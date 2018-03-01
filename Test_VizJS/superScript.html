@@ -1,0 +1,44 @@
+
+<input type="file" id="input" onchange="handleFiles(this.files)" webkitdirectory>
+<script>
+
+function handleFiles(files) {
+  //console.log(files)
+  //console.log(files[0])
+  let file_reader = new FileReader()
+
+  file_reader.onload = function(event) {
+    console.log(event.currentTarget.result)
+  }
+
+  file_reader.readAsText(files[0])
+
+  // file_reader.readAsArrayBuffer(files[0])
+
+  // file_reader.addEventListener('onload', function(a) {
+  //     console.log(a)
+  //   }, false)
+  // file_reader.onload = function(event) {
+  //   console.log(event.currentTarget.result)
+  // }
+
+  var treeString
+
+  //treeString = "path,weight\n"
+
+  var index
+  var filepath
+
+  for (index = 0; index < files.length; ++index) {
+    filepath = files[index].webkitRelativePath.replace(/-/g, '_').replace(/[\/\\]/g, '-')
+    treeString += filepath + "," + files[index].size + "\n"
+  }
+
+  console.log(treeString)
+
+  //console.log(file_reader)
+
+
+}
+
+</script>

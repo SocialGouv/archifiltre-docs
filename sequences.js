@@ -1,5 +1,20 @@
 
-window.onload = function() {
+
+let csv_string = ""
+  csv_string += "folder,10\n"
+  csv_string += "file,1\n"
+  csv_string += "hu.txt,6\n"
+  csv_string += "test-swag.com,3\n"
+  csv_string += "test-swag.fr,2\n"
+  csv_string += "test-up-t.com,3\n"
+  csv_string += "test-up-o.com,3\n"
+
+plot(csv_string)
+
+function plot(csv_string) {
+
+  d3.select("#chart").selectAll("svg").remove()
+  d3.select("#legend").selectAll("svg").remove()
 
 
   // Dimensions of sunburst.
@@ -43,21 +58,7 @@ window.onload = function() {
   // Use d3.text and d3.csv.parseRows so that we do not need to have a header
   // row, and can receive the csv as an array of arrays.
 
-  let ans = ""
-  // ans += "test,12\n"
-  // ans += "caca,2\n"
-  // ans += "zdgugeuf,10\n"
-  ans += "folder,10\n"
-  ans += "file,1\n"
-  ans += "hu.txt,6\n"
-  ans += "test-swag.com,3\n"
-  ans += "test-swag.fr,2\n"
-  ans += "test-up-t.com,3\n"
-  ans += "test-up-o.com,3\n"
-
-
-
-  var csv = d3.csv.parseRows(ans);
+  var csv = d3.csv.parseRows(csv_string);
   var json = buildHierarchy(csv);
   createVisualization(json);
 

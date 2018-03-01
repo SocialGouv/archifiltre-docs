@@ -1,13 +1,89 @@
 
 
 let csv_string = ""
-  csv_string += "folder,10\n"
-  csv_string += "file,1\n"
-  csv_string += "hu.txt,6\n"
-  csv_string += "test-swag.com,3\n"
-  csv_string += "test-swag.fr,2\n"
-  csv_string += "test-up-t.com,3\n"
-  csv_string += "test-up-o.com,3\n"
+  // csv_string += "folder,10\n"
+  // csv_string += "file,1\n"
+  // csv_string += "hu.txt,6\n"
+  // csv_string += "test-swag.com,3\n"
+  // csv_string += "test-swag.fr,2\n"
+  // csv_string += "test-up-t.com,3\n"
+  // csv_string += "test-up-o.com,3\n"
+
+
+csv_string += "Test Git-.DS_Store,6148\n"
+csv_string += "Test Git-test_vim.txt,1\n"
+csv_string += "Test Git-test_first_repo-dude.png,13659\n"
+csv_string += "Test Git-test_first_repo-dummy_text_file.txt,103\n"
+csv_string += "Test Git-test_first_repo-README.md,47\n"
+csv_string += "Test Git-test_first_repo-.git-COMMIT_EDITMSG,20\n"
+csv_string += "Test Git-test_first_repo-.git-config,324\n"
+csv_string += "Test Git-test_first_repo-.git-description,73\n"
+csv_string += "Test Git-test_first_repo-.git-HEAD,23\n"
+csv_string += "Test Git-test_first_repo-.git-index,297\n"
+csv_string += "Test Git-test_first_repo-.git-packed_refs,114\n"
+csv_string += "Test Git-test_first_repo-.git-refs-remotes-origin-HEAD,32\n"
+csv_string += "Test Git-test_first_repo-.git-refs-remotes-origin-master,41\n"
+csv_string += "Test Git-test_first_repo-.git-refs-heads-master,41\n"
+csv_string += "Test Git-test_first_repo-.git-objects-f2-75f29a34efe7bfd00c9a9b684467d92315ce3f,168\n"
+csv_string += "Test Git-test_first_repo-.git-objects-e2-7547dfd9d8e0c02db76217987e6b7c25d46d94,168\n"
+csv_string += "Test Git-test_first_repo-.git-objects-e1-6e1689f24935c8a3cb1bd6a330eb4daa176ddd,127\n"
+csv_string += "Test Git-test_first_repo-.git-objects-b1-1f79d5a6500682c709ce350957862968a52653,13183\n"
+csv_string += "Test Git-test_first_repo-.git-objects-76-bbe94a33430ca9b0a74ef9d3edec411b0f9d1a,529\n"
+csv_string += "Test Git-test_first_repo-.git-objects-75-a5664f1b34f0dd80959d6629b17a3a3e5fa22d,73\n"
+csv_string += "Test Git-test_first_repo-.git-objects-6a-3b461fd19253096e01f0a59b60d795335ef248,169\n"
+csv_string += "Test Git-test_first_repo-.git-objects-4c-7adc903717af1db0109dde8317c4eb95c383d0,96\n"
+csv_string += "Test Git-test_first_repo-.git-objects-31-d10795296109cc1dcce24d4e6b6f518a55b56e,99\n"
+csv_string += "Test Git-test_first_repo-.git-objects-2e-2e995ca02bcba5f6df6452a07826ae32d69e5d,167\n"
+csv_string += "Test Git-test_first_repo-.git-objects-26-8888065e48b9d78600846d26305ef033d98ec4,58\n"
+csv_string += "Test Git-test_first_repo-.git-objects-13-736da1eb5f88c856c62ef92e6c945ccd30933a,127\n"
+csv_string += "Test Git-test_first_repo-.git-objects-09-83eb018794999079fbf62f7d9d7ce40632d4b8,93\n"
+csv_string += "Test Git-test_first_repo-.git-objects-08-e3a35d6388cf7a4a74b66ae4004f0b39ec4620,127\n"
+csv_string += "Test Git-test_first_repo-.git-objects-00-9a85bfc7a65fe07c280074889bf3001756c7e9,53\n"
+csv_string += "Test Git-test_first_repo-.git-logs-HEAD,891\n"
+csv_string += "Test Git-test_first_repo-.git-logs-refs-remotes-origin-HEAD,208\n"
+csv_string += "Test Git-test_first_repo-.git-logs-refs-remotes-origin-master,312\n"
+csv_string += "Test Git-test_first_repo-.git-logs-refs-heads-master,891\n"
+csv_string += "Test Git-test_first_repo-.git-info-exclude,250\n"
+csv_string += "Test Git-test_first_repo-.git-hooks-applypatch_msg.sample,478\n"
+csv_string += "Test Git-test_first_repo-.git-hooks-commit_msg.sample,896\n"
+csv_string += "Test Git-test_first_repo-.git-hooks-post_update.sample,189\n"
+csv_string += "Test Git-test_first_repo-.git-hooks-pre_applypatch.sample,424\n"
+csv_string += "Test Git-test_first_repo-.git-hooks-pre_commit.sample,1642\n"
+csv_string += "Test Git-test_first_repo-.git-hooks-pre_push.sample,1348\n"
+csv_string += "Test Git-test_first_repo-.git-hooks-pre_rebase.sample,4898\n"
+csv_string += "Test Git-test_first_repo-.git-hooks-pre_receive.sample,544\n"
+csv_string += "Test Git-test_first_repo-.git-hooks-prepare_commit_msg.sample,1492\n"
+csv_string += "Test Git-test_first_repo-.git-hooks-update.sample,3610\n"
+csv_string += "Test Git-repo1-test.txt,26\n"
+csv_string += "Test Git-repo1-.git-COMMIT_EDITMSG,25\n"
+csv_string += "Test Git-repo1-.git-config,137\n"
+csv_string += "Test Git-repo1-.git-description,73\n"
+csv_string += "Test Git-repo1-.git-HEAD,41\n"
+csv_string += "Test Git-repo1-.git-index,137\n"
+csv_string += "Test Git-repo1-.git-refs-heads-master,41\n"
+csv_string += "Test Git-repo1-.git-objects-e6-9de29bb2d1d6434b8b29ae775ad8c2e48c5391,15\n"
+csv_string += "Test Git-repo1-.git-objects-e0-b7bf70f163cca656c571de2d4dba4889b4e1df,162\n"
+csv_string += "Test Git-repo1-.git-objects-c8-4e687c0452510233b55a0f1fa091abae132c24,53\n"
+csv_string += "Test Git-repo1-.git-objects-ab-2c1538600de7da499f5369fbede239c2df2c3c,176\n"
+csv_string += "Test Git-repo1-.git-objects-8c-6f74cf1eabf2ccfc870b9ab911f6ba7ccbbe02,53\n"
+csv_string += "Test Git-repo1-.git-objects-6a-3f5574c68fe1eabcf76380ae166f38d51b5403,53\n"
+csv_string += "Test Git-repo1-.git-objects-5e-fb9bc29c482e023e40e0a2b3b7e49cec842034,53\n"
+csv_string += "Test Git-repo1-.git-objects-4b-825dc642cb6eb9a060e54bf8d69288fbee4904,15\n"
+csv_string += "Test Git-repo1-.git-objects-17-00a5af6792e715d9b1551d34656d27b9c937c7,37\n"
+csv_string += "Test Git-repo1-.git-objects-11-a70e034f5827b019b62de36f9ae67bcfa4ba0e,140\n"
+csv_string += "Test Git-repo1-.git-logs-HEAD,726\n"
+csv_string += "Test Git-repo1-.git-logs-refs-heads-master,512\n"
+csv_string += "Test Git-repo1-.git-info-exclude,250\n"
+csv_string += "Test Git-repo1-.git-hooks-applypatch_msg.sample,478\n"
+csv_string += "Test Git-repo1-.git-hooks-commit_msg.sample,896\n"
+csv_string += "Test Git-repo1-.git-hooks-post_update.sample,189\n"
+csv_string += "Test Git-repo1-.git-hooks-pre_applypatch.sample,424\n"
+csv_string += "Test Git-repo1-.git-hooks-pre_commit.sample,1642\n"
+csv_string += "Test Git-repo1-.git-hooks-pre_push.sample,1348\n"
+csv_string += "Test Git-repo1-.git-hooks-pre_rebase.sample,4898\n"
+csv_string += "Test Git-repo1-.git-hooks-pre_receive.sample,544\n"
+csv_string += "Test Git-repo1-.git-hooks-prepare_commit_msg.sample,1492\n"
+csv_string += "Test Git-repo1-.git-hooks-update.sample,3610\n"
 
 plot(csv_string)
 
@@ -33,9 +109,9 @@ function plot(csv_string) {
   };
 
 
-  function colorOf(name) {
+  function colorOf(name, children) {
     let m = name.match(/\..*$/)
-    if (m === null) {
+    if (children !== undefined) {
       return colors.folder
     } else {
       return colors.file
@@ -94,7 +170,7 @@ function plot(csv_string) {
         .attr("width", function(d) { return d.dx; })
         .attr("height", function(d) { return d.dy; })
         .attr("display", function(d) { return d.depth ? null : "none"; })
-        .style("fill", function(d) { return colorOf(d.name); })
+        .style("fill", function(d) { return colorOf(d.name, d.children); })
         .style("opacity", 1)
         .on("mouseover", mouseover);
 
@@ -200,7 +276,7 @@ function plot(csv_string) {
 
     entering.append("svg:polygon")
         .attr("points", breadcrumbPoints)
-        .style("fill", function(d) { return colorOf(d.name); });
+        .style("fill", function(d) { return colorOf(d.name, d.children); });
 
     entering.append("svg:text")
         .attr("x", (b.w + b.t) / 2)

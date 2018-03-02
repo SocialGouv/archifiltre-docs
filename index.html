@@ -10,6 +10,11 @@
     <link rel="stylesheet" type="text/css" href="sequences.css"/>
   </head>
   <body>
+    <p>
+      Type the root folder path to enable onclick
+    </p>
+    <input type="text" id="root_folder_path" placeholder="Root Folder Path">
+    <br /> 
   	<input type="file" id="input" onchange="plot(files2CSV(this.files))" webkitdirectory>
     <div id="main">
       <div id="sequence"></div>

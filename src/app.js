@@ -1,10 +1,44 @@
 
-import * as Folder from 'folder'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+
+import rootReducer from 'reducers/root-reducer'
+
+import MainSpace from 'components/main-space'
+
 
 window.onload = function () {
-  let dropzone = document.getElementById('dropzone')
+  let root_div = document.createElement('div')
+  root_div.setAttribute('id','root')
 
-  dropzone.ondragover = e => e.preventDefault()
-  dropzone.ondrop = Folder.handleDrop
+  if (document.body !== null) {
+    document.body.append(root_div)
+  }
+
+  let store = createStore(rootReducer)
+
+  window.swag = store
+
+  ReactDOM.render(
+    <Provider store={store}>
+      <div className="mdl-grid">
+        <div className="mdl-cell mdl-cell--12-col">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates odit, non itaque ab aspernatur officiis magni voluptatem repellat est quam, dolorum vel possimus.
+        </div>
+        <div className="mdl-cell mdl-cell--12-col">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates odit, non itaque ab aspernatur officiis magni voluptatem repellat est quam, dolorum vel possimus.
+        </div>
+        <div className="mdl-cell mdl-cell--12-col">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates odit, non itaque ab aspernatur officiis magni voluptatem repellat est quam, dolorum vel possimus.
+        </div>
+        <div className="mdl-cell mdl-cell--12-col">
+          <MainSpace />
+        </div>
+      </div>
+    </Provider>,
+    root_div
+  )
 }
 

@@ -15,6 +15,8 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+RUN npm run-script flow
+
 RUN npm run-script build
 
 WORKDIR ./dist

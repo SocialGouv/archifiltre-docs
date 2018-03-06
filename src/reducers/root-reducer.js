@@ -1,3 +1,6 @@
+// @flow
+
+
 import { combineReducers } from 'redux'
 
 import database from 'reducers/database'

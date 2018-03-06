@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import { plot } from 'sequences'
 import { toCSV, getSize } from 'reducers/database'
 

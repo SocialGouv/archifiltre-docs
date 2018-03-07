@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { isStarted, isFinished } from 'reducers/app-state'
+import { selectAppState } from 'reducers/root-reducer'
 
 import FolderDropzone from 'components/folder-dropzone'
 import Icicle from 'components/icicle'
@@ -19,9 +19,10 @@ const Presentational = props => {
 
 
 const mapStateToProps = state => {
+  let app_state = selectAppState(state)
   return {
-    started: isStarted(state),
-    finished: isFinished(state)
+    started: app_state.isStarted(),
+    finished: app_state.isFinished()
   }
 }
 

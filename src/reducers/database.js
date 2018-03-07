@@ -2,50 +2,36 @@
 
 import { Map } from 'immutable'
 import { generateRandomString } from 'random-gen'
+import duck from 'reducers/duck'
 
+const type = 'cheapExp/database'
 
-const action_prefix = 'cheapExp/database/'+generateRandomString(40)+'/'
+const key = Symbol()
 
-// Actions
-const CREATE = action_prefix+'CREATE'
-const UPDATE = action_prefix+'UPDATE'
-const REMOVE = action_prefix+'REMOVE'
-
-
-const initialState = Map()
-
-// Reducer
-export default function reducer(state = initialState, action) {
-  switch (action.type) {
-    case CREATE:
-      return state.set(generateRandomString(40), action.value)
-    case UPDATE:
-      return state.set(action.key, action.value)
-    case REMOVE:
-      return state.delete(action.key)
-    default:
-      return state
+function mkS(map) {
+  return {
+    toCSV: () => map.reduce((acc,val) => acc + val + '\n',''),
+    size: () => map.size,
+    [key]: {
+      map
+    }
   }
 }
 
-// Action Creators
-export function create(value) {
-  return { type:CREATE, value }
-}
+const initialState = mkS(Map())
 
-export function update(key, value) {
-  return { type:UPDATE, key, value }
-}
+const { mkA, reducer } = duck(type, initialState)
 
-export function remove(key) {
-  return { type:REMOVE, key }
-}
+export default reducer
 
-// Selectors
-export function toCSV(state) {
-  return state.database.reduce((acc,val) => acc + val + '\n','')
-}
+export const create = mkA((value) => state =>
+  mkS(state[key].map.set(generateRandomString(40), value))
+)
 
-export function getSize(state) {
-  return state.database.size
-}
+export const update = mkA((key, value) => state =>
+  mkS(state[key].map.set(key, value))
+)
+
+export const remove = mkA((key) => state =>
+  mkS(state[key].map.delete(key))
+)

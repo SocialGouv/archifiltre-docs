@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { getSize } from 'reducers/database'
+import { selectDatabase } from 'reducers/root-reducer'
 
 
 const Presentational = props => {
@@ -14,8 +14,9 @@ const Presentational = props => {
 
 
 const mapStateToProps = state => {
+  let database = selectDatabase(state)
   return {
-    nb_files: getSize(state)
+    nb_files: database.size()
   }
 }
 

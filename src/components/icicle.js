@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { selectDatabase } from 'reducers/root-reducer'
+
 
 import { plot } from 'sequences'
-import { toCSV, getSize } from 'reducers/database'
 
 
 const Presentational = props => {
@@ -32,13 +33,14 @@ const Presentational = props => {
 
 
 const mapStateToProps = state => {
+  let database = selectDatabase(state)
   console.time('csv')
-  let csv = toCSV(state)
+  let csv = database.toCSV()
   console.timeEnd('csv')
 
   return {
     csv,
-    nb_files: getSize(state)
+    nb_files: database.size()
   }
 }
  

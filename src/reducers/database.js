@@ -25,7 +25,7 @@ const { mkA, reducer } = duck(type, initialState)
 export default reducer
 
 export const create = mkA((value) => state =>
-  mkS(state[key].map.set(generateRandomString(40), value))
+  mkS(state[key].map.set(mkId(), value))
 )
 
 export const update = mkA((key, value) => state =>
@@ -35,3 +35,12 @@ export const update = mkA((key, value) => state =>
 export const remove = mkA((key) => state =>
   mkS(state[key].map.delete(key))
 )
+
+export const fromCSV = mkA((csv) => state =>
+  mkS(Map().withMutations(map => 
+    csv.split('\n').forEach(line => map.set(mkId(), line))
+  ))
+)
+
+
+const mkId = () => generateRandomString(40)

@@ -7,10 +7,16 @@ import FolderDropzone from 'components/folder-dropzone'
 import Icicle from 'components/icicle'
 import WaitingScreen from 'components/waiting-screen'
 import ExportButton from 'components/export-button'
+import ImportButton from 'components/import-button'
 
 const Presentational = props => {
   if (props.started === false && props.finished === false) {
-    return (<FolderDropzone />)
+    return (
+      <div>
+        <ImportButton />
+        <FolderDropzone />
+      </div>
+    )
   } else if (props.started === true && props.finished === false) {
     return (<WaitingScreen />)
   } else {

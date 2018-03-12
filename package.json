@@ -6,7 +6,8 @@
   "scripts": {
     "flow": "flow",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js --progress",
+    "buildDev": "webpack --progress --mode development",
+    "buildProd": "webpack --progress --mode production",
     "start": ""
   },
   "repository": {

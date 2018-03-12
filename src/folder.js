@@ -1,7 +1,7 @@
 
 
 export function asyncHandleDrop(event, insert2DB, loadCsv2DB) {
-  let myWorker = new Worker('worker.js')
+  // let myWorker = new Worker('worker.js')
 
   event.preventDefault()
   let items = event.dataTransfer.items

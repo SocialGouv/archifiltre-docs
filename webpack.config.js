@@ -1,13 +1,20 @@
 const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const FlowWebpackPlugin = require('flow-webpack-plugin')
 
 module.exports = {
   entry: {
     app: './src/app.js'
   },
 
-  plugins: [],
+  plugins: [
+    new CopyWebpackPlugin(['static']),
+  ],
 
   devtool: 'source-map',
+  devServer: {
+    contentBase: './dist'
+  },
 
   resolve: {
     modules: [

@@ -12,10 +12,10 @@ const Presentational = props => {
   let id = generateRandomString(40)
   return (
     <div style={{position:'relative'}}>
-      <label for={id} class="label-file">Import from csv</label>
+      <label htmlFor={id} className="label-file">Import from csv</label>
       <input
         id={id}
-        class="input-file"
+        className="input-file"
         type="file"
         onChange={e => importCsv(e,props.loadCsv,props.finish)}
         accept=".csv, .CSV"

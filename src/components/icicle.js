@@ -35,7 +35,7 @@ const Presentational = props => {
 const mapStateToProps = state => {
   let database = selectDatabase(state)
   console.time('csv')
-  let csv = database.toCSV()
+  let csv = database.toCsv()
   console.timeEnd('csv')
 
   return {

@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import * as Folder from 'folder'
-import { create } from 'reducers/database'
+import { create, fromCsv } from 'reducers/database'
 import { startToLoadFiles, finishedToLoadFiles } from 'reducers/app-state'
 
 class Presentational extends React.Component {
@@ -23,7 +23,7 @@ class Presentational extends React.Component {
       fontSize: '3em'
     }
 
-    this.placeholder = 'Drop files here !'
+    this.placeholder = 'Drop files or csv here !'
 
 
     this.handleDrop = this.handleDrop.bind(this)
@@ -34,7 +34,8 @@ class Presentational extends React.Component {
   }
 
   handleDrop (e) {
-    Folder.asyncHandleDrop(e,this.props.create).then(this.props.finishedToLoadFiles)
+    Folder.asyncHandleDrop(e,this.props.create,this.props.fromCsv)
+          .then(this.props.finishedToLoadFiles)
     this.props.startToLoadFiles()
   }
 
@@ -62,6 +63,9 @@ const mapDispatchToProps = dispatch => {
   return {
     create: a => {
       dispatch(create(a))
+    },
+    fromCsv: a => {
+      dispatch(fromCsv(a))
     },
     startToLoadFiles: () => {
       dispatch(startToLoadFiles())

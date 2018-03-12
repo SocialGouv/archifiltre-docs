@@ -1,23 +1,35 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { fromCSV } from 'reducers/database'
+import { generateRandomString } from 'random-gen'
+
+import { fromCsv } from 'reducers/database'
 import { finishedToLoadFiles } from 'reducers/app-state'
+import { readFile } from 'folder'
+
 
 const Presentational = props => {
+  let id = generateRandomString(40)
   return (
-    <input type="file" onChange={e => importCsv(e,props.loadCSV,props.finish)} accept=".csv, .CSV"/>
+    <div style={{position:'relative'}}>
+      <label for={id} class="label-file">Import from csv</label>
+      <input
+        id={id}
+        class="input-file"
+        type="file"
+        onChange={e => importCsv(e,props.loadCsv,props.finish)}
+        accept=".csv, .CSV"
+      />
+    </div>
   )
 }
 
-function importCsv(e,loadCSV,finish) {
+function importCsv(e,loadCsv,finish) {
   let file = e.currentTarget.files[0]
-  let file_reader = new FileReader()
-  file_reader.onload = e => {
-    loadCSV(e.currentTarget.result)
+  readFile(file).then(csv => {
+    loadCsv(csv)
     finish()
-  }
-  file_reader.readAsText(file)
+  })
 }
 
 const mapStateToProps = state => {
@@ -26,7 +38,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    loadCSV: csv => dispatch(fromCSV(csv)),
+    loadCsv: csv => dispatch(fromCsv(csv)),
     finish: () => dispatch(finishedToLoadFiles())
   }
 }

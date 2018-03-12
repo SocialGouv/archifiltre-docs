@@ -10,7 +10,7 @@ const key = Symbol()
 
 function mkS(map) {
   return {
-    toCSV: () => map.reduce((acc,val) => acc + val + '\n',''),
+    toCsv: () => map.reduce((acc,val) => acc + val + '\n',''),
     size: () => map.size,
     [key]: {
       map
@@ -36,8 +36,8 @@ export const remove = mkA((key) => state =>
   mkS(state[key].map.delete(key))
 )
 
-export const fromCSV = mkA((csv) => state =>
-  mkS(Map().withMutations(map => 
+export const fromCsv = mkA((csv) => state =>
+  mkS(state[key].map.withMutations(map => 
     csv.split('\n').forEach(line => map.set(mkId(), line))
   ))
 )

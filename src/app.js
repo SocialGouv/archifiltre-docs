@@ -26,13 +26,7 @@ window.onload = function () {
     <Provider store={store}>
       <div className="mdl-grid">
         <div className="mdl-cell mdl-cell--12-col">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates odit, non itaque ab aspernatur officiis magni voluptatem repellat est quam, dolorum vel possimus.
-        </div>
-        <div className="mdl-cell mdl-cell--12-col">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates odit, non itaque ab aspernatur officiis magni voluptatem repellat est quam, dolorum vel possimus.
-        </div>
-        <div className="mdl-cell mdl-cell--12-col">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates odit, non itaque ab aspernatur officiis magni voluptatem repellat est quam, dolorum vel possimus.
+          This app is only compatible with Chrome or Firefox
         </div>
         <div className="mdl-cell mdl-cell--12-col">
           <MainSpace />

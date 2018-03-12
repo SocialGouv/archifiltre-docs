@@ -47,7 +47,7 @@ export function plot(csv_string) {
         case ".xlt":
         case ".xltx":
         case ".xltm":
-        case ".csv": // format CSV
+        case ".csv": // format Csv
         case ".ods": //formats OOo/LO Calc
         case ".ots":
           return colors.spreadsheet;
@@ -188,8 +188,29 @@ export function plot(csv_string) {
     totalSize = node.node().__data__.value;
    };
 
+  function octet2HumanReadableFormat(o) {
+    let To = o/Math.pow(1000,4)
+    if (To > 1) {
+      return Math.round(To * 10)/10 + ' To'
+    }
+    let Go = o/Math.pow(1000,3)
+    if (Go > 1) {
+      return Math.round(Go * 10)/10 + ' Go'
+    }
+    let Mo = o/Math.pow(1000,2)
+    if (Mo > 1) {
+      return Math.round(Mo * 10)/10 + ' Mo'
+    }
+    let ko = o/1000
+    if (ko > 1) {
+      return Math.round(ko * 10)/10 + ' ko'
+    }
+    return o + ' o'
+  }
+
   // Fade all but the current sequence, and show it in the breadcrumb trail.
   function mouseover(d) {
+    let sizeString = octet2HumanReadableFormat(d.value)
 
     var percentage = (100 * d.value / totalSize).toPrecision(3);
     var percentageString = percentage + "%";
@@ -198,7 +219,7 @@ export function plot(csv_string) {
     }
 
     var sequenceArray = getAncestors(d);
-    updateBreadcrumbs(sequenceArray, percentageString);
+    updateBreadcrumbs(sequenceArray, percentageString, sizeString);
 
     // Fade all the segments.
     d3.selectAll(".node")
@@ -276,7 +297,7 @@ export function plot(csv_string) {
   }
 
   // Update the breadcrumb trail to show the current sequence and percentage.
-  function updateBreadcrumbs(nodeArray, percentageString) {
+  function updateBreadcrumbs(nodeArray, percentageString, sizeString) {
 
     // Data join; key function combines name and depth (= position in sequence).
     var g = d3.select("#trail")
@@ -303,7 +324,7 @@ export function plot(csv_string) {
     var tot_len = 0
     var line_length = 0
     var prev_y = 0
-    var end_label_width = 35
+    var end_label_width = 70
 
     // Set position for entering and updating nodes.
     g.attr("transform", function(d, i) {
@@ -331,7 +352,7 @@ export function plot(csv_string) {
         .attr("y", prev_y + b.h / 2)
         .attr("dy", "0.35em")
         .attr("text-anchor", "middle")
-        .text(percentageString);
+        .text(percentageString + " | " + sizeString);
 
     // Make the breadcrumb trail visible, if it's hidden.
     d3.select("#trail")
@@ -381,7 +402,7 @@ export function plot(csv_string) {
     }
   }
 
-  // Take a 2-column CSV and transform it into a hierarchical structure suitable
+  // Take a 2-column Csv and transform it into a hierarchical structure suitable
   // for a partition layout. The first column is a sequence of step names, from
   // root to leaf, separated by hyphens. The second column is a count of how 
   // often that sequence occurred.

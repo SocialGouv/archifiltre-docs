@@ -11,9 +11,10 @@ module.exports = {
     new CopyWebpackPlugin(['static']),
   ],
 
-  devtool: 'source-map',
+  // devtool: 'source-map',
+
   devServer: {
-    contentBase: './dist'
+    contentBase: './dist',
   },
 
   resolve: {
@@ -25,6 +26,10 @@ module.exports = {
 
   module: {
     rules: [
+      {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' }
+      },
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,

@@ -17,6 +17,7 @@ COPY . .
 # WORKDIR ./dist
 # CMD ["python", "-m", "SimpleHTTPServer", "8000"]
 
+
 CMD ["./startupDev.bash"]
 
 

@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "buildDev": "webpack --progress --mode development",
     "buildProd": "webpack --progress --mode production",
-    "devServer": "webpack-dev-server --open",
+    "devServer": "webpack-dev-server --mode development",
+    "watchBuildDev": "webpack --watch --progress --mode development",
     "start": ""
   },
   "repository": {
@@ -30,6 +31,7 @@
     "flow-webpack-plugin": "^1.2.0",
     "flow-bin": "^0.66.0",
     "copy-webpack-plugin": "^4.5.1",
+    "worker-loader": "^1.1.1",
     "webpack-dev-server": "^3.1.1",
     "webpack-cli": "^2.0.4",
     "webpack": "^4.1.0"

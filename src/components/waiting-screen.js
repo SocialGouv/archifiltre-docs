@@ -13,17 +13,17 @@ class Presentational extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.nb_files === nextProps.nb_files) {
-      this.forceUpdate()
-      return false
-    }
-    let cur_ms = (new Date()).getTime()
-    if (cur_ms - this.last_ms < this.thres) {
-      this.forceUpdate()
-      return false
-    }
-    this.last_ms = cur_ms
-    this.forceUpdate()
+    // if (this.props.nb_files === nextProps.nb_files) {
+    //   this.forceUpdate()
+    //   return false
+    // }
+    // let cur_ms = (new Date()).getTime()
+    // if (cur_ms - this.last_ms < this.thres) {
+    //   this.forceUpdate()
+    //   return false
+    // }
+    // this.last_ms = cur_ms
+    // this.forceUpdate()
     return true
   }
 
@@ -31,7 +31,6 @@ class Presentational extends React.Component {
     return (
       <div>
         <p>{this.props.nb_files}</p>
-        <h2>It is {new Date().toLocaleTimeString()}.</h2>
       </div>
     )
   }

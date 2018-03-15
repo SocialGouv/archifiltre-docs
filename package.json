@@ -1,0 +1,47 @@
+{
+  "name": "cheapExp",
+  "version": "1.0.0",
+  "description": "Explorer plus plus for archive",
+  "main": "index.js",
+  "scripts": {
+    "flow": "flow",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "buildDev": "webpack --progress --mode development",
+    "buildProd": "webpack --progress --mode production",
+    "devServer": "webpack-dev-server --mode development",
+    "watchBuildDev": "webpack --watch --progress --mode development",
+    "start": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeanbaptisteassouad/cheapExp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeanbaptisteassouad/cheapExp/issues"
+  },
+  "homepage": "https://github.com/jeanbaptisteassouad/cheapExp#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.3",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-flow": "^6.23.0",
+    "flow-webpack-plugin": "^1.2.0",
+    "flow-bin": "^0.66.0",
+    "copy-webpack-plugin": "^4.5.1",
+    "webpack-dev-server": "^3.1.1",
+    "webpack-cli": "^2.0.4",
+    "webpack": "^4.1.0"
+  },
+  "dependencies": {
+    "d3": "^4.13.0",
+    "immutable": "^4.0.0-rc.9",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "file-saver": "^1.3.3"
+  }
+}

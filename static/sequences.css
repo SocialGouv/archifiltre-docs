@@ -1,31 +1,27 @@
 body {
   font-family: 'Open Sans', sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
   background-color: #fff;
-  width: 960px;
-  height: 600px;
-  margin-top: 10px;
-  margin-left: 10px;
 }
 
 #main {
   float: left;
-  width: 850px;
+  width: 53.125em;
 }
 
 #sidebar {
   float: right;
-  width: 100px;
+  width: 6.25em;
 }
 
 #sequence {
-  width: 600px;
-  height: 200px;
+  width: 37.5em;
+  height: 12.5em;
 }
 
 #legend {
-  padding: 10px 0 0 3px;
+  padding: 0.625em 0 0 0.1875em;
 }
 
 #sequence text, #legend text {
@@ -39,4 +35,18 @@ body {
 
 #chart rect {
   stroke: #fff;
+}
+
+
+.label-file {
+    cursor: pointer;
+    color: #00b1ca;
+    font-weight: bold;
+}
+.label-file:hover {
+    color: #25a5c4;
+}
+
+.input-file {
+    display: none;
 }

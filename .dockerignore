@@ -1,0 +1,7 @@
+node_modules
+Makefile
+README.md
+Dockerfile
+.gitignore
+LICENSE
+.git

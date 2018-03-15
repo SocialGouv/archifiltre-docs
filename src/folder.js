@@ -1,22 +1,9 @@
-// import Worker from 'workers/file.worker.js'
 
+import { mkScheduler } from 'scheduler'
+
+const sch = mkScheduler()
 
 export function asyncHandleDrop(event, insert2DB, loadCsv2DB) {
-  // console.log(event)
-  // let myWorker = new Worker()
-  // myWorker.postMessage('obj',[
-  //   // event,
-  //   // event.dataTransfer,
-  //   // event.dataTransfer.items[0],
-  //   event.dataTransfer.items[0].webkitGetAsEntry(),
-  // ])
-  // myWorker.onmessage = function(e) {
-  //   console.log(e)
-  //   console.log('Message received from worker')
-  // }
-
-
-
   event.preventDefault()
   let items = event.dataTransfer.items
 
@@ -75,16 +62,16 @@ function traverseFileTree(insert2DB, entry, path) {
 }
 
 function traverseFile(insert2DB, entry, path) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => sch.schedule(() => {
     entry.file(file => {
       insert2DB(path + file.name+','+file.size)
       resolve()
     }, e => console.log(e))
-  })
+  }))
 }
 
 function traverseFolder(insert2DB, entry, path) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => sch.schedule(() => {
     let promise_array = []
     let dirReader = entry.createReader()
     const doBatch = () => {
@@ -100,5 +87,7 @@ function traverseFolder(insert2DB, entry, path) {
       }, e => console.log(e))
     }
     doBatch()
-  })
+  }))
 }
+
+

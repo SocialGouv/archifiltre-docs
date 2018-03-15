@@ -20,8 +20,6 @@ window.onload = function () {
 
   let store = createStore(rootReducer)
 
-  window.swag = store
-
   ReactDOM.render(
     <Provider store={store}>
       <div className="mdl-grid">
@@ -35,20 +33,6 @@ window.onload = function () {
     </Provider>,
     root_div
   )
-
-
-  // function hhh() {
-  //   function step() {
-
-  //     window.scroll(window.scrollX,window.scrollY+1)
-
-  //     requestAnimationFrame(step)
-  //   }
-
-  //   requestAnimationFrame(step)
-  // }
-  // hhh()
-
 
 }
 

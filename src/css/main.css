@@ -1,9 +1,11 @@
+
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   background-color: #fff;
 }
+
 
 #main {
   float: left;
@@ -35,18 +37,4 @@ body {
 
 #chart rect {
   stroke: #fff;
-}
-
-
-.label-file {
-    cursor: pointer;
-    color: #00b1ca;
-    font-weight: bold;
-}
-.label-file:hover {
-    color: #25a5c4;
-}
-
-.input-file {
-    display: none;
 }

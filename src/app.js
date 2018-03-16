@@ -9,6 +9,8 @@ import rootReducer from 'reducers/root-reducer'
 
 import MainSpace from 'components/main-space'
 
+import unsafeStyle from 'css/main.css'
+
 
 window.onload = function () {
   let root_div = document.createElement('div')

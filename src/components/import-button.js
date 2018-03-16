@@ -7,15 +7,19 @@ import { fromCsv } from 'reducers/database'
 import { finishedToLoadFiles } from 'reducers/app-state'
 import { readFile } from 'folder'
 
+import unsafeStyle from 'css/import-button.css'
+import wrapper from 'css/wrapper.js'
+const style = wrapper(unsafeStyle)
+
 
 const Presentational = props => {
   let id = generateRandomString(40)
   return (
-    <div style={{position:'relative'}}>
-      <label htmlFor={id} className="label-file">Import from csv</label>
+    <div className={style.container()}>
+      <label htmlFor={id} className={style.labelFile()}>Import from csv</label>
       <input
         id={id}
-        className="input-file"
+        className={style.inputFile()}
         type="file"
         onChange={e => importCsv(e,props.loadCsv,props.finish)}
         accept=".csv, .CSV"

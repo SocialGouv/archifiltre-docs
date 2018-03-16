@@ -28,7 +28,6 @@ FROM dev as prod
 WORKDIR /usr/src/app
 RUN npm run-script buildProd
 
-CMD ["bash"]
 
-
-# FROM node:9.7.1-alpine
+FROM nginx:1.13.9-alpine
+COPY --from=prod /usr/src/app/dist /usr/share/nginx/html

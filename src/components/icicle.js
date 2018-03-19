@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { selectDatabase, selectLogError } from 'reducers/root-reducer'
 
+import { setParentPath } from 'reducers/database'
 
 import { plot } from 'sequences'
 
@@ -23,9 +24,11 @@ const Presentational = props => {
       <div className="mdl-grid">
         <div className="mdl-cell mdl-cell--10-col">
           <div className="mdl-grid" id='main' ref={(input) => {
-              console.time('plot')
-              plot(props.csv)
-              console.timeEnd('plot')
+              if (input) {
+                console.time('plot')
+                plot(props.csv, props.setParentPath, props.parent_path)
+                console.timeEnd('plot')
+              }
             }}>
             <div
               className="mdl-cell mdl-cell--12-col"
@@ -59,12 +62,15 @@ const mapStateToProps = state => {
   return {
     csv,
     nb_files: database.size(),
-    nb_errors: logError.size()
+    nb_errors: logError.size(),
+    parent_path: database.parent_path(),
   }
 }
  
 const mapDispatchToProps = dispatch => {
-  return {}
+  return {
+    setParentPath: (...args) => dispatch(setParentPath(...args))
+  }
 }
 
 

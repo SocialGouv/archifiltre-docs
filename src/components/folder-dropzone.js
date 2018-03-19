@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import * as Folder from 'folder'
 import { create, fromCsv } from 'reducers/database'
 import { startToLoadFiles, finishedToLoadFiles } from 'reducers/app-state'
+import { logError } from 'reducers/log-error'
 
 class Presentational extends React.Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class Presentational extends React.Component {
   }
 
   handleDrop (e) {
-    Folder.asyncHandleDrop(e,this.props.create,this.props.fromCsv)
+    Folder.asyncHandleDrop(e,this.props.create,this.props.fromCsv,this.props.logError)
           .then(this.props.finishedToLoadFiles)
     this.props.startToLoadFiles()
   }
@@ -67,6 +68,7 @@ const mapDispatchToProps = dispatch => {
     fromCsv: a => {
       dispatch(fromCsv(a))
     },
+    logError: (...a) => dispatch(logError(...a)),
     startToLoadFiles: () => {
       dispatch(startToLoadFiles())
     },

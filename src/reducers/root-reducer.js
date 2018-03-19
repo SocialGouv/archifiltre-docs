@@ -4,19 +4,16 @@ import { combineReducers } from 'redux'
 
 import database from 'reducers/database'
 import appState from 'reducers/app-state'
+import logError from 'reducers/log-error'
 
 const reducer = combineReducers({
   database,
-  appState
+  appState,
+  logError
 })
  
 export default reducer
 
-export function selectAppState(state) {
-  return state.appState
-}
-
-export function selectDatabase(state) {
-  return state.database
-}
-
+export const selectAppState = state => state.appState
+export const selectDatabase = state => state.database
+export const selectLogError = state => state.logError

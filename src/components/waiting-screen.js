@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { selectDatabase } from 'reducers/root-reducer'
+import { selectDatabase, selectLogError } from 'reducers/root-reducer'
 
 class Presentational extends React.Component {
   constructor(props) {
@@ -27,7 +27,8 @@ class Presentational extends React.Component {
   render() {
     return (
       <div>
-        <p>{this.props.nb_files}</p>
+        <p>files loaded : {this.props.nb_files}</p>
+        <p>errors : {this.props.nb_errors}</p>
       </div>
     )
   }
@@ -36,8 +37,11 @@ class Presentational extends React.Component {
 
 const mapStateToProps = state => {
   let database = selectDatabase(state)
+  let logError = selectLogError(state)
+
   return {
-    nb_files: database.size()
+    nb_files: database.size(),
+    nb_errors: logError.size()
   }
 }
 

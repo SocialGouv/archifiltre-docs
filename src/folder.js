@@ -68,7 +68,7 @@ function traverseFileTree(insert2DB, logError, entry, path) {
 function traverseFile(insert2DB, logError, entry, path) {
   return new Promise((resolve, reject) => sch.schedule(() => {
     entry.file(file => {
-      insert2DB(path + file.name+','+file.size)
+      insert2DB(path + file.name, file.size)
       resolve()
     }, e => {
       console.log(e)

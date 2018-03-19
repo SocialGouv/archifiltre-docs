@@ -7,6 +7,7 @@ import FolderDropzone from 'components/folder-dropzone'
 import Icicle from 'components/icicle'
 import WaitingScreen from 'components/waiting-screen'
 import ExportButton from 'components/export-button'
+import ReinitButton from 'components/reinit-button'
 import ImportButton from 'components/import-button'
 
 const Presentational = props => {
@@ -21,9 +22,16 @@ const Presentational = props => {
     return (<WaitingScreen />)
   } else {
     return (
-      <div>
-        <ExportButton />
-        <Icicle />
+      <div className="mdl-grid">
+        <div className="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
+          <ExportButton />
+        </div>
+        <div className="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
+          <ReinitButton />
+        </div>
+        <div className="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+          <Icicle />
+        </div>
       </div>
     )
   }

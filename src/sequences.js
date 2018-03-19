@@ -124,8 +124,9 @@ export function plot(csv_string) {
   var totalSize = 0; 
 
   var vis = d3.select("#chart").append("svg:svg")
-      .attr("width", width)
-      .attr("height", height)
+      .attr("xmlns", "http://www.w3.org/2000/svg")
+      // .attr("viewBox", "0 0 900 500")
+      .attr("viewBox", "0 0 "+width+" "+height)
       .append("svg:g")
       .attr("id", "container");
 
@@ -148,38 +149,38 @@ export function plot(csv_string) {
     // Basic setup of page elements.
     initializeBreadcrumbTrail();
     drawLegend();
-    d3.select("#togglelegend").on("click", toggleLegend);
 
     // Bounding rect underneath the chart, to make it easier to detect
     // when the mouse leaves the parent g.
     vis.append("svg:rect")
-        .attr("width", width)
-        .attr("height", height)
-        .style("opacity", 0);
+      .attr("width", width)
+      .attr("height", height)
+      .style("opacity", 0);
 
     // For efficiency, filter nodes to keep only those large enough to see.
     var nodes = partition.nodes(json)
-        .filter(function(d) {
-        return (d.dx > 0.5);
-        });
+      .filter(function(d) {
+      return (d.dx > 0.5);
+      });
 
     var node = vis.data([json]).selectAll(".node")
-        .data(nodes)
-        .enter().append("rect")
-        .attr("class", "node")
-        .attr("x", function(d) { return d.x; })
-        .attr("y", function(d) { return d.y; })
-        .attr("width", function(d) { return d.dx; })
-        .attr("height", function(d) { return d.dy; })
-        .attr("display", function(d) { return d.depth ? null : "none"; })
-        .style("fill", function(d) { return colorOf(d.name, d.children); })
-        .style("opacity", 1)
-        .on("mouseover", mouseover)
-        .on("click", function(d) {
-          if (isOnClickEnabled()) {
-            window.open(remakePath(d))
-          }
-        });
+      .data(nodes)
+      .enter().append("rect")
+      .attr("class", "node")
+      .attr("x", function(d) { return d.x; })
+      .attr("y", function(d) { return d.y; })
+      .attr("width", function(d) { return d.dx; })
+      .attr("height", function(d) { return d.dy; })
+      .attr("display", function(d) { return d.depth ? null : "none"; })
+      .style("fill", function(d) { return colorOf(d.name, d.children); })
+      .style("opacity", 1)
+      .on("mouseover", mouseover)
+      .on("click", function(d) {
+        if (isOnClickEnabled()) {
+          window.open(remakePath(d))
+        }
+      });
+
 
     // Add the mouseleave handler to the bounding rect.
     d3.select("#container").on("mouseleave", mouseleave);
@@ -268,8 +269,10 @@ export function plot(csv_string) {
   function initializeBreadcrumbTrail() {
     // Add the svg area.
     var trail = d3.select("#sequence").append("svg:svg")
-        .attr("width", width)
-        .attr("height", 200)
+        // .attr("width", width)
+        // .attr("height", 200)
+        .attr("xmlns", "http://www.w3.org/2000/svg")
+        .attr("viewBox", "0 0 "+width+" 200")
         .attr("id", "trail");
     // Add the label at the end, for the percentage.
     trail.append("svg:text")
@@ -364,12 +367,17 @@ export function plot(csv_string) {
 
     // Dimensions of legend item: width, height, spacing, radius of rounded rect.
     var li = {
-      w: 75, h: 30, s: 3, r: 3
+      w: 75, h: 10, s: 3, r: 3
     };
 
+    let leg_width = li.w
+    let leg_height = d3.keys(colors).length * (li.h + li.s)
+
     var legend = d3.select("#legend").append("svg:svg")
-        .attr("width", li.w)
-        .attr("height", d3.keys(colors).length * (li.h + li.s));
+        .attr("xmlns", "http://www.w3.org/2000/svg")
+        .attr("viewBox", "0 0 "+leg_width+" "+leg_height)
+        // .attr("width", li.w)
+        // .attr("height", d3.keys(colors).length * (li.h + li.s));
 
     var g = legend.selectAll("g")
         .data(d3.entries(colors))
@@ -391,15 +399,6 @@ export function plot(csv_string) {
         .attr("dy", "0.35em")
         .attr("text-anchor", "middle")
         .text(function(d) { return d.key; });
-  }
-
-  function toggleLegend() {
-    var legend = d3.select("#legend");
-    if (legend.style("visibility") == "hidden") {
-      legend.style("visibility", "");
-    } else {
-      legend.style("visibility", "hidden");
-    }
   }
 
   // Take a 2-column Csv and transform it into a hierarchical structure suitable

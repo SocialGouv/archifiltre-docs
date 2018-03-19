@@ -4,19 +4,15 @@ import { Map } from 'immutable'
 import { generateRandomString } from 'random-gen'
 import duck from 'reducers/duck'
 
+import { toCsvLine, fromCsvLine } from 'csv'
+
 const type = 'cheapExp/database'
 
 const key = Symbol()
 
-function toCsvLine(val) {
-  return `"${val.path.join('/')}","${val.size}"`
-}
 
-function fromCsvLine(csv_line) {
-  let arr =
-    csv_line.match(/(".*?")|([^,"\s]*)/g)
-            .filter(a=>a!=="")
-            .map(a=>a.replace(/"/g,''))
+function csvLineToVal(csv_line) {
+  let arr = fromCsvLine(csv_line)
   if (arr.length === 2) {
     return {
       path:arr[0].split('/'),
@@ -51,11 +47,14 @@ function mkS(map,parent_path) {
   return {
     toCsv: () => map.reduce((acc,val) => {
       if (filterPath(parent_path, val.path)) {
-        return acc + toCsvLine(val) + '\n'
+        return acc + toCsvLine([val.path.join('/'), val.size])
       } else {
         return acc
       }
     },''),
+    toCsvNoFilter: () => map.reduce((acc,val) =>
+      acc + toCsvLine([val.path.join('/'), val.size])
+    ,''),
     size: () => map.size,
     parent_path: () => parent_path.slice(),
     [key]: {
@@ -80,7 +79,7 @@ export const create = mkA((path,size) => state =>
 
 export const fromCsv = mkA((csv) => state =>
   mkS(state[key].map.withMutations(map => 
-    csv.split('\n').forEach(line => map.set(mkId(), fromCsvLine(line)))
+    csv.split('\n').forEach(line => map.set(mkId(), csvLineToVal(line)))
   ), state[key].parent_path)
 )
 

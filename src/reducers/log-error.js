@@ -4,6 +4,9 @@ import { Map } from 'immutable'
 import { generateRandomString } from 'random-gen'
 import duck from 'reducers/duck'
 
+import { toCsvLine } from 'csv'
+
+
 const type = 'cheapExp/log-error'
 
 const key = Symbol()
@@ -11,7 +14,8 @@ const key = Symbol()
 function mkS(map) {
   return {
     toCsv: () => map.reduce((acc,val,key) =>
-      acc + `${key},"${val[0]}","${val[1]}"\n`,''),
+      acc + toCsvLine([key,val[0],val[1]])
+    ,''),
     size: () => map.size,
     [key]: {
       map

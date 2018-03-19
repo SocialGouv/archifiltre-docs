@@ -6,6 +6,7 @@ import { generateRandomString } from 'random-gen'
 import { fromCsv } from 'reducers/database'
 import { finishedToLoadFiles } from 'reducers/app-state'
 import { readFile } from 'folder'
+import { tr } from 'dict'
 
 import unsafeStyle from 'css/import-button.css'
 import wrapper from 'css/wrapper.js'
@@ -16,7 +17,7 @@ const Presentational = props => {
   let id = generateRandomString(40)
   return (
     <div className={style.container()}>
-      <label htmlFor={id} className={style.labelFile()}>Import from csv</label>
+      <label htmlFor={id} className={style.labelFile()}>{tr("Importer depuis un CSV")}</label>
       <input
         id={id}
         className={style.inputFile()}

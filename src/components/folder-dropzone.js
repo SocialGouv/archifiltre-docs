@@ -6,6 +6,8 @@ import { create, fromCsv } from 'reducers/database'
 import { startToLoadFiles, finishedToLoadFiles } from 'reducers/app-state'
 import { logError } from 'reducers/log-error'
 
+import { tr } from 'dict'
+
 class Presentational extends React.Component {
   constructor(props) {
     super(props)
@@ -24,7 +26,7 @@ class Presentational extends React.Component {
       fontSize: '3em'
     }
 
-    this.placeholder = 'Drop files or csv here !'
+    this.placeholder = tr("Glissez-déposez un répertoire ici !")
 
 
     this.handleDrop = this.handleDrop.bind(this)

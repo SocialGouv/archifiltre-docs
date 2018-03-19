@@ -11,6 +11,8 @@ import MainSpace from 'components/main-space'
 
 import unsafeStyle from 'css/main.css'
 
+import { tr } from 'dict'
+
 
 window.onload = function () {
   let root_div = document.createElement('div')
@@ -26,7 +28,7 @@ window.onload = function () {
     <Provider store={store}>
       <div className="mdl-grid">
         <div className="mdl-cell mdl-cell--12-col">
-          This app is only compatible with Chrome or Firefox
+          {tr("Cet outil est compatible avec Firefox et Chrome.")}
         </div>
         <div className="mdl-cell mdl-cell--12-col">
           <MainSpace />

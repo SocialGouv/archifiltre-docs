@@ -9,19 +9,16 @@ const copyCurPath = s => s[key].cur_path.slice()
 
 function mkS(
   start,
-  finish,
-  cur_path
+  finish
 ) {
   return {
     isStarted: () => start,
     isFinished: () => finish,
-    [key]: {
-      cur_path
-    }
+    [key]: {}
   }
 }
 
-const initialState = mkS(false,false,[])
+const initialState = mkS(false,false)
 
 const { mkA, reducer } = duck(type, initialState)
 
@@ -29,11 +26,11 @@ export default reducer
 
 export const startToLoadFiles = mkA(() => state => {
   console.time('loaded')
-  return mkS(true,false,copyCurPath(state))
+  return mkS(true,false)
 })
 export const finishedToLoadFiles = mkA(() => state => {
   console.timeEnd('loaded')
-  return mkS(true,true,copyCurPath(state))
+  return mkS(true,true)
 })
 
 export const reInit = mkA(() => state => initialState)

@@ -8,7 +8,7 @@ import FileSaver from 'file-saver'
 
 const Presentational = props => {
   return (
-    <button type="button" onClick={()=>exportCsv(props.csv)}>Export to csv</button>
+    <button type="button" onClick={()=>exportCsv(props.getCsv())}>Export to csv</button>
   )
 }
 
@@ -28,7 +28,7 @@ function exportCsv(csv) {
 const mapStateToProps = state => {
   let database = selectDatabase(state)
   return {
-    csv: database.toCsv()
+    getCsv: () => database.toCsv()
   }
 }
 

@@ -4,6 +4,8 @@ import { selectDatabase, selectLogError } from 'reducers/root-reducer'
 
 import { setParentPath } from 'reducers/database'
 
+import { tr } from 'dict'
+
 import { plot } from 'sequences'
 
 
@@ -18,8 +20,8 @@ const Presentational = props => {
   return (
     <div>
       <div>
-        <p>Number of files loaded : {props.nb_files}</p>
-        <p>Number of errors : {props.nb_errors}</p>
+        <p>{props.nb_files} {tr("fichiers chargés")}.</p>
+        <p>{props.nb_errors} {tr("erreurs")}.</p>
       </div>
       <div className="mdl-grid">
         <div className="mdl-cell mdl-cell--10-col">
@@ -41,7 +43,7 @@ const Presentational = props => {
         </div>
         <div className="mdl-cell mdl-cell--2-col">
           <div id='sidebar'>
-            <p>Legend :</p>
+            <p>{tr("Légende")}</p>
             <div id='legend'></div>
           </div>
         </div>

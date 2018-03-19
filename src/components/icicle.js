@@ -2,8 +2,16 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { selectDatabase, selectLogError } from 'reducers/root-reducer'
 
+import { setParentPath } from 'reducers/database'
 
 import { plot } from 'sequences'
+
+
+// dummy, just to keep same feel as original sequences.js
+const chart_style = {
+  position: 'relative',
+  stroke: '#fff',
+}
 
 
 const Presentational = props => {
@@ -13,19 +21,30 @@ const Presentational = props => {
         <p>Number of files loaded : {props.nb_files}</p>
         <p>Number of errors : {props.nb_errors}</p>
       </div>
-      <div id='main' ref={(input) => {
-          console.time('plot')
-          plot(props.csv)
-          console.timeEnd('plot')
-        }}>
-        <div id='sequence'>
+      <div className="mdl-grid">
+        <div className="mdl-cell mdl-cell--10-col">
+          <div className="mdl-grid" id='main' ref={(input) => {
+              if (input) {
+                console.time('plot')
+                plot(props.csv, props.setParentPath, props.parent_path)
+                console.timeEnd('plot')
+              }
+            }}>
+            <div
+              className="mdl-cell mdl-cell--12-col"
+              id='sequence'></div>
+            <div
+              className="mdl-cell mdl-cell--12-col"
+              id='chart'
+              style={chart_style}></div>
+          </div>
         </div>
-        <div id='chart'>
+        <div className="mdl-cell mdl-cell--2-col">
+          <div id='sidebar'>
+            <p>Legend :</p>
+            <div id='legend'></div>
+          </div>
         </div>
-      </div>
-      <div id='sidebar'>
-        <input type='checkbox' id='togglelegend' /> Legend<br/>
-        <div id='legend' style={{visibility: 'hidden'}}></div>
       </div>
     </div>
   )
@@ -43,12 +62,15 @@ const mapStateToProps = state => {
   return {
     csv,
     nb_files: database.size(),
-    nb_errors: logError.size()
+    nb_errors: logError.size(),
+    parent_path: database.parent_path(),
   }
 }
  
 const mapDispatchToProps = dispatch => {
-  return {}
+  return {
+    setParentPath: (...args) => dispatch(setParentPath(...args))
+  }
 }
 
 

@@ -1,9 +1,10 @@
 
 
-export function plot(csv_string) {
+export function plot(csv_string, setParentPath, parent_path) {
 
   d3.select("#chart").selectAll("svg").remove()
   d3.select("#legend").selectAll("svg").remove()
+  d3.select("#sequence").selectAll("svg").remove()
 
 
   // Dimensions of sunburst.
@@ -18,6 +19,7 @@ export function plot(csv_string) {
   // Mapping of step names to colors.
   var colors = {
     folder : "#fabf0b",
+    parent_folder : "#e07f00",
     spreadsheet : "#52d11a",
     doc : "#1a55ea",
     presentation : "#e33b14",
@@ -28,11 +30,23 @@ export function plot(csv_string) {
 
   var font_size = 10
 
+  function isAParentFolder(path) {
+    if (path.length>parent_path.length) {
+      return false
+    } else {
+      return path.map((val,i)=>val===parent_path[i])
+          .reduce((acc,val)=>acc&&val,true)
+    }
+  }
 
-  function colorOf(name, children) {
+  function colorOf(name, children, path) {
     
     if (children !== undefined) {
-      return colors.folder;
+      if (isAParentFolder(path)) {
+        return colors.parent_folder;
+      } else {
+        return colors.folder;
+      }
     } else {
       var m = name.match(/\..*$/)
 
@@ -102,30 +116,24 @@ export function plot(csv_string) {
 
   function remakePath(d) {
     if (d.parent) {
-      return remakePath(d.parent) + "/" + d.name
+      return remakePath(d.parent).concat([d.name])
     } else {
-      var root_folder_path = document.getElementById('root_folder_path').value
-      return "file://" + escapeLastCharPath(root_folder_path)
+      return []
     }
   }
 
-  function isOnClickEnabled() {
-    return document.getElementById('root_folder_path').value !== ''
+  function pathToStr(p) {
+    return p.join('/')
   }
 
-  function escapeLastCharPath(str) {
-    if (str[str.length - 1] === '/') {
-      return str.slice(0,-1)
-    }
-    return str
-  }
 
   // Total size of all segments; we set this later, after loading the data.
   var totalSize = 0; 
 
   var vis = d3.select("#chart").append("svg:svg")
-      .attr("width", width)
-      .attr("height", height)
+      .attr("xmlns", "http://www.w3.org/2000/svg")
+      // .attr("viewBox", "0 0 900 500")
+      .attr("viewBox", "0 0 "+width+" "+height)
       .append("svg:g")
       .attr("id", "container");
 
@@ -148,38 +156,57 @@ export function plot(csv_string) {
     // Basic setup of page elements.
     initializeBreadcrumbTrail();
     drawLegend();
-    d3.select("#togglelegend").on("click", toggleLegend);
 
     // Bounding rect underneath the chart, to make it easier to detect
     // when the mouse leaves the parent g.
     vis.append("svg:rect")
-        .attr("width", width)
-        .attr("height", height)
-        .style("opacity", 0);
+      .attr("width", width)
+      .attr("height", height)
+      .style("opacity", 0);
 
     // For efficiency, filter nodes to keep only those large enough to see.
     var nodes = partition.nodes(json)
-        .filter(function(d) {
-        return (d.dx > 0.5);
-        });
+      .filter(function(d) {
+      return (d.dx > 0.5);
+      });
 
     var node = vis.data([json]).selectAll(".node")
-        .data(nodes)
-        .enter().append("rect")
-        .attr("class", "node")
+      .data(nodes)
+      .enter();
+
+    const onClickHandler = function(d) {
+      setParentPath(remakePath(d))
+    }
+
+    node.append("rect")
+      .attr("class", "node")
+      .attr("x", function(d) { return d.x; })
+      .attr("y", function(d) { return d.y; })
+      .attr("width", function(d) { return d.dx; })
+      .attr("height", function(d) { return d.dy; })
+      .attr("display", function(d) { return d.depth ? null : "none"; })
+      .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); })
+      .style("opacity", 1)
+      .on("mouseover", mouseover)
+      .on("click", onClickHandler);
+
+      node.append("text")
         .attr("x", function(d) { return d.x; })
         .attr("y", function(d) { return d.y; })
-        .attr("width", function(d) { return d.dx; })
-        .attr("height", function(d) { return d.dy; })
-        .attr("display", function(d) { return d.depth ? null : "none"; })
-        .style("fill", function(d) { return colorOf(d.name, d.children); })
-        .style("opacity", 1)
-        .on("mouseover", mouseover)
-        .on("click", function(d) {
-          if (isOnClickEnabled()) {
-            window.open(remakePath(d))
+        .attr("dx", function(d) { return d.dx/2; })
+        .attr("dy", function(d) { return d.dy/2; })
+        .attr("text-anchor", "middle")
+        .attr("stroke", "none")
+        .attr("visibility", function(d) {
+          if (9*d.name.length < d.dx) {
+            return "visible"
+          } else {
+            return "hidden"
           }
-        });
+        })
+        .text(function(d) { return d.name; })
+        .on("click", onClickHandler);
+
 
     // Add the mouseleave handler to the bounding rect.
     d3.select("#container").on("mouseleave", mouseleave);
@@ -268,8 +295,10 @@ export function plot(csv_string) {
   function initializeBreadcrumbTrail() {
     // Add the svg area.
     var trail = d3.select("#sequence").append("svg:svg")
-        .attr("width", width)
-        .attr("height", 200)
+        // .attr("width", width)
+        // .attr("height", 200)
+        .attr("xmlns", "http://www.w3.org/2000/svg")
+        .attr("viewBox", "0 0 "+width+" 200")
         .attr("id", "trail");
     // Add the label at the end, for the percentage.
     trail.append("svg:text")
@@ -309,7 +338,7 @@ export function plot(csv_string) {
 
     entering.append("svg:polygon")
         .attr("points", breadcrumbPoints)
-        .style("fill", function(d) { return colorOf(d.name, d.children); });
+        .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); });
 
     entering.append("svg:text")
         .attr("x", function(d, i) {
@@ -364,12 +393,17 @@ export function plot(csv_string) {
 
     // Dimensions of legend item: width, height, spacing, radius of rounded rect.
     var li = {
-      w: 75, h: 30, s: 3, r: 3
+      w: 75, h: 10, s: 3, r: 3
     };
 
+    let leg_width = li.w
+    let leg_height = d3.keys(colors).length * (li.h + li.s)
+
     var legend = d3.select("#legend").append("svg:svg")
-        .attr("width", li.w)
-        .attr("height", d3.keys(colors).length * (li.h + li.s));
+        .attr("xmlns", "http://www.w3.org/2000/svg")
+        .attr("viewBox", "0 0 "+leg_width+" "+leg_height)
+        // .attr("width", li.w)
+        // .attr("height", d3.keys(colors).length * (li.h + li.s));
 
     var g = legend.selectAll("g")
         .data(d3.entries(colors))
@@ -391,15 +425,6 @@ export function plot(csv_string) {
         .attr("dy", "0.35em")
         .attr("text-anchor", "middle")
         .text(function(d) { return d.key; });
-  }
-
-  function toggleLegend() {
-    var legend = d3.select("#legend");
-    if (legend.style("visibility") == "hidden") {
-      legend.style("visibility", "");
-    } else {
-      legend.style("visibility", "hidden");
-    }
   }
 
   // Take a 2-column Csv and transform it into a hierarchical structure suitable

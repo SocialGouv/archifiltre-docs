@@ -62,19 +62,11 @@ const mapStateToProps = state => {
  
 const mapDispatchToProps = dispatch => {
   return {
-    create: a => {
-      dispatch(create(a))
-    },
-    fromCsv: a => {
-      dispatch(fromCsv(a))
-    },
+    create: (...args) => dispatch(create(...args)),
+    fromCsv: (...args) => dispatch(fromCsv(...args)),
     logError: (...a) => dispatch(logError(...a)),
-    startToLoadFiles: () => {
-      dispatch(startToLoadFiles())
-    },
-    finishedToLoadFiles: () => {
-      dispatch(finishedToLoadFiles())
-    }
+    startToLoadFiles: (...args) => dispatch(startToLoadFiles(...args)),
+    finishedToLoadFiles: (...args) => dispatch(finishedToLoadFiles(...args)),
   }
 }
 

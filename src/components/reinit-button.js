@@ -1,25 +1,27 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { selectDatabase } from 'reducers/root-reducer'
-import { exportCsv } from 'csv'
+import { reInit as re1 } from 'reducers/database'
+import { reInit as re2 } from 'reducers/app-state'
 
 const Presentational = props => {
   return (
-    <button type="button" onClick={()=>exportCsv(props.getCsv())}>Export to csv</button>
+    <button type="button" onClick={props.reInitStateApp}>Reinit</button>
   )
 }
 
 
 const mapStateToProps = state => {
-  let database = selectDatabase(state)
-  return {
-    getCsv: () => database.toCsvNoFilter()
-  }
+  return {}
 }
 
 const mapDispatchToProps = dispatch => {
-  return {}
+  return {
+    reInitStateApp: (...args) => {
+      dispatch(re1())
+      dispatch(re2())
+    }
+  }
 }
 
 

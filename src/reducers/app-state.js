@@ -5,7 +5,12 @@ const type = 'cheapExp/appState'
 
 const key = Symbol()
 
-function mkS(start, finish) {
+const copyCurPath = s => s[key].cur_path.slice()
+
+function mkS(
+  start,
+  finish
+) {
   return {
     isStarted: () => start,
     isFinished: () => finish,
@@ -27,3 +32,5 @@ export const finishedToLoadFiles = mkA(() => state => {
   console.timeEnd('loaded')
   return mkS(true,true)
 })
+
+export const reInit = mkA(() => state => initialState)

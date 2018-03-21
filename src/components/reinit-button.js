@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { reInit as re1 } from 'reducers/database'
 import { reInit as re2 } from 'reducers/app-state'
+import { reInit as re3 } from 'reducers/log-error'
 
 import { tr } from 'dict'
 
@@ -22,6 +23,7 @@ const mapDispatchToProps = dispatch => {
     reInitStateApp: (...args) => {
       dispatch(re1())
       dispatch(re2())
+      dispatch(re3())
     }
   }
 }

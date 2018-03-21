@@ -1,4 +1,4 @@
-
+import { tr } from 'dict'
 
 export function plot(csv_string, setParentPath, parent_path) {
 
@@ -18,14 +18,14 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   // Mapping of step names to colors.
   var colors = {
-    folder : "#fabf0b",
-    parent_folder : "#e07f00",
-    spreadsheet : "#52d11a",
-    doc : "#1a55ea",
-    presentation : "#e33b14",
-    otherfiles : "#8a8c93",
-    email: "#13d6f3",
-    multimedia: "#9735f2"
+    presentation : {label: tr("Presentation"), color:"#e33b14"},
+    parent_folder : {label: tr("Root"), color: "#f99a0b"},
+    folder : {label: tr("Folder"), color:"#fabf0b"},
+    spreadsheet : {label: tr("Spreadsheet"), color:"#52d11a"},
+    email: {label: tr("E-mail"), color:"#13d6f3"},
+    doc : {label: tr("Document"), color:"#1a55ea"},
+    multimedia: {label: tr("Multimedia"), color:"#9735f2"},
+    otherfiles : {label: tr("Others"), color:"#8a8c93"}
   };
 
   var font_size = 10
@@ -185,7 +185,7 @@ export function plot(csv_string, setParentPath, parent_path) {
       .attr("width", function(d) { return d.dx; })
       .attr("height", function(d) { return d.dy; })
       .attr("display", function(d) { return d.depth ? null : "none"; })
-      .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); })
+      .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)).color; })
       .style("opacity", 1)
       .on("mouseover", mouseover)
       .on("click", onClickHandler);
@@ -338,7 +338,7 @@ export function plot(csv_string, setParentPath, parent_path) {
 
     entering.append("svg:polygon")
         .attr("points", breadcrumbPoints)
-        .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); });
+        .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)).color; });
 
     entering.append("svg:text")
         .attr("x", function(d, i) {
@@ -417,14 +417,14 @@ export function plot(csv_string, setParentPath, parent_path) {
         .attr("ry", li.r)
         .attr("width", li.w)
         .attr("height", li.h)
-        .style("fill", function(d) { return d.value; });
+        .style("fill", function(d) { return d.value.color; });
 
     g.append("svg:text")
         .attr("x", li.w / 2)
         .attr("y", li.h / 2)
         .attr("dy", "0.35em")
         .attr("text-anchor", "middle")
-        .text(function(d) { return d.key; });
+        .text(function(d) { return d.value.label; });
   }
 
   // Take a 2-column Csv and transform it into a hierarchical structure suitable
@@ -432,7 +432,7 @@ export function plot(csv_string, setParentPath, parent_path) {
   // root to leaf, separated by hyphens. The second column is a count of how 
   // often that sequence occurred.
   function buildHierarchy(csv) {
-    var root = {"name": "root", "children": []};
+    var root = {"name": tr("Root"), "children": []};
     for (var i = 0; i < csv.length; i++) {
       var sequence = csv[i][0];
       var size = +csv[i][1];

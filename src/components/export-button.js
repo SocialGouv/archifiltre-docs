@@ -9,7 +9,7 @@ import { tr } from 'dict'
 const Presentational = props => {
 
   return (
-    <button type="button" onClick={()=>exportCsv(props.getCsv())}>{tr("Exporter")}</button>
+    <button type="button" onClick={()=>exportCsv(props.getCsv())}>{tr("Export")}</button>
   )
 }
 

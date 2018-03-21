@@ -28,7 +28,7 @@ window.onload = function () {
     <Provider store={store}>
       <div className="mdl-grid">
         <div className="mdl-cell mdl-cell--12-col">
-          {tr("Cet outil est compatible avec Firefox et Chrome.")}
+          {tr("This app is compatible with Firefox and Chrome.")}
         </div>
         <div className="mdl-cell mdl-cell--12-col">
           <MainSpace />
@@ -39,4 +39,3 @@ window.onload = function () {
   )
 
 }
-

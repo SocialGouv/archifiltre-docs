@@ -26,7 +26,7 @@ class Presentational extends React.Component {
       fontSize: '3em'
     }
 
-    this.placeholder = tr("Glissez-déposez un répertoire ici !")
+    this.placeholder = tr("Drop a directory here!")
 
 
     this.handleDrop = this.handleDrop.bind(this)

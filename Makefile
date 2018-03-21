@@ -1,8 +1,7 @@
 image_name = cheap-exp
 pwd = $(shell pwd)
 
-all: prod
-	sudo docker stack deploy -c docker-compose.yml $(image_name)-stack
+all: devServer
 
 devServer: dev
 	sudo docker run \
@@ -15,22 +14,16 @@ dev: cleanContainer
 	sudo docker build \
 		--network=host \
 		--target=dev \
-		--tag=$(image_name) \
+		--tag=$(image_name):dev \
 		.
 
 prod: cleanContainer
 	sudo docker build \
 		--network=host \
-		--tag=$(image_name) \
+		--tag=$(image_name):prod \
 		.
 
-clean: cleanContainer cleanImage cleanVolume
+clean: cleanContainer
 
 cleanContainer:
 	sudo docker container prune -f
-
-cleanImage:
-	sudo docker image prune -f
-
-cleanVolume:
-	sudo docker volume prune -f

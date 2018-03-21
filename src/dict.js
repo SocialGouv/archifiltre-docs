@@ -1,5 +1,4 @@
-//const lang = navigator.language.slice(0,-3)
-const lang = "fr"
+const lang = navigator.language.slice(0,-3)
 
 const dict = {
   // Home screen

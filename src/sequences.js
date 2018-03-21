@@ -43,9 +43,9 @@ export function plot(csv_string, setParentPath, parent_path) {
     
     if (children !== undefined) {
       if (isAParentFolder(path)) {
-        return colors.parent_folder;
+        return colors.parent_folder.color;
       } else {
-        return colors.folder;
+        return colors.folder.color;
       }
     } else {
       var m = name.match(/\..*$/)
@@ -64,7 +64,7 @@ export function plot(csv_string, setParentPath, parent_path) {
         case ".csv": // format Csv
         case ".ods": //formats OOo/LO Calc
         case ".ots":
-          return colors.spreadsheet;
+          return colors.spreadsheet.color;
         case ".doc":  //formats Microsoft Word
         case ".docx":
         case ".docm":
@@ -75,7 +75,7 @@ export function plot(csv_string, setParentPath, parent_path) {
         case ".ott":
         case ".txt": // formats texte standard
         case ".rtf":
-          return colors.doc;
+          return colors.doc.color;
         case ".ppt": // formats Microsoft PowerPoint
         case ".pptx":
         case ".pptm":
@@ -85,11 +85,11 @@ export function plot(csv_string, setParentPath, parent_path) {
         case ".odp": // formats OOo/LO Impress
         case ".otp":
         case ".pdf": // On considère le PDF comme une présentation
-          return colors.presentation;
+          return colors.presentation.color;
         case ".eml": //formats d'email et d'archive email
         case ".msg":
         case ".pst":
-          return colors.email;
+          return colors.email.color;
         case ".jpeg": //formats d'image
         case ".jpg":
         case ".gif":
@@ -104,9 +104,9 @@ export function plot(csv_string, setParentPath, parent_path) {
         case ".mp4":
         case ".mov":
         case ".mkv":
-          return colors.multimedia;
+          return colors.multimedia.color;
         default:
-          return colors.otherfiles;
+          return colors.otherfiles.color;
         }
 
       }
@@ -185,7 +185,7 @@ export function plot(csv_string, setParentPath, parent_path) {
       .attr("width", function(d) { return d.dx; })
       .attr("height", function(d) { return d.dy; })
       .attr("display", function(d) { return d.depth ? null : "none"; })
-      .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)).color; })
+      .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); })
       .style("opacity", 1)
       .on("mouseover", mouseover)
       .on("click", onClickHandler);
@@ -338,7 +338,7 @@ export function plot(csv_string, setParentPath, parent_path) {
 
     entering.append("svg:polygon")
         .attr("points", breadcrumbPoints)
-        .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)).color; });
+        .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); });
 
     entering.append("svg:text")
         .attr("x", function(d, i) {

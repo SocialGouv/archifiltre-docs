@@ -4,9 +4,12 @@ import { connect } from 'react-redux'
 import { selectDatabase } from 'reducers/root-reducer'
 import { exportCsv } from 'csv'
 
+import { tr } from 'dict'
+
 const Presentational = props => {
+
   return (
-    <button type="button" onClick={()=>exportCsv(props.getCsv())}>Export to csv</button>
+    <button type="button" onClick={()=>exportCsv(props.getCsv())}>{tr("Export")}</button>
   )
 }
 

@@ -34,3 +34,5 @@ export const logError = mkA((path, error) => state => {
   return mkS(map.set(map.size, [path, error]))
 })
 
+export const reInit = mkA(() => state => initialState)
+

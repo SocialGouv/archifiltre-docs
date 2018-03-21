@@ -28,8 +28,8 @@ class Presentational extends React.Component {
   render() {
     return (
       <div>
-        <p>{tr("Fichiers chargés")}: {this.props.nb_files}</p>
-        <p>{tr("Erreurs")} : {this.props.nb_errors}</p>
+        <p>{tr("Files loaded")}: {this.props.nb_files}</p>
+        <p>{tr("Errors")} : {this.props.nb_errors}</p>
       </div>
     )
   }

@@ -17,7 +17,7 @@ const Presentational = props => {
   let id = generateRandomString(40)
   return (
     <div className={style.container()}>
-      <label htmlFor={id} className={style.labelFile()}>{tr("Importer depuis un CSV")}</label>
+      <label htmlFor={id} className={style.labelFile()}>{tr("Import from CSV")}</label>
       <input
         id={id}
         className={style.inputFile()}

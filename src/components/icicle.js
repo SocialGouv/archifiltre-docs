@@ -20,8 +20,8 @@ const Presentational = props => {
   return (
     <div>
       <div>
-        <p>{props.nb_files} {tr("fichiers chargés")}.</p>
-        <p>{props.nb_errors} {tr("erreurs")}.</p>
+        <p>{props.nb_files} {tr("files loaded")}.</p>
+        <p>{props.nb_errors} {tr("errors")}.</p>
       </div>
       <div className="mdl-grid">
         <div className="mdl-cell mdl-cell--10-col">
@@ -43,7 +43,7 @@ const Presentational = props => {
         </div>
         <div className="mdl-cell mdl-cell--2-col">
           <div id='sidebar'>
-            <p>{tr("Légende")}</p>
+            <p>{tr("Legend")}</p>
             <div id='legend'></div>
           </div>
         </div>

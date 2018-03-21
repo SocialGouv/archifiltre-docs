@@ -4,9 +4,11 @@ import { connect } from 'react-redux'
 import { reInit as re1 } from 'reducers/database'
 import { reInit as re2 } from 'reducers/app-state'
 
+import { tr } from 'dict'
+
 const Presentational = props => {
   return (
-    <button type="button" onClick={props.reInitStateApp}>Reinit</button>
+    <button type="button" onClick={props.reInitStateApp}>{tr("Reset")}</button>
   )
 }
 

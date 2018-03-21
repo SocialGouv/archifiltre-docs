@@ -1,4 +1,4 @@
-
+import { tr } from 'dict'
 
 export function plot(csv_string, setParentPath, parent_path) {
 
@@ -18,14 +18,14 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   // Mapping of step names to colors.
   var colors = {
-    folder : "#fabf0b",
-    parent_folder : "#e07f00",
-    spreadsheet : "#52d11a",
-    doc : "#1a55ea",
-    presentation : "#e33b14",
-    otherfiles : "#8a8c93",
-    email: "#13d6f3",
-    multimedia: "#9735f2"
+    presentation : {label: tr("Presentation"), color:"#e33b14"},
+    parent_folder : {label: tr("Root"), color: "#f99a0b"},
+    folder : {label: tr("Folder"), color:"#fabf0b"},
+    spreadsheet : {label: tr("Spreadsheet"), color:"#52d11a"},
+    email: {label: tr("E-mail"), color:"#13d6f3"},
+    doc : {label: tr("Document"), color:"#1a55ea"},
+    multimedia: {label: tr("Multimedia"), color:"#9735f2"},
+    otherfiles : {label: tr("Others"), color:"#8a8c93"}
   };
 
   var font_size = 10
@@ -43,9 +43,9 @@ export function plot(csv_string, setParentPath, parent_path) {
     
     if (children !== undefined) {
       if (isAParentFolder(path)) {
-        return colors.parent_folder;
+        return colors.parent_folder.color;
       } else {
-        return colors.folder;
+        return colors.folder.color;
       }
     } else {
       var m = name.match(/\..*$/)
@@ -64,7 +64,7 @@ export function plot(csv_string, setParentPath, parent_path) {
         case ".csv": // format Csv
         case ".ods": //formats OOo/LO Calc
         case ".ots":
-          return colors.spreadsheet;
+          return colors.spreadsheet.color;
         case ".doc":  //formats Microsoft Word
         case ".docx":
         case ".docm":
@@ -75,7 +75,7 @@ export function plot(csv_string, setParentPath, parent_path) {
         case ".ott":
         case ".txt": // formats texte standard
         case ".rtf":
-          return colors.doc;
+          return colors.doc.color;
         case ".ppt": // formats Microsoft PowerPoint
         case ".pptx":
         case ".pptm":
@@ -85,11 +85,11 @@ export function plot(csv_string, setParentPath, parent_path) {
         case ".odp": // formats OOo/LO Impress
         case ".otp":
         case ".pdf": // On considère le PDF comme une présentation
-          return colors.presentation;
+          return colors.presentation.color;
         case ".eml": //formats d'email et d'archive email
         case ".msg":
         case ".pst":
-          return colors.email;
+          return colors.email.color;
         case ".jpeg": //formats d'image
         case ".jpg":
         case ".gif":
@@ -104,9 +104,9 @@ export function plot(csv_string, setParentPath, parent_path) {
         case ".mp4":
         case ".mov":
         case ".mkv":
-          return colors.multimedia;
+          return colors.multimedia.color;
         default:
-          return colors.otherfiles;
+          return colors.otherfiles.color;
         }
 
       }
@@ -417,14 +417,14 @@ export function plot(csv_string, setParentPath, parent_path) {
         .attr("ry", li.r)
         .attr("width", li.w)
         .attr("height", li.h)
-        .style("fill", function(d) { return d.value; });
+        .style("fill", function(d) { return d.value.color; });
 
     g.append("svg:text")
         .attr("x", li.w / 2)
         .attr("y", li.h / 2)
         .attr("dy", "0.35em")
         .attr("text-anchor", "middle")
-        .text(function(d) { return d.key; });
+        .text(function(d) { return d.value.label; });
   }
 
   // Take a 2-column Csv and transform it into a hierarchical structure suitable
@@ -432,7 +432,7 @@ export function plot(csv_string, setParentPath, parent_path) {
   // root to leaf, separated by hyphens. The second column is a count of how 
   // often that sequence occurred.
   function buildHierarchy(csv) {
-    var root = {"name": "root", "children": []};
+    var root = {"name": tr("Root"), "children": []};
     for (var i = 0; i < csv.length; i++) {
       var sequence = csv[i][0];
       var size = +csv[i][1];

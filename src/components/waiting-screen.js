@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { selectDatabase, selectLogError } from 'reducers/root-reducer'
+import { tr } from 'dict'
 
 class Presentational extends React.Component {
   constructor(props) {
@@ -27,8 +28,8 @@ class Presentational extends React.Component {
   render() {
     return (
       <div>
-        <p>files loaded : {this.props.nb_files}</p>
-        <p>errors : {this.props.nb_errors}</p>
+        <p>{tr("Files loaded")}: {this.props.nb_files}</p>
+        <p>{tr("Errors")} : {this.props.nb_errors}</p>
       </div>
     )
   }

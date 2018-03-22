@@ -7,6 +7,10 @@ const dict = {
     en: "Drop a directory here!",
     es: "¡Coloca un directorio aquí!"
   },
+  "You may also drop a CSV file previously exported from Icicle.": {
+    fr: "Vous pouvez aussi déposer un fichier CSV précédement exporté depuis Stalactite.",
+    en: "You may also drop a CSV file previously exported from Icicle."
+  },
   "Import from CSV": {
   	fr: "Importer depuis un CSV",
   	en: "Import from CSV",

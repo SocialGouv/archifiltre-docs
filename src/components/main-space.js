@@ -18,7 +18,6 @@ const Presentational = props => {
   if (props.started === false && props.finished === false) {
     return (
       <div>
-        <ImportButton />
         <FolderDropzone />
       </div>
     )
@@ -27,15 +26,6 @@ const Presentational = props => {
   } else {
     return (
       <div className="mdl-grid">
-        <div className="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
-          <ExportButton />
-        </div>
-        <div className="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
-          <ReinitButton />
-        </div>
-        <div className="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--2-col-phone">
-          <ErrorLogButton />
-        </div>
         <div className="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
           <Icicle />
         </div>

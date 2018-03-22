@@ -194,7 +194,7 @@ export function plot(csv_string, setParentPath, parent_path) {
         .attr("x", function(d) { return d.x; })
         .attr("y", function(d) { return d.y; })
         .attr("dx", function(d) { return d.dx/2; })
-        .attr("dy", function(d) { return d.dy/2; })
+        .attr("dy", function(d) { return d.dy/1.5; })
         .attr("text-anchor", "middle")
         .attr("stroke", "none")
         .attr("visibility", function(d) {
@@ -298,7 +298,7 @@ export function plot(csv_string, setParentPath, parent_path) {
         // .attr("width", width)
         // .attr("height", 200)
         .attr("xmlns", "http://www.w3.org/2000/svg")
-        .attr("viewBox", "0 0 "+width+" 200")
+        .attr("viewBox", "0 0 "+width+" 100")
         .attr("id", "trail");
     // Add the label at the end, for the percentage.
     trail.append("svg:text")
@@ -389,11 +389,11 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   }
 
-  function drawLegend() {
+function drawLegend() {
 
     // Dimensions of legend item: width, height, spacing, radius of rounded rect.
     var li = {
-      w: 75, h: 10, s: 3, r: 3
+      w: 30, h: 5, s: 0.5, r: 0
     };
 
     let leg_width = li.w
@@ -424,6 +424,7 @@ export function plot(csv_string, setParentPath, parent_path) {
         .attr("y", li.h / 2)
         .attr("dy", "0.35em")
         .attr("text-anchor", "middle")
+        .style("font-size", "0.2em")
         .text(function(d) { return d.value.label; });
   }
 

@@ -18,7 +18,10 @@ class Presentational extends React.Component {
       borderRadius: '1em',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      textAlign: 'center',
+      marginLeft: '5em',
+      marginRight: '5em'
     }
 
     this.style_placeholder = {
@@ -27,6 +30,7 @@ class Presentational extends React.Component {
     }
 
     this.placeholder = tr("Drop a directory here!")
+    this.placeholder_st = tr("You may also drop a CSV file previously exported from Icicle.")
 
 
     this.handleDrop = this.handleDrop.bind(this)
@@ -44,16 +48,21 @@ class Presentational extends React.Component {
 
   render() {
     return (
-      <div
-        onDragOver={this.handleDragover}
-        onDrop={this.handleDrop}
-        style={this.style_dropzone}
-      >
-        <div style={this.style_placeholder}>
-          {this.placeholder}
-        </div>
-      </div>
-    )
+     <div
+       onDragOver={this.handleDragover}
+       onDrop={this.handleDrop}
+       style={this.style_dropzone}
+     >
+       <div>
+         <p style={this.style_placeholder}>
+           {this.placeholder}
+         </p>
+         <p style={this.style_placeholder_st}>
+           {this.placeholder_st}
+         </p>
+       </div>
+     </div>
+   )
   }
 }
 

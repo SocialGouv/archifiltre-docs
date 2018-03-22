@@ -27,7 +27,7 @@ window.onload = function () {
   ReactDOM.render(
     <Provider store={store}>
       <div className="mdl-grid">
-        <div className="mdl-cell mdl-cell--12-col">
+        <div className="mdl-cell mdl-cell--12-col" style={{'textAlign':'center'}}>
           {tr("This app is compatible with Firefox and Chrome.")}
         </div>
         <div className="mdl-cell mdl-cell--12-col">

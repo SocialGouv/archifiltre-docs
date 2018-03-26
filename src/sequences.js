@@ -11,9 +11,11 @@ export function plot(csv_string, setParentPath, parent_path) {
   var width = 800;
   var height = 300;
 
+  var font_size = 8
+
   // Breadcrumb dimensions: width, height, spacing, width of tip/tail.
   var b = {
-    w: null, h: 30, s: 3, t: 3
+    w: null, h: font_size*2.5, s: 3, t: 3
   };
 
   // Mapping of step names to colors.
@@ -28,7 +30,7 @@ export function plot(csv_string, setParentPath, parent_path) {
     otherfiles : {label: tr("Others"), color:"#8a8c93"}
   };
 
-  var font_size = 10
+
 
   function isAParentFolder(path) {
     if (path.length>parent_path.length) {
@@ -349,6 +351,7 @@ export function plot(csv_string, setParentPath, parent_path) {
         .attr("y", b.h / 2)
         .attr("dy", "0.35em")
         .attr("text-anchor", "middle")
+        .style("font-size", font_size/10+"em")
         .text(function(d) { return d.name; });
 
     var tot_len = 0

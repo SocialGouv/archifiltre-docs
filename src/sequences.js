@@ -48,12 +48,13 @@ export function plot(csv_string, setParentPath, parent_path) {
         return colors.folder.color;
       }
     } else {
-      var m = name.match(/\..*$/)
+      var m = name.match(/\.[^\.]*$/)
 
       if (m == null)
         m = [""]
 
-      switch(m[0]){
+
+      switch(m[0].toLowerCase()){
         case ".xls": //formats Microsoft Excel
         case ".xlsx":
         case ".xlsm":

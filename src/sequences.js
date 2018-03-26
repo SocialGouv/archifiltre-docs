@@ -1,5 +1,7 @@
 import { tr } from 'dict'
 
+import d3 from 'd3'
+
 export function plot(csv_string, setParentPath, parent_path) {
 
   d3.select("#chart").selectAll("svg").remove()

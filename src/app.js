@@ -19,7 +19,7 @@ window.onload = function () {
   root_div.setAttribute('id','root')
 
   if (document.body !== null) {
-    document.body.append(root_div)
+    document.body.appendChild(root_div)
   }
 
   let store = createStore(rootReducer)

@@ -1,0 +1,50 @@
+
+
+h1, h2, h3, h4, p, .mdl-layout__header-row .mdl-navigation__link {
+	font-family: 'Quicksand', sans-serif;
+	color: #242523;
+}
+
+.logo-espace{
+	letter-spacing: 0.25em;
+	font-variant-ligatures: none;
+}
+
+h1 {
+	letter-spacing: 0.16em;
+	padding-top: 0px;
+	margin-top:0px;
+	padding-bottom: 0px;
+	margin-bottom:0px;
+}
+
+.jap{
+	font-family: "Sawarabi Mincho";
+	letter-spacing: 0.45em;
+}
+
+.mdl-layout-spacer{
+/*	background: #ffeded;
+*/}
+
+.mdl-cell {
+	justify-content: center;
+	align-content: center;
+	text-align:center;
+/*	background: #ededed;
+*/}
+
+.demo-layout-transparent {
+	height: 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background: #ced3cc;
+    background-repeat:no-repeat;
+    background: -webkit-linear-gradient(to bottom, #ecefea, #ced3cc);
+    background: -moz-linear-gradient(to bottom, #ecefea, #ced3cc);
+    background: -ms-linear-gradient(to bottom, #ecefea, #ced3cc);
+    background: -o-linear-gradient(to bottom, #ecefea, #ced3cc);
+    background: linear-gradient(to bottom, #ecefea, #ced3cc);
+}

@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { mkB } from 'button'
+
 import { reInit as re1 } from 'reducers/database'
 import { reInit as re2 } from 'reducers/app-state'
 import { reInit as re3 } from 'reducers/log-error'
@@ -8,10 +10,10 @@ import { reInit as re3 } from 'reducers/log-error'
 import { tr } from 'dict'
 
 const Presentational = props => {
-  return (
-    <button type="button" onClick={props.reInitStateApp}>{tr("Reset")}</button>
-  )
+
+  return mkB(props.reInitStateApp, tr("Reset"))
 }
+
 
 
 const mapStateToProps = state => {

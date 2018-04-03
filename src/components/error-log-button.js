@@ -11,11 +11,18 @@ import { generateRandomString } from 'random-gen'
 import { tr } from 'dict'
 
 const Presentational = props => {
-
-  return mkB(()=> {
+  if(props.nb_errors > 0){
+    return mkB(()=> {
       let report_name = 'error_log_report_'+generateRandomString(40)
       exportCsv(props.getCsv(),report_name)
-    }, tr("Export error log"))
+      },
+      (<span><i className='material-icons'>file_download</i><span> {tr("Errors")}</span></span>)
+      )
+  }
+  else{
+    return (<span></span>)
+  }
+  
 }
 
 

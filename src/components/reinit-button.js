@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { mkB } from 'button'
+import { mkRB } from 'button'
 
 import { reInit as re1 } from 'reducers/database'
 import { reInit as re2 } from 'reducers/app-state'
@@ -11,7 +11,7 @@ import { tr } from 'dict'
 
 const Presentational = props => {
 
-  return mkB(props.reInitStateApp, tr("Reset"))
+  return mkRB(props.reInitStateApp, (<i className='material-icons'>power_settings_new</i>))
 }
 
 

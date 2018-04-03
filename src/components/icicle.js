@@ -42,9 +42,9 @@ const Presentational = props => {
         </div>
         <div className="mdl-cell mdl-cell--2-col">
           <div id='sidebar' style={{"textAlign":"center"}}>
-          <p>{props.nb_files} {tr("files loaded")}<br />{props.nb_errors} {tr("errors")}</p>
-          <ErrorLogButton /><br /><br />
-            <ExportButton /><span>      </span><ReinitButton />
+            <ExportButton /><ReinitButton /><br />
+            <p>{props.nb_files} {tr("files loaded")}<br />{props.nb_errors} {tr("errors")}</p>
+            <ErrorLogButton />
             <h5>{tr("Legend")}</h5>
             <div id='legend'></div>
           </div>

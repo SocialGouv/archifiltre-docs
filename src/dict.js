@@ -3,6 +3,19 @@ console.log("lang : " + lang)
 
 const dict = {
   // Home screen
+  "Your directories. Like you've never seen them before.": {
+    fr: "Vos répertoires comme vous ne les avez jamais vus.",
+    en: "Your directories. Like you've never seen them before."
+  },
+  "Icicles": {
+    fr: "Stalactites",
+    en: "Icicles",
+    es: "Carámbanos"
+  },
+  "Your data won't leave your computer. Only you can see what happens below.": {
+    fr: "Vos données ne quittent pas votre ordinateur ; seul•e vous pouvez voir ce qu'il y a ci-dessous.",
+    en: "Your data won't leave your computer. Only you can see what happens below."
+  },
   "Drop a directory here!": {
     fr: "Glissez-déposez un répertoire ici !",
     en: "Drop a directory here!",
@@ -36,10 +49,10 @@ const dict = {
     en: "Export",
     es: "Exportar"
   },
-  "Export error log": {
-    fr: "Exporter les erreurs",
-    en: "Export error log",
-    es: "Exportar errores"
+  "Errors": {
+    fr: "Erreurs",
+    en: "Errors",
+    es: "Errores"
   },
   "Reset": {
     fr: "Réinitialiser",

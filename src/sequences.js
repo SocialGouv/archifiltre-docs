@@ -5,7 +5,6 @@ import d3 from 'd3'
 export function plot(csv_string, setParentPath, parent_path) {
 
   d3.select("#chart").selectAll("svg").remove()
-  d3.select("#legend").selectAll("svg").remove()
   d3.select("#sequence").selectAll("svg").remove()
 
 
@@ -13,11 +12,10 @@ export function plot(csv_string, setParentPath, parent_path) {
   var width = 800;
   var height = 300;
 
-  var font_size = 8
 
   // Breadcrumb dimensions: width, height, spacing, width of tip/tail.
   var b = {
-    w: null, h: font_size*2.5, s: 3, t: 3
+    w: 152, h: null, s: 0.25, t: 5, o: 20
   };
 
   // Mapping of step names to colors.
@@ -138,7 +136,8 @@ export function plot(csv_string, setParentPath, parent_path) {
   var vis = d3.select("#chart").append("svg:svg")
       .attr("xmlns", "http://www.w3.org/2000/svg")
       // .attr("viewBox", "0 0 900 500")
-      .attr("viewBox", "0 0 "+width+" "+height)
+     .attr("viewBox", "0 0 "+width+" "+height)
+      .attr("preserveAspectRatio", "xMidYMid meet")
       .append("svg:g")
       .attr("id", "container");
 
@@ -160,7 +159,6 @@ export function plot(csv_string, setParentPath, parent_path) {
 
     // Basic setup of page elements.
     initializeBreadcrumbTrail();
-    drawLegend();
 
     // Bounding rect underneath the chart, to make it easier to detect
     // when the mouse leaves the parent g.
@@ -174,6 +172,8 @@ export function plot(csv_string, setParentPath, parent_path) {
       .filter(function(d) {
       return (d.dx > 0.5);
       });
+
+    console.log(nodes)
 
     var node = vis.data([json]).selectAll(".node")
       .data(nodes)
@@ -195,22 +195,22 @@ export function plot(csv_string, setParentPath, parent_path) {
       .on("mouseover", mouseover)
       .on("click", onClickHandler);
 
-      node.append("text")
-        .attr("x", function(d) { return d.x; })
-        .attr("y", function(d) { return d.y; })
-        .attr("dx", function(d) { return d.dx/2; })
-        .attr("dy", function(d) { return d.dy/1.5; })
-        .attr("text-anchor", "middle")
-        .attr("stroke", "none")
-        .attr("visibility", function(d) {
-          if (9*d.name.length < d.dx) {
-            return "visible"
-          } else {
-            return "hidden"
-          }
-        })
-        .text(function(d) { return d.name; })
-        .on("click", onClickHandler);
+    node.append("text")
+      .attr("x", function(d) { return d.x; })
+      .attr("y", function(d) { return d.y; })
+      .attr("dx", function(d) { return d.dx/2; })
+      .attr("dy", function(d) { return d.dy/1.5; })
+      .attr("text-anchor", "middle")
+      .attr("stroke", "none")
+      .attr("visibility", function(d) {
+        if (width/10 < d.dx) {
+          return "visible"
+        } else {
+          return "hidden"
+        }
+      })
+      .text(function(d) { return smartClip(d.name, d.dx); })
+      .on("click", onClickHandler);
 
 
     // Add the mouseleave handler to the bounding rect.
@@ -219,6 +219,20 @@ export function plot(csv_string, setParentPath, parent_path) {
     // Get total size of the tree = value of root node from partition.
     totalSize = node.node().__data__.value;
    };
+
+  function smartClip(s, w){
+    var target_size = Math.floor(w/7)
+    var slice = Math.floor(target_size/2)
+
+    if(s.length > target_size){
+      console.log(s)
+      console.log(slice)
+      return s.substring(0, slice-2) + "..." + s.substring(s.length - slice + 2, s.length)
+    }
+    else{
+      return s
+    }
+  }
 
   function octet2HumanReadableFormat(o) {
     let To = o/Math.pow(1000,4)
@@ -251,6 +265,7 @@ export function plot(csv_string, setParentPath, parent_path) {
     }
 
     var sequenceArray = getAncestors(d);
+    console.log(sequenceArray)
     updateBreadcrumbs(sequenceArray, percentageString, sizeString);
 
     // Fade all the segments.
@@ -303,8 +318,8 @@ export function plot(csv_string, setParentPath, parent_path) {
         // .attr("width", width)
         // .attr("height", 200)
         .attr("xmlns", "http://www.w3.org/2000/svg")
-        .attr("viewBox", "0 0 "+width+" 100")
-        .attr("id", "trail");
+        .attr("viewBox", "0 0 " + b.w + " " + height)
+        .attr("id", "trail")
     // Add the label at the end, for the percentage.
     trail.append("svg:text")
       .attr("id", "endlabel")
@@ -312,21 +327,29 @@ export function plot(csv_string, setParentPath, parent_path) {
   }
 
   function computeBW(len) {
-    return len * font_size
+    return 300
   }
 
   // Generate a string that describes the points of a breadcrumb polygon.
-  function breadcrumbPoints(d, i) {
-    var bw = computeBW(d.name.length)
+  function breadcrumbPoints(d, i, o, t, w, s) {
+    var h = d.dy
+    var y = d.y + i*s
+
     var points = [];
-    points.push("0,0");
-    points.push(bw + ",0");
-    points.push(bw + b.t + "," + (b.h / 2));
-    points.push(bw + "," + b.h);
-    points.push("0," + b.h);
-    if (i > 0) { // Leftmost breadcrumb; don't include 6th vertex.
-      points.push(b.t + "," + (b.h / 2));
+    points.push("0," + y);
+    if (i > 0) { // Topmost breadcrumb; don't include upper notch.
+      points.push(((w-o)/2) + "," + y);
+      points.push((w/2) + "," + (y+t));
+      points.push(((w+o)/2) + "," + y);
     }
+    points.push(w + "," + y);
+    points.push(w + "," + (y+h));
+
+    points.push(((w+o)/2) + "," + (y+h));
+    points.push((w/2) + "," + (y+h+t)); // lower notch
+    points.push(((w-o)/2) + "," + (y+h));
+
+    points.push("0," + (y+h));
     return points.join(" ");
   }
 
@@ -338,54 +361,41 @@ export function plot(csv_string, setParentPath, parent_path) {
         .selectAll("g")
         .data(nodeArray, function(d) { return d.name + d.depth; });
 
+    console.log(g.enter())
+
     // Add breadcrumb and label for entering nodes.
     var entering = g.enter().append("svg:g");
 
+    // entering.append("svg:rect")
+    //   .attr("x", "0")
+    //   .attr("y", function(d, i) { return d.y; })
+    //   .attr("width", b.w)
+    //   .attr("height", function(d) { return d.dy; })
+    //   .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); })
+
+
     entering.append("svg:polygon")
-        .attr("points", breadcrumbPoints)
+        .attr("points", function(d, i) {return breadcrumbPoints(d, i, b.o, b.t, b.w, b.s)})
         .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); });
 
-    entering.append("svg:text")
-        .attr("x", function(d, i) {
-          var bw = computeBW(d.name.length)
-          return (bw + b.t) / 2
-        })
-        .attr("y", b.h / 2)
-        .attr("dy", "0.35em")
-        .attr("text-anchor", "middle")
-        .style("font-size", font_size/10+"em")
-        .text(function(d) { return d.name; });
-
-    var tot_len = 0
-    var line_length = 0
-    var prev_y = 0
-    var end_label_width = 70
-
-    // Set position for entering and updating nodes.
-    g.attr("transform", function(d, i) {
-      var bw = computeBW(d.name.length)
-      var thresh = width - bw - end_label_width
-      var x = line_length % thresh
-      var y = Math.floor((tot_len / thresh)) * (b.h + b.s)
-      if (prev_y < y) {
-        line_length = 0
-        x = 0
-      }
-      tot_len += bw + b.s
-      line_length += bw + b.s
-      prev_y = y
-      return "translate(" + x + ", " + y + ")";
-    });
+        entering.append("svg:text")
+      .attr("x", function(d) { return 0; })
+      .attr("y", function(d) { return d.y; })
+      .attr("dx", function(d) { return b.w/2; })
+      .attr("dy", function(d, i) { return (d.dy/1.5 + i*b.s); })
+      .attr("text-anchor", "middle")
+      .attr("stroke", "none")
+      .text(function(d) {return d.name})
 
     // Remove exiting nodes.
     g.exit().remove();
 
     // Now move and update the percentage at the end.
     d3.select("#trail").select("#endlabel")
-        .attr("x", line_length + end_label_width)
+        .attr("x", b.w/2)
         // .attr("x", (nodeArray.length + 0.5) * (b.w + b.s))
-        .attr("y", prev_y + b.h / 2)
-        .attr("dy", "0.35em")
+        .attr("y", 0)
+        .attr("dy", "-0.35em")
         .attr("text-anchor", "middle")
         .text(percentageString + " | " + sizeString);
 
@@ -393,47 +403,6 @@ export function plot(csv_string, setParentPath, parent_path) {
     d3.select("#trail")
         .style("visibility", "");
 
-  }
-
-function drawLegend() {
-
-    // Dimensions of legend item: width, height, spacing, radius of rounded rect.
-    var li = {
-      w: 30, h: 5, s: 0.5, r: 0
-    };
-
-    let leg_width = li.w
-    let leg_height = d3.keys(colors).length * (li.h + li.s)
-
-    var legend = d3.select("#legend").append("svg:svg")
-        .attr("xmlns", "http://www.w3.org/2000/svg")
-        .attr("viewBox", "0 0 "+leg_width+" "+leg_height)
-        // .attr("width", li.w)
-        // .attr("height", d3.keys(colors).length * (li.h + li.s));
-
-    var g = legend.selectAll("g")
-        .data(d3.entries(colors))
-        .enter().append("svg:g")
-        .attr("transform", function(d, i) {
-                return "translate(0," + i * (li.h + li.s) + ")";
-             });
-
-    g.append("svg:rect")
-        .attr("rx", li.r)
-        .attr("ry", li.r)
-        .attr("width", li.w)
-        .attr("height", li.h)
-        .style("fill", function(d) { return d.value.color; });
-
-    g.append("svg:text")
-        .attr("x", li.w / 2)
-        .attr("y", li.h / 2)
-        .attr("dy", "0.35em")
-        .attr("text-anchor", "middle")
-        .attr("class", "legend-label")
-        // .attr("fill", "white")
-        .style("font-size", "0.2em")
-        .text(function(d) { return d.value.label; });
   }
 
   // Take a 2-column Csv and transform it into a hierarchical structure suitable

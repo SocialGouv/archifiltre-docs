@@ -22,8 +22,21 @@ const chart_style = {
 
 const Presentational = props => {
   return (
+    <div>
       <div className="mdl-grid">
-        <div className="mdl-cell mdl-cell--10-col">
+
+        <div className="mdl-cell mdl-cell--3-col">
+          <p>{props.nb_files} {tr("files loaded")}<br />{props.nb_errors} {tr("errors")}</p>
+          <ErrorLogButton /><br /><br />
+          <ExportButton /><span>      </span><ReinitButton />
+        </div>
+
+        <div className="mdl-cell mdl-cell--3-col" id='sidebar'>
+        </div>
+
+      </div>
+      <div className="mdl-grid">
+        <div className="mdl-cell mdl-cell--12-col">
           <div className="mdl-grid" id='main' ref={(input) => {
               if (input) {
                 console.time('plot')
@@ -31,25 +44,21 @@ const Presentational = props => {
                 console.timeEnd('plot')
               }
             }}>
+            
             <div
-              className="mdl-cell mdl-cell--12-col"
-              id='sequence'></div>
-            <div
-              className="mdl-cell mdl-cell--12-col"
+              className="mdl-cell mdl-cell--10-col"
               id='chart'
-              style={chart_style}></div>
+              style={chart_style}>
+            </div>
+
+            <div id='sequence' className="mdl-cell mdl-cell--2-col" style={chart_style}>
+            </div>
+
           </div>
         </div>
-        <div className="mdl-cell mdl-cell--2-col">
-          <div id='sidebar' style={{"textAlign":"center"}}>
-            <ExportButton /><ReinitButton /><br />
-            <p>{props.nb_files} {tr("files loaded")}<br />{props.nb_errors} {tr("errors")}</p>
-            <ErrorLogButton />
-            <h5>{tr("Legend")}</h5>
-            <div id='legend'></div>
-          </div>
-        </div>
+
       </div>
+    </div>
   )
 }
 

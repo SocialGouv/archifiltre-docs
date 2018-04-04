@@ -17,7 +17,7 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   // Breadcrumb dimensions: width, height, spacing, width of tip/tail.
   var b = {
-    w: 152, h: null, s: 0.25, t: 5, o: 20
+    w: 400, h: null, s: 0.25, t: 5, o: 20
   };
 
   // Mapping of step names to colors.
@@ -358,7 +358,7 @@ export function plot(csv_string, setParentPath, parent_path) {
     console.log(d.children)
     var h = d.dy
     var y = d.y + i*s
-    var w2 = w/10
+    var w2 = w/20
 
     var points = [];
     points.push("0," + y);
@@ -401,7 +401,7 @@ export function plot(csv_string, setParentPath, parent_path) {
         .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); });
 
         entering.append("svg:text")
-      .attr("x", b.w/7)
+      .attr("x", b.w/14)
       .attr("y", function(d) { return d.y; })
       .attr("dx", 0)
       .attr("dy", function(d, i) { return (d.dy/1.5 + i*b.s); })

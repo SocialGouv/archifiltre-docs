@@ -401,14 +401,14 @@ export function plot(csv_string, setParentPath, parent_path) {
         .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); });
 
         entering.append("svg:text")
-      .attr("x", function(d) { return 0; })
+      .attr("x", b.w/7)
       .attr("y", function(d) { return d.y; })
-      .attr("dx", function(d) { return b.w/2; })
+      .attr("dx", 0)
       .attr("dy", function(d, i) { return (d.dy/1.5 + i*b.s); })
-      .attr("text-anchor", "middle")
+      .attr("text-anchor", "left")
       .attr("stroke", "none")
       .style("font-size", function(d) { if(d.name.length*font_width < b.w){ return "1em"; } else { return "0.7em"; } })
-      .text(function(d) {if(d.name.length*font_width < b.w){ return smartClip(d.name, b.w, font_width); } else { return smartClip(d.name, b.w, 5); } })
+      .text(function(d) {if(d.name.length*font_width < b.w){ return smartClip(d.name, b.w*8/10, font_width); } else { return smartClip(d.name, b.w*8/10, 5); } })
 
     // Remove exiting nodes.
     g.exit().remove();

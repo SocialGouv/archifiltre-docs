@@ -46,12 +46,12 @@ const Presentational = props => {
             }}>
             
             <div
-              className="mdl-cell mdl-cell--10-col"
+              className="mdl-cell mdl-cell--8-col"
               id='chart'
               style={chart_style}>
             </div>
 
-            <div id='sequence' className="mdl-cell mdl-cell--2-col" style={chart_style}>
+            <div id='sequence' className="mdl-cell mdl-cell--4-col" style={chart_style}>
             </div>
 
           </div>

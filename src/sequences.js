@@ -329,25 +329,47 @@ export function plot(csv_string, setParentPath, parent_path) {
   }
 
   // Generate a string that describes the points of a breadcrumb polygon.
+  // function breadcrumbPoints(d, i, o, t, w, s) {
+  //   console.log(d.children)
+  //   var h = d.dy
+  //   var y = d.y + i*s
+
+  //   var points = [];
+  //   points.push("0," + y);
+  //   if (i > 0) { // Topmost breadcrumb; don't include upper notch.
+  //     points.push(((w-o)/2) + "," + y);
+  //     points.push((w/2) + "," + (y+t));
+  //     points.push(((w+o)/2) + "," + y);
+  //   }
+  //   points.push(w + "," + y);
+  //   points.push(w + "," + (y+h));
+
+  //   if(d.children !== undefined){
+  //     points.push(((w+o)/2) + "," + (y+h));
+  //     points.push((w/2) + "," + (y+h+t)); // lower notch
+  //     points.push(((w-o)/2) + "," + (y+h));
+  //   }
+
+  //   points.push("0," + (y+h));
+  //   return points.join(" ");
+  // }
+
   function breadcrumbPoints(d, i, o, t, w, s) {
     console.log(d.children)
     var h = d.dy
     var y = d.y + i*s
+    var w2 = w/10
 
     var points = [];
     points.push("0," + y);
     if (i > 0) { // Topmost breadcrumb; don't include upper notch.
-      points.push(((w-o)/2) + "," + y);
-      points.push((w/2) + "," + (y+t));
-      points.push(((w+o)/2) + "," + y);
+      points.push((w2/2) + "," + (y+t));
     }
-    points.push(w + "," + y);
-    points.push(w + "," + (y+h));
+    points.push(w2 + "," + y);
+    points.push(w2 + "," + (y+h));
 
     if(d.children !== undefined){
-      points.push(((w+o)/2) + "," + (y+h));
-      points.push((w/2) + "," + (y+h+t)); // lower notch
-      points.push(((w-o)/2) + "," + (y+h));
+      points.push((w2/2) + "," + (y+h+t)); // lower notch
     }
 
     points.push("0," + (y+h));

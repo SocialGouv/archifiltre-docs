@@ -175,8 +175,6 @@ export function plot(csv_string, setParentPath, parent_path) {
       return (d.dx > 0.5);
       });
 
-    console.log(nodes)
-
     var node = vis.data([json]).selectAll(".node")
       .data(nodes)
       .enter();
@@ -228,8 +226,6 @@ export function plot(csv_string, setParentPath, parent_path) {
     var slice = Math.floor(target_size/2)
 
     if(s.length > target_size){
-      console.log(s)
-      console.log(slice)
       return s.substring(0, slice-2) + "..." + s.substring(s.length - slice + 2, s.length)
     }
     else{
@@ -268,7 +264,6 @@ export function plot(csv_string, setParentPath, parent_path) {
     }
 
     var sequenceArray = getAncestors(d);
-    console.log(sequenceArray)
     updateBreadcrumbs(sequenceArray, percentageString, sizeString);
 
     // Fade all the segments.
@@ -335,6 +330,7 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   // Generate a string that describes the points of a breadcrumb polygon.
   function breadcrumbPoints(d, i, o, t, w, s) {
+    console.log(d.children)
     var h = d.dy
     var y = d.y + i*s
 
@@ -348,9 +344,11 @@ export function plot(csv_string, setParentPath, parent_path) {
     points.push(w + "," + y);
     points.push(w + "," + (y+h));
 
-    points.push(((w+o)/2) + "," + (y+h));
-    points.push((w/2) + "," + (y+h+t)); // lower notch
-    points.push(((w-o)/2) + "," + (y+h));
+    if(d.children !== undefined){
+      points.push(((w+o)/2) + "," + (y+h));
+      points.push((w/2) + "," + (y+h+t)); // lower notch
+      points.push(((w-o)/2) + "," + (y+h));
+    }
 
     points.push("0," + (y+h));
     return points.join(" ");
@@ -364,7 +362,6 @@ export function plot(csv_string, setParentPath, parent_path) {
         .selectAll("g")
         .data(nodeArray, function(d) { return d.name + d.depth; });
 
-    console.log(g.enter())
 
     // Add breadcrumb and label for entering nodes.
     var entering = g.enter().append("svg:g");

@@ -12,6 +12,8 @@ export function plot(csv_string, setParentPath, parent_path) {
   var width = 800;
   var height = 300;
 
+  var font_width = 7;
+
 
   // Breadcrumb dimensions: width, height, spacing, width of tip/tail.
   var b = {
@@ -209,7 +211,8 @@ export function plot(csv_string, setParentPath, parent_path) {
           return "hidden"
         }
       })
-      .text(function(d) { return smartClip(d.name, d.dx); })
+      .style("font-size", function(d) { if(d.name.length*font_width < d.dx){ return "1em"; } else { return "0.7em"; } })
+      .text(function(d) {if(d.name.length*font_width < d.dx){ return smartClip(d.name, d.dx, font_width); } else { return smartClip(d.name, d.dx, 5); } })
       .on("click", onClickHandler);
 
 
@@ -220,8 +223,8 @@ export function plot(csv_string, setParentPath, parent_path) {
     totalSize = node.node().__data__.value;
    };
 
-  function smartClip(s, w){
-    var target_size = Math.floor(w/7)
+  function smartClip(s, w, fw){
+    var target_size = Math.floor(w/fw)
     var slice = Math.floor(target_size/2)
 
     if(s.length > target_size){
@@ -385,7 +388,8 @@ export function plot(csv_string, setParentPath, parent_path) {
       .attr("dy", function(d, i) { return (d.dy/1.5 + i*b.s); })
       .attr("text-anchor", "middle")
       .attr("stroke", "none")
-      .text(function(d) {return d.name})
+      .style("font-size", function(d) { if(d.name.length*font_width < b.w){ return "1em"; } else { return "0.7em"; } })
+      .text(function(d) {if(d.name.length*font_width < b.w){ return smartClip(d.name, b.w, font_width); } else { return smartClip(d.name, b.w, 5); } })
 
     // Remove exiting nodes.
     g.exit().remove();

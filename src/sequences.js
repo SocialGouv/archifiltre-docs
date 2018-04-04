@@ -203,7 +203,7 @@ export function plot(csv_string, setParentPath, parent_path) {
       .attr("text-anchor", "middle")
       .attr("stroke", "none")
       .attr("visibility", function(d) {
-        if (width/10 < d.dx) {
+        if (width/10 < d.dx || d.name.length*5 < d.dx) {
           return "visible"
         } else {
           return "hidden"

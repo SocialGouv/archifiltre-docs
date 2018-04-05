@@ -196,6 +196,7 @@ export function plot(csv_string, setParentPath, parent_path) {
       .on("click", onClickHandler);
 
     node.append("text")
+      .attr("class", "node-text")
       .attr("x", function(d) { return d.x; })
       .attr("y", function(d) { return d.y; })
       .attr("dx", function(d) { return d.dx/2; })
@@ -255,6 +256,7 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   // Fade all but the current sequence, and show it in the breadcrumb trail.
   function mouseover(d) {
+    console.log(d)
     let sizeString = octet2HumanReadableFormat(d.value)
 
     var percentage = (100 * d.value / totalSize).toPrecision(3);
@@ -267,11 +269,11 @@ export function plot(csv_string, setParentPath, parent_path) {
     updateBreadcrumbs(sequenceArray, percentageString, sizeString);
 
     // Fade all the segments.
-    d3.selectAll(".node")
+    d3.selectAll(".node, .node-text")
         .style("opacity", 0.3);
 
     // Then highlight only those that are an ancestor of the current segment.
-    vis.selectAll(".node")
+    vis.selectAll(".node, .node-text")
         .filter(function(node) {
                   return (sequenceArray.indexOf(node) >= 0);
                 })
@@ -285,17 +287,9 @@ export function plot(csv_string, setParentPath, parent_path) {
     d3.select("#trail")
         .style("visibility", "hidden");
 
-    // Deactivate all segments during transition.
-    d3.selectAll(".node").on("mouseover", null);
-
     // Transition each segment to full opacity and then reactivate it.
-    d3.selectAll(".node")
-        .transition()
-        .duration(0)
+    d3.selectAll(".node, .node-text")
         .style("opacity", 1)
-        .each("end", function() {
-                d3.select(this).on("mouseover", mouseover);
-              });
   }
 
   // Given a node in a partition layout, return an array of all of its ancestor
@@ -355,7 +349,6 @@ export function plot(csv_string, setParentPath, parent_path) {
   // }
 
   function breadcrumbPoints(d, i, o, t, w, s) {
-    console.log(d.children)
     var h = d.dy
     var y = d.y + i*s
     var w2 = w/20

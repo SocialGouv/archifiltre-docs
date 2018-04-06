@@ -179,10 +179,6 @@ export function plot(csv_string, setParentPath, parent_path) {
       .data(nodes)
       .enter();
 
-    const onClickHandler = function(d) {
-      setParentPath(remakePath(d))
-    }
-
     node.append("rect")
       .attr("class", "node")
       .attr("x", function(d) { return d.x; })
@@ -193,7 +189,8 @@ export function plot(csv_string, setParentPath, parent_path) {
       .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); })
       .style("opacity", 1)
       .on("mouseover", mouseover)
-      .on("click", onClickHandler);
+      // .on("dblclick", onDoubleClickHandler)
+      .on("click", function(d){event.stopPropagation(); clickBalancer(d);});
 
     node.append("text")
       .attr("class", "node-text")
@@ -203,6 +200,7 @@ export function plot(csv_string, setParentPath, parent_path) {
       .attr("dy", function(d) { return d.dy/1.5; })
       .attr("text-anchor", "middle")
       .attr("stroke", "none")
+      .attr("display", function(d) { return d.depth ? null : "none"; })
       .attr("visibility", function(d) {
         if (width/10 < d.dx || d.name.length*5 < d.dx) {
           return "visible"
@@ -212,11 +210,15 @@ export function plot(csv_string, setParentPath, parent_path) {
       })
       .style("font-size", function(d) { if(d.name.length*font_width < d.dx){ return "1em"; } else { return "0.7em"; } })
       .text(function(d) {if(d.name.length*font_width < d.dx){ return smartClip(d.name, d.dx, font_width); } else { return smartClip(d.name, d.dx, 5); } })
-      .on("click", onClickHandler);
+      // .on("dblclick", onDoubleClickHandler)
+      .on("click", function(d){event.stopPropagation(); clickBalancer(d);});
+
 
 
     // Add the mouseleave handler to the bounding rect.
-    d3.select("#container").on("mouseleave", mouseleave);
+    d3.select("#container")
+      .on("mouseleave", mouseleave)
+      .on("click", unlockNodes)
 
     // Get total size of the tree = value of root node from partition.
     totalSize = node.node().__data__.value;
@@ -254,9 +256,49 @@ export function plot(csv_string, setParentPath, parent_path) {
     return o + ' o'
   }
 
+  function onDoubleClickHandler (d) {
+    unlockNodes(d)
+    setParentPath(remakePath(d))
+  }
+
+  function onClickHandler (d) {
+    lockNode(d)
+  }
+
+  var clickStack = 0
+
+  function clickBalancer(d) {
+    clickStack++;
+    if(clickStack > 1){
+      onDoubleClickHandler(d);
+    }
+    else{
+      setTimeout(function(){
+      if(clickStack <= 1){ onClickHandler(d); }
+      clickStack = 0;}
+      ,210)
+    }
+
+  }
+
+  function lockNode(d){
+    mouseover(d)
+    d3.selectAll(".node, .node-text")
+      .on("mouseover", function(d2){mouseoverAlt(d2, d)})
+    d3.select("#container").on("mouseleave", function(d2){mouseleaveAlt(d2, d)});
+  }
+
+  function unlockNodes(d){
+    d3.selectAll(".node, .node-text")
+      .on("mouseover", mouseover)
+      .style("opacity", 1)
+    d3.select("#container").on("mouseleave", mouseleave)
+    d3.select("#container").on("mouseover", null);
+    mouseleave(d)
+  }
+
   // Fade all but the current sequence, and show it in the breadcrumb trail.
   function mouseover(d) {
-    console.log(d)
     let sizeString = octet2HumanReadableFormat(d.value)
 
     var percentage = (100 * d.value / totalSize).toPrecision(3);
@@ -274,15 +316,32 @@ export function plot(csv_string, setParentPath, parent_path) {
 
     // Then highlight only those that are an ancestor of the current segment.
     vis.selectAll(".node, .node-text")
-        .filter(function(node) {
+        .filter(function(node) {// console.log(sequenceArray.indexOf(node) ? node.name + " " + sequenceArray.indexOf(node) : "")
                   return (sequenceArray.indexOf(node) >= 0);
                 })
         .style("opacity", 1);
   }
 
+  function mouseoverAlt(d, locked_node) {
+    var sequenceArray = getAncestors(d);
+
+    vis.selectAll(".node, .node-text")
+        .filter(function(node) {
+                  return (getAncestors(locked_node).indexOf(node) < 0);
+                })
+        .style("opacity", 0.3);
+
+    // highlight only those that are an ancestor of the current segment.
+    vis.selectAll(".node, .node-text")
+        .filter(function(node) {
+                  return (sequenceArray.indexOf(node) >= 0 && getAncestors(locked_node).indexOf(node) < 0);
+                })
+        .style("opacity", 0.5);
+  }
+
+
   // Restore everything to full opacity when moving off the visualization.
   function mouseleave(d) {
-
     // Hide the breadcrumb trail
     d3.select("#trail")
         .style("visibility", "hidden");
@@ -290,6 +349,14 @@ export function plot(csv_string, setParentPath, parent_path) {
     // Transition each segment to full opacity and then reactivate it.
     d3.selectAll(".node, .node-text")
         .style("opacity", 1)
+  }
+
+  function mouseleaveAlt(d, locked_node) {
+    vis.selectAll(".node, .node-text")
+        .filter(function(node) {
+                  return (getAncestors(locked_node).indexOf(node) < 0);
+                })
+        .style("opacity", 0.3);
   }
 
   // Given a node in a partition layout, return an array of all of its ancestor
@@ -324,7 +391,6 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   // Generate a string that describes the points of a breadcrumb polygon.
   // function breadcrumbPoints(d, i, o, t, w, s) {
-  //   console.log(d.children)
   //   var h = d.dy
   //   var y = d.y + i*s
 

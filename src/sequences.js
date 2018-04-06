@@ -180,8 +180,8 @@ export function plot(csv_string, setParentPath, parent_path) {
     chart_dims.node_height = nodes[0].dy
     chart_dims.chart_depth = nodes.reduce((acc,val) => {return (val.depth > acc ? val.depth : acc)}, 0)
 
-    // Basic setup of page elements.
     initializeBreadcrumbTrail();
+    initializeReport()
 
     var node = vis.data([json]).selectAll(".node")
       .data(nodes)
@@ -291,9 +291,20 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   function lockNode(d){
     mouseover(d)
+
     d3.selectAll(".node, .node-text")
       .on("mouseover", function(d2){mouseoverAlt(d2, d)})
     d3.select("#container").on("mouseleave", function(d2){mouseleaveAlt(d2, d)});
+
+    let sizeString = octet2HumanReadableFormat(d.value)
+
+    var percentage = (100 * d.value / totalSize).toPrecision(3);
+    var percentageString = percentage + "%";
+    if (percentage < 0.1) {
+      percentageString = "< 0.1%";
+    }
+
+    updateReport(d, sizeString, percentageString)
   }
 
   function unlockNodes(d){
@@ -302,7 +313,8 @@ export function plot(csv_string, setParentPath, parent_path) {
       .style("opacity", 1)
     d3.select("#container").on("mouseleave", mouseleave)
     d3.select("#container").on("mouseover", null);
-    mouseleave(d)
+    makeDummyReport()
+    makeDummyBreadcrumbs()
   }
 
   // Fade all but the current sequence, and show it in the breadcrumb trail.
@@ -314,6 +326,8 @@ export function plot(csv_string, setParentPath, parent_path) {
     if (percentage < 0.1) {
       percentageString = "< 0.1%";
     }
+
+    updateReport(d, sizeString, percentageString)
 
     var sequenceArray = getAncestors(d);
     updateBreadcrumbs(sequenceArray, percentageString, sizeString);
@@ -351,11 +365,11 @@ export function plot(csv_string, setParentPath, parent_path) {
   // Restore everything to full opacity when moving off the visualization.
   function mouseleave(d) {
     // Hide the breadcrumb trail
-    makeDummyBreadcrumbs();
+    // fadeBreadCrumbs();
 
     // Transition each segment to full opacity and then reactivate it.
-    d3.selectAll(".node, .node-text")
-        .style("opacity", 1)
+    // d3.selectAll(".node, .node-text")
+    //     .style("opacity", 1)
   }
 
   function mouseleaveAlt(d, locked_node) {
@@ -376,6 +390,28 @@ export function plot(csv_string, setParentPath, parent_path) {
       current = current.parent;
     }
     return path;
+  }
+
+
+  function initializeBreadcrumbTrail() {
+    // Add the svg area.
+    var trail = d3.select("#sequence").append("svg:svg")
+        // .attr("width", width)
+        // .attr("height", 200)
+        .attr("xmlns", "http://www.w3.org/2000/svg")
+        .attr("viewBox", "0 0 " + b.w + " " + height)
+        .attr("id", "trail")
+    // Add the label at the end, for the percentage.
+    trail.append("svg:text")
+      .attr("id", "endlabel")
+      .style("fill", "#000");
+
+    makeDummyBreadcrumbs()
+
+  }
+
+  function initializeReport(){
+    makeDummyReport()
   }
 
   function makeDummyBreadcrumbs(){
@@ -430,21 +466,19 @@ export function plot(csv_string, setParentPath, parent_path) {
     
   }
 
-  function initializeBreadcrumbTrail() {
-    // Add the svg area.
-    var trail = d3.select("#sequence").append("svg:svg")
-        // .attr("width", width)
-        // .attr("height", 200)
-        .attr("xmlns", "http://www.w3.org/2000/svg")
-        .attr("viewBox", "0 0 " + b.w + " " + height)
-        .attr("id", "trail")
-    // Add the label at the end, for the percentage.
-    trail.append("svg:text")
-      .attr("id", "endlabel")
-      .style("fill", "#000");
+  function makeDummyReport(){
+    d3.select("#sidebar")
+      .style('opacity',0.3)
 
-    makeDummyBreadcrumbs()
+    d3.select("#report-icon")
+      .text("perm_media")
+      .style("color", colors.otherfiles.color)
 
+    d3.select("#report-name")
+      .text(tr("Folder of file's name"))
+
+    d3.select("#report-size")
+      .text(tr("Size") + " : " + tr("absolute") + " | " + tr("percentage of the whole"))
   }
 
   function computeBW(len) {
@@ -497,6 +531,7 @@ export function plot(csv_string, setParentPath, parent_path) {
     return points.join(" ");
   }
 
+
   // Update the breadcrumb trail to show the current sequence and percentage.
   function updateBreadcrumbs(nodeArray, percentageString, sizeString) {
 
@@ -548,6 +583,33 @@ export function plot(csv_string, setParentPath, parent_path) {
         .style("opacity", 1)
 
   }
+
+  function updateReport(d, sizeString, percentageString){
+    d3.select("#sidebar")
+      .style('opacity',1)
+
+    d3.select("#report-icon")
+      .text(d.children === undefined ? "insert_drive_file" : "folder")
+      .style("color", colorOf(d.name, d.children, remakePath(d)))
+
+    d3.select("#report-name")
+      .text(d.name)
+
+    d3.select("#report-size")
+      .text(sizeString + ' | ' + percentageString)
+  }
+  
+
+  function fadeBreadCrumbs(){
+    d3.select("#trail")
+      .style("opacity", 0.5)
+  }
+
+  function fadeReport(){
+    d3.select("#sidebar")
+      .style('opacity',0.5)
+  }
+
 
   // Take a 2-column Csv and transform it into a hierarchical structure suitable
   // for a partition layout. The first column is a sequence of step names, from

@@ -90,6 +90,10 @@ const dict = {
     en: "Folder",
     es: "Directorio"
   },
+  "File": {
+    fr: "Fichier",
+    en: "File"
+  },
   "Root": {
     fr: "Racine",
     en: "Root",

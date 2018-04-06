@@ -152,15 +152,17 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   var csv = d3.csv.parseRows(csv_string);
   var json = buildHierarchy(csv);
-  createVisualization(json);
 
+  const chart_dims = {
+    node_height:null,
+    chart_depth:null
+    }
+
+  createVisualization(json);
 
 
   // Main function to draw and set up the visualization, once we have the data.
   function createVisualization(json) {
-
-    // Basic setup of page elements.
-    initializeBreadcrumbTrail();
 
     // Bounding rect underneath the chart, to make it easier to detect
     // when the mouse leaves the parent g.
@@ -174,6 +176,12 @@ export function plot(csv_string, setParentPath, parent_path) {
       .filter(function(d) {
       return (d.dx > 0.5);
       });
+
+    chart_dims.node_height = nodes[0].dy
+    chart_dims.chart_depth = nodes.reduce((acc,val) => {return (val.depth > acc ? val.depth : acc)}, 0)
+
+    // Basic setup of page elements.
+    initializeBreadcrumbTrail();
 
     var node = vis.data([json]).selectAll(".node")
       .data(nodes)
@@ -193,14 +201,14 @@ export function plot(csv_string, setParentPath, parent_path) {
       .on("click", function(d){event.stopPropagation(); clickBalancer(d);});
 
     node.append("text")
-      .attr("class", "node-text")
+      .attr("class", function(d) { return d.depth ? "node-text" : null; })
       .attr("x", function(d) { return d.x; })
       .attr("y", function(d) { return d.y; })
       .attr("dx", function(d) { return d.dx/2; })
       .attr("dy", function(d) { return d.dy/1.5; })
       .attr("text-anchor", "middle")
       .attr("stroke", "none")
-      .attr("display", function(d) { return d.depth ? null : "none"; })
+      .attr("display", function(d) { return d.depth || parent_path.length ? null : "none"; })
       .attr("visibility", function(d) {
         if (width/10 < d.dx || d.name.length*5 < d.dx) {
           return "visible"
@@ -262,7 +270,7 @@ export function plot(csv_string, setParentPath, parent_path) {
   }
 
   function onClickHandler (d) {
-    lockNode(d)
+    if(d.depth){lockNode(d)}
   }
 
   var clickStack = 0
@@ -316,7 +324,7 @@ export function plot(csv_string, setParentPath, parent_path) {
 
     // Then highlight only those that are an ancestor of the current segment.
     vis.selectAll(".node, .node-text")
-        .filter(function(node) {// console.log(sequenceArray.indexOf(node) ? node.name + " " + sequenceArray.indexOf(node) : "")
+        .filter(function(node) {
                   return (sequenceArray.indexOf(node) >= 0);
                 })
         .style("opacity", 1);
@@ -343,8 +351,7 @@ export function plot(csv_string, setParentPath, parent_path) {
   // Restore everything to full opacity when moving off the visualization.
   function mouseleave(d) {
     // Hide the breadcrumb trail
-    d3.select("#trail")
-        .style("visibility", "hidden");
+    makeDummyBreadcrumbs();
 
     // Transition each segment to full opacity and then reactivate it.
     d3.selectAll(".node, .node-text")
@@ -371,6 +378,58 @@ export function plot(csv_string, setParentPath, parent_path) {
     return path;
   }
 
+  function makeDummyBreadcrumbs(){
+    var dummy_bc = []
+    var bc_height = chart_dims.node_height;
+    var bc_depth = chart_dims.chart_depth;
+
+    for(let i = 0; i < bc_depth; i++){
+      dummy_bc.push({
+        name:(i < bc_depth-1 ? tr("Folder") + " " + (i+1) : tr("File")),
+        children:(i < bc_depth-1 ? [] : undefined),
+        parent: (i ? dummy_bc[i-1] : null),
+        depth:i+1,
+        dx: 0,
+        dy: bc_height,
+        value: 0,
+        x: 0,
+        y: bc_height*(i+1)
+        })
+
+      for(let j = 0; j < i; j++){
+        dummy_bc[j].children.push(dummy_bc[i])
+      }
+    }
+
+    var g = d3.select("#trail")
+        .selectAll("g")
+        .data(dummy_bc, function(d) { return d.name + d.depth; });
+
+    var entering = g.enter().append("svg:g");
+
+    entering.append("svg:polygon")
+        .attr("points", function(d, i) {return breadcrumbPoints(d, i, b.o, b.t, b.w, b.s)})
+        .style("fill", colors.otherfiles.color);
+
+      entering.append("svg:text")
+    .attr("x", b.w/14)
+    .attr("y", function(d) { return d.y; })
+    .attr("dx", 0)
+    .attr("dy", function(d, i) { return (d.dy/1.5 + i*b.s); })
+    .attr("text-anchor", "left")
+    .attr("stroke", "none")
+    .style("font-weight", "bold")
+    .text(function(d) {return d.name})
+
+    // Remove exiting nodes.
+    g.exit().remove();
+
+    // Make the breadcrumb trail visible, if it's hidden.
+    d3.select("#trail")
+        .style("opacity", "0.3")
+    
+  }
+
   function initializeBreadcrumbTrail() {
     // Add the svg area.
     var trail = d3.select("#sequence").append("svg:svg")
@@ -383,6 +442,9 @@ export function plot(csv_string, setParentPath, parent_path) {
     trail.append("svg:text")
       .attr("id", "endlabel")
       .style("fill", "#000");
+
+    makeDummyBreadcrumbs()
+
   }
 
   function computeBW(len) {
@@ -483,7 +545,7 @@ export function plot(csv_string, setParentPath, parent_path) {
 
     // Make the breadcrumb trail visible, if it's hidden.
     d3.select("#trail")
-        .style("visibility", "");
+        .style("opacity", 1)
 
   }
 
@@ -492,7 +554,7 @@ export function plot(csv_string, setParentPath, parent_path) {
   // root to leaf, separated by hyphens. The second column is a count of how 
   // often that sequence occurred.
   function buildHierarchy(csv) {
-    var root = {"name": tr("Root"), "children": []};
+    var root = {"name": tr("Back to root"), "children": []};
     for (var i = 0; i < csv.length; i++) {
       var sequence = csv[i][0];
       var size = +csv[i][1];

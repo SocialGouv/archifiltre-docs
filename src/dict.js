@@ -56,6 +56,10 @@ const dict = {
   	en: "errors",
     es: "errores"
   },
+  "Back to root": {
+    fr: "Retour à la racine",
+    en: "Back to root",
+  },
 
   // Icicle / Legend
   "Legend": {

@@ -112,6 +112,24 @@ const dict = {
     es: "Otros"
   },
 
+  // Icicle / Report
+  "Folder of file's name": {
+    fr: "Nom du répertoire ou fichier",
+    en: "Folder of file's name"
+  },
+  "Size": {
+    fr: "Taille",
+    en: "Size"
+  },
+  "absolute": {
+    fr: "absolue",
+    en: "absolute"
+  },
+  "percentage of the whole": {
+    fr: "pourcentage du total",
+    en: "percentage of the whole"
+  },
+
 
     // Always displayed
   "This app is compatible with Firefox and Chrome.": {

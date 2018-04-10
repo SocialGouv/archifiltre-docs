@@ -270,7 +270,8 @@ export function plot(csv_string, setParentPath, parent_path) {
   }
 
   function onClickHandler (d) {
-    if(d.depth){lockNode(d)}
+    //if(d.depth){lockNode(d)}
+    onDoubleClickHandler(d)
   }
 
   var clickStack = 0

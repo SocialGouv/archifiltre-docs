@@ -23,7 +23,7 @@ const chart_style = {
 const Presentational = props => {
   return (
     <div>
-      <div className="mdl-grid">
+      <div className="mdl-grid" style={{'marginLeft': '8em'}}>
 
         <div className="mdl-cell mdl-cell--3-col">
           <p>{props.nb_files} {tr("files loaded")}<br />{props.nb_errors} {tr("errors")}</p>

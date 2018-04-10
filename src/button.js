@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 const button_style = {
-	width: '80%',
+	width: '50%',
 	margin: '0.2em',
 	fontSize: '0.8em'
 }

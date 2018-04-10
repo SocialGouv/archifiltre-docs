@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { mkB } from 'button'
+
 import { selectDatabase } from 'reducers/root-reducer'
 import { exportCsv } from 'csv'
 
@@ -8,9 +10,7 @@ import { tr } from 'dict'
 
 const Presentational = props => {
 
-  return (
-    <button type="button" onClick={()=>exportCsv(props.getCsv())}>{tr("Export")}</button>
-  )
+  return mkB(()=>exportCsv(props.getCsv()), tr("Export"))
 }
 
 

@@ -15,7 +15,7 @@ class Presentational extends React.Component {
     this.style_dropzone = {
       height: '20em',
       border: '0.2em dashed #868686',
-      borderRadius: '1em',
+      borderRadius: '3em',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

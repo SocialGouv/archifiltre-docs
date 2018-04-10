@@ -22,13 +22,13 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   // Mapping of step names to colors.
   var colors = {
-    presentation : {label: tr("Presentation"), color:"#e33b14"},
+    presentation : {label: tr("Presentation"), color:"#f75b40"},
     parent_folder : {label: tr("Root"), color: "#f99a0b"},
     folder : {label: tr("Folder"), color:"#fabf0b"},
     spreadsheet : {label: tr("Spreadsheet"), color:"#52d11a"},
     email: {label: tr("E-mail"), color:"#13d6f3"},
-    doc : {label: tr("Document"), color:"#1a55ea"},
-    multimedia: {label: tr("Multimedia"), color:"#9735f2"},
+    doc : {label: tr("Document"), color:"#4c78e8"},
+    multimedia: {label: tr("Multimedia"), color:"#b574f2"},
     otherfiles : {label: tr("Others"), color:"#8a8c93"}
   };
 
@@ -430,6 +430,8 @@ function drawLegend() {
         .attr("y", li.h / 2)
         .attr("dy", "0.35em")
         .attr("text-anchor", "middle")
+        .attr("class", "legend-label")
+        // .attr("fill", "white")
         .style("font-size", "0.2em")
         .text(function(d) { return d.value.label; });
   }

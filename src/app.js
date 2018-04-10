@@ -29,15 +29,14 @@ window.onload = function () {
 
     <Provider store={store}>
           <div className="mdl-grid">
-            <div className="mdl-cell mdl-cell--12-col" style={{'textAlign':'center'}}>
-              <h2>{tr("Icicles")}</h2>
-              <h4>{tr("Your directories. Like you've never seen them before.")}</h4>
-              <p>
+            <div className="mdl-cell mdl-cell--12-col" style={{'textAlign':'left', 'marginLeft': '8em'}}>
+              <h4>{tr("Icicles")}</h4>
+              <span>
                 <em>
                   {tr("This app is compatible with Firefox and Chrome.")}<br />
                   {tr("Your data won't leave your computer. Only you can see what happens below.")}
                 </em>
-              </p>
+              </span>
             </div>
             <div className="mdl-cell mdl-cell--12-col">
               <MainSpace />

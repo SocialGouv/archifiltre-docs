@@ -33,11 +33,11 @@ const Presentational = props => {
 
          <div className="mdl-cell mdl-cell--9-col"  >
           <div className="mdl-grid" style={{'width':'100%'}} id='sidebar'>
-            <div className="mdl-cell mdl-cell--2-col"  style={{'textAlign': 'center'}}>
-              <i className="material-icons" id="report-icon" style={{'fontSize': '4.5em'}}></i>
-            </div>
-            <div className="mdl-cell mdl-cell--10-col" style={{'marginTop': '1.4em'}}>
+            <div className="mdl-cell mdl-cell--4-col">
+              <i className="material-icons" id="report-icon" style={{'fontSize': '4.5em'}}></i><br />
               <span  id="report-name" style={{'fontWeight': 'bold'}}></span><br /><span id="report-size"></span>
+            </div>
+            <div className="mdl-cell mdl-cell--10-col">
             </div>
           </div>
         </div>

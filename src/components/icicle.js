@@ -25,13 +25,7 @@ const Presentational = props => {
     <div>
       <div className="mdl-grid">
 
-        <div className="mdl-cell mdl-cell--3-col">
-          <p>{props.nb_files} {tr("files loaded")}<br />{props.nb_errors} {tr("errors")}</p>
-          <ErrorLogButton /><br /><br />
-          <ExportButton /><span>      </span><ReinitButton />
-        </div>
-
-         <div className="mdl-cell mdl-cell--9-col"  >
+         <div className="mdl-cell mdl-cell--9-col" style={{'textAlign':'left'}}>
           <div className="mdl-grid" style={{'width':'100%'}} id='sidebar'>
             <div className="mdl-cell mdl-cell--4-col">
               <i className="material-icons" id="report-icon" style={{'fontSize': '4.5em'}}></i><br />

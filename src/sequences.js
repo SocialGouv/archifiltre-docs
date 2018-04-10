@@ -219,6 +219,7 @@ export function plot(csv_string, setParentPath, parent_path) {
       .style("font-size", function(d) { if(d.name.length*font_width < d.dx){ return "1em"; } else { return "0.7em"; } })
       .text(function(d) {if(d.name.length*font_width < d.dx){ return smartClip(d.name, d.dx, font_width); } else { return smartClip(d.name, d.dx, 5); } })
       // .on("dblclick", onDoubleClickHandler)
+      .on("mouseover", mouseover)
       .on("click", function(d){event.stopPropagation(); clickBalancer(d);});
 
 
@@ -264,6 +265,18 @@ export function plot(csv_string, setParentPath, parent_path) {
     return o + ' o'
   }
 
+  function makeSizeString(d){
+    let sizeString = octet2HumanReadableFormat(d.value)
+
+    var percentage = (100 * d.value / totalSize).toPrecision(3);
+    var percentageString = percentage + "%";
+    if (percentage < 0.1) {
+      percentageString = "< 0.1%";
+    }
+
+    return percentageString + " | " + sizeString
+  }
+
   function onDoubleClickHandler (d) {
     unlockNodes(d)
     setParentPath(remakePath(d))
@@ -289,6 +302,7 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   }
 
+
   function lockNode(d){
     mouseover(d)
 
@@ -296,15 +310,7 @@ export function plot(csv_string, setParentPath, parent_path) {
       .on("mouseover", function(d2){mouseoverAlt(d2, d)})
     d3.select("#container").on("mouseleave", function(d2){mouseleaveAlt(d2, d)});
 
-    let sizeString = octet2HumanReadableFormat(d.value)
-
-    var percentage = (100 * d.value / totalSize).toPrecision(3);
-    var percentageString = percentage + "%";
-    if (percentage < 0.1) {
-      percentageString = "< 0.1%";
-    }
-
-    updateReport(d, sizeString, percentageString)
+    updateReport(d)
   }
 
   function unlockNodes(d){
@@ -319,18 +325,11 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   // Fade all but the current sequence, and show it in the breadcrumb trail.
   function mouseover(d) {
-    let sizeString = octet2HumanReadableFormat(d.value)
 
-    var percentage = (100 * d.value / totalSize).toPrecision(3);
-    var percentageString = percentage + "%";
-    if (percentage < 0.1) {
-      percentageString = "< 0.1%";
-    }
-
-    updateReport(d, sizeString, percentageString)
+    updateReport(d)
 
     var sequenceArray = getAncestors(d);
-    updateBreadcrumbs(sequenceArray, percentageString, sizeString);
+    updateBreadcrumbs(sequenceArray);
 
     // Fade all the segments.
     d3.selectAll(".node, .node-text")
@@ -533,7 +532,7 @@ export function plot(csv_string, setParentPath, parent_path) {
 
 
   // Update the breadcrumb trail to show the current sequence and percentage.
-  function updateBreadcrumbs(nodeArray, percentageString, sizeString) {
+  function updateBreadcrumbs(nodeArray) {
 
     // Data join; key function combines name and depth (= position in sequence).
     var g = d3.select("#trail")
@@ -569,14 +568,14 @@ export function plot(csv_string, setParentPath, parent_path) {
     // Remove exiting nodes.
     g.exit().remove();
 
-    // Now move and update the percentage at the end.
-    d3.select("#trail").select("#endlabel")
-        .attr("x", b.w/2)
-        // .attr("x", (nodeArray.length + 0.5) * (b.w + b.s))
-        .attr("y", 0)
-        .attr("dy", "-0.35em")
-        .attr("text-anchor", "middle")
-        .text(percentageString + " | " + sizeString);
+    // // Now move and update the percentage at the end.
+    // d3.select("#trail").select("#endlabel")
+    //     .attr("x", b.w/2)
+    //     // .attr("x", (nodeArray.length + 0.5) * (b.w + b.s))
+    //     .attr("y", 0)
+    //     .attr("dy", "-0.35em")
+    //     .attr("text-anchor", "middle")
+    //     .text("");
 
     // Make the breadcrumb trail visible, if it's hidden.
     d3.select("#trail")
@@ -584,7 +583,7 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   }
 
-  function updateReport(d, sizeString, percentageString){
+  function updateReport(d){
     d3.select("#sidebar")
       .style('opacity',1)
 
@@ -596,7 +595,7 @@ export function plot(csv_string, setParentPath, parent_path) {
       .text(d.name)
 
     d3.select("#report-size")
-      .text(sizeString + ' | ' + percentageString)
+      .text(makeSizeString(d))
   }
   
 

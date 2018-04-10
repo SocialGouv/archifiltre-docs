@@ -565,7 +565,12 @@ export function plot(csv_string, setParentPath, parent_path) {
       .attr("text-anchor", "left")
       .attr("stroke", "none")
       .style("font-size", function(d) { if(d.name.length*font_width < b.w){ return "1em"; } else { return "0.7em"; } })
-      .text(function(d) {if(d.name.length*font_width < b.w){ return smartClip(d.name, b.w*8/10, font_width); } else { return smartClip(d.name, b.w*8/10, 5); } })
+      .text(function(d) {
+        if(d.name.length*font_width < b.w) {
+          return smartClip(d.name + " · " + sizeString + ' | ' + percentageString, b.w*8/10, font_width); }
+        else {
+          return smartClip(d.name + "  ·  " + sizeString + ' | ' + percentageString, b.w*8/10, 5); }
+        })
 
     // Remove exiting nodes.
     g.exit().remove();

@@ -1,6 +1,6 @@
 
 
-h1, h2, h3, h4, h5, p, .mdl-layout__header-row .mdl-navigation__link {
+h1, h2, h3, h4, h5, p, span, .mdl-layout__header-row .mdl-navigation__link {
 	font-family: 'Quicksand', sans-serif;
 	color: #242523;
 }

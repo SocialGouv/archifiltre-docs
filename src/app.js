@@ -14,6 +14,8 @@ import unsafeStyle from 'css/main.css'
 
 import { tr } from 'dict'
 
+import apiCall from 'api-call'
+
 
 window.onload = function () {
   let root_div = document.createElement('main')
@@ -30,7 +32,7 @@ window.onload = function () {
 
     <Provider store={store}>
       <div className="mdl-grid">
-      <div className="mdl-layout-spacer"></div>
+        <div className="mdl-layout-spacer"></div>
         <div className="mdl-cell mdl-cell--6-col">
           <h4>{tr("Icicles")}</h4>
           <span>
@@ -43,7 +45,7 @@ window.onload = function () {
         <div className="mdl-layout-spacer"></div>
         <div className="mdl-layout-spacer"></div>
         <Dashboard />
-          <MainSpace />
+        <MainSpace />
       </div>
     </Provider>,
     root_div

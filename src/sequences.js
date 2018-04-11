@@ -466,7 +466,7 @@ export function plot(csv_string, setParentPath, parent_path) {
   }
 
   function makeDummyReport(){
-    d3.select("#sidebar")
+    d3.select("#report")
       .style('opacity',0.3)
 
     d3.select("#report-icon")
@@ -584,7 +584,7 @@ export function plot(csv_string, setParentPath, parent_path) {
   }
 
   function updateReport(d){
-    d3.select("#sidebar")
+    d3.select("#report")
       .style('opacity',1)
 
     d3.select("#report-icon")
@@ -605,7 +605,7 @@ export function plot(csv_string, setParentPath, parent_path) {
   }
 
   function fadeReport(){
-    d3.select("#sidebar")
+    d3.select("#report")
       .style('opacity',0.5)
   }
 

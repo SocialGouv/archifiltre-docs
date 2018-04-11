@@ -17,9 +17,7 @@ import { tr } from 'dict'
 const Presentational = props => {
   if (props.started === false && props.finished === false) {
     return (
-      <div>
         <FolderDropzone />
-      </div>
     )
   } else if (props.started === true && props.finished === false) {
     return (<WaitingScreen />)

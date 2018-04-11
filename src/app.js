@@ -30,7 +30,8 @@ window.onload = function () {
 
     <Provider store={store}>
           <div className="mdl-grid">
-            <div className="mdl-cell mdl-cell--6-col" style={{'textAlign':'left', 'marginLeft': '8em'}}>
+          <div className="mdl-layout-spacer"></div>
+            <div className="mdl-cell mdl-cell--6-col">
               <h4>{tr("Icicles")}</h4>
               <span>
                 <em>
@@ -40,10 +41,9 @@ window.onload = function () {
               </span>
             </div>
             <div className="mdl-layout-spacer"></div>
+            <div className="mdl-layout-spacer"></div>
             <Dashboard />
-            <div className="mdl-cell mdl-cell--12-col">
               <MainSpace />
-            </div>
           </div>
     </Provider>,
     root_div

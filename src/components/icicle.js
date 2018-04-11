@@ -24,14 +24,12 @@ const Presentational = props => {
   return (
     <div className="mdl-cell mdl-cell--12-col">
       <div className="mdl-grid" id="report">
-
             <div className="mdl-layout-spacer"></div>
             <div className="mdl-cell mdl-cell--3-col">
               <i className="material-icons" id="report-icon" style={{'fontSize': '4.5em'}}></i><br />
               <span  id="report-name" style={{'fontWeight': 'bold'}}></span><br /><span id="report-size"></span>
             </div>
             <div className="mdl-layout-spacer"></div>
-
       </div>
 
 
@@ -42,7 +40,9 @@ const Presentational = props => {
             console.timeEnd('plot')
           }
         }}>
-          <div className="mdl-cell mdl-cell--8-col" id='chart' style={chart_style}></div>
+          <div className="mdl-cell mdl-cell--8-col" id='chart' style={chart_style}>
+            <div id='ruler' style={{'position':'absolute', 'bottom':'0', 'width':'100%', 'height': '50pt'}}></div>
+          </div>
           <div id='sequence' className="mdl-cell mdl-cell--4-col" style={chart_style}></div>
         </div>
 

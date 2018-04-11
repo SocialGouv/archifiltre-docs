@@ -180,8 +180,9 @@ export function plot(csv_string, setParentPath, parent_path) {
     chart_dims.node_height = nodes[0].dy
     chart_dims.chart_depth = nodes.reduce((acc,val) => {return (val.depth > acc ? val.depth : acc)}, 0)
 
-    initializeBreadcrumbTrail();
+    initializeBreadcrumbTrail()
     initializeReport()
+    initializeRuler()
 
     var node = vis.data([json]).selectAll(".node")
       .data(nodes)
@@ -311,6 +312,7 @@ export function plot(csv_string, setParentPath, parent_path) {
     d3.select("#container").on("mouseleave", function(d2){mouseleaveAlt(d2, d)});
 
     updateReport(d)
+    updateRuler(d)
   }
 
   function unlockNodes(d){
@@ -327,9 +329,11 @@ export function plot(csv_string, setParentPath, parent_path) {
   function mouseover(d) {
 
     updateReport(d)
+    
 
     var sequenceArray = getAncestors(d);
-    updateBreadcrumbs(sequenceArray);
+    updateBreadcrumbs(sequenceArray)
+    updateRuler(sequenceArray)
 
     // Fade all the segments.
     d3.selectAll(".node, .node-text")
@@ -400,10 +404,6 @@ export function plot(csv_string, setParentPath, parent_path) {
         .attr("xmlns", "http://www.w3.org/2000/svg")
         .attr("viewBox", "0 0 " + b.w + " " + height)
         .attr("id", "trail")
-    // Add the label at the end, for the percentage.
-    trail.append("svg:text")
-      .attr("id", "endlabel")
-      .style("fill", "#000");
 
     makeDummyBreadcrumbs()
 
@@ -411,6 +411,13 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   function initializeReport(){
     makeDummyReport()
+  }
+
+  function initializeRuler(){
+    var ruler = d3.select("#ruler").append("svg:svg")
+      .attr("xmlns", "http://www.w3.org/2000/svg")
+     .attr("viewBox", "0 0 "+width+" 50")
+      .attr("id", "rulermarks")
   }
 
   function makeDummyBreadcrumbs(){
@@ -596,6 +603,36 @@ export function plot(csv_string, setParentPath, parent_path) {
 
     d3.select("#report-size")
       .text(makeSizeString(d))
+  }
+
+  function updateRuler(nodeArray){
+    var g = d3.select("#rulermarks")
+      .selectAll("g")
+      .data(nodeArray, function(d) { return d.name + d.depth; });
+
+    // Add breadcrumb and label for entering nodes.
+    var entering = g.enter().append("svg:g");
+
+    entering.append("svg:rect")
+      .attr("x", function(d) {return d.x; })
+      .attr("y", 0)
+      .attr("width", function(d) { return d.dx; })
+      .attr("height", 3)
+      .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); })
+      .style("opacity", function(d) {console.log(d.depth); console.log(nodeArray.length); return d.depth === nodeArray.length})
+
+    // entering.append("svg:text")
+    //   .attr("x", b.w/14)
+    //   .attr("y", function(d) { return d.y; })
+    //   .attr("dx", 0)
+    //   .attr("dy", function(d, i) { return (d.dy/1.5 + i*b.s); })
+    //   .attr("text-anchor", "left")
+    //   .attr("stroke", "none")
+    //   .style("font-size", function(d) { if(d.name.length*font_width < b.w){ return "1em"; } else { return "0.7em"; } })
+    //   .text(function(d) {if(d.name.length*font_width < b.w){ return smartClip(d.name, b.w*8/10, font_width); } else { return smartClip(d.name, b.w*8/10, 5); } })
+
+    // Remove exiting nodes.
+    g.exit().remove();
   }
   
 

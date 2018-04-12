@@ -17,6 +17,15 @@ import { plot } from 'sequences'
 const chart_style = {
   position: 'relative',
   stroke: '#fff',
+  // 'background-color': 'rgba(100,100,100,0.1)'
+}
+
+const ruler_style = {
+  // 'position':'absolute',
+  // 'bottom':'0',
+  'width':'100%',
+  'height': '50pt',
+  // 'background-color': 'rgba(100,100,100,0.2)'
 }
 
 
@@ -40,10 +49,12 @@ const Presentational = props => {
             console.timeEnd('plot')
           }
         }}>
-          <div className="mdl-cell mdl-cell--8-col" id='chart' style={chart_style}>
-            <div id='ruler' style={{'position':'absolute', 'bottom':'0', 'width':'100%', 'height': '50pt'}}></div>
+          <div className="mdl-cell mdl-cell--8-col">
+            <div id='chart' style={chart_style}></div>
+            <div id='ruler' style={ruler_style}></div>
           </div>
-          <div id='sequence' className="mdl-cell mdl-cell--4-col" style={chart_style}></div>
+          <div className="mdl-cell mdl-cell--4-col" id='sequence' style={chart_style}></div>
+
         </div>
 
     </div>

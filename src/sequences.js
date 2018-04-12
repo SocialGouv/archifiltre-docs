@@ -269,16 +269,33 @@ export function plot(csv_string, setParentPath, parent_path) {
     return o + ' o'
   }
 
+  function precisionRound(number, precision) {
+    var factor = Math.pow(10, precision);
+    return Math.round(number * factor) / factor;
+  }
+
   function makeSizeString(d){
     let sizeString = octet2HumanReadableFormat(d.value)
 
-    var percentage = (100 * d.value / totalSize).toPrecision(3);
+    var percentage = precisionRound((100 * d.value / totalSize),1);
     var percentageString = percentage + "%";
     if (percentage < 0.1) {
       percentageString = "< 0.1%";
     }
 
     return percentageString + " | " + sizeString
+  }
+
+  function computeRulerTextDisplayMode(candidate_position, text_length, w, fw){
+    if(candidate_position < text_length*fw){
+      return "LEFT"
+    }
+    else if(candidate_position > w - (text_length*fw)){
+      return "RIGHT"
+    }
+    else{
+      return "ORGANIC"
+    }
   }
 
   // Given a node in a partition layout, return an array of all of its ancestor
@@ -298,7 +315,7 @@ export function plot(csv_string, setParentPath, parent_path) {
   }
 
   function computeOpacity(d, nodeArray){
-    // return Math.pow(d.depth / nodeArray.length, 3);
+    // return Math.pow(d.depth / nodeArray.length, 1);
     return (d.depth === nodeArray.length ? 1 : 0);
   }
 
@@ -439,6 +456,7 @@ export function plot(csv_string, setParentPath, parent_path) {
     d3.select("#container").on("mouseover", null);
     makeDummyReport()
     makeDummyBreadcrumbs()
+    makeDummyRuler()
   }
 
   // ### MOUSE MOTION EVENTS
@@ -524,9 +542,13 @@ export function plot(csv_string, setParentPath, parent_path) {
   function initializeRuler(){
     var ruler = d3.select("#ruler").append("svg:svg")
       .attr("xmlns", "http://www.w3.org/2000/svg")
-      .attr("viewBox", "0 0 "+width+" 50")
-      .attr("id", "rulermarks")
-      .style("stroke", "none")
+      .attr("viewBox", "0 0 "+width+" "+height)
+      .append("svg:g")
+        .attr("id", "rulermarks")
+        // .style("stroke", "none")
+        .append("svg:text")
+          .attr("id", "rulertext")
+          .text("")
   }
 
   function makeDummyBreadcrumbs(){
@@ -594,6 +616,10 @@ export function plot(csv_string, setParentPath, parent_path) {
 
     d3.select("#report-size")
       .text(tr("Size") + " : " + tr("absolute") + " | " + tr("percentage of the whole"))
+  }
+
+  function makeDummyRuler(){
+    updateRuler([])
   }
 
 
@@ -667,25 +693,39 @@ export function plot(csv_string, setParentPath, parent_path) {
 
   function updateRuler(nodeArray){
 
+
+
     var g = d3.select("#rulermarks")
       .selectAll("g")
       .style("opacity", function(d) {return computeOpacity(d, nodeArray)}) // Update existing nodes' opacity
       .data(nodeArray, function(d) { return d.name + d.depth; });
-
-    
 
     // Add breadcrumb and label for entering nodes.
     var entering = g.enter().append("svg:g");
 
     entering.append("svg:rect")
       .attr("x", function(d) {return d.x; })
-      .attr("y", 0)
+      .attr("y", "1.5em")
       .attr("width", function(d) { return d.dx; })
-      .attr("height", 3)
+      .attr("height", "0.3em")
       .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); })
       .style("opacity", function(d) {return computeOpacity(d, nodeArray)})
 
     g.exit().remove();
+
+    var leaf = nodeArray[nodeArray.length - 1]
+
+    if(leaf !== undefined){
+    var mode = computeRulerTextDisplayMode(leaf.x + leaf.dx/2, makeSizeString(leaf).length, width, font_width)
+      d3.select("#rulertext")
+        .attr("x", {"ORGANIC" : leaf.x + leaf.dx/2, "LEFT" : 5, "RIGHT" : width - 5}[mode])
+        .attr("y", "3em")
+        .attr("text-anchor", {"ORGANIC" : "middle", "LEFT" : "start", "RIGHT" : "end"}[mode])
+        .text(makeSizeString(leaf))
+    }
+    else{
+      d3.select("#rulertext").text("")
+    }
   }
   
 

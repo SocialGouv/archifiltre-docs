@@ -287,6 +287,11 @@ export function plot(csv_string, setParentPath, parent_path) {
   }
 
   function computeRulerTextDisplayMode(candidate_position, text_length, w, fw){
+    console.log(candidate_position)
+    console.log(text_length)
+    console.log(w)
+    console.log(fw)
+
     if(candidate_position < text_length*fw){
       return "LEFT"
     }
@@ -716,7 +721,7 @@ export function plot(csv_string, setParentPath, parent_path) {
     var leaf = nodeArray[nodeArray.length - 1]
 
     if(leaf !== undefined){
-    var mode = computeRulerTextDisplayMode(leaf.x + leaf.dx/2, makeSizeString(leaf).length, width, font_width)
+    var mode = computeRulerTextDisplayMode(leaf.x + leaf.dx/2, makeSizeString(leaf).length, width, font_width*0.6)
       d3.select("#rulertext")
         .attr("x", {"ORGANIC" : leaf.x + leaf.dx/2, "LEFT" : 5, "RIGHT" : width - 5}[mode])
         .attr("y", "3em")

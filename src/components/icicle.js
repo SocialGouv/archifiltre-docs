@@ -32,6 +32,7 @@ const ruler_style = {
 const Presentational = props => {
   return (
     <div className="mdl-cell mdl-cell--12-col">
+
       <div className="mdl-grid" id="report">
             <div className="mdl-layout-spacer"></div>
             <div className="mdl-cell mdl-cell--3-col">
@@ -40,7 +41,6 @@ const Presentational = props => {
             </div>
             <div className="mdl-layout-spacer"></div>
       </div>
-
 
         <div className="mdl-grid" id='main' ref={(input) => {
           if (input) {

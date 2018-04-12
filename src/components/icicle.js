@@ -28,19 +28,19 @@ const ruler_style = {
   // 'background-color': 'rgba(100,100,100,0.2)'
 }
 
+ //     <div className="mdl-grid" id="report">
+ //           <div className="mdl-layout-spacer"></div>
+ //           <div className="mdl-cell mdl-cell--3-col">
+ //             <i className="material-icons" id="report-icon" style={{'fontSize': '4.5em'}}></i><br />
+ //             <span  id="report-name" style={{'fontWeight': 'bold'}}></span><br /><span id="report-size"></span>
+ //           </div>
+ //           <div className="mdl-layout-spacer"></div>
+ //     </div>
 
 const Presentational = props => {
   return (
     <div className="mdl-cell mdl-cell--12-col">
 
-      <div className="mdl-grid" id="report">
-            <div className="mdl-layout-spacer"></div>
-            <div className="mdl-cell mdl-cell--3-col">
-              <i className="material-icons" id="report-icon" style={{'fontSize': '4.5em'}}></i><br />
-              <span  id="report-name" style={{'fontWeight': 'bold'}}></span><br /><span id="report-size"></span>
-            </div>
-            <div className="mdl-layout-spacer"></div>
-      </div>
 
         <div className="mdl-grid" id='main' ref={(input) => {
           if (input) {

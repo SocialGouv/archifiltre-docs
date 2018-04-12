@@ -40,23 +40,19 @@ const ruler_style = {
 const Presentational = props => {
   return (
     <div className="mdl-cell mdl-cell--12-col">
-
-
-        <div className="mdl-grid" id='main' ref={(input) => {
-          if (input) {
-            console.time('plot')
-            plot(props.csv, props.setParentPath, props.parent_path)
-            console.timeEnd('plot')
-          }
-        }}>
-          <div className="mdl-cell mdl-cell--8-col">
-            <div id='chart' style={chart_style}></div>
-            <div id='ruler' style={ruler_style}></div>
-          </div>
-          <div className="mdl-cell mdl-cell--4-col" id='sequence' style={chart_style}></div>
-
+      <div className="mdl-grid" id='main' ref={(input) => {
+        if (input) {
+          console.time('plot')
+          plot(props.csv, props.setParentPath, props.parent_path)
+          console.timeEnd('plot')
+        }
+      }}>
+        <div className="mdl-cell mdl-cell--8-col">
+          <div id='chart' style={chart_style}></div>
+          <div id='ruler' style={ruler_style}></div>
         </div>
-
+        <div className="mdl-cell mdl-cell--4-col" id='sequence' style={chart_style}></div>
+      </div>
     </div>
   )
 }

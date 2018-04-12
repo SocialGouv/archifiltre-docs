@@ -29,22 +29,22 @@ window.onload = function () {
   ReactDOM.render(
 
     <Provider store={store}>
-          <div className="mdl-grid">
-          <div className="mdl-layout-spacer"></div>
-            <div className="mdl-cell mdl-cell--6-col">
-              <h4>{tr("Icicles")}</h4>
-              <span>
-                <em>
-                  {tr("This app is compatible with Firefox and Chrome.")}<br />
-                  {tr("Your data won't leave your computer. Only you can see what happens below.")}
-                </em>
-              </span>
-            </div>
-            <div className="mdl-layout-spacer"></div>
-            <div className="mdl-layout-spacer"></div>
-            <Dashboard />
-              <MainSpace />
-          </div>
+      <div className="mdl-grid">
+      <div className="mdl-layout-spacer"></div>
+        <div className="mdl-cell mdl-cell--6-col">
+          <h4>{tr("Icicles")}</h4>
+          <span>
+            <em>
+              {tr("This app is compatible with Firefox and Chrome.")}<br />
+              {tr("Your data won't leave your computer. Only you can see what happens below.")}
+            </em>
+          </span>
+        </div>
+        <div className="mdl-layout-spacer"></div>
+        <div className="mdl-layout-spacer"></div>
+        <Dashboard />
+          <MainSpace />
+      </div>
     </Provider>,
     root_div
   )

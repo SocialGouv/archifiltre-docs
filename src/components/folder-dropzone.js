@@ -50,22 +50,22 @@ class Presentational extends React.Component {
 
   render() {
     return (
-     <div
-       onDragOver={this.handleDragover}
-       onDrop={this.handleDrop}
-       style={this.style_dropzone}
-       className="mdl-cell mdl-cell--12-col"
-     >
-       <div>
-         <p style={this.style_placeholder}>
-           {this.placeholder}
-         </p>
-         <p style={this.style_placeholder_st}>
-           {this.placeholder_st}
-         </p>
-       </div>
-     </div>
-   )
+      <div
+        onDragOver={this.handleDragover}
+        onDrop={this.handleDrop}
+        style={this.style_dropzone}
+        className="mdl-cell mdl-cell--12-col"
+      >
+        <div>
+          <p style={this.style_placeholder}>
+            {this.placeholder}
+          </p>
+          <p style={this.style_placeholder_st}>
+            {this.placeholder_st}
+          </p>
+        </div>
+      </div>
+    )
   }
 }
 

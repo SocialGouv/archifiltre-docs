@@ -22,8 +22,7 @@ const dashboard_content_style = {
 
 const Presentational = props => {
   if (props.started === true && props.finished === true) {
-
-    if(props.nb_errors){
+    if(props.nb_errors) {
       return (
         <div className="mdl-cell mdl-cell--3-col" style={dashboard_style}>
           <div style={dashboard_content_style}>
@@ -32,9 +31,8 @@ const Presentational = props => {
             <ExportButton /><span>      </span><ReinitButton />
           </div>
         </div>
-      );
-    }
-    else{
+      )
+    } else {
       return (
         <div className="mdl-cell mdl-cell--3-col" style={dashboard_style}>
           <div style={dashboard_content_style}>
@@ -42,12 +40,10 @@ const Presentational = props => {
             <ExportButton /><span>      </span><ReinitButton />
           </div>
         </div>
-      );
+      )
     }
-
-  }  
-  else{
-    return (<div className="mdl-cell mdl-cell--3-col" style={dashboard_style}></div>);
+  } else {
+    return (<div className="mdl-cell mdl-cell--3-col" style={dashboard_style}></div>)
   }
 }
 

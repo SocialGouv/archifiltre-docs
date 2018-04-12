@@ -234,6 +234,9 @@ export function plot(csv_string, setParentPath, parent_path) {
     totalSize = node.node().__data__.value;
    };
 
+
+  // ################### AUXILIARY FUNCTIONS ##################
+
   function smartClip(s, w, fw){
     var target_size = Math.floor(w/fw)
     var slice = Math.floor(target_size/2)
@@ -278,13 +281,127 @@ export function plot(csv_string, setParentPath, parent_path) {
     return percentageString + " | " + sizeString
   }
 
+  // Given a node in a partition layout, return an array of all of its ancestor
+  // nodes, highest first, but excluding the root.
+  function getAncestors(node) {
+    var path = [];
+    var current = node;
+    while (current.parent) {
+      path.unshift(current);
+      current = current.parent;
+    }
+    return path;
+  }
+
+  function computeBW(len) {
+    return 300
+  }
+
+  function computeOpacity(d, nodeArray){
+    // return Math.pow(d.depth / nodeArray.length, 3);
+    return (d.depth === nodeArray.length ? 1 : 0);
+  }
+
+  function breadcrumbPoints(d, i, o, t, w, s) {
+    //   var h = d.dy
+    //   var y = d.y + i*s
+
+    //   var points = [];
+    //   points.push("0," + y);
+    //   if (i > 0) { // Topmost breadcrumb; don't include upper notch.
+    //     points.push(((w-o)/2) + "," + y);
+    //     points.push((w/2) + "," + (y+t));
+    //     points.push(((w+o)/2) + "," + y);
+    //   }
+    //   points.push(w + "," + y);
+    //   points.push(w + "," + (y+h));
+
+    //   if(d.children !== undefined){
+    //     points.push(((w+o)/2) + "," + (y+h));
+    //     points.push((w/2) + "," + (y+h+t)); // lower notch
+    //     points.push(((w-o)/2) + "," + (y+h));
+    //   }
+
+    //   points.push("0," + (y+h));
+    //   return points.join(" ");
+    var h = d.dy
+    var y = d.y + i*s
+    var w2 = w/20
+
+    var points = [];
+    points.push("0," + y);
+    if (i > 0) { // Topmost breadcrumb; don't include upper notch.
+      points.push((w2/2) + "," + (y+t));
+    }
+    points.push(w2 + "," + y);
+    points.push(w2 + "," + (y+h));
+
+    if(d.children !== undefined){
+      points.push((w2/2) + "," + (y+h+t)); // lower notch
+    }
+
+    points.push("0," + (y+h));
+    return points.join(" ");
+  }
+
+
+  function buildHierarchy(csv) {
+    // Take a 2-column Csv and transform it into a hierarchical structure suitable
+    // for a partition layout. The first column is a sequence of step names, from
+    // root to leaf, separated by hyphens. The second column is a count of how 
+    // often that sequence occurred.
+    var root = {"name": tr("Back to root"), "children": []};
+    for (var i = 0; i < csv.length; i++) {
+      var sequence = csv[i][0];
+      var size = +csv[i][1];
+      if (isNaN(size)) { // e.g. if this is a header row
+        continue;
+      }
+      var parts = sequence.split("/");
+      var currentNode = root;
+      for (var j = 0; j < parts.length; j++) {
+        var children = currentNode["children"];
+        var nodeName = parts[j];
+        var childNode;
+        if (j + 1 < parts.length) {
+     // Not yet at the end of the sequence; move down the tree.
+    var foundChild = false;
+    for (var k = 0; k < children.length; k++) {
+      if (children[k]["name"] == nodeName) {
+        childNode = children[k];
+        foundChild = true;
+        break;
+      }
+    }
+    // If we don't already have a child node for this branch, create it.
+    if (!foundChild) {
+      childNode = {"name": nodeName, "children": []};
+      children.push(childNode);
+    }
+    currentNode = childNode;
+        } else {
+    // Reached the end of the sequence; create a leaf node.
+    childNode = {"name": nodeName, "size": size};
+    children.push(childNode);
+        }
+      }
+    }
+    return root;
+  };
+
+  // ################### EVENT HANDLING ##################
+
+  // ### CLICK EVENTS
+
   function onDoubleClickHandler (d) {
     unlockNodes(d)
     setParentPath(remakePath(d))
   }
 
   function onClickHandler (d) {
-    if(d.depth){lockNode(d)}
+    if(d.depth){
+      lockNode(d)
+    }
   }
 
   var clickStack = 0
@@ -302,7 +419,6 @@ export function plot(csv_string, setParentPath, parent_path) {
     }
 
   }
-
 
   function lockNode(d){
     mouseover(d)
@@ -324,6 +440,9 @@ export function plot(csv_string, setParentPath, parent_path) {
     makeDummyReport()
     makeDummyBreadcrumbs()
   }
+
+  // ### MOUSE MOTION EVENTS
+
 
   // Fade all but the current sequence, and show it in the breadcrumb trail.
   function mouseover(d) {
@@ -383,18 +502,7 @@ export function plot(csv_string, setParentPath, parent_path) {
         .style("opacity", 0.3);
   }
 
-  // Given a node in a partition layout, return an array of all of its ancestor
-  // nodes, highest first, but excluding the root.
-  function getAncestors(node) {
-    var path = [];
-    var current = node;
-    while (current.parent) {
-      path.unshift(current);
-      current = current.parent;
-    }
-    return path;
-  }
-
+  // ################### CREATE AND UPDATE UI FEEDBACK ##################
 
   function initializeBreadcrumbTrail() {
     // Add the svg area.
@@ -416,8 +524,9 @@ export function plot(csv_string, setParentPath, parent_path) {
   function initializeRuler(){
     var ruler = d3.select("#ruler").append("svg:svg")
       .attr("xmlns", "http://www.w3.org/2000/svg")
-     .attr("viewBox", "0 0 "+width+" 50")
+      .attr("viewBox", "0 0 "+width+" 50")
       .attr("id", "rulermarks")
+      .style("stroke", "none")
   }
 
   function makeDummyBreadcrumbs(){
@@ -487,55 +596,6 @@ export function plot(csv_string, setParentPath, parent_path) {
       .text(tr("Size") + " : " + tr("absolute") + " | " + tr("percentage of the whole"))
   }
 
-  function computeBW(len) {
-    return 300
-  }
-
-  // Generate a string that describes the points of a breadcrumb polygon.
-  // function breadcrumbPoints(d, i, o, t, w, s) {
-  //   var h = d.dy
-  //   var y = d.y + i*s
-
-  //   var points = [];
-  //   points.push("0," + y);
-  //   if (i > 0) { // Topmost breadcrumb; don't include upper notch.
-  //     points.push(((w-o)/2) + "," + y);
-  //     points.push((w/2) + "," + (y+t));
-  //     points.push(((w+o)/2) + "," + y);
-  //   }
-  //   points.push(w + "," + y);
-  //   points.push(w + "," + (y+h));
-
-  //   if(d.children !== undefined){
-  //     points.push(((w+o)/2) + "," + (y+h));
-  //     points.push((w/2) + "," + (y+h+t)); // lower notch
-  //     points.push(((w-o)/2) + "," + (y+h));
-  //   }
-
-  //   points.push("0," + (y+h));
-  //   return points.join(" ");
-  // }
-
-  function breadcrumbPoints(d, i, o, t, w, s) {
-    var h = d.dy
-    var y = d.y + i*s
-    var w2 = w/20
-
-    var points = [];
-    points.push("0," + y);
-    if (i > 0) { // Topmost breadcrumb; don't include upper notch.
-      points.push((w2/2) + "," + (y+t));
-    }
-    points.push(w2 + "," + y);
-    points.push(w2 + "," + (y+h));
-
-    if(d.children !== undefined){
-      points.push((w2/2) + "," + (y+h+t)); // lower notch
-    }
-
-    points.push("0," + (y+h));
-    return points.join(" ");
-  }
 
 
   // Update the breadcrumb trail to show the current sequence and percentage.
@@ -606,9 +666,13 @@ export function plot(csv_string, setParentPath, parent_path) {
   }
 
   function updateRuler(nodeArray){
+
     var g = d3.select("#rulermarks")
       .selectAll("g")
+      .style("opacity", function(d) {return computeOpacity(d, nodeArray)}) // Update existing nodes' opacity
       .data(nodeArray, function(d) { return d.name + d.depth; });
+
+    
 
     // Add breadcrumb and label for entering nodes.
     var entering = g.enter().append("svg:g");
@@ -619,19 +683,8 @@ export function plot(csv_string, setParentPath, parent_path) {
       .attr("width", function(d) { return d.dx; })
       .attr("height", 3)
       .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); })
-      .style("opacity", function(d) {console.log(d.depth); console.log(nodeArray.length); return d.depth === nodeArray.length})
+      .style("opacity", function(d) {return computeOpacity(d, nodeArray)})
 
-    // entering.append("svg:text")
-    //   .attr("x", b.w/14)
-    //   .attr("y", function(d) { return d.y; })
-    //   .attr("dx", 0)
-    //   .attr("dy", function(d, i) { return (d.dy/1.5 + i*b.s); })
-    //   .attr("text-anchor", "left")
-    //   .attr("stroke", "none")
-    //   .style("font-size", function(d) { if(d.name.length*font_width < b.w){ return "1em"; } else { return "0.7em"; } })
-    //   .text(function(d) {if(d.name.length*font_width < b.w){ return smartClip(d.name, b.w*8/10, font_width); } else { return smartClip(d.name, b.w*8/10, 5); } })
-
-    // Remove exiting nodes.
     g.exit().remove();
   }
   
@@ -645,50 +698,5 @@ export function plot(csv_string, setParentPath, parent_path) {
     d3.select("#report")
       .style('opacity',0.5)
   }
-
-
-  // Take a 2-column Csv and transform it into a hierarchical structure suitable
-  // for a partition layout. The first column is a sequence of step names, from
-  // root to leaf, separated by hyphens. The second column is a count of how 
-  // often that sequence occurred.
-  function buildHierarchy(csv) {
-    var root = {"name": tr("Back to root"), "children": []};
-    for (var i = 0; i < csv.length; i++) {
-      var sequence = csv[i][0];
-      var size = +csv[i][1];
-      if (isNaN(size)) { // e.g. if this is a header row
-        continue;
-      }
-      var parts = sequence.split("/");
-      var currentNode = root;
-      for (var j = 0; j < parts.length; j++) {
-        var children = currentNode["children"];
-        var nodeName = parts[j];
-        var childNode;
-        if (j + 1 < parts.length) {
-     // Not yet at the end of the sequence; move down the tree.
-    var foundChild = false;
-    for (var k = 0; k < children.length; k++) {
-      if (children[k]["name"] == nodeName) {
-        childNode = children[k];
-        foundChild = true;
-        break;
-      }
-    }
-    // If we don't already have a child node for this branch, create it.
-    if (!foundChild) {
-      childNode = {"name": nodeName, "children": []};
-      children.push(childNode);
-    }
-    currentNode = childNode;
-        } else {
-    // Reached the end of the sequence; create a leaf node.
-    childNode = {"name": nodeName, "size": size};
-    children.push(childNode);
-        }
-      }
-    }
-    return root;
-  };
 
 }

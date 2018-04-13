@@ -14,10 +14,13 @@ import unsafeStyle from 'css/main.css'
 
 import { tr } from 'dict'
 
-import apiCall from 'api-call'
+import { logError } from 'api-call'
+import { getCookie } from 'cookie'
+
+import ErrorBoundary from 'components/error-boundary'
 
 
-window.onload = function () {
+const app = () => {
   let root_div = document.createElement('main')
   root_div.setAttribute('id','root')
   root_div.setAttribute('className','mdl-layout__content')
@@ -29,26 +32,36 @@ window.onload = function () {
   let store = createStore(rootReducer)
 
   ReactDOM.render(
-
-    <Provider store={store}>
-      <div className="mdl-grid">
-        <div className="mdl-layout-spacer"></div>
-        <div className="mdl-cell mdl-cell--6-col">
-          <h4>{tr("Icicles")}</h4>
-          <span>
-            <em>
-              {tr("This app is compatible with Firefox and Chrome.")}<br />
-              {tr("Your data won't leave your computer. Only you can see what happens below.")}
-            </em>
-          </span>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <div className="mdl-grid">
+          <div className="mdl-layout-spacer"></div>
+          <div className="mdl-cell mdl-cell--6-col">
+            <h4>{tr("Icicles")}</h4>
+            <span>
+              <em>
+                {tr("This app is compatible with Firefox and Chrome.")}<br />
+                {tr("Your data won't leave your computer. Only you can see what happens below.")}
+              </em>
+            </span>
+          </div>
+          <div className="mdl-layout-spacer"></div>
+          <div className="mdl-layout-spacer"></div>
+          <Dashboard />
+          <MainSpace />
         </div>
-        <div className="mdl-layout-spacer"></div>
-        <div className="mdl-layout-spacer"></div>
-        <Dashboard />
-        <MainSpace />
-      </div>
-    </Provider>,
+      </Provider>
+    </ErrorBoundary>,
     root_div
   )
+}
 
+window.onload = () => {
+  try {
+    app()
+  } catch(e) {
+    if (!getCookie().impicklerick) {
+      logError(e.stack)
+    }
+  }
 }

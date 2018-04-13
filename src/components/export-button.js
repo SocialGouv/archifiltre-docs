@@ -9,7 +9,6 @@ import { exportCsv } from 'csv'
 import { tr } from 'dict'
 
 const Presentational = props => {
-
   return mkB(()=>exportCsv(props.getCsv()), tr("Export"))
 }
 

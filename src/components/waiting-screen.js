@@ -27,7 +27,7 @@ class Presentational extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="mdl-cell mdl-cell--12-col" style={{'textAlign':'center', 'marginTop':'3em'}}>
         <p>{tr("Files loaded")}: {this.props.nb_files}</p>
         <p>{tr("Errors")} : {this.props.nb_errors}</p>
       </div>

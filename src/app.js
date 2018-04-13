@@ -8,6 +8,7 @@ import { createStore } from 'redux'
 import rootReducer from 'reducers/root-reducer'
 
 import MainSpace from 'components/main-space'
+import Dashboard from 'components/dashboard'
 
 import unsafeStyle from 'css/main.css'
 
@@ -28,20 +29,22 @@ window.onload = function () {
   ReactDOM.render(
 
     <Provider store={store}>
-          <div className="mdl-grid">
-            <div className="mdl-cell mdl-cell--12-col" style={{'textAlign':'left', 'marginLeft': '8em'}}>
-              <h4>{tr("Icicles")}</h4>
-              <span>
-                <em>
-                  {tr("This app is compatible with Firefox and Chrome.")}<br />
-                  {tr("Your data won't leave your computer. Only you can see what happens below.")}
-                </em>
-              </span>
-            </div>
-            <div className="mdl-cell mdl-cell--12-col">
-              <MainSpace />
-            </div>
-          </div>
+      <div className="mdl-grid">
+      <div className="mdl-layout-spacer"></div>
+        <div className="mdl-cell mdl-cell--6-col">
+          <h4>{tr("Icicles")}</h4>
+          <span>
+            <em>
+              {tr("This app is compatible with Firefox and Chrome.")}<br />
+              {tr("Your data won't leave your computer. Only you can see what happens below.")}
+            </em>
+          </span>
+        </div>
+        <div className="mdl-layout-spacer"></div>
+        <div className="mdl-layout-spacer"></div>
+        <Dashboard />
+          <MainSpace />
+      </div>
     </Provider>,
     root_div
   )

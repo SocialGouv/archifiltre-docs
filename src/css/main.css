@@ -11,3 +11,7 @@
 .input-file {
     display: none;
 }
+
+.mdl-cell {
+	background: red;
+}

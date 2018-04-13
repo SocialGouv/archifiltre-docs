@@ -69,6 +69,10 @@ const dict = {
   	en: "errors",
     es: "errores"
   },
+  "Back to root": {
+    fr: "Retour à la racine",
+    en: "Back to root",
+  },
 
   // Icicle / Legend
   "Legend": {
@@ -85,6 +89,10 @@ const dict = {
     fr: "Répertoire",
     en: "Folder",
     es: "Directorio"
+  },
+  "File": {
+    fr: "Fichier",
+    en: "File"
   },
   "Root": {
     fr: "Racine",
@@ -115,6 +123,24 @@ const dict = {
     fr: "Autres",
     en: "Others",
     es: "Otros"
+  },
+
+  // Icicle / Report
+  "Folder of file's name": {
+    fr: "Nom du répertoire ou fichier",
+    en: "Folder of file's name"
+  },
+  "Size": {
+    fr: "Taille",
+    en: "Size"
+  },
+  "absolute": {
+    fr: "absolue",
+    en: "absolute"
+  },
+  "percentage of the whole": {
+    fr: "pourcentage du total",
+    en: "percentage of the whole"
   },
 
 

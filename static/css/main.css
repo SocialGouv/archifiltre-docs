@@ -37,12 +37,13 @@ h1 {
 /*	background: #ffeded;
 */}
 
-.mdl-cell {
+/*.mdl-cell {
 	justify-content: center;
 	align-content: center;
 	text-align:center;
-/*	background: #ededed;
-*/}
+	background: #ededed;
+}*/
+
 
 .demo-layout-transparent {
 	height: 100%;

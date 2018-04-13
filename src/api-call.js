@@ -16,7 +16,7 @@ const request = obj => {
         reject(xhr.statusText)
       }
     }
-    xhr.onerror = () => reject(xhr.statusText);
+    xhr.onerror = () => reject(xhr.statusText)
     xhr.send(obj.body)
   })
 }
@@ -29,6 +29,26 @@ const b64Toutf8 = str => {
   return decodeURIComponent(escape(window.atob( str )));
 }
 
+export const logError = (stack,componentStack) => {
+  return request({
+    method:'POST',
+    url:'http://localhost:3000/none/log/browserError',
+    headers:{
+      'content-type': 'application/json'
+    },
+    body:JSON.stringify({
+      stack,
+      componentStack
+    })
+  })
+}
+
+
+
+
+
+
+// SOME DUMMY TEST
 
 
 const createAccount = (name,password) => {
@@ -177,6 +197,8 @@ const testDebugLog = () => {
 }
 
 window.swag = {
+  logError,
+
   createAccount,
   getToken,
   checkToken,

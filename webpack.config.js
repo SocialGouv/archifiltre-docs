@@ -1,20 +1,34 @@
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const FlowWebpackPlugin = require('flow-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
 
 module.exports = {
   entry: {
-    app: './src/app.js'
+    app: './src/app.js',
+    react: ['react', 'react-dom'],
+    redux: ['redux', 'react-redux'],
+    immutable: ['immutable']
   },
 
   plugins: [
     new CopyWebpackPlugin(['static']),
+    new HtmlWebpackPlugin({
+      inject: 'head',
+      template: 'static/index.html'
+    })
   ],
-
-  // devtool: 'source-map',
 
   devServer: {
     contentBase: './dist',
+  },
+
+  optimization : {
+    splitChunks : {
+      chunks: 'all'
+    },
+    runtimeChunk : true
   },
 
   resolve: {

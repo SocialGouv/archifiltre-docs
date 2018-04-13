@@ -13,20 +13,22 @@ class Presentational extends React.Component {
     super(props)
 
     this.style_dropzone = {
-      height: '20em',
+      height: '15em',
       border: '0.2em dashed #868686',
       borderRadius: '3em',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       textAlign: 'center',
-      marginLeft: '5em',
-      marginRight: '5em'
+      marginLeft: '5%',
+      marginRight: '5%',
+      marginTop: '3em'
     }
 
     this.style_placeholder = {
       fontFamily: '\'Quicksand\', sans-serif',
-      fontSize: '3em'
+      fontSize: '3em',
+      lineHeight: '1.2'
     }
 
     this.placeholder = tr("Drop a directory here!")
@@ -48,21 +50,22 @@ class Presentational extends React.Component {
 
   render() {
     return (
-     <div
-       onDragOver={this.handleDragover}
-       onDrop={this.handleDrop}
-       style={this.style_dropzone}
-     >
-       <div>
-         <p style={this.style_placeholder}>
-           {this.placeholder}
-         </p>
-         <p style={this.style_placeholder_st}>
-           {this.placeholder_st}
-         </p>
-       </div>
-     </div>
-   )
+      <div
+        onDragOver={this.handleDragover}
+        onDrop={this.handleDrop}
+        style={this.style_dropzone}
+        className="mdl-cell mdl-cell--12-col"
+      >
+        <div>
+          <p style={this.style_placeholder}>
+            {this.placeholder}
+          </p>
+          <p style={this.style_placeholder_st}>
+            {this.placeholder_st}
+          </p>
+        </div>
+      </div>
+    )
   }
 }
 

@@ -17,43 +17,41 @@ import { plot } from 'sequences'
 const chart_style = {
   position: 'relative',
   stroke: '#fff',
+  // 'background-color': 'rgba(100,100,100,0.1)'
 }
 
+const ruler_style = {
+  // 'position':'absolute',
+  // 'bottom':'0',
+  'width':'100%',
+  'height': '50pt',
+  // 'background-color': 'rgba(100,100,100,0.2)'
+}
+
+ //     <div className="mdl-grid" id="report">
+ //           <div className="mdl-layout-spacer"></div>
+ //           <div className="mdl-cell mdl-cell--3-col">
+ //             <i className="material-icons" id="report-icon" style={{'fontSize': '4.5em'}}></i><br />
+ //             <span  id="report-name" style={{'fontWeight': 'bold'}}></span><br /><span id="report-size"></span>
+ //           </div>
+ //           <div className="mdl-layout-spacer"></div>
+ //     </div>
 
 const Presentational = props => {
   return (
-    <div>
-      <div className="mdl-grid" style={{'marginLeft': '8em'}}>
-
-        <div className="mdl-cell mdl-cell--3-col">
-          <p>{props.nb_files} {tr("files loaded")}<br />{props.nb_errors} {tr("errors")}</p>
-          <ErrorLogButton /><br /><br />
-          <ExportButton /><span>      </span><ReinitButton />
+    <div className="mdl-cell mdl-cell--12-col">
+      <div className="mdl-grid" id='main' ref={(input) => {
+        if (input) {
+          console.time('plot')
+          plot(props.csv, props.setParentPath, props.parent_path)
+          console.timeEnd('plot')
+        }
+      }}>
+        <div className="mdl-cell mdl-cell--8-col">
+          <div id='chart' style={chart_style}></div>
+          <div id='ruler' style={ruler_style}></div>
         </div>
-
-      </div>
-      <div className="mdl-grid">
-        <div className="mdl-cell mdl-cell--12-col">
-          <div className="mdl-grid" id='main' ref={(input) => {
-              if (input) {
-                console.time('plot')
-                plot(props.csv, props.setParentPath, props.parent_path)
-                console.timeEnd('plot')
-              }
-            }}>
-            
-            <div
-              className="mdl-cell mdl-cell--8-col"
-              id='chart'
-              style={chart_style}>
-            </div>
-
-            <div id='sequence' className="mdl-cell mdl-cell--4-col" style={chart_style}>
-            </div>
-
-          </div>
-        </div>
-
+        <div className="mdl-cell mdl-cell--4-col" id='sequence' style={chart_style}></div>
       </div>
     </div>
   )

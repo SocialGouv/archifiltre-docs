@@ -1,6 +1,8 @@
 // @flow
 
+
 import React from 'react'
+
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
@@ -18,6 +20,7 @@ import { logError } from 'api-call'
 import { getCookie } from 'cookie'
 
 import ErrorBoundary from 'components/error-boundary'
+
 
 
 const app = () => {
@@ -65,3 +68,5 @@ window.onload = () => {
     }
   }
 }
+
+

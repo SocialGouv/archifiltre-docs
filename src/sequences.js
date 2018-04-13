@@ -287,10 +287,6 @@ export function plot(csv_string, setParentPath, parent_path) {
   }
 
   function computeRulerTextDisplayMode(candidate_position, text_length, w, fw){
-    console.log(candidate_position)
-    console.log(text_length)
-    console.log(w)
-    console.log(fw)
 
     if(candidate_position < text_length*fw){
       return "LEFT"

@@ -9,15 +9,25 @@ module.exports = {
     app: './src/app.js',
     react: ['react', 'react-dom'],
     redux: ['redux', 'react-redux'],
-    immutable: ['immutable']
+    immutable: ['immutable'],
+
+    stats: './src/stats.js'
   },
 
   plugins: [
     new CopyWebpackPlugin(['static']),
     new HtmlWebpackPlugin({
       inject: 'head',
-      template: 'static/index.html'
-    })
+      filename: 'index.html',
+      template: 'static/index.html',
+      excludeChunks: ['stats']
+    }),
+    new HtmlWebpackPlugin({
+      inject: 'head',
+      filename: 'stats.html',
+      template: 'static/stats.html',
+      excludeChunks: ['app']
+    }),
   ],
 
   devServer: {

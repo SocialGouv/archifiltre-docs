@@ -1,33 +1,35 @@
 
+import { request, b64Toutf8, utf8Tob64 } from 'request'
 
-const request = obj => {
-  return new Promise((resolve, reject) => {
-    let xhr = new XMLHttpRequest()
-    xhr.open(obj.method || 'GET', obj.url)
-    if (obj.headers) {
-      Object.keys(obj.headers).forEach(key => {
-        xhr.setRequestHeader(key, obj.headers[key])
-      })
-    }
-    xhr.onload = () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        resolve(xhr.response)
-      } else {
-        reject(xhr.statusText)
-      }
-    }
-    xhr.onerror = () => reject(xhr.statusText)
-    xhr.send(obj.body)
-  })
-}
 
-const utf8Tob64 = str => {
-  return window.btoa(unescape(encodeURIComponent( str )));
-}
+// const request = obj => {
+//   return new Promise((resolve, reject) => {
+//     let xhr = new XMLHttpRequest()
+//     xhr.open(obj.method || 'GET', obj.url)
+//     if (obj.headers) {
+//       Object.keys(obj.headers).forEach(key => {
+//         xhr.setRequestHeader(key, obj.headers[key])
+//       })
+//     }
+//     xhr.onload = () => {
+//       if (xhr.status >= 200 && xhr.status < 300) {
+//         resolve(xhr.response)
+//       } else {
+//         reject(xhr.statusText)
+//       }
+//     }
+//     xhr.onerror = () => reject(xhr.statusText)
+//     xhr.send(obj.body)
+//   })
+// }
 
-const b64Toutf8 = str => {
-  return decodeURIComponent(escape(window.atob( str )));
-}
+// const utf8Tob64 = str => {
+//   return window.btoa(unescape(encodeURIComponent( str )));
+// }
+
+// const b64Toutf8 = str => {
+//   return decodeURIComponent(escape(window.atob( str )));
+// }
 
 export const logError = (stack,componentStack) => {
   return request({
@@ -43,41 +45,70 @@ export const logError = (stack,componentStack) => {
   })
 }
 
-
-
-
-
-
-// SOME DUMMY TEST
-
-
-const createAccount = (name,password) => {
+export const readError = (nb) => {
   return request({
-    method:'POST',
-    url:'http://localhost:3000/basic/account',
+    method:'GET',
+    url:'http://localhost:3000/none/log/browserError?nb='+nb,
     headers:{
-      Authorization:'Basic '+utf8Tob64(name+':'+password)
+      'content-type': 'application/json'
     }
   })
 }
 
+
+
+
 const ref = {
-  token:null
+  token:null,
+  retry:0,
+  account_name:'',
+  password:''
 }
 
-const getToken = (name,password) => {
+
+export const signUp = (account_name,password) => {
+  return request({
+    method:'POST',
+    url:'http://localhost:3000/basic/account',
+    headers:{
+      Authorization:'Basic '+utf8Tob64(account_name+':'+password)
+    }
+  })
+  .then(() => signIn(account_name,password))
+}
+
+
+export const signIn = (account_name,password) => {
+  ref.account_name = account_name
+  ref.password = password
+  return getToken()
+}
+
+const getToken = () => {
   return request({
     method:'GET',
     url:'http://localhost:3000/basic/account',
     headers:{
-      Authorization:'Basic '+utf8Tob64(name+':'+password)
+      Authorization:'Basic '+utf8Tob64(ref.account_name+':'+ref.password)
     }
   })
   .then(res => {
     res = JSON.parse(res)
     ref.token = res.token
+    ref.retry = 1
   })
 }
+
+const retry = f => {
+  if (ref.retry > 0) {
+    ref.retry -= 1
+    return getToken().then(f)
+  }
+}
+
+
+// SOME DUMMY TEST
+
 
 const checkToken = () => {
   return request({
@@ -87,6 +118,7 @@ const checkToken = () => {
       Authorization:'Bearer '+ref.token
     }
   })
+  .catch(() => retry(() => checkToken()))
 }
 
 
@@ -198,8 +230,10 @@ const testDebugLog = () => {
 
 window.swag = {
   logError,
+  readError,
 
-  createAccount,
+  signUp,
+  signIn,
   getToken,
   checkToken,
   ref,
@@ -211,6 +245,7 @@ window.swag = {
   makeArr,
   seqDoAction,
   makeBigBody,
-  sendBigFile
+  sendBigFile,
+  ref
 }
 

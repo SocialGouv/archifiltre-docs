@@ -43,6 +43,7 @@
     "d3": "3.5.17",
     "immutable": "4.0.0-rc.9",
     "react": "16.0.0",
+    "redux-thunk": "2.2.0",
     "react-dom": "16.0.0",
     "react-redux": "5.0.6",
     "redux": "3.7.2",

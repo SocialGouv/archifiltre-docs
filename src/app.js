@@ -29,8 +29,8 @@ const app = () => {
   root_div.setAttribute('id','root')
   root_div.setAttribute('className','mdl-layout__content')
 
-  if (document.getElementById("container") !== null) {
-    document.getElementById("container").appendChild(root_div)
+  if (document.getElementById('container') !== null) {
+    document.getElementById('container').appendChild(root_div)
   }
 
   let store = createStore(rootReducer, applyMiddleware(thunk))
@@ -43,21 +43,25 @@ const app = () => {
   ReactDOM.render(
     <ErrorBoundary>
       <Provider store={store}>
-        <div className="mdl-grid">
-          <div className="mdl-layout-spacer"></div>
-          <div className="mdl-cell mdl-cell--6-col">
-            <h4>{tr("Icicles")}</h4>
+        <div className='npnm mdl-grid'>
+          <div className='mdl-layout-spacer'></div>
+          <div className='npnm mdl-cell mdl-cell--6-col'>
+            <h4>{tr('Icicles')}</h4>
             <span>
               <em>
-                {tr("This app is compatible with Firefox and Chrome.")}<br />
-                {tr("Your data won't leave your computer. Only you can see what happens below.")}
+                {tr('This app is compatible with Firefox and Chrome.')}<br />
+                {tr('Your data won\'t leave your computer. Only you can see what happens below.')}
               </em>
             </span>
           </div>
-          <div className="mdl-layout-spacer"></div>
-          <div className="mdl-layout-spacer"></div>
-          <Dashboard />
-          <MainSpace />
+          <div className='mdl-layout-spacer'></div>
+          <div className='mdl-layout-spacer'></div>
+          <div className='npnm vAlign mdl-cell mdl-cell--3-col'>
+            <Dashboard />
+          </div>
+          <div className='npnm mdl-cell mdl-cell--12-col'>
+            <MainSpace />
+          </div>
         </div>
       </Provider>
     </ErrorBoundary>,

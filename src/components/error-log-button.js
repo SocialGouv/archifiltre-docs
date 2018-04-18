@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { mkB } from 'button'
+import { mkB } from 'components/button'
 
 import { selectLogError } from 'reducers/root-reducer'
 import { exportCsv } from 'csv'

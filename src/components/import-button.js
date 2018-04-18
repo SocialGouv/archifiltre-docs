@@ -5,6 +5,8 @@ import { generateRandomString } from 'random-gen'
 
 import { fromCsv } from 'reducers/database-alt'
 import { finishedToLoadFiles } from 'reducers/app-state'
+import { commit } from 'reducers/root-reducer'
+
 import { readFile } from 'folder'
 import { tr } from 'dict'
 
@@ -44,7 +46,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     loadCsv: csv => dispatch(fromCsv(csv)),
-    finish: () => dispatch(finishedToLoadFiles())
+    finish: () => {
+      dispatch(finishedToLoadFiles())
+      dispatch(commit())
+    }
   }
 }
 

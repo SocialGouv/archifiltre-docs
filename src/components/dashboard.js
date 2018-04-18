@@ -6,88 +6,47 @@ import { selectAppState, selectDatabase, selectLogError } from 'reducers/root-re
 import ExportButton from 'components/export-button'
 import ReinitButton from 'components/reinit-button'
 import ErrorLogButton from 'components/error-log-button'
+import TextAlignCenter from 'components/text-align-center'
 
 import { tr } from 'dict'
 
-const dashboard_style = {
-  'textAlign':'center',
-  'position':'relative',
-  'height':'100%'
+const error_log_button_style = {
+  marginBottom: '0.4em',
+  marginTop: '0.4em'
 }
-
-const dashboard_content_style = {
-  'position': 'absolute',
-  'bottom': '0',
-  'width':'100%'
-}
-
-
-const parent = {
-  // 'display': 'flex',
-  // 'flexDirection': 'column',
-  // 'justifyContent': 'center',
-  'marginTop': '1em',
-  'marginBottom': '1em',
-}
-
 
 const Presentational = props => {
   if (props.started === true && props.finished === true) {
-    if(props.nb_errors) {
       return (
-        <div style={dashboard_style}>
-          <div style={dashboard_content_style}>
-            <p>{props.nb_files} {tr('files loaded')}<br />{props.nb_errors} {tr('errors')}</p>
-            <ErrorLogButton /><br /><br />
-            <ExportButton /><span>      </span><ReinitButton />
+        <div className='grid-x'>
+          <div className='cell small-12'>
+            <TextAlignCenter>
+              <p>{props.nb_files} {tr('files loaded')}</p>
+            </TextAlignCenter>
+          </div>
+          {props.nb_errors > 0 && 
+            <div className='cell small-12' style={error_log_button_style}>
+              <TextAlignCenter>
+                <ErrorLogButton/>
+              </TextAlignCenter>
+            </div>
+          }
+          <div className='cell small-6'>
+            <TextAlignCenter>
+              <ExportButton/>
+            </TextAlignCenter>
+          </div>
+          <div className='cell small-6'>
+            <TextAlignCenter>
+              <ReinitButton/>
+            </TextAlignCenter>
           </div>
         </div>
       )
-    } else {
-      return (
-        <div style={parent}>
-          <div className='npnm mdl-grid'>
-            <div className='npnm hAlign mdl-cell mdl-cell--12-col'>
-              <p>{props.nb_files} {tr('files loaded')}</p>
-            </div>
-            <div className='npnm hAlign mdl-cell mdl-cell--6-col'>
-              <p>{props.nb_files} {tr('files loaded')}</p>
-            </div>
-            <div className='npnm hAlign mdl-cell mdl-cell--6-col'>
-              <p>{props.nb_files} {tr('files loaded')}</p>
-            </div>
-          </div>
-        </div>
-      )
-    }
   } else {
-    return (<div style={dashboard_style}></div>)
+    return (<div></div>)
   }
 }
-
-// <div style={dashboard_style}>
-//           <div style={dashboard_content_style}>
-//             <p>{props.nb_files} {tr('files loaded')}</p>
-//             <ExportButton /><span>      </span><ReinitButton />
-//           </div>
-//         </div>
-
-
-
-// <div className='npnm mdl-grid'>
-//           <div className='npnm mdl-cell mdl-cell--12-col'>
-//             <p>{props.nb_files} {tr('files loaded')}</p>
-//           </div>
-//           <div className='npnm mdl-cell mdl-cell--6-col'>
-//             <ExportButton />
-//           </div>
-//           <div className='npnm mdl-cell mdl-cell--6-col'>
-//             <ReinitButton />
-//           </div>
-//         </div>
-
-
-
 
 const mapStateToProps = state => {
   let app_state = selectAppState(state)

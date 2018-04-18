@@ -5,14 +5,39 @@ import { connect } from 'react-redux'
 import { undo, redo } from 'reducers/root-reducer'
 
 
-const Presentational = props => {
+class Presentational extends React.Component {
+  constructor(props) {
+    super(props)
+    
+  }
 
-  return (
-    <div onKeyDown={e=>console.log(e)} onClick={e=>console.log(e)} style={{height:'0px'}}>
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (this.props.nb_files === nextProps.nb_files) {
+  //     return false
+  //   }
+  //   let cur_ms = (new Date()).getTime()
+  //   if (cur_ms - this.last_ms < this.thres) {
+  //     return false
+  //   }
+  //   this.last_ms = cur_ms
+  //   return true
+  // }
 
-    </div>
-  )
+  render() {
+    return (
+      <div></div>
+    )
+  }
 }
+
+// const Presentational = props => {
+
+//   return (
+//     <div onKeyDown={e=>console.log(e)} onClick={e=>console.log(e)} style={{height:'0px'}}>
+
+//     </div>
+//   )
+// }
 
 
 

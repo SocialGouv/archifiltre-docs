@@ -81,11 +81,11 @@ const getToken = () => (dispatch, getState) => {
 
 
 
-window.thug = Object.assign({},window.thug,{
-  reInit,
-  signUp,
-  signIn
-})
+// window.thug = Object.assign({},window.thug,{
+//   reInit,
+//   signUp,
+//   signIn
+// })
 
 
 

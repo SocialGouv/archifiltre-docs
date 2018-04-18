@@ -10,7 +10,6 @@ svg text{
 }
 
 .legend-label {
-	/*font-weight: bold;*/
 	letter-spacing: 0.15em;
 }
 
@@ -34,16 +33,8 @@ h1 {
 }
 
 .mdl-layout-spacer{
-/*	background: #ffeded;
-*/}
 
-/*.mdl-cell {
-	justify-content: center;
-	align-content: center;
-	text-align:center;
-	background: #ededed;
-}*/
-
+}
 
 .demo-layout-transparent {
 	height: 100%;
@@ -59,3 +50,4 @@ h1 {
     background: -o-linear-gradient(to bottom, #ecefea, #ced3cc);
     background: linear-gradient(to bottom, #ecefea, #ced3cc);
 }
+

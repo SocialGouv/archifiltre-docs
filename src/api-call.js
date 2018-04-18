@@ -228,24 +228,24 @@ const testDebugLog = () => {
   })
 }
 
-window.swag = {
-  logError,
-  readError,
+// window.swag = {
+//   logError,
+//   readError,
 
-  signUp,
-  signIn,
-  getToken,
-  checkToken,
-  ref,
-  createFs,
-  readFs,
-  pushFs,
-  paraDoAction,
-  testDebugLog,
-  makeArr,
-  seqDoAction,
-  makeBigBody,
-  sendBigFile,
-  ref
-}
+//   signUp,
+//   signIn,
+//   getToken,
+//   checkToken,
+//   ref,
+//   createFs,
+//   readFs,
+//   pushFs,
+//   paraDoAction,
+//   testDebugLog,
+//   makeArr,
+//   seqDoAction,
+//   makeBigBody,
+//   sendBigFile,
+//   ref
+// }
 

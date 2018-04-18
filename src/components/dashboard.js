@@ -11,7 +11,8 @@ import { tr } from 'dict'
 
 const dashboard_style = {
   'textAlign':'center',
-  'position':'relative'
+  'position':'relative',
+  'height':'100%'
 }
 
 const dashboard_content_style = {
@@ -20,13 +21,23 @@ const dashboard_content_style = {
   'width':'100%'
 }
 
+
+const parent = {
+  // 'display': 'flex',
+  // 'flexDirection': 'column',
+  // 'justifyContent': 'center',
+  'marginTop': '1em',
+  'marginBottom': '1em',
+}
+
+
 const Presentational = props => {
   if (props.started === true && props.finished === true) {
     if(props.nb_errors) {
       return (
-        <div className="mdl-cell mdl-cell--3-col" style={dashboard_style}>
+        <div style={dashboard_style}>
           <div style={dashboard_content_style}>
-            <p>{props.nb_files} {tr("files loaded")}<br />{props.nb_errors} {tr("errors")}</p>
+            <p>{props.nb_files} {tr('files loaded')}<br />{props.nb_errors} {tr('errors')}</p>
             <ErrorLogButton /><br /><br />
             <ExportButton /><span>      </span><ReinitButton />
           </div>
@@ -34,18 +45,47 @@ const Presentational = props => {
       )
     } else {
       return (
-        <div className="mdl-cell mdl-cell--3-col" style={dashboard_style}>
-          <div style={dashboard_content_style}>
-            <p>{props.nb_files} {tr("files loaded")}</p>
-            <ExportButton /><span>      </span><ReinitButton />
+        <div style={parent}>
+          <div className='npnm mdl-grid'>
+            <div className='npnm hAlign mdl-cell mdl-cell--12-col'>
+              <p>{props.nb_files} {tr('files loaded')}</p>
+            </div>
+            <div className='npnm hAlign mdl-cell mdl-cell--6-col'>
+              <p>{props.nb_files} {tr('files loaded')}</p>
+            </div>
+            <div className='npnm hAlign mdl-cell mdl-cell--6-col'>
+              <p>{props.nb_files} {tr('files loaded')}</p>
+            </div>
           </div>
         </div>
       )
     }
   } else {
-    return (<div className="mdl-cell mdl-cell--3-col" style={dashboard_style}></div>)
+    return (<div style={dashboard_style}></div>)
   }
 }
+
+// <div style={dashboard_style}>
+//           <div style={dashboard_content_style}>
+//             <p>{props.nb_files} {tr('files loaded')}</p>
+//             <ExportButton /><span>      </span><ReinitButton />
+//           </div>
+//         </div>
+
+
+
+// <div className='npnm mdl-grid'>
+//           <div className='npnm mdl-cell mdl-cell--12-col'>
+//             <p>{props.nb_files} {tr('files loaded')}</p>
+//           </div>
+//           <div className='npnm mdl-cell mdl-cell--6-col'>
+//             <ExportButton />
+//           </div>
+//           <div className='npnm mdl-cell mdl-cell--6-col'>
+//             <ReinitButton />
+//           </div>
+//         </div>
+
 
 
 

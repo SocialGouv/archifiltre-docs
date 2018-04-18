@@ -5,6 +5,7 @@ import * as Folder from 'folder'
 import { create, fromCsv } from 'reducers/database-alt'
 import { startToLoadFiles, finishedToLoadFiles } from 'reducers/app-state'
 import { logError } from 'reducers/log-error'
+import { commit } from 'reducers/root-reducer'
 
 import { tr } from 'dict'
 
@@ -31,8 +32,8 @@ class Presentational extends React.Component {
       lineHeight: '1.2'
     }
 
-    this.placeholder = tr("Drop a directory here!")
-    this.placeholder_st = tr("You may also drop a CSV file previously exported from Icicle.")
+    this.placeholder = tr('Drop a directory here!')
+    this.placeholder_st = tr('You may also drop a CSV file previously exported from Icicle.')
 
 
     this.handleDrop = this.handleDrop.bind(this)
@@ -54,7 +55,6 @@ class Presentational extends React.Component {
         onDragOver={this.handleDragover}
         onDrop={this.handleDrop}
         style={this.style_dropzone}
-        className="mdl-cell mdl-cell--12-col"
       >
         <div>
           <p style={this.style_placeholder}>
@@ -80,7 +80,10 @@ const mapDispatchToProps = dispatch => {
     fromCsv: (...args) => dispatch(fromCsv(...args)),
     logError: (...a) => dispatch(logError(...a)),
     startToLoadFiles: (...args) => dispatch(startToLoadFiles(...args)),
-    finishedToLoadFiles: (...args) => dispatch(finishedToLoadFiles(...args)),
+    finishedToLoadFiles: (...args) => {
+      dispatch(finishedToLoadFiles(...args))
+      dispatch(commit())
+    },
   }
 }
 

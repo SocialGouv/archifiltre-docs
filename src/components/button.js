@@ -14,7 +14,7 @@ const round_button_style = {
 
 export function mkB (click_action, label) {
 	return (
-    <button type="button" className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick={click_action} style={button_style}>
+    <button type='button' className='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent' onClick={click_action} style={button_style}>
     	{label}
     </button>
   )
@@ -22,7 +22,7 @@ export function mkB (click_action, label) {
 
 export function mkRB (click_action, label) {
 	return (
-    <button type="button" className="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" onClick={click_action} style={round_button_style}>
+    <button type='button' className='mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored' onClick={click_action} style={round_button_style}>
     	{label}
     </button>
   )

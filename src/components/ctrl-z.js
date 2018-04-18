@@ -8,20 +8,25 @@ import { undo, redo } from 'reducers/root-reducer'
 class Presentational extends React.Component {
   constructor(props) {
     super(props)
-    
+    this.onKeyDownHandler = e => {
+      if (e.ctrlKey === true) {
+        if (e.key === 'z') {
+          this.props.undo()
+        } else if (e.key === 'Z') {
+          this.props.redo()
+        }
+      }
+      console.log(e.key,e.ctrlKey)
+    }
+
+    document.body.addEventListener('keydown',this.onKeyDownHandler,false)
+
+    this.componentWillUnmount = this.componentWillUnmount.bind(this)
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   if (this.props.nb_files === nextProps.nb_files) {
-  //     return false
-  //   }
-  //   let cur_ms = (new Date()).getTime()
-  //   if (cur_ms - this.last_ms < this.thres) {
-  //     return false
-  //   }
-  //   this.last_ms = cur_ms
-  //   return true
-  // }
+  componentWillUnmount() {
+    document.body.removeEventListener('keydown',this.onKeyDownHandler,false)
+  }
 
   render() {
     return (
@@ -29,16 +34,6 @@ class Presentational extends React.Component {
     )
   }
 }
-
-// const Presentational = props => {
-
-//   return (
-//     <div onKeyDown={e=>console.log(e)} onClick={e=>console.log(e)} style={{height:'0px'}}>
-
-//     </div>
-//   )
-// }
-
 
 
 const mapStateToProps = state => {

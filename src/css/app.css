@@ -1,0 +1,21 @@
+
+
+body {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background: #ced3cc;
+  background-repeat:no-repeat;
+  background: -webkit-linear-gradient(to bottom, #ecefea, #ced3cc);
+  background: -moz-linear-gradient(to bottom, #ecefea, #ced3cc);
+  background: -ms-linear-gradient(to bottom, #ecefea, #ced3cc);
+  background: -o-linear-gradient(to bottom, #ecefea, #ced3cc);
+  background: linear-gradient(to bottom, #ecefea, #ced3cc);
+}
+
+
+* {
+  font-family: 'Quicksand', sans-serif;
+  /*background-color: rgba(0,0,0,0.05);*/
+}

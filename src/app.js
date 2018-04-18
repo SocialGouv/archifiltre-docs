@@ -1,4 +1,3 @@
-// @flow
 
 
 import React from 'react'
@@ -11,11 +10,10 @@ import thunk from 'redux-thunk'
 import rootReducer from 'reducers/root-reducer'
 
 import MainSpace from 'components/main-space'
-import Dashboard from 'components/dashboard'
+import Header from 'components/header'
 
-import unsafeStyle from 'css/main.css'
+import 'css/app.css'
 
-import { tr } from 'dict'
 
 import { logError } from 'api-call'
 import { getCookie } from 'cookie'
@@ -25,12 +23,11 @@ import ErrorBoundary from 'components/error-boundary'
 
 
 const app = () => {
-  let root_div = document.createElement('main')
+  let root_div = document.createElement('div')
   root_div.setAttribute('id','root')
-  root_div.setAttribute('className','mdl-layout__content')
 
-  if (document.getElementById('container') !== null) {
-    document.getElementById('container').appendChild(root_div)
+  if (document.body !== null) {
+    document.body.appendChild(root_div)
   }
 
   let store = createStore(rootReducer, applyMiddleware(thunk))
@@ -43,24 +40,12 @@ const app = () => {
   ReactDOM.render(
     <ErrorBoundary>
       <Provider store={store}>
-        <div className='npnm mdl-grid'>
-          <div className='mdl-layout-spacer'></div>
-          <div className='npnm mdl-cell mdl-cell--6-col'>
-            <h4>{tr('Icicles')}</h4>
-            <span>
-              <em>
-                {tr('This app is compatible with Firefox and Chrome.')}<br />
-                {tr('Your data won\'t leave your computer. Only you can see what happens below.')}
-              </em>
-            </span>
+        <div className='grid-y grid-padding-y grid-frame'>
+          <div className='cell'>
+            <Header/>
           </div>
-          <div className='mdl-layout-spacer'></div>
-          <div className='mdl-layout-spacer'></div>
-          <div className='npnm vAlign mdl-cell mdl-cell--3-col'>
-            <Dashboard />
-          </div>
-          <div className='npnm mdl-cell mdl-cell--12-col'>
-            <MainSpace />
+          <div className='cell auto'>
+            <MainSpace/>
           </div>
         </div>
       </Provider>

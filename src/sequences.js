@@ -320,6 +320,10 @@ export function plot(csv_string, setParentPath, parent_path) {
     return (d.depth === nodeArray.length ? 1 : 0);
   }
 
+  function translateBread(x) {
+    return x + 20
+  }
+
   function breadcrumbPoints(d, i, o, t, w, s) {
     //   var h = d.dy
     //   var y = d.y + i*s
@@ -346,19 +350,27 @@ export function plot(csv_string, setParentPath, parent_path) {
     var y = d.y + i*s
     var w2 = w/20
 
+    const coord2Str = (x,y) => translateBread(x)+','+y
+
     var points = [];
-    points.push("0," + y);
+    // points.push("0," + y);
+    points.push(coord2Str(0,y));
     if (i > 0) { // Topmost breadcrumb; don't include upper notch.
-      points.push((w2/2) + "," + (y+t));
+      // points.push((w2/2) + "," + (y+t));
+      points.push(coord2Str(w2/2,y+t));
     }
-    points.push(w2 + "," + y);
-    points.push(w2 + "," + (y+h));
+    // points.push(w2 + "," + y);
+    points.push(coord2Str(w2,y));
+    // points.push(w2 + "," + (y+h));
+    points.push(coord2Str(w2,y+h));
 
     if(d.children !== undefined){
-      points.push((w2/2) + "," + (y+h+t)); // lower notch
+      // points.push((w2/2) + "," + (y+h+t)); // lower notch
+      points.push(coord2Str(w2/2,y+h+t)); // lower notch
     }
 
-    points.push("0," + (y+h));
+    // points.push("0," + (y+h));
+    points.push(coord2Str(0,y+h));
     return points.join(" ");
   }
 
@@ -567,7 +579,7 @@ export function plot(csv_string, setParentPath, parent_path) {
         value: 0,
         x: 0,
         y: bc_height*(i+1)
-        })
+      })
 
       for(let j = 0; j < i; j++){
         dummy_bc[j].children.push(dummy_bc[i])
@@ -585,7 +597,7 @@ export function plot(csv_string, setParentPath, parent_path) {
         .style("fill", colors.otherfiles.color);
 
       entering.append("svg:text")
-    .attr("x", b.w/14)
+    .attr("x", translateBread(b.w/14))
     .attr("y", function(d) { return d.y; })
     .attr("dx", 0)
     .attr("dy", function(d, i) { return (d.dy/1.5 + i*b.s); })
@@ -649,7 +661,7 @@ export function plot(csv_string, setParentPath, parent_path) {
         .style("fill", function(d) { return colorOf(d.name, d.children, remakePath(d)); });
 
         entering.append("svg:text")
-      .attr("x", b.w/14)
+      .attr("x", translateBread(b.w/14))
       .attr("y", function(d) { return d.y; })
       .attr("dx", 0)
       .attr("dy", function(d, i) { return (d.dy/1.5 + i*b.s); })

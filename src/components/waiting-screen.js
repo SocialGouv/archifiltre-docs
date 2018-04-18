@@ -2,6 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { selectDatabase, selectLogError } from 'reducers/root-reducer'
+
+import TextAlignCenter from 'components/text-align-center'
+
 import { tr } from 'dict'
 
 class Presentational extends React.Component {
@@ -27,9 +30,13 @@ class Presentational extends React.Component {
 
   render() {
     return (
-      <div className="mdl-cell mdl-cell--12-col" style={{'textAlign':'center', 'marginTop':'3em'}}>
-        <p>{tr("Files loaded")}: {this.props.nb_files}</p>
-        <p>{tr("Errors")} : {this.props.nb_errors}</p>
+      <div className='grid-y grid-frame align-center'>
+        <div className='cell'>
+          <TextAlignCenter>
+            <p>{tr("Files loaded")}: {this.props.nb_files}</p>
+            <p>{tr("Errors")} : {this.props.nb_errors}</p>
+          </TextAlignCenter>
+        </div>
       </div>
     )
   }

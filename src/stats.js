@@ -9,7 +9,7 @@ import Dashboard from 'components/dashboard'
 
 import unsafeStyle from 'css/stats.css'
 
-import { readError } from 'api-call'
+import { readError, readNbFiles } from 'api-call'
 
 window.onload = () => {
   let root_div = document.createElement('main')
@@ -27,7 +27,8 @@ class Root extends React.Component {
     super(props)
     this.state = {
       val:10,
-      arr:[]
+      error_arr:[],
+      nb_files_arr:[]
     }
 
     this.handleClick = this.handleClick.bind(this)
@@ -35,9 +36,13 @@ class Root extends React.Component {
   }
 
   handleClick(e) {
-    readError(this.state.val)
-    .then(arr => {
-      this.setState({arr: JSON.parse(arr)})
+    Promise.all([readError(this.state.val),readNbFiles(this.state.val)])
+    .then(([error_arr, nb_files_arr]) => {
+      console.log(error_arr, nb_files_arr)
+      this.setState({
+        error_arr: JSON.parse(error_arr),
+        nb_files_arr: JSON.parse(nb_files_arr)
+      })
     })
   }
 
@@ -50,7 +55,8 @@ class Root extends React.Component {
       <div>
         <button onClick={this.handleClick}>Fetch</button>
         <input onChange={this.handleChange} value={this.state.val}></input>
-        <Table arr={this.state.arr}/>
+        <Table arr={this.state.error_arr}/>
+        {this.state.nb_files_arr}
       </div>
     )
   }

@@ -60,11 +60,8 @@ window.onload = () => {
   try {
     app()
   } catch(e) {
-    if (!getCookie().impicklerick) {
-      logError(e.stack)
-    } else {
-      throw e
-    }
+    logError(e.stack)
+    throw e
   }
 }
 

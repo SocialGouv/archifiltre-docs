@@ -1,48 +1,26 @@
 
 import { request } from 'request'
 import { b64Toutf8, utf8Tob64 } from 'base64'
+import { getCookie } from 'cookie'
 
-// const request = obj => {
-//   return new Promise((resolve, reject) => {
-//     let xhr = new XMLHttpRequest()
-//     xhr.open(obj.method || 'GET', obj.url)
-//     if (obj.headers) {
-//       Object.keys(obj.headers).forEach(key => {
-//         xhr.setRequestHeader(key, obj.headers[key])
-//       })
-//     }
-//     xhr.onload = () => {
-//       if (xhr.status >= 200 && xhr.status < 300) {
-//         resolve(xhr.response)
-//       } else {
-//         reject(xhr.statusText)
-//       }
-//     }
-//     xhr.onerror = () => reject(xhr.statusText)
-//     xhr.send(obj.body)
-//   })
-// }
-
-// const utf8Tob64 = str => {
-//   return window.btoa(unescape(encodeURIComponent( str )));
-// }
-
-// const b64Toutf8 = str => {
-//   return decodeURIComponent(escape(window.atob( str )));
-// }
+const shouldLog = !getCookie().impicklerick
 
 export const logError = (stack,componentStack) => {
-  return request({
-    method:'POST',
-    url:'http://localhost:3000/none/log/browserError',
-    headers:{
-      'content-type': 'application/json'
-    },
-    body:JSON.stringify({
-      stack,
-      componentStack
+  if (shouldLog) {
+    return request({
+      method:'POST',
+      url:'http://localhost:3000/none/log/browserError',
+      headers:{
+        'content-type': 'application/json'
+      },
+      body:JSON.stringify({
+        stack,
+        componentStack
+      })
     })
-  })
+  } else {
+    return new Promise((resolve)=>resolve())
+  }
 }
 
 export const readError = (nb) => {
@@ -54,6 +32,46 @@ export const readError = (nb) => {
     }
   })
 }
+
+
+export const logNbFiles = (nb) => {
+  if (shouldLog) {
+    return request({
+      method:'POST',
+      url:'http://localhost:3000/none/log/nbFiles',
+      headers:{
+        'content-type': 'application/json'
+      },
+      body:JSON.stringify({
+        nb
+      })
+    })
+  } else {
+    return new Promise((resolve)=>resolve())
+  }
+}
+
+export const readNbFiles = (nb) => {
+  return request({
+    method:'GET',
+    url:'http://localhost:3000/none/log/nbFiles?nb='+nb,
+    headers:{
+      'content-type': 'application/json'
+    }
+  })
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

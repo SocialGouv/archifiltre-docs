@@ -9,9 +9,7 @@ export default class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
-    if (!getCookie().impicklerick) {
-      logError(error.stack, info.componentStack)
-    }
+    logError(error.stack, info.componentStack)
   }
 
   render() {

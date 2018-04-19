@@ -1,6 +1,6 @@
 
-import { request, b64Toutf8, utf8Tob64 } from 'request'
-
+import { request } from 'request'
+import { b64Toutf8, utf8Tob64 } from 'base64'
 
 // const request = obj => {
 //   return new Promise((resolve, reject) => {

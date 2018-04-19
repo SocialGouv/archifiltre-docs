@@ -20,6 +20,8 @@ import { getCookie } from 'cookie'
 
 import ErrorBoundary from 'components/error-boundary'
 
+import * as qs from 'query-string'
+import { generateRandomString } from 'random-gen'
 
 
 const app = () => {
@@ -60,8 +62,13 @@ window.onload = () => {
   } catch(e) {
     if (!getCookie().impicklerick) {
       logError(e.stack)
+    } else {
+      throw e
     }
   }
 }
 
+if (!getCookie().impicklerick) {
+  window.onbeforeunload = () => false
+}
 

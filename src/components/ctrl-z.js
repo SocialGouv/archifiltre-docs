@@ -16,7 +16,6 @@ class Presentational extends React.Component {
           this.props.redo()
         }
       }
-      console.log(e.key,e.ctrlKey)
     }
 
     document.body.addEventListener('keydown',this.onKeyDownHandler,false)

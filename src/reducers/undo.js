@@ -8,7 +8,7 @@ export default function undoReducer(fRedux) {
   const undo_type = 'undo'+rand
   const redo_type = 'redo'+rand
 
-  const size_limit = 10
+  const size_limit = 1000
 
   let pastC = []
   let presentC

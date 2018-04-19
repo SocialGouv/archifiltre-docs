@@ -10,7 +10,7 @@ import ErrorLogButton from 'components/error-log-button'
 
 import { tr } from 'dict'
 
-import { plot } from 'sequences'
+import { plot } from 'sequences-alt'
 
 
 // dummy, just to keep same feel as original sequences.js
@@ -41,7 +41,7 @@ const Presentational = props => {
       <div className="mdl-grid" id='main' ref={(input) => {
         if (input) {
           console.time('plot')
-          plot(props.csv, props.setParentPath, props.parent_path)
+          plot(props.jsObject)
           console.timeEnd('plot')
         }
       }}>
@@ -61,11 +61,13 @@ const mapStateToProps = state => {
   let database = selectDatabase(state)
   console.time('csv')
   let csv = database.toCsv()
+  let jsObject = database.jsObject()
   console.timeEnd('csv')
   let logError = selectLogError(state)
 
   return {
     csv,
+    jsObject,
     nb_files: database.size(),
     nb_errors: logError.size(),
     parent_path: database.parent_path(),

@@ -23,6 +23,7 @@ import ErrorBoundary from 'components/error-boundary'
 import * as qs from 'query-string'
 import { generateRandomString } from 'random-gen'
 
+import 'tree'
 
 const app = () => {
   let root_div = document.createElement('div')

@@ -121,7 +121,7 @@ function buildHierarchy(csv) {
   computeSizes(root)
   sortSizes(root)
 
-  console.log(root)
+  console.log("Built database hierarchy")
 
   return root;
 };

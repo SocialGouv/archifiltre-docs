@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { selectDatabase, selectLogError } from 'reducers/root-reducer'
 
+import IcicleRect from 'components/icicle-rect'
+
 import { tr } from 'dict'
 
 const icicle_style = {
@@ -28,14 +30,13 @@ const types = {
 
 
 
-  
+
 class Presentational extends React.Component {
   constructor(props) {
     super(props)
     this.max_tree_depth = this.getMaxDepth(props.nodes)
     this.nodes = props.nodes
 
-    this.mkRect = this.mkRect.bind(this)
     this.positionNodes = this.positionNodes.bind(this)
     this.getMaxDepth = this.getMaxDepth.bind(this)
 
@@ -45,16 +46,18 @@ class Presentational extends React.Component {
 
   plot(nodes, position, tree_depth) {
     console.time("render icicle")
-    let icicle = position(nodes, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth)
+    let icicle = position(nodes, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [])
     console.timeEnd("render icicle")
     console.log(nodes)
     return icicle
   }
 
 
-  positionNodes(root, left, right, top, bottom, tree_depth){
+  positionNodes(root, left, right, top, bottom, tree_depth, sequence){
     let height = bottom - top
     let width = right - left
+    let new_sequence = sequence.concat(root.id)
+    // let new_sequence = sequence + [root.name + root.depth]
 
     root.x = left
     root.y = top
@@ -65,7 +68,7 @@ class Presentational extends React.Component {
       root.dx < 1 ?
       []
       :
-      [this.mkRect(root)])
+      [<IcicleRect key={root.name + root.depth} node={root} type={this.typeOf(root)} node_sequence={new_sequence} />])
 
     let children = root.children
     if (children && root.dx > 1) {
@@ -77,7 +80,8 @@ class Presentational extends React.Component {
           x_cursor+children[i].size/root.size*width,
           top+height/tree_depth,
           bottom,
-          tree_depth-1))
+          tree_depth-1,
+          new_sequence))
         x_cursor = x_cursor+children[i].size/root.size*width
       }
     }
@@ -93,17 +97,6 @@ class Presentational extends React.Component {
     else{
       return tree.depth
     }
-  }
-
-  mkRect(node){
-    return (<rect
-      key={node.name + node.depth}
-      className="node"
-      x={node.x}
-      y={node.y}
-      width={node.dx}
-      height={node.dy}
-      style={{"fill": this.typeOf(node).color, "opacity": "1"}}></rect>);
   }
 
   typeOf(node) {

@@ -1,20 +1,26 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { selectIcicleState } from 'reducers/icicle-state'
+import { selectIcicleState } from 'reducers/root-reducer'
+
+import { setFocus } from 'reducers/icicle-state'
 
 import { tr } from 'dict'
 
 const Presentational = props => {
-	let opacity = props.hover_sequence.includes(props.id)
+	let node = props.node
+
+	let opacity = props.hover_sequence.includes(-1) ? 1 : (props.hover_sequence.includes(node.id) ? 1 : 0.3)
+	let display = node.depth ? "" : "none"
+
   return (<rect
-      key={node.name + node.depth}
       className="node"
       x={node.x}
       y={node.y}
       width={node.dx}
       height={node.dy}
-      style={{"fill": this.typeOf(node).color, "opacity": "1"}}></rect>);
+      onMouseOver={() => {props.setFocus(props.node_sequence)}}
+      style={{"fill": props.type.color, "opacity": opacity, "display" : display}}></rect>);
 }
 
 
@@ -26,7 +32,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
- 	return {}
+ 	return {
+ 		setFocus: (...args) => dispatch((setFocus(...args)))
+ 	}
 }
 
 

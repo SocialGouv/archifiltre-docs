@@ -10,6 +10,7 @@
     "buildProd": "webpack --progress --mode production",
     "devServer": "webpack-dev-server --mode development",
     "watchBuildDev": "webpack --watch --progress --mode development",
+    "test": "env NODE_PATH=$NODE_PATH:$PWD/src mocha --require babel-register",
     "start": ""
   },
   "repository": {
@@ -23,12 +24,15 @@
   },
   "homepage": "https://github.com/jeanbaptisteassouad/cheapExp#readme",
   "devDependencies": {
+    "chai": "4.1.2",
+    "mocha": "5.0.5",
     "babel-core": "6.26.0",
     "babel-loader": "7.1.3",
     "babel-preset-env": "1.6.1",
     "babel-preset-react": "6.24.1",
     "babel-preset-flow": "6.23.0",
     "babel-plugin-syntax-dynamic-import": "6.18.0",
+    "babel-register": "6.26.0",
     "flow-webpack-plugin": "1.2.0",
     "flow-bin": "0.66.0",
     "copy-webpack-plugin": "4.5.1",

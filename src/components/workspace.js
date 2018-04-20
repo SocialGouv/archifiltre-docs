@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { selectDatabase, selectLogError } from 'reducers/root-reducer'
+import { selectDatabase } from 'reducers/root-reducer'
 
 import { setParentPath } from 'reducers/database-alt'
 
@@ -10,7 +10,7 @@ import ErrorLogButton from 'components/error-log-button'
 
 import { tr } from 'dict'
 
-import { plot } from 'sequences-alt'
+import Icicle from 'sequences-alt'
 
 
 // dummy, just to keep same feel as original sequences.js
@@ -38,15 +38,9 @@ const ruler_style = {
 const Presentational = props => {
   return (
     <div className="mdl-cell mdl-cell--12-col">
-      <div className="mdl-grid" id='main' ref={(input) => {
-        if (input) {
-          console.time('plot')
-          plot(props.jsObject)
-          console.timeEnd('plot')
-        }
-      }}>
+      <div className="mdl-grid" id='main'>
         <div className="mdl-cell mdl-cell--8-col">
-          <div id='chart' style={chart_style}></div>
+          <Icicle nodes={props.nodes} />
           <div id='ruler' style={ruler_style}></div>
         </div>
         <div className="mdl-cell mdl-cell--4-col" id='sequence' style={chart_style}></div>
@@ -59,17 +53,12 @@ const Presentational = props => {
 
 const mapStateToProps = state => {
   let database = selectDatabase(state)
-  console.time('csv')
-  let csv = database.toCsv()
-  let jsObject = database.jsObject()
-  console.timeEnd('csv')
-  let logError = selectLogError(state)
+  console.time('JSON')
+  let nodes = database.jsObject()
+  console.timeEnd('JSON')
 
   return {
-    csv,
-    jsObject,
-    nb_files: database.size(),
-    nb_errors: logError.size(),
+    nodes,
     parent_path: database.parent_path(),
   }
 }

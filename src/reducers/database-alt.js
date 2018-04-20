@@ -44,54 +44,87 @@ function filterPath(parent,curr) {
   return ans
 }
 
+function computeSizes(root) {
+  let children = root["children"]
+
+  if(children){
+    let res = 0
+    for (var k = 0; k < children.length; k++) {
+      computeSizes(children[k])
+      res += children[k]["size"]
+    }
+    root["size"] = res
+  }
+}
+
+function sortSizes(root){
+  if(root["children"]){
+    root["children"] = root["children"].sort((a,b) => {return (a.size < b.size) ? 1 : ((b.size < a.size) ? -1 : 0);} );
+
+    for (var k = 0; k < root["children"].length; k++) {
+      sortSizes(root["children"][k])
+    }
+  }
+}
+
 
 function buildHierarchy(csv) {
-  console.log(csv)
-  let csv_arr = csv.split("\n").map(function(row){return row.split(",");})
-  console.log(csv_arr)
-    // Take a 2-column Csv and transform it into a hierarchical structure suitable
-    // for a partition layout. The first column is a sequence of step names, from
-    // root to leaf, separated by hyphens. The second column is a count of how 
-    // often that sequence occurred.
-    var root = {"name": tr("Back to root"), "children": []};
-    for (var i = 0; i < csv_arr.length; i++) {
-      var sequence = csv_arr[i][0];
-      var size = +csv_arr[i][1];
-      if (isNaN(size)) { // e.g. if this is a header row
-        continue;
-      }
-      var parts = sequence.split("/");
-      var currentNode = root;
-      for (var j = 0; j < parts.length; j++) {
-        var children = currentNode["children"];
-        var nodeName = parts[j];
-        var childNode;
-        if (j + 1 < parts.length) {
-     // Not yet at the end of the sequence; move down the tree.
-    var foundChild = false;
-    for (var k = 0; k < children.length; k++) {
-      if (children[k]["name"] == nodeName) {
-        childNode = children[k];
-        foundChild = true;
-        break;
-      }
+  let csv_arr = csv.split('\n')
+    .map((row) => {
+      return row.split(',').map((cell) => {
+        return cell.replace(/"/g, '');
+      });
+    })
+
+  let id = 0;
+
+  var root = {"name": tr("Back to root"), "children": [], "size": 0, "depth": 0, "id":id};
+  for (var i = 0; i < csv_arr.length; i++) {
+    var sequence = csv_arr[i][0];
+    var size = +csv_arr[i][1];
+    if (isNaN(size)) { // e.g. if this is a header row
+      continue;
     }
-    // If we don't already have a child node for this branch, create it.
-    if (!foundChild) {
-      childNode = {"name": nodeName, "children": []};
-      children.push(childNode);
+    var parts = sequence.split("/");
+    var currentNode = root;
+    for (var j = 0; j < parts.length; j++) {
+      var children = currentNode["children"]
+      var nodeName = parts[j];
+      var childNode;
+      if (j + 1 < parts.length) {
+   // Not yet at the end of the sequence; move down the tree.
+  var foundChild = false;
+  for (var k = 0; k < children.length; k++) {
+    if (children[k]["name"] == nodeName) {
+      childNode = children[k];
+      foundChild = true;
+      break;
     }
-    currentNode = childNode;
-        } else {
-    // Reached the end of the sequence; create a leaf node.
-    childNode = {"name": nodeName, "size": size};
+  }
+  // If we don't already have a child node for this branch, create it.
+  if (!foundChild) {
+    id++
+    childNode = {"name": nodeName, "children": [], "size": 0, "depth": (currentNode["depth"] + 1), "id":id};
     children.push(childNode);
-        }
+  }
+  currentNode = childNode;
+      } else {
+  // Reached the end of the sequence; create a leaf node.
+  id++
+  childNode = {"name": nodeName, "size": size,  "depth": (currentNode["depth"] + 1), "id":id};
+  children.push(childNode);
+  // currentNode["size"] += childNode["size"]
       }
     }
-    console.log(root)
-    return root;
-  };
+  }
+
+  computeSizes(root)
+  sortSizes(root)
+
+  console.log(root)
+
+  return root;
+};
 
 
 function mkS(map,parent_path) {

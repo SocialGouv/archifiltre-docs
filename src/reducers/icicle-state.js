@@ -9,16 +9,23 @@ function mkS(
   id_arr
 ) {
   return {
-    hover_sequence: () => id_arr
+    hover_sequence: () => id_arr,
+    [key]: {}
   }
 }
 
-const initialState = mkS(-1)
+const noFocusState = mkS([-1])
+const initialState = noFocusState
+
 
 const { mkA, reducer } = duck(type, initialState)
 
 export default reducer
 
-export const handleMouseOver = mkA((id_arr) => state => {
+export const setFocus = mkA((id_arr) => state => {
   return mkS(id_arr)
+})
+
+export const setNoFocus = mkA(() => state => {
+  return noFocusState
 })

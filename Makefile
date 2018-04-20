@@ -33,3 +33,19 @@ clean: cleanContainer
 
 cleanContainer:
 	sudo docker container prune -f
+
+
+
+TP = './src/**/*.test.js'
+
+test: dev
+	sudo docker run \
+		--network host \
+		-it \
+		$(image_name):dev \
+		npm test $(TP)
+
+
+
+
+

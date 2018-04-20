@@ -5,7 +5,7 @@ import { selectAppState } from 'reducers/root-reducer'
 
 import FolderDropzone from 'components/folder-dropzone'
 import Icicle from 'components/icicle'
-import IcicleAlt from 'components/icicle-alt'
+import WorkSpace from 'components/workspace'
 import WaitingScreen from 'components/waiting-screen'
 
 import ExportButton from 'components/export-button'
@@ -24,7 +24,7 @@ const Presentational = props => {
     return (<WaitingScreen />)
   } else {
     return (
-        <IcicleAlt />
+        <WorkSpace />
     )
   }
 }

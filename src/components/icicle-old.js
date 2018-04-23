@@ -1,9 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { selectDatabase } from 'reducers/root-reducer'
+import { selectDatabase, selectLogError } from 'reducers/root-reducer'
 
 import { setParentPath } from 'reducers/database-alt'
-import { setNoFocus } from 'reducers/icicle-state'
 
 import ExportButton from 'components/export-button'
 import ReinitButton from 'components/reinit-button'
@@ -11,8 +10,7 @@ import ErrorLogButton from 'components/error-log-button'
 
 import { tr } from 'dict'
 
-import Icicle from 'components/icicle'
-import Ruler from 'components/ruler'
+import { plot } from 'sequences'
 
 
 // dummy, just to keep same feel as original sequences.js
@@ -40,12 +38,16 @@ const ruler_style = {
 const Presentational = props => {
   return (
     <div className="mdl-cell mdl-cell--12-col">
-      <div className="mdl-grid" id='main'>
-        <div
-        onClick={(e) => {props.setNoFocus();}}
-        className="mdl-cell mdl-cell--8-col">
-          <Icicle nodes={props.nodes} />
-          <Ruler style={ruler_style} />
+      <div className="mdl-grid" id='main' ref={(input) => {
+        if (input) {
+          console.time('plot')
+          plot(props.csv, props.setParentPath, props.parent_path)
+          console.timeEnd('plot')
+        }
+      }}>
+        <div className="mdl-cell mdl-cell--8-col">
+          <div id='chart' style={chart_style}></div>
+          <div id='ruler' style={ruler_style}></div>
         </div>
         <div className="mdl-cell mdl-cell--4-col" id='sequence' style={chart_style}></div>
       </div>
@@ -57,19 +59,21 @@ const Presentational = props => {
 
 const mapStateToProps = state => {
   let database = selectDatabase(state)
-  console.time('JSON')
-  let nodes = database.jsObject()
-  console.timeEnd('JSON')
+  console.time('csv')
+  let csv = database.toCsv()
+  console.timeEnd('csv')
+  let logError = selectLogError(state)
 
   return {
-    nodes,
+    csv,
+    nb_files: database.size(),
+    nb_errors: logError.size(),
     parent_path: database.parent_path(),
   }
 }
  
 const mapDispatchToProps = dispatch => {
   return {
-    setNoFocus: (...args) => dispatch((setNoFocus(...args))),
     setParentPath: (...args) => dispatch(setParentPath(...args))
   }
 }

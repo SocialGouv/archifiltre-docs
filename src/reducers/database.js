@@ -8,9 +8,7 @@ import { toCsvLine, fromCsvLine } from 'csv'
 import * as TT from 'table-tree'
 import { List, Record } from 'immutable'
 
-const type = 'cheapExp/database2'
-
-const key = Symbol()
+const type = 'cheapExp/database'
 
 
 function csvLineToVal(csv_line) {
@@ -59,40 +57,37 @@ function mkS(state) {
       TT.toCsvList(state.get('tree'))
         .filter(val=>filterPath(state.get('parent_path'), val.get(0)))
         .map(val=>toCsvLine([val.get(0).join('/'),val.get(1)]))
-        .join('\n')
+        .join('')
     ,
     toCsvNoFilter: () =>
       TT.toCsvList(state.get('tree'))
         .map(val=>toCsvLine([val.get(0).join('/'),val.get(1)]))
-        .join('\n')
+        .join('')
     ,
     size: () => state.get('nb_update'),
     parent_path: () => state.get('parent_path').toArray(),
-    [key]: state
   }
 }
 
 const tree = TT.init('root')
 const root_id = TT.getRootIdArray(tree)[0]
-const initialState = mkS(new State({tree,root_id}))
+const initialState = new State({tree,root_id})
 
 
-const { mkA, reducer } = duck(type, initialState)
+const { mkA, reducer } = duck(type, initialState, mkS)
 
 export default reducer
 
 export const create = mkA((path,size) => state => {
-  state = state[key]
   path = path.split('/')
   state = state.update('tree', tree => 
     TT.update(path, size, state.get('root_id'),tree))
 
   state = state.update('nb_update', a=>a+1)
-  return mkS(state)
+  return state
 })
 
 export const fromCsv = mkA((csv) => state => {
-  state = state[key]
   state = state.update('tree', tree => {
     csv.split('\n').forEach(line => {
       const {path,size} = csvLineToVal(line)
@@ -100,11 +95,11 @@ export const fromCsv = mkA((csv) => state => {
     })
     return tree
   })
-  return mkS(state)
+  return state
 })
 
 export const reInit = mkA(() => state => initialState)
 
 export const setParentPath = mkA((parent_path) => state =>
-  mkS(state[key].set('parent_path', List(parent_path)))
+  state.set('parent_path', List(parent_path))
 )

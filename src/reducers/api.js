@@ -6,29 +6,27 @@ import { request } from 'request'
 import { b64Toutf8, utf8Tob64 } from 'base64'
 
 import { selectApi } from 'reducers/root-reducer'
+import { Record } from 'immutable'
 
 const type = 'cheapExp/api'
 
-const key = Symbol()
 
-function mkS(
-  account_name='',
-  password='',
-  token='',
-  retry=0
-) {
+const State = Record({
+  account_name:'',
+  password:'',
+  token:'',
+  retry:0
+})
+
+function mkS(state) {
   return {
-    getToken: () => token,
-    [key]: {
-      account_name,
-      password
-    }
+    getToken: () => state.get('token'),
   }
 }
 
-const initialState = mkS()
+const initialState = new State()
 
-const { mkA, reducer } = duck(type, initialState)
+const { mkA, reducer, key } = duck(type, initialState, mkS)
 
 export default reducer
 
@@ -36,16 +34,15 @@ export const reInit = mkA(() => state => initialState)
 
 
 const setCredential = mkA((account_name,password) => state => {
-  return mkS(account_name,password,'',0)
+  state = state.update('account_name', () => account_name)
+  state = state.update('password', () => password)
+  return state
 })
 
 const setToken = mkA((token) => state => {
-  return mkS(
-    state[key].account_name,
-    state[key].password,
-    token,
-    1
-  )
+  state = state.update('token', () => token)
+  state = state.update('retry', () => 1)
+  return state
 })
 
 

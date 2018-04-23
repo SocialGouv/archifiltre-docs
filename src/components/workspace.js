@@ -15,17 +15,8 @@ import Icicle from 'components/icicle'
 import Ruler from 'components/ruler'
 
 
-// dummy, just to keep same feel as original sequences.js
 const chart_style = {
-  position: 'relative',
   stroke: '#fff',
-  // 'background-color': 'rgba(100,100,100,0.1)'
-}
-
-const ruler_style = {
-  'width':'100%',
-  'height': '50pt',
-  // 'background-color': 'rgba(100,100,100,0.2)'
 }
 
  //     <div className="mdl-grid" id="report">
@@ -45,7 +36,7 @@ const Presentational = props => {
           className="cell small-8"
         >
           <Icicle nodes={props.nodes} />
-          <Ruler style={ruler_style} />
+          <Ruler />
         </div>
         <div className="cell small-4" style={chart_style}>
         </div>

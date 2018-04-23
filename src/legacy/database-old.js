@@ -5,7 +5,7 @@ import duck from 'reducers/duck'
 
 import { toCsvLine, fromCsvLine } from 'csv'
 
-const type = 'cheapExp/database'
+const type = 'cheapExp/database-old'
 
 const key = Symbol()
 

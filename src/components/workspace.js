@@ -47,7 +47,7 @@ const Presentational = props => {
           <Icicle nodes={props.nodes} />
           <Ruler style={ruler_style} />
         </div>
-        <div className="mdl-cell mdl-cell--4-col" id='sequence' style={chart_style}></div>
+        <div className="mdl-cell mdl-cell--4-col" style={chart_style}></div>
       </div>
     </div>
   )

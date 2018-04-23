@@ -19,6 +19,7 @@ const Presentational = props => {
       y={node.y}
       width={node.dx}
       height={node.dy}
+      onClick={(e) => {e.stopPropagation()}}
       onMouseOver={() => {props.setFocus(props.node_sequence)}}
       style={{"fill": props.type.color, "opacity": opacity, "display" : display}}></rect>);
 }

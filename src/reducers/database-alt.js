@@ -1,6 +1,6 @@
 // @flow
 
-import { Map } from 'immutable'
+import { Map, Record } from 'immutable'
 import { generateRandomString } from 'random-gen'
 import duck from 'reducers/duck'
 
@@ -8,10 +8,7 @@ import { toCsvLine, fromCsvLine } from 'csv'
 
 import { tr } from 'dict'
 
-
 const type = 'cheapExp/database'
-
-const key = Symbol()
 
 
 function csvLineToVal(csv_line) {
@@ -127,7 +124,16 @@ function buildHierarchy(csv) {
 };
 
 
-function mkS(map,parent_path) {
+
+const State = Record({
+  map:Map(),
+  parent_path:[],
+})
+
+
+function mkS(state) {
+  const map = state.get('map')
+  const parent_path = state.get('parent_path')
   return {
     toCsv: () => map.reduce((acc,val) => {
       if (filterPath(parent_path, val.path)) {
@@ -141,10 +147,6 @@ function mkS(map,parent_path) {
     ,''),
     size: () => map.size,
     parent_path: () => parent_path.slice(),
-    [key]: {
-      map,
-      parent_path
-    },
     jsObject: () => buildHierarchy(map.reduce((acc,val) => {
       if (filterPath(parent_path, val.path)) {
         return acc + toCsvLine([val.path.join('/'), val.size])
@@ -155,29 +157,32 @@ function mkS(map,parent_path) {
   }
 }
 
-const initialState = mkS(Map(),[])
+const initialState = new State()
 
-const { mkA, reducer } = duck(type, initialState)
+const { mkA, reducer } = duck(type, initialState, mkS)
 
 export default reducer
 
-export const create = mkA((path,size) => state =>
-  mkS(state[key].map.set(mkId(), {
+export const create = mkA((path,size) => state => {
+  state = state.update('map', a=>a.set(mkId(), {
     path:path.split('/'),
     size
-  }), state[key].parent_path)
-)
+  }))
+  return state
+})
 
-export const fromCsv = mkA((csv) => state =>
-  mkS(state[key].map.withMutations(map => 
+export const fromCsv = mkA((csv) => state => {
+  state = state.update('map', a=>a.withMutations(map => 
     csv.split('\n').forEach(line => map.set(mkId(), csvLineToVal(line)))
-  ), state[key].parent_path)
-)
+  ))
+  return state
+})
 
 export const reInit = mkA(() => state => initialState)
 
-export const setParentPath = mkA((parent_path) => state =>
-  mkS(state[key].map, parent_path.slice())
-)
+export const setParentPath = mkA((parent_path) => state => {
+  state = state.update('parent_path', ()=>parent_path.slice())
+  return state
+})
 
 const mkId = () => generateRandomString(40)

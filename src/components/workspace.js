@@ -39,17 +39,17 @@ const ruler_style = {
 
 const Presentational = props => {
   return (
-    <div className="mdl-cell mdl-cell--12-col">
-      <div className="mdl-grid" id='main'>
+      <div className="grid-x grid-frame" id='main'>
         <div
-        onClick={(e) => {props.setNoFocus();}}
-        className="mdl-cell mdl-cell--8-col">
+          onClick={(e) => {props.setNoFocus();}}
+          className="cell small-8"
+        >
           <Icicle nodes={props.nodes} />
           <Ruler style={ruler_style} />
         </div>
-        <div className="mdl-cell mdl-cell--4-col" style={chart_style}></div>
+        <div className="cell small-4" style={chart_style}>
+        </div>
       </div>
-    </div>
   )
 }
 

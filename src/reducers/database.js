@@ -48,6 +48,7 @@ const State = Record({
   root_id:'',
   parent_path:List(),
   nb_update:0,
+  max_depth:0
 })
 
 
@@ -65,7 +66,11 @@ function mkS(state) {
         .join('')
     ,
     size: () => state.get('nb_update'),
+    max_depth: () => state.get('max_depth'),
     parent_path: () => state.get('parent_path').toArray(),
+    getByID: (id) => state.get('tree').get(id).toJS(),
+    getIDList: () => TT.getIdList(state.get('tree')),
+    getRootIDs: () => TT.getRootIdArray(state.get('tree'))
   }
 }
 
@@ -84,6 +89,7 @@ export const create = mkA((path,size) => state => {
     TT.update(path, size, state.get('root_id'),tree))
 
   state = state.update('nb_update', a=>a+1)
+  state = state.update('max_depth', a=>Math.max(a, path.length))
   return state
 })
 

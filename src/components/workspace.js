@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { selectDatabase } from 'reducers/root-reducer'
 
-import { setParentPath } from 'reducers/database-alt'
+import { setParentPath } from 'reducers/database'
 import { setNoFocus } from 'reducers/icicle-state'
 
 import ExportButton from 'components/export-button'
@@ -35,7 +35,7 @@ const Presentational = props => {
           onClick={(e) => {props.setNoFocus();}}
           className="cell small-8"
         >
-          <Icicle nodes={props.nodes} />
+          <Icicle />
           <Ruler />
         </div>
         <div className="cell small-4" style={chart_style}>
@@ -48,12 +48,8 @@ const Presentational = props => {
 
 const mapStateToProps = state => {
   let database = selectDatabase(state)
-  console.time('JSON')
-  let nodes = database.jsObject()
-  console.timeEnd('JSON')
 
   return {
-    nodes,
     parent_path: database.parent_path(),
   }
 }

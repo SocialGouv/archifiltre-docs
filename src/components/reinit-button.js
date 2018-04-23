@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { mkB } from 'components/button'
 
-import { reInit as re1 } from 'reducers/database-alt'
+import { reInit as re1 } from 'reducers/database'
 import { reInit as re2 } from 'reducers/app-state'
 import { reInit as re3 } from 'reducers/log-error'
 

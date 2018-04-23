@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { selectDatabase, selectLogError } from 'reducers/root-reducer'
 
-import { setParentPath } from 'reducers/database-alt'
+import { setParentPath } from 'reducers/database'
 
 import ExportButton from 'components/export-button'
 import ReinitButton from 'components/reinit-button'

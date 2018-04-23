@@ -10,6 +10,7 @@ const Entry = Record({
   size:0,
   children:List(),
   parent:null,
+  depth:0
 })
 
 
@@ -49,7 +50,8 @@ const updateRec = (path, size, id, map) => {
       const child = new Entry({
         name,
         size,
-        parent:id
+        parent:id,
+        depth: map.get(id).get('depth')+1
       })
       map = map.set(child_id, child)
       map = map.update(id, a=>updateChildren(child_id, a))
@@ -85,6 +87,14 @@ export const remakePath = (id,map) => {
   } else {
     return List.of(entry.get('name'))
   }
+}
+
+export const getEntryById = (id,map) => {
+  return map.get(id)
+}
+
+export const getIdList = (map) => {
+  return map.keySeq().toArray()
 }
 
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import * as Folder from 'folder'
-import { create, fromCsv } from 'reducers/database-alt'
+import { create, fromCsv } from 'reducers/database'
 import { startToLoadFiles, finishedToLoadFiles } from 'reducers/app-state'
 import { logError } from 'reducers/log-error'
 import { commit } from 'reducers/root-reducer'

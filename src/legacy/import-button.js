@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { generateRandomString } from 'random-gen'
 
-import { fromCsv } from 'reducers/database-alt'
+import { fromCsv } from 'reducers/database'
 import { finishedToLoadFiles } from 'reducers/app-state'
 import { commit } from 'reducers/root-reducer'
 

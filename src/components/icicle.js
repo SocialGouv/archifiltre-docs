@@ -34,21 +34,23 @@ const types = {
 class Presentational extends React.Component {
   constructor(props) {
     super(props)
-    this.max_tree_depth = this.getMaxDepth(props.nodes)
-    this.nodes = props.nodes
+    this.root = props.getByID(props.root_id)
+    // this.max_tree_depth = this.getMaxDepth(this.root)
+    this.max_tree_depth = props.max_depth
+
+    this.getByID = props.getByID
 
     this.positionNodes = this.positionNodes.bind(this)
-    this.getMaxDepth = this.getMaxDepth.bind(this)
+    // this.getMaxDepth = this.getMaxDepth.bind(this)
 
     console.log("profondeur : ", this.max_tree_depth)
   }
 
 
-  plot(nodes, position, tree_depth) {
+  plot(root, position, tree_depth) {
     console.time("render icicle")
-    let icicle = position(nodes, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [])
+    let icicle = position(root, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [])
     console.timeEnd("render icicle")
-    console.log(nodes)
     return icicle
   }
 
@@ -74,30 +76,36 @@ class Presentational extends React.Component {
     if (children && root.dx > 1) {
       let x_cursor = left
       for (let i = 0; i <= children.length - 1; ++i) {
+        let child = this.getByID(children[i])
+
         res.push(this.positionNodes(
-          children[i],
+          child,
           x_cursor,
-          x_cursor+children[i].size/root.size*width,
+          x_cursor+child.size/root.size*width,
           top+height/tree_depth,
           bottom,
           tree_depth-1,
           new_sequence))
-        x_cursor = x_cursor+children[i].size/root.size*width
+        x_cursor = x_cursor+child.size/root.size*width
       }
     }
 
     return res
   }
 
-  getMaxDepth(tree){
-    let children = tree.children
-    if(children){
-      return children.reduce((acc, val) => {if(this.getMaxDepth(val) > acc) return this.getMaxDepth(val) ; else return acc}, 0)
-    }
-    else{
-      return tree.depth
-    }
-  }
+  // getMaxDepth(tree){
+  //   let children = tree.children
+  //   if(children){
+  //     return 1 + children.reduce((acc, val) => {
+  //       let child_depth = this.getMaxDepth(this.getByID(val));
+  //       if(child_depth > acc) return child_depth ;
+  //       else return acc ;
+  //     }, 0)
+  //   }
+  //   else{
+  //     return 0
+  //   }
+  // }
 
   typeOf(node) {
     
@@ -178,7 +186,7 @@ class Presentational extends React.Component {
       <div id='chart' style={icicle_style}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
           <g id="container">
-            {this.plot(this.nodes, this.positionNodes, this.max_tree_depth + 1)}
+            {this.plot(this.root, this.positionNodes, this.max_tree_depth + 1)}
           </g>
         </svg>
       </div>)
@@ -187,7 +195,16 @@ class Presentational extends React.Component {
 
 
 const mapStateToProps = state => {
-  return {}
+  let database = selectDatabase(state)
+  console.log(database.getIDList())
+  console.log(database.getRootIDs())
+
+  return {
+    max_depth: database.max_depth(),
+    node_ids: database.getIDList(),
+    getByID: database.getByID,
+    root_id: database.getRootIDs()[0]
+  }
 }
  
 const mapDispatchToProps = dispatch => {

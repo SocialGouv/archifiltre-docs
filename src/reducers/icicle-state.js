@@ -1,29 +1,31 @@
 
 import duck from 'reducers/duck'
+import { Record } from 'immutable'
 
 const type = 'cheapExp/icicleState'
 
-const key = Symbol()
 
-function mkS(
-  id_arr
-) {
+const State = Record({
+  id_arr:[-1],
+})
+
+function mkS(state) {
   return {
-    hover_sequence: () => id_arr,
-    [key]: {}
+    hover_sequence: () => state.get('id_arr'),
   }
 }
 
-const noFocusState = mkS([-1])
+const noFocusState = new State()
 const initialState = noFocusState
 
 
-const { mkA, reducer } = duck(type, initialState)
+const { mkA, reducer } = duck(type, initialState, mkS)
 
 export default reducer
 
 export const setFocus = mkA((id_arr) => state => {
-  return mkS(id_arr)
+  state = state.update('id_arr',()=>id_arr)
+  return state
 })
 
 export const setNoFocus = mkA(() => state => {

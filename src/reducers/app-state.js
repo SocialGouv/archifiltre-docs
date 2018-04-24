@@ -11,7 +11,7 @@ const State = Record({
 })
 
 
-function mkS(state) {
+function bundle(state) {
   return {
     isStarted: () => state.get('start'),
     isFinished: () => state.get('finish')
@@ -20,7 +20,7 @@ function mkS(state) {
 
 const initialState = new State()
 
-const { mkA, reducer } = duck(type, initialState, mkS)
+const { mkA, reducer } = duck(type, initialState, bundle)
 
 export default reducer
 

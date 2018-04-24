@@ -4,6 +4,10 @@ export function mkScheduler() {
   let queue = []
   let canBePlanned = true
 
+  let size = 1
+  let start_ms = 0
+  let end_ms = 0
+
   const planNextStep = () => {
     if (canBePlanned) {
       requestAnimationFrame(step)
@@ -17,12 +21,28 @@ export function mkScheduler() {
     }
   }
 
+  const startRecordMs = () => start_ms = new Date().getTime()
+  const endRecordMs = () => end_ms = new Date().getTime() - start_ms
+  const updateSize = () => {
+    const target = 30
+    if (end_ms > target && size > 0) {
+      size--
+    } else {
+      size++
+    }
+  }
+
   const step = () => {
+    endRecordMs()
+    updateSize()
+
     canBePlanned = true
     if (queue.length > 0) {
-      popAtMost(50)
+      popAtMost(size)
       planNextStep()
     }
+
+    startRecordMs()
   }
 
   return {

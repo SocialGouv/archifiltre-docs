@@ -24,6 +24,18 @@ const updateChildren = (child_id, entry) => {
   return entry
 }
 
+const sortChildren = (map, entry) => {
+  const getSize = (child_id, map) => map.get(child_id).get('size')
+  const comparator = ([id1,size1], [id2,size2]) => size1 < size2
+
+  entry = entry.update('children', children =>
+    children.map(child_id => [child_id, getSize(child_id, map)])
+      .sort(comparator)
+      .map(([child_id,size]) => child_id)
+  )
+  return entry
+}
+
 const getChildIdByName = (name, id, map) => {
   const list = map.get(id).get('children')
     .filter((child_id=>map.get(child_id).get('name')===name))
@@ -56,6 +68,7 @@ const updateRec = (path, size, id, map) => {
       map = map.set(child_id, child)
       map = map.update(id, a=>updateChildren(child_id, a))
     }
+    map = map.update(id, a=>sortChildren(map,a))
     return updateRec(path, size, child_id, map)
   }
 }
@@ -104,4 +117,13 @@ export const toCsvList = (map) => {
     leaf.map((entry,id) => List.of(remakePath(id, map).slice(1),entry.get('size')))
         .reduce((acc,val) => acc.push(val), List())
   )
+}
+
+export const toTree = (id,map) => {
+  let entry = map.get(id)
+  entry = entry.update('children', children =>
+    children.map(id=>toTree(id,map))
+  )
+  entry = entry.update('parent',()=>null)
+  return entry
 }

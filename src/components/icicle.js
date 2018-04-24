@@ -12,7 +12,7 @@ const icicle_style = {
   // 'background-color': 'rgba(100,100,100,0.1)'
 }
 
-const icicle_dims = {
+export const icicle_dims = {
   w:800,
   h:300
 }
@@ -34,7 +34,8 @@ const types = {
 class Presentational extends React.Component {
   constructor(props) {
     super(props)
-    this.root = props.getByID(props.root_id)
+    // this.root = props.getByID(props.root_id)
+    this.root_id = props.root_id
     // this.max_tree_depth = this.getMaxDepth(this.root)
     this.max_tree_depth = props.max_depth
 
@@ -49,31 +50,34 @@ class Presentational extends React.Component {
 
   plot(root, position, tree_depth) {
     console.time("render icicle")
-    let icicle = position(root, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [])
+    let icicle = position(this.root_id, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [])
     console.timeEnd("render icicle")
     return icicle
   }
 
 
-  positionNodes(root, left, right, top, bottom, tree_depth, sequence){
+  positionNodes(root_id, left, right, top, bottom, tree_depth, sequence){
+    let root = this.getByID(root_id)
     let height = bottom - top
     let width = right - left
-    let new_sequence = sequence.concat(root.id)
+    let new_sequence = sequence.concat(root_id)
     // let new_sequence = sequence + [root.name + root.depth]
 
-    root.x = left
-    root.y = top
-    root.dx = (isNaN(width) ? 0 : width)
-    root.dy = height/tree_depth
+    let root_dims={
+      x: left,
+      y: top,
+      dx: (isNaN(width) ? 0 : width),
+      dy: height/tree_depth
+    }
 
     let res = (
-      root.dx < 1 ?
+      root_dims.dx < 1 ?
       []
       :
-      [<IcicleRect key={root.name + root.depth} node={root} type={this.typeOf(root)} node_sequence={new_sequence} />])
+      [<IcicleRect key={root.name + root.depth} dims={root_dims} node_id={root_id} node={root} node_sequence={new_sequence} />])
 
     let children = root.children
-    if (children && root.dx > 1) {
+    if (children.length && root_dims.dx > 1) {
       let x_cursor = left
       for (let i = 0; i <= children.length - 1; ++i) {
         let child = this.getByID(children[i])
@@ -81,7 +85,7 @@ class Presentational extends React.Component {
         const root_size = root.content.size
 
         res.push(this.positionNodes(
-          child,
+          children[i],
           x_cursor,
           x_cursor+child_size/root_size*width,
           top+height/tree_depth,
@@ -109,79 +113,6 @@ class Presentational extends React.Component {
   //   }
   // }
 
-  typeOf(node) {
-    
-    if (node["children"]) {
-      if (false) {
-        return types.parent_folder;
-      } else {
-        return types.folder;
-      }
-    }
-
-    else {
-      let m = node["name"].match(/\.[^\.]*$/)
-
-      if (m == null)
-        m = [""]
-
-      switch(m[0].toLowerCase()){
-        case ".xls": //formats Microsoft Excel
-        case ".xlsx":
-        case ".xlsm":
-        case ".xlw": // dont les vieux
-        case ".xlt":
-        case ".xltx":
-        case ".xltm":
-        case ".csv": // format Csv
-        case ".ods": //formats OOo/LO Calc
-        case ".ots":
-          return types.spreadsheet;
-        case ".doc":  //formats Microsoft Word
-        case ".docx":
-        case ".docm":
-        case ".dot":
-        case ".dotx":
-        case ".dotm":
-        case ".odt": // formats OOo/LO Writer
-        case ".ott":
-        case ".txt": // formats texte standard
-        case ".rtf":
-          return types.doc;
-        case ".ppt": // formats Microsoft PowerPoint
-        case ".pptx":
-        case ".pptm":
-        case ".pps":
-        case ".ppsx":
-        case ".pot":
-        case ".odp": // formats OOo/LO Impress
-        case ".otp":
-        case ".pdf": // On considère le PDF comme une présentation
-          return types.presentation;
-        case ".eml": //formats d'email et d'archive email
-        case ".msg":
-        case ".pst":
-          return types.email;
-        case ".jpeg": //formats d'image
-        case ".jpg":
-        case ".gif":
-        case ".png":
-        case ".bmp":
-        case ".tiff":
-        case ".mp3": //formats audio
-        case ".wav":
-        case ".wma":
-        case ".avi":
-        case ".wmv": //formats vidéo
-        case ".mp4":
-        case ".mov":
-        case ".mkv":
-          return types.multimedia;
-        default:
-          return types.otherfiles;
-        }
-      }
-    }
 
   render() {
     return (
@@ -195,11 +126,82 @@ class Presentational extends React.Component {
   }
 }
 
+export const typeOf = (node) => {
+  
+  if (node["children"].length) {
+    if (false) {
+      return types.parent_folder;
+    } else {
+      return types.folder;
+    }
+  }
+
+  else {
+    let m = node["name"].match(/\.[^\.]*$/)
+
+    if (m == null)
+      m = [""]
+
+    switch(m[0].toLowerCase()){
+      case ".xls": //formats Microsoft Excel
+      case ".xlsx":
+      case ".xlsm":
+      case ".xlw": // dont les vieux
+      case ".xlt":
+      case ".xltx":
+      case ".xltm":
+      case ".csv": // format Csv
+      case ".ods": //formats OOo/LO Calc
+      case ".ots":
+        return types.spreadsheet;
+      case ".doc":  //formats Microsoft Word
+      case ".docx":
+      case ".docm":
+      case ".dot":
+      case ".dotx":
+      case ".dotm":
+      case ".odt": // formats OOo/LO Writer
+      case ".ott":
+      case ".txt": // formats texte standard
+      case ".rtf":
+        return types.doc;
+      case ".ppt": // formats Microsoft PowerPoint
+      case ".pptx":
+      case ".pptm":
+      case ".pps":
+      case ".ppsx":
+      case ".pot":
+      case ".odp": // formats OOo/LO Impress
+      case ".otp":
+      case ".pdf": // On considère le PDF comme une présentation
+        return types.presentation;
+      case ".eml": //formats d'email et d'archive email
+      case ".msg":
+      case ".pst":
+        return types.email;
+      case ".jpeg": //formats d'image
+      case ".jpg":
+      case ".gif":
+      case ".png":
+      case ".bmp":
+      case ".tiff":
+      case ".mp3": //formats audio
+      case ".wav":
+      case ".wma":
+      case ".avi":
+      case ".wmv": //formats vidéo
+      case ".mp4":
+      case ".mov":
+      case ".mkv":
+        return types.multimedia;
+      default:
+        return types.otherfiles;
+      }
+    }
+  }
 
 const mapStateToProps = state => {
   let database = selectDatabase(state)
-  console.log(database.getIDList())
-  console.log(database.getRootIDs())
 
   return {
     max_depth: database.max_depth(),

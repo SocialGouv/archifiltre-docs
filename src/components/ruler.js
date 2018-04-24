@@ -1,41 +1,114 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { selectIcicleState } from 'reducers/root-reducer'
+import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
+
+import { typeOf, icicle_dims } from 'components/icicle'
 
 import { tr } from 'dict'
 
 const Presentational = props => {
-	let node = {x:0, dx: 10}
+  let res
 
-	let display = props.hover_sequence.includes(-1) ? "none" : ""
+  if(props.isFocused) {
+    let text = makeSizeString(props.node.size, props.total_size)
+    let mode = computeRulerTextDisplayMode(props.dims.x + props.dims.dx/2, text.length, icicle_dims.w, 4.2)
+
+    res = (<g><rect
+      className="ruler"
+      x={props.dims.x}
+      y="1.5em"
+      width={props.dims.dx}
+      height="0.3em"
+      onClick={(e) => {e.stopPropagation()}}
+      onMouseOver={() => {}}
+      style={{"fill": typeOf(props.node).color}}>
+    </rect>
+    <text
+    x={computeTextPosition(props.dims.x, props.dims.dx, icicle_dims.w, mode)}
+    y="3em"
+    textAnchor={{"ORGANIC" : "middle", "LEFT" : "start", "RIGHT" : "end"}[mode]}
+    >{text}
+    </text></g>)
+  }
+  else res = (<g />);
 
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
-          <g >
-            <rect
-              className="ruler"
-              x={node.x}
-              y="1.5em"
-              width={node.dx}
-              height="0.3em"
-              onClick={(e) => {e.stopPropagation()}}
-              onMouseOver={() => {}}
-              style={{"fill": "black", "display" : display}}>
-            </rect>
-            <text>
-            </text>
-          </g>
-        </svg>
-    
+      {res}
+    </svg>
       );
 }
+
+const octet2HumanReadableFormat = o => {
+  let To = o/Math.pow(1000,4)
+  if (To > 1) {
+    return Math.round(To * 10)/10 + ' To'
+  }
+  let Go = o/Math.pow(1000,3)
+  if (Go > 1) {
+    return Math.round(Go * 10)/10 + ' Go'
+  }
+  let Mo = o/Math.pow(1000,2)
+  if (Mo > 1) {
+    return Math.round(Mo * 10)/10 + ' Mo'
+  }
+  let ko = o/1000
+  if (ko > 1) {
+    return Math.round(ko * 10)/10 + ' ko'
+  }
+  return o + ' o'
+}
+
+const precisionRound = (number, precision) => {
+  let factor = Math.pow(10, precision);
+  return Math.round(number * factor) / factor;
+}
+
+const makeSizeString = (o, total) => {
+  let sizeString = octet2HumanReadableFormat(o)
+
+  let percentage = precisionRound((100 * o / total),1);
+  let percentageString = percentage + "%";
+  if (percentage < 0.1) {
+    percentageString = "< 0.1%";
+  }
+
+  return percentageString + " | " + sizeString
+}
+
+
+const computeRulerTextDisplayMode = (candidate_position, l, w, fw) => {
+  if(candidate_position < l*fw){
+      return "LEFT"
+    }
+    else if(candidate_position > w - (l*fw)){
+      return "RIGHT"
+    }
+    else{
+      return "ORGANIC"
+    }
+}
+
+const computeTextPosition = (x, dx, w, mode) => {
+  return {"ORGANIC" : x + dx/2, "LEFT" : 5, "RIGHT" : w - 5}[mode]
+}
+
+
 
 
 const mapStateToProps = state => {
 	let icicle_state = selectIcicleState(state)
+  let database = selectDatabase(state)
+
+  let node = (icicle_state.isFocused() ? database.getByID(icicle_state.hover_sequence()[icicle_state.hover_sequence().length - 1]) : {})
+  let total_size = database.getByID(database.getRootIDs()[0]).size
+
 	return {
-		hover_sequence: icicle_state.hover_sequence()
+		dims: icicle_state.hover_dims(),
+    isFocused: icicle_state.isFocused(),
+    node,
+    total_size
 	}
 }
 

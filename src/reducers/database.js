@@ -52,7 +52,7 @@ const State = Record({
 })
 
 
-function mkS(state) {
+function bundle(state) {
   return {
     toCsv: () =>
       TT.toCsvList(state.get('tree'))
@@ -79,7 +79,7 @@ const root_id = TT.getRootIdArray(tree)[0]
 const initialState = new State({tree,root_id})
 
 
-const { mkA, reducer } = duck(type, initialState, mkS)
+const { mkA, reducer } = duck(type, initialState, bundle)
 
 export default reducer
 

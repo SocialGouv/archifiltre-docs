@@ -9,7 +9,7 @@ const State = Record({
   id_arr:[-1],
 })
 
-function mkS(state) {
+function bundle(state) {
   return {
     hover_sequence: () => state.get('id_arr'),
   }
@@ -19,7 +19,7 @@ const noFocusState = new State()
 const initialState = noFocusState
 
 
-const { mkA, reducer } = duck(type, initialState, mkS)
+const { mkA, reducer } = duck(type, initialState, bundle)
 
 export default reducer
 

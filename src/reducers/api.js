@@ -18,7 +18,7 @@ const State = Record({
   retry:0
 })
 
-function mkS(state) {
+function bundle(state) {
   return {
     getToken: () => state.get('token'),
   }
@@ -26,7 +26,7 @@ function mkS(state) {
 
 const initialState = new State()
 
-const { mkA, reducer, key } = duck(type, initialState, mkS)
+const { mkA, reducer, key } = duck(type, initialState, bundle)
 
 export default reducer
 

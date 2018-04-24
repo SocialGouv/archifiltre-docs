@@ -6,6 +6,7 @@ import { mkB } from 'components/button'
 import { reInit as re1 } from 'reducers/database'
 import { reInit as re2 } from 'reducers/app-state'
 import { reInit as re3 } from 'reducers/log-error'
+import { setNoFocus as re4 } from 'reducers/icicle-state'
 
 import { commit } from 'reducers/root-reducer'
 
@@ -28,6 +29,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(re1())
       dispatch(re2())
       dispatch(re3())
+      dispatch(re4())
       dispatch(commit())
     }
   }

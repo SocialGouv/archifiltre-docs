@@ -77,16 +77,18 @@ class Presentational extends React.Component {
       let x_cursor = left
       for (let i = 0; i <= children.length - 1; ++i) {
         let child = this.getByID(children[i])
+        const child_size = child.content.size
+        const root_size = root.content.size
 
         res.push(this.positionNodes(
           child,
           x_cursor,
-          x_cursor+child.size/root.size*width,
+          x_cursor+child_size/root_size*width,
           top+height/tree_depth,
           bottom,
           tree_depth-1,
           new_sequence))
-        x_cursor = x_cursor+child.size/root.size*width
+        x_cursor = x_cursor+child_size/root_size*width
       }
     }
 

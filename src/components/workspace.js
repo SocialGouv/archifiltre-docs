@@ -13,6 +13,7 @@ import { tr } from 'dict'
 
 import Icicle from 'components/icicle'
 import Ruler from 'components/ruler'
+import BreadCrumbs from 'components/breadcrumbs'
 
 
 const chart_style = {
@@ -39,6 +40,7 @@ const Presentational = props => {
           <Ruler />
         </div>
         <div className="cell small-4" style={chart_style}>
+          <BreadCrumbs />
         </div>
       </div>
   )

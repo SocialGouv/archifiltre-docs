@@ -1,14 +1,32 @@
 
-import { Map } from 'immutable'
+import { Map, List, Record } from 'immutable'
 import { generateRandomString } from 'random-gen'
 import duck from 'reducers/duck'
 
 import { toCsvLine, fromCsvLine } from 'csv'
 
-import * as TT from 'table-tree'
-import { List, Record } from 'immutable'
+import tT from 'table-tree'
 
 const type = 'cheapExp/database'
+
+
+
+
+const Content = Record({
+  size:0
+})
+
+const compare = (a,b) => a.get('size') < b.get('size')
+const update = (young,old) => {
+  const size = young.get('size')
+  old = old.update('size', a=>a+size)
+  return old
+}
+const toCsvList = (a) => List.of(a.get('size'))
+const TT = tT(update, compare, toCsvList)
+
+
+
 
 
 function csvLineToVal(csv_line) {
@@ -74,7 +92,7 @@ function bundle(state) {
   }
 }
 
-const tree = TT.init('root')
+const tree = TT.init(new Content())
 const root_id = TT.getRootIdArray(tree)[0]
 const initialState = new State({tree,root_id})
 
@@ -84,9 +102,10 @@ const { mkA, reducer } = duck(type, initialState, bundle)
 export default reducer
 
 export const create = mkA((path,size) => state => {
+  const content = new Content({size})
   path = path.split('/')
-  state = state.update('tree', tree => 
-    TT.update(path, size, state.get('root_id'),tree))
+  state = state.update('tree', tree =>
+    TT.update(path, content, state.get('root_id'),tree))
 
   state = state.update('nb_update', a=>a+1)
   state = state.update('max_depth', a=>Math.max(a, path.length))
@@ -97,7 +116,8 @@ export const fromCsv = mkA((csv) => state => {
   state = state.update('tree', tree => {
     csv.split('\n').forEach(line => {
       const {path,size} = csvLineToVal(line)
-      tree = TT.update(path, size, state.get('root_id'),tree)
+      const content = new Content({size})
+      tree = TT.update(path, content, state.get('root_id'),tree)
     })
     return tree
   })

@@ -32,6 +32,70 @@ describe('table-tree', function() {
         ])
     })
 
+    it('sort children by size', function() {
+      let a = TT.init('baba')
+      const root_id = TT.getRootIdArray(a)[0]
+
+      a = TT.update(['a','b','c'], 1, root_id, a)
+      a = TT.update(['a','b','d'], 2, root_id, a)
+      a = TT.update(['a','e','f'], 4, root_id, a)
+
+      TT.toTree(root_id, a).toJS()
+        .should.deep.equal({
+          name:'baba',
+          size:7,
+          parent:null,
+          depth:0,
+          children:[
+            {
+              name:'a',
+              size:7,
+              parent:null,
+              depth:1,
+              children:[
+                {
+                  name:'e',
+                  size:4,
+                  parent:null,
+                  depth:2,
+                  children:[
+                    {
+                      name:'f',
+                      size:4,
+                      parent:null,
+                      depth:3,
+                      children:[]
+                    }
+                  ]
+                },
+                {
+                  name:'b',
+                  size:3,
+                  parent:null,
+                  depth:2,
+                  children:[
+                    {
+                      name:'d',
+                      size:2,
+                      parent:null,
+                      depth:3,
+                      children:[]
+                    },
+                    {
+                      name:'c',
+                      size:1,
+                      parent:null,
+                      depth:3,
+                      children:[]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+        })
+    })
+
 
   })
 })

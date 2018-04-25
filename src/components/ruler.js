@@ -65,7 +65,7 @@ const precisionRound = (number, precision) => {
   return Math.round(number * factor) / factor;
 }
 
-const makeSizeString = (o, total) => {
+export const makeSizeString = (o, total) => {
   let sizeString = octet2HumanReadableFormat(o)
 
   let percentage = precisionRound((100 * o / total),1);

@@ -14,6 +14,7 @@ import { tr } from 'dict'
 import Icicle from 'components/icicle'
 import Ruler from 'components/ruler'
 import BreadCrumbs from 'components/breadcrumbs'
+import Report from 'components/report'
 
 
 const chart_style = {
@@ -31,18 +32,27 @@ const chart_style = {
 
 const Presentational = props => {
   return (
-      <div className="grid-x grid-frame" id='main'>
-        <div
-          onClick={(e) => {props.setNoFocus();}}
-          className="cell small-8"
-        >
-          <Icicle />
-          <Ruler />
+    <div>
+      <div className="grid-x grid-frame">
+        <div className="cell small-2"></div>
+        <div className="cell small-8">
+          <Report />
         </div>
-        <div className="cell small-4" style={chart_style}>
-          <BreadCrumbs />
-        </div>
+        <div className="cell small-2"></div>
       </div>
+        <div className="grid-x grid-frame" id='main'>
+          <div
+            onClick={(e) => {props.setNoFocus();}}
+            className="cell small-8"
+          >
+            <Icicle />
+            <Ruler />
+          </div>
+          <div className="cell small-4" style={chart_style}>
+            <BreadCrumbs />
+          </div>
+        </div>
+    </div>
   )
 }
 

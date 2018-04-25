@@ -62,7 +62,7 @@ const Presentational = props => {
       i++
     }
 
-    if(props.max_depth > 3){
+    if(props.max_depth > 2){
       res.push(
         <g key={"breadcrumb" + i}>
           <BreadCrumbPoly
@@ -83,7 +83,7 @@ const Presentational = props => {
       i++
     }
 
-    if(props.max_depth > 2){
+    if(props.max_depth > 3){
       res.push(
         <g key={"breadcrumb" + i}>
           <BreadCrumbPoly

@@ -7,13 +7,13 @@ const Presentational = props => {
 
   return (<text
       className="breadcrumb-text"
-      x="40"
+      x={props.w/7}
       y={props.level*props.step}
       dx="0"
-      dy={props.step/2 + props.step/10}
+      dy={props.step/2 + 5}
       textAnchor="start"
       stroke="none"
-      fontWeight={props.isDummy ? "bold" : ""}>{props.text}</text>);
+      fontWeight={props.is_dummy ? "bold" : ""}>{props.text}</text>);
 }
 
 

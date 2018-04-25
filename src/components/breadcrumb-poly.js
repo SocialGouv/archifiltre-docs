@@ -6,17 +6,17 @@ import { tr } from 'dict'
 const Presentational = props => {
   return (<polygon
       className="breadcrumb-poly"
-      points={makePoints(props.level, props.step, props.w, props.type)}
+      points={makePoints(props.level, props.step, props.w, props.type, props.is_last, props.is_dummy)}
       fill={props.type.color} />);
 }
 
-const makePoints = (level, step, w, type) => {
+const makePoints = (level, step, w, type, is_last, is_dummy) => {
   let h = step
   let y = level*(step)
   let t = h/10
   let w2 = w/20
 
-  const coord2Str = (x,y) => (x+20)+','+y
+  const coord2Str = (x,y) => (x+30)+','+y
 
   let points = [];
 
@@ -27,7 +27,7 @@ const makePoints = (level, step, w, type) => {
   points.push(coord2Str(w2,y));
   points.push(coord2Str(w2,y+h));
 
-  if(type.label === tr("Folder") || type.label === tr("Root")){
+  if(type.label === tr("Folder") || type.label === tr("Root") || (is_dummy && !is_last)){
     points.push(coord2Str(w2/2,y+h+t)); // lower notch
   }
 

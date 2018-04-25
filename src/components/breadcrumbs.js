@@ -22,42 +22,126 @@ const Presentational = props => {
       res.push(
         <g key={"breadcrumb" + i}>
           <BreadCrumbPoly
-          // is_last={i === props.hover_sequence.length-1}
+          is_last={i === props.hover_sequence.length-1}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
           type={typeOf(node)}
           w={breadcrumb_dims.w}
-          isDummy={false}/>
+          is_dummy={false}/>
           <BreadCrumbText
           key={"text" + i}
           text={node.name}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
           w={breadcrumb_dims.w}
-          isDummy={false}/>
+          is_dummy={false}/>
         </g>);
     }
   }
   else{
-    for(let i = 1; i < props.max_depth+1; i++){
+    let i = 1
+
+    if(props.max_depth > 1){
       res.push(
         <g key={"breadcrumb" + i}>
           <BreadCrumbPoly
-          // is_last={i === props.max_depth}
+          is_last={false}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
           type={typeOf({children:[], name:''})}
           w={breadcrumb_dims.w}
-          isDummy={true}/>
+          is_dummy={true}/>
           <BreadCrumbText
           key={"text" + i}
-          text={(i === props.max_depth ? tr("File") : tr("Level") + " " + (i))}
+          text={tr("Level") + " " + (i)}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
           w={breadcrumb_dims.w}
-          isDummy={true}/>
+          is_dummy={true}/>
         </g>);
+      i++
     }
+
+    if(props.max_depth > 3){
+      res.push(
+        <g key={"breadcrumb" + i}>
+          <BreadCrumbPoly
+          is_last={false}
+          level={i}
+          step={icicle_dims.h/(props.max_depth+1)}
+          type={typeOf({children:[], name:''})}
+          w={breadcrumb_dims.w}
+          is_dummy={true}/>
+          <BreadCrumbText
+          key={"text" + i}
+          text={tr("Level") + " " + (i)}
+          level={i}
+          step={icicle_dims.h/(props.max_depth+1)}
+          w={breadcrumb_dims.w}
+          is_dummy={true}/>
+        </g>);
+      i++
+    }
+
+    if(props.max_depth > 2){
+      res.push(
+        <g key={"breadcrumb" + i}>
+          <BreadCrumbPoly
+          is_last={false}
+          level={i}
+          step={icicle_dims.h/(props.max_depth+1)}
+          type={typeOf({children:[], name:''})}
+          w={breadcrumb_dims.w}
+          is_dummy={true}/>
+          <BreadCrumbText
+          key={"text" + i}
+          text="..."
+          level={i}
+          step={icicle_dims.h/(props.max_depth+1)}
+          w={breadcrumb_dims.w}
+          is_dummy={true}/>
+        </g>);
+      i++
+    }
+
+    if(props.max_depth > 4){
+      res.push(
+        <g key={"breadcrumb" + i}>
+          <BreadCrumbPoly
+          is_last={false}
+          level={i}
+          step={icicle_dims.h/(props.max_depth+1)}
+          type={typeOf({children:[], name:''})}
+          w={breadcrumb_dims.w}
+          is_dummy={true}/>
+          <BreadCrumbText
+          key={"text" + i}
+          text="..."
+          level={i}
+          step={icicle_dims.h/(props.max_depth+1)}
+          w={breadcrumb_dims.w}
+          is_dummy={true}/>
+        </g>);
+      i++
+    }
+
+    res.push(
+      <g key={"breadcrumb" + i}>
+        <BreadCrumbPoly
+        is_last={true}
+        level={i}
+        step={icicle_dims.h/(props.max_depth+1)}
+        type={typeOf({children:[], name:''})}
+        w={breadcrumb_dims.w}
+        is_dummy={true}/>
+        <BreadCrumbText
+        key={"text" + i}
+        text={tr("File")}
+        level={i}
+        step={icicle_dims.h/(props.max_depth+1)}
+        w={breadcrumb_dims.w}
+        is_dummy={true}/>
+      </g>);
   }
 
   return (

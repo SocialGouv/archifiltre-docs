@@ -16,7 +16,16 @@ const Content = Record({
   size:0
 })
 
-const compare = (a,b) => a.get('size') < b.get('size')
+const compare = (a,b) => {
+  if (a.get('size') === b.get('size')) {
+    return 0
+  } else if (a.get('size') > b.get('size')) {
+    return -1
+  } else {
+    return 1
+  }
+}
+
 const update = (young,old) => {
   const size = young.get('size')
   old = old.update('size', a=>a+size)

@@ -11,7 +11,7 @@ const Presentational = props => {
   let res
 
   if(props.isFocused) {
-    let text = makeSizeString(props.node.size, props.total_size)
+    let text = makeSizeString(props.node.content.size, props.total_size)
     let mode = computeRulerTextDisplayMode(props.dims.x + props.dims.dx/2, text.length, icicle_dims.w, 4.2)
 
     res = (<g><rect
@@ -102,7 +102,7 @@ const mapStateToProps = state => {
   let database = selectDatabase(state)
 
   let node = (icicle_state.isFocused() ? database.getByID(icicle_state.hover_sequence()[icicle_state.hover_sequence().length - 1]) : {})
-  let total_size = database.getByID(database.getRootIDs()[0]).size
+  let total_size = database.getByID(database.getRootIDs()[0]).content.size
 
 	return {
 		dims: icicle_state.hover_dims(),

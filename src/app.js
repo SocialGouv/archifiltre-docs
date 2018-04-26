@@ -20,11 +20,18 @@ import { getCookie } from 'cookie'
 
 import ErrorBoundary from 'components/error-boundary'
 
-import * as qs from 'query-string'
 import { generateRandomString } from 'random-gen'
 
 
 const app = () => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(registration => {
+      console.log('SW registered: ', registration)
+    }).catch(registrationError => {
+      console.log('SW registration failed: ', registrationError)
+    })
+  }
+
   let root_div = document.createElement('div')
   root_div.setAttribute('id','root')
 

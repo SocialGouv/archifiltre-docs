@@ -8,7 +8,7 @@ const type = 'cheapExp/icicleState'
 const State = Record({
   hover_seq:[-1],
   dims: {},
-  display_root:""
+  display_root:[-1]
 })
 
 function bundle(state) {
@@ -17,7 +17,7 @@ function bundle(state) {
     hover_dims: () => state.get('dims'),
     isFocused: () => !(state.get('hover_seq').includes(-1)),
     display_root: () => state.get('display_root'),
-    isZoomed: () => state.get('display_root') ? true : false
+    isZoomed: () => !(state.get('display_root').includes(-1))
   }
 }
 
@@ -40,12 +40,12 @@ export const setNoFocus = mkA(() => state => {
   return state
 })
 
-export const setDisplayRoot = mkA((root_id) => state =>{
-  state = state.update('display_root',()=>root_id)
+export const setDisplayRoot = mkA((root_seq) => state =>{
+  state = state.update('display_root',()=>root_seq)
   return state
 })
 
 export const setNoDisplayRoot = mkA(() => state =>{
-  state = state.update('display_root',()=>"")
+  state = state.update('display_root',()=>[-1])
   return state
 })

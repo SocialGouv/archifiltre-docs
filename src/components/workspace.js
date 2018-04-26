@@ -45,7 +45,7 @@ const Presentational = props => {
             onClick={(e) => {props.setNoFocus();}}
             className="cell small-8"
           >
-            <Icicle display_root_id={props.display_root}/>
+            <Icicle display_root={props.display_root}/>
             <Ruler />
           </div>
           <div className="cell small-4" style={chart_style}>

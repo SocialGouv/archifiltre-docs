@@ -49,15 +49,15 @@ class Presentational extends React.Component {
   }
 
 
-  plot(root, position, tree_depth) {
+  plot(root, root_seq, position, tree_depth) {
     console.time("render icicle")
-    let icicle = position(root, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [])
+    let icicle = position(root, root_seq, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [])
     console.timeEnd("render icicle")
     return icicle
   }
 
 
-  positionNodes(root_id, left, right, top, bottom, tree_depth, sequence){
+  positionNodes(root_id, root_seq, left, right, top, bottom, tree_depth, sequence){
     let root = this.getByID(root_id)
     let height = bottom - top
     let width = right - left
@@ -78,21 +78,42 @@ class Presentational extends React.Component {
 
     let children = root.children
     if (children.length && root_dims.dx > 1) {
-      let x_cursor = left
-      for (let i = 0; i <= children.length - 1; ++i) {
-        let child = this.getByID(children[i])
-        const child_size = child.content.size
-        const root_size = root.content.size
+
+      if(this.props.isZoomed && root_seq.length > 1){
+        let child = this.getByID(root_seq[1])
+        // const child_size = child.content.size
+        // const root_size = root.content.size
 
         res.push(this.positionNodes(
-          children[i],
-          x_cursor,
-          x_cursor+child_size/root_size*width,
+          root_seq[1],
+          root_seq.slice(1,root_seq.length-1),
+          left,
+          right,
           top+height/tree_depth,
           bottom,
           tree_depth-1,
           new_sequence))
-        x_cursor = x_cursor+child_size/root_size*width
+      }
+
+      else{
+      let x_cursor = left
+        for (let i = 0; i <= children.length - 1; ++i) {
+            let child = this.getByID(children[i])
+            const child_size = child.content.size
+            const root_size = root.content.size
+
+            res.push(this.positionNodes(
+              children[i],
+              root_seq,
+              x_cursor,
+              x_cursor+child_size/root_size*width,
+              top+height/tree_depth,
+              bottom,
+              tree_depth-1,
+              new_sequence))
+
+            x_cursor = x_cursor+child_size/root_size*width
+        }
       }
     }
 
@@ -104,7 +125,7 @@ class Presentational extends React.Component {
       <div id='chart' style={icicle_style}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
           <g id="container">
-            {this.plot((this.props.display_root_id ? this.props.display_root_id : this.props.root_id), this.positionNodes, this.max_tree_depth + 1)}
+            {this.plot(this.props.root_id, (this.props.isZoomed ? this.props.display_root : []), this.positionNodes, this.max_tree_depth + 1)}
           </g>
         </svg>
       </div>)
@@ -194,7 +215,7 @@ const mapStateToProps = state => {
     node_ids: database.getIDList(),
     getByID: database.getByID,
     root_id: database.getRootIDs()[0],
-    display_root_id: icicle_state.display_root(),
+    display_root: icicle_state.display_root(),
     isZoomed: icicle_state.isZoomed()
   }
 }

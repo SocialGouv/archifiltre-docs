@@ -14,7 +14,12 @@
 
 workbox.skipWaiting();
 workbox.clientsClaim();
-workbox.googleAnalytics.initialize();
+
+try {
+  workbox.googleAnalytics.initialize();
+} catch(e) {
+
+}
 
 /**
  * The workboxSW.precacheAndRoute() method efficiently caches and responds to

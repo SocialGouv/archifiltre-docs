@@ -26,7 +26,7 @@ const Presentational = props => {
     size = <span>{makeSizeString(node.content.size, props.total_size)}</span>
   }
   else{
-    icon = <i className="fi-archive" style={{
+    icon = <i className="fi-page-multiple" style={{
       'fontSize': '2em',
       'width': '1.2em',
       'color': typeOf({children:[], name:''}).color,

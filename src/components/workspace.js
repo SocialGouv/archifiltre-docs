@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { selectDatabase } from 'reducers/root-reducer'
+import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 
 import { setParentPath } from 'reducers/database'
 import { setNoFocus } from 'reducers/icicle-state'
@@ -45,7 +45,7 @@ const Presentational = props => {
             onClick={(e) => {props.setNoFocus();}}
             className="cell small-8"
           >
-            <Icicle />
+            <Icicle display_root_id={props.display_root}/>
             <Ruler />
           </div>
           <div className="cell small-4" style={chart_style}>
@@ -60,9 +60,11 @@ const Presentational = props => {
 
 const mapStateToProps = state => {
   let database = selectDatabase(state)
+  let display_root = selectIcicleState(state).display_root()
 
   return {
     parent_path: database.parent_path(),
+    display_root
   }
 }
  

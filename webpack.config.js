@@ -1,8 +1,9 @@
 const path = require('path')
+const fs = require('fs')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const FlowWebpackPlugin = require('flow-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-
+const workboxPlugin = require('workbox-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -28,10 +29,35 @@ module.exports = {
       template: 'static/stats.html',
       excludeChunks: ['app']
     }),
+    // new workboxPlugin.GenerateSW({
+    //   swDest: 'sw.js',
+    //   clientsClaim: true,
+    //   skipWaiting: true,
+    //   runtimeCaching: [
+    //     {
+    //       urlPattern: /.*googleapis|.*jsdelivr|.*gstatic/,
+    //       handler: 'cacheFirst',
+    //       options: {
+    //         cacheableResponse: {
+    //           statuses: [0, 200],
+    //         }
+    //       }
+    //     }
+    //   ]
+    // })
+    new workboxPlugin.InjectManifest({
+      swSrc: 'src/sw.js',
+      swDest: 'sw.js',
+    })
   ],
 
   devServer: {
     contentBase: './dist',
+    https: true,
+    port: 8000,
+    compress: true,
+    hot: false,
+    inline: false,
   },
 
   optimization : {

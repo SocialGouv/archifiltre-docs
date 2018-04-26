@@ -1,7 +1,5 @@
 import React from 'react'
 
-import ReactDOM from 'react-dom'
-
 import { tr } from 'dict'
 import Dashboard from 'components/dashboard'
 

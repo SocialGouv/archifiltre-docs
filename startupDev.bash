@@ -10,6 +10,6 @@ watch() {
 watch src &
 watch static &
 
-python -m SimpleHTTPServer 8000 &
+# python -m SimpleHTTPServer 8000 &
 
-npm run-script watchBuildDev
+npm run-script devServer

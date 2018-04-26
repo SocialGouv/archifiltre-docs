@@ -152,6 +152,18 @@ const Presentational = props => {
 
 }
 
+export const smartClip = (s, w, fw) => {
+    var target_size = Math.floor(w/fw)
+    var slice = Math.floor(target_size/2)
+
+    if(s.length > target_size){
+      return s.substring(0, slice-2) + "..." + s.substring(s.length - slice + 2, s.length)
+    }
+    else{
+      return s
+    }
+  }
+
 
 const mapStateToProps = state => {
 	let icicle_state = selectIcicleState(state)

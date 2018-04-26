@@ -31,4 +31,10 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerRoute(/.*googleapis|.*jsdelivr|.*gstatic/, workbox.strategies.cacheFirst({ plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]})] }), 'GET');
+workbox.routing.registerRoute(
+  /.*googleapis|.*jsdelivr|.*gstatic/,
+  workbox.strategies.staleWhileRevalidate({
+    plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]})]
+  }),
+  'GET'
+);

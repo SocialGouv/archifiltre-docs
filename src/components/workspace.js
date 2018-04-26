@@ -34,11 +34,11 @@ const Presentational = props => {
   return (
     <div>
       <div className="grid-x grid-frame">
-        <div className="cell small-2"></div>
-        <div className="cell small-8">
+        <div className="cell auto"></div>
+        <div className="cell small-12">
           <Report />
         </div>
-        <div className="cell small-2"></div>
+        <div className="cell auto"></div>
       </div>
         <div className="grid-x grid-frame" id='main'>
           <div

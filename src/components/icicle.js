@@ -74,10 +74,10 @@ class Presentational extends React.Component {
       root_dims.dx < 1 ?
       []
       :
-      [<IcicleRect key={root.name + root.depth} dims={root_dims} node_id={root_id} node={root} node_sequence={new_sequence} />])
+      [<IcicleRect key={root.get('name') + root.get('depth')} dims={root_dims} node_id={root_id} node={root} node_sequence={new_sequence} />])
 
-    let children = root.children
-    if (children.length && root_dims.dx > 1) {
+    let children = root.get('children')
+    if (children.size && root_dims.dx > 1) {
 
       if(this.props.isZoomed && root_seq.length > 1){
         let child = this.getByID(root_seq[1])
@@ -95,13 +95,13 @@ class Presentational extends React.Component {
 
       else{
       let x_cursor = left
-        for (let i = 0; i <= children.length - 1; ++i) {
-            let child = this.getByID(children[i])
+        for (let i = 0; i <= children.size - 1; ++i) {
+            let child = this.getByID(children.get(i))
             const child_size = child.content.size
-            const root_size = root.content.size
+            const root_size = root.get('content').get('size')
 
             res.push(this.positionNodes(
-              children[i],
+              children.get(i),
               root_seq,
               x_cursor,
               x_cursor+child_size/root_size*width,
@@ -132,8 +132,8 @@ class Presentational extends React.Component {
 
 export const typeOf = (node) => {
   
-  if (node["children"].length) {
-    if (node["children"][0] === "-1") {
+  if (node.get('children').size) {
+    if (node.get('children').get(0) === "-1") {
       return types.parent_folder;
     } else {
       return types.folder;
@@ -141,7 +141,7 @@ export const typeOf = (node) => {
   }
 
   else {
-    let m = node["name"].match(/\.[^\.]*$/)
+    let m = node.get('name').match(/\.[^\.]*$/)
 
     if (m == null)
       m = [""]

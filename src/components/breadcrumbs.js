@@ -8,6 +8,8 @@ import { typeOf, icicle_dims } from 'components/icicle'
 import BreadCrumbText from 'components/breadcrumb-text'
 import BreadCrumbPoly from 'components/breadcrumb-poly'
 
+import { mkDummyParent, mkDummyFile } from 'table-tree'
+
 import { tr } from 'dict'
 
 const breadcrumb_dims = {w: 400, h: 300}
@@ -19,7 +21,7 @@ const Presentational = props => {
     for(let i = 1; i < props.hover_sequence.length; i++){
       let node = props.getByID(props.hover_sequence[i])
       let node_id = props.hover_sequence[i]
-      let is_parent = props.isZoomed && props.display_root.includes(node_id) && node.children.length
+      let is_parent = props.isZoomed && props.display_root.includes(node_id) && node.get('children').size
 
       res.push(
         <g key={"breadcrumb" + i}>
@@ -27,12 +29,12 @@ const Presentational = props => {
           is_last={i === props.hover_sequence.length-1}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
-          type={is_parent ? typeOf({children:["-1"], name:''}) : typeOf(node)}
+          type={is_parent ? typeOf(mkDummyParent()) : typeOf(node)}
           w={breadcrumb_dims.w}
           is_dummy={false}/>
           <BreadCrumbText
           key={"text" + i}
-          text={node.name}
+          text={node.get('name')}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
           w={breadcrumb_dims.w}
@@ -51,7 +53,7 @@ const Presentational = props => {
           is_last={false}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
-          type={typeOf({children:[], name:''})}
+          type={typeOf(mkDummyFile())}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
           <BreadCrumbText
@@ -72,7 +74,7 @@ const Presentational = props => {
           is_last={false}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
-          type={typeOf({children:[], name:''})}
+          type={typeOf(mkDummyFile())}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
           <BreadCrumbText
@@ -93,7 +95,7 @@ const Presentational = props => {
           is_last={false}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
-          type={typeOf({children:[], name:''})}
+          type={typeOf(mkDummyFile())}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
           <BreadCrumbText
@@ -114,7 +116,7 @@ const Presentational = props => {
           is_last={false}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
-          type={typeOf({children:[], name:''})}
+          type={typeOf(mkDummyFile())}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
           <BreadCrumbText
@@ -134,7 +136,7 @@ const Presentational = props => {
         is_last={true}
         level={i}
         step={icicle_dims.h/(props.max_depth+1)}
-        type={typeOf({children:[], name:''})}
+        type={typeOf(mkDummyFile())}
         w={breadcrumb_dims.w}
         is_dummy={true}/>
         <BreadCrumbText

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { selectIcicleState } from 'reducers/root-reducer'
 
-import { setFocus } from 'reducers/icicle-state'
+import { setFocus, setDisplayRoot, setNoDisplayRoot } from 'reducers/icicle-state'
 
 import { typeOf } from 'components/icicle'
 
@@ -17,28 +17,47 @@ const Presentational = props => {
 	let opacity = props.hover_sequence.includes(-1) ? 1 : (props.hover_sequence.includes(node_id) ? 1 : 0.3)
 	let display = node.depth ? "" : "none"
 
-  return (<rect
+  let is_parent = props.isZoomed && props.display_root.includes(node_id) && node.children.length
+
+  let res = [(<rect
+      key="rect"
       className="node"
       x={node_dims.x}
       y={node_dims.y}
       width={node_dims.dx}
       height={node_dims.dy}
-      onClick={(e) => {e.stopPropagation()}}
+      onClick={(e) => {e.stopPropagation(); props.setDisplayRoot(props.node_sequence)}}
       onMouseOver={() => {props.setFocus(props.node_sequence, node_dims)}}
-      style={{"fill": typeOf(node).color, "opacity": opacity, "display" : display}}></rect>);
+      style={{"fill": is_parent ? typeOf({children:["-1"], name:''}).color : typeOf(node).color, "opacity": opacity, "display" : display}}></rect>)]
+
+  if(!(node.depth) && props.isZoomed) res.push(<text
+    x={node_dims.dx/2}
+    y={node_dims.dy/2}
+    dx="0"
+    dy={node_dims.dy/4}
+    textAnchor="middle"
+    stroke="none"
+    onClick={(e) => {e.stopPropagation(); props.setNoDisplayRoot() ;}}
+    key="text">{tr("Back to root")}</text>)
+
+  return res;
 }
 
 
 const mapStateToProps = state => {
 	let icicle_state = selectIcicleState(state)
 	return {
-		hover_sequence: icicle_state.hover_sequence()
+		hover_sequence: icicle_state.hover_sequence(),
+    display_root: icicle_state.display_root(),
+    isZoomed: icicle_state.isZoomed()
 	}
 }
 
 const mapDispatchToProps = dispatch => {
  	return {
- 		setFocus: (...args) => dispatch((setFocus(...args)))
+    setFocus: (...args) => dispatch((setFocus(...args))),
+    setDisplayRoot: (...args) => dispatch((setDisplayRoot(...args))),
+ 		setNoDisplayRoot: (...args) => dispatch((setNoDisplayRoot(...args)))
  	}
 }
 

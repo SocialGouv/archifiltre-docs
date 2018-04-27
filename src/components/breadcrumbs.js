@@ -18,6 +18,8 @@ const Presentational = props => {
   if(props.isFocused){
     for(let i = 1; i < props.hover_sequence.length; i++){
       let node = props.getByID(props.hover_sequence[i])
+      let node_id = props.hover_sequence[i]
+      let is_parent = props.isZoomed && props.display_root.includes(node_id) && node.children.length
 
       res.push(
         <g key={"breadcrumb" + i}>
@@ -25,7 +27,7 @@ const Presentational = props => {
           is_last={i === props.hover_sequence.length-1}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
-          type={typeOf(node)}
+          type={is_parent ? typeOf({children:["-1"], name:''}) : typeOf(node)}
           w={breadcrumb_dims.w}
           is_dummy={false}/>
           <BreadCrumbText
@@ -38,6 +40,7 @@ const Presentational = props => {
         </g>);
     }
   }
+
   else{
     let i = 1
 
@@ -62,7 +65,7 @@ const Presentational = props => {
       i++
     }
 
-    if(props.max_depth > 3){
+    if(props.max_depth > 2){
       res.push(
         <g key={"breadcrumb" + i}>
           <BreadCrumbPoly
@@ -83,7 +86,7 @@ const Presentational = props => {
       i++
     }
 
-    if(props.max_depth > 2){
+    if(props.max_depth > 3){
       res.push(
         <g key={"breadcrumb" + i}>
           <BreadCrumbPoly
@@ -152,13 +155,27 @@ const Presentational = props => {
 
 }
 
+export const smartClip = (s, w, fw) => {
+    var target_size = Math.floor(w/fw)
+    var slice = Math.floor(target_size/2)
+
+    if(s.length > target_size){
+      return s.substring(0, slice-2) + "..." + s.substring(s.length - slice + 2, s.length)
+    }
+    else{
+      return s
+    }
+  }
+
 
 const mapStateToProps = state => {
 	let icicle_state = selectIcicleState(state)
   let database = selectDatabase(state)
 	return {
 		hover_sequence: icicle_state.hover_sequence(),
+    display_root: icicle_state.display_root(),
     isFocused: icicle_state.isFocused(),
+    isZoomed: icicle_state.isZoomed(),
     max_depth: database.max_depth(),
     getByID : database.getByID
 	}

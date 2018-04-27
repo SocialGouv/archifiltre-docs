@@ -81,12 +81,10 @@ class Presentational extends React.Component {
 
       if(this.props.isZoomed && root_seq.length > 1){
         let child = this.getByID(root_seq[1])
-        // const child_size = child.content.size
-        // const root_size = root.content.size
 
         res.push(this.positionNodes(
           root_seq[1],
-          root_seq.slice(1,root_seq.length-1),
+          root_seq.slice(1,root_seq.length),
           left,
           right,
           top+height/tree_depth,
@@ -135,7 +133,7 @@ class Presentational extends React.Component {
 export const typeOf = (node) => {
   
   if (node["children"].length) {
-    if (false) {
+    if (node["children"][0] === "-1") {
       return types.parent_folder;
     } else {
       return types.folder;

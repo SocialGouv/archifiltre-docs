@@ -14,12 +14,14 @@ const Presentational = props => {
   if(props.isFocused) {
     let node = props.node
     let type = typeOf(node)
-    let isFolder = type.label === tr("Folder") || type.label === tr("Root")
+    let is_folder = type.label === tr("Folder") || type.label === tr("Root")
 
-    icon = <i className={(isFolder ? "fi-folder" : "fi-page")} style={{
+    let is_parent = props.isZoomed && props.display_root.includes(props.node_id) && props.node.children.length
+
+    icon = <i className={(is_folder ? "fi-folder" : "fi-page")} style={{
       'fontSize': '2em',
       'width': '1.2em',
-      'color': type.color,
+      'color': is_parent ? typeOf({children:["-1"], name:''}).color : typeOf(node).color,
       'display': 'table-cell',
       'verticalAlign':'middle'}}/>
     name = <span style={{'fontWeight':'bold', 'display': 'table-cell', 'verticalAlign':'middle', 'horizontalmarginLeft':'1em'}}>{node.name}</span>
@@ -47,12 +49,16 @@ const mapStateToProps = state => {
 	let icicle_state = selectIcicleState(state)
   let database = selectDatabase(state)
 
-  let node = (icicle_state.isFocused() ? database.getByID(icicle_state.hover_sequence()[icicle_state.hover_sequence().length - 1]) : {})
+  let node_id = icicle_state.hover_sequence()[icicle_state.hover_sequence().length - 1]
+  let node = (icicle_state.isFocused() ? database.getByID(node_id) : {})
   let total_size = database.getByID(database.getRootIDs()[0]).content.size
 
 	return {
+    display_root: icicle_state.display_root(),
     isFocused: icicle_state.isFocused(),
+    isZoomed: icicle_state.isZoomed(),
     node,
+    node_id,
     total_size
 	}
 }

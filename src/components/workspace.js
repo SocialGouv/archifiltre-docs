@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { selectDatabase } from 'reducers/root-reducer'
+import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 
 import { setParentPath } from 'reducers/database'
 import { setNoFocus } from 'reducers/icicle-state'
@@ -14,6 +14,7 @@ import { tr } from 'dict'
 import Icicle from 'components/icicle'
 import Ruler from 'components/ruler'
 import BreadCrumbs from 'components/breadcrumbs'
+import Report from 'components/report'
 
 
 const chart_style = {
@@ -31,18 +32,27 @@ const chart_style = {
 
 const Presentational = props => {
   return (
-      <div className="grid-x grid-frame" id='main'>
-        <div
-          onClick={(e) => {props.setNoFocus();}}
-          className="cell small-8"
-        >
-          <Icicle />
-          <Ruler />
+    <div>
+      <div className="grid-x grid-frame">
+        <div className="cell auto"></div>
+        <div className="cell small-12">
+          <Report />
         </div>
-        <div className="cell small-4" style={chart_style}>
-          <BreadCrumbs />
-        </div>
+        <div className="cell auto"></div>
       </div>
+        <div className="grid-x grid-frame" id='main'>
+          <div
+            onClick={(e) => {props.setNoFocus();}}
+            className="cell small-8"
+          >
+            <Icicle display_root={props.display_root}/>
+            <Ruler />
+          </div>
+          <div className="cell small-4" style={chart_style}>
+            <BreadCrumbs />
+          </div>
+        </div>
+    </div>
   )
 }
 
@@ -50,9 +60,11 @@ const Presentational = props => {
 
 const mapStateToProps = state => {
   let database = selectDatabase(state)
+  let display_root = selectIcicleState(state).display_root()
 
   return {
     parent_path: database.parent_path(),
+    display_root
   }
 }
  

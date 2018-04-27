@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { selectDatabase, selectLogError } from 'reducers/root-reducer'
+import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
+
+import { setNoDisplayRoot } from 'reducers/icicle-state'
 
 import IcicleRect from 'components/icicle-rect'
 
@@ -34,34 +36,32 @@ const types = {
 class Presentational extends React.Component {
   constructor(props) {
     super(props)
-    // this.root = props.getByID(props.root_id)
     this.root_id = props.root_id
-    // this.max_tree_depth = this.getMaxDepth(this.root)
     this.max_tree_depth = props.max_depth
 
     this.getByID = props.getByID
 
     this.positionNodes = this.positionNodes.bind(this)
-    // this.getMaxDepth = this.getMaxDepth.bind(this)
 
     console.log("profondeur : ", this.max_tree_depth)
+
+    setNoDisplayRoot()
   }
 
 
-  plot(root, position, tree_depth) {
+  plot(root, root_seq, position, tree_depth) {
     console.time("render icicle")
-    let icicle = position(this.root_id, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [])
+    let icicle = position(root, root_seq, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [])
     console.timeEnd("render icicle")
     return icicle
   }
 
 
-  positionNodes(root_id, left, right, top, bottom, tree_depth, sequence){
+  positionNodes(root_id, root_seq, left, right, top, bottom, tree_depth, sequence){
     let root = this.getByID(root_id)
     let height = bottom - top
     let width = right - left
     let new_sequence = sequence.concat(root_id)
-    // let new_sequence = sequence + [root.name + root.depth]
 
     let root_dims={
       x: left,
@@ -78,48 +78,52 @@ class Presentational extends React.Component {
 
     let children = root.children
     if (children.length && root_dims.dx > 1) {
-      let x_cursor = left
-      for (let i = 0; i <= children.length - 1; ++i) {
-        let child = this.getByID(children[i])
-        const child_size = child.content.size
-        const root_size = root.content.size
+
+      if(this.props.isZoomed && root_seq.length > 1){
+        let child = this.getByID(root_seq[1])
 
         res.push(this.positionNodes(
-          children[i],
-          x_cursor,
-          x_cursor+child_size/root_size*width,
+          root_seq[1],
+          root_seq.slice(1,root_seq.length),
+          left,
+          right,
           top+height/tree_depth,
           bottom,
           tree_depth-1,
           new_sequence))
-        x_cursor = x_cursor+child_size/root_size*width
+      }
+
+      else{
+      let x_cursor = left
+        for (let i = 0; i <= children.length - 1; ++i) {
+            let child = this.getByID(children[i])
+            const child_size = child.content.size
+            const root_size = root.content.size
+
+            res.push(this.positionNodes(
+              children[i],
+              root_seq,
+              x_cursor,
+              x_cursor+child_size/root_size*width,
+              top+height/tree_depth,
+              bottom,
+              tree_depth-1,
+              new_sequence))
+
+            x_cursor = x_cursor+child_size/root_size*width
+        }
       }
     }
 
     return res
   }
 
-  // getMaxDepth(tree){
-  //   let children = tree.children
-  //   if(children){
-  //     return 1 + children.reduce((acc, val) => {
-  //       let child_depth = this.getMaxDepth(this.getByID(val));
-  //       if(child_depth > acc) return child_depth ;
-  //       else return acc ;
-  //     }, 0)
-  //   }
-  //   else{
-  //     return 0
-  //   }
-  // }
-
-
   render() {
     return (
       <div id='chart' style={icicle_style}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
           <g id="container">
-            {this.plot(this.root, this.positionNodes, this.max_tree_depth + 1)}
+            {this.plot(this.props.root_id, (this.props.isZoomed ? this.props.display_root : []), this.positionNodes, this.max_tree_depth + 1)}
           </g>
         </svg>
       </div>)
@@ -129,7 +133,7 @@ class Presentational extends React.Component {
 export const typeOf = (node) => {
   
   if (node["children"].length) {
-    if (false) {
+    if (node["children"][0] === "-1") {
       return types.parent_folder;
     } else {
       return types.folder;
@@ -202,17 +206,22 @@ export const typeOf = (node) => {
 
 const mapStateToProps = state => {
   let database = selectDatabase(state)
+  let icicle_state = selectIcicleState(state)
 
   return {
     max_depth: database.max_depth(),
     node_ids: database.getIDList(),
     getByID: database.getByID,
-    root_id: database.getRootIDs()[0]
+    root_id: database.getRootIDs()[0],
+    display_root: icicle_state.display_root(),
+    isZoomed: icicle_state.isZoomed()
   }
 }
  
 const mapDispatchToProps = dispatch => {
-  return {}
+  return {
+    setNoDisplayRoot: (...args) => dispatch(setNoDisplayRoot(...args))
+  }
 }
 
 

@@ -4,17 +4,20 @@ import { generateRandomString } from 'random-gen'
 
 import { Map, Record, List } from 'immutable'
 
+const Entry = Record({
+  name:'',
+  content:null,
+  children:List(),
+  parent:null,
+  depth:0
+})
+
+export const mkDummyFile = () => new Entry({children:List(), name:''})
+export const mkDummyParent = () => new Entry({children:List(["-1"]), name:''})
 
 export default function(update_, compare_, toCsvList_) {
 
 
-  const Entry = Record({
-    name:'',
-    content:null,
-    children:List(),
-    parent:null,
-    depth:0
-  })
 
 
   const updateChildren = (child_id, entry) => {

@@ -7,6 +7,8 @@ import { setFocus, setDisplayRoot, setNoDisplayRoot } from 'reducers/icicle-stat
 
 import { typeOf } from 'components/icicle'
 
+import { mkDummyParent } from 'table-tree'
+
 import { tr } from 'dict'
 
 const Presentational = props => {
@@ -15,9 +17,9 @@ const Presentational = props => {
 	let node_id = props.node_id
 
 	let opacity = props.hover_sequence.includes(-1) ? 1 : (props.hover_sequence.includes(node_id) ? 1 : 0.3)
-	let display = node.depth ? "" : "none"
+	let display = node.get('depth') ? "" : "none"
 
-  let is_parent = props.isZoomed && props.display_root.includes(node_id) && node.children.length
+  let is_parent = props.isZoomed && props.display_root.includes(node_id) && node.get('children').size
 
   let res = [(<rect
       key="rect"
@@ -28,9 +30,9 @@ const Presentational = props => {
       height={node_dims.dy}
       onClick={(e) => {e.stopPropagation(); props.setDisplayRoot(props.node_sequence)}}
       onMouseOver={() => {props.setFocus(props.node_sequence, node_dims)}}
-      style={{"fill": is_parent ? typeOf({children:["-1"], name:''}).color : typeOf(node).color, "opacity": opacity, "display" : display}}></rect>)]
+      style={{"fill": is_parent ? typeOf(mkDummyParent()).color : typeOf(node).color, "opacity": opacity, "display" : display}}></rect>)]
 
-  if(!(node.depth) && props.isZoomed) res.push(<text
+  if(!(node.get('depth')) && props.isZoomed) res.push(<text
     x={node_dims.dx/2}
     y={node_dims.dy/2}
     dx="0"

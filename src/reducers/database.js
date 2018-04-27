@@ -95,7 +95,8 @@ function bundle(state) {
     size: () => state.get('nb_update'),
     max_depth: () => state.get('max_depth'),
     parent_path: () => state.get('parent_path').toArray(),
-    getByID: (id) => state.get('tree').get(id).toJS(),
+    // getByID: (id) => {console.time("getting ", id) ; let res = state.get('tree').get(id); console.timeEnd("getting ", id) ; return res},
+    getByID: (id) => state.get('tree').get(id),
     getIDList: () => TT.getIdList(state.get('tree')),
     getRootIDs: () => TT.getRootIdArray(state.get('tree'))
   }

@@ -5,16 +5,18 @@ import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 
 import { typeOf, icicle_dims } from 'components/icicle'
 
+import { mkDummyParent } from 'table-tree'
+
 import { tr } from 'dict'
 
 const Presentational = props => {
   let res
 
   if(props.isFocused) {
-    let text = makeSizeString(props.node.content.size, props.total_size)
+    let text = makeSizeString(props.node.get('children').get('size'), props.total_size)
     let mode = computeRulerTextDisplayMode(props.dims.x + props.dims.dx/2, text.length, icicle_dims.w, 4.2)
 
-    let is_parent = props.isZoomed && props.display_root.includes(props.node_id) && props.node.children.length
+    let is_parent = props.isZoomed && props.display_root.includes(props.node_id) && props.node.get('children').size
 
 
     res = (<g><rect
@@ -25,7 +27,7 @@ const Presentational = props => {
       height="0.3em"
       onClick={(e) => {e.stopPropagation()}}
       onMouseOver={() => {}}
-      style={{"fill":  is_parent ? typeOf({children:["-1"], name:''}).color : typeOf(props.node).color}}>
+      style={{"fill":  is_parent ? typeOf(mkDummyParent()).color : typeOf(props.node).color}}>
     </rect>
     <text
     x={computeTextPosition(props.dims.x, props.dims.dx, icicle_dims.w, mode)}
@@ -106,7 +108,7 @@ const mapStateToProps = state => {
 
   let node_id = icicle_state.hover_sequence()[icicle_state.hover_sequence().length - 1]
   let node = (icicle_state.isFocused() ? database.getByID(node_id) : {})
-  let total_size = database.getByID(database.getRootIDs()[0]).content.size
+  let total_size = database.getByID(database.getRootIDs()[0]).get('content').get('size')
 
 	return {
 		dims: icicle_state.hover_dims(),

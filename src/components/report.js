@@ -6,6 +6,8 @@ import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 import { typeOf } from 'components/icicle'
 import { makeSizeString } from 'components/ruler'
 
+import { mkDummyParent, mkDummyFile } from 'table-tree'
+
 import { tr } from 'dict'
 
 const Presentational = props => {
@@ -16,22 +18,22 @@ const Presentational = props => {
     let type = typeOf(node)
     let is_folder = type.label === tr("Folder") || type.label === tr("Root")
 
-    let is_parent = props.isZoomed && props.display_root.includes(props.node_id) && props.node.children.length
+    let is_parent = props.isZoomed && props.display_root.includes(props.node_id) && props.node.get('children').size
 
     icon = <i className={(is_folder ? "fi-folder" : "fi-page")} style={{
       'fontSize': '2em',
       'width': '1.2em',
-      'color': is_parent ? typeOf({children:["-1"], name:''}).color : typeOf(node).color,
+      'color': is_parent ? typeOf(mkDummyParent()).color : typeOf(node).color,
       'display': 'table-cell',
       'verticalAlign':'middle'}}/>
-    name = <span style={{'fontWeight':'bold', 'display': 'table-cell', 'verticalAlign':'middle', 'horizontalmarginLeft':'1em'}}>{node.name}</span>
-    size = <span>{makeSizeString(node.content.size, props.total_size)}</span>
+    name = <span style={{'fontWeight':'bold', 'display': 'table-cell', 'verticalAlign':'middle', 'horizontalmarginLeft':'1em'}}>{node.get('name')}</span>
+    size = <span>{makeSizeString(node.get('content').get('size'), props.total_size)}</span>
   }
   else{
     icon = <i className="fi-page-multiple" style={{
       'fontSize': '2em',
       'width': '1.2em',
-      'color': typeOf({children:[], name:''}).color,
+      'color': typeOf(mkDummyFile()).color,
       'display': 'table-cell',
       'verticalAlign':'middle'}}/>
     name = <span style={{'fontWeight':'bold', 'display': 'table-cell', 'verticalAlign':'middle', 'horizontalmarginLeft':'1em'}}>{tr("Folder of file's name")}</span>
@@ -51,7 +53,7 @@ const mapStateToProps = state => {
 
   let node_id = icicle_state.hover_sequence()[icicle_state.hover_sequence().length - 1]
   let node = (icicle_state.isFocused() ? database.getByID(node_id) : {})
-  let total_size = database.getByID(database.getRootIDs()[0]).content.size
+  let total_size = database.getByID(database.getRootIDs()[0]).get('content').get('size')
 
 	return {
     display_root: icicle_state.display_root(),

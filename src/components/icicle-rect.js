@@ -11,47 +11,60 @@ import { mkDummyParent } from 'table-tree'
 
 import { tr } from 'dict'
 
-const Presentational = props => {
-	let node = props.node
-	let node_dims = props.dims
-	let node_id = props.node_id
+class Presentational extends React.Component {
+  constructor (props) {
+    super(props)
+  	this.node = props.node
+  	this.node_dims = props.dims
+  	this.node_id = props.node_id
+    this.node_sequence = props.node_sequence
+    this.isZoomed = props.isZoomed
 
-	let opacity = props.hover_sequence.includes(-1) ? 1 : (props.hover_sequence.includes(node_id) ? 1 : 0.3)
-	let display = node.get('depth') ? "" : "none"
+  	this.opacity = props.isFocused ? (props.isInHoverSeq ? 1 : 0.3) : 1
+    console.log("coucou ", props.isFocused ? (props.isInHoverSeq ? 1 : 0.3) : 1, " ", this.opacity)
+    this.display = this.node.get('depth') ? "" : "none"
 
-  let is_parent = props.isZoomed && props.display_root.includes(node_id) && node.get('children').size
+    this.is_parent = props.isZoomed && props.display_root.includes(this.node_id) && this.node.get('children').size
+  }
 
-  let res = [(<rect
-      key="rect"
-      className="node"
-      x={node_dims.x}
-      y={node_dims.y}
-      width={node_dims.dx}
-      height={node_dims.dy}
-      onClick={(e) => {e.stopPropagation(); props.setDisplayRoot(props.node_sequence)}}
-      onMouseOver={() => {props.setFocus(props.node_sequence, node_dims)}}
-      style={{"fill": is_parent ? typeOf(mkDummyParent()).color : typeOf(node).color, "opacity": opacity, "display" : display}}></rect>)]
+  render() {
+    let res = [(<rect
+        key="rect"
+        className="node"
+        x={this.node_dims.x}
+        y={this.node_dims.y}
+        width={this.node_dims.dx}
+        height={this.node_dims.dy}
+        onClick={(e) => {e.stopPropagation(); this.props.setDisplayRoot(this.node_sequence)}}
+        onMouseOver={() => {this.props.setFocus(this.node_sequence, this.node_dims)}}
+        style={{"fill": this.is_parent ? typeOf(mkDummyParent()).color : typeOf(this.node).color, "opacity": this.opacity, "display" : this.display}}></rect>)]
 
-  if(!(node.get('depth')) && props.isZoomed) res.push(<text
-    x={node_dims.dx/2}
-    y={node_dims.dy/2}
-    dx="0"
-    dy={node_dims.dy/4}
-    textAnchor="middle"
-    stroke="none"
-    onClick={(e) => {e.stopPropagation(); props.setNoDisplayRoot() ;}}
-    key="text">{tr("Back to root")}</text>)
+    if(!(this.node.get('depth')) && this.isZoomed) res.push(<text
+      x={this.node_dims.dx/2}
+      y={this.node_dims.dy/2}
+      dx="0"
+      dy={this.node_dims.dy/4}
+      textAnchor="middle"
+      stroke="none"
+      onClick={(e) => {e.stopPropagation(); this.props.setNoDisplayRoot() ;}}
+      key="text">{tr("Back to root")}</text>)
 
-  return res;
+    return res;
+  }
 }
 
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
 	let icicle_state = selectIcicleState(state)
+  let hover_sequence = icicle_state.hover_sequence()
+
+  let isInHoverSeq = hover_sequence.includes(props.node_id)
+
 	return {
-		hover_sequence: icicle_state.hover_sequence(),
     display_root: icicle_state.display_root(),
-    isZoomed: icicle_state.isZoomed()
+    isZoomed: icicle_state.isZoomed(),
+    isFocused: icicle_state.isFocused(),
+    isInHoverSeq
 	}
 }
 

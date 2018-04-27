@@ -5,6 +5,7 @@ import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 import { setNoDisplayRoot } from 'reducers/icicle-state'
 
 import IcicleRect from 'components/icicle-rect'
+import {positionNodes} from 'components/node-placer'
 
 import { tr } from 'dict'
 
@@ -38,10 +39,11 @@ class Presentational extends React.Component {
     super(props)
     this.root_id = props.root_id
     this.max_tree_depth = props.max_depth
+    this.isZoomed = this.props.isZoomed
 
     this.getByID = props.getByID
 
-    this.positionNodes = this.positionNodes.bind(this)
+    this.plot = this.plot.bind(this)
 
     console.log("profondeur : ", this.max_tree_depth)
 
@@ -49,9 +51,35 @@ class Presentational extends React.Component {
   }
 
 
-  plot(root, root_seq, position, tree_depth) {
+  plot(root, root_seq, tree_depth) {
     console.time("render icicle")
-    let icicle = position(root, root_seq, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [])
+    let icicle = this.positionNodes(root, root_seq, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [], this.getByID, this.isZoomed)
+
+    // let icicle = <NodePlacer
+    //   root_id={root}
+    //   root_seq={root_seq}
+    //   left="0"
+    //   right={icicle_dims.w}
+    //   top="0"
+    //   bottom={icicle_dims.h}
+    //   tree_depth={tree_depth}
+    //   sequence={[]}
+    //   getByID={this.getByID}
+    //   isZoomed={this.isZoomed} />;
+
+    // let icicle = positionNodes({
+    //       root_id: root,
+    //       root_seq,
+    //       left: 0,
+    //       right: icicle_dims.w,
+    //       top: 0,
+    //       bottom: icicle_dims.h,
+    //       tree_depth,
+    //       sequence: [],
+    //       getByID: this.getByID,
+    //       isZoomed: this.isZoomed
+    //     })
+
     console.timeEnd("render icicle")
     return icicle
   }
@@ -123,7 +151,7 @@ class Presentational extends React.Component {
       <div id='chart' style={icicle_style}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
           <g id="container">
-            {this.plot(this.props.root_id, (this.props.isZoomed ? this.props.display_root : []), this.positionNodes, this.max_tree_depth + 1)}
+            {this.plot(this.props.root_id, (this.props.isZoomed ? this.props.display_root : []), this.max_tree_depth + 1)}
           </g>
         </svg>
       </div>)

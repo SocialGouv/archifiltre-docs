@@ -50,6 +50,13 @@ class Presentational extends React.Component {
     setNoDisplayRoot()
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    // if(nextProps.hover_sequence !== this.props.hover_sequence) return true;
+    
+    if(nextProps.display_root !== this.props.display_root) return true;
+    return false;
+  }
+
 
   plot(root, root_seq, tree_depth) {
     console.time("render icicle")
@@ -242,7 +249,9 @@ const mapStateToProps = state => {
     getByID: database.getByID,
     root_id: database.getRootIDs()[0],
     display_root: icicle_state.display_root(),
-    isZoomed: icicle_state.isZoomed()
+    isZoomed: icicle_state.isZoomed(),
+    isFocused: icicle_state.isFocused(),
+    hover_sequence: icicle_state.hover_sequence()
   }
 }
  

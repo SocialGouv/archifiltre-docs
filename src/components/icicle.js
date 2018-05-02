@@ -51,9 +51,7 @@ class Presentational extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log("coucou")
     // if(nextProps.hover_sequence !== this.props.hover_sequence) return true;
-
     if(nextProps.display_root !== this.props.display_root) return true;
     return false;
   }

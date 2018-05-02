@@ -30,7 +30,8 @@ class Presentational extends React.Component {
   }
 
   render() {
-    console.time("updating")
+    console.log("updating")
+    // console.time("updating")
     let opacity = this.props.isFocused ? (this.props.isInHoverSeq ? 1 : 0.3) : 1
     let display = this.node.get('depth') ? "" : "none"
     let is_parent = this.props.isZoomed && this.props.display_root.includes(this.node_id) && this.node.get('children').size
@@ -57,7 +58,7 @@ class Presentational extends React.Component {
       onClick={(e) => {e.stopPropagation(); this.props.setNoDisplayRoot() ; this.props.setNoFocus() ;}}
       key="text">{tr("Back to root")}</text>);
 
-    console.timeEnd("updating")
+    // console.timeEnd("updating")
 
     return res;
   }

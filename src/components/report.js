@@ -53,7 +53,7 @@ const mapStateToProps = state => {
 
   let node_id = icicle_state.hover_sequence()[icicle_state.hover_sequence().length - 1]
   let node = (icicle_state.isFocused() ? database.getByID(node_id) : {})
-  let total_size = database.getByID(database.getRootIDs()[0]).get('content').get('size')
+  let total_size = database.volume()
 
 	return {
     display_root: icicle_state.display_root(),

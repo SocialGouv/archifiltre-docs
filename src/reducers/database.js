@@ -75,7 +75,8 @@ const State = Record({
   root_id:'',
   parent_path:List(),
   nb_update:0,
-  max_depth:0
+  max_depth:0,
+  volume:0
 })
 
 
@@ -98,7 +99,9 @@ function bundle(state) {
     // getByID: (id) => {console.time("getting ", id) ; let res = state.get('tree').get(id); console.timeEnd("getting ", id) ; return res},
     getByID: (id) => state.get('tree').get(id),
     getIDList: () => TT.getIdList(state.get('tree')),
-    getRootIDs: () => TT.getRootIdArray(state.get('tree'))
+    getRootIDs: () => TT.getRootIdArray(state.get('tree')),
+    volume: () => state.get('volume'),
+    root_id: () => state.get('root_id')
   }
 }
 
@@ -119,6 +122,8 @@ export const create = mkA((path,size) => state => {
 
   state = state.update('nb_update', a=>a+1)
   state = state.update('max_depth', a=>Math.max(a, path.length))
+  state = state.update('volume', a=>a+size)
+
   return state
 })
 

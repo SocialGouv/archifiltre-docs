@@ -32,7 +32,7 @@ workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
 workbox.routing.registerRoute(
-  /.*googleapis|.*jsdelivr|.*gstatic/,
+  /.*googleapis|.*jsdelivr|.*gstatic|.*cloudflare/,
   workbox.strategies.staleWhileRevalidate({
     plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]})]
   }),

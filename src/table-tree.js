@@ -119,7 +119,7 @@ export default function(update_, compare_, toCsvList_) {
   }
 
   const getIdList = (map) => {
-    return map.keySeq().toArray()
+    return map.keySeq()
   }
 
 

@@ -51,8 +51,9 @@ class Presentational extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    console.log("coucou")
     // if(nextProps.hover_sequence !== this.props.hover_sequence) return true;
-    
+
     if(nextProps.display_root !== this.props.display_root) return true;
     return false;
   }
@@ -245,9 +246,8 @@ const mapStateToProps = state => {
 
   return {
     max_depth: database.max_depth(),
-    node_ids: database.getIDList(),
     getByID: database.getByID,
-    root_id: database.getRootIDs()[0],
+    root_id: database.root_id(),
     display_root: icicle_state.display_root(),
     isZoomed: icicle_state.isZoomed(),
     isFocused: icicle_state.isFocused(),

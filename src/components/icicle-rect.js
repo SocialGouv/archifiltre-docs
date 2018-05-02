@@ -30,7 +30,7 @@ class Presentational extends React.Component {
   }
 
   render() {
-    console.log("updating")
+    // console.log("updating")
     // console.time("updating")
     let opacity = this.props.isFocused ? (this.props.isInHoverSeq ? 1 : 0.3) : 1
     let display = this.node.get('depth') ? "" : "none"

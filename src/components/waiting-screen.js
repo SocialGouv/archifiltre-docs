@@ -33,6 +33,7 @@ class Presentational extends React.Component {
       <div className='grid-y grid-frame align-center'>
         <div className='cell'>
           <TextAlignCenter>
+            <img src='imgs/loading.gif' style={{'width': '50%', 'opacity': '0.3'}}/>
             <p>{tr("Files loaded")}: {this.props.nb_files}</p>
             <p>{tr("Errors")} : {this.props.nb_errors}</p>
           </TextAlignCenter>

@@ -71,6 +71,7 @@ function filterPath(parent,curr) {
 
 
 const State = Record({
+  update_call_stack:List(),
   tree:null,
   root_id:'',
   parent_path:List(),
@@ -117,12 +118,25 @@ export default reducer
 export const create = mkA((path,size) => state => {
   const content = new Content({size})
   path = path.split('/')
-  state = state.update('tree', tree =>
-    TT.update(path, content, state.get('root_id'),tree))
+
+  state = state.update('update_call_stack',
+    a=>a.push(
+      tree =>TT.update(path, content, state.get('root_id'),tree)))
 
   state = state.update('nb_update', a=>a+1)
   state = state.update('max_depth', a=>Math.max(a, path.length))
   state = state.update('volume', a=>a+size)
+
+  return state
+})
+
+export const makeTree = mkA(() => state => {
+  state = state.update('tree', tree => {
+    tree = tree.asMutable()
+    tree = state.get('update_call_stack')
+      .reduce((acc, val) => val(acc), tree)
+    return tree.asImmutable()
+  })
 
   return state
 })

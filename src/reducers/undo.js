@@ -72,5 +72,8 @@ export default function undoReducer(fRedux) {
   const undo = () => {return {type:undo_type}}
   const redo = () => {return {type:redo_type}}
 
-  return { commit, undo, redo, reducer }
+  const hasAPast = () => pastC.length !== 0
+  const hasAFuture = () => futureC.length !== 0
+
+  return { commit, undo, redo, reducer, hasAPast, hasAFuture }
 }

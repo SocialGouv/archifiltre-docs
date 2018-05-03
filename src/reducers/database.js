@@ -13,7 +13,8 @@ const type = 'cheapExp/database'
 
 
 const Content = Record({
-  size:0
+  size:0,
+  last_modified:null
 })
 
 const compare = (a,b) => {
@@ -115,13 +116,18 @@ const { mkA, reducer } = duck(type, initialState, bundle)
 
 export default reducer
 
-export const create = mkA((path,size) => state => {
-  const content = new Content({size})
+export const create = mkA((path,size,last_modified) => state => {
+  const content = new Content({
+    size,
+    last_modified
+  })
   path = path.split('/')
+  const root_id = state.get('root_id')
 
-  state = state.update('update_call_stack',
-    a=>a.push(
-      tree =>TT.update(path, content, state.get('root_id'),tree)))
+  state = state.update(
+    'update_call_stack',
+    a=>a.push(tree =>TT.update(path, content, root_id, tree))
+  )
 
   state = state.update('nb_update', a=>a+1)
   state = state.update('max_depth', a=>Math.max(a, path.length))
@@ -148,13 +154,20 @@ export const sort = mkA(() => state => {
 })
 
 export const fromCsv = mkA((csv) => state => {
-  state = state.update('tree', tree => {
-    csv.split('\n').forEach(line => {
-      const {path,size} = csvLineToVal(line)
-      const content = new Content({size})
-      tree = TT.update(path, content, state.get('root_id'),tree)
-    })
-    return tree
+  csv.split('\n').forEach(line => {
+    let {path,size} = csvLineToVal(line)
+    size = Number(size)
+    const content = new Content({size})
+    const root_id = state.get('root_id')
+
+    state = state.update(
+      'update_call_stack',
+      a=>a.push(tree =>TT.update(path, content, root_id, tree))
+    )
+
+    state = state.update('nb_update', a=>a+1)
+    state = state.update('max_depth', a=>Math.max(a, path.length))
+    state = state.update('volume', a=>a+size)
   })
   return state
 })

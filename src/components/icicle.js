@@ -51,7 +51,6 @@ class Presentational extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // if(nextProps.hover_sequence !== this.props.hover_sequence) return true;
     if(nextProps.display_root !== this.props.display_root) return true;
     return false;
   }
@@ -60,32 +59,6 @@ class Presentational extends React.Component {
   plot(root, root_seq, tree_depth) {
     console.time("render icicle")
     let icicle = this.positionNodes(root, root_seq, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [], this.getByID, this.isZoomed)
-
-    // let icicle = <NodePlacer
-    //   root_id={root}
-    //   root_seq={root_seq}
-    //   left="0"
-    //   right={icicle_dims.w}
-    //   top="0"
-    //   bottom={icicle_dims.h}
-    //   tree_depth={tree_depth}
-    //   sequence={[]}
-    //   getByID={this.getByID}
-    //   isZoomed={this.isZoomed} />;
-
-    // let icicle = positionNodes({
-    //       root_id: root,
-    //       root_seq,
-    //       left: 0,
-    //       right: icicle_dims.w,
-    //       top: 0,
-    //       bottom: icicle_dims.h,
-    //       tree_depth,
-    //       sequence: [],
-    //       getByID: this.getByID,
-    //       isZoomed: this.isZoomed
-    //     })
-
     console.timeEnd("render icicle")
     return icicle
   }

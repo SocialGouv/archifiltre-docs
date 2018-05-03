@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 
 import { setParentPath } from 'reducers/database'
-import { setNoFocus } from 'reducers/icicle-state'
+import { setNoFocus, unlock } from 'reducers/icicle-state'
 
 import ExportButton from 'components/export-button'
 import ReinitButton from 'components/reinit-button'
@@ -42,7 +42,7 @@ const Presentational = props => {
       </div>
         <div className="grid-x grid-frame" id='main'>
           <div
-            onClick={(e) => {props.setNoFocus();}}
+            onClick={(e) => {props.unlock(); props.setNoFocus();}}
             className="cell small-8"
           >
             <Icicle display_root={props.display_root}/>
@@ -71,6 +71,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     setNoFocus: (...args) => dispatch((setNoFocus(...args))),
+    unlock: (...args) => dispatch((unlock(...args))),
     setParentPath: (...args) => dispatch(setParentPath(...args))
   }
 }

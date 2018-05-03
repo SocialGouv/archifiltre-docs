@@ -33,6 +33,7 @@ const Presentational = props => {
       'display': 'table-cell',
       'paddingLeft': '0.5em',
       'verticalAlign':'middle'}}/>);
+
     name = (<span style={{'fontWeight':'bold'}} className={edit_hover_container}>
         <RIEInput
         value={node.get('display_name')}
@@ -40,6 +41,7 @@ const Presentational = props => {
         propName='new_display_name' />
         &ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} />
       </span>);
+
     real_name = (<span style={{'fontStyle':'italic', 'visibility': (node.get('name') !== node.get('display_name') ? '' : 'hidden')}}>
       ({node.get('name')})</span>);
   }
@@ -52,7 +54,9 @@ const Presentational = props => {
       'display': 'table-cell',
       'paddingLeft': '0.5em',
       'verticalAlign':'middle'}}/>);
+
     name = (<span style={{'fontWeight':'bold'}}>{tr("Folder of file's name")}</span>);
+
     real_name = (<span style={{'fontStyle':'italic'}}>{tr("Folder of file's real name")}</span>);
   }
 
@@ -70,7 +74,9 @@ const mapStateToProps = state => {
 	let icicle_state = selectIcicleState(state)
   let database = selectDatabase(state)
 
-  let node_id = icicle_state.hover_sequence()[icicle_state.hover_sequence().length - 1]
+  let sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
+
+  let node_id = sequence[sequence.length - 1]
   let node = (icicle_state.isFocused() ? database.getByID(node_id) : {})
   let total_size = database.volume()
 

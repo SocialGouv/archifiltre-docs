@@ -6,6 +6,7 @@ import { Map, Record, List } from 'immutable'
 
 const Entry = Record({
   name:'',
+  display_name:'',
   content:null,
   children:List(),
   parent:null,
@@ -65,6 +66,7 @@ export default function(update_, compare_, toCsvList_) {
       path = path.slice(1)
       const child = new Entry({
         name,
+        display_name: name,
         content,
         parent:id,
         depth: map.get(id).get('depth')+1

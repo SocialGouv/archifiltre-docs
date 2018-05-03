@@ -144,3 +144,11 @@ export const reInit = mkA(() => state => initialState)
 export const setParentPath = mkA((parent_path) => state =>
   state.set('parent_path', List(parent_path))
 )
+
+export const editEntry = mkA((id, entry_name, new_entry_value) => state => {
+  state = state.update('tree', tree =>
+    tree.update(id, node =>
+      node.update(entry_name, a => new_entry_value)));
+
+  return state
+})

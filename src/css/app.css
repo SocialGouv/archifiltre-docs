@@ -1,4 +1,9 @@
-
+.edit_hover_container .edit_hover_pencil{
+  visibility:hidden;
+}
+.edit_hover_container:hover .edit_hover_pencil{
+ visibility:visible;
+}
 
 body {
   -webkit-background-size: cover;

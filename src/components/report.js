@@ -1,17 +1,23 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { RIEInput } from 'riek'
+// import _ from 'lodash'
+
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
+import { editEntry } from 'reducers/database'
 
 import { typeOf } from 'components/icicle'
 import { makeSizeString } from 'components/ruler'
 
 import { mkDummyParent, mkDummyFile } from 'table-tree'
 
+import { edit_hover_container, edit_hover_pencil } from 'css/app.css'
+
 import { tr } from 'dict'
 
 const Presentational = props => {
-  let icon, name, size
+  let icon, name, real_name
 
   if(props.isFocused) {
     let node = props.node
@@ -20,29 +26,42 @@ const Presentational = props => {
 
     let is_parent = props.isZoomed && props.display_root.includes(props.node_id) && props.node.get('children').size
 
-    icon = <i className={(is_folder ? "fi-folder" : "fi-page")} style={{
-      'fontSize': '2em',
-      'width': '1.2em',
+    icon = (<i className={(is_folder ? "fi-folder" : "fi-page")} style={{
+      'fontSize': '3em',
+      'width': '1.7em',
       'color': is_parent ? typeOf(mkDummyParent()).color : typeOf(node).color,
       'display': 'table-cell',
-      'verticalAlign':'middle'}}/>
-    name = <span style={{'fontWeight':'bold', 'display': 'table-cell', 'verticalAlign':'middle', 'horizontalmarginLeft':'1em'}}>{node.get('name')}</span>
-    size = <span>{makeSizeString(node.get('content').get('size'), props.total_size)}</span>
+      'paddingLeft': '0.5em',
+      'verticalAlign':'middle'}}/>);
+    name = (<span style={{'fontWeight':'bold'}} className={edit_hover_container}>
+        <RIEInput
+        value={node.get('display_name')}
+        change={(n) => {props.editEntry(props.node_id, 'display_name', n['new_display_name'])}}
+        propName='new_display_name' />
+        &ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} />
+      </span>);
+    real_name = (<span style={{'fontStyle':'italic', 'visibility': (node.get('name') !== node.get('display_name') ? '' : 'hidden')}}>
+      ({node.get('name')})</span>);
   }
+
   else{
-    icon = <i className="fi-page-multiple" style={{
-      'fontSize': '2em',
-      'width': '1.2em',
+    icon = (<i className="fi-page-multiple" style={{
+      'fontSize': '3em',
+      'width': '1.7em',
       'color': typeOf(mkDummyFile()).color,
       'display': 'table-cell',
-      'verticalAlign':'middle'}}/>
-    name = <span style={{'fontWeight':'bold', 'display': 'table-cell', 'verticalAlign':'middle', 'horizontalmarginLeft':'1em'}}>{tr("Folder of file's name")}</span>
-    size = <span>{tr("Size") + " : " + tr("absolute") + " | " + tr("percentage of the whole")}</span>
+      'paddingLeft': '0.5em',
+      'verticalAlign':'middle'}}/>);
+    name = (<span style={{'fontWeight':'bold'}}>{tr("Folder of file's name")}</span>);
+    real_name = (<span style={{'fontStyle':'italic'}}>{tr("Folder of file's real name")}</span>);
   }
 
   return (
     <div style={{"opacity": (props.isFocused ? 1 : 0.3), 'display': 'table', 'width':'100%'}}>
-      {icon}{name}
+      {icon}
+      <span style={{'display': 'table-cell', 'verticalAlign':'middle', 'lineHeight':'1.25em'}}>
+        {name}<br />{real_name}
+      </span>
     </div>
       );
 }
@@ -66,7 +85,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
- 	return {}
+ 	return {
+    editEntry: (...args) => dispatch((editEntry(...args))),
+  }
 }
 
 

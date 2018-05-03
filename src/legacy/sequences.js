@@ -199,7 +199,7 @@ export function plot(csv_string, setParentPath, parent_path) {
       .style("opacity", 1)
       .on("mouseover", mouseover)
       // .on("dblclick", onDoubleClickHandler)
-      .on("click", function(d){event.stopPropagation(); clickBalancer(d);});
+      .on("click", function(d){d3.event.stopPropagation(); clickBalancer(d);});
 
     node.append("text")
       .attr("class", function(d) { return d.depth ? "node-text" : null; })
@@ -221,7 +221,7 @@ export function plot(csv_string, setParentPath, parent_path) {
       .text(function(d) {if(d.name.length*font_width < d.dx){ return smartClip(d.name, d.dx, font_width); } else { return smartClip(d.name, d.dx, 5); } })
       // .on("dblclick", onDoubleClickHandler)
       .on("mouseover", mouseover)
-      .on("click", function(d){event.stopPropagation(); clickBalancer(d);});
+      .on("click", function(d){d3.event.stopPropagation(); clickBalancer(d);});
 
 
 

@@ -127,6 +127,12 @@ export const create = mkA((path,size) => state => {
   return state
 })
 
+export const sort = mkA(() => state => {
+  state = state.update('tree', tree => TT.sort(state.get('root_id'), tree))
+
+  return state
+})
+
 export const fromCsv = mkA((csv) => state => {
   state = state.update('tree', tree => {
     csv.split('\n').forEach(line => {

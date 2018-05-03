@@ -58,6 +58,7 @@ class Presentational extends React.Component {
         width={this.props.dims.dx}
         height={this.props.dims.dy}
         onClick={(e) => {e.stopPropagation(); this.props.lock(this.props.node_sequence, this.props.dims)}}
+        onDoubleClick={() => {this.props.setDisplayRoot(this.props.node_sequence)}}
         // onClick={(e) => {e.stopPropagation(); this.props.setDisplayRoot(this.props.node_sequence)}}
         onMouseOver={() => {this.props.setFocus(this.props.node_sequence, this.props.dims, this.props.isLocked)}}
         style={{"fill": fill, "opacity": opacity, "display" : display}}></rect>)]

@@ -15,11 +15,14 @@ import CtrlZ from 'components/ctrl-z'
 
 import { tr } from 'dict'
 
+const grid_style = {
+  padding: '0em 5em'
+}
+
 const Presentational = props => {
   if (props.started === false && props.finished === false) {
     return (
-      <div className='grid-y grid-padding-x grid-frame align-center'>
-        <CtrlZ/>
+      <div className='grid-y grid-padding-x grid-frame align-center' style={grid_style}>
         <div className='cell small-8'>
           <FolderDropzone/>
         </div>
@@ -36,7 +39,6 @@ const Presentational = props => {
   } else {
     return (
       <div className='grid-y grid-padding-x grid-frame align-center'>
-        <CtrlZ/>
         <div className='cell small-12'>
           <WorkSpace />
         </div>

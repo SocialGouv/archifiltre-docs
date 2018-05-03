@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 
+import { mkB } from 'components/button'
 import { undo, redo } from 'reducers/root-reducer'
 
 
@@ -28,9 +29,28 @@ class Presentational extends React.Component {
   }
 
   render() {
-    return (
-      <div></div>
-    )
+    if (this.props.visible) {
+      return (
+        <div>
+          <div className='grid-x grid-padding-x'>
+            <div className='cell small-6'>
+            {
+              mkB(this.props.undo,'<=')
+            }
+            </div>
+            <div className='cell small-6'>
+            {
+              mkB(this.props.redo,'=>')
+            }
+            </div>
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div></div>
+      )
+    }
   }
 }
 

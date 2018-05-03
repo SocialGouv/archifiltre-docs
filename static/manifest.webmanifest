@@ -1,0 +1,21 @@
+{
+  "name": "archifiltre Progressive Web App",
+  "short_name": "archifiltre",
+  "description": "Your files and folders, as you've never seen them.",
+  "icons": [
+    {
+      "src": "imgs/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "imgs/favicon144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/index.html",
+  "display": "fullscreen",
+  "theme_color": "#B12A34",
+  "background_color": "#B12A34"
+}

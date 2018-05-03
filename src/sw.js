@@ -33,8 +33,8 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
 workbox.routing.registerRoute(
   /.*googleapis|.*jsdelivr|.*gstatic|.*cloudflare/,
-  workbox.strategies.staleWhileRevalidate({
-    plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]})]
+  workbox.strategies.cacheFirst({
+    plugins: [new workbox.cacheableResponse.Plugin({"statuses":[200]})]
   }),
   'GET'
 );

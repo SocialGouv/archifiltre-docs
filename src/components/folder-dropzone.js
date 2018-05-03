@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import * as Folder from 'folder'
-import { create, fromCsv } from 'reducers/database'
+import { create, fromCsv, sort } from 'reducers/database'
 import { startToLoadFiles, finishedToLoadFiles } from 'reducers/app-state'
 import { logError } from 'reducers/log-error'
 import { commit } from 'reducers/root-reducer'
@@ -38,6 +38,7 @@ class Presentational extends React.Component {
   handleDrop (e) {
     e.preventDefault()
     Folder.asyncHandleDrop(e,this.props.create,this.props.fromCsv,this.props.logError)
+          .then(this.props.sort)
           .then(this.props.finishedToLoadFiles)
     this.props.startToLoadFiles()
   }
@@ -73,6 +74,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     create: (...args) => dispatch(create(...args)),
+    sort: (...args) => dispatch(sort(...args)),
     fromCsv: (...args) => dispatch(fromCsv(...args)),
     logError: (...a) => dispatch(logError(...a)),
     startToLoadFiles: (...args) => dispatch(startToLoadFiles(...args)),

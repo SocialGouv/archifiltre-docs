@@ -77,7 +77,6 @@ export default function(update_, compare_, toCsvList_) {
         map = map.set(child_id, child)
         map = map.update(id, a=>updateChildren(child_id, a))
       }
-      map = map.update(id, a=>sortChildren(map,a))
       return updateRec(path, content, child_id, map)
     }
   }
@@ -91,6 +90,13 @@ export default function(update_, compare_, toCsvList_) {
     return map
   }
 
+  const sort = (id, map) => {
+    map = map.update(id, a=>sortChildren(map,a))
+
+    map.get(id).get('children').forEach(id => map = sort(id, map))
+
+    return map
+  }
 
   const init = (content) => {
     return Map({
@@ -145,6 +151,7 @@ export default function(update_, compare_, toCsvList_) {
 
   return {
     update,
+    sort,
     init,
     getRootIdArray,
     remakePath,

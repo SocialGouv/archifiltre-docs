@@ -47,6 +47,8 @@ describe('table-tree', function() {
       a = TT.update(['a','b','d'], 1, root_id, a)
       a = TT.update(['a','e','f'], 1, root_id, a)
 
+      a = TT.sort(root_id, a)
+
       a.size.should.equal(7)
       a.get(root_id).get('content').should.equal(3)
 
@@ -75,6 +77,8 @@ describe('table-tree', function() {
       a = TT.update(['a','b','c'], 1, root_id, a)
       a = TT.update(['a','b','d'], 2, root_id, a)
       a = TT.update(['a','e','f'], 4, root_id, a)
+
+      a = TT.sort(root_id, a)
 
       isSorted(root_id, a).should.equal(true)
       isSortedToTreeToJs(TT.toTree(root_id, a).toJS()).should.equal(true)
@@ -154,6 +158,8 @@ describe('table-tree', function() {
       a = TT.update(['','src','random-gen.js'], 441, root_id, a)
       a = TT.update(['','src','scheduler.js'], 931, root_id, a)
       a = TT.update(['','src','table-tree.test.js'], 2798, root_id, a)
+
+      a = TT.sort(root_id, a)
 
       isSorted(root_id, a).should.equal(true)
       isSortedToTreeToJs(TT.toTree(root_id, a).toJS()).should.equal(true)

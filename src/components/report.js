@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { RIEInput, RIETextArea } from 'riek'
+import { RIEInput, RIETextArea, RIETags } from 'riek'
 // import _ from 'lodash'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
@@ -17,7 +17,7 @@ import { edit_hover_container, edit_hover_pencil } from 'css/app.css'
 import { tr } from 'dict'
 
 const Presentational = props => {
-  let icon, name, real_name, comments_cell
+  let icon, name, real_name, tags_cell, comments_cell
 
   if(props.isFocused) {
     let node = props.node
@@ -45,12 +45,24 @@ const Presentational = props => {
     real_name = (<span style={{'fontStyle':'italic', 'visibility': (node.get('name') !== node.get('display_name') ? '' : 'hidden')}}>
       ({node.get('name')})</span>);
 
+    tags_cell = (
+      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em'}}>
+        <span style={{'fontWeight': 'bold'}}>{tr("Tags")}</span>
+        <span>&ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
+        <span style={{'fontStyle': (node.get('tags').size ? '' : 'italic')}}>
+          <RIETags
+          value={node.get('tags').size ? node.get('tags') : new Set(["Your", "Tags", "Here"])}
+          change={(n) => props.editEntry(props.node_id, 'tags', n['new_tags'])}
+          propName='new_tags'/>
+        </span>
+      </div>);
+
     comments_cell = (
-      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em'}}>
+      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
         <span style={{'fontWeight': 'bold'}}>{tr("Comments")}</span>
         <span>&ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-        <span style={{'fontStyle': (node.get('comments').length ? '' : 'italic'), 'opacity': (node.get('comments').length ? '1' : '0.6')}}>
-          <RIEInput
+        <span style={{'fontStyle': (node.get('comments').length ? '' : 'italic')}}>
+          <RIETextArea
           value={node.get('comments').length ? node.get('comments') : tr("Your text here")+"..."}
           change={(n) => {props.editEntry(props.node_id, 'comments', n['new_comments'].length ? n['new_comments'] : node.get('comments'))}}
           propName='new_comments'/>
@@ -71,15 +83,21 @@ const Presentational = props => {
 
     real_name = (<span style={{'fontStyle':'italic'}}>{tr("Folder of file's real name")}</span>);
 
+    tags_cell = (
+      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
+        <span style={{'fontWeight': 'bold'}}>{tr("Tags")}</span><br />
+        <span style={{'fontStyle':'italic'}}>{tr("Your tags here") + "..."}</span>
+      </div>);
+
     comments_cell = (
-      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em'}}>
+      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
         <span style={{'fontWeight': 'bold'}}>{tr("Comments")}</span><br />
         <span style={{'fontStyle':'italic'}}>{tr("Your text here") + "..."}</span>
       </div>);
   }
 
   return (
-    <div style={{"opacity": (props.isFocused ? 1 : 0.3), 'background': 'white', 'borderRadius': '1em'}}>
+    <div style={{"opacity": (props.isFocused ? 1 : 0.5), 'background': 'white', 'borderRadius': '1em'}}>
 
       <div className="grid-x grid-frame">
         <div className="cell small-12">
@@ -93,6 +111,7 @@ const Presentational = props => {
       </div>
 
       <div className="grid-x grid-frame">
+          {tags_cell}
           {comments_cell}
       </div>
 

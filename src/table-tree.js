@@ -8,6 +8,7 @@ const Entry = Record({
   name:'',
   display_name:'',
   comments: '',
+  tags: new Set(),
   content:null,
   children:List(),
   parent:null,

@@ -37,7 +37,7 @@ class Presentational extends React.Component {
       this.props.isLocked ?
         (this.props.isInLockSeq ?
           1 :
-          (this.props.isInHoverSeq ? 0.5 : 0.3)
+          (this.props.isInHoverSeq ? 0.6 : 0.3)
         )
       :
         (this.props.isFocused ?

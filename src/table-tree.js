@@ -7,6 +7,7 @@ import { Map, Record, List } from 'immutable'
 const Entry = Record({
   name:'',
   display_name:'',
+  comments: '',
   content:null,
   children:List(),
   parent:null,

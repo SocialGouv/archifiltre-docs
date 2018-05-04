@@ -33,13 +33,7 @@ const chart_style = {
 const Presentational = props => {
   return (
     <div>
-      <div className="grid-x grid-frame">
-        <div className="cell auto"></div>
-        <div className="cell small-12">
-          <Report />
-        </div>
-        <div className="cell auto"></div>
-      </div>
+        <Report />
         <div className="grid-x grid-frame" id='main'>
           <div
             onClick={(e) => {props.unlock(); props.setNoFocus();}}

@@ -124,11 +124,19 @@ const dict = {
     en: "Others",
     es: "Otros"
   },
+  "Level": {
+    fr: "Niveau",
+    en: "Level",
+  },
 
   // Icicle / Report
   "Folder of file's name": {
     fr: "Nom du répertoire ou fichier",
     en: "Folder of file's name"
+  },
+  "Real name": {
+    fr: "Nom réel",
+    en: "Real name"
   },
   "Size": {
     fr: "Taille",
@@ -141,6 +149,25 @@ const dict = {
   "percentage of the whole": {
     fr: "pourcentage du total",
     en: "percentage of the whole"
+  },
+  "Tags": {
+
+  },
+  "New tag": {
+    fr: "Nouveau tag",
+    en: "New tag"
+  },
+  "Comments": {
+    fr: "Commentaires",
+    en: "Comments"
+  },
+  "Your text here": {
+    fr: "Votre texte ici",
+    en: "Your text here"
+  },
+  "Your tags here": {
+    fr: "Vos tags ici",
+    en: "Your tags here"
   },
 
 

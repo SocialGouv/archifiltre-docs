@@ -48,15 +48,32 @@ class Presentational extends React.Component {
         onMouseOver={() => {this.props.setFocus(this.props.node_sequence, this.props.dims)}}
         style={{"fill": fill, "opacity": opacity, "display" : display}}></rect>)]
 
-    if(!(this.node.get('depth')) && this.props.isZoomed) res.push(<text
+    if(!(this.node.get('depth')) && this.props.isZoomed){
+      res.push(<rect
+      x={this.props.dims.dx/3}
+      y="0"
+      rx="1em"
+      ry="1em"
+      width={this.props.dims.dx/3}
+      height={this.props.dims.dy*3/4}
+      stroke="none"
+      fill={typeOf(mkDummyParent()).color}
+      onClick={(e) => {e.stopPropagation(); this.props.setNoDisplayRoot() ; this.props.setNoFocus() ;}}
+      key="text" />);
+
+      res.push(<text
       x={this.props.dims.dx/2}
       y={this.props.dims.dy/2}
       dx="0"
-      dy={this.props.dims.dy/4}
+      dy="0"
       textAnchor="middle"
+      fontWeight="bold"
+      letterSpacing="0.05em"
       stroke="none"
+      fill="white"
       onClick={(e) => {e.stopPropagation(); this.props.setNoDisplayRoot() ; this.props.setNoFocus() ;}}
       key="text">{tr("Back to root")}</text>);
+    }
 
     // console.timeEnd("updating")
 

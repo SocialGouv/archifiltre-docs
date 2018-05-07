@@ -12,7 +12,7 @@ import { makeSizeString } from 'components/ruler'
 
 import { mkDummyParent, mkDummyFile } from 'table-tree'
 
-import { edit_hover_container, edit_hover_pencil } from 'css/app.css'
+import { edit_hover_container, edit_hover_pencil, tags, comments } from 'css/app.css'
 
 import { tr } from 'dict'
 
@@ -49,10 +49,12 @@ const Presentational = props => {
       <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em'}}>
         <span style={{'fontWeight': 'bold'}}>{tr("Tags")}</span>
         <span>&ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-        <span style={{'fontStyle': (node.get('tags').size ? '' : 'italic')}}>
+        <span style={{'fontStyle': (node.get('tags').size ? '' : '')}}>
           <RIETags
           value={node.get('tags').size ? node.get('tags') : new Set(["Your", "Tags", "Here"])}
           change={(n) => props.editEntry(props.node_id, 'tags', n['new_tags'])}
+          className={tags}
+          placeholder={tr("New tag")}
           propName='new_tags'/>
         </span>
       </div>);
@@ -65,6 +67,7 @@ const Presentational = props => {
           <RIETextArea
           value={node.get('comments').length ? node.get('comments') : tr("Your text here")+"..."}
           change={(n) => {props.editEntry(props.node_id, 'comments', n['new_comments'].length ? n['new_comments'] : node.get('comments'))}}
+          className={comments}
           propName='new_comments'/>
         </span>
       </div>);
@@ -81,7 +84,7 @@ const Presentational = props => {
 
     name = (<span style={{'fontWeight':'bold'}}>{tr("Folder of file's name")}</span>);
 
-    real_name = (<span style={{'fontStyle':'italic'}}>{tr("Folder of file's real name")}</span>);
+    real_name = (<span style={{'fontStyle':'italic'}}>({tr("Real name")})</span>);
 
     tags_cell = (
       <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>

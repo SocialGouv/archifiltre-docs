@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { selectDatabase, selectLogError } from 'reducers/root-reducer'
+import { selectDatabase } from 'reducers/root-reducer'
 
 import TextAlignCenter from 'components/text-align-center'
 
@@ -35,7 +35,6 @@ class Presentational extends React.Component {
           <TextAlignCenter>
             <img src='imgs/loading.gif' style={{'width': '50%', 'opacity': '0.3'}}/>
             <p>{tr("Files loaded")}: {this.props.nb_files}</p>
-            <p>{tr("Errors")} : {this.props.nb_errors}</p>
           </TextAlignCenter>
         </div>
       </div>
@@ -46,11 +45,8 @@ class Presentational extends React.Component {
 
 const mapStateToProps = state => {
   let database = selectDatabase(state)
-  let logError = selectLogError(state)
-
   return {
     nb_files: database.size(),
-    nb_errors: logError.size()
   }
 }
 

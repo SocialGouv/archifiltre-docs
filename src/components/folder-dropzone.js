@@ -2,9 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import * as Folder from 'folder'
-import { create, fromCsv, makeTree, sort } from 'reducers/database'
+import { push, fromJson, makeTree, sort } from 'reducers/database'
 import { startToLoadFiles, finishedToLoadFiles } from 'reducers/app-state'
-import { logError } from 'reducers/log-error'
 import { commit } from 'reducers/root-reducer'
 
 import TextAlignCenter from 'components/text-align-center'
@@ -25,7 +24,7 @@ class Presentational extends React.Component {
     }
 
     this.placeholder = tr('Drop a directory here!')
-    this.placeholder_st = tr('You may also drop a CSV file previously exported from Icicle.')
+    this.placeholder_st = tr('You may also drop a JSON file previously exported from Icicle.')
 
 
     this.handleDrop = this.handleDrop.bind(this)
@@ -37,7 +36,7 @@ class Presentational extends React.Component {
 
   handleDrop (e) {
     e.preventDefault()
-    Folder.asyncHandleDrop(e,this.props.create,this.props.fromCsv,this.props.logError)
+    Folder.asyncHandleDrop(e,this.props.push,this.props.fromJson,this.props.logError)
           .then(this.props.makeTree)
           .then(this.props.sort)
           .then(this.props.finishedToLoadFiles)
@@ -74,11 +73,10 @@ const mapStateToProps = state => {
  
 const mapDispatchToProps = dispatch => {
   return {
-    create: (...args) => dispatch(create(...args)),
+    push: (...args) => dispatch(push(...args)),
     makeTree: (...args) => dispatch(makeTree(...args)),
     sort: (...args) => dispatch(sort(...args)),
-    fromCsv: (...args) => dispatch(fromCsv(...args)),
-    logError: (...a) => dispatch(logError(...a)),
+    fromJson: (...args) => dispatch(fromJson(...args)),
     startToLoadFiles: (...args) => dispatch(startToLoadFiles(...args)),
     finishedToLoadFiles: (...args) => {
       dispatch(finishedToLoadFiles(...args))

@@ -135,7 +135,7 @@ const mapStateToProps = state => {
 	return {
     display_root: icicle_state.display_root(),
     isFocused: icicle_state.isFocused(),
-    isZoomed: icicle_state.isZoomed(),
+    isLocked: icicle_state.isLocked(),
     node,
     node_id,
     total_size

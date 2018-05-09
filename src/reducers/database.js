@@ -101,7 +101,8 @@ function bundle(state) {
     getIDList: () => TT.getIdList(state.get('tree')),
     getRootIDs: () => TT.getRootIdArray(state.get('tree')),
     volume: () => state.get('volume'),
-    root_id: () => state.get('root_id')
+    root_id: () => state.get('root_id'),
+    print: () => console.log(state.get('tree').toJS()),
   }
 }
 

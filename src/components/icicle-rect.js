@@ -18,17 +18,17 @@ class Presentational extends React.Component {
     // this.node_dims = props.dims
     this.node = props.node
 
-    this.shouldComponentUpdate = this.shouldComponentUpdate.bind(this)
+    // this.shouldComponentUpdate = this.shouldComponentUpdate.bind(this)
 
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if(nextProps.isFocused !== this.props.isFocused) return true;
-    if(nextProps.isInHoverSeq !== this.props.isInHoverSeq) return true;
-    if(nextProps.isInLockSeq !== this.props.isInLockSeq) return true;
-    if(nextProps.display_root !== this.props.display_root) return true;
-    return false;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if(nextProps.isFocused !== this.props.isFocused) return true;
+  //   if(nextProps.isInHoverSeq !== this.props.isInHoverSeq) return true;
+  //   if(nextProps.isInLockSeq !== this.props.isInLockSeq) return true;
+  //   if(nextProps.display_root !== this.props.display_root) return true;
+  //   return false;
+  // }
 
   render() {
     // console.log("updating")
@@ -61,6 +61,7 @@ class Presentational extends React.Component {
         onDoubleClick={() => {this.props.setDisplayRoot(this.props.node_sequence)}}
         // onClick={(e) => {e.stopPropagation(); this.props.setDisplayRoot(this.props.node_sequence)}}
         onMouseOver={() => {this.props.setFocus(this.props.node_sequence, this.props.dims, this.props.isLocked)}}
+        onMouseOut={() => {if(!(this.props.isLocked)) this.props.setNoFocus()}}
         style={{"fill": fill, "opacity": opacity, "display" : display}}></rect>)]
 
     if(!(this.node.get('depth')) && this.props.isZoomed) res.push(<text
@@ -94,7 +95,7 @@ const mapStateToProps = (state, props) => {
     isFocused: icicle_state.isFocused(),
     isLocked: icicle_state.isLocked(),
     isInHoverSeq,
-    isInLockSeq
+    isInLockSeq,
 	}
 }
 

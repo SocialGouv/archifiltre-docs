@@ -46,8 +46,11 @@ export const setSize = (s, a) => a.set('size', s)
 export const getLastModified = (a) => a.get('last_modified')
 export const setLastModified = (s, a) => a.set('last_modified', s)
 
-export const toJson = (a) => JSON.stringify(a.toJS())
+export const toJs = (a) => a.toJS()
+export const fromJs = (a) => new Content(a)
+
+export const toJson = (a) => JSON.stringify(toJs(a))
 export const fromJson = (a) => {
-  return new Content(JSON.parse(a))
+  return fromJs(JSON.parse(a))
 }
 

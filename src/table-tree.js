@@ -1,6 +1,7 @@
 
 import * as Loop from 'test/loop'
 import * as Arbitrary from 'test/arbitrary'
+import * as Cache from 'cache'
 
 import { generateRandomString } from 'random-gen'
 
@@ -229,14 +230,14 @@ export default function(C) {
     }
   }
 
-  const toCsvList = (tt) => {
+  const toStrList2 = (tt) => {
     const leaf = getTable(tt).filter(entry => entry.get('children').isEmpty())
     const mapper = (entry,id) =>
-      List.of(remakePath(id, tt).slice(1))
-        .concat(C.toCsvList(entry.get('content')))
+      List.of(remakePath(id, tt).slice(1).join('/'))
+        .concat(C.toStrList(entry.get('content')))
+    const header = List.of('path').concat(C.toStrListHeader())
     return (
-      leaf.map(mapper)
-        .reduce((acc,val) => acc.push(val), List())
+      leaf.map(mapper).reduce((acc,val) => acc.push(val), List.of(header))
     )
   }
 
@@ -299,9 +300,9 @@ export default function(C) {
     return tt
   }
 
-  const depth = (tt) => reduce((acc_array, e) => {
+  const depth = Cache.make((tt) => reduce((acc_array, e) => {
     return acc_array.reduce((a, b) => Math.max(a, b), e.get('depth'))
-  }, getRootId(tt), tt)
+  }, getRootId(tt), tt))
 
   return {
     update,
@@ -312,7 +313,7 @@ export default function(C) {
     getRootId,
     remakePath,
     getEntryById,
-    toCsvList,
+    toStrList2,
 
     toJsTree,
     fromJsTree,

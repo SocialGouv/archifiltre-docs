@@ -44,6 +44,7 @@ export const qeFromJson = a => {
 }
 
 const Fs = Record({
+  version:1,
   content_queue:List(),
   nb_push:0,
   tree:null,
@@ -78,7 +79,7 @@ export const parentPath = (state) => {
 export const getByID = (id, state) => TT.getEntryById(id, state.get('tree'))
 
 export const volume = (state) => {
-  return Content.getSize(getByID(rootId(state), state))
+  return Content.getSize(getByID(rootId(state), state).get('content'))
 }
 
 export const rootId = (state) => TT.getRootId(state.get('tree'))
@@ -131,6 +132,9 @@ export const fromJson = (json) => {
   return state
 }
 
+export const toStrList2 = (state) => {
+  return TT.toStrList2(state.get('tree'))
+}
 
 export const setParentPath = (parent_path, state) =>
   state.set('parent_path', List(parent_path))

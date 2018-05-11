@@ -16,6 +16,11 @@ describe('content', function() {
     return [M.fromJson(M.toJson(a)), a]
   })
 
+  Loop.immuEqual('(fromJs . toJs) a', () => {
+    const a = M.arbitrary()
+    return [M.fromJs(M.toJs(a)), a]
+  })
+
   Loop.equal('(getSize . setSize x) a', () => {
     const a = Arbitrary.natural()
     return [M.getSize(M.setSize(a, M.arbitrary())), a]

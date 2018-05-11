@@ -3,6 +3,7 @@ import { Map, List, Record } from 'immutable'
 import { generateRandomString } from 'random-gen'
 import duck from 'reducers/duck'
 
+import * as Cache from 'cache'
 import * as Content from 'content'
 import * as Arbitrary from 'test/arbitrary'
 import * as Loop from 'test/loop'
@@ -117,11 +118,11 @@ export const sort = (state) => {
 }
 
 
-export const toJson = (state) => {
+export const toJson = Cache.make((state) => {
   state = state.update('tree', TT.toJson)
   state = state.update('content_queue', a=>a.map(qeToJson))
   return JSON.stringify(state.toJS())
-}
+})
 
 export const fromJson = (json) => {
   let state = new Fs(JSON.parse(json))
@@ -132,9 +133,9 @@ export const fromJson = (json) => {
   return state
 }
 
-export const toStrList2 = (state) => {
+export const toStrList2 = Cache.make((state) => {
   return TT.toStrList2(state.get('tree'))
-}
+})
 
 export const setParentPath = (parent_path, state) =>
   state.set('parent_path', List(parent_path))

@@ -5,21 +5,22 @@ import { mkB } from 'components/button'
 
 import { selectDatabase } from 'reducers/root-reducer'
 
+import * as Csv from 'csv'
 import { save } from 'save'
 import { tr } from 'dict'
 
 const Presentational = props => {
   return mkB(()=>{
-    console.log('export')
-    save('my.json', props.getJson())
-  }, tr('Export'))
+    console.log('to csv')
+    save('my.csv', Csv.toStr(props.getStrList2()))
+  }, tr('to Csv'))
 }
 
 
 const mapStateToProps = state => {
   let database = selectDatabase(state)
   return {
-    getJson: database.toJson
+    getStrList2: database.toStrList2
   }
 }
 

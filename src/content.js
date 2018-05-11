@@ -35,8 +35,8 @@ export const update = (young,old) => {
 }
 
 
-export const toStrListHeader = () => List.of('size', 'last_modified')
-export const toStrList = (a) => List.of(a.get('size'), a.get('last_modified'))
+export const toStrListHeader = () => List.of('size (octet)', 'last_modified')
+export const toStrList = (a) => List.of(a.get('size'), new Date(a.get('last_modified')))
 
 
 

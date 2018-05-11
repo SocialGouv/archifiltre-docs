@@ -21,7 +21,9 @@ describe('table-tree', function() {
       return 1
     }
   }
-  const toCsvList = (a) => List.of(a)
+  const toStrList = (a) => List.of(a)
+  const column_name = 'num'
+  const toStrListHeader = () => List.of(column_name)
   const toJson = JSON.stringify
   const fromJson = JSON.parse
 
@@ -30,7 +32,8 @@ describe('table-tree', function() {
   const TT = tT({
     update,
     compare,
-    toCsvList,
+    toStrList,
+    toStrListHeader,
     toJson,
     fromJson,
     arbitrary
@@ -94,11 +97,12 @@ describe('table-tree', function() {
 
     isSortedToTreeToJs(TT.toJsTree(a)).should.equal(true)
 
-    TT.toCsvList(a).toJS()
+    TT.toStrList2(a).toJS()
       .should.deep.equal([
-        [['a', 'b', 'c'], 1],
-        [['a', 'b', 'd'], 1],
-        [['a', 'e', 'f'], 1],
+        ['path', column_name],
+        ['a/b/c', 1],
+        ['a/b/d', 1],
+        ['a/e/f', 1],
       ])
 
     TT.fromJson(TT.toJson(a)).toJS().should.deep.equal(a.toJS())

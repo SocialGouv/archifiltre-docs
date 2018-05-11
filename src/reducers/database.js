@@ -13,7 +13,8 @@ function bundle(state) {
     getByID: (id) => FileSystem.getByID(id, state),
     volume: () => FileSystem.volume(state),
     root_id: () => FileSystem.rootId(state),
-    toJson: () => FileSystem.toJson(state)
+    toJson: () => FileSystem.toJson(state),
+    toStrList2: () => FileSystem.toStrList2(state)
   }
 }
 
@@ -55,13 +56,13 @@ export const setParentPath = mkA((parent_path) => state => {
 // function bundle(state) {
 //   return {
 //     toCsv: () =>
-//       TT.toCsvList(state.get('tree'))
+//       TT.toStrList2(state.get('tree'))
 //         .filter(val=>filterPath(state.get('parent_path'), val.get(0)))
 //         .map(val=>toCsvLine([val.get(0).join('/'),val.get(1)]))
 //         .join('')
 //     ,
 //     toCsvNoFilter: () =>
-//       TT.toCsvList(state.get('tree'))
+//       TT.toStrList2(state.get('tree'))
 //         .map(val=>toCsvLine([val.get(0).join('/'),val.get(1)]))
 //         .join('')
 //     ,

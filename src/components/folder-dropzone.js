@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import * as Folder from 'folder'
-import { push, fromJson, makeTree, sort } from 'reducers/database'
+import { push, fromJson, makeTree, sort, fromLegacyCsv } from 'reducers/database'
 import { startToLoadFiles, finishedToLoadFiles } from 'reducers/app-state'
 import { commit } from 'reducers/root-reducer'
 
@@ -36,7 +36,7 @@ class Presentational extends React.Component {
 
   handleDrop (e) {
     e.preventDefault()
-    Folder.asyncHandleDrop(e,this.props.push,this.props.fromJson,this.props.logError)
+    Folder.asyncHandleDrop(e,this.props.push,this.props.fromJson,this.props.fromLegacyCsv)
           .then(this.props.makeTree)
           .then(this.props.sort)
           .then(this.props.finishedToLoadFiles)
@@ -77,6 +77,7 @@ const mapDispatchToProps = dispatch => {
     makeTree: (...args) => dispatch(makeTree(...args)),
     sort: (...args) => dispatch(sort(...args)),
     fromJson: (...args) => dispatch(fromJson(...args)),
+    fromLegacyCsv: (...args) => dispatch(fromLegacyCsv(...args)),
     startToLoadFiles: (...args) => dispatch(startToLoadFiles(...args)),
     finishedToLoadFiles: (...args) => {
       dispatch(finishedToLoadFiles(...args))

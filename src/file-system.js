@@ -45,7 +45,7 @@ export const qeFromJson = a => {
 }
 
 const Fs = Record({
-  version:1,
+  version:5,
   content_queue:List(),
   nb_push:0,
   tree:null,
@@ -76,6 +76,9 @@ export const depth = (state) => TT.depth(state.get('tree'))
 export const parentPath = (state) => {
   return state.get('parent_path').toArray()
 }
+
+const getVersion = (state) => state.get('version')
+const setVersion = (a,state) => state.set('version',a)
 
 export const getByID = (id, state) => TT.getEntryById(id, state.get('tree'))
 
@@ -139,4 +142,22 @@ export const toStrList2 = Cache.make((state) => {
 
 export const setParentPath = (parent_path, state) =>
   state.set('parent_path', List(parent_path))
+
+
+export const fromLegacyCsv = (csv) => {
+  const parseLine = (a) =>
+    a.match(/(".*?")|([^,"\s]*)/g)
+      .filter(a=>a!=="")
+      .map(a=>a.replace(/"/g,''))
+  let ans = setVersion(4, empty())
+  const lines = csv.split('\n')
+    .filter(a=>a!=='')
+    .map(parseLine)
+    .forEach(([path,size])=>{
+      ans = pushOnQueue(path, Content.create({size:Number(size)}), ans)
+    })
+  ans = makeTree(ans)
+  ans = sort(ans)
+  return ans
+}
 

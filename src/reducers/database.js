@@ -41,6 +41,10 @@ export const fromJson = mkA((json) => state => {
   return FileSystem.fromJson(json)
 })
 
+export const fromLegacyCsv = mkA((csv) => state => {
+  return FileSystem.fromLegacyCsv(csv)
+})
+
 export const reInit = mkA(() => state => initialState)
 
 export const setParentPath = mkA((parent_path) => state => {

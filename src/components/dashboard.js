@@ -49,10 +49,15 @@ const Presentational = props => {
 const mapStateToProps = state => {
   let app_state = selectAppState(state)
   let database = selectDatabase(state)
+  const finished = app_state.isFinished()
+  let nb_files = 0
+  if (finished) {
+    nb_files = database.size()
+  }
   return {
     started: app_state.isStarted(),
-    finished: app_state.isFinished(),
-    nb_files: database.size(),
+    finished,
+    nb_files,
   }
 }
 

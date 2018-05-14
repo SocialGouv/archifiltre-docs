@@ -3,7 +3,7 @@ import { mkScheduler } from 'scheduler'
 
 const sch = mkScheduler()
 
-export function asyncHandleDrop(event, insert2DB, loadJson2DB) {
+export function asyncHandleDrop(event, insert2DB, loadJson2DB, loadLegacyCsv2DB) {
   event.preventDefault()
   let items = event.dataTransfer.items
 
@@ -12,7 +12,9 @@ export function asyncHandleDrop(event, insert2DB, loadJson2DB) {
     if (items[i].kind === 'file') {
       let entry = items[i].webkitGetAsEntry()
       if (isJsonFile(entry)) {
-        promise_array.push(loadJson(loadJson2DB, entry))
+        promise_array.push(readFileFromEntry(entry).then(loadJson2DB))
+      } else if (isLegacyCsvFile(entry)) {
+        promise_array.push(readFileFromEntry(entry).then(loadLegacyCsv2DB))
       } else {
         promise_array.push(traverseFileTree(insert2DB, entry, ''))
       }
@@ -29,13 +31,20 @@ function hasJsonExt(s) {
   return s.split('.').slice(-1).pop() === 'json'
 }
 
+function isLegacyCsvFile(entry) {
+  return entry.isFile && hasLegacyCsvExt(entry.name)
+}
 
-function loadJson(loadJson2DB, entry) {
+function hasLegacyCsvExt(s) {
+  return s.split('.').slice(-1).pop() === 'csv'
+}
+
+
+function readFileFromEntry(entry) {
   return new Promise((resolve, reject) => {
     entry.file(file => {
-      readFile(file).then(json => {
-        loadJson2DB(json)
-        resolve()
+      readFile(file).then(content => {
+        resolve(content)
       })
     }, e => {
       console.log(e)
@@ -43,6 +52,24 @@ function loadJson(loadJson2DB, entry) {
     })
   })
 }
+
+// function loadLegacyCsv(loadLegacyCsv2DB, entry) {
+//   return readFileFromEntry(entry).then(loadLegacyCsv2DB)
+// }
+
+// function loadJson(loadJson2DB, entry) {
+//   return new Promise((resolve, reject) => {
+//     entry.file(file => {
+//       readFile(file).then(json => {
+//         loadJson2DB(json)
+//         resolve()
+//       })
+//     }, e => {
+//       console.log(e)
+//       resolve()
+//     })
+//   })
+// }
 
 export function readFile(file) {
   return new Promise((resolve, reject) => {

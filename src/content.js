@@ -6,8 +6,8 @@ import * as Arbitrary from 'test/arbitrary'
 
 const Content = Record({
   size:0,
-  last_modified:null,
-  error_is_file:null
+  last_modified:NaN,
+  error_is_file:false
 })
 
 export const arbitrary = () => new Content({

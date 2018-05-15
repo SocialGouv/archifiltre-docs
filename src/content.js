@@ -6,7 +6,7 @@ import * as Arbitrary from 'test/arbitrary'
 
 const Content = Record({
   size:0,
-  last_modified:NaN,
+  last_modified:null,
   error_is_file:false
 })
 

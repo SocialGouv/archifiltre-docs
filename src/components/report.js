@@ -5,7 +5,7 @@ import { RIEInput, RIETextArea, RIETags } from 'riek'
 // import _ from 'lodash'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
-import { editEntry } from 'reducers/database'
+import { editEntryContent } from 'reducers/database'
 
 import { typeOf } from 'components/icicle'
 import { makeSizeString } from 'components/ruler'
@@ -36,23 +36,23 @@ const Presentational = props => {
 
     name = (<span style={{'fontWeight':'bold'}} className={edit_hover_container}>
         <RIEInput
-        value={node.get('display_name')}
-        change={(n) => {props.editEntry(props.node_id, 'display_name', n['new_display_name'].length ? n['new_display_name'] : node.get('display_name'))}}
+        value={node.get('content').get('display_name')}
+        change={(n) => {props.editEntryContent(props.node_id, 'display_name', n['new_display_name'].length ? n['new_display_name'] : node.get('content').get('display_name'))}}
         propName='new_display_name' />
         &ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} />
       </span>);
 
-    real_name = (<span style={{'fontStyle':'italic', 'visibility': (node.get('name') !== node.get('display_name') ? '' : 'hidden')}}>
+    real_name = (<span style={{'fontStyle':'italic', 'visibility': (node.get('name') !== node.get('content').get('display_name') ? '' : 'hidden')}}>
       ({node.get('name')})</span>);
 
     tags_cell = (
       <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em'}}>
         <span style={{'fontWeight': 'bold'}}>{tr("Tags")}</span>
         <span>&ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-        <span style={{'fontStyle': (node.get('tags').size ? '' : '')}}>
+        <span style={{'fontStyle': (node.get('content').get('tags').size ? '' : '')}}>
           <RIETags
-          value={node.get('tags').size ? node.get('tags') : new Set(["Your", "Tags", "Here"])}
-          change={(n) => props.editEntry(props.node_id, 'tags', n['new_tags'])}
+          value={node.get('content').get('tags').size ? node.get('content').get('tags') : new Set(["Your", "Tags", "Here"])}
+          change={(n) => props.editEntryContent(props.node_id, 'tags', n['new_tags'])}
           className={tags}
           placeholder={tr("New tag")}
           propName='new_tags'/>
@@ -63,10 +63,10 @@ const Presentational = props => {
       <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
         <span style={{'fontWeight': 'bold'}}>{tr("Comments")}</span>
         <span>&ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-        <span style={{'fontStyle': (node.get('comments').length ? '' : 'italic')}}>
+        <span style={{'fontStyle': (node.get('content').get('comments').length ? '' : 'italic')}}>
           <RIETextArea
-          value={node.get('comments').length ? node.get('comments') : tr("Your text here")+"..."}
-          change={(n) => {props.editEntry(props.node_id, 'comments', n['new_comments'].length ? n['new_comments'] : node.get('comments'))}}
+          value={node.get('content').get('comments').length ? node.get('content').get('comments') : tr("Your text here")+"..."}
+          change={(n) => {props.editEntryContent(props.node_id, 'comments', n['new_comments'].length ? n['new_comments'] : node.get('content').get('comments'))}}
           className={comments}
           propName='new_comments'/>
         </span>
@@ -144,7 +144,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
  	return {
-    editEntry: (...args) => dispatch((editEntry(...args))),
+    editEntryContent: (...args) => dispatch((editEntryContent(...args))),
   }
 }
 

@@ -34,7 +34,7 @@ const Presentational = props => {
           is_dummy={false}/>
           <BreadCrumbText
           key={"text" + i}
-          text={node.get('display_name')}
+          text={node.get('content').get('display_name')}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
           w={breadcrumb_dims.w}

@@ -7,20 +7,24 @@ export function asyncHandleDrop(event, insert2DB, loadJson2DB, loadLegacyCsv2DB)
   event.preventDefault()
   let items = event.dataTransfer.items
 
-  let promise_array = []
-  for (let i=0; i<items.length; i++) {
-    if (items[i].kind === 'file') {
+  let entry = items[0].webkitGetAsEntry()
+  if (isJsonFile(entry)) {
+    return readFileFromEntry(entry)
+      .then(loadJson2DB)
+      .then(()=>false)
+  } else if (isLegacyCsvFile(entry)) {
+    return readFileFromEntry(entry)
+      .then(loadLegacyCsv2DB)
+      .then(()=>true)
+  } else {
+    let promise_array = []
+    for (let i=0; i<items.length; i++) {
       let entry = items[i].webkitGetAsEntry()
-      if (isJsonFile(entry)) {
-        promise_array.push(readFileFromEntry(entry).then(loadJson2DB))
-      } else if (isLegacyCsvFile(entry)) {
-        promise_array.push(readFileFromEntry(entry).then(loadLegacyCsv2DB))
-      } else {
-        promise_array.push(traverseFileTree(insert2DB, entry, ''))
-      }
+      promise_array.push(traverseFileTree(insert2DB, entry, ''))
     }
+    return Promise.all(promise_array)
+      .then(()=>true)
   }
-  return Promise.all(promise_array)
 }
 
 function isJsonFile(entry) {

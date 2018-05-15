@@ -36,11 +36,15 @@ class Presentational extends React.Component {
 
   handleDrop (e) {
     e.preventDefault()
-    Folder.asyncHandleDrop(e,this.props.push,this.props.fromJson,this.props.fromLegacyCsv)
-          .then(this.props.makeTree)
-          .then(this.props.sort)
-          .then(this.props.finishedToLoadFiles)
     this.props.startToLoadFiles()
+    Folder.asyncHandleDrop(e,this.props.push,this.props.fromJson,this.props.fromLegacyCsv)
+      .then(shouldProcess => {
+        if (shouldProcess) {
+          this.props.makeTree()
+          this.props.sort()
+        }
+      })
+      .then(this.props.finishedToLoadFiles)
   }
 
   render() {

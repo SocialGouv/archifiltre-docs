@@ -3,8 +3,24 @@ import { connect } from 'react-redux'
 
 
 import { mkB } from 'components/button'
-import { undo, redo } from 'reducers/root-reducer'
+import { undo, redo, hasAPast, hasAFuture } from 'reducers/root-reducer'
 
+
+const button = (onClick, label, enabled) => {
+  if (enabled) {
+    return (
+      <button type='button' className='button' onClick={onClick}>
+        {label}
+      </button>
+    )
+  } else {
+    return (
+      <button type='button' className='button' onClick={onClick} disabled>
+        {label}
+      </button>
+    )
+  }
+}
 
 class Presentational extends React.Component {
   constructor(props) {
@@ -34,14 +50,22 @@ class Presentational extends React.Component {
         <div>
           <div className='grid-x grid-padding-x'>
             <div className='cell small-6'>
-            {
-              mkB(this.props.undo,(<i className="fi-arrow-left" style={{fontSize: '2em'}}/>))
-            }
+              {
+                button(
+                  this.props.undo,
+                  (<i className="fi-arrow-left" style={{fontSize: '2em'}}/>),
+                  this.props.hasAPast
+                )
+              }
             </div>
             <div className='cell small-6'>
-            {
-              mkB(this.props.redo,(<i className="fi-arrow-right" style={{fontSize: '2em'}}/>))
-            }
+              {
+                button(
+                  this.props.redo,
+                  (<i className="fi-arrow-right" style={{fontSize: '2em'}}/>),
+                  this.props.hasAFuture
+                )
+              }
             </div>
           </div>
         </div>
@@ -56,7 +80,10 @@ class Presentational extends React.Component {
 
 
 const mapStateToProps = state => {
-  return {}
+  return {
+    hasAPast: hasAPast(state),
+    hasAFuture: hasAFuture(state)
+  }
 }
 
 const mapDispatchToProps = dispatch => {

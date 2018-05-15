@@ -6,11 +6,6 @@ RUN apt-get update && apt-get -y install \
 
 WORKDIR /usr/src/app
 
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj "/CN=localhost" \
-  -keyout ./privkey.pem \
-  -out ./cert.pem
-
-
 COPY package*.json ./
 RUN npm install
 

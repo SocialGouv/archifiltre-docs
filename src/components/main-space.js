@@ -10,7 +10,6 @@ import WaitingScreen from 'components/waiting-screen'
 
 import ExportButton from 'components/export-button'
 import ReinitButton from 'components/reinit-button'
-import ErrorLogButton from 'components/error-log-button'
 import CtrlZ from 'components/ctrl-z'
 
 import { tr } from 'dict'

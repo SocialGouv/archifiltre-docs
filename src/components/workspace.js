@@ -7,7 +7,6 @@ import { setNoFocus, unlock } from 'reducers/icicle-state'
 
 import ExportButton from 'components/export-button'
 import ReinitButton from 'components/reinit-button'
-import ErrorLogButton from 'components/error-log-button'
 
 import { tr } from 'dict'
 

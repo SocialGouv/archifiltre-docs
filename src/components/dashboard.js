@@ -1,11 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { selectAppState, selectDatabase, selectLogError } from 'reducers/root-reducer'
+import { selectAppState, selectDatabase } from 'reducers/root-reducer'
 
 
 import ExportButton from 'components/export-button'
 import ReinitButton from 'components/reinit-button'
-import ErrorLogButton from 'components/error-log-button'
+import ToCsvButton from 'components/csv-button'
 import TextAlignCenter from 'components/text-align-center'
 
 import { tr } from 'dict'
@@ -24,13 +24,11 @@ const Presentational = props => {
               <p>{props.nb_files} {tr('files loaded')}</p>
             </TextAlignCenter>
           </div>
-          {props.nb_errors > 0 && 
-            <div className='cell small-12' style={error_log_button_style}>
-              <TextAlignCenter>
-                <ErrorLogButton/>
-              </TextAlignCenter>
-            </div>
-          }
+          <div className='cell small-12' style={error_log_button_style}>
+            <TextAlignCenter>
+              <ToCsvButton/>
+            </TextAlignCenter>
+          </div>
           <div className='cell small-6'>
             <TextAlignCenter>
               <ExportButton/>
@@ -51,12 +49,15 @@ const Presentational = props => {
 const mapStateToProps = state => {
   let app_state = selectAppState(state)
   let database = selectDatabase(state)
-  let logError = selectLogError(state)
+  const finished = app_state.isFinished()
+  let nb_files = 0
+  if (finished) {
+    nb_files = database.size()
+  }
   return {
     started: app_state.isStarted(),
-    finished: app_state.isFinished(),
-    nb_files: database.size(),
-    nb_errors: logError.size()
+    finished,
+    nb_files,
   }
 }
 

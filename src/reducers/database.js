@@ -124,7 +124,7 @@ export default reducer
 export const create = mkA((path,size,last_modified) => state => {
   const content = new Content({
     size,
-    last_modified
+    last_modified,
   })
   path = path.split('/')
   const root_id = state.get('root_id')

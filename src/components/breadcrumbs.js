@@ -18,15 +18,15 @@ const Presentational = props => {
   let res = []
 
   if(props.isFocused){
-    for(let i = 1; i < props.hover_sequence.length; i++){
-      let node = props.getByID(props.hover_sequence[i])
-      let node_id = props.hover_sequence[i]
+    for(let i = 1; i < props.breadcrumb_sequence.length; i++){
+      let node = props.getByID(props.breadcrumb_sequence[i])
+      let node_id = props.breadcrumb_sequence[i]
       let is_parent = props.isZoomed && props.display_root.includes(node_id) && node.get('children').size
 
       res.push(
         <g key={"breadcrumb" + i}>
           <BreadCrumbPoly
-          is_last={i === props.hover_sequence.length-1}
+          is_last={i === props.breadcrumb_sequence.length-1}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
           type={is_parent ? typeOf(mkDummyParent()) : typeOf(node)}
@@ -34,7 +34,7 @@ const Presentational = props => {
           is_dummy={false}/>
           <BreadCrumbText
           key={"text" + i}
-          text={node.get('name')}
+          text={node.get('content').get('display_name')}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
           w={breadcrumb_dims.w}
@@ -173,8 +173,11 @@ export const smartClip = (s, w, fw) => {
 const mapStateToProps = state => {
 	let icicle_state = selectIcicleState(state)
   let database = selectDatabase(state)
+
+  let breadcrumb_sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence();
+  
 	return {
-		hover_sequence: icicle_state.hover_sequence(),
+		breadcrumb_sequence,
     display_root: icicle_state.display_root(),
     isFocused: icicle_state.isFocused(),
     isZoomed: icicle_state.isZoomed(),

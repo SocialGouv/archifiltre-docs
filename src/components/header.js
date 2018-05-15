@@ -14,7 +14,7 @@ const Presentational = props => {
       <div className='cell small-6'>
         <h4 style={{lineHeight: '0.8em'}}>
           <b>{tr('Icicles')}</b><br />
-          <span style={{fontSize: '0.65em'}}>v4 Demanding Dolphin - <a target="_blank" href="http://archifiltre.com/#changelog">{tr("What's new?")}</a></span>
+          <span style={{fontSize: '0.65em'}}>v5 Elegant Elephant - <a target="_blank" href="http://archifiltre.com/#changelog">{tr("What's new?")}</a></span>
         </h4>
         <span>
           <em>

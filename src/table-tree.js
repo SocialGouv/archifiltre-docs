@@ -6,7 +6,12 @@ import { Map, Record, List } from 'immutable'
 
 const Entry = Record({
   name:'',
-  content:null,
+  content:Record({
+    size:0,
+    display_name:'',
+    comments: '',
+    tags: new Set(),
+  }),
   children:List(),
   parent:null,
   depth:0
@@ -65,7 +70,7 @@ export default function(update_, compare_, toCsvList_) {
       path = path.slice(1)
       const child = new Entry({
         name,
-        content,
+        content: content.update('display_name', a=>name),
         parent:id,
         depth: map.get(id).get('depth')+1
       })
@@ -77,6 +82,7 @@ export default function(update_, compare_, toCsvList_) {
         map = map.set(child_id, child)
         map = map.update(id, a=>updateChildren(child_id, a))
       }
+
       return updateRec(path, content, child_id, map)
     }
   }

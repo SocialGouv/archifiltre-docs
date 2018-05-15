@@ -14,8 +14,12 @@ const type = 'cheapExp/database'
 
 const Content = Record({
   size:0,
-  last_modified:null
+  last_modified:null,
+  display_name:'',
+  comments: '',
+  tags: new Set(),
 })
+
 
 const compare = (a,b) => {
   if (a.get('size') === b.get('size')) {
@@ -103,7 +107,8 @@ function bundle(state) {
     getIDList: () => TT.getIdList(state.get('tree')),
     getRootIDs: () => TT.getRootIdArray(state.get('tree')),
     volume: () => state.get('volume'),
-    root_id: () => state.get('root_id')
+    root_id: () => state.get('root_id'),
+    print: () => console.log(state.get('tree').toJS()),
   }
 }
 
@@ -177,3 +182,12 @@ export const reInit = mkA(() => state => initialState)
 export const setParentPath = mkA((parent_path) => state =>
   state.set('parent_path', List(parent_path))
 )
+
+export const editEntryContent = mkA((id, entry_name, new_entry_value) => state => {
+  state = state.update('tree', tree =>
+    tree.update(id, node =>
+      node.update('content', content =>
+        content.update(entry_name, a => new_entry_value))));
+
+  return state
+})

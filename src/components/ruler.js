@@ -16,9 +16,6 @@ const Presentational = props => {
     let text = makeSizeString(props.node.get('content').get('size'), props.total_size)
     let mode = computeRulerTextDisplayMode(props.dims.x + props.dims.dx/2, text.length, icicle_dims.w, 4.2)
 
-    let is_parent = props.isZoomed && props.display_root.includes(props.node_id) && props.node.get('children').size
-
-
     res = (<g><rect
       className="ruler"
       x={props.dims.x}
@@ -27,7 +24,7 @@ const Presentational = props => {
       height="0.3em"
       onClick={(e) => {e.stopPropagation()}}
       onMouseOver={() => {}}
-      style={{"fill":  is_parent ? typeOf(mkDummyParent()).color : typeOf(props.node).color}}>
+      style={{"fill":  props.is_parent ? typeOf(mkDummyParent()).color : typeOf(props.node).color}}>
     </rect>
     <text
     x={computeTextPosition(props.dims.x, props.dims.dx, icicle_dims.w, mode)}
@@ -106,18 +103,22 @@ const mapStateToProps = state => {
 	let icicle_state = selectIcicleState(state)
   let database = selectDatabase(state)
 
-  let node_id = icicle_state.hover_sequence()[icicle_state.hover_sequence().length - 1]
+  let node_id = icicle_state.isLocked() ?
+    icicle_state.lock_sequence()[icicle_state.lock_sequence().length - 1]
+    : icicle_state.hover_sequence()[icicle_state.hover_sequence().length - 1];
+
   let node = (icicle_state.isFocused() ? database.getByID(node_id) : {})
   let total_size = database.volume()
 
+  let is_parent = icicle_state.isZoomed() && icicle_state.display_root().includes(node_id) && node.get('children').size
+
 	return {
 		dims: icicle_state.hover_dims(),
-    display_root: icicle_state.display_root(),
     isFocused: icicle_state.isFocused(),
-    isZoomed: icicle_state.isZoomed(),
     node,
     node_id,
-    total_size
+    total_size,
+    is_parent
 	}
 }
 

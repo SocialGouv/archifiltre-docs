@@ -70,7 +70,8 @@ export default function(update_, compare_, toCsvList_) {
       path = path.slice(1)
       const child = new Entry({
         name,
-        content: content.update('display_name', a=>name),
+        content,
+        // content: content.update('display_name', a=>name), ###############################################
         parent:id,
         depth: map.get(id).get('depth')+1
       })

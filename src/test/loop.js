@@ -1,7 +1,8 @@
 import chai from 'chai'
-import chaiImmutable from 'chai-immutable'
-chai.use(chaiImmutable)
-const should = chai.should()
+import chaiExclude from 'chai-exclude'
+chai.use(chaiExclude)
+
+const expect = chai.expect
 
 import { is } from 'immutable'
 
@@ -48,7 +49,7 @@ export const equal = (str, f) => {
   it(str, function() {
     iter(() => {
       const [a,b] = f()
-      a.should.deep.equal(b)
+      expect(a).to.deep.equal(b)
     })
   }).timeout(10000)
 }
@@ -57,8 +58,9 @@ export const immuEqual = (str, f) => {
   it(str, function() {
     iter(() => {
       const [a,b] = f()
-      a.toJS().should.deep.equal(b.toJS())
-      is(a,b).should.equal(true)
+      // expect(a).excludingEvery('ownerID').to.deep.equal(b)
+      expect(a.toJS()).to.deep.equal(b.toJS())
+      expect(is(a,b)).to.equal(true)
     })
   }).timeout(10000)
 }

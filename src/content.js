@@ -1,5 +1,5 @@
 
-import { Record, List } from 'immutable'
+import { Record, List, Set } from 'immutable'
 
 import * as Arbitrary from 'test/arbitrary'
 
@@ -10,16 +10,24 @@ const Content = Record({
   error_is_file:false,
   display_name:'',
   comments: '',
-  tags: new Set(),
+  tags: Set(),
 })
+
+export const arbitraryTags = () => {
+  return Set(Arbitrary.array(Arbitrary.string))
+}
+
+const tagsToJs = a => a.toArray()
+const tagsFromJs = a => Set(a)
+
 
 export const arbitrary = () => new Content({
   size: Arbitrary.natural(),
   last_modified: Arbitrary.natural(),
   error_is_file: Arbitrary.nullable(Arbitrary.bool),
-  // display_name:'', ############################
-  // comments: '', ############################
-  // tags: new Set(), ############################
+  display_name: Arbitrary.string(),
+  comments: Arbitrary.string(),
+  tags: arbitraryTags(),
 })
 
 export const create = a => new Content(a)
@@ -52,8 +60,26 @@ export const setSize = (s, a) => a.set('size', s)
 export const getLastModified = (a) => a.get('last_modified')
 export const setLastModified = (s, a) => a.set('last_modified', s)
 
-export const toJs = (a) => a.toJS()
-export const fromJs = (a) => new Content(a)
+export const getDisplayName = (a) => a.get('display_name')
+export const setDisplayName = (s, a) => a.set('display_name', s)
+
+export const getComments = (a) => a.get('comments')
+export const setComments = (s, a) => a.set('comments', s)
+
+export const getTags = (a) => a.get('tags')
+export const setTags = (s, a) => a.set('tags', s)
+
+
+export const toJs = (a) => {
+  a = a.update('tags', tagsToJs)
+  a = a.toJS()
+  return a
+}
+export const fromJs = (a) => {
+  a = new Content(a)
+  a = a.update('tags', tagsFromJs)
+  return a
+}
 
 export const toJson = (a) => JSON.stringify(toJs(a))
 export const fromJson = (a) => {

@@ -1,6 +1,4 @@
 import chai from 'chai'
-import chaiImmutable from 'chai-immutable'
-// chai.use(chaiImmutable)
 const should = chai.should()
 
 
@@ -30,6 +28,22 @@ describe('content', function() {
     const a = Arbitrary.natural()
     return [M.getLastModified(M.setLastModified(a, M.arbitrary())), a]
   })
+
+  Loop.equal('(getDisplayName . setDisplayName x) a', () => {
+    const a = Arbitrary.string()
+    return [M.getDisplayName(M.setDisplayName(a, M.arbitrary())), a]
+  })
+
+  Loop.equal('(getComments . setComments x) a', () => {
+    const a = Arbitrary.string()
+    return [M.getComments(M.setComments(a, M.arbitrary())), a]
+  })
+
+  Loop.equal('(getTags . setTags x) a', () => {
+    const a = M.arbitraryTags()
+    return [M.getTags(M.setTags(a, M.arbitrary())), a]
+  })
+
 
   Loop.equal('compare a (update a b)', () => {
     const a = M.arbitrary()

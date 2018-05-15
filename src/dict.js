@@ -3,15 +3,6 @@ console.log("lang : " + lang)
 
 const dict = {
   // Home screen
-  "Your directories. Like you've never seen them before.": {
-    fr: "Vos répertoires comme vous ne les avez jamais vus.",
-    en: "Your directories. Like you've never seen them before."
-  },
-  "Icicles": {
-    fr: "Stalactites",
-    en: "Icicles",
-    es: "Carámbanos"
-  },
   "Your data won't leave your computer. Only you can see what happens below.": {
     fr: "Vos données ne quittent pas votre ordinateur ; seul•e vous pouvez voir ce qu'il y a ci-dessous.",
     en: "Your data won't leave your computer. Only you can see what happens below."
@@ -26,20 +17,20 @@ const dict = {
     en: "You may also drop a CSV file previously exported from Icicle."
   },
   "Import from CSV": {
-  	fr: "Importer depuis un CSV",
-  	en: "Import from CSV",
+    fr: "Importer depuis un CSV",
+    en: "Import from CSV",
     es: "Importar desde un archivo CSV"
   },
 
   // Loading screen
   "Files loaded": {
-  	fr: "Fichiers chargés",
-  	en: "Files loaded",
+    fr: "Fichiers chargés",
+    en: "Files loaded",
     es: "Archivos cargados"
   },
   "Errors": {
-  	fr: "Erreurs",
-  	en: "Errors",
+    fr: "Erreurs",
+    en: "Errors",
     es: "Errores"
   },
 
@@ -60,13 +51,13 @@ const dict = {
     es: "Reiniciar"
   },
   "files loaded": {
-  	fr: "fichiers chargés",
-  	en: "files loaded",
+    fr: "fichiers chargés",
+    en: "files loaded",
     es: "archivos cargados"
   },
   "errors": {
-  	fr: "erreurs",
-  	en: "errors",
+    fr: "erreurs",
+    en: "errors",
     es: "errores"
   },
   "Back to root": {
@@ -81,8 +72,8 @@ const dict = {
     es: "Leyenda"
   },
   "Presentation": {
-  	fr: "Présentation",
-  	en: "Presentation",
+    fr: "Présentation",
+    en: "Presentation",
     es: "Presentación"
   },
   "Folder": {
@@ -146,9 +137,22 @@ const dict = {
 
     // Always displayed
   "Compatible with Firefox and Chrome.": {
-  	fr: "Compatible avec Firefox et Chrome.",
-  	en: "Compatible with Firefox and Chrome.",
+    fr: "Compatible avec Firefox et Chrome.",
+    en: "Compatible with Firefox and Chrome.",
     es: "Compatible con Firefox y Chrome."
+  },
+  // "Your directories. Like you've never seen them before.": {
+  //   fr: "Vos répertoires comme vous ne les avez jamais vus.",
+  //   en: "Your directories. Like you've never seen them before."
+  // },
+  "Icicles": {
+    fr: "Stalactites",
+    en: "Icicles",
+    es: "Carámbanos"
+  },
+  "What's new?": {
+    fr: "Quoi de neuf ?",
+    en: "What's new?"
   }
 }
 

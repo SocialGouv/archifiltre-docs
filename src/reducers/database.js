@@ -13,8 +13,11 @@ const type = 'cheapExp/database'
 
 
 const Content = Record({
-  size:0
-})
+    size:0,
+    display_name:'',
+    comments: '',
+    tags: new Set(),
+  })
 
 const compare = (a,b) => {
   if (a.get('size') === b.get('size')) {
@@ -146,10 +149,11 @@ export const setParentPath = mkA((parent_path) => state =>
   state.set('parent_path', List(parent_path))
 )
 
-export const editEntry = mkA((id, entry_name, new_entry_value) => state => {
+export const editEntryContent = mkA((id, entry_name, new_entry_value) => state => {
   state = state.update('tree', tree =>
     tree.update(id, node =>
-      node.update(entry_name, a => new_entry_value)));
+      node.update('content', content =>
+        content.update(entry_name, a => new_entry_value))));
 
   return state
 })

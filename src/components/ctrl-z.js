@@ -35,12 +35,12 @@ class Presentational extends React.Component {
           <div className='grid-x grid-padding-x'>
             <div className='cell small-6'>
             {
-              mkB(this.props.undo,'<=')
+              mkB(this.props.undo,(<i className="fi-arrow-left" style={{fontSize: '2em'}}/>))
             }
             </div>
             <div className='cell small-6'>
             {
-              mkB(this.props.redo,'=>')
+              mkB(this.props.redo,(<i className="fi-arrow-right" style={{fontSize: '2em'}}/>))
             }
             </div>
           </div>

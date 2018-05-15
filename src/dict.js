@@ -145,10 +145,10 @@ const dict = {
 
 
     // Always displayed
-  "This app is compatible with Firefox and Chrome.": {
-  	fr: "Cet outil est compatible avec Firefox et Chrome.",
-  	en: "This app is compatible with Firefox and Chrome.",
-    es: "Esta aplicación es compatible con Firefox y Chrome."
+  "Compatible with Firefox and Chrome.": {
+  	fr: "Compatible avec Firefox et Chrome.",
+  	en: "Compatible with Firefox and Chrome.",
+    es: "Compatible con Firefox y Chrome."
   }
 }
 

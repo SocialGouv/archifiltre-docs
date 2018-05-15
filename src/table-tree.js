@@ -11,12 +11,7 @@ import { Map, Record, List } from 'immutable'
 
 const Entry = Record({
   name:'',
-  content:Record({
-    size:0,
-    display_name:'',
-    comments: '',
-    tags: new Set(),
-  }),
+  content:null,
   children:List(),
   parent:null,
   depth:0
@@ -143,18 +138,19 @@ export default function(C) {
     } else {
       const name = path[0]
       path = path.slice(1)
-      const child = new Entry({
-        name,
-        content,
-        // content: content.update('display_name', a=>name), ###############################################
-        parent:id,
-        depth: getEntryById(id, tt).get('depth')+1
-      })
+
       let child_id = getChildIdByName(name, id, tt)
       if (child_id) {
         tt = updateEntryById(child_id, a=>updateContent(content, a), tt)
       } else {
         child_id = genId()
+        const child = new Entry({
+          name,
+          content,
+          // content: content.update('display_name', a=>name), ###############################################
+          parent:id,
+          depth: getEntryById(id, tt).get('depth')+1
+        })
         tt = setEntryById(child_id, child, tt)
         tt = updateEntryById(id, a=>updateChildren(child_id, a), tt)
       }

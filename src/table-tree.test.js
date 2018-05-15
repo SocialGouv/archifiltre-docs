@@ -1,6 +1,4 @@
 import chai from 'chai'
-import chaiImmutable from 'chai-immutable'
-chai.use(chaiImmutable)
 const should = chai.should()
 
 import tT from 'table-tree'

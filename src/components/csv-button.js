@@ -12,7 +12,7 @@ import { tr } from 'dict'
 const Presentational = props => {
   return mkB(()=>{
     console.log('to csv')
-    save('my.csv', Csv.toStr(props.getStrList2()))
+    save(props.getName(), Csv.toStr(props.getStrList2()))
   }, tr('to Csv'))
 }
 
@@ -20,7 +20,10 @@ const Presentational = props => {
 const mapStateToProps = state => {
   let database = selectDatabase(state)
   return {
-    getStrList2: database.toStrList2
+    getStrList2: database.toStrList2,
+    getName: () => {
+      return database.getSessionName() + '_' + new Date().getTime() + '.csv'
+    }
   }
 }
 

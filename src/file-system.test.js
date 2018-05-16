@@ -20,6 +20,11 @@ describe('file-system', function() {
     return [M.fromJson(M.toJson(a)), a]
   })
 
+  Loop.equal('(getSessionName . setSessionName x) a', () => {
+    const a = Arbitrary.string()
+    return [M.getSessionName(M.setSessionName(a, M.arbitrary())), a]
+  })
+
 
 
 })

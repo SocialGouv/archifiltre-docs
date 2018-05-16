@@ -8,6 +8,7 @@ import { setFocus, setNoFocus, setDisplayRoot, setNoDisplayRoot, lock } from 're
 import { typeOf } from 'components/icicle'
 
 import { mkDummyParent } from 'table-tree'
+import { commit } from 'reducers/root-reducer'
 
 import { tr } from 'dict'
 
@@ -124,7 +125,10 @@ const mapDispatchToProps = dispatch => {
     setNoFocus: (...args) => dispatch((setNoFocus(...args))),
     setDisplayRoot: (...args) => dispatch((setDisplayRoot(...args))),
     setNoDisplayRoot: (...args) => dispatch((setNoDisplayRoot(...args))),
- 		lock: (...args) => dispatch((lock(...args)))
+ 		lock: (...args) => {
+      dispatch((lock(...args)))
+      dispatch(commit())
+    }
  	}
 }
 

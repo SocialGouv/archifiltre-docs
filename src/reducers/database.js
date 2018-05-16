@@ -15,7 +15,8 @@ function bundle(state) {
     volume: () => FileSystem.volume(state),
     root_id: () => FileSystem.rootId(state),
     toJson: () => FileSystem.toJson(state),
-    toStrList2: () => FileSystem.toStrList2(state)
+    toStrList2: () => FileSystem.toStrList2(state),
+    getSessionName: () => FileSystem.getSessionName(state)
   }
 }
 
@@ -56,5 +57,10 @@ export const setParentPath = mkA((parent_path) => state => {
 export const setContentByID = mkA((id, content) => state => {
   const updater = (entry) => entry.set('content', content)
   state = FileSystem.updateByID(id, updater, state)
+  return state
+})
+
+export const setSessionName = mkA((name) => state => {
+  state = FileSystem.setSessionName(name,state)
   return state
 })

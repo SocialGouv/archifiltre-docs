@@ -1,82 +1,240 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { selectDatabase, selectLogError } from 'reducers/root-reducer'
+import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 
-import { setParentPath } from 'reducers/database'
+import { setNoDisplayRoot } from 'reducers/icicle-state'
 
-import ExportButton from 'components/export-button'
-import ReinitButton from 'components/reinit-button'
-import ErrorLogButton from 'components/error-log-button'
+import IcicleRect from 'components/icicle-rect'
 
 import { tr } from 'dict'
 
-import { plot } from 'sequences'
-
-
-// dummy, just to keep same feel as original sequences.js
-const chart_style = {
+const icicle_style = {
   position: 'relative',
   stroke: '#fff',
   // 'background-color': 'rgba(100,100,100,0.1)'
 }
 
-const ruler_style = {
-  // 'position':'absolute',
-  // 'bottom':'0',
-  'width':'100%',
-  'height': '50pt',
-  // 'background-color': 'rgba(100,100,100,0.2)'
+export const icicle_dims = {
+  w:800,
+  h:300
 }
 
- //     <div className="mdl-grid" id="report">
- //           <div className="mdl-layout-spacer"></div>
- //           <div className="mdl-cell mdl-cell--3-col">
- //             <i className="material-icons" id="report-icon" style={{'fontSize': '4.5em'}}></i><br />
- //             <span  id="report-name" style={{'fontWeight': 'bold'}}></span><br /><span id="report-size"></span>
- //           </div>
- //           <div className="mdl-layout-spacer"></div>
- //     </div>
+const types = {
+    presentation : {label: tr("Presentation"), color:"#f75b40"},
+    parent_folder : {label: tr("Root"), color: "#f99a0b"},
+    folder : {label: tr("Folder"), color:"#fabf0b"},
+    spreadsheet : {label: tr("Spreadsheet"), color:"#52d11a"},
+    email: {label: tr("E-mail"), color:"#13d6f3"},
+    doc : {label: tr("Document"), color:"#4c78e8"},
+    multimedia: {label: tr("Multimedia"), color:"#b574f2"},
+    otherfiles : {label: tr("Others"), color:"#8a8c93"}
+  };
 
-const Presentational = props => {
-  return (
-    <div className="mdl-cell mdl-cell--12-col">
-      <div className="mdl-grid" id='main' ref={(input) => {
-        if (input) {
-          console.time('plot')
-          plot(props.csv, props.setParentPath, props.parent_path)
-          console.timeEnd('plot')
+
+const getChildrenSize = a => a.size
+const getChildrenElem = (i,a) => a.get(i)
+
+class Presentational extends React.Component {
+  constructor(props) {
+    super(props)
+    this.root_id = props.root_id
+    this.max_tree_depth = props.max_depth
+    this.isZoomed = this.props.isZoomed
+
+    this.getByID = props.getByID
+
+    this.plot = this.plot.bind(this)
+
+    console.log("profondeur : ", this.max_tree_depth)
+
+    setNoDisplayRoot()
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if(nextProps.display_root !== this.props.display_root) return true;
+    return false;
+  }
+
+
+  plot(root, root_seq, tree_depth) {
+    console.time("render icicle")
+    let icicle = this.positionNodes(root, root_seq, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [], this.getByID, this.isZoomed)
+    console.timeEnd("render icicle")
+    return icicle
+  }
+
+
+  positionNodes(root_id, root_seq, left, right, top, bottom, tree_depth, sequence){
+    const root = this.getByID(root_id)
+    const r_name = root.get('name')
+    const r_depth = root.get('depth')
+    const r_children = root.get('children')
+    const r_content = root.get('content')
+    const root_size = r_content.get('size')
+
+    let height = bottom - top
+    let width = right - left
+    let new_sequence = sequence.concat(root_id)
+
+    let root_dims = {
+      x: left,
+      y: top,
+      dx: (isNaN(width) ? 0 : width),
+      dy: height/tree_depth
+    }
+
+    let res = (
+      root_dims.dx < 1 ?
+      []
+      : //######################################" change key with entry id"
+      [<IcicleRect key={r_name + r_depth} dims={root_dims} node_id={root_id} node={root} node_sequence={new_sequence} />])
+
+
+    if (getChildrenSize(r_children) && root_dims.dx > 1) {
+
+      if(this.props.isZoomed && root_seq.length > 1){
+        let child = this.getByID(root_seq[1])
+
+        res.push(this.positionNodes(
+          root_seq[1],
+          root_seq.slice(1,root_seq.length),
+          left,
+          right,
+          top+height/tree_depth,
+          bottom,
+          tree_depth-1,
+          new_sequence))
+      }
+
+      else{
+      let x_cursor = left
+        for (let i = 0; i <= getChildrenSize(r_children) - 1; ++i) {
+          const child_id = getChildrenElem(i, r_children)
+          const child = this.getByID(child_id)
+          const child_size = child.content.size
+
+          res.push(this.positionNodes(
+            child_id,
+            root_seq,
+            x_cursor,
+            x_cursor+child_size/root_size*width,
+            top+height/tree_depth,
+            bottom,
+            tree_depth-1,
+            new_sequence))
+
+          x_cursor = x_cursor+child_size/root_size*width
         }
-      }}>
-        <div className="mdl-cell mdl-cell--8-col">
-          <div id='chart' style={chart_style}></div>
-          <div id='ruler' style={ruler_style}></div>
-        </div>
-        <div className="mdl-cell mdl-cell--4-col" id='sequence' style={chart_style}></div>
-      </div>
-    </div>
-  )
+      }
+    }
+
+    return res
+  }
+
+  render() {
+    return (
+      <div id='chart' style={icicle_style}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
+          <g id="container">
+            {this.plot(this.props.root_id, (this.props.isZoomed ? this.props.display_root : []), this.max_tree_depth + 1)}
+          </g>
+        </svg>
+      </div>)
+  }
 }
 
+export const typeOf = (node) => {
+  
+  if (node.get('children').size) {
+    if (node.get('children').get(0) === "-1") {
+      return types.parent_folder;
+    } else {
+      return types.folder;
+    }
+  }
 
+  else {
+    let m = node.get('name').match(/\.[^\.]*$/)
+
+    if (m == null)
+      m = [""]
+
+    switch(m[0].toLowerCase()){
+      case ".xls": //formats Microsoft Excel
+      case ".xlsx":
+      case ".xlsm":
+      case ".xlw": // dont les vieux
+      case ".xlt":
+      case ".xltx":
+      case ".xltm":
+      case ".csv": // format Csv
+      case ".ods": //formats OOo/LO Calc
+      case ".ots":
+        return types.spreadsheet;
+      case ".doc":  //formats Microsoft Word
+      case ".docx":
+      case ".docm":
+      case ".dot":
+      case ".dotx":
+      case ".dotm":
+      case ".odt": // formats OOo/LO Writer
+      case ".ott":
+      case ".txt": // formats texte standard
+      case ".rtf":
+        return types.doc;
+      case ".ppt": // formats Microsoft PowerPoint
+      case ".pptx":
+      case ".pptm":
+      case ".pps":
+      case ".ppsx":
+      case ".pot":
+      case ".odp": // formats OOo/LO Impress
+      case ".otp":
+      case ".pdf": // On considère le PDF comme une présentation
+        return types.presentation;
+      case ".eml": //formats d'email et d'archive email
+      case ".msg":
+      case ".pst":
+        return types.email;
+      case ".jpeg": //formats d'image
+      case ".jpg":
+      case ".gif":
+      case ".png":
+      case ".bmp":
+      case ".tiff":
+      case ".mp3": //formats audio
+      case ".wav":
+      case ".wma":
+      case ".avi":
+      case ".wmv": //formats vidéo
+      case ".mp4":
+      case ".mov":
+      case ".mkv":
+        return types.multimedia;
+      default:
+        return types.otherfiles;
+      }
+    }
+  }
 
 const mapStateToProps = state => {
   let database = selectDatabase(state)
-  console.time('csv')
-  let csv = database.toCsv()
-  console.timeEnd('csv')
-  let logError = selectLogError(state)
+  let icicle_state = selectIcicleState(state)
 
   return {
-    csv,
-    nb_files: database.size(),
-    nb_errors: logError.size(),
-    parent_path: database.parent_path(),
+    max_depth: database.max_depth(),
+    getByID: database.getByID,
+    root_id: database.root_id(),
+    display_root: icicle_state.display_root(),
+    isZoomed: icicle_state.isZoomed(),
+    isFocused: icicle_state.isFocused(),
+    hover_sequence: icicle_state.hover_sequence()
   }
 }
  
 const mapDispatchToProps = dispatch => {
   return {
-    setParentPath: (...args) => dispatch(setParentPath(...args))
+    setNoDisplayRoot: (...args) => dispatch(setNoDisplayRoot(...args))
   }
 }
 

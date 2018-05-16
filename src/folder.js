@@ -3,47 +3,77 @@ import { mkScheduler } from 'scheduler'
 
 const sch = mkScheduler()
 
-export function asyncHandleDrop(event, insert2DB, loadCsv2DB, logError) {
+export function asyncHandleDrop(event, insert2DB, loadJson2DB, loadLegacyCsv2DB) {
   event.preventDefault()
   let items = event.dataTransfer.items
 
-  let promise_array = []
-  for (let i=0; i<items.length; i++) {
-    if (items[i].kind === 'file') {
+  let entry = items[0].webkitGetAsEntry()
+  if (isJsonFile(entry)) {
+    return readFileFromEntry(entry)
+      .then(loadJson2DB)
+      .then(()=>false)
+  } else if (isLegacyCsvFile(entry)) {
+    return readFileFromEntry(entry)
+      .then(loadLegacyCsv2DB)
+      .then(()=>true)
+  } else {
+    let promise_array = []
+    for (let i=0; i<items.length; i++) {
       let entry = items[i].webkitGetAsEntry()
-      if (isCsvFile(entry)) {
-        promise_array.push(loadCsv(loadCsv2DB, logError, entry))
-      } else {
-        promise_array.push(traverseFileTree(insert2DB, logError, entry, ''))
-      }
+      promise_array.push(traverseFileTree(insert2DB, entry, ''))
     }
+    return Promise.all(promise_array)
+      .then(()=>true)
   }
-  return Promise.all(promise_array)
 }
 
-function isCsvFile(entry) {
-  return entry.isFile && hasCsvExt(entry.name)
+function isJsonFile(entry) {
+  return entry.isFile && hasJsonExt(entry.name)
 }
 
-function hasCsvExt(s) {
+function hasJsonExt(s) {
+  return s.split('.').slice(-1).pop() === 'json'
+}
+
+function isLegacyCsvFile(entry) {
+  return entry.isFile && hasLegacyCsvExt(entry.name)
+}
+
+function hasLegacyCsvExt(s) {
   return s.split('.').slice(-1).pop() === 'csv'
 }
 
 
-function loadCsv(loadCsv2DB, logError, entry) {
+function readFileFromEntry(entry) {
   return new Promise((resolve, reject) => {
     entry.file(file => {
-      readFile(file).then(csv => {
-        loadCsv2DB(csv)
-        resolve()
+      readFile(file).then(content => {
+        resolve(content)
       })
     }, e => {
       console.log(e)
-      logError(file.name,e)
       resolve()
     })
   })
 }
+
+// function loadLegacyCsv(loadLegacyCsv2DB, entry) {
+//   return readFileFromEntry(entry).then(loadLegacyCsv2DB)
+// }
+
+// function loadJson(loadJson2DB, entry) {
+//   return new Promise((resolve, reject) => {
+//     entry.file(file => {
+//       readFile(file).then(json => {
+//         loadJson2DB(json)
+//         resolve()
+//       })
+//     }, e => {
+//       console.log(e)
+//       resolve()
+//     })
+//   })
+// }
 
 export function readFile(file) {
   return new Promise((resolve, reject) => {
@@ -57,28 +87,39 @@ export function readFile(file) {
 }
 
 
-function traverseFileTree(insert2DB, logError, entry, path) {
+function traverseFileTree(insert2DB, entry, path) {
   if (entry.isFile) {
-    return traverseFile(insert2DB, logError, entry, path)
+    return traverseFile(insert2DB, entry, path)
   } else if (entry.isDirectory) {
-    return traverseFolder(insert2DB, logError, entry, path)
+    return traverseFolder(insert2DB, entry, path)
   }
 }
 
-function traverseFile(insert2DB, logError, entry, path) {
+function traverseFile(insert2DB, entry, path) {
   return new Promise((resolve, reject) => sch.schedule(() => {
     entry.file(file => {
-      insert2DB(path + file.name, file.size)
+      insert2DB(
+        path + file.name,
+        {
+          size:file.size,
+          last_modified:file.lastModified,
+          error_is_file:null
+        }
+      )
       resolve()
     }, e => {
-      console.log(e)
-      logError(path+entry.name,e)
+      insert2DB(
+        path + entry.name,
+        {
+          error_is_file:true
+        }
+      )
       resolve()
     })
   }))
 }
 
-function traverseFolder(insert2DB, logError, entry, path) {
+function traverseFolder(insert2DB, entry, path) {
   return new Promise((resolve, reject) => sch.schedule(() => {
     let promise_array = []
     let dirReader = entry.createReader()
@@ -86,15 +127,19 @@ function traverseFolder(insert2DB, logError, entry, path) {
       dirReader.readEntries(entries => {
         if (entries.length > 0) {
           entries.forEach(e =>
-            promise_array.push(traverseFileTree(insert2DB, logError, e, path+entry.name+"/"))
+            promise_array.push(traverseFileTree(insert2DB, e, path+entry.name+"/"))
           )
           doBatch()
         } else {
           Promise.all(promise_array).then(()=>resolve())
         }
       }, e => {
-        console.log(e)
-        logError(path+entry.name,e)
+        insert2DB(
+          path + entry.name,
+          {
+            error_is_file:false
+          }
+        )
         resolve()
       })
     }

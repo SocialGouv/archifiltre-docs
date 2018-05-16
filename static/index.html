@@ -8,59 +8,43 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'UA-115293619-2');
+      gtag('config', 'UA-115293619-2', {
+        'custom_map': {
+          'dimension1': 'dev'
+        }
+      });
+
+      var impicklerick = document.cookie
+        .split('; ')
+        .map(a=>a.split('='))
+        .reduce((acc,val)=>{
+          acc[val[0]]=val[1]
+          return acc
+        }, {})
+        .impicklerick;
+
+      gtag('event', 'dev_dimension', {'dev': impicklerick});
+      if (impicklerick === 'true') {
+        console.log('You are pickle Rick !');
+      }
     </script>
     
     <meta charset="utf-8">
     <title>stalactite v3 - archifiltre</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="imgs/favicon.png">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.4.3/dist/css/foundation.min.css" integrity="sha256-GSio8qamaXapM8Fq9JYdGNTvk/dgs+cMLgPeevOYEx0= sha384-wAweiGTn38CY2DSwAaEffed6iMeflc0FMiuptanbN4J+ib+342gKGpvYRWubPd/+ sha512-QHEb6jOC8SaGTmYmGU19u2FhIfeG+t/hSacIWPpDzOp5yygnthL3JwnilM7LM1dOAbJv62R+/FICfsrKUqv4Gg==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/foundation-sites@6.4.3/dist/js/foundation.min.js" integrity="sha256-mRYlCu5EG+ouD07WxLF8v4ZAZYCA6WrmdIXyn1Bv9Vk= sha384-KzKofw4qqetd3kvuQ5AdapWPqV1ZI+CnfyfEwZQgPk8poOLWaabfgJOfmW7uI+AV sha512-0gHfaMkY+Do568TgjJC2iMAV0dQlY4NqbeZ4pr9lVUTXQzKu8qceyd6wg/3Uql9qA2+3X5NHv3IMb05wb387rA==" crossorigin="anonymous"></script>
+
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
-
-    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-
-    <link rel="stylesheet" type="text/css"
-      href="https://fonts.googleapis.com/css?family=Open+Sans:400,600">
-      <link rel="stylesheet" type="text/css" href="css/main.css">
-
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-
-    <!-- <style>
-        .mdl-cell {
-      background-color:rgba(100, 0, 0, 0.1);
-    }
-
-        .mdl-grid {
-      background-color:rgba(0, 100, 0, 0.1);
-    }
-    </style> -->
-
-
-    <script defer type="text/javascript" src="app.bundle.js"></script>
   </head>
-
   <body>
-      <div id="container" class="demo-layout-transparent mdl-layout mdl-js-layout">
-        <!-- <header class="mdl-layout__header mdl-layout__header--transparent">
-          <div class="mdl-layout__header-row">
-            <span class="mdl-layout-title">
-              <a class="logo-espace mdl-navigation__link" href="index.html"><strong>archifiltre</strong></a>
-            </span>
-
-            <div class="mdl-layout-spacer"></div>
-
-            <nav class="mdl-navigation">
-              <p class="mdl-navigation__link" href=""><strong>Outils à tester |</strong></p>
-              <a class="mdl-navigation__link" href="stalactite2.html">stalactite v2</a>
-              <a class="mdl-navigation__link" href="stalactite2.html">stalactite v3 (beta)</a>
-            </nav>
-          </div>
-        </header> -->
-      </div>
 
   </body>
-
-
 </html>
 
 

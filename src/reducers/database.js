@@ -1,92 +1,66 @@
-// @flow
 
-import { Map } from 'immutable'
-import { generateRandomString } from 'random-gen'
+
 import duck from 'reducers/duck'
-
-import { toCsvLine, fromCsvLine } from 'csv'
+import * as FileSystem from 'file-system'
 
 const type = 'cheapExp/database'
 
-const key = Symbol()
 
-
-function csvLineToVal(csv_line) {
-  let arr = fromCsvLine(csv_line)
-  if (arr.length === 2) {
-    return {
-      path:arr[0].split('/'),
-      size:arr[1]
-    }
-  } else {
-    return {
-      path:arr.slice(0,-1).join('').split('/'),
-      size:arr.slice(-1)
-    }
-  }
-}
-
-function filterPath(parent,curr) {
-  let ans
-  if (parent.length > curr.length) {
-    ans = false
-  } else if (parent.length===curr.length) {
-    ans = curr.map((val,i)=>val===parent[i])
-      .reduce((acc,val)=>acc && val,true)
-  } else {
-    ans = curr.slice(0,parent.length-curr.length)
-      .map((val,i)=>val===parent[i])
-      .reduce((acc,val)=>acc && val,true)
-  }
-  return ans
-}
-
-
-
-function mkS(map,parent_path) {
+function bundle(state) {
   return {
-    toCsv: () => map.reduce((acc,val) => {
-      if (filterPath(parent_path, val.path)) {
-        return acc + toCsvLine([val.path.join('/'), val.size])
-      } else {
-        return acc
-      }
-    },''),
-    toCsvNoFilter: () => map.reduce((acc,val) =>
-      acc + toCsvLine([val.path.join('/'), val.size])
-    ,''),
-    size: () => map.size,
-    parent_path: () => parent_path.slice(),
-    [key]: {
-      map,
-      parent_path
-    }
+    size: () => FileSystem.size(state),
+    max_depth: () => FileSystem.depth(state),
+    parent_path: () => FileSystem.parentPath(state),
+    getByID: (id) => FileSystem.getByID(id, state),
+    volume: () => FileSystem.volume(state),
+    root_id: () => FileSystem.rootId(state),
+    toJson: () => FileSystem.toJson(state),
+    toStrList2: () => FileSystem.toStrList2(state),
+    getSessionName: () => FileSystem.getSessionName(state)
   }
 }
 
-const initialState = mkS(Map(),[])
+const initialState = FileSystem.empty()
 
-const { mkA, reducer } = duck(type, initialState)
+const { mkA, reducer } = duck(type, initialState, bundle)
+
 
 export default reducer
 
-export const create = mkA((path,size) => state =>
-  mkS(state[key].map.set(mkId(), {
-    path:path.split('/'),
-    size
-  }), state[key].parent_path)
-)
+export const push = mkA((path, content) => state => {
+  return FileSystem.pushOnQueue(path, content, state)
+})
 
-export const fromCsv = mkA((csv) => state =>
-  mkS(state[key].map.withMutations(map => 
-    csv.split('\n').forEach(line => map.set(mkId(), csvLineToVal(line)))
-  ), state[key].parent_path)
-)
+export const makeTree = mkA(() => state => {
+  return FileSystem.makeTree(state)
+})
+
+export const sort = mkA(() => state => {
+  return FileSystem.sort(state)
+})
+
+export const fromJson = mkA((json) => state => {
+  return FileSystem.fromJson(json)
+})
+
+export const fromLegacyCsv = mkA((csv) => state => {
+  return FileSystem.fromLegacyCsv(csv)
+})
+
 
 export const reInit = mkA(() => state => initialState)
 
-export const setParentPath = mkA((parent_path) => state =>
-  mkS(state[key].map, parent_path.slice())
-)
+export const setParentPath = mkA((parent_path) => state => {
+  return FileSystem.setParentPath(parent_path, state)
+})
 
-const mkId = () => generateRandomString(40)
+export const setContentByID = mkA((id, content) => state => {
+  const updater = (entry) => entry.set('content', content)
+  state = FileSystem.updateByID(id, updater, state)
+  return state
+})
+
+export const setSessionName = mkA((name) => state => {
+  state = FileSystem.setSessionName(name,state)
+  return state
+})

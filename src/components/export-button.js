@@ -11,7 +11,7 @@ import { tr } from 'dict'
 const Presentational = props => {
   return mkB(()=>{
     console.log('export')
-    save('my.json', props.getJson())
+    save(props.getName(), props.getJson())
   }, tr('Export'))
 }
 
@@ -19,7 +19,10 @@ const Presentational = props => {
 const mapStateToProps = state => {
   let database = selectDatabase(state)
   return {
-    getJson: database.toJson
+    getJson: database.toJson,
+    getName: () => {
+      return database.getSessionName() + '_' + new Date().getTime() + '.json'
+    }
   }
 }
 

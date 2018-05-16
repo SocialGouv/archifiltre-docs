@@ -19,9 +19,15 @@ const Presentational = props => {
 
   if(props.isFocused){
     for(let i = 1; i < props.breadcrumb_sequence.length; i++){
-      let node = props.getByID(props.breadcrumb_sequence[i])
-      let node_id = props.breadcrumb_sequence[i]
-      let is_parent = props.isZoomed && props.display_root.includes(node_id) && node.get('children').size
+      const node_id = props.breadcrumb_sequence[i]
+      const node = props.getByID(node_id)
+      const n_children_size = node.get('children').size
+      const is_parent = props.isZoomed && props.display_root.includes(node_id) && n_children_size
+
+      const n_name = node.get('name')
+      const n_content = node.get('content')
+      const c_alias = n_content.get('alias')
+      const display_name = c_alias === '' ? n_name : c_alias
 
       res.push(
         <g key={"breadcrumb" + i}>
@@ -34,7 +40,7 @@ const Presentational = props => {
           is_dummy={false}/>
           <BreadCrumbText
           key={"text" + i}
-          text={node.get('content').get('display_name')}
+          text={display_name}
           level={i}
           step={icicle_dims.h/(props.max_depth+1)}
           w={breadcrumb_dims.w}

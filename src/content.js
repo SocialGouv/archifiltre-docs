@@ -8,7 +8,7 @@ const Content = Record({
   size:0,
   last_modified:null,
   error_is_file:false,
-  display_name:'',
+  alias:'',
   comments: '',
   tags: Set(),
 })
@@ -17,15 +17,15 @@ export const arbitraryTags = () => {
   return Set(Arbitrary.array(Arbitrary.string))
 }
 
-const tagsToJs = a => a.toArray()
-const tagsFromJs = a => Set(a)
+export const tagsToJs = a => a.toArray()
+export const tagsFromJs = a => Set(a)
 
 
 export const arbitrary = () => new Content({
   size: Arbitrary.natural(),
   last_modified: Arbitrary.natural(),
   error_is_file: Arbitrary.nullable(Arbitrary.bool),
-  display_name: Arbitrary.string(),
+  alias: Arbitrary.string(),
   comments: Arbitrary.string(),
   tags: arbitraryTags(),
 })
@@ -60,8 +60,8 @@ export const setSize = (s, a) => a.set('size', s)
 export const getLastModified = (a) => a.get('last_modified')
 export const setLastModified = (s, a) => a.set('last_modified', s)
 
-export const getDisplayName = (a) => a.get('display_name')
-export const setDisplayName = (s, a) => a.set('display_name', s)
+export const getAlias = (a) => a.get('alias')
+export const setAlias = (s, a) => a.set('alias', s)
 
 export const getComments = (a) => a.get('comments')
 export const setComments = (s, a) => a.set('comments', s)

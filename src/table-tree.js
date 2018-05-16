@@ -17,6 +17,9 @@ const Entry = Record({
   depth:0
 })
 
+export const isLeaf = (a) => a.get('children').size === 0
+export const isRoot = (a) => a.get('parent') === null
+
 export const mkDummyFile = () => new Entry({children:List(), name:''})
 export const mkDummyParent = () => new Entry({children:List(["-1"]), name:''})
 
@@ -147,7 +150,6 @@ export default function(C) {
         const child = new Entry({
           name,
           content,
-          // content: content.update('display_name', a=>name), ###############################################
           parent:id,
           depth: getEntryById(id, tt).get('depth')+1
         })
@@ -315,6 +317,8 @@ export default function(C) {
     getRootId,
     remakePath,
     getEntryById,
+    updateEntryById,
+    
     toStrList2,
 
     toJsTree,

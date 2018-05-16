@@ -33,18 +33,20 @@ class Presentational extends React.Component {
   render() {
     // console.log("updating")
     // console.time("updating")
-    let opacity = (
-      this.props.isLocked ?
+    let opacity =
+      (this.props.isLocked ?
         (this.props.isInLockSeq ?
-          1 :
+          1
+        :
           (this.props.isInHoverSeq ? 0.6 : 0.3)
         )
       :
         (this.props.isFocused ?
           (this.props.isInHoverSeq ? 1 : 0.3)
-          : 1
+        :
+          1
         )
-      );
+      )
 
     let display = this.node.get('depth') ? "" : "none"
     let is_parent = this.props.isZoomed && this.props.display_root.includes(this.node_id) && this.node.get('children').size
@@ -75,7 +77,7 @@ class Presentational extends React.Component {
       stroke="none"
       fill={typeOf(mkDummyParent()).color}
       onClick={(e) => {e.stopPropagation(); this.props.setNoDisplayRoot() ; this.props.setNoFocus() ;}}
-      key="text" />);
+      key="button" />);
 
       res.push(<text
       x={this.props.dims.dx/2}

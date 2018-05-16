@@ -42,7 +42,7 @@ const Presentational = props => {
       );
 }
 
-const octet2HumanReadableFormat = o => {
+export const octet2HumanReadableFormat = o => {
   let To = o/Math.pow(1000,4)
   if (To > 1) {
     return Math.round(To * 10)/10 + ' To'

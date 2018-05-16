@@ -11,12 +11,6 @@ RUN npm install
 
 COPY . .
 
-# # Old dev build
-# RUN npm run-script buildDev
-
-# WORKDIR ./dist
-# CMD ["python", "-m", "SimpleHTTPServer", "8000"]
-
 
 CMD ["./startupDev.bash"]
 

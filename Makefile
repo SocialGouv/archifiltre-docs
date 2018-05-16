@@ -5,12 +5,14 @@ all: devServer
 
 runProd : prod
 	sudo docker run \
+		--rm \
 		--network=host \
 		-it \
 		$(image_name):prod
 
 devServer: dev
 	sudo docker run \
+		--rm \
 		--network=host \
 		--mount type=bind,source=$(pwd),target=/mnt,readonly \
 		-it \
@@ -33,3 +35,19 @@ clean: cleanContainer
 
 cleanContainer:
 	sudo docker container prune -f
+
+
+
+TP = './src/**/*.test.js'
+
+test: dev
+	sudo docker run \
+		--network host \
+		-it \
+		$(image_name):dev \
+		npm test $(TP)
+
+
+
+
+

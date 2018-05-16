@@ -1,0 +1,55 @@
+.comments {
+  font-size: 1em;
+  border: none;
+  resize: none;
+  line-height: 1.2em;
+}
+
+.comments:focus {
+  font-size: 1em;
+  border: none;
+}
+
+.tags div {
+  display: inline-block;
+  margin-right: 0.3em;
+  color: white;
+  background-color: rgb(40,40,40);
+  border-radius: 0.8em;
+  padding-left:0.7em;
+  padding-right:0.5em;
+}
+
+.tags div div {
+  background: none;
+  padding-left: 0.5em;
+  padding-right: 0em;
+}
+
+.edit_hover_container .edit_hover_pencil{
+  visibility: hidden;
+}
+.edit_hover_container:hover .edit_hover_pencil{
+  visibility: visible;
+}
+
+body {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background: #ced3cc;
+  background-repeat:no-repeat;
+  background: -webkit-linear-gradient(to bottom, #ecefea, #ced3cc);
+  background: -moz-linear-gradient(to bottom, #ecefea, #ced3cc);
+  background: -ms-linear-gradient(to bottom, #ecefea, #ced3cc);
+  background: -o-linear-gradient(to bottom, #ecefea, #ced3cc);
+  background: linear-gradient(to bottom, #ecefea, #ced3cc);
+}
+
+
+*, h4 {
+  font-family: 'Quicksand', sans-serif;
+  /*background-color: rgba(0,0,0,0.05);*/
+}
+

@@ -2,9 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import * as Folder from 'folder'
-import { create, fromCsv } from 'reducers/database'
+import { push, fromJson, makeTree, sort, fromLegacyCsv } from 'reducers/database'
 import { startToLoadFiles, finishedToLoadFiles } from 'reducers/app-state'
-import { logError } from 'reducers/log-error'
+import { commit } from 'reducers/root-reducer'
+
+import TextAlignCenter from 'components/text-align-center'
 
 import { tr } from 'dict'
 
@@ -13,26 +15,16 @@ class Presentational extends React.Component {
     super(props)
 
     this.style_dropzone = {
-      height: '15em',
       border: '0.2em dashed #868686',
       borderRadius: '3em',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      textAlign: 'center',
-      marginLeft: '5%',
-      marginRight: '5%',
-      marginTop: '3em'
     }
 
     this.style_placeholder = {
-      fontFamily: '\'Quicksand\', sans-serif',
       fontSize: '3em',
-      lineHeight: '1.2'
     }
 
-    this.placeholder = tr("Drop a directory here!")
-    this.placeholder_st = tr("You may also drop a CSV file previously exported from Icicle.")
+    this.placeholder = tr('Drop a directory here!')
+    this.placeholder_st = tr('You may also drop a JSON file previously exported from Icicle.')
 
 
     this.handleDrop = this.handleDrop.bind(this)
@@ -43,26 +35,35 @@ class Presentational extends React.Component {
   }
 
   handleDrop (e) {
-    Folder.asyncHandleDrop(e,this.props.create,this.props.fromCsv,this.props.logError)
-          .then(this.props.finishedToLoadFiles)
+    e.preventDefault()
     this.props.startToLoadFiles()
+    Folder.asyncHandleDrop(e,this.props.push,this.props.fromJson,this.props.fromLegacyCsv)
+      .then(shouldProcess => {
+        if (shouldProcess) {
+          this.props.makeTree()
+          this.props.sort()
+        }
+      })
+      .then(this.props.finishedToLoadFiles)
   }
 
   render() {
     return (
       <div
+        className='grid-y grid-frame align-center'
         onDragOver={this.handleDragover}
         onDrop={this.handleDrop}
         style={this.style_dropzone}
-        className="mdl-cell mdl-cell--12-col"
       >
-        <div>
-          <p style={this.style_placeholder}>
-            {this.placeholder}
-          </p>
-          <p style={this.style_placeholder_st}>
-            {this.placeholder_st}
-          </p>
+        <div className='cell'>
+          <TextAlignCenter>
+            <div style={this.style_placeholder}>{this.placeholder}</div>
+          </TextAlignCenter>
+        </div>
+        <div className='cell'>
+          <TextAlignCenter>
+            <div>{this.placeholder_st}</div>
+          </TextAlignCenter>
         </div>
       </div>
     )
@@ -76,11 +77,16 @@ const mapStateToProps = state => {
  
 const mapDispatchToProps = dispatch => {
   return {
-    create: (...args) => dispatch(create(...args)),
-    fromCsv: (...args) => dispatch(fromCsv(...args)),
-    logError: (...a) => dispatch(logError(...a)),
+    push: (...args) => dispatch(push(...args)),
+    makeTree: (...args) => dispatch(makeTree(...args)),
+    sort: (...args) => dispatch(sort(...args)),
+    fromJson: (...args) => dispatch(fromJson(...args)),
+    fromLegacyCsv: (...args) => dispatch(fromLegacyCsv(...args)),
     startToLoadFiles: (...args) => dispatch(startToLoadFiles(...args)),
-    finishedToLoadFiles: (...args) => dispatch(finishedToLoadFiles(...args)),
+    finishedToLoadFiles: (...args) => {
+      dispatch(finishedToLoadFiles(...args))
+      dispatch(commit())
+    },
   }
 }
 

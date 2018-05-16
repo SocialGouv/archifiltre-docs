@@ -45,6 +45,7 @@ export const qeFromJson = a => {
 }
 
 const Fs = Record({
+  session_name:'Untitled',
   version:5,
   content_queue:List(),
   nb_push:0,
@@ -86,6 +87,9 @@ export const setByID = (id, entry, state) =>
 export const updateByID = (id, f, state) =>
   state.update('tree',a=>TT.updateEntryById(id, f, a))
 
+
+export const getSessionName = (state) => state.get('session_name')
+export const setSessionName = (a, state) => state.set('session_name',a)
 
 export const volume = (state) => {
   return Content.getSize(getByID(rootId(state), state).get('content'))

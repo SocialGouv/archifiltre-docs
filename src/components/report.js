@@ -15,6 +15,7 @@ import { mkDummyParent, mkDummyFile } from 'table-tree'
 import { edit_hover_container, edit_hover_pencil, tags, comments } from 'css/app.css'
 
 import * as Content from 'content'
+import { commit } from 'reducers/root-reducer'
 
 import { tr } from 'dict'
 
@@ -172,19 +173,21 @@ const mapStateToProps = state => {
 	}
 }
 
-const mapDispatchToProps = dispatch => {  
+const mapDispatchToProps = dispatch => {
   // (n) => {
   //   props.editEntryContent(props.node_id, 'display_name',
   //    n['new_display_name'].length ? n['new_display_name'] : display_name)}
   const onChangeAlias = (prop_name, id, content) => (n) => {
     content = content.set('alias', n[prop_name])
     dispatch(setContentByID(id, content))
+    dispatch(commit())
   }
 
   // (n) => props.editEntryContent(props.node_id, 'tags', n['new_tags'])
   const onChangeTags = (prop_name, id, content) => (n) => {
     content = content.set('tags', Content.tagsFromJs([...n[prop_name]]))
     dispatch(setContentByID(id, content))
+    dispatch(commit())
   }
 
   // (n) => {
@@ -193,6 +196,7 @@ const mapDispatchToProps = dispatch => {
   const onChangeComments = (prop_name, id, content) => (n) => {
     content = content.set('comments', n[prop_name])
     dispatch(setContentByID(id, content))
+    dispatch(commit())
   }
  	return {
     onChangeAlias,

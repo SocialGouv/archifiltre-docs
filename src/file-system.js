@@ -83,6 +83,9 @@ const setVersion = (a,state) => state.set('version',a)
 export const getByID = (id, state) => TT.getEntryById(id, state.get('tree'))
 export const setByID = (id, entry, state) =>
   state.update('tree',a=>TT.setEntryById(id, entry, a))
+export const updateByID = (id, f, state) =>
+  state.update('tree',a=>TT.updateEntryById(id, f, a))
+
 
 export const volume = (state) => {
   return Content.getSize(getByID(rootId(state), state).get('content'))

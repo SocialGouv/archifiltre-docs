@@ -9,6 +9,11 @@ import * as M from 'content'
 
 describe('content', function() {
 
+  Loop.immuEqual('(tagsFromJs . tagsToJs) a', () => {
+    const a = M.arbitraryTags()
+    return [M.tagsFromJs(M.tagsToJs(a)), a]
+  })
+
   Loop.immuEqual('(fromJson . toJson) a', () => {
     const a = M.arbitrary()
     return [M.fromJson(M.toJson(a)), a]
@@ -29,9 +34,9 @@ describe('content', function() {
     return [M.getLastModified(M.setLastModified(a, M.arbitrary())), a]
   })
 
-  Loop.equal('(getDisplayName . setDisplayName x) a', () => {
+  Loop.equal('(getAlias . setAlias x) a', () => {
     const a = Arbitrary.string()
-    return [M.getDisplayName(M.setDisplayName(a, M.arbitrary())), a]
+    return [M.getAlias(M.setAlias(a, M.arbitrary())), a]
   })
 
   Loop.equal('(getComments . setComments x) a', () => {

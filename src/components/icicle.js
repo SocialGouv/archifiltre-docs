@@ -5,7 +5,6 @@ import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 import { setNoDisplayRoot } from 'reducers/icicle-state'
 
 import IcicleRect from 'components/icicle-rect'
-import {positionNodes} from 'components/node-placer'
 
 import { tr } from 'dict'
 
@@ -32,7 +31,8 @@ const types = {
   };
 
 
-
+const getChildrenSize = a => a.size
+const getChildrenElem = (i,a) => a.get(i)
 
 class Presentational extends React.Component {
   constructor(props) {
@@ -65,12 +65,18 @@ class Presentational extends React.Component {
 
 
   positionNodes(root_id, root_seq, left, right, top, bottom, tree_depth, sequence){
-    let root = this.getByID(root_id)
+    const root = this.getByID(root_id)
+    const r_name = root.get('name')
+    const r_depth = root.get('depth')
+    const r_children = root.get('children')
+    const r_content = root.get('content')
+    const root_size = r_content.get('size')
+
     let height = bottom - top
     let width = right - left
     let new_sequence = sequence.concat(root_id)
 
-    let root_dims={
+    let root_dims = {
       x: left,
       y: top,
       dx: (isNaN(width) ? 0 : width),
@@ -80,11 +86,11 @@ class Presentational extends React.Component {
     let res = (
       root_dims.dx < 1 ?
       []
-      :
-      [<IcicleRect key={root.get('name') + root.get('depth')} dims={root_dims} node_id={root_id} node={root} node_sequence={new_sequence} />])
+      : //######################################" change key with entry id"
+      [<IcicleRect key={r_name + r_depth} dims={root_dims} node_id={root_id} node={root} node_sequence={new_sequence} />])
 
-    let children = root.get('children')
-    if (children.size && root_dims.dx > 1) {
+
+    if (getChildrenSize(r_children) && root_dims.dx > 1) {
 
       if(this.props.isZoomed && root_seq.length > 1){
         let child = this.getByID(root_seq[1])
@@ -102,22 +108,22 @@ class Presentational extends React.Component {
 
       else{
       let x_cursor = left
-        for (let i = 0; i <= children.size - 1; ++i) {
-            let child = this.getByID(children.get(i))
-            const child_size = child.content.size
-            const root_size = root.get('content').get('size')
+        for (let i = 0; i <= getChildrenSize(r_children) - 1; ++i) {
+          const child_id = getChildrenElem(i, r_children)
+          const child = this.getByID(child_id)
+          const child_size = child.content.size
 
-            res.push(this.positionNodes(
-              children.get(i),
-              root_seq,
-              x_cursor,
-              x_cursor+child_size/root_size*width,
-              top+height/tree_depth,
-              bottom,
-              tree_depth-1,
-              new_sequence))
+          res.push(this.positionNodes(
+            child_id,
+            root_seq,
+            x_cursor,
+            x_cursor+child_size/root_size*width,
+            top+height/tree_depth,
+            bottom,
+            tree_depth-1,
+            new_sequence))
 
-            x_cursor = x_cursor+child_size/root_size*width
+          x_cursor = x_cursor+child_size/root_size*width
         }
       }
     }

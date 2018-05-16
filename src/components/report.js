@@ -5,7 +5,7 @@ import { RIEInput, RIETextArea, RIETags } from 'riek'
 // import _ from 'lodash'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
-import { editEntryContent } from 'reducers/database'
+import { setContentByID } from 'reducers/database'
 
 import { typeOf } from 'components/icicle'
 import { makeSizeString } from 'components/ruler'
@@ -14,89 +14,119 @@ import { mkDummyParent, mkDummyFile } from 'table-tree'
 
 import { edit_hover_container, edit_hover_pencil, tags, comments } from 'css/app.css'
 
+import * as Content from 'content'
+
 import { tr } from 'dict'
 
 const Presentational = props => {
   let icon, name, real_name, tags_cell, comments_cell
 
   if(props.isFocused) {
-    let node = props.node
+    const node = props.node
+    const n_children = node.get('children')
+    const n_name = node.get('name')
+    const n_content = node.get('content')
+    const c_alias = n_content.get('alias')
+    const c_tags = new Set(Content.tagsToJs(n_content.get('tags')))
+    const c_comments = n_content.get('comments')
+
+    const display_name = c_alias === '' ? n_name : c_alias
+    const bracket_name = c_alias === '' ? '' : n_name
+
+
     let type = typeOf(node)
     let is_folder = type.label === tr("Folder") || type.label === tr("Root")
 
-    let is_parent = props.isZoomed && props.display_root.includes(props.node_id) && props.node.get('children').size
+    let is_parent = props.isZoomed && props.display_root.includes(props.node_id) && n_children.size
 
-    icon = (<i className={(is_folder ? "fi-folder" : "fi-page")} style={{
-      'fontSize': '3em',
-      'width': '1.7em',
-      'color': is_parent ? typeOf(mkDummyParent()).color : typeOf(node).color,
-      'display': 'table-cell',
-      'paddingLeft': '0.5em',
-      'verticalAlign':'middle'}}/>);
+    icon = (
+      <i className={(is_folder ? "fi-folder" : "fi-page")} style={{
+        'fontSize': '3em',
+        'width': '1.7em',
+        'color': is_parent ? typeOf(mkDummyParent()).color : typeOf(node).color,
+        'display': 'table-cell',
+        'paddingLeft': '0.5em',
+        'verticalAlign':'middle'}}
+      />
+    )
 
-    name = (<span style={{'fontWeight':'bold'}} className={edit_hover_container}>
+    name = (
+      <span style={{'fontWeight':'bold'}} className={edit_hover_container}>
         <RIEInput
-        value={node.get('content').get('display_name')}
-        change={(n) => {props.editEntryContent(props.node_id, 'display_name', n['new_display_name'].length ? n['new_display_name'] : node.get('content').get('display_name'))}}
-        propName='new_display_name' />
-        &ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} />
-      </span>);
+          value={display_name}
+          change={props.onChangeAlias('new_display_name', props.node_id, n_content)}
+          propName='new_display_name'
+        />
+        &ensp;
+        <i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} />
+      </span>
+    )
 
-    real_name = (<span style={{'fontStyle':'italic', 'visibility': (node.get('name') !== node.get('content').get('display_name') ? '' : 'hidden')}}>
-      ({node.get('name')})</span>);
+    real_name = (
+      <span style={{'fontStyle':'italic', 'visibility': (bracket_name === '' ? 'hidden' : '')}}>
+        ({bracket_name})
+      </span>
+    )
 
     tags_cell = (
       <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em'}}>
         <span style={{'fontWeight': 'bold'}}>{tr("Tags")}</span>
         <span>&ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-        <span style={{'fontStyle': (node.get('content').get('tags').size ? '' : '')}}>
+        <span style={{'fontStyle': (c_tags.size ? '' : '')}}>
           <RIETags
-          value={node.get('content').get('tags').size ? node.get('content').get('tags') : new Set(["Your", "Tags", "Here"])}
-          change={(n) => props.editEntryContent(props.node_id, 'tags', n['new_tags'])}
-          className={tags}
-          placeholder={tr("New tag")}
-          propName='new_tags'/>
+            value={c_tags.size ? c_tags : new Set(["Your", "Tags", "Here"])}
+            change={props.onChangeTags('new_tags', props.node_id, n_content)}
+            className={tags}
+            placeholder={tr("New tag")}
+            propName='new_tags'
+          />
         </span>
-      </div>);
+      </div>
+    )
 
     comments_cell = (
       <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
         <span style={{'fontWeight': 'bold'}}>{tr("Comments")}</span>
         <span>&ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-        <span style={{'fontStyle': (node.get('content').get('comments').length ? '' : 'italic')}}>
+        <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
           <RIETextArea
-          value={node.get('content').get('comments').length ? node.get('content').get('comments') : tr("Your text here")+"..."}
-          change={(n) => {props.editEntryContent(props.node_id, 'comments', n['new_comments'].length ? n['new_comments'] : node.get('content').get('comments'))}}
-          className={comments}
-          propName='new_comments'/>
+            value={c_comments.length ? c_comments : tr("Your text here")+"..."} // ##############" Placeholder ???"
+            change={props.onChangeComments('new_comments', props.node_id, n_content)}
+            className={comments}
+            propName='new_comments'
+          />
         </span>
-      </div>);
-  }
+      </div>
+    )
+  } else {
+    icon = (
+      <i className="fi-page-multiple" style={{
+        'fontSize': '3em',
+        'width': '1.7em',
+        'color': typeOf(mkDummyFile()).color,
+        'display': 'table-cell',
+        'paddingLeft': '0.5em',
+        'verticalAlign':'middle'}}
+      />
+    )
 
-  else{
-    icon = (<i className="fi-page-multiple" style={{
-      'fontSize': '3em',
-      'width': '1.7em',
-      'color': typeOf(mkDummyFile()).color,
-      'display': 'table-cell',
-      'paddingLeft': '0.5em',
-      'verticalAlign':'middle'}}/>);
+    name = (<span style={{'fontWeight':'bold'}}>{tr("Folder of file's name")}</span>)
 
-    name = (<span style={{'fontWeight':'bold'}}>{tr("Folder of file's name")}</span>);
-
-    real_name = (<span style={{'fontStyle':'italic'}}>({tr("Real name")})</span>);
+    real_name = (<span style={{'fontStyle':'italic'}}>({tr("Real name")})</span>)
 
     tags_cell = (
       <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
         <span style={{'fontWeight': 'bold'}}>{tr("Tags")}</span><br />
         <span style={{'fontStyle':'italic'}}>{tr("Your tags here") + "..."}</span>
-      </div>);
+      </div>
+    )
 
     comments_cell = (
       <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
         <span style={{'fontWeight': 'bold'}}>{tr("Comments")}</span><br />
         <span style={{'fontStyle':'italic'}}>{tr("Your text here") + "..."}</span>
-      </div>);
+      </div>
+    )
   }
 
   return (
@@ -119,7 +149,7 @@ const Presentational = props => {
       </div>
 
     </div>
-      );
+  )
 }
 
 const mapStateToProps = state => {
@@ -142,9 +172,32 @@ const mapStateToProps = state => {
 	}
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = dispatch => {  
+  // (n) => {
+  //   props.editEntryContent(props.node_id, 'display_name',
+  //    n['new_display_name'].length ? n['new_display_name'] : display_name)}
+  const onChangeAlias = (prop_name, id, content) => (n) => {
+    content = content.set('alias', n[prop_name])
+    dispatch(setContentByID(id, content))
+  }
+
+  // (n) => props.editEntryContent(props.node_id, 'tags', n['new_tags'])
+  const onChangeTags = (prop_name, id, content) => (n) => {
+    content = content.set('tags', Content.tagsFromJs([...n[prop_name]]))
+    dispatch(setContentByID(id, content))
+  }
+
+  // (n) => {
+  //   props.editEntryContent(props.node_id, 'comments',
+  //     n['new_comments'].length ? n['new_comments'] : c_comments)}
+  const onChangeComments = (prop_name, id, content) => (n) => {
+    content = content.set('comments', n[prop_name])
+    dispatch(setContentByID(id, content))
+  }
  	return {
-    editEntryContent: (...args) => dispatch((editEntryContent(...args))),
+    onChangeAlias,
+    onChangeTags,
+    onChangeComments
   }
 }
 

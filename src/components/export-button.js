@@ -5,13 +5,15 @@ import { mkB } from 'components/button'
 
 import { selectDatabase } from 'reducers/root-reducer'
 
-import { save } from 'save'
+import { save, makeNameWithExt } from 'save'
 import { tr } from 'dict'
 
+
 const Presentational = props => {
+  const name = makeNameWithExt(props.getSessionName(),'.json')
   return mkB(()=>{
     console.log('export')
-    save(props.getName(), props.getJson())
+    save(name, props.getJson())
   }, tr('Export'))
 }
 
@@ -20,9 +22,7 @@ const mapStateToProps = state => {
   let database = selectDatabase(state)
   return {
     getJson: database.toJson,
-    getName: () => {
-      return database.getSessionName() + '_' + new Date().getTime() + '.json'
-    }
+    getSessionName: database.getSessionName,
   }
 }
 

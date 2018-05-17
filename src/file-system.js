@@ -170,3 +170,6 @@ export const fromLegacyCsv = (csv) => {
   return ans
 }
 
+export const getIDPath = (id, state) => {
+  return TT.getIdPath(id, state.get('tree'))
+}

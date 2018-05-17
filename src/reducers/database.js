@@ -12,6 +12,7 @@ function bundle(state) {
     max_depth: () => FileSystem.depth(state),
     parent_path: () => FileSystem.parentPath(state),
     getByID: (id) => FileSystem.getByID(id, state),
+    getIDPath: (id) => FileSystem.getIDPath(id, state),
     volume: () => FileSystem.volume(state),
     root_id: () => FileSystem.rootId(state),
     toJson: () => FileSystem.toJson(state),

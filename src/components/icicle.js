@@ -11,7 +11,6 @@ import { tr } from 'dict'
 const icicle_style = {
   position: 'relative',
   stroke: '#fff',
-  // 'background-color': 'rgba(100,100,100,0.1)'
 }
 
 export const icicle_dims = {
@@ -31,104 +30,162 @@ const types = {
   };
 
 
-const getChildrenSize = a => a.size
-const getChildrenElem = (i,a) => a.get(i)
+const makeKeyPN = (id) => 'position-nodes-'+id
+const makeKeyIR = (id) => 'icicle-rect-'+id
+
+class PositionNodes extends React.PureComponent {
+  constructor(props) {
+    super(props)
+  }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   let ans = true
+  //   let logs = []
+  //   for (let key in this.props) {
+  //     ans = ans && this.props[key] === nextProps[key]
+  //     if (this.props[key] !== nextProps[key]) {
+  //       logs.push(key)
+  //     }
+  //   }
+  //   // console.log(ans)
+  //   // console.log(ans, logs)
+  //   return true
+  // }
+
+  render() {
+    const getChildrenSize = a => a.size
+    const getChildrenElem = (i,a) => a.get(i)
+
+    const root = this.props.getByID(this.props.root_id)
+    const r_children = root.get('children')
+    const r_content = root.get('content')
+    const root_size = r_content.get('size')
+
+    const height = this.props.bottom - this.props.top
+    const width = this.props.right - this.props.left
+
+    const x = this.props.left
+    const y = this.props.top
+    const dx = (isNaN(width) ? 0 : width)
+    const dy = height/this.props.tree_depth
+
+    const res = []
+
+    if (dx < 1) {
+      return (<g/>)
+    } else {
+      const recCall = []
+
+      if (getChildrenSize(r_children) && dx > 1) {
+
+        if(this.props.isZoomed && this.props.root_seq.length > 1) {
+          const root_id = this.props.root_seq[1]
+          recCall.push(
+            <PositionNodes
+              key={makeKeyPN(root_id)}
+              root_id={root_id}
+              root_seq={this.props.root_seq.slice(1,this.props.root_seq.length)}
+              left={this.props.left}
+              right={this.props.right}
+              top={this.props.top+height/this.props.tree_depth}
+              bottom={this.props.bottom}
+              tree_depth={this.props.tree_depth-1}
+              getByID={this.props.getByID}
+              isZoomed={this.props.isZoomed}
+            />
+          )
+        } else {
+          let x_cursor = this.props.left
+          for (let i = 0; i <= getChildrenSize(r_children) - 1; ++i) {
+            const child_id = getChildrenElem(i, r_children)
+            const child = this.props.getByID(child_id)
+            const child_size = child.content.size
+
+            recCall.push(
+              <PositionNodes
+                key={makeKeyPN(child_id)}
+                root_id={child_id}
+                root_seq={this.props.root_seq}
+                left={x_cursor}
+                right={x_cursor+child_size/root_size*width}
+                top={this.props.top+height/this.props.tree_depth}
+                bottom={this.props.bottom}
+                tree_depth={this.props.tree_depth-1}
+                getByID={this.props.getByID}
+                isZoomed={this.props.isZoomed}
+              />
+            )
+
+            x_cursor = x_cursor+child_size/root_size*width
+          }
+        }
+      }
+
+      return (
+        <g>
+          <IcicleRect
+            key={makeKeyIR(this.props.root_id)}
+            node_id={this.props.root_id}
+            x={x}
+            y={y}
+            dx={dx}
+            dy={dy}
+          />
+          {recCall}
+        </g>
+      )
+
+    }
+  }
+}
+
+
+
 
 class Presentational extends React.Component {
   constructor(props) {
     super(props)
-    this.root_id = props.root_id
-    this.max_tree_depth = props.max_depth
-    this.isZoomed = this.props.isZoomed
-
-    this.getByID = props.getByID
 
     this.plot = this.plot.bind(this)
 
-    console.log("profondeur : ", this.max_tree_depth)
+    console.log('profondeur : ', props.max_depth)
 
     setNoDisplayRoot()
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if(nextProps.display_root !== this.props.display_root) return true;
-    return false;
+    if (nextProps.display_root !== this.props.display_root) {
+      return true
+    } else {
+      return false
+    }
   }
 
 
-  plot(root, root_seq, tree_depth) {
+  plot() {
+    const root_id = this.props.root_id
+    // const root_seq = this.props.isZoomed ? this.props.display_root : []
+    const root_seq = this.props.display_root
+    const tree_depth = this.props.max_depth + 1
+    const getByID = this.props.getByID
+    const isZoomed = this.props.isZoomed
     console.time("render icicle")
-    let icicle = this.positionNodes(root, root_seq, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [], this.getByID, this.isZoomed)
+    const icicle = (
+      <PositionNodes
+        key={makeKeyPN(root_id)}
+        root_id={root_id}
+        root_seq={root_seq}
+        left={0}
+        right={icicle_dims.w}
+        top={0}
+        bottom={icicle_dims.h}
+        tree_depth={tree_depth}
+        getByID={getByID}
+        isZoomed={isZoomed}
+      />
+    )
     console.timeEnd("render icicle")
     return icicle
-  }
-
-
-  positionNodes(root_id, root_seq, left, right, top, bottom, tree_depth, sequence){
-    const root = this.getByID(root_id)
-    const r_name = root.get('name')
-    const r_depth = root.get('depth')
-    const r_children = root.get('children')
-    const r_content = root.get('content')
-    const root_size = r_content.get('size')
-
-    let height = bottom - top
-    let width = right - left
-    let new_sequence = sequence.concat(root_id)
-
-    let root_dims = {
-      x: left,
-      y: top,
-      dx: (isNaN(width) ? 0 : width),
-      dy: height/tree_depth
-    }
-
-    let res = (
-      root_dims.dx < 1 ?
-      []
-      : //######################################" change key with entry id"
-      [<IcicleRect key={r_name + r_depth} dims={root_dims} node_id={root_id} node={root} node_sequence={new_sequence} />])
-
-
-    if (getChildrenSize(r_children) && root_dims.dx > 1) {
-
-      if(this.props.isZoomed && root_seq.length > 1){
-        let child = this.getByID(root_seq[1])
-
-        res.push(this.positionNodes(
-          root_seq[1],
-          root_seq.slice(1,root_seq.length),
-          left,
-          right,
-          top+height/tree_depth,
-          bottom,
-          tree_depth-1,
-          new_sequence))
-      }
-
-      else{
-      let x_cursor = left
-        for (let i = 0; i <= getChildrenSize(r_children) - 1; ++i) {
-          const child_id = getChildrenElem(i, r_children)
-          const child = this.getByID(child_id)
-          const child_size = child.content.size
-
-          res.push(this.positionNodes(
-            child_id,
-            root_seq,
-            x_cursor,
-            x_cursor+child_size/root_size*width,
-            top+height/tree_depth,
-            bottom,
-            tree_depth-1,
-            new_sequence))
-
-          x_cursor = x_cursor+child_size/root_size*width
-        }
-      }
-    }
-
-    return res
   }
 
   render() {
@@ -136,7 +193,7 @@ class Presentational extends React.Component {
       <div id='chart' style={icicle_style}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
           <g id="container">
-            {this.plot(this.props.root_id, (this.props.isZoomed ? this.props.display_root : []), this.max_tree_depth + 1)}
+            {this.plot()}
           </g>
         </svg>
       </div>)
@@ -151,15 +208,13 @@ export const typeOf = (node) => {
     } else {
       return types.folder;
     }
-  }
-
-  else {
+  } else {
     let m = node.get('name').match(/\.[^\.]*$/)
 
     if (m == null)
       m = [""]
 
-    switch(m[0].toLowerCase()){
+    switch (m[0].toLowerCase()) {
       case ".xls": //formats Microsoft Excel
       case ".xlsx":
       case ".xlsm":
@@ -213,9 +268,9 @@ export const typeOf = (node) => {
         return types.multimedia;
       default:
         return types.otherfiles;
-      }
     }
   }
+}
 
 const mapStateToProps = state => {
   let database = selectDatabase(state)

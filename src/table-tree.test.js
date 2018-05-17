@@ -24,6 +24,8 @@ describe('table-tree', function() {
   const toStrListHeader = () => List.of(column_name)
   const toJson = JSON.stringify
   const fromJson = JSON.parse
+  const toJs = a=>a
+  const fromJs = a=>a
 
   const arbitrary = Arbitrary.natural
 
@@ -34,7 +36,9 @@ describe('table-tree', function() {
     toStrListHeader,
     toJson,
     fromJson,
-    arbitrary
+    arbitrary,
+    toJs,
+    fromJs
   })
 
   const isSortedToTreeToJs = function(tree) {
@@ -48,6 +52,11 @@ describe('table-tree', function() {
   Loop.immuEqual('(fromJson . toJson) a', () => {
     const a = TT.arbitrary()
     return [TT.fromJson(TT.toJson(a)), a]
+  })
+
+  Loop.immuEqual('(fromJs . toJs) a', () => {
+    const a = TT.arbitrary()
+    return [TT.fromJs(TT.toJs(a)), a]
   })
 
   Loop.equal('(isSorted . sort) a', () => {
@@ -98,8 +107,12 @@ describe('table-tree', function() {
     TT.toStrList2(a).toJS()
       .should.deep.equal([
         ['path', column_name],
+        ['', 3],
+        ['a', 3],
+        ['a/b', 2],
         ['a/b/c', 1],
         ['a/b/d', 1],
+        ['a/e', 1],
         ['a/e/f', 1],
       ])
 

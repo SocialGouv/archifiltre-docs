@@ -6,10 +6,10 @@ const type = 'cheapExp/icicleState'
 
 
 const State = Record({
-  hover_seq:[-1],
-  lock_seq:[-1],
+  hover_seq:[],
+  lock_seq:[],
   dims: {},
-  display_root:[-1]
+  display_root:[]
 })
 
 function bundle(state) {
@@ -18,9 +18,9 @@ function bundle(state) {
     lock_sequence: () => state.get('lock_seq'),
     hover_dims: () => state.get('dims'),
     display_root: () => state.get('display_root'),
-    isFocused: () => !(state.get('hover_seq').includes(-1)),
-    isLocked: () => !(state.get('lock_seq').includes(-1)),
-    isZoomed: () => !(state.get('display_root').includes(-1))
+    isFocused: () => state.get('hover_seq').length > 0,
+    isLocked: () => state.get('lock_seq').length > 0,
+    isZoomed: () => state.get('display_root').length > 0
   }
 }
 
@@ -38,8 +38,8 @@ export const setFocus = mkA((id_arr, dims, isLocked) => state => {
 })
 
 export const setNoFocus = mkA(() => state => {
-  state = state.update('hover_seq', () => [-1])
-  state = state.update('dims',()=>{})
+  state = state.update('hover_seq', () => [])
+  state = state.update('dims',()=>{return {}})
   return state
 })
 
@@ -50,18 +50,18 @@ export const lock = mkA((id_arr, dims) => state => {
 })
 
 export const unlock = mkA(() => state => {
-  state = state.update('lock_seq', () => [-1])
+  state = state.update('lock_seq', () => [])
   return state
 })
 
 export const setDisplayRoot = mkA((root_seq) => state =>{
   state = state.update('display_root',()=>root_seq)
-  state = state.update('lock_seq', () => [-1])
+  state = state.update('lock_seq', () => [])
   return state
 })
 
 export const setNoDisplayRoot = mkA(() => state =>{
-  state = state.update('display_root',()=>[-1])
-  state = state.update('lock_seq', () => [-1])
+  state = state.update('display_root',()=>[])
+  state = state.update('lock_seq', () => [])
   return state
 })

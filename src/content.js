@@ -45,12 +45,24 @@ export const compare = (a,b) => {
 export const update = (young,old) => {
   const size = young.get('size')
   old = old.update('size', a=>a+size)
+  const time = young.get('last_modified')
+  old = old.update('last_modified', a=>Math.max(a,time))
   return old
 }
 
 
-export const toStrListHeader = () => List.of('size (octet)', 'last_modified')
-export const toStrList = (a) => List.of(a.get('size'), new Date(a.get('last_modified')))
+export const toStrListHeader = () => List.of(
+  'size (octet)',
+  'last_modified',
+  'comments',
+  'tags'
+)
+export const toStrList = (a) => List.of(
+  a.get('size'),
+  new Date(a.get('last_modified')),
+  a.get('comments'),
+  tagsToJs(a.get('tags')).toString()
+)
 
 
 

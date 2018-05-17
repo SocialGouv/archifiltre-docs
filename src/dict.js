@@ -10,7 +10,6 @@ const dict = {
   "Drop a directory here!": {
     fr: "Glissez-déposez un répertoire ici !",
     en: "Drop a directory here!",
-    es: "¡Coloca un directorio aquí!"
   },
   "You may also drop a CSV file previously exported from Icicle.": {
     fr: "Vous pouvez aussi déposer un fichier CSV précédement exporté depuis Stalactite.",
@@ -19,67 +18,66 @@ const dict = {
   "Import from CSV": {
     fr: "Importer depuis un CSV",
     en: "Import from CSV",
-    es: "Importar desde un archivo CSV"
   },
 
   // Loading screen
   "Files loaded": {
     fr: "Fichiers chargés",
     en: "Files loaded",
-    es: "Archivos cargados"
+
   },
   "Errors": {
     fr: "Erreurs",
     en: "Errors",
-    es: "Errores"
+
   },
 
-  // Icicle
+  // Dashboard
   "Export": {
     fr: "Exporter",
     en: "Export",
-    es: "Exportar"
+  },
+  "Save": {
+    fr: "Enregistrer",
+    en: "Save"
   },
   "Errors": {
     fr: "Erreurs",
     en: "Errors",
-    es: "Errores"
   },
   "Reset": {
     fr: "Réinitialiser",
     en: "Reset",
-    es: "Reiniciar"
   },
-  "files loaded": {
-    fr: "fichiers chargés",
-    en: "files loaded",
-    es: "archivos cargados"
+  "files": {
+    fr: "fichiers",
+    en: "files",
+  },
+  "B": {
+    fr: "o",
+    en: "B"
   },
   "errors": {
     fr: "erreurs",
     en: "errors",
-    es: "errores"
   },
+
+  // Icicle / Legend
   "Back to root": {
     fr: "Retour à la racine",
     en: "Back to root",
   },
-
-  // Icicle / Legend
   "Legend": {
     fr: "Légende",
     en: "Legend",
-    es: "Leyenda"
   },
   "Presentation": {
     fr: "Présentation",
     en: "Presentation",
-    es: "Presentación"
   },
   "Folder": {
     fr: "Répertoire",
     en: "Folder",
-    es: "Directorio"
   },
   "File": {
     fr: "Fichier",
@@ -88,32 +86,26 @@ const dict = {
   "Root": {
     fr: "Racine",
     en: "Root",
-    es: "Raíz"
   },
   "Spreadsheet": {
     fr: "Tableur",
     en: "Spreadsheet",
-    es: "Hoja"
   },
   "E-mail": {
     fr: "E-mail",
     en: "E-mail",
-    es: "E-mail"
   },
   "Document": {
     fr: "Document",
     en: "Document",
-    es: "Documento"
   },
   "Multimedia": {
     fr: "Multimédia",
     en: "Multimedia",
-    es: "Multimedia"
   },
   "Others": {
     fr: "Autres",
     en: "Others",
-    es: "Otros"
   },
   "Level": {
     fr: "Niveau",
@@ -166,7 +158,6 @@ const dict = {
   "Compatible with Firefox and Chrome.": {
     fr: "Compatible avec Firefox et Chrome.",
     en: "Compatible with Firefox and Chrome.",
-    es: "Compatible con Firefox y Chrome."
   },
   // "Your directories. Like you've never seen them before.": {
   //   fr: "Vos répertoires comme vous ne les avez jamais vus.",
@@ -175,7 +166,6 @@ const dict = {
   "Icicles": {
     fr: "Stalactites",
     en: "Icicles",
-    es: "Carámbanos"
   },
   "What's new?": {
     fr: "Quoi de neuf ?",

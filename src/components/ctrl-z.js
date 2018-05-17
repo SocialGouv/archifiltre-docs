@@ -2,24 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 
-import { mkB } from 'components/button'
+import { mkRB } from 'components/button'
 import { undo, redo, hasAPast, hasAFuture } from 'reducers/root-reducer'
 
-
-const button = (onClick, label, enabled) => {
-  if (enabled) {
-    return (
-      <button type='button' className='button' onClick={onClick}>
-        {label}
-      </button>
-    )
-  } else {
-    return (
-      <button type='button' className='button' onClick={onClick} disabled>
-        {label}
-      </button>
-    )
-  }
+const round_button_style = {
+  borderRadius: '50%'
 }
 
 class Presentational extends React.Component {
@@ -51,7 +38,7 @@ class Presentational extends React.Component {
           <div className='grid-x grid-padding-x'>
             <div className='cell small-6'>
               {
-                button(
+                mkRB(
                   this.props.undo,
                   (<i className="fi-arrow-left" style={{fontSize: '2em'}}/>),
                   this.props.hasAPast
@@ -60,7 +47,7 @@ class Presentational extends React.Component {
             </div>
             <div className='cell small-6'>
               {
-                button(
+                mkRB(
                   this.props.redo,
                   (<i className="fi-arrow-right" style={{fontSize: '2em'}}/>),
                   this.props.hasAFuture

@@ -9,10 +9,13 @@ import { save } from 'save'
 import { tr } from 'dict'
 
 const Presentational = props => {
-  return mkB(()=>{
-    console.log('export')
-    save(props.getName(), props.getJson())
-  }, tr('Export'))
+  return mkB(
+    ()=>{
+      console.log('export')
+      save(props.getName(), props.getJson())
+    },
+    tr('Save'),
+    true)
 }
 
 

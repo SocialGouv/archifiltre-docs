@@ -33,6 +33,22 @@
   visibility: visible;
 }
 
+.editable_text:focus {
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.session_name {
+  font-weight: bold;
+  font-size: 1.2em;
+  min-width: 80%;
+  max-width: 80%;
+  display: inline-block;
+  height: 1.2em;
+  padding-bottom: 0.5em;
+}
+
 body {
   -webkit-background-size: cover;
   -moz-background-size: cover;

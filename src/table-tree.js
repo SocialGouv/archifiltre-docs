@@ -235,13 +235,14 @@ export default function(C) {
   }
 
   const toStrList2 = (tt) => {
-    const leaf = getTable(tt).filter(entry => entry.get('children').isEmpty())
+    // const leaf = getTable(tt).filter(entry => entry.get('children').isEmpty())
+    const table = getTable(tt)
     const mapper = (entry,id) =>
       List.of(remakePath(id, tt).slice(1).join('/'))
         .concat(C.toStrList(entry.get('content')))
     const header = List.of('path').concat(C.toStrListHeader())
     return (
-      leaf.map(mapper).reduce((acc,val) => acc.push(val), List.of(header))
+      table.map(mapper).reduce((acc,val) => acc.push(val), List.of(header))
     )
   }
 

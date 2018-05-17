@@ -24,12 +24,8 @@ const Presentational = props => {
         </span>
       </div>
       <div className='cell auto'></div>
-      <div className='cell small-2'>
+      <div className='cell small-4'>
         <Dashboard />
-      </div>
-      <div className='cell auto'></div>
-      <div className='cell small-2'>
-        {props.started === props.finished && <CtrlZ visible={true}/>}
       </div>
       <div className='cell auto'></div>
     </div>
@@ -38,11 +34,7 @@ const Presentational = props => {
 
 
 const mapStateToProps = state => {
-  let app_state = selectAppState(state)
-  return {
-    started: app_state.isStarted(),
-    finished: app_state.isFinished()
-  }
+  return {}
 }
 
 const mapDispatchToProps = dispatch => {

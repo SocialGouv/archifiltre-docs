@@ -5,9 +5,6 @@ import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 import { setParentPath } from 'reducers/database'
 import { setNoFocus, unlock } from 'reducers/icicle-state'
 
-import ExportButton from 'components/export-button'
-import ReinitButton from 'components/reinit-button'
-
 import { tr } from 'dict'
 
 import Icicle from 'components/icicle'

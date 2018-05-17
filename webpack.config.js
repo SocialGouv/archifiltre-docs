@@ -29,22 +29,6 @@ module.exports = {
       template: 'static/stats.html',
       excludeChunks: ['app']
     }),
-    // new workboxPlugin.GenerateSW({
-    //   swDest: 'sw.js',
-    //   clientsClaim: true,
-    //   skipWaiting: true,
-    //   runtimeCaching: [
-    //     {
-    //       urlPattern: /.*googleapis|.*jsdelivr|.*gstatic/,
-    //       handler: 'cacheFirst',
-    //       options: {
-    //         cacheableResponse: {
-    //           statuses: [0, 200],
-    //         }
-    //       }
-    //     }
-    //   ]
-    // })
     new workboxPlugin.InjectManifest({
       swSrc: 'src/sw.js',
       swDest: 'sw.js',
@@ -94,6 +78,10 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' }
       }
     ]
   },

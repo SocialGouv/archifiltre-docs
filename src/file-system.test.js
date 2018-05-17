@@ -15,6 +15,16 @@ describe('file-system', function() {
     return [M.qeFromJson(M.qeToJson(a)), a]
   })
 
+  Loop.immuEqual('(qeFromJs . qeToJs) a', () => {
+    const a = M.arbitraryQe()
+    return [M.qeFromJs(M.qeToJs(a)), a]
+  })
+
+  Loop.immuEqual('(contentQueueFromJs . contentQueueToJs) a', () => {
+    const a = M.arbitraryContentQueue()
+    return [M.contentQueueFromJs(M.contentQueueToJs(a)), a]
+  })
+
   Loop.immuEqual('(fromJson . toJson) a', () => {
     const a = M.arbitrary()
     return [M.fromJson(M.toJson(a)), a]

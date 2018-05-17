@@ -8,16 +8,20 @@ import * as Content from 'content'
 import * as Arbitrary from 'test/arbitrary'
 import * as Loop from 'test/loop'
 import tT from 'table-tree'
-const TT = tT(Content)
-
-
-const type = 'cheapExp/database'
+export const TT = tT(Content)
 
 
 const QueueElem = Record({
   path:List(),
   content:null
 })
+
+export const makeQueueElem = (path,content) => {
+  return new QueueElem({
+    path:List(path.split('/')),
+    content: Content.create(content)
+  })
+}
 
 const arbitraryPath = () => List(Arbitrary.array(
   () => 'p' + Math.round(Math.random() * 1)
@@ -28,6 +32,20 @@ export const arbitraryQe = () => {
     path:arbitraryPath(),
     content:Content.arbitrary()
   })
+}
+
+export const qeToJs = a => {
+  a = a.update('path', a=>a.toJS())
+  a = a.update('content', Content.toJs)
+  a = a.toJS()
+  return a
+}
+
+export const qeFromJs = a => {
+  a = new QueueElem(a)
+  a = a.update('path', List)
+  a = a.update('content', Content.fromJs)
+  return a
 }
 
 export const qeToJson = a => {
@@ -44,11 +62,13 @@ export const qeFromJson = a => {
   return a
 }
 
+
+
+
 const Fs = Record({
   session_name:'Untitled',
   version:5,
   content_queue:List(),
-  nb_push:0,
   tree:null,
   parent_path:List(),
 })
@@ -91,6 +111,32 @@ export const updateByID = (id, f, state) =>
 export const getSessionName = (state) => state.get('session_name')
 export const setSessionName = (a, state) => state.set('session_name',a)
 
+export const ghostTreeFromJs = (js, state) => {
+  state = state.set('tree', TT.fromJs(js))
+  return state
+}
+
+export const arbitraryContentQueue = () => {
+  return Arbitrary.immutableList(arbitraryQe)
+}
+
+export const contentQueueToJs = (a) => {
+  a = a.map(qeToJs)
+  a = a.toJS()
+  return a
+}
+
+export const contentQueueFromJs = (a) => {
+  a = List(a)
+  a = a.map(qeFromJs)
+  return a
+}
+
+export const ghostQueueFromJs = (js,state) => {
+  state = state.set('content_queue', contentQueueFromJs(js))
+  return state
+}
+
 export const volume = (state) => {
   return Content.getSize(getByID(rootId(state), state).get('content'))
 }
@@ -100,22 +146,22 @@ export const rootId = (state) => TT.getRootId(state.get('tree'))
 export const pushOnQueue = (path, content, state) => {
   state = state.update(
     'content_queue',
-    a=> a.push(new QueueElem({
-      path:List(path.split('/')),
-      content: Content.create(content)
-    }))
+    a=> a.push(makeQueueElem(path,content))
   )
 
-  state = state.update('depth', a=>Math.max(a, path.length))
-
   return state
+}
+
+export const updateTreeWithQueueElem = (queue_elem,tree) => {
+  tree = TT.update(queue_elem.get('path').toJS(), queue_elem.get('content'), tree)
+  return tree
 }
 
 export const makeTree = (state) => {
   state = state.update('tree', tree => {
     tree = tree.asMutable()
-    state.get('content_queue').forEach(val => {
-      tree = TT.update(val.get('path').toJS(), val.get('content'), tree)
+    state.get('content_queue').forEach(queue_elem => {
+      tree = updateTreeWithQueueElem(queue_elem, tree)
     })
     return tree.asImmutable()
   })

@@ -5,9 +5,9 @@ const sch = mkScheduler()
 
 export function asyncHandleDrop(event, insert2DB, loadJson2DB, loadLegacyCsv2DB) {
   event.preventDefault()
-  let items = event.dataTransfer.items
+  const items = event.dataTransfer.items
 
-  let entry = items[0].webkitGetAsEntry()
+  const entry = items[0].webkitGetAsEntry()
   if (isJsonFile(entry)) {
     return readFileFromEntry(entry)
       .then(loadJson2DB)
@@ -15,11 +15,11 @@ export function asyncHandleDrop(event, insert2DB, loadJson2DB, loadLegacyCsv2DB)
   } else if (isLegacyCsvFile(entry)) {
     return readFileFromEntry(entry)
       .then(loadLegacyCsv2DB)
-      .then(()=>true)
+      .then(()=>false)
   } else {
-    let promise_array = []
+    const promise_array = []
     for (let i=0; i<items.length; i++) {
-      let entry = items[i].webkitGetAsEntry()
+      const entry = items[i].webkitGetAsEntry()
       promise_array.push(traverseFileTree(insert2DB, entry, ''))
     }
     return Promise.all(promise_array)

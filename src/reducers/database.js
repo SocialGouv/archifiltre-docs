@@ -3,6 +3,12 @@
 import duck from 'reducers/duck'
 import * as FileSystem from 'file-system'
 
+
+
+import Worker from 'file-system.worker'
+
+
+
 const type = 'cheapExp/database'
 
 
@@ -33,19 +39,55 @@ export const push = mkA((path, content) => state => {
 })
 
 export const makeTree = mkA(() => state => {
-  return FileSystem.makeTree(state)
+  state = FileSystem.makeTree(state)
+  state = FileSystem.sort(state)
+  return state
 })
 
-export const sort = mkA(() => state => {
-  return FileSystem.sort(state)
-})
+
+// const worker = new Worker()
+
+// export const workerPush = mkA((path, content) => state => {
+//   worker.postMessage({
+//     cmd:'push',
+//     path,
+//     content
+//   })
+//   return state
+// })
+
+// const workerGhostFromJs = mkA((content_queue_js,tree_js) => state => {
+//   state = FileSystem.ghostQueueFromJs(content_queue_js,state)
+//   state = FileSystem.ghostTreeFromJs(tree_js,state)
+//   return state
+// })
+
+// export const workerMakeTree = () => dispatch => {
+//   return new Promise((resolve, reject) => {
+//     worker.postMessage({
+//       cmd:'pull'
+//     })
+
+//     worker.onmessage = (e) => {
+//       if (e.data.cmd === 'pull') {
+//         dispatch(workerGhostFromJs(e.data.content_queue,e.data.tree))
+//         resolve()
+//       }
+//     }
+//   })
+// }
+
+
 
 export const fromJson = mkA((json) => state => {
   return FileSystem.fromJson(json)
 })
 
 export const fromLegacyCsv = mkA((csv) => state => {
-  return FileSystem.fromLegacyCsv(csv)
+  state = FileSystem.fromLegacyCsv(csv)
+  state = FileSystem.makeTree(state)
+  state = FileSystem.sort(state)
+  return state
 })
 
 

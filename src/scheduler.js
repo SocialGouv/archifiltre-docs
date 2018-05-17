@@ -24,8 +24,8 @@ export function mkScheduler() {
   const startRecordMs = () => start_ms = new Date().getTime()
   const endRecordMs = () => end_ms = new Date().getTime() - start_ms
   const updateSize = () => {
-    const target = 30
-    if (end_ms > target && size > 0) {
+    const target_ms = 30
+    if (end_ms > target_ms && size > 0) {
       size--
     } else {
       size++

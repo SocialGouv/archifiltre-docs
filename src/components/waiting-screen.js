@@ -14,7 +14,7 @@ const cell_style = {
 class Presentational extends React.Component {
   constructor(props) {
     super(props)
-    this.thres = 60
+    this.thres = 30
     this.last_ms = 0
 
     this.shouldComponentUpdate = this.shouldComponentUpdate.bind(this)

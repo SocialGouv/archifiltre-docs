@@ -283,6 +283,22 @@ export default function(C) {
     return ans
   }
 
+  const toJs = (tt) => {
+    tt = mapContent(C.toJs, tt)
+    return tt.toJS()
+  }
+  const fromJs = (js) => {
+    let ans = new TableTree(js)
+    ans = updateTable(t => {
+      return Map(t).map(e=> {
+        return new Entry(e)
+          .update('content', C.fromJs)
+          .update('children', List)
+      })
+    }, ans)
+    return ans
+  }
+
   const toJsTree = (tt) => reduce((acc_array, e) => {
     return e.set('children', acc_array)
             .set('parent', null)
@@ -340,6 +356,9 @@ export default function(C) {
 
     toJson,
     fromJson,
+
+    toJs,
+    fromJs,
 
     toList,
 

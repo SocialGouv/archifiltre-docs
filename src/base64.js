@@ -1,10 +1,10 @@
 
 
 
-export const utf8Tob64 = str => {
+export const fromUtf8 = str => {
   return window.btoa(unescape(encodeURIComponent(str)))
 }
 
-export const b64Toutf8 = str => {
+export const toUtf8 = str => {
   return decodeURIComponent(escape(window.atob(str)))
 }

@@ -6,13 +6,15 @@ import { mkB } from 'components/button'
 import { selectDatabase } from 'reducers/root-reducer'
 
 import * as Csv from 'csv'
-import { save } from 'save'
+import { save, makeNameWithExt } from 'save'
 import { tr } from 'dict'
 
+
 const Presentational = props => {
+  const name = makeNameWithExt(props.getSessionName(),'.csv')
   return mkB(()=>{
     console.log('to csv')
-    save(props.getName(), Csv.toStr(props.getStrList2()))
+    save(name, Csv.toStr(props.getStrList2()))
   }, tr('to Csv'))
 }
 
@@ -21,9 +23,7 @@ const mapStateToProps = state => {
   let database = selectDatabase(state)
   return {
     getStrList2: database.toStrList2,
-    getName: () => {
-      return database.getSessionName() + '_' + new Date().getTime() + '.csv'
-    }
+    getSessionName: database.getSessionName,
   }
 }
 

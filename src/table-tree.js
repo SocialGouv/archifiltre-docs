@@ -234,6 +234,17 @@ export default function(C) {
     }
   }
 
+  const getIdPath = (id, tt) => {
+    const entry = getEntryById(id, tt)
+    const parent_id = entry.get('parent')
+
+    if (parent_id) {
+      return getIdPath(parent_id,tt).push(id)
+    } else {
+      return List.of(id)
+    }
+  }
+
   const toStrList2 = (tt) => {
     const leaf = getTable(tt).filter(entry => entry.get('children').isEmpty())
     const mapper = (entry,id) =>
@@ -316,6 +327,8 @@ export default function(C) {
     init,
     getRootId,
     remakePath,
+    getIdPath,
+    
     getEntryById,
     updateEntryById,
     

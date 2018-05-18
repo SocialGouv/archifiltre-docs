@@ -30,114 +30,144 @@ export const types = {
   };
 
 
-const makeKeyPN = (id) => 'position-nodes-'+id
-const makeKeyIR = (id) => 'icicle-rect-'+id
 
-class PositionNodes extends React.PureComponent {
+class Icicle extends React.PureComponent {
   constructor(props) {
     super(props)
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   let ans = true
-  //   let logs = []
-  //   for (let key in this.props) {
-  //     ans = ans && this.props[key] === nextProps[key]
-  //     if (this.props[key] !== nextProps[key]) {
-  //       logs.push(key)
-  //     }
-  //   }
-  //   // console.log(ans)
-  //   // console.log(ans, logs)
-  //   return true
-  // }
+  makeKey(id) {
+    return 'icicle-display-root-'+id
+  }
 
   render() {
-    const getChildrenSize = a => a.size
-    const getChildrenElem = (i,a) => a.get(i)
+    const x = 0
+    let y = 0
+    const width = icicle_dims.w
+    let height = icicle_dims.h
+    const trueFHeight = this.props.trueFHeight(height)
+    let id = this.props.root_id
+    let display_root_components = []
+    const display_root = this.props.display_root.slice(1)
 
-    const root = this.props.getByID(this.props.root_id)
-    const r_children = root.get('children')
-    const r_content = root.get('content')
-    const root_size = r_content.get('size')
+    if (display_root.length) {
+      id = display_root.slice(-1)[0]
+      display_root_components = display_root.map(node_id => {
+        const x_node = x
+        const y_node = y
+        const dx_node = width
+        const dy_node = trueFHeight(node_id)
+        y += dy_node
+        height -= dy_node
 
-    const height = this.props.bottom - this.props.top
-    const width = this.props.right - this.props.left
-
-    const x = this.props.left
-    const y = this.props.top
-    const dx = (isNaN(width) ? 0 : width)
-    const dy = height/this.props.tree_depth
-
-    const res = []
-
-    if (dx < 1) {
-      return (<g/>)
-    } else {
-      const recCall = []
-
-      if (getChildrenSize(r_children) && dx > 1) {
-
-        if(this.props.isZoomed && this.props.root_seq.length > 1) {
-          const root_id = this.props.root_seq[1]
-          recCall.push(
-            <PositionNodes
-              key={makeKeyPN(root_id)}
-              root_id={root_id}
-              root_seq={this.props.root_seq.slice(1,this.props.root_seq.length)}
-              left={this.props.left}
-              right={this.props.right}
-              top={this.props.top+height/this.props.tree_depth}
-              bottom={this.props.bottom}
-              tree_depth={this.props.tree_depth-1}
-              getByID={this.props.getByID}
-              isZoomed={this.props.isZoomed}
+        return (
+          <g key={this.makeKey(node_id)}>
+            <IcicleRect
+              node_id={node_id}
+              x={x_node}
+              y={y_node}
+              dx={dx_node}
+              dy={dy_node}
             />
-          )
-        } else {
-          let x_cursor = this.props.left
-          for (let i = 0; i <= getChildrenSize(r_children) - 1; ++i) {
-            const child_id = getChildrenElem(i, r_children)
-            const child = this.props.getByID(child_id)
-            const child_size = child.content.size
-
-            recCall.push(
-              <PositionNodes
-                key={makeKeyPN(child_id)}
-                root_id={child_id}
-                root_seq={this.props.root_seq}
-                left={x_cursor}
-                right={x_cursor+child_size/root_size*width}
-                top={this.props.top+height/this.props.tree_depth}
-                bottom={this.props.bottom}
-                tree_depth={this.props.tree_depth-1}
-                getByID={this.props.getByID}
-                isZoomed={this.props.isZoomed}
-              />
-            )
-
-            x_cursor = x_cursor+child_size/root_size*width
-          }
-        }
-      }
-
-      return (
-        <g>
-          <IcicleRect
-            key={makeKeyIR(this.props.root_id)}
-            node_id={this.props.root_id}
-            x={x}
-            y={y}
-            dx={dx}
-            dy={dy}
-          />
-          {recCall}
-        </g>
-      )
-
+          </g>
+        )
+      })
     }
+
+    return (
+      <g>
+        {display_root_components}
+        <IcicleRecursive
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          id={id}
+          fWidth={this.props.fWidth}
+          normalizeWidth={this.props.normalizeWidth}
+          trueFHeight={trueFHeight}
+          getChildrenIdFromId={this.props.getChildrenIdFromId}
+        />
+      </g>
+    )
   }
 }
+
+
+class IcicleRecursive extends React.PureComponent {
+  constructor(props) {
+    super(props)
+  }
+
+  makeKey(id) {
+    return 'icicle-recursive-'+id
+  }
+
+  computeCumulative(array) {
+    const ans = [0]
+    for (let i = 0; i < array.length - 1; i++) {
+      ans.push(array[i] + ans[i])
+    }
+    return ans
+  }
+
+
+  render() {
+    const children = this.props.getChildrenIdFromId(this.props.id)
+    const children_width = this.props.normalizeWidth(children.map(this.props.fWidth))
+      .map(a=>a*this.props.width)
+    const cumulated_children_width = this.computeCumulative(children_width)
+
+    const children_height = children.map(this.props.trueFHeight)
+
+    const children_component = children.map((child_id,i) => {
+      const x_child = this.props.x + cumulated_children_width[i]
+      const width_child = children_width[i]
+      if (width_child < 1) {
+        return (<g key={this.makeKey(child_id)} />)
+      }
+
+      const y_child = this.props.y
+      const height_child = children_height[i]
+
+      const x_prime = x_child
+      const width_prime = width_child
+      const y_prime = y_child + height_child
+      const height_prime = this.props.height - height_child
+      return (
+        <g key={this.makeKey(child_id)}>
+          <IcicleRect
+            node_id={child_id}
+            x={x_child}
+            y={y_child}
+            dx={width_child}
+            dy={height_child}
+          />
+          <IcicleRecursive
+            x={x_prime}
+            y={y_prime}
+            width={width_prime}
+            height={height_prime}
+            id={child_id}
+            fWidth={this.props.fWidth}
+            normalizeWidth={this.props.normalizeWidth}
+            trueFHeight={this.props.trueFHeight}
+            getChildrenIdFromId={this.props.getChildrenIdFromId}
+          />
+        </g>
+      )
+    })
+
+    return (
+      <g>
+        {children_component}
+      </g>
+    )
+  }
+}
+
+
+
 
 
 
@@ -164,27 +194,49 @@ class Presentational extends React.Component {
 
   plot() {
     const root_id = this.props.root_id
-    // const root_seq = this.props.isZoomed ? this.props.display_root : []
-    const root_seq = this.props.display_root
-    const tree_depth = this.props.max_depth + 1
+    const display_root = this.props.display_root
+    const max_depth = this.props.max_depth
     const getByID = this.props.getByID
-    const isZoomed = this.props.isZoomed
-    console.time("render icicle")
+   
+    const fWidth = id => {
+      // const node = getByID(id)
+      // return node.get('content').get('size')
+
+      const node = getByID(id)
+      return node.get('content').get('nb_files')
+    }
+
+    const normalizeWidth = arr => {
+      const sum = arr.reduce((a,b)=>a+b,0)
+      const ans = arr.map(a=>a/sum)
+      return ans
+    }
+
+    const trueFHeight = max_height => id => {
+      // return max_height/max_depth
+
+      const node = getByID(id)
+      const len = node.get('name').length
+      return len * (max_height/260)
+    }
+
+    const getChildrenIdFromId = id => {
+      const node = getByID(id)
+      return node.get('children').toJS()
+    }
+
+    console.time('render icicle')
     const icicle = (
-      <PositionNodes
-        key={makeKeyPN(root_id)}
+      <Icicle
         root_id={root_id}
-        root_seq={root_seq}
-        left={0}
-        right={icicle_dims.w}
-        top={0}
-        bottom={icicle_dims.h}
-        tree_depth={tree_depth}
-        getByID={getByID}
-        isZoomed={isZoomed}
+        display_root={display_root}
+        fWidth={fWidth}
+        normalizeWidth={normalizeWidth}
+        trueFHeight={trueFHeight}
+        getChildrenIdFromId={getChildrenIdFromId}
       />
     )
-    console.timeEnd("render icicle")
+    console.timeEnd('render icicle')
     return icicle
   }
 
@@ -281,9 +333,6 @@ const mapStateToProps = state => {
     getByID: database.getByID,
     root_id: database.root_id(),
     display_root: icicle_state.display_root(),
-    isZoomed: icicle_state.isZoomed(),
-    isFocused: icicle_state.isFocused(),
-    hover_sequence: icicle_state.hover_sequence()
   }
 }
  

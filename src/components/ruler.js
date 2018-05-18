@@ -43,23 +43,24 @@ const Presentational = props => {
 }
 
 export const octet2HumanReadableFormat = o => {
+  let unit = tr('B')
   let To = o/Math.pow(1000,4)
   if (To > 1) {
-    return Math.round(To * 10)/10 + ' To'
+    return Math.round(To * 10)/10 + ' T' + unit
   }
   let Go = o/Math.pow(1000,3)
   if (Go > 1) {
-    return Math.round(Go * 10)/10 + ' Go'
+    return Math.round(Go * 10)/10 + ' G' + unit
   }
   let Mo = o/Math.pow(1000,2)
   if (Mo > 1) {
-    return Math.round(Mo * 10)/10 + ' Mo'
+    return Math.round(Mo * 10)/10 + ' M' + unit
   }
   let ko = o/1000
   if (ko > 1) {
-    return Math.round(ko * 10)/10 + ' ko'
+    return Math.round(ko * 10)/10 + ' k' + unit
   }
-  return o + ' o'
+  return o + ' ' + unit
 }
 
 const precisionRound = (number, precision) => {

@@ -12,10 +12,13 @@ import { tr } from 'dict'
 
 const Presentational = props => {
   const name = makeNameWithExt(props.getSessionName(),'.csv')
-  return mkB(()=>{
-    console.log('to csv')
-    save(name, Csv.toStr(props.getStrList2()))
-  }, tr('to Csv'))
+  return mkB(
+    ()=>{
+      console.log('to csv')
+      save(name, Csv.toStr(props.getStrList2()))
+    },
+    tr('Export'),
+    true)
 }
 
 

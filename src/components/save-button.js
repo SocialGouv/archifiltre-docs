@@ -11,10 +11,13 @@ import { tr } from 'dict'
 
 const Presentational = props => {
   const name = makeNameWithExt(props.getSessionName(),'.json')
-  return mkB(()=>{
-    console.log('export')
-    save(name, props.getJson())
-  }, tr('Export'))
+  return mkB(
+    ()=>{
+      save(name, props.getJson())
+    },
+    tr('Save'),
+    true
+  )
 }
 
 

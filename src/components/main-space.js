@@ -8,10 +8,6 @@ import Icicle from 'components/icicle'
 import WorkSpace from 'components/workspace'
 import WaitingScreen from 'components/waiting-screen'
 
-import ExportButton from 'components/export-button'
-import ReinitButton from 'components/reinit-button'
-import CtrlZ from 'components/ctrl-z'
-
 import { tr } from 'dict'
 
 const grid_style = {

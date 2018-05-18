@@ -7,6 +7,8 @@ import { setFocus, setNoFocus, setDisplayRoot, setNoDisplayRoot, lock } from 're
 
 import { typeOf } from 'components/icicle'
 
+import { root_button } from 'css/app.css'
+
 import { mkDummyParent } from 'table-tree'
 import { commit } from 'reducers/root-reducer'
 
@@ -104,40 +106,6 @@ class Presentational extends React.PureComponent {
       />)
     ]
 
-    if (!(this.props.node.get('depth')) && this.props.isZoomed) {
-      res.push(
-        <rect
-          x={dims.dx/3}
-          y="0"
-          rx="1em"
-          ry="1em"
-          width={dims.dx/3}
-          height={dims.dy*3/4}
-          stroke="none"
-          fill={typeOf(mkDummyParent()).color}
-          onClick={(e) => {e.stopPropagation(); d_setNoDisplayRoot() ; d_setNoFocus() ;}}
-          key="button"
-        />
-      )
-
-      res.push(
-        <text
-          x={dims.dx/2}
-          y={dims.dy/2}
-          dx="0"
-          dy="0"
-          textAnchor="middle"
-          fontWeight="bold"
-          letterSpacing="0.05em"
-          stroke="none"
-          fill="white"
-          onClick={(e) => {e.stopPropagation(); d_setNoDisplayRoot() ; d_setNoFocus() ;}}
-          key="text">{tr("Back to root")}
-        </text>
-      )
-    }
-
-
     return res
   }
 }
@@ -169,14 +137,6 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = dispatch => {
   return {
     dispatch,
-    // setFocus: (...args) => dispatch((setFocus(...args))),
-    // setNoFocus: (...args) => dispatch((setNoFocus(...args))),
-    // setDisplayRoot: (...args) => dispatch((setDisplayRoot(...args))),
-    // setNoDisplayRoot: (...args) => dispatch((setNoDisplayRoot(...args))),
-    // lock: (...args) => {
-    //   dispatch((lock(...args)))
-    //   dispatch(commit())
-    // }
   }
 }
 

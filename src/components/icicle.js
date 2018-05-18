@@ -61,7 +61,7 @@ class PositionNodes extends React.PureComponent {
     const r_content = root.get('content')
     const root_size = r_content.get('size')
 
-    const height = this.props.bottom - this.props.top
+    const height = this.props.isRoot ? 0 : this.props.bottom - this.props.top
     const width = this.props.right - this.props.left
 
     const x = this.props.left
@@ -92,6 +92,7 @@ class PositionNodes extends React.PureComponent {
               tree_depth={this.props.tree_depth-1}
               getByID={this.props.getByID}
               isZoomed={this.props.isZoomed}
+              isRoot={false}
             />
           )
         } else {
@@ -113,6 +114,7 @@ class PositionNodes extends React.PureComponent {
                 tree_depth={this.props.tree_depth-1}
                 getByID={this.props.getByID}
                 isZoomed={this.props.isZoomed}
+                isRoot={false}
               />
             )
 
@@ -182,6 +184,7 @@ class Presentational extends React.Component {
         tree_depth={tree_depth}
         getByID={getByID}
         isZoomed={isZoomed}
+        isRoot={true}
       />
     )
     console.timeEnd("render icicle")

@@ -21,7 +21,7 @@ const makePoints = (level, step, w, type, is_last, is_dummy) => {
   let points = [];
 
   points.push(coord2Str(0,y));
-  if (level > 1) { // Topmost breadcrumb; don't include upper notch.
+  if (level > 0) { // Topmost breadcrumb; don't include upper notch.
     points.push(coord2Str(w2/2,y+t));
   }
   points.push(coord2Str(w2,y));

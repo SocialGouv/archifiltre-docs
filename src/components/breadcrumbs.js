@@ -33,16 +33,16 @@ const Presentational = props => {
         <g key={"breadcrumb" + i}>
           <BreadCrumbPoly
           is_last={i === props.breadcrumb_sequence.length-1}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
+          level={i-1}
+          step={icicle_dims.h/(props.max_depth)}
           type={is_parent ? typeOf(mkDummyParent()) : typeOf(node)}
           w={breadcrumb_dims.w}
           is_dummy={false}/>
           <BreadCrumbText
           key={"text" + i}
           text={display_name}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
+          level={i-1}
+          step={icicle_dims.h/(props.max_depth)}
           w={breadcrumb_dims.w}
           is_dummy={false}/>
         </g>);
@@ -57,16 +57,16 @@ const Presentational = props => {
         <g key={"breadcrumb" + i}>
           <BreadCrumbPoly
           is_last={false}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
+          level={i-1}
+          step={icicle_dims.h/(props.max_depth)}
           type={typeOf(mkDummyFile())}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
           <BreadCrumbText
           key={"text" + i}
           text={tr("Level") + " " + (i)}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
+          level={i-1}
+          step={icicle_dims.h/(props.max_depth)}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
         </g>);
@@ -78,16 +78,16 @@ const Presentational = props => {
         <g key={"breadcrumb" + i}>
           <BreadCrumbPoly
           is_last={false}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
+          level={i-1}
+          step={icicle_dims.h/(props.max_depth)}
           type={typeOf(mkDummyFile())}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
           <BreadCrumbText
           key={"text" + i}
           text={tr("Level") + " " + (i)}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
+          level={i-1}
+          step={icicle_dims.h/(props.max_depth)}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
         </g>);
@@ -99,16 +99,16 @@ const Presentational = props => {
         <g key={"breadcrumb" + i}>
           <BreadCrumbPoly
           is_last={false}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
+          level={i-1}
+          step={icicle_dims.h/(props.max_depth)}
           type={typeOf(mkDummyFile())}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
           <BreadCrumbText
           key={"text" + i}
           text="..."
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
+          level={i-1}
+          step={icicle_dims.h/(props.max_depth)}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
         </g>);
@@ -120,16 +120,16 @@ const Presentational = props => {
         <g key={"breadcrumb" + i}>
           <BreadCrumbPoly
           is_last={false}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
+          level={i-1}
+          step={icicle_dims.h/(props.max_depth)}
           type={typeOf(mkDummyFile())}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
           <BreadCrumbText
           key={"text" + i}
           text="..."
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
+          level={i-1}
+          step={icicle_dims.h/(props.max_depth)}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
         </g>);
@@ -140,16 +140,16 @@ const Presentational = props => {
       <g key={"breadcrumb" + i}>
         <BreadCrumbPoly
         is_last={true}
-        level={i}
-        step={icicle_dims.h/(props.max_depth+1)}
+        level={i-1}
+        step={icicle_dims.h/(props.max_depth)}
         type={typeOf(mkDummyFile())}
         w={breadcrumb_dims.w}
         is_dummy={true}/>
         <BreadCrumbText
         key={"text" + i}
         text={tr("File")}
-        level={i}
-        step={icicle_dims.h/(props.max_depth+1)}
+        level={i-1}
+        step={icicle_dims.h/(props.max_depth)}
         w={breadcrumb_dims.w}
         is_dummy={true}/>
       </g>);

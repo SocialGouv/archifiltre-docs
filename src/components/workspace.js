@@ -22,7 +22,7 @@ const Presentational = props => {
   return (
     <div>
         <Report />
-        <div className="grid-x grid-frame" id='main'>
+        <div className="grid-x grid-frame" style={{marginTop: '1em'}}>
           <div
             onClick={(e) => {props.unlock(); props.setNoFocus();}}
             className="cell small-8"

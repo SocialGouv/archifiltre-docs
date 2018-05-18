@@ -7,6 +7,8 @@ import { setFocus, setNoFocus, setDisplayRoot, setNoDisplayRoot, lock } from 're
 
 import { typeOf } from 'components/icicle'
 
+import { root_button } from 'css/app.css'
+
 import { mkDummyParent } from 'table-tree'
 import { commit } from 'reducers/root-reducer'
 
@@ -78,6 +80,7 @@ class Presentational extends React.Component {
       stroke="none"
       fill={typeOf(mkDummyParent()).color}
       onClick={(e) => {e.stopPropagation(); this.props.setNoDisplayRoot() ; this.props.setNoFocus() ;}}
+      className={root_button}
       key="button" />);
 
       res.push(<text

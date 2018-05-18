@@ -6,6 +6,7 @@ import * as Arbitrary from 'test/arbitrary'
 
 const Content = Record({
   size:0,
+  nb_files:1,
   last_modified:null,
   error_is_file:false,
   alias:'',
@@ -23,6 +24,7 @@ export const tagsFromJs = a => Set(a)
 
 export const arbitrary = () => new Content({
   size: Arbitrary.natural(),
+  nb_files: Arbitrary.natural(),
   last_modified: Arbitrary.natural(),
   error_is_file: Arbitrary.nullable(Arbitrary.bool),
   alias: Arbitrary.string(),
@@ -47,6 +49,7 @@ export const update = (young,old) => {
   old = old.update('size', a=>a+size)
   const time = young.get('last_modified')
   old = old.update('last_modified', a=>Math.max(a,time))
+  old = old.update('nb_files', a=>a+1)
   return old
 }
 

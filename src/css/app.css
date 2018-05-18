@@ -3,14 +3,14 @@
 }
 
 .active_button {
-  -webkit-transition : brightness 0.25s ease-out;
-  transition : brightness 0.25s ease-out;
+  -webkit-transition : filter 0.25s ease-out;
+  transition : filter 0.25s ease-out;
   outline: none;
 }
 
 .active_button:hover {
   -webkit-filter: brightness(85%);
-  filter: brightness(85%);
+  filter: brightness(120%);
 }
 
 .comments {

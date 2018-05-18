@@ -69,33 +69,33 @@ class Presentational extends React.Component {
         onMouseOut={() => {if(!(this.props.isLocked)) this.props.setNoFocus()}}
         style={{"fill": fill, "opacity": opacity, "display" : display}}></rect>)]
 
-    if(!(this.node.get('depth')) && this.props.isZoomed){
-      res.push(<rect
-      x={this.props.dims.dx/3}
-      y="0"
-      rx="1em"
-      ry="1em"
-      width={this.props.dims.dx/3}
-      height={this.props.dims.dy*3/4}
-      stroke="none"
-      fill={typeOf(mkDummyParent()).color}
-      onClick={(e) => {e.stopPropagation(); this.props.setNoDisplayRoot() ; this.props.setNoFocus() ;}}
-      className={root_button}
-      key="button" />);
+    // if(!(this.node.get('depth')) && this.props.isZoomed){
+    //   res.push(<rect
+    //   x={this.props.dims.dx/3}
+    //   y="0"
+    //   rx="1em"
+    //   ry="1em"
+    //   width={this.props.dims.dx/3}
+    //   height={this.props.dims.dy*3/4}
+    //   stroke="none"
+    //   fill={typeOf(mkDummyParent()).color}
+    //   onClick={(e) => {e.stopPropagation(); this.props.setNoDisplayRoot() ; this.props.setNoFocus() ;}}
+    //   className={root_button}
+    //   key="button" />);
 
-      res.push(<text
-      x={this.props.dims.dx/2}
-      y={this.props.dims.dy/2}
-      dx="0"
-      dy="0"
-      textAnchor="middle"
-      fontWeight="bold"
-      letterSpacing="0.05em"
-      stroke="none"
-      fill="white"
-      onClick={(e) => {e.stopPropagation(); this.props.setNoDisplayRoot() ; this.props.setNoFocus() ;}}
-      key="text">{tr("Back to root")}</text>);
-    }
+    //   res.push(<text
+    //   x={this.props.dims.dx/2}
+    //   y={this.props.dims.dy/2}
+    //   dx="0"
+    //   dy="0"
+    //   textAnchor="middle"
+    //   fontWeight="bold"
+    //   letterSpacing="0.05em"
+    //   stroke="none"
+    //   fill="white"
+    //   onClick={(e) => {e.stopPropagation(); this.props.setNoDisplayRoot() ; this.props.setNoFocus() ;}}
+    //   key="text">{tr("Back to root")}</text>);
+    // }
 
     // console.timeEnd("updating")
 

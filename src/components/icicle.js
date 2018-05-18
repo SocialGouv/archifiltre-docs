@@ -19,7 +19,7 @@ export const icicle_dims = {
   h:300
 }
 
-const types = {
+export const types = {
     presentation : {label: tr("Presentation"), color:"#f75b40"},
     parent_folder : {label: tr("Root"), color: "#f99a0b"},
     folder : {label: tr("Folder"), color:"#fabf0b"},
@@ -133,9 +133,9 @@ class Presentational extends React.Component {
 
   render() {
     return (
-      <div id='chart' style={icicle_style}>
+      <div style={icicle_style}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
-          <g id="container">
+          <g>
             {this.plot(this.props.root_id, (this.props.isZoomed ? this.props.display_root : []), this.max_tree_depth + 1)}
           </g>
         </svg>

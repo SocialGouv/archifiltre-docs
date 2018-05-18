@@ -57,11 +57,18 @@ export const unlock = mkA(() => state => {
 export const setDisplayRoot = mkA((root_seq) => state =>{
   state = state.update('display_root',()=>root_seq)
   state = state.update('lock_seq', () => [-1])
+  clearSelection()
   return state
 })
 
 export const setNoDisplayRoot = mkA(() => state =>{
   state = state.update('display_root',()=>[-1])
   state = state.update('lock_seq', () => [-1])
+  clearSelection()
   return state
 })
+
+const clearSelection = () => {
+  if (window.getSelection) {window.getSelection().removeAllRanges();}
+  else if (document.selection) {document.selection.empty();}
+}

@@ -20,8 +20,9 @@ const Entry = Record({
 export const isLeaf = (a) => a.get('children').size === 0
 export const isRoot = (a) => a.get('parent') === null
 
-export const mkDummyFile = () => new Entry({children:List(), name:''})
-export const mkDummyParent = () => new Entry({children:List(["-1"]), name:''})
+// DEPRECATED : now directly using types object from icicle
+// export const mkDummyFile = () => new Entry({children:List(), name:''})
+// export const mkDummyParent = () => new Entry({children:List(["-1"]), name:''})
 
 
 export default function(C) {

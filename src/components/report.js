@@ -7,10 +7,8 @@ import { RIEInput, RIETextArea, RIETags } from 'riek'
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 import { setContentByID } from 'reducers/database'
 
-import { typeOf } from 'components/icicle'
+import { types, typeOf } from 'components/icicle'
 import { makeSizeString } from 'components/ruler'
-
-import { mkDummyParent, mkDummyFile } from 'table-tree'
 
 import { edit_hover_container, edit_hover_pencil, tags, comments } from 'css/app.css'
 
@@ -20,7 +18,14 @@ import { commit } from 'reducers/root-reducer'
 import { tr } from 'dict'
 
 const Presentational = props => {
-  let icon, name, real_name, tags_cell, comments_cell
+  let icon, name, real_name, info_cell, tags_cell, comments_cell
+
+  const cells_style = {
+    'padding':'1em',
+    'fontSize': '0.8em',
+    'minHeight': '8em',
+    'maxHeight': '8em'
+  }
 
   if(props.isFocused) {
     const node = props.node
@@ -44,7 +49,7 @@ const Presentational = props => {
       <i className={(is_folder ? "fi-folder" : "fi-page")} style={{
         'fontSize': '3em',
         'width': '1.7em',
-        'color': is_parent ? typeOf(mkDummyParent()).color : typeOf(node).color,
+        'color': is_parent ? types.parent_folder.color : typeOf(node).color,
         'display': 'table-cell',
         'paddingLeft': '0.5em',
         'verticalAlign':'middle'}}
@@ -69,8 +74,15 @@ const Presentational = props => {
       </span>
     )
 
+    info_cell = (
+      <div className="cell small-4" style={cells_style}>
+        <span style={{'fontWeight': 'bold'}}>{tr("Information")}</span><br />
+        <span>{"..."}</span>
+      </div>
+    )
+
     tags_cell = (
-      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em'}}>
+      <div className={"cell small-4 " + edit_hover_container} style={cells_style}>
         <span style={{'fontWeight': 'bold'}}>{tr("Tags")}</span>
         <span>&ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
         <span style={{'fontStyle': (c_tags.size ? '' : '')}}>
@@ -86,7 +98,7 @@ const Presentational = props => {
     )
 
     comments_cell = (
-      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
+      <div className={"cell small-4 " + edit_hover_container} style={cells_style}>
         <span style={{'fontWeight': 'bold'}}>{tr("Comments")}</span>
         <span>&ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
         <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
@@ -104,7 +116,7 @@ const Presentational = props => {
       <i className="fi-page-multiple" style={{
         'fontSize': '3em',
         'width': '1.7em',
-        'color': typeOf(mkDummyFile()).color,
+        'color': types.otherfiles.color,
         'display': 'table-cell',
         'paddingLeft': '0.5em',
         'verticalAlign':'middle'}}
@@ -115,15 +127,22 @@ const Presentational = props => {
 
     real_name = (<span style={{'fontStyle':'italic'}}>({tr("Real name")})</span>)
 
+    info_cell = (
+      <div className="cell small-4" style={cells_style}>
+        <span style={{'fontWeight': 'bold'}}>{tr("Information")}</span><br />
+        <span>{"..."}</span>
+      </div>
+    )
+
     tags_cell = (
-      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
+      <div className={"cell small-4 " + edit_hover_container} style={cells_style}>
         <span style={{'fontWeight': 'bold'}}>{tr("Tags")}</span><br />
         <span style={{'fontStyle':'italic'}}>{tr("Your tags here") + "..."}</span>
       </div>
     )
 
     comments_cell = (
-      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
+      <div className={"cell small-4 " + edit_hover_container} style={cells_style}>
         <span style={{'fontWeight': 'bold'}}>{tr("Comments")}</span><br />
         <span style={{'fontStyle':'italic'}}>{tr("Your text here") + "..."}</span>
       </div>
@@ -145,8 +164,9 @@ const Presentational = props => {
       </div>
 
       <div className="grid-x grid-frame">
-          {tags_cell}
-          {comments_cell}
+        {info_cell}
+        {tags_cell}
+        {comments_cell}
       </div>
 
     </div>

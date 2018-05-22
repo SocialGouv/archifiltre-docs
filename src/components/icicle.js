@@ -5,11 +5,11 @@ import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 import { setNoDisplayRoot } from 'reducers/icicle-state'
 
 import IcicleRect from 'components/icicle-rect'
+import * as Color from 'color'
 
 import { tr } from 'dict'
 
 const icicle_style = {
-  position: 'relative',
   stroke: '#fff',
 }
 
@@ -17,18 +17,6 @@ export const icicle_dims = {
   w:800,
   h:300
 }
-
-export const types = {
-    presentation : {label: tr("Presentation"), color:"#f75b40"},
-    parent_folder : {label: tr("Root"), color: "#f99a0b"},
-    folder : {label: tr("Folder"), color:"#fabf0b"},
-    spreadsheet : {label: tr("Spreadsheet"), color:"#52d11a"},
-    email: {label: tr("E-mail"), color:"#13d6f3"},
-    doc : {label: tr("Document"), color:"#4c78e8"},
-    multimedia: {label: tr("Multimedia"), color:"#b574f2"},
-    otherfiles : {label: tr("Others"), color:"#8a8c93"}
-  };
-
 
 
 class Icicle extends React.PureComponent {
@@ -40,6 +28,10 @@ class Icicle extends React.PureComponent {
     return 'icicle-display-root-'+id
   }
 
+  removeRootId(arr) {
+    return arr.slice(1)
+  }
+
   render() {
     const x = 0
     let y = 0
@@ -48,7 +40,7 @@ class Icicle extends React.PureComponent {
     const trueFHeight = this.props.trueFHeight(height)
     let id = this.props.root_id
     let display_root_components = []
-    const display_root = this.props.display_root.slice(1)
+    const display_root = this.removeRootId(this.props.display_root)
 
     if (display_root.length) {
       id = display_root.slice(-1)[0]
@@ -68,6 +60,7 @@ class Icicle extends React.PureComponent {
               y={y_node}
               dx={dx_node}
               dy={dy_node}
+              fillColor={this.props.fillColor}
             />
           </g>
         )
@@ -87,6 +80,7 @@ class Icicle extends React.PureComponent {
           normalizeWidth={this.props.normalizeWidth}
           trueFHeight={trueFHeight}
           getChildrenIdFromId={this.props.getChildrenIdFromId}
+          fillColor={this.props.fillColor}
         />
       </g>
     )
@@ -142,6 +136,7 @@ class IcicleRecursive extends React.PureComponent {
             y={y_child}
             dx={width_child}
             dy={height_child}
+            fillColor={this.props.fillColor}
           />
           <IcicleRecursive
             x={x_prime}
@@ -153,6 +148,7 @@ class IcicleRecursive extends React.PureComponent {
             normalizeWidth={this.props.normalizeWidth}
             trueFHeight={this.props.trueFHeight}
             getChildrenIdFromId={this.props.getChildrenIdFromId}
+            fillColor={this.props.fillColor}
           />
         </g>
       )
@@ -172,38 +168,23 @@ class IcicleRecursive extends React.PureComponent {
 
 
 
-class Presentational extends React.Component {
+class Presentational extends React.PureComponent {
   constructor(props) {
     super(props)
-
-    this.plot = this.plot.bind(this)
-
-    console.log('profondeur : ', props.max_depth)
-
-    setNoDisplayRoot()
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.display_root !== this.props.display_root) {
-      return true
-    } else {
-      return false
-    }
-  }
-
-
-  plot() {
+  render() {
     const root_id = this.props.root_id
     const display_root = this.props.display_root
     const max_depth = this.props.max_depth
     const getByID = this.props.getByID
    
     const fWidth = id => {
-      // const node = getByID(id)
-      // return node.get('content').get('size')
-
       const node = getByID(id)
-      return node.get('content').get('nb_files')
+      return node.get('content').get('size')
+
+      // const node = getByID(id)
+      // return node.get('content').get('nb_files')
     }
 
     const normalizeWidth = arr => {
@@ -213,16 +194,31 @@ class Presentational extends React.Component {
     }
 
     const trueFHeight = max_height => id => {
-      // return max_height/max_depth
+      return max_height/max_depth
 
-      const node = getByID(id)
-      const len = node.get('name').length
-      return len * (max_height/260)
+      // const node = getByID(id)
+      // const len = node.get('name').length
+      // return len * (max_height/260)
     }
 
     const getChildrenIdFromId = id => {
       const node = getByID(id)
       return node.get('children').toJS()
+    }
+
+    const fillColor = id => {
+      const node = getByID(id)
+      const name = node.get('name')
+      
+      if (node.get('children').size) {
+        if (display_root.includes(id)) {
+          return Color.parentFolder()
+        } else {
+          return Color.folder()
+        }
+      } else {
+        return Color.fromFileName(name)
+      }
     }
 
     console.time('render icicle')
@@ -234,93 +230,21 @@ class Presentational extends React.Component {
         normalizeWidth={normalizeWidth}
         trueFHeight={trueFHeight}
         getChildrenIdFromId={getChildrenIdFromId}
+        fillColor={fillColor}
       />
     )
     console.timeEnd('render icicle')
-    return icicle
-  }
 
-  render() {
+
     return (
       <div style={icicle_style}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
           <g>
-            {this.plot()}
+            {icicle}
           </g>
         </svg>
-      </div>)
-  }
-}
-
-export const typeOf = (node) => {
-  
-  if (node.get('children').size) {
-    if (node.get('children').get(0) === "-1") {
-      return types.parent_folder;
-    } else {
-      return types.folder;
-    }
-  } else {
-    let m = node.get('name').match(/\.[^\.]*$/)
-
-    if (m == null)
-      m = [""]
-
-    switch (m[0].toLowerCase()) {
-      case ".xls": //formats Microsoft Excel
-      case ".xlsx":
-      case ".xlsm":
-      case ".xlw": // dont les vieux
-      case ".xlt":
-      case ".xltx":
-      case ".xltm":
-      case ".csv": // format Csv
-      case ".ods": //formats OOo/LO Calc
-      case ".ots":
-        return types.spreadsheet;
-      case ".doc":  //formats Microsoft Word
-      case ".docx":
-      case ".docm":
-      case ".dot":
-      case ".dotx":
-      case ".dotm":
-      case ".odt": // formats OOo/LO Writer
-      case ".ott":
-      case ".txt": // formats texte standard
-      case ".rtf":
-        return types.doc;
-      case ".ppt": // formats Microsoft PowerPoint
-      case ".pptx":
-      case ".pptm":
-      case ".pps":
-      case ".ppsx":
-      case ".pot":
-      case ".odp": // formats OOo/LO Impress
-      case ".otp":
-      case ".pdf": // On considère le PDF comme une présentation
-        return types.presentation;
-      case ".eml": //formats d'email et d'archive email
-      case ".msg":
-      case ".pst":
-        return types.email;
-      case ".jpeg": //formats d'image
-      case ".jpg":
-      case ".gif":
-      case ".png":
-      case ".bmp":
-      case ".tiff":
-      case ".mp3": //formats audio
-      case ".wav":
-      case ".wma":
-      case ".avi":
-      case ".wmv": //formats vidéo
-      case ".mp4":
-      case ".mov":
-      case ".mkv":
-        return types.multimedia;
-      default:
-        return types.otherfiles;
-    }
+      </div>
+    )
   }
 }
 

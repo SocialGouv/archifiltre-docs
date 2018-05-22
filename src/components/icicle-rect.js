@@ -5,14 +5,8 @@ import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 
 import { setFocus, setNoFocus, setDisplayRoot, setNoDisplayRoot, lock } from 'reducers/icicle-state'
 
-import { typeOf } from 'components/icicle'
-
-import { root_button } from 'css/app.css'
-
-import { mkDummyParent } from 'table-tree'
 import { commit } from 'reducers/root-reducer'
 
-import { tr } from 'dict'
 
 class Presentational extends React.PureComponent {
   constructor(props) {
@@ -86,14 +80,12 @@ class Presentational extends React.PureComponent {
         )
       )
 
-    const display = this.props.node.get('depth') ? "" : "none"
-    const is_parent = this.props.isZoomed && this.props.display_root.includes(this.props.node_id) && this.props.node.get('children').size
-    const fill = is_parent ? typeOf(mkDummyParent()).color : typeOf(this.props.node).color
+    const fill = this.props.fillColor(this.props.node_id)
 
     const res = [
       (<rect
-        key="rect"
-        className="node"
+        key='rect'
+        className='node'
         x={dims.x}
         y={dims.y}
         width={dims.dx}
@@ -102,7 +94,7 @@ class Presentational extends React.PureComponent {
         onDoubleClick={onDoubleClickHandler}
         onMouseOver={onMouseOverHandler}
         // onMouseOut={onMouseOutHandler}
-        style={{"fill": fill, "opacity": opacity, "display" : display}}
+        style={{'fill': fill, 'opacity': opacity}}
       />)
     ]
 
@@ -124,9 +116,6 @@ const mapStateToProps = (state, props) => {
 
   return {
     getIDPath: database.getIDPath,
-    node: database.getByID(props.node_id),
-    display_root: icicle_state.display_root(),
-    isZoomed: icicle_state.isZoomed(),
     isFocused: icicle_state.isFocused(),
     isLocked: icicle_state.isLocked(),
     isInHoverSeq,

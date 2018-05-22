@@ -3,43 +3,63 @@ import { connect } from 'react-redux'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 
-import { typeOf, icicle_dims } from 'components/icicle'
-
-import { mkDummyParent } from 'table-tree'
+import { icicle_dims } from 'components/icicle'
+import * as Color from 'color'
 
 import { tr } from 'dict'
 
 const Presentational = props => {
   let res
 
-  if(props.isFocused) {
-    let text = makeSizeString(props.node.get('content').get('size'), props.total_size)
+  if (props.isFocused) {
+    let text = makeSizeString(props.node_size, props.total_size)
     let mode = computeRulerTextDisplayMode(props.dims.x + props.dims.dx/2, text.length, icicle_dims.w, 4.2)
 
-    res = (<g><rect
-      className="ruler"
-      x={props.dims.x}
-      y="1.5em"
-      width={props.dims.dx}
-      height="0.3em"
-      onClick={(e) => {e.stopPropagation()}}
-      onMouseOver={() => {}}
-      style={{"fill":  props.is_parent ? typeOf(mkDummyParent()).color : typeOf(props.node).color}}>
-    </rect>
-    <text
-    x={computeTextPosition(props.dims.x, props.dims.dx, icicle_dims.w, mode)}
-    y="3em"
-    textAnchor={{"ORGANIC" : "middle", "LEFT" : "start", "RIGHT" : "end"}[mode]}
-    >{text}
-    </text></g>)
+    const fillColor = id => {
+      const node = props.getByID(id)
+      const name = node.get('name')
+      
+      if (node.get('children').size) {
+        if (props.display_root.includes(id)) {
+          return Color.parentFolder()
+        } else {
+          return Color.folder()
+        }
+      } else {
+        return Color.fromFileName(name)
+      }
+    }
+
+    res = (
+      <g>
+        <rect
+          className='ruler'
+          x={props.dims.x}
+          y='1.5em'
+          width={props.dims.dx}
+          height='0.3em'
+          onClick={(e) => {e.stopPropagation()}}
+          onMouseOver={() => {}}
+          style={{'fill': fillColor(props.node_id)}}
+        />
+        <text
+          x={computeTextPosition(props.dims.x, props.dims.dx, icicle_dims.w, mode)}
+          y='3em'
+          textAnchor={{'ORGANIC' : 'middle', 'LEFT' : 'start', 'RIGHT' : 'end'}[mode]}
+        >
+          {text}
+        </text>
+      </g>
+    )
+  } else {
+    res = (<g />)
   }
-  else res = (<g />);
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 300' preserveAspectRatio='xMidYMid meet'>
       {res}
     </svg>
-      );
+  )
 }
 
 export const octet2HumanReadableFormat = o => {
@@ -72,54 +92,58 @@ export const makeSizeString = (o, total) => {
   let sizeString = octet2HumanReadableFormat(o)
 
   let percentage = precisionRound((100 * o / total),1);
-  let percentageString = percentage + "%";
+  let percentageString = percentage + '%';
   if (percentage < 0.1) {
-    percentageString = "< 0.1%";
+    percentageString = '< 0.1%';
   }
 
-  return percentageString + " | " + sizeString
+  return percentageString + ' | ' + sizeString
 }
 
 
 const computeRulerTextDisplayMode = (candidate_position, l, w, fw) => {
-  if(candidate_position < l*fw){
-      return "LEFT"
-    }
-    else if(candidate_position > w - (l*fw)){
-      return "RIGHT"
-    }
-    else{
-      return "ORGANIC"
-    }
+  if(candidate_position < l*fw) {
+    return 'LEFT'
+  } else if (candidate_position > w - (l*fw)) {
+    return 'RIGHT'
+  } else {
+    return 'ORGANIC'
+  }
 }
 
 const computeTextPosition = (x, dx, w, mode) => {
-  return {"ORGANIC" : x + dx/2, "LEFT" : 5, "RIGHT" : w - 5}[mode]
+  return {'ORGANIC' : x + dx/2, 'LEFT' : 5, 'RIGHT' : w - 5}[mode]
 }
 
 
 
 
 const mapStateToProps = state => {
-	let icicle_state = selectIcicleState(state)
-  let database = selectDatabase(state)
+	const icicle_state = selectIcicleState(state)
+  const database = selectDatabase(state)
 
-  let node_id = icicle_state.isLocked() ?
+  const node_id = icicle_state.isLocked() ?
     icicle_state.lock_sequence()[icicle_state.lock_sequence().length - 1]
     : icicle_state.hover_sequence()[icicle_state.hover_sequence().length - 1];
 
-  let node = (icicle_state.isFocused() ? database.getByID(node_id) : {})
-  let total_size = database.volume()
+  const total_size = database.volume()
 
-  let is_parent = icicle_state.isZoomed() && icicle_state.display_root().includes(node_id) && node.get('children').size
+  const getByID = database.getByID
+  const node = getByID(node_id)
+  let node_size
+  if (node) {
+    node_size = node.get('content').get('size')
+  }
 
 	return {
+    getByID,
+    display_root: icicle_state.display_root(),
+
 		dims: icicle_state.hover_dims(),
     isFocused: icicle_state.isFocused(),
-    node,
+    node_size,
     node_id,
     total_size,
-    is_parent
 	}
 }
 

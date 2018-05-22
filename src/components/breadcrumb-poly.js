@@ -1,39 +1,39 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { tr } from 'dict'
 
 const Presentational = props => {
-  return (<polygon
-      className="breadcrumb-poly"
-      points={makePoints(props.level, props.step, props.w, props.type, props.is_last, props.is_dummy)}
-      fill={props.type.color} />);
+  const x = props.x
+  const y = props.y
+  const dx = props.dx
+  const dy = props.dy
+  const notch = dy/10
+
+  const points = []
+  const coord2Str = (x,y) => x+','+y
+  const pushPoints = (x,y) => points.push(coord2Str(x,y))
+
+  pushPoints(x,y)
+  if (props.is_first === false) {
+    pushPoints(x+dx/2, y+notch)
+  }
+  pushPoints(x+dx,y)
+  pushPoints(x+dx,y+dy)
+  if (props.is_last === false) {
+    pushPoints(x+dx/2, y+dy+notch)
+  }
+  pushPoints(x,y+dy)
+
+
+  return (
+    <polygon
+      className='breadcrumb-poly'
+      points={points.join(' ')}
+      fill={props.fill_color}
+    />
+  )
 }
 
-const makePoints = (level, step, w, type, is_last, is_dummy) => {
-  let h = step
-  let y = level*(step)
-  let t = h/10
-  let w2 = w/20
-
-  const coord2Str = (x,y) => (x+30)+','+y
-
-  let points = [];
-
-  points.push(coord2Str(0,y));
-  if (level > 1) { // Topmost breadcrumb; don't include upper notch.
-    points.push(coord2Str(w2/2,y+t));
-  }
-  points.push(coord2Str(w2,y));
-  points.push(coord2Str(w2,y+h));
-
-  if(type.label === tr("Folder") || type.label === tr("Root") || (is_dummy && !is_last)){
-    points.push(coord2Str(w2/2,y+h+t)); // lower notch
-  }
-
-  points.push(coord2Str(0,y+h));
-  return points.join(" ");
-}
 
 const mapStateToProps = state => {
 	return {}

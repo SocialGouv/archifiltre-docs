@@ -39,7 +39,7 @@ const Presentational = props => {
             onClick={(e) => {props.unlock(); props.setNoFocus();}}
             className="cell small-8"
           >
-            <Icicle display_root={props.display_root}/>
+            <Icicle />
             <Ruler />
           </div>
           <div className="cell small-4" style={chart_style}>
@@ -53,13 +53,7 @@ const Presentational = props => {
 
 
 const mapStateToProps = state => {
-  let database = selectDatabase(state)
-  let display_root = selectIcicleState(state).display_root()
-
-  return {
-    parent_path: database.parent_path(),
-    display_root
-  }
+  return {}
 }
  
 const mapDispatchToProps = dispatch => {

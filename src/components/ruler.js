@@ -3,9 +3,7 @@ import { connect } from 'react-redux'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 
-import { typeOf, icicle_dims } from 'components/icicle'
-
-import { mkDummyParent } from 'table-tree'
+import { typeOf, types, icicle_dims } from 'components/icicle'
 
 import { tr } from 'dict'
 
@@ -24,7 +22,7 @@ const Presentational = props => {
       height="0.3em"
       onClick={(e) => {e.stopPropagation()}}
       onMouseOver={() => {}}
-      style={{"fill":  props.is_parent ? typeOf(mkDummyParent()).color : typeOf(props.node).color}}>
+      style={{"fill":  props.is_parent ? types.parent_folder.color : typeOf(props.node).color}}>
     </rect>
     <text
     x={computeTextPosition(props.dims.x, props.dims.dx, icicle_dims.w, mode)}

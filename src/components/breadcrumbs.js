@@ -3,12 +3,10 @@ import { connect } from 'react-redux'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 
-import { typeOf, icicle_dims } from 'components/icicle'
+import { typeOf, types, icicle_dims } from 'components/icicle'
 
 import BreadCrumbText from 'components/breadcrumb-text'
 import BreadCrumbPoly from 'components/breadcrumb-poly'
-
-import { mkDummyParent, mkDummyFile } from 'table-tree'
 
 import { tr } from 'dict'
 
@@ -35,7 +33,7 @@ const Presentational = props => {
           is_last={i === props.breadcrumb_sequence.length-1}
           level={i-1}
           step={icicle_dims.h/(props.max_depth)}
-          type={is_parent ? typeOf(mkDummyParent()) : typeOf(node)}
+          type={is_parent ? types.parent_folder : typeOf(node)}
           w={breadcrumb_dims.w}
           is_dummy={false}/>
           <BreadCrumbText
@@ -59,7 +57,7 @@ const Presentational = props => {
           is_last={false}
           level={i-1}
           step={icicle_dims.h/(props.max_depth)}
-          type={typeOf(mkDummyFile())}
+          type={types.otherfiles}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
           <BreadCrumbText
@@ -80,7 +78,7 @@ const Presentational = props => {
           is_last={false}
           level={i-1}
           step={icicle_dims.h/(props.max_depth)}
-          type={typeOf(mkDummyFile())}
+          type={types.otherfiles}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
           <BreadCrumbText
@@ -101,7 +99,7 @@ const Presentational = props => {
           is_last={false}
           level={i-1}
           step={icicle_dims.h/(props.max_depth)}
-          type={typeOf(mkDummyFile())}
+          type={types.otherfiles}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
           <BreadCrumbText
@@ -122,7 +120,7 @@ const Presentational = props => {
           is_last={false}
           level={i-1}
           step={icicle_dims.h/(props.max_depth)}
-          type={typeOf(mkDummyFile())}
+          type={types.otherfiles}
           w={breadcrumb_dims.w}
           is_dummy={true}/>
           <BreadCrumbText
@@ -142,7 +140,7 @@ const Presentational = props => {
         is_last={true}
         level={i-1}
         step={icicle_dims.h/(props.max_depth)}
-        type={typeOf(mkDummyFile())}
+        type={types.otherfiles}
         w={breadcrumb_dims.w}
         is_dummy={true}/>
         <BreadCrumbText

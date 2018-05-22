@@ -1,16 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
+import { selectDatabase, selectIcicleState, commit } from 'reducers/root-reducer'
 
 import { setFocus, setNoFocus, setDisplayRoot, setNoDisplayRoot, lock } from 'reducers/icicle-state'
 
-import { typeOf } from 'components/icicle'
+import { typeOf, types } from 'components/icicle'
 
 import { root_button } from 'css/app.css'
-
-import { mkDummyParent } from 'table-tree'
-import { commit } from 'reducers/root-reducer'
 
 import { tr } from 'dict'
 
@@ -55,6 +52,7 @@ class Presentational extends React.PureComponent {
     const onClickHandler = (e) => {
       e.stopPropagation()
       d_lock(nodeSequence(), dims)
+      console.log(this.props.node.toJS()) // TO BE DELETED - USED FOR IMPLEMENTING
     }
     const onDoubleClickHandler = () => {
       d_setDisplayRoot(nodeSequence())
@@ -88,7 +86,7 @@ class Presentational extends React.PureComponent {
 
     const display = this.props.node.get('depth') ? "" : "none"
     const is_parent = this.props.isZoomed && this.props.display_root.includes(this.props.node_id) && this.props.node.get('children').size
-    const fill = is_parent ? typeOf(mkDummyParent()).color : typeOf(this.props.node).color
+    const fill = is_parent ? types.parent_folder.color : typeOf(this.props.node).color
 
     const res = [
       (<rect

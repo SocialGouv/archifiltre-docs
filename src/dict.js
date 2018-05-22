@@ -133,6 +133,14 @@ const dict = {
     fr: "pourcentage du total",
     en: "percentage of the whole"
   },
+  "Last modified" : {
+    fr: "Dernière modification",
+    en: "Last modified"
+  },
+  "at": {
+    fr: "à",
+    en: "at"
+  },
   "Tags": {
 
   },

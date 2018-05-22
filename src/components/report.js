@@ -8,7 +8,7 @@ import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 import { setContentByID } from 'reducers/database'
 
 import { types, typeOf } from 'components/icicle'
-import { makeSizeString } from 'components/ruler'
+import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
 import { edit_hover_container, edit_hover_pencil, tags, comments } from 'css/app.css'
 
@@ -16,6 +16,27 @@ import * as Content from 'content'
 import { commit } from 'reducers/root-reducer'
 
 import { tr } from 'dict'
+
+const epochTimeToDateTime = (d) => {
+  let res = new Date(d)
+
+  let mm = res.getMonth() + 1; // getMonth() is zero-based
+  let dd = res.getDate();
+
+  return (
+    [
+      (dd>9 ? '' : '0') + dd,
+      (mm>9 ? '' : '0') + mm,
+      res.getFullYear()
+    ].join('/')
+    + " " + tr("at") + " " +
+    [
+      res.getHours(),
+      res.getMinutes(),
+      res.getSeconds(),
+    ].join(':')
+    );
+}
 
 const Presentational = props => {
   let icon, name, real_name, info_cell, tags_cell, comments_cell
@@ -32,6 +53,10 @@ const Presentational = props => {
     const n_children = node.get('children')
     const n_name = node.get('name')
     const n_content = node.get('content')
+
+    const c_last_modified = epochTimeToDateTime(n_content.get('last_modified'));
+    const c_size = octet2HumanReadableFormat(n_content.get('size'))
+
     const c_alias = n_content.get('alias')
     const c_tags = new Set(Content.tagsToJs(n_content.get('tags')))
     const c_comments = n_content.get('comments')
@@ -76,8 +101,8 @@ const Presentational = props => {
 
     info_cell = (
       <div className="cell small-4" style={cells_style}>
-        <span style={{'fontWeight': 'bold'}}>{tr("Information")}</span><br />
-        <span>{"..."}</span>
+        <b>{tr("Size")} :</b> {c_size}<br />
+        <b>{tr("Last modified")} :</b> {c_last_modified}<br />
       </div>
     )
 
@@ -129,8 +154,8 @@ const Presentational = props => {
 
     info_cell = (
       <div className="cell small-4" style={cells_style}>
-        <span style={{'fontWeight': 'bold'}}>{tr("Information")}</span><br />
-        <span>{"..."}</span>
+        <b>{tr("Size")} :</b> ...<br />
+        <b>{tr("Last modified")} :</b> ...<br />
       </div>
     )
 

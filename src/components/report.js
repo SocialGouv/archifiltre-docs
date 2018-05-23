@@ -10,7 +10,7 @@ import { setContentByID } from 'reducers/database'
 import { types, typeOf } from 'components/icicle'
 import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
-import { edit_hover_container, edit_hover_pencil, tags, comments } from 'css/app.css'
+import { edit_hover_container, edit_hover_pencil, editable_text, bold, tags, comments } from 'css/app.css'
 
 import * as Content from 'content'
 import { commit } from 'reducers/root-reducer'
@@ -82,10 +82,11 @@ const Presentational = props => {
     )
 
     name = (
-      <span style={{'fontWeight':'bold'}} className={edit_hover_container}>
+      <span className={edit_hover_container}>
         <RIEInput
           value={display_name}
           change={props.onChangeAlias('new_display_name', props.node_id, n_content)}
+          className={editable_text + " " + bold}
           propName='new_display_name'
         />
         &ensp;

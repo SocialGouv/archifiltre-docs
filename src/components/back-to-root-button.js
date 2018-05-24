@@ -19,8 +19,10 @@ const Presentational = props => {
     transition : 'opacity 0.2s ease-out',
     WebkitTransition : 'opacity 0.2s ease-out',
   }
+  
+  let cursor_style = {cursor: props.isZoomed ? 'pointer' : 'default'}
 
-  return <div style={div_style}>{mkB(props.backToRoot, tr("Back to root"), true, Color.parentFolder())}</div>
+  return <div style={div_style}>{mkB(props.backToRoot, tr("Back to root"), true, Color.parentFolder(), cursor_style)}</div>
 }
 
 

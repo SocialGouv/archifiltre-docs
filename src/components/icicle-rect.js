@@ -1,11 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
+import { selectDatabase, selectIcicleState, commit } from 'reducers/root-reducer'
 
 import { setFocus, setNoFocus, setDisplayRoot, setNoDisplayRoot, lock } from 'reducers/icicle-state'
-
-import { commit } from 'reducers/root-reducer'
 
 
 class Presentational extends React.PureComponent {

@@ -80,7 +80,7 @@ const Presentational = props => {
     icon = (
       <i className={(is_folder ? 'fi-folder' : 'fi-page')} style={{
         'fontSize': '3em',
-        'width': '1.7em',
+        'width': '1.9em',
         'color': props.fillColor(props.node_id),
         'display': 'table-cell',
         'paddingLeft': '0.5em',
@@ -149,7 +149,7 @@ const Presentational = props => {
     icon = (
       <i className='fi-page-multiple' style={{
         'fontSize': '3em',
-        'width': '1.7em',
+        'width': '1.9em',
         'color': Color.placeholder(),
         'display': 'table-cell',
         'paddingLeft': '0.5em',

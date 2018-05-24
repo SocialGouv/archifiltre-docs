@@ -53,6 +53,10 @@ const dict = {
     fr: "fichiers",
     en: "files",
   },
+  "folders": {
+    fr: "répertoires",
+    en: "folders",
+  },
   "B": {
     fr: "o",
     en: "B"

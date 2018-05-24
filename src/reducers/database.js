@@ -14,7 +14,8 @@ const type = 'cheapExp/database'
 
 function bundle(state) {
   return {
-    size: () => FileSystem.size(state),
+    size_overall: () => FileSystem.size_overall(state),
+    size_files: () => FileSystem.size_files(state),
     max_depth: () => FileSystem.depth(state),
     parent_path: () => FileSystem.parentPath(state),
     getByID: (id) => FileSystem.getByID(id, state),

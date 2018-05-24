@@ -90,7 +90,8 @@ export const empty = () => new Fs({
   tree:TT.init(Content.create())
 })
 
-export const size = (state) => state.get('content_queue').size
+export const size_files = (state) => state.get('content_queue').size
+export const size_overall = (state) => state.get('tree').get('table').size - 1
 
 export const depth = (state) => TT.depth(state.get('tree'))
 

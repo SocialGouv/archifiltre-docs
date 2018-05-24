@@ -15,21 +15,6 @@ const Presentational = props => {
     let text = makeSizeString(props.node_size, props.total_size)
     let mode = computeRulerTextDisplayMode(props.dims.x + props.dims.dx/2, text.length, icicle_dims.w, 4.2)
 
-    const fillColor = id => {
-      const node = props.getByID(id)
-      const name = node.get('name')
-      
-      if (node.get('children').size) {
-        if (props.display_root.includes(id)) {
-          return Color.parentFolder()
-        } else {
-          return Color.folder()
-        }
-      } else {
-        return Color.fromFileName(name)
-      }
-    }
-
     res = (
       <g>
         <rect
@@ -40,7 +25,7 @@ const Presentational = props => {
           height='0.3em'
           onClick={(e) => {e.stopPropagation()}}
           onMouseOver={() => {}}
-          style={{'fill': fillColor(props.node_id)}}
+          style={{'fill': props.fillColor(props.node_id)}}
         />
         <text
           x={computeTextPosition(props.dims.x, props.dims.dx, icicle_dims.w, mode)}
@@ -136,9 +121,6 @@ const mapStateToProps = state => {
   }
 
 	return {
-    getByID,
-    display_root: icicle_state.display_root(),
-
 		dims: icicle_state.hover_dims(),
     isFocused: icicle_state.isFocused(),
     node_size,

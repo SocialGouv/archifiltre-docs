@@ -165,72 +165,27 @@ class IcicleRecursive extends React.PureComponent {
 
 
 
-
-
-
 class Presentational extends React.PureComponent {
   constructor(props) {
     super(props)
   }
 
   render() {
-    const root_id = this.props.root_id
-    const display_root = this.props.display_root
-    const max_depth = this.props.max_depth
-    const getByID = this.props.getByID
-   
-    const fWidth = id => {
-      const node = getByID(id)
-      return node.get('content').get('size')
-
-      // const node = getByID(id)
-      // return node.get('content').get('nb_files')
-    }
-
-    const normalizeWidth = arr => {
-      const sum = arr.reduce((a,b)=>a+b,0)
-      const ans = arr.map(a=>a/sum)
-      return ans
-    }
-
-    const trueFHeight = max_height => id => {
-      return max_height/max_depth
-
-      // const node = getByID(id)
-      // const len = node.get('name').length
-      // return len * (max_height/260)
-    }
-
     const getChildrenIdFromId = id => {
-      const node = getByID(id)
+      const node = this.props.getByID(id)
       return node.get('children').toJS()
-    }
-
-    const fillColor = id => {
-      const node = getByID(id)
-      const name = node.get('name')
-      
-      if (node.get('children').size) {
-        if (display_root.includes(id)) {
-          return Color.parentFolder()
-        } else {
-          return Color.folder()
-        }
-      } else {
-        return Color.fromFileName(name)
-      }
     }
 
     console.time('render icicle')
     const icicle = (
       <Icicle
-        root_id={root_id}
-        display_root={display_root}
-        fWidth={fWidth}
-        normalizeWidth={normalizeWidth}
-        trueFHeight={trueFHeight}
+        root_id={this.props.root_id}
+        display_root={this.props.display_root}
+        fWidth={this.props.fWidth}
+        normalizeWidth={this.props.normalizeWidth}
+        trueFHeight={this.props.trueFHeight}
         getChildrenIdFromId={getChildrenIdFromId}
-        fillColor={fillColor}
+        fillColor={this.props.fillColor}
       />
     )
     console.timeEnd('render icicle')
@@ -253,7 +208,6 @@ const mapStateToProps = state => {
   let icicle_state = selectIcicleState(state)
 
   return {
-    max_depth: database.max_depth(),
     getByID: database.getByID,
     root_id: database.root_id(),
     display_root: icicle_state.display_root(),

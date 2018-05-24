@@ -20,22 +20,6 @@ const Presentational = props => {
   let icon, name, real_name, tags_cell, comments_cell
 
   if(props.isFocused) {
-    const fillColor = id => {
-      const node = props.getByID(id)
-      const name = node.get('name')
-      
-      if (node.get('children').size) {
-        if (props.display_root.includes(id)) {
-          return Color.parentFolder()
-        } else {
-          return Color.folder()
-        }
-      } else {
-        return Color.fromFileName(name)
-      }
-    }
-
-
     const node = props.node
     const n_children = node.get('children')
     const n_name = node.get('name')
@@ -54,7 +38,7 @@ const Presentational = props => {
       <i className={(is_folder ? 'fi-folder' : 'fi-page')} style={{
         'fontSize': '3em',
         'width': '1.7em',
-        'color': fillColor(props.node_id),
+        'color': props.fillColor(props.node_id),
         'display': 'table-cell',
         'paddingLeft': '0.5em',
         'verticalAlign':'middle'}}
@@ -176,8 +160,6 @@ const mapStateToProps = state => {
   let total_size = database.volume()
 
 	return {
-    getByID,
-    display_root: icicle_state.display_root(),
     isFocused: icicle_state.isFocused(),
     isLocked: icicle_state.isLocked(),
     node,

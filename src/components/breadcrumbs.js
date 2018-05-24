@@ -56,15 +56,7 @@ class Presentational extends React.PureComponent {
   }
 
   render() {
-    let trueFHeight = max_height => id => {
-      return max_height/this.props.max_depth
-
-      // const node = getByID(id)
-      // const len = node.get('name').length
-      // return len * (max_height/260)
-    }
-
-    trueFHeight = trueFHeight(icicle_dims.h)
+    const trueFHeight = this.props.trueFHeight(icicle_dims.h)
 
     const displayName = id => {
       const node = this.props.getByID(id)
@@ -77,22 +69,6 @@ class Presentational extends React.PureComponent {
       return display_name
     }
 
-    const fillColor = id => {
-      const node = this.props.getByID(id)
-      const name = node.get('name')
-      
-      if (node.get('children').size) {
-        if (this.props.display_root.includes(id)) {
-          return Color.parentFolder()
-        } else {
-          return Color.folder()
-        }
-      } else {
-        return Color.fromFileName(name)
-      }
-    }
-
-
 
     let res = []
 
@@ -103,7 +79,7 @@ class Presentational extends React.PureComponent {
       const cumulated_breadcrumb_sequence_height = computeCumulative(breadcrumb_sequence_height)
 
       res = breadcrumb_sequence.map((node_id,i) => {
-        const fill_color = fillColor(node_id)
+        const fill_color = this.props.fillColor(node_id)
 
         const display_name = displayName(node_id)
 
@@ -212,7 +188,6 @@ const mapStateToProps = state => {
 
   return {
     breadcrumb_sequence,
-    display_root: icicle_state.display_root(),
     isFocused: icicle_state.isFocused(),
     max_depth,
     getByID,

@@ -84,10 +84,11 @@ const Presentational = props => {
     name = (
       <span className={edit_hover_container}>
         <RIEInput
-          value={display_name}
-          change={props.onChangeAlias('new_display_name', props.node_id, n_content)}
+          value={display_name.length > 0 ? display_name : bracket_name}
+          change={props.onChangeAlias('new_display_name', props.node_id, n_content, n_name)}
           className={editable_text + " " + bold}
           propName='new_display_name'
+          validate={(s) => (s.length > 0)}
         />
         &ensp;
         <i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} />
@@ -133,6 +134,7 @@ const Presentational = props => {
             change={props.onChangeComments('new_comments', props.node_id, n_content)}
             className={comments}
             propName='new_comments'
+            validate={(s) => s.replace(/\s/g,'').length > 0}
           />
         </span>
       </div>
@@ -223,8 +225,8 @@ const mapDispatchToProps = dispatch => {
   // (n) => {
   //   props.editEntryContent(props.node_id, 'display_name',
   //    n['new_display_name'].length ? n['new_display_name'] : display_name)}
-  const onChangeAlias = (prop_name, id, content) => (n) => {
-    content = content.set('alias', n[prop_name])
+  const onChangeAlias = (prop_name, id, content, old_name) => (n) => {
+    content = content.set('alias', n[prop_name] === old_name ? '' : n[prop_name])
     dispatch(setContentByID(id, content))
     dispatch(commit())
   }

@@ -35,6 +35,7 @@ const Presentational = props => {
               change={props.onChangeSessionName('new_session_name')}
               propName='new_session_name'
               className={session_name + " " + editable_text}
+              validate={(s) => s.replace(/\s/g,'').length > 0}
             />
             &ensp;
             <i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} />
@@ -122,8 +123,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 
   const onChangeSessionName = (prop_name) => (n) => {
-    dispatch(setSessionName(n[prop_name]))
-    dispatch(commit())
+    if(n[prop_name].length > 0){
+      dispatch(setSessionName(n[prop_name]))
+      dispatch(commit())
+    }
   }
   return {
     onChangeSessionName

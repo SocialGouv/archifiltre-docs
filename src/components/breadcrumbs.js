@@ -3,197 +3,200 @@ import { connect } from 'react-redux'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 
-import { typeOf, icicle_dims } from 'components/icicle'
+import { icicle_dims } from 'components/icicle'
 
 import BreadCrumbText from 'components/breadcrumb-text'
 import BreadCrumbPoly from 'components/breadcrumb-poly'
 
-import { mkDummyParent, mkDummyFile } from 'table-tree'
+import * as Color from 'color'
 
 import { tr } from 'dict'
 
 const breadcrumb_dims = {w: 400, h: 300}
 
-const Presentational = props => {
-  let res = []
 
-  if(props.isFocused){
-    for(let i = 1; i < props.breadcrumb_sequence.length; i++){
-      const node_id = props.breadcrumb_sequence[i]
-      const node = props.getByID(node_id)
-      const n_children_size = node.get('children').size
-      const is_parent = props.isZoomed && props.display_root.includes(node_id) && n_children_size
 
+const makeBreadKey = id => 'breadcrumbc-'+id
+const removeRootId = arr => arr.slice(1)
+const computeCumulative = array => {
+  const ans = [0]
+  for (let i = 0; i < array.length - 1; i++) {
+    ans.push(array[i] + ans[i])
+  }
+  return ans
+}
+
+const computeDim = (y,height) => {
+  const x_poly = 30
+  const y_poly = y
+  const width_poly = breadcrumb_dims.w/20
+  const height_poly = height
+
+  const x_text = breadcrumb_dims.w*1/7
+  const y_text = y_poly
+  const width_text = breadcrumb_dims.w*6/7
+  const height_text = height_poly
+
+  return {
+    x_poly,
+    y_poly,
+    width_poly,
+    height_poly,
+
+    x_text,
+    y_text,
+    width_text,
+    height_text,
+  }
+}
+
+class Presentational extends React.PureComponent {
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    const trueFHeight = this.props.trueFHeight(icicle_dims.h)
+
+    const displayName = id => {
+      const node = this.props.getByID(id)
       const n_name = node.get('name')
       const n_content = node.get('content')
       const c_alias = n_content.get('alias')
+
       const display_name = c_alias === '' ? n_name : c_alias
 
-      res.push(
-        <g key={"breadcrumb" + i}>
-          <BreadCrumbPoly
-          is_last={i === props.breadcrumb_sequence.length-1}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
-          type={is_parent ? typeOf(mkDummyParent()) : typeOf(node)}
-          w={breadcrumb_dims.w}
-          is_dummy={false}/>
-          <BreadCrumbText
-          key={"text" + i}
-          text={display_name}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
-          w={breadcrumb_dims.w}
-          is_dummy={false}/>
-        </g>);
+      return display_name
     }
+
+
+    let res = []
+
+    if (this.props.isFocused) {
+      const breadcrumb_sequence = removeRootId(this.props.breadcrumb_sequence)
+
+      const breadcrumb_sequence_height = breadcrumb_sequence.map(trueFHeight)
+      const cumulated_breadcrumb_sequence_height = computeCumulative(breadcrumb_sequence_height)
+
+      res = breadcrumb_sequence.map((node_id,i) => {
+        const fill_color = this.props.fillColor(node_id)
+
+        const display_name = displayName(node_id)
+
+        const is_last = i === breadcrumb_sequence.length-1
+        const is_first = i === 0
+
+        const dim = computeDim(
+          cumulated_breadcrumb_sequence_height[i],
+          breadcrumb_sequence_height[i]
+        )
+
+        return (
+          <g key={makeBreadKey(node_id)}>
+            <BreadCrumbPoly
+              is_last={is_last}
+              is_first={is_first}
+              x={dim.x_poly}
+              y={dim.y_poly}
+              dx={dim.width_poly}
+              dy={dim.height_poly}
+
+              fill_color={fill_color}
+            />
+            <BreadCrumbText
+              x={dim.x_text}
+              y={dim.y_text}
+              dx={dim.width_text}
+              dy={dim.height_text}
+
+              text={display_name}
+              is_placeholder={false}
+            />
+          </g>
+        )
+      })
+
+    } else {
+
+      const height_child = trueFHeight(this.props.root_id)
+      const i_max = Math.min(this.props.max_depth,5)
+      const fill_color = Color.placeholder()
+
+      for (let i = 0; i < i_max; i++) {
+        const is_last = i === i_max - 1
+        const is_first = i === 0
+
+        const dim = computeDim(
+          i*height_child,
+          height_child
+        )
+
+        let display_name
+        if (is_last) {
+          display_name = tr('File')
+        } else if (i >= 2) {
+          display_name = '...'
+        } else {
+          display_name = tr('Level') + ' ' + (i+1)
+        }
+        res.push(
+          <g key={'breadcrumb' + i}>
+            <BreadCrumbPoly
+              is_last={is_last}
+              is_first={is_first}
+              x={dim.x_poly}
+              y={dim.y_poly}
+              dx={dim.width_poly}
+              dy={dim.height_poly}
+
+              fill_color={fill_color}
+            />
+            <BreadCrumbText
+              x={dim.x_text}
+              y={dim.y_text}
+              dx={dim.width_text}
+              dy={dim.height_text}
+
+              text={display_name}
+              is_placeholder={true}
+            />
+          </g>
+        )
+      }
+    }
+
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" style={{"opacity": (this.props.isFocused ? 1 : 0.3)}}>
+        {res}
+      </svg>
+    )
+
   }
-
-  else{
-    let i = 1
-
-    if(props.max_depth > 1){
-      res.push(
-        <g key={"breadcrumb" + i}>
-          <BreadCrumbPoly
-          is_last={false}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
-          type={typeOf(mkDummyFile())}
-          w={breadcrumb_dims.w}
-          is_dummy={true}/>
-          <BreadCrumbText
-          key={"text" + i}
-          text={tr("Level") + " " + (i)}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
-          w={breadcrumb_dims.w}
-          is_dummy={true}/>
-        </g>);
-      i++
-    }
-
-    if(props.max_depth > 2){
-      res.push(
-        <g key={"breadcrumb" + i}>
-          <BreadCrumbPoly
-          is_last={false}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
-          type={typeOf(mkDummyFile())}
-          w={breadcrumb_dims.w}
-          is_dummy={true}/>
-          <BreadCrumbText
-          key={"text" + i}
-          text={tr("Level") + " " + (i)}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
-          w={breadcrumb_dims.w}
-          is_dummy={true}/>
-        </g>);
-      i++
-    }
-
-    if(props.max_depth > 3){
-      res.push(
-        <g key={"breadcrumb" + i}>
-          <BreadCrumbPoly
-          is_last={false}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
-          type={typeOf(mkDummyFile())}
-          w={breadcrumb_dims.w}
-          is_dummy={true}/>
-          <BreadCrumbText
-          key={"text" + i}
-          text="..."
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
-          w={breadcrumb_dims.w}
-          is_dummy={true}/>
-        </g>);
-      i++
-    }
-
-    if(props.max_depth > 4){
-      res.push(
-        <g key={"breadcrumb" + i}>
-          <BreadCrumbPoly
-          is_last={false}
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
-          type={typeOf(mkDummyFile())}
-          w={breadcrumb_dims.w}
-          is_dummy={true}/>
-          <BreadCrumbText
-          key={"text" + i}
-          text="..."
-          level={i}
-          step={icicle_dims.h/(props.max_depth+1)}
-          w={breadcrumb_dims.w}
-          is_dummy={true}/>
-        </g>);
-      i++
-    }
-
-    res.push(
-      <g key={"breadcrumb" + i}>
-        <BreadCrumbPoly
-        is_last={true}
-        level={i}
-        step={icicle_dims.h/(props.max_depth+1)}
-        type={typeOf(mkDummyFile())}
-        w={breadcrumb_dims.w}
-        is_dummy={true}/>
-        <BreadCrumbText
-        key={"text" + i}
-        text={tr("File")}
-        level={i}
-        step={icicle_dims.h/(props.max_depth+1)}
-        w={breadcrumb_dims.w}
-        is_dummy={true}/>
-      </g>);
-  }
-
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" style={{"opacity": (props.isFocused ? 1 : 0.3)}}>
-      {res}
-    </svg>
-      );
 
 }
 
-export const smartClip = (s, w, fw) => {
-    var target_size = Math.floor(w/fw)
-    var slice = Math.floor(target_size/2)
-
-    if(s.length > target_size){
-      return s.substring(0, slice-2) + "..." + s.substring(s.length - slice + 2, s.length)
-    }
-    else{
-      return s
-    }
-  }
-
-
 const mapStateToProps = state => {
-	let icicle_state = selectIcicleState(state)
+  let icicle_state = selectIcicleState(state)
   let database = selectDatabase(state)
 
-  let breadcrumb_sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence();
+  let breadcrumb_sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
   
-	return {
-		breadcrumb_sequence,
-    display_root: icicle_state.display_root(),
+  const getByID = database.getByID
+  const max_depth = database.max_depth()
+
+
+
+  return {
+    breadcrumb_sequence,
     isFocused: icicle_state.isFocused(),
-    isZoomed: icicle_state.isZoomed(),
-    max_depth: database.max_depth(),
-    getByID : database.getByID
-	}
+    max_depth,
+    getByID,
+    root_id: database.root_id(),
+  }
 }
 
 const mapDispatchToProps = dispatch => {
- 	return {}
+  return {}
 }
 
 

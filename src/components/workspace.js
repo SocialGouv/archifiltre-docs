@@ -6,6 +6,7 @@ import { setParentPath } from 'reducers/database'
 import { setNoFocus, unlock } from 'reducers/icicle-state'
 
 import { tr } from 'dict'
+import * as Color from 'color'
 
 import Icicle from 'components/icicle'
 import Ruler from 'components/ruler'
@@ -24,9 +25,50 @@ const btr_style = {
 
 
 const Presentational = props => {
+
+  const fWidth = id => {
+    const node = props.getByID(id)
+    return node.get('content').get('size')
+
+    // const node = props.getByID(id)
+    // return node.get('content').get('nb_files')
+  }
+
+  const normalizeWidth = arr => {
+    const sum = arr.reduce((a,b)=>a+b,0)
+    const ans = arr.map(a=>a/sum)
+    return ans
+  }
+
+  const trueFHeight = max_height => id => {
+    return max_height/props.max_depth
+
+    // const node = props.getByID(id)
+    // const len = node.get('name').length
+    // return len * (max_height/260)
+  }
+
+  const fillColor = id => {
+    const node = props.getByID(id)
+    const name = node.get('name')
+
+    if (node.get('children').size) {
+      if (props.display_root.includes(id)) {
+        return Color.parentFolder()
+      } else {
+        return Color.folder()
+      }
+    } else {
+      return Color.fromFileName(name)
+    }
+  }
+
+
   return (
     <div>
-        <Report />
+        <Report
+          fillColor={fillColor}
+        />
         <div className="grid-x grid-frame">
           <div className="cell small-2"></div>
           <div className="cell small-4" style={btr_style}>
@@ -39,11 +81,21 @@ const Presentational = props => {
             onClick={(e) => {props.unlock(); props.setNoFocus();}}
             className="cell small-8"
           >
-            <Icicle display_root={props.display_root}/>
-            <Ruler />
+            <Icicle
+              fWidth={fWidth}
+              normalizeWidth={normalizeWidth}
+              trueFHeight={trueFHeight}
+              fillColor={fillColor}
+            />
+            <Ruler
+              fillColor={fillColor}
+            />
           </div>
           <div className="cell small-4" style={chart_style}>
-            <BreadCrumbs />
+            <BreadCrumbs
+              trueFHeight={trueFHeight}
+              fillColor={fillColor}
+            />
           </div>
         </div>
     </div>
@@ -53,12 +105,13 @@ const Presentational = props => {
 
 
 const mapStateToProps = state => {
-  let database = selectDatabase(state)
-  let display_root = selectIcicleState(state).display_root()
+  const database = selectDatabase(state)
+  const icicle_state = selectIcicleState(state)
 
   return {
-    parent_path: database.parent_path(),
-    display_root
+    max_depth: database.max_depth(),
+    getByID: database.getByID,
+    display_root: icicle_state.display_root(),
   }
 }
  

@@ -55,13 +55,17 @@
 }
 
 .session_name {
+  display: inline-block;
   font-weight: bold;
   font-size: 1.2em;
   min-width: 80%;
   max-width: 80%;
-  display: inline-block;
   height: 1.2em;
   padding-bottom: 0.5em;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 body {

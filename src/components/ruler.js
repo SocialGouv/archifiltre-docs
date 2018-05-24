@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 
+
 import { icicle_dims } from 'components/icicle'
 import * as Color from 'color'
 

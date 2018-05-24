@@ -20,7 +20,7 @@ const chart_style = {
 
 const btr_style = {
   textAlign: 'center',
-  paddingTop: '2em'
+  padding: '1em 0'
 }
 
 

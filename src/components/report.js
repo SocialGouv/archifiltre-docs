@@ -6,9 +6,10 @@ import { RIEInput, RIETextArea, RIETags } from 'riek'
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 import { setContentByID } from 'reducers/database'
 
-import { makeSizeString } from 'components/ruler'
+import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
-import { edit_hover_container, edit_hover_pencil, tags, comments } from 'css/app.css'
+import { edit_hover_container, edit_hover_pencil, editable_text, bold, tags, comments } from 'css/app.css'
+
 
 import * as Content from 'content'
 import { commit } from 'reducers/root-reducer'
@@ -16,14 +17,46 @@ import * as Color from 'color'
 
 import { tr } from 'dict'
 
+const epochTimeToDateTime = (d) => {
+  let res = new Date(d)
+
+  let mm = res.getMonth() + 1; // getMonth() is zero-based
+  let dd = res.getDate();
+
+  return (
+    [
+      (dd>9 ? '' : '0') + dd,
+      (mm>9 ? '' : '0') + mm,
+      res.getFullYear()
+    ].join('/')
+    + " " + tr("at") + " " +
+    [
+      res.getHours(),
+      res.getMinutes(),
+      res.getSeconds(),
+    ].join(':')
+    );
+}
+
 const Presentational = props => {
-  let icon, name, real_name, tags_cell, comments_cell
+  let icon, name, real_name, info_cell, tags_cell, comments_cell
+
+  const cells_style = {
+    'padding':'1em',
+    'fontSize': '0.8em',
+    'minHeight': '8em',
+    'maxHeight': '8em'
+  }
 
   if(props.isFocused) {
     const node = props.node
     const n_children = node.get('children')
     const n_name = node.get('name')
     const n_content = node.get('content')
+
+    const c_last_modified = epochTimeToDateTime(n_content.get('last_modified'));
+    const c_size = octet2HumanReadableFormat(n_content.get('size'))
+
     const c_alias = n_content.get('alias')
     const c_tags = new Set(Content.tagsToJs(n_content.get('tags')))
     const c_comments = n_content.get('comments')
@@ -46,10 +79,11 @@ const Presentational = props => {
     )
 
     name = (
-      <span style={{'fontWeight':'bold'}} className={edit_hover_container}>
+      <span className={edit_hover_container}>
         <RIEInput
           value={display_name}
           change={props.onChangeAlias('new_display_name', props.node_id, n_content)}
+          className={editable_text + " " + bold}
           propName='new_display_name'
         />
         &ensp;
@@ -63,8 +97,15 @@ const Presentational = props => {
       </span>
     )
 
+    info_cell = (
+      <div className="cell small-4" style={cells_style}>
+        <b>{tr("Size")} :</b> {c_size}<br />
+        <b>{tr("Last modified")} :</b> {c_last_modified}<br />
+      </div>
+    )
+
     tags_cell = (
-      <div className={'cell small-4 ' + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em'}}>
+      <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
         <span style={{'fontWeight': 'bold'}}>{tr('Tags')}</span>
         <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
         <span style={{'fontStyle': (c_tags.size ? '' : '')}}>
@@ -80,7 +121,7 @@ const Presentational = props => {
     )
 
     comments_cell = (
-      <div className={'cell small-4 ' + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
+      <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
         <span style={{'fontWeight': 'bold'}}>{tr('Comments')}</span>
         <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
         <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
@@ -109,15 +150,22 @@ const Presentational = props => {
 
     real_name = (<span style={{'fontStyle':'italic'}}>({tr('Real name')})</span>)
 
+    info_cell = (
+      <div className="cell small-4" style={cells_style}>
+        <b>{tr("Size")} :</b> ...<br />
+        <b>{tr("Last modified")} :</b> ...<br />
+      </div>
+    )
+
     tags_cell = (
-      <div className={'cell small-4 ' + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
+      <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
         <span style={{'fontWeight': 'bold'}}>{tr('Tags')}</span><br />
         <span style={{'fontStyle':'italic'}}>{tr('Your tags here') + '...'}</span>
       </div>
     )
 
     comments_cell = (
-      <div className={'cell small-4 ' + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
+      <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
         <span style={{'fontWeight': 'bold'}}>{tr('Comments')}</span><br />
         <span style={{'fontStyle':'italic'}}>{tr('Your text here') + '...'}</span>
       </div>
@@ -137,10 +185,10 @@ const Presentational = props => {
           </div>
         </div>
       </div>
-
-      <div className='grid-x grid-frame'>
-          {tags_cell}
-          {comments_cell}
+      <div className="grid-x grid-frame">
+        {info_cell}
+        {tags_cell}
+        {comments_cell}
       </div>
 
     </div>

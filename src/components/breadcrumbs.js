@@ -170,7 +170,6 @@ class Presentational extends React.PureComponent {
         {res}
       </svg>
     )
-
   }
 
 }

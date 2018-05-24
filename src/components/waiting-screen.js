@@ -50,7 +50,7 @@ class Presentational extends React.Component {
 const mapStateToProps = state => {
   let database = selectDatabase(state)
   return {
-    nb_files: database.size(),
+    nb_files: database.size_files(),
   }
 }
 

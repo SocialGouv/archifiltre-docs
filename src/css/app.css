@@ -48,6 +48,15 @@
   visibility: visible;
 }
 
+.edit_hover_container:hover {
+  background-color: rgba(190, 200, 180, 0.3);
+  border-radius: 1em;
+  cursor: text;
+}
+
+.edit_hover_container {
+}
+
 .editable_text:focus {
   border: none;
   background: none;
@@ -66,6 +75,11 @@
 
 .bold {
   font-weight: bold;
+}
+
+.element_name {
+  display: inline-block;
+  min-width: 30%;
 }
 
 body {

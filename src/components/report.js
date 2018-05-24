@@ -8,7 +8,7 @@ import { setContentByID } from 'reducers/database'
 
 import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
-import { edit_hover_container, edit_hover_pencil, editable_text, bold, tags, comments } from 'css/app.css'
+import { edit_hover_container, edit_hover_pencil, editable_text, element_name, bold, tags, comments } from 'css/app.css'
 
 
 import * as Content from 'content'
@@ -42,10 +42,20 @@ const Presentational = props => {
   let icon, name, real_name, info_cell, tags_cell, comments_cell
 
   const cells_style = {
-    'padding':'1em',
+    'padding':'1em 0 0 1em',
+    'marginRight': '-0.5em',
+    'marginBottom': '1em',
     'fontSize': '0.8em',
     'minHeight': '8em',
     'maxHeight': '8em'
+  }
+
+  const margin_padding_compensate = {
+    margin: "0.2em -0.8em",
+    padding: "0.2em 0.8em",
+  }
+
+  const margin_padding_compensate_cells = {
   }
 
   if(props.isFocused) {
@@ -79,11 +89,11 @@ const Presentational = props => {
     )
 
     name = (
-      <span className={edit_hover_container}>
+      <span className={edit_hover_container} style={margin_padding_compensate}>
         <RIEInput
           value={display_name.length > 0 ? display_name : bracket_name}
           change={props.onChangeAlias('new_display_name', props.node_id, n_content, n_name)}
-          className={editable_text + " " + bold}
+          className={editable_text + " " + element_name + " " + bold}
           propName='new_display_name'
         />
         &ensp;
@@ -110,7 +120,7 @@ const Presentational = props => {
         <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
         <span style={{'fontStyle': (c_tags.size ? '' : '')}}>
           <RIETags
-            value={c_tags.size ? c_tags : new Set(['Your', 'Tags', 'Here'])}
+            value={c_tags.size ? c_tags : new Set([tr('Your tags here')])}
             change={props.onChangeTags('new_tags', props.node_id, n_content)}
             className={tags}
             placeholder={tr('New tag')}

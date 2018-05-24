@@ -19,7 +19,7 @@ const QueueElem = Record({
 export const makeQueueElem = (path,content) => {
   return new QueueElem({
     path:List(path.split('/')),
-    content: Content.create(content)
+    content: content
   })
 }
 
@@ -67,7 +67,7 @@ export const qeFromJson = a => {
 
 const Fs = Record({
   session_name:'Untitled',
-  version:5,
+  version:6,
   content_queue:List(),
   tree:null,
   parent_path:List(),
@@ -82,7 +82,7 @@ export const arbitrary = () => {
     ans = pushOnQueue(arbitraryStrPath(),Content.arbitrary(), ans)
   }
   ans = makeTree(ans)
-  ans = sort(ans)
+  ans = sortBySize(ans)
   return ans
 }
 
@@ -169,12 +169,26 @@ export const makeTree = (state) => {
   return state
 }
 
-export const sort = (state) => {
-  state = state.update('tree', TT.sort)
+export const computeDerivatedData = (state) => {
+  state = state.update('tree', tree => {
+    tree = TT.mapContent(Content.computeDerivatedData, tree)
+    return tree
+  })
 
   return state
 }
 
+export const sortBySize = Cache.make((state) => {
+  state = state.update('tree', TT.sort(Content.compareSize))
+
+  return state
+})
+
+export const sortByMaxRemainingPathLength = Cache.make((state) => {
+  state = state.update('tree', TT.sortByMaxRemainingPathLength)
+
+  return state
+})
 
 export const toJson = Cache.make((state) => {
   state = state.update('tree', TT.toJson)
@@ -212,7 +226,7 @@ export const fromLegacyCsv = (csv) => {
       ans = pushOnQueue(path, Content.create({size:Number(size)}), ans)
     })
   ans = makeTree(ans)
-  ans = sort(ans)
+  ans = sortBySize(ans)
   return ans
 }
 

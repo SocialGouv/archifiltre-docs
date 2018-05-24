@@ -5,6 +5,7 @@ import { selectDatabase, selectIcicleState, commit } from 'reducers/root-reducer
 
 import { setFocus, setNoFocus, setDisplayRoot, setNoDisplayRoot, lock } from 'reducers/icicle-state'
 
+import { isLeaf } from 'table-tree'
 
 class Presentational extends React.PureComponent {
   constructor(props) {
@@ -80,8 +81,9 @@ class Presentational extends React.PureComponent {
 
     const fill = this.props.fillColor(this.props.node_id)
 
-    const res = [
-      (<rect
+
+    const res = [(
+      <rect
         key='rect'
         className='node'
         x={dims.x}
@@ -93,8 +95,44 @@ class Presentational extends React.PureComponent {
         onMouseOver={onMouseOverHandler}
         // onMouseOut={onMouseOutHandler}
         style={{'fill': fill, 'opacity': opacity}}
-      />)
-    ]
+      >
+      </rect>
+    )]
+
+
+    // // TEST SPIKE FOR LEAF NODE 
+    // const points = []
+    // const coord2Str = (x,y) => x+','+y
+    // const pushPoints = (x,y) => points.push(coord2Str(x,y))
+
+    // pushPoints(dims.x,dims.y)
+    // pushPoints(dims.x+dims.dx,dims.y)
+    // if (isLeaf(this.props.getByID(this.props.node_id))) {
+    //   const a = 5
+    //   const ay = Math.min(a,dims.dy)
+    //   const ax = Math.min(a,dims.dx/2)
+    //   pushPoints(dims.x+dims.dx, dims.y+dims.dy-ay)
+    //   pushPoints(dims.x+dims.dx-ax, dims.y+dims.dy)
+    //   pushPoints(dims.x+ax, dims.y+dims.dy)
+    //   pushPoints(dims.x, dims.y+dims.dy-ay)
+
+    // } else {
+    //   pushPoints(dims.x+dims.dx,dims.y+dims.dy)
+    //   pushPoints(dims.x,dims.y+dims.dy)
+    // }
+
+    // return (
+    //   <polygon
+    //     key='rect'
+    //     className='node'
+    //     points={points.join(' ')}
+    //     onClick={onClickHandler}
+    //     onDoubleClick={onDoubleClickHandler}
+    //     onMouseOver={onMouseOverHandler}
+    //     style={{'fill': fill, 'opacity': opacity}}
+    //   />
+    // )
+
 
     return res
   }
@@ -113,6 +151,7 @@ const mapStateToProps = (state, props) => {
 
 
   return {
+    getByID: database.getByID,
     getIDPath: database.getIDPath,
     isFocused: icicle_state.isFocused(),
     isLocked: icicle_state.isLocked(),

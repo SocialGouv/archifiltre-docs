@@ -14,12 +14,17 @@ const Entry = Record({
   content:null,
   children:List(),
   parent:null,
-  depth:0
+  depth:0,
+  
+  sum_children_path_length:0,
+  max_children_path_length:0,
+  parent_path_length:0,
 })
 
 export const isLeaf = (a) => a.get('children').size === 0
 export const isRoot = (a) => a.get('parent') === null
 
+export const getMaxRemainingPathLength = (a) => a.get('max_children_path_length') + a.get('name').length
 
 export default function(C) {
 
@@ -115,6 +120,18 @@ export default function(C) {
     return entry
   }
 
+  const strPathLen = (path) => {
+    return path.join('').length
+  }
+
+  const entryUpdater = (content, path) => entry => {
+    entry = updateContent(content, entry)
+    const len = strPathLen(path)
+    entry = entry.update('sum_children_path_length',a=>a+len)
+    entry = entry.update('max_children_path_length',a=>Math.max(a,len))
+    return entry
+  }
+
   const updateContent = (content, entry) => {
     entry = entry.update('content', a=>C.update(content,a))
     return entry
@@ -141,14 +158,20 @@ export default function(C) {
 
       let child_id = getChildIdByName(name, id, tt)
       if (child_id) {
-        tt = updateEntryById(child_id, a=>updateContent(content, a), tt)
+        tt = updateEntryById(child_id, entryUpdater(content, path), tt)
       } else {
         child_id = genId()
+        const path_len = strPathLen(path)
+        const parent_entry = getEntryById(id, tt)
         const child = new Entry({
           name,
           content,
           parent:id,
-          depth: getEntryById(id, tt).get('depth')+1
+          depth: parent_entry.get('depth') + 1,
+
+          parent_path_length: parent_entry.get('parent_path_length') + parent_entry.get('name').length,
+          max_children_path_length: path_len,
+          sum_children_path_length: path_len,
         })
         tt = setEntryById(child_id, child, tt)
         tt = updateEntryById(id, a=>updateChildren(child_id, a), tt)
@@ -160,7 +183,7 @@ export default function(C) {
 
   const update = (path, content, tt) => {
     const root_id = getRootId(tt)
-    tt = updateEntryById(root_id, a=>updateContent(content, a), tt)
+    tt = updateEntryById(root_id, entryUpdater(content, path), tt)
 
     tt = updateRec(path, content, root_id, tt)
 
@@ -170,10 +193,9 @@ export default function(C) {
 
 
   
-  const sortChildren = (tt, entry) => {
-    const getObj = (child_id, tt) => getEntryById(child_id,tt).get('content')
+  const sortChildren = (tt, getObj, compare, entry) => {
     const comparator = ([id1,content1], [id2,content2]) =>
-      C.compare(content1,content2)
+      compare(content1,content2)
 
     entry = entry.update('children', children =>
       children.map(child_id => [child_id, getObj(child_id, tt)])
@@ -183,38 +205,58 @@ export default function(C) {
     return entry
   }
 
-  const sortRec = (id, tt) => {
-    tt = updateEntryById(id, a=>sortChildren(tt,a), tt)
+  const sortRec = (id, getObj, compare, tt) => {
+    tt = updateEntryById(id, a=>sortChildren(tt, getObj, compare, a), tt)
 
-    getEntryById(id, tt).get('children').forEach(id => tt = sortRec(id, tt))
+    getEntryById(id, tt).get('children').forEach(id => tt = sortRec(id, getObj, compare, tt))
 
     return tt
   }
 
-  const sort = (tt) => {
+  const sort = (compare) => (tt) => {
     const root_id = getRootId(tt)
+    const getObj = (child_id, tt) => getEntryById(child_id,tt).get('content')
 
-    tt = sortRec(root_id, tt)
+    tt = sortRec(root_id, getObj, compare, tt)
     return tt
   }
 
-  const isSortedRec = (id, tt) => {
+  const sortByMaxRemainingPathLength = (tt) => {
+    const root_id = getRootId(tt)
+    const getObj = (child_id, tt) => getEntryById(child_id,tt)
+    const compare = (a,b) => {
+      const len_a = getMaxRemainingPathLength(a)
+      const len_b = getMaxRemainingPathLength(b)
+      if (len_a < len_b) {
+        return 1
+      } else if (len_a > len_b) {
+        return -1
+      } else {
+        return 0
+      }
+    }
+
+    tt = sortRec(root_id, getObj, compare, tt)
+    return tt
+  }
+
+  const isSortedRec = (id, compare, tt) => {
     const getContentFromId = (id) => getEntryById(id,tt).get('content')
     const children = getEntryById(id,tt).get('children')
     let ans = true
     for (let i = 1; i < children.size; i++) {
-      ans = ans && C.compare(
+      ans = ans && compare(
         getContentFromId(children.get(i-1)),
         getContentFromId(children.get(i))
       ) !== 1
     }
-    return children.map(a=>isSortedRec(a,tt)).reduce((acc,val)=>acc && val, ans)
+    return children.map(a=>isSortedRec(a,compare,tt)).reduce((acc,val)=>acc && val, ans)
   }
 
-  const isSorted = (tt) => {
+  const isSorted = (compare) => (tt) => {
     const root_id = getRootId(tt)
 
-    return isSortedRec(root_id, tt)
+    return isSortedRec(root_id, compare, tt)
   }
 
 
@@ -360,6 +402,10 @@ export default function(C) {
     toList,
 
     size,
-    depth
+    depth,
+
+    sortByMaxRemainingPathLength,
+
+    mapContent
   }
 }

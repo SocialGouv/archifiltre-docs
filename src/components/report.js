@@ -10,6 +10,8 @@ import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
 import { edit_hover_container, edit_hover_pencil, editable_text, bold, tags, comments } from 'css/app.css'
 
+import LastModifiedReporter from 'components/last-modified-reporter'
+
 
 import * as Content from 'content'
 import { commit } from 'reducers/root-reducer'
@@ -17,26 +19,6 @@ import * as Color from 'color'
 
 import { tr } from 'dict'
 
-const epochTimeToDateTime = (d) => {
-  let res = new Date(d)
-
-  let mm = res.getMonth() + 1; // getMonth() is zero-based
-  let dd = res.getDate();
-
-  return (
-    [
-      (dd>9 ? '' : '0') + dd,
-      (mm>9 ? '' : '0') + mm,
-      res.getFullYear()
-    ].join('/')
-    + " " + tr("at") + " " +
-    [
-      res.getHours(),
-      res.getMinutes(),
-      res.getSeconds(),
-    ].join(':')
-    );
-}
 
 const Presentational = props => {
   let icon, name, real_name, info_cell, tags_cell, comments_cell
@@ -44,8 +26,8 @@ const Presentational = props => {
   const cells_style = {
     'padding':'1em',
     'fontSize': '0.8em',
-    'minHeight': '8em',
-    'maxHeight': '8em'
+    'minHeight': '12em',
+    'maxHeight': '12em'
   }
 
   if(props.isFocused) {
@@ -54,7 +36,6 @@ const Presentational = props => {
     const n_name = node.get('name')
     const n_content = node.get('content')
 
-    const c_last_modified = epochTimeToDateTime(n_content.get('last_modified'));
     const c_size = octet2HumanReadableFormat(n_content.get('size'))
 
     const c_alias = n_content.get('alias')
@@ -100,7 +81,7 @@ const Presentational = props => {
     info_cell = (
       <div className="cell small-4" style={cells_style}>
         <b>{tr("Size")} :</b> {c_size}<br />
-        <b>{tr("Last modified")} :</b> {c_last_modified}<br />
+        <LastModifiedReporter id={props.node_id} placeholder={false}/>
       </div>
     )
 
@@ -154,7 +135,7 @@ const Presentational = props => {
     info_cell = (
       <div className="cell small-4" style={cells_style}>
         <b>{tr("Size")} :</b> ...<br />
-        <b>{tr("Last modified")} :</b> ...<br />
+        <LastModifiedReporter placeholder={true}/>
       </div>
     )
 
@@ -221,7 +202,7 @@ const mapDispatchToProps = dispatch => {
   const onChangeAlias = (prop_name, id, content, old_name) => (n) => {
     let new_alias = n[prop_name] === old_name ? '' : n[prop_name]
     new_alias = new_alias.replace(/^\s*|\s*$/g,'')
-    
+
     content = content.set('alias', new_alias)
     dispatch(setContentByID(id, content))
     dispatch(commit())

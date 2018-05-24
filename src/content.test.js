@@ -14,6 +14,11 @@ describe('content', function() {
     return [M.tagsFromJs(M.tagsToJs(a)), a]
   })
 
+  Loop.immuEqual('(lastModifiedFromJs . lastModifiedToJs) a', () => {
+    const a = M.arbitraryLastModified()
+    return [M.lastModifiedFromJs(M.lastModifiedToJs(a)), a]
+  })
+
   Loop.immuEqual('(fromJson . toJson) a', () => {
     const a = M.arbitrary()
     return [M.fromJson(M.toJson(a)), a]
@@ -50,21 +55,21 @@ describe('content', function() {
   })
 
 
-  Loop.equal('compare a (update a b)', () => {
+  Loop.equal('compareSize a (update a b)', () => {
     const a = M.arbitrary()
     const b = M.setSize(M.getSize(a) + 1 + Arbitrary.natural(), a)
-    return [M.compare(a, b), 1]
+    return [M.compareSize(a, b), 1]
   })
 
-  Loop.equal('compare a (update b a)', () => {
+  Loop.equal('compareSize a (update b a)', () => {
     const a = M.arbitrary()
     const b = M.setSize(M.getSize(a) + 1 + Arbitrary.natural(), a)
-    return [M.compare(b, a), -1]
+    return [M.compareSize(b, a), -1]
   })
 
-  Loop.equal('compare a a', () => {
+  Loop.equal('compareSize a a', () => {
     const a = M.arbitrary()
-    return [M.compare(a, a), 0]
+    return [M.compareSize(a, a), 0]
   })
 
 })

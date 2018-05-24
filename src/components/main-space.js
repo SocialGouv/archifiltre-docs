@@ -6,12 +6,14 @@ import { selectAppState } from 'reducers/root-reducer'
 import FolderDropzone from 'components/folder-dropzone'
 import Icicle from 'components/icicle'
 import WorkSpace from 'components/workspace'
+import WorkSpaceWin from 'components/workspace-win'
+
 import WaitingScreen from 'components/waiting-screen'
 
 import { tr } from 'dict'
 
 const grid_style = {
-  padding: '0em 5em'
+  padding: '0em 5em',
 }
 
 const Presentational = props => {

@@ -1,6 +1,7 @@
 
 
 import duck from 'reducers/duck'
+import * as Content from 'content'
 import * as FileSystem from 'file-system'
 
 
@@ -35,15 +36,21 @@ const { mkA, reducer } = duck(type, initialState, bundle)
 export default reducer
 
 export const push = mkA((path, content) => state => {
-  return FileSystem.pushOnQueue(path, content, state)
+  return FileSystem.pushOnQueue(path, Content.create(content), state)
 })
 
 export const makeTree = mkA(() => state => {
   state = FileSystem.makeTree(state)
-  state = FileSystem.sort(state)
+  state = FileSystem.sortBySize(state)
+  state = FileSystem.computeDerivatedData(state)
   return state
 })
 
+export const sortByMaxRemainingPathLength = mkA(() => state => {
+  state = FileSystem.sortByMaxRemainingPathLength(state)
+
+  return state
+})
 
 // const worker = new Worker()
 
@@ -86,7 +93,8 @@ export const fromJson = mkA((json) => state => {
 export const fromLegacyCsv = mkA((csv) => state => {
   state = FileSystem.fromLegacyCsv(csv)
   state = FileSystem.makeTree(state)
-  state = FileSystem.sort(state)
+  state = FileSystem.sortBySize(state)
+  state = FileSystem.computeDerivatedData(state)
   return state
 })
 

@@ -61,7 +61,7 @@ describe('table-tree', function() {
 
   Loop.equal('(isSorted . sort) a', () => {
     const a = TT.arbitrary()
-    return [TT.isSorted(TT.sort(a)), true]
+    return [TT.isSorted(compare)(TT.sort(compare)(a)), true]
   })
 
   Loop.equal('(toJsTree . fromJsTree) a', () => {
@@ -71,7 +71,7 @@ describe('table-tree', function() {
 
   Loop.immuEqual('(toList . sort . fromJsTree . toJsTree) a', () => {
     const a = TT.arbitrary()
-    return [TT.toList(TT.sort(TT.fromJsTree(TT.toJsTree(a)))), TT.toList(TT.sort(a))]
+    return [TT.toList(TT.sort(compare)(TT.fromJsTree(TT.toJsTree(a)))), TT.toList(TT.sort(compare)(a))]
   })
 
   
@@ -87,7 +87,7 @@ describe('table-tree', function() {
     a = TT.update(['a','b','d'], 1, a)
     a = TT.update(['a','e','f'], 1, a)
 
-    a = TT.sort(a)
+    a = TT.sort(compare)(a)
 
     TT.size(a).should.equal(7)
     TT.depth(a).should.equal(3)
@@ -100,7 +100,7 @@ describe('table-tree', function() {
     // TT.remakePath(b[b[root_id].children[0]].children[0], a).toArray()
     //   .should.deep.equal(['', 'a', 'b'])
 
-    TT.isSorted(a).should.equal(true)
+    TT.isSorted(compare)(a).should.equal(true)
 
     isSortedToTreeToJs(TT.toJsTree(a)).should.equal(true)
 
@@ -127,9 +127,9 @@ describe('table-tree', function() {
     a = TT.update(['a','b','d'], 2, a)
     a = TT.update(['a','e','f'], 4, a)
 
-    a = TT.sort(a)
+    a = TT.sort(compare)(a)
 
-    TT.isSorted(a).should.equal(true)
+    TT.isSorted(compare)(a).should.equal(true)
     isSortedToTreeToJs(TT.toJsTree(a)).should.equal(true)
 
     TT.toJsTree(a)
@@ -138,24 +138,36 @@ describe('table-tree', function() {
         content:7,
         parent:null,
         depth:0,
+        parent_path_length:0,
+        max_children_path_length: 3,
+        sum_children_path_length: 9,
         children:[
           {
             name:'a',
             content:7,
             parent:null,
             depth:1,
+            parent_path_length:0,
+            max_children_path_length: 2,
+            sum_children_path_length: 6,
             children:[
               {
                 name:'e',
                 content:4,
                 parent:null,
                 depth:2,
+                parent_path_length:1,
+                max_children_path_length: 1,
+                sum_children_path_length: 1,
                 children:[
                   {
                     name:'f',
                     content:4,
                     parent:null,
                     depth:3,
+                    parent_path_length:2,
+                    max_children_path_length: 0,
+                    sum_children_path_length: 0,
                     children:[]
                   }
                 ]
@@ -165,12 +177,18 @@ describe('table-tree', function() {
                 content:3,
                 parent:null,
                 depth:2,
+                parent_path_length:1,
+                max_children_path_length: 1,
+                sum_children_path_length: 2,
                 children:[
                   {
                     name:'d',
                     content:2,
                     parent:null,
                     depth:3,
+                    parent_path_length:2,
+                    max_children_path_length: 0,
+                    sum_children_path_length: 0,
                     children:[]
                   },
                   {
@@ -178,6 +196,9 @@ describe('table-tree', function() {
                     content:1,
                     parent:null,
                     depth:3,
+                    parent_path_length:2,
+                    max_children_path_length: 0,
+                    sum_children_path_length: 0,
                     children:[]
                   }
                 ]
@@ -208,9 +229,9 @@ describe('table-tree', function() {
     a = TT.update(['','src','scheduler.js'], 931, a)
     a = TT.update(['','src','table-tree.test.js'], 2798, a)
 
-    a = TT.sort(a)
+    a = TT.sort(compare)(a)
 
-    TT.isSorted(a).should.equal(true)
+    TT.isSorted(compare)(a).should.equal(true)
     isSortedToTreeToJs(TT.toJsTree(a)).should.equal(true)
 
     // TT.toJsTree(a).should.deep.equal({})

@@ -117,7 +117,9 @@ class IcicleRecursive extends React.PureComponent {
     const children_component = children.map((child_id,i) => {
       const x_child = this.props.x + cumulated_children_width[i]
       const width_child = children_width[i]
-      if (width_child < 1) {
+      const width_threshold = 1
+
+      if (width_child < width_threshold) {
         return (<g key={this.makeKey(child_id)} />)
       }
 

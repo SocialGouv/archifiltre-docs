@@ -57,23 +57,6 @@ function readFileFromEntry(entry) {
   })
 }
 
-// function loadLegacyCsv(loadLegacyCsv2DB, entry) {
-//   return readFileFromEntry(entry).then(loadLegacyCsv2DB)
-// }
-
-// function loadJson(loadJson2DB, entry) {
-//   return new Promise((resolve, reject) => {
-//     entry.file(file => {
-//       readFile(file).then(json => {
-//         loadJson2DB(json)
-//         resolve()
-//       })
-//     }, e => {
-//       console.log(e)
-//       resolve()
-//     })
-//   })
-// }
 
 export function readFile(file) {
   return new Promise((resolve, reject) => {
@@ -94,6 +77,7 @@ function traverseFileTree(insert2DB, entry, path) {
     return traverseFolder(insert2DB, entry, path)
   }
 }
+
 
 function traverseFile(insert2DB, entry, path) {
   return new Promise((resolve, reject) => sch.schedule(() => {

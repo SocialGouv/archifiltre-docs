@@ -33,7 +33,7 @@ export default reducer
 
 export const setFocus = mkA((id_arr, dims, isLocked) => state => {
   state = state.update('hover_seq',()=>id_arr)
-  if(!isLocked) state = state.update('dims',()=>dims);
+  if(!isLocked) state = state.update('dims',()=>dims)
   return state
 })
 
@@ -45,7 +45,7 @@ export const setNoFocus = mkA(() => state => {
 
 export const lock = mkA((id_arr, dims) => state => {
   state = state.update('lock_seq',()=>id_arr)
-  state = state.update('dims',()=>dims);
+  state = state.update('dims',()=>dims)
   return state
 })
 

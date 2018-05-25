@@ -24,7 +24,8 @@ function bundle(state) {
     root_id: () => FileSystem.rootId(state),
     toJson: () => FileSystem.toJson(state),
     toStrList2: () => FileSystem.toStrList2(state),
-    getSessionName: () => FileSystem.getSessionName(state)
+    getSessionName: () => FileSystem.getSessionName(state),
+    getTagged: (tag) => FileSystem.getTagged(state, tag)
   }
 }
 
@@ -106,5 +107,19 @@ export const setContentByID = mkA((id, content) => state => {
 
 export const setSessionName = mkA((name) => state => {
   state = FileSystem.setSessionName(name,state)
+  return state
+})
+
+export const addTagged = mkA((tag, id) => state => {
+  state = FileSystem.addTagged(state, tag, id)
+  console.log(state.get('tree').get('table').toJS())
+  console.log(state.get('tags').toJS())
+  return state
+})
+
+export const deleteTagged = mkA((tag, id) => state => {
+  state = FileSystem.deleteTagged(state, tag, id)
+  console.log(state.get('tree').get('table').toJS())
+  console.log(state.get('tags').toJS())
   return state
 })

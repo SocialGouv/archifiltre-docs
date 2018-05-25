@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { RIEInput, RIETextArea, RIETags } from 'riek'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
-import { setContentByID } from 'reducers/database'
+import { setContentByID, addTagged, deleteTagged } from 'reducers/database'
 
 import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
@@ -238,8 +238,19 @@ const mapDispatchToProps = dispatch => {
   }
 
   const onChangeTags = (prop_name, id, content) => (n) => {
-    content = content.set('tags', Content.tagsFromJs([...n[prop_name]]))
+    let new_tags = Content.tagsFromJs([...n[prop_name]])
+    let old_tags = content.get('tags')
+
+    content = content.set('tags', new_tags)
     dispatch(setContentByID(id, content))
+
+    let tags_TBdeleted = old_tags.subtract(new_tags)
+    let tags_TBadded = new_tags.subtract(old_tags)
+
+    tags_TBdeleted.map(tag => {dispatch(deleteTagged(tag, id)); return tag;})
+    tags_TBadded.map(tag => {dispatch(addTagged(tag, id)); return tag;})
+
+
     dispatch(commit())
   }
 

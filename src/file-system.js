@@ -1,5 +1,5 @@
 
-import { Map, List, Record } from 'immutable'
+import { Map, List, Record, Set } from 'immutable'
 import { generateRandomString } from 'random-gen'
 import duck from 'reducers/duck'
 
@@ -70,6 +70,7 @@ const Fs = Record({
   version:5,
   content_queue:List(),
   tree:null,
+  tags: Map(),
   parent_path:List(),
 })
 
@@ -111,6 +112,17 @@ export const updateByID = (id, f, state) =>
 
 export const getSessionName = (state) => state.get('session_name')
 export const setSessionName = (a, state) => state.set('session_name',a)
+
+export const getTagged = (state, tag) => state.get('tags').get(tag)
+export const addTagged = (state, tag, id) => state.update('tags', a=>a.update(tag, b=>{if (b === undefined) return Set.of(id); else return b.add(id);}))
+export const deleteTagged = (state, tag, id) =>
+  state.update('tags', a=>{
+    let new_tags = a.update(tag, b=>b.delete(id))
+    if(new_tags.get(tag).size === 0)
+      return a.delete(tag);
+    else
+      return new_tags;
+  })
 
 export const ghostTreeFromJs = (js, state) => {
   state = state.set('tree', TT.fromJs(js))

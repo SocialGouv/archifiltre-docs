@@ -116,7 +116,7 @@ const Presentational = props => {
 
     tags_cell = (
       <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
-        <span style={{'fontWeight': 'bold'}}>{tr('Tags')}</span>
+        <b>{tr('Tags')}</b>
         <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
         <span style={{'fontStyle': (c_tags.size ? '' : '')}}>
           <RIETags
@@ -132,7 +132,7 @@ const Presentational = props => {
 
     comments_cell = (
       <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
-        <span style={{'fontWeight': 'bold'}}>{tr('Comments')}</span>
+        <b>{tr('Comments')}</b>
         <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
         <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
           <RIETextArea
@@ -145,7 +145,9 @@ const Presentational = props => {
         </span>
       </div>
     )
-  } else {
+  }
+
+  else {
     icon = (
       <i className='fi-page-multiple' style={{
         'fontSize': '3em',
@@ -169,15 +171,15 @@ const Presentational = props => {
     )
 
     tags_cell = (
-      <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
-        <span style={{'fontWeight': 'bold'}}>{tr('Tags')}</span><br />
+      <div className='cell small-4' style={cells_style}>
+        <b>{tr('Tags')}</b><br />
         <span style={{'fontStyle':'italic'}}>{tr('Your tags here') + '...'}</span>
       </div>
     )
 
     comments_cell = (
-      <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
-        <span style={{'fontWeight': 'bold'}}>{tr('Comments')}</span><br />
+      <div className='cell small-4' style={cells_style}>
+        <b>{tr('Comments')}</b><br />
         <span style={{'fontStyle':'italic'}}>{tr('Your text here') + '...'}</span>
       </div>
     )

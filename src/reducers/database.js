@@ -25,7 +25,8 @@ function bundle(state) {
     toJson: () => FileSystem.toJson(state),
     toStrList2: () => FileSystem.toStrList2(state),
     getSessionName: () => FileSystem.getSessionName(state),
-    getTagged: (tag) => FileSystem.getTagged(state, tag)
+    getTagged: (tag) => FileSystem.getTagged(state, tag),
+    getAllTags: () => FileSystem.getAllTags(state)
   }
 }
 
@@ -112,14 +113,10 @@ export const setSessionName = mkA((name) => state => {
 
 export const addTagged = mkA((tag, id) => state => {
   state = FileSystem.addTagged(state, tag, id)
-  console.log(state.get('tree').get('table').toJS())
-  console.log(state.get('tags').toJS())
   return state
 })
 
 export const deleteTagged = mkA((tag, id) => state => {
   state = FileSystem.deleteTagged(state, tag, id)
-  console.log(state.get('tree').get('table').toJS())
-  console.log(state.get('tags').toJS())
   return state
 })

@@ -66,7 +66,7 @@ const dict = {
     en: "errors",
   },
 
-  // Icicle / Legend
+  // Icicle / Types
   "Back to root": {
     fr: "Retour à la racine",
     en: "Back to root",
@@ -166,15 +166,22 @@ const dict = {
   },
 
 
-    // Always displayed
+  // Tags menu
+  "All tags": {
+    fr: "Tous les tags",
+    en: "All tags"
+  },
+  "No tags at the moment.": {
+    fr: "Aucun tag pour l'instant.",
+    en : "No tags at the moment."
+  },
+
+
+  // Always displayed
   "Compatible with Firefox and Chrome.": {
     fr: "Compatible avec Firefox et Chrome.",
     en: "Compatible with Firefox and Chrome.",
   },
-  // "Your directories. Like you've never seen them before.": {
-  //   fr: "Vos répertoires comme vous ne les avez jamais vus.",
-  //   en: "Your directories. Like you've never seen them before."
-  // },
   "Icicles": {
     fr: "Stalactites",
     en: "Icicles",

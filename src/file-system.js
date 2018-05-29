@@ -124,6 +124,8 @@ export const deleteTagged = (state, tag, id) =>
       return new_tags;
   })
 
+  export const getAllTags = (state) => state.get('tags')
+
 export const ghostTreeFromJs = (js, state) => {
   state = state.set('tree', TT.fromJs(js))
   return state

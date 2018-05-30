@@ -67,7 +67,7 @@ const mapStateToProps = state => {
   let database = selectDatabase(state)
 
 	return {
-    tags: database.getAllTags(),
+    tags: database.getAllTags().sortBy(t => -1 * t.size),
   }
 }
 

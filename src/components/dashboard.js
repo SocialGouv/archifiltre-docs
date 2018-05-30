@@ -6,7 +6,7 @@ import { commit } from 'reducers/root-reducer'
 import { setSessionName } from 'reducers/database'
 import { octet2HumanReadableFormat } from 'components/ruler'
 
-import { RIEInput } from 'riek'
+import { RIEInput } from 'riek2'
 
 
 import SaveButton from 'components/save-button'

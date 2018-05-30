@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { RIEInput, RIETextArea, RIETags } from 'riek'
+import { RIEInput, RIETextArea, RIETags } from 'riek2'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 import { setContentByID, addTagged, deleteTagged } from 'reducers/database'

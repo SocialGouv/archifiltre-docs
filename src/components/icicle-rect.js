@@ -3,13 +3,26 @@ import { connect } from 'react-redux'
 
 import { selectDatabase, selectIcicleState, commit } from 'reducers/root-reducer'
 
-import { setFocus, setNoFocus, setDisplayRoot, setNoDisplayRoot, lock } from 'reducers/icicle-state'
+import { setFocus, setNoFocus, setDisplayRoot, lock } from 'reducers/icicle-state'
 
 import { isLeaf } from 'table-tree'
 
 class Presentational extends React.PureComponent {
   constructor(props) {
     super(props)
+
+    this.d_setFocus = this.d_setFocus.bind(this)
+    this.d_setNoFocus = this.d_setNoFocus.bind(this)
+    this.d_setDisplayRoot = this.d_setDisplayRoot.bind(this)
+    this.d_lock = this.d_lock.bind(this)
+
+    this.dims = this.dims.bind(this)
+
+    this.nodeSequence = this.nodeSequence.bind(this)
+    this.onClickHandler = this.onClickHandler.bind(this)
+    this.onDoubleClickHandler = this.onDoubleClickHandler.bind(this)
+    this.onMouseOverHandler = this.onMouseOverHandler.bind(this)
+    this.onMouseOutHandler = this.onMouseOutHandler.bind(this)
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
@@ -21,49 +34,57 @@ class Presentational extends React.PureComponent {
   //       logs.push(key)
   //     }
   //   }
-  //   // console.log(ans)
   //   // console.log(ans, logs)
   //   return true
   // }
 
+  d_setFocus(...args) {
+    this.props.dispatch((setFocus(...args)))
+  }
+  d_setNoFocus(...args) {
+    this.props.dispatch((setNoFocus(...args)))
+  }
+  d_setDisplayRoot(...args) {
+    this.props.dispatch((setDisplayRoot(...args)))
+  }
+  d_lock(...args) {
+    this.props.dispatch((lock(...args)))
+    this.props.dispatch(commit())
+  }
 
-  render() {
-    const d_setFocus = (...args) => this.props.dispatch((setFocus(...args)))
-    const d_setNoFocus = (...args) => this.props.dispatch((setNoFocus(...args)))
-    const d_setDisplayRoot = (...args) => this.props.dispatch((setDisplayRoot(...args)))
-    const d_setNoDisplayRoot = (...args) => this.props.dispatch((setNoDisplayRoot(...args)))
-    const d_lock = (...args) => {
-      this.props.dispatch((lock(...args)))
-      this.props.dispatch(commit())
-    }
-
-    const dims = {
+  dims() {
+    return {
       x:this.props.x,
       y:this.props.y,
       dx:this.props.dx,
       dy:this.props.dy,
     }
+  }
 
-    const nodeSequence = () => this.props.getIDPath(this.props.node_id).toJS()
-    const onClickHandler = (e) => {
-      e.stopPropagation()
-      d_lock(nodeSequence(), dims)
+  nodeSequence() {
+    return this.props.getIDPath(this.props.node_id).toJS()
+  }
+  onClickHandler(e) {
+    e.stopPropagation()
+    this.d_lock(this.nodeSequence(), this.dims())
+  }
+  onDoubleClickHandler() {
+    this.d_setDisplayRoot(this.nodeSequence())
+  }
+  onMouseOverHandler() {
+    this.d_setFocus(this.nodeSequence(), this.dims(), this.props.isLocked)
+  }
+  // #### perf bottleneck ####
+  // when mouse go from IcicleRect to IcicleRect, trigger Out event => Hover event
+  // d_setNoFocus trigger a redering of all the IcicleRect
+  onMouseOutHandler() {
+    if (!this.props.isLocked) {
+      this.d_setNoFocus()
     }
-    const onDoubleClickHandler = () => {
-      d_setDisplayRoot(nodeSequence())
-    }
-    const onMouseOverHandler = () => {
-      d_setFocus(nodeSequence(), dims, this.props.isLocked)
-    }
-    // #### perf bottleneck ####
-    // when mouse go from IcicleRect to IcicleRect, trigger Out event => Hover event
-    // d_setNoFocus trigger a redering of all the IcicleRect
-    const onMouseOutHandler = () => {
-      if (!this.props.isLocked) {
-        d_setNoFocus()
-      }
-    }
+  }
 
+
+  render() {
     const opacity =
       (this.props.isLocked ?
         (this.props.isInLockSeq ?
@@ -81,58 +102,22 @@ class Presentational extends React.PureComponent {
 
     const fill = this.props.fillColor(this.props.node_id)
 
-
     const res = [(
       <rect
         key='rect'
         className='node'
-        x={dims.x}
-        y={dims.y}
-        width={dims.dx}
-        height={dims.dy}
-        onClick={onClickHandler}
-        onDoubleClick={onDoubleClickHandler}
-        onMouseOver={onMouseOverHandler}
-        // onMouseOut={onMouseOutHandler}
+        x={this.props.x}
+        y={this.props.y}
+        width={this.props.dx}
+        height={this.props.dy}
+        onClick={this.onClickHandler}
+        onDoubleClick={this.onDoubleClickHandler}
+        onMouseOver={this.onMouseOverHandler}
+        // onMouseOut={this.onMouseOutHandler}
         style={{'fill': fill, 'opacity': opacity}}
       >
       </rect>
     )]
-
-
-    // // TEST SPIKE FOR LEAF NODE 
-    // const points = []
-    // const coord2Str = (x,y) => x+','+y
-    // const pushPoints = (x,y) => points.push(coord2Str(x,y))
-
-    // pushPoints(dims.x,dims.y)
-    // pushPoints(dims.x+dims.dx,dims.y)
-    // if (isLeaf(this.props.getByID(this.props.node_id))) {
-    //   const a = 5
-    //   const ay = Math.min(a,dims.dy)
-    //   const ax = Math.min(a,dims.dx/2)
-    //   pushPoints(dims.x+dims.dx, dims.y+dims.dy-ay)
-    //   pushPoints(dims.x+dims.dx-ax, dims.y+dims.dy)
-    //   pushPoints(dims.x+ax, dims.y+dims.dy)
-    //   pushPoints(dims.x, dims.y+dims.dy-ay)
-
-    // } else {
-    //   pushPoints(dims.x+dims.dx,dims.y+dims.dy)
-    //   pushPoints(dims.x,dims.y+dims.dy)
-    // }
-
-    // return (
-    //   <polygon
-    //     key='rect'
-    //     className='node'
-    //     points={points.join(' ')}
-    //     onClick={onClickHandler}
-    //     onDoubleClick={onDoubleClickHandler}
-    //     onMouseOver={onMouseOverHandler}
-    //     style={{'fill': fill, 'opacity': opacity}}
-    //   />
-    // )
-
 
     return res
   }
@@ -151,8 +136,7 @@ const mapStateToProps = (state, props) => {
 
 
   return {
-    getByID: database.getByID,
-    getIDPath: database.getIDPath,
+    getIDPath: database.getIDPath, // TO CONTINUED !!!!!!!
     isFocused: icicle_state.isFocused(),
     isLocked: icicle_state.isLocked(),
     isInHoverSeq,

@@ -4,9 +4,10 @@ import { connect } from 'react-redux'
 import { selectAppState } from 'reducers/root-reducer'
 
 import FolderDropzone from 'components/folder-dropzone'
-import Icicle from 'components/icicle'
+
 import WorkSpace from 'components/workspace'
 import WorkSpaceWin from 'components/workspace-win'
+import WorkSpaceTime from 'components/workspace-time'
 
 import WaitingScreen from 'components/waiting-screen'
 
@@ -37,7 +38,7 @@ const Presentational = props => {
     return (
       <div className='grid-y grid-padding-x grid-frame align-center'>
         <div className='cell small-12'>
-          <WorkSpace />
+          <WorkSpace/>
         </div>
       </div>
     )

@@ -1,10 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { RIEInput, RIETextArea, RIETags } from 'riek2'
+import { RIEInput, RIETextArea, RIETags } from 'riek'
 
-import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
+import TagsEditable from 'components/tags-editable'
+
+import { selectIcicleState, selectDatabase, selectReportState } from 'reducers/root-reducer'
 import { setContentByID, addTagged, deleteTagged } from 'reducers/database'
+import { toggleEditingTags } from 'reducers/report-state'
 
 import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
@@ -68,7 +71,7 @@ const Presentational = props => {
     const c_size = octet2HumanReadableFormat(n_content.get('size'))
 
     const c_alias = n_content.get('alias')
-    const c_tags = new Set(Content.tagsToJs(n_content.get('tags')))
+    const c_tags = n_content.get('tags')
     const c_comments = n_content.get('comments')
 
     const display_name = c_alias === '' ? n_name : c_alias
@@ -114,18 +117,28 @@ const Presentational = props => {
       </div>
     )
 
+    // tags_cell = (
+    //   <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
+    //     <b>{tr('Tags')}</b>
+    //     <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
+    //     <span style={{'fontStyle': (c_tags.size ? '' : '')}}>
+    //       <RIETags
+    //         value={c_tags.size ? c_tags : new Set([tr('Your tags here')])}
+    //         change={props.onChangeTags('new_tags', props.node_id, n_content)}
+    //         className={tags}
+    //         placeholder={tr('New tag')}
+    //         propName='new_tags'
+    //       />
+    //     </span>
+    //   </div>
+    // )
+
     tags_cell = (
-      <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
+      <div className={'cell small-4 ' + edit_hover_container} style={cells_style} onClick={(e) => {e.stopPropagation(); props.onClickTagsCells();}}>
         <b>{tr('Tags')}</b>
         <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-        <span style={{'fontStyle': (c_tags.size ? '' : '')}}>
-          <RIETags
-            value={c_tags.size ? c_tags : new Set([tr('Your tags here')])}
-            change={props.onChangeTags('new_tags', props.node_id, n_content)}
-            className={tags}
-            placeholder={tr('New tag')}
-            propName='new_tags'
-          />
+        <span>
+          <TagsEditable tag_list={c_tags} node_id={props.node_id} old_content={n_content} />
         </span>
       </div>
     )
@@ -209,7 +222,8 @@ const Presentational = props => {
 }
 
 const mapStateToProps = state => {
-	let icicle_state = selectIcicleState(state)
+  let icicle_state = selectIcicleState(state)
+	let report_state = selectReportState(state)
   let database = selectDatabase(state)
 
   let sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
@@ -223,6 +237,7 @@ const mapStateToProps = state => {
 	return {
     isFocused: icicle_state.isFocused(),
     isLocked: icicle_state.isLocked(),
+    isEditingTags: report_state.editing_tags(),
     node,
     node_id,
     total_size
@@ -256,6 +271,10 @@ const mapDispatchToProps = dispatch => {
     dispatch(commit())
   }
 
+  const onClickTagsCells = () => {
+    dispatch(toggleEditingTags())
+  }
+
   const onChangeComments = (prop_name, id, content) => (n) => {
     content = content.set('comments', n[prop_name])
     dispatch(setContentByID(id, content))
@@ -264,6 +283,7 @@ const mapDispatchToProps = dispatch => {
  	return {
     onChangeAlias,
     onChangeTags,
+    onClickTagsCells,
     onChangeComments
   }
 }

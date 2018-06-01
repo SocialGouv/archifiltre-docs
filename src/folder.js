@@ -1,11 +1,13 @@
 
 import { mkScheduler } from 'scheduler'
+import * as File from 'file'
 
 const sch = mkScheduler()
 
 export function asyncHandleDrop(event, insert2DB, loadJson2DB, loadLegacyCsv2DB) {
   event.preventDefault()
   const items = event.dataTransfer.items
+
 
   const entry = items[0].webkitGetAsEntry()
   if (isJsonFile(entry)) {
@@ -47,7 +49,7 @@ function hasLegacyCsvExt(s) {
 function readFileFromEntry(entry) {
   return new Promise((resolve, reject) => {
     entry.file(file => {
-      readFile(file).then(content => {
+      File.readAsText(file).then(content => {
         resolve(content)
       })
     }, e => {
@@ -58,18 +60,6 @@ function readFileFromEntry(entry) {
 }
 
 
-export function readFile(file) {
-  return new Promise((resolve, reject) => {
-    let file_reader = new FileReader()
-    file_reader.onload = e => {
-      resolve(e.currentTarget.result)
-    }
-    file_reader.readAsText(file)
-  })
-  
-}
-
-
 function traverseFileTree(insert2DB, entry, path) {
   if (entry.isFile) {
     return traverseFile(insert2DB, entry, path)
@@ -77,6 +67,10 @@ function traverseFileTree(insert2DB, entry, path) {
     return traverseFolder(insert2DB, entry, path)
   }
 }
+
+
+import Worker from 'file-system.worker'
+const worker = new Worker()
 
 
 function traverseFile(insert2DB, entry, path) {
@@ -91,6 +85,10 @@ function traverseFile(insert2DB, entry, path) {
         }
       )
       resolve()
+      worker.postMessage({
+        cmd:'test',
+        file
+      })
     }, e => {
       insert2DB(
         path + entry.name,

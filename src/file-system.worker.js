@@ -1,5 +1,7 @@
 import { List } from 'immutable'
 
+import * as File from 'file'
+
 import * as FileSystem from 'file-system'
 import * as Content from 'content'
 const TT = FileSystem.TT
@@ -24,6 +26,11 @@ onmessage = function(e) {
       break
     case 'pull':
       pullHandler(e)
+      break
+    case 'test':
+      File.readAsArrayBuffer(e.data.file).then(a=>{
+        // console.log('message')
+      })
       break
     default:
   }

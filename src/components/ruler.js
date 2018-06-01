@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 
 
-import { icicle_dims } from 'components/icicle'
 import * as Color from 'color'
 
 import { tr } from 'dict'
@@ -14,7 +13,7 @@ const Presentational = props => {
 
   if (props.isFocused) {
     let text = makeSizeString(props.node_size, props.total_size)
-    let mode = computeRulerTextDisplayMode(props.dims.x + props.dims.dx/2, text.length, icicle_dims.w, 4.2)
+    let mode = computeRulerTextDisplayMode(props.dims.x + props.dims.dx/2, text.length, props.icicle_width, 4.2)
 
     res = (
       <g>
@@ -29,7 +28,7 @@ const Presentational = props => {
           style={{'fill': props.fillColor(props.node_id)}}
         />
         <text
-          x={computeTextPosition(props.dims.x, props.dims.dx, icicle_dims.w, mode)}
+          x={computeTextPosition(props.dims.x, props.dims.dx, props.icicle_width, mode)}
           y='3em'
           textAnchor={{'ORGANIC' : 'middle', 'LEFT' : 'start', 'RIGHT' : 'end'}[mode]}
         >

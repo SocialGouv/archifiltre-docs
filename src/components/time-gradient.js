@@ -7,11 +7,6 @@ import * as Color from 'color'
 const least_rgba = Color.toRgba(Color.leastRecentDate())
 const most_rgba = Color.toRgba(Color.mostRecentDate())
 
-const style = {
-  background:'linear-gradient(to right, '+least_rgba+' 0%, '+most_rgba+' 100%)',
-  height: '2em'
-}
-
 const Presentational = props => {
   const cursor_width = 0.75
 
@@ -62,7 +57,6 @@ const Presentational = props => {
             width={cursor_width}
             height={svg_height}
             fill='black'
-            style={style}
           />
         </g>
       )
@@ -84,7 +78,7 @@ const Presentational = props => {
     <svg xmlns='http://www.w3.org/2000/svg' viewBox={'0 0 '+svg_width+' '+svg_height}>
       <g>
         <defs>
-          <linearGradient id='grad1' x1='0%' y1='0%' x2='100%' y2='0%'>
+          <linearGradient id='time-gradient-grad1' x1='0%' y1='0%' x2='100%' y2='0%'>
             <stop offset='0%' style={{stopColor:least_rgba}} />
             <stop offset='100%' style={{stopColor:most_rgba}} />
           </linearGradient>
@@ -94,8 +88,7 @@ const Presentational = props => {
           y={0}
           width={svg_width}
           height={svg_height}
-          fill='url(#grad1)'
-          style={style}
+          fill='url(#time-gradient-grad1)'
         />
         {cursor_array}
       </g>
@@ -114,7 +107,7 @@ const mapStateToProps = state => {
 
   return {
     getByID: database.getByID,
-    root_id: database.root_id(),
+    root_id: database.rootId(),
     id,
   }
 }

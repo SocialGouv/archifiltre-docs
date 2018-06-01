@@ -16,15 +16,16 @@ const type = 'cheapExp/database'
 function bundle(state) {
   return {
     size: () => FileSystem.size(state),
-    max_depth: () => FileSystem.depth(state),
+    maxDepth: () => FileSystem.depth(state),
     parent_path: () => FileSystem.parentPath(state),
     getByID: (id) => FileSystem.getByID(id, state),
     getIDPath: (id) => FileSystem.getIDPath(id, state),
     volume: () => FileSystem.volume(state),
-    root_id: () => FileSystem.rootId(state),
+    rootId: () => FileSystem.rootId(state),
     toJson: () => FileSystem.toJson(state),
     toStrList2: () => FileSystem.toStrList2(state),
-    getSessionName: () => FileSystem.getSessionName(state)
+    getSessionName: () => FileSystem.getSessionName(state),
+    getLeafIdArray: () => FileSystem.getLeafIdArray(state)
   }
 }
 

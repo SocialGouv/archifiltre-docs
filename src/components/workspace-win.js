@@ -114,8 +114,8 @@ const mapStateToProps = state => {
   const icicle_state = selectIcicleState(state)
 
   return {
-    root_id: database.root_id(),
-    max_depth: database.max_depth(),
+    root_id: database.rootId(),
+    max_depth: database.maxDepth(),
     getByID: database.getByID,
     display_root: icicle_state.display_root(),
   }

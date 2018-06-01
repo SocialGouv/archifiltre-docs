@@ -13,11 +13,6 @@ const icicle_style = {
   stroke: '#fff',
 }
 
-export const icicle_dims = {
-  w:800,
-  h:300
-}
-
 
 class Icicle extends React.PureComponent {
   constructor(props) {
@@ -35,9 +30,9 @@ class Icicle extends React.PureComponent {
   render() {
     const x = 0
     let y = 0
-    const width = icicle_dims.w
-    let height = icicle_dims.h
-    const trueFHeight = this.props.trueFHeight(height)
+    const width = this.props.icicle_width
+    let height = this.props.icicle_height
+    const trueFHeight = this.props.trueFHeight
     let id = this.props.root_id
     let display_root_components = []
     const display_root = this.removeRootId(this.props.display_root)
@@ -170,23 +165,27 @@ class IcicleRecursive extends React.PureComponent {
 class Presentational extends React.PureComponent {
   constructor(props) {
     super(props)
+
+    this.getChildrenIdFromId = this.getChildrenIdFromId.bind(this)
+  }
+
+  getChildrenIdFromId(id) {
+    const node = this.props.getByID(id)
+    return node.get('children').toJS()
   }
 
   render() {
-    const getChildrenIdFromId = id => {
-      const node = this.props.getByID(id)
-      return node.get('children').toJS()
-    }
-
     console.time('render icicle')
     const icicle = (
       <Icicle
+        icicle_width={this.props.icicle_width}
+        icicle_height={this.props.icicle_height}
         root_id={this.props.root_id}
         display_root={this.props.display_root}
         fWidth={this.props.fWidth}
         normalizeWidth={this.props.normalizeWidth}
         trueFHeight={this.props.trueFHeight}
-        getChildrenIdFromId={getChildrenIdFromId}
+        getChildrenIdFromId={this.getChildrenIdFromId}
         fillColor={this.props.fillColor}
       />
     )
@@ -211,7 +210,7 @@ const mapStateToProps = state => {
 
   return {
     getByID: database.getByID,
-    root_id: database.root_id(),
+    root_id: database.rootId(),
     display_root: icicle_state.display_root(),
   }
 }

@@ -41,6 +41,10 @@ export default function(C) {
   const setTable = (a,tt) => tt.set('table',a)
   const updateTable = (f,tt) => tt.update('table',f)
 
+  const getIdArray = (tt) => {
+    const [ ...keys ] = getTable(tt).keys()
+    return keys
+  }
 
   const getRootId = (tt) => tt.get('root_id')
   const setRootId = (a,tt) => tt.set('root_id',a)
@@ -96,7 +100,10 @@ export default function(C) {
     return ans
   }
 
-
+  const filter = (f, tt) => {
+    tt = setTable(getTable(tt).filter(f), tt)
+    return tt
+  }
 
 
 
@@ -375,6 +382,11 @@ export default function(C) {
     return acc_array.reduce((a, b) => Math.max(a, b), e.get('depth'))
   }, getRootId(tt), tt))
 
+  const getLeafIdArray = (tt) => {
+    tt = filter(isLeaf,tt)
+    return getIdArray(tt)
+  }
+
   return {
     update,
     sort,
@@ -406,6 +418,8 @@ export default function(C) {
 
     sortByMaxRemainingPathLength,
 
-    mapContent
+    mapContent,
+
+    getLeafIdArray
   }
 }

@@ -24,7 +24,6 @@ class Presentational extends React.Component {
   }
 
   render() {
-    console.log(this.props.tag_list.toJS())
     let res, elements
     res = []
     elements = []
@@ -48,7 +47,7 @@ class Presentational extends React.Component {
       }
     }
 
-    let handle_remove = (tag) => () => {console.log("x") ; this.props.deleteTag(this.props.old_content, tag, this.props.node_id)}
+    let handle_remove = (tag) => () => {this.props.deleteTag(this.props.old_content, tag, this.props.node_id)}
 
 
     if(this.props.editing){
@@ -114,10 +113,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   const addTag = (content, tag, id) => {
-    console.log('add')
-    console.log(content.toJS())
     content = content.update('tags', a=>{if (a === undefined) return Set.of(tag); else return a.add(tag);})
-    console.log(content.toJS())
     dispatch(setContentByID(id, content))
 
     dispatch(addTagged(tag, id))
@@ -126,10 +122,7 @@ const mapDispatchToProps = dispatch => {
   }
 
   const deleteTag = (content, tag, id) => {
-    console.log('delete')
-    console.log(content.toJS())
     content = content.update('tags', a=>a.delete(tag))
-    console.log(content.toJS())
     dispatch(setContentByID(id, content))
 
     dispatch(deleteTagged(tag, id))

@@ -79,6 +79,7 @@ class Presentational extends React.PureComponent {
       )
 
     const fill = this.props.fillColor(this.props.node_id)
+    const stroke = this.props.hasTagToHighlight ? 'blue' : ''
 
     const res = [
       (<rect
@@ -92,7 +93,7 @@ class Presentational extends React.PureComponent {
         onDoubleClick={onDoubleClickHandler}
         onMouseOver={onMouseOverHandler}
         // onMouseOut={onMouseOutHandler}
-        style={{'fill': fill, 'opacity': opacity}}
+        style={{'fill': fill, 'opacity': opacity, stroke:stroke}}
       />)
     ]
 
@@ -107,9 +108,13 @@ const mapStateToProps = (state, props) => {
   const icicle_state = selectIcicleState(state)
   const hover_sequence = icicle_state.hover_sequence()
   const lock_sequence = icicle_state.lock_sequence()
+  const tag_to_highlight = icicle_state.tag_to_highlight()
+
+  const node_tags = database.getByID(props.node_id).get('content').get('tags')
 
   const isInHoverSeq = hover_sequence.includes(props.node_id)
   const isInLockSeq = lock_sequence.includes(props.node_id)
+  const hasTagToHighlight = node_tags.includes(tag_to_highlight)
 
 
   return {
@@ -118,6 +123,7 @@ const mapStateToProps = (state, props) => {
     isLocked: icicle_state.isLocked(),
     isInHoverSeq,
     isInLockSeq,
+    hasTagToHighlight
   }
 }
 

@@ -1,6 +1,6 @@
 
 import duck from 'reducers/duck'
-import { Record } from 'immutable'
+import { Record, Set } from 'immutable'
 
 const type = 'cheapExp/icicleState'
 
@@ -9,6 +9,7 @@ const State = Record({
   hover_seq:[],
   lock_seq:[],
   dims: {},
+  tag_to_highlight: '',
   display_root:[]
 })
 
@@ -17,6 +18,7 @@ function bundle(state) {
     hover_sequence: () => state.get('hover_seq'),
     lock_sequence: () => state.get('lock_seq'),
     hover_dims: () => state.get('dims'),
+    tag_to_highlight: () => state.get('tag_to_highlight'),
     display_root: () => state.get('display_root'),
     isFocused: () => state.get('hover_seq').length > 0,
     isLocked: () => state.get('lock_seq').length > 0,
@@ -65,6 +67,16 @@ export const setNoDisplayRoot = mkA(() => state =>{
   state = state.update('display_root',()=>[])
   state = state.update('lock_seq', () => [])
   clearSelection()
+  return state
+})
+
+export const setTagToHighlight = mkA((tag) => state =>{
+  state = state.update('tag_to_highlight',()=>tag)
+  return state
+})
+
+export const setNoTagToHighlight = mkA(() => state =>{
+  state = state.update('tag_to_highlight',()=>'')
   return state
 })
 

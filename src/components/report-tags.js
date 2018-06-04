@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { selectDatabase } from 'reducers/root-reducer'
 import { addTagged, deleteTagged } from 'reducers/database'
+import { setTagToHighlight, setNoTagToHighlight } from 'reducers/icicle-state'
 
 import { tags, tags_count } from 'css/app.css'
 
@@ -38,7 +39,7 @@ const Presentational = props => {
   else {
     let tags_list = props.tags.reduce((acc, tagged_ids, tag) => {
       let new_element = (
-        <div key={tag}>
+        <div key={tag} onMouseEnter={(e)=> props.highlightTag(tag)} onMouseLeave={(e)=> props.stopHighlightingTag()}>
           <div className={tags_count}>
             {tagged_ids.size}
           </div>
@@ -72,7 +73,17 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
- 	return {}
+  const highlightTag = (tag) => {
+    dispatch(setTagToHighlight(tag))
+  }
+
+  const stopHighlightingTag = () => {
+    dispatch(setNoTagToHighlight())
+  }
+ 	return {
+    highlightTag,
+    stopHighlightingTag
+  }
 }
 
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { selectDatabase } from 'reducers/root-reducer'
+import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 import { addTagged, deleteTagged } from 'reducers/database'
 import { setTagToHighlight, setNoTagToHighlight } from 'reducers/icicle-state'
 
@@ -38,8 +38,10 @@ const Presentational = props => {
 
   else {
     let tags_list = props.tags.reduce((acc, tagged_ids, tag) => {
+      let opacity = props.tag_to_highlight.length > 0 ? (tag === props.tag_to_highlight ? 1 : 0.2) : 1
+
       let new_element = (
-        <div key={tag} onMouseEnter={(e)=> props.highlightTag(tag)} onMouseLeave={(e)=> props.stopHighlightingTag()}>
+        <div key={tag} onMouseEnter={(e)=> props.highlightTag(tag)} onMouseLeave={(e)=> props.stopHighlightingTag()} style={{opacity}}>
           <div className={tags_count}>
             {tagged_ids.size}
           </div>
@@ -65,10 +67,14 @@ const Presentational = props => {
 }
 
 const mapStateToProps = state => {
-  let database = selectDatabase(state)
+  const database = selectDatabase(state)
+  const icicle_state = selectIcicleState(state)
+
+  const tag_to_highlight = icicle_state.tag_to_highlight()
 
 	return {
     tags: database.getAllTags().sortBy(t => -1 * t.size),
+    tag_to_highlight
   }
 }
 

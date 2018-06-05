@@ -79,7 +79,6 @@ class Presentational extends React.PureComponent {
       )
 
     const fill = this.props.fillColor(this.props.node_id)
-    const stroke = this.props.hasTagToHighlight ? 'blue' : ''
 
     const res = [
       (<rect
@@ -93,10 +92,25 @@ class Presentational extends React.PureComponent {
         onDoubleClick={onDoubleClickHandler}
         onMouseOver={onMouseOverHandler}
         // onMouseOut={onMouseOutHandler}
-        style={{'fill': fill, 'opacity': opacity, stroke:stroke}}
+        style={{'fill': fill, 'opacity': opacity}}
       />)
     ]
 
+    if(this.props.hasTags) {
+      const stroke_opacity = this.props.highlightingATag ? (this.props.hasTagToHighlight ? 1 : 0.2) : 1
+
+      res.push(
+        (<rect
+          key='stroke'
+          x={dims.x + 1}
+          y={dims.y + 1}
+          width={dims.dx - 2}
+          height='6'
+          style={{'fill': 'rgb(5, 120, 200)', 'stroke':'none', 'opacity':stroke_opacity}}
+          />
+        )
+      )
+    }
     return res
   }
 }
@@ -114,6 +128,8 @@ const mapStateToProps = (state, props) => {
 
   const isInHoverSeq = hover_sequence.includes(props.node_id)
   const isInLockSeq = lock_sequence.includes(props.node_id)
+  const hasTags = node_tags.size > 0
+  const highlightingATag = tag_to_highlight.length > 0
   const hasTagToHighlight = node_tags.includes(tag_to_highlight)
 
 
@@ -123,6 +139,8 @@ const mapStateToProps = (state, props) => {
     isLocked: icicle_state.isLocked(),
     isInHoverSeq,
     isInLockSeq,
+    hasTags,
+    highlightingATag,
     hasTagToHighlight
   }
 }

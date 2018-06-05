@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 
 import Tag from 'components/tag'
@@ -21,6 +22,11 @@ const getLastValue = (set) => {
 class Presentational extends React.Component {
   constructor(props) {
     super(props)
+    this.textInput = null
+  }
+
+  componentDidUpdate(){
+    if(this.textInput) this.textInput.focus()
   }
 
   render() {
@@ -43,6 +49,7 @@ class Presentational extends React.Component {
               event.target.value = "";
           }
       } else if (event.keyCode === 27) { // Escape
+          event.stopPropagation();
           this.props.endEditing();
       }
     }
@@ -69,10 +76,10 @@ class Presentational extends React.Component {
         <input
         key="__input__"
         onBlur={this.props.endEditing}
-        onClick={(e) => {e.stopPropagation();}}
+        onMouseUp={(e) => {e.stopPropagation();}}
         onKeyDown={keyDown}
         placeholder={tr("New tag")}
-        ref="input" />);
+        ref={(component) => {this.textInput = component; console.log(this.textInput)}} />);
 
       res.push(...elements, input_box)
     }
@@ -131,6 +138,7 @@ const mapDispatchToProps = dispatch => {
   }
 
   const endEditing = () => {
+    console.log("arivederci")
     dispatch(stopEditingTags())
   }
   return {
@@ -143,7 +151,9 @@ const mapDispatchToProps = dispatch => {
 
 const Container = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  null,
+  {withRef:true}
 )(Presentational)
 
 export default Container

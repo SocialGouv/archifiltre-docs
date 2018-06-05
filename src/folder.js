@@ -1,6 +1,6 @@
 
 import { mkScheduler } from 'scheduler'
-import * as File from 'file'
+import * as FileUti from 'file-uti'
 
 const sch = mkScheduler()
 
@@ -49,7 +49,7 @@ function hasLegacyCsvExt(s) {
 function readFileFromEntry(entry) {
   return new Promise((resolve, reject) => {
     entry.file(file => {
-      File.readAsText(file).then(content => {
+      FileUti.readAsText(file).then(content => {
         resolve(content)
       })
     }, e => {
@@ -60,48 +60,50 @@ function readFileFromEntry(entry) {
 }
 
 
-function traverseFileTree(insert2DB, entry, path) {
+function traverseFileTree(insert2DB, entry, parent_path) {
   if (entry.isFile) {
-    return traverseFile(insert2DB, entry, path)
+    return traverseFile(insert2DB, entry, parent_path)
   } else if (entry.isDirectory) {
-    return traverseFolder(insert2DB, entry, path)
+    return traverseFolder(insert2DB, entry, parent_path)
   }
 }
 
 
-import Worker from 'file-system.worker'
-const worker = new Worker()
+// import Worker from 'file-system.worker'
+// const worker = new Worker()
 
 
-function traverseFile(insert2DB, entry, path) {
+function traverseFile(insert2DB, entry, parent_path) {
   return new Promise((resolve, reject) => sch.schedule(() => {
     entry.file(file => {
-      insert2DB(
-        path + file.name,
-        {
-          size:file.size,
-          last_modified:file.lastModified,
-          error_is_file:null
-        }
-      )
+      // insert2DB(
+      //   parent_path + file.name,
+      //   {
+      //     size:file.size,
+      //     last_modified:file.lastModified,
+      //     error_is_file:null
+      //   }
+      // )
+      insert2DB(parent_path, file)
       resolve()
-      worker.postMessage({
-        cmd:'test',
-        file
-      })
+      // worker.postMessage({
+      //   cmd:'test',
+      //   file
+      // })
     }, e => {
-      insert2DB(
-        path + entry.name,
-        {
-          error_is_file:true
-        }
-      )
+      // insert2DB(
+      //   parent_path + entry.name,
+      //   {
+      //     error_is_file:true
+      //   }
+      // )
+      insert2DB(parent_path, new File([''], entry.name))
       resolve()
     })
   }))
 }
 
-function traverseFolder(insert2DB, entry, path) {
+function traverseFolder(insert2DB, entry, parent_path) {
   return new Promise((resolve, reject) => sch.schedule(() => {
     let promise_array = []
     let dirReader = entry.createReader()
@@ -109,19 +111,20 @@ function traverseFolder(insert2DB, entry, path) {
       dirReader.readEntries(entries => {
         if (entries.length > 0) {
           entries.forEach(e =>
-            promise_array.push(traverseFileTree(insert2DB, e, path+entry.name+"/"))
+            promise_array.push(traverseFileTree(insert2DB, e, parent_path+entry.name+'/'))
           )
           doBatch()
         } else {
           Promise.all(promise_array).then(()=>resolve())
         }
       }, e => {
-        insert2DB(
-          path + entry.name,
-          {
-            error_is_file:false
-          }
-        )
+        // insert2DB(
+        //   parent_path + entry.name,
+        //   {
+        //     error_is_file:false
+        //   }
+        // )
+        insert2DB(parent_path, new File([''], entry.name+'/'))
         resolve()
       })
     }

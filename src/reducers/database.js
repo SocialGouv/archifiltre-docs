@@ -59,29 +59,20 @@ export const sortByMaxRemainingPathLength = mkA(() => state => {
   return state
 })
 
+
+
 const worker = new Worker()
 
-
 export const workerPush = mkA((parent_path, file) => state => {
-  const path = parent_path + file.name
-  const content = {
-    size:file.size,
-    last_modified:file.lastModified,
-  }
   worker.postMessage({
     cmd:'push',
-    path,
-    content
+    parent_path,
+    file
   })
   return state
 })
 
-const workerGhostFromJs = mkA((content_queue_js,tree_js) => state => {
-  state = FileSystem.ghostQueueFromJs(content_queue_js,state)
-  state = FileSystem.ghostTreeFromJs(tree_js,state)
-  state = FileSystem.computeDerivatedData(state)
-  return state
-})
+const workerSetStateFromJs = mkA((js) => () => FileSystem.fromJs(js))
 
 export const workerMakeTree = () => dispatch => {
   return new Promise((resolve, reject) => {
@@ -91,7 +82,7 @@ export const workerMakeTree = () => dispatch => {
 
     worker.onmessage = (e) => {
       if (e.data.cmd === 'pull') {
-        dispatch(workerGhostFromJs(e.data.content_queue,e.data.tree))
+        dispatch(workerSetStateFromJs(e.data.state))
         resolve()
       }
     }

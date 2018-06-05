@@ -31,7 +31,7 @@ const dummy_style={
 
 const Presentational = props => {
   let cross = (
-    <span onClick={(e) => {e.stopPropagation(); props.remove_handler() }} style={cross_style}>
+    <span onMouseUp={(e) => {e.stopPropagation(); props.remove_handler() }} style={cross_style}>
      X 
     </span>);
 

@@ -7,7 +7,7 @@ import TagsEditable from 'components/tags-editable'
 
 import { selectIcicleState, selectDatabase, selectReportState } from 'reducers/root-reducer'
 import { setContentByID, addTagged, deleteTagged } from 'reducers/database'
-import { toggleEditingTags } from 'reducers/report-state'
+import { startEditingTags, stopEditingTags, toggleEditingTags } from 'reducers/report-state'
 
 import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
@@ -117,24 +117,13 @@ const Presentational = props => {
       </div>
     )
 
-    // tags_cell = (
-    //   <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
-    //     <b>{tr('Tags')}</b>
-    //     <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-    //     <span style={{'fontStyle': (c_tags.size ? '' : '')}}>
-    //       <RIETags
-    //         value={c_tags.size ? c_tags : new Set([tr('Your tags here')])}
-    //         change={props.onChangeTags('new_tags', props.node_id, n_content)}
-    //         className={tags}
-    //         placeholder={tr('New tag')}
-    //         propName='new_tags'
-    //       />
-    //     </span>
-    //   </div>
-    // )
-
     tags_cell = (
-      <div className={'cell small-4 ' + edit_hover_container} style={cells_style} onClick={(e) => {e.stopPropagation(); props.onClickTagsCells();}}>
+      <div
+      className={'cell small-4 ' + edit_hover_container}
+      style={cells_style}
+      onMouseUp={(e) => {e.stopPropagation(); if(!props.isEditingTags) props.onClickTagsCells();}}
+      onFocus={() => {console.log("hello");}}
+      onKeyDown={(e) => {if(e.keyCode === 27) props.onBlurTagsCells();}}>
         <b>{tr('Tags')}</b>
         <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
         <span>
@@ -254,25 +243,12 @@ const mapDispatchToProps = dispatch => {
     dispatch(commit())
   }
 
-  const onChangeTags = (prop_name, id, content) => (n) => {
-    let new_tags = Content.tagsFromJs([...n[prop_name]])
-    let old_tags = content.get('tags')
-
-    content = content.set('tags', new_tags)
-    dispatch(setContentByID(id, content))
-
-    let tags_TBdeleted = old_tags.subtract(new_tags)
-    let tags_TBadded = new_tags.subtract(old_tags)
-
-    tags_TBdeleted.map(tag => {dispatch(deleteTagged(tag, id)); return tag;})
-    tags_TBadded.map(tag => {dispatch(addTagged(tag, id)); return tag;})
-
-
-    dispatch(commit())
+  const onClickTagsCells = () => {
+    dispatch(startEditingTags())
   }
 
-  const onClickTagsCells = () => {
-    dispatch(toggleEditingTags())
+  const onBlurTagsCells = () => {
+    dispatch(stopEditingTags())
   }
 
   const onChangeComments = (prop_name, id, content) => (n) => {
@@ -282,9 +258,9 @@ const mapDispatchToProps = dispatch => {
   }
  	return {
     onChangeAlias,
-    onChangeTags,
     onClickTagsCells,
-    onChangeComments
+    onChangeComments,
+    onBlurTagsCells
   }
 }
 

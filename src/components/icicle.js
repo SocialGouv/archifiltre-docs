@@ -76,6 +76,7 @@ class Icicle extends React.PureComponent {
           trueFHeight={trueFHeight}
           getChildrenIdFromId={this.props.getChildrenIdFromId}
           fillColor={this.props.fillColor}
+          nodeSequence={this.props.nodeSequence}
         />
       </g>
     )
@@ -134,6 +135,7 @@ class IcicleRecursive extends React.PureComponent {
             dx={width_child}
             dy={height_child}
             fillColor={this.props.fillColor}
+            nodeSequence={this.props.nodeSequence}
           />
           <IcicleRecursive
             x={x_prime}
@@ -146,6 +148,7 @@ class IcicleRecursive extends React.PureComponent {
             trueFHeight={this.props.trueFHeight}
             getChildrenIdFromId={this.props.getChildrenIdFromId}
             fillColor={this.props.fillColor}
+            nodeSequence={this.props.nodeSequence}
           />
         </g>
       )
@@ -167,11 +170,16 @@ class Presentational extends React.PureComponent {
     super(props)
 
     this.getChildrenIdFromId = this.getChildrenIdFromId.bind(this)
+    this.nodeSequence = this.nodeSequence.bind(this)
   }
 
   getChildrenIdFromId(id) {
     const node = this.props.getByID(id)
     return node.get('children').toJS()
+  }
+
+  nodeSequence(id) {
+    return this.props.getIDPath(id).toJS()
   }
 
   render() {
@@ -187,6 +195,7 @@ class Presentational extends React.PureComponent {
         trueFHeight={this.props.trueFHeight}
         getChildrenIdFromId={this.getChildrenIdFromId}
         fillColor={this.props.fillColor}
+        nodeSequence={this.nodeSequence}
       />
     )
     console.timeEnd('render icicle')
@@ -212,6 +221,7 @@ const mapStateToProps = state => {
     getByID: database.getByID,
     root_id: database.rootId(),
     display_root: icicle_state.display_root(),
+    getIDPath: database.getIDPath,
   }
 }
  

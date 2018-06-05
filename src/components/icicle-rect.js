@@ -62,7 +62,7 @@ class Presentational extends React.PureComponent {
   }
 
   nodeSequence() {
-    return this.props.getIDPath(this.props.node_id).toJS()
+    return this.props.nodeSequence(this.props.node_id)
   }
   onClickHandler(e) {
     e.stopPropagation()
@@ -136,7 +136,6 @@ const mapStateToProps = (state, props) => {
 
 
   return {
-    getIDPath: database.getIDPath, // TO CONTINUED !!!!!!!
     isFocused: icicle_state.isFocused(),
     isLocked: icicle_state.isLocked(),
     isInHoverSeq,

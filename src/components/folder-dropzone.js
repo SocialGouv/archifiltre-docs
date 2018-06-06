@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import * as Folder from 'folder'
-import { push, fromJson, makeTree, fromLegacyCsv } from 'reducers/database'
+import { push, fromJson, makeTree, fromLegacyCsv, workerPush, workerMakeTree } from 'reducers/database'
 import { startToLoadFiles, finishedToLoadFiles } from 'reducers/app-state'
 import { commit } from 'reducers/root-reducer'
 
@@ -76,8 +76,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    push: (...args) => dispatch(push(...args)),
-    makeTree: (...args) => dispatch(makeTree(...args)),
+    push: (...args) => dispatch(workerPush(...args)),
+    makeTree: (...args) => dispatch(workerMakeTree(...args)),
     sort: (...args) => dispatch(sort(...args)),
     fromJson: (...args) => dispatch(fromJson(...args)),
     fromLegacyCsv: (...args) => dispatch(fromLegacyCsv(...args)),

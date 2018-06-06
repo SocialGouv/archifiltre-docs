@@ -3,8 +3,6 @@ import { connect } from 'react-redux'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 
-import { icicle_dims } from 'components/icicle'
-
 import BreadCrumbText from 'components/breadcrumb-text'
 import BreadCrumbPoly from 'components/breadcrumb-poly'
 
@@ -56,7 +54,7 @@ class Presentational extends React.PureComponent {
   }
 
   render() {
-    const trueFHeight = this.props.trueFHeight(icicle_dims.h)
+    const trueFHeight = this.props.trueFHeight
 
     const displayName = id => {
       const node = this.props.getByID(id)
@@ -181,7 +179,7 @@ const mapStateToProps = state => {
   let breadcrumb_sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
   
   const getByID = database.getByID
-  const max_depth = database.max_depth()
+  const max_depth = database.maxDepth()
 
 
 
@@ -190,7 +188,7 @@ const mapStateToProps = state => {
     isFocused: icicle_state.isFocused(),
     max_depth,
     getByID,
-    root_id: database.root_id(),
+    root_id: database.rootId(),
   }
 }
 

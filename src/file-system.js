@@ -8,7 +8,7 @@ import * as Content from 'content'
 import * as Arbitrary from 'test/arbitrary'
 import * as Loop from 'test/loop'
 import tT from 'table-tree'
-export const TT = tT(Content)
+const TT = tT(Content)
 
 
 const QueueElem = Record({
@@ -16,10 +16,10 @@ const QueueElem = Record({
   content:null
 })
 
-export const makeQueueElem = (path,content) => {
+const makeQueueElem = (path,content) => {
   return new QueueElem({
     path:List(path.split('/')),
-    content: Content.create(content)
+    content: content
   })
 }
 
@@ -67,7 +67,7 @@ export const qeFromJson = a => {
 
 const Fs = Record({
   session_name:'Untitled',
-  version:5,
+  version:6,
   content_queue:List(),
   tree:null,
   tags: Map(),
@@ -83,7 +83,7 @@ export const arbitrary = () => {
     ans = pushOnQueue(arbitraryStrPath(),Content.arbitrary(), ans)
   }
   ans = makeTree(ans)
-  ans = sort(ans)
+  ans = sortBySize(ans)
   return ans
 }
 
@@ -113,6 +113,7 @@ export const updateByID = (id, f, state) =>
 export const getSessionName = (state) => state.get('session_name')
 export const setSessionName = (a, state) => state.set('session_name',a)
 
+
 export const getTagged = (state, tag) => state.get('tags').get(tag)
 export const addTagged = (state, tag, id) => state.update('tags', a=>a.update(tag, b=>{if (b === undefined) return Set.of(id); else return b.add(id);}))
 export const deleteTagged = (state, tag, id) =>
@@ -131,8 +132,23 @@ export const ghostTreeFromJs = (js, state) => {
   return state
 }
 
+
+
 export const arbitraryContentQueue = () => {
   return Arbitrary.immutableList(arbitraryQe)
+}
+
+
+export const contentQueueToJson = (a) => {
+  a = contentQueueToJs(a)
+  a = JSON.stringify(a)
+  return a
+}
+
+export const contentQueueFromJson = (a) => {
+  a = JSON.parse(a)
+  a = contentQueueFromJs(a)
+  return a
 }
 
 export const contentQueueToJs = (a) => {
@@ -145,11 +161,6 @@ export const contentQueueFromJs = (a) => {
   a = List(a)
   a = a.map(qeFromJs)
   return a
-}
-
-export const ghostQueueFromJs = (js,state) => {
-  state = state.set('content_queue', contentQueueFromJs(js))
-  return state
 }
 
 export const volume = (state) => {
@@ -167,7 +178,7 @@ export const pushOnQueue = (path, content, state) => {
   return state
 }
 
-export const updateTreeWithQueueElem = (queue_elem,tree) => {
+const updateTreeWithQueueElem = (queue_elem,tree) => {
   tree = TT.update(queue_elem.get('path').toJS(), queue_elem.get('content'), tree)
   return tree
 }
@@ -184,27 +195,56 @@ export const makeTree = (state) => {
   return state
 }
 
-export const sort = (state) => {
-  state = state.update('tree', TT.sort)
+export const computeDerivatedData = (state) => {
+  state = state.update('tree', tree => {
+    tree = TT.mapContent(Content.computeDerivatedData, tree)
+    return tree
+  })
 
   return state
 }
 
+export const sortBySize = Cache.make((state) => {
+  state = state.update('tree', TT.sort(Content.compareSize))
+
+  return state
+})
+
+export const sortByMaxRemainingPathLength = Cache.make((state) => {
+  state = state.update('tree', TT.sortByMaxRemainingPathLength)
+
+  return state
+})
 
 export const toJson = Cache.make((state) => {
   state = state.update('tree', TT.toJson)
-  state = state.update('content_queue', a=>a.map(qeToJson))
+  state = state.update('content_queue', contentQueueToJson)
   return JSON.stringify(state.toJS())
 })
-
 export const fromJson = (json) => {
   let state = new Fs(JSON.parse(json))
-  state = state.update('content_queue', cq=>List(cq).map(qeFromJson))
+  state = state.update('content_queue', contentQueueFromJson)
   state = state.update('tree', TT.fromJson)
   state = state.update('parent_path', List)
 
   return state
 }
+
+
+export const toJs = (state) => {
+  state = state.update('tree', TT.toJs)
+  state = state.update('content_queue', contentQueueToJs)
+  return state.toJS()
+}
+export const fromJs = (js) => {
+  let state = new Fs(js)
+  state = state.update('content_queue', contentQueueFromJs)
+  state = state.update('tree', TT.fromJs)
+  state = state.update('parent_path', List)
+
+  return state
+}
+
 
 export const toStrList2 = Cache.make((state) => {
   return TT.toStrList2(state.get('tree'))
@@ -227,10 +267,18 @@ export const fromLegacyCsv = (csv) => {
       ans = pushOnQueue(path, Content.create({size:Number(size)}), ans)
     })
   ans = makeTree(ans)
-  ans = sort(ans)
+  ans = sortBySize(ans)
   return ans
 }
 
 export const getIDPath = (id, state) => {
   return TT.getIdPath(id, state.get('tree'))
+}
+
+export const getLeafIdArray = (state) => {
+  return TT.getLeafIdArray(state.get('tree'))
+}
+
+export const getSubIdList = (id, state) => {
+  return TT.getSubIdList(id, state.get('tree'))
 }

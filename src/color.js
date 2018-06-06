@@ -1,5 +1,59 @@
 
+import * as Loop from 'test/loop'
 
+
+
+export const gradiant = (a, b) => (zero_to_one) => {
+  const ans = a.map((a,i)=>a+(b[i]-a)*zero_to_one)
+    .map((a,i)=>{
+      if (i !== 3) {
+        return Math.round(a)
+      } else {
+        return a
+      }
+    })
+
+  return ans
+}
+
+export const arbitrary = () => {
+  const arbitraryRgb = () => Math.round(Math.random()*255)
+  const arbitraryA = () => Math.random()
+  return [arbitraryRgb(),arbitraryRgb(),arbitraryRgb(),arbitraryA()]
+}
+
+export const setAlpha = (alpha,color) => {
+  return color.slice(0,-1).concat([alpha])
+}
+
+export const toRgba = a => `rgba(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`
+export const fromRgba = a => a.split(/rgba\(|, |\)/).filter(a=>a!=='').map(Number)
+
+export const toHex = a => {
+  a = a.map(Number).map(a=>{
+    a = a.toString(16)
+    if (a.length < 2) {
+      a = '0'+a
+    }
+    return a
+  })
+  return `#${a[0]}${a[1]}${a[2]}`
+}
+export const fromHex = a => {
+  Loop.log(a,a.split(/#|([0-9a-f]{2})/).filter(a=>a&&a!==''))
+  a = a.split(/#|([0-9a-f]{2})/).filter(a=>a&&a!=='').map(a=>parseInt(a, 16))
+  const default_alpha = 1
+  a.push(default_alpha)
+  return a
+}
+
+
+
+export const mostRecentDate = () => [255, 153, 204, 1]
+export const leastRecentDate = () => [51, 204, 255, 1]
+
+export const duplicate = () => [255, 0, 0, 1]
+export const different = () => [0, 0, 0, 0.5]
 
 const colors = {
   presentation : '#f75b40',

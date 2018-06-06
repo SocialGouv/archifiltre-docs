@@ -97,6 +97,7 @@ class Presentational extends React.PureComponent {
         <div className='grid-x grid-frame'>
           <div
             onClick={(e) => {this.props.unlock(); this.props.setNoFocus();}}
+            onMouseLeave={(e) => {if(!this.props.isLocked) this.props.setNoFocus();}}
             className='cell small-8'
           >
             <Icicle
@@ -143,6 +144,7 @@ const mapStateToProps = state => {
     display_root: icicle_state.display_root(),
     root_id: database.rootId(),
     duplicate_node_id,
+    isLocked: lock_sequence.length > 0
   }
 }
  

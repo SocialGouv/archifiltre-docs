@@ -6,6 +6,8 @@ import * as Loop from 'test/loop'
 import * as Arbitrary from 'test/arbitrary'
 import * as M from 'content'
 
+import * as V5 from '../version/v5/src/content'
+
 
 describe('content', function() {
 
@@ -70,6 +72,11 @@ describe('content', function() {
   Loop.equal('compareSize a a', () => {
     const a = M.arbitrary()
     return [M.compareSize(a, a), 0]
+  })
+
+  Loop.immuEqual('(toCommon . fromV5) a === v5ToCommon a', () => {
+    const a = V5.arbitrary()
+    return [M.toCommon(M.fromV5(a)), M.v5ToCommon(a)]
   })
 
 })

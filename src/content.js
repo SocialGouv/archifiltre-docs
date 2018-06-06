@@ -1,5 +1,5 @@
 
-import { Record, List, Set } from 'immutable'
+import { Record, List, Set, Map } from 'immutable'
 
 import * as Arbitrary from 'test/arbitrary'
 
@@ -78,7 +78,6 @@ const Content = Record({
   size:0,
   nb_files:1,
   last_modified:new LastModified(),
-  error_is_file:false,
   alias:'',
   comments: '',
   tags: Set(),
@@ -97,7 +96,6 @@ export const arbitrary = () => new Content({
   size: Arbitrary.natural(),
   nb_files: Arbitrary.natural(),
   last_modified: arbitraryLastModified(),
-  error_is_file: Arbitrary.nullable(Arbitrary.bool),
   alias: Arbitrary.string(),
   comments: Arbitrary.string(),
   tags: arbitraryTags(),
@@ -105,11 +103,6 @@ export const arbitrary = () => new Content({
 
 export const create = a => {
   if (a) {
-    // a.last_modified = new LastModified({
-    //   max:a.last_modified,
-    //   list:List(a.last_modified)
-    //   min:a.last_modified,
-    // })
     a.last_modified = createLastModified(a.last_modified)
   }
   return new Content(a)
@@ -193,3 +186,42 @@ export const fromJson = (a) => {
   return fromJs(JSON.parse(a))
 }
 
+
+
+
+
+
+
+
+
+
+
+
+export const v5ToCommon = a => {
+  return Map({
+    size:a.get('size'),
+    last_modified:a.get('last_modified'),
+    alias:a.get('alias'),
+    comments:a.get('comments'),
+    tags:a.get('tags'),
+  })
+}
+export const toCommon = (a) => {
+  return Map({
+    size:a.get('size'),
+    last_modified:a.get('last_modified').get('max'),
+    alias:a.get('alias'),
+    comments:a.get('comments'),
+    tags:a.get('tags'),
+  })
+}
+export const fromV5 = (a) => {
+  return create({
+    size:a.get('size'),
+    nb_files:1,
+    last_modified:a.get('last_modified'),
+    alias:a.get('alias'),
+    comments:a.get('comments'),
+    tags:a.get('tags'),
+  })
+}

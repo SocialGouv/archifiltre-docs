@@ -152,6 +152,10 @@ const dict = {
   "Tags": {
 
   },
+  "Click here to add some tags!": {
+    fr: "Cliquez ici pour ajouter des tags !",
+    en: "Click here to add some tags!"
+  },
   "New tag": {
     fr: "Nouveau tag",
     en: "New tag"

@@ -9,6 +9,10 @@ const round_button_style = {
   borderRadius: '50%'
 }
 
+const arrow_style = {
+  fontSize: '1.6em',
+}
+
 class Presentational extends React.Component {
   constructor(props) {
     super(props)
@@ -34,14 +38,15 @@ class Presentational extends React.Component {
   render() {
     if (this.props.visible) {
       return (
-        <div>
           <div className='grid-x grid-padding-x'>
             <div className='cell small-6'>
               {
                 mkRB(
                   this.props.undo,
-                  (<i className="fi-arrow-left" style={{fontSize: '2em'}}/>),
-                  this.props.hasAPast
+                  (<i className="fi-arrow-left" style={arrow_style}/>),
+                  this.props.hasAPast,
+                  '',
+                  {marginBottom: '0'}
                 )
               }
             </div>
@@ -49,13 +54,14 @@ class Presentational extends React.Component {
               {
                 mkRB(
                   this.props.redo,
-                  (<i className="fi-arrow-right" style={{fontSize: '2em'}}/>),
-                  this.props.hasAFuture
+                  (<i className="fi-arrow-right" style={arrow_style}/>),
+                  this.props.hasAFuture,
+                  '',
+                  {marginBottom: '0'}
                 )
               }
             </div>
           </div>
-        </div>
       )
     } else {
       return (

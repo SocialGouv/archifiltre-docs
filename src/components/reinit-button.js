@@ -14,7 +14,7 @@ import { tr } from 'dict'
 
 const Presentational = props => {
 
-  return mkB(props.reInitStateApp, tr("Reset"), true, "#e04d1c")
+  return mkB(props.reInitStateApp, tr("Close"), true, "#e04d1c")
 }
 
 

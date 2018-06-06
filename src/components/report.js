@@ -139,7 +139,7 @@ const Presentational = props => {
       </div>
     )
 
-    tags_cell = <TagsCell isDummy={true} cells_style={cells_style} tags={0} node_id={0} content={0} />
+    tags_cell = <TagsCell isDummy={true} cells_style={cells_style} />
 
     comments_cell = (
       <div className='cell small-4' style={cells_style}>

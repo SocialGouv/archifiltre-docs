@@ -36,8 +36,8 @@ class Presentational extends React.Component {
 
     let keyDown = (event) => {
       if (event.keyCode === 8) { // Backspace
-          if(event.target.value.length == 0){
-              this.props.deleteTag(this.props.old_content, getLastValue(this.props.tag_list), this.props.node_id);
+          if(event.target.value.length == 0 && this.props.tag_list.size > 0){
+              this.props.deleteTag(this.props.old_content, this.props.tag_list.last(), this.props.node_id);
           }
 
       } else if (event.keyCode === 13) { // Enter
@@ -75,11 +75,10 @@ class Presentational extends React.Component {
       let input_box = (
         <input
         key="__input__"
-        onBlur={this.props.endEditing}
         onMouseUp={(e) => {e.stopPropagation();}}
         onKeyDown={keyDown}
         placeholder={tr("New tag")}
-        ref={(component) => {this.textInput = component; console.log(this.textInput)}} />);
+        ref={(component) => {this.textInput = component;}} />);
 
       res.push(...elements, input_box)
     }
@@ -138,7 +137,6 @@ const mapDispatchToProps = dispatch => {
   }
 
   const endEditing = () => {
-    console.log("arivederci")
     dispatch(stopEditingTags())
   }
   return {

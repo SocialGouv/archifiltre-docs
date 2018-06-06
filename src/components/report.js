@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { RIEInput, RIETextArea, RIETags } from 'riek'
 
-import TagsEditable from 'components/tags-editable'
+import TagsCell from 'components/report-cell-tags'
 
 import { selectIcicleState, selectDatabase, selectReportState } from 'reducers/root-reducer'
 import { setContentByID, addTagged, deleteTagged } from 'reducers/database'
@@ -117,20 +117,7 @@ const Presentational = props => {
       </div>
     )
 
-    tags_cell = (
-      <div
-      className={'cell small-4 ' + edit_hover_container}
-      style={cells_style}
-      onMouseUp={(e) => {e.stopPropagation(); if(!props.isEditingTags) props.onClickTagsCells();}}
-      onFocus={() => {console.log("hello");}}
-      onKeyDown={(e) => {if(e.keyCode === 27) props.onBlurTagsCells();}}>
-        <b>{tr('Tags')}</b>
-        <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-        <span>
-          <TagsEditable tag_list={c_tags} node_id={props.node_id} old_content={n_content} />
-        </span>
-      </div>
-    )
+    tags_cell = <TagsCell isDummy={false} cells_style={cells_style} tags={c_tags} node_id={props.node_id} content={n_content} />
 
     comments_cell = (
       <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
@@ -172,12 +159,7 @@ const Presentational = props => {
       </div>
     )
 
-    tags_cell = (
-      <div className='cell small-4' style={cells_style}>
-        <b>{tr('Tags')}</b><br />
-        <span style={{'fontStyle':'italic'}}>{tr('Your tags here') + '...'}</span>
-      </div>
-    )
+    tags_cell = <TagsCell isDummy={true} cells_style={cells_style} tags={0} node_id={0} content={0} />
 
     comments_cell = (
       <div className='cell small-4' style={cells_style}>
@@ -186,6 +168,7 @@ const Presentational = props => {
       </div>
     )
   }
+
 
   return (
     <div style={{'opacity': (props.isFocused ? 1 : 0.5), 'background': 'white', 'borderRadius': '1em'}}>

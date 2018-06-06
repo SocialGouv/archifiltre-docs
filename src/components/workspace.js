@@ -22,7 +22,8 @@ const chart_style = {
 
 const btr_style = {
   textAlign: 'center',
-  padding: '1em 0'
+  padding: '0.5em 0 0 0',
+  marginBottom: '-0.5em'
 }
 
 

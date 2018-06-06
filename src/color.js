@@ -24,6 +24,8 @@ export const fromFileName = (name) => {
   if (m == null)
     m = ['']
 
+  return colors.otherfiles; // Suppressing extension-based file coloring for now.
+
   switch (m[0].toLowerCase()) {
     case '.xls': //formats Microsoft Excel
     case '.xlsx':

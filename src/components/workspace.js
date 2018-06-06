@@ -12,6 +12,7 @@ import Icicle from 'components/icicle'
 import Ruler from 'components/ruler'
 import BreadCrumbs from 'components/breadcrumbs'
 import Report from 'components/report'
+import AllTags from 'components/all-tags'
 import BTRButton from 'components/back-to-root-button'
 
 const chart_style = {
@@ -66,38 +67,45 @@ const Presentational = props => {
 
   return (
     <div>
-        <Report
-          fillColor={fillColor}
-        />
-        <div className="grid-x grid-frame">
-          <div className="cell small-2"></div>
-          <div className="cell small-4" style={btr_style}>
-            <BTRButton />
-          </div>
-          <div className="cell small-6"></div>
+      <div className="grid-x grid-frame grid-padding-x">
+        <div className='cell small-10'>
+          <Report
+            fillColor={fillColor}
+          />
         </div>
-        <div className="grid-x grid-frame">
-          <div
-            onClick={(e) => {props.unlock(); props.setNoFocus();}}
-            className="cell small-8"
-          >
-            <Icicle
-              fWidth={fWidth}
-              normalizeWidth={normalizeWidth}
-              trueFHeight={trueFHeight}
-              fillColor={fillColor}
-            />
-            <Ruler
-              fillColor={fillColor}
-            />
-          </div>
-          <div className="cell small-4" style={chart_style}>
-            <BreadCrumbs
-              trueFHeight={trueFHeight}
-              fillColor={fillColor}
-            />
-          </div>
+        <div className='cell small-2'>
+          <AllTags />
         </div>
+      </div>
+      <div className="grid-x grid-frame">
+        <div className="cell small-2"></div>
+        <div className="cell small-4" style={btr_style}>
+          <BTRButton />
+        </div>
+        <div className="cell small-6"></div>
+      </div>
+      <div className="grid-x grid-frame">
+        <div
+          onClick={(e) => {props.unlock(); props.setNoFocus();}}
+          className="cell small-8"
+        >
+          <Icicle
+            fWidth={fWidth}
+            normalizeWidth={normalizeWidth}
+            trueFHeight={trueFHeight}
+            fillColor={fillColor}
+          />
+          <Ruler
+            fillColor={fillColor}
+          />
+        </div>
+        <div className="cell small-4" style={chart_style}>
+          <BreadCrumbs
+            trueFHeight={trueFHeight}
+            fillColor={fillColor}
+          />
+        </div>
+      </div>
     </div>
   )
 }

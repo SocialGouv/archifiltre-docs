@@ -56,6 +56,7 @@ class Icicle extends React.PureComponent {
               dx={dx_node}
               dy={dy_node}
               fillColor={this.props.fillColor}
+              nodeSequence={this.props.nodeSequence}
             />
           </g>
         )
@@ -214,8 +215,9 @@ class Presentational extends React.PureComponent {
 }
 
 const mapStateToProps = state => {
-  let database = selectDatabase(state)
-  let icicle_state = selectIcicleState(state)
+  const database = selectDatabase(state)
+  const icicle_state = selectIcicleState(state)
+
 
   return {
     getByID: database.getByID,

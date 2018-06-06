@@ -1,6 +1,5 @@
 import { List } from 'immutable'
 
-
 import * as FileUti from 'file-uti'
 
 import * as FileSystem from 'file-system'
@@ -40,11 +39,13 @@ const pushHandler = (e) => {
       last_modified:file.lastModified,
     }
 
-    FileUti.readAsArrayBuffer(file).then(buffer=>{
-      const view = new DataView(buffer)
-      state = FileSystem.pushOnQueue(path, Content.create(content), state)
-      resolve()
-    })
+    // FileUti.readAsArrayBuffer(file).then(buffer=>{
+    //   const view = new DataView(buffer)
+    //   state = FileSystem.pushOnQueue(path, Content.create(content), state)
+    //   resolve()
+    // })
+    state = FileSystem.pushOnQueue(path, Content.create(content), state)
+    resolve()
   })
 
   promise_array.push(promise)

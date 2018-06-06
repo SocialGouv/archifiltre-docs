@@ -5,9 +5,8 @@ import { RIEInput, RIETextArea, RIETags } from 'riek'
 
 import TagsCell from 'components/report-cell-tags'
 
-import { selectIcicleState, selectDatabase, selectReportState } from 'reducers/root-reducer'
+import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 import { setContentByID, addTagged, deleteTagged } from 'reducers/database'
-import { startEditingTags, stopEditingTags, toggleEditingTags } from 'reducers/report-state'
 
 import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
@@ -195,7 +194,6 @@ const Presentational = props => {
 
 const mapStateToProps = state => {
   let icicle_state = selectIcicleState(state)
-	let report_state = selectReportState(state)
   let database = selectDatabase(state)
 
   let sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
@@ -209,7 +207,6 @@ const mapStateToProps = state => {
 	return {
     isFocused: icicle_state.isFocused(),
     isLocked: icicle_state.isLocked(),
-    isEditingTags: report_state.editing_tags(),
     node,
     node_id,
     total_size
@@ -226,14 +223,6 @@ const mapDispatchToProps = dispatch => {
     dispatch(commit())
   }
 
-  const onClickTagsCells = () => {
-    dispatch(startEditingTags())
-  }
-
-  const onBlurTagsCells = () => {
-    dispatch(stopEditingTags())
-  }
-
   const onChangeComments = (prop_name, id, content) => (n) => {
     content = content.set('comments', n[prop_name])
     dispatch(setContentByID(id, content))
@@ -241,9 +230,7 @@ const mapDispatchToProps = dispatch => {
   }
  	return {
     onChangeAlias,
-    onClickTagsCells,
     onChangeComments,
-    onBlurTagsCells
   }
 }
 

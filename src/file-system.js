@@ -75,6 +75,37 @@ const Fs = Record({
 })
 
 
+export const arbitraryTags = () => {
+  return Arbitrary.immutableMap(
+    Arbitrary.string,
+    ()=>Arbitrary.immutableSet(()=>generateRandomString(40))
+  )
+}
+
+export const tagsToJs = a => {
+  Loop.log(a)
+  return a.toJS()
+}
+
+export const tagsFromJs = a => {
+  a = Map(a)
+  a = a.map(Set)
+  return a
+}
+
+export const tagsToJson = a => {
+  a = tagsToJs(a)
+  a = JSON.stringify(a)
+  return a
+}
+
+export const tagsFromJson = a => {
+  a = JSON.parse(a)
+  a = tagsFromJs(a)
+  return a
+}
+
+
 const arbitraryStrPath = () => arbitraryPath().join('/')
 
 export const arbitrary = () => {
@@ -84,6 +115,7 @@ export const arbitrary = () => {
   }
   ans = makeTree(ans)
   ans = sortBySize(ans)
+  ans = ans.set('tags',arbitraryTags())
   return ans
 }
 
@@ -219,10 +251,12 @@ export const sortByMaxRemainingPathLength = Cache.make((state) => {
 export const toJson = Cache.make((state) => {
   state = state.update('tree', TT.toJson)
   state = state.update('content_queue', contentQueueToJson)
+  state = state.update('tags', tagsToJson)
   return JSON.stringify(state.toJS())
 })
 export const fromJson = (json) => {
   let state = new Fs(JSON.parse(json))
+  state = state.update('tags', tagsFromJson)
   state = state.update('content_queue', contentQueueFromJson)
   state = state.update('tree', TT.fromJson)
   state = state.update('parent_path', List)
@@ -234,10 +268,12 @@ export const fromJson = (json) => {
 export const toJs = (state) => {
   state = state.update('tree', TT.toJs)
   state = state.update('content_queue', contentQueueToJs)
+  state = state.update('tags', tagsToJs)
   return state.toJS()
 }
 export const fromJs = (js) => {
   let state = new Fs(js)
+  state = state.update('tags', tagsFromJs)
   state = state.update('content_queue', contentQueueFromJs)
   state = state.update('tree', TT.fromJs)
   state = state.update('parent_path', List)

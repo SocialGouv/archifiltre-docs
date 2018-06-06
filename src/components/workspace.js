@@ -12,7 +12,7 @@ import Icicle from 'components/icicle'
 import Ruler from 'components/ruler'
 import BreadCrumbs from 'components/breadcrumbs'
 import Report from 'components/report'
-import ReportTags from 'components/report-tags'
+import AllTags from 'components/all-tags'
 import BTRButton from 'components/back-to-root-button'
 
 const chart_style = {
@@ -74,7 +74,7 @@ const Presentational = props => {
           />
         </div>
         <div className='cell small-2'>
-          <ReportTags />
+          <AllTags />
         </div>
       </div>
       <div className="grid-x grid-frame">

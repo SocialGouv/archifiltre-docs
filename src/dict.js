@@ -3,9 +3,9 @@ console.log("lang : " + lang)
 
 const dict = {
   // Home screen
-  "Your data won't leave your computer. Only you can see what happens below.": {
-    fr: "Vos données ne quittent pas votre ordinateur ; seul•e vous pouvez voir ce qu'il y a ci-dessous.",
-    en: "Your data won't leave your computer. Only you can see what happens below."
+  "Your data won't leave your computer. Only you can see what happens in this app.": {
+    fr: "Vos données ne quittent pas votre ordinateur ; seul•e vous pouvez voir ce qui se passe dans cette application.",
+    en: "Your data won't leave your computer. Only you can see what happens in this app."
   },
   "Drop a directory here!": {
     fr: "Glissez-déposez un répertoire ici !",
@@ -45,9 +45,9 @@ const dict = {
     fr: "Erreurs",
     en: "Errors",
   },
-  "Reset": {
-    fr: "Réinitialiser",
-    en: "Reset",
+  "Close": {
+    fr: "Fermer",
+    en: "Close",
   },
   "files": {
     fr: "fichiers",

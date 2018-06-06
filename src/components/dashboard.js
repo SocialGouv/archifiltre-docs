@@ -26,10 +26,15 @@ const Presentational = props => {
     lineHeight: '1em'
   }
 
+  const margin_padding_compensate = {
+    margin: "0.2em -0.8em",
+    padding: "0.2em 0.8em",
+  }
+
   if (props.started === true && props.finished === true) {
     session_info_cell = (
       <div className='cell small-7' style={session_info_cell_style}>
-          <span className={edit_hover_container}>
+          <span className={edit_hover_container} style={margin_padding_compensate}>
             <RIEInput
               value={props.session_name}
               change={props.onChangeSessionName('new_session_name')}
@@ -41,7 +46,8 @@ const Presentational = props => {
             <i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} />
           </span>
           <br />
-          {props.nb_files} {tr('files')}<br />{octet2HumanReadableFormat(props.volume)}
+          <span>{props.nb_folders} {tr('folders')}, {props.nb_files} {tr('files')}<br />
+          {octet2HumanReadableFormat(props.volume)}</span>
       </div>
     );
 
@@ -106,15 +112,18 @@ const mapStateToProps = state => {
   let database = selectDatabase(state)
   const finished = app_state.isFinished()
   let nb_files = 0
+  let nb_folders = 0
   let volume = 0
   if (finished) {
-    nb_files = database.size()
+    nb_files = database.size_files()
+    nb_folders = database.size_overall() - database.size_files()
     volume = database.volume()
   }
   return {
     started: app_state.isStarted(),
     finished,
     nb_files,
+    nb_folders,
     volume,
     session_name: database.getSessionName()
   }

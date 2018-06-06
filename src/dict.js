@@ -11,9 +11,9 @@ const dict = {
     fr: "Glissez-déposez un répertoire ici !",
     en: "Drop a directory here!",
   },
-  "You may also drop a CSV file previously exported from Icicle.": {
-    fr: "Vous pouvez aussi déposer un fichier CSV précédement exporté depuis Stalactite.",
-    en: "You may also drop a CSV file previously exported from Icicle."
+  "You may also drop a JSON file previously exported from Icicle.": {
+    fr: "Vous pouvez aussi déposer un fichier JSON précédement exporté depuis Stalactite.",
+    en: "You may also drop a JSON file previously exported from Icicle."
   },
   "Import from CSV": {
     fr: "Importer depuis un CSV",
@@ -53,6 +53,10 @@ const dict = {
     fr: "fichiers",
     en: "files",
   },
+  "folders": {
+    fr: "répertoires",
+    en: "folders",
+  },
   "B": {
     fr: "o",
     en: "B"
@@ -62,7 +66,7 @@ const dict = {
     en: "errors",
   },
 
-  // Icicle / Legend
+  // Icicle / Types
   "Back to root": {
     fr: "Retour à la racine",
     en: "Back to root",
@@ -162,15 +166,22 @@ const dict = {
   },
 
 
-    // Always displayed
+  // Tags menu
+  "All tags": {
+    fr: "Tous les tags",
+    en: "All tags"
+  },
+  "No tags at the moment.": {
+    fr: "Aucun tag pour l'instant.",
+    en : "No tags at the moment."
+  },
+
+
+  // Always displayed
   "Compatible with Firefox and Chrome.": {
     fr: "Compatible avec Firefox et Chrome.",
     en: "Compatible with Firefox and Chrome.",
   },
-  // "Your directories. Like you've never seen them before.": {
-  //   fr: "Vos répertoires comme vous ne les avez jamais vus.",
-  //   en: "Your directories. Like you've never seen them before."
-  // },
   "Icicles": {
     fr: "Stalactites",
     en: "Icicles",

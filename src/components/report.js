@@ -3,12 +3,14 @@ import { connect } from 'react-redux'
 
 import { RIEInput, RIETextArea, RIETags } from 'riek'
 
+import TagsCell from 'components/report-cell-tags'
+
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
-import { setContentByID } from 'reducers/database'
+import { setContentByID, addTagged, deleteTagged } from 'reducers/database'
 
 import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
-import { edit_hover_container, edit_hover_pencil, editable_text, bold, tags, comments } from 'css/app.css'
+import { edit_hover_container, edit_hover_pencil, editable_text, element_name, bold, tags, comments } from 'css/app.css'
 
 
 import * as Content from 'content'
@@ -42,10 +44,20 @@ const Presentational = props => {
   let icon, name, real_name, info_cell, tags_cell, comments_cell
 
   const cells_style = {
-    'padding':'1em',
+    'padding':'1em 0 0 1em',
+    'marginRight': '-0.5em',
+    'marginBottom': '1em',
     'fontSize': '0.8em',
     'minHeight': '8em',
     'maxHeight': '8em'
+  }
+
+  const margin_padding_compensate = {
+    margin: "0.2em -0.8em",
+    padding: "0.2em 0.8em",
+  }
+
+  const margin_padding_compensate_cells = {
   }
 
   if(props.isFocused) {
@@ -58,7 +70,7 @@ const Presentational = props => {
     const c_size = octet2HumanReadableFormat(n_content.get('size'))
 
     const c_alias = n_content.get('alias')
-    const c_tags = new Set(Content.tagsToJs(n_content.get('tags')))
+    const c_tags = n_content.get('tags')
     const c_comments = n_content.get('comments')
 
     const display_name = c_alias === '' ? n_name : c_alias
@@ -70,7 +82,7 @@ const Presentational = props => {
     icon = (
       <i className={(is_folder ? 'fi-folder' : 'fi-page')} style={{
         'fontSize': '3em',
-        'width': '1.7em',
+        'width': '1.9em',
         'color': props.fillColor(props.node_id),
         'display': 'table-cell',
         'paddingLeft': '0.5em',
@@ -79,11 +91,11 @@ const Presentational = props => {
     )
 
     name = (
-      <span className={edit_hover_container}>
+      <span className={edit_hover_container} style={margin_padding_compensate}>
         <RIEInput
           value={display_name.length > 0 ? display_name : bracket_name}
           change={props.onChangeAlias('new_display_name', props.node_id, n_content, n_name)}
-          className={editable_text + " " + bold}
+          className={editable_text + " " + element_name + " " + bold}
           propName='new_display_name'
         />
         &ensp;
@@ -104,25 +116,11 @@ const Presentational = props => {
       </div>
     )
 
-    tags_cell = (
-      <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
-        <span style={{'fontWeight': 'bold'}}>{tr('Tags')}</span>
-        <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-        <span style={{'fontStyle': (c_tags.size ? '' : '')}}>
-          <RIETags
-            value={c_tags.size ? c_tags : new Set(['Your', 'Tags', 'Here'])}
-            change={props.onChangeTags('new_tags', props.node_id, n_content)}
-            className={tags}
-            placeholder={tr('New tag')}
-            propName='new_tags'
-          />
-        </span>
-      </div>
-    )
+    tags_cell = <TagsCell isDummy={false} cells_style={cells_style} tags={c_tags} node_id={props.node_id} content={n_content} />
 
     comments_cell = (
       <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
-        <span style={{'fontWeight': 'bold'}}>{tr('Comments')}</span>
+        <b>{tr('Comments')}</b>
         <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
         <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
           <RIETextArea
@@ -135,11 +133,13 @@ const Presentational = props => {
         </span>
       </div>
     )
-  } else {
+  }
+
+  else {
     icon = (
       <i className='fi-page-multiple' style={{
         'fontSize': '3em',
-        'width': '1.7em',
+        'width': '1.9em',
         'color': Color.placeholder(),
         'display': 'table-cell',
         'paddingLeft': '0.5em',
@@ -158,20 +158,16 @@ const Presentational = props => {
       </div>
     )
 
-    tags_cell = (
-      <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
-        <span style={{'fontWeight': 'bold'}}>{tr('Tags')}</span><br />
-        <span style={{'fontStyle':'italic'}}>{tr('Your tags here') + '...'}</span>
-      </div>
-    )
+    tags_cell = <TagsCell isDummy={true} cells_style={cells_style} tags={0} node_id={0} content={0} />
 
     comments_cell = (
-      <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
-        <span style={{'fontWeight': 'bold'}}>{tr('Comments')}</span><br />
+      <div className='cell small-4' style={cells_style}>
+        <b>{tr('Comments')}</b><br />
         <span style={{'fontStyle':'italic'}}>{tr('Your text here') + '...'}</span>
       </div>
     )
   }
+
 
   return (
     <div style={{'opacity': (props.isFocused ? 1 : 0.5), 'background': 'white', 'borderRadius': '1em'}}>
@@ -197,7 +193,7 @@ const Presentational = props => {
 }
 
 const mapStateToProps = state => {
-	let icicle_state = selectIcicleState(state)
+  let icicle_state = selectIcicleState(state)
   let database = selectDatabase(state)
 
   let sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
@@ -227,12 +223,6 @@ const mapDispatchToProps = dispatch => {
     dispatch(commit())
   }
 
-  const onChangeTags = (prop_name, id, content) => (n) => {
-    content = content.set('tags', Content.tagsFromJs([...n[prop_name]]))
-    dispatch(setContentByID(id, content))
-    dispatch(commit())
-  }
-
   const onChangeComments = (prop_name, id, content) => (n) => {
     content = content.set('comments', n[prop_name])
     dispatch(setContentByID(id, content))
@@ -240,8 +230,7 @@ const mapDispatchToProps = dispatch => {
   }
  	return {
     onChangeAlias,
-    onChangeTags,
-    onChangeComments
+    onChangeComments,
   }
 }
 

@@ -7,38 +7,43 @@ import { commit } from 'reducers/root-reducer'
 import { tr } from 'dict'
 
 const tag_style = {
-  fontWeight: "bold",
   display: "inline-block",
   color: "white",
   backgroundColor: "rgb(5, 120, 200)",
   borderRadius: "0.8em",
-  padding: "0 0.2em 0 1em",
-  margin: "0 0.3em 0.3em 0",
+  padding: "0 1em",
+  marginBottom: "0.3em",
 }
 
 const cross_style = {
-  fontWeight: "bold",
+  display: "inline-block",
   color: "white",
-  backgroundColor: "none",
+  backgroundColor: "rgb(0, 90, 170)",
   padding: "0 0.4em",
   borderRadius: "1em",
-  margin: "0 0 0 0.5em"
+  marginRight: "0.3em",
+  marginLeft: "-0.5em"
 }
 
-const dummy_style={
-  paddingLeft: "1em"
+const component_style = {
+  fontWeight: "bold",
+  display: "inline-block",
+  marginRight: "0.3em",
+  marginBottom: "0.3em"
 }
 
 const Presentational = props => {
   let cross = (
-    <span onMouseUp={(e) => {e.stopPropagation(); props.remove_handler() }} style={cross_style}>
+    <div onMouseUp={(e) => {e.stopPropagation(); props.remove_handler() }} style={cross_style}>
      X 
-    </span>);
+    </div>);
 
   return (
-    <div style={tag_style}>
-      {props.text}
-      {props.editing ? cross : <span style={dummy_style} />}
+    <div style={component_style}>
+      <div style={tag_style}>
+        {props.text}
+      </div>
+      {props.editing ? cross : <span />}
     </div>
   )
 }

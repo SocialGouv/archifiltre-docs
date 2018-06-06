@@ -1,14 +1,28 @@
 
 import { Map, List, Record, Set } from 'immutable'
 import { generateRandomString } from 'random-gen'
-import duck from 'reducers/duck'
 
 import * as Cache from 'cache'
 import * as Content from 'content'
 import * as Arbitrary from 'test/arbitrary'
 import * as Loop from 'test/loop'
-import tT from 'table-tree'
-const TT = tT(Content)
+import * as TT_ from 'table-tree'
+const TT = Object.assign({},TT_)
+
+
+import * as V5 from '../version/v5/src/file-system'
+
+
+TT.arbitrary = TT.arbitrary(Content.update, Content.arbitrary)
+TT.update = TT.update(Content.update)
+TT.sort = TT.sort(Content.compareSize)
+TT.isSorted = TT.isSorted(Content.compareSize)
+TT.toStrList2 = TT.toStrList2(Content.toStrListHeader, Content.toStrList)
+TT.toJson = TT.toJson(Content.toJson)
+TT.fromJson = TT.fromJson(Content.fromJson)
+TT.toJs = TT.toJs(Content.toJs)
+TT.fromJs = TT.fromJs(Content.fromJs)
+
 
 
 const QueueElem = Record({
@@ -83,7 +97,6 @@ export const arbitraryTags = () => {
 }
 
 export const tagsToJs = a => {
-  Loop.log(a)
   return a.toJS()
 }
 
@@ -237,7 +250,7 @@ export const computeDerivatedData = (state) => {
 }
 
 export const sortBySize = Cache.make((state) => {
-  state = state.update('tree', TT.sort(Content.compareSize))
+  state = state.update('tree', TT.sort)
 
   return state
 })
@@ -252,10 +265,17 @@ export const toJson = Cache.make((state) => {
   state = state.update('tree', TT.toJson)
   state = state.update('content_queue', contentQueueToJson)
   state = state.update('tags', tagsToJson)
-  return JSON.stringify(state.toJS())
+  state = state.toJS()
+
+  return JSON.stringify(state)
 })
 export const fromJson = (json) => {
-  let state = new Fs(JSON.parse(json))
+  let state = JSON.parse(json)
+  if (state.version === 5) {
+    return fromJsonV5(json)
+  }
+
+  state = new Fs(state)
   state = state.update('tags', tagsFromJson)
   state = state.update('content_queue', contentQueueFromJson)
   state = state.update('tree', TT.fromJson)
@@ -317,4 +337,130 @@ export const getLeafIdArray = (state) => {
 
 export const getSubIdList = (id, state) => {
   return TT.getSubIdList(id, state.get('tree'))
+}
+
+
+
+
+
+
+
+TT.v5ToCommon = TT.v5ToCommon(Content.v5ToCommon)
+TT.toCommon = TT.toCommon(Content.toCommon)
+TT.fromV5 = TT.fromV5(Content.fromV5)
+const contentQueueToCommon = (f,a) => {
+  return a.map(e=>{
+    const path = e.get('path')
+    const content = e.update('content',f)
+    return Map({
+      path,
+      content
+    })
+  })
+}
+const makeLastModifiedFromTreeRec = (id,table) => {
+  let node = table.get(id)
+  const children = node.get('children')
+  if (children.size) {
+    children.forEach(child_id=>{
+      table = makeLastModifiedFromTreeRec(child_id,table)
+    })
+    let list = List()
+    children.forEach(child_id=>{
+      const child_node = table.get(child_id)
+      list = list.concat(child_node.get('content').get('last_modified').get('list'))
+    })
+    let max = list.max()
+    let min = list.min()
+    node = node.update('content',a=>a.update('last_modified',last_modified=>{
+      last_modified = last_modified.set('list',list)
+      last_modified = last_modified.set('max',max)
+      last_modified = last_modified.set('min',min)
+      return last_modified
+    }))
+    table = table.set(id,node)
+    return table
+  } else {
+    return table
+  }
+}
+const makeLastModifiedFromTree = (tt) => {
+  const table = tt.get('table')
+  const root_id = tt.get('root_id')
+
+  tt = tt.set('table', makeLastModifiedFromTreeRec(root_id,table))
+
+  return tt
+}
+const makeTagsFromTree = (tt) => {
+  let tags = Map()
+  const insert = (id,tag) => {
+    tags = tags.update(tag,s=>{
+      if (s) {
+        return s.add(id)
+      } else {
+        return Set([id])
+      }
+    })
+  }
+  tt.get('table').forEach((val,key) => {
+    val.get('content').get('tags').forEach(tag=>{
+      insert(key,tag)
+    })
+  })
+  return tags
+}
+export const v5ToCommon = (a) => {
+  const session_name = a.get('session_name')
+  const content_queue = contentQueueToCommon(Content.v5ToCommon, a.get('content_queue'))
+  const tree = TT.v5ToCommon(a.get('tree'))
+  const tags = makeTagsFromTree(tree)
+  const parent_path = a.get('parent_path')
+  return Map({
+    session_name,
+    content_queue,
+    tree,
+    tags,
+    parent_path
+  })
+}
+export const toCommon = (a) => {
+  const session_name = a.get('session_name')
+  const content_queue = contentQueueToCommon(Content.toCommon, a.get('content_queue'))
+  const tree = TT.toCommon(a.get('tree'))
+  const parent_path = a.get('parent_path')
+  const tags = a.get('tags')
+
+  return Map({
+    session_name,
+    content_queue,
+    tree,
+    tags,
+    parent_path
+  })
+}
+export const fromV5 = (a) => {
+  const session_name = a.get('session_name')
+  const version = 6
+  const content_queue = a.get('content_queue').map(a=>{
+    return a.update('content',Content.fromV5)
+  })
+  const tree = TT.fromV5(a.get('tree'))
+  const tags = makeTagsFromTree(tree)
+  const parent_path = a.get('parent_path')
+
+  return new Fs({
+    session_name,
+    version,
+    content_queue,
+    tree,
+    tags,
+    parent_path
+  })
+}
+const fromJsonV5 = (a) => {
+  a = fromV5(V5.fromJson(a))
+  a = a.update('tree', makeLastModifiedFromTree)
+  a = computeDerivatedData(a)
+  return a
 }

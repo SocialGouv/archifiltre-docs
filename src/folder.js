@@ -69,34 +69,12 @@ function traverseFileTree(insert2DB, entry, parent_path) {
 }
 
 
-// import Worker from 'file-system.worker'
-// const worker = new Worker()
-
-
 function traverseFile(insert2DB, entry, parent_path) {
   return new Promise((resolve, reject) => sch.schedule(() => {
     entry.file(file => {
-      // insert2DB(
-      //   parent_path + file.name,
-      //   {
-      //     size:file.size,
-      //     last_modified:file.lastModified,
-      //     error_is_file:null
-      //   }
-      // )
       insert2DB(parent_path, file)
       resolve()
-      // worker.postMessage({
-      //   cmd:'test',
-      //   file
-      // })
     }, e => {
-      // insert2DB(
-      //   parent_path + entry.name,
-      //   {
-      //     error_is_file:true
-      //   }
-      // )
       insert2DB(parent_path, new File([''], entry.name))
       resolve()
     })
@@ -118,12 +96,6 @@ function traverseFolder(insert2DB, entry, parent_path) {
           Promise.all(promise_array).then(()=>resolve())
         }
       }, e => {
-        // insert2DB(
-        //   parent_path + entry.name,
-        //   {
-        //     error_is_file:false
-        //   }
-        // )
         insert2DB(parent_path, new File([''], entry.name+'/'))
         resolve()
       })

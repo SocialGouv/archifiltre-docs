@@ -5,6 +5,9 @@ import * as Loop from 'test/loop'
 import * as Arbitrary from 'test/arbitrary'
 import * as M from 'file-system'
 
+import * as V5 from '../version/v5/src/file-system'
+
+
 import {Map,List,is} from 'immutable'
 
 describe('file-system', function() {
@@ -43,7 +46,6 @@ describe('file-system', function() {
 
 
 
-
   Loop.immuEqual('(fromJson . toJson) a', () => {
     const a = M.arbitrary()
     return [M.fromJson(M.toJson(a)), a]
@@ -59,6 +61,11 @@ describe('file-system', function() {
     return [M.getSessionName(M.setSessionName(a, M.arbitrary())), a]
   })
 
+
+  Loop.immuEqual('(toCommon . fromV5) a === v5ToCommon a', () => {
+    const a = V5.arbitrary()
+    return [M.toCommon(M.fromV5(a)), M.v5ToCommon(a)]
+  })
 
 
 })

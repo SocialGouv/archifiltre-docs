@@ -1,6 +1,7 @@
 
 
 import duck from 'reducers/duck'
+import * as Content from 'content'
 import * as FileSystem from 'file-system'
 
 
@@ -16,17 +17,24 @@ function bundle(state) {
   return {
     size_overall: () => FileSystem.size_overall(state),
     size_files: () => FileSystem.size_files(state),
-    max_depth: () => FileSystem.depth(state),
+
+    size: () => FileSystem.size(state),
+    maxDepth: () => FileSystem.depth(state),
+
     parent_path: () => FileSystem.parentPath(state),
     getByID: (id) => FileSystem.getByID(id, state),
     getIDPath: (id) => FileSystem.getIDPath(id, state),
     volume: () => FileSystem.volume(state),
-    root_id: () => FileSystem.rootId(state),
+    rootId: () => FileSystem.rootId(state),
     toJson: () => FileSystem.toJson(state),
     toStrList2: () => FileSystem.toStrList2(state),
     getSessionName: () => FileSystem.getSessionName(state),
+
     getTagged: (tag) => FileSystem.getTagged(state, tag),
     getAllTags: () => FileSystem.getAllTags(state)
+
+    getLeafIdArray: () => FileSystem.getLeafIdArray(state),
+    getSubIdList: (id) => FileSystem.getSubIdList(id, state)
   }
 }
 
@@ -37,48 +45,58 @@ const { mkA, reducer } = duck(type, initialState, bundle)
 
 export default reducer
 
-export const push = mkA((path, content) => state => {
-  return FileSystem.pushOnQueue(path, content, state)
+
+export const push = mkA((parent_path, file) => state => {
+  const path = parent_path + file.name
+  const content = {
+    size:file.size,
+    last_modified:file.lastModified,
+  }
+  return FileSystem.pushOnQueue(path, Content.create(content), state)
 })
 
 export const makeTree = mkA(() => state => {
   state = FileSystem.makeTree(state)
-  state = FileSystem.sort(state)
+  state = FileSystem.sortBySize(state)
+  state = FileSystem.computeDerivatedData(state)
+  return state
+})
+
+export const sortByMaxRemainingPathLength = mkA(() => state => {
+  state = FileSystem.sortByMaxRemainingPathLength(state)
+
   return state
 })
 
 
-// const worker = new Worker()
 
-// export const workerPush = mkA((path, content) => state => {
-//   worker.postMessage({
-//     cmd:'push',
-//     path,
-//     content
-//   })
-//   return state
-// })
+const worker = new Worker()
 
-// const workerGhostFromJs = mkA((content_queue_js,tree_js) => state => {
-//   state = FileSystem.ghostQueueFromJs(content_queue_js,state)
-//   state = FileSystem.ghostTreeFromJs(tree_js,state)
-//   return state
-// })
+export const workerPush = mkA((parent_path, file) => state => {
+  worker.postMessage({
+    cmd:'push',
+    parent_path,
+    file
+  })
+  return state
+})
 
-// export const workerMakeTree = () => dispatch => {
-//   return new Promise((resolve, reject) => {
-//     worker.postMessage({
-//       cmd:'pull'
-//     })
+const workerSetStateFromJs = mkA((js) => () => FileSystem.fromJs(js))
 
-//     worker.onmessage = (e) => {
-//       if (e.data.cmd === 'pull') {
-//         dispatch(workerGhostFromJs(e.data.content_queue,e.data.tree))
-//         resolve()
-//       }
-//     }
-//   })
-// }
+export const workerMakeTree = () => dispatch => {
+  return new Promise((resolve, reject) => {
+    worker.postMessage({
+      cmd:'pull'
+    })
+
+    worker.onmessage = (e) => {
+      if (e.data.cmd === 'pull') {
+        dispatch(workerSetStateFromJs(e.data.state))
+        resolve()
+      }
+    }
+  })
+}
 
 
 
@@ -89,7 +107,8 @@ export const fromJson = mkA((json) => state => {
 export const fromLegacyCsv = mkA((csv) => state => {
   state = FileSystem.fromLegacyCsv(csv)
   state = FileSystem.makeTree(state)
-  state = FileSystem.sort(state)
+  state = FileSystem.sortBySize(state)
+  state = FileSystem.computeDerivatedData(state)
   return state
 })
 

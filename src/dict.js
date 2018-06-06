@@ -71,6 +71,10 @@ const dict = {
     fr: "Retour à la racine",
     en: "Back to root",
   },
+  'Toggle Skin': {
+    fr: 'changer l\'apparence',
+    en: 'Toggle Skin',
+  },
   "Legend": {
     fr: "Légende",
     en: "Legend",

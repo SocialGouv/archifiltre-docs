@@ -10,7 +10,8 @@ const State = Record({
   lock_seq:[],
   dims: {},
   tag_to_highlight: '',
-  display_root:[]
+  display_root:[],
+  change_skin:false,
 })
 
 function bundle(state) {
@@ -22,7 +23,8 @@ function bundle(state) {
     display_root: () => state.get('display_root'),
     isFocused: () => state.get('hover_seq').length > 0,
     isLocked: () => state.get('lock_seq').length > 0,
-    isZoomed: () => state.get('display_root').length > 0
+    isZoomed: () => state.get('display_root').length > 0,
+    changeSkin: () => state.get('change_skin')
   }
 }
 
@@ -87,3 +89,8 @@ const clearSelection = () => {
     document.selection.empty()
   }
 }
+
+export const toggleChangeSkin = mkA(() => state =>{
+  state = state.update('change_skin',a=>!a)
+  return state
+})

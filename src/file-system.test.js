@@ -20,6 +20,11 @@ describe('file-system', function() {
     return [M.qeFromJs(M.qeToJs(a)), a]
   })
 
+  Loop.immuEqual('(contentQueueFromJson . contentQueueToJson) a', () => {
+    const a = M.arbitraryContentQueue()
+    return [M.contentQueueFromJson(M.contentQueueToJson(a)), a]
+  })
+
   Loop.immuEqual('(contentQueueFromJs . contentQueueToJs) a', () => {
     const a = M.arbitraryContentQueue()
     return [M.contentQueueFromJs(M.contentQueueToJs(a)), a]
@@ -28,6 +33,11 @@ describe('file-system', function() {
   Loop.immuEqual('(fromJson . toJson) a', () => {
     const a = M.arbitrary()
     return [M.fromJson(M.toJson(a)), a]
+  })
+
+  Loop.immuEqual('(fromJs . toJs) a', () => {
+    const a = M.arbitrary()
+    return [M.fromJs(M.toJs(a)), a]
   })
 
   Loop.equal('(getSessionName . setSessionName x) a', () => {

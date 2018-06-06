@@ -30,6 +30,20 @@ describe('file-system', function() {
     return [M.contentQueueFromJs(M.contentQueueToJs(a)), a]
   })
 
+  Loop.immuEqual('(tagsFromJson . tagsToJson) a', () => {
+    const a = M.arbitraryTags()
+    return [M.tagsFromJson(M.tagsToJson(a)), a]
+  })
+
+  Loop.immuEqual('(tagsFromJs . tagsToJs) a', () => {
+    const a = M.arbitraryTags()
+    return [M.tagsFromJs(M.tagsToJs(a)), a]
+  })
+
+
+
+
+
   Loop.immuEqual('(fromJson . toJson) a', () => {
     const a = M.arbitrary()
     return [M.fromJson(M.toJson(a)), a]

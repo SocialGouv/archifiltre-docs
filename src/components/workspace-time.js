@@ -14,6 +14,7 @@ import BreadCrumbs from 'components/breadcrumbs'
 import Report from 'components/report'
 import BTRButton from 'components/back-to-root-button'
 import ToggleChangeSkin from 'components/toggle-change-skin'
+import AllTags from 'components/all-tags'
 
 const chart_style = {
   stroke: '#fff',
@@ -144,9 +145,16 @@ class Presentational extends React.PureComponent {
   render() {
     return (
       <div>
-        <Report
-          fillColor={this.fillColor}
-        />
+        <div className="grid-x grid-frame grid-padding-x">
+          <div className='cell small-10'>
+            <Report
+              fillColor={this.fillColor}
+            />
+          </div>
+          <div className='cell small-2'>
+            <AllTags />
+          </div>
+        </div>
         <div className='grid-x grid-frame'>
           <div className='cell small-2'></div>
           <div className='cell small-4' style={btr_style}>

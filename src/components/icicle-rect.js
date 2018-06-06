@@ -198,9 +198,9 @@ class Presentational extends React.PureComponent {
       res.push(
         (<rect
           key='stroke'
-          x={dims.x + 1}
-          y={dims.y + 1}
-          width={dims.dx - 2}
+          x={this.props.x + 1}
+          y={this.props.y + 1}
+          width={this.props.dx - 2}
           height='6'
           style={{'fill': 'rgb(5, 120, 200)', 'stroke':'none', 'opacity':stroke_opacity}}
           />

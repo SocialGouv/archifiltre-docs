@@ -52,6 +52,8 @@ export const fromHex = a => {
 export const mostRecentDate = () => [255, 153, 204, 1]
 export const leastRecentDate = () => [51, 204, 255, 1]
 
+export const duplicate = () => [255, 0, 0, 1]
+export const different = () => [0, 0, 0, 0.5]
 
 const colors = {
   presentation : '#f75b40',

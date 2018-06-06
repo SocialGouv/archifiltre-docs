@@ -74,6 +74,11 @@ describe('table-tree', function() {
     return [TT.toList(TT.sort(compare)(TT.fromJsTree(TT.toJsTree(a)))), TT.toList(TT.sort(compare)(a))]
   })
 
+  Loop.equal('(size . getSubIdList root_id) a === size a', () => {
+    const a = TT.arbitrary()
+    return [TT.getSubIdList(TT.getRootId(a), a).size, TT.size(a)]
+  })
+
   
 
 

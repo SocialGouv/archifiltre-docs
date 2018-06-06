@@ -13,6 +13,7 @@ import Ruler from 'components/ruler'
 import BreadCrumbs from 'components/breadcrumbs'
 import Report from 'components/report'
 import BTRButton from 'components/back-to-root-button'
+import ToggleChangeSkin from 'components/toggle-change-skin'
 
 const chart_style = {
   stroke: '#fff',
@@ -54,25 +55,6 @@ class Presentational extends React.PureComponent {
   }
 
   fillColor(id) {
-    const root_node = this.props.getByID(this.props.root_id)
-    const last_modified = root_node.get('content').get('last_modified')
-    const max_time = last_modified.get('max')
-    const min_time = last_modified.get('min')
-    const zeroToOne = (id) => {
-      const node = this.props.getByID(id)
-      const last_modified = node.get('content').get('last_modified')
-      const time = last_modified.get('average')
-      return (time - min_time) / (max_time - min_time)
-    }
-
-    return Color.toRgba(
-      Color.gradiant(
-        Color.leastRecentDate(),
-        Color.mostRecentDate()
-      )(zeroToOne(id))
-    )
-
-
     const node = this.props.getByID(id)
     const name = node.get('name')
 
@@ -94,17 +76,21 @@ class Presentational extends React.PureComponent {
         <Report
           fillColor={this.fillColor}
         />
-        <div className="grid-x grid-frame">
-          <div className="cell small-2"></div>
-          <div className="cell small-4" style={btr_style}>
+        <div className='grid-x grid-frame'>
+          <div className='cell small-2'></div>
+          <div className='cell small-4' style={btr_style}>
             <BTRButton />
           </div>
-          <div className="cell small-6"></div>
+          <div className='cell small-2'></div>
+          <div className='cell small-2' style={btr_style}>
+            <ToggleChangeSkin />
+          </div>
+          <div className='cell small-2'></div>
         </div>
-        <div className="grid-x grid-frame">
+        <div className='grid-x grid-frame'>
           <div
             onClick={(e) => {this.props.unlock(); this.props.setNoFocus();}}
-            className="cell small-8"
+            className='cell small-8'
           >
             <Icicle
               icicle_width={icicle_width}
@@ -119,7 +105,7 @@ class Presentational extends React.PureComponent {
               fillColor={this.fillColor}
             />
           </div>
-          <div className="cell small-4" style={chart_style}>
+          <div className='cell small-4' style={chart_style}>
             <BreadCrumbs
               icicle_height={icicle_height}
               trueFHeight={this.trueFHeight}
@@ -138,12 +124,19 @@ class Presentational extends React.PureComponent {
 const mapStateToProps = state => {
   const database = selectDatabase(state)
   const icicle_state = selectIcicleState(state)
+  const hover_sequence = icicle_state.hover_sequence()
+  const lock_sequence = icicle_state.lock_sequence()
+
+  const sequence = lock_sequence.length ? lock_sequence : hover_sequence
+
+  const duplicate_node_id = sequence.slice(-1)[0]
 
   return {
     max_depth: database.maxDepth(),
     getByID: database.getByID,
     display_root: icicle_state.display_root(),
     root_id: database.rootId(),
+    duplicate_node_id,
   }
 }
  

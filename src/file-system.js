@@ -255,3 +255,7 @@ export const getIDPath = (id, state) => {
 export const getLeafIdArray = (state) => {
   return TT.getLeafIdArray(state.get('tree'))
 }
+
+export const getSubIdList = (id, state) => {
+  return TT.getSubIdList(id, state.get('tree'))
+}

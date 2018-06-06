@@ -291,6 +291,7 @@ export default function(C) {
     }
   }
 
+
   const toStrList2 = (tt) => {
     // const leaf = getTable(tt).filter(entry => entry.get('children').isEmpty())
     const table = getTable(tt)
@@ -387,6 +388,13 @@ export default function(C) {
     return getIdArray(tt)
   }
 
+  const getSubIdList = (id, tt) => {
+    const entry = getEntryById(id, tt)
+    const children_id = entry.get('children')
+
+    return children_id.map(id=>getSubIdList(id, tt)).flatten().push(id)
+  }
+
   return {
     update,
     sort,
@@ -420,6 +428,8 @@ export default function(C) {
 
     mapContent,
 
-    getLeafIdArray
+    getLeafIdArray,
+
+    getSubIdList,
   }
 }

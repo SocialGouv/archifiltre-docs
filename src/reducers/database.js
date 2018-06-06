@@ -25,7 +25,8 @@ function bundle(state) {
     toJson: () => FileSystem.toJson(state),
     toStrList2: () => FileSystem.toStrList2(state),
     getSessionName: () => FileSystem.getSessionName(state),
-    getLeafIdArray: () => FileSystem.getLeafIdArray(state)
+    getLeafIdArray: () => FileSystem.getLeafIdArray(state),
+    getSubIdList: (id) => FileSystem.getSubIdList(id, state)
   }
 }
 

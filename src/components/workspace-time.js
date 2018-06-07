@@ -145,7 +145,7 @@ class Presentational extends React.PureComponent {
   render() {
     return (
       <div>
-        <div className="grid-x grid-frame grid-padding-x">
+        <div className="grid-x grid-padding-x">
           <div className='cell small-10'>
             <Report
               fillColor={this.fillColor}
@@ -155,7 +155,7 @@ class Presentational extends React.PureComponent {
             <AllTags />
           </div>
         </div>
-        <div className='grid-x grid-frame'>
+        <div className='grid-x'>
           <div className='cell small-2'></div>
           <div className='cell small-4' style={btr_style}>
             <BTRButton />
@@ -166,7 +166,7 @@ class Presentational extends React.PureComponent {
           </div>
           <div className='cell small-2'></div>
         </div>
-        <div className='grid-x grid-frame'>
+        <div className='grid-x'>
           <div
             onClick={(e) => {this.props.unlock(); this.props.setNoFocus();}}
             className='cell small-8'

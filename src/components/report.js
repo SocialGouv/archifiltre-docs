@@ -153,7 +153,7 @@ const Presentational = props => {
   return (
     <div style={{'opacity': (props.isFocused ? 1 : 0.5), 'background': 'white', 'borderRadius': '1em'}}>
 
-      <div className='grid-x grid-frame'>
+      <div className='grid-x'>
         <div className='cell small-12'>
           <div style={{'display': 'table', 'width':'100%'}}>
             {icon}
@@ -163,7 +163,7 @@ const Presentational = props => {
           </div>
         </div>
       </div>
-      <div className="grid-x grid-frame">
+      <div className="grid-x">
         {info_cell}
         {tags_cell}
         {comments_cell}

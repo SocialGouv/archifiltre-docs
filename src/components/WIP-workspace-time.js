@@ -83,14 +83,14 @@ const Presentational = props => {
         <Report
           fillColor={fillColor}
         />
-        <div className="grid-x grid-frame">
+        <div className="grid-x">
           <div className="cell small-2"></div>
           <div className="cell small-4" style={btr_style}>
             <BTRButton />
           </div>
           <div className="cell small-6"></div>
         </div>
-        <div className="grid-x grid-frame">
+        <div className="grid-x">
           <div className="cell small-12">
             <RugTimePlot/>
           </div>

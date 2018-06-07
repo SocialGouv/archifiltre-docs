@@ -12,7 +12,6 @@ const tag_style = {
   backgroundColor: "rgb(5, 120, 200)",
   borderRadius: "0.8em",
   padding: "0 1em",
-  marginBottom: "0.3em",
 }
 
 const cross_style = {
@@ -29,7 +28,7 @@ const component_style = {
   fontWeight: "bold",
   display: "inline-block",
   marginRight: "0.3em",
-  marginBottom: "0.3em"
+  marginBottom: "0.2em"
 }
 
 const Presentational = props => {

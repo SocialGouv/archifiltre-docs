@@ -13,8 +13,7 @@ import Ruler from 'components/ruler'
 import BreadCrumbs from 'components/breadcrumbs'
 import Report from 'components/report'
 import AllTags from 'components/all-tags'
-import BTRButton from 'components/back-to-root-button'
-import ToggleChangeSkin from 'components/toggle-change-skin'
+import NavigationBar from 'components/navigation-bar'
 
 const chart_style = {
   stroke: '#fff',
@@ -85,15 +84,9 @@ class Presentational extends React.PureComponent {
           </div>
         </div>
         <div className='grid-x grid-frame'>
-          <div className='cell small-2'></div>
-          <div className='cell small-4' style={btr_style}>
-            <BTRButton />
-          </div>
-          <div className='cell small-2'></div>
-          <div className='cell small-2' style={btr_style}>
-            <ToggleChangeSkin />
-          </div>
-          <div className='cell small-2'></div>
+          <div className='cell auto'></div>
+          <NavigationBar />
+          <div className='cell auto'></div>
         </div>
         <div className='grid-x grid-frame'>
           <div

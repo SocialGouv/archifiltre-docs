@@ -19,6 +19,7 @@ CMD ["./startupDev.bash"]
 FROM dev as prod
 
 WORKDIR /usr/src/app
+Run make fetchAndPatch
 RUN npm run-script buildProd
 
 

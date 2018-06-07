@@ -52,8 +52,7 @@ test: dev
 # Use this to make patchs :
 # diff -Naur v5 new-v5 > v5.patch
 fetchAndPatch:
-	sudo rm -fr version
+	rm -fr version
 	git clone -b v5 $(repo) version/v5
 	cp patch/v5.patch version
 	patch -p 0 -d version -i v5.patch
-	sudo chown -R root:root version

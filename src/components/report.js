@@ -23,23 +23,24 @@ import { tr } from 'dict'
 
 
 const Presentational = props => {
-  let icon, name, real_name, info_cell, tags_cell, comments_cell
+  let icon, name, real_name, info_cell, tags_cell, comments_cell, name_cell
 
   const cells_style = {
-    'padding':'1em 0 0 1em',
-    'marginRight': '-0.5em',
-    'marginBottom': '1em',
+    'borderRadius' : '1em',
+    'padding':'0.6em 1em 0 1em',
+    'margin' : '0 0 1em 1em',
     'fontSize': '0.8em',
-    'minHeight': '12em',
-    'maxHeight': '12em'
+    "minHeight": "8em"
+  }
+
+  const info_cell_style = {
+    'fontSize': '0.8em',
+    'padding' : '2em'
   }
 
   const margin_padding_compensate = {
     margin: "0.2em -0.8em",
     padding: "0.2em 0.8em",
-  }
-
-  const margin_padding_compensate_cells = {
   }
 
   if(props.isFocused) {
@@ -91,7 +92,7 @@ const Presentational = props => {
     )
 
     info_cell = (
-      <div className="cell small-4" style={cells_style}>
+      <div className="cell small-4" style={info_cell_style}>
         <b>{tr("Size")} :</b> {c_size}<br />
         <LastModifiedReporter id={props.node_id} placeholder={false}/>
       </div>
@@ -100,7 +101,7 @@ const Presentational = props => {
     tags_cell = <TagsCell isDummy={false} cells_style={cells_style} tags={c_tags} node_id={props.node_id} content={n_content} />
 
     comments_cell = (
-      <div className={'cell small-4 ' + edit_hover_container} style={cells_style}>
+      <div className={'cell small-6 ' + edit_hover_container} style={cells_style}>
         <b>{tr('Comments')}</b>
         <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
         <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
@@ -133,7 +134,7 @@ const Presentational = props => {
     real_name = (<span style={{'fontStyle':'italic'}}>({tr('Real name')})</span>)
 
     info_cell = (
-      <div className="cell small-4" style={cells_style}>
+      <div className="cell small-4" style={info_cell_style}>
         <b>{tr("Size")} :</b> ...<br />
         <LastModifiedReporter placeholder={true}/>
       </div>
@@ -142,31 +143,38 @@ const Presentational = props => {
     tags_cell = <TagsCell isDummy={true} cells_style={cells_style} />
 
     comments_cell = (
-      <div className='cell small-4' style={cells_style}>
+      <div className='cell small-6' style={cells_style}>
         <b>{tr('Comments')}</b><br />
         <span style={{'fontStyle':'italic'}}>{tr('Your text here') + '...'}</span>
       </div>
     )
   }
 
+  name_cell = (
+    <div className='cell small-12'>
+      <div style={{'display': 'table', 'width':'100%'}}>
+        {icon}
+        <span style={{'display': 'table-cell', 'verticalAlign':'middle', 'lineHeight':'1.25em'}}>
+          {name}<br />{real_name}
+        </span>
+      </div>
+    </div>
+  );
+
 
   return (
-    <div style={{'opacity': (props.isFocused ? 1 : 0.5), 'background': 'white', 'borderRadius': '1em'}}>
-
-      <div className='grid-x grid-frame'>
-        <div className='cell small-12'>
-          <div style={{'display': 'table', 'width':'100%'}}>
-            {icon}
-            <span style={{'display': 'table-cell', 'verticalAlign':'middle', 'lineHeight':'1.25em'}}>
-              {name}<br />{real_name}
-            </span>
+    <div style={{'opacity': (props.isFocused ? 1 : 0.5), 'background': 'white', 'borderRadius': '1em', minHeight: '11em', maxHeight:'11em'}}>
+      <div className="grid-x grid-frame grid-padding-x">
+        <div className="cell small-8">
+          <div className="grid-x grid-frame" style={{maxHeight:"3.8em"}}>
+            {name_cell}
+          </div>
+          <div className="grid-x grid-frame" style={{padding: '0 1.5em 0 0'}}>
+            {tags_cell}
+            {comments_cell}
           </div>
         </div>
-      </div>
-      <div className="grid-x grid-frame">
         {info_cell}
-        {tags_cell}
-        {comments_cell}
       </div>
 
     </div>

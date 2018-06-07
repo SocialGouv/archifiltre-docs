@@ -172,6 +172,20 @@ const dict = {
     fr: "Vos tags ici",
     en: "Your tags here"
   },
+  "max": {
+
+  },
+  "min": {
+
+  },
+  "average": {
+    fr: "moyenne",
+    en: "average"
+  },
+  "median": {
+    fr: "médiane",
+    en: "median"
+  },
 
 
   // Tags menu

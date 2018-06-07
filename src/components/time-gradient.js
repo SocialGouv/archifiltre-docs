@@ -8,7 +8,7 @@ const least_rgba = Color.toRgba(Color.leastRecentDate())
 const most_rgba = Color.toRgba(Color.mostRecentDate())
 
 const Presentational = props => {
-  const cursor_width = 0.75
+  const cursor_height = 0.75
 
   const root_node = props.getByID(props.root_id)
   const last_modified = root_node.get('content').get('last_modified')
@@ -21,8 +21,8 @@ const Presentational = props => {
     return (time - min_time) / (max_time - min_time)
   }
 
-  const svg_width = 100
-  const svg_height = 5
+  const svg_width = 5
+  const svg_height = 25
 
   let cursor_array = []
   if (props.id) {
@@ -52,10 +52,10 @@ const Presentational = props => {
       return (
         <g key={prop_name}>
           <rect
-            x={zeroToOne(prop_name,props.id)*svg_width - cursor_width/2}
-            y={0}
-            width={cursor_width}
-            height={svg_height}
+            x={0}
+            y={zeroToOne(prop_name,props.id)*svg_height - cursor_height/2}
+            width={svg_width}
+            height={cursor_height}
             fill='black'
           />
         </g>
@@ -65,9 +65,9 @@ const Presentational = props => {
     cursor_array.push(
       <g key={'average'}>
         <circle
-          cx={zeroToOne('average',props.id)*svg_width}
-          cy={svg_height/2}
-          r={cursor_width}
+          cx={svg_width/2}
+          cy={zeroToOne('average',props.id)*svg_height}
+          r={cursor_height}
           fill='red'
         />
       </g>
@@ -78,7 +78,7 @@ const Presentational = props => {
     <svg xmlns='http://www.w3.org/2000/svg' viewBox={'0 0 '+svg_width+' '+svg_height}>
       <g>
         <defs>
-          <linearGradient id='time-gradient-grad1' x1='0%' y1='0%' x2='100%' y2='0%'>
+          <linearGradient id='time-gradient-grad1' x1='0%' y1='0%' x2='0%' y2='100%'>
             <stop offset='0%' style={{stopColor:least_rgba}} />
             <stop offset='100%' style={{stopColor:most_rgba}} />
           </linearGradient>

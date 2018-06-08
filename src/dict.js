@@ -66,6 +66,20 @@ const dict = {
     en: "errors",
   },
 
+  // Icicle / Navigation bar
+  "View mode:": {
+    fr: "Mode de vue :",
+    en: "View mode:"
+  },
+  "Dates": {
+    fr: "Dates",
+    en: "Dates"
+  },
+  Volume: {
+    fr: "Volume",
+    en: "Volume"
+  },
+
   // Icicle / Types
   "Back to root": {
     fr: "Retour à la racine",

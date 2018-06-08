@@ -12,17 +12,25 @@ import * as Color from 'color'
 
 import { tr } from 'dict'
 
+
 const Presentational = props => {
 
-  let div_style = {
-    opacity: props.isZoomed ? '1' : '0',
-    transition : 'opacity 0.2s ease-out',
-    WebkitTransition : 'opacity 0.2s ease-out',
+  const button_style = {
+    transition : 'all 0.2s ease-out',
+    WebkitTransition : 'all 0.2s ease-out',
+    padding:'0.3em 0.45em',
+    margin:'0',
+    borderRadius: '2em'
   }
-  
+
   let cursor_style = {cursor: props.isZoomed ? 'pointer' : 'default', padding:'0.3em 0.45em'}
 
-  return <div style={div_style}>{mkRB(props.backToRoot, (<i className="fi-zoom-out" style={{fontSize: '1.8em'}} />), true, Color.parentFolder(), cursor_style)}</div>
+  return mkB(
+    props.backToRoot,
+    (<span><i className="fi-zoom-out" />&ensp;{tr('Back to root')}</span>),
+    props.isZoomed,
+    Color.parentFolder(),
+    button_style)
 }
 
 

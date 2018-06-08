@@ -13,26 +13,32 @@ import ToggleChangeSkin from 'components/toggle-change-skin'
 import * as Color from 'color'
 import { tr } from 'dict'
 
-const component_style ={
+const grid_style ={
   background: 'white',
   borderRadius: '5em',
-  minHeight: '4em',
-  maxHeight:'4em'
+  minHeight: '2.5em',
+  maxHeight:'2.5em',
+  padding: '0.2em 1em',
+  margin: '0.5em 0'
 }
 
 const Presentational = props => {
 
   return (
-    <div style={component_style} className="cell small-4">
-      <div className='grid-x grid-padding-x'>
-        <div className='cell auto' />
-        <div className='cell small-2'>
+    <div className="cell small-6">
+      <div style={grid_style} className='grid-x align-middle'>
+        <div className='cell small-4'>
           <BTRButton />
         </div>
-        <div className='cell small-6'>
-          <ToggleChangeSkin />
+        <div className='cell small-8'>
+          <div className='flex-container'>
+            <div className='flex-child-grow' />
+            <div className='flex-child-auto'>
+              <ToggleChangeSkin />
+            </div>
+            <div className='flex-child-grow' />
+          </div>
         </div>
-        <div className='cell auto' />
       </div>
     </div>
   )

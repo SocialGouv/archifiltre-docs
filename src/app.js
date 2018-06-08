@@ -48,7 +48,7 @@ const app = () => {
   ReactDOM.render(
     <ErrorBoundary>
       <Provider store={store}>
-        <div className='grid-y grid-padding-y grid-frame'>
+        <div className='grid-y grid-frame'>
           <div className='cell'>
             <Header/>
           </div>

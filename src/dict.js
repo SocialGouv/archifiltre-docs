@@ -3,9 +3,9 @@ console.log("lang : " + lang)
 
 const dict = {
   // Home screen
-  "Your data won't leave your computer. Only you can see what happens below.": {
-    fr: "Vos données ne quittent pas votre ordinateur ; seul•e vous pouvez voir ce qu'il y a ci-dessous.",
-    en: "Your data won't leave your computer. Only you can see what happens below."
+  "Your data won't leave your computer. Only you can see what happens in this app.": {
+    fr: "Vos données ne quittent pas votre ordinateur ; seul•e vous pouvez voir ce qui se passe dans cette application.",
+    en: "Your data won't leave your computer. Only you can see what happens in this app."
   },
   "Drop a directory here!": {
     fr: "Glissez-déposez un répertoire ici !",
@@ -45,9 +45,9 @@ const dict = {
     fr: "Erreurs",
     en: "Errors",
   },
-  "Reset": {
-    fr: "Réinitialiser",
-    en: "Reset",
+  "Close": {
+    fr: "Fermer",
+    en: "Close",
   },
   "files": {
     fr: "fichiers",
@@ -64,6 +64,20 @@ const dict = {
   "errors": {
     fr: "erreurs",
     en: "errors",
+  },
+
+  // Icicle / Navigation bar
+  "View mode:": {
+    fr: "Mode de vue :",
+    en: "View mode:"
+  },
+  "Dates": {
+    fr: "Dates",
+    en: "Dates"
+  },
+  Volume: {
+    fr: "Volume",
+    en: "Volume"
   },
 
   // Icicle / Types
@@ -152,6 +166,10 @@ const dict = {
   "Tags": {
 
   },
+  "Click here to add some tags!": {
+    fr: "Cliquez ici pour ajouter des tags !",
+    en: "Click here to add some tags!"
+  },
   "New tag": {
     fr: "Nouveau tag",
     en: "New tag"
@@ -167,6 +185,20 @@ const dict = {
   "Your tags here": {
     fr: "Vos tags ici",
     en: "Your tags here"
+  },
+  "max": {
+
+  },
+  "min": {
+
+  },
+  "average": {
+    fr: "moyenne",
+    en: "average"
+  },
+  "median": {
+    fr: "médiane",
+    en: "median"
   },
 
 

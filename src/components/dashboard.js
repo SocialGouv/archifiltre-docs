@@ -33,7 +33,7 @@ const Presentational = props => {
 
   if (props.started === true && props.finished === true) {
     session_info_cell = (
-      <div className='cell small-7' style={session_info_cell_style}>
+      <div className='cell small-3' style={session_info_cell_style}>
           <span className={edit_hover_container} style={margin_padding_compensate}>
             <RIEInput
               value={props.session_name}
@@ -46,13 +46,16 @@ const Presentational = props => {
             <i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} />
           </span>
           <br />
-          <span>{props.nb_folders} {tr('folders')}, {props.nb_files} {tr('files')}<br />
-          {octet2HumanReadableFormat(props.volume)}</span>
+          <b>
+            {props.nb_folders} <i className="fi-folder" />&ensp;&ensp;
+            {props.nb_files} <i className="fi-page" />&ensp;&ensp;
+            {octet2HumanReadableFormat(props.volume)}
+          </b>
       </div>
     );
 
     csv_button_cell = (
-      <div className='cell small-4'>
+      <div className='cell small-2'>
         <TextAlignCenter>
           <ToCsvButton/>
         </TextAlignCenter>
@@ -60,7 +63,7 @@ const Presentational = props => {
     );
 
     save_button_cell = (
-      <div className='cell small-4'>
+      <div className='cell small-2'>
         <TextAlignCenter>
           <SaveButton/>
         </TextAlignCenter>
@@ -68,7 +71,7 @@ const Presentational = props => {
     );
 
     reinit_button_cell = (
-      <div className='cell small-4'>
+      <div className='cell small-2'>
         <TextAlignCenter>
           <ReinitButton/>
         </TextAlignCenter>
@@ -76,29 +79,30 @@ const Presentational = props => {
     );
   }
   else {
-    session_info_cell = <div className='cell small-7'></div>;
-    csv_button_cell = <div className='cell small-4'></div>;
-    save_button_cell = <div className='cell small-4'></div>;
-    reinit_button_cell = <div className='cell small-4'></div>;
+    session_info_cell = <div className='cell small-3'></div>;
+    csv_button_cell = <div className='cell small-2'></div>;
+    save_button_cell = <div className='cell small-2'></div>;
+    reinit_button_cell = <div className='cell small-2'></div>;
   }
 
   if(props.started === props.finished){
     ctrlz_cell = (
-      <div className='cell small-4'>
+      <div className='cell small-2'>
         <CtrlZ visible={true}/>
       </div>
     );
   }
   else {
-    ctrlz_cell = <div className='cell small-4'></div>;
+    ctrlz_cell = <div className='cell small-2'></div>;
   }
 
 
   return (
-    <div className='grid-x'>
+    <div className='grid-x grid-padding-y align-middle'>
       {ctrlz_cell}
       <div className='cell auto'></div>
       {session_info_cell}
+      <div className='cell auto'></div>
       {save_button_cell}
       {csv_button_cell}
       {reinit_button_cell}

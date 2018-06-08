@@ -13,8 +13,7 @@ import Ruler from 'components/ruler'
 import BreadCrumbs from 'components/breadcrumbs'
 import Report from 'components/report'
 import AllTags from 'components/all-tags'
-import BTRButton from 'components/back-to-root-button'
-import ToggleChangeSkin from 'components/toggle-change-skin'
+import NavigationBar from 'components/navigation-bar'
 
 const chart_style = {
   stroke: '#fff',
@@ -22,7 +21,8 @@ const chart_style = {
 
 const btr_style = {
   textAlign: 'center',
-  padding: '1em 0'
+  padding: '0.5em 0 0 0',
+  marginBottom: '-0.5em'
 }
 
 
@@ -84,19 +84,14 @@ class Presentational extends React.PureComponent {
           </div>
         </div>
         <div className='grid-x'>
-          <div className='cell small-2'></div>
-          <div className='cell small-4' style={btr_style}>
-            <BTRButton />
-          </div>
-          <div className='cell small-2'></div>
-          <div className='cell small-2' style={btr_style}>
-            <ToggleChangeSkin />
-          </div>
-          <div className='cell small-2'></div>
+          <div className='cell auto'></div>
+            <NavigationBar />
+          <div className='cell auto'></div>
         </div>
         <div className='grid-x'>
           <div
             onClick={(e) => {this.props.unlock(); this.props.setNoFocus();}}
+            onMouseLeave={(e) => {if(!this.props.isLocked) this.props.setNoFocus();}}
             className='cell small-8'
           >
             <Icicle
@@ -143,6 +138,7 @@ const mapStateToProps = state => {
     display_root: icicle_state.display_root(),
     root_id: database.rootId(),
     duplicate_node_id,
+    isLocked: lock_sequence.length > 0
   }
 }
  

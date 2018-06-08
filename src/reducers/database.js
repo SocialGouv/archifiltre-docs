@@ -35,6 +35,8 @@ function bundle(state) {
 
     getLeafIdArray: () => FileSystem.getLeafIdArray(state),
     getSubIdList: (id) => FileSystem.getSubIdList(id, state),
+
+    getWaitingCounter: () => waiting_counter,
   }
 }
 
@@ -71,6 +73,19 @@ export const sortByMaxRemainingPathLength = mkA(() => state => {
 
 
 const worker = new Worker()
+const workerOnMessageHandler = {}
+
+worker.onmessage = (e) => {
+  const data = e.data
+  const cmd = data.cmd
+  workerOnMessageHandler[cmd](data)
+}
+
+let waiting_counter = 0
+workerOnMessageHandler.pushCounter = ({push_counter}) => {
+  waiting_counter = push_counter
+}
+
 
 export const workerPush = mkA((parent_path, file) => state => {
   worker.postMessage({
@@ -89,11 +104,9 @@ export const workerMakeTree = () => dispatch => {
       cmd:'pull'
     })
 
-    worker.onmessage = (e) => {
-      if (e.data.cmd === 'pull') {
-        dispatch(workerSetStateFromJs(e.data.state))
-        resolve()
-      }
+    workerOnMessageHandler.pull = ({state}) => {
+      dispatch(workerSetStateFromJs(state))
+      resolve()
     }
   })
 }

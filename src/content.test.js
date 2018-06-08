@@ -6,12 +6,19 @@ import * as Loop from 'test/loop'
 import * as Arbitrary from 'test/arbitrary'
 import * as M from 'content'
 
+import * as V5 from '../version/v5/src/content'
+
 
 describe('content', function() {
 
   Loop.immuEqual('(tagsFromJs . tagsToJs) a', () => {
     const a = M.arbitraryTags()
     return [M.tagsFromJs(M.tagsToJs(a)), a]
+  })
+
+  Loop.immuEqual('(lastModifiedFromJs . lastModifiedToJs) a', () => {
+    const a = M.arbitraryLastModified()
+    return [M.lastModifiedFromJs(M.lastModifiedToJs(a)), a]
   })
 
   Loop.immuEqual('(fromJson . toJson) a', () => {
@@ -50,21 +57,26 @@ describe('content', function() {
   })
 
 
-  Loop.equal('compare a (update a b)', () => {
+  Loop.equal('compareSize a (update a b)', () => {
     const a = M.arbitrary()
     const b = M.setSize(M.getSize(a) + 1 + Arbitrary.natural(), a)
-    return [M.compare(a, b), 1]
+    return [M.compareSize(a, b), 1]
   })
 
-  Loop.equal('compare a (update b a)', () => {
+  Loop.equal('compareSize a (update b a)', () => {
     const a = M.arbitrary()
     const b = M.setSize(M.getSize(a) + 1 + Arbitrary.natural(), a)
-    return [M.compare(b, a), -1]
+    return [M.compareSize(b, a), -1]
   })
 
-  Loop.equal('compare a a', () => {
+  Loop.equal('compareSize a a', () => {
     const a = M.arbitrary()
-    return [M.compare(a, a), 0]
+    return [M.compareSize(a, a), 0]
+  })
+
+  Loop.immuEqual('(toCommon . fromV5) a === v5ToCommon a', () => {
+    const a = V5.arbitrary()
+    return [M.toCommon(M.fromV5(a)), M.v5ToCommon(a)]
   })
 
 })

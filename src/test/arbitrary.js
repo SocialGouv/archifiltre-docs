@@ -1,5 +1,5 @@
 
-import { Map, List } from 'immutable'
+import { Map, List, Set } from 'immutable'
 
 import { generateRandomString } from 'random-gen'
 
@@ -54,6 +54,10 @@ export const immutableMap = (arbitraryKey, arbitraryValue) => {
   }
   return map
 }
+
+export const immutableSet = (arbitrary) =>
+  Set(array(arbitrary))
+
 
 
 export const nullable = a => Math.random() <= 0.25 ? null : a()

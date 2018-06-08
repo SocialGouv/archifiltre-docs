@@ -2,49 +2,70 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { RIEInput, RIETextArea, RIETags } from 'riek'
-// import _ from 'lodash'
+
+import TagsCell from 'components/report-cell-tags'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
-import { setContentByID } from 'reducers/database'
+import { setContentByID, addTagged, deleteTagged } from 'reducers/database'
 
-import { typeOf } from 'components/icicle'
-import { makeSizeString } from 'components/ruler'
+import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
-import { mkDummyParent, mkDummyFile } from 'table-tree'
+import { edit_hover_container, edit_hover_pencil, editable_text, element_name, bold, tags, comments } from 'css/app.css'
 
-import { edit_hover_container, edit_hover_pencil, tags, comments } from 'css/app.css'
+import LastModifiedReporter from 'components/last-modified-reporter'
+
 
 import * as Content from 'content'
 import { commit } from 'reducers/root-reducer'
+import * as Color from 'color'
 
 import { tr } from 'dict'
 
+
 const Presentational = props => {
-  let icon, name, real_name, tags_cell, comments_cell
+  let icon, name, real_name, info_cell, tags_cell, comments_cell, name_cell
+
+  const cells_style = {
+    'borderRadius' : '1em',
+    'padding':'0.6em 1em 0 1em',
+    'margin' : '0 0 1em 1em',
+    'fontSize': '0.8em',
+    "minHeight": "8em"
+  }
+
+  const info_cell_style = {
+    'fontSize': '0.8em',
+    'padding' : '2em'
+  }
+
+  const margin_padding_compensate = {
+    margin: "0.2em -0.8em",
+    padding: "0.2em 0.8em",
+  }
 
   if(props.isFocused) {
     const node = props.node
     const n_children = node.get('children')
     const n_name = node.get('name')
     const n_content = node.get('content')
+
+    const c_size = octet2HumanReadableFormat(n_content.get('size'))
+
     const c_alias = n_content.get('alias')
-    const c_tags = new Set(Content.tagsToJs(n_content.get('tags')))
+    const c_tags = n_content.get('tags')
     const c_comments = n_content.get('comments')
 
     const display_name = c_alias === '' ? n_name : c_alias
     const bracket_name = c_alias === '' ? '' : n_name
 
 
-    let type = typeOf(node)
-    let is_folder = type.label === tr("Folder") || type.label === tr("Root")
-
-    let is_parent = props.isZoomed && props.display_root.includes(props.node_id) && n_children.size
+    const is_folder = n_children.size > 0
 
     icon = (
-      <i className={(is_folder ? "fi-folder" : "fi-page")} style={{
+      <i className={(is_folder ? 'fi-folder' : 'fi-page')} style={{
         'fontSize': '3em',
-        'width': '1.7em',
-        'color': is_parent ? typeOf(mkDummyParent()).color : typeOf(node).color,
+        'width': '1.9em',
+        'color': props.fillColor(props.node_id),
         'display': 'table-cell',
         'paddingLeft': '0.5em',
         'verticalAlign':'middle'}}
@@ -52,14 +73,15 @@ const Presentational = props => {
     )
 
     name = (
-      <span style={{'fontWeight':'bold'}} className={edit_hover_container}>
+      <span className={edit_hover_container} style={margin_padding_compensate}>
         <RIEInput
-          value={display_name}
-          change={props.onChangeAlias('new_display_name', props.node_id, n_content)}
+          value={display_name.length > 0 ? display_name : bracket_name}
+          change={props.onChangeAlias('new_display_name', props.node_id, n_content, n_name)}
+          className={editable_text + " " + element_name + " " + bold}
           propName='new_display_name'
         />
         &ensp;
-        <i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} />
+        <i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} />
       </span>
     )
 
@@ -69,84 +91,90 @@ const Presentational = props => {
       </span>
     )
 
-    tags_cell = (
-      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em'}}>
-        <span style={{'fontWeight': 'bold'}}>{tr("Tags")}</span>
-        <span>&ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-        <span style={{'fontStyle': (c_tags.size ? '' : '')}}>
-          <RIETags
-            value={c_tags.size ? c_tags : new Set(["Your", "Tags", "Here"])}
-            change={props.onChangeTags('new_tags', props.node_id, n_content)}
-            className={tags}
-            placeholder={tr("New tag")}
-            propName='new_tags'
-          />
-        </span>
+    info_cell = (
+      <div className="cell small-4" style={info_cell_style}>
+        <b>{tr("Size")} :</b> {c_size}<br />
+        <LastModifiedReporter id={props.node_id} placeholder={false}/>
       </div>
     )
 
+    tags_cell = <TagsCell isDummy={false} cells_style={cells_style} tags={c_tags} node_id={props.node_id} content={n_content} />
+
     comments_cell = (
-      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
-        <span style={{'fontWeight': 'bold'}}>{tr("Comments")}</span>
-        <span>&ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
+      <div className={'cell small-6 ' + edit_hover_container} style={cells_style}>
+        <b>{tr('Comments')}</b>
+        <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
         <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
           <RIETextArea
-            value={c_comments.length ? c_comments : tr("Your text here")+"..."} // ##############" Placeholder ???"
+            value={c_comments.length ? c_comments : tr('Your text here')+'...'} // ##############' Placeholder ???"
             change={props.onChangeComments('new_comments', props.node_id, n_content)}
             className={comments}
             propName='new_comments'
+            validate={(s) => s.replace(/\s/g,'').length > 0}
           />
         </span>
       </div>
     )
-  } else {
+  }
+
+  else {
     icon = (
-      <i className="fi-page-multiple" style={{
+      <i className='fi-page-multiple' style={{
         'fontSize': '3em',
-        'width': '1.7em',
-        'color': typeOf(mkDummyFile()).color,
+        'width': '1.9em',
+        'color': Color.placeholder(),
         'display': 'table-cell',
         'paddingLeft': '0.5em',
         'verticalAlign':'middle'}}
       />
     )
 
-    name = (<span style={{'fontWeight':'bold'}}>{tr("Folder of file's name")}</span>)
+    name = (<span style={{'fontWeight':'bold'}}>{tr('Folder of file\'s name')}</span>)
 
-    real_name = (<span style={{'fontStyle':'italic'}}>({tr("Real name")})</span>)
+    real_name = (<span style={{'fontStyle':'italic'}}>({tr('Real name')})</span>)
 
-    tags_cell = (
-      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
-        <span style={{'fontWeight': 'bold'}}>{tr("Tags")}</span><br />
-        <span style={{'fontStyle':'italic'}}>{tr("Your tags here") + "..."}</span>
+    info_cell = (
+      <div className="cell small-4" style={info_cell_style}>
+        <b>{tr("Size")} :</b> ...<br />
+        <LastModifiedReporter placeholder={true}/>
       </div>
     )
 
+    tags_cell = <TagsCell isDummy={true} cells_style={cells_style} />
+
     comments_cell = (
-      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
-        <span style={{'fontWeight': 'bold'}}>{tr("Comments")}</span><br />
-        <span style={{'fontStyle':'italic'}}>{tr("Your text here") + "..."}</span>
+      <div className='cell small-6' style={cells_style}>
+        <b>{tr('Comments')}</b><br />
+        <span style={{'fontStyle':'italic'}}>{tr('Your text here') + '...'}</span>
       </div>
     )
   }
 
-  return (
-    <div style={{"opacity": (props.isFocused ? 1 : 0.5), 'background': 'white', 'borderRadius': '1em'}}>
+  name_cell = (
+    <div className='cell small-12'>
+      <div style={{'display': 'table', 'width':'100%'}}>
+        {icon}
+        <span style={{'display': 'table-cell', 'verticalAlign':'middle', 'lineHeight':'1.25em'}}>
+          {name}<br />{real_name}
+        </span>
+      </div>
+    </div>
+  );
 
-      <div className="grid-x grid-frame">
-        <div className="cell small-12">
-          <div style={{'display': 'table', 'width':'100%'}}>
-            {icon}
-            <span style={{'display': 'table-cell', 'verticalAlign':'middle', 'lineHeight':'1.25em'}}>
-              {name}<br />{real_name}
-            </span>
+
+  return (
+    <div style={{'opacity': (props.isFocused ? 1 : 0.5), 'background': 'white', 'borderRadius': '1em', minHeight: '11em', maxHeight:'11em'}}>
+      <div className="grid-x grid-frame grid-padding-x">
+        <div className="cell small-8">
+          <div className="grid-x grid-frame" style={{maxHeight:"3.8em"}}>
+            {name_cell}
+          </div>
+          <div className="grid-x grid-frame" style={{padding: '0 1.5em 0 0'}}>
+            {tags_cell}
+            {comments_cell}
           </div>
         </div>
-      </div>
-
-      <div className="grid-x grid-frame">
-          {tags_cell}
-          {comments_cell}
+        {info_cell}
       </div>
 
     </div>
@@ -154,17 +182,18 @@ const Presentational = props => {
 }
 
 const mapStateToProps = state => {
-	let icicle_state = selectIcicleState(state)
+  let icicle_state = selectIcicleState(state)
   let database = selectDatabase(state)
 
   let sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
 
+  const getByID = database.getByID
+
   let node_id = sequence[sequence.length - 1]
-  let node = (icicle_state.isFocused() ? database.getByID(node_id) : {})
+  let node = (icicle_state.isFocused() ? getByID(node_id) : {})
   let total_size = database.volume()
 
 	return {
-    display_root: icicle_state.display_root(),
     isFocused: icicle_state.isFocused(),
     isLocked: icicle_state.isLocked(),
     node,
@@ -174,25 +203,15 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  // (n) => {
-  //   props.editEntryContent(props.node_id, 'display_name',
-  //    n['new_display_name'].length ? n['new_display_name'] : display_name)}
-  const onChangeAlias = (prop_name, id, content) => (n) => {
-    content = content.set('alias', n[prop_name])
+  const onChangeAlias = (prop_name, id, content, old_name) => (n) => {
+    let new_alias = n[prop_name] === old_name ? '' : n[prop_name]
+    new_alias = new_alias.replace(/^\s*|\s*$/g,'')
+
+    content = content.set('alias', new_alias)
     dispatch(setContentByID(id, content))
     dispatch(commit())
   }
 
-  // (n) => props.editEntryContent(props.node_id, 'tags', n['new_tags'])
-  const onChangeTags = (prop_name, id, content) => (n) => {
-    content = content.set('tags', Content.tagsFromJs([...n[prop_name]]))
-    dispatch(setContentByID(id, content))
-    dispatch(commit())
-  }
-
-  // (n) => {
-  //   props.editEntryContent(props.node_id, 'comments',
-  //     n['new_comments'].length ? n['new_comments'] : c_comments)}
   const onChangeComments = (prop_name, id, content) => (n) => {
     content = content.set('comments', n[prop_name])
     dispatch(setContentByID(id, content))
@@ -200,8 +219,7 @@ const mapDispatchToProps = dispatch => {
   }
  	return {
     onChangeAlias,
-    onChangeTags,
-    onChangeComments
+    onChangeComments,
   }
 }
 

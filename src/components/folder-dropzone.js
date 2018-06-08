@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import * as Folder from 'folder'
-import { push, fromJson, makeTree, sort, fromLegacyCsv } from 'reducers/database'
+import { push, fromJson, makeTree, fromLegacyCsv, workerPush, workerMakeTree } from 'reducers/database'
 import { startToLoadFiles, finishedToLoadFiles } from 'reducers/app-state'
 import { commit } from 'reducers/root-reducer'
 
@@ -25,7 +25,12 @@ class Presentational extends React.Component {
 
     this.placeholder = tr('Drop a directory here!')
     this.placeholder_st = tr('You may also drop a JSON file previously exported from Icicle.')
-
+    this.disclaimer = (
+      <em><br />
+        {tr('Compatible with Firefox and Chrome.')}<br />
+        {tr('Your data won\'t leave your computer. Only you can see what happens in this app.')}
+      </em>
+    );
 
     this.handleDrop = this.handleDrop.bind(this)
   }
@@ -40,8 +45,7 @@ class Presentational extends React.Component {
     Folder.asyncHandleDrop(e,this.props.push,this.props.fromJson,this.props.fromLegacyCsv)
       .then(shouldProcess => {
         if (shouldProcess) {
-          this.props.makeTree()
-          this.props.sort()
+          return this.props.makeTree()
         }
       })
       .then(this.props.finishedToLoadFiles)
@@ -65,6 +69,11 @@ class Presentational extends React.Component {
             <div>{this.placeholder_st}</div>
           </TextAlignCenter>
         </div>
+        <div className='cell'>
+          <TextAlignCenter>
+            <div>{this.disclaimer}</div>
+          </TextAlignCenter>
+        </div>
       </div>
     )
   }
@@ -74,11 +83,11 @@ class Presentational extends React.Component {
 const mapStateToProps = state => {
   return {}
 }
- 
+
 const mapDispatchToProps = dispatch => {
   return {
-    push: (...args) => dispatch(push(...args)),
-    makeTree: (...args) => dispatch(makeTree(...args)),
+    push: (...args) => dispatch(workerPush(...args)),
+    makeTree: (...args) => dispatch(workerMakeTree(...args)),
     sort: (...args) => dispatch(sort(...args)),
     fromJson: (...args) => dispatch(fromJson(...args)),
     fromLegacyCsv: (...args) => dispatch(fromLegacyCsv(...args)),

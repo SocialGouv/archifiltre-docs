@@ -1,11 +1,15 @@
 import chai from 'chai'
 const should = chai.should()
 
-import tT from 'table-tree'
-import { List } from 'immutable'
+import { List, Record } from 'immutable'
 
 import * as Loop from 'test/loop'
 import * as Arbitrary from 'test/arbitrary'
+import * as M_ from 'table-tree'
+const M = Object.assign({},M_)
+
+import V5_ from '../version/v5/src/table-tree'
+
 
 
 describe('table-tree', function() {
@@ -24,18 +28,44 @@ describe('table-tree', function() {
   const toStrListHeader = () => List.of(column_name)
   const toJson = JSON.stringify
   const fromJson = JSON.parse
+  const toJs = a=>a
+  const fromJs = a=>a
+
+  const toCommon = a=>a
+  const fromV5 = a=>a
 
   const arbitrary = Arbitrary.natural
 
-  const TT = tT({
+  const C = {
     update,
     compare,
     toStrList,
     toStrListHeader,
     toJson,
     fromJson,
-    arbitrary
-  })
+    arbitrary,
+    toJs,
+    fromJs,
+    toCommon,
+    fromV5,
+  }
+
+  M.arbitrary = M.arbitrary(update, arbitrary)
+  M.update = M.update(update)
+  M.sort = M.sort(compare)
+  M.isSorted = M.isSorted(compare)
+  M.toStrList2 = M.toStrList2(toStrListHeader, toStrList)
+  M.toJson = M.toJson(toJson)
+  M.fromJson = M.fromJson(fromJson)
+  M.toJs = M.toJs(toJs)
+  M.fromJs = M.fromJs(fromJs)
+
+  M.v5ToCommon = M.v5ToCommon(toCommon)
+  M.toCommon = M.toCommon(toCommon)
+  M.fromV5 = M.fromV5(fromV5)
+
+
+
 
   const isSortedToTreeToJs = function(tree) {
     let ans = true
@@ -46,23 +76,33 @@ describe('table-tree', function() {
   }
 
   Loop.immuEqual('(fromJson . toJson) a', () => {
-    const a = TT.arbitrary()
-    return [TT.fromJson(TT.toJson(a)), a]
+    const a = M.arbitrary()
+    return [M.fromJson(M.toJson(a)), a]
+  })
+
+  Loop.immuEqual('(fromJs . toJs) a', () => {
+    const a = M.arbitrary()
+    return [M.fromJs(M.toJs(a)), a]
   })
 
   Loop.equal('(isSorted . sort) a', () => {
-    const a = TT.arbitrary()
-    return [TT.isSorted(TT.sort(a)), true]
+    const a = M.arbitrary()
+    return [M.isSorted(M.sort(a)), true]
   })
 
   Loop.equal('(toJsTree . fromJsTree) a', () => {
-    const a = TT.toJsTree(TT.arbitrary())
-    return [TT.toJsTree(TT.fromJsTree(a)), a]
+    const a = M.toJsTree(M.arbitrary())
+    return [M.toJsTree(M.fromJsTree(a)), a]
   })
 
   Loop.immuEqual('(toList . sort . fromJsTree . toJsTree) a', () => {
-    const a = TT.arbitrary()
-    return [TT.toList(TT.sort(TT.fromJsTree(TT.toJsTree(a)))), TT.toList(TT.sort(a))]
+    const a = M.arbitrary()
+    return [M.toList(M.sort(M.fromJsTree(M.toJsTree(a)))), M.toList(M.sort(a))]
+  })
+
+  Loop.equal('(size . getSubIdList root_id) a === size a', () => {
+    const a = M.arbitrary()
+    return [M.getSubIdList(M.getRootId(a), a).size, M.size(a)]
   })
 
   
@@ -71,78 +111,94 @@ describe('table-tree', function() {
 
 
   it('basic test to improve', function() {
-    let a = TT.init(0)
-    const root_id = TT.getRootId(a)
+    let a = M.init(0)
+    const root_id = M.getRootId(a)
 
-    a = TT.update(['a','b','c'], 1, a)
-    a = TT.update(['a','b','d'], 1, a)
-    a = TT.update(['a','e','f'], 1, a)
+    a = M.update(['a','b','c'], 1, a)
+    a = M.update(['a','b','d'], 1, a)
+    a = M.update(['a','e','f'], 1, a)
 
-    a = TT.sort(a)
+    a = M.sort(a)
 
-    TT.size(a).should.equal(7)
-    TT.depth(a).should.equal(3)
-    // TT.getEntryById(root_id, a).get('content').should.equal(3)
+    M.size(a).should.equal(7)
+    M.depth(a).should.equal(3)
+    // M.getEntryById(root_id, a).get('content').should.equal(3)
 
     // let b = a.toJS()
     // b[root_id].children.should.have.lengthOf(1)
     // b[b[root_id].children[0]].children.should.have.lengthOf(2)
 
-    // TT.remakePath(b[b[root_id].children[0]].children[0], a).toArray()
+    // M.remakePath(b[b[root_id].children[0]].children[0], a).toArray()
     //   .should.deep.equal(['', 'a', 'b'])
 
-    TT.isSorted(a).should.equal(true)
+    M.isSorted(a).should.equal(true)
 
-    isSortedToTreeToJs(TT.toJsTree(a)).should.equal(true)
+    isSortedToTreeToJs(M.toJsTree(a)).should.equal(true)
 
-    TT.toStrList2(a).toJS()
+    M.toStrList2(a).toJS()
       .should.deep.equal([
         ['path', column_name],
+        ['', 3],
+        ['a', 3],
+        ['a/b', 2],
         ['a/b/c', 1],
         ['a/b/d', 1],
+        ['a/e', 1],
         ['a/e/f', 1],
       ])
 
-    TT.fromJson(TT.toJson(a)).toJS().should.deep.equal(a.toJS())
+    M.fromJson(M.toJson(a)).toJS().should.deep.equal(a.toJS())
   })
 
   it('sort children : const compare = (a,b) => a < b Issue', function() {
-    let a = TT.init(0)
-    const root_id = TT.getRootId(a)
+    let a = M.init(0)
+    const root_id = M.getRootId(a)
 
-    a = TT.update(['a','b','c'], 1, a)
-    a = TT.update(['a','b','d'], 2, a)
-    a = TT.update(['a','e','f'], 4, a)
+    a = M.update(['a','b','c'], 1, a)
+    a = M.update(['a','b','d'], 2, a)
+    a = M.update(['a','e','f'], 4, a)
 
-    a = TT.sort(a)
+    a = M.sort(a)
 
-    TT.isSorted(a).should.equal(true)
-    isSortedToTreeToJs(TT.toJsTree(a)).should.equal(true)
+    M.isSorted(a).should.equal(true)
+    isSortedToTreeToJs(M.toJsTree(a)).should.equal(true)
 
-    TT.toJsTree(a)
+    M.toJsTree(a)
       .should.deep.equal({
         name:'',
         content:7,
         parent:null,
         depth:0,
+        parent_path_length:0,
+        max_children_path_length: 3,
+        sum_children_path_length: 9,
         children:[
           {
             name:'a',
             content:7,
             parent:null,
             depth:1,
+            parent_path_length:0,
+            max_children_path_length: 2,
+            sum_children_path_length: 6,
             children:[
               {
                 name:'e',
                 content:4,
                 parent:null,
                 depth:2,
+                parent_path_length:1,
+                max_children_path_length: 1,
+                sum_children_path_length: 1,
                 children:[
                   {
                     name:'f',
                     content:4,
                     parent:null,
                     depth:3,
+                    parent_path_length:2,
+                    max_children_path_length: 0,
+                    sum_children_path_length: 0,
                     children:[]
                   }
                 ]
@@ -152,12 +208,18 @@ describe('table-tree', function() {
                 content:3,
                 parent:null,
                 depth:2,
+                parent_path_length:1,
+                max_children_path_length: 1,
+                sum_children_path_length: 2,
                 children:[
                   {
                     name:'d',
                     content:2,
                     parent:null,
                     depth:3,
+                    parent_path_length:2,
+                    max_children_path_length: 0,
+                    sum_children_path_length: 0,
                     children:[]
                   },
                   {
@@ -165,6 +227,9 @@ describe('table-tree', function() {
                     content:1,
                     parent:null,
                     depth:3,
+                    parent_path_length:2,
+                    max_children_path_length: 0,
+                    sum_children_path_length: 0,
                     children:[]
                   }
                 ]
@@ -177,31 +242,38 @@ describe('table-tree', function() {
 
 
   it('bug sort', function() {
-    let a = TT.init(0)
-    const root_id = TT.getRootId(a)
+    let a = M.init(0)
+    const root_id = M.getRootId(a)
 
-    a = TT.update(['','src','csv.js'], 745, a)
-    a = TT.update(['','src','stats.js'], 1995, a)
-    a = TT.update(['','src','dict.js'], 3392, a)
-    a = TT.update(['','src','table-tree.js'], 3602, a)
-    a = TT.update(['','src','folder.js'], 2504, a)
-    a = TT.update(['','src','app.js'], 1445, a)
-    a = TT.update(['','src','cookie.js'], 174, a)
-    a = TT.update(['','src','api-call.js'], 4782, a)
-    a = TT.update(['','src','request.js'], 536, a)
-    a = TT.update(['','src','query-string.js'], 1166, a)
-    a = TT.update(['','src','base64.js'], 186, a)
-    a = TT.update(['','src','random-gen.js'], 441, a)
-    a = TT.update(['','src','scheduler.js'], 931, a)
-    a = TT.update(['','src','table-tree.test.js'], 2798, a)
+    a = M.update(['','src','csv.js'], 745, a)
+    a = M.update(['','src','stats.js'], 1995, a)
+    a = M.update(['','src','dict.js'], 3392, a)
+    a = M.update(['','src','table-tree.js'], 3602, a)
+    a = M.update(['','src','folder.js'], 2504, a)
+    a = M.update(['','src','app.js'], 1445, a)
+    a = M.update(['','src','cookie.js'], 174, a)
+    a = M.update(['','src','api-call.js'], 4782, a)
+    a = M.update(['','src','request.js'], 536, a)
+    a = M.update(['','src','query-string.js'], 1166, a)
+    a = M.update(['','src','base64.js'], 186, a)
+    a = M.update(['','src','random-gen.js'], 441, a)
+    a = M.update(['','src','scheduler.js'], 931, a)
+    a = M.update(['','src','table-tree.test.js'], 2798, a)
 
-    a = TT.sort(a)
+    a = M.sort(a)
 
-    TT.isSorted(a).should.equal(true)
-    isSortedToTreeToJs(TT.toJsTree(a)).should.equal(true)
+    M.isSorted(a).should.equal(true)
+    isSortedToTreeToJs(M.toJsTree(a)).should.equal(true)
 
-    // TT.toJsTree(a).should.deep.equal({})
+    // M.toJsTree(a).should.deep.equal({})
   })
 
+  
+  const V5 = V5_(C)
+
+  Loop.immuEqual('(toCommon . fromV5) a === v5ToCommon a', () => {
+    const a = V5.arbitrary()
+    return [M.toCommon(M.fromV5(a)), M.v5ToCommon(a)]
+  })
 
 })

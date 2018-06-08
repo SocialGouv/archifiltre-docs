@@ -5,230 +5,225 @@ import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 import { setNoDisplayRoot } from 'reducers/icicle-state'
 
 import IcicleRect from 'components/icicle-rect'
+import * as Color from 'color'
 
 import { tr } from 'dict'
 
 const icicle_style = {
-  position: 'relative',
   stroke: '#fff',
-  // 'background-color': 'rgba(100,100,100,0.1)'
 }
 
-export const icicle_dims = {
-  w:800,
-  h:300
-}
 
-const types = {
-    presentation : {label: tr("Presentation"), color:"#f75b40"},
-    parent_folder : {label: tr("Root"), color: "#f99a0b"},
-    folder : {label: tr("Folder"), color:"#fabf0b"},
-    spreadsheet : {label: tr("Spreadsheet"), color:"#52d11a"},
-    email: {label: tr("E-mail"), color:"#13d6f3"},
-    doc : {label: tr("Document"), color:"#4c78e8"},
-    multimedia: {label: tr("Multimedia"), color:"#b574f2"},
-    otherfiles : {label: tr("Others"), color:"#8a8c93"}
-  };
-
-
-const getChildrenSize = a => a.size
-const getChildrenElem = (i,a) => a.get(i)
-
-class Presentational extends React.Component {
+class Icicle extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.root_id = props.root_id
-    this.max_tree_depth = props.max_depth
-    this.isZoomed = this.props.isZoomed
-
-    this.getByID = props.getByID
-
-    this.plot = this.plot.bind(this)
-
-    console.log("profondeur : ", this.max_tree_depth)
-
-    setNoDisplayRoot()
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if(nextProps.display_root !== this.props.display_root) return true;
-    return false;
+  makeKey(id) {
+    return 'icicle-display-root-'+id
   }
 
-
-  plot(root, root_seq, tree_depth) {
-    console.time("render icicle")
-    let icicle = this.positionNodes(root, root_seq, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [], this.getByID, this.isZoomed)
-    console.timeEnd("render icicle")
-    return icicle
-  }
-
-
-  positionNodes(root_id, root_seq, left, right, top, bottom, tree_depth, sequence){
-    const root = this.getByID(root_id)
-    const r_name = root.get('name')
-    const r_depth = root.get('depth')
-    const r_children = root.get('children')
-    const r_content = root.get('content')
-    const root_size = r_content.get('size')
-
-    let height = bottom - top
-    let width = right - left
-    let new_sequence = sequence.concat(root_id)
-
-    let root_dims = {
-      x: left,
-      y: top,
-      dx: (isNaN(width) ? 0 : width),
-      dy: height/tree_depth
-    }
-
-    let res = (
-      root_dims.dx < 1 ?
-      []
-      : //######################################" change key with entry id"
-      [<IcicleRect key={r_name + r_depth} dims={root_dims} node_id={root_id} node={root} node_sequence={new_sequence} />])
-
-
-    if (getChildrenSize(r_children) && root_dims.dx > 1) {
-
-      if(this.props.isZoomed && root_seq.length > 1){
-        let child = this.getByID(root_seq[1])
-
-        res.push(this.positionNodes(
-          root_seq[1],
-          root_seq.slice(1,root_seq.length),
-          left,
-          right,
-          top+height/tree_depth,
-          bottom,
-          tree_depth-1,
-          new_sequence))
-      }
-
-      else{
-      let x_cursor = left
-        for (let i = 0; i <= getChildrenSize(r_children) - 1; ++i) {
-          const child_id = getChildrenElem(i, r_children)
-          const child = this.getByID(child_id)
-          const child_size = child.content.size
-
-          res.push(this.positionNodes(
-            child_id,
-            root_seq,
-            x_cursor,
-            x_cursor+child_size/root_size*width,
-            top+height/tree_depth,
-            bottom,
-            tree_depth-1,
-            new_sequence))
-
-          x_cursor = x_cursor+child_size/root_size*width
-        }
-      }
-    }
-
-    return res
+  removeRootId(arr) {
+    return arr.slice(1)
   }
 
   render() {
-    return (
-      <div id='chart' style={icicle_style}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
-          <g id="container">
-            {this.plot(this.props.root_id, (this.props.isZoomed ? this.props.display_root : []), this.max_tree_depth + 1)}
+    const x = 0
+    let y = 0
+    const width = this.props.icicle_width
+    let height = this.props.icicle_height
+    const trueFHeight = this.props.trueFHeight
+    let id = this.props.root_id
+    let display_root_components = []
+    const display_root = this.removeRootId(this.props.display_root)
+
+    if (display_root.length) {
+      id = display_root.slice(-1)[0]
+      display_root_components = display_root.map(node_id => {
+        const x_node = x
+        const y_node = y
+        const dx_node = width
+        const dy_node = trueFHeight(node_id)
+        y += dy_node
+        height -= dy_node
+
+        return (
+          <g key={this.makeKey(node_id)}>
+            <IcicleRect
+              node_id={node_id}
+              x={x_node}
+              y={y_node}
+              dx={dx_node}
+              dy={dy_node}
+              fillColor={this.props.fillColor}
+              nodeSequence={this.props.nodeSequence}
+            />
           </g>
-        </svg>
-      </div>)
+        )
+      })
+    }
+
+    return (
+      <g>
+        {display_root_components}
+        <IcicleRecursive
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          id={id}
+          fWidth={this.props.fWidth}
+          normalizeWidth={this.props.normalizeWidth}
+          trueFHeight={trueFHeight}
+          getChildrenIdFromId={this.props.getChildrenIdFromId}
+          fillColor={this.props.fillColor}
+          nodeSequence={this.props.nodeSequence}
+        />
+      </g>
+    )
   }
 }
 
-export const typeOf = (node) => {
-  
-  if (node.get('children').size) {
-    if (node.get('children').get(0) === "-1") {
-      return types.parent_folder;
-    } else {
-      return types.folder;
-    }
+
+class IcicleRecursive extends React.PureComponent {
+  constructor(props) {
+    super(props)
   }
 
-  else {
-    let m = node.get('name').match(/\.[^\.]*$/)
+  makeKey(id) {
+    return 'icicle-recursive-'+id
+  }
 
-    if (m == null)
-      m = [""]
+  computeCumulative(array) {
+    const ans = [0]
+    for (let i = 0; i < array.length - 1; i++) {
+      ans.push(array[i] + ans[i])
+    }
+    return ans
+  }
 
-    switch(m[0].toLowerCase()){
-      case ".xls": //formats Microsoft Excel
-      case ".xlsx":
-      case ".xlsm":
-      case ".xlw": // dont les vieux
-      case ".xlt":
-      case ".xltx":
-      case ".xltm":
-      case ".csv": // format Csv
-      case ".ods": //formats OOo/LO Calc
-      case ".ots":
-        return types.spreadsheet;
-      case ".doc":  //formats Microsoft Word
-      case ".docx":
-      case ".docm":
-      case ".dot":
-      case ".dotx":
-      case ".dotm":
-      case ".odt": // formats OOo/LO Writer
-      case ".ott":
-      case ".txt": // formats texte standard
-      case ".rtf":
-        return types.doc;
-      case ".ppt": // formats Microsoft PowerPoint
-      case ".pptx":
-      case ".pptm":
-      case ".pps":
-      case ".ppsx":
-      case ".pot":
-      case ".odp": // formats OOo/LO Impress
-      case ".otp":
-      case ".pdf": // On considère le PDF comme une présentation
-        return types.presentation;
-      case ".eml": //formats d'email et d'archive email
-      case ".msg":
-      case ".pst":
-        return types.email;
-      case ".jpeg": //formats d'image
-      case ".jpg":
-      case ".gif":
-      case ".png":
-      case ".bmp":
-      case ".tiff":
-      case ".mp3": //formats audio
-      case ".wav":
-      case ".wma":
-      case ".avi":
-      case ".wmv": //formats vidéo
-      case ".mp4":
-      case ".mov":
-      case ".mkv":
-        return types.multimedia;
-      default:
-        return types.otherfiles;
+
+  render() {
+    const children = this.props.getChildrenIdFromId(this.props.id)
+    const children_width = this.props.normalizeWidth(children.map(this.props.fWidth))
+      .map(a=>a*this.props.width)
+    const cumulated_children_width = this.computeCumulative(children_width)
+
+    const children_height = children.map(this.props.trueFHeight)
+
+    const children_component = children.map((child_id,i) => {
+      const x_child = this.props.x + cumulated_children_width[i]
+      const width_child = children_width[i]
+      const width_threshold = 1
+
+      if (width_child < width_threshold) {
+        return (<g key={this.makeKey(child_id)} />)
       }
-    }
+
+      const y_child = this.props.y
+      const height_child = children_height[i]
+
+      const x_prime = x_child
+      const width_prime = width_child
+      const y_prime = y_child + height_child
+      const height_prime = this.props.height - height_child
+      return (
+        <g key={this.makeKey(child_id)}>
+          <IcicleRect
+            node_id={child_id}
+            x={x_child}
+            y={y_child}
+            dx={width_child}
+            dy={height_child}
+            fillColor={this.props.fillColor}
+            nodeSequence={this.props.nodeSequence}
+          />
+          <IcicleRecursive
+            x={x_prime}
+            y={y_prime}
+            width={width_prime}
+            height={height_prime}
+            id={child_id}
+            fWidth={this.props.fWidth}
+            normalizeWidth={this.props.normalizeWidth}
+            trueFHeight={this.props.trueFHeight}
+            getChildrenIdFromId={this.props.getChildrenIdFromId}
+            fillColor={this.props.fillColor}
+            nodeSequence={this.props.nodeSequence}
+          />
+        </g>
+      )
+    })
+
+    return (
+      <g>
+        {children_component}
+      </g>
+    )
   }
+}
+
+
+
+
+class Presentational extends React.PureComponent {
+  constructor(props) {
+    super(props)
+
+    this.getChildrenIdFromId = this.getChildrenIdFromId.bind(this)
+    this.nodeSequence = this.nodeSequence.bind(this)
+  }
+
+  getChildrenIdFromId(id) {
+    const node = this.props.getByID(id)
+    return node.get('children').toJS()
+  }
+
+  nodeSequence(id) {
+    return this.props.getIDPath(id).toJS()
+  }
+
+  render() {
+    console.time('render icicle')
+    const icicle = (
+      <Icicle
+        icicle_width={this.props.icicle_width}
+        icicle_height={this.props.icicle_height}
+        root_id={this.props.root_id}
+        display_root={this.props.display_root}
+        fWidth={this.props.fWidth}
+        normalizeWidth={this.props.normalizeWidth}
+        trueFHeight={this.props.trueFHeight}
+        getChildrenIdFromId={this.getChildrenIdFromId}
+        fillColor={this.props.fillColor}
+        nodeSequence={this.nodeSequence}
+      />
+    )
+    console.timeEnd('render icicle')
+
+
+    return (
+      <div style={icicle_style}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
+          <g>
+            {icicle}
+          </g>
+        </svg>
+      </div>
+    )
+  }
+}
 
 const mapStateToProps = state => {
-  let database = selectDatabase(state)
-  let icicle_state = selectIcicleState(state)
+  const database = selectDatabase(state)
+  const icicle_state = selectIcicleState(state)
+
 
   return {
-    max_depth: database.max_depth(),
     getByID: database.getByID,
-    root_id: database.root_id(),
+    root_id: database.rootId(),
     display_root: icicle_state.display_root(),
-    isZoomed: icicle_state.isZoomed(),
-    isFocused: icicle_state.isFocused(),
-    hover_sequence: icicle_state.hover_sequence()
+    getIDPath: database.getIDPath,
   }
 }
  

@@ -1,7 +1,8 @@
 
 import { request } from 'request'
-import { b64Toutf8, utf8Tob64 } from 'base64'
 import { getCookie } from 'cookie'
+
+import * as Base64 from 'base64'
 
 const shouldLog = !getCookie().impicklerick
 
@@ -89,7 +90,7 @@ export const signUp = (account_name,password) => {
     method:'POST',
     url:'http://localhost:3000/basic/account',
     headers:{
-      Authorization:'Basic '+utf8Tob64(account_name+':'+password)
+      Authorization:'Basic '+Base64.fromUtf8(account_name+':'+password)
     }
   })
   .then(() => signIn(account_name,password))
@@ -107,7 +108,7 @@ const getToken = () => {
     method:'GET',
     url:'http://localhost:3000/basic/account',
     headers:{
-      Authorization:'Basic '+utf8Tob64(ref.account_name+':'+ref.password)
+      Authorization:'Basic '+Base64.fromUtf8(ref.account_name+':'+ref.password)
     }
   })
   .then(res => {

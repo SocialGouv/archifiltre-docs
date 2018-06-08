@@ -25,7 +25,12 @@ class Presentational extends React.Component {
 
     this.placeholder = tr('Drop a directory here!')
     this.placeholder_st = tr('You may also drop a JSON file previously exported from Icicle.')
-
+    this.disclaimer = (
+      <em><br />
+        {tr('Compatible with Firefox and Chrome.')}<br />
+        {tr('Your data won\'t leave your computer. Only you can see what happens in this app.')}
+      </em>
+    );
 
     this.handleDrop = this.handleDrop.bind(this)
   }
@@ -62,6 +67,11 @@ class Presentational extends React.Component {
         <div className='cell'>
           <TextAlignCenter>
             <div>{this.placeholder_st}</div>
+          </TextAlignCenter>
+        </div>
+        <div className='cell'>
+          <TextAlignCenter>
+            <div>{this.disclaimer}</div>
           </TextAlignCenter>
         </div>
       </div>

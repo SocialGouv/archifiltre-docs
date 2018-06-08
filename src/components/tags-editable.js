@@ -13,10 +13,12 @@ import { setContentByID, addTagged, deleteTagged } from 'reducers/database'
 import { commit } from 'reducers/root-reducer'
 import { tr } from 'dict'
 
-const getLastValue = (set) => {
-  let value;
-  for(value of set);
-  return value;
+const input_style = {
+  width: "7em",
+  border: "none",
+  background: "none",
+  outline: "none",
+  borderBottom: "3px solid rgb(5, 120, 200)"
 }
 
 class Presentational extends React.Component {
@@ -75,6 +77,7 @@ class Presentational extends React.Component {
       let input_box = (
         <input
         key="__input__"
+        style={input_style}
         onMouseUp={(e) => {e.stopPropagation();}}
         onKeyDown={keyDown}
         placeholder={tr("New tag")}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { mkB } from 'components/button'
+import { mkB, mkRB } from 'components/button'
 
 import { setNoDisplayRoot } from 'reducers/icicle-state'
 import { setNoFocus } from 'reducers/icicle-state'
@@ -12,17 +12,25 @@ import * as Color from 'color'
 
 import { tr } from 'dict'
 
+
 const Presentational = props => {
 
-  let div_style = {
-    opacity: props.isZoomed ? '1' : '0',
-    transition : 'opacity 0.2s ease-out',
-    WebkitTransition : 'opacity 0.2s ease-out',
+  const button_style = {
+    transition : 'all 0.2s ease-out',
+    WebkitTransition : 'all 0.2s ease-out',
+    padding:'0.3em 0.45em',
+    margin:'0',
+    borderRadius: '2em'
   }
-  
-  let cursor_style = {cursor: props.isZoomed ? 'pointer' : 'default'}
 
-  return <div style={div_style}>{mkB(props.backToRoot, tr("Back to root"), true, Color.parentFolder(), cursor_style)}</div>
+  let cursor_style = {cursor: props.isZoomed ? 'pointer' : 'default', padding:'0.3em 0.45em'}
+
+  return mkB(
+    props.backToRoot,
+    (<span><i className="fi-zoom-out" />&ensp;{tr('Back to root')}</span>),
+    props.isZoomed,
+    Color.parentFolder(),
+    button_style)
 }
 
 

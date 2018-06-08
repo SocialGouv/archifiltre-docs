@@ -40,7 +40,7 @@ class Presentational extends React.Component {
   render() {
     if(this.props.isDummy) {
       return(
-        <div className='cell small-4' style={this.props.cells_style}>
+        <div className='cell small-6' style={this.props.cells_style}>
           <b>{tr('Tags')}</b><br />
           <span style={{'fontStyle':'italic'}}>{tr('Your tags here') + '...'}</span>
         </div>
@@ -51,7 +51,7 @@ class Presentational extends React.Component {
       return (
         <div
         ref={this.setWrapperRef}
-        className={'cell small-4 ' + edit_hover_container}
+        className={'cell small-6 ' + edit_hover_container}
         style={this.props.cells_style}
         onClick={(e) => {e.stopPropagation(); if(!this.props.isEditingTags) this.props.onClickTagsCells();}}>
           <b>{tr('Tags')}</b>

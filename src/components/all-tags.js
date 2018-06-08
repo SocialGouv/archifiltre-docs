@@ -57,7 +57,7 @@ const Presentational = props => {
   }
 
   return (
-    <div style={{'opacity': (props.tags.size > 0 ? 1 : 0.5), 'background': 'white', 'borderRadius': '1em', height:'100%', padding:'0.5em 1em'}}>
+    <div style={{'opacity': (props.tags.size > 0 ? 1 : 0.5), 'background': 'white', 'borderRadius': '1em', height:'100%', padding:'0.5em 0.5em'}}>
       <TextAlignCenter>
         <b>{tr('All tags')}</b>
       </TextAlignCenter>

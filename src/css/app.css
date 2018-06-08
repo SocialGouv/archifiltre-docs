@@ -1,3 +1,18 @@
+.root_button {
+  cursor: pointer;
+}
+
+.active_button {
+  -webkit-transition : filter 0.25s ease-out;
+  transition : filter 0.25s ease-out;
+  outline: none;
+}
+
+.active_button:hover {
+  -webkit-filter: brightness(85%);
+  filter: brightness(120%);
+}
+
 .comments {
   font-size: 1em;
   border: none;
@@ -8,22 +23,37 @@
 .comments:focus {
   font-size: 1em;
   border: none;
+  background: none;
+  outline: none;
+  width: 90%;
+  padding: 0.2em;
 }
 
 .tags div {
+  font-weight: bold;
   display: inline-block;
-  margin-right: 0.3em;
   color: white;
-  background-color: rgb(40,40,40);
+  background-color: rgb(5, 120, 200);
   border-radius: 0.8em;
-  padding-left:0.7em;
-  padding-right:0.5em;
+  padding: 0 1em;
+  margin: 0 0.3em 0.3em 0;
 }
 
 .tags div div {
   background: none;
-  padding-left: 0.5em;
-  padding-right: 0em;
+  padding: 0;
+  margin: 0 0 0 0.5em;
+}
+
+.tags_count {
+  font-weight: bold;
+  display: inline-block;
+  color: white;
+  background-color: rgb(0, 90, 170);
+  border-radius: 0.8em;
+  margin-right: 0.3em;
+  min-width: 2em;
+  text-align: center;
 }
 
 .edit_hover_container .edit_hover_pencil{
@@ -31,6 +61,40 @@
 }
 .edit_hover_container:hover .edit_hover_pencil{
   visibility: visible;
+}
+
+.edit_hover_container:hover {
+  background-color: rgba(190, 200, 180, 0.3);
+  border-radius: 1em;
+  cursor: text;
+}
+
+.edit_hover_container {
+}
+
+.editable_text:focus {
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.session_name {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 1.2em;
+  min-width: 80%;
+  max-width: 80%;
+  height: 1.2em;
+  padding-bottom: 0.5em;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.element_name {
+  display: inline-block;
+  min-width: 30%;
 }
 
 body {

@@ -3,7 +3,9 @@
 import duck from 'reducers/duck'
 
 import { request } from 'request'
-import { b64Toutf8, utf8Tob64 } from 'base64'
+
+import * as Base64 from 'base64'
+
 
 import { selectApi } from 'reducers/root-reducer'
 import { Record } from 'immutable'
@@ -51,7 +53,7 @@ export const signUp = (account_name,password) => (dispatch, getState) => {
     method:'POST',
     url:'http://localhost:3000/basic/account',
     headers:{
-      Authorization:'Basic '+utf8Tob64(account_name+':'+password)
+      Authorization:'Basic '+Base64.fromUtf8(account_name+':'+password)
     }
   })
   .then(() => dispatch(signIn(account_name,password)))
@@ -69,7 +71,7 @@ const getToken = () => (dispatch, getState) => {
     method:'GET',
     url:'http://localhost:3000/basic/account',
     headers:{
-      Authorization:'Basic '+utf8Tob64(state[key].account_name+':'+state[key].password)
+      Authorization:'Basic '+Base64.fromUtf8(state[key].account_name+':'+state[key].password)
     }
   })
   .then(res => {

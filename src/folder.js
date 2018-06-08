@@ -1,13 +1,15 @@
 
 import { mkScheduler } from 'scheduler'
+import * as FileUti from 'file-uti'
 
 const sch = mkScheduler()
 
 export function asyncHandleDrop(event, insert2DB, loadJson2DB, loadLegacyCsv2DB) {
   event.preventDefault()
-  let items = event.dataTransfer.items
+  const items = event.dataTransfer.items
 
-  let entry = items[0].webkitGetAsEntry()
+
+  const entry = items[0].webkitGetAsEntry()
   if (isJsonFile(entry)) {
     return readFileFromEntry(entry)
       .then(loadJson2DB)
@@ -15,11 +17,11 @@ export function asyncHandleDrop(event, insert2DB, loadJson2DB, loadLegacyCsv2DB)
   } else if (isLegacyCsvFile(entry)) {
     return readFileFromEntry(entry)
       .then(loadLegacyCsv2DB)
-      .then(()=>true)
+      .then(()=>false)
   } else {
-    let promise_array = []
+    const promise_array = []
     for (let i=0; i<items.length; i++) {
-      let entry = items[i].webkitGetAsEntry()
+      const entry = items[i].webkitGetAsEntry()
       promise_array.push(traverseFileTree(insert2DB, entry, ''))
     }
     return Promise.all(promise_array)
@@ -47,7 +49,7 @@ function hasLegacyCsvExt(s) {
 function readFileFromEntry(entry) {
   return new Promise((resolve, reject) => {
     entry.file(file => {
-      readFile(file).then(content => {
+      FileUti.readAsText(file).then(content => {
         resolve(content)
       })
     }, e => {
@@ -57,69 +59,29 @@ function readFileFromEntry(entry) {
   })
 }
 
-// function loadLegacyCsv(loadLegacyCsv2DB, entry) {
-//   return readFileFromEntry(entry).then(loadLegacyCsv2DB)
-// }
 
-// function loadJson(loadJson2DB, entry) {
-//   return new Promise((resolve, reject) => {
-//     entry.file(file => {
-//       readFile(file).then(json => {
-//         loadJson2DB(json)
-//         resolve()
-//       })
-//     }, e => {
-//       console.log(e)
-//       resolve()
-//     })
-//   })
-// }
-
-export function readFile(file) {
-  return new Promise((resolve, reject) => {
-    let file_reader = new FileReader()
-    file_reader.onload = e => {
-      resolve(e.currentTarget.result)
-    }
-    file_reader.readAsText(file)
-  })
-  
-}
-
-
-function traverseFileTree(insert2DB, entry, path) {
+function traverseFileTree(insert2DB, entry, parent_path) {
   if (entry.isFile) {
-    return traverseFile(insert2DB, entry, path)
+    return traverseFile(insert2DB, entry, parent_path)
   } else if (entry.isDirectory) {
-    return traverseFolder(insert2DB, entry, path)
+    return traverseFolder(insert2DB, entry, parent_path)
   }
 }
 
-function traverseFile(insert2DB, entry, path) {
+
+function traverseFile(insert2DB, entry, parent_path) {
   return new Promise((resolve, reject) => sch.schedule(() => {
     entry.file(file => {
-      insert2DB(
-        path + file.name,
-        {
-          size:file.size,
-          last_modified:file.lastModified,
-          error_is_file:null
-        }
-      )
+      insert2DB(parent_path, file)
       resolve()
     }, e => {
-      insert2DB(
-        path + entry.name,
-        {
-          error_is_file:true
-        }
-      )
+      insert2DB(parent_path, new File([''], entry.name))
       resolve()
     })
   }))
 }
 
-function traverseFolder(insert2DB, entry, path) {
+function traverseFolder(insert2DB, entry, parent_path) {
   return new Promise((resolve, reject) => sch.schedule(() => {
     let promise_array = []
     let dirReader = entry.createReader()
@@ -127,19 +89,14 @@ function traverseFolder(insert2DB, entry, path) {
       dirReader.readEntries(entries => {
         if (entries.length > 0) {
           entries.forEach(e =>
-            promise_array.push(traverseFileTree(insert2DB, e, path+entry.name+"/"))
+            promise_array.push(traverseFileTree(insert2DB, e, parent_path+entry.name+'/'))
           )
           doBatch()
         } else {
           Promise.all(promise_array).then(()=>resolve())
         }
       }, e => {
-        insert2DB(
-          path + entry.name,
-          {
-            error_is_file:false
-          }
-        )
+        insert2DB(parent_path, new File([''], entry.name+'/'))
         resolve()
       })
     }

@@ -1,3 +1,4 @@
+repo = https://github.com/jeanbaptisteassouad/cheapExp.git
 image_name = cheap-exp
 pwd = $(shell pwd)
 
@@ -40,6 +41,7 @@ cleanContainer:
 
 TP = './src/**/*.test.js'
 
+# You need to fetchAndPatch before launching test
 test: dev
 	sudo docker run \
 		--network host \
@@ -47,7 +49,10 @@ test: dev
 		$(image_name):dev \
 		npm test $(TP)
 
-
-
-
-
+# Use this to make patchs :
+# diff -Naur v5 new-v5 > v5.patch
+fetchAndPatch:
+	rm -fr version
+	git clone -b v5 $(repo) version/v5
+	cp patch/v5.patch version
+	patch -p 0 -d version -i v5.patch

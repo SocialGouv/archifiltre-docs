@@ -8,13 +8,11 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 RUN npm install
-
 COPY . .
 
+Run make fetchAndPatch
 
 CMD ["./startupDev.bash"]
-
-
 
 
 FROM dev as prod

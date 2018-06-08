@@ -14,7 +14,7 @@ const cell_style = {
 class Presentational extends React.Component {
   constructor(props) {
     super(props)
-    this.thres = 60
+    this.thres = 30
     this.last_ms = 0
 
     this.shouldComponentUpdate = this.shouldComponentUpdate.bind(this)
@@ -50,7 +50,7 @@ class Presentational extends React.Component {
 const mapStateToProps = state => {
   let database = selectDatabase(state)
   return {
-    nb_files: database.size(),
+    nb_files: database.getWaitingCounter(),
   }
 }
 

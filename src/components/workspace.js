@@ -73,7 +73,7 @@ class Presentational extends React.PureComponent {
   render() {
     return (
       <div>
-        <div className="grid-x grid-frame grid-padding-x">
+        <div className="grid-x grid-padding-x">
           <div className='cell small-10'>
             <Report
               fillColor={this.fillColor}
@@ -83,12 +83,12 @@ class Presentational extends React.PureComponent {
             <AllTags />
           </div>
         </div>
-        <div className='grid-x grid-frame'>
+        <div className='grid-x'>
           <div className='cell auto'></div>
           <NavigationBar />
           <div className='cell auto'></div>
         </div>
-        <div className='grid-x grid-frame'>
+        <div className='grid-x'>
           <div
             onClick={(e) => {this.props.unlock(); this.props.setNoFocus();}}
             onMouseLeave={(e) => {if(!this.props.isLocked) this.props.setNoFocus();}}

@@ -7,10 +7,12 @@ import * as Content from 'content'
 
 let promise_array
 let state
+let push_counter
 
 const init = () => {
   promise_array = []
   state = FileSystem.empty()
+  push_counter = 0
 }
 
 init()
@@ -27,6 +29,7 @@ onmessage = function(e) {
     default:
   }
 }
+
 
 const pushHandler = (e) => {
   const promise = new Promise((resolve, reject) => {
@@ -45,6 +48,12 @@ const pushHandler = (e) => {
     //   resolve()
     // })
     state = FileSystem.pushOnQueue(path, Content.create(content), state)
+    push_counter++
+    postMessage({
+      cmd:'pushCounter',
+      push_counter,
+    })
+
     resolve()
   })
 

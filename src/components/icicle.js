@@ -2,16 +2,17 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 
-import { setNoDisplayRoot } from 'reducers/icicle-state'
+import { setNoDisplayRoot, setNoFocus, unlock } from 'reducers/icicle-state'
 
 import IcicleRect from 'components/icicle-rect'
+import Ruler from 'components/ruler'
+import BreadCrumbs from 'components/breadcrumbs'
+
+import { animate, clear } from 'animation-daemon' 
 import * as Color from 'color'
 
 import { tr } from 'dict'
 
-const icicle_style = {
-  stroke: '#fff',
-}
 
 
 class Icicle extends React.PureComponent {
@@ -30,8 +31,8 @@ class Icicle extends React.PureComponent {
   render() {
     const x = 0
     let y = 0
-    const width = this.props.icicle_width
-    let height = this.props.icicle_height
+    const width = this.props.dx
+    let height = this.props.dy
     const trueFHeight = this.props.trueFHeight
     let id = this.props.root_id
     let display_root_components = []
@@ -170,8 +171,67 @@ class Presentational extends React.PureComponent {
   constructor(props) {
     super(props)
 
+    this.state = {
+      view_box_width:1000,
+      view_box_height:300,
+    }
+
+    this.ref = this.ref.bind(this)
+
+
     this.getChildrenIdFromId = this.getChildrenIdFromId.bind(this)
     this.nodeSequence = this.nodeSequence.bind(this)
+    this.fWidth = this.fWidth.bind(this)
+    this.normalizeWidth = this.normalizeWidth.bind(this)
+    this.trueFHeight = this.trueFHeight.bind(this)
+
+    this.icicleWidth = this.icicleWidth.bind(this)
+    this.icicleHeight = this.icicleHeight.bind(this)
+    this.breadcrumbsWidth = this.breadcrumbsWidth.bind(this)
+    this.rulerHeight = this.rulerHeight.bind(this)
+
+    this.onClickHandler = this.onClickHandler.bind(this)
+    this.onMouseLeaveHandler = this.onMouseLeaveHandler.bind(this)
+  }
+
+  icicleWidth() {
+    return this.state.view_box_width*8/12
+  }
+
+  icicleHeight() {
+    return this.state.view_box_height*8/12
+  }
+
+  breadcrumbsWidth() {
+    return this.state.view_box_width - this.icicleWidth()
+  }
+
+  rulerHeight() {
+    return this.state.view_box_height - this.icicleHeight()
+  }
+
+  ref(dom_element) {
+    let animation_id
+    if (dom_element) {
+      const visible = () => true
+      const measure = () => {
+        try {
+          const width = dom_element.width.baseVal.value
+          const height = dom_element.height.baseVal.value
+          this.setState({
+            view_box_width: width,
+            view_box_height: height,
+          })
+        } catch(e) {
+
+        }
+      }
+      const mutate = () => {}
+
+      animation_id = animate(visible,measure,mutate)
+    } else {
+      clear(animation_id)
+    }
   }
 
   getChildrenIdFromId(id) {
@@ -183,33 +243,100 @@ class Presentational extends React.PureComponent {
     return this.props.getIDPath(id).toJS()
   }
 
+  fWidth(id) {
+    const node = this.props.getByID(id)
+    return node.get('content').get('size')
+  }
+
+  normalizeWidth(arr) {
+    const sum = arr.reduce((a,b)=>a+b,0)
+    const ans = arr.map(a=>a/sum)
+    return ans
+  }
+
+  trueFHeight(id) {
+    const icicle_height = this.icicleHeight()
+    return icicle_height/this.props.max_depth
+  }
+
+
+  onClickHandler(e) {
+    this.props.unlock()
+    this.props.setNoFocus()
+  }
+  onMouseLeaveHandler(e) {
+    if (!this.props.isLocked) {
+      this.props.setNoFocus()
+    }
+  }
+
   render() {
+    const view_box_width = this.state.view_box_width
+    const view_box_height = this.state.view_box_height
+
+    const icicle_width = this.icicleWidth()
+    const icicle_height = this.icicleHeight()
+
+    const breadcrumbs_width = this.breadcrumbsWidth()
+    const ruler_height = this.rulerHeight()
+
     console.time('render icicle')
     const icicle = (
-      <Icicle
-        icicle_width={this.props.icicle_width}
-        icicle_height={this.props.icicle_height}
-        root_id={this.props.root_id}
-        display_root={this.props.display_root}
-        fWidth={this.props.fWidth}
-        normalizeWidth={this.props.normalizeWidth}
-        trueFHeight={this.props.trueFHeight}
-        getChildrenIdFromId={this.getChildrenIdFromId}
-        fillColor={this.props.fillColor}
-        nodeSequence={this.nodeSequence}
-      />
+      <g style={{backgroundColor:'red'}}>
+        <Icicle
+          dx={icicle_width}
+          dy={icicle_height}
+
+          root_id={this.props.root_id}
+          display_root={this.props.display_root}
+          fWidth={this.fWidth}
+          normalizeWidth={this.normalizeWidth}
+          trueFHeight={this.trueFHeight}
+          getChildrenIdFromId={this.getChildrenIdFromId}
+          fillColor={this.props.fillColor}
+          nodeSequence={this.nodeSequence}
+        />
+
+        <Ruler
+          y={icicle_height}
+          dx={icicle_width}
+          dy={ruler_height}
+
+          fillColor={this.props.fillColor}
+        />
+
+        <BreadCrumbs
+          x={icicle_width}
+          dx={breadcrumbs_width}
+
+          trueFHeight={this.trueFHeight}
+          fillColor={this.props.fillColor}
+        />
+      </g>
     )
     console.timeEnd('render icicle')
 
 
     return (
-      <div style={icicle_style}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
-          <g>
-            {icicle}
-          </g>
-        </svg>
-      </div>
+      <svg
+        xmlns='http://www.w3.org/2000/svg'
+        viewBox={'0 0 '+view_box_width+' '+view_box_height}
+        width='100%'
+        height='100%'
+        preserveAspectRatio='xMidYMid meet'
+        ref={this.ref}
+        onClick={this.onClickHandler}
+        onMouseLeave={this.onMouseLeaveHandler}
+      >
+        <rect
+          x={0}
+          y={0}
+          width={view_box_width}
+          height={view_box_height}
+          style={{'fill': 'antiquewhite',opacity:'0'}}
+        />
+        {icicle}
+      </svg>
     )
   }
 }
@@ -219,16 +346,23 @@ const mapStateToProps = state => {
   const icicle_state = selectIcicleState(state)
 
 
+  const lock_sequence = icicle_state.lock_sequence()
+  const isLocked = lock_sequence.length > 0
+
   return {
     getByID: database.getByID,
     root_id: database.rootId(),
     display_root: icicle_state.display_root(),
     getIDPath: database.getIDPath,
+    max_depth: database.maxDepth(),
+    isLocked,
   }
 }
  
 const mapDispatchToProps = dispatch => {
   return {
+    setNoFocus: (...args) => dispatch((setNoFocus(...args))),
+    unlock: (...args) => dispatch((unlock(...args))),
     setNoDisplayRoot: (...args) => dispatch(setNoDisplayRoot(...args))
   }
 }

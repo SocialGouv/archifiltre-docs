@@ -47,7 +47,7 @@ class SvgRectangle extends React.PureComponent {
         onDoubleClick={onDoubleClickHandler}
         onMouseOver={onMouseOverHandler}
         // onMouseOut={onMouseOutHandler}
-        style={{'fill': fill, 'opacity': opacity}}
+        style={{'fill': fill, 'opacity': opacity, stroke: '#fff'}}
       />
     )
   }

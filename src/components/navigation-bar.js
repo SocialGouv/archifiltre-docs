@@ -25,19 +25,17 @@ const grid_style ={
 const Presentational = props => {
 
   return (
-    <div className="cell small-6">
-      <div style={grid_style} className='grid-x align-middle'>
-        <div className='cell small-4'>
-          <BTRButton />
-        </div>
-        <div className='cell small-8'>
-          <div className='flex-container'>
-            <div className='flex-child-grow' />
-            <div className='flex-child-auto'>
-              <ToggleChangeSkin />
-            </div>
-            <div className='flex-child-grow' />
+    <div style={grid_style} className='grid-x align-middle'>
+      <div className='cell small-4'>
+        <BTRButton />
+      </div>
+      <div className='cell small-8'>
+        <div className='flex-container'>
+          <div className='flex-child-grow' />
+          <div className='flex-child-auto'>
+            <ToggleChangeSkin />
           </div>
+          <div className='flex-child-grow' />
         </div>
       </div>
     </div>

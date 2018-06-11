@@ -51,6 +51,39 @@ const computeDim = (y,height) => {
 class Presentational extends React.PureComponent {
   constructor(props) {
     super(props)
+
+    this.computeDim = this.computeDim.bind(this)
+  }
+
+  computeDim(y,height) {
+    const props = this.props
+    const offset = 30
+    const x = props.x + offset
+    const dx = props.dx - offset
+
+    const x_poly = x
+    const y_poly = y
+    const width_poly = dx/20
+    const height_poly = height
+
+    const remaining_space_dx = dx - width_poly
+
+    const x_text = (x_poly+width_poly)+(remaining_space_dx*1/20)
+    const y_text = y_poly
+    const width_text = remaining_space_dx*19/20
+    const height_text = height_poly
+
+    return {
+      x_poly,
+      y_poly,
+      width_poly,
+      height_poly,
+
+      x_text,
+      y_text,
+      width_text,
+      height_text,
+    }
   }
 
   render() {
@@ -84,7 +117,7 @@ class Presentational extends React.PureComponent {
         const is_last = i === breadcrumb_sequence.length-1
         const is_first = i === 0
 
-        const dim = computeDim(
+        const dim = this.computeDim(
           cumulated_breadcrumb_sequence_height[i],
           breadcrumb_sequence_height[i]
         )
@@ -124,7 +157,7 @@ class Presentational extends React.PureComponent {
         const is_last = i === i_max - 1
         const is_first = i === 0
 
-        const dim = computeDim(
+        const dim = this.computeDim(
           i*height_child,
           height_child
         )
@@ -164,9 +197,9 @@ class Presentational extends React.PureComponent {
     }
 
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" style={{"opacity": (this.props.isFocused ? 1 : 0.3)}}>
+      <g style={{'opacity': (this.props.isFocused ? 1 : 0.3), stroke: '#fff'}}>
         {res}
-      </svg>
+      </g>
     )
   }
 

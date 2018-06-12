@@ -91,7 +91,6 @@ const mapDispatchToProps = dispatch => {
   const editTrigger = (candidate_comments, content, id) => {
     if(true){
       content = content.set('comments', candidate_comments)
-      console.log(content.toJS())
       dispatch(setContentByID(id, content))
     }
   }

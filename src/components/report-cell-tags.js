@@ -51,7 +51,7 @@ class Presentational extends React.Component {
       return (
         <div
         ref={this.setWrapperRef}
-        className={'cell small-6 ' + edit_hover_container}
+        className={edit_hover_container}
         style={this.props.cells_style}
         onClick={(e) => {e.stopPropagation(); if(!this.props.isEditingTags) this.props.onClickTagsCells();}}>
           <b>{tr('Tags')}</b>

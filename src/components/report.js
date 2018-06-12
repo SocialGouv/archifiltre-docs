@@ -22,26 +22,157 @@ import * as Color from 'color'
 import { tr } from 'dict'
 
 
+const pad = '1em'
+
+const cells_style = {
+  'borderRadius' : '1em',
+  'padding':'0.6em 1em 0 1em',
+  'fontSize': '0.8em',
+}
+
+
+const info_cell_style = {
+  'fontSize': '0.8em',
+}
+
+const margin_padding_compensate = {
+  padding: '0.2em 0.8em',
+}
+
+
+
+const Icon = props => {
+  const placeholder = props.placeholder
+  const is_folder = props.is_folder
+  const fillColor = props.fillColor
+  const node_id = props.node_id
+
+  let class_name
+  let color
+  if (placeholder) {
+    class_name = 'fi-page-multiple'
+    color = Color.placeholder()
+  } else {
+    color = fillColor(node_id)
+    if (is_folder) {
+      class_name = 'fi-folder'
+    } else {
+      class_name = 'fi-page'
+    }
+  }
+
+  return (
+    <div style={{marginTop: '-1em', marginBottom: '-1em'}}>
+      <i className={class_name} style={{fontSize: '3em', color}}/>
+    </div>
+  )
+}
+
+const Name = props => {
+  const placeholder = props.placeholder
+  const onChangeAlias = props.onChangeAlias
+  const node_id = props.node_id
+  const display_name = props.display_name
+  const bracket_name = props.bracket_name
+  const n_content = props.n_content
+  const n_name = props.n_name
+
+  if (placeholder) {
+    return (
+      <div style={{'fontWeight':'bold'}}>{tr('Folder of file\'s name')}</div>
+    )
+  } else {
+    return (
+      <span className={edit_hover_container} style={margin_padding_compensate}>
+        <RIEInput
+          value={display_name.length > 0 ? display_name : bracket_name}
+          change={onChangeAlias('new_display_name', node_id, n_content, n_name)}
+          className={editable_text + ' ' + element_name + ' ' + bold}
+          propName='new_display_name'
+        />
+        &ensp;
+        <i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} />
+      </span>
+    )
+  }
+}
+
+const RealName = props => {
+  const placeholder = props.placeholder
+  const bracket_name = props.bracket_name
+
+  if (placeholder) {
+    return (
+      <div style={{'fontStyle':'italic'}}>({tr('Real name')})</div>
+    )
+  } else {
+    return (
+      <div style={{'fontStyle':'italic', 'visibility': (bracket_name === '' ? 'hidden' : '')}}>
+        ({bracket_name})
+      </div>
+    )
+  }
+}
+
+const InfoCell = props => {
+  const placeholder = props.placeholder
+  const c_size = props.c_size
+  const node_id = props.node_id
+
+  let size_label
+  let component
+  if (placeholder) {
+    size_label = '...'
+    component = <LastModifiedReporter placeholder={true}/>
+  } else {
+    size_label = c_size
+    component = <LastModifiedReporter id={node_id} placeholder={false}/>
+  }
+
+  return (
+    <div style={info_cell_style}>
+      <b>{tr('Size')} :</b> {size_label}<br />
+      {component}
+    </div>
+  )
+}
+
+const CommentCell =  props => {
+  const placeholder = props.placeholder
+  const node_id = props.node_id
+  const onChangeComments = props.onChangeComments
+  const c_comments = props.c_comments
+  const n_content = props.n_content
+
+  if (placeholder) {
+    return (
+      <div style={cells_style}>
+        <b>{tr('Comments')}</b><br />
+        <span style={{'fontStyle':'italic'}}>{tr('Your text here') + '...'}</span>
+      </div>
+    )
+  } else {
+    return (
+      <div className={edit_hover_container} style={cells_style}>
+        <b>{tr('Comments')}</b>
+        <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
+        <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
+          <RIETextArea
+            value={c_comments.length ? c_comments : tr('Your text here')+'...'} // ##############' Placeholder ???'
+            change={onChangeComments('new_comments', node_id, n_content)}
+            className={comments}
+            propName='new_comments'
+            validate={(s) => s.replace(/\s/g,'').length > 0}
+          />
+        </span>
+      </div>
+    )
+  }
+}
+
+
 const Presentational = props => {
   let icon, name, real_name, info_cell, tags_cell, comments_cell, name_cell
-
-  const cells_style = {
-    'borderRadius' : '1em',
-    'padding':'0.6em 1em 0 1em',
-    'margin' : '0 0 1em 1em',
-    'fontSize': '0.8em',
-    "minHeight": "8em"
-  }
-
-  const info_cell_style = {
-    'fontSize': '0.8em',
-    'padding' : '2em'
-  }
-
-  const margin_padding_compensate = {
-    margin: "0.2em -0.8em",
-    padding: "0.2em 0.8em",
-  }
 
   if(props.isFocused) {
     const node = props.node
@@ -58,125 +189,103 @@ const Presentational = props => {
     const display_name = c_alias === '' ? n_name : c_alias
     const bracket_name = c_alias === '' ? '' : n_name
 
-
     const is_folder = n_children.size > 0
 
-    icon = (
-      <i className={(is_folder ? 'fi-folder' : 'fi-page')} style={{
-        'fontSize': '3em',
-        'width': '1.9em',
-        'color': props.fillColor(props.node_id),
-        'display': 'table-cell',
-        'paddingLeft': '0.5em',
-        'verticalAlign':'middle'}}
-      />
-    )
+    icon = <Icon
+      is_folder={is_folder}
+      fillColor={props.fillColor}
+      node_id={props.node_id}
+    />
 
-    name = (
-      <span className={edit_hover_container} style={margin_padding_compensate}>
-        <RIEInput
-          value={display_name.length > 0 ? display_name : bracket_name}
-          change={props.onChangeAlias('new_display_name', props.node_id, n_content, n_name)}
-          className={editable_text + " " + element_name + " " + bold}
-          propName='new_display_name'
-        />
-        &ensp;
-        <i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} />
-      </span>
-    )
+    name = <Name
+      onChangeAlias={props.onChangeAlias}
+      node_id={props.node_id}
+      display_name={display_name}
+      bracket_name={bracket_name}
+      n_content={n_content}
+      n_name={n_name}
+    />
 
-    real_name = (
-      <span style={{'fontStyle':'italic', 'visibility': (bracket_name === '' ? 'hidden' : '')}}>
-        ({bracket_name})
-      </span>
-    )
+    real_name = <RealName
+      bracket_name={bracket_name}
+    />
 
-    info_cell = (
-      <div className="cell small-4" style={info_cell_style}>
-        <b>{tr("Size")} :</b> {c_size}<br />
-        <LastModifiedReporter id={props.node_id} placeholder={false}/>
-      </div>
-    )
+    info_cell = <InfoCell
+      placeholder={true}
+      c_size={c_size}
+      node_id={props.node_id}
+    />
 
-    tags_cell = <TagsCell isDummy={false} cells_style={cells_style} tags={c_tags} node_id={props.node_id} content={n_content} />
+    tags_cell = <TagsCell
+      isDummy={false}
+      cells_style={cells_style}
+      tags={c_tags}
+      node_id={props.node_id}
+      content={n_content}
+    />
 
-    comments_cell = (
-      <div className={'cell small-6 ' + edit_hover_container} style={cells_style}>
-        <b>{tr('Comments')}</b>
-        <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-        <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
-          <RIETextArea
-            value={c_comments.length ? c_comments : tr('Your text here')+'...'} // ##############' Placeholder ???"
-            change={props.onChangeComments('new_comments', props.node_id, n_content)}
-            className={comments}
-            propName='new_comments'
-            validate={(s) => s.replace(/\s/g,'').length > 0}
-          />
-        </span>
-      </div>
-    )
-  }
-
-  else {
-    icon = (
-      <i className='fi-page-multiple' style={{
-        'fontSize': '3em',
-        'width': '1.9em',
-        'color': Color.placeholder(),
-        'display': 'table-cell',
-        'paddingLeft': '0.5em',
-        'verticalAlign':'middle'}}
-      />
-    )
-
-    name = (<span style={{'fontWeight':'bold'}}>{tr('Folder of file\'s name')}</span>)
-
-    real_name = (<span style={{'fontStyle':'italic'}}>({tr('Real name')})</span>)
-
-    info_cell = (
-      <div className="cell small-4" style={info_cell_style}>
-        <b>{tr("Size")} :</b> ...<br />
-        <LastModifiedReporter placeholder={true}/>
-      </div>
-    )
-
+    comments_cell = <CommentCell
+      node_id={props.node_id}
+      onChangeComments={props.onChangeComments}
+      c_comments={c_comments}
+      n_content={n_content}
+    />
+  } else {
+    icon = <Icon placeholder={true}/>
+    name = <Name placeholder={true}/>
+    real_name = <RealName placeholder={true}/>
+    info_cell = <InfoCell placeholder={true}/>
     tags_cell = <TagsCell isDummy={true} cells_style={cells_style} />
-
-    comments_cell = (
-      <div className='cell small-6' style={cells_style}>
-        <b>{tr('Comments')}</b><br />
-        <span style={{'fontStyle':'italic'}}>{tr('Your text here') + '...'}</span>
-      </div>
-    )
+    comments_cell = <CommentCell placeholder={true}/>
   }
+
 
   name_cell = (
-    <div className='cell small-12'>
-      <div style={{'display': 'table', 'width':'100%'}}>
+    <div className='grid-x align-middle'>
+      <div className='cell shrink' style={{paddingRight:pad}}>
         {icon}
-        <span style={{'display': 'table-cell', 'verticalAlign':'middle', 'lineHeight':'1.25em'}}>
-          {name}<br />{real_name}
-        </span>
       </div>
-    </div>
-  );
-
-
-  return (
-    <div style={{'opacity': (props.isFocused ? 1 : 0.5), 'background': 'white', 'borderRadius': '1em', minHeight: '11em', maxHeight:'11em'}}>
-      <div className="grid-x grid-frame grid-padding-x">
-        <div className="cell small-8">
-          <div className="grid-x grid-frame" style={{maxHeight:"3.8em"}}>
-            {name_cell}
+      <div className='cell auto'>
+        <div className='grid-x'>
+          <div className='cell small-12'>
+            {name}
           </div>
-          <div className="grid-x grid-frame" style={{padding: '0 1.5em 0 0'}}>
-            {tags_cell}
-            {comments_cell}
+          <div className='cell small-12'>
+            {real_name}
           </div>
         </div>
-        {info_cell}
       </div>
+    </div>
+  )
 
+  return (
+    <div style={
+      {
+        opacity: (props.isFocused ? 1 : 0.5),
+        background: 'white',
+        borderRadius: '1em',
+        minHeight: '11em',
+        maxHeight: '11em',
+      }
+    }>
+      <div className='grid-x' style={{padding:pad}}>
+        <div className='cell small-8' style={{paddingRight:pad}}>
+          <div className='grid-x'>
+            <div className='cell small-12' style={{paddingBottom:pad}}>
+              {name_cell}
+            </div>
+            <div className='cell small-6' style={{paddingRight:pad}}>
+              {tags_cell}
+            </div>
+            <div className='cell small-6'>
+              {comments_cell}
+            </div>
+          </div>
+        </div>
+        <div className='cell small-4'>
+          {info_cell}
+        </div>
+      </div>
     </div>
   )
 }

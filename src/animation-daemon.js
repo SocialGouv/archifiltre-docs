@@ -33,29 +33,6 @@ const animationLoop = () => {
   })
 
   requestAnimationFrame(animationLoop)
-
-  // for (var i = 0; i < keys.length; i++) {
-  //   let animation = AnimationDb.get(queue,keys[i])
-  //   let measure = Animation.getMeasure(animation)
-  //   let dom_element = Animation.getParentDomElem(animation)
-
-  //   visible.push(isDomElemVisible(dom_element))
-
-  //   if (visible[i]) {
-  //     measure(dom_element)
-  //   }
-  // }
-
-  // for (var i = 0; i < keys.length; i++) {
-  //   let animation = AnimationDb.get(queue,keys[i])
-  //   let mutate = Animation.getMutate(animation)
-  //   let dom_element = Animation.getParentDomElem(animation)
-
-  //   if (visible[i]) {
-  //     mutate(dom_element)
-  //   }
-  // }
-
 }
 
 animationLoop()

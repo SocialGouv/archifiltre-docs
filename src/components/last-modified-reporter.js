@@ -14,6 +14,7 @@ const RedDot = (props) => {
       width: '0.5em',
       backgroundColor: 'red',
       borderRadius: '50%',
+      margin: 'auto'
     }}/>
   )
 }
@@ -21,9 +22,10 @@ const RedDot = (props) => {
 const BlackCursor = (props) => {
   return (
     <div style={{
-      height: '0.2em',
-      width: '1em',
+      height: '1em',
+      width: '0.2em',
       backgroundColor: 'black',
+      margin: 'auto'
     }}/>
   )
 }
@@ -69,67 +71,60 @@ const Presentational = props => {
   }
 
   return (
-    <div>
-      <div className='grid-x'>
-        <div className='cell small-12'>
-          <b>{tr('Last modified')} :</b>
-        </div>
+    <div className='grid-x align-middle'>
+
+      <div className='cell small-12'>
+        <b>{tr('Last modified')} :</b>
       </div>
 
-      <div className='grid-x align-middle'>
-        <div className='cell small-1' style={{width:"1.5em"}}>
-          <TimeGradient/>
-        </div>
 
-        <div className='cell auto' />
-
-        <div className='cell small-10'>
-          <div className='grid-x align-middle'>
-
-            <div className='cell small-1'>
-              <BlackCursor/>
-            </div>
-            <div className='cell small-5'>
-              {tr('min')} :
-            </div>
-            <div className='cell small-6'>
-              {c_lm_min}
-            </div>
-
-            <div className='cell small-1'>
-              <RedDot/>
-            </div>
-            <div className='cell small-5'>
-              {tr('average')} :
-            </div>
-            <div className='cell small-6'>
-              {c_lm_average}
-            </div>
-
-            <div className='cell small-1'>
-              <BlackCursor/>
-            </div>
-            <div className='cell small-5'>
-              {tr('median')} :
-            </div>
-            <div className='cell small-6'>
-              {c_lm_median}
-            </div>
-
-            <div className='cell small-1'>
-              <BlackCursor/>
-            </div>
-            <div className='cell small-5'>
-              {tr('max')} :
-            </div>
-            <div className='cell small-6'>
-              {c_lm_max}
-            </div>
-
-          </div>
-        </div>
-
+      <div className='cell small-1'>
+        <BlackCursor/>
       </div>
+      <div className='cell small-5'>
+        {tr('max')} :
+      </div>
+      <div className='cell small-6'>
+        {c_lm_max}
+      </div>
+
+      <div className='cell small-1'>
+        <RedDot/>
+      </div>
+      <div className='cell small-5'>
+        {tr('average')} :
+      </div>
+      <div className='cell small-6'>
+        {c_lm_average}
+      </div>
+
+      <div className='cell small-1'>
+        <BlackCursor/>
+      </div>
+      <div className='cell small-5'>
+        {tr('median')} :
+      </div>
+      <div className='cell small-6'>
+        {c_lm_median}
+      </div>
+
+      <div className='cell small-1'>
+        <BlackCursor/>
+      </div>
+      <div className='cell small-5'>
+        {tr('min')} :
+      </div>
+      <div className='cell small-6'>
+        {c_lm_min}
+      </div>
+
+
+
+      <div className='cell small-12' style={{paddingTop: '0.5em'}}>
+        <TimeGradient/>
+      </div>
+
+
     </div>
   )
 }

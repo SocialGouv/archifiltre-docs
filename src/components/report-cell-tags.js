@@ -10,6 +10,12 @@ import { startEditingTags, stopEditingTags, toggleEditingTags } from 'reducers/r
 
 import { tr } from 'dict'
 
+const tags_style = {
+  overflowY: 'auto',
+  overflowX: 'hidden',
+  maxHeight: '5em'
+}
+
 class Presentational extends React.Component {
   constructor(props) {
     super(props);
@@ -56,9 +62,9 @@ class Presentational extends React.Component {
         onClick={(e) => {e.stopPropagation(); if(!this.props.isEditingTags) this.props.onClickTagsCells();}}>
           <b>{tr('Tags')}</b>
           <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-          <span>
+          <div style={tags_style} >
             <TagsEditable tag_list={this.props.tags} node_id={this.props.node_id} old_content={this.props.content} />
-          </span>
+          </div>
         </div>
       )
     }

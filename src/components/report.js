@@ -4,13 +4,14 @@ import { connect } from 'react-redux'
 import { RIEInput, RIETextArea, RIETags } from 'riek'
 
 import TagsCell from 'components/report-cell-tags'
+import CommentsCell from 'components/report-cell-comments'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
 import { setContentByID, addTagged, deleteTagged } from 'reducers/database'
 
 import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
-import { edit_hover_container, edit_hover_pencil, editable_text, element_name, bold, tags, comments } from 'css/app.css'
+import { edit_hover_container, edit_hover_pencil, editable_text, element_name, bold } from 'css/app.css'
 
 import LastModifiedReporter from 'components/last-modified-reporter'
 
@@ -99,22 +100,23 @@ const Presentational = props => {
     )
 
     tags_cell = <TagsCell isDummy={false} cells_style={cells_style} tags={c_tags} node_id={props.node_id} content={n_content} />
+    comments_cell = <CommentsCell isDummy={false} cells_style={cells_style} comments={c_comments} node_id={props.node_id} content={n_content} />
 
-    comments_cell = (
-      <div className={'cell small-6 ' + edit_hover_container} style={cells_style}>
-        <b>{tr('Comments')}</b>
-        <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-        <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
-          <RIETextArea
-            value={c_comments.length ? c_comments : tr('Your text here')+'...'} // ##############' Placeholder ???"
-            change={props.onChangeComments('new_comments', props.node_id, n_content)}
-            className={comments}
-            propName='new_comments'
-            validate={(s) => s.replace(/\s/g,'').length > 0}
-          />
-        </span>
-      </div>
-    )
+    // comments_cell = (
+    //   <div className={'cell small-6 ' + edit_hover_container} style={cells_style}>
+    //     <b>{tr('Comments')}</b>
+    //     <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
+    //     <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
+    //       <RIETextArea
+    //         value={c_comments.length ? c_comments : tr('Your text here')+'...'} // ##############' Placeholder ???"
+    //         change={props.onChangeComments('new_comments', props.node_id, n_content)}
+    //         className={comments}
+    //         propName='new_comments'
+    //         validate={(s) => s.replace(/\s/g,'').length > 0}
+    //       />
+    //     </span>
+    //   </div>
+    // )
   }
 
   else {
@@ -141,13 +143,14 @@ const Presentational = props => {
     )
 
     tags_cell = <TagsCell isDummy={true} cells_style={cells_style} />
+    comments_cell = <CommentsCell isDummy={true} cells_style={cells_style} />
 
-    comments_cell = (
-      <div className='cell small-6' style={cells_style}>
-        <b>{tr('Comments')}</b><br />
-        <span style={{'fontStyle':'italic'}}>{tr('Your text here') + '...'}</span>
-      </div>
-    )
+    // comments_cell = (
+    //   <div className='cell small-6' style={cells_style}>
+    //     <b>{tr('Comments')}</b><br />
+    //     <span style={{'fontStyle':'italic'}}>{tr('Your text here') + '...'}</span>
+    //   </div>
+    // )
   }
 
   name_cell = (

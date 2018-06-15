@@ -81,7 +81,7 @@ export const qeFromJson = a => {
 
 const Fs = Record({
   session_name:'Untitled',
-  version:6,
+  version:7,
   content_queue:List(),
   tree:null,
   tags: Map(),

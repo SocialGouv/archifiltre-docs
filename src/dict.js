@@ -67,17 +67,17 @@ const dict = {
   },
 
   // Icicle / Navigation bar
-  "View mode:": {
-    fr: "Mode de vue :",
-    en: "View mode:"
+  "Color code:": {
+    fr: "Code couleurs :",
+    en: "Color code:"
   },
   "Dates": {
     fr: "Dates",
     en: "Dates"
   },
-  Volume: {
-    fr: "Volume",
-    en: "Volume"
+  Type: {
+    fr: "Type",
+    en: "Type"
   },
 
   // Icicle / Types

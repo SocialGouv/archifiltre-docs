@@ -9,7 +9,7 @@ import { tr } from 'dict'
 const tag_style = {
   display: "inline-block",
   color: "white",
-  backgroundColor: "rgb(5, 120, 200)",
+  backgroundColor: "rgb(10, 50, 100)",
   borderRadius: "0.8em",
   padding: "0 1em",
 }
@@ -17,7 +17,7 @@ const tag_style = {
 const cross_style = {
   display: "inline-block",
   color: "white",
-  backgroundColor: "rgb(0, 90, 170)",
+  backgroundColor: "rgb(15, 80, 150)",
   padding: "0 0.4em",
   borderRadius: "1em",
   marginRight: "0.3em",

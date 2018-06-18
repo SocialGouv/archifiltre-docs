@@ -3,7 +3,7 @@ import * as Loop from 'test/loop'
 
 
 
-export const gradiant = (a, b) => (zero_to_one) => {
+export const gradient = (a, b) => (zero_to_one) => {
   const ans = a.map((a,i)=>a+(b[i]-a)*zero_to_one)
     .map((a,i)=>{
       if (i !== 3) {
@@ -14,6 +14,10 @@ export const gradiant = (a, b) => (zero_to_one) => {
     })
 
   return ans
+}
+
+export const triGradient = (a, b, c) => (zero_to_one) => {
+  return (zero_to_one < 0.5 ? gradient(a, b)(2*zero_to_one) : gradient(b, c)(2*(zero_to_one-0.5)))
 }
 
 export const arbitrary = () => {
@@ -49,8 +53,9 @@ export const fromHex = a => {
 
 
 
-export const mostRecentDate = () => [255, 153, 204, 1]
-export const leastRecentDate = () => [51, 204, 255, 1]
+export const mostRecentDate = () => [255, 216, 155, 1]
+export const mediumDate = () => [255, 140, 0, 1]
+export const leastRecentDate = () => [20, 86, 130, 1]
 
 export const duplicate = () => [255, 0, 0, 1]
 export const different = () => [0, 0, 0, 0.5]

@@ -70,7 +70,7 @@ class Presentational extends React.PureComponent {
     }
 
     return Color.toRgba(
-      Color.gradiant(
+      Color.gradient(
         Color.leastRecentDate(),
         Color.mostRecentDate()
       )(zeroToOne(id))
@@ -119,7 +119,7 @@ class Presentational extends React.PureComponent {
     // }
 
     // return Color.toRgba(
-    //   Color.gradiant(
+    //   Color.gradient(
     //     Color.different(),
     //     Color.duplicate()
     //   )(zeroToOne(id))

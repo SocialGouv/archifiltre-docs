@@ -37,7 +37,7 @@ describe('content', function() {
   })
 
   Loop.equal('(getLastModified . setLastModified x) a', () => {
-    const a = Arbitrary.natural()
+    const a = M.arbitraryLastModified()
     return [M.getLastModified(M.setLastModified(a, M.arbitrary())), a]
   })
 
@@ -73,6 +73,30 @@ describe('content', function() {
     const a = M.arbitrary()
     return [M.compareSize(a, a), 0]
   })
+
+
+  Loop.equal('compareDate a (update a b)', () => {
+    const a = M.arbitrary()
+    let lm = M.getLastModified(a)
+    lm = M.lastModifiedUpdateAverage(a => a + 1 + Arbitrary.natural(), lm)
+    const b = M.setLastModified(lm, a)
+    return [M.compareDate(a, b), -1]
+  })
+
+  Loop.equal('compareDate a (update b a)', () => {
+    const a = M.arbitrary()
+    let lm = M.getLastModified(a)
+    lm = M.lastModifiedUpdateAverage(a => a + 1 + Arbitrary.natural(), lm)
+    const b = M.setLastModified(lm, a)
+    return [M.compareDate(b, a), 1]
+  })
+
+  Loop.equal('compareDate a a', () => {
+    const a = M.arbitrary()
+    return [M.compareDate(a, a), 0]
+  })
+
+
 
   Loop.immuEqual('(toCommon . fromV5) a === v5ToCommon a', () => {
     const a = V5.arbitrary()

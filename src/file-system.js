@@ -15,8 +15,12 @@ import * as V5 from '../version/v5/src/file-system'
 
 TT.arbitrary = TT.arbitrary(Content.update, Content.arbitrary)
 TT.update = TT.update(Content.update)
-TT.sort = TT.sort(Content.compareSize)
-TT.isSorted = TT.isSorted(Content.compareSize)
+const sortTTBySize = TT.sort(Content.compareSize)
+const isTTSortedBySize = TT.isSorted(Content.compareSize)
+
+const sortTTByDate = TT.sort(Content.compareDate)
+const isTTSortedByDate = TT.isSorted(Content.compareDate)
+
 TT.toStrList2 = TT.toStrList2(Content.toStrListHeader, Content.toStrList)
 TT.toJson = TT.toJson(Content.toJson)
 TT.fromJson = TT.fromJson(Content.fromJson)
@@ -250,8 +254,12 @@ export const computeDerivatedData = (state) => {
 }
 
 export const sortBySize = Cache.make((state) => {
-  state = state.update('tree', TT.sort)
+  state = state.update('tree', sortTTBySize)
+  return state
+})
 
+export const sortByDate = Cache.make((state) => {
+  state = state.update('tree', sortTTByDate)
   return state
 })
 

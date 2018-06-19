@@ -6,6 +6,7 @@ import * as Color from 'color'
 
 
 const least_rgba = Color.toRgba(Color.leastRecentDate())
+const medium_rgba = Color.toRgba(Color.mediumDate())
 const most_rgba = Color.toRgba(Color.mostRecentDate())
 
 class Presentational extends React.PureComponent {

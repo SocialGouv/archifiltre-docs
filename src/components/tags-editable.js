@@ -18,7 +18,7 @@ const input_style = {
   border: "none",
   background: "none",
   outline: "none",
-  borderBottom: "3px solid rgb(5, 120, 200)"
+  borderBottom: "3px solid rgb(10, 50, 100)"
 }
 
 class Presentational extends React.Component {

@@ -63,7 +63,7 @@ class Presentational extends React.Component {
           <b>{tr('Tags')}</b>
           <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
           <div style={tags_style} >
-            <TagsEditable tag_list={this.props.tags} node_id={this.props.node_id} old_content={this.props.content} />
+            <TagsEditable tag_list={this.props.tags} node_id={this.props.node_id} />
           </div>
         </div>
       )

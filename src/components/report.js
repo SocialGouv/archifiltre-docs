@@ -76,7 +76,6 @@ const Name = props => {
   const node_id = props.node_id
   const display_name = props.display_name
   const bracket_name = props.bracket_name
-  const n_content = props.n_content
   const n_name = props.n_name
 
   if (placeholder) {
@@ -88,8 +87,8 @@ const Name = props => {
       <span className={edit_hover_container} style={margin_padding_compensate}>
         <RIEInput
           value={display_name.length > 0 ? display_name : bracket_name}
-          change={onChangeAlias('new_display_name', node_id, n_content, n_name)}
-          className={editable_text + ' ' + element_name + ' ' + bold}
+          change={props.onChangeAlias('new_display_name', props.node_id, n_name)}
+          className={editable_text + " " + element_name + " " + bold}
           propName='new_display_name'
         />
         &ensp;
@@ -139,40 +138,6 @@ const InfoCell = props => {
   )
 }
 
-// const CommentCell =  props => {
-//   const placeholder = props.placeholder
-//   const node_id = props.node_id
-//   const onChangeComments = props.onChangeComments
-//   const c_comments = props.c_comments
-//   const n_content = props.n_content
-
-//   if (placeholder) {
-//     return (
-//       <div style={cells_style}>
-//         <b>{tr('Comments')}</b><br />
-//         <span style={{'fontStyle':'italic'}}>{tr('Your text here') + '...'}</span>
-//       </div>
-//     )
-//   } else {
-//     return (
-//       <div className={edit_hover_container} style={cells_style}>
-//         <b>{tr('Comments')}</b>
-//         <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-//         <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
-//           <RIETextArea
-//             value={c_comments.length ? c_comments : tr('Your text here')+'...'} // ##############' Placeholder ???'
-//             change={onChangeComments('new_comments', node_id, n_content)}
-//             className={comments}
-//             propName='new_comments'
-//             validate={(s) => s.replace(/\s/g,'').length > 0}
-//           />
-//         </span>
-//       </div>
-//     )
-//   }
-// }
-
-
 const Presentational = props => {
   let icon, name, real_name, info_cell, tags_cell, comments_cell, name_cell
 
@@ -204,7 +169,6 @@ const Presentational = props => {
       node_id={props.node_id}
       display_name={display_name}
       bracket_name={bracket_name}
-      n_content={n_content}
       n_name={n_name}
     />
 
@@ -223,14 +187,7 @@ const Presentational = props => {
       cells_style={cells_style}
       tags={c_tags}
       node_id={props.node_id}
-      content={n_content}
     />
-    // comments_cell = <CommentCell
-    //   node_id={props.node_id}
-    //   onChangeComments={props.onChangeComments}
-    //   c_comments={c_comments}
-    //   n_content={n_content}
-    // />
     comments_cell = <CommentsCell
       isDummy={false}
       cells_style={cells_style}
@@ -244,7 +201,6 @@ const Presentational = props => {
     real_name = <RealName placeholder={true}/>
     info_cell = <InfoCell placeholder={true}/>
     tags_cell = <TagsCell isDummy={true} cells_style={cells_style} />
-    // comments_cell = <CommentCell placeholder={true}/>
     comments_cell = <CommentsCell isDummy={true} cells_style={cells_style} />
   }
 
@@ -321,14 +277,14 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  const onChangeAlias = (prop_name, id, content, old_name) => (n) => {
+  const onChangeAlias = (prop_name, id, old_name) => (n) => {
     let new_alias = n[prop_name] === old_name ? '' : n[prop_name]
     new_alias = new_alias.replace(/^\s*|\s*$/g,'')
 
     dispatch(updateContentElementByID(id, 'alias', () => new_alias))
     dispatch(commit())
   }
-  
+
  	return {
     onChangeAlias,
   }

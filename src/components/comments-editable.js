@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import { selectReportState } from 'reducers/root-reducer'
 import { startEditingComments, stopEditingComments, setCandidateComments } from 'reducers/report-state'
-import { setContentByID } from 'reducers/database'
+import { updateContentElementByID } from 'reducers/database'
 
 import { comments } from 'css/app.css'
 
@@ -42,7 +42,7 @@ class Presentational extends React.Component {
       }
       else {
         event.stopPropagation();
-        this.props.editTrigger(event.target.value, this.props.old_content, this.props.node_id)
+        this.props.editTrigger(event.target.value, this.props.node_id)
       }
     }
 
@@ -53,7 +53,7 @@ class Presentational extends React.Component {
         style={input_style}
         onMouseUp={(e) => {e.stopPropagation();}}
         onKeyUp={keyUp}
-        onBlur={(e) => {this.props.endEditing(event.target.value, this.props.old_content, this.props.node_id)}}
+        onBlur={(e) => {this.props.endEditing()}}
         defaultValue={this.props.comments.length > 0 ? this.props.comments : ""}
         placeholder={this.props.comments.length > 0 ? "" : tr("Your comments here")}
         ref={(component) => {this.textInput = component;}} />);
@@ -88,10 +88,10 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  const editTrigger = (candidate_comments, content, id) => {
+  const editTrigger = (candidate_comments, id) => {
     if(true){
-      content = content.set('comments', candidate_comments)
-      dispatch(setContentByID(id, content))
+      const updater = () => candidate_comments
+      dispatch(updateContentElementByID(id, 'comments', updater))
     }
   }
 

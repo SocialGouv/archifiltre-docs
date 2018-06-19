@@ -7,7 +7,7 @@ import TagsCell from 'components/report-cell-tags'
 import CommentsCell from 'components/report-cell-comments'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
-import { setContentByID, addTagged, deleteTagged } from 'reducers/database'
+import { updateContentElementByID, addTagged, deleteTagged } from 'reducers/database'
 
 import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
@@ -100,7 +100,7 @@ const Presentational = props => {
     )
 
     tags_cell = <TagsCell isDummy={false} cells_style={cells_style} tags={c_tags} node_id={props.node_id} content={n_content} />
-    comments_cell = <CommentsCell isDummy={false} cells_style={cells_style} comments={c_comments} node_id={props.node_id} content={n_content} />
+    comments_cell = <CommentsCell isDummy={false} cells_style={cells_style} comments={c_comments} node_id={props.node_id} />
 
     // comments_cell = (
     //   <div className={'cell small-6 ' + edit_hover_container} style={cells_style}>
@@ -210,19 +210,12 @@ const mapDispatchToProps = dispatch => {
     let new_alias = n[prop_name] === old_name ? '' : n[prop_name]
     new_alias = new_alias.replace(/^\s*|\s*$/g,'')
 
-    content = content.set('alias', new_alias)
-    dispatch(setContentByID(id, content))
+    dispatch(updateContentElementByID(id, 'alias', () => new_alias))
     dispatch(commit())
   }
-
-  const onChangeComments = (prop_name, id, content) => (n) => {
-    content = content.set('comments', n[prop_name])
-    dispatch(setContentByID(id, content))
-    dispatch(commit())
-  }
+  
  	return {
     onChangeAlias,
-    onChangeComments,
   }
 }
 

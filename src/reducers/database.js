@@ -138,6 +138,12 @@ export const setContentByID = mkA((id, content) => state => {
   return state
 })
 
+export const updateContentElementByID = mkA((id, field, updateFunction) => state => {
+  const updater = (entry) => entry.update('content', c => c.update(field, updateFunction))
+  state = FileSystem.updateByID(id, updater, state)
+  return state
+})
+
 export const setSessionName = mkA((name) => state => {
   state = FileSystem.setSessionName(name,state)
   return state

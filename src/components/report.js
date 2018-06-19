@@ -177,7 +177,6 @@ const Presentational = props => {
     />
 
     info_cell = <InfoCell
-      placeholder={true}
       c_size={c_size}
       node_id={props.node_id}
     />

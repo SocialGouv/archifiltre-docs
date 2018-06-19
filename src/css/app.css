@@ -15,18 +15,11 @@
 
 .comments {
   font-size: 1em;
-  border: none;
-  resize: none;
-  line-height: 1.2em;
 }
 
 .comments:focus {
-  font-size: 1em;
-  border: none;
-  background: none;
-  outline: none;
-  width: 90%;
-  padding: 0.2em;
+  padding: 0 ;
+  margin: 0;
 }
 
 .tags div {
@@ -51,9 +44,28 @@
   color: white;
   background-color: rgb(15, 80, 150);
   border-radius: 0.8em;
-  margin-right: 0.3em;
-  min-width: 2em;
+  margin-right: 0.2em;
+  min-width: 1.5em;
   text-align: center;
+}
+
+::-webkit-scrollbar-track
+{
+  border-radius: 10px;
+  background-color: rgba(190, 200, 180, 0.3);
+}
+
+::-webkit-scrollbar
+{
+  border-radius: 10px;
+  width: 12px;
+  background-color: rgba(190, 200, 180, 0.3);
+}
+
+::-webkit-scrollbar-thumb
+{
+  border-radius: 10px;
+  background-color: #555;
 }
 
 .edit_hover_container .edit_hover_pencil{

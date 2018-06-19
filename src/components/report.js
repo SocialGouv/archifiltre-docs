@@ -4,13 +4,14 @@ import { connect } from 'react-redux'
 import { RIEInput, RIETextArea, RIETags } from 'riek'
 
 import TagsCell from 'components/report-cell-tags'
+import CommentsCell from 'components/report-cell-comments'
 
 import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
-import { setContentByID, addTagged, deleteTagged } from 'reducers/database'
+import { updateContentElementByID, addTagged, deleteTagged } from 'reducers/database'
 
 import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
-import { edit_hover_container, edit_hover_pencil, editable_text, element_name, bold, tags, comments } from 'css/app.css'
+import { edit_hover_container, edit_hover_pencil, editable_text, element_name, bold } from 'css/app.css'
 
 import LastModifiedReporter from 'components/last-modified-reporter'
 
@@ -28,6 +29,7 @@ const cells_style = {
   'borderRadius' : '1em',
   'padding':'0.6em 1em 0 1em',
   'fontSize': '0.8em',
+  height: '8em'
 }
 
 
@@ -137,38 +139,38 @@ const InfoCell = props => {
   )
 }
 
-const CommentCell =  props => {
-  const placeholder = props.placeholder
-  const node_id = props.node_id
-  const onChangeComments = props.onChangeComments
-  const c_comments = props.c_comments
-  const n_content = props.n_content
+// const CommentCell =  props => {
+//   const placeholder = props.placeholder
+//   const node_id = props.node_id
+//   const onChangeComments = props.onChangeComments
+//   const c_comments = props.c_comments
+//   const n_content = props.n_content
 
-  if (placeholder) {
-    return (
-      <div style={cells_style}>
-        <b>{tr('Comments')}</b><br />
-        <span style={{'fontStyle':'italic'}}>{tr('Your text here') + '...'}</span>
-      </div>
-    )
-  } else {
-    return (
-      <div className={edit_hover_container} style={cells_style}>
-        <b>{tr('Comments')}</b>
-        <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-        <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
-          <RIETextArea
-            value={c_comments.length ? c_comments : tr('Your text here')+'...'} // ##############' Placeholder ???'
-            change={onChangeComments('new_comments', node_id, n_content)}
-            className={comments}
-            propName='new_comments'
-            validate={(s) => s.replace(/\s/g,'').length > 0}
-          />
-        </span>
-      </div>
-    )
-  }
-}
+//   if (placeholder) {
+//     return (
+//       <div style={cells_style}>
+//         <b>{tr('Comments')}</b><br />
+//         <span style={{'fontStyle':'italic'}}>{tr('Your text here') + '...'}</span>
+//       </div>
+//     )
+//   } else {
+//     return (
+//       <div className={edit_hover_container} style={cells_style}>
+//         <b>{tr('Comments')}</b>
+//         <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
+//         <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
+//           <RIETextArea
+//             value={c_comments.length ? c_comments : tr('Your text here')+'...'} // ##############' Placeholder ???'
+//             change={onChangeComments('new_comments', node_id, n_content)}
+//             className={comments}
+//             propName='new_comments'
+//             validate={(s) => s.replace(/\s/g,'').length > 0}
+//           />
+//         </span>
+//       </div>
+//     )
+//   }
+// }
 
 
 const Presentational = props => {
@@ -223,20 +225,27 @@ const Presentational = props => {
       node_id={props.node_id}
       content={n_content}
     />
-
-    comments_cell = <CommentCell
+    // comments_cell = <CommentCell
+    //   node_id={props.node_id}
+    //   onChangeComments={props.onChangeComments}
+    //   c_comments={c_comments}
+    //   n_content={n_content}
+    // />
+    comments_cell = <CommentsCell
+      isDummy={false}
+      cells_style={cells_style}
+      comments={c_comments}
       node_id={props.node_id}
-      onChangeComments={props.onChangeComments}
-      c_comments={c_comments}
-      n_content={n_content}
     />
+    
   } else {
     icon = <Icon placeholder={true}/>
     name = <Name placeholder={true}/>
     real_name = <RealName placeholder={true}/>
     info_cell = <InfoCell placeholder={true}/>
     tags_cell = <TagsCell isDummy={true} cells_style={cells_style} />
-    comments_cell = <CommentCell placeholder={true}/>
+    // comments_cell = <CommentCell placeholder={true}/>
+    comments_cell = <CommentsCell isDummy={true} cells_style={cells_style} />
   }
 
 
@@ -264,8 +273,8 @@ const Presentational = props => {
         opacity: (props.isFocused ? 1 : 0.5),
         background: 'white',
         borderRadius: '1em',
-        minHeight: '11em',
-        maxHeight: '11em',
+        // minHeight: '11em',
+        // maxHeight: '11em',
       }
     }>
       <div className='grid-x' style={{padding:pad}}>
@@ -316,19 +325,12 @@ const mapDispatchToProps = dispatch => {
     let new_alias = n[prop_name] === old_name ? '' : n[prop_name]
     new_alias = new_alias.replace(/^\s*|\s*$/g,'')
 
-    content = content.set('alias', new_alias)
-    dispatch(setContentByID(id, content))
+    dispatch(updateContentElementByID(id, 'alias', () => new_alias))
     dispatch(commit())
   }
-
-  const onChangeComments = (prop_name, id, content) => (n) => {
-    content = content.set('comments', n[prop_name])
-    dispatch(setContentByID(id, content))
-    dispatch(commit())
-  }
+  
  	return {
     onChangeAlias,
-    onChangeComments,
   }
 }
 

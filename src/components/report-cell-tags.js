@@ -22,6 +22,9 @@ class Presentational extends React.Component {
 
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.setCandidateTag = this.setCandidateTag.bind(this);
+
+    this.candidateTag = ''
   }
 
   componentDidMount() {
@@ -41,6 +44,10 @@ class Presentational extends React.Component {
       if(this.props.isEditingTags)
         this.props.endEditing();
     }
+  }
+
+  setCandidateTag(new_value) {
+    this.candidateTag = new_value
   }
 
   render() {

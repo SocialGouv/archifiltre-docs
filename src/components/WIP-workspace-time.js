@@ -56,7 +56,7 @@ const Presentational = props => {
 
   const fillColor = id => {
     return Color.toRgba(
-      Color.gradiant(
+      Color.gradient(
         Color.leastRecentDate(),
         Color.mostRecentDate()
       )(zeroToOne(id))

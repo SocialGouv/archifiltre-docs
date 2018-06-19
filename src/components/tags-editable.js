@@ -36,23 +36,26 @@ class Presentational extends React.Component {
     res = []
     elements = []
 
-    let keyDown = (event) => {
+    let keyUp = (event) => {
+      this.props.candidateTagCallback(event.target.value)
+
       if (event.keyCode === 8) { // Backspace
-          if(event.target.value.length == 0 && this.props.tag_list.size > 0){
-              this.props.deleteTag(this.props.tag_list.last(), this.props.node_id);
-          }
+        if(event.target.value.length == 0 && this.props.tag_list.size > 0){
+          this.props.deleteTag(this.props.tag_list.last(), this.props.node_id);
+        }
 
       } else if (event.keyCode === 13) { // Enter
-          event.preventDefault();
-          if(event.target.value.length === 0) {
-              this.props.endEditing();
-          } else {
-              this.props.addTag(event.target.value, this.props.node_id);
-              event.target.value = "";
-          }
-      } else if (event.keyCode === 27) { // Escape
-          event.stopPropagation();
+        event.preventDefault();
+        if(event.target.value.length === 0) {
           this.props.endEditing();
+        } else {
+          this.props.addTag(event.target.value, this.props.node_id);
+          event.target.value = "";
+        }
+
+      } else if (event.keyCode === 27) { // Escape
+        event.stopPropagation();
+        this.props.endEditing();
       }
     }
 
@@ -79,7 +82,7 @@ class Presentational extends React.Component {
         key="__input__"
         style={input_style}
         onMouseUp={(e) => {e.stopPropagation();}}
-        onKeyDown={keyDown}
+        onKeyUp={keyUp}
         placeholder={tr("New tag")}
         ref={(component) => {this.textInput = component;}} />);
 

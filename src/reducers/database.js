@@ -64,11 +64,26 @@ export const makeTree = mkA(() => state => {
   return state
 })
 
+
+
+export const sortBySize = mkA(() => state => {
+  state = FileSystem.sortBySize(state)
+
+  return state
+})
+
+export const sortByDate = mkA(() => state => {
+  state = FileSystem.sortByDate(state)
+
+  return state
+})
+
 export const sortByMaxRemainingPathLength = mkA(() => state => {
   state = FileSystem.sortByMaxRemainingPathLength(state)
 
   return state
 })
+
 
 
 

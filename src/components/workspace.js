@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
+import { sortBySize } from 'reducers/database'
 
 import { tr } from 'dict'
 import * as Color from 'color'
@@ -17,6 +18,7 @@ class Presentational extends React.PureComponent {
     super(props)
 
     this.fillColor = this.fillColor.bind(this)
+    this.props.dispatch(sortBySize())
   }
 
 
@@ -82,7 +84,9 @@ const mapStateToProps = state => {
 }
  
 const mapDispatchToProps = dispatch => {
-  return {}
+  return {
+    dispatch,
+  }
 }
 
 

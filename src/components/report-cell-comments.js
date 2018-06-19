@@ -7,7 +7,6 @@ import CommentsEditable from 'components/comments-editable'
 
 import { selectReportState } from 'reducers/root-reducer'
 import { startEditingComments, stopEditingComments } from 'reducers/report-state'
-import { setContentByID } from 'reducers/database'
 
 import { commit } from 'reducers/root-reducer'
 import { tr } from 'dict'
@@ -68,7 +67,7 @@ class Presentational extends React.Component {
           <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
         </div>
         <div style={comments_style} >
-          <CommentsEditable comments={this.props.comments} node_id={this.props.node_id} old_content={this.props.content} />
+          <CommentsEditable comments={this.props.comments} node_id={this.props.node_id} />
         </div>
       </div>
     )

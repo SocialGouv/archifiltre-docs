@@ -205,7 +205,7 @@ const Presentational = props => {
 
 
   name_cell = (
-    <div className='grid-x align-middle'>
+    <div className='grid-x align-middle' style={{height:'3.2em'}}>
       <div className='cell shrink' style={{paddingRight:pad}}>
         {icon}
       </div>

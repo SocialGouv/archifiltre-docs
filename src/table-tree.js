@@ -303,9 +303,9 @@ export const getIdPath = (id, tt) => {
 export const toStrList2 = (toStrListHeader, toStrList) => (tt) => {
   const table = getTable(tt)
   const mapper = (entry,id) =>
-    List.of(remakePath(id, tt).slice(1).join('/'))
+    List.of('', remakePath(id, tt).slice(1).join('/'))
       .concat(toStrList(entry.get('content')))
-  const header = List.of('path').concat(toStrListHeader())
+  const header = List.of('', 'path').concat(toStrListHeader())
   return (
     table.map(mapper).reduce((acc,val) => acc.push(val), List.of(header))
   )

@@ -77,15 +77,14 @@ const Presentational = props => {
         <b>{tr('Last modified')} :</b>
       </div>
 
-
       <div className='cell small-1'>
         <BlackCursor/>
       </div>
       <div className='cell small-5'>
-        {tr('max')} :
+        {tr('min')} :
       </div>
       <div className='cell small-6'>
-        {c_lm_max}
+        {c_lm_min}
       </div>
 
       <div className='cell small-1'>
@@ -112,10 +111,10 @@ const Presentational = props => {
         <BlackCursor/>
       </div>
       <div className='cell small-5'>
-        {tr('min')} :
+        {tr('max')} :
       </div>
       <div className='cell small-6'>
-        {c_lm_min}
+        {c_lm_max}
       </div>
 
 

@@ -281,6 +281,8 @@ export const fromJson = (json) => {
   let state = JSON.parse(json)
   if (state.version === 5) {
     return fromJsonV5(json)
+  } else if (state.version === 6) {
+    // same structure as v7
   }
 
   state = new Fs(state)
@@ -471,6 +473,7 @@ export const fromV5 = (a) => {
     parent_path
   })
 }
+
 const fromJsonV5 = (a) => {
   a = fromV5(V5.fromJson(a))
   a = a.update('tree', makeLastModifiedFromTree)

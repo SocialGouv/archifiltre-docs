@@ -63,6 +63,7 @@ class Presentational extends React.Component {
 
 
     if(this.props.editing){
+      this.props.candidateTagCallback('')
       if(this.props.tag_list.size > 0){
         elements = this.props.tag_list.reduce((acc, val, i) => {
           let new_element = (

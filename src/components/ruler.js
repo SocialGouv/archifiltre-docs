@@ -9,18 +9,22 @@ import * as Color from 'color'
 import { tr } from 'dict'
 
 const Presentational = props => {
+  const ruler_y = props.y
+  const ruler_dx = props.dx
+  const ruler_dy = props.dy
+
   let res
 
   if (props.isFocused) {
     let text = makeSizeString(props.node_size, props.total_size)
-    let mode = computeRulerTextDisplayMode(props.dims.x + props.dims.dx/2, text.length, props.icicle_width, 4.2)
+    let mode = computeRulerTextDisplayMode(props.dims.x + props.dims.dx/2, text.length, ruler_dx, 4.2)
 
     res = (
       <g>
         <rect
           className='ruler'
           x={props.dims.x}
-          y='1.5em'
+          y={ruler_y+ruler_dy*1/3}
           width={props.dims.dx}
           height='0.3em'
           onClick={(e) => {e.stopPropagation()}}
@@ -28,8 +32,8 @@ const Presentational = props => {
           style={{'fill': props.fillColor(props.node_id)}}
         />
         <text
-          x={computeTextPosition(props.dims.x, props.dims.dx, props.icicle_width, mode)}
-          y='3em'
+          x={computeTextPosition(props.dims.x, props.dims.dx, ruler_dx, mode)}
+          y={ruler_y+ruler_dy*2/3}
           textAnchor={{'ORGANIC' : 'middle', 'LEFT' : 'start', 'RIGHT' : 'end'}[mode]}
         >
           {text}
@@ -40,10 +44,29 @@ const Presentational = props => {
     res = (<g />)
   }
 
+
+  // <rect
+  //         className='ruler'
+  //         x={props.dims.x}
+  //         y='1.5em'
+  //         width={props.dims.dx}
+  //         height='0.3em'
+  //         onClick={(e) => {e.stopPropagation()}}
+  //         onMouseOver={() => {}}
+  //         style={{'fill': props.fillColor(props.node_id)}}
+  //       />
+  //       <text
+  //         x={computeTextPosition(props.dims.x, props.dims.dx, ruler_dx, mode)}
+  //         y='3em'
+  //         textAnchor={{'ORGANIC' : 'middle', 'LEFT' : 'start', 'RIGHT' : 'end'}[mode]}
+  //       >
+  //         {text}
+  //       </text>
+
   return (
-    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 300' preserveAspectRatio='xMidYMid meet'>
+    <g>
       {res}
-    </svg>
+    </g>
   )
 }
 

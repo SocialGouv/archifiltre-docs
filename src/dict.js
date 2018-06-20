@@ -67,17 +67,17 @@ const dict = {
   },
 
   // Icicle / Navigation bar
-  "View mode:": {
-    fr: "Mode de vue :",
-    en: "View mode:"
+  "Color code:": {
+    fr: "Code couleurs :",
+    en: "Color code:"
   },
   "Dates": {
     fr: "Dates",
     en: "Dates"
   },
-  Volume: {
-    fr: "Volume",
-    en: "Volume"
+  Type: {
+    fr: "Type",
+    en: "Type"
   },
 
   // Icicle / Types
@@ -170,6 +170,10 @@ const dict = {
     fr: "Cliquez ici pour ajouter des tags !",
     en: "Click here to add some tags!"
   },
+  "Your tags here": {
+    fr: "Vos tags ici",
+    en: "Your tags here"
+  },
   "New tag": {
     fr: "Nouveau tag",
     en: "New tag"
@@ -178,13 +182,13 @@ const dict = {
     fr: "Commentaires",
     en: "Comments"
   },
-  "Your text here": {
-    fr: "Votre texte ici",
-    en: "Your text here"
+  "Your comments here": {
+    fr: "Vos commentaires ici",
+    en: "Your comments here"
   },
-  "Your tags here": {
-    fr: "Vos tags ici",
-    en: "Your tags here"
+  "Click here to add some comments!": {
+    fr: "Cliquez ici pour ajouter des commentaires !",
+    en: "Click here to add some comments!"
   },
   "max": {
 

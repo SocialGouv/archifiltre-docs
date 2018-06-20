@@ -64,11 +64,26 @@ export const makeTree = mkA(() => state => {
   return state
 })
 
+
+
+export const sortBySize = mkA(() => state => {
+  state = FileSystem.sortBySize(state)
+
+  return state
+})
+
+export const sortByDate = mkA(() => state => {
+  state = FileSystem.sortByDate(state)
+
+  return state
+})
+
 export const sortByMaxRemainingPathLength = mkA(() => state => {
   state = FileSystem.sortByMaxRemainingPathLength(state)
 
   return state
 })
+
 
 
 
@@ -134,6 +149,12 @@ export const setParentPath = mkA((parent_path) => state => {
 
 export const setContentByID = mkA((id, content) => state => {
   const updater = (entry) => entry.set('content', content)
+  state = FileSystem.updateByID(id, updater, state)
+  return state
+})
+
+export const updateContentElementByID = mkA((id, field, updateFunction) => state => {
+  const updater = (entry) => entry.update('content', c => c.update(field, updateFunction))
   state = FileSystem.updateByID(id, updater, state)
   return state
 })

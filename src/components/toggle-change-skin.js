@@ -27,10 +27,10 @@ const Presentational = props => {
   return (
     <div className='grid-x align-middle' style={{minWidth: '25em'}}>
       <div className='cell small-4'>
-        <TextAlignCenter>{tr('View mode:')}</TextAlignCenter>
+        <TextAlignCenter>{tr('Color code:')}</TextAlignCenter>
       </div>
       <div className='cell small-3'>
-        <TextAlignCenter>{mkTB(props.toggleChangeSkin, tr('Volume'), props.change_skin, Color.parentFolder(), button_style)}</TextAlignCenter>
+        <TextAlignCenter>{mkTB(props.toggleChangeSkin, tr('Type'), props.change_skin, Color.parentFolder(), button_style)}</TextAlignCenter>
       </div>
       <div className='cell small-3'>
         <TextAlignCenter>{mkTB(props.toggleChangeSkin, tr('Dates'), !props.change_skin, Color.parentFolder(), button_style)}</TextAlignCenter>

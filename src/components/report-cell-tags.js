@@ -7,8 +7,16 @@ import TagsEditable from 'components/tags-editable'
 
 import { selectReportState } from 'reducers/root-reducer'
 import { startEditingTags, stopEditingTags, toggleEditingTags } from 'reducers/report-state'
+import { updateContentElementByID, addTagged } from 'reducers/database'
 
+import { commit } from 'reducers/root-reducer'
 import { tr } from 'dict'
+
+const tags_style = {
+  overflowY: 'auto',
+  overflowX: 'hidden',
+  maxHeight: '5em'
+}
 
 class Presentational extends React.Component {
   constructor(props) {
@@ -16,6 +24,9 @@ class Presentational extends React.Component {
 
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.setCandidateTag = this.setCandidateTag.bind(this);
+
+    this.candidateTag = ''
   }
 
   componentDidMount() {
@@ -32,9 +43,17 @@ class Presentational extends React.Component {
 
   handleClickOutside(event) {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-      if(this.props.isEditingTags)
+      if(this.props.isEditingTags){
         this.props.endEditing();
+        if(this.candidateTag.replace(/\s/g,'').length > 0){
+          this.props.addTag(this.candidateTag, this.props.node_id)
+        }
+      }
     }
+  }
+
+  setCandidateTag(new_value) {
+    this.candidateTag = new_value
   }
 
   render() {
@@ -51,14 +70,14 @@ class Presentational extends React.Component {
       return (
         <div
         ref={this.setWrapperRef}
-        className={'cell small-6 ' + edit_hover_container}
+        className={edit_hover_container}
         style={this.props.cells_style}
         onClick={(e) => {e.stopPropagation(); if(!this.props.isEditingTags) this.props.onClickTagsCells();}}>
           <b>{tr('Tags')}</b>
           <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-          <span>
-            <TagsEditable tag_list={this.props.tags} node_id={this.props.node_id} old_content={this.props.content} />
-          </span>
+          <div style={tags_style} >
+            <TagsEditable tag_list={this.props.tags} node_id={this.props.node_id} candidateTagCallback={this.setCandidateTag} />
+          </div>
         </div>
       )
     }
@@ -75,6 +94,15 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
+  const addTag = (tag, id) => {
+    const updater = (a) => {if (a === undefined) return Set.of(tag); else return a.add(tag);}
+    dispatch(updateContentElementByID(id, 'tags', updater))
+
+    dispatch(addTagged(tag, id))
+
+    dispatch(commit())
+  }
+
   const onClickTagsCells = () => {
     dispatch(startEditingTags())
   }
@@ -84,6 +112,7 @@ const mapDispatchToProps = dispatch => {
   }
 
   return {
+    addTag,
     onClickTagsCells,
     endEditing
   }

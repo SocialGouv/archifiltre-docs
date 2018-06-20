@@ -8,7 +8,7 @@ import { Set } from 'immutable'
 
 import { selectReportState } from 'reducers/root-reducer'
 import { startEditingTags, stopEditingTags } from 'reducers/report-state'
-import { setContentByID, addTagged, deleteTagged } from 'reducers/database'
+import { updateContentElementByID, addTagged, deleteTagged } from 'reducers/database'
 
 import { commit } from 'reducers/root-reducer'
 import { tr } from 'dict'
@@ -18,7 +18,7 @@ const input_style = {
   border: "none",
   background: "none",
   outline: "none",
-  borderBottom: "3px solid rgb(5, 120, 200)"
+  borderBottom: "3px solid rgb(10, 50, 100)"
 }
 
 class Presentational extends React.Component {
@@ -36,30 +36,34 @@ class Presentational extends React.Component {
     res = []
     elements = []
 
-    let keyDown = (event) => {
+    let keyUp = (event) => {
+      this.props.candidateTagCallback(event.target.value)
+
       if (event.keyCode === 8) { // Backspace
-          if(event.target.value.length == 0 && this.props.tag_list.size > 0){
-              this.props.deleteTag(this.props.old_content, this.props.tag_list.last(), this.props.node_id);
-          }
+        if(event.target.value.length == 0 && this.props.tag_list.size > 0){
+          this.props.deleteTag(this.props.tag_list.last(), this.props.node_id);
+        }
 
       } else if (event.keyCode === 13) { // Enter
-          event.preventDefault();
-          if(event.target.value.length === 0) {
-              this.props.endEditing();
-          } else {
-              this.props.addTag(this.props.old_content, event.target.value, this.props.node_id);
-              event.target.value = "";
-          }
-      } else if (event.keyCode === 27) { // Escape
-          event.stopPropagation();
+        event.preventDefault();
+        if(event.target.value.length === 0) {
           this.props.endEditing();
+        } else {
+          this.props.addTag(event.target.value, this.props.node_id);
+          event.target.value = "";
+        }
+
+      } else if (event.keyCode === 27) { // Escape
+        event.stopPropagation();
+        this.props.endEditing();
       }
     }
 
-    let handle_remove = (tag) => () => {this.props.deleteTag(this.props.old_content, tag, this.props.node_id)}
+    let handle_remove = (tag) => () => {this.props.deleteTag(tag, this.props.node_id)}
 
 
     if(this.props.editing){
+      this.props.candidateTagCallback('')
       if(this.props.tag_list.size > 0){
         elements = this.props.tag_list.reduce((acc, val, i) => {
           let new_element = (
@@ -79,7 +83,7 @@ class Presentational extends React.Component {
         key="__input__"
         style={input_style}
         onMouseUp={(e) => {e.stopPropagation();}}
-        onKeyDown={keyDown}
+        onKeyUp={keyUp}
         placeholder={tr("New tag")}
         ref={(component) => {this.textInput = component;}} />);
 
@@ -121,18 +125,17 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  const addTag = (content, tag, id) => {
-    content = content.update('tags', a=>{if (a === undefined) return Set.of(tag); else return a.add(tag);})
-    dispatch(setContentByID(id, content))
+  const addTag = (tag, id) => {
+    const updater = (a) => {if (a === undefined) return Set.of(tag); else return a.add(tag);}
+    dispatch(updateContentElementByID(id, 'tags', updater))
 
     dispatch(addTagged(tag, id))
 
     dispatch(commit())
   }
 
-  const deleteTag = (content, tag, id) => {
-    content = content.update('tags', a=>a.delete(tag))
-    dispatch(setContentByID(id, content))
+  const deleteTag = (tag, id) => {
+    dispatch(updateContentElementByID(id, 'tags', a=>a.delete(tag)))
 
     dispatch(deleteTagged(tag, id))
 

@@ -32,6 +32,11 @@ export const lastModifiedFromJs = a => {
   return a
 }
 
+export const lastModifiedUpdateAverage = (f,a) => {
+  a = a.update('average',f)
+  return a
+}
+
 const createLastModified = (last_modified) => {
   return new LastModified({
     max:last_modified,
@@ -108,15 +113,48 @@ export const create = a => {
   return new Content(a)
 }
 
-export const compareSize = (a,b) => {
-  if (a.get('size') === b.get('size')) {
+const makeCompare = g => (a,b) => {
+  a = g(a)
+  b = g(b)
+
+  if (a === b) {
     return 0
-  } else if (a.get('size') > b.get('size')) {
+  } else if (a > b) {
     return -1
   } else {
     return 1
   }
 }
+
+
+export const compareSize = (a,b) => {
+  const g = x => x.get('size')
+  a = g(a)
+  b = g(b)
+
+  if (a === b) {
+    return 0
+  } else if (a > b) {
+    return -1
+  } else {
+    return 1
+  }
+}
+
+export const compareDate = (a,b) => {
+  const g = x => x.get('last_modified').get('average')
+  a = g(a)
+  b = g(b)
+
+  if (a === b) {
+    return 0
+  } else if (a > b) {
+    return 1
+  } else {
+    return -1
+  }
+}
+
 
 export const update = (young,old) => {
   const size = young.get('size')

@@ -137,14 +137,14 @@ describe('table-tree', function() {
 
     M.toStrList2(a).toJS()
       .should.deep.equal([
-        ['path', column_name],
-        ['', 3],
-        ['a', 3],
-        ['a/b', 2],
-        ['a/b/c', 1],
-        ['a/b/d', 1],
-        ['a/e', 1],
-        ['a/e/f', 1],
+        ['', 'path', column_name],
+        ['', '', 3],
+        ['', 'a', 3],
+        ['', 'a/b', 2],
+        ['', 'a/b/c', 1],
+        ['', 'a/b/d', 1],
+        ['', 'a/e', 1],
+        ['', 'a/e/f', 1],
       ])
 
     M.fromJson(M.toJson(a)).toJS().should.deep.equal(a.toJS())

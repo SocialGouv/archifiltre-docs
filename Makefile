@@ -41,7 +41,6 @@ cleanContainer:
 
 TP = './src/**/*.test.js'
 
-# You need to fetchAndPatch before launching test
 test: dev
 	sudo docker run \
 		--network host \

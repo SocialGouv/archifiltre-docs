@@ -64,7 +64,7 @@ class Presentational extends React.PureComponent {
       const node = this.props.getByID(id)
       const len = node.get('parent_path_length') + node.get('name').length
       const zero_to_one = len/max_children_path_len_root_id
-      return Color.toRgba(Color.gradiant([122, 255, 159, 1],[255, 121, 121, 1])(zero_to_one))
+      return Color.toRgba(Color.gradient([122, 255, 159, 1],[255, 121, 121, 1])(zero_to_one))
     }
 
     return (

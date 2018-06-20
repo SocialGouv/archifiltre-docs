@@ -47,7 +47,7 @@ class SvgRectangle extends React.PureComponent {
         onDoubleClick={onDoubleClickHandler}
         onMouseOver={onMouseOverHandler}
         // onMouseOut={onMouseOutHandler}
-        style={{'fill': fill, 'opacity': opacity}}
+        style={{'fill': fill, 'opacity': opacity, stroke: '#fff'}}
       />
     )
   }
@@ -202,7 +202,7 @@ class Presentational extends React.PureComponent {
           y={this.props.y + 1}
           width={this.props.dx - 2}
           height='6'
-          style={{'fill': 'rgb(5, 120, 200)', 'stroke':'none', 'opacity':stroke_opacity}}
+          style={{'fill': 'rgb(10, 50, 100)', 'stroke':'none', 'opacity':stroke_opacity}}
           />
         )
       )

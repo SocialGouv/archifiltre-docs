@@ -15,8 +15,12 @@ import * as V5 from '../version/v5/src/file-system'
 
 TT.arbitrary = TT.arbitrary(Content.update, Content.arbitrary)
 TT.update = TT.update(Content.update)
-TT.sort = TT.sort(Content.compareSize)
-TT.isSorted = TT.isSorted(Content.compareSize)
+const sortTTBySize = TT.sort(Content.compareSize)
+const isTTSortedBySize = TT.isSorted(Content.compareSize)
+
+const sortTTByDate = TT.sort(Content.compareDate)
+const isTTSortedByDate = TT.isSorted(Content.compareDate)
+
 TT.toStrList2 = TT.toStrList2(Content.toStrListHeader, Content.toStrList)
 TT.toJson = TT.toJson(Content.toJson)
 TT.fromJson = TT.fromJson(Content.fromJson)
@@ -81,7 +85,7 @@ export const qeFromJson = a => {
 
 const Fs = Record({
   session_name:'Untitled',
-  version:6,
+  version:7,
   content_queue:List(),
   tree:null,
   tags: Map(),
@@ -250,8 +254,12 @@ export const computeDerivatedData = (state) => {
 }
 
 export const sortBySize = Cache.make((state) => {
-  state = state.update('tree', TT.sort)
+  state = state.update('tree', sortTTBySize)
+  return state
+})
 
+export const sortByDate = Cache.make((state) => {
+  state = state.update('tree', sortTTByDate)
   return state
 })
 
@@ -273,6 +281,8 @@ export const fromJson = (json) => {
   let state = JSON.parse(json)
   if (state.version === 5) {
     return fromJsonV5(json)
+  } else if (state.version === 6) {
+    // same structure as v7
   }
 
   state = new Fs(state)
@@ -344,6 +354,11 @@ export const getSubIdList = (id, state) => {
 
 
 
+
+
+
+
+// v5 | v6,v7
 
 TT.v5ToCommon = TT.v5ToCommon(Content.v5ToCommon)
 TT.toCommon = TT.toCommon(Content.toCommon)
@@ -458,6 +473,7 @@ export const fromV5 = (a) => {
     parent_path
   })
 }
+
 const fromJsonV5 = (a) => {
   a = fromV5(V5.fromJson(a))
   a = a.update('tree', makeLastModifiedFromTree)

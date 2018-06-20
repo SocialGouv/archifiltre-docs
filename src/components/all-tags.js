@@ -7,12 +7,26 @@ import { setTagToHighlight, setNoTagToHighlight } from 'reducers/icicle-state'
 
 import { tags, tags_count } from 'css/app.css'
 
+import Tag from 'components/tag'
 import TextAlignCenter from 'components/text-align-center'
 
 import * as Color from 'color'
 import { tr } from 'dict'
 
+const trimString = (s, max_length) => {
+  return s.length > max_length+3 ? s.substring(0,max_length) + "..." : s
+}
+
+
 const Presentational = props => {
+  const component_style = {
+    'opacity': (props.tags.size > 0 ? 1 : 0.5),
+    'background': 'white',
+    'height': '100%',
+    'borderRadius': '1em',
+    padding:'0.5em 0.5em'
+  }
+
   let tags_content
 
   if(props.tags.size === 0){
@@ -41,23 +55,25 @@ const Presentational = props => {
       let opacity = props.tag_to_highlight.length > 0 ? (tag === props.tag_to_highlight ? 1 : 0.2) : 1
 
       let new_element = (
-        <div key={tag} onMouseEnter={(e)=> props.highlightTag(tag)} onMouseLeave={(e)=> props.stopHighlightingTag()} style={{opacity}}>
+        <div key={tag} onMouseEnter={(e)=> props.highlightTag(tag)} onMouseLeave={(e)=> props.stopHighlightingTag()} style={{opacity, width:'20em'}}>
           <div className={tags_count}>
             {tagged_ids.size}
           </div>
-          <div className={tags} style={{display:'inline-block'}}>
-            <div>{tag}</div>
-          </div>
+          <Tag
+            text={trimString(tag, 25)}
+            editing={false}
+            remove_handler={() => {}}
+            />
         </div>);
 
       return acc === null ? [new_element] : [...acc, new_element]
     }, null)
 
-    tags_content = <div style={{fontSize: '0.8em'}}>{tags_list}</div>;
+    tags_content = <div style={{fontSize: '0.8em', overflowY: 'auto', overflowX: 'hidden', maxHeight: '10.5em'}}>{tags_list}</div>;
   }
 
   return (
-    <div style={{'opacity': (props.tags.size > 0 ? 1 : 0.5), 'background': 'white', 'borderRadius': '1em', height:'100%', padding:'0.5em 0.5em'}}>
+    <div style={component_style}>
       <TextAlignCenter>
         <b>{tr('All tags')}</b>
       </TextAlignCenter>

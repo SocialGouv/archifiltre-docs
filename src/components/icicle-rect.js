@@ -221,7 +221,7 @@ const mapStateToProps = (state, props) => {
   const lock_sequence = icicle_state.lock_sequence()
   const tag_to_highlight = icicle_state.tag_to_highlight()
 
-  const node_tags = database.getByID(props.node_id).get('content').get('tags')
+  const node_tags = database.getTags(props.node_id)
 
 
   const isInHoverSeq = hover_sequence.includes(props.node_id)

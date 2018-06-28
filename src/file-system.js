@@ -162,7 +162,7 @@ export const updateByID = (id, f, state) =>
 export const getSessionName = (state) => state.get('session_name')
 export const setSessionName = (a, state) => state.set('session_name',a)
 
-
+export const getTagsByID = (state, id) => state.get('tags').reduce((acc, val, i) => {return (val.has(id) ? acc.add(i) : acc)}, Set.of())
 export const getTagged = (state, tag) => state.get('tags').get(tag)
 export const addTagged = (state, tag, id) => state.update('tags', a=>a.update(tag, b=>{if (b === undefined) return Set.of(id); else return b.add(id);}))
 export const deleteTagged = (state, tag, id) =>
@@ -174,7 +174,14 @@ export const deleteTagged = (state, tag, id) =>
       return new_tags;
   })
 
-  export const getAllTags = (state) => state.get('tags')
+export const getAllTags = (state) => state.get('tags')
+
+export const renameTag = (state, old_tag, new_tag) => state.update('tags', a=>(
+  (a.has(old_tag) && !a.has(new_tag))
+  ? a.mapKeys(k => (k === old_tag ? new_tag : k))
+  : a)
+)
+export const deleteTag = (state, tag) => state.update('tags', a => a.delete(tag))
 
 export const ghostTreeFromJs = (js, state) => {
   state = state.set('tree', TT.fromJs(js))
@@ -313,7 +320,7 @@ export const fromJs = (js) => {
 
 
 export const toStrList2 = Cache.make((state) => {
-  return TT.toStrList2(state.get('tree'))
+  return TT.toStrList2(state.get('tree'), state.get('tags'))
 })
 
 export const setParentPath = (parent_path, state) =>

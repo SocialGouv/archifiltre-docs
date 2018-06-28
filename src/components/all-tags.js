@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
-import { addTagged, deleteTagged } from 'reducers/database'
+import { addTagged, deleteTagged, renameTag, deleteTag } from 'reducers/database'
 import { setTagToHighlight, setNoTagToHighlight } from 'reducers/icicle-state'
 
 import { tags, tags_count } from 'css/app.css'
@@ -11,6 +11,7 @@ import Tag from 'components/tag'
 import TextAlignCenter from 'components/text-align-center'
 
 import * as Color from 'color'
+import { commit } from 'reducers/root-reducer'
 import { tr } from 'dict'
 
 const trimString = (s, max_length) => {
@@ -55,7 +56,12 @@ const Presentational = props => {
       let opacity = props.tag_to_highlight.length > 0 ? (tag === props.tag_to_highlight ? 1 : 0.2) : 1
 
       let new_element = (
-        <div key={tag} onMouseEnter={(e)=> props.highlightTag(tag)} onMouseLeave={(e)=> props.stopHighlightingTag()} style={{opacity, width:'20em'}}>
+        <div
+        key={tag}
+        onMouseEnter={(e)=> props.highlightTag(tag)}
+        onMouseLeave={(e)=> props.stopHighlightingTag()}
+        onClick={(e) => props.onAddTag(tag, props.focused_node_id)}
+        style={{opacity, width:'20em'}}>
           <div className={tags_count}>
             {tagged_ids.size}
           </div>
@@ -86,11 +92,15 @@ const mapStateToProps = state => {
   const database = selectDatabase(state)
   const icicle_state = selectIcicleState(state)
 
+  const sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
+  const focused_node_id = sequence[sequence.length - 1]
+
   const tag_to_highlight = icicle_state.tag_to_highlight()
 
 	return {
     tags: database.getAllTags().sortBy(t => -1 * t.size),
-    tag_to_highlight
+    tag_to_highlight,
+    focused_node_id
   }
 }
 
@@ -102,9 +112,30 @@ const mapDispatchToProps = dispatch => {
   const stopHighlightingTag = () => {
     dispatch(setNoTagToHighlight())
   }
+
+  const onRenameTag = (old_tag, new_tag) => {
+    dispatch(renameTag(old_tag, new_tag))
+    dispatch(commit())
+  }
+
+  const onDeleteTag = (tag) => {
+    dispatch(deleteTag(tag))
+    dispatch(commit())
+    dispatch(setNoTagToHighlight())
+  }
+
+  const onAddTag = (tag, id) => {
+    if(id !== undefined){
+      dispatch(addTagged(tag,id))
+      dispatch(commit())
+    }
+  }
  	return {
     highlightTag,
-    stopHighlightingTag
+    stopHighlightingTag,
+    onRenameTag,
+    onDeleteTag,
+    onAddTag
   }
 }
 

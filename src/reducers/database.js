@@ -30,6 +30,7 @@ function bundle(state) {
     toStrList2: () => FileSystem.toStrList2(state),
     getSessionName: () => FileSystem.getSessionName(state),
 
+    getTags: (id) => FileSystem.getTagsByID(state, id),
     getTagged: (tag) => FileSystem.getTagged(state, tag),
     getAllTags: () => FileSystem.getAllTags(state),
 
@@ -171,5 +172,15 @@ export const addTagged = mkA((tag, id) => state => {
 
 export const deleteTagged = mkA((tag, id) => state => {
   state = FileSystem.deleteTagged(state, tag, id)
+  return state
+})
+
+export const renameTag = mkA((old_tag, new_tag) => state => {
+  state = FileSystem.renameTag(state, old_tag, new_tag)
+  return state
+})
+
+export const deleteTag = mkA((tag) => state => {
+  state = FileSystem.deleteTag(state, tag)
   return state
 })

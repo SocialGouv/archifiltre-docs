@@ -150,7 +150,7 @@ const Presentational = props => {
     const c_size = octet2HumanReadableFormat(n_content.get('size'))
 
     const c_alias = n_content.get('alias')
-    const c_tags = n_content.get('tags')
+    const c_tags = props.tags
     const c_comments = n_content.get('comments')
 
     const display_name = c_alias === '' ? n_name : c_alias
@@ -266,11 +266,14 @@ const mapStateToProps = state => {
   let node = (icicle_state.isFocused() ? getByID(node_id) : {})
   let total_size = database.volume()
 
+  const tags = database.getTags(node_id)
+
 	return {
     isFocused: icicle_state.isFocused(),
     isLocked: icicle_state.isLocked(),
     node,
     node_id,
+    tags,
     total_size
 	}
 }

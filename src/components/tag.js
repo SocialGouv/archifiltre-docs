@@ -10,8 +10,8 @@ const tag_style = {
   display: "inline-block",
   color: "white",
   backgroundColor: "rgb(10, 50, 100)",
-  borderRadius: "0.8em",
-  padding: "0 1em",
+  borderRadius: "0.5em",
+  padding: "0 0.5em",
 }
 
 const cross_style = {
@@ -20,8 +20,8 @@ const cross_style = {
   backgroundColor: "rgb(15, 80, 150)",
   padding: "0 0.4em",
   borderRadius: "1em",
-  marginRight: "0.3em",
-  marginLeft: "-0.5em"
+  marginRight: "0em",
+  marginLeft: "-0.3em"
 }
 
 const component_style = {

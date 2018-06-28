@@ -5,8 +5,11 @@ import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 import { addTagged, deleteTagged, renameTag, deleteTag } from 'reducers/database'
 import { setTagToHighlight, setNoTagToHighlight } from 'reducers/icicle-state'
 
-import { tags, tags_count } from 'css/app.css'
+import { tags, tags_count, visibleonhover } from 'css/app.css'
 
+import ReactTooltip from 'react-tooltip'
+
+import { mkRB } from 'components/button'
 import Tag from 'components/tag'
 import TextAlignCenter from 'components/text-align-center'
 
@@ -29,7 +32,19 @@ const Presentational = props => {
   }
 
   let tags_content
+  const mkTT = (tag) => (
+    <ReactTooltip key={tag + "__tooltip"} className={visibleonhover} place="left" effect='solid' delayHide={100}>
+      {mkRB(
+        props.onDeleteTag(tag),
+        (<i className="fi-arrow-left"/>),
+        true,
+        '',
+        {}
+      )}
+    </ReactTooltip>
+  );
 
+  // Dummy display for when there aren't any tags yet
   if(props.tags.size === 0){
     tags_content = (
         <div className='grid-y grid-frame align-center' style={{height:'75%'}}>
@@ -51,13 +66,17 @@ const Presentational = props => {
     );
   }
 
+  // Displaying the list of all tags
   else {
+
     let tags_list = props.tags.reduce((acc, tagged_ids, tag) => {
       let opacity = props.tag_to_highlight.length > 0 ? (tag === props.tag_to_highlight ? 1 : 0.2) : 1
+      let tooltip = mkTT(tag)
 
       let new_element = (
         <div
         key={tag}
+        data-tip={tag}
         onMouseEnter={(e)=> props.highlightTag(tag)}
         onMouseLeave={(e)=> props.stopHighlightingTag()}
         onClick={(e) => props.onAddTag(tag, props.focused_node_id)}
@@ -72,10 +91,14 @@ const Presentational = props => {
             />
         </div>);
 
-      return acc === null ? [new_element] : [...acc, new_element]
+      return acc === null ? [new_element, tooltip] : [...acc, new_element, tooltip]
     }, null)
 
-    tags_content = <div style={{fontSize: '0.8em', overflowY: 'auto', overflowX: 'hidden', maxHeight: '10.5em'}}>{tags_list}</div>;
+    tags_content = (
+      <div style={{fontSize: '0.8em', overflowY: 'auto', overflowX: 'hidden', maxHeight: '10.5em'}}>
+        {tags_list}
+      </div>
+    );
   }
 
   return (
@@ -118,7 +141,7 @@ const mapDispatchToProps = dispatch => {
     dispatch(commit())
   }
 
-  const onDeleteTag = (tag) => {
+  const onDeleteTag = (tag) => () => {
     dispatch(deleteTag(tag))
     dispatch(commit())
     dispatch(setNoTagToHighlight())

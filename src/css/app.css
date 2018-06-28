@@ -49,6 +49,12 @@
   text-align: center;
 }
 
+.extraclass:hover {
+  pointer-events: auto !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
 ::-webkit-scrollbar-track
 {
   border-radius: 10px;

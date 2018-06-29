@@ -7,9 +7,9 @@ import { setTagToHighlight, setNoTagToHighlight } from 'reducers/icicle-state'
 
 import { tags_bubble, tags_count, tags_add, tags_cross, visibleonhover } from 'css/app.css'
 
-import ReactTooltip from 'react-tooltip'
+// import ReactTooltip from 'react-tooltip'
 
-import { mkRB } from 'components/button'
+// import { mkRB } from 'components/button'
 import Tag from 'components/tag'
 import TextAlignCenter from 'components/text-align-center'
 

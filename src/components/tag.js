@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 
 import { deleteTagged } from 'reducers/database'
 
+import { tags_bubble, tags_cross } from 'css/app.css'
+
 import { commit } from 'reducers/root-reducer'
 import { tr } from 'dict'
 
@@ -15,12 +17,6 @@ const tag_style = {
 }
 
 const cross_style = {
-  display: "inline-block",
-  color: "white",
-  backgroundColor: "rgb(15, 80, 150)",
-  padding: "0 0.4em",
-  borderRadius: "1em",
-  marginRight: "0em",
   marginLeft: "-0.3em"
 }
 
@@ -33,8 +29,8 @@ const component_style = {
 
 const Presentational = props => {
   let cross = (
-    <div onMouseUp={(e) => {e.stopPropagation(); props.remove_handler() }} style={cross_style}>
-     X 
+    <div className={tags_bubble + " " + tags_cross} style={cross_style} onMouseUp={(e) => {e.stopPropagation(); props.remove_handler() }}>
+     <i className='fi-x'></i>
     </div>);
 
   return (

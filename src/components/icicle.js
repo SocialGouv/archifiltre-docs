@@ -17,97 +17,118 @@ import { tr } from 'dict'
 
 const nothing = ()=>{}
 
-
 class AnimatedIcicle extends React.PureComponent {
   constructor(props) {
     super(props)
 
-    this.state = {
-      prevProps:props,
-
-      zoom_animation:false,
-      x_clicked_node:0,
-      dx_clicked_node:0
-    }
+    this.state = {}
 
     this.onIcicleRectDoubleClickHandler = this.onIcicleRectDoubleClickHandler.bind(this)
 
-    this.savePrevProps = this.savePrevProps.bind(this)
-
-    this.startZoomAnimation = this.startZoomAnimation.bind(this)
-    this.stopZoomAnimation = this.stopZoomAnimation.bind(this)
-    this.zoomAnimation = this.zoomAnimation.bind(this)
 
     this.ref = this.ref.bind(this)
+
+    this.ani = this.ani.bind(this)
 
   }
 
   onIcicleRectDoubleClickHandler(props,event) {
-    // const dims = props.dims()
-    // const x = dims.x
-    // const dx = dims.dx
-
-    // this.startZoomAnimation(x,dx)
-
-    this.props.onIcicleRectDoubleClickHandler(props,event)
-  }
-
-  savePrevProps(prevProps) {
-    const props = this.props
-
-    if (props != prevProps) {
-      this.setState({
-        prevProps,
-      })
-    }
-  }
-
-
-  componentDidUpdate(prevProps, prevState) {
-    this.savePrevProps(prevProps)
-  }
-
-  startZoomAnimation(x,dx) {
-    console.log('jbzegljkzblgbzekgbzlebgkzlekb')
     this.setState({
-      zoom_animation:true,
-      x_clicked_node:x,
-      dx_clicked_node:dx,
+      prevProps:this.props,
+    }, () => {
+      this.props.onIcicleRectDoubleClickHandler(props,event)
+
+      const target_x = this.props.x
+      const target_dx = this.props.dx
+
+      const dims = props.dims()
+      const x = dims.x
+      const dx = dims.dx
+
+      const children = this.state.dom_element.children
+      const prev_dom_element = children[0]
+      const dom_element = children[1]
+
+      console.log(children)
+
+      Promise.all([
+        this.ani(prev_dom_element,false,target_x,target_dx,x,dx),
+        this.ani(dom_element,true,x,dx,target_x,target_dx),
+      ]).then(() => {
+          this.setState({
+            prevProps:undefined,
+          })
+        })
     })
+
+
   }
 
-  stopZoomAnimation() {
-    this.setState({
-      zoom_animation:false
-    })
-  }
 
-  zoomAnimation(dom_element) {
-    let animation_id
-    if (dom_element) {
-      const visible = () => this.state.zoom_animation
-      const measure = () => {
-        console.log('gnjkllberbgkerlkbgerlnklsgnqlm')
+  ani(dom_element,inv,target_x,target_dx,x,dx) {
+    return new Promise((resolve,reject) => {
+      const state = this.state
+
+      let animation_id
+      let nb_loop = 20
+
+      const init_translate_x = 0
+      const init_scale_x = 1
+      const init_opacity = 1
+
+      const target_scale_x = target_dx / dx
+      let target_translate_x = (target_x - x)
+      if (target_x < x) {
+        target_translate_x = target_translate_x * target_scale_x
       }
-      const mutate = () => {
-        console.log('aaaaaaaaaaaaakllberbgkerlkbgerlnklsgnqlm')
-        const x = this.x
-        const dx = this.dx
-        const x_clicked_node = this.state.x_clicked_node
-        const dx_clicked_node = this.state.dx_clicked_node
+      // const target_translate_x = (target_x - x) * target_scale_x
+      const target_opacity = 0
 
-        const translate_x = x - x_clicked_node
-        console.log(x_clicked_node,dx_clicked_node,translate_x)
+      const translate_x_inc = (target_translate_x - init_translate_x) / nb_loop
+      const scale_x_inc = (target_scale_x - init_scale_x) / nb_loop
+      const opacity_inc = (target_opacity - init_opacity) / nb_loop
+
+      let translate_x = init_translate_x
+      let scale_x = init_scale_x
+      let opacity = init_opacity
+      let f = (a,b) => a+b
+
+      if (inv) {
+        translate_x = target_translate_x
+        scale_x = target_scale_x
+        opacity = target_opacity
+        f = (a,b) => a-b
+      }
+
+      const visible = () => true
+      const measure = () => {}
+      const mutate = () => {
+        if (nb_loop) {
+          translate_x = f(translate_x, translate_x_inc)
+          scale_x = f(scale_x, scale_x_inc)
+          opacity = f(opacity, opacity_inc)
+          nb_loop--
+
+          // console.log(translate_x,scale_x)
+
+          dom_element.style.willChange = 'transform, opacity'
+          dom_element.style.transform = `translateX(${translate_x}px) scaleX(${scale_x})`
+          dom_element.style.opacity = opacity
+        } else {
+          dom_element.style.willChange = 'unset'
+          clear(animation_id)
+          resolve()
+        }
       }
 
       animation_id = animate(visible,measure,mutate)
-    } else {
-      clear(animation_id)
-    }
+    })
   }
 
   ref(dom_element) {
-    this.zoomAnimation(dom_element)
+    this.setState({
+      dom_element,
+    })
   }
 
   render() {
@@ -120,6 +141,11 @@ class AnimatedIcicle extends React.PureComponent {
 
     const state = this.state
     const prevProps = state.prevProps
+    // const styles = state.styles
+    // const props_array = state.props_array
+
+    const ref = this.ref
+    const prevRef = this.prevRef
 
     return (
       <g clipPath='url(#icicle-clip)'>
@@ -129,35 +155,24 @@ class AnimatedIcicle extends React.PureComponent {
           </clipPath>
         </defs>
 
-        <g style={{opacity:1, transition: 'transform 2s', transform:'scaleX(1) translateX(0%)'}}>
-          <Icicle
-            {...props}
-            onIcicleRectDoubleClickHandler={this.onIcicleRectDoubleClickHandler}
-          />
+
+        <g ref={ref}>
+          <g>
+            {prevProps && <Icicle {...prevProps}/>}
+          </g>
+          <g>
+            <Icicle
+              {...props}
+              onIcicleRectDoubleClickHandler={this.onIcicleRectDoubleClickHandler}
+            />
+          </g>
         </g>
-        <g style={{display:'none'}}>
-          <Icicle {...prevProps}/>
-        </g>
+        
       </g>
     )
   }
 }
 
-// <animate attributeName='opacity'
-//             from='1' to='0' dur='2s' fill='freeze' />
-
-
-
- // <animateTransform
- //            attributeName='transform'
- //            type='translate' from='0 0' to='100 0' dur='1s'
- //            additive='sum' fill='freeze'
- //          />
- //          <animateTransform
- //            attributeName='transform'
- //            type='scale' from='1 1' to='2 1' dur='1s'
- //            additive='sum' fill='freeze'
- //          />
 
 class Icicle extends React.PureComponent {
   constructor(props) {

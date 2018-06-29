@@ -11,6 +11,7 @@ import { tags_bubble, tags_count, tags_add, tags_cross, visibleonhover } from 'c
 
 // import { mkRB } from 'components/button'
 import Tag from 'components/tag'
+import TagListItem from 'components/all-tags-item'
 import TextAlignCenter from 'components/text-align-center'
 
 import * as Color from 'color'
@@ -19,6 +20,13 @@ import { tr } from 'dict'
 
 const trimString = (s, max_length) => {
   return s.length > max_length+3 ? s.substring(0,max_length) + "..." : s
+}
+
+const content_style = {
+  fontSize: '0.8em',
+  overflowY: 'auto',
+  overflowX: 'hidden',
+  maxHeight: '10.5em'
 }
 
 
@@ -87,43 +95,30 @@ const Presentational = props => {
   else {
 
     let tags_list = props.tags.reduce((acc, tagged_ids, tag) => {
+
       let opacity = props.tag_to_highlight.length > 0 ? (tag === props.tag_to_highlight ? 1 : 0.2) : 1
-
-      let delete_bubble = (
-        <div className={tags_bubble + " " + tags_cross} onClick={props.onDeleteTag(tag)}>
-          <i className='fi-x' />
-        </div>
-      );
-
       let shoud_display_add = (props.focused_node_id !== undefined && !props.tags.get(tag).has(props.focused_node_id))
-      let count_or_add_bubble = (
-        shoud_display_add ?
-        (<div className={tags_bubble + " " + tags_add} onClick={props.onAddTag(tag, props.focused_node_id)}><i className='fi-plus' /></div>)
-        : (<div className={tags_bubble + " " + tags_count}>{tagged_ids.size}</div>)
-      );
 
       let new_element = (
-        <div
+        <TagListItem
         key={tag}
-        data-tip={tag}
-        onMouseEnter={(e)=> props.highlightTag(tag)}
-        onMouseLeave={(e)=> props.stopHighlightingTag()}
-        onClick={(e) => props.onAddTag(tag, props.focused_node_id)}
-        style={{opacity, width:'20em'}}>
-          {delete_bubble}
-          {count_or_add_bubble}
-          <Tag
-            text={trimString(tag, 25)}
-            editing={false}
-            remove_handler={() => {}}
-            />
-        </div>);
+        tag={tag}
+        opacity={opacity}
+        shoud_display_add={shoud_display_add}
+        tag_number={tagged_ids.size}
+        highlightTag={props.highlightTag(tag)}
+        stopHighlightingTag={props.stopHighlightingTag}
+        deleteTag={props.onDeleteTag(tag)}
+        addTagToNode={props.onAddTag(tag, props.focused_node_id)}
+        />
+      );
 
       return acc === null ? [new_element] : [...acc, new_element]
+
     }, null)
 
     tags_content = (
-      <div style={{fontSize: '0.8em', overflowY: 'auto', overflowX: 'hidden', maxHeight: '10.5em'}}>
+      <div style={content_style} onMouseLeave={props.stopHighlightingTag}>
         {tags_list}
       </div>
     );
@@ -158,7 +153,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  const highlightTag = (tag) => {
+  const highlightTag = (tag) => () => {
     dispatch(setTagToHighlight(tag))
   }
 
@@ -173,8 +168,8 @@ const mapDispatchToProps = dispatch => {
 
   const onDeleteTag = (tag) => () => {
     dispatch(deleteTag(tag))
-    dispatch(commit())
     dispatch(setNoTagToHighlight())
+    dispatch(commit())
   }
 
   const onAddTag = (tag, id) => () => {

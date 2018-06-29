@@ -76,11 +76,9 @@ class Presentational extends React.Component {
 
     res = (
       <div
-      key={tag}
       onMouseEnter={this.props.highlightTag}
-      onMouseLeave={this.props.stopHighlightingTag}
       onClick={(e) => {}}
-      style={{this.props.opacity, width:'20em'}}>
+      style={{opacity: this.props.opacity, width:'20em'}}>
         {delete_bubble}
         {count_or_add_bubble}
         <Tag

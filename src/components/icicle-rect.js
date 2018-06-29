@@ -138,12 +138,15 @@ class Presentational extends React.PureComponent {
 
       res.push(
         (<rect
-          key='stroke'
-          x={this.props.x + 1}
-          y={this.props.y + 1}
-          width={this.props.dx - 2}
-          height='6'
-          style={{'fill': 'rgb(10, 50, 100)', 'stroke':'none', 'opacity':stroke_opacity}}
+            key='stroke'
+            x={this.props.x + 1}
+            y={this.props.y + 1}
+            width={this.props.dx - 2}
+            height='6'
+            onClick={this.onClickHandler}
+            onDoubleClick={this.onDoubleClickHandler}
+            onMouseOver={this.onMouseOverHandler}
+            style={{'fill': 'rgb(10, 50, 100)', 'stroke':'none', 'opacity':stroke_opacity}}
           />
         )
       )

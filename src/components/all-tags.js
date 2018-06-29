@@ -5,7 +5,7 @@ import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 import { addTagged, deleteTagged, renameTag, deleteTag } from 'reducers/database'
 import { setTagToHighlight, setNoTagToHighlight } from 'reducers/icicle-state'
 
-import { tags, tags_count, visibleonhover } from 'css/app.css'
+import { tags_bubble, tags_count, tags_add, visibleonhover } from 'css/app.css'
 
 import ReactTooltip from 'react-tooltip'
 
@@ -81,12 +81,20 @@ const Presentational = props => {
     );
   }
 
+  
+
   // Displaying the list of all tags
   else {
 
     let tags_list = props.tags.reduce((acc, tagged_ids, tag) => {
       let opacity = props.tag_to_highlight.length > 0 ? (tag === props.tag_to_highlight ? 1 : 0.2) : 1
-      let tooltip = mkTT(tag)
+
+      let shoud_display_plus = (tag === props.tag_to_highlight && props.focused_node_id !== undefined && !props.tags.get(tag).has(props.focused_node_id))
+      let bubble = (
+        shoud_display_plus ?
+        (<div className={tags_bubble + " " + tags_add} onClick={props.onAddTag(tag, props.focused_node_id)}><i className='fi-plus' /></div>)
+        : (<div className={tags_bubble + " " + tags_count}>{tagged_ids.size}</div>)
+      );
 
       let new_element = (
         <div
@@ -96,9 +104,7 @@ const Presentational = props => {
         onMouseLeave={(e)=> props.stopHighlightingTag()}
         onClick={(e) => props.onAddTag(tag, props.focused_node_id)}
         style={{opacity, width:'20em'}}>
-          <div className={tags_count}>
-            {tagged_ids.size}
-          </div>
+          {bubble}
           <Tag
             text={trimString(tag, 25)}
             editing={false}
@@ -106,7 +112,7 @@ const Presentational = props => {
             />
         </div>);
 
-      return acc === null ? [new_element, tooltip] : [...acc, new_element, tooltip]
+      return acc === null ? [new_element] : [...acc, new_element]
     }, null)
 
     tags_content = (
@@ -115,6 +121,8 @@ const Presentational = props => {
       </div>
     );
   }
+
+
 
   return (
     <div style={component_style}>

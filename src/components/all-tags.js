@@ -32,11 +32,26 @@ const Presentational = props => {
   }
 
   let tags_content
+
   const mkTT = (tag) => (
     <ReactTooltip key={tag + "__tooltip"} className={visibleonhover} place="left" effect='solid' delayHide={100}>
       {mkRB(
-        props.onDeleteTag(tag),
+        props.onAddTag(tag, props.focused_node_id),
         (<i className="fi-arrow-left"/>),
+        true,
+        '',
+        {}
+      )}
+      {mkRB(
+        props.onDeleteTag(tag),
+        (<i className="fi-pencil"/>),
+        true,
+        '',
+        {}
+      )}
+      {mkRB(
+        props.onDeleteTag(tag),
+        (<i className="fi-trash"/>),
         true,
         '',
         {}
@@ -147,7 +162,7 @@ const mapDispatchToProps = dispatch => {
     dispatch(setNoTagToHighlight())
   }
 
-  const onAddTag = (tag, id) => {
+  const onAddTag = (tag, id) => () => {
     if(id !== undefined){
       dispatch(addTagged(tag,id))
       dispatch(commit())

@@ -49,8 +49,11 @@
   text-align: center;
 }
 
-.extraclass:hover {
+.visibleonhover {
   pointer-events: auto !important;
+}
+
+.visibleonhover:hover {
   visibility: visible !important;
   opacity: 1 !important;
 }

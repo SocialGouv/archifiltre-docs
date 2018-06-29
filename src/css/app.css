@@ -48,6 +48,21 @@
   filter: brightness(120%);
 }
 
+.tags_cross {
+  -webkit-transition : filter 0.25s ease-out;
+  transition : filter 0.25s ease-out;
+  cursor: pointer;
+  background-color: #e04d1c;
+  padding: 0 0.4em;
+  border-radius: 1em;
+  max-width: 0.3em;
+}
+
+.tags_cross:hover{
+  -webkit-filter: brightness(85%);
+  filter: brightness(120%);
+}
+
 .visibleonhover {
   pointer-events: auto !important;
 }

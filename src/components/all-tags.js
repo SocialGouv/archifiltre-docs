@@ -5,7 +5,7 @@ import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 import { addTagged, deleteTagged, renameTag, deleteTag } from 'reducers/database'
 import { setTagToHighlight, setNoTagToHighlight } from 'reducers/icicle-state'
 
-import { tags_bubble, tags_count, tags_add, visibleonhover } from 'css/app.css'
+import { tags_bubble, tags_count, tags_add, tags_cross, visibleonhover } from 'css/app.css'
 
 import ReactTooltip from 'react-tooltip'
 
@@ -33,31 +33,31 @@ const Presentational = props => {
 
   let tags_content
 
-  const mkTT = (tag) => (
-    <ReactTooltip key={tag + "__tooltip"} className={visibleonhover} place="left" effect='solid' delayHide={100}>
-      {mkRB(
-        props.onAddTag(tag, props.focused_node_id),
-        (<i className="fi-arrow-left"/>),
-        true,
-        '',
-        {}
-      )}
-      {mkRB(
-        props.onDeleteTag(tag),
-        (<i className="fi-pencil"/>),
-        true,
-        '',
-        {}
-      )}
-      {mkRB(
-        props.onDeleteTag(tag),
-        (<i className="fi-trash"/>),
-        true,
-        '',
-        {}
-      )}
-    </ReactTooltip>
-  );
+  // const mkTT = (tag) => (
+  //   <ReactTooltip key={tag + "__tooltip"} className={visibleonhover} place="left" effect='solid' delayHide={100}>
+  //     {mkRB(
+  //       props.onAddTag(tag, props.focused_node_id),
+  //       (<i className="fi-arrow-left"/>),
+  //       true,
+  //       '',
+  //       {}
+  //     )}
+  //     {mkRB(
+  //       props.onDeleteTag(tag),
+  //       (<i className="fi-pencil"/>),
+  //       true,
+  //       '',
+  //       {}
+  //     )}
+  //     {mkRB(
+  //       props.onDeleteTag(tag),
+  //       (<i className="fi-trash"/>),
+  //       true,
+  //       '',
+  //       {}
+  //     )}
+  //   </ReactTooltip>
+  // );
 
   // Dummy display for when there aren't any tags yet
   if(props.tags.size === 0){
@@ -81,7 +81,7 @@ const Presentational = props => {
     );
   }
 
-  
+
 
   // Displaying the list of all tags
   else {
@@ -89,9 +89,15 @@ const Presentational = props => {
     let tags_list = props.tags.reduce((acc, tagged_ids, tag) => {
       let opacity = props.tag_to_highlight.length > 0 ? (tag === props.tag_to_highlight ? 1 : 0.2) : 1
 
-      let shoud_display_plus = (tag === props.tag_to_highlight && props.focused_node_id !== undefined && !props.tags.get(tag).has(props.focused_node_id))
-      let bubble = (
-        shoud_display_plus ?
+      let delete_bubble = (
+        <div className={tags_bubble + " " + tags_cross} onClick={props.onDeleteTag(tag)}>
+          <i className='fi-x' />
+        </div>
+      );
+
+      let shoud_display_add = (props.focused_node_id !== undefined && !props.tags.get(tag).has(props.focused_node_id))
+      let count_or_add_bubble = (
+        shoud_display_add ?
         (<div className={tags_bubble + " " + tags_add} onClick={props.onAddTag(tag, props.focused_node_id)}><i className='fi-plus' /></div>)
         : (<div className={tags_bubble + " " + tags_count}>{tagged_ids.size}</div>)
       );
@@ -104,7 +110,8 @@ const Presentational = props => {
         onMouseLeave={(e)=> props.stopHighlightingTag()}
         onClick={(e) => props.onAddTag(tag, props.focused_node_id)}
         style={{opacity, width:'20em'}}>
-          {bubble}
+          {delete_bubble}
+          {count_or_add_bubble}
           <Tag
             text={trimString(tag, 25)}
             editing={false}

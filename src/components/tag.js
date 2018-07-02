@@ -34,7 +34,7 @@ const Presentational = props => {
     </div>);
 
   return (
-    <div style={component_style}>
+    <div style={component_style} onClick={props.click_handler}>
       <div style={tag_style}>
         {props.text}
       </div>

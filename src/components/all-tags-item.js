@@ -10,7 +10,7 @@ import Tag from 'components/tag'
 // import { startEditingTags, stopEditingTags } from 'reducers/report-state'
 // import { addTagged, deleteTagged } from 'reducers/database'
 
-import { tags_bubble, tags_count, tags_add, tags_cross } from 'css/app.css'
+import { tags_bubble, tags_count, tags_add, tags_cross, edit_hover_container, edit_hover_pencil } from 'css/app.css'
 
 import { commit } from 'reducers/root-reducer'
 import { tr } from 'dict'
@@ -20,12 +20,16 @@ const input_style = {
   border: "none",
   background: "none",
   outline: "none",
-  borderBottom: "3px solid rgb(10, 50, 100)"
+  paddingBottom: 0,
+  borderBottom: "3px solid rgb(10, 50, 100)",
+  marginBottom: "2px",
+  fontSize: "1.15em"
 }
 
 class Presentational extends React.Component {
   constructor(props) {
     super(props)
+
     this.textInput = null
   }
 
@@ -36,26 +40,17 @@ class Presentational extends React.Component {
   render() {
 
     let keyUp = (event) => {
-      // this.props.candidateTagCallback(event.target.value)
+      if (event.keyCode === 13) { // Enter
+        event.preventDefault();
+        if(event.target.value.length > 0) {
+          this.props.renameTag(event.target.value);
+          event.target.value = "";
+        }
+        this.props.stopEditingTag();
 
-      // if (event.keyCode === 8) { // Backspace
-      //   if(event.target.value.length == 0 && this.props.tag_list.size > 0){
-      //     this.props.deleteTag(this.props.tag_list.last(), this.props.node_id);
-      //   }
-
-      // } else if (event.keyCode === 13) { // Enter
-      //   event.preventDefault();
-      //   if(event.target.value.length === 0) {
-      //     this.props.endEditing();
-      //   } else {
-      //     this.props.addTag(event.target.value, this.props.node_id);
-      //     event.target.value = "";
-      //   }
-
-      // } else if (event.keyCode === 27) { // Escape
-      //   event.stopPropagation();
-      //   this.props.endEditing();
-      // }
+      } else if (event.keyCode === 27) { // Escape
+        this.props.stopEditingTag();
+      }
     }
 
     let res
@@ -74,70 +69,38 @@ class Presentational extends React.Component {
       : (<div className={tags_bubble + " " + tags_count}>{this.props.tag_number}</div>)
     );
 
-    res = (
-      <div
-      onMouseEnter={this.props.highlightTag}
-      onClick={(e) => {}}
-      style={{opacity: this.props.opacity, width:'20em'}}>
-        {delete_bubble}
-        {count_or_add_bubble}
-        <Tag
-          text={tag}
-          editing={false}
-          remove_handler={() => {}}
-          />
-      </div>
+    let tag_pill = (
+      this.props.editing ?
+      (<input
+        style={input_style}
+        onFocus={(e) => {e.target.select();}}
+        onMouseUp={(e) => {e.stopPropagation();}}
+        onKeyUp={keyUp}
+        onBlur={(e) => {this.props.renameTag(e.target.value); this.props.stopEditingTag()}}
+        defaultValue={tag}
+        placeholder={tr("Rename tag")}
+        ref={(component) => {this.textInput = component;}} />)
+      : (<Tag
+        text={tag}
+        editing={false}
+        click_handler={this.props.startEditingTag}
+        remove_handler={() => {}}
+        />)
     );
 
+    let pencil = this.props.editing ? <span /> : (<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} />);
 
-    // if(this.props.editing){
-      // this.props.candidateTagCallback('')
-      // if(this.props.tag_list.size > 0){
-      //   elements = this.props.tag_list.reduce((acc, val, i) => {
-      //     let new_element = (
-      //       <Tag
-      //       key={val}
-      //       text={val}
-      //       node_id={this.props.node_id}
-      //       editing={true}
-      //       remove_handler={handle_remove(val)}
-      //       />);
-
-      //     return acc === null ? [new_element] : [...acc, new_element]
-      //   }, null)}
-
-      // let input_box = (
-      //   <input
-      //   key="__input__"
-      //   style={input_style}
-      //   onMouseUp={(e) => {e.stopPropagation();}}
-      //   onKeyUp={keyUp}
-      //   placeholder={tr("New tag")}
-      //   ref={(component) => {this.textInput = component;}} />);
-
-      // res.push(...elements, input_box)
-    // }
-
-    // else{
-      // if(this.props.tag_list.size > 0){
-      //   elements = this.props.tag_list.reduce((acc, val, i) => {
-      //     let new_element = (
-      //       <Tag
-      //       key={val}
-      //       text={val}
-      //       editing={false}
-      //       remove_handler={handle_remove(val)}
-      //       />);
-
-      //     return acc === null ? [new_element] : [...acc, new_element]
-      //   }, null)
-
-      //   res.push(...elements)
-      // }
-      // else{
-      //   res.push(<span key="__closing__">{tr("Click here to add some tags!")}</span>)
-      // }
-    // }
+    res = (
+      <div
+      className= { edit_hover_container }
+      onMouseEnter={this.props.highlightTag}
+      style={{opacity: this.props.opacity, width:'20em', background: 'none'}}>
+        {delete_bubble}
+        {count_or_add_bubble}
+        {tag_pill}
+        {pencil}
+      </div>
+    );
 
     return (
       res
@@ -148,28 +111,11 @@ class Presentational extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    // editing: selectReportState(state).editing_tags(),
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  // const addTag = (tag, id) => {
-  //   dispatch(addTagged(tag, id))
-  //   dispatch(commit())
-  // }
-
-  // const deleteTag = (tag, id) => {
-  //   dispatch(deleteTagged(tag, id))
-  //   dispatch(commit())
-  // }
-
-  // const endEditing = () => {
-  //   dispatch(stopEditingTags())
-  // }
   return {
-    // addTag,
-    // deleteTag,
-    // endEditing,
   }
 }
 

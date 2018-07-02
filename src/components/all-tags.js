@@ -1,15 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
+import { selectDatabase, selectIcicleState, selectTagListState } from 'reducers/root-reducer'
 import { addTagged, deleteTagged, renameTag, deleteTag } from 'reducers/database'
 import { setTagToHighlight, setNoTagToHighlight } from 'reducers/icicle-state'
+import { setTagBeingEdited, setNoTagBeingEdited } from 'reducers/tag-list-state'
 
 import { tags_bubble, tags_count, tags_add, tags_cross, visibleonhover } from 'css/app.css'
 
-// import ReactTooltip from 'react-tooltip'
-
-// import { mkRB } from 'components/button'
 import Tag from 'components/tag'
 import TagListItem from 'components/all-tags-item'
 import TextAlignCenter from 'components/text-align-center'
@@ -41,32 +39,6 @@ const Presentational = props => {
 
   let tags_content
 
-  // const mkTT = (tag) => (
-  //   <ReactTooltip key={tag + "__tooltip"} className={visibleonhover} place="left" effect='solid' delayHide={100}>
-  //     {mkRB(
-  //       props.onAddTag(tag, props.focused_node_id),
-  //       (<i className="fi-arrow-left"/>),
-  //       true,
-  //       '',
-  //       {}
-  //     )}
-  //     {mkRB(
-  //       props.onDeleteTag(tag),
-  //       (<i className="fi-pencil"/>),
-  //       true,
-  //       '',
-  //       {}
-  //     )}
-  //     {mkRB(
-  //       props.onDeleteTag(tag),
-  //       (<i className="fi-trash"/>),
-  //       true,
-  //       '',
-  //       {}
-  //     )}
-  //   </ReactTooltip>
-  // );
-
   // Dummy display for when there aren't any tags yet
   if(props.tags.size === 0){
     tags_content = (
@@ -96,7 +68,17 @@ const Presentational = props => {
 
     let tags_list = props.tags.reduce((acc, tagged_ids, tag) => {
 
-      let opacity = props.tag_to_highlight.length > 0 ? (tag === props.tag_to_highlight ? 1 : 0.2) : 1
+      let opacity = (
+        props.tag_being_edited.length > 0 ?
+        (props.tag_being_edited === tag ? 1 : 0.2)
+        : (
+          props.tag_to_highlight.length > 0 ?
+          (props.tag_to_highlight === tag ? 1 : 0.2)
+          : 1
+        )
+      );
+
+      let editing = (props.tag_being_edited === tag)
       let shoud_display_add = (props.focused_node_id !== undefined && !props.tags.get(tag).has(props.focused_node_id))
 
       let new_element = (
@@ -104,11 +86,15 @@ const Presentational = props => {
         key={tag}
         tag={tag}
         opacity={opacity}
+        editing={editing}
         shoud_display_add={shoud_display_add}
         tag_number={tagged_ids.size}
         highlightTag={props.highlightTag(tag)}
         stopHighlightingTag={props.stopHighlightingTag}
+        startEditingTag={props.startEditingTag(tag)}
+        stopEditingTag={props.stopEditingTag}
         deleteTag={props.onDeleteTag(tag)}
+        renameTag={props.onRenameTag(tag)}
         addTagToNode={props.onAddTag(tag, props.focused_node_id)}
         />
       );
@@ -139,16 +125,20 @@ const Presentational = props => {
 const mapStateToProps = state => {
   const database = selectDatabase(state)
   const icicle_state = selectIcicleState(state)
+  const tag_list_state = selectTagListState(state)
 
   const sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
   const focused_node_id = sequence[sequence.length - 1]
 
   const tag_to_highlight = icicle_state.tag_to_highlight()
 
+  const tag_being_edited = tag_list_state.tag_being_edited()
+
 	return {
     tags: database.getAllTags().sortBy(t => -1 * t.size),
     tag_to_highlight,
-    focused_node_id
+    focused_node_id,
+    tag_being_edited,
   }
 }
 
@@ -161,7 +151,15 @@ const mapDispatchToProps = dispatch => {
     dispatch(setNoTagToHighlight())
   }
 
-  const onRenameTag = (old_tag, new_tag) => {
+  const startEditingTag = (tag) => () => {
+    dispatch(setTagBeingEdited(tag))
+  }
+
+  const stopEditingTag = () => {
+    dispatch(setNoTagBeingEdited())
+  }
+
+  const onRenameTag = (old_tag) => (new_tag) => {
     dispatch(renameTag(old_tag, new_tag))
     dispatch(commit())
   }
@@ -181,6 +179,8 @@ const mapDispatchToProps = dispatch => {
  	return {
     highlightTag,
     stopHighlightingTag,
+    startEditingTag,
+    stopEditingTag,
     onRenameTag,
     onDeleteTag,
     onAddTag

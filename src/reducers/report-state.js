@@ -2,7 +2,7 @@
 import duck from 'reducers/duck'
 import { Record } from 'immutable'
 
-const type = 'cheapExp/icicleState'
+const type = 'cheapExp/reportState'
 
 
 const State = Record({

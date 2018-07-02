@@ -72,6 +72,11 @@
   opacity: 1 !important;
 }
 
+::selection {
+  color: white;
+  background-color: rgb(10, 50, 100);
+}
+
 ::-webkit-scrollbar-track
 {
   border-radius: 10px;

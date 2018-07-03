@@ -109,8 +109,6 @@
   cursor: text;
 }
 
-.edit_hover_container {
-}
 
 .editable_text:focus {
   border: none;

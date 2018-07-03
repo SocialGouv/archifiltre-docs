@@ -52,7 +52,6 @@
     "react": "16.4.0",
     "react-dom": "16.4.0",
     "react-redux": "5.0.6",
-    "react-tooltip": "3.6.1",
     "redux": "3.7.2",
     "redux-thunk": "2.2.0",
     "riek": "1.1.0",

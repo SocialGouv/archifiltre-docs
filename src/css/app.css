@@ -72,6 +72,13 @@
   opacity: 1 !important;
 }
 
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
 ::selection {
   color: white;
   background-color: rgb(10, 50, 100);

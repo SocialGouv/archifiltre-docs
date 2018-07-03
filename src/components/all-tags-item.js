@@ -10,13 +10,13 @@ import Tag from 'components/tag'
 // import { startEditingTags, stopEditingTags } from 'reducers/report-state'
 // import { addTagged, deleteTagged } from 'reducers/database'
 
-import { tags_bubble, tags_count, tags_add, tags_cross, edit_hover_container, edit_hover_pencil } from 'css/app.css'
+import { tags_bubble, tags_count, tags_add, tags_cross, edit_hover_container, edit_hover_pencil, background } from 'css/app.css'
 
 import { commit } from 'reducers/root-reducer'
 import { tr } from 'dict'
 
 const input_style = {
-  width: "7em",
+  width: "50%",
   border: "none",
   background: "none",
   outline: "none",
@@ -57,6 +57,26 @@ class Presentational extends React.Component {
 
     let tag = this.props.tag
 
+    let component_style = {
+      position: 'relative',
+      width:'100%',
+      background: 'none',
+      margin: '0',
+      padding: '2px 0',
+    }
+
+    let content_style = {
+      opacity: this.props.opacity,
+      position: 'relative',
+      zIndex: '1'
+    }
+
+    let background_style = {
+      height: '100%',
+      width: '100%',
+      // backgroundColor: 'gray'
+    }
+
     let delete_bubble = (
       <div className={tags_bubble + " " + tags_cross} onClick={this.props.deleteTag}>
         <i className='fi-x' />
@@ -85,6 +105,7 @@ class Presentational extends React.Component {
         editing={false}
         click_handler={this.props.startEditingTag}
         remove_handler={() => {}}
+        custom_style={{'margin': '0'}}
         />)
     );
 
@@ -94,11 +115,14 @@ class Presentational extends React.Component {
       <div
       className= { edit_hover_container }
       onMouseEnter={this.props.highlightTag}
-      style={{opacity: this.props.opacity, width:'20em', background: 'none'}}>
-        {delete_bubble}
-        {count_or_add_bubble}
-        {tag_pill}
-        {pencil}
+      style={component_style}>
+        <div style={content_style}>
+          {delete_bubble}
+          {count_or_add_bubble}
+          {tag_pill}&nbsp;
+          {pencil}
+        </div>
+        <div className={ background } style={background_style}></div>
       </div>
     );
 

@@ -127,6 +127,8 @@ const mapStateToProps = state => {
   const icicle_state = selectIcicleState(state)
   const tag_list_state = selectTagListState(state)
 
+  const tags = database.getAllTags().sortBy(t => -1 * t.size)
+
   const sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
   const focused_node_id = sequence[sequence.length - 1]
 
@@ -135,7 +137,7 @@ const mapStateToProps = state => {
   const tag_being_edited = tag_list_state.tag_being_edited()
 
 	return {
-    tags: database.getAllTags().sortBy(t => -1 * t.size),
+    tags,
     tag_to_highlight,
     focused_node_id,
     tag_being_edited,

@@ -20,7 +20,7 @@ const cross_style = {
   marginLeft: "-0.3em"
 }
 
-const component_style = {
+const default_component_style = {
   fontWeight: "bold",
   display: "inline-block",
   marginRight: "0.3em",
@@ -28,10 +28,14 @@ const component_style = {
 }
 
 const Presentational = props => {
-  let cross = (
+  const cross = (
     <div className={tags_bubble + " " + tags_cross} style={cross_style} onMouseUp={(e) => {e.stopPropagation(); props.remove_handler() }}>
      <i className='fi-x'></i>
     </div>);
+
+  const custom_style = props.custom_style
+
+  const component_style = Object.assign({}, default_component_style, custom_style);
 
   return (
     <div style={component_style} onClick={props.click_handler}>

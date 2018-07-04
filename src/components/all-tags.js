@@ -78,6 +78,8 @@ const Presentational = props => {
         )
       );
 
+      let percentage = Math.floor((props.tags_sizes.get(tag) / props.total_volume)*100)
+
       let editing = (props.tag_being_edited === tag)
       let shoud_display_add = (props.focused_node_id !== undefined && !props.tags.get(tag).has(props.focused_node_id))
 
@@ -87,6 +89,7 @@ const Presentational = props => {
         tag={tag}
         opacity={opacity}
         editing={editing}
+        percentage={percentage}
         shoud_display_add={shoud_display_add}
         tag_number={tagged_ids.size}
         highlightTag={props.highlightTag(tag)}
@@ -128,6 +131,8 @@ const mapStateToProps = state => {
   const tag_list_state = selectTagListState(state)
 
   const tags = database.getAllTags().sortBy(t => -1 * t.size)
+  const tags_sizes = database.getAllTagsSizes()
+  const total_volume = database.volume()
 
   const sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
   const focused_node_id = sequence[sequence.length - 1]
@@ -138,9 +143,11 @@ const mapStateToProps = state => {
 
 	return {
     tags,
+    tags_sizes,
     tag_to_highlight,
     focused_node_id,
     tag_being_edited,
+    total_volume
   }
 }
 

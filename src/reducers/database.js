@@ -33,6 +33,7 @@ function bundle(state) {
     getTags: (id) => FileSystem.getTagsByID(state, id),
     getTagged: (tag) => FileSystem.getTagged(state, tag),
     getAllTags: () => FileSystem.getAllTags(state),
+    getAllTagsSizes: () => FileSystem.getAllTagsSizes(state),
 
     getLeafIdArray: () => FileSystem.getLeafIdArray(state),
     getSubIdList: (id) => FileSystem.getSubIdList(id, state),

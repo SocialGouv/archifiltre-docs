@@ -67,6 +67,9 @@ class AnimatedIcicle extends React.PureComponent {
       const prev_dom_element = children[0]
       const dom_element = children[1]
 
+
+      console.log({x,dx,target_x,target_dx})
+
       Promise.all([
         this.ani(prev_dom_element,false,target_x,target_dx,x,dx),
         this.ani(dom_element,true,x,dx,target_x,target_dx),
@@ -98,7 +101,8 @@ class AnimatedIcicle extends React.PureComponent {
       const init = [0,1,1]
       const target = [target_x - x, target_dx / dx, 0]
 
-      if (target_x < x) {
+      if (target_x === 0) {
+        console.log('auietsnstauiesn')
         target[0] = target[0] * target[1]
       }
 
@@ -221,7 +225,7 @@ class Icicle extends React.PureComponent {
       dx_prime = 0
     }
 
-    console.log({x,dx,xc,dxc,x_prime,dx_prime})
+    // console.log({x,dx,xc,dxc,x_prime,dx_prime})
 
     const root_id = props.root_id
     const trueFHeight = this.trueFHeight

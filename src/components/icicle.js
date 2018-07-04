@@ -8,6 +8,8 @@ import IcicleRect from 'components/icicle-rect'
 import Ruler from 'components/ruler'
 import BreadCrumbs from 'components/breadcrumbs'
 
+import { generateRandomString } from 'random-gen'
+
 import MinimapBracket from 'components/minimap-bracket'
 
 import { animate, clear } from 'animation-daemon' 
@@ -17,11 +19,24 @@ import { tr } from 'dict'
 
 const nothing = ()=>{}
 
+function computeCumulative(array) {
+  const ans = [0]
+  for (let i = 0; i < array.length - 1; i++) {
+    ans.push(array[i] + ans[i])
+  }
+  return ans
+}
+
 class AnimatedIcicle extends React.PureComponent {
   constructor(props) {
     super(props)
 
-    this.state = {}
+    this.state = {
+      prevStyle:{
+        display:'none',
+      },
+      prevProps:props,
+    }
 
     this.onIcicleRectDoubleClickHandler = this.onIcicleRectDoubleClickHandler.bind(this)
 
@@ -35,6 +50,9 @@ class AnimatedIcicle extends React.PureComponent {
   onIcicleRectDoubleClickHandler(props,event) {
     this.setState({
       prevProps:this.props,
+      prevStyle:{
+        display:'inherit',
+      }
     }, () => {
       this.props.onIcicleRectDoubleClickHandler(props,event)
 
@@ -49,72 +67,59 @@ class AnimatedIcicle extends React.PureComponent {
       const prev_dom_element = children[0]
       const dom_element = children[1]
 
-      console.log(children)
-
       Promise.all([
         this.ani(prev_dom_element,false,target_x,target_dx,x,dx),
         this.ani(dom_element,true,x,dx,target_x,target_dx),
       ]).then(() => {
           this.setState({
-            prevProps:undefined,
+            prevStyle:{
+              display:'none',
+            }
           })
         })
     })
-
-
   }
 
 
   ani(dom_element,inv,target_x,target_dx,x,dx) {
     return new Promise((resolve,reject) => {
       const state = this.state
+      const getTime = () => new Date().getTime()
+      const init_time = getTime()
+      const target_time = 1000
+      const zeroToOne = () => {
+        const current_time = getTime()
+        return Math.min(1, (current_time-init_time)/target_time)
+      }
 
       let animation_id
-      let nb_loop = 20
+      // [translateX, scaleX, opacity]
 
-      const init_translate_x = 0
-      const init_scale_x = 1
-      const init_opacity = 1
+      const init = [0,1,1]
+      const target = [target_x - x, target_dx / dx, 0]
 
-      const target_scale_x = target_dx / dx
-      let target_translate_x = (target_x - x)
       if (target_x < x) {
-        target_translate_x = target_translate_x * target_scale_x
+        target[0] = target[0] * target[1]
       }
-      // const target_translate_x = (target_x - x) * target_scale_x
-      const target_opacity = 0
 
-      const translate_x_inc = (target_translate_x - init_translate_x) / nb_loop
-      const scale_x_inc = (target_scale_x - init_scale_x) / nb_loop
-      const opacity_inc = (target_opacity - init_opacity) / nb_loop
-
-      let translate_x = init_translate_x
-      let scale_x = init_scale_x
-      let opacity = init_opacity
-      let f = (a,b) => a+b
-
+      let vector = init.map((val,i)=>a=>val+(target[i]-val)*a)
       if (inv) {
-        translate_x = target_translate_x
-        scale_x = target_scale_x
-        opacity = target_opacity
-        f = (a,b) => a-b
+        vector = target.map((val,i)=>a=>val+(init[i]-val)*a)
       }
 
       const visible = () => true
       const measure = () => {}
       const mutate = () => {
-        if (nb_loop) {
-          translate_x = f(translate_x, translate_x_inc)
-          scale_x = f(scale_x, scale_x_inc)
-          opacity = f(opacity, opacity_inc)
-          nb_loop--
+        const zero_to_one = zeroToOne()
+        let translate_x = vector[0](zero_to_one)
+        let scale_x = vector[1](zero_to_one)
+        let opacity = vector[2](zero_to_one)
 
-          // console.log(translate_x,scale_x)
-
-          dom_element.style.willChange = 'transform, opacity'
-          dom_element.style.transform = `translateX(${translate_x}px) scaleX(${scale_x})`
-          dom_element.style.opacity = opacity
-        } else {
+        dom_element.style.willChange = 'transform, opacity'
+        dom_element.style.transform = `translateX(${translate_x}px) scaleX(${scale_x})`
+        dom_element.style.opacity = opacity
+        
+        if (zero_to_one >= 1) {
           dom_element.style.willChange = 'unset'
           clear(animation_id)
           resolve()
@@ -141,24 +146,24 @@ class AnimatedIcicle extends React.PureComponent {
 
     const state = this.state
     const prevProps = state.prevProps
-    // const styles = state.styles
-    // const props_array = state.props_array
+    const prevStyle = state.prevStyle
 
     const ref = this.ref
     const prevRef = this.prevRef
 
+    const svg_id = generateRandomString(40)
+
     return (
-      <g clipPath='url(#icicle-clip)'>
+      <g clipPath={'url(#'+svg_id+')'}>
         <defs>
-          <clipPath id='icicle-clip'>
+          <clipPath id={svg_id}>
             <rect x={x} y={y} width={dx} height={dy}/>
           </clipPath>
         </defs>
 
-
         <g ref={ref}>
-          <g>
-            {prevProps && <Icicle {...prevProps}/>}
+          <g style={prevStyle}>
+            <Icicle {...prevProps}/>
           </g>
           <g>
             <Icicle
@@ -195,63 +200,50 @@ class Icicle extends React.PureComponent {
   }
 
   render() {
-    const x = this.props.x
-    let y = this.props.y
-    const width = this.props.dx
-    let height = this.props.dy
-    const trueFHeight = this.trueFHeight
-    let id = this.props.root_id
-    let display_root_components = []
-    const display_root = this.removeRootId(this.props.display_root)
+    const props = this.props
 
-    if (display_root.length) {
-      id = display_root.slice(-1)[0]
-      display_root_components = display_root.map(node_id => {
-        const x_node = x
-        const y_node = y
-        const dx_node = width
-        const dy_node = trueFHeight(node_id)
-        y += dy_node
-        height -= dy_node
+    const x = props.x
+    const y = props.y
+    const dx = props.dx
+    const dy = props.dy
 
-        return (
-          <g key={this.makeKey(node_id)}>
-            <IcicleRect
-              node_id={node_id}
-              x={x_node}
-              y={y_node}
-              dx={dx_node}
-              dy={dy_node}
-              fillColor={this.props.fillColor}
+    const display_root = props.display_root
+    const [xc,dxc] = props.computeWidthRec(display_root,x,dx)
 
-              onClickHandler={this.props.onIcicleRectClickHandler}
-              onDoubleClickHandler={this.props.onIcicleRectDoubleClickHandler}
-              onMouseOverHandler={this.props.onIcicleRectMouseOverHandler}
-            />
-          </g>
-        )
-      })
+    let x_prime = (x + (x - xc)) * (dx / dxc)
+    let dx_prime = dx * (dx / dxc)
+
+    if (Number.isNaN(x_prime)) {
+      x_prime = 0
     }
 
-    return (
-      <g>
-        {display_root_components}
-        <IcicleRecursive
-          x={x}
-          y={y}
-          width={width}
-          height={height}
-          id={id}
-          fWidth={this.props.fWidth}
-          normalizeWidth={this.props.normalizeWidth}
-          trueFHeight={trueFHeight}
-          getChildrenIdFromId={this.props.getChildrenIdFromId}
-          fillColor={this.props.fillColor}
-          shouldRenderChild={this.props.shouldRenderChild}
+    if (Number.isNaN(dx_prime)) {
+      dx_prime = 0
+    }
 
-          onIcicleRectClickHandler={this.props.onIcicleRectClickHandler}
-          onIcicleRectDoubleClickHandler={this.props.onIcicleRectDoubleClickHandler}
-          onIcicleRectMouseOverHandler={this.props.onIcicleRectMouseOverHandler}
+    console.log({x,dx,xc,dxc,x_prime,dx_prime})
+
+    const root_id = props.root_id
+    const trueFHeight = this.trueFHeight
+
+    return (
+       <g>
+        <IcicleRecursive
+          x={x_prime}
+          y={y}
+          width={dx_prime}
+          height={dy}
+          id={root_id}
+          fWidth={props.fWidth}
+          normalizeWidth={props.normalizeWidth}
+          trueFHeight={trueFHeight}
+          getChildrenIdFromId={props.getChildrenIdFromId}
+          fillColor={props.fillColor}
+          shouldRenderChild={props.shouldRenderChild}
+
+          onIcicleRectClickHandler={props.onIcicleRectClickHandler}
+          onIcicleRectDoubleClickHandler={props.onIcicleRectDoubleClickHandler}
+          onIcicleRectMouseOverHandler={props.onIcicleRectMouseOverHandler}
         />
       </g>
     )
@@ -268,20 +260,13 @@ class IcicleRecursive extends React.PureComponent {
     return 'icicle-recursive-'+id
   }
 
-  computeCumulative(array) {
-    const ans = [0]
-    for (let i = 0; i < array.length - 1; i++) {
-      ans.push(array[i] + ans[i])
-    }
-    return ans
-  }
 
 
   render() {
     const children = this.props.getChildrenIdFromId(this.props.id)
     const children_width = this.props.normalizeWidth(children.map(this.props.fWidth))
       .map(a=>a*this.props.width)
-    const cumulated_children_width = this.computeCumulative(children_width)
+    const cumulated_children_width = computeCumulative(children_width)
 
     const children_height = children.map(this.props.trueFHeight)
 
@@ -382,6 +367,7 @@ class Presentational extends React.PureComponent {
     this.onIcicleRectClickHandler = this.onIcicleRectClickHandler.bind(this)
     this.onIcicleRectDoubleClickHandler = this.onIcicleRectDoubleClickHandler.bind(this)
     this.onIcicleRectMouseOverHandler = this.onIcicleRectMouseOverHandler.bind(this)
+    this.computeWidthRec = this.computeWidthRec.bind(this)
   }
 
   icicleWidth() {
@@ -433,6 +419,30 @@ class Presentational extends React.PureComponent {
     return node.get('children').toJS()
   }
 
+  computeWidthRec(ids, x, dx) {
+    if (ids.length < 2) {
+      return [x, dx]
+    } else {
+      const fWidth = this.fWidth
+      const normalizeWidth = this.normalizeWidth
+      const getChildrenIdFromId = this.getChildrenIdFromId
+
+      const parent_id = ids[0]
+      const child_id = ids[1]
+      ids = ids.slice(1)
+
+      const children_ids = getChildrenIdFromId(parent_id)
+      const width_array = normalizeWidth(children_ids.map(fWidth)).map(a=>a*dx)
+      const cumulated_width_array = computeCumulative(width_array)
+
+      const index_of = children_ids.indexOf(child_id)
+      x = cumulated_width_array[index_of] + x
+      dx = width_array[index_of]
+
+      return this.computeWidthRec(ids, x, dx)
+    }
+  }
+
 
   fWidth(id) {
     const node = this.props.getByID(id)
@@ -452,7 +462,7 @@ class Presentational extends React.PureComponent {
   shouldRenderChildIcicle(x,dx) {
     const dx_threshold = 1
     const x_window = 0
-    const dx_window = this.icicleWidth()
+    const dx_window = this.icicleWidth() - 1
 
     if (x + dx < x_window || x_window + dx_window < x) {
       return false
@@ -551,6 +561,8 @@ class Presentational extends React.PureComponent {
           onIcicleRectClickHandler={this.onIcicleRectClickHandler}
           onIcicleRectDoubleClickHandler={this.onIcicleRectDoubleClickHandler}
           onIcicleRectMouseOverHandler={this.onIcicleRectMouseOverHandler}
+        
+          computeWidthRec={this.computeWidthRec}
         />
 
         <Ruler
@@ -576,7 +588,6 @@ class Presentational extends React.PureComponent {
             y={minimap_y}
             width={minimap_width}
             height={minimap_height}
-            // rx='10' ry='10'
             style={{'fill': 'white', opacity:'0.4'}}
           />
           <Icicle
@@ -598,6 +609,8 @@ class Presentational extends React.PureComponent {
             onIcicleRectClickHandler={nothing}
             onIcicleRectDoubleClickHandler={nothing}
             onIcicleRectMouseOverHandler={nothing}
+
+            computeWidthRec={this.computeWidthRec}
           />
           <MinimapBracket
             x={minimap_x+5}
@@ -606,9 +619,7 @@ class Presentational extends React.PureComponent {
             dy={minimap_height-10}
 
             display_root={this.props.display_root}
-            fWidth={this.fWidth}
-            normalizeWidth={this.normalizeWidth}
-            getChildrenIdFromId={this.getChildrenIdFromId}
+            computeWidthRec={this.computeWidthRec}
           />
         </g>
       </g>

@@ -62,7 +62,7 @@ class Presentational extends React.Component {
       width:'100%',
       background: 'none',
       margin: '0',
-      padding: '2px 0',
+      padding: '4px 2px',
     }
 
     let content_style = {
@@ -73,8 +73,9 @@ class Presentational extends React.Component {
 
     let background_style = {
       height: '100%',
-      width: '100%',
-      // backgroundColor: 'gray'
+      opacity: '0.5',
+      width: this.props.percentage + '%',
+      backgroundColor: 'gray'
     }
 
     let delete_bubble = (

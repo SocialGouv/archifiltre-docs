@@ -258,6 +258,7 @@ const mapStateToProps = state => {
   let icicle_state = selectIcicleState(state)
   let database = selectDatabase(state)
 
+
   let sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
 
   const getByID = database.getByID

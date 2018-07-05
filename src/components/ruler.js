@@ -9,9 +9,13 @@ import * as Color from 'color'
 import { tr } from 'dict'
 
 const Presentational = props => {
+  const ruler_x = props.x
   const ruler_y = props.y
   const ruler_dx = props.dx
   const ruler_dy = props.dy
+
+  props.dims.x = Math.max(props.dims.x, ruler_x)
+  props.dims.dx = Math.min(props.dims.dx, ruler_dx)
 
   let res
 

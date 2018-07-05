@@ -570,6 +570,7 @@ class Presentational extends React.PureComponent {
         />
 
         <Ruler
+          x={0}
           y={icicle_height}
           dx={icicle_width}
           dy={ruler_height}

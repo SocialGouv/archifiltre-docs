@@ -85,7 +85,7 @@ export const qeFromJson = a => {
 
 const Fs = Record({
   session_name:'Untitled',
-  version:7,
+  version:8,
   content_queue:List(),
   tree:null,
   tags: Map(),
@@ -111,6 +111,11 @@ export const tagsFromJs = a => {
   return a
 }
 
+export const tagsSizesFromJs = a => {
+  a = Map(a)
+  return a
+}
+
 export const tagsToJson = a => {
   a = tagsToJs(a)
   a = JSON.stringify(a)
@@ -120,6 +125,12 @@ export const tagsToJson = a => {
 export const tagsFromJson = a => {
   a = JSON.parse(a)
   a = tagsFromJs(a)
+  return a
+}
+
+export const tagsSizesFromJson = a => {
+  a = JSON.parse(a)
+  a = tagsSizesFromJs(a)
   return a
 }
 
@@ -170,16 +181,18 @@ export const getTagsByID = (state, id) => state.get('tags').reduce((acc, val, i)
 export const getTagged = (state, tag) => state.get('tags').get(tag)
 export const addTagged = (state, tag, id) => {
   let new_state = state.update('tags', a=>{
-    return a.update(tag, b=>{if (b === undefined) {console.log(Set.of(id).toJS()); return Set.of(id);} else return b.add(id);})
+    return a.update(tag, b=>(b === undefined ? Set.of(id) : b.add(id)))
   })
 
-  new_state = new_state.update('tags_sizes', a=>{
-    return a.update(tag, b=>{
-      let size = getByID(id, state).get('content').get('size')
-      if (b === undefined) return size;
-      else return b + size;
-    })
-  })
+  // new_state = new_state.update('tags_sizes', a=>{
+  //   return a.update(tag, b=>{
+  //     let size = getByID(id, state).get('content').get('size')
+  //     if (b === undefined) return size;
+  //     else return b + size;
+  //   })
+  // })
+
+  new_state = updateTagsSizes(new_state)
 
   return new_state
 }
@@ -193,15 +206,22 @@ export const deleteTagged = (state, tag, id) => {
         return new_tags;
     })
 
-    state = state.update('tags_sizes', a=>{
-      let new_tags = a.update(tag, b=>b - getByID(id, state).get('content').get('size'))
-      if(new_tags.get(tag) === 0)
-        return a.delete(tag);
-      else
-        return new_tags;
-    })
+    // state = state.update('tags_sizes', a=>{
+    //   let new_tags = a.update(tag, b=>b - getByID(id, state).get('content').get('size'))
+    //   if(new_tags.get(tag) === 0)
+    //     return a.delete(tag);
+    //   else
+    //     return new_tags;
+    // })
+
+    state = updateTagsSizes(state)
   }
 
+  return state
+}
+
+export const updateTagsSizes = (state) => {
+  console.log({state : state.toJS()})
   return state
 }
 
@@ -320,7 +340,7 @@ export const toJson = Cache.make((state) => {
   state = state.update('tree', TT.toJson)
   state = state.update('content_queue', contentQueueToJson)
   state = state.update('tags', tagsToJson)
-  state = state.update('tag_sizes', tagsToJson)
+  state = state.update('tags_sizes', tagsToJson)
   state = state.toJS()
 
   return JSON.stringify(state)
@@ -335,7 +355,7 @@ export const fromJson = (json) => {
 
   state = new Fs(state)
   state = state.update('tags', tagsFromJson)
-  state = state.update('tags_sizes', tagsFromJson)
+  state = state.update('tags_sizes', tagsSizesFromJson)
   state = state.update('content_queue', contentQueueFromJson)
   state = state.update('tree', TT.fromJson)
   state = state.update('parent_path', List)

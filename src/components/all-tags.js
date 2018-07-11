@@ -34,7 +34,7 @@ const Presentational = props => {
     'background': 'white',
     'height': '100%',
     'borderRadius': '1em',
-    padding:'0.5em 0.5em'
+    padding:'0.5em 0'
   }
 
   let tags_content
@@ -81,7 +81,8 @@ const Presentational = props => {
       let percentage = Math.floor((props.tags_sizes.get(tag) / props.total_volume)*100)
 
       let editing = (props.tag_being_edited === tag)
-      let shoud_display_add = (props.focused_node_id !== undefined && !props.tags.get(tag).has(props.focused_node_id))
+      let shoud_display_count = (props.focused_node_id === undefined)
+      let node_has_tag = props.tags.get(tag).has(props.focused_node_id)
 
       let new_element = (
         <TagListItem
@@ -90,7 +91,8 @@ const Presentational = props => {
         opacity={opacity}
         editing={editing}
         percentage={percentage}
-        shoud_display_add={shoud_display_add}
+        shoud_display_count={shoud_display_count}
+        node_has_tag={node_has_tag}
         tag_number={tagged_ids.size}
         highlightTag={props.highlightTag(tag)}
         stopHighlightingTag={props.stopHighlightingTag}
@@ -99,6 +101,7 @@ const Presentational = props => {
         deleteTag={props.onDeleteTag(tag)}
         renameTag={props.onRenameTag(tag)}
         addTagToNode={props.onAddTag(tag, props.focused_node_id)}
+        removeTagFromNode={props.onRemoveTag(tag, props.focused_node_id)}
         />
       );
 
@@ -185,6 +188,14 @@ const mapDispatchToProps = dispatch => {
       dispatch(commit())
     }
   }
+
+  const onRemoveTag = (tag, id) => () => {
+    if(id !== undefined){
+      dispatch(deleteTagged(tag,id))
+      dispatch(commit())
+    }
+  }
+
  	return {
     highlightTag,
     stopHighlightingTag,
@@ -192,7 +203,8 @@ const mapDispatchToProps = dispatch => {
     stopEditingTag,
     onRenameTag,
     onDeleteTag,
-    onAddTag
+    onAddTag,
+    onRemoveTag
   }
 }
 

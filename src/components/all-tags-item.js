@@ -62,7 +62,7 @@ class Presentational extends React.Component {
       width:'100%',
       background: 'none',
       margin: '0',
-      padding: '4px 2px',
+      padding: '4px 0.5em',
     }
 
     let content_style = {
@@ -72,22 +72,27 @@ class Presentational extends React.Component {
     }
 
     let background_style = {
+      transition : 'all 0.4s',
+      WebkitTransition : 'all 0.4s',
       height: '100%',
-      opacity: '0.5',
       width: this.props.percentage + '%',
-      backgroundColor: 'gray'
+      opacity: '0.2',
+      backgroundColor: 'rgb(10, 50, 100)'
     }
 
     let delete_bubble = (
       <div className={tags_bubble + " " + tags_cross} onClick={this.props.deleteTag}>
-        <i className='fi-x' />
+        <i className='fi-trash' />
       </div>
     );
 
-    let count_or_add_bubble = (
-      this.props.shoud_display_add ?
-      (<div className={tags_bubble + " " + tags_add} onClick={this.props.addTagToNode}><i className='fi-plus' /></div>)
-      : (<div className={tags_bubble + " " + tags_count}>{this.props.tag_number}</div>)
+    let count_or_action_bubble = (
+      this.props.shoud_display_count ?
+      (<div className={tags_bubble + " " + tags_count}>{this.props.tag_number}</div>)
+      : (this.props.node_has_tag ? 
+        (<div className={tags_bubble + " " + tags_cross} onClick={this.props.removeTagFromNode}><i className='fi-x' /></div>)
+        : (<div className={tags_bubble + " " + tags_add} onClick={this.props.addTagToNode}><i className='fi-plus' /></div>)
+      )
     );
 
     let tag_pill = (
@@ -119,7 +124,7 @@ class Presentational extends React.Component {
       style={component_style}>
         <div style={content_style}>
           {delete_bubble}
-          {count_or_add_bubble}
+          {count_or_action_bubble}
           {tag_pill}&nbsp;
           {pencil}
         </div>

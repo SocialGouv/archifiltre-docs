@@ -89,6 +89,7 @@ const Fs = Record({
   content_queue:List(),
   tree:null,
   tags: Map(),
+  tags_sizes: Map(),
   parent_path:List(),
 })
 
@@ -110,6 +111,11 @@ export const tagsFromJs = a => {
   return a
 }
 
+export const tagsSizesFromJs = a => {
+  a = Map(a)
+  return a
+}
+
 export const tagsToJson = a => {
   a = tagsToJs(a)
   a = JSON.stringify(a)
@@ -119,6 +125,12 @@ export const tagsToJson = a => {
 export const tagsFromJson = a => {
   a = JSON.parse(a)
   a = tagsFromJs(a)
+  return a
+}
+
+export const tagsSizesFromJson = a => {
+  a = JSON.parse(a)
+  a = tagsSizesFromJs(a)
   return a
 }
 
@@ -136,9 +148,12 @@ export const arbitrary = () => {
   return ans
 }
 
-export const empty = () => new Fs({
-  tree:TT.init(Content.create())
-})
+export const empty = () => {
+  let res = new Fs({
+    tree:TT.init(Content.create())
+  });
+  return res
+}
 
 export const size_files = (state) => state.get('content_queue').size
 export const size_overall = (state) => state.get('tree').get('table').size - 1
@@ -162,19 +177,107 @@ export const updateByID = (id, f, state) =>
 export const getSessionName = (state) => state.get('session_name')
 export const setSessionName = (a, state) => state.set('session_name',a)
 
-
+export const getTagsByID = (state, id) => state.get('tags').reduce((acc, val, i) => {return (val.has(id) ? acc.add(i) : acc)}, Set.of())
 export const getTagged = (state, tag) => state.get('tags').get(tag)
-export const addTagged = (state, tag, id) => state.update('tags', a=>a.update(tag, b=>{if (b === undefined) return Set.of(id); else return b.add(id);}))
-export const deleteTagged = (state, tag, id) =>
-  state.update('tags', a=>{
-    let new_tags = a.update(tag, b=>b.delete(id))
-    if(new_tags.get(tag).size === 0)
-      return a.delete(tag);
-    else
-      return new_tags;
+export const addTagged = (state, tag, id) => {
+  let new_state = state.update('tags', a=>{
+    return a.update(tag, b=>(b === undefined ? Set.of(id) : b.add(id)))
   })
 
-  export const getAllTags = (state) => state.get('tags')
+  // new_state = new_state.update('tags_sizes', a=>{
+  //   return a.update(tag, b=>{
+  //     let size = getByID(id, state).get('content').get('size')
+  //     if (b === undefined) return size;
+  //     else return b + size;
+  //   })
+  // })
+
+  new_state = updateTagsSizes(new_state, tag)
+
+  return new_state
+}
+export const deleteTagged = (state, tag, id) => {
+  if (state.get('tags').has(tag)) {
+    state = state.update('tags', a=>{
+      let new_tags = a.update(tag, b=>b.delete(id))
+      if(new_tags.get(tag).size === 0)
+        return a.delete(tag);
+      else
+        return new_tags;
+    })
+
+    // state = state.update('tags_sizes', a=>{
+    //   let new_tags = a.update(tag, b=>b - getByID(id, state).get('content').get('size'))
+    //   if(new_tags.get(tag) === 0)
+    //     return a.delete(tag);
+    //   else
+    //     return new_tags;
+    // })
+
+    state = updateTagsSizes(state, tag)
+  }
+
+  return state
+}
+
+export const getAllChildren = (table, id) => {
+  const direct_children = table.get(id).get('children')
+  let init = Set.of(id)
+
+  let res
+  if(direct_children.size > 0)
+    res = direct_children.reduce((acc, val) => acc.union(getAllChildren(table, val)), init);
+  else
+    res = init;
+
+  return res
+}
+
+export const updateTagsSizes = (state, tag) => {
+  if(state.get('tags').has(tag)) {
+    const table = state.get('tree').get('table')
+    let id_list = state.get('tags').get(tag).sortBy(id => -1*table.get(id).get('content').get('size'))
+
+    let filtered_id_list = Set.of()
+
+    while (id_list.size > 0){
+      let potential_parent = id_list.first()
+      filtered_id_list = filtered_id_list.add(potential_parent)
+      
+      let potential_children = getAllChildren(table, potential_parent)
+
+      id_list = id_list.reduce((acc, val) => (potential_children.includes(val) ? acc : acc.add(val)), Set.of())
+    }
+
+    let tagged_size = filtered_id_list.reduce((acc, val) => (acc + table.get(val).get('content').get('size')), 0)
+
+    state = state.update('tags_sizes', a => (tagged_size > 0 ? a.set(tag, tagged_size) : a.delete(tag)))
+  }
+
+  else {
+    state = state.update('tags_sizes', a => a.delete(tag))
+  }
+
+  return state
+}
+
+export const getAllTags = (state) => state.get('tags')
+export const getAllTagsSizes = (state) => state.get('tags_sizes')
+
+export const renameTag = (state, old_tag, new_tag) => {
+  if (state.get('tags').has(old_tag) && !state.get('tags').has(new_tag)){
+    state = state.update('tags', a=>(a.mapKeys(k => (k === old_tag ? new_tag : k))))
+    state = state.update('tags_sizes', a=>(a.mapKeys(k => (k === old_tag ? new_tag : k))))
+  }
+
+  return state
+}
+  
+export const deleteTag = (state, tag) => {
+  state = state.update('tags', a => a.delete(tag))
+  state = state.update('tags_sizes', a => a.delete(tag))
+  return state
+}
 
 export const ghostTreeFromJs = (js, state) => {
   state = state.set('tree', TT.fromJs(js))
@@ -273,6 +376,7 @@ export const toJson = Cache.make((state) => {
   state = state.update('tree', TT.toJson)
   state = state.update('content_queue', contentQueueToJson)
   state = state.update('tags', tagsToJson)
+  state = state.update('tags_sizes', tagsToJson)
   state = state.toJS()
 
   return JSON.stringify(state)
@@ -287,6 +391,7 @@ export const fromJson = (json) => {
 
   state = new Fs(state)
   state = state.update('tags', tagsFromJson)
+  state = state.update('tags_sizes', tagsSizesFromJson)
   state = state.update('content_queue', contentQueueFromJson)
   state = state.update('tree', TT.fromJson)
   state = state.update('parent_path', List)
@@ -299,11 +404,13 @@ export const toJs = (state) => {
   state = state.update('tree', TT.toJs)
   state = state.update('content_queue', contentQueueToJs)
   state = state.update('tags', tagsToJs)
+  state = state.update('tags_sizes', tagsToJs)
   return state.toJS()
 }
 export const fromJs = (js) => {
   let state = new Fs(js)
   state = state.update('tags', tagsFromJs)
+  state = state.update('tags_sizes', tagsFromJs)
   state = state.update('content_queue', contentQueueFromJs)
   state = state.update('tree', TT.fromJs)
   state = state.update('parent_path', List)
@@ -313,7 +420,7 @@ export const fromJs = (js) => {
 
 
 export const toStrList2 = Cache.make((state) => {
-  return TT.toStrList2(state.get('tree'))
+  return TT.toStrList2(state.get('tree'), state.get('tags'))
 })
 
 export const setParentPath = (parent_path, state) =>

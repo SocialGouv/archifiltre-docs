@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 
 import { deleteTagged } from 'reducers/database'
 
+import { tags_bubble, tags_cross } from 'css/app.css'
+
 import { commit } from 'reducers/root-reducer'
 import { tr } from 'dict'
 
@@ -10,21 +12,15 @@ const tag_style = {
   display: "inline-block",
   color: "white",
   backgroundColor: "rgb(10, 50, 100)",
-  borderRadius: "0.8em",
-  padding: "0 1em",
+  borderRadius: "0.5em",
+  padding: "0 0.5em",
 }
 
 const cross_style = {
-  display: "inline-block",
-  color: "white",
-  backgroundColor: "rgb(15, 80, 150)",
-  padding: "0 0.4em",
-  borderRadius: "1em",
-  marginRight: "0.3em",
-  marginLeft: "-0.5em"
+  marginLeft: "-0.3em"
 }
 
-const component_style = {
+const default_component_style = {
   fontWeight: "bold",
   display: "inline-block",
   marginRight: "0.3em",
@@ -32,13 +28,17 @@ const component_style = {
 }
 
 const Presentational = props => {
-  let cross = (
-    <div onMouseUp={(e) => {e.stopPropagation(); props.remove_handler() }} style={cross_style}>
-     X 
+  const cross = (
+    <div className={tags_bubble + " " + tags_cross} style={cross_style} onMouseUp={(e) => {e.stopPropagation(); props.remove_handler() }}>
+     <i className='fi-x'></i>
     </div>);
 
+  const custom_style = props.custom_style
+
+  const component_style = Object.assign({}, default_component_style, custom_style);
+
   return (
-    <div style={component_style}>
+    <div style={component_style} onClick={props.click_handler}>
       <div style={tag_style}>
         {props.text}
       </div>

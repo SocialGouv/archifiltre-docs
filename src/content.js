@@ -85,7 +85,6 @@ const Content = Record({
   last_modified:new LastModified(),
   alias:'',
   comments: '',
-  tags: Set(),
 })
 
 
@@ -93,17 +92,12 @@ export const arbitraryTags = () => {
   return Set(Arbitrary.array(Arbitrary.string))
 }
 
-export const tagsToJs = a => a.toArray()
-export const tagsFromJs = a => Set(a)
-
-
 export const arbitrary = () => new Content({
   size: Arbitrary.natural(),
   nb_files: Arbitrary.natural(),
   last_modified: arbitraryLastModified(),
   alias: Arbitrary.string(),
   comments: Arbitrary.string(),
-  tags: arbitraryTags(),
 })
 
 export const create = a => {
@@ -178,14 +172,15 @@ export const computeDerivatedData = a => {
 export const toStrListHeader = () => List.of(
   'size (octet)',
   'last_modified',
+  'alias',
   'comments',
   'tags'
 )
 export const toStrList = (a) => List.of(
   a.get('size'),
   new Date(a.get('last_modified').get('max')),
+  a.get('alias'),
   a.get('comments'),
-  tagsToJs(a.get('tags')).toString()
 )
 
 
@@ -202,12 +197,7 @@ export const setAlias = (s, a) => a.set('alias', s)
 export const getComments = (a) => a.get('comments')
 export const setComments = (s, a) => a.set('comments', s)
 
-export const getTags = (a) => a.get('tags')
-export const setTags = (s, a) => a.set('tags', s)
-
-
 export const toJs = (a) => {
-  a = a.update('tags', tagsToJs)
   a = a.update('last_modified', lastModifiedToJs)
   a = a.toJS()
   return a
@@ -215,7 +205,6 @@ export const toJs = (a) => {
 export const fromJs = (a) => {
   a = new Content(a)
   a = a.update('last_modified', lastModifiedFromJs)
-  a = a.update('tags', tagsFromJs)
   return a
 }
 

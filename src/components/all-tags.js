@@ -135,6 +135,7 @@ const mapStateToProps = state => {
 
   const tags = database.getAllTags().sortBy(t => -1 * t.size)
   const tags_sizes = database.getAllTagsSizes()
+  // console.log({sizes : tags_sizes.toJS()})
   const total_volume = database.volume()
 
   const sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()

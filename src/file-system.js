@@ -192,7 +192,7 @@ export const addTagged = (state, tag, id) => {
   //   })
   // })
 
-  new_state = updateTagsSizes(new_state)
+  new_state = updateTagsSizes(new_state, tag)
 
   return new_state
 }
@@ -214,14 +214,50 @@ export const deleteTagged = (state, tag, id) => {
     //     return new_tags;
     // })
 
-    state = updateTagsSizes(state)
+    state = updateTagsSizes(state, tag)
   }
 
   return state
 }
 
-export const updateTagsSizes = (state) => {
-  console.log({state : state.toJS()})
+export const getAllChildren = (table, id) => {
+  const direct_children = table.get(id).get('children')
+  let init = Set.of(id)
+
+  let res
+  if(direct_children.size > 0)
+    res = direct_children.reduce((acc, val) => acc.union(getAllChildren(table, val)), init);
+  else
+    res = init;
+
+  return res
+}
+
+export const updateTagsSizes = (state, tag) => {
+  if(state.get('tags').has(tag)) {
+    const table = state.get('tree').get('table')
+    let id_list = state.get('tags').get(tag).sortBy(id => -1*table.get(id).get('content').get('size'))
+
+    let filtered_id_list = Set.of()
+
+    while (id_list.size > 0){
+      let potential_parent = id_list.first()
+      filtered_id_list = filtered_id_list.add(potential_parent)
+      
+      let potential_children = getAllChildren(table, potential_parent)
+
+      id_list = id_list.reduce((acc, val) => (potential_children.includes(val) ? acc : acc.add(val)), Set.of())
+    }
+
+    let tagged_size = filtered_id_list.reduce((acc, val) => (acc + table.get(val).get('content').get('size')), 0)
+
+    state = state.update('tags_sizes', a => (tagged_size > 0 ? a.set(tag, tagged_size) : a.delete(tag)))
+  }
+
+  else {
+    state = state.update('tags_sizes', a => a.delete(tag))
+  }
+
   return state
 }
 

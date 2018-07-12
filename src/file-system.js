@@ -10,7 +10,6 @@ import * as TT_ from 'table-tree'
 const TT = Object.assign({},TT_)
 
 
-import * as V5 from '../version/v5/src/file-system'
 
 
 TT.arbitrary = TT.arbitrary(Content.update, Content.arbitrary)
@@ -383,11 +382,11 @@ export const toJson = Cache.make((state) => {
 })
 export const fromJson = (json) => {
   let state = JSON.parse(json)
-  if (state.version === 5) {
-    return fromJsonV5(json)
-  } else if (state.version === 6) {
-    // same structure as v7
-  }
+  // if (state.version === 5) {
+  //   return fromJsonV5(json)
+  // } else if (state.version === 6) {
+  //   // same structure as v7
+  // }
 
   state = new Fs(state)
   state = state.update('tags', tagsFromJson)
@@ -460,130 +459,3 @@ export const getSubIdList = (id, state) => {
 
 
 
-
-
-
-
-
-// v5 | v6,v7
-
-TT.v5ToCommon = TT.v5ToCommon(Content.v5ToCommon)
-TT.toCommon = TT.toCommon(Content.toCommon)
-TT.fromV5 = TT.fromV5(Content.fromV5)
-const contentQueueToCommon = (f,a) => {
-  return a.map(e=>{
-    const path = e.get('path')
-    const content = e.update('content',f)
-    return Map({
-      path,
-      content
-    })
-  })
-}
-const makeLastModifiedFromTreeRec = (id,table) => {
-  let node = table.get(id)
-  const children = node.get('children')
-  if (children.size) {
-    children.forEach(child_id=>{
-      table = makeLastModifiedFromTreeRec(child_id,table)
-    })
-    let list = List()
-    children.forEach(child_id=>{
-      const child_node = table.get(child_id)
-      list = list.concat(child_node.get('content').get('last_modified').get('list'))
-    })
-    let max = list.max()
-    let min = list.min()
-    node = node.update('content',a=>a.update('last_modified',last_modified=>{
-      last_modified = last_modified.set('list',list)
-      last_modified = last_modified.set('max',max)
-      last_modified = last_modified.set('min',min)
-      return last_modified
-    }))
-    table = table.set(id,node)
-    return table
-  } else {
-    return table
-  }
-}
-const makeLastModifiedFromTree = (tt) => {
-  const table = tt.get('table')
-  const root_id = tt.get('root_id')
-
-  tt = tt.set('table', makeLastModifiedFromTreeRec(root_id,table))
-
-  return tt
-}
-const makeTagsFromTree = (tt) => {
-  let tags = Map()
-  const insert = (id,tag) => {
-    tags = tags.update(tag,s=>{
-      if (s) {
-        return s.add(id)
-      } else {
-        return Set([id])
-      }
-    })
-  }
-  tt.get('table').forEach((val,key) => {
-    val.get('content').get('tags').forEach(tag=>{
-      insert(key,tag)
-    })
-  })
-  return tags
-}
-export const v5ToCommon = (a) => {
-  const session_name = a.get('session_name')
-  const content_queue = contentQueueToCommon(Content.v5ToCommon, a.get('content_queue'))
-  const tree = TT.v5ToCommon(a.get('tree'))
-  const tags = makeTagsFromTree(tree)
-  const parent_path = a.get('parent_path')
-  return Map({
-    session_name,
-    content_queue,
-    tree,
-    tags,
-    parent_path
-  })
-}
-export const toCommon = (a) => {
-  const session_name = a.get('session_name')
-  const content_queue = contentQueueToCommon(Content.toCommon, a.get('content_queue'))
-  const tree = TT.toCommon(a.get('tree'))
-  const parent_path = a.get('parent_path')
-  const tags = a.get('tags')
-
-  return Map({
-    session_name,
-    content_queue,
-    tree,
-    tags,
-    parent_path
-  })
-}
-export const fromV5 = (a) => {
-  const session_name = a.get('session_name')
-  const version = 6
-  const content_queue = a.get('content_queue').map(a=>{
-    return a.update('content',Content.fromV5)
-  })
-  const tree = TT.fromV5(a.get('tree'))
-  const tags = makeTagsFromTree(tree)
-  const parent_path = a.get('parent_path')
-
-  return new Fs({
-    session_name,
-    version,
-    content_queue,
-    tree,
-    tags,
-    parent_path
-  })
-}
-
-const fromJsonV5 = (a) => {
-  a = fromV5(V5.fromJson(a))
-  a = a.update('tree', makeLastModifiedFromTree)
-  a = computeDerivatedData(a)
-  return a
-}

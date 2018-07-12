@@ -88,10 +88,6 @@ const Content = Record({
 })
 
 
-export const arbitraryTags = () => {
-  return Set(Arbitrary.array(Arbitrary.string))
-}
-
 export const arbitrary = () => new Content({
   size: Arbitrary.natural(),
   nb_files: Arbitrary.natural(),
@@ -106,20 +102,6 @@ export const create = a => {
   }
   return new Content(a)
 }
-
-const makeCompare = g => (a,b) => {
-  a = g(a)
-  b = g(b)
-
-  if (a === b) {
-    return 0
-  } else if (a > b) {
-    return -1
-  } else {
-    return 1
-  }
-}
-
 
 export const compareSize = (a,b) => {
   const g = x => x.get('size')
@@ -174,7 +156,6 @@ export const toStrListHeader = () => List.of(
   'last_modified',
   'alias',
   'comments',
-  'tags'
 )
 export const toStrList = (a) => List.of(
   a.get('size'),
@@ -213,42 +194,3 @@ export const fromJson = (a) => {
   return fromJs(JSON.parse(a))
 }
 
-
-
-
-
-
-
-
-
-
-
-
-export const v5ToCommon = a => {
-  return Map({
-    size:a.get('size'),
-    last_modified:a.get('last_modified'),
-    alias:a.get('alias'),
-    comments:a.get('comments'),
-    tags:a.get('tags'),
-  })
-}
-export const toCommon = (a) => {
-  return Map({
-    size:a.get('size'),
-    last_modified:a.get('last_modified').get('max'),
-    alias:a.get('alias'),
-    comments:a.get('comments'),
-    tags:a.get('tags'),
-  })
-}
-export const fromV5 = (a) => {
-  return create({
-    size:a.get('size'),
-    nb_files:1,
-    last_modified:a.get('last_modified'),
-    alias:a.get('alias'),
-    comments:a.get('comments'),
-    tags:a.get('tags'),
-  })
-}

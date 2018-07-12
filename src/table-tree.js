@@ -423,46 +423,46 @@ export const getSubIdList = (id, tt) => {
 
 
 
-const entryToCommon = a => {
-  return Map({
-    name:a.get('name'),
-    content:a.get('content'),
-    children:a.get('children'),
-    parent:a.get('parent'),
-    depth:a.get('depth'),
-  })
-}
-export const v5ToCommon = (v5ToCommon) => (a) => {
-  const table = a.get('table').map(entry=>{
-    entry = entry.update('content',v5ToCommon)
-    return entryToCommon(entry)
-  })
-  const root_id = a.get('root_id')
+// const entryToCommon = a => {
+//   return Map({
+//     name:a.get('name'),
+//     content:a.get('content'),
+//     children:a.get('children'),
+//     parent:a.get('parent'),
+//     depth:a.get('depth'),
+//   })
+// }
+// export const v5ToCommon = (v5ToCommon) => (a) => {
+//   const table = a.get('table').map(entry=>{
+//     entry = entry.update('content',v5ToCommon)
+//     return entryToCommon(entry)
+//   })
+//   const root_id = a.get('root_id')
 
-  return Map({
-    table,
-    root_id,
-  })
-}
-export const toCommon = (toCommon) => (a) => {
-  a = mapContent(toCommon, a)
-  const table = a.get('table').map(entryToCommon)
-  const root_id = a.get('root_id')
+//   return Map({
+//     table,
+//     root_id,
+//   })
+// }
+// export const toCommon = (toCommon) => (a) => {
+//   a = mapContent(toCommon, a)
+//   const table = a.get('table').map(entryToCommon)
+//   const root_id = a.get('root_id')
 
-  return Map({
-    table,
-    root_id,
-  })
-}
-export const fromV5 = (fromV5) => (a) => {
-  const table = a.get('table').map(entry=>{
-    entry = entry.update('content', fromV5)
-    return new Entry(entry)
-  })
-  const root_id = a.get('root_id')
-  return new TableTree({
-    table,
-    root_id,
-  })
-}
+//   return Map({
+//     table,
+//     root_id,
+//   })
+// }
+// export const fromV5 = (fromV5) => (a) => {
+//   const table = a.get('table').map(entry=>{
+//     entry = entry.update('content', fromV5)
+//     return new Entry(entry)
+//   })
+//   const root_id = a.get('root_id')
+//   return new TableTree({
+//     table,
+//     root_id,
+//   })
+// }
 

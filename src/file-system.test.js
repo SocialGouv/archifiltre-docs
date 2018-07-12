@@ -62,10 +62,10 @@ describe('file-system', function() {
   })
 
 
-  Loop.immuEqual('(toCommon . fromV5) a === v5ToCommon a', () => {
-    const a = V5.arbitrary()
-    return [M.toCommon(M.fromV5(a)), M.v5ToCommon(a)]
-  })
+  // Loop.immuEqual('(toCommon . fromV5) a === v5ToCommon a', () => {
+  //   const a = V5.arbitrary()
+  //   return [M.toCommon(M.fromV5(a)), M.v5ToCommon(a)]
+  // })
 
 
 })

@@ -11,11 +11,6 @@ import * as V5 from '../version/v5/src/content'
 
 describe('content', function() {
 
-  Loop.immuEqual('(tagsFromJs . tagsToJs) a', () => {
-    const a = M.arbitraryTags()
-    return [M.tagsFromJs(M.tagsToJs(a)), a]
-  })
-
   Loop.immuEqual('(lastModifiedFromJs . lastModifiedToJs) a', () => {
     const a = M.arbitraryLastModified()
     return [M.lastModifiedFromJs(M.lastModifiedToJs(a)), a]
@@ -49,11 +44,6 @@ describe('content', function() {
   Loop.equal('(getComments . setComments x) a', () => {
     const a = Arbitrary.string()
     return [M.getComments(M.setComments(a, M.arbitrary())), a]
-  })
-
-  Loop.equal('(getTags . setTags x) a', () => {
-    const a = M.arbitraryTags()
-    return [M.getTags(M.setTags(a, M.arbitrary())), a]
   })
 
 
@@ -94,13 +84,6 @@ describe('content', function() {
   Loop.equal('compareDate a a', () => {
     const a = M.arbitrary()
     return [M.compareDate(a, a), 0]
-  })
-
-
-
-  Loop.immuEqual('(toCommon . fromV5) a === v5ToCommon a', () => {
-    const a = V5.arbitrary()
-    return [M.toCommon(M.fromV5(a)), M.v5ToCommon(a)]
   })
 
 })

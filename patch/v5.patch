@@ -1,2508 +1,6 @@
-diff -Naur v5/.babelrc new-v5/.babelrc
---- v5/.babelrc	2018-06-06 18:28:15.891448455 +0200
-+++ new-v5/.babelrc	1970-01-01 01:00:00.000000000 +0100
-@@ -1,4 +0,0 @@
--{
--  "presets": ["env", "react", "flow"],
--  "plugins": ["syntax-dynamic-import"]
--}
-diff -Naur v5/Dockerfile new-v5/Dockerfile
---- v5/Dockerfile	2018-06-06 18:28:15.891448455 +0200
-+++ new-v5/Dockerfile	1970-01-01 01:00:00.000000000 +0100
-@@ -1,27 +0,0 @@
--FROM node:9.7.1 as dev
--
--RUN apt-get update && apt-get -y install \
--  inotify-tools=3.14-1+b1 \
--  rsync=3.1.1-3+deb8u1
--
--WORKDIR /usr/src/app
--
--COPY package*.json ./
--RUN npm install
--
--COPY . .
--
--
--CMD ["./startupDev.bash"]
--
--
--
--
--FROM dev as prod
--
--WORKDIR /usr/src/app
--RUN npm run-script buildProd
--
--
--FROM nginx:1.13.9-alpine
--COPY --from=prod /usr/src/app/dist /usr/share/nginx/html
-diff -Naur v5/.dockerignore new-v5/.dockerignore
---- v5/.dockerignore	2018-06-06 18:28:15.891448455 +0200
-+++ new-v5/.dockerignore	1970-01-01 01:00:00.000000000 +0100
-@@ -1,7 +0,0 @@
--node_modules
--Makefile
--README.md
--Dockerfile
--.gitignore
--LICENSE
--.git
-\ No newline at end of file
-diff -Naur v5/.flowconfig new-v5/.flowconfig
---- v5/.flowconfig	2018-06-06 18:28:15.891448455 +0200
-+++ new-v5/.flowconfig	1970-01-01 01:00:00.000000000 +0100
-@@ -1,13 +0,0 @@
--[include]
--
--[ignore]
--
--[libs]
--
--[lints]
--all=error
--
--[options]
--module.name_mapper='^\(.*\)$' -> '<PROJECT_ROOT>/src/\1'
--
--[version]
-diff -Naur v5/.gitignore new-v5/.gitignore
---- v5/.gitignore	2018-06-06 18:28:15.891448455 +0200
-+++ new-v5/.gitignore	1970-01-01 01:00:00.000000000 +0100
-@@ -1,3 +0,0 @@
--.DS_Store
--node_modules/
--npm-debug.log
-diff -Naur v5/LICENSE new-v5/LICENSE
---- v5/LICENSE	2018-06-06 18:28:15.891448455 +0200
-+++ new-v5/LICENSE	1970-01-01 01:00:00.000000000 +0100
-@@ -1,21 +0,0 @@
--MIT License
--
--Copyright (c) 2018 jeanbaptisteassouad
--
--Permission is hereby granted, free of charge, to any person obtaining a copy
--of this software and associated documentation files (the "Software"), to deal
--in the Software without restriction, including without limitation the rights
--to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
--copies of the Software, and to permit persons to whom the Software is
--furnished to do so, subject to the following conditions:
--
--The above copyright notice and this permission notice shall be included in all
--copies or substantial portions of the Software.
--
--THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
--IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
--FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
--AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
--LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
--OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
--SOFTWARE.
-diff -Naur v5/Makefile new-v5/Makefile
---- v5/Makefile	2018-06-06 18:28:15.891448455 +0200
-+++ new-v5/Makefile	1970-01-01 01:00:00.000000000 +0100
-@@ -1,53 +0,0 @@
--image_name = cheap-exp
--pwd = $(shell pwd)
--
--all: devServer
--
--runProd : prod
--	sudo docker run \
--		--rm \
--		--network=host \
--		-it \
--		$(image_name):prod
--
--devServer: dev
--	sudo docker run \
--		--rm \
--		--network=host \
--		--mount type=bind,source=$(pwd),target=/mnt,readonly \
--		-it \
--		$(image_name):dev
--
--dev: cleanContainer
--	sudo docker build \
--		--network=host \
--		--target=dev \
--		--tag=$(image_name):dev \
--		.
--
--prod: cleanContainer
--	sudo docker build \
--		--network=host \
--		--tag=$(image_name):prod \
--		.
--
--clean: cleanContainer
--
--cleanContainer:
--	sudo docker container prune -f
--
--
--
--TP = './src/**/*.test.js'
--
--test: dev
--	sudo docker run \
--		--network host \
--		-it \
--		$(image_name):dev \
--		npm test $(TP)
--
--
--
--
--
-diff -Naur v5/package.json new-v5/package.json
---- v5/package.json	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/package.json	1970-01-01 01:00:00.000000000 +0100
-@@ -1,59 +0,0 @@
--{
--  "name": "cheapExp",
--  "version": "1.0.0",
--  "description": "Explorer plus plus for archive",
--  "main": "index.js",
--  "scripts": {
--    "flow": "flow",
--    "test": "echo \"Error: no test specified\" && exit 1",
--    "buildDev": "webpack --progress --mode development",
--    "buildProd": "webpack --progress --mode production",
--    "devServer": "webpack-dev-server --mode development",
--    "watchBuildDev": "webpack --watch --progress --mode development",
--    "test": "env NODE_PATH=$NODE_PATH:$PWD/src mocha --require babel-register",
--    "start": ""
--  },
--  "repository": {
--    "type": "git",
--    "url": "git+https://github.com/jeanbaptisteassouad/cheapExp.git"
--  },
--  "author": "",
--  "license": "ISC",
--  "bugs": {
--    "url": "https://github.com/jeanbaptisteassouad/cheapExp/issues"
--  },
--  "homepage": "https://github.com/jeanbaptisteassouad/cheapExp#readme",
--  "devDependencies": {
--    "colors": "1.2.1",
--    "chai-exclude": "1.0.8",
--    "chai": "4.1.2",
--    "mocha": "5.0.5",
--    "babel-core": "6.26.0",
--    "babel-loader": "7.1.3",
--    "babel-preset-env": "1.6.1",
--    "babel-preset-react": "6.24.1",
--    "babel-preset-flow": "6.23.0",
--    "babel-plugin-syntax-dynamic-import": "6.18.0",
--    "babel-register": "6.26.0",
--    "flow-webpack-plugin": "1.2.0",
--    "flow-bin": "0.66.0",
--    "copy-webpack-plugin": "4.5.1",
--    "css-loader": "0.28.10",
--    "style-loader" :"0.20.3",
--    "html-webpack-plugin": "3.2.0",
--    "webpack-dev-server": "3.1.1",
--    "webpack-cli": "2.0.4",
--    "webpack": "4.1.0"
--  },
--  "dependencies": {
--    "workbox-webpack-plugin": "3.1.0",
--    "immutable": "4.0.0-rc.9",
--    "react": "16.0.0",
--    "redux-thunk": "2.2.0",
--    "react-dom": "16.0.0",
--    "react-redux": "5.0.6",
--    "redux": "3.7.2",
--    "file-saver": "1.3.3",
--    "riek": "1.1.0"
--  }
--}
-diff -Naur v5/README.md new-v5/README.md
---- v5/README.md	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/README.md	1970-01-01 01:00:00.000000000 +0100
-@@ -1 +0,0 @@
--# cheapExp
-\ No newline at end of file
-diff -Naur v5/src/api-call.js new-v5/src/api-call.js
---- v5/src/api-call.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/api-call.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,269 +0,0 @@
--
--import { request } from 'request'
--import { b64Toutf8, utf8Tob64 } from 'base64'
--import { getCookie } from 'cookie'
--
--const shouldLog = !getCookie().impicklerick
--
--export const logError = (stack,componentStack) => {
--  if (shouldLog) {
--    return request({
--      method:'POST',
--      url:'http://localhost:3000/none/log/browserError',
--      headers:{
--        'content-type': 'application/json'
--      },
--      body:JSON.stringify({
--        stack,
--        componentStack
--      })
--    })
--  } else {
--    return new Promise((resolve)=>resolve())
--  }
--}
--
--export const readError = (nb) => {
--  return request({
--    method:'GET',
--    url:'http://localhost:3000/none/log/browserError?nb='+nb,
--    headers:{
--      'content-type': 'application/json'
--    }
--  })
--}
--
--
--export const logNbFiles = (nb) => {
--  if (shouldLog) {
--    return request({
--      method:'POST',
--      url:'http://localhost:3000/none/log/nbFiles',
--      headers:{
--        'content-type': 'application/json'
--      },
--      body:JSON.stringify({
--        nb
--      })
--    })
--  } else {
--    return new Promise((resolve)=>resolve())
--  }
--}
--
--export const readNbFiles = (nb) => {
--  return request({
--    method:'GET',
--    url:'http://localhost:3000/none/log/nbFiles?nb='+nb,
--    headers:{
--      'content-type': 'application/json'
--    }
--  })
--}
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--const ref = {
--  token:null,
--  retry:0,
--  account_name:'',
--  password:''
--}
--
--
--export const signUp = (account_name,password) => {
--  return request({
--    method:'POST',
--    url:'http://localhost:3000/basic/account',
--    headers:{
--      Authorization:'Basic '+utf8Tob64(account_name+':'+password)
--    }
--  })
--  .then(() => signIn(account_name,password))
--}
--
--
--export const signIn = (account_name,password) => {
--  ref.account_name = account_name
--  ref.password = password
--  return getToken()
--}
--
--const getToken = () => {
--  return request({
--    method:'GET',
--    url:'http://localhost:3000/basic/account',
--    headers:{
--      Authorization:'Basic '+utf8Tob64(ref.account_name+':'+ref.password)
--    }
--  })
--  .then(res => {
--    res = JSON.parse(res)
--    ref.token = res.token
--    ref.retry = 1
--  })
--}
--
--const retry = f => {
--  if (ref.retry > 0) {
--    ref.retry -= 1
--    return getToken().then(f)
--  }
--}
--
--
--// SOME DUMMY TEST
--
--
--const checkToken = () => {
--  return request({
--    method:'GET',
--    url:'http://localhost:3000/bearer',
--    headers:{
--      Authorization:'Bearer '+ref.token
--    }
--  })
--  .catch(() => retry(() => checkToken()))
--}
--
--
--const createFs = (root) => {
--  return request({
--    method:'POST',
--    url:'http://localhost:3000/bearer/fs/'+root,
--    headers:{
--      Authorization:'Bearer '+ref.token
--    }
--  })
--}
--
--
--const readFs = (root) => {
--  return request({
--    method:'GET',
--    url:'http://localhost:3000/bearer/fs/'+root,
--    headers:{
--      Authorization:'Bearer '+ref.token
--    }
--  })
--}
--
--const pushFs = (root,path) => {
--  return request({
--    method:'POST',
--    url:'http://localhost:3000/bearer/fs/'+root+path,
--    headers:{
--      Authorization:'Bearer '+ref.token
--    }
--  })
--}
--
--
--
--
--const makeBigBody = (num) => {
--  let arr = []
--  for (let i = num - 1; i >= 0; i--) {
--    arr.push(Math.floor(Math.random() * 9))
--  }
--  return arr.join('')
--}
--
--
--const sendBigFile = (body) => {
--  return getToken('fufu','pass')
--    .then(() => console.time('sendBigFile'))
--    .then(() => request({
--      method:'GET',
--      url:'http://localhost:3000/bearer',
--      headers:{
--        Authorization:'Bearer '+ref.token
--      },
--      body
--    }))
--    .then(() => console.timeEnd('sendBigFile'))
--}
--
--
--
--
--
--const makeArr = (num) => {
--  let arr = []
--  for (let i = 0; i < num; i++) {
--    let str = ''
--    for (let j = 0; j < 1+Math.floor(Math.random() * 8); j++) {
--      str += '/'+Math.floor(Math.random() * 10)
--    }
--    arr.push(str)
--  }
--  return arr
--}
--
--
--const paraDoAction = (arr) => {
--  const roo = Math.floor(Math.random() * 2000000)
--  return getToken('fufu','pass')
--    .then(() => createFs(roo))
--    .then(() => Promise.all(arr.map(e => pushFs(roo,e))))
--    .then(() => readFs(roo))
--    .then(a => console.log(a))
--}
--
--
--const seqDoAction = (arr) => {
--  const roo = Math.floor(Math.random() * 2000000)
--  let pro = getToken('fufu','pass')
--    .then(() => createFs(roo))
--    .then(() => console.time('seqDoAction'))
--  arr.forEach(e => {
--    pro = pro.then(() => pushFs(roo,e))
--  })
--
--  pro.then(() => console.timeEnd('seqDoAction'))
--    .then(() => readFs(roo))
--    .then(a => console.log(JSON.parse(a)))
--}
--
--
--const testDebugLog = () => {
--  return request({
--    method:'GET',
--    url:'http://localhost:3000/basic/',
--  })
--}
--
--// window.swag = {
--//   logError,
--//   readError,
--
--//   signUp,
--//   signIn,
--//   getToken,
--//   checkToken,
--//   ref,
--//   createFs,
--//   readFs,
--//   pushFs,
--//   paraDoAction,
--//   testDebugLog,
--//   makeArr,
--//   seqDoAction,
--//   makeBigBody,
--//   sendBigFile,
--//   ref
--// }
--
-diff -Naur v5/src/app.js new-v5/src/app.js
---- v5/src/app.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/app.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,78 +0,0 @@
--
--
--import React from 'react'
--
--import ReactDOM from 'react-dom'
--import { Provider } from 'react-redux'
--import { createStore, applyMiddleware } from 'redux'
--import thunk from 'redux-thunk'
--
--import rootReducer from 'reducers/root-reducer'
--
--import MainSpace from 'components/main-space'
--import Header from 'components/header'
--
--import 'css/app.css'
--
--
--import { logError } from 'api-call'
--import { getCookie } from 'cookie'
--
--import ErrorBoundary from 'components/error-boundary'
--
--import { generateRandomString } from 'random-gen'
--
--
--const app = () => {
--  if ('serviceWorker' in navigator) {
--    navigator.serviceWorker.register('/sw.js').then(registration => {
--      console.log('SW registered: ', registration)
--    }).catch(registrationError => {
--      console.log('SW registration failed: ', registrationError)
--    })
--  }
--
--  let root_div = document.createElement('div')
--  root_div.setAttribute('id','root')
--
--  if (document.body !== null) {
--    document.body.appendChild(root_div)
--  }
--
--  let store = createStore(rootReducer, applyMiddleware(thunk))
--
--  window.thug = Object.assign({},window.thug,{
--    dispatch: store.dispatch,
--    getState: store.getState
--  })
--
--  ReactDOM.render(
--    <ErrorBoundary>
--      <Provider store={store}>
--        <div className='grid-y grid-padding-y grid-frame'>
--          <div className='cell'>
--            <Header/>
--          </div>
--          <div className='cell auto'>
--            <MainSpace/>
--          </div>
--        </div>
--      </Provider>
--    </ErrorBoundary>,
--    root_div
--  )
--}
--
--window.onload = () => {
--  try {
--    app()
--  } catch(e) {
--    logError(e.stack)
--    throw e
--  }
--}
--
--if (!getCookie().impicklerick) {
--  window.onbeforeunload = () => false
--}
--
-diff -Naur v5/src/base64.js new-v5/src/base64.js
---- v5/src/base64.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/base64.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,10 +0,0 @@
--
--
--
--export const utf8Tob64 = str => {
--  return window.btoa(unescape(encodeURIComponent(str)))
--}
--
--export const b64Toutf8 = str => {
--  return decodeURIComponent(escape(window.atob(str)))
--}
-diff -Naur v5/src/cache.test.js new-v5/src/cache.test.js
---- v5/src/cache.test.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/cache.test.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,32 +0,0 @@
--import chai from 'chai'
--const should = chai.should()
--
--
--import * as Loop from 'test/loop'
--import * as Arbitrary from 'test/arbitrary'
--import * as M from 'cache'
--
--
--describe('cache', function() {
--
--  it('basic test to improve', function() {
--    let a = 0
--    const f = (b) => {
--      a++
--      return b+1
--    }
--    const cacheF = M.make(f)
--    
--    a.should.equal(0)
--    cacheF(1).should.equal(2)
--    a.should.equal(1)
--    cacheF(1).should.equal(2)
--    a.should.equal(1)
--    cacheF(2).should.equal(3)
--    a.should.equal(2)
--    cacheF(1).should.equal(2)
--    a.should.equal(3)
--  })
--
--
--})
-diff -Naur v5/src/components/breadcrumb-poly.js new-v5/src/components/breadcrumb-poly.js
---- v5/src/components/breadcrumb-poly.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/breadcrumb-poly.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,52 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--import { tr } from 'dict'
--
--const Presentational = props => {
--  return (<polygon
--      className="breadcrumb-poly"
--      points={makePoints(props.level, props.step, props.w, props.type, props.is_last, props.is_dummy)}
--      fill={props.type.color} />);
--}
--
--const makePoints = (level, step, w, type, is_last, is_dummy) => {
--  let h = step
--  let y = level*(step)
--  let t = h/10
--  let w2 = w/20
--
--  const coord2Str = (x,y) => (x+30)+','+y
--
--  let points = [];
--
--  points.push(coord2Str(0,y));
--  if (level > 1) { // Topmost breadcrumb; don't include upper notch.
--    points.push(coord2Str(w2/2,y+t));
--  }
--  points.push(coord2Str(w2,y));
--  points.push(coord2Str(w2,y+h));
--
--  if(type.label === tr("Folder") || type.label === tr("Root") || (is_dummy && !is_last)){
--    points.push(coord2Str(w2/2,y+h+t)); // lower notch
--  }
--
--  points.push(coord2Str(0,y+h));
--  return points.join(" ");
--}
--
--const mapStateToProps = state => {
--	return {}
--}
--
--const mapDispatchToProps = dispatch => {
-- 	return {}
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/breadcrumbs.js new-v5/src/components/breadcrumbs.js
---- v5/src/components/breadcrumbs.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/breadcrumbs.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,205 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
--
--import { typeOf, icicle_dims } from 'components/icicle'
--
--import BreadCrumbText from 'components/breadcrumb-text'
--import BreadCrumbPoly from 'components/breadcrumb-poly'
--
--import { mkDummyParent, mkDummyFile } from 'table-tree'
--
--import { tr } from 'dict'
--
--const breadcrumb_dims = {w: 400, h: 300}
--
--const Presentational = props => {
--  let res = []
--
--  if(props.isFocused){
--    for(let i = 1; i < props.breadcrumb_sequence.length; i++){
--      const node_id = props.breadcrumb_sequence[i]
--      const node = props.getByID(node_id)
--      const n_children_size = node.get('children').size
--      const is_parent = props.isZoomed && props.display_root.includes(node_id) && n_children_size
--
--      const n_name = node.get('name')
--      const n_content = node.get('content')
--      const c_alias = n_content.get('alias')
--      const display_name = c_alias === '' ? n_name : c_alias
--
--      res.push(
--        <g key={"breadcrumb" + i}>
--          <BreadCrumbPoly
--          is_last={i === props.breadcrumb_sequence.length-1}
--          level={i}
--          step={icicle_dims.h/(props.max_depth+1)}
--          type={is_parent ? typeOf(mkDummyParent()) : typeOf(node)}
--          w={breadcrumb_dims.w}
--          is_dummy={false}/>
--          <BreadCrumbText
--          key={"text" + i}
--          text={display_name}
--          level={i}
--          step={icicle_dims.h/(props.max_depth+1)}
--          w={breadcrumb_dims.w}
--          is_dummy={false}/>
--        </g>);
--    }
--  }
--
--  else{
--    let i = 1
--
--    if(props.max_depth > 1){
--      res.push(
--        <g key={"breadcrumb" + i}>
--          <BreadCrumbPoly
--          is_last={false}
--          level={i}
--          step={icicle_dims.h/(props.max_depth+1)}
--          type={typeOf(mkDummyFile())}
--          w={breadcrumb_dims.w}
--          is_dummy={true}/>
--          <BreadCrumbText
--          key={"text" + i}
--          text={tr("Level") + " " + (i)}
--          level={i}
--          step={icicle_dims.h/(props.max_depth+1)}
--          w={breadcrumb_dims.w}
--          is_dummy={true}/>
--        </g>);
--      i++
--    }
--
--    if(props.max_depth > 2){
--      res.push(
--        <g key={"breadcrumb" + i}>
--          <BreadCrumbPoly
--          is_last={false}
--          level={i}
--          step={icicle_dims.h/(props.max_depth+1)}
--          type={typeOf(mkDummyFile())}
--          w={breadcrumb_dims.w}
--          is_dummy={true}/>
--          <BreadCrumbText
--          key={"text" + i}
--          text={tr("Level") + " " + (i)}
--          level={i}
--          step={icicle_dims.h/(props.max_depth+1)}
--          w={breadcrumb_dims.w}
--          is_dummy={true}/>
--        </g>);
--      i++
--    }
--
--    if(props.max_depth > 3){
--      res.push(
--        <g key={"breadcrumb" + i}>
--          <BreadCrumbPoly
--          is_last={false}
--          level={i}
--          step={icicle_dims.h/(props.max_depth+1)}
--          type={typeOf(mkDummyFile())}
--          w={breadcrumb_dims.w}
--          is_dummy={true}/>
--          <BreadCrumbText
--          key={"text" + i}
--          text="..."
--          level={i}
--          step={icicle_dims.h/(props.max_depth+1)}
--          w={breadcrumb_dims.w}
--          is_dummy={true}/>
--        </g>);
--      i++
--    }
--
--    if(props.max_depth > 4){
--      res.push(
--        <g key={"breadcrumb" + i}>
--          <BreadCrumbPoly
--          is_last={false}
--          level={i}
--          step={icicle_dims.h/(props.max_depth+1)}
--          type={typeOf(mkDummyFile())}
--          w={breadcrumb_dims.w}
--          is_dummy={true}/>
--          <BreadCrumbText
--          key={"text" + i}
--          text="..."
--          level={i}
--          step={icicle_dims.h/(props.max_depth+1)}
--          w={breadcrumb_dims.w}
--          is_dummy={true}/>
--        </g>);
--      i++
--    }
--
--    res.push(
--      <g key={"breadcrumb" + i}>
--        <BreadCrumbPoly
--        is_last={true}
--        level={i}
--        step={icicle_dims.h/(props.max_depth+1)}
--        type={typeOf(mkDummyFile())}
--        w={breadcrumb_dims.w}
--        is_dummy={true}/>
--        <BreadCrumbText
--        key={"text" + i}
--        text={tr("File")}
--        level={i}
--        step={icicle_dims.h/(props.max_depth+1)}
--        w={breadcrumb_dims.w}
--        is_dummy={true}/>
--      </g>);
--  }
--
--  return (
--    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" style={{"opacity": (props.isFocused ? 1 : 0.3)}}>
--      {res}
--    </svg>
--      );
--
--}
--
--export const smartClip = (s, w, fw) => {
--    var target_size = Math.floor(w/fw)
--    var slice = Math.floor(target_size/2)
--
--    if(s.length > target_size){
--      return s.substring(0, slice-2) + "..." + s.substring(s.length - slice + 2, s.length)
--    }
--    else{
--      return s
--    }
--  }
--
--
--const mapStateToProps = state => {
--	let icicle_state = selectIcicleState(state)
--  let database = selectDatabase(state)
--
--  let breadcrumb_sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence();
--  
--	return {
--		breadcrumb_sequence,
--    display_root: icicle_state.display_root(),
--    isFocused: icicle_state.isFocused(),
--    isZoomed: icicle_state.isZoomed(),
--    max_depth: database.max_depth(),
--    getByID : database.getByID
--	}
--}
--
--const mapDispatchToProps = dispatch => {
-- 	return {}
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/breadcrumb-text.js new-v5/src/components/breadcrumb-text.js
---- v5/src/components/breadcrumb-text.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/breadcrumb-text.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,45 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--import { smartClip } from 'components/breadcrumbs'
--
--import { tr } from 'dict'
--
--const Presentational = props => {
--
--  let available_space = props.w*6/7
--  let font_width = 6
--
--  return (<text
--      className="breadcrumb-text"
--      x={props.w - available_space}
--      y={props.level*props.step}
--      dx="0"
--      dy={props.step/2 + 5}
--      textAnchor="start"
--      stroke="none"
--      fontWeight={props.is_dummy ? "bold" : ""}
--      fontSize={props.text.length*font_width < 0.8*available_space ? "1em" : "0.7em"}>
--      {(props.text.length*font_width < 0.8*available_space ?
--        smartClip(props.text, 0.8*available_space, font_width)
--        :
--        smartClip(props.text, 0.8*available_space, 0.75*font_width))}
--      </text>);
--}
--
--
--const mapStateToProps = state => {
--	return {}
--}
--
--const mapDispatchToProps = dispatch => {
-- 	return {}
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/button.js new-v5/src/components/button.js
---- v5/src/components/button.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/button.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,26 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--const button_style = {
--  margin: 0
--}
--
--const round_button_style = {
--  margin: 0
--}
--
--export function mkB (click_action, label) {
--  return (
--    <button type='button' className='button' onClick={click_action} style={button_style}>
--      {label}
--    </button>
--  )
--}
--
--export function mkRB (click_action, label) {
--  return (
--    <button type='button' className='button' onClick={click_action} style={round_button_style}>
--      {label}
--    </button>
--  )
--}
-\ No newline at end of file
-diff -Naur v5/src/components/csv-button.js new-v5/src/components/csv-button.js
---- v5/src/components/csv-button.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/csv-button.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,40 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--import { mkB } from 'components/button'
--
--import { selectDatabase } from 'reducers/root-reducer'
--
--import * as Csv from 'csv'
--import { save } from 'save'
--import { tr } from 'dict'
--
--const Presentational = props => {
--  return mkB(()=>{
--    console.log('to csv')
--    save(props.getName(), Csv.toStr(props.getStrList2()))
--  }, tr('to Csv'))
--}
--
--
--const mapStateToProps = state => {
--  let database = selectDatabase(state)
--  return {
--    getStrList2: database.toStrList2,
--    getName: () => {
--      return database.getSessionName() + '_' + new Date().getTime() + '.csv'
--    }
--  }
--}
--
--const mapDispatchToProps = dispatch => {
--  return {}
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/ctrl-z.js new-v5/src/components/ctrl-z.js
---- v5/src/components/ctrl-z.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/ctrl-z.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,102 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--
--import { mkB } from 'components/button'
--import { undo, redo, hasAPast, hasAFuture } from 'reducers/root-reducer'
--
--
--const button = (onClick, label, enabled) => {
--  if (enabled) {
--    return (
--      <button type='button' className='button' onClick={onClick}>
--        {label}
--      </button>
--    )
--  } else {
--    return (
--      <button type='button' className='button' onClick={onClick} disabled>
--        {label}
--      </button>
--    )
--  }
--}
--
--class Presentational extends React.Component {
--  constructor(props) {
--    super(props)
--    this.onKeyDownHandler = e => {
--      if (e.ctrlKey === true) {
--        if (e.key === 'z') {
--          this.props.undo()
--        } else if (e.key === 'Z') {
--          this.props.redo()
--        }
--      }
--    }
--
--    document.body.addEventListener('keydown',this.onKeyDownHandler,false)
--
--    this.componentWillUnmount = this.componentWillUnmount.bind(this)
--  }
--
--  componentWillUnmount() {
--    document.body.removeEventListener('keydown',this.onKeyDownHandler,false)
--  }
--
--  render() {
--    if (this.props.visible) {
--      return (
--        <div>
--          <div className='grid-x grid-padding-x'>
--            <div className='cell small-6'>
--              {
--                button(
--                  this.props.undo,
--                  (<i className="fi-arrow-left" style={{fontSize: '2em'}}/>),
--                  this.props.hasAPast
--                )
--              }
--            </div>
--            <div className='cell small-6'>
--              {
--                button(
--                  this.props.redo,
--                  (<i className="fi-arrow-right" style={{fontSize: '2em'}}/>),
--                  this.props.hasAFuture
--                )
--              }
--            </div>
--          </div>
--        </div>
--      )
--    } else {
--      return (
--        <div></div>
--      )
--    }
--  }
--}
--
--
--const mapStateToProps = state => {
--  return {
--    hasAPast: hasAPast(state),
--    hasAFuture: hasAFuture(state)
--  }
--}
--
--const mapDispatchToProps = dispatch => {
--  return {
--    undo: () => dispatch(undo()),
--    redo: () => dispatch(redo())
--  }
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/dashboard.js new-v5/src/components/dashboard.js
---- v5/src/components/dashboard.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/dashboard.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,102 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--import { selectAppState, selectDatabase } from 'reducers/root-reducer'
--import { commit } from 'reducers/root-reducer'
--
--import { setSessionName } from 'reducers/database'
--import { octet2HumanReadableFormat } from 'components/ruler'
--
--import { RIEInput } from 'riek'
--
--
--import ExportButton from 'components/export-button'
--import ReinitButton from 'components/reinit-button'
--import ToCsvButton from 'components/csv-button'
--import TextAlignCenter from 'components/text-align-center'
--
--import { edit_hover_container, edit_hover_pencil} from 'css/app.css'
--
--import { tr } from 'dict'
--
--const error_log_button_style = {
--  marginBottom: '0.4em',
--  marginTop: '0.4em'
--}
--
--const Presentational = props => {
--  if (props.started === true && props.finished === true) {
--      return (
--        <div className='grid-x'>
--          <div className='cell small-12'>
--            <TextAlignCenter>
--              <span style={{'fontWeight':'bold'}} className={edit_hover_container}>
--                <RIEInput
--                  value={props.session_name}
--                  change={props.onChangeSessionName('new_session_name')}
--                  propName='new_session_name'
--                />
--                &ensp;
--                <i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} />
--              </span>
--              <p>{props.nb_files} {tr('files loaded')}, {octet2HumanReadableFormat(props.volume)}</p>
--            </TextAlignCenter>
--          </div>
--          <div className='cell small-12' style={error_log_button_style}>
--            <TextAlignCenter>
--              <ToCsvButton/>
--            </TextAlignCenter>
--          </div>
--          <div className='cell small-6'>
--            <TextAlignCenter>
--              <ExportButton/>
--            </TextAlignCenter>
--          </div>
--          <div className='cell small-6'>
--            <TextAlignCenter>
--              <ReinitButton/>
--            </TextAlignCenter>
--          </div>
--        </div>
--      )
--  } else {
--    return (<div></div>)
--  }
--}
--
--const mapStateToProps = state => {
--  let app_state = selectAppState(state)
--  let database = selectDatabase(state)
--  const finished = app_state.isFinished()
--  let nb_files = 0
--  let volume = 0
--  if (finished) {
--    nb_files = database.size()
--    volume = database.volume()
--  }
--  return {
--    started: app_state.isStarted(),
--    finished,
--    nb_files,
--    volume,
--    session_name: database.getSessionName()
--  }
--}
--
--const mapDispatchToProps = dispatch => {
--
--  const onChangeSessionName = (prop_name) => (n) => {
--    dispatch(setSessionName(n[prop_name]))
--    dispatch(commit())
--  }
--  return {
--    onChangeSessionName
--  }
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/error-boundary.js new-v5/src/components/error-boundary.js
---- v5/src/components/error-boundary.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/error-boundary.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,19 +0,0 @@
--import React from 'react'
--
--import { logError } from 'api-call'
--import { getCookie } from 'cookie'
--
--export default class ErrorBoundary extends React.Component {
--  constructor(props) {
--    super(props)
--  }
--
--  componentDidCatch(error, info) {
--    logError(error.stack, info.componentStack)
--  }
--
--  render() {
--    return this.props.children
--  }
--}
--
-diff -Naur v5/src/components/export-button.js new-v5/src/components/export-button.js
---- v5/src/components/export-button.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/export-button.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,39 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--import { mkB } from 'components/button'
--
--import { selectDatabase } from 'reducers/root-reducer'
--
--import { save } from 'save'
--import { tr } from 'dict'
--
--const Presentational = props => {
--  return mkB(()=>{
--    console.log('export')
--    save(props.getName(), props.getJson())
--  }, tr('Export'))
--}
--
--
--const mapStateToProps = state => {
--  let database = selectDatabase(state)
--  return {
--    getJson: database.toJson,
--    getName: () => {
--      return database.getSessionName() + '_' + new Date().getTime() + '.json'
--    }
--  }
--}
--
--const mapDispatchToProps = dispatch => {
--  return {}
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/folder-dropzone.js new-v5/src/components/folder-dropzone.js
---- v5/src/components/folder-dropzone.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/folder-dropzone.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,99 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--import * as Folder from 'folder'
--import { push, fromJson, makeTree, sort, fromLegacyCsv } from 'reducers/database'
--import { startToLoadFiles, finishedToLoadFiles } from 'reducers/app-state'
--import { commit } from 'reducers/root-reducer'
--
--import TextAlignCenter from 'components/text-align-center'
--
--import { tr } from 'dict'
--
--class Presentational extends React.Component {
--  constructor(props) {
--    super(props)
--
--    this.style_dropzone = {
--      border: '0.2em dashed #868686',
--      borderRadius: '3em',
--    }
--
--    this.style_placeholder = {
--      fontSize: '3em',
--    }
--
--    this.placeholder = tr('Drop a directory here!')
--    this.placeholder_st = tr('You may also drop a JSON file previously exported from Icicle.')
--
--
--    this.handleDrop = this.handleDrop.bind(this)
--  }
--
--  handleDragover (e) {
--    e.preventDefault()
--  }
--
--  handleDrop (e) {
--    e.preventDefault()
--    this.props.startToLoadFiles()
--    Folder.asyncHandleDrop(e,this.props.push,this.props.fromJson,this.props.fromLegacyCsv)
--      .then(shouldProcess => {
--        if (shouldProcess) {
--          this.props.makeTree()
--          this.props.sort()
--        }
--      })
--      .then(this.props.finishedToLoadFiles)
--  }
--
--  render() {
--    return (
--      <div
--        className='grid-y grid-frame align-center'
--        onDragOver={this.handleDragover}
--        onDrop={this.handleDrop}
--        style={this.style_dropzone}
--      >
--        <div className='cell'>
--          <TextAlignCenter>
--            <div style={this.style_placeholder}>{this.placeholder}</div>
--          </TextAlignCenter>
--        </div>
--        <div className='cell'>
--          <TextAlignCenter>
--            <div>{this.placeholder_st}</div>
--          </TextAlignCenter>
--        </div>
--      </div>
--    )
--  }
--}
--
--
--const mapStateToProps = state => {
--  return {}
--}
--â€Š
--const mapDispatchToProps = dispatch => {
--  return {
--    push: (...args) => dispatch(push(...args)),
--    makeTree: (...args) => dispatch(makeTree(...args)),
--    sort: (...args) => dispatch(sort(...args)),
--    fromJson: (...args) => dispatch(fromJson(...args)),
--    fromLegacyCsv: (...args) => dispatch(fromLegacyCsv(...args)),
--    startToLoadFiles: (...args) => dispatch(startToLoadFiles(...args)),
--    finishedToLoadFiles: (...args) => {
--      dispatch(finishedToLoadFiles(...args))
--      dispatch(commit())
--    },
--  }
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/header.js new-v5/src/components/header.js
---- v5/src/components/header.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/header.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,58 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--import { selectAppState } from 'reducers/root-reducer'
--import { tr } from 'dict'
--import Dashboard from 'components/dashboard'
--import CtrlZ from 'components/ctrl-z'
--
--
--const Presentational = props => {
--  return (
--    <div className='grid-x grid-padding-y align-middle'>
--      <div className='cell auto'></div>
--      <div className='cell small-6'>
--        <h4 style={{lineHeight: '0.8em'}}>
--          <b>{tr('Icicles')}</b><br />
--          <span style={{fontSize: '0.65em'}}>v5 Elegant Elephant - <a target="_blank" href="http://archifiltre.com/#changelog">{tr("What's new?")}</a></span>
--        </h4>
--        <span>
--          <em>
--            {tr('Compatible with Firefox and Chrome.')}<br />
--            {tr('Your data won\'t leave your computer. Only you can see what happens below.')}
--          </em>
--        </span>
--      </div>
--      <div className='cell auto'></div>
--      <div className='cell small-2'>
--        <Dashboard />
--      </div>
--      <div className='cell auto'></div>
--      <div className='cell small-2'>
--        {props.started === props.finished && <CtrlZ visible={true}/>}
--      </div>
--      <div className='cell auto'></div>
--    </div>
--  )
--}
--
--
--const mapStateToProps = state => {
--  let app_state = selectAppState(state)
--  return {
--    started: app_state.isStarted(),
--    finished: app_state.isFinished()
--  }
--}
--
--const mapDispatchToProps = dispatch => {
--  return {}
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/icicle.js new-v5/src/components/icicle.js
---- v5/src/components/icicle.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/icicle.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,247 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
--
--import { setNoDisplayRoot } from 'reducers/icicle-state'
--
--import IcicleRect from 'components/icicle-rect'
--
--import { tr } from 'dict'
--
--const icicle_style = {
--  position: 'relative',
--  stroke: '#fff',
--  // 'background-color': 'rgba(100,100,100,0.1)'
--}
--
--export const icicle_dims = {
--  w:800,
--  h:300
--}
--
--const types = {
--    presentation : {label: tr("Presentation"), color:"#f75b40"},
--    parent_folder : {label: tr("Root"), color: "#f99a0b"},
--    folder : {label: tr("Folder"), color:"#fabf0b"},
--    spreadsheet : {label: tr("Spreadsheet"), color:"#52d11a"},
--    email: {label: tr("E-mail"), color:"#13d6f3"},
--    doc : {label: tr("Document"), color:"#4c78e8"},
--    multimedia: {label: tr("Multimedia"), color:"#b574f2"},
--    otherfiles : {label: tr("Others"), color:"#8a8c93"}
--  };
--
--
--const getChildrenSize = a => a.size
--const getChildrenElem = (i,a) => a.get(i)
--
--class Presentational extends React.Component {
--  constructor(props) {
--    super(props)
--    this.root_id = props.root_id
--    this.max_tree_depth = props.max_depth
--    this.isZoomed = this.props.isZoomed
--
--    this.getByID = props.getByID
--
--    this.plot = this.plot.bind(this)
--
--    console.log("profondeur : ", this.max_tree_depth)
--
--    setNoDisplayRoot()
--  }
--
--  shouldComponentUpdate(nextProps, nextState) {
--    if(nextProps.display_root !== this.props.display_root) return true;
--    return false;
--  }
--
--
--  plot(root, root_seq, tree_depth) {
--    console.time("render icicle")
--    let icicle = this.positionNodes(root, root_seq, 0, icicle_dims.w, 0, icicle_dims.h, tree_depth, [], this.getByID, this.isZoomed)
--    console.timeEnd("render icicle")
--    return icicle
--  }
--
--
--  positionNodes(root_id, root_seq, left, right, top, bottom, tree_depth, sequence){
--    const root = this.getByID(root_id)
--    const r_name = root.get('name')
--    const r_depth = root.get('depth')
--    const r_children = root.get('children')
--    const r_content = root.get('content')
--    const root_size = r_content.get('size')
--
--    let height = bottom - top
--    let width = right - left
--    let new_sequence = sequence.concat(root_id)
--
--    let root_dims = {
--      x: left,
--      y: top,
--      dx: (isNaN(width) ? 0 : width),
--      dy: height/tree_depth
--    }
--
--    let res = (
--      root_dims.dx < 1 ?
--      []
--      : //######################################" change key with entry id"
--      [<IcicleRect key={r_name + r_depth} dims={root_dims} node_id={root_id} node={root} node_sequence={new_sequence} />])
--
--
--    if (getChildrenSize(r_children) && root_dims.dx > 1) {
--
--      if(this.props.isZoomed && root_seq.length > 1){
--        let child = this.getByID(root_seq[1])
--
--        res.push(this.positionNodes(
--          root_seq[1],
--          root_seq.slice(1,root_seq.length),
--          left,
--          right,
--          top+height/tree_depth,
--          bottom,
--          tree_depth-1,
--          new_sequence))
--      }
--
--      else{
--      let x_cursor = left
--        for (let i = 0; i <= getChildrenSize(r_children) - 1; ++i) {
--          const child_id = getChildrenElem(i, r_children)
--          const child = this.getByID(child_id)
--          const child_size = child.content.size
--
--          res.push(this.positionNodes(
--            child_id,
--            root_seq,
--            x_cursor,
--            x_cursor+child_size/root_size*width,
--            top+height/tree_depth,
--            bottom,
--            tree_depth-1,
--            new_sequence))
--
--          x_cursor = x_cursor+child_size/root_size*width
--        }
--      }
--    }
--
--    return res
--  }
--
--  render() {
--    return (
--      <div id='chart' style={icicle_style}>
--        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
--          <g id="container">
--            {this.plot(this.props.root_id, (this.props.isZoomed ? this.props.display_root : []), this.max_tree_depth + 1)}
--          </g>
--        </svg>
--      </div>)
--  }
--}
--
--export const typeOf = (node) => {
--  
--  if (node.get('children').size) {
--    if (node.get('children').get(0) === "-1") {
--      return types.parent_folder;
--    } else {
--      return types.folder;
--    }
--  }
--
--  else {
--    let m = node.get('name').match(/\.[^\.]*$/)
--
--    if (m == null)
--      m = [""]
--
--    switch(m[0].toLowerCase()){
--      case ".xls": //formats Microsoft Excel
--      case ".xlsx":
--      case ".xlsm":
--      case ".xlw": // dont les vieux
--      case ".xlt":
--      case ".xltx":
--      case ".xltm":
--      case ".csv": // format Csv
--      case ".ods": //formats OOo/LO Calc
--      case ".ots":
--        return types.spreadsheet;
--      case ".doc":  //formats Microsoft Word
--      case ".docx":
--      case ".docm":
--      case ".dot":
--      case ".dotx":
--      case ".dotm":
--      case ".odt": // formats OOo/LO Writer
--      case ".ott":
--      case ".txt": // formats texte standard
--      case ".rtf":
--        return types.doc;
--      case ".ppt": // formats Microsoft PowerPoint
--      case ".pptx":
--      case ".pptm":
--      case ".pps":
--      case ".ppsx":
--      case ".pot":
--      case ".odp": // formats OOo/LO Impress
--      case ".otp":
--      case ".pdf": // On considÃ¨re le PDF comme une prÃ©sentation
--        return types.presentation;
--      case ".eml": //formats d'email et d'archive email
--      case ".msg":
--      case ".pst":
--        return types.email;
--      case ".jpeg": //formats d'image
--      case ".jpg":
--      case ".gif":
--      case ".png":
--      case ".bmp":
--      case ".tiff":
--      case ".mp3": //formats audio
--      case ".wav":
--      case ".wma":
--      case ".avi":
--      case ".wmv": //formats vidÃ©o
--      case ".mp4":
--      case ".mov":
--      case ".mkv":
--        return types.multimedia;
--      default:
--        return types.otherfiles;
--      }
--    }
--  }
--
--const mapStateToProps = state => {
--  let database = selectDatabase(state)
--  let icicle_state = selectIcicleState(state)
--
--  return {
--    max_depth: database.max_depth(),
--    getByID: database.getByID,
--    root_id: database.root_id(),
--    display_root: icicle_state.display_root(),
--    isZoomed: icicle_state.isZoomed(),
--    isFocused: icicle_state.isFocused(),
--    hover_sequence: icicle_state.hover_sequence()
--  }
--}
--â€Š
--const mapDispatchToProps = dispatch => {
--  return {
--    setNoDisplayRoot: (...args) => dispatch(setNoDisplayRoot(...args))
--  }
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-\ No newline at end of file
-diff -Naur v5/src/components/icicle-rect.js new-v5/src/components/icicle-rect.js
---- v5/src/components/icicle-rect.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/icicle-rect.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,141 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--import { selectIcicleState } from 'reducers/root-reducer'
--
--import { setFocus, setNoFocus, setDisplayRoot, setNoDisplayRoot, lock } from 'reducers/icicle-state'
--
--import { typeOf } from 'components/icicle'
--
--import { mkDummyParent } from 'table-tree'
--import { commit } from 'reducers/root-reducer'
--
--import { tr } from 'dict'
--
--class Presentational extends React.Component {
--  constructor (props) {
--    super(props)
--    this.node_id = props.node_id
--    // this.node_dims = props.dims
--    this.node = props.node
--
--    // this.shouldComponentUpdate = this.shouldComponentUpdate.bind(this)
--
--  }
--
--  // shouldComponentUpdate(nextProps, nextState) {
--  //   if(nextProps.isFocused !== this.props.isFocused) return true;
--  //   if(nextProps.isInHoverSeq !== this.props.isInHoverSeq) return true;
--  //   if(nextProps.isInLockSeq !== this.props.isInLockSeq) return true;
--  //   if(nextProps.display_root !== this.props.display_root) return true;
--  //   return false;
--  // }
--
--  render() {
--    // console.log("updating")
--    // console.time("updating")
--    let opacity =
--      (this.props.isLocked ?
--        (this.props.isInLockSeq ?
--          1
--        :
--          (this.props.isInHoverSeq ? 0.6 : 0.3)
--        )
--      :
--        (this.props.isFocused ?
--          (this.props.isInHoverSeq ? 1 : 0.3)
--        :
--          1
--        )
--      )
--
--    let display = this.node.get('depth') ? "" : "none"
--    let is_parent = this.props.isZoomed && this.props.display_root.includes(this.node_id) && this.node.get('children').size
--    let fill = is_parent ? typeOf(mkDummyParent()).color : typeOf(this.node).color
--
--    let res = [(<rect
--        key="rect"
--        className="node"
--        x={this.props.dims.x}
--        y={this.props.dims.y}
--        width={this.props.dims.dx}
--        height={this.props.dims.dy}
--        onClick={(e) => {e.stopPropagation(); this.props.lock(this.props.node_sequence, this.props.dims); }}
--        onDoubleClick={() => {this.props.setDisplayRoot(this.props.node_sequence)}}
--        // onClick={(e) => {e.stopPropagation(); this.props.setDisplayRoot(this.props.node_sequence)}}
--        onMouseOver={() => {this.props.setFocus(this.props.node_sequence, this.props.dims, this.props.isLocked)}}
--        onMouseOut={() => {if(!(this.props.isLocked)) this.props.setNoFocus()}}
--        style={{"fill": fill, "opacity": opacity, "display" : display}}></rect>)]
--
--    if(!(this.node.get('depth')) && this.props.isZoomed){
--      res.push(<rect
--      x={this.props.dims.dx/3}
--      y="0"
--      rx="1em"
--      ry="1em"
--      width={this.props.dims.dx/3}
--      height={this.props.dims.dy*3/4}
--      stroke="none"
--      fill={typeOf(mkDummyParent()).color}
--      onClick={(e) => {e.stopPropagation(); this.props.setNoDisplayRoot() ; this.props.setNoFocus() ;}}
--      key="button" />);
--
--      res.push(<text
--      x={this.props.dims.dx/2}
--      y={this.props.dims.dy/2}
--      dx="0"
--      dy="0"
--      textAnchor="middle"
--      fontWeight="bold"
--      letterSpacing="0.05em"
--      stroke="none"
--      fill="white"
--      onClick={(e) => {e.stopPropagation(); this.props.setNoDisplayRoot() ; this.props.setNoFocus() ;}}
--      key="text">{tr("Back to root")}</text>);
--    }
--
--    // console.timeEnd("updating")
--
--    return res;
--  }
--}
--
--
--const mapStateToProps = (state, props) => {
--	let icicle_state = selectIcicleState(state)
--  let hover_sequence = icicle_state.hover_sequence()
--  let lock_sequence = icicle_state.lock_sequence()
--
--  let isInHoverSeq = hover_sequence.includes(props.node_id)
--  let isInLockSeq = lock_sequence.includes(props.node_id)
--
--	return {
--    display_root: icicle_state.display_root(),
--    isZoomed: icicle_state.isZoomed(),
--    isFocused: icicle_state.isFocused(),
--    isLocked: icicle_state.isLocked(),
--    isInHoverSeq,
--    isInLockSeq,
--	}
--}
--
--const mapDispatchToProps = dispatch => {
-- 	return {
--    setFocus: (...args) => dispatch((setFocus(...args))),
--    setNoFocus: (...args) => dispatch((setNoFocus(...args))),
--    setDisplayRoot: (...args) => dispatch((setDisplayRoot(...args))),
--    setNoDisplayRoot: (...args) => dispatch((setNoDisplayRoot(...args))),
-- 		lock: (...args) => {
--      dispatch((lock(...args)))
--      dispatch(commit())
--    }
-- 	}
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/main-space.js new-v5/src/components/main-space.js
---- v5/src/components/main-space.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/main-space.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,68 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--import { selectAppState } from 'reducers/root-reducer'
--
--import FolderDropzone from 'components/folder-dropzone'
--import Icicle from 'components/icicle'
--import WorkSpace from 'components/workspace'
--import WaitingScreen from 'components/waiting-screen'
--
--import ExportButton from 'components/export-button'
--import ReinitButton from 'components/reinit-button'
--import CtrlZ from 'components/ctrl-z'
--
--import { tr } from 'dict'
--
--const grid_style = {
--  padding: '0em 5em'
--}
--
--const Presentational = props => {
--  if (props.started === false && props.finished === false) {
--    return (
--      <div className='grid-y grid-padding-x grid-frame align-center' style={grid_style}>
--        <div className='cell small-8'>
--          <FolderDropzone/>
--        </div>
--      </div>
--    )
--  } else if (props.started === true && props.finished === false) {
--    return (
--      <div className='grid-y grid-padding-x grid-frame align-center'>
--        <div className='cell small-8'>
--          <WaitingScreen/>
--        </div>
--      </div>
--    )
--  } else {
--    return (
--      <div className='grid-y grid-padding-x grid-frame align-center'>
--        <div className='cell small-12'>
--          <WorkSpace />
--        </div>
--      </div>
--    )
--  }
--}
--
--
--const mapStateToProps = state => {
--  let app_state = selectAppState(state)
--  return {
--    started: app_state.isStarted(),
--    finished: app_state.isFinished()
--  }
--}
--
--const mapDispatchToProps = dispatch => {
--  return {}
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/reinit-button.js new-v5/src/components/reinit-button.js
---- v5/src/components/reinit-button.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/reinit-button.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,44 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--import { mkB } from 'components/button'
--
--import { reInit as re1 } from 'reducers/database'
--import { reInit as re2 } from 'reducers/app-state'
--import { setNoFocus as re4 } from 'reducers/icicle-state'
--import { setNoDisplayRoot as re5 } from 'reducers/icicle-state'
--
--import { commit } from 'reducers/root-reducer'
--
--import { tr } from 'dict'
--
--const Presentational = props => {
--
--  return mkB(props.reInitStateApp, tr("Reset"))
--}
--
--
--
--const mapStateToProps = state => {
--  return {}
--}
--
--const mapDispatchToProps = dispatch => {
--  return {
--    reInitStateApp: (...args) => {
--      dispatch(re1())
--      dispatch(re2())
--      dispatch(re4())
--      dispatch(re5())
--      dispatch(commit())
--    }
--  }
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/report.js new-v5/src/components/report.js
---- v5/src/components/report.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/report.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,214 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--import { RIEInput, RIETextArea, RIETags } from 'riek'
--// import _ from 'lodash'
--
--import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
--import { setContentByID } from 'reducers/database'
--
--import { typeOf } from 'components/icicle'
--import { makeSizeString } from 'components/ruler'
--
--import { mkDummyParent, mkDummyFile } from 'table-tree'
--
--import { edit_hover_container, edit_hover_pencil, tags, comments } from 'css/app.css'
--
--import * as Content from 'content'
--import { commit } from 'reducers/root-reducer'
--
--import { tr } from 'dict'
--
--const Presentational = props => {
--  let icon, name, real_name, tags_cell, comments_cell
--
--  if(props.isFocused) {
--    const node = props.node
--    const n_children = node.get('children')
--    const n_name = node.get('name')
--    const n_content = node.get('content')
--    const c_alias = n_content.get('alias')
--    const c_tags = new Set(Content.tagsToJs(n_content.get('tags')))
--    const c_comments = n_content.get('comments')
--
--    const display_name = c_alias === '' ? n_name : c_alias
--    const bracket_name = c_alias === '' ? '' : n_name
--
--
--    let type = typeOf(node)
--    let is_folder = type.label === tr("Folder") || type.label === tr("Root")
--
--    let is_parent = props.isZoomed && props.display_root.includes(props.node_id) && n_children.size
--
--    icon = (
--      <i className={(is_folder ? "fi-folder" : "fi-page")} style={{
--        'fontSize': '3em',
--        'width': '1.7em',
--        'color': is_parent ? typeOf(mkDummyParent()).color : typeOf(node).color,
--        'display': 'table-cell',
--        'paddingLeft': '0.5em',
--        'verticalAlign':'middle'}}
--      />
--    )
--
--    name = (
--      <span style={{'fontWeight':'bold'}} className={edit_hover_container}>
--        <RIEInput
--          value={display_name}
--          change={props.onChangeAlias('new_display_name', props.node_id, n_content)}
--          propName='new_display_name'
--        />
--        &ensp;
--        <i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} />
--      </span>
--    )
--
--    real_name = (
--      <span style={{'fontStyle':'italic', 'visibility': (bracket_name === '' ? 'hidden' : '')}}>
--        ({bracket_name})
--      </span>
--    )
--
--    tags_cell = (
--      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em'}}>
--        <span style={{'fontWeight': 'bold'}}>{tr("Tags")}</span>
--        <span>&ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
--        <span style={{'fontStyle': (c_tags.size ? '' : '')}}>
--          <RIETags
--            value={c_tags.size ? c_tags : new Set(["Your", "Tags", "Here"])}
--            change={props.onChangeTags('new_tags', props.node_id, n_content)}
--            className={tags}
--            placeholder={tr("New tag")}
--            propName='new_tags'
--          />
--        </span>
--      </div>
--    )
--
--    comments_cell = (
--      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
--        <span style={{'fontWeight': 'bold'}}>{tr("Comments")}</span>
--        <span>&ensp;<i className={"fi-pencil " + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
--        <span style={{'fontStyle': (c_comments.length ? '' : 'italic')}}>
--          <RIETextArea
--            value={c_comments.length ? c_comments : tr("Your text here")+"..."} // ##############" Placeholder ???"
--            change={props.onChangeComments('new_comments', props.node_id, n_content)}
--            className={comments}
--            propName='new_comments'
--          />
--        </span>
--      </div>
--    )
--  } else {
--    icon = (
--      <i className="fi-page-multiple" style={{
--        'fontSize': '3em',
--        'width': '1.7em',
--        'color': typeOf(mkDummyFile()).color,
--        'display': 'table-cell',
--        'paddingLeft': '0.5em',
--        'verticalAlign':'middle'}}
--      />
--    )
--
--    name = (<span style={{'fontWeight':'bold'}}>{tr("Folder of file's name")}</span>)
--
--    real_name = (<span style={{'fontStyle':'italic'}}>({tr("Real name")})</span>)
--
--    tags_cell = (
--      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
--        <span style={{'fontWeight': 'bold'}}>{tr("Tags")}</span><br />
--        <span style={{'fontStyle':'italic'}}>{tr("Your tags here") + "..."}</span>
--      </div>
--    )
--
--    comments_cell = (
--      <div className={"cell small-4 " + edit_hover_container} style={{'padding':'1em', 'fontSize': '0.8em', 'minHeight': '8em', 'maxHeight': '8em'}}>
--        <span style={{'fontWeight': 'bold'}}>{tr("Comments")}</span><br />
--        <span style={{'fontStyle':'italic'}}>{tr("Your text here") + "..."}</span>
--      </div>
--    )
--  }
--
--  return (
--    <div style={{"opacity": (props.isFocused ? 1 : 0.5), 'background': 'white', 'borderRadius': '1em'}}>
--
--      <div className="grid-x grid-frame">
--        <div className="cell small-12">
--          <div style={{'display': 'table', 'width':'100%'}}>
--            {icon}
--            <span style={{'display': 'table-cell', 'verticalAlign':'middle', 'lineHeight':'1.25em'}}>
--              {name}<br />{real_name}
--            </span>
--          </div>
--        </div>
--      </div>
--
--      <div className="grid-x grid-frame">
--          {tags_cell}
--          {comments_cell}
--      </div>
--
--    </div>
--  )
--}
--
--const mapStateToProps = state => {
--	let icicle_state = selectIcicleState(state)
--  let database = selectDatabase(state)
--
--  let sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
--
--  let node_id = sequence[sequence.length - 1]
--  let node = (icicle_state.isFocused() ? database.getByID(node_id) : {})
--  let total_size = database.volume()
--
--	return {
--    display_root: icicle_state.display_root(),
--    isFocused: icicle_state.isFocused(),
--    isLocked: icicle_state.isLocked(),
--    node,
--    node_id,
--    total_size
--	}
--}
--
--const mapDispatchToProps = dispatch => {
--  // (n) => {
--  //   props.editEntryContent(props.node_id, 'display_name',
--  //    n['new_display_name'].length ? n['new_display_name'] : display_name)}
--  const onChangeAlias = (prop_name, id, content) => (n) => {
--    content = content.set('alias', n[prop_name])
--    dispatch(setContentByID(id, content))
--    dispatch(commit())
--  }
--
--  // (n) => props.editEntryContent(props.node_id, 'tags', n['new_tags'])
--  const onChangeTags = (prop_name, id, content) => (n) => {
--    content = content.set('tags', Content.tagsFromJs([...n[prop_name]]))
--    dispatch(setContentByID(id, content))
--    dispatch(commit())
--  }
--
--  // (n) => {
--  //   props.editEntryContent(props.node_id, 'comments',
--  //     n['new_comments'].length ? n['new_comments'] : c_comments)}
--  const onChangeComments = (prop_name, id, content) => (n) => {
--    content = content.set('comments', n[prop_name])
--    dispatch(setContentByID(id, content))
--    dispatch(commit())
--  }
-- 	return {
--    onChangeAlias,
--    onChangeTags,
--    onChangeComments
--  }
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/ruler.js new-v5/src/components/ruler.js
---- v5/src/components/ruler.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/ruler.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,135 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
--
--import { typeOf, icicle_dims } from 'components/icicle'
--
--import { mkDummyParent } from 'table-tree'
--
--import { tr } from 'dict'
--
--const Presentational = props => {
--  let res
--
--  if(props.isFocused) {
--    let text = makeSizeString(props.node.get('content').get('size'), props.total_size)
--    let mode = computeRulerTextDisplayMode(props.dims.x + props.dims.dx/2, text.length, icicle_dims.w, 4.2)
--
--    res = (<g><rect
--      className="ruler"
--      x={props.dims.x}
--      y="1.5em"
--      width={props.dims.dx}
--      height="0.3em"
--      onClick={(e) => {e.stopPropagation()}}
--      onMouseOver={() => {}}
--      style={{"fill":  props.is_parent ? typeOf(mkDummyParent()).color : typeOf(props.node).color}}>
--    </rect>
--    <text
--    x={computeTextPosition(props.dims.x, props.dims.dx, icicle_dims.w, mode)}
--    y="3em"
--    textAnchor={{"ORGANIC" : "middle", "LEFT" : "start", "RIGHT" : "end"}[mode]}
--    >{text}
--    </text></g>)
--  }
--  else res = (<g />);
--
--  return (
--    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
--      {res}
--    </svg>
--      );
--}
--
--export const octet2HumanReadableFormat = o => {
--  let To = o/Math.pow(1000,4)
--  if (To > 1) {
--    return Math.round(To * 10)/10 + ' To'
--  }
--  let Go = o/Math.pow(1000,3)
--  if (Go > 1) {
--    return Math.round(Go * 10)/10 + ' Go'
--  }
--  let Mo = o/Math.pow(1000,2)
--  if (Mo > 1) {
--    return Math.round(Mo * 10)/10 + ' Mo'
--  }
--  let ko = o/1000
--  if (ko > 1) {
--    return Math.round(ko * 10)/10 + ' ko'
--  }
--  return o + ' o'
--}
--
--const precisionRound = (number, precision) => {
--  let factor = Math.pow(10, precision);
--  return Math.round(number * factor) / factor;
--}
--
--export const makeSizeString = (o, total) => {
--  let sizeString = octet2HumanReadableFormat(o)
--
--  let percentage = precisionRound((100 * o / total),1);
--  let percentageString = percentage + "%";
--  if (percentage < 0.1) {
--    percentageString = "< 0.1%";
--  }
--
--  return percentageString + " | " + sizeString
--}
--
--
--const computeRulerTextDisplayMode = (candidate_position, l, w, fw) => {
--  if(candidate_position < l*fw){
--      return "LEFT"
--    }
--    else if(candidate_position > w - (l*fw)){
--      return "RIGHT"
--    }
--    else{
--      return "ORGANIC"
--    }
--}
--
--const computeTextPosition = (x, dx, w, mode) => {
--  return {"ORGANIC" : x + dx/2, "LEFT" : 5, "RIGHT" : w - 5}[mode]
--}
--
--
--
--
--const mapStateToProps = state => {
--	let icicle_state = selectIcicleState(state)
--  let database = selectDatabase(state)
--
--  let node_id = icicle_state.isLocked() ?
--    icicle_state.lock_sequence()[icicle_state.lock_sequence().length - 1]
--    : icicle_state.hover_sequence()[icicle_state.hover_sequence().length - 1];
--
--  let node = (icicle_state.isFocused() ? database.getByID(node_id) : {})
--  let total_size = database.volume()
--
--  let is_parent = icicle_state.isZoomed() && icicle_state.display_root().includes(node_id) && node.get('children').size
--
--	return {
--		dims: icicle_state.hover_dims(),
--    isFocused: icicle_state.isFocused(),
--    node,
--    node_id,
--    total_size,
--    is_parent
--	}
--}
--
--const mapDispatchToProps = dispatch => {
-- 	return {}
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/text-align-center.js new-v5/src/components/text-align-center.js
---- v5/src/components/text-align-center.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/text-align-center.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,15 +0,0 @@
--import React from 'react'
--
--
--const style = {
--  textAlign:'center'
--}
--
--
--export default function(props) {
--  return (
--    <div style={style}>
--      {props.children}
--    </div>
--  )
--}
-\ No newline at end of file
-diff -Naur v5/src/components/waiting-screen.js new-v5/src/components/waiting-screen.js
---- v5/src/components/waiting-screen.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/waiting-screen.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,67 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--
--import { selectDatabase } from 'reducers/root-reducer'
--
--import { tr } from 'dict'
--
--
--const cell_style = {
--  textAlign:'center'
--}
--
--
--class Presentational extends React.Component {
--  constructor(props) {
--    super(props)
--    this.thres = 60
--    this.last_ms = 0
--
--    this.shouldComponentUpdate = this.shouldComponentUpdate.bind(this)
--  }
--
--  shouldComponentUpdate(nextProps, nextState) {
--    if (this.props.nb_files === nextProps.nb_files) {
--      return false
--    }
--    let cur_ms = (new Date()).getTime()
--    if (cur_ms - this.last_ms < this.thres) {
--      return false
--    }
--    this.last_ms = cur_ms
--    return true
--  }
--
--  render() {
--    return (
--      <div className='grid-y grid-frame align-center'>
--        <div className='cell'>
--          <div style={cell_style}>
--            <img src='imgs/loading.gif' style={{'width': '50%', 'opacity': '0.3'}}/>
--            <p>{tr("Files loaded")}: {this.props.nb_files}</p>
--          </div>
--        </div>
--      </div>
--    )
--  }
--}
--
--
--const mapStateToProps = state => {
--  let database = selectDatabase(state)
--  return {
--    nb_files: database.size(),
--  }
--}
--
--const mapDispatchToProps = dispatch => {
--  return {}
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
-diff -Naur v5/src/components/workspace.js new-v5/src/components/workspace.js
---- v5/src/components/workspace.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/components/workspace.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,70 +0,0 @@
--import React from 'react'
--import { connect } from 'react-redux'
--import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
--
--import { setParentPath } from 'reducers/database'
--import { setNoFocus, unlock } from 'reducers/icicle-state'
--
--import ExportButton from 'components/export-button'
--import ReinitButton from 'components/reinit-button'
--
--import { tr } from 'dict'
--
--import Icicle from 'components/icicle'
--import Ruler from 'components/ruler'
--import BreadCrumbs from 'components/breadcrumbs'
--import Report from 'components/report'
--
--
--const chart_style = {
--  stroke: '#fff',
--}
--
--
--const Presentational = props => {
--  return (
--    <div>
--        <Report />
--        <div className="grid-x grid-frame" id='main'>
--          <div
--            onClick={(e) => {props.unlock(); props.setNoFocus();}}
--            className="cell small-8"
--          >
--            <Icicle display_root={props.display_root}/>
--            <Ruler />
--          </div>
--          <div className="cell small-4" style={chart_style}>
--            <BreadCrumbs />
--          </div>
--        </div>
--    </div>
--  )
--}
--
--
--
--const mapStateToProps = state => {
--  let database = selectDatabase(state)
--  let display_root = selectIcicleState(state).display_root()
--
--  return {
--    parent_path: database.parent_path(),
--    display_root
--  }
--}
--â€Š
--const mapDispatchToProps = dispatch => {
--  return {
--    setNoFocus: (...args) => dispatch((setNoFocus(...args))),
--    unlock: (...args) => dispatch((unlock(...args))),
--    setParentPath: (...args) => dispatch(setParentPath(...args))
--  }
--}
--
--
--const Container = connect(
--  mapStateToProps,
--  mapDispatchToProps
--)(Presentational)
--
--export default Container
 diff -Naur v5/src/content.js new-v5/src/content.js
---- v5/src/content.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/content.js	2018-06-06 18:17:00.580029550 +0200
+--- v5/src/content.js	2018-07-12 17:54:48.521576015 +0200
++++ new-v5/src/content.js	2018-07-12 17:58:28.645575175 +0200
 @@ -1,7 +1,7 @@
  
  import { Record, List, Set } from 'immutable'
@@ -2512,436 +10,16 @@ diff -Naur v5/src/content.js new-v5/src/content.js
  
  
  const Content = Record({
-diff -Naur v5/src/content.test.js new-v5/src/content.test.js
---- v5/src/content.test.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/content.test.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,70 +0,0 @@
--import chai from 'chai'
--const should = chai.should()
--
--
--import * as Loop from 'test/loop'
--import * as Arbitrary from 'test/arbitrary'
--import * as M from 'content'
--
--
--describe('content', function() {
--
--  Loop.immuEqual('(tagsFromJs . tagsToJs) a', () => {
--    const a = M.arbitraryTags()
--    return [M.tagsFromJs(M.tagsToJs(a)), a]
--  })
--
--  Loop.immuEqual('(fromJson . toJson) a', () => {
--    const a = M.arbitrary()
--    return [M.fromJson(M.toJson(a)), a]
--  })
--
--  Loop.immuEqual('(fromJs . toJs) a', () => {
--    const a = M.arbitrary()
--    return [M.fromJs(M.toJs(a)), a]
--  })
--
--  Loop.equal('(getSize . setSize x) a', () => {
--    const a = Arbitrary.natural()
--    return [M.getSize(M.setSize(a, M.arbitrary())), a]
--  })
--
--  Loop.equal('(getLastModified . setLastModified x) a', () => {
--    const a = Arbitrary.natural()
--    return [M.getLastModified(M.setLastModified(a, M.arbitrary())), a]
--  })
--
--  Loop.equal('(getAlias . setAlias x) a', () => {
--    const a = Arbitrary.string()
--    return [M.getAlias(M.setAlias(a, M.arbitrary())), a]
--  })
--
--  Loop.equal('(getComments . setComments x) a', () => {
--    const a = Arbitrary.string()
--    return [M.getComments(M.setComments(a, M.arbitrary())), a]
--  })
--
--  Loop.equal('(getTags . setTags x) a', () => {
--    const a = M.arbitraryTags()
--    return [M.getTags(M.setTags(a, M.arbitrary())), a]
--  })
--
--
--  Loop.equal('compare a (update a b)', () => {
--    const a = M.arbitrary()
--    const b = M.setSize(M.getSize(a) + 1 + Arbitrary.natural(), a)
--    return [M.compare(a, b), 1]
--  })
--
--  Loop.equal('compare a (update b a)', () => {
--    const a = M.arbitrary()
--    const b = M.setSize(M.getSize(a) + 1 + Arbitrary.natural(), a)
--    return [M.compare(b, a), -1]
--  })
--
--  Loop.equal('compare a a', () => {
--    const a = M.arbitrary()
--    return [M.compare(a, a), 0]
--  })
--
--})
-diff -Naur v5/src/cookie.js new-v5/src/cookie.js
---- v5/src/cookie.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/cookie.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,12 +0,0 @@
--
--
--
--export const getCookie = () =>
--  document.cookie
--    .split('; ')
--    .map(a=>a.split('='))
--    .reduce((acc,val)=>{
--      acc[val[0]]=val[1]
--      return acc
--    }, {})
--
-diff -Naur v5/src/css/app.css new-v5/src/css/app.css
---- v5/src/css/app.css	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/css/app.css	1970-01-01 01:00:00.000000000 +0100
-@@ -1,55 +0,0 @@
--.comments {
--  font-size: 1em;
--  border: none;
--  resize: none;
--  line-height: 1.2em;
--}
--
--.comments:focus {
--  font-size: 1em;
--  border: none;
--}
--
--.tags div {
--  display: inline-block;
--  margin-right: 0.3em;
--  color: white;
--  background-color: rgb(40,40,40);
--  border-radius: 0.8em;
--  padding-left:0.7em;
--  padding-right:0.5em;
--}
--
--.tags div div {
--  background: none;
--  padding-left: 0.5em;
--  padding-right: 0em;
--}
--
--.edit_hover_container .edit_hover_pencil{
--  visibility: hidden;
--}
--.edit_hover_container:hover .edit_hover_pencil{
--  visibility: visible;
--}
--
--body {
--  -webkit-background-size: cover;
--  -moz-background-size: cover;
--  -o-background-size: cover;
--  background-size: cover;
--  background: #ced3cc;
--  background-repeat:no-repeat;
--  background: -webkit-linear-gradient(to bottom, #ecefea, #ced3cc);
--  background: -moz-linear-gradient(to bottom, #ecefea, #ced3cc);
--  background: -ms-linear-gradient(to bottom, #ecefea, #ced3cc);
--  background: -o-linear-gradient(to bottom, #ecefea, #ced3cc);
--  background: linear-gradient(to bottom, #ecefea, #ced3cc);
--}
--
--
--*, h4 {
--  font-family: 'Quicksand', sans-serif;
--  /*background-color: rgba(0,0,0,0.05);*/
--}
--
-diff -Naur v5/src/css/stats.css new-v5/src/css/stats.css
---- v5/src/css/stats.css	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/css/stats.css	1970-01-01 01:00:00.000000000 +0100
-@@ -1,5 +0,0 @@
--table, th, td {
--  border: 1px solid black;
--  border-collapse: collapse;
--  white-space: pre-wrap;
--}
-\ No newline at end of file
-diff -Naur v5/src/csv.js new-v5/src/csv.js
---- v5/src/csv.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/csv.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,40 +0,0 @@
--
--import { List } from 'immutable'
--
--import * as Arbitrary from 'test/arbitrary'
--import * as Loop from 'test/loop'
--
--
--export const arbitrary = () => Arbitrary.immutableList(
--  () => Arbitrary.immutableList(
--    Arbitrary.string
--  )
--)
--
--const cell_separator = ','
--const line_separator = '\n'
--
--const str2Cell = a => `"${a}"`
--export const list2Line = a => {
--  return a.map(str2Cell).join(cell_separator) + line_separator
--}
--export const toStr = a => {
--  return a.map(list2Line).join('')
--}
--
--export const fromStr = a => {
--  if (a === '') {
--    return List()
--  }
--  a = a.split(line_separator)
--    .slice(0,-1)
--    .map(a=>a+line_separator)
--  return List(a).map(line2List)
--}
--
--export const line2List = a => {
--  const re = new RegExp(`^"|","|"${line_separator}$`)
--  return List(a.split(re).slice(1, -1))
--}
--
--  
-\ No newline at end of file
-diff -Naur v5/src/csv.test.js new-v5/src/csv.test.js
---- v5/src/csv.test.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/csv.test.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,21 +0,0 @@
--import chai from 'chai'
--const should = chai.should()
--
--import * as Loop from 'test/loop'
--import * as Arbitrary from 'test/arbitrary'
--import * as M from 'csv'
--
--
--describe('csv', function() {
--
--  Loop.equal('(line2List . list2Line) a', () => {
--    const a = Arbitrary.immutableList(Arbitrary.string)
--    return [M.line2List(M.list2Line(a)), a]
--  })
--
--  Loop.equal('(fromStr . toStr) a', () => {
--    const a = M.arbitrary()
--    return [M.fromStr(M.toStr(a)).toJS(), a.toJS()]
--  })
--
--})
-diff -Naur v5/src/dict.js new-v5/src/dict.js
---- v5/src/dict.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/dict.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,188 +0,0 @@
--const lang = navigator.language.slice(0,2)
--console.log("lang : " + lang)
--
--const dict = {
--  // Home screen
--  "Your data won't leave your computer. Only you can see what happens below.": {
--    fr: "Vos donnÃ©es ne quittent pas votre ordinateur ; seulâ€¢e vous pouvez voir ce qu'il y a ci-dessous.",
--    en: "Your data won't leave your computer. Only you can see what happens below."
--  },
--  "Drop a directory here!": {
--    fr: "Glissez-dÃ©posez un rÃ©pertoire ici !",
--    en: "Drop a directory here!",
--    es: "Â¡Coloca un directorio aquÃ­!"
--  },
--  "You may also drop a CSV file previously exported from Icicle.": {
--    fr: "Vous pouvez aussi dÃ©poser un fichier CSV prÃ©cÃ©dement exportÃ© depuis Stalactite.",
--    en: "You may also drop a CSV file previously exported from Icicle."
--  },
--  "Import from CSV": {
--    fr: "Importer depuis un CSV",
--    en: "Import from CSV",
--    es: "Importar desde un archivo CSV"
--  },
--
--  // Loading screen
--  "Files loaded": {
--    fr: "Fichiers chargÃ©s",
--    en: "Files loaded",
--    es: "Archivos cargados"
--  },
--  "Errors": {
--    fr: "Erreurs",
--    en: "Errors",
--    es: "Errores"
--  },
--
--  // Icicle
--  "Export": {
--    fr: "Exporter",
--    en: "Export",
--    es: "Exportar"
--  },
--  "Errors": {
--    fr: "Erreurs",
--    en: "Errors",
--    es: "Errores"
--  },
--  "Reset": {
--    fr: "RÃ©initialiser",
--    en: "Reset",
--    es: "Reiniciar"
--  },
--  "files loaded": {
--    fr: "fichiers chargÃ©s",
--    en: "files loaded",
--    es: "archivos cargados"
--  },
--  "errors": {
--    fr: "erreurs",
--    en: "errors",
--    es: "errores"
--  },
--  "Back to root": {
--    fr: "Retour Ã  la racine",
--    en: "Back to root",
--  },
--
--  // Icicle / Legend
--  "Legend": {
--    fr: "LÃ©gende",
--    en: "Legend",
--    es: "Leyenda"
--  },
--  "Presentation": {
--    fr: "PrÃ©sentation",
--    en: "Presentation",
--    es: "PresentaciÃ³n"
--  },
--  "Folder": {
--    fr: "RÃ©pertoire",
--    en: "Folder",
--    es: "Directorio"
--  },
--  "File": {
--    fr: "Fichier",
--    en: "File"
--  },
--  "Root": {
--    fr: "Racine",
--    en: "Root",
--    es: "RaÃ­z"
--  },
--  "Spreadsheet": {
--    fr: "Tableur",
--    en: "Spreadsheet",
--    es: "Hoja"
--  },
--  "E-mail": {
--    fr: "E-mail",
--    en: "E-mail",
--    es: "E-mail"
--  },
--  "Document": {
--    fr: "Document",
--    en: "Document",
--    es: "Documento"
--  },
--  "Multimedia": {
--    fr: "MultimÃ©dia",
--    en: "Multimedia",
--    es: "Multimedia"
--  },
--  "Others": {
--    fr: "Autres",
--    en: "Others",
--    es: "Otros"
--  },
--  "Level": {
--    fr: "Niveau",
--    en: "Level",
--  },
--
--  // Icicle / Report
--  "Folder of file's name": {
--    fr: "Nom du rÃ©pertoire ou fichier",
--    en: "Folder of file's name"
--  },
--  "Real name": {
--    fr: "Nom rÃ©el",
--    en: "Real name"
--  },
--  "Size": {
--    fr: "Taille",
--    en: "Size"
--  },
--  "absolute": {
--    fr: "absolue",
--    en: "absolute"
--  },
--  "percentage of the whole": {
--    fr: "pourcentage du total",
--    en: "percentage of the whole"
--  },
--  "Tags": {
--
--  },
--  "New tag": {
--    fr: "Nouveau tag",
--    en: "New tag"
--  },
--  "Comments": {
--    fr: "Commentaires",
--    en: "Comments"
--  },
--  "Your text here": {
--    fr: "Votre texte ici",
--    en: "Your text here"
--  },
--  "Your tags here": {
--    fr: "Vos tags ici",
--    en: "Your tags here"
--  },
--
--
--    // Always displayed
--  "Compatible with Firefox and Chrome.": {
--    fr: "Compatible avec Firefox et Chrome.",
--    en: "Compatible with Firefox and Chrome.",
--    es: "Compatible con Firefox y Chrome."
--  },
--  // "Your directories. Like you've never seen them before.": {
--  //   fr: "Vos rÃ©pertoires comme vous ne les avez jamais vus.",
--  //   en: "Your directories. Like you've never seen them before."
--  // },
--  "Icicles": {
--    fr: "Stalactites",
--    en: "Icicles",
--    es: "CarÃ¡mbanos"
--  },
--  "What's new?": {
--    fr: "Quoi de neuf ?",
--    en: "What's new?"
--  }
--}
--
--
--export const tr = string => 
--	(string in dict ? (lang in dict[string] ? dict[string][lang] : string) : string)
 diff -Naur v5/src/file-system.js new-v5/src/file-system.js
---- v5/src/file-system.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/file-system.js	2018-06-06 18:17:23.992286754 +0200
-@@ -1,13 +1,11 @@
+--- v5/src/file-system.js	2018-07-12 17:54:48.521576015 +0200
++++ new-v5/src/file-system.js	2018-07-12 18:07:36.817573084 +0200
+@@ -1,13 +1,13 @@
  
  import { Map, List, Record } from 'immutable'
 -import { generateRandomString } from 'random-gen'
 -import duck from 'reducers/duck'
 +import { generateRandomString } from './random-gen'
++// import duck from './reducers/duck'
  
 -import * as Cache from 'cache'
 -import * as Content from 'content'
@@ -2951,943 +29,33 @@ diff -Naur v5/src/file-system.js new-v5/src/file-system.js
 +import * as Cache from './cache'
 +import * as Content from './content'
 +import * as Arbitrary from './test/arbitrary'
++import * as Loop from './test/loop'
 +import tT from './table-tree'
  const TT = tT(Content)
  
  
-diff -Naur v5/src/file-system.test.js new-v5/src/file-system.test.js
---- v5/src/file-system.test.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/file-system.test.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,30 +0,0 @@
--import chai from 'chai'
--const should = chai.should()
--
--import * as Loop from 'test/loop'
--import * as Arbitrary from 'test/arbitrary'
--import * as M from 'file-system'
--
--import {Map,List,is} from 'immutable'
--
--describe('file-system', function() {
--
--
--  Loop.immuEqual('(qeFromJson . qeToJson) a', () => {
--    const a = M.arbitraryQe()
--    return [M.qeFromJson(M.qeToJson(a)), a]
--  })
--
--  Loop.immuEqual('(fromJson . toJson) a', () => {
--    const a = M.arbitrary()
--    return [M.fromJson(M.toJson(a)), a]
--  })
--
--  Loop.equal('(getSessionName . setSessionName x) a', () => {
--    const a = Arbitrary.string()
--    return [M.getSessionName(M.setSessionName(a, M.arbitrary())), a]
--  })
--
--
--
--})
-diff -Naur v5/src/folder.js new-v5/src/folder.js
---- v5/src/folder.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/folder.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,150 +0,0 @@
--
--import { mkScheduler } from 'scheduler'
--
--const sch = mkScheduler()
--
--export function asyncHandleDrop(event, insert2DB, loadJson2DB, loadLegacyCsv2DB) {
--  event.preventDefault()
--  let items = event.dataTransfer.items
--
--  let entry = items[0].webkitGetAsEntry()
--  if (isJsonFile(entry)) {
--    return readFileFromEntry(entry)
--      .then(loadJson2DB)
--      .then(()=>false)
--  } else if (isLegacyCsvFile(entry)) {
--    return readFileFromEntry(entry)
--      .then(loadLegacyCsv2DB)
--      .then(()=>true)
--  } else {
--    let promise_array = []
--    for (let i=0; i<items.length; i++) {
--      let entry = items[i].webkitGetAsEntry()
--      promise_array.push(traverseFileTree(insert2DB, entry, ''))
--    }
--    return Promise.all(promise_array)
--      .then(()=>true)
--  }
--}
--
--function isJsonFile(entry) {
--  return entry.isFile && hasJsonExt(entry.name)
--}
--
--function hasJsonExt(s) {
--  return s.split('.').slice(-1).pop() === 'json'
--}
--
--function isLegacyCsvFile(entry) {
--  return entry.isFile && hasLegacyCsvExt(entry.name)
--}
--
--function hasLegacyCsvExt(s) {
--  return s.split('.').slice(-1).pop() === 'csv'
--}
--
--
--function readFileFromEntry(entry) {
--  return new Promise((resolve, reject) => {
--    entry.file(file => {
--      readFile(file).then(content => {
--        resolve(content)
--      })
--    }, e => {
--      console.log(e)
--      resolve()
--    })
--  })
--}
--
--// function loadLegacyCsv(loadLegacyCsv2DB, entry) {
--//   return readFileFromEntry(entry).then(loadLegacyCsv2DB)
--// }
--
--// function loadJson(loadJson2DB, entry) {
--//   return new Promise((resolve, reject) => {
--//     entry.file(file => {
--//       readFile(file).then(json => {
--//         loadJson2DB(json)
--//         resolve()
--//       })
--//     }, e => {
--//       console.log(e)
--//       resolve()
--//     })
--//   })
--// }
--
--export function readFile(file) {
--  return new Promise((resolve, reject) => {
--    let file_reader = new FileReader()
--    file_reader.onload = e => {
--      resolve(e.currentTarget.result)
--    }
--    file_reader.readAsText(file)
--  })
--  
--}
--
--
--function traverseFileTree(insert2DB, entry, path) {
--  if (entry.isFile) {
--    return traverseFile(insert2DB, entry, path)
--  } else if (entry.isDirectory) {
--    return traverseFolder(insert2DB, entry, path)
--  }
--}
--
--function traverseFile(insert2DB, entry, path) {
--  return new Promise((resolve, reject) => sch.schedule(() => {
--    entry.file(file => {
--      insert2DB(
--        path + file.name,
--        {
--          size:file.size,
--          last_modified:file.lastModified,
--          error_is_file:null
--        }
--      )
--      resolve()
--    }, e => {
--      insert2DB(
--        path + entry.name,
--        {
--          error_is_file:true
--        }
--      )
--      resolve()
--    })
--  }))
--}
--
--function traverseFolder(insert2DB, entry, path) {
--  return new Promise((resolve, reject) => sch.schedule(() => {
--    let promise_array = []
--    let dirReader = entry.createReader()
--    const doBatch = () => {
--      dirReader.readEntries(entries => {
--        if (entries.length > 0) {
--          entries.forEach(e =>
--            promise_array.push(traverseFileTree(insert2DB, e, path+entry.name+"/"))
--          )
--          doBatch()
--        } else {
--          Promise.all(promise_array).then(()=>resolve())
--        }
--      }, e => {
--        insert2DB(
--          path + entry.name,
--          {
--            error_is_file:false
--          }
--        )
--        resolve()
--      })
--    }
--    doBatch()
--  }))
--}
--
--
-diff -Naur v5/src/query-string.js new-v5/src/query-string.js
---- v5/src/query-string.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/query-string.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,45 +0,0 @@
--
--import { b64Toutf8, utf8Tob64 } from 'base64'
--
--
--export function set(key,value) {
--  const searchParams = new URLSearchParams(window.location.search)
--  searchParams.set(utf8Tob64(key),utf8Tob64(value))
--
--  const newRelativePathQuery = window.location.pathname + '?' + searchParams.toString()
--
--  history.replaceState(null, '', newRelativePathQuery)
--}
--
--export function get(key) {
--  const searchParams = new URLSearchParams(window.location.search)
--  let value = searchParams.get(utf8Tob64(key))
--  if (value) {
--    value = b64Toutf8(value.replace(/\//g,''))
--  }
--  return value
--}
--
--export function remove(key) {
--  const searchParams = new URLSearchParams(window.location.search)
--  searchParams.delete(utf8Tob64(key))
--
--  const newRelativePathQuery = window.location.pathname + '?' + searchParams.toString()
--
--  history.replaceState(null, '', newRelativePathQuery)
--}
--
--
--
--
--// if (qs.get('tabId') && sessionStorage.getItem(qs.get('tabId')) === null) {
--//   qs.remove('tabId')
--// }
--
--// if (!qs.get('tabId')) {
--//   const val = generateRandomString(40)
--//   qs.set('tabId',val)
--//   sessionStorage.setItem(val, 'value')
--// }
--
--// console.log(sessionStorage.getItem(qs.get('tabId')))
-diff -Naur v5/src/reducers/api.js new-v5/src/reducers/api.js
---- v5/src/reducers/api.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/reducers/api.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,79 +0,0 @@
--
--
--import duck from 'reducers/duck'
--
--import { request } from 'request'
--import { b64Toutf8, utf8Tob64 } from 'base64'
--
--import { selectApi } from 'reducers/root-reducer'
--import { Record } from 'immutable'
--
--const type = 'cheapExp/api'
--
--
--const State = Record({
--  account_name:'',
--  password:'',
--  token:'',
--  retry:0
--})
--
--function bundle(state) {
--  return {
--    getToken: () => state.get('token'),
--  }
--}
--
--const initialState = new State()
--
--const { mkA, reducer, key } = duck(type, initialState, bundle)
--
--export default reducer
--
--export const reInit = mkA(() => state => initialState)
--
--
--const setCredential = mkA((account_name,password) => state => {
--  state = state.update('account_name', () => account_name)
--  state = state.update('password', () => password)
--  return state
--})
--
--const setToken = mkA((token) => state => {
--  state = state.update('token', () => token)
--  state = state.update('retry', () => 1)
--  return state
--})
--
--
--export const signUp = (account_name,password) => (dispatch, getState) => {
--  return request({
--    method:'POST',
--    url:'http://localhost:3000/basic/account',
--    headers:{
--      Authorization:'Basic '+utf8Tob64(account_name+':'+password)
--    }
--  })
--  .then(() => dispatch(signIn(account_name,password)))
--}
--
--export const signIn = (account_name,password) => (dispatch, getState) => {
--  dispatch(setCredential(account_name,password))
--  return dispatch(getToken())
--}
--
--const getToken = () => (dispatch, getState) => {
--  const state = selectApi(getState())
--  console.log(state[key])
--  return request({
--    method:'GET',
--    url:'http://localhost:3000/basic/account',
--    headers:{
--      Authorization:'Basic '+utf8Tob64(state[key].account_name+':'+state[key].password)
--    }
--  })
--  .then(res => {
--    res = JSON.parse(res)
--    return dispatch(setToken(res.token))
--  })
--}
-diff -Naur v5/src/reducers/app-state.js new-v5/src/reducers/app-state.js
---- v5/src/reducers/app-state.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/reducers/app-state.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,40 +0,0 @@
--
--import duck from 'reducers/duck'
--import { Record } from 'immutable'
--
--const type = 'cheapExp/appState'
--
--
--const State = Record({
--  start:false,
--  finish:false,
--})
--
--
--function bundle(state) {
--  return {
--    isStarted: () => state.get('start'),
--    isFinished: () => state.get('finish')
--  }
--}
--
--const initialState = new State()
--
--const { mkA, reducer } = duck(type, initialState, bundle)
--
--export default reducer
--
--export const startToLoadFiles = mkA(() => state => {
--  console.time('loaded')
--  state = state.update('start', () => true) 
--  state = state.update('finish', () => false) 
--  return state
--})
--export const finishedToLoadFiles = mkA(() => state => {
--  console.timeEnd('loaded')
--  state = state.update('start', () => true) 
--  state = state.update('finish', () => true) 
--  return state
--})
--
--export const reInit = mkA(() => state => initialState)
-diff -Naur v5/src/reducers/database.js new-v5/src/reducers/database.js
---- v5/src/reducers/database.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/reducers/database.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,66 +0,0 @@
--
--
--import duck from 'reducers/duck'
--import * as FileSystem from 'file-system'
--
--const type = 'cheapExp/database'
--
--
--function bundle(state) {
--  return {
--    size: () => FileSystem.size(state),
--    max_depth: () => FileSystem.depth(state),
--    parent_path: () => FileSystem.parentPath(state),
--    getByID: (id) => FileSystem.getByID(id, state),
--    volume: () => FileSystem.volume(state),
--    root_id: () => FileSystem.rootId(state),
--    toJson: () => FileSystem.toJson(state),
--    toStrList2: () => FileSystem.toStrList2(state),
--    getSessionName: () => FileSystem.getSessionName(state)
--  }
--}
--
--const initialState = FileSystem.empty()
--
--const { mkA, reducer } = duck(type, initialState, bundle)
--
--
--export default reducer
--
--export const push = mkA((path, content) => state => {
--  return FileSystem.pushOnQueue(path, content, state)
--})
--
--export const makeTree = mkA(() => state => {
--  return FileSystem.makeTree(state)
--})
--
--export const sort = mkA(() => state => {
--  return FileSystem.sort(state)
--})
--
--export const fromJson = mkA((json) => state => {
--  return FileSystem.fromJson(json)
--})
--
--export const fromLegacyCsv = mkA((csv) => state => {
--  return FileSystem.fromLegacyCsv(csv)
--})
--
--
--export const reInit = mkA(() => state => initialState)
--
--export const setParentPath = mkA((parent_path) => state => {
--  return FileSystem.setParentPath(parent_path, state)
--})
--
--export const setContentByID = mkA((id, content) => state => {
--  const updater = (entry) => entry.set('content', content)
--  state = FileSystem.updateByID(id, updater, state)
--  return state
--})
--
--export const setSessionName = mkA((name) => state => {
--  state = FileSystem.setSessionName(name,state)
--  return state
--})
-\ No newline at end of file
-diff -Naur v5/src/reducers/duck.js new-v5/src/reducers/duck.js
---- v5/src/reducers/duck.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/reducers/duck.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,48 +0,0 @@
--
--import { generateRandomString } from 'random-gen'
--
--export default function duckReducer(type, initial_state, initial_bundler) {
--  type = type+'_'+generateRandomString(40)
--
--  const key = Symbol()
--  const unbundler = state => state[key]
--  const bundler = state => {
--    const ans = initial_bundler(state)
--    ans[key] = state
--    return ans
--  } 
--  initial_state = bundler(initial_state)
--
--  const mkA = f => function(...args) {
--    return {type,f:f(...args)}
--  }
--
--  function reducer(state = initial_state, action) {
--    if (action.type === type) {
--      return bundler(action.f(unbundler(state)))
--    } else {
--      return state
--    }
--  }
--
--  return { mkA, reducer, key }
--}
--
--
--
--// export default function duckReducer(type, initialState) {
--//   type = type+'_'+generateRandomString(40)
--//   const mkA = f => function(...args) {
--//     return {type,f:f(...args)}
--//   }
--
--//   function reducer(state = initialState, action) {
--//     if (action.type === type) {
--//       return action.f(state)
--//     } else {
--//       return state
--//     }
--//   }
--
--//   return { mkA, reducer }
--// }
-diff -Naur v5/src/reducers/icicle-state.js new-v5/src/reducers/icicle-state.js
---- v5/src/reducers/icicle-state.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/reducers/icicle-state.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,67 +0,0 @@
--
--import duck from 'reducers/duck'
--import { Record } from 'immutable'
--
--const type = 'cheapExp/icicleState'
--
--
--const State = Record({
--  hover_seq:[-1],
--  lock_seq:[-1],
--  dims: {},
--  display_root:[-1]
--})
--
--function bundle(state) {
--  return {
--    hover_sequence: () => state.get('hover_seq'),
--    lock_sequence: () => state.get('lock_seq'),
--    hover_dims: () => state.get('dims'),
--    display_root: () => state.get('display_root'),
--    isFocused: () => !(state.get('hover_seq').includes(-1)),
--    isLocked: () => !(state.get('lock_seq').includes(-1)),
--    isZoomed: () => !(state.get('display_root').includes(-1))
--  }
--}
--
--const initialState = new State()
--
--
--const { mkA, reducer } = duck(type, initialState, bundle)
--
--export default reducer
--
--export const setFocus = mkA((id_arr, dims, isLocked) => state => {
--  state = state.update('hover_seq',()=>id_arr)
--  if(!isLocked) state = state.update('dims',()=>dims);
--  return state
--})
--
--export const setNoFocus = mkA(() => state => {
--  state = state.update('hover_seq', () => [-1])
--  state = state.update('dims',()=>{})
--  return state
--})
--
--export const lock = mkA((id_arr, dims) => state => {
--  state = state.update('lock_seq',()=>id_arr)
--  state = state.update('dims',()=>dims);
--  return state
--})
--
--export const unlock = mkA(() => state => {
--  state = state.update('lock_seq', () => [-1])
--  return state
--})
--
--export const setDisplayRoot = mkA((root_seq) => state =>{
--  state = state.update('display_root',()=>root_seq)
--  state = state.update('lock_seq', () => [-1])
--  return state
--})
--
--export const setNoDisplayRoot = mkA(() => state =>{
--  state = state.update('display_root',()=>[-1])
--  state = state.update('lock_seq', () => [-1])
--  return state
--})
-\ No newline at end of file
-diff -Naur v5/src/reducers/root-reducer.js new-v5/src/reducers/root-reducer.js
---- v5/src/reducers/root-reducer.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/reducers/root-reducer.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,32 +0,0 @@
--
--import { combineReducers } from 'redux'
--import undoReducer from 'reducers/undo'
--
--import database from 'reducers/database'
--import appState from 'reducers/app-state'
--import icicleState from 'reducers/icicle-state'
--import api from 'reducers/api'
--
--
--const combine = undoReducer(combineReducers({
--  database,
--  appState,
--  icicleState,
--  api
--}))
--
--const reducer = combine.reducer
--
--export default reducer
--
--export const commit = combine.commit
--export const undo = combine.undo
--export const redo = combine.redo
--export const hasAPast = combine.hasAPast
--export const hasAFuture = combine.hasAFuture
--
--
--export const selectAppState = state => combine.selectContent(state).appState
--export const selectDatabase = state => combine.selectContent(state).database
--export const selectIcicleState = state => combine.selectContent(state).icicleState
--export const selectApi = state => combine.selectContent(state).api
-diff -Naur v5/src/reducers/undo.js new-v5/src/reducers/undo.js
---- v5/src/reducers/undo.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/reducers/undo.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,83 +0,0 @@
--
--import { generateRandomString } from 'random-gen'
--import { Map, List, Record } from 'immutable'
--
--
--const State = Record({
--  content: undefined,
--  pastC: List(),
--  presentC: undefined,
--  futureC: List()
--})
--
--const size_limit = 1000
--
--export default function undoReducer(fRedux) {
--  const rand = '_'+generateRandomString(40)
--  const commit_type = 'commit'+rand
--  const undo_type = 'undo'+rand
--  const redo_type = 'redo'+rand
--
--
--  function reducer(state = new State(), action) {
--    if (action.type === commit_type) {
--      return commitH(state)
--    } else if (action.type === undo_type) {
--      return undoH(state)
--    } else if (action.type === redo_type) {
--      return redoH(state)
--    } else {
--      return pass(state, action)
--    }
--  }
--
--  const hasAPast = state => state.get('pastC').size !== 0
--  const hasAFuture = state => state.get('futureC').size !== 0
--
--  function commitH(state) {
--    state = state.update('pastC', a=>a.push(state.get('presentC')))
--    if (state.get('pastC').size > size_limit) {
--      state = state.update('pastC', a=>a.slice(1))
--    }
--    state = state.set('presentC', state.get('content'))
--    state = state.set('futureC', List())
--    return state
--  }
--
--  function undoH(state) {
--    if (hasAPast(state)) {
--      state = state.update('futureC', a=>a.insert(0, state.get('presentC')))
--      state = state.set('presentC', state.get('pastC').get(-1))
--      state = state.update('pastC', a=>a.slice(0, -1))
--      state = state.set('content', state.get('presentC'))
--    }
--    return state
--  }
--
--  function redoH(state) {
--    if (hasAFuture(state)) {
--      state = state.update('pastC', a=>a.push(state.get('presentC')))
--      state = state.set('presentC', state.get('futureC').get(0))
--      state = state.update('futureC', a=>a.slice(1))
--      state = state.set('content', state.get('presentC'))
--    }
--    return state
--  }
--
--  function pass(state, action) {
--    state = state.update('content', c => fRedux(c, action))
--    if (!state.get('presentC')) {
--      state = state.set('presentC', state.get('content'))
--    }
--    return state
--  }
--
--  const commit = () => {return {type:commit_type}}
--  const undo = () => {return {type:undo_type}}
--  const redo = () => {return {type:redo_type}}
--
--  const selectContent = state => state.get('content')
--
--
--  return { commit, undo, redo, reducer, hasAPast, hasAFuture, selectContent }
--}
-\ No newline at end of file
-diff -Naur v5/src/request.js new-v5/src/request.js
---- v5/src/request.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/request.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,21 +0,0 @@
--
--export const request = obj => {
--  return new Promise((resolve, reject) => {
--    let xhr = new XMLHttpRequest()
--    xhr.open(obj.method || 'GET', obj.url)
--    if (obj.headers) {
--      Object.keys(obj.headers).forEach(key => {
--        xhr.setRequestHeader(key, obj.headers[key])
--      })
--    }
--    xhr.onload = () => {
--      if (xhr.status >= 200 && xhr.status < 300) {
--        resolve(xhr.response)
--      } else {
--        reject(xhr.statusText)
--      }
--    }
--    xhr.onerror = () => reject(xhr.statusText)
--    xhr.send(obj.body)
--  })
--}
-diff -Naur v5/src/save.js new-v5/src/save.js
---- v5/src/save.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/save.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,9 +0,0 @@
--
--
--import FileSaver from 'file-saver'
--
--
--export function save(name, json) {
--  const blob = new Blob([json], {type: "text/plain;charset=utf-8"})
--  FileSaver.saveAs(blob, name)
--}
-diff -Naur v5/src/scheduler.js new-v5/src/scheduler.js
---- v5/src/scheduler.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/scheduler.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,54 +0,0 @@
--
--
--export function mkScheduler() {
--  let queue = []
--  let canBePlanned = true
--
--  let size = 1
--  let start_ms = 0
--  let end_ms = 0
--
--  const planNextStep = () => {
--    if (canBePlanned) {
--      requestAnimationFrame(step)
--      canBePlanned = false
--    }
--  }
--
--  const popAtMost = nb => {
--    for (let i = Math.min(queue.length,nb) - 1; i >= 0; i--) {
--      queue.pop()()
--    }
--  }
--
--  const startRecordMs = () => start_ms = new Date().getTime()
--  const endRecordMs = () => end_ms = new Date().getTime() - start_ms
--  const updateSize = () => {
--    const target = 30
--    if (end_ms > target && size > 0) {
--      size--
--    } else {
--      size++
--    }
--  }
--
--  const step = () => {
--    endRecordMs()
--    updateSize()
--
--    canBePlanned = true
--    if (queue.length > 0) {
--      popAtMost(size)
--      planNextStep()
--    }
--
--    startRecordMs()
--  }
--
--  return {
--    schedule: a => {
--      queue=[a].concat(queue)
--      planNextStep()
--    }
--  }
--}
-diff -Naur v5/src/stats.js new-v5/src/stats.js
---- v5/src/stats.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/stats.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,97 +0,0 @@
--
--
--import React from 'react'
--
--import ReactDOM from 'react-dom'
--
--import MainSpace from 'components/main-space'
--import Dashboard from 'components/dashboard'
--
--import unsafeStyle from 'css/stats.css'
--
--import { readError, readNbFiles } from 'api-call'
--
--window.onload = () => {
--  let root_div = document.createElement('main')
--  root_div.setAttribute('id','root')
--
--  if (document.body !== null) {
--    document.body.appendChild(root_div)
--  }
--
--  ReactDOM.render(<Root/>,root_div)
--}
--
--class Root extends React.Component {
--  constructor(props) {
--    super(props)
--    this.state = {
--      val:10,
--      error_arr:[],
--      nb_files_arr:[]
--    }
--
--    this.handleClick = this.handleClick.bind(this)
--    this.handleChange = this.handleChange.bind(this)
--  }
--
--  handleClick(e) {
--    Promise.all([readError(this.state.val),readNbFiles(this.state.val)])
--    .then(([error_arr, nb_files_arr]) => {
--      console.log(error_arr, nb_files_arr)
--      this.setState({
--        error_arr: JSON.parse(error_arr),
--        nb_files_arr: JSON.parse(nb_files_arr)
--      })
--    })
--  }
--
--  handleChange(e) {
--    this.setState({val: e.target.value})
--  }
--
--  render() {
--    return (
--      <div>
--        <button onClick={this.handleClick}>Fetch</button>
--        <input onChange={this.handleChange} value={this.state.val}></input>
--        <Table arr={this.state.error_arr}/>
--        {this.state.nb_files_arr}
--      </div>
--    )
--  }
--}
--
--function Table(props) {
--  const header = (
--    <tr>
--      <th>user_agent</th>
--      <th>date</th> 
--      <th>stack</th>
--      <th>componentStack</th>
--    </tr>
--  )
--  
--  const listItems = props.arr.map((e,i) =>
--    <tr key={i}>
--      <td>{e.user_agent}</td>
--      <td>{new Date(e.date).toString()}</td> 
--      <td>{e.stack}</td>
--      <td>{e.componentStack}</td>
--    </tr>
--  )
--  if (listItems.length) {
--    return (
--      <div>
--        <table>
--          <tbody>
--            {header}
--            {listItems}
--          </tbody>
--        </table>
--      </div>
--    )
--  } else {
--    return (<div></div>)
--  }
--}
-\ No newline at end of file
-diff -Naur v5/src/sw.js new-v5/src/sw.js
---- v5/src/sw.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/sw.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,40 +0,0 @@
--/**
-- * Welcome to your Workbox-powered service worker!
-- *
-- * You'll need to register this file in your web app and you should
-- * disable HTTP caching for this file too.
-- * See https://goo.gl/nhQhGp
-- *
-- * The rest of the code is auto-generated. Please don't update this file
-- * directly; instead, make changes to your Workbox build configuration
-- * and re-run your build process.
-- * See https://goo.gl/2aRDsh
-- */
--
--
--workbox.skipWaiting();
--workbox.clientsClaim();
--
--try {
--  workbox.googleAnalytics.initialize();
--} catch(e) {
--
--}
--
--/**
-- * The workboxSW.precacheAndRoute() method efficiently caches and responds to
-- * requests for URLs in the manifest.
-- * See https://goo.gl/S9QRab
-- */
--
--self.__precacheManifest = [].concat(self.__precacheManifest || []);
--workbox.precaching.suppressWarnings();
--workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
--
--workbox.routing.registerRoute(
--  /.*googleapis|.*jsdelivr|.*gstatic|.*cloudflare/,
--  workbox.strategies.cacheFirst({
--    plugins: [new workbox.cacheableResponse.Plugin({"statuses":[200]})]
--  }),
--  'GET'
--);
+@@ -145,6 +145,12 @@
+   return state
+ }
+ 
++
++
++export const toJs = (state) => {
++  return state.toJS()
++}
++
+ export const toStrList2 = Cache.make((state) => {
+   return TT.toStrList2(state.get('tree'))
+ })
 diff -Naur v5/src/table-tree.js new-v5/src/table-tree.js
---- v5/src/table-tree.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/table-tree.js	2018-06-06 18:17:40.736470705 +0200
-@@ -1,9 +1,8 @@
+--- v5/src/table-tree.js	2018-07-12 17:54:48.521576015 +0200
++++ new-v5/src/table-tree.js	2018-07-12 17:58:12.377575237 +0200
+@@ -1,9 +1,9 @@
  
 -import * as Loop from 'test/loop'
 -import * as Arbitrary from 'test/arbitrary'
 -import * as Cache from 'cache'
++import * as Loop from './test/loop'
 +import * as Arbitrary from './test/arbitrary'
 +import * as Cache from './cache'
  
@@ -3896,220 +64,9 @@ diff -Naur v5/src/table-tree.js new-v5/src/table-tree.js
  
  import { Map, Record, List } from 'immutable'
  
-diff -Naur v5/src/table-tree.test.js new-v5/src/table-tree.test.js
---- v5/src/table-tree.test.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/table-tree.test.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,207 +0,0 @@
--import chai from 'chai'
--const should = chai.should()
--
--import tT from 'table-tree'
--import { List } from 'immutable'
--
--import * as Loop from 'test/loop'
--import * as Arbitrary from 'test/arbitrary'
--
--
--describe('table-tree', function() {
--  const update = (young,old) => young+old
--  const compare = (a,b) => {
--    if (a === b) {
--      return 0
--    } else if (a > b) {
--      return -1
--    } else {
--      return 1
--    }
--  }
--  const toStrList = (a) => List.of(a)
--  const column_name = 'num'
--  const toStrListHeader = () => List.of(column_name)
--  const toJson = JSON.stringify
--  const fromJson = JSON.parse
--
--  const arbitrary = Arbitrary.natural
--
--  const TT = tT({
--    update,
--    compare,
--    toStrList,
--    toStrListHeader,
--    toJson,
--    fromJson,
--    arbitrary
--  })
--
--  const isSortedToTreeToJs = function(tree) {
--    let ans = true
--    for (let i = 1; i < tree.children.length; i++) {
--      ans = ans && tree.children[i].content <= tree.children[i-1].content
--    }
--    return tree.children.map(a=>isSortedToTreeToJs(a)).reduce((acc,val)=>acc && val, ans)
--  }
--
--  Loop.immuEqual('(fromJson . toJson) a', () => {
--    const a = TT.arbitrary()
--    return [TT.fromJson(TT.toJson(a)), a]
--  })
--
--  Loop.equal('(isSorted . sort) a', () => {
--    const a = TT.arbitrary()
--    return [TT.isSorted(TT.sort(a)), true]
--  })
--
--  Loop.equal('(toJsTree . fromJsTree) a', () => {
--    const a = TT.toJsTree(TT.arbitrary())
--    return [TT.toJsTree(TT.fromJsTree(a)), a]
--  })
--
--  Loop.immuEqual('(toList . sort . fromJsTree . toJsTree) a', () => {
--    const a = TT.arbitrary()
--    return [TT.toList(TT.sort(TT.fromJsTree(TT.toJsTree(a)))), TT.toList(TT.sort(a))]
--  })
--
--  
--
--
--
--
--  it('basic test to improve', function() {
--    let a = TT.init(0)
--    const root_id = TT.getRootId(a)
--
--    a = TT.update(['a','b','c'], 1, a)
--    a = TT.update(['a','b','d'], 1, a)
--    a = TT.update(['a','e','f'], 1, a)
--
--    a = TT.sort(a)
--
--    TT.size(a).should.equal(7)
--    TT.depth(a).should.equal(3)
--    // TT.getEntryById(root_id, a).get('content').should.equal(3)
--
--    // let b = a.toJS()
--    // b[root_id].children.should.have.lengthOf(1)
--    // b[b[root_id].children[0]].children.should.have.lengthOf(2)
--
--    // TT.remakePath(b[b[root_id].children[0]].children[0], a).toArray()
--    //   .should.deep.equal(['', 'a', 'b'])
--
--    TT.isSorted(a).should.equal(true)
--
--    isSortedToTreeToJs(TT.toJsTree(a)).should.equal(true)
--
--    TT.toStrList2(a).toJS()
--      .should.deep.equal([
--        ['path', column_name],
--        ['a/b/c', 1],
--        ['a/b/d', 1],
--        ['a/e/f', 1],
--      ])
--
--    TT.fromJson(TT.toJson(a)).toJS().should.deep.equal(a.toJS())
--  })
--
--  it('sort children : const compare = (a,b) => a < b Issue', function() {
--    let a = TT.init(0)
--    const root_id = TT.getRootId(a)
--
--    a = TT.update(['a','b','c'], 1, a)
--    a = TT.update(['a','b','d'], 2, a)
--    a = TT.update(['a','e','f'], 4, a)
--
--    a = TT.sort(a)
--
--    TT.isSorted(a).should.equal(true)
--    isSortedToTreeToJs(TT.toJsTree(a)).should.equal(true)
--
--    TT.toJsTree(a)
--      .should.deep.equal({
--        name:'',
--        content:7,
--        parent:null,
--        depth:0,
--        children:[
--          {
--            name:'a',
--            content:7,
--            parent:null,
--            depth:1,
--            children:[
--              {
--                name:'e',
--                content:4,
--                parent:null,
--                depth:2,
--                children:[
--                  {
--                    name:'f',
--                    content:4,
--                    parent:null,
--                    depth:3,
--                    children:[]
--                  }
--                ]
--              },
--              {
--                name:'b',
--                content:3,
--                parent:null,
--                depth:2,
--                children:[
--                  {
--                    name:'d',
--                    content:2,
--                    parent:null,
--                    depth:3,
--                    children:[]
--                  },
--                  {
--                    name:'c',
--                    content:1,
--                    parent:null,
--                    depth:3,
--                    children:[]
--                  }
--                ]
--              }
--            ]
--          }
--        ],
--      })
--  })
--
--
--  it('bug sort', function() {
--    let a = TT.init(0)
--    const root_id = TT.getRootId(a)
--
--    a = TT.update(['','src','csv.js'], 745, a)
--    a = TT.update(['','src','stats.js'], 1995, a)
--    a = TT.update(['','src','dict.js'], 3392, a)
--    a = TT.update(['','src','table-tree.js'], 3602, a)
--    a = TT.update(['','src','folder.js'], 2504, a)
--    a = TT.update(['','src','app.js'], 1445, a)
--    a = TT.update(['','src','cookie.js'], 174, a)
--    a = TT.update(['','src','api-call.js'], 4782, a)
--    a = TT.update(['','src','request.js'], 536, a)
--    a = TT.update(['','src','query-string.js'], 1166, a)
--    a = TT.update(['','src','base64.js'], 186, a)
--    a = TT.update(['','src','random-gen.js'], 441, a)
--    a = TT.update(['','src','scheduler.js'], 931, a)
--    a = TT.update(['','src','table-tree.test.js'], 2798, a)
--
--    a = TT.sort(a)
--
--    TT.isSorted(a).should.equal(true)
--    isSortedToTreeToJs(TT.toJsTree(a)).should.equal(true)
--
--    // TT.toJsTree(a).should.deep.equal({})
--  })
--
--
--})
 diff -Naur v5/src/test/arbitrary.js new-v5/src/test/arbitrary.js
---- v5/src/test/arbitrary.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/test/arbitrary.js	2018-06-06 17:44:33.486638973 +0200
+--- v5/src/test/arbitrary.js	2018-07-12 17:54:48.521576015 +0200
++++ new-v5/src/test/arbitrary.js	2018-07-12 17:58:20.101575208 +0200
 @@ -1,7 +1,7 @@
  
  import { Map, List } from 'immutable'
@@ -4119,713 +76,3 @@ diff -Naur v5/src/test/arbitrary.js new-v5/src/test/arbitrary.js
  
  import colors from 'colors/safe'
  
-diff -Naur v5/src/test/loop.js new-v5/src/test/loop.js
---- v5/src/test/loop.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/src/test/loop.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,66 +0,0 @@
--import chai from 'chai'
--import chaiExclude from 'chai-exclude'
--chai.use(chaiExclude)
--
--const expect = chai.expect
--
--import { is } from 'immutable'
--
--import colors from 'colors/safe'
--
--let loop_log_array = []
--
--export const log = (...args) => {
--  const stack = new Error().stack
--  const line = stack.split('\n')[2]
--  let match = line.match(/at ([^ ]+) \(([^:]+):([^:]+):([^:]+)\)/)
--
--  if (match === null) {
--    match = line.match(/at ([^:]+):([^:]+):([^:]+)/)
--    match = match.slice()
--    match = [match[0]].concat(['anonymous']).concat(match.slice(1))
--  }
--
--  const func_name = colors.red(match[1])
--  const file_name = colors.blue(match[2])
--  const line_num = colors.green(match[3])
--  const col_num = colors.yellow(match[4])
--
--  loop_log_array.push([`\n${func_name}:${file_name}:${line_num}:${col_num}\n`, ...args, '\n'])
--}
--
--export const simpleLog = (...args) => {
--  loop_log_array.push([...args])
--}
--
--export const iter = (f, nb=100) => {
--  try {
--    for (let i = nb - 1; i >= 0; i--) {
--      loop_log_array = []
--      f()
--    }
--  } catch(e) {
--    loop_log_array.forEach(a => console.log(...a))
--    throw e
--  }
--}
--
--export const equal = (str, f) => {
--  it(str, function() {
--    iter(() => {
--      const [a,b] = f()
--      expect(a).to.deep.equal(b)
--    })
--  }).timeout(10000)
--}
--
--export const immuEqual = (str, f) => {
--  it(str, function() {
--    iter(() => {
--      const [a,b] = f()
--      // expect(a).excludingEvery('ownerID').to.deep.equal(b)
--      expect(a.toJS()).to.deep.equal(b.toJS())
--      expect(is(a,b)).to.equal(true)
--    })
--  }).timeout(10000)
--}
-\ No newline at end of file
-diff -Naur v5/startupDev.bash new-v5/startupDev.bash
---- v5/startupDev.bash	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/startupDev.bash	1970-01-01 01:00:00.000000000 +0100
-@@ -1,15 +0,0 @@
--#!/bin/bash
--
--watch() {
--  echo $1;
--  while inotifywait -r -e modify,create,delete,move /mnt/$1/; 
--  do rsync --delete -av /mnt/$1/ /usr/src/app/$1/; 
--  done
--}
--
--watch src &
--watch static &
--
--# python -m SimpleHTTPServer 8000 &
--
--npm run-script devServer
-diff -Naur v5/static/imgs/favicon144.png new-v5/static/imgs/favicon144.png
---- v5/static/imgs/favicon144.png	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/static/imgs/favicon144.png	1970-01-01 01:00:00.000000000 +0100
-@@ -1,45 +0,0 @@
--‰PNG
--
--   IHDR         çFâ¸   bKGD ÿ ÿ ÿ ½§“   	pHYs     šœ   tIMEâ,:»*{Ï    IDATxÚí}isÜF–í¹ j/YÜ)nZlkñÚ{º{æMÄøO¾ó&æÅÌs÷D¿¶»Û²DK"ÅE$Å­¸T±V w>`) ‘™@‘EuwÄĞáÄB‰Ì›7Ï=w£“Æáÿè7Ìp™Ñ €(öO€AÂß(òÙğ‡ÿaáÛÑ+Yñ$îœ¸VóHü…×°æûÁ;³ÿ/’Œ'şGn$^ŸşvŠ‹Âß‰c¥ÈÁgıCú^âÜÉÖTüRâ6DE €ß[ ıÀ¯§ö-ƒÉaü=ıĞßãÓxlİÙ[Y ÜP,ˆ½ñ0I¿û'“r2(h2qÒ™#»‡¢ZO»e#4>"fµVŸ9TrßğÕ<‘ÅŞÔ°°I˜éLQ\“Ä§™Ú“#§Èî—êı˜æb0±0f‹çI0OÑ1Gæ…× ¨ã	ÏvôÑx6!¸y„e˜ííX}2Şd¦²<*ùoM—püÅx4Ô1T÷fbÅÍ8qyR0ù;ˆn$,, Š=ƒ"Ÿ³fá£ØHÀ"Äá™4÷ ¡FPC&†¨”£jŠcôU{š…şGá»…ãŒj=æ¡Va2ñ}cKÁÂ”0Æß•¢÷/ŞËûß.$qDM†oü¬S=zÑş5Hì²¸ÿh8÷
--Ÿ7¼'…“É"Œ‰¥x!ŠIIÁgVK)ƒ|ãøÖã¸6^‘aqÃD„ˆHØ`‘µfQ2ˆÃy¤áLÆıÄ/¢â2ü}ğ}ƒ™=L PaÄ’­GrS'õtáøfgÁ6“äã’+šãˆI'ŞéŠ›(û!a<âq$±<oêYÿ$*C+´ØŸ)_™“€ãgh]²`.’úğö©N€Uª†Ø#cZH#9Âsâ¯`ƒpïQ,3ÓğZ"Å#™%ëDgu!hşˆ>œW9%B1¸ÀÂ4GÑ¼@5pºçIud,§¼ÔM1§~÷°jNG;‰F@¿Y.I×
--Yx–ñSwdt3áVï>šn"a¶É>3’|Ÿ„n?‚d‡–pÆJO0Ê8D2x •İ)'"9:9uòIÁûqä,`¨ø¼Èï$Q@I O
--ğÎ2ò’\£Ld4¨Š&áÈL	ˆóÑê!áF·Éß&µIDÙxºİ›ßôK<Ê)†ÄÂ!.`$›(†Y¢M´„†Z‘ s‡ã¸­8³ô=eßa™ª á¤Â±Ry	"„¤£š8LÚß$Ì3gzsİ<qš3äf|ÖMÍ`Ó(JfÄİÃ7·Ó-$9²:ó~ˆÕHŞ×Ğ]BWép°ìïŠ`ú“†’2'R#ŸÅ¯sVJõ»!xğŒÒÕg)«¿3Ëˆ	£
--NRœÎ23”$bÌ¾NgÒü^'0”.@PNĞp9)Â1P¹b:4+€Jî)]½Şfw©­r…“/Ë^¥øéBdqtÚ8‹ğè2 Yu/ÄL¯Í¾Âã;V”Ğ—³{·|1şkÏğíki1‚†ÉyÇq¢Œ2ˆ
--g‰¹KeãV`İ	Ï)\U†G‘Æ(Îo\õr†c¤‚ˆÿùùŸÍ%Ê6IŒm´`â#eÜ ¹¯ÑÏ,P¦î4p Ã÷‰”8’•–eš—t›_§‘Ò#6åS(|?çD[I ÆÍ/²hÑ¨ÕnË”qöñ¸X¹
-- y<ëÅ:Äätv0a%üş²˜hJÚl¤¢	²—”T{ÂÈ“ÁèÎıÀÑĞŞ¿Î
--MJ¤ÆBØ…ÜDƒ2¨@>ÒÒè“X wdæ³È@LÁÊµÚğJnaê„AÇ#ŒbDégÕm8Ë÷9‹f˜ó;İÔ#lbÎb…QmÉ·|J…:ºÈŠuß,xóÄp†¨»Ÿå¤Ø0£CM8‹’\-‘DüË8'Š«æ ğŠ¥—°œ§I@–îT¢,§âPScqvÃÑšèiˆô›6(Sâç(ÏÃ•û‚#k/:UDb,ª/XĞØÍq–‘ô¤a¼º÷ñ$Â<)¸ªğ&p<‘(®Â8v¯!+ú˜$Šø”È”:É4ƒÿ¬ô /Ÿ³ˆoHuâ¤ôX&<b71,Î†÷äé”Hr$'ØïqÅÖ¨	ºÀ•1”<ŞˆÓ‘á¢l³Â7š(ı“âz²lêƒÓ§Ê‹H¤ˆœ„Ã•';SÕ)-¡^Ci9ş}É‰‰dìøñüZ=*Y8)vFˆ3 bÄ8îxÌµád; ](’ âqšŒP$ÔEM†Ï'–<I.NÑt¥È_ ŒHL÷Ë’¥,Q‹YÅ’åìW¨eåöh<Ó‹çP[y–¥Ó|Ã$4gŸV§qŸ°eš#y¿tº‡b·%A(¥ºP¢-“–¾êè$–gSs¦³œ"‹)Â{Ut%Ÿ!Dg²~Èç¢Ê"­<®ú!¸´LÛùÃ&@C‹Èÿ•––xÖîüäP9“]I Z×ÂÎ–˜»„ì™–ÑÔiÎ Â)ù‘56,1Óª¬$qóòxæôD_N®L"‰£0eí½y7ß»}„dúÆ…ù!fÒ!§ÚÚšòÒ0Ò'äºtd† ç+ëÑpZ¬ßÑJ)ÂÚ£4ÌAË’iäiVõ·\bi4—Ä“Íİ!ùéDœ>¨LÇ‰æ+#AĞÉûTr˜9ÅšH‰`øìBË‰iÑÅ!;Ry—Û
--‘DA°Fu @¬!ÑFI4Ğ_OóÑğÃ€AÃ0ÀÌ°mÃ¶8® ßõdxLÓ@>ŸGÎÊ ×ëºÒÃ]æì~BA ˆ˜¦	 Ø6\Ça˜0 Ãu]Ínâ;g’èNa$¦šH ¯„–fõ2é¡%ÉÆ„u'š&ş&#()D¦	Û¶aèv»ètºè÷û ³ß ƒ`™&òù<"ò¯¹¼´hwÂY1W¤ˆS
--Óµƒ8®‹^·‹^¿B¡ˆr©##âÜ,	SÈI3³àÙ½…«9ş
--V¶ÚkúsşæŠ‚ÕG•¼‡úìhÃğ´Œë2ö ıNıÁ ½^Ï˜vNÇû³ÛA¯ÛÃ`0ğ4%‰døÚ'—G©TB¥RA¹\F¹TF¡TD>ŸG¾G!Ÿ‡ey{’]5S’¨è9Ã€aƒ®.›8?¿À»ıw¸¾¾ÆÒÒÖ××P.—AdøcK²èDn‹%æf,(8x‡•ÀÔÇ«b†¤>œ ³Â.qÑäEu½Ã üÆİŸğX–…|.=Àõu§gghœ5p|rŒw{ûØÛİE£qN·ƒAC:ND0È;úòù<–––ğèÑCÜ[¾‡¹¹YÌÌÌbvv…B†aÂq\¸®×q¡ÈìY¦Ë2quÕÄææ6^nàü#ç|ûí7°¬Å½{÷P.—‘ËåàºIæ‡g,F‹E±U•§¡t1
--4(.@qÄBPÇŒ ÁCg×³„d  ®ë¢×sĞn·1Ğl¶p||Œ£÷G8>9ÆÑÑ¶·wğvë-úı>Çñ9#=“Áô0LËËË¸¸¼ÀñÉ	0??‡…ÅÔ§§Q©TP(xš)—3=ÌåÆ=÷ä4ã ßïãøøøá‡ğÃÀÅå,ËÂìÜ,˜ëë÷Q,ÁìÄêc3ÛÏ™Î–Ôã²Xª^ÓÏRñ¬&ÃXê`é!f%?|!Oëäsy˜¦N»ƒæÕö°¹¹‰wïŞáøèççh·¯ÑétqÕ¼B³ÙôÇÔÆĞOWdå,Z­¶6·p||Œr©Œjµ‚êD³3³¸ÿà>>|ˆ••Ì/Ì£P( ×ëÁ¶íÇ†—]OCœbãåKüøãxñâ%Z×-Ş¼y×uÑíô°0?™™i¸½$ îU’ğ¿qnF,Ë#nöhÎšˆoe¡gV:ö¾ÙÙI7¸Ë¨;„ü…íúp:6ÎÎx·÷¿àÇÀææÚí6Àğ¬ÿ8Êår·ÒzãàääÇÇÇp]¦iÂ4MLOOãéÓ'h·Ûp–earr.ûEìüÉ´R»İÆÑÑvvv°µ¹…ıı}˜¦B¡€ã£c\œ_`ùŞ=ôzßÁ²,«egNŸaeÕ“"dÉ±…¹Ÿ¬%ÛÕ«®bHòiTË0ÔÙÃèBOsäòy}`{ë-¶·w°³½ƒ½w{Øß?ğ„§Ó=xVâ ÙuÌnìêIÇ E;f†ã¸°mO£5çxıú:ßc{{÷ÜÇÚÚ¦§ë0- Ã4¸®Çq|pïy×u`šF(¤ƒş`¨¹ Z-YÔd†ÄÃgHév’¹e8±n3(±–,–1Ln‰´>l>éàŞäÛhµZxóú~÷ıïğË/¿`oïšÍf¸àù\ùˆ¶	‚™aÀÌe®UÇ³‹÷ïßãääÛÛ;ØÜÜÄ§Ÿ~
--v]ä,åJ–e}Î¸ì‚°rr¹ˆ<Êår(
--Èçó€à=®Š58É¨ş˜–âø/‡°ƒä`G"DQ¶Ìå1Ï#•”¯Õlboï677ñóÏ?cãåößí£q~~¿|>Ë´À>	ç8ø,
--¨T*¨T+¨V«¨”Ë(KÈåsŞ"àºĞë¡Óîàòò0M(†·ğ¶m‡Ï´mì[y§§§xğà055	Ã0<mÃˆq<ã
--®ˆ´˜7e‡şp­L¨[SÅ”)ƒh°†_!]9ˆŒ³GGÇø÷ÿ¿øıï~‡““St»]ôz=är9X–5LIñ­Çq  …Bsós¸wïVV–±°°ˆÙ™T'ª ¢@¬³Á`€V«…Ë‹Kœ_œãøø[›[h6›h_·üPÀÃc«Al6›xófGGÇØ|³‰ßüö7øê«/‘ËåP©T`˜¦·)RDbuD²_áËYXa$ò(r™u×&v¶xçtÁ!Ÿ-»¼¼ÄşÁ^¼xŸşòSˆ7¡	Ü¶mÃ4MT«UT«Y]©T03;ƒÅÅE,..biisss¨×ë¨T*I"€ÈÀÀ }İÆÕÕ.//qzz†z½útFŸÑn5[èt:p]7¼W€q./¯ĞëõP(à:lÇÆúúzŠk:ÿ)g,Àq—."áyÖ­Ô5Hª]()è¤iœâ³À ÙıƒüÛÿù7üéÇ?aÌŒ\.[ Û¶ÑétP©T°°°€O>ù<ÀêêªÏÓ”Q*•Q(PÈç‘Ëå|"é¼Ã¶.3*•
--êõ:¶~¯‡Ï?ÿWWW8=;ÅÁÁ!vvv°ñb{{{ø =Œà§Ùlâÿÿ8<8D¯ßCÎÊÁ²<7#Z3S‘O’%i*ÈAJz™dn¡¡‰Wt$ Q’úø£TN¯òãa×­kãÅ‹øÓÂË/a;vˆ?¢€¶X,¢V«a~~Ï=Å§Ÿ~ŠÇOc}}¾•ãİ7ê-ˆ Ø1+Ìÿ»Ë.Î/Î±·»‡úTÈår8;;Ãõõ5úı~Sõû}4\]]afvµZSSSèt:°í­†“"u¸ÕmİK7=p,iVƒ†<õV ÷É4áˆg"™M1L#‘­œ…~¿ííüçü'?ıı}Ø³¬‚ã‚ÈÀÂÂ~õõ¯ğôÉ¬­­bqqÓ3Ó(•Š ƒ†,#ŒEÓ80×Óˆ0 "”Ë,/¯ \®`ii	Ï=ÃóçÏñâç8:>ÂõumûÖ¡P(€™ñúÕ+´¯ÛX^¾‡Ù¹Y´š-8ÃPI4"G:æÊHd¥‹‰””,šK$¥ò”`kÔRâ<úù™ô{DøhƒÀ.£Ûíâüâ¯^½Âï¾ÿ¶6·à²b€2Å¢‡s>şøcüó?ÿ¾øâLMM"ŸÏƒˆà¸nèu«ø$"eÈÿRW|%"LNNb²VÃúÚ<¸b±ˆ~¿2ÇÇÇh_·C­U, ïßáèè'''øøãĞï÷Ñï2±âñÅ`y¢½HİzUÆ¤¼3^Ñu­
--ON2Áb†b¡€~¿½íüü³˜ONNĞéz€9ˆé19+‡êDëëëxúì)<}‚O?F}ºB¡ Ç‰.¬.eué©Ccd˜êõ)<}ú–eaii	¯_½Â»wïpzrŠv§ã›îfhŸŸãíÛm03:şçêò¾,”ŒI²ÌwjşØæ—4‘¶ò¢tÃÌÊr"ª:'‡NÜKz­ÇñR“,SF¦‰ÁÀÆÖæ¾ÿßãõë×èv»¡ğBaªU¬¬¬à›o¿Áwß}‡•Õ•p'G©1—¢É‘ad'Iİ&Ã"c_8Éö®\][ÅÌì,159‰R±„n·‡ëv;t{
--…DÈMC½$ìÜ$Ë&é ¢?y„U”s‰ˆàÇ%9ƒºoÄ›ÒÍAïâ8...ğşğ=Ş¾}‹­­-…ÖM°CÇA±XÄúú:¾ùö|õ«¯poùj“5ô{}ßàêMãèˆ”yà$-Ú û1L¹\…||-;=;C«ÙB/¬‰¼w»¦Ï	éáƒ 3T×`áËşFÊ’"‹÷¶´V‘Ô&‡›%¾Dÿ*Q2İnïñêÕklm½Åññ1®¯¯Cs=z}¹\ÆÓgOñİwÿŠ{ËË°,v;ôse·<XŠb	|Ê}4LFdı> `jr•gU¸®‹½½w>‡tŠN§fNXéÂ3¬Ş!«S+vbäŒÀT™Ô)Ñv‚¯¯};£otÃ0 Äı^»»{xñóìíí…í`’÷ÁÚÚ*¾üêK<{ö+«+˜šš„ip7UxîÂÌ®	b£s¹<jµVVVğùŸã³Ï>ÃÜÜœ„°¤ì™!*À­™ßÃY´ÂTÆQŠFR&ÕÑèBDD0Lİn›››øóŸÿŒÃÃÃ0ü"À4ívµZß|ûşå_ş>zƒô{}a´Õ)J2n™q¦NğvÌÀ`Ğ‡íØ˜¨Mà×¿şGÔjhµZ8<<L„edŸ$‰¸(ª«j:h|$)ï,hak\”öm`SÓ®h4Î±¿¿İİ=\_·bV—eY˜˜˜ÀâÒ"={†/¾üµZí9<Yg6¤y¼İ–Û“ƒB!ÕµU036^zlõÑÑz½Ç	)‰l÷æ‘q–V	7SR‰ÄÂ´šÅÓÊ‘JeD)wb)×n·Ñ8;ÃŞî.ÎÎÎĞív`Û^PVÀ×&kXY^Á§Ÿ}Š•ÕUT*˜¦Çvc§8Ké6	’–ÌHiJ3DHËJ¥ŒgŸ~ŠN¯‡ø¯~y…~¯B± ¶¾¢ËÃ>„¢1\r2ÄJ[Ô¥v‰(5Ğm1‹=Ç4eà¢m¥É0Ğétğnï¶ßnãâüÜwJÆb²6‰gÏáË/¿Äüü<Ã3î$›z7uı¸gË²ğèÑC€€óF;Û;èv»£áNºƒ’*–S˜DÙµTt¼ğ[àÊH‹Ê×U
--$¹º$Aì#¹'Ãê Ãû™~®V¯ÓÅÎÎŞlnâââ2a™†Úd>z„O>ùÓÓu‹qÈãâf.'Û­+´,+)ÜØ×eËŠ-®"Ïr]7’·«++˜››ƒãØp]MyÒ]$©ÒˆÖSdQıAÆG¬sDV‡HZ›2Š~­ô­Æ‰ ë¨cK9†gn¼/%a§=?¼İnco÷vŞî Ùl†¸ ,ËB¡PÀÌôÖÖV±²ºË²àØöpÒ…ELÔÀT	K„Ğr’%O…Q¤6BÈ?{\ö²O+¥"fgfpoùVWW0ôÑhœ‡–¥'ê…J> IaR–‡¨"FîFæG"Áéiˆ®DdÁ?ºLÚï‹Å¼ÿ×E¿×G³ÙÄÉ‰çêt:1Qñ•÷–ï¡^¯£\*Áò'<S¹à‘"¥»x¤
--	Ş‹ Ã 
--y,.,â£>ÂÒÒ’Ÿï¥ÏMcE+$ÎştÜ´f£”½ó‡b@R ›„ƒ.Z¬3Ôbe@Yù’q/Å°ísP^ßØh]_ãâò—¸j^aà;ìS›œÄÃ‡°¾¶†R©èç¥³¤Á­?ÿ{Äûš‰o/¯ÒOÂG±„Hzİsd~âGù°Gæ¬ß÷¨†Ù¹Y<~ò+««ÈårpG“ÿ°s¿§ÔÅûÅ³@Pzµ$ÙÓ:‚a%"M’Õ_Å½õıPÎn¯‡Fãççç¸n_ÃØp}"0Ø™U¬­­âŞò2J¥Øõ‹¤òÛ£hº•"K3_H¦¦¦°ºº‚ÙÙY¦¡É¼Eg~8+!L,Œ%2+*„èzƒÆ?cIºµƒ2û†ApüÜ¨ããcœÂøAb~f‚'@@u¢Šå•{X\Z@¾P„ãÆµºY³® ˜ru¨WH'(i|».@„jµ‚¹¹YÔ&&¼8ïQHÀû¤2¿ISYVE‚¤scß3R`ÊÌ_N%»İNOOqqîe9æ0÷Ê ¥R	sós˜õ‚Ö]®Ëcİg¢Øk $ùBÕjµÉjµÊå²PäÑM£ìè#i=à®Ls&A+)3XøNøæ]Ôëöpyq‰ËË+Ø¾Ue§mÛ†eY¨OÕ199	Ç–àŠç‹À‰6ÉœlKyK&^öhÓ²055…õûëhwÚ¸¼¸D¯×))f…uL1ë$ùLa³Ë¬ÊX•,
--¡‘Iâù×èú´š-´¯¯aÛv|’ıº<år•j¥b1Èâ±Õ-‘”Rî“qº&š¨M`uuKK÷P,Ó+…Èé¹»-©y†ÅE,´%RQòãöæL­ëzŸ"8 H™Æüü<<s7*8)%ğÂ÷QECE,%+Ø§N´dW¦Øñ£Z,1=]G}jû¹œ&…™¡È7Î¨ÓÕÈç‹£¶sâ;Vº4Fh'b‰Ï"›ÛH~ÜqNĞ9C£tı>æçæ`æPÈbá²’Ú†Ì™ã¨Šfbu4@h–OfòÓ]? gå¼Ùj–e¦pAÉ1gòG‰2E'F„…PäIçì0”æ·¦L?gqº¦¨Ö –˜ˆ¼ÀùÆ9...c9U/äaùáZáÈ@^ê/¥ÔûÍR·Å¾l¦e¢X,¢P(À0Ì‘¢lõ¢ÓÏÊğ™ì+î=òvá°=“Â×¥I|‰à÷ Ä#ğÚ¯ÄÉéé)úı~,Ï< ÑãøŒ]CÄ[/^Ü4¤±HªÉŠ#|bcÅäßg­à’ ¯|ÊÖ/®i¦ï.dÉ¸’FMº³[~¯»¤¦På]Uf©B€onÇ'›¥iÍxòË¯®®Ğj5aAƒş3¶n’iÖ[ µp^Ækë‡E®2w¯åØI<şÌfIëYPXˆIRPşV¶h“n
--„øØ¶G(ä0-3v„‹?"1ª„HÑ(DîI Õc—–AõI@‘X¨5"åB°Øú*ê`Îp\&¤xgÒjŠc²XE’²=rlKºIÍhRšö¹ëºØ".Œè¼õ7?áoOù+ê±®•¯+îôgøQú/ê:­Aˆ.€Uí‰%f¼c{£Ä^å¶m£Ûëa0ğ>óügˆµºf1-¢ 9„QB=R´Ó”Yù‚B¡¬õY‚Td±˜{B[jœ-²a‘ºhŠy—­İ“*}„G"ÓÔ›~¬g‰Ä‡d;úı1‚‘µ,<EçŒ0)4‚–“ìÑ,%öTïzë"¸#¥Q'a½4&ZÑoC.’ò\Y5 ¥¸æ‰zÚ¯¯¯ÃªÑfø-ƒ´-ñb-’N¤µ«‡­â³ûßYEÊ˜¢õèpÃPæ`±¸>”Ñ\H¬-K;ë”ÉÙÈ*ºªp&ÊûóèR< 	¬®­aÙÕˆÒùÆöt„²Q·ªE¿ ]‹ênqº)úã8nXX!á,‹ŸÒÀÕxIÁsgmnÃQ"‘‘ŞR@ßƒ÷ÖĞ VÎŠ•¦‚É:íÎçhµZ`×Ë'¤h£Qú‡¨Æ&£0€°|^»}­9è¶c!*ª…¥í¤Ç&­ªR,©l–Õaß6úÂn ®®®ğşı{œŸŸÃqœ0N(Úí™Tu†f=Ù\·²7Qf€Ëmí˜uÙíõp~q‹ËKìA¦z‰â°ˆ3Œ\Q½,z´§b7Iß0CÔsY `¶6Vé>à˜Êår¨V*(WÊ¡§=Ğ@İn———h^5Ñívo¹G|Gªä†?®3Ğn·qxxˆã£côº½°ÀÄß’b•/©'3’ò(‘äô¶JÒbâNÀ›ëù.—Ë˜_XÀìá{ìîìÆ$ ¯Û×hµ¼"–^k$}AJıØÓõ¶^ÿ=Ø•Ì·ZpMÓ‚ë2Z­¶··±··ççÊCÑÏš-/f’Èª—éÎ±HC|#F£ŒñKoöÎ³[*–07;‹{Ï¢  ¹IDATééiäó¹˜YË.Ã¶m´¯¯Ñh4pyy‰ÁÀ¾eA‚»:Y¨YÛ Óéàêò3ï½Ä`ºl£¸m;+Ùçt,ÍÁÊ×³’ñ0}–TMWƒy4ò5P¡X@½>…É©š—¦ì­0òk^_·ñşğ=ıòq¦W½]ijD2'„ô‰ÀZ‹çfÈÿçğ?‰!Ş(È{ãĞ”³Âëçº]]5ñşpˆíÒjq¢,×ğ)¤™}â˜½œ¸f˜)ÃÊµ$	bYZO\»“Fxx,ú*HI.ò˜œšÂää$ò…|Ì”õ&Ö@«ÕÂŞŞ;øÇIB[xD…qv‹~Í¾qà2ãââïŞ½ÃÙÙYX4"]ó²}épC¯Ê7šñ:Õ‘%’Š%I¤_G¬¹~ùB¡€z½©©©0d5ZgÙ0~¡Í­Í-\__ÇB>’BÄaıFuA·¸%'ŸÉ›ç$-6˜³,ä½ÏÎî.OÂ¢èZb{©·µCˆF–À–o%Kf«É-O}ágbéDŠ&Ğ¬°<ò…&§&Q«M¢R©„ÁåÁ¤zØg€z½Ë‹KØƒÓÄ°Š$KŸMáMæìCÊt›8	Aˆßûã$2àº.ÎÎÎ°³³£ã#Ø¶­)®)Jj‹•|fë¬…¨“…ÇEëdI–‰};„S6µiJ¥Šå•e¬®­abb"æXb†NÏNñŞ>ëv»&¢t—gˆwæÔÜ©›SÎ-áõùhw:8::ÂÖÖ[g ğ€79—Fü±²Y².Éš–K?+ä-ğ•Š%<|øÍfı^/ì,äK9ƒf³‰½½=ÌÍÍb}ı>ff¦ı»Nfë/(ÃˆGš¾*$‡xÍq\´Û4ÎØß?ÀîÎ.NOO½nĞYˆ¡l7‘úÊ”qĞ-h,Ò:Â1Ğ—J%¬­¯¡Ù¼ÂÛ·[a¦FP(œ™Ñj¶°µµ…j¥ŠjµŠ©ÉŒ|~<ã¹£öëañĞN‡‡øå—_°»»‹««+ôûıDñĞ‘×‚Æp-İVÉ
--ê‰”¿,EW©Œ¥§.ÄşÁìº`"”JE¬,/£yu‰r©ì7ÅuÃ£A¯ÒW¿¼X\ZÄò½å0‚‘ˆBnI¦Ä–Y6kâ§¡ê\-^AÓ²ĞétğóóŸñ_¿ÿ/l¿İ[då}8w‰)×+$34kÖNY£÷,oàÂ«‘ËåP¯Oaa~‹K˜›C«Ùq¯aè÷û8::B¡PÀöÛm,ùm›Ê•2L+—ÅQ)¯÷|=œwŸÃrÍnïğúõklllàüüD”Ñ|¿[Z4óÓ%&õĞ/…P@’‚qÂ-½¼Kœ¢
--ŠN±_OÑ4MÔ&'ñé§Ÿâ×¿şÇ°8ePÕ”™aÛ^!òŸşøÃ°÷î×è­ÛEªÇ, ÌÒ>$)¬„Å	Z1¹M£…_r–…R¡ »?ğÚA½ÜÀŞî...ĞívCŸ_–U&e©U¼4Içc‘ä#•z/vMübKÆ.Ğôejæ¦×uÇó}òÉ'p½^§'§¡Y¨İN§ƒ­­-/Èoí4=33\æô=ÇãÚ¹ÉšB Ãu\ôìÎNOñjã¼xñïŞ£Ûí†s#…nd\ÊĞDKf{§gs'k»Y,%Iú=Ö"ˆÑpEO]V¤®”ŒëºÈåòX\\Ä`0ÀÛ·oQ.WüêîÄ¶mŒÛÙÁÄU ÀãÇqÿÁ}T'ªp^.'˜0’p(Œh:’X´Š(iŒYpŠA…WyÃ0W—W8<8ÄÆÆ~øáG¼zõ
--³FHÃVUÁïR¹ ÷‹Œ¤”mOá¹!ğIQY"‡eV˜¬˜¢ wÊüådsè(ù®‹]f—÷î¸0ˆ099Û¶±|ïæ1ôÑív1¸áäw»]œâ§Ÿ£yÕD¯×óØìRÉóô§ÕçUT!pè$	Áòk$x«#d¦m;8>9Á_ÿ„Ÿşü~zşC÷ÿ˜VQ„Ö×†r¼iL”Ğ’ÆmKb—SšVˆO·˜9¥|B:ğâlæŒD“”71-•J=Â7ßœ£T*áÍ›7±.€®ßÿ+ğ'UªiÿQó#,ÌÏc¢6Ó0½}ær¢Š}ZKsöçˆ‰îu2$˜¦ÛàôôÔ3×7~ÁŸÿügl¾ÙDã¬–ú5M3Ì¶-•J˜¨VÁğŠŒX$æ‘ªÜ{ ™R@JîÈ#-y ¡`ºk$2áMX$3“ã Ñö«–>zôår	ù|gg§h6[¡V°,O4ll¼ôµÒ	¾ıö[ÜÏßG±Tôv8Iæ;ğÕi<‘R“ìf"‚ešèv:ØÚÜÂşğlllàíö6.Î/¼ÎB…b,§år‹K‹p]‡^C¼„ ‘šÏ$KCÊâÆe„†6ªB©nÛê 'Ç·«Ûç²2SSSÈçóïhwãâääív;L{v]İn''§~û$` Ñh`ii	õé:Êå
--rV¦Ea&¨XcHé]Ìa¢£šèİn××m\·Z8::Â_şò<ş»»»8;k ×ë!ŸÏÃ4M¯›a ^¯czzó˜E³ÙÄÙÙ./]m­è›5KÍ@ÍÜºÕÎ¥!‘Ìé^©Ä—Ì3Š/f@¶­­®á7¿ù
--ù¾ÿş{œ!—Ï¡T*Å
--1\\\âåËìîîbyy_ı+|öùgX[[ÃÌì,òù\×Ë~Ã]—‡æ<BDÃB A¿A^@Ğé¹ÕjáüüÛÛÛøùùs¼zõ:Œá¾¾¾ö@µ/<®ë¢Óé P(àáÃ‡øæÛoP¯×aØÙÙE>ÿ6dåc8)-ƒ ÙxMó!ßÌ¥Çãve| î‹áõÕš™Á“'OĞïõqpx€n·ªû@ĞMtuu…½½.O|á"´Z×XXX@­6|.\Ş Ã4B	BD¢å…Ùe8®ãÿû9\ÁñãØ6ççØÛ{‡×¯_ãÇ~Äë×¯Ã×á=}MejµfçfñìÙ3|ıõ×(
--8öÃÑxğñÑ„wt_¬K’òWœÛÈV¦Oô¨¸®ò‹Å"æççğäécô}ÌÍÍaãå†×ÁÙ÷f‡~'¿,Ş`0ÀÖÖšÍ&~øáT«U,.-buuóó¨ÏÔQ­V‘ÏåÏåQ¨¢R)Ã´¼xåÁÀ;a/úK?õøøïß¿Çéé)ççhœ5prrÃ0ÑÔ EUĞçã¾ù««+èv{8=9ñ(‡1Uşˆçñ+JºfñÀ2é†ñÈ4Bcq”S	­¾é[©T°²²‚\>ÉÚdX¸;ˆ'òª‚# NNNÂ0XÓ4±²²Œ'O`}}‹K‹¨×ë(
--(•J¨×ë˜œš„•ËÁu½nÍ¦—³Õï÷Ñjµprr‚ƒıloockkF½^?Ô0†a„à>Tó–…r¹Œ……|ùå—øí?ı>ÀÄÄÎNÏBÍ¦n’7®ˆ£­I–o[ÙºŒ	ÄRŒB‹ÓR)®-z…ú7ªöB±ˆ¹¹¹Ğ×477‡—/_bks———áN|L^ıE'<zÎÎxóæÎÎ¨MÖ¼–	–…\.‡r¹Œb)(âéi^¯‡A¿ïåè÷zhµZ¸¼¼ÄÙYgggètÚp7–q^ƒ]³³søè£ğäÉc|ùÕ—X]]ÁD­æÅG–+¥™FE!aAxR˜¬ğ*>+ñm•®‚¼P7q´ò–´ŸpŠ©Øè0\×ñª¼P*±´´ˆéé:VVWP,ÑiwàºnÈ¥D1§
--¡Fz¶‹½JeØƒ…HÀùÿçryøÊ.FzR…B÷ï¯ã»ïşŸñ9fffP*—`Zf˜LyKŠã®b^wü!5I¨*ŸN’§XHMèÏhf±œ•Î¤Õ÷Iè«¨ŸÉ4˜EÅ¢g}şùç  {{ïprâU¼o4<+(èµSà:ş¦‰zÃ,QŠšïCÁİ®G;±Íõzsss¨O×17;‹?úO<ÁÒÒ’×î;’×æºÛ±ı#Ø­°Àªì÷ûD“)Iµ¸Y\^t³1„½Áa»'Jğô‰ºÓ”Æ,E”‘Ô±
-- Ña^*ö”ÒJ€Ù;2|2¬P(àÉ“Ç¸wo	ïßc{{¯^½Âóç?‡-%¡	 ŠQF®Q-j"pÈŠ—J%,,,à«_}…O>ş<ÀÜÜ\X‰Şq¼Şf)ÙÕhâ»²<BZO’G‰N][Nqá!e%v¡«Íø[Å#Ú€·23ÂŒË²Pœ*br²†jµŠr¹ŒR©„B¡€ùù\]]¢İn£Óé„eô‚ò1QK)ÍtÖDâĞŸô0+—Ë(0µÚ$?yŒÏ>û>Äòò2*•Jòƒl\ösß
--…¦ëÓ˜™™Áää$J¥º¾à{Dã–——½>n²BÂ–‰2L9ßhâ5‰ ëÜ§k.¢ËlÔæm‰n–Õ¤<ÁïaÛ6@©TÂòÊ2¦¦¦ğèÑGh48::ÂááŞ½ÛÇÁÁ>Ş¿?Âõõ5z½^¬o»'@$-¯Õ¥W,Q­V±°°€õûëX^^ÆÂü<fgg0;;‹zİ£ÓD0»AŒ‘ãz=^'&&°¾¾ëëk¼İŞÆÙÙö÷÷1`Æã'OğO¿ı-¾øò”Jeü0j7£àŠŠ§Z³”ÅEÌ…®±Ä	ëıi%OÂ‡(.0.‚‹Á`ÇÛ†VÎB-_ÃÔäVVí¶—ıpp0ééiLMMbrr
--ÇÇÇh·Ûaq´Ê³Àú„™aš^Éôô4î-ßÃ£G°¶¶†•å{˜™™	ÃT™¶ãa#‘a7Hª, /`yyü1ºİ.¬œvOŸ>Á×ÿğ5V×VQ(ä½ãØåÍSZÕ÷;U„¿° iÏ”è~ÓÌFÅr¤Ç7I£Œ6æö9¹|33Ó(ó˜›Ã'?A³Ùôúr´Ûèv»èt»áßm?†(
--î™ù|µ&ªUäò9äryTÊeLLL`¢VÃäd¨V«ÿä§ğp´!Ÿ”)¶š™Æ?|ı5–––°·»‡^¿‡O>ù+++¨ML€‚ëxZ‹T{]äx)Â(ê–ÔUÔõîš(ÓŞŞö0áMVIá™Q„ÒZ^¹’³ßg„g†Ö“áYSì2œç m¶šh6›¸ºjz¥õ|ìà£ |‹EÌÌÎ >]G©èá« º¼iaó»°Kb¢ßHÊXƒ—Ñévqzr‚v·ƒ™éiÌÍÍy½a}c€dY(12‚4ğ„4q9†ÿÓb[Ëı¢l?}7µn£f·iša;çÙÓ$…<*•
--¦êSè÷úa)DO23¬œ…J¥‚r¹Œ\.Ë²Â¸ÀkëM®v#ŒeI(´„ø;Ã0`Z†Tƒ/ ñş‰Â·œíÈbv ;‘¶ÔÉØ‰ÉÒ6º;’5²¿…–ãtŸP EÂ6R±ÂJ¾Õ–V(j¥&ûHãMY€—V¬¸ å~aNôÅ‰
--‘¨å©çék`éGwÇ.÷´Hî»ÀóAnX$¦‡"a2“>*ˆCSï¤Ãa4”#x¦Ø­jäô"V{1o<Å, e¯Qüè#S	R¥B‘–0"9;JçDùşáÑDàñI¸ eJFŒ\àÃ§
--‚¾¬$ıyd!8Á„Öúİ ¡BÕ]hzåt[5”²g™Uå±o®EÆ29»TJÔğ·d¿w­´»±HüÅvÇi-Ì“¦~"%—”1Á¾{dİ›£•yXë†‘¹jÄ–Wqç#eĞÁ,½ŸHÖ	“™¸±ÜÍ0ÌÉXçQYXöLVËb}EiÃ9£|¦1Ó#Ãnég<Šãöµ¦ldê+ÆS6ŒyÜcm2¬t0ÅÚòibİ–réBltøPş•9NŠ%ÄRç]bïBe/Û²Qb•*T­‰R-­b† ­WfMË†¨‘K‘wÓ“f¢a8â¸BÃW¼0ß\XGh<¬ıg¾LãĞuDÉØUfhHê¿½dèGÉY|Ö¬Ö~¤UIQ"ÿx·¢óÁBä‘~F½¿¬¢;$]’y„ì(U»úØ&à¸Fˆ'Şq8¥dq4™ÁË‘¢²6zq¾¤‚¥Ì?ù;Y¯ZL\Cäá–=Œ¥6EôâoOÅM1ŒJe¥/‰Ğ‚:LÍi#YçCÉ$‹ì9gá6X‰–Âc“â³]hÒhŠ	güª…´")$¡Ì(‰–H0>p<ZP‚í!F60$%¢ó3lmÁ¢z‹?€¡iq3ú™=L¨R–‚İñ™L:-/–¾îÅn^ş˜G¼×2s<BõşhAKË}°¬!gE/IÇ¦äf%ú¦¯";¦Y®æ‘L””8Ñt`LYnñøOß@Ù1—Îÿ,ö ¦õ(ùLÖÌé®I4[ù['¹n„Æoüùî‡Ìwsş+-—uóª¦£4ÇºÉ‹°J!f«;rãTª ÁÓín”f« ²N¨ÙZÏK5 77ñ‡Pé}€ùkLú­Ÿ™d¸¬èù§ªl5Úöq×Œp7‹Š³;!Ò…HŞî‰2MÂÍÚ=ê«Åf]Òh—Ñ!>b ¬!¥<Öísã»İ`âÇåÊøûÔ×|gc7`2(Å¤"dË‹gí¢i{ãfûµ¢ˆ¦V,+°¨x´Ô†¬ÍRü¹ÑQóÈİ]“s'm7’@D«V&õeb¾X=… E&†¡™eÊpKV¨ûè¤¦|-ó¼°òp‘]JÂ¼Yş]±æaZW Ò¹sµ4k_<Nl*„gØø,Ee;¤¶=X½–Ñ~h†rwÒxÔwOùÍ£j)ƒŠ¨ù¤óS|eé›é=Æã,¤L(eôj4ÒÕŠ7ô7†%;˜©g5ì2€ŒHÒeÎÛ†à‰Ã"á6&éá˜	9Û‘œŒÊPN-’Å0$ôä1RG&½à¢Œ'¼?œhª(±äYš !IÅMRÒ1FRıeÑ|Kiÿp@”n¤t*ñÚÿİt<úÆë²¶³ùX‰¬ÄÍbœ¸BË Y‰^êEVMv$/eÉÈ²ƒñ¢"òè9N™É„ğˆ;*Ô—¯³œĞC,™+hƒ‰u)Í)«”v#¿p,sÔAJ
--}™oR(XªéóC4Ô£n±Ytšˆn»Q)Ã‰Ì£p#Yxì)F#…:?œĞÔÚ4MÈ$ãe²¦˜8fÆ'&”’E©Irª#(t	ŠjN‘‰œÜ©"Ú×a¶©{ºs4½;Ñª8şL15f§„®ƒ@+ ì<|)q=ÄU¤CU’@s1.}XFlÅbš9% &Çp'`ÄËèg“z]ú±}H" )ƒÕFÚNÌ”¾Óø&I’¬¡H	Šy4R³²«‡lÈÒÍ:›Í'†ºmÇè!Ñ:a½¦¥ h	GGù’ää+Aâ9ÂFzÅ2')Ç'‹PQ&ª“!!Œå«Ğk2,¼®y®ÀáÈ›–pœ³0Ó”d -˜F¤˜>cİx£Ï•œ¡qõOòèBNëêçÄ^î±ç¸Œİ@;Äf@s£DñLdwsrğšPu&É«#.Åt}R[vñã_ş˜KÙÙö>’10Hiğ<.‰â‡Gğ©eŠÑáÔ)Ôû‚øn
--S¤-»ƒÍ%6Z„ß¬£Ûe;] ì’éË’„;mÜ±9¬áIÔ
--:Õ¡ûœaË«,Öè»$«§H:	±†ˆd•¶3¥N«²Daô{ÿ.€î¸öúøÊ2Ğ¸T25òû 'ßòŠ<äáOÑS<üûÿ¼Û §Yó    IEND®B`‚
-\ No newline at end of file
-diff -Naur v5/static/imgs/favicon.png new-v5/static/imgs/favicon.png
---- v5/static/imgs/favicon.png	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/static/imgs/favicon.png	1970-01-01 01:00:00.000000000 +0100
-@@ -1,239 +0,0 @@
--‰PNG
--
--   IHDR   @   @   ªiqŞ   	pHYs     šœ  E&iTXtXML:com.adobe.xmp     <?xpacket begin="ï»¿" id="W5M0MpCehiHzreSzNTczkc9d"?>
--<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c138 79.159824, 2016/09/14-01:09:01        ">
--   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
--      <rdf:Description rdf:about=""
--            xmlns:xmp="http://ns.adobe.com/xap/1.0/"
--            xmlns:dc="http://purl.org/dc/elements/1.1/"
--            xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
--            xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#"
--            xmlns:stRef="http://ns.adobe.com/xap/1.0/sType/ResourceRef#"
--            xmlns:photoshop="http://ns.adobe.com/photoshop/1.0/"
--            xmlns:tiff="http://ns.adobe.com/tiff/1.0/"
--            xmlns:exif="http://ns.adobe.com/exif/1.0/">
--         <xmp:CreatorTool>Adobe Photoshop CC 2017 (Macintosh)</xmp:CreatorTool>
--         <xmp:CreateDate>2018-02-14T17:58:52+01:00</xmp:CreateDate>
--         <xmp:MetadataDate>2018-03-08T12:10:20+01:00</xmp:MetadataDate>
--         <xmp:ModifyDate>2018-03-08T12:10:20+01:00</xmp:ModifyDate>
--         <dc:format>image/png</dc:format>
--         <xmpMM:InstanceID>xmp.iid:fe50c95e-1c1c-412c-bdcd-92f0f75d6048</xmpMM:InstanceID>
--         <xmpMM:DocumentID>adobe:docid:photoshop:290dbeae-621c-117b-93f7-ef5f67fba1d9</xmpMM:DocumentID>
--         <xmpMM:OriginalDocumentID>xmp.did:2cfd8d4e-cb3c-4f62-beaf-ac5088422c02</xmpMM:OriginalDocumentID>
--         <xmpMM:History>
--            <rdf:Seq>
--               <rdf:li rdf:parseType="Resource">
--                  <stEvt:action>created</stEvt:action>
--                  <stEvt:instanceID>xmp.iid:2cfd8d4e-cb3c-4f62-beaf-ac5088422c02</stEvt:instanceID>
--                  <stEvt:when>2018-02-14T17:58:52+01:00</stEvt:when>
--                  <stEvt:softwareAgent>Adobe Photoshop CC 2017 (Macintosh)</stEvt:softwareAgent>
--               </rdf:li>
--               <rdf:li rdf:parseType="Resource">
--                  <stEvt:action>saved</stEvt:action>
--                  <stEvt:instanceID>xmp.iid:72061676-2b6c-4825-a4fc-b027d6af6529</stEvt:instanceID>
--                  <stEvt:when>2018-02-14T18:16:18+01:00</stEvt:when>
--                  <stEvt:softwareAgent>Adobe Photoshop CC 2017 (Macintosh)</stEvt:softwareAgent>
--                  <stEvt:changed>/</stEvt:changed>
--               </rdf:li>
--               <rdf:li rdf:parseType="Resource">
--                  <stEvt:action>saved</stEvt:action>
--                  <stEvt:instanceID>xmp.iid:071ec8c9-ee47-4e98-919a-fef62e1e49f9</stEvt:instanceID>
--                  <stEvt:when>2018-03-08T09:32:11+01:00</stEvt:when>
--                  <stEvt:softwareAgent>Adobe Photoshop CC 2017 (Macintosh)</stEvt:softwareAgent>
--                  <stEvt:changed>/</stEvt:changed>
--               </rdf:li>
--               <rdf:li rdf:parseType="Resource">
--                  <stEvt:action>converted</stEvt:action>
--                  <stEvt:parameters>from application/vnd.adobe.photoshop to image/png</stEvt:parameters>
--               </rdf:li>
--               <rdf:li rdf:parseType="Resource">
--                  <stEvt:action>derived</stEvt:action>
--                  <stEvt:parameters>converted from application/vnd.adobe.photoshop to image/png</stEvt:parameters>
--               </rdf:li>
--               <rdf:li rdf:parseType="Resource">
--                  <stEvt:action>saved</stEvt:action>
--                  <stEvt:instanceID>xmp.iid:9cd61f61-040c-4528-9571-fb8bd0f94cd1</stEvt:instanceID>
--                  <stEvt:when>2018-03-08T09:32:11+01:00</stEvt:when>
--                  <stEvt:softwareAgent>Adobe Photoshop CC 2017 (Macintosh)</stEvt:softwareAgent>
--                  <stEvt:changed>/</stEvt:changed>
--               </rdf:li>
--               <rdf:li rdf:parseType="Resource">
--                  <stEvt:action>saved</stEvt:action>
--                  <stEvt:instanceID>xmp.iid:fe50c95e-1c1c-412c-bdcd-92f0f75d6048</stEvt:instanceID>
--                  <stEvt:when>2018-03-08T12:10:20+01:00</stEvt:when>
--                  <stEvt:softwareAgent>Adobe Photoshop CC 2017 (Macintosh)</stEvt:softwareAgent>
--                  <stEvt:changed>/</stEvt:changed>
--               </rdf:li>
--            </rdf:Seq>
--         </xmpMM:History>
--         <xmpMM:DerivedFrom rdf:parseType="Resource">
--            <stRef:instanceID>xmp.iid:071ec8c9-ee47-4e98-919a-fef62e1e49f9</stRef:instanceID>
--            <stRef:documentID>adobe:docid:photoshop:ef9f6f5f-523c-117b-8083-ec5789b3e810</stRef:documentID>
--            <stRef:originalDocumentID>xmp.did:2cfd8d4e-cb3c-4f62-beaf-ac5088422c02</stRef:originalDocumentID>
--         </xmpMM:DerivedFrom>
--         <photoshop:ColorMode>3</photoshop:ColorMode>
--         <photoshop:ICCProfile>Display</photoshop:ICCProfile>
--         <photoshop:TextLayers>
--            <rdf:Bag>
--               <rdf:li rdf:parseType="Resource">
--                  <photoshop:LayerName>a</photoshop:LayerName>
--                  <photoshop:LayerText>a</photoshop:LayerText>
--               </rdf:li>
--            </rdf:Bag>
--         </photoshop:TextLayers>
--         <photoshop:DocumentAncestors>
--            <rdf:Bag>
--               <rdf:li>adobe:docid:photoshop:ef9f6f5f-523c-117b-8083-ec5789b3e810</rdf:li>
--            </rdf:Bag>
--         </photoshop:DocumentAncestors>
--         <tiff:Orientation>1</tiff:Orientation>
--         <tiff:XResolution>720000/10000</tiff:XResolution>
--         <tiff:YResolution>720000/10000</tiff:YResolution>
--         <tiff:ResolutionUnit>2</tiff:ResolutionUnit>
--         <exif:ColorSpace>65535</exif:ColorSpace>
--         <exif:PixelXDimension>64</exif:PixelXDimension>
--         <exif:PixelYDimension>64</exif:PixelYDimension>
--      </rdf:Description>
--   </rdf:RDF>
--</x:xmpmeta>
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                            
--<?xpacket end="w"?>š0fK    cHRM  m˜  s  ù¥  „È  |W  úÁ  0v  $
--r  IDATxÚœ[MŒ–Õ~Î3Z3Î¦ÃÎ™I ©A“2€MĞta"ZÔU[ˆ­ÕÚ4ÖAZmÓtR­[ÓªR~´Šfˆw-0CªÃ˜Tá›næéâ½?çœ{ß‘vÌ8ï÷şÜ{î=ÏyÎsÎ+Ÿ^¼@R B€ Dš?  _ á3Ãg1Ç‘®Ä\B ’şMõJó¹íÉæ@¼)›û4Ÿ”|˜1Ü@Ì-:€@ Í‡8N;±ü¡š:³ùŠ€0‡æJ!Ã9÷m~Ãa'ãp™®M÷“¦Ä‰(lî%Ìcc3‚ÙNğœ|»Nš€0$ÈİH‚yØa„šÉSŸ'ÙR¤yN²›0ÛÜY˜VŒÒÜ“a2d¸W|x0œ  %GØ¬i2*Ôgx6Ña¸	 ÍI°[)¬UÀ4ñ´õâŠ‰¨-c÷/)áVá~lŒ&B˜­”Œ'Ú”Ák˜V–"Í¯ÚÔqÅ%îDÒìH2£¹ÿ¢4HR»fğÙ°}å—+â})ÖEãwÔ¾CQøÀf'è­İ;nİ¸ÈêŒ0ÿ´¢ñ>Í1…%Ì+ i¿
--4ÂA‚Ö§…Ì;@$ƒ™¤…SÿcØÚßı¯w1¨–í¤¡Já›‡ØhG¡zÃøhp‹á?àz]:5' Qo ¢A~„sÂH+)ÊMÊa;£¾D;‹õ1çw¢¾×‘+ÿtô?IoÁr&4ÇhŸËÊ5-?ÀùÂ2-gºÍdLY³¶öyãøyuÌê‰ËÇHee­‘iê®?‹ñ¢rÂŞ:ÒnˆÂF
--\¢¿§PlÃ`FCbŒmxç“äh(¤4Z2‡È&ü:kš1Šùfª¢üÖ­TˆN(B@$>7 ÆAD¾†XH^PR‘
--fpá’1Cm7É˜aés8‚8Q«£ŒœnĞ<VŠõ×îO^1ğ›™/¢
--zì°s‚DÒÁ´ªÑ¨™¢%ó
--ÇxW††y†5H»Š‹H&N)œæÈ‘}DáQ¿èyÄvfÃX-Kš¨ì0CÒêæo¥À¦H½Iı”Èr¸Íì×R?Öü½^2I„+?A/Ø„A›lH‰•,!°©,0T
-->`£¦9Ù=øÛ-/nÁXA–pè°™°@VK}3‘.ãUÁ{ìè0Ï–À¦ÃQ	®p©æ«q“WNiO4T˜BEU„b-3>·‘¸×DK› `öâ,fgg³Ï
--pÕU½X<¸8SZ5†Ä}ÕÖšÆâÁÅkDÂµL%jéºØh½(§¸Ì)¦Ïú•e³şÚĞf1¡NDgÜÀÉabbûŞ|333­k´şîõ¸iÕJ,»qzz®ÊEçŸ}ãããØ½gV®\¥vbÓ’r·—v<úˆ\øtJ›ÀÀ›†A{¹>Û¦Ú÷~pÏ>÷Nıış—ŸüğG÷aİºu)ñ!ˆÃ‡cËæ­é¼#ï¿ëF*F3h¢ƒÓLŞC,Ê‚e£%µrc÷‡Ïò=ºİ.v?¹Äÿó333ƒ]OîÆ;ïü›6=‚ÁÅƒ —.]ªÆ+z8.<OCÊ4îÄëdBÔt¤¤§F‘’‡ŸŸÂÃı¬ºÕGWŒâ–[nÆÒ¥KÍñ³gÏâäÉğÚŸ^3Ç'Mà§=Œ_<ö(V®ZYÇ=©ƒo‘¿‘¨DÁìej0.o¥@6’Ÿ+LµL~ãÆX÷zô÷÷;@²Âáåîe<x{_Ø[Üc÷S»ğÙgŸa×“»Ó±÷¼k† šúŠfF¾İ"²öÿš¢M‚´Ïˆ:).¦6xpñóÏqÿ}÷›`÷S»0<<8,µÚâÓ‡dèÙÙYìØñ&M#ÜzëZãVï½ÿ®6“–(¢fB1BÏX;¦é¼^˜!Ñd•T2C˜ÌÛŸ0“ÅË¯¼Œ¡áá`¼Ì£âm’ßßß‡íoÇÆŒ
--L!³ C±1—YÊD°˜YfT…bBÏ§¤¤»>'ğúëo`bbÂ¬üöÛĞÛÛ«rr,,"’&!€«z{ğ£ßÑÑÑ¯ 6Y¥&5³ñB¯
--âo¶ÚBBG·ÛÅŞ÷šc¿ùí¯ÑÛÓ¸ÜÛÚQò#êØÅØşø6,Èğ¨®£Q³-“¬Şä,$<0Ô©jÎ¶€ƒš­ÿàCb0°ºŠ^£(3kŞê($z{{ğècÖ§®´€¤;Pe¡Ëe ı"ˆ¢t©D¬ˆ8tú¼’6IüåÏ¯›­×wïÌù;D¥µ.^3× XÉt´K¯\±££Ëˆ‚T'Ğñ–2ÖTı£C•>Z-ƒÙŒi«àüÔ4NÊ,ïöÛoGoOFƒ¡öØ;©DZr
--vÏ½÷¶lşZN	“¬'¬ v…&jtÕátSm”„Ş
-->üğC3 ›¿½ZñIšlÎ¦©!¤’±Ò
--Ù‘Õ.[vı‚IèÈ€ŠÎH+¶Ä]Ñ¡'úÔUŸbRK†øäô'f,ÃÃÃø¬Ähï’,J‹2ìğ³§·ko][§{¡6H­[JE)«6aA= ´Œ-øâ‹/Ò±µk×MÎè|ôH@æ+ H¾JÚ&‰‘‘áªTÇéf¡…fA:s;•w+™4s¸‰ÇOœ8Qrs#tèôÙù,Å
--™
--š©*ÆMõº9~õÕW·Á ­QĞjí&7¥” ˆèP(°‚c¦™†[éğwÍ5_ój\V~$§«:åNÕÚùŒ’DÃZ¯^4‘ÂàyÄ±+"”rÿ"/2Š®÷‹Øm&•´+üü;ºC(¥DçBWœè,Mô–_yò*˜˜üß–Õ²ZäÇEéx?¤ó½‚¨¨mµfíšr=Äºs„äX†gÁ*i+É¬Ò' ¢˜ëE­®çQ©vº%	tJ §©»N‰œ»1<q2a 4œ‹ÎÊ$ZK{,³·S§O×=A—Ë+‹E¶ë§\cöOÚÒ]BN·B7ŞpƒQq¦¦¦ fÙ¡KÕŠuf™rY¹‡ªb ibA…\ÔPÚA'U½òË²Öni±dé3œ#ïQ@g»2âöÏ]<¢US
--«u;z¬²ù¥¢FfF¸cÙî] Ôàgõl!MhÔ‹84<d2µW_ı#º—/+3Å> æF²ººe8ñ¤™Ü_hÉ†\aCËvqo»BCä¦? (‚ùÂ…Tø{î½Ç¸Á¡C‡m#C­×Àk‹ù±npúãO*Û¿¥š2®õ+eEH÷•ÑIUdQ¢sŒÛn³ôtüwã˜šv Ç*Õ.Ä%8—»]ìÚ¹k¡¹°5£‹Ø%íÕ«mf*sµ2„Ñûúú±éç›Ì.xúégĞíÎ•Øá˜"‘{ùÊdŒyâ•?¼‚Ó-è/4y¤áyšºÑYJ‡â¯³ĞEõoRõæd­pÍšï`dd$=brr[6oE·Ûµl2×Ú’AÄÔ2D­œà…÷â¥ß¿Ô.	mòËóézÄ xH^V6‚HLˆríİ´BªN0Ëİ%ìééÁ–­› NNNbëæ-˜šƒ"4i‹‚jNÀ²¯Íuç°cûãÅä—/ÿf;g@¥=„@ÑàJï‰µÈêæ_´æèdfppĞ¸Bc„ãøş÷~€}oìk\¢r_ûK¼ıö;Ø°ac¦êglçV¯^İz†N[#ÛÁCÎÿGKÛ{»ë;ZlÑåØ±	ìyjOµ2t×]wbÅÊ¸öZ\˜ÆÅ‹191‰ıû÷cfæbqİØÎ1¬X1Š}oîÃ=¿LÇ¿}¨eäªÃû¿›‡œ=†F€3jŒª%WzÃu§ 6ÕôôlÛº­¼®¼Hz-ÆÆÆpİğu o8X©fër½ääŠ;"Xv´N“ ‹Ò|LP®bÈgc´ÁÁ¯ãég~…M›ù
--I»ıçŸ<€ññq•’¹ÙõT)s¨cH¥%R˜)YÛ8{şL*'¤ö(±ä–Uí‚áï\÷?8zôìß¿““ÇœôÈÈîXw¾uÓ*ôõõåÉ„EšëÎaËÖ­8>yc;Ç0ºbyAtR×xìsİC”ÛöR½ôì¹3¡ÃMß­/æ³ ètn»&ü{îò¦¦§pîÜy\úòËôÕ’¥KĞßß¾¾¾²ÉÉİk®;‡ÓŒë¯ÿ†] ß@Cµ(Ø×€oıÏsgXÀ‚)i1J‹1<p¢]XYĞˆW2.UxÒµi¹§^D‹Ó¢9z-‘´ı'õ’Ñ
--Pål¶œ(óåšÔªTšşq\ÚÖ4ğ‰KDDÕùc×(Uù\'>¢‰–y@\³•«Ğ¦¼bJU™òM}¢
--±qÖ‹ÄÑ<[èdu§¨WRReV¤L½˜_PhÄ!É¡H4?€Ô˜´áUÓlß
--åıJVè5Õ1-¾V­ñe0q˜’ÄÂvŸ¥æ¸>:Í™0¥5qUk*‰Nóq²6ó%Ì J±*ë"¡9@mX™ Ëú»Tâz»³t7ÿB– Ş¹ïûÔ»M±Zj´v¥âµ¶YGñ2sJ×;¿"p,æÂCfôû/ˆX¾BôçÂg°¥£–õÎ]gd¶5ã¶>ÆÈ…;ònë”KË’Fºö–‘¬> ¬òæL’VmN­.´u‰²ñ¾1³Şl,æ…VÂ½è&)óYP½4×Õ’ü.·ºg¬ÅQ%±±Xır/YÄÕXtÊqz ¢š?Ü›`z}İAì{~INZ¾+ÅùµĞöQ+2î­/¡‘f3œê—3ô»`‰ISTø¢Í9 B/JtR½ì™Y„(CM™)o˜Th¹YKQ¦_˜ªQQU”™*Ğ4FĞBú×âb|W<B÷ÅWcSˆcV«¯Ô¯ôÄZbšY¬å¤·9üTu§iÏ¨ÊÊâ•#º{²’ke?Xz)nÇˆ(ã:~ëZ2‡05ıSîQìØ"Å”šQ	Í¦tÌ¬ÊïiÓcs”:sI^•`ëûŒŠ7ÏË¼­a4‹´ÿ ó+¢¦-!£    IEND®B`‚
-\ No newline at end of file
-diff -Naur v5/static/imgs/loading.gif new-v5/static/imgs/loading.gif
---- v5/static/imgs/loading.gif	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/static/imgs/loading.gif	1970-01-01 01:00:00.000000000 +0100
-@@ -1,57 +0,0 @@
--GIF89aèôÆT          ! ! ! ! !!!! !!!"! "!! " "  "!!"!" !"!"" ""! ##"! #  #!!#!# !#!"#"# "#!"#"##!##"###"$!"$"#$ #$!#$"#$#$$!$$"$$##%"#%#$%"$%#$%$%%#%%$$&#$&$%&#%&$%&%&&%%'$ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ!ÿNETSCAPE2.0   !ùF  ,  ãæ ş€‚ƒ„…†‡ˆ‰Š‹Œ‘’“”•–—˜™š›œŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõö÷øùúûüışÿ 
--H° Áƒ*\È°¡Ã‡#JœH±¢Å‹3jÜÈ±£Ç CŠI²¤É“(Sª\É²¥Ë—0cÊœI³¦Í›8sêÜÉ³§ÏŸ@ƒ
--J´¨Ñ£H“*]Ê´©Ó§P£JJµªÕ«X³jİÊµ«×¯`ÃŠK¶¬Ù³hÓª]Ë¶­Û·şpãÊK·®İ»xóêİË·¯ß¿€L¸°áÃˆ+^Ì¸±ãÇ#KL¹²åË˜3kŞÌ¹³çÏ C‹Mº´éÓ¨S«^Íºµë×°cËM»¶íÛ¸sëŞÍ»·ïßÀƒN¼¸ñãÈ“+_Î¼¹óçĞ£KŸN½ºõëØ³kßÎ½»÷ïàÃ‹O¾¼ùóèÓ«_Ï¾½û÷ğãËŸO¿¾ıûøóëßÏ¿¿ÿÿ (à€hà&¨à‚6èàƒF(á„Vhá…f¨á†vèá‡ †(âˆ$–hâ‰(¦¨âŠ,¶èâ‹0Æ(ãŒ4Öhã8æ¨ã<öèã@)äDiä‘H&ş©ä’L6éä“PF)å”TViå•Xf©å–\véå—`†)æ˜d–iæ™h¦©æšl¶éæ›pÆ)çœtÖiçxæ©ç|öéçŸ€*è „jè¡ˆ&ªè¢Œ6êè£F*é¤”Vjé¥˜fªé¦œvêé§ †*ê¨¤–jê©¨¦ªêª¬¶êê«°Æ*ë¬´Öjë­¸æªë®¼öêë¯À+ì°Äkì±È&«ì²Ì6ëì³ĞF+í´ÔVkíµØ^šÄ¶Üvëí·à†+î¸ä–;.!D¡îºì¶ëî»ğÆKD¶™kï½øæk.!Aèëo¸AĞë×¿lğ¶üLpÀó¥ğÃŸ;H¿şãËpÃzU¬qÅ	olîÅãåñÈwL²¸ ‡l×É,çkrËŞ¦¬2]0×LîË6'!óÌråì³·8Û¼3ÏpıltA×<4ÑnısÒ0/Í4[NûuËRO­VÕ9_ÍrÖZ£ÅµÍ^ŸvØf]sÙ$Ÿ6YjÃÌöÈn¿-VÜ-Ïíqİvƒ…7ËzoÌwß^ı}ràN8W†“ŒxÅŠ/®Uã#?qä’cE¹Ç–CŒyæVm¾qç:U¢kLºÂ¦Ÿ.UêO|të®C{Ä«L{íNİqîïÎ;S¾?|ÁÂ¯Tñ
--¿°òc1°óÿ&ıQÒ—,»ÑÖ×T°ëşÙ¿ıÏİË„ûâáL½¿åÃ¤:áéÿ»¾¾í»4:üñë;¾õ·ÄyßùÓßø|Ö?–üÏntÙ sV@•T€	¼×ş,F¼¾-‚\ Ğ*x@´aĞ^¼WQ¸~°\!´×ORBğfTÚRZ¶ÂP#ßòòæB†+…Û!§æCq¡+^HL¢×5¯¤ÈízÄ!…SÄ±M1-U´âÓ–Åªm‘‹]<Z£ÒµÄ2š‘]…À@ÖÈÆ\€à 6 G9Ò±"p÷ÈG>¶ säCF12*‡F+Ä
--ÉÈE~€#ˆä )IGè ˜Ì¤&7şIÉHvr’W)¤!…È§ñë], Ö¥JV6"öÂA+Õ5ËÎD”‰<¤U	.YbÛò¥ €™a.–æ2&1•LÍáÒjºtZ!pĞKB,ÓšÍ|e,±YLnuÏìZ4G)j~‹™İüe6Ìr¡óÎçÚÆ™ËA˜Ó[ğTg:Ù¹M}æ“ò|")wiÏjúÓ›h'¹şù‡k†2 UT)¡YĞs"ô ÚLæE‡¹Îª@4¢‰š¨8+ŠÏ6´£ŠPè¸êP€~Ôqô4%I»ÅR”&B¥âªé>=Š¯/â å4(GwÚÒcös¨'}ú‘Jq¦ÜÒé7ozşÔ“Õ¦¯ËàKyˆ'§Îª-jQSZU±b5*ZİêWéäUŞ“¦&+U5ŠQ¤Æ…PëSçÔV®Õ¢uµêTÓpIõ®0ÔëZåÔ×!¾5ªq=«!
--+TÁšT©7T,HãÔØÃñ°v,YéÚÒò¯šİ,œ:S°^õµƒ=eAkYÑNe©©"cú‡Ç†õ·;­;#ÜÛî+¯¹m-[yë[Ø^v®Ã¬\³šØäZ°N¬½no+kÖâ¶¬À­íPkİ.WšŸ-©t%[ˆÙª×´ÓE+yËû>;e×¼Í=lF£_öö®ºôİî{?×ê—Ÿ¤­­i1ûCşäø|f.wÃ›Pğ:÷¡{0„#Œ^W¼íµpRkDAhøwy"p}ÿú^»X¸ı0b¿eâ7OO*0‹áº^ïÊVÄÏ¥nƒm|ãK˜¶İ1!ÜËãşúx¼%&òôp|ä'¹Â	¾2†ÁUc)«oO9Şğv‘LáıÆ¸ÇJnJ†½üe*wxÇE3–ùëâøB™Ëf³Á\å&×Ù¿ƒ`rœœfÒ8Ïzî)ŸÂŒbËÙÌ+•ñ–†èD/•Ïo³•ËŒ`:kÙ¥”¶ô1MNMûùÓFÍ2§OKéJ‹Zb‹îó ÿüä«úÂ æV—_×>1Úxé=õªaéGşça®æ5}-ëUÛÙÖ6‰»5e—Ù™Î¯¤;}fBÏiÉ¶6µÿôë"ÃÙÙ€„ Ñ]ëÿ†ZÜ°Æv©á•J{º²œ÷N5WIK{÷ûØ»†w«ıTî)¢‘|ä $	JA0Ü’›Œ¸&?IñIƒ[à%şÏÈq%¦±l|ã âÈ‘ÛÑyì£ÊõøG“—\$$«‘ñe3uæ¯ùÀo>mp‡Ş<uÀut¡ÿ\ÜEguµu®ë¤cvè5wúÓnm©Oê·:‰±u­Ë7çL÷¹×ŸÒô°#{ìd÷¹ÙÅö
--rémOûÛ«÷Ş-éu'ûÜ•w»SşıÕ}÷»ÙŸö°ŞİD?¼š¯xCc¼ñ<ä…˜øÉ#…ñ–¿<Ş3ïDÉsşó ½èGOúÒ›şô¨O½êWÏúÖ»şõ°½ìgOûÚÛşö¸Ï½îwÏûŞûş÷À¾ğ‡OüâÿøÈO¾ò—Ïüæ;ÿùĞ¾ô§Oıê[ÿúØÏ¾ö·Ïıî{ÿûà¿øÇOşò›ÿüèO¿ú×Ïşö»ÿığ¿üçOÿúÛÿşøÏ¿ş÷Ïÿşûÿÿ €8€X€x€˜€
--¸€Ø€ø€8Xx˜¸Øø ‚"8‚$X‚&x‚(˜‚*¸‚,Ø‚.ø‚0ƒ2€8ƒ4Xƒ6xƒ8˜ƒ:¸ƒ<Øƒ>øƒ@„B8„DX„Fx„H˜„J¸„LØ„Nø„P…R8…TX…Vx…X˜…Z¸…\Ø…^ø…`†b8†dX†fx†h˜†j¸†lØ†nø†p‡r8‡tX‡vx‡x˜‡z¸‡|Ø‡~ø‡€ˆ‚8ˆ„Xˆ !ù  ,  ãæ ş€‚ƒ„…†‡ˆ‰Š‹Œ‘’“”•–—˜™š›œŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõö÷øùúûüışÿ 
--H° Áƒ*\È°¡Ã‡#JœH±¢Å‹3jÜÈ±£Ç CŠI²¤É“(Sª\É²¥Ë—0cÊœI³¦Í›8sêÜÉ³§ÏŸ@ƒ
--J´¨Ñ£H“*]Ê´©Ó§P£JJµªÕ«X³jİÊµ«×¯`ÃŠK¶¬Ù³hÓª]Ë¶­Û·şpãÊK·®İ»xóêİË·¯ß¿€L¸°áÃˆ+^Ì¸±ãÇ#KL¹²åË˜3kŞÌ¹³çÏ C‹Mº´éÓ¨S«^Íºµë×°cËM»¶íÛ¸sëŞÍ»·ïßÀƒN¼¸ñãÈ“+_Î¼¹óçĞ£KŸN½ºõëØ³kßÎ½»÷ïàÃ‹O¾¼ùóèÓ«_Ï¾½û÷ğãËŸO¿¾ıûøóëßÏ¿¿ÿÿ (à€hà&¨à‚6èàƒF(á„Vhá…f¨á†vèá‡ †(âˆ$–hâ‰(¦¨âŠ,¶èâ‹0Æ(ãŒ4Öhã8æ¨ã<öèã@)äDiä‘H&ş©ä’L6éä“PF)å”TViå•Xf©å–\véå—`†)æ˜d–iæ™h¦©æšl¶éæ›pÆ)çœtÖiçxæ©ç|öéçŸ€*è „jè¡ˆ&ªè¢Œ6êè£F*é¤”Vjé¥˜fªé¦œvêé§ †*ê¨¤–jê©¨¦ªêª¬¶êê«°Æ*ë¬´Öjë­¸æªë®¼öêë¯À+ì°Äkì±È&«ì²Ì6ëì³® ­„A$áCÓ6¸BG0Em‚F$!Ä¹IL¡Ä
--Œk E®F<.Hë.€5$A½Fq„DÄÁ-4šÄÂ7ìğÃG,ñÄşW<1!D¬ñÆwìñÇ AÄnA ‘DG!½Eq0·G,\¢×lóÍ8[LHµ9÷qºEà¯¼±²&#„A” p¨ÏTWmõÂ;_M5Ğ¹ååA„¹MÄÁD'-d ¡ZÇ-÷Åƒğ<·Í\ß B 1¶ßG,DÊŸûoÌI ±pŞíøİY?nqŞ¶U Å#qDGsnôÁDœ+DÆå¾œ„PÔÀ€}JîºÕ‘¿.1åµm»ùÙ*mÄÁL±tÁá2œÑDD¬°úŞ)ûó8Ç½Ã´Ó¦rÌ¯³¼ÀñµßşcgLºè±„¹½BĞ9ıûKÿÉ¸àoÃ‹„Ë"—O¯ÆÂk™Ò˜º¤!ÍGxÂÉ‚€0ošŸ&?øUO6ÛªVÓT¦±Œíïv»+ğÆ¶@Vëlô2ÊÀV­&áà Ô4Á&¡‚ï»`lp°²"œÍƒœ# ·J¶;zx~İşH§4Î¡-„FSBvw²L@\d²áq8=¾†wŸ#Xö6¶01"±ƒÄ#İîxÂ“ë¢cš÷ÊÅ­$ä`8`˜´(A.BÏ‹®©Öà„À-ƒ…Ğt!Ş¹ç¯Œ•ñ`KØ7°¦1…`›¢÷ğş„µ­  èççÇç²5\¼Ç?ym`Ìğ˜F“…°xüÑú¶2¥iişÚœ÷(õ­àmY%üJ)»S®f[>ØÿDÆ4WŠ­–İÛ5¸ƒE³dÚ¹”Ö4Ò9e›ëå&_vÖYI™ïcæëœ©ìî_¸»§ø4æ21¶lw»ó%%_6‚éÏoÂ[¡›†8Ì¡ì\¼CàÕ–„€ ™R‚çôäé:z¦f‰¤¢¹Î¸¿•®–eD`BKV6•a³›cØÀ$ÊHÅ’¡3è¿¦1h J…G%çQÔ¤,c˜óÿºĞ•iÌ•çâîØxşÓ–Ir¦uüËÀFK†%í¨-#C…@)¨ÏêãŠjšœ© {c7ÑöFmfoa.ƒèàÜÄíÉËhb+[Ì ×2ß™Í¥™“(Ïfö$´ÊN­cki ¹ĞöŸÕTÙ[3w2‰
--0ndé
--¹Z¼Z¢“štb*²&Î{Ís’c_Ù»I–49ÆXøPEò®„6¥×kÑ)2™.JFÉÕ2^b<	&Ñ$Hí¬³•\mçv[Ñ0 ’«%éRIË|rpš›ãèÍ‚Miûãdq}÷=ÒfOtåDYhÑì>n»rënh68ƒast¥èÄæ·ş"VÒ› 4á?õÉ`¥a3c&KjÌZ¶¿I¶š¥@ı¹ºÙPÀ Ñx@q²²½ŞSš|=Ñá®‰D_Á^™=:-fÕ¤e¼úD!ÌpÄ$–€ã†âÏ¸`çá*	Ä .w|™ØÖ?J¦/…E›"o—´!ş+¾åõ`>0¥$—Xv“`“;‚İ&t3í¡zÅyÂâ¡{Â3¤^gše•Ùš1+¸¥mPp•Ü<·%kmÎœÙVè„÷µ ¡©£¬j5‹>ÎT`}óŠ9×¢Nd«,·gX9v[m¦tÜ,}5LoÆJ]pk(N—şùÍ‰E+D™;äĞ‰mt›k¼È‰FŞ~ÎhØãX 0i]k×Vóµf8ø/N£4eF4éçÂÚ4RòÙo$áŒ²#‚y·âs6æDïyp	zÌµ·agâŠ;3d»+§	]ímús/9W–JsÍ‘wÆ%Ã!IÍ™`<Â°(ğSÜU;øeªÅatåÕoœS}N§¶l¶õ—»’Íh<°°Éº0Š£O˜ü»a•LNp8Ÿ8*U[Æ×8÷×–™ë€=†hÓ"²ªôâ`Ì2-ÃæJéÖm˜«î?‘š„Ø"™é9CùÖRic0	ıÆ»ğÍ\€şĞ\_ÛİLYÆ²jlå+g?v¸j†°„HCÜeöN¸ûLî>S¹LWŒÜÃâXé¬Æ(ƒÑİÛ7½¹á‚Á7³ÀY«ÔWíÁjsûÛ-o3Ì÷Ló0ù/1J*/†KRl¢×úÏİÁ¦¡¼S‡h"eù¹±±ùâtä×*/(¸sé¼{Á'ü—hwJpöèàÛg´aù©L¢~Iı–í&ä5±Œ`.Ğ_å=P€%á'~NgpMq~ÂÀWÿ2MxÅOaÅ?…9ù&K£cs@ÆgC^]çAITN_³cB¦~Ø{ã'gLá:ÃP¡æzäTKïş—F¿s=¾ÃR®‡_ùDEZ÷2³båM)³HsMº:N° x‚(x€ä·‚,8PBøtlğG0ô;—„m„äKZ¶~Wû#H‹$/4Mıƒ;Jw%LØ„góS~-A[Á0„cw6zçxÇ…MÂ„6¼cx2vt?äOæA@868B “2µ0Gæ†o¨3)8‡K‘V¿ JàJßCISôAÒ$^åQJsOX.–…?Ó–WWc¾CH Ó€„ŠÑ•L“X1¾—3t¸˜èöSR}SPe4Ild.ØAWÕw_`Gld}Ÿ³1 S<Chôƒ‹¹H7şN¨‚Jñ‹½0…¦OgwŠè¶@?‡SD´ZáDhÅ9>ôCl´AƒÇIºÕI'‰Û(1»ˆ3½˜å†—;ŠVBD@G3¸³bÕKõF‘·jJsT‡@àÅˆÁ%2PÀ Z²Ü‡O—É!r³txx¶F¾cvC‘/GHSŠ´‹¹>ã\6…’ü”2†w[â‘ü82DY” 32")Tá˜J%U6?3‚}·W\à…2¦S6Ìõ^)sŞSoŸˆNÀãM¢SHHÀû¢ËÄShed}ó7©DŠÆˆÔ&/‹Vµ„4Ø´eı#e¡>Ò%yÄãg™ş@)~Û’J¸oÒ…@ÈE=è´zÃˆ‘êÕ1?DªÇ1Ä“D¡…I€k…i‡=€¶Äa&xVrÃ47¦;†&]ïˆ´Ä˜H%^íE<L©B>šW1šMØ”N„w•48*$‡0»¥—™_6õA|˜;kç^Œ¹†Å‰¾IÀY3‚à@#¥uÈxd41çõD¦VD¸zšcNStT½ô\cÓƒu‹[2”FyŸøI;ĞüÙŸp„°À Z  .° Ú š0ƒ  j ú›Û©‹ĞSDejn”UCk!Õ1 “YeC/ÇÖKÔJ¬ˆDş ]‚œ¤DÊS£5Êfƒ0:jV9º£ ¤B:¤Ø¹£<*FŠŠ¡]ÉAKs¢!W]#¢O@·$dÔU2È—R¬æƒU÷2ºw%2š–uã1f9t0„¦å5ƒlº¦£¤K”`U…B ÕHk498*ÕaÊ6–EˆKsdM¬WM¸i ©%cOk
--1Ø¹H”šØ©nZ1“Z©ƒp©™:u”+ aú5fÊ©1~Š4Õ$sº³z2W>µF´†ëFmÒå%:’İ)©–ê©‚ ª°©Ó©˜ú«Çj¡£ú0‚0<òfŠ.eY»Ú0ªºe+æTş}ã9„CBãhsT`iUW£1ÊG…0…c¬ê:¬5³®Ÿ
--¬U±¬Ì*o5N(*gæ|3<ø“9º¹4¨¦zkd7w‰Œ„.{ˆZ%è¨æ©éŠ¬îÊÄ:1ûÂª¬òŠ5d4Ö—ªƒ85e~_ğ¸u s®ú€ä6/¼¤_ŒÅ%Ó
--¥é«ïš¬Á
--¯šÚ®Û³›±pœ´­s3‡Ššeœ&¤—&ó7v_ZVKü¶A_2³å°S±+±<{³««± %xƒó18U˜”BñÙO„¤—u$Zidœ4<ø×vUÛ°hj³9‹³«³‰0ş±£µ€+a«±@¶LMotRVÛ0„ó?²è=óW8uD6]‰×=˜[ò¸Q¸·ëµ>ËµoZºë·`‡ã€`‰—;”z¼58Ì¹c~£Šœƒ·y«EçÊ·©ûµÛµ}¼†ËºAF9wD	µ™F 1[®¼‹µC¸ª¼§KºØ+š(x¸¼z§!xœJ”oô’ß½6Ô»£;¼¨»³×«¾Ù¯ÜùÜ;£òk00ãˆ›–tj
--& «€½š¾¿»¾ÖË©¨»µğK‰ó;£'õc…_ä2aÊ°Ñ+ºY[À…{‚1ÔªÅ‹À	©^z@èsûÃ&ı+|ş<½\½ˆÁ¾kÀ¼ºñC¯TP(U†“DˆÂzû¿ü¾3<ÀÅÚÂu|ÃJÙ;)Dq„ãš,$&)ÌyÒË0Ì®íÀïKÃtÃÄJ)¿…4HşfxÜ.TÄ5À2|Á† Ãl¯EÜÁ5Æ˜ØD¬ú…9db3&UüfBÌÂDìÆ… ÇCì¾ˆ|À_lÇv‡0Ir›j.,³jŒ®‡ÌÅ‰Ì¾<È“KÌÈÂ'G[5–dI°°ºZÉ1,Ç„L†,È‰<ÇJ\Ç |~V©ÜänoûBòÇu·ÂXŒÄZ¼É±ÜÊ	HËµlÅ<‹ìD0·ILÉÈşÁÌÉÑ\ÈÂ‹ÉÚìÅcÃÉ\bMËb'ôºMÃÏË¿ªÇ~+ËoœÍmÜÉt‡Ìß¼k‚Îÿ³•Ò¥ªN` dâËJvÅ¬¼ÎÆ,¯\ÍÅÏNQÃb<ÏôìsÀ”g.YKJÀ_ıœÎ—üÎ×ìÊîĞ}ÌAÉĞÿü}ã±«0ì¶uP A=Ík|Ñ=ÌGlÍtúÑ ımwºoİ/„T„E/PJ+}¾ -ĞDİÑ½ÑE=ÓãÍ5u"šc_ôIIĞfâÏôÌ/İÅFL±Âü³´ĞM}r‚ğ…şR­^©2å‚ÊèÌÒ–ËÚÌÎØ¼Å­Ôó:Ö·?ñ"^µÙşUFƒ@Än½ÊIİ½Õ™,ª4×=3kÆÅq†fxg‚Õ6­Õ…Ø/ŒÔÄ;ËwÍØ—'ÒÎ'>à
-->“ĞÒ,Ô˜Å†ÍÙLÇaÚ¡6_ãn™“}C÷SWmÑp]×­M×ˆ­È±-Û¤ùH¥9 äqıÚ4ÜÖªMÍÁ-×Ü™-Ü3ÄMš«_/‡¢€MØi<ØêÜÙíLİæÏŸİñûî86/gIQU-Ô5„¾.]İšÓmÔ—ØÍbÍŞ5ÜR&5G†küãßŸËÛ×ı‡]İÒíÑƒİN‰²@óKú–§œ&–}5øİÛÁ½ß^ş-Ó`­tN‰`Œ6°=l0Pp  ÎàÑıàÎÚÚ;Ü+N7XÇ“Äæ|ùÃhâMgf*§ûÛsúÛÄ\šMÎäKnİ*ŞãvêˆV†vÄ“šã
--¾à,m£6Š£Hê£=ª£?J¤jŞ@„¤g~¤ÖÍÔV>¯4H7¾ƒ4-×…&ö™Ÿ€2…°ŸşÉŸ ¡J¡Ê
--ê ¾ *ºè0év]ås>¯qøT×S.Œt“uÔÙYëéş&N*ÃM\Ö2ñ‚Ú£n×nê§~e®­Âçë^Áã´.¶ja®Tç®2ÙèëaìÁgÑÅşº%sxŞÜÊn˜×-ç¦^7v9”qdR8÷áÕµì×Ş–©¶¢®.îË~íä~íÌhj.³}éäME@íì¾ã˜Şìpvƒ²©='ÓHÂ0½ïÖ¾ïür»¾w‘¤Š¤ëßÁØéu#o?D8d²ÇÖ¯¬?çHDzhUO´T¡#ßÂşîÍ‹İƒ>õ&Ğœò*ğÙŞ¬ÿâ¬¦V·NÄ4ÎKó\¡±ï®tÅóƒ„ŠxGuèBr@¯¤³NëeÚ´ÊÖOîY6ºÛô†ùñV.¤ƒ9w™>ã;LĞ X–Z¿â32e‘†ˆè2 eŸõNñŞl7¤Š¥£ş`¼÷81ô…öV5dBv.øÎ÷êõˆÀ<,€›ä;ñVKÀ‘†é ¿à €M @HÔ†“¯ïtï
--À öæùŸ¯Øü	Ğ SŸú	Mî—@Ÿ²ÏÍ[ûmAûº¿û¡ßûÀüÂ?üÄ_üÆüÈŸüÊ¿üÌßüÎÿüĞıÒ?ıÔ_ıÖıØŸıÚ¿ıÜßıŞÿıàşâ?şä_şæşèŸşê¿şìßşîÿşğÿò?ÿô_ÿöÿøŸÿú¿ÿüßÿşÿÿ€ğ'8HXhxˆ˜¨¸ÈØèø)9IYiy‰™©¹ÉÙéù	*:JZjzŠšªºÊÚêú
--+;şK[k{‹›«»ËÛëû,<L\l|Œœ¬¼ÌÜìü-=M]m}­½Íİíı.>N^n~®¾ÎŞîş/?O_oŸ¯¿Ïßïÿ0 À<ˆ0¡Â…:|1¢Ä‰+Z¼ˆ1£Æ;zü2¤È‘$Kš<‰2¥Ê•,[º|	3¦Ì™4kÚ¼‰3§Î<{úü	4¨Ğ¡D‹=Š4©Ò¥L›:}
--5ªÔ©T«Z½Š5«Ö­\»zı
--6¬Ø±dËš=‹6­ÚµlÛº}7®Ü¹tëÚ½‹7¯Ş½|ûúı8°àÁ„>Œ8±âÅŒ;~9²äÉ”+[¾Œ9³æÍœ;ş{ş:´èÑ¤K›>:µêÕ¬[»~;¶ìÙ´kÛ¾;·îİ¼{ûş<¸ğáÄ‹?<¹òåÌ›;=ºôéÔ«[¿=»öíÜ»{ÿ>¼øñäË›?>½úõìÛ»?¾üùôëÛ¿?¿şıüûûÿ`€H`ˆ`‚
--.È`ƒ>a„NHa…^ˆa†nÈa‡~bˆ"Hb‰&ˆbŠ*®Èb‹.¾cŒ2ÎHc6Şˆc:îÈc>şdBId‘F‰d’J.Éd“N>	e”RNIe•V^‰e–ZnÉe—^~	f˜bIf™f‰fšj®Éf›n¾	gœr&ÎIgvŞ‰gzîÉgŸ~ş	h ‚Jh¡†Šh¢Š.Êh£º !ù  ,  ãæ ş€‚ƒ„…†‡ˆ‰Š‹Œ‘’“”•–—˜™š›œŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõö÷øùúûüışÿ 
--H° Áƒ*\È°¡Ã‡#JœH±¢Å‹3jÜÈ±£Ç CŠI²¤É“(Sª\É²¥Ë—0cÊœI³¦Í›8sêÜÉ³§ÏŸ@ƒ
--J´¨Ñ£H“*]Ê´©Ó§P£JJµªÕ«X³jİÊµ«×¯`ÃŠK¶¬Ù³hÓª]Ë¶­Û·şpãÊK·®İ»xóêİË·¯ß¿€L¸°áÃˆ+^Ì¸±ãÇ#KL¹²åË˜3kŞÌ¹³çÏ C‹Mº´éÓ¨S«^Íºµë×°cËM»¶íÛ¸sëŞÍ»·ïßÀƒN¼¸ñãÈ“+_Î¼¹óçĞ£KŸN½ºõëØ³kßÎ½»÷ïàÃ‹O¾¼ùóèÓ«_Ï¾½û÷ğãËŸO¿¾ıûøóëßÏ¿¿ÿÿ (à€hà&¨à‚6èàƒF(á„Vhá…f¨á†vèá‡ †(âˆ$–hâ‰(¦¨âŠ,¶èâ‹0Æ(ãŒ4Öhã8æ¨ã<öèã@)äDiä‘H&ş©ä’L6éä“PF)å”TViå•Xf©å–\véå—`†)æ˜d–iæ™h¦©æšl¶éæ›pÆ)çœtÖiçxæ©ç|öéçŸ€*è „jè¡ˆ&ªè¢Œ6êè£FJ§’>	Â
---TÚ$8ÜPBš*¹B§.°°¥¡9ê8Ô€+Œ BªCâĞ¯úğê
--§‚€­?®°CÄêº+¬°® ‚
--¼*Û, Œ0B£®pÂ
--.´À¬À’ˆƒÄ1ì¯–[nµ8ĞÀj4`k.¬@àºë
--İŠ¸‚Ã«/±¯ñ*«åüª¸î oñúËm½ âï¾ó;p¹ñşâ1Â@¹ô2üá¨‡1úî`òÅ(ÛC5xü!>¤ñÃÓ\òÊ-»Üa1Ëì³Í3û»Â¬:o²ÏHÿ¼kÑ¢P¸IG}ñ¿Lkx´ÔXï»tÕ^uÖ=à×‚à‚­_ƒİ*máÙig/.¸]¡×q'íC8€j·„xçísØ­şú7„-X,8Ö¯fzøƒ/.ó¹;È©äYãÀ‚ß•/9æ(¿jjç+zÒ:,L:‚'8|zÒ¯æÀÂêr
--ôë“¬:íÒ`:î>oÍû€¹ûîÃÿ§BâÆ#3òÉ÷×ÉÍûllÇÑû‡ÂïÕ£ìCØşdï_ëİ[¿+çâëÇBå#İjúü}Şş¾9Ü ÿ~òÏûØßoß¶'ÓŸ÷pà?üøN€)ÓA^P@ûä=è_áÃQõûêAz`¿Ğ$áƒ ¡GHÂšğ„(Lá		Aî‹Ú– æBˆ4*Ì¡wÈC"=b	ƒ ¨°ª†Ó7#Ä&:ñ‰ü!›HÄ@Š{HÚg¦ÈÅ.®p@ôâ«(‹Q/‹Ä"×ÅÈF/J±*$# F…¯fQ£ŸøÆ=šPsÄÁÑ˜:Ïøñ<ì#"EH@)nHÄ#IÉ/
--"Œ•a#ÿş2q¡ñ{AÈ™f2IJ*2“›ä$]xAÎ”ò•I8e%S©J˜¡‘_K¬,K)KJÒòO‰ókøª¶ef—¤ìå"é'°k•ì”11ƒÌL*‘ÌôÓûEÌNM²š‹¼æ!³é'l‹›4™NğMpRœ~$§ŸdP.âÀ¹Ô¥;	Ï=ÊS›¶Ä`óI™}òŒ°üg9]Àù‘‹†¥AıØO=*´œ9¸]õ`@Ğ‚Nt…ãEıÄ<ıéª£“ù(HúÊ‘ú©_Ğ<]teH•Â1¤mtéKı%2ã³¦6e#NÙ¨Sm&mÆ»ÁˆæÊ 
--•¥¥,ªQc*ş8yu0NãPÅ(U?ÀVÂP…Õ¬vq«^ì*IqQªJ­9àÛUËjÖ)¢µ‹j%éq=‰ÖÕ®P%e^ıt6bnX7˜&]ÿêÄ»rq°}Á«vÀ>ÁÅs],c…èØ)B¶OØÚ×W¿n¶‰…âgût¶ÔõkÔ»!OÛØÀ¢2*µÍ9]§Ñ”‘ÌZ¢¡mnÿ€IÁ>Å¯1WÚp…Rj
--—³¶¥SêšQk3Ä;ƒûÜ ¦ö‰«…Ias)tFMxìn¿ëÄğ¾ä¦¯¹b¸Î‹ÅÎV½;d/›ß×˜Ó­6lî1ñ›ßèú’)zÔí¶^ºşNmw4.ğ%ŠàÃ&qaSf`šëP¿BtoKV
--[Í4x+ø@‡=ìC/s)ï„
--hpb”Ék§aq‹'ÜRS46¬ÊÁ0Óø*Q–FÇ)qE¼’ëöl@ÛUDŒdK—ÂI	§nG³aá nj•K¨ä29%ZM\¥¯Ë¾/5c6!³Ã,46+pU¼*ûª	£’³q—¾`5e?#ÎàÔÊàF,<ØĞÁ@t¢³²ÍtAš’®¦VšÅ«Kc:Ó»ÜJµ^ÓB4Hµª;pBl€Ø€«a-ëFˆÀ¸Îµ®uí8A¼:Ö³öU@êMşÏî5Åå%!8ÍiBZÒ"´qÜˆÔ½ëÚå’6´µíaû•Jv2x±cÂt„@w#rCÙşAİçÖV¾nF‰Ûšé&¡»wğÁ}÷ÛìV¡¿“0pwS…ŞÊ^Ô½ïœü&8ÀÛñ"âŸ
--ÂÇ­pdú®¸Ä/nqF<…'ùÈ­²q|w¼Øƒ ¹ÃEr“S\å5¯JËşrX~<ä8§ùÄ.ô {{çwVÔÂ)ùó™]:Ê‹õ’ëéIOÔÒÓ|n W}åˆúºoşõœëNVºÇ.Âœ‹İæDzØ­~ö{Ú[ÏºÌÛNõ¹ƒş]'G¡Ûé®q»ß½yOû»½îw³'"ğ'üßŸCA =ëuJücÎø·7^ê‚ï»çëä?\çtÒ<‰»îô²÷ğdÿ¼ÜIBËŸé™_;ç[/{×=î¾şÕ[|{Ü§^÷¬ç»ÜGÿøØ{ùR©¼í‹¯ø8©ŞÂ»W¾ğ¡È›Pò>ñ©y8]¿¿É!øAyÑ^ü¥'õ­üÅóşùïï¾ó­Î}¨H_ş›w|0—~ ´~¿7uË—ş ˆ}¹7€ö§}½7°|ØÇÅ€8^wr~˜}êç~“‡ŞWBÈr¸ZÕõ·w!˜€#¨şˆ1¸€_¤‚h'H]È>Xƒ…P‚÷ƒá‡[µgz8¸‚,.X€"X„† „÷G„óv„Iˆ\x²ƒJØƒ`GƒP„û×…
--˜r6}WEz¢…XÈ…'¸R(^X…ex†\´'jxVl÷‚Û7†„ğ†zx|È_7H‡h˜†-8„b„}†d†„„8\Kèsyè„0ø…‹8ƒTxt$d†‘è]vxˆS˜ˆ˜8~h‰{¨ˆ‚øˆŸ(‰“Xo ˆŠ€¨Š‚pŠ›(|´gJØŠ‰Ä'wX‡•x‹Ø|šHŠr8BÈ‹†gˆLˆˆ(ƒ˜Š¥Xa¸‹Ê¸Œyò‹€‹şÂˆ™³8>V×Ø‹¾(Šp(ŒqÈ‰!4å(a¡ØŒ£øŒQÈˆ¯GyºØÈŒ”ÈÆ8{ÄÈê¨ïhüX†}¢…m¸¡w‰ÇBğ˜¥·èø‡íw(¸y„~Â|Œ9Œ$ˆéˆ‰!©‹#Y(cnï&o1g“‘ñF,é†“Ãw/©1	ÌÖ,Î&ÓÆmÔÆÖ†m×¦”Pé±ä’AE€RjYtj«¦j­6¿Vk¾Fkpk»V–¸Ökğ•Á–?i•UY‡—R ù–—’“t	“v	s™—S¹—‘Ñ—y	˜wÙş’Tù’„Y˜né—V™˜”Œù—Ùé—“É—‹É˜—ù˜™9˜›é-™Ÿ	š)š£ÉI—§I™Siš«©¥i™¯¹­©™³	›É”·I›¹‰˜»I›¶ù›‰œÂ‰ÄYœ†!›ÈyÇ¹œƒÑœÎÊ„1ÔùœUyÚ¹ÜÙŞùàâ9äYæyè™ê¹ìÙîùğŸò9ŸôYŸöyŸø™Ÿú¹ŸüÙŸşùŸ  : Z z š 
--º Ú ú ¡:¡Z¡z¡š¡º¡Ú¡ú¡ ¢":¢$Z¢&z¢(š¢*º¢,Ú¢.øú¢0£2:£4Z£6z£8š£:º£<Ú£>ú£@¤B:¤DZ¤Fz¤Hš¤Jº¤LÚ¤Nú¤P¥R:¥TZ¥Vz¥Xš¥Zº¥\Ú¥^ú¥`¦b:¦dZ¦fz¦hš¦jº¦lÚ¦nú¦p§r:§tZ§vz§xš§zº§|Ú§~ú§€¨‚:¨„Z¨†z¨ˆš¨Šº¨ŒÚ¨ú¨©’:©”Z©–z©˜š©šº©œÚ©ú© ª¢:ª¤Zª¦zª¨šªªºª¬Úª®úª°«²:«´Z«¶z«¸š«ºº«¼Ú«¾ú«À¬Â:¬ÄZ¬Æz¬Èš¬Êº¬ÌÚ¬Îú¬Ğ­È !ù  ,  ãæ ş€‚ƒ„…†‡ˆ‰Š‹Œ‘’“”•–—˜™š›œŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõö÷øùúûüışÿ 
--H° Áƒ*\È°¡Ã‡#JœH±¢Å‹3jÜÈ±£Ç CŠI²¤É“(Sª\É²¥Ë—0cÊœI³¦Í›8sêÜÉ³§ÏŸ@ƒ
--J´¨Ñ£H“*]Ê´©Ó§P£JJµªÕ«X³jİÊµ«×¯`ÃŠK¶¬Ù³hÓª]Ë¶­Û·şpãÊK·®İ»xóêİË·¯ß¿€L¸°áÃˆ+^Ì¸±ãÇ#KL¹²åË˜3kŞÌ¹³çÏ C‹Mº´éÓ¨S«^Íºµë×°cËM»¶íÛ¸sëŞÍ»·ïßÀƒN¼¸ñãÈ“+_Î¼¹óçĞ£KŸN½ºõëØ³kßÎ½»÷ïàÃ‹O¾¼ùóèÓ«_Ï¾½û÷ğãËŸO¿¾ıûøóëßÏ¿¿ÿÿ (à€hà&¨à‚6èàƒF(á„Vhá…f¨á†vèá‡ †(âˆ$–hâ‰(¦¨âŠ,¶èâ‹0Æ(ãŒ4Öhã8æ¨ã<öèã@)äDiä‘H&ş©ä’L6éä“PF)å”TViå•Xf©å–\véå—`†)æ˜d–iæ™h¦©æšl¶éæ›pÆ)çœtÖiçxæ©ç|öéçŸ€*è „jè¡ˆ&ªè¢Œ6êè£F*é¤”Vjé¥˜fªé¦œvêé§ †*ê¨¤–jê©¨¦ªêª¬¶êê«°Æ*ë¬´Öjë­¸æªë®¼öêë¯À+ì°Äkì±È&«ì²Ì6ëì³ĞF+í´ÔVkíµØJ¸B%áí·à†+î¸ä–kî¹èšKA´ëî»ğÆ+ï¼ô‘m>à€C·éöëï¿ £KHLn÷âCƒ¾7dğÃGìíÀş?ŒpÂõ¬ /7”PÅ ‡¬î ‹üïÅÏ£o@ààB
-- ™,³ÉÏœ.Ê)Ã£ñ»8Ô³Í@C\sĞåâœ³;8ìÀ3+üCôÓ u¸F½N8È‹
--şLíõ¹RDÕV§ƒƒZïĞ4?b·nØ_“]¶9$d=ï.ôãöŞIÀíµÜs“SƒİóâÀí>|»í÷Ô€ÎÎôÁôÚù$ŞöâP7îø7,¸¹»+P~åbcş´æ›s3BÒŸ·Ë1×øşµéD£º6X·îzyÇ.ûÔ´mûí×ˆ@¸î’³àûïOôğÄW9ò®ƒ0:óÍ“Ì7ôÑO³õşïê`¸=Øg/HÉnsß=4'Ü >Ï×S>ÑÎÛ¬şúÎ¬ü¾ëúÊ??Ğõ›Ùığ·ï}9èß<ş@íím€LÆ¸¿–Ñ`œY eÁ#wûƒnp8xdPƒLŸ³q
--†pc%tÇ	e¶A“up…ÃpaùÒ,…m»!ƒAƒÒ‹i&ôaÈj(2!Ñƒ3â¼z Àv(q‰@›ŸÈ‹(JQk.:®2&†l‹\ÔÅ€ğÅ#*d¬˜A†Æ4Ş¢nmŒ×G‰Í±bu´c-ô—ÇÂÁ±BËbÜ¢’È.²ñÚc:ÙÈ? /ˆO™–ş¦CHê«wè äÃş(±@Ê„†Xê$$İ5ÂIŠ²`¤Œ˜)a‚Â+©r•,sY(_°XBl–/±Ù•VÇF\êqçàe/ù·¦ÓJ·4¦¾ŞXeF™ŒcJ«MiîÒšıò¥Å´¹M) ›«TÛ7Á)0lfœÏœ9Å}­“#;ßö–b¾(Í“ñòÏî‰Or‰Ó`ÀdI?¡4A€ÎËc,(ØÜy:~ÒOJ+H C#)ÆjJ4Ÿ–ÜgR€¥ht£<³+?jPŠÖN)$…$‡Rñ‘¥-»j:/{jRÚO%‡LÍJèÌ#„SÙİ‡JjbÀşÔ¦’Î>+ˆ*O{$«^µ>îªäºêÕÄÙGbİ	Ú±S±Æ«è€\çÚbàÀîš×½6B.¬`;ØâU¯|EìUÊjVúˆÀ­ödÇ%GˆĞYÖ² Ä6;ÍrÖâÛ˜hG[Å?p¶³ƒ8-VË·ú|o¨=sÇd/70yQó„#Dn‘ƒ~E·îÒmpËZÊÎç‘ÕÁÛ1ÛÒév\¿İ·¢;]Gô6]ÔMBvK•âW>ÿÜ(wÕÑÜ£Ğ%„tµ«ŞêòÖ·íeï Ö;^©x—¶óihMqpÛu”×k…@¯¸¶ßúâºè"ğ|İk•şû:÷¸C­AŞñß˜
--BÀáR° èk]ø.X¾fpUlŞø¶ğ¨0PŸ;à»ø½Ø}qˆA<b[>-j:J^Ë8½Öğ"|.!s˜¸6^è{Z Õæ`Âö1‹3,ã?™D6—‘EÜİ$+Ù=.h²Cu/ÃàÚ2‘år©ÙÀP¹æ˜’*EIÊVÊçòŒ…Ìfï¹Ê]g™Š‰R;3ÏÖ³•E|å!ûyÑ4nt Ó%/¯ø;båq›çĞ‰h3¹Ş¼ZA[ºÄÙ	3Oáœ3_´ÓTş´¬±üèFKz*şªô©¼ÖíW®Ú=ıçYş;:ÆÆ¾µ}M½ë_„v(P›bDãVÑ¶ær¨kÍhm/»h¶³­“ƒhP®6§MlHóyÛÈ.¶¼kÜNq»:È¥'«[mm4‹Ô0Np••ÍHJ‡ÛŞ¯Ö8Ğ2÷Ûİ^3¼lo¼Ş6w¾Ãø9|İ×nw¶%QC<Ò3Æ3Ïí„—šöïÃEñ}Âä4G9É/>2–—Sá<ù¦[;å4<å…Ày¬çMp•OÔç-:J¹:`ÿÜß5uÉ¹­s›Ã³\º†ú¹ãÅRØ3_º»µ~`®¿ûÛ`?¸Ø5Ù“nô°zÔ±Şu¶şBéF¯øÎ÷¹Ó½;ãiŞÓx¦#€ÿ÷ÑŸÉ|‹İñ\MAùq¢Ãºñk7vŸãúyOz\a¿|ÄÀã‚ t^?‡ŞkÉnµ<ö‘ÏºèqİsÕûñ;3­ir¾œÖ¤¿}©ïûÕßõ(mxç÷6lÛëùw<åÒûæ<7€¾CwĞß(ÿäoo{ò¯OoÔËİû°ÇC(}u{¾ö W~À‹<ùØÃ”ùğ·LàñZÑG|÷rÖ×wû§eı·|â’zø/âU…V³‡JŸ'y‚‡{nçw•ç~¬7­{Täæpc‡¨}¸~
--Ø`-ş‚r/gD; {.ã7ĞƒÈx-XzB8zÙ'„M÷o48Qá±hSgvÃ05°\÷ ‚‡Ç‚ìw„×»wà¢„Kwâ1=ûmtÛÒVˆyXƒC8qü·ø…ï† 5€hUA-³#  ±†eTtA¨Ø‡.8‡†vø€ã1b¦5Q¸1T€(G‚˜…ws\hz¼—„‹nâ±:z$9’øQ‰¿—˜¸}šƒéGxß¢ˆŸ‹äA€K³1?@+`
--ŠÎG2¶%\í"ŒÃ“{4¶[6\2è‰³˜Sã\£Å~È¾XIpY—•Y©õYşÛ¸Y EZàXZªÕÔÖ~‰ØŒb8  9¢u°ãmåVïWt5Wv5‡åW‚ X„õeX}•Xúh}S‡è˜ˆåÑBúâºXbÂˆ	Éˆæ¡/+0‰f’„™‚ôÌ8‘´Ø‘]ñ‘ y"Ét¸‘Íx’^A‡%’,©.ù’&“Y1“%i“(y4©“[A‹=é“2É“9)”7i’Ai”Ä%‹Ÿ¨”GÉ”‹è”«5/)•S©’³h•‹•a¨•[‰•Qé•H’b9–Y–Ë8‘h™–è¸–¹’nÙ‰j—^—tÉsmy—ui‡zÙ—~ù—€˜‚9˜„Yş˜†y˜ˆ™˜Š¹˜ŒÙ˜ù˜™’9™”Y™–y™˜™™š¹™œÙ™ù™ š¢9š¤Yš¦yš¨™šª¹š¬Ùš®ùš°›²9›´Y›¶y›¸™›º¹›¼Ù›¾ù›ÀœÂ9œÄYœÆyœÈ™œÊ¹œÌÙœÎùœĞÒ9ÔYÖyØ™Ú¹ÜÙŞùàâ9äYæyè™ê¹ìÙîùğŸò9ŸôYŸöyŸø™Ÿú¹ŸüÙŸşùŸ  : Z z š 
--º Ú ú ¡:¡Z¡z¡š¡º¡Ú¡ú¡ ¢":¢$Z¢&z¢(š¢*º¢,Ú¢.Xú¢0£2:£4Z£6z£8š£:º£<Ú£>ú£@¤B:¤DZ¤Fz¤Hš¤Jº¤LÚ¤Nú¤P¥R:¥TZ¥Vz¥Xš¥Zº¥\Ú¥^ú¥`¦b:¦dZ¦fŠ  !ùF  ,  ãæ ş€‚ƒ„…†‡ˆ‰Š‹Œ‘’“”•–—˜™š›œŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçèéêëìíîïğñòóôõö÷øùúûüışÿ 
--H° Áƒ*\È°¡Ã‡#JœH±¢Å‹3jÜÈ±£Ç CŠI²¤É“(Sª\É²¥Ë—0cÊœI³¦Í›8sêÜÉ³§ÏŸ@ƒ
--J´¨Ñ£H“*]Ê´©Ó§P£JJµªÕ«X³jİÊµ«×¯`ÃŠK¶¬Ù³hÓª]Ë¶­Û·şpãÊK·®İ»xóêİË·¯ß¿€L¸°áÃˆ+^Ì¸±ãÇ#KL¹²åË˜3kŞÌ¹³çÏ C‹Mº´éÓ¨S«^Íºµë×°cËM»¶íÛ¸sëŞÍ»·ïßÀƒN¼¸ñãÈ“+_Î¼¹óçĞ£KŸN½ºõëØ³kßÎ½»÷ïàÃ‹O¾¼ùóèÓ«_Ï¾½û÷ğãËŸO¿¾ıûøóëßÏ¿¿ÿÿ (à€hà&¨à‚6èàƒF(á„Vhá…f¨á†vèá‡ †(âˆ$–hâ‰(¦¨âŠ,¶èâ‹0Æ(ãŒ4Öhã8æ¨ã<öèã@)äDiä‘H&ş©ä’L6éä“PF)å”TViå•Xf©å–\véå—`†)æ˜d–iæ™h¦©æšl¶éæ›pÆ)çœtÖiçxæ©ç|öéçŸ€*è „jè¡ˆ&ªè¢Œ6êè£F*é¤”Vjé¥˜fªé¦œvêé§ †*ê¨¤–jê©¨¦ªêª¬¶êê«°Æ*ë¬´Öjë­¸æªë®¼öêë¯À+ì°Äkì±È&«ì²Ì6ëì³ĞF+í´ÔVkíµØ^šÄ¶Üvëí·à†+î¸ä–;.!D¡îºì¶ëî»ğÆKD¶™kï½øæk.!Aèëo¸AĞë×¿lğ¶üLpÀó¥ğÃŸ;H¿şãËpÃzU¬qÅ	olîÅãåñÈwL²¸ ‡l×É,çkrËŞ¦¬2]0×LîË6'!óÌråì³·8Û¼3ÏpıltA×<4ÑnısÒ0/Í4[NûuËRO­VÕ9_ÍrÖZ£ÅµÍ^ŸvØf]sÙ$Ÿ6YjÃÌöÈn¿-VÜ-Ïíqİvƒ…7ËzoÌwß^ı}ràN8W†“ŒxÅŠ/®Uã#?qä’cE¹Ç–CŒyæVm¾qç:U¢kLºÂ¦Ÿ.UêO|të®C{Ä«L{íNİqîïÎ;S¾?|ÁÂ¯Tñ
--¿°òc1°óÿ&ıQÒ—,»ÑÖ×T°ëşÙ¿ıÏİË„ûâáL½¿åÃ¤:áéÿ»¾¾í»4:üñë;¾õ·ÄyßùÓßø|Ö?–üÏntÙ sV@•T€	¼×ş,F¼¾-‚\ Ğ*x@´aĞ^¼WQ¸~°\!´×ORBğfTÚRZ¶ÂP#ßòòæB†+…Û!§æCq¡+^HL¢×5¯¤ÈízÄ!…SÄ±M1-U´âÓ–Åªm‘‹]<Z£ÒµÄ2š‘]…À@ÖÈÆ\€à 6 G9Ò±"p÷ÈG>¶ säCF12*‡F+Ä
--ÉÈE~€#ˆä )IGè ˜Ì¤&7şIÉHvr’W)¤!…È§ñë], Ö¥JV6"öÂA+Õ5ËÎD”‰<¤U	.YbÛò¥ €™a.–æ2&1•LÍáÒjºtZ!pĞKB,ÓšÍ|e,±YLnuÏìZ4G)j~‹™İüe6Ìr¡óÎçÚÆ™ËA˜Ó[ğTg:Ù¹M}æ“ò|")wiÏjúÓ›h'¹şù‡k†2 UT)¡YĞs"ô ÚLæE‡¹Îª@4¢‰š¨8+ŠÏ6´£ŠPè¸êP€~Ôqô4%I»ÅR”&B¥âªé>=Š¯/â å4(GwÚÒcös¨'}ú‘Jq¦ÜÒé7ozşÔ“Õ¦¯ËàKyˆ'§Îª-jQSZU±b5*ZİêWéäUŞ“¦&+U5ŠQ¤Æ…PëSçÔV®Õ¢uµêTÓpIõ®0ÔëZåÔ×!¾5ªq=«!
--+TÁšT©7T,HãÔØÃñ°v,YéÚÒò¯šİ,œ:S°^õµƒ=eAkYÑNe©©"cú‡Ç†õ·;­;#ÜÛî+¯¹m-[yë[Ø^v®Ã¬\³šØäZ°N¬½no+kÖâ¶¬À­íPkİ.WšŸ-©t%[ˆÙª×´ÓE+yËû>;e×¼Í=lF£_öö®ºôİî{?×ê—Ÿ¤­­i1ûCşäø|f.wÃ›Pğ:÷¡{0„#Œ^W¼íµpRkDAhøwy"p}ÿú^»X¸ı0b¿eâ7OO*0‹áº^ïÊVÄÏ¥nƒm|ãK˜¶İ1!ÜËãşúx¼%&òôp|ä'¹Â	¾2†ÁUc)«oO9Şğv‘LáıÆ¸ÇJnJ†½üe*wxÇE3–ùëâøB™Ëf³Á\å&×Ù¿ƒ`rœœfÒ8Ïzî)ŸÂŒbËÙÌ+•ñ–†èD/•Ïo³•ËŒ`:kÙ¥”¶ô1MNMûùÓFÍ2§OKéJ‹Zb‹îó ÿüä«úÂ æV—_×>1Úxé=õªaéGşça®æ5}-ëUÛÙÖ6‰»5e—Ù™Î¯¤;}fBÏiÉ¶6µÿôë"ÃÙÙ€„ Ñ]ëÿ†ZÜ°Æv©á•J{º²œ÷N5WIK{÷ûØ»†w«ıTî)¢‘|ä $	JA0Ü’›Œ¸&?IñIƒ[à%şÏÈq%¦±l|ã âÈ‘ÛÑyì£ÊõøG“—\$$«‘ñe3uæ¯ùÀo>mp‡Ş<uÀut¡ÿ\Ü˜òkÆ}tej¯¨·Îwş'¨ŸFêS×õ ¬n¬g½P\/Ö³®õ­/öê4'»¡ÂNš±«ìgïºÏÉîs³«Vì9ÿúÚã÷¡cşüPlÍÜõ¾w¾ŞïGÔH£x¤+>ğ¡É;Ñoø¶¿ğ‹:á1ùÈo¾ğ•ÍçAúÏ\ò÷ÌéQ_úÎŒó©çÌëIßzÙÿİQ¥.úkÖl^İ·æ‡w÷=ã‘yá«æ\~5şñß{å/Ë+v¾l´+}Û ­ÍÕçø²?„İûÈAÚ¡ÁOşò›ÿüèO¿ú×Ïşö»ÿığ¿üçOÿúÛÿşøÏ¿ş÷Ïÿşûÿÿ €8€X€x€˜€
--¸€Ø€ø€8Xx˜¸Øø ‚"8‚$X‚&x‚(˜‚*¸‚,Ø‚.ø‚0ƒ2Ú8ƒ4Xƒ6xƒ8˜ƒ:¸ƒ<Øƒ>øƒ@„B8„DX„Fx„H˜„J¸„LØ„Nø„P…R8…TX…Vx…X˜…Z¸…\Ø…^ø…`†b8†dX†fx†h˜†j¸†lØ†nø†p‡r8‡tX‡vx‡x˜‡z¸‡|Ø‡~ø‡€ˆ‚8ˆ„Xˆ†xˆˆ˜ˆŠ¸ˆŒØˆøˆ‰’8‰”X‰–x‰˜˜‰š¸‰œØ‰ø‰ Š¢8Š¤XŠ¦xŠ¨˜Šª¸Š¬ØŠ®øŠ°‹²8‹´X‹¶x‹¸˜‹º¸‹¼Ø‹¾ø‹ÀŒ„ ;
-\ No newline at end of file
-diff -Naur v5/static/impicklerick.html new-v5/static/impicklerick.html
---- v5/static/impicklerick.html	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/static/impicklerick.html	1970-01-01 01:00:00.000000000 +0100
-@@ -1,46 +0,0 @@
--
--<!DOCTYPE html>
--<html>
--  <head>
--    <meta charset="UTF-8">
--    <script>
--      document.cookie = "impicklerick=true"
--    </script>
--  </head>
--  <body>
--    <h1>ï¼©ï¼‡ï½ã€€ï½ï½‰ï½ƒï½‹ï½Œï½…ã€€ï½’ï½‰ï½ƒï½‹ã€€ï¼ã€€éŸ³å¿œæ¸©ã’ã</h1>
--    <pre>
--         ___________
--        [___________]
--        /           \
--       /~~^~^~^~^~^~^\
--      |===============|
--      | P I C K L E S |
--      | ,-.   __      |
--      | \ ,'-'. )     |
--      |  '._'_;'      |
--      ;===============;
--       \             /
--        `"""""``""""`
--    </pre>
--    <pre>
--              ___          
--          . -^   `--,      
--         /# =========`-_   
--        /# (--====___====\ 
--       /#   .- --.  . --.| 
--      /##   |  * ) (   * ),
--      |##   \    /\ \   / |
--      |###   ---   \ ---  |
--      |####      ___)    #|
--      |######           ##|
--       \##### ---------- / 
--        \####           (  
--         `\###          |  
--           \###         |  
--            \##        |   
--             \###.    .)   
--              `======/
--    </pre> 
--  </body>
--</html>
-\ No newline at end of file
-diff -Naur v5/static/index.html new-v5/static/index.html
---- v5/static/index.html	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/static/index.html	1970-01-01 01:00:00.000000000 +0100
-@@ -1,50 +0,0 @@
--<!DOCTYPE html>
--<html>
--  <head>
--    <!-- Global site tag (gtag.js) - Google Analytics -->
--    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-115293619-2"></script>
--    <script>
--      window.dataLayer = window.dataLayer || [];
--      function gtag(){dataLayer.push(arguments);}
--      gtag('js', new Date());
--
--      gtag('config', 'UA-115293619-2', {
--        'custom_map': {
--          'dimension1': 'dev'
--        }
--      });
--
--      var impicklerick = document.cookie
--        .split('; ')
--        .map(a=>a.split('='))
--        .reduce((acc,val)=>{
--          acc[val[0]]=val[1]
--          return acc
--        }, {})
--        .impicklerick;
--
--      gtag('event', 'dev_dimension', {'dev': impicklerick});
--      if (impicklerick === 'true') {
--        console.log('You are pickle Rick !');
--      }
--    </script>
--    
--    <meta charset="utf-8">
--    <title>stalactite v5 - archifiltre</title>
--    <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
--    <link rel="manifest" href="manifest.webmanifest">
--    <link rel="icon" href="imgs/favicon.png">
--
--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.4.3/dist/css/foundation.min.css" integrity="sha256-GSio8qamaXapM8Fq9JYdGNTvk/dgs+cMLgPeevOYEx0= sha384-wAweiGTn38CY2DSwAaEffed6iMeflc0FMiuptanbN4J+ib+342gKGpvYRWubPd/+ sha512-QHEb6jOC8SaGTmYmGU19u2FhIfeG+t/hSacIWPpDzOp5yygnthL3JwnilM7LM1dOAbJv62R+/FICfsrKUqv4Gg==" crossorigin="anonymous">
--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css">
--
--    <script defer src="https://cdn.jsdelivr.net/npm/foundation-sites@6.4.3/dist/js/foundation.min.js" integrity="sha256-mRYlCu5EG+ouD07WxLF8v4ZAZYCA6WrmdIXyn1Bv9Vk= sha384-KzKofw4qqetd3kvuQ5AdapWPqV1ZI+CnfyfEwZQgPk8poOLWaabfgJOfmW7uI+AV sha512-0gHfaMkY+Do568TgjJC2iMAV0dQlY4NqbeZ4pr9lVUTXQzKu8qceyd6wg/3Uql9qA2+3X5NHv3IMb05wb387rA==" crossorigin="anonymous"></script>
--
--    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
--  </head>
--  <body>
--
--  </body>
--</html>
--
--
-diff -Naur v5/static/manifest.webmanifest new-v5/static/manifest.webmanifest
---- v5/static/manifest.webmanifest	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/static/manifest.webmanifest	1970-01-01 01:00:00.000000000 +0100
-@@ -1,21 +0,0 @@
--{
--  "name": "archifiltre Progressive Web App",
--  "short_name": "archifiltre",
--  "description": "Your files and folders, as you've never seen them.",
--  "icons": [
--    {
--      "src": "imgs/favicon.png",
--      "sizes": "64x64",
--      "type": "image/png"
--    },
--    {
--      "src": "imgs/favicon144.png",
--      "sizes": "144x144",
--      "type": "image/png"
--    }
--  ],
--  "start_url": "/index.html",
--  "display": "fullscreen",
--  "theme_color": "#B12A34",
--  "background_color": "#B12A34"
--}
-\ No newline at end of file
-diff -Naur v5/static/stats.html new-v5/static/stats.html
---- v5/static/stats.html	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/static/stats.html	1970-01-01 01:00:00.000000000 +0100
-@@ -1,19 +0,0 @@
--<!DOCTYPE html>
--<html>
--  <head>
--    <meta charset="utf-8">
--    <title>stats - archifiltre</title>
--    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
--    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
--    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
--
--    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
--
--    <link rel="stylesheet" type="text/css"
--      href="https://fonts.googleapis.com/css?family=Open+Sans:400,600">
--  </head>
--
--  <body>
--      
--  </body>
--</html>
-diff -Naur v5/webpack.config.js new-v5/webpack.config.js
---- v5/webpack.config.js	2018-06-06 18:28:15.895448499 +0200
-+++ new-v5/webpack.config.js	1970-01-01 01:00:00.000000000 +0100
-@@ -1,106 +0,0 @@
--const path = require('path')
--const fs = require('fs')
--const CopyWebpackPlugin = require('copy-webpack-plugin')
--const FlowWebpackPlugin = require('flow-webpack-plugin')
--const HtmlWebpackPlugin = require('html-webpack-plugin')
--const workboxPlugin = require('workbox-webpack-plugin')
--
--module.exports = {
--  entry: {
--    app: './src/app.js',
--    react: ['react', 'react-dom'],
--    redux: ['redux', 'react-redux'],
--    immutable: ['immutable'],
--
--    stats: './src/stats.js'
--  },
--
--  plugins: [
--    new CopyWebpackPlugin(['static']),
--    new HtmlWebpackPlugin({
--      inject: 'head',
--      filename: 'index.html',
--      template: 'static/index.html',
--      excludeChunks: ['stats']
--    }),
--    new HtmlWebpackPlugin({
--      inject: 'head',
--      filename: 'stats.html',
--      template: 'static/stats.html',
--      excludeChunks: ['app']
--    }),
--    // new workboxPlugin.GenerateSW({
--    //   swDest: 'sw.js',
--    //   clientsClaim: true,
--    //   skipWaiting: true,
--    //   runtimeCaching: [
--    //     {
--    //       urlPattern: /.*googleapis|.*jsdelivr|.*gstatic/,
--    //       handler: 'cacheFirst',
--    //       options: {
--    //         cacheableResponse: {
--    //           statuses: [0, 200],
--    //         }
--    //       }
--    //     }
--    //   ]
--    // })
--    new workboxPlugin.InjectManifest({
--      swSrc: 'src/sw.js',
--      swDest: 'sw.js',
--    })
--  ],
--
--  devServer: {
--    contentBase: './dist',
--    https: true,
--    port: 8000,
--    compress: true,
--    hot: false,
--    inline: false,
--  },
--
--  optimization : {
--    splitChunks : {
--      chunks: 'all'
--    },
--    runtimeChunk : true
--  },
--
--  resolve: {
--    modules: [
--      path.resolve(__dirname, 'src'),
--      'node_modules'
--    ]
--  },
--
--  module: {
--    rules: [
--      {
--        test: /\.js$/,
--        exclude: /(node_modules|bower_components)/,
--        loader: 'babel-loader'
--      },
--      {
--        test: /\.css$/,
--        exclude: /(node_modules|bower_components)/,
--        use: [
--          { loader: "style-loader" },
--          {
--            loader: "css-loader",
--            query: {
--              modules: true,
--              localIdentName: '[name]__[local]___[hash:base64:5]',
--            }
--          }
--        ]
--      }
--    ]
--  },
--
--  output: {
--    filename: '[name].bundle.js',
--    path: path.resolve(__dirname, 'dist')
--  }
--}
--

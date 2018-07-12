@@ -8,7 +8,7 @@ import { Set } from 'immutable'
 
 import { selectReportState } from 'reducers/root-reducer'
 import { startEditingTags, stopEditingTags } from 'reducers/report-state'
-import { updateContentElementByID, addTagged, deleteTagged } from 'reducers/database'
+import { addTagged, deleteTagged } from 'reducers/database'
 
 import { commit } from 'reducers/root-reducer'
 import { tr } from 'dict'
@@ -126,19 +126,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   const addTag = (tag, id) => {
-    const updater = (a) => {if (a === undefined) return Set.of(tag); else return a.add(tag);}
-    dispatch(updateContentElementByID(id, 'tags', updater))
-
     dispatch(addTagged(tag, id))
-
     dispatch(commit())
   }
 
   const deleteTag = (tag, id) => {
-    dispatch(updateContentElementByID(id, 'tags', a=>a.delete(tag)))
-
     dispatch(deleteTagged(tag, id))
-
     dispatch(commit())
   }
 

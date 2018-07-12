@@ -300,11 +300,13 @@ export const getIdPath = (id, tt) => {
 
 
 
-export const toStrList2 = (toStrListHeader, toStrList) => (tt) => {
+export const toStrList2 = (toStrListHeader, toStrList) => (tt, tags) => {
   const table = getTable(tt)
+
   const mapper = (entry,id) =>
     List.of('', remakePath(id, tt).slice(1).join('/'))
       .concat(toStrList(entry.get('content')))
+      .concat(tags.reduce((acc, val, i) => {return (val.has(id) ? (acc.length > 0 ? acc + ", " + i : i) : acc)}, "").toString())
   const header = List.of('', 'path').concat(toStrListHeader())
   return (
     table.map(mapper).reduce((acc,val) => acc.push(val), List.of(header))

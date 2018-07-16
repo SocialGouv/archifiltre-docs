@@ -60,9 +60,9 @@ describe('table-tree', function() {
   M.toJs = M.toJs(toJs)
   M.fromJs = M.fromJs(fromJs)
 
-  M.v5ToCommon = M.v5ToCommon(toCommon)
-  M.toCommon = M.toCommon(toCommon)
-  M.fromV5 = M.fromV5(fromV5)
+  // M.v5ToCommon = M.v5ToCommon(toCommon)
+  // M.toCommon = M.toCommon(toCommon)
+  // M.fromV5 = M.fromV5(fromV5)
 
 
 
@@ -122,29 +122,21 @@ describe('table-tree', function() {
 
     M.size(a).should.equal(7)
     M.depth(a).should.equal(3)
-    // M.getEntryById(root_id, a).get('content').should.equal(3)
-
-    // let b = a.toJS()
-    // b[root_id].children.should.have.lengthOf(1)
-    // b[b[root_id].children[0]].children.should.have.lengthOf(2)
-
-    // M.remakePath(b[b[root_id].children[0]].children[0], a).toArray()
-    //   .should.deep.equal(['', 'a', 'b'])
 
     M.isSorted(a).should.equal(true)
 
     isSortedToTreeToJs(M.toJsTree(a)).should.equal(true)
 
-    M.toStrList2(a).toJS()
+    M.toStrList2(a,[]).toJS()
       .should.deep.equal([
         ['', 'path', column_name],
-        ['', '', 3],
-        ['', 'a', 3],
-        ['', 'a/b', 2],
-        ['', 'a/b/c', 1],
-        ['', 'a/b/d', 1],
-        ['', 'a/e', 1],
-        ['', 'a/e/f', 1],
+        ['', '', 3, ''],
+        ['', 'a', 3, ''],
+        ['', 'a/b', 2, ''],
+        ['', 'a/b/c', 1, ''],
+        ['', 'a/b/d', 1, ''],
+        ['', 'a/e', 1, ''],
+        ['', 'a/e/f', 1, ''],
       ])
 
     M.fromJson(M.toJson(a)).toJS().should.deep.equal(a.toJS())
@@ -269,11 +261,11 @@ describe('table-tree', function() {
   })
 
   
-  const V5 = V5_(C)
+  // const V5 = V5_(C)
 
-  Loop.immuEqual('(toCommon . fromV5) a === v5ToCommon a', () => {
-    const a = V5.arbitrary()
-    return [M.toCommon(M.fromV5(a)), M.v5ToCommon(a)]
-  })
+  // Loop.immuEqual('(toCommon . fromV5) a === v5ToCommon a', () => {
+  //   const a = V5.arbitrary()
+  //   return [M.toCommon(M.fromV5(a)), M.v5ToCommon(a)]
+  // })
 
 })

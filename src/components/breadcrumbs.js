@@ -52,7 +52,13 @@ class Presentational extends React.PureComponent {
   constructor(props) {
     super(props)
 
+    this.trueFHeight = this.trueFHeight.bind(this)
     this.computeDim = this.computeDim.bind(this)
+  }
+
+  trueFHeight(id) {
+    const height = this.props.dy
+    return this.props.trueFHeight(height, id)
   }
 
   computeDim(y,height) {
@@ -87,7 +93,7 @@ class Presentational extends React.PureComponent {
   }
 
   render() {
-    const trueFHeight = this.props.trueFHeight
+    const trueFHeight = this.trueFHeight
 
     const displayName = id => {
       const node = this.props.getByID(id)

@@ -7,7 +7,7 @@ import TagsEditable from 'components/tags-editable'
 
 import { selectReportState } from 'reducers/root-reducer'
 import { startEditingTags, stopEditingTags, toggleEditingTags } from 'reducers/report-state'
-import { updateContentElementByID, addTagged } from 'reducers/database'
+import { addTagged } from 'reducers/database'
 
 import { commit } from 'reducers/root-reducer'
 import { tr } from 'dict'
@@ -95,11 +95,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   const addTag = (tag, id) => {
-    const updater = (a) => {if (a === undefined) return Set.of(tag); else return a.add(tag);}
-    dispatch(updateContentElementByID(id, 'tags', updater))
-
     dispatch(addTagged(tag, id))
-
     dispatch(commit())
   }
 

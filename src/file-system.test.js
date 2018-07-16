@@ -44,6 +44,16 @@ describe('file-system', function() {
   })
 
 
+  Loop.immuEqual('(tagsSizesFromJson . tagsSizesToJson) a', () => {
+    const a = M.arbitraryTagsSizes()
+    return [M.tagsSizesFromJson(M.tagsSizesToJson(a)), a]
+  })
+
+  Loop.immuEqual('(tagsFromJs . tagsToJs) a', () => {
+    const a = M.arbitraryTags()
+    return [M.tagsFromJs(M.tagsToJs(a)), a]
+  })
+
 
 
   Loop.immuEqual('(fromJson . toJson) a', () => {
@@ -62,10 +72,10 @@ describe('file-system', function() {
   })
 
 
-  Loop.immuEqual('(toCommon . fromV5) a === v5ToCommon a', () => {
-    const a = V5.arbitrary()
-    return [M.toCommon(M.fromV5(a)), M.v5ToCommon(a)]
-  })
+  // Loop.immuEqual('(toCommon . fromV5) a === v5ToCommon a', () => {
+  //   const a = V5.arbitrary()
+  //   return [M.toCommon(M.fromV5(a)), M.v5ToCommon(a)]
+  // })
 
 
 })

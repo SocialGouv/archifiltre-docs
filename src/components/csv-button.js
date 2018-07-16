@@ -11,7 +11,7 @@ import { tr } from 'dict'
 
 
 const Presentational = props => {
-  const name = makeNameWithExt(props.getSessionName(),'.csv')
+  const name = makeNameWithExt(props.getSessionName(),'csv')
   return mkB(
     ()=>{
       console.log('to csv')

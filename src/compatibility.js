@@ -5,6 +5,37 @@ import * as V5 from '../version/v5/src/file-system'
 import * as V6 from '../version/v6/src/file-system'
 import * as V7 from '../version/v7/src/file-system'
 
+
+export const fromAnyJsonToJs = (fromJsonToJs,json) => {
+  const version = JSON.parse(json).version
+
+  let js
+
+  switch (version) {
+    case 5:
+      if (js===undefined) {
+        js = V5.toJs(V5.fromJson(json))
+      }
+      js = v5JsToV6Js(js)
+    case 6:
+      if (js===undefined) {
+        js = V6.toJs(V6.fromJson(json))
+      }
+      js = v6JsToV7Js(js)
+    case 7:
+      if (js===undefined) {
+        js = V7.toJs(V7.fromJson(json))
+      }
+      js = v7JsToV8Js(js)
+    case 8:
+      if (js===undefined) {
+        js = fromJsonToJs(json)
+      }
+  }
+  return js
+}
+
+
 const max = (m,l) => {
   return l.reduce((acc,val)=>Math.max(acc,val),m)
 }
@@ -44,6 +75,7 @@ const unzip3 = l => {
 export const v5JsToV6Js = (v5) => {
   const convFs = a => {
     a = Object.assign({},a)
+    a.version = 6
     delete a.nb_push
     a.content_queue = a.content_queue.map(convCq)
     const tags = {}
@@ -90,7 +122,7 @@ export const v5JsToV6Js = (v5) => {
     }
 
 
-    const addTag = (tag,id) => {
+    const addTag = (id) => (tag) => {
       if (tags[tag]) {
         if (tags[tag].includes(id) === false) {
           tags[tag].push(id)
@@ -106,7 +138,7 @@ export const v5JsToV6Js = (v5) => {
       entry.max_children_path_length = 0
       entry.sum_children_path_length = 0
       entry.parent_path_length = 0
-      entry.content.tags.forEach(addTag)
+      entry.content.tags.forEach(addTag(id))
 
       const array = unzip3(entry.children.map(convEntry))
       
@@ -136,154 +168,73 @@ export const v5JsToV6Js = (v5) => {
 
 
 
-export const v6JsToCommon67 = () => {
 
-}
-
-export const v6JsToV7Js = () => {
-
-}
-
-export const v7JsToCommon67 = () => {
-
+export const v6JsToV7Js = (v6) => {
+  const v7 = Object.assign({},v6)
+  v7.version = 7
+  return v7
 }
 
 
 
+export const v7JsToV8Js = (v7) => {
+  const v8 = Object.assign({},v7)
+  v8.version = 8
+  v8.tags_sizes = {}
+
+  const table = v8.tree.table
 
 
-export const v7JsToCommon78 = () => {
+  const sortBySize = (ids) => {
+    const compare = (a,b) => {
+      const s_a = table[a].content.size
+      const s_b = table[b].content.size
+      if (s_a > s_b) {
+        return -1
+      } else if (s_a === s_b) {
+        return 0
+      } else {
+        return 1
+      }
+    }
+    const sizes = ids.sort(compare)
+    return sizes
+  }
 
+  const filterChildren = (ids) => {
+    const getAllChildren = (id) => {
+      const children = table[id].children
+      return children.concat(children.map(getAllChildren).reduce((acc,val)=>acc.concat(val),[]))
+    }
+
+    if (ids.length <= 1) {
+      return ids
+    } else {
+      const head_id = ids[0]
+      const children_head_id = getAllChildren(head_id)
+
+      const tail = ids.slice(1)
+      const filtered_tail = tail.filter(a=>children_head_id.includes(a)===false)
+      return [head_id].concat(filterChildren(filtered_tail))
+    }
+  }
+
+  const reduceToSize = (ids) => {
+    return ids.reduce((acc,val)=>acc+table[val].content.size,0)
+  }
+  
+  for (let key in table) {
+    delete table[key].content.tags
+  }
+
+  for (let key in v8.content_queue) {
+    delete v8.content_queue[key].content.tags
+  }
+
+  for (let key in v8.tags) {
+    v8.tags_sizes[key] = reduceToSize(filterChildren(sortBySize(v8.tags[key])))
+  }
+
+  return v8
 }
 
-export const v7JsToV8Js = () => {
-
-}
-
-export const v8JsToCommon78 = () => {
-
-}
-
-
-// // v5 | v6,v7
-
-// TT.v5ToCommon = TT.v5ToCommon(Content.v5ToCommon)
-// TT.toCommon = TT.toCommon(Content.toCommon)
-// TT.fromV5 = TT.fromV5(Content.fromV5)
-// const contentQueueToCommon = (f,a) => {
-//   return a.map(e=>{
-//     const path = e.get('path')
-//     const content = e.update('content',f)
-//     return Map({
-//       path,
-//       content
-//     })
-//   })
-// }
-// const makeLastModifiedFromTreeRec = (id,table) => {
-//   let node = table.get(id)
-//   const children = node.get('children')
-//   if (children.size) {
-//     children.forEach(child_id=>{
-//       table = makeLastModifiedFromTreeRec(child_id,table)
-//     })
-//     let list = List()
-//     children.forEach(child_id=>{
-//       const child_node = table.get(child_id)
-//       list = list.concat(child_node.get('content').get('last_modified').get('list'))
-//     })
-//     let max = list.max()
-//     let min = list.min()
-//     node = node.update('content',a=>a.update('last_modified',last_modified=>{
-//       last_modified = last_modified.set('list',list)
-//       last_modified = last_modified.set('max',max)
-//       last_modified = last_modified.set('min',min)
-//       return last_modified
-//     }))
-//     table = table.set(id,node)
-//     return table
-//   } else {
-//     return table
-//   }
-// }
-// const makeLastModifiedFromTree = (tt) => {
-//   const table = tt.get('table')
-//   const root_id = tt.get('root_id')
-
-//   tt = tt.set('table', makeLastModifiedFromTreeRec(root_id,table))
-
-//   return tt
-// }
-// const makeTagsFromTree = (tt) => {
-//   let tags = Map()
-//   const insert = (id,tag) => {
-//     tags = tags.update(tag,s=>{
-//       if (s) {
-//         return s.add(id)
-//       } else {
-//         return Set([id])
-//       }
-//     })
-//   }
-//   tt.get('table').forEach((val,key) => {
-//     val.get('content').get('tags').forEach(tag=>{
-//       insert(key,tag)
-//     })
-//   })
-//   return tags
-// }
-// export const v5ToCommon = (a) => {
-//   const session_name = a.get('session_name')
-//   const content_queue = contentQueueToCommon(Content.v5ToCommon, a.get('content_queue'))
-//   const tree = TT.v5ToCommon(a.get('tree'))
-//   const tags = makeTagsFromTree(tree)
-//   const parent_path = a.get('parent_path')
-//   return Map({
-//     session_name,
-//     content_queue,
-//     tree,
-//     tags,
-//     parent_path
-//   })
-// }
-// export const toCommon = (a) => {
-//   const session_name = a.get('session_name')
-//   const content_queue = contentQueueToCommon(Content.toCommon, a.get('content_queue'))
-//   const tree = TT.toCommon(a.get('tree'))
-//   const parent_path = a.get('parent_path')
-//   const tags = a.get('tags')
-
-//   return Map({
-//     session_name,
-//     content_queue,
-//     tree,
-//     tags,
-//     parent_path
-//   })
-// }
-// export const fromV5 = (a) => {
-//   const session_name = a.get('session_name')
-//   const version = 6
-//   const content_queue = a.get('content_queue').map(a=>{
-//     return a.update('content',Content.fromV5)
-//   })
-//   const tree = TT.fromV5(a.get('tree'))
-//   const tags = makeTagsFromTree(tree)
-//   const parent_path = a.get('parent_path')
-
-//   return new Fs({
-//     session_name,
-//     version,
-//     content_queue,
-//     tree,
-//     tags,
-//     parent_path
-//   })
-// }
-
-// const fromJsonV5 = (a) => {
-//   a = fromV5(V5.fromJson(a))
-//   a = a.update('tree', makeLastModifiedFromTree)
-//   a = computeDerivatedData(a)
-//   return a
-// }

@@ -2,6 +2,8 @@
 import { Map, List, Record, Set } from 'immutable'
 import { generateRandomString } from 'random-gen'
 
+import * as Compatibility from 'compatibility'
+
 import * as Cache from 'cache'
 import * as Content from 'content'
 import * as Arbitrary from 'test/arbitrary'
@@ -110,11 +112,6 @@ export const tagsFromJs = a => {
   return a
 }
 
-export const tagsSizesFromJs = a => {
-  a = Map(a)
-  return a
-}
-
 export const tagsToJson = a => {
   a = tagsToJs(a)
   a = JSON.stringify(a)
@@ -124,6 +121,29 @@ export const tagsToJson = a => {
 export const tagsFromJson = a => {
   a = JSON.parse(a)
   a = tagsFromJs(a)
+  return a
+}
+
+
+export const arbitraryTagsSizes = () => {
+  return Arbitrary.immutableMap(
+    Arbitrary.string,
+    Arbitrary.natural
+  )
+}
+
+export const tagsSizesToJs = a => {
+  return a.toJS()
+}
+
+export const tagsSizesFromJs = a => {
+  a = Map(a)
+  return a
+}
+
+export const tagsSizesToJson = a => {
+  a = tagsSizesToJs(a)
+  a = JSON.stringify(a)
   return a
 }
 
@@ -144,6 +164,7 @@ export const arbitrary = () => {
   ans = makeTree(ans)
   ans = sortBySize(ans)
   ans = ans.set('tags',arbitraryTags())
+  ans = ans.set('tags_sizes',arbitraryTagsSizes())
   return ans
 }
 
@@ -372,28 +393,15 @@ export const sortByMaxRemainingPathLength = Cache.make((state) => {
 })
 
 export const toJson = Cache.make((state) => {
-  state = state.update('tree', TT.toJson)
-  state = state.update('content_queue', contentQueueToJson)
-  state = state.update('tags', tagsToJson)
-  state = state.update('tags_sizes', tagsToJson)
-  state = state.toJS()
+
+  state = toJs(state)
 
   return JSON.stringify(state)
 })
 export const fromJson = (json) => {
-  let state = JSON.parse(json)
-  // if (state.version === 5) {
-  //   return fromJsonV5(json)
-  // } else if (state.version === 6) {
-  //   // same structure as v7
-  // }
+  let state = Compatibility.fromAnyJsonToJs(JSON.parse,json)
 
-  state = new Fs(state)
-  state = state.update('tags', tagsFromJson)
-  state = state.update('tags_sizes', tagsSizesFromJson)
-  state = state.update('content_queue', contentQueueFromJson)
-  state = state.update('tree', TT.fromJson)
-  state = state.update('parent_path', List)
+  state = fromJs(state)
 
   return state
 }
@@ -403,13 +411,13 @@ export const toJs = (state) => {
   state = state.update('tree', TT.toJs)
   state = state.update('content_queue', contentQueueToJs)
   state = state.update('tags', tagsToJs)
-  state = state.update('tags_sizes', tagsToJs)
+  state = state.update('tags_sizes', tagsSizesToJs)
   return state.toJS()
 }
 export const fromJs = (js) => {
   let state = new Fs(js)
   state = state.update('tags', tagsFromJs)
-  state = state.update('tags_sizes', tagsFromJs)
+  state = state.update('tags_sizes', tagsSizesFromJs)
   state = state.update('content_queue', contentQueueFromJs)
   state = state.update('tree', TT.fromJs)
   state = state.update('parent_path', List)

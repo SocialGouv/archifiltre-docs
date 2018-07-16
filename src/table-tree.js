@@ -300,11 +300,13 @@ export const getIdPath = (id, tt) => {
 
 
 
-export const toStrList2 = (toStrListHeader, toStrList) => (tt) => {
+export const toStrList2 = (toStrListHeader, toStrList) => (tt, tags) => {
   const table = getTable(tt)
+
   const mapper = (entry,id) =>
     List.of('', remakePath(id, tt).slice(1).join('/'))
       .concat(toStrList(entry.get('content')))
+      .concat(tags.reduce((acc, val, i) => {return (val.has(id) ? (acc.length > 0 ? acc + ", " + i : i) : acc)}, "").toString())
   const header = List.of('', 'path').concat(toStrListHeader())
   return (
     table.map(mapper).reduce((acc,val) => acc.push(val), List.of(header))
@@ -421,46 +423,46 @@ export const getSubIdList = (id, tt) => {
 
 
 
-const entryToCommon = a => {
-  return Map({
-    name:a.get('name'),
-    content:a.get('content'),
-    children:a.get('children'),
-    parent:a.get('parent'),
-    depth:a.get('depth'),
-  })
-}
-export const v5ToCommon = (v5ToCommon) => (a) => {
-  const table = a.get('table').map(entry=>{
-    entry = entry.update('content',v5ToCommon)
-    return entryToCommon(entry)
-  })
-  const root_id = a.get('root_id')
+// const entryToCommon = a => {
+//   return Map({
+//     name:a.get('name'),
+//     content:a.get('content'),
+//     children:a.get('children'),
+//     parent:a.get('parent'),
+//     depth:a.get('depth'),
+//   })
+// }
+// export const v5ToCommon = (v5ToCommon) => (a) => {
+//   const table = a.get('table').map(entry=>{
+//     entry = entry.update('content',v5ToCommon)
+//     return entryToCommon(entry)
+//   })
+//   const root_id = a.get('root_id')
 
-  return Map({
-    table,
-    root_id,
-  })
-}
-export const toCommon = (toCommon) => (a) => {
-  a = mapContent(toCommon, a)
-  const table = a.get('table').map(entryToCommon)
-  const root_id = a.get('root_id')
+//   return Map({
+//     table,
+//     root_id,
+//   })
+// }
+// export const toCommon = (toCommon) => (a) => {
+//   a = mapContent(toCommon, a)
+//   const table = a.get('table').map(entryToCommon)
+//   const root_id = a.get('root_id')
 
-  return Map({
-    table,
-    root_id,
-  })
-}
-export const fromV5 = (fromV5) => (a) => {
-  const table = a.get('table').map(entry=>{
-    entry = entry.update('content', fromV5)
-    return new Entry(entry)
-  })
-  const root_id = a.get('root_id')
-  return new TableTree({
-    table,
-    root_id,
-  })
-}
+//   return Map({
+//     table,
+//     root_id,
+//   })
+// }
+// export const fromV5 = (fromV5) => (a) => {
+//   const table = a.get('table').map(entry=>{
+//     entry = entry.update('content', fromV5)
+//     return new Entry(entry)
+//   })
+//   const root_id = a.get('root_id')
+//   return new TableTree({
+//     table,
+//     root_id,
+//   })
+// }
 

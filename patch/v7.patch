@@ -1,0 +1,213 @@
+diff -Naur v7/src/content.js new-v7/src/content.js
+--- v7/src/content.js	2018-07-12 17:20:26.569583881 +0200
++++ new-v7/src/content.js	2018-07-12 17:47:10.921577760 +0200
+@@ -1,7 +1,7 @@
+ 
+ import { Record, List, Set, Map } from 'immutable'
+ 
+-import * as Arbitrary from 'test/arbitrary'
++import * as Arbitrary from './test/arbitrary'
+ 
+ 
+ const LastModified = Record({
+diff -Naur v7/src/file-system.js new-v7/src/file-system.js
+--- v7/src/file-system.js	2018-07-12 17:20:26.569583881 +0200
++++ new-v7/src/file-system.js	2018-07-12 17:46:12.065577985 +0200
+@@ -1,18 +1,15 @@
+ 
+ import { Map, List, Record, Set } from 'immutable'
+-import { generateRandomString } from 'random-gen'
++import { generateRandomString } from './random-gen'
+ 
+-import * as Cache from 'cache'
+-import * as Content from 'content'
+-import * as Arbitrary from 'test/arbitrary'
+-import * as Loop from 'test/loop'
+-import * as TT_ from 'table-tree'
++import * as Cache from './cache'
++import * as Content from './content'
++import * as Arbitrary from './test/arbitrary'
++import * as Loop from './test/loop'
++import * as TT_ from './table-tree'
+ const TT = Object.assign({},TT_)
+ 
+ 
+-import * as V5 from '../version/v5/src/file-system'
+-
+-
+ TT.arbitrary = TT.arbitrary(Content.update, Content.arbitrary)
+ TT.update = TT.update(Content.update)
+ const sortTTBySize = TT.sort(Content.compareSize)
+@@ -279,11 +276,6 @@
+ })
+ export const fromJson = (json) => {
+   let state = JSON.parse(json)
+-  if (state.version === 5) {
+-    return fromJsonV5(json)
+-  } else if (state.version === 6) {
+-    // same structure as v7
+-  }
+ 
+   state = new Fs(state)
+   state = state.update('tags', tagsFromJson)
+@@ -352,131 +344,3 @@
+ 
+ 
+ 
+-
+-
+-
+-
+-
+-
+-// v5 | v6,v7
+-
+-TT.v5ToCommon = TT.v5ToCommon(Content.v5ToCommon)
+-TT.toCommon = TT.toCommon(Content.toCommon)
+-TT.fromV5 = TT.fromV5(Content.fromV5)
+-const contentQueueToCommon = (f,a) => {
+-  return a.map(e=>{
+-    const path = e.get('path')
+-    const content = e.update('content',f)
+-    return Map({
+-      path,
+-      content
+-    })
+-  })
+-}
+-const makeLastModifiedFromTreeRec = (id,table) => {
+-  let node = table.get(id)
+-  const children = node.get('children')
+-  if (children.size) {
+-    children.forEach(child_id=>{
+-      table = makeLastModifiedFromTreeRec(child_id,table)
+-    })
+-    let list = List()
+-    children.forEach(child_id=>{
+-      const child_node = table.get(child_id)
+-      list = list.concat(child_node.get('content').get('last_modified').get('list'))
+-    })
+-    let max = list.max()
+-    let min = list.min()
+-    node = node.update('content',a=>a.update('last_modified',last_modified=>{
+-      last_modified = last_modified.set('list',list)
+-      last_modified = last_modified.set('max',max)
+-      last_modified = last_modified.set('min',min)
+-      return last_modified
+-    }))
+-    table = table.set(id,node)
+-    return table
+-  } else {
+-    return table
+-  }
+-}
+-const makeLastModifiedFromTree = (tt) => {
+-  const table = tt.get('table')
+-  const root_id = tt.get('root_id')
+-
+-  tt = tt.set('table', makeLastModifiedFromTreeRec(root_id,table))
+-
+-  return tt
+-}
+-const makeTagsFromTree = (tt) => {
+-  let tags = Map()
+-  const insert = (id,tag) => {
+-    tags = tags.update(tag,s=>{
+-      if (s) {
+-        return s.add(id)
+-      } else {
+-        return Set([id])
+-      }
+-    })
+-  }
+-  tt.get('table').forEach((val,key) => {
+-    val.get('content').get('tags').forEach(tag=>{
+-      insert(key,tag)
+-    })
+-  })
+-  return tags
+-}
+-export const v5ToCommon = (a) => {
+-  const session_name = a.get('session_name')
+-  const content_queue = contentQueueToCommon(Content.v5ToCommon, a.get('content_queue'))
+-  const tree = TT.v5ToCommon(a.get('tree'))
+-  const tags = makeTagsFromTree(tree)
+-  const parent_path = a.get('parent_path')
+-  return Map({
+-    session_name,
+-    content_queue,
+-    tree,
+-    tags,
+-    parent_path
+-  })
+-}
+-export const toCommon = (a) => {
+-  const session_name = a.get('session_name')
+-  const content_queue = contentQueueToCommon(Content.toCommon, a.get('content_queue'))
+-  const tree = TT.toCommon(a.get('tree'))
+-  const parent_path = a.get('parent_path')
+-  const tags = a.get('tags')
+-
+-  return Map({
+-    session_name,
+-    content_queue,
+-    tree,
+-    tags,
+-    parent_path
+-  })
+-}
+-export const fromV5 = (a) => {
+-  const session_name = a.get('session_name')
+-  const version = 6
+-  const content_queue = a.get('content_queue').map(a=>{
+-    return a.update('content',Content.fromV5)
+-  })
+-  const tree = TT.fromV5(a.get('tree'))
+-  const tags = makeTagsFromTree(tree)
+-  const parent_path = a.get('parent_path')
+-
+-  return new Fs({
+-    session_name,
+-    version,
+-    content_queue,
+-    tree,
+-    tags,
+-    parent_path
+-  })
+-}
+-
+-const fromJsonV5 = (a) => {
+-  a = fromV5(V5.fromJson(a))
+-  a = a.update('tree', makeLastModifiedFromTree)
+-  a = computeDerivatedData(a)
+-  return a
+-}
+diff -Naur v7/src/table-tree.js new-v7/src/table-tree.js
+--- v7/src/table-tree.js	2018-07-12 17:20:26.573583881 +0200
++++ new-v7/src/table-tree.js	2018-07-12 17:46:58.273577809 +0200
+@@ -1,9 +1,9 @@
+ 
+-import * as Loop from 'test/loop'
+-import * as Arbitrary from 'test/arbitrary'
+-import * as Cache from 'cache'
++import * as Loop from './test/loop'
++import * as Arbitrary from './test/arbitrary'
++import * as Cache from './cache'
+ 
+-import { generateRandomString } from 'random-gen'
++import { generateRandomString } from './random-gen'
+ 
+ import { Map, Record, List } from 'immutable'
+ 
+diff -Naur v7/src/test/arbitrary.js new-v7/src/test/arbitrary.js
+--- v7/src/test/arbitrary.js	2018-07-12 17:20:26.573583881 +0200
++++ new-v7/src/test/arbitrary.js	2018-07-12 17:46:35.145577897 +0200
+@@ -1,7 +1,7 @@
+ 
+ import { Map, List, Set } from 'immutable'
+ 
+-import { generateRandomString } from 'random-gen'
++import { generateRandomString } from '../random-gen'
+ 
+ import colors from 'colors/safe'
+ 

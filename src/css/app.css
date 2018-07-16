@@ -9,7 +9,7 @@
 }
 
 .active_button:hover {
-  -webkit-filter: brightness(85%);
+  -webkit-filter: brightness(120%);
   filter: brightness(120%);
 }
 
@@ -22,31 +22,66 @@
   margin: 0;
 }
 
-.tags div {
+.tags_bubble {
   font-weight: bold;
   display: inline-block;
   color: white;
-  background-color: rgb(10, 50, 100);
-  border-radius: 0.8em;
-  padding: 0 1em;
-  margin: 0 0.3em 0.3em 0;
-}
-
-.tags div div {
-  background: none;
-  padding: 0;
-  margin: 0 0 0 0.5em;
-}
-
-.tags_count {
-  font-weight: bold;
-  display: inline-block;
-  color: white;
-  background-color: rgb(15, 80, 150);
   border-radius: 0.8em;
   margin-right: 0.2em;
   min-width: 1.5em;
   text-align: center;
+}
+
+.tags_count {
+  background-color: rgb(15, 80, 150);
+}
+
+.tags_add {
+  -webkit-transition : filter 0.25s ease-out;
+  transition : filter 0.25s ease-out;
+  background-color: #4d9e25;
+  cursor: pointer;
+}
+
+.tags_add:hover {
+  -webkit-filter: brightness(85%);
+  filter: brightness(120%);
+}
+
+.tags_cross {
+  -webkit-transition : filter 0.25s ease-out;
+  transition : filter 0.25s ease-out;
+  cursor: pointer;
+  background-color: #e04d1c;
+  padding: 0 0.4em;
+  border-radius: 1em;
+  max-width: 0.3em;
+}
+
+.tags_cross:hover{
+  -webkit-filter: brightness(85%);
+  filter: brightness(120%);
+}
+
+.visibleonhover {
+  pointer-events: auto !important;
+}
+
+.visibleonhover:hover {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+::selection {
+  color: white;
+  background-color: rgb(10, 50, 100);
 }
 
 ::-webkit-scrollbar-track
@@ -81,8 +116,6 @@
   cursor: text;
 }
 
-.edit_hover_container {
-}
 
 .editable_text:focus {
   border: none;

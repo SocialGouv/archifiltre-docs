@@ -21,66 +21,15 @@ describe('file-system', function() {
     return [(V6.toJs(V6.fromJs(Compatibility.v5JsToV6Js(a)))), Compatibility.v5JsToV6Js(a)]
   })
 
-  // it('test', ()=>{
+  Loop.equal('v6JsToV7Js', () => {
+    const a = V6.toJs(V6.arbitrary())
+    return [(V7.toJs(V7.fromJs(Compatibility.v6JsToV7Js(a)))), Compatibility.v6JsToV7Js(a)]
+  })
 
-  //   // const b = Compatibility.v6JsToCommon56(V6.toJs(V6.fromJs(Compatibility.v5JsToV6Js(a))))
-  //   // const c = Compatibility.v5JsToCommon56(a)
-
-
-  //   const b = (V6.toJs(V6.fromJs(Compatibility.v5JsToV6Js(a))))
-  //   const c = Compatibility.v5JsToV6Js(a)    
-  //   b.should.deep.equal(c)
-  // })
-
-  // Loop.immuEqual('(qeFromJson . qeToJson) a', () => {
-  //   const a = M.arbitraryQe()
-  //   return [M.qeFromJson(M.qeToJson(a)), a]
-  // })
-
-  // Loop.immuEqual('(qeFromJs . qeToJs) a', () => {
-  //   const a = M.arbitraryQe()
-  //   return [M.qeFromJs(M.qeToJs(a)), a]
-  // })
-
-  // Loop.immuEqual('(contentQueueFromJson . contentQueueToJson) a', () => {
-  //   const a = M.arbitraryContentQueue()
-  //   return [M.contentQueueFromJson(M.contentQueueToJson(a)), a]
-  // })
-
-  // Loop.immuEqual('(contentQueueFromJs . contentQueueToJs) a', () => {
-  //   const a = M.arbitraryContentQueue()
-  //   return [M.contentQueueFromJs(M.contentQueueToJs(a)), a]
-  // })
-
-  // Loop.immuEqual('(tagsFromJson . tagsToJson) a', () => {
-  //   const a = M.arbitraryTags()
-  //   return [M.tagsFromJson(M.tagsToJson(a)), a]
-  // })
-
-  // Loop.immuEqual('(tagsFromJs . tagsToJs) a', () => {
-  //   const a = M.arbitraryTags()
-  //   return [M.tagsFromJs(M.tagsToJs(a)), a]
-  // })
-
-
-
-
-  // Loop.immuEqual('(fromJson . toJson) a', () => {
-  //   const a = M.arbitrary()
-  //   return [M.fromJson(M.toJson(a)), a]
-  // })
-
-  // Loop.immuEqual('(fromJs . toJs) a', () => {
-  //   const a = M.arbitrary()
-  //   return [M.fromJs(M.toJs(a)), a]
-  // })
-
-
-
-  // Loop.immuEqual('(toCommon . fromV5) a === v5ToCommon a', () => {
-  //   const a = V5.arbitrary()
-  //   return [M.toCommon(M.fromV5(a)), M.v5ToCommon(a)]
-  // })
+  Loop.equal('v7JsToV8Js', () => {
+    const a = V7.toJs(V7.arbitrary())
+    return [(V8.toJs(V8.fromJs(Compatibility.v7JsToV8Js(a)))), Compatibility.v7JsToV8Js(a)]
+  })
 
 
 })

@@ -10,10 +10,10 @@ import { tr } from 'dict'
 
 
 const Presentational = props => {
-  const name = makeNameWithExt(props.getSessionName(),'json')
+  const name = () => makeNameWithExt(props.getSessionName(),'json')
   return mkB(
     ()=>{
-      save(name, props.getJson())
+      save(name(), props.getJson())
     },
     tr('Save'),
     true

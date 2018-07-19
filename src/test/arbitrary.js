@@ -34,7 +34,7 @@ export const index = () => {
 }
 
 
-export const array = (arbitrary) => {
+export const arrayWithIndex = (index) => (arbitrary) => {
   let arr = []
   const nb = index()
   for (let i = nb - 1; i >= 0; i--) {
@@ -42,6 +42,8 @@ export const array = (arbitrary) => {
   }
   return arr
 }
+
+export const array = arrayWithIndex(index)
 
 export const immutableList = (arbitrary) =>
   List(array(arbitrary))

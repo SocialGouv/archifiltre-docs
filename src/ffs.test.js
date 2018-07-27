@@ -12,19 +12,24 @@ describe('ffs', function() {
     return [M.sortOrigin(M.ffsInv(M.ffs(a))), M.sortOrigin(a)]
   })
 
-  Loop.equal('(fromJs . toJs) a', () => {
+  Loop.equal('(fromSaveJs . toSaveJs) a', () => {
     const a = M.ffs(M.arbitraryOrigin())
-    return [M.fromJs(M.toJs(a)).toJS(), a.toJS()]
+    return [M.fromSaveJs(M.toSaveJs(a)).toJS(), a.toJS()]
   })
 
-  Loop.equal('(ffsInv . fromJs . toJs . ffs) a', () => {
+  Loop.equal('(ffsInv . fromSaveJs . toSaveJs . ffs) a', () => {
     const a = M.arbitraryOrigin()
-    return [M.sortOrigin(M.ffsInv(M.fromJs(M.toJs(M.ffs(a))))), M.sortOrigin(a)]
+    return [M.sortOrigin(M.ffsInv(M.fromSaveJs(M.toSaveJs(M.ffs(a))))), M.sortOrigin(a)]
   })
 
-  Loop.equal('(ffsInv . fromJs . toJs . computeDerived . ffs) a', () => {
+  Loop.equal('(ffsInv . fromSaveJs . toSaveJs . computeDerived . ffs) a', () => {
     const a = M.arbitraryOrigin()
-    return [M.sortOrigin(M.ffsInv(M.fromJs(M.toJs(M.computeDerived(M.ffs(a)))))), M.sortOrigin(a)]
+    return [M.sortOrigin(M.ffsInv(M.fromSaveJs(M.toSaveJs(M.computeDerived(M.ffs(a)))))), M.sortOrigin(a)]
+  })
+
+  Loop.equal('(ffsInv . fromFullJs . toFullJs . computeDerived . ffs) a', () => {
+    const a = M.arbitraryOrigin()
+    return [M.sortOrigin(M.ffsInv(M.fromFullJs(M.toFullJs(M.computeDerived(M.ffs(a)))))), M.sortOrigin(a)]
   })
 
   it('simple derived data test', () => {

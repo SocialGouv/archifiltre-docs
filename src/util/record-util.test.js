@@ -16,9 +16,9 @@ describe('record-util', function() {
 
   it('compose : a . empty === empty . a', () => {
     const a = M.createFactory(
-      {a:1,b:2,},
+      {a:1,b:2},
       {toJs:a=>{a.b*=2;return a},fromJs:a=>{a.b*=2;return a}}
-    )()
+    )({a:10,b:20})
     const empty = M.emptyFactory()
 
     testEquality(M.compose(a,empty), a)
@@ -30,15 +30,15 @@ describe('record-util', function() {
     const a = M.createFactory(
       {a:1,b:2,},
       {toJs:a=>{a.b*=2;return a},fromJs:a=>{a.b*=2;return a}}
-    )()
+    )({a:10,b:20})
     const b = M.createFactory(
       {o:'tss',em:79,a:9},
       {toJs:a=>a,fromJs:a=>a}
-    )()
+    )({o:'tsstss',em:0,a:1})
     const c = M.createFactory(
       {t:0},
-      {toJs:a=>a,fromJs:a=>a}
-    )()
+      {toJs:a=>{return {t:'sautiensrautiena'}},fromJs:a=>a}
+    )({t:3})
 
     testEquality(M.compose(a, M.compose(b, c)), M.compose(M.compose(a, b), c))
   })

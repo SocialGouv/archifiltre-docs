@@ -1,10 +1,12 @@
+import * as Arbitrary from 'test/arbitrary'
+import * as Loop from 'test/loop'
 
 import { generateRandomString } from 'random-gen'
 import * as RecordUtil from 'util/record-util'
 
 import { List, Map, Set } from 'immutable'
 
-const v_tag = RecordUtil.createFactory({
+const tagFactory = RecordUtil.createFactory({
   name:'',
   ff_ids:Set(),
 },{
@@ -19,7 +21,7 @@ const v_tag = RecordUtil.createFactory({
 })
 
 
-const v_derived = RecordUtil.createFactory({
+const derivedFactory = RecordUtil.createFactory({
   size:0,
 },{
   toJs: a => a,
@@ -29,7 +31,7 @@ const v_derived = RecordUtil.createFactory({
 
 
 
-export const create = RecordUtil.composeFactory(v_derived, v_tag)
+export const create = tagFactory
 
 const makeId = () => generateRandomString(40)
 
@@ -55,12 +57,12 @@ const insert = (id,tag,tags) => {
 export const push = (tag,tags) => tags.set(makeId(), tag)
 
 const computeDerived = (ffs,tags) => {
-  tags = tags.map(v_tag)
+  tags = tags.map(tagFactory)
 
   const sortBySize = (ids) => {
     const compare = (a,b) => {
-      const s_a = ffs[a].get('size')
-      const s_b = ffs[b].get('size')
+      const s_a = ffs.get(a).get('size')
+      const s_b = ffs.get(b).get('size')
       if (s_a > s_b) {
         return -1
       } else if (s_a === s_b) {
@@ -75,7 +77,7 @@ const computeDerived = (ffs,tags) => {
 
   const filterChildren = (ids) => {
     const getAllChildren = (id) => {
-      const children = ffs[id].get('children')
+      const children = ffs.get(id).get('children')
       return children.concat(children.map(getAllChildren).reduce((acc,val)=>acc.concat(val),List()))
     }
 
@@ -87,19 +89,21 @@ const computeDerived = (ffs,tags) => {
 
       const tail = ids.slice(1)
       const filtered_tail = tail.filter(a=>children_head_id.includes(a)===false)
-      return List(head_id).concat(filterChildren(filtered_tail))
+
+      return List.of(head_id).concat(filterChildren(filtered_tail))
     }
   }
 
   const reduceToSize = (ids) => {
-    return ids.reduce((acc,val)=>acc+ffs[val].get('size'),0)
+    return ids.reduce((acc,val)=>acc+ffs.get(val).get('size'),0)
   }
 
   tags = tags.map((tag) => {
-    const ids = tag.get('ff_ids')
-    tag = RecordUtil.compose(v_derived({
+    const ids = List(tag.get('ff_ids'))
+
+    tag = RecordUtil.compose(derivedFactory({
       size: reduceToSize(filterChildren(sortBySize(ids))),
-    }, tag))
+    }), tag)
 
     return tag
   })
@@ -109,6 +113,7 @@ const computeDerived = (ffs,tags) => {
 
 export const update = (ffs,tags) => {
   tags = tags.reduce((acc,val,id)=>insert(id,val,acc),empty())
+  tags = tags.filter((val)=>val.get('ff_ids').size !== 0)
   tags = computeDerived(ffs,tags)
 
   return tags
@@ -116,14 +121,22 @@ export const update = (ffs,tags) => {
 
 
 
-export const toSaveJs = a => {
-  a = a.map(v_tag.toJs)
-  a = a.toObject()
+const toAndFromJs = (factory) => [
+  a => {
+    a = a.map(factory.toJs)
+    a = a.toObject()
 
-  return a
-}
+    return a
+  },
+  a => {
+    a = Map(a)
+    a = a.map(factory.fromJs)
 
-export const fromSaveJs = a => {
-  a = Map(a)
-  a = a.map()
-}
+    return a
+  }
+]
+
+export const [toJs,fromJs] = toAndFromJs(
+  tagFactory
+)
+

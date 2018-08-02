@@ -3,33 +3,36 @@ const should = chai.should()
 
 import * as Loop from 'test/loop'
 import * as Arbitrary from 'test/arbitrary'
-import * as M from 'ffs'
+import * as M from 'files-and-folders'
+import * as Origin from 'origin'
 
-describe('ffs', function() {
+describe('files-and-folders', function() {
 
-  Loop.equal('(ffsInv . ffs) a', () => {
-    const a = M.arbitraryOrigin()
-    return [M.sortOrigin(M.ffsInv(M.ffs(a))), M.sortOrigin(a)]
+  Loop.equal('(ffInv . ff) a', () => {
+    const a = Origin.arbitrary()
+    return [Origin.sort(M.ffInv(M.ff(a))), Origin.sort(a)]
   })
 
-  Loop.equal('(fromSaveJs . toSaveJs) a', () => {
-    const a = M.ffs(M.arbitraryOrigin())
-    return [M.fromSaveJs(M.toSaveJs(a)).toJS(), a.toJS()]
+  Loop.equal('(fromJs . toJs) a', () => {
+    const a = M.computeDerived(M.arbitrary())
+    return [M.fromJs(M.toJs(a)).toJS(), a.toJS()]
   })
 
-  Loop.equal('(ffsInv . fromSaveJs . toSaveJs . ffs) a', () => {
-    const a = M.arbitraryOrigin()
-    return [M.sortOrigin(M.ffsInv(M.fromSaveJs(M.toSaveJs(M.ffs(a))))), M.sortOrigin(a)]
+  Loop.equal('(ffInv . fromJs . toJs . computeDerived . ff) a', () => {
+    const a = Origin.arbitrary()
+    return [Origin.sort(M.ffInv(M.fromJs(M.toJs(M.computeDerived(M.ff(a)))))), Origin.sort(a)]
   })
 
-  Loop.equal('(ffsInv . fromSaveJs . toSaveJs . computeDerived . ffs) a', () => {
-    const a = M.arbitraryOrigin()
-    return [M.sortOrigin(M.ffsInv(M.fromSaveJs(M.toSaveJs(M.computeDerived(M.ffs(a)))))), M.sortOrigin(a)]
+  Loop.equal('merge empty a === merge a empty', () => {
+    const a = M.arbitrary()
+    return [M.merge(M.empty(),a).toJS(), M.merge(a,M.empty()).toJS()]
   })
 
-  Loop.equal('(ffsInv . fromFullJs . toFullJs . computeDerived . ffs) a', () => {
-    const a = M.arbitraryOrigin()
-    return [M.sortOrigin(M.ffsInv(M.fromFullJs(M.toFullJs(M.computeDerived(M.ffs(a)))))), M.sortOrigin(a)]
+  Loop.equal('merge (merge a b) c === merge a (merge b c)', () => {
+    const a = M.arbitrary()
+    const b = M.arbitrary()
+    const c = M.arbitrary()
+    return [M.merge(M.merge(a,b),c).toJS(), M.merge(a,M.merge(b,c)).toJS()]
   })
 
   it('simple derived data test', () => {
@@ -40,7 +43,7 @@ describe('ffs', function() {
       [{size:4,lastModified:2},'/a/e/g'],
       [{size:5,lastModified:1},'/h'],
     ]
-    const data = M.ffs(origin)
+    const data = M.ff(origin)
     const derived = M.computeDerived(data)
 
     const test = (a,updater,predicates) => {

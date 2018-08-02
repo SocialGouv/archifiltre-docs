@@ -53,8 +53,8 @@ describe('record-util', function() {
       {a:10,c:20,d:30},
       {toJs:a=>{a.d*=2;return a},fromJs:a=>{a.d*=2;return a}}
     )
-    const c = M.compose(b(),a())
-    
+    const c = M.compose(b(),a().set('a',12))
+
     c.toObject().should.deep.equal({
       a:10,
       b:2,

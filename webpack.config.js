@@ -11,8 +11,6 @@ module.exports = {
     react: ['react', 'react-dom'],
     redux: ['redux', 'react-redux'],
     immutable: ['immutable'],
-
-    stats: './src/stats.js'
   },
 
   plugins: [
@@ -22,17 +20,17 @@ module.exports = {
       filename: 'index.html',
       template: 'static/index.html',
       excludeChunks: ['stats']
-    }),
-    new HtmlWebpackPlugin({
-      inject: 'head',
-      filename: 'stats.html',
-      template: 'static/stats.html',
-      excludeChunks: ['app']
-    }),
-    new workboxPlugin.InjectManifest({
-      swSrc: 'src/sw.js',
-      swDest: 'sw.js',
     })
+    // new HtmlWebpackPlugin({
+    //   inject: 'head',
+    //   filename: 'stats.html',
+    //   template: 'static/stats.html',
+    //   excludeChunks: ['app']
+    // }),
+    // new workboxPlugin.InjectManifest({
+    //   swSrc: 'src/sw.js',
+    //   swDest: 'sw.js',
+    // })
   ],
 
   devServer: {

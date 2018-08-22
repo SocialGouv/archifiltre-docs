@@ -1,10 +1,12 @@
-repo = https://github.com/jeanbaptisteassouad/cheapExp.git
 image_name = cheap-exp
 pwd = $(shell pwd)
 
+.PHONY: electron
+
+
 all: devServer
 
-runProd : prod
+runProd: prod
 	sudo docker run \
 		--rm \
 		--network=host \
@@ -39,6 +41,8 @@ cleanContainer:
 
 
 
+
+
 TP = './src/**/*.test.js'
 
 test: dev
@@ -48,14 +52,18 @@ test: dev
 		$(image_name):dev \
 		npm test $(TP)
 
-# Use this to make patchs :
-# diff -Naur v5 new-v5 > v5.patch
-fetchAndPatch:
-	rm -fr version
-	git clone -b v5 $(repo) version/v5
-	git clone -b v6 $(repo) version/v6
-	git clone -b v7 $(repo) version/v7
-	cp patch/* version
-	patch -p 0 -d version -i v5.patch
-	patch -p 0 -d version -i v6.patch
-	patch -f -p 0 -d version -i v7.patch
+
+
+
+
+
+electron: dev
+	rm -fr ./electron/dist
+	sudo docker run -d --name=$(image_name)_electron $(image_name):dev sh
+	sudo docker cp $(image_name)_electron:/usr/src/app/dist ./electron
+	sudo docker container stop $(image_name)_electron
+	sudo docker container rm $(image_name)_electron
+	sudo chmod -R 777 ./electron/dist
+	npm --prefix ./electron install
+	npm --prefix ./electron run-script electron
+

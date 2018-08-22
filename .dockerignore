@@ -4,3 +4,4 @@ Dockerfile
 .gitignore
 LICENSE
 .git
+electron

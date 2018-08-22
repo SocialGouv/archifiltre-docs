@@ -1,0 +1,24 @@
+{
+  "name": "cheapExp",
+  "version": "1.0.0",
+  "description": "Explorer plus plus for archive",
+  "main": "./index.js",
+  "scripts": {
+    "electron": "electron .",
+    "start": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeanbaptisteassouad/cheapExp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeanbaptisteassouad/cheapExp/issues"
+  },
+  "homepage": "https://github.com/jeanbaptisteassouad/cheapExp#readme",
+  "devDependencies": {
+    "electron": "2.0.5"
+  },
+  "dependencies": {}
+}

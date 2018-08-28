@@ -15,7 +15,7 @@ const Header = props => {
         </h4>
       </div>
       <div className='cell small-8'>
-        <Dashboard />
+        <Dashboard api={props.api}/>
       </div>
       <div className='cell auto'></div>
     </div>

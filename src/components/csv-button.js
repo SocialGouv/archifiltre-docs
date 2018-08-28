@@ -1,29 +1,26 @@
 import React from 'react'
-// import { connect } from 'react-redux'
 
 import { mkB } from 'components/button'
-
-// import { selectDatabase } from 'reducers/root-reducer'
 
 import * as Csv from 'csv'
 import { save, makeNameWithExt } from 'save'
 import { tr } from 'dict'
 
 
-export default CsvButton = props => {
-  // let database = selectDatabase(state)
-  // return {
-  //   getStrList2: database.toStrList2,
-  //   getSessionName: database.getSessionName,
-  // }
+const CsvButton = props => {
+  const api = props.api
+  const database = api.database
+  const getStrList2 = database.toStrList2
+  const getSessionName = database.getSessionName
 
-  const name = () => makeNameWithExt(props.getSessionName(),'csv')
+  const name = () => makeNameWithExt(getSessionName(),'csv')
   return mkB(
     ()=>{
       console.log('to csv')
-      save(name(), Csv.toStr(props.getStrList2()))
+      save(name(), Csv.toStr(getStrList2()))
     },
     tr('Export'),
     true)
 }
 
+export default CsvButton

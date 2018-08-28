@@ -30,9 +30,12 @@ const finishedToLoadFiles = () => state => {
   return state
 }
 
+const reInit = () => state => initialState()
+
 const writer = {
   startToLoadFiles,
   finishedToLoadFiles,
+  reInit,
 }
 
 export default RealEstate.create({

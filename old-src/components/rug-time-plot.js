@@ -36,15 +36,15 @@ class RugTimePlot extends React.PureComponent {
     const svg_height = this.props.svg_height
 
     const root_id = this.props.root_id
-    const getByID = this.props.getByID
+    const getById = this.props.getById
 
-    const root_node = getByID(root_id)
+    const root_node = getById(root_id)
     const last_modified = root_node.get('content').get('last_modified')
     const max_time = last_modified.get('max')
     const min_time = last_modified.get('min')
 
     const zeroToOne = (id) => {
-      const node = getByID(id)
+      const node = getById(id)
       const last_modified = node.get('content').get('last_modified')
       const time = last_modified.get('max')
       return (time - min_time) / (max_time - min_time)
@@ -110,7 +110,7 @@ class Presentational extends React.PureComponent {
     const svg_height = 5
 
     const root_id = this.props.root_id
-    const getByID = this.props.getByID
+    const getById = this.props.getById
     const leaf_id_array = this.props.leaf_id_array
 
     return (
@@ -136,7 +136,7 @@ class Presentational extends React.PureComponent {
             svg_height={svg_height}
 
             root_id={root_id}
-            getByID={getByID}
+            getById={getById}
             leaf_id_array={leaf_id_array}
           />
           <MouseCursor 
@@ -157,7 +157,7 @@ const mapStateToProps = state => {
 
 
   return {
-    getByID: database.getByID,
+    getById: database.getById,
     root_id: database.rootId(),
     leaf_id_array: database.getLeafIdArray(),
   }

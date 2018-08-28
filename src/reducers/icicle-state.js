@@ -6,7 +6,7 @@ const State = Record({
   hover_seq:[],
   lock_seq:[],
   dims: {},
-  tag_to_highlight: '',
+  tag_id_to_highlight: '',
   display_root:[],
   change_skin:false,
 })
@@ -15,14 +15,31 @@ const property_name = 'icicle_state'
 
 const initialState = () => new State()
 
+
+const hover_sequence = () => state => state.get('hover_seq')
+const lock_sequence = () => state => state.get('lock_seq')
+
+const isLocked = () => state => state.get('lock_seq').length > 0
+
+const sequence = () => state => {
+  let sequence
+  if (isLocked()(state)) {
+    sequence = lock_sequence()(state)
+  } else {
+    sequence = hover_sequence()(state)
+  }
+  return sequence
+}
+
 const reader = {
-  hover_sequence: () => state => state.get('hover_seq'),
-  lock_sequence: () => state => state.get('lock_seq'),
+  hover_sequence,
+  lock_sequence,
+  sequence,
   hover_dims: () => state => state.get('dims'),
-  tag_to_highlight: () => state => state.get('tag_to_highlight'),
+  tagIdToHighlight: () => state => state.get('tag_id_to_highlight'),
   display_root: () => state => state.get('display_root'),
   isFocused: () => state => state.get('hover_seq').length > 0,
-  isLocked: () => state => state.get('lock_seq').length > 0,
+  isLocked,
   isZoomed: () => state => state.get('display_root').length > 0,
   changeSkin: () => state => state.get('change_skin'),
 }
@@ -72,13 +89,13 @@ const clearSelection = () => {
   }
 }
 
-const setTagToHighlight = (tag) => state => {
-  state = state.update('tag_to_highlight',()=>tag)
+const setTagIdToHighlight = (tag) => state => {
+  state = state.update('tag_id_to_highlight',()=>tag)
   return state
 }
 
-const setNoTagToHighlight = () => state => {
-  state = state.update('tag_to_highlight',()=>'')
+const setNoTagIdToHighlight = () => state => {
+  state = state.update('tag_id_to_highlight',()=>'')
   return state
 }
 
@@ -87,6 +104,8 @@ const toggleChangeSkin = () => state => {
   return state
 }
 
+const reInit = () => state => initialState()
+
 const writer = {
   setFocus,
   setNoFocus,
@@ -94,9 +113,10 @@ const writer = {
   unlock,
   setDisplayRoot,
   setNoDisplayRoot,
-  setTagToHighlight,
-  setNoTagToHighlight,
+  setTagIdToHighlight,
+  setNoTagIdToHighlight,
   toggleChangeSkin,
+  reInit,
 }
 
 export default RealEstate.create({

@@ -66,7 +66,6 @@ const writer = {
 }
 
 export default RealEstate.createHigherOrder({
-  property_name:'undo',
   initialState,
   get,
   set,

@@ -50,7 +50,6 @@ describe('real-estate', function() {
   })
 
   const higherOrder = M.createHigherOrder({
-    property_name:'ho',
     initialState:s=>{return{origin:s,current:s}},
     get:s=>s.current,
     set:(a,s)=>ObjectUtil.compose({current:a},s),
@@ -93,7 +92,7 @@ describe('real-estate', function() {
   })
 
   it('higher order test', () => {
-    const {initialState,api} = M.compile(higherOrder(M.compose(state2,state1)))
+    const {initialState,api} = M.compile(higherOrder('ho',M.compose(state2,state1)))
 
     let store = initialState()
 

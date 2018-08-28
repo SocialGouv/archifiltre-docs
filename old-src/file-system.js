@@ -175,8 +175,8 @@ export const empty = () => {
   return res
 }
 
-export const size_files = (state) => state.get('content_queue').size
-export const size_overall = (state) => state.get('tree').get('table').size - 1
+export const file_count = (state) => state.get('content_queue').size
+export const overall_count = (state) => state.get('tree').get('table').size - 1
 
 export const depth = (state) => TT.depth(state.get('tree'))
 
@@ -187,7 +187,7 @@ export const parentPath = (state) => {
 const getVersion = (state) => state.get('version')
 const setVersion = (a,state) => state.set('version',a)
 
-export const getByID = (id, state) => TT.getEntryById(id, state.get('tree'))
+export const getById = (id, state) => TT.getEntryById(id, state.get('tree'))
 export const setByID = (id, entry, state) =>
   state.update('tree',a=>TT.setEntryById(id, entry, a))
 export const updateByID = (id, f, state) =>
@@ -206,7 +206,7 @@ export const addTagged = (state, tag, id) => {
 
   // new_state = new_state.update('tags_sizes', a=>{
   //   return a.update(tag, b=>{
-  //     let size = getByID(id, state).get('content').get('size')
+  //     let size = getById(id, state).get('content').get('size')
   //     if (b === undefined) return size;
   //     else return b + size;
   //   })
@@ -227,7 +227,7 @@ export const deleteTagged = (state, tag, id) => {
     })
 
     // state = state.update('tags_sizes', a=>{
-    //   let new_tags = a.update(tag, b=>b - getByID(id, state).get('content').get('size'))
+    //   let new_tags = a.update(tag, b=>b - getById(id, state).get('content').get('size'))
     //   if(new_tags.get(tag) === 0)
     //     return a.delete(tag);
     //   else
@@ -336,7 +336,7 @@ export const contentQueueFromJs = (a) => {
 }
 
 export const volume = (state) => {
-  return Content.getSize(getByID(rootId(state), state).get('content'))
+  return Content.getSize(getById(rootId(state), state).get('content'))
 }
 
 export const rootId = (state) => TT.getRootId(state.get('tree'))
@@ -451,7 +451,7 @@ export const fromLegacyCsv = (csv) => {
   return ans
 }
 
-export const getIDPath = (id, state) => {
+export const getIdPath = (id, state) => {
   return TT.getIdPath(id, state.get('tree'))
 }
 

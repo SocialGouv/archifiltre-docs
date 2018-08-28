@@ -3,30 +3,41 @@ import React from 'react'
 
 import ReactDOM from 'react-dom'
 
-// import MainSpace from 'components/main-space'
-// import Header from 'components/header'
+import ErrorBoundary from 'components/error-boundary'
+import MainSpace from 'components/main-space'
+import Header from 'components/header'
 
 import 'css/app.css'
 
-// import ErrorBoundary from 'components/error-boundary'
-
 import { generateRandomString } from 'random-gen'
 
-import appState from 'reducers/app-state'
-import icicleState from 'reducers/icicle-state'
-import reportState from 'reducers/report-state'
-import tagListState from 'reducers/tag-list-state'
+import store from 'reducers/store'
+
+// import Analytics from 'electron-ga'
+
+// const analytics = new Analytics('UA-115293619-2')
+
+// analytics.send('pageview',{
+//   dh:'https://archifiltre.electron/',
+//   dp:'/electron/v9',
+//   dt:'archifiltre',
+// })
 
 
-const Baba = tagListState(reportState(icicleState(appState((props) => {
+const Store = store((props) => {
   console.log(props)
   window.props = props
   return (
-    <div>
-      tucetsauicertcuiaretcuitecuitrecui tuic ecuier tcuietcuiaretcuiacetauicuitaecautricetraui
+    <div className='grid-y grid-frame'>
+      <div className='cell'>
+        <Header api={props.api}/>
+      </div>
+      <div className='cell auto'>
+        <MainSpace api={props.api}/>
+      </div>
     </div>
   )
-}))))
+})
 
 const app = () => {
   let root_div = document.createElement('div')
@@ -38,21 +49,16 @@ const app = () => {
 
 
   ReactDOM.render(
-    <Baba/>,
+    <ErrorBoundary>
+      <Store/>
+    </ErrorBoundary>
+    ,
     root_div
   )
-
-  // ReactDOM.render(
-  //   <div className='grid-y grid-frame'>
-  //     <div className='cell'>
-  //       <Header/>
-  //     </div>
-  //     <div className='cell auto'>
-  //       <MainSpace/>
-  //     </div>
-  //   </div>,
-  //   root_div
-  // )
 }
 
 window.onload = app
+
+document.ondragover = document.ondrop = (ev) => {
+  ev.preventDefault()
+}

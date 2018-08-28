@@ -1,16 +1,8 @@
 import React from 'react'
-// import { connect } from 'react-redux'
-// import { selectAppState, selectDatabase } from 'reducers/root-reducer'
-// import { commit } from 'reducers/root-reducer'
 
-// import { setSessionName } from 'reducers/database'
+import * as ObjectUtil from 'util/object-util'
 
-
-
-
-
-
-// import { octet2HumanReadableFormat } from 'components/ruler'
+import { octet2HumanReadableFormat } from 'components/ruler'
 
 import { RIEInput } from 'riek'
 
@@ -26,39 +18,7 @@ import { edit_hover_container, edit_hover_pencil, editable_text, session_name} f
 import { tr } from 'dict'
 
 
-const DashBoard = props => {
-
-  let app_state = selectAppState(state)
-  let database = selectDatabase(state)
-  const finished = app_state.isFinished()
-  let nb_files = 0
-  let nb_folders = 0
-  let volume = 0
-  if (finished) {
-    nb_files = database.size_files()
-    nb_folders = database.size_overall() - database.size_files()
-    volume = database.volume()
-  }
-  // return {
-  //   started: app_state.isStarted(),
-  //   finished,
-  //   nb_files,
-  //   nb_folders,
-  //   volume,
-  //   session_name: database.getSessionName()
-  // }
-  
-
-  const onChangeSessionName = (prop_name) => (n) => {
-    if(n[prop_name].length > 0){
-      dispatch(setSessionName(n[prop_name]))
-      dispatch(commit())
-    }
-  }
-  // return {
-  //   onChangeSessionName
-  // }
-
+const Presentational = props => {
 
   let session_info_cell, ctrlz_cell, csv_button_cell, save_button_cell, reinit_button_cell;
 
@@ -76,7 +36,7 @@ const DashBoard = props => {
       <div className='cell small-3' style={session_info_cell_style}>
           <span className={edit_hover_container} style={margin_padding_compensate}>
             <RIEInput
-              value={props.session_name}
+              value={props.sessionName()}
               change={props.onChangeSessionName('new_session_name')}
               propName='new_session_name'
               className={session_name + " " + editable_text}
@@ -97,7 +57,7 @@ const DashBoard = props => {
     csv_button_cell = (
       <div className='cell small-2'>
         <TextAlignCenter>
-          <ToCsvButton/>
+          <ToCsvButton api={props.api}/>
         </TextAlignCenter>
       </div>
     );
@@ -105,7 +65,7 @@ const DashBoard = props => {
     save_button_cell = (
       <div className='cell small-2'>
         <TextAlignCenter>
-          <SaveButton/>
+          <SaveButton api={props.api}/>
         </TextAlignCenter>
       </div>
     );
@@ -113,7 +73,7 @@ const DashBoard = props => {
     reinit_button_cell = (
       <div className='cell small-2'>
         <TextAlignCenter>
-          <ReinitButton/>
+          <ReinitButton api={props.api}/>
         </TextAlignCenter>
       </div>
     );
@@ -128,7 +88,7 @@ const DashBoard = props => {
   if(props.started === props.finished){
     ctrlz_cell = (
       <div className='cell small-2'>
-        <CtrlZ visible={true}/>
+        <CtrlZ visible={true} api={props.api}/>
       </div>
     );
   }
@@ -151,4 +111,39 @@ const DashBoard = props => {
  
 }
 
-export default DashBoard
+
+export default (props) => {
+  const api = props.api
+  const app_state = api.app_state
+  const database = api.database
+  const finished = app_state.isFinished()
+
+  let nb_files = 0
+  let nb_folders = 0
+  let volume = 0
+  if (finished) {
+    nb_files = database.fileCount()
+    nb_folders = database.overallCount() - database.fileCount()
+    volume = database.volume()
+  }
+  
+  const onChangeSessionName = (prop_name) => (n) => {
+    if(n[prop_name].length > 0){
+      database.setSessionName(n[prop_name])
+      api.undo.commit()
+    }
+  }
+
+  props = ObjectUtil.compose({
+    started: app_state.isStarted(),
+    finished,
+    nb_files,
+    nb_folders,
+    volume,
+    sessionName: ()=>database.getSessionName(),
+    onChangeSessionName,
+  },props)
+
+  return (<Presentational {...props}/>)
+}
+

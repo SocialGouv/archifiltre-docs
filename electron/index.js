@@ -12,7 +12,7 @@ let win
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1200,
+    width: 1400,
     height: 600,
     webPreferences: {
       nodeIntegrationInWorker: true

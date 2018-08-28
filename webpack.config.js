@@ -33,6 +33,8 @@ module.exports = {
     // })
   ],
 
+  target:'electron-renderer',
+
   devServer: {
     contentBase: './dist',
     https: true,

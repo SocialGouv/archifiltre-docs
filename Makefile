@@ -58,7 +58,7 @@ test: dev
 
 
 electron: dev
-	rm -fr ./electron/dist
+	sudo rm -fr ./electron/dist
 	sudo docker run -d --name=$(image_name)_electron $(image_name):dev sh
 	sudo docker cp $(image_name)_electron:/usr/src/app/dist ./electron
 	sudo docker container stop $(image_name)_electron

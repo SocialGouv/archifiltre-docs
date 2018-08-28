@@ -44,12 +44,15 @@ const setCandidateComments = (comments) => state => {
   return state
 }
 
+const reInit = () => state => initialState()
+
 const writer = {
   startEditingTags,
   stopEditingTags,
   startEditingComments,
   stopEditingComments,
   setCandidateComments,
+  reInit,
 }
 
 export default RealEstate.create({

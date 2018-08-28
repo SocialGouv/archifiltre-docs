@@ -29,7 +29,7 @@ const btr_style = {
 const Presentational = props => {
 
   const fWidth = id => {
-    const node = props.getByID(id)
+    const node = props.getById(id)
     return node.get('content').get('size')
   }
 
@@ -43,12 +43,12 @@ const Presentational = props => {
     return max_height/props.max_depth
   }
 
-  const root_node = props.getByID(props.root_id)
+  const root_node = props.getById(props.root_id)
   const last_modified = root_node.get('content').get('last_modified')
   const max_time = last_modified.get('max')
   const min_time = last_modified.get('min')
   const zeroToOne = (id) => {
-    const node = props.getByID(id)
+    const node = props.getById(id)
     const last_modified = node.get('content').get('last_modified')
     const time = last_modified.get('average')
     return (time - min_time) / (max_time - min_time)
@@ -63,7 +63,7 @@ const Presentational = props => {
     )
 
 
-    const node = props.getByID(id)
+    const node = props.getById(id)
     const name = node.get('name')
 
     if (node.get('children').size) {
@@ -107,7 +107,7 @@ const mapStateToProps = state => {
 
   return {
     max_depth: database.maxDepth(),
-    getByID: database.getByID,
+    getById: database.getById,
     display_root: icicle_state.display_root(),
     root_id: database.rootId(),
   }

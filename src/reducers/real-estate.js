@@ -106,6 +106,7 @@ export const compile = (real_estate) => {
     api[key] = (...args) => state => f(...args)(get(state))
     delete api[key].get
     delete api[key].set
+    api[key].reader = true
   }
 
   for (let key in real_estate.writer) {
@@ -115,17 +116,17 @@ export const compile = (real_estate) => {
     api[key] = (...args) => state => set(f(...args)(get(state)),state)
     delete api[key].get
     delete api[key].set
+    api[key].writer = true
   }
 
   for (let key in api) {
     const split = key.split('|')
-    if (split.length === 2) {
-      if (api[split[0]] === undefined) {
-        api[split[0]] = {}
-      }
-      api[split[0]][split[1]] = api[key]
-      delete api[key]
+    
+    if (api[split[0]] === undefined) {
+      api[split[0]] = {}
     }
+    api[split[0]][split[1]] = api[key]
+    delete api[key]
   }
 
   return {
@@ -135,11 +136,10 @@ export const compile = (real_estate) => {
 }
 
 export const createHigherOrder = (higher_order) => {
-  const property_name = higher_order.property_name
   const get = higher_order.get
   const set = higher_order.set
 
-  return (real_estate) => {
+  return (property_name,real_estate) => {
     const initialState = () => higher_order.initialState(real_estate.initialState({}))
     const reader = {}
     for (let key in real_estate.reader) {

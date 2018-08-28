@@ -36,12 +36,12 @@ class Presentational extends React.PureComponent {
 
   render() {
     const max_path_len = 260
-    const root_id_node = this.props.getByID(this.props.root_id)
+    const root_id_node = this.props.getById(this.props.root_id)
 
     const max_children_path_len_root_id = root_id_node.get('max_children_path_length')
 
     const fWidth = id => {
-      const node = this.props.getByID(id)
+      const node = this.props.getById(id)
 
       return getMaxRemainingPathLength(node)
     }
@@ -55,13 +55,13 @@ class Presentational extends React.PureComponent {
     }
 
     const trueFHeight = max_height => id => {
-      const node = this.props.getByID(id)
+      const node = this.props.getById(id)
       const len = node.get('name').length
       return len * (max_height/max_path_len)
     }
 
     const fillColor = id => {
-      const node = this.props.getByID(id)
+      const node = this.props.getById(id)
       const len = node.get('parent_path_length') + node.get('name').length
       const zero_to_one = len/max_children_path_len_root_id
       return Color.toRgba(Color.gradient([122, 255, 159, 1],[255, 121, 121, 1])(zero_to_one))
@@ -116,7 +116,7 @@ const mapStateToProps = state => {
   return {
     root_id: database.rootId(),
     max_depth: database.maxDepth(),
-    getByID: database.getByID,
+    getById: database.getById,
     display_root: icicle_state.display_root(),
   }
 }

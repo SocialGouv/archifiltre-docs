@@ -1,29 +1,49 @@
 
-import { generateRandomString } from 'random-gen'
 
-export default function duckReducer(type, initial_state, initial_bundler) {
-  type = type+'_'+generateRandomString(40)
+import React from 'react'
 
-  const key = Symbol()
-  const unbundler = state => state[key]
-  const bundler = state => {
-    const ans = initial_bundler(state)
-    ans[key] = state
-    return ans
-  } 
-  initial_state = bundler(initial_state)
+import * as ObjectUtil from 'util/object-util'
 
-  const mkA = f => function(...args) {
-    return {type,f:f(...args)}
-  }
+export default function(compiled_real_estate) {
 
-  function reducer(state = initial_state, action) {
-    if (action.type === type) {
-      return bundler(action.f(unbundler(state)))
-    } else {
-      return state
+  return function(NextComponent) {
+
+    return class Duck extends React.Component {
+      constructor(props) {
+        super(props)
+
+        this.bundle = (state) => {
+          const pub = {}
+          for (let key in reader) {
+            pub[key] = (...args) => reader[key](...args)(this.state.private)
+          }
+          for (let key in writer) {
+            pub[key] = this[key]
+          }
+          pub.reInit = this.reInit
+          return {
+            private:state,
+            public:pub,
+          }
+        }
+
+        this.bundleAndUpdate = (state) => this.setState(this.bundle(state))
+        this.reInit = () => this.bundleAndUpdate(initial_state)
+
+        for (let key in writer) {
+          this[key] = (...args) => this.bundleAndUpdate(writer[key](...args)(this.state.private))
+        }
+
+        this.state = this.bundle(initial_state)
+      }
+
+      render() {
+        const enhanced_props = ObjectUtil.compose(this.props,{[props_name]:this.state.public})
+        return (
+          <NextComponent {...enhanced_props}/>
+        )
+      }
     }
   }
 
-  return { mkA, reducer, key }
 }

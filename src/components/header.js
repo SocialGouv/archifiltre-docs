@@ -1,13 +1,10 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
-import { selectAppState } from 'reducers/root-reducer'
 import { tr } from 'dict'
 import Dashboard from 'components/dashboard'
-import CtrlZ from 'components/ctrl-z'
 
 
-const Presentational = props => {
+const Header = props => {
   return (
     <div className='grid-x grid-padding-y align-middle'>
       <div className='cell auto'></div>
@@ -25,19 +22,4 @@ const Presentational = props => {
   )
 }
 
-
-const mapStateToProps = state => {
-  return {}
-}
-
-const mapDispatchToProps = dispatch => {
-  return {}
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container
+export default Header

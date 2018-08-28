@@ -1,10 +1,16 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { selectAppState, selectDatabase } from 'reducers/root-reducer'
-import { commit } from 'reducers/root-reducer'
+// import { connect } from 'react-redux'
+// import { selectAppState, selectDatabase } from 'reducers/root-reducer'
+// import { commit } from 'reducers/root-reducer'
 
-import { setSessionName } from 'reducers/database'
-import { octet2HumanReadableFormat } from 'components/ruler'
+// import { setSessionName } from 'reducers/database'
+
+
+
+
+
+
+// import { octet2HumanReadableFormat } from 'components/ruler'
 
 import { RIEInput } from 'riek'
 
@@ -19,7 +25,41 @@ import { edit_hover_container, edit_hover_pencil, editable_text, session_name} f
 
 import { tr } from 'dict'
 
-const Presentational = props => {
+
+const DashBoard = props => {
+
+  let app_state = selectAppState(state)
+  let database = selectDatabase(state)
+  const finished = app_state.isFinished()
+  let nb_files = 0
+  let nb_folders = 0
+  let volume = 0
+  if (finished) {
+    nb_files = database.size_files()
+    nb_folders = database.size_overall() - database.size_files()
+    volume = database.volume()
+  }
+  // return {
+  //   started: app_state.isStarted(),
+  //   finished,
+  //   nb_files,
+  //   nb_folders,
+  //   volume,
+  //   session_name: database.getSessionName()
+  // }
+  
+
+  const onChangeSessionName = (prop_name) => (n) => {
+    if(n[prop_name].length > 0){
+      dispatch(setSessionName(n[prop_name]))
+      dispatch(commit())
+    }
+  }
+  // return {
+  //   onChangeSessionName
+  // }
+
+
   let session_info_cell, ctrlz_cell, csv_button_cell, save_button_cell, reinit_button_cell;
 
   const session_info_cell_style = {
@@ -111,45 +151,4 @@ const Presentational = props => {
  
 }
 
-const mapStateToProps = state => {
-  let app_state = selectAppState(state)
-  let database = selectDatabase(state)
-  const finished = app_state.isFinished()
-  let nb_files = 0
-  let nb_folders = 0
-  let volume = 0
-  if (finished) {
-    nb_files = database.size_files()
-    nb_folders = database.size_overall() - database.size_files()
-    volume = database.volume()
-  }
-  return {
-    started: app_state.isStarted(),
-    finished,
-    nb_files,
-    nb_folders,
-    volume,
-    session_name: database.getSessionName()
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-
-  const onChangeSessionName = (prop_name) => (n) => {
-    if(n[prop_name].length > 0){
-      dispatch(setSessionName(n[prop_name]))
-      dispatch(commit())
-    }
-  }
-  return {
-    onChangeSessionName
-  }
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container
+export default DashBoard

@@ -25,12 +25,18 @@ document.ondragover = document.ondrop = (ev) => {
 document.body.ondrop = (ev) => {
   const path = ev.dataTransfer.files[0].path
   console.log(path)
-  console.log(fs.statSync(path).size)
+  console.log(fs.statSync(path))
 
-  console.log(fs.readdirSync(path))
+  // console.log(fs.readdirSync(path))
+
+  // Test open file
+  const {shell} = require('electron')
+  // Open a local file in the default app
+  shell.openItem(path)
 
   ev.preventDefault()
 }
+
 
 
 // // Test RAM limit

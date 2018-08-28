@@ -1,9 +1,6 @@
 
-import duck from 'reducers/duck'
 import { Record } from 'immutable'
-
-const type = 'cheapExp/reportState'
-
+import * as RealEstate from 'reducers/real-estate'
 
 const State = Record({
   editing_tags:false,
@@ -11,43 +8,53 @@ const State = Record({
   candidate_comments:''
 })
 
-function bundle(state) {
-  return {
-    editing_tags: () => state.get('editing_tags'),
-    editing_comments: () => state.get('editing_comments'),
-    candidate_comments: () => state.get('candidate_comments'),
-  }
+const property_name = 'report_state'
+
+const initialState = () => new State()
+
+const reader = {
+  editing_tags: () => state => state.get('editing_tags'),
+  editing_comments: () => state => state.get('editing_comments'),
+  candidate_comments: () => state => state.get('candidate_comments'),
 }
 
-const initialState = new State()
-
-const { mkA, reducer } = duck(type, initialState, bundle)
-
-export default reducer
-
-
-export const startEditingTags = mkA(() => state =>{
+const startEditingTags = () => state => {
   state = state.update('editing_tags',(a)=>true)
   return state
-})
+}
 
-export const stopEditingTags = mkA(() => state =>{
+const stopEditingTags = () => state => {
   state = state.update('editing_tags',(a)=>false)
   return state
-})
+}
 
-export const startEditingComments = mkA(() => state =>{
+const startEditingComments = () => state => {
   state = state.update('editing_comments',(a)=>true)
   return state
-})
+}
 
-export const stopEditingComments = mkA(() => state =>{
+const stopEditingComments = () => state => {
   state = state.update('editing_comments',(a)=>false)
   state = state.set('candidate_comments','')
   return state
-})
+}
 
-export const setCandidateComments = mkA((comments) => state =>{
+const setCandidateComments = (comments) => state => {
   state = state.set('candidate_comments',comments)
   return state
+}
+
+const writer = {
+  startEditingTags,
+  stopEditingTags,
+  startEditingComments,
+  stopEditingComments,
+  setCandidateComments,
+}
+
+export default RealEstate.create({
+  property_name,
+  initialState,
+  reader,
+  writer,
 })

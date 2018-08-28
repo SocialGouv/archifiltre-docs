@@ -1,33 +1,37 @@
 
-import duck from 'reducers/duck'
 import { Record } from 'immutable'
-
-const type = 'cheapExp/tagListState'
-
+import * as RealEstate from 'reducers/real-estate'
 
 const State = Record({
   tag_being_edited: '',
 })
 
-function bundle(state) {
-  return {
-    tag_being_edited: () => state.get('tag_being_edited'),
-  }
+const property_name = 'tag_list_state'
+
+const initialState = () => new State()
+
+const reader = {
+  tag_being_edited: () => state => state.get('tag_being_edited'),
 }
 
-const initialState = new State()
-
-const { mkA, reducer } = duck(type, initialState, bundle)
-
-export default reducer
-
-
-export const setTagBeingEdited = mkA((tag) => state =>{
+const setTagBeingEdited = (tag) => state => {
   state = state.update('tag_being_edited',(a)=>tag)
   return state
-})
+}
 
-export const setNoTagBeingEdited = mkA(() => state =>{
+const setNoTagBeingEdited = () => state => {
   state = state.update('tag_being_edited',(a)=>'')
   return state
+}
+
+const writer = {
+  setTagBeingEdited,
+  setNoTagBeingEdited,
+}
+
+export default RealEstate.create({
+  property_name,
+  initialState,
+  reader,
+  writer,
 })

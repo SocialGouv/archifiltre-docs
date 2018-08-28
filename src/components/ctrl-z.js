@@ -1,9 +1,9 @@
 import React from 'react'
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 
 
 import { mkRB } from 'components/button'
-import { undo, redo, hasAPast, hasAFuture } from 'reducers/root-reducer'
+// import { undo, redo, hasAPast, hasAFuture } from 'reducers/root-reducer'
 
 const round_button_style = {
   borderRadius: '50%'
@@ -13,7 +13,8 @@ const arrow_style = {
   fontSize: '1.6em',
 }
 
-class Presentational extends React.Component {
+
+class CtrlZ extends React.Component {
   constructor(props) {
     super(props)
     this.onKeyDownHandler = e => {
@@ -36,6 +37,16 @@ class Presentational extends React.Component {
   }
 
   render() {
+  // return {
+  //   hasAPast: hasAPast(state),
+  //   hasAFuture: hasAFuture(state)
+  // }
+
+  // return {
+  //   undo: () => dispatch(undo()),
+  //   redo: () => dispatch(redo())
+  // }
+  
     if (this.props.visible) {
       return (
           <div className='grid-x grid-padding-x'>
@@ -72,24 +83,4 @@ class Presentational extends React.Component {
 }
 
 
-const mapStateToProps = state => {
-  return {
-    hasAPast: hasAPast(state),
-    hasAFuture: hasAFuture(state)
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    undo: () => dispatch(undo()),
-    redo: () => dispatch(redo())
-  }
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container
+export default CtrlZ

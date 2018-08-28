@@ -1,9 +1,6 @@
 
-import duck from 'reducers/duck'
 import { Record, Set } from 'immutable'
-
-const type = 'cheapExp/icicleState'
-
+import * as RealEstate from 'reducers/real-estate'
 
 const State = Record({
   hover_seq:[],
@@ -14,73 +11,58 @@ const State = Record({
   change_skin:false,
 })
 
-function bundle(state) {
-  return {
-    hover_sequence: () => state.get('hover_seq'),
-    lock_sequence: () => state.get('lock_seq'),
-    hover_dims: () => state.get('dims'),
-    tag_to_highlight: () => state.get('tag_to_highlight'),
-    display_root: () => state.get('display_root'),
-    isFocused: () => state.get('hover_seq').length > 0,
-    isLocked: () => state.get('lock_seq').length > 0,
-    isZoomed: () => state.get('display_root').length > 0,
-    changeSkin: () => state.get('change_skin')
-  }
+const property_name = 'icicle_state'
+
+const initialState = () => new State()
+
+const reader = {
+  hover_sequence: () => state => state.get('hover_seq'),
+  lock_sequence: () => state => state.get('lock_seq'),
+  hover_dims: () => state => state.get('dims'),
+  tag_to_highlight: () => state => state.get('tag_to_highlight'),
+  display_root: () => state => state.get('display_root'),
+  isFocused: () => state => state.get('hover_seq').length > 0,
+  isLocked: () => state => state.get('lock_seq').length > 0,
+  isZoomed: () => state => state.get('display_root').length > 0,
+  changeSkin: () => state => state.get('change_skin'),
 }
 
-const initialState = new State()
-
-
-const { mkA, reducer } = duck(type, initialState, bundle)
-
-export default reducer
-
-export const setFocus = mkA((id_arr, dims, isLocked) => state => {
+const setFocus = (id_arr, dims, isLocked) => state => {
   state = state.update('hover_seq',()=>id_arr)
   if(!isLocked) state = state.update('dims',()=>dims)
   return state
-})
+}
 
-export const setNoFocus = mkA(() => state => {
+const setNoFocus = () => state => {
   state = state.update('hover_seq', () => [])
   state = state.update('dims',()=>{return {}})
   return state
-})
+}
 
-export const lock = mkA((id_arr, dims) => state => {
+const lock = (id_arr, dims) => state => {
   state = state.update('lock_seq',()=>id_arr)
   state = state.update('dims',()=>dims)
   return state
-})
+}
 
-export const unlock = mkA(() => state => {
+const unlock = () => state => {
   state = state.update('lock_seq', () => [])
   return state
-})
+}
 
-export const setDisplayRoot = mkA((root_seq) => state =>{
+const setDisplayRoot = (root_seq) => state => {
   state = state.update('display_root',()=>root_seq)
   state = state.update('lock_seq', () => [])
   clearSelection()
   return state
-})
+}
 
-export const setNoDisplayRoot = mkA(() => state =>{
+const setNoDisplayRoot = () => state => {
   state = state.update('display_root',()=>[])
   state = state.update('lock_seq', () => [])
   clearSelection()
   return state
-})
-
-export const setTagToHighlight = mkA((tag) => state =>{
-  state = state.update('tag_to_highlight',()=>tag)
-  return state
-})
-
-export const setNoTagToHighlight = mkA(() => state =>{
-  state = state.update('tag_to_highlight',()=>'')
-  return state
-})
+}
 
 const clearSelection = () => {
   if (window.getSelection) {
@@ -90,7 +72,38 @@ const clearSelection = () => {
   }
 }
 
-export const toggleChangeSkin = mkA(() => state =>{
+const setTagToHighlight = (tag) => state => {
+  state = state.update('tag_to_highlight',()=>tag)
+  return state
+}
+
+const setNoTagToHighlight = () => state => {
+  state = state.update('tag_to_highlight',()=>'')
+  return state
+}
+
+const toggleChangeSkin = () => state => {
   state = state.update('change_skin',a=>!a)
   return state
+}
+
+const writer = {
+  setFocus,
+  setNoFocus,
+  lock,
+  unlock,
+  setDisplayRoot,
+  setNoDisplayRoot,
+  setTagToHighlight,
+  setNoTagToHighlight,
+  toggleChangeSkin,
+}
+
+export default RealEstate.create({
+  property_name,
+  initialState,
+  reader,
+  writer,
 })
+
+

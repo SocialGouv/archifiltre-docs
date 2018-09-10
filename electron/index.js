@@ -20,7 +20,7 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  win.loadFile('dist/index.html')
+  win.loadFile('webpack/index.html')
 
   // Open the DevTools.
   win.webContents.openDevTools()
@@ -71,4 +71,8 @@ app.on('will-quit', () => {
 
 app.on('quit', () => {
   console.log('quit')
+})
+
+app.on('will-navigate', () => {
+  console.log('will-navigate')
 })

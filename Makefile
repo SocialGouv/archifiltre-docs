@@ -58,12 +58,12 @@ test: dev
 
 
 electron: dev
-	sudo rm -fr ./electron/dist
+	sudo rm -fr ./electron/webpack
 	sudo docker run -d --name=$(image_name)_electron $(image_name):dev sh
-	sudo docker cp $(image_name)_electron:/usr/src/app/dist ./electron
+	sudo docker cp $(image_name)_electron:/usr/src/app/dist ./electron/webpack
 	sudo docker container stop $(image_name)_electron
 	sudo docker container rm $(image_name)_electron
-	sudo chmod -R 777 ./electron/dist
-	npm --prefix ./electron install
-	npm --prefix ./electron run-script electron
+	sudo chmod -R 777 ./electron/webpack
+	yarn --cwd ./electron install
+	yarn --cwd ./electron electron
 

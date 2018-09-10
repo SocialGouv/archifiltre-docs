@@ -13,6 +13,8 @@ import { generateRandomString } from 'random-gen'
 
 import store from 'reducers/store'
 
+import 'typeface-quicksand'
+
 // import Analytics from 'electron-ga'
 
 // const analytics = new Analytics('UA-115293619-2')

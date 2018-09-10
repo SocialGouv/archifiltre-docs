@@ -16,6 +16,10 @@ COPY package*.json ./
 RUN npm install
 
 
+COPY cdn.txt .
+RUN wget -P static/cdn -i cdn.txt
+
+
 
 COPY . .
 

@@ -21,16 +21,6 @@ module.exports = {
       template: 'static/index.html',
       excludeChunks: ['stats']
     })
-    // new HtmlWebpackPlugin({
-    //   inject: 'head',
-    //   filename: 'stats.html',
-    //   template: 'static/stats.html',
-    //   excludeChunks: ['app']
-    // }),
-    // new workboxPlugin.InjectManifest({
-    //   swSrc: 'src/sw.js',
-    //   swDest: 'sw.js',
-    // })
   ],
 
   target:'electron-renderer',

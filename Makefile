@@ -4,22 +4,7 @@ pwd = $(shell pwd)
 .PHONY: electron
 
 
-all: devServer
-
-runProd: prod
-	sudo docker run \
-		--rm \
-		--network=host \
-		-it \
-		$(image_name):prod
-
-devServer: dev
-	sudo docker run \
-		--rm \
-		--network=host \
-		--mount type=bind,source=$(pwd),target=/mnt,readonly \
-		-it \
-		$(image_name):dev
+all: electron
 
 dev: cleanContainer
 	sudo docker build \
@@ -67,3 +52,12 @@ electron: dev
 	yarn --cwd ./electron install
 	yarn --cwd ./electron electron
 
+
+builder: dev
+	sudo rm -fr ./electron/webpack
+	sudo docker run -d --name=$(image_name)_electron $(image_name):dev sh
+	sudo docker cp $(image_name)_electron:/usr/src/app/dist ./electron/webpack
+	sudo docker container stop $(image_name)_electron
+	sudo docker container rm $(image_name)_electron
+	sudo chmod -R 777 ./electron/webpack
+	yarn --cwd ./electron windows

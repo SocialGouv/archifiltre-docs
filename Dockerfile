@@ -34,5 +34,5 @@ WORKDIR /usr/src/app
 RUN npm run-script buildProd
 
 
-FROM nginx:1.13.9-alpine
-COPY --from=prod /usr/src/app/dist /usr/share/nginx/html
+# FROM nginx:1.13.9-alpine
+# COPY --from=prod /usr/src/app/dist /usr/share/nginx/html

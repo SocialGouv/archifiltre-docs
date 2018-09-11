@@ -6,8 +6,22 @@ import TextAlignCenter from 'components/text-align-center'
 import * as ObjectUtil from 'util/object-util'
 
 import * as Color from 'color'
+import pick from 'languages'
 
-import { tr } from 'dict'
+const color_code = pick({
+  en: 'Color code:',
+  fr: 'Code couleurs :',
+})
+
+const type = pick({
+  en: 'Type',
+  fr: 'Type',
+})
+
+const dates = pick({
+  en: 'Dates',
+  fr: 'Dates',
+})
 
 const Presentational = props => {
 
@@ -23,13 +37,13 @@ const Presentational = props => {
   return (
     <div className='grid-x align-middle' style={{minWidth: '25em'}}>
       <div className='cell small-4'>
-        <TextAlignCenter>{tr('Color code:')}</TextAlignCenter>
+        <TextAlignCenter>{color_code}</TextAlignCenter>
       </div>
       <div className='cell small-3'>
-        <TextAlignCenter>{mkTB(props.toggleChangeSkin, tr('Type'), props.change_skin, Color.parentFolder(), button_style)}</TextAlignCenter>
+        <TextAlignCenter>{mkTB(props.toggleChangeSkin, type, props.change_skin, Color.parentFolder(), button_style)}</TextAlignCenter>
       </div>
       <div className='cell small-3'>
-        <TextAlignCenter>{mkTB(props.toggleChangeSkin, tr('Dates'), !props.change_skin, Color.parentFolder(), button_style)}</TextAlignCenter>
+        <TextAlignCenter>{mkTB(props.toggleChangeSkin, dates, !props.change_skin, Color.parentFolder(), button_style)}</TextAlignCenter>
       </div>
     </div>
   )

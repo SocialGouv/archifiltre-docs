@@ -1,9 +1,38 @@
 import React from 'react'
 
-import { tr } from 'dict'
-
 import TimeGradient from 'components/time-gradient'
 import * as ObjectUtil from 'util/object-util'
+
+import pick from 'languages'
+
+
+const last_modified_tr = pick({
+  en: 'Last modified',
+  fr: 'Dernière modification',
+})
+
+const at_tr = pick({
+  en: 'at',
+  fr: 'à',
+})
+
+const max_tr = pick({
+  en: 'max',
+})
+
+const min_tr = pick({
+  en: 'min',
+})
+const average_tr = pick({
+  en: 'average',
+  fr: 'moyenne',
+})
+const median_tr = pick({
+  en: 'median',
+  fr: 'médiane',
+})
+
+
 
 const RedDot = (props) => {
   return (
@@ -40,7 +69,7 @@ const epochTimeToDateTime = (d) => {
       (mm>9 ? '' : '0') + mm,
       res.getFullYear()
     ].join('/')
-    // + " " + tr("at") + " " +
+    // + " " + at_tr + " " +
     // [
     //   res.getHours(),
     //   res.getMinutes(),
@@ -49,7 +78,7 @@ const epochTimeToDateTime = (d) => {
   )
 }
 
-const Presentational = props => {
+const LastModifiedReporter = props => {
   const api = props.api
 
   const cursor_width = 0.75
@@ -72,14 +101,14 @@ const Presentational = props => {
     <div className='grid-x align-middle'>
 
       <div className='cell small-12'>
-        <b>{tr('Last modified')} :</b>
+        <b>{last_modified_tr} :</b>
       </div>
 
       <div className='cell small-1'>
         <BlackCursor/>
       </div>
       <div className='cell small-5'>
-        {tr('min')} :
+        {min_tr} :
       </div>
       <div className='cell small-6'>
         {lm_min}
@@ -89,7 +118,7 @@ const Presentational = props => {
         <RedDot/>
       </div>
       <div className='cell small-5'>
-        {tr('average')} :
+        {average_tr} :
       </div>
       <div className='cell small-6'>
         {lm_average}
@@ -99,7 +128,7 @@ const Presentational = props => {
         <BlackCursor/>
       </div>
       <div className='cell small-5'>
-        {tr('median')} :
+        {median_tr} :
       </div>
       <div className='cell small-6'>
         {lm_median}
@@ -109,7 +138,7 @@ const Presentational = props => {
         <BlackCursor/>
       </div>
       <div className='cell small-5'>
-        {tr('max')} :
+        {max_tr} :
       </div>
       <div className='cell small-6'>
         {lm_max}
@@ -135,5 +164,5 @@ export default (props) => {
     getFfByFfId: database.getFfByFfId,
   },props)
 
-  return (<Presentational {...props}/>)
+  return (<LastModifiedReporter {...props}/>)
 }

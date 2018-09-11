@@ -3,9 +3,16 @@ import React from 'react'
 import * as Color from 'color'
 import * as ObjectUtil from 'util/object-util'
 
-import { tr } from 'dict'
 
-const Presentational = props => {
+import pick from 'languages'
+
+const byte_char = pick({
+  en: "B",
+  fr: "o",
+})
+
+
+const Ruler = props => {
   const ruler_x = props.x
   const ruler_y = props.y
   const ruler_dx = props.dx
@@ -72,7 +79,7 @@ const Presentational = props => {
 }
 
 export const octet2HumanReadableFormat = o => {
-  let unit = tr('B')
+  let unit = byte_char
   let To = o/Math.pow(1000,4)
   if (To > 1) {
     return Math.round(To * 10)/10 + ' T' + unit
@@ -126,7 +133,7 @@ const computeTextPosition = (x, dx, w, mode) => {
 
 
 
-export default (props) => {
+export default function RulerApiToProps(props) {
   const api = props.api
   const icicle_state = api.icicle_state
   const database = api.database
@@ -150,5 +157,5 @@ export default (props) => {
     total_size,
   },props)
 
-  return (<Presentational {...props}/>)
+  return (<Ruler {...props}/>)
 }

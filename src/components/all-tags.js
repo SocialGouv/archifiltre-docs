@@ -8,7 +8,19 @@ import TextAlignCenter from 'components/text-align-center'
 
 import * as Color from 'color'
 
-import { tr } from 'dict'
+import pick from 'languages'
+
+const all_tags = pick({
+  en: 'All tags',
+  fr: 'Tous les tags',
+})
+
+const no_tags = pick({
+  en : 'No tags at the moment.',
+  fr: 'Aucun tag pour l\'instant.',
+})
+
+
 
 const trimString = (s, max_length) => {
   return s.length > max_length+3 ? s.substring(0,max_length) + "..." : s
@@ -22,7 +34,7 @@ const content_style = {
 }
 
 
-const Presentational = props => {
+const AllTags = props => {
   const tag_ids = props.tag_ids
 
   const component_style = {
@@ -77,7 +89,7 @@ const Presentational = props => {
         </div>
         <div className='cell'>
           <TextAlignCenter>
-            <em>{tr('No tags at the moment.')}</em>
+            <em>{no_tags}</em>
           </TextAlignCenter>
         </div>
       </div>
@@ -134,7 +146,7 @@ const Presentational = props => {
   return (
     <div style={component_style}>
       <TextAlignCenter>
-        <b>{tr('All tags')}</b>
+        <b>{all_tags}</b>
       </TextAlignCenter>
         {tags_content}
     </div>
@@ -226,6 +238,6 @@ export default (props) => {
     onDeleteTagged,
   },props)
 
-  return (<Presentational {...props}/>)
+  return (<AllTags {...props}/>)
 }
 

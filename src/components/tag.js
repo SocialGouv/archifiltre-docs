@@ -2,8 +2,6 @@ import React from 'react'
 
 import { tags_bubble, tags_cross } from 'css/app.css'
 
-import { tr } from 'dict'
-
 const tag_style = {
   display: "inline-block",
   color: "white",

@@ -11,11 +11,19 @@ import 'css/app.css'
 
 import { generateRandomString } from 'random-gen'
 
-import store from 'reducers/store'
+import { Store } from 'reducers/store'
 
-import 'typeface-quicksand'
 
-// import Analytics from 'electron-ga'
+
+
+// import 'typeface-quicksand'
+
+
+
+
+
+
+// import Analytics from 'electron-ga' // dev/prod
 
 // const analytics = new Analytics('UA-115293619-2')
 
@@ -26,20 +34,11 @@ import 'typeface-quicksand'
 // })
 
 
-const Store = store((props) => {
-  console.log(props)
-  window.props = props
-  return (
-    <div className='grid-y grid-frame'>
-      <div className='cell'>
-        <Header api={props.api}/>
-      </div>
-      <div className='cell auto'>
-        <MainSpace api={props.api}/>
-      </div>
-    </div>
-  )
-})
+
+
+
+
+
 
 const app = () => {
   let root_div = document.createElement('div')
@@ -52,7 +51,22 @@ const app = () => {
 
   ReactDOM.render(
     <ErrorBoundary>
-      <Store/>
+      <Store>
+        {props => {
+          console.log(props)
+          window.props = props
+          return (
+            <div className='grid-y grid-frame'>
+              <div className='cell'>
+                <Header api={props.api}/>
+              </div>
+              <div className='cell auto'>
+                <MainSpace api={props.api}/>
+              </div>
+            </div>
+          )
+        }}
+      </Store>
     </ErrorBoundary>
     ,
     root_div
@@ -62,5 +76,9 @@ const app = () => {
 window.onload = app
 
 document.ondragover = document.ondrop = (ev) => {
+  ev.preventDefault()
+}
+
+window.ondragover = window.ondrop = (ev) => {
   ev.preventDefault()
 }

@@ -6,7 +6,6 @@ import WorkSpace from 'components/workspace'
 
 import WaitingScreen from 'components/waiting-screen'
 
-import { tr } from 'dict'
 
 const grid_style = {
   padding: '0em 5em',

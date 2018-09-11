@@ -5,7 +5,12 @@ import { mkB, mkRB } from 'components/button'
 
 import * as Color from 'color'
 
-import { tr } from 'dict'
+import pick from 'languages'
+
+const label = pick({
+  en: 'Back to root',
+  fr: 'Retour à la racine',
+})
 
 
 const Presentational = props => {
@@ -22,7 +27,7 @@ const Presentational = props => {
 
   return mkB(
     props.backToRoot,
-    (<span><i className="fi-zoom-out" />&ensp;{tr('Back to root')}</span>),
+    (<span><i className="fi-zoom-out" />&ensp;{label}</span>),
     props.isZoomed,
     Color.parentFolder(),
     button_style)

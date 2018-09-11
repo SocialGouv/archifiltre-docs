@@ -44,9 +44,9 @@ const reader = {
   changeSkin: () => state => state.get('change_skin'),
 }
 
-const setFocus = (id_arr, dims, isLocked) => state => {
+const setFocus = (id_arr, dims) => state => {
   state = state.update('hover_seq',()=>id_arr)
-  if(!isLocked) state = state.update('dims',()=>dims)
+  if(!isLocked()(state)) state = state.update('dims',()=>dims)
   return state
 }
 

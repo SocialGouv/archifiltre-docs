@@ -4,7 +4,18 @@ import Tag from 'components/tag'
 import * as ObjectUtil from 'util/object-util'
 import { Set } from 'immutable'
 
-import { tr } from 'dict'
+import pick from 'languages'
+
+const click_here_to_add = pick({
+  en: "Click here to add some tags!",
+  fr: "Cliquez ici pour ajouter des tags !",
+})
+
+const new_tag = pick({
+  en: "New tag",
+  fr: "Nouveau tag",
+})
+
 
 const input_style = {
   width: "7em",
@@ -80,7 +91,7 @@ class Presentational extends React.Component {
           style={input_style}
           onMouseUp={(e) => {e.stopPropagation();}}
           onKeyUp={keyUp}
-          placeholder={tr("New tag")}
+          placeholder={new_tag}
           ref={(component) => {this.textInput = component;}}
         />
       )
@@ -91,7 +102,7 @@ class Presentational extends React.Component {
       return elements
     } else {
       return (
-        <span key="__closing__">{tr("Click here to add some tags!")}</span>
+        <span key="__closing__">{click_here_to_add}</span>
       )
     }
   }

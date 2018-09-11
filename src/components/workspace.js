@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { tr } from 'dict'
 import * as Color from 'color'
 import * as ObjectUtil from 'util/object-util'
 
@@ -11,7 +10,7 @@ import AllTags from 'components/all-tags'
 import NavigationBar from 'components/navigation-bar'
 
 
-class Presentational extends React.PureComponent {
+class Workspace extends React.PureComponent {
   constructor(props) {
     super(props)
 
@@ -169,6 +168,6 @@ export default (props) => {
     change_skin: icicle_state.changeSkin(),
   },props)
 
-  return (<Presentational {...props}/>)
+  return (<Workspace {...props}/>)
 }
 

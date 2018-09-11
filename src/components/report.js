@@ -14,7 +14,21 @@ import LastModifiedReporter from 'components/last-modified-reporter'
 
 import * as Color from 'color'
 
-import { tr } from 'dict'
+
+import pick from 'languages'
+
+const folder_of_name_tr = pick({
+  en: 'Folder of file\'s name',
+  fr: 'Nom du répertoire ou fichier',
+})
+const real_name_tr = pick({
+  en: 'Real name',
+  fr: 'Nom réel',
+})
+const size_tr = pick({
+  en: 'Size',
+  fr: 'Taille',
+})
 
 
 const pad = '1em'
@@ -74,7 +88,7 @@ const Name = props => {
 
   if (placeholder) {
     return (
-      <div style={{'fontWeight':'bold'}}>{tr('Folder of file\'s name')}</div>
+      <div style={{'fontWeight':'bold'}}>{folder_of_name_tr}</div>
     )
   } else {
     return (
@@ -98,7 +112,7 @@ const RealName = props => {
 
   if (placeholder) {
     return (
-      <div style={{'fontStyle':'italic'}}>({tr('Real name')})</div>
+      <div style={{'fontStyle':'italic'}}>({real_name_tr})</div>
     )
   } else {
     return (
@@ -127,13 +141,13 @@ const InfoCell = props => {
 
   return (
     <div style={info_cell_style}>
-      <b>{tr('Size')} :</b> {size_label}<br />
+      <b>{size_tr} :</b> {size_label}<br />
       {component}
     </div>
   )
 }
 
-const Presentational = props => {
+const Report = props => {
   const api = props.api
   let icon, name, real_name, info_cell, tags_cell, comments_cell, name_cell
 
@@ -253,7 +267,7 @@ const Presentational = props => {
 }
 
 
-export default (props) => {
+export default function ReportApiToProps(props) {
   const api = props.api
   const icicle_state = api.icicle_state
   const database = api.database
@@ -287,6 +301,6 @@ export default (props) => {
     onChangeAlias,
   },props)
 
-  return (<Presentational {...props}/>)
+  return (<Report {...props}/>)
 }
 

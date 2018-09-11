@@ -1,5 +1,10 @@
 const {app, BrowserWindow} = require('electron')
 
+const {dialog} = require('electron')
+
+const language = app.getLocale().slice(0,2)
+
+
 
 app.commandLine.appendSwitch('js-flags', '--max-old-space-size=40960')
 
@@ -12,8 +17,8 @@ let win
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1400,
-    height: 600,
+    width: 1500,
+    height: 800,
     webPreferences: {
       nodeIntegrationInWorker: true
     },
@@ -22,8 +27,50 @@ function createWindow () {
   // and load the index.html of the app.
   win.loadFile('webpack/index.html')
 
+
+
+
   // Open the DevTools.
-  win.webContents.openDevTools()
+  win.webContents.openDevTools() // dev/prod
+  console.log('process.env.NODE_ENV',process.env.NODE_ENV)
+
+
+  win.on('close', (event) => {
+    // event.preventDefault() // dev/prod
+    let title
+    let message
+    let detail
+    let no
+    let yes
+    if (language === 'fr') {
+      title = 'Bye bye !'
+      message = 'Êtes-vous sure de vouloir quitter ?'
+      detail = 'Toutes les données qui n\'ont pas étaient sauvegardées seront perdu définitivement !'
+      no = 'non'
+      yes = 'oui'
+    } else {
+      title = 'Bye bye !'
+      message = 'Are you sure you want to leave?'
+      detail = 'All data that has not been saved will be permanently lost !'
+      no = 'no'
+      yes = 'yes'
+    }
+    const option = {
+      type:'warning',
+      buttons:[no,yes],
+      defaultId:0,
+      title,
+      message,
+      detail,
+      cancelId:0,
+    }
+    dialog.showMessageBox(win,option,a=>{
+      console.log('dialog',a)
+      if (a===1) {
+        win.destroy()
+      }
+    })
+  })
 
   // Emitted when the window is closed.
   win.on('closed', () => {

@@ -3,7 +3,18 @@ import React from 'react'
 import { comments } from 'css/app.css'
 import * as ObjectUtil from 'util/object-util'
 
-import { tr } from 'dict'
+import pick from 'languages'
+
+const your_comments = pick({
+  en: 'Your comments here',
+  fr: 'Vos commentaires ici',
+})
+
+const click_here_to_add = pick({
+  en: 'Click here to add some comments!',
+  fr: 'Cliquez ici pour ajouter des commentaires !',
+})
+
 
 const input_style = {
   border: "none",
@@ -49,7 +60,7 @@ class Presentational extends React.Component {
         onKeyUp={keyUp}
         onBlur={(e) => {this.props.endEditing()}}
         defaultValue={this.props.comments.length > 0 ? this.props.comments : ""}
-        placeholder={this.props.comments.length > 0 ? "" : tr("Your comments here")}
+        placeholder={this.props.comments.length > 0 ? "" : your_comments}
         ref={(component) => {this.textInput = component;}} />);
     }
     else if(this.props.comments.length > 0){
@@ -62,7 +73,7 @@ class Presentational extends React.Component {
         );
     }
     else {
-      res = <span>{tr("Click here to add some comments!")}</span>
+      res = <span>{click_here_to_add}</span>
     }
     
 

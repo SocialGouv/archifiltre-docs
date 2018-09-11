@@ -12,7 +12,7 @@ const smartClip = (s, w, fw) => {
   }
 }
 
-const Presentational = props => {
+const BreadcrumbText = props => {
   const available_space = 0.8*props.dx
   const font_width = 6
 
@@ -37,4 +37,4 @@ const Presentational = props => {
 }
 
 
-export default Presentational
+export default BreadcrumbText

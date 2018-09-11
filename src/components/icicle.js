@@ -1,5 +1,8 @@
 import React from 'react'
 
+import ReactDOM from 'react-dom'
+
+
 import IcicleRect from 'components/icicle-rect'
 import Ruler from 'components/ruler'
 import BreadCrumbs from 'components/breadcrumbs'
@@ -11,20 +14,19 @@ import MinimapBracket from 'components/minimap-bracket'
 import { animate, clear } from 'animation-daemon' 
 import * as Color from 'color'
 
-import { tr } from 'dict'
-
 import * as ObjectUtil from 'util/object-util'
 
+import { ApiContext } from 'reducers/store'
+
+
+import SvgLayers from 'components/svg-layers'
+import SvgRectangle from 'components/svg-rectangle'
+
+import * as ArrayUtil from 'util/array-util'
+import IcicleRecursive from 'components/icicle-recursive'
 
 const nothing = ()=>{}
 
-function computeCumulative(array) {
-  const ans = [0]
-  for (let i = 0; i < array.length - 1; i++) {
-    ans.push(array[i] + ans[i])
-  }
-  return ans
-}
 
 class AnimatedIcicle extends React.PureComponent {
   constructor(props) {
@@ -58,9 +60,8 @@ class AnimatedIcicle extends React.PureComponent {
       const target_x = this.props.x
       const target_dx = this.props.dx
 
-      const dims = props.dims()
-      const x = dims.x
-      const dx = dims.dx
+      const x = props.x
+      const dx = props.dx
 
       const children = this.state.dom_element.children
       const prev_dom_element = children[0]
@@ -163,7 +164,9 @@ class AnimatedIcicle extends React.PureComponent {
 
         <g ref={ref}>
           <g style={prevStyle}>
+          {prevStyle.display !== 'none' &&
             <Icicle {...prevProps}/>
+          }
           </g>
           <g>
             <Icicle
@@ -184,6 +187,36 @@ class Icicle extends React.PureComponent {
     super(props)
 
     this.trueFHeight = this.trueFHeight.bind(this)
+    this.shouldRenderSequence = this.shouldRenderSequence.bind(this)
+    this.shouldRenderHoverSequence = this.shouldRenderHoverSequence.bind(this)
+
+    this.componentsPropsEnhancer1 = this.componentsPropsEnhancer1.bind(this)
+    this.componentsPropsEnhancer15 = this.componentsPropsEnhancer15.bind(this)
+    this.componentsPropsEnhancer2 = this.componentsPropsEnhancer2.bind(this)
+    this.componentsPropsEnhancer3 = this.componentsPropsEnhancer3.bind(this)
+
+    this.layers = [
+      {
+        shouldRender:this.props.shouldRenderChild,
+        Components:SvgRectangle,
+        propsEnhancer:this.componentsPropsEnhancer1,
+      },
+      {
+        shouldRender:(...args)=>this.shouldRenderHoverSequence(...args),
+        Components:SvgRectangle,
+        propsEnhancer:this.componentsPropsEnhancer15,
+      },
+      {
+        shouldRender:(...args)=>this.shouldRenderSequence(...args),
+        Components:SvgRectangle,
+        propsEnhancer:this.componentsPropsEnhancer2,
+      },
+      {
+        shouldRender:this.props.shouldRenderChild,
+        Components:SvgRectangle,
+        propsEnhancer:this.componentsPropsEnhancer3,
+      },
+    ]
   }
 
   makeKey(id) {
@@ -199,18 +232,110 @@ class Icicle extends React.PureComponent {
     return this.props.trueFHeight(height, id)
   }
 
+  shouldRenderSequence(x,dx,id) {
+    const props = this.props
+    const sequence = props.sequence
+    
+    if (sequence.includes(id)) {
+      return props.shouldRenderChild(x,dx,id)
+    } else {
+      return false
+    }
+  }
+
+  shouldRenderHoverSequence(x,dx,id) {
+    const props = this.props
+    const hover_sequence = props.hover_sequence
+    
+    if (hover_sequence.includes(id)) {
+      return props.shouldRenderChild(x,dx,id)
+    } else {
+      return false
+    }
+  }
+
+  componentsPropsEnhancer1(props) {
+    let opacity = 1
+    if (this.props.sequence.length) {
+      opacity = 0.3
+    }
+    return {
+      opacity,
+      stroke:'#fff',
+      fill:this.props.fillColor(props.id),
+      onClickHandler:nothing,
+      onDoubleClickHandler:nothing,
+      onMouseOverHandler:nothing,
+    }
+  }
+
+  componentsPropsEnhancer15(props) {
+    return {
+      opacity:0.3,
+      stroke:'#fff',
+      fill:this.props.fillColor(props.id),
+      onClickHandler:nothing,
+      onDoubleClickHandler:nothing,
+      onMouseOverHandler:nothing,
+    }
+  }
+
+  componentsPropsEnhancer2(props) {
+    return {
+      opacity:1,
+      stroke:'#fff',
+      fill:this.props.fillColor(props.id),
+      onClickHandler:nothing,
+      onDoubleClickHandler:nothing,
+      onMouseOverHandler:nothing,
+    }
+  }
+
+  componentsPropsEnhancer3(props) {
+    return {
+      opacity:0,
+      stroke:'none',
+      fill:'rgba(0,0,0,0)',
+      onClickHandler:e=>this.props.onIcicleRectClickHandler(props,e),
+      onDoubleClickHandler:e=>this.props.onIcicleRectDoubleClickHandler(props,e),
+      onMouseOverHandler:e=>this.props.onIcicleRectMouseOverHandler(props,e),
+    }
+  }
+
   render() {
     const props = this.props
 
-    const api = props.api
-
+    const root_id = props.root_id
     const x = props.x
     const y = props.y
     const dx = props.dx
     const dy = props.dy
 
     const display_root = props.display_root
-    const [xc,dxc] = props.computeWidthRec(display_root,x,dx)
+    const computeWidthRec = props.computeWidthRec
+
+    const fWidth = props.fWidth
+    const normalizeWidth = props.normalizeWidth
+    const getChildrenIdFromId = props.getChildrenIdFromId
+
+    const shouldRenderChild = props.shouldRenderChild
+    const shouldRenderSequence = this.shouldRenderSequence
+    const shouldRenderHoverSequence = this.shouldRenderHoverSequence
+
+    const trueFHeight = this.trueFHeight
+
+    const componentsPropsEnhancer1 = this.componentsPropsEnhancer1
+    const componentsPropsEnhancer15 = this.componentsPropsEnhancer15
+    const componentsPropsEnhancer2 = this.componentsPropsEnhancer2
+    const componentsPropsEnhancer3 = this.componentsPropsEnhancer3
+
+    const ref = this.ref
+
+
+    const layers = this.layers
+
+
+    const [xc,dxc] = computeWidthRec(display_root,x,dx).slice(-1)[0]
 
     let x_prime = (x + (x - xc)) * (dx / dxc)
     let dx_prime = dx * (dx / dxc)
@@ -223,29 +348,28 @@ class Icicle extends React.PureComponent {
       dx_prime = 0
     }
 
-    const root_id = props.root_id
-    const trueFHeight = this.trueFHeight
 
     return (
-       <g>
+      <g>
+        <SvgLayers>
+          {layers=>(
+            <g>
+            </g> 
+          )}
+        </SvgLayers>
         <IcicleRecursive
-          api={api}
-
           x={x_prime}
           y={y}
           width={dx_prime}
           height={dy}
           id={root_id}
-          fWidth={props.fWidth}
-          normalizeWidth={props.normalizeWidth}
-          trueFHeight={trueFHeight}
-          getChildrenIdFromId={props.getChildrenIdFromId}
-          fillColor={props.fillColor}
-          shouldRenderChild={props.shouldRenderChild}
 
-          onIcicleRectClickHandler={props.onIcicleRectClickHandler}
-          onIcicleRectDoubleClickHandler={props.onIcicleRectDoubleClickHandler}
-          onIcicleRectMouseOverHandler={props.onIcicleRectMouseOverHandler}
+          fWidth={fWidth}
+          normalizeWidth={normalizeWidth}
+          trueFHeight={trueFHeight}
+          getChildrenIdFromId={getChildrenIdFromId}
+
+          layers={layers}
         />
       </g>
     )
@@ -253,95 +377,9 @@ class Icicle extends React.PureComponent {
 }
 
 
-class IcicleRecursive extends React.PureComponent {
-  constructor(props) {
-    super(props)
-  }
-
-  makeKey(id) {
-    return 'icicle-recursive-'+id
-  }
 
 
-
-  render() {
-    const api = this.props.api
-
-    const children = this.props.getChildrenIdFromId(this.props.id)
-    const children_width = this.props.normalizeWidth(children.map(this.props.fWidth))
-      .map(a=>a*this.props.width)
-    const cumulated_children_width = computeCumulative(children_width)
-
-    const children_height = children.map(this.props.trueFHeight)
-
-    const children_component = children.map((child_id,i) => {
-      const x_child = this.props.x + cumulated_children_width[i]
-      const width_child = children_width[i]
-
-      const should_render_child = this.props.shouldRenderChild(x_child, width_child)
-
-      if (should_render_child === false) {
-        return (<g key={this.makeKey(child_id)} />)
-      }
-
-      const y_child = this.props.y
-      const height_child = children_height[i]
-
-      const x_prime = x_child
-      const width_prime = width_child
-      const y_prime = y_child + height_child
-      const height_prime = this.props.height - height_child
-      return (
-        <g key={this.makeKey(child_id)}>
-          <IcicleRect
-            api={api}
-
-            node_id={child_id}
-            x={x_child}
-            y={y_child}
-            dx={width_child}
-            dy={height_child}
-            fillColor={this.props.fillColor}
-
-            onClickHandler={this.props.onIcicleRectClickHandler}
-            onDoubleClickHandler={this.props.onIcicleRectDoubleClickHandler}
-            onMouseOverHandler={this.props.onIcicleRectMouseOverHandler}
-          />
-          <IcicleRecursive
-            api={api}
-
-            x={x_prime}
-            y={y_prime}
-            width={width_prime}
-            height={height_prime}
-            id={child_id}
-            fWidth={this.props.fWidth}
-            normalizeWidth={this.props.normalizeWidth}
-            trueFHeight={this.props.trueFHeight}
-            getChildrenIdFromId={this.props.getChildrenIdFromId}
-            fillColor={this.props.fillColor}
-            shouldRenderChild={this.props.shouldRenderChild}
-
-            onIcicleRectClickHandler={this.props.onIcicleRectClickHandler}
-            onIcicleRectDoubleClickHandler={this.props.onIcicleRectDoubleClickHandler}
-            onIcicleRectMouseOverHandler={this.props.onIcicleRectMouseOverHandler}
-          />
-        </g>
-      )
-    })
-
-    return (
-      <g>
-        {children_component}
-      </g>
-    )
-  }
-}
-
-
-
-
-class Presentational extends React.PureComponent {
+class IcicleMainComponent extends React.PureComponent {
   constructor(props) {
     super(props)
 
@@ -423,8 +461,9 @@ class Presentational extends React.PureComponent {
 
 
   computeWidthRec(ids, x, dx) {
+    const ans = [[x, dx]]
     if (ids.length < 2) {
-      return [x, dx]
+      return ans
     } else {
       const fWidth = this.fWidth
       const normalizeWidth = this.normalizeWidth
@@ -436,13 +475,13 @@ class Presentational extends React.PureComponent {
 
       const children_ids = getChildrenIdFromId(parent_id)
       const width_array = normalizeWidth(children_ids.map(fWidth)).map(a=>a*dx)
-      const cumulated_width_array = computeCumulative(width_array)
+      const cumulated_width_array = ArrayUtil.computeCumulative(width_array)
 
       const index_of = children_ids.indexOf(child_id)
       x = cumulated_width_array[index_of] + x
       dx = width_array[index_of]
 
-      return this.computeWidthRec(ids, x, dx)
+      return ans.concat(this.computeWidthRec(ids, x, dx))
     }
   }
 
@@ -462,7 +501,7 @@ class Presentational extends React.PureComponent {
     return height/this.props.max_depth
   }
 
-  shouldRenderChildIcicle(x,dx) {
+  shouldRenderChildIcicle(x,dx,id) {
     const dx_threshold = 1
     const x_window = 0
     const dx_window = this.icicleWidth() - 1
@@ -478,7 +517,7 @@ class Presentational extends React.PureComponent {
     }
   }
 
-  shouldRenderChildMinimap(x,dx) {
+  shouldRenderChildMinimap(x,dx,id) {
     const dx_threshold = 2.5
 
     if (dx < dx_threshold) {
@@ -505,25 +544,34 @@ class Presentational extends React.PureComponent {
 
   onIcicleRectClickHandler(props,event) {
     event.stopPropagation()
-    const node_id = props.node_id
-    const dims = props.dims
+    const node_id = props.id
+    const dims = {
+      x:props.x,
+      y:props.y,
+      dx:props.dx,
+      dy:props.dy,
+    }
 
     const node_sequence = this.nodeSequence(node_id)
-    this.props.lock(node_sequence, dims())
+    this.props.lock(node_sequence, dims)
   }
   onIcicleRectDoubleClickHandler(props,event) {
-    const node_id = props.node_id
+    const node_id = props.id
 
     const node_sequence = this.nodeSequence(node_id)
     this.props.setDisplayRoot(node_sequence)
   }
   onIcicleRectMouseOverHandler(props,event) {
-    const node_id = props.node_id
-    const dims = props.dims
-    const isLocked = props.isLocked
+    const node_id = props.id
+    const dims = {
+      x:props.x,
+      y:props.y,
+      dx:props.dx,
+      dy:props.dy,
+    }
 
     const node_sequence = this.nodeSequence(node_id)
-    this.props.setFocus(node_sequence, dims(), isLocked)
+    this.props.setFocus(node_sequence, dims)
   }
 
 
@@ -547,8 +595,6 @@ class Presentational extends React.PureComponent {
     const icicle = (
       <g>
         <AnimatedIcicle
-          api={api}
-          
           x={0}
           y={0}
           dx={icicle_width}
@@ -561,6 +607,9 @@ class Presentational extends React.PureComponent {
           trueFHeight={this.trueFHeight}
           getChildrenIdFromId={this.props.getChildrenIdFromId}
           fillColor={this.props.fillColor}
+
+          sequence={this.props.sequence}
+          hover_sequence={this.props.hover_sequence}
 
           shouldRenderChild={this.shouldRenderChildIcicle}
 
@@ -600,8 +649,6 @@ class Presentational extends React.PureComponent {
             style={{'fill': 'white', opacity:'0.4'}}
           />
           <Icicle
-            api={api}
-            
             x={minimap_x+5}
             y={minimap_y+5}
             dx={minimap_width-10}
@@ -614,6 +661,9 @@ class Presentational extends React.PureComponent {
             trueFHeight={this.trueFHeight}
             getChildrenIdFromId={this.props.getChildrenIdFromId}
             fillColor={this.props.fillColor}
+
+            sequence={this.props.sequence}
+            hover_sequence={this.props.hover_sequence}
 
             shouldRenderChild={this.shouldRenderChildMinimap}
 
@@ -637,7 +687,6 @@ class Presentational extends React.PureComponent {
     )
     console.timeEnd('render icicle')
 
-
     return (
       <svg
         xmlns='http://www.w3.org/2000/svg'
@@ -652,15 +701,32 @@ class Presentational extends React.PureComponent {
         {icicle}
       </svg>
     )
+
+
+    // return (
+    //   <svg
+    //     xmlns='http://www.w3.org/2000/svg'
+    //     viewBox={'0 0 '+view_box_width+' '+view_box_height}
+    //     width='100%'
+    //     height='100%'
+    //     preserveAspectRatio='xMidYMid meet'
+    //     ref={this.ref}
+    //     onClick={this.onClickHandler}
+    //     onMouseLeave={this.onMouseLeaveHandler}
+    //   >
+    //     <ApiContext.Provider value={Math.random()}>
+    //       {icicle}
+    //     </ApiContext.Provider>
+    //   </svg>
+    // )
   }
 }
 
 
-export default (props) => {
+export default function IcicleApiToProps(props) {
   const api = props.api
   const icicle_state = api.icicle_state
   const database = api.database
-
 
   const lock_sequence = icicle_state.lock_sequence()
   const isLocked = lock_sequence.length > 0
@@ -672,6 +738,8 @@ export default (props) => {
     getFfIdPath: database.getFfIdPath,
     max_depth: database.maxDepth(),
     isLocked,
+    sequence: icicle_state.sequence(),
+    hover_sequence: icicle_state.hover_sequence(),
 
     setFocus: icicle_state.setFocus,
     setNoFocus: icicle_state.setNoFocus,
@@ -684,6 +752,6 @@ export default (props) => {
     setNoDisplayRoot: icicle_state.setNoDisplayRoot,
   },props)
 
-  return (<Presentational {...props}/>)
+  return (<IcicleMainComponent {...props}/>)
 }
 

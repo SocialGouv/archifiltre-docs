@@ -4,8 +4,13 @@ import { mkB } from 'components/button'
 
 import * as Csv from 'csv'
 import { save, makeNameWithExt } from 'save'
-import { tr } from 'dict'
 
+import pick from 'languages'
+
+const label = pick({
+  en: 'Export',
+  fr: 'Exporter',
+})
 
 const CsvButton = props => {
   const api = props.api
@@ -19,7 +24,7 @@ const CsvButton = props => {
       console.log('to csv')
       save(name(), Csv.toStr(getStrList2()))
     },
-    tr('Export'),
+    label,
     true)
 }
 

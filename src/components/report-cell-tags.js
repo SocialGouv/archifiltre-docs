@@ -4,7 +4,19 @@ import { edit_hover_container, edit_hover_pencil } from 'css/app.css'
 
 import TagsEditable from 'components/tags-editable'
 import * as ObjectUtil from 'util/object-util'
-import { tr } from 'dict'
+
+import pick from 'languages'
+
+const tags_tr = pick({
+  en: 'Tags',
+})
+
+const your_tags_here_tr = pick({
+  en: 'Your tags here',
+  fr: 'Vos tags ici',
+})
+
+
 
 const tags_style = {
   overflowY: 'auto',
@@ -12,7 +24,7 @@ const tags_style = {
   maxHeight: '5em'
 }
 
-class Presentational extends React.Component {
+class ReportCellTags extends React.Component {
   constructor(props) {
     super(props);
 
@@ -55,8 +67,8 @@ class Presentational extends React.Component {
     if(this.props.isDummy) {
       return(
         <div className='cell small-6' style={this.props.cells_style}>
-          <b>{tr('Tags')}</b><br />
-          <span style={{'fontStyle':'italic'}}>{tr('Your tags here') + '...'}</span>
+          <b>{tags_tr}</b><br />
+          <span style={{'fontStyle':'italic'}}>{your_tags_here_tr + '...'}</span>
         </div>
       )
     }
@@ -68,7 +80,7 @@ class Presentational extends React.Component {
         className={edit_hover_container}
         style={this.props.cells_style}
         onClick={(e) => {e.stopPropagation(); if(!this.props.isEditingTags) this.props.onClickTagsCells();}}>
-          <b>{tr('Tags')}</b>
+          <b>{tags_tr}</b>
           <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
           <div style={tags_style} >
             <TagsEditable
@@ -103,7 +115,7 @@ export default (props) => {
     endEditing: report_state.stopEditingTags,
   },props)
 
-  return (<Presentational {...props}/>)
+  return (<ReportCellTags {...props}/>)
 }
 
 // const Container = connect(
@@ -111,6 +123,6 @@ export default (props) => {
 //   mapDispatchToProps,
 //   null,
 //   {withRef:true}
-// )(Presentational)
+// )(ReportCellTags)
 
 // export default Container

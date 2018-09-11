@@ -3,8 +3,13 @@ import React from 'react'
 import { mkB } from 'components/button'
 
 import { save, makeNameWithExt } from 'save'
-import { tr } from 'dict'
 
+import pick from 'languages'
+
+const label = pick({
+  en: 'Save',
+  fr: 'Enregistrer',
+})
 
 const SaveButton = props => {
   const api = props.api
@@ -18,7 +23,7 @@ const SaveButton = props => {
     ()=>{
       save(name(), getJson())
     },
-    tr('Save'),
+    label,
     true
   )
 }

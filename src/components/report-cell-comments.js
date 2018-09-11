@@ -6,10 +6,20 @@ import * as ObjectUtil from 'util/object-util'
 
 import CommentsEditable from 'components/comments-editable'
 
-import { tr } from 'dict'
+import pick from 'languages'
+
+const comments_tr = pick({
+  en: 'Comments',
+  fr: 'Commentaires',
+})
+
+const your_comments_here_tr = pick({
+  en: 'Your comments here',
+  fr: 'Vos commentaires ici',
+})
 
 
-class Presentational extends React.Component {
+class ReportCellComments extends React.Component {
   constructor(props) {
     super(props);
 
@@ -47,8 +57,8 @@ class Presentational extends React.Component {
     if(this.props.isDummy) {
       return(
         <div className='cell small-6' style={this.props.cells_style}>
-          <b>{tr('Comments')}</b><br />
-          <span style={{'fontStyle':'italic'}}>{tr('Your comments here') + '...'}</span>
+          <b>{comments_tr}</b><br />
+          <span style={{'fontStyle':'italic'}}>{your_comments_here_tr + '...'}</span>
         </div>
       )
     }
@@ -61,7 +71,7 @@ class Presentational extends React.Component {
         style={this.props.cells_style}
         onClick={(e) => {e.stopPropagation(); if(!this.props.isEditingComments) this.props.onClickCommentsCells();}}>
           <div>
-            <b>{tr('Comments')}</b>
+            <b>{comments_tr}</b>
             <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
           </div>
           <div style={comments_style} >
@@ -99,7 +109,7 @@ export default (props) => {
     endEditing,
   },props)
 
-  return (<Presentational {...props}/>)
+  return (<ReportCellComments {...props}/>)
 }
 
 
@@ -108,6 +118,6 @@ export default (props) => {
 //   mapDispatchToProps,
 //   null,
 //   {withRef:true}
-// )(Presentational)
+// )(ReportCellComments)
 
 // export default Container

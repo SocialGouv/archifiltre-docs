@@ -2,7 +2,12 @@ import React from 'react'
 
 import { mkB } from 'components/button'
 
-import { tr } from 'dict'
+import pick from 'languages'
+
+const label = pick({
+  en: 'Close',
+  fr: 'Fermer',
+})
 
 const ReinitButton = props => {
   const api = props.api
@@ -18,7 +23,7 @@ const ReinitButton = props => {
     undo.commit()
   }
 
-  return mkB(reInitStateApp, tr("Close"), true, "#e04d1c")
+  return mkB(reInitStateApp, label, true, "#e04d1c")
 }
 
 export default ReinitButton

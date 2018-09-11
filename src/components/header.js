@@ -1,7 +1,18 @@
 import React from 'react'
 
-import { tr } from 'dict'
 import Dashboard from 'components/dashboard'
+
+import pick from 'languages'
+
+const title = pick({
+  en: 'Icicles',
+  fr: 'Stalactites',
+})
+
+const what_new = pick({
+  en: 'What\'s new?',
+  fr: 'Quoi de neuf ?',
+})
 
 
 const Header = props => {
@@ -10,8 +21,11 @@ const Header = props => {
       <div className='cell auto'></div>
       <div className='cell small-3'>
         <h4 style={{lineHeight: '0.8em'}}>
-          <b>{tr('Icicles')}</b><br />
-          <span style={{fontSize: '0.65em'}}>v8 Hipster Hippo - <a target="_blank" href="http://archifiltre.com/#changelog">{tr("What's new?")}</a></span>
+          <b>{title}</b><br />
+          <span style={{fontSize: '0.65em'}}>
+            v8 Hipster Hippo -
+            <a target="_blank" href="http://archifiltre.com/#changelog">{what_new}</a>
+          </span>
         </h4>
       </div>
       <div className='cell small-8'>

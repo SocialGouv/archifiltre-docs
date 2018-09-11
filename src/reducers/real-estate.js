@@ -43,7 +43,6 @@ export const create = (state) => {
   }
 }
 
-
 const updateGetAndSet = (get,set,property_name,old_key,old_obj,new_obj) => {
   let new_key = old_key
   let update = (a,b)=>[a].concat(b)
@@ -80,6 +79,9 @@ export const compose = (a,b) => {
   }
 }
 
+
+
+
 const compileGet = (get) => {
   if (get.length === 0) {
     return s=>s
@@ -96,6 +98,22 @@ const compileSet = (get,set) => {
   }
 }
 
+const cache = (f) => {
+  const equal = (a,b) => a === b
+  let last_args = [Symbol()]
+  let last_state = Symbol()
+  let last_ans
+  return (...args) => state => {
+    const same_args = args.reduce((acc,val,ind) => acc && val === last_args[ind],true)
+    if (same_args === false || equal(last_state,state) === false) {
+      last_args = args
+      last_state = state
+      last_ans = f(...args)(state)
+    }
+    return last_ans
+  }
+}
+
 export const compile = (real_estate) => {
   const initialState = () => real_estate.initialState({})
   const api = {}
@@ -103,7 +121,8 @@ export const compile = (real_estate) => {
   for (let key in real_estate.reader) {
     const f = real_estate.reader[key]
     const get = compileGet(f.get)
-    api[key] = (...args) => state => f(...args)(get(state))
+    const cachedF = cache(f)
+    api[key] = (...args) => state => cachedF(...args)(get(state))
     delete api[key].get
     delete api[key].set
     api[key].reader = true
@@ -134,6 +153,11 @@ export const compile = (real_estate) => {
     api,
   }
 }
+
+
+
+
+
 
 export const createHigherOrder = (higher_order) => {
   const get = higher_order.get

@@ -6,7 +6,6 @@ import BTRButton from 'components/back-to-root-button'
 import ToggleChangeSkin from 'components/toggle-change-skin'
 
 import * as Color from 'color'
-import { tr } from 'dict'
 
 const grid_style ={
   background: 'white',
@@ -17,7 +16,7 @@ const grid_style ={
   margin: '0.5em 0'
 }
 
-const Presentational = props => {
+const NavigationBar = props => {
   const api = props.api
   
   return (
@@ -39,4 +38,4 @@ const Presentational = props => {
 }
 
 
-export default Presentational
+export default NavigationBar

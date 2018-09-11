@@ -15,10 +15,8 @@ import CtrlZ from 'components/ctrl-z'
 
 import { edit_hover_container, edit_hover_pencil, editable_text, session_name} from 'css/app.css'
 
-import { tr } from 'dict'
 
-
-const Presentational = props => {
+const DashBoard = props => {
 
   let session_info_cell, ctrlz_cell, csv_button_cell, save_button_cell, reinit_button_cell;
 
@@ -112,20 +110,16 @@ const Presentational = props => {
 }
 
 
-export default (props) => {
+export default function DashBoardApiToProps(props) {
   const api = props.api
   const app_state = api.app_state
   const database = api.database
   const finished = app_state.isFinished()
 
-  let nb_files = 0
-  let nb_folders = 0
-  let volume = 0
-  if (finished) {
-    nb_files = database.fileCount()
-    nb_folders = database.overallCount() - database.fileCount()
-    volume = database.volume()
-  }
+
+  const nb_files = database.fileCount()
+  const nb_folders = database.overallCount() - nb_files
+  const volume = database.volume()
   
   const onChangeSessionName = (prop_name) => (n) => {
     if(n[prop_name].length > 0){
@@ -144,6 +138,6 @@ export default (props) => {
     onChangeSessionName,
   },props)
 
-  return (<Presentational {...props}/>)
+  return (<DashBoard {...props}/>)
 }
 

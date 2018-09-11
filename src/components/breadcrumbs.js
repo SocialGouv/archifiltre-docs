@@ -7,10 +7,20 @@ import BreadCrumbPoly from 'components/breadcrumb-poly'
 
 import * as Color from 'color'
 
-import { tr } from 'dict'
+import pick from 'languages'
+
+const file_text = pick({
+  en: 'File',
+  fr: 'Fichier',
+})
+
+const level_text = pick({
+  en: 'Level',
+  fr: 'Niveau',
+})
+
 
 const breadcrumb_dims = {w: 400, h: 300}
-
 
 
 const makeBreadKey = id => 'breadcrumbc-'+id
@@ -47,7 +57,7 @@ const computeDim = (y,height) => {
   }
 }
 
-class Presentational extends React.PureComponent {
+class Breadcrumbs extends React.PureComponent {
   constructor(props) {
     super(props)
 
@@ -169,11 +179,11 @@ class Presentational extends React.PureComponent {
 
         let display_name
         if (is_last) {
-          display_name = tr('File')
+          display_name = file_text
         } else if (i >= 2) {
           display_name = '...'
         } else {
-          display_name = tr('Level') + ' ' + (i+1)
+          display_name = level_text + ' ' + (i+1)
         }
         res.push(
           <g key={'breadcrumb' + i}>
@@ -211,7 +221,7 @@ class Presentational extends React.PureComponent {
 }
 
 
-export default (props) => {
+export default function BreadcrumbsApiToProps(props) {
   const api = props.api
   const icicle_state = api.icicle_state
   const database = api.database
@@ -219,6 +229,7 @@ export default (props) => {
   const breadcrumb_sequence = icicle_state.sequence()
 
   const getFfByFfId = database.getFfByFfId
+
   const max_depth = database.maxDepth()
 
   props = ObjectUtil.compose({
@@ -229,5 +240,5 @@ export default (props) => {
     root_id: database.rootFfId(),
   },props)
 
-  return (<Presentational {...props}/>)
+  return (<Breadcrumbs {...props}/>)
 }

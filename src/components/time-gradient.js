@@ -7,7 +7,7 @@ const least_rgba = Color.toRgba(Color.leastRecentDate())
 const medium_rgba = Color.toRgba(Color.mediumDate())
 const most_rgba = Color.toRgba(Color.mostRecentDate())
 
-class Presentational extends React.PureComponent {
+class TimeGradient extends React.PureComponent {
   constructor(props) {
     super(props)
 
@@ -133,6 +133,6 @@ export default (props) => {
     id,
   },props)
 
-  return (<Presentational {...props}/>)
+  return (<TimeGradient {...props}/>)
 }
 

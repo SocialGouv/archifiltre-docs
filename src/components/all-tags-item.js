@@ -4,7 +4,12 @@ import Tag from 'components/tag'
 
 import { tags_bubble, tags_count, tags_add, tags_cross, edit_hover_container, edit_hover_pencil, background } from 'css/app.css'
 
-import { tr } from 'dict'
+import pick from 'languages'
+
+const rename_tag_placeholder = pick({
+  en: 'Rename tag',
+  fr: 'Renommer un tag',
+})
 
 const input_style = {
   width: "50%",
@@ -95,7 +100,7 @@ class Presentational extends React.Component {
         onKeyUp={keyUp}
         onBlur={(e) => {this.props.renameTag(e.target.value); this.props.stopEditingTag()}}
         defaultValue={tag}
-        placeholder={tr("Rename tag")}
+        placeholder={rename_tag_placeholder}
         ref={(component) => {this.textInput = component;}} />)
       : (<Tag
         text={tag}

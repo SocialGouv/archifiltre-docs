@@ -2,6 +2,7 @@
 
 import React from 'react'
 import root_reducer from 'reducers/root-reducer'
+import * as ObjectUtil from 'util/object-util'
 
 function makeStore(compiled_real_estate) {
   const initialState = compiled_real_estate.initialState
@@ -18,43 +19,62 @@ function makeStore(compiled_real_estate) {
     }
   }
 
-  return function(NextComponent) {
 
-    return class Store extends React.Component {
-      constructor(props) {
-        super(props)
+  class Store extends React.Component {
+    constructor(props) {
+      super(props)
 
-        this.state = initialState()
+      this.state = initialState()
 
-        // this.reader_api = {}
-        // reader_key.forEach(key=>{
-        //   this.reader_api[key] = (...args) => flat_api[key](...args)(this.state)
-        // })
+      this.api = {}
 
-        this.writer_api = {}
-        writer_key.forEach(key=>{
-          this.writer_api[key] = (...args) => this.setState(flat_api[key](...args))
-        })
+      reader_key.forEach(key=>{
+        this.api[key] = (...args) => flat_api[key](...args)(this.state)
+      })
 
-        this.getApi = () => {
-          const ans = {}
-          reader_key.forEach(key=>{
-            // ans[key] = this.reader_api[key]
-            ans[key] = (...args) => flat_api[key](...args)(this.state)
-          })
-          writer_key.forEach(key=>{
-            ans[key] = this.writer_api[key]
-          })
-          return unflattenApi(ans)
-        }
-      }
+      writer_key.forEach(key=>{
+        this.api[key] = (...args) => this.setState(flat_api[key](...args))
+      })
 
-      render() {
-        return (
-          <NextComponent {...this.props} api={this.getApi()}/>
-        )
-      }
+      this.api = unflattenApi(this.api)
+
+      this.getApi = () => Object.assign({},this.api)
+
+
+
+      // // this.reader_api = {}
+      // // reader_key.forEach(key=>{
+      // //   this.reader_api[key] = (...args) => flat_api[key](...args)(this.state)
+      // // })
+
+      // this.writer_api = {}
+      // writer_key.forEach(key=>{
+      //   this.writer_api[key] = (...args) => this.setState(flat_api[key](...args))
+      // })
+
+      // this.getApi = () => {
+      //   const ans = {}
+      //   reader_key.forEach(key=>{
+      //     // ans[key] = this.reader_api[key]
+      //     ans[key] = (...args) => flat_api[key](...args)(this.state)
+      //   })
+      //   writer_key.forEach(key=>{
+      //     ans[key] = this.writer_api[key]
+      //   })
+      //   return unflattenApi(ans)
+      // }
     }
+
+    render() {
+      return this.props.children(ObjectUtil.compose({api:this.getApi()},this.props))
+    }
+  }
+
+  const ApiContext = React.createContext({})
+
+  return {
+    Store,
+    ApiContext,
   }
 
 }
@@ -82,4 +102,5 @@ const unflattenApi = (flat_api) => {
 }
 
 
-export default makeStore(root_reducer)
+export const { Store, ApiContext } = makeStore(root_reducer)
+

@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-const Presentational = props => {
+const BreadcrumbPoly = props => {
   const x = props.x
   const y = props.y
   const dx = props.dx
@@ -34,4 +34,4 @@ const Presentational = props => {
 }
 
 
-export default Presentational
+export default BreadcrumbPoly

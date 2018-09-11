@@ -174,5 +174,40 @@ describe('real-estate', function() {
   })
 
 
+  it('cache test', () => {
+    let sideeffect = 0
+    const state = M.create({
+      property_name:'state',
+      initialState:()=>0,
+      reader:{
+        isZero:()=>s=>{
+          sideeffect++
+          return s===0
+        },
+      },
+      writer:{
+        add:(a)=>s=>s+a,
+      }
+    })
+
+    const {initialState,api} = M.compile(state)
+
+    let store = initialState()
+
+    store.should.deep.equal({state:0})
+
+    sideeffect.should.equal(0)
+    api.state.isZero()(store)
+    sideeffect.should.equal(1)
+    api.state.isZero()(store)
+    sideeffect.should.equal(1)
+
+    store = api.state.add(10)(store)
+    api.state.isZero()(store)
+    sideeffect.should.equal(2)
+    api.state.isZero()(store)
+    sideeffect.should.equal(2)
+  })
+
 })
 

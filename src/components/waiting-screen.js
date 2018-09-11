@@ -1,12 +1,17 @@
 import React from 'react'
 
-import { tr } from 'dict'
-
 import * as ObjectUtil from 'util/object-util'
+import pick from 'languages'
 
 const cell_style = {
   textAlign:'center'
 }
+
+const text = pick({
+  en: 'Files loaded',
+  fr: 'Fichiers chargés',
+})
+
 
 class Presentational extends React.Component {
   constructor(props) {
@@ -35,7 +40,7 @@ class Presentational extends React.Component {
         <div className='cell'>
           <div style={cell_style}>
             <img src='imgs/loading.gif' style={{'width': '50%', 'opacity': '0.3'}}/>
-            <p>{tr("Files loaded")}: {this.props.nb_files}</p>
+            <p>{text}: {this.props.nb_files}</p>
           </div>
         </div>
       </div>

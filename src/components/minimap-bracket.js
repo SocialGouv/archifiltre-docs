@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-class Presentational extends React.PureComponent {
+class MinimapBracket extends React.PureComponent {
   constructor(props) {
     super(props)
   }
@@ -18,7 +18,7 @@ class Presentational extends React.PureComponent {
 
     if (display_root.length) {
       const ids = display_root
-      let [minimap_x, minimap_width] = computeWidthRec(ids,x,dx)
+      let [minimap_x, minimap_width] = computeWidthRec(ids,x,dx).slice(-1)[0]
 
       minimap_width = Math.max(minimap_width,1)
 
@@ -48,4 +48,4 @@ class Presentational extends React.PureComponent {
   }
 }
 
-export default Presentational
+export default MinimapBracket

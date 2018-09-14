@@ -22,14 +22,12 @@ const fileOrFolderFactory = RecordUtil.createFactory({
   file_size:0,
   file_last_modified:0,
 },{
-  toJs: a => {
-    a.children = a.children.toArray()
-    return a
-  },
-  fromJs: a => {
-    a.children = List(a.children)
-    return a
-  },
+  toJs: a => ObjectUtil.compose({
+    children:a.children.toArray(),
+  },a),
+  fromJs: a => ObjectUtil.compose({
+    children:List(a.children),
+  },a),
 })
 
 
@@ -154,18 +152,16 @@ const derivedFactory = RecordUtil.createFactory({
   sort_by_size_index:List(),
   sort_by_date_index:List(),
 },{
-  toJs: a => {
-    a.last_modified_list = a.last_modified_list.toArray()
-    a.sort_by_size_index = a.sort_by_size_index.toArray()
-    a.sort_by_date_index = a.sort_by_date_index.toArray()
-    return a
-  },
-  fromJs: a => {
-    a.last_modified_list = List(a.last_modified_list)
-    a.sort_by_size_index = List(a.sort_by_size_index)
-    a.sort_by_date_index = List(a.sort_by_date_index)
-    return a
-  },
+  toJs: a => ObjectUtil.compose({
+    last_modified_list:a.last_modified_list.toArray(),
+    sort_by_size_index:a.sort_by_size_index.toArray(),
+    sort_by_date_index:a.sort_by_date_index.toArray(),
+  },a),
+  fromJs: a => ObjectUtil.compose({
+    last_modified_list:List(a.last_modified_list),
+    sort_by_size_index:List(a.sort_by_size_index),
+    sort_by_date_index:List(a.sort_by_date_index),
+  },a),
 })
 
 

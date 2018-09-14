@@ -3,6 +3,7 @@ import * as Loop from 'test/loop'
 
 import { generateRandomString } from 'random-gen'
 import * as RecordUtil from 'util/record-util'
+import * as ObjectUtil from 'util/object-util'
 
 import { List, Map, Set } from 'immutable'
 
@@ -10,14 +11,12 @@ const tagFactory = RecordUtil.createFactory({
   name:'',
   ff_ids:Set(),
 },{
-  toJs: a => {
-    a.ff_ids = a.ff_ids.toArray()
-    return a
-  },
-  fromJs: a => {
-    a.ff_ids = Set(a.ff_ids)
-    return a
-  }
+  toJs: a => ObjectUtil.compose({
+    ff_ids:a.ff_ids.toArray(),
+  },a),
+  fromJs: a => ObjectUtil.compose({
+    ff_ids:Set(a.ff_ids),
+  },a),
 })
 
 
@@ -137,6 +136,6 @@ const toAndFromJs = (factory) => [
 ]
 
 export const [toJs,fromJs] = toAndFromJs(
-  tagFactory
+  RecordUtil.composeFactory(derivedFactory, tagFactory)
 )
 

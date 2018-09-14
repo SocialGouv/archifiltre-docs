@@ -1,0 +1,75 @@
+diff -Naur v8/src/content.js new-v8/src/content.js
+--- v8/src/content.js	2018-09-14 14:40:28.755703885 +0200
++++ new-v8/src/content.js	2018-09-14 15:04:41.835698342 +0200
+@@ -1,7 +1,7 @@
+ 
+ import { Record, List, Set, Map } from 'immutable'
+ 
+-import * as Arbitrary from 'test/arbitrary'
++import * as Arbitrary from './test/arbitrary'
+ 
+ 
+ const LastModified = Record({
+diff -Naur v8/src/file-system.js new-v8/src/file-system.js
+--- v8/src/file-system.js	2018-09-14 14:40:28.755703885 +0200
++++ new-v8/src/file-system.js	2018-09-14 15:04:14.363698447 +0200
+@@ -1,14 +1,13 @@
+ 
+ import { Map, List, Record, Set } from 'immutable'
+-import { generateRandomString } from 'random-gen'
++import { generateRandomString } from './random-gen'
+ 
+-import * as Compatibility from 'compatibility'
+ 
+-import * as Cache from 'cache'
+-import * as Content from 'content'
+-import * as Arbitrary from 'test/arbitrary'
+-import * as Loop from 'test/loop'
+-import * as TT_ from 'table-tree'
++import * as Cache from './cache'
++import * as Content from './content'
++import * as Arbitrary from './test/arbitrary'
++import * as Loop from './test/loop'
++import * as TT_ from './table-tree'
+ const TT = Object.assign({},TT_)
+ 
+ 
+@@ -399,8 +398,7 @@
+   return JSON.stringify(state)
+ })
+ export const fromJson = (json) => {
+-  let state = Compatibility.fromAnyJsonToJs(JSON.parse,json)
+-
++  let state = JSON.parse(json)
+   state = fromJs(state)
+ 
+   return state
+diff -Naur v8/src/table-tree.js new-v8/src/table-tree.js
+--- v8/src/table-tree.js	2018-09-14 14:40:28.755703885 +0200
++++ new-v8/src/table-tree.js	2018-09-14 15:05:48.307698088 +0200
+@@ -1,9 +1,9 @@
+ 
+-import * as Loop from 'test/loop'
+-import * as Arbitrary from 'test/arbitrary'
+-import * as Cache from 'cache'
++import * as Loop from './test/loop'
++import * as Arbitrary from './test/arbitrary'
++import * as Cache from './cache'
+ 
+-import { generateRandomString } from 'random-gen'
++import { generateRandomString } from './random-gen'
+ 
+ import { Map, Record, List } from 'immutable'
+ 
+diff -Naur v8/src/test/arbitrary.js new-v8/src/test/arbitrary.js
+--- v8/src/test/arbitrary.js	2018-09-14 14:40:28.755703885 +0200
++++ new-v8/src/test/arbitrary.js	2018-09-14 15:04:50.035698311 +0200
+@@ -1,7 +1,7 @@
+ 
+ import { Map, List, Set } from 'immutable'
+ 
+-import { generateRandomString } from 'random-gen'
++import { generateRandomString } from '../random-gen'
+ 
+ import colors from 'colors/safe'
+ 

@@ -1,4 +1,5 @@
 
+import * as ObjectUtil from 'util/object-util'
 import * as RecordUtil from 'util/record-util'
 import * as FilesAndFolders from 'datastore/files-and-folders'
 import * as Tags from 'datastore/tags'
@@ -9,16 +10,14 @@ const virtualFileSystem = RecordUtil.createFactory({
   files_and_folders:FilesAndFolders.empty(),
   tags:Tags.empty(),
 },{
-  toJs: a => {
-    a.files_and_folders = FilesAndFolders.toJs(a.files_and_folders)
-    a.tags = Tags.toJs(a.tags)
-    return a
-  },
-  fromJs: a => {
-    a.files_and_folders = FilesAndFolders.fromJs(a.files_and_folders)
-    a.tags = Tags.fromJs(a.tags)
-    return a
-  },
+  toJs: a => ObjectUtil.compose({
+    files_and_folders:FilesAndFolders.toJs(a.files_and_folders),
+    tags:Tags.toJs(a.tags),
+  },a),
+  fromJs: a => ObjectUtil.compose({
+    files_and_folders:FilesAndFolders.fromJs(a.files_and_folders),
+    tags:Tags.fromJs(a.tags),
+  }),
 })
 
 export const make = origin => virtualFileSystem({

@@ -5,6 +5,8 @@ import * as Loop from 'test/loop'
 import * as Arbitrary from 'test/arbitrary'
 import * as M from 'util/record-util'
 
+import { List } from 'immutable'
+
 describe('record-util', function() {
   const testEquality = (a,b) => {
     a.toObject().should.deep.equal(b.toObject())
@@ -91,5 +93,6 @@ describe('record-util', function() {
       d:80,
     })
   })
+
 
 })

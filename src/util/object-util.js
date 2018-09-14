@@ -17,3 +17,5 @@ export const extractKeys = (keys,obj) => {
   })
   return ans
 }
+
+export const copy = a => Object.assign({},a)

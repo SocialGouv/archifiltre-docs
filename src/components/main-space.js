@@ -13,10 +13,10 @@ const grid_style = {
 
 const MainSpace = props => {
   const api = props.api
-  const app_state = api.app_state
+  const loading_state = api.loading_state
 
-  const started = app_state.isStarted()
-  const finished = app_state.isFinished()
+  const started = loading_state.isStarted()
+  const finished = loading_state.isFinished()
 
   if (started === false && finished === false) {
     return (

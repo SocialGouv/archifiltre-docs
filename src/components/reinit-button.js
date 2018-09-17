@@ -12,12 +12,12 @@ const label = pick({
 const ReinitButton = props => {
   const api = props.api
   const database = api.database
-  const app_state = api.app_state
+  const loading_state = api.loading_state
   const icicle_state = api.icicle_state
   const undo = api.undo
   const reInitStateApp = () => {
     database.reInit()
-    app_state.reInit()
+    loading_state.reInit()
     icicle_state.setNoFocus()
     icicle_state.setNoDisplayRoot()
     undo.commit()

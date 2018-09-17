@@ -16,12 +16,6 @@ import { Store } from 'reducers/store'
 
 
 
-// import 'typeface-quicksand'
-
-
-
-
-
 
 // import Analytics from 'electron-ga' // dev/prod
 
@@ -53,8 +47,6 @@ const app = () => {
     <ErrorBoundary>
       <Store>
         {props => {
-          console.log(props)
-          window.props = props
           return (
             <div className='grid-y grid-frame'>
               <div className='cell'>

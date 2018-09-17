@@ -112,9 +112,9 @@ const DashBoard = props => {
 
 export default function DashBoardApiToProps(props) {
   const api = props.api
-  const app_state = api.app_state
+  const loading_state = api.loading_state
   const database = api.database
-  const finished = app_state.isFinished()
+  const finished = loading_state.isFinished()
 
 
   const nb_files = database.fileCount()
@@ -129,7 +129,7 @@ export default function DashBoardApiToProps(props) {
   }
 
   props = ObjectUtil.compose({
-    started: app_state.isStarted(),
+    started: loading_state.isStarted(),
     finished,
     nb_files,
     nb_folders,

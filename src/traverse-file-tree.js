@@ -4,13 +4,14 @@ const Fs = require('fs')
 const Path = require('path')
 
 
-const recTraverseFileTree = (path) => {
+const recTraverseFileTree = (hook,path) => {
   const stats = Fs.statSync(path)
   if (stats.isDirectory()) {
     return Fs.readdirSync(path)
-      .map(a=>recTraverseFileTree(Path.join(path,a)))
+      .map(a=>recTraverseFileTree(hook,Path.join(path,a)))
       .reduce((acc,val)=>acc.concat(val),[])
   } else {
+    hook()
     const file = {
       size:stats.size,
       lastModified:stats.mtimeMs,
@@ -21,8 +22,8 @@ const recTraverseFileTree = (path) => {
 
 const convertToPosixPath = (path) => path.split(Path.sep).join('/')
 
-export const traverseFileTree = (dropped_folder_path) => {
-  let origin = recTraverseFileTree(dropped_folder_path)
+export const traverseFileTree = (hook,dropped_folder_path) => {
+  let origin = recTraverseFileTree(hook,dropped_folder_path)
   dropped_folder_path = Path.dirname(dropped_folder_path)
   origin = origin.map(([file,path])=>[
     file,

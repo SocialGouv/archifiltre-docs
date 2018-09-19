@@ -47,27 +47,12 @@ electron_workspace:
 	cp electron/src/* $(workspace)
 	yarn --cwd $(workspace) install
 
-
-electron_webpack:
-	echo $(webpack_target)
-	sudo rm -fr $(workspace)/webpack
-	sudo docker run -d --name=$(image_name)_electron $(image_name):$(webpack_target) sh
-	sudo docker cp $(image_name)_electron:/usr/src/app/dist $(workspace)/webpack
-	sudo docker container stop $(image_name)_electron
-	sudo docker container rm $(image_name)_electron
-	sudo chmod -R 777 $(workspace)/webpack
-
-
-electron: dev electron_workspace
-	bin/extractWebpackDist.sh $(image_name) dev $(workspace)
+electron_dev: dev electron_workspace
+	sudo bin/extractWebpackDist.sh $(image_name) dev $(workspace)
 	yarn --cwd $(workspace) electron
 
-
-# electron_builder_pack: prod
-# 	sudo rm -fr ./electron/webpack
-# 	sudo docker run -d --name=$(image_name)_electron $(image_name):dev sh
-# 	sudo docker cp $(image_name)_electron:/usr/src/app/dist ./electron/webpack
-# 	sudo docker container stop $(image_name)_electron
-# 	sudo docker container rm $(image_name)_electron
-# 	sudo chmod -R 777 ./electron/webpack
-# 	yarn --cwd ./electron windows
+electron_prod: prod electron_workspace
+	sudo bin/extractWebpackDist.sh $(image_name) prod $(workspace)
+	bin/toggleDevComment.sh $(workspace)/index.js > /tmp/electron_pack
+	cat /tmp/electron_pack > $(workspace)/index.js
+	yarn --cwd $(workspace) electron

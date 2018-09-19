@@ -31,12 +31,10 @@ function createWindow () {
 
 
   // Open the DevTools.
-  win.webContents.openDevTools() // dev/prod
-  console.log('process.env.NODE_ENV',process.env.NODE_ENV)
-
+  win.webContents.openDevTools() // development
 
   win.on('close', (event) => {
-    // event.preventDefault() // dev/prod
+    // event.preventDefault() // development
     let title
     let message
     let detail

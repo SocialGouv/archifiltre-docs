@@ -1,10 +1,10 @@
 image_name = cheap-exp
 pwd = $(shell pwd)
 
-.PHONY: electron
+# .PHONY: electron
 
 
-all: electron
+all: electron_dev
 
 dev: cleanContainer
 	sudo docker build \

@@ -69,8 +69,10 @@ window.onload = app
 
 document.ondragover = document.ondrop = (ev) => {
   ev.preventDefault()
+  return false
 }
 
 window.ondragover = window.ondrop = (ev) => {
   ev.preventDefault()
+  return false
 }

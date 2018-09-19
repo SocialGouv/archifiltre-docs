@@ -3,6 +3,7 @@ import React from 'react'
 import * as ArrayUtil from 'util/array-util'
 import * as ObjectUtil from 'util/object-util'
 
+import IcicleRect from 'components/icicle-rect'
 
 export default class IcicleRecursive extends React.PureComponent {
   constructor(props) {
@@ -13,35 +14,8 @@ export default class IcicleRecursive extends React.PureComponent {
     return 'icicle-recursive-'+id
   }
 
-  mapper(shouldRenderChild,x,width,y,height,componentsPropsEnhancer,Components,id) {
-    const should_render_child = shouldRenderChild(x, width, id)
-    if (should_render_child === false) {
-      return false
-    }
-
-    const current_components_props = ObjectUtil.compose({
-      x,
-      y,
-      dx:width,
-      dy:height, 
-    },componentsPropsEnhancer({
-      id,
-      x,
-      y,
-      dx:width,
-      dy:height, 
-    }))
-
-    return <Components {...current_components_props}/>
-  }
-
   render() {
     const props = this.props
-
-    const layers = props.layers
-    // const Components = props.Components
-    // const componentsPropsEnhancer = props.componentsPropsEnhancer
-    // const shouldRenderChild = props.shouldRenderChild
 
     const id = props.id
     const x = props.x
@@ -54,16 +28,20 @@ export default class IcicleRecursive extends React.PureComponent {
     const normalizeWidth = props.normalizeWidth
     const trueFHeight = props.trueFHeight
 
-    const makeKey = this.makeKey
+    const shouldRenderChild = props.shouldRenderChild
 
-    const computeCumulative = ArrayUtil.computeCumulative
+    const fillColor = props.fillColor
+    const onClickHandler = props.onClickHandler
+    const onDoubleClickHandler = props.onDoubleClickHandler
+    const onMouseOverHandler = props.onMouseOverHandler
 
-    const mapper = this.mapper
+
+
 
 
     const children = getChildrenIdFromId(id)
     const children_width = normalizeWidth(children.map(fWidth)).map(a=>a*width)
-    const cumulated_children_width = computeCumulative(children_width)
+    const cumulated_children_width = ArrayUtil.computeCumulative(children_width)
 
     const children_height = children.map(trueFHeight)
 
@@ -71,28 +49,14 @@ export default class IcicleRecursive extends React.PureComponent {
       const x_child = x + cumulated_children_width[i]
       const width_child = children_width[i]
 
+      const should_render_child = shouldRenderChild(x_child, width_child)
+
+      if (should_render_child === false) {
+        return (<g key={this.makeKey(child_id)} />)
+      }
+
       const y_child = y
       const height_child = children_height[i]
-
-      const components = layers.map(({shouldRender,Components,propsEnhancer},i) => (
-        <g key={i}>
-          {
-            mapper(
-              shouldRender,
-              x_child,
-              width_child,
-              y_child,
-              height_child,
-              propsEnhancer,
-              Components,
-              child_id
-            )
-          }
-        </g>
-      ))
-
-      const shouldContinue = components.reduce((acc,val)=>acc||val!==false,false)
-
 
       const x_prime = x_child
       const width_prime = width_child
@@ -100,26 +64,38 @@ export default class IcicleRecursive extends React.PureComponent {
       const height_prime = height - height_child
 
       return (
-        <g key={makeKey(child_id)}>
-          {shouldContinue &&
-            <g>
-              {components}
-              <IcicleRecursive
-                x={x_prime}
-                y={y_prime}
-                width={width_prime}
-                height={height_prime}
-                id={child_id}
+        <g key={this.makeKey(child_id)}>
+          <IcicleRect
+            id={child_id}
+            x={x_child}
+            y={y_child}
+            dx={width_child}
+            dy={height_child}
 
-                fWidth={fWidth}
-                normalizeWidth={normalizeWidth}
-                trueFHeight={trueFHeight}
-                getChildrenIdFromId={getChildrenIdFromId}
+            fillColor={fillColor}
 
-                layers={layers}
-              />
-            </g>
-          }
+            onClickHandler={onClickHandler}
+            onDoubleClickHandler={onDoubleClickHandler}
+            onMouseOverHandler={onMouseOverHandler}
+          />
+          <IcicleRecursive
+            x={x_prime}
+            y={y_prime}
+            width={width_prime}
+            height={height_prime}
+            id={child_id}
+
+            fWidth={fWidth}
+            normalizeWidth={normalizeWidth}
+            trueFHeight={trueFHeight}
+            getChildrenIdFromId={getChildrenIdFromId}
+
+            shouldRenderChild={shouldRenderChild}
+            fillColor={fillColor}
+            onClickHandler={onClickHandler}
+            onDoubleClickHandler={onDoubleClickHandler}
+            onMouseOverHandler={onMouseOverHandler}
+          />
         </g>
       )
     })

@@ -73,33 +73,26 @@ class IcicleRect extends React.PureComponent {
     }
   }
 
-  emptyHandler() {
-
-  }
-
   onClickHandler(e) {
     this.props.onClickHandler({
-      node_id:this.props.node_id,
+      id:this.props.node_id,
       dims:this.dims,
     },e)
   }
   onDoubleClickHandler(e) {
     this.props.onDoubleClickHandler({
-      node_id:this.props.node_id,
+      id:this.props.node_id,
       dims:this.dims,
     },e)
   }
   onMouseOverHandler(e) {
     this.props.onMouseOverHandler({
-      node_id:this.props.node_id,
+      id:this.props.node_id,
       dims:this.dims,
-      isLocked:this.props.isLocked,
     },e)
   }
 
   render() {
-    const layers = this.props.layers
-
     const node_id = this.props.node_id
 
     const isLocked = this.props.isLocked
@@ -131,9 +124,9 @@ class IcicleRect extends React.PureComponent {
         y={this.props.y}
         dx={this.props.dx}
         dy={this.props.dy}
-        onClickHandler={this.emptyHandler}
-        onDoubleClickHandler={this.emptyHandler}
-        onMouseOverHandler={this.emptyHandler}
+        onClickHandler={this.onClickHandler}
+        onDoubleClickHandler={this.onDoubleClickHandler}
+        onMouseOverHandler={this.onMouseOverHandler}
         fill={fill}
         opacity={opacity}
         stroke={'#fff'}
@@ -157,26 +150,9 @@ class IcicleRect extends React.PureComponent {
       )
     }
 
-    const two = [
-      <SvgRectangle
-        key='rect'
-        x={this.props.x}
-        y={this.props.y}
-        dx={this.props.dx}
-        dy={this.props.dy}
-        onClickHandler={this.onClickHandler}
-        onDoubleClickHandler={this.onDoubleClickHandler}
-        onMouseOverHandler={this.onMouseOverHandler}
-        fill={fill}
-        opacity={0}
-        stroke={'none'}
-      />
-    ]
-
     return (
       <g>
-        {ReactDOM.createPortal(zero,layers[0])}
-        {ReactDOM.createPortal(two,layers[2])}
+        {zero}
       </g>
     )
   }
@@ -187,49 +163,46 @@ class IcicleRect extends React.PureComponent {
 import { List } from 'immutable' //////////////////////////////////
 
 export default (props) => {
-  return (
-    <ApiContext.Consumer>
-      {(api) => {
+  const hover_sequence = []
+  const lock_sequence = []
+  const tag_id_to_highlight = ''
 
-        const hover_sequence = []
-        const lock_sequence = []
-        const tag_id_to_highlight = ''
-
-        const node_tag_ids = List()
+  const node_tag_ids = List()
 
 
-        // const icicle_state = api.icicle_state
-        // const database = api.database
+  // const icicle_state = api.icicle_state
+  // const database = api.database
 
-        // const hover_sequence = icicle_state.hover_sequence()
-        // const lock_sequence = icicle_state.lock_sequence()
-        // const tag_id_to_highlight = icicle_state.tagIdToHighlight()
+  // const hover_sequence = icicle_state.hover_sequence()
+  // const lock_sequence = icicle_state.lock_sequence()
+  // const tag_id_to_highlight = icicle_state.tagIdToHighlight()
 
-        // const node_tag_ids = database.getTagIdsByFfId(props.node_id)
+  // const node_tag_ids = database.getTagIdsByFfId(props.node_id)
 
-        const isInHoverSeq = hover_sequence.includes(props.node_id)
-        const isInLockSeq = lock_sequence.includes(props.node_id)
-        const hasTags = node_tag_ids.size > 0
-        const highlightingATag = tag_id_to_highlight.length > 0
-        const hasTagToHighlight = node_tag_ids.includes(tag_id_to_highlight)
-
-
-        props = ObjectUtil.compose({
-          isFocused: false,
-          isLocked: false,
-          // isFocused: icicle_state.isFocused(),
-          // isLocked: icicle_state.isLocked(),
-          isInHoverSeq,
-          isInLockSeq,
-          hasTags,
-          highlightingATag,
-          hasTagToHighlight,
-        },props)
+  const isInHoverSeq = hover_sequence.includes(props.id)
+  const isInLockSeq = lock_sequence.includes(props.id)
+  const hasTags = node_tag_ids.size > 0
+  const highlightingATag = tag_id_to_highlight.length > 0
+  const hasTagToHighlight = node_tag_ids.includes(tag_id_to_highlight)
 
 
-        return (<IcicleRect {...props}/>)
-      }}
-    </ApiContext.Consumer>
-  )
+  props = ObjectUtil.compose({
+    node_id:props.id,
+
+
+    isFocused: false,
+    isLocked: false,
+    // isFocused: icicle_state.isFocused(),
+    // isLocked: icicle_state.isLocked(),
+    isInHoverSeq,
+    isInLockSeq,
+    hasTags,
+    highlightingATag,
+    hasTagToHighlight,
+  },props)
+
+
+  return (<IcicleRect {...props}/>)
+    
 }
 

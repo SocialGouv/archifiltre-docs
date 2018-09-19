@@ -17,15 +17,15 @@ import { Store } from 'reducers/store'
 
 
 
-// import Analytics from 'electron-ga' // dev/prod
+// import Analytics from 'electron-ga' // development
 
-// const analytics = new Analytics('UA-115293619-2')
+// const analytics = new Analytics('UA-115293619-2') // development
 
-// analytics.send('pageview',{
-//   dh:'https://archifiltre.electron/',
-//   dp:'/electron/v9',
-//   dt:'archifiltre',
-// })
+// analytics.send('pageview',{ // development
+//   dh:'https://archifiltre.electron/', // development
+//   dp:'/electron/v9', // development
+//   dt:'archifiltre', // development
+// }) // development
 
 
 

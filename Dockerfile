@@ -25,14 +25,11 @@ COPY . .
 
 RUN npm run-script buildDev
 
-# CMD ["./startupDev.bash"]
-
-
 FROM dev as prod
 
 WORKDIR /usr/src/app
+
+RUN bin/toggleDevComment.sh src/app.js > tmp && cat tmp > src/app.js
+
+
 RUN npm run-script buildProd
-
-
-# FROM nginx:1.13.9-alpine
-# COPY --from=prod /usr/src/app/dist /usr/share/nginx/html

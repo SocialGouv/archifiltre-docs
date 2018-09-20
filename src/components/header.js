@@ -1,5 +1,7 @@
 import React from 'react'
 
+import version from 'version'
+
 import Dashboard from 'components/dashboard'
 
 import pick from 'languages'
@@ -23,7 +25,7 @@ const Header = props => {
         <h4 style={{lineHeight: '0.8em'}}>
           <b>{title}</b><br />
           <span style={{fontSize: '0.65em'}}>
-            v8 Hipster Hippo -
+            {'v'+version+' Hipster Hippo -'}
             <a target="_blank" href="http://archifiltre.com/#changelog">{what_new}</a>
           </span>
         </h4>

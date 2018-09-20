@@ -57,11 +57,36 @@ class IcicleRect extends React.PureComponent {
   constructor(props) {
     super(props)
 
+    this.register = this.register.bind(this)
+    this.componentDidMount = this.componentDidMount.bind(this)
+    this.componentDidUpdate = this.componentDidUpdate.bind(this)
+
     this.dims = this.dims.bind(this)
 
     this.onClickHandler = this.onClickHandler.bind(this)
     this.onDoubleClickHandler = this.onDoubleClickHandler.bind(this)
     this.onMouseOverHandler = this.onMouseOverHandler.bind(this)
+  }
+
+  register() {
+    const props = this.props
+
+    const x = props.x
+    const dx = props.dx
+    const y = props.y
+    const dy = props.dy
+
+    const node_id = props.node_id
+
+    props.registerDims(x,dx,y,dy,node_id)
+  }
+
+  componentDidMount() {
+    this.register()
+  }
+
+  componentDidUpdate() {
+    this.register()
   }
 
   dims() {
@@ -93,12 +118,13 @@ class IcicleRect extends React.PureComponent {
   }
 
   render() {
-    const node_id = this.props.node_id
+    const props = this.props
+    const node_id = props.node_id
 
-    const isLocked = this.props.isLocked
-    const isFocused = this.props.isFocused
-    const isInHoverSeq = this.props.isInHoverSeq
-    const isInLockSeq = this.props.isInLockSeq
+    const isLocked = props.isLocked
+    const isFocused = props.isFocused
+    const isInHoverSeq = props.isInHoverSeq
+    const isInLockSeq = props.isInLockSeq
 
     const opacity =
       (isLocked ?
@@ -117,13 +143,18 @@ class IcicleRect extends React.PureComponent {
 
     const fill = this.props.fillColor(node_id)
 
+    const x = props.x
+    const dx = props.dx
+    const y = props.y
+    const dy = props.dy
+
     const zero = [
       <SvgRectangle
         key='rect'
-        x={this.props.x}
-        y={this.props.y}
-        dx={this.props.dx}
-        dy={this.props.dy}
+        x={x}
+        y={y}
+        dx={dx}
+        dy={dy}
         onClickHandler={this.onClickHandler}
         onDoubleClickHandler={this.onDoubleClickHandler}
         onMouseOverHandler={this.onMouseOverHandler}

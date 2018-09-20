@@ -32,10 +32,11 @@ onmessage = function(e) {
     const traverseHook = () => {
       count++
       let cur_ms = (new Date()).getTime()
+
       if (cur_ms - last_ms >= thres) {
         postMessage({status:'traverse',count})
+        last_ms = cur_ms
       }
-      last_ms = cur_ms
     }
 
     postMessage({status:'traverse',count})

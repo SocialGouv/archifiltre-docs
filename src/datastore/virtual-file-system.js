@@ -1,12 +1,18 @@
 
+import version from 'version'
+
 import * as ObjectUtil from 'util/object-util'
 import * as RecordUtil from 'util/record-util'
 import * as FilesAndFolders from 'datastore/files-and-folders'
 import * as Tags from 'datastore/tags'
 
+if (isNaN(version) || typeof version !== 'number') {
+  throw new Error('version is not a number')
+}
+
 const virtualFileSystem = RecordUtil.createFactory({
   session_name:'Untitled',
-  version:9,
+  version,
   files_and_folders:FilesAndFolders.empty(),
   tags:Tags.empty(),
 },{

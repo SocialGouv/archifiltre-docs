@@ -35,7 +35,7 @@ export default class IcicleRecursive extends React.PureComponent {
     const onDoubleClickHandler = props.onDoubleClickHandler
     const onMouseOverHandler = props.onMouseOverHandler
 
-
+    const registerDims = props.registerDims
 
 
 
@@ -77,6 +77,8 @@ export default class IcicleRecursive extends React.PureComponent {
             onClickHandler={onClickHandler}
             onDoubleClickHandler={onDoubleClickHandler}
             onMouseOverHandler={onMouseOverHandler}
+
+            registerDims={registerDims}
           />
           <IcicleRecursive
             x={x_prime}
@@ -95,6 +97,8 @@ export default class IcicleRecursive extends React.PureComponent {
             onClickHandler={onClickHandler}
             onDoubleClickHandler={onDoubleClickHandler}
             onMouseOverHandler={onMouseOverHandler}
+
+            registerDims={registerDims}
           />
         </g>
       )

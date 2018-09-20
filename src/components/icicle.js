@@ -24,6 +24,9 @@ import SvgLayers from 'components/svg-layers'
 import * as ArrayUtil from 'util/array-util'
 import IcicleRecursive from 'components/icicle-recursive'
 
+import { updateIn } from 'immutable'
+
+
 const nothing = ()=>{}
 
 
@@ -185,9 +188,19 @@ class Icicle extends React.PureComponent {
   constructor(props) {
     super(props)
 
+    this.state = {
+      dims:{},
+    }
+
+    this.registerDims = this.registerDims.bind(this)
+
     this.trueFHeight = this.trueFHeight.bind(this)
 
-    this.componentsPropsEnhancer = this.componentsPropsEnhancer.bind(this)
+    this.arrayOfIdToComponents = this.arrayOfIdToComponents.bind(this)
+  }
+
+  registerDims(x,dx,y,dy,id) {
+    this.setState(state=>updateIn(state,['dims',id],()=>{return{x,dx,y,dy}}))
   }
 
   makeKey(id) {
@@ -203,18 +216,48 @@ class Icicle extends React.PureComponent {
     return this.props.trueFHeight(height, id)
   }
 
-  componentsPropsEnhancer(props) {
-    let opacity = 1
-    if (this.props.sequence.length) {
-      opacity = 0.3
-    }
-    return {
-      opacity,
-      stroke:'#fff',
-      fill:this.props.fillColor(props.id),
-      onClickHandler:e=>this.props.onIcicleRectClickHandler(props,e),
-      onDoubleClickHandler:e=>this.props.onIcicleRectDoubleClickHandler(props,e),
-      onMouseOverHandler:e=>this.props.onIcicleRectMouseOverHandler(props,e),
+  arrayOfIdToComponents(key_prefix,array_of_id) {
+    if (array_of_id.length) {
+      const props = this.props
+      const fillColor = props.fillColor
+
+      const onClickHandler = props.onIcicleRectClickHandler
+      const onDoubleClickHandler = props.onIcicleRectDoubleClickHandler
+      const onMouseOverHandler = props.onIcicleRectMouseOverHandler
+
+      const array_of_id_without_root_id = array_of_id.slice(1)
+      return array_of_id_without_root_id.map(id=>{
+        const state = this.state
+        const dims = state.dims[id]
+        if (dims === undefined) {
+          return (<g key={key_prefix+id}/>)
+        }
+        const x = dims.x
+        const dx = dims.dx
+        const y = dims.y
+        const dy = dims.dy
+
+        return (
+          <IcicleRect
+            key={key_prefix+id}
+            id={id}
+            x={x}
+            y={y}
+            dx={dx}
+            dy={dy}
+
+            fillColor={fillColor}
+
+            onClickHandler={onClickHandler}
+            onDoubleClickHandler={onDoubleClickHandler}
+            onMouseOverHandler={onMouseOverHandler}
+
+            registerDims={nothing}
+          />
+        )
+      })
+    } else {
+      return []
     }
   }
 
@@ -242,6 +285,8 @@ class Icicle extends React.PureComponent {
     const onMouseOverHandler = props.onIcicleRectMouseOverHandler
 
     const trueFHeight = this.trueFHeight
+    const registerDims = this.registerDims
+    const arrayOfIdToComponents = this.arrayOfIdToComponents
 
 
     const [xc,dxc] = computeWidthRec(display_root,x,dx).slice(-1)[0]
@@ -260,32 +305,44 @@ class Icicle extends React.PureComponent {
 
 
     const api = this.props.api
-    console.log(api.icicle_state.isFocused() || api.icicle_state.isLocked())
     let style = {}
     if (api.icicle_state.isFocused() || api.icicle_state.isLocked()) {
       style.opacity = 0.3
     }
 
+    const sequence = api.icicle_state.sequence()
+    const sequence_components = arrayOfIdToComponents('sequence',sequence)
+
+    const hover = api.icicle_state.hover_sequence()
+    const hover_components = arrayOfIdToComponents('hover',hover)
+
+
     return (
-      <g style={style}>
-        <IcicleRecursive
-          x={x_prime}
-          y={y}
-          width={dx_prime}
-          height={dy}
-          id={root_id}
+      <g>
+        <g style={style}>
+          <IcicleRecursive
+            x={x_prime}
+            y={y}
+            width={dx_prime}
+            height={dy}
+            id={root_id}
 
-          fWidth={fWidth}
-          normalizeWidth={normalizeWidth}
-          trueFHeight={trueFHeight}
-          getChildrenIdFromId={getChildrenIdFromId}
+            fWidth={fWidth}
+            normalizeWidth={normalizeWidth}
+            trueFHeight={trueFHeight}
+            getChildrenIdFromId={getChildrenIdFromId}
 
-          shouldRenderChild={shouldRenderChild}
-          fillColor={fillColor}
-          onClickHandler={onClickHandler}
-          onDoubleClickHandler={onDoubleClickHandler}
-          onMouseOverHandler={onMouseOverHandler}
-        />
+            shouldRenderChild={shouldRenderChild}
+            fillColor={fillColor}
+            onClickHandler={onClickHandler}
+            onDoubleClickHandler={onDoubleClickHandler}
+            onMouseOverHandler={onMouseOverHandler}
+
+            registerDims={registerDims}
+          />
+        </g>
+        {hover_components}
+        {sequence_components}
       </g>
     )
   }

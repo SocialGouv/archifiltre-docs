@@ -13,8 +13,11 @@ import { generateRandomString } from 'random-gen'
 
 import { Store } from 'reducers/store'
 
+import version from 'version'
 
 
+
+document.title = 'stalactite v'+version+' - archifiltre'
 
 
 // import Analytics from 'electron-ga' // development

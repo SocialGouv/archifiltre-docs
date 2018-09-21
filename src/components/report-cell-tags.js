@@ -82,7 +82,7 @@ class ReportCellTags extends React.Component {
         onClick={(e) => {e.stopPropagation(); if(!this.props.isEditingTags) this.props.onClickTagsCells();}}>
           <b>{tags_tr}</b>
           <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
-          <div style={tags_style} >
+          <div className='grid-x' style={tags_style} >
             <TagsEditable
               api={api}
               tag_ids={this.props.tag_ids}

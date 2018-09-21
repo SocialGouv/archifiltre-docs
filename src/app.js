@@ -47,23 +47,23 @@ const app = () => {
 
 
   ReactDOM.render(
-      <Store>
-        {props => {
-          const api = props.api
-          return (
-            <ErrorBoundary api={api}>
-              <div className='grid-y grid-frame'>
-                <div className='cell'>
-                  <Header api={api}/>
-                </div>
-                <div className='cell auto'>
-                  <MainSpace api={api}/>
-                </div>
+    <Store>
+      {props => {
+        const api = props.api
+        return (
+          <ErrorBoundary api={api}>
+            <div className='grid-y grid-frame'>
+              <div className='cell'>
+                <Header api={api}/>
               </div>
-            </ErrorBoundary>
-          )
-        }}
-      </Store>
+              <div className='cell auto'>
+                <MainSpace api={api}/>
+              </div>
+            </div>
+          </ErrorBoundary>
+        )
+      }}
+    </Store>
     ,
     root_div
   )

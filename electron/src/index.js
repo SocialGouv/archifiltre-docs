@@ -14,37 +14,19 @@ app.commandLine.appendSwitch('js-flags', '--max-old-space-size=40960')
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
-const preventNavigation = a => {
-  a.on('will-navigate', (event) => {
+const preventNavigation = () => {
+  win.on('will-navigate', (event) => {
     event.preventDefault()
   })
 
-  a.webContents.on('will-navigate', (event) => {
+  win.webContents.on('will-navigate', (event) => {
     event.preventDefault()
   })
 }
 
-function createWindow () {
-  // Create the browser window.
-  win = new BrowserWindow({
-    width: 1500,
-    height: 800,
-    webPreferences: {
-      nodeIntegrationInWorker: true
-    },
-  })
-
-  // and load the index.html of the app.
-  win.loadFile('webpack/index.html')
-
-  preventNavigation(win)
-  
-
-  // Open the DevTools.
-  win.webContents.openDevTools() // development
-
+const askBeforeLeaving = () => {
   win.on('close', (event) => {
-    // event.preventDefault() // development
+    event.preventDefault()
     let title
     let message
     let detail
@@ -73,12 +55,34 @@ function createWindow () {
       cancelId:0,
     }
     dialog.showMessageBox(win,option,a=>{
-      console.log('dialog',a)
       if (a===1) {
         win.destroy()
       }
     })
   })
+}
+
+function createWindow () {
+  // Create the browser window.
+  win = new BrowserWindow({
+    width: 1500,
+    height: 800,
+    webPreferences: {
+      nodeIntegrationInWorker: true
+    },
+  })
+
+  // and load the index.html of the app.
+  win.loadFile('webpack/index.html')
+
+
+  preventNavigation()
+
+  // Open the DevTools.
+  win.webContents.openDevTools() // development
+
+  // askBeforeLeaving() // development
+
 
   // Emitted when the window is closed.
   win.on('closed', () => {

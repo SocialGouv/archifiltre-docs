@@ -1,5 +1,4 @@
 import React from 'react'
-// import { connect } from 'react-redux'
 
 import { active_button } from 'css/app.css'
 
@@ -56,6 +55,7 @@ export function mkRB (click_action, label, enabled, color, custom_style) {
 }
 
 export function mkTB (click_action, label, enabled, color, custom_style) {
+
   const default_button_style = {
     color: (color ? color : '#4d9e25'),
     backgroundColor: (enabled ? 'rgba(249, 154, 11, 0)' : 'rgba(249, 154, 11, 0.2)'),
@@ -69,9 +69,9 @@ export function mkTB (click_action, label, enabled, color, custom_style) {
   
   if(enabled){
     return (
-      <a className={'clear button '+ active_button} onClick={click_action} style={button_style}>
+      <button className={'clear button '+ active_button} onClick={click_action} style={button_style}>
         {label}
-      </a>
+      </button>
     )
   }
   else{

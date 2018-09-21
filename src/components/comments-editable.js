@@ -74,7 +74,8 @@ export default class CommentsEditable extends React.Component {
       return (
         <div
           style={{
-            wordWrap:'break-word',
+            wordWrap: 'break-word',
+            whiteSpace: 'pre-wrap',
           }}
         >
           {comments} 

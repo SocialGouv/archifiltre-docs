@@ -39,26 +39,6 @@ class TimeGradient extends React.PureComponent {
 
     let cursor_array = []
     if (this.props.id) {
-
-      // const node = this.props.getFfByFfId(this.props.id)
-      // const list = node.get('last_modified_list')
-      // cursor_array = list.map((time,i)=>{
-      //   const zero_to_one = (time - min_time) / (max_time - min_time)
-      //   return (
-      //     <g key={'cursor_'+i}>
-      //       <rect
-      //         x={zero_to_one*svg_width - cursor_width/2}
-      //         y={0}
-      //         width={cursor_width}
-      //         height={svg_height}
-      //         fill={'rgba(0, 0, 0, '+ Math.max(1/list.size, 0.01) +')'}
-      //         style={style}
-      //       />
-      //     </g>
-      //   )
-      // })
-
-
       cursor_array = ['min','median','max']
       cursor_array = cursor_array.map(prop_name=>{
         return (

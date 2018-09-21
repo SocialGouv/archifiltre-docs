@@ -240,8 +240,6 @@ const Report = props => {
         opacity: (props.isFocused ? 1 : 0.5),
         background: 'white',
         borderRadius: '1em',
-        // minHeight: '11em',
-        // maxHeight: '11em',
       }
     }>
       <div className='grid-x' style={{padding:pad}}>

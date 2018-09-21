@@ -69,12 +69,6 @@ const epochTimeToDateTime = (d) => {
       (mm>9 ? '' : '0') + mm,
       res.getFullYear()
     ].join('/')
-    // + " " + at_tr + " " +
-    // [
-    //   res.getHours(),
-    //   res.getMinutes(),
-    //   res.getSeconds(),
-    // ].join(':')
   )
 }
 

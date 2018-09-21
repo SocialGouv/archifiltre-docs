@@ -11,6 +11,10 @@ const rename_tag_placeholder = pick({
   fr: 'Renommer un tag',
 })
 
+const cell_shrink_style = {
+  padding: '0em 0.3em',
+}
+
 const input_style = {
   width: "50%",
   border: "none",
@@ -118,11 +122,19 @@ class Presentational extends React.Component {
       className= { edit_hover_container }
       onMouseEnter={this.props.highlightTag}
       style={component_style}>
-        <div style={content_style}>
-          {delete_bubble}
-          {count_or_action_bubble}
-          {tag_pill}&nbsp;
-          {pencil}
+        <div className='grid-x' style={content_style}>
+          <div className='cell shrink' style={cell_shrink_style}>
+            {delete_bubble}
+          </div>
+          <div className='cell shrink' style={cell_shrink_style}>
+            {count_or_action_bubble}
+          </div>
+          <div className='cell shrink' style={cell_shrink_style}>
+            {tag_pill}
+          </div>
+          <div className='cell shrink' style={cell_shrink_style}>
+            {pencil}
+          </div>
         </div>
         <div className={ background } style={background_style}></div>
       </div>

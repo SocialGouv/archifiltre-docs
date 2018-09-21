@@ -25,6 +25,10 @@ const input_style = {
   borderBottom: "3px solid rgb(10, 50, 100)"
 }
 
+const cell_shrink_style = {
+  padding: '0.3em',
+}
+
 class Presentational extends React.Component {
   constructor(props) {
     super(props)
@@ -71,13 +75,14 @@ class Presentational extends React.Component {
       const name = tag.get('name')
 
       return (
-        <Tag
-          key={tag_id}
-          text={name}
-          node_id={this.props.node_id}
-          editing={editing}
-          remove_handler={handle_remove(tag_id)}
-        />
+        <div className='cell shrink' key={tag_id} style={cell_shrink_style}>
+          <Tag
+            text={name}
+            node_id={this.props.node_id}
+            editing={editing}
+            remove_handler={handle_remove(tag_id)}
+          />
+        </div>
       )
     }).reduce((acc,val)=>[...acc,val],[])
 
@@ -86,14 +91,15 @@ class Presentational extends React.Component {
       this.props.candidateTagCallback('')
       const elements = tagIdsToElements()
       const input_box = (
-        <input
-          key="__input__"
-          style={input_style}
-          onMouseUp={(e) => {e.stopPropagation();}}
-          onKeyUp={keyUp}
-          placeholder={new_tag}
-          ref={(component) => {this.textInput = component;}}
-        />
+        <div className='cell shrink' key='__input__' style={cell_shrink_style}>
+          <input
+            style={input_style}
+            onMouseUp={(e) => {e.stopPropagation();}}
+            onKeyUp={keyUp}
+            placeholder={new_tag}
+            ref={(component) => {this.textInput = component;}}
+          />
+        </div>
       )
 
       return [...elements, input_box]
@@ -102,7 +108,9 @@ class Presentational extends React.Component {
       return elements
     } else {
       return (
-        <span key="__closing__">{click_here_to_add}</span>
+        <div className='cell shrink' key='__closing__' style={cell_shrink_style}>
+          <span>{click_here_to_add}</span>
+        </div>
       )
     }
   }

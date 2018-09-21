@@ -117,12 +117,3 @@ export default (props) => {
 
   return (<ReportCellTags {...props}/>)
 }
-
-// const Container = connect(
-//   mapStateToProps,
-//   mapDispatchToProps,
-//   null,
-//   {withRef:true}
-// )(ReportCellTags)
-
-// export default Container

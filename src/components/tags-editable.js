@@ -134,13 +134,3 @@ export default (props) => {
 
   return (<Presentational {...props}/>)
 }
-
-
-// const Container = connect(
-//   mapStateToProps,
-//   mapDispatchToProps,
-//   null,
-//   {withRef:true}
-// )(Presentational)
-
-// export default Container

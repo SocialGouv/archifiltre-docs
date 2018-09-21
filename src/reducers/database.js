@@ -66,9 +66,6 @@ const getAllTagIds = () => state => state.get('tags').keySeq().toList()
 
 const getTagByTagId = (id) => state => getIn(state,['tags',id])
 
-// getLeafIdArray: () => FileSystem.getLeafIdArray(state),
-// getSubIdList: (id) => FileSystem.getSubIdList(id, state),
-
 const getWaitingCounter = () => state => 0
 
 

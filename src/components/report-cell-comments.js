@@ -217,13 +217,3 @@ export default (props) => {
 
   return (<ReportCellComments {...props}/>)
 }
-
-
-// const Container = connect(
-//   mapStateToProps,
-//   mapDispatchToProps,
-//   null,
-//   {withRef:true}
-// )(ReportCellComments)
-
-// export default Container

@@ -72,6 +72,8 @@ export default class IcicleRecursive extends React.PureComponent {
             dx={width_child}
             dy={height_child}
 
+            opacity={1}
+
             fillColor={fillColor}
 
             onClickHandler={onClickHandler}

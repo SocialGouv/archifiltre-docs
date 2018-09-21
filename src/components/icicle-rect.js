@@ -126,20 +126,7 @@ class IcicleRect extends React.PureComponent {
     const isInHoverSeq = props.isInHoverSeq
     const isInLockSeq = props.isInLockSeq
 
-    const opacity =
-      (isLocked ?
-        (isInLockSeq ?
-          1
-        :
-          (isInHoverSeq ? 0.6 : 0.3)
-        )
-      :
-        (isFocused ?
-          (isInHoverSeq ? 1 : 0.3)
-        :
-          1
-        )
-      )
+    const opacity = props.opacity
 
     const fill = this.props.fillColor(node_id)
 

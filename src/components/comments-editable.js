@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { comments } from 'css/app.css'
+import * as Css from 'css/app.css'
 import * as ObjectUtil from 'util/object-util'
 
 import pick from 'languages'
+
 
 const your_comments = pick({
   en: 'Your comments here',
@@ -25,98 +26,63 @@ const input_style = {
   borderBottom: "3px solid rgb(5, 120, 200)"
 }
 
-class Presentational extends React.Component {
+
+export default class CommentsEditable extends React.Component {
   constructor(props) {
     super(props)
-    this.textInput = null
+
+    this.textareaRef = this.textareaRef.bind(this)
   }
 
-  componentDidUpdate(){
-    if(this.textInput) this.textInput.focus()
+  componentDidUpdate() {
+    const textarea = this.textarea
+    if (textarea) {
+      textarea.focus()
+    }
+  }
+
+  textareaRef(dom_element) {
+    this.textarea = dom_element
   }
 
   render() {
-    let res, elements
-    res = []
-    elements = []
+    const props = this.props
+    const textareaRef = this.textareaRef
 
-    let keyUp = (event) => {
-      if (event.keyCode === 27) { // Escape
-        event.stopPropagation();
-        this.props.endEditing(event.target.value, this.props.old_content, this.props.node_id);
-      }
-      else {
-        event.stopPropagation();
-        this.props.editTrigger(event.target.value, this.props.node_id)
-      }
-    }
+    const onKeyUp = props.onKeyUp
+    const onMouseUp = e=>e.stopPropagation()
+    const onBlur = props.onBlur
 
-    if(this.props.editing) {
-      res = (
+    const editing = props.editing
+    const comments = props.comments
+
+
+    if(editing) {
+      return (
         <textarea
-        className={comments}
-        style={input_style}
-        onMouseUp={(e) => {e.stopPropagation();}}
-        onKeyUp={keyUp}
-        onBlur={(e) => {this.props.endEditing()}}
-        defaultValue={this.props.comments.length > 0 ? this.props.comments : ""}
-        placeholder={this.props.comments.length > 0 ? "" : your_comments}
-        ref={(component) => {this.textInput = component;}} />);
-    }
-    else if(this.props.comments.length > 0){
-      res = (
-        <div>
-          {this.props.comments.split('\n').map((item, key) => {
-          return <span key={key}>{item}<br/></span>
-          })}
+          className={Css.comments}
+          style={input_style}
+          onMouseUp={onMouseUp}
+          onKeyUp={onKeyUp}
+          onBlur={onBlur}
+          defaultValue={comments}
+          placeholder={your_comments}
+          ref={textareaRef}
+        />
+      )
+    } else if (comments.length > 0) {
+      return (
+        <div
+          style={{
+            wordWrap:'break-word',
+          }}
+        >
+          {comments} 
         </div>
-        );
+      )
+    } else {
+      return (<span>{click_here_to_add}</span>)
     }
-    else {
-      res = <span>{click_here_to_add}</span>
-    }
-    
-
-    return (
-      res
-    )
   }
 }
 
-
-export default (props) => {
-  const api = props.api
-  const report_state = api.report_state
-  const database = api.database
-
-  const editTrigger = (candidate_comments, id) => {
-    if(true){
-      const updater = () => candidate_comments
-      database.updateComments(updater,id)
-    }
-  }
-
-  const endEditing = () => {
-    report_state.stopEditingComments()
-    api.undo.commit()
-  }
-
-
-  props = ObjectUtil.compose({
-    editing: report_state.editing_comments(),
-    editTrigger,
-    endEditing,
-  },props)
-
-  return (<Presentational {...props}/>)
-}
-
-
-// const Container = connect(
-//   mapStateToProps,
-//   mapDispatchToProps,
-//   null,
-//   {withRef:true}
-// )(Presentational)
-
-// export default Container

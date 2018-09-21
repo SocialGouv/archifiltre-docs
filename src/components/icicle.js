@@ -216,7 +216,7 @@ class Icicle extends React.PureComponent {
     return this.props.trueFHeight(height, id)
   }
 
-  arrayOfIdToComponents(key_prefix,array_of_id) {
+  arrayOfIdToComponents(key_prefix,opacity,array_of_id) {
     if (array_of_id.length) {
       const props = this.props
       const fillColor = props.fillColor
@@ -245,6 +245,8 @@ class Icicle extends React.PureComponent {
             y={y}
             dx={dx}
             dy={dy}
+
+            opacity={opacity}
 
             fillColor={fillColor}
 
@@ -311,10 +313,10 @@ class Icicle extends React.PureComponent {
     }
 
     const sequence = api.icicle_state.sequence()
-    const sequence_components = arrayOfIdToComponents('sequence',sequence)
+    const sequence_components = arrayOfIdToComponents('sequence',1,sequence)
 
     const hover = api.icicle_state.hover_sequence()
-    const hover_components = arrayOfIdToComponents('hover',hover)
+    const hover_components = arrayOfIdToComponents('hover',0.3,hover)
 
 
     return (

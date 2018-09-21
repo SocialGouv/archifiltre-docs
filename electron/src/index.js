@@ -14,6 +14,16 @@ app.commandLine.appendSwitch('js-flags', '--max-old-space-size=40960')
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
+const preventNavigation = a => {
+  a.on('will-navigate', (event) => {
+    event.preventDefault()
+  })
+
+  a.webContents.on('will-navigate', (event) => {
+    event.preventDefault()
+  })
+}
+
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
@@ -27,8 +37,8 @@ function createWindow () {
   // and load the index.html of the app.
   win.loadFile('webpack/index.html')
 
-
-
+  preventNavigation(win)
+  
 
   // Open the DevTools.
   win.webContents.openDevTools() // development

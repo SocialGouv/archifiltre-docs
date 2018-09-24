@@ -149,7 +149,7 @@ class ReportCellComments extends React.Component {
     const onKeyUp = this.onKeyUp
     const onBlur = this.onBlur
 
-    const isDummy = props.isDummy
+    const is_dummy = props.is_dummy
     const cells_style = props.cells_style
 
     const editing = state.editing
@@ -164,7 +164,7 @@ class ReportCellComments extends React.Component {
     }
 
 
-    if (isDummy) {
+    if (is_dummy) {
       return(
         <div className='cell small-6' style={cells_style}>
           <b>{comments_tr}</b><br />

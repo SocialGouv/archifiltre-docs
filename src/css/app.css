@@ -24,10 +24,8 @@
 
 .tags_bubble {
   font-weight: bold;
-  display: inline-block;
   color: white;
   border-radius: 0.8em;
-  margin-right: 0.2em;
   min-width: 1.5em;
   text-align: center;
 }
@@ -53,9 +51,7 @@
   transition : filter 0.25s ease-out;
   cursor: pointer;
   background-color: #e04d1c;
-  padding: 0 0.4em;
   border-radius: 1em;
-  max-width: 0.3em;
 }
 
 .tags_cross:hover{

@@ -8,6 +8,8 @@ import * as Origin from 'datastore/origin'
 import * as VirtualFileSystem from 'datastore/virtual-file-system'
 import * as Tags from 'datastore/tags'
 
+import * as SEDA from 'seda'
+
 const property_name = 'database'
 
 const initialState = () => VirtualFileSystem.make(Origin.empty())
@@ -57,6 +59,8 @@ const toStrList2 = () => state => {
   return ans
 }
 
+const toManifestStr = () => SEDA.makeManifest
+
 const getSessionName = () => state => state.get('session_name')
 
 
@@ -83,6 +87,7 @@ const reader = {
   getFfIdPath,
   toJson,
   toStrList2,
+  toManifestStr,
   getSessionName,
   getTagIdsByFfId,
   getAllTagIds,

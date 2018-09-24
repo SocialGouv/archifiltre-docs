@@ -1,5 +1,7 @@
 import React from 'react'
 
+import * as ObjectUtil from 'util/object-util'
+
 import { tags_bubble, tags_cross } from 'css/app.css'
 
 const tag_style = {
@@ -13,30 +15,36 @@ const default_component_style = {
   fontWeight: 'bold',
 }
 
-const Presentational = props => {
+const Tag = props => {
+
+  const removeHandler = props.removeHandler
+  const custom_style = props.custom_style
+  const clickHandler = props.clickHandler
+  const text = props.text
+  const editing = props.editing
+
   const cross = (
-    <div className={tags_bubble + ' ' + tags_cross} onMouseUp={(e) => {e.stopPropagation(); props.remove_handler() }}>
+    <div className={tags_bubble + ' ' + tags_cross} onMouseUp={(e) => {e.stopPropagation(); removeHandler() }}>
       <i className='fi-x'></i>
     </div>
   )
 
-  const custom_style = props.custom_style
 
-  const component_style = Object.assign({}, default_component_style, custom_style);
+  const component_style = ObjectUtil.compose(custom_style, default_component_style)
 
   return (
-    <div className='grid-x' style={component_style} onClick={props.click_handler}>
+    <div className='grid-x' style={component_style} onClick={clickHandler}>
       <div className='cell shrink' style={{paddingRight:'0em'}}>
         <div style={tag_style}>
-          {props.text}
+          {text}
         </div>
       </div>
       <div className='cell shrink' style={{marginLeft:'-0.3em'}}>
-        {props.editing ? cross : <span />}
+        {editing ? cross : <span />}
       </div>
     </div>
   )
 }
 
 
-export default Presentational
+export default Tag

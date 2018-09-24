@@ -95,25 +95,32 @@ class Presentational extends React.Component {
       )
     );
 
-    let tag_pill = (
-      this.props.editing ?
-      (<input
-        style={input_style}
-        onFocus={(e) => {e.target.select();}}
-        onMouseUp={(e) => {e.stopPropagation();}}
-        onKeyUp={keyUp}
-        onBlur={(e) => {this.props.renameTag(e.target.value); this.props.stopEditingTag()}}
-        defaultValue={tag}
-        placeholder={rename_tag_placeholder}
-        ref={(component) => {this.textInput = component;}} />)
-      : (<Tag
-        text={tag}
-        editing={false}
-        click_handler={this.props.startEditingTag}
-        remove_handler={() => {}}
-        custom_style={{'margin': '0'}}
-        />)
-    );
+    let tag_pill
+    if (this.props.editing) {
+      tag_pill = (
+        <input
+          style={input_style}
+          onFocus={(e) => {e.target.select();}}
+          onMouseUp={(e) => {e.stopPropagation();}}
+          onKeyUp={keyUp}
+          onBlur={(e) => {this.props.renameTag(e.target.value); this.props.stopEditingTag()}}
+          defaultValue={tag}
+          placeholder={rename_tag_placeholder}
+          ref={(component) => {this.textInput = component;}}
+        />
+      )
+    } else {
+      tag_pill = (
+        <Tag
+          text={tag}
+          editing={false}
+          clickHandler={this.props.startEditingTag}
+          removeHandler={() => {}}
+        />
+      )
+    }
+
+
 
     let pencil = this.props.editing ? <span /> : (<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} />);
 

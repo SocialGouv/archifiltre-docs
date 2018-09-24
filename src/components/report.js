@@ -193,14 +193,14 @@ const Report = props => {
 
     tags_cell = <TagsCell
       api={api}
-      isDummy={false}
+      is_dummy={false}
       cells_style={cells_style}
       tag_ids={c_tag_ids}
       node_id={props.node_id}
     />
     comments_cell = <CommentsCell
       api={api}
-      isDummy={false}
+      is_dummy={false}
       cells_style={cells_style}
       comments={c_comments}
       node_id={props.node_id}
@@ -211,8 +211,8 @@ const Report = props => {
     name = <Name placeholder={true}/>
     real_name = <RealName placeholder={true}/>
     info_cell = <InfoCell api={api} placeholder={true}/>
-    tags_cell = <TagsCell api={api} isDummy={true} cells_style={cells_style} />
-    comments_cell = <CommentsCell api={api} isDummy={true} cells_style={cells_style} />
+    tags_cell = <TagsCell api={api} is_dummy={true} cells_style={cells_style} />
+    comments_cell = <CommentsCell api={api} is_dummy={true} cells_style={cells_style} />
   }
 
 

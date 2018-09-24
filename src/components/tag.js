@@ -9,19 +9,13 @@ const tag_style = {
   padding: '0 0.5em',
 }
 
-const cross_style = {
-  marginLeft: '-0.3em',
-}
-
 const default_component_style = {
   fontWeight: 'bold',
-  // marginRight: '0.3em',
-  // marginBottom: '0.2em'
 }
 
 const Presentational = props => {
   const cross = (
-    <div className={tags_bubble + ' ' + tags_cross} style={cross_style} onMouseUp={(e) => {e.stopPropagation(); props.remove_handler() }}>
+    <div className={tags_bubble + ' ' + tags_cross} onMouseUp={(e) => {e.stopPropagation(); props.remove_handler() }}>
       <i className='fi-x'></i>
     </div>
   )
@@ -32,10 +26,12 @@ const Presentational = props => {
 
   return (
     <div className='grid-x' style={component_style} onClick={props.click_handler}>
-      <div className='cell shrink' style={tag_style}>
-        {props.text}
+      <div className='cell shrink' style={{paddingRight:'0em'}}>
+        <div style={tag_style}>
+          {props.text}
+        </div>
       </div>
-      <div className='cell shrink'>
+      <div className='cell shrink' style={{marginLeft:'-0.3em'}}>
         {props.editing ? cross : <span />}
       </div>
     </div>

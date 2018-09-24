@@ -12,7 +12,7 @@ const rename_tag_placeholder = pick({
 })
 
 const cell_shrink_style = {
-  padding: '0em 0.3em',
+  padding: '0em 0.1em',
 }
 
 const input_style = {

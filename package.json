@@ -58,6 +58,7 @@
     "redux": "3.7.2",
     "redux-thunk": "2.2.0",
     "riek": "1.1.0",
-    "workbox-webpack-plugin": "3.1.0"
+    "workbox-webpack-plugin": "3.1.0",
+    "xml": "1.0.1"
   }
 }

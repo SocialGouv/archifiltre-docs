@@ -26,7 +26,7 @@ const input_style = {
   fontSize: "1.15em"
 }
 
-class Presentational extends React.Component {
+class AllTagsItem extends React.Component {
   constructor(props) {
     super(props)
 
@@ -38,6 +38,7 @@ class Presentational extends React.Component {
   }
 
   render() {
+
 
     let keyUp = (event) => {
       if (event.keyCode === 13) { // Enter
@@ -154,13 +155,13 @@ class Presentational extends React.Component {
 }
 
 
-export default Presentational
+export default AllTagsItem
 
 // const Container = connect(
 //   mapStateToProps,
 //   mapDispatchToProps,
 //   null,
 //   {withRef:true}
-// )(Presentational)
+// )(AllTagsItem)
 
 // export default Container

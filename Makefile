@@ -19,7 +19,7 @@ prod: cleanContainer
 		--tag=$(image_name):prod \
 		.
 
-clean: cleanContainer
+clean: cleanContainer electron_clean
 
 cleanContainer:
 	sudo docker container prune -f
@@ -40,11 +40,14 @@ test: dev
 
 
 
-workspace = './electron/build'
+workspace = './electron/tmpws'
+
+electron_clean:
+	rm -fr $(workspace)
 
 electron_workspace:
 	mkdir -p $(workspace)
-	cp electron/src/* $(workspace)
+	cp -r electron/src/* $(workspace)
 	yarn --cwd $(workspace) install
 
 electron_dev: dev electron_workspace

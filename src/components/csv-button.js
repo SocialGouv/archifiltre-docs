@@ -25,7 +25,10 @@ const CsvButton = props => {
       save(name(), Csv.toStr(getStrList2()))
     },
     label,
-    true)
+    true,
+    '#4d9e25',
+    {width:'90%'}
+  )
 }
 
 export default CsvButton

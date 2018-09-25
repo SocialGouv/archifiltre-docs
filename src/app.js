@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom'
 import ErrorBoundary from 'components/error-boundary'
 import MainSpace from 'components/main-space'
 import Header from 'components/header'
+import ANewVersionIsAvailable from 'components/a-new-version-is-available'
 
 import 'css/app.css'
 
@@ -14,10 +15,13 @@ import { generateRandomString } from 'random-gen'
 import { Store } from 'reducers/store'
 
 import version from 'version'
+import pick from 'languages'
 
 
-
-document.title = 'stalactite v'+version+' - archifiltre'
+document.title = pick({
+  en:'icicle v'+version+' - archifiltre',
+  fr:'stalactite v'+version+' - archifiltre',
+})
 
 
 // import Analytics from 'electron-ga' // development
@@ -29,9 +33,6 @@ document.title = 'stalactite v'+version+' - archifiltre'
 //   dp:'/electron/v9', // development
 //   dt:'archifiltre', // development
 // }) // development
-
-
-
 
 
 
@@ -53,6 +54,9 @@ const app = () => {
         return (
           <ErrorBoundary api={api}>
             <div className='grid-y grid-frame'>
+              <div className='cell'>
+                <ANewVersionIsAvailable/>
+              </div>
               <div className='cell'>
                 <Header api={api}/>
               </div>

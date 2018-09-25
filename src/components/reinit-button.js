@@ -23,7 +23,7 @@ const ReinitButton = props => {
     undo.commit()
   }
 
-  return mkB(reInitStateApp, label, true, "#e04d1c")
+  return mkB(reInitStateApp, label, true, "#e04d1c", {width:'90%'})
 }
 
 export default ReinitButton

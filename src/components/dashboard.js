@@ -25,8 +25,8 @@ const DashBoard = props => {
   }
 
   const margin_padding_compensate = {
-    margin: "0.2em -0.8em",
-    padding: "0.2em 0.8em",
+    margin: '0.2em -0.8em',
+    padding: '0.2em 0.8em',
   }
 
   if (props.started === true && props.finished === true) {

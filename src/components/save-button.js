@@ -24,7 +24,9 @@ const SaveButton = props => {
       save(name(), getJson())
     },
     label,
-    true
+    true,
+    '#4d9e25',
+    {width:'90%'}
   )
 }
 

@@ -6,6 +6,8 @@ import Dashboard from 'components/dashboard'
 
 import pick from 'languages'
 
+const {shell} = require('electron')
+
 const title = pick({
   en: 'Icicles',
   fr: 'Stalactites',
@@ -16,6 +18,10 @@ const what_new = pick({
   fr: 'Quoi de neuf ?',
 })
 
+const onClick = event => {
+  event.preventDefault()
+  shell.openExternal('http://archifiltre.com/#changelog')
+}
 
 const Header = props => {
   return (
@@ -25,8 +31,10 @@ const Header = props => {
         <h4 style={{lineHeight: '0.8em'}}>
           <b>{title}</b><br />
           <span style={{fontSize: '0.65em'}}>
-            {'v'+version+' Hipster Hippo -'}
-            <a target="_blank" href="http://archifiltre.com/#changelog">{what_new}</a>
+            {'v'+version+' Irrational Indoraptor -'}
+            <a target='_blank' onClick={onClick}>
+              {what_new}
+            </a>
           </span>
         </h4>
       </div>

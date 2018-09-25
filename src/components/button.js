@@ -6,7 +6,6 @@ import { active_button } from 'css/app.css'
 export function mkB (click_action, label, enabled, color, custom_style) {
   const default_button_style = {
     margin: 0,
-    width: '90%',
     fontWeight: 'bold',
     color: 'white',
     backgroundColor: (color ? color : '#4d9e25'),

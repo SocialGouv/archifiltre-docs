@@ -38,19 +38,20 @@ class AllTagsItem extends React.Component {
   }
 
   render() {
-
+    const enter_key_code = 13
+    const escape_key_code = 27
 
     let keyUp = (event) => {
-      if (event.keyCode === 13) { // Enter
-        event.preventDefault();
+      if (event.keyCode === enter_key_code) {
+        event.preventDefault()
         if(event.target.value.length > 0) {
-          this.props.renameTag(event.target.value);
-          event.target.value = "";
+          this.props.renameTag(event.target.value)
+          event.target.value = ''
         }
-        this.props.stopEditingTag();
+        this.props.stopEditingTag()
 
-      } else if (event.keyCode === 27) { // Escape
-        this.props.stopEditingTag();
+      } else if (event.keyCode === escape_key_code) {
+        this.props.stopEditingTag()
       }
     }
 

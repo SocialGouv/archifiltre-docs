@@ -1,7 +1,5 @@
 import React from 'react'
 
-import ReactDOM from 'react-dom'
-
 
 import IcicleRect from 'components/icicle-rect'
 import Ruler from 'components/ruler'
@@ -16,15 +14,13 @@ import * as Color from 'color'
 
 import * as ObjectUtil from 'util/object-util'
 
-import { ApiContext } from 'reducers/store'
-
-
-import SvgLayers from 'components/svg-layers'
 
 import * as ArrayUtil from 'util/array-util'
 import IcicleRecursive from 'components/icicle-recursive'
 
 import { updateIn } from 'immutable'
+
+import IcicleTags from 'components/icicle-tags'
 
 
 const nothing = ()=>{}
@@ -307,17 +303,25 @@ class Icicle extends React.PureComponent {
 
 
     const api = this.props.api
+    const icicle_state = api.icicle_state
+
     let style = {}
-    if (api.icicle_state.isFocused() || api.icicle_state.isLocked()) {
+    if (icicle_state.isFocused() || icicle_state.isLocked()) {
       style.opacity = 0.3
     }
 
-    const sequence = api.icicle_state.sequence()
+    const sequence = icicle_state.sequence()
     const sequence_components = arrayOfIdToComponents('sequence',1,sequence)
 
-    const hover = api.icicle_state.hover_sequence()
+    const hover = icicle_state.hover_sequence()
     const hover_components = arrayOfIdToComponents('hover',0.3,hover)
 
+
+    const database = api.database
+    const tag_ids = database.getAllTagIds()
+    const getTagByTagId = database.getTagByTagId
+    const dims = this.state.dims
+    const tag_id_to_highlight = icicle_state.tagIdToHighlight()
 
     return (
       <g>
@@ -345,6 +349,15 @@ class Icicle extends React.PureComponent {
         </g>
         {hover_components}
         {sequence_components}
+        <IcicleTags
+          tag_ids={tag_ids}
+          getTagByTagId={getTagByTagId}
+          dims={dims}
+          tag_id_to_highlight={tag_id_to_highlight}
+          onClick={onClickHandler}
+          onDoubleClick={onDoubleClickHandler}
+          onMouseOver={onMouseOverHandler}
+        />
       </g>
     )
   }
@@ -669,23 +682,6 @@ class IcicleMainComponent extends React.PureComponent {
       </svg>
     )
 
-
-    // return (
-    //   <svg
-    //     xmlns='http://www.w3.org/2000/svg'
-    //     viewBox={'0 0 '+view_box_width+' '+view_box_height}
-    //     width='100%'
-    //     height='100%'
-    //     preserveAspectRatio='xMidYMid meet'
-    //     ref={this.ref}
-    //     onClick={this.onClickHandler}
-    //     onMouseLeave={this.onMouseLeaveHandler}
-    //   >
-    //     <ApiContext.Provider value={Math.random()}>
-    //       {icicle}
-    //     </ApiContext.Provider>
-    //   </svg>
-    // )
   }
 }
 

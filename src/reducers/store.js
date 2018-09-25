@@ -39,30 +39,6 @@ function makeStore(compiled_real_estate) {
       this.api = unflattenApi(this.api)
 
       this.getApi = () => Object.assign({},this.api)
-
-
-
-      // // this.reader_api = {}
-      // // reader_key.forEach(key=>{
-      // //   this.reader_api[key] = (...args) => flat_api[key](...args)(this.state)
-      // // })
-
-      // this.writer_api = {}
-      // writer_key.forEach(key=>{
-      //   this.writer_api[key] = (...args) => this.setState(flat_api[key](...args))
-      // })
-
-      // this.getApi = () => {
-      //   const ans = {}
-      //   reader_key.forEach(key=>{
-      //     // ans[key] = this.reader_api[key]
-      //     ans[key] = (...args) => flat_api[key](...args)(this.state)
-      //   })
-      //   writer_key.forEach(key=>{
-      //     ans[key] = this.writer_api[key]
-      //   })
-      //   return unflattenApi(ans)
-      // }
     }
 
     render() {

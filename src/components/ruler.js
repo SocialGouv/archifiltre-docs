@@ -52,25 +52,6 @@ const Ruler = props => {
     res = (<g />)
   }
 
-
-  // <rect
-  //         className='ruler'
-  //         x={props.dims.x}
-  //         y='1.5em'
-  //         width={props.dims.dx}
-  //         height='0.3em'
-  //         onClick={(e) => {e.stopPropagation()}}
-  //         onMouseOver={() => {}}
-  //         style={{'fill': props.fillColor(props.node_id)}}
-  //       />
-  //       <text
-  //         x={computeTextPosition(props.dims.x, props.dims.dx, ruler_dx, mode)}
-  //         y='3em'
-  //         textAnchor={{'ORGANIC' : 'middle', 'LEFT' : 'start', 'RIGHT' : 'end'}[mode]}
-  //       >
-  //         {text}
-  //       </text>
-
   return (
     <g>
       {res}

@@ -60,7 +60,9 @@ const BlackCursor = (props) => {
 const epochTimeToDateTime = (d) => {
   const res = new Date(d)
 
-  const mm = res.getMonth() + 1 // getMonth() is zero-based
+  const zeroBasedGetMonth = a=>a.getMonth()
+
+  const mm = zeroBasedGetMonth(res) + 1
   const dd = res.getDate()
 
   return (

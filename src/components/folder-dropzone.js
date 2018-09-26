@@ -7,6 +7,15 @@ import TextAlignCenter from 'components/text-align-center'
 import pick from 'languages'
 
 
+
+
+import { traverseFileTree, isJsonFile, readFileSync, copyFileTree, zipFileTree } from 'traverse-file-tree'
+import FileSaver from 'file-saver'
+
+
+
+
+
 const placeholder = pick({
   en: 'Drop a directory here!',
   fr: 'Glissez-déposez un répertoire ici !',
@@ -57,6 +66,28 @@ export default class FolderDropzone extends React.Component {
 
   handleDrop (e) {
     e.preventDefault()
+
+
+
+
+    // console.time('copy') ////////////////////////////////////////
+    // let count = 0
+    // copyFileTree(()=>{
+    //   count++
+    //   console.log(count)
+    // },e.dataTransfer.files[0].path)
+    // console.timeEnd('copy')
+
+
+    // console.time('zip') ////////////////////////////////////////
+    // zipFileTree(()=>{},e.dataTransfer.files[0].path).then((content) => {
+    //   FileSaver.saveAs(content, 'example.zip')
+    // })
+    // console.timeEnd('zip')
+
+
+
+
 
     const hook = (a) => {
       this.props.api.loading_state.setStatus(a.status)

@@ -14,42 +14,64 @@ class Workspace extends React.PureComponent {
   constructor(props) {
     super(props)
 
-    this.fillColor = this.fillColor.bind(this)
+    this.chooseFillColor = this.chooseFillColor.bind(this)
+    this.fillColorType = this.fillColorType.bind(this)
+    this.fillColorDate = this.fillColorDate.bind(this)
     this.getChildrenIdFromId = this.getChildrenIdFromId.bind(this)
+
+    this.state = {
+      fillColor:this.chooseFillColor(),
+    }
   }
 
-
-  fillColor(id) {
-    if (this.props.change_skin) {
-      const root_node = this.props.getFfByFfId(this.props.root_id)
-      const max_time = root_node.get('last_modified_max')
-      const min_time = root_node.get('last_modified_min')
-      const zeroToOne = (id) => {
-        const node = this.props.getFfByFfId(id)
-        const time = node.get('last_modified_average')
-        return (time - min_time) / (max_time - min_time)
-      }
-
-      return Color.toRgba(
-        Color.gradient(
-          Color.leastRecentDate(),
-          Color.mostRecentDate()
-        )(zeroToOne(id))
-      )
-    } else {
-      const node = this.props.getFfByFfId(id)
-      const name = node.get('name')
-
-      if (node.get('children').size) {
-        if (this.props.display_root.includes(id)) {
-          return Color.parentFolder()
-        } else {
-          return Color.folder()
-        }
-      } else {
-        return Color.fromFileName(name)
-      }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.change_skin !== prevProps.change_skin) {
+      const fillColor = this.chooseFillColor()
+      this.setState({
+        fillColor:(...args)=>fillColor(...args),
+      })
     }
+  }
+
+  chooseFillColor() {
+    if (this.props.change_skin) {
+      return this.fillColorDate
+    } else {
+      return this.fillColorType
+    }
+  }
+
+  fillColorType(id) {
+    const node = this.props.getFfByFfId(id)
+    const name = node.get('name')
+
+    if (node.get('children').size) {
+      if (this.props.display_root.includes(id)) {
+        return Color.parentFolder()
+      } else {
+        return Color.folder()
+      }
+    } else {
+      return Color.fromFileName(name)
+    }
+  }
+
+  fillColorDate(id) {
+    const root_node = this.props.getFfByFfId(this.props.root_id)
+    const max_time = root_node.get('last_modified_max')
+    const min_time = root_node.get('last_modified_min')
+    const zeroToOne = (id) => {
+      const node = this.props.getFfByFfId(id)
+      const time = node.get('last_modified_average')
+      return (time - min_time) / (max_time - min_time)
+    }
+
+    return Color.toRgba(
+      Color.gradient(
+        Color.leastRecentDate(),
+        Color.mostRecentDate()
+      )(zeroToOne(id))
+    )
   }
 
   // const zeroToOne = (id) => {
@@ -117,6 +139,10 @@ class Workspace extends React.PureComponent {
   render() {
     const api = this.props.api
 
+
+    const state = this.state
+    const fillColor = state.fillColor
+
     return (
       <div className='grid-y grid-frame'>
 
@@ -124,7 +150,7 @@ class Workspace extends React.PureComponent {
           <div className='grid-x'>
             <div className='cell small-10' style={{paddingRight:'.9375em'}}>
               <Report
-                fillColor={this.fillColor}
+                fillColor={fillColor}
                 api={api}
               />
             </div>
@@ -144,7 +170,7 @@ class Workspace extends React.PureComponent {
 
         <div className='cell auto'>
           <Icicle
-            fillColor={this.fillColor}
+            fillColor={fillColor}
             getChildrenIdFromId={this.getChildrenIdFromId}
             api={api}
           />

@@ -3,13 +3,11 @@ const fs = require('fs')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const FlowWebpackPlugin = require('flow-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const workboxPlugin = require('workbox-webpack-plugin')
 
 module.exports = {
   entry: {
     app: './src/app.js',
     react: ['react', 'react-dom'],
-    redux: ['redux', 'react-redux'],
     immutable: ['immutable'],
   },
 

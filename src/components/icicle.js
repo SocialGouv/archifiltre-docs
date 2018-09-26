@@ -58,8 +58,9 @@ class AnimatedIcicle extends React.PureComponent {
       const target_x = this.props.x
       const target_dx = this.props.dx
 
-      const x = props.x
-      const dx = props.dx
+      const dims = props.dims()
+      const x = dims.x
+      const dx = dims.dx
 
       const children = this.state.dom_element.children
       const prev_dom_element = children[0]
@@ -152,6 +153,9 @@ class AnimatedIcicle extends React.PureComponent {
 
     const svg_id = generateRandomString(40)
 
+          // {prevStyle.display !== 'none' &&
+          //   <Icicle {...prevProps}/>
+          // }
     return (
       <g clipPath={'url(#'+svg_id+')'}>
         <defs>
@@ -162,9 +166,7 @@ class AnimatedIcicle extends React.PureComponent {
 
         <g ref={ref}>
           <g style={prevStyle}>
-          {false && prevStyle.display !== 'none' &&
             <Icicle {...prevProps}/>
-          }
           </g>
           <g>
             <Icicle

@@ -18,6 +18,10 @@ import version from 'version'
 import pick from 'languages'
 
 
+
+
+
+
 document.title = pick({
   en:'icicle v'+version+' - archifiltre',
   fr:'stalactite v'+version+' - archifiltre',

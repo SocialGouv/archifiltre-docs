@@ -62,6 +62,7 @@ const askBeforeLeaving = () => {
   })
 }
 
+
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
@@ -70,6 +71,7 @@ function createWindow () {
     webPreferences: {
       nodeIntegrationInWorker: true
     },
+    icon: 'build/icon.png',
   })
 
   // and load the index.html of the app.

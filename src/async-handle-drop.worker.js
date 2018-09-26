@@ -13,6 +13,7 @@ onmessage = function(e) {
   const thres = 1000
   let last_ms = 0
 
+
   if (isJsonFile(dropped_folder_path)) {
     postMessage({status:'loading'})
     const content = readFileSync(dropped_folder_path,'utf8')

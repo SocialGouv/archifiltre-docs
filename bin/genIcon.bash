@@ -7,8 +7,8 @@ if [[ "$1" == "install" ]]; then
 fi
 
 filename="$1"
-filename_without_ext=$(echo "$filename" | cut -f 1 -d '.')
+filename_without_ext=$(echo "$filename" | sed 's/^\(.*\)\.[^\.]*$/\1/')
 
 echo "$filename_without_ext"
-icotool -c "$filename" > "filename_without_ext".ico
-# png2icns icon.icns icon.png
+icotool -c "$filename" > "$filename_without_ext".ico
+png2icns "$filename_without_ext".icns "$filename"

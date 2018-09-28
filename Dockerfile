@@ -30,6 +30,7 @@ FROM dev as prod
 WORKDIR /usr/src/app
 
 RUN bin/toggleDevComment.sh src/app.js > tmp && cat tmp > src/app.js
+RUN bin/toggleDevComment.sh static/index.html > tmp && cat tmp > static/index.html
 
 
 RUN npm run-script buildProd

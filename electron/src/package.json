@@ -6,13 +6,16 @@
   "scripts": {
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "windows": "electron-builder --windows portable",
+    "windows64": "electron-builder --windows portable --x64",
+    "windows32": "electron-builder --windows portable --ia32",
+    "mac": "electron-builder --mac dmg",
     "electron": "electron .",
     "start": ""
   },
   "postinstall": "electron-builder install-app-deps",
   "build": {
-    "appId": "com.example.app"
+    "appId": "com.example.app",
+    "files": ["**/*", "build/icon.*"]
   },
   "repository": {
     "type": "git",

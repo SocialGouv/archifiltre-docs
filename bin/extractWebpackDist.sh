@@ -1,4 +1,6 @@
 #!/bin/sh
+set -e
+# set -x
 
 docker_image_name="$1"
 webpack_target="$2"

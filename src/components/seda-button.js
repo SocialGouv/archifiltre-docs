@@ -12,7 +12,7 @@ const label = pick({
   fr: 'SEDA',
 })
 
-const CsvButton = props => {
+const SedaButton = props => {
   const api = props.api
   const database = api.database
   // const getStrList2 = database.toStrList2
@@ -25,10 +25,10 @@ const CsvButton = props => {
     ()=>{
       console.log('to SEDA')
       console.log(getManifestStr())
-      // save(name(), getManifestStr())
+      save(name(), getManifestStr())
     },
     label,
     true)
 }
 
-export default CsvButton
+export default SedaButton

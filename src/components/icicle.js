@@ -23,7 +23,9 @@ import { updateIn } from 'immutable'
 import IcicleTags from 'components/icicle-tags'
 
 
-const nothing = ()=>{}
+const empty_function = ()=>{}
+
+const empty_array = []
 
 
 class AnimatedIcicle extends React.PureComponent {
@@ -153,9 +155,6 @@ class AnimatedIcicle extends React.PureComponent {
 
     const svg_id = generateRandomString(40)
 
-          // {prevStyle.display !== 'none' &&
-          //   <Icicle {...prevProps}/>
-          // }
     return (
       <g clipPath={'url(#'+svg_id+')'}>
         <defs>
@@ -166,7 +165,9 @@ class AnimatedIcicle extends React.PureComponent {
 
         <g ref={ref}>
           <g style={prevStyle}>
-            <Icicle {...prevProps}/>
+            {prevStyle.display !== 'none' &&
+               <Icicle {...prevProps}/>
+            }
           </g>
           <g>
             <Icicle
@@ -188,6 +189,7 @@ class Icicle extends React.PureComponent {
 
     this.state = {
       dims:{},
+      fillColor:props.fillColor,
     }
 
     this.registerDims = this.registerDims.bind(this)
@@ -195,6 +197,15 @@ class Icicle extends React.PureComponent {
     this.trueFHeight = this.trueFHeight.bind(this)
 
     this.arrayOfIdToComponents = this.arrayOfIdToComponents.bind(this)
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.display_root !== prevProps.display_root) {
+      const fillColor = this.props.fillColor
+      this.setState({
+        fillColor:(...args)=>fillColor(...args),
+      })
+    }
   }
 
   registerDims(x,dx,y,dy,id) {
@@ -217,15 +228,16 @@ class Icicle extends React.PureComponent {
   arrayOfIdToComponents(key_prefix,opacity,array_of_id) {
     if (array_of_id.length) {
       const props = this.props
-      const fillColor = props.fillColor
 
       const onClickHandler = props.onIcicleRectClickHandler
       const onDoubleClickHandler = props.onIcicleRectDoubleClickHandler
       const onMouseOverHandler = props.onIcicleRectMouseOverHandler
 
+      const state = this.state
+      const fillColor = state.fillColor
+
       const array_of_id_without_root_id = array_of_id.slice(1)
       return array_of_id_without_root_id.map(id=>{
-        const state = this.state
         const dims = state.dims[id]
         if (dims === undefined) {
           return (<g key={key_prefix+id}/>)
@@ -252,7 +264,7 @@ class Icicle extends React.PureComponent {
             onDoubleClickHandler={onDoubleClickHandler}
             onMouseOverHandler={onMouseOverHandler}
 
-            registerDims={nothing}
+            registerDims={empty_function}
           />
         )
       })
@@ -278,11 +290,15 @@ class Icicle extends React.PureComponent {
     const getChildrenIdFromId = props.getChildrenIdFromId
 
     const shouldRenderChild = props.shouldRenderChild
-    const fillColor = props.fillColor
 
     const onClickHandler = props.onIcicleRectClickHandler
     const onDoubleClickHandler = props.onIcicleRectDoubleClickHandler
     const onMouseOverHandler = props.onIcicleRectMouseOverHandler
+
+
+    const state = this.state
+    const fillColor = state.fillColor
+
 
     const trueFHeight = this.trueFHeight
     const registerDims = this.registerDims
@@ -637,7 +653,7 @@ class IcicleMainComponent extends React.PureComponent {
             dy={minimap_height-10}
 
             root_id={this.props.root_id}
-            display_root={[]}
+            display_root={empty_array}
             fWidth={this.fWidth}
             normalizeWidth={this.normalizeWidth}
             trueFHeight={this.trueFHeight}
@@ -649,9 +665,9 @@ class IcicleMainComponent extends React.PureComponent {
 
             shouldRenderChild={this.shouldRenderChildMinimap}
 
-            onIcicleRectClickHandler={nothing}
-            onIcicleRectDoubleClickHandler={nothing}
-            onIcicleRectMouseOverHandler={nothing}
+            onIcicleRectClickHandler={empty_function}
+            onIcicleRectDoubleClickHandler={empty_function}
+            onIcicleRectMouseOverHandler={empty_function}
 
             computeWidthRec={this.computeWidthRec}
           />
@@ -714,7 +730,6 @@ export default function IcicleApiToProps(props) {
     },
     unlock: icicle_state.unlock,
     setDisplayRoot: icicle_state.setDisplayRoot,
-    setNoDisplayRoot: icicle_state.setNoDisplayRoot,
   },props)
 
   return (<IcicleMainComponent {...props}/>)

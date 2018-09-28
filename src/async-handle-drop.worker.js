@@ -4,7 +4,7 @@ import { traverseFileTree, isJsonFile, readFileSync } from 'traverse-file-tree'
 import * as VirtualFileSystem from 'datastore/virtual-file-system'
 import { fromAnyJsonToJs } from 'compatibility'
 
-
+import version from 'version'
 
 onmessage = function(e) {
   const data = e.data
@@ -19,10 +19,13 @@ onmessage = function(e) {
     const content = readFileSync(dropped_folder_path,'utf8')
     const content_without_byte_order_mark = content.slice(1)
     
-    let vfs = VirtualFileSystem.fromJs(fromAnyJsonToJs(content_without_byte_order_mark))
+    const [js,js_version] = fromAnyJsonToJs(content_without_byte_order_mark)
+    let vfs = VirtualFileSystem.fromJs(js)
 
-    postMessage({status:'derivate'})
-    vfs = VirtualFileSystem.derivate(vfs)
+    if (js_version !== version) {
+      postMessage({status:'derivate'})
+      vfs = VirtualFileSystem.derivate(vfs)
+    }
 
     postMessage({
       status:'return',

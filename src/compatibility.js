@@ -39,7 +39,7 @@ export const fromAnyJsonToJs = (json) => {
         js = JSON.parse(json)
       }
   }
-  return js
+  return [js,version]
 }
 
 

@@ -1,4 +1,6 @@
 #!/bin/sh
+set -e
+# set -x
 
 FILE=$(cat $1)
 

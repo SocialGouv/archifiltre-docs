@@ -4,6 +4,7 @@ const {dialog} = require('electron')
 
 const language = app.getLocale().slice(0,2)
 
+const path = require('path')
 
 
 app.commandLine.appendSwitch('js-flags', '--max-old-space-size=40960')
@@ -71,7 +72,9 @@ function createWindow () {
     webPreferences: {
       nodeIntegrationInWorker: true
     },
-    icon: 'build/icon.png',
+    // icon: 'build/icon.png',
+    // icon: path.join(__dirname, '/icon/Icon-512x512.png'),
+    // icon: path.join(__dirname, '/build/icon.png'),
   })
 
   // and load the index.html of the app.

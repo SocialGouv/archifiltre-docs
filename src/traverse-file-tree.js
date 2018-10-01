@@ -5,18 +5,22 @@ const Path = require('path')
 
 
 const recTraverseFileTree = (hook,path) => {
-  const stats = Fs.statSync(path)
-  if (stats.isDirectory()) {
-    return Fs.readdirSync(path)
-      .map(a=>recTraverseFileTree(hook,Path.join(path,a)))
-      .reduce((acc,val)=>acc.concat(val),[])
-  } else {
-    hook()
-    const file = {
-      size:stats.size,
-      lastModified:stats.mtimeMs,
+  try {
+    const stats = Fs.statSync(path)
+    if (stats.isDirectory()) {
+      return Fs.readdirSync(path)
+        .map(a=>recTraverseFileTree(hook,Path.join(path,a)))
+        .reduce((acc,val)=>acc.concat(val),[])
+    } else {
+      hook()
+      const file = {
+        size:stats.size,
+        lastModified:stats.mtimeMs,
+      }
+      return [[file,path]]
     }
-    return [[file,path]]
+  } catch (e) {
+    return []
   }
 }
 

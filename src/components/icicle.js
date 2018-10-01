@@ -189,7 +189,6 @@ class Icicle extends React.PureComponent {
 
     this.state = {
       dims:{},
-      fillColor:props.fillColor,
     }
 
     this.registerDims = this.registerDims.bind(this)
@@ -199,14 +198,6 @@ class Icicle extends React.PureComponent {
     this.arrayOfIdToComponents = this.arrayOfIdToComponents.bind(this)
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.display_root !== prevProps.display_root) {
-      const fillColor = this.props.fillColor
-      this.setState({
-        fillColor:(...args)=>fillColor(...args),
-      })
-    }
-  }
 
   registerDims(x,dx,y,dy,id) {
     this.setState(state=>updateIn(state,['dims',id],()=>{return{x,dx,y,dy}}))
@@ -233,8 +224,9 @@ class Icicle extends React.PureComponent {
       const onDoubleClickHandler = props.onIcicleRectDoubleClickHandler
       const onMouseOverHandler = props.onIcicleRectMouseOverHandler
 
+      const fillColor = props.fillColor
+
       const state = this.state
-      const fillColor = state.fillColor
 
       const array_of_id_without_root_id = array_of_id.slice(1)
       return array_of_id_without_root_id.map(id=>{
@@ -296,8 +288,8 @@ class Icicle extends React.PureComponent {
     const onMouseOverHandler = props.onIcicleRectMouseOverHandler
 
 
-    const state = this.state
-    const fillColor = state.fillColor
+
+    const fillColor = props.fillColor
 
 
     const trueFHeight = this.trueFHeight
@@ -419,6 +411,20 @@ class IcicleMainComponent extends React.PureComponent {
     this.onIcicleRectMouseOverHandler = this.onIcicleRectMouseOverHandler.bind(this)
     this.computeWidthRec = this.computeWidthRec.bind(this)
   }
+
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   const ans = {}
+  //   for (let key in this.props) {
+  //     if (prevProps[key] !== this.props[key]) {
+  //       ans[key] = [prevProps[key], this.props[key]]
+  //     }
+  //   }
+  //   if (Object.keys(ans).length > 0) {
+  //     console.log(ans)
+  //   }
+  // }
+
 
   icicleWidth() {
     return this.state.view_box_width*8/12

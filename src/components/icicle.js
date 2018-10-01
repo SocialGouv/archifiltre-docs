@@ -192,6 +192,7 @@ class Icicle extends React.PureComponent {
     }
 
     this.registerDims = this.registerDims.bind(this)
+    this.shouldResetDims = false
 
     this.trueFHeight = this.trueFHeight.bind(this)
 
@@ -200,6 +201,10 @@ class Icicle extends React.PureComponent {
 
 
   registerDims(x,dx,y,dy,id) {
+    if (this.shouldResetDims) {
+      this.setState({dims:{}})
+      this.shouldResetDims = false
+    }
     this.setState(state=>updateIn(state,['dims',id],()=>{return{x,dx,y,dy}}))
   }
 
@@ -266,6 +271,8 @@ class Icicle extends React.PureComponent {
   }
 
   render() {
+    this.shouldResetDims = true
+    
     const props = this.props
 
     const root_id = props.root_id
@@ -685,6 +692,8 @@ class IcicleMainComponent extends React.PureComponent {
 
             display_root={this.props.display_root}
             computeWidthRec={this.computeWidthRec}
+
+            fillColor={this.props.fillColor}
           />
         </g>
       </g>

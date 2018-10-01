@@ -10,17 +10,17 @@ export default class IcicleTags extends React.PureComponent {
     this.onMouseOverFactory = this.onMouseOverFactory.bind(this)
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const ans = {}
-    for (let key in this.props) {
-      if (prevProps[key] !== this.props[key]) {
-        ans[key] = [prevProps[key], this.props[key]]
-      }
-    }
-    if (Object.keys(ans).length > 0) {
-      console.log(ans)
-    }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   const ans = {}
+  //   for (let key in this.props) {
+  //     if (prevProps[key] !== this.props[key]) {
+  //       ans[key] = [prevProps[key], this.props[key]]
+  //     }
+  //   }
+  //   if (Object.keys(ans).length > 0) {
+  //     console.log(ans)
+  //   }
+  // }
 
   onClickFactory(id) {
     const props = this.props

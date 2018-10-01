@@ -2,6 +2,7 @@ import React from 'react'
 
 import * as Color from 'color'
 import * as ObjectUtil from 'util/object-util'
+import * as Cache from 'cache'
 
 import Icicle from 'components/icicle'
 
@@ -14,30 +15,47 @@ class Workspace extends React.PureComponent {
   constructor(props) {
     super(props)
 
-    this.chooseFillColor = this.chooseFillColor.bind(this)
+    this.state = {
+      prev_display_root:props.display_root,
+    }
+
+    this.fillColorFactory = this.fillColorFactory.bind(this)
     this.fillColorType = this.fillColorType.bind(this)
     this.fillColorDate = this.fillColorDate.bind(this)
     this.getChildrenIdFromId = this.getChildrenIdFromId.bind(this)
-
-    this.state = {
-      fillColor:this.chooseFillColor(),
-    }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.change_skin !== prevProps.change_skin) {
-      const fillColor = this.chooseFillColor()
+    const props = this.props
+    const display_root = props.display_root
+
+    const state = this.state
+    const prev_display_root = state.prev_display_root
+
+    if (display_root !== prev_display_root) {
       this.setState({
-        fillColor:(...args)=>fillColor(...args),
+        prev_display_root:display_root,
       })
     }
   }
 
-  chooseFillColor() {
-    if (this.props.change_skin) {
+
+  fillColorFactory() {
+    const props = this.props
+    const change_skin = props.change_skin
+    const display_root = props.display_root
+
+    const state = this.state
+    const prev_display_root = state.prev_display_root
+
+    if (change_skin) {
       return this.fillColorDate
     } else {
-      return this.fillColorType
+      if (display_root !== prev_display_root) {
+        return (...args)=>this.fillColorType(...args)
+      } else {
+        return this.fillColorType
+      }
     }
   }
 
@@ -74,54 +92,6 @@ class Workspace extends React.PureComponent {
     )
   }
 
-  // const zeroToOne = (id) => {
-    //   const props = this.props
-    //   const duplicate_node_id = props.duplicate_node_id
-    //   if (!duplicate_node_id) {
-    //     return 0
-    //   }
-
-    //   const database = props.database
-    //   const getSubIdList = database.getSubIdList
-    //   const sub_id_list = getSubIdList(duplicate_node_id,database)
-
-
-    //   const getSize = node => node.get('size')
-    //   const getFfByFfId = props.getFfByFfId
-
-    //   const z2O = (duplicate_node_id) => {
-    //     const duplicate_node = getFfByFfId(duplicate_node_id)
-    //     const duplicate_node_size = getSize(duplicate_node)
-
-
-    //     const node = getFfByFfId(id)
-    //     const node_size = getSize(node)
-    //     if (node_size === duplicate_node_size) {
-    //       return 1
-    //     } else {
-    //       return 0
-    //     }
-    //   }
-
-    //   let ans = 0
-    //   for (let i = 0; i < sub_id_list.size; i++) {
-    //     ans = z2O(sub_id_list.get(i))
-    //     if (ans === 1) {
-    //       break;
-    //     }
-    //   }
-
-    //   return ans
-    // }
-
-    // return Color.toRgba(
-    //   Color.gradient(
-    //     Color.different(),
-    //     Color.duplicate()
-    //   )(zeroToOne(id))
-    // )
-
-
   getChildrenIdFromId(id) {
     const node = this.props.getFfByFfId(id)
     const children = node.get('children')
@@ -140,8 +110,8 @@ class Workspace extends React.PureComponent {
     const api = this.props.api
 
 
-    const state = this.state
-    const fillColor = state.fillColor
+    const fillColor = this.fillColorFactory()
+
 
     return (
       <div className='grid-y grid-frame'>

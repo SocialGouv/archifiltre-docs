@@ -7,20 +7,16 @@ import { ApiContext } from 'reducers/store'
 
 
 class SvgRectangle extends React.PureComponent {
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   let ans = true
-  //   let logs = []
+  // componentDidUpdate(prevProps, prevState) {
+  //   const ans = {}
   //   for (let key in this.props) {
-  //     ans = ans && this.props[key] === nextProps[key]
-  //     if (this.props[key] !== nextProps[key]) {
-  //       console.log(key,this.props[key],nextProps[key])
-  //       logs.push(key)
+  //     if (prevProps[key] !== this.props[key]) {
+  //       ans[key] = [prevProps[key], this.props[key]]
   //     }
   //   }
-  //   if (!ans) {
-  //     // console.log(ans, logs)
+  //   if (Object.keys(ans).length > 0) {
+  //     console.log(ans)
   //   }
-  //   return !ans
   // }
 
   render() {

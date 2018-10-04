@@ -67,11 +67,11 @@ const makeDataObjectPackageObj = (state) => {
 	// Creating root elements
 	let AU_root_content = new Array()
 	AU_root_content.push(makeObj('DescriptionLevel', 'File')) // Correct?
-	AU_root_content.push(makeObj('Title', 'DUMMY_TITLE'))
-	AU_root_content.push(makeObj('CustodialHistory', [
-		makeObj('CustodialHistoryItem', 'DUMMY_CUSTODIALHISTORYITEM_1'),
-		makeObj('CustodialHistoryItem', 'DUMMY_CUSTODIALHISTORYITEM_2')
-	]))
+	AU_root_content.push(makeObj('Title', 'DUMMY_TITLE')) // PUT GAME NAME HERE
+	// AU_root_content.push(makeObj('CustodialHistory', [
+	// 	makeObj('CustodialHistoryItem', 'DUMMY_CUSTODIALHISTORYITEM_1'),
+	// 	makeObj('CustodialHistoryItem', 'DUMMY_CUSTODIALHISTORYITEM_2')
+	// ]))
 	AU_root_content.push(makeObj('Event', [
 		makeObj('EventIdentifier', makeId()),
 		makeObj('EventType', 'Creation'),
@@ -81,7 +81,7 @@ const makeDataObjectPackageObj = (state) => {
 	
 
 	AU_children.push({_attr: makeObj('id', makeId())})
-	AU_children.push(makeObj('Management', ''))
+	// AU_children.push(makeObj('Management', ''))
 	AU_children.push(makeObj('Content', AU_root_content))
 
 
@@ -120,7 +120,7 @@ const makeDataObjectPackageObj = (state) => {
 		// Where to insert alias ? Tags ? Comments ?
 		AU_content.push(makeObj('DescriptionLevel', 'File'))
 		AU_content.push(makeObj('Title', ff.get('name')))
-		AU_content.push(makeObj('Type', 'DUMMY_TYPE')) // CDO ?
+		// AU_content.push(makeObj('Type', 'DUMMY_TYPE')) // CDO ?
 		AU_content.push(makeObj('StartDate', last_modified)) // Correct ? Format ?
 		AU_content.push(makeObj('Event', [
 			makeObj('EventIdentifier', makeId()),
@@ -131,7 +131,7 @@ const makeDataObjectPackageObj = (state) => {
 
 		let AU = makeObj('ArchiveUnit', [
 			{_attr: makeObj('id', makeId())},
-			makeObj('Management', ''),
+			// makeObj('Management', ''),
 			makeObj('Content', AU_content),
 			makeObj('DataObjectReference', [makeObj('DataObjectReferenceId', BDO_id)])
 		])

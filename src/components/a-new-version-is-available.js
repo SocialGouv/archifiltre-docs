@@ -51,12 +51,12 @@ export default class ANewVersionIsAvailable extends React.PureComponent {
   componentDidMount() {
     request({
       method:'GET',
-      url:'https://archifiltre.github.io/version/',
+      url:'https://archifiltre.github.io/api-version/',
     }).then(a => {
       try {
         a = JSON.parse(a)
         const last_version = a.last_version
-        const current_version = 2
+        const current_version = version
 
         if (isNaN(last_version) === false && typeof last_version === 'number') {
           if (current_version !== last_version) {
@@ -77,7 +77,7 @@ export default class ANewVersionIsAvailable extends React.PureComponent {
   }
 
   download() {
-    shell.openExternal('https://github.com') //////////////////////////////////////////
+    shell.openExternal('https://archifiltre.github.io/')
   }
 
   render() {

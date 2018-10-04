@@ -99,7 +99,7 @@ export default class FolderDropzone extends React.Component {
     this.props.api.loading_state.startToLoadFiles()
     AsyncHandleDrop(hook,e.dataTransfer.files[0].path)
       .then(vfs => {
-        console.log(vfs.toJS())
+        // console.log(vfs.toJS())
         this.props.api.database.set(vfs)
 
         this.props.api.loading_state.finishedToLoadFiles()

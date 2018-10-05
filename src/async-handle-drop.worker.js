@@ -20,7 +20,9 @@ onmessage = function(e) {
     const content_without_byte_order_mark = content.slice(1)
     
     const [js,js_version] = fromAnyJsonToJs(content_without_byte_order_mark)
+
     let vfs = VirtualFileSystem.fromJs(js)
+
 
     if (js_version !== version) {
       postMessage({status:'derivate'})

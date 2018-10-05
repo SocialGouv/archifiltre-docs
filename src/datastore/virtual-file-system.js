@@ -23,7 +23,7 @@ const virtualFileSystem = RecordUtil.createFactory({
   fromJs: a => ObjectUtil.compose({
     files_and_folders:FilesAndFolders.fromJs(a.files_and_folders),
     tags:Tags.fromJs(a.tags),
-  }),
+  },a),
 })
 
 export const make = origin => virtualFileSystem({

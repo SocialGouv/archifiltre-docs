@@ -5,6 +5,8 @@ import * as ObjectUtil from 'util/object-util'
 
 import { ApiContext } from 'reducers/store'
 
+import * as FunctionUtil from 'util/function-util'
+
 
 class SvgRectangle extends React.PureComponent {
   // componentDidUpdate(prevProps, prevState) {
@@ -31,6 +33,7 @@ class SvgRectangle extends React.PureComponent {
     const fill = props.fill
     const opacity = props.opacity
     const stroke = props.stroke
+    const cursor = props.cursor
 
     return (
       <rect
@@ -42,7 +45,7 @@ class SvgRectangle extends React.PureComponent {
         onClick={onClickHandler}
         onDoubleClick={onDoubleClickHandler}
         onMouseOver={onMouseOverHandler}
-        style={{fill, opacity, stroke}}
+        style={{fill, opacity, stroke, cursor}}
       />
     )
   }
@@ -126,6 +129,11 @@ export default class IcicleRect extends React.PureComponent {
     const y = props.y
     const dy = props.dy
 
+    let cursor = 'pointer'
+    if (props.onClickHandler === FunctionUtil.empty) {
+      cursor = 'initial'
+    }
+
     return (
       <g>
         <SvgRectangle
@@ -140,6 +148,7 @@ export default class IcicleRect extends React.PureComponent {
           fill={fill}
           opacity={opacity}
           stroke={'#fff'}
+          cursor={cursor}
         />
       </g>
     )

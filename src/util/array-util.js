@@ -16,3 +16,5 @@ export const computeCumulative = array => {
   }
   return ans
 }
+
+export const empty = []

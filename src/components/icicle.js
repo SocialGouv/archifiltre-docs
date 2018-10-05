@@ -16,6 +16,8 @@ import * as ObjectUtil from 'util/object-util'
 
 
 import * as ArrayUtil from 'util/array-util'
+import * as FunctionUtil from 'util/function-util'
+
 import IcicleRecursive from 'components/icicle-recursive'
 
 import { updateIn } from 'immutable'
@@ -23,9 +25,6 @@ import { updateIn } from 'immutable'
 import IcicleTags from 'components/icicle-tags'
 
 
-const empty_function = ()=>{}
-
-const empty_array = []
 
 
 class AnimatedIcicle extends React.PureComponent {
@@ -261,7 +260,7 @@ class Icicle extends React.PureComponent {
             onDoubleClickHandler={onDoubleClickHandler}
             onMouseOverHandler={onMouseOverHandler}
 
-            registerDims={empty_function}
+            registerDims={FunctionUtil.empty}
           />
         )
       })
@@ -666,7 +665,7 @@ class IcicleMainComponent extends React.PureComponent {
             dy={minimap_height-10}
 
             root_id={this.props.root_id}
-            display_root={empty_array}
+            display_root={ArrayUtil.empty}
             fWidth={this.fWidth}
             normalizeWidth={this.normalizeWidth}
             trueFHeight={this.trueFHeight}
@@ -678,9 +677,9 @@ class IcicleMainComponent extends React.PureComponent {
 
             shouldRenderChild={this.shouldRenderChildMinimap}
 
-            onIcicleRectClickHandler={empty_function}
-            onIcicleRectDoubleClickHandler={empty_function}
-            onIcicleRectMouseOverHandler={empty_function}
+            onIcicleRectClickHandler={FunctionUtil.empty}
+            onIcicleRectDoubleClickHandler={FunctionUtil.empty}
+            onIcicleRectMouseOverHandler={FunctionUtil.empty}
 
             computeWidthRec={this.computeWidthRec}
           />

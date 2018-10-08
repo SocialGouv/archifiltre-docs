@@ -31,6 +31,9 @@ const makeId = () => {
 
 const seda_source = "fr:gouv:culture:archivesdefrance:seda:v2.1 seda-2.1-main.xsd"
 
+const DUMMY_ORIGINATINGAGENCYIDENTIFIER = 'FRAN_NP_000001'
+const DUMMY_ARCHIVALAGREEMENT = 'ArchivalAgreement0'
+
 // SPECIFIC ROOT ELEMENTS
 const makeManifestRootAttributes = () => {
 	return {
@@ -89,6 +92,8 @@ const makeDataObjectPackageObj = (state) => {
 	files.forEach((ff,id)=>{
 	    if (id==='') {return undefined}
 
+	    let URI = (id.charAt(0) === '/' ? id.substring(1) : id)
+
 	    let BDO_id = makeId()
 		let last_modified = dateFormat(ff.get('last_modified_max'), date_format)
 		let now = dateFormat(new Date(), date_format)
@@ -96,7 +101,7 @@ const makeDataObjectPackageObj = (state) => {
 	    let BDO_content = new Array()
 
 		BDO_content.push({_attr: makeObj('id', BDO_id)})
-		BDO_content.push(makeObj('Uri', id))
+		BDO_content.push(makeObj('Uri', URI))
 		// BDO_content.push(makeObj('MessageDigest', [{_attr: makeObj('algorithm', 'DUMMY_ALGORITHM')}, 'DUMMY_MESSAGEDIGEST']))
 		BDO_content.push(makeObj('MessageDigest', [{_attr: makeObj('algorithm', 'DUMMY_ALGORITHM')}, '']))
 		BDO_content.push(makeObj('Size', ff.get('size')))
@@ -146,7 +151,7 @@ const makeDataObjectPackageObj = (state) => {
 
 	//Final population of Data Object Package
 	DOP_children.push(makeObj('DescriptiveMetadata', [AU_root]))
-	DOP_children.push(makeObj('ManagementMetadata', ''))
+	DOP_children.push(makeObj('ManagementMetadata', [makeObj('OriginatingAgencyIdentifier', DUMMY_ORIGINATINGAGENCYIDENTIFIER)])) // DUMMY value for now
 
 	return makeObj('DataObjectPackage', DOP_children)
 }
@@ -159,6 +164,7 @@ export const makeManifest = (state) => {
 			{_attr: makeManifestRootAttributes()},
 			makeObj('Date', dateFormat(new Date(), date_format)),
 			makeObj('MessageIdentifier', makeId()),
+			makeObj('ArchivalAgreement', DUMMY_ARCHIVALAGREEMENT),
 			makeCodeListVersionsObj(),
 			makeDataObjectPackageObj(state),
 			makeArchivalAgencyObj(),

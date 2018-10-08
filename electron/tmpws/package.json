@@ -1,0 +1,36 @@
+{
+  "name": "archifiltre",
+  "version": "9.0.0",
+  "description": "Explorer plus plus for archive",
+  "main": "./index.js",
+  "scripts": {
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "windows64": "electron-builder --windows portable --x64",
+    "windows32": "electron-builder --windows portable --ia32",
+    "mac": "electron-builder --mac dmg",
+    "electron": "electron .",
+    "start": ""
+  },
+  "postinstall": "electron-builder install-app-deps",
+  "build": {
+    "appId": "com.example.app",
+    "files": ["**/*", "build/icon.*"]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeanbaptisteassouad/cheapExp.git"
+  },
+  "author": "archifiltre",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeanbaptisteassouad/cheapExp/issues"
+  },
+  "homepage": "https://github.com/jeanbaptisteassouad/cheapExp#readme",
+  "devDependencies": {
+    "electron-react-devtools": "0.5.3",
+    "electron-builder": "20.28.4",
+    "electron": "2.0.5"
+  },
+  "dependencies": {}
+}

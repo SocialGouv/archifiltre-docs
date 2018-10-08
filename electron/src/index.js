@@ -73,6 +73,7 @@ function createWindow () {
     webPreferences: {
       nodeIntegrationInWorker: true
     },
+    show: false,
     // icon: 'build/icon.png',
     // icon: path.join(__dirname, '/icon/Icon-512x512.png'),
     // icon: path.join(__dirname, '/build/icon.png'),

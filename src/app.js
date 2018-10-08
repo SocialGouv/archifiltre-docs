@@ -8,6 +8,8 @@ import MainSpace from 'components/main-space'
 import Header from 'components/header'
 import ANewVersionIsAvailable from 'components/a-new-version-is-available'
 
+import WindowResize from 'components/window-resize'
+
 import 'css/app.css'
 
 import { generateRandomString } from 'random-gen'
@@ -59,31 +61,6 @@ import pick from 'languages'
 
 
 
-
-// const fs = require('fs')
-// const path = require('path')
-
-// const aapp = require('electron').remote.app
-// const user_data = aapp.getPath('userData')
-
-// const aaaa = fs.existsSync(path.join(user_data,'test'))
-// if (aaaa) {
-//   console.log(fs.readFileSync(path.join(user_data,'test')))
-// } else {
-//   fs.writeFileSync(path.join(user_data,'test'),'atuienstauinsetaunsritenasutienutaien')
-// }
-
-
-// C2D47XcTOg0StHdFGQ8Zu1yqYAzVZ1MZRVNj5mYn
-
-// TzMKJ54yo65AglOIQnbB1Vl1S0COE82AMCVKZWbh
-
-
-
-
-
-
-
 document.title = pick({
   en:'icicle v'+version+' - archifiltre',
   fr:'stalactite v'+version+' - archifiltre',
@@ -119,6 +96,7 @@ const app = () => {
         const api = props.api
         return (
           <ErrorBoundary api={api}>
+            <WindowResize/>
             <div className='grid-y grid-frame'>
               <div className='cell'>
                 <ANewVersionIsAvailable/>

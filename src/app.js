@@ -60,6 +60,27 @@ import pick from 'languages'
 
 
 
+// const fs = require('fs')
+// const path = require('path')
+
+// const aapp = require('electron').remote.app
+// const user_data = aapp.getPath('userData')
+
+// const aaaa = fs.existsSync(path.join(user_data,'test'))
+// if (aaaa) {
+//   console.log(fs.readFileSync(path.join(user_data,'test')))
+// } else {
+//   fs.writeFileSync(path.join(user_data,'test'),'atuienstauinsetaunsritenasutienutaien')
+// }
+
+
+// C2D47XcTOg0StHdFGQ8Zu1yqYAzVZ1MZRVNj5mYn
+
+// TzMKJ54yo65AglOIQnbB1Vl1S0COE82AMCVKZWbh
+
+
+
+
 
 
 

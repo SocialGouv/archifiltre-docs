@@ -95,3 +95,13 @@ electron_release: electron_prod
 	mv $(workspace)/dist $(workspace)/windows32
 	yarn --cwd $(workspace) dist
 	mv $(workspace)/dist $(workspace)/linux
+
+
+
+
+
+
+
+
+install:
+	bin/installDeps.sh

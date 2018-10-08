@@ -100,8 +100,6 @@ electron_release: electron_prod
 
 
 
-
-
-
-install:
+deps:
 	bin/installDeps.sh
+

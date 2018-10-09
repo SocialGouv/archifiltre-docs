@@ -2,8 +2,6 @@ const {app, BrowserWindow} = require('electron')
 
 const {dialog} = require('electron')
 
-const language = app.getLocale().slice(0,2)
-
 const path = require('path')
 
 
@@ -15,6 +13,9 @@ app.commandLine.appendSwitch('js-flags', '--max-old-space-size=40960')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
+
+
+const getLanguage = () => app.getLocale().slice(0,2)
 
 const preventNavigation = () => {
   win.on('will-navigate', (event) => {
@@ -29,6 +30,7 @@ const preventNavigation = () => {
 const askBeforeLeaving = () => {
   win.on('close', (event) => {
     event.preventDefault()
+    const language = getLanguage()
     let title
     let message
     let detail

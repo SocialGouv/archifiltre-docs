@@ -1,7 +1,8 @@
+import { generateRandomString } from 'random-gen'
+
 const XML = require('xml')
 const dateFormat = require('dateformat')
 
-const date_format = "yyyy-mm-dd'T'HH:MM:ss"
 
 // AUXILIARY FUNCTIONS AND VARIABLES
 const makeObj = (key, value) => {
@@ -17,17 +18,10 @@ const pad = (s, l) => {
 }
 
 const makeId = () => {
-	let d = new Date()
-	return '_'
-		+ d.getFullYear()
-		+ pad(d.getMonth()+1, 2)
-		+ pad(d.getDay(), 2)
-		+ pad(d.getHours(), 2)
-		+ pad(d.getMinutes(), 2)
-		+ pad(d.getSeconds(), 2)
-		+ pad(d.getMilliseconds(), 3)
-		+ Math.floor(Math.random() * 1000)
+	return '_' + generateRandomString(40)
 }
+
+const date_format = "yyyy-mm-dd'T'HH:MM:ss"
 
 const seda_source = "fr:gouv:culture:archivesdefrance:seda:v2.1 seda-2.1-main.xsd"
 

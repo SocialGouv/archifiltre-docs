@@ -1,7 +1,11 @@
 import { generateRandomString } from 'random-gen'
+import { readAsText } from 'file-uti'
 
 const XML = require('xml')
 const dateFormat = require('dateformat')
+const Path = require('path')
+const fs = require('fs')
+const SHA512 = require('js-sha512').sha512
 
 
 // AUXILIARY FUNCTIONS AND VARIABLES
@@ -22,11 +26,13 @@ const makeId = () => {
 }
 
 const date_format = "yyyy-mm-dd'T'HH:MM:ss"
+const hash_algorithm = "SHA-512"
 
 const seda_source = "fr:gouv:culture:archivesdefrance:seda:v2.1 seda-2.1-main.xsd"
 
 const DUMMY_ORIGINATINGAGENCYIDENTIFIER = 'FRAN_NP_000001'
 const DUMMY_ARCHIVALAGREEMENT = 'ArchivalAgreement0'
+const DUMMY_FOLDERPATH = "/home/manu/Documents/EIG/versements/Test_ADAMANT"
 
 // SPECIFIC ROOT ELEMENTS
 const makeManifestRootAttributes = () => {
@@ -56,6 +62,7 @@ const makeTransferringAgencyObj = () => {
 const makeDataObjectPackageObj = (state) => {
 
 	let files = state.get('files_and_folders').filter(a=>a.get('children').size===0)
+	let folderpath = DUMMY_FOLDERPATH
 
 	let DOP_children = new Array()
 	let AU_children = new Array()
@@ -87,6 +94,8 @@ const makeDataObjectPackageObj = (state) => {
 	    if (id==='') {return undefined}
 
 	    let URI = (id.charAt(0) === '/' ? id.substring(1) : id)
+		let full_URI = Path.join(folderpath, URI)
+		let file_hash = SHA512(fs.readFileSync(full_URI))
 
 	    let BDO_id = makeId()
 		let last_modified = dateFormat(ff.get('last_modified_max'), date_format)
@@ -96,8 +105,7 @@ const makeDataObjectPackageObj = (state) => {
 
 		BDO_content.push({_attr: makeObj('id', BDO_id)})
 		BDO_content.push(makeObj('Uri', URI))
-		// BDO_content.push(makeObj('MessageDigest', [{_attr: makeObj('algorithm', 'DUMMY_ALGORITHM')}, 'DUMMY_MESSAGEDIGEST']))
-		BDO_content.push(makeObj('MessageDigest', [{_attr: makeObj('algorithm', 'DUMMY_ALGORITHM')}, '']))
+		BDO_content.push(makeObj('MessageDigest', [{_attr: makeObj('algorithm', hash_algorithm)}, file_hash]))
 		BDO_content.push(makeObj('Size', ff.get('size')))
 		BDO_content.push(makeObj('FormatIdentification', [
 			makeObj('FormatLitteral', 'DUMMY_FORMATLITTERAL'),

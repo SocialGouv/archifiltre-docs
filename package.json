@@ -53,6 +53,7 @@
     "electron-ga": "1.0.6",
     "file-saver": "1.3.3",
     "immutable": "4.0.0-rc.9",
+    "js-sha512": "0.8.0",
     "react": "16.4.0",
     "react-dom": "16.4.0",
     "react-redux": "5.0.6",

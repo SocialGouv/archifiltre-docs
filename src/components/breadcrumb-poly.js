@@ -1,8 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 
-const Presentational = props => {
+const BreadcrumbPoly = props => {
   const x = props.x
   const y = props.y
   const dx = props.dx
@@ -35,18 +34,4 @@ const Presentational = props => {
 }
 
 
-const mapStateToProps = state => {
-	return {}
-}
-
-const mapDispatchToProps = dispatch => {
- 	return {}
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container
+export default BreadcrumbPoly

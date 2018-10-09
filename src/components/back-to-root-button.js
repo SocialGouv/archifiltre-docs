@@ -1,16 +1,16 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
+import * as ObjectUtil from 'util/object-util'
 import { mkB, mkRB } from 'components/button'
-
-import { setNoDisplayRoot } from 'reducers/icicle-state'
-import { setNoFocus } from 'reducers/icicle-state'
-
-import { selectIcicleState, commit } from 'reducers/root-reducer'
 
 import * as Color from 'color'
 
-import { tr } from 'dict'
+import pick from 'languages'
+
+const label = pick({
+  en: 'Back to root',
+  fr: 'Retour à la racine',
+})
 
 
 const Presentational = props => {
@@ -27,36 +27,28 @@ const Presentational = props => {
 
   return mkB(
     props.backToRoot,
-    (<span><i className="fi-zoom-out" />&ensp;{tr('Back to root')}</span>),
+    (<span><i className="fi-zoom-out" />&ensp;{label}</span>),
     props.isZoomed,
     Color.parentFolder(),
     button_style)
 }
 
 
+export default (props) => {
+  const api = props.api
+  const icicle_state = api.icicle_state
 
-const mapStateToProps = state => {
-  let icicle_state = selectIcicleState(state)
+  const backToRoot = () => {
+    icicle_state.setNoDisplayRoot()
+    icicle_state.setNoFocus()
+    api.undo.commit()
+  }
 
-  return {
+  props = ObjectUtil.compose({
     isZoomed: icicle_state.isZoomed(),
-  }
+    backToRoot,
+  },props)
+
+  return (<Presentational {...props}/>)
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    backToRoot: (...args) => {
-      dispatch(setNoDisplayRoot())
-      dispatch(setNoFocus())
-      dispatch(commit())
-    }
-  }
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container

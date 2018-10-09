@@ -3,16 +3,12 @@ const fs = require('fs')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const FlowWebpackPlugin = require('flow-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const workboxPlugin = require('workbox-webpack-plugin')
 
 module.exports = {
   entry: {
     app: './src/app.js',
     react: ['react', 'react-dom'],
-    redux: ['redux', 'react-redux'],
     immutable: ['immutable'],
-
-    stats: './src/stats.js'
   },
 
   plugins: [
@@ -22,18 +18,10 @@ module.exports = {
       filename: 'index.html',
       template: 'static/index.html',
       excludeChunks: ['stats']
-    }),
-    new HtmlWebpackPlugin({
-      inject: 'head',
-      filename: 'stats.html',
-      template: 'static/stats.html',
-      excludeChunks: ['app']
-    }),
-    new workboxPlugin.InjectManifest({
-      swSrc: 'src/sw.js',
-      swDest: 'sw.js',
     })
   ],
+
+  target:'electron-renderer',
 
   devServer: {
     contentBase: './dist',

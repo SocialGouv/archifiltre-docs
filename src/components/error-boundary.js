@@ -1,19 +1,42 @@
 import React from 'react'
 
-import { logError } from 'api-call'
-import { getCookie } from 'cookie'
+import SaveButton from 'components/save-button'
+
 
 export default class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      hasError: false
+    }
   }
 
   componentDidCatch(error, info) {
-    logError(error.stack, info.componentStack)
+    this.setState({
+      hasError: true
+    })
   }
 
   render() {
+    const props = this.props
+
+    const api = props.api
+
+    if (this.state.hasError) {
+      return (
+        <div className='grid-y grid-frame align-center'>
+          <div
+            className='cell small-1'
+            style={{
+              textAlign: 'center',
+            }}
+          >
+            <h1>Something went wrong.</h1>
+            <SaveButton api={api}/>
+          </div>
+        </div>
+      )
+    }
     return this.props.children
   }
 }
-

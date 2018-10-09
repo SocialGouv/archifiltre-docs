@@ -1,9 +1,48 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
-import { selectDatabase } from 'reducers/root-reducer'
+import * as ObjectUtil from 'util/object-util'
+import pick from 'languages'
 
-import { tr } from 'dict'
+
+const Loading = () => {
+  const text = pick({
+    en: 'Json loading',
+    fr: 'Chargement du json',
+  })
+
+  return (<p>{text}</p>)
+}
+
+const Traverse = (props) => {
+  const count = props.count
+  const text = pick({
+    en: 'Files loaded',
+    fr: 'Fichiers chargés',
+  })
+
+  return (
+    <p>{text}: {count}</p>
+  )
+}
+
+const Make = () => {
+  const text = pick({
+    en: 'Construction of the data model',
+    fr: 'Construction du model de donnée',
+  })
+
+  return (<p>{text}</p>)
+}
+
+const Derivate = () => {
+  const text = pick({
+    en: 'Computation of the derivative data',
+    fr: 'Calcul des données dérivées',
+  })
+
+  return (<p>{text}</p>)
+}
+
 
 
 const cell_style = {
@@ -11,34 +50,26 @@ const cell_style = {
 }
 
 
+
 class Presentational extends React.Component {
   constructor(props) {
     super(props)
-    this.thres = 30
-    this.last_ms = 0
-
-    this.shouldComponentUpdate = this.shouldComponentUpdate.bind(this)
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.nb_files === nextProps.nb_files) {
-      return false
-    }
-    let cur_ms = (new Date()).getTime()
-    if (cur_ms - this.last_ms < this.thres) {
-      return false
-    }
-    this.last_ms = cur_ms
-    return true
   }
 
   render() {
+    const props = this.props
+    const status = props.status
+    const count = props.count
+
     return (
       <div className='grid-y grid-frame align-center'>
         <div className='cell'>
           <div style={cell_style}>
             <img src='imgs/loading.gif' style={{'width': '50%', 'opacity': '0.3'}}/>
-            <p>{tr("Files loaded")}: {this.props.nb_files}</p>
+              {status === 'loading' && <Loading/>}
+              {status === 'traverse' && <Traverse count={count}/>}
+              {status === 'make' && <Make/>}
+              {status === 'derivate' && <Derivate/>}
           </div>
         </div>
       </div>
@@ -47,21 +78,19 @@ class Presentational extends React.Component {
 }
 
 
-const mapStateToProps = state => {
-  let database = selectDatabase(state)
-  return {
-    nb_files: database.getWaitingCounter(),
-  }
+
+export default (props) => {
+  const api = props.api
+
+  const loading_state = api.loading_state
+  const status = loading_state.status()
+  const count = loading_state.count()
+
+  props = ObjectUtil.compose({
+    status,
+    count,
+  },props)
+
+  return (<Presentational {...props}/>)
 }
 
-const mapDispatchToProps = dispatch => {
-  return {}
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container

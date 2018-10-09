@@ -1,15 +1,13 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
-import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
 import * as Color from 'color'
-
+import * as ObjectUtil from 'util/object-util'
 
 const least_rgba = Color.toRgba(Color.leastRecentDate())
 const medium_rgba = Color.toRgba(Color.mediumDate())
 const most_rgba = Color.toRgba(Color.mostRecentDate())
 
-class Presentational extends React.PureComponent {
+class TimeGradient extends React.PureComponent {
   constructor(props) {
     super(props)
 
@@ -26,14 +24,14 @@ class Presentational extends React.PureComponent {
 
     const cursor_width = svg_width * 0.0075
 
-    const root_node = this.props.getByID(this.props.root_id)
-    const last_modified = root_node.get('content').get('last_modified')
-    const max_time = last_modified.get('max')
-    const min_time = last_modified.get('min')
+    const root_node = this.props.getFfByFfId(this.props.root_id)
+    
+    const max_time = root_node.get('last_modified_max')
+    const min_time = root_node.get('last_modified_min')
     const zeroToOne = (prop_name,id) => {
-      const node = this.props.getByID(id)
-      const last_modified = node.get('content').get('last_modified')
-      const time = last_modified.get(prop_name)
+      const node = this.props.getFfByFfId(id)
+      
+      const time = node.get('last_modified_'+prop_name)
       return (time - min_time) / (max_time - min_time)
     }
 
@@ -41,27 +39,6 @@ class Presentational extends React.PureComponent {
 
     let cursor_array = []
     if (this.props.id) {
-
-      // const node = this.props.getByID(this.props.id)
-      // const last_modified = node.get('content').get('last_modified')
-      // const list = last_modified.get('list')
-      // cursor_array = list.map((time,i)=>{
-      //   const zero_to_one = (time - min_time) / (max_time - min_time)
-      //   return (
-      //     <g key={'cursor_'+i}>
-      //       <rect
-      //         x={zero_to_one*svg_width - cursor_width/2}
-      //         y={0}
-      //         width={cursor_width}
-      //         height={svg_height}
-      //         fill={'rgba(0, 0, 0, '+ Math.max(1/list.size, 0.01) +')'}
-      //         style={style}
-      //       />
-      //     </g>
-      //   )
-      // })
-
-
       cursor_array = ['min','median','max']
       cursor_array = cursor_array.map(prop_name=>{
         return (
@@ -120,29 +97,22 @@ class Presentational extends React.PureComponent {
 }
 
 
-const mapStateToProps = state => {
-  const icicle_state = selectIcicleState(state)
-  const database = selectDatabase(state)
 
-  const sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
+export default (props) => {
+  const api = props.api
+  const icicle_state = api.icicle_state
+  const database = api.database
+
+  const sequence = icicle_state.sequence()
 
   const id = sequence.slice(-1)[0]
 
-  return {
-    getByID: database.getByID,
-    root_id: database.rootId(),
+  props = ObjectUtil.compose({
+    getFfByFfId: database.getFfByFfId,
+    root_id: database.rootFfId(),
     id,
-  }
+  },props)
+
+  return (<TimeGradient {...props}/>)
 }
 
-const mapDispatchToProps = dispatch => {
-  return {}
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container

@@ -1,8 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { selectDatabase, selectIcicleState, commit } from 'reducers/root-reducer'
 
-import { setDisplayRoot, setNoDisplayRoot, setFocus, setNoFocus, lock, unlock } from 'reducers/icicle-state'
 
 import IcicleRect from 'components/icicle-rect'
 import Ruler from 'components/ruler'
@@ -15,17 +12,20 @@ import MinimapBracket from 'components/minimap-bracket'
 import { animate, clear } from 'animation-daemon' 
 import * as Color from 'color'
 
-import { tr } from 'dict'
+import * as ObjectUtil from 'util/object-util'
 
-const nothing = ()=>{}
 
-function computeCumulative(array) {
-  const ans = [0]
-  for (let i = 0; i < array.length - 1; i++) {
-    ans.push(array[i] + ans[i])
-  }
-  return ans
-}
+import * as ArrayUtil from 'util/array-util'
+import * as FunctionUtil from 'util/function-util'
+
+import IcicleRecursive from 'components/icicle-recursive'
+
+import { updateIn } from 'immutable'
+
+import IcicleTags from 'components/icicle-tags'
+
+
+
 
 class AnimatedIcicle extends React.PureComponent {
   constructor(props) {
@@ -164,7 +164,9 @@ class AnimatedIcicle extends React.PureComponent {
 
         <g ref={ref}>
           <g style={prevStyle}>
-            <Icicle {...prevProps}/>
+            {prevStyle.display !== 'none' &&
+               <Icicle {...prevProps}/>
+            }
           </g>
           <g>
             <Icicle
@@ -184,7 +186,25 @@ class Icicle extends React.PureComponent {
   constructor(props) {
     super(props)
 
+    this.state = {
+      dims:{},
+    }
+
+    this.registerDims = this.registerDims.bind(this)
+    this.shouldResetDims = false
+
     this.trueFHeight = this.trueFHeight.bind(this)
+
+    this.arrayOfIdToComponents = this.arrayOfIdToComponents.bind(this)
+  }
+
+
+  registerDims(x,dx,y,dy,id) {
+    if (this.shouldResetDims) {
+      this.setState({dims:{}})
+      this.shouldResetDims = false
+    }
+    this.setState(state=>updateIn(state,['dims',id],()=>{return{x,dx,y,dy}}))
   }
 
   makeKey(id) {
@@ -200,16 +220,90 @@ class Icicle extends React.PureComponent {
     return this.props.trueFHeight(height, id)
   }
 
+  arrayOfIdToComponents(key_prefix,opacity,array_of_id) {
+    if (array_of_id.length) {
+      const props = this.props
+
+      const onClickHandler = props.onIcicleRectClickHandler
+      const onDoubleClickHandler = props.onIcicleRectDoubleClickHandler
+      const onMouseOverHandler = props.onIcicleRectMouseOverHandler
+
+      const fillColor = props.fillColor
+
+      const state = this.state
+
+      const array_of_id_without_root_id = array_of_id.slice(1)
+      return array_of_id_without_root_id.map(id=>{
+        const dims = state.dims[id]
+        if (dims === undefined) {
+          return (<g key={key_prefix+id}/>)
+        }
+        const x = dims.x
+        const dx = dims.dx
+        const y = dims.y
+        const dy = dims.dy
+
+        return (
+          <IcicleRect
+            key={key_prefix+id}
+            id={id}
+            x={x}
+            y={y}
+            dx={dx}
+            dy={dy}
+
+            opacity={opacity}
+
+            fillColor={fillColor}
+
+            onClickHandler={onClickHandler}
+            onDoubleClickHandler={onDoubleClickHandler}
+            onMouseOverHandler={onMouseOverHandler}
+
+            registerDims={FunctionUtil.empty}
+          />
+        )
+      })
+    } else {
+      return []
+    }
+  }
+
   render() {
+    this.shouldResetDims = true
+    
     const props = this.props
 
+    const root_id = props.root_id
     const x = props.x
     const y = props.y
     const dx = props.dx
     const dy = props.dy
 
     const display_root = props.display_root
-    const [xc,dxc] = props.computeWidthRec(display_root,x,dx)
+    const computeWidthRec = props.computeWidthRec
+
+    const fWidth = props.fWidth
+    const normalizeWidth = props.normalizeWidth
+    const getChildrenIdFromId = props.getChildrenIdFromId
+
+    const shouldRenderChild = props.shouldRenderChild
+
+    const onClickHandler = props.onIcicleRectClickHandler
+    const onDoubleClickHandler = props.onIcicleRectDoubleClickHandler
+    const onMouseOverHandler = props.onIcicleRectMouseOverHandler
+
+
+
+    const fillColor = props.fillColor
+
+
+    const trueFHeight = this.trueFHeight
+    const registerDims = this.registerDims
+    const arrayOfIdToComponents = this.arrayOfIdToComponents
+
+
+    const [xc,dxc] = computeWidthRec(display_root,x,dx).slice(-1)[0]
 
     let x_prime = (x + (x - xc)) * (dx / dxc)
     let dx_prime = dx * (dx / dxc)
@@ -223,27 +317,62 @@ class Icicle extends React.PureComponent {
     }
 
 
-    const root_id = props.root_id
-    const trueFHeight = this.trueFHeight
+
+    const api = this.props.api
+    const icicle_state = api.icicle_state
+
+    let style = {}
+    if (icicle_state.isFocused() || icicle_state.isLocked()) {
+      style.opacity = 0.3
+    }
+
+    const sequence = icicle_state.sequence()
+    const sequence_components = arrayOfIdToComponents('sequence',1,sequence)
+
+    const hover = icicle_state.hover_sequence()
+    const hover_components = arrayOfIdToComponents('hover',0.3,hover)
+
+
+    const database = api.database
+    const tag_ids = database.getAllTagIds()
+    const getTagByTagId = database.getTagByTagId
+    const dims = this.state.dims
+    const tag_id_to_highlight = icicle_state.tagIdToHighlight()
 
     return (
-       <g>
-        <IcicleRecursive
-          x={x_prime}
-          y={y}
-          width={dx_prime}
-          height={dy}
-          id={root_id}
-          fWidth={props.fWidth}
-          normalizeWidth={props.normalizeWidth}
-          trueFHeight={trueFHeight}
-          getChildrenIdFromId={props.getChildrenIdFromId}
-          fillColor={props.fillColor}
-          shouldRenderChild={props.shouldRenderChild}
+      <g>
+        <g style={style}>
+          <IcicleRecursive
+            x={x_prime}
+            y={y}
+            width={dx_prime}
+            height={dy}
+            id={root_id}
 
-          onIcicleRectClickHandler={props.onIcicleRectClickHandler}
-          onIcicleRectDoubleClickHandler={props.onIcicleRectDoubleClickHandler}
-          onIcicleRectMouseOverHandler={props.onIcicleRectMouseOverHandler}
+            fWidth={fWidth}
+            normalizeWidth={normalizeWidth}
+            trueFHeight={trueFHeight}
+            getChildrenIdFromId={getChildrenIdFromId}
+
+            shouldRenderChild={shouldRenderChild}
+            fillColor={fillColor}
+            onClickHandler={onClickHandler}
+            onDoubleClickHandler={onDoubleClickHandler}
+            onMouseOverHandler={onMouseOverHandler}
+
+            registerDims={registerDims}
+          />
+        </g>
+        {hover_components}
+        {sequence_components}
+        <IcicleTags
+          tag_ids={tag_ids}
+          getTagByTagId={getTagByTagId}
+          dims={dims}
+          tag_id_to_highlight={tag_id_to_highlight}
+          onClick={onClickHandler}
+          onDoubleClick={onDoubleClickHandler}
+          onMouseOver={onMouseOverHandler}
         />
       </g>
     )
@@ -251,89 +380,9 @@ class Icicle extends React.PureComponent {
 }
 
 
-class IcicleRecursive extends React.PureComponent {
-  constructor(props) {
-    super(props)
-  }
-
-  makeKey(id) {
-    return 'icicle-recursive-'+id
-  }
 
 
-
-  render() {
-    const children = this.props.getChildrenIdFromId(this.props.id)
-    const children_width = this.props.normalizeWidth(children.map(this.props.fWidth))
-      .map(a=>a*this.props.width)
-    const cumulated_children_width = computeCumulative(children_width)
-
-    const children_height = children.map(this.props.trueFHeight)
-
-    const children_component = children.map((child_id,i) => {
-      const x_child = this.props.x + cumulated_children_width[i]
-      const width_child = children_width[i]
-
-      const should_render_child = this.props.shouldRenderChild(x_child, width_child)
-
-      if (should_render_child === false) {
-        return (<g key={this.makeKey(child_id)} />)
-      }
-
-      const y_child = this.props.y
-      const height_child = children_height[i]
-
-      const x_prime = x_child
-      const width_prime = width_child
-      const y_prime = y_child + height_child
-      const height_prime = this.props.height - height_child
-      return (
-        <g key={this.makeKey(child_id)}>
-          <IcicleRect
-            node_id={child_id}
-            x={x_child}
-            y={y_child}
-            dx={width_child}
-            dy={height_child}
-            fillColor={this.props.fillColor}
-
-            onClickHandler={this.props.onIcicleRectClickHandler}
-            onDoubleClickHandler={this.props.onIcicleRectDoubleClickHandler}
-            onMouseOverHandler={this.props.onIcicleRectMouseOverHandler}
-          />
-          <IcicleRecursive
-            x={x_prime}
-            y={y_prime}
-            width={width_prime}
-            height={height_prime}
-            id={child_id}
-            fWidth={this.props.fWidth}
-            normalizeWidth={this.props.normalizeWidth}
-            trueFHeight={this.props.trueFHeight}
-            getChildrenIdFromId={this.props.getChildrenIdFromId}
-            fillColor={this.props.fillColor}
-            shouldRenderChild={this.props.shouldRenderChild}
-
-            onIcicleRectClickHandler={this.props.onIcicleRectClickHandler}
-            onIcicleRectDoubleClickHandler={this.props.onIcicleRectDoubleClickHandler}
-            onIcicleRectMouseOverHandler={this.props.onIcicleRectMouseOverHandler}
-          />
-        </g>
-      )
-    })
-
-    return (
-      <g>
-        {children_component}
-      </g>
-    )
-  }
-}
-
-
-
-
-class Presentational extends React.PureComponent {
+class IcicleMainComponent extends React.PureComponent {
   constructor(props) {
     super(props)
 
@@ -346,7 +395,6 @@ class Presentational extends React.PureComponent {
 
     this.ref = this.ref.bind(this)
 
-    this.getChildrenIdFromId = this.getChildrenIdFromId.bind(this)
     this.fWidth = this.fWidth.bind(this)
     this.normalizeWidth = this.normalizeWidth.bind(this)
     this.trueFHeight = this.trueFHeight.bind(this)
@@ -369,6 +417,20 @@ class Presentational extends React.PureComponent {
     this.onIcicleRectMouseOverHandler = this.onIcicleRectMouseOverHandler.bind(this)
     this.computeWidthRec = this.computeWidthRec.bind(this)
   }
+
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   const ans = {}
+  //   for (let key in this.props) {
+  //     if (prevProps[key] !== this.props[key]) {
+  //       ans[key] = [prevProps[key], this.props[key]]
+  //     }
+  //   }
+  //   if (Object.keys(ans).length > 0) {
+  //     console.log(ans)
+  //   }
+  // }
+
 
   icicleWidth() {
     return this.state.view_box_width*8/12
@@ -414,18 +476,15 @@ class Presentational extends React.PureComponent {
     this.responsiveAnimation(dom_element)
   }
 
-  getChildrenIdFromId(id) {
-    const node = this.props.getByID(id)
-    return node.get('children').toJS()
-  }
 
   computeWidthRec(ids, x, dx) {
+    const ans = [[x, dx]]
     if (ids.length < 2) {
-      return [x, dx]
+      return ans
     } else {
       const fWidth = this.fWidth
       const normalizeWidth = this.normalizeWidth
-      const getChildrenIdFromId = this.getChildrenIdFromId
+      const getChildrenIdFromId = this.props.getChildrenIdFromId
 
       const parent_id = ids[0]
       const child_id = ids[1]
@@ -433,20 +492,20 @@ class Presentational extends React.PureComponent {
 
       const children_ids = getChildrenIdFromId(parent_id)
       const width_array = normalizeWidth(children_ids.map(fWidth)).map(a=>a*dx)
-      const cumulated_width_array = computeCumulative(width_array)
+      const cumulated_width_array = ArrayUtil.computeCumulative(width_array)
 
       const index_of = children_ids.indexOf(child_id)
       x = cumulated_width_array[index_of] + x
       dx = width_array[index_of]
 
-      return this.computeWidthRec(ids, x, dx)
+      return ans.concat(this.computeWidthRec(ids, x, dx))
     }
   }
 
 
   fWidth(id) {
-    const node = this.props.getByID(id)
-    return node.get('content').get('size')
+    const node = this.props.getFfByFfId(id)
+    return node.get('size')
   }
 
   normalizeWidth(arr) {
@@ -459,7 +518,7 @@ class Presentational extends React.PureComponent {
     return height/this.props.max_depth
   }
 
-  shouldRenderChildIcicle(x,dx) {
+  shouldRenderChildIcicle(x,dx,id) {
     const dx_threshold = 1
     const x_window = 0
     const dx_window = this.icicleWidth() - 1
@@ -475,7 +534,7 @@ class Presentational extends React.PureComponent {
     }
   }
 
-  shouldRenderChildMinimap(x,dx) {
+  shouldRenderChildMinimap(x,dx,id) {
     const dx_threshold = 2.5
 
     if (dx < dx_threshold) {
@@ -497,34 +556,34 @@ class Presentational extends React.PureComponent {
 
 
   nodeSequence(id) {
-    return this.props.getIDPath(id).toJS()
+    return this.props.getFfIdPath(id).toJS()
   }
 
   onIcicleRectClickHandler(props,event) {
     event.stopPropagation()
-    const node_id = props.node_id
-    const dims = props.dims
+    const node_id = props.id
+    const dims = props.dims()
 
     const node_sequence = this.nodeSequence(node_id)
-    this.props.lock(node_sequence, dims())
+    this.props.lock(node_sequence, dims)
   }
   onIcicleRectDoubleClickHandler(props,event) {
-    const node_id = props.node_id
+    const node_id = props.id
 
     const node_sequence = this.nodeSequence(node_id)
     this.props.setDisplayRoot(node_sequence)
   }
   onIcicleRectMouseOverHandler(props,event) {
-    const node_id = props.node_id
-    const dims = props.dims
-    const isLocked = props.isLocked
+    const node_id = props.id
+    const dims = props.dims()
 
     const node_sequence = this.nodeSequence(node_id)
-    this.props.setFocus(node_sequence, dims(), isLocked)
+    this.props.setFocus(node_sequence, dims)
   }
 
 
   render() {
+    const api = this.props.api
     const view_box_width = this.state.view_box_width
     const view_box_height = this.state.view_box_height
 
@@ -543,6 +602,7 @@ class Presentational extends React.PureComponent {
     const icicle = (
       <g>
         <AnimatedIcicle
+          api={api}
           x={0}
           y={0}
           dx={icicle_width}
@@ -553,8 +613,11 @@ class Presentational extends React.PureComponent {
           fWidth={this.fWidth}
           normalizeWidth={this.normalizeWidth}
           trueFHeight={this.trueFHeight}
-          getChildrenIdFromId={this.getChildrenIdFromId}
+          getChildrenIdFromId={this.props.getChildrenIdFromId}
           fillColor={this.props.fillColor}
+
+          sequence={this.props.sequence}
+          hover_sequence={this.props.hover_sequence}
 
           shouldRenderChild={this.shouldRenderChildIcicle}
 
@@ -566,6 +629,7 @@ class Presentational extends React.PureComponent {
         />
 
         <Ruler
+          api={api}
           x={0}
           y={icicle_height}
           dx={icicle_width}
@@ -575,6 +639,7 @@ class Presentational extends React.PureComponent {
         />
 
         <BreadCrumbs
+          api={api}
           x={icicle_width}
           dx={breadcrumbs_width}
           dy={icicle_height}
@@ -592,24 +657,29 @@ class Presentational extends React.PureComponent {
             style={{'fill': 'white', opacity:'0.4'}}
           />
           <Icicle
+            api={api}
+
             x={minimap_x+5}
             y={minimap_y+5}
             dx={minimap_width-10}
             dy={minimap_height-10}
 
             root_id={this.props.root_id}
-            display_root={[]}
+            display_root={ArrayUtil.empty}
             fWidth={this.fWidth}
             normalizeWidth={this.normalizeWidth}
             trueFHeight={this.trueFHeight}
-            getChildrenIdFromId={this.getChildrenIdFromId}
+            getChildrenIdFromId={this.props.getChildrenIdFromId}
             fillColor={this.props.fillColor}
+
+            sequence={this.props.sequence}
+            hover_sequence={this.props.hover_sequence}
 
             shouldRenderChild={this.shouldRenderChildMinimap}
 
-            onIcicleRectClickHandler={nothing}
-            onIcicleRectDoubleClickHandler={nothing}
-            onIcicleRectMouseOverHandler={nothing}
+            onIcicleRectClickHandler={FunctionUtil.empty}
+            onIcicleRectDoubleClickHandler={FunctionUtil.empty}
+            onIcicleRectMouseOverHandler={FunctionUtil.empty}
 
             computeWidthRec={this.computeWidthRec}
           />
@@ -621,12 +691,13 @@ class Presentational extends React.PureComponent {
 
             display_root={this.props.display_root}
             computeWidthRec={this.computeWidthRec}
+
+            fillColor={this.props.fillColor}
           />
         </g>
       </g>
     )
     console.timeEnd('render icicle')
-
 
     return (
       <svg
@@ -642,45 +713,39 @@ class Presentational extends React.PureComponent {
         {icicle}
       </svg>
     )
+
   }
 }
 
-const mapStateToProps = state => {
-  const database = selectDatabase(state)
-  const icicle_state = selectIcicleState(state)
 
+export default function IcicleApiToProps(props) {
+  const api = props.api
+  const icicle_state = api.icicle_state
+  const database = api.database
 
   const lock_sequence = icicle_state.lock_sequence()
   const isLocked = lock_sequence.length > 0
 
-  return {
-    getByID: database.getByID,
-    root_id: database.rootId(),
+  props = ObjectUtil.compose({
+    getFfByFfId: database.getFfByFfId,
+    root_id: database.rootFfId(),
     display_root: icicle_state.display_root(),
-    getIDPath: database.getIDPath,
+    getFfIdPath: database.getFfIdPath,
     max_depth: database.maxDepth(),
     isLocked,
-  }
-}
- 
-const mapDispatchToProps = dispatch => {
-  return {
-    setFocus: (...args) => dispatch((setFocus(...args))),
-    setNoFocus: (...args) => dispatch((setNoFocus(...args))),
+    sequence: icicle_state.sequence(),
+    hover_sequence: icicle_state.hover_sequence(),
+
+    setFocus: icicle_state.setFocus,
+    setNoFocus: icicle_state.setNoFocus,
     lock: (...args) => {
-      dispatch((lock(...args)))
-      dispatch(commit())
+      icicle_state.lock(...args)
+      api.undo.commit()
     },
-    unlock: (...args) => dispatch((unlock(...args))),
-    setDisplayRoot: (...args) => dispatch(setDisplayRoot(...args)),
-    setNoDisplayRoot: (...args) => dispatch(setNoDisplayRoot(...args)),
-  }
+    unlock: icicle_state.unlock,
+    setDisplayRoot: icicle_state.setDisplayRoot,
+  },props)
+
+  return (<IcicleMainComponent {...props}/>)
 }
 
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container
-        

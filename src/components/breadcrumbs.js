@@ -1,17 +1,26 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
-import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
+import * as ObjectUtil from 'util/object-util'
 
 import BreadCrumbText from 'components/breadcrumb-text'
 import BreadCrumbPoly from 'components/breadcrumb-poly'
 
 import * as Color from 'color'
 
-import { tr } from 'dict'
+import pick from 'languages'
+
+const file_text = pick({
+  en: 'File',
+  fr: 'Fichier',
+})
+
+const level_text = pick({
+  en: 'Level',
+  fr: 'Niveau',
+})
+
 
 const breadcrumb_dims = {w: 400, h: 300}
-
 
 
 const makeBreadKey = id => 'breadcrumbc-'+id
@@ -48,7 +57,7 @@ const computeDim = (y,height) => {
   }
 }
 
-class Presentational extends React.PureComponent {
+class Breadcrumbs extends React.PureComponent {
   constructor(props) {
     super(props)
 
@@ -96,12 +105,12 @@ class Presentational extends React.PureComponent {
     const trueFHeight = this.trueFHeight
 
     const displayName = id => {
-      const node = this.props.getByID(id)
+      const node = this.props.getFfByFfId(id)
       const n_name = node.get('name')
-      const n_content = node.get('content')
-      const c_alias = n_content.get('alias')
+      
+      const n_alias = node.get('alias')
 
-      const display_name = c_alias === '' ? n_name : c_alias
+      const display_name = n_alias === '' ? n_name : n_alias
 
       return display_name
     }
@@ -170,11 +179,11 @@ class Presentational extends React.PureComponent {
 
         let display_name
         if (is_last) {
-          display_name = tr('File')
+          display_name = file_text
         } else if (i >= 2) {
           display_name = '...'
         } else {
-          display_name = tr('Level') + ' ' + (i+1)
+          display_name = level_text + ' ' + (i+1)
         }
         res.push(
           <g key={'breadcrumb' + i}>
@@ -211,34 +220,25 @@ class Presentational extends React.PureComponent {
 
 }
 
-const mapStateToProps = state => {
-  let icicle_state = selectIcicleState(state)
-  let database = selectDatabase(state)
 
-  let breadcrumb_sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
-  
-  const getByID = database.getByID
+export default function BreadcrumbsApiToProps(props) {
+  const api = props.api
+  const icicle_state = api.icicle_state
+  const database = api.database
+
+  const breadcrumb_sequence = icicle_state.sequence()
+
+  const getFfByFfId = database.getFfByFfId
+
   const max_depth = database.maxDepth()
 
-
-
-  return {
+  props = ObjectUtil.compose({
     breadcrumb_sequence,
     isFocused: icicle_state.isFocused(),
     max_depth,
-    getByID,
-    root_id: database.rootId(),
-  }
+    getFfByFfId,
+    root_id: database.rootFfId(),
+  },props)
+
+  return (<Breadcrumbs {...props}/>)
 }
-
-const mapDispatchToProps = dispatch => {
-  return {}
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container

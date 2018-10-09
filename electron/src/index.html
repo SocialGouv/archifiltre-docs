@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    We are using node <script>document.write(process.versions.node)</script>,
+    Chrome <script>document.write(process.versions.chrome)</script>,
+    and Electron <script>document.write(process.versions.electron)</script>.
+  </body>
+
+  <script type="text/javascript">
+
+
+
+// Test Fs use
+const fs = require('fs')
+
+document.ondragover = document.ondrop = (ev) => {
+  ev.preventDefault()
+}
+
+document.body.ondrop = (ev) => {
+  const path = ev.dataTransfer.files[0].path
+  console.log(path)
+  console.log(fs.statSync(path))
+
+  // console.log(fs.readdirSync(path))
+
+  // Test open file
+  const {shell} = require('electron')
+  // Open a local file in the default app
+  shell.openItem(path)
+
+  ev.preventDefault()
+}
+
+
+
+// // Test RAM limit
+// let output = []
+// let count = 0
+
+// while (true) {
+//   output.push(new Object())
+//   count++
+
+//   if (count % 1000 === 0) {
+//     console.log(process.memoryUsage())
+//   }
+// }
+
+  </script>
+</html>

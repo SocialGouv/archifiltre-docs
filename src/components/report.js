@@ -1,13 +1,10 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
+import * as ObjectUtil from 'util/object-util'
 import { RIEInput, RIETextArea, RIETags } from 'riek'
 
 import TagsCell from 'components/report-cell-tags'
 import CommentsCell from 'components/report-cell-comments'
-
-import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
-import { updateContentElementByID, addTagged, deleteTagged } from 'reducers/database'
 
 import { makeSizeString, octet2HumanReadableFormat } from 'components/ruler'
 
@@ -15,12 +12,23 @@ import { edit_hover_container, edit_hover_pencil, editable_text, element_name, b
 
 import LastModifiedReporter from 'components/last-modified-reporter'
 
-
-import * as Content from 'content'
-import { commit } from 'reducers/root-reducer'
 import * as Color from 'color'
 
-import { tr } from 'dict'
+
+import pick from 'languages'
+
+const folder_of_name_tr = pick({
+  en: 'Folder of file\'s name',
+  fr: 'Nom du répertoire ou fichier',
+})
+const real_name_tr = pick({
+  en: 'Real name',
+  fr: 'Nom réel',
+})
+const size_tr = pick({
+  en: 'Size',
+  fr: 'Taille',
+})
 
 
 const pad = '1em'
@@ -80,7 +88,7 @@ const Name = props => {
 
   if (placeholder) {
     return (
-      <div style={{'fontWeight':'bold'}}>{tr('Folder of file\'s name')}</div>
+      <div style={{'fontWeight':'bold'}}>{folder_of_name_tr}</div>
     )
   } else {
     return (
@@ -104,7 +112,7 @@ const RealName = props => {
 
   if (placeholder) {
     return (
-      <div style={{'fontStyle':'italic'}}>({tr('Real name')})</div>
+      <div style={{'fontStyle':'italic'}}>({real_name_tr})</div>
     )
   } else {
     return (
@@ -116,6 +124,7 @@ const RealName = props => {
 }
 
 const InfoCell = props => {
+  const api = props.api
   const placeholder = props.placeholder
   const c_size = props.c_size
   const node_id = props.node_id
@@ -124,34 +133,34 @@ const InfoCell = props => {
   let component
   if (placeholder) {
     size_label = '...'
-    component = <LastModifiedReporter placeholder={true}/>
+    component = <LastModifiedReporter api={api} placeholder={true}/>
   } else {
     size_label = c_size
-    component = <LastModifiedReporter id={node_id} placeholder={false}/>
+    component = <LastModifiedReporter api={api} id={node_id} placeholder={false}/>
   }
 
   return (
     <div style={info_cell_style}>
-      <b>{tr('Size')} :</b> {size_label}<br />
+      <b>{size_tr} :</b> {size_label}<br />
       {component}
     </div>
   )
 }
 
-const Presentational = props => {
+const Report = props => {
+  const api = props.api
   let icon, name, real_name, info_cell, tags_cell, comments_cell, name_cell
 
   if(props.isFocused) {
     const node = props.node
     const n_children = node.get('children')
     const n_name = node.get('name')
-    const n_content = node.get('content')
 
-    const c_size = octet2HumanReadableFormat(n_content.get('size'))
+    const c_size = octet2HumanReadableFormat(node.get('size'))
 
-    const c_alias = n_content.get('alias')
-    const c_tags = props.tags
-    const c_comments = n_content.get('comments')
+    const c_alias = node.get('alias')
+    const c_tag_ids = props.tag_ids
+    const c_comments = node.get('comments')
 
     const display_name = c_alias === '' ? n_name : c_alias
     const bracket_name = c_alias === '' ? '' : n_name
@@ -177,18 +186,21 @@ const Presentational = props => {
     />
 
     info_cell = <InfoCell
+      api={api}
       c_size={c_size}
       node_id={props.node_id}
     />
 
     tags_cell = <TagsCell
-      isDummy={false}
+      api={api}
+      is_dummy={false}
       cells_style={cells_style}
-      tags={c_tags}
+      tag_ids={c_tag_ids}
       node_id={props.node_id}
     />
     comments_cell = <CommentsCell
-      isDummy={false}
+      api={api}
+      is_dummy={false}
       cells_style={cells_style}
       comments={c_comments}
       node_id={props.node_id}
@@ -198,9 +210,9 @@ const Presentational = props => {
     icon = <Icon placeholder={true}/>
     name = <Name placeholder={true}/>
     real_name = <RealName placeholder={true}/>
-    info_cell = <InfoCell placeholder={true}/>
-    tags_cell = <TagsCell isDummy={true} cells_style={cells_style} />
-    comments_cell = <CommentsCell isDummy={true} cells_style={cells_style} />
+    info_cell = <InfoCell api={api} placeholder={true}/>
+    tags_cell = <TagsCell api={api} is_dummy={true} cells_style={cells_style} />
+    comments_cell = <CommentsCell api={api} is_dummy={true} cells_style={cells_style} />
   }
 
 
@@ -228,8 +240,6 @@ const Presentational = props => {
         opacity: (props.isFocused ? 1 : 0.5),
         background: 'white',
         borderRadius: '1em',
-        // minHeight: '11em',
-        // maxHeight: '11em',
       }
     }>
       <div className='grid-x' style={{padding:pad}}>
@@ -254,49 +264,41 @@ const Presentational = props => {
   )
 }
 
-const mapStateToProps = state => {
-  let icicle_state = selectIcicleState(state)
-  let database = selectDatabase(state)
 
+export default function ReportApiToProps(props) {
+  const api = props.api
+  const icicle_state = api.icicle_state
+  const database = api.database
 
-  let sequence = icicle_state.isLocked() ? icicle_state.lock_sequence() : icicle_state.hover_sequence()
+  const sequence = icicle_state.sequence()
+  const getFfByFfId = database.getFfByFfId
 
-  const getByID = database.getByID
-
-  let node_id = sequence[sequence.length - 1]
-  let node = (icicle_state.isFocused() ? getByID(node_id) : {})
+  const node_id = sequence[sequence.length - 1]
+  let node = (icicle_state.isFocused() ? getFfByFfId(node_id) : {})
   let total_size = database.volume()
 
-  const tags = database.getTags(node_id)
+  const tag_ids = database.getTagIdsByFfId(node_id)
 
-	return {
-    isFocused: icicle_state.isFocused(),
-    isLocked: icicle_state.isLocked(),
-    node,
-    node_id,
-    tags,
-    total_size
-	}
-}
 
-const mapDispatchToProps = dispatch => {
   const onChangeAlias = (prop_name, id, old_name) => (n) => {
     let new_alias = n[prop_name] === old_name ? '' : n[prop_name]
     new_alias = new_alias.replace(/^\s*|\s*$/g,'')
 
-    dispatch(updateContentElementByID(id, 'alias', () => new_alias))
-    dispatch(commit())
+    database.updateAlias(()=>new_alias,id)
+    api.undo.commit()
   }
 
- 	return {
+
+  props = ObjectUtil.compose({
+    isFocused: icicle_state.isFocused(),
+    isLocked: icicle_state.isLocked(),
+    node,
+    node_id,
+    tag_ids,
+    total_size,
     onChangeAlias,
-  }
+  },props)
+
+  return (<Report {...props}/>)
 }
 
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container

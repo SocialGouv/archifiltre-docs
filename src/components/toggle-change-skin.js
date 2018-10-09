@@ -1,17 +1,27 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import { mkTB } from 'components/button'
 
 import TextAlignCenter from 'components/text-align-center'
-
-import { toggleChangeSkin } from 'reducers/icicle-state'
-
-import { selectIcicleState } from 'reducers/root-reducer'
+import * as ObjectUtil from 'util/object-util'
 
 import * as Color from 'color'
+import pick from 'languages'
 
-import { tr } from 'dict'
+const color_code = pick({
+  en: 'Color code:',
+  fr: 'Code couleurs :',
+})
+
+const type = pick({
+  en: 'Type',
+  fr: 'Type',
+})
+
+const dates = pick({
+  en: 'Dates',
+  fr: 'Dates',
+})
 
 const Presentational = props => {
 
@@ -27,38 +37,28 @@ const Presentational = props => {
   return (
     <div className='grid-x align-middle' style={{minWidth: '25em'}}>
       <div className='cell small-4'>
-        <TextAlignCenter>{tr('Color code:')}</TextAlignCenter>
+        <TextAlignCenter>{color_code}</TextAlignCenter>
       </div>
       <div className='cell small-3'>
-        <TextAlignCenter>{mkTB(props.toggleChangeSkin, tr('Type'), props.change_skin, Color.parentFolder(), button_style)}</TextAlignCenter>
+        <TextAlignCenter>{mkTB(props.toggleChangeSkin, type, props.change_skin, Color.parentFolder(), button_style)}</TextAlignCenter>
       </div>
       <div className='cell small-3'>
-        <TextAlignCenter>{mkTB(props.toggleChangeSkin, tr('Dates'), !props.change_skin, Color.parentFolder(), button_style)}</TextAlignCenter>
+        <TextAlignCenter>{mkTB(props.toggleChangeSkin, dates, !props.change_skin, Color.parentFolder(), button_style)}</TextAlignCenter>
       </div>
     </div>
   )
 }
 
 
+export default (props) => {
+  const api = props.api
+  const icicle_state = api.icicle_state
 
-const mapStateToProps = state => {
-  const icicle_state = selectIcicleState(state)
-
-  return {
+  props = ObjectUtil.compose({
     change_skin: icicle_state.changeSkin(),
-  }
+    toggleChangeSkin: icicle_state.toggleChangeSkin,
+  },props)
+
+
+  return (<Presentational {...props}/>)
 }
-
-const mapDispatchToProps = dispatch => {
-  return {
-    toggleChangeSkin: () => dispatch(toggleChangeSkin())
-  }
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container

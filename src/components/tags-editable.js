@@ -1,17 +1,21 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { connect } from 'react-redux'
 
 import Tag from 'components/tag'
-
+import * as ObjectUtil from 'util/object-util'
 import { Set } from 'immutable'
 
-import { selectReportState } from 'reducers/root-reducer'
-import { startEditingTags, stopEditingTags } from 'reducers/report-state'
-import { addTagged, deleteTagged } from 'reducers/database'
+import pick from 'languages'
 
-import { commit } from 'reducers/root-reducer'
-import { tr } from 'dict'
+const click_here_to_add = pick({
+  en: "Click here to add some tags!",
+  fr: "Cliquez ici pour ajouter des tags !",
+})
+
+const new_tag = pick({
+  en: "New tag",
+  fr: "Nouveau tag",
+})
+
 
 const input_style = {
   width: "7em",
@@ -21,136 +25,86 @@ const input_style = {
   borderBottom: "3px solid rgb(10, 50, 100)"
 }
 
-class Presentational extends React.Component {
+const cell_shrink_style = {
+  padding: '0.3em',
+}
+
+export default class TagsEditable extends React.Component {
   constructor(props) {
     super(props)
     this.textInput = null
   }
 
   componentDidUpdate(){
-    if(this.textInput) this.textInput.focus()
+    if(this.textInput) {
+      this.textInput.focus()
+    }
   }
 
   render() {
-    let res, elements
-    res = []
-    elements = []
+    const props = this.props
 
-    let keyUp = (event) => {
-      this.props.candidateTagCallback(event.target.value)
-
-      if (event.keyCode === 8) { // Backspace
-        if(event.target.value.length == 0 && this.props.tag_list.size > 0){
-          this.props.deleteTag(this.props.tag_list.last(), this.props.node_id);
-        }
-
-      } else if (event.keyCode === 13) { // Enter
-        event.preventDefault();
-        if(event.target.value.length === 0) {
-          this.props.endEditing();
-        } else {
-          this.props.addTag(event.target.value, this.props.node_id);
-          event.target.value = "";
-        }
-
-      } else if (event.keyCode === 27) { // Escape
-        event.stopPropagation();
-        this.props.endEditing();
-      }
-    }
-
-    let handle_remove = (tag) => () => {this.props.deleteTag(tag, this.props.node_id)}
+    const tag_ids = props.tag_ids
+    const getTagByTagId = props.getTagByTagId
+    const editing = props.editing
+    const candidate_tag = props.candidate_tag
+    const onChange = props.onChange
+    const onKeyUp = props.onKeyUp
+    const removeHandlerFactory = props.removeHandlerFactory
 
 
-    if(this.props.editing){
-      this.props.candidateTagCallback('')
-      if(this.props.tag_list.size > 0){
-        elements = this.props.tag_list.reduce((acc, val, i) => {
-          let new_element = (
-            <Tag
-            key={val}
-            text={val}
-            node_id={this.props.node_id}
-            editing={true}
-            remove_handler={handle_remove(val)}
-            />);
+    const tagIdsToElements = () => tag_ids.map(tag_id=>{
+      const tag = getTagByTagId(tag_id)
+      const name = tag.get('name')
 
-          return acc === null ? [new_element] : [...acc, new_element]
-        }, null)}
+      return (
+        <div className='cell shrink' key={tag_id} style={cell_shrink_style}>
+          <Tag
+            text={name}
+            editing={editing}
+            removeHandler={removeHandlerFactory(tag_id)}
+          />
+        </div>
+      )
+    }).reduce((acc,val)=>[...acc,val],[])
 
-      let input_box = (
-        <input
-        key="__input__"
-        style={input_style}
-        onMouseUp={(e) => {e.stopPropagation();}}
-        onKeyUp={keyUp}
-        placeholder={tr("New tag")}
-        ref={(component) => {this.textInput = component;}} />);
 
-      res.push(...elements, input_box)
-    }
 
-    else{
-      if(this.props.tag_list.size > 0){
-        elements = this.props.tag_list.reduce((acc, val, i) => {
-          let new_element = (
-            <Tag
-            key={val}
-            text={val}
-            editing={false}
-            remove_handler={handle_remove(val)}
-            />);
+    let ans
 
-          return acc === null ? [new_element] : [...acc, new_element]
-        }, null)
+    if (editing) {
+      const elements = tagIdsToElements()
+      const input_box = (
+        <div className='cell shrink' key='__input__' style={cell_shrink_style}>
+          <input
+            style={input_style}
+            onMouseUp={(e) => {e.stopPropagation()}}
+            onKeyUp={onKeyUp}
+            placeholder={new_tag}
+            ref={(component) => {this.textInput = component}}
+            value={candidate_tag}
+            onChange={onChange}
+          />
+        </div>
+      )
 
-        res.push(...elements)
-      }
-      else{
-        res.push(<span key="__closing__">{tr("Click here to add some tags!")}</span>)
-      }
+      ans = [...elements, input_box]
+    } else if (tag_ids.size > 0) {
+      const elements = tagIdsToElements()
+      ans = elements
+    } else {
+      ans = (
+        <div className='cell shrink' key='__closing__' style={cell_shrink_style}>
+          <span>{click_here_to_add}</span>
+        </div>
+      )
     }
 
     return (
-      res
+      <div className='grid-x'>
+        {ans}
+      </div>
     )
   }
 }
 
-
-const mapStateToProps = state => {
-  return {
-    editing: selectReportState(state).editing_tags(),
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  const addTag = (tag, id) => {
-    dispatch(addTagged(tag, id))
-    dispatch(commit())
-  }
-
-  const deleteTag = (tag, id) => {
-    dispatch(deleteTagged(tag, id))
-    dispatch(commit())
-  }
-
-  const endEditing = () => {
-    dispatch(stopEditingTags())
-  }
-  return {
-    addTag,
-    deleteTag,
-    endEditing,
-  }
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  null,
-  {withRef:true}
-)(Presentational)
-
-export default Container

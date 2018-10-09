@@ -1,9 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
-
-import { selectDatabase, selectIcicleState } from 'reducers/root-reducer'
-import { addTagged, deleteTagged } from 'reducers/database'
-import { setTagToHighlight, setNoTagToHighlight } from 'reducers/icicle-state'
 
 import { tags, tags_count } from 'css/app.css'
 
@@ -11,7 +6,6 @@ import BTRButton from 'components/back-to-root-button'
 import ToggleChangeSkin from 'components/toggle-change-skin'
 
 import * as Color from 'color'
-import { tr } from 'dict'
 
 const grid_style ={
   background: 'white',
@@ -22,18 +16,19 @@ const grid_style ={
   margin: '0.5em 0'
 }
 
-const Presentational = props => {
-
+const NavigationBar = props => {
+  const api = props.api
+  
   return (
     <div style={grid_style} className='grid-x align-middle'>
       <div className='cell small-4'>
-        <BTRButton />
+        <BTRButton api={api}/>
       </div>
       <div className='cell small-8'>
         <div className='flex-container'>
           <div className='flex-child-grow' />
           <div className='flex-child-auto'>
-            <ToggleChangeSkin />
+            <ToggleChangeSkin api={api}/>
           </div>
           <div className='flex-child-grow' />
         </div>
@@ -42,20 +37,5 @@ const Presentational = props => {
   )
 }
 
-const mapStateToProps = state => {
-	return {
-  }
-}
 
-const mapDispatchToProps = dispatch => {
- 	return {
-  }
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container
+export default NavigationBar

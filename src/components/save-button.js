@@ -1,42 +1,33 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import { mkB } from 'components/button'
 
-import { selectDatabase } from 'reducers/root-reducer'
-
 import { save, makeNameWithExt } from 'save'
-import { tr } from 'dict'
+
+import pick from 'languages'
+
+const label = pick({
+  en: 'Save',
+  fr: 'Enregistrer',
+})
+
+const SaveButton = props => {
+  const api = props.api
+  const database = api.database
+  const getJson = database.toJson
+  const getSessionName = database.getSessionName
 
 
-const Presentational = props => {
-  const name = () => makeNameWithExt(props.getSessionName(),'json')
+  const name = () => makeNameWithExt(getSessionName(),'json')
   return mkB(
     ()=>{
-      save(name(), props.getJson())
+      save(name(), getJson())
     },
-    tr('Save'),
-    true
+    label,
+    true,
+    '#4d9e25',
+    {width:'90%'}
   )
 }
 
-
-const mapStateToProps = state => {
-  let database = selectDatabase(state)
-  return {
-    getJson: database.toJson,
-    getSessionName: database.getSessionName,
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {}
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container
+export default SaveButton

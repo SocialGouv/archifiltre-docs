@@ -1,187 +1,160 @@
 
+import { updateIn, getIn, List, Set } from 'immutable'
 
-import duck from 'reducers/duck'
-import * as Content from 'content'
-import * as FileSystem from 'file-system'
+import * as RealEstate from 'reducers/real-estate'
 
+import * as Cache from 'cache'
+import * as Origin from 'datastore/origin'
+import * as VirtualFileSystem from 'datastore/virtual-file-system'
+import * as Tags from 'datastore/tags'
 
+const property_name = 'database'
 
-import Worker from 'file-system.worker'
-
-
-
-const type = 'cheapExp/database'
-
-
-function bundle(state) {
-  return {
-    size_overall: () => FileSystem.size_overall(state),
-    size_files: () => FileSystem.size_files(state),
-
-    size: () => FileSystem.size(state),
-    maxDepth: () => FileSystem.depth(state),
-
-    parent_path: () => FileSystem.parentPath(state),
-    getByID: (id) => FileSystem.getByID(id, state),
-    getIDPath: (id) => FileSystem.getIDPath(id, state),
-    volume: () => FileSystem.volume(state),
-    rootId: () => FileSystem.rootId(state),
-    toJson: () => FileSystem.toJson(state),
-    toStrList2: () => FileSystem.toStrList2(state),
-    getSessionName: () => FileSystem.getSessionName(state),
-
-    getTags: (id) => FileSystem.getTagsByID(state, id),
-    getTagged: (tag) => FileSystem.getTagged(state, tag),
-    getAllTags: () => FileSystem.getAllTags(state),
-    getAllTagsSizes: () => FileSystem.getAllTagsSizes(state),
-
-    getLeafIdArray: () => FileSystem.getLeafIdArray(state),
-    getSubIdList: (id) => FileSystem.getSubIdList(id, state),
-
-    getWaitingCounter: () => waiting_counter,
-  }
-}
-
-const initialState = FileSystem.empty()
-
-const { mkA, reducer } = duck(type, initialState, bundle)
-
-
-export default reducer
-
-
-export const push = mkA((parent_path, file) => state => {
-  const path = parent_path + file.name
-  const content = {
-    size:file.size,
-    last_modified:file.lastModified,
-  }
-  return FileSystem.pushOnQueue(path, Content.create(content), state)
-})
-
-export const makeTree = mkA(() => state => {
-  state = FileSystem.makeTree(state)
-  state = FileSystem.sortBySize(state)
-  state = FileSystem.computeDerivatedData(state)
-  return state
-})
-
-
-
-export const sortBySize = mkA(() => state => {
-  state = FileSystem.sortBySize(state)
-
-  return state
-})
-
-export const sortByDate = mkA(() => state => {
-  state = FileSystem.sortByDate(state)
-
-  return state
-})
-
-export const sortByMaxRemainingPathLength = mkA(() => state => {
-  state = FileSystem.sortByMaxRemainingPathLength(state)
-
-  return state
-})
+const initialState = () => VirtualFileSystem.make(Origin.empty())
 
 
 
 
-const worker = new Worker()
-const workerOnMessageHandler = {}
+const overallCount = () => state =>
+  state.get('files_and_folders').size
 
-worker.onmessage = (e) => {
-  const data = e.data
-  const cmd = data.cmd
-  workerOnMessageHandler[cmd](data)
-}
+const fileCount = () => state =>
+  state.get('files_and_folders').filter(a=>a.get('children').size===0).size
 
-let waiting_counter = 0
-workerOnMessageHandler.pushCounter = ({push_counter}) => {
-  waiting_counter = push_counter
-}
+const getFfByFfId = (id) => state => state.get('files_and_folders').get(id)
+const rootFfId = () => state => ''
+
+const maxDepth = () => state =>
+  state.get('files_and_folders')
+    .map(a=>a.get('depth'))
+    .reduce((acc,val)=>Math.max(acc,val),0)
 
 
-export const workerPush = mkA((parent_path, file) => state => {
-  worker.postMessage({
-    cmd:'push',
-    parent_path,
-    file
+const volume = () => state => getFfByFfId(rootFfId()())(state).get('size')
+
+const getFfIdPath = (id) => state =>
+  List(id.split('/').map((_,i)=>id.split('/').slice(0,i+1).join('/')))
+
+
+const toJson = () => state => JSON.stringify(VirtualFileSystem.toJs(state))
+const toStrList2 = () => state => {
+  const ans = [
+    ['','path','size (octet)','last_modified','alias','comments','tags','is_file']
+  ]
+  state.get('files_and_folders').forEach((ff,id)=>{
+    if (id==='') {return undefined}
+    const path = id
+    const size = ff.get('size')
+    const last_modified = ff.get('last_modified_max')
+    const alias = ff.get('alias')
+    const comments = ff.get('comments')
+    const tags = state.get('tags')
+      .filter(tag=>tag.get('ff_ids').includes(id))
+      .reduce((acc,val)=>acc.concat([val.get('name')]),[])
+    const children = ff.get('children')
+    const is_file = children.size === 0
+
+    ans.push(['',path,size,last_modified,alias,comments,tags,is_file])
   })
+  return ans
+}
+
+const getSessionName = () => state => state.get('session_name')
+
+
+const getTagIdsByFfId = (id) => state =>
+  state.get('tags').filter((tag)=>tag.get('ff_ids').includes(id)).keySeq().toList()
+const getAllTagIds = () => state => state.get('tags').keySeq().toList()
+
+const getTagByTagId = (id) => state => getIn(state,['tags',id])
+
+const getWaitingCounter = () => state => 0
+
+
+
+const reader = {
+  overallCount,
+  fileCount,
+  getFfByFfId,
+  rootFfId,
+  maxDepth,
+  volume,
+  getFfIdPath,
+  toJson,
+  toStrList2,
+  getSessionName,
+  getTagIdsByFfId,
+  getAllTagIds,
+  getTagByTagId,
+  getWaitingCounter,
+} 
+
+
+
+const set = (next_state) => state => next_state
+
+const reInit = () => state => initialState()
+
+const updateAlias = (updater,id) => state => {
+  state = updateIn(state,['files_and_folders',id,'alias'],updater)
   return state
-})
+}
 
-const workerSetStateFromJs = mkA((js) => () => FileSystem.fromJs(js))
-
-export const workerMakeTree = () => dispatch => {
-  return new Promise((resolve, reject) => {
-    worker.postMessage({
-      cmd:'pull'
-    })
-
-    workerOnMessageHandler.pull = ({state}) => {
-      dispatch(workerSetStateFromJs(state))
-      resolve()
-    }
-  })
+const updateComments = (updater,id) => state => {
+  state = updateIn(state,['files_and_folders',id,'comments'],updater)
+  return state
 }
 
 
+const setSessionName = (name) => state => state.set('session_name',name)
 
-export const fromJson = mkA((json) => state => {
-  return FileSystem.fromJson(json)
-})
 
-export const fromLegacyCsv = mkA((csv) => state => {
-  state = FileSystem.fromLegacyCsv(csv)
-  state = FileSystem.makeTree(state)
-  state = FileSystem.sortBySize(state)
-  state = FileSystem.computeDerivatedData(state)
+
+const createTagged = (ff_id, name) => state => {
+  state = state.update('tags',a=>Tags.push(Tags.create({name,ff_ids:Set.of(ff_id)}),a))
+  state = VirtualFileSystem.derivateTags(state)
   return state
-})
+}
 
-
-export const reInit = mkA(() => state => initialState)
-
-export const setParentPath = mkA((parent_path) => state => {
-  return FileSystem.setParentPath(parent_path, state)
-})
-
-export const setContentByID = mkA((id, content) => state => {
-  const updater = (entry) => entry.set('content', content)
-  state = FileSystem.updateByID(id, updater, state)
+const addTagged = (ff_id, tag_id) => state => {
+  state = updateIn(state,['tags',tag_id,'ff_ids'],a=>a.add(ff_id))
+  state = VirtualFileSystem.derivateTags(state)
   return state
-})
+}
 
-export const updateContentElementByID = mkA((id, field, updateFunction) => state => {
-  const updater = (entry) => entry.update('content', c => c.update(field, updateFunction))
-  state = FileSystem.updateByID(id, updater, state)
+const deleteTagged = (ff_id, tag_id) => state => {
+  state = updateIn(state,['tags',tag_id,'ff_ids'],a=>a.delete(ff_id))
+  state = VirtualFileSystem.derivateTags(state)
   return state
-})
+}
 
-export const setSessionName = mkA((name) => state => {
-  state = FileSystem.setSessionName(name,state)
+const renameTag = (name,tag_id) => state => {
+  state = updateIn(state,['tags',tag_id,'name'],()=>name)
+  state = VirtualFileSystem.derivateTags(state)
   return state
-})
+}
 
-export const addTagged = mkA((tag, id) => state => {
-  state = FileSystem.addTagged(state, tag, id)
+const deleteTag = (tag_id) => state => {
+  state = state.update('tags',tags=>tags.delete(tag_id))
   return state
-})
+}
 
-export const deleteTagged = mkA((tag, id) => state => {
-  state = FileSystem.deleteTagged(state, tag, id)
-  return state
-})
+const writer = {
+  set,
+  reInit,
+  updateAlias,
+  updateComments,
+  setSessionName,
+  createTagged,
+  addTagged,
+  deleteTagged,
+  renameTag,
+  deleteTag,
+}
 
-export const renameTag = mkA((old_tag, new_tag) => state => {
-  state = FileSystem.renameTag(state, old_tag, new_tag)
-  return state
-})
-
-export const deleteTag = mkA((tag) => state => {
-  state = FileSystem.deleteTag(state, tag)
-  return state
+export default RealEstate.create({
+  property_name,
+  initialState,
+  reader,
+  writer,
 })

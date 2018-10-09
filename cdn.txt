@@ -1,0 +1,4 @@
+https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
+https://cdn.jsdelivr.net/npm/foundation-sites@6.4.3/dist/css/foundation.min.css
+https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css
+https://cdn.jsdelivr.net/npm/foundation-sites@6.4.3/dist/js/foundation.min.js

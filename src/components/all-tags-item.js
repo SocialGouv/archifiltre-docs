@@ -1,19 +1,19 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { connect } from 'react-redux'
 
 import Tag from 'components/tag'
 
-// import { Set } from 'immutable'
-
-// import { selectReportState } from 'reducers/root-reducer'
-// import { startEditingTags, stopEditingTags } from 'reducers/report-state'
-// import { addTagged, deleteTagged } from 'reducers/database'
-
 import { tags_bubble, tags_count, tags_add, tags_cross, edit_hover_container, edit_hover_pencil, background } from 'css/app.css'
 
-import { commit } from 'reducers/root-reducer'
-import { tr } from 'dict'
+import pick from 'languages'
+
+const rename_tag_placeholder = pick({
+  en: 'Rename tag',
+  fr: 'Renommer un tag',
+})
+
+const cell_shrink_style = {
+  padding: '0em 0.1em',
+}
 
 const input_style = {
   width: "50%",
@@ -26,7 +26,7 @@ const input_style = {
   fontSize: "1.15em"
 }
 
-class Presentational extends React.Component {
+class AllTagsItem extends React.Component {
   constructor(props) {
     super(props)
 
@@ -38,18 +38,20 @@ class Presentational extends React.Component {
   }
 
   render() {
+    const enter_key_code = 13
+    const escape_key_code = 27
 
     let keyUp = (event) => {
-      if (event.keyCode === 13) { // Enter
-        event.preventDefault();
+      if (event.keyCode === enter_key_code) {
+        event.preventDefault()
         if(event.target.value.length > 0) {
-          this.props.renameTag(event.target.value);
-          event.target.value = "";
+          this.props.renameTag(event.target.value)
+          event.target.value = ''
         }
-        this.props.stopEditingTag();
+        this.props.stopEditingTag()
 
-      } else if (event.keyCode === 27) { // Escape
-        this.props.stopEditingTag();
+      } else if (event.keyCode === escape_key_code) {
+        this.props.stopEditingTag()
       }
     }
 
@@ -95,25 +97,32 @@ class Presentational extends React.Component {
       )
     );
 
-    let tag_pill = (
-      this.props.editing ?
-      (<input
-        style={input_style}
-        onFocus={(e) => {e.target.select();}}
-        onMouseUp={(e) => {e.stopPropagation();}}
-        onKeyUp={keyUp}
-        onBlur={(e) => {this.props.renameTag(e.target.value); this.props.stopEditingTag()}}
-        defaultValue={tag}
-        placeholder={tr("Rename tag")}
-        ref={(component) => {this.textInput = component;}} />)
-      : (<Tag
-        text={tag}
-        editing={false}
-        click_handler={this.props.startEditingTag}
-        remove_handler={() => {}}
-        custom_style={{'margin': '0'}}
-        />)
-    );
+    let tag_pill
+    if (this.props.editing) {
+      tag_pill = (
+        <input
+          style={input_style}
+          onFocus={(e) => {e.target.select();}}
+          onMouseUp={(e) => {e.stopPropagation();}}
+          onKeyUp={keyUp}
+          onBlur={(e) => {this.props.renameTag(e.target.value); this.props.stopEditingTag()}}
+          defaultValue={tag}
+          placeholder={rename_tag_placeholder}
+          ref={(component) => {this.textInput = component;}}
+        />
+      )
+    } else {
+      tag_pill = (
+        <Tag
+          text={tag}
+          editing={false}
+          clickHandler={this.props.startEditingTag}
+          removeHandler={() => {}}
+        />
+      )
+    }
+
+
 
     let pencil = this.props.editing ? <span /> : (<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} />);
 
@@ -122,11 +131,19 @@ class Presentational extends React.Component {
       className= { edit_hover_container }
       onMouseEnter={this.props.highlightTag}
       style={component_style}>
-        <div style={content_style}>
-          {delete_bubble}
-          {count_or_action_bubble}
-          {tag_pill}&nbsp;
-          {pencil}
+        <div className='grid-x' style={content_style}>
+          <div className='cell shrink' style={cell_shrink_style}>
+            {delete_bubble}
+          </div>
+          <div className='cell shrink' style={cell_shrink_style}>
+            {count_or_action_bubble}
+          </div>
+          <div className='cell shrink' style={cell_shrink_style}>
+            {tag_pill}
+          </div>
+          <div className='cell shrink' style={cell_shrink_style}>
+            {pencil}
+          </div>
         </div>
         <div className={ background } style={background_style}></div>
       </div>
@@ -139,22 +156,13 @@ class Presentational extends React.Component {
 }
 
 
-const mapStateToProps = state => {
-  return {
-  }
-}
+export default AllTagsItem
 
-const mapDispatchToProps = dispatch => {
-  return {
-  }
-}
+// const Container = connect(
+//   mapStateToProps,
+//   mapDispatchToProps,
+//   null,
+//   {withRef:true}
+// )(AllTagsItem)
 
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  null,
-  {withRef:true}
-)(Presentational)
-
-export default Container
+// export default Container

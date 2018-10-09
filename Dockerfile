@@ -4,22 +4,33 @@ RUN apt-get update && apt-get -y install \
   inotify-tools=3.14-1+b1 \
   rsync=3.1.1-3+deb8u1
 
-WORKDIR /usr/src/app
 
-COPY package*.json ./
-RUN npm install
-COPY . .
-
+WORKDIR /usr/src/app/patch
+COPY patch .
 Run make fetchAndPatch
 
-CMD ["./startupDev.bash"]
 
+
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+
+
+COPY cdn.txt .
+RUN wget -P static/cdn -i cdn.txt
+
+
+
+COPY . .
+
+RUN npm run-script buildDev
 
 FROM dev as prod
 
 WORKDIR /usr/src/app
+
+RUN bin/toggleDevComment.sh src/app.js > tmp && cat tmp > src/app.js
+RUN bin/toggleDevComment.sh static/index.html > tmp && cat tmp > static/index.html
+
+
 RUN npm run-script buildProd
-
-
-FROM nginx:1.13.9-alpine
-COPY --from=prod /usr/src/app/dist /usr/share/nginx/html

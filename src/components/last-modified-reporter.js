@@ -1,10 +1,37 @@
 import React from 'react'
-import { connect } from 'react-redux'
-
-import { selectDatabase } from 'reducers/root-reducer'
-import { tr } from 'dict'
 
 import TimeGradient from 'components/time-gradient'
+import * as ObjectUtil from 'util/object-util'
+
+import pick from 'languages'
+
+
+const last_modified_tr = pick({
+  en: 'Last modified',
+  fr: 'Dernière modification',
+})
+
+const at_tr = pick({
+  en: 'at',
+  fr: 'à',
+})
+
+const max_tr = pick({
+  en: 'max',
+})
+
+const min_tr = pick({
+  en: 'min',
+})
+const average_tr = pick({
+  en: 'average',
+  fr: 'moyenne',
+})
+const median_tr = pick({
+  en: 'median',
+  fr: 'médiane',
+})
+
 
 
 const RedDot = (props) => {
@@ -33,7 +60,9 @@ const BlackCursor = (props) => {
 const epochTimeToDateTime = (d) => {
   const res = new Date(d)
 
-  const mm = res.getMonth() + 1 // getMonth() is zero-based
+  const zeroBasedGetMonth = a=>a.getMonth()
+
+  const mm = zeroBasedGetMonth(res) + 1
   const dd = res.getDate()
 
   return (
@@ -42,85 +71,79 @@ const epochTimeToDateTime = (d) => {
       (mm>9 ? '' : '0') + mm,
       res.getFullYear()
     ].join('/')
-    // + " " + tr("at") + " " +
-    // [
-    //   res.getHours(),
-    //   res.getMinutes(),
-    //   res.getSeconds(),
-    // ].join(':')
   )
 }
 
-const Presentational = props => {
+const LastModifiedReporter = props => {
+  const api = props.api
+
   const cursor_width = 0.75
 
-  let c_lm_max = '...'
-  let c_lm_median = '...'
-  let c_lm_average = '...'
-  let c_lm_min = '...'
+  let lm_max = '...'
+  let lm_median = '...'
+  let lm_average = '...'
+  let lm_min = '...'
 
   if (props.placeholder === false) {
-    const node = props.getByID(props.id)
-    const n_content = node.get('content')
+    const node = props.getFfByFfId(props.id)
 
-    const c_last_modified = n_content.get('last_modified')
-    c_lm_max = epochTimeToDateTime(c_last_modified.get('max'))
-    c_lm_median = epochTimeToDateTime(c_last_modified.get('median'))
-    c_lm_average = epochTimeToDateTime(c_last_modified.get('average'))
-    c_lm_min = epochTimeToDateTime(c_last_modified.get('min'))
+    lm_max = epochTimeToDateTime(node.get('last_modified_max'))
+    lm_median = epochTimeToDateTime(node.get('last_modified_median'))
+    lm_average = epochTimeToDateTime(node.get('last_modified_average'))
+    lm_min = epochTimeToDateTime(node.get('last_modified_min'))
   }
 
   return (
     <div className='grid-x align-middle'>
 
       <div className='cell small-12'>
-        <b>{tr('Last modified')} :</b>
+        <b>{last_modified_tr} :</b>
       </div>
 
       <div className='cell small-1'>
         <BlackCursor/>
       </div>
       <div className='cell small-5'>
-        {tr('min')} :
+        {min_tr} :
       </div>
       <div className='cell small-6'>
-        {c_lm_min}
+        {lm_min}
       </div>
 
       <div className='cell small-1'>
         <RedDot/>
       </div>
       <div className='cell small-5'>
-        {tr('average')} :
+        {average_tr} :
       </div>
       <div className='cell small-6'>
-        {c_lm_average}
+        {lm_average}
       </div>
 
       <div className='cell small-1'>
         <BlackCursor/>
       </div>
       <div className='cell small-5'>
-        {tr('median')} :
+        {median_tr} :
       </div>
       <div className='cell small-6'>
-        {c_lm_median}
+        {lm_median}
       </div>
 
       <div className='cell small-1'>
         <BlackCursor/>
       </div>
       <div className='cell small-5'>
-        {tr('max')} :
+        {max_tr} :
       </div>
       <div className='cell small-6'>
-        {c_lm_max}
+        {lm_max}
       </div>
 
 
 
       <div className='cell small-12' style={{paddingTop: '0.5em'}}>
-        <TimeGradient/>
+        <TimeGradient api={api}/>
       </div>
 
 
@@ -129,22 +152,13 @@ const Presentational = props => {
 }
 
 
-const mapStateToProps = state => {
-  const database = selectDatabase(state)
+export default (props) => {
+  const api = props.api
+  const database = api.database
 
-  return {
-    getByID: database.getByID,
-  }
+  props = ObjectUtil.compose({
+    getFfByFfId: database.getFfByFfId,
+  },props)
+
+  return (<LastModifiedReporter {...props}/>)
 }
-
-const mapDispatchToProps = dispatch => {
-  return {}
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container

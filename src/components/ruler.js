@@ -1,14 +1,18 @@
 import React from 'react'
-import { connect } from 'react-redux'
-
-import { selectIcicleState, selectDatabase } from 'reducers/root-reducer'
-
 
 import * as Color from 'color'
+import * as ObjectUtil from 'util/object-util'
 
-import { tr } from 'dict'
 
-const Presentational = props => {
+import pick from 'languages'
+
+const byte_char = pick({
+  en: "B",
+  fr: "o",
+})
+
+
+const Ruler = props => {
   const ruler_x = props.x
   const ruler_y = props.y
   const ruler_dx = props.dx
@@ -48,25 +52,6 @@ const Presentational = props => {
     res = (<g />)
   }
 
-
-  // <rect
-  //         className='ruler'
-  //         x={props.dims.x}
-  //         y='1.5em'
-  //         width={props.dims.dx}
-  //         height='0.3em'
-  //         onClick={(e) => {e.stopPropagation()}}
-  //         onMouseOver={() => {}}
-  //         style={{'fill': props.fillColor(props.node_id)}}
-  //       />
-  //       <text
-  //         x={computeTextPosition(props.dims.x, props.dims.dx, ruler_dx, mode)}
-  //         y='3em'
-  //         textAnchor={{'ORGANIC' : 'middle', 'LEFT' : 'start', 'RIGHT' : 'end'}[mode]}
-  //       >
-  //         {text}
-  //       </text>
-
   return (
     <g>
       {res}
@@ -75,7 +60,7 @@ const Presentational = props => {
 }
 
 export const octet2HumanReadableFormat = o => {
-  let unit = tr('B')
+  let unit = byte_char
   let To = o/Math.pow(1000,4)
   if (To > 1) {
     return Math.round(To * 10)/10 + ' T' + unit
@@ -129,41 +114,29 @@ const computeTextPosition = (x, dx, w, mode) => {
 
 
 
+export default function RulerApiToProps(props) {
+  const api = props.api
+  const icicle_state = api.icicle_state
+  const database = api.database
 
-const mapStateToProps = state => {
-	const icicle_state = selectIcicleState(state)
-  const database = selectDatabase(state)
-
-  const node_id = icicle_state.isLocked() ?
-    icicle_state.lock_sequence()[icicle_state.lock_sequence().length - 1]
-    : icicle_state.hover_sequence()[icicle_state.hover_sequence().length - 1];
+  const node_id = icicle_state.sequence().slice(-1)[0]
 
   const total_size = database.volume()
 
-  const getByID = database.getByID
-  const node = getByID(node_id)
+  const getFfByFfId = database.getFfByFfId
+  const node = getFfByFfId(node_id)
   let node_size
   if (node) {
-    node_size = node.get('content').get('size')
+    node_size = node.get('size')
   }
 
-	return {
-		dims: icicle_state.hover_dims(),
+  props = ObjectUtil.compose({
+    dims: icicle_state.hover_dims(),
     isFocused: icicle_state.isFocused(),
     node_size,
     node_id,
     total_size,
-	}
+  },props)
+
+  return (<Ruler {...props}/>)
 }
-
-const mapDispatchToProps = dispatch => {
- 	return {}
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container

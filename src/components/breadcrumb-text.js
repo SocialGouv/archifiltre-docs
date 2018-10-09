@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 
 const smartClip = (s, w, fw) => {
@@ -13,7 +12,7 @@ const smartClip = (s, w, fw) => {
   }
 }
 
-const Presentational = props => {
+const BreadcrumbText = props => {
   const available_space = 0.8*props.dx
   const font_width = 6
 
@@ -38,18 +37,4 @@ const Presentational = props => {
 }
 
 
-const mapStateToProps = state => {
-	return {}
-}
-
-const mapDispatchToProps = dispatch => {
- 	return {}
-}
-
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container
+export default BreadcrumbText

@@ -1,44 +1,29 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import { mkB } from 'components/button'
 
-import { reInit as re1 } from 'reducers/database'
-import { reInit as re2 } from 'reducers/app-state'
-import { setNoFocus as re4 } from 'reducers/icicle-state'
-import { setNoDisplayRoot as re5 } from 'reducers/icicle-state'
+import pick from 'languages'
 
-import { commit } from 'reducers/root-reducer'
+const label = pick({
+  en: 'Close',
+  fr: 'Fermer',
+})
 
-import { tr } from 'dict'
-
-const Presentational = props => {
-
-  return mkB(props.reInitStateApp, tr("Close"), true, "#e04d1c")
-}
-
-
-
-const mapStateToProps = state => {
-  return {}
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    reInitStateApp: (...args) => {
-      dispatch(re1())
-      dispatch(re2())
-      dispatch(re4())
-      dispatch(re5())
-      dispatch(commit())
-    }
+const ReinitButton = props => {
+  const api = props.api
+  const database = api.database
+  const loading_state = api.loading_state
+  const icicle_state = api.icicle_state
+  const undo = api.undo
+  const reInitStateApp = () => {
+    database.reInit()
+    loading_state.reInit()
+    icicle_state.setNoFocus()
+    icicle_state.setNoDisplayRoot()
+    undo.commit()
   }
+
+  return mkB(reInitStateApp, label, true, "#e04d1c", {width:'90%'})
 }
 
-
-const Container = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Presentational)
-
-export default Container
+export default ReinitButton

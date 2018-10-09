@@ -23,17 +23,39 @@ import pick from 'languages'
 
 
 
-// const zlib = require('zlib')
+// const Zlib = require('zlib')
+// const Fs = require('fs')
 
-// const gzip = zlib.createGzip({
-//   level:zlib.constants.Z_NO_COMPRESSION,
-// })
-// const fs = require('fs')
 
-// const inp = fs.createReadStream('/home/jibe/Desktop/input.txt')
-// const out = fs.createWriteStream('/home/jibe/Desktop/input.txt.gz')
+// const gzipTest = () => {
+//   const gzip = Zlib.createGzip()
 
-// inp.pipe(gzip).pipe(out)
+//   const inp = Fs.createReadStream('/home/jibe/Desktop/CHOMA2010.tar')
+//   const out = Fs.createWriteStream('/home/jibe/Desktop/output.gz')
+
+//   console.time('gzip')
+//   inp.pipe(gzip).pipe(out)
+//   .on('finish',()=>console.timeEnd('gzip'))
+// }
+
+// const gunzipTest = () => {
+//   const gunzip = Zlib.createGunzip()
+
+//   const inp = Fs.createReadStream('/home/jibe/Desktop/output.gz')
+//   const out = Fs.createWriteStream('/home/jibe/Desktop/output2.tar')
+
+//   console.time('gunzip')
+//   inp.pipe(gunzip).pipe(out)
+//   .on('finish',()=>console.timeEnd('gunzip'))
+// }
+
+
+
+
+
+
+
+
 
 
 
@@ -57,6 +79,107 @@ import pick from 'languages'
 //     console.timeEnd('untar')
 //   })
 // })
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import * as NodeFsUtil from 'util/node-fs-util'
+
+// const Fs = require('fs')
+// const Path = require('path')
+
+// const Tar = require('tar-stream')
+
+// const extractTest = () => {
+
+//   const read_stream = Fs.createReadStream('/home/jibe/Desktop/folder.tar')
+
+//   const extract = Tar.extract()
+   
+//   extract.on('entry', function(header, stream, next) {
+//     // header is the tar header
+//     // stream is the content body (might be an empty stream)
+//     // call next when you are done with this entry
+
+//     // console.log(header)
+
+//     if (header.type === 'file' && header.name === 'input.txt') {
+//       const path = '/home/jibe/Desktop/baba/'+header.name
+//       NodeFsUtil.mkdir(Path.dirname(path))
+//       const write_stream = Fs.createWriteStream(path)
+//       stream.pipe(write_stream)
+//     }
+
+//     stream.on('end', function() {
+//       next() // ready for next entry
+//     })
+   
+//     stream.resume() // just auto drain the stream
+//   })
+   
+//   extract.on('finish', function() {
+//     // all entries read
+//   })
+
+//   console.time('tar')
+//   read_stream.pipe(extract)
+//   .on('finish',()=>console.timeEnd('tar'))
+// }
+
+// const packTest = () => {
+//   const pack = Tar.pack()
+//   const extract = Tar.extract()
+
+//   const read_stream = Fs.createReadStream('/home/jibe/Desktop/folder.tar')
+
+//   const write_stream = Fs.createWriteStream('/home/jibe/Desktop/baba.tar')
+
+//   extract.on('entry', function(header, stream, callback) {
+//     if (header.type === 'file' && header.name === 'input.txt') {
+//       // let's prefix all names with 'tmp'
+//       header.name = Path.join('tmp', header.name)
+//       pack.entry(header,'tttttt', callback)
+//     } else {
+//       // write the new entry to the pack stream
+//       stream.pipe(pack.entry(header, callback))
+//     }
+//   })
+   
+//   extract.on('finish', function() {
+//     // all entries done - lets finalize it
+//     pack.finalize()
+//   })
+
+
+//   console.time('pack')
+//   read_stream.pipe(extract)
+//   pack.pipe(write_stream)
+//   .on('finish',()=>console.timeEnd('pack'))
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

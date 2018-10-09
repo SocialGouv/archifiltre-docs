@@ -72,6 +72,8 @@ sudo apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
 
 sudo apt-get update && sudo apt-get -y install --install-recommends winehq-stable
 
+sudo apt-get -y install wine-gecko
+
 
 
 ###########################

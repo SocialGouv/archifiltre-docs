@@ -39,11 +39,12 @@ const getFfIdPath = (id) => state =>
 const toJson = () => state => JSON.stringify(VirtualFileSystem.toJs(state))
 const toStrList2 = () => state => {
   const ans = [
-    ['','path','size (octet)','last_modified','alias','comments','tags','is_file']
+    ['','path','name','size (octet)','last_modified','alias','comments','tags','is_file']
   ]
   state.get('files_and_folders').forEach((ff,id)=>{
     if (id==='') {return undefined}
     const path = id
+    const name = ff.get('name')
     const size = ff.get('size')
     const last_modified = ff.get('last_modified_max')
     const alias = ff.get('alias')
@@ -54,7 +55,7 @@ const toStrList2 = () => state => {
     const children = ff.get('children')
     const is_file = children.size === 0
 
-    ans.push(['',path,size,last_modified,alias,comments,tags,is_file])
+    ans.push(['',path,name,size,last_modified,alias,comments,tags,is_file])
   })
   return ans
 }

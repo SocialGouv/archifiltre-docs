@@ -23,69 +23,79 @@ import pick from 'languages'
 
 
 
-// const Zlib = require('zlib')
+
+
+
+
+// import * as NodeFsUtil from 'util/node-fs-util'
+
 // const Fs = require('fs')
+// try {
+//   Fs.rmdirSync('/home/jibe/Desktop/tmp')
+// } catch(e) {}
 
+// let count
 
-// const gzipTest = () => {
-//   const gzip = Zlib.createGzip()
-
-//   const inp = Fs.createReadStream('/home/jibe/Desktop/CHOMA2010.tar')
-//   const out = Fs.createWriteStream('/home/jibe/Desktop/output.gz')
-
-//   console.time('gzip')
-//   inp.pipe(gzip).pipe(out)
-//   .on('finish',()=>console.timeEnd('gzip'))
-// }
-
-// const gunzipTest = () => {
-//   const gunzip = Zlib.createGunzip()
-
-//   const inp = Fs.createReadStream('/home/jibe/Desktop/output.gz')
-//   const out = Fs.createWriteStream('/home/jibe/Desktop/output2.tar')
-
-//   console.time('gunzip')
-//   inp.pipe(gunzip).pipe(out)
-//   .on('finish',()=>console.timeEnd('gunzip'))
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const tar = require('tar-fs')
-// const fs = require('fs')
+// console.time('all')
+// console.time('copy')
+// count = 0
+// NodeFsUtil.cp(()=>{
+//   count++
+//   console.log(count)
+// // },'/home/jibe/Desktop/CHOMA2010','/home/jibe/Desktop/copy')
+// },'/home/jibe/Desktop/folder','/home/jibe/Desktop/tmp/a1')
+// console.timeEnd('copy')
 
 // console.time('tar')
-// // packing a directory
-// tar.pack('/home/jibe/Desktop/folder').pipe(fs.createWriteStream('/home/jibe/Desktop/folder.tar'))
-// // tar.pack('/home/jibe/Desktop/CHOMA2010').pipe(fs.createWriteStream('/home/jibe/Desktop/folder.tar'))
-// .on('finish',()=>{
-
+// count = 0
+// NodeFsUtil.tar2(()=>{
+//   count++
+//   console.log(count)
+// },'/home/jibe/Desktop/tmp/a1','/home/jibe/Desktop/tmp/a2.tar')
+// .then(()=>{
 //   console.timeEnd('tar')
-
-//   console.time('untar')
-//   // extracting a directory
-//   fs.createReadStream('/home/jibe/Desktop/folder.tar').pipe(tar.extract('/home/jibe/Desktop/folder2'))
-//   .on('finish',()=>{
-//     console.timeEnd('untar')
-//   })
+//   console.time('gzip')
+//   count = 0
+//   NodeFsUtil.cp(()=>{},'/home/jibe/Desktop/input.json','/home/jibe/Desktop/tmp/a3/input.json')
+//   // return NodeFsUtil.gzip('/home/jibe/Desktop/tmp/a2.tar','/home/jibe/Desktop/tmp/a3/a3.tar.gz')
 // })
-
-
-
-
-
-
-
+// .then(()=>{
+//   console.timeEnd('gzip')
+//   console.time('last step')
+//   return NodeFsUtil.tar2(()=>{},'/home/jibe/Desktop/tmp/a3','/home/jibe/Desktop/tmp/a4.tar')
+// })
+// // .then(()=>{
+// //   return NodeFsUtil.extractByName(
+// //     'input.json',
+// //     '/home/jibe/Desktop/tmp/a4.tar',
+// //     '/home/jibe/Desktop/tmp'
+// //   )
+// // })
+// .then(()=>{
+//   console.log('ZZZZZZZZZZZZZZ')
+//   return NodeFsUtil.packByName(
+//     'ttttttttt',
+//     'a3/input.json',
+//     '/home/jibe/Desktop/tmp/a4.tar',
+//     '/home/jibe/Desktop/tmp/a4.2.tar'
+//   )
+// })
+// // .then(()=>{
+// //   console.timeEnd('last step')
+// //   console.log('AAAAAAAAAAAAAA')
+// //   return NodeFsUtil.untar(()=>{},'/home/jibe/Desktop/tmp/a4.2.tar','/home/jibe/Desktop/tmp/a5')
+// // })
+// // .then(()=>{
+// //   console.log('BBBBBBBBBBBBBB')
+// //   return NodeFsUtil.gunzip('/home/jibe/Desktop/tmp/a5/a3.tar.gz','/home/jibe/Desktop/tmp/a6.tar')
+// // })
+// // .then(()=>{
+// //   console.log('CCCCCCCCCCCCCC')
+// //   return NodeFsUtil.untar(()=>{},'/home/jibe/Desktop/tmp/a6.tar','/home/jibe/Desktop/tmp/a7')
+// // })
+// // .then(()=>{
+// //   console.timeEnd('all')
+// // })
 
 
 
@@ -134,6 +144,9 @@ import pick from 'languages'
 //   read_stream.pipe(extract)
 //   .on('finish',()=>console.timeEnd('tar'))
 // }
+
+
+
 
 // const packTest = () => {
 //   const pack = Tar.pack()

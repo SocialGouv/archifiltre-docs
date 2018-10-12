@@ -65,6 +65,7 @@ const toStrList2 = () => state => {
 const toManifestStr = () => SEDA.makeManifest
 
 const getSessionName = () => state => state.get('session_name')
+const getOriginalPath = () => state => state.get('original_path')
 
 
 const getTagIdsByFfId = (id) => state =>
@@ -89,6 +90,7 @@ const reader = {
   toStrList2,
   toManifestStr,
   getSessionName,
+  getOriginalPath,
   getTagIdsByFfId,
   getAllTagIds,
   getTagByTagId,

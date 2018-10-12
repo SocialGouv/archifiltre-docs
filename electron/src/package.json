@@ -6,8 +6,7 @@
   "scripts": {
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "windows64": "electron-builder --windows portable --x64",
-    "windows32": "electron-builder --windows portable --ia32",
+    "windows": "electron-builder --windows portable --x64",
     "mac": "electron-builder --mac dmg",
     "electron": "electron .",
     "start": ""

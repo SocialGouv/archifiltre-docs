@@ -45,11 +45,23 @@ export function isJsonFile(path) {
 export const readFileSync = Fs.readFileSync
 
 
-
-
-
-
-
+export const recTraverseFileTreeForHook = (hook, path) => {
+  try {
+    const stats = Fs.statSync(path)
+    if (stats.isDirectory()) {
+      return Fs.readdirSync(path)
+        .map(a=>recTraverseFileTreeForHook(hook,Path.join(path,a)))
+    } else {
+      let name = path.split('/')[path.split('/').length - 1]
+      console.log(name)
+      let data = Fs.readFileSync(path)
+      hook(name,data)
+      return
+    }
+  } catch (e) {
+    return
+  }
+}
 
 
 

@@ -58,27 +58,6 @@ export const readFileSync = Fs.readFileSync
 
 
 
-const recCopyFileTree = (hook,old_path,new_path) => {
-  const stats = Fs.statSync(old_path)
-  const mode = 0o555
-  if (stats.isDirectory()) {
-    Fs.mkdirSync(new_path)
-    Fs.readdirSync(old_path)
-      .map(a=>recCopyFileTree(hook,Path.join(old_path,a),Path.join(new_path,a)))
-  } else {
-    hook()
-    Fs.copyFileSync(old_path,new_path)
-  }
-  // Fs.chmodSync(new_path, mode)
-}
-
-export const copyFileTree = (hook,dropped_folder_path) => {
-  const new_path = dropped_folder_path+'copy'
-  recCopyFileTree(hook,dropped_folder_path,new_path)
-}
-
-
-
 
 
 

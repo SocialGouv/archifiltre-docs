@@ -6,6 +6,12 @@
   font-family: 'Quicksand';
   font-style: normal;
   font-weight: 400;
-  src: url('Quicksand-Regular.ttf') format('opentype');
+  src: url('Quicksand/Quicksand-Regular.ttf') format('opentype');
 }
 
+@font-face {
+  font-family: 'Playfair';
+  font-style: normal;
+  font-weight: 400;
+  src: url('Playfair_Display/PlayfairDisplay-BlackItalic.ttf') format('opentype');
+}

@@ -8,6 +8,7 @@ import { RIEInput } from 'riek'
 
 
 import SaveButton from 'components/save-button'
+import SEDAButton from 'components/seda-button'
 import ReinitButton from 'components/reinit-button'
 import ToCsvButton from 'components/csv-button'
 import TextAlignCenter from 'components/text-align-center'
@@ -18,7 +19,7 @@ import { edit_hover_container, edit_hover_pencil, editable_text, session_name} f
 
 const DashBoard = props => {
 
-  let session_info_cell, ctrlz_cell, csv_button_cell, save_button_cell, reinit_button_cell;
+  let session_info_cell, ctrlz_cell, csv_button_cell, seda_button_cell, save_button_cell, reinit_button_cell;
 
   const session_info_cell_style = {
     lineHeight: '1em'
@@ -60,6 +61,14 @@ const DashBoard = props => {
       </div>
     );
 
+    seda_button_cell = (
+      <div className='cell small-2'>
+        <TextAlignCenter>
+          <SEDAButton api={props.api}/>
+        </TextAlignCenter>
+      </div>
+    );
+
     save_button_cell = (
       <div className='cell small-2'>
         <TextAlignCenter>
@@ -79,6 +88,7 @@ const DashBoard = props => {
   else {
     session_info_cell = <div className='cell small-3'></div>;
     csv_button_cell = <div className='cell small-2'></div>;
+    seda_button_cell = <div className='cell small-2'></div>;
     save_button_cell = <div className='cell small-2'></div>;
     reinit_button_cell = <div className='cell small-2'></div>;
   }
@@ -102,9 +112,10 @@ const DashBoard = props => {
       {session_info_cell}
       <div className='cell auto'></div>
       {save_button_cell}
-      {csv_button_cell}
+      {seda_button_cell}
       {reinit_button_cell}
     </div>
+      // {csv_button_cell}
   )
  
 }

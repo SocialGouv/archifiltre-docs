@@ -2,6 +2,7 @@ import React from 'react'
 
 import version from 'version'
 
+import { font_playfair } from 'css/app.css'
 import Dashboard from 'components/dashboard'
 
 import pick from 'languages'
@@ -27,16 +28,18 @@ const Header = props => {
   return (
     <div className='grid-x grid-padding-y align-middle'>
       <div className='cell auto'></div>
-      <div className='cell small-3'>
-        <h4 style={{lineHeight: '0.8em'}}>
-          <b>{title}</b><br />
-          <span style={{fontSize: '0.65em'}}>
-            {'v'+version+' Irrational Indoraptor -'}
+      <div className='cell small-3' style={{paddingTop: '1.5em'}}>
+        <span style={{lineHeight: '1.5em'}}>
+          <div style={{fontSize: '2em'}}>
+            <b className={font_playfair}>{title}</b>
+          </div>
+          <div style={{fontSize: '0.7em'}}>
+            {'v'+version+' Irrational Indoraptor • '}
             <a target='_blank' onClick={onClick}>
               {what_new}
             </a>
-          </span>
-        </h4>
+          </div>
+        </span>
       </div>
       <div className='cell small-8'>
         <Dashboard api={props.api}/>

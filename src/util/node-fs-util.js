@@ -223,7 +223,6 @@ export const packByName = (content,name,old_path,new_path) => {
       } else {
         stream.pipe(pack.entry(header, callback))
       }
-      stream.resume
     })
      
     extract.on('finish', function() {

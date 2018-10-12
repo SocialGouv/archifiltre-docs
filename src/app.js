@@ -28,12 +28,6 @@ import pick from 'languages'
 
 
 // import * as NodeFsUtil from 'util/node-fs-util'
-
-// const Fs = require('fs')
-// try {
-//   Fs.rmdirSync('/home/jibe/Desktop/tmp')
-// } catch(e) {}
-
 // let count
 
 // console.time('all')
@@ -96,6 +90,18 @@ import pick from 'languages'
 // // .then(()=>{
 // //   console.timeEnd('all')
 // // })
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

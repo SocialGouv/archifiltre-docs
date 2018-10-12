@@ -29,7 +29,7 @@
   "devDependencies": {
     "electron-react-devtools": "0.5.3",
     "electron-builder": "20.28.4",
-    "electron": "2.0.5"
+    "electron": "2.0.8"
   },
   "dependencies": {}
 }

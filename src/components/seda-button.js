@@ -35,21 +35,23 @@ const SedaButton = props => {
 
     let content = sip.folder('content')
     let addToContent = (filename, data) => {
-      console.log('avant')
       content.file(filename.replace(/[^a-zA-Z0-9.\\-\\/+=@_]+/g, '_'), data)
-      console.log('après')
     }
 
     recTraverseFileTreeForHook(addToContent, original_path)
 
-    sip.generateNodeStream({type:'nodebuffer',streamFiles:true})
-     .pipe(FS.createWriteStream(original_path + '/../' + getSessionName() + '.zip'))
-     // .pipe(FS.createWriteStream(original_path + '/../SIP.zip'))
-     .on('finish', function () {
-         console.log("SIP zip written.");
-      });
+    // sip.generateNodeStream({type:'nodebuffer',streamFiles:true})
+    //  .pipe(FS.createWriteStream(original_path + '/../' + getSessionName() + '.zip'))
+    //  // .pipe(FS.createWriteStream(original_path + '/../SIP.zip'))
+    //  .on('finish', function () {
+    //      console.log("SIP zip written.");
+    //   });
 
-
+    sip.generateAsync({type: 'nodebuffer'})
+      .then((data) => {
+        FS.writeFileSync(original_path + '/../' + getSessionName() + '.zip', data)
+        console.log("SIP zip written.")
+      })
     
   }
 

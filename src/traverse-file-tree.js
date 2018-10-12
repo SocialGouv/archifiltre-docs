@@ -53,7 +53,6 @@ export const recTraverseFileTreeForHook = (hook, path) => {
         .map(a=>recTraverseFileTreeForHook(hook,Path.join(path,a)))
     } else {
       let name = path.split('/')[path.split('/').length - 1]
-      console.log(name)
       let data = Fs.readFileSync(path)
       hook(name,data)
       return

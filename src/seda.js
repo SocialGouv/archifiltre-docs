@@ -98,7 +98,7 @@ const makeDataObjectPackageObj = (state) => {
 	    let URI = (id.charAt(0) === '/' ? id.substring(1) : id)
 		let full_URI = Path.join(folderpath, URI)
 		let file_hash = SHA512(fs.readFileSync(full_URI))
-		let fake_URI = 'Content/' + name_in_manifest
+		let fake_URI = 'content/' + name_in_manifest
 
 	    let BDO_id = makeId()
 		let last_modified = dateFormat(ff.get('last_modified_max'), date_format)

@@ -1,5 +1,5 @@
 import { generateRandomString } from 'random-gen'
-import { readAsText } from 'file-uti'
+// import { readAsText } from 'file-uti'
 
 const XML = require('xml')
 const dateFormat = require('dateformat')
@@ -7,8 +7,9 @@ const Path = require('path')
 const fs = require('fs')
 const SHA512 = require('js-sha512').sha512
 
-
+// =================================
 // AUXILIARY FUNCTIONS AND VARIABLES
+// =================================
 const makeObj = (key, value) => {
 	let obj = {}
 	obj[key] = value
@@ -34,7 +35,9 @@ const DUMMY_ORIGINATINGAGENCYIDENTIFIER = 'FRAN_NP_000001'
 const DUMMY_ARCHIVALAGREEMENT = 'ArchivalAgreement0'
 // const DUMMY_FOLDERPATH = "/home/manu/Documents/EIG/versements/Test_ADAMANT"
 
+// =================================
 // SPECIFIC ROOT ELEMENTS
+// =================================
 const makeManifestRootAttributes = () => {
 	return {
 		'xmlns': 'fr:gouv:culture:archivesdefrance:seda:v2.1',
@@ -58,10 +61,117 @@ const makeTransferringAgencyObj = () => {
 	return {TransferringAgency: [makeObj('Identifier', 'DUMMY_TRANSFERRINGAGENCY')]}
 }
 
+// =================================
+// AUXILIARY FUNCTIONS FOR DATA OBJECT PACKAGE
+// =================================
+const makeBDO = (item, ID, itempath, folderpath) => {
+	let name_in_manifest = item.get('name').replace(/[^a-zA-Z0-9.\\-\\/+=@_]+/g, '_')
+
+
+    let clean_itempath = (itempath.charAt(0) === '/' ? itempath.substring(1) : itempath)
+	let URI = Path.join(folderpath, clean_itempath, item.get('name'))
+	let file_hash = SHA512(fs.readFileSync(URI))
+	let fake_URI = 'content/' + name_in_manifest
+
+	let last_modified = dateFormat(item.get('last_modified_max'), date_format)
+
+    let BDO_content = new Array()
+
+	BDO_content.push({_attr: makeObj('id', ID)})
+	BDO_content.push(makeObj('Uri', fake_URI))
+	BDO_content.push(makeObj('MessageDigest', [{_attr: makeObj('algorithm', hash_algorithm)}, file_hash]))
+	BDO_content.push(makeObj('Size', item.get('size')))
+	BDO_content.push(makeObj('FormatIdentification', [
+		makeObj('FormatLitteral', 'DUMMY_FORMATLITTERAL'),
+		makeObj('MimeType', 'DUMMY_MIMETYPE'),
+		makeObj('FormatId', 'DUMMY_FORMATID')
+	]))
+	BDO_content.push(makeObj('FileInfo', [
+		makeObj('Filename', name_in_manifest),
+		makeObj('LastModified', last_modified)
+	]))
+
+	return(makeObj('BinaryDataObject', BDO_content))
+}
+
+const makeFileAU = (item, ID) => {
+	let last_modified = dateFormat(item.get('last_modified_max'), date_format)
+	let now = dateFormat(new Date(), date_format)
+
+	let AU_content = new Array()
+
+	// Where to insert alias ? Tags ? Comments ?
+	AU_content.push(makeObj('DescriptionLevel', 'File'))
+	AU_content.push(makeObj('Title', item.get('name')))
+	// AU_content.push(makeObj('Type', 'DUMMY_TYPE')) // CDO ?
+	AU_content.push(makeObj('StartDate', last_modified)) // Correct ? Format ?
+	AU_content.push(makeObj('Event', [
+		makeObj('EventIdentifier', makeId()),
+		makeObj('EventType', 'Creation'),
+		makeObj('EventDateTime', now),
+		makeObj('EventDetail', 'Créé dans ArchiFiltre.')
+	]))
+
+	return (makeObj('ArchiveUnit', [
+		{_attr: makeObj('id', makeId())},
+		// makeObj('Management', ''),
+		makeObj('Content', AU_content),
+		makeObj('DataObjectReference', [makeObj('DataObjectReferenceId', ID)])
+	]))
+}
+
+const makeFolderAUChildren = (item, ID) => {
+	let last_modified = dateFormat(item.get('last_modified_max'), date_format)
+	let now = dateFormat(new Date(), date_format)
+
+	let AU_content = new Array()
+
+	AU_content.push(makeObj('DescriptionLevel', 'RecordGrp'))
+	AU_content.push(makeObj('Title', item.get('name')))
+
+	return [
+		{_attr: makeObj('id', makeId())},
+		// makeObj('Management', ''),
+		makeObj('Content', AU_content),
+	]
+}
+
+const bundleFolderAU = (AU_children) => {
+	return makeObj('ArchiveUnit', AU_children)
+}
+
+const recTraverseDB = (root, rootpath, absolutepath, readFromFF, addToDOP, addToAUParent) => {
+	let item = readFromFF(root)
+	let ID = makeId()
+
+
+	if(item.get('children').size === 0){
+		let item_BDO = makeBDO(item, ID, rootpath, absolutepath)
+		let item_AU = makeFileAU(item, ID)
+
+		addToDOP(item_BDO)
+		addToAUParent(item_AU)
+	}
+	else{
+		let item_AU = makeFolderAUChildren(item, ID)
+
+		let new_hook = (child) => item_AU.push(child)
+
+		item.get('children').forEach((child) => {
+			recTraverseDB(child, Path.join(rootpath,item.get('name')), absolutepath, readFromFF, addToDOP, new_hook)
+		})
+
+		addToAUParent(bundleFolderAU(item_AU))
+	}
+}
+
+// =================================
 // DATA OBJECT PACKAGE
+// =================================
 const makeDataObjectPackageObj = (state) => {
 
-	let files = state.get('files_and_folders').filter(a=>a.get('children').size===0)
+	let FF = state.get('files_and_folders')
+	let files = FF.filter(a=>a.get('children').size===0)
 	let folderpath = state.get('original_path') + '/../'
 
 	let DOP_children = new Array()
@@ -70,12 +180,8 @@ const makeDataObjectPackageObj = (state) => {
 	// Pre-population of AU_children
 	// Creating root elements
 	let AU_root_content = new Array()
-	AU_root_content.push(makeObj('DescriptionLevel', 'File')) // Correct?
-	AU_root_content.push(makeObj('Title', 'DUMMY_TITLE')) // PUT GAME NAME HERE
-	// AU_root_content.push(makeObj('CustodialHistory', [
-	// 	makeObj('CustodialHistoryItem', 'DUMMY_CUSTODIALHISTORYITEM_1'),
-	// 	makeObj('CustodialHistoryItem', 'DUMMY_CUSTODIALHISTORYITEM_2')
-	// ]))
+	AU_root_content.push(makeObj('DescriptionLevel', 'RecordGrp'))
+	AU_root_content.push(makeObj('Title', state.get('session_name')))
 	AU_root_content.push(makeObj('Event', [
 		makeObj('EventIdentifier', makeId()),
 		makeObj('EventType', 'Creation'),
@@ -85,71 +191,19 @@ const makeDataObjectPackageObj = (state) => {
 	
 
 	AU_children.push({_attr: makeObj('id', makeId())})
-	// AU_children.push(makeObj('Management', ''))
 	AU_children.push(makeObj('Content', AU_root_content))
 
+	//Traversing database
+	const FFreader = (a) => FF.get(a)
 
-	// Populating BDO's and AU's
-	files.forEach((ff,id)=>{
+	const DOPwriter = (item) => DOP_children.push(item)
+	const rootAUwriter = (item) => AU_children.push(item)
+
+	FF.filter(a=>a.get('depth')===1).forEach((ff,id)=>{
 	    if (id==='') {return undefined}
 
-	    let name_in_manifest = ff.get('name').replace(/[^a-zA-Z0-9.\\-\\/+=@_]+/g, '_')
-
-	    let URI = (id.charAt(0) === '/' ? id.substring(1) : id)
-		let full_URI = Path.join(folderpath, URI)
-		let file_hash = SHA512(fs.readFileSync(full_URI))
-		let fake_URI = 'content/' + name_in_manifest
-
-	    let BDO_id = makeId()
-		let last_modified = dateFormat(ff.get('last_modified_max'), date_format)
-		let now = dateFormat(new Date(), date_format)
-
-	    let BDO_content = new Array()
-
-		BDO_content.push({_attr: makeObj('id', BDO_id)})
-		BDO_content.push(makeObj('Uri', fake_URI))
-		BDO_content.push(makeObj('MessageDigest', [{_attr: makeObj('algorithm', hash_algorithm)}, file_hash]))
-		BDO_content.push(makeObj('Size', ff.get('size')))
-		BDO_content.push(makeObj('FormatIdentification', [
-			makeObj('FormatLitteral', 'DUMMY_FORMATLITTERAL'),
-			makeObj('MimeType', 'DUMMY_MIMETYPE'),
-			makeObj('FormatId', 'DUMMY_FORMATID')
-		]))
-		BDO_content.push(makeObj('FileInfo', [
-			makeObj('Filename', name_in_manifest),
-			makeObj('LastModified', last_modified) // FORMAT?
-		]))
-
-		let BDO = makeObj('BinaryDataObject', BDO_content)
-
-		DOP_children.push(BDO)
-
-
-		let AU_content = new Array()
-
-		// Where to insert alias ? Tags ? Comments ?
-		AU_content.push(makeObj('DescriptionLevel', 'File'))
-		AU_content.push(makeObj('Title', ff.get('name')))
-		// AU_content.push(makeObj('Type', 'DUMMY_TYPE')) // CDO ?
-		AU_content.push(makeObj('StartDate', last_modified)) // Correct ? Format ?
-		AU_content.push(makeObj('Event', [
-			makeObj('EventIdentifier', makeId()),
-			makeObj('EventType', 'Creation'),
-			makeObj('EventDateTime', now),
-			makeObj('EventDetail', 'Créé dans ArchiFiltre.')
-		]))
-
-		let AU = makeObj('ArchiveUnit', [
-			{_attr: makeObj('id', makeId())},
-			// makeObj('Management', ''),
-			makeObj('Content', AU_content),
-			makeObj('DataObjectReference', [makeObj('DataObjectReferenceId', BDO_id)])
-		])
-
-		AU_children.push(AU)
-
-
-	  })
+		recTraverseDB(id, '', folderpath, FFreader, DOPwriter, rootAUwriter)
+	})
 
 	//Composition of DescriptiveMetadata
 	let AU_root = makeObj('ArchiveUnit', AU_children)
@@ -179,9 +233,6 @@ export const makeManifest = (state) => {
 
 	return XML(manifest_obj)
 }
-	    // const path = id
-	    // const size = ff.get('size')
-	    // const last_modified = ff.get('last_modified_max')
 	    // const alias = ff.get('alias')
 	    // const comments = ff.get('comments')
 	    // const tags = state.get('tags')

@@ -101,7 +101,7 @@ const makeFileAU = (item, ID) => {
 	let AU_content = new Array()
 
 	// Where to insert alias ? Tags ? Comments ?
-	AU_content.push(makeObj('DescriptionLevel', 'File'))
+	AU_content.push(makeObj('DescriptionLevel', 'Item'))
 	AU_content.push(makeObj('Title', item.get('name')))
 	// AU_content.push(makeObj('Type', 'DUMMY_TYPE')) // CDO ?
 	AU_content.push(makeObj('StartDate', last_modified)) // Correct ? Format ?

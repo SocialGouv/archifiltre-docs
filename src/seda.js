@@ -247,7 +247,7 @@ export const makeManifest = (state) => {
 		]
 	}]
 
-	return XML(manifest_obj)
+	return XML(manifest_obj, {indent: '\t'})
 }
 	    // const alias = ff.get('alias')
 	    // const comments = ff.get('comments')

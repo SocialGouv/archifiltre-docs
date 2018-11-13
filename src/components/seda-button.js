@@ -52,13 +52,20 @@ const SedaButton = props => {
     
   }
 
+
+  let button_is_enabled = true
+  if (getOriginalPath() === '') {
+    button_is_enabled = false
+  }
+
+
   return mkB(
     ()=>{
       console.log('to SEDA')
       makeSIP()
     },
     label,
-    true,
+    button_is_enabled,
     '#4d9e25',
     {width:'90%'}
   )

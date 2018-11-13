@@ -10,10 +10,7 @@ import { recTraverseFileTreeForHook } from 'traverse-file-tree'
 
 import pick from 'languages'
 
-const label = pick({
-  en: 'SEDA',
-  fr: 'SEDA',
-})
+const label = 'SEDA'
 
 const SedaButton = props => {
   const api = props.api

@@ -34,7 +34,7 @@ const Header = props => {
             <b className={font_playfair}>{title}</b>
           </div>
           <div style={{fontSize: '0.7em'}}>
-            {'v'+version+' Irrational Indoraptor • '}
+            {'v'+version+' Jazzy Jellyfish • '}
             <a target='_blank' onClick={onClick}>
               {what_new}
             </a>

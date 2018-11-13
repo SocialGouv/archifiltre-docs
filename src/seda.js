@@ -94,7 +94,7 @@ const makeBDO = (item, ID, itempath, folderpath) => {
 	return(makeObj('BinaryDataObject', BDO_content))
 }
 
-const makeFileAU = (item, ID) => {
+const makeFileAU = (item, item_tags, ID) => {
 	let last_modified = dateFormat(item.get('last_modified_max'), date_format)
 	let now = dateFormat(new Date(), date_format)
 
@@ -112,6 +112,13 @@ const makeFileAU = (item, ID) => {
 		makeObj('EventDetail', 'Créé dans ArchiFiltre.')
 	]))
 
+	if(item.get('comments').length > 0) AU_content.push(makeObj('xsi:Description', item.get('comments').replace(/[^\w ]/g, '_')))
+
+	item_tags.forEach((a)=>{
+		AU_content.push(makeObj('xsi:Tag', a))
+	})
+
+
 	return (makeObj('ArchiveUnit', [
 		{_attr: makeObj('id', makeId())},
 		// makeObj('Management', ''),
@@ -120,7 +127,7 @@ const makeFileAU = (item, ID) => {
 	]))
 }
 
-const makeFolderAUChildren = (item, ID) => {
+const makeFolderAUChildren = (item, item_tags, ID) => {
 	let last_modified = dateFormat(item.get('last_modified_max'), date_format)
 	let now = dateFormat(new Date(), date_format)
 
@@ -129,10 +136,16 @@ const makeFolderAUChildren = (item, ID) => {
 	AU_content.push(makeObj('DescriptionLevel', 'RecordGrp'))
 	AU_content.push(makeObj('Title', item.get('name')))
 
+	if(item.get('comments').length > 0) AU_content.push(makeObj('xsi:Description', item.get('comments').replace(/[^\w ]/g, '_')))
+
+	item_tags.forEach((a)=>{
+		AU_content.push(makeObj('xsi:Tag', a))
+	})
+
 	return [
 		{_attr: makeObj('id', makeId())},
 		// makeObj('Management', ''),
-		makeObj('Content', AU_content),
+		makeObj('Content', AU_content)
 	]
 }
 
@@ -140,25 +153,25 @@ const bundleFolderAU = (AU_children) => {
 	return makeObj('ArchiveUnit', AU_children)
 }
 
-const recTraverseDB = (root, rootpath, absolutepath, readFromFF, addToDOP, addToAUParent) => {
+const recTraverseDB = (root, rootpath, absolutepath, readFromFF, readTags, addToDOP, addToAUParent) => {
 	let item = readFromFF(root)
+	let tags = readTags(root)
 	let ID = makeId()
-
 
 	if(item.get('children').size === 0){
 		let item_BDO = makeBDO(item, ID, rootpath, absolutepath)
-		let item_AU = makeFileAU(item, ID)
+		let item_AU = makeFileAU(item, tags, ID)
 
 		addToDOP(item_BDO)
 		addToAUParent(item_AU)
 	}
 	else{
-		let item_AU = makeFolderAUChildren(item, ID)
+		let item_AU = makeFolderAUChildren(item, tags, ID)
 
-		let new_hook = (child) => item_AU.push(child)
+		let new_hook = (child) => {item_AU.push(child); return;}
 
 		item.get('children').forEach((child) => {
-			recTraverseDB(child, Path.join(rootpath,item.get('name')), absolutepath, readFromFF, addToDOP, new_hook)
+			recTraverseDB(child, Path.join(rootpath,item.get('name')), absolutepath, readFromFF, readTags, addToDOP, new_hook)
 		})
 
 		addToAUParent(bundleFolderAU(item_AU))
@@ -193,8 +206,11 @@ const makeDataObjectPackageObj = (state) => {
 	AU_children.push({_attr: makeObj('id', makeId())})
 	AU_children.push(makeObj('Content', AU_root_content))
 
+	// console.log(state.get('tags').toJS())
+
 	//Traversing database
 	const FFreader = (a) => FF.get(a)
+	const tagReader = (a) => state.get('tags').filter((tag)=>tag.get('ff_ids').includes(a)).valueSeq().toList().map((a)=>a.get("name"))
 
 	const DOPwriter = (item) => DOP_children.push(item)
 	const rootAUwriter = (item) => AU_children.push(item)
@@ -202,7 +218,7 @@ const makeDataObjectPackageObj = (state) => {
 	FF.filter(a=>a.get('depth')===1).forEach((ff,id)=>{
 	    if (id==='') {return undefined}
 
-		recTraverseDB(id, '', folderpath, FFreader, DOPwriter, rootAUwriter)
+		recTraverseDB(id, '', folderpath, FFreader, tagReader, DOPwriter, rootAUwriter)
 	})
 
 	//Composition of DescriptiveMetadata

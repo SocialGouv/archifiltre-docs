@@ -7,10 +7,7 @@ import { save, makeNameWithExt } from 'save'
 
 import pick from 'languages'
 
-const label = pick({
-  en: 'Export',
-  fr: 'Exporter',
-})
+const label = 'CSV'
 
 const CsvButton = props => {
   const api = props.api

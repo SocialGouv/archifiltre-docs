@@ -10,15 +10,19 @@ import { mkB } from 'components/button'
 
 import pick from 'languages'
 
-const label = pick({
-  en: 'SEDA',
-  fr: 'SEDA',
-})
+const label = 'SEDA'
 
 const SedaButton = props => {
   const api = props.api
   const database = api.database
   const makeSIP = database.toSIP
+
+
+  let button_is_enabled = true
+  if (getOriginalPath() === '') {
+    button_is_enabled = false
+  }
+
 
   return mkB(
     ()=>{
@@ -26,7 +30,7 @@ const SedaButton = props => {
       makeSIP()
     },
     label,
-    true,
+    button_is_enabled,
     '#4d9e25',
     {width:'90%'}
   )

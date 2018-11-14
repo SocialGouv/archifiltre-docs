@@ -16,6 +16,7 @@ const SedaButton = props => {
   const api = props.api
   const database = api.database
   const makeSIP = database.toSIP
+  const getOriginalPath = database.getOriginalPath
 
 
   let button_is_enabled = true

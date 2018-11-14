@@ -1,10 +1,12 @@
 import { generateRandomString } from 'random-gen'
+import { Map } from 'immutable'
 // import { readAsText } from 'file-uti'
 
 const XML = require('xml')
 const dateFormat = require('dateformat')
 const Path = require('path')
 const fs = require('fs')
+const JSZip = require('jszip')
 const SHA512 = require('js-sha512').sha512
 
 // =================================
@@ -33,7 +35,6 @@ const seda_source = "fr:gouv:culture:archivesdefrance:seda:v2.1 seda-2.1-main.xs
 
 const DUMMY_ORIGINATINGAGENCYIDENTIFIER = 'FRAN_NP_000001'
 const DUMMY_ARCHIVALAGREEMENT = 'ArchivalAgreement0'
-// const DUMMY_FOLDERPATH = "/home/manu/Documents/EIG/versements/Test_ADAMANT"
 
 // =================================
 // SPECIFIC ROOT ELEMENTS
@@ -64,28 +65,23 @@ const makeTransferringAgencyObj = () => {
 // =================================
 // AUXILIARY FUNCTIONS FOR DATA OBJECT PACKAGE
 // =================================
-const makeBDO = (item, ID, itempath, folderpath) => {
-	let name_in_manifest = item.get('name').replace(/[^a-zA-Z0-9.\\-\\/+=@_]+/g, '_')
-
-
-    let clean_itempath = (itempath.charAt(0) === '/' ? itempath.substring(1) : itempath)
-	let URI = Path.join(folderpath, clean_itempath, item.get('name'))
-	let file_hash = SHA512(fs.readFileSync(URI))
-	let fake_URI = 'content/' + name_in_manifest
-
+const makeBDO = (item, ID, hash) => {
+	// let name_in_manifest = item.get('name').replace(/[^a-zA-Z0-9.\\-\\/+=@_]+/g, '_')
+	let name_in_manifest = item.get('name')
+	let fake_URI = 'content/' + hash
 	let last_modified = dateFormat(item.get('last_modified_max'), date_format)
 
     let BDO_content = new Array()
 
 	BDO_content.push({_attr: makeObj('id', ID)})
 	BDO_content.push(makeObj('Uri', fake_URI))
-	BDO_content.push(makeObj('MessageDigest', [{_attr: makeObj('algorithm', hash_algorithm)}, file_hash]))
-	BDO_content.push(makeObj('Size', item.get('size')))
-	BDO_content.push(makeObj('FormatIdentification', [
-		makeObj('FormatLitteral', 'DUMMY_FORMATLITTERAL'),
-		makeObj('MimeType', 'DUMMY_MIMETYPE'),
-		makeObj('FormatId', 'DUMMY_FORMATID')
-	]))
+	BDO_content.push(makeObj('MessageDigest', [{_attr: makeObj('algorithm', hash_algorithm)}, hash]))
+	BDO_content.push(makeObj('Size', Math.max(item.get('size'),1)))
+	// BDO_content.push(makeObj('FormatIdentification', [
+	// 	makeObj('FormatLitteral', 'DUMMY_FORMATLITTERAL'),
+	// 	makeObj('MimeType', 'DUMMY_MIMETYPE'),
+	// 	makeObj('FormatId', 'DUMMY_FORMATID')
+	// ]))
 	BDO_content.push(makeObj('FileInfo', [
 		makeObj('Filename', name_in_manifest),
 		makeObj('LastModified', last_modified)
@@ -153,17 +149,32 @@ const bundleFolderAU = (AU_children) => {
 	return makeObj('ArchiveUnit', AU_children)
 }
 
-const recTraverseDB = (root, rootpath, absolutepath, readFromFF, readTags, addToDOP, addToAUParent) => {
+const recTraverseDB = (root, rootpath, absolutepath, readFromFF, readTags, addToDOP, addToAUParent, HMread, HMupdate, contentWriter) => {
 	let item = readFromFF(root)
 	let tags = readTags(root)
 	let ID = makeId()
 
 	if(item.get('children').size === 0){
-		let item_BDO = makeBDO(item, ID, rootpath, absolutepath)
-		let item_AU = makeFileAU(item, tags, ID)
+		let clean_rootpath = (rootpath.charAt(0) === '/' ? rootpath.substring(1) : rootpath)
+		let URI = Path.join(absolutepath, clean_rootpath, item.get('name'))
+		let data = fs.readFileSync(URI)
+		let hash = SHA512(data)
 
-		addToDOP(item_BDO)
-		addToAUParent(item_AU)
+		if(HMread().has(hash)){
+			let item_AU = makeFileAU(item, tags, HMread().get(hash))
+			addToAUParent(item_AU)
+		}
+		else{
+			let item_BDO = makeBDO(item, ID, hash)
+			addToDOP(item_BDO)
+
+			let item_AU = makeFileAU(item, tags, ID)
+			addToAUParent(item_AU)
+
+			HMupdate(hash,a=>ID)
+
+			contentWriter(hash, data)
+		}
 	}
 	else{
 		let item_AU = makeFolderAUChildren(item, tags, ID)
@@ -171,7 +182,7 @@ const recTraverseDB = (root, rootpath, absolutepath, readFromFF, readTags, addTo
 		let new_hook = (child) => {item_AU.push(child); return;}
 
 		item.get('children').forEach((child) => {
-			recTraverseDB(child, Path.join(rootpath,item.get('name')), absolutepath, readFromFF, readTags, addToDOP, new_hook)
+			recTraverseDB(child, Path.join(rootpath,item.get('name')), absolutepath, readFromFF, readTags, addToDOP, new_hook, HMread, HMupdate, contentWriter)
 		})
 
 		addToAUParent(bundleFolderAU(item_AU))
@@ -181,7 +192,7 @@ const recTraverseDB = (root, rootpath, absolutepath, readFromFF, readTags, addTo
 // =================================
 // DATA OBJECT PACKAGE
 // =================================
-const makeDataObjectPackageObj = (state) => {
+const makeDataObjectPackageObj = (state, contentWriter) => {
 
 	let FF = state.get('files_and_folders')
 	let files = FF.filter(a=>a.get('children').size===0)
@@ -209,6 +220,10 @@ const makeDataObjectPackageObj = (state) => {
 	// console.log(state.get('tags').toJS())
 
 	//Traversing database
+	let hashmap = new Map()
+	const HMread = () => hashmap
+	const HMupdate = (hash, updater) => {hashmap = hashmap.update(hash, updater);}
+
 	const FFreader = (a) => FF.get(a)
 	const tagReader = (a) => state.get('tags').filter((tag)=>tag.get('ff_ids').includes(a)).valueSeq().toList().map((a)=>a.get("name"))
 
@@ -218,7 +233,7 @@ const makeDataObjectPackageObj = (state) => {
 	FF.filter(a=>a.get('depth')===1).forEach((ff,id)=>{
 	    if (id==='') {return undefined}
 
-		recTraverseDB(id, '', folderpath, FFreader, tagReader, DOPwriter, rootAUwriter)
+		recTraverseDB(id, '', folderpath, FFreader, tagReader, DOPwriter, rootAUwriter, HMread, HMupdate, contentWriter)
 	})
 
 	//Composition of DescriptiveMetadata
@@ -232,8 +247,20 @@ const makeDataObjectPackageObj = (state) => {
 }
 
 
-// MANIFEST COMPOSITION
-export const makeManifest = (state) => {
+// =================================
+// SIP COMPOSITION
+// =================================
+export const makeSIP = (state) => {
+
+	let sip = new JSZip()
+
+	let content = sip.folder('content')
+	let addToContent = (filename, data) => {
+      content.file(filename.replace(/[^a-zA-Z0-9.\\-\\/+=@_]+/g, '_'), data)
+    }
+
+	let DOP_obj = makeDataObjectPackageObj(state, addToContent) // will also compute ZIP
+
 	let manifest_obj = [{ArchiveTransfer:
 		[
 			{_attr: makeManifestRootAttributes()},
@@ -241,16 +268,22 @@ export const makeManifest = (state) => {
 			makeObj('MessageIdentifier', makeId()),
 			makeObj('ArchivalAgreement', DUMMY_ARCHIVALAGREEMENT),
 			makeCodeListVersionsObj(),
-			makeDataObjectPackageObj(state),
+			DOP_obj,
 			makeArchivalAgencyObj(),
 			makeTransferringAgencyObj()
 		]
 	}]
 
-	return XML(manifest_obj, {indent: '\t'})
+	let manifest_str = XML(manifest_obj, {indent: '\t'})
+
+	sip.file('manifest.xml', manifest_str)
+
+	// final ZIP output
+	sip.generateAsync({type: 'nodebuffer'})
+      .then((data) => {
+        fs.writeFileSync(state.get('original_path') + '/../' + state.get('session_name') + '.zip', data)
+        console.log("SIP zip written.")
+      })
+
+
 }
-	    // const alias = ff.get('alias')
-	    // const comments = ff.get('comments')
-	    // const tags = state.get('tags')
-	    //   .filter(tag=>tag.get('ff_ids').includes(id))
-	    //   .reduce((acc,val)=>acc.concat([val.get('name')]),[])

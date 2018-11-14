@@ -69,26 +69,6 @@ export default class FolderDropzone extends React.Component {
 
 
 
-
-    // console.time('copy') ////////////////////////////////////////
-    // let count = 0
-    // copyFileTree(()=>{
-    //   count++
-    //   console.log(count)
-    // },e.dataTransfer.files[0].path)
-    // console.timeEnd('copy')
-
-
-    // console.time('zip') ////////////////////////////////////////
-    // zipFileTree(()=>{},e.dataTransfer.files[0].path).then((content) => {
-    //   FileSaver.saveAs(content, 'example.zip')
-    // })
-    // console.timeEnd('zip')
-
-
-
-
-
     const hook = (a) => {
       this.props.api.loading_state.setStatus(a.status)
       if (a.count) {

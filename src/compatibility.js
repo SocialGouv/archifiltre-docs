@@ -34,6 +34,11 @@ export const fromAnyJsonToJs = (json) => {
         js = V8.toJs(V8.fromJson(json))
       }
       js = v8JsToV9Js(js)
+    case 9:
+      if (js===undefined) {
+        js = JSON.parse(json)
+      }
+      js = v9JsToV10Js(js)
     default:
       if (js===undefined) {
         js = JSON.parse(json)
@@ -349,5 +354,14 @@ export const v8JsToV9Js = (v8) => {
   v9.tags = v8TagsToV9Tags(v8.tags)
 
   return v9
+}
+
+
+
+export const v9JsToV10Js = (v9) => {
+  const v10 = Object.assign({},v9)
+  v10.version = 10
+
+  return v10
 }
 

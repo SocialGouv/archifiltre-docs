@@ -62,7 +62,7 @@ const toStrList2 = () => state => {
   return ans
 }
 
-const toManifestStr = () => SEDA.makeManifest
+const toSIP = () => SEDA.makeSIP
 
 const getSessionName = () => state => state.get('session_name')
 const getOriginalPath = () => state => state.get('original_path')
@@ -88,7 +88,7 @@ const reader = {
   getFfIdPath,
   toJson,
   toStrList2,
-  toManifestStr,
+  toSIP,
   getSessionName,
   getOriginalPath,
   getTagIdsByFfId,

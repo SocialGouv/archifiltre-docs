@@ -50,7 +50,7 @@ onmessage = function(e) {
 
 
     postMessage({status:'make'})
-    let vfs = VirtualFileSystem.make(origin)
+    let vfs = VirtualFileSystem.make(origin, dropped_folder_path)
     postMessage({status:'derivate'})
     vfs = VirtualFileSystem.derivate(vfs)
 

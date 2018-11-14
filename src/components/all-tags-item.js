@@ -157,12 +157,3 @@ class AllTagsItem extends React.Component {
 
 
 export default AllTagsItem
-
-// const Container = connect(
-//   mapStateToProps,
-//   mapDispatchToProps,
-//   null,
-//   {withRef:true}
-// )(AllTagsItem)
-
-// export default Container

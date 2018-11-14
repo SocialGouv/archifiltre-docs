@@ -8,6 +8,8 @@ import * as Origin from 'datastore/origin'
 import * as VirtualFileSystem from 'datastore/virtual-file-system'
 import * as Tags from 'datastore/tags'
 
+import * as SEDA from 'seda'
+
 const property_name = 'database'
 
 const initialState = () => VirtualFileSystem.make(Origin.empty())
@@ -39,11 +41,12 @@ const getFfIdPath = (id) => state =>
 const toJson = () => state => JSON.stringify(VirtualFileSystem.toJs(state))
 const toStrList2 = () => state => {
   const ans = [
-    ['','path','size (octet)','last_modified','alias','comments','tags','is_file']
+    ['','path','name','size (octet)','last_modified','alias','comments','tags','is_file']
   ]
   state.get('files_and_folders').forEach((ff,id)=>{
     if (id==='') {return undefined}
     const path = id
+    const name = ff.get('name')
     const size = ff.get('size')
     const last_modified = ff.get('last_modified_max')
     const alias = ff.get('alias')
@@ -54,12 +57,15 @@ const toStrList2 = () => state => {
     const children = ff.get('children')
     const is_file = children.size === 0
 
-    ans.push(['',path,size,last_modified,alias,comments,tags,is_file])
+    ans.push(['',path,name,size,last_modified,alias,comments,tags,is_file])
   })
   return ans
 }
 
+const toSIP = () => SEDA.makeSIP
+
 const getSessionName = () => state => state.get('session_name')
+const getOriginalPath = () => state => state.get('original_path')
 
 
 const getTagIdsByFfId = (id) => state =>
@@ -82,7 +88,9 @@ const reader = {
   getFfIdPath,
   toJson,
   toStrList2,
+  toSIP,
   getSessionName,
+  getOriginalPath,
   getTagIdsByFfId,
   getAllTagIds,
   getTagByTagId,

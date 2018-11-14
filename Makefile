@@ -89,10 +89,8 @@ electron_prod_dist: electron_prod
 
 
 electron_release: electron_prod
-	yarn --cwd $(workspace) windows64
-	mv $(workspace)/dist $(workspace)/windows64
-	yarn --cwd $(workspace) windows32
-	mv $(workspace)/dist $(workspace)/windows32
+	yarn --cwd $(workspace) windows
+	mv $(workspace)/dist $(workspace)/windows
 	yarn --cwd $(workspace) dist
 	mv $(workspace)/dist $(workspace)/linux
 

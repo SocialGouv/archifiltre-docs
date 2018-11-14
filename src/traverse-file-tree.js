@@ -45,37 +45,27 @@ export function isJsonFile(path) {
 export const readFileSync = Fs.readFileSync
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-const recCopyFileTree = (hook,old_path,new_path) => {
-  const stats = Fs.statSync(old_path)
-  const mode = 0o555
-  if (stats.isDirectory()) {
-    Fs.mkdirSync(new_path)
-    Fs.readdirSync(old_path)
-      .map(a=>recCopyFileTree(hook,Path.join(old_path,a),Path.join(new_path,a)))
-  } else {
-    hook()
-    Fs.copyFileSync(old_path,new_path)
+export const recTraverseFileTreeForHook = (hook, path) => {
+  try {
+    const stats = Fs.statSync(path)
+    if (stats.isDirectory()) {
+      return Fs.readdirSync(path)
+        .map(a=>recTraverseFileTreeForHook(hook,Path.join(path,a)))
+    } else {
+      let name = path.split('/')[path.split('/').length - 1]
+      let data = Fs.readFileSync(path)
+      hook(name,data)
+      return
+    }
+  } catch (e) {
+    return
   }
-  // Fs.chmodSync(new_path, mode)
 }
 
-export const copyFileTree = (hook,dropped_folder_path) => {
-  const new_path = dropped_folder_path+'copy'
-  recCopyFileTree(hook,dropped_folder_path,new_path)
-}
+
+
+
+
 
 
 

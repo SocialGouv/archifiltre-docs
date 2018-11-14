@@ -12,6 +12,7 @@ if (isNaN(version) || typeof version !== 'number') {
 
 const virtualFileSystem = RecordUtil.createFactory({
   session_name:'Untitled',
+  original_path:'',
   version,
   files_and_folders:FilesAndFolders.empty(),
   tags:Tags.empty(),
@@ -26,8 +27,9 @@ const virtualFileSystem = RecordUtil.createFactory({
   },a),
 })
 
-export const make = origin => virtualFileSystem({
+export const make = (origin, path) => virtualFileSystem({
   files_and_folders:FilesAndFolders.ff(origin),
+  original_path: path
 })
 
 export const derivateTags = vfs =>

@@ -60,7 +60,6 @@ electron_clean:
 electron_workspace:
 	mkdir -p $(workspace)
 	cp -r electron/src/* $(workspace)
-	bin/genIcon.bash $(workspace)/build/icon.png
 	yarn --cwd $(workspace) install
 
 
@@ -94,10 +93,4 @@ electron_release: electron_prod
 	yarn --cwd $(workspace) dist
 	mv $(workspace)/dist $(workspace)/linux
 
-
-
-
-
-deps:
-	bin/installDeps.sh
 

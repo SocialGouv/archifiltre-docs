@@ -1,46 +1,44 @@
-import React from 'react'
-
+import React from "react";
 
 class SvgLayers extends React.PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
-      layers:undefined,  
-    }
+      layers: undefined
+    };
 
-    this.ref = this.ref.bind(this)
-
+    this.ref = this.ref.bind(this);
   }
 
   ref(dom_element) {
     if (dom_element) {
-      const layers = dom_element.children
+      const layers = dom_element.children;
 
       this.setState({
-        layers,
-      })      
+        layers
+      });
     }
   }
 
   render() {
-    const state = this.state
-    const layers = state.layers
-    const ref = this.ref
+    const state = this.state;
+    const layers = state.layers;
+    const ref = this.ref;
 
     return (
       <g>
         <g ref={ref}>
-          <g/>
-          <g/>
-          <g/>
+          <g />
+          <g />
+          <g />
         </g>
-        <g style={{display:'none'}}>
+        <g style={{ display: "none" }}>
           {layers && this.props.children(layers)}
         </g>
       </g>
-    )
+    );
   }
 }
 
-export default SvgLayers
+export default SvgLayers;

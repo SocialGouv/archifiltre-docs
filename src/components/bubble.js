@@ -1,53 +1,51 @@
-
-import React from 'react'
-
+import React from "react";
 
 export default class Bubble extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this.onMouseEnter = this.onMouseEnter.bind(this)
-    this.onMouseLeave = this.onMouseLeave.bind(this)
+    this.onMouseEnter = this.onMouseEnter.bind(this);
+    this.onMouseLeave = this.onMouseLeave.bind(this);
 
     this.state = {
-      mouse_over:false,
-    }
+      mouse_over: false
+    };
   }
 
   onMouseEnter() {
     this.setState({
-      mouse_over:true,
-    })
+      mouse_over: true
+    });
   }
 
   onMouseLeave() {
     this.setState({
-      mouse_over:false,
-    })
+      mouse_over: false
+    });
   }
 
   render() {
-    const state = this.state
-    const mouse_over = state.mouse_over
+    const state = this.state;
+    const mouse_over = state.mouse_over;
 
-    const props = this.props
-    const comp = props.comp
-    const sub_comp = props.sub_comp
+    const props = this.props;
+    const comp = props.comp;
+    const sub_comp = props.sub_comp;
 
     const style = {
-      position:'relative',
-    }
+      position: "relative"
+    };
 
     const sub_style = {
-      display:'none',
-      position:'absolute',
-      top:'100%',
-      width:'100%',
-      zIndex: 3,
-    }
+      display: "none",
+      position: "absolute",
+      top: "100%",
+      width: "100%",
+      zIndex: 3
+    };
 
     if (mouse_over) {
-      delete sub_style.display
+      delete sub_style.display;
     }
 
     return (
@@ -55,14 +53,16 @@ export default class Bubble extends React.Component {
         <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
           {comp}
         </div>
-        <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} style={sub_style}>
-          <div className='grid-x align-center'>
-            <div className='cell'>
-              {sub_comp}
-            </div>
+        <div
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+          style={sub_style}
+        >
+          <div className="grid-x align-center">
+            <div className="cell">{sub_comp}</div>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }

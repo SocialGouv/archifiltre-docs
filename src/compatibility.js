@@ -1,7 +1,7 @@
+/* eslint-disable no-fallthrough */
+import * as Loop from "test/loop";
 
-import * as Loop from 'test/loop'
-
-import { generateRandomString } from 'random-gen'
+import { generateRandomString } from "random-gen";
 
 // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
 // import * as V5 from '../version/v5/src/file-system'
@@ -10,10 +10,10 @@ import { generateRandomString } from 'random-gen'
 // import * as V8 from '../version/v8/src/file-system'
 // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
 
-export const fromAnyJsonToJs = (json) => {
-  const version = JSON.parse(json).version
+export const fromAnyJsonToJs = json => {
+  const version = JSON.parse(json).version;
 
-  let js
+  let js;
 
   switch (version) {
     // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
@@ -39,54 +39,55 @@ export const fromAnyJsonToJs = (json) => {
     //   js = v8JsToV9Js(js)
     // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
     case 9:
-      if (js===undefined) {
-        js = JSON.parse(json)
+      if (js === undefined) {
+        js = JSON.parse(json);
       }
-      js = v9JsToV10Js(js)
+      js = v9JsToV10Js(js);
     default:
-      if (js===undefined) {
-        js = JSON.parse(json)
+      if (js === undefined) {
+        js = JSON.parse(json);
       }
   }
-  return [js,version]
-}
+  return [js, version];
+};
 
+const max = (m, l) => {
+  return l.reduce((acc, val) => Math.max(acc, val), m);
+};
 
-const max = (m,l) => {
-  return l.reduce((acc,val)=>Math.max(acc,val),m)
-}
-
-const min = (m,l) => {
-  return l.reduce((acc,val)=>Math.min(acc,val),m)
-}
+const min = (m, l) => {
+  return l.reduce((acc, val) => Math.min(acc, val), m);
+};
 
 const median = l => {
   if (l.length % 2 === 1) {
-    return l[Math.floor(l.length/2)]
+    return l[Math.floor(l.length / 2)];
   } else {
-    const i = l.length/2
-    return (l[i-1] + l[i]) / 2
+    const i = l.length / 2;
+    return (l[i - 1] + l[i]) / 2;
   }
-}
+};
 
 const average = l => {
-  const sum = l.reduce((acc,val)=>acc+val,0)
-  return sum/l.length
-}
+  const sum = l.reduce((acc, val) => acc + val, 0);
+  return sum / l.length;
+};
 
 const sum = l => {
-  return l.reduce((acc,val)=>acc+val,0)
-}
+  return l.reduce((acc, val) => acc + val, 0);
+};
 
 const unzip3 = l => {
-  return l.reduce((acc,val)=>{
-    acc[0].push(val[0])
-    acc[1].push(val[1])
-    acc[2].push(val[2])
-    return acc
-  },[[],[],[]])
-}
-
+  return l.reduce(
+    (acc, val) => {
+      acc[0].push(val[0]);
+      acc[1].push(val[1]);
+      acc[2].push(val[2]);
+      return acc;
+    },
+    [[], [], []]
+  );
+};
 
 // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
 // export const v5JsToV6Js = (v5) => {
@@ -121,7 +122,6 @@ const unzip3 = l => {
 //     return a
 //   }
 
-
 //   const convTT = (tags,a) => {
 //     a = Object.assign({},a)
 //     a.table = Object.assign({},a.table)
@@ -137,7 +137,6 @@ const unzip3 = l => {
 //       a.average = average(a.list)
 //       return a
 //     }
-
 
 //     const addTag = (id) => (tag) => {
 //       if (tags[tag]) {
@@ -158,7 +157,7 @@ const unzip3 = l => {
 //       entry.content.tags.forEach(addTag(id))
 
 //       const array = unzip3(entry.children.map(convEntry))
-      
+
 //       if (array[0].length) {
 //         entry.content.size = sum(array[0])
 //         entry.content.last_modified = reduceLM(array[1])
@@ -181,18 +180,11 @@ const unzip3 = l => {
 //   return convFs(v5)
 // }
 
-
-
-
-
-
 // export const v6JsToV7Js = (v6) => {
 //   const v7 = Object.assign({},v6)
 //   v7.version = 7
 //   return v7
 // }
-
-
 
 // export const v7JsToV8Js = (v7) => {
 //   const v8 = Object.assign({},v7)
@@ -200,7 +192,6 @@ const unzip3 = l => {
 //   v8.tags_sizes = {}
 
 //   const table = v8.tree.table
-
 
 //   const sortBySize = (ids) => {
 //     const compare = (a,b) => {
@@ -239,7 +230,7 @@ const unzip3 = l => {
 //   const reduceToSize = (ids) => {
 //     return ids.reduce((acc,val)=>acc+table[val].content.size,0)
 //   }
-  
+
 //   for (let key in table) {
 //     delete table[key].content.tags
 //   }
@@ -255,12 +246,6 @@ const unzip3 = l => {
 //   return v8
 // }
 
-
-
-
-
-
-
 // export const v8JsToV9Js = (v8) => {
 //   const v9 = Object.assign({},v8)
 //   v9.version = 9
@@ -272,7 +257,6 @@ const unzip3 = l => {
 //   delete v9.parent_path
 
 //   const mapOldToNewId = {}
-  
 
 //   const v8TreeToV9Ffs = tree => {
 //     const table = tree.table
@@ -287,7 +271,6 @@ const unzip3 = l => {
 //         return remakePath(parent,table) + '/' + name
 //       }
 //     }
-
 
 //     const ans = {}
 //     for (let key in table) {
@@ -342,7 +325,7 @@ const unzip3 = l => {
 
 //     return ans
 //   }
-  
+
 //   v9.files_and_folders = v8TreeToV9Ffs(v8.tree)
 
 //   const v8TagsToV9Tags = tags => {
@@ -362,11 +345,9 @@ const unzip3 = l => {
 // }
 // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
 
+export const v9JsToV10Js = v9 => {
+  const v10 = Object.assign({}, v9);
+  v10.version = 10;
 
-export const v9JsToV10Js = (v9) => {
-  const v10 = Object.assign({},v9)
-  v10.version = 10
-
-  return v10
-}
-
+  return v10;
+};

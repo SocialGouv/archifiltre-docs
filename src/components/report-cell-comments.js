@@ -1,189 +1,189 @@
-import React from 'react'
+import React from "react";
 
-import { edit_hover_container, edit_hover_pencil } from 'css/app.css'
+import { edit_hover_container, edit_hover_pencil } from "css/app.css";
 
-import * as ObjectUtil from 'util/object-util'
+import * as ObjectUtil from "util/object-util";
 
-import CommentsEditable from 'components/comments-editable'
+import CommentsEditable from "components/comments-editable";
 
-import pick from 'languages'
+import pick from "languages";
 
 const comments_tr = pick({
-  en: 'Comments',
-  fr: 'Commentaires',
-})
+  en: "Comments",
+  fr: "Commentaires"
+});
 
 const your_comments_here_tr = pick({
-  en: 'Your comments here',
-  fr: 'Vos commentaires ici',
-})
-
+  en: "Your comments here",
+  fr: "Vos commentaires ici"
+});
 
 class ReportCellComments extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
-      editing:false,
-      comments:'',
-    }
+      editing: false,
+      comments: ""
+    };
 
-    this.startInput = this.startInput.bind(this)
-    this.input = this.input.bind(this)
-    this.stopInput = this.stopInput.bind(this)
+    this.startInput = this.startInput.bind(this);
+    this.input = this.input.bind(this);
+    this.stopInput = this.stopInput.bind(this);
 
-    this.comments = this.comments.bind(this)
+    this.comments = this.comments.bind(this);
 
-    this.onKeyUp = this.onKeyUp.bind(this)
-    this.onBlur = this.onBlur.bind(this)
-    this.onClick = this.onClick.bind(this)
+    this.onKeyUp = this.onKeyUp.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    this.onClick = this.onClick.bind(this);
 
-    this.setWrapperRef = this.setWrapperRef.bind(this)
-    this.onClickOutside = this.onClickOutside.bind(this)
+    this.setWrapperRef = this.setWrapperRef.bind(this);
+    this.onClickOutside = this.onClickOutside.bind(this);
   }
 
   startInput() {
-    const props = this.props
+    const props = this.props;
 
-    const comments = props.comments
+    const comments = props.comments;
 
     this.setState({
-      editing:true,
-      comments,
-    })
+      editing: true,
+      comments
+    });
   }
 
   input(comments) {
     this.setState({
-      comments,
-    })
+      comments
+    });
   }
 
   stopInput() {
-    const props = this.props
-    const state = this.state
+    const props = this.props;
+    const state = this.state;
 
-    const commitComments = props.commitComments
-    const comments = state.comments
+    const commitComments = props.commitComments;
+    const comments = state.comments;
 
-    commitComments(comments)
-    
+    commitComments(comments);
+
     this.setState({
-      editing:false,
-      comments:'',
-    })
+      editing: false,
+      comments: ""
+    });
   }
-
-
 
   comments() {
     if (this.state.editing) {
-      return this.state.comments
+      return this.state.comments;
     } else {
-      return this.props.comments
+      return this.props.comments;
     }
   }
 
-
   onKeyUp(event) {
-    event.stopPropagation()
-    const escape_key_code = 27
+    event.stopPropagation();
+    const escape_key_code = 27;
     if (event.keyCode === escape_key_code) {
-      this.stopInput()
+      this.stopInput();
     } else {
-      this.input(event.target.value)
+      this.input(event.target.value);
     }
   }
 
   onBlur() {
-    this.stopInput()
+    this.stopInput();
   }
 
   onClick(event) {
-    event.stopPropagation()
-    const state = this.state
+    event.stopPropagation();
+    const state = this.state;
 
-    const editing = state.editing
-    const startInput = this.startInput
+    const editing = state.editing;
+    const startInput = this.startInput;
 
     if (editing === false) {
-      startInput()
+      startInput();
     }
   }
 
-
   componentDidMount() {
-    document.addEventListener('mousedown', this.onClickOutside)
+    document.addEventListener("mousedown", this.onClickOutside);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.onClickOutside)
+    document.removeEventListener("mousedown", this.onClickOutside);
   }
 
   setWrapperRef(dom_element) {
-    this.wrapper_ref = dom_element
+    this.wrapper_ref = dom_element;
   }
 
   onClickOutside(event) {
-    const state = this.state
-    const wrapper_ref = this.wrapper_ref
-    const stopInput = this.stopInput
-    
-    const editing = state.editing
+    const state = this.state;
+    const wrapper_ref = this.wrapper_ref;
+    const stopInput = this.stopInput;
+
+    const editing = state.editing;
 
     if (wrapper_ref && !wrapper_ref.contains(event.target)) {
       if (editing) {
-        stopInput()
+        stopInput();
       }
     }
   }
 
-
-
-
   render() {
-    const props = this.props
-    const state = this.state
-    const setWrapperRef = this.setWrapperRef
-    const onClick = this.onClick
-    const onKeyUp = this.onKeyUp
-    const onBlur = this.onBlur
+    const props = this.props;
+    const state = this.state;
+    const setWrapperRef = this.setWrapperRef;
+    const onClick = this.onClick;
+    const onKeyUp = this.onKeyUp;
+    const onBlur = this.onBlur;
 
-    const is_dummy = props.is_dummy
-    const cells_style = props.cells_style
+    const is_dummy = props.is_dummy;
+    const cells_style = props.cells_style;
 
-    const editing = state.editing
+    const editing = state.editing;
 
-    const comments = this.comments()
-
+    const comments = this.comments();
 
     const comments_style = {
-      overflowY: editing ? '': 'auto',
-      overflowX: 'hidden',
-      maxHeight: '5.5em'
-    }
-
+      overflowY: editing ? "" : "auto",
+      overflowX: "hidden",
+      maxHeight: "5.5em"
+    };
 
     if (is_dummy) {
-      return(
-        <div className='cell small-6' style={cells_style}>
-          <b>{comments_tr}</b><br />
-          <span style={{'fontStyle':'italic'}}>{your_comments_here_tr + '...'}</span>
+      return (
+        <div className="cell small-6" style={cells_style}>
+          <b>{comments_tr}</b>
+          <br />
+          <span style={{ fontStyle: "italic" }}>
+            {your_comments_here_tr + "..."}
+          </span>
         </div>
-      )
+      );
     } else {
       return (
         <div
           ref={setWrapperRef}
-          className={'cell small-6 ' + edit_hover_container}
+          className={"cell small-6 " + edit_hover_container}
           style={cells_style}
           onClick={onClick}
         >
           <div>
             <b>{comments_tr}</b>
-            <span>&ensp;<i className={'fi-pencil ' + edit_hover_pencil} style={{'opacity': '0.3'}} /></span><br />
+            <span>
+              &ensp;
+              <i
+                className={"fi-pencil " + edit_hover_pencil}
+                style={{ opacity: "0.3" }}
+              />
+            </span>
+            <br />
           </div>
-          <div style={comments_style} >
+          <div style={comments_style}>
             <CommentsEditable
               onKeyUp={onKeyUp}
               onBlur={onBlur}
@@ -192,28 +192,30 @@ class ReportCellComments extends React.Component {
             />
           </div>
         </div>
-      )
+      );
     }
   }
 }
 
+export default props => {
+  const api = props.api;
+  const database = api.database;
+  const undo = api.undo;
 
-export default (props) => {
-  const api = props.api
-  const database = api.database
-  const undo = api.undo
+  const node_id = props.node_id;
 
-  const node_id = props.node_id
+  const commitComments = comments => {
+    const updater = () => comments;
+    database.updateComments(updater, node_id);
+    undo.commit();
+  };
 
-  const commitComments = (comments) => {
-    const updater = ()=>comments
-    database.updateComments(updater,node_id)
-    undo.commit()
-  }
+  props = ObjectUtil.compose(
+    {
+      commitComments
+    },
+    props
+  );
 
-  props = ObjectUtil.compose({
-    commitComments,
-  },props)
-
-  return (<ReportCellComments {...props}/>)
-}
+  return <ReportCellComments {...props} />;
+};

@@ -1,53 +1,51 @@
-import { generateRandomString } from 'random-gen'
-import { Map } from 'immutable'
+import { generateRandomString } from "random-gen";
+import { Map } from "immutable";
 
+const genId = () => generateRandomString(40);
 
-const genId = () => generateRandomString(40)
-
-let queue = Map()
+let queue = Map();
 
 const animationLoop = () => {
-  const [ ...keys ] = queue.keys()
-  const visible_array = []
+  const [...keys] = queue.keys();
+  const visible_array = [];
 
-  keys.forEach((animation_id,i)=>{
-    const animation = queue.get(animation_id)
-    const visible = animation.visible
-    const measure = animation.measure
+  keys.forEach((animation_id, i) => {
+    const animation = queue.get(animation_id);
+    const visible = animation.visible;
+    const measure = animation.measure;
 
-    visible_array.push(visible())
-
-    if (visible_array[i]) {
-      measure()
-    }
-  })
-
-
-  keys.forEach((animation_id,i)=>{
-    const animation = queue.get(animation_id)
-    const mutate = animation.mutate
+    visible_array.push(visible());
 
     if (visible_array[i]) {
-      mutate()
+      measure();
     }
-  })
+  });
 
-  requestAnimationFrame(animationLoop)
-}
+  keys.forEach((animation_id, i) => {
+    const animation = queue.get(animation_id);
+    const mutate = animation.mutate;
 
-animationLoop()
+    if (visible_array[i]) {
+      mutate();
+    }
+  });
 
-export function animate(visible,measure,mutate) {
-  const animation_id = genId()
+  requestAnimationFrame(animationLoop);
+};
+
+animationLoop();
+
+export function animate(visible, measure, mutate) {
+  const animation_id = genId();
   const animation = {
     visible,
     measure,
-    mutate,
-  }
-  queue = queue.set(animation_id,animation)
-  return animation_id
+    mutate
+  };
+  queue = queue.set(animation_id, animation);
+  return animation_id;
 }
 
 export function clear(animation_id) {
-  queue = queue.delete(animation_id)
+  queue = queue.delete(animation_id);
 }

@@ -1,31 +1,27 @@
+import React from "react";
 
-import React from 'react'
+import ReactDOM from "react-dom";
 
-import ReactDOM from 'react-dom'
+import ErrorBoundary from "components/error-boundary";
+import MainSpace from "components/main-space";
+import Header from "components/header";
+import ANewVersionIsAvailable from "components/a-new-version-is-available";
 
-import ErrorBoundary from 'components/error-boundary'
-import MainSpace from 'components/main-space'
-import Header from 'components/header'
-import ANewVersionIsAvailable from 'components/a-new-version-is-available'
+import WindowResize from "components/window-resize";
 
-import WindowResize from 'components/window-resize'
+import "css/app.css";
 
-import 'css/app.css'
+import { generateRandomString } from "random-gen";
 
-import { generateRandomString } from 'random-gen'
+import { Store } from "reducers/store";
 
-import { Store } from 'reducers/store'
-
-import version from 'version'
-import pick from 'languages'
-
-
+import version from "version";
+import pick from "languages";
 
 document.title = pick({
-  en:'icicle v'+version+' - archifiltre',
-  fr:'stalactite v'+version+' - archifiltre',
-})
-
+  en: "icicle v" + version + " - archifiltre",
+  fr: "stalactite v" + version + " - archifiltre"
+});
 
 // import Analytics from 'electron-ga' // development
 
@@ -37,54 +33,48 @@ document.title = pick({
 //   dt:'archifiltre', // development
 // }) // development
 
-
-
-
-
 const app = () => {
-  let root_div = document.createElement('div')
-  root_div.setAttribute('id','root')
+  let root_div = document.createElement("div");
+  root_div.setAttribute("id", "root");
 
   if (document.body !== null) {
-    document.body.appendChild(root_div)
+    document.body.appendChild(root_div);
   }
-
 
   ReactDOM.render(
     <Store>
       {props => {
-        const api = props.api
+        const api = props.api;
         return (
           <ErrorBoundary api={api}>
-            <WindowResize/>
-            <div className='grid-y grid-frame'>
-              <div className='cell'>
-                <ANewVersionIsAvailable/>
+            <WindowResize />
+            <div className="grid-y grid-frame">
+              <div className="cell">
+                <ANewVersionIsAvailable />
               </div>
-              <div className='cell'>
-                <Header api={api}/>
+              <div className="cell">
+                <Header api={api} />
               </div>
-              <div className='cell auto'>
-                <MainSpace api={api}/>
+              <div className="cell auto">
+                <MainSpace api={api} />
               </div>
             </div>
           </ErrorBoundary>
-        )
+        );
       }}
-    </Store>
-    ,
+    </Store>,
     root_div
-  )
-}
+  );
+};
 
-window.onload = app
+window.onload = app;
 
-document.ondragover = document.ondrop = (ev) => {
-  ev.preventDefault()
-  return false
-}
+document.ondragover = document.ondrop = ev => {
+  ev.preventDefault();
+  return false;
+};
 
-window.ondragover = window.ondrop = (ev) => {
-  ev.preventDefault()
-  return false
-}
+window.ondragover = window.ondrop = ev => {
+  ev.preventDefault();
+  return false;
+};

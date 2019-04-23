@@ -1,49 +1,46 @@
-const path = require('path')
-const fs = require('fs')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const FlowWebpackPlugin = require('flow-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require("path");
+const fs = require("fs");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const FlowWebpackPlugin = require("flow-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: {
-    app: './src/app.js',
-    react: ['react', 'react-dom'],
-    immutable: ['immutable'],
+    app: "./src/app.js",
+    react: ["react", "react-dom"],
+    immutable: ["immutable"]
   },
 
   plugins: [
-    new CopyWebpackPlugin(['static']),
+    new CopyWebpackPlugin(["static"]),
     new HtmlWebpackPlugin({
-      inject: 'head',
-      filename: 'index.html',
-      template: 'static/index.html',
-      excludeChunks: ['stats']
+      inject: "head",
+      filename: "index.html",
+      template: "static/index.html",
+      excludeChunks: ["stats"]
     })
   ],
 
-  target:'electron-renderer',
+  target: "electron-renderer",
 
   devServer: {
-    contentBase: './dist',
+    contentBase: "./dist",
     https: true,
     port: 8000,
     compress: true,
     hot: false,
-    inline: false,
+    inline: false
   },
 
-  optimization : {
-    splitChunks : {
-      chunks: 'all'
+  optimization: {
+    splitChunks: {
+      chunks: "all"
     },
-    runtimeChunk : true
+    runtimeChunk: true
   },
 
   resolve: {
-    modules: [
-      path.resolve(__dirname, 'src'),
-      'node_modules'
-    ]
+    modules: [path.resolve(__dirname, "src"), "node_modules"]
   },
 
   module: {
@@ -51,7 +48,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
-        loader: 'babel-loader'
+        loader: "babel-loader"
       },
       {
         test: /\.css$/,
@@ -62,21 +59,20 @@ module.exports = {
             loader: "css-loader",
             query: {
               modules: true,
-              localIdentName: '[name]__[local]___[hash:base64:5]',
+              localIdentName: "[name]__[local]___[hash:base64:5]"
             }
           }
         ]
       },
       {
         test: /\.worker\.js$/,
-        use: { loader: 'worker-loader' }
+        use: { loader: "worker-loader" }
       }
     ]
   },
 
   output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "dist")
   }
-}
-
+};

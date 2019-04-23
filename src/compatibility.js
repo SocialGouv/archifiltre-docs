@@ -3,12 +3,12 @@ import * as Loop from 'test/loop'
 
 import { generateRandomString } from 'random-gen'
 
-// DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+// TO REMOVE TO REMOVE TO REMOVE TO REMOVE
 // import * as V5 from '../version/v5/src/file-system'
 // import * as V6 from '../version/v6/src/file-system'
 // import * as V7 from '../version/v7/src/file-system'
 // import * as V8 from '../version/v8/src/file-system'
-// DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+// TO REMOVE TO REMOVE TO REMOVE TO REMOVE
 
 export const fromAnyJsonToJs = (json) => {
   const version = JSON.parse(json).version
@@ -16,7 +16,7 @@ export const fromAnyJsonToJs = (json) => {
   let js
 
   switch (version) {
-    // DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+    // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
     // case 5:
     //   if (js===undefined) {
     //     js = V5.toJs(V5.fromJson(json))
@@ -37,7 +37,7 @@ export const fromAnyJsonToJs = (json) => {
     //     js = V8.toJs(V8.fromJson(json))
     //   }
     //   js = v8JsToV9Js(js)
-    // DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+    // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
     case 9:
       if (js===undefined) {
         js = JSON.parse(json)
@@ -88,7 +88,7 @@ const unzip3 = l => {
 }
 
 
-// DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+// TO REMOVE TO REMOVE TO REMOVE TO REMOVE
 // export const v5JsToV6Js = (v5) => {
 //   const convFs = a => {
 //     a = Object.assign({},a)
@@ -360,7 +360,7 @@ const unzip3 = l => {
 
 //   return v9
 // }
-// DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+// TO REMOVE TO REMOVE TO REMOVE TO REMOVE
 
 
 export const v9JsToV10Js = (v9) => {

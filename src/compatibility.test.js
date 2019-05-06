@@ -1,12 +1,12 @@
-import chai from 'chai'
-const should = chai.should()
+import chai from "chai";
+const should = chai.should();
 
-import { updateIn } from 'immutable'
+import { updateIn } from "immutable";
 
-import * as Loop from 'test/loop'
-import * as Arbitrary from 'test/arbitrary'
+import * as Loop from "test/loop";
+import * as Arbitrary from "test/arbitrary";
 
-import * as Compatibility from 'compatibility'
+import * as Compatibility from "compatibility";
 
 // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
 // import * as V5 from '../version/v5/src/file-system'
@@ -15,19 +15,17 @@ import * as Compatibility from 'compatibility'
 // import * as V8 from '../version/v8/src/file-system'
 // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
 
-import * as V9 from 'datastore/virtual-file-system'
+import * as V9 from "datastore/virtual-file-system";
 
-
-describe('compatibility', function() {
-
+describe("compatibility", function() {
   const sortV6 = a => {
-    return updateIn(a,['tags'],tags=>{
+    return updateIn(a, ["tags"], tags => {
       for (let key in tags) {
-        tags[key] = tags[key].sort()
+        tags[key] = tags[key].sort();
       }
-      return tags
-    })
-  }
+      return tags;
+    });
+  };
 
   // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
   // Loop.equal('v5JsToV6Js', () => {
@@ -47,15 +45,14 @@ describe('compatibility', function() {
   // })
   // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
 
-
   const sortV9 = a => {
-    return updateIn(a,['tags'],tags=>{
+    return updateIn(a, ["tags"], tags => {
       for (let key in tags) {
-        tags[key].ff_ids = tags[key].ff_ids.sort()
+        tags[key].ff_ids = tags[key].ff_ids.sort();
       }
-      return tags
-    })
-  }
+      return tags;
+    });
+  };
 
   // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
   // Loop.equal('v8JsToV9Js', () => {
@@ -63,6 +60,4 @@ describe('compatibility', function() {
   //   return [sortV9(V9.toJs(V9.fromJs(Compatibility.v8JsToV9Js(a)))), sortV9(Compatibility.v8JsToV9Js(a))]
   // })
   // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
-
-
-})
+});

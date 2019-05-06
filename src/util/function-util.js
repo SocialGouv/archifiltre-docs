@@ -1,3 +1,1 @@
-
-
-export const empty = () => {}
+export const empty = () => {};

@@ -1,95 +1,92 @@
+import React from "react";
 
-import React from 'react'
+import * as UserData from "user-data";
 
-import * as UserData from 'user-data'
-
-const { remote } = require('electron')
+const { remote } = require("electron");
 
 class WindowResize extends React.PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
 
-    const {reader,writer} = UserData.create({
-      width:620,
-      height:600,
-    })
+    const { reader, writer } = UserData.create({
+      width: 620,
+      height: 600
+    });
 
     this.state = {
-      win:remote.getCurrentWindow(),
+      win: remote.getCurrentWindow(),
       reader,
-      writer,
-    }
+      writer
+    };
 
-    this.onResize = this.onResize.bind(this)
+    this.onResize = this.onResize.bind(this);
   }
 
   onResize() {
-    const state = this.state
-    const win = state.win
-    const writer = state.writer
+    const state = this.state;
+    const win = state.win;
+    const writer = state.writer;
 
-    const [width,height] = win.getSize()
+    const [width, height] = win.getSize();
 
     writer({
       width,
-      height,
-    })
+      height
+    });
   }
 
   componentDidMount() {
-    const state = this.state
-    const win = state.win
-    const reader = state.reader
+    const state = this.state;
+    const win = state.win;
+    const reader = state.reader;
 
-    const {width,height} = reader()
+    const { width, height } = reader();
 
-    win.setSize(width,height)
+    win.setSize(width, height);
 
-    win.show()
+    win.show();
 
-    const onResize = this.onResize
-    window.addEventListener('resize',onResize)
+    const onResize = this.onResize;
+    window.addEventListener("resize", onResize);
   }
 
   componentWillUnmount() {
-    const onResize = this.onResize
-    window.removeEventListener('resize',onResize)
+    const onResize = this.onResize;
+    window.removeEventListener("resize", onResize);
   }
 
   componentDidCatch(error, info) {
-    console.log(error,info)
+    console.log(error, info);
   }
 
   render() {
-
-    return null
+    return null;
   }
 }
 
 export default class WindowResizeErrorHandler extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       hasError: false
-    }
+    };
   }
 
   componentDidCatch(error, info) {
     this.setState({
       hasError: true
-    })
+    });
   }
 
   render() {
-    const props = this.props
-    const state = this.state
+    const props = this.props;
+    const state = this.state;
 
     if (state.hasError) {
-      remote.getCurrentWindow().show()
-      return null
+      remote.getCurrentWindow().show();
+      return null;
     } else {
-      return <WindowResize/>
+      return <WindowResize />;
     }
   }
 }
-

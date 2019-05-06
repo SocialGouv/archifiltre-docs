@@ -1,42 +1,41 @@
-import React from 'react'
+import React from "react";
 
-import SaveButton from 'components/save-button'
-
+import SaveButton from "components/save-button";
 
 export default class ErrorBoundary extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       hasError: false
-    }
+    };
   }
 
   componentDidCatch(error, info) {
     this.setState({
       hasError: true
-    })
+    });
   }
 
   render() {
-    const props = this.props
+    const props = this.props;
 
-    const api = props.api
+    const api = props.api;
 
     if (this.state.hasError) {
       return (
-        <div className='grid-y grid-frame align-center'>
+        <div className="grid-y grid-frame align-center">
           <div
-            className='cell small-1'
+            className="cell small-1"
             style={{
-              textAlign: 'center',
+              textAlign: "center"
             }}
           >
             <h1>Something went wrong.</h1>
-            <SaveButton api={api}/>
+            <SaveButton api={api} />
           </div>
         </div>
-      )
+      );
     }
-    return this.props.children
+    return this.props.children;
   }
 }

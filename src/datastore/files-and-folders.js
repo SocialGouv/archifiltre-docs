@@ -1,5 +1,4 @@
 import * as Arbitrary from "test/arbitrary";
-import * as Loop from "test/loop";
 
 import * as ArrayUtil from "util/array-util";
 import * as ListUtil from "util/list-util";
@@ -9,7 +8,7 @@ import * as ObjectUtil from "util/object-util";
 
 import * as Origin from "datastore/origin";
 
-import { List, Map, Set } from "immutable";
+import { List, Map } from "immutable";
 
 const fileOrFolderFactory = RecordUtil.createFactory(
   {

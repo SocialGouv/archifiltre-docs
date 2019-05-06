@@ -1,8 +1,7 @@
 import React from "react";
 import * as ArrayUtil from "util/array-util";
-import * as ObjectUtil from "util/object-util";
 
-import IcicleRect from "components/icicle-rect";
+import IcicleRect from "./icicle-rect";
 
 export default class IcicleRecursive extends React.PureComponent {
   constructor(props) {

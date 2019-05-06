@@ -4,7 +4,7 @@ import * as Color from "color";
 import * as ObjectUtil from "util/object-util";
 import * as Cache from "cache";
 
-import Icicle from "components/icicle";
+import Icicle from "components/icicle/icicle-container";
 
 import Report from "components/report";
 import AllTags from "components/all-tags";

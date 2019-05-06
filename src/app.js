@@ -1,6 +1,10 @@
+import 'foundation-sites';
+import './css/index.scss';
+
 import React from "react";
 
 import ReactDOM from "react-dom";
+import Analytics from 'electron-ga'
 
 import ErrorBoundary from "components/error-boundary";
 import MainSpace from "components/main-space";
@@ -10,8 +14,6 @@ import ANewVersionIsAvailable from "components/a-new-version-is-available";
 import WindowResize from "components/window-resize";
 
 import "css/app.css";
-
-import { generateRandomString } from "random-gen";
 
 import { Store } from "reducers/store";
 
@@ -23,15 +25,15 @@ document.title = pick({
   fr: "stalactite v" + version + " - archifiltre"
 });
 
-// import Analytics from 'electron-ga' // development
+if (MODE === 'production') {
+  const analytics = new Analytics('UA-115293619-2')
 
-// const analytics = new Analytics('UA-115293619-2') // development
-
-// analytics.send('pageview',{ // development
-//   dh:'https://archifiltre.electron/', // development
-//   dp:'/electron/v9', // development
-//   dt:'archifiltre', // development
-// }) // development
+  analytics.send('pageview',{
+    dh:'https://archifiltre.electron/',
+    dp:'/electron/v9',
+    dt:'archifiltre',
+  });
+}
 
 const app = () => {
   let root_div = document.createElement("div");
@@ -67,7 +69,7 @@ const app = () => {
   );
 };
 
-window.onload = app;
+window.addEventListener('load', app);
 
 document.ondragover = document.ondrop = ev => {
   ev.preventDefault();

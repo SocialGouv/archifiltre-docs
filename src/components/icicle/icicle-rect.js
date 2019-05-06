@@ -1,54 +1,7 @@
 import React from "react";
-import ReactDOM from "react-dom";
-
-import * as ObjectUtil from "util/object-util";
-
-import { ApiContext } from "reducers/store";
 
 import * as FunctionUtil from "util/function-util";
-
-class SvgRectangle extends React.PureComponent {
-  // componentDidUpdate(prevProps, prevState) {
-  //   const ans = {}
-  //   for (let key in this.props) {
-  //     if (prevProps[key] !== this.props[key]) {
-  //       ans[key] = [prevProps[key], this.props[key]]
-  //     }
-  //   }
-  //   if (Object.keys(ans).length > 0) {
-  //     console.log(ans)
-  //   }
-  // }
-
-  render() {
-    const props = this.props;
-    const x = props.x;
-    const y = props.y;
-    const dx = props.dx;
-    const dy = props.dy;
-    const onClickHandler = props.onClickHandler;
-    const onDoubleClickHandler = props.onDoubleClickHandler;
-    const onMouseOverHandler = props.onMouseOverHandler;
-    const fill = props.fill;
-    const opacity = props.opacity;
-    const stroke = props.stroke;
-    const cursor = props.cursor;
-
-    return (
-      <rect
-        className="node"
-        x={x}
-        y={y}
-        width={dx}
-        height={dy}
-        onClick={onClickHandler}
-        onDoubleClick={onDoubleClickHandler}
-        onMouseOver={onMouseOverHandler}
-        style={{ fill, opacity, stroke, cursor }}
-      />
-    );
-  }
-}
+import SvgRectangle from './svg-rectangle';
 
 export default class IcicleRect extends React.PureComponent {
   constructor(props) {

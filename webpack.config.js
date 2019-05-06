@@ -1,10 +1,12 @@
 const path = require("path");
-const fs = require("fs");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const FlowWebpackPlugin = require("flow-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require('webpack');
 
-module.exports = {
+const env = process.env.NODE_ENV;
+
+module.exports = (env, argv) => ({
+  devtool: "source-map",
   entry: {
     app: "./src/app.js",
     react: ["react", "react-dom"],
@@ -18,6 +20,9 @@ module.exports = {
       filename: "index.html",
       template: "static/index.html",
       excludeChunks: ["stats"]
+    }),
+    new webpack.DefinePlugin({
+      MODE: JSON.stringify(argv.mode),
     })
   ],
 
@@ -51,15 +56,20 @@ module.exports = {
         loader: "babel-loader"
       },
       {
-        test: /\.css$/,
+        test: /\.js$/,
+        loader: "source-map-loader",
+        enforce: "pre"
+      },
+      {
+        test: /\.css$|\.scss$/,
         exclude: /(node_modules|bower_components)/,
         use: [
           { loader: "style-loader" },
+          { loader: "css-loader" },
           {
-            loader: "css-loader",
-            query: {
-              modules: true,
-              localIdentName: "[name]__[local]___[hash:base64:5]"
+            loader: "sass-loader",
+            options: {
+              includePaths: ["./node_modules"]
             }
           }
         ]
@@ -67,12 +77,33 @@ module.exports = {
       {
         test: /\.worker\.js$/,
         use: { loader: "worker-loader" }
+      },
+      {
+        test: /\.svg/,
+        use: [{
+          loader: 'svg-url-loader',
+          options: {
+            limit: 1024,
+            name: '[name].[ext]',
+          },
+        }, 'image-webpack-loader'],
+      },
+      {
+        test: /\.(otf|ttf|eot|woff|woff2)$/,
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 1000,
+            name: '[name].[ext]',
+            outputPath: 'fonts/',
+          },
+        }],
       }
     ]
   },
 
   output: {
     filename: "[name].bundle.js",
-    path: path.resolve(__dirname, "dist")
+    path: path.resolve(__dirname, "electron/dist")
   }
-};
+});

@@ -73,25 +73,26 @@ function createWindow () {
     width: 1500,
     height: 800,
     webPreferences: {
+      nodeIntegration: true,
       nodeIntegrationInWorker: true
     },
-    // show: false, // development
-
-    // icon: 'build/icon.png',
-    // icon: path.join(__dirname, '/icon/Icon-512x512.png'),
-    // icon: path.join(__dirname, '/build/icon.png'),
+    show: false
   })
 
   // and load the index.html of the app.
-  win.loadFile('webpack/index.html')
+  win.loadFile(path.join(__dirname, 'dist/index.html'))
 
 
   preventNavigation()
 
   // Open the DevTools.
-  win.webContents.openDevTools() // development
+  if (!app.isPackaged) {
+    win.webContents.openDevTools()
+  }
 
-  // askBeforeLeaving() // development
+  if (app.isPackaged) {
+    askBeforeLeaving()
+  }
 
 
   // Emitted when the window is closed.

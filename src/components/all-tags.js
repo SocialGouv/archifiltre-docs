@@ -1,13 +1,6 @@
 import React from "react";
 
 import * as ObjectUtil from "util/object-util";
-import {
-  tags_bubble,
-  tags_count,
-  tags_add,
-  tags_cross,
-  visibleonhover
-} from "css/app.css";
 
 import TagListItem from "components/all-tags-item";
 import TextAlignCenter from "components/text-align-center";

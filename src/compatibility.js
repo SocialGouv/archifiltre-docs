@@ -1,7 +1,7 @@
 /* eslint-disable no-fallthrough */
 import * as Loop from "test/loop";
 
-import { generateRandomString } from "random-gen";
+import { generateRandomString } from "util/random-gen-util";
 
 // TO REMOVE TO REMOVE TO REMOVE TO REMOVE
 // import * as V5 from '../version/v5/src/file-system'

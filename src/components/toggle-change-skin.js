@@ -5,7 +5,7 @@ import { mkTB } from "components/button";
 import TextAlignCenter from "components/text-align-center";
 import * as ObjectUtil from "util/object-util";
 
-import * as Color from "color";
+import * as Color from "util/color-util";
 import pick from "languages";
 
 const color_code = pick({

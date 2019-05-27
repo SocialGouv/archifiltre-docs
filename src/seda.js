@@ -1,6 +1,5 @@
-import { generateRandomString } from "random-gen";
+import { generateRandomString } from "util/random-gen-util";
 import { Map } from "immutable";
-// import { readAsText } from 'file-uti'
 
 const XML = require("xml");
 const dateFormat = require("dateformat");

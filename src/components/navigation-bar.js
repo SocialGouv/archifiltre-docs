@@ -5,7 +5,7 @@ import { tags, tags_count } from "css/app.css";
 import BTRButton from "components/back-to-root-button";
 import ToggleChangeSkin from "components/toggle-change-skin";
 
-import * as Color from "color";
+import * as Color from "util/color-util";
 
 const grid_style = {
   background: "white",

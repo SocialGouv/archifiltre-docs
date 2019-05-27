@@ -12,7 +12,7 @@ import {
   readFileSync,
   copyFileTree,
   zipFileTree
-} from "traverse-file-tree";
+} from "util/file-sys-util";
 import FileSaver from "file-saver";
 
 const placeholder = pick({

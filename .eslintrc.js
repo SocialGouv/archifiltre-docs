@@ -13,6 +13,9 @@ module.exports = {
     'jsx-a11y/no-static-element-interactions': 'off',
     'jsx-a11y/anchor-is-valid': 'off'
   },
+  globals: {
+    MODE: 'readonly',
+  },
   overrides: [
     {
       files: ['src/**/*.test.js'],
@@ -21,4 +24,4 @@ module.exports = {
       },
     }
   ]
-}
+};

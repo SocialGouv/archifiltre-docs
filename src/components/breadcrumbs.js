@@ -31,30 +31,6 @@ const computeCumulative = array => {
   return ans;
 };
 
-const computeDim = (y, height) => {
-  const x_poly = 30;
-  const y_poly = y;
-  const width_poly = breadcrumb_dims.w / 20;
-  const height_poly = height;
-
-  const x_text = (breadcrumb_dims.w * 1) / 7;
-  const y_text = y_poly;
-  const width_text = (breadcrumb_dims.w * 6) / 7;
-  const height_text = height_poly;
-
-  return {
-    x_poly,
-    y_poly,
-    width_poly,
-    height_poly,
-
-    x_text,
-    y_text,
-    width_text,
-    height_text
-  };
-};
-
 class Breadcrumbs extends React.PureComponent {
   constructor(props) {
     super(props);

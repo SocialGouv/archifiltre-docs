@@ -18,14 +18,6 @@ const makeObj = (key, value) => {
   return obj;
 };
 
-const pad = (s, l) => {
-  let res = s.toString();
-  while (res.length < l) {
-    res = "0" + res;
-  }
-  return res;
-};
-
 const makeId = () => {
   return "_" + generateRandomString(40);
 };
@@ -88,7 +80,7 @@ const makeBDO = (item, ID, hash) => {
   let fake_URI = "content/" + hash;
   let last_modified = dateFormat(item.get("last_modified_max"), date_format);
 
-  let BDO_content = new Array();
+  let BDO_content = [];
 
   BDO_content.push({ _attr: makeObj("id", ID) });
   BDO_content.push(makeObj("Uri", fake_URI));
@@ -118,7 +110,7 @@ const makeFileAU = (item, item_tags, ID) => {
   let last_modified = dateFormat(item.get("last_modified_max"), date_format);
   let now = dateFormat(new Date(), date_format);
 
-  let AU_content = new Array();
+  let AU_content = [];
 
   // Where to insert alias ? Tags ? Comments ?
   AU_content.push(makeObj("DescriptionLevel", "Item"));
@@ -155,7 +147,7 @@ const makeFolderAUChildren = (item, item_tags, ID) => {
   let last_modified = dateFormat(item.get("last_modified_max"), date_format);
   let now = dateFormat(new Date(), date_format);
 
-  let AU_content = new Array();
+  let AU_content = [];
 
   AU_content.push(makeObj("DescriptionLevel", "RecordGrp"));
   AU_content.push(makeObj("Title", item.get("name")));
@@ -222,7 +214,6 @@ const recTraverseDB = (
 
     let new_hook = child => {
       item_AU.push(child);
-      return;
     };
 
     item.get("children").forEach(child => {
@@ -252,12 +243,12 @@ const makeDataObjectPackageObj = (state, contentWriter) => {
   let files = FF.filter(a => a.get("children").size === 0);
   let folderpath = state.get("original_path") + "/../";
 
-  let DOP_children = new Array();
-  let AU_children = new Array();
+  let DOP_children = [];
+  let AU_children = [];
 
   // Pre-population of AU_children
   // Creating root elements
-  let AU_root_content = new Array();
+  let AU_root_content = [];
   AU_root_content.push(makeObj("DescriptionLevel", "RecordGrp"));
   AU_root_content.push(makeObj("Title", state.get("session_name")));
   AU_root_content.push(

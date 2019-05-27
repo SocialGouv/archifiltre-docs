@@ -1,7 +1,7 @@
 const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const webpack = require('webpack');
+const webpack = require("webpack");
 
 const env = process.env.NODE_ENV;
 
@@ -22,7 +22,7 @@ module.exports = (env, argv) => ({
       excludeChunks: ["stats"]
     }),
     new webpack.DefinePlugin({
-      MODE: JSON.stringify(argv.mode),
+      MODE: JSON.stringify(argv.mode)
     })
   ],
 
@@ -80,24 +80,29 @@ module.exports = (env, argv) => ({
       },
       {
         test: /\.svg/,
-        use: [{
-          loader: 'svg-url-loader',
-          options: {
-            limit: 1024,
-            name: '[name].[ext]',
+        use: [
+          {
+            loader: "svg-url-loader",
+            options: {
+              limit: 1024,
+              name: "[name].[ext]"
+            }
           },
-        }, 'image-webpack-loader'],
+          "image-webpack-loader"
+        ]
       },
       {
         test: /\.(otf|ttf|eot|woff|woff2)$/,
-        use: [{
-          loader: 'url-loader',
-          options: {
-            limit: 1000,
-            name: '[name].[ext]',
-            outputPath: 'fonts/',
-          },
-        }],
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 1000,
+              name: "[name].[ext]",
+              outputPath: "fonts/"
+            }
+          }
+        ]
       }
     ]
   },

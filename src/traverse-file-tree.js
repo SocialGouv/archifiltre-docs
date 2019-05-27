@@ -51,10 +51,9 @@ export const recTraverseFileTreeForHook = (hook, path) => {
       let name = path.split("/")[path.split("/").length - 1];
       let data = Fs.readFileSync(path);
       hook(name, data);
-      return;
     }
   } catch (e) {
-    return;
+    // Error to catch
   }
 };
 

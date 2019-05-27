@@ -26,7 +26,10 @@
       "electron/dist",
       "electron/build/icon.*",
       "package.json"
-    ]
+    ],
+    "mac": {
+      "icon": "./electron/build/icon.icns"
+    },
   },
   "repository": {
     "type": "git",

@@ -3,7 +3,7 @@ const should = chai.should();
 
 import * as Loop from "test/loop";
 import * as Arbitrary from "test/arbitrary";
-import * as M from "cache";
+import * as M from "util/cache-util";
 
 describe("cache", function() {
   it("basic test to improve", function() {

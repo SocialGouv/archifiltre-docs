@@ -1,7 +1,7 @@
 import React from "react";
 
 import * as FunctionUtil from "util/function-util";
-import SvgRectangle from './svg-rectangle';
+import SvgRectangle from "./svg-rectangle";
 
 export default class IcicleRect extends React.PureComponent {
   constructor(props) {

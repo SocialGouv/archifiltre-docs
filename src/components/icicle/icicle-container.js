@@ -1,6 +1,6 @@
 import React from "react";
 import * as ObjectUtil from "util/object-util";
-import IcicleMain from './icicle-main';
+import IcicleMain from "./icicle-main";
 
 export default function IcicleApiToProps(props) {
   const api = props.api;

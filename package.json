@@ -29,7 +29,7 @@
     ],
     "mac": {
       "icon": "./electron/build/icon.icns"
-    },
+    }
   },
   "repository": {
     "type": "git",

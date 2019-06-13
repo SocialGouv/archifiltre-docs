@@ -4,7 +4,7 @@ const Path = require("path");
 const TarFs = require("tar-fs");
 const Zlib = require("zlib");
 const TarStream = require("tar-stream");
-const FileSaver = require("file-saver");
+import FileSaver from "file-saver";
 
 export function save(name, json) {
   const blob = new Blob([json], { type: "text/plain;charset=utf-8" });

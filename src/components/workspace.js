@@ -1,8 +1,8 @@
 import React from "react";
 
-import * as Color from "color";
+import * as Color from "util/color-util";
 import * as ObjectUtil from "util/object-util";
-import * as Cache from "cache";
+import * as Cache from "util/cache-util";
 
 import Icicle from "components/icicle/icicle-container";
 

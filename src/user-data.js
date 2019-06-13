@@ -1,5 +1,5 @@
 import * as ObjectUtil from "util/object-util";
-import * as NodeFsUtil from "util/node-fs-util";
+import * as FsUtil from "util/file-sys-util";
 
 const Fs = require("fs");
 const Path = require("path");
@@ -8,11 +8,11 @@ const Crypto = require("crypto");
 
 const App = require("electron").remote.app;
 
-const random_string = "WbXDHMMHojJEQHzY6TLFBq2LSOQjVktGRSp9HT07";
+const random_string  = "WbXDHMMHojJEQHzY6TLFBq2LSOQjVktGRSp9HT07";
 const base_path = Path.join(App.getPath("userData"), random_string);
 
 export const create = initial_obj => {
-  NodeFsUtil.mkdir(base_path);
+  FsUtil.mkdir(base_path);
 
   const keys = Object.keys(initial_obj);
   const hash = Crypto.createHash("sha256");

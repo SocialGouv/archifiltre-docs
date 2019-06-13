@@ -1,11 +1,11 @@
 import React from "react";
 
-import { request } from "request";
+import { request } from "util/http-util";
 import version from "version";
 
 import { mkB } from "components/button";
 
-import * as Color from "color";
+import * as Color from "util/color-util";
 
 import pick from "languages";
 

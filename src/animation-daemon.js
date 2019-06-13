@@ -1,4 +1,4 @@
-import { generateRandomString } from "random-gen";
+import { generateRandomString } from "util/random-gen-util";
 import { Map } from "immutable";
 
 const genId = () => generateRandomString(40);

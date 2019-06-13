@@ -3,7 +3,7 @@ import React from "react";
 import * as ObjectUtil from "util/object-util";
 import { mkB, mkRB } from "components/button";
 
-import * as Color from "color";
+import * as Color from "util/color-util";
 
 import pick from "languages";
 

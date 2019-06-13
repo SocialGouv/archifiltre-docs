@@ -5,7 +5,7 @@ import * as ObjectUtil from "util/object-util";
 import BreadCrumbText from "components/breadcrumb-text";
 import BreadCrumbPoly from "components/breadcrumb-poly";
 
-import * as Color from "color";
+import * as Color from "util/color-util";
 
 import pick from "languages";
 

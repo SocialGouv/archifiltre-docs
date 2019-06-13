@@ -1,4 +1,4 @@
-import { traverseFileTree, isJsonFile, readFileSync } from "traverse-file-tree";
+import { traverseFileTree, isJsonFile, readFileSync } from "util/file-sys-util";
 
 import * as VirtualFileSystem from "datastore/virtual-file-system";
 import { fromAnyJsonToJs } from "compatibility";

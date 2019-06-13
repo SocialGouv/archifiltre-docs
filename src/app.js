@@ -35,6 +35,7 @@ if (MODE === "production") {
   });
 }
 
+/**This is the entrypoint for the app. */
 const app = () => {
   let root_div = document.createElement("div");
   root_div.setAttribute("id", "root");

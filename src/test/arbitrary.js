@@ -1,6 +1,6 @@
 import { Map, List, Set } from "immutable";
 
-import { generateRandomString } from "random-gen";
+import { generateRandomString } from "util/random-gen-util";
 
 import colors from "colors/safe";
 

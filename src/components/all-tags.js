@@ -5,7 +5,7 @@ import * as ObjectUtil from "util/object-util";
 import TagListItem from "components/all-tags-item";
 import TextAlignCenter from "components/text-align-center";
 
-import * as Color from "color";
+import * as Color from "util/color-util";
 
 import pick from "languages";
 

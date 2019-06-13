@@ -18,7 +18,7 @@ import {
 
 import LastModifiedReporter from "components/last-modified-reporter";
 
-import * as Color from "color";
+import * as Color from "util/color-util";
 
 import pick from "languages";
 

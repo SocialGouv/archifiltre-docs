@@ -6,15 +6,6 @@ import TextAlignCenter from "components/text-align-center";
 
 import pick from "languages";
 
-import {
-  traverseFileTree,
-  isJsonFile,
-  readFileSync,
-  copyFileTree,
-  zipFileTree
-} from "util/file-sys-util";
-import FileSaver from "file-saver";
-
 const placeholder = pick({
   en: "Drop a directory here!",
   fr: "Glissez-déposez un répertoire ici !"
@@ -80,12 +71,13 @@ export default class FolderDropzone extends React.Component {
 
     this.props.api.loading_state.startToLoadFiles();
     AsyncHandleDrop(hook, e.dataTransfer.files[0].path).then(vfs => {
-      // console.log(vfs.toJS())
       this.props.api.database.set(vfs);
 
       this.props.api.loading_state.finishedToLoadFiles();
       this.props.api.undo.commit();
       console.log("finish handle drop");
+    }).catch((err) => {
+      console.error(err);
     });
   }
 

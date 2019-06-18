@@ -56,28 +56,3 @@ export const recTraverseFileTreeForHook = (hook, path) => {
     // Error to catch
   }
 };
-
-import JSZip from "jszip";
-
-const recZipFileTree = (hook, path, zip) => {
-  const stats = Fs.statSync(path);
-  if (stats.isDirectory()) {
-    Fs.readdirSync(path).map(a =>
-      recZipFileTree(hook, Path.join(path, a), zip)
-    );
-  } else {
-    hook();
-
-    const data = Fs.readFileSync(path);
-    // console.log(path)
-    zip.file(path, data);
-
-    // zip.file(new_path,'tuaisetnausitenrsautienausiten')
-  }
-};
-
-export const zipFileTree = (hook, dropped_folder_path) => {
-  const zip = new JSZip();
-  recZipFileTree(hook, dropped_folder_path, zip);
-  return zip.generateAsync({ type: "blob" });
-};

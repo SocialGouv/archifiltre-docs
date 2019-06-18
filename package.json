@@ -80,6 +80,7 @@
     "worker-loader": "1.1.1"
   },
   "dependencies": {
+    "@sentry/browser": "^5.4.0",
     "dateformat": "3.0.3",
     "electron-ga": "1.0.6",
     "file-saver": "2.0.2",

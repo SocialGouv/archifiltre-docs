@@ -5,6 +5,7 @@ import FolderDropzone from "components/folder-dropzone";
 import WorkSpace from "components/workspace";
 
 import WaitingScreen from "components/waiting-screen";
+import ErrorScreen from "./error-screen";
 
 const grid_style = {
   padding: "0em 5em"
@@ -16,7 +17,20 @@ const MainSpace = props => {
 
   const started = loading_state.isStarted();
   const finished = loading_state.isFinished();
+  const error = loading_state.isInError();
 
+  if (error === true) {
+    return (
+      <div
+        className="grid-y grid-padding-x grid-frame align-center"
+        style={grid_style}
+      >
+        <div className="cell small-8">
+          <ErrorScreen api={api} />
+        </div>
+      </div>
+    );
+  }
   if (started === false && finished === false) {
     return (
       <div
@@ -28,7 +42,8 @@ const MainSpace = props => {
         </div>
       </div>
     );
-  } else if (started === true && finished === false) {
+  }
+  if (started === true && finished === false) {
     return (
       <div className="grid-y grid-padding-x grid-frame align-center">
         <div className="cell small-8">
@@ -36,15 +51,14 @@ const MainSpace = props => {
         </div>
       </div>
     );
-  } else {
-    return (
-      <div className="grid-y grid-padding-x grid-frame align-center">
-        <div className="cell small-12">
-          <WorkSpace api={api} />
-        </div>
-      </div>
-    );
   }
+  return (
+    <div className="grid-y grid-padding-x grid-frame align-center">
+      <div className="cell small-12">
+        <WorkSpace api={api} />
+      </div>
+    </div>
+  );
 };
 
 export default MainSpace;

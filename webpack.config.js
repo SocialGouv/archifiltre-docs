@@ -29,11 +29,10 @@ module.exports = (env, argv) => ({
   target: "electron-renderer",
 
   devServer: {
-    contentBase: "./dist",
-    https: true,
+    contentBase: path.resolve(__dirname, "electron/dist"),
     port: 8000,
     compress: true,
-    hot: false,
+    hot: true,
     inline: false
   },
 

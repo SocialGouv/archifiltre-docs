@@ -8,7 +8,7 @@ const Crypto = require("crypto");
 
 const App = require("electron").remote.app;
 
-const random_string  = "WbXDHMMHojJEQHzY6TLFBq2LSOQjVktGRSp9HT07";
+const random_string = "WbXDHMMHojJEQHzY6TLFBq2LSOQjVktGRSp9HT07";
 const base_path = Path.join(App.getPath("userData"), random_string);
 
 export const create = initial_obj => {

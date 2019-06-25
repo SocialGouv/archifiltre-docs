@@ -15,6 +15,7 @@
     "mac": "electron-builder --mac dmg",
     "postinstall": "electron-builder install-app-deps package.json",
     "electron": "electron ./electron",
+    "electron-server": "export DEV_SERVER=true; electron ./electron",
     "start": "",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",

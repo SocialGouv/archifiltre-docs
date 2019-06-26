@@ -5,7 +5,8 @@ const State = Record({
   start: false,
   status: "",
   traverse_file_count: 0,
-  finish: false
+  finish: false,
+  error: false
 });
 
 const property_name = "loading_state";
@@ -16,14 +17,16 @@ const reader = {
   status: () => state => state.get("status"),
   count: () => state => state.get("traverse_file_count"),
   isStarted: () => state => state.get("start"),
-  isFinished: () => state => state.get("finish")
+  isFinished: () => state => state.get("finish"),
+  isInError: () => state => state.get("error")
 };
 
 const startToLoadFiles = () => state => {
   console.time("loaded");
-  state = state.update("start", () => true);
-  state = state.update("finish", () => false);
-  return state;
+  return state
+    .update("start", () => true)
+    .update("finish", () => false)
+    .update("error", () => false);
 };
 
 const setStatus = a => state => state.set("status", a);
@@ -31,9 +34,18 @@ const setCount = a => state => state.set("traverse_file_count", a);
 
 const finishedToLoadFiles = () => state => {
   console.timeEnd("loaded");
-  state = state.update("start", () => true);
-  state = state.update("finish", () => true);
-  return state;
+  return state
+    .update("start", () => true)
+    .update("finish", () => true)
+    .update("error", () => false);
+};
+
+const errorLoadingFiles = () => state => {
+  console.log("errorLoadingFiles");
+  return state
+    .update("start", () => true)
+    .update("finish", () => true)
+    .update("error", () => true);
 };
 
 const reInit = () => state => initialState();
@@ -43,6 +55,7 @@ const writer = {
   setStatus,
   setCount,
   finishedToLoadFiles,
+  errorLoadingFiles,
   reInit
 };
 

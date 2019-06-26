@@ -26,6 +26,20 @@ Then launch the application
 yarn electron
 ```
 
+### AutoReloading
+
+You can also use autoreloading, using
+
+```bash
+yarn devServer
+```
+
+```bash
+yarn electron-server
+```
+
+and then, reload your electron app with the refresh command (`CMD + R` on OSX)
+
 ### Pull requests
 
 If you want to contribute, you must respect our linter specs. You can run `yarn lint` for compliance test.

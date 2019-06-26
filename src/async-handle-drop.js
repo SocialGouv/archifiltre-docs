@@ -6,12 +6,11 @@ export default (hook, dropped_folder_path) => {
     const worker = new AsyncHandleDropWorker();
     worker.onmessage = e => {
       switch (e.data.status) {
-        case 'return':
-          const vfs = VirtualFileSystem.fromJs(e.data.vfs);
+        case "return":
           worker.terminate();
-          resolve(vfs);
+          resolve(VirtualFileSystem.fromJs(e.data.vfs));
           break;
-        case 'error':
+        case "error":
           worker.terminate();
           reject(e.data.message);
           break;

@@ -70,15 +70,17 @@ export default class FolderDropzone extends React.Component {
     };
 
     this.props.api.loading_state.startToLoadFiles();
-    AsyncHandleDrop(hook, e.dataTransfer.files[0].path).then(vfs => {
-      this.props.api.database.set(vfs);
-
-      this.props.api.loading_state.finishedToLoadFiles();
-      this.props.api.undo.commit();
-      console.log("finish handle drop");
-    }).catch((err) => {
-      console.error(err);
-    });
+    AsyncHandleDrop(hook, e.dataTransfer.files[0].path)
+      .then(vfs => {
+        this.props.api.database.set(vfs);
+        this.props.api.loading_state.finishedToLoadFiles();
+        this.props.api.undo.commit();
+        console.log("finish handle drop");
+      })
+      .catch(err => {
+        console.error(err);
+        this.props.api.loading_state.errorLoadingFiles();
+      });
   }
 
   render() {

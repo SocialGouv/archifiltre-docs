@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { animate, clear } from "animation-daemon";
 import { generateRandomString } from "util/random-gen-util";
-import Icicle from './icicle';
+import Icicle from "./icicle";
 
 export default class AnimatedIcicle extends PureComponent {
   constructor(props) {

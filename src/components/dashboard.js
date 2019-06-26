@@ -42,7 +42,11 @@ const DashBoard = props => {
     padding: "0.2em 0.8em"
   };
 
-  if (props.started === true && props.finished === true) {
+  if (
+    props.started === true &&
+    props.finished === true &&
+    props.error === false
+  ) {
     session_info_cell = (
       <div style={session_info_cell_style}>
         <span
@@ -91,12 +95,6 @@ const DashBoard = props => {
       </TextAlignCenter>
     );
 
-    reinit_button_cell = (
-      <TextAlignCenter>
-        <ReinitButton api={props.api} />
-      </TextAlignCenter>
-    );
-
     export_menu_cell = (
       <Bubble
         comp={
@@ -123,7 +121,16 @@ const DashBoard = props => {
     );
   }
 
-  if (props.started === props.finished) {
+  if (props.started === true && props.finished === true) {
+    console.log("reinit");
+    reinit_button_cell = (
+      <TextAlignCenter>
+        <ReinitButton api={props.api} />
+      </TextAlignCenter>
+    );
+  }
+
+  if (props.started === props.finished && props.error === false) {
     ctrlz_cell = <CtrlZ visible={true} api={props.api} />;
   }
 
@@ -151,6 +158,7 @@ export default function DashBoardApiToProps(props) {
   const loading_state = api.loading_state;
   const database = api.database;
   const finished = loading_state.isFinished();
+  const error = loading_state.isInError();
 
   const nb_files = database.fileCount();
   const nb_folders = database.overallCount() - nb_files;
@@ -167,6 +175,7 @@ export default function DashBoardApiToProps(props) {
     {
       started: loading_state.isStarted(),
       finished,
+      error,
       nb_files,
       nb_folders,
       volume,

@@ -1,5 +1,5 @@
 {
-  "name": "cheapExp",
+  "name": "archifiltre",
   "version": "1.0.0",
   "description": "Explorer plus plus for archive",
   "main": "electron/index.js",
@@ -35,14 +35,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jeanbaptisteassouad/cheapExp.git"
+    "url": "https://github.com/SocialGouv/archifiltre"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jeanbaptisteassouad/cheapExp/issues"
+    "url": "https://github.com/SocialGouv/archifiltre/issues"
   },
-  "homepage": "https://github.com/jeanbaptisteassouad/cheapExp#readme",
+  "homepage": "https://github.com/SocialGouv/archifiltre#readme",
   "devDependencies": {
     "@socialgouv/eslint-config-react": "^0.6.0",
     "babel-cli": "6.26.0",

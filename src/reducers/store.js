@@ -1,6 +1,7 @@
 import React from "react";
 import root_reducer from "reducers/root-reducer";
 import * as ObjectUtil from "util/object-util";
+import { compose } from "../util/function-util";
 
 function makeStore(compiled_real_estate) {
   const initialState = compiled_real_estate.initialState;
@@ -30,12 +31,30 @@ function makeStore(compiled_real_estate) {
       });
 
       writer_key.forEach(key => {
-        this.api[key] = (...args) => this.setState(flat_api[key](...args));
+        this.api[key] = (...args) => this.updateState(key, args);
       });
 
       this.api = unflattenApi(this.api);
 
       this.getApi = () => Object.assign({}, this.api);
+    }
+
+    updateState(key, args) {
+      /* We prevent multiple rerendering on a single call stack by chaining all the state modifications and updating the
+        state only once every callstack */
+      if (!this.stateChangePending) {
+        this.stateChangePending = true;
+        this.upcomingStateChange = state => state;
+        setImmediate(() => {
+          this.stateChangePending = false;
+          this.setState(this.upcomingStateChange);
+        });
+      }
+      // We chain all the state updates and calls them afterwards
+      this.upcomingStateChange = compose(
+        this.upcomingStateChange,
+        flat_api[key](...args)
+      );
     }
 
     render() {

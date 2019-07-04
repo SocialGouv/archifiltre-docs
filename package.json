@@ -12,7 +12,7 @@
     "watchBuildDev": "webpack --watch --progress --mode development",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "windows": "electron-builder --windows portable --x64",
+    "windows": "electron-builder --windows portable --ia32 --x64",
     "mac": "electron-builder --mac dmg",
     "postinstall": "electron-builder install-app-deps package.json",
     "electron": "electron ./electron",
@@ -32,6 +32,9 @@
     ],
     "mac": {
       "icon": "./electron/build/icon.icns"
+    },
+    "win": {
+      "icon": "./electron/build/icon.png"
     }
   },
   "repository": {

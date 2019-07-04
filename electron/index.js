@@ -75,7 +75,6 @@ function createWindow() {
   });
 
   // and load the index.html of the app.
-  console.log(process.env.DEV_SERVER);
   if (process.env.DEV_SERVER !== "true") {
     win.loadFile(path.join(__dirname, "dist/index.html"));
   } else {

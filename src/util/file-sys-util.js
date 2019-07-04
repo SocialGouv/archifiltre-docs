@@ -246,14 +246,20 @@ const recTraverseFileTree = (hook, path) => {
 
 const convertToPosixPath = path => path.split(Path.sep).join("/");
 
-export const traverseFileTree = (hook, dropped_folder_path) => {
-  let origin = recTraverseFileTree(hook, dropped_folder_path);
-  dropped_folder_path = Path.dirname(dropped_folder_path);
+/**
+ * Calls the hook function for every file in the tree
+ * @param hook - The function called for each file
+ * @param folderPath - The path of the folder to traverse.
+ * @returns {[string, Array]} - folderPath and array containing all the files
+ */
+export const traverseFileTree = (hook, folderPath) => {
+  let origin = recTraverseFileTree(hook, folderPath);
+  folderPath = Path.dirname(folderPath);
   origin = origin.map(([file, path]) => [
     file,
-    convertToPosixPath(path.slice(dropped_folder_path.length))
+    convertToPosixPath(path.slice(folderPath.length))
   ]);
-  return [dropped_folder_path, origin];
+  return [folderPath, origin];
 };
 
 export function isJsonFile(path) {

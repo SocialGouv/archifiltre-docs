@@ -5,7 +5,7 @@ const webpack = require("webpack");
 
 const env = process.env.NODE_ENV;
 
-module.exports = (env, argv) => ({
+module.exports = (env, argv = {}) => ({
   devtool: "source-map",
   entry: {
     app: "./src/app.js",
@@ -22,7 +22,7 @@ module.exports = (env, argv) => ({
       excludeChunks: ["stats"]
     }),
     new webpack.DefinePlugin({
-      MODE: JSON.stringify(argv.mode)
+      MODE: JSON.stringify(argv.mode || "development")
     })
   ],
 

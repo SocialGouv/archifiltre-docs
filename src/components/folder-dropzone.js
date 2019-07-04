@@ -67,6 +67,9 @@ export default class FolderDropzone extends React.Component {
       if (a.count) {
         this.props.api.loading_state.setCount(a.count);
       }
+      if (a.totalCount) {
+        this.props.api.loading_state.setTotalCount(a.totalCount);
+      }
     };
 
     this.props.api.loading_state.startToLoadFiles();

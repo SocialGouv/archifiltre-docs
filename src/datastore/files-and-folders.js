@@ -37,7 +37,7 @@ const fileOrFolderFactory = RecordUtil.createFactory(
   }
 );
 
-export const ff = a => {
+export const ff = (a, hook) => {
   const mapper = ([file, path]) => {
     const names = path.split("/");
     const ids = names.map((name, i) => names.slice(0, i + 1).join("/"));
@@ -65,6 +65,11 @@ export const ff = a => {
         return a;
       });
     });
+
+    if (hook) {
+      hook(m);
+    }
+
     return m;
   };
 
@@ -211,9 +216,8 @@ const sortChildren = (children_ans_array, a) => {
   return a;
 };
 
-export const computeDerived = m => {
+export const computeDerived = (m, hook) => {
   m = m.map(fileOrFolderFactory);
-
   const reducer = ([children_ans_array, node]) => {
     let ans;
     if (children_ans_array.length === 0) {
@@ -237,6 +241,11 @@ export const computeDerived = m => {
       ans,
       node
     );
+
+    if (hook) {
+      hook("reducedFilesAndFolders", ans, node);
+    }
+
     return [ans, node];
   };
   let [_, next_m] = reduce(reducer, m);
@@ -244,6 +253,11 @@ export const computeDerived = m => {
   const diver = ([parent_ans, node]) => {
     node = node.set("depth", parent_ans);
     parent_ans = parent_ans + 1;
+
+    if (hook) {
+      hook("divedFilesAndFolders", parent_ans, node);
+    }
+
     return [parent_ans, node];
   };
   next_m = dive(diver, 0, next_m);

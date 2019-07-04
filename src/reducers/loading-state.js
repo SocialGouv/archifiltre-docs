@@ -5,6 +5,7 @@ const State = Record({
   start: false,
   status: "",
   traverse_file_count: 0,
+  total_count: 0,
   finish: false,
   error: false
 });
@@ -16,6 +17,7 @@ const initialState = () => new State();
 const reader = {
   status: () => state => state.get("status"),
   count: () => state => state.get("traverse_file_count"),
+  totalCount: () => state => state.get("total_count"),
   isStarted: () => state => state.get("start"),
   isFinished: () => state => state.get("finish"),
   isInError: () => state => state.get("error")
@@ -31,6 +33,7 @@ const startToLoadFiles = () => state => {
 
 const setStatus = a => state => state.set("status", a);
 const setCount = a => state => state.set("traverse_file_count", a);
+const setTotalCount = a => state => state.set("total_count", a);
 
 const finishedToLoadFiles = () => state => {
   console.timeEnd("loaded");
@@ -54,6 +57,7 @@ const writer = {
   startToLoadFiles,
   setStatus,
   setCount,
+  setTotalCount,
   finishedToLoadFiles,
   errorLoadingFiles,
   reInit

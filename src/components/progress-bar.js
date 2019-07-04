@@ -24,7 +24,6 @@ const fillerStyle = {
 };
 
 const ProgressBar = ({ percentage }) => {
-  console.log(percentage);
   const fillerFullStyle = { ...fillerStyle, width: `${percentage}%` };
   return (
     <div style={progressBarStyle}>

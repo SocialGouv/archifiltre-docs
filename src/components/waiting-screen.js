@@ -2,6 +2,7 @@ import React from "react";
 
 import * as ObjectUtil from "util/object-util";
 import pick from "languages";
+import ProgressBar from "./progress-bar";
 
 const Loading = () => {
   const text = pick({
@@ -12,86 +13,148 @@ const Loading = () => {
   return <p>{text}</p>;
 };
 
-const Traverse = props => {
-  const count = props.count;
+const Traverse = ({ count, totalCount, complete }) => {
   const text = pick({
     en: "Files loaded",
     fr: "Fichiers chargés"
   });
 
   return (
-    <p>
-      {text}: {count}
-    </p>
+    <div>
+      {text}: {complete ? totalCount : count}
+    </div>
   );
 };
 
-const Make = () => {
-  const text = pick({
-    en: "Construction of the data model",
-    fr: "Construction du model de donnée"
-  });
+/**
+ * Creates a loader component with the appropriate text
+ * @param {Object} textMap - A text object with the different languages
+ * @returns {React.Component}
+ */
+const makeLoadingComponent = textMap => {
+  const text = pick(textMap);
 
-  return <p>{text}</p>;
+  const LoadingComponent = ({ count, totalCount, complete, waiting }) => {
+    let displayedCount;
+    if (waiting === true) {
+      displayedCount = 0;
+    } else if (complete === true) {
+      displayedCount = totalCount;
+    } else {
+      displayedCount = count;
+    }
+
+    const percentage = totalCount ? (displayedCount / totalCount) * 100 : 0;
+
+    return (
+      <div>
+        {text} : <ProgressBar percentage={percentage} />
+      </div>
+    );
+  };
+
+  return LoadingComponent;
 };
 
-const Derivate = () => {
-  const text = pick({
-    en: "Computation of the derivative data",
-    fr: "Calcul des données dérivées"
-  });
+const Make = makeLoadingComponent({
+  en: "Construction of the data model",
+  fr: "Construction du modèle de données"
+});
 
-  return <p>{text}</p>;
-};
+const DerivateFF = makeLoadingComponent({
+  en: "Computation of the derivative data from file and folders",
+  fr: "Calcul des données dérivées des fichiers et dossiers"
+});
+
+const DivedFF = makeLoadingComponent({
+  en: "Computation of file depth",
+  fr: "Calcul de la profondeur des fichiers"
+});
 
 const cell_style = {
   textAlign: "center"
 };
 
-class Presentational extends React.Component {
-  constructor(props) {
-    super(props);
+const statusMap = {
+  traverse: 0,
+  make: 1,
+  derivateFF: 2,
+  divedFF: 3
+};
+
+const statusComponents = [
+  {
+    index: statusMap.traverse,
+    Component: Traverse
+  },
+  {
+    index: statusMap.make,
+    Component: Make
+  },
+  {
+    index: statusMap.derivateFF,
+    Component: DerivateFF
+  },
+  {
+    index: statusMap.divedFF,
+    Component: DivedFF
   }
+];
 
-  render() {
-    const props = this.props;
-    const status = props.status;
-    const count = props.count;
+const LoadingMessages = ({ status, count, totalCount }) => {
+  const currentStatusIndex = statusMap[status];
 
-    return (
-      <div className="grid-y grid-frame align-center">
-        <div className="cell">
-          <div style={cell_style}>
-            <img
-              alt="loading"
-              src="imgs/loading.gif"
-              style={{ width: "50%", opacity: "0.3" }}
-            />
-            {status === "loading" && <Loading />}
-            {status === "traverse" && <Traverse count={count} />}
-            {status === "make" && <Make />}
-            {status === "derivate" && <Derivate />}
-          </div>
-        </div>
+  return (
+    <React.Fragment>
+      {statusComponents.map(({ index, Component }) => (
+        <Component
+          key={index}
+          count={count}
+          totalCount={totalCount}
+          complete={currentStatusIndex > index}
+          waiting={currentStatusIndex < index}
+        />
+      ))}
+    </React.Fragment>
+  );
+};
+
+const Presentational = ({ status, count, totalCount }) => (
+  <div className="grid-y grid-frame align-center">
+    <div className="cell">
+      <div style={cell_style}>
+        <img
+          alt="loading"
+          src="imgs/loading.gif"
+          style={{ width: "50%", opacity: "0.3" }}
+        />
+        {status === "loading" && <Loading />}
+        <LoadingMessages
+          status={status}
+          count={count}
+          totalCount={totalCount}
+        />
       </div>
-    );
-  }
-}
+    </div>
+  </div>
+);
 
-export default props => {
-  const api = props.api;
-
-  const loading_state = api.loading_state;
+const WaitingScreen = props => {
+  const {
+    api: { loading_state }
+  } = props;
   const status = loading_state.status();
   const count = loading_state.count();
+  const totalCount = loading_state.totalCount();
 
-  props = ObjectUtil.compose(
-    {
-      status,
-      count
-    },
-    props
+  return (
+    <Presentational
+      {...props}
+      status={status}
+      count={count}
+      totalCount={totalCount}
+    />
   );
-
-  return <Presentational {...props} />;
 };
+
+export default WaitingScreen;

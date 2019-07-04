@@ -37,19 +37,46 @@ const virtualFileSystem = RecordUtil.createFactory(
   }
 );
 
-export const make = (origin, path) =>
+/**
+ * Create the virtual file system
+ * @param {Array} origin - The list of the extracted files
+ * @param {string} path - The base folder path
+ * @param {function} [hook] - A hook called after each file treatment
+ * @returns {*}
+ */
+export const make = (origin, path, hook) =>
   virtualFileSystem({
-    files_and_folders: FilesAndFolders.ff(origin),
+    files_and_folders: FilesAndFolders.ff(origin, hook),
     original_path: path
   });
 
+/**
+ * Compute derivated data about tags
+ * @param vfs - A VirtualFileSystem instance
+ * @returns {*}
+ */
 export const derivateTags = vfs =>
   vfs.update("tags", tags => Tags.update(vfs.get("files_and_folders"), tags));
 
-export const derivateFilesAndFolders = vfs =>
-  vfs.update("files_and_folders", FilesAndFolders.computeDerived);
+/**
+ * Compute derivated data about filesAndFolder
+ * @param vfs - A VirtualFileSystem instance
+ * @param hook - A hook called after each treated file to track progress
+ * @returns {*} - A VirtualFileSystem instance with enriched filesAndFolders data.
+ */
+export const derivateFilesAndFolders = (vfs, hook) =>
+  vfs.update("files_and_folders", ff =>
+    FilesAndFolders.computeDerived(ff, hook)
+  );
 
-export const derivate = vfs => derivateTags(derivateFilesAndFolders(vfs));
+/**
+ * Compute derivated data from the Virtual File System
+ * @param vfs - A VirtualFileSystem instance
+ * @param hook - A hook called after each treated file to track progress
+ * @returns {*} - A VirtualFileSystem instance with enriched data.
+ */
+export const derivate = (vfs, hook) =>
+  derivateTags(derivateFilesAndFolders(vfs, hook));
 
 export const toJs = virtualFileSystem.toJs;
 export const fromJs = virtualFileSystem.fromJs;

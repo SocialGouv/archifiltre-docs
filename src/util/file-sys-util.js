@@ -1,10 +1,14 @@
 const Fs = require("fs");
 const Path = require("path");
+const util = require("util");
 
 const TarFs = require("tar-fs");
 const Zlib = require("zlib");
 const TarStream = require("tar-stream");
 import FileSaver from "file-saver";
+import { sha512 } from "js-sha512";
+
+const readFilePromise = util.promisify(Fs.readFile);
 
 export function save(name, json) {
   const blob = new Blob([json], { type: "text/plain;charset=utf-8" });
@@ -310,4 +314,9 @@ export const zipFileTree = (hook, dropped_folder_path) => {
   const zip = new JSZip();
   recZipFileTree(hook, dropped_folder_path, zip);
   return zip.generateAsync({ type: "blob" });
+};
+
+export const hashFile = async filePath => {
+  const fileData = await readFilePromise(filePath);
+  return sha512(fileData);
 };

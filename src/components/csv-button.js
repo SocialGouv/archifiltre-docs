@@ -4,22 +4,24 @@ import { mkB } from "components/button";
 
 import * as Csv from "csv";
 import { save, makeNameWithExt } from "util/file-sys-util";
-
-import pick from "languages";
+import { fileAndFoldersToCsv } from "../util/export-util";
 
 const label = "CSV";
 
 const CsvButton = props => {
   const api = props.api;
   const database = api.database;
-  const getStrList2 = database.toStrList2;
   const getSessionName = database.getSessionName;
 
   const name = () => makeNameWithExt(getSessionName(), "csv");
   return mkB(
-    () => {
-      console.log("to csv");
-      save(name(), Csv.toStr(getStrList2()));
+    async () => {
+      const csvStructure = await fileAndFoldersToCsv(
+        database.getAllFf(),
+        database.getAllTags(),
+        database.getOriginalPath()
+      );
+      save(name(), Csv.toStr(csvStructure));
     },
     label,
     true,

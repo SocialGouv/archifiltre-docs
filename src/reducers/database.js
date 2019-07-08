@@ -19,6 +19,7 @@ const fileCount = () => state =>
   state.get("files_and_folders").filter(a => a.get("children").size === 0).size;
 
 const getFfByFfId = id => state => state.get("files_and_folders").get(id);
+const getAllFf = () => state => state.get("files_and_folders");
 const rootFfId = () => state => "";
 
 const maxDepth = () => state =>
@@ -103,6 +104,8 @@ const getAllTagIds = () => state =>
     .keySeq()
     .toList();
 
+const getAllTags = () => state => state.get("tags");
+
 const getTagByTagId = id => state => getIn(state, ["tags", id]);
 
 const getWaitingCounter = () => state => 0;
@@ -111,6 +114,7 @@ const reader = {
   overallCount,
   fileCount,
   getFfByFfId,
+  getAllFf,
   rootFfId,
   maxDepth,
   volume,
@@ -123,6 +127,7 @@ const reader = {
   getTagIdsByFfId,
   getAllTagIds,
   getTagByTagId,
+  getAllTags,
   getWaitingCounter
 };
 

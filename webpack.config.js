@@ -3,8 +3,6 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 
-const env = process.env.NODE_ENV;
-
 module.exports = (env, argv = {}) => ({
   devtool: "source-map",
   entry: {

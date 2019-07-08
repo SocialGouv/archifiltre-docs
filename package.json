@@ -57,16 +57,15 @@
   },
   "homepage": "https://github.com/SocialGouv/archifiltre#readme",
   "devDependencies": {
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.1",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/preset-env": "^7.5.0",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
     "@socialgouv/eslint-config-react": "^0.6.0",
-    "babel-cli": "6.26.0",
-    "babel-core": "6.26.0",
-    "babel-loader": "7.1.3",
-    "babel-plugin-syntax-dynamic-import": "6.18.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "1.6.1",
-    "babel-preset-flow": "6.23.0",
-    "babel-preset-react": "6.24.1",
-    "babel-register": "6.26.0",
+    "babel-loader": "^8.0.6",
     "chai": "4.1.2",
     "chai-exclude": "1.0.8",
     "colors": "1.2.1",
@@ -105,6 +104,7 @@
   },
   "dependencies": {
     "@sentry/browser": "^5.4.0",
+    "core-js": "^3.1.4",
     "dateformat": "3.0.3",
     "electron-ga": "1.0.6",
     "file-saver": "2.0.2",
@@ -119,7 +119,6 @@
     "tar-fs": "1.16.3",
     "tar-stream": "1.6.2",
     "what-input": "^5.2.1",
-    "workbox-webpack-plugin": "3.1.0",
     "xml": "1.0.1"
   }
 }

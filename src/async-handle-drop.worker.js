@@ -5,7 +5,6 @@ import { fromAnyJsonToJs } from "compatibility";
 
 import version from "version";
 import { reportError, reportMessage } from "./reporter";
-import { derivate } from "datastore/virtual-file-system";
 import { hookCounter } from "./util/hook-utils";
 
 /**

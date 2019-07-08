@@ -34,6 +34,18 @@
       "icon": "./electron/build/icon.icns"
     }
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && yarn test"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --list-different",
+      "git add"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/SocialGouv/archifiltre"
@@ -69,13 +81,16 @@
     "flow-bin": "0.66.0",
     "flow-webpack-plugin": "1.2.0",
     "html-webpack-plugin": "3.2.0",
+    "husky": "^3.0.0",
     "image-webpack-loader": "^4.6.0",
     "jsdoc-to-markdown": "5.0.0",
     "jsdom": "^15.1.1",
     "jsdom-global": "^3.0.2",
+    "lint-staged": "^9.1.0",
     "mocha": "5.0.5",
     "mochapack": "^1.1.1",
     "node-sass": "^4.12.0",
+    "prettier": "^1.18.2",
     "sass-loader": "^7.1.0",
     "sinon": "5",
     "sinon-chai": "^3.3.0",

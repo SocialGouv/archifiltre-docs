@@ -1,6 +1,3 @@
-import chai from "chai";
-const should = chai.should();
-
 import * as Loop from "test/loop";
 import * as Arbitrary from "test/arbitrary";
 import * as M from "util/array-util";
@@ -16,6 +13,6 @@ describe("array-util", function() {
 
   it("join", () => {
     const a = [[1, 2, 3], [3, 5], [9]];
-    M.join(a).should.deep.equal([1, 2, 3, 3, 5, 9]);
+    expect(M.join(a)).toEqual([1, 2, 3, 3, 5, 9]);
   });
 });

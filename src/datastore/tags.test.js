@@ -1,9 +1,3 @@
-import chai from "chai";
-const should = chai.should();
-const expect = chai.expect;
-
-import * as Loop from "test/loop";
-import * as Arbitrary from "test/arbitrary";
 import * as FilesAndFolders from "datastore/files-and-folders";
 import * as M from "datastore/tags";
 
@@ -39,7 +33,7 @@ describe("tags", function() {
     const test = (a, updater, predicates) => {
       Object.keys(updater).forEach(key => (a = a.update(key, updater[key])));
       Object.keys(predicates).forEach(key =>
-        [key, a.get(key)].should.deep.equal([key, predicates[key]])
+        expect(a.get(key)).toEqual(predicates[key])
       );
     };
 
@@ -68,6 +62,6 @@ describe("tags", function() {
       size: 5
     });
 
-    expect(getter("V", tags)).to.be.undefined;
+    expect(getter("V", tags)).not.toBeDefined();
   });
 });

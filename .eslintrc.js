@@ -1,27 +1,25 @@
 module.exports = {
-  extends: [
-    '@socialgouv/eslint-config-react'
-  ],
+  extends: ["@socialgouv/eslint-config-react"],
   rules: {
-    'import/no-unresolved': 'off',
-    'react/prop-types': 'off',
-    'no-unused-vars': 'off',
-    'jsx-a11y/mouse-events-have-key-events': 'off',
-    'no-console': 'off',
-    'jsx-a11y/click-events-have-key-events': 'off',
-    'jsx-a11y/interactive-supports-focus': 'off',
-    'jsx-a11y/no-static-element-interactions': 'off',
-    'jsx-a11y/anchor-is-valid': 'off'
+    "import/no-unresolved": "off",
+    "react/prop-types": "off",
+    "no-unused-vars": "off",
+    "jsx-a11y/mouse-events-have-key-events": "off",
+    "no-console": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/interactive-supports-focus": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/anchor-is-valid": "off"
   },
   globals: {
-    MODE: 'readonly',
+    MODE: "readonly"
   },
   overrides: [
     {
-      files: ['src/**/*.test.js'],
+      files: ["src/**/*.test.js", "src/test/**/*.js"],
       env: {
-        mocha: true
-      },
+        jest: true
+      }
     }
   ]
 };

@@ -1,6 +1,3 @@
-import chai from "chai";
-const should = chai.should();
-
 import { compose } from "./function-util";
 
 describe("functionUtil", () => {
@@ -14,7 +11,7 @@ describe("functionUtil", () => {
         firstFunction
       );
 
-      composed("base").should.equal("base:first:second");
+      expect(composed("base")).toBe("base:first:second");
     });
   });
 });

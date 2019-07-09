@@ -2,7 +2,6 @@ import React from "react";
 
 import version from "version";
 
-import { font_playfair } from "css/app.css";
 import Dashboard from "components/dashboard";
 
 import pick from "languages";
@@ -31,7 +30,7 @@ const Header = props => {
       <div className="cell small-3" style={{ paddingTop: "1.5em" }}>
         <span style={{ lineHeight: "1.5em" }}>
           <div style={{ fontSize: "2em" }}>
-            <b className={font_playfair}>{title}</b>
+            <b className="font_playfair">{title}</b>
           </div>
           <div style={{ fontSize: "0.7em" }}>
             {"v" + version + " Jazzy Jellyfish • "}

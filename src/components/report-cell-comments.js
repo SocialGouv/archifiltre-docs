@@ -1,7 +1,5 @@
 import React from "react";
 
-import { edit_hover_container, edit_hover_pencil } from "css/app.css";
-
 import * as ObjectUtil from "util/object-util";
 
 import CommentsEditable from "components/comments-editable";
@@ -168,7 +166,7 @@ class ReportCellComments extends React.Component {
       return (
         <div
           ref={setWrapperRef}
-          className={"cell small-6 " + edit_hover_container}
+          className="cell small-6 edit_hover_container"
           style={cells_style}
           onClick={onClick}
         >
@@ -177,7 +175,7 @@ class ReportCellComments extends React.Component {
             <span>
               &ensp;
               <i
-                className={"fi-pencil " + edit_hover_pencil}
+                className="fi-pencil edit_hover_pencil"
                 style={{ opacity: "0.3" }}
               />
             </span>

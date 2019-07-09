@@ -2,8 +2,6 @@ import React from "react";
 
 import * as ObjectUtil from "util/object-util";
 
-import { tags_bubble, tags_cross } from "css/app.css";
-
 const tag_style = {
   color: "white",
   backgroundColor: "rgb(10, 50, 100)",
@@ -24,7 +22,7 @@ const Tag = props => {
 
   const cross = (
     <div
-      className={tags_bubble + " " + tags_cross}
+      className="tags_bubble  tags_cross"
       onMouseUp={e => {
         e.stopPropagation();
         removeHandler();

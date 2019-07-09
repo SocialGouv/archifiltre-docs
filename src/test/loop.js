@@ -1,10 +1,3 @@
-/* eslint-disable no-undef */
-import chai from "chai";
-import chaiExclude from "chai-exclude";
-chai.use(chaiExclude);
-
-const expect = chai.expect;
-
 import { is } from "immutable";
 
 import colors from "colors/safe";
@@ -51,21 +44,28 @@ export const iter = (f, nb = 100) => {
 };
 
 export const equal = (str, f) => {
-  it(str, function() {
-    iter(() => {
-      const [a, b] = f();
-      expect(a).to.deep.equal(b);
-    });
-  }).timeout(10000);
+  it(
+    str,
+    function() {
+      iter(() => {
+        const [a, b] = f();
+        expect(a).toEqual(b);
+      });
+    },
+    10000
+  );
 };
 
 export const immuEqual = (str, f) => {
-  it(str, function() {
-    iter(() => {
-      const [a, b] = f();
-      // expect(a).excludingEvery('ownerID').to.deep.equal(b)
-      expect(a.toJS()).to.deep.equal(b.toJS());
-      expect(is(a, b)).to.equal(true);
-    });
-  }).timeout(10000);
+  it(
+    str,
+    function() {
+      iter(() => {
+        const [a, b] = f();
+        expect(a.toJS()).toEqual(b.toJS());
+        expect(is(a, b)).toEqual(true);
+      });
+    },
+    10000
+  );
 };

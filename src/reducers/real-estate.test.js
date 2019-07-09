@@ -1,25 +1,8 @@
-import chai from "chai";
-const should = chai.should();
-
-import * as Loop from "test/loop";
-import * as Arbitrary from "test/arbitrary";
 import * as M from "reducers/real-estate";
 
 import * as ObjectUtil from "util/object-util";
 
 describe("real-estate", function() {
-  // Loop.equal('compose : a . empty === empty . a', () => {
-  //   const a = M.arbitrary()
-  //   return [M.compose(a,M.empty()), M.compose(M.empty(),a)]
-  // })
-
-  // Loop.equal('compose : a . (b . c) === (a . b) . c', () => {
-  //   const a = M.arbitrary()
-  //   const b = M.arbitrary()
-  //   const c = M.arbitrary()
-  //   return [M.compose(a,M.compose(b,c)), M.compose(M.compose(a,b),c)]
-  // })
-
   const state1 = M.create({
     property_name: "state1",
     initialState: () => 0,
@@ -80,7 +63,7 @@ describe("real-estate", function() {
 
     let store = initialState();
 
-    store.should.deep.equal({
+    expect(store).toEqual({
       state1: 0,
       state2: {
         baba: "baba"
@@ -91,22 +74,16 @@ describe("real-estate", function() {
     store = api.state1.add(10)(store);
     store = api.state1.sub(6)(store);
 
-    store.should.deep.equal({
+    expect(store).toEqual({
       state1: 4,
       state2: {
         baba: "ahah"
       }
     });
 
-    api.state2
-      .read()(store)
-      .should.deep.equal("ahah");
-    api.state1
-      .isZero()(store)
-      .should.deep.equal(false);
-    api.state1
-      .print("titre")(store)
-      .should.deep.equal("titre : 4");
+    expect(api.state2.read()(store)).toBe("ahah");
+    expect(api.state1.isZero()(store)).toBe(false);
+    expect(api.state1.print("titre")(store)).toBe("titre : 4");
   });
 
   it("higher order test", () => {
@@ -122,7 +99,7 @@ describe("real-estate", function() {
 
     let store = initialState();
 
-    store.should.deep.equal({
+    expect(store).toEqual({
       ho: {
         origin: {
           state1: 0,
@@ -143,7 +120,7 @@ describe("real-estate", function() {
     store = api.state1.add(10)(store);
     store = api.state1.sub(6)(store);
 
-    store.should.deep.equal({
+    expect(store).toEqual({
       ho: {
         origin: {
           state1: 0,
@@ -160,37 +137,27 @@ describe("real-estate", function() {
       }
     });
 
-    api.state2
-      .read()(store)
-      .should.deep.equal("ahah");
-    api.state1
-      .isZero()(store)
-      .should.deep.equal(false);
-    api.state1
-      .print("titre")(store)
-      .should.deep.equal("titre : 4");
+    expect(api.state2.read()(store)).toBe("ahah");
+    expect(api.state1.isZero()(store)).toBe(false);
+    expect(api.state1.print("titre")(store)).toBe("titre : 4");
 
-    api.ho
-      .getCurrent()(store)
-      .should.deep.equal({
-        state1: 4,
-        state2: {
-          baba: "ahah"
-        }
-      });
+    expect(api.ho.getCurrent()(store)).toEqual({
+      state1: 4,
+      state2: {
+        baba: "ahah"
+      }
+    });
 
     store = api.ho.goBackToOrigin()(store);
 
-    api.ho
-      .getCurrent()(store)
-      .should.deep.equal({
-        state1: 0,
-        state2: {
-          baba: "baba"
-        }
-      });
+    expect(api.ho.getCurrent()(store)).toEqual({
+      state1: 0,
+      state2: {
+        baba: "baba"
+      }
+    });
 
-    store.should.deep.equal({
+    expect(store).toEqual({
       ho: {
         origin: {
           state1: 0,
@@ -228,18 +195,18 @@ describe("real-estate", function() {
 
     let store = initialState();
 
-    store.should.deep.equal({ state: 0 });
+    expect(store).toEqual({ state: 0 });
 
-    sideeffect.should.equal(0);
+    expect(sideeffect).toBe(0);
     api.state.isZero()(store);
-    sideeffect.should.equal(1);
+    expect(sideeffect).toBe(1);
     api.state.isZero()(store);
-    sideeffect.should.equal(1);
+    expect(sideeffect).toBe(1);
 
     store = api.state.add(10)(store);
     api.state.isZero()(store);
-    sideeffect.should.equal(2);
+    expect(sideeffect).toBe(2);
     api.state.isZero()(store);
-    sideeffect.should.equal(2);
+    expect(sideeffect).toBe(2);
   });
 });

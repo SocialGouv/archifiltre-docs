@@ -1,51 +1,45 @@
-import sinon from "sinon";
-import chai from "chai";
-import sinonChai from "sinon-chai";
-
-chai.use(sinonChai);
-
-const { expect } = chai;
-
 import { hookCounter } from "./hook-utils";
+import { advanceBy, advanceTo } from "jest-date-mock";
+
+const setup = options => {
+  const throttledHook = jest.fn();
+  const { hook, getCount } = hookCounter(throttledHook, options);
+  advanceTo(new Date());
+  return {
+    throttledHook,
+    hook,
+    getCount
+  };
+};
 
 describe("hookUtils", () => {
   describe("hookCounter", () => {
-    let clock;
-    beforeEach(() => {
-      clock = sinon.useFakeTimers();
-    });
-
-    afterEach(() => {
-      clock.restore();
-    });
     describe("with default interval", () => {
       it("should debounce correctly", () => {
-        const throttledHook = sinon.spy();
-        const { hook, getCount } = hookCounter(throttledHook);
+        const { hook, getCount, throttledHook } = setup();
         hook();
-        clock.tick(200);
+        advanceBy(200);
         hook();
-        expect(throttledHook).to.have.not.been.called;
-        clock.tick(400);
+        expect(throttledHook).not.toBeCalled();
+        advanceBy(400);
         hook();
-        expect(throttledHook).to.have.been.calledOnce;
-        expect(throttledHook).to.have.been.calledWith(3);
+        expect(throttledHook).toBeCalledTimes(1);
+        expect(throttledHook).toBeCalledWith(3);
       });
     });
 
     describe("with custom interval", () => {
       it("should debounce correctly", () => {
-        const throttledHook = sinon.spy();
-        const { hook, getCount } = hookCounter(throttledHook, {
+        const { hook, getCount, throttledHook } = setup({
           interval: 300
         });
         hook();
-        clock.tick(200);
+        advanceBy(200);
         hook();
-        clock.tick(200);
+        advanceBy(200);
         hook();
-        expect(throttledHook).to.have.been.calledOnce;
-        expect(throttledHook).to.have.been.calledWith(3);
+        expect(throttledHook).toBeCalledTimes(1);
+        expect(throttledHook).toBeCalledWith(3);
       });
     });
   });

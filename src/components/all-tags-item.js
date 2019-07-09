@@ -2,16 +2,6 @@ import React from "react";
 
 import Tag from "components/tag";
 
-import {
-  tags_bubble,
-  tags_count,
-  tags_add,
-  tags_cross,
-  edit_hover_container,
-  edit_hover_pencil,
-  background
-} from "css/app.css";
-
 import pick from "languages";
 
 const rename_tag_placeholder = pick({
@@ -90,30 +80,22 @@ class AllTagsItem extends React.Component {
     };
 
     let delete_bubble = (
-      <div
-        className={tags_bubble + " " + tags_cross}
-        onClick={this.props.deleteTag}
-      >
+      <div className="tags_bubble tags_cross" onClick={this.props.deleteTag}>
         <i className="fi-trash" />
       </div>
     );
 
     let count_or_action_bubble = this.props.shoud_display_count ? (
-      <div className={tags_bubble + " " + tags_count}>
-        {this.props.tag_number}
-      </div>
+      <div className="tags_bubble tags_count">{this.props.tag_number}</div>
     ) : this.props.node_has_tag ? (
       <div
-        className={tags_bubble + " " + tags_cross}
+        className="tags_bubble tags_cross"
         onClick={this.props.removeTagFromNode}
       >
         <i className="fi-x" />
       </div>
     ) : (
-      <div
-        className={tags_bubble + " " + tags_add}
-        onClick={this.props.addTagToNode}
-      >
+      <div className="tags_bubble tags_add" onClick={this.props.addTagToNode}>
         <i className="fi-plus" />
       </div>
     );
@@ -155,15 +137,12 @@ class AllTagsItem extends React.Component {
     let pencil = this.props.editing ? (
       <span />
     ) : (
-      <i
-        className={"fi-pencil " + edit_hover_pencil}
-        style={{ opacity: "0.3" }}
-      />
+      <i className="fi-pencil edit_hover_pencil" style={{ opacity: "0.3" }} />
     );
 
     res = (
       <div
-        className={edit_hover_container}
+        className="edit_hover_container"
         onMouseEnter={this.props.highlightTag}
         style={component_style}
       >
@@ -181,7 +160,7 @@ class AllTagsItem extends React.Component {
             {pencil}
           </div>
         </div>
-        <div className={background} style={background_style} />
+        <div className="background" style={background_style} />
       </div>
     );
 

@@ -13,13 +13,6 @@ import ToCsvButton from "components/csv-button";
 import TextAlignCenter from "components/text-align-center";
 import CtrlZ from "components/ctrl-z";
 
-import {
-  edit_hover_container,
-  edit_hover_pencil,
-  editable_text,
-  session_name
-} from "css/app.css";
-
 import { mkB } from "components/button";
 import Bubble from "components/bubble";
 import pick from "languages";
@@ -50,19 +43,19 @@ const DashBoard = props => {
     session_info_cell = (
       <div style={session_info_cell_style}>
         <span
-          className={edit_hover_container}
+          className="edit_hover_container"
           style={margin_padding_compensate}
         >
           <RIEInput
             value={props.sessionName()}
             change={props.onChangeSessionName("new_session_name")}
             propName="new_session_name"
-            className={session_name + " " + editable_text}
+            className="session_name editable_text"
             validate={s => s.replace(/\s/g, "").length > 0}
           />
           &ensp;
           <i
-            className={"fi-pencil " + edit_hover_pencil}
+            className="fi-pencil edit_hover_pencil"
             style={{ opacity: "0.3" }}
           />
         </span>

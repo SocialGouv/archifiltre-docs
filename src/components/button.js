@@ -1,7 +1,5 @@
 import React from "react";
 
-import { active_button } from "css/app.css";
-
 export function mkB(click_action, label, enabled, color, custom_style) {
   const default_button_style = {
     margin: 0,
@@ -16,7 +14,7 @@ export function mkB(click_action, label, enabled, color, custom_style) {
     return (
       <button
         type="button"
-        className={"clear button " + active_button}
+        className="clear button active_button"
         onClick={click_action}
         style={button_style}
       >
@@ -50,7 +48,7 @@ export function mkRB(click_action, label, enabled, color, custom_style) {
     return (
       <button
         type="button"
-        className={"button " + active_button}
+        className="button active_button"
         onClick={click_action}
         style={button_style}
       >
@@ -89,7 +87,7 @@ export function mkTB(click_action, label, enabled, color, custom_style) {
   if (enabled) {
     return (
       <button
-        className={"clear button " + active_button}
+        className="clear button active_button"
         onClick={click_action}
         style={button_style}
       >

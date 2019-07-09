@@ -1,8 +1,5 @@
 import React from "react";
 
-import * as Css from "css/app.css";
-import * as ObjectUtil from "util/object-util";
-
 import pick from "languages";
 
 const your_comments = pick({
@@ -56,7 +53,7 @@ export default class CommentsEditable extends React.Component {
     if (editing) {
       return (
         <textarea
-          className={Css.comments}
+          className="comments"
           style={input_style}
           onMouseUp={onMouseUp}
           onKeyUp={onKeyUp}

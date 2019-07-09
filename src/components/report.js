@@ -1,20 +1,12 @@
 import React from "react";
 
 import * as ObjectUtil from "util/object-util";
-import { RIEInput, RIETextArea, RIETags } from "riek";
+import { RIEInput } from "riek";
 
 import TagsCell from "components/report-cell-tags";
 import CommentsCell from "components/report-cell-comments";
 
-import { makeSizeString, octet2HumanReadableFormat } from "components/ruler";
-
-import {
-  edit_hover_container,
-  edit_hover_pencil,
-  editable_text,
-  element_name,
-  bold
-} from "css/app.css";
+import { octet2HumanReadableFormat } from "components/ruler";
 
 import LastModifiedReporter from "components/last-modified-reporter";
 
@@ -91,7 +83,7 @@ const Name = props => {
     return <div style={{ fontWeight: "bold" }}>{folder_of_name_tr}</div>;
   } else {
     return (
-      <span className={edit_hover_container} style={margin_padding_compensate}>
+      <span className="edit_hover_container" style={margin_padding_compensate}>
         <RIEInput
           value={display_name.length > 0 ? display_name : bracket_name}
           change={props.onChangeAlias(
@@ -99,14 +91,11 @@ const Name = props => {
             props.node_id,
             n_name
           )}
-          className={editable_text + " " + element_name + " " + bold}
+          className="editable_text element_name bold"
           propName="new_display_name"
         />
         &ensp;
-        <i
-          className={"fi-pencil " + edit_hover_pencil}
-          style={{ opacity: "0.3" }}
-        />
+        <i className="fi-pencil edit_hover_pencil" style={{ opacity: "0.3" }} />
       </span>
     );
   }

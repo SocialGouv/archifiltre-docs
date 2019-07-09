@@ -1,7 +1,5 @@
 import React from "react";
 
-import { edit_hover_container, edit_hover_pencil } from "css/app.css";
-
 import TagsEditable from "components/tags-editable";
 import * as ObjectUtil from "util/object-util";
 
@@ -196,7 +194,7 @@ class ReportCellTags extends React.Component {
       return (
         <div
           ref={setWrapperRef}
-          className={edit_hover_container}
+          className="edit_hover_container"
           style={cells_style}
           onClick={onClick}
         >
@@ -204,7 +202,7 @@ class ReportCellTags extends React.Component {
           <span>
             &ensp;
             <i
-              className={"fi-pencil " + edit_hover_pencil}
+              className="fi-pencil edit_hover_pencil"
               style={{ opacity: "0.3" }}
             />
           </span>

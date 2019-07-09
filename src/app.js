@@ -1,5 +1,6 @@
 import "foundation-sites";
 import "./css/index.scss";
+import "./css/app.css";
 
 import React from "react";
 

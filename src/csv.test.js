@@ -1,6 +1,3 @@
-import chai from "chai";
-const should = chai.should();
-
 import * as Loop from "test/loop";
 import * as Arbitrary from "test/arbitrary";
 import * as M from "csv";

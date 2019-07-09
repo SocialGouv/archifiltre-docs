@@ -1,22 +1,14 @@
-import chai from "chai";
-const should = chai.should();
-
-import * as Loop from "test/loop";
-import * as Arbitrary from "test/arbitrary";
 import * as M from "util/record-util";
-
-import { List } from "immutable";
 
 describe("record-util", function() {
   const testEquality = (a, b) => {
-    a.toObject().should.deep.equal(b.toObject());
-    a.constructor.toJs(a).should.deep.equal(b.constructor.toJs(b));
-    a.constructor
-      .fromJs(a.constructor.toJs(a))
-      .toObject()
-      .should.deep.equal(
-        b.constructor.fromJs(b.constructor.toJs(b)).toObject()
-      );
+    expect(a.toObject()).toEqual(b.toObject());
+    expect(a.constructor.toJs(a)).toEqual(b.constructor.toJs(b));
+    const objectRecord = a.constructor.fromJs(a.constructor.toJs(a)).toObject();
+
+    expect(objectRecord).toEqual(
+      b.constructor.fromJs(b.constructor.toJs(b)).toObject()
+    );
   };
 
   it("compose : a . empty === empty . a", () => {
@@ -130,46 +122,48 @@ describe("record-util", function() {
       a().set("a", 12)
     );
 
-    c.toObject().should.deep.equal({
+    expect(c.toObject()).toEqual({
       a: 10,
       b: 2,
       c: 20,
       d: 30
     });
 
-    c.constructor.toJs(c).should.deep.equal({
+    expect(c.constructor.toJs(c)).toEqual({
       a: 10,
       b: 4,
       c: 20,
       d: 60
     });
 
-    c.constructor
-      .fromJs({
-        a: 10,
-        b: 2,
-        c: 20,
-        d: 30
-      })
-      .toObject()
-      .should.deep.equal({
-        a: 10,
-        b: 4,
-        c: 20,
-        d: 60
-      });
+    expect(
+      c.constructor
+        .fromJs({
+          a: 10,
+          b: 2,
+          c: 20,
+          d: 30
+        })
+        .toObject()
+    ).toEqual({
+      a: 10,
+      b: 4,
+      c: 20,
+      d: 60
+    });
 
-    c.constructor
-      .fromJs({
-        b: 2,
-        d: 40
-      })
-      .toObject()
-      .should.deep.equal({
-        a: 10,
-        b: 4,
-        c: 20,
-        d: 80
-      });
+    expect(
+      c.constructor
+        .fromJs({
+          b: 2,
+          d: 40
+        })
+        .toObject()
+    ).toEqual({
+      a: 10,
+      b: 4,
+      c: 20,
+      d: 80
+    });
   });
 });

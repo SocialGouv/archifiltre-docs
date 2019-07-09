@@ -1,8 +1,3 @@
-import chai from "chai";
-const should = chai.should();
-
-import * as Loop from "test/loop";
-import * as Arbitrary from "test/arbitrary";
 import * as M from "util/cache-util";
 
 describe("cache", function() {
@@ -14,14 +9,12 @@ describe("cache", function() {
     };
     const cacheF = M.make(f);
 
-    a.should.equal(0);
-    cacheF(1).should.equal(2);
-    a.should.equal(1);
-    cacheF(1).should.equal(2);
-    a.should.equal(1);
-    cacheF(2).should.equal(3);
-    a.should.equal(2);
-    cacheF(1).should.equal(2);
-    a.should.equal(3);
+    expect(a).toBe(0);
+    expect(cacheF(1)).toBe(2);
+    expect(a).toBe(1);
+    expect(cacheF(2)).toBe(3);
+    expect(a).toBe(2);
+    expect(cacheF(1)).toBe(2);
+    expect(a).toBe(3);
   });
 });

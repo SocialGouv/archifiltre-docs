@@ -1,8 +1,4 @@
-import chai from "chai";
-const should = chai.should();
-
 import * as Loop from "test/loop";
-import * as Arbitrary from "test/arbitrary";
 import * as M from "datastore/files-and-folders";
 import * as Origin from "datastore/origin";
 
@@ -51,7 +47,7 @@ describe("files-and-folders", function() {
     const test = (a, updater, predicates) => {
       Object.keys(updater).forEach(key => (a = a.update(key, updater[key])));
       Object.keys(predicates).forEach(key =>
-        [key, a.get(key)].should.deep.equal([key, predicates[key]])
+        expect(a.get(key)).toEqual(predicates[key])
       );
     };
 

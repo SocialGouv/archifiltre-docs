@@ -142,3 +142,9 @@ app.on("quit", () => {
 app.on("will-navigate", () => {
   console.log("will-navigate");
 });
+
+const { ipcMain } = require("electron");
+// Needed for secret devtools
+ipcMain.on("open-devtools", (event, arg) => {
+  win.webContents.openDevTools();
+});

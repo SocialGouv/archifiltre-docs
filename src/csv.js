@@ -6,7 +6,7 @@ import * as Loop from "test/loop";
 export const arbitrary = () =>
   Arbitrary.immutableList(() => Arbitrary.immutableList(Arbitrary.string));
 
-const cell_separator = ",";
+const cell_separator = ";";
 const line_separator = "\n";
 
 const str2Cell = a => `"${a}"`;
@@ -29,6 +29,6 @@ export const fromStr = a => {
 };
 
 export const line2List = a => {
-  const re = new RegExp(`^"|","|"${line_separator}$`);
+  const re = new RegExp(`^"|"${cell_separator}"|"${line_separator}$`);
   return List(a.split(re).slice(1, -1));
 };

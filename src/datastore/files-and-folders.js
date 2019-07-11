@@ -10,6 +10,10 @@ import * as Origin from "datastore/origin";
 
 import { List, Map } from "immutable";
 
+import * as CSV from "csv";
+import pick from "languages";
+const Path = require("path");
+
 const fileOrFolderFactory = RecordUtil.createFactory(
   {
     name: "",
@@ -281,3 +285,88 @@ const toAndFromJs = factory => [
 export const [toJs, fromJs] = toAndFromJs(
   RecordUtil.composeFactory(derivedFactory, fileOrFolderFactory)
 );
+
+export const toFfidList = a => a.keySeq().toArray();
+
+const str_list_2_header = pick({
+  fr: [
+    "",
+    "chemin",
+    "longueur du chemin",
+    "nom",
+    "extension",
+    "poids (octet)",
+    "date de dernière modification",
+    "alias",
+    "commentaire",
+    "fichier/répertoire",
+    "profondeur"
+  ],
+  en: [
+    "",
+    "path",
+    "path length",
+    "name",
+    "extension",
+    "size (octet)",
+    "last_modified",
+    "alias",
+    "comments",
+    "file/folder",
+    "depth"
+  ]
+});
+const file_str = pick({
+  fr: "fichier",
+  en: "file"
+});
+const folder_str = pick({
+  fr: "répertoire",
+  en: "folder"
+});
+
+export const toStrList2 = (ff_id_list, ffs) => {
+  const ans = [str_list_2_header.slice()];
+  const mapFfidToStrList = {};
+
+  ffs.forEach((ff, id) => {
+    if (id === "") {
+      return undefined;
+    }
+    const platform_independent_path = id;
+    const platform_dependent_path = id.split("/").join(Path.sep);
+    const path_length = platform_dependent_path.length;
+    const name = ff.get("name");
+    const extension = Path.extname(name);
+    const size = ff.get("size");
+    const last_modified = CSV.epochToFormatedUtcDateString(
+      ff.get("last_modified_max")
+    );
+    const alias = ff.get("alias");
+    const comments = ff.get("comments");
+    const children = ff.get("children");
+    let file_or_folder = folder_str;
+    if (children.size === 0) {
+      file_or_folder = file_str;
+    }
+    const depth = ff.get("depth");
+
+    mapFfidToStrList[id] = [
+      "",
+      platform_dependent_path,
+      path_length,
+      name,
+      extension,
+      size,
+      last_modified,
+      alias,
+      comments,
+      file_or_folder,
+      depth
+    ];
+  });
+
+  ff_id_list.forEach(id => ans.push(mapFfidToStrList[id]));
+
+  return ans;
+};

@@ -32,3 +32,25 @@ export const line2List = a => {
   const re = new RegExp(`^"|"${cell_separator}"|"${line_separator}$`);
   return List(a.split(re).slice(1, -1));
 };
+
+export const leftPadInt = (pad, num) => {
+  const zero_string = new Array(pad).fill("0").join("");
+  const num_len = num.toString().length;
+
+  return (zero_string + num).slice(-Math.max(pad, num_len));
+};
+
+export const epochToFormatedUtcDateString = a => {
+  const date = new Date(a);
+  const year = date.getUTCFullYear();
+  const zero_based_month = date.getUTCMonth();
+  const day_of_the_month = date.getUTCDate();
+
+  return (
+    leftPadInt(2, day_of_the_month) +
+    "/" +
+    leftPadInt(2, zero_based_month + 1) +
+    "/" +
+    leftPadInt(4, year)
+  );
+};

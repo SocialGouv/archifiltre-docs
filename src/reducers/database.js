@@ -6,6 +6,7 @@ import * as Cache from "util/cache-util";
 import * as Origin from "datastore/origin";
 import * as VirtualFileSystem from "datastore/virtual-file-system";
 import * as Tags from "datastore/tags";
+import * as FilesAndFolders from "datastore/files-and-folders";
 
 import * as SEDA from "seda";
 
@@ -41,48 +42,19 @@ const getFfIdPath = id => state =>
 
 const toJson = () => state => JSON.stringify(VirtualFileSystem.toJs(state));
 const toStrList2 = () => state => {
-  const ans = [
-    [
-      "",
-      "path",
-      "name",
-      "size (octet)",
-      "last_modified",
-      "alias",
-      "comments",
-      "tags",
-      "is_file"
-    ]
-  ];
-  state.get("files_and_folders").forEach((ff, id) => {
-    if (id === "") {
-      return undefined;
-    }
-    const path = id;
-    const name = ff.get("name");
-    const size = ff.get("size");
-    const last_modified = ff.get("last_modified_max");
-    const alias = ff.get("alias");
-    const comments = ff.get("comments");
-    const tags = state
-      .get("tags")
-      .filter(tag => tag.get("ff_ids").includes(id))
-      .reduce((acc, val) => acc.concat([val.get("name")]), []);
-    const children = ff.get("children");
-    const is_file = children.size === 0;
+  const files_and_folders = state.get("files_and_folders");
+  const root_id = "";
+  const ff_id_list = FilesAndFolders.toFfidList(files_and_folders).filter(
+    a => a != root_id
+  );
+  const tags = state.get("tags");
 
-    ans.push([
-      "",
-      path,
-      name,
-      size,
-      last_modified,
-      alias,
-      comments,
-      tags,
-      is_file
-    ]);
+  const ans = FilesAndFolders.toStrList2(ff_id_list, files_and_folders);
+
+  Tags.toStrList2(ff_id_list, files_and_folders, tags).forEach((a, i) => {
+    ans[i] = ans[i].concat(a);
   });
+
   return ans;
 };
 

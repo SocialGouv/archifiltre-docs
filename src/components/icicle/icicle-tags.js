@@ -92,7 +92,7 @@ export default class IcicleTags extends React.PureComponent {
             x={x + 1}
             y={y + 1}
             width={dx - 2}
-            height="6"
+            height={dy / 3}
             style={{ fill: "rgb(10, 50, 100)", stroke: "none", opacity }}
             onClick={onClickFactory(key)}
             onDoubleClick={onDoubleClickFactory(key)}

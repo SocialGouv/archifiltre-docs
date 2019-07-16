@@ -64,4 +64,47 @@ describe("tags", function() {
 
     expect(getter("V", tags)).not.toBeDefined();
   });
+
+  it("simple toStrList2 test", () => {
+    const ff = FilesAndFolders.computeDerived(
+      FilesAndFolders.ff([
+        [{ size: 1, lastModified: 0 }, "/a/b/c"],
+        [{ size: 2, lastModified: 0 }, "/a/b/d"],
+        [{ size: 3, lastModified: 0 }, "/a/e"],
+        [{ size: 4, lastModified: 0 }, "/a/f/g"]
+      ])
+    );
+
+    let tags = M.empty();
+    tags = M.update(ff, tags);
+
+    tags = M.push(
+      M.create({ name: "T", ff_ids: Set.of("/a/b", "/a/f/g") }),
+      tags
+    );
+    tags = M.push(M.create({ name: "U", ff_ids: Set.of("/a") }), tags);
+    tags = M.push(M.create({ name: "X", ff_ids: Set.of("/a/b/d") }), tags);
+    tags = M.update(ff, tags);
+
+    const root_id = "";
+    const ff_id_list = FilesAndFolders.toFfidList(ff)
+      .sort()
+      .filter(a => a != root_id);
+    const str_list_2 = M.toStrList2(ff_id_list, ff, tags);
+
+    expect(str_list_2).toEqual([
+      ["tag0 : T", "tag1 : U", "tag2 : X"],
+
+      ["", "U", ""], // /a
+
+      ["T", "U", ""], // /a/b
+      ["T", "U", ""], // /a/b/c
+      ["T", "U", "X"], // /a/b/d
+
+      ["", "U", ""], // /a/e
+
+      ["", "U", ""], // /a/f
+      ["T", "U", ""] // /a/f/g
+    ]);
+  });
 });

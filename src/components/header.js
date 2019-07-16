@@ -9,8 +9,8 @@ import pick from "languages";
 const { shell } = require("electron");
 
 const title = pick({
-  en: "Icicles",
-  fr: "Stalactites"
+  en: "Archifiltre",
+  fr: "Archifiltre"
 });
 
 const what_new = pick({
@@ -20,7 +20,7 @@ const what_new = pick({
 
 const onClick = event => {
   event.preventDefault();
-  shell.openExternal("http://archifiltre.com/#changelog");
+  shell.openExternal("http://archifiltre.github.io/#changelog");
 };
 
 const Header = props => {
@@ -33,7 +33,7 @@ const Header = props => {
             <b className="font_playfair">{title}</b>
           </div>
           <div style={{ fontSize: "0.7em" }}>
-            {"v" + version + " Jazzy Jellyfish • "}
+            {"v" + version + " Kinky Kookaburra • "}
             <a target="_blank" onClick={onClick} role="link">
               {what_new}
             </a>

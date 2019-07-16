@@ -5,13 +5,18 @@ import * as RecordUtil from "util/record-util";
 import * as FilesAndFolders from "datastore/files-and-folders";
 import * as Tags from "datastore/tags";
 
+import pick from "languages";
+
 if (isNaN(version) || typeof version !== "number") {
   throw new Error("version is not a number");
 }
 
 const virtualFileSystem = RecordUtil.createFactory(
   {
-    session_name: "Untitled",
+    session_name: pick({
+      en: "Project name",
+      fr: "Nom du projet"
+    }),
     original_path: "",
     version,
     files_and_folders: FilesAndFolders.empty(),

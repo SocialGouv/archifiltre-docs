@@ -26,8 +26,8 @@ import pick from "languages";
 SecretDevtools.enable();
 
 document.title = pick({
-  en: "icicle v" + version + " - archifiltre",
-  fr: "stalactite v" + version + " - archifiltre"
+  en: "Archifiltre v" + version,
+  fr: "Archifiltre v" + version
 });
 
 if (MODE === "production") {

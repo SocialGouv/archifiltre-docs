@@ -156,3 +156,59 @@ const toAndFromJs = factory => [
 export const [toJs, fromJs] = toAndFromJs(
   RecordUtil.composeFactory(derivedFactory, tagFactory)
 );
+
+/**
+ * Get an array with all the tag name
+ * @param tags
+ */
+const toNameList = tags => {
+  return tags
+    .map(a => a.get("name"))
+    .valueSeq()
+    .toArray();
+};
+
+/**
+ * Generates an array of array ([[]]) with the first line being
+ * the csv header.
+ *
+ * Each line represents one file or folder and the order is determined
+ * by the file and folder id array (ff_id_list).
+ *
+ * Parent tags are inherited by all their children during the export.
+ *
+ * @param ff_id_list - array of file and folder id
+ * @param ffs - files and folders tree
+ * @param tags
+ */
+export const toStrList2 = (ff_id_list, ffs, tags) => {
+  const name_list = toNameList(tags);
+  const header = name_list.map((tag_name, i) => "tag" + i + " : " + tag_name);
+  const root_ff_id = "";
+  const mapFfidToStrList = {};
+
+  const rec = (parent_tag, curr_ff_id) => {
+    const curr_ff = ffs.get(curr_ff_id);
+    let curr_ff_tags_name = toNameList(
+      tags.filter(tag => tag.get("ff_ids").includes(curr_ff_id))
+    );
+    curr_ff_tags_name = curr_ff_tags_name.concat(parent_tag);
+
+    mapFfidToStrList[curr_ff_id] = name_list.map(tag_name => {
+      if (curr_ff_tags_name.includes(tag_name)) {
+        return tag_name;
+      } else {
+        return "";
+      }
+    });
+
+    const curr_ff_children = curr_ff.get("children");
+    curr_ff_children.forEach(id => rec(curr_ff_tags_name, id));
+  };
+
+  rec([], root_ff_id);
+
+  const ans = [header];
+  ff_id_list.forEach(id => ans.push(mapFfidToStrList[id]));
+  return ans;
+};

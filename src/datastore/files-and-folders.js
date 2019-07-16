@@ -286,6 +286,10 @@ export const [toJs, fromJs] = toAndFromJs(
   RecordUtil.composeFactory(derivedFactory, fileOrFolderFactory)
 );
 
+/**
+ * Generates the array of all file and folder id
+ * @param a - files and folders tree
+ */
 export const toFfidList = a => a.keySeq().toArray();
 
 const str_list_2_header = pick({
@@ -325,6 +329,16 @@ const folder_str = pick({
   en: "folder"
 });
 
+/**
+ * Generates an array of array ([[]]) with the first line being
+ * the csv header.
+ *
+ * Each line represents one file or folder and the order is determined
+ * by the file and folder id array (ff_id_list).
+ *
+ * @param ff_id_list - array of file and folder id
+ * @param ffs - files and folders tree
+ */
 export const toStrList2 = (ff_id_list, ffs) => {
   const ans = [str_list_2_header.slice()];
   const mapFfidToStrList = {};

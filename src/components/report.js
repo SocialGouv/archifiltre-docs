@@ -14,6 +14,11 @@ import * as Color from "util/color-util";
 
 import pick from "languages";
 
+import { shell } from "electron";
+import path from "path";
+import Icon, { FOLDER_ICON, PAGE_ICON, PAGE_MULTIPLE_ICON } from "./icon";
+import ClickableIcon from "./clickable-icon";
+
 const folder_of_name_tr = pick({
   en: "Folder of file's name",
   fr: "Nom du répertoire ou fichier"
@@ -44,31 +49,26 @@ const margin_padding_compensate = {
   padding: "0.2em 0.8em"
 };
 
-const Icon = props => {
+const ElementIcon = props => {
   const placeholder = props.placeholder;
   const is_folder = props.is_folder;
   const fillColor = props.fillColor;
   const node_id = props.node_id;
 
-  let class_name;
+  let icon;
   let color;
   if (placeholder) {
-    class_name = "fi-page-multiple";
-    color = Color.placeholder();
-  } else {
-    color = fillColor(node_id);
-    if (is_folder) {
-      class_name = "fi-folder";
-    } else {
-      class_name = "fi-page";
-    }
+    return <Icon icon={PAGE_MULTIPLE_ICON} color={Color.placeholder()} />;
   }
 
-  return (
-    <div style={{ marginTop: "-1em", marginBottom: "-1em" }}>
-      <i className={class_name} style={{ fontSize: "3em", color }} />
-    </div>
-  );
+  color = fillColor(node_id);
+  if (is_folder) {
+    icon = FOLDER_ICON;
+  } else {
+    icon = PAGE_ICON;
+  }
+
+  return <ClickableIcon icon={icon} color={color} onClick={props.onClick} />;
 };
 
 const Name = props => {
@@ -167,12 +167,16 @@ const Report = props => {
     const bracket_name = c_alias === "" ? "" : n_name;
 
     const is_folder = n_children.size > 0;
-
     icon = (
-      <Icon
+      <ElementIcon
         is_folder={is_folder}
         fillColor={props.fillColor}
         node_id={props.node_id}
+        onClick={() => {
+          const originalPath = api.database.getOriginalPath();
+          const itemPath = path.join(originalPath, "..", props.node_id);
+          shell.openItem(itemPath);
+        }}
       />
     );
 
@@ -209,7 +213,7 @@ const Report = props => {
       />
     );
   } else {
-    icon = <Icon placeholder={true} />;
+    icon = <ElementIcon placeholder={true} />;
     name = <Name placeholder={true} />;
     real_name = <RealName placeholder={true} />;
     info_cell = <InfoCell api={api} placeholder={true} />;

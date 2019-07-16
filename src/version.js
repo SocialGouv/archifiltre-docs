@@ -1,2 +1,2 @@
-const version = 10;
+const version = 11;
 export default version;

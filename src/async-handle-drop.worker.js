@@ -9,11 +9,11 @@ import { hookCounter } from "./util/hook-utils";
 
 /**
  * Remove the byte order mark
- * Until v10, json files were generate with a
+ * Until v10, json files were generated with a
  * byte order mark at their start
  * We upgrade file-saver from 1.3.3 to 2.0.2,
- * they are not anymore generate with a byte order mark
- * @param dropped_folder_path
+ * they are not anymore generated with a byte order mark
+ * @param content
  */
 const removeByteOrderMark = content => {
   if (content[0] !== "{") {

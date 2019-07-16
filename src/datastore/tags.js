@@ -157,6 +157,10 @@ export const [toJs, fromJs] = toAndFromJs(
   RecordUtil.composeFactory(derivedFactory, tagFactory)
 );
 
+/**
+ * Get an array with all the tag name
+ * @param tags
+ */
 const toNameList = tags => {
   return tags
     .map(a => a.get("name"))
@@ -164,7 +168,19 @@ const toNameList = tags => {
     .toArray();
 };
 
-// parent tags are inherit by all their children during the export
+/**
+ * Generates an array of array ([[]]) with the first line being
+ * the csv header.
+ *
+ * Each line represents one file or folder and the order is determined
+ * by the file and folder id array (ff_id_list).
+ *
+ * Parent tags are inherited by all their children during the export.
+ *
+ * @param ff_id_list - array of file and folder id
+ * @param ffs - files and folders tree
+ * @param tags
+ */
 export const toStrList2 = (ff_id_list, ffs, tags) => {
   const name_list = toNameList(tags);
   const header = name_list.map((tag_name, i) => "tag" + i + " : " + tag_name);

@@ -41,6 +41,17 @@ const getFfIdPath = id => state =>
   );
 
 const toJson = () => state => JSON.stringify(VirtualFileSystem.toJs(state));
+
+/**
+ * Generates an array of array ([[]]) with the first line being
+ * the csv header.
+ *
+ * Each line represents one file or folder.
+ *
+ * ff_id_list is an array that determined the line order.
+ *
+ * @param state - virtual file system
+ */
 const toStrList2 = () => state => {
   const files_and_folders = state.get("files_and_folders");
   const root_id = "";

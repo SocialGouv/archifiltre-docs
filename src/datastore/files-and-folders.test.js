@@ -1,6 +1,7 @@
 import * as Loop from "test/loop";
 import * as M from "datastore/files-and-folders";
 import * as Origin from "datastore/origin";
+import { updateIn } from "immutable";
 
 describe("files-and-folders", function() {
   Loop.equal("(ffInv . ff) a", () => {
@@ -212,5 +213,92 @@ describe("files-and-folders", function() {
       sort_by_size_index: [],
       sort_by_date_index: []
     });
+  });
+
+  it("simple toStrList2 test", () => {
+    const origin = [
+      [{ size: 1, lastModified: 5 }, "/a/b/c.ext"],
+      [{ size: 2, lastModified: 4 }, "/a/b/d"],
+      [{ size: 3, lastModified: 3 }, "/a/e/f"],
+      [{ size: 4, lastModified: 2 }, "/a/e/g"],
+      [{ size: 5, lastModified: 1 }, "/h"]
+    ];
+    const data = M.ff(origin);
+    let derived = M.computeDerived(data);
+
+    derived = updateIn(derived, ["/h", "comments"], a => "my comments");
+    derived = updateIn(derived, ["/h", "alias"], a => "my alias");
+    derived = updateIn(derived, ["/a/b/d", "comments"], a => "my comments 2");
+    derived = updateIn(derived, ["/a/e/g", "alias"], a => "my alias 2");
+
+    const root_id = "";
+    const ff_id_list = M.toFfidList(derived)
+      .sort()
+      .filter(a => a != root_id);
+    const str_list_2 = M.toStrList2(ff_id_list, derived);
+
+    expect(str_list_2).toEqual([
+      [
+        "",
+        "path",
+        "path length",
+        "name",
+        "extension",
+        "size (octet)",
+        "last_modified",
+        "alias",
+        "comments",
+        "file/folder",
+        "depth"
+      ],
+
+      ["", "/a", 2, "a", "", 10, "01/01/1970", "", "", "folder", 1],
+
+      ["", "/a/b", 4, "b", "", 3, "01/01/1970", "", "", "folder", 2],
+      [
+        "",
+        "/a/b/c.ext",
+        10,
+        "c.ext",
+        ".ext",
+        1,
+        "01/01/1970",
+        "",
+        "",
+        "file",
+        3
+      ],
+      [
+        "",
+        "/a/b/d",
+        6,
+        "d",
+        "",
+        2,
+        "01/01/1970",
+        "",
+        "my comments 2",
+        "file",
+        3
+      ],
+
+      ["", "/a/e", 4, "e", "", 7, "01/01/1970", "", "", "folder", 2],
+      ["", "/a/e/f", 6, "f", "", 3, "01/01/1970", "", "", "file", 3],
+      ["", "/a/e/g", 6, "g", "", 4, "01/01/1970", "my alias 2", "", "file", 3],
+
+      [
+        "",
+        "/h",
+        2,
+        "h",
+        "",
+        5,
+        "01/01/1970",
+        "my alias",
+        "my comments",
+        "file",
+        1
+      ]
+    ]);
   });
 });

@@ -244,7 +244,24 @@ const recTraverseFileTree = (hook, path) => {
   }
 };
 
-const convertToPosixPath = path => path.split(Path.sep).join("/");
+/**
+ * Path in archifiltre should always start with '/'
+ * When we drop a folder which is at the root of a file
+ * system (like '/myfolder' or 'C:\myfolder' path),
+ * dirname return '/' or 'C:\', so path parameter may be wrong
+ * i.e. : myfolder/my/file instead of /myfolder/my/file
+ *     or myfolder\my\file instead of \myfolder\my\file
+ *
+ * @param path
+ */
+const convertToPosixAbsolutePath = path => {
+  const array = path.split(Path.sep);
+  if (array[0] !== "") {
+    array.unshift("");
+  }
+
+  return array.join("/");
+};
 
 /**
  * Calls the hook function for every file in the tree
@@ -257,7 +274,7 @@ export const traverseFileTree = (hook, folderPath) => {
   folderPath = Path.dirname(folderPath);
   origin = origin.map(([file, path]) => [
     file,
-    convertToPosixPath(path.slice(folderPath.length))
+    convertToPosixAbsolutePath(path.slice(folderPath.length))
   ]);
   return [folderPath, origin];
 };

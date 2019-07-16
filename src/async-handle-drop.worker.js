@@ -8,12 +8,28 @@ import { reportError, reportMessage } from "./reporter";
 import { hookCounter } from "./util/hook-utils";
 
 /**
+ * Remove the byte order mark
+ * Until v10, json files were generated with a
+ * byte order mark at their start
+ * We upgrade file-saver from 1.3.3 to 2.0.2,
+ * they are not anymore generated with a byte order mark
+ * @param content
+ */
+const removeByteOrderMark = content => {
+  if (content[0] !== "{") {
+    return content.slice(1);
+  } else {
+    return content;
+  }
+};
+
+/**
  * Loads a preexisting saved config
  * @param dropped_folder_path
  */
 function loadJsonConfig(dropped_folder_path) {
   const content = readFileSync(dropped_folder_path, "utf8");
-  const content_without_byte_order_mark = content.slice(1);
+  const content_without_byte_order_mark = removeByteOrderMark(content);
 
   const [js, js_version] = fromAnyJsonToJs(content_without_byte_order_mark);
 

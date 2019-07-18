@@ -7,7 +7,7 @@
     "test": "jest",
     "test-watch": "yarn test --watch",
     "buildDev": "webpack --progress --mode development",
-    "buildProd": "yarn win64 && yarn mac && yarn linux && yarn win32",
+    "buildProd": "webpack --progress --mode production",
     "devServer": "webpack-dev-server --mode development",
     "watchBuildDev": "webpack --watch --progress --mode development",
     "pack": "electron-builder --dir",

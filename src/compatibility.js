@@ -19,6 +19,11 @@ export const fromAnyJsonToJs = json => {
         js = JSON.parse(json);
       }
       js = v9JsToV10Js(js);
+    case 10:
+      if (js === undefined) {
+        js = JSON.parse(json);
+      }
+      js = v10JsToV11Js(js);
     default:
       if (js === undefined) {
         js = JSON.parse(json);
@@ -168,4 +173,11 @@ export const v9JsToV10Js = v9 => {
   v10.version = 10;
 
   return v10;
+};
+
+export const v10JsToV11Js = v10 => {
+  const v11 = Object.assign({}, v10);
+  v11.version = 11;
+
+  return v11;
 };

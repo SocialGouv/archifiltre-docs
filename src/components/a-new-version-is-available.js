@@ -13,8 +13,8 @@ const { shell } = require("electron");
 
 const text = v =>
   pick({
-    en: `Version ${v} of icicle is out!`,
-    fr: `La version ${v} de stalactite est sortie !`
+    en: `Version ${v} of Archifiltre is out!`,
+    fr: `La version ${v} d'Archifiltre est sortie !`
   });
 
 const button_tr = pick({
@@ -59,7 +59,7 @@ export default class ANewVersionIsAvailable extends React.PureComponent {
         const current_version = version;
 
         if (isNaN(last_version) === false && typeof last_version === "number") {
-          if (current_version !== last_version) {
+          if (current_version < last_version) {
             this.setState({
               display: true,
               last_version

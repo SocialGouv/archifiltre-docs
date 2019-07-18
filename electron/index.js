@@ -6,6 +6,13 @@ const path = require("path");
 
 app.commandLine.appendSwitch("js-flags", "--max-old-space-size=40960");
 
+const { Menu } = require("electron");
+// Passing null will suppress the default menu.
+// On Windows and Linux, this has the additional
+// effect of removing the menu bar from the window.
+Menu.setApplicationMenu(null);
+
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;

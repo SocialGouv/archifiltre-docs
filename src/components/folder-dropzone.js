@@ -12,9 +12,9 @@ const placeholder = pick({
 });
 
 const placeholder_st = pick({
-  en: "You may also drop a JSON file previously exported from Icicle.",
+  en: "You may also drop a JSON file previously exported from Archifiltre.",
   fr:
-    "Vous pouvez aussi déposer un fichier JSON précédement exporté depuis Stalactite."
+    "Vous pouvez aussi déposer un fichier JSON précédement exporté depuis Archifiltre."
 });
 
 const disclaimer = pick({

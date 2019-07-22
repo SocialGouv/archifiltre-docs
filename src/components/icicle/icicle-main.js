@@ -45,6 +45,7 @@ export default class IcicleMain extends PureComponent {
     this.onIcicleRectMouseOverHandler = this.onIcicleRectMouseOverHandler.bind(
       this
     );
+    this.onIcicleMouseLeave = this.onIcicleMouseLeave.bind(this);
     this.computeWidthRec = this.computeWidthRec.bind(this);
   }
 
@@ -198,6 +199,10 @@ export default class IcicleMain extends PureComponent {
     this.props.setFocus(node_sequence, dims);
   }
 
+  onIcicleMouseLeave() {
+    this.props.setNoHover();
+  }
+
   render() {
     const api = this.props.api;
     const view_box_width = this.state.view_box_width;
@@ -236,6 +241,7 @@ export default class IcicleMain extends PureComponent {
           onIcicleRectClickHandler={this.onIcicleRectClickHandler}
           onIcicleRectDoubleClickHandler={this.onIcicleRectDoubleClickHandler}
           onIcicleRectMouseOverHandler={this.onIcicleRectMouseOverHandler}
+          onIcicleMouseLeave={this.onIcicleMouseLeave}
           computeWidthRec={this.computeWidthRec}
         />
 

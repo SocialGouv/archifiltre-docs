@@ -26,6 +26,7 @@ const sequence = () => state => {
   } else {
     sequence = hover_sequence()(state);
   }
+
   return sequence;
 };
 
@@ -41,6 +42,8 @@ const reader = {
   isZoomed: () => state => state.get("display_root").length > 0,
   changeSkin: () => state => state.get("change_skin")
 };
+
+const setNoHover = () => state => state.update("hover_seq", () => []);
 
 const setFocus = (id_arr, dims) => state => {
   state = state.update("hover_seq", () => id_arr);
@@ -107,6 +110,7 @@ const toggleChangeSkin = () => state => {
 const reInit = () => state => initialState();
 
 const writer = {
+  setNoHover,
   setFocus,
   setNoFocus,
   lock,

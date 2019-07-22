@@ -58,7 +58,7 @@ export default class Icicle extends PureComponent {
 
       const state = this.state;
 
-      const array_of_id_without_root_id = array_of_id.slice(1);
+      const array_of_id_without_root_id = array_of_id.filter(id => id !== "");
       return array_of_id_without_root_id.map(id => {
         const dims = state.dims[id];
         if (dims === undefined) {
@@ -142,11 +142,38 @@ export default class Icicle extends PureComponent {
       style.opacity = 0.3;
     }
 
-    const sequence = icicle_state.sequence();
-    const sequence_components = arrayOfIdToComponents("sequence", 1, sequence);
-
+    const lock = icicle_state.lock_sequence();
     const hover = icicle_state.hover_sequence();
-    const hover_components = arrayOfIdToComponents("hover", 0.3, hover);
+
+    // Locked + hovered => 1
+    // Locked + not hovered => 0.6
+    // NotLocked + hovered => 0.3
+    let lockedHovered;
+    if (hover.length > 0) {
+      lockedHovered = lock.filter(id => hover.includes(id));
+    } else {
+      lockedHovered = lock;
+    }
+
+    const lockedNotHovered = lock.filter(id => !hover.includes(id));
+
+    const unlockedHovered = hover.filter(id => !lock.includes(id));
+
+    const lockedHoveredComponents = arrayOfIdToComponents(
+      "lockedDisplay",
+      1,
+      lockedHovered
+    );
+    const lockedNotHoveredComponents = arrayOfIdToComponents(
+      "lockedNotHovered",
+      0.6,
+      lockedNotHovered
+    );
+    const unlockedHoveredComponents = arrayOfIdToComponents(
+      "unlockedHovered",
+      lock.length === 0 ? 0.6 : 0.3,
+      unlockedHovered
+    );
 
     const database = api.database;
     const tag_ids = database.getAllTagIds();
@@ -175,8 +202,9 @@ export default class Icicle extends PureComponent {
             registerDims={registerDims}
           />
         </g>
-        {hover_components}
-        {sequence_components}
+        {lockedHoveredComponents}
+        {lockedNotHoveredComponents}
+        {unlockedHoveredComponents}
         <IcicleTags
           tag_ids={tag_ids}
           getTagByTagId={getTagByTagId}

@@ -27,6 +27,7 @@ const BreadcrumbPoly = props => {
       className="breadcrumb-poly"
       points={points.join(" ")}
       fill={props.fill_color}
+      style={{ opacity: props.opacity }}
     />
   );
 };

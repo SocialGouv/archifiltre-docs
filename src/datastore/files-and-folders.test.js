@@ -2,6 +2,7 @@ import * as Loop from "test/loop";
 import * as M from "datastore/files-and-folders";
 import * as Origin from "datastore/origin";
 import { updateIn } from "immutable";
+import path from "path";
 
 describe("files-and-folders", function() {
   Loop.equal("(ffInv . ff) a", () => {
@@ -251,13 +252,13 @@ describe("files-and-folders", function() {
         "file/folder",
         "depth"
       ],
+      // path.join enables windows compatibility
+      ["", path.join("/a"), 2, "a", "", 10, "01/01/1970", "", "", "folder", 1],
 
-      ["", "/a", 2, "a", "", 10, "01/01/1970", "", "", "folder", 1],
-
-      ["", "/a/b", 4, "b", "", 3, "01/01/1970", "", "", "folder", 2],
+      ["", path.join("/a/b"), 4, "b", "", 3, "01/01/1970", "", "", "folder", 2],
       [
         "",
-        "/a/b/c.ext",
+        path.join("/a/b/c.ext"),
         10,
         "c.ext",
         ".ext",
@@ -270,7 +271,7 @@ describe("files-and-folders", function() {
       ],
       [
         "",
-        "/a/b/d",
+        path.join("/a/b/d"),
         6,
         "d",
         "",
@@ -282,13 +283,25 @@ describe("files-and-folders", function() {
         3
       ],
 
-      ["", "/a/e", 4, "e", "", 7, "01/01/1970", "", "", "folder", 2],
-      ["", "/a/e/f", 6, "f", "", 3, "01/01/1970", "", "", "file", 3],
-      ["", "/a/e/g", 6, "g", "", 4, "01/01/1970", "my alias 2", "", "file", 3],
+      ["", path.join("/a/e"), 4, "e", "", 7, "01/01/1970", "", "", "folder", 2],
+      ["", path.join("/a/e/f"), 6, "f", "", 3, "01/01/1970", "", "", "file", 3],
+      [
+        "",
+        path.join("/a/e/g"),
+        6,
+        "g",
+        "",
+        4,
+        "01/01/1970",
+        "my alias 2",
+        "",
+        "file",
+        3
+      ],
 
       [
         "",
-        "/h",
+        path.join("/h"),
         2,
         "h",
         "",

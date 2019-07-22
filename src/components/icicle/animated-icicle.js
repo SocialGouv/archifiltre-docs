@@ -130,7 +130,10 @@ export default class AnimatedIcicle extends PureComponent {
     const svg_id = generateRandomString(40);
 
     return (
-      <g clipPath={"url(#" + svg_id + ")"}>
+      <g
+        clipPath={"url(#" + svg_id + ")"}
+        onMouseLeave={this.props.onIcicleMouseLeave}
+      >
         <defs>
           <clipPath id={svg_id}>
             <rect x={x} y={y} width={dx} height={dy} />

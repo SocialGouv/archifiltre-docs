@@ -16,12 +16,14 @@ import CtrlZ from "components/ctrl-z";
 import { mkB } from "components/button";
 import Bubble from "components/bubble";
 import pick from "languages";
+import ResipButton from "./resip-button";
 
 const DashBoard = props => {
   let session_info_cell = false;
   let ctrlz_cell = false;
   let csv_button_cell = false;
   let seda_button_cell = false;
+  let resip_button_cell = false;
   let save_button_cell = false;
   let reinit_button_cell = false;
   let export_menu_cell = false;
@@ -82,6 +84,12 @@ const DashBoard = props => {
       </TextAlignCenter>
     );
 
+    resip_button_cell = (
+      <TextAlignCenter>
+        <ResipButton api={props.api} />
+      </TextAlignCenter>
+    );
+
     save_button_cell = (
       <TextAlignCenter>
         <SaveButton api={props.api} />
@@ -108,6 +116,7 @@ const DashBoard = props => {
           <div className="grid-x">
             <div className="cell small-12">{csv_button_cell}</div>
             <div className="cell small-12">{seda_button_cell}</div>
+            <div className="cell small-12">{resip_button_cell}</div>
           </div>
         }
       />

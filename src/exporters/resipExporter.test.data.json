@@ -1,0 +1,373 @@
+{
+  "input": {
+    "session_name": "Nom du projet",
+    "original_path": "/Users/clementberthou/Dev/incub/random-files/files/1bd93af4554f1/6f37b9341287/2072aeb72d432",
+    "version": 11,
+    "files_and_folders": {
+      "": {
+        "name": "",
+        "alias": "",
+        "comments": "",
+        "children": [
+          "/files"
+        ],
+        "file_size": 0,
+        "file_last_modified": 0,
+        "size": 245,
+        "last_modified_max": 1563979128306.3845,
+        "last_modified_list": [
+          1563979128306.2227,
+          1563979128306.0234,
+          1563979128306.3845,
+          1563979128304.0352,
+          1563979128303.9539
+        ],
+        "last_modified_min": 1563979128303.9539,
+        "last_modified_median": 1563979128306.3845,
+        "last_modified_average": 1563979128305.324,
+        "depth": 0,
+        "nb_files": 5,
+        "sort_by_size_index": [
+          0
+        ],
+        "sort_by_date_index": [
+          0
+        ]
+      },
+      "/files/1bd93af4554f1/1b2e8af880f7d": {
+        "name": "1b2e8af880f7d",
+        "alias": "",
+        "comments": "",
+        "children": [],
+        "file_size": 49,
+        "file_last_modified": 1563979128306.0234,
+        "size": 49,
+        "last_modified_max": 1563979128306.0234,
+        "last_modified_list": [
+          1563979128306.0234
+        ],
+        "last_modified_min": 1563979128306.0234,
+        "last_modified_median": 1563979128306.0234,
+        "last_modified_average": 1563979128306.0234,
+        "depth": 3,
+        "nb_files": 1,
+        "sort_by_size_index": [],
+        "sort_by_date_index": []
+      },
+      "/files/1bd93af4554f1/1a6d2646d7501": {
+        "name": "1a6d2646d7501",
+        "alias": "",
+        "comments": "",
+        "children": [],
+        "file_size": 49,
+        "file_last_modified": 1563979128306.2227,
+        "size": 49,
+        "last_modified_max": 1563979128306.2227,
+        "last_modified_list": [
+          1563979128306.2227
+        ],
+        "last_modified_min": 1563979128306.2227,
+        "last_modified_median": 1563979128306.2227,
+        "last_modified_average": 1563979128306.2227,
+        "depth": 3,
+        "nb_files": 1,
+        "sort_by_size_index": [],
+        "sort_by_date_index": []
+      },
+      "/files/2cb6ab95bf3ac": {
+        "name": "2cb6ab95bf3ac",
+        "alias": "",
+        "comments": "",
+        "children": [],
+        "file_size": 49,
+        "file_last_modified": 1563979128304.0352,
+        "size": 49,
+        "last_modified_max": 1563979128304.0352,
+        "last_modified_list": [
+          1563979128304.0352
+        ],
+        "last_modified_min": 1563979128304.0352,
+        "last_modified_median": 1563979128304.0352,
+        "last_modified_average": 1563979128304.0352,
+        "depth": 2,
+        "nb_files": 1,
+        "sort_by_size_index": [],
+        "sort_by_date_index": []
+      },
+      "/files": {
+        "name": "files",
+        "alias": "",
+        "comments": "",
+        "children": [
+          "/files/1bd93af4554f1",
+          "/files/2cb6ab95bf3ac",
+          "/files/307b77f2e0a0e"
+        ],
+        "file_size": 0,
+        "file_last_modified": 0,
+        "size": 245,
+        "last_modified_max": 1563979128306.3845,
+        "last_modified_list": [
+          1563979128306.2227,
+          1563979128306.0234,
+          1563979128306.3845,
+          1563979128304.0352,
+          1563979128303.9539
+        ],
+        "last_modified_min": 1563979128303.9539,
+        "last_modified_median": 1563979128306.3845,
+        "last_modified_average": 1563979128305.324,
+        "depth": 1,
+        "nb_files": 5,
+        "sort_by_size_index": [
+          0,
+          2,
+          1
+        ],
+        "sort_by_date_index": [
+          2,
+          1,
+          0
+        ]
+      },
+      "/files/307b77f2e0a0e": {
+        "name": "307b77f2e0a0e",
+        "alias": "",
+        "comments": "",
+        "children": [],
+        "file_size": 49,
+        "file_last_modified": 1563979128303.9539,
+        "size": 49,
+        "last_modified_max": 1563979128303.9539,
+        "last_modified_list": [
+          1563979128303.9539
+        ],
+        "last_modified_min": 1563979128303.9539,
+        "last_modified_median": 1563979128303.9539,
+        "last_modified_average": 1563979128303.9539,
+        "depth": 2,
+        "nb_files": 1,
+        "sort_by_size_index": [],
+        "sort_by_date_index": []
+      },
+      "/files/1bd93af4554f1": {
+        "name": "1bd93af4554f1",
+        "alias": "",
+        "comments": "",
+        "children": [
+          "/files/1bd93af4554f1/1a6d2646d7501",
+          "/files/1bd93af4554f1/1b2e8af880f7d",
+          "/files/1bd93af4554f1/225e5b63fce14"
+        ],
+        "file_size": 0,
+        "file_last_modified": 0,
+        "size": 147,
+        "last_modified_max": 1563979128306.3845,
+        "last_modified_list": [
+          1563979128306.2227,
+          1563979128306.0234,
+          1563979128306.3845
+        ],
+        "last_modified_min": 1563979128306.0234,
+        "last_modified_median": 1563979128306.0234,
+        "last_modified_average": 1563979128306.2102,
+        "depth": 2,
+        "nb_files": 3,
+        "sort_by_size_index": [
+          2,
+          1,
+          0
+        ],
+        "sort_by_date_index": [
+          1,
+          0,
+          2
+        ]
+      },
+      "/files/1bd93af4554f1/225e5b63fce14": {
+        "name": "225e5b63fce14",
+        "alias": "",
+        "comments": "",
+        "children": [
+          "/files/1bd93af4554f1/225e5b63fce14/2a2471c1172cd"
+        ],
+        "file_size": 0,
+        "file_last_modified": 0,
+        "size": 49,
+        "last_modified_max": 1563979128306.3845,
+        "last_modified_list": [
+          1563979128306.3845
+        ],
+        "last_modified_min": 1563979128306.3845,
+        "last_modified_median": 1563979128306.3845,
+        "last_modified_average": 1563979128306.3845,
+        "depth": 3,
+        "nb_files": 1,
+        "sort_by_size_index": [
+          0
+        ],
+        "sort_by_date_index": [
+          0
+        ]
+      },
+      "/files/1bd93af4554f1/225e5b63fce14/2a2471c1172cd": {
+        "name": "2a2471c1172cd",
+        "alias": "",
+        "comments": "",
+        "children": [],
+        "file_size": 49,
+        "file_last_modified": 1563979128306.3845,
+        "size": 49,
+        "last_modified_max": 1563979128306.3845,
+        "last_modified_list": [
+          1563979128306.3845
+        ],
+        "last_modified_min": 1563979128306.3845,
+        "last_modified_median": 1563979128306.3845,
+        "last_modified_average": 1563979128306.3845,
+        "depth": 4,
+        "nb_files": 1,
+        "sort_by_size_index": [],
+        "sort_by_date_index": []
+      }
+    },
+    "tags": {
+      "TCcONU59jtMvCWLMI1XSIjYXPFNfQ9ROTwYc66TE": {
+        "name": "TestTag1",
+        "ff_ids": [
+          "/files",
+          "/files/1bd93af4554f1/1b2e8af880f7d"
+        ],
+        "size": 245
+      },
+      "TtA5LtMKjIgx0QNVYNlyIkGX99rUImL5G2BL9OsP": {
+        "name": "TestTag2",
+        "ff_ids": [
+          "/files/1bd93af4554f1/1b2e8af880f7d",
+          "/files/307b77f2e0a0e",
+          "/files/2cb6ab95bf3ac"
+        ],
+        "size": 147
+      }
+    }
+  },
+  "output": [
+    [
+      "ID",
+      "ParentID",
+      "File",
+      "DescriptionLevel",
+      "Title",
+      "StartDate",
+      "EndDate",
+      "TransactedDate",
+      "Description",
+      "Tag0",
+      "Tag1"
+    ],
+    [
+      1,
+      6,
+      "1bd93af4554f1/1b2e8af880f7d",
+      "Item",
+      "1b2e8af880f7d",
+      "2019-07-24",
+      "2019-07-24",
+      "2019-08-05",
+      "",
+      "TestTag1",
+      "TestTag2"
+    ],
+    [
+      2,
+      6,
+      "1bd93af4554f1/1a6d2646d7501",
+      "Item",
+      "1a6d2646d7501",
+      "2019-07-24",
+      "2019-07-24",
+      "2019-08-05",
+      "",
+      "",
+      ""
+    ],
+    [
+      3,
+      4,
+      "2cb6ab95bf3ac",
+      "Item",
+      "2cb6ab95bf3ac",
+      "2019-07-24",
+      "2019-07-24",
+      "2019-08-05",
+      "",
+      "",
+      "TestTag2"
+    ],
+    [
+      4,
+      "",
+      ".",
+      "RecordGrp",
+      "files",
+      "2019-07-24",
+      "2019-07-24",
+      "2019-08-05",
+      "",
+      "TestTag1",
+      ""
+    ],
+    [
+      5,
+      4,
+      "307b77f2e0a0e",
+      "Item",
+      "307b77f2e0a0e",
+      "2019-07-24",
+      "2019-07-24",
+      "2019-08-05",
+      "",
+      "",
+      "TestTag2"
+    ],
+    [
+      6,
+      4,
+      "1bd93af4554f1",
+      "RecordGrp",
+      "1bd93af4554f1",
+      "2019-07-24",
+      "2019-07-24",
+      "2019-08-05",
+      "",
+      "",
+      ""
+    ],
+    [
+      7,
+      6,
+      "1bd93af4554f1/225e5b63fce14",
+      "RecordGrp",
+      "225e5b63fce14",
+      "2019-07-24",
+      "2019-07-24",
+      "2019-08-05",
+      "",
+      "",
+      ""
+    ],
+    [
+      8,
+      7,
+      "1bd93af4554f1/225e5b63fce14/2a2471c1172cd",
+      "Item",
+      "2a2471c1172cd",
+      "2019-07-24",
+      "2019-07-24",
+      "2019-08-05",
+      "",
+      "",
+      ""
+    ]
+  ]
+}

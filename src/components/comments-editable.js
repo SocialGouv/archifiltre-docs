@@ -4,12 +4,12 @@ import pick from "languages";
 
 const your_comments = pick({
   en: "Your comments here",
-  fr: "Vos commentaires ici"
+  fr: "Votre description ici"
 });
 
 const click_here_to_add = pick({
   en: "Click here to add some comments!",
-  fr: "Cliquez ici pour ajouter des commentaires !"
+  fr: "Cliquez ici pour ajouter une description !"
 });
 
 const input_style = {

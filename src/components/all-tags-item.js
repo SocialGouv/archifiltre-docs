@@ -4,6 +4,8 @@ import Tag from "components/tag";
 
 import pick from "languages";
 
+import MultiLinesInput from "components/multi-lines-input";
+
 const rename_tag_placeholder = pick({
   en: "Rename tag",
   fr: "Renommer un tag"
@@ -103,25 +105,36 @@ class AllTagsItem extends React.Component {
     let tag_pill;
     if (this.props.editing) {
       tag_pill = (
-        <input
-          style={input_style}
-          onFocus={e => {
-            e.target.select();
-          }}
-          onMouseUp={e => {
-            e.stopPropagation();
-          }}
-          onKeyUp={keyUp}
-          onBlur={e => {
-            this.props.renameTag(e.target.value);
+        <MultiLinesInput
+          value={tag}
+          onFinish={value => {
+            if (value !== "") {
+              this.props.renameTag(value);
+            }
             this.props.stopEditingTag();
           }}
-          defaultValue={tag}
-          placeholder={rename_tag_placeholder}
-          ref={component => {
-            this.textInput = component;
-          }}
+          autofocus={true}
         />
+
+        // <input
+        //   style={input_style}
+        //   onFocus={e => {
+        //     e.target.select();
+        //   }}
+        //   onMouseUp={e => {
+        //     e.stopPropagation();
+        //   }}
+        //   onKeyUp={keyUp}
+        //   onBlur={e => {
+        //     this.props.renameTag(e.target.value);
+        //     this.props.stopEditingTag();
+        //   }}
+        //   defaultValue={tag}
+        //   placeholder={rename_tag_placeholder}
+        //   ref={component => {
+        //     this.textInput = component;
+        //   }}
+        // />
       );
     } else {
       tag_pill = (
@@ -137,7 +150,10 @@ class AllTagsItem extends React.Component {
     let pencil = this.props.editing ? (
       <span />
     ) : (
-      <i className="fi-pencil edit_hover_pencil" style={{ opacity: "0.3" }} />
+      <i
+        className="fi-pencil edit_hover_pencil"
+        style={{ opacity: "0.3", paddingLeft: "0.4em" }}
+      />
     );
 
     res = (
@@ -153,7 +169,7 @@ class AllTagsItem extends React.Component {
           <div className="cell shrink" style={cell_shrink_style}>
             {count_or_action_bubble}
           </div>
-          <div className="cell shrink" style={cell_shrink_style}>
+          <div className="cell auto" style={cell_shrink_style}>
             {tag_pill}
           </div>
           <div className="cell shrink" style={cell_shrink_style}>

@@ -27,7 +27,7 @@ const content_style = {
   fontSize: "0.8em",
   overflowY: "auto",
   overflowX: "hidden",
-  maxHeight: "10.5em"
+  height: "100%"
 };
 
 class AllTags extends React.Component {
@@ -76,7 +76,7 @@ class AllTags extends React.Component {
       background: "white",
       height: "100%",
       borderRadius: "1em",
-      padding: "0.5em 0"
+      padding: "0.5em 0 1em 0"
     };
 
     let tags_content;
@@ -190,10 +190,14 @@ class AllTags extends React.Component {
 
     return (
       <div style={component_style}>
-        <TextAlignCenter>
-          <b>{all_tags}</b>
-        </TextAlignCenter>
-        {tags_content}
+        <div className="grid-y" style={{ height: "100%" }}>
+          <div className="cell shrink">
+            <TextAlignCenter>
+              <b>{all_tags}</b>
+            </TextAlignCenter>
+          </div>
+          <div className="cell auto">{tags_content}</div>
+        </div>
       </div>
     );
   }

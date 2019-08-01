@@ -4,14 +4,18 @@ const { dialog } = require("electron");
 
 const path = require("path");
 
-app.commandLine.appendSwitch("js-flags", "--max-old-space-size=40960");
+// We need to check if we are on 64 bits.
+// Setting --max-old-space-size with this value
+// make chromium crash on 32 bits.
+if (process.arch === "x64") {
+  app.commandLine.appendSwitch("js-flags", "--max-old-space-size=40960");
+}
 
 const { Menu } = require("electron");
 // Passing null will suppress the default menu.
 // On Windows and Linux, this has the additional
 // effect of removing the menu bar from the window.
 Menu.setApplicationMenu(null);
-
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.

@@ -150,9 +150,10 @@ const InfoCell = props => {
 
 const Report = props => {
   const api = props.api;
+  const isActive = props.isFocused || props.isLocked;
   let icon, name, real_name, info_cell, tags_cell, comments_cell, name_cell;
 
-  if (props.isFocused) {
+  if (isActive) {
     const node = props.node;
     const n_children = node.get("children");
     const n_name = node.get("name");
@@ -242,7 +243,7 @@ const Report = props => {
   return (
     <div
       style={{
-        opacity: props.isFocused ? 1 : 0.5,
+        opacity: isActive ? 1 : 0.5,
         background: "white",
         borderRadius: "1em"
       }}
@@ -274,7 +275,14 @@ export default function ReportApiToProps(props) {
   const getFfByFfId = database.getFfByFfId;
 
   const node_id = sequence[sequence.length - 1];
-  let node = icicle_state.isFocused() ? getFfByFfId(node_id) : {};
+
+  const isFocused = icicle_state.isFocused();
+  const isLocked = icicle_state.isLocked();
+
+  const isActive = isFocused || isLocked;
+
+  let node = isActive ? getFfByFfId(node_id) : {};
+
   let total_size = database.volume();
 
   const tag_ids = database.getTagIdsByFfId(node_id);
@@ -289,8 +297,8 @@ export default function ReportApiToProps(props) {
 
   props = ObjectUtil.compose(
     {
-      isFocused: icicle_state.isFocused(),
-      isLocked: icicle_state.isLocked(),
+      isFocused,
+      isLocked,
       node,
       node_id,
       tag_ids,

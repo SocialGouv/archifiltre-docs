@@ -20,7 +20,7 @@ export default function IcicleApiToProps(props) {
       isLocked,
       sequence: icicle_state.sequence(),
       hover_sequence: icicle_state.hover_sequence(),
-
+      setNoHover: icicle_state.setNoHover,
       setFocus: icicle_state.setFocus,
       setNoFocus: icicle_state.setNoFocus,
       lock: (...args) => {

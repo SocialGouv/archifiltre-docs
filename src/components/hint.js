@@ -73,7 +73,7 @@ export default class Hint extends React.Component {
           })}
         </div>
 
-        <div className="cell small-8">
+        <div className="cell small-10">
           <div
             style={{
               wordBreak: "break-word",
@@ -83,8 +83,8 @@ export default class Hint extends React.Component {
             <div className="grid-x">
               <div className="cell small-12">
                 {pick({
-                  en: "Hint :",
-                  fr: "Astuce :"
+                  en: `Hint ${this.state.index + 1}/${this.hintsLength()} :`,
+                  fr: `Astuce ${this.state.index + 1}/${this.hintsLength()} :`
                 })}
               </div>
               <div className="cell small-12">

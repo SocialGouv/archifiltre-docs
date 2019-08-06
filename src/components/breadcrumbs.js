@@ -77,6 +77,7 @@ class Breadcrumbs extends React.PureComponent {
 
   render() {
     const trueFHeight = this.trueFHeight;
+    const { isFocused, isLocked } = this.props;
 
     const displayName = id => {
       const node = this.props.getFfByFfId(id);
@@ -91,26 +92,32 @@ class Breadcrumbs extends React.PureComponent {
 
     let res = [];
 
-    if (this.props.isFocused) {
-      const breadcrumb_sequence = removeRootId(this.props.breadcrumb_sequence);
+    if (isFocused || isLocked) {
+      const icicle_state = this.props.api.icicle_state;
+      const locked = icicle_state.lock_sequence();
+      const hovered = icicle_state.hover_sequence();
+      const displayedNodes = isFocused ? hovered : locked;
+      const paddedDisplayedNodes = removeRootId(displayedNodes);
 
-      const breadcrumb_sequence_height = breadcrumb_sequence.map(trueFHeight);
+      const breadcrumb_sequence_height = paddedDisplayedNodes.map(trueFHeight);
       const cumulated_breadcrumb_sequence_height = computeCumulative(
         breadcrumb_sequence_height
       );
 
-      res = breadcrumb_sequence.map((node_id, i) => {
+      res = paddedDisplayedNodes.map((node_id, i) => {
         const fill_color = this.props.fillColor(node_id);
 
         const display_name = displayName(node_id);
 
-        const is_last = i === breadcrumb_sequence.length - 1;
+        const is_last = i === hovered.length - 1;
         const is_first = i === 0;
 
         const dim = this.computeDim(
           cumulated_breadcrumb_sequence_height[i],
           breadcrumb_sequence_height[i]
         );
+
+        const opacity = locked.includes(node_id) ? 1 : isLocked ? 0.4 : 0.7;
 
         return (
           <g key={makeBreadKey(node_id)}>
@@ -122,6 +129,7 @@ class Breadcrumbs extends React.PureComponent {
               dx={dim.width_poly}
               dy={dim.height_poly}
               fill_color={fill_color}
+              opacity={opacity}
             />
             <BreadCrumbText
               x={dim.x_text}
@@ -178,7 +186,7 @@ class Breadcrumbs extends React.PureComponent {
     }
 
     return (
-      <g style={{ opacity: this.props.isFocused ? 1 : 0.3, stroke: "#fff" }}>
+      <g style={{ opacity: isFocused || isLocked ? 1 : 0.3, stroke: "#fff" }}>
         {res}
       </g>
     );
@@ -200,6 +208,7 @@ export default function BreadcrumbsApiToProps(props) {
     {
       breadcrumb_sequence,
       isFocused: icicle_state.isFocused(),
+      isLocked: icicle_state.isLocked(),
       max_depth,
       getFfByFfId,
       root_id: database.rootFfId()

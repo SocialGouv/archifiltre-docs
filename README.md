@@ -49,15 +49,25 @@ You are welcome to open pull requests to add features to the project.
 
 ### Building/releasing the app.
 
-First, build the app in production mode
+First, prepare the build in production mode
+
+```bash
+yarn prepareProd
+```
+
+Then you can package the app for the right platform:
+
+```bash
+yarn win32
+yarn win64
+yarn mac
+yarn linux
+```
+
+Or you can prepare the build and build for all four platforms with one command:
 
 ```bash
 yarn buildProd
 ```
 
-Then you can package the app for the right platform :
-
-```bash
-yarn windows
-yarn mac
-```
+Once built, production binaries are found in the dist folder, each in their corresponding platform's subfolder.

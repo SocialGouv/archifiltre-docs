@@ -7,7 +7,8 @@
     "test": "jest",
     "test-watch": "yarn test --watch",
     "buildDev": "webpack --progress --mode development",
-    "buildProd": "webpack --progress --mode production",
+    "prepareProd": "webpack --progress --mode production",
+    "buildProd": "yarn prepareProd && yarn win32 && yarn win64 && yarn mac && yarn linux",
     "devServer": "webpack-dev-server --mode development",
     "watchBuildDev": "webpack --watch --progress --mode development",
     "pack": "electron-builder --dir",
@@ -32,10 +33,17 @@
       "electron/build/icon.*",
       "package.json"
     ],
+    "directories": {
+      "output": "dist/${os}-${arch}"
+    },
     "mac": {
       "icon": "./electron/build/icon.icns"
     },
     "win": {
+      "icon": "./electron/build/icon.png"
+    },
+    "linux": {
+      "category": "Office",
       "icon": "./electron/build/icon.png"
     }
   },

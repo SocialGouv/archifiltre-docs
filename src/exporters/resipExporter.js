@@ -12,7 +12,7 @@ const formatFile = ff => {
     .join("/");
 
   // We format the file path for the current file system
-  return path.join(resipFilePath);
+  return path.join(resipFilePath).replace(/\\/g, "/");
 };
 
 /**

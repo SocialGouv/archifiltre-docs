@@ -1,5 +1,6 @@
 import testData from "./audiReportExporter.test.data.json";
 import auditReportExporter from "./auditReportExporter";
+import { TEMPLATE_PATH } from "./auditReportExporter";
 import { exportToDocX } from "../util/docx-util";
 import { advanceTo } from "jest-date-mock";
 
@@ -18,7 +19,8 @@ describe("auditReportExporter", () => {
       });
 
       expect(exportToDocX).toHaveBeenCalledWith(
-        "template/auditTemplate.docx",
+        //"template/auditTemplate.docx",
+        TEMPLATE_PATH,
         testData.output
       );
     });

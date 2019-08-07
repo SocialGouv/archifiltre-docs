@@ -1,6 +1,6 @@
 import path from "path";
 import dateFormat from "dateformat";
-import { makeEmptyArray, replaceValue } from "../util/array-util";
+import { makeEmptyArray, replaceValue } from "../util/array-util.ts";
 
 const formatFile = ff => {
   const removeStartingSlash = str =>

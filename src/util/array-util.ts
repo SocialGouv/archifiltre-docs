@@ -8,7 +8,7 @@ import { fill } from "lodash";
  * computeCumulative([1, 1, 1]) // [ 0, 1, 2 ]
  * computeCumulative([1, 2, 3]) // [ 0, 1, 3 ]
  */
-export const computeCumulative = array => {
+export const computeCumulative = (array: number[]): number[] => {
   const ans = [0];
   for (let i = 0; i < array.length - 1; i++) {
     ans.push(array[i] + ans[i]);
@@ -22,7 +22,7 @@ export const computeCumulative = array => {
  * @param [defaultValue=undefined] - Default
  * @returns {any[][]}
  */
-export const makeEmptyArray = (nbElements, defaultValue) =>
+export const makeEmptyArray = <T>(nbElements: number, defaultValue: T): T[] =>
   fill(Array(nbElements), defaultValue);
 
 /**
@@ -32,7 +32,7 @@ export const makeEmptyArray = (nbElements, defaultValue) =>
  * @param newValue - The value to replace the old one with
  * @returns {*[]} - A new array with the replaced value
  */
-export const replaceValue = (array, index, newValue) => [
+export const replaceValue = <T>(array: T[], index: number, newValue: T) => [
   ...array.slice(0, index),
   newValue,
   ...array.slice(index + 1)
@@ -44,14 +44,16 @@ export const replaceValue = (array, index, newValue) => [
  * @param array - The array to count elements from
  * @returns {function(*): *}
  */
-export const countItems = predicate => array => array.filter(predicate).length;
+export const countItems = <T>(predicate: (T) => boolean) => (
+  array: T[]
+): number => array.filter(predicate).length;
 
 /**
  * Returns the median of a sorted array of numbers
  * @param sortedArray - An already sorted array of numbers
  * @returns {number|*}
  */
-export const medianOnSortedArray = sortedArray => {
+export const medianOnSortedArray = (sortedArray: number[]): number => {
   const arrayLength = sortedArray.length;
   if (arrayLength % 2 === 1) {
     return sortedArray[(arrayLength - 1) / 2];

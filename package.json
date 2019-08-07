@@ -57,6 +57,11 @@
       "eslint --fix",
       "prettier --list-different",
       "git add"
+    ],
+    "*.ts": [
+      "tslint --fix",
+      "prettier --list-different",
+      "git add"
     ]
   },
   "repository": {
@@ -78,8 +83,8 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@socialgouv/eslint-config-react": "^0.6.0",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-loader": "^8.0.6",
+    "@types/jest": "^24.0.18",
+    "awesome-typescript-loader": "^5.2.1",
     "colors": "1.2.1",
     "copy-webpack-plugin": "4.5.1",
     "cross-env": "^5.2.0",
@@ -107,6 +112,9 @@
     "source-map-loader": "^0.2.4",
     "style-loader": "0.20.3",
     "svg-url-loader": "^2.3.2",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.20.0",
+    "typescript": "^3.5.3",
     "url-loader": "^1.1.2",
     "webpack": "^4.37.0",
     "webpack-cli": "^3.3.6",
@@ -116,13 +124,17 @@
   },
   "dependencies": {
     "@sentry/browser": "^5.4.0",
+    "@socialgouv/tslint-config-recommended": "^0.10.0",
+    "@types/immutable": "^3.8.7",
+    "@types/react": "^16.8.24",
+    "@types/react-dom": "^16.8.5",
     "core-js": "^3.1.4",
     "dateformat": "3.0.3",
     "docxtemplater": "^3.14.1",
     "electron-ga": "1.0.6",
     "file-saver": "2.0.2",
     "foundation-sites": "^6.5.3",
-    "immutable": "4.0.0-rc.9",
+    "immutable": "4.0.0-rc.12",
     "jquery": "^3.4.1",
     "js-md5": "0.7.3",
     "js-sha512": "0.8.0",

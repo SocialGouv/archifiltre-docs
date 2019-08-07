@@ -1,4 +1,4 @@
-export function generateRandomString(num: number) {
+export function generateRandomString(num) {
   // 0-9 => 48-57 (10)
   // A-Z => 65-90 (26)
   // a-z => 97-122 (26)

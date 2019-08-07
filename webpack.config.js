@@ -6,9 +6,7 @@ const webpack = require("webpack");
 module.exports = (env, argv = {}) => ({
   devtool: "source-map",
   entry: {
-    app: "./src/app.js",
-    react: ["react", "react-dom"],
-    immutable: ["immutable"]
+    app: "./src/app.js"
   },
 
   plugins: [
@@ -50,9 +48,9 @@ module.exports = (env, argv = {}) => ({
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.[tj]sx?$/,
         exclude: /(node_modules|bower_components)/,
-        loader: "babel-loader"
+        loader: "awesome-typescript-loader"
       },
       {
         test: /\.js$/,

@@ -9,6 +9,7 @@ import * as Tags from "datastore/tags";
 import * as FilesAndFolders from "datastore/files-and-folders";
 
 import * as SEDA from "seda";
+import * as METS from "mets";
 
 const property_name = "database";
 
@@ -72,6 +73,7 @@ const toStrList2 = () => state => {
 };
 
 const toSIP = () => SEDA.makeSIP;
+const toSIP2 = () => METS.makeSIP;
 
 const getSessionName = () => state => state.get("session_name");
 const getOriginalPath = () => state => state.get("original_path");
@@ -103,6 +105,7 @@ const reader = {
   toJson,
   toStrList2,
   toSIP,
+  toSIP2,
   getSessionName,
   getOriginalPath,
   getTagIdsByFfId,

@@ -17,7 +17,7 @@ const CHILDREN_LIMIT = 30;
 const NB_FOLDERS_TO_DISPLAY = 10;
 const MAX_FOLDERS_DEPTH = 7;
 const MAX_PATH_LENGTH = 200;
-const TEMPLATE_PATH = path.join(
+export const TEMPLATE_PATH = path.join(
   STATIC_ASSETS_PATH,
   "template/auditTemplate.docx"
 );

@@ -1,0 +1,12 @@
+{
+  "extends": ["@socialgouv/tslint-config-recommended"],
+  "overrides": [
+    {
+      "files": ["src/**/*.test.ts", "src/test/**/*.ts"],
+      "env": {
+        "jest": true
+      },
+      "baseUrl": "src"
+    }
+  ]
+}

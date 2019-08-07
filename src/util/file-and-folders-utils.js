@@ -1,4 +1,4 @@
-import { countItems } from "./array-util";
+import { countItems } from "./array-util.ts";
 import md5 from "js-md5";
 
 /**

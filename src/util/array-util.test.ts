@@ -1,12 +1,12 @@
 import {
-  makeEmptyArray,
-  replaceValue,
+  computeCumulative,
   countItems,
+  makeEmptyArray,
   medianOnSortedArray,
-  computeCumulative
-} from "util/array-util";
+  replaceValue
+} from "./array-util";
 
-describe("array-util", function() {
+describe("array-util", () => {
   describe("computeCumulative", () => {
     describe("with an empty array", () => {
       it("should count return [0]", () => {
@@ -27,10 +27,7 @@ describe("array-util", function() {
       const array = makeEmptyArray(NB_ELEMENTS);
 
       it("should have undefined values for each element", () => {
-        expect(array[0]).toBeUndefined();
-        expect(array[1]).toBeUndefined();
-        expect(array[2]).toBeUndefined();
-        expect(array[3]).toBeUndefined();
+        expect(array).toEqual([undefined, undefined, undefined, undefined]);
       });
 
       it("should be iterable", () => {
@@ -46,10 +43,12 @@ describe("array-util", function() {
       const array = makeEmptyArray(NB_ELEMENTS, DEFAULT_VALUE);
 
       it("should have undefined values for each element", () => {
-        expect(array[0]).toBe(DEFAULT_VALUE);
-        expect(array[1]).toBe(DEFAULT_VALUE);
-        expect(array[2]).toBe(DEFAULT_VALUE);
-        expect(array[3]).toBe(DEFAULT_VALUE);
+        expect(array).toEqual([
+          DEFAULT_VALUE,
+          DEFAULT_VALUE,
+          DEFAULT_VALUE,
+          DEFAULT_VALUE
+        ]);
       });
     });
   });
@@ -67,11 +66,7 @@ describe("array-util", function() {
       });
 
       it("should provide a new array with the replaced value", () => {
-        expect(newArray[0]).toBe("a");
-        expect(newArray[1]).toBe("b2");
-        expect(newArray[2]).toBe("c");
-        expect(newArray[3]).toBe("d");
-        expect(newArray.length).toBe(4);
+        expect(newArray).toEqual(["a", "b2", "c", "d"]);
       });
     });
 

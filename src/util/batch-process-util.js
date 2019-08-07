@@ -1,4 +1,4 @@
-import { makeEmptyArray } from "./array-util";
+import { makeEmptyArray } from "./array-util.ts";
 import { cpus } from "os";
 import { Observable } from "rxjs";
 import { reportError } from "../reporter";

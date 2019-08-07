@@ -12,7 +12,7 @@ import {
   sortFoldersByDepth
 } from "../util/file-and-folders-utils";
 import { percent } from "../util/numbers-util";
-import { medianOnSortedArray } from "../util/array-util";
+import { medianOnSortedArray } from "../util/array-util.ts";
 import { exportToDocX } from "../util/docx-util";
 
 const CHILDREN_LIMIT = 30;

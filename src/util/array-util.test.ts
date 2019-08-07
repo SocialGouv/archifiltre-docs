@@ -1,12 +1,12 @@
 import {
-  makeEmptyArray,
-  replaceValue,
+  computeCumulative,
   countItems,
+  makeEmptyArray,
   medianOnSortedArray,
-  computeCumulative
-} from "util/array-util";
+  replaceValue
+} from "./array-util";
 
-describe("array-util", function() {
+describe("array-util", () => {
   describe("computeCumulative", () => {
     describe("with an empty array", () => {
       it("should count return [0]", () => {
@@ -22,35 +22,23 @@ describe("array-util", function() {
   });
 
   describe("makeEmptyArray", () => {
-    describe("withoutDefaultValue", () => {
-      const NB_ELEMENTS = 4;
-      const array = makeEmptyArray(NB_ELEMENTS);
+    const NB_ELEMENTS = 4;
+    const DEFAULT_VALUE = "default";
+    const array = makeEmptyArray(NB_ELEMENTS, DEFAULT_VALUE);
 
-      it("should have undefined values for each element", () => {
-        expect(array[0]).toBeUndefined();
-        expect(array[1]).toBeUndefined();
-        expect(array[2]).toBeUndefined();
-        expect(array[3]).toBeUndefined();
-      });
-
-      it("should be iterable", () => {
-        const mapper = jest.fn();
-        array.map(mapper);
-        expect(mapper).toHaveBeenCalledTimes(NB_ELEMENTS);
-      });
+    it("should have undefined values for each element", () => {
+      expect(array).toEqual([
+        DEFAULT_VALUE,
+        DEFAULT_VALUE,
+        DEFAULT_VALUE,
+        DEFAULT_VALUE
+      ]);
     });
 
-    describe("with default value", () => {
-      const NB_ELEMENTS = 4;
-      const DEFAULT_VALUE = "default";
-      const array = makeEmptyArray(NB_ELEMENTS, DEFAULT_VALUE);
-
-      it("should have undefined values for each element", () => {
-        expect(array[0]).toBe(DEFAULT_VALUE);
-        expect(array[1]).toBe(DEFAULT_VALUE);
-        expect(array[2]).toBe(DEFAULT_VALUE);
-        expect(array[3]).toBe(DEFAULT_VALUE);
-      });
+    it("should be iterable", () => {
+      const mapper = jest.fn();
+      array.map(mapper);
+      expect(mapper).toHaveBeenCalledTimes(NB_ELEMENTS);
     });
   });
 
@@ -67,11 +55,7 @@ describe("array-util", function() {
       });
 
       it("should provide a new array with the replaced value", () => {
-        expect(newArray[0]).toBe("a");
-        expect(newArray[1]).toBe("b2");
-        expect(newArray[2]).toBe("c");
-        expect(newArray[3]).toBe("d");
-        expect(newArray.length).toBe(4);
+        expect(newArray).toEqual(["a", "b2", "c", "d"]);
       });
     });
 

@@ -1,5 +1,5 @@
 import React from "react";
-import * as ArrayUtil from "util/array-util";
+import * as ArrayUtil from "util/array-util.ts";
 
 import IcicleRect from "./icicle-rect";
 

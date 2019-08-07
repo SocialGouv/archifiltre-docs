@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import MinimapBracket from "../minimap-bracket";
 import { animate, clear } from "../../animation-daemon";
-import * as ArrayUtil from "util/array-util";
+import * as ArrayUtil from "util/array-util.ts";
 import Ruler from "components/ruler";
 import BreadCrumbs from "components/breadcrumbs";
 import * as FunctionUtil from "util/function-util";
@@ -122,7 +122,6 @@ export default class IcicleMain extends PureComponent {
         a => a * dx
       );
       const cumulated_width_array = ArrayUtil.computeCumulative(width_array);
-
       const index_of = children_ids.indexOf(child_id);
       x = cumulated_width_array[index_of] + x;
       dx = width_array[index_of];

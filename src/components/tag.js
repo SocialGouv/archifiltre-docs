@@ -39,7 +39,10 @@ const Tag = props => {
 
   return (
     <div className="grid-x" style={component_style} onClick={clickHandler}>
-      <div className="cell shrink" style={{ paddingRight: "0em" }}>
+      <div
+        className="cell auto"
+        style={{ paddingRight: "0em", wordBreak: "break-word" }}
+      >
         <div style={tag_style}>{text}</div>
       </div>
       <div className="cell shrink" style={{ marginLeft: "-0.3em" }}>

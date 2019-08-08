@@ -12,7 +12,7 @@ const french_hints = [
     "et ils sont classés du plus grand à gauche au plus petit à droite.",
   "Dans archifiltre, " +
     "les dossiers sont en orange ou en orange foncé et " +
-    "celle des fichiers dépend de leur extension.",
+    "la couleur des fichiers dépend de leur extension.",
   "Dans archifiltre, " +
     "les tableurs sont verts, " +
     "les documents sont bleus, " +

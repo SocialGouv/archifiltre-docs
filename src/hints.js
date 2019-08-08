@@ -17,7 +17,7 @@ const french_hints = [
     "les tableurs sont verts, " +
     "les documents sont bleus, " +
     "les présentations (.pdf, .pptx, ...) sont rouges, " +
-    "les mails (.msg, .pst, ...) sont bleu claire, " +
+    "les mails (.msg, .pst, ...) sont bleu clair, " +
     "les fichiers multimédias sont en violet et " +
     "tous les autres fichiers sont en gris.",
   "Pour zoomer, double-cliquez sur un rectangle. " +

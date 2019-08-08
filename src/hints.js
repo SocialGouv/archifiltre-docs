@@ -33,7 +33,7 @@ const french_hints = [
   "En haut de la visualisation, vous avez à gauche une fiche " +
     "qui décrit le fichier ou dossier qui se trouve sous votre souris ou qui " +
     "a été vérouillé, et à droite une section qui regroupe tous les tags de votre analyse.",
-  "Vous trouverez dans la fiche à gauche une icon avec une loupe qui représente " +
+  "Vous trouverez dans la fiche à gauche une icône avec une loupe qui représente " +
     "le fichier ou dossier sélectionné. " +
     "En cliquant dessus, vous ouvrirez l'explorateur de fichier windows si c'est un dossier ou " +
     "le logiciel adéquat si c'est un fichier (ex : word pour un fichier .docx).",

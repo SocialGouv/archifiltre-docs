@@ -41,7 +41,7 @@ const french_hints = [
     "cliquant sur son nom, le fichier ne sera pas renommé sur votre ordinateur " +
     "et l'ancien nom sera conservé entre parenthèses dans archifiltre. " +
     "Pour redonner son nom d'origine à un fichier ou dossier, " +
-    "renommer le avec une chaine de caractères vide.",
+    "renommez-le avec une chaîne de caractères vide.",
   "Vous pouvez changer le nom de votre analyse en haut au centre de l'interface. " +
     "Les fichiers générés par archifiltre porteront le nom de votre analyse.",
   "Tout en haut de l'interface il y a 3 boutons. " +

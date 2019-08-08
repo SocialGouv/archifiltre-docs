@@ -8,12 +8,12 @@ import pick from "languages";
 
 const comments_tr = pick({
   en: "Comments",
-  fr: "Commentaires"
+  fr: "Description"
 });
 
 const your_comments_here_tr = pick({
   en: "Your comments here",
-  fr: "Vos commentaires ici"
+  fr: "Votre description ici"
 });
 
 class ReportCellComments extends React.Component {

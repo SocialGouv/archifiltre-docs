@@ -6,6 +6,8 @@ import WorkSpace from "components/workspace";
 
 import WaitingScreen from "components/waiting-screen";
 import ErrorScreen from "./error-screen";
+import Hint from "components/hint";
+import { hints } from "hints";
 
 const grid_style = {
   padding: "0em 5em"
@@ -18,6 +20,17 @@ const MainSpace = props => {
   const started = loading_state.isStarted();
   const finished = loading_state.isFinished();
   const error = loading_state.isInError();
+
+  // return (
+  //   <div className="grid-y grid-padding-x grid-frame align-center">
+  //     <div className="cell small-8">
+  //       <WaitingScreen api={api} />
+  //     </div>
+  //     <div className="cell shrink">
+  //       <Hint hints={hints} />
+  //     </div>
+  //   </div>
+  // ); //////////////////////
 
   if (error === true) {
     return (
@@ -48,6 +61,9 @@ const MainSpace = props => {
       <div className="grid-y grid-padding-x grid-frame align-center">
         <div className="cell small-8">
           <WaitingScreen api={api} />
+        </div>
+        <div className="cell shrink">
+          <Hint hints={hints} />
         </div>
       </div>
     );

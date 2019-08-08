@@ -16,4 +16,26 @@ export const computeCumulative = array => {
   return ans;
 };
 
+/**
+ * Creates an array with nbElements which are initialized to defaultValue
+ * @param nbElements
+ * @param [defaultValue=undefined] - Default
+ * @returns {any[][]}
+ */
+export const makeEmptyArray = (nbElements, defaultValue) =>
+  Array.apply(null, Array(nbElements)).map(() => defaultValue);
+
+/**
+ * Replaces the value from array at index by the newValue.
+ * @param array - The array to work on
+ * @param index - The index of the value to replace
+ * @param newValue - The value to replace the old one with
+ * @returns {*[]} - A new array with the replaced value
+ */
+export const replaceValue = (array, index, newValue) => [
+  ...array.slice(0, index),
+  newValue,
+  ...array.slice(index + 1)
+];
+
 export const empty = [];

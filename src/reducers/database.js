@@ -42,6 +42,8 @@ const getFfIdPath = id => state =>
 
 const toJson = () => state => JSON.stringify(VirtualFileSystem.toJs(state));
 
+const getData = () => state => VirtualFileSystem.toJs(state);
+
 /**
  * Generates an array of array ([[]]) with the first line being
  * the csv header.
@@ -106,7 +108,8 @@ const reader = {
   getTagIdsByFfId,
   getAllTagIds,
   getTagByTagId,
-  getWaitingCounter
+  getWaitingCounter,
+  getData
 };
 
 const set = next_state => state => next_state;

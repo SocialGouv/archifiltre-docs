@@ -4,5 +4,6 @@
 module.exports = {
   coverageDirectory: "coverage",
   moduleFileExtensions: ["js", "jsx"],
-  moduleDirectories: ["src", "node_modules"]
+  moduleDirectories: ["src", "node_modules"],
+  setupFiles: ["jest-date-mock"]
 };

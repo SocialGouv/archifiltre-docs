@@ -9,6 +9,8 @@ import pick from "languages";
 
 const label = "CSV";
 
+const utf8_byte_order_mark = "\ufeff";
+
 const CsvButton = props => {
   const api = props.api;
   const database = api.database;
@@ -19,7 +21,7 @@ const CsvButton = props => {
   return mkB(
     () => {
       console.log("to csv");
-      save(name(), Csv.toStr(getStrList2()));
+      save(name(), utf8_byte_order_mark + Csv.toStr(getStrList2()));
     },
     label,
     true,

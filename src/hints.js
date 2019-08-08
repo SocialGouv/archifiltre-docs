@@ -5,7 +5,7 @@ const english_hints = [];
 const french_hints = [
   "Si vous avez fait une erreur, " +
     "vous pouvez annuler vos dernières actions en utilisant " +
-    "les deux flèches « suivante » et « précédente » qui se trouvent en haut de l'interface",
+    "les deux flèches « suivant » et « précédent » qui se trouvent en haut de l'interface",
   "Dans archifiltre, " +
     "chaque rectangle représente un dossier ou un fichier de votre arborescence, " +
     "leur largeur est proportionnelle au poids du dossier ou fichier, " +

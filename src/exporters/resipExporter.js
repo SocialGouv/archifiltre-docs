@@ -33,7 +33,7 @@ const formatDescriptionLevel = ff => {
  * @param ff - a file or folder data object
  * @returns {string} The file title
  */
-const formatTitle = ff => path.basename(ff.id);
+const formatTitle = ff => (ff.alias !== "" ? ff.alias : path.basename(ff.id));
 
 /**
  * Formats the date to "yyyy-mm-dd"

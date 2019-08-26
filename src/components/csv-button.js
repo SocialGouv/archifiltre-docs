@@ -5,11 +5,7 @@ import { mkB } from "components/button";
 import * as Csv from "csv";
 import { save, makeNameWithExt } from "util/file-sys-util";
 
-import pick from "languages";
-
 const label = "CSV";
-
-const utf8_byte_order_mark = "\ufeff";
 
 const CsvButton = props => {
   const api = props.api;
@@ -20,8 +16,7 @@ const CsvButton = props => {
   const name = () => makeNameWithExt(getSessionName(), "csv");
   return mkB(
     () => {
-      console.log("to csv");
-      save(name(), utf8_byte_order_mark + Csv.toStr(getStrList2()));
+      save(name(), Csv.toStr(getStrList2()), { format: "utf-8" });
     },
     label,
     true,

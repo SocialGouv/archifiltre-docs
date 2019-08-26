@@ -6,8 +6,17 @@ const Zlib = require("zlib");
 const TarStream = require("tar-stream");
 import FileSaver from "file-saver";
 
-export function save(name, json) {
-  const blob = new Blob([json], { type: "text/plain;charset=utf-8" });
+const utf8_byte_order_mark = "\ufeff";
+
+export function save(name, json, { format }) {
+  let fileHead = "";
+
+  if (format.toLowerCase() === "utf-8") {
+    fileHead += utf8_byte_order_mark;
+  }
+
+  const writtenData = fileHead + json;
+  const blob = new Blob([writtenData], { type: "text/plain;charset=utf-8" });
   FileSaver.saveAs(blob, name);
 }
 

@@ -36,7 +36,7 @@
       },
       "/files/1bd93af4554f1/1b2e8af880f7d": {
         "name": "1b2e8af880f7d",
-        "alias": "",
+        "alias": "FileAlias",
         "comments": "",
         "children": [],
         "file_size": 49,
@@ -152,7 +152,7 @@
       },
       "/files/1bd93af4554f1": {
         "name": "1bd93af4554f1",
-        "alias": "",
+        "alias": "FolderAlias",
         "comments": "",
         "children": [
           "/files/1bd93af4554f1/1a6d2646d7501",
@@ -270,7 +270,7 @@
       6,
       "1bd93af4554f1/1b2e8af880f7d",
       "Item",
-      "1b2e8af880f7d",
+      "FileAlias",
       "2019-07-24",
       "2019-07-24",
       "2019-08-05",
@@ -335,7 +335,7 @@
       4,
       "1bd93af4554f1",
       "RecordGrp",
-      "1bd93af4554f1",
+      "FolderAlias",
       "2019-07-24",
       "2019-07-24",
       "2019-08-05",

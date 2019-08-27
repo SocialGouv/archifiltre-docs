@@ -52,8 +52,8 @@ function makeStore(compiled_real_estate) {
       }
       // We chain all the state updates and calls them afterwards
       this.upcomingStateChange = compose(
-        this.upcomingStateChange,
-        flat_api[key](...args)
+        flat_api[key](...args),
+        this.upcomingStateChange
       );
     }
 

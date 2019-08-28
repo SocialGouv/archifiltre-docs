@@ -1,8 +1,8 @@
 import React from "react";
 
-import * as ObjectUtil from "util/object-util";
 import pick from "languages";
-import ProgressBar from "./progress-bar";
+import IndexingBlock from "./indexing-block";
+import AreaLoadingBar from "./AreaComponents/area-loading-bar";
 
 const Loading = () => {
   const text = pick({
@@ -13,18 +13,12 @@ const Loading = () => {
   return <p>{text}</p>;
 };
 
-const Traverse = ({ count, totalCount, complete }) => {
-  const text = pick({
-    en: "Files loaded",
-    fr: "Fichiers chargés"
-  });
-
-  return (
-    <div>
-      {text}: {complete ? totalCount : count}
-    </div>
-  );
-};
+const Traverse = ({ count, complete, totalCount }) => (
+  <IndexingBlock
+    fileCount={!complete ? count : totalCount}
+    loading={!complete}
+  />
+);
 
 /**
  * Creates a loader component with the appropriate text
@@ -46,11 +40,7 @@ const makeLoadingComponent = textMap => {
 
     const percentage = totalCount ? (displayedCount / totalCount) * 100 : 0;
 
-    return (
-      <div>
-        {text} : <ProgressBar percentage={percentage} />
-      </div>
-    );
+    return <AreaLoadingBar progress={percentage}>{text}</AreaLoadingBar>;
   };
 
   return LoadingComponent;
@@ -62,8 +52,8 @@ const Make = makeLoadingComponent({
 });
 
 const DerivateFF = makeLoadingComponent({
-  en: "Computation of the derivative data from file and folders",
-  fr: "Calcul des données dérivées des fichiers et dossiers"
+  en: "Computing derivated data",
+  fr: "Calcul des données dérivées"
 });
 
 const DivedFF = makeLoadingComponent({
@@ -123,11 +113,6 @@ const Presentational = ({ status, count, totalCount }) => (
   <div className="grid-y grid-frame align-center">
     <div className="cell">
       <div style={cell_style}>
-        <img
-          alt="loading"
-          src="imgs/loading.gif"
-          style={{ width: "50%", opacity: "0.3" }}
-        />
         {status === "loading" && <Loading />}
         <LoadingMessages
           status={status}

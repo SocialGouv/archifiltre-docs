@@ -1,12 +1,15 @@
-
-
-
-
 @font-face {
   font-family: 'Quicksand';
   font-style: normal;
   font-weight: 400;
   src: url('Quicksand/Quicksand-Regular.ttf') format('opentype');
+}
+
+@font-face {
+  font-family: 'QuicksandBold';
+  font-style: normal;
+  font-weight: 400;
+  src: url('Quicksand/Quicksand-Bold.ttf') format('opentype');
 }
 
 @font-face {

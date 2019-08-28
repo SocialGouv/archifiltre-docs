@@ -1,105 +1,77 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
-import { mkRB } from "components/button";
 import pick from "languages";
+import AreaEmphasized from "./AreaComponents/area-emphasized";
+import RefreshButton from "./Buttons/refresh-button";
 
-export default class Hint extends React.Component {
-  constructor(props) {
-    super(props);
+const NEW_HINT_INTERVAL = 15000;
 
-    const len = props.hints.length;
+const didYouKnowText = pick({
+  en: "Did you know ?",
+  fr: "Le saviez-vous ?"
+});
 
-    this.state = {
-      index: Math.floor(Math.random() * len)
+const hintsContainerStyle = {
+  position: "relative",
+  display: "flex",
+
+  minHeight: "150px",
+
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+
+  textAlign: "center"
+};
+
+const hintsTextContainerStyle = {
+  marginLeft: "120px",
+  marginRight: "120px"
+};
+
+const refreshButtonContainerStyle = {
+  position: "absolute",
+
+  right: 0,
+
+  fontSize: "36px"
+};
+
+/**
+ * Displays a slideshow of various hints.
+ * @param hints - The list of displayed hints
+ * @returns {React.Component}
+ */
+const Hint = ({ hints = [] }) => {
+  const [hintIndex, setHintIndex] = useState(0);
+
+  const nextHint = useCallback(() => {
+    setHintIndex((hintIndex + 1) % hints.length);
+  }, [hintIndex, hints.length, setHintIndex]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextHint();
+    }, NEW_HINT_INTERVAL);
+
+    return () => {
+      clearInterval(interval);
     };
+  }, [hintIndex, hints.length, nextHint]);
 
-    this.hintsLength = this.hintsLength.bind(this);
-    this.updateIndex = this.updateIndex.bind(this);
-  }
-
-  hintsLength() {
-    return this.props.hints.length;
-  }
-
-  updateIndex(should_increment) {
-    const index = this.state.index;
-    const hints_length = this.hintsLength();
-
-    let next_index;
-    if (should_increment) {
-      next_index = index + 1;
-    } else {
-      next_index = index - 1;
-    }
-
-    if (next_index === hints_length) {
-      next_index = 0;
-    }
-
-    if (next_index === -1) {
-      next_index = hints_length - 1;
-    }
-
-    this.setState({
-      index: next_index
-    });
-  }
-
-  render() {
-    const enable = true;
-    const hex_str_color = "";
-    const label = class_name => (
-      <i className={class_name} style={{ fontSize: "1.6em" }} />
-    );
-    const leftCallback = () => {
-      const should_increment = false;
-      this.updateIndex(should_increment);
-    };
-    const left_label = label("fi-arrow-left");
-    const rightCallback = () => {
-      const should_increment = true;
-      this.updateIndex(should_increment);
-    };
-    const right_label = label("fi-arrow-right");
-
-    return (
-      <div
-        className="grid-x align-center align-middle"
-        style={{ padding: "0em 3em" }}
-      >
-        <div className="cell shrink">
-          {mkRB(leftCallback, left_label, enable, hex_str_color, {
-            marginBottom: "0"
-          })}
+  return (
+    <div style={hintsContainerStyle}>
+      <div style={hintsTextContainerStyle}>
+        <div>
+          <AreaEmphasized>{didYouKnowText}</AreaEmphasized>
         </div>
-
-        <div className="cell small-10">
-          <div
-            style={{
-              wordBreak: "break-word",
-              padding: "0em 3em"
-            }}
-          >
-            <div className="grid-x">
-              <div className="cell small-12">
-                {pick({
-                  en: `Hint ${this.state.index + 1}/${this.hintsLength()} :`,
-                  fr: `Astuce ${this.state.index + 1}/${this.hintsLength()} :`
-                })}
-              </div>
-              <div className="cell small-12">
-                {this.props.hints[this.state.index]}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="cell shrink">
-          {mkRB(rightCallback, right_label, enable, hex_str_color, {
-            marginBottom: "0"
-          })}
-        </div>
+        <div>{hints[hintIndex]}</div>
       </div>
-    );
-  }
-}
+      <div style={refreshButtonContainerStyle}>
+        <RefreshButton onClick={nextHint} />
+      </div>
+    </div>
+  );
+};
+
+export default Hint;

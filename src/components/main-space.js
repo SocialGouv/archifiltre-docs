@@ -59,7 +59,7 @@ const MainSpace = props => {
   if (started === true && finished === false) {
     return (
       <div className="grid-y grid-padding-x grid-frame align-center">
-        <div className="cell small-8">
+        <div className="cell">
           <WaitingScreen api={api} />
         </div>
         <div className="cell shrink">

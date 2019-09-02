@@ -20,7 +20,8 @@ module.exports = (env, argv = {}) => ({
       excludeChunks: ["stats"]
     }),
     new webpack.DefinePlugin({
-      MODE: JSON.stringify(argv.mode || "development")
+      MODE: JSON.stringify(argv.mode || "development"),
+      __dirname: JSON.stringify(__dirname)
     })
   ],
 

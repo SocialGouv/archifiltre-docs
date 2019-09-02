@@ -17,6 +17,7 @@ import { mkB } from "components/button";
 import Bubble from "components/bubble";
 import pick from "languages";
 import ResipButton from "./resip-button";
+import AuditReportButton from "./audit-report-button";
 
 const DashBoard = props => {
   let session_info_cell = false;
@@ -27,6 +28,7 @@ const DashBoard = props => {
   let save_button_cell = false;
   let reinit_button_cell = false;
   let export_menu_cell = false;
+  let audit_button_cell = false;
 
   const session_info_cell_style = {
     lineHeight: "1em"
@@ -96,6 +98,12 @@ const DashBoard = props => {
       </TextAlignCenter>
     );
 
+    audit_button_cell = (
+      <TextAlignCenter>
+        <AuditReportButton api={props.api} />
+      </TextAlignCenter>
+    );
+
     export_menu_cell = (
       <Bubble
         comp={
@@ -117,6 +125,7 @@ const DashBoard = props => {
             <div className="cell small-12">{csv_button_cell}</div>
             <div className="cell small-12">{seda_button_cell}</div>
             <div className="cell small-12">{resip_button_cell}</div>
+            <div className="cell small-12">{audit_button_cell}</div>
           </div>
         }
       />

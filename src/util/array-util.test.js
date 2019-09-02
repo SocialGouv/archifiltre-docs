@@ -3,6 +3,8 @@ import * as Arbitrary from "test/arbitrary";
 import * as M from "util/array-util";
 import { makeEmptyArray } from "util/array-util";
 import { replaceValue } from "./array-util";
+import { countItems } from "util/array-util";
+import { medianOnSortedArray } from "util/array-util";
 
 describe("array-util", function() {
   Loop.equal("(unzip . zip) a", () => {
@@ -97,6 +99,40 @@ describe("array-util", function() {
         expect(newArray[2]).toBe("c");
         expect(newArray[3]).toBe("d2");
         expect(newArray.length).toBe(4);
+      });
+    });
+  });
+
+  describe("countItems", () => {
+    const predicate = value => value;
+
+    describe("with an empty array", () => {
+      expect(countItems(predicate)([])).toEqual(0);
+    });
+
+    describe("with a filled array", () => {
+      expect(countItems(predicate)([true, false, true, true])).toEqual(3);
+    });
+
+    describe("with a fully false array", () => {
+      expect(countItems(predicate)([false, false, false, false])).toEqual(0);
+    });
+  });
+
+  describe("medianOnSortedArray", () => {
+    describe("on an odd length array", () => {
+      const sortedArray = [1, 3, 4, 7, 9];
+
+      it("should return the middle value", () => {
+        expect(medianOnSortedArray(sortedArray)).toEqual(4);
+      });
+    });
+
+    describe("on an event length array", () => {
+      const sortedArray = [1, 3, 7, 9];
+
+      it("should return the mean of the two middle value", () => {
+        expect(medianOnSortedArray(sortedArray)).toEqual(5);
       });
     });
   });

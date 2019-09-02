@@ -8,15 +8,30 @@ import FileSaver from "file-saver";
 
 const utf8_byte_order_mark = "\ufeff";
 
-export function save(name, json, { format }) {
+/**
+ * Open a dialog to save string data into a file
+ * @param name - The default file name
+ * @param content - The string content to save
+ * @param format - The specific format (ex: 'utf-8')
+ */
+export function save(name, content, { format } = {}) {
   let fileHead = "";
 
   if (format.toLowerCase() === "utf-8") {
     fileHead += utf8_byte_order_mark;
   }
 
-  const writtenData = fileHead + json;
+  const writtenData = fileHead + content;
   const blob = new Blob([writtenData], { type: "text/plain;charset=utf-8" });
+  saveBlob(name, blob);
+}
+
+/**
+ * Saves a blob into a file
+ * @param name - The default file name
+ * @param blob - The blob to save into a file
+ */
+export function saveBlob(name, blob) {
   FileSaver.saveAs(blob, name);
 }
 

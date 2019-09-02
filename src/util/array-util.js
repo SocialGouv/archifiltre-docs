@@ -38,4 +38,26 @@ export const replaceValue = (array, index, newValue) => [
   ...array.slice(index + 1)
 ];
 
+/**
+ * Curried function that counts the number of items in array for which predicate is true
+ * @param predicate - A function called with an array element that returns true if predicate matches
+ * @param array - The array to count elements from
+ * @returns {function(*): *}
+ */
+export const countItems = predicate => array => array.filter(predicate).length;
+
+/**
+ * Returns the median of a sorted array of numbers
+ * @param sortedArray - An already sorted array of numbers
+ * @returns {number|*}
+ */
+export const medianOnSortedArray = sortedArray => {
+  const arrayLength = sortedArray.length;
+  if (arrayLength % 2 === 1) {
+    return sortedArray[(arrayLength - 1) / 2];
+  }
+
+  return (sortedArray[arrayLength / 2] + sortedArray[arrayLength / 2 - 1]) / 2;
+};
+
 export const empty = [];

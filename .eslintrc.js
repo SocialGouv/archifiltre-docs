@@ -12,7 +12,8 @@ module.exports = {
     "jsx-a11y/anchor-is-valid": "off"
   },
   globals: {
-    MODE: "readonly"
+    MODE: "readonly",
+    STATIC_ASSETS_PATH: "readonly"
   },
   overrides: [
     {

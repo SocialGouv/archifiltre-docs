@@ -21,7 +21,8 @@ module.exports = (env, argv = {}) => ({
     }),
     new webpack.DefinePlugin({
       MODE: JSON.stringify(argv.mode || "development"),
-      __dirname: JSON.stringify(__dirname)
+      STATIC_ASSETS_PATH:
+        argv.mode === "development" ? JSON.stringify(".") : "__dirname"
     })
   ],
 

@@ -5,5 +5,8 @@ module.exports = {
   coverageDirectory: "coverage",
   moduleFileExtensions: ["js", "jsx"],
   moduleDirectories: ["src", "node_modules"],
-  setupFiles: ["jest-date-mock"]
+  setupFiles: ["jest-date-mock"],
+  globals: {
+    STATIC_ASSETS_PATH: "."
+  }
 };

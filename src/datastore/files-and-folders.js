@@ -21,7 +21,8 @@ const fileOrFolderFactory = RecordUtil.createFactory(
     comments: "",
     children: List(),
     file_size: 0,
-    file_last_modified: 0
+    file_last_modified: 0,
+    hash: null
   },
   {
     toJs: a =>

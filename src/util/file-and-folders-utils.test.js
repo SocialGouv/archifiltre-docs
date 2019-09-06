@@ -2,7 +2,10 @@ import {
   countDeeperFolders,
   countFoldersWithMoreThanNChildren,
   countLongerPath,
+  filesAndFoldersMapToArray,
   findAllFoldersWithNoSubfolder,
+  getFiles,
+  getFolders,
   sortFoldersByChildrenCount,
   sortFoldersByDepth
 } from "./file-and-folders-utils";
@@ -257,6 +260,116 @@ describe("file-and-folders-utils", () => {
         expect(findAllFoldersWithNoSubfolder(fileAndFolders).sort()).toEqual(
           ["folder1/folder1", "folder2"].sort()
         );
+      });
+    });
+  });
+
+  describe("filesAndFoldersMapToArray", () => {
+    describe("with a standard filesAndFolders data", () => {
+      it("should transform data correctly", () => {
+        const data = {
+          "": {
+            children: ["baseFolder"]
+          },
+          baseFolder: {
+            children: ["baseFolder/file1", "baseFolder/file2"]
+          },
+          "baseFolder/file1": {
+            children: []
+          },
+          "baseFolder/file2": {
+            children: []
+          }
+        };
+
+        expect(
+          filesAndFoldersMapToArray(data).sort((ff1, ff2) => ff1.id > ff2.id)
+        ).toEqual([
+          {
+            id: "baseFolder",
+            children: ["baseFolder/file1", "baseFolder/file2"]
+          },
+          {
+            id: "baseFolder/file1",
+            children: []
+          },
+          {
+            id: "baseFolder/file2",
+            children: []
+          }
+        ]);
+      });
+    });
+  });
+
+  describe("getFiles", () => {
+    describe("with a standard filesAndFoldersList", () => {
+      it("should return the files only", () => {
+        const data = [
+          {
+            id: "folder",
+            children: ["folder/file1", "folder/file2"]
+          },
+          {
+            id: "folder/file1",
+            children: []
+          },
+          {
+            id: "folder/file2",
+            children: []
+          }
+        ];
+
+        expect(
+          getFiles(data).sort((file1, file2) => file1.id > file2.id)
+        ).toEqual([
+          {
+            id: "folder/file1",
+            children: []
+          },
+          {
+            id: "folder/file2",
+            children: []
+          }
+        ]);
+      });
+    });
+  });
+
+  describe("getFolders", () => {
+    describe("with a standard filesAndFoldersList", () => {
+      it("should return the files only", () => {
+        const data = [
+          {
+            id: "folder",
+            children: ["folder/file1", "folder/childFolder"]
+          },
+          {
+            id: "folder/file1",
+            children: []
+          },
+          {
+            id: "folder/childFolder",
+            children: ["folder/childFolder/file"]
+          },
+          {
+            id: "folder/childFolder/file",
+            children: []
+          }
+        ];
+
+        expect(
+          getFolders(data).sort((folder1, folder2) => folder1.id > folder2.id)
+        ).toEqual([
+          {
+            id: "folder",
+            children: ["folder/file1", "folder/childFolder"]
+          },
+          {
+            id: "folder/childFolder",
+            children: ["folder/childFolder/file"]
+          }
+        ]);
       });
     });
   });

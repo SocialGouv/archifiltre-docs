@@ -108,6 +108,7 @@
     "webpack": "^4.37.0",
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.7.2",
+    "webpack-fork-loader": "^1.0.1",
     "worker-loader": "1.1.1"
   },
   "dependencies": {
@@ -124,11 +125,13 @@
     "js-md5": "0.7.3",
     "uuid": "3.3.2",
     "jszip": "3.1.5",
+    "md5-file": "^4.0.0",
     "pizzip": "^3.0.6",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "riek": "1.1.0",
+    "rxjs": "^6.5.3",
     "styled-components": "^4.3.2",
     "tar-fs": "1.16.3",
     "tar-stream": "1.6.2",

@@ -5,7 +5,9 @@ import {
   countDeeperFolders,
   countFoldersWithMoreThanNChildren,
   countLongerPath,
+  filesAndFoldersMapToArray,
   findAllFoldersWithNoSubfolder,
+  getFolders,
   sortFoldersByChildrenCount,
   sortFoldersByDepth
 } from "../util/file-and-folders-utils";
@@ -21,27 +23,6 @@ export const TEMPLATE_PATH = path.join(
   STATIC_ASSETS_PATH,
   "template/auditTemplate.docx"
 );
-
-/**
- * Transforms a fileAndFolders object to an array
- * @param filesAndFolders - An object with id (the path) as a key and the fileAndFolders data as a value
- * @returns {{Object}[]}
- */
-const filesAndFoldersMapToArray = filesAndFolders =>
-  Object.keys(filesAndFolders)
-    .filter(id => id !== "")
-    .map(key => ({
-      ...filesAndFolders[key],
-      id: key
-    }));
-
-/**
- * Filters files and folders to only get folders
- * @param filesAndFolders
- * @returns {*}
- */
-const getFolders = filesAndFolders =>
-  filesAndFolders.filter(({ children }) => children.length > 0);
 
 /**
  * Returns a blob containing the docx content for an audit report

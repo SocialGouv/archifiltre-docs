@@ -162,6 +162,16 @@ const deleteTag = tag_id => state => {
   return state;
 };
 
+const setHashes = hashesMap => state => {
+  const newState = Object.keys(hashesMap).reduce(
+    (acc, ffId) =>
+      updateIn(acc, ["files_and_folders", ffId, "hash"], () => hashesMap[ffId]),
+    state
+  );
+
+  return newState;
+};
+
 const writer = {
   set,
   reInit,
@@ -172,7 +182,8 @@ const writer = {
   addTagged,
   deleteTagged,
   renameTag,
-  deleteTag
+  deleteTag,
+  setHashes
 };
 
 export default RealEstate.create({

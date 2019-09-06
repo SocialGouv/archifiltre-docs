@@ -5,6 +5,12 @@ import AsyncHandleDrop from "async-handle-drop";
 import TextAlignCenter from "components/text-align-center";
 
 import pick from "languages";
+import path from "path";
+import { computeHashes } from "../hash-computer/hash-computer.controller";
+import {
+  filesAndFoldersMapToArray,
+  getFiles
+} from "../util/file-and-folders-utils";
 
 const placeholder = pick({
   en: "Drop a directory here!",
@@ -78,7 +84,20 @@ export default class FolderDropzone extends React.Component {
         this.props.api.database.set(vfs);
         this.props.api.loading_state.finishedToLoadFiles();
         this.props.api.undo.commit();
-        console.log("finish handle drop");
+        return vfs;
+      })
+      .then(vfs => {
+        const filesAndFolders = vfs.files_and_folders.toJS();
+        const basePath = vfs.original_path
+          .split(path.sep)
+          .slice(0, -1)
+          .join(path.sep);
+        const paths = getFiles(filesAndFoldersMapToArray(filesAndFolders)).map(
+          file => file.id
+        );
+        computeHashes(paths, () => {}, {
+          initialValues: { basePath }
+        }).subscribe(this.props.api.database.setHashes);
       })
       .catch(err => {
         console.error(err);

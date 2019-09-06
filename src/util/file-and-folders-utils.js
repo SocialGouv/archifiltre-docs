@@ -79,3 +79,32 @@ export const findAllFoldersWithNoSubfolder = fileAndFoldersMap => {
 
   return findFoldersWithNoSubfolderRec(baseNodeId);
 };
+
+/**
+ * Transforms a fileAndFolders object to an array
+ * @param filesAndFolders - An object with id (the path) as a key and the fileAndFolders data as a value
+ * @returns {{Object}[]}
+ */
+export const filesAndFoldersMapToArray = filesAndFolders =>
+  Object.keys(filesAndFolders)
+    .filter(id => id !== "")
+    .map(key => ({
+      ...filesAndFolders[key],
+      id: key
+    }));
+
+/**
+ * Returns all the files from a filesAndFolders list
+ * @param filesAndFoldersArray
+ * @returns {*}
+ */
+export const getFiles = filesAndFoldersArray =>
+  filesAndFoldersArray.filter(({ children }) => children.length === 0);
+
+/**
+ * Filters files and folders to only get folders
+ * @param filesAndFolders
+ * @returns {*}
+ */
+export const getFolders = filesAndFolders =>
+  filesAndFolders.filter(({ children }) => children.length > 0);

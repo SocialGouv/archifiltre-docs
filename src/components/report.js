@@ -32,6 +32,11 @@ const size_tr = pick({
   fr: "Taille"
 });
 
+const hash_tr = pick({
+  en: "Hash",
+  fs: "Hash"
+});
+
 const pad = "1em";
 
 const cells_style = {
@@ -141,7 +146,12 @@ const InfoCell = props => {
 
   return (
     <div style={info_cell_style}>
-      <b>{size_tr} :</b> {size_label}
+      <div>
+        <b>{size_tr} :</b> {size_label}
+      </div>
+      <div>
+        <b>{hash_tr} :</b> {props.hash || "..."}
+      </div>
       <br />
       {component}
     </div>
@@ -159,6 +169,7 @@ const Report = props => {
     const n_name = node.get("name");
 
     const c_size = octet2HumanReadableFormat(node.get("size"));
+    const hash = node.get("hash");
 
     const c_alias = node.get("alias");
     const c_tag_ids = props.tag_ids;
@@ -193,7 +204,9 @@ const Report = props => {
 
     real_name = <RealName bracket_name={bracket_name} />;
 
-    info_cell = <InfoCell api={api} c_size={c_size} node_id={props.node_id} />;
+    info_cell = (
+      <InfoCell api={api} c_size={c_size} hash={hash} node_id={props.node_id} />
+    );
 
     tags_cell = (
       <TagsCell

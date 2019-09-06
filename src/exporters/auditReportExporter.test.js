@@ -1,6 +1,7 @@
 import testData from "./audiReportExporter.test.data.json";
 import auditReportExporter from "./auditReportExporter";
 import { exportToDocX } from "../util/docx-util";
+import { advanceTo } from "jest-date-mock";
 
 jest.mock("../util/docx-util", () => ({
   exportToDocX: jest.fn()
@@ -9,6 +10,7 @@ jest.mock("../util/docx-util", () => ({
 describe("auditReportExporter", () => {
   describe("with test data", () => {
     it("should generate the right report data", () => {
+      advanceTo(new Date("2019-09-04"));
       exportToDocX.mockReset();
       exportToDocX.mockReturnValue("docxBlob");
       auditReportExporter({

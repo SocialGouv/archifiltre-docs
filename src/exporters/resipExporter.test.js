@@ -1,3 +1,4 @@
+import path from "path";
 import { input, output } from "./resipExporter.test.data.json";
 import resipExporter from "./resipExporter";
 import { advanceTo } from "jest-date-mock";
@@ -8,7 +9,15 @@ advanceTo("2019-08-05");
 describe("resipExporter", () => {
   describe("with a simple file structure", () => {
     it("should format the right csv", () => {
-      expect(resipExporter(input)).toEqual(output);
+      const fileSystemFormatedOutput = output.map(
+        ([id, parentId, file, ...rest], index) => {
+          if (index === 0) {
+            return [id, parentId, file, ...rest];
+          }
+          return [id, parentId, path.join(file), ...rest];
+        }
+      );
+      expect(resipExporter(input)).toEqual(fileSystemFormatedOutput);
     });
   });
 });

@@ -14,7 +14,7 @@ const utf8_byte_order_mark = "\ufeff";
  * @param content - The string content to save
  * @param format - The specific format (ex: 'utf-8')
  */
-export function save(name, content, { format } = {}) {
+export function save(name, content, { format = "" } = {}) {
   let fileHead = "";
 
   if (format.toLowerCase() === "utf-8") {

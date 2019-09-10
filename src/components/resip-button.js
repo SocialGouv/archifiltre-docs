@@ -16,9 +16,7 @@ const ResipButton = props => {
   const name = () => makeNameWithExt(`${getSessionName()}-RESIP`, "csv");
   return mkB(
     () => {
-      save(name(), toStr(resipExporter(database.getData())), {
-        format: "utf-8"
-      });
+      save(name(), toStr(resipExporter(database.getData())));
     },
     label,
     true,

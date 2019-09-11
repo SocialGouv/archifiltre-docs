@@ -2,7 +2,6 @@ import { updateIn, getIn, List, Set } from "immutable";
 
 import * as RealEstate from "reducers/real-estate";
 
-import * as Cache from "util/cache-util";
 import * as Origin from "datastore/origin";
 import * as VirtualFileSystem from "datastore/virtual-file-system";
 import * as Tags from "datastore/tags";

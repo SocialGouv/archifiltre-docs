@@ -7,7 +7,6 @@ import { octet2HumanReadableFormat } from "components/ruler";
 import { RIEInput } from "riek";
 
 import SaveButton from "components/save-button";
-import SEDAButton from "components/seda-button";
 import METSButton from "components/mets-button";
 import ReinitButton from "components/reinit-button";
 import ToCsvButton from "components/csv-button";
@@ -24,7 +23,6 @@ const DashBoard = props => {
   let session_info_cell = false;
   let ctrlz_cell = false;
   let csv_button_cell = false;
-  let seda_button_cell = false;
   let resip_button_cell = false;
   let mets_button_cell = false;
   let save_button_cell = false;
@@ -82,12 +80,6 @@ const DashBoard = props => {
       </TextAlignCenter>
     );
 
-    seda_button_cell = (
-      <TextAlignCenter>
-        <SEDAButton api={props.api} />
-      </TextAlignCenter>
-    );
-
     resip_button_cell = (
       <TextAlignCenter>
         <ResipButton api={props.api} />
@@ -130,10 +122,9 @@ const DashBoard = props => {
         }
         sub_comp={
           <div className="grid-x">
-            <div className="cell small-12">{csv_button_cell}</div>
-            <div className="cell small-12">{seda_button_cell}</div>
-            <div className="cell small-12">{resip_button_cell}</div>
             <div className="cell small-12">{audit_button_cell}</div>
+            <div className="cell small-12">{csv_button_cell}</div>
+            <div className="cell small-12">{resip_button_cell}</div>
             <div className="cell small-12">{mets_button_cell}</div>
           </div>
         }

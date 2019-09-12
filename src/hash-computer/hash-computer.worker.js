@@ -18,8 +18,8 @@ onmessage = ({ data: { data, type } }) => {
           result: computeHash(path.join(basePath, param))
         }));
         postMessage({ type: "result", result });
-      } catch (err) {
-        postMessage({ type: "error", err });
+      } catch (error) {
+        postMessage({ type: "error", error });
       }
       break;
 

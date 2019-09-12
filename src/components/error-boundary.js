@@ -1,6 +1,7 @@
 import React from "react";
 
 import SaveButton from "components/save-button";
+import { reportError } from "../reporter";
 
 export default class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -11,6 +12,7 @@ export default class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
+    reportError({ error, info });
     this.setState({
       hasError: true
     });

@@ -1,8 +1,26 @@
-const { app, BrowserWindow } = require("electron");
+const Raven = require("raven");
+
+const { app, BrowserWindow, crashReporter, Menu } = require("electron");
 
 const { dialog } = require("electron");
 
 const path = require("path");
+
+const sentryUrl =
+  "https://0fa8ab6a50a347a3b1903ed48b4c9e5c@sentry.tools.factory.social.gouv.fr/20";
+const sentryMinidumpUrl =
+  "https://sentry.tools.factory.social.gouv.fr/api/20/minidump/?sentry_key=0fa8ab6a50a347a3b1903ed48b4c9e5c";
+
+// Initialize sentry error reporter
+Raven.config(sentryUrl).install();
+
+// Enable electron crash reporter to get logs in case of low level crash
+crashReporter.start({
+  companyName: "SocialGouv",
+  productName: "Archifiltre",
+  ignoreSystemCrashHandler: true,
+  submitURL: sentryMinidumpUrl
+});
 
 // We need to check if we are on 64 bits.
 // Setting --max-old-space-size with this value
@@ -10,8 +28,6 @@ const path = require("path");
 if (process.arch === "x64") {
   app.commandLine.appendSwitch("js-flags", "--max-old-space-size=40960");
 }
-
-const { Menu } = require("electron");
 
 // Passing null will suppress the default menu.
 // On Windows and Linux, this has the additional
@@ -151,6 +167,14 @@ app.on("quit", () => {
 
 app.on("will-navigate", () => {
   console.log("will-navigate");
+});
+
+app.on("renderer-process-crashed", function(event) {
+  Raven.captureException(event);
+});
+
+process.on("uncaughtException", error => {
+  Raven.captureException(error);
 });
 
 const { ipcMain } = require("electron");

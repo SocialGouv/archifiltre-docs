@@ -1,9 +1,10 @@
 import { makeEmptyArray } from "./array-util";
 import { cpus } from "os";
 import { Observable } from "rxjs";
+import { reportError } from "../reporter";
 
 // We create NB_CPUS - 1 processes to optimize computation
-const NB_CPUS = cpus().length - 1;
+const NB_CPUS = cpus().length - 1 > 0 ? cpus().length - 1 : 1;
 
 const getNextBatch = (array, batchSize) => {
   return array.slice(0, batchSize);
@@ -36,22 +37,27 @@ export const computeBatch = (
     let remainingData = data;
     let runningWorkersCount = 0;
 
+    const elementProcessed = worker => {
+      runningWorkersCount = runningWorkersCount - 1;
+      if (remainingData.length !== 0) {
+        processNext(worker);
+      } else {
+        if (runningWorkersCount === 0) {
+          observer.complete();
+        }
+      }
+    };
+
     const onMessage = (worker, { data: { type, result: data, error } }) => {
       switch (type) {
         case "result":
           observer.next(data);
-          runningWorkersCount = runningWorkersCount - 1;
-          if (remainingData.length !== 0) {
-            processNext(worker);
-          } else {
-            if (runningWorkersCount === 0) {
-              observer.complete();
-            }
-          }
+          elementProcessed(worker);
           break;
 
         case "error":
-          console.error(error);
+          reportError(error);
+          elementProcessed(worker);
           break;
 
         default:
@@ -61,6 +67,9 @@ export const computeBatch = (
 
     const processNext = worker => {
       const dataToProcess = getNextBatch(remainingData, batchSize);
+      if (dataToProcess.length <= 0) {
+        return;
+      }
       remainingData = removeNextBatch(remainingData, batchSize);
       runningWorkersCount = runningWorkersCount + 1;
       worker.postMessage({ type: "data", data: dataToProcess });

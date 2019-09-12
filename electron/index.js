@@ -65,7 +65,7 @@ const askBeforeLeaving = () => {
       title = "Bye bye !";
       message = "Êtes-vous sure de vouloir quitter ?";
       detail =
-        "Toutes les données qui n'ont pas étaient sauvegardées seront perdu définitivement !";
+        "Toutes les données qui n'ont pas été sauvegardées seront perdues définitivement !";
       no = "non";
       yes = "oui";
     } else {
@@ -170,11 +170,11 @@ app.on("will-navigate", () => {
 });
 
 app.on("renderer-process-crashed", function(event) {
-  Raven.captureException(event);
+  Raven.captureException("Renderer process crashed");
 });
 
 process.on("uncaughtException", error => {
-  Raven.captureException(error);
+  Raven.captureException("Uncaught exception");
 });
 
 const { ipcMain } = require("electron");

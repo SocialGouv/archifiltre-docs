@@ -1,3 +1,6 @@
+// Enables reporter to hook into the environment so it captures uncaught errors
+import "./reporter";
+
 import "foundation-sites";
 import "./css/index.scss";
 import "./css/app.css";

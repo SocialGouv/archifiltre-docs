@@ -121,13 +121,13 @@
     "foundation-sites": "^6.5.3",
     "immutable": "4.0.0-rc.9",
     "jquery": "^3.4.1",
-    "js-sha512": "0.8.0",
     "js-md5": "0.7.3",
-    "uuid": "3.3.2",
+    "js-sha512": "0.8.0",
     "jszip": "3.1.5",
     "md5-file": "^4.0.0",
     "pizzip": "^3.0.6",
     "prop-types": "^15.7.2",
+    "raven": "^2.6.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "riek": "1.1.0",
@@ -135,6 +135,7 @@
     "styled-components": "^4.3.2",
     "tar-fs": "1.16.3",
     "tar-stream": "1.6.2",
+    "uuid": "3.3.2",
     "what-input": "^5.2.1",
     "xml": "1.0.1"
   }

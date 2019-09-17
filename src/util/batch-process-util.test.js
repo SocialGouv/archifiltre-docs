@@ -1,24 +1,32 @@
-import { computeBatch } from "./batch-process-util";
+import { backgroundWorkerProcess$, computeBatch$ } from "./batch-process-util";
+import { reportError } from "../reporter";
 
 jest.mock("os", () => ({
   cpus: () => [1, 2, 3, 4]
 }));
 
+jest.mock("../reporter", () => ({
+  reportError: jest.fn()
+}));
+
 const NB_CPUS = 4;
 const NB_WORKERS = NB_CPUS - 1;
 
-const setup = () => {
+const makeWorkerMock = () => {
   const postMessage = jest.fn();
   const addEventListener = jest.fn();
+  const terminate = jest.fn();
   const WorkerBuilder = jest.fn(() => ({
     postMessage,
-    addEventListener
+    addEventListener,
+    terminate
   }));
 
   return {
     WorkerBuilder,
     postMessage,
-    addEventListener
+    addEventListener,
+    terminate
   };
 };
 
@@ -27,7 +35,7 @@ const getEventCallback = (addEventListener, eventType) => {
 };
 
 describe("batch-process-util", () => {
-  describe("computeBatch", () => {
+  describe("computeBatch$", () => {
     let postMessage;
     let addEventListener;
     let WorkerBuilder;
@@ -45,8 +53,8 @@ describe("batch-process-util", () => {
       responseObserver = jest.fn();
       completeObserver = jest.fn();
       errorObserver = jest.fn();
-      ({ postMessage, addEventListener, WorkerBuilder } = setup());
-      responseObservable = computeBatch(testData, WorkerBuilder, {
+      ({ postMessage, addEventListener, WorkerBuilder } = makeWorkerMock());
+      responseObservable = computeBatch$(testData, WorkerBuilder, {
         batchSize,
         initialValues
       });
@@ -110,6 +118,67 @@ describe("batch-process-util", () => {
       }
 
       expect(completeObserver).toHaveBeenCalled();
+    });
+  });
+
+  describe("backgroundWorkerProcess$", () => {
+    const initialData = "test-data";
+
+    let WorkerBuilder;
+    let addEventListener;
+    let postMessage;
+    let terminate;
+    let result$;
+
+    let responseObserver;
+    let completeObserver;
+    let errorObserver;
+
+    beforeEach(() => {
+      reportError.mockReset();
+      responseObserver = jest.fn();
+      completeObserver = jest.fn();
+      errorObserver = jest.fn();
+
+      ({
+        terminate,
+        postMessage,
+        addEventListener,
+        WorkerBuilder
+      } = makeWorkerMock());
+      result$ = backgroundWorkerProcess$(initialData, WorkerBuilder);
+      result$.subscribe(responseObserver, errorObserver, completeObserver);
+    });
+    it("should correctly instantiate the worker", () => {
+      expect(WorkerBuilder).toHaveBeenCalledTimes(1);
+    });
+    it("should correctly initialize the worker", () => {
+      expect(postMessage).toHaveBeenCalledWith({
+        type: "initialize",
+        data: initialData
+      });
+    });
+    it("should proxy results from the worker", () => {
+      const testResult = "test-result";
+      const messageCallback = getEventCallback(addEventListener, "message");
+      messageCallback({ data: { type: "result", result: testResult } });
+      expect(responseObserver).toHaveBeenCalledWith(testResult);
+    });
+    it("should handle errors from the worker", () => {
+      const error = "test-error";
+      const messageCallback = getEventCallback(addEventListener, "message");
+      messageCallback({ data: { type: "error", error } });
+      expect(reportError).toHaveBeenCalledWith(error);
+    });
+    it("should complete the observer on complete message", () => {
+      const messageCallback = getEventCallback(addEventListener, "message");
+      messageCallback({ data: { type: "complete" } });
+      expect(completeObserver).toHaveBeenCalledTimes(1);
+    });
+    it("should terminate the worker on complete message", () => {
+      const messageCallback = getEventCallback(addEventListener, "message");
+      messageCallback({ data: { type: "complete" } });
+      expect(terminate).toHaveBeenCalledTimes(1);
     });
   });
 });

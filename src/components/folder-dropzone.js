@@ -6,7 +6,10 @@ import TextAlignCenter from "components/text-align-center";
 
 import pick from "languages";
 import path from "path";
-import { computeHashes } from "../hash-computer/hash-computer.controller";
+import {
+  computeFolderHashes$,
+  computeHashes$
+} from "../hash-computer/hash-computer.controller";
 import {
   filesAndFoldersMapToArray,
   getFiles
@@ -68,22 +71,26 @@ export default class FolderDropzone extends React.Component {
   handleDrop(e) {
     e.preventDefault();
 
+    const {
+      props: { api }
+    } = this;
+
     const hook = a => {
-      this.props.api.loading_state.setStatus(a.status);
+      api.loading_state.setStatus(a.status);
       if (a.count) {
-        this.props.api.loading_state.setCount(a.count);
+        api.loading_state.setCount(a.count);
       }
       if (a.totalCount) {
-        this.props.api.loading_state.setTotalCount(a.totalCount);
+        api.loading_state.setTotalCount(a.totalCount);
       }
     };
 
     this.props.api.loading_state.startToLoadFiles();
     AsyncHandleDrop(hook, e.dataTransfer.files[0].path)
       .then(vfs => {
-        this.props.api.database.set(vfs);
-        this.props.api.loading_state.finishedToLoadFiles();
-        this.props.api.undo.commit();
+        api.database.set(vfs);
+        api.loading_state.finishedToLoadFiles();
+        api.undo.commit();
         return vfs;
       })
       .then(vfs => {
@@ -95,13 +102,21 @@ export default class FolderDropzone extends React.Component {
         const paths = getFiles(filesAndFoldersMapToArray(filesAndFolders)).map(
           file => file.id
         );
-        computeHashes(paths, () => {}, {
+        computeHashes$(paths, {
           initialValues: { basePath }
-        }).subscribe(this.props.api.database.setHashes);
+        }).subscribe({
+          next: api.database.setHashes,
+          complete: () =>
+            setTimeout(() =>
+              computeFolderHashes$(api.database.getData()).subscribe(
+                api.database.setHashes
+              )
+            )
+        });
       })
       .catch(err => {
         console.error(err);
-        this.props.api.loading_state.errorLoadingFiles();
+        api.loading_state.errorLoadingFiles();
       });
   }
 

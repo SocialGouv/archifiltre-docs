@@ -1,4 +1,5 @@
 import { countItems } from "./array-util";
+import md5 from "js-md5";
 
 /**
  * Returns the number of folders in an array which have strictly more that nbChildren children
@@ -108,3 +109,51 @@ export const getFiles = filesAndFoldersArray =>
  */
 export const getFolders = filesAndFolders =>
   filesAndFolders.filter(({ children }) => children.length > 0);
+
+/**
+ * Recursive function for computing folder hashes
+ * @param {Object} filesAndFolders - A file and folders map
+ * @param {String} id - The current folder ID (base is "")
+ * @param {function} hook - A hook called after each computation
+ * @returns {Object} - The map of all hashes for each id
+ */
+const recComputeFolderHash = (filesAndFolders, id, hook) => {
+  const { hash, children } = filesAndFolders[id];
+  if (hash) {
+    return { [id]: hash };
+  }
+
+  if (!children || children.length === 0) {
+    return { [id]: null };
+  }
+
+  const childrenResults = children
+    .map(childId => recComputeFolderHash(filesAndFolders, childId, hook))
+    .reduce((acc, folderHashes) => ({ ...acc, ...folderHashes }));
+
+  const currentFolderHash = md5(
+    children
+      .sort()
+      .map(childId => childrenResults[childId])
+      .reduce(
+        (concatenatedHashes, childHash) => `${concatenatedHashes}${childHash}`
+      )
+  );
+
+  const currentHashObject = { [id]: currentFolderHash };
+
+  hook(currentHashObject);
+
+  return { ...currentHashObject, ...childrenResults };
+};
+
+/**
+ * Compute all the folder hashes
+ * @param {Object} filesAndFolders - A filesAndFolders map
+ * @param {function} hook - A hook called every time a hash is computed
+ * @returns {Object} - A map containing all the filesAndFolders hashes
+ */
+export const computeFolderHashes = (filesAndFolders, hook) => {
+  const baseFolder = "";
+  return recComputeFolderHash(filesAndFolders, baseFolder, hook);
+};

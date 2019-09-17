@@ -1,4 +1,6 @@
+import md5 from "js-md5";
 import {
+  computeFolderHashes,
   countDeeperFolders,
   countFoldersWithMoreThanNChildren,
   countLongerPath,
@@ -370,6 +372,94 @@ describe("file-and-folders-utils", () => {
             children: ["folder/childFolder/file"]
           }
         ]);
+      });
+    });
+  });
+
+  describe("computeFolderHashes", () => {
+    const setup = fileAndFolders => {
+      const hook = jest.fn();
+      const result = computeFolderHashes(fileAndFolders, hook);
+
+      return { hook, result };
+    };
+
+    describe("with a valid fileAndFolders structure", () => {
+      const filesAndFolders = {
+        "": {
+          children: ["baseFolder"]
+        },
+        baseFolder: {
+          children: [
+            "baseFolder/folder1",
+            "baseFolder/folder2",
+            "baseFolder/file1"
+          ]
+        },
+        "baseFolder/folder1": {
+          children: ["baseFolder/folder1/file1", "baseFolder/folder1/file2"]
+        },
+        "baseFolder/folder1/file1": {
+          hash: "6d3e9fb007bf4069e4f994c290e2841d",
+          children: []
+        },
+        "baseFolder/folder1/file2": {
+          hash: "115c6b34df55fab98666a584e579f6dd",
+          children: []
+        },
+        "baseFolder/folder2": {
+          children: ["baseFolder/folder2/file1"]
+        },
+        "baseFolder/folder2/file1": {
+          hash: "24e10ee6f2f885106f7f6473701ebfd0"
+        },
+        "baseFolder/file1": {
+          hash: "c82250a7c798d52669795d3ea5701158"
+        }
+      };
+
+      const expectedResults = {
+        "baseFolder/file1": filesAndFolders["baseFolder/file1"].hash,
+        "baseFolder/folder1/file1":
+          filesAndFolders["baseFolder/folder1/file1"].hash,
+        "baseFolder/folder1/file2":
+          filesAndFolders["baseFolder/folder1/file2"].hash,
+        "baseFolder/folder2/file1":
+          filesAndFolders["baseFolder/folder2/file1"].hash
+      };
+      expectedResults["baseFolder/folder2"] = md5(
+        expectedResults["baseFolder/folder2/file1"]
+      );
+      expectedResults["baseFolder/folder1"] = md5(
+        `${expectedResults["baseFolder/folder1/file1"]}${
+          expectedResults["baseFolder/folder1/file2"]
+        }`
+      );
+      expectedResults["baseFolder"] = md5(
+        `${expectedResults["baseFolder/file1"]}${
+          expectedResults["baseFolder/folder1"]
+        }${expectedResults["baseFolder/folder2"]}`
+      );
+      expectedResults[""] = md5(expectedResults["baseFolder"]);
+
+      const getHashObject = id => ({ [id]: expectedResults[id] });
+
+      let hook, result;
+
+      beforeAll(() => {
+        ({ hook, result } = setup(filesAndFolders));
+      });
+
+      it("should call the hook with the right hashes", () => {
+        expect(hook).toHaveBeenCalledTimes(4);
+        expect(hook).toHaveBeenCalledWith(getHashObject(""));
+        expect(hook).toHaveBeenCalledWith(getHashObject("baseFolder"));
+        expect(hook).toHaveBeenCalledWith(getHashObject("baseFolder/folder1"));
+        expect(hook).toHaveBeenCalledWith(getHashObject("baseFolder/folder2"));
+      });
+
+      it("should return the right hashes", () => {
+        expect(result).toEqual(expectedResults);
       });
     });
   });

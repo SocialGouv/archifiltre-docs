@@ -1,23 +1,24 @@
-import * as Loop from "test/loop";
-import * as Arbitrary from "test/arbitrary";
-import * as M from "util/array-util";
-import { makeEmptyArray } from "util/array-util";
-import { replaceValue } from "./array-util";
-import { countItems } from "util/array-util";
-import { medianOnSortedArray } from "util/array-util";
+import {
+  makeEmptyArray,
+  replaceValue,
+  countItems,
+  medianOnSortedArray,
+  computeCumulative
+} from "util/array-util";
 
 describe("array-util", function() {
-  Loop.equal("(unzip . zip) a", () => {
-    const index = () => 1 + Arbitrary.index();
-    const i = index();
-    const a = () => Arbitrary.arrayWithIndex(() => i)(Arbitrary.natural);
-    const b = Arbitrary.arrayWithIndex(index)(a);
-    return [M.unzip(M.zip(b)), b];
-  });
+  describe("computeCumulative", () => {
+    describe("with an empty array", () => {
+      it("should count return [0]", () => {
+        expect(computeCumulative([])).toEqual([0]);
+      });
+    });
 
-  it("join", () => {
-    const a = [[1, 2, 3], [3, 5], [9]];
-    expect(M.join(a)).toEqual([1, 2, 3, 3, 5, 9]);
+    describe("with [1, 2, 3, 5, 8] ", () => {
+      it("should count return [0, 1, 3, 6, 11]", () => {
+        expect(computeCumulative([1, 2, 3, 5, 8])).toEqual([0, 1, 3, 6, 11]);
+      });
+    });
   });
 
   describe("makeEmptyArray", () => {
@@ -107,15 +108,21 @@ describe("array-util", function() {
     const predicate = value => value;
 
     describe("with an empty array", () => {
-      expect(countItems(predicate)([])).toEqual(0);
+      it("should return 0", () => {
+        expect(countItems(predicate)([])).toEqual(0);
+      });
     });
 
     describe("with a filled array", () => {
-      expect(countItems(predicate)([true, false, true, true])).toEqual(3);
+      it("should return the right count", () => {
+        expect(countItems(predicate)([true, false, true, true])).toEqual(3);
+      });
     });
 
     describe("with a fully false array", () => {
-      expect(countItems(predicate)([false, false, false, false])).toEqual(0);
+      it("should return the right count", () => {
+        expect(countItems(predicate)([false, false, false, false])).toEqual(0);
+      });
     });
   });
 

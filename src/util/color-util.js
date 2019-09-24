@@ -1,5 +1,3 @@
-import * as Loop from "test/loop";
-
 export const gradient = (a, b) => zero_to_one => {
   const ans = a
     .map((a, i) => a + (b[i] - a) * zero_to_one)
@@ -12,18 +10,6 @@ export const gradient = (a, b) => zero_to_one => {
     });
 
   return ans;
-};
-
-export const triGradient = (a, b, c) => zero_to_one => {
-  return zero_to_one < 0.5
-    ? gradient(a, b)(2 * zero_to_one)
-    : gradient(b, c)(2 * (zero_to_one - 0.5));
-};
-
-export const arbitrary = () => {
-  const arbitraryRgb = () => Math.round(Math.random() * 255);
-  const arbitraryA = () => Math.random();
-  return [arbitraryRgb(), arbitraryRgb(), arbitraryRgb(), arbitraryA()];
 };
 
 export const setAlpha = (alpha, color) => {
@@ -47,8 +33,8 @@ export const toHex = a => {
   });
   return `#${a[0]}${a[1]}${a[2]}`;
 };
+
 export const fromHex = a => {
-  Loop.log(a, a.split(/#|([0-9a-f]{2})/).filter(a => a && a !== ""));
   a = a
     .split(/#|([0-9a-f]{2})/)
     .filter(a => a && a !== "")
@@ -61,9 +47,6 @@ export const fromHex = a => {
 export const mostRecentDate = () => [255, 216, 155, 1];
 export const mediumDate = () => [255, 140, 0, 1];
 export const leastRecentDate = () => [20, 86, 130, 1];
-
-export const duplicate = () => [255, 0, 0, 1];
-export const different = () => [0, 0, 0, 0.5];
 
 const colors = {
   presentation: "#f75b40",

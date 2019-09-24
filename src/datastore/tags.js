@@ -1,6 +1,3 @@
-import * as Arbitrary from "test/arbitrary";
-import * as Loop from "test/loop";
-
 import { generateRandomString } from "util/random-gen-util";
 import * as RecordUtil from "util/record-util";
 import * as ObjectUtil from "util/object-util";

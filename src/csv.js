@@ -1,10 +1,5 @@
 import { List } from "immutable";
-
-import * as Arbitrary from "test/arbitrary";
-import * as Loop from "test/loop";
-
-export const arbitrary = () =>
-  Arbitrary.immutableList(() => Arbitrary.immutableList(Arbitrary.string));
+import dateFormat from "dateformat";
 
 const cell_separator = ";";
 const line_separator = "\n";
@@ -40,17 +35,4 @@ export const leftPadInt = (pad, num) => {
   return (zero_string + num).slice(-Math.max(pad, num_len));
 };
 
-export const epochToFormatedUtcDateString = a => {
-  const date = new Date(a);
-  const year = date.getUTCFullYear();
-  const zero_based_month = date.getUTCMonth();
-  const day_of_the_month = date.getUTCDate();
-
-  return (
-    leftPadInt(2, day_of_the_month) +
-    "/" +
-    leftPadInt(2, zero_based_month + 1) +
-    "/" +
-    leftPadInt(4, year)
-  );
-};
+export const epochToFormattedUtcDateString = a => dateFormat(a, "dd/mm/yyyy");

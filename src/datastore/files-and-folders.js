@@ -1,12 +1,7 @@
-import * as Arbitrary from "test/arbitrary";
+import { concat, zip } from "lodash";
 
-import * as ArrayUtil from "util/array-util";
 import * as ListUtil from "util/list-util";
 import * as RecordUtil from "util/record-util";
-
-import * as ObjectUtil from "util/object-util";
-
-import * as Origin from "datastore/origin";
 
 import { List, Map } from "immutable";
 
@@ -25,20 +20,14 @@ const fileOrFolderFactory = RecordUtil.createFactory(
     hash: null
   },
   {
-    toJs: a =>
-      ObjectUtil.compose(
-        {
-          children: a.children.toArray()
-        },
-        a
-      ),
-    fromJs: a =>
-      ObjectUtil.compose(
-        {
-          children: List(a.children)
-        },
-        a
-      )
+    toJs: a => ({
+      ...a,
+      children: a.children.toArray()
+    }),
+    fromJs: a => ({
+      ...a,
+      children: List(a.children)
+    })
   }
 );
 
@@ -52,7 +41,7 @@ export const ff = (a, hook) => {
       .concat([List()]);
     let m = Map();
 
-    const loop = ArrayUtil.zip([names, ids, childrens]);
+    const loop = zip(names, ids, childrens);
     loop.forEach(([name, id, children]) => {
       m = m.set(
         id,
@@ -123,7 +112,12 @@ const dive = (diver, first_ans, m) => {
   return m;
 };
 
-export const ffInv = m => {
+/**
+ * Test utility that reduces a fileAndFolders structure into an origin list
+ * @param fileAndFolders - The file and folders structure
+ * @returns {*}
+ */
+export const ffInv = fileAndFolders => {
   const reducer = ([children_ans_array, node]) => {
     if (children_ans_array.length === 0) {
       const file = {
@@ -134,7 +128,7 @@ export const ffInv = m => {
       const ans = [[file, path]];
       return [ans, node];
     } else {
-      children_ans_array = ArrayUtil.join(children_ans_array);
+      children_ans_array = concat(...children_ans_array);
       const ans = children_ans_array.map(a => {
         const path = node.get("name") + "/" + a[1];
         return [a[0], path];
@@ -143,16 +137,8 @@ export const ffInv = m => {
       return [ans, node];
     }
   };
-  const [ans, _] = reduce(reducer, m);
+  const [ans, _] = reduce(reducer, fileAndFolders);
   return ans;
-};
-
-export const arbitrary = () => {
-  return ff(Origin.arbitrary()).map(a => {
-    a.set("alias", Arbitrary.string());
-    a.set("comments", Arbitrary.string());
-    return a;
-  });
 };
 
 const derivedFactory = RecordUtil.createFactory(
@@ -169,24 +155,18 @@ const derivedFactory = RecordUtil.createFactory(
     sort_by_date_index: List()
   },
   {
-    toJs: a =>
-      ObjectUtil.compose(
-        {
-          last_modified_list: a.last_modified_list.toArray(),
-          sort_by_size_index: a.sort_by_size_index.toArray(),
-          sort_by_date_index: a.sort_by_date_index.toArray()
-        },
-        a
-      ),
-    fromJs: a =>
-      ObjectUtil.compose(
-        {
-          last_modified_list: List(a.last_modified_list),
-          sort_by_size_index: List(a.sort_by_size_index),
-          sort_by_date_index: List(a.sort_by_date_index)
-        },
-        a
-      )
+    toJs: a => ({
+      ...a,
+      last_modified_list: a.last_modified_list.toArray(),
+      sort_by_size_index: a.sort_by_size_index.toArray(),
+      sort_by_date_index: a.sort_by_date_index.toArray()
+    }),
+    fromJs: a => ({
+      ...a,
+      last_modified_list: List(a.last_modified_list),
+      sort_by_size_index: List(a.sort_by_size_index),
+      sort_by_date_index: List(a.sort_by_date_index)
+    })
   }
 );
 
@@ -348,13 +328,12 @@ export const toStrList2 = (ff_id_list, ffs) => {
     if (id === "") {
       return undefined;
     }
-    const platform_independent_path = id;
     const platform_dependent_path = id.split("/").join(Path.sep);
     const path_length = platform_dependent_path.length;
     const name = ff.get("name");
     const extension = Path.extname(name);
     const size = ff.get("size");
-    const last_modified = CSV.epochToFormatedUtcDateString(
+    const last_modified = CSV.epochToFormattedUtcDateString(
       ff.get("last_modified_max")
     );
     const alias = ff.get("alias");

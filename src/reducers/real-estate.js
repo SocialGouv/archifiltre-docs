@@ -1,21 +1,4 @@
 import * as ObjectUtil from "util/object-util";
-import * as Arbitrary from "test/arbitrary";
-
-export const arbitrary = () => {
-  const state = {
-    property_name: Arbitrary.string(),
-    initialState: () => 0,
-    reader: {
-      isZero: () => s => s === 0,
-      print: blabla => s => blabla + " : " + s
-    },
-    writer: {
-      add: a => s => s + a,
-      sub: a => s => s - a
-    }
-  };
-  return create(state);
-};
 
 export const create = state => {
   const property_name = state.property_name;

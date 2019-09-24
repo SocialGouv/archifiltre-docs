@@ -1,13 +1,13 @@
-export const zip = a => {
-  return a[0].map((_, i) => a.map(a => a[i]));
-};
+import { fill } from "lodash";
 
-export const unzip = zip;
-
-export const join = a => {
-  return a.reduce((acc, val) => acc.concat(val), []);
-};
-
+/**
+ * Adds cumulatively the values of an array (starting with a 0) without the last element
+ * @param array
+ * @returns {[number]}
+ * @example
+ * computeCumulative([1, 1, 1]) // [ 0, 1, 2 ]
+ * computeCumulative([1, 2, 3]) // [ 0, 1, 3 ]
+ */
 export const computeCumulative = array => {
   const ans = [0];
   for (let i = 0; i < array.length - 1; i++) {
@@ -23,7 +23,7 @@ export const computeCumulative = array => {
  * @returns {any[][]}
  */
 export const makeEmptyArray = (nbElements, defaultValue) =>
-  Array.apply(null, Array(nbElements)).map(() => defaultValue);
+  fill(Array(nbElements), defaultValue);
 
 /**
  * Replaces the value from array at index by the newValue.

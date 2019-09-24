@@ -1,14 +1,20 @@
-import * as Loop from "test/loop";
-import * as M from "./color-util";
+import equal from "deep-equal";
+import fc from "fast-check";
+import { fromRgba, toRgba, fromHex, toHex, setAlpha } from "./color-util";
+import { arbitraryRgba } from "../test/custom-arbitraries";
 
 describe("color", function() {
-  Loop.equal("(fromRgba . toRgba) a", () => {
-    const a = M.arbitrary();
-    return [M.fromRgba(M.toRgba(a)), a];
+  it("(fromRgba . toRgba) a", () => {
+    fc.assert(
+      fc.property(arbitraryRgba, color => equal(color, fromRgba(toRgba(color))))
+    );
   });
 
-  Loop.equal("(fromHex . toHex) a", () => {
-    const a = M.arbitrary();
-    return [M.fromHex(M.toHex(a)), M.setAlpha(1, a)];
+  it("(fromHex . toHex) a", () => {
+    fc.assert(
+      fc.property(arbitraryRgba, color =>
+        equal(setAlpha(1, color), fromHex(toHex(color)))
+      )
+    );
   });
 });

@@ -1,5 +1,4 @@
 /* eslint-disable no-fallthrough */
-import * as Loop from "test/loop";
 
 import { generateRandomString } from "util/random-gen-util";
 
@@ -30,44 +29,6 @@ export const fromAnyJsonToJs = json => {
       }
   }
   return [js, version];
-};
-
-const max = (m, l) => {
-  return l.reduce((acc, val) => Math.max(acc, val), m);
-};
-
-const min = (m, l) => {
-  return l.reduce((acc, val) => Math.min(acc, val), m);
-};
-
-const median = l => {
-  if (l.length % 2 === 1) {
-    return l[Math.floor(l.length / 2)];
-  } else {
-    const i = l.length / 2;
-    return (l[i - 1] + l[i]) / 2;
-  }
-};
-
-const average = l => {
-  const sum = l.reduce((acc, val) => acc + val, 0);
-  return sum / l.length;
-};
-
-const sum = l => {
-  return l.reduce((acc, val) => acc + val, 0);
-};
-
-const unzip3 = l => {
-  return l.reduce(
-    (acc, val) => {
-      acc[0].push(val[0]);
-      acc[1].push(val[1]);
-      acc[2].push(val[2]);
-      return acc;
-    },
-    [[], [], []]
-  );
 };
 
 const v8JsToV9Js = v8 => {

@@ -1,38 +1,69 @@
-import * as Loop from "test/loop";
+import fc from "fast-check";
 import * as M from "datastore/files-and-folders";
 import * as Origin from "datastore/origin";
 import { updateIn } from "immutable";
 import path from "path";
+import { arbitraryFF, arbitraryOrigins } from "../test/custom-arbitraries";
+import equal from "deep-equal";
+import { compose } from "../util/function-util";
 
-describe("files-and-folders", function() {
-  Loop.equal("(ffInv . ff) a", () => {
-    const a = Origin.arbitrary();
-    return [Origin.sort(M.ffInv(M.ff(a))), Origin.sort(a)];
+describe("files-and-folders", () => {
+  it("(ffInv . ff)", () => {
+    fc.assert(
+      fc.property(arbitraryOrigins, origins =>
+        equal(Origin.sort(M.ffInv(M.ff(origins))), Origin.sort(origins))
+      )
+    );
   });
 
-  Loop.equal("(fromJs . toJs) a", () => {
-    const a = M.computeDerived(M.arbitrary());
-    return [M.fromJs(M.toJs(a)).toJS(), a.toJS()];
+  it("(fromJs . toJs)", () => {
+    fc.assert(
+      fc.property(arbitraryFF, ff => {
+        const ffWithDerivedData = M.computeDerived(ff);
+        const expected = ffWithDerivedData.toJS();
+        const actual = M.fromJs(M.toJs(ffWithDerivedData)).toJS();
+
+        return equal(actual, expected);
+      })
+    );
   });
 
-  Loop.equal("(ffInv . fromJs . toJs . computeDerived . ff) a", () => {
-    const a = Origin.arbitrary();
-    return [
-      Origin.sort(M.ffInv(M.fromJs(M.toJs(M.computeDerived(M.ff(a)))))),
-      Origin.sort(a)
-    ];
+  it("(ffInv . fromJs . toJs . computeDerived . ff) a", () => {
+    fc.assert(
+      fc.property(arbitraryOrigins, origins => {
+        const actual = compose(
+          Origin.sort,
+          M.ffInv,
+          M.fromJs,
+          M.toJs,
+          M.computeDerived,
+          M.ff
+        )(origins);
+        const expected = Origin.sort(origins);
+        return equal(actual, expected);
+      })
+    );
   });
 
-  Loop.equal("merge empty a === merge a empty", () => {
-    const a = M.arbitrary();
-    return [M.merge(M.empty(), a).toJS(), M.merge(a, M.empty()).toJS()];
+  it("merge empty a === merge a empty", () => {
+    fc.assert(
+      fc.property(arbitraryFF, ff => {
+        const actual = M.merge(M.empty(), ff).toJS();
+        const expected = M.merge(ff, M.empty()).toJS();
+        return equal(actual, expected);
+      })
+    );
   });
 
-  Loop.equal("merge (merge a b) c === merge a (merge b c)", () => {
-    const a = M.arbitrary();
-    const b = M.arbitrary();
-    const c = M.arbitrary();
-    return [M.merge(M.merge(a, b), c).toJS(), M.merge(a, M.merge(b, c)).toJS()];
+  it("merge (merge a b) c === merge a (merge b c)", () => {
+    fc.property(
+      fc.tuple(arbitraryFF, arbitraryFF, arbitraryFF),
+      ([ff1, ff2, ff3]) => {
+        const actual = M.merge(M.merge(ff1, ff2), ff3).toJS();
+        const expected = M.merge(ff1, M.merge(ff2, ff3)).toJS();
+        return equal(actual, expected);
+      }
+    );
   });
 
   it("simple derived data test", () => {

@@ -21,17 +21,9 @@ Docker:
   before_script:
     - echo "$CI_JOB_TOKEN" | docker login $CI_REGISTRY -u gitlab-ci-token --password-stdin
   script:
-    - >
-      if [[ -n "${CI_COMMIT_TAG}" ]]; then
-        export TAG=$(printf "${CI_COMMIT_TAG}" | sed "s/^v//")
-      else
-        export TAG=$CI_COMMIT_REF_SLUG
-      fi
-    #
-    - docker pull $IMAGE_NAME:$CI_COMMIT_BEFORE_SHA || true
     - docker pull $IMAGE_NAME:master || true
-    - docker build --cache-from $IMAGE_NAME:master -t $IMAGE_NAME:$CI_COMMIT_SHA - < Dockerfile
-    - docker push $IMAGE_NAME:$CI_COMMIT_SHA
+    - docker build --cache-from $IMAGE_NAME:master -t $IMAGE_NAME:master - < Dockerfile
+    - docker push $IMAGE_NAME:master
 
 
 Quality:
@@ -45,7 +37,7 @@ Quality:
 
 Build:
   stage: "Build archifiltre"
-  image: $IMAGE_NAME:$CI_COMMIT_SHA
+  image: $IMAGE_NAME:master
   before_script:
     - yarn --frozen-lockfile
   script:

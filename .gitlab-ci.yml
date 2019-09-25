@@ -21,9 +21,9 @@ Docker:
   before_script:
     - echo "$CI_JOB_TOKEN" | docker login $CI_REGISTRY -u gitlab-ci-token --password-stdin
   script:
-    - docker pull $CI_REGISTRY_IMAGE$IMAGE_NAME:master || true
-    - docker build --cache-from $CI_REGISTRY_IMAGE$IMAGE_NAME:master -t $CI_REGISTRY_IMAGE$IMAGE_NAME:master - < Dockerfile
-    - docker push $CI_REGISTRY_IMAGE$IMAGE_NAME:master
+    - docker pull $CI_REGISTRY_IMAGE:master || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE:master -t $CI_REGISTRY_IMAGE:master - < Dockerfile
+    - docker push $CI_REGISTRY_IMAGE:master
 
 
 Quality:
@@ -37,7 +37,7 @@ Quality:
 
 Build:
   stage: "Build archifiltre"
-  image: $IMAGE_NAME:master
+  image: $CI_REGISTRY_IMAGE:master
   before_script:
     - yarn --frozen-lockfile
   script:

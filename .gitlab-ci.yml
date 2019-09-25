@@ -16,7 +16,7 @@ stages:
 Docker:
   stage: "Build docker build image"
   services:
-    - docker:dind
+    - docker:latest-dind
   image: docker:latest
   before_script:
     - echo "$CI_JOB_TOKEN" | docker login $CI_REGISTRY -u gitlab-ci-token --password-stdin

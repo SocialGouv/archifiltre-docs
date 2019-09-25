@@ -5,9 +5,9 @@ import {
   metsExporterThunk,
   resipExporterThunk
 } from "../exporters/export-thunks";
-import Dashboard from "./dashboard";
 import { getFilesAndFoldersMetadataFromStore } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getFilesAndFoldersFromStore } from "../reducers/files-and-folders/files-and-folders-selectors";
+import Dashboard from "./dashboard";
 
 interface DashboardContainerProps {
   api: any;

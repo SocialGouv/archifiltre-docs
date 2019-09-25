@@ -29,11 +29,10 @@ Docker:
       fi
     #
     - docker pull $IMAGE_NAME:$CI_COMMIT_BEFORE_SHA || true
-    - docker pull $IMAGE_NAME:$TAG || true
     - docker pull $IMAGE_NAME:master || true
-    - docker build --cache-from $IMAGE_NAME:master -t $IMAGE_NAME:$CI_COMMIT_SHA -t $IMAGE_NAME:$TAG - < Dockerfile
+    - docker build --cache-from $IMAGE_NAME:master -t $IMAGE_NAME:$CI_COMMIT_SHA - < Dockerfile
     - docker push $IMAGE_NAME:$CI_COMMIT_SHA
-    - docker push $IMAGE_NAME:$TAG
+
 
 Quality:
   stage: "Code Quality"
@@ -46,7 +45,7 @@ Quality:
 
 Build:
   stage: "Build archifiltre"
-  image: node:12-alpine
+  image: $IMAGE_NAME:$CI_COMMIT_SHA
   before_script:
     - yarn --frozen-lockfile
   script:

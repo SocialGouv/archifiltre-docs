@@ -21,9 +21,9 @@ Docker:
   before_script:
     - echo "$CI_JOB_TOKEN" | docker login $CI_REGISTRY -u gitlab-ci-token --password-stdin
   script:
-    - docker pull $IMAGE_NAME:master || true
-    - docker build --cache-from $IMAGE_NAME:master -t $IMAGE_NAME:master - < Dockerfile
-    - docker push $IMAGE_NAME:master
+    - docker pull $CI_REGISTRY_IMAGE$IMAGE_NAME:master || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE$IMAGE_NAME:master -t $CI_REGISTRY_IMAGE$IMAGE_NAME:master - < Dockerfile
+    - docker push $CI_REGISTRY_IMAGE$IMAGE_NAME:master
 
 
 Quality:

@@ -1,9 +1,9 @@
 import React, { FC, useCallback } from "react";
 import { useSelector } from "react-redux";
 
+import { getFilesAndFoldersMetadataFromStore } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getFilesAndFoldersFromStore } from "../reducers/files-and-folders/files-and-folders-selectors";
 import Workspace from "./workspace";
-import { getFilesAndFoldersMetadataFromStore } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 interface WorkspaceContainerProps {
   api: any;

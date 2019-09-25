@@ -11,4 +11,4 @@ RUN wget -nc https://dl.winehq.org/wine-builds/winehq.key \
   && apt-get -yq install --install-recommends winehq-stable \
   && apt-get -yq install libtool automake autoconf nasm
 
-ENTRYPOINT ["yarn", "buildProd"]
+ENTRYPOINT ["yarn", "build-prod"]

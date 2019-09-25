@@ -46,12 +46,12 @@ Build:
   before_script:
     - yarn --frozen-lockfile
   script:
-    - yarn buildProd
+    - yarn build-prod
   artifacts:
     paths:
-    - dist/win-ia32/archifiltre 1.0.0.exe
-    - dist/win-x64/archifiltre 1.0.0.exe
-    - dist/linux-x64/archifiltre 1.0.0.AppImage
+    - dist/win-ia32/archifiltre 13.0.0.exe
+    - dist/win-x64/archifiltre 13.0.0.exe
+    - dist/linux-x64/archifiltre 13.0.0.AppImage
     expire_in: 1 week
   cache:
     key: ${CI_JOB_NAME}

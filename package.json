@@ -10,7 +10,7 @@
     "dev-app": "cross-env DEV_SERVER=true electron ./electron",
     "test": "jest",
     "prepare-prod": "webpack --progress --mode production",
-    "build-prod": "yarn prepare-prod && yarn win32 && yarn win64 && yarn mac && yarn linux",
+    "build-prod": "yarn prepare-prod && yarn win32 && yarn win64 && yarn linux",
     "win32": "electron-builder --windows portable --ia32",
     "win64": "electron-builder --windows portable --x64",
     "mac": "electron-builder --mac dmg",

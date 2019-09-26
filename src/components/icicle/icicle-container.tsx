@@ -30,6 +30,7 @@ export default function IcicleApiToProps({
         api.undo.commit();
       }}
       max_depth={database.maxDepth()}
+      width_by_size={icicle_state.widthBySize()}
       root_id={database.rootFfId()}
       sequence={icicle_state.sequence()}
       setDisplayRoot={icicle_state.setDisplayRoot}

@@ -111,7 +111,6 @@ class Workspace extends React.PureComponent {
     const api = this.props.api;
 
     const fillColor = this.fillColorFactory();
-
     return (
       <div className="grid-y grid-frame">
         <div className="cell">
@@ -155,7 +154,8 @@ export default props => {
       getFfByFfId: database.getFfByFfId,
       display_root: icicle_state.display_root(),
       root_id: database.rootFfId(),
-      change_skin: icicle_state.changeSkin()
+      change_skin: icicle_state.changeSkin(),
+      width_by_size: icicle_state.widthBySize()
     },
     props
   );

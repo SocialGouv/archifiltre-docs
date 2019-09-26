@@ -3,7 +3,7 @@ import "./reporter";
 
 import "foundation-sites";
 import "./css/index.scss";
-import "./css/app.css";
+import "css/app.css";
 
 import { SecretDevtools } from "secret-devtools";
 
@@ -18,8 +18,6 @@ import Header from "components/header";
 import ANewVersionIsAvailable from "components/a-new-version-is-available";
 
 import WindowResize from "components/window-resize";
-
-import "css/app.css";
 
 import { Store } from "reducers/store";
 

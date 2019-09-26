@@ -1,7 +1,3 @@
-import pick from "languages";
-
-const english_hints = [];
-
 const french_hints = [
   "Si vous avez fait une erreur, " +
     "vous pouvez annuler vos dernières actions en utilisant " +
@@ -63,9 +59,4 @@ const french_hints = [
     "sont propagés à tous ses fils."
 ];
 
-// export const hints = pick({
-//   en:english_hints,
-//   fr:french_hints,
-// });
-
-export const hints = french_hints; //////////////////////
+export const hints = french_hints;

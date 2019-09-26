@@ -1,5 +1,3 @@
-import React from "react";
-
 import { mkB } from "components/button";
 
 import { save, makeNameWithExt } from "util/file-sys-util";

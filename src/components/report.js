@@ -78,8 +78,6 @@ const ElementIcon = props => {
 
 const Name = props => {
   const placeholder = props.placeholder;
-  const onChangeAlias = props.onChangeAlias;
-  const node_id = props.node_id;
   const display_name = props.display_name;
   const bracket_name = props.bracket_name;
   const n_name = props.n_name;

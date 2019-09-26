@@ -6,20 +6,6 @@ import RoundedArea from "./AreaComponents/rounded-area";
 import RoundedAreaInnerBlock from "./AreaComponents/rounded-area-inner-block";
 import pick from "../languages";
 
-const loaderBlockPadding = "30px";
-
-const loaderBlockStyle = {
-  display: "flex",
-  flexDirection: "column",
-
-  width: "100%",
-
-  paddingTop: loaderBlockPadding,
-  paddingRight: loaderBlockPadding,
-  paddingBottom: loaderBlockPadding,
-  paddingLeft: loaderBlockPadding
-};
-
 const loaderBlockTitleStyle = {
   display: "flex"
 };

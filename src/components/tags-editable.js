@@ -1,8 +1,6 @@
 import React from "react";
 
 import Tag from "components/tag";
-import * as ObjectUtil from "util/object-util";
-import { Set } from "immutable";
 
 import pick from "languages";
 
@@ -93,8 +91,7 @@ export default class TagsEditable extends React.Component {
 
       ans = [...elements, input_box];
     } else if (tag_ids.size > 0) {
-      const elements = tagIdsToElements();
-      ans = elements;
+      ans = tagIdsToElements();
     } else {
       ans = (
         <div

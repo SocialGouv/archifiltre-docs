@@ -51,7 +51,7 @@ const errorLoadingFiles = () => state => {
     .update("error", () => true);
 };
 
-const reInit = () => state => initialState();
+const reInit = () => () => initialState();
 
 const writer = {
   startToLoadFiles,

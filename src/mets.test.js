@@ -66,7 +66,6 @@ describe("mets module", () => {
     const testId = "TEST_ID";
     const testOrder = 10;
     const testFileId = "master.10";
-    const testmd5Hash = "123456789abcdef0123456789abcdef0";
     it("should generate a proper file section", () => {
       expect(
         makeObjectDiv(undefined, undefined, testId, testOrder, testFileId)

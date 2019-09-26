@@ -142,10 +142,7 @@ const makeFileAU = (item, item_tags, ID) => {
   ]);
 };
 
-const makeFolderAUChildren = (item, item_tags, ID) => {
-  let last_modified = dateFormat(item.get("last_modified_max"), date_format);
-  let now = dateFormat(new Date(), date_format);
-
+const makeFolderAUChildren = (item, item_tags) => {
   let AU_content = [];
 
   AU_content.push(makeObj("DescriptionLevel", "RecordGrp"));
@@ -160,11 +157,7 @@ const makeFolderAUChildren = (item, item_tags, ID) => {
     AU_content.push(makeObj("xsi:Tag", a));
   });
 
-  return [
-    { _attr: makeObj("id", makeId()) },
-    // makeObj('Management', ''),
-    makeObj("Content", AU_content)
-  ];
+  return [{ _attr: makeObj("id", makeId()) }, makeObj("Content", AU_content)];
 };
 
 const bundleFolderAU = AU_children => {
@@ -204,7 +197,7 @@ const recTraverseDB = (
       let item_AU = makeFileAU(item, tags, ID);
       addToAUParent(item_AU);
 
-      HMupdate(hash, a => ID);
+      HMupdate(hash, () => ID);
 
       contentWriter(hash, data);
     }
@@ -239,7 +232,6 @@ const recTraverseDB = (
 // =================================
 const makeDataObjectPackageObj = (state, contentWriter) => {
   let FF = state.get("files_and_folders");
-  let files = FF.filter(a => a.get("children").size === 0);
   let folderpath = state.get("original_path") + "/../";
 
   let DOP_children = [];
@@ -261,8 +253,6 @@ const makeDataObjectPackageObj = (state, contentWriter) => {
 
   AU_children.push({ _attr: makeObj("id", makeId()) });
   AU_children.push(makeObj("Content", AU_root_content));
-
-  // console.log(state.get('tags').toJS())
 
   //Traversing database
   let hashmap = new Map();
@@ -324,7 +314,7 @@ export const makeSIP = state => {
 
   let content = sip.folder("content");
   let addToContent = (filename, data) => {
-    content.file(filename.replace(/[^a-zA-Z0-9.\\-\\/+=@_]+/g, "_"), data);
+    content.file(filename.replace(/[^a-zA-Z0-9.\\/+=@_]+/g, "_"), data);
   };
 
   let DOP_obj = makeDataObjectPackageObj(state, addToContent); // will also compute ZIP

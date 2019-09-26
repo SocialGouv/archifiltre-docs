@@ -46,5 +46,5 @@ Build:
     paths:
     - dist/win-ia32/archifiltre 1.0.0.exe
     - dist/win-x64/archifiltre 1.0.0.exe
-    - dist/linux/archifiltre 1.0.0.AppImage
+    - dist/linux-x64/archifiltre 1.0.0.AppImage
     expire_in: 1 week

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/default
 import AsyncHandleDropWorker from "async-handle-drop.worker";
 import * as VirtualFileSystem from "datastore/virtual-file-system";
 

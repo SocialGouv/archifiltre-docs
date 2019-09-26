@@ -1,9 +1,14 @@
 import equal from "deep-equal";
 import fc from "fast-check";
-import * as M from "csv";
 import { arbitraryImmutableList } from "./test/custom-arbitraries";
-import { line2List, list2Line, fromStr, toStr, leftPadInt } from "csv";
-import { epochToFormattedUtcDateString } from "csv";
+import {
+  line2List,
+  list2Line,
+  fromStr,
+  toStr,
+  leftPadInt,
+  epochToFormattedUtcDateString
+} from "csv";
 
 describe("csv", function() {
   describe("(line2List . list2Line)", () => {
@@ -28,11 +33,11 @@ describe("csv", function() {
   });
   describe("leftPadInt", () => {
     it("should behave correctly", () => {
-      expect(M.leftPadInt(0, 12)).toEqual("12");
-      expect(M.leftPadInt(1, 12)).toEqual("12");
-      expect(M.leftPadInt(2, 12)).toEqual("12");
-      expect(M.leftPadInt(3, 12)).toEqual("012");
-      expect(M.leftPadInt(4, 12)).toEqual("0012");
+      expect(leftPadInt(0, 12)).toEqual("12");
+      expect(leftPadInt(1, 12)).toEqual("12");
+      expect(leftPadInt(2, 12)).toEqual("12");
+      expect(leftPadInt(3, 12)).toEqual("012");
+      expect(leftPadInt(4, 12)).toEqual("0012");
     });
 
     it("should have a length bigger or equal to the pad value", () => {

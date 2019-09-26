@@ -28,7 +28,7 @@ Docker:
 
 Quality:
   stage: "Code Quality"
-  image: node:12-alpine
+  image: $CI_REGISTRY_IMAGE:master
   before_script:
     - yarn --frozen-lockfile
   script:

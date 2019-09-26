@@ -2,7 +2,6 @@ import React from "react";
 
 import * as Color from "util/color-util";
 import * as ObjectUtil from "util/object-util";
-import * as Cache from "util/cache-util";
 
 import Icicle from "components/icicle/icicle-container";
 
@@ -24,7 +23,7 @@ class Workspace extends React.PureComponent {
     this.getChildrenIdFromId = this.getChildrenIdFromId.bind(this);
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
     const props = this.props;
     const display_root = props.display_root;
 

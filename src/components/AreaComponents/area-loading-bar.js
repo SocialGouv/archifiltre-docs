@@ -1,7 +1,6 @@
 import React from "react";
 import RoundedArea, { LIGHT } from "./rounded-area";
 import { toRgba } from "../../util/color-util";
-import RoundedAreaInnerBlock from "./rounded-area-inner-block";
 import AreaTitle from "./area-title";
 import AreaMessage from "./area-message";
 
@@ -48,7 +47,7 @@ const progressBarText = {
 const AreaLoadingBar = ({ children, progress = 0 }) => (
   <RoundedArea color={LIGHT}>
     <div style={progressBarContainer}>
-      <div style={{ ...progressBarStyle, width: `${progress}%` }}></div>
+      <div style={{ ...progressBarStyle, width: `${progress}%` }} />
       <div style={progressBarPercent}>
         <AreaMessage>{Math.round(progress)}%</AreaMessage>
       </div>

@@ -19,8 +19,6 @@ const level_text = pick({
   fr: "Niveau"
 });
 
-const breadcrumb_dims = { w: 400, h: 300 };
-
 const makeBreadKey = id => "breadcrumbc-" + id;
 const removeRootId = arr => arr.slice(1);
 const computeCumulative = array => {
@@ -57,10 +55,9 @@ class Breadcrumbs extends React.PureComponent {
 
     const remaining_space_dx = dx - width_poly;
 
-    const x_text = x_poly + width_poly + (remaining_space_dx * 1) / 20;
+    const x_text = x_poly + width_poly + remaining_space_dx / 20;
     const y_text = y_poly;
     const width_text = (remaining_space_dx * 19) / 20;
-    const height_text = height_poly;
 
     return {
       x_poly,
@@ -71,7 +68,7 @@ class Breadcrumbs extends React.PureComponent {
       x_text,
       y_text,
       width_text,
-      height_text
+      height_text: height
     };
   }
 
@@ -85,9 +82,7 @@ class Breadcrumbs extends React.PureComponent {
 
       const n_alias = node.get("alias");
 
-      const display_name = n_alias === "" ? n_name : n_alias;
-
-      return display_name;
+      return n_alias === "" ? n_name : n_alias;
     };
 
     let res = [];

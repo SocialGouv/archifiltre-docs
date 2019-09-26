@@ -136,8 +136,6 @@
     "riek": "1.1.0",
     "rxjs": "^6.5.3",
     "styled-components": "^4.3.2",
-    "tar-fs": "1.16.3",
-    "tar-stream": "1.6.2",
     "uuid": "3.3.2",
     "what-input": "^5.2.1",
     "xml": "1.0.1"

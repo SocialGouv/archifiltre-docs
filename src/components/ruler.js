@@ -1,6 +1,5 @@
 import React from "react";
 
-import * as Color from "util/color-util";
 import * as ObjectUtil from "util/object-util";
 
 import pick from "languages";

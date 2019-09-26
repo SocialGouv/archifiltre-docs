@@ -2,28 +2,10 @@ import React from "react";
 
 import Tag from "components/tag";
 
-import pick from "languages";
-
 import MultiLinesInput from "components/multi-lines-input";
-
-const rename_tag_placeholder = pick({
-  en: "Rename tag",
-  fr: "Renommer un tag"
-});
 
 const cell_shrink_style = {
   padding: "0em 0.1em"
-};
-
-const input_style = {
-  width: "50%",
-  border: "none",
-  background: "none",
-  outline: "none",
-  paddingBottom: 0,
-  borderBottom: "3px solid rgb(10, 50, 100)",
-  marginBottom: "2px",
-  fontSize: "1.15em"
 };
 
 class AllTagsItem extends React.Component {
@@ -38,22 +20,6 @@ class AllTagsItem extends React.Component {
   }
 
   render() {
-    const enter_key_code = 13;
-    const escape_key_code = 27;
-
-    let keyUp = event => {
-      if (event.keyCode === enter_key_code) {
-        event.preventDefault();
-        if (event.target.value.length > 0) {
-          this.props.renameTag(event.target.value);
-          event.target.value = "";
-        }
-        this.props.stopEditingTag();
-      } else if (event.keyCode === escape_key_code) {
-        this.props.stopEditingTag();
-      }
-    };
-
     let res;
 
     let tag = this.props.tag;
@@ -115,26 +81,6 @@ class AllTagsItem extends React.Component {
           }}
           autofocus={true}
         />
-
-        // <input
-        //   style={input_style}
-        //   onFocus={e => {
-        //     e.target.select();
-        //   }}
-        //   onMouseUp={e => {
-        //     e.stopPropagation();
-        //   }}
-        //   onKeyUp={keyUp}
-        //   onBlur={e => {
-        //     this.props.renameTag(e.target.value);
-        //     this.props.stopEditingTag();
-        //   }}
-        //   defaultValue={tag}
-        //   placeholder={rename_tag_placeholder}
-        //   ref={component => {
-        //     this.textInput = component;
-        //   }}
-        // />
       );
     } else {
       tag_pill = (

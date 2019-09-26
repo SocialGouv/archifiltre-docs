@@ -1,5 +1,3 @@
-import React from "react";
-
 import { mkB } from "components/button";
 
 import * as Csv from "csv";

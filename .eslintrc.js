@@ -3,7 +3,6 @@ module.exports = {
   rules: {
     "import/no-unresolved": "off",
     "react/prop-types": "off",
-    "no-unused-vars": "off",
     "jsx-a11y/mouse-events-have-key-events": "off",
     "no-console": "off",
     "jsx-a11y/click-events-have-key-events": "off",

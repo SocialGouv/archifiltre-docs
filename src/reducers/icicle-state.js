@@ -1,4 +1,4 @@
-import { Record, Set } from "immutable";
+import { Record } from "immutable";
 import * as RealEstate from "reducers/real-estate";
 
 const State = Record({
@@ -107,7 +107,7 @@ const toggleChangeSkin = () => state => {
   return state;
 };
 
-const reInit = () => state => initialState();
+const reInit = () => () => initialState();
 
 const writer = {
   setNoHover,

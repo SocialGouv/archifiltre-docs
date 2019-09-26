@@ -20,7 +20,7 @@ const fileCount = () => state =>
   state.get("files_and_folders").filter(a => a.get("children").size === 0).size;
 
 const getFfByFfId = id => state => state.get("files_and_folders").get(id);
-const rootFfId = () => state => "";
+const rootFfId = () => () => "";
 
 const maxDepth = () => state =>
   state
@@ -30,7 +30,7 @@ const maxDepth = () => state =>
 
 const volume = () => state => getFfByFfId(rootFfId()())(state).get("size");
 
-const getFfIdPath = id => state =>
+const getFfIdPath = id => () =>
   List(
     id.split("/").map((_, i) =>
       id
@@ -51,14 +51,12 @@ const getData = () => state => VirtualFileSystem.toJs(state);
  * Each line represents one file or folder.
  *
  * ff_id_list is an array that determined the line order.
- *
- * @param state - virtual file system
  */
 const toStrList2 = () => state => {
   const files_and_folders = state.get("files_and_folders");
   const root_id = "";
   const ff_id_list = FilesAndFolders.toFfidList(files_and_folders).filter(
-    a => a != root_id
+    a => a !== root_id
   );
   const tags = state.get("tags");
 
@@ -91,7 +89,7 @@ const getAllTagIds = () => state =>
 
 const getTagByTagId = id => state => getIn(state, ["tags", id]);
 
-const getWaitingCounter = () => state => 0;
+const getWaitingCounter = () => () => 0;
 
 const reader = {
   overallCount,
@@ -114,9 +112,9 @@ const reader = {
   getData
 };
 
-const set = next_state => state => next_state;
+const set = next_state => () => next_state;
 
-const reInit = () => state => initialState();
+const reInit = () => () => initialState();
 
 const updateAlias = (updater, id) => state => {
   state = updateIn(state, ["files_and_folders", id, "alias"], updater);
@@ -161,15 +159,12 @@ const deleteTag = tag_id => state => {
   return state;
 };
 
-const setHashes = hashesMap => state => {
-  const newState = Object.keys(hashesMap).reduce(
+const setHashes = hashesMap => state =>
+  Object.keys(hashesMap).reduce(
     (acc, ffId) =>
       updateIn(acc, ["files_and_folders", ffId, "hash"], () => hashesMap[ffId]),
     state
   );
-
-  return newState;
-};
 
 const writer = {
   set,

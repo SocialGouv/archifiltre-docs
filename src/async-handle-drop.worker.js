@@ -58,10 +58,9 @@ function loadFolder(folderPath) {
     count => postMessage({ status: "traverse", count }),
     { interval: MIN_MESSAGE_INTERVAL }
   );
-  let path;
   let origin;
   try {
-    [path, origin] = traverseFileTree(traverseHook, folderPath);
+    [, origin] = traverseFileTree(traverseHook, folderPath);
   } catch (err) {
     reportError(err);
     reportMessage("Error in traverseFileTree");

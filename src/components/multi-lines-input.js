@@ -14,7 +14,7 @@ export default class MultiLinesInput extends React.Component {
     this.ref = this.ref.bind(this);
   }
 
-  onBlur(event) {
+  onBlur() {
     this.props.onFinish(this.state.value);
   }
 

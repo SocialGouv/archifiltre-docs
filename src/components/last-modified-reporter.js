@@ -10,11 +10,6 @@ const last_modified_tr = pick({
   fr: "Dernière modification"
 });
 
-const at_tr = pick({
-  en: "at",
-  fr: "à"
-});
-
 const max_tr = pick({
   en: "max"
 });
@@ -31,7 +26,7 @@ const median_tr = pick({
   fr: "médiane"
 });
 
-const RedDot = props => {
+const RedDot = () => {
   return (
     <div
       style={{
@@ -45,7 +40,7 @@ const RedDot = props => {
   );
 };
 
-const BlackCursor = props => {
+const BlackCursor = () => {
   return (
     <div
       style={{
@@ -75,8 +70,6 @@ const epochTimeToDateTime = d => {
 
 const LastModifiedReporter = props => {
   const api = props.api;
-
-  const cursor_width = 0.75;
 
   let lm_max = "...";
   let lm_median = "...";

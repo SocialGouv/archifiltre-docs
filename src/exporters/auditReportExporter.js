@@ -151,9 +151,7 @@ const auditReportExporter = ({ files_and_folders }) => {
     ...longestPathValues
   };
 
-  const blob = exportToDocX(TEMPLATE_PATH, docxData);
-
-  return blob;
+  return exportToDocX(TEMPLATE_PATH, docxData);
 };
 
 export default auditReportExporter;

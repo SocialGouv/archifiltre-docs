@@ -7,7 +7,8 @@ const State = Record({
   dims: {},
   tag_id_to_highlight: "",
   display_root: [],
-  change_skin: false
+  change_skin: false,
+  width_by_size: true
 });
 
 const property_name = "icicle_state";
@@ -40,7 +41,8 @@ const reader = {
   isFocused: () => state => state.get("hover_seq").length > 0,
   isLocked,
   isZoomed: () => state => state.get("display_root").length > 0,
-  changeSkin: () => state => state.get("change_skin")
+  changeSkin: () => state => state.get("change_skin"),
+  widthBySize: () => state => state.get("width_by_size")
 };
 
 const setNoHover = () => state => state.update("hover_seq", () => []);
@@ -107,6 +109,14 @@ const toggleChangeSkin = () => state => {
   return state;
 };
 
+const toggleChangeWidthBySize = () => state => {
+  state = state.update("width_by_size", a => !a);
+  state = state.update("dims", () => {
+    return {};
+  });
+  return state;
+};
+
 const reInit = () => () => initialState();
 
 const writer = {
@@ -120,6 +130,7 @@ const writer = {
   setTagIdToHighlight,
   setNoTagIdToHighlight,
   toggleChangeSkin,
+  toggleChangeWidthBySize,
   reInit
 };
 

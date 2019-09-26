@@ -21,7 +21,9 @@ export default class IcicleMain extends PureComponent {
 
     this.ref = this.ref.bind(this);
 
-    this.fWidth = this.fWidth.bind(this);
+    this.getComputeWidthFunc = this.getComputeWidthFunc.bind(this);
+    this.computeWidthByNbFiles = this.computeWidthByNbFiles.bind(this);
+    this.computeWidthBySize = this.computeWidthBySize.bind(this);
     this.normalizeWidth = this.normalizeWidth.bind(this);
     this.trueFHeight = this.trueFHeight.bind(this);
 
@@ -94,10 +96,11 @@ export default class IcicleMain extends PureComponent {
 
   computeWidthRec(ids, x, dx) {
     const ans = [[x, dx]];
+
     if (ids.length < 2) {
       return ans;
     } else {
-      const fWidth = this.fWidth;
+      const fWidth = this.getComputeWidthFunc();
       const normalizeWidth = this.normalizeWidth;
       const getChildrenIdFromId = this.props.getChildrenIdFromId;
 
@@ -118,9 +121,18 @@ export default class IcicleMain extends PureComponent {
     }
   }
 
-  fWidth(id) {
-    const node = this.props.getFfByFfId(id);
-    return node.get("size");
+  getComputeWidthFunc() {
+    return this.props.width_by_size
+      ? this.computeWidthBySize
+      : this.computeWidthByNbFiles;
+  }
+
+  computeWidthBySize(id) {
+    return this.props.getFfByFfId(id).get("size");
+  }
+
+  computeWidthByNbFiles(id) {
+    return this.props.getFfByFfId(id).get("nb_files");
   }
 
   normalizeWidth(arr) {
@@ -205,6 +217,7 @@ export default class IcicleMain extends PureComponent {
     const minimap_y = icicle_height + 10;
     const minimap_width = breadcrumbs_width - 30;
     const minimap_height = ruler_height - 20;
+    const fWidth = this.getComputeWidthFunc();
 
     const icicle = (
       <g>
@@ -217,7 +230,7 @@ export default class IcicleMain extends PureComponent {
           tags={tags}
           root_id={this.props.root_id}
           display_root={this.props.display_root}
-          fWidth={this.fWidth}
+          fWidth={fWidth}
           normalizeWidth={this.normalizeWidth}
           trueFHeight={this.trueFHeight}
           getChildrenIdFromId={this.props.getChildrenIdFromId}
@@ -266,7 +279,7 @@ export default class IcicleMain extends PureComponent {
             dy={minimap_height - 10}
             root_id={this.props.root_id}
             display_root={ArrayUtil.empty}
-            fWidth={this.fWidth}
+            fWidth={fWidth}
             normalizeWidth={this.normalizeWidth}
             trueFHeight={this.trueFHeight}
             getChildrenIdFromId={this.props.getChildrenIdFromId}

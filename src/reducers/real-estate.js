@@ -40,7 +40,7 @@ const updateGetAndSet = (
 
   if (old_obj[old_key].get === undefined) {
     new_key = property_name + "|" + old_key;
-    update = (a, b) => [a];
+    update = a => [a];
   }
 
   new_obj[new_key] = (...args) => old_obj[old_key](...args);
@@ -86,7 +86,7 @@ const compileGet = get => {
 
 const compileSet = (get, set) => {
   if (set.length === 0) {
-    return (a, s) => a;
+    return a => a;
   } else {
     return (a, s) =>
       set[0](compileSet(get.slice(1), set.slice(1))(a, get[0](s)), s);

@@ -152,7 +152,7 @@ export const makePremisEvent = (id, type, date, detail, agents, object) => {
     ])
   );
   premisEvent.push(makeObj("premis:eventType", type));
-  if (date !== undefined && date != "") {
+  if (date !== undefined && date !== "") {
     if (date instanceof Date) {
       let dateS = dateFormat(date, date_format);
       premisEvent.push(makeObj("premis:eventDateTime", dateS));
@@ -163,7 +163,7 @@ export const makePremisEvent = (id, type, date, detail, agents, object) => {
     let nowDate = dateFormat(new Date(), date_format);
     premisEvent.push(makeObj("premis:eventDateTime", nowDate));
   }
-  if (detail !== undefined && detail != "") {
+  if (detail !== undefined && detail !== "") {
     premisEvent.push(makeObj("premis:eventDetail", detail));
   }
 
@@ -196,14 +196,12 @@ export const makePremisEvent = (id, type, date, detail, agents, object) => {
  * @param {string} hash md5 hash of the file
  */
 export const makeFileElement = (item, ID, DMDID, hash) => {
-  // let name_in_manifest = item.get('name').replace(/[^a-zA-Z0-9.\\-\\/+=@_]+/g, '_')
   let original_name = item.get("name");
   let alias_name = item.get("alias");
-  if (alias_name == "") {
+  if (alias_name === "") {
     alias_name = original_name;
   }
   let internal_URI = "master/" + alias_name;
-  let last_modified = dateFormat(item.get("last_modified_max"), date_format);
 
   let file_content = [];
 
@@ -307,61 +305,58 @@ const recTraverseDB = (
     if (HMread().has(hash)) {
       // doublon !!!
       return;
-    } else {
-      let idFile = counters.fileCount;
-      counters.fileCount = idFile + 1;
-
-      let idDmd = counters.dmdCount;
-      counters.dmdCount = idDmd + 1;
-      let dmdContent = [];
-      // make sure we use / in uri even on Windows
-      let relativeURI = Path.join(clean_rootpath, item.get("name")).replace(
-        /\\/g,
-        "/"
-      );
-
-      dmdContent.push(
-        makeObj("dc:source", [
-          { _attr: { "xsi:type": "spar_dc:originalName" } },
-          relativeURI
-        ])
-      );
-
-      let last_modified = dateFormat(
-        item.get("last_modified_max"),
-        date_format
-      );
-      let comment = item.get("comments");
-      if (comment.length > 0) {
-        dmdContent.push(makeObj("dc:title", comment.replace(/[^\w ]/g, "_")));
-      }
-      dmdContent.push(makeObj("dcterms:modified", last_modified));
-      addToDmd(makeDmdSec("DMD." + idDmd, dmdContent));
-
-      let item_File = makeFileElement(
-        item,
-        "master." + idFile,
-        "DMD." + idDmd,
-        hash
-      );
-      addToMASTER(item_File);
-
-      let idObj = counters.objCount;
-      counters.objCount = idObj + 1;
-
-      let itemDIV = makeObjectDiv(
-        item,
-        tags,
-        "DIV." + (idObj + 2),
-        idObj,
-        "master." + idFile
-      );
-      addToDIV(itemDIV);
-
-      HMupdate(hash, a => ID);
-
-      contentWriter(hash, data);
     }
+
+    let idFile = counters.fileCount;
+    counters.fileCount = idFile + 1;
+
+    let idDmd = counters.dmdCount;
+    counters.dmdCount = idDmd + 1;
+    let dmdContent = [];
+    // make sure we use / in uri even on Windows
+    let relativeURI = Path.join(clean_rootpath, item.get("name")).replace(
+      /\\/g,
+      "/"
+    );
+
+    dmdContent.push(
+      makeObj("dc:source", [
+        { _attr: { "xsi:type": "spar_dc:originalName" } },
+        relativeURI
+      ])
+    );
+
+    let last_modified = dateFormat(item.get("last_modified_max"), date_format);
+    let comment = item.get("comments");
+    if (comment.length > 0) {
+      dmdContent.push(makeObj("dc:title", comment.replace(/[^\w ]/g, "_")));
+    }
+    dmdContent.push(makeObj("dcterms:modified", last_modified));
+    addToDmd(makeDmdSec("DMD." + idDmd, dmdContent));
+
+    let item_File = makeFileElement(
+      item,
+      "master." + idFile,
+      "DMD." + idDmd,
+      hash
+    );
+    addToMASTER(item_File);
+
+    let idObj = counters.objCount;
+    counters.objCount = idObj + 1;
+
+    let itemDIV = makeObjectDiv(
+      item,
+      tags,
+      "DIV." + (idObj + 2),
+      idObj,
+      "master." + idFile
+    );
+    addToDIV(itemDIV);
+
+    HMupdate(hash, () => ID);
+
+    contentWriter(hash, data);
   } else {
     // it's a folder continue the traversal
     item.get("children").forEach(child => {
@@ -547,7 +542,7 @@ export const makeSIP = state => {
 
   let content = sip.folder("master");
   let addToContent = (filename, data) => {
-    content.file(filename.replace(/[^a-zA-Z0-9.\\-\\/+=@_]+/g, "_"), data);
+    content.file(filename.replace(/[^a-zA-Z0-9.\\/+=@_]+/g, "_"), data);
   };
 
   let metsContent = [];

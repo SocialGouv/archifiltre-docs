@@ -16,7 +16,7 @@ describe("hookUtils", () => {
   describe("hookCounter", () => {
     describe("with default interval", () => {
       it("should debounce correctly", () => {
-        const { hook, getCount, throttledHook } = setup();
+        const { hook, throttledHook } = setup();
         hook();
         advanceBy(200);
         hook();
@@ -30,7 +30,7 @@ describe("hookUtils", () => {
 
     describe("with custom interval", () => {
       it("should debounce correctly", () => {
-        const { hook, getCount, throttledHook } = setup({
+        const { hook, throttledHook } = setup({
           interval: 300
         });
         hook();

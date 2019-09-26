@@ -1,8 +1,4 @@
-import React from "react";
-
 import { mkB } from "components/button";
-
-import pick from "languages";
 
 const label = "METS";
 
@@ -19,7 +15,6 @@ const MetsButton = props => {
 
   return mkB(
     () => {
-      console.log("to METS SIP");
       makeSIP();
     },
     label,

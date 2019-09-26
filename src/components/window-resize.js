@@ -72,17 +72,16 @@ export default class WindowResizeErrorHandler extends React.Component {
     };
   }
 
-  componentDidCatch(error, info) {
+  componentDidCatch() {
     this.setState({
       hasError: true
     });
   }
 
   render() {
-    const props = this.props;
-    const state = this.state;
+    const { hasError } = this.state;
 
-    if (state.hasError) {
+    if (hasError) {
       remote.getCurrentWindow().show();
       return null;
     } else {

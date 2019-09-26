@@ -258,15 +258,15 @@ describe("files-and-folders", () => {
     const data = M.ff(origin);
     let derived = M.computeDerived(data);
 
-    derived = updateIn(derived, ["/h", "comments"], a => "my comments");
-    derived = updateIn(derived, ["/h", "alias"], a => "my alias");
-    derived = updateIn(derived, ["/a/b/d", "comments"], a => "my comments 2");
-    derived = updateIn(derived, ["/a/e/g", "alias"], a => "my alias 2");
+    derived = updateIn(derived, ["/h", "comments"], () => "my comments");
+    derived = updateIn(derived, ["/h", "alias"], () => "my alias");
+    derived = updateIn(derived, ["/a/b/d", "comments"], () => "my comments 2");
+    derived = updateIn(derived, ["/a/e/g", "alias"], () => "my alias 2");
 
     const root_id = "";
     const ff_id_list = M.toFfidList(derived)
       .sort()
-      .filter(a => a != root_id);
+      .filter(a => a !== root_id);
     const str_list_2 = M.toStrList2(ff_id_list, derived);
 
     expect(str_list_2).toEqual([

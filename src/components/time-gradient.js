@@ -4,7 +4,6 @@ import * as Color from "util/color-util";
 import * as ObjectUtil from "util/object-util";
 
 const least_rgba = Color.toRgba(Color.leastRecentDate());
-const medium_rgba = Color.toRgba(Color.mediumDate());
 const most_rgba = Color.toRgba(Color.mostRecentDate());
 
 class TimeGradient extends React.PureComponent {

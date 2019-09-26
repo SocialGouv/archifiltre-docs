@@ -19,10 +19,6 @@ const no_tags = pick({
   fr: "Aucun tag pour l'instant."
 });
 
-const trimString = (s, max_length) => {
-  return s.length > max_length + 3 ? s.substring(0, max_length) + "..." : s;
-};
-
 const content_style = {
   fontSize: "0.8em",
   overflowY: "auto",

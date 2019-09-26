@@ -2,10 +2,6 @@ import React from "react";
 
 import { mkRB } from "components/button";
 
-const round_button_style = {
-  borderRadius: "50%"
-};
-
 const arrow_style = {
   fontSize: "1.6em"
 };

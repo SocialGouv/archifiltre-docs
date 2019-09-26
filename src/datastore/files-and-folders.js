@@ -137,7 +137,7 @@ export const ffInv = fileAndFolders => {
       return [ans, node];
     }
   };
-  const [ans, _] = reduce(reducer, fileAndFolders);
+  const [ans] = reduce(reducer, fileAndFolders);
   return ans;
 };
 
@@ -233,7 +233,7 @@ export const computeDerived = (m, hook) => {
 
     return [ans, node];
   };
-  let [_, next_m] = reduce(reducer, m);
+  let [, next_m] = reduce(reducer, m);
 
   const diver = ([parent_ans, node]) => {
     node = node.set("depth", parent_ans);

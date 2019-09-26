@@ -64,7 +64,7 @@ describe("record-util", function() {
     const c = M.createFactory(
       { t: 0 },
       {
-        toJs: a => {
+        toJs: () => {
           return { t: "sautiensrautiena" };
         },
         fromJs: a => a

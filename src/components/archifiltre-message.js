@@ -5,11 +5,6 @@ const grid_style = {
   height: "100%"
 };
 
-const errorMessage = {
-  fr: "Oups ! Une erreur s'est produite.",
-  en: "Oops ! An error occurred."
-};
-
 const imgStyle = {
   width: "150px",
   height: "150px"

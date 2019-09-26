@@ -1,7 +1,7 @@
 import React from "react";
 
 import * as ObjectUtil from "util/object-util";
-import { mkB, mkRB } from "components/button";
+import { mkB } from "components/button";
 
 import * as Color from "util/color-util";
 
@@ -19,11 +19,6 @@ const Presentational = props => {
     padding: "0.3em 0.45em",
     margin: "0",
     borderRadius: "2em"
-  };
-
-  let cursor_style = {
-    cursor: props.isZoomed ? "pointer" : "default",
-    padding: "0.3em 0.45em"
   };
 
   return mkB(

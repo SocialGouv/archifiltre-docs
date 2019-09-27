@@ -38,6 +38,7 @@ Quality:
     key: ${CI_JOB_NAME}
     paths:
       - node_modules/
+      - $HOME/.cache/electron
 
 Build:
   stage: "Build archifiltre"
@@ -56,3 +57,5 @@ Build:
     key: ${CI_JOB_NAME}
     paths:
       - node_modules/
+      - $HOME/.cache/electron
+      - $HOME/.cache/electron-builder

@@ -34,6 +34,10 @@ Quality:
   script:
     - yarn lint
     - yarn test
+  cache:
+    key: ${CI_JOB_NAME}
+    paths:
+      - node_modules/
 
 Build:
   stage: "Build archifiltre"
@@ -48,3 +52,7 @@ Build:
     - dist/win-x64/archifiltre 1.0.0.exe
     - dist/linux-x64/archifiltre 1.0.0.AppImage
     expire_in: 1 week
+  cache:
+    key: ${CI_JOB_NAME}
+    paths:
+      - node_modules/

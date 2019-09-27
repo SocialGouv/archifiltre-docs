@@ -60,7 +60,12 @@ export const arbitraryOrigin = fc
  * A list of arbitrary origins
  * @type {Arbitrary<*[][]>}
  */
-export const arbitraryOrigins = fc.array(arbitraryOrigin, 1, 10);
+export const arbitraryOrigins = fc.set(
+  arbitraryOrigin,
+  1,
+  10,
+  ([, pathA], [, pathB]) => pathA === pathB
+);
 
 /**
  * Arbitrary fileAndFolders structures

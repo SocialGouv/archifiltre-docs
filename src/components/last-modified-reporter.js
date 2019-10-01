@@ -1,7 +1,7 @@
 import React from "react";
 
 import TimeGradient from "components/time-gradient";
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 
 import pick from "languages";
 

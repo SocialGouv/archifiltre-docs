@@ -1,7 +1,7 @@
 import React from "react";
 
 import * as Color from "util/color-util";
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 
 const least_rgba = Color.toRgba(Color.leastRecentDate());
 const most_rgba = Color.toRgba(Color.mostRecentDate());

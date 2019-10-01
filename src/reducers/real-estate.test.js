@@ -1,6 +1,6 @@
 import * as M from "reducers/real-estate";
 
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 
 describe("real-estate", function() {
   const state1 = M.create({

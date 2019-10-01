@@ -3,7 +3,7 @@ import React from "react";
 import { mkTB } from "components/button";
 
 import TextAlignCenter from "components/text-align-center";
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 
 import * as Color from "util/color-util";
 import pick from "languages";

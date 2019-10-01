@@ -1,11 +1,11 @@
 import React from "react";
 
 import * as Color from "util/color-util";
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 
 import Icicle from "components/icicle/icicle-container";
 
-import Report from "components/report";
+import Report from "components/report-container.tsx";
 import AllTags from "components/all-tags";
 import NavigationBar from "components/navigation-bar";
 

@@ -41,36 +41,30 @@ export default class TagsEditable extends React.Component {
   render() {
     const props = this.props;
 
-    const tag_ids = props.tag_ids;
-    const getTagByTagId = props.getTagByTagId;
+    const tagsForCurrentFile = props.tagsForCurrentFile;
     const editing = props.editing;
     const candidate_tag = props.candidate_tag;
     const onChange = props.onChange;
     const onKeyUp = props.onKeyUp;
     const removeHandlerFactory = props.removeHandlerFactory;
 
-    const tagIdsToElements = () =>
-      tag_ids
-        .map(tag_id => {
-          const tag = getTagByTagId(tag_id);
-          const name = tag.get("name");
-
-          return (
-            <div className="cell shrink" key={tag_id} style={cell_shrink_style}>
-              <Tag
-                text={name}
-                editing={editing}
-                removeHandler={removeHandlerFactory(tag_id)}
-              />
-            </div>
-          );
-        })
+    const tagsToElements = () =>
+      tagsForCurrentFile
+        .map(tag => (
+          <div className="cell shrink" key={tag.id} style={cell_shrink_style}>
+            <Tag
+              text={tag.name}
+              editing={editing}
+              removeHandler={removeHandlerFactory(tag.id)}
+            />
+          </div>
+        ))
         .reduce((acc, val) => [...acc, val], []);
 
     let ans;
 
     if (editing) {
-      const elements = tagIdsToElements();
+      const elements = tagsToElements();
       const input_box = (
         <div className="cell shrink" key="__input__" style={cell_shrink_style}>
           <input
@@ -90,8 +84,8 @@ export default class TagsEditable extends React.Component {
       );
 
       ans = [...elements, input_box];
-    } else if (tag_ids.size > 0) {
-      ans = tagIdsToElements();
+    } else if (tagsForCurrentFile.length > 0) {
+      ans = tagsToElements();
     } else {
       ans = (
         <div

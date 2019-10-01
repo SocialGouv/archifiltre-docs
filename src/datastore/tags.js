@@ -1,6 +1,6 @@
 import { generateRandomString } from "util/random-gen-util";
 import * as RecordUtil from "util/record-util";
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 
 import { List, Map, Set } from "immutable";
 
@@ -61,7 +61,14 @@ const insert = (id, tag, tags) => {
   return tags;
 };
 
-export const push = (tag, tags) => tags.set(makeId(), tag);
+/**
+ *
+ * @param tag - The tag to push to the list
+ * @param tags - The tag list to push the tag in
+ * @param {string}[id] - The tag ID. Allows to force the id.
+ * @returns {*}
+ */
+export const push = (tag, tags, { id } = {}) => tags.set(id || makeId(), tag);
 
 const computeDerived = (ffs, tags) => {
   tags = tags.map(tagFactory);

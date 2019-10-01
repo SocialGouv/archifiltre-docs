@@ -1,6 +1,6 @@
 import React from "react";
 import root_reducer from "reducers/root-reducer";
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 import { compose } from "../util/function-util";
 
 function makeStore(compiled_real_estate) {

@@ -1,4 +1,4 @@
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 import * as FsUtil from "util/file-sys-util";
 
 const Fs = require("fs");

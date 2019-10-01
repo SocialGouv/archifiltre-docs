@@ -19,7 +19,9 @@ import ANewVersionIsAvailable from "components/a-new-version-is-available";
 
 import WindowResize from "components/window-resize";
 
-import { Store } from "reducers/store";
+import { Store } from "reducers/real-estate-store";
+import { Provider } from "react-redux";
+import store from "reducers/store.ts";
 
 import version from "version";
 import pick from "languages";
@@ -51,27 +53,29 @@ const app = () => {
   }
 
   ReactDOM.render(
-    <Store>
-      {props => {
-        const api = props.api;
-        return (
-          <ErrorBoundary api={api}>
-            <WindowResize />
-            <div className="grid-y grid-frame">
-              <div className="cell">
-                <ANewVersionIsAvailable />
+    <Provider store={store}>
+      <Store>
+        {props => {
+          const api = props.api;
+          return (
+            <ErrorBoundary api={api}>
+              <WindowResize />
+              <div className="grid-y grid-frame">
+                <div className="cell">
+                  <ANewVersionIsAvailable />
+                </div>
+                <div className="cell">
+                  <Header api={api} />
+                </div>
+                <div className="cell auto">
+                  <MainSpace api={api} />
+                </div>
               </div>
-              <div className="cell">
-                <Header api={api} />
-              </div>
-              <div className="cell auto">
-                <MainSpace api={api} />
-              </div>
-            </div>
-          </ErrorBoundary>
-        );
-      }}
-    </Store>,
+            </ErrorBoundary>
+          );
+        }}
+      </Store>
+    </Provider>,
     root_div
   );
 };

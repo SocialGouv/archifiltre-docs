@@ -1,4 +1,4 @@
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 import { Record } from "immutable";
 
 const f = Symbol();

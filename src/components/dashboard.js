@@ -1,6 +1,6 @@
 import React from "react";
 
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 
 import { octet2HumanReadableFormat } from "components/ruler";
 

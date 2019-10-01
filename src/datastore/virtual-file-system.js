@@ -1,6 +1,6 @@
 import version from "version";
 
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 import * as RecordUtil from "util/record-util";
 import * as FilesAndFolders from "datastore/files-and-folders";
 import * as Tags from "datastore/tags";

@@ -1,6 +1,6 @@
 import React from "react";
 
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 import { RIEInput } from "riek";
 
 import TagsCell from "components/report-cell-tags";
@@ -170,7 +170,6 @@ const Report = props => {
     const hash = node.get("hash");
 
     const c_alias = node.get("alias");
-    const c_tag_ids = props.tag_ids;
     const c_comments = node.get("comments");
 
     const display_name = c_alias === "" ? n_name : c_alias;
@@ -211,7 +210,7 @@ const Report = props => {
         api={api}
         is_dummy={false}
         cells_style={cells_style}
-        tag_ids={c_tag_ids}
+        tagsForCurrentFile={props.tagsForCurrentFile}
         node_id={props.node_id}
       />
     );
@@ -296,8 +295,6 @@ export default function ReportApiToProps(props) {
 
   let total_size = database.volume();
 
-  const tag_ids = database.getTagIdsByFfId(node_id);
-
   const onChangeAlias = (prop_name, id, old_name) => n => {
     let new_alias = n[prop_name] === old_name ? "" : n[prop_name];
     new_alias = new_alias.replace(/^\s*|\s*$/g, "");
@@ -312,7 +309,7 @@ export default function ReportApiToProps(props) {
       isLocked,
       node,
       node_id,
-      tag_ids,
+      tagsForCurrentFile: props.tagsForCurrentFile,
       total_size,
       onChangeAlias
     },

@@ -1,4 +1,4 @@
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 import * as RealEstate from "reducers/real-estate";
 
 const length_limit = 1000;

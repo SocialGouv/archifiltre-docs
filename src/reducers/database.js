@@ -10,6 +10,10 @@ import * as FilesAndFolders from "datastore/files-and-folders";
 import * as SEDA from "seda";
 import * as METS from "mets";
 
+import store from "./store.ts";
+import * as actions from "./tags/tags-actions.ts";
+import uuid from "uuid/v4";
+
 const property_name = "database";
 
 const initialState = () => VirtualFileSystem.make(Origin.empty());
@@ -91,6 +95,12 @@ const getTagByTagId = id => state => getIn(state, ["tags", id]);
 
 const getWaitingCounter = () => () => 0;
 
+/**
+ * Returns the current databaseState. Used for selectors purpose.
+ * @returns {function(*): *}
+ */
+const getState = () => state => state;
+
 const reader = {
   overallCount,
   fileCount,
@@ -109,7 +119,8 @@ const reader = {
   getAllTagIds,
   getTagByTagId,
   getWaitingCounter,
-  getData
+  getData,
+  getState
 };
 
 const set = next_state => () => next_state;
@@ -129,33 +140,39 @@ const updateComments = (updater, id) => state => {
 const setSessionName = name => state => state.set("session_name", name);
 
 const createTagged = (ff_id, name) => state => {
-  state = state.update("tags", a =>
-    Tags.push(Tags.create({ name, ff_ids: Set.of(ff_id) }), a)
-  );
+  const id = uuid();
+  state = state.update("tags", a => {
+    return Tags.push(Tags.create({ name, ff_ids: Set.of(ff_id) }), a, { id });
+  });
   state = VirtualFileSystem.derivateTags(state);
+  store.dispatch(actions.addTag(name, ff_id, id));
   return state;
 };
 
 const addTagged = (ff_id, tag_id) => state => {
   state = updateIn(state, ["tags", tag_id, "ff_ids"], a => a.add(ff_id));
   state = VirtualFileSystem.derivateTags(state);
+  store.dispatch(actions.tagFile(tag_id, ff_id));
   return state;
 };
 
 const deleteTagged = (ff_id, tag_id) => state => {
   state = updateIn(state, ["tags", tag_id, "ff_ids"], a => a.delete(ff_id));
   state = VirtualFileSystem.derivateTags(state);
+  store.dispatch(actions.untagFile(tag_id, ff_id));
   return state;
 };
 
 const renameTag = (name, tag_id) => state => {
   state = updateIn(state, ["tags", tag_id, "name"], () => name);
   state = VirtualFileSystem.derivateTags(state);
+  store.dispatch(actions.renameTag(tag_id, name));
   return state;
 };
 
 const deleteTag = tag_id => state => {
   state = state.update("tags", tags => tags.delete(tag_id));
+  store.dispatch(actions.deleteTag(tag_id));
   return state;
 };
 

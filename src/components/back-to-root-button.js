@@ -1,6 +1,6 @@
 import React from "react";
 
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 import { mkB } from "components/button";
 
 import * as Color from "util/color-util";

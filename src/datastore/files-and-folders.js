@@ -251,16 +251,8 @@ export const computeDerived = (m, hook) => {
 };
 
 const toAndFromJs = factory => [
-  a => {
-    a = a.map(factory.toJs);
-    a = a.toObject();
-    return a;
-  },
-  a => {
-    a = Map(a);
-    a = a.map(factory.fromJs);
-    return a;
-  }
+  a => a.map(factory.toJs).toObject(),
+  a => Map(a).map(factory.fromJs)
 ];
 
 export const [toJs, fromJs] = toAndFromJs(

@@ -1,7 +1,8 @@
+import _ from "lodash";
 import React from "react";
 
 import TagsEditable from "components/tags-editable";
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 
 import pick from "languages";
 
@@ -76,7 +77,7 @@ class ReportCellTags extends React.Component {
     const props = this.props;
 
     const node_id = props.node_id;
-    const tag_ids = props.tag_ids;
+    const tagsForCurrentFile = props.tagsForCurrentFile;
     const createTagged = props.createTagged;
     const deleteTagged = props.deleteTagged;
 
@@ -88,8 +89,8 @@ class ReportCellTags extends React.Component {
     const escape_key_code = 27;
 
     if (keyCode === backspace_key_code) {
-      if (value.length == 0 && tag_ids.size > 0) {
-        deleteTagged(node_id, tag_ids.last());
+      if (value.length === 0 && tagsForCurrentFile.size > 0) {
+        deleteTagged(node_id, _.last(tagsForCurrentFile).id);
       }
     } else if (keyCode === enter_key_code) {
       event.preventDefault();
@@ -167,8 +168,6 @@ class ReportCellTags extends React.Component {
 
     const is_dummy = props.is_dummy;
     const cells_style = props.cells_style;
-    const tag_ids = props.tag_ids;
-    const getTagByTagId = props.getTagByTagId;
 
     const state = this.state;
     const editing = state.editing;
@@ -209,8 +208,7 @@ class ReportCellTags extends React.Component {
           <br />
           <div className="eeeeeeegrid-x" style={tags_style}>
             <TagsEditable
-              tag_ids={tag_ids}
-              getTagByTagId={getTagByTagId}
+              tagsForCurrentFile={props.tagsForCurrentFile}
               editing={editing}
               onKeyUp={onKeyUp}
               removeHandlerFactory={removeHandlerFactory}
@@ -239,16 +237,15 @@ export default props => {
     commit();
   };
 
-  const getTagByTagId = database.getTagByTagId;
-
   props = ObjectUtil.compose(
     {
       createTagged,
-      deleteTagged,
-      getTagByTagId
+      deleteTagged
     },
     props
   );
 
-  return <ReportCellTags {...props} />;
+  return (
+    <ReportCellTags tagsForCurrentFile={props.tagsForCurrentFile} {...props} />
+  );
 };

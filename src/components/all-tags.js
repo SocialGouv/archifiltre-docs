@@ -1,6 +1,6 @@
 import React from "react";
 
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 
 import TagListItem from "components/all-tags-item";
 import TextAlignCenter from "components/text-align-center";

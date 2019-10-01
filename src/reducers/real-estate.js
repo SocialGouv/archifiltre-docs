@@ -1,4 +1,4 @@
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object-util.ts";
 
 export const create = state => {
   const property_name = state.property_name;

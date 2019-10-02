@@ -11,16 +11,19 @@ const sentryUrl =
 const sentryMinidumpUrl =
   "https://sentry.tools.factory.social.gouv.fr/api/20/minidump/?sentry_key=0fa8ab6a50a347a3b1903ed48b4c9e5c";
 
-// Initialize sentry error reporter
-Raven.config(sentryUrl).install();
+// Initializes sentry logging for production build
+if (app.isPackaged) {
+  // Initialize sentry error reporter
+  Raven.config(sentryUrl).install();
 
-// Enable electron crash reporter to get logs in case of low level crash
-crashReporter.start({
-  companyName: "SocialGouv",
-  productName: "Archifiltre",
-  ignoreSystemCrashHandler: true,
-  submitURL: sentryMinidumpUrl
-});
+  // Enable electron crash reporter to get logs in case of low level crash
+  crashReporter.start({
+    companyName: "SocialGouv",
+    productName: "Archifiltre",
+    ignoreSystemCrashHandler: true,
+    submitURL: sentryMinidumpUrl
+  });
+}
 
 // We need to check if we are on 64 bits.
 // Setting --max-old-space-size with this value

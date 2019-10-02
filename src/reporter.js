@@ -3,16 +3,24 @@ import * as Sentry from "@sentry/browser";
 const sentryUrl =
   "https://0fa8ab6a50a347a3b1903ed48b4c9e5c@sentry.tools.factory.social.gouv.fr/20";
 
-Sentry.init({
-  dsn: sentryUrl
-});
+const isProd = () => MODE === "production";
+
+if (isProd()) {
+  Sentry.init({
+    dsn: sentryUrl
+  });
+}
 
 /**
  * Reports an error to the log server.
  * @param err
  */
 export const reportError = err => {
-  Sentry.captureException(err);
+  if (isProd()) {
+    Sentry.captureException(err);
+  } else {
+    console.error(err);
+  }
 };
 
 /**
@@ -20,5 +28,9 @@ export const reportError = err => {
  * @param message
  */
 export const reportMessage = message => {
-  Sentry.captureMessage(message);
+  if (isProd()) {
+    Sentry.captureMessage(message);
+  } else {
+    console.log(message);
+  }
 };

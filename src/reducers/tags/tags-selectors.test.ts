@@ -1,7 +1,11 @@
+import { computeDerived, ff } from "../../datastore/files-and-folders";
 import {
   getAllTagIdsForFile,
   getTagByName,
-  getTagsByIds
+  getTagsByIds,
+  getTagSize,
+  Order,
+  sortTags
 } from "./tags-selectors";
 import { Tag } from "./tags-types";
 
@@ -101,6 +105,75 @@ describe("tags-selectors", () => {
       };
 
       expect(getTagByName(tagMap, foundTagName)).toEqual(foundTag);
+    });
+  });
+
+  describe("sortTags", () => {
+    const firstTagId = "3firstTagId";
+    const firstTag = {
+      ffIds: new Set(["ffid"]),
+      id: firstTagId,
+      name: "1TagName"
+    };
+
+    const secondTagId = "2secondTagId";
+    const secondTag = {
+      ffIds: new Set(["ffid"]),
+      id: secondTagId,
+      name: "2TagName"
+    };
+
+    const thirdTagId = "1thirdTagId";
+    const thirdTag = {
+      ffIds: new Set(["ffid"]),
+      id: thirdTagId,
+      name: "3TagName"
+    };
+    describe("with default parameter", () => {
+      it("should order the tags in asc order based on name field", () => {
+        expect(sortTags([secondTag, firstTag, thirdTag], {})).toEqual([
+          firstTag,
+          secondTag,
+          thirdTag
+        ]);
+      });
+    });
+
+    describe("with descending order", () => {
+      it("should order the tags in desc order based on name field", () => {
+        expect(
+          sortTags([secondTag, firstTag, thirdTag], { order: Order.DESC })
+        ).toEqual([thirdTag, secondTag, firstTag]);
+      });
+    });
+
+    describe("based on ID", () => {
+      it("should order the tags in asc order based on id field", () => {
+        expect(
+          sortTags([secondTag, firstTag, thirdTag], { sortParam: "id" })
+        ).toEqual([thirdTag, secondTag, firstTag]);
+      });
+    });
+  });
+
+  describe("getTagSize", () => {
+    it("should return the sum of the tag sizes", () => {
+      const origins = [
+        [{ size: 1, lastModified: Date.now() }, "path1"],
+        [{ size: 10, lastModified: Date.now() }, "path2"],
+        [{ size: 100, lastModified: Date.now() }, "path3/file1"],
+        [{ size: 100, lastModified: Date.now() }, "path3/file2"]
+      ];
+
+      const filesAndFolders = computeDerived(ff(origins));
+
+      const tag = {
+        ffIds: new Set(["path1", "path3"]),
+        id: "tagId",
+        name: "tagName"
+      };
+
+      expect(getTagSize(tag, filesAndFolders)).toEqual(201);
     });
   });
 });

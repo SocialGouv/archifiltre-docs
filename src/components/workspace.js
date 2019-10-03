@@ -6,7 +6,7 @@ import * as ObjectUtil from "util/object-util.ts";
 import Icicle from "components/icicle/icicle-container";
 
 import Report from "components/report-container.tsx";
-import AllTags from "components/all-tags";
+import AllTags from "components/all-tags-container.tsx";
 import NavigationBar from "components/navigation-bar";
 
 class Workspace extends React.PureComponent {

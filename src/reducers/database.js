@@ -7,8 +7,8 @@ import * as VirtualFileSystem from "datastore/virtual-file-system";
 import * as Tags from "datastore/tags";
 import * as FilesAndFolders from "datastore/files-and-folders";
 
-import * as SEDA from "seda";
-import * as METS from "mets";
+import * as SEDA from "exporters/seda";
+import * as METS from "exporters/mets";
 
 import store from "./store.ts";
 import * as actions from "./tags/tags-actions.ts";

@@ -1,13 +1,12 @@
 import React from "react";
 
-import * as ObjectUtil from "util/object-util.ts";
-
 import TagListItem from "components/all-tags-item";
 import TextAlignCenter from "components/text-align-center";
 
 import * as Color from "util/color-util";
 
 import pick from "languages";
+import { sortTags, getTagSize } from "../reducers/tags/tags-selectors.ts";
 
 const all_tags = pick({
   en: "All tags",
@@ -53,12 +52,10 @@ class AllTags extends React.Component {
 
   render() {
     const props = this.props;
-
-    const getTagByTagId = props.getTagByTagId;
+    const { tags, filesAndFolders } = props;
     const tag_id_to_highlight = props.tag_id_to_highlight;
     const total_volume = props.total_volume;
     const focused_node_id = props.focused_node_id;
-    const tag_ids = props.tag_ids;
 
     const state = this.state;
 
@@ -68,7 +65,7 @@ class AllTags extends React.Component {
     const stopEditingTag = this.stopEditingTag;
 
     const component_style = {
-      opacity: tag_ids.size > 0 ? 1 : 0.5,
+      opacity: tags.length > 0 ? 1 : 0.5,
       background: "white",
       height: "100%",
       borderRadius: "1em",
@@ -98,7 +95,7 @@ class AllTags extends React.Component {
     };
 
     // Dummy display for when there aren't any tags yet
-    if (tag_ids.size === 0) {
+    if (tags.length === 0) {
       tags_content = (
         <div
           className="grid-y grid-frame align-center"
@@ -124,54 +121,36 @@ class AllTags extends React.Component {
         </div>
       );
     } else {
-      // Displaying the list of all tags
+      const tags_list = sortTags(Object.values(tags), {})
+        .map(tag => {
+          const size = getTagSize(tag, filesAndFolders);
 
-      const comparator = (a, b) => {
-        a = getTagByTagId(a).get("name");
-        b = getTagByTagId(b).get("name");
-        if (a < b) {
-          return -1;
-        } else if (a === b) {
-          return 0;
-        } else {
-          return 1;
-        }
-      };
-
-      const tags_list = tag_ids
-        .sort(comparator)
-        .map(tag_id => {
-          const tag = getTagByTagId(tag_id);
-          const name = tag.get("name");
-          const ff_ids = tag.get("ff_ids");
-          const size = tag.get("size");
-
-          const opacity = computeOpacity(tag_id);
+          const opacity = computeOpacity(tag.id);
 
           const percentage = Math.floor((size / total_volume) * 100);
 
-          const editing = editing_tag_id === tag_id;
+          const editing = editing_tag_id === tag.id;
           const shoud_display_count = focused_node_id === undefined;
-          const node_has_tag = ff_ids.has(focused_node_id);
+          const node_has_tag = tag.ffIds.has(focused_node_id);
 
           return (
             <TagListItem
-              key={tag_id}
-              tag={name}
+              key={tag.id}
+              tag={tag.name}
               opacity={opacity}
               editing={editing}
               percentage={percentage}
               shoud_display_count={shoud_display_count}
               node_has_tag={node_has_tag}
-              tag_number={ff_ids.size}
-              highlightTag={props.highlightTag(tag_id)}
+              tag_number={tag.ffIds.length}
+              highlightTag={props.highlightTag(tag.id)}
               stopHighlightingTag={props.stopHighlightingTag}
-              startEditingTag={startEditingTagFactory(tag_id)}
+              startEditingTag={startEditingTagFactory(tag.id)}
               stopEditingTag={stopEditingTag}
-              deleteTag={props.onDeleteTag(tag_id)}
-              renameTag={props.onRenameTag(tag_id)}
-              addTagToNode={props.onAddTagged(focused_node_id, tag_id)}
-              removeTagFromNode={props.onDeleteTagged(focused_node_id, tag_id)}
+              deleteTag={props.onDeleteTag(tag.id)}
+              renameTag={props.onRenameTag(tag.id)}
+              addTagToNode={props.onAddTagged(focused_node_id, tag.id)}
+              removeTagFromNode={props.onDeleteTagged(focused_node_id, tag.id)}
             />
           );
         })
@@ -199,12 +178,11 @@ class AllTags extends React.Component {
   }
 }
 
-export default props => {
-  const api = props.api;
+export default ({ api, tags }) => {
   const icicle_state = api.icicle_state;
   const database = api.database;
 
-  const tag_ids = database.getAllTagIds();
+  const filesAndFolders = api.database.getFilesAndFolders();
 
   const total_volume = database.volume();
 
@@ -246,23 +224,20 @@ export default props => {
     }
   };
 
-  props = ObjectUtil.compose(
-    {
-      tag_ids,
-      tag_id_to_highlight,
-      focused_node_id,
-      total_volume,
-      getTagByTagId: database.getTagByTagId,
-
-      highlightTag,
-      stopHighlightingTag,
-      onRenameTag,
-      onDeleteTag,
-      onAddTagged,
-      onDeleteTagged
-    },
-    props
+  return (
+    <AllTags
+      tag_id_to_highlight={tag_id_to_highlight}
+      focused_node_id={focused_node_id}
+      total_volume={total_volume}
+      getTagByTagId={database.getTagByTagId}
+      highlightTag={highlightTag}
+      stopHighlightingTag={stopHighlightingTag}
+      onRenameTag={onRenameTag}
+      onDeleteTag={onDeleteTag}
+      onAddTagged={onAddTagged}
+      onDeleteTagged={onDeleteTagged}
+      tags={tags}
+      filesAndFolders={filesAndFolders}
+    />
   );
-
-  return <AllTags {...props} />;
 };

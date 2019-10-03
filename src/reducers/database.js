@@ -24,6 +24,9 @@ const fileCount = () => state =>
   state.get("files_and_folders").filter(a => a.get("children").size === 0).size;
 
 const getFfByFfId = id => state => state.get("files_and_folders").get(id);
+
+const getFilesAndFolders = () => state => state.get("files_and_folders");
+
 const rootFfId = () => () => "";
 
 const maxDepth = () => state =>
@@ -120,7 +123,8 @@ const reader = {
   getTagByTagId,
   getWaitingCounter,
   getData,
-  getState
+  getState,
+  getFilesAndFolders
 };
 
 const set = next_state => () => next_state;

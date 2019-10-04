@@ -47,9 +47,15 @@ const getFfIdPath = id => () =>
     )
   );
 
-const toJson = () => state => JSON.stringify(VirtualFileSystem.toJs(state));
+const getData = () => state => ({
+  files_and_folders: FilesAndFolders.toJs(state.get("files_and_folders")),
+  session_name: state.get("session_name"),
+  tags: store.getState().tags.tags,
+  original_path: state.get("original_path"),
+  version: state.get("version")
+});
 
-const getData = () => state => VirtualFileSystem.toJs(state);
+const toJson = () => state => JSON.stringify(getData()(state));
 
 /**
  * Generates an array of array ([[]]) with the first line being
@@ -65,7 +71,7 @@ const toStrList2 = () => state => {
   const ff_id_list = FilesAndFolders.toFfidList(files_and_folders).filter(
     a => a !== root_id
   );
-  const tags = state.get("tags");
+  const tags = store.getState().tags.tags;
 
   const ans = FilesAndFolders.toStrList2(ff_id_list, files_and_folders);
 
@@ -84,12 +90,6 @@ const getOriginalPath = () => state => state.get("original_path");
 
 const getWaitingCounter = () => () => 0;
 
-/**
- * Returns the current databaseState. Used for selectors purpose.
- * @returns {function(*): *}
- */
-const getState = () => state => state;
-
 const reader = {
   overallCount,
   fileCount,
@@ -106,11 +106,14 @@ const reader = {
   getOriginalPath,
   getWaitingCounter,
   getData,
-  getState,
   getFilesAndFolders
 };
 
-const set = next_state => () => next_state;
+const set = next_state => () => {
+  console.log(next_state);
+  store.dispatch(actions.initializeTags(next_state.tags));
+  return VirtualFileSystem.fromJs(next_state);
+};
 
 const reInit = () => () => initialState();
 

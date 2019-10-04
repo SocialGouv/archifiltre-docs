@@ -234,7 +234,7 @@
     "tags": {
       "TCcONU59jtMvCWLMI1XSIjYXPFNfQ9ROTwYc66TE": {
         "name": "TestTag1",
-        "ff_ids": [
+        "ffIds": [
           "/files",
           "/files/1bd93af4554f1/1b2e8af880f7d"
         ],
@@ -242,7 +242,7 @@
       },
       "TtA5LtMKjIgx0QNVYNlyIkGX99rUImL5G2BL9OsP": {
         "name": "TestTag2",
-        "ff_ids": [
+        "ffIds": [
           "/files/1bd93af4554f1/1b2e8af880f7d",
           "/files/307b77f2e0a0e",
           "/files/2cb6ab95bf3ac"

@@ -2,6 +2,7 @@ import uuid from "uuid/v4";
 import {
   addTag,
   deleteTag,
+  initializeTags,
   renameTag,
   tagFile,
   untagFile
@@ -19,6 +20,27 @@ const setup = ({ mockTagId = "" } = {}) => {
 };
 
 describe("database-reducer", () => {
+  describe("INITIALIZE_TAGS", () => {
+    const initialState: TagsState = {
+      tags: {}
+    };
+
+    it("should replace the state with the provided tagMap", () => {
+      const firstId = "id1";
+      const tags = {
+        [firstId]: {
+          ffIds: ["ff1", "ff2"],
+          id: firstId,
+          name: "name"
+        }
+      };
+
+      expect(tagsReducer(initialState, initializeTags(tags))).toEqual({
+        tags
+      });
+    });
+  });
+
   describe("ADD_TAG", () => {
     const initialState: TagsState = {
       tags: {}
@@ -35,7 +57,7 @@ describe("database-reducer", () => {
         expect(nextState).toEqual({
           tags: {
             [tagId]: {
-              ffIds: new Set([ffId]),
+              ffIds: [ffId],
               id: tagId,
               name: tagName
             }
@@ -59,7 +81,7 @@ describe("database-reducer", () => {
         expect(nextState).toEqual({
           tags: {
             [tagId]: {
-              ffIds: new Set([ffId]),
+              ffIds: [ffId],
               id: tagId,
               name: tagName
             }
@@ -78,7 +100,7 @@ describe("database-reducer", () => {
         const baseState = {
           tags: {
             [tagId]: {
-              ffIds: new Set([existingFfId]),
+              ffIds: [existingFfId],
               id: tagId,
               name: tagName
             }
@@ -90,7 +112,7 @@ describe("database-reducer", () => {
         expect(nextState).toEqual({
           tags: {
             [tagId]: {
-              ffIds: new Set([existingFfId, newFfId]),
+              ffIds: [existingFfId, newFfId],
               id: tagId,
               name: tagName
             }
@@ -104,7 +126,7 @@ describe("database-reducer", () => {
     it("should change the name of the preexisting tag", () => {
       const tagId = "testId";
       const newName = "newName";
-      const ffIds = new Set(["test-ffid"]);
+      const ffIds = ["test-ffid"];
       const initialState = {
         tags: {
           [tagId]: {
@@ -135,7 +157,7 @@ describe("database-reducer", () => {
       const initialState = {
         tags: {
           [tagId]: {
-            ffIds: new Set(["test-ffid"]),
+            ffIds: ["test-ffid"],
             id: tagId,
             name: "baseName"
           }
@@ -157,7 +179,7 @@ describe("database-reducer", () => {
       const initialState = {
         tags: {
           [tagId]: {
-            ffIds: new Set([existingFfid]),
+            ffIds: [existingFfid],
             id: tagId,
             name: tagName
           }
@@ -169,7 +191,33 @@ describe("database-reducer", () => {
       expect(nextState).toEqual({
         tags: {
           [tagId]: {
-            ffIds: new Set([existingFfid, ffId]),
+            ffIds: [existingFfid, ffId],
+            id: tagId,
+            name: tagName
+          }
+        }
+      });
+    });
+    it("should keep only one version of a ffId if it is already present", () => {
+      const tagId = "tag-id";
+      const existingFfid = "existing-ffid";
+      const tagName = "baseName";
+      const initialState = {
+        tags: {
+          [tagId]: {
+            ffIds: [existingFfid],
+            id: tagId,
+            name: tagName
+          }
+        }
+      };
+
+      const nextState = tagsReducer(initialState, tagFile(tagId, existingFfid));
+
+      expect(nextState).toEqual({
+        tags: {
+          [tagId]: {
+            ffIds: [existingFfid],
             id: tagId,
             name: tagName
           }
@@ -187,7 +235,7 @@ describe("database-reducer", () => {
       const initialState = {
         tags: {
           [tagId]: {
-            ffIds: new Set([existingFfid, ffIdToRemove]),
+            ffIds: [existingFfid, ffIdToRemove],
             id: tagId,
             name: tagName
           }
@@ -202,7 +250,7 @@ describe("database-reducer", () => {
       expect(nextState).toEqual({
         tags: {
           [tagId]: {
-            ffIds: new Set([existingFfid]),
+            ffIds: [existingFfid],
             id: tagId,
             name: tagName
           }

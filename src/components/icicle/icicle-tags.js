@@ -63,13 +63,14 @@ export default class IcicleTags extends React.PureComponent {
       tagArray
         .filter(tag => tag_id_to_highlight !== tag.id)
         .flatMap(({ ffIds }) => [...ffIds])
+        .filter(ffId => !ffIdsToHighlight.includes(ffId))
     );
 
     const highlightedComponents = ffIdsToHighlight
       .filter(ffId => dims[ffId])
       .map(ffId => (
         <IcicleHightlightTag
-          key={ffId}
+          key={`${ffId}:HighlightTag`}
           opacity={HIGHLIGHTED_OPACITY}
           ffId={ffId}
           dims={dims[ffId]}
@@ -83,7 +84,7 @@ export default class IcicleTags extends React.PureComponent {
       .filter(ffId => dims[ffId])
       .map(ffId => (
         <IcicleHightlightTag
-          key={ffId}
+          key={`${ffId}:HighlightTag`}
           opacity={
             tag_id_to_highlight === ""
               ? HIGHLIGHTED_OPACITY

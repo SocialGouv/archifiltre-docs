@@ -7,6 +7,7 @@ import * as Color from "util/color-util";
 
 import pick from "languages";
 import { sortTags, getTagSize } from "../reducers/tags/tags-selectors.ts";
+import { tagMapHasTags, tagMapToArray } from "../reducers/tags/tags-selectors";
 
 const all_tags = pick({
   en: "All tags",
@@ -95,7 +96,7 @@ class AllTags extends React.Component {
     };
 
     // Dummy display for when there aren't any tags yet
-    if (tags.length === 0) {
+    if (!tagMapHasTags(tags)) {
       tags_content = (
         <div
           className="grid-y grid-frame align-center"
@@ -121,7 +122,7 @@ class AllTags extends React.Component {
         </div>
       );
     } else {
-      const tags_list = sortTags(Object.values(tags), {})
+      const tags_list = sortTags(tagMapToArray(tags))
         .map(tag => {
           const size = getTagSize(tag, filesAndFolders);
 
@@ -229,7 +230,6 @@ export default ({ api, tags }) => {
       tag_id_to_highlight={tag_id_to_highlight}
       focused_node_id={focused_node_id}
       total_volume={total_volume}
-      getTagByTagId={database.getTagByTagId}
       highlightTag={highlightTag}
       stopHighlightingTag={stopHighlightingTag}
       onRenameTag={onRenameTag}

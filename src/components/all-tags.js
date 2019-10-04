@@ -7,7 +7,11 @@ import * as Color from "util/color-util";
 
 import pick from "languages";
 import { sortTags, getTagSize } from "../reducers/tags/tags-selectors.ts";
-import { tagMapHasTags, tagMapToArray } from "../reducers/tags/tags-selectors";
+import {
+  tagHasFfId,
+  tagMapHasTags,
+  tagMapToArray
+} from "../reducers/tags/tags-selectors";
 
 const all_tags = pick({
   en: "All tags",
@@ -132,7 +136,7 @@ class AllTags extends React.Component {
 
           const editing = editing_tag_id === tag.id;
           const shoud_display_count = focused_node_id === undefined;
-          const node_has_tag = tag.ffIds.has(focused_node_id);
+          const node_has_tag = tagHasFfId(tag, focused_node_id);
 
           return (
             <TagListItem

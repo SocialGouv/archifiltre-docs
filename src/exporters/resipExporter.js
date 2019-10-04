@@ -1,6 +1,7 @@
 import path from "path";
 import dateFormat from "dateformat";
 import { makeEmptyArray, replaceValue } from "../util/array-util.ts";
+import { tagHasFfId } from "../reducers/tags/tags-selectors";
 
 const formatFile = ff => {
   const removeStartingSlash = str =>
@@ -85,7 +86,7 @@ const transformDefaultFormatToResip = enrichedFilesAndFolders => ({
  */
 const getAllTagsByFfId = (tags, ffId) =>
   tags.reduce(
-    (tagList, tag) => (tag.ff_ids.includes(ffId) ? [...tagList, tag] : tagList),
+    (tagList, tag) => (tagHasFfId(tag, ffId) ? [...tagList, tag] : tagList),
     []
   );
 

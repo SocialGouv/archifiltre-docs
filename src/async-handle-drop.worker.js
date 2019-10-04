@@ -1,6 +1,7 @@
 import { traverseFileTree, isJsonFile, readFileSync } from "util/file-sys-util";
 
 import * as VirtualFileSystem from "datastore/virtual-file-system";
+import * as FilesAndFolders from "datastore/files-and-folders";
 import { fromAnyJsonToJs } from "compatibility";
 
 import version from "version";
@@ -33,16 +34,19 @@ function loadJsonConfig(dropped_folder_path) {
 
   const [js, js_version] = fromAnyJsonToJs(content_without_byte_order_mark);
 
-  let vfs = VirtualFileSystem.fromJs(js);
+  let filesAndFolders = FilesAndFolders.fromJs(js.files_and_folders);
 
   if (js_version !== version) {
     postMessage({ status: "derivate" });
-    vfs = VirtualFileSystem.derivate(vfs);
+    filesAndFolders = FilesAndFolders.computeDerived(filesAndFolders);
   }
 
   postMessage({
     status: "return",
-    vfs: VirtualFileSystem.toJs(vfs)
+    vfs: {
+      ...js,
+      files_and_folders: FilesAndFolders.toJs(filesAndFolders)
+    }
   });
 }
 

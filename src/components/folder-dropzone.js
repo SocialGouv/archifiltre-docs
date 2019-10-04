@@ -94,7 +94,7 @@ export default class FolderDropzone extends React.Component {
         return vfs;
       })
       .then(vfs => {
-        const filesAndFolders = vfs.files_and_folders.toJS();
+        const filesAndFolders = vfs.files_and_folders;
         const basePath = vfs.original_path
           .split(path.sep)
           .slice(0, -1)

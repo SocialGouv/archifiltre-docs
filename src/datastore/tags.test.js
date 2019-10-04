@@ -75,21 +75,28 @@ describe("tags", function() {
       ])
     );
 
-    let tags = M.empty();
-    tags = M.update(ff, tags);
-
-    tags = M.push(
-      M.create({ name: "T", ff_ids: Set.of("/a/b", "/a/f/g") }),
-      tags
-    );
-    tags = M.push(M.create({ name: "U", ff_ids: Set.of("/a") }), tags);
-    tags = M.push(M.create({ name: "X", ff_ids: Set.of("/a/b/d") }), tags);
-    tags = M.update(ff, tags);
+    const tags = {
+      id: {
+        id: "id",
+        name: "T",
+        ffIds: ["/a/b", "/a/f/g"]
+      },
+      id2: {
+        id: "id2",
+        name: "U",
+        ffIds: ["/a"]
+      },
+      id3: {
+        id: "id3",
+        name: "X",
+        ffIds: ["/a/b/d"]
+      }
+    };
 
     const root_id = "";
     const ff_id_list = FilesAndFolders.toFfidList(ff)
       .sort()
-      .filter(a => a != root_id);
+      .filter(a => a !== root_id);
     const str_list_2 = M.toStrList2(ff_id_list, ff, tags);
 
     expect(str_list_2).toEqual([

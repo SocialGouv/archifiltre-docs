@@ -1,6 +1,7 @@
 import { computeDerived, ff } from "../../datastore/files-and-folders";
 import {
   getAllTagIdsForFile,
+  getAllTagsForFile,
   getTagByName,
   getTagsByIds,
   getTagSize,
@@ -16,27 +17,58 @@ describe("tags-selectors", () => {
     it("should return all the tags for the defined ffId", () => {
       const ffId = "test-ffid";
       const foundTagID = "foundTagID";
-      const secondFoungTagID = "secondFoundTagID";
+      const secondFoundTagID = "secondFoundTagID";
       const tags = {
         [foundTagID]: {
-          ffIds: new Set([ffId, "fakeFFid"]),
-          id: "1",
+          ffIds: [ffId, "fakeFFid"],
+          id: foundTagID,
           name: "found"
         },
         unfound: {
-          ffIds: new Set(["unwanted", "unwanted2"]),
-          id: "2",
+          ffIds: ["unwanted", "unwanted2"],
+          id: "unfound",
           name: "unfound"
         },
-        [secondFoungTagID]: {
-          ffIds: new Set([ffId, "fakeFFid2"]),
-          id: "3",
+        [secondFoundTagID]: {
+          ffIds: [ffId, "fakeFFid2"],
+          id: secondFoundTagID,
           name: "found2"
         }
       };
 
       expect(getAllTagIdsForFile(tags, ffId).sort()).toEqual(
-        [foundTagID, secondFoungTagID].sort()
+        [foundTagID, secondFoundTagID].sort()
+      );
+    });
+  });
+
+  describe("getAllTagsForFile", () => {
+    it("should return all the tags for the defined ffId", () => {
+      const ffId = "test-ffid";
+      const foundTagID = "foundTagID";
+      const foundTag = {
+        ffIds: [ffId, "fakeFFid"],
+        id: foundTagID,
+        name: "found"
+      };
+      const secondFoundTagID = "secondFoundTagID";
+      const secondFoundTag = {
+        ffIds: [ffId, "fakeFFid2"],
+        id: secondFoundTagID,
+        name: "found2"
+      };
+      const tags = {
+        [foundTagID]: foundTag,
+        unfound: {
+          ffIds: ["unwanted", "unwanted2"],
+          id: "2",
+          name: "unfound"
+        },
+        [secondFoundTagID]: secondFoundTag
+      };
+
+      expect(sortTags(getAllTagsForFile(tags, ffId))).toEqual(
+        sortTags([foundTag, secondFoundTag])
       );
     });
   });
@@ -46,12 +78,12 @@ describe("tags-selectors", () => {
       const foundTagID = "foundTagID";
       const secondFoungTagID = "secondFoundTagID";
       const foundTag = {
-        ffIds: new Set(["fakeFFid"]),
+        ffIds: ["fakeFFid"],
         id: foundTagID,
         name: "found"
       };
       const secondFoundTag = {
-        ffIds: new Set(["fakeFFid2"]),
+        ffIds: ["fakeFFid2"],
         id: secondFoungTagID,
         name: "found2"
       };
@@ -59,7 +91,7 @@ describe("tags-selectors", () => {
       const tags = {
         [foundTagID]: foundTag,
         unfound: {
-          ffIds: new Set(["unwanted", "unwanted2"]),
+          ffIds: ["unwanted", "unwanted2"],
           id: "unfound",
           name: "unfound"
         },
@@ -80,7 +112,7 @@ describe("tags-selectors", () => {
     it("should return undefined if no tag is found", () => {
       const tagMap = {
         unfound: {
-          ffIds: new Set(["unwanted", "unwanted2"]),
+          ffIds: ["unwanted", "unwanted2"],
           id: "unfound",
           name: "unfound"
         }
@@ -93,14 +125,14 @@ describe("tags-selectors", () => {
       const foundTagID = "foundTagID";
       const foundTagName = "foundTagName";
       const foundTag = {
-        ffIds: new Set(["fakeFFid"]),
+        ffIds: ["fakeFFid"],
         id: foundTagID,
         name: foundTagName
       };
       const tagMap = {
         [foundTagID]: foundTag,
         unfound: {
-          ffIds: new Set(["unwanted", "unwanted2"]),
+          ffIds: ["unwanted", "unwanted2"],
           id: "unfound",
           name: "unfound"
         }
@@ -113,21 +145,21 @@ describe("tags-selectors", () => {
   describe("sortTags", () => {
     const firstTagId = "3firstTagId";
     const firstTag = {
-      ffIds: new Set(["ffid"]),
+      ffIds: ["ffid"],
       id: firstTagId,
       name: "1TagName"
     };
 
     const secondTagId = "2secondTagId";
     const secondTag = {
-      ffIds: new Set(["ffid"]),
+      ffIds: ["ffid"],
       id: secondTagId,
       name: "2TagName"
     };
 
     const thirdTagId = "1thirdTagId";
     const thirdTag = {
-      ffIds: new Set(["ffid"]),
+      ffIds: ["ffid"],
       id: thirdTagId,
       name: "3TagName"
     };
@@ -170,7 +202,7 @@ describe("tags-selectors", () => {
       const filesAndFolders = computeDerived(ff(origins));
 
       const tag = {
-        ffIds: new Set(["path1", "path3"]),
+        ffIds: ["path1", "path3"],
         id: "tagId",
         name: "tagName"
       };
@@ -187,7 +219,7 @@ describe("tags-selectors", () => {
     it("should return true if there is at least a tag", () => {
       const tagMap = {
         id: {
-          ffIds: new Set(["ffId "]),
+          ffIds: ["ffId "],
           id: "id",
           name: "tag"
         }
@@ -201,13 +233,13 @@ describe("tags-selectors", () => {
     it("should return the array of tags", () => {
       const tag1Id = "id";
       const tag1 = {
-        ffIds: new Set(["ffId "]),
+        ffIds: ["ffId"],
         id: tag1Id,
         name: "tag"
       };
       const tag2Id = "id2";
       const tag2 = {
-        ffIds: new Set(["ffId "]),
+        ffIds: ["ffId"],
         id: tag2Id,
         name: "tag2"
       };

@@ -24,7 +24,7 @@ export const getTagsByIds = (tagMap: TagMap, tagIds: string[]): Tag[] =>
  * @param name
  */
 export const getTagByName = (tagMap: TagMap, name: string): Tag | undefined =>
-  _.find(Object.values(tagMap), tag => tag.name === name);
+  _.find(tagMapToArray(tagMap), tag => tag.name === name);
 
 /**
  * Order for sorting functions
@@ -39,6 +39,8 @@ export interface SortTagOptions {
   sortParam?: string;
 }
 
+const defaultSortTagOptions: SortTagOptions = {};
+
 /**
  * Sort tags
  * @param tagList - The tag list to sort
@@ -46,7 +48,10 @@ export interface SortTagOptions {
  * @param {Order} [options.order=Order.ASC]  - The sort order. Defaults to Ascending.
  * @param {string} [options.sortParam="name"] - The param to sort on. Defaults to name.
  */
-export const sortTags = (tagList: Tag[], options: SortTagOptions): Tag[] => {
+export const sortTags = (
+  tagList: Tag[],
+  options = defaultSortTagOptions
+): Tag[] => {
   const order = options.order || Order.ASC;
   const sortParam = options.sortParam || "name";
 
@@ -80,3 +85,16 @@ export const getTagSize = (tag: Tag, ffs: any): number => {
   );
   return taggedFf.reduce((totalSize, ff) => totalSize + ff.get("file_size"), 0);
 };
+
+/**
+ * Returns true if a TagMap has tags, false otherwise.
+ * @param tagMap
+ */
+export const tagMapHasTags = (tagMap: TagMap): boolean =>
+  Object.keys(tagMap).length !== 0;
+
+/**
+ * Transforms a tagMap to a tag Array
+ * @param tagMap
+ */
+export const tagMapToArray = (tagMap: TagMap): Tag[] => Object.values(tagMap);

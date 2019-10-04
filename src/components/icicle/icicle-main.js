@@ -49,18 +49,6 @@ export default class IcicleMain extends PureComponent {
     this.computeWidthRec = this.computeWidthRec.bind(this);
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   const ans = {}
-  //   for (let key in this.props) {
-  //     if (prevProps[key] !== this.props[key]) {
-  //       ans[key] = [prevProps[key], this.props[key]]
-  //     }
-  //   }
-  //   if (Object.keys(ans).length > 0) {
-  //     console.log(ans)
-  //   }
-  // }
-
   icicleWidth() {
     return (this.state.view_box_width * 8) / 12;
   }
@@ -203,7 +191,7 @@ export default class IcicleMain extends PureComponent {
   }
 
   render() {
-    const api = this.props.api;
+    const { api, tags } = this.props;
     const view_box_width = this.state.view_box_width;
     const view_box_height = this.state.view_box_height;
 
@@ -227,6 +215,7 @@ export default class IcicleMain extends PureComponent {
           y={0}
           dx={icicle_width}
           dy={icicle_height}
+          tags={tags}
           root_id={this.props.root_id}
           display_root={this.props.display_root}
           fWidth={this.fWidth}
@@ -290,6 +279,7 @@ export default class IcicleMain extends PureComponent {
             onIcicleRectDoubleClickHandler={FunctionUtil.empty}
             onIcicleRectMouseOverHandler={FunctionUtil.empty}
             computeWidthRec={this.computeWidthRec}
+            tags={tags}
           />
           <MinimapBracket
             x={minimap_x + 5}

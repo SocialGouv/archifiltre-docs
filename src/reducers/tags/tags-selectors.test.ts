@@ -5,7 +5,9 @@ import {
   getTagsByIds,
   getTagSize,
   Order,
-  sortTags
+  sortTags,
+  tagMapHasTags,
+  tagMapToArray
 } from "./tags-selectors";
 import { Tag } from "./tags-types";
 
@@ -131,7 +133,7 @@ describe("tags-selectors", () => {
     };
     describe("with default parameter", () => {
       it("should order the tags in asc order based on name field", () => {
-        expect(sortTags([secondTag, firstTag, thirdTag], {})).toEqual([
+        expect(sortTags([secondTag, firstTag, thirdTag])).toEqual([
           firstTag,
           secondTag,
           thirdTag
@@ -174,6 +176,47 @@ describe("tags-selectors", () => {
       };
 
       expect(getTagSize(tag, filesAndFolders)).toEqual(201);
+    });
+  });
+
+  describe("tagMapHasTags", () => {
+    it("should return false if there is no tag", () => {
+      expect(tagMapHasTags({})).toBe(false);
+    });
+
+    it("should return true if there is at least a tag", () => {
+      const tagMap = {
+        id: {
+          ffIds: new Set(["ffId "]),
+          id: "id",
+          name: "tag"
+        }
+      };
+
+      expect(tagMapHasTags(tagMap)).toBe(true);
+    });
+  });
+
+  describe("tagMapToArray", () => {
+    it("should return the array of tags", () => {
+      const tag1Id = "id";
+      const tag1 = {
+        ffIds: new Set(["ffId "]),
+        id: tag1Id,
+        name: "tag"
+      };
+      const tag2Id = "id2";
+      const tag2 = {
+        ffIds: new Set(["ffId "]),
+        id: tag2Id,
+        name: "tag2"
+      };
+      const tagMap = {
+        [tag1Id]: tag1,
+        [tag2Id]: tag2
+      };
+
+      expect(sortTags(tagMapToArray(tagMap))).toEqual(sortTags([tag1, tag2]));
     });
   });
 });

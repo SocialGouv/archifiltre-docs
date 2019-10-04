@@ -3,7 +3,7 @@ import React from "react";
 import * as Color from "util/color-util";
 import * as ObjectUtil from "util/object-util.ts";
 
-import Icicle from "components/icicle/icicle-container";
+import Icicle from "components/icicle/icicle-container.tsx";
 
 import Report from "components/report-container.tsx";
 import AllTags from "components/all-tags-container.tsx";
@@ -88,6 +88,7 @@ class Workspace extends React.PureComponent {
     );
   }
 
+  // TODO: Move this, as this has nothing to do here
   getChildrenIdFromId(id) {
     const node = this.props.getFfByFfId(id);
     const children = node.get("children");

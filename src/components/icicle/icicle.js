@@ -33,14 +33,6 @@ export default class Icicle extends PureComponent {
     );
   }
 
-  makeKey(id) {
-    return "icicle-display-root-" + id;
-  }
-
-  removeRootId(arr) {
-    return arr.slice(1);
-  }
-
   trueFHeight(id) {
     const height = this.props.dy;
     return this.props.trueFHeight(height, id);
@@ -94,28 +86,25 @@ export default class Icicle extends PureComponent {
   render() {
     this.shouldResetDims = true;
 
-    const props = this.props;
-
-    const root_id = props.root_id;
-    const x = props.x;
-    const y = props.y;
-    const dx = props.dx;
-    const dy = props.dy;
-
-    const display_root = props.display_root;
-    const computeWidthRec = props.computeWidthRec;
-
-    const fWidth = props.fWidth;
-    const normalizeWidth = props.normalizeWidth;
-    const getChildrenIdFromId = props.getChildrenIdFromId;
-
-    const shouldRenderChild = props.shouldRenderChild;
-
-    const onClickHandler = props.onIcicleRectClickHandler;
-    const onDoubleClickHandler = props.onIcicleRectDoubleClickHandler;
-    const onMouseOverHandler = props.onIcicleRectMouseOverHandler;
-
-    const fillColor = props.fillColor;
+    const {
+      api,
+      computeWidthRec,
+      display_root,
+      dx,
+      dy,
+      fillColor,
+      fWidth,
+      getChildrenIdFromId,
+      normalizeWidth,
+      onIcicleRectClickHandler: onClickHandler,
+      onIcicleRectDoubleClickHandler: onDoubleClickHandler,
+      onIcicleRectMouseOverHandler: onMouseOverHandler,
+      root_id,
+      shouldRenderChild,
+      tags,
+      x,
+      y
+    } = this.props;
 
     const trueFHeight = this.trueFHeight;
     const registerDims = this.registerDims;
@@ -134,7 +123,6 @@ export default class Icicle extends PureComponent {
       dx_prime = 0;
     }
 
-    const api = this.props.api;
     const icicle_state = api.icicle_state;
 
     let style = {};
@@ -175,9 +163,6 @@ export default class Icicle extends PureComponent {
       unlockedHovered
     );
 
-    const database = api.database;
-    const tag_ids = database.getAllTagIds();
-    const getTagByTagId = database.getTagByTagId;
     const dims = this.state.dims;
     const tag_id_to_highlight = icicle_state.tagIdToHighlight();
 
@@ -206,8 +191,7 @@ export default class Icicle extends PureComponent {
         {lockedNotHoveredComponents}
         {unlockedHoveredComponents}
         <IcicleTags
-          tag_ids={tag_ids}
-          getTagByTagId={getTagByTagId}
+          tags={tags}
           dims={dims}
           tag_id_to_highlight={tag_id_to_highlight}
           onClick={onClickHandler}

@@ -1,4 +1,4 @@
-import { updateIn, getIn, List, Set } from "immutable";
+import { updateIn, List, Set } from "immutable";
 
 import * as RealEstate from "reducers/real-estate";
 
@@ -82,20 +82,6 @@ const toSIP2 = () => METS.makeSIP;
 const getSessionName = () => state => state.get("session_name");
 const getOriginalPath = () => state => state.get("original_path");
 
-const getTagIdsByFfId = id => state =>
-  state
-    .get("tags")
-    .filter(tag => tag.get("ff_ids").includes(id))
-    .keySeq()
-    .toList();
-const getAllTagIds = () => state =>
-  state
-    .get("tags")
-    .keySeq()
-    .toList();
-
-const getTagByTagId = id => state => getIn(state, ["tags", id]);
-
 const getWaitingCounter = () => () => 0;
 
 /**
@@ -118,9 +104,6 @@ const reader = {
   toSIP2,
   getSessionName,
   getOriginalPath,
-  getTagIdsByFfId,
-  getAllTagIds,
-  getTagByTagId,
   getWaitingCounter,
   getData,
   getState,

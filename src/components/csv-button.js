@@ -14,7 +14,9 @@ const CsvButton = props => {
   const name = () => makeNameWithExt(getSessionName(), "csv");
   return mkB(
     () => {
-      save(name(), Csv.toStr(getStrList2()), { format: "utf-8" });
+      const list = getStrList2();
+      const strCsv = Csv.toStr(list);
+      save(name(), strCsv, { format: "utf-8" });
     },
     label,
     true,

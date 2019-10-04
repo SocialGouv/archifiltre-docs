@@ -1,11 +1,18 @@
 import {
   ADD_TAG,
   DELETE_TAG,
+  INITIALIZE_TAGS,
   RENAME_TAG,
   TAG_FILE,
+  TagMap,
   TagsActionTypes,
   UNTAG_FILE
 } from "./tags-types";
+
+export const initializeTags = (tags: TagMap): TagsActionTypes => ({
+  tags,
+  type: INITIALIZE_TAGS
+});
 
 export const addTag = (
   tagName: string,

@@ -3,6 +3,7 @@ import { removeKey } from "../../util/object-util";
 import {
   ADD_TAG,
   DELETE_TAG,
+  INITIALIZE_TAGS,
   RENAME_TAG,
   TAG_FILE,
   TagsActionTypes,
@@ -22,7 +23,7 @@ const tagFile = (state: TagsState, tagId: string, ffId: string): TagsState => ({
     ...state.tags,
     [tagId]: {
       ...state.tags[tagId],
-      ffIds: new Set([...state.tags[tagId].ffIds, ffId])
+      ffIds: [...new Set([...state.tags[tagId].ffIds, ffId])]
     }
   }
 });
@@ -38,7 +39,7 @@ const createTag = (
     tags: {
       ...state.tags,
       [completeTagId]: {
-        ffIds: new Set([ffId]),
+        ffIds: [ffId],
         id: completeTagId,
         name: tagName
       }
@@ -51,6 +52,8 @@ const tagsReducer = (
   action: TagsActionTypes
 ): TagsState => {
   switch (action.type) {
+    case INITIALIZE_TAGS:
+      return { tags: action.tags };
     case ADD_TAG:
       const tagWithTheSameName = getTagByName(state.tags, action.tagName);
       if (tagWithTheSameName === undefined) {
@@ -74,9 +77,7 @@ const tagsReducer = (
           ...state.tags,
           [action.tagId]: {
             ...state.tags[action.tagId],
-            ffIds: new Set(
-              _.without([...state.tags[action.tagId].ffIds], action.ffId)
-            )
+            ffIds: _.without([...state.tags[action.tagId].ffIds], action.ffId)
           }
         }
       };

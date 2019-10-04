@@ -2,13 +2,22 @@ import _ from "lodash";
 import { Tag, TagMap } from "./tags-types";
 
 /**
- * Returns all the tags that are associated to the provided ffId
+ * Returns all the tags ids that are associated to the provided ffId
  * @param tagMap - The TagMap as in the redux store
  * @param ffId - The ffid
  * @returns The list of tagIds for the file
  */
 export const getAllTagIdsForFile = (tagMap: TagMap, ffId: string): string[] =>
-  Object.keys(tagMap).filter(key => tagMap[key].ffIds.has(ffId));
+  Object.keys(tagMap).filter(key => tagHasFfId(tagMap[key], ffId));
+
+/**
+ * Returns all the tags that are associated to the provided ffId
+ * @param tagMap - The TagMap as in the redux store
+ * @param ffId - The ffid
+ * @returns The list of tags for the file
+ */
+export const getAllTagsForFile = (tagMap: TagMap, ffId: string): Tag[] =>
+  tagMapToArray(tagMap).filter(tag => tagHasFfId(tag, ffId));
 
 /**
  * Returns the tags corresponding to the ids in tagIds
@@ -75,10 +84,9 @@ export const sortTags = (
  * @returns the total size of the tagged files and folders
  */
 export const getTagSize = (tag: Tag, ffs: any): number => {
-  const arrayFfIds = [...tag.ffIds];
   const taggedFf = ffs.filter((ff, path) =>
     _.some(
-      arrayFfIds,
+      tag.ffIds,
       ffId =>
         path.indexOf(ffId) === 0 && (path[ffId.length] === "/" || path === ffId)
     )
@@ -98,3 +106,10 @@ export const tagMapHasTags = (tagMap: TagMap): boolean =>
  * @param tagMap
  */
 export const tagMapToArray = (tagMap: TagMap): Tag[] => Object.values(tagMap);
+
+/**
+ *
+ * @param tag
+ * @param ffId
+ */
+export const tagHasFfId = (tag: Tag, ffId: string) => tag.ffIds.includes(ffId);

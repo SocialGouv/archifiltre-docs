@@ -3,30 +3,20 @@
 import { generateRandomString } from "util/random-gen-util";
 
 export const fromAnyJsonToJs = json => {
-  const version = JSON.parse(json).version;
+  let js = JSON.parse(json);
 
-  let js;
+  const version = js.version;
 
   switch (version) {
     case 8:
-      if (js === undefined) {
-        js = JSON.parse(json);
-      }
       js = v8JsToV9Js(js);
     case 9:
-      if (js === undefined) {
-        js = JSON.parse(json);
-      }
       js = v9JsToV10Js(js);
     case 10:
-      if (js === undefined) {
-        js = JSON.parse(json);
-      }
       js = v10JsToV11Js(js);
-    default:
-      if (js === undefined) {
-        js = JSON.parse(json);
-      }
+    case 11:
+    case 12:
+      js = v12JsToV13Js(js);
   }
   return [js, version];
 };
@@ -141,4 +131,23 @@ export const v10JsToV11Js = v10 => {
   v11.version = 11;
 
   return v11;
+};
+
+export const v12JsToV13Js = v12 => {
+  const reformatTag = (id, { ff_ids, name }) => ({
+    ffIds: ff_ids,
+    id,
+    name
+  });
+  return {
+    ...v12,
+    version: 13,
+    tags: Object.keys(v12.tags).reduce(
+      (tagMap, tagId) => ({
+        ...tagMap,
+        [tagId]: reformatTag(tagId, v12.tags[tagId])
+      }),
+      {}
+    )
+  };
 };

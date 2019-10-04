@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/default
 import AsyncHandleDropWorker from "async-handle-drop.worker";
-import * as VirtualFileSystem from "datastore/virtual-file-system";
 
 export default (hook, dropped_folder_path) => {
   return new Promise((resolve, reject) => {
@@ -9,7 +8,7 @@ export default (hook, dropped_folder_path) => {
       switch (e.data.status) {
         case "return":
           worker.terminate();
-          resolve(VirtualFileSystem.fromJs(e.data.vfs));
+          resolve(e.data.vfs);
           break;
         case "error":
           worker.terminate();

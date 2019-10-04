@@ -52,22 +52,29 @@ export default class ANewVersionIsAvailable extends React.PureComponent {
     request({
       method: "GET",
       url: "https://archifiltre.github.io/api-version/"
-    }).then(a => {
-      try {
-        a = JSON.parse(a);
-        const last_version = a.last_version;
-        const current_version = version;
+    })
+      .then(a => {
+        try {
+          a = JSON.parse(a);
+          const last_version = a.last_version;
+          const current_version = version;
 
-        if (isNaN(last_version) === false && typeof last_version === "number") {
-          if (current_version < last_version) {
-            this.setState({
-              display: true,
-              last_version
-            });
+          if (
+            isNaN(last_version) === false &&
+            typeof last_version === "number"
+          ) {
+            if (current_version < last_version) {
+              this.setState({
+                display: true,
+                last_version
+              });
+            }
           }
-        }
-      } catch (e) {} // eslint-disable-line no-empty
-    });
+        } catch (e) {} // eslint-disable-line no-empty
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 
   displayNone() {

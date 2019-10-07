@@ -133,11 +133,9 @@ const recComputeFolderHash = (filesAndFolders, id, hook) => {
 
   const currentFolderHash = md5(
     children
-      .sort()
       .map(childId => childrenResults[childId])
-      .reduce(
-        (concatenatedHashes, childHash) => `${concatenatedHashes}${childHash}`
-      )
+      .sort()
+      .join("")
   );
 
   const currentHashObject = { [id]: currentFolderHash };

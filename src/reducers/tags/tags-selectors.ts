@@ -1,4 +1,6 @@
 import _ from "lodash";
+import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
+import { StoreState } from "../store";
 import { Tag, TagMap } from "./tags-types";
 
 /**
@@ -113,3 +115,10 @@ export const tagMapToArray = (tagMap: TagMap): Tag[] => Object.values(tagMap);
  * @param ffId
  */
 export const tagHasFfId = (tag: Tag, ffId: string) => tag.ffIds.includes(ffId);
+
+/**
+ * Gets the tags map from the redux store.
+ * @param store - The redux store
+ */
+export const getTagsFromStore = (store: StoreState): TagMap =>
+  getCurrentState(store.tags).tags;

@@ -1,6 +1,13 @@
 import * as ObjectUtil from "util/object-util.ts";
 import * as RealEstate from "reducers/real-estate";
 
+import store from "./store.ts";
+import {
+  commitAction,
+  redoAction,
+  undoAction
+} from "./enhancers/undoable/undoable-actions";
+
 const length_limit = 1000;
 
 const initialState = s => {
@@ -29,6 +36,7 @@ const reader = {
 
 const commit = () => state => {
   state = Object.assign({}, state);
+  store.dispatch(commitAction());
   state.past = state.past.concat([state.present]);
   if (state.past.length > length_limit) {
     state.past = state.past.slice(1);
@@ -40,6 +48,7 @@ const commit = () => state => {
 
 const undo = () => state => {
   state = Object.assign({}, state);
+  store.dispatch(undoAction());
   if (hasAPast()(state)) {
     state.future = [state.present].concat(state.future);
     state.present = state.past.slice(-1)[0];
@@ -51,6 +60,7 @@ const undo = () => state => {
 
 const redo = () => state => {
   state = Object.assign({}, state);
+  store.dispatch(redoAction());
   if (hasAFuture()(state)) {
     state.past = state.past.concat([state.present]);
     state.present = state.future[0];

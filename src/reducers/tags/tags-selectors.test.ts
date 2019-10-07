@@ -1,9 +1,11 @@
 import { computeDerived, ff } from "../../datastore/files-and-folders";
+import { StoreState } from "../store";
 import {
   getAllTagIdsForFile,
   getAllTagsForFile,
   getTagByName,
   getTagsByIds,
+  getTagsFromStore,
   getTagSize,
   Order,
   sortTags,
@@ -249,6 +251,33 @@ describe("tags-selectors", () => {
       };
 
       expect(sortTags(tagMapToArray(tagMap))).toEqual(sortTags([tag1, tag2]));
+    });
+  });
+
+  describe("getTagsFromStore", () => {
+    it("should return the tag state", () => {
+      const tags = {
+        id: {
+          ffIds: ["ffId"],
+          id: "id",
+          name: "name"
+        }
+      };
+
+      const tagState = {
+        tags
+      };
+
+      const storeState: StoreState = {
+        tags: {
+          current: tagState,
+          future: [],
+          past: [],
+          present: tagState
+        }
+      };
+
+      expect(getTagsFromStore(storeState)).toEqual(tags);
     });
   });
 });

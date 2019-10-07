@@ -1,5 +1,6 @@
 import { Action } from "redux";
 
+export const RESET_TAGS = "TAGS/RESET";
 export const INITIALIZE_TAGS = "TAGS/INITIALIZE";
 export const ADD_TAG = "TAGS/ADD_TAGS";
 export const RENAME_TAG = "TAGS/RENAME_TAG";
@@ -19,6 +20,10 @@ export interface TagMap {
 
 export interface TagsState {
   tags: TagMap;
+}
+
+interface ResetTagsAction extends Action {
+  type: typeof RESET_TAGS;
 }
 
 interface InitializeTagsAction extends Action {
@@ -57,6 +62,7 @@ interface UntagFileAction extends Action {
 }
 
 export type TagsActionTypes =
+  | ResetTagsAction
   | InitializeTagsAction
   | AddTagAction
   | RenameTagAction

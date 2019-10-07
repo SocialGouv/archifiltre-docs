@@ -5,7 +5,7 @@ const label = "METS";
 const MetsButton = props => {
   const api = props.api;
   const database = api.database;
-  const makeSIP = database.toSIP2;
+  const exportMETS = database.toMETS;
   const getOriginalPath = database.getOriginalPath;
 
   let button_is_enabled = true;
@@ -15,7 +15,7 @@ const MetsButton = props => {
 
   return mkB(
     () => {
-      makeSIP();
+      exportMETS();
     },
     label,
     button_is_enabled,

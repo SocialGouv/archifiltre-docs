@@ -384,6 +384,8 @@ describe("file-and-folders-utils", () => {
       return { hook, result };
     };
 
+    const childrenHash = (...children) => md5(children.sort().join(""));
+
     describe("with a valid fileAndFolders structure", () => {
       const filesAndFolders = {
         "": {
@@ -427,20 +429,19 @@ describe("file-and-folders-utils", () => {
         "baseFolder/folder2/file1":
           filesAndFolders["baseFolder/folder2/file1"].hash
       };
-      expectedResults["baseFolder/folder2"] = md5(
+      expectedResults["baseFolder/folder2"] = childrenHash(
         expectedResults["baseFolder/folder2/file1"]
       );
-      expectedResults["baseFolder/folder1"] = md5(
-        `${expectedResults["baseFolder/folder1/file1"]}${
-          expectedResults["baseFolder/folder1/file2"]
-        }`
+      expectedResults["baseFolder/folder1"] = childrenHash(
+        expectedResults["baseFolder/folder1/file1"],
+        expectedResults["baseFolder/folder1/file2"]
       );
-      expectedResults["baseFolder"] = md5(
-        `${expectedResults["baseFolder/file1"]}${
-          expectedResults["baseFolder/folder1"]
-        }${expectedResults["baseFolder/folder2"]}`
+      expectedResults["baseFolder"] = childrenHash(
+        expectedResults["baseFolder/file1"],
+        expectedResults["baseFolder/folder1"],
+        expectedResults["baseFolder/folder2"]
       );
-      expectedResults[""] = md5(expectedResults["baseFolder"]);
+      expectedResults[""] = childrenHash(expectedResults["baseFolder"]);
 
       const getHashObject = id => ({ [id]: expectedResults[id] });
 

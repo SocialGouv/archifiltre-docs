@@ -531,6 +531,7 @@ const makeMetsContent = (state, tags, contentWriter, metsContent) => {
 /**
  * Build the entire SIP in ZIP format with a METS manifest.
  * @param {Object} state state of the GUI
+ * @param {Object} tags - The tag map of the redux store
  */
 export const makeSIP = (state, tags) => {
   let sip = new JSZip();

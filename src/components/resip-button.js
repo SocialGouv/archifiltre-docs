@@ -1,6 +1,5 @@
 import { mkB } from "components/button";
 
-import resipExporter from "../exporters/resipExporter";
 import { toStr } from "../csv";
 import { makeNameWithExt, save } from "../util/file-sys-util";
 
@@ -14,7 +13,10 @@ const ResipButton = props => {
   const name = () => makeNameWithExt(`${getSessionName()}-RESIP`, "csv");
   return mkB(
     () => {
-      save(name(), toStr(resipExporter(database.getData())));
+      save(
+        name(),
+        toStr(props.exportToResip(database.getData().files_and_folders))
+      );
     },
     label,
     true,

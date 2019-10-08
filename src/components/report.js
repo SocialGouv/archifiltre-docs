@@ -1,6 +1,5 @@
 import React from "react";
 
-import * as ObjectUtil from "util/object-util.ts";
 import { RIEInput } from "riek";
 
 import TagsCell from "components/report-cell-tags";
@@ -157,7 +156,7 @@ const InfoCell = props => {
 };
 
 const Report = props => {
-  const api = props.api;
+  const { api, createTag, untag } = props;
   const isActive = props.isFocused || props.isLocked;
   let icon, name, real_name, info_cell, tags_cell, comments_cell, name_cell;
 
@@ -212,6 +211,8 @@ const Report = props => {
         cells_style={cells_style}
         tagsForCurrentFile={props.tagsForCurrentFile}
         node_id={props.node_id}
+        createTag={createTag}
+        untag={untag}
       />
     );
     comments_cell = (
@@ -277,7 +278,7 @@ const Report = props => {
 };
 
 export default function ReportApiToProps(props) {
-  const api = props.api;
+  const { api, createTag, untag } = props;
   const icicle_state = api.icicle_state;
   const database = api.database;
 
@@ -303,18 +304,18 @@ export default function ReportApiToProps(props) {
     api.undo.commit();
   };
 
-  props = ObjectUtil.compose(
-    {
-      isFocused,
-      isLocked,
-      node,
-      node_id,
-      tagsForCurrentFile: props.tagsForCurrentFile,
-      total_size,
-      onChangeAlias
-    },
-    props
-  );
+  props = {
+    ...props,
+    isFocused,
+    isLocked,
+    node,
+    node_id,
+    tagsForCurrentFile: props.tagsForCurrentFile,
+    total_size,
+    onChangeAlias,
+    createTag,
+    untag
+  };
 
   return <Report {...props} />;
 }

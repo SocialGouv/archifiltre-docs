@@ -2,7 +2,6 @@ import _ from "lodash";
 import React from "react";
 
 import TagsEditable from "components/tags-editable";
-import * as ObjectUtil from "util/object-util.ts";
 
 import pick from "languages";
 
@@ -97,7 +96,7 @@ class ReportCellTags extends React.Component {
       if (value.length === 0) {
         // stopEditing()
       } else {
-        createTagged(node_id, value);
+        createTagged(value, node_id);
         setCandidateTag("");
       }
     } else if (keyCode === escape_key_code) {
@@ -106,13 +105,13 @@ class ReportCellTags extends React.Component {
     }
   }
 
-  removeHandlerFactory(tag_id) {
+  removeHandlerFactory(tagName) {
     const props = this.props;
 
-    const node_id = props.node_id;
+    const nodeId = props.node_id;
     const deleteTagged = props.deleteTagged;
 
-    return () => deleteTagged(node_id, tag_id);
+    return () => deleteTagged(tagName, nodeId);
   }
 
   onClick(event) {
@@ -157,7 +156,7 @@ class ReportCellTags extends React.Component {
       if (editing) {
         stopEditing();
         if (candidate_tag.replace(/\s/g, "").length > 0) {
-          createTagged(node_id, candidate_tag);
+          createTagged(candidate_tag, node_id);
         }
       }
     }
@@ -223,29 +222,25 @@ class ReportCellTags extends React.Component {
 }
 
 export default props => {
-  const api = props.api;
-  const database = api.database;
+  const { api, createTag, untag } = props;
   const commit = api.undo.commit;
 
-  const createTagged = (ff_id, tag_name) => {
-    database.createTagged(ff_id, tag_name);
+  const createTagged = (tagName, ffId) => {
+    createTag(tagName, ffId);
     commit();
   };
 
-  const deleteTagged = (ff_id, tag_id) => {
-    database.deleteTagged(ff_id, tag_id);
+  const deleteTagged = (tagName, ffId) => {
+    untag(tagName, ffId);
     commit();
   };
-
-  props = ObjectUtil.compose(
-    {
-      createTagged,
-      deleteTagged
-    },
-    props
-  );
 
   return (
-    <ReportCellTags tagsForCurrentFile={props.tagsForCurrentFile} {...props} />
+    <ReportCellTags
+      {...props}
+      tagsForCurrentFile={props.tagsForCurrentFile}
+      createTagged={createTagged}
+      deleteTagged={deleteTagged}
+    />
   );
 };

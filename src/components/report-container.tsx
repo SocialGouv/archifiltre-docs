@@ -1,6 +1,7 @@
-import React, { FC } from "react";
-import { useSelector } from "react-redux";
+import React, { FC, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "../reducers/store";
+import { addTag, untagFile } from "../reducers/tags/tags-actions";
 import {
   getAllTagIdsForFile,
   getTagsByIds,
@@ -26,11 +27,24 @@ const ReportContainer: FC<ReportContainerProps> = ({ api, fillColor }) => {
     getTagsByIds(getTagsFromStore(state), tagIdsForCurrentFile)
   );
 
+  const dispatch = useDispatch();
+
+  const createTag = useCallback(
+    (tagName, ffId) => dispatch(addTag(tagName, ffId)),
+    [dispatch]
+  );
+  const untag = useCallback(
+    (tagName, ffId) => dispatch(untagFile(tagName, ffId)),
+    [dispatch]
+  );
+
   return (
     <ReportApiToProps
       tagsForCurrentFile={tagsForCurrentFile}
       api={api}
       fillColor={fillColor}
+      createTag={createTag}
+      untag={untag}
     />
   );
 };

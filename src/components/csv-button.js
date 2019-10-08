@@ -2,19 +2,17 @@ import { mkB } from "components/button";
 
 import * as Csv from "csv";
 import { save, makeNameWithExt } from "util/file-sys-util";
-
 const label = "CSV";
 
 const CsvButton = props => {
   const api = props.api;
   const database = api.database;
-  const getStrList2 = database.toStrList2;
   const getSessionName = database.getSessionName;
 
   const name = () => makeNameWithExt(getSessionName(), "csv");
   return mkB(
     () => {
-      const list = getStrList2();
+      const list = props.exportToCsv(database.getFilesAndFolders());
       const strCsv = Csv.toStr(list);
       save(name(), strCsv, { format: "utf-8" });
     },

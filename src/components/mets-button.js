@@ -5,7 +5,6 @@ const label = "METS";
 const MetsButton = props => {
   const api = props.api;
   const database = api.database;
-  const exportMETS = database.toMETS;
   const getOriginalPath = database.getOriginalPath;
 
   let button_is_enabled = true;
@@ -15,7 +14,7 @@ const MetsButton = props => {
 
   return mkB(
     () => {
-      exportMETS();
+      props.exportToMets(database.getState());
     },
     label,
     button_is_enabled,

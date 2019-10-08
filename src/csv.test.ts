@@ -1,22 +1,28 @@
 import equal from "deep-equal";
 import fc from "fast-check";
-import { arbitraryImmutableList } from "./test/custom-arbitraries";
 import {
+  epochToFormattedUtcDateString,
+  fromStr,
+  leftPadInt,
   line2List,
   list2Line,
-  fromStr,
-  toStr,
-  leftPadInt,
-  epochToFormattedUtcDateString
-} from "csv";
+  toStr
+} from "./csv";
 
-describe("csv", function() {
+import { arbitraryImmutableList } from "./test/custom-arbitraries";
+
+describe("csv", () => {
   describe("(line2List . list2Line)", () => {
     it("should be an identity function", () => {
       fc.assert(
         // TODO : fix line2List not handling ";" inside values (and change fc.hexaString() to fc.string())
-        fc.property(arbitraryImmutableList(fc.hexaString()), list =>
-          equal(line2List(list2Line(list)).toJS(), list.toJS())
+        fc.property(
+          arbitraryImmutableList(fc.hexaString()),
+          (convertedList: any) =>
+            equal(
+              line2List(list2Line(convertedList)).toJS(),
+              convertedList.toJS()
+            )
         )
       );
     });
@@ -28,7 +34,8 @@ describe("csv", function() {
         fc.property(
           // TODO : fix fromStr not handling ";" inside values (and change fc.hexaString() to fc.string())
           arbitraryImmutableList(arbitraryImmutableList(fc.hexaString())),
-          list => equal(fromStr(toStr(list)).toJS(), list.toJS())
+          (convertedList: any) =>
+            equal(fromStr(toStr(convertedList)).toJS(), convertedList.toJS())
         )
       );
     });
@@ -47,7 +54,8 @@ describe("csv", function() {
         fc.property(
           fc.integer(9999),
           fc.integer(0, 6),
-          (number, padding) => leftPadInt(padding, number).length >= padding
+          (padLength, padding) =>
+            leftPadInt(padding, padLength).length >= padding
         )
       );
     });

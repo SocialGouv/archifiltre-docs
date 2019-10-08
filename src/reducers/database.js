@@ -4,7 +4,6 @@ import * as RealEstate from "reducers/real-estate";
 
 import * as Origin from "datastore/origin";
 import * as VirtualFileSystem from "datastore/virtual-file-system";
-import { toStrList2 as tagsToStrList2 } from "datastore/tags";
 import * as FilesAndFolders from "datastore/files-and-folders";
 
 import * as METS from "exporters/mets";
@@ -56,30 +55,7 @@ const getData = () => state => ({
 
 const toJson = () => state => JSON.stringify(getData()(state));
 
-/**
- * Generates an array of array ([[]]) with the first line being
- * the csv header.
- *
- * Each line represents one file or folder.
- *
- * ff_id_list is an array that determined the line order.
- */
-const toStrList2 = () => state => {
-  const files_and_folders = state.get("files_and_folders");
-  const root_id = "";
-  const ff_id_list = FilesAndFolders.toFfidList(files_and_folders).filter(
-    a => a !== root_id
-  );
-  const tags = store.getState().tags.tags;
-
-  const ans = FilesAndFolders.toStrList2(ff_id_list, files_and_folders);
-
-  tagsToStrList2(ff_id_list, files_and_folders, tags).forEach((a, i) => {
-    ans[i] = ans[i].concat(a);
-  });
-
-  return ans;
-};
+const getState = () => state => state;
 
 const toMETS = () => state => {
   const tags = getTagsFromStore(store.getState());
@@ -100,17 +76,16 @@ const reader = {
   volume,
   getFfIdPath,
   toJson,
-  toStrList2,
   toMETS,
   getSessionName,
   getOriginalPath,
   getWaitingCounter,
   getData,
-  getFilesAndFolders
+  getFilesAndFolders,
+  getState
 };
 
 const set = next_state => () => {
-  console.log(next_state);
   store.dispatch(actions.initializeTags(next_state.tags));
   return VirtualFileSystem.fromJs(next_state);
 };
@@ -132,31 +107,6 @@ const updateComments = (updater, id) => state => {
 
 const setSessionName = name => state => state.set("session_name", name);
 
-const createTagged = (ff_id, name) => state => {
-  store.dispatch(actions.addTag(name, ff_id));
-  return state;
-};
-
-const addTagged = (ff_id, tag_id) => state => {
-  store.dispatch(actions.tagFile(tag_id, ff_id));
-  return state;
-};
-
-const deleteTagged = (ff_id, tag_id) => state => {
-  store.dispatch(actions.untagFile(tag_id, ff_id));
-  return state;
-};
-
-const renameTag = (name, tag_id) => state => {
-  store.dispatch(actions.renameTag(tag_id, name));
-  return state;
-};
-
-const deleteTag = tag_id => state => {
-  store.dispatch(actions.deleteTag(tag_id));
-  return state;
-};
-
 const setHashes = hashesMap => state =>
   Object.keys(hashesMap).reduce(
     (acc, ffId) =>
@@ -170,11 +120,6 @@ const writer = {
   updateAlias,
   updateComments,
   setSessionName,
-  createTagged,
-  addTagged,
-  deleteTagged,
-  renameTag,
-  deleteTag,
   setHashes
 };
 

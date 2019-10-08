@@ -6,8 +6,9 @@ import TextAlignCenter from "components/text-align-center";
 import * as Color from "util/color-util";
 
 import pick from "languages";
-import { sortTags, getTagSize } from "../reducers/tags/tags-selectors.ts";
 import {
+  getTagSize,
+  sortTags,
   tagHasFfId,
   tagMapHasTags,
   tagMapToArray
@@ -183,11 +184,16 @@ class AllTags extends React.Component {
   }
 }
 
-export default ({ api, tags }) => {
-  const icicle_state = api.icicle_state;
-  const database = api.database;
-
-  const filesAndFolders = api.database.getFilesAndFolders();
+export default ({
+  api,
+  tags,
+  renameTag,
+  deleteTag,
+  deleteTagged,
+  addTagged
+}) => {
+  const { icicle_state, database } = api;
+  const filesAndFolders = database.getFilesAndFolders();
 
   const total_volume = database.volume();
 
@@ -204,27 +210,27 @@ export default ({ api, tags }) => {
     icicle_state.setNoTagIdToHighlight();
   };
 
-  const onRenameTag = tag_id => name => {
-    database.renameTag(name, tag_id);
+  const onRenameTag = tagId => name => {
+    renameTag(tagId, name);
     api.undo.commit();
   };
 
-  const onDeleteTag = tag_id => () => {
-    database.deleteTag(tag_id);
+  const onDeleteTag = tagId => () => {
+    deleteTag(tagId);
     icicle_state.setNoTagIdToHighlight();
     api.undo.commit();
   };
 
-  const onAddTagged = (ff_id, tag_id) => () => {
-    if (ff_id !== undefined) {
-      database.addTagged(ff_id, tag_id);
+  const onAddTagged = (ffId, tagId) => () => {
+    if (ffId !== undefined) {
+      addTagged(tagId, ffId);
       api.undo.commit();
     }
   };
 
-  const onDeleteTagged = (ff_id, tag_id) => () => {
-    if (ff_id !== undefined) {
-      database.deleteTagged(ff_id, tag_id);
+  const onDeleteTagged = (ffId, tagId) => () => {
+    if (ffId !== undefined) {
+      deleteTagged(tagId, ffId);
       api.undo.commit();
     }
   };

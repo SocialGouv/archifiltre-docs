@@ -1,7 +1,4 @@
 import React from "react";
-
-import * as ObjectUtil from "util/object-util.ts";
-
 import { octet2HumanReadableFormat } from "components/ruler";
 
 import { RIEInput } from "riek";
@@ -76,19 +73,19 @@ const DashBoard = props => {
 
     csv_button_cell = (
       <TextAlignCenter>
-        <ToCsvButton api={props.api} />
+        <ToCsvButton api={props.api} exportToCsv={props.exportToCsv} />
       </TextAlignCenter>
     );
 
     resip_button_cell = (
       <TextAlignCenter>
-        <ResipButton api={props.api} />
+        <ResipButton api={props.api} exportToResip={props.exportToResip} />
       </TextAlignCenter>
     );
 
     mets_button_cell = (
       <TextAlignCenter>
-        <METSButton api={props.api} />
+        <METSButton api={props.api} exportToMets={props.exportToMets} />
       </TextAlignCenter>
     );
 
@@ -164,8 +161,12 @@ const DashBoard = props => {
   );
 };
 
-export default function DashBoardApiToProps(props) {
-  const api = props.api;
+export default function DashBoardApiToProps({
+  api,
+  exportToCsv,
+  exportToResip,
+  exportToMets
+}) {
   const loading_state = api.loading_state;
   const database = api.database;
   const finished = loading_state.isFinished();
@@ -182,19 +183,20 @@ export default function DashBoardApiToProps(props) {
     }
   };
 
-  props = ObjectUtil.compose(
-    {
-      started: loading_state.isStarted(),
-      finished,
-      error,
-      nb_files,
-      nb_folders,
-      volume,
-      sessionName: () => database.getSessionName(),
-      onChangeSessionName
-    },
-    props
+  return (
+    <DashBoard
+      api={api}
+      started={loading_state.isStarted()}
+      finished={finished}
+      error={error}
+      nb_files={nb_files}
+      nb_folders={nb_folders}
+      volume={volume}
+      sessionName={() => database.getSessionName()}
+      onChangeSessionName={onChangeSessionName}
+      exportToCsv={exportToCsv}
+      exportToResip={exportToResip}
+      exportToMets={exportToMets}
+    />
   );
-
-  return <DashBoard {...props} />;
 }

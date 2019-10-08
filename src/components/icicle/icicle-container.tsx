@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import * as ObjectUtil from "util/object-util";
-import { StoreState } from "../../reducers/store";
+import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import IcicleMain from "./icicle-main";
 
 export default function IcicleApiToProps({
@@ -14,7 +13,7 @@ export default function IcicleApiToProps({
 
   const lockSequence = icicle_state.lock_sequence();
   const isLocked = lockSequence.length > 0;
-  const tags = useSelector((state: StoreState) => state.tags.tags);
+  const tags = useSelector(getTagsFromStore);
 
   return (
     <IcicleMain

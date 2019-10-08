@@ -1,6 +1,7 @@
 import { generateRandomString } from "util/random-gen-util";
 import { Map } from "immutable";
 import version from "version";
+import { getAllTagsForFile } from "../reducers/tags/tags-selectors";
 
 const XML = require("xml");
 const dateFormat = require("dateformat");
@@ -290,7 +291,7 @@ const recTraverseDB = (
   let ID = makeId();
 
   // Ignore files with exclude tag
-  if (tags.contains(DUMMY_EXCLUDE_TAG)) {
+  if (tags.includes(DUMMY_EXCLUDE_TAG)) {
     return;
   }
 
@@ -384,7 +385,7 @@ const recTraverseDB = (
  * @param {function} contentWriter function to gather payload to be added to the package
  * @param {Array} metsContent preload METS to be filled up
  */
-const makeMetsContent = (state, contentWriter, metsContent) => {
+const makeMetsContent = (state, tags, contentWriter, metsContent) => {
   let FF = state.get("files_and_folders");
   // let files = FF.filter(a => a.get("children").size === 0);
   let folderpath = state.get("original_path") + "/../";
@@ -462,13 +463,7 @@ const makeMetsContent = (state, contentWriter, metsContent) => {
   };
 
   const FFreader = a => FF.get(a);
-  const tagReader = a =>
-    state
-      .get("tags")
-      .filter(tag => tag.get("ff_ids").includes(a))
-      .valueSeq()
-      .toList()
-      .map(a => a.get("name"));
+  const tagReader = ffId => getAllTagsForFile(tags, ffId).map(tag => tag.name);
 
   const DMDwriter = item => DMD_children.push(item);
   const MASTERwriter = item => MASTER_children.push(item);
@@ -537,7 +532,7 @@ const makeMetsContent = (state, contentWriter, metsContent) => {
  * Build the entire SIP in ZIP format with a METS manifest.
  * @param {Object} state state of the GUI
  */
-export const makeSIP = state => {
+export const makeSIP = (state, tags) => {
   let sip = new JSZip();
 
   let content = sip.folder("master");
@@ -549,7 +544,7 @@ export const makeSIP = state => {
   metsContent.push({ _attr: makeManifestRootAttributes() });
   metsContent.push(makeHeader(state.get("session_name")));
 
-  makeMetsContent(state, addToContent, metsContent); // will also compute ZIP
+  makeMetsContent(state, tags, addToContent, metsContent); // will also compute ZIP
 
   let manifest_obj = [
     {

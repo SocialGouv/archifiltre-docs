@@ -1,11 +1,11 @@
 /**
  * Composes objects
- * @param a - base object
- * @param b - Object to merge into the first object
+ * @param mergedObject - Object to merge into the base object
+ * @param baseObject - Base object
  */
-export const compose = (a: object, b: object): object => ({
-  ...b,
-  ...a
+export const compose = (mergedObject: object, baseObject: object): object => ({
+  ...baseObject,
+  ...mergedObject
 });
 
 /**

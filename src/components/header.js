@@ -2,7 +2,7 @@ import React from "react";
 
 import version from "version";
 
-import Dashboard from "components/dashboard";
+import Dashboard from "components/dashboard-container.tsx";
 
 import pick from "languages";
 

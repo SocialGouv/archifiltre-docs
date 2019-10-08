@@ -131,7 +131,7 @@ const formatToCsv = (sipFilesAndFolders, tags) => {
  * @param files_and_folders - The files and folder structure
  * @param tags - The tags structure
  */
-const resipExporter = ({ files_and_folders, tags }) => {
+const resipExporter = (filesAndFolders, tags) => {
   let sipId = 0;
 
   const addSipId = ff => {
@@ -144,8 +144,8 @@ const resipExporter = ({ files_and_folders, tags }) => {
     ID: tagIndex
   }));
 
-  const dataWithSipId = Object.keys(files_and_folders)
-    .map(ffId => ({ id: ffId, ...files_and_folders[ffId] }))
+  const dataWithSipId = Object.keys(filesAndFolders)
+    .map(ffId => ({ id: ffId, ...filesAndFolders[ffId] }))
     .filter(({ id }) => id !== "")
     .map(addSipId)
     .map(addParentId)

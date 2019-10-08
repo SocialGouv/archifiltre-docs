@@ -17,7 +17,9 @@ describe("resipExporter", () => {
           return [id, parentId, path.join(file), ...rest];
         }
       );
-      expect(resipExporter(input)).toEqual(fileSystemFormatedOutput);
+      expect(resipExporter(input.files_and_folders, input.tags)).toEqual(
+        fileSystemFormatedOutput
+      );
     });
   });
 });

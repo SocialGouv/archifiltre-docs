@@ -1,23 +1,29 @@
-import React, { FunctionComponent } from "react";
+import React, { FC } from "react";
 import { useSelector } from "react-redux";
 import { StoreState } from "../reducers/store";
 import {
   getAllTagIdsForFile,
-  getTagsByIds
+  getTagsByIds,
+  getTagsFromStore
 } from "../reducers/tags/tags-selectors";
 import ReportApiToProps from "./report";
 
-const ReportContainer: FunctionComponent = ({ api, fillColor }: any) => {
+interface ReportContainerProps {
+  api: any;
+  fillColor: (ffId: string) => string;
+}
+
+const ReportContainer: FC<ReportContainerProps> = ({ api, fillColor }) => {
   /* <Legacy> : to replace */
   const sequence = api.icicle_state.sequence();
   const nodeId = sequence[sequence.length - 1];
   /* </Legacy> */
   const tagIdsForCurrentFile = useSelector((state: StoreState) =>
-    getAllTagIdsForFile(state.tags.tags, nodeId)
+    getAllTagIdsForFile(getTagsFromStore(state), nodeId)
   );
 
   const tagsForCurrentFile = useSelector((state: StoreState) =>
-    getTagsByIds(state.tags.tags, tagIdsForCurrentFile)
+    getTagsByIds(getTagsFromStore(state), tagIdsForCurrentFile)
   );
 
   return (

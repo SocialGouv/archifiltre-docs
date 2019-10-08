@@ -7,12 +7,12 @@ import * as VirtualFileSystem from "datastore/virtual-file-system";
 import * as Tags from "datastore/tags";
 import * as FilesAndFolders from "datastore/files-and-folders";
 
-import * as SEDA from "exporters/seda";
 import * as METS from "exporters/mets";
 
 import store from "./store.ts";
 import * as actions from "./tags/tags-actions.ts";
 import uuid from "uuid/v4";
+import { getTagsFromStore } from "./tags/tags-selectors";
 
 const property_name = "database";
 
@@ -82,8 +82,10 @@ const toStrList2 = () => state => {
   return ans;
 };
 
-const toSIP = () => SEDA.makeSIP;
-const toSIP2 = () => METS.makeSIP;
+const toMETS = () => state => {
+  const tags = getTagsFromStore(store.getState());
+  return METS.makeSIP(state, tags);
+};
 
 const getSessionName = () => state => state.get("session_name");
 const getOriginalPath = () => state => state.get("original_path");
@@ -100,8 +102,7 @@ const reader = {
   getFfIdPath,
   toJson,
   toStrList2,
-  toSIP,
-  toSIP2,
+  toMETS,
   getSessionName,
   getOriginalPath,
   getWaitingCounter,
@@ -115,7 +116,10 @@ const set = next_state => () => {
   return VirtualFileSystem.fromJs(next_state);
 };
 
-const reInit = () => () => initialState();
+const reInit = () => () => {
+  store.dispatch(actions.resetTags());
+  return initialState();
+};
 
 const updateAlias = (updater, id) => state => {
   state = updateIn(state, ["files_and_folders", id, "alias"], updater);

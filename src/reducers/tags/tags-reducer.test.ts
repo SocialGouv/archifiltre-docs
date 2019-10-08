@@ -4,10 +4,11 @@ import {
   deleteTag,
   initializeTags,
   renameTag,
+  resetTags,
   tagFile,
   untagFile
 } from "./tags-actions";
-import tagsReducer from "./tags-reducer";
+import { tagsReducer } from "./tags-reducer";
 import { TagsState } from "./tags-types";
 
 jest.mock("uuid/v4", () => jest.fn());
@@ -20,6 +21,26 @@ const setup = ({ mockTagId = "" } = {}) => {
 };
 
 describe("database-reducer", () => {
+  describe("RESET_TAGS", () => {
+    const initialState: TagsState = {
+      tags: {
+        tagId: {
+          ffIds: ["ffId"],
+          id: "tagId",
+          name: "tag-name"
+        }
+      }
+    };
+
+    it("should reset the state to an empty store", () => {
+      const nextState = tagsReducer(initialState, resetTags());
+
+      expect(nextState).toEqual({
+        tags: {}
+      });
+    });
+  });
+
   describe("INITIALIZE_TAGS", () => {
     const initialState: TagsState = {
       tags: {}

@@ -1,23 +1,32 @@
 import _ from "lodash";
+import uuid from "uuid/v4";
+
 import { removeKey } from "../../util/object-util";
+import undoable from "../enhancers/undoable/undoable";
+import { getTagByName } from "./tags-selectors";
 import {
   ADD_TAG,
   DELETE_TAG,
   INITIALIZE_TAGS,
   RENAME_TAG,
+  RESET_TAGS,
   TAG_FILE,
   TagsActionTypes,
   TagsState,
   UNTAG_FILE
 } from "./tags-types";
 
-import uuid from "uuid/v4";
-import { getTagByName } from "./tags-selectors";
-
 const initialState: TagsState = {
   tags: {}
 };
 
+/**
+ * State mutation to tag a file
+ * @param state - Current state
+ * @param tagId - The id of the tag to which you add a file
+ * @param ffId - The id of the file to add
+ * @returns - The new state
+ */
 const tagFile = (state: TagsState, tagId: string, ffId: string): TagsState => ({
   tags: {
     ...state.tags,
@@ -28,6 +37,14 @@ const tagFile = (state: TagsState, tagId: string, ffId: string): TagsState => ({
   }
 });
 
+/**
+ * State mutation to create a new tag and bind a file to it
+ * @param state - Current state
+ * @param tagName - The name of the new tag
+ * @param ffId - The id of the file to tag
+ * @param tagId - The new tag id. Set to "" to generate it with uuid/v4.
+ * @returns - The new state
+ */
 const createTag = (
   state: TagsState,
   tagName: string,
@@ -47,11 +64,18 @@ const createTag = (
   };
 };
 
+/**
+ * Reducer that handles tag data structure
+ * @param state
+ * @param action
+ */
 const tagsReducer = (
   state = initialState,
   action: TagsActionTypes
 ): TagsState => {
   switch (action.type) {
+    case RESET_TAGS:
+      return initialState;
     case INITIALIZE_TAGS:
       return { tags: action.tags };
     case ADD_TAG:
@@ -86,4 +110,6 @@ const tagsReducer = (
   }
 };
 
-export default tagsReducer;
+export { tagsReducer };
+
+export default undoable(tagsReducer, initialState);

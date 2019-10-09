@@ -1,7 +1,8 @@
 import {
   FilesAndFoldersActionTypes,
   FilesAndFoldersMap,
-  INITIALIZE_FILES_AND_FOLDERS
+  INITIALIZE_FILES_AND_FOLDERS,
+  SET_FILES_AND_FOLDERS_ALIAS
 } from "./files-and-folders-types";
 
 /**
@@ -13,4 +14,18 @@ export const initializeFilesAndFolders = (
 ): FilesAndFoldersActionTypes => ({
   filesAndFolders,
   type: INITIALIZE_FILES_AND_FOLDERS
+});
+
+/**
+ * Action to set an alias to a FileAndFolder
+ * @param filesAndFoldersId
+ * @param alias
+ */
+export const setFilesAndFoldersAlias = (
+  filesAndFoldersId: string,
+  alias: string
+): FilesAndFoldersActionTypes => ({
+  alias,
+  filesAndFoldersId,
+  type: SET_FILES_AND_FOLDERS_ALIAS
 });

@@ -1,6 +1,7 @@
 import { Action } from "redux";
 
 export const INITIALIZE_FILES_AND_FOLDERS = "FILES_AND_FOLDERS/INITIALIZE";
+export const SET_FILES_AND_FOLDERS_ALIAS = "FILES_AND_FOLDERS/SET_ALIAS";
 
 export interface FilesAndFolders {
   id: string;
@@ -26,4 +27,12 @@ interface InitializeFilesAndFoldersAction extends Action {
   filesAndFolders: FilesAndFoldersMap;
 }
 
-export type FilesAndFoldersActionTypes = InitializeFilesAndFoldersAction;
+interface SetFilesAndFoldersAliasAction extends Action {
+  type: typeof SET_FILES_AND_FOLDERS_ALIAS;
+  filesAndFoldersId: string;
+  alias: string;
+}
+
+export type FilesAndFoldersActionTypes =
+  | InitializeFilesAndFoldersAction
+  | SetFilesAndFoldersAliasAction;

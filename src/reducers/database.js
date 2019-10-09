@@ -48,7 +48,7 @@ const getFfIdPath = id => () =>
 const getData = () => state => ({
   files_and_folders: FilesAndFolders.toJs(state.get("files_and_folders")),
   session_name: state.get("session_name"),
-  tags: store.getState().tags.tags,
+  tags: getTagsFromStore(store.getState()),
   original_path: state.get("original_path"),
   version: state.get("version")
 });

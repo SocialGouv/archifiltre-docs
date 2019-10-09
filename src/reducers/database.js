@@ -12,6 +12,7 @@ import store from "./store.ts";
 import * as tagActions from "./tags/tags-actions.ts";
 import * as filesAndFoldersActions from "./files-and-folders/files-and-folders-actions.ts";
 import { getTagsFromStore } from "./tags/tags-selectors";
+import { updateFilesAndFolderHashes } from "./files-and-folders/files-and-folders-thunks";
 
 const property_name = "database";
 
@@ -114,12 +115,15 @@ const updateComments = (updater, id) => state => {
 
 const setSessionName = name => state => state.set("session_name", name);
 
-const setHashes = hashesMap => state =>
-  Object.keys(hashesMap).reduce(
+const setHashes = hashesMap => state => {
+  store.dispatch(updateFilesAndFolderHashes(hashesMap));
+
+  return Object.keys(hashesMap).reduce(
     (acc, ffId) =>
       updateIn(acc, ["files_and_folders", ffId, "hash"], () => hashesMap[ffId]),
     state
   );
+};
 
 const writer = {
   set,

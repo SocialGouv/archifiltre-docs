@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 import { computeDerived, ff } from "../datastore/files-and-folders";
 import { DispatchExts } from "../reducers/archifiltre-types";
 import { StoreState } from "../reducers/store";
+import { createEmptyStore } from "../reducers/store-test-utils";
 import { generateCsvExportArray } from "./csvExporter";
 
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
@@ -28,12 +29,12 @@ describe("csvExporter", () => {
         [{ size: 20, lastModified }, untaggedFfId]
       ];
 
+      const emptyStore = createEmptyStore();
       const store = mockStore({
+        ...emptyStore,
         tags: {
-          current: { tags },
-          future: [],
-          past: [],
-          present: { tags }
+          ...emptyStore.tags,
+          current: { tags }
         }
       });
 

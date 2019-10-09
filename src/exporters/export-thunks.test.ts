@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 import { computeDerived, ff } from "../datastore/files-and-folders";
 import { DispatchExts } from "../reducers/archifiltre-types";
 import { StoreState } from "../reducers/store";
+import { createEmptyStore } from "../reducers/store-test-utils";
 import { exportMetsThunk, resipExporterThunk } from "./export-thunks";
 import { makeSIP } from "./mets";
 import resipExporter from "./resipExporter";
@@ -39,12 +40,13 @@ const origins = [
 
 const filesAndFolders = computeDerived(ff(origins));
 
+const emptyStore = createEmptyStore();
+
 const storeContent = {
+  ...emptyStore,
   tags: {
-    current: { tags },
-    future: [],
-    past: [],
-    present: { tags }
+    ...emptyStore.tags,
+    current: { tags }
   }
 };
 

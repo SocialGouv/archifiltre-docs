@@ -9,7 +9,8 @@ import * as FilesAndFolders from "datastore/files-and-folders";
 import * as METS from "exporters/mets";
 
 import store from "./store.ts";
-import * as actions from "./tags/tags-actions.ts";
+import * as tagActions from "./tags/tags-actions.ts";
+import * as filesAndFoldersActions from "./files-and-folders/files-and-folders-actions.ts";
 import { getTagsFromStore } from "./tags/tags-selectors";
 
 const property_name = "database";
@@ -86,12 +87,17 @@ const reader = {
 };
 
 const set = next_state => () => {
-  store.dispatch(actions.initializeTags(next_state.tags));
+  store.dispatch(tagActions.initializeTags(next_state.tags));
+  store.dispatch(
+    filesAndFoldersActions.initializeFilesAndFolders(
+      next_state.files_and_folders
+    )
+  );
   return VirtualFileSystem.fromJs(next_state);
 };
 
 const reInit = () => () => {
-  store.dispatch(actions.resetTags());
+  store.dispatch(tagActions.resetTags());
   return initialState();
 };
 

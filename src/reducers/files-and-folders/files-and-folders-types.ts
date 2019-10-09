@@ -2,6 +2,7 @@ import { Action } from "redux";
 
 export const INITIALIZE_FILES_AND_FOLDERS = "FILES_AND_FOLDERS/INITIALIZE";
 export const SET_FILES_AND_FOLDERS_ALIAS = "FILES_AND_FOLDERS/SET_ALIAS";
+export const SET_FILES_AND_FOLDERS_HASH = "FILES_AND_FOLDERS/SET_HASH";
 
 export interface FilesAndFolders {
   id: string;
@@ -33,6 +34,13 @@ interface SetFilesAndFoldersAliasAction extends Action {
   alias: string;
 }
 
+interface SetFilesAndFoldersHashAction extends Action {
+  type: typeof SET_FILES_AND_FOLDERS_HASH;
+  filesAndFoldersId: string;
+  hash: string;
+}
+
 export type FilesAndFoldersActionTypes =
   | InitializeFilesAndFoldersAction
-  | SetFilesAndFoldersAliasAction;
+  | SetFilesAndFoldersAliasAction
+  | SetFilesAndFoldersHashAction;

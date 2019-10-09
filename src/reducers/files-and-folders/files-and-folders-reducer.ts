@@ -3,7 +3,8 @@ import {
   FilesAndFoldersActionTypes,
   FilesAndFoldersState,
   INITIALIZE_FILES_AND_FOLDERS,
-  SET_FILES_AND_FOLDERS_ALIAS
+  SET_FILES_AND_FOLDERS_ALIAS,
+  SET_FILES_AND_FOLDERS_HASH
 } from "./files-and-folders-types";
 
 const initialState: FilesAndFoldersState = {
@@ -51,6 +52,13 @@ const filesAndFoldersReducer = (
         action.filesAndFoldersId,
         "alias",
         action.alias
+      );
+    case SET_FILES_AND_FOLDERS_HASH:
+      return setFilesAndFoldersProp(
+        state,
+        action.filesAndFoldersId,
+        "hash",
+        action.hash
       );
     default:
       return state;

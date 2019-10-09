@@ -2,12 +2,36 @@ import undoable from "../enhancers/undoable/undoable";
 import {
   FilesAndFoldersActionTypes,
   FilesAndFoldersState,
-  INITIALIZE_FILES_AND_FOLDERS
+  INITIALIZE_FILES_AND_FOLDERS,
+  SET_FILES_AND_FOLDERS_ALIAS
 } from "./files-and-folders-types";
 
 const initialState: FilesAndFoldersState = {
   filesAndFolders: {}
 };
+
+/**
+ * Create a new state with the [propName] prop of the filesAndFoldersId FF
+ * set to propValue
+ * @param state
+ * @param filesAndFoldersId
+ * @param propName
+ * @param propValue
+ */
+const setFilesAndFoldersProp = <PropType>(
+  state: FilesAndFoldersState,
+  filesAndFoldersId: string,
+  propName: string,
+  propValue: PropType
+): FilesAndFoldersState => ({
+  filesAndFolders: {
+    ...state.filesAndFolders,
+    [filesAndFoldersId]: {
+      ...state.filesAndFolders[filesAndFoldersId],
+      [propName]: propValue
+    }
+  }
+});
 
 /**
  * Reducer that handles files and folders data structure
@@ -21,6 +45,13 @@ const filesAndFoldersReducer = (
   switch (action.type) {
     case INITIALIZE_FILES_AND_FOLDERS:
       return { filesAndFolders: action.filesAndFolders };
+    case SET_FILES_AND_FOLDERS_ALIAS:
+      return setFilesAndFoldersProp(
+        state,
+        action.filesAndFoldersId,
+        "alias",
+        action.alias
+      );
     default:
       return state;
   }

@@ -20,7 +20,7 @@ const setup = ({ mockTagId = "" } = {}) => {
   }
 };
 
-describe("database-reducer", () => {
+describe("tags-reducer", () => {
   describe("RESET_TAGS", () => {
     const initialState: TagsState = {
       tags: {

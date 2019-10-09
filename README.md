@@ -10,12 +10,6 @@ First install the dependencies
 yarn
 ```
 
-Then build the project
-
-```bash
-yarn buildDev
-```
-
 You should use autoreloading when developping, using
 
 ```bash

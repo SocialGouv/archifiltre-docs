@@ -1,5 +1,6 @@
 import { computeDerived, ff } from "../../datastore/files-and-folders";
 import { StoreState } from "../store";
+import { createEmptyStore } from "../store-test-utils";
 import {
   getAllTagIdsForFile,
   getAllTagsForFile,
@@ -268,12 +269,12 @@ describe("tags-selectors", () => {
         tags
       };
 
+      const emptyStore = createEmptyStore();
       const storeState: StoreState = {
+        ...emptyStore,
         tags: {
-          current: tagState,
-          future: [],
-          past: [],
-          present: tagState
+          ...emptyStore.tags,
+          current: tagState
         }
       };
 

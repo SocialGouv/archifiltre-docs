@@ -1,28 +1,11 @@
 import {
   initializeFilesAndFolders,
-  setFilesAndFoldersAlias
+  setFilesAndFoldersAlias,
+  setFilesAndFoldersHash
 } from "./files-and-folders-actions";
 import { filesAndFoldersReducer } from "./files-and-folders-reducer";
-import {
-  FilesAndFolders,
-  FilesAndFoldersState
-} from "./files-and-folders-types";
-
-/**
- * Utility function to create a prefilled filesAndFolders.
- * @param id
- * @param alias
- */
-const createFilesAndFolders = (id: string, alias = ""): FilesAndFolders => ({
-  alias,
-  children: [],
-  comments: "",
-  file_last_modified: 1570625049127,
-  file_size: 10,
-  hash: null,
-  id,
-  name: "base-name"
-});
+import { createFilesAndFolders } from "./files-and-folders-test-utils";
+import { FilesAndFoldersState } from "./files-and-folders-types";
 
 describe("files-and-folders-reducer", () => {
   describe("INITIALIZE_FILES_AND_FOLDERS", () => {
@@ -65,8 +48,14 @@ describe("files-and-folders-reducer", () => {
 
       const initialState: FilesAndFoldersState = {
         filesAndFolders: {
-          [changedId]: createFilesAndFolders(changedId, "base-alias"),
-          [unchangedId]: createFilesAndFolders(unchangedId, unchangedAlias)
+          [changedId]: createFilesAndFolders({
+            alias: "base-alias",
+            id: changedId
+          }),
+          [unchangedId]: createFilesAndFolders({
+            alias: unchangedAlias,
+            id: unchangedId
+          })
         }
       };
 
@@ -77,8 +66,51 @@ describe("files-and-folders-reducer", () => {
 
       expect(nextState).toEqual({
         filesAndFolders: {
-          [changedId]: createFilesAndFolders(changedId, newAlias),
-          [unchangedId]: createFilesAndFolders(unchangedId, unchangedAlias)
+          [changedId]: createFilesAndFolders({
+            alias: newAlias,
+            id: changedId
+          }),
+          [unchangedId]: createFilesAndFolders({
+            alias: unchangedAlias,
+            id: unchangedId
+          })
+        }
+      });
+    });
+  });
+
+  describe("SET_FILES_AND_FOLDERS_HASH", () => {
+    it("should replace the file and folder alias", () => {
+      const changedId = "changed-id";
+      const unchangedId = "unchanged-id";
+      const newHash = "new-hash";
+
+      const initialState: FilesAndFoldersState = {
+        filesAndFolders: {
+          [changedId]: createFilesAndFolders({
+            hash: "base-hash",
+            id: changedId
+          }),
+          [unchangedId]: createFilesAndFolders({
+            id: unchangedId
+          })
+        }
+      };
+
+      const nextState = filesAndFoldersReducer(
+        initialState,
+        setFilesAndFoldersHash(changedId, newHash)
+      );
+
+      expect(nextState).toEqual({
+        filesAndFolders: {
+          [changedId]: createFilesAndFolders({
+            hash: newHash,
+            id: changedId
+          }),
+          [unchangedId]: createFilesAndFolders({
+            id: unchangedId
+          })
         }
       });
     });

@@ -49,7 +49,7 @@ describe("mets module", () => {
   });
 
   describe("with an item, its ID, its associated DMDID and a hash", () => {
-    let testItem = new Map();
+    const testItem = new Map();
     testItem.set("name", "test.test");
     testItem.set("alias", "alias.test");
     testItem.set("size", 100);
@@ -62,7 +62,8 @@ describe("mets module", () => {
       ).toStrictEqual(outputFileTag);
     });
   });
-  describe("with an item, its ID, its associated DMDID and a hash", () => {
+
+  describe("with an item, its ID, its Order and fileId", () => {
     const testId = "TEST_ID";
     const testOrder = 10;
     const testFileId = "master.10";

@@ -45,11 +45,11 @@ if (MODE === "production") {
 
 /**This is the entrypoint for the app. */
 const app = () => {
-  let root_div = document.createElement("div");
-  root_div.setAttribute("id", "root");
+  const rootDiv = document.createElement("div");
+  rootDiv.setAttribute("id", "root");
 
   if (document.body !== null) {
-    document.body.appendChild(root_div);
+    document.body.appendChild(rootDiv);
   }
 
   ReactDOM.render(
@@ -76,7 +76,7 @@ const app = () => {
         }}
       </Store>
     </Provider>,
-    root_div
+    rootDiv
   );
 };
 

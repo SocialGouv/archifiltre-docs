@@ -48,7 +48,7 @@ const v8JsToV9Js = v8 => {
     };
 
     const ans = {};
-    for (let key in table) {
+    for (const key in table) {
       const path = remakePath(key, table);
       mapOldToNewId[key] = path;
       const node = table[key];
@@ -105,7 +105,7 @@ const v8JsToV9Js = v8 => {
 
   const v8TagsToV9Tags = tags => {
     const ans = {};
-    for (let key in tags) {
+    for (const key in tags) {
       ans[generateRandomString(40)] = {
         name: key,
         ff_ids: tags[key].map(a => mapOldToNewId[a])

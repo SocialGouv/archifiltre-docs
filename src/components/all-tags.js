@@ -184,7 +184,7 @@ class AllTags extends React.Component {
   }
 }
 
-export default ({
+const AllTagsApiToProps = ({
   api,
   tags,
   renameTag,
@@ -251,3 +251,5 @@ export default ({
     />
   );
 };
+
+export default AllTagsApiToProps;

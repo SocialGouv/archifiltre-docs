@@ -75,7 +75,7 @@ class ReportCellTags extends React.Component {
 
     const props = this.props;
 
-    const node_id = props.node_id;
+    const filesAndFoldersId = props.filesAndFoldersId;
     const tagsForCurrentFile = props.tagsForCurrentFile;
     const createTagged = props.createTagged;
     const deleteTagged = props.deleteTagged;
@@ -89,14 +89,14 @@ class ReportCellTags extends React.Component {
 
     if (keyCode === backspace_key_code) {
       if (value.length === 0 && tagsForCurrentFile.size > 0) {
-        deleteTagged(node_id, _.last(tagsForCurrentFile).id);
+        deleteTagged(filesAndFoldersId, _.last(tagsForCurrentFile).id);
       }
     } else if (keyCode === enter_key_code) {
       event.preventDefault();
       if (value.length === 0) {
         // stopEditing()
       } else {
-        createTagged(value, node_id);
+        createTagged(value, filesAndFoldersId);
         setCandidateTag("");
       }
     } else if (keyCode === escape_key_code) {
@@ -222,25 +222,14 @@ class ReportCellTags extends React.Component {
 }
 
 const ReportCellTagsApiToProps = props => {
-  const { api, createTag, untag } = props;
-  const commit = api.undo.commit;
-
-  const createTagged = (tagName, ffId) => {
-    createTag(tagName, ffId);
-    commit();
-  };
-
-  const deleteTagged = (tagName, ffId) => {
-    untag(tagName, ffId);
-    commit();
-  };
+  const { createTag, untag } = props;
 
   return (
     <ReportCellTags
       {...props}
       tagsForCurrentFile={props.tagsForCurrentFile}
-      createTagged={createTagged}
-      deleteTagged={deleteTagged}
+      createTagged={createTag}
+      deleteTagged={untag}
     />
   );
 };

@@ -1,5 +1,6 @@
 import undoable from "../enhancers/undoable/undoable";
 import {
+  ADD_COMMENTS_ON_FILES_AND_FOLDERS,
   FilesAndFoldersActionTypes,
   FilesAndFoldersState,
   INITIALIZE_FILES_AND_FOLDERS,
@@ -59,6 +60,13 @@ const filesAndFoldersReducer = (
         action.filesAndFoldersId,
         "hash",
         action.hash
+      );
+    case ADD_COMMENTS_ON_FILES_AND_FOLDERS:
+      return setFilesAndFoldersProp(
+        state,
+        action.filesAndFoldersId,
+        "comments",
+        action.comments
       );
     default:
       return state;

@@ -9,7 +9,8 @@ import { FilesAndFolders } from "./files-and-folders-types";
 export const createFilesAndFolders = ({
   id,
   alias = "",
-  hash = ""
+  hash = "",
+  comments = ""
 }): FilesAndFolders => ({
   alias,
   children: [],

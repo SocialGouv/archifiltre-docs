@@ -8,6 +8,9 @@ export const createEmptyStore = (): StoreState => ({
   filesAndFolders: wrapStoreWithUndoable({
     filesAndFolders: {}
   }),
+  filesAndFoldersMetadata: {
+    filesAndFoldersMetadata: {}
+  },
   tags: wrapStoreWithUndoable({
     tags: {}
   })

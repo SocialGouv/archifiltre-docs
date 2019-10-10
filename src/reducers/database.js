@@ -11,6 +11,7 @@ import * as METS from "exporters/mets";
 import store from "./store.ts";
 import * as tagActions from "./tags/tags-actions.ts";
 import * as filesAndFoldersActions from "./files-and-folders/files-and-folders-actions.ts";
+import * as filesAndFoldersMetadataActions from "./files-and-folders-metadata/files-and-folders-metadata-actions.ts";
 import { getTagsFromStore } from "./tags/tags-selectors";
 import { updateFilesAndFolderHashes } from "./files-and-folders/files-and-folders-thunks";
 
@@ -93,6 +94,22 @@ const set = next_state => () => {
     filesAndFoldersActions.initializeFilesAndFolders(
       next_state.files_and_folders
     )
+  );
+  const metadata = Object.entries(next_state.files_and_folders).reduce(
+    (metadataMap, [id, ff]) => ({
+      ...metadataMap,
+      [id]: {
+        lastModifiedAverage: ff.last_modified_average,
+        lastModifiedMax: ff.last_modified_max,
+        lastModifiedMedian: ff.last_modified_median,
+        lastModifiedMin: ff.last_modified_min
+      }
+    }),
+    {}
+  );
+
+  store.dispatch(
+    filesAndFoldersMetadataActions.initFilesAndFoldersMetatada(metadata)
   );
   return VirtualFileSystem.fromJs(next_state);
 };

@@ -5,6 +5,7 @@ import { FilesAndFolders } from "./files-and-folders-types";
  * @param id
  * @param alias
  * @param hash
+ * @param comments
  */
 export const createFilesAndFolders = ({
   id,

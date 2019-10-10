@@ -18,73 +18,77 @@ import path from "path";
 import Icon, { FOLDER_ICON, PAGE_ICON, PAGE_MULTIPLE_ICON } from "./icon";
 import ClickableIcon from "./clickable-icon";
 
-const folder_of_name_tr = pick({
+const FILE_OR_FOLDER_NAME_TEXT = pick({
   en: "Folder of file's name",
   fr: "Nom du répertoire ou fichier"
 });
-const real_name_tr = pick({
+const FILE_OR_FOLDER_REAL_NAME_TEXT = pick({
   en: "Real name",
   fr: "Nom réel"
 });
-const size_tr = pick({
+const SIZE_TEXT = pick({
   en: "Size",
   fr: "Taille"
 });
 
-const hash_tr = pick({
+const HASH_TEXT = pick({
   en: "Hash",
   fs: "Hash"
 });
 
 const pad = "1em";
 
-const cells_style = {
+const cellsStyle = {
   borderRadius: "1em",
   padding: "0.6em 1em 0 1em",
   fontSize: "0.8em",
   height: "8em"
 };
 
-const info_cell_style = {
+const infoCellStyle = {
   fontSize: "0.8em"
 };
 
-const margin_padding_compensate = {
+const marginPaddingCompensate = {
   padding: "0.2em 0.8em"
 };
 
-const ElementIcon = props => {
-  const placeholder = props.placeholder;
-  const is_folder = props.is_folder;
-  const fillColor = props.fillColor;
-  const node_id = props.node_id;
-  const icon = is_folder ? FOLDER_ICON : PAGE_ICON;
+const ElementIcon = ({
+  placeholder,
+  isFolder,
+  fillColor,
+  filesAndFoldersId,
+  onClick
+}) => {
+  const icon = isFolder ? FOLDER_ICON : PAGE_ICON;
 
   if (placeholder) {
     return <Icon icon={PAGE_MULTIPLE_ICON} color={Color.placeholder()} />;
   }
 
-  const color = fillColor(node_id);
-  return <ClickableIcon icon={icon} color={color} onClick={props.onClick} />;
+  const color = fillColor(filesAndFoldersId);
+  return <ClickableIcon icon={icon} color={color} onClick={onClick} />;
 };
 
-const Name = props => {
-  const placeholder = props.placeholder;
-  const display_name = props.display_name;
-  const bracket_name = props.bracket_name;
-  const n_name = props.n_name;
-
+const Name = ({
+  displayName = "",
+  placeholder,
+  bracketName = "",
+  nodeName = "",
+  filesAndFoldersId,
+  onChangeAlias
+}) => {
   if (placeholder) {
-    return <div style={{ fontWeight: "bold" }}>{folder_of_name_tr}</div>;
+    return <div style={{ fontWeight: "bold" }}>{FILE_OR_FOLDER_NAME_TEXT}</div>;
   } else {
     return (
-      <span className="edit_hover_container" style={margin_padding_compensate}>
+      <span className="edit_hover_container" style={marginPaddingCompensate}>
         <RIEInput
-          value={display_name.length > 0 ? display_name : bracket_name}
-          change={props.onChangeAlias(
+          value={displayName || bracketName}
+          change={onChangeAlias(
             "new_display_name",
-            props.node_id,
-            n_name
+            filesAndFoldersId,
+            nodeName
           )}
           className="editable_text element_name bold"
           propName="new_display_name"
@@ -97,152 +101,140 @@ const Name = props => {
 };
 
 const RealName = props => {
+  const { bracketName } = props;
   const placeholder = props.placeholder;
-  const bracket_name = props.bracket_name;
 
   if (placeholder) {
-    return <div style={{ fontStyle: "italic" }}>({real_name_tr})</div>;
+    return (
+      <div style={{ fontStyle: "italic" }}>
+        ({FILE_OR_FOLDER_REAL_NAME_TEXT})
+      </div>
+    );
   } else {
     return (
       <div
         style={{
           fontStyle: "italic",
-          visibility: bracket_name === "" ? "hidden" : ""
+          visibility: bracketName === "" ? "hidden" : ""
         }}
       >
-        ({bracket_name})
+        ({bracketName})
       </div>
     );
   }
 };
 
-const InfoCell = props => {
-  const api = props.api;
-  const placeholder = props.placeholder;
-  const c_size = props.c_size;
-  const node_id = props.node_id;
-
-  let size_label;
-  let component;
-  if (placeholder) {
-    size_label = "...";
-    component = <LastModifiedReporter api={api} placeholder={true} />;
-  } else {
-    size_label = c_size;
-    component = (
-      <LastModifiedReporter api={api} id={node_id} placeholder={false} />
-    );
-  }
-
-  return (
-    <div style={info_cell_style}>
-      <div>
-        <b>{size_tr} :</b> {size_label}
-      </div>
-      <div>
-        <b>{hash_tr} :</b> {props.hash || "..."}
-      </div>
-      <br />
-      {component}
-    </div>
-  );
-};
-
-const Report = props => {
-  const { api, createTag, untag } = props;
-  const isActive = props.isFocused || props.isLocked;
-  let icon, name, real_name, info_cell, tags_cell, comments_cell;
-
-  if (isActive) {
-    const node = props.node;
-    const n_children = node.get("children");
-    const n_name = node.get("name");
-
-    const c_size = octet2HumanReadableFormat(node.get("size"));
-    const hash = node.get("hash");
-
-    const c_alias = node.get("alias");
-    const c_comments = node.get("comments");
-
-    const display_name = c_alias === "" ? n_name : c_alias;
-    const bracket_name = c_alias === "" ? "" : n_name;
-
-    const is_folder = n_children.size > 0;
-    icon = (
+const NameCell = ({
+  placeholder,
+  bracketName,
+  nodeName,
+  displayName,
+  filesAndFoldersId,
+  isFolder,
+  fillColor,
+  originalPath,
+  onChangeAlias
+}) => (
+  <div className="grid-x align-middle" style={{ height: "3.2em" }}>
+    <div className="cell shrink" style={{ paddingRight: pad }}>
       <ElementIcon
-        is_folder={is_folder}
-        fillColor={props.fillColor}
-        node_id={props.node_id}
+        placeholder={placeholder}
+        isFolder={isFolder}
+        fillColor={fillColor}
+        filesAndFoldersId={filesAndFoldersId}
         onClick={() => {
-          const originalPath = api.database.getOriginalPath();
-          const itemPath = path.join(originalPath, "..", props.node_id);
+          const itemPath = path.join(originalPath, "..", filesAndFoldersId);
           shell.openItem(itemPath);
         }}
       />
-    );
-
-    name = (
-      <Name
-        onChangeAlias={props.onChangeAlias}
-        node_id={props.node_id}
-        display_name={display_name}
-        bracket_name={bracket_name}
-        n_name={n_name}
-      />
-    );
-
-    real_name = <RealName bracket_name={bracket_name} />;
-
-    info_cell = (
-      <InfoCell api={api} c_size={c_size} hash={hash} node_id={props.node_id} />
-    );
-
-    tags_cell = (
-      <TagsCell
-        api={api}
-        is_dummy={false}
-        cells_style={cells_style}
-        tagsForCurrentFile={props.tagsForCurrentFile}
-        node_id={props.node_id}
-        createTag={createTag}
-        untag={untag}
-      />
-    );
-    comments_cell = (
-      <CommentsCell
-        api={api}
-        is_dummy={false}
-        cells_style={cells_style}
-        comments={c_comments}
-        node_id={props.node_id}
-      />
-    );
-  } else {
-    icon = <ElementIcon placeholder={true} />;
-    name = <Name placeholder={true} />;
-    real_name = <RealName placeholder={true} />;
-    info_cell = <InfoCell api={api} placeholder={true} />;
-    tags_cell = (
-      <TagsCell api={api} is_dummy={true} cells_style={cells_style} />
-    );
-    comments_cell = (
-      <CommentsCell api={api} is_dummy={true} cells_style={cells_style} />
-    );
-  }
-
-  const name_cell = (
-    <div className="grid-x align-middle" style={{ height: "3.2em" }}>
-      <div className="cell shrink" style={{ paddingRight: pad }}>
-        {icon}
-      </div>
-      <div className="cell auto">
-        <div className="grid-x">
-          <div className="cell small-12">{name}</div>
-          <div className="cell small-12">{real_name}</div>
+    </div>
+    <div className="cell auto">
+      <div className="grid-x">
+        <div className="cell small-12">
+          <Name
+            placeholder={placeholder}
+            onChangeAlias={onChangeAlias}
+            filesAndFoldersId={filesAndFoldersId}
+            displayName={displayName}
+            bracketName={bracketName}
+            nodeName={nodeName}
+          />
+        </div>
+        <div className="cell small-12">
+          {" "}
+          <RealName placeholder={placeholder} bracketName={bracketName} />
         </div>
       </div>
     </div>
+  </div>
+);
+
+const InfoCell = ({
+  placeholder = false,
+  filesAndFolders,
+  filesAndFoldersId,
+  filesAndFoldersMetadata
+}) => {
+  const currentFilesAndFolders = filesAndFolders[filesAndFoldersId];
+  const hashLabel = placeholder ? "..." : currentFilesAndFolders.hash;
+  const sizeLabel = placeholder
+    ? "..."
+    : octet2HumanReadableFormat(
+        filesAndFoldersMetadata[filesAndFoldersId].childrenTotalSize
+      );
+
+  return (
+    <div style={infoCellStyle}>
+      <div>
+        <b>{SIZE_TEXT} :</b> {sizeLabel}
+      </div>
+      <div>
+        <b>{HASH_TEXT} :</b> {hashLabel}
+      </div>
+      <br />
+      <LastModifiedReporter
+        filesAndFoldersId={filesAndFoldersId}
+        placeholder={placeholder}
+        filesAndFoldersMetadata={filesAndFoldersMetadata}
+      />
+    </div>
   );
+};
+
+const Report = ({
+  createTag,
+  untag,
+  updateComment,
+  currentFilesAndFolders,
+  filesAndFoldersId,
+  filesAndFolders,
+  filesAndFoldersMetadata,
+  tagsForCurrentFile,
+  originalPath,
+  onChangeAlias,
+  fillColor,
+  isFocused,
+  isLocked
+}) => {
+  const isActive = isFocused || isLocked;
+
+  let children = [];
+  let nodeName = "";
+  let nodeAlias = "";
+  let nodeComments = "";
+  let displayName = "";
+  let bracketName = "";
+  let isFolder = false;
+
+  if (isActive) {
+    children = currentFilesAndFolders.children;
+    nodeName = currentFilesAndFolders.name;
+    nodeAlias = currentFilesAndFolders.alias;
+    nodeComments = currentFilesAndFolders.comments;
+    displayName = nodeAlias === "" ? nodeName : nodeAlias;
+    bracketName = nodeAlias === "" ? "" : nodeName;
+    isFolder = children.length > 0;
+  }
 
   return (
     <div
@@ -256,59 +248,102 @@ const Report = props => {
         <div className="cell small-8" style={{ paddingRight: pad }}>
           <div className="grid-x">
             <div className="cell small-12" style={{ paddingBottom: pad }}>
-              {name_cell}
+              <NameCell
+                placeholder={!isActive}
+                filesAndFoldersId={filesAndFoldersId}
+                nodeName={nodeName}
+                displayName={displayName}
+                bracketName={bracketName}
+                fillColor={fillColor}
+                isFolder={isFolder}
+                onChangeAlias={onChangeAlias}
+                originalPath={originalPath}
+              />
             </div>
             <div className="cell small-6" style={{ paddingRight: pad }}>
-              {tags_cell}
+              <TagsCell
+                is_dummy={!isActive}
+                cells_style={cellsStyle}
+                tagsForCurrentFile={tagsForCurrentFile}
+                filesAndFoldersId={filesAndFoldersId}
+                createTag={createTag}
+                untag={untag}
+              />
             </div>
-            <div className="cell small-6">{comments_cell}</div>
+            <div className="cell small-6">
+              <CommentsCell
+                is_dummy={!isActive}
+                cells_style={cellsStyle}
+                comments={nodeComments}
+                filesAndFoldersId={filesAndFoldersId}
+                updateComment={updateComment}
+              />
+            </div>
           </div>
         </div>
-        <div className="cell small-4">{info_cell}</div>
+        <div className="cell small-4">
+          <InfoCell
+            filesAndFolders={filesAndFolders}
+            filesAndFoldersId={filesAndFoldersId}
+            filesAndFoldersMetadata={filesAndFoldersMetadata}
+            placeholder={!isActive}
+          />
+        </div>
       </div>
     </div>
   );
 };
 
-export default function ReportApiToProps(props) {
-  const { api, createTag, untag } = props;
+export default function ReportApiToProps({
+  api,
+  createTag,
+  untag,
+  tagsForCurrentFile,
+  filesAndFolders,
+  filesAndFoldersId,
+  filesAndFoldersMetadata,
+  updateComment,
+  fillColor
+}) {
   const icicle_state = api.icicle_state;
   const database = api.database;
 
-  const sequence = icicle_state.sequence();
-  const getFfByFfId = database.getFfByFfId;
-
-  const node_id = sequence[sequence.length - 1];
+  const originalPath = api.database.getOriginalPath();
 
   const isFocused = icicle_state.isFocused();
   const isLocked = icicle_state.isLocked();
 
   const isActive = isFocused || isLocked;
 
-  const node = isActive ? getFfByFfId(node_id) : {};
+  const currentFilesAndFolders = isActive
+    ? filesAndFolders[filesAndFoldersId]
+    : {};
 
-  const totalSize = database.volume();
+  // TODO: Refactor this method to use a standard value instead of the riekInputResult value
+  const onChangeAlias = (propName, id, oldName) => riekInputResult => {
+    let newAlias =
+      riekInputResult[propName] === oldName ? "" : riekInputResult[propName];
+    newAlias = newAlias.replace(/^\s*|\s*$/g, "");
 
-  const onChangeAlias = (prop_name, id, old_name) => n => {
-    let new_alias = n[prop_name] === old_name ? "" : n[prop_name];
-    new_alias = new_alias.replace(/^\s*|\s*$/g, "");
-
-    database.updateAlias(() => new_alias, id);
+    database.updateAlias(() => newAlias, id);
     api.undo.commit();
   };
 
-  props = {
-    ...props,
-    isFocused,
-    isLocked,
-    node,
-    node_id,
-    tagsForCurrentFile: props.tagsForCurrentFile,
-    total_size: totalSize,
-    onChangeAlias,
-    createTag,
-    untag
-  };
-
-  return <Report {...props} />;
+  return (
+    <Report
+      currentFilesAndFolders={currentFilesAndFolders}
+      filesAndFoldersId={filesAndFoldersId}
+      filesAndFolders={filesAndFolders}
+      filesAndFoldersMetadata={filesAndFoldersMetadata}
+      tagsForCurrentFile={tagsForCurrentFile}
+      originalPath={originalPath}
+      isFocused={isFocused}
+      isLocked={isLocked}
+      fillColor={fillColor}
+      createTag={createTag}
+      untag={untag}
+      updateComment={updateComment}
+      onChangeAlias={onChangeAlias}
+    />
+  );
 }

@@ -1,9 +1,6 @@
 import React from "react";
 
-import * as ObjectUtil from "util/object-util.ts";
-
 import CommentsEditable from "components/comments-editable";
-
 import pick from "languages";
 
 const comments_tr = pick({
@@ -16,7 +13,7 @@ const your_comments_here_tr = pick({
   fr: "Votre description ici"
 });
 
-class ReportCellComments extends React.Component {
+export default class ReportCellComments extends React.Component {
   constructor(props) {
     super(props);
 
@@ -60,10 +57,9 @@ class ReportCellComments extends React.Component {
     const props = this.props;
     const state = this.state;
 
-    const commitComments = props.commitComments;
     const comments = state.comments;
 
-    commitComments(comments);
+    props.updateComment(comments);
 
     this.setState({
       editing: false,
@@ -194,26 +190,3 @@ class ReportCellComments extends React.Component {
     }
   }
 }
-
-export default props => {
-  const api = props.api;
-  const database = api.database;
-  const undo = api.undo;
-
-  const node_id = props.node_id;
-
-  const commitComments = comments => {
-    const updater = () => comments;
-    database.updateComments(updater, node_id);
-    undo.commit();
-  };
-
-  props = ObjectUtil.compose(
-    {
-      commitComments
-    },
-    props
-  );
-
-  return <ReportCellComments {...props} />;
-};

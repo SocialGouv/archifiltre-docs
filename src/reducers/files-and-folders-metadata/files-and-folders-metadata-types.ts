@@ -6,6 +6,7 @@ export interface FilesAndFoldersMetadata {
   minLastModified: number;
   medianLastModified: number;
   averageLastModified: number;
+  childrenTotalSize: number;
 }
 
 export interface FilesAndFoldersMetadataMap {

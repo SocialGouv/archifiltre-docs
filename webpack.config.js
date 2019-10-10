@@ -77,16 +77,6 @@ module.exports = (env, argv = {}) => ({
         use: { loader: "worker-loader" }
       },
       {
-        test: /\.fork\.js/,
-        use: {
-          loader: "webpack-fork-loader",
-          options: {
-            publicPath: "__dirname + '/'",
-            evalPath: true
-          }
-        }
-      },
-      {
         test: /\.svg/,
         use: [
           {

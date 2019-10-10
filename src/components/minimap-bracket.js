@@ -17,9 +17,13 @@ class MinimapBracket extends React.PureComponent {
 
     if (display_root.length) {
       const ids = display_root;
-      let [minimap_x, minimap_width] = computeWidthRec(ids, x, dx).slice(-1)[0];
+      const [minimap_x, minimapUnboundWidth] = computeWidthRec(
+        ids,
+        x,
+        dx
+      ).slice(-1)[0];
 
-      minimap_width = Math.max(minimap_width, 1);
+      const minimap_width = Math.max(minimapUnboundWidth, 1);
 
       return (
         <g>

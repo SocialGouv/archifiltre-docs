@@ -58,20 +58,13 @@ const ElementIcon = props => {
   const is_folder = props.is_folder;
   const fillColor = props.fillColor;
   const node_id = props.node_id;
+  const icon = is_folder ? FOLDER_ICON : PAGE_ICON;
 
-  let icon;
-  let color;
   if (placeholder) {
     return <Icon icon={PAGE_MULTIPLE_ICON} color={Color.placeholder()} />;
   }
 
-  color = fillColor(node_id);
-  if (is_folder) {
-    icon = FOLDER_ICON;
-  } else {
-    icon = PAGE_ICON;
-  }
-
+  const color = fillColor(node_id);
   return <ClickableIcon icon={icon} color={color} onClick={props.onClick} />;
 };
 
@@ -158,7 +151,7 @@ const InfoCell = props => {
 const Report = props => {
   const { api, createTag, untag } = props;
   const isActive = props.isFocused || props.isLocked;
-  let icon, name, real_name, info_cell, tags_cell, comments_cell, name_cell;
+  let icon, name, real_name, info_cell, tags_cell, comments_cell;
 
   if (isActive) {
     const node = props.node;
@@ -237,7 +230,7 @@ const Report = props => {
     );
   }
 
-  name_cell = (
+  const name_cell = (
     <div className="grid-x align-middle" style={{ height: "3.2em" }}>
       <div className="cell shrink" style={{ paddingRight: pad }}>
         {icon}
@@ -292,9 +285,9 @@ export default function ReportApiToProps(props) {
 
   const isActive = isFocused || isLocked;
 
-  let node = isActive ? getFfByFfId(node_id) : {};
+  const node = isActive ? getFfByFfId(node_id) : {};
 
-  let total_size = database.volume();
+  const totalSize = database.volume();
 
   const onChangeAlias = (prop_name, id, old_name) => n => {
     let new_alias = n[prop_name] === old_name ? "" : n[prop_name];
@@ -311,7 +304,7 @@ export default function ReportApiToProps(props) {
     node,
     node_id,
     tagsForCurrentFile: props.tagsForCurrentFile,
-    total_size,
+    total_size: totalSize,
     onChangeAlias,
     createTag,
     untag

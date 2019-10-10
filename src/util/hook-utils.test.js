@@ -20,11 +20,11 @@ describe("hookUtils", () => {
         hook();
         advanceBy(200);
         hook();
-        expect(throttledHook).not.toBeCalled();
+        expect(throttledHook).not.toHaveBeenCalled();
         advanceBy(400);
         hook();
-        expect(throttledHook).toBeCalledTimes(1);
-        expect(throttledHook).toBeCalledWith(3);
+        expect(throttledHook).toHaveBeenCalledTimes(1);
+        expect(throttledHook).toHaveBeenCalledWith(3);
       });
     });
 
@@ -38,8 +38,8 @@ describe("hookUtils", () => {
         hook();
         advanceBy(200);
         hook();
-        expect(throttledHook).toBeCalledTimes(1);
-        expect(throttledHook).toBeCalledWith(3);
+        expect(throttledHook).toHaveBeenCalledTimes(1);
+        expect(throttledHook).toHaveBeenCalledWith(3);
       });
     });
   });

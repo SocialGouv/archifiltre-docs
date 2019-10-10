@@ -118,8 +118,8 @@ export const recTraverseFileTreeForHook = (hook, path) => {
         recTraverseFileTreeForHook(hook, Path.join(path, a))
       );
     } else {
-      let name = path.split("/")[path.split("/").length - 1];
-      let data = Fs.readFileSync(path);
+      const name = path.split("/")[path.split("/").length - 1];
+      const data = Fs.readFileSync(path);
       hook(name, data);
       return;
     }

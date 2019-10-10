@@ -14,10 +14,10 @@ const animationLoop = () => {
     const visible = animation.visible;
     const measure = animation.measure;
 
-    visible_array.push(visible());
+    visible_array.push(visible(animation_id));
 
     if (visible_array[i]) {
-      measure();
+      measure(animation_id);
     }
   });
 
@@ -26,7 +26,7 @@ const animationLoop = () => {
     const mutate = animation.mutate;
 
     if (visible_array[i]) {
-      mutate();
+      mutate(animation_id);
     }
   });
 

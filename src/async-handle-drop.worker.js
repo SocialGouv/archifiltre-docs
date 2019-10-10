@@ -73,7 +73,7 @@ function loadFolder(folderPath) {
   }
   postMessage({ status: "traverse", count: getTraverseCount() });
 
-  let totalMakeCount = getTraverseCount();
+  const totalMakeCount = getTraverseCount();
   postMessage({ status: "make", count: 0, totalCount: totalMakeCount });
 
   const { hook: makeHook, getCount: getMakeCount } = hookCounter(

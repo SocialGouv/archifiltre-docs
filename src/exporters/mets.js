@@ -14,11 +14,9 @@ const uuidv4 = require("uuid/v4");
 // =================================
 // AUXILIARY FUNCTIONS AND VARIABLES
 // =================================
-const makeObj = (key, value) => {
-  let obj = {};
-  obj[key] = value;
-  return obj;
-};
+const makeObj = (key, value) => ({
+  [key]: value
+});
 
 const makeId = () => {
   return "_" + generateRandomString(40);
@@ -125,7 +123,7 @@ const makePremisAgent = (agentType, agentValue, agentRole) => {
  * @param {string} objectRole an optional role of the linking object
  */
 const makePremisObject = (objectType, objectValue, objectRole) => {
-  let loiContent = [];
+  const loiContent = [];
   loiContent.push(makeObj("premis:linkingObjectIdentifierType", objectType));
   loiContent.push(makeObj("premis:linkingObjectIdentifierValue", objectValue));
   if (objectRole !== undefined) {
@@ -145,7 +143,7 @@ const makePremisObject = (objectType, objectValue, objectRole) => {
  * @param {Object} object an optional linking object
  */
 export const makePremisEvent = (id, type, date, detail, agents, object) => {
-  let premisEvent = [];
+  const premisEvent = [];
   premisEvent.push(
     makeObj("premis:eventIdentifier", [
       makeObj("premis:eventIdentifierType", "UUID"),
@@ -155,13 +153,13 @@ export const makePremisEvent = (id, type, date, detail, agents, object) => {
   premisEvent.push(makeObj("premis:eventType", type));
   if (date !== undefined && date !== "") {
     if (date instanceof Date) {
-      let dateS = dateFormat(date, date_format);
+      const dateS = dateFormat(date, date_format);
       premisEvent.push(makeObj("premis:eventDateTime", dateS));
     } else {
       premisEvent.push(makeObj("premis:eventDateTime", date));
     }
   } else {
-    let nowDate = dateFormat(new Date(), date_format);
+    const nowDate = dateFormat(new Date(), date_format);
     premisEvent.push(makeObj("premis:eventDateTime", nowDate));
   }
   if (detail !== undefined && detail !== "") {
@@ -197,14 +195,14 @@ export const makePremisEvent = (id, type, date, detail, agents, object) => {
  * @param {string} hash md5 hash of the file
  */
 export const makeFileElement = (item, ID, DMDID, hash) => {
-  let original_name = item.get("name");
+  const original_name = item.get("name");
   let alias_name = item.get("alias");
   if (alias_name === "") {
     alias_name = original_name;
   }
-  let internal_URI = "master/" + alias_name;
+  const internal_URI = "master/" + alias_name;
 
-  let file_content = [];
+  const file_content = [];
 
   file_content.push({
     _attr: {
@@ -286,9 +284,9 @@ const recTraverseDB = (
   HMupdate,
   contentWriter
 ) => {
-  let item = readFromFF(root);
-  let tags = readTags(root);
-  let ID = makeId();
+  const item = readFromFF(root);
+  const tags = readTags(root);
+  const ID = makeId();
 
   // Ignore files with exclude tag
   if (tags.includes(DUMMY_EXCLUDE_TAG)) {
@@ -297,25 +295,25 @@ const recTraverseDB = (
 
   if (item.get("children").size === 0) {
     // it's a file
-    let clean_rootpath =
+    const clean_rootpath =
       rootpath.charAt(0) === "/" ? rootpath.substring(1) : rootpath;
-    let URI = Path.join(absolutepath, clean_rootpath, item.get("name"));
-    let data = fs.readFileSync(URI);
-    let hash = MD5(data);
+    const URI = Path.join(absolutepath, clean_rootpath, item.get("name"));
+    const data = fs.readFileSync(URI);
+    const hash = MD5(data);
 
     if (HMread().has(hash)) {
       // doublon !!!
       return;
     }
 
-    let idFile = counters.fileCount;
+    const idFile = counters.fileCount;
     counters.fileCount = idFile + 1;
 
-    let idDmd = counters.dmdCount;
+    const idDmd = counters.dmdCount;
     counters.dmdCount = idDmd + 1;
-    let dmdContent = [];
+    const dmdContent = [];
     // make sure we use / in uri even on Windows
-    let relativeURI = Path.join(clean_rootpath, item.get("name")).replace(
+    const relativeURI = Path.join(clean_rootpath, item.get("name")).replace(
       /\\/g,
       "/"
     );
@@ -327,15 +325,18 @@ const recTraverseDB = (
       ])
     );
 
-    let last_modified = dateFormat(item.get("last_modified_max"), date_format);
-    let comment = item.get("comments");
+    const last_modified = dateFormat(
+      item.get("last_modified_max"),
+      date_format
+    );
+    const comment = item.get("comments");
     if (comment.length > 0) {
       dmdContent.push(makeObj("dc:title", comment.replace(/[^\w ]/g, "_")));
     }
     dmdContent.push(makeObj("dcterms:modified", last_modified));
     addToDmd(makeDmdSec("DMD." + idDmd, dmdContent));
 
-    let item_File = makeFileElement(
+    const item_File = makeFileElement(
       item,
       "master." + idFile,
       "DMD." + idDmd,
@@ -343,10 +344,10 @@ const recTraverseDB = (
     );
     addToMASTER(item_File);
 
-    let idObj = counters.objCount;
+    const idObj = counters.objCount;
     counters.objCount = idObj + 1;
 
-    let itemDIV = makeObjectDiv(
+    const itemDIV = makeObjectDiv(
       item,
       tags,
       "DIV." + (idObj + 2),
@@ -386,11 +387,11 @@ const recTraverseDB = (
  * @param {Array} metsContent preload METS to be filled up
  */
 const makeMetsContent = (state, tags, contentWriter, metsContent) => {
-  let FF = state.get("files_and_folders");
+  const FF = state.get("files_and_folders");
   // let files = FF.filter(a => a.get("children").size === 0);
-  let folderpath = state.get("original_path") + "/../";
+  const folderpath = state.get("original_path") + "/../";
   // Initial counters for numbering the sections
-  let counters = {
+  const counters = {
     dmdCount: 2,
     amdCount: 1,
     fileCount: 1,
@@ -398,14 +399,14 @@ const makeMetsContent = (state, tags, contentWriter, metsContent) => {
   };
 
   // Arrays to store the sections while traversing the FF
-  let DMD_children = [];
-  let MASTER_children = [];
-  let DIV_children = [];
+  const DMD_children = [];
+  const MASTER_children = [];
+  const DIV_children = [];
 
   MASTER_children.push({ _attr: { USE: "master", ID: "GRP.1" } });
 
   // Make first dmd for the group
-  let dmdContent = [];
+  const dmdContent = [];
   // Need to get the item of the first folder to retrieve the title (in the comment ?)
   dmdContent.push(
     makeObj("dc:title", "DUMMMY_TITLE"),
@@ -418,8 +419,8 @@ const makeMetsContent = (state, tags, contentWriter, metsContent) => {
   DMD_children.push(makeDmdSec("DMD.1", dmdContent));
 
   // Create the digiprovMD sections
-  let digiprovsContent = [];
-  let amdIds = [];
+  const digiprovsContent = [];
+  const amdIds = [];
 
   // Define the event for the whole group
   // First a 'preconditioning' event
@@ -491,7 +492,7 @@ const makeMetsContent = (state, tags, contentWriter, metsContent) => {
   });
 
   //Composition of StructMap
-  let groupContent = [];
+  const groupContent = [];
   groupContent.push({
     _attr: {
       ID: "DIV.2",
@@ -506,7 +507,7 @@ const makeMetsContent = (state, tags, contentWriter, metsContent) => {
   });
 
   // Build the physical structMap
-  let DIV_root = makeObj("mets:structMap", [
+  const DIV_root = makeObj("mets:structMap", [
     { _attr: makeObj("TYPE", "physical") },
     makeObj("mets:div", [
       { _attr: { ID: "DIV.1", TYPE: "set" } },
@@ -534,26 +535,26 @@ const makeMetsContent = (state, tags, contentWriter, metsContent) => {
  * @param {Object} tags - The tag map of the redux store
  */
 export const makeSIP = (state, tags) => {
-  let sip = new JSZip();
+  const sip = new JSZip();
 
-  let content = sip.folder("master");
-  let addToContent = (filename, data) => {
+  const content = sip.folder("master");
+  const addToContent = (filename, data) => {
     content.file(filename.replace(/[^a-zA-Z0-9.\\/+=@_]+/g, "_"), data);
   };
 
-  let metsContent = [];
+  const metsContent = [];
   metsContent.push({ _attr: makeManifestRootAttributes() });
   metsContent.push(makeHeader(state.get("session_name")));
 
   makeMetsContent(state, tags, addToContent, metsContent); // will also compute ZIP
 
-  let manifest_obj = [
+  const manifest_obj = [
     {
       "mets:mets": metsContent
     }
   ];
 
-  let manifest_str = XML(manifest_obj, { indent: "  " });
+  const manifest_str = XML(manifest_obj, { indent: "  " });
 
   sip.file("manifest.xml", manifest_str);
   console.log(

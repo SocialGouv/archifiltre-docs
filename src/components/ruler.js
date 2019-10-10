@@ -21,8 +21,8 @@ const Ruler = props => {
   let res;
 
   if (props.isFocused) {
-    let text = makeSizeString(props.node_size, props.total_size);
-    let mode = computeRulerTextDisplayMode(
+    const text = makeSizeString(props.node_size, props.total_size);
+    const mode = computeRulerTextDisplayMode(
       props.dims.x + props.dims.dx / 2,
       text.length,
       ruler_dx,
@@ -60,20 +60,20 @@ const Ruler = props => {
 };
 
 export const octet2HumanReadableFormat = o => {
-  let unit = byte_char;
-  let To = o / Math.pow(1000, 4);
+  const unit = byte_char;
+  const To = o / Math.pow(1000, 4);
   if (To > 1) {
     return Math.round(To * 10) / 10 + " T" + unit;
   }
-  let Go = o / Math.pow(1000, 3);
+  const Go = o / Math.pow(1000, 3);
   if (Go > 1) {
     return Math.round(Go * 10) / 10 + " G" + unit;
   }
-  let Mo = o / Math.pow(1000, 2);
+  const Mo = o / Math.pow(1000, 2);
   if (Mo > 1) {
     return Math.round(Mo * 10) / 10 + " M" + unit;
   }
-  let ko = o / 1000;
+  const ko = o / 1000;
   if (ko > 1) {
     return Math.round(ko * 10) / 10 + " k" + unit;
   }
@@ -81,14 +81,14 @@ export const octet2HumanReadableFormat = o => {
 };
 
 const precisionRound = (number, precision) => {
-  let factor = Math.pow(10, precision);
+  const factor = Math.pow(10, precision);
   return Math.round(number * factor) / factor;
 };
 
 export const makeSizeString = (o, total) => {
-  let sizeString = octet2HumanReadableFormat(o);
+  const sizeString = octet2HumanReadableFormat(o);
 
-  let percentage = precisionRound((100 * o) / total, 1);
+  const percentage = precisionRound((100 * o) / total, 1);
   let percentageString = percentage + "%";
   if (percentage < 0.1) {
     percentageString = "< 0.1%";

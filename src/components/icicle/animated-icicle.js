@@ -59,7 +59,7 @@ export default class AnimatedIcicle extends PureComponent {
     );
   }
 
-  ani(dom_element, inv, target_x, target_dx, x, dx) {
+  ani(domElement, inv, target_x, target_dx, x, dx) {
     return new Promise(resolve => {
       const getTime = () => new Date().getTime();
       const init_time = getTime();
@@ -69,9 +69,6 @@ export default class AnimatedIcicle extends PureComponent {
         return Math.min(1, (current_time - init_time) / target_time);
       };
 
-      let animation_id;
-
-      // [translateX, scaleX, opacity]
       const init = [0, 1, 1];
       const target = [target_x - x, target_dx / dx, 0];
 
@@ -86,24 +83,24 @@ export default class AnimatedIcicle extends PureComponent {
 
       const visible = () => true;
       const measure = () => {};
-      const mutate = () => {
-        const zero_to_one = zeroToOne();
-        let translate_x = vector[0](zero_to_one);
-        let scale_x = vector[1](zero_to_one);
-        let opacity = vector[2](zero_to_one);
+      const mutate = animationId => {
+        const ratio = zeroToOne();
+        const translateX = vector[0](ratio);
+        const scaleX = vector[1](ratio);
+        const opacity = vector[2](ratio);
 
-        dom_element.style.willChange = "transform, opacity";
-        dom_element.style.transform = `translateX(${translate_x}px) scaleX(${scale_x})`;
-        dom_element.style.opacity = opacity;
+        domElement.style.willChange = "transform, opacity";
+        domElement.style.transform = `translateX(${translateX}px) scaleX(${scaleX})`;
+        domElement.style.opacity = opacity;
 
-        if (zero_to_one >= 1) {
-          dom_element.style.willChange = "unset";
-          clear(animation_id);
+        if (ratio >= 1) {
+          domElement.style.willChange = "unset";
+          clear(animationId);
           resolve();
         }
       };
 
-      animation_id = animate(visible, measure, mutate);
+      animate(visible, measure, mutate);
     });
   }
 

@@ -20,11 +20,9 @@ class AllTagsItem extends React.Component {
   }
 
   render() {
-    let res;
+    const { tag } = this.props;
 
-    let tag = this.props.tag;
-
-    let component_style = {
+    const componentStyle = {
       position: "relative",
       width: "100%",
       background: "none",
@@ -32,13 +30,13 @@ class AllTagsItem extends React.Component {
       padding: "4px 0.5em"
     };
 
-    let content_style = {
+    const contentStyle = {
       opacity: this.props.opacity,
       position: "relative",
       zIndex: "1"
     };
 
-    let background_style = {
+    const backgroundStyle = {
       transition: "all 0.4s",
       WebkitTransition: "all 0.4s",
       height: "100%",
@@ -47,13 +45,13 @@ class AllTagsItem extends React.Component {
       backgroundColor: "rgb(10, 50, 100)"
     };
 
-    let delete_bubble = (
+    const deleteBubble = (
       <div className="tags_bubble tags_cross" onClick={this.props.deleteTag}>
         <i className="fi-trash" />
       </div>
     );
 
-    let count_or_action_bubble = this.props.shoud_display_count ? (
+    const countOrActionBubble = this.props.shoud_display_count ? (
       <div className="tags_bubble tags_count">{this.props.tag_number}</div>
     ) : this.props.node_has_tag ? (
       <div
@@ -93,7 +91,7 @@ class AllTagsItem extends React.Component {
       );
     }
 
-    let pencil = this.props.editing ? (
+    const pencil = this.props.editing ? (
       <span />
     ) : (
       <i
@@ -102,18 +100,18 @@ class AllTagsItem extends React.Component {
       />
     );
 
-    res = (
+    return (
       <div
         className="edit_hover_container"
         onMouseEnter={this.props.highlightTag}
-        style={component_style}
+        style={componentStyle}
       >
-        <div className="grid-x" style={content_style}>
+        <div className="grid-x" style={contentStyle}>
           <div className="cell shrink" style={cell_shrink_style}>
-            {delete_bubble}
+            {deleteBubble}
           </div>
           <div className="cell shrink" style={cell_shrink_style}>
-            {count_or_action_bubble}
+            {countOrActionBubble}
           </div>
           <div className="cell auto" style={cell_shrink_style}>
             {tag_pill}
@@ -122,11 +120,9 @@ class AllTagsItem extends React.Component {
             {pencil}
           </div>
         </div>
-        <div className="background" style={background_style} />
+        <div className="background" style={backgroundStyle} />
       </div>
     );
-
-    return res;
   }
 }
 

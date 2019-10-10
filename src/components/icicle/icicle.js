@@ -125,7 +125,7 @@ export default class Icicle extends PureComponent {
 
     const icicle_state = api.icicle_state;
 
-    let style = {};
+    const style = {};
     if (icicle_state.isFocused() || icicle_state.isLocked()) {
       style.opacity = 0.3;
     }

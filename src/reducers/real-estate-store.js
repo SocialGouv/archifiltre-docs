@@ -9,7 +9,7 @@ function makeStore(compiled_real_estate) {
   const writer_key = [];
   const reader_key = [];
 
-  for (let key in flat_api) {
+  for (const key in flat_api) {
     if (flat_api[key].reader) {
       reader_key.push(key);
     }
@@ -77,8 +77,8 @@ function makeStore(compiled_real_estate) {
 
 const flattenApi = api => {
   const flat_api = {};
-  for (let key1 in api) {
-    for (let key2 in api[key1]) {
+  for (const key1 in api) {
+    for (const key2 in api[key1]) {
       flat_api[key1 + "|" + key2] = api[key1][key2];
     }
   }
@@ -87,7 +87,7 @@ const flattenApi = api => {
 
 const unflattenApi = flat_api => {
   const api = {};
-  for (let key in flat_api) {
+  for (const key in flat_api) {
     const split = key.split("|");
     if (api[split[0]] === undefined) {
       api[split[0]] = {};

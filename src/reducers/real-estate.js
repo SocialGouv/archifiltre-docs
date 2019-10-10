@@ -12,11 +12,11 @@ export const create = state => {
   const initialState = s => set(state.initialState(), s);
 
   const reader = {};
-  for (let key in state.reader) {
+  for (const key in state.reader) {
     updateGetAndSet(get, set, property_name, key, state.reader, reader);
   }
   const writer = {};
-  for (let key in state.writer) {
+  for (const key in state.writer) {
     updateGetAndSet(get, set, property_name, key, state.writer, writer);
   }
 
@@ -116,7 +116,7 @@ export const compile = real_estate => {
   const initialState = () => real_estate.initialState({});
   const api = {};
 
-  for (let key in real_estate.reader) {
+  for (const key in real_estate.reader) {
     const f = real_estate.reader[key];
     const get = compileGet(f.get);
     const cachedF = cache(f);
@@ -126,7 +126,7 @@ export const compile = real_estate => {
     api[key].reader = true;
   }
 
-  for (let key in real_estate.writer) {
+  for (const key in real_estate.writer) {
     const f = real_estate.writer[key];
     const get = compileGet(f.get);
     const set = compileSet(f.get, f.set);
@@ -136,7 +136,7 @@ export const compile = real_estate => {
     api[key].writer = true;
   }
 
-  for (let key in api) {
+  for (const key in api) {
     const split = key.split("|");
 
     if (api[split[0]] === undefined) {
@@ -160,11 +160,11 @@ export const createHigherOrder = higher_order => {
     const initialState = () =>
       higher_order.initialState(real_estate.initialState({}));
     const reader = {};
-    for (let key in real_estate.reader) {
+    for (const key in real_estate.reader) {
       updateGetAndSet(get, set, property_name, key, real_estate.reader, reader);
     }
     const writer = {};
-    for (let key in real_estate.writer) {
+    for (const key in real_estate.writer) {
       updateGetAndSet(get, set, property_name, key, real_estate.writer, writer);
     }
     return create({

@@ -221,7 +221,7 @@ class ReportCellTags extends React.Component {
   }
 }
 
-export default props => {
+const ReportCellTagsApiToProps = props => {
   const { api, createTag, untag } = props;
   const commit = api.undo.commit;
 
@@ -244,3 +244,5 @@ export default props => {
     />
   );
 };
+
+export default ReportCellTagsApiToProps;

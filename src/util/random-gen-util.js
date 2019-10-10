@@ -4,7 +4,7 @@ export function generateRandomString(num) {
   // a-z => 97-122 (26)
   let s = "";
   for (let i = 0; i < num; i++) {
-    let tmp = Math.random() * 61;
+    const tmp = Math.random() * 61;
     if (tmp < 10) {
       s += String.fromCharCode(48 + tmp);
     } else {

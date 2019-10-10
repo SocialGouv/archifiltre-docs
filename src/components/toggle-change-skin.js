@@ -24,7 +24,7 @@ const dates = pick({
 });
 
 const Presentational = props => {
-  let button_style = {
+  const button_style = {
     margin: 0,
     padding: "0.3em 10%",
     fontSize: "1em",

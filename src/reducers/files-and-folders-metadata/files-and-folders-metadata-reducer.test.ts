@@ -12,6 +12,7 @@ describe("files-and-folders-metadata-reducer", () => {
       const addedMetadata = {
         testId: {
           averageLastModified: 3000,
+          childrenTotalSize: 10000,
           maxLastModified: 10000,
           medianLastModified: 4000,
           minLastModified: 1000

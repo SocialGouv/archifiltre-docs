@@ -100,6 +100,7 @@ const set = next_state => () => {
       ...metadataMap,
       [id]: {
         lastModifiedAverage: ff.last_modified_average,
+        childrenTotalSize: ff.size,
         lastModifiedMax: ff.last_modified_max,
         lastModifiedMedian: ff.last_modified_median,
         lastModifiedMin: ff.last_modified_min

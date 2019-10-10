@@ -1,123 +1,99 @@
 import React from "react";
 
 import * as Color from "util/color-util";
-import * as ObjectUtil from "util/object-util.ts";
 
-const least_rgba = Color.toRgba(Color.leastRecentDate());
-const most_rgba = Color.toRgba(Color.mostRecentDate());
+const earliestColor = Color.toRgba(Color.leastRecentDate());
+const latestColor = Color.toRgba(Color.mostRecentDate());
+const svgWidth = 100;
+const svgHeight = 5;
+const cursorWidthRatio = 0.0075;
+const cursorWidth = svgWidth * cursorWidthRatio;
 
-class TimeGradient extends React.PureComponent {
-  constructor(props) {
-    super(props);
+const CURSOR_ARRAY_KEYS = [
+  { key: "min", getter: metadata => metadata.lastModifiedMin },
+  { key: "median", getter: metadata => metadata.lastModifiedMedian },
+  { key: "max", getter: metadata => metadata.lastModifiedMax }
+];
 
-    this.state = {
-      svg_width: 100,
-      svg_height: 5
-    };
-  }
+const Cursor = ({ ratio }) => (
+  <g>
+    <rect
+      x={ratio * svgWidth - cursorWidth / 2}
+      y={0}
+      width={cursorWidth}
+      height={svgHeight}
+      fill="black"
+    />
+  </g>
+);
 
-  render() {
-    const svg_width = this.state.svg_width;
-    const svg_height = this.state.svg_height;
+const TimeGradient = ({ filesAndFoldersId, filesAndFoldersMetadata }) => {
+  const rootId = "";
 
-    const cursor_width = svg_width * 0.0075;
+  const rootMetadata = filesAndFoldersMetadata[rootId];
+  const maxTime = rootMetadata.lastModifiedMax;
+  const minTime = rootMetadata.lastModifiedMin;
+  const computeRelativePosition = time => {
+    return (time - minTime) / (maxTime - minTime);
+  };
 
-    const root_node = this.props.getFfByFfId(this.props.root_id);
+  let cursorArray = [];
+  if (filesAndFoldersId) {
+    const currentFileMetadata = filesAndFoldersMetadata[filesAndFoldersId];
+    cursorArray = CURSOR_ARRAY_KEYS.map(({ key, getter }) => (
+      <Cursor
+        key={key}
+        ratio={computeRelativePosition(getter(currentFileMetadata))}
+      />
+    ));
 
-    const max_time = root_node.get("last_modified_max");
-    const min_time = root_node.get("last_modified_min");
-    const zeroToOne = (prop_name, id) => {
-      const node = this.props.getFfByFfId(id);
-
-      const time = node.get("last_modified_" + prop_name);
-      return (time - min_time) / (max_time - min_time);
-    };
-
-    let cursor_array = [];
-    if (this.props.id) {
-      cursor_array = ["min", "median", "max"];
-      cursor_array = cursor_array.map(prop_name => {
-        return (
-          <g key={prop_name}>
-            <rect
-              x={
-                zeroToOne(prop_name, this.props.id) * svg_width -
-                cursor_width / 2
-              }
-              y={0}
-              width={cursor_width}
-              height={svg_height}
-              fill="black"
-            />
-          </g>
-        );
-      });
-
-      cursor_array.push(
-        <g key={"average"}>
-          <circle
-            cx={zeroToOne("average", this.props.id) * svg_width}
-            cy={svg_height / 2}
-            r={cursor_width}
-            fill="red"
-          />
-        </g>
-      );
-    }
-
-    return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox={"0 0 " + svg_width + " " + svg_height}
-        width="100%"
-        height="100%"
-        preserveAspectRatio="none"
-        ref={this.ref}
-      >
-        <g>
-          <defs>
-            <linearGradient
-              id="time-gradient-grad1"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="0%"
-            >
-              <stop offset="0%" style={{ stopColor: least_rgba }} />
-              <stop offset="100%" style={{ stopColor: most_rgba }} />
-            </linearGradient>
-          </defs>
-          <rect
-            x={0}
-            y={0}
-            width={svg_width}
-            height={svg_height}
-            fill="url(#time-gradient-grad1)"
-          />
-          {cursor_array}
-        </g>
-      </svg>
+    cursorArray.push(
+      <g key={"average"}>
+        <circle
+          cx={
+            computeRelativePosition(currentFileMetadata.lastModifiedAverage) *
+            svgWidth
+          }
+          cy={svgHeight / 2}
+          r={cursorWidth}
+          fill="red"
+        />
+      </g>
     );
   }
-}
 
-export default props => {
-  const api = props.api;
-  const icicle_state = api.icicle_state;
-  const database = api.database;
-
-  const sequence = icicle_state.sequence();
-
-  const id = sequence.slice(-1)[0];
-
-  props = ObjectUtil.compose(
-    {
-      getFfByFfId: database.getFfByFfId,
-      root_id: database.rootFfId(),
-      id
-    },
-    props
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox={"0 0 " + svgWidth + " " + svgHeight}
+      width="100%"
+      height="100%"
+      preserveAspectRatio="none"
+    >
+      <g>
+        <defs>
+          <linearGradient
+            id="time-gradient-grad1"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="0%"
+          >
+            <stop offset="0%" style={{ stopColor: earliestColor }} />
+            <stop offset="100%" style={{ stopColor: latestColor }} />
+          </linearGradient>
+        </defs>
+        <rect
+          x={0}
+          y={0}
+          width={svgWidth}
+          height={svgHeight}
+          fill="url(#time-gradient-grad1)"
+        />
+        {cursorArray}
+      </g>
+    </svg>
   );
-
-  return <TimeGradient {...props} />;
 };
+
+export default TimeGradient;

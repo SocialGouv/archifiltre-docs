@@ -2,7 +2,7 @@ import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { DispatchExts } from "../archifiltre-types";
 import { StoreState } from "../store";
-import { createEmptyStore } from "../store-test-utils";
+import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import { setFilesAndFoldersHash } from "./files-and-folders-actions";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
 import { updateFilesAndFolderHashes } from "./files-and-folders-thunks";
@@ -21,25 +21,22 @@ describe("file-and-folders-thunks.test.ts", () => {
 
       const testState = {
         ...emptyStoreState,
-        filesAndFolders: {
-          ...emptyStoreState.filesAndFolders,
-          current: {
-            filesAndFolders: {
-              [updateId1]: createFilesAndFolders({
-                hash: "oldHash",
-                id: updateId1
-              }),
-              [updateId2]: createFilesAndFolders({
-                hash: "oldHash2",
-                id: updateId2
-              }),
-              [unupdatedId]: createFilesAndFolders({
-                hash: "unchangedHash",
-                id: unupdatedId
-              })
-            }
+        filesAndFolders: wrapStoreWithUndoable({
+          filesAndFolders: {
+            [updateId1]: createFilesAndFolders({
+              hash: "oldHash",
+              id: updateId1
+            }),
+            [updateId2]: createFilesAndFolders({
+              hash: "oldHash2",
+              id: updateId2
+            }),
+            [unupdatedId]: createFilesAndFolders({
+              hash: "unchangedHash",
+              id: unupdatedId
+            })
           }
-        }
+        })
       };
 
       const store = mockStore(testState);

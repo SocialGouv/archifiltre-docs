@@ -1,6 +1,6 @@
 import { computeDerived, ff } from "../../datastore/files-and-folders";
 import { StoreState } from "../store";
-import { createEmptyStore } from "../store-test-utils";
+import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
   getAllTagIdsForFile,
   getAllTagsForFile,
@@ -272,10 +272,7 @@ describe("tags-selectors", () => {
       const emptyStore = createEmptyStore();
       const storeState: StoreState = {
         ...emptyStore,
-        tags: {
-          ...emptyStore.tags,
-          current: tagState
-        }
+        tags: wrapStoreWithUndoable(tagState)
       };
 
       expect(getTagsFromStore(storeState)).toEqual(tags);

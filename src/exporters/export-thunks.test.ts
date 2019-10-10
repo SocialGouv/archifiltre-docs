@@ -3,7 +3,10 @@ import thunk from "redux-thunk";
 import { computeDerived, ff } from "../datastore/files-and-folders";
 import { DispatchExts } from "../reducers/archifiltre-types";
 import { StoreState } from "../reducers/store";
-import { createEmptyStore } from "../reducers/store-test-utils";
+import {
+  createEmptyStore,
+  wrapStoreWithUndoable
+} from "../reducers/store-test-utils";
 import { exportMetsThunk, resipExporterThunk } from "./export-thunks";
 import { makeSIP } from "./mets";
 import resipExporter from "./resipExporter";
@@ -44,10 +47,7 @@ const emptyStore = createEmptyStore();
 
 const storeContent = {
   ...emptyStore,
-  tags: {
-    ...emptyStore.tags,
-    current: { tags }
-  }
+  tags: wrapStoreWithUndoable({ tags })
 };
 
 describe("export-thunks", () => {

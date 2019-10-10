@@ -130,7 +130,10 @@ describe("files-and-folders-reducer", () => {
             comments: "base-comments",
             id: changedId
           }),
-          [unchangedId]: createFilesAndFolders({ id: unchangedId })
+          [unchangedId]: createFilesAndFolders({
+            comments: unchangedComment,
+            id: unchangedId
+          })
         }
       };
 

@@ -14,7 +14,7 @@ export const createFilesAndFolders = ({
 }): FilesAndFolders => ({
   alias,
   children: [],
-  comments: "",
+  comments,
   file_last_modified: 1570625049127,
   file_size: 10,
   hash,

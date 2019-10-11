@@ -101,7 +101,7 @@
     "image-webpack-loader": "4.6.0",
     "jest": "24.9.0",
     "jest-date-mock": "1.0.7",
-    "jsdoc-to-markdown": "5.0.1",
+    "jsdoc-to-markdown": "5.0.2",
     "lint-staged": "9.4.2",
     "node-sass": "4.12.0",
     "prettier": "1.18.2",

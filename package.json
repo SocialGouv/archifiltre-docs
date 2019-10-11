@@ -76,8 +76,8 @@
   },
   "homepage": "https://github.com/SocialGouv/archifiltre#readme",
   "devDependencies": {
-    "@commitlint/cli": "^8.2.0",
-    "@commitlint/config-conventional": "^8.2.0",
+    "@commitlint/cli": "8.2.0",
+    "@commitlint/config-conventional": "8.2.0",
     "@socialgouv/eslint-config-react": "0.10.0",
     "@socialgouv/tslint-config-recommended": "0.10.0",
     "@types/immutable": "3.8.7",

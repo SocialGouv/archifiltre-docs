@@ -3,6 +3,8 @@ import { Action } from "redux";
 export const INITIALIZE_FILES_AND_FOLDERS = "FILES_AND_FOLDERS/INITIALIZE";
 export const SET_FILES_AND_FOLDERS_ALIAS = "FILES_AND_FOLDERS/SET_ALIAS";
 export const SET_FILES_AND_FOLDERS_HASH = "FILES_AND_FOLDERS/SET_HASH";
+export const ADD_COMMENTS_ON_FILES_AND_FOLDERS =
+  "FILES_AND_FOLDERS/ADD_COMMENTS";
 
 export interface FilesAndFolders {
   id: string;
@@ -40,7 +42,14 @@ interface SetFilesAndFoldersHashAction extends Action {
   hash: string;
 }
 
+interface AddCommentsOnFilesAndFoldersAction extends Action {
+  type: typeof ADD_COMMENTS_ON_FILES_AND_FOLDERS;
+  filesAndFoldersId: string;
+  comments: string;
+}
+
 export type FilesAndFoldersActionTypes =
   | InitializeFilesAndFoldersAction
   | SetFilesAndFoldersAliasAction
+  | AddCommentsOnFilesAndFoldersAction
   | SetFilesAndFoldersHashAction;

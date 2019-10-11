@@ -1,4 +1,5 @@
 import {
+  ADD_COMMENTS_ON_FILES_AND_FOLDERS,
   FilesAndFoldersActionTypes,
   FilesAndFoldersMap,
   INITIALIZE_FILES_AND_FOLDERS,
@@ -43,4 +44,18 @@ export const setFilesAndFoldersHash = (
   filesAndFoldersId,
   hash,
   type: SET_FILES_AND_FOLDERS_HASH
+});
+
+/**
+ * Add comments on a FileAndFolder
+ * @param filesAndFoldersId
+ * @param comments
+ */
+export const addCommentsOnFilesAndFolders = (
+  filesAndFoldersId: string,
+  comments: string
+): FilesAndFoldersActionTypes => ({
+  comments,
+  filesAndFoldersId,
+  type: ADD_COMMENTS_ON_FILES_AND_FOLDERS
 });

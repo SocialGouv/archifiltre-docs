@@ -9,11 +9,12 @@ import { FilesAndFolders } from "./files-and-folders-types";
 export const createFilesAndFolders = ({
   id,
   alias = "",
-  hash = ""
+  hash = "",
+  comments = ""
 }): FilesAndFolders => ({
   alias,
   children: [],
-  comments: "",
+  comments,
   file_last_modified: 1570625049127,
   file_size: 10,
   hash,

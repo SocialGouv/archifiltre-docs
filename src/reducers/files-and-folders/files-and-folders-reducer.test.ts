@@ -1,4 +1,5 @@
 import {
+  addCommentsOnFilesAndFolders,
   initializeFilesAndFolders,
   setFilesAndFoldersAlias,
   setFilesAndFoldersHash
@@ -109,6 +110,46 @@ describe("files-and-folders-reducer", () => {
             id: changedId
           }),
           [unchangedId]: createFilesAndFolders({
+            id: unchangedId
+          })
+        }
+      });
+    });
+  });
+
+  describe("ADD_COMMENT_ON_FILES_AND_FOLDERS", () => {
+    it("should add a comment on the file and folder", () => {
+      const changedId = "changed-id";
+      const unchangedId = "unchanged-id";
+      const newComment = "new-comment";
+      const unchangedComment = "unchanged-comment";
+
+      const initialState: FilesAndFoldersState = {
+        filesAndFolders: {
+          [changedId]: createFilesAndFolders({
+            comments: "base-comments",
+            id: changedId
+          }),
+          [unchangedId]: createFilesAndFolders({
+            comments: unchangedComment,
+            id: unchangedId
+          })
+        }
+      };
+
+      const nextState = filesAndFoldersReducer(
+        initialState,
+        addCommentsOnFilesAndFolders(changedId, newComment)
+      );
+
+      expect(nextState).toEqual({
+        filesAndFolders: {
+          [changedId]: createFilesAndFolders({
+            comments: newComment,
+            id: changedId
+          }),
+          [unchangedId]: createFilesAndFolders({
+            comments: unchangedComment,
             id: unchangedId
           })
         }

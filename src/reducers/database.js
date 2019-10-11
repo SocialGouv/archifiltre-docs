@@ -103,13 +103,14 @@ const reInit = () => () => {
 };
 
 const updateAlias = (updater, id) => state => {
-  state = updateIn(state, ["files_and_folders", id, "alias"], updater);
   store.dispatch(filesAndFoldersActions.setFilesAndFoldersAlias(id, updater()));
   return state;
 };
 
 const updateComments = (updater, id) => state => {
-  state = updateIn(state, ["files_and_folders", id, "comments"], updater);
+  store.dispatch(
+    filesAndFoldersActions.addCommentsOnFilesAndFolders(id, updater())
+  );
   return state;
 };
 

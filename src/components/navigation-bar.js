@@ -1,6 +1,6 @@
 import React from "react";
 
-import BTRButton from "components/back-to-root-button";
+import BTRButton from "components/Buttons/back-to-root-button";
 import ToggleChangeSkin from "components/toggle-change-skin";
 
 const grid_style = {

@@ -1,8 +1,6 @@
 import fc from "fast-check";
-import * as M from "datastore/files-and-folders";
+import * as FF from "datastore/files-and-folders";
 import * as Origin from "datastore/origin";
-import { updateIn } from "immutable";
-import path from "path";
 import { arbitraryFF, arbitraryOrigins } from "../test/custom-arbitraries";
 import equal from "deep-equal";
 import { compose } from "../util/function-util";
@@ -11,7 +9,7 @@ describe("files-and-folders", () => {
   it("(ffInv . ff)", () => {
     fc.assert(
       fc.property(arbitraryOrigins, origins =>
-        equal(Origin.sort(M.ffInv(M.ff(origins))), Origin.sort(origins))
+        equal(Origin.sort(FF.ffInv(FF.ff(origins))), Origin.sort(origins))
       )
     );
   });
@@ -19,9 +17,9 @@ describe("files-and-folders", () => {
   it("(fromJs . toJs)", () => {
     fc.assert(
       fc.property(arbitraryFF, ff => {
-        const ffWithDerivedData = M.computeDerived(ff);
+        const ffWithDerivedData = FF.computeDerived(ff);
         const expected = ffWithDerivedData.toJS();
-        const actual = M.fromJs(M.toJs(ffWithDerivedData)).toJS();
+        const actual = FF.fromJs(FF.toJs(ffWithDerivedData)).toJS();
 
         return equal(actual, expected);
       })
@@ -33,11 +31,11 @@ describe("files-and-folders", () => {
       fc.property(arbitraryOrigins, origins => {
         const actual = compose(
           Origin.sort,
-          M.ffInv,
-          M.fromJs,
-          M.toJs,
-          M.computeDerived,
-          M.ff
+          FF.ffInv,
+          FF.fromJs,
+          FF.toJs,
+          FF.computeDerived,
+          FF.ff
         )(origins);
         const expected = Origin.sort(origins);
         return equal(actual, expected);
@@ -48,8 +46,8 @@ describe("files-and-folders", () => {
   it("merge empty a === merge a empty", () => {
     fc.assert(
       fc.property(arbitraryFF, ff => {
-        const actual = M.merge(M.empty(), ff).toJS();
-        const expected = M.merge(ff, M.empty()).toJS();
+        const actual = FF.merge(FF.empty(), ff).toJS();
+        const expected = FF.merge(ff, FF.empty()).toJS();
         return equal(actual, expected);
       })
     );
@@ -59,8 +57,8 @@ describe("files-and-folders", () => {
     fc.property(
       fc.tuple(arbitraryFF, arbitraryFF, arbitraryFF),
       ([ff1, ff2, ff3]) => {
-        const actual = M.merge(M.merge(ff1, ff2), ff3).toJS();
-        const expected = M.merge(ff1, M.merge(ff2, ff3)).toJS();
+        const actual = FF.merge(FF.merge(ff1, ff2), ff3).toJS();
+        const expected = FF.merge(ff1, FF.merge(ff2, ff3)).toJS();
         return equal(actual, expected);
       }
     );
@@ -74,8 +72,8 @@ describe("files-and-folders", () => {
       [{ size: 4, lastModified: 2 }, "/a/e/g"],
       [{ size: 5, lastModified: 1 }, "/h"]
     ];
-    const data = M.ff(origin);
-    const derived = M.computeDerived(data);
+    const data = FF.ff(origin);
+    const derived = FF.computeDerived(data);
 
     const test = (a, updater, predicates) => {
       Object.keys(updater).forEach(key => (a = a.update(key, updater[key])));
@@ -248,28 +246,33 @@ describe("files-and-folders", () => {
   });
 
   it("simple toStrList2 test", () => {
-    const origin = [
-      [{ size: 1, lastModified: 5 }, "/a/b/c.ext"],
-      [{ size: 2, lastModified: 4 }, "/a/b/d"],
-      [{ size: 3, lastModified: 3 }, "/a/e/f"],
-      [{ size: 4, lastModified: 2 }, "/a/e/g"],
-      [{ size: 5, lastModified: 1 }, "/h"]
-    ];
-    const data = M.ff(origin);
-    let derived = M.computeDerived(data);
+    const firstId = "/rootFolder/filename";
+    const filesAndFolders = {
+      [firstId]: {
+        alias: "",
+        children: [],
+        comments: "",
+        file_last_modified: 1570615679168,
+        file_size: 10,
+        hash: null,
+        id: firstId,
+        name: "filename"
+      }
+    };
 
-    derived = updateIn(derived, ["/h", "comments"], () => "my comments");
-    derived = updateIn(derived, ["/h", "alias"], () => "my alias");
-    derived = updateIn(derived, ["/a/b/d", "comments"], () => "my comments 2");
-    derived = updateIn(derived, ["/a/e/g", "alias"], () => "my alias 2");
+    const metadata = {
+      [firstId]: {
+        averageLastModified: 3000,
+        childrenTotalSize: 10000,
+        maxLastModified: 1570615679168,
+        medianLastModified: 4000,
+        minLastModified: 1000
+      }
+    };
 
-    const root_id = "";
-    const ff_id_list = M.toFfidList(derived)
-      .sort()
-      .filter(a => a !== root_id);
-    const str_list_2 = M.toStrList2(ff_id_list, derived);
+    const strList2 = FF.toStrList2(filesAndFolders, metadata);
 
-    expect(str_list_2).toEqual([
+    expect(strList2).toEqual([
       [
         "",
         "path",
@@ -283,64 +286,17 @@ describe("files-and-folders", () => {
         "file/folder",
         "depth"
       ],
-      // path.join enables windows compatibility
-      ["", path.join("/a"), 2, "a", "", 10, "01/01/1970", "", "", "folder", 1],
-
-      ["", path.join("/a/b"), 4, "b", "", 3, "01/01/1970", "", "", "folder", 2],
       [
         "",
-        path.join("/a/b/c.ext"),
-        10,
-        "c.ext",
-        ".ext",
-        1,
-        "01/01/1970",
+        "/rootFolder/filename",
+        20,
+        "filename",
+        "",
+        10000,
+        "09/10/2019",
         "",
         "",
-        "file",
-        3
-      ],
-      [
-        "",
-        path.join("/a/b/d"),
-        6,
-        "d",
-        "",
-        2,
-        "01/01/1970",
-        "",
-        "my comments 2",
-        "file",
-        3
-      ],
-
-      ["", path.join("/a/e"), 4, "e", "", 7, "01/01/1970", "", "", "folder", 2],
-      ["", path.join("/a/e/f"), 6, "f", "", 3, "01/01/1970", "", "", "file", 3],
-      [
-        "",
-        path.join("/a/e/g"),
-        6,
-        "g",
-        "",
-        4,
-        "01/01/1970",
-        "my alias 2",
-        "",
-        "file",
-        3
-      ],
-
-      [
-        "",
-        path.join("/h"),
-        2,
-        "h",
-        "",
-        5,
-        "01/01/1970",
-        "my alias",
-        "my comments",
-        "file",
+        "folder",
         1
       ]
     ]);

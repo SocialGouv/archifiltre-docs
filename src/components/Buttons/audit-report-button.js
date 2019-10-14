@@ -1,8 +1,8 @@
-import { mkB } from "components/button";
+import { mkB } from "components/Buttons/button";
 
 import pick from "languages";
 import { saveBlob, makeNameWithExt } from "util/file-sys-util";
-import auditReportExporter from "../exporters/auditReportExporter";
+import auditReportExporter from "../../exporters/auditReportExporter";
 
 const label = pick({
   fr: "Rapport d'audit",

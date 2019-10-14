@@ -1,6 +1,6 @@
 import React from "react";
 
-import SaveButton from "components/save-button";
+import SaveButton from "components/Buttons/save-button";
 import { reportError } from "../reporter";
 
 export default class ErrorBoundary extends React.Component {

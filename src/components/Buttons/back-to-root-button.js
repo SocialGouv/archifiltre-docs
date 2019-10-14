@@ -1,7 +1,7 @@
 import React from "react";
 
-import * as ObjectUtil from "util/object-util.ts";
-import { mkB } from "components/button";
+import * as ObjectUtil from "util/object-util";
+import { mkB } from "components/Buttons/button";
 
 import * as Color from "util/color-util";
 

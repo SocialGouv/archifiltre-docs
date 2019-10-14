@@ -1,5 +1,5 @@
 import * as FilesAndFolders from "datastore/files-and-folders";
-import * as M from "datastore/tags";
+import * as Tags from "datastore/tags";
 
 import { Set } from "immutable";
 
@@ -14,21 +14,24 @@ describe("tags", function() {
       ])
     );
 
-    let tags = M.empty();
-    tags = M.update(ff, tags);
+    let tags = Tags.empty();
+    tags = Tags.update(ff, tags);
 
-    tags = M.push(
-      M.create({ name: "T", ff_ids: Set.of("/a/b", "/a/b/d") }),
+    tags = Tags.push(
+      Tags.create({ name: "T", ff_ids: Set.of("/a/b", "/a/b/d") }),
       tags
     );
-    tags = M.push(
-      M.create({ name: "U", ff_ids: Set.of("/a/e", "/a/b/d") }),
+    tags = Tags.push(
+      Tags.create({ name: "U", ff_ids: Set.of("/a/e", "/a/b/d") }),
       tags
     );
-    tags = M.push(M.create({ name: "T", ff_ids: Set.of("/a/f/g") }), tags);
-    tags = M.push(M.create({ name: "V", ff_ids: Set() }), tags);
+    tags = Tags.push(
+      Tags.create({ name: "T", ff_ids: Set.of("/a/f/g") }),
+      tags
+    );
+    tags = Tags.push(Tags.create({ name: "V", ff_ids: Set() }), tags);
 
-    tags = M.update(ff, tags);
+    tags = Tags.update(ff, tags);
 
     const test = (a, updater, predicates) => {
       Object.keys(updater).forEach(key => (a = a.update(key, updater[key])));
@@ -66,52 +69,49 @@ describe("tags", function() {
   });
 
   it("simple toStrList2 test", () => {
-    const ff = FilesAndFolders.computeDerived(
-      FilesAndFolders.ff([
-        [{ size: 1, lastModified: 0 }, "/a/b/c"],
-        [{ size: 2, lastModified: 0 }, "/a/b/d"],
-        [{ size: 3, lastModified: 0 }, "/a/e"],
-        [{ size: 4, lastModified: 0 }, "/a/f/g"]
-      ])
-    );
-
+    const tagName = "test-tag-1";
+    const taggedFfId = "/folder/ff-id";
+    const tagId = "test-tag-id";
+    const tagId2 = "test-tag-id-2";
+    const rootId = "";
     const tags = {
-      id: {
-        id: "id",
-        name: "T",
-        ffIds: ["/a/b", "/a/f/g"]
+      [tagId]: {
+        ffIds: [taggedFfId],
+        id: tagId,
+        name: tagName
       },
-      id2: {
-        id: "id2",
-        name: "U",
-        ffIds: ["/a"]
-      },
-      id3: {
-        id: "id3",
-        name: "X",
-        ffIds: ["/a/b/d"]
+      [tagId2]: {
+        ffIds: [rootId],
+        id: tagId2,
+        name: rootId
       }
     };
 
-    const root_id = "";
-    const ff_id_list = FilesAndFolders.toFfidList(ff)
-      .sort()
-      .filter(a => a !== root_id);
-    const str_list_2 = M.toStrList2(ff_id_list, ff, tags);
+    const filesAndFolders = {
+      [rootId]: {
+        alias: "",
+        children: [],
+        comments: "",
+        file_last_modified: 1570615679168,
+        file_size: 10,
+        hash: null,
+        id: rootId,
+        name: "root"
+      },
+      [taggedFfId]: {
+        alias: "",
+        children: [],
+        comments: "",
+        file_last_modified: 1570615679168,
+        file_size: 10,
+        hash: null,
+        id: taggedFfId,
+        name: "filename"
+      }
+    };
 
-    expect(str_list_2).toEqual([
-      ["tag0 : T", "tag1 : U", "tag2 : X"],
+    const strList2 = Tags.toStrList2(filesAndFolders, tags);
 
-      ["", "U", ""], // /a
-
-      ["T", "U", ""], // /a/b
-      ["T", "U", ""], // /a/b/c
-      ["T", "U", "X"], // /a/b/d
-
-      ["", "U", ""], // /a/e
-
-      ["", "U", ""], // /a/f
-      ["T", "U", ""] // /a/f/g
-    ]);
+    expect(strList2).toEqual([["tag0 : test-tag-1", "tag1 : "], undefined]);
   });
 });

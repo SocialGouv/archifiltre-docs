@@ -206,7 +206,6 @@ export default class IcicleMain extends PureComponent {
     const minimap_width = breadcrumbs_width - 30;
     const minimap_height = ruler_height - 20;
 
-    console.time("render icicle");
     const icicle = (
       <g>
         <AnimatedIcicle
@@ -293,7 +292,6 @@ export default class IcicleMain extends PureComponent {
         </g>
       </g>
     );
-    console.timeEnd("render icicle");
 
     return (
       <svg

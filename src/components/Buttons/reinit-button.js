@@ -1,4 +1,4 @@
-import { mkB } from "components/button";
+import { mkB } from "components/Buttons/button";
 
 import pick from "languages";
 

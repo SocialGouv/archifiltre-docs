@@ -1,6 +1,6 @@
 import React from "react";
 
-import { mkTB } from "components/button";
+import { mkTB } from "components/Buttons/button";
 
 import TextAlignCenter from "components/text-align-center";
 import * as ObjectUtil from "util/object-util.ts";

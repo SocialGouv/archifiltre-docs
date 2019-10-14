@@ -180,39 +180,36 @@ const toNameList = tagsArray => tagsArray.map(({ name }) => name);
  *
  * Parent tags are inherited by all their children during the export.
  *
- * @param ff_id_list - array of file and folder id
  * @param ffs - files and folders tree
  * @param tags
  */
-export const toStrList2 = (ffIds, ffs, tags) => {
+export const toStrList2 = (ffs, tags) => {
+  const rootFfId = "";
+  const ffIds = Object.keys(ffs).filter(id => id !== rootFfId);
   const tagsArray = tagMapToArray(tags);
   const tagNamesList = toNameList(tagsArray);
-  const header = tagNamesList.map((tagName, i) => "tag" + i + " : " + tagName);
-  const rootFfId = "";
+  const header = tagNamesList.map(
+    (tagName, index) => `tag${index} : ${tagName}`
+  );
+
   const mapFfidToStrList = {};
 
   const rec = (parentTags, currentFfId) => {
-    const currentFf = ffs.get(currentFfId);
+    const currentFf = ffs[currentFfId];
     let currentFfTagNames = getAllTagsForFile(tags, currentFfId).map(
       ({ name }) => name
     );
     currentFfTagNames = currentFfTagNames.concat(parentTags);
 
-    mapFfidToStrList[currentFfId] = tagNamesList.map(tagName => {
-      if (currentFfTagNames.includes(tagName)) {
-        return tagName;
-      } else {
-        return "";
-      }
-    });
+    mapFfidToStrList[currentFfId] = tagNamesList.map(tagName =>
+      currentFfTagNames.includes(tagName) ? tagName : ""
+    );
 
-    const currentFfChildren = currentFf.get("children");
+    const currentFfChildren = currentFf.children;
     currentFfChildren.forEach(id => rec(currentFfTagNames, id));
   };
 
   rec([], rootFfId);
 
-  const ans = [header];
-  ffIds.forEach(id => ans.push(mapFfidToStrList[id]));
-  return ans;
+  return [header, ...ffIds.map(id => mapFfidToStrList[id])];
 };

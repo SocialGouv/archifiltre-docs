@@ -3,7 +3,7 @@ import React from "react";
 import { request } from "util/http-util";
 import version from "version";
 
-import { mkB } from "components/button";
+import { mkB } from "components/Buttons/button";
 
 import * as Color from "util/color-util";
 

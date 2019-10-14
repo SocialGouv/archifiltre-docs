@@ -145,3 +145,10 @@ export const getFilesAndFoldersTotalSize = (
     (childrenValues, currentFilesAndFolders) =>
       _.sum([...childrenValues, currentFilesAndFolders.file_size])
   );
+
+/**
+ * Get the depth of the selected filesAndFolders
+ * @param filesAndFoldersId
+ */
+export const getFilesAndFoldersDepth = (filesAndFoldersId: string): number =>
+  filesAndFoldersId.split("/").length - 2;

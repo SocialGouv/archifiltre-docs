@@ -1,4 +1,4 @@
-import { mkB } from "components/button";
+import { mkB } from "components/Buttons/button";
 
 import { save, makeNameWithExt } from "util/file-sys-util";
 

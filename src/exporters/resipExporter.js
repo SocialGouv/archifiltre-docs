@@ -153,8 +153,7 @@ const resipExporter = (filesAndFolders, tags) => {
 
   const formattedData = dataWithSipId.map(transformDefaultFormatToResip);
 
-  const csvData = formatToCsv(formattedData, tagsWithIndex);
-  return csvData;
+  return formatToCsv(formattedData, tagsWithIndex);
 };
 
 export default resipExporter;

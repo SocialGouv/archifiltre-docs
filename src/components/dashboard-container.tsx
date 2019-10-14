@@ -1,8 +1,8 @@
 import React, { FC, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { generateCsvExportArray } from "../exporters/csvExporter";
+import { csvExporterThunk } from "../exporters/csv-exporter";
 import {
-  exportMetsThunk,
+  metsExporterThunk,
   resipExporterThunk
 } from "../exporters/export-thunks";
 import Dashboard from "./dashboard";
@@ -14,19 +14,19 @@ interface DashboardContainerProps {
 const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
   const dispatch = useDispatch();
 
-  const exportToCsv = useCallback(
-    filesAndFolders => dispatch(generateCsvExportArray(filesAndFolders)),
-    [dispatch]
-  );
-
-  const exportToResip = useCallback(
-    filesAndFolders => dispatch(resipExporterThunk(filesAndFolders)),
-    [dispatch]
-  );
-
-  const exportToMets = useCallback(state => dispatch(exportMetsThunk(state)), [
+  const exportToCsv = useCallback(name => dispatch(csvExporterThunk(name)), [
     dispatch
   ]);
+
+  const exportToResip = useCallback(
+    name => dispatch(resipExporterThunk(name)),
+    [dispatch]
+  );
+
+  const exportToMets = useCallback(
+    state => dispatch(metsExporterThunk(state)),
+    [dispatch]
+  );
 
   return (
     <Dashboard

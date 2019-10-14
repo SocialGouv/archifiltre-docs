@@ -92,7 +92,16 @@ const set = next_state => () => {
   store.dispatch(tagActions.initializeTags(next_state.tags));
   store.dispatch(
     filesAndFoldersActions.initializeFilesAndFolders(
-      next_state.files_and_folders
+      Object.entries(next_state.files_and_folders).reduce(
+        (ffMap, [id, ff]) => ({
+          ...ffMap,
+          [id]: {
+            ...ff,
+            id
+          }
+        }),
+        {}
+      )
     )
   );
   const metadata = Object.entries(next_state.files_and_folders).reduce(

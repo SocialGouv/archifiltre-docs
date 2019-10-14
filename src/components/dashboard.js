@@ -3,18 +3,18 @@ import { octet2HumanReadableFormat } from "components/ruler";
 
 import { RIEInput } from "riek";
 
-import SaveButton from "components/save-button";
-import METSButton from "components/mets-button";
-import ReinitButton from "components/reinit-button";
-import ToCsvButton from "components/csv-button";
+import SaveButton from "components/Buttons/save-button";
+import METSButton from "components/Buttons/mets-button";
+import ReinitButton from "components/Buttons/reinit-button";
+import ToCsvButton from "components/Buttons/csv-button";
 import TextAlignCenter from "components/text-align-center";
 import CtrlZ from "components/ctrl-z";
 
-import { mkB } from "components/button";
+import { mkB } from "components/Buttons/button";
 import Bubble from "components/bubble";
 import pick from "languages";
-import ResipButton from "./resip-button";
-import AuditReportButton from "./audit-report-button";
+import ResipButton from "./Buttons/resip-button";
+import AuditReportButton from "./Buttons/audit-report-button";
 
 const DashBoard = props => {
   let session_info_cell = false;
@@ -108,8 +108,8 @@ const DashBoard = props => {
             {mkB(
               () => {},
               pick({
-                en: "Export to",
-                fr: "Exporter vers"
+                en: "Export",
+                fr: "Exporter"
               }),
               true,
               "#4d9e25",
@@ -130,7 +130,6 @@ const DashBoard = props => {
   }
 
   if (props.started === true && props.finished === true) {
-    console.log("reinit");
     reinit_button_cell = (
       <TextAlignCenter>
         <ReinitButton api={props.api} />

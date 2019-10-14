@@ -1,6 +1,6 @@
 import React from "react";
 
-import { mkRB } from "components/button";
+import { mkRB } from "components/Buttons/button";
 
 const arrow_style = {
   fontSize: "1.6em"

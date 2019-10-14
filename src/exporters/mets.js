@@ -536,7 +536,6 @@ const makeMetsContent = (state, tags, contentWriter, metsContent) => {
  */
 export const makeSIP = (state, tags) => {
   const sip = new JSZip();
-
   const content = sip.folder("master");
   const addToContent = (filename, data) => {
     content.file(filename.replace(/[^a-zA-Z0-9.\\/+=@_]+/g, "_"), data);

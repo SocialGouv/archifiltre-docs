@@ -5,8 +5,9 @@ import * as RecordUtil from "util/record-util";
 
 import { List, Map } from "immutable";
 
-import * as CSV from "csv";
+import { epochToFormattedUtcDateString } from "csv";
 import pick from "languages";
+import { getFilesAndFoldersDepth } from "reducers/files-and-folders/files-and-folders-selectors";
 const Path = require("path");
 
 const fileOrFolderFactory = RecordUtil.createFactory(
@@ -307,37 +308,39 @@ const folder_str = pick({
  * the csv header.
  *
  * Each line represents one file or folder and the order is determined
- * by the file and folder id array (ff_id_list).
+ * by the file and folder id array.
  *
- * @param ff_id_list - array of file and folder id
- * @param ffs - files and folders tree
+ * @param filesAndFolders - files and folders tree
+ * @param filesAndFoldersMetadata - files and folders tree metadata
  */
-export const toStrList2 = (ff_id_list, ffs) => {
-  const ans = [str_list_2_header.slice()];
-  const mapFfidToStrList = {};
-
-  ffs.forEach((ff, id) => {
-    if (id === "") {
+export const toStrList2 = (filesAndFolders, filesAndFoldersMetadata) => {
+  const rootId = "";
+  const filesAndFoldersWithoutRoot = Object.values(filesAndFolders).filter(
+    filesAndFolder => filesAndFolder.id !== rootId
+  );
+  const ffFormattedArray = filesAndFoldersWithoutRoot.map(ff => {
+    if (ff.id === "") {
       return undefined;
     }
-    const platform_dependent_path = id.split("/").join(Path.sep);
+    const currentMetadata = filesAndFoldersMetadata[ff.id];
+    const platform_dependent_path = ff.id.split("/").join(Path.sep);
     const path_length = platform_dependent_path.length;
-    const name = ff.get("name");
+    const name = ff.name;
     const extension = Path.extname(name);
-    const size = ff.get("size");
-    const last_modified = CSV.epochToFormattedUtcDateString(
-      ff.get("last_modified_max")
+    const size = currentMetadata.childrenTotalSize;
+    const last_modified = epochToFormattedUtcDateString(
+      currentMetadata.maxLastModified
     );
-    const alias = ff.get("alias");
-    const comments = ff.get("comments");
-    const children = ff.get("children");
+    const alias = ff.alias;
+    const comments = ff.comments;
+    const children = ff.children;
     let file_or_folder = folder_str;
     if (children.size === 0) {
       file_or_folder = file_str;
     }
-    const depth = ff.get("depth");
+    const depth = getFilesAndFoldersDepth(ff.id);
 
-    mapFfidToStrList[id] = [
+    return [
       "",
       platform_dependent_path,
       path_length,
@@ -352,7 +355,5 @@ export const toStrList2 = (ff_id_list, ffs) => {
     ];
   });
 
-  ff_id_list.forEach(id => ans.push(mapFfidToStrList[id]));
-
-  return ans;
+  return [str_list_2_header.slice(), ...ffFormattedArray];
 };

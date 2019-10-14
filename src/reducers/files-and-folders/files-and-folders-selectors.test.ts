@@ -2,6 +2,7 @@ import _ from "lodash";
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
   getFilesAndFoldersAverageLastModified,
+  getFilesAndFoldersDepth,
   getFilesAndFoldersFromStore,
   getFilesAndFoldersMaxLastModified,
   getFilesAndFoldersMedianLastModified,
@@ -120,6 +121,12 @@ describe("files-and-folders-selectors", () => {
       expect(
         getFilesAndFoldersTotalSize(filesAndFoldersTestMap, rootFolderId)
       ).toEqual(1110);
+    });
+  });
+
+  describe("getFilesAndFoldersDepth", () => {
+    it("should find the depth root folder", () => {
+      expect(getFilesAndFoldersDepth(child1Id)).toEqual(1);
     });
   });
 });

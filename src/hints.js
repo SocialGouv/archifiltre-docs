@@ -44,7 +44,7 @@ const french_hints = [
     "Le bouton « Enregistrer » permet de sauver son travail " +
     "dans un fichier JSON, vous pourrez ensuite le glisser-déposer à la " +
     "place d'un dossier dans archifiltre pour reprendre votre travail. " +
-    "Le bouton « Exporter vers » vous permet d'exporter votre travail " +
+    "Le bouton « Exporter » vous permet d'exporter votre travail " +
     "vers divers formats (ex : CSV, ...). " +
     "Le bouton « Fermer » vous permet de fermer l'analyse en cours pour en commencer " +
     "une nouvelle.",

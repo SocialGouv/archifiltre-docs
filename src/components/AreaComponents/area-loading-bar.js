@@ -12,7 +12,6 @@ const progressBarContainer = {
 
 const progressBarStyle = {
   position: "absolute",
-
   backgroundColor: toRgba([121, 121, 121, 0.3]),
   width: "70%",
   height: "100%"
@@ -20,7 +19,6 @@ const progressBarStyle = {
 
 const progressBarPercent = {
   position: "absolute",
-
   display: "flex",
   height: "100%",
   width: "100%",
@@ -30,9 +28,7 @@ const progressBarPercent = {
 
 const progressBarText = {
   textAlign: "left",
-
   maxWidth: "50%",
-
   paddingTop: "20px",
   paddingRight: "40px",
   paddingBottom: "20px",

@@ -1,5 +1,7 @@
 import _ from "lodash";
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
+import { FilesAndFoldersMetadataMap } from "../files-and-folders-metadata/files-and-folders-metadata-types";
+import { FilesAndFoldersMap } from "../files-and-folders/files-and-folders-types";
 import { StoreState } from "../store";
 import { Tag, TagMap } from "./tags-types";
 
@@ -82,18 +84,26 @@ export const sortTags = (
 /**
  * Computes a tag size based on the files and folders size
  * @param tag - The tag which you want to compute the value
- * @param ffs - The files and folders structure
+ * @param filesAndFolders - The files and folders structure
+ * @param filesAndFoldersMetadata - The files and folders metadata
  * @returns the total size of the tagged files and folders
  */
-export const getTagSize = (tag: Tag, ffs: any): number => {
-  const taggedFf = ffs.filter((ff, path) =>
+export const getTagSize = (
+  tag: Tag,
+  filesAndFolders: FilesAndFoldersMap,
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap
+): number => {
+  const taggedFfIds = Object.keys(filesAndFolders).filter(id =>
     _.some(
       tag.ffIds,
-      ffId =>
-        path.indexOf(ffId) === 0 && (path[ffId.length] === "/" || path === ffId)
+      ffId => id.indexOf(ffId) === 0 && (id[ffId.length] === "/" || id === ffId)
     )
   );
-  return taggedFf.reduce((totalSize, ff) => totalSize + ff.get("file_size"), 0);
+  return taggedFfIds.reduce(
+    (totalSize, id) =>
+      totalSize + filesAndFoldersMetadata[id].childrenTotalSize,
+    0
+  );
 };
 
 /**

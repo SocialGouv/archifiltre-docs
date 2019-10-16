@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 
-import TagsEditable from "components/tags-editable";
+import TagsEditable from "components/tags/tags-editable";
 
 import pick from "languages";
 

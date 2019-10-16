@@ -1,6 +1,6 @@
 import React from "react";
 
-import Tag from "components/tag";
+import Tag from "components/tags/tag";
 
 import pick from "languages";
 

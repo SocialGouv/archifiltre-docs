@@ -1,6 +1,6 @@
 import React from "react";
 
-import * as ObjectUtil from "util/object-util.ts";
+import * as ObjectUtil from "util/object-util";
 
 const tag_style = {
   color: "white",

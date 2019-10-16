@@ -9,10 +9,8 @@ const roundedAreaMarginSize = "15px";
 const roundedAreaStyle = {
   display: "flex",
   flexDirection: "column",
-
   width: "100%",
   height: "100%",
-
   borderRadius: "32px",
   overflow: "hidden",
   marginTop: roundedAreaMarginSize,

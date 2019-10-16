@@ -1,6 +1,6 @@
 import React from "react";
 
-import Tag from "components/tag";
+import Tag from "components/tags/tag";
 
 import MultiLinesInput from "components/multi-lines-input";
 
@@ -11,7 +11,6 @@ const cell_shrink_style = {
 class AllTagsItem extends React.Component {
   constructor(props) {
     super(props);
-
     this.textInput = null;
   }
 
@@ -20,7 +19,22 @@ class AllTagsItem extends React.Component {
   }
 
   render() {
-    const { tag } = this.props;
+    const {
+      tag,
+      opacity,
+      percentage,
+      deleteTag,
+      shoud_display_count,
+      tag_number,
+      node_has_tag,
+      removeTagFromNode,
+      addTagToNode,
+      editing,
+      renameTag,
+      stopEditingTag,
+      startEditingTag,
+      highlightTag
+    } = this.props;
 
     const componentStyle = {
       position: "relative",
@@ -31,7 +45,7 @@ class AllTagsItem extends React.Component {
     };
 
     const contentStyle = {
-      opacity: this.props.opacity,
+      opacity: opacity,
       position: "relative",
       zIndex: "1"
     };
@@ -40,58 +54,55 @@ class AllTagsItem extends React.Component {
       transition: "all 0.4s",
       WebkitTransition: "all 0.4s",
       height: "100%",
-      width: this.props.percentage + "%",
+      width: `${percentage}%`,
       opacity: "0.2",
       backgroundColor: "rgb(10, 50, 100)"
     };
 
     const deleteBubble = (
-      <div className="tags_bubble tags_cross" onClick={this.props.deleteTag}>
+      <div className="tags_bubble tags_cross" onClick={deleteTag}>
         <i className="fi-trash" />
       </div>
     );
 
-    const countOrActionBubble = this.props.shoud_display_count ? (
-      <div className="tags_bubble tags_count">{this.props.tag_number}</div>
-    ) : this.props.node_has_tag ? (
-      <div
-        className="tags_bubble tags_cross"
-        onClick={this.props.removeTagFromNode}
-      >
+    const countOrActionBubble = shoud_display_count ? (
+      <div className="tags_bubble tags_count">{tag_number}</div>
+    ) : node_has_tag ? (
+      <div className="tags_bubble tags_cross" onClick={removeTagFromNode}>
         <i className="fi-x" />
       </div>
     ) : (
-      <div className="tags_bubble tags_add" onClick={this.props.addTagToNode}>
+      <div className="tags_bubble tags_add" onClick={addTagToNode}>
         <i className="fi-plus" />
       </div>
     );
 
-    let tag_pill;
-    if (this.props.editing) {
-      tag_pill = (
+    let tagPill;
+    if (editing) {
+      tagPill = (
         <MultiLinesInput
           value={tag}
           onFinish={value => {
             if (value !== "") {
-              this.props.renameTag(value);
+              renameTag(value);
             }
-            this.props.stopEditingTag();
+            stopEditingTag();
           }}
           autofocus={true}
         />
       );
     } else {
-      tag_pill = (
+      tagPill = (
         <Tag
           text={tag}
           editing={false}
-          clickHandler={this.props.startEditingTag}
+          clickHandler={startEditingTag}
           removeHandler={() => {}}
         />
       );
     }
 
-    const pencil = this.props.editing ? (
+    const pencil = editing ? (
       <span />
     ) : (
       <i
@@ -103,7 +114,7 @@ class AllTagsItem extends React.Component {
     return (
       <div
         className="edit_hover_container"
-        onMouseEnter={this.props.highlightTag}
+        onMouseEnter={highlightTag}
         style={componentStyle}
       >
         <div className="grid-x" style={contentStyle}>
@@ -114,7 +125,7 @@ class AllTagsItem extends React.Component {
             {countOrActionBubble}
           </div>
           <div className="cell auto" style={cell_shrink_style}>
-            {tag_pill}
+            {tagPill}
           </div>
           <div className="cell shrink" style={cell_shrink_style}>
             {pencil}

@@ -1,6 +1,6 @@
 import React from "react";
 
-import TagListItem from "components/all-tags-item";
+import TagListItem from "components/tags/all-tags-item";
 import TextAlignCenter from "components/text-align-center";
 
 import * as Color from "util/color-util";
@@ -12,19 +12,22 @@ import {
   tagHasFfId,
   tagMapHasTags,
   tagMapToArray
-} from "../reducers/tags/tags-selectors";
+} from "../../reducers/tags/tags-selectors";
+import { useSelector } from "react-redux";
+import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
-const all_tags = pick({
+const allTags = pick({
   en: "All tags",
   fr: "Tous les tags"
 });
 
-const no_tags = pick({
+const noTags = pick({
   en: "No tags at the moment.",
   fr: "Aucun tag pour l'instant."
 });
 
-const content_style = {
+const contentStyle = {
   fontSize: "0.8em",
   overflowY: "auto",
   overflowX: "hidden",
@@ -57,20 +60,27 @@ class AllTags extends React.Component {
   }
 
   render() {
-    const props = this.props;
-    const { tags, filesAndFolders } = props;
-    const tag_id_to_highlight = props.tag_id_to_highlight;
-    const total_volume = props.total_volume;
-    const focused_node_id = props.focused_node_id;
+    const {
+      tags,
+      filesAndFolders,
+      filesAndFoldersMetadata,
+      tag_id_to_highlight,
+      total_volume,
+      focused_node_id,
+      highlightTag,
+      stopHighlightingTag,
+      onDeleteTag,
+      onRenameTag,
+      onAddTagged,
+      onDeleteTagged
+    } = this.props;
 
-    const state = this.state;
-
-    const editing_tag_id = state.editing_tag_id;
+    const { editing_tag_id } = this.state;
 
     const startEditingTagFactory = this.startEditingTagFactory;
     const stopEditingTag = this.stopEditingTag;
 
-    const component_style = {
+    const componentStyle = {
       opacity: tags.length > 0 ? 1 : 0.5,
       background: "white",
       height: "100%",
@@ -78,7 +88,7 @@ class AllTags extends React.Component {
       padding: "0.5em 0 1em 0"
     };
 
-    let tags_content;
+    let tagsContent;
 
     const computeOpacity = tag_id => {
       if (editing_tag_id.length > 0) {
@@ -102,7 +112,7 @@ class AllTags extends React.Component {
 
     // Dummy display for when there aren't any tags yet
     if (!tagMapHasTags(tags)) {
-      tags_content = (
+      tagsContent = (
         <div
           className="grid-y grid-frame align-center"
           style={{ height: "75%" }}
@@ -121,23 +131,24 @@ class AllTags extends React.Component {
           </div>
           <div className="cell">
             <TextAlignCenter>
-              <em>{no_tags}</em>
+              <em>{noTags}</em>
             </TextAlignCenter>
           </div>
         </div>
       );
     } else {
-      const tags_list = sortTags(tagMapToArray(tags))
+      const tagsList = sortTags(tagMapToArray(tags))
         .map(tag => {
-          const size = getTagSize(tag, filesAndFolders);
-
+          const size = getTagSize(
+            tag,
+            filesAndFolders,
+            filesAndFoldersMetadata
+          );
           const opacity = computeOpacity(tag.id);
-
           const percentage = Math.floor((size / total_volume) * 100);
-
           const editing = editing_tag_id === tag.id;
-          const shoud_display_count = focused_node_id === undefined;
-          const node_has_tag = tagHasFfId(tag, focused_node_id);
+          const shouldDisplayCount = focused_node_id === undefined;
+          const nodeHasTag = tagHasFfId(tag, focused_node_id);
 
           return (
             <TagListItem
@@ -146,38 +157,38 @@ class AllTags extends React.Component {
               opacity={opacity}
               editing={editing}
               percentage={percentage}
-              shoud_display_count={shoud_display_count}
-              node_has_tag={node_has_tag}
+              shoud_display_count={shouldDisplayCount}
+              node_has_tag={nodeHasTag}
               tag_number={tag.ffIds.length}
-              highlightTag={props.highlightTag(tag.id)}
-              stopHighlightingTag={props.stopHighlightingTag}
+              highlightTag={highlightTag(tag.id)}
+              stopHighlightingTag={stopHighlightingTag}
               startEditingTag={startEditingTagFactory(tag.id)}
               stopEditingTag={stopEditingTag}
-              deleteTag={props.onDeleteTag(tag.id)}
-              renameTag={props.onRenameTag(tag.id)}
-              addTagToNode={props.onAddTagged(focused_node_id, tag.id)}
-              removeTagFromNode={props.onDeleteTagged(focused_node_id, tag.id)}
+              deleteTag={onDeleteTag(tag.id)}
+              renameTag={onRenameTag(tag.id)}
+              addTagToNode={onAddTagged(focused_node_id, tag.id)}
+              removeTagFromNode={onDeleteTagged(focused_node_id, tag.id)}
             />
           );
         })
         .reduce((acc, val) => [...acc, val], []);
 
-      tags_content = (
-        <div style={content_style} onMouseLeave={props.stopHighlightingTag}>
-          {tags_list}
+      tagsContent = (
+        <div style={contentStyle} onMouseLeave={stopHighlightingTag}>
+          {tagsList}
         </div>
       );
     }
 
     return (
-      <div style={component_style}>
+      <div style={componentStyle}>
         <div className="grid-y" style={{ height: "100%" }}>
           <div className="cell shrink">
             <TextAlignCenter>
-              <b>{all_tags}</b>
+              <b>{allTags}</b>
             </TextAlignCenter>
           </div>
-          <div className="cell auto">{tags_content}</div>
+          <div className="cell auto">{tagsContent}</div>
         </div>
       </div>
     );
@@ -193,7 +204,10 @@ const AllTagsApiToProps = ({
   addTagged
 }) => {
   const { icicle_state, database } = api;
-  const filesAndFolders = database.getFilesAndFolders();
+  const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
+  const filesAndFoldersMetadata = useSelector(
+    getFilesAndFoldersMetadataFromStore
+  );
 
   const total_volume = database.volume();
 
@@ -248,6 +262,7 @@ const AllTagsApiToProps = ({
       onDeleteTagged={onDeleteTagged}
       tags={tags}
       filesAndFolders={filesAndFolders}
+      filesAndFoldersMetadata={filesAndFoldersMetadata}
     />
   );
 };

@@ -195,22 +195,52 @@ describe("tags-selectors", () => {
 
   describe("getTagSize", () => {
     it("should return the sum of the tag sizes", () => {
-      const origins = [
-        [{ size: 1, lastModified: Date.now() }, "path1"],
-        [{ size: 10, lastModified: Date.now() }, "path2"],
-        [{ size: 100, lastModified: Date.now() }, "path3/file1"],
-        [{ size: 100, lastModified: Date.now() }, "path3/file2"]
-      ];
-
-      const filesAndFolders = computeDerived(ff(origins));
-
+      const tagName = "test-tag-1";
+      const taggedFfId = "/folder/ff-id";
+      const tagId = "test-tag-id";
+      const rootId = "";
       const tag = {
-        ffIds: ["path1", "path3"],
-        id: "tagId",
-        name: "tagName"
+        ffIds: [taggedFfId],
+        id: tagId,
+        name: tagName
       };
 
-      expect(getTagSize(tag, filesAndFolders)).toEqual(201);
+      const filesAndFolders = {
+        [rootId]: {
+          alias: "",
+          children: [],
+          comments: "",
+          file_last_modified: 1570615679168,
+          file_size: 10,
+          hash: null,
+          id: rootId,
+          name: "root"
+        },
+        [taggedFfId]: {
+          alias: "",
+          children: [],
+          comments: "",
+          file_last_modified: 1570615679168,
+          file_size: 10,
+          hash: null,
+          id: taggedFfId,
+          name: "filename"
+        }
+      };
+
+      const filesAndFoldersMetadata = {
+        [taggedFfId]: {
+          averageLastModified: 3000,
+          childrenTotalSize: 10000,
+          maxLastModified: 10000,
+          medianLastModified: 4000,
+          minLastModified: 1000
+        }
+      };
+
+      expect(getTagSize(tag, filesAndFolders, filesAndFoldersMetadata)).toEqual(
+        10000
+      );
     });
   });
 

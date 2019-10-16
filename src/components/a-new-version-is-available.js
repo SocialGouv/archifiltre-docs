@@ -17,21 +17,21 @@ const text = v =>
     fr: `La version ${v} d'Archifiltre est sortie !`
   });
 
-const button_tr = pick({
+const buttonTr = pick({
   en: "download it!",
   fr: "téléchargez la !"
 });
 
-const banner_style = {
+const bannerStyle = {
   backgroundColor: Color.folder(),
   border: "0.1em black solid"
 };
 
-const cell_style = {
+const cellStyle = {
   padding: "0.3em 0.3em"
 };
 
-const button_style = {
+const buttonStyle = {
   borderRadius: "3em"
 };
 
@@ -41,7 +41,7 @@ export default class ANewVersionIsAvailable extends React.PureComponent {
 
     this.state = {
       display: false,
-      last_version: -1
+      lastVersion: -1
     };
 
     this.setState = this.setState.bind(this);
@@ -53,20 +53,17 @@ export default class ANewVersionIsAvailable extends React.PureComponent {
       method: "GET",
       url: "https://archifiltre.github.io/api-version/"
     })
-      .then(a => {
+      .then(result => {
         try {
-          a = JSON.parse(a);
-          const last_version = a.last_version;
-          const current_version = version;
+          result = JSON.parse(result);
+          const lastVersion = result.last_version;
+          const currentVersion = version;
 
-          if (
-            isNaN(last_version) === false &&
-            typeof last_version === "number"
-          ) {
-            if (current_version < last_version) {
+          if (isNaN(lastVersion) === false && typeof lastVersion === "number") {
+            if (currentVersion < lastVersion) {
               this.setState({
                 display: true,
-                last_version
+                lastVersion
               });
             }
           }
@@ -88,42 +85,36 @@ export default class ANewVersionIsAvailable extends React.PureComponent {
   }
 
   render() {
-    const state = this.state;
-
-    const display = state.display;
-    const last_version = state.last_version;
-    if (display) {
-      return (
-        <div className="grid-x" style={banner_style}>
-          <div className="cell auto">
-            <div className="grid-x align-center align-middle">
-              <div className="cell shrink" style={cell_style}>
-                {text(last_version)}
-              </div>
-              <div className="cell shrink" style={cell_style}>
-                {mkB(
-                  this.download,
-                  button_tr,
-                  true,
-                  "rgb(23, 177, 251)",
-                  button_style
-                )}
-              </div>
+    const { display, lastVersion } = this.state;
+    if (!display) return false;
+    return (
+      <div className="grid-x" style={bannerStyle}>
+        <div className="cell auto">
+          <div className="grid-x align-center align-middle">
+            <div className="cell shrink" style={cellStyle}>
+              {text(lastVersion)}
+            </div>
+            <div className="cell shrink" style={cellStyle}>
+              {mkB(
+                this.download,
+                buttonTr,
+                true,
+                "rgb(23, 177, 251)",
+                buttonStyle
+              )}
             </div>
           </div>
-          <div className="cell shrink" style={cell_style}>
-            {mkB(
-              this.displayNone,
-              "X",
-              true,
-              "rgba(224, 77, 28, 0.31)",
-              button_style
-            )}
-          </div>
         </div>
-      );
-    } else {
-      return false;
-    }
+        <div className="cell shrink" style={cellStyle}>
+          {mkB(
+            this.displayNone,
+            "X",
+            true,
+            "rgba(224, 77, 28, 0.31)",
+            buttonStyle
+          )}
+        </div>
+      </div>
+    );
   }
 }

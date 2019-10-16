@@ -5,8 +5,8 @@ import {
   renameTag,
   tagFile,
   untagFile
-} from "../reducers/tags/tags-actions";
-import { getTagsFromStore } from "../reducers/tags/tags-selectors";
+} from "../../reducers/tags/tags-actions";
+import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import AllTags from "./all-tags";
 
 interface AllTagsContainerProps {

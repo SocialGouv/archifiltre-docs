@@ -1,54 +1,8 @@
-import { traverseFileTree, isJsonFile, readFileSync } from "util/file-sys-util";
+import { traverseFileTree } from "util/file-sys-util";
 
 import * as VirtualFileSystem from "datastore/virtual-file-system";
-import * as FilesAndFolders from "datastore/files-and-folders";
-import { fromAnyJsonToJs } from "compatibility";
-
-import version from "version";
 import { reportError, reportMessage } from "./reporter";
 import { hookCounter } from "./util/hook-utils";
-
-/**
- * Remove the byte order mark
- * Until v10, json files were generated with a
- * byte order mark at their start
- * We upgrade file-saver from 1.3.3 to 2.0.2,
- * they are not anymore generated with a byte order mark
- * @param content
- */
-const removeByteOrderMark = content => {
-  if (content[0] !== "{") {
-    return content.slice(1);
-  } else {
-    return content;
-  }
-};
-
-/**
- * Loads a preexisting saved config
- * @param dropped_folder_path
- */
-function loadJsonConfig(dropped_folder_path) {
-  const content = readFileSync(dropped_folder_path, "utf8");
-  const content_without_byte_order_mark = removeByteOrderMark(content);
-
-  const [js, js_version] = fromAnyJsonToJs(content_without_byte_order_mark);
-
-  let filesAndFolders = FilesAndFolders.fromJs(js.files_and_folders);
-
-  if (js_version !== version) {
-    postMessage({ status: "derivate" });
-    filesAndFolders = FilesAndFolders.computeDerived(filesAndFolders);
-  }
-
-  postMessage({
-    status: "return",
-    vfs: {
-      ...js,
-      files_and_folders: FilesAndFolders.toJs(filesAndFolders)
-    }
-  });
-}
 
 /**
  * Recursively generates a file system from a dropped folder
@@ -128,10 +82,10 @@ function loadFolder(folderPath) {
       count: getDerivateCount() / 2,
       totalCount: derivateTotalCount
     });
-  } catch (err) {
-    reportError(err);
+  } catch (error) {
+    reportError(error);
     reportMessage("Error in vfs.derivate");
-    postMessage({ status: "error", message: err.message });
+    postMessage({ status: "error", message: error.message });
   }
   postMessage({
     status: "return",
@@ -139,13 +93,6 @@ function loadFolder(folderPath) {
   });
 }
 
-onmessage = function(e) {
-  const data = e.data;
-  const dropped_folder_path = data.dropped_folder_path;
-
-  if (isJsonFile(dropped_folder_path)) {
-    loadJsonConfig(dropped_folder_path);
-  } else {
-    loadFolder(dropped_folder_path);
-  }
+onmessage = ({ data: { droppedElementPath } }) => {
+  loadFolder(droppedElementPath);
 };

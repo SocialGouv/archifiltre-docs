@@ -13,16 +13,16 @@ yarn
 You should use autoreloading when developping, using
 
 ```bash
-yarn devServer
+yarn dev
 ```
 
-and in another terminal :
+and in another terminal, to launch the electron app:
 
 ```bash
-yarn electron-server
+yarn dev-app
 ```
 
-and then, reload your electron app with the refresh command (`CMD + R` on OSX)
+and then, reload your electron app with the refresh command (`CMD + R` on OS X)
 
 ### Writing code
 
@@ -58,7 +58,7 @@ We are trying to improve our test coverage, so you are welcome to test the servi
 First, prepare the build in production mode
 
 ```bash
-yarn prepareProd
+yarn prepare-prod
 ```
 
 Then you can package the app for the right platform:
@@ -73,7 +73,7 @@ yarn linux
 Or you can prepare the build and build for all four platforms with one command:
 
 ```bash
-yarn buildProd
+yarn build-prod
 ```
 
 Once built, production binaries are found in the dist folder, each in their corresponding platform's subfolder.

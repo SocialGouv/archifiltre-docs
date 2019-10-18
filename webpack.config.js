@@ -9,6 +9,9 @@ module.exports = (env, argv = {}) => ({
     app: "./src/app.js"
   },
 
+  externals: {
+    "iconv-lite": "require('iconv-lite')"
+  },
   plugins: [
     new CopyWebpackPlugin(["static"]),
     new HtmlWebpackPlugin({

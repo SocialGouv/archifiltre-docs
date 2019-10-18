@@ -6,10 +6,11 @@ import {
   createEmptyStore,
   wrapStoreWithUndoable
 } from "../reducers/store-test-utils";
-import { save } from "../util/file-sys-util";
+import { save, UTF8 } from "../util/file-sys-util";
 import { csvExporterThunk } from "./csv-exporter";
 
 jest.mock("../util/file-sys-util", () => ({
+  UTF8: "utf-8",
   save: jest.fn()
 }));
 
@@ -88,7 +89,7 @@ describe("csv-exporter", () => {
       const expectedCsv = `${csvHeader}"";"/folder/ff-id";"13";"filename";"";"10000";"01/01/1970";"";"";"folder";"1"\n`;
 
       expect(saveMock).toHaveBeenCalledWith(name, expectedCsv, {
-        format: "utf-8"
+        format: UTF8
       });
     });
   });

@@ -5,7 +5,7 @@ import * as FilesAndFolders from "../datastore/files-and-folders";
 import * as Tags from "../datastore/tags";
 import { ArchifiltreThunkAction } from "../reducers/archifiltre-types";
 import { getTagsFromStore } from "../reducers/tags/tags-selectors";
-import { save } from "../util/file-sys-util";
+import { save, UTF8 } from "../util/file-sys-util";
 
 /**
  * Thunk that generates the csv array for the CSV export with the first line being
@@ -31,6 +31,6 @@ export const csvExporterThunk = (name: string): ArchifiltreThunkAction => (
   );
 
   save(name, toStr(csv), {
-    format: "utf-8"
+    format: UTF8
   });
 };

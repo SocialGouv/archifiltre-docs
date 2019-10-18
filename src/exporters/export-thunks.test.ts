@@ -1,3 +1,4 @@
+import fs from "fs";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { computeDerived, ff } from "../datastore/files-and-folders";
@@ -9,7 +10,6 @@ import {
   wrapStoreWithUndoable
 } from "../reducers/store-test-utils";
 import { save } from "../util/file-sys-util";
-import { csvExporterThunk } from "./csv-exporter";
 import { metsExporterThunk, resipExporterThunk } from "./export-thunks";
 import { makeSIP } from "./mets";
 import resipExporter from "./resipExporter";
@@ -25,6 +25,10 @@ jest.mock("../util/file-sys-util", () => ({
 
 jest.mock("./mets", () => ({
   makeSIP: jest.fn()
+}));
+
+jest.mock("fs", () => ({
+  writeFileSync: jest.fn()
 }));
 
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
@@ -93,21 +97,21 @@ const storeContent = {
 describe("export-thunks", () => {
   describe("resipExporterThunk", () => {
     it("should call resipExporter with the right data", () => {
-      const saveMock = save as jest.Mock<any>;
+      const writeFileSyncMock = fs.writeFileSync as jest.Mock<any>;
       const mockedResipExporter = resipExporter as jest.Mock<any>;
-      const name = "test-name";
-      saveMock.mockReset();
+      const savePath = "/path/to/save/the/file";
+      writeFileSyncMock.mockReset();
       const store = mockStore(storeContent);
 
       const csvData = [["data"]];
       mockedResipExporter.mockReturnValue(csvData);
-      store.dispatch(resipExporterThunk(name));
+      store.dispatch(resipExporterThunk(savePath));
 
       expect(mockedResipExporter).toHaveBeenCalledWith(
         storeFilesAndFolders,
         tags
       );
-      expect(saveMock).toHaveBeenCalledWith(name, `"data"\n`);
+      expect(writeFileSyncMock).toHaveBeenCalledWith(savePath, `"data"\n`);
     });
   });
 

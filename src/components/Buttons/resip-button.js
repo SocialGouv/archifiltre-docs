@@ -1,4 +1,5 @@
 import { mkB } from "components/Buttons/button";
+import path from "path";
 
 import { makeNameWithExt } from "../../util/file-sys-util";
 
@@ -8,10 +9,13 @@ const ResipButton = props => {
   const {
     exportToResip,
     api: {
-      database: { getSessionName }
+      database: { getSessionName, getOriginalPath }
     }
   } = props;
-  const name = makeNameWithExt(`${getSessionName()}-RESIP`, "csv");
+
+  const savePath = path.join(getOriginalPath(), `${getSessionName()}-RESIP`);
+
+  const name = makeNameWithExt(savePath, "csv");
 
   return mkB(
     () => {

@@ -1,25 +1,29 @@
-// eslint-disable-next-line import/default
-import AsyncHandleDropWorker from "async-handle-drop.worker";
+/* eslint import/default: OFF */
+import LoadFromFilesystemWorker from "./load-from-filesystem.worker";
+import LoadFromJsonWorker from "./load-from-json.worker";
+import { isJsonFile } from "./util/file-sys-util";
 
-export default (hook, dropped_folder_path) => {
+export default (hook, droppedElementPath) => {
   return new Promise((resolve, reject) => {
-    const worker = new AsyncHandleDropWorker();
-    worker.onmessage = e => {
-      switch (e.data.status) {
+    const worker = isJsonFile(droppedElementPath)
+      ? new LoadFromJsonWorker()
+      : new LoadFromFilesystemWorker();
+    worker.onmessage = event => {
+      switch (event.data.status) {
         case "return":
           worker.terminate();
-          resolve(e.data.vfs);
+          resolve(event.data.vfs);
           break;
         case "error":
           worker.terminate();
-          reject(e.data.message);
+          reject(event.data.message);
           break;
         default:
-          hook(e.data);
+          hook(event.data);
       }
     };
     worker.postMessage({
-      dropped_folder_path
+      droppedElementPath
     });
   });
 };

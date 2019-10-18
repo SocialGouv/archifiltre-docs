@@ -14,13 +14,14 @@ import {
   filesAndFoldersMapToArray,
   getFiles
 } from "../util/file-and-folders-utils";
+import { isJsonFile } from "../util/file-sys-util";
 
 const placeholder = pick({
   en: "Drop a directory here!",
   fr: "Glissez-déposez un répertoire ici !"
 });
 
-const placeholder_st = pick({
+const placeholderSt = pick({
   en: "You may also drop a JSON file previously exported from Archifiltre.",
   fr:
     "Vous pouvez aussi déposer un fichier JSON précédement exporté depuis Archifiltre."
@@ -42,7 +43,7 @@ const disclaimer = pick({
       <br />
       Compatible avec Firefox et Chrome.
       <br />
-      Vos données ne quittent pas votre ordinateur ; seul•e vous pouvez voir ce
+      Vos données ne quittent pas votre ordinateur; seul•e vous pouvez voir ce
       qui se passe dans cette application.
     </em>
   )
@@ -64,12 +65,12 @@ export default class FolderDropzone extends React.Component {
     this.handleDrop = this.handleDrop.bind(this);
   }
 
-  handleDragover(e) {
-    e.preventDefault();
+  handleDragover(event) {
+    event.preventDefault();
   }
 
-  handleDrop(e) {
-    e.preventDefault();
+  handleDrop(event) {
+    event.preventDefault();
 
     const {
       props: { api }
@@ -86,36 +87,39 @@ export default class FolderDropzone extends React.Component {
     };
 
     this.props.api.loading_state.startToLoadFiles();
-    AsyncHandleDrop(hook, e.dataTransfer.files[0].path)
-      .then(vfs => {
-        api.database.set(vfs);
+    const droppedElementPath = event.dataTransfer.files[0].path;
+    AsyncHandleDrop(hook, droppedElementPath)
+      .then(virtualFileSystem => {
+        api.database.set(virtualFileSystem);
         api.loading_state.finishedToLoadFiles();
         api.undo.commit();
-        return vfs;
+        return virtualFileSystem;
       })
-      .then(vfs => {
-        const filesAndFolders = vfs.files_and_folders;
-        const basePath = vfs.original_path
-          .split(path.sep)
-          .slice(0, -1)
-          .join(path.sep);
-        const paths = getFiles(filesAndFoldersMapToArray(filesAndFolders)).map(
-          file => file.id
-        );
-        computeHashes$(paths, {
-          initialValues: { basePath }
-        }).subscribe({
-          next: api.database.setHashes,
-          complete: () =>
-            setTimeout(() =>
-              computeFolderHashes$(api.database.getData()).subscribe(
-                api.database.setHashes
+      .then(virtualFileSystem => {
+        if (!isJsonFile(droppedElementPath)) {
+          const filesAndFolders = virtualFileSystem.files_and_folders;
+          const basePath = virtualFileSystem.original_path
+            .split(path.sep)
+            .slice(0, -1)
+            .join(path.sep);
+          const paths = getFiles(
+            filesAndFoldersMapToArray(filesAndFolders)
+          ).map(file => file.id);
+          computeHashes$(paths, {
+            initialValues: { basePath }
+          }).subscribe({
+            next: api.database.setHashes,
+            complete: () =>
+              setTimeout(() =>
+                computeFolderHashes$(api.database.getData()).subscribe(
+                  api.database.setHashes
+                )
               )
-            )
-        });
+          });
+        }
       })
-      .catch(err => {
-        console.error(err);
+      .catch(error => {
+        console.error(error);
         api.loading_state.errorLoadingFiles();
       });
   }
@@ -135,7 +139,7 @@ export default class FolderDropzone extends React.Component {
         </div>
         <div className="cell">
           <TextAlignCenter>
-            <div>{placeholder_st}</div>
+            <div>{placeholderSt}</div>
           </TextAlignCenter>
         </div>
         <div className="cell">

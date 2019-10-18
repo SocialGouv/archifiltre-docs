@@ -1,29 +1,23 @@
 {
   "name": "archifiltre",
-  "version": "1.0.0",
+  "version": "13.0.0",
   "description": "Explorer plus plus for archive",
+  "author": "",
+  "license": "ISC",
   "main": "electron/index.js",
   "scripts": {
+    "dev": "webpack-dev-server --mode development",
+    "dev-app": "cross-env DEV_SERVER=true electron ./electron",
     "test": "jest",
-    "test-watch": "yarn test --watch",
-    "buildDev": "webpack --progress --mode development",
-    "prepareProd": "webpack --progress --mode production",
-    "buildProd": "yarn prepareProd && yarn win32 && yarn win64 && yarn mac && yarn linux",
-    "devServer": "webpack-dev-server --mode development",
-    "watchBuildDev": "webpack --watch --progress --mode development",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
+    "prepare-prod": "webpack --progress --mode production",
+    "build-prod": "yarn prepare-prod && yarn win32 && yarn win64 && yarn mac && yarn linux",
     "win32": "electron-builder --windows portable --ia32",
     "win64": "electron-builder --windows portable --x64",
     "mac": "electron-builder --mac dmg",
     "linux": "electron-builder --linux AppImage",
-    "postinstall": "electron-builder install-app-deps package.json",
-    "electron": "electron ./electron",
-    "electron-server": "cross-env DEV_SERVER=true electron ./electron",
-    "start": "",
     "lint": "eslint . && tslint -p .",
     "lint-fix": "eslint --fix .",
-    "document-wip": "jsdoc2md ./src/*.js > ./docs/doc.md"
+    "postinstall": "electron-builder install-app-deps package.json"
   },
   "build": {
     "appId": "io.github.archifiltre",
@@ -69,8 +63,6 @@
     "type": "git",
     "url": "https://github.com/SocialGouv/archifiltre"
   },
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/SocialGouv/archifiltre/issues"
   },

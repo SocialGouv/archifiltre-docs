@@ -4,16 +4,18 @@ import FileSaver from "file-saver";
 
 const utf8_byte_order_mark = "\ufeff";
 
+export const UTF8 = "utf-8";
+
 /**
  * Open a dialog to save string data into a file
  * @param name - The default file name
  * @param content - The string content to save
- * @param format - The specific format (ex: 'utf-8')
+ * @param format - The specific format (ex: UTF8)
  */
 export function save(name, content, { format = "" } = {}) {
   let fileHead = "";
 
-  if (format.toLowerCase() === "utf-8") {
+  if (format === UTF8) {
     fileHead += utf8_byte_order_mark;
   }
 

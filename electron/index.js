@@ -66,11 +66,11 @@ const askBeforeLeaving = () => {
     let yes;
     if (language === "fr") {
       title = "Bye bye !";
-      message = "Êtes-vous sure de vouloir quitter ?";
+      message = "Êtes-vous sûr•e de vouloir quitter ?";
       detail =
         "Toutes les données qui n'ont pas été sauvegardées seront perdues définitivement !";
-      no = "non";
-      yes = "oui";
+      no = "Non";
+      yes = "Oui";
     } else {
       title = "Bye bye !";
       message = "Are you sure you want to leave?";

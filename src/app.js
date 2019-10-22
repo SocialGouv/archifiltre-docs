@@ -26,6 +26,8 @@ import store from "reducers/store.ts";
 import version from "version";
 import pick from "languages";
 
+import { NotificationContainer } from "react-notifications";
+
 SecretDevtools.enable();
 
 document.title = pick({
@@ -71,6 +73,7 @@ const app = () => {
                   <MainSpace api={api} />
                 </div>
               </div>
+              <NotificationContainer />
             </ErrorBoundary>
           );
         }}

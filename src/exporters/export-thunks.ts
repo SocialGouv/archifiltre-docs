@@ -1,12 +1,22 @@
 import fs from "fs";
+import pick from "languages";
 import { toStr } from "../csv";
+import { notifySuccess } from "../notifications-util";
 import { ArchifiltreThunkAction } from "../reducers/archifiltre-types";
 import { getFilesAndFoldersFromStore } from "../reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "../reducers/tags/tags-selectors";
-import { formatFileContentForResip } from "../util/file-format-util";
-import { save } from "../util/file-sys-util";
 import { makeSIP } from "./mets";
 import resipExporter from "./resipExporter";
+
+const resipExportSuccessMessage = pick({
+  en: "The metadata file has been exported to project root folder",
+  fr: "Fichier de métadonnées exporté dans le dossier racine du projet"
+});
+
+const resipExportSuccessTitle = pick({
+  en: "Resip Export",
+  fr: "Export Resip"
+});
 
 /**
  * Thunk to export data to Resip
@@ -21,6 +31,7 @@ export const resipExporterThunk = (
   const content = toStr(resipExporter(filesAndFolders, tags));
 
   fs.writeFileSync(filePath, content);
+  notifySuccess(resipExportSuccessMessage, resipExportSuccessTitle);
 };
 
 /**

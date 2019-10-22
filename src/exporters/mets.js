@@ -1,7 +1,9 @@
+import pick from "languages";
 import { generateRandomString } from "util/random-gen-util";
 import { Map } from "immutable";
 import version from "version";
 import { getAllTagsForFile } from "../reducers/tags/tags-selectors";
+import { notifySuccess } from "../notifications-util";
 
 const XML = require("xml");
 const dateFormat = require("dateformat");
@@ -566,10 +568,19 @@ export const makeSIP = (state, tags) => {
 
   // final ZIP output
   sip.generateAsync({ type: "nodebuffer" }).then(data => {
+    const exportSuccessTitle = pick({
+      en: "METS Export",
+      fr: "Export METS"
+    });
+    const exportSuccessMessage = pick({
+      en: "METS archive has been created in the projet parent folder",
+      fr: "L'archive METS a été créée dans le dossier parent du projet"
+    });
     fs.writeFileSync(
       state.get("original_path") + "/../" + state.get("session_name") + ".zip",
       data
     );
     console.log("SIP zip written.");
+    notifySuccess(exportSuccessMessage, exportSuccessTitle);
   });
 };

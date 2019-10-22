@@ -33,7 +33,7 @@ const Header = props => {
             <b className="font_playfair">{title}</b>
           </div>
           <div style={{ fontSize: "0.7em" }}>
-            {"v" + version + " Kinky Kookaburra • "}
+            {"v" + version + " Magic Moose • "}
             <a target="_blank" onClick={onClick} role="link">
               {what_new}
             </a>

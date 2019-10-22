@@ -27,7 +27,7 @@ describe("object-util", () => {
 
     it("should always contain first object values", () => {
       fc.assert(
-        fc.property(fc.object(), fc.object(), (a, b) => {
+        fc.property(fc.object(), fc.object(), (a: any, b: any) => {
           expect(
             compose(
               a,
@@ -40,7 +40,7 @@ describe("object-util", () => {
 
     it("should always contain all the keys of the first object", () => {
       fc.assert(
-        fc.property(fc.object(), fc.object(), (a, b) => {
+        fc.property(fc.object(), fc.object(), (a: any, b: any) => {
           expect(
             Object.keys(
               compose(
@@ -55,7 +55,7 @@ describe("object-util", () => {
 
     it("should always contain all the keys of the second object", () => {
       fc.assert(
-        fc.property(fc.object(), fc.object(), (a, b) => {
+        fc.property(fc.object(), fc.object(), (a: any, b: any) => {
           expect(
             Object.keys(
               compose(
@@ -89,7 +89,7 @@ describe("object-util", () => {
   describe("copy", () => {
     it("should create a new object", () => {
       fc.assert(
-        fc.property(fc.object(), obj => {
+        fc.property(fc.object(), (obj: any) => {
           expect(copy(obj)).not.toBe(obj);
         })
       );
@@ -97,7 +97,7 @@ describe("object-util", () => {
 
     it("should create the same object", () => {
       fc.assert(
-        fc.property(fc.object(), obj => {
+        fc.property(fc.object(), (obj: any) => {
           expect(copy(obj)).toEqual(obj);
         })
       );
@@ -111,7 +111,7 @@ describe("object-util", () => {
           fc.object(),
           fc.string(),
           fc.anything(),
-          (obj, key, value) => {
+          (obj: any, key, value) => {
             expect(removeKey({ ...obj, [key]: value }, key)).toEqual(
               removeKey(obj, key)
             );
@@ -122,7 +122,7 @@ describe("object-util", () => {
 
     it("should not modify the original object", () => {
       fc.assert(
-        fc.property(fc.object(), fc.string(), (obj, key) => {
+        fc.property(fc.object(), fc.string(), (obj: any, key) => {
           const backup = copy(obj);
           removeKey(obj, key);
           expect(obj).toEqual(backup);

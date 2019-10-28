@@ -7,7 +7,8 @@ module.exports = {
   moduleDirectories: ["src", "node_modules"],
   setupFiles: ["jest-date-mock"],
   globals: {
-    STATIC_ASSETS_PATH: "."
+    STATIC_ASSETS_PATH: ".",
+    MODE: "development"
   },
   preset: "ts-jest/presets/js-with-ts"
 };

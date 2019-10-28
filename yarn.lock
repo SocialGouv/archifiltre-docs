@@ -4141,10 +4141,10 @@ extsprintf@^1.2.0:
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
 
-fast-check@1.18.0:
-  version "1.18.0"
-  resolved "https://registry.yarnpkg.com/fast-check/-/fast-check-1.18.0.tgz#cada1abd191beeb01f271af44b6f2ab3870b186a"
-  integrity sha512-mbpESEzJmjt2ITz1v9aRX0wFQK8Cj/u7hXjrkbsfIAsxLGD+Tlib3hmqI3ImmnLbC50E5yg05oCoXwpzFqikiA==
+fast-check@1.18.1:
+  version "1.18.1"
+  resolved "https://registry.yarnpkg.com/fast-check/-/fast-check-1.18.1.tgz#64568dd417bca4c7c93d1705868d8e46fa7a3fdf"
+  integrity sha512-b2EOdqujCBzMC78WhqYMXMRzWUKC8cXuPAgt6UOZtU5QTHk2NpUMZDfQeMqHNDZYPZUQyZdHtZqQgq43lBCoIg==
   dependencies:
     pure-rand "^1.7.0"
     tslib "^1.10.0"

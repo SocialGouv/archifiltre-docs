@@ -281,8 +281,8 @@ describe("files-and-folders", () => {
         "extension",
         "size (octet)",
         "last_modified",
-        "alias",
-        "comments",
+        "new name",
+        "description",
         "file/folder",
         "depth"
       ],

@@ -275,8 +275,8 @@ const str_list_2_header = pick({
     "extension",
     "poids (octet)",
     "date de dernière modification",
-    "alias",
-    "commentaire",
+    "nouveau nom",
+    "description",
     "fichier/répertoire",
     "profondeur"
   ],
@@ -288,8 +288,8 @@ const str_list_2_header = pick({
     "extension",
     "size (octet)",
     "last_modified",
-    "alias",
-    "comments",
+    "new name",
+    "description",
     "file/folder",
     "depth"
   ]

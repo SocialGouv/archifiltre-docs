@@ -15,6 +15,8 @@ import {
   getFiles
 } from "../util/file-and-folders-utils";
 import { isJsonFile } from "../util/file-sys-util";
+import { expectToBeDefined } from "../util/expect-behaviour";
+import { notifyError } from "../notifications-util";
 
 const placeholder = pick({
   en: "Drop a directory here!",
@@ -49,6 +51,16 @@ const disclaimer = pick({
   )
 });
 
+const loadingErrorTitle = pick({
+  en: "Folder loading error",
+  fr: "Erreur de chargement"
+});
+
+const loadingErrorMessage = pick({
+  en: "You probably neither dropped a folder nor a file.",
+  fr: "Vous n'avez probablement pas déposé un dossier ou un fichier."
+});
+
 export default class FolderDropzone extends React.Component {
   constructor(props) {
     super(props);
@@ -72,6 +84,13 @@ export default class FolderDropzone extends React.Component {
   handleDrop(event) {
     event.preventDefault();
 
+    const isFileDefined = expectToBeDefined(event.dataTransfer.files[0]);
+
+    if (!isFileDefined) {
+      notifyError(loadingErrorMessage, loadingErrorTitle);
+      return;
+    }
+
     const {
       props: { api }
     } = this;
@@ -87,6 +106,7 @@ export default class FolderDropzone extends React.Component {
     };
 
     this.props.api.loading_state.startToLoadFiles();
+
     const droppedElementPath = event.dataTransfer.files[0].path;
     AsyncHandleDrop(hook, droppedElementPath)
       .then(virtualFileSystem => {

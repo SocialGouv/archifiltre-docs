@@ -8,6 +8,7 @@ import { List, Map } from "immutable";
 import { epochToFormattedUtcDateString } from "csv";
 import pick from "languages";
 import { getFilesAndFoldersDepth } from "reducers/files-and-folders/files-and-folders-selectors";
+import { expectToBeDefined } from "../util/expect-behaviour";
 const Path = require("path");
 
 const fileOrFolderFactory = RecordUtil.createFactory(
@@ -156,12 +157,39 @@ const derivedFactory = RecordUtil.createFactory(
     sort_by_date_index: List()
   },
   {
-    toJs: a => ({
-      ...a,
-      last_modified_list: a.last_modified_list.toArray(),
-      sort_by_size_index: a.sort_by_size_index.toArray(),
-      sort_by_date_index: a.sort_by_date_index.toArray()
-    }),
+    toJs: partiallyConvertedFilesAndFolders => {
+      const currentFn = "files-and-folders/derivedFactory/toJs";
+
+      /**
+       * Converts the data to an array. Handles the weird case where value is undefined.
+       * Reports these unexpected cases
+       * @param data - The partiallyConvertedFilesAndFolders
+       * @param key - The field to change
+       * @returns {Array} - The value converted to an array or an empty array if value is undefined
+       */
+      const convertToArray = (data, key) => {
+        const value = data[key];
+        const isValueDefined = expectToBeDefined(value, `${currentFn}: ${key}`);
+
+        return isValueDefined ? value.toArray() : [];
+      };
+
+      return {
+        ...partiallyConvertedFilesAndFolders,
+        last_modified_list: convertToArray(
+          partiallyConvertedFilesAndFolders,
+          "last_modified_list"
+        ),
+        sort_by_size_index: convertToArray(
+          partiallyConvertedFilesAndFolders,
+          "sort_by_size_index"
+        ),
+        sort_by_date_index: convertToArray(
+          partiallyConvertedFilesAndFolders,
+          "sort_by_date_index"
+        )
+      };
+    },
     fromJs: a => ({
       ...a,
       last_modified_list: List(a.last_modified_list),

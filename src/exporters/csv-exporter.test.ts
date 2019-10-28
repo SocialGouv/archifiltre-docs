@@ -85,7 +85,7 @@ describe("csv-exporter", () => {
       const name = "test-name";
       store.dispatch(csvExporterThunk(name));
 
-      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"last_modified";"alias";"comments";"file/folder";"depth"\n`;
+      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"last_modified";"new name";"description";"file/folder";"depth"\n`;
       const expectedCsv = `${csvHeader}"";"/folder/ff-id";"13";"filename";"";"10000";"01/01/1970";"";"";"folder";"1"\n`;
 
       expect(saveMock).toHaveBeenCalledWith(name, expectedCsv, {

@@ -11,7 +11,7 @@ import {
 } from "../reducers/store-test-utils";
 import { save } from "../util/file-sys-util";
 import { metsExporterThunk, resipExporterThunk } from "./export-thunks";
-import { makeSIP } from "./mets";
+import { makeSIP } from "./mets/mets";
 import resipExporter from "./resipExporter";
 
 jest.mock("./resipExporter", () => ({
@@ -23,7 +23,7 @@ jest.mock("../util/file-sys-util", () => ({
   save: jest.fn()
 }));
 
-jest.mock("./mets", () => ({
+jest.mock("./mets/mets", () => ({
   makeSIP: jest.fn()
 }));
 

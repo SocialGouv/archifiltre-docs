@@ -1,5 +1,6 @@
 import React, { FC, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getFilesAndFoldersMetadataFromStore } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getFilesAndFoldersFromStore } from "../reducers/files-and-folders/files-and-folders-selectors";
 import { StoreState } from "../reducers/store";
 import { addTag, untagFile } from "../reducers/tags/tags-actions";
@@ -9,7 +10,6 @@ import {
   getTagsFromStore
 } from "../reducers/tags/tags-selectors";
 import ReportApiToProps from "./report";
-import { getFilesAndFoldersMetadataFromStore } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 interface ReportContainerProps {
   api: any;

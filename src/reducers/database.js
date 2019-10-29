@@ -6,7 +6,7 @@ import * as Origin from "datastore/origin";
 import * as VirtualFileSystem from "datastore/virtual-file-system";
 import * as FilesAndFolders from "datastore/files-and-folders";
 
-import * as METS from "exporters/mets";
+import * as METS from "exporters/mets/mets";
 
 import store from "./store.ts";
 import * as tagActions from "./tags/tags-actions.ts";

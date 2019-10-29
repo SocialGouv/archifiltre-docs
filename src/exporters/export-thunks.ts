@@ -1,11 +1,11 @@
 import fs from "fs";
 import pick from "languages";
 import { toStr } from "../csv";
-import { notifySuccess } from "../notifications-util";
 import { ArchifiltreThunkAction } from "../reducers/archifiltre-types";
 import { getFilesAndFoldersFromStore } from "../reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "../reducers/tags/tags-selectors";
-import { makeSIP } from "./mets";
+import { notifySuccess } from "../util/notifications-util";
+import { makeSIP } from "./mets/mets";
 import resipExporter from "./resipExporter";
 
 const resipExportSuccessMessage = pick({

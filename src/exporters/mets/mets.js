@@ -2,8 +2,15 @@ import pick from "languages";
 import { generateRandomString } from "util/random-gen-util";
 import { Map } from "immutable";
 import version from "version";
-import { getAllTagsForFile } from "../reducers/tags/tags-selectors";
-import { notifySuccess } from "../notifications-util";
+import { getAllTagsForFile } from "../../reducers/tags/tags-selectors";
+import { notifySuccess } from "../../util/notifications-util";
+import { handleError } from "../../util/error-util";
+import {
+  METS_EXPORT_ERROR_TITLE,
+  METS_EXPORT_UNHANDLED_ERROR,
+  metsExportErrorCannotAccessFile,
+  metsExportErrorFileDoesNotExist
+} from "./mets-errors";
 
 const XML = require("xml");
 const dateFormat = require("dateformat");
@@ -300,7 +307,21 @@ const recTraverseDB = (
     const clean_rootpath =
       rootpath.charAt(0) === "/" ? rootpath.substring(1) : rootpath;
     const URI = Path.join(absolutepath, clean_rootpath, item.get("name"));
-    const data = fs.readFileSync(URI);
+    let data;
+    try {
+      data = fs.readFileSync(URI);
+    } catch (err) {
+      handleError(
+        err.code,
+        {
+          EACCES: metsExportErrorCannotAccessFile(URI),
+          ENOENT: metsExportErrorFileDoesNotExist(URI),
+          default: METS_EXPORT_UNHANDLED_ERROR
+        },
+        METS_EXPORT_ERROR_TITLE
+      );
+      return;
+    }
     const hash = MD5(data);
 
     if (HMread().has(hash)) {

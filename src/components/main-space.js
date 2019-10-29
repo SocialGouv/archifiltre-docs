@@ -9,34 +9,23 @@ import ErrorScreen from "./error-screen";
 import Hint from "components/hint";
 import { hints } from "hints";
 
-const grid_style = {
+const gridStyle = {
   padding: "0em 5em"
 };
 
 const MainSpace = props => {
-  const api = props.api;
-  const loading_state = api.loading_state;
+  const { api } = props;
+  const { loading_state } = api;
 
   const started = loading_state.isStarted();
   const finished = loading_state.isFinished();
   const error = loading_state.isInError();
 
-  // return (
-  //   <div className="grid-y grid-padding-x grid-frame align-center">
-  //     <div className="cell small-8">
-  //       <WaitingScreen api={api} />
-  //     </div>
-  //     <div className="cell shrink">
-  //       <Hint hints={hints} />
-  //     </div>
-  //   </div>
-  // ); //////////////////////
-
   if (error === true) {
     return (
       <div
         className="grid-y grid-padding-x grid-frame align-center"
-        style={grid_style}
+        style={gridStyle}
       >
         <div className="cell small-8">
           <ErrorScreen api={api} />
@@ -48,7 +37,7 @@ const MainSpace = props => {
     return (
       <div
         className="grid-y grid-padding-x grid-frame align-center"
-        style={grid_style}
+        style={gridStyle}
       >
         <div className="cell small-8">
           <FolderDropzone api={api} />

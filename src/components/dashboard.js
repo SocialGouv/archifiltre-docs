@@ -17,39 +17,47 @@ import ResipButton from "./Buttons/resip-button";
 import AuditReportButton from "./Buttons/audit-report-button";
 
 const DashBoard = props => {
-  let session_info_cell = false;
-  let ctrlz_cell = false;
-  let csv_button_cell = false;
-  let resip_button_cell = false;
-  let mets_button_cell = false;
-  let save_button_cell = false;
-  let reinit_button_cell = false;
-  let export_menu_cell = false;
-  let audit_button_cell = false;
+  let sessionInfoCell = false;
+  let ctrlzCell = false;
+  let csvButtonCell = false;
+  let resipButtonCell = false;
+  let metsButtonCell = false;
+  let saveButtonCell = false;
+  let reinitButtonCell = false;
+  let exportMenuCell = false;
+  let auditButtonCell = false;
 
-  const session_info_cell_style = {
+  const sessionInfoCellStyle = {
     lineHeight: "1em"
   };
 
-  const margin_padding_compensate = {
+  const marginPaddingCompensate = {
     margin: "0.2em -0.8em",
     padding: "0.2em 0.8em"
   };
 
-  if (
-    props.started === true &&
-    props.finished === true &&
-    props.error === false
-  ) {
-    session_info_cell = (
-      <div style={session_info_cell_style}>
-        <span
-          className="edit_hover_container"
-          style={margin_padding_compensate}
-        >
+  const {
+    started,
+    finished,
+    error,
+    sessionName,
+    onChangeSessionName,
+    nb_folders,
+    nb_files,
+    volume,
+    api,
+    exportToCsv,
+    exportToResip,
+    exportToMets
+  } = props;
+
+  if (started === true && finished === true && error === false) {
+    sessionInfoCell = (
+      <div style={sessionInfoCellStyle}>
+        <span className="edit_hover_container" style={marginPaddingCompensate}>
           <RIEInput
-            value={props.sessionName()}
-            change={props.onChangeSessionName("new_session_name")}
+            value={sessionName()}
+            change={onChangeSessionName("new_session_name")}
             propName="new_session_name"
             className="session_name editable_text"
             validate={s => s.replace(/\s/g, "").length > 0}
@@ -62,46 +70,46 @@ const DashBoard = props => {
         </span>
         <br />
         <b>
-          {props.nb_folders} <i className="fi-folder" />
+          {nb_folders} <i className="fi-folder" />
           &ensp;&ensp;
-          {props.nb_files} <i className="fi-page" />
+          {nb_files} <i className="fi-page" />
           &ensp;&ensp;
-          {octet2HumanReadableFormat(props.volume)}
+          {octet2HumanReadableFormat(volume)}
         </b>
       </div>
     );
 
-    csv_button_cell = (
+    csvButtonCell = (
       <TextAlignCenter>
-        <ToCsvButton api={props.api} exportToCsv={props.exportToCsv} />
+        <ToCsvButton api={api} exportToCsv={exportToCsv} />
       </TextAlignCenter>
     );
 
-    resip_button_cell = (
+    resipButtonCell = (
       <TextAlignCenter>
-        <ResipButton api={props.api} exportToResip={props.exportToResip} />
+        <ResipButton api={api} exportToResip={exportToResip} />
       </TextAlignCenter>
     );
 
-    mets_button_cell = (
+    metsButtonCell = (
       <TextAlignCenter>
-        <METSButton api={props.api} exportToMets={props.exportToMets} />
+        <METSButton api={api} exportToMets={exportToMets} />
       </TextAlignCenter>
     );
 
-    save_button_cell = (
+    saveButtonCell = (
       <TextAlignCenter>
-        <SaveButton api={props.api} />
+        <SaveButton api={api} />
       </TextAlignCenter>
     );
 
-    audit_button_cell = (
+    auditButtonCell = (
       <TextAlignCenter>
-        <AuditReportButton api={props.api} />
+        <AuditReportButton api={api} />
       </TextAlignCenter>
     );
 
-    export_menu_cell = (
+    exportMenuCell = (
       <Bubble
         comp={
           <TextAlignCenter>
@@ -119,10 +127,10 @@ const DashBoard = props => {
         }
         sub_comp={
           <div className="grid-x">
-            <div className="cell small-12">{audit_button_cell}</div>
-            <div className="cell small-12">{csv_button_cell}</div>
-            <div className="cell small-12">{resip_button_cell}</div>
-            <div className="cell small-12">{mets_button_cell}</div>
+            <div className="cell small-12">{auditButtonCell}</div>
+            <div className="cell small-12">{csvButtonCell}</div>
+            <div className="cell small-12">{resipButtonCell}</div>
+            <div className="cell small-12">{metsButtonCell}</div>
           </div>
         }
       />
@@ -130,7 +138,7 @@ const DashBoard = props => {
   }
 
   if (props.started === true && props.finished === true) {
-    reinit_button_cell = (
+    reinitButtonCell = (
       <TextAlignCenter>
         <ReinitButton api={props.api} />
       </TextAlignCenter>
@@ -138,24 +146,24 @@ const DashBoard = props => {
   }
 
   if (props.started === props.finished && props.error === false) {
-    ctrlz_cell = <CtrlZ visible={true} api={props.api} />;
+    ctrlzCell = <CtrlZ visible={true} api={props.api} />;
   }
 
   return (
     <div className="grid-x grid-padding-y align-middle">
-      <div className="cell small-2">{ctrlz_cell}</div>
+      <div className="cell small-2">{ctrlzCell}</div>
 
       <div className="cell auto" />
 
-      <div className="cell small-3">{session_info_cell}</div>
+      <div className="cell small-3">{sessionInfoCell}</div>
 
       <div className="cell auto" />
 
-      <div className="cell small-2">{save_button_cell}</div>
+      <div className="cell small-2">{saveButtonCell}</div>
 
-      <div className="cell small-2">{export_menu_cell}</div>
+      <div className="cell small-2">{exportMenuCell}</div>
 
-      <div className="cell small-2">{reinit_button_cell}</div>
+      <div className="cell small-2">{reinitButtonCell}</div>
     </div>
   );
 };
@@ -166,18 +174,20 @@ export default function DashBoardApiToProps({
   exportToResip,
   exportToMets
 }) {
-  const loading_state = api.loading_state;
-  const database = api.database;
-  const finished = loading_state.isFinished();
-  const error = loading_state.isInError();
+  const {
+    loading_state: { isFinished, isInError, isStarted },
+    database
+  } = api;
+  const finished = isFinished();
+  const error = isInError();
 
   const nb_files = database.fileCount();
   const nb_folders = database.overallCount() - nb_files;
   const volume = database.volume();
 
-  const onChangeSessionName = prop_name => n => {
-    if (n[prop_name].length > 0) {
-      database.setSessionName(n[prop_name]);
+  const onChangeSessionName = propName => n => {
+    if (n[propName].length > 0) {
+      database.setSessionName(n[propName]);
       api.undo.commit();
     }
   };
@@ -185,7 +195,7 @@ export default function DashBoardApiToProps({
   return (
     <DashBoard
       api={api}
-      started={loading_state.isStarted()}
+      started={isStarted()}
       finished={finished}
       error={error}
       nb_files={nb_files}

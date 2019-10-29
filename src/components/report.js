@@ -17,6 +17,7 @@ import { shell } from "electron";
 import path from "path";
 import Icon, { FOLDER_ICON, PAGE_ICON, PAGE_MULTIPLE_ICON } from "./icon";
 import ClickableIcon from "./clickable-icon";
+import ReactTooltip from "react-tooltip";
 
 const FILE_OR_FOLDER_NAME_TEXT = pick({
   en: "Folder of file's name",
@@ -33,7 +34,19 @@ const SIZE_TEXT = pick({
 
 const HASH_TEXT = pick({
   en: "Hash",
-  fs: "Hash"
+  fr: "Hash"
+});
+
+const FILE_HASH_EXPLANATION_TEXT = pick({
+  en: "This hash is a file footprint computed with the MD5 algorithm",
+  fr: "Ce hash est une empreinte de fichier calculée avec l'algorithme MD5"
+});
+
+const FOLDER_HASH_EXPLANATION_TEXT = pick({
+  en:
+    "This hash is a footprint (computed with the MD5 algorithm) of this folder's children hashes concatenation",
+  fr:
+    "Ce hash est une empreinte (calculée avec l'algorithme MD5) de la concaténation des hashs des enfants de ce dossier"
 });
 
 const pad = "1em";
@@ -182,6 +195,12 @@ const InfoCell = ({
     : octet2HumanReadableFormat(
         filesAndFoldersMetadata[filesAndFoldersId].childrenTotalSize
       );
+  const isFolder = currentFilesAndFolders
+    ? currentFilesAndFolders.children.length > 0
+    : true;
+  const hashExplanationText = isFolder
+    ? FOLDER_HASH_EXPLANATION_TEXT
+    : FILE_HASH_EXPLANATION_TEXT;
 
   return (
     <div style={infoCellStyle}>
@@ -189,7 +208,15 @@ const InfoCell = ({
         <b>{SIZE_TEXT} :</b> {sizeLabel}
       </div>
       <div>
-        <b>{HASH_TEXT} :</b> {hashLabel}
+        <b>
+          {HASH_TEXT}&nbsp;
+          <span data-tip={hashExplanationText}>
+            <i className="fi-info" />
+          </span>
+          &nbsp;:&nbsp;
+        </b>
+        {hashLabel}
+        <ReactTooltip place={"bottom"} />
       </div>
       <br />
       <LastModifiedReporter

@@ -17,7 +17,7 @@
     "linux": "electron-builder --linux AppImage",
     "lint": "eslint . && tslint -p .",
     "lint-fix": "eslint --fix .",
-    "postinstall": "electron-builder install-app-deps package.json"
+    "postinstall": "electron-builder install-app-deps"
   },
   "build": {
     "appId": "io.github.archifiltre",
@@ -84,7 +84,7 @@
     "css-loader": "3.2.0",
     "deep-equal": "1.1.0",
     "electron": "7.0.0",
-    "electron-builder": "21.2.0",
+    "electron-builder": "22.1.0",
     "electron-react-devtools": "0.5.3",
     "eslint": "6.6.0",
     "eslint-import-resolver-webpack": "0.11.1",

@@ -1,7 +1,7 @@
-import { makeEmptyArray } from "./array-util.ts";
 import { cpus } from "os";
 import { Observable } from "rxjs";
-import { reportError } from "../reporter";
+import { reportError } from "../../reporter";
+import { makeEmptyArray } from "../array-util";
 
 // We create NB_CPUS - 1 processes to optimize computation
 const NB_CPUS = cpus().length - 1 > 0 ? cpus().length - 1 : 1;

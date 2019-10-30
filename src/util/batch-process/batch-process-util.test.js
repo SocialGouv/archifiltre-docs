@@ -1,11 +1,11 @@
 import { backgroundWorkerProcess$, computeBatch$ } from "./batch-process-util";
-import { reportError } from "../reporter";
+import { reportError } from "../../reporter";
 
 jest.mock("os", () => ({
   cpus: () => [1, 2, 3, 4]
 }));
 
-jest.mock("../reporter", () => ({
+jest.mock("../../reporter", () => ({
   reportError: jest.fn()
 }));
 

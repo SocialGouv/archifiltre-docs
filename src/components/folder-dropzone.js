@@ -16,7 +16,7 @@ import {
 } from "../util/file-and-folders-utils";
 import { isJsonFile } from "../util/file-sys-util";
 import { expectToBeDefined } from "../util/expect-behaviour";
-import { notifyError } from "../notifications-util";
+import { notifyError } from "../util/notifications-util";
 
 const placeholder = pick({
   en: "Drop a directory here!",

@@ -1,21 +1,27 @@
-import fs from "fs";
+import { promises as fs } from "fs";
 import pick from "languages";
+import { takeLast, tap } from "rxjs/operators";
 import { toStr } from "../csv";
 import { ArchifiltreThunkAction } from "../reducers/archifiltre-types";
 import { getFilesAndFoldersFromStore } from "../reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "../reducers/tags/tags-selectors";
-import { notifySuccess } from "../util/notifications-util";
+import { notifyInfo, notifySuccess } from "../util/notifications-util";
 import { makeSIP } from "./mets/mets";
-import resipExporter from "./resipExporter";
+import { generateResipExport$ } from "./resip/resipExport.controller";
 
 const resipExportSuccessMessage = pick({
   en: "The metadata file has been exported to project root folder",
   fr: "Fichier de métadonnées exporté dans le dossier racine du projet"
 });
 
-const resipExportSuccessTitle = pick({
+const resipExportTitle = pick({
   en: "Resip Export",
   fr: "Export Resip"
+});
+
+const resipExportStartedMessage = pick({
+  en: "Resip export started",
+  fr: "L'export Resip a commencé"
 });
 
 /**
@@ -28,10 +34,17 @@ export const resipExporterThunk = (
   const state = getState();
   const tags = getTagsFromStore(state);
   const filesAndFolders = getFilesAndFoldersFromStore(state);
-  const content = toStr(resipExporter(filesAndFolders, tags));
 
-  fs.writeFileSync(filePath, content);
-  notifySuccess(resipExportSuccessMessage, resipExportSuccessTitle);
+  notifyInfo(resipExportStartedMessage, resipExportTitle);
+  return new Promise(resolve => {
+    generateResipExport$(filesAndFolders, tags)
+      .pipe(takeLast(1))
+      .subscribe(async ({ resipCsv }) => {
+        await fs.writeFile(filePath, toStr(resipCsv));
+        notifySuccess(resipExportSuccessMessage, resipExportTitle);
+        resolve();
+      });
+  });
 };
 
 /**

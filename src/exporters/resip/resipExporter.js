@@ -1,7 +1,7 @@
 import path from "path";
 import dateFormat from "dateformat";
-import { makeEmptyArray, replaceValue } from "../util/array-util.ts";
-import { tagHasFfId } from "../reducers/tags/tags-selectors";
+import { tagHasFfId } from "../../reducers/tags/tags-selectors";
+import { makeEmptyArray, replaceValue } from "../../util/array-util";
 
 const formatFile = ff => {
   const removeStartingSlash = str =>
@@ -127,11 +127,27 @@ const formatToCsv = (sipFilesAndFolders, tags) => {
 };
 
 /**
- * Formats the fileStructure and tag into a csv that can be imported in RESIP
- * @param files_and_folders - The files and folder structure
- * @param tags - The tags structure
+ * Wraps a mapper with a side effect function called before the hook
+ * @param mapper - the wrapped mapper that will still be called.
+ * @param sideEffect - the side effect called with the mapper parameters
+ * @returns {function} - The mapper that will call the hook every time the mapper called.
  */
-const resipExporter = (filesAndFolders, tags) => {
+const wrapWithHook = (mapper, sideEffect) => (
+  mappedElement,
+  mappedIndex,
+  mappedArray
+) => {
+  sideEffect(mappedElement, mappedIndex, mappedArray);
+  return mapper(mappedElement, mappedIndex, mappedArray);
+};
+
+/**
+ * Formats the fileStructure and tag into a csv that can be imported in RESIP
+ * @param filesAndFolders - The files and folder structure
+ * @param tags - The tags structure
+ * @param [hook]
+ */
+const resipExporter = (filesAndFolders, tags, hook = () => {}) => {
   let sipId = 0;
 
   const addSipId = ff => {
@@ -145,11 +161,11 @@ const resipExporter = (filesAndFolders, tags) => {
   }));
 
   const dataWithSipId = Object.keys(filesAndFolders)
-    .map(ffId => ({ id: ffId, ...filesAndFolders[ffId] }))
-    .filter(({ id }) => id !== "")
-    .map(addSipId)
-    .map(addParentId)
-    .map(addTagsToFf(tagsWithIndex));
+    .filter(id => id !== "")
+    .map(wrapWithHook(ffId => ({ id: ffId, ...filesAndFolders[ffId] }), hook))
+    .map(wrapWithHook(addSipId, hook))
+    .map(wrapWithHook(addParentId, hook))
+    .map(wrapWithHook(addTagsToFf(tagsWithIndex), hook));
 
   const formattedData = dataWithSipId.map(transformDefaultFormatToResip);
 

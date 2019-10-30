@@ -1,6 +1,7 @@
-import fs from "fs";
+import { promises as fs } from "fs";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
+import { from } from "rxjs";
 import { computeDerived, ff } from "../datastore/files-and-folders";
 import { DispatchExts } from "../reducers/archifiltre-types";
 import { createFilesAndFolders } from "../reducers/files-and-folders/files-and-folders-test-utils";
@@ -9,13 +10,13 @@ import {
   createEmptyStore,
   wrapStoreWithUndoable
 } from "../reducers/store-test-utils";
+import { notifyInfo, notifySuccess } from "../util/notifications-util";
 import { metsExporterThunk, resipExporterThunk } from "./export-thunks";
 import { makeSIP } from "./mets/mets";
-import resipExporter from "./resipExporter";
+import { generateResipExport$ } from "./resip/resipExport.controller";
 
-jest.mock("./resipExporter", () => ({
-  __esModule: true,
-  default: jest.fn()
+jest.mock("./resip/resipExport.controller", () => ({
+  generateResipExport$: jest.fn()
 }));
 
 jest.mock("../util/file-sys-util", () => ({
@@ -27,7 +28,14 @@ jest.mock("./mets/mets", () => ({
 }));
 
 jest.mock("fs", () => ({
-  writeFileSync: jest.fn()
+  promises: {
+    writeFile: jest.fn()
+  }
+}));
+
+jest.mock("../util/notifications-util", () => ({
+  notifyInfo: jest.fn(),
+  notifySuccess: jest.fn()
 }));
 
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
@@ -95,22 +103,50 @@ const storeContent = {
 
 describe("export-thunks", () => {
   describe("resipExporterThunk", () => {
-    it("should call resipExporter with the right data", () => {
-      const writeFileSyncMock = fs.writeFileSync as jest.Mock<any>;
-      const mockedResipExporter = resipExporter as jest.Mock<any>;
-      const savePath = "/path/to/save/the/file";
-      writeFileSyncMock.mockReset();
+    const writeFileMock = fs.writeFile as jest.Mock<any>;
+    const mockedGenerateResipExport$ = generateResipExport$ as jest.Mock<any>;
+    const savePath = "/path/to/save/the/file";
+    const resipCsv = [["resipCsv"]];
+
+    beforeEach(() => {
+      mockedGenerateResipExport$.mockReset();
+      writeFileMock.mockReset();
+      writeFileMock.mockResolvedValue(null);
+      mockedGenerateResipExport$.mockReturnValue(
+        from([{ count: 0, result: [] }, { count: 100, resipCsv }])
+      );
+    });
+
+    it("should call resipExporter with the right data", async () => {
       const store = mockStore(storeContent);
 
-      const csvData = [["data"]];
-      mockedResipExporter.mockReturnValue(csvData);
-      store.dispatch(resipExporterThunk(savePath));
+      await store.dispatch(resipExporterThunk(savePath));
 
-      expect(mockedResipExporter).toHaveBeenCalledWith(
+      expect(mockedGenerateResipExport$).toHaveBeenCalledWith(
         storeFilesAndFolders,
         tags
       );
-      expect(writeFileSyncMock).toHaveBeenCalledWith(savePath, `"data"\n`);
+      expect(writeFileMock).toHaveBeenCalledWith(savePath, '"resipCsv"\n');
+    });
+
+    it("should open info popin on start", () => {
+      const notifyInfoMock = notifyInfo as jest.Mock;
+      notifyInfoMock.mockReset();
+      const store = mockStore(storeContent);
+
+      store.dispatch(resipExporterThunk(savePath));
+
+      expect(notifyInfoMock).toHaveBeenCalled();
+    });
+
+    it("should open success popin on success", async () => {
+      const notifySuccessMock = notifySuccess as jest.Mock;
+      notifySuccessMock.mockReset();
+      const store = mockStore(storeContent);
+
+      await store.dispatch(resipExporterThunk(savePath));
+
+      expect(notifySuccessMock).toHaveBeenCalled();
     });
   });
 

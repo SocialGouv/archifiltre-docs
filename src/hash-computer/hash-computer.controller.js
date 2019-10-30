@@ -2,7 +2,7 @@ import {
   aggregateResultsToMap,
   backgroundWorkerProcess$,
   computeBatch$
-} from "../util/batch-process-util";
+} from "../util/batch-process/batch-process-util";
 
 // eslint-disable-next-line import/default
 import FileHashWorker from "./file-hash-computer.worker.js";

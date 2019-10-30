@@ -9,7 +9,8 @@
     "allowJs": true,            // allow a partial TypeScript and JavaScript codebase
     "moduleResolution": "node",
     "baseUrl": "src",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "lib": ["es6", "webworker", "scripthost"]
   },
   "include": [
     "./src/"

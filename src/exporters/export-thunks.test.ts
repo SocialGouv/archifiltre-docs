@@ -9,7 +9,6 @@ import {
   createEmptyStore,
   wrapStoreWithUndoable
 } from "../reducers/store-test-utils";
-import { save } from "../util/file-sys-util";
 import { metsExporterThunk, resipExporterThunk } from "./export-thunks";
 import { makeSIP } from "./mets/mets";
 import resipExporter from "./resipExporter";

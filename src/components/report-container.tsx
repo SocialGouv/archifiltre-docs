@@ -1,7 +1,10 @@
 import React, { FC, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getFilesAndFoldersMetadataFromStore } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { getFilesAndFoldersFromStore } from "../reducers/files-and-folders/files-and-folders-selectors";
+import {
+  getFilesAndFoldersFromStore,
+  getHashesFromStore
+} from "../reducers/files-and-folders/files-and-folders-selectors";
 import { StoreState } from "../reducers/store";
 import { addTag, untagFile } from "../reducers/tags/tags-actions";
 import {
@@ -35,6 +38,10 @@ const ReportContainer: FC<ReportContainerProps> = ({ api, fillColor }) => {
     getFilesAndFoldersMetadataFromStore
   );
 
+  const currentFileHash = useSelector((state: StoreState) =>
+    getHashesFromStore(state)
+  )[filesAndFoldersId];
+
   const dispatch = useDispatch();
 
   const createTag = useCallback(
@@ -65,6 +72,7 @@ const ReportContainer: FC<ReportContainerProps> = ({ api, fillColor }) => {
   return (
     <ReportApiToProps
       tagsForCurrentFile={tagsForCurrentFile}
+      currentFileHash={currentFileHash}
       filesAndFolders={filesAndFolders}
       filesAndFoldersId={filesAndFoldersId}
       filesAndFoldersMetadata={filesAndFoldersMetadata}

@@ -4,7 +4,7 @@ onmessage = ({ data: { data, type } }) => {
   if (type === "initialize") {
     try {
       // We batch the results to avoid overloading the main process
-      const BATCH_SIZE = 50;
+      const BATCH_SIZE = 500;
       let batchResult = {};
       const computeFolderHashHook = hashObject => {
         batchResult = { ...batchResult, ...hashObject };

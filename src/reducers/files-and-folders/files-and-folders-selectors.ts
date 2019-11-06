@@ -2,7 +2,11 @@ import _ from "lodash";
 import { medianOnSortedArray } from "../../util/array-util";
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
 import { StoreState } from "../store";
-import { FilesAndFolders, FilesAndFoldersMap } from "./files-and-folders-types";
+import {
+  FilesAndFolders,
+  FilesAndFoldersMap,
+  HashesMap
+} from "./files-and-folders-types";
 
 /**
  * Gets the files and folder map from the redux state
@@ -152,3 +156,6 @@ export const getFilesAndFoldersTotalSize = (
  */
 export const getFilesAndFoldersDepth = (filesAndFoldersId: string): number =>
   filesAndFoldersId.split("/").length - 2;
+
+export const getHashesFromStore = (store: StoreState): HashesMap =>
+  getCurrentState(store.filesAndFolders).hashes;

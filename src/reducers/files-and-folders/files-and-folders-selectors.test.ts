@@ -7,7 +7,8 @@ import {
   getFilesAndFoldersMaxLastModified,
   getFilesAndFoldersMedianLastModified,
   getFilesAndFoldersMinLastModified,
-  getFilesAndFoldersTotalSize
+  getFilesAndFoldersTotalSize,
+  getHashesFromStore
 } from "./files-and-folders-selectors";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
 
@@ -64,7 +65,8 @@ describe("files-and-folders-selectors", () => {
       const testStore = {
         ...emptyStore,
         filesAndFolders: wrapStoreWithUndoable({
-          filesAndFolders: filesAndFoldersMap
+          filesAndFolders: filesAndFoldersMap,
+          hashes: {}
         })
       };
       expect(getFilesAndFoldersFromStore(testStore)).toEqual(
@@ -127,6 +129,25 @@ describe("files-and-folders-selectors", () => {
   describe("getFilesAndFoldersDepth", () => {
     it("should find the depth root folder", () => {
       expect(getFilesAndFoldersDepth(child1Id)).toEqual(1);
+    });
+  });
+
+  describe("getHashesFromStore", () => {
+    it("should return the current store", () => {
+      const fileId = "base-id";
+      const hash = "hash";
+      const emptyStore = createEmptyStore();
+      const hashesMap = {
+        [fileId]: hash
+      };
+      const testStore = {
+        ...emptyStore,
+        filesAndFolders: wrapStoreWithUndoable({
+          filesAndFolders: {},
+          hashes: hashesMap
+        })
+      };
+      expect(getHashesFromStore(testStore)).toEqual(hashesMap);
     });
   });
 });

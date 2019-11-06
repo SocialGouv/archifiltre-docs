@@ -1,6 +1,6 @@
 import React from "react";
 
-import FolderDropzone from "components/folder-dropzone";
+import FolderDropzone from "components/folder-dropzone-container.tsx";
 
 import WorkSpace from "components/workspace-container.tsx";
 

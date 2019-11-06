@@ -92,7 +92,7 @@ export default class FolderDropzone extends React.Component {
     }
 
     const {
-      props: { api }
+      props: { api, setHashes }
     } = this;
 
     const hook = a => {
@@ -128,11 +128,11 @@ export default class FolderDropzone extends React.Component {
           computeHashes$(paths, {
             initialValues: { basePath }
           }).subscribe({
-            next: api.database.setHashes,
+            next: setHashes,
             complete: () =>
               setTimeout(() =>
                 computeFolderHashes$(api.database.getData()).subscribe(
-                  api.database.setHashes
+                  setHashes
                 )
               )
           });

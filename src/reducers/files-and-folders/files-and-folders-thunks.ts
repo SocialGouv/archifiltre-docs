@@ -1,5 +1,5 @@
 import { ArchifiltreThunkAction } from "../archifiltre-types";
-import { setFilesAndFoldersHash } from "./files-and-folders-actions";
+import { setFilesAndFoldersHashes } from "./files-and-folders-actions";
 
 interface FfHashMap {
   [fileAndFoldersId: string]: string;
@@ -12,7 +12,5 @@ interface FfHashMap {
 export const updateFilesAndFolderHashes = (
   hashes: FfHashMap
 ): ArchifiltreThunkAction => dispatch => {
-  Object.entries(hashes).forEach(([ffId, ffHash]) => {
-    dispatch(setFilesAndFoldersHash(ffId, ffHash));
-  });
+  dispatch(setFilesAndFoldersHashes(hashes));
 };

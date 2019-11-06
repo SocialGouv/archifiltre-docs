@@ -2,7 +2,7 @@ import { Action } from "redux";
 
 export const INITIALIZE_FILES_AND_FOLDERS = "FILES_AND_FOLDERS/INITIALIZE";
 export const SET_FILES_AND_FOLDERS_ALIAS = "FILES_AND_FOLDERS/SET_ALIAS";
-export const SET_FILES_AND_FOLDERS_HASH = "FILES_AND_FOLDERS/SET_HASH";
+export const SET_FILES_AND_FOLDERS_HASHES = "FILES_AND_FOLDERS/SET_HASHES";
 export const ADD_COMMENTS_ON_FILES_AND_FOLDERS =
   "FILES_AND_FOLDERS/ADD_COMMENTS";
 
@@ -21,8 +21,13 @@ export interface FilesAndFoldersMap {
   [id: string]: FilesAndFolders;
 }
 
+export interface HashesMap {
+  [id: string]: string;
+}
+
 export interface FilesAndFoldersState {
   filesAndFolders: FilesAndFoldersMap;
+  hashes: HashesMap;
 }
 
 interface InitializeFilesAndFoldersAction extends Action {
@@ -36,10 +41,9 @@ interface SetFilesAndFoldersAliasAction extends Action {
   alias: string;
 }
 
-interface SetFilesAndFoldersHashAction extends Action {
-  type: typeof SET_FILES_AND_FOLDERS_HASH;
-  filesAndFoldersId: string;
-  hash: string;
+interface SetFilesAndFoldersHashesAction extends Action {
+  type: typeof SET_FILES_AND_FOLDERS_HASHES;
+  hashes: HashesMap;
 }
 
 interface AddCommentsOnFilesAndFoldersAction extends Action {
@@ -52,4 +56,4 @@ export type FilesAndFoldersActionTypes =
   | InitializeFilesAndFoldersAction
   | SetFilesAndFoldersAliasAction
   | AddCommentsOnFilesAndFoldersAction
-  | SetFilesAndFoldersHashAction;
+  | SetFilesAndFoldersHashesAction;

@@ -1,4 +1,5 @@
 import { createFilesAndFoldersMetadata } from "../files-and-folders-metadata/files-and-folders-metadata-test-utils";
+import { createFilesAndFolders } from "../files-and-folders/files-and-folders-test-utils";
 import { StoreState } from "../store";
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
@@ -197,41 +198,39 @@ describe("tags-selectors", () => {
     it("should return the sum of the tag sizes", () => {
       const tagName = "test-tag-1";
       const taggedFfId = "/folder/ff-id";
+      const taggedChildrenFfId = "/folder/ff-id/children";
       const tagId = "test-tag-id";
       const rootId = "";
+      const taggedParentSize = 10000;
       const tag = {
-        ffIds: [taggedFfId],
+        ffIds: [taggedFfId, taggedChildrenFfId],
         id: tagId,
         name: tagName
       };
 
       const filesAndFolders = {
-        [rootId]: {
-          alias: "",
-          children: [],
-          comments: "",
-          file_last_modified: 1570615679168,
-          file_size: 10,
-          hash: null,
-          id: rootId,
-          name: "root"
-        },
-        [taggedFfId]: {
-          alias: "",
-          children: [],
-          comments: "",
-          file_last_modified: 1570615679168,
-          file_size: 10,
-          hash: null,
-          id: taggedFfId,
-          name: "filename"
-        }
+        [rootId]: createFilesAndFolders({
+          children: [taggedFfId],
+          id: ""
+        }),
+        [taggedFfId]: createFilesAndFolders({
+          children: [taggedChildrenFfId],
+          id: taggedFfId
+        }),
+        [taggedChildrenFfId]: createFilesAndFolders({ id: taggedChildrenFfId })
       };
 
       const filesAndFoldersMetadata = {
         [taggedFfId]: createFilesAndFoldersMetadata({
           averageLastModified: 3000,
-          childrenTotalSize: 10000,
+          childrenTotalSize: taggedParentSize,
+          maxLastModified: 10000,
+          medianLastModified: 4000,
+          minLastModified: 1000
+        }),
+        [taggedChildrenFfId]: createFilesAndFoldersMetadata({
+          averageLastModified: 3000,
+          childrenTotalSize: 1000,
           maxLastModified: 10000,
           medianLastModified: 4000,
           minLastModified: 1000
@@ -239,7 +238,7 @@ describe("tags-selectors", () => {
       };
 
       expect(getTagSize(tag, filesAndFolders, filesAndFoldersMetadata)).toEqual(
-        10000
+        taggedParentSize
       );
     });
   });

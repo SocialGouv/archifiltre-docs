@@ -1,9 +1,9 @@
 import React, { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import IcicleMain from "./icicle-main";
-import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
 
 export default function IcicleApiToProps({
   api,

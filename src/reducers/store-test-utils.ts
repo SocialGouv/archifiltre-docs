@@ -6,7 +6,8 @@ import { StoreState } from "./store";
  */
 export const createEmptyStore = (): StoreState => ({
   filesAndFolders: wrapStoreWithUndoable({
-    filesAndFolders: {}
+    filesAndFolders: {},
+    hashes: {}
   }),
   filesAndFoldersMetadata: {
     filesAndFoldersMetadata: {}

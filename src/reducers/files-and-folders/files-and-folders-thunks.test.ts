@@ -3,7 +3,7 @@ import thunk from "redux-thunk";
 import { DispatchExts } from "../archifiltre-types";
 import { StoreState } from "../store";
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
-import { setFilesAndFoldersHash } from "./files-and-folders-actions";
+import { setFilesAndFoldersHashes } from "./files-and-folders-actions";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
 import { updateFilesAndFolderHashes } from "./files-and-folders-thunks";
 
@@ -24,7 +24,6 @@ describe("file-and-folders-thunks.test.ts", () => {
         filesAndFolders: wrapStoreWithUndoable({
           filesAndFolders: {
             [updateId1]: createFilesAndFolders({
-              hash: "oldHash",
               id: updateId1
             }),
             [updateId2]: createFilesAndFolders({
@@ -35,25 +34,22 @@ describe("file-and-folders-thunks.test.ts", () => {
               hash: "unchangedHash",
               id: unupdatedId
             })
-          }
+          },
+          hashes: {}
         })
+      };
+      const hashes = {
+        [updateId1]: newHash1,
+        [updateId2]: newHash2
       };
 
       const store = mockStore(testState);
 
-      store.dispatch(
-        updateFilesAndFolderHashes({
-          [updateId1]: newHash1,
-          [updateId2]: newHash2
-        })
-      );
+      store.dispatch(updateFilesAndFolderHashes(hashes));
 
       const actions = store.getActions();
 
-      expect(actions).toEqual([
-        setFilesAndFoldersHash(updateId1, newHash1),
-        setFilesAndFoldersHash(updateId2, newHash2)
-      ]);
+      expect(actions).toEqual([setFilesAndFoldersHashes(hashes)]);
     });
   });
 });

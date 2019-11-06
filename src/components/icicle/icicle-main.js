@@ -128,11 +128,11 @@ export default class IcicleMain extends PureComponent {
   }
 
   computeWidthBySize(id) {
-    return this.props.getFfByFfId(id).get("size");
+    return this.props.getFfByFfId(id).childrenTotalSize;
   }
 
   computeWidthByNbFiles(id) {
-    return this.props.getFfByFfId(id).get("nb_files");
+    return this.props.getFfByFfId(id).nbChildrenFiles;
   }
 
   normalizeWidth(arr) {
@@ -247,6 +247,7 @@ export default class IcicleMain extends PureComponent {
 
         <Ruler
           api={api}
+          getFfByFfId={this.props.getFfByFfId}
           x={0}
           y={icicle_height}
           dx={icicle_width}
@@ -256,6 +257,7 @@ export default class IcicleMain extends PureComponent {
 
         <BreadCrumbs
           api={api}
+          getFfByFfId={this.props.getFfByFfId}
           x={icicle_width}
           dx={breadcrumbs_width}
           dy={icicle_height}

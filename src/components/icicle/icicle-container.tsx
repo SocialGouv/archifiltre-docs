@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useSelector } from "react-redux";
+import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import IcicleMain from "./icicle-main";
+import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
 
 export default function IcicleApiToProps({
   api,
@@ -15,13 +17,27 @@ export default function IcicleApiToProps({
   const isLocked = lockSequence.length > 0;
   const tags = useSelector(getTagsFromStore);
 
+  const filesAndFoldersMetadata = useSelector(
+    getFilesAndFoldersMetadataFromStore
+  );
+
+  const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
+
+  const getFfByFfId = useCallback(
+    (ffId: string) => ({
+      ...filesAndFoldersMetadata[ffId],
+      ...filesAndFolders[ffId]
+    }),
+    [filesAndFoldersMetadata, filesAndFolders]
+  );
+
   return (
     <IcicleMain
       api={api}
       display_root={icicle_state.display_root()}
       fillColor={fillColor}
       getChildrenIdFromId={getChildrenIdFromId}
-      getFfByFfId={database.getFfByFfId}
+      getFfByFfId={getFfByFfId}
       getFfIdPath={database.getFfIdPath}
       hover_sequence={icicle_state.hover_sequence()}
       isLocked={isLocked}

@@ -1,7 +1,4 @@
 import React from "react";
-
-import * as ObjectUtil from "util/object-util.ts";
-
 import BreadCrumbText from "components/breadcrumb-text";
 import BreadCrumbPoly from "components/breadcrumb-poly";
 
@@ -78,11 +75,11 @@ class Breadcrumbs extends React.PureComponent {
 
     const displayName = id => {
       const node = this.props.getFfByFfId(id);
-      const n_name = node.get("name");
+      const nodeName = node.name;
 
-      const n_alias = node.get("alias");
+      const nodeAlias = node.alias;
 
-      return n_alias === "" ? n_name : n_alias;
+      return nodeAlias === "" ? nodeName : nodeAlias;
     };
 
     let res = [];
@@ -195,21 +192,17 @@ export default function BreadcrumbsApiToProps(props) {
 
   const breadcrumb_sequence = icicle_state.sequence();
 
-  const getFfByFfId = database.getFfByFfId;
-
   const max_depth = database.maxDepth();
 
-  props = ObjectUtil.compose(
-    {
-      breadcrumb_sequence,
-      isFocused: icicle_state.isFocused(),
-      isLocked: icicle_state.isLocked(),
-      max_depth,
-      getFfByFfId,
-      root_id: database.rootFfId()
-    },
-    props
-  );
+  const componentProps = {
+    ...props,
+    breadcrumb_sequence,
+    isFocused: icicle_state.isFocused(),
+    isLocked: icicle_state.isLocked(),
+    max_depth,
+    getFfByFfId: props.getFfByFfId,
+    root_id: database.rootFfId()
+  };
 
-  return <Breadcrumbs {...props} />;
+  return <Breadcrumbs {...componentProps} />;
 }

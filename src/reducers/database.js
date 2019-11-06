@@ -112,7 +112,8 @@ const set = next_state => () => {
         childrenTotalSize: ff.size,
         lastModifiedMax: ff.last_modified_max,
         lastModifiedMedian: ff.last_modified_median,
-        lastModifiedMin: ff.last_modified_min
+        lastModifiedMin: ff.last_modified_min,
+        nbChildrenFiles: ff.nb_files
       }
     }),
     {}

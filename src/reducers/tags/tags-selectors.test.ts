@@ -1,4 +1,4 @@
-import { computeDerived, ff } from "../../datastore/files-and-folders";
+import { createFilesAndFoldersMetadata } from "../files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { StoreState } from "../store";
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
@@ -229,13 +229,13 @@ describe("tags-selectors", () => {
       };
 
       const filesAndFoldersMetadata = {
-        [taggedFfId]: {
+        [taggedFfId]: createFilesAndFoldersMetadata({
           averageLastModified: 3000,
           childrenTotalSize: 10000,
           maxLastModified: 10000,
           medianLastModified: 4000,
           minLastModified: 1000
-        }
+        })
       };
 
       expect(getTagSize(tag, filesAndFolders, filesAndFoldersMetadata)).toEqual(

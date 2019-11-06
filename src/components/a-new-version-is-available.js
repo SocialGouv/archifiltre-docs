@@ -8,13 +8,14 @@ import { mkB } from "components/Buttons/button";
 import * as Color from "util/color-util";
 
 import pick from "languages";
+import { siteUrl } from "../env";
 
 const { shell } = require("electron");
 
-const text = v =>
+const text = version =>
   pick({
-    en: `Version ${v} of Archifiltre is out!`,
-    fr: `La version ${v} d'Archifiltre est sortie !`
+    en: `Version ${version} of Archifiltre is out!`,
+    fr: `La version ${version} d'Archifiltre est sortie !`
   });
 
 const buttonTr = pick({
@@ -38,7 +39,6 @@ const buttonStyle = {
 export default class ANewVersionIsAvailable extends React.PureComponent {
   constructor(props) {
     super(props);
-
     this.state = {
       display: false,
       lastVersion: -1
@@ -51,23 +51,19 @@ export default class ANewVersionIsAvailable extends React.PureComponent {
   componentDidMount() {
     request({
       method: "GET",
-      url: "https://archifiltre.github.io/api-version/"
+      url: `${siteUrl}/api-version.json`
     })
       .then(result => {
-        try {
-          result = JSON.parse(result);
-          const lastVersion = result.last_version;
-          const currentVersion = version;
-
-          if (isNaN(lastVersion) === false && typeof lastVersion === "number") {
-            if (currentVersion < lastVersion) {
-              this.setState({
-                display: true,
-                lastVersion
-              });
-            }
+        const { lastVersion } = JSON.parse(result);
+        const currentVersion = version;
+        if (isNaN(lastVersion) === false && typeof lastVersion === "number") {
+          if (currentVersion < lastVersion) {
+            this.setState({
+              display: true,
+              lastVersion
+            });
           }
-        } catch (e) {} // eslint-disable-line no-empty
+        }
       })
       .catch(err => {
         console.error(err);
@@ -81,7 +77,7 @@ export default class ANewVersionIsAvailable extends React.PureComponent {
   }
 
   download() {
-    shell.openExternal("https://archifiltre.github.io/");
+    shell.openExternal(siteUrl);
   }
 
   render() {

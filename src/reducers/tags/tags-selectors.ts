@@ -93,12 +93,15 @@ export const getTagSize = (
   filesAndFolders: FilesAndFoldersMap,
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap
 ): number => {
-  const taggedFfIds = Object.keys(filesAndFolders).filter(id =>
-    _.some(
-      tag.ffIds,
-      ffId => id.indexOf(ffId) === 0 && (id[ffId.length] === "/" || id === ffId)
-    )
-  );
+  const parentIsTagged = (taggedFfidsList, potentialChildId) =>
+    taggedFfidsList.some(
+      potentialParentId =>
+        potentialChildId.indexOf(potentialParentId) === 0 &&
+        potentialChildId[potentialParentId.length] === "/"
+    );
+
+  const taggedFfIds = tag.ffIds.filter(id => !parentIsTagged(tag.ffIds, id));
+
   return taggedFfIds.reduce(
     (totalSize, id) =>
       totalSize + filesAndFoldersMetadata[id].childrenTotalSize,

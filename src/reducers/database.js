@@ -73,7 +73,6 @@ const getWaitingCounter = () => () => 0;
 const reader = {
   overallCount,
   fileCount,
-  getFfByFfId,
   rootFfId,
   maxDepth,
   volume,
@@ -113,7 +112,9 @@ const set = next_state => () => {
         lastModifiedMax: ff.last_modified_max,
         lastModifiedMedian: ff.last_modified_median,
         lastModifiedMin: ff.last_modified_min,
-        nbChildrenFiles: ff.nb_files
+        nbChildrenFiles: ff.nb_files,
+        sortBySizeIndex: ff.sort_by_size_index,
+        sortByDateIndex: ff.sort_by_date_index
       }
     }),
     {}

@@ -8,6 +8,8 @@ export interface FilesAndFoldersMetadata {
   averageLastModified: number;
   childrenTotalSize: number;
   nbChildrenFiles: number;
+  sortBySizeIndex: number[];
+  sortByDateIndex: number[];
 }
 
 export interface FilesAndFoldersMetadataMap {

@@ -1,7 +1,6 @@
 import React from "react";
 
 import * as Color from "util/color-util";
-import * as ObjectUtil from "util/object-util.ts";
 
 import Icicle from "components/icicle/icicle-container.tsx";
 
@@ -58,9 +57,9 @@ class Workspace extends React.PureComponent {
 
   fillColorType(id) {
     const node = this.props.getFfByFfId(id);
-    const name = node.get("name");
+    const name = node.name;
 
-    if (node.get("children").size) {
+    if (node.children.length) {
       if (this.props.display_root.includes(id)) {
         return Color.parentFolder();
       } else {
@@ -72,13 +71,13 @@ class Workspace extends React.PureComponent {
   }
 
   fillColorDate(id) {
-    const root_node = this.props.getFfByFfId(this.props.root_id);
-    const max_time = root_node.get("last_modified_max");
-    const min_time = root_node.get("last_modified_min");
+    const rootNode = this.props.getFfByFfId(this.props.root_id);
+    const maxTime = rootNode.lastModifiedMax;
+    const minTime = rootNode.lastModifiedMin;
     const zeroToOne = id => {
       const node = this.props.getFfByFfId(id);
-      const time = node.get("last_modified_average");
-      return (time - min_time) / (max_time - min_time);
+      const time = node.lastModifiedAverage;
+      return (time - minTime) / (maxTime - minTime);
     };
 
     return Color.toRgba(
@@ -91,20 +90,11 @@ class Workspace extends React.PureComponent {
   // TODO: Move this, as this has nothing to do here
   getChildrenIdFromId(id) {
     const node = this.props.getFfByFfId(id);
-    const children = node.get("children");
-    if (this.props.change_skin) {
-      const sort_by_date_index = node
-        .get("sort_by_date_index")
-        .map(a => children.get(a));
-
-      return sort_by_date_index.toJS();
-    } else {
-      const sort_by_size_index = node
-        .get("sort_by_size_index")
-        .map(a => children.get(a));
-
-      return sort_by_size_index.toJS();
-    }
+    const children = node.children;
+    const orderArray = this.props.change_skin
+      ? node.sortByDateIndex
+      : node.sortBySizeIndex;
+    return orderArray.map(childIndex => children[childIndex]);
   }
 
   render() {
@@ -144,21 +134,21 @@ class Workspace extends React.PureComponent {
   }
 }
 
-export default props => {
+const WorkspaceApiToProps = props => {
   const api = props.api;
   const icicle_state = api.icicle_state;
   const database = api.database;
 
-  props = ObjectUtil.compose(
-    {
-      getFfByFfId: database.getFfByFfId,
-      display_root: icicle_state.display_root(),
-      root_id: database.rootFfId(),
-      change_skin: icicle_state.changeSkin(),
-      width_by_size: icicle_state.widthBySize()
-    },
-    props
-  );
+  const childProps = {
+    ...props,
+    getFfByFfId: props.getFfByFfId,
+    display_root: icicle_state.display_root(),
+    root_id: database.rootFfId(),
+    change_skin: icicle_state.changeSkin(),
+    width_by_size: icicle_state.widthBySize()
+  };
 
-  return <Workspace {...props} />;
+  return <Workspace {...childProps} />;
 };
+
+export default WorkspaceApiToProps;

@@ -4,6 +4,7 @@ import thunk from "redux-thunk";
 import { from } from "rxjs";
 import { computeDerived, ff } from "../datastore/files-and-folders";
 import { DispatchExts } from "../reducers/archifiltre-types";
+import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { createFilesAndFolders } from "../reducers/files-and-folders/files-and-folders-test-utils";
 import { StoreState } from "../reducers/store";
 import {
@@ -67,27 +68,27 @@ const storeFilesAndFolders = {
 };
 
 const filesAndFoldersMetadata = {
-  "": {
+  "": createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 10000,
     maxLastModified: 1570615679168,
     medianLastModified: 4000,
     minLastModified: 1000
-  },
-  id1: {
+  }),
+  id1: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 10000,
     maxLastModified: 1570615679168,
     medianLastModified: 4000,
     minLastModified: 1000
-  },
-  id2: {
+  }),
+  id2: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 10000,
     maxLastModified: 1570615679168,
     medianLastModified: 4000,
     minLastModified: 1000
-  }
+  })
 };
 
 const emptyStore = createEmptyStore();

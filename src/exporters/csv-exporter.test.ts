@@ -1,6 +1,7 @@
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { DispatchExts } from "../reducers/archifiltre-types";
+import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { StoreState } from "../reducers/store";
 import {
   createEmptyStore,
@@ -61,13 +62,13 @@ describe("csv-exporter", () => {
       };
 
       const filesAndFoldersMetadata = {
-        [taggedFfId]: {
+        [taggedFfId]: createFilesAndFoldersMetadata({
           averageLastModified: 3000,
           childrenTotalSize: 10000,
           maxLastModified: 10000,
           medianLastModified: 4000,
           minLastModified: 1000
-        }
+        })
       };
 
       const emptyStore = createEmptyStore();

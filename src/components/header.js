@@ -5,6 +5,7 @@ import version from "version";
 import Dashboard from "components/dashboard-container.tsx";
 
 import pick from "languages";
+import { siteUrl } from "../env";
 
 const { shell } = require("electron");
 
@@ -20,7 +21,7 @@ const what_new = pick({
 
 const onClick = event => {
   event.preventDefault();
-  shell.openExternal("http://archifiltre.github.io/#changelog");
+  shell.openExternal(`${siteUrl}/#changelog`);
 };
 
 const Header = props => {

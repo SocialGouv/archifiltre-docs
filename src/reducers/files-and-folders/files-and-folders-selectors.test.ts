@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
+  getFileCount,
   getFilesAndFoldersAverageLastModified,
   getFilesAndFoldersDepth,
   getFilesAndFoldersFromStore,
@@ -8,7 +9,9 @@ import {
   getFilesAndFoldersMedianLastModified,
   getFilesAndFoldersMinLastModified,
   getFilesAndFoldersTotalSize,
-  getHashesFromStore
+  getFoldersCount,
+  getHashesFromStore,
+  isFile
 } from "./files-and-folders-selectors";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
 
@@ -148,6 +151,54 @@ describe("files-and-folders-selectors", () => {
         })
       };
       expect(getHashesFromStore(testStore)).toEqual(hashesMap);
+    });
+  });
+
+  describe("isFile", () => {
+    it("should return true if the element is a file", () => {
+      const filesAndFolders = createFilesAndFolders({
+        children: [],
+        id: "test"
+      });
+
+      expect(isFile(filesAndFolders)).toBe(true);
+    });
+
+    it("should return false if the element is a folder", () => {
+      const filesAndFolders = createFilesAndFolders({
+        children: ["child1"],
+        id: "test"
+      });
+
+      expect(isFile(filesAndFolders)).toBe(false);
+    });
+  });
+
+  describe("getFileCount", () => {
+    it("should return the right number of files", () => {
+      const fileId = "/folder/file";
+      const folderId = "/folder";
+
+      const filesAndFoldersMap = {
+        [fileId]: createFilesAndFolders({ id: fileId, children: [] }),
+        [folderId]: createFilesAndFolders({ id: folderId, children: [fileId] })
+      };
+
+      expect(getFileCount(filesAndFoldersMap)).toBe(1);
+    });
+  });
+
+  describe("getFoldersCount", () => {
+    it("should return the right number of files", () => {
+      const fileId = "/folder/file";
+      const folderId = "/folder";
+
+      const filesAndFoldersMap = {
+        [fileId]: createFilesAndFolders({ id: fileId, children: [] }),
+        [folderId]: createFilesAndFolders({ id: folderId, children: [fileId] })
+      };
+
+      expect(getFoldersCount(filesAndFoldersMap)).toBe(1);
     });
   });
 });

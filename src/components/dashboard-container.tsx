@@ -1,11 +1,13 @@
 import React, { FC, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { csvExporterThunk } from "../exporters/csv-exporter";
 import {
   metsExporterThunk,
   resipExporterThunk
 } from "../exporters/export-thunks";
 import Dashboard from "./dashboard";
+import { getFilesAndFoldersMetadataFromStore } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { getFilesAndFoldersFromStore } from "../reducers/files-and-folders/files-and-folders-selectors";
 
 interface DashboardContainerProps {
   api: any;
@@ -28,12 +30,18 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
     [dispatch]
   );
 
+  const metadata = useSelector(getFilesAndFoldersMetadataFromStore);
+  const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
+  const rootFilesAndFoldersMetadata = metadata[""] || {};
+
   return (
     <Dashboard
       api={api}
       exportToCsv={exportToCsv}
       exportToResip={exportToResip}
       exportToMets={exportToMets}
+      rootFilesAndFoldersMetadata={rootFilesAndFoldersMetadata}
+      filesAndFolders={filesAndFolders}
     />
   );
 };

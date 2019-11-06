@@ -19,15 +19,6 @@ const property_name = "database";
 
 const initialState = () => VirtualFileSystem.make(Origin.empty());
 
-const overallCount = () => state => state.get("files_and_folders").size;
-
-const fileCount = () => state =>
-  state.get("files_and_folders").filter(a => a.get("children").size === 0).size;
-
-const getFfByFfId = id => state => state.get("files_and_folders").get(id);
-
-const getFilesAndFolders = () => state => state.get("files_and_folders");
-
 const rootFfId = () => () => "";
 
 const maxDepth = () => state =>
@@ -35,8 +26,6 @@ const maxDepth = () => state =>
     .get("files_and_folders")
     .map(a => a.get("depth"))
     .reduce((acc, val) => Math.max(acc, val), 0);
-
-const volume = () => state => getFfByFfId(rootFfId()())(state).get("size");
 
 const getFfIdPath = id => () =>
   List(
@@ -71,11 +60,8 @@ const getOriginalPath = () => state => state.get("original_path");
 const getWaitingCounter = () => () => 0;
 
 const reader = {
-  overallCount,
-  fileCount,
   rootFfId,
   maxDepth,
-  volume,
   getFfIdPath,
   toJson,
   toMETS,
@@ -83,7 +69,6 @@ const reader = {
   getOriginalPath,
   getWaitingCounter,
   getData,
-  getFilesAndFolders,
   getState
 };
 

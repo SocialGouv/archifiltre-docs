@@ -114,11 +114,10 @@ const computeTextPosition = (x, dx, w, mode) => {
 export default function RulerApiToProps(props) {
   const api = props.api;
   const icicle_state = api.icicle_state;
-  const database = api.database;
 
   const node_id = icicle_state.sequence().slice(-1)[0];
 
-  const total_size = database.volume();
+  const total_size = props.getFfByFfId("").childrenTotalSize;
 
   const node = props.getFfByFfId(node_id);
   let node_size;

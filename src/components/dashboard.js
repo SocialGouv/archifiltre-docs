@@ -15,6 +15,10 @@ import Bubble from "components/bubble";
 import pick from "languages";
 import ResipButton from "./Buttons/resip-button";
 import AuditReportButton from "./Buttons/audit-report-button";
+import {
+  getFileCount,
+  getFoldersCount
+} from "../reducers/files-and-folders/files-and-folders-selectors";
 
 const DashBoard = props => {
   let sessionInfoCell = false;
@@ -172,7 +176,9 @@ export default function DashBoardApiToProps({
   api,
   exportToCsv,
   exportToResip,
-  exportToMets
+  exportToMets,
+  rootFilesAndFoldersMetadata,
+  filesAndFolders
 }) {
   const {
     loading_state: { isFinished, isInError, isStarted },
@@ -181,9 +187,9 @@ export default function DashBoardApiToProps({
   const finished = isFinished();
   const error = isInError();
 
-  const nb_files = database.fileCount();
-  const nb_folders = database.overallCount() - nb_files;
-  const volume = database.volume();
+  const nbFiles = getFileCount(filesAndFolders);
+  const nbFolders = getFoldersCount(filesAndFolders);
+  const volume = rootFilesAndFoldersMetadata.childrenTotalSize;
 
   const onChangeSessionName = propName => n => {
     if (n[propName].length > 0) {
@@ -198,8 +204,8 @@ export default function DashBoardApiToProps({
       started={isStarted()}
       finished={finished}
       error={error}
-      nb_files={nb_files}
-      nb_folders={nb_folders}
+      nb_files={nbFiles}
+      nb_folders={nbFolders}
       volume={volume}
       sessionName={() => database.getSessionName()}
       onChangeSessionName={onChangeSessionName}

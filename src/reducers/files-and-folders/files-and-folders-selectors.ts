@@ -157,5 +157,31 @@ export const getFilesAndFoldersTotalSize = (
 export const getFilesAndFoldersDepth = (filesAndFoldersId: string): number =>
   filesAndFoldersId.split("/").length - 2;
 
+/**
+ * Gets the hashes map from the redux state
+ * @param store - The current redux state
+ */
 export const getHashesFromStore = (store: StoreState): HashesMap =>
   getCurrentState(store.filesAndFolders).hashes;
+
+/**
+ * Returns true if the filesAndFolders is a file
+ * @param filesAndFolders
+ */
+export const isFile = (filesAndFolders: FilesAndFolders): boolean =>
+  filesAndFolders.children.length === 0;
+
+/**
+ * Returns the number of files in a FilesAndFoldersMap
+ * @param filesAndFoldersMap
+ */
+export const getFileCount = (filesAndFoldersMap: FilesAndFoldersMap): number =>
+  Object.values(filesAndFoldersMap).filter(isFile).length;
+
+/**
+ * Returns the number of folders in a FilesAndFoldersMap
+ * @param filesAndFoldersMap
+ */
+export const getFoldersCount = (
+  filesAndFoldersMap: FilesAndFoldersMap
+): number => Object.values(filesAndFoldersMap).filter(ff => !isFile(ff)).length;

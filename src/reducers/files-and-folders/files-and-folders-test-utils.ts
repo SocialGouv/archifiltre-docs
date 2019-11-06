@@ -9,6 +9,7 @@ import { FilesAndFolders } from "./files-and-folders-types";
  * @param file_last_modified
  * @param children
  * @param file_size
+ * @param name
  */
 export const createFilesAndFolders = ({
   id,
@@ -17,7 +18,8 @@ export const createFilesAndFolders = ({
   comments = "",
   file_last_modified = 0,
   children = [] as string[],
-  file_size = 0
+  file_size = 0,
+  name = "base-name"
 }): FilesAndFolders => ({
   alias,
   children,
@@ -26,5 +28,5 @@ export const createFilesAndFolders = ({
   file_size,
   hash,
   id,
-  name: "base-name"
+  name
 });

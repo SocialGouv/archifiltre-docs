@@ -144,6 +144,7 @@ class AllTags extends React.Component {
             filesAndFolders,
             filesAndFoldersMetadata
           );
+
           const opacity = computeOpacity(tag.id);
           const percentage = Math.floor((size / total_volume) * 100);
           const editing = editing_tag_id === tag.id;
@@ -203,13 +204,14 @@ const AllTagsApiToProps = ({
   deleteTagged,
   addTagged
 }) => {
-  const { icicle_state, database } = api;
+  const { icicle_state } = api;
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
   const filesAndFoldersMetadata = useSelector(
     getFilesAndFoldersMetadataFromStore
   );
 
-  const total_volume = database.volume();
+  const rootElementId = "";
+  const total_volume = filesAndFoldersMetadata[rootElementId].childrenTotalSize;
 
   const sequence = icicle_state.sequence();
   const focused_node_id = sequence[sequence.length - 1];

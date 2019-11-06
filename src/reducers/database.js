@@ -1,4 +1,5 @@
 import { updateIn, List } from "immutable";
+import { keyBy } from "lodash";
 
 import * as RealEstate from "reducers/real-estate";
 
@@ -89,40 +90,40 @@ const reader = {
 
 const set = next_state => () => {
   store.dispatch(tagActions.initializeTags(next_state.tags));
+
+  const formattedFilesAndFolders = Object.entries(
+    next_state.files_and_folders
+  ).map(([id, ff]) => ({
+    ...ff,
+    id
+  }));
+
   store.dispatch(
     filesAndFoldersActions.initializeFilesAndFolders(
-      Object.entries(next_state.files_and_folders).reduce(
-        (ffMap, [id, ff]) => ({
-          ...ffMap,
-          [id]: {
-            ...ff,
-            id
-          }
-        }),
-        {}
-      )
+      keyBy(formattedFilesAndFolders, "id")
     )
   );
-  const metadata = Object.entries(next_state.files_and_folders).reduce(
-    (metadataMap, [id, ff]) => ({
-      ...metadataMap,
-      [id]: {
-        lastModifiedAverage: ff.last_modified_average,
-        childrenTotalSize: ff.size,
-        lastModifiedMax: ff.last_modified_max,
-        lastModifiedMedian: ff.last_modified_median,
-        lastModifiedMin: ff.last_modified_min,
-        nbChildrenFiles: ff.nb_files,
-        sortBySizeIndex: ff.sort_by_size_index,
-        sortByDateIndex: ff.sort_by_date_index
-      }
-    }),
-    {}
+
+  const formattedMetadata = Object.entries(next_state.files_and_folders).map(
+    ([id, ff]) => ({
+      lastModifiedAverage: ff.last_modified_average,
+      childrenTotalSize: ff.size,
+      lastModifiedMax: ff.last_modified_max,
+      lastModifiedMedian: ff.last_modified_median,
+      lastModifiedMin: ff.last_modified_min,
+      nbChildrenFiles: ff.nb_files,
+      sortBySizeIndex: ff.sort_by_size_index,
+      sortByDateIndex: ff.sort_by_date_index,
+      id
+    })
   );
 
   store.dispatch(
-    filesAndFoldersMetadataActions.initFilesAndFoldersMetatada(metadata)
+    filesAndFoldersMetadataActions.initFilesAndFoldersMetatada(
+      keyBy(formattedMetadata, "id")
+    )
   );
+
   return VirtualFileSystem.fromJs(next_state);
 };
 

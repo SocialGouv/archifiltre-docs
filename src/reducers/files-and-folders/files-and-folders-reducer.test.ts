@@ -2,7 +2,7 @@ import {
   addCommentsOnFilesAndFolders,
   initializeFilesAndFolders,
   setFilesAndFoldersAlias,
-  setFilesAndFoldersHash
+  setFilesAndFoldersHashes
 } from "./files-and-folders-actions";
 import { filesAndFoldersReducer } from "./files-and-folders-reducer";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
@@ -11,7 +11,8 @@ import { FilesAndFoldersState } from "./files-and-folders-types";
 describe("files-and-folders-reducer", () => {
   describe("INITIALIZE_FILES_AND_FOLDERS", () => {
     const initialState: FilesAndFoldersState = {
-      filesAndFolders: {}
+      filesAndFolders: {},
+      hashes: {}
     };
 
     it("should replace the state with the provided filesAndFoldersMap", () => {
@@ -35,7 +36,8 @@ describe("files-and-folders-reducer", () => {
           initializeFilesAndFolders(filesAndFolders)
         )
       ).toEqual({
-        filesAndFolders
+        filesAndFolders,
+        hashes: {}
       });
     });
   });
@@ -57,7 +59,8 @@ describe("files-and-folders-reducer", () => {
             alias: unchangedAlias,
             id: unchangedId
           })
-        }
+        },
+        hashes: {}
       };
 
       const nextState = filesAndFoldersReducer(
@@ -75,43 +78,54 @@ describe("files-and-folders-reducer", () => {
             alias: unchangedAlias,
             id: unchangedId
           })
-        }
+        },
+        hashes: {}
       });
     });
   });
 
-  describe("SET_FILES_AND_FOLDERS_HASH", () => {
+  describe("SET_FILES_AND_FOLDERS_HASHES", () => {
     it("should replace the file and folder alias", () => {
       const changedId = "changed-id";
       const unchangedId = "unchanged-id";
       const newHash = "new-hash";
+      const unchangedHash = "unchanged-hash";
+
+      const newHashes = {
+        [changedId]: newHash
+      };
 
       const initialState: FilesAndFoldersState = {
         filesAndFolders: {
           [changedId]: createFilesAndFolders({
-            hash: "base-hash",
             id: changedId
           }),
           [unchangedId]: createFilesAndFolders({
             id: unchangedId
           })
+        },
+        hashes: {
+          [unchangedId]: unchangedHash
         }
       };
 
       const nextState = filesAndFoldersReducer(
         initialState,
-        setFilesAndFoldersHash(changedId, newHash)
+        setFilesAndFoldersHashes(newHashes)
       );
 
       expect(nextState).toEqual({
         filesAndFolders: {
           [changedId]: createFilesAndFolders({
-            hash: newHash,
             id: changedId
           }),
           [unchangedId]: createFilesAndFolders({
             id: unchangedId
           })
+        },
+        hashes: {
+          [changedId]: newHash,
+          [unchangedId]: unchangedHash
         }
       });
     });
@@ -134,7 +148,8 @@ describe("files-and-folders-reducer", () => {
             comments: unchangedComment,
             id: unchangedId
           })
-        }
+        },
+        hashes: {}
       };
 
       const nextState = filesAndFoldersReducer(
@@ -152,7 +167,8 @@ describe("files-and-folders-reducer", () => {
             comments: unchangedComment,
             id: unchangedId
           })
-        }
+        },
+        hashes: {}
       });
     });
   });

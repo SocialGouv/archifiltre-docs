@@ -5,11 +5,12 @@ import {
   FilesAndFoldersState,
   INITIALIZE_FILES_AND_FOLDERS,
   SET_FILES_AND_FOLDERS_ALIAS,
-  SET_FILES_AND_FOLDERS_HASH
+  SET_FILES_AND_FOLDERS_HASHES
 } from "./files-and-folders-types";
 
 const initialState: FilesAndFoldersState = {
-  filesAndFolders: {}
+  filesAndFolders: {},
+  hashes: {}
 };
 
 /**
@@ -26,6 +27,7 @@ const setFilesAndFoldersProp = <PropType>(
   propName: string,
   propValue: PropType
 ): FilesAndFoldersState => ({
+  ...state,
   filesAndFolders: {
     ...state.filesAndFolders,
     [filesAndFoldersId]: {
@@ -46,7 +48,7 @@ const filesAndFoldersReducer = (
 ): FilesAndFoldersState => {
   switch (action.type) {
     case INITIALIZE_FILES_AND_FOLDERS:
-      return { filesAndFolders: action.filesAndFolders };
+      return { ...state, filesAndFolders: action.filesAndFolders };
     case SET_FILES_AND_FOLDERS_ALIAS:
       return setFilesAndFoldersProp(
         state,
@@ -54,13 +56,14 @@ const filesAndFoldersReducer = (
         "alias",
         action.alias
       );
-    case SET_FILES_AND_FOLDERS_HASH:
-      return setFilesAndFoldersProp(
-        state,
-        action.filesAndFoldersId,
-        "hash",
-        action.hash
-      );
+    case SET_FILES_AND_FOLDERS_HASHES:
+      return {
+        ...state,
+        hashes: {
+          ...state.hashes,
+          ...action.hashes
+        }
+      };
     case ADD_COMMENTS_ON_FILES_AND_FOLDERS:
       return setFilesAndFoldersProp(
         state,

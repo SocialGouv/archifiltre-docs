@@ -13,10 +13,10 @@ import FolderHashWorker from "./folder-hash-computer.worker.js";
 import { bufferTime, map, tap, filter } from "rxjs/operators";
 
 const BATCH_SIZE = 500;
-const BUFFER_TIME = 200;
+const BUFFER_TIME = 1000;
 
 /**
- * Returns an observable that will dispatch computed hashes every 200ms
+ * Returns an observable that will dispatch computed hashes every second
  * @param paths - The paths of the files
  * @param basePath - The base Path of the files.
  * @returns {Observable<{}>}
@@ -33,8 +33,13 @@ export const computeHashes$ = (paths, { initialValues: { basePath } }) => {
     .pipe(map(bufferedObjects => Object.assign({}, ...bufferedObjects)));
 };
 
-export const computeFolderHashes$ = files_and_folders => {
-  const hashes$ = backgroundWorkerProcess$(files_and_folders, FolderHashWorker);
+/**
+ * Returns an observable that will dispatch computed hashes every second
+ * @param filesAndFolders - The filesAndFolders
+ * @returns {Observable<{}>}
+ */
+export const computeFolderHashes$ = filesAndFolders => {
+  const hashes$ = backgroundWorkerProcess$(filesAndFolders, FolderHashWorker);
 
   return hashes$
     .pipe(bufferTime(BUFFER_TIME))

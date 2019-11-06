@@ -2,9 +2,10 @@ import {
   ADD_COMMENTS_ON_FILES_AND_FOLDERS,
   FilesAndFoldersActionTypes,
   FilesAndFoldersMap,
+  HashesMap,
   INITIALIZE_FILES_AND_FOLDERS,
   SET_FILES_AND_FOLDERS_ALIAS,
-  SET_FILES_AND_FOLDERS_HASH
+  SET_FILES_AND_FOLDERS_HASHES
 } from "./files-and-folders-types";
 
 /**
@@ -33,17 +34,14 @@ export const setFilesAndFoldersAlias = (
 });
 
 /**
- * Action to set an alias to a FileAndFolder
- * @param filesAndFoldersId
- * @param alias
+ * Action to set hashes to FileAndFolders
+ * @param hashes
  */
-export const setFilesAndFoldersHash = (
-  filesAndFoldersId: string,
-  hash: string
+export const setFilesAndFoldersHashes = (
+  hashes: HashesMap
 ): FilesAndFoldersActionTypes => ({
-  filesAndFoldersId,
-  hash,
-  type: SET_FILES_AND_FOLDERS_HASH
+  hashes,
+  type: SET_FILES_AND_FOLDERS_HASHES
 });
 
 /**

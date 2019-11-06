@@ -1,4 +1,4 @@
-import { updateIn, List } from "immutable";
+import { List } from "immutable";
 import { keyBy } from "lodash";
 
 import * as RealEstate from "reducers/real-estate";
@@ -14,7 +14,6 @@ import * as tagActions from "./tags/tags-actions.ts";
 import * as filesAndFoldersActions from "./files-and-folders/files-and-folders-actions.ts";
 import * as filesAndFoldersMetadataActions from "./files-and-folders-metadata/files-and-folders-metadata-actions.ts";
 import { getTagsFromStore } from "./tags/tags-selectors";
-import { updateFilesAndFolderHashes } from "./files-and-folders/files-and-folders-thunks";
 
 const property_name = "database";
 
@@ -146,23 +145,12 @@ const updateComments = (updater, id) => state => {
 
 const setSessionName = name => state => state.set("session_name", name);
 
-const setHashes = hashesMap => state => {
-  store.dispatch(updateFilesAndFolderHashes(hashesMap));
-
-  return Object.keys(hashesMap).reduce(
-    (acc, ffId) =>
-      updateIn(acc, ["files_and_folders", ffId, "hash"], () => hashesMap[ffId]),
-    state
-  );
-};
-
 const writer = {
   set,
   reInit,
   updateAlias,
   updateComments,
-  setSessionName,
-  setHashes
+  setSessionName
 };
 
 export default RealEstate.create({

@@ -183,13 +183,14 @@ const NameCell = ({
 );
 
 const InfoCell = ({
+  currentFileHash,
   placeholder = false,
   filesAndFolders,
   filesAndFoldersId,
   filesAndFoldersMetadata
 }) => {
   const currentFilesAndFolders = filesAndFolders[filesAndFoldersId];
-  const hashLabel = placeholder ? "..." : currentFilesAndFolders.hash;
+  const hashLabel = placeholder ? "..." : currentFileHash;
   const sizeLabel = placeholder
     ? "..."
     : octet2HumanReadableFormat(
@@ -233,6 +234,7 @@ const Report = ({
   untag,
   updateComment,
   currentFilesAndFolders,
+  currentFileHash,
   filesAndFoldersId,
   filesAndFolders,
   filesAndFoldersMetadata,
@@ -310,6 +312,7 @@ const Report = ({
         </div>
         <div className="cell small-4">
           <InfoCell
+            currentFileHash={currentFileHash}
             filesAndFolders={filesAndFolders}
             filesAndFoldersId={filesAndFoldersId}
             filesAndFoldersMetadata={filesAndFoldersMetadata}
@@ -325,6 +328,7 @@ export default function ReportApiToProps({
   api,
   createTag,
   untag,
+  currentFileHash,
   tagsForCurrentFile,
   filesAndFolders,
   filesAndFoldersId,
@@ -359,6 +363,7 @@ export default function ReportApiToProps({
   return (
     <Report
       currentFilesAndFolders={currentFilesAndFolders}
+      currentFileHash={currentFileHash}
       filesAndFoldersId={filesAndFoldersId}
       filesAndFolders={filesAndFolders}
       filesAndFoldersMetadata={filesAndFoldersMetadata}

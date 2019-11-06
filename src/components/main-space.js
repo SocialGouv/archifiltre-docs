@@ -2,7 +2,7 @@ import React from "react";
 
 import FolderDropzone from "components/folder-dropzone";
 
-import WorkSpace from "components/workspace";
+import WorkSpace from "components/workspace-container.tsx";
 
 import WaitingScreen from "components/waiting-screen";
 import ErrorScreen from "./error-screen";

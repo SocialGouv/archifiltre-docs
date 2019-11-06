@@ -120,11 +120,10 @@ export default function RulerApiToProps(props) {
 
   const total_size = database.volume();
 
-  const getFfByFfId = database.getFfByFfId;
-  const node = getFfByFfId(node_id);
+  const node = props.getFfByFfId(node_id);
   let node_size;
   if (node) {
-    node_size = node.get("size");
+    node_size = node.childrenTotalSize;
   }
 
   props = ObjectUtil.compose(

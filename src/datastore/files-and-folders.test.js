@@ -296,7 +296,7 @@ describe("files-and-folders", () => {
         "09/10/2019",
         "",
         "",
-        "folder",
+        "file",
         1
       ]
     ]);

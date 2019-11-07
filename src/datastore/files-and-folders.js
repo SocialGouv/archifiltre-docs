@@ -288,12 +288,6 @@ export const [toJs, fromJs] = toAndFromJs(
   RecordUtil.composeFactory(derivedFactory, fileOrFolderFactory)
 );
 
-/**
- * Generates the array of all file and folder id
- * @param a - files and folders tree
- */
-export const toFfidList = a => a.keySeq().toArray();
-
 const str_list_2_header = pick({
   fr: [
     "",
@@ -363,7 +357,7 @@ export const toStrList2 = (filesAndFolders, filesAndFoldersMetadata) => {
     const comments = ff.comments;
     const children = ff.children;
     let file_or_folder = folder_str;
-    if (children.size === 0) {
+    if (children.length === 0) {
       file_or_folder = file_str;
     }
     const depth = getFilesAndFoldersDepth(ff.id);

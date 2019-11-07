@@ -2,13 +2,9 @@ import { List } from "immutable";
 import { keyBy } from "lodash";
 
 import * as RealEstate from "reducers/real-estate";
-
 import * as Origin from "datastore/origin";
 import * as VirtualFileSystem from "datastore/virtual-file-system";
 import * as FilesAndFolders from "datastore/files-and-folders";
-
-import * as METS from "exporters/mets/mets";
-
 import store from "./store.ts";
 import * as tagActions from "./tags/tags-actions.ts";
 import * as filesAndFoldersActions from "./files-and-folders/files-and-folders-actions.ts";
@@ -20,12 +16,6 @@ const property_name = "database";
 const initialState = () => VirtualFileSystem.make(Origin.empty());
 
 const rootFfId = () => () => "";
-
-const maxDepth = () => state =>
-  state
-    .get("files_and_folders")
-    .map(a => a.get("depth"))
-    .reduce((acc, val) => Math.max(acc, val), 0);
 
 const getFfIdPath = id => () =>
   List(
@@ -49,11 +39,6 @@ const toJson = () => state => JSON.stringify(getData()(state));
 
 const getState = () => state => state;
 
-const toMETS = () => state => {
-  const tags = getTagsFromStore(store.getState());
-  return METS.makeSIP(state, tags);
-};
-
 const getSessionName = () => state => state.get("session_name");
 const getOriginalPath = () => state => state.get("original_path");
 
@@ -61,10 +46,8 @@ const getWaitingCounter = () => () => 0;
 
 const reader = {
   rootFfId,
-  maxDepth,
   getFfIdPath,
   toJson,
-  toMETS,
   getSessionName,
   getOriginalPath,
   getWaitingCounter,

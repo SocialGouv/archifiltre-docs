@@ -141,7 +141,7 @@ export default class IcicleMain extends PureComponent {
   }
 
   trueFHeight(height) {
-    return height / this.props.max_depth;
+    return height / this.props.maxDepth;
   }
 
   shouldRenderChildIcicle(x, dx) {
@@ -258,6 +258,7 @@ export default class IcicleMain extends PureComponent {
         <BreadCrumbs
           api={api}
           getFfByFfId={this.props.getFfByFfId}
+          maxDepth={this.props.maxDepth}
           x={icicle_width}
           dx={breadcrumbs_width}
           dy={icicle_height}

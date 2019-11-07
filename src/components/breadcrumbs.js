@@ -136,7 +136,7 @@ class Breadcrumbs extends React.PureComponent {
       });
     } else {
       const height_child = trueFHeight(this.props.root_id);
-      const i_max = Math.min(this.props.max_depth, 5);
+      const i_max = Math.min(this.props.maxDepth, 5);
       const fill_color = Color.placeholder();
 
       for (let i = 0; i < i_max; i++) {
@@ -192,14 +192,14 @@ export default function BreadcrumbsApiToProps(props) {
 
   const breadcrumb_sequence = icicle_state.sequence();
 
-  const max_depth = database.maxDepth();
+  const maxDepth = props.maxDepth;
 
   const componentProps = {
     ...props,
     breadcrumb_sequence,
     isFocused: icicle_state.isFocused(),
     isLocked: icicle_state.isLocked(),
-    max_depth,
+    maxDepth,
     getFfByFfId: props.getFfByFfId,
     root_id: database.rootFfId()
   };

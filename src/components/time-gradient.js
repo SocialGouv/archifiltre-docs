@@ -10,9 +10,9 @@ const cursorWidthRatio = 0.0075;
 const cursorWidth = svgWidth * cursorWidthRatio;
 
 const CURSOR_ARRAY_KEYS = [
-  { key: "min", getter: metadata => metadata.lastModifiedMin },
-  { key: "median", getter: metadata => metadata.lastModifiedMedian },
-  { key: "max", getter: metadata => metadata.lastModifiedMax }
+  { key: "min", getter: metadata => metadata.minLastModified },
+  { key: "median", getter: metadata => metadata.medianLastModified },
+  { key: "max", getter: metadata => metadata.maxLastModified }
 ];
 
 const Cursor = ({ ratio }) => (
@@ -31,11 +31,10 @@ const TimeGradient = ({ filesAndFoldersId, filesAndFoldersMetadata }) => {
   const rootId = "";
 
   const rootMetadata = filesAndFoldersMetadata[rootId];
-  const maxTime = rootMetadata.lastModifiedMax;
-  const minTime = rootMetadata.lastModifiedMin;
-  const computeRelativePosition = time => {
-    return (time - minTime) / (maxTime - minTime);
-  };
+  const maxTime = rootMetadata.maxLastModified;
+  const minTime = rootMetadata.minLastModified;
+  const computeRelativePosition = time =>
+    (time - minTime) / (maxTime - minTime);
 
   let cursorArray = [];
   if (filesAndFoldersId) {
@@ -51,7 +50,7 @@ const TimeGradient = ({ filesAndFoldersId, filesAndFoldersMetadata }) => {
       <g key={"average"}>
         <circle
           cx={
-            computeRelativePosition(currentFileMetadata.lastModifiedAverage) *
+            computeRelativePosition(currentFileMetadata.averageLastModified) *
             svgWidth
           }
           cy={svgHeight / 2}

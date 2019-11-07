@@ -72,11 +72,11 @@ class Workspace extends React.PureComponent {
 
   fillColorDate(id) {
     const rootNode = this.props.getFfByFfId(this.props.root_id);
-    const maxTime = rootNode.lastModifiedMax;
-    const minTime = rootNode.lastModifiedMin;
+    const maxTime = rootNode.maxLastModified;
+    const minTime = rootNode.minLastModified;
     const zeroToOne = id => {
       const node = this.props.getFfByFfId(id);
-      const time = node.lastModifiedAverage;
+      const time = node.averageLastModified;
       return (time - minTime) / (maxTime - minTime);
     };
 

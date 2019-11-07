@@ -75,7 +75,7 @@ describe("csv-exporter", () => {
 
       const testState = {
         ...emptyStore,
-        filesAndFolders: wrapStoreWithUndoable({ filesAndFolders }),
+        filesAndFolders: wrapStoreWithUndoable({ filesAndFolders, hashes: {} }),
         filesAndFoldersMetadata: { filesAndFoldersMetadata },
         tags: wrapStoreWithUndoable({ tags })
       };

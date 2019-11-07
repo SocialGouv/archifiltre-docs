@@ -1,7 +1,10 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import {
+  getFilesAndFoldersFromStore,
+  getMaxDepth
+} from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import IcicleMain from "./icicle-main";
 
@@ -31,6 +34,10 @@ export default function IcicleApiToProps({
     [filesAndFoldersMetadata, filesAndFolders]
   );
 
+  const maxDepth = useMemo(() => getMaxDepth(filesAndFolders), [
+    filesAndFolders
+  ]);
+
   return (
     <IcicleMain
       api={api}
@@ -39,13 +46,13 @@ export default function IcicleApiToProps({
       getChildrenIdFromId={getChildrenIdFromId}
       getFfByFfId={getFfByFfId}
       getFfIdPath={database.getFfIdPath}
+      maxDepth={maxDepth}
       hover_sequence={icicle_state.hover_sequence()}
       isLocked={isLocked}
       lock={(...args) => {
         icicle_state.lock(...args);
         api.undo.commit();
       }}
-      max_depth={database.maxDepth()}
       width_by_size={icicle_state.widthBySize()}
       root_id={database.rootFfId()}
       sequence={icicle_state.sequence()}

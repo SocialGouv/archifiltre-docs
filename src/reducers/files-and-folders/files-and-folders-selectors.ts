@@ -185,3 +185,19 @@ export const getFileCount = (filesAndFoldersMap: FilesAndFoldersMap): number =>
 export const getFoldersCount = (
   filesAndFoldersMap: FilesAndFoldersMap
 ): number => Object.values(filesAndFoldersMap).filter(ff => !isFile(ff)).length;
+
+/**
+ * Returns the depth of the deepest element of a filesAndFoldersMap
+ * @param filesAndFoldersMap
+ */
+export const getMaxDepth = (filesAndFoldersMap: FilesAndFoldersMap): number =>
+  reduceFilesAndFolders(
+    filesAndFoldersMap,
+    "",
+    (childrenDepth: number[], currentFilesAndFolders) => {
+      if (currentFilesAndFolders.children.length === 0) {
+        return 0;
+      }
+      return Math.max(...childrenDepth) + 1;
+    }
+  );

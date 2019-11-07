@@ -96,7 +96,8 @@ const emptyStore = createEmptyStore();
 const storeContent = {
   ...emptyStore,
   filesAndFolders: wrapStoreWithUndoable({
-    filesAndFolders: storeFilesAndFolders
+    filesAndFolders: storeFilesAndFolders,
+    hashes: {}
   }),
   filesAndFoldersMetadata: { filesAndFoldersMetadata },
   tags: wrapStoreWithUndoable({ tags })

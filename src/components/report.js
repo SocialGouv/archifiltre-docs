@@ -190,7 +190,8 @@ const InfoCell = ({
   filesAndFoldersMetadata
 }) => {
   const currentFilesAndFolders = filesAndFolders[filesAndFoldersId];
-  const hashLabel = placeholder ? "..." : currentFileHash;
+  const hashLabel =
+    currentFileHash === undefined || placeholder ? "..." : currentFileHash;
   const sizeLabel = placeholder
     ? "..."
     : octet2HumanReadableFormat(

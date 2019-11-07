@@ -73,11 +73,11 @@ const set = next_state => () => {
 
   const formattedMetadata = Object.entries(next_state.files_and_folders).map(
     ([id, ff]) => ({
-      lastModifiedAverage: ff.last_modified_average,
       childrenTotalSize: ff.size,
-      lastModifiedMax: ff.last_modified_max,
-      lastModifiedMedian: ff.last_modified_median,
-      lastModifiedMin: ff.last_modified_min,
+      averageLastModified: ff.last_modified_average,
+      maxLastModified: ff.last_modified_max,
+      medianLastModified: ff.last_modified_median,
+      minLastModified: ff.last_modified_min,
       nbChildrenFiles: ff.nb_files,
       sortBySizeIndex: ff.sort_by_size_index,
       sortByDateIndex: ff.sort_by_date_index,

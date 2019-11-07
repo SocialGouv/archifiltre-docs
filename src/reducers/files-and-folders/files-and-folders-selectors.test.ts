@@ -11,6 +11,7 @@ import {
   getFilesAndFoldersTotalSize,
   getFoldersCount,
   getHashesFromStore,
+  getMaxDepth,
   isFile
 } from "./files-and-folders-selectors";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
@@ -199,6 +200,31 @@ describe("files-and-folders-selectors", () => {
       };
 
       expect(getFoldersCount(filesAndFoldersMap)).toBe(1);
+    });
+  });
+
+  describe("getMaxDepth", () => {
+    it("should compute the max depth", () => {
+      const folderId = "root-folder";
+      const subfolderId = "root-folder/subfolderId";
+      const deepestFileId = "root-folder/subfolderId/subfile";
+      const otherFileId = "rootFolder/subfileId";
+
+      const filesAndFoldersMap = {
+        "": createFilesAndFolders({ id: "", children: [folderId] }),
+        [folderId]: createFilesAndFolders({
+          children: [otherFileId, subfolderId],
+          id: folderId
+        }),
+        [subfolderId]: createFilesAndFolders({
+          children: [deepestFileId],
+          id: subfolderId
+        }),
+        [otherFileId]: createFilesAndFolders({ id: otherFileId }),
+        [deepestFileId]: createFilesAndFolders({ id: deepestFileId })
+      };
+
+      expect(getMaxDepth(filesAndFoldersMap)).toBe(3);
     });
   });
 });

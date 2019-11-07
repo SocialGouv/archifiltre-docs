@@ -65,10 +65,10 @@ const LastModifiedReporter = ({
 
   if (placeholder === false) {
     const metadata = filesAndFoldersMetadata[filesAndFoldersId];
-    lm_max = epochToFormattedUtcDateString(metadata.lastModifiedMax);
-    lm_median = epochToFormattedUtcDateString(metadata.lastModifiedMedian);
-    lm_average = epochToFormattedUtcDateString(metadata.lastModifiedAverage);
-    lm_min = epochToFormattedUtcDateString(metadata.lastModifiedMin);
+    lm_max = epochToFormattedUtcDateString(metadata.maxLastModified);
+    lm_median = epochToFormattedUtcDateString(metadata.medianLastModified);
+    lm_average = epochToFormattedUtcDateString(metadata.averageLastModified);
+    lm_min = epochToFormattedUtcDateString(metadata.minLastModified);
   }
 
   return (

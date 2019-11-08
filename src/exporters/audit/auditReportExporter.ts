@@ -1,6 +1,8 @@
 import dateFormat from "dateformat";
 import path from "path";
 
+import { medianOnSortedArray } from "../../util/array-util";
+import { exportToDocX } from "../../util/docx-util";
 import {
   countDeeperFolders,
   countFoldersWithMoreThanNChildren,
@@ -10,10 +12,8 @@ import {
   getFolders,
   sortFoldersByChildrenCount,
   sortFoldersByDepth
-} from "../util/file-and-folders-utils";
-import { percent } from "../util/numbers-util";
-import { medianOnSortedArray } from "../util/array-util.ts";
-import { exportToDocX } from "../util/docx-util";
+} from "../../util/file-and-folders-utils";
+import { percent } from "../../util/numbers-util";
 
 const CHILDREN_LIMIT = 30;
 const NB_FOLDERS_TO_DISPLAY = 10;
@@ -91,7 +91,7 @@ const auditReportExporter = ({ files_and_folders }) => {
 
   const orderedPathList = pathList.sort((a, b) => b.length - a.length);
   const pathLengthMedian = medianOnSortedArray(
-    orderedPathList.map(path => path.length)
+    orderedPathList.map(currentPath => currentPath.length)
   );
 
   const nbPathTooLong = countLongerPath(MAX_PATH_LENGTH)(pathList);
@@ -99,18 +99,18 @@ const auditReportExporter = ({ files_and_folders }) => {
 
   let docxData = {
     creationDate: dateFormat(new Date(), "dd/mm/yyyy"),
-    nbFolders,
-    nbFoldersWithTooManyChildren,
-    nbFoldersWithTooManyChildrenPercent: `${nbFoldersWithTooManyChildrenPercent}%`,
-    medianOfChildren,
-    nbFoldersWithNoSubfolders: foldersWithNoSubfolders.length,
-    nbFoldersTooDeep,
     foldersTooDeepPercent: `${foldersTooDeepPercent}%`,
     medianDepth,
+    medianOfChildren,
     nbElements,
-    pathLengthMedian,
+    nbFolders,
+    nbFoldersTooDeep,
+    nbFoldersWithNoSubfolders: foldersWithNoSubfolders.length,
+    nbFoldersWithTooManyChildren,
+    nbFoldersWithTooManyChildrenPercent: `${nbFoldersWithTooManyChildrenPercent}%`,
     nbPathTooLong,
-    nbPathTooLongPercent: `${nbPathTooLongPercent}%`
+    nbPathTooLongPercent: `${nbPathTooLongPercent}%`,
+    pathLengthMedian
   };
 
   const foldersWithMostChildrenValues = foldersWithMostChildren.reduce(
@@ -136,10 +136,10 @@ const auditReportExporter = ({ files_and_folders }) => {
   const longestPathValues = orderedPathList
     .slice(0, NB_FOLDERS_TO_DISPLAY)
     .reduce(
-      (acc, path, index) => ({
+      (acc, currentPath, index) => ({
         ...acc,
-        [`longPath${index + 1}Path`]: path,
-        [`longPath${index + 1}Value`]: path.length
+        [`longPath${index + 1}Path`]: currentPath,
+        [`longPath${index + 1}Value`]: currentPath.length
       }),
       {}
     );

@@ -46,7 +46,7 @@ Build:
     - yarn build-prod
     - git remote add upstream https://github.com/${CI_PROJECT_PATH}
     - git fetch upstream +refs/pull/*/merge:refs/remotes/origin/pr/*
-    - export PR_ID=$(git ls-remote upstream refs/pull/[0-9]*/head | grep ${CI_COMMIT_SHA} | cut -d '/' -f3)
+    - export PR_ID=$(git ls-remote upstream refs/pull/[0-9]*/head | grep ${CI_COMMIT_SHA} | cut -d '/' -f3 | tail -1)
     - |
       curl --request POST \
         --url https://${GITHUB_TOKEN}@api.github.com/repos/SocialGouv/archifiltre/issues/${PR_ID}/comments \

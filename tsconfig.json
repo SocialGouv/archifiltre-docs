@@ -10,7 +10,8 @@
     "moduleResolution": "node",
     "baseUrl": "src",
     "esModuleInterop": true,
-    "lib": ["es6", "webworker", "scripthost"]
+    "lib": ["es6", "webworker", "scripthost"],
+    "resolveJsonModule": true,
   },
   "include": [
     "./src/"

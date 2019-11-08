@@ -1,5 +1,5 @@
-import { countItems } from "./array-util.ts";
 import md5 from "js-md5";
+import { countItems } from "./array-util";
 
 /**
  * Returns the number of folders in an array which have strictly more that nbChildren children
@@ -56,9 +56,7 @@ export const findAllFoldersWithNoSubfolder = fileAndFoldersMap => {
 
   const findFoldersWithNoSubfolderRec = nodeId => {
     const currentNode = fileAndFoldersMap[nodeId];
-    try {
-      currentNode.children.length;
-    } catch (err) {
+    if (!currentNode) {
       throw new Error(`${nodeId} is undefined`);
     }
     if (currentNode.children.length === 0) {

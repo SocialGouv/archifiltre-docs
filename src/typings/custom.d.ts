@@ -5,3 +5,5 @@ declare module "worker-loader!*" {
 
   export default WebpackWorker;
 }
+
+declare const STATIC_ASSETS_PATH: string;

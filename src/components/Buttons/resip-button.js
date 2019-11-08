@@ -24,7 +24,8 @@ const ResipButton = props => {
     label,
     true,
     "#4d9e25",
-    { width: "90%" }
+    { width: "90%" },
+    "resip-button"
   );
 };
 

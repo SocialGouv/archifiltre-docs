@@ -109,7 +109,7 @@ function createWindow() {
   });
 
   // and load the index.html of the app.
-  if (process.env.DEV_SERVER !== "true") {
+  if (process.env.DEV_SERVER !== "true" && process.env.NODE_ENV !== "test") {
     win.loadFile(path.join(__dirname, "dist/index.html"));
   } else {
     win.loadURL("http://localhost:8000");
@@ -118,7 +118,7 @@ function createWindow() {
   preventNavigation();
 
   // Open the DevTools.
-  if (!app.isPackaged) {
+  if (!app.isPackaged && process.env.NODE_ENV !== "test") {
     win.webContents.openDevTools();
   }
 

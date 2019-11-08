@@ -1,6 +1,6 @@
 import React from "react";
 
-export function mkB(click_action, label, enabled, color, custom_style) {
+export function mkB(click_action, label, enabled, color, custom_style, id) {
   const default_button_style = {
     margin: 0,
     fontWeight: "bold",
@@ -17,6 +17,7 @@ export function mkB(click_action, label, enabled, color, custom_style) {
         className="clear button active_button"
         onClick={click_action}
         style={button_style}
+        data-test-id={id}
       >
         {label}
       </button>
@@ -28,6 +29,7 @@ export function mkB(click_action, label, enabled, color, custom_style) {
         className="button"
         onClick={click_action}
         style={button_style}
+        id={id}
         disabled
       >
         {label}

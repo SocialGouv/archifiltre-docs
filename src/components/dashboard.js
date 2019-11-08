@@ -129,7 +129,8 @@ const DashBoard = props => {
               }),
               true,
               "#4d9e25",
-              { width: "90%", cursor: "default" }
+              { width: "90%", cursor: "default" },
+              "export-menu"
             )}
           </TextAlignCenter>
         }

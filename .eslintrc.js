@@ -14,7 +14,8 @@ module.exports = {
   },
   globals: {
     MODE: "readonly",
-    STATIC_ASSETS_PATH: "readonly"
+    STATIC_ASSETS_PATH: "readonly",
+    AUTOLOAD: "readonly"
   },
   overrides: [
     {

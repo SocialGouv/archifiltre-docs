@@ -95,16 +95,7 @@ export default class FolderDropzone extends React.Component {
     event.preventDefault();
   }
 
-  handleDrop(event) {
-    event.preventDefault();
-
-    const isFileDefined = expectToBeDefined(event.dataTransfer.files[0]);
-
-    if (!isFileDefined) {
-      notifyError(loadingErrorMessage, loadingErrorTitle);
-      return;
-    }
-
+  loadFileOrFolder(loadedPath) {
     const {
       props: { api, setHashes }
     } = this;
@@ -120,9 +111,7 @@ export default class FolderDropzone extends React.Component {
     };
 
     this.props.api.loading_state.startToLoadFiles();
-
-    const droppedElementPath = event.dataTransfer.files[0].path;
-    AsyncHandleDrop(hook, droppedElementPath)
+    AsyncHandleDrop(hook, loadedPath)
       .then(virtualFileSystem => {
         api.database.set(virtualFileSystem);
         api.loading_state.finishedToLoadFiles();
@@ -130,7 +119,7 @@ export default class FolderDropzone extends React.Component {
         return virtualFileSystem;
       })
       .then(virtualFileSystem => {
-        if (!isJsonFile(droppedElementPath)) {
+        if (!isJsonFile(loadedPath)) {
           const filesAndFolders = virtualFileSystem.files_and_folders;
           const basePath = virtualFileSystem.original_path
             .split(path.sep)
@@ -161,6 +150,24 @@ export default class FolderDropzone extends React.Component {
         api.loading_state.errorLoadingFiles();
       });
   }
+  handleDrop(event) {
+    event.preventDefault();
+
+    const isFileDefined = expectToBeDefined(event.dataTransfer.files[0]);
+
+    if (!isFileDefined) {
+      notifyError(loadingErrorMessage, loadingErrorTitle);
+      return;
+    }
+
+    this.loadFileOrFolder(event.dataTransfer.files[0].path);
+  }
+
+  componentDidMount() {
+    if (AUTOLOAD) {
+      this.loadFileOrFolder(path.resolve("./test-folder"));
+    }
+  }
 
   render() {
     return (
@@ -172,7 +179,9 @@ export default class FolderDropzone extends React.Component {
       >
         <div className="cell">
           <TextAlignCenter>
-            <div style={this.style_placeholder}>{placeholder}</div>
+            <div id="drag-drop-text" style={this.style_placeholder}>
+              {placeholder}
+            </div>
           </TextAlignCenter>
         </div>
         <div className="cell">

@@ -161,6 +161,7 @@ export default class ReportCellComments extends React.Component {
     } else {
       return (
         <div
+          data-test-id="description-edit-box"
           ref={setWrapperRef}
           className="cell small-6 edit_hover_container"
           style={cells_style}

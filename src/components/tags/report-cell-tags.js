@@ -172,6 +172,7 @@ class ReportCellTags extends React.Component {
     } else {
       return (
         <div
+          data-test-id="tag-edit-box"
           ref={setWrapperRef}
           className="edit_hover_container"
           style={cells_style}

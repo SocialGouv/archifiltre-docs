@@ -33,6 +33,19 @@ and then, reload your electron app with the refresh command (`CMD + R` on OS X)
 
 For our commits message, we are following [conventional commits](https://www.conventionalcommits.org).
 
+### e2e tests
+
+You can run end-to-end tests by running
+
+```bash
+yarn e2e
+```
+
+E2E tests may fail after you installed new dependencies. You can fix it by doing
+
+```bash
+yarn install --force
+```
 
 ### Code state
 

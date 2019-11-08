@@ -2,6 +2,13 @@ import path from "path";
 import dateFormat from "dateformat";
 import { tagHasFfId } from "../../reducers/tags/tags-selectors";
 import { makeEmptyArray, replaceValue } from "../../util/array-util";
+import pick from "languages";
+
+const nameChangedText = oldName =>
+  pick({
+    en: `This element original title was '${oldName}'`,
+    fr: `Cet élément était originellement intitulé '${oldName}'`
+  });
 
 const formatFile = ff => {
   const removeStartingSlash = str =>
@@ -60,6 +67,9 @@ const addParentId = (fileOrFolder, index, fileAndFolders) => {
   };
 };
 
+const formatCustodialHistory = fileAndFolder =>
+  fileAndFolder.alias !== "" ? nameChangedText(fileAndFolder.name) : "";
+
 /**
  * Mapper that transform enriched archifiltre data to Resip compatible data
  * @param enrichedFilesAndFolders
@@ -74,6 +84,9 @@ const transformDefaultFormatToResip = enrichedFilesAndFolders => ({
   StartDate: formatDate(enrichedFilesAndFolders.last_modified_min),
   EndDate: formatDate(enrichedFilesAndFolders.last_modified_max),
   TransactedDate: formatDate(Date.now()),
+  "CustodialHistory.CustodialHistoryItem": formatCustodialHistory(
+    enrichedFilesAndFolders
+  ),
   Description: enrichedFilesAndFolders.comments,
   Tags: enrichedFilesAndFolders.tags
 });
@@ -105,6 +118,7 @@ const formatToCsv = (sipFilesAndFolders, tags) => {
     "StartDate",
     "EndDate",
     "TransactedDate",
+    "CustodialHistory.CustodialHistoryItem",
     "Description"
   ];
   const tagsFields = tags.map((tag, index) => `Tag${index}`);

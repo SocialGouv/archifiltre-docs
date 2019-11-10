@@ -1,6 +1,6 @@
 import { mkB } from "components/Buttons/button";
 
-const label = "METS";
+const label = "METS \uD83E\uDD7C"; // \u{1F97C} labcoat or \u{1F9EA} test-tube
 
 const MetsButton = props => {
   const {

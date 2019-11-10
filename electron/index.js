@@ -78,17 +78,18 @@ const askBeforeLeaving = () => {
       no = "no";
       yes = "yes";
     }
-    const option = {
+    const options = {
       type: "warning",
       buttons: [no, yes],
       defaultId: 0,
-      title,
-      message,
-      detail,
+      title: title,
+      message: message,
+      detail: detail,
       cancelId: 0
     };
-    dialog.showMessageBox(win, option, a => {
-      if (a === 1) {
+    let promiseResponse = dialog.showMessageBox(win, options);
+    promiseResponse.then(obj => {
+      if (obj.response === 1) {
         win.destroy();
       }
     });

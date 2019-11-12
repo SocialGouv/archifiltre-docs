@@ -108,7 +108,7 @@ describe("export-thunks", () => {
     const writeFileMock = fs.writeFile as jest.Mock<any>;
     const mockedGenerateResipExport$ = generateResipExport$ as jest.Mock<any>;
     const savePath = "/path/to/save/the/file";
-    const resipCsv = [["resipCsv"]];
+    const resipCsv = [["resipCsv", "header"]];
 
     beforeEach(() => {
       mockedGenerateResipExport$.mockReset();
@@ -128,7 +128,10 @@ describe("export-thunks", () => {
         storeFilesAndFolders,
         tags
       );
-      expect(writeFileMock).toHaveBeenCalledWith(savePath, '"resipCsv"\n');
+      expect(writeFileMock).toHaveBeenCalledWith(
+        savePath,
+        '"resipCsv";"header"'
+      );
     });
 
     it("should open info popin on start", () => {

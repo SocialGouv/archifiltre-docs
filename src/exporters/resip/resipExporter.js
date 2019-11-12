@@ -166,7 +166,7 @@ const resipExporter = (filesAndFolders, tags, hook = () => {}) => {
 
   const addSipId = ff => {
     sipId = sipId + 1;
-    return { ...ff, ID: sipId };
+    return { ...ff, ID: `${sipId}` };
   };
 
   const tagsWithIndex = Object.keys(tags).map((tagId, tagIndex) => ({

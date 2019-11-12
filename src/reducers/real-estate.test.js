@@ -38,11 +38,7 @@ describe("real-estate", function() {
       return { origin: s, current: s };
     },
     get: s => s.current,
-    set: (a, s) =>
-      ObjectUtil.compose(
-        { current: a },
-        s
-      ),
+    set: (a, s) => ObjectUtil.compose({ current: a }, s),
     reader: {
       getCurrent: () => s => s.current
     },
@@ -54,12 +50,7 @@ describe("real-estate", function() {
   });
 
   it("basic test", () => {
-    const { initialState, api } = M.compile(
-      M.compose(
-        state2,
-        state1
-      )
-    );
+    const { initialState, api } = M.compile(M.compose(state2, state1));
 
     let store = initialState();
 
@@ -88,13 +79,7 @@ describe("real-estate", function() {
 
   it("higher order test", () => {
     const { initialState, api } = M.compile(
-      higherOrder(
-        "ho",
-        M.compose(
-          state2,
-          state1
-        )
-      )
+      higherOrder("ho", M.compose(state2, state1))
     );
 
     let store = initialState();

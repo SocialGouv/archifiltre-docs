@@ -22,10 +22,7 @@ export const create = initial_obj => {
   const reader = () => JSON.parse(Fs.readFileSync(path, "utf8"));
   const writer = obj => {
     obj = ObjectUtil.extractKeys(keys, obj);
-    obj = ObjectUtil.compose(
-      obj,
-      initial_obj
-    );
+    obj = ObjectUtil.compose(obj, initial_obj);
     const json = JSON.stringify(obj);
     Fs.writeFileSync(path, json, "utf8");
   };

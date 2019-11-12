@@ -251,10 +251,7 @@ export const computeDerived = (m, hook) => {
       ans = afterMergeDerived(ans);
       ans = sortChildren(children_ans_array, ans);
     }
-    node = RecordUtil.compose(
-      ans,
-      node
-    );
+    node = RecordUtil.compose(ans, node);
 
     if (hook) {
       hook("reducedFilesAndFolders", ans, node);

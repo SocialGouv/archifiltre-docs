@@ -3,11 +3,7 @@ import * as ObjectUtil from "util/object-util.ts";
 export const create = state => {
   const property_name = state.property_name;
   const get = s => s[property_name];
-  const set = (a, s) =>
-    ObjectUtil.compose(
-      { [property_name]: a },
-      s
-    );
+  const set = (a, s) => ObjectUtil.compose({ [property_name]: a }, s);
 
   const initialState = s => set(state.initialState(), s);
 
@@ -61,14 +57,8 @@ export const empty = () => {
 
 export const compose = (a, b) => {
   const initialState = s => a.initialState(b.initialState(s));
-  const reader = ObjectUtil.compose(
-    a.reader,
-    b.reader
-  );
-  const writer = ObjectUtil.compose(
-    a.writer,
-    b.writer
-  );
+  const reader = ObjectUtil.compose(a.reader, b.reader);
+  const writer = ObjectUtil.compose(a.writer, b.writer);
   return {
     initialState,
     reader,
@@ -170,14 +160,8 @@ export const createHigherOrder = higher_order => {
     return create({
       property_name,
       initialState,
-      reader: ObjectUtil.compose(
-        higher_order.reader,
-        reader
-      ),
-      writer: ObjectUtil.compose(
-        higher_order.writer,
-        writer
-      )
+      reader: ObjectUtil.compose(higher_order.reader, reader),
+      writer: ObjectUtil.compose(higher_order.writer, writer)
     });
   };
 };

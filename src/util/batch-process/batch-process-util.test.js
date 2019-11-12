@@ -94,7 +94,10 @@ describe("batch-process-util", () => {
 
     it("should correctly send responses", () => {
       const messageCallback = getEventCallback(addEventListener, "message");
-      const result = [{ param: 0, result: "R0" }, { param: 1, result: "R1" }];
+      const result = [
+        { param: 0, result: "R0" },
+        { param: 1, result: "R1" }
+      ];
       messageCallback({ data: { type: "result", result } });
       expect(responseObserver).toHaveBeenCalledWith(result);
     });

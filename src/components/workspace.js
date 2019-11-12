@@ -81,9 +81,10 @@ class Workspace extends React.PureComponent {
     };
 
     return Color.toRgba(
-      Color.gradient(Color.leastRecentDate(), Color.mostRecentDate())(
-        zeroToOne(id)
-      )
+      Color.gradient(
+        Color.leastRecentDate(),
+        Color.mostRecentDate()
+      )(zeroToOne(id))
     );
   }
 

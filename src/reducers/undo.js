@@ -20,11 +20,7 @@ const initialState = s => {
 };
 
 const get = s => s.content;
-const set = (a, s) =>
-  ObjectUtil.compose(
-    { content: a },
-    s
-  );
+const set = (a, s) => ObjectUtil.compose({ content: a }, s);
 
 const hasAPast = () => state => state.past.length !== 0;
 const hasAFuture = () => state => state.future.length !== 0;

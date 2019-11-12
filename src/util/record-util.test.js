@@ -27,20 +27,8 @@ describe("record-util", function() {
     )({ a: 10, b: 20 });
     const empty = M.emptyFactory();
 
-    testEquality(
-      M.compose(
-        a,
-        empty
-      ),
-      a
-    );
-    testEquality(
-      M.compose(
-        empty,
-        a
-      ),
-      a
-    );
+    testEquality(M.compose(a, empty), a);
+    testEquality(M.compose(empty, a), a);
   });
 
   it("compose : a . (b . c) === (a . b) . c", () => {
@@ -71,22 +59,7 @@ describe("record-util", function() {
       }
     )({ t: 3 });
 
-    testEquality(
-      M.compose(
-        a,
-        M.compose(
-          b,
-          c
-        )
-      ),
-      M.compose(
-        M.compose(
-          a,
-          b
-        ),
-        c
-      )
-    );
+    testEquality(M.compose(a, M.compose(b, c)), M.compose(M.compose(a, b), c));
   });
 
   it("simple test", () => {
@@ -117,10 +90,7 @@ describe("record-util", function() {
         }
       }
     );
-    const c = M.compose(
-      b(),
-      a().set("a", 12)
-    );
+    const c = M.compose(b(), a().set("a", 12));
 
     expect(c.toObject()).toEqual({
       a: 10,

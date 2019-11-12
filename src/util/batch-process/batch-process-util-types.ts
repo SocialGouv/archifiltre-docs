@@ -19,4 +19,12 @@ interface ResultMessage extends Message {
   result: any;
 }
 
-export type WorkerMessage = Message | ErrorMessage | ResultMessage;
+interface InitializeMessage extends Message {
+  data: any;
+}
+
+export type WorkerMessage =
+  | Message
+  | ErrorMessage
+  | ResultMessage
+  | InitializeMessage;

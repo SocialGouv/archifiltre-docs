@@ -3,6 +3,19 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 
+/**
+ * Return code that will compute the path of the folder containing worker file,
+ * which is the electron/dist folder in development mode, and the app.asar/electron/dist
+ * folder in production mode
+ * Note : the prod mode method gives archifiltre/electron/electron/dist folder in dev mode
+ * @param mode - the build mode. "development" or "production".
+ * @returns {string}
+ */
+const workerRootFolder = mode =>
+  mode === "development"
+    ? JSON.stringify(path.join(__dirname, "electron/dist/"))
+    : "require('path').join(require('electron').remote.app.getAppPath(),'/electron/dist/')";
+
 module.exports = (env, argv = {}) => ({
   devtool: "source-map",
   entry: {
@@ -30,6 +43,7 @@ module.exports = (env, argv = {}) => ({
   target: "electron-renderer",
 
   devServer: {
+    writeToDisk: name => /\.fork\.[jt]s$/.test(name),
     contentBase: path.resolve(__dirname, "electron/dist"),
     port: 8000,
     compress: true,
@@ -51,6 +65,17 @@ module.exports = (env, argv = {}) => ({
 
   module: {
     rules: [
+      // This loader won't work if it is not defined before the typescript loader
+      {
+        test: /\.fork\.[jt]s$/,
+        use: {
+          loader: "webpack-fork-loader",
+          options: {
+            publicPath: workerRootFolder(argv.mode),
+            evalPath: true
+          }
+        }
+      },
       {
         test: /\.[tj]sx?$/,
         exclude: /(node_modules|bower_components)/,

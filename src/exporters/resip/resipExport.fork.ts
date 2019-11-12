@@ -1,22 +1,19 @@
+import { ChildProcess } from "child_process";
 import {
-  MessageTypes,
-  WorkerMessage
-} from "../../util/batch-process/batch-process-util-types";
+  AsyncWorkerEvent,
+  createAsyncWorkerForChildProcess,
+  fakeChildProcess
+} from "../../util/async-worker-util";
+import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
 import { hookCounter } from "../../util/hook-utils";
 import resipExporter from "./resipExporter";
 
-const ctx: Worker = self as any;
+const asyncWorker = createAsyncWorkerForChildProcess();
 
-// The target origin is "*" as this is a service worker
-
-const sendMessage = (message: WorkerMessage) => {
-  ctx.postMessage(message);
-};
-
-ctx.onmessage = ({ data: { data, type } }) => {
+asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, ({ type, data }) => {
   if (type === "initialize") {
     const messageHook = count => {
-      sendMessage({
+      asyncWorker.postMessage({
         result: { count, resipCsv: [] },
         type: MessageTypes.RESULT
       });
@@ -27,13 +24,15 @@ ctx.onmessage = ({ data: { data, type } }) => {
 
     const resipExportData = resipExporter(filesAndFolders, tags, hook);
 
-    sendMessage({
+    asyncWorker.postMessage({
       result: { count: getCount(), resipCsv: resipExportData },
       type: MessageTypes.RESULT
     });
 
-    sendMessage({
+    asyncWorker.postMessage({
       type: MessageTypes.COMPLETE
     });
   }
-};
+});
+
+export default fakeChildProcess;

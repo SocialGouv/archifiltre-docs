@@ -6,10 +6,7 @@ describe("functionUtil", () => {
       const firstFunction = value => value + ":first";
       const secondFunction = value => value + ":second";
 
-      const composed = compose(
-        secondFunction,
-        firstFunction
-      );
+      const composed = compose(secondFunction, firstFunction);
 
       expect(composed("base")).toBe("base:first:second");
     });

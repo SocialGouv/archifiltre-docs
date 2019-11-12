@@ -59,10 +59,7 @@ function makeStore(compiled_real_estate) {
 
     render() {
       return this.props.children(
-        ObjectUtil.compose(
-          { api: this.getApi() },
-          this.props
-        )
+        ObjectUtil.compose({ api: this.getApi() }, this.props)
       );
     }
   }

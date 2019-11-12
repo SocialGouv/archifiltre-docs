@@ -14,7 +14,9 @@ function loadFolder(folderPath) {
   postMessage({ status: "traverse", count: 0 });
   const { hook: traverseHook, getCount: getTraverseCount } = hookCounter(
     count => postMessage({ status: "traverse", count }),
-    { interval: MIN_MESSAGE_INTERVAL }
+    {
+      interval: MIN_MESSAGE_INTERVAL
+    }
   );
   let origin;
   try {
@@ -71,10 +73,10 @@ function loadFolder(folderPath) {
     }
   };
 
-  const { hook: derivateHook, getCount: getDerivateCount } = hookCounter(
-    derivateThrottledHook,
-    { interval: MIN_MESSAGE_INTERVAL }
-  );
+  const {
+    hook: derivateHook,
+    getCount: getDerivateCount
+  } = hookCounter(derivateThrottledHook, { interval: MIN_MESSAGE_INTERVAL });
   try {
     vfs = VirtualFileSystem.derivate(vfs, derivateHook);
     postMessage({

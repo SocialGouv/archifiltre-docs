@@ -1,7 +1,7 @@
 import { advanceTo } from "jest-date-mock";
 import { exportToDocX } from "../../util/docx-util";
-import testData from "./audiReportExporter.test.data.json";
-import auditReportExporter, { TEMPLATE_PATH } from "./auditReportExporter";
+import testData from "./audi-report-exporter.test.data.json";
+import auditReportExporter, { TEMPLATE_PATH } from "./audit-report-exporter";
 
 jest.mock("../../util/docx-util", () => ({
   exportToDocX: jest.fn()
@@ -15,9 +15,7 @@ describe("auditReportExporter", () => {
       advanceTo(new Date("2019-09-04"));
       exportToDocXMock.mockReset();
       exportToDocXMock.mockReturnValue("docxBlob");
-      auditReportExporter({
-        files_and_folders: testData.input.files_and_folders
-      });
+      auditReportExporter(testData.input.files_and_folders);
 
       expect(exportToDocXMock).toHaveBeenCalledWith(
         TEMPLATE_PATH,

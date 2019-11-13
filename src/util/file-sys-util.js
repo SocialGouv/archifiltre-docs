@@ -1,6 +1,9 @@
+import path from "path";
+
 const Fs = require("fs");
 const Path = require("path");
 import FileSaver from "file-saver";
+import { countItems } from "./array-util";
 
 const utf8_byte_order_mark = "\ufeff";
 
@@ -129,3 +132,10 @@ export const recTraverseFileTreeForHook = (hook, path) => {
     return;
   }
 };
+
+/**
+ * Get the number of files with .zip extension
+ * @param filePaths - list of strings representing file paths
+ */
+export const countZipFiles = filePaths =>
+  countItems(filePath => path.extname(filePath) === ".zip")(filePaths);

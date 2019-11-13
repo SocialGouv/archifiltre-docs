@@ -50,6 +50,19 @@ export const createAsyncWorkerForChildProcessController = (
 });
 
 /**
+ * Creates a wrapper class for the childProcess contructor to be used in batch-process-utils
+ * @param ChildProcessContructor
+ */
+export const createAsyncWorkerControllerClass = ChildProcessContructor => {
+  return class AsyncWorkerController {
+    constructor() {
+      const childProcess = new ChildProcessContructor();
+      return createAsyncWorkerForChildProcessController(childProcess);
+    }
+  };
+};
+
+/**
  * Fake object used to declare a file as a ChildProcess for the typescript compiler
  * @example
  * // my-child-process.fork.ts

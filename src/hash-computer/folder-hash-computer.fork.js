@@ -1,6 +1,12 @@
 import { computeFolderHashes } from "../util/file-and-folders-utils";
+import {
+  AsyncWorkerEvent,
+  createAsyncWorkerForChildProcess
+} from "../util/async-worker-util";
 
-onmessage = ({ data: { data, type } }) => {
+const asyncWorker = createAsyncWorkerForChildProcess();
+
+asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, ({ data, type }) => {
   if (type === "initialize") {
     try {
       // We batch the results to avoid overloading the main process
@@ -10,7 +16,7 @@ onmessage = ({ data: { data, type } }) => {
         batchResult = { ...batchResult, ...hashObject };
 
         if (Object.keys(batchResult).length === BATCH_SIZE) {
-          postMessage({ type: "result", result: batchResult });
+          asyncWorker.postMessage({ type: "result", result: batchResult });
           batchResult = {};
         }
       };
@@ -18,14 +24,16 @@ onmessage = ({ data: { data, type } }) => {
       computeFolderHashes(data.files_and_folders, computeFolderHashHook);
 
       // flushing remaining results
-      postMessage({ type: "result", result: batchResult });
+      asyncWorker.postMessage({ type: "result", result: batchResult });
     } catch (error) {
-      postMessage({ type: "error", error });
+      asyncWorker.postMessage({ type: "error", error });
     }
 
-    postMessage({ type: "complete" });
+    asyncWorker.postMessage({ type: "complete" });
     return;
   }
 
-  postMessage({ type: "unknown" });
-};
+  asyncWorker.postMessage({ type: "unknown" });
+});
+
+export default {};

@@ -4,13 +4,11 @@ import {
   computeBatch$
 } from "../util/batch-process/batch-process-util";
 
-// eslint-disable-next-line import/default
-import FileHashWorker from "./file-hash-computer.worker.js";
-
-// eslint-disable-next-line import/default
-import FolderHashWorker from "./folder-hash-computer.worker.js";
+import FileHashFork from "./file-hash-computer.fork.js";
+import FolderHashFork from "./folder-hash-computer.fork.js";
 
 import { bufferTime, map, tap, filter } from "rxjs/operators";
+import { createAsyncWorkerControllerClass } from "../util/async-worker-util";
 
 const BATCH_SIZE = 500;
 const BUFFER_TIME = 1000;
@@ -22,6 +20,7 @@ const BUFFER_TIME = 1000;
  * @returns {Observable<{}>}
  */
 export const computeHashes$ = (paths, { initialValues: { basePath } }) => {
+  const FileHashWorker = createAsyncWorkerControllerClass(FileHashFork);
   const hashes$ = computeBatch$(paths, FileHashWorker, {
     batchSize: BATCH_SIZE,
     initialValues: { basePath }
@@ -39,6 +38,7 @@ export const computeHashes$ = (paths, { initialValues: { basePath } }) => {
  * @returns {Observable<{}>}
  */
 export const computeFolderHashes$ = filesAndFolders => {
+  const FolderHashWorker = createAsyncWorkerControllerClass(FolderHashFork);
   const hashes$ = backgroundWorkerProcess$(filesAndFolders, FolderHashWorker);
 
   return hashes$

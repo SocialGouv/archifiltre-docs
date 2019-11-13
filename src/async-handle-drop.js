@@ -1,28 +1,33 @@
-/* eslint import/default: OFF */
-import LoadFromFilesystemWorker from "./load-from-filesystem.worker";
-import LoadFromJsonWorker from "./load-from-json.worker";
+import LoadFromFilesystemFork from "./load-from-filesystem.fork";
+import LoadFromJsonFork from "./load-from-json.fork";
 import { isJsonFile } from "./util/file-sys-util";
+import {
+  AsyncWorkerEvent,
+  createAsyncWorkerForChildProcessController
+} from "./util/async-worker-util";
 
 export default (hook, droppedElementPath) => {
   return new Promise((resolve, reject) => {
     const worker = isJsonFile(droppedElementPath)
-      ? new LoadFromJsonWorker()
-      : new LoadFromFilesystemWorker();
-    worker.onmessage = event => {
+      ? new LoadFromJsonFork()
+      : new LoadFromFilesystemFork();
+
+    const asyncWorker = createAsyncWorkerForChildProcessController(worker);
+    asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, event => {
       switch (event.data.status) {
         case "return":
-          worker.terminate();
+          asyncWorker.terminate();
           resolve(event.data.vfs);
           break;
         case "error":
-          worker.terminate();
+          asyncWorker.terminate();
           reject(event.data.message);
           break;
         default:
           hook(event.data);
       }
-    };
-    worker.postMessage({
+    });
+    asyncWorker.postMessage({
       droppedElementPath
     });
   });

@@ -6,7 +6,7 @@ import { RIEInput } from "riek";
 import SaveButton from "components/Buttons/save-button";
 import METSButton from "components/Buttons/mets-button";
 import ReinitButton from "components/Buttons/reinit-button";
-import ToCsvButton from "components/Buttons/csv-button";
+import CsvButton from "components/Buttons/csv-button";
 import TextAlignCenter from "components/text-align-center";
 import CtrlZ from "components/ctrl-z";
 
@@ -52,7 +52,8 @@ const DashBoard = props => {
     api,
     exportToCsv,
     exportToResip,
-    exportToMets
+    exportToMets,
+    exportToAuditReport
   } = props;
 
   if (started === true && finished === true && error === false) {
@@ -85,7 +86,7 @@ const DashBoard = props => {
 
     csvButtonCell = (
       <TextAlignCenter>
-        <ToCsvButton api={api} exportToCsv={exportToCsv} />
+        <CsvButton api={api} exportToCsv={exportToCsv} />
       </TextAlignCenter>
     );
 
@@ -109,7 +110,10 @@ const DashBoard = props => {
 
     auditButtonCell = (
       <TextAlignCenter>
-        <AuditReportButton api={api} />
+        <AuditReportButton
+          api={api}
+          exportToAuditReport={exportToAuditReport}
+        />
       </TextAlignCenter>
     );
 
@@ -177,6 +181,7 @@ export default function DashBoardApiToProps({
   exportToCsv,
   exportToResip,
   exportToMets,
+  exportToAuditReport,
   rootFilesAndFoldersMetadata,
   filesAndFolders
 }) {
@@ -212,6 +217,7 @@ export default function DashBoardApiToProps({
       exportToCsv={exportToCsv}
       exportToResip={exportToResip}
       exportToMets={exportToMets}
+      exportToAuditReport={exportToAuditReport}
     />
   );
 }

@@ -1,5 +1,6 @@
 import React, { FC, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { auditReportExporterThunk } from "../exporters/audit/audit-report-exporter";
 import { csvExporterThunk } from "../exporters/csv-exporter";
 import {
   metsExporterThunk,
@@ -30,6 +31,11 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
     [dispatch]
   );
 
+  const exportToAuditReport = useCallback(
+    name => dispatch(auditReportExporterThunk(name)),
+    [dispatch]
+  );
+
   const metadata = useSelector(getFilesAndFoldersMetadataFromStore);
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
   const rootFilesAndFoldersMetadata = metadata[""] || {};
@@ -37,6 +43,7 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
   return (
     <Dashboard
       api={api}
+      exportToAuditReport={exportToAuditReport}
       exportToCsv={exportToCsv}
       exportToResip={exportToResip}
       exportToMets={exportToMets}

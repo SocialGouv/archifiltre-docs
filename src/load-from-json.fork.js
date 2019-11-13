@@ -4,6 +4,12 @@ import * as FilesAndFolders from "datastore/files-and-folders";
 import { fromAnyJsonToJs } from "compatibility";
 
 import version from "version";
+import {
+  AsyncWorkerEvent,
+  createAsyncWorkerForChildProcess
+} from "./util/async-worker-util";
+
+const asyncWorker = createAsyncWorkerForChildProcess();
 
 /**
  * Remove the byte order mark
@@ -29,11 +35,11 @@ function loadJsonConfig(droppedFolderPath) {
   let filesAndFolders = FilesAndFolders.fromJs(js.files_and_folders);
 
   if (jsVersion !== version) {
-    postMessage({ status: "derivate" });
+    asyncWorker.postMessage({ status: "derivate" });
     filesAndFolders = FilesAndFolders.computeDerived(filesAndFolders);
   }
 
-  postMessage({
+  asyncWorker.postMessage({
     status: "return",
     vfs: {
       ...js,
@@ -42,6 +48,11 @@ function loadJsonConfig(droppedFolderPath) {
   });
 }
 
-onmessage = ({ data: { droppedElementPath } }) => {
-  loadJsonConfig(droppedElementPath);
-};
+asyncWorker.addEventListener(
+  AsyncWorkerEvent.MESSAGE,
+  ({ droppedElementPath }) => {
+    loadJsonConfig(droppedElementPath);
+  }
+);
+
+export default {};

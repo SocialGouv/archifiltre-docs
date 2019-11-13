@@ -1,7 +1,7 @@
 import { Observable } from "rxjs";
 import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "../../reducers/tags/tags-types";
-import { createAsyncWorkerForChildProcessController } from "../../util/async-worker-util";
+import { createAsyncWorkerControllerClass } from "../../util/async-worker-util";
 import { backgroundWorkerProcess$ } from "../../util/batch-process/batch-process-util";
 import ResipExportFork from "./resipExport.fork";
 
@@ -20,12 +20,9 @@ export const generateResipExport$ = (
   filesAndFolders: FilesAndFoldersMap,
   tags: TagMap
 ): Observable<ResipExportProgress> => {
-  class ResipExportAsyncWorker {
-    constructor() {
-      const resipExportFork = new ResipExportFork();
-      return createAsyncWorkerForChildProcessController(resipExportFork);
-    }
-  }
+  const ResipExportAsyncWorker = createAsyncWorkerControllerClass(
+    ResipExportFork
+  );
 
   return backgroundWorkerProcess$(
     { filesAndFolders, tags },

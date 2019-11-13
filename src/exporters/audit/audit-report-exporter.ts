@@ -1,5 +1,7 @@
 import dateFormat from "dateformat";
 import path from "path";
+import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
+import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
 
 import { medianOnSortedArray } from "../../util/array-util";
 import { exportToDocX } from "../../util/docx-util";
@@ -13,6 +15,7 @@ import {
   sortFoldersByChildrenCount,
   sortFoldersByDepth
 } from "../../util/file-and-folders-utils";
+import { saveBlob } from "../../util/file-sys-util";
 import { percent } from "../../util/numbers-util";
 
 const CHILDREN_LIMIT = 30;
@@ -27,12 +30,11 @@ export const TEMPLATE_PATH = path.join(
 /**
  * Returns a blob containing the docx content for an audit report
  * This is based on the template defined in the const TEMPLATE_PATH
- * @param files_and_folders - The file and folder list
+ * @param filesAndFolders - The files and folders list
  * @returns {Blob}
  */
-const auditReportExporter = ({ files_and_folders }) => {
-  const filesAndFoldersArray = filesAndFoldersMapToArray(files_and_folders);
-
+const auditReportExporter = filesAndFolders => {
+  const filesAndFoldersArray = filesAndFoldersMapToArray(filesAndFolders);
   const folders = getFolders(filesAndFoldersArray);
 
   /*
@@ -62,8 +64,8 @@ const auditReportExporter = ({ files_and_folders }) => {
    * Report page 2 data
    */
   const foldersWithNoSubfolders = findAllFoldersWithNoSubfolder(
-    files_and_folders
-  ).map(folderId => ({ id: folderId, ...files_and_folders[folderId] }));
+    filesAndFolders
+  ).map(folderId => ({ id: folderId, ...filesAndFolders[folderId] }));
 
   const foldersWithNoSubfoldersByDepth = sortFoldersByDepth(
     foldersWithNoSubfolders
@@ -87,9 +89,11 @@ const auditReportExporter = ({ files_and_folders }) => {
    */
   const nbElements = filesAndFoldersArray.length;
 
-  const pathList = Object.keys(files_and_folders);
+  const pathList = Object.keys(filesAndFolders);
 
-  const orderedPathList = pathList.sort((a, b) => b.length - a.length);
+  const orderedPathList = pathList.sort(
+    (firstPath, secondPath) => secondPath.length - firstPath.length
+  );
   const pathLengthMedian = medianOnSortedArray(
     orderedPathList.map(currentPath => currentPath.length)
   );
@@ -152,6 +156,17 @@ const auditReportExporter = ({ files_and_folders }) => {
   };
 
   return exportToDocX(TEMPLATE_PATH, docxData);
+};
+
+/**
+ * Thunk to export an audit
+ * @param name - name of the output file
+ */
+export const auditReportExporterThunk = (
+  name: string
+): ArchifiltreThunkAction => (dispatch, getState) => {
+  const filesAndFolders = getFilesAndFoldersFromStore(getState());
+  saveBlob(name, auditReportExporter(filesAndFolders));
 };
 
 export default auditReportExporter;

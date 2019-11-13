@@ -115,7 +115,10 @@ describe("export-thunks", () => {
       writeFileMock.mockReset();
       writeFileMock.mockResolvedValue(null);
       mockedGenerateResipExport$.mockReturnValue(
-        from([{ count: 0, result: [] }, { count: 100, resipCsv }])
+        from([
+          { count: 0, result: [] },
+          { count: 100, resipCsv }
+        ])
       );
     });
 

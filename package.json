@@ -95,7 +95,7 @@
     "jest": "24.9.0",
     "jest-date-mock": "1.0.7",
     "jsdoc-to-markdown": "5.0.2",
-    "lint-staged": "9.4.2",
+    "lint-staged": "9.4.3",
     "node-sass": "4.13.0",
     "prettier": "1.19.1",
     "sass-loader": "8.0.0",

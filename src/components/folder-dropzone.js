@@ -14,9 +14,9 @@ import {
   filesAndFoldersMapToArray,
   getFiles
 } from "../util/file-and-folders-utils";
-import { isJsonFile } from "../util/file-sys-util";
+import { isJsonFile, countZipFiles } from "../util/file-sys-util";
 import { expectToBeDefined } from "../util/expect-behaviour";
-import { notifyError } from "../util/notifications-util";
+import { notifyError, notifyInfo } from "../util/notifications-util";
 
 const placeholder = pick({
   en: "Drop a directory here!",
@@ -27,6 +27,16 @@ const placeholderSt = pick({
   en: "You may also drop a JSON file previously exported from Archifiltre.",
   fr:
     "Vous pouvez aussi déposer un fichier JSON précédement exporté depuis Archifiltre."
+});
+
+const zipNotificationTitle = zipNumber =>
+  pick({
+    en: `${zipNumber} zip(s) file(s) detected`,
+    fr: `${zipNumber} fichier(s) zip détecté(s)`
+  });
+const zipNotificationMessage = pick({
+  en: "Archifiltre doesn't handle zips, please unzip them to read them",
+  fr: "Archifiltre ne lit pas les zips, veuillez les décompresser pour les lire"
 });
 
 const disclaimer = pick({
@@ -60,6 +70,10 @@ const loadingErrorMessage = pick({
   en: "You probably neither dropped a folder nor a file.",
   fr: "Vous n'avez probablement pas déposé un dossier ou un fichier."
 });
+
+const displayZipNotification = zipCount => {
+  notifyInfo(zipNotificationMessage, zipNotificationTitle(zipCount));
+};
 
 export default class FolderDropzone extends React.Component {
   constructor(props) {
@@ -125,6 +139,10 @@ export default class FolderDropzone extends React.Component {
           const paths = getFiles(
             filesAndFoldersMapToArray(filesAndFolders)
           ).map(file => file.id);
+          const zipFileCount = countZipFiles(paths);
+          if (zipFileCount > 0) {
+            displayZipNotification(zipFileCount);
+          }
           computeHashes$(paths, {
             initialValues: { basePath }
           }).subscribe({

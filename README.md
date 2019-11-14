@@ -41,6 +41,55 @@ For our commits message, we are following [conventional commits](https://www.con
 - We are trying to change our components to functional components using hooks instead of class components.
 - We are migrating our code to typescript to make it easier to maintain.
 
+### Resource consuming tasks
+
+When doing heavy resource consuming tasks, we use NodeJS `childProcess.fork` method to keep the UI reactive. To do so,
+we use [webpack-fork-loader](https://www.npmjs.com/package/webpack-fork-loader), which will wrap every `*.fork.js` or
+`*.fork.ts` file into a ChildProcess constructor that will build a nodeJS ChildProcess element.
+
+We added some utility classes to adapt the ChildProcess API to the formerly used WebWorkers API which can be found in
+the `src/util/async-worker-util.ts` file.
+
+A basic new ChildProcess would look like :
+
+```typescript
+// child-process.controller.ts
+import MyChildProcess from "./child-process.fork.ts";
+import { createAsyncWorkerControllerClass, AsyncWorkerEvent } from "../util/async-worker-util";
+import { MessageTypes } from "../util/batch-process/batch-process-util-types";
+
+export const runMyChildProcess = () => {
+  // We build a "newable" entity which is easier to use if you need to spawn mutliple process
+  const AsyncProcess = createAsyncWorkerControllerClass(MyChildProcess);
+
+  const asyncProcess = new AsyncProcess();
+
+  asyncProcess.postMessage({ type: MessageTypes.INITIALIZE, data: "hello" });
+  asyncProcess.addEventListener(AsyncWorkerEvent.MESSAGE, (message) => { console.log("messageReceived", message) });
+}
+```
+```typescript
+// child-process.fork.ts
+import {
+  AsyncWorkerEvent,
+  createAsyncWorkerForChildProcess,
+  fakeChildProcess
+} from "../util/async-worker-util";
+import { MessageTypes } from "../util/batch-process/batch-process-util-types";
+
+const asyncWorker = createAsyncWorkerForChildProcess();
+
+asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, ({ data, type }) => {
+  if (type === MessageTypes.INITIALIZE) {
+    asyncWorker.postMessage({ type: MessageTypes.RESULT, result: "hello" });
+  }
+});
+
+// This export allows typescript compiler to not throw type errors. It will not really be used
+// as it will be replaced by webpack-fork-loader
+export default fakeChildProcess;
+```
+
 ### CI
 
 - We are making a CI platform on GitLab. We have a [mirrored repository](https://gitlab.factory.social.gouv.fr/SocialGouv/archifiltre) for that.

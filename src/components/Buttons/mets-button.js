@@ -1,6 +1,11 @@
 import { mkB } from "components/Buttons/button";
+import React from "react";
 
-const label = "METS \uD83E\uDD7C"; // \u{1F97C} labcoat or \u{1F9EA} test-tube
+const label = (
+  <span>
+    METS <small>beta</small>
+  </span>
+);
 
 const MetsButton = props => {
   const {

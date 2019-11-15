@@ -5,16 +5,17 @@ import TagsEditable from "components/tags/tags-editable";
 
 import pick from "languages";
 
-const tags_tr = pick({
-  en: "Tags"
+const tagsText = pick({
+  en: "Tags",
+  fr: "Tags"
 });
 
-const your_tags_here_tr = pick({
+const yourTagsHereText = pick({
   en: "Your tags here",
   fr: "Vos tags ici"
 });
 
-const tags_style = {
+const tagsStyle = {
   overflowY: "auto",
   overflowX: "hidden",
   maxHeight: "5em"
@@ -63,43 +64,36 @@ class ReportCellTags extends React.Component {
 
   onChange(event) {
     const value = event.target.value;
-
-    const setCandidateTag = this.setCandidateTag;
-
-    setCandidateTag(value);
+    this.setCandidateTag(value);
   }
 
   onKeyUp(event) {
     const keyCode = event.keyCode;
     const value = event.target.value;
 
-    const props = this.props;
+    const {
+      filesAndFoldersId,
+      tagsForCurrentFile,
+      createTagged,
+      deleteTagged
+    } = this.props;
 
-    const filesAndFoldersId = props.filesAndFoldersId;
-    const tagsForCurrentFile = props.tagsForCurrentFile;
-    const createTagged = props.createTagged;
-    const deleteTagged = props.deleteTagged;
+    const { stopEditing, setCandidateTag } = this;
 
-    const stopEditing = this.stopEditing;
-    const setCandidateTag = this.setCandidateTag;
-
-    const backspace_key_code = 8;
-    const enter_key_code = 13;
-    const escape_key_code = 27;
-
-    if (keyCode === backspace_key_code) {
+    const backspaceKeyCode = 8;
+    const enterKeyCode = 13;
+    const escapeKeyCode = 27;
+    if (keyCode === backspaceKeyCode) {
       if (value.length === 0 && tagsForCurrentFile.size > 0) {
         deleteTagged(filesAndFoldersId, _.last(tagsForCurrentFile).id);
       }
-    } else if (keyCode === enter_key_code) {
+    } else if (keyCode === enterKeyCode) {
       event.preventDefault();
-      if (value.length === 0) {
-        // stopEditing()
-      } else {
+      if (value.length !== 0) {
         createTagged(value, filesAndFoldersId);
         setCandidateTag("");
       }
-    } else if (keyCode === escape_key_code) {
+    } else if (keyCode === escapeKeyCode) {
       event.stopPropagation();
       stopEditing();
     }
@@ -140,17 +134,9 @@ class ReportCellTags extends React.Component {
   }
 
   handleClickOutside(event) {
-    const props = this.props;
-
-    const node_id = props.node_id;
-    const createTagged = props.createTagged;
-
-    const state = this.state;
-    const editing = state.editing;
-    const candidate_tag = state.candidate_tag;
-
-    const stopEditing = this.stopEditing;
-    const wrapper_ref = this.wrapper_ref;
+    const { node_id, createTagged } = this.props;
+    const { editing, candidate_tag } = this.state;
+    const { stopEditing, wrapper_ref } = this;
 
     if (wrapper_ref && !wrapper_ref.contains(event.target)) {
       if (editing) {
@@ -163,28 +149,23 @@ class ReportCellTags extends React.Component {
   }
 
   render() {
-    const props = this.props;
-
-    const is_dummy = props.is_dummy;
-    const cells_style = props.cells_style;
-
-    const state = this.state;
-    const editing = state.editing;
-    const candidate_tag = state.candidate_tag;
-
-    const onClick = this.onClick;
-    const onKeyUp = this.onKeyUp;
-    const onChange = this.onChange;
-    const removeHandlerFactory = this.removeHandlerFactory;
-    const setWrapperRef = this.setWrapperRef;
+    const { is_dummy, cells_style, tagsForCurrentFile } = this.props;
+    const { editing, candidate_tag } = this.state;
+    const {
+      onClick,
+      onKeyUp,
+      onChange,
+      removeHandlerFactory,
+      setWrapperRef
+    } = this;
 
     if (is_dummy) {
       return (
         <div className="cell small-6" style={cells_style}>
-          <b>{tags_tr}</b>
+          <b>{tagsText}</b>
           <br />
           <span style={{ fontStyle: "italic" }}>
-            {your_tags_here_tr + "..."}
+            {yourTagsHereText + "..."}
           </span>
         </div>
       );
@@ -196,7 +177,7 @@ class ReportCellTags extends React.Component {
           style={cells_style}
           onClick={onClick}
         >
-          <b>{tags_tr}</b>
+          <b>{tagsText}</b>
           <span>
             &ensp;
             <i
@@ -205,9 +186,9 @@ class ReportCellTags extends React.Component {
             />
           </span>
           <br />
-          <div className="eeeeeeegrid-x" style={tags_style}>
+          <div className="grid-x" style={tagsStyle}>
             <TagsEditable
-              tagsForCurrentFile={props.tagsForCurrentFile}
+              tagsForCurrentFile={tagsForCurrentFile}
               editing={editing}
               onKeyUp={onKeyUp}
               removeHandlerFactory={removeHandlerFactory}
@@ -221,17 +202,13 @@ class ReportCellTags extends React.Component {
   }
 }
 
-const ReportCellTagsApiToProps = props => {
-  const { createTag, untag } = props;
-
-  return (
-    <ReportCellTags
-      {...props}
-      tagsForCurrentFile={props.tagsForCurrentFile}
-      createTagged={createTag}
-      deleteTagged={untag}
-    />
-  );
-};
+const ReportCellTagsApiToProps = props => (
+  <ReportCellTags
+    {...props}
+    tagsForCurrentFile={props.tagsForCurrentFile}
+    createTagged={props.createTag}
+    deleteTagged={props.untag}
+  />
+);
 
 export default ReportCellTagsApiToProps;

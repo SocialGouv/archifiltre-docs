@@ -2,7 +2,7 @@ import React from "react";
 
 import { RIEInput } from "riek";
 
-import TagsCell from "components/report-cell-tags";
+import TagsCell from "components/tags/report-cell-tags";
 import CommentsCell from "components/report-cell-comments";
 
 import { octet2HumanReadableFormat } from "components/ruler";

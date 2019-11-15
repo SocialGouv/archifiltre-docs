@@ -4,17 +4,17 @@ import Tag from "components/tags/tag";
 
 import pick from "languages";
 
-const click_here_to_add = pick({
+const clickHereToAddText = pick({
   en: "Click here to add some tags!",
   fr: "Cliquez ici pour ajouter des tags !"
 });
 
-const new_tag = pick({
+const newTagText = pick({
   en: "New tag",
   fr: "Nouveau tag"
 });
 
-const input_style = {
+const inputStyle = {
   width: "7em",
   border: "none",
   background: "none",
@@ -22,7 +22,7 @@ const input_style = {
   borderBottom: "3px solid rgb(10, 50, 100)"
 };
 
-const cell_shrink_style = {
+const cellShrinkStyle = {
   padding: "0.3em"
 };
 
@@ -39,19 +39,19 @@ export default class TagsEditable extends React.Component {
   }
 
   render() {
-    const props = this.props;
-
-    const tagsForCurrentFile = props.tagsForCurrentFile;
-    const editing = props.editing;
-    const candidate_tag = props.candidate_tag;
-    const onChange = props.onChange;
-    const onKeyUp = props.onKeyUp;
-    const removeHandlerFactory = props.removeHandlerFactory;
+    const {
+      tagsForCurrentFile,
+      editing,
+      candidate_tag,
+      onChange,
+      onKeyUp,
+      removeHandlerFactory
+    } = this.props;
 
     const tagsToElements = () =>
       tagsForCurrentFile
         .map(tag => (
-          <div className="cell shrink" key={tag.id} style={cell_shrink_style}>
+          <div className="cell shrink" key={tag.id} style={cellShrinkStyle}>
             <Tag
               text={tag.name}
               editing={editing}
@@ -59,21 +59,21 @@ export default class TagsEditable extends React.Component {
             />
           </div>
         ))
-        .reduce((acc, val) => [...acc, val], []);
+        .reduce((accumulator, value) => [...accumulator, value], []);
 
-    let ans;
+    let answer;
 
     if (editing) {
       const elements = tagsToElements();
-      const input_box = (
-        <div className="cell shrink" key="__input__" style={cell_shrink_style}>
+      const inputBox = (
+        <div className="cell shrink" key="__input__" style={cellShrinkStyle}>
           <input
-            style={input_style}
-            onMouseUp={e => {
-              e.stopPropagation();
+            style={inputStyle}
+            onMouseUp={event => {
+              event.stopPropagation();
             }}
             onKeyUp={onKeyUp}
-            placeholder={new_tag}
+            placeholder={newTagText}
             ref={component => {
               this.textInput = component;
             }}
@@ -83,21 +83,17 @@ export default class TagsEditable extends React.Component {
         </div>
       );
 
-      ans = [...elements, input_box];
+      answer = [...elements, inputBox];
     } else if (tagsForCurrentFile.length > 0) {
-      ans = tagsToElements();
+      answer = tagsToElements();
     } else {
-      ans = (
-        <div
-          className="cell shrink"
-          key="__closing__"
-          style={cell_shrink_style}
-        >
-          <span>{click_here_to_add}</span>
+      answer = (
+        <div className="cell shrink" key="__closing__" style={cellShrinkStyle}>
+          <span>{clickHereToAddText}</span>
         </div>
       );
     }
 
-    return <div className="grid-x">{ans}</div>;
+    return <div className="grid-x">{answer}</div>;
   }
 }

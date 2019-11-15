@@ -26,11 +26,13 @@ export const csvExporterThunk = (name: string): ArchifiltreThunkAction => (
     filesAndFoldersMetadata
   );
 
-  Tags.toStrList2(filesAndFolders, tags).map((filesAndFolder, index) =>
-    csv[index].concat(filesAndFolder)
+  const csvWithTags = Tags.toStrList2(filesAndFolders, tags).map(
+    (filesAndFolder, index) => {
+      return csv[index].concat(filesAndFolder);
+    }
   );
 
-  save(name, toStr(csv), {
+  save(name, toStr(csvWithTags), {
     format: UTF8
   });
 };

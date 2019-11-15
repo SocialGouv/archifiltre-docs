@@ -25,6 +25,7 @@ describe("csv-exporter", () => {
       const tagId = "test-tag-id";
       const tagId2 = "test-tag-id-2";
       const rootId = "";
+      const tag2Name = "tag2";
       const tags = {
         [tagId]: {
           ffIds: [taggedFfId],
@@ -32,16 +33,16 @@ describe("csv-exporter", () => {
           name: tagName
         },
         [tagId2]: {
-          ffIds: [rootId],
+          ffIds: [taggedFfId],
           id: tagId2,
-          name: rootId
+          name: tag2Name
         }
       };
 
       const filesAndFolders = {
         [rootId]: {
           alias: "",
-          children: [],
+          children: [taggedFfId],
           comments: "",
           file_last_modified: 1571325669,
           file_size: 10,
@@ -86,8 +87,8 @@ describe("csv-exporter", () => {
       const name = "test-name";
       store.dispatch(csvExporterThunk(name));
 
-      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"last_modified";"new name";"description";"file/folder";"depth"\n`;
-      const expectedCsv = `${csvHeader}"";"/folder/ff-id";"13";"filename";"";"10000";"01/01/1970";"";"";"file";"1"\n`;
+      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"last_modified";"new name";"description";"file/folder";"depth";"tag0 : ${tagName}";"tag1 : ${tag2Name}"\n`;
+      const expectedCsv = `${csvHeader}"";"/folder/ff-id";"13";"filename";"";"10000";"01/01/1970";"";"";"file";"1";"${tagName}";"${tag2Name}"\n`;
 
       expect(saveMock).toHaveBeenCalledWith(name, expectedCsv, {
         format: UTF8

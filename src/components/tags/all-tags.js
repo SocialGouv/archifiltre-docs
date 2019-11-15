@@ -77,8 +77,7 @@ class AllTags extends React.Component {
 
     const { editing_tag_id } = this.state;
 
-    const startEditingTagFactory = this.startEditingTagFactory;
-    const stopEditingTag = this.stopEditingTag;
+    const { startEditingTagFactory, stopEditingTag } = this;
 
     const componentStyle = {
       opacity: tags.length > 0 ? 1 : 0.5,

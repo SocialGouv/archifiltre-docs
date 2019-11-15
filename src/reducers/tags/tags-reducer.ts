@@ -79,6 +79,9 @@ const tagsReducer = (
     case INITIALIZE_TAGS:
       return { tags: action.tags };
     case ADD_TAG:
+      if (action.ffId === undefined) {
+        return state;
+      }
       const tagWithTheSameName = getTagByName(state.tags, action.tagName);
       if (tagWithTheSameName === undefined) {
         return createTag(state, action.tagName, action.ffId, action.tagId);

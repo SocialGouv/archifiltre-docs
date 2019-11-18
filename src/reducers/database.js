@@ -1,4 +1,3 @@
-import { List } from "immutable";
 import { keyBy } from "lodash";
 
 import * as RealEstate from "reducers/real-estate";
@@ -16,16 +15,6 @@ const property_name = "database";
 const initialState = () => VirtualFileSystem.make(Origin.empty());
 
 const rootFfId = () => () => "";
-
-const getFfIdPath = id => () =>
-  List(
-    id.split("/").map((_, i) =>
-      id
-        .split("/")
-        .slice(0, i + 1)
-        .join("/")
-    )
-  );
 
 const getData = () => state => ({
   files_and_folders: FilesAndFolders.toJs(state.get("files_and_folders")),
@@ -46,7 +35,6 @@ const getWaitingCounter = () => () => 0;
 
 const reader = {
   rootFfId,
-  getFfIdPath,
   toJson,
   getSessionName,
   getOriginalPath,

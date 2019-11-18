@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { updateIn } from "immutable";
-import IcicleRect from "./icicle-rect";
+import IcicleRect from "./icicle-rect.tsx";
 import * as FunctionUtil from "../../util/function-util";
 import IcicleRecursive from "./icicle-recursive";
 import IcicleTags from "./icicle-tags";

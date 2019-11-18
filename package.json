@@ -117,6 +117,7 @@
     "docxtemplater": "^3.14.1",
     "electron-ga": "1.0.6",
     "eslint-plugin-import": "^2.18.2",
+    "fast-memoize": "^2.5.1",
     "file-saver": "2.0.2",
     "foundation-sites": "^6.5.3",
     "iconv-lite": "^0.5.0",

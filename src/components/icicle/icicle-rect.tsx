@@ -94,6 +94,7 @@ const IcicleRect: FC<IcicleRectProps> = ({
   return (
     <g>
       <SvgRectangle
+        draggableId={id}
         key="rect"
         x={x}
         y={y}

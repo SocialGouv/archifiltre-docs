@@ -14,9 +14,11 @@ export default class SvgRectangle extends PureComponent {
     const opacity = props.opacity;
     const stroke = props.stroke;
     const cursor = props.cursor;
+    const draggableId = props.draggableId;
 
     return (
       <rect
+        data-draggable-id={draggableId}
         className="node"
         x={x}
         y={y}

@@ -102,6 +102,10 @@ const IcicleMain: FC<IcicleMainProps> = ({
   const rulerHeight = viewBoxHeight - icicleHeight;
 
   const svgRef = useRef<SVGSVGElement>(null);
+  const dragRef = useRef({
+    draggedElementId: "",
+    isDragging: false
+  });
 
   /**
    * Setup the listeners for the zoom in / zoom out animations
@@ -124,6 +128,60 @@ const IcicleMain: FC<IcicleMainProps> = ({
     return () => clear(animationId);
   }, [svgRef, setViewboxState, viewBoxHeight, viewBoxWidth]);
 
+  useEffect(() => {
+    const svg = svgRef.current;
+    const dragState = dragRef.current;
+    if (svg) {
+      const getElementId = target => target.getAttribute("data-draggable-id");
+
+      const onDragStart = ({ target }) => {
+        const elementId = getElementId(target);
+        if (elementId) {
+          dragState.draggedElementId = elementId;
+          dragState.isDragging = true;
+        }
+      };
+
+      const onDragEnd = ({ target }) => {
+        const elementId = getElementId(target);
+        if (elementId && dragState.isDragging) {
+          // tslint:disable-next-line:no-console
+          console.log(
+            `element ${dragState.draggedElementId} dragged onto ${elementId}`
+          );
+        }
+        dragState.isDragging = false;
+        dragState.draggedElementId = "";
+      };
+
+      const onDragMove = ({ target }) => {
+        const elementId = getElementId(target);
+        if (dragState.isDragging && dragState.draggedElementId) {
+          // tslint:disable-next-line:no-console
+          console.log(
+            `element ${dragState.draggedElementId} is being dragged over ${elementId}`
+          );
+        }
+      };
+
+      const onDragOut = () => {
+        dragState.isDragging = false;
+        dragState.draggedElementId = "";
+      };
+
+      svg.addEventListener("mousedown", onDragStart);
+      svg.addEventListener("mousemove", onDragMove);
+      svg.addEventListener("mouseup", onDragEnd);
+      svg.addEventListener("mouseleave", onDragOut);
+
+      return () => {
+        svg.removeEventListener("mousedown", onDragStart);
+        svg.removeEventListener("mousemove", onDragMove);
+        svg.removeEventListener("mouseup", onDragEnd);
+        svg.removeEventListener("mouseleave", onDragOut);
+      };
+    }
+  }, [svgRef, dragRef]);
   /**
    * Returns the total size of the child elements based on its id
    */

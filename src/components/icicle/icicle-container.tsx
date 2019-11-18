@@ -45,7 +45,6 @@ export default function IcicleApiToProps({
       fillColor={fillColor}
       getChildrenIdFromId={getChildrenIdFromId}
       getFfByFfId={getFfByFfId}
-      getFfIdPath={database.getFfIdPath}
       maxDepth={maxDepth}
       hover_sequence={icicle_state.hover_sequence()}
       isLocked={isLocked}

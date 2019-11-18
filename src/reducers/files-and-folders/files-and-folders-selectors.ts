@@ -1,3 +1,4 @@
+import memoize from "fast-memoize";
 import _ from "lodash";
 import { medianOnSortedArray } from "../../util/array-util";
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
@@ -201,3 +202,20 @@ export const getMaxDepth = (filesAndFoldersMap: FilesAndFoldersMap): number =>
       return Math.max(...childrenDepth) + 1;
     }
   );
+
+/**
+ * Decomposes the path to an element into each of the parent elements.
+ * @param id
+ */
+const decomposePathToElementImpl = (id: string): string[] =>
+  id.split("/").map(($, i) =>
+    id
+      .split("/")
+      .slice(0, i + 1)
+      .join("/")
+  );
+
+/**
+ * Memoized function that decomposes the path to an element into each of the parent elements.
+ */
+export const decomposePathToElement = memoize(decomposePathToElementImpl);

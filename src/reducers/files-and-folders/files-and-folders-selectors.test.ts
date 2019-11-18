@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
+  decomposePathToElement,
   getFileCount,
   getFilesAndFoldersAverageLastModified,
   getFilesAndFoldersDepth,
@@ -225,6 +226,20 @@ describe("files-and-folders-selectors", () => {
       };
 
       expect(getMaxDepth(filesAndFoldersMap)).toBe(3);
+    });
+  });
+
+  describe("decomposePathToElement", () => {
+    it("should return the decomposed path to the element", () => {
+      const path = "/f1/f2/f3/file";
+
+      expect(decomposePathToElement(path)).toEqual([
+        "",
+        "/f1",
+        "/f1/f2",
+        "/f1/f2/f3",
+        "/f1/f2/f3/file"
+      ]);
     });
   });
 });

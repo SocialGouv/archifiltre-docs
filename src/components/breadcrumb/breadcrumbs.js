@@ -1,17 +1,17 @@
 import React from "react";
-import BreadCrumbText from "components/breadcrumb-text";
-import BreadCrumbPoly from "components/breadcrumb-poly";
+import BreadCrumbText from "components/breadcrumb/breadcrumb-text";
+import BreadCrumbPoly from "components/breadcrumb/breadcrumb-poly";
 
 import * as Color from "util/color-util";
 
 import pick from "languages";
 
-const file_text = pick({
+const fileText = pick({
   en: "File",
   fr: "Fichier"
 });
 
-const level_text = pick({
+const levelText = pick({
   en: "Level",
   fr: "Niveau"
 });
@@ -61,7 +61,6 @@ class Breadcrumbs extends React.PureComponent {
       y_poly,
       width_poly,
       height_poly,
-
       x_text,
       y_text,
       width_text,
@@ -71,56 +70,49 @@ class Breadcrumbs extends React.PureComponent {
 
   render() {
     const trueFHeight = this.trueFHeight;
-    const { isFocused, isLocked } = this.props;
+    const { isFocused, isLocked, getFfByFfId, api, root_id } = this.props;
 
     const displayName = id => {
-      const node = this.props.getFfByFfId(id);
-      const nodeName = node.name;
-
-      const nodeAlias = node.alias;
-
-      return nodeAlias === "" ? nodeName : nodeAlias;
+      const node = getFfByFfId(id);
+      return node.alias === "" ? node.name : node.alias;
     };
 
     let res = [];
 
     if (isFocused || isLocked) {
-      const icicle_state = this.props.api.icicle_state;
-      const locked = icicle_state.lock_sequence();
-      const hovered = icicle_state.hover_sequence();
+      const icicleState = api.icicle_state;
+      const locked = icicleState.lock_sequence();
+      const hovered = icicleState.hover_sequence();
       const displayedNodes = isFocused ? hovered : locked;
       const paddedDisplayedNodes = removeRootId(displayedNodes);
 
-      const breadcrumb_sequence_height = paddedDisplayedNodes.map(trueFHeight);
-      const cumulated_breadcrumb_sequence_height = computeCumulative(
-        breadcrumb_sequence_height
+      const breadcrumbSequenceHeight = paddedDisplayedNodes.map(trueFHeight);
+      const cumulatedBreadcrumbSequenceHeight = computeCumulative(
+        breadcrumbSequenceHeight
       );
 
       res = paddedDisplayedNodes.map((node_id, i) => {
-        const fill_color = this.props.fillColor(node_id);
-
+        const fillColor = this.props.fillColor(node_id);
         const display_name = displayName(node_id);
-
-        const is_last = i === hovered.length - 1;
-        const is_first = i === 0;
+        const isLast = i === hovered.length - 1;
+        const isFirst = i === 0;
 
         const dim = this.computeDim(
-          cumulated_breadcrumb_sequence_height[i],
-          breadcrumb_sequence_height[i]
+          cumulatedBreadcrumbSequenceHeight[i],
+          breadcrumbSequenceHeight[i]
         );
 
         const opacity = locked.includes(node_id) ? 1 : isLocked ? 0.4 : 0.7;
-
         return (
           <g key={makeBreadKey(node_id)}>
             <BreadCrumbPoly
-              is_last={is_last}
-              is_first={is_first}
+              isLast={isLast}
+              isFirst={isFirst}
               x={dim.x_poly}
               y={dim.y_poly}
               dx={dim.width_poly}
               dy={dim.height_poly}
-              fill_color={fill_color}
+              fillColor={fillColor}
               opacity={opacity}
             />
             <BreadCrumbText
@@ -129,48 +121,47 @@ class Breadcrumbs extends React.PureComponent {
               dx={dim.width_text}
               dy={dim.height_text}
               text={display_name}
-              is_placeholder={false}
+              isPlaceholder={false}
             />
           </g>
         );
       });
     } else {
-      const height_child = trueFHeight(this.props.root_id);
-      const i_max = Math.min(this.props.maxDepth, 5);
-      const fill_color = Color.placeholder();
+      const heightChild = trueFHeight(root_id);
+      const maxDepth = Math.min(this.props.maxDepth, 5);
+      const fillColor = Color.placeholder();
 
-      for (let i = 0; i < i_max; i++) {
-        const is_last = i === i_max - 1;
-        const is_first = i === 0;
+      for (let depth = 0; depth < maxDepth; depth++) {
+        const isLast = depth === maxDepth - 1;
+        const isFirst = depth === 0;
+        const dim = this.computeDim(depth * heightChild, heightChild);
 
-        const dim = this.computeDim(i * height_child, height_child);
-
-        let display_name;
-        if (is_last) {
-          display_name = file_text;
-        } else if (i >= 2) {
-          display_name = "...";
+        let displayName;
+        if (isLast) {
+          displayName = fileText;
+        } else if (depth >= 2) {
+          displayName = "...";
         } else {
-          display_name = level_text + " " + (i + 1);
+          displayName = `${levelText} ${depth + 1}`;
         }
         res.push(
-          <g key={"breadcrumb" + i}>
+          <g key={`breadcrumb${depth}`}>
             <BreadCrumbPoly
-              is_last={is_last}
-              is_first={is_first}
+              isLast={isLast}
+              isFirst={isFirst}
               x={dim.x_poly}
               y={dim.y_poly}
               dx={dim.width_poly}
               dy={dim.height_poly}
-              fill_color={fill_color}
+              fillColor={fillColor}
             />
             <BreadCrumbText
               x={dim.x_text}
               y={dim.y_text}
               dx={dim.width_text}
               dy={dim.height_text}
-              text={display_name}
-              is_placeholder={true}
+              text={displayName}
+              isPlaceholder={true}
             />
           </g>
         );
@@ -186,12 +177,8 @@ class Breadcrumbs extends React.PureComponent {
 }
 
 export default function BreadcrumbsApiToProps(props) {
-  const api = props.api;
-  const icicle_state = api.icicle_state;
-  const database = api.database;
-
+  const { icicle_state, database } = props.api;
   const breadcrumb_sequence = icicle_state.sequence();
-
   const maxDepth = props.maxDepth;
 
   const componentProps = {

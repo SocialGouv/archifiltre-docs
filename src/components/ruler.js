@@ -1,31 +1,43 @@
 import React from "react";
 
-import * as ObjectUtil from "util/object-util.ts";
-
 import pick from "languages";
+import { isFile } from "../reducers/files-and-folders/files-and-folders-selectors";
 
-const byte_char = pick({
+const byteChar = pick({
   en: "B",
   fr: "o"
 });
 
 const Ruler = props => {
-  const ruler_x = props.x;
-  const ruler_y = props.y;
-  const ruler_dx = props.dx;
-  const ruler_dy = props.dy;
+  const {
+    x,
+    y,
+    dx,
+    dy,
+    dims,
+    isFocused,
+    node_size,
+    total_size,
+    fillColor,
+    node_id,
+    getFfByFfId
+  } = props;
+  const rulerX = x;
+  const rulerY = y;
+  const rulerDx = dx;
+  const rulerDy = dy;
 
-  props.dims.x = Math.max(props.dims.x, ruler_x);
-  props.dims.dx = Math.min(props.dims.dx, ruler_dx);
+  dims.x = Math.max(dims.x, rulerX);
+  dims.dx = Math.min(dims.dx, rulerDx);
 
   let res;
 
-  if (props.isFocused) {
-    const text = makeSizeString(props.node_size, props.total_size);
+  if (isFocused) {
+    const text = makeRulerText(node_size, total_size, getFfByFfId(node_id));
     const mode = computeRulerTextDisplayMode(
-      props.dims.x + props.dims.dx / 2,
+      dims.x + dims.dx / 2,
       text.length,
-      ruler_dx,
+      rulerDx,
       4.2
     );
 
@@ -33,19 +45,19 @@ const Ruler = props => {
       <g>
         <rect
           className="ruler"
-          x={props.dims.x}
-          y={ruler_y + (ruler_dy * 1) / 3}
-          width={props.dims.dx}
+          x={dims.x}
+          y={rulerY + (rulerDy * 1) / 3}
+          width={dims.dx}
           height="0.3em"
           onClick={e => {
             e.stopPropagation();
           }}
           onMouseOver={() => {}}
-          style={{ fill: props.fillColor(props.node_id) }}
+          style={{ fill: fillColor(node_id) }}
         />
         <text
-          x={computeTextPosition(props.dims.x, props.dims.dx, ruler_dx, mode)}
-          y={ruler_y + (ruler_dy * 2) / 3}
+          x={computeTextPosition(dims.x, dims.dx, rulerDx, mode)}
+          y={rulerY + (rulerDy * 2) / 3}
           textAnchor={{ ORGANIC: "middle", LEFT: "start", RIGHT: "end" }[mode]}
         >
           {text}
@@ -60,7 +72,7 @@ const Ruler = props => {
 };
 
 export const octet2HumanReadableFormat = o => {
-  const unit = byte_char;
+  const unit = byteChar;
   const To = o / Math.pow(1000, 4);
   if (To > 1) {
     return Math.round(To * 10) / 10 + " T" + unit;
@@ -85,22 +97,25 @@ const precisionRound = (number, precision) => {
   return Math.round(number * factor) / factor;
 };
 
-export const makeSizeString = (o, total) => {
-  const sizeString = octet2HumanReadableFormat(o);
-
-  const percentage = precisionRound((100 * o) / total, 1);
-  let percentageString = percentage + "%";
-  if (percentage < 0.1) {
-    percentageString = "< 0.1%";
-  }
-
-  return percentageString + " | " + sizeString;
+const getFilesAndFoldersNumber = node => {
+  return isFile(node) ? null : `${node.nbChildrenFiles} fichier(s)`;
 };
 
-const computeRulerTextDisplayMode = (candidate_position, l, w, fw) => {
-  if (candidate_position < l * fw) {
+const makeRulerText = (nodeSize, totalSize, node) => {
+  const filesAndFolderSize = octet2HumanReadableFormat(nodeSize);
+  const percentage = precisionRound((100 * nodeSize) / totalSize, 1);
+  const filesAndFoldersRatio = percentage < 0.1 ? "< 0.1%" : `${percentage}%`;
+  const rulerInfo = [filesAndFoldersRatio, filesAndFolderSize];
+  const filesAndFoldersNumber = getFilesAndFoldersNumber(node);
+  if (filesAndFoldersNumber) rulerInfo.push(filesAndFoldersNumber);
+
+  return rulerInfo.join(" | ");
+};
+
+const computeRulerTextDisplayMode = (candidatePosition, l, w, fw) => {
+  if (candidatePosition < l * fw) {
     return "LEFT";
-  } else if (candidate_position > w - l * fw) {
+  } else if (candidatePosition > w - l * fw) {
     return "RIGHT";
   } else {
     return "ORGANIC";
@@ -112,29 +127,24 @@ const computeTextPosition = (x, dx, w, mode) => {
 };
 
 export default function RulerApiToProps(props) {
-  const api = props.api;
-  const icicle_state = api.icicle_state;
+  const {
+    api: { icicle_state },
+    getFfByFfId
+  } = props;
 
-  const node_id = icicle_state.sequence().slice(-1)[0];
+  const nodeId = icicle_state.sequence().slice(-1)[0];
+  const totalSize = getFfByFfId("").childrenTotalSize;
+  const node = getFfByFfId(nodeId);
+  const nodeSize = node ? node.childrenTotalSize : null;
 
-  const total_size = props.getFfByFfId("").childrenTotalSize;
-
-  const node = props.getFfByFfId(node_id);
-  let node_size;
-  if (node) {
-    node_size = node.childrenTotalSize;
-  }
-
-  props = ObjectUtil.compose(
-    {
-      dims: icicle_state.hover_dims(),
-      isFocused: icicle_state.isFocused(),
-      node_size,
-      node_id,
-      total_size
-    },
-    props
+  return (
+    <Ruler
+      {...props}
+      dims={icicle_state.hover_dims()}
+      isFocused={icicle_state.isFocused()}
+      node_size={nodeSize}
+      node_id={nodeId}
+      total_size={totalSize}
+    />
   );
-
-  return <Ruler {...props} />;
 }

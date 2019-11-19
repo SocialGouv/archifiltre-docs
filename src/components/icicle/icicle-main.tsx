@@ -15,7 +15,7 @@ import { FilesAndFolders } from "../../reducers/files-and-folders/files-and-fold
 import { TagMap } from "../../reducers/tags/tags-types";
 import * as ArrayUtil from "../../util/array-util";
 import * as FunctionUtil from "../../util/function-util";
-import BreadCrumbs from "../breadcrumbs";
+import BreadCrumbs from "../breadcrumb/breadcrumbs";
 import MinimapBracket from "../minimap-bracket";
 import Ruler from "../ruler";
 import AnimatedIcicle from "./animated-icicle";

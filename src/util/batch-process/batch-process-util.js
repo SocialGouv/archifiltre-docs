@@ -1,6 +1,6 @@
 import { cpus } from "os";
 import { Observable } from "rxjs";
-import { reportError } from "../../reporter";
+import { reportError } from "../../logging/reporter";
 import { makeEmptyArray } from "../array-util";
 
 // We create NB_CPUS - 1 processes to optimize computation

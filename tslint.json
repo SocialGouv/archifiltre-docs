@@ -3,6 +3,10 @@
   "linterOptions": {
     "exclude": ["**/*.js"]
   },
+  "globals": {
+    "MATOMO_APPLICATION_ID": "readonly",
+    "MATOMO_URL": "readonly"
+  },
   "overrides": [
     {
       "files": ["src/**/*.test.ts", "src/test/**/*.ts"],

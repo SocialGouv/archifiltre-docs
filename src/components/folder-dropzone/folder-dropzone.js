@@ -17,6 +17,8 @@ import {
 import { isJsonFile, countZipFiles } from "../../util/file-sys-util";
 import { expectToBeDefined } from "../../util/expect-behaviour";
 import { notifyError, notifyInfo } from "../../util/notifications-util";
+import { addTracker } from "../../logging/tracker";
+import { ActionTitle, ActionType } from "../../logging/tracker-types";
 
 const placeholder = pick({
   en: "Drop a directory here!",
@@ -87,7 +89,6 @@ export default class FolderDropzone extends React.Component {
     this.style_placeholder = {
       fontSize: "3em"
     };
-
     this.handleDrop = this.handleDrop.bind(this);
   }
 
@@ -128,6 +129,11 @@ export default class FolderDropzone extends React.Component {
           const paths = getFiles(
             filesAndFoldersMapToArray(filesAndFolders)
           ).map(file => file.id);
+          addTracker({
+            type: ActionType.TRACK_EVENT,
+            title: ActionTitle.FILE_TREE_DROP,
+            value: `Files dropped: ${paths.length}`
+          });
           const zipFileCount = countZipFiles(paths);
           if (zipFileCount > 0) {
             displayZipNotification(zipFileCount);

@@ -1,7 +1,7 @@
 import { traverseFileTree } from "util/file-sys-util";
 
 import * as VirtualFileSystem from "datastore/virtual-file-system";
-import { reportError, reportMessage } from "./reporter";
+import { reportError, reportMessage } from "./logging/reporter";
 import { hookCounter } from "./util/hook-utils";
 import {
   AsyncWorkerEvent,

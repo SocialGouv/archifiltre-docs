@@ -1,4 +1,4 @@
-import { reportMessage } from "../reporter";
+import { reportMessage } from "../logging/reporter";
 
 /**
  * Expects a value to be defined. Otherwise, reports a message with the values.

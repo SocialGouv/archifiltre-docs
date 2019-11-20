@@ -2,6 +2,7 @@ const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
+require("dotenv").config();
 
 /**
  * Return code that will compute the path of the folder containing worker file,
@@ -39,7 +40,10 @@ module.exports = (env, argv = {}) => ({
         argv.mode === "development" ? JSON.stringify(".") : "__dirname",
       AUTOLOAD: argv.autoload
         ? JSON.stringify(argv.autoload)
-        : JSON.stringify("")
+        : JSON.stringify(""),
+      MATOMO_APPLICATION_ID: process.env.MATOMO_APPLICATION_ID,
+      MATOMO_URL: JSON.stringify(process.env.MATOMO_URL),
+      FORCE_TRACKING: !!JSON.stringify(process.env.FORCE_TRACKING)
     })
   ],
 

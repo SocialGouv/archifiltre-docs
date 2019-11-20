@@ -1,16 +1,13 @@
 // Enables reporter to hook into the environment so it captures uncaught errors
-import "./reporter";
+import "./logging/reporter";
 
 import "foundation-sites";
 import "./css/index.scss";
 import "css/app.css";
 
 import { SecretDevtools } from "secret-devtools";
-
 import React from "react";
-
 import ReactDOM from "react-dom";
-import Analytics from "electron-ga";
 
 import ErrorBoundary from "components/errors/error-boundary";
 import MainSpace from "components/main-space/main-space";
@@ -26,23 +23,15 @@ import version from "version";
 import pick from "languages";
 
 import { NotificationContainer } from "react-notifications";
-
-SecretDevtools.enable();
+import { initTracker } from "./logging/tracker.ts";
 
 document.title = pick({
   en: "Archifiltre v" + version,
   fr: "Archifiltre v" + version
 });
 
-if (MODE === "production") {
-  const analytics = new Analytics("UA-115293619-2");
-
-  analytics.send("pageview", {
-    dh: "https://archifiltre.electron/",
-    dp: "/electron/v9",
-    dt: "archifiltre"
-  });
-}
+SecretDevtools.enable();
+initTracker();
 
 /**This is the entrypoint for the app. */
 const app = () => {

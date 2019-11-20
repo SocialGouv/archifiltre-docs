@@ -1,7 +1,7 @@
-import { reportMessage } from "../reporter";
+import { reportMessage } from "../logging/reporter";
 import { expectToBeDefined } from "./expect-behaviour";
 
-jest.mock("../reporter", () => ({
+jest.mock("../logging/reporter", () => ({
   reportMessage: jest.fn()
 }));
 

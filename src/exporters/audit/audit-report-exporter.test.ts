@@ -1,7 +1,7 @@
 import { advanceTo } from "jest-date-mock";
 import { exportToDocX } from "../../util/docx-util";
-import testData from "./audi-report-exporter.test.data.json";
 import auditReportExporter, { TEMPLATE_PATH } from "./audit-report-exporter";
+import testData from "./audit-report-exporter.test.data.json";
 
 jest.mock("../../util/docx-util", () => ({
   exportToDocX: jest.fn()

@@ -105,7 +105,7 @@
     "source-map-loader": "0.2.4",
     "spectron": "9.0.0",
     "style-loader": "1.0.0",
-    "svg-url-loader": "3.0.2",
+    "svg-url-loader": "3.0.3",
     "ts-jest": "24.1.0",
     "tslint": "5.20.1",
     "typescript": "3.7.2",

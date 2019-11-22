@@ -2,7 +2,7 @@ import dateFormat from "dateformat";
 import path from "path";
 import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
-
+import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 import { medianOnSortedArray } from "../../util/array-util";
 import { exportToDocX } from "../../util/docx-util";
 import {
@@ -17,6 +17,10 @@ import {
 } from "../../util/file-and-folders-utils";
 import { saveBlob } from "../../util/file-sys-util";
 import { percent } from "../../util/numbers-util";
+import {
+  AuditReportData,
+  generateAuditReportDocx
+} from "./audit-report-generator";
 
 const CHILDREN_LIMIT = 30;
 const NB_FOLDERS_TO_DISPLAY = 10;
@@ -158,6 +162,147 @@ const auditReportExporter = filesAndFolders => {
   return exportToDocX(TEMPLATE_PATH, docxData);
 };
 
+// tslint:disable:object-literal-sort-keys
+export const computeAuditReportData = (
+  filesAndFolders: FilesAndFoldersMap
+): AuditReportData => ({
+  totalFoldersCount: 0,
+  totalFilesCount: 0,
+  totalSize: "1Go",
+  oldestDate: "20/10/1990",
+  newestDate: "20/10/2019",
+  longestPathLength: 250,
+  longestPathFileName: "longest-path-filename.pdf",
+  longestPathPath: "longest/path",
+  depth: 10,
+  presentationPercent: 11,
+  presentationCount: 11,
+  documentPercent: 18,
+  documentCount: 18,
+  spreadsheetPercent: 25,
+  spreadsheetCount: 25,
+  emailPercent: 21,
+  emailCount: 21,
+  mediaPercent: 10,
+  mediaCount: 10,
+  otherPercent: 15,
+  otherCount: 15,
+  oldestFiles: [
+    {
+      date: "20/10/1990",
+      name: "file1",
+      path: "path/to/file1"
+    },
+    {
+      date: "20/10/1990",
+      name: "file1",
+      path: "path/to/file1"
+    },
+    {
+      date: "20/10/1990",
+      name: "file1",
+      path: "path/to/file1"
+    },
+    {
+      date: "20/10/1990",
+      name: "file1",
+      path: "path/to/file1"
+    },
+    {
+      date: "20/10/1990",
+      name: "file1",
+      path: "path/to/file1"
+    }
+  ],
+  biggestFiles: [
+    {
+      name: "file1",
+      path: "path/to/file1",
+      size: "2Go"
+    },
+    {
+      name: "file1",
+      path: "path/to/file1",
+      size: "2Go"
+    },
+    {
+      name: "file1",
+      path: "path/to/file1",
+      size: "2Go"
+    },
+    {
+      name: "file1",
+      path: "path/to/file1",
+      size: "2Go"
+    },
+    {
+      name: "file1",
+      path: "path/to/file1",
+      size: "2Go"
+    }
+  ],
+  duplicateFolderCount: 10,
+  duplicateFolderPercent: 10,
+  duplicateFileCount: 10,
+  duplicateFilePercent: 10,
+  duplicateTotalSize: "2Go",
+  duplicates: [
+    {
+      count: 10,
+      name: "file1",
+      path: "path/to/file1"
+    },
+    {
+      count: 10,
+      name: "file1",
+      path: "path/to/file1"
+    },
+    {
+      count: 10,
+      name: "file1",
+      path: "path/to/file1"
+    },
+    {
+      count: 10,
+      name: "file1",
+      path: "path/to/file1"
+    },
+    {
+      count: 10,
+      name: "file1",
+      path: "path/to/file1"
+    }
+  ],
+  biggestDuplicateFiles: [
+    {
+      name: "file1",
+      path: "path/to/file1",
+      size: "2Go"
+    },
+    {
+      name: "file1",
+      path: "path/to/file1",
+      size: "2Go"
+    },
+    {
+      name: "file1",
+      path: "path/to/file1",
+      size: "2Go"
+    },
+    {
+      name: "file1",
+      path: "path/to/file1",
+      size: "2Go"
+    },
+    {
+      name: "file1",
+      path: "path/to/file1",
+      size: "2Go"
+    }
+  ]
+});
+// tslint:enable:object-literal-sort-keys
+
 /**
  * Thunk to export an audit
  * @param name - name of the output file
@@ -166,7 +311,10 @@ export const auditReportExporterThunk = (
   name: string
 ): ArchifiltreThunkAction => (dispatch, getState) => {
   const filesAndFolders = getFilesAndFoldersFromStore(getState());
-  saveBlob(name, auditReportExporter(filesAndFolders));
+  saveBlob(
+    name,
+    generateAuditReportDocx(computeAuditReportData(filesAndFolders))
+  );
 };
 
 export default auditReportExporter;

@@ -189,9 +189,10 @@ const removeRootFolder: Mapper<
  * Get the files only from files and folders
  * @param filesAndFolders
  */
-const getFiles: Mapper<FilesAndFoldersCollection, FilesAndFolders[]> = memoize(
-  fp.filter(isFile)
-);
+export const getFiles: Mapper<
+  FilesAndFoldersCollection,
+  FilesAndFolders[]
+> = memoize(fp.filter(isFile));
 
 /**
  * Get folders only from files and folders
@@ -207,7 +208,7 @@ const getFolders: Mapper<
  * @param filesAndFoldersMap
  */
 export const getFileCount: Mapper<FilesAndFoldersMap, number> = memoize(
-  fp.compose([size, getFiles, removeRootFolder])
+  fp.compose(size, getFiles, removeRootFolder)
 );
 
 /**
@@ -215,7 +216,7 @@ export const getFileCount: Mapper<FilesAndFoldersMap, number> = memoize(
  * @param filesAndFoldersMap
  */
 export const getFoldersCount: Mapper<FilesAndFoldersMap, number> = memoize(
-  fp.compose([size, getFolders, removeRootFolder])
+  fp.compose(size, getFolders, removeRootFolder)
 );
 
 /**

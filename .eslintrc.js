@@ -17,6 +17,7 @@ module.exports = {
     STATIC_ASSETS_PATH: "readonly",
     AUTOLOAD: "readonly"
   },
+  plugins: ["lodash-fp"],
   overrides: [
     {
       files: ["src/**/*.test.js", "src/**/*.test.ts", "src/test/**/*.js"],

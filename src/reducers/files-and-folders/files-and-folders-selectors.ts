@@ -1,6 +1,8 @@
 import memoize from "fast-memoize";
 import _ from "lodash";
+import fp from "lodash/fp";
 import { medianOnSortedArray } from "../../util/array-util";
+import { Mapper, not, size } from "../../util/functionnal-programming-utils";
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
 import { StoreState } from "../store";
 import {
@@ -8,6 +10,8 @@ import {
   FilesAndFoldersMap,
   HashesMap
 } from "./files-and-folders-types";
+
+export type FilesAndFoldersCollection = FilesAndFolders[] | FilesAndFoldersMap;
 
 /**
  * Gets the files and folder map from the redux state
@@ -173,19 +177,46 @@ export const isFile = (filesAndFolders: FilesAndFolders): boolean =>
   filesAndFolders.children.length === 0;
 
 /**
+ * Removes the root folder from a filesAndFolders collection
+ * @param filesAndFolders
+ */
+const removeRootFolder: Mapper<
+  FilesAndFoldersCollection,
+  FilesAndFoldersCollection
+> = memoize(fp.filter(({ id }) => id !== ""));
+
+/**
+ * Get the files only from files and folders
+ * @param filesAndFolders
+ */
+const getFiles: Mapper<FilesAndFoldersCollection, FilesAndFolders[]> = memoize(
+  fp.filter(isFile)
+);
+
+/**
+ * Get folders only from files and folders
+ * @param filesAndFolders
+ */
+const getFolders: Mapper<
+  FilesAndFoldersCollection,
+  FilesAndFolders[]
+> = memoize(fp.filter(fp.compose([not, isFile])));
+
+/**
  * Returns the number of files in a FilesAndFoldersMap
  * @param filesAndFoldersMap
  */
-export const getFileCount = (filesAndFoldersMap: FilesAndFoldersMap): number =>
-  Object.values(filesAndFoldersMap).filter(isFile).length;
+export const getFileCount: Mapper<FilesAndFoldersMap, number> = memoize(
+  fp.compose([size, getFiles, removeRootFolder])
+);
 
 /**
  * Returns the number of folders in a FilesAndFoldersMap
  * @param filesAndFoldersMap
  */
-export const getFoldersCount = (
-  filesAndFoldersMap: FilesAndFoldersMap
-): number => Object.values(filesAndFoldersMap).filter(ff => !isFile(ff)).length;
+export const getFoldersCount: Mapper<FilesAndFoldersMap, number> = memoize(
+  fp.compose([size, getFolders, removeRootFolder])
+);
 
 /**
  * Returns the depth of the deepest element of a filesAndFoldersMap

@@ -734,6 +734,13 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
+"@types/pizzip@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@types/pizzip/-/pizzip-3.0.1.tgz#9b77d4ac5448e51afea46da67a989e4e8cf767ed"
+  integrity sha512-F7iuv53yPv9NcXVbjhRleja+T9cjxcGBRQirn/X6X4fYnLhxBXpT1PmLf+ub0ciMVDrK+hSPuCdD2m4XC0qm+Q==
+  dependencies:
+    "@types/node" "*"
+
 "@types/prop-types@*":
   version "15.7.3"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
@@ -3452,7 +3459,7 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-docxtemplater@^3.14.1:
+docxtemplater@^3.15.0:
   version "3.15.0"
   resolved "https://registry.yarnpkg.com/docxtemplater/-/docxtemplater-3.15.0.tgz#129aae5b50a98f88f25f72f9291440948ace25e4"
   integrity sha512-Zv3IoJoz31n4mfNbv0+njWBoJ8J2F7CxqEEsLspTJIbNbdQuoeAxtIP/a0o16hUnDcu0qfdXnSNLd4f58LUhKA==

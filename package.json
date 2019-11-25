@@ -117,9 +117,10 @@
   },
   "dependencies": {
     "@sentry/browser": "^5.4.0",
+    "@types/pizzip": "^3.0.1",
     "csv-parse": "^4.8.2",
     "dateformat": "3.0.3",
-    "docxtemplater": "^3.14.1",
+    "docxtemplater": "^3.15.0",
     "electron-ga": "1.0.6",
     "eslint-plugin-import": "^2.18.2",
     "fast-memoize": "^2.5.1",

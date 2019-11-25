@@ -18,6 +18,7 @@ module.exports = {
     AUTOLOAD: "readonly",
     FORCE_TRACKING: "readonly"
   },
+  plugins: ["lodash-fp"],
   overrides: [
     {
       files: ["src/**/*.test.js", "src/**/*.test.ts", "src/test/**/*.js"],

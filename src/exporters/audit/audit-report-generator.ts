@@ -1,6 +1,5 @@
-import fs from "fs";
 import path from "path";
-import { exportToDocX } from "../../util/docx-util";
+import { createChartReplacer, exportToDocX } from "../../util/docx-util";
 
 interface AuditReportFile {
   name: string;
@@ -35,12 +34,12 @@ export interface AuditReportData {
   documentCount: number;
   spreadsheetPercent: number;
   spreadsheetCount: number;
-  emailPercent;
-  emailCount;
-  mediaPercent;
-  mediaCount;
-  otherPercent;
-  otherCount;
+  emailPercent: number;
+  emailCount: number;
+  mediaPercent: number;
+  mediaCount: number;
+  otherPercent: number;
+  otherCount: number;
   oldestFiles: AuditReportFileWithDate[];
   biggestFiles: AuditReportFileWithSize[];
   duplicateFolderCount: number;
@@ -52,10 +51,30 @@ export interface AuditReportData {
   biggestDuplicateFiles: AuditReportFileWithSize[];
 }
 
-const TEMPLATE_PATH = path.join(
+const TEMPLATE_PATH = path.resolve(
   STATIC_ASSETS_PATH,
   "template/auditReportTemplate.docx"
 );
 
-export const generateAuditReportDocx = (auditReportData: AuditReportData) =>
-  exportToDocX(TEMPLATE_PATH, auditReportData);
+/*
+ * To update the chart template, you will need to create a docx, unzip it, and get the xml chart file.
+ * The xml chart files are in the folder word/charts.
+ * Then, you replace the numeric values by templated strings like "<c:v>{presentationCount}</c:v>"
+ */
+const CHART_TEMPLATE_PATH = path.resolve(
+  STATIC_ASSETS_PATH,
+  "template/chartTemplate.xml"
+);
+
+/**
+ * Generates the docx Blob
+ * @param auditReportData
+ */
+export const generateAuditReportDocx = (
+  auditReportData: AuditReportData
+): Blob =>
+  exportToDocX(
+    TEMPLATE_PATH,
+    auditReportData,
+    createChartReplacer("chart1", CHART_TEMPLATE_PATH)
+  );

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<c:chartSpace xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"
+              xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
+              xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+    <c:date1904 val="0"/>
+    <c:lang val="fr-FR"/>
+    <c:roundedCorners val="0"/>
+    <mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
+        <mc:Choice Requires="c14" xmlns:c14="http://schemas.microsoft.com/office/drawing/2007/8/2/chart">
+            <c14:style val="102"/>
+        </mc:Choice>
+        <mc:Fallback>
+            <c:style val="2"/>
+        </mc:Fallback>
+    </mc:AlternateContent>
+    <c:chart>
+        <c:title>
+            <c:tx>
+                <c:rich>
+                    <a:bodyPr/>
+                    <a:lstStyle/>
+                    <a:p>
+                        <a:pPr>
+                            <a:defRPr/>
+                        </a:pPr>
+                        <a:r>
+                            <a:rPr lang="fr-FR"/>
+                            <a:t>Répartition</a:t>
+                        </a:r>
+                        <a:r>
+                            <a:rPr lang="fr-FR" baseline="0"/>
+                            <a:t> par type d'extension</a:t>
+                        </a:r>
+                        <a:endParaRPr lang="fr-FR"/>
+                    </a:p>
+                </c:rich>
+            </c:tx>
+            <c:layout>
+                <c:manualLayout>
+                    <c:xMode val="edge"/>
+                    <c:yMode val="edge"/>
+                    <c:x val="1.6689814814814803E-2"/>
+                    <c:y val="1.984126984126984E-2"/>
+                </c:manualLayout>
+            </c:layout>
+            <c:overlay val="0"/>
+        </c:title>
+        <c:autoTitleDeleted val="0"/>
+        <c:plotArea>
+            <c:layout/>
+            <c:pieChart>
+                <c:varyColors val="1"/>
+                <c:ser>
+                    <c:idx val="0"/>
+                    <c:order val="0"/>
+                    <c:tx>
+                        <c:strRef>
+                            <c:f>Feuil1!$B$1</c:f>
+                            <c:strCache>
+                                <c:ptCount val="1"/>
+                                <c:pt idx="0">
+                                    <c:v>Nombre</c:v>
+                                </c:pt>
+                            </c:strCache>
+                        </c:strRef>
+                    </c:tx>
+                    <c:dPt>
+                        <c:idx val="0"/>
+                        <c:bubble3D val="0"/>
+                        <c:spPr>
+                            <a:solidFill>
+                                <a:srgbClr val="F75B40"/>
+                            </a:solidFill>
+                        </c:spPr>
+                    </c:dPt>
+                    <c:dPt>
+                        <c:idx val="1"/>
+                        <c:bubble3D val="0"/>
+                        <c:spPr>
+                            <a:solidFill>
+                                <a:srgbClr val="4C78E8"/>
+                            </a:solidFill>
+                        </c:spPr>
+                    </c:dPt>
+                    <c:dPt>
+                        <c:idx val="2"/>
+                        <c:bubble3D val="0"/>
+                        <c:spPr>
+                            <a:solidFill>
+                                <a:srgbClr val="52D11A"/>
+                            </a:solidFill>
+                        </c:spPr>
+                    </c:dPt>
+                    <c:dPt>
+                        <c:idx val="3"/>
+                        <c:bubble3D val="0"/>
+                        <c:spPr>
+                            <a:solidFill>
+                                <a:srgbClr val="13D6F3"/>
+                            </a:solidFill>
+                        </c:spPr>
+                    </c:dPt>
+                    <c:dPt>
+                        <c:idx val="4"/>
+                        <c:bubble3D val="0"/>
+                        <c:spPr>
+                            <a:solidFill>
+                                <a:srgbClr val="B574F2"/>
+                            </a:solidFill>
+                        </c:spPr>
+                    </c:dPt>
+                    <c:dPt>
+                        <c:idx val="5"/>
+                        <c:bubble3D val="0"/>
+                        <c:spPr>
+                            <a:solidFill>
+                                <a:srgbClr val="8A8C93"/>
+                            </a:solidFill>
+                        </c:spPr>
+                    </c:dPt>
+                    <c:cat>
+                        <c:strRef>
+                            <c:f>Feuil1!$A$2:$A$7</c:f>
+                            <c:strCache>
+                                <c:ptCount val="6"/>
+                                <c:pt idx="0">
+                                    <c:v>Fichier de type Présentation</c:v>
+                                </c:pt>
+                                <c:pt idx="1">
+                                    <c:v>Fichier de type Document</c:v>
+                                </c:pt>
+                                <c:pt idx="2">
+                                    <c:v>Fichier de type Tableur</c:v>
+                                </c:pt>
+                                <c:pt idx="3">
+                                    <c:v>Fichier de type Email</c:v>
+                                </c:pt>
+                                <c:pt idx="4">
+                                    <c:v>Fichier de type Média</c:v>
+                                </c:pt>
+                                <c:pt idx="5">
+                                    <c:v>Fichiers autres</c:v>
+                                </c:pt>
+                            </c:strCache>
+                        </c:strRef>
+                    </c:cat>
+                    <c:val>
+                        <c:numRef>
+                            <c:f>Feuil1!$B$2:$B$7</c:f>
+                            <c:numCache>
+                                <c:formatCode>General</c:formatCode>
+                                <c:ptCount val="6"/>
+                                <c:pt idx="0">
+                                    <c:v>{presentationCount}</c:v>
+                                </c:pt>
+                                <c:pt idx="1">
+                                    <c:v>{documentCount}</c:v>
+                                </c:pt>
+                                <c:pt idx="2">
+                                    <c:v>{spreadsheetCount}</c:v>
+                                </c:pt>
+                                <c:pt idx="3">
+                                    <c:v>{emailCount}</c:v>
+                                </c:pt>
+                                <c:pt idx="4">
+                                    <c:v>{mediaCount}</c:v>
+                                </c:pt>
+                                <c:pt idx="5">
+                                    <c:v>{otherCount}</c:v>
+                                </c:pt>
+                            </c:numCache>
+                        </c:numRef>
+                    </c:val>
+                </c:ser>
+                <c:dLbls>
+                    <c:showLegendKey val="0"/>
+                    <c:showVal val="0"/>
+                    <c:showCatName val="0"/>
+                    <c:showSerName val="0"/>
+                    <c:showPercent val="0"/>
+                    <c:showBubbleSize val="0"/>
+                    <c:showLeaderLines val="1"/>
+                </c:dLbls>
+                <c:firstSliceAng val="0"/>
+            </c:pieChart>
+        </c:plotArea>
+        <c:legend>
+            <c:legendPos val="r"/>
+            <c:overlay val="0"/>
+        </c:legend>
+        <c:plotVisOnly val="1"/>
+        <c:dispBlanksAs val="gap"/>
+        <c:showDLblsOverMax val="0"/>
+    </c:chart>
+    <c:externalData r:id="rId1">
+        <c:autoUpdate val="0"/>
+    </c:externalData>
+</c:chartSpace>

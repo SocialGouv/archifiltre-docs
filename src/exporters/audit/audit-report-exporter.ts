@@ -1,7 +1,15 @@
 import dateFormat from "dateformat";
 import path from "path";
+import { octet2HumanReadableFormat } from "../../components/ruler";
 import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
-import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import {
+  getFileCount,
+  getFilesAndFoldersFromStore,
+  getFoldersCount,
+  getMaxDepth
+} from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 import { medianOnSortedArray } from "../../util/array-util";
 import { exportToDocX } from "../../util/docx-util";
@@ -21,6 +29,7 @@ import {
   AuditReportData,
   generateAuditReportDocx
 } from "./audit-report-generator";
+import { getLongestPathFile } from "./audit-report-values-computer";
 
 const CHILDREN_LIMIT = 30;
 const NB_FOLDERS_TO_DISPLAY = 10;
@@ -162,19 +171,31 @@ const auditReportExporter = filesAndFolders => {
   return exportToDocX(TEMPLATE_PATH, docxData);
 };
 
+const ROOT_ID = "";
+
+const formatAuditReportDate = (timestamp: number): string =>
+  dateFormat(timestamp, "dd/mm/yyyy");
+
 // tslint:disable:object-literal-sort-keys
 export const computeAuditReportData = (
-  filesAndFolders: FilesAndFoldersMap
+  filesAndFolders: FilesAndFoldersMap,
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap
 ): AuditReportData => ({
-  totalFoldersCount: 0,
-  totalFilesCount: 0,
-  totalSize: "1Go",
-  oldestDate: "20/10/1990",
-  newestDate: "20/10/2019",
-  longestPathLength: 250,
-  longestPathFileName: "longest-path-filename.pdf",
-  longestPathPath: "longest/path",
-  depth: 10,
+  totalFoldersCount: getFoldersCount(filesAndFolders),
+  totalFilesCount: getFileCount(filesAndFolders),
+  totalSize: octet2HumanReadableFormat(
+    filesAndFoldersMetadata[ROOT_ID].childrenTotalSize
+  ),
+  oldestDate: formatAuditReportDate(
+    filesAndFoldersMetadata[ROOT_ID].minLastModified
+  ),
+  newestDate: formatAuditReportDate(
+    filesAndFoldersMetadata[ROOT_ID].maxLastModified
+  ),
+  longestPathLength: getLongestPathFile(filesAndFolders).id.length,
+  longestPathFileName: getLongestPathFile(filesAndFolders).name,
+  longestPathPath: getLongestPathFile(filesAndFolders).id,
+  depth: getMaxDepth(filesAndFolders),
   presentationPercent: 11,
   presentationCount: 11,
   documentPercent: 18,
@@ -311,9 +332,14 @@ export const auditReportExporterThunk = (
   name: string
 ): ArchifiltreThunkAction => (dispatch, getState) => {
   const filesAndFolders = getFilesAndFoldersFromStore(getState());
+  const filesAndFoldersMetadata = getFilesAndFoldersMetadataFromStore(
+    getState()
+  );
   saveBlob(
     name,
-    generateAuditReportDocx(computeAuditReportData(filesAndFolders))
+    generateAuditReportDocx(
+      computeAuditReportData(filesAndFolders, filesAndFoldersMetadata)
+    )
   );
 };
 

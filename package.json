@@ -123,6 +123,7 @@
     "dateformat": "3.0.3",
     "docxtemplater": "^3.15.0",
     "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-lodash-fp": "^2.2.0-a1",
     "fast-memoize": "^2.5.1",
     "file-saver": "2.0.2",
     "foundation-sites": "^6.5.3",

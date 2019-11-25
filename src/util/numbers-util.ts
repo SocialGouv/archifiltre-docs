@@ -5,5 +5,11 @@
  * @param numbersOfDecimals - The number of displayed decimals
  * @returns {string}
  */
-export const percent = (value, total, { numbersOfDecimals = 0 } = {}) =>
-  ((value / total) * 100).toFixed(numbersOfDecimals);
+export const percent = (
+  value: number,
+  total: number,
+  { numbersOfDecimals = 0 } = {}
+): number => {
+  const exponent = 10 ** numbersOfDecimals;
+  return Math.round((value / total) * 100 * exponent) / exponent;
+};

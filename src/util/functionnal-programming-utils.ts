@@ -1,5 +1,7 @@
 export type Mapper<Input, Output> = (input: Input) => Output;
 
+export type Accessor<T> = () => T;
+
 /**
  * Applies the ! operator to the value
  * @param value

@@ -1,6 +1,6 @@
 import * as M from "util/record-util";
 
-describe("record-util", function() {
+describe("record-util", () => {
   const testEquality = (a, b) => {
     expect(a.toObject()).toEqual(b.toObject());
     expect(a.constructor.toJs(a)).toEqual(b.constructor.toJs(b));

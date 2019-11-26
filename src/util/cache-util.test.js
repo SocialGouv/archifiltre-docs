@@ -1,7 +1,7 @@
 import * as M from "util/cache-util";
 
-describe("cache", function() {
-  it("basic test to improve", function() {
+describe("cache", () => {
+  it("basic test to improve", () => {
     let a = 0;
     const f = b => {
       a++;

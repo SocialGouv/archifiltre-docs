@@ -3,7 +3,7 @@ import fc from "fast-check";
 import { fromRgba, toRgba, fromHex, toHex, setAlpha } from "./color-util";
 import { arbitraryRgba } from "../test/custom-arbitraries";
 
-describe("color", function() {
+describe("color", () => {
   it("(fromRgba . toRgba) a", () => {
     fc.assert(
       fc.property(arbitraryRgba, color => equal(color, fromRgba(toRgba(color))))

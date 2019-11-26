@@ -2,7 +2,7 @@ import * as M from "reducers/real-estate";
 
 import * as ObjectUtil from "util/object-util.ts";
 
-describe("real-estate", function() {
+describe("real-estate", () => {
   const state1 = M.create({
     property_name: "state1",
     initialState: () => 0,

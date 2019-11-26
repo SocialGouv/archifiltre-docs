@@ -173,7 +173,7 @@ app.on("will-navigate", () => {
   console.log("will-navigate");
 });
 
-app.on("renderer-process-crashed", function(event) {
+app.on("renderer-process-crashed", event => {
   Raven.captureException("Renderer process crashed");
 });
 

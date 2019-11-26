@@ -3,7 +3,7 @@ import * as Tags from "datastore/tags";
 
 import { Set } from "immutable";
 
-describe("tags", function() {
+describe("tags", () => {
   it("simple derived data test", () => {
     const ff = FilesAndFolders.computeDerived(
       FilesAndFolders.ff([

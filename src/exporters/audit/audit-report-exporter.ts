@@ -1,4 +1,3 @@
-import dateFormat from "dateformat";
 import { octet2HumanReadableFormat } from "../../components/ruler";
 import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
@@ -18,15 +17,15 @@ import {
 } from "./audit-report-generator";
 import {
   countFileTypes,
+  formatAuditReportDate,
+  getBiggestFiles,
   getExtensionsList,
   getLongestPathFile,
+  getOldestFiles,
   percentFileTypes
 } from "./audit-report-values-computer";
 
 const ROOT_ID = "";
-
-const formatAuditReportDate = (timestamp: number): string =>
-  dateFormat(timestamp, "dd/mm/yyyy");
 
 // tslint:disable:object-literal-sort-keys
 export const computeAuditReportData = (
@@ -66,60 +65,8 @@ export const computeAuditReportData = (
   otherPercent: percentFileTypes(filesAndFolders)[FileType.OTHER],
   otherCount: countFileTypes(filesAndFolders)[FileType.OTHER],
   otherFileTypes: "les types restants",
-  oldestFiles: [
-    {
-      date: "20/10/1990",
-      name: "file1",
-      path: "path/to/file1"
-    },
-    {
-      date: "20/10/1990",
-      name: "file1",
-      path: "path/to/file1"
-    },
-    {
-      date: "20/10/1990",
-      name: "file1",
-      path: "path/to/file1"
-    },
-    {
-      date: "20/10/1990",
-      name: "file1",
-      path: "path/to/file1"
-    },
-    {
-      date: "20/10/1990",
-      name: "file1",
-      path: "path/to/file1"
-    }
-  ],
-  biggestFiles: [
-    {
-      name: "file1",
-      path: "path/to/file1",
-      size: "2Go"
-    },
-    {
-      name: "file1",
-      path: "path/to/file1",
-      size: "2Go"
-    },
-    {
-      name: "file1",
-      path: "path/to/file1",
-      size: "2Go"
-    },
-    {
-      name: "file1",
-      path: "path/to/file1",
-      size: "2Go"
-    },
-    {
-      name: "file1",
-      path: "path/to/file1",
-      size: "2Go"
-    }
-  ],
+  oldestFiles: getOldestFiles(filesAndFolders),
+  biggestFiles: getBiggestFiles(filesAndFolders),
   duplicateFolderCount: 10,
   duplicateFolderPercent: 10,
   duplicateFileCount: 10,

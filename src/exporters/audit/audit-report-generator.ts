@@ -6,15 +6,15 @@ interface AuditReportFile {
   path: string;
 }
 
-interface AuditReportFileWithDate extends AuditReportFile {
+export interface AuditReportFileWithDate extends AuditReportFile {
   date: string;
 }
 
-interface AuditReportFileWithSize extends AuditReportFile {
+export interface AuditReportFileWithSize extends AuditReportFile {
   size: string;
 }
 
-interface AuditReportFileWithCount extends AuditReportFile {
+export interface AuditReportFileWithCount extends AuditReportFile {
   count: number;
 }
 

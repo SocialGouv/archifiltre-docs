@@ -24,6 +24,13 @@ yarn dev-app
 
 and then, reload your electron app with the refresh command (`CMD + R` on OS X)
 
+You can make the app automatically load a specific folder by doing:
+
+```bash
+yarn dev --autoload /absolute/or/relative/path/to/folder
+```
+
+
 ### Writing code
 
 - Use JSDoc comments to document new functions.

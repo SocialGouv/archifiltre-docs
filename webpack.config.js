@@ -38,6 +38,8 @@ module.exports = (env, argv = {}) => ({
       STATIC_ASSETS_PATH:
         argv.mode === "development" ? JSON.stringify(".") : "__dirname",
       AUTOLOAD: argv.autoload
+        ? JSON.stringify(argv.autoload)
+        : JSON.stringify("")
     })
   ],
 

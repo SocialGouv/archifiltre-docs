@@ -7,7 +7,7 @@
   "main": "electron/index.js",
   "scripts": {
     "dev": "webpack-dev-server --mode development",
-    "dev-test": "webpack-dev-server --mode development --autoload true",
+    "dev-test": "webpack-dev-server --mode development --autoload ./test-folder",
     "dev-app": "cross-env DEV_SERVER=true electron ./electron",
     "test": "jest \"src/.*\\.test\\.[jt]s\"",
     "e2e": "jest \"e2e/.*\\\\.test\\\\.[jt]s\"",

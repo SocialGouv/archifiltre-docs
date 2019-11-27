@@ -86,7 +86,7 @@
     "css-loader": "3.2.0",
     "deep-equal": "1.1.1",
     "electron": "7.1.2",
-    "electron-builder": "22.1.0",
+    "electron-builder": "22.2.0",
     "electron-react-devtools": "0.5.3",
     "eslint": "6.7.1",
     "eslint-import-resolver-webpack": "0.11.1",

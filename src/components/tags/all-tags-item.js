@@ -2,7 +2,7 @@ import React from "react";
 
 import Tag from "components/tags/tag";
 
-import MultiLinesInput from "components/multi-lines-input";
+import MultiLinesInput from "components/tags/multi-lines-input";
 
 const cell_shrink_style = {
   padding: "0em 0.1em"

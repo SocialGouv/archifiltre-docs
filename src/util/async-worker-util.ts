@@ -50,7 +50,7 @@ export const createAsyncWorkerForChildProcessController = (
 });
 
 /**
- * Creates a wrapper class for the childProcess contructor to be used in batch-process-utils
+ * Creates a wrapper class for the childProcess contructor to be used in batch-process-common
  * @param ChildProcessContructor
  */
 export const createAsyncWorkerControllerClass = ChildProcessContructor => {

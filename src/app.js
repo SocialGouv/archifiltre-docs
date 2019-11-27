@@ -12,12 +12,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Analytics from "electron-ga";
 
-import ErrorBoundary from "components/error-boundary";
-import MainSpace from "components/main-space";
-import Header from "components/header";
-import ANewVersionIsAvailable from "components/a-new-version-is-available";
-
-import WindowResize from "components/window-resize";
+import ErrorBoundary from "components/errors/error-boundary";
+import MainSpace from "components/main-space/main-space";
+import Header from "components/header/header";
+import ANewVersionIsAvailable from "components/header/a-new-version-is-available";
+import WindowResize from "components/common/window-resize";
 
 import { Store } from "reducers/real-estate-store";
 import { Provider } from "react-redux";

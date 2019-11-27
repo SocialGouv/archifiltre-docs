@@ -1,7 +1,7 @@
 import React from "react";
 
 import TagListItem from "components/tags/all-tags-item";
-import TextAlignCenter from "components/text-align-center";
+import TextAlignCenter from "components/common/text-align-center";
 
 import * as Color from "util/color-util";
 

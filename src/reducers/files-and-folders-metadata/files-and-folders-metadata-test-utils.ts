@@ -21,7 +21,7 @@ const DEFAULT_SORT_BY_SIZE_INDEX = [0];
 const DEFAULT_SORT_BY_DATE_INDEX = [0];
 
 /**
- * Test utils to create FilesAndFoldersMetadata with only the tested parameters
+ * Test common to create FilesAndFoldersMetadata with only the tested parameters
  * @param maxLastModified
  * @param minLastModified
  * @param medianLastModified

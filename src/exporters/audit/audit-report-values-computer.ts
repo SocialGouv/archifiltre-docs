@@ -1,3 +1,4 @@
+import dateFormat from "dateformat";
 import memoize from "fast-memoize";
 import _ from "lodash";
 import {
@@ -9,9 +10,13 @@ import {
   join,
   map,
   mapValues,
+  reverse,
   sortBy,
-  sum
+  sum,
+  take,
+  takeRight
 } from "lodash/fp";
+import { octet2HumanReadableFormat } from "../../components/ruler";
 import {
   FilesAndFoldersCollection,
   getFiles
@@ -22,12 +27,26 @@ import {
   getExtensionsForEachFileType,
   getFileType
 } from "../../util/file-types-util";
-import { Accessor, Mapper } from "../../util/functionnal-programming-utils";
+import {
+  Accessor,
+  Mapper,
+  tap
+} from "../../util/functionnal-programming-utils";
 import { percent } from "../../util/numbers-util";
+import {
+  AuditReportFileWithDate,
+  AuditReportFileWithSize
+} from "./audit-report-generator";
 
 type FileTypeMap<T> = {
   [key in FileType]: T;
 };
+/**
+ * Formats the date to the expect audit report format
+ * @param timestamp
+ */
+export const formatAuditReportDate = (timestamp: number): string =>
+  dateFormat(timestamp, "dd/mm/yyyy");
 
 /**
  * Sorts a FilesAndFoldersMap or FilesAndFolders[] by path length in a descending order.
@@ -108,5 +127,68 @@ export const getExtensionsList: Accessor<FileTypeMap<string>> = memoize(
     }),
     mapValues(join(", ")),
     getExtensionsForEachFileType
+  )
+);
+
+/**
+ * Sorts a FilesAndFoldersCollection by its lastModifiedDate in ascending order
+ * @param filesAndFolders
+ */
+export const sortFilesByLastModifiedDate: Mapper<
+  FilesAndFoldersCollection,
+  FilesAndFoldersCollection
+> = memoize(sortBy(({ file_last_modified }) => file_last_modified));
+
+/**
+ * Returns the 5 oldest files info by last modified date
+ * @param filesAndFolders
+ */
+export const getOldestFiles: Mapper<
+  FilesAndFoldersCollection,
+  AuditReportFileWithDate[]
+> = memoize(
+  compose(
+    map(
+      ({ name, id, file_last_modified }): AuditReportFileWithDate => ({
+        date: formatAuditReportDate(file_last_modified),
+        name,
+        path: id
+      })
+    ),
+    take(5),
+    sortFilesByLastModifiedDate,
+    getFiles
+  )
+);
+
+/**
+ * Sorts a FilesAndFoldersCollection by its lastModifiedDate in ascending order
+ * @param filesAndFolders
+ */
+export const sortFilesBySize: Mapper<
+  FilesAndFoldersCollection,
+  FilesAndFoldersCollection
+> = memoize(sortBy(({ file_size }) => file_size));
+
+/**
+ * Returns the 5 oldest files info by last modified date
+ * @param filesAndFolders
+ */
+export const getBiggestFiles: Mapper<
+  FilesAndFoldersCollection,
+  AuditReportFileWithSize[]
+> = memoize(
+  compose(
+    map(
+      ({ name, id, file_size }): AuditReportFileWithSize => ({
+        name,
+        path: id,
+        size: octet2HumanReadableFormat(file_size)
+      })
+    ),
+    reverse,
+    takeRight(5),
+    sortFilesBySize,
+    getFiles
   )
 );

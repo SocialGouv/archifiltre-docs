@@ -164,8 +164,8 @@ export default class FolderDropzone extends React.Component {
   }
 
   componentDidMount() {
-    if (AUTOLOAD) {
-      this.loadFileOrFolder(path.resolve("./test-folder"));
+    if (AUTOLOAD !== "") {
+      this.loadFileOrFolder(path.resolve(AUTOLOAD));
     }
   }
 

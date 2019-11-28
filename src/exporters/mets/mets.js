@@ -594,8 +594,8 @@ export const makeSIP = (state, tags) => {
       fr: "Export METS"
     });
     const exportSuccessMessage = pick({
-      en: "METS archive has been created in the projet parent folder",
-      fr: "L'archive METS a été créée dans le dossier parent du projet"
+      en: "The METS zip has been created in the projet parent folder",
+      fr: "Le zip d'export METS a été créé dans le dossier parent du projet"
     });
     fs.writeFileSync(
       state.get("original_path") + "/../" + state.get("session_name") + ".zip",

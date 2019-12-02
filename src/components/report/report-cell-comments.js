@@ -1,19 +1,9 @@
 import React from "react";
 
 import CommentsEditable from "components/report/comments-editable";
-import pick from "languages";
+import { withTranslation } from "react-i18next";
 
-const comments_tr = pick({
-  en: "Comments",
-  fr: "Description"
-});
-
-const your_comments_here_tr = pick({
-  en: "Your comments here",
-  fr: "Votre description ici"
-});
-
-export default class ReportCellComments extends React.Component {
+class ReportCellComments extends React.Component {
   constructor(props) {
     super(props);
 
@@ -151,10 +141,10 @@ export default class ReportCellComments extends React.Component {
     if (is_dummy) {
       return (
         <div className="cell small-6" style={cells_style}>
-          <b>{comments_tr}</b>
+          <b>{props.t("report.comments")}</b>
           <br />
           <span style={{ fontStyle: "italic" }}>
-            {your_comments_here_tr + "..."}
+            {props.t("report.yourCommentsHere")}
           </span>
         </div>
       );
@@ -168,7 +158,7 @@ export default class ReportCellComments extends React.Component {
           onClick={onClick}
         >
           <div>
-            <b>{comments_tr}</b>
+            <b>{props.t("report.comments")}</b>
             <span>
               &ensp;
               <i
@@ -191,3 +181,5 @@ export default class ReportCellComments extends React.Component {
     }
   }
 }
+
+export default withTranslation()(ReportCellComments);

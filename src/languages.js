@@ -1,14 +1,15 @@
-const default_lang = "en";
+const defaultLang = "en";
+
+export const getLanguage = () =>
+  global.navigator ? [global.navigator.language.slice(0, 2)] : [defaultLang];
 
 export default function(obj) {
   // Allows this function to be called inside a NodeJS childProcess
-  const lang = global.navigator
-    ? [global.navigator.language.slice(0, 2)]
-    : [default_lang];
-  let key = default_lang;
-  for (let i = 0; i < lang.length; i++) {
-    if (obj[lang[i]]) {
-      key = lang[i];
+  const language = getLanguage();
+  let key = defaultLang;
+  for (let i = 0; i < language.length; i++) {
+    if (obj[language[i]]) {
+      key = language[i];
       break;
     }
   }

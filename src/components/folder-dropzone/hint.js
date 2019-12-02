@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 
-import pick from "languages";
 import AreaEmphasized from "../area-components/area-emphasized";
 import RefreshButton from "../buttons/refresh-button";
+import { useTranslation } from "react-i18next";
 
 const NEW_HINT_INTERVAL = 15000;
-
-const didYouKnowText = pick({
-  en: "Did you know ?",
-  fr: "Le saviez-vous ?"
-});
 
 const hintsContainerStyle = {
   position: "relative",
@@ -43,6 +38,7 @@ const refreshButtonContainerStyle = {
  * @returns {React.Component}
  */
 const Hint = ({ hints = [] }) => {
+  const { t } = useTranslation();
   const [hintIndex, setHintIndex] = useState(0);
 
   const nextHint = useCallback(() => {
@@ -63,7 +59,7 @@ const Hint = ({ hints = [] }) => {
     <div style={hintsContainerStyle}>
       <div style={hintsTextContainerStyle}>
         <div>
-          <AreaEmphasized>{didYouKnowText}</AreaEmphasized>
+          <AreaEmphasized>{t("folderDropzone.didYouKnow")}</AreaEmphasized>
         </div>
         <div>{hints[hintIndex]}</div>
       </div>

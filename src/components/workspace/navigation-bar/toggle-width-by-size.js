@@ -6,45 +6,31 @@ import TextAlignCenter from "components/common/text-align-center";
 import * as ObjectUtil from "util/object-util";
 
 import * as Color from "util/color-util";
-import pick from "languages";
-
-const display_code = pick({
-  en: "Display:",
-  fr: "Affichage :"
-});
-
-const by_size = pick({
-  en: "By size",
-  fr: "Par volume"
-});
-
-const by_number = pick({
-  en: "By count",
-  fr: "Par nombre"
-});
+import { useTranslation } from "react-i18next";
 
 const Presentational = props => {
-  const button_style = {
+  const buttonStyle = {
     margin: 0,
     padding: "0.3em 10%",
     fontSize: "1em",
     fontWeight: "bold",
     borderRadius: "0.4em"
   };
+  const { t } = useTranslation();
 
   return (
     <div className="grid-x align-middle" style={{ minWidth: "25em" }}>
       <div className="cell small-4">
-        <TextAlignCenter>{display_code}</TextAlignCenter>
+        <TextAlignCenter>{t("workspace.display")}</TextAlignCenter>
       </div>
       <div className="cell small-4">
         <TextAlignCenter>
           {mkTB(
             props.toggleChangeWidthBySize,
-            by_size,
+            t("workspace.bySize"),
             !props.width_by_size,
             Color.parentFolder(),
-            button_style
+            buttonStyle
           )}
         </TextAlignCenter>
       </div>
@@ -52,10 +38,10 @@ const Presentational = props => {
         <TextAlignCenter>
           {mkTB(
             props.toggleChangeWidthBySize,
-            by_number,
+            t("workspace.byNumber"),
             props.width_by_size,
             Color.parentFolder(),
-            button_style
+            buttonStyle
           )}
         </TextAlignCenter>
       </div>

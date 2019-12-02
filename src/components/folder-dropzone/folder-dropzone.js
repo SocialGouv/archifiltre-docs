@@ -4,7 +4,6 @@ import AsyncHandleDrop from "async-handle-drop";
 
 import TextAlignCenter from "components/common/text-align-center";
 
-import pick from "languages";
 import path from "path";
 import {
   computeFolderHashes$,
@@ -17,67 +16,18 @@ import {
 import { isJsonFile, countZipFiles } from "../../util/file-sys-util";
 import { expectToBeDefined } from "../../util/expect-behaviour";
 import { notifyError, notifyInfo } from "../../util/notifications-util";
+import { withTranslation } from "react-i18next";
 import { addTracker } from "../../logging/tracker";
-import { ActionTitle, ActionType } from "../../logging/tracker-types";
+import { ActionType, ActionTitle } from "../../logging/tracker-types";
 
-const placeholder = pick({
-  en: "Drop a directory here!",
-  fr: "Glissez-déposez un répertoire ici !"
-});
-
-const placeholderSt = pick({
-  en: "You may also drop a JSON file previously exported from Archifiltre.",
-  fr:
-    "Vous pouvez aussi déposer un fichier JSON précédement exporté depuis Archifiltre."
-});
-
-const zipNotificationTitle = zipNumber =>
-  pick({
-    en: `${zipNumber} zip(s) file(s) detected`,
-    fr: `${zipNumber} fichier(s) zip détecté(s)`
-  });
-const zipNotificationMessage = pick({
-  en: "Archifiltre doesn't handle zips, please unzip them to read them",
-  fr: "Archifiltre ne lit pas les zips, veuillez les décompresser pour les lire"
-});
-
-const disclaimer = pick({
-  en: (
-    <em>
-      <br />
-      {"Compatible with Firefox and Chrome."}
-      <br />
-      {
-        "Your data won't leave your computer. Only you can see what happens in this app."
-      }
-    </em>
-  ),
-  fr: (
-    <em>
-      <br />
-      Compatible avec Firefox et Chrome.
-      <br />
-      Vos données ne quittent pas votre ordinateur; seul•e vous pouvez voir ce
-      qui se passe dans cette application.
-    </em>
-  )
-});
-
-const loadingErrorTitle = pick({
-  en: "Folder loading error",
-  fr: "Erreur de chargement"
-});
-
-const loadingErrorMessage = pick({
-  en: "You probably neither dropped a folder nor a file.",
-  fr: "Vous n'avez probablement pas déposé un dossier ou un fichier."
-});
-
-const displayZipNotification = zipCount => {
-  notifyInfo(zipNotificationMessage, zipNotificationTitle(zipCount));
+const displayZipNotification = (zipCount, t) => {
+  notifyInfo(
+    t("folderDropzone.zipNotificationMessage"),
+    `${zipCount} ${t("folderDropzone.zipNotificationTitle")}`
+  );
 };
 
-export default class FolderDropzone extends React.Component {
+class FolderDropzone extends React.Component {
   constructor(props) {
     super(props);
 
@@ -99,7 +49,7 @@ export default class FolderDropzone extends React.Component {
   loadFileOrFolder(loadedPath) {
     this.props.setLoadedPath(loadedPath);
     const {
-      props: { api, setHashes }
+      props: { api, setHashes, t }
     } = this;
 
     const hook = a => {
@@ -112,7 +62,7 @@ export default class FolderDropzone extends React.Component {
       }
     };
 
-    this.props.api.loading_state.startToLoadFiles();
+    api.loading_state.startToLoadFiles();
     AsyncHandleDrop(hook, loadedPath)
       .then(virtualFileSystem => {
         api.database.set(virtualFileSystem);
@@ -137,7 +87,7 @@ export default class FolderDropzone extends React.Component {
           });
           const zipFileCount = countZipFiles(paths);
           if (zipFileCount > 0) {
-            displayZipNotification(zipFileCount);
+            displayZipNotification(zipFileCount, t);
           }
           computeHashes$(paths, {
             initialValues: { basePath }
@@ -159,11 +109,15 @@ export default class FolderDropzone extends React.Component {
   }
   handleDrop(event) {
     event.preventDefault();
+    const { t } = this.props;
 
     const isFileDefined = expectToBeDefined(event.dataTransfer.files[0]);
 
     if (!isFileDefined) {
-      notifyError(loadingErrorMessage, loadingErrorTitle);
+      notifyError(
+        t("folderDropzone.loadingErrorMessage"),
+        t("folderDropzone.loadingErrorTitle")
+      );
       return;
     }
 
@@ -177,6 +131,7 @@ export default class FolderDropzone extends React.Component {
   }
 
   render() {
+    const { t } = this.props;
     return (
       <div
         className="grid-y grid-frame align-center"
@@ -187,21 +142,30 @@ export default class FolderDropzone extends React.Component {
         <div className="cell">
           <TextAlignCenter>
             <div id="drag-drop-text" style={this.style_placeholder}>
-              {placeholder}
+              {t("folderDropzone.placeholder")}
             </div>
           </TextAlignCenter>
         </div>
         <div className="cell">
           <TextAlignCenter>
-            <div>{placeholderSt}</div>
+            <div>{t("folderDropzone.placeholderSubtitle")}</div>
           </TextAlignCenter>
         </div>
         <div className="cell">
           <TextAlignCenter>
-            <div>{disclaimer}</div>
+            <div>
+              <em>
+                <br />
+                {t("folderDropzone.disclaimer")}
+                <br />
+                {t("folderDropzone.disclaimerSubtitle")}
+              </em>
+            </div>
           </TextAlignCenter>
         </div>
       </div>
     );
   }
 }
+
+export default withTranslation()(FolderDropzone);

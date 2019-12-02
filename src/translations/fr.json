@@ -1,0 +1,65 @@
+{
+  "translation": {
+    "folderDropzone": {
+      "placeholder": "Glissez-déposez un répertoire ici !",
+      "placeholderSubtitle": "Vous pouvez aussi déposer un fichier JSON précédement exporté depuis Archifiltre.",
+      "zipNotificationTitle": "fichier(s) zip détecté(s)",
+      "zipNotificationMessage": "Archifiltre ne lit pas les zips, veuillez les décompresser pour les lire",
+      "disclaimer": "Compatible avec Firefox et Chrome.",
+      "disclaimerSubtitle": "Vos données ne quittent pas votre ordinateur; seul•e vous pouvez voir ce qui se passe dans cette application.",
+      "loadingErrorTitle": "Erreur de chargement",
+      "loadingErrorMessage": "Vous n'avez probablement pas déposé un dossier ou un fichier.",
+      "filesLoaded": "fichiers indexés",
+      "jsonLoading": "Chargement du JSON",
+      "constructingDataModel": "Construction du modèle de données",
+      "computingDerivedData": "Calcul des données dérivées",
+      "computingFileDepth": "Calcul de la profondeur des fichiers",
+      "didYouKnow": "Le saviez-vous ?"
+    },
+    "report": {
+      "comments": "Description",
+      "yourCommentsHere": "Votre description ici...",
+      "lastModified": "Dernière modification",
+      "max": "max",
+      "min": "min",
+      "average": "moyenne",
+      "median": "médiane",
+      "whatsNew": "Quoi de neuf ?",
+      "fileOrFolderName": "Nom du répertoire ou fichier",
+      "fileOrFolderRealName": "Nom réel",
+      "size": "Taille",
+      "hash": "Hash",
+      "fileHashExplanation": "Ce hash est une empreinte de fichier calculée avec l'algorithme MD5",
+      "folderHashExplanation": "Ce hash est une empreinte (calculée avec l'algorithme MD5) de la concaténation des hashs des enfants de ce dossier",
+      "clickHereToAddComments": "Cliquez ici pour ajouter une description !"
+    },
+    "workspace": {
+      "colorCode": "Code couleurs :",
+      "type": "Type",
+      "dates": "Dates",
+      "backToRoot": "Retour à la racine",
+      "display": "Affichage :",
+      "bySize": "Par volume",
+      "byNumber": "Par nombre",
+      "allTags": "Tous les tags",
+      "noTags": "Aucun tag pour l'instant.",
+      "tags": "Tags",
+      "yourTagsHere": "Vos tags ici",
+      "clickHereToAddTags": "Cliquez ici pour ajouter des tags !",
+      "newTag": "Nouveau tag",
+      "file": "Fichier",
+      "level": "Niveau"
+    },
+    "header": {
+      "export": "Exporter",
+      "auditReport": "Rapport d'audit",
+      "close": "Fermer",
+      "save": "Enregistrer",
+      "aNewVersionIsOut": "La version {{version}} d'Archifiltre est sortie !",
+      "downloadIt": "téléchargez la !"
+    },
+    "common": {
+      "error": "Oups ! Une erreur s'est produite."
+    }
+  }
+}

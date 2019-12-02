@@ -1,18 +1,8 @@
 import React from "react";
 
-import pick from "languages";
+import { withTranslation } from "react-i18next";
 
-const your_comments = pick({
-  en: "Your comments here",
-  fr: "Votre description ici"
-});
-
-const click_here_to_add = pick({
-  en: "Click here to add some comments!",
-  fr: "Cliquez ici pour ajouter une description !"
-});
-
-const input_style = {
+const inputStyle = {
   border: "none",
   background: "none",
   outline: "none",
@@ -21,7 +11,7 @@ const input_style = {
   borderBottom: "3px solid rgb(5, 120, 200)"
 };
 
-export default class CommentsEditable extends React.Component {
+class CommentsEditable extends React.Component {
   constructor(props) {
     super(props);
 
@@ -54,12 +44,12 @@ export default class CommentsEditable extends React.Component {
       return (
         <textarea
           className="comments"
-          style={input_style}
+          style={inputStyle}
           onMouseUp={onMouseUp}
           onKeyUp={onKeyUp}
           onBlur={onBlur}
           defaultValue={comments}
-          placeholder={your_comments}
+          placeholder={props.t("report.yourCommentsHere")}
           ref={textareaRef}
         />
       );
@@ -75,7 +65,9 @@ export default class CommentsEditable extends React.Component {
         </div>
       );
     } else {
-      return <span>{click_here_to_add}</span>;
+      return <span>{props.t("report.clickHereToAddComments")}</span>;
     }
   }
 }
+
+export default withTranslation()(CommentsEditable);

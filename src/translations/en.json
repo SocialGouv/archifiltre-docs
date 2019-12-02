@@ -1,0 +1,65 @@
+{
+  "translation": {
+    "folderDropzone": {
+      "placeholder": "Drop a directory here!",
+      "placeholderSubtitle": "You may also drop a JSON file previously exported from Archifiltre.",
+      "zipNotificationTitle": "zip(s) file(s) detected",
+      "zipNotificationMessage": "Archifiltre doesn't handle zips, please unzip them to read them",
+      "disclaimer": "Compatible with Firefox and Chrome.",
+      "disclaimerSubtitle": "Your data won't leave your computer. Only you can see what happens in this app.",
+      "loadingErrorTitle": "Folder loading error",
+      "loadingErrorMessage": "You probably neither dropped a folder nor a file.",
+      "filesLoaded": "files loaded",
+      "jsonLoading": "JSON loading",
+      "constructingDataModel": "Construction of the data model",
+      "computingDerivedData": "Computing derivated data",
+      "computingFileDepth": "Computation of file depth",
+      "didYouKnow": "Did you know?"
+    },
+    "report": {
+      "comments": "Comments",
+      "yourCommentsHere": "Your comments here...",
+      "lastModified": "Last modified",
+      "max": "max",
+      "min": "min",
+      "average": "average",
+      "median": "median",
+      "whatsNew": "What's new?",
+      "fileOrFolderName": "Folder of file's name",
+      "fileOrFolderRealName": "Real name",
+      "size": "Size",
+      "hash": "Hash",
+      "fileHashExplanation": "This hash is a file footprint computed with the MD5 algorithm",
+      "folderHashExplanation": "This hash is a footprint (computed with the MD5 algorithm) of this folder's children hashes concatenation",
+      "clickHereToAddComments": "Click here to add comments!"
+    },
+    "workspace": {
+      "colorCode": "Color code:",
+      "type": "Type",
+      "dates": "Dates",
+      "backToRoot": "Back to root",
+      "display": "Display:",
+      "bySize": "By size",
+      "byNumber": "By count",
+      "allTags": "All tags",
+      "noTags": "No tag at the moment.",
+      "tags": "Tags",
+      "yourTagsHere": "Your tags here",
+      "clickHereToAddTags": "Click here to add tags!!",
+      "newTag": "New tag",
+      "file": "File",
+      "level": "Level"
+    },
+    "header": {
+      "export": "Export",
+      "auditReport": "Audit report",
+      "close": "Close",
+      "save": "Save",
+      "aNewVersionIsOut": "Version {{version}} of Archifiltre is out!",
+      "downloadIt": "download it!"
+    },
+    "common": {
+      "error": "Oops ! An error occurred."
+    }
+  }
+}

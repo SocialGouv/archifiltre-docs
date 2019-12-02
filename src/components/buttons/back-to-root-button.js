@@ -5,15 +5,11 @@ import { mkB } from "components/buttons/button";
 
 import * as Color from "util/color-util";
 
-import pick from "languages";
-
-const label = pick({
-  en: "Back to root",
-  fr: "Retour à la racine"
-});
+import { useTranslation } from "react-i18next";
 
 const Presentational = props => {
-  const button_style = {
+  const { t } = useTranslation();
+  const buttonStyle = {
     transition: "all 0.2s ease-out",
     WebkitTransition: "all 0.2s ease-out",
     padding: "0.3em 0.45em",
@@ -25,11 +21,11 @@ const Presentational = props => {
     props.backToRoot,
     <span>
       <i className="fi-zoom-out" />
-      &ensp;{label}
+      &ensp;{t("workspace.backToRoot")}
     </span>,
     props.isZoomed,
     Color.parentFolder(),
-    button_style
+    buttonStyle
   );
 };
 

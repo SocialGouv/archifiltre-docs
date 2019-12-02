@@ -3,17 +3,7 @@ import React from "react";
 
 import TagsEditable from "components/tags/tags-editable";
 
-import pick from "languages";
-
-const tagsText = pick({
-  en: "Tags",
-  fr: "Tags"
-});
-
-const yourTagsHereText = pick({
-  en: "Your tags here",
-  fr: "Vos tags ici"
-});
+import { withTranslation } from "react-i18next";
 
 const tagsStyle = {
   overflowY: "auto",
@@ -162,10 +152,10 @@ class ReportCellTags extends React.Component {
     if (is_dummy) {
       return (
         <div className="cell small-6" style={cells_style}>
-          <b>{tagsText}</b>
+          <b>{this.props.t("workspace.tags")}</b>
           <br />
           <span style={{ fontStyle: "italic" }}>
-            {yourTagsHereText + "..."}
+            {this.props.t("workspace.yourTagsHere") + "..."}
           </span>
         </div>
       );
@@ -178,7 +168,7 @@ class ReportCellTags extends React.Component {
           style={cells_style}
           onClick={onClick}
         >
-          <b>{tagsText}</b>
+          <b>{this.props.t("workspace.tags")}</b>
           <span>
             &ensp;
             <i
@@ -212,4 +202,4 @@ const ReportCellTagsApiToProps = props => (
   />
 );
 
-export default ReportCellTagsApiToProps;
+export default withTranslation()(ReportCellTagsApiToProps);

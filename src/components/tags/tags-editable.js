@@ -1,18 +1,6 @@
 import React from "react";
-
 import Tag from "components/tags/tag";
-
-import pick from "languages";
-
-const clickHereToAddText = pick({
-  en: "Click here to add some tags!",
-  fr: "Cliquez ici pour ajouter des tags !"
-});
-
-const newTagText = pick({
-  en: "New tag",
-  fr: "Nouveau tag"
-});
+import { withTranslation } from "react-i18next";
 
 const inputStyle = {
   width: "7em",
@@ -26,7 +14,7 @@ const cellShrinkStyle = {
   padding: "0.3em"
 };
 
-export default class TagsEditable extends React.Component {
+class TagsEditable extends React.Component {
   constructor(props) {
     super(props);
     this.textInput = null;
@@ -73,7 +61,7 @@ export default class TagsEditable extends React.Component {
               event.stopPropagation();
             }}
             onKeyUp={onKeyUp}
-            placeholder={newTagText}
+            placeholder={this.props.t("workspace.newTag")}
             ref={component => {
               this.textInput = component;
             }}
@@ -89,7 +77,7 @@ export default class TagsEditable extends React.Component {
     } else {
       answer = (
         <div className="cell shrink" key="__closing__" style={cellShrinkStyle}>
-          <span>{clickHereToAddText}</span>
+          <span>{this.props.t("workspace.clickHereToAddTags")}</span>
         </div>
       );
     }
@@ -97,3 +85,5 @@ export default class TagsEditable extends React.Component {
     return <div className="grid-x">{answer}</div>;
   }
 }
+
+export default withTranslation()(TagsEditable);

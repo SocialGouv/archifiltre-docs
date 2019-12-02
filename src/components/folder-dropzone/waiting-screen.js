@@ -1,10 +1,10 @@
 import React from "react";
 
-import pick from "languages";
 import IndexingBlock from "./indexing-block";
 import AreaLoadingBar from "../area-components/area-loading-bar";
 import { isJsonFile } from "../../util/file-sys-util";
 import Loader from "./loader";
+import { useTranslation } from "react-i18next";
 
 const loadingJsonContainerStyle = {
   display: "flex",
@@ -17,14 +17,10 @@ const loadingJsonTextStyle = {
 };
 
 const LoadingJson = () => {
-  const text = pick({
-    en: "Json loading",
-    fr: "Chargement du json"
-  });
-
+  const { t } = useTranslation();
   return (
     <div style={loadingJsonContainerStyle}>
-      <h3 style={loadingJsonTextStyle}>{text}</h3>
+      <h3 style={loadingJsonTextStyle}>{t("folderDropzone.jsonLoading")}</h3>
       <Loader loading={true} />
     </div>
   );
@@ -39,46 +35,37 @@ const Traverse = ({ count, complete, totalCount }) => (
 
 /**
  * Creates a loader component with the appropriate text
- * @param {Object} textMap - A text object with the different languages
+ * @param {Object} translationText - A string of the translation to find
  * @returns {React.Component}
  */
-const makeLoadingComponent = textMap => {
-  const text = pick(textMap);
+const makeLoadingComponent = translationText => ({
+  count,
+  totalCount,
+  complete,
+  waiting
+}) => {
+  const { t } = useTranslation();
+  let displayedCount;
+  if (waiting === true) {
+    displayedCount = 0;
+  } else if (complete === true) {
+    displayedCount = totalCount;
+  } else {
+    displayedCount = count;
+  }
 
-  const LoadingComponent = ({ count, totalCount, complete, waiting }) => {
-    let displayedCount;
-    if (waiting === true) {
-      displayedCount = 0;
-    } else if (complete === true) {
-      displayedCount = totalCount;
-    } else {
-      displayedCount = count;
-    }
+  const percentage = totalCount ? (displayedCount / totalCount) * 100 : 0;
 
-    const percentage = totalCount ? (displayedCount / totalCount) * 100 : 0;
-
-    return <AreaLoadingBar progress={percentage}>{text}</AreaLoadingBar>;
-  };
-
-  return LoadingComponent;
+  return (
+    <AreaLoadingBar progress={percentage}>{t(translationText)}</AreaLoadingBar>
+  );
 };
 
-const Make = makeLoadingComponent({
-  en: "Construction of the data model",
-  fr: "Construction du modèle de données"
-});
+const Make = makeLoadingComponent("folderDropzone.constructingDataModel");
+const DerivateFF = makeLoadingComponent("folderDropzone.computingDerivedData");
+const DivedFF = makeLoadingComponent("folderDropzone.computingFileDepth");
 
-const DerivateFF = makeLoadingComponent({
-  en: "Computing derivated data",
-  fr: "Calcul des données dérivées"
-});
-
-const DivedFF = makeLoadingComponent({
-  en: "Computation of file depth",
-  fr: "Calcul de la profondeur des fichiers"
-});
-
-const cell_style = {
+const cellStyle = {
   textAlign: "center"
 };
 
@@ -129,7 +116,7 @@ const LoadingMessages = ({ status, count, totalCount }) => {
 const Presentational = ({ status, count, totalCount, loadedPath }) => (
   <div className="grid-y grid-frame align-center">
     <div className="cell">
-      <div style={cell_style}>
+      <div style={cellStyle}>
         {isJsonFile(loadedPath) ? (
           <LoadingJson />
         ) : (

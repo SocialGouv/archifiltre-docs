@@ -7,21 +7,10 @@ import { mkB } from "components/buttons/button";
 
 import * as Color from "util/color-util";
 
-import pick from "languages";
 import { siteUrl } from "../../env";
+import { withTranslation } from "react-i18next";
 
 const { shell } = require("electron");
-
-const text = version =>
-  pick({
-    en: `Version ${version} of Archifiltre is out!`,
-    fr: `La version ${version} d'Archifiltre est sortie !`
-  });
-
-const buttonTr = pick({
-  en: "download it!",
-  fr: "téléchargez la !"
-});
 
 const bannerStyle = {
   backgroundColor: Color.folder(),
@@ -36,7 +25,7 @@ const buttonStyle = {
   borderRadius: "3em"
 };
 
-export default class ANewVersionIsAvailable extends React.PureComponent {
+class ANewVersionIsAvailable extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -82,18 +71,21 @@ export default class ANewVersionIsAvailable extends React.PureComponent {
 
   render() {
     const { display, lastVersion } = this.state;
+    const { t } = this.props;
     if (!display) return false;
     return (
       <div className="grid-x" style={bannerStyle}>
         <div className="cell auto">
           <div className="grid-x align-center align-middle">
             <div className="cell shrink" style={cellStyle}>
-              {text(lastVersion)}
+              {this.props.t("header.aNewVersionIsOut", {
+                version: lastVersion
+              })}
             </div>
             <div className="cell shrink" style={cellStyle}>
               {mkB(
                 this.download,
-                buttonTr,
+                t("header.downloadIt"),
                 true,
                 "rgb(23, 177, 251)",
                 buttonStyle
@@ -114,3 +106,5 @@ export default class ANewVersionIsAvailable extends React.PureComponent {
     );
   }
 }
+
+export default withTranslation()(ANewVersionIsAvailable);

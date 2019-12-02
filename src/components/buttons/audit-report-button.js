@@ -1,12 +1,6 @@
 import { mkB } from "components/buttons/button";
-
-import pick from "languages";
 import { makeNameWithExt } from "util/file-sys-util";
-
-const label = pick({
-  fr: "Rapport d'audit",
-  en: "Audit Report"
-});
+import { useTranslation } from "react-i18next";
 
 const AuditReportButton = ({
   api: {
@@ -14,12 +8,13 @@ const AuditReportButton = ({
   },
   exportToAuditReport
 }) => {
+  const { t } = useTranslation();
   const name = makeNameWithExt(`${getSessionName()}-Audit`, "docx");
   return mkB(
     () => {
       exportToAuditReport(name);
     },
-    label,
+    t("header.auditReport"),
     true,
     "#4d9e25",
     { width: "90%" }

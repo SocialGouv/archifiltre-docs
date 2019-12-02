@@ -4,7 +4,7 @@ import Loader from "./loader";
 import AreaMessage from "../area-components/area-message";
 import RoundedArea from "../area-components/rounded-area";
 import RoundedAreaInnerBlock from "../area-components/rounded-area-inner-block";
-import pick from "../../languages";
+import { useTranslation } from "react-i18next";
 
 const loaderBlockTitleStyle = {
   display: "flex"
@@ -21,32 +21,30 @@ const counterContainerStyle = {
   justifyContent: "center"
 };
 
-const filesLoadedText = pick({
-  en: "files loaded",
-  fr: "fichiers indexés"
-});
-
 /**
  * Block displaying content file count while content is indexing
  * @param fileCount
  * @param loading
  */
-const IndexingBlock = ({ fileCount = 0, loading }) => (
-  <RoundedArea>
-    <RoundedAreaInnerBlock>
-      <div style={loaderBlockTitleStyle}>
-        <AreaTitle>Indexation</AreaTitle>
-      </div>
-      <div style={loaderContainerStyle}>
-        <Loader loading={loading} />
-      </div>
-      <div style={counterContainerStyle}>
-        <AreaMessage>
-          {fileCount.toLocaleString()} {filesLoadedText}
-        </AreaMessage>
-      </div>
-    </RoundedAreaInnerBlock>
-  </RoundedArea>
-);
+const IndexingBlock = ({ fileCount = 0, loading }) => {
+  const { t } = useTranslation();
+  return (
+    <RoundedArea>
+      <RoundedAreaInnerBlock>
+        <div style={loaderBlockTitleStyle}>
+          <AreaTitle>Indexation</AreaTitle>
+        </div>
+        <div style={loaderContainerStyle}>
+          <Loader loading={loading} />
+        </div>
+        <div style={counterContainerStyle}>
+          <AreaMessage>
+            {fileCount.toLocaleString()} {t("folderDropzone.filesLoaded")}
+          </AreaMessage>
+        </div>
+      </RoundedAreaInnerBlock>
+    </RoundedArea>
+  );
+};
 
 export default IndexingBlock;

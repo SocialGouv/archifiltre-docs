@@ -1,14 +1,10 @@
 import React from "react";
-import pick from "languages";
 import ArchifiltreMessage from "./archifiltre-message";
+import { useTranslation } from "react-i18next";
 
-const errorMessage = {
-  fr: "Oups ! Une erreur s'est produite.",
-  en: "Oops ! An error occurred."
+const ErrorScreen = () => {
+  const { t } = useTranslation();
+  return <ArchifiltreMessage>{t("common.error")}</ArchifiltreMessage>;
 };
-
-const ErrorScreen = () => (
-  <ArchifiltreMessage>{pick(errorMessage)}</ArchifiltreMessage>
-);
 
 export default ErrorScreen;

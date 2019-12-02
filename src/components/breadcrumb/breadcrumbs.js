@@ -1,20 +1,8 @@
 import React from "react";
 import BreadCrumbText from "components/breadcrumb/breadcrumb-text";
 import BreadCrumbPoly from "components/breadcrumb/breadcrumb-poly";
-
 import * as Color from "util/color-util";
-
-import pick from "languages";
-
-const fileText = pick({
-  en: "File",
-  fr: "Fichier"
-});
-
-const levelText = pick({
-  en: "Level",
-  fr: "Niveau"
-});
+import { useTranslation } from "react-i18next";
 
 const makeBreadKey = id => "breadcrumbc-" + id;
 const removeRootId = arr => arr.slice(1);
@@ -70,7 +58,7 @@ class Breadcrumbs extends React.PureComponent {
 
   render() {
     const trueFHeight = this.trueFHeight;
-    const { isFocused, isLocked, getFfByFfId, api, root_id } = this.props;
+    const { isFocused, isLocked, getFfByFfId, api, root_id, t } = this.props;
 
     const displayName = id => {
       const node = getFfByFfId(id);
@@ -138,11 +126,11 @@ class Breadcrumbs extends React.PureComponent {
 
         let displayName;
         if (isLast) {
-          displayName = fileText;
+          displayName = t("workspace.file");
         } else if (depth >= 2) {
           displayName = "...";
         } else {
-          displayName = `${levelText} ${depth + 1}`;
+          displayName = `${t("workspace.level")} ${depth + 1}`;
         }
         res.push(
           <g key={`breadcrumb${depth}`}>
@@ -177,19 +165,21 @@ class Breadcrumbs extends React.PureComponent {
 }
 
 export default function BreadcrumbsApiToProps(props) {
-  const { icicle_state, database } = props.api;
+  const { api, maxDepth, getFfByFfId } = props;
+  const { icicle_state, database } = api;
   const breadcrumb_sequence = icicle_state.sequence();
-  const maxDepth = props.maxDepth;
+  const { t } = useTranslation();
 
-  const componentProps = {
-    ...props,
-    breadcrumb_sequence,
-    isFocused: icicle_state.isFocused(),
-    isLocked: icicle_state.isLocked(),
-    maxDepth,
-    getFfByFfId: props.getFfByFfId,
-    root_id: database.rootFfId()
-  };
-
-  return <Breadcrumbs {...componentProps} />;
+  return (
+    <Breadcrumbs
+      {...props}
+      breadcrumb_sequence={breadcrumb_sequence}
+      isFocused={icicle_state.isFocused()}
+      isLocked={icicle_state.isLocked()}
+      maxDepth={maxDepth}
+      getFfByFfId={getFfByFfId}
+      root_id={database.rootFfId()}
+      t={t}
+    />
+  );
 }

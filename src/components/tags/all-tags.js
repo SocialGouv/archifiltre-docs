@@ -5,7 +5,6 @@ import TextAlignCenter from "components/common/text-align-center";
 
 import * as Color from "util/color-util";
 
-import pick from "languages";
 import {
   getTagSize,
   sortTags,
@@ -16,16 +15,7 @@ import {
 import { useSelector } from "react-redux";
 import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-
-const allTags = pick({
-  en: "All tags",
-  fr: "Tous les tags"
-});
-
-const noTags = pick({
-  en: "No tags at the moment.",
-  fr: "Aucun tag pour l'instant."
-});
+import { withTranslation } from "react-i18next";
 
 const contentStyle = {
   fontSize: "0.8em",
@@ -130,7 +120,7 @@ class AllTags extends React.Component {
           </div>
           <div className="cell">
             <TextAlignCenter>
-              <em>{noTags}</em>
+              <em>{this.props.t("workspace.noTags")}</em>
             </TextAlignCenter>
           </div>
         </div>
@@ -185,7 +175,7 @@ class AllTags extends React.Component {
         <div className="grid-y" style={{ height: "100%" }}>
           <div className="cell shrink">
             <TextAlignCenter>
-              <b>{allTags}</b>
+              <b>{this.props.t("workspace.allTags")}</b>
             </TextAlignCenter>
           </div>
           <div className="cell auto">{tagsContent}</div>
@@ -201,7 +191,8 @@ const AllTagsApiToProps = ({
   renameTag,
   deleteTag,
   deleteTagged,
-  addTagged
+  addTagged,
+  t
 }) => {
   const { icicle_state } = api;
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
@@ -264,8 +255,9 @@ const AllTagsApiToProps = ({
       tags={tags}
       filesAndFolders={filesAndFolders}
       filesAndFoldersMetadata={filesAndFoldersMetadata}
+      t={t}
     />
   );
 };
 
-export default AllTagsApiToProps;
+export default withTranslation()(AllTagsApiToProps);

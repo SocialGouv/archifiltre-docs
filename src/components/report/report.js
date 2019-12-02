@@ -11,8 +11,6 @@ import LastModifiedReporter from "components/report/last-modified-reporter";
 
 import * as Color from "util/color-util";
 
-import pick from "languages";
-
 import { shell } from "electron";
 import path from "path";
 import Icon, {
@@ -22,36 +20,7 @@ import Icon, {
 } from "../common/icon";
 import ClickableIcon from "../common/clickable-icon";
 import ReactTooltip from "react-tooltip";
-
-const FILE_OR_FOLDER_NAME_TEXT = pick({
-  en: "Folder of file's name",
-  fr: "Nom du répertoire ou fichier"
-});
-const FILE_OR_FOLDER_REAL_NAME_TEXT = pick({
-  en: "Real name",
-  fr: "Nom réel"
-});
-const SIZE_TEXT = pick({
-  en: "Size",
-  fr: "Taille"
-});
-
-const HASH_TEXT = pick({
-  en: "Hash",
-  fr: "Hash"
-});
-
-const FILE_HASH_EXPLANATION_TEXT = pick({
-  en: "This hash is a file footprint computed with the MD5 algorithm",
-  fr: "Ce hash est une empreinte de fichier calculée avec l'algorithme MD5"
-});
-
-const FOLDER_HASH_EXPLANATION_TEXT = pick({
-  en:
-    "This hash is a footprint (computed with the MD5 algorithm) of this folder's children hashes concatenation",
-  fr:
-    "Ce hash est une empreinte (calculée avec l'algorithme MD5) de la concaténation des hashs des enfants de ce dossier"
-});
+import { useTranslation } from "react-i18next";
 
 const pad = "1em";
 
@@ -95,8 +64,11 @@ const Name = ({
   filesAndFoldersId,
   onChangeAlias
 }) => {
+  const { t } = useTranslation();
   if (placeholder) {
-    return <div style={{ fontWeight: "bold" }}>{FILE_OR_FOLDER_NAME_TEXT}</div>;
+    return (
+      <div style={{ fontWeight: "bold" }}>{t("report.fileOrFolderText")}</div>
+    );
   } else {
     return (
       <span className="edit_hover_container" style={marginPaddingCompensate}>
@@ -120,11 +92,11 @@ const Name = ({
 const RealName = props => {
   const { bracketName } = props;
   const placeholder = props.placeholder;
-
+  const { t } = useTranslation();
   if (placeholder) {
     return (
       <div style={{ fontStyle: "italic" }}>
-        ({FILE_OR_FOLDER_REAL_NAME_TEXT})
+        ({t("report.fileOrFolderRealName")})
       </div>
     );
   } else {
@@ -193,6 +165,7 @@ const InfoCell = ({
   filesAndFoldersId,
   filesAndFoldersMetadata
 }) => {
+  const { t } = useTranslation();
   const currentFilesAndFolders = filesAndFolders[filesAndFoldersId];
   const hashLabel =
     currentFileHash === undefined || placeholder ? "..." : currentFileHash;
@@ -205,17 +178,17 @@ const InfoCell = ({
     ? currentFilesAndFolders.children.length > 0
     : true;
   const hashExplanationText = isFolder
-    ? FOLDER_HASH_EXPLANATION_TEXT
-    : FILE_HASH_EXPLANATION_TEXT;
+    ? t("report.folderHashExplanation")
+    : t("report.fileHashExplanation");
 
   return (
     <div style={infoCellStyle}>
       <div>
-        <b>{SIZE_TEXT} :</b> {sizeLabel}
+        <b>{t("report.size")} :</b> {sizeLabel}
       </div>
       <div>
         <b>
-          {HASH_TEXT}&nbsp;
+          {t("report.hash")}&nbsp;
           <span data-tip={hashExplanationText}>
             <i className="fi-info" />
           </span>

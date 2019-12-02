@@ -11,13 +11,13 @@ import TextAlignCenter from "components/common/text-align-center";
 import CtrlZ from "components/header/dashboard/ctrl-z";
 import { mkB } from "components/buttons/button";
 import Bubble from "components/header/dashboard/bubble";
-import pick from "languages";
 import ResipButton from "../../buttons/resip-button";
 import AuditReportButton from "../../buttons/audit-report-button";
 import {
   getFileCount,
   getFoldersCount
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
+import { useTranslation } from "react-i18next";
 
 const DashBoard = props => {
   let sessionInfoCell = false;
@@ -29,7 +29,7 @@ const DashBoard = props => {
   let reinitButtonCell = false;
   let exportMenuCell = false;
   let auditButtonCell = false;
-
+  const { t } = useTranslation();
   const sessionInfoCellStyle = {
     lineHeight: "1em"
   };
@@ -122,10 +122,7 @@ const DashBoard = props => {
           <TextAlignCenter>
             {mkB(
               () => {},
-              pick({
-                en: "Export",
-                fr: "Exporter"
-              }),
+              t("header.export"),
               true,
               "#4d9e25",
               { width: "90%", cursor: "default" },

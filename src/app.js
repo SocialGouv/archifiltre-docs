@@ -20,18 +20,19 @@ import { Provider } from "react-redux";
 import store from "reducers/store.ts";
 
 import version from "version";
-import pick from "languages";
 
 import { NotificationContainer } from "react-notifications";
 import { initTracker } from "./logging/tracker.ts";
+import { initTranslations } from "./translations/translations";
 
-document.title = pick({
-  en: "Archifiltre v" + version,
-  fr: "Archifiltre v" + version
-});
+SecretDevtools.enable();
+
+document.title = `Archifiltre v${version}`;
 
 SecretDevtools.enable();
 initTracker();
+
+initTranslations();
 
 /**This is the entrypoint for the app. */
 const app = () => {
@@ -73,12 +74,12 @@ const app = () => {
 
 window.addEventListener("load", app);
 
-document.ondragover = document.ondrop = ev => {
-  ev.preventDefault();
+document.ondragover = document.ondrop = event => {
+  event.preventDefault();
   return false;
 };
 
-window.ondragover = window.ondrop = ev => {
-  ev.preventDefault();
+window.ondragover = window.ondrop = event => {
+  event.preventDefault();
   return false;
 };

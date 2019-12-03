@@ -13,12 +13,7 @@ describe("object-util", () => {
         secondKey: "secondValue"
       };
 
-      expect(
-        compose(
-          first,
-          second
-        )
-      ).toEqual({
+      expect(compose(first, second)).toEqual({
         firstKey: "firstValue",
         overlappedKey: "firstOverlappedValue",
         secondKey: "secondValue"
@@ -28,12 +23,7 @@ describe("object-util", () => {
     it("should always contain first object values", () => {
       fc.assert(
         fc.property(fc.object(), fc.object(), (a: any, b: any) => {
-          expect(
-            compose(
-              a,
-              b
-            )
-          ).toMatchObject(a);
+          expect(compose(a, b)).toMatchObject(a);
         })
       );
     });
@@ -41,14 +31,9 @@ describe("object-util", () => {
     it("should always contain all the keys of the first object", () => {
       fc.assert(
         fc.property(fc.object(), fc.object(), (a: any, b: any) => {
-          expect(
-            Object.keys(
-              compose(
-                a,
-                b
-              )
-            )
-          ).toEqual(expect.arrayContaining(Object.keys(a)));
+          expect(Object.keys(compose(a, b))).toEqual(
+            expect.arrayContaining(Object.keys(a))
+          );
         })
       );
     });
@@ -56,14 +41,9 @@ describe("object-util", () => {
     it("should always contain all the keys of the second object", () => {
       fc.assert(
         fc.property(fc.object(), fc.object(), (a: any, b: any) => {
-          expect(
-            Object.keys(
-              compose(
-                a,
-                b
-              )
-            )
-          ).toEqual(expect.arrayContaining(Object.keys(b)));
+          expect(Object.keys(compose(a, b))).toEqual(
+            expect.arrayContaining(Object.keys(b))
+          );
         })
       );
     });

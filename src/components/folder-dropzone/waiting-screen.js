@@ -3,14 +3,31 @@ import React from "react";
 import pick from "languages";
 import IndexingBlock from "./indexing-block";
 import AreaLoadingBar from "../area-components/area-loading-bar";
+import { isJsonFile } from "../../util/file-sys-util";
+import Loader from "./loader";
 
-const Loading = () => {
+const loadingJsonContainerStyle = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center"
+};
+
+const loadingJsonTextStyle = {
+  paddingRight: "10px"
+};
+
+const LoadingJson = () => {
   const text = pick({
     en: "Json loading",
     fr: "Chargement du json"
   });
 
-  return <p>{text}</p>;
+  return (
+    <div style={loadingJsonContainerStyle}>
+      <h3 style={loadingJsonTextStyle}>{text}</h3>
+      <Loader loading={true} />
+    </div>
+  );
 };
 
 const Traverse = ({ count, complete, totalCount }) => (
@@ -109,16 +126,19 @@ const LoadingMessages = ({ status, count, totalCount }) => {
   );
 };
 
-const Presentational = ({ status, count, totalCount }) => (
+const Presentational = ({ status, count, totalCount, loadedPath }) => (
   <div className="grid-y grid-frame align-center">
     <div className="cell">
       <div style={cell_style}>
-        {status === "loading" && <Loading />}
-        <LoadingMessages
-          status={status}
-          count={count}
-          totalCount={totalCount}
-        />
+        {isJsonFile(loadedPath) ? (
+          <LoadingJson />
+        ) : (
+          <LoadingMessages
+            status={status}
+            count={count}
+            totalCount={totalCount}
+          />
+        )}
       </div>
     </div>
   </div>
@@ -131,7 +151,6 @@ const WaitingScreen = props => {
   const status = loading_state.status();
   const count = loading_state.count();
   const totalCount = loading_state.totalCount();
-
   return (
     <Presentational
       {...props}

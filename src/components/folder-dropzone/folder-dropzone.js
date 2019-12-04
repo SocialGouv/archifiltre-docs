@@ -96,6 +96,7 @@ export default class FolderDropzone extends React.Component {
   }
 
   loadFileOrFolder(loadedPath) {
+    this.props.setLoadedPath(loadedPath);
     const {
       props: { api, setHashes }
     } = this;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import FolderDropzone from "components/folder-dropzone/folder-dropzone-container";
 import WorkSpace from "components/workspace/workspace-container";
@@ -14,7 +14,7 @@ const gridStyle = {
 const MainSpace = props => {
   const { api } = props;
   const { loading_state } = api;
-
+  const [loadedPath, setLoadedPath] = useState();
   const started = loading_state.isStarted();
   const finished = loading_state.isFinished();
   const error = loading_state.isInError();
@@ -38,7 +38,7 @@ const MainSpace = props => {
         style={gridStyle}
       >
         <div className="cell small-8">
-          <FolderDropzone api={api} />
+          <FolderDropzone api={api} setLoadedPath={setLoadedPath} />
         </div>
       </div>
     );
@@ -47,7 +47,7 @@ const MainSpace = props => {
     return (
       <div className="grid-y grid-padding-x grid-frame align-center">
         <div className="cell">
-          <WaitingScreen api={api} />
+          <WaitingScreen api={api} loadedPath={loadedPath} />
         </div>
         <div className="cell shrink">
           <Hint hints={hints} />

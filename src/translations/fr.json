@@ -59,7 +59,9 @@
       "downloadIt": "téléchargez la !"
     },
     "common": {
-      "error": "Oups ! Une erreur s'est produite."
+      "error": "Oups ! Une erreur s'est produite.",
+      "contactUs": "Cliquez ici pour nous contacter",
+      "somethingWentWrong": "Une erreur s'est produite."
     }
   }
 }

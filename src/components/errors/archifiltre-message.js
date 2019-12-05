@@ -1,4 +1,5 @@
 import React from "react";
+import { ContactUs } from "./contact-us";
 
 const grid_style = {
   padding: "0em 5em",
@@ -16,7 +17,12 @@ const ArchifiltreMessage = ({ children }) => (
     style={grid_style}
   >
     <img style={imgStyle} alt="archifiltre-logo" src="imgs/archifiltre.png" />
-    <h3>{children}</h3>
+    <h3>
+      {children}
+      <br />
+      <br />
+      <ContactUs />
+    </h3>
   </div>
 );
 

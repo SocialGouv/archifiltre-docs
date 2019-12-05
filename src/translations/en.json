@@ -59,7 +59,9 @@
       "downloadIt": "download it!"
     },
     "common": {
-      "error": "Oops ! An error occurred."
+      "error": "Oops ! An error occurred.",
+      "contactUs": "Click here to contact us",
+      "somethingWentWrong": "Something went wrong."
     }
   }
 }

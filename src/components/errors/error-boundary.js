@@ -2,8 +2,10 @@ import React from "react";
 
 import SaveButton from "components/buttons/save-button";
 import { reportError } from "../../logging/reporter";
+import { ContactUs } from "./contact-us";
+import { withTranslation } from "react-i18next";
 
-export default class ErrorBoundary extends React.Component {
+class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,9 +21,7 @@ export default class ErrorBoundary extends React.Component {
   }
 
   render() {
-    const props = this.props;
-
-    const api = props.api;
+    const { api, t } = this.props;
 
     if (this.state.hasError) {
       return (
@@ -32,7 +32,10 @@ export default class ErrorBoundary extends React.Component {
               textAlign: "center"
             }}
           >
-            <h1>Something went wrong.</h1>
+            <h1>{t("common.somethingWentWrong")}</h1>
+            <h4>
+              <ContactUs />
+            </h4>
             <SaveButton api={api} />
           </div>
         </div>
@@ -41,3 +44,5 @@ export default class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
+
+export default withTranslation()(ErrorBoundary);

@@ -1,4 +1,4 @@
-import { percent } from "./numbers-util";
+import { curriedFormatPercent, formatPercent, percent } from "./numbers-util";
 
 describe("numbers-util", () => {
   describe("percent", () => {
@@ -28,6 +28,22 @@ describe("numbers-util", () => {
           expect(percent(2, 3, { numbersOfDecimals: 2 })).toEqual(66.67);
         });
       });
+    });
+  });
+
+  describe("formatPercent", () => {
+    it("with default value", () => {
+      expect(formatPercent(1 / 3)).toBe(33);
+    });
+
+    it("with set number of decimals", () => {
+      expect(formatPercent(1 / 3, { numbersOfDecimals: 2 })).toBe(33.33);
+    });
+  });
+
+  describe("curriedFormatPercent", () => {
+    it("with set number of decimals", () => {
+      expect(curriedFormatPercent({ numbersOfDecimals: 2 })(1 / 3)).toBe(33.33);
     });
   });
 });

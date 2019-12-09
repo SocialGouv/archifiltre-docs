@@ -195,10 +195,18 @@ export const getFiles: Mapper<
 > = memoize(fp.filter(isFile));
 
 /**
+ * Get only files from files and folders
+ */
+export const getFilesMap: Mapper<
+  FilesAndFoldersMap,
+  FilesAndFoldersMap
+> = memoize(fp.pickBy(isFile));
+
+/**
  * Get folders only from files and folders
  * @param filesAndFolders
  */
-const getFolders: Mapper<
+export const getFolders: Mapper<
   FilesAndFoldersCollection,
   FilesAndFolders[]
 > = memoize(fp.filter(fp.compose([not, isFile])));

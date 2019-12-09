@@ -6,9 +6,17 @@ import {
   getFileCount,
   getFilesAndFoldersFromStore,
   getFoldersCount,
+  getHashesFromStore,
   getMaxDepth
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import {
+  FilesAndFoldersMap,
+  HashesMap
+} from "../../reducers/files-and-folders/files-and-folders-types";
+import {
+  countDuplicateFiles,
+  countDuplicateFolders
+} from "../../util/duplicates-util";
 import { saveBlob } from "../../util/file-sys-util";
 import { FileType } from "../../util/file-types-util";
 import {
@@ -19,7 +27,12 @@ import {
   countFileTypes,
   formatAuditReportDate,
   getBiggestFiles,
+  getDuplicateFilesPercent,
+  getDuplicateFoldersPercent,
+  getDuplicatesWithTheBiggestSize,
+  getDuplicatesWithTheMostCopy,
   getExtensionsList,
+  getHumanReadableDuplicateTotalSize,
   getLongestPathFile,
   getOldestFiles,
   percentFileTypes
@@ -30,7 +43,8 @@ const ROOT_ID = "";
 // tslint:disable:object-literal-sort-keys
 export const computeAuditReportData = (
   filesAndFolders: FilesAndFoldersMap,
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap,
+  filesAndFoldersHashes: HashesMap
 ): AuditReportData => ({
   totalFoldersCount: getFoldersCount(filesAndFolders),
   totalFilesCount: getFileCount(filesAndFolders),
@@ -67,65 +81,34 @@ export const computeAuditReportData = (
   otherFileTypes: "les types restants",
   oldestFiles: getOldestFiles(filesAndFolders),
   biggestFiles: getBiggestFiles(filesAndFolders),
-  duplicateFolderCount: 10,
-  duplicateFolderPercent: 10,
-  duplicateFileCount: 10,
-  duplicateFilePercent: 10,
-  duplicateTotalSize: "2Go",
-  duplicates: [
-    {
-      count: 10,
-      name: "file1",
-      path: "path/to/file1"
-    },
-    {
-      count: 10,
-      name: "file1",
-      path: "path/to/file1"
-    },
-    {
-      count: 10,
-      name: "file1",
-      path: "path/to/file1"
-    },
-    {
-      count: 10,
-      name: "file1",
-      path: "path/to/file1"
-    },
-    {
-      count: 10,
-      name: "file1",
-      path: "path/to/file1"
-    }
-  ],
-  biggestDuplicateFiles: [
-    {
-      name: "file1",
-      path: "path/to/file1",
-      size: "2Go"
-    },
-    {
-      name: "file1",
-      path: "path/to/file1",
-      size: "2Go"
-    },
-    {
-      name: "file1",
-      path: "path/to/file1",
-      size: "2Go"
-    },
-    {
-      name: "file1",
-      path: "path/to/file1",
-      size: "2Go"
-    },
-    {
-      name: "file1",
-      path: "path/to/file1",
-      size: "2Go"
-    }
-  ]
+  duplicateFolderCount: countDuplicateFolders(
+    filesAndFolders,
+    filesAndFoldersHashes
+  ),
+  duplicateFolderPercent: getDuplicateFoldersPercent(
+    filesAndFolders,
+    filesAndFoldersHashes
+  ),
+  duplicateFileCount: countDuplicateFiles(
+    filesAndFolders,
+    filesAndFoldersHashes
+  ),
+  duplicateFilePercent: getDuplicateFilesPercent(
+    filesAndFolders,
+    filesAndFoldersHashes
+  ),
+  duplicateTotalSize: getHumanReadableDuplicateTotalSize(
+    filesAndFolders,
+    filesAndFoldersHashes
+  ),
+  duplicates: getDuplicatesWithTheMostCopy(
+    filesAndFolders,
+    filesAndFoldersHashes
+  ),
+  biggestDuplicateFiles: getDuplicatesWithTheBiggestSize(
+    filesAndFolders,
+    filesAndFoldersHashes
+  )
 });
 // tslint:enable:object-literal-sort-keys
 
@@ -140,10 +123,11 @@ export const auditReportExporterThunk = (
   const filesAndFoldersMetadata = getFilesAndFoldersMetadataFromStore(
     getState()
   );
+  const hashes = getHashesFromStore(getState());
   saveBlob(
     name,
     generateAuditReportDocx(
-      computeAuditReportData(filesAndFolders, filesAndFoldersMetadata)
+      computeAuditReportData(filesAndFolders, filesAndFoldersMetadata, hashes)
     )
   );
 };

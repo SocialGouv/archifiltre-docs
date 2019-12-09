@@ -21,7 +21,17 @@ import {
   FilesAndFoldersCollection,
   getFiles
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
+import {
+  FilesAndFolders,
+  HashesMap
+} from "../../reducers/files-and-folders/files-and-folders-types";
+import {
+  countDuplicateFilesTotalSize,
+  countDuplicatesPercentForFiles,
+  countDuplicatesPercentForFolders,
+  getBiggestDuplicatedFiles,
+  getMostDuplicatedFiles
+} from "../../util/duplicates-util";
 import {
   FileType,
   getExtensionsForEachFileType,
@@ -30,10 +40,11 @@ import {
 import {
   Accessor,
   Mapper,
-  tap
+  Merger
 } from "../../util/functionnal-programming-utils";
-import { percent } from "../../util/numbers-util";
+import { curriedFormatPercent, percent } from "../../util/numbers-util";
 import {
+  AuditReportFileWithCount,
   AuditReportFileWithDate,
   AuditReportFileWithSize
 } from "./audit-report-generator";
@@ -56,7 +67,7 @@ export const formatAuditReportDate = (timestamp: number): string =>
 const sortFilesAndFoldersByPathLength: Mapper<
   FilesAndFoldersCollection,
   FilesAndFolders[]
-> = memoize(sortBy((fileOrFolder: FilesAndFolders) => -fileOrFolder.id.length));
+> = sortBy((fileOrFolder: FilesAndFolders) => -fileOrFolder.id.length);
 
 /**
  * Gets the file with the longest path
@@ -66,7 +77,7 @@ const sortFilesAndFoldersByPathLength: Mapper<
 export const getLongestPathFile: Mapper<
   FilesAndFoldersCollection,
   FilesAndFolders | undefined
-> = memoize(compose(head, sortFilesAndFoldersByPathLength));
+> = compose(head, sortFilesAndFoldersByPathLength);
 
 /**
  * Gets the number of files of every types
@@ -92,8 +103,9 @@ export const countFileTypes: Mapper<
   )
 );
 
-export const sumFileType: Mapper<FileTypeMap<number>, number> = memoize(
-  compose(sum, Object.values)
+const sumFileType: Mapper<FileTypeMap<number>, number> = compose(
+  sum,
+  Object.values
 );
 
 /**
@@ -103,14 +115,12 @@ export const sumFileType: Mapper<FileTypeMap<number>, number> = memoize(
 export const percentFileTypes: Mapper<
   FilesAndFoldersCollection,
   FileTypeMap<number>
-> = memoize(
-  compose((counts: FileTypeMap<number>) => {
-    const nbFiles = sumFileType(counts);
-    return _.mapValues(counts, (filesForType: number) =>
-      percent(filesForType, nbFiles, { numbersOfDecimals: 2 })
-    );
-  }, countFileTypes)
-);
+> = compose((counts: FileTypeMap<number>) => {
+  const nbFiles = sumFileType(counts);
+  return _.mapValues(counts, (filesForType: number) =>
+    percent(filesForType, nbFiles, { numbersOfDecimals: 2 })
+  );
+}, countFileTypes);
 
 /**
  * Gets the list of extensions for each file
@@ -137,7 +147,7 @@ export const getExtensionsList: Accessor<FileTypeMap<string>> = memoize(
 export const sortFilesByLastModifiedDate: Mapper<
   FilesAndFoldersCollection,
   FilesAndFoldersCollection
-> = memoize(sortBy(({ file_last_modified }) => file_last_modified));
+> = sortBy(({ file_last_modified }) => file_last_modified);
 
 /**
  * Returns the 5 oldest files info by last modified date
@@ -146,19 +156,17 @@ export const sortFilesByLastModifiedDate: Mapper<
 export const getOldestFiles: Mapper<
   FilesAndFoldersCollection,
   AuditReportFileWithDate[]
-> = memoize(
-  compose(
-    map(
-      ({ name, id, file_last_modified }): AuditReportFileWithDate => ({
-        date: formatAuditReportDate(file_last_modified),
-        name,
-        path: id
-      })
-    ),
-    take(5),
-    sortFilesByLastModifiedDate,
-    getFiles
-  )
+> = compose(
+  map(
+    ({ name, id, file_last_modified }): AuditReportFileWithDate => ({
+      date: formatAuditReportDate(file_last_modified),
+      name,
+      path: id
+    })
+  ),
+  take(5),
+  sortFilesByLastModifiedDate,
+  getFiles
 );
 
 /**
@@ -177,18 +185,86 @@ export const sortFilesBySize: Mapper<
 export const getBiggestFiles: Mapper<
   FilesAndFoldersCollection,
   AuditReportFileWithSize[]
-> = memoize(
-  compose(
-    map(
-      ({ name, id, file_size }): AuditReportFileWithSize => ({
-        name,
-        path: id,
-        size: octet2HumanReadableFormat(file_size)
-      })
-    ),
-    reverse,
-    takeRight(5),
-    sortFilesBySize,
-    getFiles
-  )
+> = compose(
+  map(
+    ({ name, id, file_size }): AuditReportFileWithSize => ({
+      name,
+      path: id,
+      size: octet2HumanReadableFormat(file_size)
+    })
+  ),
+  reverse,
+  takeRight(5),
+  sortFilesBySize,
+  getFiles
+);
+
+/**
+ * Returns the percentage of duplicated folders
+ * @param filesAndFolders
+ */
+export const getDuplicateFoldersPercent: Merger<
+  FilesAndFoldersCollection,
+  HashesMap,
+  number
+> = compose(
+  curriedFormatPercent({ numbersOfDecimals: 2 }),
+  countDuplicatesPercentForFolders
+);
+
+/**
+ * Returns the percentage of duplicated files
+ * @param filesAndFolders
+ */
+export const getDuplicateFilesPercent: Merger<
+  FilesAndFoldersCollection,
+  HashesMap,
+  number
+> = compose(
+  curriedFormatPercent({ numbersOfDecimals: 2 }),
+  countDuplicatesPercentForFiles
+);
+
+/**
+ * Returns the total size of duplicated files
+ * @param filesAndFolders
+ */
+export const getHumanReadableDuplicateTotalSize: Merger<
+  FilesAndFoldersCollection,
+  HashesMap,
+  string
+> = compose(octet2HumanReadableFormat, countDuplicateFilesTotalSize);
+
+/**
+ * Returns the most duplicated files formatted for the audit report
+ */
+export const getDuplicatesWithTheMostCopy: Merger<
+  FilesAndFoldersCollection,
+  HashesMap,
+  AuditReportFileWithCount[]
+> = compose(
+  map((filesAndFolders: FilesAndFolders[]) => ({
+    count: filesAndFolders.length - 1,
+    name: filesAndFolders[0].name,
+    path: filesAndFolders[0].id
+  })),
+  getMostDuplicatedFiles(5)
+);
+
+/**
+ * Returns the duplicated elements that take the most space formatted for the audit report
+ */
+export const getDuplicatesWithTheBiggestSize: Merger<
+  FilesAndFoldersCollection,
+  HashesMap,
+  AuditReportFileWithSize[]
+> = compose(
+  map((filesAndFolders: FilesAndFolders[]) => ({
+    name: filesAndFolders[0].name,
+    path: filesAndFolders[0].id,
+    size: octet2HumanReadableFormat(
+      (filesAndFolders.length - 1) * filesAndFolders[0].file_size
+    )
+  })),
+  getBiggestDuplicatedFiles(5)
 );

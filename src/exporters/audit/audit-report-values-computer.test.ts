@@ -1,4 +1,4 @@
-import { octet2HumanReadableFormat } from "../../components/ruler";
+import { octet2HumanReadableFormat } from "../../components/main-space/ruler";
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 import { FileType } from "../../util/file-types-util";
 import {

@@ -3,6 +3,7 @@ import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
   decomposePathToElement,
   getFileCount,
+  getFiles,
   getFilesAndFoldersAverageLastModified,
   getFilesAndFoldersDepth,
   getFilesAndFoldersFromStore,
@@ -10,6 +11,8 @@ import {
   getFilesAndFoldersMedianLastModified,
   getFilesAndFoldersMinLastModified,
   getFilesAndFoldersTotalSize,
+  getFilesMap,
+  getFolders,
   getFoldersCount,
   getHashesFromStore,
   getMaxDepth,
@@ -32,30 +35,37 @@ const child1Id = `${rootFolderId}/folder1`;
 const child2Id = `/${rootFolderId}/file1`;
 const child11Id = `${child1Id}/file1`;
 const child12Id = `${child1Id}/file2`;
+const rootFolder = createFilesAndFolders({
+  children: [child1Id, child2Id],
+  id: rootFolderId
+});
+const child1 = createFilesAndFolders({
+  children: [child11Id, child12Id],
+  id: child1Id
+});
+const child11 = createFilesAndFolders({
+  file_last_modified: minLastModified,
+  file_size: 10,
+  id: child11Id
+});
+const child12 = createFilesAndFolders({
+  file_last_modified: maxLastModified,
+  file_size: 100,
+  id: child11Id
+});
+
+const child2 = createFilesAndFolders({
+  file_last_modified: medianLastModified,
+  file_size: 1000,
+  id: child2Id
+});
+
 const filesAndFoldersTestMap = {
-  "/rootFolder": createFilesAndFolders({
-    children: [child1Id, child2Id],
-    id: "/rootFolder"
-  }),
-  [child1Id]: createFilesAndFolders({
-    children: [child11Id, child12Id],
-    id: child1Id
-  }),
-  [child11Id]: createFilesAndFolders({
-    file_last_modified: minLastModified,
-    file_size: 10,
-    id: child11Id
-  }),
-  [child12Id]: createFilesAndFolders({
-    file_last_modified: maxLastModified,
-    file_size: 100,
-    id: child11Id
-  }),
-  [child2Id]: createFilesAndFolders({
-    file_last_modified: medianLastModified,
-    file_size: 1000,
-    id: child2Id
-  })
+  [rootFolderId]: rootFolder,
+  [child1Id]: child1,
+  [child11Id]: child11,
+  [child12Id]: child12,
+  [child2Id]: child2
 };
 
 describe("files-and-folders-selectors", () => {
@@ -85,6 +95,33 @@ describe("files-and-folders-selectors", () => {
       expect(
         getFilesAndFoldersMaxLastModified(filesAndFoldersTestMap, rootFolderId)
       ).toEqual(maxLastModified);
+    });
+  });
+
+  describe("getFiles", () => {
+    it("should filter out the folders", () => {
+      const files = getFiles(filesAndFoldersTestMap);
+      expect(files.length).toBe(3);
+      expect(files).toEqual(expect.arrayContaining([child12, child11, child2]));
+    });
+  });
+
+  describe("getFilesMap", () => {
+    it("should filter out the folders", () => {
+      const filesMap = getFilesMap(filesAndFoldersTestMap);
+      expect(filesMap).toEqual({
+        [child2Id]: child2,
+        [child11Id]: child11,
+        [child12Id]: child12
+      });
+    });
+  });
+
+  describe("getFolders", () => {
+    it("should filter out files", () => {
+      const folders = getFolders(filesAndFoldersTestMap);
+      expect(folders.length).toBe(2);
+      expect(folders).toEqual(expect.arrayContaining([rootFolder, child1]));
     });
   });
 

@@ -95,11 +95,14 @@ export const countFileTypes: Mapper<
 > = memoize(
   compose(
     defaults({
+      [FileType.PUBLICATION]: 0,
       [FileType.PRESENTATION]: 0,
       [FileType.SPREADSHEET]: 0,
       [FileType.EMAIL]: 0,
       [FileType.DOCUMENT]: 0,
-      [FileType.MEDIA]: 0,
+      [FileType.IMAGE]: 0,
+      [FileType.VIDEO]: 0,
+      [FileType.AUDIO]: 0,
       [FileType.OTHER]: 0
     }),
     countBy(identity),
@@ -134,11 +137,14 @@ export const percentFileTypes: Mapper<
 export const getExtensionsList: Accessor<FileTypeMap<string>> = memoize(
   compose(
     defaults({
+      [FileType.PUBLICATION]: "",
       [FileType.PRESENTATION]: "",
       [FileType.SPREADSHEET]: "",
       [FileType.EMAIL]: "",
       [FileType.DOCUMENT]: "",
-      [FileType.MEDIA]: "",
+      [FileType.IMAGE]: "",
+      [FileType.VIDEO]: "",
+      [FileType.AUDIO]: "",
       [FileType.OTHER]: ""
     }),
     mapValues(join(", ")),

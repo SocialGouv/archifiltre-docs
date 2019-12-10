@@ -64,11 +64,14 @@ const PARENT_FOLDER_COLOR = "#f99a0b";
 const FOLDER_COLOR = "#fabf0b";
 
 const colors = {
+  [FileType.PUBLICATION]: "#b4250c",
   [FileType.PRESENTATION]: "#f75b40",
   [FileType.SPREADSHEET]: "#52d11a",
   [FileType.EMAIL]: "#13d6f3",
   [FileType.DOCUMENT]: "#4c78e8",
-  [FileType.MEDIA]: "#b574f2",
+  [FileType.IMAGE]: "#b574f2",
+  [FileType.VIDEO]: "#6700c7",
+  [FileType.AUDIO]: "#ff35dd",
   [FileType.OTHER]: "#8a8c93"
 };
 

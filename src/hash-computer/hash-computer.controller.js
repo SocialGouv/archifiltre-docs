@@ -37,9 +37,12 @@ export const computeHashes$ = (paths, { initialValues: { basePath } }) => {
  * @param filesAndFolders - The filesAndFolders
  * @returns {Observable<{}>}
  */
-export const computeFolderHashes$ = filesAndFolders => {
+export const computeFolderHashes$ = ({ filesAndFolders, hashes }) => {
   const FolderHashWorker = createAsyncWorkerControllerClass(FolderHashFork);
-  const hashes$ = backgroundWorkerProcess$(filesAndFolders, FolderHashWorker);
+  const hashes$ = backgroundWorkerProcess$(
+    { filesAndFolders, hashes },
+    FolderHashWorker
+  );
 
   return hashes$
     .pipe(bufferTime(BUFFER_TIME))

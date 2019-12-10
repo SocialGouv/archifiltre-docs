@@ -69,7 +69,7 @@
                         <c:bubble3D val="0"/>
                         <c:spPr>
                             <a:solidFill>
-                                <a:srgbClr val="F75B40"/>
+                                <a:srgbClr val="B4250C"/>
                             </a:solidFill>
                         </c:spPr>
                     </c:dPt>
@@ -78,7 +78,7 @@
                         <c:bubble3D val="0"/>
                         <c:spPr>
                             <a:solidFill>
-                                <a:srgbClr val="4C78E8"/>
+                                <a:srgbClr val="F75B40"/>
                             </a:solidFill>
                         </c:spPr>
                     </c:dPt>
@@ -105,12 +105,39 @@
                         <c:bubble3D val="0"/>
                         <c:spPr>
                             <a:solidFill>
-                                <a:srgbClr val="B574F2"/>
+                                <a:srgbClr val="4C78E8"/>
                             </a:solidFill>
                         </c:spPr>
                     </c:dPt>
                     <c:dPt>
                         <c:idx val="5"/>
+                        <c:bubble3D val="0"/>
+                        <c:spPr>
+                            <a:solidFill>
+                                <a:srgbClr val="B574F2"/>
+                            </a:solidFill>
+                        </c:spPr>
+                    </c:dPt>
+                    <c:dPt>
+                        <c:idx val="6"/>
+                        <c:bubble3D val="0"/>
+                        <c:spPr>
+                            <a:solidFill>
+                                <a:srgbClr val="6700C7"/>
+                            </a:solidFill>
+                        </c:spPr>
+                    </c:dPt>
+                    <c:dPt>
+                        <c:idx val="7"/>
+                        <c:bubble3D val="0"/>
+                        <c:spPr>
+                            <a:solidFill>
+                                <a:srgbClr val="FF35DD"/>
+                            </a:solidFill>
+                        </c:spPr>
+                    </c:dPt>
+                    <c:dPt>
+                        <c:idx val="8"/>
                         <c:bubble3D val="0"/>
                         <c:spPr>
                             <a:solidFill>
@@ -120,14 +147,14 @@
                     </c:dPt>
                     <c:cat>
                         <c:strRef>
-                            <c:f>Feuil1!$A$2:$A$7</c:f>
+                            <c:f>Feuil1!$A$2:$A$11</c:f>
                             <c:strCache>
-                                <c:ptCount val="6"/>
+                                <c:ptCount val="9"/>
                                 <c:pt idx="0">
-                                    <c:v>Fichier de type Présentation</c:v>
+                                    <c:v>Fichier de type Publication</c:v>
                                 </c:pt>
                                 <c:pt idx="1">
-                                    <c:v>Fichier de type Document</c:v>
+                                    <c:v>Fichier de type Présentation</c:v>
                                 </c:pt>
                                 <c:pt idx="2">
                                     <c:v>Fichier de type Tableur</c:v>
@@ -136,9 +163,18 @@
                                     <c:v>Fichier de type Email</c:v>
                                 </c:pt>
                                 <c:pt idx="4">
-                                    <c:v>Fichier de type Média</c:v>
+                                    <c:v>Fichier de type Document</c:v>
                                 </c:pt>
                                 <c:pt idx="5">
+                                    <c:v>Fichier de type Image</c:v>
+                                </c:pt>
+                                <c:pt idx="6">
+                                    <c:v>Fichier de type Vidéo</c:v>
+                                </c:pt>
+                                <c:pt idx="7">
+                                    <c:v>Fichier de type Son</c:v>
+                                </c:pt>
+                                <c:pt idx="8">
                                     <c:v>Fichiers autres</c:v>
                                 </c:pt>
                             </c:strCache>
@@ -146,15 +182,15 @@
                     </c:cat>
                     <c:val>
                         <c:numRef>
-                            <c:f>Feuil1!$B$2:$B$7</c:f>
+                            <c:f>Feuil1!$B$2:$B$11</c:f>
                             <c:numCache>
                                 <c:formatCode>General</c:formatCode>
-                                <c:ptCount val="6"/>
+                                <c:ptCount val="9"/>
                                 <c:pt idx="0">
-                                    <c:v>{presentationCount}</c:v>
+                                    <c:v>{publicationCount}</c:v>
                                 </c:pt>
                                 <c:pt idx="1">
-                                    <c:v>{documentCount}</c:v>
+                                    <c:v>{presentationCount}</c:v>
                                 </c:pt>
                                 <c:pt idx="2">
                                     <c:v>{spreadsheetCount}</c:v>
@@ -163,9 +199,18 @@
                                     <c:v>{emailCount}</c:v>
                                 </c:pt>
                                 <c:pt idx="4">
-                                    <c:v>{mediaCount}</c:v>
+                                    <c:v>{documentCount}</c:v>
                                 </c:pt>
                                 <c:pt idx="5">
+                                    <c:v>{imageCount}</c:v>
+                                </c:pt>
+                                <c:pt idx="6">
+                                    <c:v>{videoCount}</c:v>
+                                </c:pt>
+                                <c:pt idx="7">
+                                    <c:v>{audioCount}</c:v>
+                                </c:pt>
+                                <c:pt idx="8">
                                     <c:v>{otherCount}</c:v>
                                 </c:pt>
                             </c:numCache>

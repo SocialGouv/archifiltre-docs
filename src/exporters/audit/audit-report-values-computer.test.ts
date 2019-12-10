@@ -16,14 +16,16 @@ import {
 
 const folderId1 = "folder-id-1";
 const folderId2 = `${folderId1}/folder-id-2`;
+const folder2WindowsPath = `${folderId1}\\folder-id-2`;
 const fileName1 = "file-id-1.xml";
 const fileName2 = "file-id-2.ppt";
 const fileName3 = "file-id-31.docx";
 const fileId1 = `${folderId1}/${fileName1}`;
+const file1WindowsPath = `${folderId1}\\${fileName1}`;
 const fileId2 = `${folderId2}/${fileName2}`;
-const file2WindowsPath = `${folderId2}\\${fileName2}`;
+const file2WindowsPath = `${folder2WindowsPath}\\${fileName2}`;
 const fileId3 = `${folderId2}/${fileName3}`;
-const file3WindowsPath = `${folderId2}\\${fileName3}`;
+const file3WindowsPath = `${folder2WindowsPath}\\${fileName3}`;
 const file1 = createFilesAndFolders({
   file_last_modified: 1531670400000,
   file_size: 1000,
@@ -82,11 +84,14 @@ describe("audit-report-values-computer", () => {
   describe("countFileTypes", () => {
     it("should count each file type", () => {
       expect(countFileTypes(filesAndFoldersMap)).toEqual({
+        [FileType.PUBLICATION]: 0,
         [FileType.PRESENTATION]: 1,
-        [FileType.MEDIA]: 0,
-        [FileType.DOCUMENT]: 1,
-        [FileType.EMAIL]: 0,
         [FileType.SPREADSHEET]: 0,
+        [FileType.EMAIL]: 0,
+        [FileType.DOCUMENT]: 1,
+        [FileType.IMAGE]: 0,
+        [FileType.VIDEO]: 0,
+        [FileType.AUDIO]: 0,
         [FileType.OTHER]: 1
       });
     });
@@ -95,11 +100,14 @@ describe("audit-report-values-computer", () => {
   describe("percentFileTypes", () => {
     it("should count each file type", () => {
       expect(percentFileTypes(filesAndFoldersMap)).toEqual({
+        [FileType.PUBLICATION]: 0,
         [FileType.PRESENTATION]: 33.33,
-        [FileType.MEDIA]: 0,
-        [FileType.DOCUMENT]: 33.33,
-        [FileType.EMAIL]: 0,
         [FileType.SPREADSHEET]: 0,
+        [FileType.EMAIL]: 0,
+        [FileType.DOCUMENT]: 33.33,
+        [FileType.IMAGE]: 0,
+        [FileType.VIDEO]: 0,
+        [FileType.AUDIO]: 0,
         [FileType.OTHER]: 33.33
       });
     });
@@ -178,12 +186,12 @@ describe("audit-report-values-computer", () => {
       ).toEqual([
         {
           name: "base-name",
-          path: folderId2,
+          path: isWindows() ? folder2WindowsPath : folderId2,
           type: "folder"
         },
         {
           name: fileName1,
-          path: fileId1,
+          path: isWindows() ? file1WindowsPath : fileId1,
           type: "file"
         }
       ]);

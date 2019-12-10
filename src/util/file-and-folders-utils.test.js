@@ -377,9 +377,9 @@ describe("file-and-folders-common", () => {
   });
 
   describe("computeFolderHashes", () => {
-    const setup = fileAndFolders => {
+    const setup = (fileAndFolders, hashes) => {
       const hook = jest.fn();
-      const result = computeFolderHashes(fileAndFolders, hook);
+      const result = computeFolderHashes(fileAndFolders, hashes, hook);
 
       return { hook, result };
     };
@@ -402,32 +402,31 @@ describe("file-and-folders-common", () => {
           children: ["baseFolder/folder1/file1", "baseFolder/folder1/file2"]
         },
         "baseFolder/folder1/file1": {
-          hash: "6d3e9fb007bf4069e4f994c290e2841d",
           children: []
         },
         "baseFolder/folder1/file2": {
-          hash: "115c6b34df55fab98666a584e579f6dd",
           children: []
         },
         "baseFolder/folder2": {
           children: ["baseFolder/folder2/file1"]
         },
         "baseFolder/folder2/file1": {
-          hash: "24e10ee6f2f885106f7f6473701ebfd0"
+          children: []
         },
         "baseFolder/file1": {
-          hash: "c82250a7c798d52669795d3ea5701158"
+          children: []
         }
       };
 
+      const hashes = {
+        "baseFolder/folder1/file1": "6d3e9fb007bf4069e4f994c290e2841d",
+        "baseFolder/folder1/file2": "115c6b34df55fab98666a584e579f6dd",
+        "baseFolder/folder2/file1": "24e10ee6f2f885106f7f6473701ebfd0",
+        "baseFolder/file1": "c82250a7c798d52669795d3ea5701158"
+      };
+
       const expectedResults = {
-        "baseFolder/file1": filesAndFolders["baseFolder/file1"].hash,
-        "baseFolder/folder1/file1":
-          filesAndFolders["baseFolder/folder1/file1"].hash,
-        "baseFolder/folder1/file2":
-          filesAndFolders["baseFolder/folder1/file2"].hash,
-        "baseFolder/folder2/file1":
-          filesAndFolders["baseFolder/folder2/file1"].hash
+        ...hashes
       };
       expectedResults["baseFolder/folder2"] = childrenHash(
         expectedResults["baseFolder/folder2/file1"]
@@ -448,7 +447,7 @@ describe("file-and-folders-common", () => {
       let hook, result;
 
       beforeAll(() => {
-        ({ hook, result } = setup(filesAndFolders));
+        ({ hook, result } = setup(filesAndFolders, hashes));
       });
 
       it("should call the hook with the right hashes", () => {

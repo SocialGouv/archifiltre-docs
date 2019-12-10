@@ -5,10 +5,7 @@ import AsyncHandleDrop from "async-handle-drop";
 import TextAlignCenter from "components/common/text-align-center";
 
 import path from "path";
-import {
-  computeFolderHashes$,
-  computeHashes$
-} from "../../hash-computer/hash-computer.controller";
+
 import {
   filesAndFoldersMapToArray,
   getFiles
@@ -19,6 +16,7 @@ import { notifyError, notifyInfo } from "../../util/notifications-util";
 import { withTranslation } from "react-i18next";
 import { addTracker } from "../../logging/tracker";
 import { ActionType, ActionTitle } from "../../logging/tracker-types";
+import { wait } from "../../util/promise-util";
 
 const displayZipNotification = (zipCount, t) => {
   notifyInfo(
@@ -48,9 +46,7 @@ class FolderDropzone extends React.Component {
 
   loadFileOrFolder(loadedPath) {
     this.props.setLoadedPath(loadedPath);
-    const {
-      props: { api, setHashes, t }
-    } = this;
+    const { api, computeHashes, t } = this.props;
 
     const hook = a => {
       api.loading_state.setStatus(a.status);
@@ -70,13 +66,9 @@ class FolderDropzone extends React.Component {
         api.undo.commit();
         return virtualFileSystem;
       })
-      .then(virtualFileSystem => {
+      .then(async virtualFileSystem => {
         if (!isJsonFile(loadedPath)) {
           const filesAndFolders = virtualFileSystem.files_and_folders;
-          const basePath = virtualFileSystem.original_path
-            .split(path.sep)
-            .slice(0, -1)
-            .join(path.sep);
           const paths = getFiles(
             filesAndFoldersMapToArray(filesAndFolders)
           ).map(file => file.id);
@@ -89,17 +81,12 @@ class FolderDropzone extends React.Component {
           if (zipFileCount > 0) {
             displayZipNotification(zipFileCount, t);
           }
-          computeHashes$(paths, {
-            initialValues: { basePath }
-          }).subscribe({
-            next: setHashes,
-            complete: () =>
-              setTimeout(() =>
-                computeFolderHashes$(api.database.getData()).subscribe(
-                  setHashes
-                )
-              )
-          });
+
+          // We defer the thunk execution to wait for the real estate setters to complete
+          // TODO: Remove this once real estate setters are no longer used
+          await wait();
+
+          computeHashes(virtualFileSystem.original_path);
         }
       })
       .catch(error => {

@@ -6,34 +6,37 @@ import {
 
 const asyncWorker = createAsyncWorkerForChildProcess();
 
-asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, ({ data, type }) => {
-  if (type === "initialize") {
-    try {
-      // We batch the results to avoid overloading the main process
-      const BATCH_SIZE = 500;
-      let batchResult = {};
-      const computeFolderHashHook = hashObject => {
-        batchResult = { ...batchResult, ...hashObject };
+asyncWorker.addEventListener(
+  AsyncWorkerEvent.MESSAGE,
+  ({ data: { hashes, filesAndFolders }, type }) => {
+    if (type === "initialize") {
+      try {
+        // We batch the results to avoid overloading the main process
+        const BATCH_SIZE = 500;
+        let batchResult = {};
+        const computeFolderHashHook = hashObject => {
+          batchResult = { ...batchResult, ...hashObject };
 
-        if (Object.keys(batchResult).length === BATCH_SIZE) {
-          asyncWorker.postMessage({ type: "result", result: batchResult });
-          batchResult = {};
-        }
-      };
+          if (Object.keys(batchResult).length === BATCH_SIZE) {
+            asyncWorker.postMessage({ type: "result", result: batchResult });
+            batchResult = {};
+          }
+        };
 
-      computeFolderHashes(data.files_and_folders, computeFolderHashHook);
+        computeFolderHashes(filesAndFolders, hashes, computeFolderHashHook);
 
-      // flushing remaining results
-      asyncWorker.postMessage({ type: "result", result: batchResult });
-    } catch (error) {
-      asyncWorker.postMessage({ type: "error", error });
+        // flushing remaining results
+        asyncWorker.postMessage({ type: "result", result: batchResult });
+      } catch (error) {
+        asyncWorker.postMessage({ type: "error", error });
+      }
+
+      asyncWorker.postMessage({ type: "complete" });
+      return;
     }
 
-    asyncWorker.postMessage({ type: "complete" });
-    return;
+    asyncWorker.postMessage({ type: "unknown" });
   }
-
-  asyncWorker.postMessage({ type: "unknown" });
-});
+);
 
 export default {};

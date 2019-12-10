@@ -1,19 +1,16 @@
 import React, { FC, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { updateFilesAndFolderHashes } from "../../reducers/files-and-folders/files-and-folders-thunks";
-import { HashesMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import { computeHashesThunk } from "../../hash-computer/hash-computer-thunk";
 import FolderDropzone from "./folder-dropzone";
 
 const FolderDropzoneContainer: FC = props => {
   const dispatch = useDispatch();
 
-  const setHashes = useCallback(
-    (hashesMap: HashesMap) => {
-      dispatch(updateFilesAndFolderHashes(hashesMap));
-    },
+  const computeHashes = useCallback(
+    (originalPath: string) => dispatch(computeHashesThunk(originalPath)),
     [dispatch]
   );
-  return <FolderDropzone {...props} setHashes={setHashes} />;
+  return <FolderDropzone {...props} computeHashes={computeHashes} />;
 };
 
 export default FolderDropzoneContainer;

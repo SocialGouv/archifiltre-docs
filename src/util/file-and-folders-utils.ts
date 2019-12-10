@@ -111,12 +111,14 @@ export const getFolders = filesAndFolders =>
 /**
  * Recursive function for computing folder hashes
  * @param {Object} filesAndFolders - A file and folders map
+ * @param {Object} hashes - A HashesMap
  * @param {String} id - The current folder ID (base is "")
  * @param {function} hook - A hook called after each computation
  * @returns {Object} - The map of all hashes for each id
  */
-const recComputeFolderHash = (filesAndFolders, id, hook) => {
-  const { hash, children } = filesAndFolders[id];
+const recComputeFolderHash = (filesAndFolders, hashes, id, hook) => {
+  const { children } = filesAndFolders[id];
+  const hash = hashes[id];
   if (hash) {
     return { [id]: hash };
   }
@@ -126,7 +128,9 @@ const recComputeFolderHash = (filesAndFolders, id, hook) => {
   }
 
   const childrenResults = children
-    .map(childId => recComputeFolderHash(filesAndFolders, childId, hook))
+    .map(childId =>
+      recComputeFolderHash(filesAndFolders, hashes, childId, hook)
+    )
     .reduce((acc, folderHashes) => ({ ...acc, ...folderHashes }));
 
   const currentFolderHash = md5(
@@ -146,10 +150,11 @@ const recComputeFolderHash = (filesAndFolders, id, hook) => {
 /**
  * Compute all the folder hashes
  * @param {Object} filesAndFolders - A filesAndFolders map
+ * @param hashes - A hashes map
  * @param {function} hook - A hook called every time a hash is computed
  * @returns {Object} - A map containing all the filesAndFolders hashes
  */
-export const computeFolderHashes = (filesAndFolders, hook) => {
+export const computeFolderHashes = (filesAndFolders, hashes, hook) => {
   const baseFolder = "";
-  return recComputeFolderHash(filesAndFolders, baseFolder, hook);
+  return recComputeFolderHash(filesAndFolders, hashes, baseFolder, hook);
 };

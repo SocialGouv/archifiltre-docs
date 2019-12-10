@@ -7,9 +7,9 @@ const { dialog } = require("electron");
 const path = require("path");
 
 const sentryUrl =
-  "https://0fa8ab6a50a347a3b1903ed48b4c9e5c@sentry.tools.factory.social.gouv.fr/20";
+  "https://0fa8ab6a50a347a3b1903ed48b4c9e5c@sentry.fabrique.social.gouv.fr/20";
 const sentryMinidumpUrl =
-  "https://sentry.tools.factory.social.gouv.fr/api/20/minidump/?sentry_key=0fa8ab6a50a347a3b1903ed48b4c9e5c";
+  "https://sentry.fabrique.social.gouv.fr/api/20/minidump/?sentry_key=0fa8ab6a50a347a3b1903ed48b4c9e5c";
 
 // Initializes sentry logging for production build
 if (app.isPackaged) {

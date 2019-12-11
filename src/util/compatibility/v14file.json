@@ -1,0 +1,109 @@
+{
+  "version": 14,
+  "filesAndFolders": {
+    "": {
+      "name": "",
+      "alias": "",
+      "comments": "",
+      "children": ["/test-folder"],
+      "file_size": 0,
+      "file_last_modified": 0
+    },
+    "/test-folder": {
+      "name": "test-folder",
+      "alias": "",
+      "comments": "",
+      "children": ["/test-folder/child"],
+      "file_size": 0,
+      "file_last_modified": 0
+    },
+    "/test-folder/child": {
+      "name": "child",
+      "alias": "",
+      "comments": "",
+      "children": [
+        "/test-folder/child/index.csv",
+        "/test-folder/child/text.txt"
+      ],
+      "file_size": 0,
+      "file_last_modified": 0
+    },
+    "/test-folder/child/index.csv": {
+      "name": "index.csv",
+      "alias": "",
+      "comments": "",
+      "children": [],
+      "file_size": 7,
+      "file_last_modified": 1574865257178.0115
+    },
+    "/test-folder/child/text.txt": {
+      "name": "text.txt",
+      "alias": "",
+      "comments": "",
+      "children": [],
+      "file_size": 6,
+      "file_last_modified": 1574865257178.5486
+    }
+  },
+  "filesAndFoldersMetadata": {
+    "": {
+      "maxLastModified": 1574865257178.5486,
+      "minLastModified": 1574865257178.0115,
+      "medianLastModified": 1574865257178.28,
+      "averageLastModified": 1574865257178.28,
+      "nbChildrenFiles": 2,
+      "sortBySizeIndex": [0],
+      "sortByDateIndex": [0],
+      "childrenTotalSize": 13
+    },
+    "/test-folder": {
+      "maxLastModified": 1574865257178.5486,
+      "minLastModified": 1574865257178.0115,
+      "medianLastModified": 1574865257178.28,
+      "averageLastModified": 1574865257178.28,
+      "nbChildrenFiles": 2,
+      "sortBySizeIndex": [0],
+      "sortByDateIndex": [0],
+      "childrenTotalSize": 13
+    },
+    "/test-folder/child": {
+      "maxLastModified": 1574865257178.5486,
+      "minLastModified": 1574865257178.0115,
+      "medianLastModified": 1574865257178.28,
+      "averageLastModified": 1574865257178.28,
+      "nbChildrenFiles": 2,
+      "sortBySizeIndex": [0, 1],
+      "sortByDateIndex": [0, 1],
+      "childrenTotalSize": 13
+    },
+    "/test-folder/child/index.csv": {
+      "maxLastModified": 1574865257178.0115,
+      "minLastModified": 1574865257178.0115,
+      "medianLastModified": 1574865257178.0115,
+      "averageLastModified": 1574865257178.0115,
+      "nbChildrenFiles": 1,
+      "sortBySizeIndex": [],
+      "sortByDateIndex": [],
+      "childrenTotalSize": 7
+    },
+    "/test-folder/child/text.txt": {
+      "maxLastModified": 1574865257178.5486,
+      "minLastModified": 1574865257178.5486,
+      "medianLastModified": 1574865257178.5486,
+      "averageLastModified": 1574865257178.5486,
+      "nbChildrenFiles": 1,
+      "sortBySizeIndex": [],
+      "sortByDateIndex": [],
+      "childrenTotalSize": 6
+    }
+  },
+  "tags": {
+    "fdd7d7d0-b437-4642-95c0-681918931a26": {
+      "ffIds": ["/test-folder/child/index.csv"],
+      "id": "fdd7d7d0-b437-4642-95c0-681918931a26",
+      "name": "Tag1"
+    }
+  },
+  "sessionName": "Project name",
+  "originalPath": "/Users/clementberthou/Dev/incub/archifiltre/test-folder"
+}

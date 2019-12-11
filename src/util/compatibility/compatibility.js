@@ -1,6 +1,9 @@
 /* eslint-disable no-fallthrough */
 
 import { generateRandomString } from "util/random-gen-util";
+import * as FilesAndFolders from "../../datastore/files-and-folders";
+import { mapValues } from "lodash";
+import fp from "lodash/fp";
 
 export const fromAnyJsonToJs = json => {
   let js = JSON.parse(json);
@@ -17,8 +20,11 @@ export const fromAnyJsonToJs = json => {
     case 11:
     case 12:
       js = v12JsToV13Js(js);
+    case 13:
+    case 13.1:
+      js = v13JsToV14Js(js);
   }
-  return [js, version];
+  return js;
 };
 
 const v8JsToV9Js = v8 => {
@@ -149,5 +155,64 @@ export const v12JsToV13Js = v12 => {
       }),
       {}
     )
+  };
+};
+
+export const v13JsToV14Js = v13 => {
+  const filesAndFoldersImmutable = FilesAndFolders.fromJs(
+    v13.files_and_folders
+  );
+
+  const v13filesAndFolders = FilesAndFolders.toJs(
+    FilesAndFolders.computeDerived(filesAndFoldersImmutable)
+  );
+
+  const filesAndFolders = mapValues(
+    v13filesAndFolders,
+    fp.pick([
+      "id",
+      "name",
+      "alias",
+      "comments",
+      "children",
+      "file_size",
+      "file_last_modified"
+    ])
+  );
+
+  const oldKeyToNewKeyMap = {
+    last_modified_max: "maxLastModified",
+    last_modified_min: "minLastModified",
+    last_modified_median: "medianLastModified",
+    last_modified_average: "averageLastModified",
+    nb_files: "nbChildrenFiles",
+    size: "childrenTotalSize",
+    sort_by_size_index: "sortBySizeIndex",
+    sort_by_date_index: "sortByDateIndex"
+  };
+  const filesAndFoldersMetadata = mapValues(
+    v13filesAndFolders,
+    fp.compose(
+      fp.mapKeys(key => oldKeyToNewKeyMap[key]),
+      fp.pick([
+        "last_modified_max",
+        "last_modified_min",
+        "last_modified_median",
+        "last_modified_average",
+        "nb_files",
+        "sort_by_size_index",
+        "sort_by_date_index",
+        "size"
+      ])
+    )
+  );
+
+  return {
+    version: 14,
+    filesAndFolders,
+    filesAndFoldersMetadata,
+    tags: v13.tags,
+    sessionName: v13.session_name,
+    originalPath: v13.original_path
   };
 };

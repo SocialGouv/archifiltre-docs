@@ -2,6 +2,7 @@ import { promises as fs } from "fs";
 import pick from "languages";
 import { map, takeLast } from "rxjs/operators";
 import { ArchifiltreThunkAction } from "../reducers/archifiltre-types";
+import { getFilesAndFoldersMetadataFromStore } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getFilesAndFoldersFromStore } from "../reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "../reducers/tags/tags-selectors";
 import { arrayToCsv } from "../util/csv-util";
@@ -48,15 +49,29 @@ export const resipExporterThunk = (
   });
 };
 
+interface MetsExportThunkParams {
+  sessionName: string;
+  originalPath: string;
+}
+
 /**
  * Thunk to export to METS
  * @param state - The application state as ImmutableJS Record
  */
-export const metsExporterThunk = (state: any): ArchifiltreThunkAction => (
-  dispatch,
-  getState
-) => {
-  const tags = getTagsFromStore(getState());
+export const metsExporterThunk = ({
+  originalPath,
+  sessionName
+}: MetsExportThunkParams): ArchifiltreThunkAction => (dispatch, getState) => {
+  const state = getState();
+  const filesAndFolders = getFilesAndFoldersFromStore(state);
+  const filesAndFoldersMetadata = getFilesAndFoldersMetadataFromStore(state);
+  const tags = getTagsFromStore(state);
 
-  makeSIP(state, tags);
+  makeSIP({
+    filesAndFolders,
+    filesAndFoldersMetadata,
+    originalPath,
+    sessionName,
+    tags
+  });
 };

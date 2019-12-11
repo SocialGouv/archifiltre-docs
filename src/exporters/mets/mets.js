@@ -1,4 +1,5 @@
 import pick from "languages";
+import path from "path";
 import { generateRandomString } from "util/random-gen-util";
 import { Map } from "immutable";
 import version from "version";
@@ -11,6 +12,7 @@ import {
   metsExportErrorCannotAccessFile,
   metsExportErrorFileDoesNotExist
 } from "./mets-errors";
+import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
 
 const XML = require("xml");
 const dateFormat = require("dateformat");
@@ -31,11 +33,11 @@ const makeId = () => {
   return "_" + generateRandomString(40);
 };
 
-const date_format = "yyyy-mm-dd'T'HH:MM:ss";
-const hash_algorithm = "MD5";
+const DATE_FORMAT = "yyyy-mm-dd'T'HH:MM:ss";
+const HASH_ALGORITHM = "MD5";
 
 const makeCreationDate = () => {
-  return dateFormat(new Date(), date_format);
+  return dateFormat(new Date(), DATE_FORMAT);
 };
 
 // =================================
@@ -49,7 +51,7 @@ const DUMMY_ARK = "ark:/12148/cbDUMMY";
 // =================================
 // SPECIFIC ROOT ELEMENTS
 // =================================
-const mets_source =
+const METS_SOURCE =
   "http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd";
 
 const makeManifestRootAttributes = () => {
@@ -62,7 +64,7 @@ const makeManifestRootAttributes = () => {
     "xmlns:dcterms": "http://purl.org/dc/terms/",
     "xmlns:spar_dc": "http://bibnum.bnf.fr/ns/spar_dc",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:schemaLocation": mets_source
+    "xsi:schemaLocation": METS_SOURCE
   };
 };
 
@@ -162,13 +164,13 @@ export const makePremisEvent = (id, type, date, detail, agents, object) => {
   premisEvent.push(makeObj("premis:eventType", type));
   if (date !== undefined && date !== "") {
     if (date instanceof Date) {
-      const dateS = dateFormat(date, date_format);
+      const dateS = dateFormat(date, DATE_FORMAT);
       premisEvent.push(makeObj("premis:eventDateTime", dateS));
     } else {
       premisEvent.push(makeObj("premis:eventDateTime", date));
     }
   } else {
-    const nowDate = dateFormat(new Date(), date_format);
+    const nowDate = dateFormat(new Date(), DATE_FORMAT);
     premisEvent.push(makeObj("premis:eventDateTime", nowDate));
   }
   if (detail !== undefined && detail !== "") {
@@ -204,40 +206,37 @@ export const makePremisEvent = (id, type, date, detail, agents, object) => {
  * @param {string} hash md5 hash of the file
  */
 export const makeFileElement = (item, ID, DMDID, hash) => {
-  const original_name = item.get("name");
-  let alias_name = item.get("alias");
-  if (alias_name === "") {
-    alias_name = original_name;
-  }
-  const internal_URI = "master/" + alias_name;
+  const originalName = item.name;
+  const aliasName = item.alias === "" ? originalName : item.alias;
+  const internalURI = "master/" + aliasName;
 
-  const file_content = [];
+  const fileContent = [];
 
-  file_content.push({
+  fileContent.push({
     _attr: {
       ID: ID,
       DMDID: DMDID,
-      CHECKSUMTYPE: hash_algorithm,
+      CHECKSUMTYPE: HASH_ALGORITHM,
       CHECKSUM: hash,
-      SIZE: Math.max(item.get("size"), 1)
+      SIZE: Math.max(item.file_size, 1)
     }
   });
   // "MIMETYPE": "DUMMY_MIMETYPE"
 
-  file_content.push(
+  fileContent.push(
     makeObj("mets:FLocat", [
       {
         _attr: {
           LOCTYPE: "URL",
           "xlink:type": "simple",
-          "xlink:href": internal_URI
+          "xlink:href": internalURI
         }
       },
       undefined // self-closed tag
     ])
   );
 
-  return makeObj("mets:file", file_content);
+  return makeObj("mets:file", fileContent);
 };
 
 /**
@@ -302,11 +301,11 @@ const recTraverseDB = (
     return;
   }
 
-  if (item.get("children").size === 0) {
+  if (isFile(item)) {
     // it's a file
-    const clean_rootpath =
+    const cleanRootpath =
       rootpath.charAt(0) === "/" ? rootpath.substring(1) : rootpath;
-    const URI = Path.join(absolutepath, clean_rootpath, item.get("name"));
+    const URI = Path.join(absolutepath, cleanRootpath, item.name);
     let data;
     try {
       data = fs.readFileSync(URI);
@@ -336,10 +335,7 @@ const recTraverseDB = (
     counters.dmdCount = idDmd + 1;
     const dmdContent = [];
     // make sure we use / in uri even on Windows
-    const relativeURI = Path.join(clean_rootpath, item.get("name")).replace(
-      /\\/g,
-      "/"
-    );
+    const relativeURI = Path.join(cleanRootpath, item.name).replace(/\\/g, "/");
 
     dmdContent.push(
       makeObj("dc:source", [
@@ -348,24 +344,21 @@ const recTraverseDB = (
       ])
     );
 
-    const last_modified = dateFormat(
-      item.get("last_modified_max"),
-      date_format
-    );
-    const comment = item.get("comments");
+    const lastModified = dateFormat(item.maxLastModified, DATE_FORMAT);
+    const comment = item.comments;
     if (comment.length > 0) {
       dmdContent.push(makeObj("dc:title", comment.replace(/[^\w ]/g, "_")));
     }
-    dmdContent.push(makeObj("dcterms:modified", last_modified));
+    dmdContent.push(makeObj("dcterms:modified", lastModified));
     addToDmd(makeDmdSec("DMD." + idDmd, dmdContent));
 
-    const item_File = makeFileElement(
+    const itemFile = makeFileElement(
       item,
       "master." + idFile,
       "DMD." + idDmd,
       hash
     );
-    addToMASTER(item_File);
+    addToMASTER(itemFile);
 
     const idObj = counters.objCount;
     counters.objCount = idObj + 1;
@@ -384,10 +377,10 @@ const recTraverseDB = (
     contentWriter(hash, data);
   } else {
     // it's a folder continue the traversal
-    item.get("children").forEach(child => {
+    item.children.forEach(childId => {
       recTraverseDB(
-        child,
-        Path.join(rootpath, item.get("name")),
+        childId,
+        Path.join(rootpath, item.name),
         absolutepath,
         counters,
         readFromFF,
@@ -409,10 +402,13 @@ const recTraverseDB = (
  * @param {function} contentWriter function to gather payload to be added to the package
  * @param {Array} metsContent preload METS to be filled up
  */
-const makeMetsContent = (state, tags, contentWriter, metsContent) => {
-  const FF = state.get("files_and_folders");
-  // let files = FF.filter(a => a.get("children").size === 0);
-  const folderpath = state.get("original_path") + "/../";
+const makeMetsContent = (
+  { filesAndFolders, filesAndFoldersMetadata, tags, originalPath, sessionName },
+  contentWriter,
+  metsContent
+) => {
+  const folderpath = path.join(originalPath, "/../");
+
   // Initial counters for numbering the sections
   const counters = {
     dmdCount: 2,
@@ -452,7 +448,7 @@ const makeMetsContent = (state, tags, contentWriter, metsContent) => {
     makePremisEvent(
       "AMD.1",
       "preconditioning",
-      dateFormat(new Date(), date_format),
+      dateFormat(new Date(), DATE_FORMAT),
       undefined,
       [makePremisAgent("application", "Archifiltre v" + version, "performer")]
     )
@@ -464,7 +460,7 @@ const makeMetsContent = (state, tags, contentWriter, metsContent) => {
     makePremisEvent(
       "AMD.3",
       "packageCreation",
-      dateFormat(new Date(), date_format),
+      dateFormat(new Date(), DATE_FORMAT),
       "Création d'un paquet compatible avec SPAR",
       [
         makePremisAgent("application", "Archifiltre v" + version, "performer"),
@@ -475,7 +471,7 @@ const makeMetsContent = (state, tags, contentWriter, metsContent) => {
           "authorizer"
         )
       ],
-      makePremisObject("productionIdentifier", state.get("session_name"))
+      makePremisObject("productionIdentifier", sessionName)
     )
   );
 
@@ -486,20 +482,21 @@ const makeMetsContent = (state, tags, contentWriter, metsContent) => {
     hashmap = hashmap.update(hash, updater);
   };
 
-  const FFreader = a => FF.get(a);
+  const FFreader = ffId => ({
+    ...filesAndFolders[ffId],
+    ...filesAndFoldersMetadata[ffId]
+  });
   const tagReader = ffId => getAllTagsForFile(tags, ffId).map(tag => tag.name);
 
   const DMDwriter = item => DMD_children.push(item);
   const MASTERwriter = item => MASTER_children.push(item);
   const DIVwriter = item => DIV_children.push(item);
 
-  FF.filter(a => a.get("depth") === 1).forEach((ff, id) => {
-    if (id === "") {
-      return undefined;
-    }
+  const ROOT_ID = "";
 
+  filesAndFolders[ROOT_ID].children.forEach(ffId => {
     recTraverseDB(
-      id,
+      ffId,
       "",
       folderpath,
       counters,
@@ -557,7 +554,13 @@ const makeMetsContent = (state, tags, contentWriter, metsContent) => {
  * @param {Object} state state of the GUI
  * @param {Object} tags - The tag map of the redux store
  */
-export const makeSIP = (state, tags) => {
+export const makeSIP = async ({
+  filesAndFolders,
+  filesAndFoldersMetadata,
+  tags,
+  originalPath,
+  sessionName
+}) => {
   const sip = new JSZip();
   const content = sip.folder("master");
   const addToContent = (filename, data) => {
@@ -566,9 +569,19 @@ export const makeSIP = (state, tags) => {
 
   const metsContent = [];
   metsContent.push({ _attr: makeManifestRootAttributes() });
-  metsContent.push(makeHeader(state.get("session_name")));
+  metsContent.push(makeHeader(sessionName));
 
-  makeMetsContent(state, tags, addToContent, metsContent); // will also compute ZIP
+  makeMetsContent(
+    {
+      filesAndFolders,
+      filesAndFoldersMetadata,
+      tags,
+      originalPath,
+      sessionName
+    },
+    addToContent,
+    metsContent
+  ); // will also compute ZIP
 
   const manifest_obj = [
     {
@@ -579,29 +592,22 @@ export const makeSIP = (state, tags) => {
   const manifest_str = XML(manifest_obj, { indent: "  " });
 
   sip.file("manifest.xml", manifest_str);
-  console.log(
-    "File: " +
-      state.get("original_path") +
-      "/../" +
-      state.get("session_name") +
-      ".zip"
-  );
+
+  const exportFilePath = path.join(originalPath, "..", `${sessionName}.zip`);
 
   // final ZIP output
-  sip.generateAsync({ type: "nodebuffer" }).then(data => {
-    const exportSuccessTitle = pick({
-      en: "METS Export",
-      fr: "Export METS"
-    });
-    const exportSuccessMessage = pick({
-      en: "The METS zip has been created in the projet parent folder",
-      fr: "Le zip d'export METS a été créé dans le dossier parent du projet"
-    });
-    fs.writeFileSync(
-      state.get("original_path") + "/../" + state.get("session_name") + ".zip",
-      data
-    );
-    console.log("SIP zip written.");
-    notifySuccess(exportSuccessMessage, exportSuccessTitle);
+  const exportedData = await sip.generateAsync({ type: "nodebuffer" });
+
+  const exportSuccessTitle = pick({
+    en: "METS Export",
+    fr: "Export METS"
   });
+
+  const exportSuccessMessage = pick({
+    en: "The METS zip has been created in the projet parent folder",
+    fr: "Le zip d'export METS a été créé dans le dossier parent du projet"
+  });
+
+  fs.writeFileSync(exportFilePath, exportedData);
+  notifySuccess(exportSuccessMessage, exportSuccessTitle);
 };

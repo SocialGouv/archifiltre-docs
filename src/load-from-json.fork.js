@@ -1,9 +1,7 @@
 import { readFileSync } from "util/file-sys-util";
 
-import * as FilesAndFolders from "datastore/files-and-folders";
-import { fromAnyJsonToJs } from "compatibility";
+import { fromAnyJsonToJs } from "util/compatibility/compatibility";
 
-import version from "version";
 import {
   AsyncWorkerEvent,
   createAsyncWorkerForChildProcess
@@ -30,21 +28,11 @@ function loadJsonConfig(droppedFolderPath) {
   const content = readFileSync(droppedFolderPath, "utf8");
   const contentWithoutByteOrderMark = removeByteOrderMark(content);
 
-  const [js, jsVersion] = fromAnyJsonToJs(contentWithoutByteOrderMark);
-
-  let filesAndFolders = FilesAndFolders.fromJs(js.files_and_folders);
-
-  if (jsVersion !== version) {
-    asyncWorker.postMessage({ status: "derivate" });
-    filesAndFolders = FilesAndFolders.computeDerived(filesAndFolders);
-  }
+  const js = fromAnyJsonToJs(contentWithoutByteOrderMark);
 
   asyncWorker.postMessage({
     status: "return",
-    vfs: {
-      ...js,
-      files_and_folders: FilesAndFolders.toJs(filesAndFolders)
-    }
+    vfs: js
   });
 }
 

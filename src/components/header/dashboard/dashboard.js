@@ -52,6 +52,7 @@ const DashBoard = props => {
     exportToCsv,
     exportToResip,
     exportToMets,
+    exportToJson,
     exportToAuditReport
   } = props;
 
@@ -103,7 +104,7 @@ const DashBoard = props => {
 
     saveButtonCell = (
       <TextAlignCenter>
-        <SaveButton api={api} />
+        <SaveButton api={api} exportToJson={exportToJson} />
       </TextAlignCenter>
     );
 
@@ -178,6 +179,7 @@ export default function DashBoardApiToProps({
   exportToCsv,
   exportToResip,
   exportToMets,
+  exportToJson,
   exportToAuditReport,
   rootFilesAndFoldersMetadata,
   filesAndFolders
@@ -214,6 +216,7 @@ export default function DashBoardApiToProps({
       exportToCsv={exportToCsv}
       exportToResip={exportToResip}
       exportToMets={exportToMets}
+      exportToJson={exportToJson}
       exportToAuditReport={exportToAuditReport}
     />
   );

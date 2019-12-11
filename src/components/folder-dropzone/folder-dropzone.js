@@ -1,29 +1,12 @@
 import React from "react";
 
-import AsyncHandleDrop from "async-handle-drop";
-
 import TextAlignCenter from "components/common/text-align-center";
 
 import path from "path";
 
-import {
-  filesAndFoldersMapToArray,
-  getFiles
-} from "../../util/file-and-folders-utils";
-import { isJsonFile, countZipFiles } from "../../util/file-sys-util";
 import { expectToBeDefined } from "../../util/expect-behaviour";
-import { notifyError, notifyInfo } from "../../util/notifications-util";
+import { notifyError } from "../../util/notifications-util";
 import { withTranslation } from "react-i18next";
-import { addTracker } from "../../logging/tracker";
-import { ActionType, ActionTitle } from "../../logging/tracker-types";
-import { wait } from "../../util/promise-util";
-
-const displayZipNotification = (zipCount, t) => {
-  notifyInfo(
-    t("folderDropzone.zipNotificationMessage"),
-    `${zipCount} ${t("folderDropzone.zipNotificationTitle")}`
-  );
-};
 
 class FolderDropzone extends React.Component {
   constructor(props) {
@@ -38,62 +21,13 @@ class FolderDropzone extends React.Component {
       fontSize: "3em"
     };
     this.handleDrop = this.handleDrop.bind(this);
+    this.loadFromPath = this.loadFromPath.bind(this);
   }
 
   handleDragover(event) {
     event.preventDefault();
   }
 
-  loadFileOrFolder(loadedPath) {
-    this.props.setLoadedPath(loadedPath);
-    const { api, computeHashes, t } = this.props;
-
-    const hook = a => {
-      api.loading_state.setStatus(a.status);
-      if (a.count) {
-        api.loading_state.setCount(a.count);
-      }
-      if (a.totalCount) {
-        api.loading_state.setTotalCount(a.totalCount);
-      }
-    };
-
-    api.loading_state.startToLoadFiles();
-    AsyncHandleDrop(hook, loadedPath)
-      .then(virtualFileSystem => {
-        api.database.set(virtualFileSystem);
-        api.loading_state.finishedToLoadFiles();
-        api.undo.commit();
-        return virtualFileSystem;
-      })
-      .then(async virtualFileSystem => {
-        if (!isJsonFile(loadedPath)) {
-          const filesAndFolders = virtualFileSystem.files_and_folders;
-          const paths = getFiles(
-            filesAndFoldersMapToArray(filesAndFolders)
-          ).map(file => file.id);
-          addTracker({
-            type: ActionType.TRACK_EVENT,
-            title: ActionTitle.FILE_TREE_DROP,
-            value: `Files dropped: ${paths.length}`
-          });
-          const zipFileCount = countZipFiles(paths);
-          if (zipFileCount > 0) {
-            displayZipNotification(zipFileCount, t);
-          }
-
-          // We defer the thunk execution to wait for the real estate setters to complete
-          // TODO: Remove this once real estate setters are no longer used
-          await wait();
-
-          computeHashes(virtualFileSystem.original_path);
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        api.loading_state.errorLoadingFiles();
-      });
-  }
   handleDrop(event) {
     event.preventDefault();
     const { t } = this.props;
@@ -108,12 +42,19 @@ class FolderDropzone extends React.Component {
       return;
     }
 
-    this.loadFileOrFolder(event.dataTransfer.files[0].path);
+    this.loadFromPath(event.dataTransfer.files[0].path);
+  }
+
+  loadFromPath(loadedPath) {
+    const { loadFromPath, api, setLoadedPath } = this.props;
+    setLoadedPath(loadedPath);
+    loadFromPath(loadedPath, { api });
   }
 
   componentDidMount() {
     if (AUTOLOAD !== "") {
-      this.loadFileOrFolder(path.resolve(AUTOLOAD));
+      const loadedPath = path.resolve(AUTOLOAD);
+      this.loadFromPath(loadedPath);
     }
   }
 

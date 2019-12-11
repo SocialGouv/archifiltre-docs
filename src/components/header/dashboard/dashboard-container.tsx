@@ -6,6 +6,7 @@ import {
   metsExporterThunk,
   resipExporterThunk
 } from "../../../exporters/export-thunks";
+import { jsonExporterThunk } from "../../../exporters/json/json-exporter";
 import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getFilesAndFoldersFromStore } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import Dashboard from "./dashboard";
@@ -36,6 +37,12 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
     [dispatch]
   );
 
+  const exportToJson = useCallback(
+    ({ sessionName, originalPath, version }) =>
+      dispatch(jsonExporterThunk({ sessionName, originalPath, version })),
+    [dispatch]
+  );
+
   const metadata = useSelector(getFilesAndFoldersMetadataFromStore);
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
   const rootFilesAndFoldersMetadata = metadata[""] || {};
@@ -47,6 +54,7 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
       exportToCsv={exportToCsv}
       exportToResip={exportToResip}
       exportToMets={exportToMets}
+      exportToJson={exportToJson}
       rootFilesAndFoldersMetadata={rootFilesAndFoldersMetadata}
       filesAndFolders={filesAndFolders}
     />

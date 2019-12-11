@@ -49,10 +49,12 @@ describe("mets module", () => {
   });
 
   describe("with an item, its ID, its associated DMDID and a hash", () => {
-    const testItem = new Map();
-    testItem.set("name", "test.test");
-    testItem.set("alias", "alias.test");
-    testItem.set("size", 100);
+    const testItem = {
+      name: "test.test",
+      alias: "alias.test",
+      file_size: 100
+    };
+
     const testId = "TEST_ID";
     const testDmdId = "TEST_DMDID";
     const testmd5Hash = "123456789abcdef0123456789abcdef0";

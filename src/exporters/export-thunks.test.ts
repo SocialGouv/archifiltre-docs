@@ -2,7 +2,6 @@ import { promises as fs } from "fs";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { from } from "rxjs";
-import { computeDerived, ff } from "../datastore/files-and-folders";
 import { DispatchExts } from "../reducers/archifiltre-types";
 import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { createFilesAndFolders } from "../reducers/files-and-folders/files-and-folders-test-utils";
@@ -55,13 +54,7 @@ const tags = {
   }
 };
 
-const origins = [
-  [{ size: 10, lastModified }, taggedFfId],
-  [{ size: 20, lastModified }, untaggedFfId]
-];
-
-const filesAndFolders = computeDerived(ff(origins));
-const storeFilesAndFolders = {
+const filesAndFolders = {
   "": createFilesAndFolders({ id: "" }),
   id1: createFilesAndFolders({ id: "id1" }),
   id2: createFilesAndFolders({ id: "id2" })
@@ -96,7 +89,7 @@ const emptyStore = createEmptyStore();
 const storeContent = {
   ...emptyStore,
   filesAndFolders: wrapStoreWithUndoable({
-    filesAndFolders: storeFilesAndFolders,
+    filesAndFolders,
     hashes: {}
   }),
   filesAndFoldersMetadata: { filesAndFoldersMetadata },
@@ -128,7 +121,7 @@ describe("export-thunks", () => {
       await store.dispatch(resipExporterThunk(savePath));
 
       expect(mockedGenerateResipExport$).toHaveBeenCalledWith(
-        storeFilesAndFolders,
+        filesAndFolders,
         tags
       );
       expect(writeFileMock).toHaveBeenCalledWith(
@@ -163,13 +156,23 @@ describe("export-thunks", () => {
       const mockedMakeSIP = makeSIP as jest.Mock<any>;
       const store = mockStore(storeContent);
 
-      const state = {
-        files_and_folders: filesAndFolders
-      };
+      const originalPath = "original-path";
+      const sessionName = "session-name";
 
-      store.dispatch(metsExporterThunk(state));
+      store.dispatch(
+        metsExporterThunk({
+          originalPath,
+          sessionName
+        })
+      );
 
-      expect(mockedMakeSIP).toHaveBeenCalledWith(state, tags);
+      expect(mockedMakeSIP).toHaveBeenCalledWith({
+        filesAndFolders,
+        filesAndFoldersMetadata,
+        originalPath,
+        sessionName,
+        tags
+      });
     });
   });
 });

@@ -17,7 +17,12 @@ const MetsButton = props => {
 
   return mkB(
     () => {
-      exportToMets(database.getState());
+      const originalPath = database.getOriginalPath();
+      const sessionName = database.getSessionName();
+      exportToMets({
+        originalPath,
+        sessionName
+      });
     },
     label,
     isButtonEnabled,

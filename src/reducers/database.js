@@ -26,21 +26,14 @@ const getData = () => state => ({
 
 const toJson = () => state => JSON.stringify(getData()(state));
 
-const getState = () => state => state;
-
 const getSessionName = () => state => state.get("session_name");
 const getOriginalPath = () => state => state.get("original_path");
-
-const getWaitingCounter = () => () => 0;
 
 const reader = {
   rootFfId,
   toJson,
   getSessionName,
-  getOriginalPath,
-  getWaitingCounter,
-  getData,
-  getState
+  getOriginalPath
 };
 
 const set = next_state => () => {

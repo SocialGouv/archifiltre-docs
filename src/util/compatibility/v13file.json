@@ -1,0 +1,112 @@
+{
+  "files_and_folders": {
+    "": {
+      "name": "",
+      "alias": "",
+      "comments": "",
+      "children": ["/test-folder"],
+      "file_size": 0,
+      "file_last_modified": 0,
+      "hash": null,
+      "size": 13,
+      "last_modified_max": 1574865257178.5486,
+      "last_modified_list": [1574865257178.0115, 1574865257178.5486],
+      "last_modified_min": 1574865257178.0115,
+      "last_modified_median": 1574865257178.28,
+      "last_modified_average": 1574865257178.28,
+      "depth": 0,
+      "nb_files": 2,
+      "sort_by_size_index": [0],
+      "sort_by_date_index": [0]
+    },
+    "/test-folder": {
+      "name": "test-folder",
+      "alias": "",
+      "comments": "",
+      "children": ["/test-folder/child"],
+      "file_size": 0,
+      "file_last_modified": 0,
+      "hash": null,
+      "size": 13,
+      "last_modified_max": 1574865257178.5486,
+      "last_modified_list": [1574865257178.0115, 1574865257178.5486],
+      "last_modified_min": 1574865257178.0115,
+      "last_modified_median": 1574865257178.28,
+      "last_modified_average": 1574865257178.28,
+      "depth": 1,
+      "nb_files": 2,
+      "sort_by_size_index": [0],
+      "sort_by_date_index": [0]
+    },
+    "/test-folder/child": {
+      "name": "child",
+      "alias": "",
+      "comments": "",
+      "children": [
+        "/test-folder/child/index.csv",
+        "/test-folder/child/text.txt"
+      ],
+      "file_size": 0,
+      "file_last_modified": 0,
+      "hash": null,
+      "size": 13,
+      "last_modified_max": 1574865257178.5486,
+      "last_modified_list": [1574865257178.0115, 1574865257178.5486],
+      "last_modified_min": 1574865257178.0115,
+      "last_modified_median": 1574865257178.28,
+      "last_modified_average": 1574865257178.28,
+      "depth": 2,
+      "nb_files": 2,
+      "sort_by_size_index": [0, 1],
+      "sort_by_date_index": [0, 1]
+    },
+    "/test-folder/child/index.csv": {
+      "name": "index.csv",
+      "alias": "",
+      "comments": "",
+      "children": [],
+      "file_size": 7,
+      "file_last_modified": 1574865257178.0115,
+      "hash": null,
+      "size": 7,
+      "last_modified_max": 1574865257178.0115,
+      "last_modified_list": [1574865257178.0115],
+      "last_modified_min": 1574865257178.0115,
+      "last_modified_median": 1574865257178.0115,
+      "last_modified_average": 1574865257178.0115,
+      "depth": 3,
+      "nb_files": 1,
+      "sort_by_size_index": [],
+      "sort_by_date_index": []
+    },
+    "/test-folder/child/text.txt": {
+      "name": "text.txt",
+      "alias": "",
+      "comments": "",
+      "children": [],
+      "file_size": 6,
+      "file_last_modified": 1574865257178.5486,
+      "hash": null,
+      "size": 6,
+      "last_modified_max": 1574865257178.5486,
+      "last_modified_list": [1574865257178.5486],
+      "last_modified_min": 1574865257178.5486,
+      "last_modified_median": 1574865257178.5486,
+      "last_modified_average": 1574865257178.5486,
+      "depth": 3,
+      "nb_files": 1,
+      "sort_by_size_index": [],
+      "sort_by_date_index": []
+    }
+  },
+  "session_name": "Project name",
+  "tags": {
+    "fdd7d7d0-b437-4642-95c0-681918931a26": {
+      "ffIds": ["/test-folder/child/index.csv"],
+      "id": "fdd7d7d0-b437-4642-95c0-681918931a26",
+      "name": "Tag1"
+    }
+  },
+  "original_path": "/Users/clementberthou/Dev/incub/archifiltre/test-folder",
+  "version": 13.1
+}

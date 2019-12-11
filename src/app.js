@@ -23,16 +23,12 @@ import version from "version";
 
 import { NotificationContainer } from "react-notifications";
 import { initTracker } from "./logging/tracker.ts";
-import { initTranslations } from "./translations/translations";
-
-SecretDevtools.enable();
+import "./translations/translations";
 
 document.title = `Archifiltre v${version}`;
 
 SecretDevtools.enable();
 initTracker();
-
-initTranslations();
 
 /**This is the entrypoint for the app. */
 const app = () => {

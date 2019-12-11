@@ -1,16 +1,17 @@
 import React, { FC, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { computeHashesThunk } from "../../hash-computer/hash-computer-thunk";
+import { loadFilesAndFoldersFromPathThunk } from "../../reducers/store-thunks";
 import FolderDropzone from "./folder-dropzone";
 
 const FolderDropzoneContainer: FC = props => {
   const dispatch = useDispatch();
 
-  const computeHashes = useCallback(
-    (originalPath: string) => dispatch(computeHashesThunk(originalPath)),
+  const loadFromPath = useCallback(
+    (path: string, { api, t }: any) =>
+      dispatch(loadFilesAndFoldersFromPathThunk(path, { api, t })),
     [dispatch]
   );
-  return <FolderDropzone {...props} computeHashes={computeHashes} />;
+  return <FolderDropzone {...props} loadFromPath={loadFromPath} />;
 };
 
 export default FolderDropzoneContainer;

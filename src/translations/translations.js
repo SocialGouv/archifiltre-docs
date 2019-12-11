@@ -5,17 +5,17 @@ import { getLanguage } from "../languages";
 const fr = require("./fr");
 const en = require("./en");
 
-export const initTranslations = () => {
-  i18n.use(initReactI18next).init({
-    resources: {
-      en,
-      fr
-    },
-    lng: getLanguage()[0],
-    fallbackLng: "en",
+i18n.use(initReactI18next).init({
+  resources: {
+    en,
+    fr
+  },
+  lng: getLanguage()[0],
+  fallbackLng: "en",
 
-    interpolation: {
-      escapeValue: false
-    }
-  });
-};
+  interpolation: {
+    escapeValue: false
+  }
+});
+
+export default i18n;

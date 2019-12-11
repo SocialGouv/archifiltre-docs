@@ -1,19 +1,19 @@
 import { mkB } from "components/buttons/button";
 
-import { save, makeNameWithExt } from "util/file-sys-util";
-
 import { useTranslation } from "react-i18next";
 
-const SaveButton = props => {
-  const api = props.api;
-  const database = api.database;
-  const getJson = database.toJson;
-  const getSessionName = database.getSessionName;
+const SaveButton = ({ api, exportToJson }) => {
   const { t } = useTranslation();
-  const name = () => makeNameWithExt(getSessionName(), "json");
+
+  const { getOriginalPath, getSessionName, getVersion } = api.database;
+
   return mkB(
     () => {
-      save(name(), getJson());
+      exportToJson({
+        sessionName: getSessionName(),
+        originalPath: getOriginalPath(),
+        version: getVersion()
+      });
     },
     t("header.save"),
     true,

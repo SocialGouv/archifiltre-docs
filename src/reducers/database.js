@@ -3,12 +3,10 @@ import { keyBy } from "lodash";
 import * as RealEstate from "reducers/real-estate";
 import * as Origin from "datastore/origin";
 import * as VirtualFileSystem from "datastore/virtual-file-system";
-import * as FilesAndFolders from "datastore/files-and-folders";
 import store from "./store.ts";
 import * as tagActions from "./tags/tags-actions.ts";
 import * as filesAndFoldersActions from "./files-and-folders/files-and-folders-actions.ts";
 import * as filesAndFoldersMetadataActions from "./files-and-folders-metadata/files-and-folders-metadata-actions.ts";
-import { getTagsFromStore } from "./tags/tags-selectors";
 
 const property_name = "database";
 
@@ -16,27 +14,18 @@ const initialState = () => VirtualFileSystem.make(Origin.empty());
 
 const rootFfId = () => () => "";
 
-const getData = () => state => ({
-  files_and_folders: FilesAndFolders.toJs(state.get("files_and_folders")),
-  session_name: state.get("session_name"),
-  tags: getTagsFromStore(store.getState()),
-  original_path: state.get("original_path"),
-  version: state.get("version")
-});
-
-const toJson = () => state => JSON.stringify(getData()(state));
-
 const getSessionName = () => state => state.get("session_name");
 const getOriginalPath = () => state => state.get("original_path");
+const getVersion = () => state => state.get("version");
 
 const reader = {
   rootFfId,
-  toJson,
   getSessionName,
-  getOriginalPath
+  getOriginalPath,
+  getVersion
 };
 
-const set = next_state => () => {
+const set = next_state => state => {
   store.dispatch(tagActions.initializeTags(next_state.tags));
 
   const formattedFilesAndFolders = Object.entries(
@@ -72,7 +61,7 @@ const set = next_state => () => {
     )
   );
 
-  return VirtualFileSystem.fromJs(next_state);
+  return state.set("original_path", next_state.original_path);
 };
 
 const reInit = () => () => {
@@ -93,13 +82,15 @@ const updateComments = (updater, id) => state => {
 };
 
 const setSessionName = name => state => state.set("session_name", name);
+const setOriginalPath = path => state => state.set("original_path", path);
 
 const writer = {
   set,
   reInit,
   updateAlias,
   updateComments,
-  setSessionName
+  setSessionName,
+  setOriginalPath
 };
 
 export default RealEstate.create({

@@ -67,7 +67,9 @@ const Name = ({
   const { t } = useTranslation();
   if (placeholder) {
     return (
-      <div style={{ fontWeight: "bold" }}>{t("report.fileOrFolderText")}</div>
+      <div style={{ fontWeight: "bold" }}>
+        {t("report.fileOrFolderNamePlaceholder")}
+      </div>
     );
   } else {
     return (
@@ -96,7 +98,7 @@ const RealName = props => {
   if (placeholder) {
     return (
       <div style={{ fontStyle: "italic" }}>
-        ({t("report.fileOrFolderRealName")})
+        ({t("report.fileOrFolderRealNamePlaceholder")})
       </div>
     );
   } else {

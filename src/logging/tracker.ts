@@ -81,6 +81,10 @@ const mapActionToMatomoAction = (
  * @param trackerAction
  */
 const addMatomoTracker = (trackerAction: MatomoTrackerAction) => {
+  if (!FORCE_TRACKING && MODE !== "production") {
+    return;
+  }
+
   if (window._paq) {
     const matomoAction = mapActionToMatomoAction(trackerAction);
     const sanitizedData = sanitizeTrackerData(matomoAction);
@@ -90,12 +94,7 @@ const addMatomoTracker = (trackerAction: MatomoTrackerAction) => {
 /**
  * Adds a tracker using an action
  */
-export const addTracker = () => {
-  if (!FORCE_TRACKING && MODE !== "production") {
-    return;
-  }
-  return compose(addMatomoTracker, mapActionToMatomoAction);
-};
+export const addTracker = compose(addMatomoTracker, mapActionToMatomoAction);
 
 interface MatomoTrackerAction {
   type: MatomoActionType;

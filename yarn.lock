@@ -602,10 +602,10 @@
     eslint-plugin-jest "^23.1.1"
     eslint-plugin-prettier "~3.1.1"
 
-"@socialgouv/tslint-config-recommended@0.10.4":
-  version "0.10.4"
-  resolved "https://registry.yarnpkg.com/@socialgouv/tslint-config-recommended/-/tslint-config-recommended-0.10.4.tgz#81542caedbaa2f5c1c8a75f099d9f4b6b667c1c3"
-  integrity sha512-Jzpn58DPFvG6LnI5YuvL5yPB0Z+TM+6mvB25YRjhi/S2UZSAFTb7NuWvu+lQ9F2DnvniPtKJckIATYG047Kcmg==
+"@socialgouv/tslint-config-recommended@0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@socialgouv/tslint-config-recommended/-/tslint-config-recommended-0.11.0.tgz#a68d9b4cb515a21795037a28fb83eebd4bc99bf4"
+  integrity sha512-P9ZJpiqOZ4YDuWG0iooubYv0VUU3Nq/odV5ktNQNIVyOv4MhgFSyGvvUA5hulLUuAQkRBOhieIUm+LLkPJKDbg==
   dependencies:
     tslint-config-prettier "~1.18.0"
     tslint-plugin-prettier "~2.0.1"

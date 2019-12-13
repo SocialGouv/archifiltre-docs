@@ -1,14 +1,13 @@
 import React from "react";
 
 import { request } from "util/http-util";
-import version from "version";
 
 import { mkB } from "components/buttons/button";
 
 import * as Color from "util/color-util";
 
-import { siteUrl } from "../../env";
 import { withTranslation } from "react-i18next";
+import version, { versionComparator } from "../../version";
 
 const { shell } = require("electron");
 
@@ -23,6 +22,21 @@ const cellStyle = {
 
 const buttonStyle = {
   borderRadius: "3em"
+};
+
+/**
+ * Maps a version number to this format: MAJOR.MINOR.PATCH
+ * @param version number to map
+ * @returns {string|*}
+ */
+const mapToNewVersionNumbers = version => {
+  if (version.split(".").length === 1) {
+    return `1.${version}.0`;
+  }
+  if (version.split(".").length === 2) {
+    return `1.${version}`;
+  }
+  return version;
 };
 
 class ANewVersionIsAvailable extends React.PureComponent {
@@ -40,18 +54,16 @@ class ANewVersionIsAvailable extends React.PureComponent {
   componentDidMount() {
     request({
       method: "GET",
-      url: `${siteUrl}/api-version.json`
+      url: `${ARCHIFILTRE_SITE_URL}/api-version.json`
     })
       .then(result => {
-        const { lastVersion } = JSON.parse(result);
+        const lastVersion = mapToNewVersionNumbers(result.lastVersion);
         const currentVersion = version;
-        if (isNaN(lastVersion) === false && typeof lastVersion === "number") {
-          if (currentVersion < lastVersion) {
-            this.setState({
-              display: true,
-              lastVersion
-            });
-          }
+        if (versionComparator(currentVersion, lastVersion) === -1) {
+          this.setState({
+            display: true,
+            lastVersion
+          });
         }
       })
       .catch(err => {
@@ -66,7 +78,7 @@ class ANewVersionIsAvailable extends React.PureComponent {
   }
 
   download() {
-    shell.openExternal(siteUrl);
+    shell.openExternal(ARCHIFILTRE_SITE_URL);
   }
 
   render() {

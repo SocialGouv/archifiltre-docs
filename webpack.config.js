@@ -43,7 +43,8 @@ module.exports = (env, argv = {}) => ({
         : JSON.stringify(""),
       MATOMO_APPLICATION_ID: process.env.MATOMO_APPLICATION_ID,
       MATOMO_URL: JSON.stringify(process.env.MATOMO_URL),
-      FORCE_TRACKING: !!JSON.stringify(process.env.FORCE_TRACKING)
+      FORCE_TRACKING: !!JSON.stringify(process.env.FORCE_TRACKING),
+      ARCHIFILTRE_SITE_URL: JSON.stringify(process.env.ARCHIFILTRE_SITE_URL)
     })
   ],
 

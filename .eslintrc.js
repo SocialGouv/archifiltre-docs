@@ -16,7 +16,8 @@ module.exports = {
     MODE: "readonly",
     STATIC_ASSETS_PATH: "readonly",
     AUTOLOAD: "readonly",
-    FORCE_TRACKING: "readonly"
+    FORCE_TRACKING: "readonly",
+    ARCHIFILTRE_SITE_URL: "readonly"
   },
   plugins: ["lodash-fp"],
   overrides: [

@@ -35,6 +35,7 @@ export const computeHashes$ = (paths, { initialValues: { basePath } }) => {
 /**
  * Returns an observable that will dispatch computed hashes every second
  * @param filesAndFolders - The filesAndFolders
+ * @param hashes - The precomputed folder hashes
  * @returns {Observable<{}>}
  */
 export const computeFolderHashes$ = ({ filesAndFolders, hashes }) => {
@@ -45,6 +46,7 @@ export const computeFolderHashes$ = ({ filesAndFolders, hashes }) => {
   );
 
   return hashes$
+    .pipe(tap(hashes => console.log("hashes received", hashes)))
     .pipe(bufferTime(BUFFER_TIME))
     .pipe(filter(buffer => buffer.length !== 0))
     .pipe(map(bufferedObjects => Object.assign({}, ...bufferedObjects)))

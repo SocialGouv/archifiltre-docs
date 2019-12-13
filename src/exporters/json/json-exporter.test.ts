@@ -4,7 +4,10 @@ import { DispatchExts } from "../../reducers/archifiltre-types";
 import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 import { StoreState } from "../../reducers/store";
-import { wrapStoreWithUndoable } from "../../reducers/store-test-utils";
+import {
+  createEmptyStore,
+  wrapStoreWithUndoable
+} from "../../reducers/store-test-utils";
 import { createTag } from "../../reducers/tags/tags-test-util";
 import { save } from "../../util/file-sys-util";
 import { jsonExporterThunk } from "./json-exporter";
@@ -50,6 +53,7 @@ describe("json-exporter", () => {
   describe("jsonExporterThunk", () => {
     it("should export the data correctly", () => {
       const store = mockStore({
+        ...createEmptyStore(),
         filesAndFolders: wrapStoreWithUndoable({
           filesAndFolders,
           hashes

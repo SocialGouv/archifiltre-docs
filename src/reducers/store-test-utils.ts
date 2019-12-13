@@ -1,4 +1,5 @@
 import { UndoableState } from "./enhancers/undoable/undoable-types";
+import { initialState as loadingInfoInitialState } from "./loading-info/loading-info-reducer";
 import { StoreState } from "./store";
 
 /**
@@ -12,6 +13,7 @@ export const createEmptyStore = (): StoreState => ({
   filesAndFoldersMetadata: {
     filesAndFoldersMetadata: {}
   },
+  loadingInfo: loadingInfoInitialState,
   tags: wrapStoreWithUndoable({
     tags: {}
   })

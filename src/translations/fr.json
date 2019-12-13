@@ -62,6 +62,9 @@
       "error": "Oups ! Une erreur s'est produite.",
       "contactUs": "Cliquez ici pour nous contacter",
       "somethingWentWrong": "Une erreur s'est produite."
+    },
+    "hash": {
+      "loadingInfoLabel": "Chargement des empreintes de fichiers et dossiers"
     }
   }
 }

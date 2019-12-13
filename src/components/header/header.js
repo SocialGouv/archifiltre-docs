@@ -4,14 +4,13 @@ import version from "version";
 
 import Dashboard from "components/header/dashboard/dashboard-container";
 
-import { siteUrl } from "../../env";
 import { useTranslation } from "react-i18next";
 
 const { shell } = require("electron");
 
 const onClick = event => {
   event.preventDefault();
-  shell.openExternal(`${siteUrl}/#changelog`);
+  shell.openExternal(`${ARCHIFILTRE_SITE_URL}/#changelog`);
 };
 
 const Header = props => {

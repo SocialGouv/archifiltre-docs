@@ -7,10 +7,6 @@ import * as Tags from "datastore/tags";
 
 import pick from "languages";
 
-if (isNaN(version) || typeof version !== "number") {
-  throw new Error("version is not a number");
-}
-
 const virtualFileSystem = RecordUtil.createFactory(
   {
     session_name: pick({

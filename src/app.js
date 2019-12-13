@@ -24,6 +24,7 @@ import version from "version";
 import { NotificationContainer } from "react-notifications";
 import { initTracker } from "./logging/tracker.ts";
 import "./translations/translations";
+import BackgroundLoadingInfoContainer from "./components/background-loading-info/BackgroundLoadingInfoContainer";
 
 document.title = `Archifiltre v${version}`;
 
@@ -57,6 +58,7 @@ const app = () => {
                 <div className="cell auto">
                   <MainSpace api={api} />
                 </div>
+                <BackgroundLoadingInfoContainer />
               </div>
               <NotificationContainer />
             </ErrorBoundary>

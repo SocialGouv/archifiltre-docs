@@ -5,12 +5,21 @@ import { from as observableFrom } from "rxjs";
 import { DispatchExts } from "../reducers/archifiltre-types";
 import { setFilesAndFoldersHashes } from "../reducers/files-and-folders/files-and-folders-actions";
 import { createFilesAndFolders } from "../reducers/files-and-folders/files-and-folders-test-utils";
+import {
+  completeLoadingAction,
+  progressLoadingAction,
+  startLoadingAction
+} from "../reducers/loading-info/loading-info-actions";
+import { LoadingInfoTypes } from "../reducers/loading-info/loading-info-types";
 import { StoreState } from "../reducers/store";
 import {
   createEmptyStore,
   wrapStoreWithUndoable
 } from "../reducers/store-test-utils";
-import { computeHashesThunk } from "./hash-computer-thunk";
+import {
+  computeHashesThunk,
+  LOAD_FILE_FOLDER_HASH_ACTION_ID
+} from "./hash-computer-thunk";
 import {
   computeFolderHashes$,
   computeHashes$
@@ -26,6 +35,11 @@ jest.mock("../reducers/files-and-folders/files-and-folders-actions", () => ({
     hashes: savedHashes,
     type: "SET_FF_HASHES"
   })
+}));
+
+jest.mock("../translations/translations", () => ({
+  __esModule: true,
+  default: { t: () => "default-name" }
 }));
 
 const originalPath = path.join("root", "path", "folder");
@@ -74,8 +88,17 @@ describe("computeHashesThunk", () => {
     });
 
     expect(testStore.getActions()).toEqual([
+      startLoadingAction(
+        LOAD_FILE_FOLDER_HASH_ACTION_ID,
+        LoadingInfoTypes.HASH_COMPUTING,
+        1,
+        "default-name"
+      ),
+      progressLoadingAction(LOAD_FILE_FOLDER_HASH_ACTION_ID, 1),
       setFilesAndFoldersHashes(fileHashes),
-      setFilesAndFoldersHashes(folderHashes)
+      progressLoadingAction(LOAD_FILE_FOLDER_HASH_ACTION_ID, 1),
+      setFilesAndFoldersHashes(folderHashes),
+      completeLoadingAction(LOAD_FILE_FOLDER_HASH_ACTION_ID)
     ]);
   });
 });

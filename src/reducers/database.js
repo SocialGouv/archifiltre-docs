@@ -5,6 +5,7 @@ import * as Origin from "datastore/origin";
 import * as VirtualFileSystem from "datastore/virtual-file-system";
 import store from "./store.ts";
 import * as tagActions from "./tags/tags-actions.ts";
+import { resetLoadingAction } from "./loading-info/loading-info-actions";
 import * as filesAndFoldersActions from "./files-and-folders/files-and-folders-actions.ts";
 import * as filesAndFoldersMetadataActions from "./files-and-folders-metadata/files-and-folders-metadata-actions.ts";
 
@@ -66,6 +67,7 @@ const set = next_state => state => {
 
 const reInit = () => () => {
   store.dispatch(tagActions.resetTags());
+  store.dispatch(resetLoadingAction());
   return initialState();
 };
 

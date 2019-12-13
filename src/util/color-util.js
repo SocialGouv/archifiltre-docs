@@ -1,5 +1,7 @@
 import { FileType, getFileTypeFromFileName } from "./file-types-util";
 
+export const SUCCESS_GREEN = "#1E8E17";
+
 export const gradient = (a, b) => zero_to_one => {
   const ans = a
     .map((a, i) => a + (b[i] - a) * zero_to_one)

@@ -62,6 +62,9 @@
       "error": "Oops ! An error occurred.",
       "contactUs": "Click here to contact us",
       "somethingWentWrong": "Something went wrong."
+    },
+    "hash": {
+      "loadingInfoLabel": "Loading file and folders hashes"
     }
   }
 }

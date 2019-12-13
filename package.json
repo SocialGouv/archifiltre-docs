@@ -87,7 +87,7 @@
     "css-loader": "3.3.2",
     "deep-equal": "1.1.1",
     "dotenv": "8.2.0",
-    "electron": "7.1.4",
+    "electron": "7.1.5",
     "electron-builder": "22.2.0",
     "electron-react-devtools": "0.5.3",
     "eslint": "6.7.2",

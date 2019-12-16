@@ -2,11 +2,39 @@ import React from "react";
 
 import pick from "languages";
 import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { percent } from "../../util/numbers-util";
 
 const byteChar = pick({
   en: "B",
   fr: "o"
 });
+
+/**
+ * Returns a formatted text with the size percentage of the file or folder
+ * @param nodeSize
+ * @param totalSize
+ * @returns {string}
+ */
+const makePercentageText = (nodeSize, totalSize) => {
+  const percentage = percent(nodeSize, totalSize, { numbersOfDecimals: 1 });
+  return percentage < 0.1 ? "< 0.1%" : `${percentage}%`;
+};
+
+/**
+ * Returns a formatted text with the file or folder size and the number of files in it (for a folder only)
+ * @param nodeSize
+ * @param totalSize
+ * @param node
+ * @returns {string}
+ */
+const makeRulerText = (nodeSize, totalSize, node) => {
+  const filesAndFolderSize = octet2HumanReadableFormat(nodeSize);
+  const rulerInfo = ["", filesAndFolderSize];
+  const filesAndFoldersNumber = getFilesAndFoldersNumber(node);
+  if (filesAndFoldersNumber) rulerInfo.push(filesAndFoldersNumber);
+
+  return rulerInfo.join(" | ");
+};
 
 const Ruler = props => {
   const {
@@ -33,10 +61,15 @@ const Ruler = props => {
   let res;
 
   if (isFocused) {
-    const text = makeRulerText(node_size, total_size, getFfByFfId(node_id));
+    const percentageText = makePercentageText(node_size, total_size);
+    const rulerText = makeRulerText(
+      node_size,
+      total_size,
+      getFfByFfId(node_id)
+    );
     const mode = computeRulerTextDisplayMode(
       dims.x + dims.dx / 2,
-      text.length,
+      rulerText.length,
       rulerDx,
       4.2
     );
@@ -60,7 +93,8 @@ const Ruler = props => {
           y={rulerY + (rulerDy * 2) / 3}
           textAnchor={{ ORGANIC: "middle", LEFT: "start", RIGHT: "end" }[mode]}
         >
-          {text}
+          <tspan fontWeight="bold">{percentageText}</tspan>
+          <tspan>{rulerText}</tspan>
         </text>
       </g>
     );
@@ -92,24 +126,8 @@ export const octet2HumanReadableFormat = o => {
   return o + " " + unit;
 };
 
-const precisionRound = (number, precision) => {
-  const factor = Math.pow(10, precision);
-  return Math.round(number * factor) / factor;
-};
-
 const getFilesAndFoldersNumber = node => {
   return isFile(node) ? null : `${node.nbChildrenFiles} fichier(s)`;
-};
-
-const makeRulerText = (nodeSize, totalSize, node) => {
-  const filesAndFolderSize = octet2HumanReadableFormat(nodeSize);
-  const percentage = precisionRound((100 * nodeSize) / totalSize, 1);
-  const filesAndFoldersRatio = percentage < 0.1 ? "< 0.1%" : `${percentage}%`;
-  const rulerInfo = [filesAndFoldersRatio, filesAndFolderSize];
-  const filesAndFoldersNumber = getFilesAndFoldersNumber(node);
-  if (filesAndFoldersNumber) rulerInfo.push(filesAndFoldersNumber);
-
-  return rulerInfo.join(" | ");
 };
 
 const computeRulerTextDisplayMode = (candidatePosition, l, w, fw) => {

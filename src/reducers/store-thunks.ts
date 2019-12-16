@@ -8,7 +8,7 @@ import {
   getFiles
 } from "../util/file-and-folders-utils";
 import { countZipFiles, isJsonFile } from "../util/file-sys-util";
-import { notifyInfo } from "../util/notifications-util";
+import { NotificationTimeout, notifyInfo } from "../util/notifications-util";
 import { wait } from "../util/promise-util";
 import { ArchifiltreThunkAction } from "./archifiltre-types";
 import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata/files-and-folders-metadata-actions";
@@ -31,7 +31,8 @@ import { TagMap } from "./tags/tags-types";
 const displayZipNotification = zipCount => {
   notifyInfo(
     translations.t("folderDropzone.zipNotificationMessage"),
-    `${zipCount} ${translations.t("folderDropzone.zipNotificationTitle")}`
+    `${zipCount} ${translations.t("folderDropzone.zipNotificationTitle")}`,
+    NotificationTimeout.LONG
   );
 };
 

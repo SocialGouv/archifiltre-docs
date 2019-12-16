@@ -85,7 +85,7 @@
     "copy-webpack-plugin": "5.1.1",
     "cross-env": "6.0.3",
     "css-loader": "3.3.2",
-    "deep-equal": "1.1.1",
+    "deep-equal": "2.0.1",
     "dotenv": "8.2.0",
     "electron": "7.1.5",
     "electron-builder": "22.2.0",

@@ -16,6 +16,7 @@ import {
   take,
   takeRight
 } from "lodash/fp";
+import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { octet2HumanReadableFormat } from "../../components/main-space/ruler";
 import {
   FilesAndFoldersCollection,
@@ -29,7 +30,7 @@ import {
   countDuplicateFilesTotalSize,
   countDuplicatesPercentForFiles,
   countDuplicatesPercentForFolders,
-  getBiggestDuplicatedFiles,
+  getBiggestDuplicatedFolders,
   getMostDuplicatedFiles
 } from "../../util/duplicates-util";
 import {
@@ -252,19 +253,20 @@ export const getDuplicatesWithTheMostCopy: Merger<
 );
 
 /**
- * Returns the duplicated elements that take the most space formatted for the audit report
+ * Returns the duplicated folders that take the most space formatted for the audit report
  */
-export const getDuplicatesWithTheBiggestSize: Merger<
-  FilesAndFoldersCollection,
-  HashesMap,
-  AuditReportFileWithSize[]
-> = compose(
-  map((filesAndFolders: FilesAndFolders[]) => ({
-    name: filesAndFolders[0].name,
-    path: filesAndFolders[0].id,
-    size: octet2HumanReadableFormat(
-      (filesAndFolders.length - 1) * filesAndFolders[0].file_size
-    )
-  })),
-  getBiggestDuplicatedFiles(5)
+export const getDuplicatesWithTheBiggestSize = compose(
+  map(
+    (
+      filesAndFolders: FilesAndFolders &
+        FilesAndFoldersMetadata & { count: number }
+    ) => ({
+      name: filesAndFolders.name,
+      path: filesAndFolders.id,
+      size: octet2HumanReadableFormat(
+        (filesAndFolders.count - 1) * filesAndFolders.childrenTotalSize
+      )
+    })
+  ),
+  getBiggestDuplicatedFolders(5)
 );

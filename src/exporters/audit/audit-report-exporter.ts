@@ -105,8 +105,9 @@ export const computeAuditReportData = (
     filesAndFolders,
     filesAndFoldersHashes
   ),
-  biggestDuplicateFiles: getDuplicatesWithTheBiggestSize(
+  biggestDuplicateFolders: getDuplicatesWithTheBiggestSize(
     filesAndFolders,
+    filesAndFoldersMetadata,
     filesAndFoldersHashes
   )
 });

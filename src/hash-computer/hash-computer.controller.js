@@ -7,7 +7,7 @@ import {
 import FileHashFork from "./file-hash-computer.fork.js";
 import FolderHashFork from "./folder-hash-computer.fork.js";
 
-import { bufferTime, map, tap, filter } from "rxjs/operators";
+import { bufferTime, map, filter } from "rxjs/operators";
 import { createAsyncWorkerControllerClass } from "../util/async-worker-util";
 
 const BATCH_SIZE = 500;
@@ -46,9 +46,7 @@ export const computeFolderHashes$ = ({ filesAndFolders, hashes }) => {
   );
 
   return hashes$
-    .pipe(tap(hashes => console.log("hashes received", hashes)))
     .pipe(bufferTime(BUFFER_TIME))
     .pipe(filter(buffer => buffer.length !== 0))
-    .pipe(map(bufferedObjects => Object.assign({}, ...bufferedObjects)))
-    .pipe(tap(hashes => console.log("hashes pushed", hashes)));
+    .pipe(map(bufferedObjects => Object.assign({}, ...bufferedObjects)));
 };

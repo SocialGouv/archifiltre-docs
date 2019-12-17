@@ -14,6 +14,7 @@ const completeLoadingInfo = createLoadingInfo({ id: completeLoadingInfoId });
 
 const loadingInfoState = {
   complete: [completeLoadingInfoId],
+  dismissed: [],
   loading: [loadingLoadingInfoId],
   loadingInfo: {
     [loadingLoadingInfoId]: loadingLoadingInfo,

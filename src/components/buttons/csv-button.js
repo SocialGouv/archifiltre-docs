@@ -1,21 +1,24 @@
 import { mkB } from "components/buttons/button";
 
 import { makeNameWithExt } from "util/file-sys-util";
-const label = "CSV";
+import { useTranslation } from "react-i18next";
 
-const CsvButton = props => {
-  const {
-    exportToCsv,
-    api: { database }
-  } = props;
+const CsvButton = ({
+  api: { database },
+  exportToCsv,
+  areHashesReady = false,
+  exportWithHashes = false
+}) => {
   const name = makeNameWithExt(database.getSessionName(), "csv");
 
+  const { t } = useTranslation();
+  const buttonLabel = exportWithHashes ? t("header.csvWithHash") : "CSV";
   return mkB(
     () => {
-      exportToCsv(name);
+      exportToCsv(name, { withHashes: exportWithHashes });
     },
-    label,
-    true,
+    buttonLabel,
+    !exportWithHashes || areHashesReady,
     "#4d9e25",
     { width: "90%" }
   );

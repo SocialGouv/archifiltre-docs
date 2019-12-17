@@ -57,7 +57,8 @@
       "save": "Save",
       "aNewVersionIsOut": "Version {{version}} of Archifiltre is out!",
       "downloadIt": "download it!",
-      "csvWithHash": "CSV with hashes"
+      "csvWithHash": "CSV with hashes",
+      "csvWithHashDisabledMessage": "You must wait for hashes to have been computed"
     },
     "common": {
       "error": "Oops ! An error occurred.",

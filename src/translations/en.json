@@ -56,7 +56,8 @@
       "close": "Close",
       "save": "Save",
       "aNewVersionIsOut": "Version {{version}} of Archifiltre is out!",
-      "downloadIt": "download it!"
+      "downloadIt": "download it!",
+      "csvWithHash": "CSV with hashes"
     },
     "common": {
       "error": "Oops ! An error occurred.",
@@ -64,7 +65,7 @@
       "somethingWentWrong": "Something went wrong."
     },
     "hash": {
-      "loadingInfoLabel": "Loading file and folders hashes"
+      "loadingInfoLabel": "Loading files and folders hashes"
     }
   }
 }

@@ -23,6 +23,7 @@ const completeLoading = createLoadingInfo({ id: completeLoadingId });
 
 const baseState: LoadingInfoState = {
   complete: [completeLoadingId],
+  dismissed: [],
   loading: [previouslyLoadingId, otherPreviouslyLoadingId],
   loadingInfo: {
     [previouslyLoadingId]: previouslyLoading,
@@ -49,6 +50,7 @@ describe("loading-info-reducer", () => {
         )
       ).toEqual({
         complete: [completeLoadingId],
+        dismissed: [],
         loading: [previouslyLoadingId, otherPreviouslyLoadingId, newLoadingId],
         loadingInfo: {
           [previouslyLoadingId]: previouslyLoading,
@@ -72,6 +74,7 @@ describe("loading-info-reducer", () => {
         )
       ).toEqual({
         complete: [completeLoadingId],
+        dismissed: [],
         loading: [previouslyLoadingId, otherPreviouslyLoadingId],
         loadingInfo: {
           [previouslyLoadingId]: {
@@ -97,6 +100,7 @@ describe("loading-info-reducer", () => {
         )
       ).toEqual({
         complete: [completeLoadingId],
+        dismissed: [],
         loading: [previouslyLoadingId, otherPreviouslyLoadingId],
         loadingInfo: {
           [previouslyLoadingId]: {
@@ -119,6 +123,7 @@ describe("loading-info-reducer", () => {
         )
       ).toEqual({
         complete: [completeLoadingId, previouslyLoadingId],
+        dismissed: [],
         loading: [otherPreviouslyLoadingId],
         loadingInfo: {
           [previouslyLoadingId]: previouslyLoading,
@@ -141,6 +146,7 @@ describe("loading-info-reducer", () => {
     it("should remove all the complete elements", () => {
       expect(loadingInfoReducer(baseState, dismissAllComplete())).toEqual({
         complete: [],
+        dismissed: [completeLoadingId],
         loading: [previouslyLoadingId, otherPreviouslyLoadingId],
         loadingInfo: {
           [previouslyLoadingId]: previouslyLoading,

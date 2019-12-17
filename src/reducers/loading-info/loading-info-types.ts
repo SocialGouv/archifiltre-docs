@@ -25,6 +25,7 @@ export interface LoadingInfoState {
   loadingInfo: LoadingInfoMap;
   loading: string[];
   complete: string[];
+  dismissed: string[];
 }
 
 interface StartLoadingAction {

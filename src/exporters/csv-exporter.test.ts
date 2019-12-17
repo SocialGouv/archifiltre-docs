@@ -17,81 +17,107 @@ jest.mock("../util/file-sys-util", () => ({
 
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
 
+const tagName = "test-tag-1";
+const taggedFfId = "/folder/ff-id";
+const tagId = "test-tag-id";
+const tagId2 = "test-tag-id-2";
+const rootId = "";
+const tag2Name = "tag2";
+const tags = {
+  [tagId]: {
+    ffIds: [taggedFfId],
+    id: tagId,
+    name: tagName
+  },
+  [tagId2]: {
+    ffIds: [taggedFfId],
+    id: tagId2,
+    name: tag2Name
+  }
+};
+
+const filesAndFolders = {
+  [rootId]: {
+    alias: "",
+    children: [taggedFfId],
+    comments: "",
+    file_last_modified: 1571325669,
+    file_size: 10,
+    hash: null,
+    id: rootId,
+    name: "root"
+  },
+  [taggedFfId]: {
+    alias: "",
+    children: [],
+    comments: "",
+    file_last_modified: 1571325669,
+    file_size: 10,
+    hash: null,
+    id: taggedFfId,
+    name: "filename"
+  }
+};
+
+const filesAndFoldersMetadata = {
+  [taggedFfId]: createFilesAndFoldersMetadata({
+    averageLastModified: 3000,
+    childrenTotalSize: 10000,
+    maxLastModified: 10000,
+    medianLastModified: 4000,
+    minLastModified: 1000
+  })
+};
+
+const rootHash = "root-tag";
+const taggedHash = "tagged-hash";
+const hashes = {
+  [rootId]: rootHash,
+  [taggedFfId]: taggedHash
+};
+
+const emptyStore = createEmptyStore();
+
+const testState = {
+  ...emptyStore,
+  filesAndFolders: wrapStoreWithUndoable({ filesAndFolders, hashes }),
+  filesAndFoldersMetadata: { filesAndFoldersMetadata },
+  tags: wrapStoreWithUndoable({ tags })
+};
+
+const saveMock = save as jest.Mock;
+
 describe("csv-exporter", () => {
   describe("csvExporterThunk", () => {
-    it("should generate valid csv data", () => {
-      const tagName = "test-tag-1";
-      const taggedFfId = "/folder/ff-id";
-      const tagId = "test-tag-id";
-      const tagId2 = "test-tag-id-2";
-      const rootId = "";
-      const tag2Name = "tag2";
-      const tags = {
-        [tagId]: {
-          ffIds: [taggedFfId],
-          id: tagId,
-          name: tagName
-        },
-        [tagId2]: {
-          ffIds: [taggedFfId],
-          id: tagId2,
-          name: tag2Name
-        }
-      };
+    describe("withoutHashes", () => {
+      it("should generate valid csv data", () => {
+        saveMock.mockReset();
+        const store = mockStore(testState);
+        const name = "test-name";
+        store.dispatch(csvExporterThunk(name));
 
-      const filesAndFolders = {
-        [rootId]: {
-          alias: "",
-          children: [taggedFfId],
-          comments: "",
-          file_last_modified: 1571325669,
-          file_size: 10,
-          hash: null,
-          id: rootId,
-          name: "root"
-        },
-        [taggedFfId]: {
-          alias: "",
-          children: [],
-          comments: "",
-          file_last_modified: 1571325669,
-          file_size: 10,
-          hash: null,
-          id: taggedFfId,
-          name: "filename"
-        }
-      };
+        const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"last_modified";"new name";"description";"file/folder";"depth";"tag0 : ${tagName}";"tag1 : ${tag2Name}"\n`;
+        const expectedCsv = `${csvHeader}"";"/folder/ff-id";"13";"filename";"";"10000";"01/01/1970";"";"";"file";"1";"${tagName}";"${tag2Name}"\n`;
 
-      const filesAndFoldersMetadata = {
-        [taggedFfId]: createFilesAndFoldersMetadata({
-          averageLastModified: 3000,
-          childrenTotalSize: 10000,
-          maxLastModified: 10000,
-          medianLastModified: 4000,
-          minLastModified: 1000
-        })
-      };
+        expect(saveMock).toHaveBeenCalledWith(name, expectedCsv, {
+          format: UTF8
+        });
+      });
+    });
 
-      const emptyStore = createEmptyStore();
+    describe("withHashes", () => {
+      it("should generate valid csv data", () => {
+        saveMock.mockReset();
+        const store = mockStore(testState);
+        const name = "test-name";
+        store.dispatch(csvExporterThunk(name, { withHashes: true }));
 
-      const testState = {
-        ...emptyStore,
-        filesAndFolders: wrapStoreWithUndoable({ filesAndFolders, hashes: {} }),
-        filesAndFoldersMetadata: { filesAndFoldersMetadata },
-        tags: wrapStoreWithUndoable({ tags })
-      };
+        const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"last_modified";"new name";"description";"file/folder";"depth";"hash (MD5)";"tag0 : ${tagName}";"tag1 : ${tag2Name}"\n`;
+        const expectedCsv = `${csvHeader}"";"/folder/ff-id";"13";"filename";"";"10000";"01/01/1970";"";"";"file";"1";"${taggedHash}";"${tagName}";"${tag2Name}"\n`;
 
-      const saveMock = save as jest.Mock<any>;
-      saveMock.mockReset();
-      const store = mockStore(testState);
-      const name = "test-name";
-      store.dispatch(csvExporterThunk(name));
-
-      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"last_modified";"new name";"description";"file/folder";"depth";"tag0 : ${tagName}";"tag1 : ${tag2Name}"\n`;
-      const expectedCsv = `${csvHeader}"";"/folder/ff-id";"13";"filename";"";"10000";"01/01/1970";"";"";"file";"1";"${tagName}";"${tag2Name}"\n`;
-
-      expect(saveMock).toHaveBeenCalledWith(name, expectedCsv, {
-        format: UTF8
+        expect(saveMock).toHaveBeenCalledWith(name, expectedCsv, {
+          format: UTF8
+        });
       });
     });
   });

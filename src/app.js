@@ -24,7 +24,7 @@ import version from "version";
 import { NotificationContainer } from "react-notifications";
 import { initTracker } from "./logging/tracker.ts";
 import "./translations/translations";
-import BackgroundLoadingInfoContainer from "./components/background-loading-info/BackgroundLoadingInfoContainer";
+import BackgroundLoadingInfoContainer from "./components/background-loading-info/background-loading-info-container";
 
 document.title = `Archifiltre v${version}`;
 

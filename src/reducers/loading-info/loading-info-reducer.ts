@@ -11,6 +11,7 @@ import {
 
 export const initialState: LoadingInfoState = {
   complete: [],
+  dismissed: [],
   loading: [],
   loadingInfo: {}
 };
@@ -74,7 +75,8 @@ const loadingInfoReducer = (
     case DISMISS_ALL_COMPLETE:
       return {
         ...state,
-        complete: []
+        complete: [],
+        dismissed: [...state.dismissed, ...state.complete]
       };
   }
   return state;

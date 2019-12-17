@@ -2,9 +2,9 @@ import React, { FC, memo, useCallback, useState } from "react";
 import styled from "styled-components";
 import { LoadingInfo } from "../../reducers/loading-info/loading-info-types";
 import { SUCCESS_GREEN } from "../../util/color-util";
-import ChevronRight from "../common/ChevronRight";
-import LoadingInfoDisplay from "./LoadingInfoDisplay";
-import LoadingSpinnerOrCloseCross from "./LoadingSpinnerOrCloseCross";
+import ChevronRight from "../common/chevron-right";
+import LoadingInfoDisplay from "./loading-info-display";
+import LoadingSpinnerOrCloseCross from "./loading-spinner-or-close-cross";
 
 const BottomRightArea = memo(styled.div`
   position: fixed;

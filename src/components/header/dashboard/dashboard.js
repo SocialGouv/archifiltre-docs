@@ -23,6 +23,7 @@ const DashBoard = props => {
   let sessionInfoCell = false;
   let ctrlzCell = false;
   let csvButtonCell = false;
+  let csvWithHashButtonCell = false;
   let resipButtonCell = false;
   let metsButtonCell = false;
   let saveButtonCell = false;
@@ -40,6 +41,7 @@ const DashBoard = props => {
   };
 
   const {
+    areHashesReady,
     started,
     finished,
     error,
@@ -90,6 +92,17 @@ const DashBoard = props => {
       </TextAlignCenter>
     );
 
+    csvWithHashButtonCell = (
+      <TextAlignCenter>
+        <CsvButton
+          api={api}
+          exportToCsv={exportToCsv}
+          exportWithHashes={true}
+          areHashesReady={areHashesReady}
+        />
+      </TextAlignCenter>
+    );
+
     resipButtonCell = (
       <TextAlignCenter>
         <ResipButton api={api} exportToResip={exportToResip} />
@@ -135,6 +148,7 @@ const DashBoard = props => {
           <div className="grid-x">
             <div className="cell small-12">{auditButtonCell}</div>
             <div className="cell small-12">{csvButtonCell}</div>
+            <div className="cell small-12">{csvWithHashButtonCell}</div>
             <div className="cell small-12">{resipButtonCell}</div>
             <div className="cell small-12">{metsButtonCell}</div>
           </div>
@@ -176,6 +190,7 @@ const DashBoard = props => {
 
 export default function DashBoardApiToProps({
   api,
+  areHashesReady,
   exportToCsv,
   exportToResip,
   exportToMets,
@@ -205,6 +220,7 @@ export default function DashBoardApiToProps({
   return (
     <DashBoard
       api={api}
+      areHashesReady={areHashesReady}
       started={isStarted()}
       finished={finished}
       error={error}

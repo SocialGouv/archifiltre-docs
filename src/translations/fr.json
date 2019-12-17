@@ -56,7 +56,8 @@
       "close": "Fermer",
       "save": "Enregistrer",
       "aNewVersionIsOut": "La version {{version}} d'Archifiltre est sortie !",
-      "downloadIt": "téléchargez la !"
+      "downloadIt": "téléchargez la !",
+      "csvWithHash": "CSV avec empreintes"
     },
     "common": {
       "error": "Oups ! Une erreur s'est produite.",

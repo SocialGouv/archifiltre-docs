@@ -6,7 +6,7 @@ import {
   getLoadingInfoFromStore,
   getRunningLoadingInfo
 } from "../../reducers/loading-info/loading-info-selectors";
-import BackgroundLoadingInfo from "./BackgroundLoadingInfo";
+import BackgroundLoadingInfo from "./background-loading-info";
 
 const BackgroundLoadingInfoContainer = () => {
   const loadingInfoState = useSelector(getLoadingInfoFromStore);

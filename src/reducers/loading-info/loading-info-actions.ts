@@ -11,10 +11,10 @@ import {
 
 /**
  * Action to start a loading display
- * @param id - the loading ID
- * @param type - the loading Type
- * @param goal - The goal to reach for completion
- * @param label - The action label
+ * @param id - the loading id
+ * @param type - the loading type
+ * @param goal - the goal to reach for completion
+ * @param label - the action label
  */
 export const startLoadingAction = (
   id: string,
@@ -47,9 +47,9 @@ export const updateLoadingAction = (
 });
 
 /**
- * Adds progress the the progress of a current loading info
+ * Adds progress count to the progress of a current loading info
  * @param id - the loading id
- * @param progress - the progress
+ * @param progress
  */
 export const progressLoadingAction = (
   id: string,

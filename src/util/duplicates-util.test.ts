@@ -1,3 +1,4 @@
+import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { createFilesAndFolders } from "../reducers/files-and-folders/files-and-folders-test-utils";
 import {
   countDuplicateFiles,
@@ -5,7 +6,7 @@ import {
   countDuplicateFolders,
   countDuplicatesPercentForFiles,
   countDuplicatesPercentForFolders,
-  getBiggestDuplicatedFiles,
+  getBiggestDuplicatedFolders,
   getMostDuplicatedFiles
 } from "./duplicates-util";
 
@@ -77,6 +78,65 @@ const filesMap = {
   [folder2Id]: folder2
 };
 
+const metadataMap = {
+  [file1Id]: createFilesAndFoldersMetadata({
+    averageLastModified: 3000,
+    childrenTotalSize: 10000,
+    maxLastModified: 1570615679168,
+    medianLastModified: 4000,
+    minLastModified: 1000
+  }),
+  [file2Id]: createFilesAndFoldersMetadata({
+    averageLastModified: 3000,
+    childrenTotalSize: 1000,
+    maxLastModified: 10000,
+    medianLastModified: 4000,
+    minLastModified: 1000
+  }),
+  [file3Id]: createFilesAndFoldersMetadata({
+    averageLastModified: 3000,
+    childrenTotalSize: 1000,
+    maxLastModified: 10000,
+    medianLastModified: 4000,
+    minLastModified: 1000
+  }),
+  [file4Id]: createFilesAndFoldersMetadata({
+    averageLastModified: 3000,
+    childrenTotalSize: 10000,
+    maxLastModified: 1570615679168,
+    medianLastModified: 4000,
+    minLastModified: 1000
+  }),
+  [file5Id]: createFilesAndFoldersMetadata({
+    averageLastModified: 3000,
+    childrenTotalSize: 1000,
+    maxLastModified: 10000,
+    medianLastModified: 4000,
+    minLastModified: 1000
+  }),
+  [file6Id]: createFilesAndFoldersMetadata({
+    averageLastModified: 3000,
+    childrenTotalSize: 1000,
+    maxLastModified: 10000,
+    medianLastModified: 4000,
+    minLastModified: 1000
+  }),
+  [folder1Id]: createFilesAndFoldersMetadata({
+    averageLastModified: 3000,
+    childrenTotalSize: 1000,
+    maxLastModified: 10000,
+    medianLastModified: 4000,
+    minLastModified: 1000
+  }),
+  [folder2Id]: createFilesAndFoldersMetadata({
+    averageLastModified: 3000,
+    childrenTotalSize: 1000,
+    maxLastModified: 10000,
+    medianLastModified: 4000,
+    minLastModified: 1000
+  })
+};
+
 const hashesMap = {
   [file1Id]: hash1,
   [file2Id]: hash2,
@@ -140,24 +200,58 @@ describe("duplicates-util", () => {
     });
   });
 
-  describe("getBiggestDuplicatedFiles", () => {
+  describe("getBiggestDuplicatedFolders", () => {
     it("should only return the duplicated items if too many are required", () => {
-      const biggestDuplicatedFiles = getBiggestDuplicatedFiles(3)(
+      const biggestDuplicatedFolders = getBiggestDuplicatedFolders(3)(
         filesMap,
+        metadataMap,
         hashesMap
       );
-      expect(biggestDuplicatedFiles.length).toBe(2);
-      expect(biggestDuplicatedFiles[0]).toEqual([file5WithHash, file6WithHash]);
-      expect(biggestDuplicatedFiles[1]).toEqual([
-        file1WithHash,
-        file3WithHash,
-        file4WithHash
-      ]);
+      expect(biggestDuplicatedFolders.length).toBe(1);
+      expect(biggestDuplicatedFolders[0]).toEqual({
+        alias: "",
+        averageLastModified: 3000,
+        children: ["folder-1-id/file-5-id", "folder-1-id/file-6-id"],
+        childrenTotalSize: 1000,
+        comments: "",
+        count: 2,
+        file_last_modified: 0,
+        file_size: 0,
+        hash: "folder-1-hash",
+        id: "folder-1-id",
+        maxLastModified: 10000,
+        medianLastModified: 4000,
+        minLastModified: 1000,
+        name: "base-name",
+        nbChildrenFiles: 1,
+        sortByDateIndex: [0],
+        sortBySizeIndex: [0]
+      });
     });
 
     it("should not return too many duplicated items", () => {
-      expect(getBiggestDuplicatedFiles(1)(filesMap, hashesMap)).toEqual([
-        [file5WithHash, file6WithHash]
+      expect(
+        getBiggestDuplicatedFolders(1)(filesMap, metadataMap, hashesMap)
+      ).toEqual([
+        {
+          alias: "",
+          averageLastModified: 3000,
+          children: ["folder-1-id/file-5-id", "folder-1-id/file-6-id"],
+          childrenTotalSize: 1000,
+          comments: "",
+          count: 2,
+          file_last_modified: 0,
+          file_size: 0,
+          hash: "folder-1-hash",
+          id: "folder-1-id",
+          maxLastModified: 10000,
+          medianLastModified: 4000,
+          minLastModified: 1000,
+          name: "base-name",
+          nbChildrenFiles: 1,
+          sortByDateIndex: [0],
+          sortBySizeIndex: [0]
+        }
       ]);
     });
   });

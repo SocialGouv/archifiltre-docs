@@ -203,6 +203,14 @@ export const getFilesMap: Mapper<
 > = memoize(fp.pickBy(isFile));
 
 /**
+ * Get only folders from files and folders
+ */
+export const getFoldersMap: Mapper<
+  FilesAndFoldersMap,
+  FilesAndFoldersMap
+> = memoize(fp.pickBy(fp.compose([not, isFile])));
+
+/**
  * Get folders only from files and folders
  * @param filesAndFolders
  */

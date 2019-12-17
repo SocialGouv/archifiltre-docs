@@ -54,7 +54,7 @@ export interface AuditReportData {
   duplicateFilePercent: number;
   duplicateTotalSize: string;
   duplicates: AuditReportFileWithCount[];
-  biggestDuplicateFiles: AuditReportFileWithSize[];
+  biggestDuplicateFolders: AuditReportFileWithSize[];
 }
 
 const TEMPLATE_PATH = path.resolve(

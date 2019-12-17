@@ -26,10 +26,15 @@ import {
 import _ from "lodash";
 
 import {
+  FilesAndFoldersMetadata,
+  FilesAndFoldersMetadataMap
+} from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import {
   FilesAndFoldersCollection,
   getFiles,
   getFilesMap,
-  getFolders
+  getFolders,
+  getFoldersMap
 } from "../reducers/files-and-folders/files-and-folders-selectors";
 import {
   FilesAndFolders,
@@ -281,37 +286,32 @@ export const getMostDuplicatedFiles = (
     )
   );
 
-/**
- * Get the duplicated elements where the duplicates take the most space
- * @param nbDuplicatedItems
- */
-const getBiggestDuplicatedItems = (
-  nbDuplicatedItems: number
-): Mapper<FilesAndFoldersMap, FilesAndFolders[][]> =>
-  compose(
-    toArray,
-    reverse,
-    takeRight(nbDuplicatedItems),
-    filter<FilesAndFolders[]>(
-      (filesAndFolders: FilesAndFolders[]) => filesAndFolders.length > 1
-    ),
-    sortBy<FilesAndFolders[]>(
-      (filesAndFolders: FilesAndFolders[]) =>
-        filesAndFolders[0].file_size * (filesAndFolders.length - 1)
-    ),
-    Object.values
-  );
+const getFoldersDuplicatesMap = getFilteredDuplicatesMap(getFoldersMap);
 
 /**
  * Get the duplicated files where the duplicates take the most space
  * @param nbDuplicatedItems
  */
-export const getBiggestDuplicatedFiles = (
-  nbDuplicatedItems: number
-): Merger<FilesAndFoldersMap, HashesMap, FilesAndFolders[][]> =>
-  memoize(
-    compose(
-      getBiggestDuplicatedItems(nbDuplicatedItems),
-      getFilteredDuplicatesMap(getFilesMap)
+export const getBiggestDuplicatedFolders = (nbDuplicatedItems: number) => (
+  filesAndFoldersMap: FilesAndFoldersMap,
+  filesAndFoldersMetadataMap: FilesAndFoldersMetadataMap,
+  hashesMap: HashesMap
+): Array<FilesAndFolders & FilesAndFoldersMetadata & { count: number }> => {
+  const duplicatesMap = getFoldersDuplicatesMap(filesAndFoldersMap, hashesMap);
+
+  return _(duplicatesMap)
+    .sortBy(
+      filesAndFoldersList =>
+        (filesAndFoldersList.length - 1) *
+        filesAndFoldersMetadataMap[filesAndFoldersList[0].id].childrenTotalSize
     )
-  );
+    .takeRight(nbDuplicatedItems)
+    .filter(filesAndFoldersList => filesAndFoldersList.length > 1)
+    .reverse()
+    .map(duplicatedItemsList => ({
+      ...duplicatedItemsList[0],
+      ...filesAndFoldersMetadataMap[duplicatedItemsList[0].id],
+      count: duplicatedItemsList.length
+    }))
+    .value();
+};

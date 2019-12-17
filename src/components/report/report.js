@@ -191,13 +191,13 @@ const InfoCell = ({
       <div>
         <b>
           {t("report.hash")}&nbsp;
-          <span data-tip={hashExplanationText}>
+          <span data-tip={hashExplanationText} data-for="hash-explanation">
             <i className="fi-info" />
           </span>
           &nbsp;:&nbsp;
         </b>
         {hashLabel}
-        <ReactTooltip place={"bottom"} />
+        <ReactTooltip place={"bottom"} id="hash-explanation" />
       </div>
       <br />
       <LastModifiedReporter

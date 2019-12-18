@@ -1,4 +1,5 @@
 import AsyncHandleDrop from "../async-handle-drop";
+import { mapToNewVersionNumbers } from "../components/header/a-new-version-is-available";
 import { computeHashesThunk } from "../hash-computer/hash-computer-thunk";
 import { addTracker } from "../logging/tracker";
 import { ActionTitle, ActionType } from "../logging/tracker-types";
@@ -10,6 +11,7 @@ import {
 import { countZipFiles, isJsonFile } from "../util/file-sys-util";
 import { NotificationTimeout, notifyInfo } from "../util/notifications-util";
 import { wait } from "../util/promise-util";
+import version, { versionComparator } from "../version";
 import { ArchifiltreThunkAction } from "./archifiltre-types";
 import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata/files-and-folders-metadata-actions";
 import { FilesAndFoldersMetadataMap } from "./files-and-folders-metadata/files-and-folders-metadata-types";
@@ -32,6 +34,17 @@ const displayZipNotification = zipCount => {
   notifyInfo(
     translations.t("folderDropzone.zipNotificationMessage"),
     `${zipCount} ${translations.t("folderDropzone.zipNotificationTitle")}`,
+    NotificationTimeout.LONG
+  );
+};
+
+/**
+ * Notifies the user that the imported JSON version is different from current version
+ */
+const displayJsonNotification = () => {
+  notifyInfo(
+    translations.t("folderDropzone.wrongJsonVersion"),
+    translations.t("folderDropzone.warning"),
     NotificationTimeout.LONG
   );
 };
@@ -70,7 +83,14 @@ export const loadFilesAndFoldersFromPathThunk = (
 
   try {
     const virtualFileSystem = await AsyncHandleDrop(hook, fileOrFolderPath);
-
+    const jsonVersion = mapToNewVersionNumbers(`${virtualFileSystem.version}`);
+    const currentVersion = mapToNewVersionNumbers(version);
+    if (
+      isJsonFile(fileOrFolderPath) &&
+      versionComparator(jsonVersion, currentVersion) !== 0
+    ) {
+      displayJsonNotification();
+    }
     if (!isJsonFile(fileOrFolderPath)) {
       setDatabase(virtualFileSystem);
     } else {

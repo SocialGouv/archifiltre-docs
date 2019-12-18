@@ -14,7 +14,9 @@
       "constructingDataModel": "Construction of the data model",
       "computingDerivedData": "Computing derivated data",
       "computingFileDepth": "Computation of file depth",
-      "didYouKnow": "Did you know?"
+      "didYouKnow": "Did you know?",
+      "warning": "Warning!",
+      "wrongJsonVersion": "The file you dropped wasn't produced with the same version of Archifiltre"
     },
     "report": {
       "comments": "Comments",

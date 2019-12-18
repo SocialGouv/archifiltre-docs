@@ -29,7 +29,7 @@ const buttonStyle = {
  * @param version number to map
  * @returns {string|*}
  */
-const mapToNewVersionNumbers = version => {
+export const mapToNewVersionNumbers = version => {
   if (version.split(".").length === 1) {
     return `1.${version}.0`;
   }

@@ -125,6 +125,7 @@ const DashBoard = props => {
       <TextAlignCenter>
         <AuditReportButton
           api={api}
+          areHashesReady={areHashesReady}
           exportToAuditReport={exportToAuditReport}
         />
       </TextAlignCenter>

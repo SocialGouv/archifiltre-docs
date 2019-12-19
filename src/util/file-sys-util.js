@@ -139,3 +139,15 @@ export const recTraverseFileTreeForHook = (hook, path) => {
  */
 export const countZipFiles = filePaths =>
   countItems(filePath => path.extname(filePath) === ".zip")(filePaths);
+
+/**
+ * Formats a path for the user file system
+ * @param formattedPath
+ * @returns {string}
+ * @example
+ * // On windows
+ * console.log(formatPathForUserSystem("/folder/file"))
+ * // => \folder\file
+ */
+export const formatPathForUserSystem = formattedPath =>
+  path.normalize(formattedPath);

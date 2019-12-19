@@ -17,7 +17,7 @@ import {
   countDuplicateFiles,
   countDuplicateFolders
 } from "../../util/duplicates-util";
-import { saveBlob } from "../../util/file-sys-util";
+import { formatPathForUserSystem, saveBlob } from "../../util/file-sys-util";
 import { FileType } from "../../util/file-types-util";
 import {
   AuditReportData,
@@ -59,7 +59,8 @@ export const computeAuditReportData = (
   ),
   longestPathLength: getLongestPathFile(filesAndFolders)?.id?.length || 0,
   longestPathFileName: getLongestPathFile(filesAndFolders)?.name || "",
-  longestPathPath: getLongestPathFile(filesAndFolders)?.id || "",
+  longestPathPath:
+    formatPathForUserSystem(getLongestPathFile(filesAndFolders)?.id) || "",
   depth: getMaxDepth(filesAndFolders),
   presentationPercent: percentFileTypes(filesAndFolders)[FileType.PRESENTATION],
   presentationCount: countFileTypes(filesAndFolders)[FileType.PRESENTATION],

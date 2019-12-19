@@ -1,6 +1,7 @@
 import { octet2HumanReadableFormat } from "../../components/main-space/ruler";
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 import { FileType } from "../../util/file-types-util";
+import { isWindows } from "../../util/os-util";
 import {
   countFileTypes,
   formatAuditReportDate,
@@ -19,7 +20,9 @@ const fileName2 = "file-id-2.ppt";
 const fileName3 = "file-id-31.docx";
 const fileId1 = `${folderId1}/${fileName1}`;
 const fileId2 = `${folderId2}/${fileName2}`;
+const file2WindowsPath = `${folderId2}\\${fileName2}`;
 const fileId3 = `${folderId2}/${fileName3}`;
+const file3WindowsPath = `${folderId2}\\${fileName3}`;
 const file1 = createFilesAndFolders({
   file_last_modified: 1531670400000,
   file_size: 1000,
@@ -116,13 +119,13 @@ describe("audit-report-values-computer", () => {
       const file2Description = {
         date: formatAuditReportDate(file2.file_last_modified),
         name: file2.name,
-        path: file2.id
+        path: isWindows() ? file2WindowsPath : file2.id
       };
 
       const file3Description = {
         date: formatAuditReportDate(file3.file_last_modified),
         name: file3.name,
-        path: file3.id
+        path: isWindows() ? file3WindowsPath : file3.id
       };
       expect(getOldestFiles(sortingTestArray)).toEqual([
         file2Description,
@@ -148,13 +151,13 @@ describe("audit-report-values-computer", () => {
     it("should return the description of the oldest files", () => {
       const file2Description = {
         name: file2.name,
-        path: file2.id,
+        path: isWindows() ? file2WindowsPath : file2.id,
         size: octet2HumanReadableFormat(file2.file_size)
       };
 
       const file3Description = {
         name: file3.name,
-        path: file3.id,
+        path: isWindows() ? file3WindowsPath : file3.id,
         size: octet2HumanReadableFormat(file3.file_size)
       };
       expect(getBiggestFiles(sortingTestArray)).toEqual([

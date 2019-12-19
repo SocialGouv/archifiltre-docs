@@ -33,6 +33,7 @@ import {
   getBiggestDuplicatedFolders,
   getMostDuplicatedFiles
 } from "../../util/duplicates-util";
+import { formatPathForUserSystem } from "../../util/file-sys-util";
 import {
   FileType,
   getExtensionsForEachFileType,
@@ -162,7 +163,7 @@ export const getOldestFiles: Mapper<
     ({ name, id, file_last_modified }): AuditReportFileWithDate => ({
       date: formatAuditReportDate(file_last_modified),
       name,
-      path: id
+      path: formatPathForUserSystem(id)
     })
   ),
   take(5),
@@ -190,7 +191,7 @@ export const getBiggestFiles: Mapper<
   map(
     ({ name, id, file_size }): AuditReportFileWithSize => ({
       name,
-      path: id,
+      path: formatPathForUserSystem(id),
       size: octet2HumanReadableFormat(file_size)
     })
   ),
@@ -247,7 +248,7 @@ export const getDuplicatesWithTheMostCopy: Merger<
   map((filesAndFolders: FilesAndFolders[]) => ({
     count: filesAndFolders.length - 1,
     name: filesAndFolders[0].name,
-    path: filesAndFolders[0].id
+    path: formatPathForUserSystem(filesAndFolders[0].id)
   })),
   getMostDuplicatedFiles(5)
 );
@@ -262,7 +263,7 @@ export const getDuplicatesWithTheBiggestSize = compose(
         FilesAndFoldersMetadata & { count: number }
     ) => ({
       name: filesAndFolders.name,
-      path: filesAndFolders.id,
+      path: formatPathForUserSystem(filesAndFolders.id),
       size: octet2HumanReadableFormat(
         (filesAndFolders.count - 1) * filesAndFolders.childrenTotalSize
       )

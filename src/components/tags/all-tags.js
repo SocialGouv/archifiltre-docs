@@ -70,7 +70,7 @@ class AllTags extends React.Component {
     const { startEditingTagFactory, stopEditingTag } = this;
 
     const componentStyle = {
-      opacity: tags.length > 0 ? 1 : 0.5,
+      opacity: Object.keys(tags).length > 0 ? 1 : 0.5,
       background: "white",
       height: "100%",
       borderRadius: "1em",

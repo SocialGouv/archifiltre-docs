@@ -2,7 +2,7 @@
 
 import { generateRandomString } from "util/random-gen-util";
 import * as FilesAndFolders from "../../datastore/files-and-folders";
-import { mapValues } from "lodash";
+import { mapValues, pick } from "lodash";
 import fp from "lodash/fp";
 
 export const fromAnyJsonToJs = json => {
@@ -169,15 +169,17 @@ export const v13JsToV14Js = v13 => {
 
   const filesAndFolders = mapValues(
     v13filesAndFolders,
-    fp.pick([
-      "id",
-      "name",
-      "alias",
-      "comments",
-      "children",
-      "file_size",
-      "file_last_modified"
-    ])
+    (fileAndFolders, id) => ({
+      ...pick(fileAndFolders, [
+        "name",
+        "alias",
+        "comments",
+        "children",
+        "file_size",
+        "file_last_modified"
+      ]),
+      id
+    })
   );
 
   const oldKeyToNewKeyMap = {

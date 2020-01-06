@@ -90,7 +90,7 @@
     "electron": "7.1.7",
     "electron-builder": "22.2.0",
     "electron-react-devtools": "0.5.3",
-    "eslint": "6.7.2",
+    "eslint": "6.8.0",
     "eslint-import-resolver-webpack": "0.12.0",
     "fast-check": "1.21.0",
     "html-webpack-plugin": "3.2.0",

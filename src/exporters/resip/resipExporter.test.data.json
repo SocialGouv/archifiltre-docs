@@ -263,8 +263,8 @@
       "TransactedDate",
       "CustodialHistory.CustodialHistoryItem",
       "Description",
-      "Tag0",
-      "Tag1"
+      "Content.Tag.0",
+      "Content.Tag.1"
     ],
     [
       "1",

@@ -604,13 +604,13 @@
     eslint-plugin-jest "~23.3.0"
     eslint-plugin-prettier "~3.1.2"
 
-"@socialgouv/tslint-config-recommended@0.11.1":
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/@socialgouv/tslint-config-recommended/-/tslint-config-recommended-0.11.1.tgz#9ea9853bd76e6101f1b39b259343e121c194af48"
-  integrity sha512-Gs6j9oyH9ffYO53YDRbFcsyE6ZIiuwK+s4dYOJ3giyDl0v9+uoaJxlU4BB1M+MEVId8GXi5gFs4MRYd1sDomCg==
+"@socialgouv/tslint-config-recommended@0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@socialgouv/tslint-config-recommended/-/tslint-config-recommended-0.13.0.tgz#35cce79f90efbbcae6f111c4aa33b6b4bac08b85"
+  integrity sha512-UUFo3WmnoKbHhJFuMbKiy7OVVt6BdxWGlEWU74fpK6vezuKCMZxvR1n/WHb/GGdcwf0cYHp3+PsLPppQWY5vLw==
   dependencies:
     tslint-config-prettier "~1.18.0"
-    tslint-plugin-prettier "~2.0.1"
+    tslint-plugin-prettier "~2.1.0"
 
 "@szmarczak/http-timer@^1.1.2":
   version "1.1.2"
@@ -11497,10 +11497,10 @@ tslint-config-prettier@~1.18.0:
   resolved "https://registry.yarnpkg.com/tslint-config-prettier/-/tslint-config-prettier-1.18.0.tgz#75f140bde947d35d8f0d238e0ebf809d64592c37"
   integrity sha512-xPw9PgNPLG3iKRxmK7DWr+Ea/SzrvfHtjFt5LBl61gk2UBG/DB9kCXRjv+xyIU1rUtnayLeMUVJBcMX8Z17nDg==
 
-tslint-plugin-prettier@~2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/tslint-plugin-prettier/-/tslint-plugin-prettier-2.0.1.tgz#95b6a3b766622ffc44375825d7760225c50c3680"
-  integrity sha512-4FX9JIx/1rKHIPJNfMb+ooX1gPk5Vg3vNi7+dyFYpLO+O57F4g+b/fo1+W/G0SUOkBLHB/YKScxjX/P+7ZT/Tw==
+tslint-plugin-prettier@~2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/tslint-plugin-prettier/-/tslint-plugin-prettier-2.1.0.tgz#e2522d273cb9672d93d0e68f2514fe3c19698c3a"
+  integrity sha512-nMCpU+QSpXtydcWXeZF+3ljIbG/K8SHVZwB7K/MtuoQQFXxXN6watqTSBpVXCInuPFvmjiWkhxeMoUW4N0zgSg==
   dependencies:
     eslint-plugin-prettier "^2.2.0"
     lines-and-columns "^1.1.6"

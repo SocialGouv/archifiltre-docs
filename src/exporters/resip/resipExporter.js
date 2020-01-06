@@ -121,7 +121,7 @@ const formatToCsv = (sipFilesAndFolders, tags) => {
     "CustodialHistory.CustodialHistoryItem",
     "Description"
   ];
-  const tagsFields = tags.map((tag, index) => `Tag${index}`);
+  const tagsFields = tags.map((tag, index) => `Content.Tag.${index}`);
 
   const firstRow = fieldsOrder.concat(tagsFields);
 

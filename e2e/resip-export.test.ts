@@ -81,8 +81,8 @@ describe("Export to RESIP", () => {
           "TransactedDate",
           "CustodialHistory.CustodialHistoryItem",
           "Description",
-          "Tag0",
-          "Tag1"
+          "Content.Tag.0",
+          "Content.Tag.1"
         ]);
 
         const todayDate = dateFormat(Date.now(), "yyyy-mm-dd");

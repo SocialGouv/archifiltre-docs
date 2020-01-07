@@ -2,13 +2,10 @@ import path from "path";
 import dateFormat from "dateformat";
 import { tagHasFfId } from "../../reducers/tags/tags-selectors";
 import { makeEmptyArray, replaceValue } from "../../util/array-util";
-import pick from "languages";
+import translations from "../../translations/translations";
 
 const nameChangedText = oldName =>
-  pick({
-    en: `This element original title was '${oldName}'`,
-    fr: `Cet élément était originellement intitulé '${oldName}'`
-  });
+  translations.t("common.originalName", { oldName });
 
 const formatFile = ff => {
   const removeStartingSlash = str =>

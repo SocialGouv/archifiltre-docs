@@ -35,12 +35,12 @@ export const csvExporterThunk = (
       .filter(ffId => ffId !== "")
       .map(ffId => hashes[ffId]);
     const hashesWithHeader = ["hash (MD5)"].concat(hashesList);
-    csv = hashesWithHeader.map((hash, index) => csv[index].concat([hash]));
+    csv = hashesWithHeader.map((hash, index) => csv[index]?.concat([hash]));
   }
 
   const csvWithTags = Tags.toStrList2(filesAndFolders, tags).map(
     (filesAndFolder, index) => {
-      return csv[index].concat(filesAndFolder);
+      return csv[index]?.concat(filesAndFolder);
     }
   );
 

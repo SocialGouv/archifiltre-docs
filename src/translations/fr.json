@@ -65,10 +65,38 @@
     "common": {
       "error": "Oups ! Une erreur s'est produite.",
       "contactUs": "Cliquez ici pour nous contacter",
-      "somethingWentWrong": "Une erreur s'est produite."
+      "somethingWentWrong": "Une erreur s'est produite.",
+      "projectName": "Nom du projet",
+      "file": "fichier",
+      "folder": "répertoire",
+      "originalName": "Cet élément était originellement intitulé '{{oldName}}'",
+      "byteChar": "o"
     },
     "hash": {
       "loadingInfoLabel": "Chargement des empreintes de fichiers et dossiers"
+    },
+    "csvHeader": {
+      "path": "chemin",
+      "pathLength": "longueur du chemin",
+      "name": "nom",
+      "extension": "extension",
+      "size": "poids (octet)",
+      "lastModified": "date de dernière modification",
+      "newName": "nouveau nom",
+      "description": "description",
+      "fileOrFolder": "fichier/répertoire",
+      "depth": "profondeur"
+    },
+    "export": {
+      "metsExportErrorTitle": "Erreur dans l'export METS",
+      "metsExportErrorFileDoesNotExist": "Le fichier \"{{filePath}}\" est introuvable. Il a peut-être été supprimé ou déplacé.",
+      "metsExportErrorCannotAccessFile": "Accès au fichier \"{{filePath}}\" impossible. Vous avez peut-être perdu l'accès.",
+      "metsExportUnhandledError": "Une erreur inattendue s'est produite",
+      "exportSuccessTitle": "Export METS",
+      "exportSuccessMessage": "Le zip d'export METS a été créé dans le dossier parent du projet",
+      "resipExportSuccessMessage": "Fichier de métadonnées exporté dans le dossier racine du projet",
+      "resipExportTitle": "Export Resip",
+      "resipExportStartedMessage": "L'export Resip a commencé"
     }
   }
 }

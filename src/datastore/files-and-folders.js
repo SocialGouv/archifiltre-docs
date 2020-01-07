@@ -1,4 +1,5 @@
 import { concat, zip } from "lodash";
+import translations from "../translations/translations";
 
 import * as ListUtil from "util/list-util";
 import * as RecordUtil from "util/record-util";
@@ -6,7 +7,6 @@ import * as RecordUtil from "util/record-util";
 import { List, Map } from "immutable";
 
 import { epochToFormattedUtcDateString } from "csv";
-import pick from "languages";
 import { getFilesAndFoldersDepth } from "reducers/files-and-folders/files-and-folders-selectors";
 import { expectToBeDefined } from "../util/expect-behaviour";
 const Path = require("path");
@@ -285,43 +285,19 @@ export const [toJs, fromJs] = toAndFromJs(
   RecordUtil.composeFactory(derivedFactory, fileOrFolderFactory)
 );
 
-const str_list_2_header = pick({
-  fr: [
-    "",
-    "chemin",
-    "longueur du chemin",
-    "nom",
-    "extension",
-    "poids (octet)",
-    "date de dernière modification",
-    "nouveau nom",
-    "description",
-    "fichier/répertoire",
-    "profondeur"
-  ],
-  en: [
-    "",
-    "path",
-    "path length",
-    "name",
-    "extension",
-    "size (octet)",
-    "last_modified",
-    "new name",
-    "description",
-    "file/folder",
-    "depth"
-  ]
-});
-const file_str = pick({
-  fr: "fichier",
-  en: "file"
-});
-const folder_str = pick({
-  fr: "répertoire",
-  en: "folder"
-});
-
+const strListToHeader = [
+  "",
+  translations.t("csvHeader.path"),
+  translations.t("csvHeader.pathLength"),
+  translations.t("csvHeader.name"),
+  translations.t("csvHeader.extension"),
+  translations.t("csvHeader.size"),
+  translations.t("csvHeader.lastModified"),
+  translations.t("csvHeader.newName"),
+  translations.t("csvHeader.description"),
+  translations.t("csvHeader.fileOrFolder"),
+  translations.t("csvHeader.depth")
+];
 /**
  * Generates an array of array ([[]]) with the first line being
  * the csv header.
@@ -353,10 +329,10 @@ export const toStrList2 = (filesAndFolders, filesAndFoldersMetadata) => {
     const alias = ff.alias;
     const comments = ff.comments;
     const children = ff.children;
-    let file_or_folder = folder_str;
-    if (children.length === 0) {
-      file_or_folder = file_str;
-    }
+    const file_or_folder =
+      children.length === 0
+        ? translations.t("common.file")
+        : translations.t("common.folder");
     const depth = getFilesAndFoldersDepth(ff.id);
 
     return [
@@ -374,5 +350,5 @@ export const toStrList2 = (filesAndFolders, filesAndFoldersMetadata) => {
     ];
   });
 
-  return [str_list_2_header.slice(), ...ffFormattedArray];
+  return [strListToHeader.slice(), ...ffFormattedArray];
 };

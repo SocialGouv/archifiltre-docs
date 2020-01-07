@@ -1,4 +1,4 @@
-import pick from "languages";
+import translations from "../../translations/translations";
 import path from "path";
 import { generateRandomString } from "util/random-gen-util";
 import { Map } from "immutable";
@@ -598,15 +598,8 @@ export const makeSIP = async ({
   // final ZIP output
   const exportedData = await sip.generateAsync({ type: "nodebuffer" });
 
-  const exportSuccessTitle = pick({
-    en: "METS Export",
-    fr: "Export METS"
-  });
-
-  const exportSuccessMessage = pick({
-    en: "The METS zip has been created in the projet parent folder",
-    fr: "Le zip d'export METS a été créé dans le dossier parent du projet"
-  });
+  const exportSuccessTitle = translations.t("export.exportSuccessTitle");
+  const exportSuccessMessage = translations.t("export.exportSuccessMessage");
 
   fs.writeFileSync(exportFilePath, exportedData);
   notifySuccess(exportSuccessMessage, exportSuccessTitle);

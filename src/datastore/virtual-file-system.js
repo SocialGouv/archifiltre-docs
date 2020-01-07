@@ -1,18 +1,14 @@
 import version from "version";
+import translations from "../translations/translations";
 
 import * as ObjectUtil from "util/object-util.ts";
 import * as RecordUtil from "util/record-util";
 import * as FilesAndFolders from "datastore/files-and-folders";
 import * as Tags from "datastore/tags";
 
-import pick from "languages";
-
 const virtualFileSystem = RecordUtil.createFactory(
   {
-    session_name: pick({
-      en: "Project name",
-      fr: "Nom du projet"
-    }),
+    session_name: translations.t("common.projectName"),
     original_path: "",
     version,
     files_and_folders: FilesAndFolders.empty(),

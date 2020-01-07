@@ -1,29 +1,22 @@
 import { promises as fs } from "fs";
-import pick from "languages";
 import { map, takeLast } from "rxjs/operators";
 import { ArchifiltreThunkAction } from "../reducers/archifiltre-types";
 import { getFilesAndFoldersMetadataFromStore } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getFilesAndFoldersFromStore } from "../reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "../reducers/tags/tags-selectors";
+import translations from "../translations/translations";
 import { arrayToCsv } from "../util/csv-util";
 import { notifyInfo, notifySuccess } from "../util/notifications-util";
 import { makeSIP } from "./mets/mets";
 import { generateResipExport$ } from "./resip/resipExport.controller";
 
-const resipExportSuccessMessage = pick({
-  en: "The metadata file has been exported to project root folder",
-  fr: "Fichier de métadonnées exporté dans le dossier racine du projet"
-});
-
-const resipExportTitle = pick({
-  en: "Resip Export",
-  fr: "Export Resip"
-});
-
-const resipExportStartedMessage = pick({
-  en: "Resip export started",
-  fr: "L'export Resip a commencé"
-});
+const resipExportTitle = translations.t("export.resipExportTitle");
+const resipExportSuccessMessage = translations.t(
+  "export.resipExportSuccessMessage"
+);
+const resipExportStartedMessage = translations.t(
+  "export.resipExportStartedMessage"
+);
 
 /**
  * Thunk to export data to Resip

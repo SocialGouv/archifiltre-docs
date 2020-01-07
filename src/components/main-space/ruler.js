@@ -1,13 +1,10 @@
 import React from "react";
 
-import pick from "languages";
+import translations from "../../translations/translations";
 import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { percent } from "../../util/numbers-util";
 
-const byteChar = pick({
-  en: "B",
-  fr: "o"
-});
+const byteChar = translations.t("common.byteChar");
 
 /**
  * Returns a formatted text with the size percentage of the file or folder

@@ -89,21 +89,15 @@ class ReportCellTags extends React.Component {
     }
   }
 
-  removeHandlerFactory(tagName) {
-    const props = this.props;
-
-    const nodeId = props.node_id;
-    const deleteTagged = props.deleteTagged;
-
-    return () => deleteTagged(tagName, nodeId);
+  removeHandlerFactory(tagId) {
+    const { nodeId, deleteTagged } = this.props;
+    return () => deleteTagged(tagId, nodeId);
   }
 
   onClick(event) {
     event.stopPropagation();
 
-    const state = this.state;
-    const editing = state.editing;
-
+    const editing = this.state.editing;
     const startEditing = this.startEditing;
 
     if (editing === false) {

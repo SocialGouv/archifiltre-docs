@@ -231,6 +231,7 @@ const Report = ({
   let nodeName = "";
   let nodeAlias = "";
   let nodeComments = "";
+  let nodeId = "";
   let displayName = "";
   let bracketName = "";
   let isFolder = false;
@@ -240,6 +241,7 @@ const Report = ({
     nodeName = currentFilesAndFolders.name;
     nodeAlias = currentFilesAndFolders.alias;
     nodeComments = currentFilesAndFolders.comments;
+    nodeId = currentFilesAndFolders.id;
     displayName = nodeAlias === "" ? nodeName : nodeAlias;
     bracketName = nodeAlias === "" ? "" : nodeName;
     isFolder = children.length > 0;
@@ -273,6 +275,7 @@ const Report = ({
               <TagsCell
                 is_dummy={!isActive}
                 cells_style={cellsStyle}
+                nodeId={nodeId}
                 tagsForCurrentFile={tagsForCurrentFile}
                 filesAndFoldersId={filesAndFoldersId}
                 createTag={createTag}

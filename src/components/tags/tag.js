@@ -2,27 +2,21 @@ import React from "react";
 
 import * as ObjectUtil from "util/object-util";
 
-const tag_style = {
+const tagStyle = {
   color: "white",
   backgroundColor: "rgb(10, 50, 100)",
   borderRadius: "0.5em",
   padding: "0 0.5em"
 };
 
-const default_component_style = {
+const defaultComponentStyle = {
   fontWeight: "bold"
 };
 
-const Tag = props => {
-  const removeHandler = props.removeHandler;
-  const custom_style = props.custom_style;
-  const clickHandler = props.clickHandler;
-  const text = props.text;
-  const editing = props.editing;
-
+const Tag = ({ removeHandler, custom_style, clickHandler, text, editing }) => {
   const cross = (
     <div
-      className="tags_bubble  tags_cross"
+      className="tags_bubble tags_cross"
       onMouseUp={e => {
         e.stopPropagation();
         removeHandler();
@@ -32,18 +26,18 @@ const Tag = props => {
     </div>
   );
 
-  const component_style = ObjectUtil.compose(
+  const componentStyle = ObjectUtil.compose(
     custom_style,
-    default_component_style
+    defaultComponentStyle
   );
 
   return (
-    <div className="grid-x" style={component_style} onClick={clickHandler}>
+    <div className="grid-x" style={componentStyle} onClick={clickHandler}>
       <div
         className="cell auto"
         style={{ paddingRight: "0em", wordBreak: "break-word" }}
       >
-        <div style={tag_style}>{text}</div>
+        <div style={tagStyle}>{text}</div>
       </div>
       <div className="cell shrink" style={{ marginLeft: "-0.3em" }}>
         {editing ? cross : <span />}

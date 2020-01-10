@@ -4,14 +4,16 @@
   "description": "Explorer plus plus for archive",
   "author": "",
   "license": "ISC",
-  "main": "electron/index.js",
+  "main": "electron/dist/main.js",
   "scripts": {
-    "dev": "webpack-dev-server --mode development",
-    "dev-test": "webpack-dev-server --mode development --autoload ./test-folder",
-    "dev-app": "cross-env DEV_SERVER=true electron ./electron",
+    "dev": "concurrently -k \"yarn dev-main\" \"yarn dev-renderer\"",
+    "dev-main": "webpack --mode development --config webpack.electron-main.js --watch",
+    "dev-renderer": "webpack-dev-server --mode development",
+    "dev-test": "concurrently -k \"yarn dev-main\" \"yarn dev-renderer --autoload ./test-folder\"",
+    "dev-app": "cross-env DEV_SERVER=true electron ./electron/dist/main",
     "test": "jest \"src/.*\\.test\\.[jt]s\"",
     "e2e": "jest \"e2e/.*\\\\.test\\\\.[jt]s\"",
-    "prepare-prod": "webpack --progress --mode production",
+    "prepare-prod": "webpack --progress --mode production --config webpack.electron-main.js && webpack --progress --mode production",
     "build-prod": "yarn prepare-prod && yarn win32 && yarn win64 && yarn linux",
     "win32": "electron-builder --windows portable --ia32",
     "win64": "electron-builder --windows portable --x64",
@@ -24,7 +26,6 @@
   "build": {
     "appId": "io.github.archifiltre",
     "files": [
-      "electron/index.js",
       "electron/dist",
       "electron/build/icon.*",
       "package.json"
@@ -82,6 +83,7 @@
     "@types/react-redux": "7.1.5",
     "@types/redux-mock-store": "1.0.1",
     "awesome-typescript-loader": "5.2.1",
+    "concurrently": "^5.0.2",
     "copy-webpack-plugin": "5.1.1",
     "cross-env": "6.0.3",
     "css-loader": "3.4.2",

@@ -87,7 +87,7 @@ const askBeforeLeaving = () => {
       detail: detail,
       cancelId: 0
     };
-    let promiseResponse = dialog.showMessageBox(win, options);
+    const promiseResponse = dialog.showMessageBox(win, options);
     promiseResponse.then(obj => {
       if (obj.response === 1) {
         win.destroy();
@@ -110,7 +110,7 @@ function createWindow() {
 
   // and load the index.html of the app.
   if (process.env.DEV_SERVER !== "true" && process.env.NODE_ENV !== "test") {
-    win.loadFile(path.join(__dirname, "dist/index.html"));
+    win.loadFile(path.join(__dirname, "./index.html"));
   } else {
     win.loadURL("http://localhost:8000");
   }
@@ -125,7 +125,6 @@ function createWindow() {
   if (app.isPackaged) {
     askBeforeLeaving();
   }
-
   // Emitted when the window is closed.
   win.on("closed", () => {
     // Dereference the window object, usually you would store windows
@@ -173,16 +172,16 @@ app.on("will-navigate", () => {
   console.log("will-navigate");
 });
 
-app.on("renderer-process-crashed", event => {
+app.on("renderer-process-crashed", () => {
   Raven.captureException("Renderer process crashed");
 });
 
-process.on("uncaughtException", error => {
+process.on("uncaughtException", () => {
   Raven.captureException("Uncaught exception");
 });
 
 const { ipcMain } = require("electron");
 // Needed for secret devtools
-ipcMain.on("open-devtools", (event, arg) => {
+ipcMain.on("open-devtools", () => {
   win.webContents.openDevTools();
 });

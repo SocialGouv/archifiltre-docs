@@ -97,7 +97,7 @@
     "husky": "4.0.3",
     "image-webpack-loader": "6.0.0",
     "jest": "24.9.0",
-    "jest-date-mock": "1.0.7",
+    "jest-date-mock": "1.0.8",
     "jsdoc-to-markdown": "5.0.3",
     "lint-staged": "9.5.0",
     "node-sass": "4.13.0",

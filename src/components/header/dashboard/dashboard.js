@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { octet2HumanReadableFormat } from "components/main-space/ruler";
 
 import { RIEInput } from "riek";
@@ -58,14 +58,23 @@ const DashBoard = props => {
     exportToAuditReport
   } = props;
 
+  const SESSION_NAME_PROP = "new_session_name";
+
+  const sessionNameChanged = useCallback(
+    rieInput => {
+      onChangeSessionName(rieInput[SESSION_NAME_PROP]);
+    },
+    [onChangeSessionName]
+  );
+
   if (started === true && finished === true && error === false) {
     sessionInfoCell = (
       <div style={sessionInfoCellStyle}>
         <span className="edit_hover_container" style={marginPaddingCompensate}>
           <RIEInput
-            value={sessionName()}
-            change={onChangeSessionName("new_session_name")}
-            propName="new_session_name"
+            value={sessionName}
+            change={sessionNameChanged}
+            propName={SESSION_NAME_PROP}
             className="session_name editable_text"
             validate={s => s.replace(/\s/g, "").length > 0}
           />
@@ -207,16 +216,23 @@ export default function DashBoardApiToProps({
   const finished = isFinished();
   const error = isInError();
 
-  const nbFiles = getFileCount(filesAndFolders);
-  const nbFolders = getFoldersCount(filesAndFolders);
+  const nbFiles = useMemo(() => getFileCount(filesAndFolders), [
+    filesAndFolders
+  ]);
+  const nbFolders = useMemo(() => getFoldersCount(filesAndFolders), [
+    filesAndFolders
+  ]);
   const volume = rootFilesAndFoldersMetadata.childrenTotalSize;
 
-  const onChangeSessionName = propName => n => {
-    if (n[propName].length > 0) {
-      database.setSessionName(n[propName]);
-      api.undo.commit();
-    }
-  };
+  const onChangeSessionName = useCallback(
+    newSessionName => {
+      if (newSessionName.length > 0) {
+        database.setSessionName(newSessionName);
+        api.undo.commit();
+      }
+    },
+    [api.undo, database]
+  );
 
   return (
     <DashBoard
@@ -228,7 +244,7 @@ export default function DashBoardApiToProps({
       nb_files={nbFiles}
       nb_folders={nbFolders}
       volume={volume}
-      sessionName={() => database.getSessionName()}
+      sessionName={database.getSessionName()}
       onChangeSessionName={onChangeSessionName}
       exportToCsv={exportToCsv}
       exportToResip={exportToResip}

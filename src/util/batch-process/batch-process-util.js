@@ -141,11 +141,12 @@ export const backgroundWorkerProcess$ = (data, WorkerBuilder) => {
   });
 };
 
-export const aggregateResultsToMap = result => {
-  return result.reduce((acc, { param, result }) => {
-    return {
-      ...acc,
-      [param]: result
-    };
-  }, {});
+export const aggregateResultsToMap = results => {
+  const resultsMap = {};
+
+  results.forEach(({ param, result }) => {
+    resultsMap[param] = result;
+  });
+
+  return resultsMap;
 };

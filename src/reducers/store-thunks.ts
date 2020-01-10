@@ -9,7 +9,7 @@ import {
   getFiles
 } from "../util/file-and-folders-utils";
 import { countZipFiles, isJsonFile } from "../util/file-sys-util";
-import { NotificationTimeout, notifyInfo } from "../util/notifications-util";
+import { NotificationDuration, notifyInfo } from "../util/notifications-util";
 import { wait } from "../util/promise-util";
 import version, { versionComparator } from "../version";
 import { ArchifiltreThunkAction } from "./archifiltre-types";
@@ -34,7 +34,7 @@ const displayZipNotification = zipCount => {
   notifyInfo(
     translations.t("folderDropzone.zipNotificationMessage"),
     `${zipCount} ${translations.t("folderDropzone.zipNotificationTitle")}`,
-    NotificationTimeout.LONG
+    NotificationDuration.PERMANENT
   );
 };
 
@@ -45,7 +45,7 @@ const displayJsonNotification = () => {
   notifyInfo(
     translations.t("folderDropzone.wrongJsonVersion"),
     translations.t("folderDropzone.warning"),
-    NotificationTimeout.LONG
+    NotificationDuration.PERMANENT
   );
 };
 

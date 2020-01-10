@@ -4,6 +4,8 @@ import React from "react";
 import TagsEditable from "components/tags/tags-editable";
 
 import { withTranslation } from "react-i18next";
+import { addTracker } from "../../logging/tracker";
+import { ActionTitle, ActionType } from "../../logging/tracker-types";
 
 const tagsStyle = {
   overflowY: "auto",
@@ -80,6 +82,12 @@ class ReportCellTags extends React.Component {
     } else if (keyCode === enterKeyCode) {
       event.preventDefault();
       if (value.length !== 0) {
+        addTracker({
+          title: ActionTitle.TAG_ADDED,
+          type: ActionType.TRACK_EVENT,
+          value: `Created tag: "${value}"`,
+          eventValue: value
+        });
         createTagged(value, filesAndFoldersId);
         setCandidateTag("");
       }

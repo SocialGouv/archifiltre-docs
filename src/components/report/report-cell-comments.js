@@ -2,6 +2,8 @@ import React from "react";
 
 import CommentsEditable from "components/report/comments-editable";
 import { withTranslation } from "react-i18next";
+import { addTracker } from "../../logging/tracker";
+import { ActionTitle, ActionType } from "../../logging/tracker-types";
 
 class ReportCellComments extends React.Component {
   constructor(props) {
@@ -50,7 +52,12 @@ class ReportCellComments extends React.Component {
     const comments = state.comments;
 
     props.updateComment(comments);
-
+    addTracker({
+      title: ActionTitle.DESCRIPTION_ADDED,
+      type: ActionType.TRACK_EVENT,
+      value: `Created description: "${comments}"`,
+      eventValue: comments
+    });
     this.setState({
       editing: false,
       comments: ""

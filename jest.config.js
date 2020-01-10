@@ -9,7 +9,8 @@ module.exports = {
   globals: {
     STATIC_ASSETS_PATH: ".",
     MODE: "development",
-    SENTRY_DSN: "https://sentry-mock-url.io"
+    SENTRY_DSN: "https://sentry-mock-url.io",
+    FORCE_TRACKING: false
   },
   preset: "ts-jest/presets/js-with-ts"
 };

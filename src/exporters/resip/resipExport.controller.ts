@@ -1,5 +1,7 @@
 import { Observable } from "rxjs";
 import { getLanguage } from "../../languages";
+import { addTracker } from "../../logging/tracker";
+import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "../../reducers/tags/tags-types";
 import { createAsyncWorkerControllerClass } from "../../util/async-worker-util";
@@ -21,6 +23,10 @@ export const generateResipExport$ = (
   filesAndFolders: FilesAndFoldersMap,
   tags: TagMap
 ): Observable<ResipExportProgress> => {
+  addTracker({
+    title: ActionTitle.RESIP_EXPORT,
+    type: ActionType.TRACK_EVENT
+  });
   const ResipExportAsyncWorker = createAsyncWorkerControllerClass(
     ResipExportFork
   );

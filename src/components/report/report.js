@@ -21,6 +21,8 @@ import Icon, {
 import ClickableIcon from "../common/clickable-icon";
 import ReactTooltip from "react-tooltip";
 import { useTranslation } from "react-i18next";
+import { addTracker } from "../../logging/tracker";
+import { ActionTitle, ActionType } from "../../logging/tracker-types";
 
 const pad = "1em";
 
@@ -338,7 +340,12 @@ export default function ReportApiToProps({
     let newAlias =
       riekInputResult[propName] === oldName ? "" : riekInputResult[propName];
     newAlias = newAlias.replace(/^\s*|\s*$/g, "");
-
+    addTracker({
+      title: ActionTitle.ALIAS_ADDED,
+      type: ActionType.TRACK_EVENT,
+      value: `Created alias: "${newAlias}"`,
+      eventValue: newAlias
+    });
     database.updateAlias(() => newAlias, id);
     api.undo.commit();
   };

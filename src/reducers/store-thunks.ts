@@ -1,3 +1,5 @@
+import _ from "lodash";
+import path from "path";
 import AsyncHandleDrop from "../async-handle-drop";
 import { mapToNewVersionNumbers } from "../components/header/a-new-version-is-available";
 import { computeHashesThunk } from "../hash-computer/hash-computer-thunk";
@@ -50,6 +52,26 @@ const displayJsonNotification = () => {
 };
 
 /**
+ * Handles tracking events sent to Matomo
+ * @param paths of files that need to be tracked
+ */
+const handleTracking = paths => {
+  const elementsByExtension = _(paths)
+    .map(path.extname)
+    .countBy(_.identity())
+    .map((count, extension) => `${extension || "[No extension]"}: ${count}`)
+    .unshift(`Files dropped: ${paths.length}`)
+    .join("; \r\n");
+
+  addTracker({
+    eventValue: paths.length,
+    title: ActionTitle.FILE_TREE_DROP,
+    type: ActionType.TRACK_EVENT,
+    value: elementsByExtension
+  });
+};
+
+/**
  * Loads a files
  * @param fileOrFolderPath
  * @param api - The real estate api. Will be removed with real estate.
@@ -80,7 +102,7 @@ export const loadFilesAndFoldersFromPathThunk = (
   };
 
   startToLoadFiles();
-
+  const loadingStart = new Date().getTime();
   try {
     const virtualFileSystem = await AsyncHandleDrop(hook, fileOrFolderPath);
     const jsonVersion = mapToNewVersionNumbers(`${virtualFileSystem.version}`);
@@ -99,6 +121,14 @@ export const loadFilesAndFoldersFromPathThunk = (
       dispatch(initStoreThunk(virtualFileSystem));
     }
     finishedToLoadFiles();
+    const loadingEnd = new Date().getTime();
+    const loadingTime = `${(loadingEnd - loadingStart) / 1000}s`; // Loading time in seconds
+    addTracker({
+      eventValue: loadingTime,
+      title: ActionTitle.LOADING_TIME,
+      type: ActionType.TRACK_EVENT,
+      value: `Loading time: ${loadingTime}`
+    });
     api.undo.commit();
 
     if (!isJsonFile(fileOrFolderPath)) {
@@ -106,11 +136,7 @@ export const loadFilesAndFoldersFromPathThunk = (
       const paths = getFiles(filesAndFoldersMapToArray(filesAndFolders)).map(
         file => file.id
       );
-      addTracker({
-        title: ActionTitle.FILE_TREE_DROP,
-        type: ActionType.TRACK_EVENT,
-        value: `Files dropped: ${paths.length}`
-      });
+      handleTracking(paths);
       const zipFileCount = countZipFiles(paths);
       if (zipFileCount > 0) {
         displayZipNotification(zipFileCount);

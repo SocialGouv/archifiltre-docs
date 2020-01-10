@@ -1,3 +1,5 @@
+import { addTracker } from "../../logging/tracker";
+import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
@@ -24,6 +26,10 @@ export const jsonExporterThunk = ({
   originalPath,
   version
 }: JsonExporterThunkArgs): ArchifiltreThunkAction => (dispatch, getState) => {
+  addTracker({
+    title: ActionTitle.JSON_EXPORT,
+    type: ActionType.TRACK_EVENT
+  });
   const state = getState();
   const fileName = makeNameWithExt(sessionName, "json");
 

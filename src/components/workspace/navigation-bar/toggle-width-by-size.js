@@ -3,12 +3,11 @@ import React from "react";
 import { mkTB } from "components/buttons/button";
 
 import TextAlignCenter from "components/common/text-align-center";
-import * as ObjectUtil from "util/object-util";
 
 import * as Color from "util/color-util";
 import { useTranslation } from "react-i18next";
 
-const Presentational = props => {
+const Presentational = ({ toggleChangeWidthBySize, width_by_size }) => {
   const buttonStyle = {
     margin: 0,
     padding: "0.3em 10%",
@@ -26,9 +25,9 @@ const Presentational = props => {
       <div className="cell small-4">
         <TextAlignCenter>
           {mkTB(
-            props.toggleChangeWidthBySize,
+            toggleChangeWidthBySize,
             t("workspace.bySize"),
-            !props.width_by_size,
+            !width_by_size,
             Color.parentFolder(),
             buttonStyle
           )}
@@ -37,9 +36,9 @@ const Presentational = props => {
       <div className="cell small-4">
         <TextAlignCenter>
           {mkTB(
-            props.toggleChangeWidthBySize,
+            toggleChangeWidthBySize,
             t("workspace.byNumber"),
-            props.width_by_size,
+            width_by_size,
             Color.parentFolder(),
             buttonStyle
           )}
@@ -49,17 +48,17 @@ const Presentational = props => {
   );
 };
 
-export default props => {
-  const api = props.api;
-  const icicle_state = api.icicle_state;
-
-  props = ObjectUtil.compose(
-    {
-      width_by_size: icicle_state.widthBySize(),
-      toggleChangeWidthBySize: icicle_state.toggleChangeWidthBySize
-    },
-    props
+const ToggleWidthBySize = ({
+  api: {
+    icicle_state: { widthBySize, toggleChangeWidthBySize }
+  }
+}) => {
+  return (
+    <Presentational
+      width_by_size={widthBySize()}
+      toggleChangeWidthBySize={toggleChangeWidthBySize}
+    />
   );
-
-  return <Presentational {...props} />;
 };
+
+export default ToggleWidthBySize;

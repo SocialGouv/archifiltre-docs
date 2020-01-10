@@ -6,6 +6,8 @@ import {
 import { toStr } from "../csv";
 import * as FilesAndFolders from "../datastore/files-and-folders";
 import * as Tags from "../datastore/tags";
+import { addTracker } from "../logging/tracker";
+import { ActionTitle, ActionType } from "../logging/tracker-types";
 import { ArchifiltreThunkAction } from "../reducers/archifiltre-types";
 import { getTagsFromStore } from "../reducers/tags/tags-selectors";
 import { save, UTF8 } from "../util/file-sys-util";
@@ -19,6 +21,10 @@ export const csvExporterThunk = (
   name: string,
   { withHashes = false } = {}
 ): ArchifiltreThunkAction => (dispatch, getState) => {
+  addTracker({
+    title: ActionTitle.CSV_EXPORT,
+    type: ActionType.TRACK_EVENT
+  });
   const state = getState();
   const tags = getTagsFromStore(state);
   const filesAndFolders = getFilesAndFoldersFromStore(state);

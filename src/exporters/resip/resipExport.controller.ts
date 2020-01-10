@@ -1,4 +1,5 @@
 import { Observable } from "rxjs";
+import { getLanguage } from "../../languages";
 import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "../../reducers/tags/tags-types";
 import { createAsyncWorkerControllerClass } from "../../util/async-worker-util";
@@ -25,7 +26,7 @@ export const generateResipExport$ = (
   );
 
   return backgroundWorkerProcess$(
-    { filesAndFolders, tags },
+    { filesAndFolders, tags, language: getLanguage()[0] },
     ResipExportAsyncWorker
   );
 };

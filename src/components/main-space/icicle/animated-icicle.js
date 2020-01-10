@@ -2,6 +2,8 @@ import React, { PureComponent } from "react";
 import { animate, clear } from "animation-daemon";
 import { generateRandomString } from "util/random-gen-util";
 import Icicle from "./icicle";
+import { addTracker } from "../../../logging/tracker";
+import { ActionTitle, ActionType } from "../../../logging/tracker-types";
 
 export default class AnimatedIcicle extends PureComponent {
   constructor(props) {
@@ -24,6 +26,10 @@ export default class AnimatedIcicle extends PureComponent {
   }
 
   onIcicleRectDoubleClickHandler(props, event) {
+    addTracker({
+      title: ActionTitle.ICICLE_ZOOM,
+      type: ActionType.TRACK_EVENT
+    });
     this.setState(
       {
         prevProps: this.props,

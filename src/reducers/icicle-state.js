@@ -1,5 +1,7 @@
 import { Record } from "immutable";
 import * as RealEstate from "reducers/real-estate";
+import { addTracker } from "../logging/tracker";
+import { ActionTitle, ActionType } from "../logging/tracker-types";
 
 const State = Record({
   hover_seq: [],
@@ -105,11 +107,19 @@ const setNoTagIdToHighlight = () => state => {
 };
 
 const toggleChangeSkin = () => state => {
+  addTracker({
+    title: ActionTitle.TOGGLE_VIEW_BY_TYPE_DATES,
+    type: ActionType.TRACK_EVENT
+  });
   state = state.update("change_skin", a => !a);
   return state;
 };
 
 const toggleChangeWidthBySize = () => state => {
+  addTracker({
+    title: ActionTitle.TOGGLE_VIEW_BY_VOLUME_NUMBER,
+    type: ActionType.TRACK_EVENT
+  });
   state = state.update("width_by_size", a => !a);
   state = state.update("dims", () => {
     return {};

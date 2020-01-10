@@ -3,12 +3,11 @@ import React from "react";
 import { mkTB } from "components/buttons/button";
 
 import TextAlignCenter from "components/common/text-align-center";
-import * as ObjectUtil from "util/object-util";
 
 import * as Color from "util/color-util";
 import { useTranslation } from "react-i18next";
 
-const Presentational = props => {
+const Presentational = ({ toggleChangeSkin, change_skin }) => {
   const buttonStyle = {
     margin: 0,
     padding: "0.3em 10%",
@@ -25,9 +24,9 @@ const Presentational = props => {
       <div className="cell small-3">
         <TextAlignCenter>
           {mkTB(
-            props.toggleChangeSkin,
+            toggleChangeSkin,
             t("workspace.type"),
-            props.change_skin,
+            change_skin,
             Color.parentFolder(),
             buttonStyle
           )}
@@ -36,9 +35,9 @@ const Presentational = props => {
       <div className="cell small-3">
         <TextAlignCenter>
           {mkTB(
-            props.toggleChangeSkin,
+            toggleChangeSkin,
             t("workspace.dates"),
-            !props.change_skin,
+            !change_skin,
             Color.parentFolder(),
             buttonStyle
           )}
@@ -48,17 +47,17 @@ const Presentational = props => {
   );
 };
 
-export default props => {
-  const api = props.api;
-  const icicle_state = api.icicle_state;
-
-  props = ObjectUtil.compose(
-    {
-      change_skin: icicle_state.changeSkin(),
-      toggleChangeSkin: icicle_state.toggleChangeSkin
-    },
-    props
+const ToggleWidthBySize = ({
+  api: {
+    icicle_state: { changeSkin, toggleChangeSkin }
+  }
+}) => {
+  return (
+    <Presentational
+      change_skin={changeSkin()}
+      toggleChangeSkin={toggleChangeSkin}
+    />
   );
-
-  return <Presentational {...props} />;
 };
+
+export default ToggleWidthBySize;

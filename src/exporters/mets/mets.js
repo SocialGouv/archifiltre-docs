@@ -13,6 +13,8 @@ import {
   metsExportErrorFileDoesNotExist
 } from "./mets-errors";
 import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { addTracker } from "../../logging/tracker";
+import { ActionTitle, ActionType } from "../../logging/tracker-types";
 
 const XML = require("xml");
 const dateFormat = require("dateformat");
@@ -561,6 +563,10 @@ export const makeSIP = async ({
   originalPath,
   sessionName
 }) => {
+  addTracker({
+    title: ActionTitle.METS_EXPORT,
+    type: ActionType.TRACK_EVENT
+  });
   const sip = new JSZip();
   const content = sip.folder("master");
   const addToContent = (filename, data) => {

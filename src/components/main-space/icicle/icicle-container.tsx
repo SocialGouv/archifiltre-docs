@@ -38,6 +38,14 @@ export default function IcicleApiToProps({
     filesAndFolders
   ]);
 
+  const lock = useCallback(
+    (...args) => {
+      icicle_state.lock(...args);
+      api.undo.commit();
+    },
+    [icicle_state.lock, api.undo.commit]
+  );
+
   return (
     <IcicleMain
       api={api}
@@ -48,10 +56,7 @@ export default function IcicleApiToProps({
       maxDepth={maxDepth}
       hover_sequence={icicle_state.hover_sequence()}
       isLocked={isLocked}
-      lock={(...args) => {
-        icicle_state.lock(...args);
-        api.undo.commit();
-      }}
+      lock={lock}
       width_by_size={icicle_state.widthBySize()}
       root_id={database.rootFfId()}
       sequence={icicle_state.sequence()}

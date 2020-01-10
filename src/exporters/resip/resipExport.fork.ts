@@ -1,3 +1,4 @@
+import translations from "../../translations/translations";
 import {
   AsyncWorkerEvent,
   createAsyncWorkerForChildProcess,
@@ -19,7 +20,8 @@ asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, ({ type, data }) => {
     };
     const { hook, getCount } = hookCounter(messageHook);
 
-    const { filesAndFolders, tags } = data;
+    const { filesAndFolders, tags, language } = data;
+    translations.changeLanguage(language);
 
     const resipExportData = resipExporter(filesAndFolders, tags, hook);
 

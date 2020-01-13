@@ -8,7 +8,8 @@ module.exports = {
   setupFiles: ["jest-date-mock"],
   globals: {
     STATIC_ASSETS_PATH: ".",
-    MODE: "development"
+    MODE: "development",
+    SENTRY_DSN: "https://sentry-mock-url.io"
   },
   preset: "ts-jest/presets/js-with-ts"
 };

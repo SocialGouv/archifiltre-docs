@@ -1,7 +1,6 @@
 import * as Sentry from "@sentry/browser";
 
-const sentryUrl =
-  "https://0fa8ab6a50a347a3b1903ed48b4c9e5c@sentry.fabrique.social.gouv.fr/20";
+const sentryUrl = SENTRY_DSN;
 
 const isProd = () => MODE === "production";
 

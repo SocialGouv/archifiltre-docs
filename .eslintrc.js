@@ -17,7 +17,9 @@ module.exports = {
     STATIC_ASSETS_PATH: "readonly",
     AUTOLOAD: "readonly",
     FORCE_TRACKING: "readonly",
-    ARCHIFILTRE_SITE_URL: "readonly"
+    ARCHIFILTRE_SITE_URL: "readonly",
+    SENTRY_DSN: "readonly",
+    SENTRY_MINIDUMP_URL: "readonly"
   },
   plugins: ["lodash-fp"],
   overrides: [

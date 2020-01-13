@@ -7,3 +7,5 @@ declare module "worker-loader!*" {
 }
 
 declare const STATIC_ASSETS_PATH: string;
+declare const SENTRY_DSN: string;
+declare const SENTRY_MINIDUMP_URL: string;

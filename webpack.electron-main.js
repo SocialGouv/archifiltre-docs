@@ -1,4 +1,6 @@
 const path = require("path");
+const webpack = require("webpack");
+require("dotenv").config();
 
 module.exports = {
   mode: "development",
@@ -19,6 +21,12 @@ module.exports = {
   devServer: {
     writeToDisk: true
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
+      SENTRY_MINIDUMP_URL: JSON.stringify(process.env.SENTRY_MINIDUMP_URL)
+    })
+  ],
   module: {
     rules: [
       {

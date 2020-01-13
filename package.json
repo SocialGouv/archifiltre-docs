@@ -152,7 +152,7 @@
     "redux-thunk": "^2.3.0",
     "riek": "1.1.0",
     "rxjs": "^6.5.3",
-    "styled-components": "^4.3.2",
+    "styled-components": "^5.0.0",
     "uuid": "3.3.3",
     "webpack-fork-loader": "^1.0.1",
     "what-input": "^5.2.1",

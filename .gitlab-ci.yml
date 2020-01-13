@@ -43,6 +43,7 @@ Build:
   before_script:
     - yarn --frozen-lockfile
   script:
+    - cp .env.prod .env
     - yarn build-prod
     - export ARCHIFILTRE_VERSION="$(node -e 'console.log(require("./package.json").version)')"
     - git remote add upstream https://github.com/${CI_PROJECT_PATH}

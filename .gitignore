@@ -5,3 +5,4 @@ version
 tmp
 etc/
 dist/
+.env

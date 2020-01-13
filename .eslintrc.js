@@ -19,7 +19,8 @@ module.exports = {
     FORCE_TRACKING: "readonly",
     ARCHIFILTRE_SITE_URL: "readonly",
     SENTRY_DSN: "readonly",
-    SENTRY_MINIDUMP_URL: "readonly"
+    SENTRY_MINIDUMP_URL: "readonly",
+    REACT_DEV_TOOLS_PATH: "readonly"
   },
   plugins: ["lodash-fp"],
   overrides: [

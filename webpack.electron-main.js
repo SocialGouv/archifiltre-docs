@@ -24,7 +24,8 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
-      SENTRY_MINIDUMP_URL: JSON.stringify(process.env.SENTRY_MINIDUMP_URL)
+      SENTRY_MINIDUMP_URL: JSON.stringify(process.env.SENTRY_MINIDUMP_URL),
+      REACT_DEV_TOOLS_PATH: JSON.stringify(process.env.REACT_DEV_TOOLS_PATH)
     })
   ],
   module: {

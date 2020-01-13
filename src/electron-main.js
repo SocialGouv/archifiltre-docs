@@ -110,6 +110,10 @@ function createWindow() {
     win.loadURL("http://localhost:8000");
   }
 
+  if (REACT_DEV_TOOLS_PATH !== "") {
+    BrowserWindow.addDevToolsExtension(REACT_DEV_TOOLS_PATH);
+  }
+
   preventNavigation();
 
   // Open the DevTools.

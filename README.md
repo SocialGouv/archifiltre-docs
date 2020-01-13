@@ -10,6 +10,15 @@ First install the dependencies
 yarn
 ```
 
+Then copy the example env file
+
+```bash
+cp .env.example .env
+```
+
+(Optionnal) Install the React Developper Tools in your chrome browser. Then, find the extension install path and add it to the .env file. More info [here](https://electronjs.org/docs/tutorial/devtools-extension). You must provide the absolute path.
+
+
 You should use autoreloading when developping, using
 
 ```bash

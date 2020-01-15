@@ -1,30 +1,12 @@
 import { cpus } from "os";
 import { Observable } from "rxjs";
+import { chunk } from "lodash";
 import { reportError } from "../../logging/reporter";
 import { makeEmptyArray } from "../array-util";
+import { map } from "rxjs/operators";
 
 // We create NB_CPUS - 1 processes to optimize computation
 const NB_CPUS = cpus().length - 1 > 0 ? cpus().length - 1 : 1;
-
-/**
- * Get next batch of data to process
- * @param array - The full dataSet to process
- * @param batchSize - The number of element to take from the dataSet
- * @returns {Array} - The next dataSet part to process
- */
-const getNextBatch = (array, batchSize) => {
-  return array.slice(0, batchSize);
-};
-
-/**
- * Get the dataset without the next set to process
- * @param array - The full dataSet to process
- * @param batchSize - The number of element to take from the dataSet
- * @returns {Array} - The remaining dataSet to process
- */
-const removeNextBatch = (array, batchSize) => {
-  return array.slice(batchSize);
-};
 
 /**
  *
@@ -43,9 +25,11 @@ const initWorkers = (
     .map(() => new WorkerBuilder())
     .map(worker => {
       worker.postMessage({ type: "initialize", data: initialValues });
-      worker.addEventListener("message", message => {
-        onMessage(worker, message);
-      });
+      if (onMessage) {
+        worker.addEventListener("message", message => {
+          onMessage(worker, message);
+        });
+      }
       worker.addEventListener("error", error =>
         console.error("WorkerError", error)
       );
@@ -57,52 +41,60 @@ export const computeBatch$ = (
   WorkerBuilder,
   { batchSize, initialValues }
 ) => {
-  return new Observable(observer => {
-    let remainingData = data;
-    let runningWorkersCount = 0;
+  const workers = initWorkers(WorkerBuilder, { initialValues });
 
-    const elementProcessed = worker => {
-      runningWorkersCount = runningWorkersCount - 1;
-      if (remainingData.length !== 0) {
-        processNext(worker);
-      } else {
-        if (runningWorkersCount === 0) {
-          observer.complete();
+  /**
+   * Observable that emits when a worker is available.
+   * @type {Observable<Worker>}
+   */
+  const workerAvailable$ = new Observable(observer => {
+    workers.map(worker => {
+      worker.addEventListener("message", ({ data: { type } }) => {
+        if (type === "result") {
+          observer.next(worker);
         }
-      }
-    };
+      });
+      observer.next(worker);
+    });
+  });
 
-    const onMessage = (worker, { data: { type, result: data, error } }) => {
-      switch (type) {
-        case "result":
-          observer.next(data);
-          elementProcessed(worker);
-          break;
+  const queue = chunk(data, batchSize);
+  const queueLength = queue.length;
 
-        case "error":
-          reportError(error);
-          elementProcessed(worker);
-          break;
+  return new Observable(observer => {
+    let completed = 0;
+    workerAvailable$
+      .pipe(
+        map(worker => {
+          if (queue.length > 0) {
+            const sentData = queue.shift();
+            worker.postMessage({
+              type: "data",
+              data: sentData
+            });
+          }
+        })
+      )
+      .subscribe();
 
-        default:
-          console.log(`Unhandled message : ${type}`);
-      }
-    };
-
-    const processNext = worker => {
-      const dataToProcess = getNextBatch(remainingData, batchSize);
-      if (dataToProcess.length <= 0) {
-        worker.terminate();
-        return;
-      }
-      remainingData = removeNextBatch(remainingData, batchSize);
-      runningWorkersCount = runningWorkersCount + 1;
-      worker.postMessage({ type: "data", data: dataToProcess });
-    };
-
-    const workers = initWorkers(WorkerBuilder, { onMessage, initialValues });
-
-    workers.map(worker => processNext(worker));
+    workers.map(worker => {
+      worker.addEventListener(
+        "message",
+        ({ data: { type, result, error } }) => {
+          if (type === "result") {
+            observer.next({ type, result });
+            completed = completed + 1;
+            if (completed === queueLength) {
+              observer.complete();
+              workers.forEach(worker => worker.terminate());
+            }
+          }
+          if (type === "error") {
+            observer.next({ type, error: [error] });
+          }
+        }
+      );
+    });
   });
 };
 
@@ -141,12 +133,15 @@ export const backgroundWorkerProcess$ = (data, WorkerBuilder) => {
   });
 };
 
-export const aggregateResultsToMap = results => {
-  const resultsMap = {};
-
-  results.forEach(({ param, result }) => {
-    resultsMap[param] = result;
-  });
-
-  return resultsMap;
+const aggregateToMap = (paramFieldName, resultFieldName) => valuesArray => {
+  const valuesMap = {};
+  for (let index = 0; index < valuesArray.length; index++) {
+    const currentValue = valuesArray[index];
+    valuesMap[currentValue[paramFieldName]] = currentValue[resultFieldName];
+  }
+  return valuesMap;
 };
+
+export const aggregateResultsToMap = aggregateToMap("param", "result");
+
+export const aggregateErrorsToMap = aggregateToMap("param", "error");

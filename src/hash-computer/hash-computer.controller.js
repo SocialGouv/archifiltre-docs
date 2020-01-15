@@ -1,4 +1,5 @@
 import {
+  aggregateErrorsToMap,
   aggregateResultsToMap,
   backgroundWorkerProcess$,
   computeBatch$
@@ -9,6 +10,8 @@ import FolderHashFork from "./folder-hash-computer.fork.js";
 
 import { bufferTime, map, filter } from "rxjs/operators";
 import { createAsyncWorkerControllerClass } from "../util/async-worker-util";
+import { compose } from "redux";
+import { operateOnDataProcessingStream } from "../util/observable-util";
 
 const BATCH_SIZE = 500;
 const BUFFER_TIME = 1000;
@@ -25,11 +28,19 @@ export const computeHashes$ = (paths, { initialValues: { basePath } }) => {
     batchSize: BATCH_SIZE,
     initialValues: { basePath }
   });
-  return hashes$
-    .pipe(map(aggregateResultsToMap))
-    .pipe(bufferTime(BUFFER_TIME))
-    .pipe(filter(buffer => buffer.length !== 0))
-    .pipe(map(bufferedObjects => Object.assign({}, ...bufferedObjects)));
+
+  const bufferAndMerge = aggregator =>
+    compose(
+      map(bufferedObjects => Object.assign({}, ...bufferedObjects)),
+      filter(buffer => buffer.length !== 0),
+      bufferTime(BUFFER_TIME),
+      map(aggregator)
+    );
+
+  return operateOnDataProcessingStream(hashes$, {
+    error: bufferAndMerge(aggregateErrorsToMap),
+    result: bufferAndMerge(aggregateResultsToMap)
+  });
 };
 
 /**

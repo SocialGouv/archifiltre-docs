@@ -1,4 +1,9 @@
-import { backgroundWorkerProcess$, computeBatch$ } from "./batch-process-util";
+import {
+  aggregateErrorsToMap,
+  aggregateResultsToMap,
+  backgroundWorkerProcess$,
+  computeBatch$
+} from "./batch-process-util";
 import { reportError } from "../../logging/reporter";
 
 jest.mock("os", () => ({
@@ -31,7 +36,12 @@ const makeWorkerMock = () => {
 };
 
 const getEventCallback = (addEventListener, eventType) => {
-  return addEventListener.mock.calls.find(([type]) => type === eventType)[1];
+  return (...args) => {
+    const callbacks = addEventListener.mock.calls.filter(
+      ([type]) => type === eventType
+    );
+    return callbacks.map(([, callback]) => callback(...args));
+  };
 };
 
 describe("batch-process-util", () => {
@@ -94,12 +104,15 @@ describe("batch-process-util", () => {
 
     it("should correctly send responses", () => {
       const messageCallback = getEventCallback(addEventListener, "message");
-      const result = [
-        { param: 0, result: "R0" },
-        { param: 1, result: "R1" }
-      ];
-      messageCallback({ data: { type: "result", result } });
-      expect(responseObserver).toHaveBeenCalledWith(result);
+      const resultMessage = {
+        result: [
+          { param: 0, result: "R0" },
+          { param: 1, result: "R1" }
+        ],
+        type: "result"
+      };
+      messageCallback({ data: resultMessage });
+      expect(responseObserver).toHaveBeenCalledWith(resultMessage);
     });
 
     it("should correctly complete the work", () => {
@@ -182,6 +195,38 @@ describe("batch-process-util", () => {
       const messageCallback = getEventCallback(addEventListener, "message");
       messageCallback({ data: { type: "complete" } });
       expect(terminate).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("aggregateResultsToMap", () => {
+    it("should merge results array into a map", () => {
+      const resultsArray = [
+        { param: "1", result: "value1" },
+        { param: "2", result: "value2" },
+        { param: "3", result: "value3" }
+      ];
+
+      expect(aggregateResultsToMap(resultsArray)).toEqual({
+        "1": "value1",
+        "2": "value2",
+        "3": "value3"
+      });
+    });
+  });
+
+  describe("aggregateErrorsToMap", () => {
+    it("should merge results array into a map", () => {
+      const errorsArray = [
+        { param: "1", error: "error1" },
+        { param: "2", error: "error2" },
+        { param: "3", error: "error3" }
+      ];
+
+      expect(aggregateErrorsToMap(errorsArray)).toEqual({
+        "1": "error1",
+        "2": "error2",
+        "3": "error3"
+      });
     });
   });
 });

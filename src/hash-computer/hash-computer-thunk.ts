@@ -1,4 +1,5 @@
 import path from "path";
+import { tap } from "rxjs/operators";
 import { ArchifiltreThunkAction } from "../reducers/archifiltre-types";
 import { setFilesAndFoldersHashes } from "../reducers/files-and-folders/files-and-folders-actions";
 import {
@@ -13,6 +14,7 @@ import {
 } from "../reducers/loading-info/loading-info-actions";
 import { LoadingInfoTypes } from "../reducers/loading-info/loading-info-types";
 import translations from "../translations/translations";
+import { operateOnDataProcessingStream } from "../util/observable-util";
 import {
   computeFolderHashes$,
   computeHashes$
@@ -51,7 +53,22 @@ export const computeHashesThunk = (
       )
     );
 
-    computeHashes$(ffIds, { initialValues: { basePath } }).subscribe({
+    const hashes$ = computeHashes$(ffIds, { initialValues: { basePath } });
+    const onNewHashesComputed = newHashes => {
+      dispatch(
+        progressLoadingAction(
+          LOAD_FILE_FOLDER_HASH_ACTION_ID,
+          Object.keys(newHashes).length
+        )
+      );
+      dispatch(setFilesAndFoldersHashes(newHashes));
+    };
+
+    operateOnDataProcessingStream(hashes$, {
+      // tslint:disable-next-line:no-console
+      error: tap(console.error),
+      result: tap(onNewHashesComputed)
+    }).subscribe({
       complete: () => {
         const hashes = getHashesFromStore(getState());
         computeFolderHashes$({ filesAndFolders, hashes }).subscribe({
@@ -59,25 +76,8 @@ export const computeHashesThunk = (
             dispatch(completeLoadingAction(LOAD_FILE_FOLDER_HASH_ACTION_ID));
             resolve();
           },
-          next: newHashes => {
-            dispatch(
-              progressLoadingAction(
-                LOAD_FILE_FOLDER_HASH_ACTION_ID,
-                Object.keys(newHashes).length
-              )
-            );
-            dispatch(setFilesAndFoldersHashes(newHashes));
-          }
+          next: onNewHashesComputed
         });
-      },
-      next: hashes => {
-        dispatch(
-          progressLoadingAction(
-            LOAD_FILE_FOLDER_HASH_ACTION_ID,
-            Object.keys(hashes).length
-          )
-        );
-        dispatch(setFilesAndFoldersHashes(hashes));
       }
     });
   });

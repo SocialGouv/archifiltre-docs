@@ -21,7 +21,7 @@ const Header = props => {
       <div className="cell small-3" style={{ paddingTop: "1.5em" }}>
         <span style={{ lineHeight: "1.5em" }}>
           <div style={{ fontSize: "2em" }}>
-            <b className="font_playfair">Archifiltre</b>
+            <b>archifiltre</b>
           </div>
           <div style={{ fontSize: "0.7em" }}>
             {"v" + version + " Nosy Narwhal • "}

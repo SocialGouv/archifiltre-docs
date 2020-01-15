@@ -27,7 +27,6 @@ const LoadingBarName = styled.h3`
   text-align: right;
   font-size: 10px;
   line-height: 13px;
-  font-family: ComfortaaBold;
 `;
 
 interface LoadingInfoProps {

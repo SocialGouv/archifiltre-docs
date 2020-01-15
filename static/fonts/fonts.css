@@ -11,17 +11,3 @@
   font-weight: 400;
   src: url('Quicksand/Quicksand-Bold.ttf') format('opentype');
 }
-
-@font-face {
-  font-family: 'Playfair';
-  font-style: normal;
-  font-weight: 400;
-  src: url('Playfair_Display/PlayfairDisplay-BlackItalic.ttf') format('opentype');
-}
-
-@font-face {
-  font-family: "ComfortaaBold";
-  font-style: normal;
-  font-weight: bold;
-  src: url('comfortaa/Comfortaa-Bold.ttf') format('opentype');
-}

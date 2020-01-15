@@ -75,7 +75,7 @@
     "@commitlint/cli": "8.3.4",
     "@commitlint/config-conventional": "8.3.4",
     "@socialgouv/eslint-config-react": "0.14.0",
-    "@socialgouv/tslint-config-recommended": "0.13.0",
+    "@socialgouv/tslint-config-recommended": "0.14.0",
     "@types/jest": "24.9.0",
     "@types/lodash": "4.14.149",
     "@types/react": "16.9.17",

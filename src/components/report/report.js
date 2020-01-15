@@ -39,6 +39,12 @@ const marginPaddingCompensate = {
   padding: "0.2em 0.8em"
 };
 
+const hashDivStyle = {
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+  overflow: "hidden"
+};
+
 const ElementIcon = ({
   placeholder,
   isFolder,
@@ -188,7 +194,7 @@ const InfoCell = ({
       <div>
         <b>{t("report.size")} :</b> {sizeLabel}
       </div>
-      <div>
+      <div style={hashDivStyle}>
         <b>
           {t("report.hash")}&nbsp;
           <span data-tip={hashExplanationText} data-for="hash-explanation">
@@ -196,7 +202,7 @@ const InfoCell = ({
           </span>
           &nbsp;:&nbsp;
         </b>
-        {hashLabel}
+        <span>{hashLabel}</span>
         <ReactTooltip place={"bottom"} id="hash-explanation" />
       </div>
       <br />

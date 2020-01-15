@@ -1,7 +1,7 @@
 import path from "path";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import { from as observableFrom } from "rxjs";
+import { of } from "rxjs";
 import { DispatchExts } from "../reducers/archifiltre-types";
 import { setFilesAndFoldersHashes } from "../reducers/files-and-folders/files-and-folders-actions";
 import { createFilesAndFolders } from "../reducers/files-and-folders/files-and-folders-test-utils";
@@ -73,10 +73,10 @@ describe("computeHashesThunk", () => {
   it("should compute hashes and save them", async () => {
     const computeHashes$Mock = computeHashes$ as jest.Mock;
     const computeFolderHashes$Mock = computeFolderHashes$ as jest.Mock;
-    computeHashes$Mock.mockImplementation(() => observableFrom([fileHashes]));
-    computeFolderHashes$Mock.mockImplementation(() =>
-      observableFrom([folderHashes])
+    computeHashes$Mock.mockImplementation(() =>
+      of({ type: "result", result: fileHashes })
     );
+    computeFolderHashes$Mock.mockImplementation(() => of(folderHashes));
     await testStore.dispatch(computeHashesThunk(originalPath));
     expect(computeHashes$).toHaveBeenCalledWith([ffId1], {
       initialValues: { basePath: expectedBasePath }

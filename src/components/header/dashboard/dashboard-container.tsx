@@ -7,15 +7,18 @@ import {
   resipExporterThunk
 } from "../../../exporters/export-thunks";
 import { jsonExporterThunk } from "../../../exporters/json/json-exporter";
-import { LOAD_FILE_FOLDER_HASH_ACTION_ID } from "../../../hash-computer/hash-computer-thunk";
 import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { getFilesAndFoldersFromStore } from "../../../reducers/files-and-folders/files-and-folders-selectors";
-import { getLoadingInfoFromStore } from "../../../reducers/loading-info/loading-info-selectors";
+import {
+  getFilesAndFoldersFromStore,
+  getHashesFromStore
+} from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import Dashboard from "./dashboard";
 
 interface DashboardContainerProps {
   api: any;
 }
+
+const ROOT_ID = "";
 
 const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
   const dispatch = useDispatch();
@@ -49,10 +52,8 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
   const metadata = useSelector(getFilesAndFoldersMetadataFromStore);
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
   const rootFilesAndFoldersMetadata = metadata[""] || {};
-  const loadingInfo = useSelector(getLoadingInfoFromStore);
-  const areHashesReady =
-    loadingInfo.complete.includes(LOAD_FILE_FOLDER_HASH_ACTION_ID) ||
-    loadingInfo.dismissed.includes(LOAD_FILE_FOLDER_HASH_ACTION_ID);
+  const hashes = useSelector(getHashesFromStore);
+  const areHashesReady = hashes[ROOT_ID] !== undefined;
 
   return (
     <Dashboard

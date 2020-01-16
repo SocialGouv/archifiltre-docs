@@ -37,6 +37,9 @@ const loadingInfoReducer = (
         }
       };
     case UPDATE_LOADING:
+      if (!state.loadingInfo[action.id]) {
+        return state;
+      }
       return {
         ...state,
         loadingInfo: {
@@ -50,6 +53,9 @@ const loadingInfoReducer = (
       };
 
     case PROGRESS_LOADING:
+      if (!state.loadingInfo[action.id]) {
+        return state;
+      }
       const currentLoadingInfo = state.loadingInfo[action.id];
       return {
         ...state,
@@ -63,6 +69,9 @@ const loadingInfoReducer = (
       };
 
     case COMPLETE_LOADING:
+      if (!state.loadingInfo[action.id]) {
+        return state;
+      }
       return {
         ...state,
         complete: [...state.complete, action.id],

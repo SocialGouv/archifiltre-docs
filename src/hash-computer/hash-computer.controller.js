@@ -5,7 +5,7 @@ import {
   computeBatch$
 } from "../util/batch-process/batch-process-util";
 
-import FileHashFork from "./file-hash-computer.fork.js";
+import FileHashFork from "./file-hash-computer.fork";
 import FolderHashFork from "./folder-hash-computer.fork.js";
 
 import { bufferTime, map, filter } from "rxjs/operators";

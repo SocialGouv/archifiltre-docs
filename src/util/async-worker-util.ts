@@ -5,7 +5,7 @@ export enum AsyncWorkerEvent {
   MESSAGE = "message"
 }
 
-interface AsyncWorker {
+export interface AsyncWorker {
   addEventListener: (
     eventType: AsyncWorkerEvent,
     listener: EventListener

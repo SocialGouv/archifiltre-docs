@@ -153,7 +153,7 @@
     "riek": "1.1.0",
     "rxjs": "^6.5.3",
     "styled-components": "^5.0.0",
-    "uuid": "3.3.3",
+    "uuid": "3.4.0",
     "webpack-fork-loader": "^1.0.1",
     "what-input": "^5.2.1",
     "xml": "1.0.1"

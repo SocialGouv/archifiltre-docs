@@ -9,9 +9,9 @@ import {
 } from "../reducers/files-and-folders/files-and-folders-selectors";
 import {
   completeLoadingAction,
-  progressLoadingAction,
-  startLoadingAction
+  progressLoadingAction
 } from "../reducers/loading-info/loading-info-actions";
+import { startLoading } from "../reducers/loading-info/loading-info-operations";
 import { LoadingInfoTypes } from "../reducers/loading-info/loading-info-types";
 import translations from "../translations/translations";
 import { operateOnDataProcessingStream } from "../util/observable-util";
@@ -19,8 +19,6 @@ import {
   computeFolderHashes$,
   computeHashes$
 } from "./hash-computer.controller";
-
-export const LOAD_FILE_FOLDER_HASH_ACTION_ID = "load-files-and-folders";
 
 /**
  * Thunk that computes files and folders hashes
@@ -44,9 +42,8 @@ export const computeHashesThunk = (
   const loadingHashLabel = translations.t("hash.loadingInfoLabel");
 
   return new Promise(resolve => {
-    dispatch(
-      startLoadingAction(
-        LOAD_FILE_FOLDER_HASH_ACTION_ID,
+    const loadingActionId = dispatch(
+      startLoading(
         LoadingInfoTypes.HASH_COMPUTING,
         nbFilesAndFolders,
         loadingHashLabel
@@ -56,10 +53,7 @@ export const computeHashesThunk = (
     const hashes$ = computeHashes$(ffIds, { initialValues: { basePath } });
     const onNewHashesComputed = newHashes => {
       dispatch(
-        progressLoadingAction(
-          LOAD_FILE_FOLDER_HASH_ACTION_ID,
-          Object.keys(newHashes).length
-        )
+        progressLoadingAction(loadingActionId, Object.keys(newHashes).length)
       );
       dispatch(setFilesAndFoldersHashes(newHashes));
     };
@@ -73,7 +67,7 @@ export const computeHashesThunk = (
         const hashes = getHashesFromStore(getState());
         computeFolderHashes$({ filesAndFolders, hashes }).subscribe({
           complete: () => {
-            dispatch(completeLoadingAction(LOAD_FILE_FOLDER_HASH_ACTION_ID));
+            dispatch(completeLoadingAction(loadingActionId));
             resolve();
           },
           next: onNewHashesComputed

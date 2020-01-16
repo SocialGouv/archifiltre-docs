@@ -7,8 +7,7 @@ import { setFilesAndFoldersHashes } from "../reducers/files-and-folders/files-an
 import { createFilesAndFolders } from "../reducers/files-and-folders/files-and-folders-test-utils";
 import {
   completeLoadingAction,
-  progressLoadingAction,
-  startLoadingAction
+  progressLoadingAction
 } from "../reducers/loading-info/loading-info-actions";
 import { LoadingInfoTypes } from "../reducers/loading-info/loading-info-types";
 import { StoreState } from "../reducers/store";
@@ -16,10 +15,7 @@ import {
   createEmptyStore,
   wrapStoreWithUndoable
 } from "../reducers/store-test-utils";
-import {
-  computeHashesThunk,
-  LOAD_FILE_FOLDER_HASH_ACTION_ID
-} from "./hash-computer-thunk";
+import { computeHashesThunk } from "./hash-computer-thunk";
 import {
   computeFolderHashes$,
   computeHashes$
@@ -35,6 +31,13 @@ jest.mock("../reducers/files-and-folders/files-and-folders-actions", () => ({
     hashes: savedHashes,
     type: "SET_FF_HASHES"
   })
+}));
+
+jest.mock("../reducers/loading-info/loading-info-operations", () => ({
+  startLoading: (type, goal, label) => dispatch => {
+    dispatch({ type: "start-loading", loadingType: type, goal, label });
+    return "fake-id";
+  }
 }));
 
 jest.mock("../translations/translations", () => ({
@@ -88,17 +91,17 @@ describe("computeHashesThunk", () => {
     });
 
     expect(testStore.getActions()).toEqual([
-      startLoadingAction(
-        LOAD_FILE_FOLDER_HASH_ACTION_ID,
-        LoadingInfoTypes.HASH_COMPUTING,
-        1,
-        "default-name"
-      ),
-      progressLoadingAction(LOAD_FILE_FOLDER_HASH_ACTION_ID, 1),
+      {
+        goal: 1,
+        label: "default-name",
+        loadingType: LoadingInfoTypes.HASH_COMPUTING,
+        type: "start-loading"
+      },
+      progressLoadingAction("fake-id", 1),
       setFilesAndFoldersHashes(fileHashes),
-      progressLoadingAction(LOAD_FILE_FOLDER_HASH_ACTION_ID, 1),
+      progressLoadingAction("fake-id", 1),
       setFilesAndFoldersHashes(folderHashes),
-      completeLoadingAction(LOAD_FILE_FOLDER_HASH_ACTION_ID)
+      completeLoadingAction("fake-id")
     ]);
   });
 });

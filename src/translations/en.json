@@ -31,6 +31,7 @@
       "fileOrFolderRealNamePlaceholder": "Real name",
       "size": "Size",
       "hash": "Hash",
+      "type": "Type",
       "fileHashExplanation": "This hash is a file footprint computed with the MD5 algorithm",
       "folderHashExplanation": "This hash is a footprint (computed with the MD5 algorithm) of this folder's children hashes concatenation",
       "clickHereToAddComments": "Click here to add comments!"
@@ -70,7 +71,8 @@
       "file": "file",
       "folder": "folder",
       "originalName": "This element original title was '{{oldName}}'",
-      "byteChar": "B"
+      "byteChar": "B",
+      "unknown": "Unknown"
     },
     "hash": {
       "loadingInfoLabel": "Loading files and folders hashes"

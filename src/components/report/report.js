@@ -23,6 +23,8 @@ import ReactTooltip from "react-tooltip";
 import { useTranslation } from "react-i18next";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
+import { lookup } from "mime-types";
+import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
 
 const pad = "1em";
 
@@ -45,6 +47,12 @@ const hashDivStyle = {
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
   overflow: "hidden"
+};
+
+const getType = (filesAndFolders, filesAndFoldersId, t) => {
+  if (!isFile(filesAndFolders)) return t("common.folder");
+  const mimeType = lookup(filesAndFoldersId);
+  return mimeType ? mimeType.split("/").pop() : t("common.unknown");
 };
 
 const ElementIcon = ({
@@ -190,6 +198,9 @@ const InfoCell = ({
   const hashExplanationText = isFolder
     ? t("report.folderHashExplanation")
     : t("report.fileHashExplanation");
+  const typeLabel = placeholder
+    ? "..."
+    : getType(currentFilesAndFolders, filesAndFoldersId, t);
 
   return (
     <div style={infoCellStyle}>
@@ -206,6 +217,9 @@ const InfoCell = ({
         </b>
         <span>{hashLabel}</span>
         <ReactTooltip place={"bottom"} id="hash-explanation" />
+      </div>
+      <div>
+        <b>{t("report.type")} :</b> {typeLabel}
       </div>
       <br />
       <LastModifiedReporter

@@ -1,7 +1,7 @@
 import { traverseFileTree } from "util/file-sys-util";
 
 import * as VirtualFileSystem from "datastore/virtual-file-system";
-import { reportError, reportMessage } from "./logging/reporter";
+import { reportError, reportWarning } from "./logging/reporter";
 import { hookCounter } from "./util/hook-utils";
 import {
   AsyncWorkerEvent,
@@ -29,7 +29,7 @@ function loadFolder(folderPath) {
     [, origin] = traverseFileTree(traverseHook, folderPath);
   } catch (err) {
     reportError(err);
-    reportMessage("Error in traverseFileTree");
+    reportWarning("Error in traverseFileTree");
     asyncWorker.postMessage({ status: "error", message: err.message });
     return;
   }
@@ -61,7 +61,7 @@ function loadFolder(folderPath) {
     });
   } catch (err) {
     reportError(err);
-    reportMessage("Error in vfs.make");
+    reportWarning("Error in vfs.make");
     asyncWorker.postMessage({ status: "error", message: err.message });
     return;
   }
@@ -101,7 +101,7 @@ function loadFolder(folderPath) {
     });
   } catch (error) {
     reportError(error);
-    reportMessage("Error in vfs.derivate");
+    reportWarning("Error in vfs.derivate");
     asyncWorker.postMessage({ status: "error", message: error.message });
   }
   asyncWorker.postMessage({

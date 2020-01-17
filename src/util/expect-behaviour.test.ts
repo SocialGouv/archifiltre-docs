@@ -1,22 +1,22 @@
-import { reportMessage } from "../logging/reporter";
+import { reportWarning } from "../logging/reporter";
 import { expectToBeDefined } from "./expect-behaviour";
 
 jest.mock("../logging/reporter", () => ({
-  reportMessage: jest.fn()
+  reportWarning: jest.fn()
 }));
 
-const reportMessageMock = reportMessage as jest.Mock;
+const reportWarningMock = reportWarning as jest.Mock;
 
 describe("expect-behaviour", () => {
   describe("expectToBeDefined", () => {
     it("should call report message if value is undefined", () => {
-      reportMessageMock.mockReset();
+      reportWarningMock.mockReset();
 
       const mockMessage = "mock-message";
       const isDefined = expectToBeDefined(undefined, mockMessage);
 
       expect(isDefined).toBe(false);
-      expect(reportMessageMock).toHaveBeenCalledWith(
+      expect(reportWarningMock).toHaveBeenCalledWith(
         JSON.stringify({
           actual: undefined,
           message: mockMessage,
@@ -26,13 +26,13 @@ describe("expect-behaviour", () => {
     });
 
     it("should call report message if value is null", () => {
-      reportMessageMock.mockReset();
+      reportWarningMock.mockReset();
 
       const mockMessage = "mock-message";
       const isDefined = expectToBeDefined(null, mockMessage);
 
       expect(isDefined).toBe(false);
-      expect(reportMessage).toHaveBeenCalledWith(
+      expect(reportWarning).toHaveBeenCalledWith(
         JSON.stringify({
           actual: null,
           message: mockMessage,
@@ -42,14 +42,14 @@ describe("expect-behaviour", () => {
     });
 
     it("should not call report message if value is defined", () => {
-      reportMessageMock.mockReset();
+      reportWarningMock.mockReset();
 
       const testedValue = "testedValue";
       const mockMessage = "mock-message";
       const isDefined = expectToBeDefined(testedValue, mockMessage);
 
       expect(isDefined).toBe(true);
-      expect(reportMessage).not.toHaveBeenCalled();
+      expect(reportWarning).not.toHaveBeenCalled();
     });
   });
 });

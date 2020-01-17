@@ -1,4 +1,4 @@
-import { reportMessage } from "../logging/reporter";
+import { reportWarning } from "../logging/reporter";
 
 /**
  * Expects a value to be defined. Otherwise, reports a message with the values.
@@ -10,7 +10,7 @@ export const expectToBeDefined = <T>(actual: T, message: string): boolean => {
   const isDefined = actual !== undefined && actual !== null;
 
   if (!isDefined) {
-    reportMessage(
+    reportWarning(
       JSON.stringify({
         actual,
         message,

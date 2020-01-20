@@ -1,17 +1,22 @@
 import React from "react";
-import BreadCrumbText from "components/breadcrumb/breadcrumb-text";
-import BreadCrumbPoly from "components/breadcrumb/breadcrumb-poly";
+import BreadCrumbText from "./breadcrumb-text";
+import BreadCrumbPoly from "./breadcrumb-poly";
 import * as Color from "util/color-util";
 import { useTranslation } from "react-i18next";
+import { ActiveBreadcrumb } from "./active-breadcrumb";
 
-const makeBreadKey = id => "breadcrumbc-" + id;
-const removeRootId = arr => arr.slice(1);
+const makeBreadcrumbKey = id => `breadcrumbc-${id}`;
+const removeRootId = array => array.slice(1);
 const computeCumulative = array => {
   const ans = [0];
   for (let i = 0; i < array.length - 1; i++) {
     ans.push(array[i] + ans[i]);
   }
   return ans;
+};
+
+const breadcrumbStyle = {
+  cursor: "pointer"
 };
 
 class Breadcrumbs extends React.PureComponent {
@@ -92,26 +97,18 @@ class Breadcrumbs extends React.PureComponent {
 
         const opacity = locked.includes(node_id) ? 1 : isLocked ? 0.4 : 0.7;
         return (
-          <g key={makeBreadKey(node_id)}>
-            <BreadCrumbPoly
-              isLast={isLast}
-              isFirst={isFirst}
-              x={dim.x_poly}
-              y={dim.y_poly}
-              dx={dim.width_poly}
-              dy={dim.height_poly}
-              fillColor={fillColor}
-              opacity={opacity}
-            />
-            <BreadCrumbText
-              x={dim.x_text}
-              y={dim.y_text}
-              dx={dim.width_text}
-              dy={dim.height_text}
-              text={display_name}
-              isPlaceholder={false}
-            />
-          </g>
+          <ActiveBreadcrumb
+            key={makeBreadcrumbKey(node_id)}
+            style={breadcrumbStyle}
+            fillColor={fillColor}
+            nodeId={node_id}
+            displayName={display_name}
+            dim={dim}
+            isLast={isLast}
+            isFirst={isFirst}
+            opacity={opacity}
+            icicleState={icicleState}
+          />
         );
       });
     } else {

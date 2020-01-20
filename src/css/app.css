@@ -138,6 +138,16 @@
   min-width: 30%;
 }
 
+.breadcrumb-label:hover .copy-to-clipboard {
+  visibility: visible;
+  display: inline-block;
+}
+
+.breadcrumb-label .copy-to-clipboard {
+  visibility: hidden;
+  display: initial;
+}
+
 body {
   -webkit-background-size: cover;
   -moz-background-size: cover;

@@ -1,12 +1,9 @@
 import React from "react";
-import BreadCrumbText from "./breadcrumb-text";
-import BreadCrumbPoly from "./breadcrumb-poly";
 import * as Color from "util/color-util";
 import { useTranslation } from "react-i18next";
-import { ActiveBreadcrumb } from "./active-breadcrumb";
+import { Breadcrumb } from "./breadcrumb";
+import { makeEmptyArray } from "../../../util/array-util";
 
-const makeBreadcrumbKey = id => `breadcrumbc-${id}`;
-const removeRootId = array => array.slice(1);
 const computeCumulative = array => {
   const ans = [0];
   for (let i = 0; i < array.length - 1; i++) {
@@ -15,16 +12,16 @@ const computeCumulative = array => {
   return ans;
 };
 
-const breadcrumbStyle = {
-  cursor: "pointer"
-};
-
 class Breadcrumbs extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.trueFHeight = this.trueFHeight.bind(this);
     this.computeDim = this.computeDim.bind(this);
+    this.getDisplayName = this.getDisplayName.bind(this);
+    this.getInactiveBreadcrumbs = this.getInactiveBreadcrumbs.bind(this);
+    this.getFillColor = this.getFillColor.bind(this);
+    this.getOpacity = this.getOpacity.bind(this);
   }
 
   trueFHeight(id) {
@@ -61,101 +58,91 @@ class Breadcrumbs extends React.PureComponent {
     };
   }
 
+  getDisplayName(nodeId) {
+    const node = this.props.getFfByFfId(nodeId);
+    return node.alias === "" ? node.name : node.alias;
+  }
+
+  getInactiveBreadcrumbs(maxHeight) {
+    const maxDepth = Math.min(this.props.maxDepth, 5);
+    const topLevel = `${this.props.t("workspace.level")} 1`;
+    const secondLevel =
+      maxHeight > 2 ? [`${this.props.t("workspace.level")} 2`] : [];
+    const intermediateLevels = makeEmptyArray(Math.max(maxDepth - 3, 0), "...");
+    const lastLevel = this.props.t("workspace.file");
+    return [topLevel, ...secondLevel, ...intermediateLevels, lastLevel];
+  }
+
+  getFillColor(isActive, nodeId) {
+    return isActive ? this.props.fillColor(nodeId) : Color.placeholder();
+  }
+
+  getOpacity(isLocked, nodeId) {
+    return this.props.api.icicle_state.lock_sequence().includes(nodeId)
+      ? 1
+      : isLocked
+      ? 0.4
+      : 0.7;
+  }
+
   render() {
+    const {
+      isFocused,
+      isLocked,
+      api: {
+        icicle_state: icicleState,
+        icicle_state: { lock_sequence, hover_sequence },
+        database: { getOriginalPath }
+      },
+      root_id,
+      maxDepth
+    } = this.props;
     const trueFHeight = this.trueFHeight;
-    const { isFocused, isLocked, getFfByFfId, api, root_id, t } = this.props;
-
-    const displayName = id => {
-      const node = getFfByFfId(id);
-      return node.alias === "" ? node.name : node.alias;
-    };
-
-    let res = [];
-
-    if (isFocused || isLocked) {
-      const icicleState = api.icicle_state;
-      const locked = icicleState.lock_sequence();
-      const hovered = icicleState.hover_sequence();
-      const displayedNodes = isFocused ? hovered : locked;
-      const paddedDisplayedNodes = removeRootId(displayedNodes);
-
-      const breadcrumbSequenceHeight = paddedDisplayedNodes.map(trueFHeight);
-      const cumulatedBreadcrumbSequenceHeight = computeCumulative(
-        breadcrumbSequenceHeight
-      );
-
-      res = paddedDisplayedNodes.map((node_id, i) => {
-        const fillColor = this.props.fillColor(node_id);
-        const display_name = displayName(node_id);
-        const isLast = i === hovered.length - 1;
-        const isFirst = i === 0;
-
-        const dim = this.computeDim(
-          cumulatedBreadcrumbSequenceHeight[i],
-          breadcrumbSequenceHeight[i]
-        );
-
-        const opacity = locked.includes(node_id) ? 1 : isLocked ? 0.4 : 0.7;
-        return (
-          <ActiveBreadcrumb
-            key={makeBreadcrumbKey(node_id)}
-            style={breadcrumbStyle}
-            fillColor={fillColor}
-            nodeId={node_id}
-            displayName={display_name}
-            dim={dim}
-            isLast={isLast}
-            isFirst={isFirst}
-            opacity={opacity}
-            icicleState={icicleState}
-          />
-        );
-      });
-    } else {
-      const heightChild = trueFHeight(root_id);
-      const maxDepth = Math.min(this.props.maxDepth, 5);
-      const fillColor = Color.placeholder();
-
-      for (let depth = 0; depth < maxDepth; depth++) {
-        const isLast = depth === maxDepth - 1;
-        const isFirst = depth === 0;
-        const dim = this.computeDim(depth * heightChild, heightChild);
-
-        let displayName;
-        if (isLast) {
-          displayName = t("workspace.file");
-        } else if (depth >= 2) {
-          displayName = "...";
-        } else {
-          displayName = `${t("workspace.level")} ${depth + 1}`;
-        }
-        res.push(
-          <g key={`breadcrumb${depth}`}>
-            <BreadCrumbPoly
-              isLast={isLast}
-              isFirst={isFirst}
-              x={dim.x_poly}
-              y={dim.y_poly}
-              dx={dim.width_poly}
-              dy={dim.height_poly}
-              fillColor={fillColor}
-            />
-            <BreadCrumbText
-              x={dim.x_text}
-              y={dim.y_text}
-              dx={dim.width_text}
-              dy={dim.height_text}
-              text={displayName}
-              isPlaceholder={true}
-            />
-          </g>
-        );
-      }
-    }
+    const originalPath = getOriginalPath();
+    const nodesWithRootId = isFocused ? hover_sequence() : lock_sequence();
+    const inactiveBreadcrumbs = this.getInactiveBreadcrumbs(maxDepth);
+    const activeBreadcrumbs = nodesWithRootId.slice(1);
+    const breadcrumbSequenceHeight = activeBreadcrumbs.map(trueFHeight);
+    const cumulatedBreadcrumbSequenceHeight = computeCumulative(
+      breadcrumbSequenceHeight
+    );
+    const childHeight = trueFHeight(root_id);
+    const isActive = isFocused || isLocked;
+    const breadcrumbs = isActive ? activeBreadcrumbs : inactiveBreadcrumbs;
 
     return (
       <g style={{ opacity: isFocused || isLocked ? 1 : 0.3, stroke: "#fff" }}>
-        {res}
+        {breadcrumbs.map((nodeId, depth) => {
+          const fillColor = this.getFillColor(isActive, nodeId);
+          const displayName = isActive ? this.getDisplayName(nodeId) : nodeId;
+          const opacity = this.getOpacity(isLocked, nodeId);
+          const isFirst = depth === 0;
+          const isLast = isActive
+            ? depth === maxDepth - 1
+            : depth === inactiveBreadcrumbs.length - 1;
+          const dim = isActive
+            ? this.computeDim(
+                cumulatedBreadcrumbSequenceHeight[depth],
+                breadcrumbSequenceHeight[depth]
+              )
+            : this.computeDim(depth * childHeight, childHeight);
+
+          return (
+            <Breadcrumb
+              key={`breadcrumb-${depth}`}
+              fillColor={fillColor}
+              nodeId={nodeId}
+              displayName={displayName}
+              dim={dim}
+              isLast={isLast}
+              isFirst={isFirst}
+              opacity={opacity}
+              icicleState={icicleState}
+              originalPath={originalPath}
+              isActive={isActive}
+            />
+          );
+        })}
       </g>
     );
   }

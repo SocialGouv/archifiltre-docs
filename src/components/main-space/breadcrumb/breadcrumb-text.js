@@ -1,5 +1,12 @@
 import React from "react";
 
+const breadcrumbTextStyle = {
+  paddingRight: "5px",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  overflow: "hidden"
+};
+
 const smartClip = (text, availableSpace, fontWidth) => {
   const targetSize = Math.floor(availableSpace / fontWidth);
   const slice = Math.floor(targetSize / 2);
@@ -15,26 +22,16 @@ const smartClip = (text, availableSpace, fontWidth) => {
 };
 
 const BreadcrumbText = props => {
-  const { isPlaceholder, text, x, y, dx, dy } = props;
+  const { text, dx } = props;
   const availableSpace = 0.8 * dx;
   const fontWidth = 6;
   const normalizedFontWidth =
     text.length * fontWidth < availableSpace ? fontWidth : 0.75 * fontWidth;
 
   return (
-    <text
-      className="breadcrumb-text"
-      x={x}
-      y={y}
-      dx="0"
-      dy={dy / 2 + 5}
-      textAnchor="start"
-      stroke="none"
-      fontWeight={isPlaceholder ? "bold" : ""}
-      fontSize={text.length * fontWidth < availableSpace ? "1em" : "0.7em"}
-    >
+    <div style={breadcrumbTextStyle}>
       {smartClip(text, availableSpace, normalizedFontWidth)}
-    </text>
+    </div>
   );
 };
 

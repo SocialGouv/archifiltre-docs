@@ -159,6 +159,7 @@
     "webpack-fork-loader": "^1.0.1",
     "what-input": "^5.2.1",
     "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^4.4.1",
     "winston-sentry-raven-transport": "^1.2.0",
     "winston-transport": "^4.3.0",
     "xml": "1.0.1"

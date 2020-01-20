@@ -1,7 +1,7 @@
 import React from "react";
 
 import SaveButton from "components/buttons/save-button";
-import { reportError } from "../../logging/reporter";
+import { reportError } from "../../logging/reporter.ts";
 import { ContactUs } from "./contact-us";
 import { withTranslation } from "react-i18next";
 

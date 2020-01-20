@@ -8,7 +8,6 @@ import { List, Map } from "immutable";
 
 import { epochToFormattedUtcDateString } from "csv";
 import { getFilesAndFoldersDepth } from "reducers/files-and-folders/files-and-folders-selectors";
-import { expectToBeDefined } from "../util/expect-behaviour";
 const Path = require("path");
 
 const fileOrFolderFactory = RecordUtil.createFactory(
@@ -63,7 +62,7 @@ export const ff = (a, hook) => {
     });
 
     if (hook) {
-      hook(m);
+      hook();
     }
 
     return m;
@@ -158,8 +157,6 @@ const derivedFactory = RecordUtil.createFactory(
   },
   {
     toJs: partiallyConvertedFilesAndFolders => {
-      const currentFn = "files-and-folders/derivedFactory/toJs";
-
       /**
        * Converts the data to an array. Handles the weird case where value is undefined.
        * Reports these unexpected cases
@@ -169,9 +166,8 @@ const derivedFactory = RecordUtil.createFactory(
        */
       const convertToArray = (data, key) => {
         const value = data[key];
-        const isValueDefined = expectToBeDefined(value, `${currentFn}: ${key}`);
 
-        return isValueDefined ? value.toArray() : [];
+        return value !== undefined && value !== null ? value.toArray() : [];
       };
 
       return {

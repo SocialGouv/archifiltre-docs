@@ -1,14 +1,62 @@
 import { traverseFileTree } from "util/file-sys-util";
 
 import * as VirtualFileSystem from "datastore/virtual-file-system";
-import { reportError, reportWarning } from "./logging/reporter";
 import { hookCounter } from "./util/hook-utils";
 import {
   AsyncWorkerEvent,
   createAsyncWorkerForChildProcess
 } from "./util/async-worker-util";
+import { MessageTypes } from "./util/batch-process/batch-process-util-types";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
+
+/**
+ * Reports an error to the main thread
+ * @param message
+ */
+const reportError = message => {
+  asyncWorker.postMessage({ type: MessageTypes.ERROR, message });
+};
+
+/**
+ * Reports a warning to the main thread
+ * @param message
+ */
+const reportWarning = message => {
+  asyncWorker.postMessage({ type: MessageTypes.WARNING, message });
+};
+
+/**
+ * Reports a fatal error to the main thread
+ * @param message
+ */
+const reportFatal = message => {
+  asyncWorker.postMessage({ type: MessageTypes.FATAL, message });
+};
+
+/**
+ * Reports a result to the main thread
+ * @param message
+ */
+const reportResult = message => {
+  asyncWorker.postMessage({ type: MessageTypes.RESULT, message });
+};
+
+/**
+ * Reports completion to the main thread
+ * @param message
+ */
+const reportComplete = message => {
+  asyncWorker.postMessage({ type: MessageTypes.COMPLETE, message });
+};
+
+const errorReportHook = error => {
+  if (error) {
+    reportError(error);
+    return false;
+  }
+  return true;
+};
 
 /**
  * Recursively generates a file system from a dropped folder
@@ -17,26 +65,26 @@ const asyncWorker = createAsyncWorkerForChildProcess();
 function loadFolder(folderPath) {
   const MIN_MESSAGE_INTERVAL = 300;
 
-  asyncWorker.postMessage({ status: "traverse", count: 0 });
+  reportResult({ status: "traverse", count: 0 });
   const { hook: traverseHook, getCount: getTraverseCount } = hookCounter(
-    count => asyncWorker.postMessage({ status: "traverse", count }),
+    count => reportResult({ status: "traverse", count }),
     {
-      interval: MIN_MESSAGE_INTERVAL
+      interval: MIN_MESSAGE_INTERVAL,
+      internalHook: errorReportHook
     }
   );
   let origin;
   try {
     [, origin] = traverseFileTree(traverseHook, folderPath);
   } catch (err) {
-    reportError(err);
+    reportFatal(err);
     reportWarning("Error in traverseFileTree");
-    asyncWorker.postMessage({ status: "error", message: err.message });
     return;
   }
-  asyncWorker.postMessage({ status: "traverse", count: getTraverseCount() });
+  reportResult({ status: "traverse", count: getTraverseCount() });
 
   const totalMakeCount = getTraverseCount();
-  asyncWorker.postMessage({
+  reportResult({
     status: "make",
     count: 0,
     totalCount: totalMakeCount
@@ -44,29 +92,28 @@ function loadFolder(folderPath) {
 
   const { hook: makeHook, getCount: getMakeCount } = hookCounter(
     count =>
-      asyncWorker.postMessage({
+      reportResult({
         status: "make",
         count,
         totalCount: totalMakeCount
       }),
-    { interval: MIN_MESSAGE_INTERVAL }
+    { interval: MIN_MESSAGE_INTERVAL, internalHook: errorReportHook }
   );
   let vfs;
   try {
     vfs = VirtualFileSystem.make(origin, folderPath, makeHook);
-    asyncWorker.postMessage({
+    reportResult({
       status: "make",
       count: getMakeCount(),
       totalCount: totalMakeCount
     });
   } catch (err) {
-    reportError(err);
+    reportFatal(err);
     reportWarning("Error in vfs.make");
-    asyncWorker.postMessage({ status: "error", message: err.message });
     return;
   }
   const derivateTotalCount = vfs.get("files_and_folders").count();
-  asyncWorker.postMessage({
+  reportResult({
     status: "derivateFF",
     count: 0,
     totalCount: derivateTotalCount
@@ -74,13 +121,13 @@ function loadFolder(folderPath) {
 
   const derivateThrottledHook = (count, type) => {
     if (type === "reducedFilesAndFolders") {
-      asyncWorker.postMessage({
+      reportResult({
         status: "derivateFF",
         count,
         totalCount: derivateTotalCount
       });
     } else if (type === "divedFilesAndFolders") {
-      asyncWorker.postMessage({
+      reportResult({
         status: "divedFF",
         count: count - derivateTotalCount,
         totalCount: derivateTotalCount
@@ -88,10 +135,13 @@ function loadFolder(folderPath) {
     }
   };
 
-  const {
-    hook: derivateHook,
-    getCount: getDerivateCount
-  } = hookCounter(derivateThrottledHook, { interval: MIN_MESSAGE_INTERVAL });
+  const { hook: derivateHook, getCount: getDerivateCount } = hookCounter(
+    derivateThrottledHook,
+    {
+      interval: MIN_MESSAGE_INTERVAL,
+      internalHook: errorReportHook
+    }
+  );
   try {
     vfs = VirtualFileSystem.derivate(vfs, derivateHook);
     asyncWorker.postMessage({
@@ -100,12 +150,11 @@ function loadFolder(folderPath) {
       totalCount: derivateTotalCount
     });
   } catch (error) {
-    reportError(error);
+    reportFatal(error);
     reportWarning("Error in vfs.derivate");
-    asyncWorker.postMessage({ status: "error", message: error.message });
   }
-  asyncWorker.postMessage({
-    status: "return",
+  reportComplete({
+    status: MessageTypes.COMPLETE,
     vfs: VirtualFileSystem.toJs(vfs)
   });
 }

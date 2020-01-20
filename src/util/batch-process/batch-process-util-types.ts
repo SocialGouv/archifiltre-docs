@@ -2,6 +2,8 @@ export enum MessageTypes {
   COMPLETE = "complete",
   DATA = "data",
   ERROR = "error",
+  WARNING = "warning",
+  FATAL = "fatal",
   INITIALIZE = "initialize",
   LOG = "log",
   RESULT = "result"

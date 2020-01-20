@@ -1,5 +1,5 @@
 // Enables reporter to hook into the environment so it captures uncaught errors
-import "./logging/reporter";
+import "./logging/reporter.ts";
 
 import "foundation-sites";
 import "./css/index.scss";

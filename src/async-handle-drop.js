@@ -5,6 +5,8 @@ import {
   AsyncWorkerEvent,
   createAsyncWorkerForChildProcessController
 } from "./util/async-worker-util";
+import { reportError, reportInfo, reportWarning } from "./logging/reporter";
+import { MessageTypes } from "./util/batch-process/batch-process-util-types";
 
 export default (hook, droppedElementPath) => {
   return new Promise((resolve, reject) => {
@@ -14,19 +16,35 @@ export default (hook, droppedElementPath) => {
 
     const asyncWorker = createAsyncWorkerForChildProcessController(worker);
     asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, event => {
-      switch (event.data.status) {
-        case "return":
+      switch (event.data.type) {
+        case MessageTypes.COMPLETE:
+          reportInfo({
+            path: droppedElementPath,
+            type: "elementLoadedSuccessfully"
+          });
           asyncWorker.terminate();
-          resolve(event.data.vfs);
+          resolve(event.data.message.vfs);
           break;
-        case "error":
+        case MessageTypes.FATAL:
           asyncWorker.terminate();
           reject(event.data.message);
+          reportError(event.data.message);
+          break;
+        case MessageTypes.ERROR:
+          reportError(event.data.message);
+          break;
+        case MessageTypes.WARNING:
+          reportWarning(event.data.message);
+          break;
+        case MessageTypes.RESULT:
+          hook(event.data.message);
           break;
         default:
           hook(event.data);
       }
     });
+
+    reportInfo({ path: droppedElementPath, type: "elementDropped" });
     asyncWorker.postMessage({
       droppedElementPath
     });

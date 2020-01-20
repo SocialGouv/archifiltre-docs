@@ -87,7 +87,8 @@ const recTraverseFileTree = (hook, path) => {
       };
       return [[file, path]];
     }
-  } catch (e) {
+  } catch (error) {
+    hook({ path, error: error.message });
     return [];
   }
 };

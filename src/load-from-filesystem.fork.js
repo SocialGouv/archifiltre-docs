@@ -138,8 +138,7 @@ function loadFolder(folderPath) {
   const { hook: derivateHook, getCount: getDerivateCount } = hookCounter(
     derivateThrottledHook,
     {
-      interval: MIN_MESSAGE_INTERVAL,
-      internalHook: errorReportHook
+      interval: MIN_MESSAGE_INTERVAL
     }
   );
   try {

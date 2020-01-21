@@ -1,5 +1,6 @@
 import path from "path";
 import { tap } from "rxjs/operators";
+import { reportError } from "../logging/reporter";
 import { ArchifiltreThunkAction } from "../reducers/archifiltre-types";
 import { setFilesAndFoldersHashes } from "../reducers/files-and-folders/files-and-folders-actions";
 import {
@@ -60,7 +61,7 @@ export const computeHashesThunk = (
 
     operateOnDataProcessingStream(hashes$, {
       // tslint:disable-next-line:no-console
-      error: tap(console.error),
+      error: tap(reportError),
       result: tap(onNewHashesComputed)
     }).subscribe({
       complete: () => {

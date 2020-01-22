@@ -1,5 +1,8 @@
 import { ChildProcess } from "child_process";
-import { WorkerMessage } from "./batch-process/batch-process-util-types";
+import {
+  MessageTypes,
+  WorkerMessage
+} from "./batch-process/batch-process-util-types";
 
 export enum AsyncWorkerEvent {
   MESSAGE = "message"
@@ -60,6 +63,45 @@ export const createAsyncWorkerControllerClass = ChildProcessContructor => {
       return createAsyncWorkerForChildProcessController(childProcess);
     }
   };
+};
+
+export type WorkerMessageHandler = (
+  asyncWorker: AsyncWorker,
+  data: any
+) => void;
+
+interface SetupChildWorkerListenersOptions {
+  onInitialize?: WorkerMessageHandler;
+  onData?: WorkerMessageHandler;
+}
+
+/**
+ * Setup the listeners on an async worker. Each callback will be called when each message type is received.
+ * @param asyncWorker - The async worker
+ * @param onInitialize - The callback for MessageTypes.INITIALIZE messages
+ * @param onData - The callback for MessageTypes.DATA messages
+ */
+export const setupChildWorkerListeners = (
+  asyncWorker: AsyncWorker,
+  { onInitialize, onData }: SetupChildWorkerListenersOptions
+) => {
+  asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, ({ data, type }) => {
+    switch (type) {
+      case MessageTypes.INITIALIZE:
+        if (!onInitialize) {
+          break;
+        }
+        onInitialize(asyncWorker, data);
+        break;
+
+      case MessageTypes.DATA:
+        if (!onData) {
+          break;
+        }
+        onData(asyncWorker, data);
+        break;
+    }
+  });
 };
 
 /**

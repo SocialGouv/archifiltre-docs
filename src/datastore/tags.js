@@ -3,10 +3,6 @@ import * as RecordUtil from "util/record-util";
 import * as ObjectUtil from "util/object-util.ts";
 
 import { List, Map, Set } from "immutable";
-import {
-  getAllTagsForFile,
-  tagMapToArray
-} from "../reducers/tags/tags-selectors";
 
 const tagFactory = RecordUtil.createFactory(
   {
@@ -164,52 +160,3 @@ const toAndFromJs = factory => [
 export const [toJs, fromJs] = toAndFromJs(
   RecordUtil.composeFactory(derivedFactory, tagFactory)
 );
-
-/**
- * Get an array with all the tag name
- * @param tags
- */
-const toNameList = tagsArray => tagsArray.map(({ name }) => name);
-
-/**
- * Generates an array of array ([[]]) with the first line being
- * the csv header.
- *
- * Each line represents one file or folder and the order is determined
- * by the file and folder id array (ff_id_list).
- *
- * Parent tags are inherited by all their children during the export.
- *
- * @param ffs - files and folders tree
- * @param tags
- */
-export const toStrList2 = (ffs, tags) => {
-  const rootFfId = "";
-  const ffIds = Object.keys(ffs).filter(id => id !== rootFfId);
-  const tagsArray = tagMapToArray(tags);
-  const tagNamesList = toNameList(tagsArray);
-  const header = tagNamesList.map(
-    (tagName, index) => `tag${index} : ${tagName}`
-  );
-
-  const mapFfidToStrList = {};
-
-  const rec = (parentTags, currentFfId) => {
-    const currentFf = ffs[currentFfId];
-    let currentFfTagNames = getAllTagsForFile(tags, currentFfId).map(
-      ({ name }) => name
-    );
-    currentFfTagNames = currentFfTagNames.concat(parentTags);
-
-    mapFfidToStrList[currentFfId] = tagNamesList.map(tagName =>
-      currentFfTagNames.includes(tagName) ? tagName : ""
-    );
-
-    const currentFfChildren = currentFf.children;
-    currentFfChildren.forEach(id => rec(currentFfTagNames, id));
-  };
-
-  rec([], rootFfId);
-
-  return [header, ...ffIds.map(id => mapFfidToStrList[id])];
-};

@@ -2,13 +2,12 @@ import {
   createAsyncWorkerForChildProcess,
   fakeChildProcess,
   setupChildWorkerListeners
-} from "../util/async-worker-util";
-import { onData, onInitialize } from "./file-hash-computer.impl";
+} from "../../util/async-worker-util";
+import { onInitialize } from "./csv-exporter.impl";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
 
 setupChildWorkerListeners(asyncWorker, {
-  onData,
   onInitialize
 });
 

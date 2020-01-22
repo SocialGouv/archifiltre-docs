@@ -1,3 +1,4 @@
+import { createAsyncWorkerMock } from "../util/async-worker-test-utils";
 import { MessageTypes } from "../util/batch-process/batch-process-util-types";
 import { computeHash } from "../util/hash-util";
 import { onData, onInitialize } from "./file-hash-computer.impl";
@@ -9,11 +10,7 @@ jest.mock("../util/hash-util", () => ({
 const basePath = "/base";
 const paths = ["/path1", "/path2"];
 
-const asyncWorker = {
-  addEventListener: jest.fn(),
-  postMessage: jest.fn(),
-  terminate: jest.fn()
-};
+const asyncWorker = createAsyncWorkerMock();
 
 const computeHashMock = computeHash as jest.Mock;
 

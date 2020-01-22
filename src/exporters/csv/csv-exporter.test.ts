@@ -1,18 +1,24 @@
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import { DispatchExts } from "../reducers/archifiltre-types";
-import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
-import { StoreState } from "../reducers/store";
+import { of } from "rxjs";
+import { DispatchExts } from "../../reducers/archifiltre-types";
+import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
+import { StoreState } from "../../reducers/store";
 import {
   createEmptyStore,
   wrapStoreWithUndoable
-} from "../reducers/store-test-utils";
-import { save, UTF8 } from "../util/file-sys-util";
+} from "../../reducers/store-test-utils";
+import { save, UTF8 } from "../../util/file-sys-util";
 import { csvExporterThunk } from "./csv-exporter";
+import { generateCsvExport$ } from "./csv-exporter.controller";
 
-jest.mock("../util/file-sys-util", () => ({
+jest.mock("../../util/file-sys-util", () => ({
   UTF8: "utf-8",
   save: jest.fn()
+}));
+
+jest.mock("./csv-exporter.controller", () => ({
+  generateCsvExport$: jest.fn()
 }));
 
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
@@ -86,36 +92,46 @@ const testState = {
 };
 
 const saveMock = save as jest.Mock;
+const generateCsvExportMock = generateCsvExport$ as jest.Mock;
+const csvValue = "csv-value";
 
 describe("csv-exporter", () => {
   describe("csvExporterThunk", () => {
+    beforeEach(() => {
+      saveMock.mockReset();
+      generateCsvExportMock.mockReset();
+      generateCsvExportMock.mockReturnValue(of(undefined, undefined, csvValue));
+    });
     describe("withoutHashes", () => {
-      it("should generate valid csv data", () => {
-        saveMock.mockReset();
+      it("should generate valid csv data", async () => {
         const store = mockStore(testState);
         const name = "test-name";
-        store.dispatch(csvExporterThunk(name));
+        await store.dispatch(csvExporterThunk(name));
 
-        const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"last_modified";"new name";"description";"file/folder";"depth";"tag0 : ${tagName}";"tag1 : ${tag2Name}"\n`;
-        const expectedCsv = `${csvHeader}"";"/folder/ff-id";"13";"filename";"";"10000";"01/01/1970";"";"";"file";"1";"${tagName}";"${tag2Name}"\n`;
-
-        expect(saveMock).toHaveBeenCalledWith(name, expectedCsv, {
+        expect(generateCsvExportMock).toHaveBeenCalledWith({
+          filesAndFolders,
+          filesAndFoldersMetadata,
+          tags
+        });
+        expect(saveMock).toHaveBeenCalledWith(name, csvValue, {
           format: UTF8
         });
       });
     });
 
     describe("withHashes", () => {
-      it("should generate valid csv data", () => {
-        saveMock.mockReset();
+      it("should generate valid csv data", async () => {
         const store = mockStore(testState);
         const name = "test-name";
-        store.dispatch(csvExporterThunk(name, { withHashes: true }));
+        await store.dispatch(csvExporterThunk(name, { withHashes: true }));
 
-        const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"last_modified";"new name";"description";"file/folder";"depth";"hash (MD5)";"tag0 : ${tagName}";"tag1 : ${tag2Name}"\n`;
-        const expectedCsv = `${csvHeader}"";"/folder/ff-id";"13";"filename";"";"10000";"01/01/1970";"";"";"file";"1";"${taggedHash}";"${tagName}";"${tag2Name}"\n`;
-
-        expect(saveMock).toHaveBeenCalledWith(name, expectedCsv, {
+        expect(generateCsvExportMock).toHaveBeenCalledWith({
+          filesAndFolders,
+          filesAndFoldersMetadata,
+          hashes,
+          tags
+        });
+        expect(saveMock).toHaveBeenCalledWith(name, csvValue, {
           format: UTF8
         });
       });

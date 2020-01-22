@@ -101,7 +101,9 @@
       "resipExportTitle": "Resip Export",
       "resipExportStartedMessage": "Resip export started",
       "csvExportTitle": "CSV Export",
-      "csvExportStartedMessage": "CSV export started"
+      "csvExportStartedMessage": "CSV export started",
+      "csvExportSuccessMessage": "CSV export succeeded",
+      "creatingCsvExport": "Creating the CSV export file"
     }
   }
 }

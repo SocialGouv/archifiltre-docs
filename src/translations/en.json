@@ -87,7 +87,8 @@
       "newName": "new name",
       "description": "description",
       "fileOrFolder": "file/folder",
-      "depth": "depth"
+      "depth": "depth",
+      "hash": "hash (MD5)"
     },
     "export": {
       "metsExportErrorTitle": "METS export error",
@@ -98,7 +99,9 @@
       "exportSuccessMessage": "The METS zip has been created in the projet parent folder",
       "resipExportSuccessMessage": "The metadata file has been exported to project root folder",
       "resipExportTitle": "Resip Export",
-      "resipExportStartedMessage": "Resip export started"
+      "resipExportStartedMessage": "Resip export started",
+      "csvExportTitle": "CSV Export",
+      "csvExportStartedMessage": "CSV export started"
     }
   }
 }

@@ -1,14 +1,9 @@
 import { concat, zip } from "lodash";
-import translations from "../translations/translations";
 
 import * as ListUtil from "util/list-util";
 import * as RecordUtil from "util/record-util";
 
 import { List, Map } from "immutable";
-
-import { epochToFormattedUtcDateString } from "csv";
-import { getFilesAndFoldersDepth } from "reducers/files-and-folders/files-and-folders-selectors";
-const Path = require("path");
 
 const fileOrFolderFactory = RecordUtil.createFactory(
   {
@@ -280,71 +275,3 @@ const toAndFromJs = factory => [
 export const [toJs, fromJs] = toAndFromJs(
   RecordUtil.composeFactory(derivedFactory, fileOrFolderFactory)
 );
-
-const strListToHeader = [
-  "",
-  translations.t("csvHeader.path"),
-  translations.t("csvHeader.pathLength"),
-  translations.t("csvHeader.name"),
-  translations.t("csvHeader.extension"),
-  translations.t("csvHeader.size"),
-  translations.t("csvHeader.lastModified"),
-  translations.t("csvHeader.newName"),
-  translations.t("csvHeader.description"),
-  translations.t("csvHeader.fileOrFolder"),
-  translations.t("csvHeader.depth")
-];
-/**
- * Generates an array of array ([[]]) with the first line being
- * the csv header.
- *
- * Each line represents one file or folder and the order is determined
- * by the file and folder id array.
- *
- * @param filesAndFolders - files and folders tree
- * @param filesAndFoldersMetadata - files and folders tree metadata
- */
-export const toStrList2 = (filesAndFolders, filesAndFoldersMetadata) => {
-  const rootId = "";
-  const filesAndFoldersWithoutRoot = Object.values(filesAndFolders).filter(
-    filesAndFolder => filesAndFolder.id !== rootId
-  );
-  const ffFormattedArray = filesAndFoldersWithoutRoot.map(ff => {
-    if (ff.id === "") {
-      return undefined;
-    }
-    const currentMetadata = filesAndFoldersMetadata[ff.id];
-    const platform_dependent_path = ff.id.split("/").join(Path.sep);
-    const path_length = platform_dependent_path.length;
-    const name = ff.name;
-    const extension = Path.extname(name);
-    const size = currentMetadata.childrenTotalSize;
-    const last_modified = epochToFormattedUtcDateString(
-      currentMetadata.maxLastModified
-    );
-    const alias = ff.alias;
-    const comments = ff.comments;
-    const children = ff.children;
-    const file_or_folder =
-      children.length === 0
-        ? translations.t("common.file")
-        : translations.t("common.folder");
-    const depth = getFilesAndFoldersDepth(ff.id);
-
-    return [
-      "",
-      platform_dependent_path,
-      path_length,
-      name,
-      extension,
-      size,
-      last_modified,
-      alias,
-      comments,
-      file_or_folder,
-      depth
-    ];
-  });
-
-  return [strListToHeader.slice(), ...ffFormattedArray];
-};

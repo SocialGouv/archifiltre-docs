@@ -87,7 +87,8 @@
       "newName": "nouveau nom",
       "description": "description",
       "fileOrFolder": "fichier/répertoire",
-      "depth": "profondeur"
+      "depth": "profondeur",
+      "hash": "empreinte (MD5)"
     },
     "export": {
       "metsExportErrorTitle": "Erreur dans l'export METS",
@@ -98,7 +99,9 @@
       "exportSuccessMessage": "Le zip d'export METS a été créé dans le dossier parent du projet",
       "resipExportSuccessMessage": "Fichier de métadonnées exporté dans le dossier racine du projet",
       "resipExportTitle": "Export Resip",
-      "resipExportStartedMessage": "L'export Resip a commencé"
+      "resipExportStartedMessage": "L'export Resip a commencé",
+      "csvExportTitle": "Export CSV",
+      "csvExportStartedMessage": "L'export CSV a commencé"
     }
   }
 }

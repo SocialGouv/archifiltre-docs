@@ -1,7 +1,7 @@
 import React, { FC, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { auditReportExporterThunk } from "../../../exporters/audit/audit-report-exporter";
-import { csvExporterThunk } from "../../../exporters/csv-exporter";
+import { csvExporterThunk } from "../../../exporters/csv/csv-exporter";
 import {
   metsExporterThunk,
   resipExporterThunk

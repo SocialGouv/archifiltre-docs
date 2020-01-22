@@ -6,7 +6,8 @@ export const RESET_LOADING = "LOADING_INFO/RESET_LOADING";
 export const DISMISS_ALL_COMPLETE = "LOADING_INFO/DISMISS_ALL_COMPLETE";
 
 export enum LoadingInfoTypes {
-  HASH_COMPUTING = "hash-computing"
+  HASH_COMPUTING = "hash-computing",
+  EXPORT = "export"
 }
 
 export interface LoadingInfo {

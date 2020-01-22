@@ -7,6 +7,8 @@ const getColor = ({ color }) => color;
 
 const LoadingBarContainer = styled.div`
   color: ${getColor};
+  padding-top: 10px;
+  padding-bottom: 10px;
 `;
 
 const LoadingBar = styled.div`

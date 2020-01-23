@@ -10,6 +10,7 @@ import {
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import ExportDropdown from "../export-dropdown";
 import SessionInfo from "./session-info";
+import LanguagePicker from "./language";
 import styled from "styled-components";
 import ArchifiltreLogo from "../archifiltre-logo";
 
@@ -27,6 +28,10 @@ const Spacer = styled.div`
 
 const ButtonCell = styled.div`
   min-width: 9em;
+`;
+
+const SmallButtonCell = styled.div`
+  min-width: 3em;
 `;
 
 const DashBoard = ({
@@ -78,16 +83,16 @@ const DashBoard = ({
 
       <Spacer />
 
-      <ButtonCell>
-        {shouldDisplayActions && (
+      {shouldDisplayActions && (
+        <ButtonCell>
           <TextAlignCenter>
             <SaveButton api={api} exportToJson={exportToJson} />
           </TextAlignCenter>
-        )}
-      </ButtonCell>
+        </ButtonCell>
+      )}
 
-      <ButtonCell>
-        {shouldDisplayActions && (
+      {shouldDisplayActions && (
+        <ButtonCell>
           <ExportDropdown
             api={api}
             areHashesReady={areHashesReady}
@@ -96,15 +101,18 @@ const DashBoard = ({
             exportToResip={exportToResip}
             exportToCsv={exportToCsv}
           />
-        )}
-      </ButtonCell>
-      <ButtonCell>
-        {shouldDisplayReset && (
+        </ButtonCell>
+      )}
+      <SmallButtonCell>
+        <LanguagePicker />
+      </SmallButtonCell>
+      {shouldDisplayReset && (
+        <ButtonCell>
           <TextAlignCenter>
             <ReinitButton api={api} />
           </TextAlignCenter>
-        )}
-      </ButtonCell>
+        </ButtonCell>
+      )}
     </HeaderLine>
   );
 };

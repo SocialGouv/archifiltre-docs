@@ -9,7 +9,8 @@ variables:
 stages:
   - "Build docker build image"
   - "Code Quality"
-  - "Build archifiltre"
+  - "Build for branch"
+  - "Build for master"
 
 Docker:
   stage: "Build docker build image"
@@ -37,8 +38,8 @@ Quality:
       - node_modules/
       - $HOME/.cache/electron
 
-Build:
-  stage: "Build archifiltre"
+Build-branch:
+  stage: "Build for branch"
   image: $CI_REGISTRY_IMAGE:master
   before_script:
     - yarn --frozen-lockfile
@@ -71,3 +72,25 @@ Build:
   except:
     - master
 
+Build-master:
+  stage: "Build for master"
+  image: $CI_REGISTRY_IMAGE:master
+  before_script:
+    - yarn --frozen-lockfile
+  script:
+    - cp .env.prod .env
+    - yarn build-prod
+    - export ARCHIFILTRE_VERSION="$(node -e 'console.log(require("./package.json").version)')"
+    - mv dist/win-x64/archifiltre%20'${ARCHIFILTRE_VERSION}'.exe dist/win-x64/archifiltre-master.exe
+  artifacts:
+    paths:
+      - dist/win-x64/archifiltre-master.exe
+    expire_in: 1 week
+  cache:
+    key: ${CI_JOB_NAME}
+    paths:
+      - node_modules/
+      - $HOME/.cache/electron
+      - $HOME/.cache/electron-builder
+  only:
+    - master

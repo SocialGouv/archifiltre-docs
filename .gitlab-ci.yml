@@ -81,7 +81,7 @@ Build-master:
     - cp .env.prod .env
     - yarn build-prod
     - export ARCHIFILTRE_VERSION="$(node -e 'console.log(require("./package.json").version)')"
-    - mv dist/win-x64/archifiltre%20'${ARCHIFILTRE_VERSION}'.exe dist/win-x64/archifiltre-master.exe
+    - mv dist/win-x64/archifiltre\ $ARCHIFILTRE_VERSION.exe dist/win-x64/archifiltre-master.exe
   artifacts:
     paths:
       - dist/win-x64/archifiltre-master.exe

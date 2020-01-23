@@ -11,7 +11,7 @@ import ReactDOM from "react-dom";
 
 import ErrorBoundary from "components/errors/error-boundary";
 import MainSpace from "components/main-space/main-space";
-import Header from "components/header/header";
+import Header from "components/header/header.tsx";
 import ANewVersionIsAvailable from "components/header/a-new-version-is-available";
 import WindowResize from "components/common/window-resize";
 
@@ -25,11 +25,19 @@ import { NotificationContainer } from "react-notifications";
 import { initTracker } from "./logging/tracker.ts";
 import "./translations/translations";
 import BackgroundLoadingInfoContainer from "./components/background-loading-info/background-loading-info-container";
+import styled from "styled-components";
 
 document.title = `Archifiltre v${version}`;
 
 SecretDevtools.enable();
 initTracker();
+
+const App = styled.div`
+  padding-top: 0.975em;
+  padding-right: 0.975em;
+  padding-bottom: 0.975em;
+  padding-left: 0.975em;
+`;
 
 /**This is the entrypoint for the app. */
 const app = () => {
@@ -48,7 +56,7 @@ const app = () => {
           return (
             <ErrorBoundary api={api}>
               <WindowResize />
-              <div className="grid-y grid-frame">
+              <App className="grid-y grid-frame">
                 <div className="cell">
                   <ANewVersionIsAvailable />
                 </div>
@@ -59,7 +67,7 @@ const app = () => {
                   <MainSpace api={api} />
                 </div>
                 <BackgroundLoadingInfoContainer />
-              </div>
+              </App>
               <NotificationContainer />
             </ErrorBoundary>
           );

@@ -6,10 +6,16 @@ import WaitingScreen from "components/folder-dropzone/waiting-screen";
 import ErrorScreen from "components/errors/error-screen";
 import Hint from "components/folder-dropzone/hint";
 import { hints } from "hints";
+import styled from "styled-components";
 
 const gridStyle = {
   padding: "0em 5em"
 };
+
+const WorkspaceWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
 const MainSpace = props => {
   const { api } = props;
@@ -57,9 +63,9 @@ const MainSpace = props => {
   }
   return (
     <div className="grid-y grid-padding-x grid-frame align-center">
-      <div className="cell small-12">
+      <WorkspaceWrapper>
         <WorkSpace api={api} />
-      </div>
+      </WorkspaceWrapper>
     </div>
   );
 };

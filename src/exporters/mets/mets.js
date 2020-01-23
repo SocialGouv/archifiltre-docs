@@ -2,7 +2,7 @@ import translations from "../../translations/translations";
 import path from "path";
 import { generateRandomString } from "util/random-gen-util";
 import { Map } from "immutable";
-import version from "version";
+import version from "version.ts";
 import { getAllTagsForFile } from "../../reducers/tags/tags-selectors";
 import { notifySuccess } from "../../util/notifications-util";
 import { handleError } from "../../util/error-util";

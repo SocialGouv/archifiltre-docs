@@ -6,7 +6,10 @@ import { version } from "../package.json";
  * @param secondVersion is the second version number to compare
  * @returns {number} returns 0 if versions are equal, 1 if firstVersion > secondVersion, and -1 if secondVersion > firstVersion
  */
-export const versionComparator = (firstVersion, secondVersion) => {
+export const versionComparator = (
+  firstVersion: string,
+  secondVersion: string
+): number => {
   const firstVersionDigits = firstVersion.split(".");
   const secondVersionDigits = secondVersion.split(".");
   for (let i = 0; i <= 2; i++) {

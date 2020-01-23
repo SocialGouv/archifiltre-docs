@@ -1,12 +1,12 @@
-import path from "path";
-import { input, output } from "./resipExporter.test.data.json";
-import resipExporter from "./resipExporter";
 import { advanceTo } from "jest-date-mock";
+import path from "path";
+import resipExporter from "./resip-exporter";
+import { input, output } from "./resip-exporter.test.data.json";
 
 // We advance to a specific date for TransactedDate to be setup correctly
 advanceTo("2019-08-05");
 
-describe("resipExporter", () => {
+describe("resip-exporter", () => {
   describe("with a simple file structure", () => {
     it("should format the right csv", () => {
       const fileSystemFormatedOutput = output.map(

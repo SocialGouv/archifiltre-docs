@@ -6,7 +6,7 @@ import {
 } from "../../util/async-worker-util";
 import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
 import { hookCounter } from "../../util/hook-utils";
-import resipExporter from "./resipExporter";
+import resipExporter from "./resip-exporter";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
 

@@ -5,7 +5,7 @@ import WorkSpace from "components/workspace/workspace-container";
 import WaitingScreen from "components/folder-dropzone/waiting-screen";
 import ErrorScreen from "components/errors/error-screen";
 import Hint from "components/folder-dropzone/hint";
-import { hints } from "hints";
+import { hints } from "hints.ts";
 import styled from "styled-components";
 
 const gridStyle = {

@@ -1,8 +1,9 @@
-import path from "path";
 import dateFormat from "dateformat";
+import path from "path";
 import { tagHasFfId } from "../../reducers/tags/tags-selectors";
-import { makeEmptyArray, replaceValue } from "../../util/array-util";
 import translations from "../../translations/translations";
+import { makeEmptyArray, replaceValue } from "../../util/array-util";
+import { empty } from "../../util/function-util";
 
 const nameChangedText = oldName =>
   translations.t("common.originalName", { oldName });
@@ -75,6 +76,7 @@ const formatCustodialHistory = fileAndFolder =>
 const transformDefaultFormatToResip = enrichedFilesAndFolders => ({
   ID: enrichedFilesAndFolders.ID,
   ParentID: enrichedFilesAndFolders.ParentID,
+  // tslint:disable-next-line:object-literal-sort-keys
   File: formatFile(enrichedFilesAndFolders),
   DescriptionLevel: formatDescriptionLevel(enrichedFilesAndFolders),
   Title: formatTitle(enrichedFilesAndFolders),
@@ -158,7 +160,7 @@ const wrapWithHook = (mapper, sideEffect) => (
  * @param tags - The tags structure
  * @param [hook]
  */
-const resipExporter = (filesAndFolders, tags, hook = () => {}) => {
+const resipExporter = (filesAndFolders, tags, hook = empty) => {
   let sipId = 0;
 
   const addSipId = ff => {

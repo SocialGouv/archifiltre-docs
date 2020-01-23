@@ -2,29 +2,20 @@ import { promises as fs } from "fs";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { from } from "rxjs";
-import { DispatchExts } from "../reducers/archifiltre-types";
-import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
-import { createFilesAndFolders } from "../reducers/files-and-folders/files-and-folders-test-utils";
-import { StoreState } from "../reducers/store";
+import { DispatchExts } from "../../reducers/archifiltre-types";
+import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
+import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
+import { StoreState } from "../../reducers/store";
 import {
   createEmptyStore,
   wrapStoreWithUndoable
-} from "../reducers/store-test-utils";
-import { notifyInfo, notifySuccess } from "../util/notifications-util";
-import { metsExporterThunk, resipExporterThunk } from "./export-thunks";
-import { makeSIP } from "./mets/mets";
-import { generateResipExport$ } from "./resip/resipExport.controller";
+} from "../../reducers/store-test-utils";
+import { notifyInfo, notifySuccess } from "../../util/notifications-util";
+import { generateResipExport$ } from "./resip-export.controller";
+import { resipExporterThunk } from "./resip-exporter-thunk";
 
-jest.mock("./resip/resipExport.controller", () => ({
+jest.mock("./resip-export.controller", () => ({
   generateResipExport$: jest.fn()
-}));
-
-jest.mock("../util/file-sys-util", () => ({
-  save: jest.fn()
-}));
-
-jest.mock("./mets/mets", () => ({
-  makeSIP: jest.fn()
 }));
 
 jest.mock("fs", () => ({
@@ -32,20 +23,15 @@ jest.mock("fs", () => ({
     writeFile: jest.fn()
   }
 }));
-
-jest.mock("../util/notifications-util", () => ({
+jest.mock("../../util/notifications-util", () => ({
   notifyInfo: jest.fn(),
   notifySuccess: jest.fn()
 }));
 
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
-
 const tagName = "test-tag-1";
 const taggedFfId = "/folder/ff-id";
-const untaggedFfId = "/folder/ff-id-2";
 const tagId = "test-tag-id";
-const lastModified = 1570542691716;
-
 const tags = {
   [tagId]: {
     ffIds: [taggedFfId],
@@ -53,7 +39,6 @@ const tags = {
     name: tagName
   }
 };
-
 const filesAndFolders = {
   "": createFilesAndFolders({ id: "" }),
   id1: createFilesAndFolders({ id: "id1" }),
@@ -83,9 +68,7 @@ const filesAndFoldersMetadata = {
     minLastModified: 1000
   })
 };
-
 const emptyStore = createEmptyStore();
-
 const storeContent = {
   ...emptyStore,
   filesAndFolders: wrapStoreWithUndoable({
@@ -96,7 +79,7 @@ const storeContent = {
   tags: wrapStoreWithUndoable({ tags })
 };
 
-describe("export-thunks", () => {
+describe("resip-exporter-thunk", () => {
   describe("resipExporterThunk", () => {
     const writeFileMock = fs.writeFile as jest.Mock<any>;
     const mockedGenerateResipExport$ = generateResipExport$ as jest.Mock<any>;
@@ -148,31 +131,6 @@ describe("export-thunks", () => {
       await store.dispatch(resipExporterThunk(savePath));
 
       expect(notifySuccessMock).toHaveBeenCalled();
-    });
-  });
-
-  describe("metsExporterThunk", () => {
-    it("should call makeSIP with the right data", () => {
-      const mockedMakeSIP = makeSIP as jest.Mock<any>;
-      const store = mockStore(storeContent);
-
-      const originalPath = "original-path";
-      const sessionName = "session-name";
-
-      store.dispatch(
-        metsExporterThunk({
-          originalPath,
-          sessionName
-        })
-      );
-
-      expect(mockedMakeSIP).toHaveBeenCalledWith({
-        filesAndFolders,
-        filesAndFoldersMetadata,
-        originalPath,
-        sessionName,
-        tags
-      });
     });
   });
 });

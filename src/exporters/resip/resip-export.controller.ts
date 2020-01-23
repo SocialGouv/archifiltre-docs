@@ -6,7 +6,7 @@ import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-f
 import { TagMap } from "../../reducers/tags/tags-types";
 import { createAsyncWorkerControllerClass } from "../../util/async-worker-util";
 import { backgroundWorkerProcess$ } from "../../util/batch-process/batch-process-util";
-import ResipExportFork from "./resipExport.fork";
+import ResipExportFork from "./resip-export.fork";
 
 interface ResipExportProgress {
   count: number;

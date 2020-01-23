@@ -7,7 +7,7 @@ import { mkB } from "components/buttons/button";
 import * as Color from "util/color-util";
 
 import { withTranslation } from "react-i18next";
-import version, { versionComparator } from "../../version";
+import version, { versionComparator } from "../../version.ts";
 
 const { shell } = require("electron");
 

@@ -2,7 +2,7 @@ import React from "react";
 
 import TimeGradient from "components/report/time-gradient";
 
-import { epochToFormattedUtcDateString } from "../../csv";
+import { epochToFormattedUtcDateString } from "../../util/date-util";
 import { useTranslation } from "react-i18next";
 
 const RedDot = () => {

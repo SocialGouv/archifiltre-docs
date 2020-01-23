@@ -1,4 +1,4 @@
-const french_hints = [
+const frenchHints = [
   `Si vous avez fait une erreur, vous pouvez annuler vos dernières actions en utilisant \
 les deux flèches « suivant » et « précédent » qui se trouvent en haut de l'interface`,
   `Dans archifiltre, chaque rectangle représente un dossier ou un fichier de votre arborescence, \
@@ -39,4 +39,4 @@ la moitié des fichiers du dossier n'ont plus été modifiés.`,
   "Lors des différents exports, les tags d'un dossier sont propagés à tous ses fils."
 ];
 
-export const hints = french_hints;
+export const hints = frenchHints;

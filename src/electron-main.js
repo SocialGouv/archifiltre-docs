@@ -140,7 +140,6 @@ app.on("ready", createWindow);
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
-  console.log("window-all-closed");
   app.quit();
 });
 
@@ -154,22 +153,6 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-
-app.on("before-quit", () => {
-  console.log("before-quit");
-});
-
-app.on("will-quit", () => {
-  console.log("will-quit");
-});
-
-app.on("quit", () => {
-  console.log("quit");
-});
-
-app.on("will-navigate", () => {
-  console.log("will-navigate");
-});
 
 app.on("renderer-process-crashed", () => {
   Raven.captureException("Renderer process crashed");

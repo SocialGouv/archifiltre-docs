@@ -1,4 +1,4 @@
-import version from "version";
+import version from "../version.ts";
 import translations from "../translations/translations";
 
 import * as ObjectUtil from "util/object-util.ts";

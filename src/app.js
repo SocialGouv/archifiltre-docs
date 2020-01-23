@@ -19,7 +19,7 @@ import { Store } from "reducers/real-estate-store";
 import { Provider } from "react-redux";
 import store from "reducers/store.ts";
 
-import version from "version";
+import version from "version.ts";
 
 import { NotificationContainer } from "react-notifications";
 import { initTracker } from "./logging/tracker.ts";

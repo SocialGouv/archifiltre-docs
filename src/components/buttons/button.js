@@ -1,6 +1,14 @@
 import React from "react";
+import { empty } from "../../util/function-util";
 
-export function mkB(click_action, label, enabled, color, custom_style, id) {
+export function mkB(
+  click_action = empty,
+  label,
+  enabled,
+  color,
+  custom_style,
+  id
+) {
   const default_button_style = {
     margin: 0,
     fontWeight: "bold",

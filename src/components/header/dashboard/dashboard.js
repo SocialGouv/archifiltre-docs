@@ -10,6 +10,24 @@ import {
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import ExportDropdown from "../export-dropdown";
 import SessionInfo from "./session-info";
+import styled from "styled-components";
+import ArchifiltreLogo from "../archifiltre-logo";
+
+const HeaderLine = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0.975em;
+  align-items: center;
+`;
+
+const Spacer = styled.div`
+  flex-grow: 1;
+`;
+
+const ButtonCell = styled.div`
+  min-width: 9em;
+`;
 
 const DashBoard = ({
   areHashesReady,
@@ -36,14 +54,17 @@ const DashBoard = ({
   const shouldDisplayNavigationArrows = started === finished && error === false;
 
   return (
-    <div className="grid-x grid-padding-y align-middle">
-      <div className="cell small-2">
+    <HeaderLine>
+      <div>
+        <ArchifiltreLogo />
+      </div>
+
+      <Spacer />
+      <div>
         {shouldDisplayNavigationArrows && <CtrlZ visible={true} api={api} />}
       </div>
 
-      <div className="cell auto" />
-
-      <div className="cell small-3">
+      <div>
         {shouldDisplayActions && (
           <SessionInfo
             sessionName={sessionName}
@@ -55,17 +76,17 @@ const DashBoard = ({
         )}
       </div>
 
-      <div className="cell auto" />
+      <Spacer />
 
-      <div className="cell small-2">
+      <ButtonCell>
         {shouldDisplayActions && (
           <TextAlignCenter>
             <SaveButton api={api} exportToJson={exportToJson} />
           </TextAlignCenter>
         )}
-      </div>
+      </ButtonCell>
 
-      <div className="cell small-2">
+      <ButtonCell>
         {shouldDisplayActions && (
           <ExportDropdown
             api={api}
@@ -76,15 +97,15 @@ const DashBoard = ({
             exportToCsv={exportToCsv}
           />
         )}
-      </div>
-      <div className="cell small-2">
+      </ButtonCell>
+      <ButtonCell>
         {shouldDisplayReset && (
           <TextAlignCenter>
             <ReinitButton api={api} />
           </TextAlignCenter>
         )}
-      </div>
-    </div>
+      </ButtonCell>
+    </HeaderLine>
   );
 };
 

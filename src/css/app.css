@@ -123,8 +123,7 @@
   display: inline-block;
   font-weight: bold;
   font-size: 1.2em;
-  min-width: 80%;
-  max-width: 80%;
+  width: 85%;
   height: 1.2em;
   padding-bottom: 0.5em;
 }

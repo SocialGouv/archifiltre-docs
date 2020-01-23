@@ -43,7 +43,7 @@ const marginPaddingCompensate = {
   padding: "0.2em 0.8em"
 };
 
-const hashDivStyle = {
+const overflowEllipsisStyle = {
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
   overflow: "hidden"
@@ -207,7 +207,7 @@ const InfoCell = ({
       <div>
         <b>{t("report.size")} :</b> {sizeLabel}
       </div>
-      <div style={hashDivStyle}>
+      <div style={overflowEllipsisStyle}>
         <b>
           {t("report.hash")}&nbsp;
           <span data-tip={hashExplanationText} data-for="hash-explanation">
@@ -218,7 +218,7 @@ const InfoCell = ({
         <span>{hashLabel}</span>
         <ReactTooltip place={"bottom"} id="hash-explanation" />
       </div>
-      <div>
+      <div style={overflowEllipsisStyle}>
         <b>{t("report.type")} :</b> {typeLabel}
       </div>
       <br />

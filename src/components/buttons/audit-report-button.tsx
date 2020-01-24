@@ -1,9 +1,17 @@
-import React from "react";
 import { mkB } from "components/buttons/button";
-import { makeNameWithExt } from "util/file-sys-util";
+import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
+import { makeNameWithExt } from "util/file-sys-util";
 
-const AuditReportButton = ({
+export type ExportToAuditReport = (name: string) => void;
+
+interface AuditReportButtonProps {
+  api: any;
+  areHashesReady: boolean;
+  exportToAuditReport: ExportToAuditReport;
+}
+
+const AuditReportButton: FC<AuditReportButtonProps> = ({
   api: {
     database: { getSessionName }
   },

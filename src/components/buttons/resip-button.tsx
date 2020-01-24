@@ -1,18 +1,23 @@
 import { mkB } from "components/buttons/button";
 import path from "path";
-
+import { FC } from "react";
 import { makeNameWithExt } from "../../util/file-sys-util";
 
 const label = "RESIP";
 
-const ResipButton = props => {
-  const {
-    exportToResip,
-    api: {
-      database: { getSessionName, getOriginalPath }
-    }
-  } = props;
+export type ExportToResip = (name: string) => void;
 
+interface ResipButtonProps {
+  api: any;
+  exportToResip: ExportToResip;
+}
+
+const ResipButton: FC<ResipButtonProps> = ({
+  exportToResip,
+  api: {
+    database: { getSessionName, getOriginalPath }
+  }
+}) => {
   const savePath = path.join(getOriginalPath(), `${getSessionName()}-RESIP`);
 
   const name = makeNameWithExt(savePath, "csv");

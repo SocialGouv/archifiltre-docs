@@ -1,8 +1,22 @@
 import { mkB } from "components/buttons/button";
 
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 
-const SaveButton = ({ api, exportToJson }) => {
+interface ExportToJsonOptions {
+  sessionName: string;
+  originalPath: string;
+  version: string;
+}
+
+export type ExportToJson = (options: ExportToJsonOptions) => void;
+
+interface SaveButtonProps {
+  api: any;
+  exportToJson: ExportToJson;
+}
+
+const SaveButton: FC<SaveButtonProps> = ({ api, exportToJson }) => {
   const { t } = useTranslation();
 
   const { getOriginalPath, getSessionName, getVersion } = api.database;
@@ -10,8 +24,8 @@ const SaveButton = ({ api, exportToJson }) => {
   return mkB(
     () => {
       exportToJson({
-        sessionName: getSessionName(),
         originalPath: getOriginalPath(),
+        sessionName: getSessionName(),
         version: getVersion()
       });
     },

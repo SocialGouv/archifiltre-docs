@@ -1,18 +1,28 @@
 import { mkB } from "components/buttons/button";
-import React from "react";
+import React, { FC } from "react";
 
-const label = (
+const metsButtonLabel = (
   <span>
     METS <small>beta</small>
   </span>
 );
 
-const MetsButton = props => {
-  const {
-    exportToMets,
-    api: { database }
-  } = props;
+interface ExportToMetsOptions {
+  originalPath: string;
+  sessionName: string;
+}
 
+export type ExportToMets = (options: ExportToMetsOptions) => void;
+
+interface MetsButtonProps {
+  exportToMets: ExportToMets;
+  api: any;
+}
+
+const MetsButton: FC<MetsButtonProps> = ({
+  exportToMets,
+  api: { database }
+}) => {
   const isButtonEnabled = database.getOriginalPath() !== "";
 
   return mkB(
@@ -24,7 +34,7 @@ const MetsButton = props => {
         sessionName
       });
     },
-    label,
+    metsButtonLabel,
     isButtonEnabled,
     "#4d9e25",
     { width: "90%" }

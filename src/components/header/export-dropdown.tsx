@@ -1,11 +1,13 @@
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { empty } from "../../util/function-util";
-import AuditReportButton from "../buttons/audit-report-button";
+import AuditReportButton, {
+  ExportToAuditReport
+} from "../buttons/audit-report-button";
 import { mkB } from "../buttons/button";
-import CsvButton from "../buttons/csv-button";
-import MetsButton from "../buttons/mets-button";
-import ResipButton from "../buttons/resip-button";
+import CsvButton, { ExportToCsv } from "../buttons/csv-button";
+import MetsButton, { ExportToMets } from "../buttons/mets-button";
+import ResipButton, { ExportToResip } from "../buttons/resip-button";
 import TextAlignCenter from "../common/text-align-center";
 import Bubble from "./dashboard/bubble";
 import BubbleCell from "./dashboard/bubble-cell";
@@ -13,14 +15,10 @@ import BubbleCell from "./dashboard/bubble-cell";
 interface ExportDropdownProps {
   api: any;
   areHashesReady: boolean;
-  // tslint:disable-next-line:ban-types
-  exportToAuditReport: Function;
-  // tslint:disable-next-line:ban-types
-  exportToMets: Function;
-  // tslint:disable-next-line:ban-types
-  exportToResip: Function;
-  // tslint:disable-next-line:ban-types
-  exportToCsv: Function;
+  exportToAuditReport: ExportToAuditReport;
+  exportToMets: ExportToMets;
+  exportToResip: ExportToResip;
+  exportToCsv: ExportToCsv;
 }
 
 const ExportDropdown: FC<ExportDropdownProps> = ({

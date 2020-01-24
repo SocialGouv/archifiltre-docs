@@ -1,11 +1,23 @@
-import React from "react";
-import ReactTooltip from "react-tooltip";
 import { mkB } from "components/buttons/button";
-
-import { makeNameWithExt } from "util/file-sys-util";
+import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
+import ReactTooltip from "react-tooltip";
+import { makeNameWithExt } from "util/file-sys-util";
 
-const CsvButton = ({
+interface ExportToCsvOptions {
+  withHashes: boolean;
+}
+
+export type ExportToCsv = (name: string, options?: ExportToCsvOptions) => void;
+
+interface CsvButtonProps {
+  api: any;
+  exportToCsv: ExportToCsv;
+  areHashesReady?: boolean;
+  exportWithHashes?: boolean;
+}
+
+const CsvButton: FC<CsvButtonProps> = ({
   api: { database },
   exportToCsv,
   areHashesReady = false,

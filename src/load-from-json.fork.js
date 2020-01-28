@@ -6,6 +6,7 @@ import {
   AsyncWorkerEvent,
   createAsyncWorkerForChildProcess
 } from "./util/async-worker-util";
+import { MessageTypes } from "./util/batch-process/batch-process-util-types";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
 
@@ -31,8 +32,10 @@ function loadJsonConfig(droppedFolderPath) {
   const js = fromAnyJsonToJs(contentWithoutByteOrderMark);
 
   asyncWorker.postMessage({
-    status: "return",
-    vfs: js
+    type: MessageTypes.COMPLETE,
+    message: {
+      vfs: js
+    }
   });
 }
 

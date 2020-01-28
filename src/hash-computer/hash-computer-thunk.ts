@@ -15,6 +15,7 @@ import {
 import { startLoading } from "../reducers/loading-info/loading-info-operations";
 import { LoadingInfoTypes } from "../reducers/loading-info/loading-info-types";
 import translations from "../translations/translations";
+import { NotificationDuration, notifyError } from "../util/notifications-util";
 import { operateOnDataProcessingStream } from "../util/observable-util";
 import {
   computeFolderHashes$,
@@ -58,10 +59,13 @@ export const computeHashesThunk = (
       );
       dispatch(setFilesAndFoldersHashes(newHashes));
     };
-
+    let loadingErrorsCount = 0;
     operateOnDataProcessingStream(hashes$, {
       // tslint:disable-next-line:no-console
-      error: tap(reportError),
+      error: tap(error => {
+        reportError(error);
+        loadingErrorsCount++;
+      }),
       result: tap(onNewHashesComputed)
     }).subscribe({
       complete: () => {
@@ -69,6 +73,17 @@ export const computeHashesThunk = (
         computeFolderHashes$({ filesAndFolders, hashes }).subscribe({
           complete: () => {
             dispatch(completeLoadingAction(loadingActionId));
+            if (loadingErrorsCount > 0) {
+              const loadingErrorMessage = translations.t(
+                "hash.loadingErrorMessage"
+              );
+              const hashTitle = translations.t("hash.title");
+              notifyError(
+                loadingErrorMessage,
+                hashTitle,
+                NotificationDuration.PERMANENT
+              );
+            }
             resolve();
           },
           next: onNewHashesComputed

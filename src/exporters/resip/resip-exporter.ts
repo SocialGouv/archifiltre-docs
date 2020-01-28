@@ -168,10 +168,13 @@ const resipExporter = (filesAndFolders, tags, hook = empty) => {
     return { ...ff, ID: `${sipId}` };
   };
 
-  const tagsWithIndex = Object.keys(tags).map((tagId, tagIndex) => ({
-    ...tags[tagId],
-    ID: tagIndex
-  }));
+  const tagsWithIndex = Object.keys(tags)
+    .map(tagId => tags[tagId])
+    .filter(({ ffIds }) => ffIds.length !== 0)
+    .map((tag, tagIndex) => ({
+      ...tag,
+      ID: tagIndex
+    }));
 
   const dataWithSipId = Object.keys(filesAndFolders)
     .filter(id => id !== "")

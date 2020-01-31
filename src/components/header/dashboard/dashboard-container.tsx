@@ -10,6 +10,10 @@ import {
   getFilesAndFoldersFromStore,
   getHashesFromStore
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
+import {
+  replayActionsThunk,
+  usePreviousSession
+} from "../../../reducers/middleware/persist-actions-middleware";
 import { resetStoreThunk } from "../../../reducers/store-thunks";
 import { getWorkspaceMetadataFromStore } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { setSessionNameThunk } from "../../../reducers/workspace-metadata/workspace-metadata-thunk";
@@ -23,6 +27,11 @@ const ROOT_ID = "";
 
 const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
   const dispatch = useDispatch();
+  const hasPreviousSession = usePreviousSession();
+
+  const reloadPreviousSession = useCallback(() => {
+    dispatch(replayActionsThunk(api));
+  }, [dispatch, api]);
 
   const exportToCsv = useCallback(
     (name, options) => dispatch(csvExporterThunk(name, options)),
@@ -79,6 +88,7 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
     <Dashboard
       api={api}
       areHashesReady={areHashesReady}
+      hasPreviousSession={hasPreviousSession}
       originalPath={originalPath}
       sessionName={sessionName}
       exportToAuditReport={exportToAuditReport}
@@ -86,6 +96,7 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
       exportToResip={exportToResip}
       exportToMets={exportToMets}
       exportToJson={exportToJson}
+      reloadPreviousSession={reloadPreviousSession}
       resetWorkspace={resetWorkspace}
       rootFilesAndFoldersMetadata={rootFilesAndFoldersMetadata}
       filesAndFolders={filesAndFolders}

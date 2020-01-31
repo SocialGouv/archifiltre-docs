@@ -13,8 +13,9 @@ import Bubble from "./dashboard/bubble";
 import BubbleCell from "./dashboard/bubble-cell";
 
 interface ExportDropdownProps {
-  api: any;
   areHashesReady: boolean;
+  originalPath: string;
+  sessionName: string;
   exportToAuditReport: ExportToAuditReport;
   exportToMets: ExportToMets;
   exportToResip: ExportToResip;
@@ -22,8 +23,9 @@ interface ExportDropdownProps {
 }
 
 const ExportDropdown: FC<ExportDropdownProps> = ({
-  api,
   areHashesReady,
+  originalPath,
+  sessionName,
   exportToAuditReport,
   exportToCsv,
   exportToMets,
@@ -48,27 +50,35 @@ const ExportDropdown: FC<ExportDropdownProps> = ({
         <div className="grid-x">
           <BubbleCell>
             <AuditReportButton
-              api={api}
+              sessionName={sessionName}
               areHashesReady={areHashesReady}
               exportToAuditReport={exportToAuditReport}
             />
           </BubbleCell>
           <BubbleCell>
-            <CsvButton api={api} exportToCsv={exportToCsv} />
+            <CsvButton sessionName={sessionName} exportToCsv={exportToCsv} />
           </BubbleCell>
           <BubbleCell>
             <CsvButton
-              api={api}
+              sessionName={sessionName}
               exportToCsv={exportToCsv}
               areHashesReady={areHashesReady}
               exportWithHashes={true}
             />
           </BubbleCell>
           <BubbleCell>
-            <ResipButton api={api} exportToResip={exportToResip} />
+            <ResipButton
+              originalPath={originalPath}
+              sessionName={sessionName}
+              exportToResip={exportToResip}
+            />
           </BubbleCell>
           <BubbleCell>
-            <MetsButton api={api} exportToMets={exportToMets} />
+            <MetsButton
+              originalPath={originalPath}
+              sessionName={sessionName}
+              exportToMets={exportToMets}
+            />
           </BubbleCell>
         </div>
       }

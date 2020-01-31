@@ -11,19 +11,19 @@ interface ExportToCsvOptions {
 export type ExportToCsv = (name: string, options?: ExportToCsvOptions) => void;
 
 interface CsvButtonProps {
-  api: any;
-  exportToCsv: ExportToCsv;
   areHashesReady?: boolean;
+  sessionName: string;
+  exportToCsv: ExportToCsv;
   exportWithHashes?: boolean;
 }
 
 const CsvButton: FC<CsvButtonProps> = ({
-  api: { database },
-  exportToCsv,
   areHashesReady = false,
+  sessionName,
+  exportToCsv,
   exportWithHashes = false
 }) => {
-  const name = makeNameWithExt(database.getSessionName(), "csv");
+  const name = makeNameWithExt(sessionName, "csv");
   const { t } = useTranslation();
   const buttonLabel = exportWithHashes ? t("header.csvWithHash") : "CSV";
   const isActive = !exportWithHashes || areHashesReady;

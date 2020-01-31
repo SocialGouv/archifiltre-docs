@@ -9,7 +9,7 @@ import { SecretDevtools } from "secret-devtools";
 import React from "react";
 import ReactDOM from "react-dom";
 
-import ErrorBoundary from "components/errors/error-boundary";
+import ErrorBoundary from "components/errors/error-boundary-container";
 import MainSpace from "components/main-space/main-space";
 import Header from "components/header/header.tsx";
 import ANewVersionIsAvailable from "components/header/a-new-version-is-available";

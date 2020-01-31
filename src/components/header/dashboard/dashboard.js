@@ -39,6 +39,7 @@ const DashBoard = ({
   started,
   finished,
   error,
+  originalPath,
   sessionName,
   onChangeSessionName,
   nbFolders,
@@ -86,7 +87,11 @@ const DashBoard = ({
       {shouldDisplayActions && (
         <ButtonCell>
           <TextAlignCenter>
-            <SaveButton api={api} exportToJson={exportToJson} />
+            <SaveButton
+              originalPath={originalPath}
+              sessionName={sessionName}
+              exportToJson={exportToJson}
+            />
           </TextAlignCenter>
         </ButtonCell>
       )}
@@ -94,8 +99,9 @@ const DashBoard = ({
       {shouldDisplayActions && (
         <ButtonCell>
           <ExportDropdown
-            api={api}
             areHashesReady={areHashesReady}
+            originalPath={originalPath}
+            sessionName={sessionName}
             exportToAuditReport={exportToAuditReport}
             exportToMets={exportToMets}
             exportToResip={exportToResip}
@@ -164,6 +170,7 @@ export default function DashBoardApiToProps({
       nbFolders={nbFolders}
       volume={volume}
       sessionName={database.getSessionName()}
+      originalPath={database.getOriginalPath()}
       onChangeSessionName={onChangeSessionName}
       exportToCsv={exportToCsv}
       exportToResip={exportToResip}

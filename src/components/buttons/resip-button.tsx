@@ -8,17 +8,17 @@ const label = "RESIP";
 export type ExportToResip = (name: string) => void;
 
 interface ResipButtonProps {
-  api: any;
+  originalPath: string;
+  sessionName: string;
   exportToResip: ExportToResip;
 }
 
 const ResipButton: FC<ResipButtonProps> = ({
-  exportToResip,
-  api: {
-    database: { getSessionName, getOriginalPath }
-  }
+  originalPath,
+  sessionName,
+  exportToResip
 }) => {
-  const savePath = path.join(getOriginalPath(), `${getSessionName()}-RESIP`);
+  const savePath = path.join(originalPath, `${sessionName}-RESIP`);
 
   const name = makeNameWithExt(savePath, "csv");
 

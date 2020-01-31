@@ -6,20 +6,18 @@ import { makeNameWithExt } from "util/file-sys-util";
 export type ExportToAuditReport = (name: string) => void;
 
 interface AuditReportButtonProps {
-  api: any;
   areHashesReady: boolean;
+  sessionName: string;
   exportToAuditReport: ExportToAuditReport;
 }
 
 const AuditReportButton: FC<AuditReportButtonProps> = ({
-  api: {
-    database: { getSessionName }
-  },
   areHashesReady,
+  sessionName,
   exportToAuditReport
 }) => {
   const { t } = useTranslation();
-  const name = makeNameWithExt(`${getSessionName()}-Audit`, "docx");
+  const name = makeNameWithExt(`${sessionName}-Audit`, "docx");
   return (
     <span
       data-tip={!areHashesReady ? t("header.csvWithHashDisabledMessage") : ""}

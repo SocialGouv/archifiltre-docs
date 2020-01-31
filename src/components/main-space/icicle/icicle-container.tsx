@@ -3,9 +3,11 @@ import { useSelector } from "react-redux";
 import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   getFilesAndFoldersFromStore,
-  getMaxDepth
+  getMaxDepth,
+  ROOT_FF_ID
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "../../../reducers/tags/tags-selectors";
+import { getWorkspaceMetadataFromStore } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
 import IcicleMain from "./icicle-main";
 
 export default function IcicleApiToProps({
@@ -14,7 +16,6 @@ export default function IcicleApiToProps({
   getChildrenIdFromId
 }) {
   const icicle_state = api.icicle_state;
-  const database = api.database;
 
   const lockSequence = icicle_state.lock_sequence();
   const isLocked = lockSequence.length > 0;
@@ -46,10 +47,13 @@ export default function IcicleApiToProps({
     [icicle_state.lock, api.undo.commit]
   );
 
+  const { originalPath } = useSelector(getWorkspaceMetadataFromStore);
+
   return (
     <IcicleMain
       api={api}
       display_root={icicle_state.display_root()}
+      originalPath={originalPath}
       fillColor={fillColor}
       getChildrenIdFromId={getChildrenIdFromId}
       getFfByFfId={getFfByFfId}
@@ -58,7 +62,7 @@ export default function IcicleApiToProps({
       isLocked={isLocked}
       lock={lock}
       width_by_size={icicle_state.widthBySize()}
-      root_id={database.rootFfId()}
+      root_id={ROOT_FF_ID}
       sequence={icicle_state.sequence()}
       setDisplayRoot={icicle_state.setDisplayRoot}
       setFocus={icicle_state.setFocus}

@@ -2,19 +2,15 @@ import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { jsonExporterThunk } from "../../exporters/json/json-exporter";
+import { getWorkspaceMetadataFromStore } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
 import ErrorBoundary from "./error-boundary";
 
-interface ErrorBoundaryContainerProps {
-  api: any;
-}
-
-const ErrorBoundaryContainer: FC<ErrorBoundaryContainerProps> = ({
-  api,
-  children
-}) => {
+const ErrorBoundaryContainer: FC = ({ children }) => {
   const { t } = useTranslation();
-  const apiSessionName = (api.getSessionName && api.getSessionName()) || "";
-  const apiOriginalPath = (api.getOriginalPath && api.getOriginalPath()) || "";
+  const {
+    sessionName: currentSessionName,
+    originalPath: currentOriginalPath
+  } = useSelector(getWorkspaceMetadataFromStore);
 
   const dispatch = useDispatch();
 
@@ -27,8 +23,8 @@ const ErrorBoundaryContainer: FC<ErrorBoundaryContainerProps> = ({
   return (
     <ErrorBoundary
       t={t}
-      originalPath={apiOriginalPath}
-      sessionName={apiSessionName}
+      originalPath={currentOriginalPath}
+      sessionName={currentSessionName}
       exportToJson={exportToJson}
     >
       {children}

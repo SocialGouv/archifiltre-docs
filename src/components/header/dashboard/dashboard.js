@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useMemo } from "react";
 
 import SaveButton from "components/buttons/save-button";
 import ReinitButton from "components/buttons/reinit-button";
@@ -50,7 +50,8 @@ const DashBoard = ({
   exportToResip,
   exportToMets,
   exportToJson,
-  exportToAuditReport
+  exportToAuditReport,
+  resetWorkspace
 }) => {
   const shouldDisplayActions =
     started === true && finished === true && error === false;
@@ -115,7 +116,7 @@ const DashBoard = ({
       {shouldDisplayReset && (
         <ButtonCell>
           <TextAlignCenter>
-            <ReinitButton api={api} />
+            <ReinitButton resetWorkspace={resetWorkspace} />
           </TextAlignCenter>
         </ButtonCell>
       )}
@@ -126,20 +127,24 @@ const DashBoard = ({
 export default function DashBoardApiToProps({
   api,
   areHashesReady,
+  originalPath,
+  sessionName,
   exportToCsv,
   exportToResip,
   exportToMets,
   exportToJson,
   exportToAuditReport,
+  resetWorkspace,
   rootFilesAndFoldersMetadata,
-  filesAndFolders
+  filesAndFolders,
+  setSessionName
 }) {
   const {
-    loading_state: { isFinished, isInError, isStarted },
-    database
+    loading_state: { isFinished, isInError, isStarted }
   } = api;
   const finished = isFinished();
   const error = isInError();
+  const started = isStarted();
 
   const nbFiles = useMemo(() => getFileCount(filesAndFolders), [
     filesAndFolders
@@ -149,34 +154,25 @@ export default function DashBoardApiToProps({
   ]);
   const volume = rootFilesAndFoldersMetadata.childrenTotalSize;
 
-  const onChangeSessionName = useCallback(
-    newSessionName => {
-      if (newSessionName.length > 0) {
-        database.setSessionName(newSessionName);
-        api.undo.commit();
-      }
-    },
-    [api.undo, database]
-  );
-
   return (
     <DashBoard
       api={api}
       areHashesReady={areHashesReady}
-      started={isStarted()}
+      started={started}
       finished={finished}
       error={error}
       nbFiles={nbFiles}
       nbFolders={nbFolders}
       volume={volume}
-      sessionName={database.getSessionName()}
-      originalPath={database.getOriginalPath()}
-      onChangeSessionName={onChangeSessionName}
+      sessionName={sessionName}
+      originalPath={originalPath}
+      onChangeSessionName={setSessionName}
       exportToCsv={exportToCsv}
       exportToResip={exportToResip}
       exportToMets={exportToMets}
       exportToJson={exportToJson}
       exportToAuditReport={exportToAuditReport}
+      resetWorkspace={resetWorkspace}
     />
   );
 }

@@ -10,6 +10,9 @@ import {
   getFilesAndFoldersFromStore,
   getHashesFromStore
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
+import { resetStoreThunk } from "../../../reducers/store-thunks";
+import { getWorkspaceMetadataFromStore } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { setSessionNameThunk } from "../../../reducers/workspace-metadata/workspace-metadata-thunk";
 import Dashboard from "./dashboard";
 
 interface DashboardContainerProps {
@@ -42,9 +45,25 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
   );
 
   const exportToJson = useCallback(
-    ({ sessionName, originalPath, version }) =>
-      dispatch(jsonExporterThunk({ sessionName, originalPath, version })),
+    ({ sessionName: newSessionName, originalPath: newOriginalPath, version }) =>
+      dispatch(
+        jsonExporterThunk({
+          originalPath: newOriginalPath,
+          sessionName: newSessionName,
+          version
+        })
+      ),
     [dispatch]
+  );
+
+  const resetWorkspace = useCallback(() => dispatch(resetStoreThunk(api)), [
+    dispatch,
+    api
+  ]);
+
+  const setSessionName = useCallback(
+    newSessionName => dispatch(setSessionNameThunk(newSessionName, api)),
+    [dispatch, api]
   );
 
   const metadata = useSelector(getFilesAndFoldersMetadataFromStore);
@@ -52,18 +71,25 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
   const rootFilesAndFoldersMetadata = metadata[""] || {};
   const hashes = useSelector(getHashesFromStore);
   const areHashesReady = hashes[ROOT_ID] !== undefined;
+  const { sessionName, originalPath } = useSelector(
+    getWorkspaceMetadataFromStore
+  );
 
   return (
     <Dashboard
       api={api}
       areHashesReady={areHashesReady}
+      originalPath={originalPath}
+      sessionName={sessionName}
       exportToAuditReport={exportToAuditReport}
       exportToCsv={exportToCsv}
       exportToResip={exportToResip}
       exportToMets={exportToMets}
       exportToJson={exportToJson}
+      resetWorkspace={resetWorkspace}
       rootFilesAndFoldersMetadata={rootFilesAndFoldersMetadata}
       filesAndFolders={filesAndFolders}
+      setSessionName={setSessionName}
     />
   );
 };

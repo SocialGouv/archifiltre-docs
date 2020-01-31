@@ -3,41 +3,54 @@ import thunk from "redux-thunk";
 import { DispatchExts } from "../archifiltre-types";
 import { StoreState } from "../store";
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
-import { setFilesAndFoldersHashes } from "./files-and-folders-actions";
+import {
+  addCommentsOnFilesAndFolders,
+  setFilesAndFoldersAlias,
+  setFilesAndFoldersHashes
+} from "./files-and-folders-actions";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
-import { updateFilesAndFolderHashes } from "./files-and-folders-thunks";
+import {
+  updateAliasThunk,
+  updateCommentThunk,
+  updateFilesAndFoldersHashes
+} from "./files-and-folders-thunks";
+
+jest.mock("../../logging/tracker", () => ({
+  addTracker: jest.fn()
+}));
 
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
+
+const emptyStoreState = createEmptyStore();
+const updateId1 = "update-1";
+const updateId2 = "update-2";
+const unupdatedId = "no-update";
+const newHash1 = "new-hash-1";
+const newHash2 = "new-hash-2";
+
+const testState = {
+  ...emptyStoreState,
+  filesAndFolders: wrapStoreWithUndoable({
+    filesAndFolders: {
+      [updateId1]: createFilesAndFolders({
+        id: updateId1
+      }),
+      [updateId2]: createFilesAndFolders({
+        hash: "oldHash2",
+        id: updateId2
+      }),
+      [unupdatedId]: createFilesAndFolders({
+        hash: "unchangedHash",
+        id: unupdatedId
+      })
+    },
+    hashes: {}
+  })
+};
 
 describe("file-and-folders-thunks.test.ts", () => {
   describe("updateFilesAndFolderHashes", () => {
     it("should dispatch an update action for each ff", () => {
-      const emptyStoreState = createEmptyStore();
-      const updateId1 = "update-1";
-      const updateId2 = "update-2";
-      const unupdatedId = "no-update";
-      const newHash1 = "new-hash-1";
-      const newHash2 = "new-hash-2";
-
-      const testState = {
-        ...emptyStoreState,
-        filesAndFolders: wrapStoreWithUndoable({
-          filesAndFolders: {
-            [updateId1]: createFilesAndFolders({
-              id: updateId1
-            }),
-            [updateId2]: createFilesAndFolders({
-              hash: "oldHash2",
-              id: updateId2
-            }),
-            [unupdatedId]: createFilesAndFolders({
-              hash: "unchangedHash",
-              id: unupdatedId
-            })
-          },
-          hashes: {}
-        })
-      };
       const hashes = {
         [updateId1]: newHash1,
         [updateId2]: newHash2
@@ -45,11 +58,37 @@ describe("file-and-folders-thunks.test.ts", () => {
 
       const store = mockStore(testState);
 
-      store.dispatch(updateFilesAndFolderHashes(hashes));
+      store.dispatch(updateFilesAndFoldersHashes(hashes));
 
       const actions = store.getActions();
 
       expect(actions).toEqual([setFilesAndFoldersHashes(hashes)]);
+    });
+  });
+
+  describe("updateAliasThunk", () => {
+    it("should dispatch the right action", () => {
+      const store = mockStore(testState);
+      const ffId = "ff-id";
+      const alias = "new-alias";
+      store.dispatch(updateAliasThunk(ffId, alias));
+
+      expect(store.getActions()).toEqual([
+        setFilesAndFoldersAlias(ffId, alias)
+      ]);
+    });
+  });
+
+  describe("updateCommentThunk", () => {
+    it("should dispatch the right action", () => {
+      const store = mockStore(testState);
+      const ffId = "ff-id";
+      const comment = "new-comment";
+      store.dispatch(updateCommentThunk(ffId, comment));
+
+      expect(store.getActions()).toEqual([
+        addCommentsOnFilesAndFolders(ffId, comment)
+      ]);
     });
   });
 });

@@ -53,6 +53,7 @@ const shouldRenderChildMinimap = (x: number, elementWidth: number): boolean => {
 interface IcicleMainProps {
   api: any;
   tags: TagMap;
+  originalPath: string;
   root_id: string;
   display_root: string;
   fillColor: FillColor;
@@ -74,6 +75,7 @@ interface IcicleMainProps {
 const IcicleMain: FC<IcicleMainProps> = ({
   api,
   tags,
+  originalPath,
   root_id: rootId,
   display_root: displayRoot,
   fillColor,
@@ -295,6 +297,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
 
       <BreadCrumbs
         api={api}
+        originalPath={originalPath}
         getFfByFfId={getFfByFfId}
         maxDepth={maxDepth}
         x={icicleWidth}

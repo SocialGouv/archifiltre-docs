@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 import { RIEInput } from "riek";
 
@@ -21,8 +21,6 @@ import Icon, {
 import ClickableIcon from "../common/clickable-icon";
 import ReactTooltip from "react-tooltip";
 import { useTranslation } from "react-i18next";
-import { addTracker } from "../../logging/tracker";
-import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { lookup } from "mime-types";
 import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
 
@@ -330,6 +328,7 @@ const Report = ({
 };
 
 export default function ReportApiToProps({
+  originalPath,
   api,
   createTag,
   untag,
@@ -338,13 +337,11 @@ export default function ReportApiToProps({
   filesAndFolders,
   filesAndFoldersId,
   filesAndFoldersMetadata,
+  updateAlias,
   updateComment,
   fillColor
 }) {
   const icicle_state = api.icicle_state;
-  const database = api.database;
-
-  const originalPath = api.database.getOriginalPath();
 
   const isFocused = icicle_state.isFocused();
   const isLocked = icicle_state.isLocked();
@@ -356,19 +353,15 @@ export default function ReportApiToProps({
     : {};
 
   // TODO: Refactor this method to use a standard value instead of the riekInputResult value
-  const onChangeAlias = (propName, id, oldName) => riekInputResult => {
-    let newAlias =
-      riekInputResult[propName] === oldName ? "" : riekInputResult[propName];
-    newAlias = newAlias.replace(/^\s*|\s*$/g, "");
-    addTracker({
-      title: ActionTitle.ALIAS_ADDED,
-      type: ActionType.TRACK_EVENT,
-      value: `Created alias: "${newAlias}"`,
-      eventValue: newAlias
-    });
-    database.updateAlias(() => newAlias, id);
-    api.undo.commit();
-  };
+  const onChangeAlias = useCallback(
+    (propName, id, oldName) => riekInputResult => {
+      let newAlias =
+        riekInputResult[propName] === oldName ? "" : riekInputResult[propName];
+      newAlias = newAlias.replace(/^\s*|\s*$/g, "");
+      updateAlias(newAlias);
+    },
+    [updateAlias]
+  );
 
   return (
     <Report

@@ -9,12 +9,15 @@ import loadingInfoReducer from "./loading-info/loading-info-reducer";
 import { LoadingInfoState } from "./loading-info/loading-info-types";
 import tagsReducer from "./tags/tags-reducer";
 import { TagsState } from "./tags/tags-types";
+import workspaceMetadataReducer from "./workspace-metadata/workspace-metadata-reducer";
+import { WorkspaceMetadataState } from "./workspace-metadata/workspace-metadata-types";
 
 export interface StoreState {
   tags: UndoableState<TagsState>;
   filesAndFolders: UndoableState<FilesAndFoldersState>;
   filesAndFoldersMetadata: FilesAndFoldersMetadataState;
   loadingInfo: LoadingInfoState;
+  workspaceMetadata: UndoableState<WorkspaceMetadataState>;
 }
 
 export default createStore(
@@ -22,7 +25,8 @@ export default createStore(
     filesAndFolders: filesAndFoldersReducer,
     filesAndFoldersMetadata: filesAndFoldersMetadataReducer,
     loadingInfo: loadingInfoReducer,
-    tags: tagsReducer
+    tags: tagsReducer,
+    workspaceMetadata: workspaceMetadataReducer
   }),
   applyMiddleware(thunk)
 );

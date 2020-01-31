@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _, { keyBy } from "lodash";
 import path from "path";
 import AsyncHandleDrop from "../async-handle-drop";
 import { mapToNewVersionNumbers } from "../components/header/a-new-version-is-available";
@@ -25,8 +25,13 @@ import {
   FilesAndFoldersMap,
   HashesMap
 } from "./files-and-folders/files-and-folders-types";
-import { initializeTags } from "./tags/tags-actions";
+import { resetLoadingAction } from "./loading-info/loading-info-actions";
+import { initializeTags, resetTags } from "./tags/tags-actions";
 import { TagMap } from "./tags/tags-types";
+import {
+  setOriginalPath,
+  setSessionName
+} from "./workspace-metadata/workspace-metadata-actions";
 
 /**
  * Notifies the user that there is a Zip in the loaded files
@@ -88,8 +93,6 @@ export const loadFilesAndFoldersFromPathThunk = (
     finishedToLoadFiles
   } = api.loading_state;
 
-  const { set: setDatabase, setOriginalPath, setSessionName } = api.database;
-
   const hook = ({ status, count, totalCount }) => {
     setStatus(status);
     if (count) {
@@ -114,11 +117,9 @@ export const loadFilesAndFoldersFromPathThunk = (
       displayJsonNotification();
     }
     if (!isJsonFile(fileOrFolderPath)) {
-      setDatabase(virtualFileSystem);
+      dispatch(initStoreFromVirtualFileSystemThunk(virtualFileSystem));
     } else {
-      setOriginalPath(virtualFileSystem.originalPath);
-      setSessionName(virtualFileSystem.sessionName);
-      dispatch(initStoreThunk(virtualFileSystem));
+      dispatch(initStoreFromJsonThunk(virtualFileSystem));
     }
     finishedToLoadFiles();
     const loadingEnd = new Date().getTime();
@@ -155,10 +156,84 @@ export const loadFilesAndFoldersFromPathThunk = (
   }
 };
 
+interface VirtualFileSystemFilesAndFolders {
+  alias: string;
+  children: string[];
+  comments: string;
+  depth: number;
+  name: string;
+  file_size: number;
+  file_last_modified: number;
+  size: number;
+  last_modified_average: number;
+  last_modified_max: number;
+  last_modified_median: number;
+  last_modified_min: number;
+  nb_files: number;
+  sort_by_size_index: number[];
+  sort_by_date_index: number[];
+}
+
+interface VirtualFileSystemFilesAndFoldersMap {
+  [id: string]: VirtualFileSystemFilesAndFolders;
+}
+
+interface VirtualFileSystem {
+  files_and_folders: VirtualFileSystemFilesAndFoldersMap;
+  tags: TagMap;
+  session_name: string;
+  original_path: string;
+}
+
+const initStoreFromVirtualFileSystemThunk = ({
+  files_and_folders: filesAndFolders,
+  original_path: originalPath,
+  tags
+}: VirtualFileSystem): ArchifiltreThunkAction => dispatch => {
+  dispatch(initializeTags(tags));
+  const formattedFilesAndFolders = Object.entries(filesAndFolders).map(
+    ([
+      id,
+      { name, alias, comments, children, file_size, file_last_modified }
+    ]) => ({
+      alias,
+      children,
+      comments,
+      file_last_modified,
+      file_size,
+      hash: null,
+      id,
+      name
+    })
+  );
+  const transformedFilesAndFolders = keyBy(formattedFilesAndFolders, "id");
+  dispatch(initializeFilesAndFolders(transformedFilesAndFolders));
+
+  const formattedMetadata = Object.entries(filesAndFolders).map(([id, ff]) => ({
+    averageLastModified: ff.last_modified_average,
+    childrenTotalSize: ff.size,
+    id,
+    maxLastModified: ff.last_modified_max,
+    medianLastModified: ff.last_modified_median,
+    minLastModified: ff.last_modified_min,
+    nbChildrenFiles: ff.nb_files,
+    sortByDateIndex: ff.sort_by_date_index,
+    sortBySizeIndex: ff.sort_by_size_index
+  }));
+
+  const transformedMetadata = keyBy(formattedMetadata, "id");
+
+  dispatch(initFilesAndFoldersMetatada(transformedMetadata));
+  dispatch(setOriginalPath(originalPath));
+  dispatch(setSessionName(translations.t("common.projectName")));
+};
+
 interface InitStoreThunkParam {
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   hashes: HashesMap;
+  originalPath: string;
+  sessionName: string;
   tags: TagMap;
 }
 
@@ -169,14 +244,31 @@ interface InitStoreThunkParam {
  * @param hashesMap
  * @param tags
  */
-export const initStoreThunk = ({
+const initStoreFromJsonThunk = ({
   filesAndFolders,
   filesAndFoldersMetadata,
   hashes,
+  originalPath,
+  sessionName,
   tags
 }: InitStoreThunkParam): ArchifiltreThunkAction => dispatch => {
   dispatch(initializeFilesAndFolders(filesAndFolders));
   dispatch(initFilesAndFoldersMetatada(filesAndFoldersMetadata));
   dispatch(setFilesAndFoldersHashes(hashes));
+  dispatch(setOriginalPath(originalPath));
+  dispatch(setSessionName(sessionName));
   dispatch(initializeTags(tags));
+};
+
+export const resetStoreThunk = (
+  api: any
+): ArchifiltreThunkAction => dispatch => {
+  const { loading_state, icicle_state, undo } = api;
+  dispatch(resetTags());
+  dispatch(resetLoadingAction());
+  loading_state.reInit();
+  icicle_state.reInit();
+  icicle_state.setNoFocus();
+  icicle_state.setNoDisplayRoot();
+  undo.commit();
 };

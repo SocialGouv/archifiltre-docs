@@ -5,6 +5,10 @@ import {
   getFilesAndFoldersFromStore,
   getHashesFromStore
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import {
+  updateAliasThunk,
+  updateCommentThunk
+} from "../../reducers/files-and-folders/files-and-folders-thunks";
 import { StoreState } from "../../reducers/store";
 import { addTag, untagFile } from "../../reducers/tags/tags-actions";
 import {
@@ -12,6 +16,7 @@ import {
   getTagsByIds,
   getTagsFromStore
 } from "../../reducers/tags/tags-selectors";
+import { getWorkspaceMetadataFromStore } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
 import ReportApiToProps from "./report";
 
 interface ReportContainerProps {
@@ -41,6 +46,7 @@ const ReportContainer: FC<ReportContainerProps> = ({ api, fillColor }) => {
   const currentFileHash = useSelector((state: StoreState) =>
     getHashesFromStore(state)
   )[filesAndFoldersId];
+  const { originalPath } = useSelector(getWorkspaceMetadataFromStore);
 
   const dispatch = useDispatch();
 
@@ -62,20 +68,29 @@ const ReportContainer: FC<ReportContainerProps> = ({ api, fillColor }) => {
 
   const updateComment = useCallback(
     comments => {
-      const updater = () => comments;
-      api.database.updateComments(updater, filesAndFoldersId);
+      dispatch(updateCommentThunk(filesAndFoldersId, comments));
       api.undo.commit();
     },
-    [api.database, api.undo, filesAndFoldersId]
+    [dispatch, api, filesAndFoldersId]
+  );
+
+  const updateAlias = useCallback(
+    alias => {
+      dispatch(updateAliasThunk(filesAndFoldersId, alias));
+      api.undo.commit();
+    },
+    [dispatch, api, filesAndFoldersId]
   );
 
   return (
     <ReportApiToProps
+      originalPath={originalPath}
       tagsForCurrentFile={tagsForCurrentFile}
       currentFileHash={currentFileHash}
       filesAndFolders={filesAndFolders}
       filesAndFoldersId={filesAndFoldersId}
       filesAndFoldersMetadata={filesAndFoldersMetadata}
+      updateAlias={updateAlias}
       updateComment={updateComment}
       api={api}
       fillColor={fillColor}

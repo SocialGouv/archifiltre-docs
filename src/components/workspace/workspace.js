@@ -6,6 +6,7 @@ import Icicle from "components/main-space/icicle/icicle-container";
 import Report from "components/report/report-container";
 import AllTags from "components/tags/all-tags-container";
 import NavigationBar from "components/workspace/navigation-bar/navigation-bar";
+import { ROOT_FF_ID } from "../../reducers/files-and-folders/files-and-folders-selectors";
 
 class Workspace extends React.PureComponent {
   constructor(props) {
@@ -137,13 +138,12 @@ class Workspace extends React.PureComponent {
 const WorkspaceApiToProps = props => {
   const api = props.api;
   const icicle_state = api.icicle_state;
-  const database = api.database;
 
   const childProps = {
     ...props,
     getFfByFfId: props.getFfByFfId,
     display_root: icicle_state.display_root(),
-    root_id: database.rootFfId(),
+    root_id: ROOT_FF_ID,
     change_skin: icicle_state.changeSkin(),
     width_by_size: icicle_state.widthBySize()
   };

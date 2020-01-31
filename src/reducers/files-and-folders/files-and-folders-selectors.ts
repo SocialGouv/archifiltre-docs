@@ -11,6 +11,8 @@ import {
   HashesMap
 } from "./files-and-folders-types";
 
+export const ROOT_FF_ID = "";
+
 export type FilesAndFoldersCollection = FilesAndFolders[] | FilesAndFoldersMap;
 
 /**

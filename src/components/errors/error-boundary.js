@@ -21,7 +21,7 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
-    const { api, t } = this.props;
+    const { t, originalPath, sessionName, exportToJson } = this.props;
 
     if (this.state.hasError) {
       return (
@@ -36,7 +36,11 @@ class ErrorBoundary extends React.Component {
             <h4>
               <ContactUs />
             </h4>
-            <SaveButton api={api} />
+            <SaveButton
+              originalPath={originalPath}
+              sessionName={sessionName}
+              exportToJson={exportToJson}
+            />
           </div>
         </div>
       );

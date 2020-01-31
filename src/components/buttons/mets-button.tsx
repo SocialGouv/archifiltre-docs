@@ -16,19 +16,19 @@ export type ExportToMets = (options: ExportToMetsOptions) => void;
 
 interface MetsButtonProps {
   exportToMets: ExportToMets;
-  api: any;
+  originalPath: string;
+  sessionName: string;
 }
 
 const MetsButton: FC<MetsButtonProps> = ({
   exportToMets,
-  api: { database }
+  originalPath,
+  sessionName
 }) => {
-  const isButtonEnabled = database.getOriginalPath() !== "";
+  const isButtonEnabled = originalPath !== "";
 
   return mkB(
     () => {
-      const originalPath = database.getOriginalPath();
-      const sessionName = database.getSessionName();
       exportToMets({
         originalPath,
         sessionName

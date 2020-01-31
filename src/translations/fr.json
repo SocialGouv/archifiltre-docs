@@ -62,7 +62,8 @@
       "aNewVersionIsOut": "La version {{version}} d'Archifiltre est sortie !",
       "downloadIt": "téléchargez la !",
       "csvWithHash": "CSV avec empreintes",
-      "csvWithHashDisabledMessage": "Vous devez attendre que les hashs aient été calculés"
+      "csvWithHashDisabledMessage": "Vous devez attendre que les hashs aient été calculés",
+      "loadPreviousSessionButtonLabel": "Recharger la session précédente"
     },
     "common": {
       "error": "Oups ! Une erreur s'est produite.",
@@ -107,6 +108,10 @@
       "csvExportStartedMessage": "L'export CSV a commencé",
       "csvExportSuccessMessage": "L'export CSV est terminé",
       "creatingCsvExport": "Création de l'export CSV"
+    },
+    "replay": {
+      "title": "Chargement de la session précédente",
+      "error": "Une erreur s'est produite lors du chargement de la session précédente."
     }
   }
 }

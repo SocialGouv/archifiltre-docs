@@ -13,6 +13,7 @@ import SessionInfo from "./session-info";
 import LanguagePicker from "./language";
 import styled from "styled-components";
 import ArchifiltreLogo from "../archifiltre-logo";
+import LoadPreviousSessionButton from "../../buttons/load-previous-session-button";
 
 const HeaderLine = styled.div`
   width: 100%;
@@ -39,6 +40,7 @@ const DashBoard = ({
   started,
   finished,
   error,
+  hasPreviousSession,
   originalPath,
   sessionName,
   onChangeSessionName,
@@ -51,13 +53,18 @@ const DashBoard = ({
   exportToMets,
   exportToJson,
   exportToAuditReport,
-  resetWorkspace
+  resetWorkspace,
+  reloadPreviousSession
 }) => {
   const shouldDisplayActions =
     started === true && finished === true && error === false;
 
   const shouldDisplayReset = started === true && finished === true;
-
+  const shouldDisplayPreviousSession =
+    started === false &&
+    finished === false &&
+    error === false &&
+    hasPreviousSession === true;
   const shouldDisplayNavigationArrows = started === finished && error === false;
 
   return (
@@ -110,6 +117,13 @@ const DashBoard = ({
           />
         </ButtonCell>
       )}
+      {shouldDisplayPreviousSession && (
+        <ButtonCell>
+          <LoadPreviousSessionButton
+            reloadPreviousSession={reloadPreviousSession}
+          />
+        </ButtonCell>
+      )}
       <SmallButtonCell>
         <LanguagePicker />
       </SmallButtonCell>
@@ -128,6 +142,7 @@ export default function DashBoardApiToProps({
   api,
   areHashesReady,
   originalPath,
+  hasPreviousSession,
   sessionName,
   exportToCsv,
   exportToResip,
@@ -135,6 +150,7 @@ export default function DashBoardApiToProps({
   exportToJson,
   exportToAuditReport,
   resetWorkspace,
+  reloadPreviousSession,
   rootFilesAndFoldersMetadata,
   filesAndFolders,
   setSessionName
@@ -161,6 +177,7 @@ export default function DashBoardApiToProps({
       started={started}
       finished={finished}
       error={error}
+      hasPreviousSession={hasPreviousSession}
       nbFiles={nbFiles}
       nbFolders={nbFolders}
       volume={volume}
@@ -173,6 +190,7 @@ export default function DashBoardApiToProps({
       exportToJson={exportToJson}
       exportToAuditReport={exportToAuditReport}
       resetWorkspace={resetWorkspace}
+      reloadPreviousSession={reloadPreviousSession}
     />
   );
 }

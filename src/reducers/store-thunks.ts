@@ -26,6 +26,7 @@ import {
   HashesMap
 } from "./files-and-folders/files-and-folders-types";
 import { resetLoadingAction } from "./loading-info/loading-info-actions";
+import { clearActionReplayFile } from "./middleware/persist-actions-middleware";
 import { initializeTags, resetTags } from "./tags/tags-actions";
 import { TagMap } from "./tags/tags-types";
 import {
@@ -103,6 +104,8 @@ export const loadFilesAndFoldersFromPathThunk = (
       setTotalCount(totalCount);
     }
   };
+
+  await clearActionReplayFile();
 
   startToLoadFiles();
   const loadingStart = new Date().getTime();

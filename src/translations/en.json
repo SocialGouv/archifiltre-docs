@@ -62,7 +62,8 @@
       "aNewVersionIsOut": "Version {{version}} of Archifiltre is out!",
       "downloadIt": "download it!",
       "csvWithHash": "CSV with hashes",
-      "csvWithHashDisabledMessage": "You must wait for hashes to have been computed"
+      "csvWithHashDisabledMessage": "You must wait for hashes to have been computed",
+      "loadPreviousSessionButtonLabel": "Load previous session"
     },
     "common": {
       "error": "Oops ! An error occurred.",
@@ -107,6 +108,10 @@
       "csvExportStartedMessage": "CSV export started",
       "csvExportSuccessMessage": "CSV export succeeded",
       "creatingCsvExport": "Creating the CSV export file"
+    },
+    "replay": {
+      "title": "Restore previous session",
+      "error": "An error occurred while restoring the previous session."
     }
   }
 }

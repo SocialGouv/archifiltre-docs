@@ -7,6 +7,7 @@ import filesAndFoldersReducer from "./files-and-folders/files-and-folders-reduce
 import { FilesAndFoldersState } from "./files-and-folders/files-and-folders-types";
 import loadingInfoReducer from "./loading-info/loading-info-reducer";
 import { LoadingInfoState } from "./loading-info/loading-info-types";
+import { persistActions } from "./middleware/persist-actions-middleware";
 import tagsReducer from "./tags/tags-reducer";
 import { TagsState } from "./tags/tags-types";
 import workspaceMetadataReducer from "./workspace-metadata/workspace-metadata-reducer";
@@ -28,5 +29,5 @@ export default createStore(
     tags: tagsReducer,
     workspaceMetadata: workspaceMetadataReducer
   }),
-  applyMiddleware(thunk)
+  applyMiddleware(thunk, persistActions)
 );

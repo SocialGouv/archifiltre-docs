@@ -11,6 +11,7 @@ const FolderDropzoneContainer: FC = props => {
       dispatch(loadFilesAndFoldersFromPathThunk(path, { api, t })),
     [dispatch]
   );
+
   return <FolderDropzone {...props} loadFromPath={loadFromPath} />;
 };
 

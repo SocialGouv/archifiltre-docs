@@ -16,6 +16,10 @@ export const createEmptyStore = (): StoreState => ({
   loadingInfo: loadingInfoInitialState,
   tags: wrapStoreWithUndoable({
     tags: {}
+  }),
+  workspaceMetadata: wrapStoreWithUndoable({
+    originalPath: "",
+    sessionName: ""
   })
 });
 

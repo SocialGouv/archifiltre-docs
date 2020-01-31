@@ -3,6 +3,7 @@ import * as Color from "util/color-util";
 import { useTranslation } from "react-i18next";
 import { Breadcrumb } from "./breadcrumb";
 import { makeEmptyArray } from "../../../util/array-util";
+import { ROOT_FF_ID } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 
 const computeCumulative = array => {
   const ans = [0];
@@ -91,14 +92,13 @@ class Breadcrumbs extends React.PureComponent {
       isLocked,
       api: {
         icicle_state: icicleState,
-        icicle_state: { lock_sequence, hover_sequence },
-        database: { getOriginalPath }
+        icicle_state: { lock_sequence, hover_sequence }
       },
+      originalPath,
       root_id,
       maxDepth
     } = this.props;
     const trueFHeight = this.trueFHeight;
-    const originalPath = getOriginalPath();
     const nodesWithRootId = isFocused ? hover_sequence() : lock_sequence();
     const inactiveBreadcrumbs = this.getInactiveBreadcrumbs(maxDepth);
     const activeBreadcrumbs = nodesWithRootId.slice(1);
@@ -149,20 +149,21 @@ class Breadcrumbs extends React.PureComponent {
 }
 
 export default function BreadcrumbsApiToProps(props) {
-  const { api, maxDepth, getFfByFfId } = props;
-  const { icicle_state, database } = api;
+  const { api, maxDepth, getFfByFfId, originalPath } = props;
+  const { icicle_state } = api;
   const breadcrumb_sequence = icicle_state.sequence();
   const { t } = useTranslation();
 
   return (
     <Breadcrumbs
       {...props}
+      originalPath={originalPath}
       breadcrumb_sequence={breadcrumb_sequence}
       isFocused={icicle_state.isFocused()}
       isLocked={icicle_state.isLocked()}
       maxDepth={maxDepth}
       getFfByFfId={getFfByFfId}
-      root_id={database.rootFfId()}
+      root_id={ROOT_FF_ID}
       t={t}
     />
   );

@@ -54,13 +54,11 @@
   "lint-staged": {
     "*.js": [
       "eslint --fix",
-      "prettier --list-different",
-      "git add"
+      "prettier --list-different"
     ],
     "*.ts": [
       "tslint --fix",
-      "prettier --list-different",
-      "git add"
+      "prettier --list-different"
     ]
   },
   "repository": {

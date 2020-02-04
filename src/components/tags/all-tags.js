@@ -73,7 +73,7 @@ class AllTags extends React.Component {
       opacity: Object.keys(tags).length > 0 ? 1 : 0.5,
       background: "white",
       height: "100%",
-      borderRadius: "1em",
+      borderRadius: "5px",
       padding: "0.5em 0 1em 0"
     };
 

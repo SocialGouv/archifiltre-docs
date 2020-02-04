@@ -117,7 +117,7 @@ class Workspace extends React.PureComponent {
 
         <div className="cell">
           <div className="grid-x align-center">
-            <div className="cell shrink">
+            <div className="cell">
               <NavigationBar api={api} />
             </div>
           </div>

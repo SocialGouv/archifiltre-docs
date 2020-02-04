@@ -1,12 +1,12 @@
 import React from "react";
 
-import BTRButton from "components/buttons/back-to-root-button";
+import BackToRootButton from "components/buttons/back-to-root-button";
 import ToggleChangeSkin from "components/workspace/navigation-bar/toggle-change-skin";
 import ToggleWidthBySize from "components/workspace/navigation-bar/toggle-width-by-size";
 
 const gridStyle = {
   background: "white",
-  borderRadius: "5em",
+  borderRadius: "5px",
   minHeight: "2.5em",
   maxHeight: "2.5em",
   padding: "0.2em 1em",
@@ -16,7 +16,7 @@ const gridStyle = {
 const NavigationBar = ({ api }) => (
   <div style={gridStyle} className="grid-x align-middle">
     <div className="cell small-2">
-      <BTRButton api={api} />
+      <BackToRootButton api={api} />
     </div>
     <div className="cell small-4">
       <div className="flex-container">

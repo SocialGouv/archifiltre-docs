@@ -39,8 +39,8 @@
     },
     "workspace": {
       "colorCode": "Code couleurs :",
-      "type": "Type",
-      "dates": "Dates",
+      "type": "Par type",
+      "dates": "Par dates",
       "backToRoot": "Retour à la racine",
       "display": "Affichage :",
       "bySize": "Par volume",

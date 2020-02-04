@@ -39,8 +39,8 @@
     },
     "workspace": {
       "colorCode": "Color code:",
-      "type": "Type",
-      "dates": "Dates",
+      "type": "By type",
+      "dates": "By dates",
       "backToRoot": "Back to root",
       "display": "Display:",
       "bySize": "By size",

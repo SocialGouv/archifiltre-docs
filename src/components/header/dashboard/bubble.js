@@ -8,35 +8,31 @@ export default class Bubble extends React.Component {
     this.onMouseLeave = this.onMouseLeave.bind(this);
 
     this.state = {
-      mouse_over: false
+      mouseOver: false
     };
   }
 
   onMouseEnter() {
     this.setState({
-      mouse_over: true
+      mouseOver: true
     });
   }
 
   onMouseLeave() {
     this.setState({
-      mouse_over: false
+      mouseOver: false
     });
   }
 
   render() {
-    const state = this.state;
-    const mouse_over = state.mouse_over;
-
-    const props = this.props;
-    const comp = props.comp;
-    const sub_comp = props.sub_comp;
+    const { mouseOver } = this.state;
+    const { comp, sub_comp } = this.props;
 
     const style = {
       position: "relative"
     };
 
-    const sub_style = {
+    const subStyle = {
       display: "none",
       position: "absolute",
       top: "100%",
@@ -44,8 +40,8 @@ export default class Bubble extends React.Component {
       zIndex: 3
     };
 
-    if (mouse_over) {
-      delete sub_style.display;
+    if (mouseOver) {
+      delete subStyle.display;
     }
 
     return (
@@ -56,7 +52,7 @@ export default class Bubble extends React.Component {
         <div
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
-          style={sub_style}
+          style={subStyle}
         >
           <div className="grid-x align-center">
             <div className="cell">{sub_comp}</div>

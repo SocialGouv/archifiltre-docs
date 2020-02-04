@@ -14,7 +14,7 @@ const Presentational = props => {
     WebkitTransition: "all 0.2s ease-out",
     padding: "0.3em 0.45em",
     margin: "0",
-    borderRadius: "2em"
+    borderRadius: "5px"
   };
 
   return mkB(

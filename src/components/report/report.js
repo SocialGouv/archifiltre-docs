@@ -272,7 +272,7 @@ const Report = ({
       style={{
         opacity: isActive ? 1 : 0.5,
         background: "white",
-        borderRadius: "1em"
+        borderRadius: "5px"
       }}
     >
       <div className="grid-x" style={{ padding: pad }}>

@@ -111,10 +111,10 @@ describe("csv-exporter.impl", () => {
   describe("onInitialize", () => {
     it("should return the right csv without hashes", async () => {
       const asyncWorker = createAsyncWorkerMock();
-      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"last_modified";"new name";"description";"file/folder";"depth";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
-      const csvFirstLine = `"";"/root";"5";"root";"";"10000";"01/01/1970";"";"";"folder";"0";"";""`;
-      const csvSecondLine = `"";"/root/folder";"12";"folder";"";"10000";"01/01/1970";"";"";"folder";"1";"${tag2Name}";"${tagName}"`;
-      const csvThirdLine = `"";"/root/folder/ff-id.txt";"22";"ff-id.txt";".txt";"10000";"01/01/1970";"${alias}";"${comments}";"file";"2";"${tag2Name}";"${tagName}"`;
+      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"first_modified";"last_modified";"new name";"description";"file/folder";"depth";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
+      const csvFirstLine = `"";"/root";"5";"root";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"0";"";""`;
+      const csvSecondLine = `"";"/root/folder";"12";"folder";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"1";"${tag2Name}";"${tagName}"`;
+      const csvThirdLine = `"";"/root/folder/ff-id.txt";"22";"ff-id.txt";".txt";"10000";"01/01/1970";"01/01/1970";"${alias}";"${comments}";"file";"2";"${tag2Name}";"${tagName}"`;
       const expectedCsv = [
         csvHeader,
         csvFirstLine,
@@ -149,10 +149,10 @@ describe("csv-exporter.impl", () => {
 
     it("should return the right csv with hashes", async () => {
       const asyncWorker = createAsyncWorkerMock();
-      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"last_modified";"new name";"description";"file/folder";"depth";"hash (MD5)";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
-      const csvFirstLine = `"";"/root";"5";"root";"";"10000";"01/01/1970";"";"";"folder";"0";"${rootFolderHash}";"";""`;
-      const csvSecondLine = `"";"/root/folder";"12";"folder";"";"10000";"01/01/1970";"";"";"folder";"1";"${taggedHash}";"${tag2Name}";"${tagName}"`;
-      const csvThirdLine = `"";"/root/folder/ff-id.txt";"22";"ff-id.txt";".txt";"10000";"01/01/1970";"${alias}";"${comments}";"file";"2";"${firstChildIdHash}";"${tag2Name}";"${tagName}"`;
+      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"first_modified";"last_modified";"new name";"description";"file/folder";"depth";"hash (MD5)";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
+      const csvFirstLine = `"";"/root";"5";"root";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"0";"${rootFolderHash}";"";""`;
+      const csvSecondLine = `"";"/root/folder";"12";"folder";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"1";"${taggedHash}";"${tag2Name}";"${tagName}"`;
+      const csvThirdLine = `"";"/root/folder/ff-id.txt";"22";"ff-id.txt";".txt";"10000";"01/01/1970";"01/01/1970";"${alias}";"${comments}";"file";"2";"${firstChildIdHash}";"${tag2Name}";"${tagName}"`;
       const expectedCsv = [
         csvHeader,
         csvFirstLine,

@@ -87,6 +87,7 @@
       "name": "nom",
       "extension": "extension",
       "size": "poids (octet)",
+      "firstModified": "date de première modification",
       "lastModified": "date de dernière modification",
       "newName": "nouveau nom",
       "description": "description",

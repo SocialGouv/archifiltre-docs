@@ -30,6 +30,7 @@ const makeCsvHeader = (tags: Tag[], { withHashes }: MakeCsvHeaderOptions) => {
     translations.t("csvHeader.name"),
     translations.t("csvHeader.extension"),
     translations.t("csvHeader.size"),
+    translations.t("csvHeader.firstModified"),
     translations.t("csvHeader.lastModified"),
     translations.t("csvHeader.newName"),
     translations.t("csvHeader.description"),
@@ -155,6 +156,9 @@ export const onInitialize: WorkerMessageHandler = async (
       const name = currentFf.name;
       const extension = path.extname(name);
       const size = `${currentMetadata.childrenTotalSize}`;
+      const firstModifiedDate = formatOutputDate(
+        currentMetadata.minLastModified
+      );
       const lastModifiedDate = formatOutputDate(
         currentMetadata.maxLastModified
       );
@@ -171,6 +175,7 @@ export const onInitialize: WorkerMessageHandler = async (
         name,
         extension,
         size,
+        firstModifiedDate,
         lastModifiedDate,
         alias,
         comments,

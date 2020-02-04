@@ -9,14 +9,14 @@ export function mkB(
   custom_style,
   id
 ) {
-  const default_button_style = {
+  const defaultButtonStyle = {
     margin: 0,
     fontWeight: "bold",
     color: "white",
     backgroundColor: color ? color : "#4d9e25"
   };
 
-  const button_style = Object.assign(default_button_style, custom_style);
+  const buttonStyle = { ...defaultButtonStyle, ...custom_style };
 
   if (enabled) {
     return (
@@ -24,7 +24,7 @@ export function mkB(
         type="button"
         className="clear button active_button"
         onClick={click_action}
-        style={button_style}
+        style={buttonStyle}
         data-test-id={id}
       >
         {label}
@@ -36,7 +36,7 @@ export function mkB(
         type="button"
         className="button"
         onClick={click_action}
-        style={button_style}
+        style={buttonStyle}
         id={id}
         disabled
       >
@@ -47,12 +47,12 @@ export function mkB(
 }
 
 export function mkRB(click_action, label, enabled, color, custom_style) {
-  const default_button_style = {
+  const defaultButtonStyle = {
     backgroundColor: color ? color : "#4d9e25",
     borderRadius: "50%"
   };
 
-  const button_style = Object.assign(default_button_style, custom_style);
+  const buttonStyle = { ...defaultButtonStyle, ...custom_style };
 
   if (enabled) {
     return (
@@ -60,7 +60,7 @@ export function mkRB(click_action, label, enabled, color, custom_style) {
         type="button"
         className="button active_button"
         onClick={click_action}
-        style={button_style}
+        style={buttonStyle}
       >
         {label}
       </button>
@@ -71,7 +71,7 @@ export function mkRB(click_action, label, enabled, color, custom_style) {
         type="button"
         className="button"
         onClick={click_action}
-        style={button_style}
+        style={buttonStyle}
         disabled
       >
         {label}
@@ -81,7 +81,7 @@ export function mkRB(click_action, label, enabled, color, custom_style) {
 }
 
 export function mkTB(click_action, label, enabled, color, custom_style) {
-  const default_button_style = {
+  const defaultButtonStyle = {
     color: color ? color : "#4d9e25",
     backgroundColor: enabled
       ? "rgba(249, 154, 11, 0)"
@@ -92,21 +92,21 @@ export function mkTB(click_action, label, enabled, color, custom_style) {
     cursor: enabled ? "pointer" : "default"
   };
 
-  const button_style = Object.assign(default_button_style, custom_style);
+  const buttonStyle = { ...defaultButtonStyle, ...custom_style };
 
   if (enabled) {
     return (
       <button
         className="clear button active_button"
         onClick={click_action}
-        style={button_style}
+        style={buttonStyle}
       >
         {label}
       </button>
     );
   } else {
     return (
-      <a className="clear button" style={button_style}>
+      <a className="clear button" style={buttonStyle}>
         {label}
       </a>
     );

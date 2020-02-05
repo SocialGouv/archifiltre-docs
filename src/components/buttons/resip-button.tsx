@@ -1,7 +1,7 @@
-import { mkB } from "components/buttons/button";
 import path from "path";
-import { FC } from "react";
+import React, { FC, useCallback } from "react";
 import { makeNameWithExt } from "../../util/file-sys-util";
+import Button, { ButtonWidth } from "../common/button";
 
 const label = "RESIP";
 
@@ -22,15 +22,14 @@ const ResipButton: FC<ResipButtonProps> = ({
 
   const name = makeNameWithExt(savePath, "csv");
 
-  return mkB(
-    () => {
-      exportToResip(name);
-    },
-    label,
-    true,
-    "#4d9e25",
-    { width: "90%" },
-    "resip-button"
+  const onClick = useCallback(() => {
+    exportToResip(name);
+  }, [exportToResip, name]);
+
+  return (
+    <Button id="resip-button" onClick={onClick} width={ButtonWidth.WITH_SPACES}>
+      {label}
+    </Button>
   );
 };
 

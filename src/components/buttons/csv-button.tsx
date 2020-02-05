@@ -1,8 +1,8 @@
-import { mkB } from "components/buttons/button";
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import ReactTooltip from "react-tooltip";
 import { makeNameWithExt } from "util/file-sys-util";
+import Button, { ButtonWidth } from "../common/button";
 
 interface ExportToCsvOptions {
   withHashes: boolean;
@@ -26,22 +26,25 @@ const CsvButton: FC<CsvButtonProps> = ({
   const name = makeNameWithExt(sessionName, "csv");
   const { t } = useTranslation();
   const buttonLabel = exportWithHashes ? t("header.csvWithHash") : "CSV";
-  const isActive = !exportWithHashes || areHashesReady;
+  const isDisabled = exportWithHashes && !areHashesReady;
+  const onClick = useCallback(
+    () => exportToCsv(name, { withHashes: exportWithHashes }),
+    [exportToCsv, name, exportWithHashes]
+  );
   return (
     <span
-      data-tip={!isActive ? t("header.csvWithHashDisabledMessage") : ""}
+      data-tip={isDisabled ? t("header.csvWithHashDisabledMessage") : ""}
       data-for="disabledCSVTooltip"
     >
-      {mkB(
-        () => {
-          exportToCsv(name, { withHashes: exportWithHashes });
-        },
-        buttonLabel,
-        isActive,
-        "#4d9e25",
-        { width: "90%" }
-      )}
-      {!isActive && <ReactTooltip id="disabledCSVTooltip" />}
+      <Button
+        id="export-to-csv"
+        onClick={onClick}
+        disabled={isDisabled}
+        width={ButtonWidth.WITH_SPACES}
+      >
+        {buttonLabel}
+      </Button>
+      {isDisabled && <ReactTooltip id="disabledCSVTooltip" />}
     </span>
   );
 };

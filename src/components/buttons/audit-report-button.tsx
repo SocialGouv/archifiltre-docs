@@ -1,7 +1,7 @@
-import { mkB } from "components/buttons/button";
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { makeNameWithExt } from "util/file-sys-util";
+import Button, { ButtonWidth } from "../common/button";
 
 export type ExportToAuditReport = (name: string) => void;
 
@@ -18,20 +18,23 @@ const AuditReportButton: FC<AuditReportButtonProps> = ({
 }) => {
   const { t } = useTranslation();
   const name = makeNameWithExt(`${sessionName}-Audit`, "docx");
+  const onClick = useCallback(() => exportToAuditReport(name), [
+    exportToAuditReport,
+    name
+  ]);
   return (
     <span
       data-tip={!areHashesReady ? t("header.csvWithHashDisabledMessage") : ""}
       data-for="disabledCSVTooltip"
     >
-      {mkB(
-        () => {
-          exportToAuditReport(name);
-        },
-        t("header.auditReport"),
-        areHashesReady,
-        "#4d9e25",
-        { width: "90%" }
-      )}
+      <Button
+        id="audit-report-button"
+        onClick={onClick}
+        disabled={!areHashesReady}
+        width={ButtonWidth.WITH_SPACES}
+      >
+        {t("header.auditReport")}
+      </Button>
     </span>
   );
 };

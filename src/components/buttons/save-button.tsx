@@ -1,8 +1,7 @@
-import { mkB } from "components/buttons/button";
-
-import { FC } from "react";
+import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import version from "../../version";
+import Button, { ButtonWidth } from "../common/button";
 
 interface ExportToJsonOptions {
   sessionName: string;
@@ -26,18 +25,19 @@ const SaveButton: FC<SaveButtonProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  return mkB(
-    () => {
-      exportToJson({
-        originalPath,
-        sessionName,
-        version
-      });
-    },
-    t("header.save"),
-    true,
-    "#4d9e25",
-    { width: "90%" }
+  const onClick = useCallback(
+    () => exportToJson({ originalPath, sessionName, version }),
+    [exportToJson, originalPath, sessionName]
+  );
+
+  return (
+    <Button
+      id="json-export-button"
+      onClick={onClick}
+      width={ButtonWidth.WITH_SPACES}
+    >
+      {t("header.save")}
+    </Button>
   );
 };
 

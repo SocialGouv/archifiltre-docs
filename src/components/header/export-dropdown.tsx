@@ -1,13 +1,12 @@
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { empty } from "../../util/function-util";
 import AuditReportButton, {
   ExportToAuditReport
 } from "../buttons/audit-report-button";
-import { mkB } from "../buttons/button";
 import CsvButton, { ExportToCsv } from "../buttons/csv-button";
 import MetsButton, { ExportToMets } from "../buttons/mets-button";
 import ResipButton, { ExportToResip } from "../buttons/resip-button";
+import Button, { ButtonWidth } from "../common/button";
 import TextAlignCenter from "../common/text-align-center";
 import Bubble from "./dashboard/bubble";
 import BubbleCell from "./dashboard/bubble-cell";
@@ -36,14 +35,9 @@ const ExportDropdown: FC<ExportDropdownProps> = ({
     <Bubble
       comp={
         <TextAlignCenter>
-          {mkB(
-            empty,
-            t("header.export"),
-            true,
-            "#4d9e25",
-            { width: "90%", cursor: "default" },
-            "export-menu"
-          )}
+          <Button id="export-menu" width={ButtonWidth.WITH_SPACES}>
+            {t("header.export")}
+          </Button>
         </TextAlignCenter>
       }
       sub_comp={

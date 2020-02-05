@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 
 import SaveButton from "components/buttons/save-button";
-import ReinitButton from "components/buttons/reinit-button";
+import ReinitButton from "components/buttons/reinit-button.tsx";
 import TextAlignCenter from "components/common/text-align-center";
 import CtrlZ from "components/header/dashboard/ctrl-z";
 import {

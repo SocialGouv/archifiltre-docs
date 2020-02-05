@@ -5,7 +5,6 @@
       "placeholderSubtitle": "Vous pouvez aussi déposer un fichier JSON précédement exporté depuis Archifiltre.",
       "zipNotificationTitle": "fichier(s) zip détecté(s)",
       "zipNotificationMessage": "Archifiltre ne lit pas les zips, veuillez les décompresser pour les lire",
-      "disclaimer": "Compatible avec Firefox et Chrome.",
       "disclaimerSubtitle": "Vos données ne quittent pas votre ordinateur; seul•e vous pouvez voir ce qui se passe dans cette application.",
       "loadingErrorTitle": "Erreur de chargement",
       "loadingErrorMessage": "Vous n'avez probablement pas déposé un dossier ou un fichier.",

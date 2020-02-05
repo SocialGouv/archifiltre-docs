@@ -84,8 +84,6 @@ class FolderDropzone extends React.Component {
             <div>
               <em>
                 <br />
-                {t("folderDropzone.disclaimer")}
-                <br />
                 {t("folderDropzone.disclaimerSubtitle")}
               </em>
             </div>

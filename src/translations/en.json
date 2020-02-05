@@ -5,7 +5,6 @@
       "placeholderSubtitle": "You may also drop a JSON file previously exported from Archifiltre.",
       "zipNotificationTitle": "zip(s) file(s) detected",
       "zipNotificationMessage": "Archifiltre doesn't handle zips, please unzip them to read them",
-      "disclaimer": "Compatible with Firefox and Chrome.",
       "disclaimerSubtitle": "Your data won't leave your computer. Only you can see what happens in this app.",
       "loadingErrorTitle": "Folder loading error",
       "loadingErrorMessage": "You probably neither dropped a folder nor a file.",

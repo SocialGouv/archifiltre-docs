@@ -1,5 +1,5 @@
-import { mkB } from "components/buttons/button";
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
+import Button, { ButtonWidth } from "../common/button";
 
 const metsButtonLabel = (
   <span>
@@ -25,19 +25,24 @@ const MetsButton: FC<MetsButtonProps> = ({
   originalPath,
   sessionName
 }) => {
-  const isButtonEnabled = originalPath !== "";
+  const isDisabled = originalPath === "";
 
-  return mkB(
-    () => {
-      exportToMets({
-        originalPath,
-        sessionName
-      });
-    },
-    metsButtonLabel,
-    isButtonEnabled,
-    "#4d9e25",
-    { width: "90%" }
+  const onClick = useCallback(() => {
+    exportToMets({
+      originalPath,
+      sessionName
+    });
+  }, [exportToMets, originalPath, sessionName]);
+
+  return (
+    <Button
+      id="mets-export-button"
+      onClick={onClick}
+      width={ButtonWidth.WITH_SPACES}
+      disabled={isDisabled}
+    >
+      {metsButtonLabel}
+    </Button>
   );
 };
 

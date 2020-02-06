@@ -2,12 +2,12 @@ import React from "react";
 
 import { request } from "util/http-util";
 
-import { mkB } from "components/buttons/button";
-
 import * as Color from "util/color-util";
 
 import { withTranslation } from "react-i18next";
 import version, { versionComparator } from "../../version.ts";
+import Button, { ButtonAngles, ButtonColor } from "../common/button";
+import { mkRB } from "../buttons/button";
 
 const { shell } = require("electron");
 
@@ -18,10 +18,6 @@ const bannerStyle = {
 
 const cellStyle = {
   padding: "0.3em 0.3em"
-};
-
-const buttonStyle = {
-  borderRadius: "3em"
 };
 
 /**
@@ -95,24 +91,19 @@ class ANewVersionIsAvailable extends React.PureComponent {
               })}
             </div>
             <div className="cell shrink" style={cellStyle}>
-              {mkB(
-                this.download,
-                t("header.downloadIt"),
-                true,
-                "rgb(23, 177, 251)",
-                buttonStyle
-              )}
+              <Button
+                id="download-last-version"
+                onClick={this.download}
+                color={ButtonColor.INFO}
+                angles={ButtonAngles.ROUNDED}
+              >
+                {t("header.downloadIt")}
+              </Button>
             </div>
           </div>
         </div>
         <div className="cell shrink" style={cellStyle}>
-          {mkB(
-            this.displayNone,
-            "X",
-            true,
-            "rgba(224, 77, 28, 0.31)",
-            buttonStyle
-          )}
+          {mkRB(this.displayNone, "X", true, "rgba(224, 77, 28, 0.31)")}
         </div>
       </div>
     );

@@ -38,8 +38,7 @@ class CtrlZ extends React.Component {
               this.props.api.undo.undo,
               <i className="fi-arrow-left" style={arrow_style} />,
               this.props.api.undo.hasAPast(),
-              "",
-              { marginBottom: "0" }
+              ""
             )}
           </div>
           <div className="cell small-6">
@@ -47,8 +46,7 @@ class CtrlZ extends React.Component {
               this.props.api.undo.redo,
               <i className="fi-arrow-right" style={arrow_style} />,
               this.props.api.undo.hasAFuture(),
-              "",
-              { marginBottom: "0" }
+              ""
             )}
           </div>
         </div>

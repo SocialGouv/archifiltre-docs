@@ -3,20 +3,34 @@ import styled from "styled-components";
 import { empty } from "../../util/function-util";
 
 export enum ButtonColor {
+  INFO = "#1779ba",
   SUCCESS = "#4d9e25",
-  ERROR = "#e04d1c"
+  ERROR = "#e04d1c",
+  ICICLE_ACTION = "#f99a0b"
 }
 
 export enum ButtonWidth {
   WITH_SPACES = "90%"
 }
 
+export enum ButtonAngles {
+  SQUARED,
+  ROUNDED
+}
+
+export enum ButtonSize {
+  SMALL,
+  NORMAL
+}
+
 const InnerButton = styled.button`
   display: inline-block;
   width: ${({ width = "100%" }) => width};
   vertical-align: middle;
-  padding: 0.85em 1em;
-  border-radius: 0;
+  padding: ${({ size }) =>
+    size === ButtonSize.SMALL ? "0.3em 0.45em" : "0.85em 1em"};
+  border-radius: ${({ angles }) =>
+    angles === ButtonAngles.SQUARED ? 0 : "5px"};
   font-family: inherit;
   font-size: 0.9rem;
   -webkit-appearance: none;
@@ -48,6 +62,8 @@ interface ButtonProps {
   disabled?: boolean;
   width?: ButtonWidth;
   onClick?: MouseEventHandler;
+  angles?: ButtonAngles;
+  size?: ButtonSize;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -56,7 +72,9 @@ const Button: FC<ButtonProps> = ({
   color = ButtonColor.SUCCESS,
   disabled = false,
   width,
-  onClick = empty
+  angles = ButtonAngles.SQUARED,
+  onClick = empty,
+  size = ButtonSize.NORMAL
 }) => (
   <InnerButton
     id={id}
@@ -64,6 +82,8 @@ const Button: FC<ButtonProps> = ({
     data-test-id={id}
     disabled={disabled}
     width={width}
+    angles={angles}
+    size={size}
     onClick={onClick}
   >
     {children}

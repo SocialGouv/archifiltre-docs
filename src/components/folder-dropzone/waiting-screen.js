@@ -5,25 +5,32 @@ import AreaLoadingBar from "../area-components/area-loading-bar";
 import { isJsonFile } from "../../util/file-sys-util";
 import Loader from "./loader";
 import { useTranslation } from "react-i18next";
+import styled from "styled-components";
 
-const loadingJsonContainerStyle = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center"
-};
+const SimpleLoaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
-const loadingJsonTextStyle = {
-  paddingRight: "10px"
-};
+const SimpleLoaderText = styled.h4`
+  padding-right: 15px;
+`;
+
+const MainCell = styled.div`
+  text-align: center;
+`;
+
+const SimpleLoader = ({ loaderText }) => (
+  <SimpleLoaderContainer>
+    <SimpleLoaderText>{loaderText}</SimpleLoaderText>
+    <Loader loading={true} />
+  </SimpleLoaderContainer>
+);
 
 const LoadingJson = () => {
   const { t } = useTranslation();
-  return (
-    <div style={loadingJsonContainerStyle}>
-      <h3 style={loadingJsonTextStyle}>{t("folderDropzone.jsonLoading")}</h3>
-      <Loader loading={true} />
-    </div>
-  );
+  return <SimpleLoader loaderText={t("folderDropzone.jsonLoading")} />;
 };
 
 const Traverse = ({ count, complete, totalCount }) => (
@@ -65,10 +72,6 @@ const Make = makeLoadingComponent("folderDropzone.constructingDataModel");
 const DerivateFF = makeLoadingComponent("folderDropzone.computingDerivedData");
 const DivedFF = makeLoadingComponent("folderDropzone.computingFileDepth");
 
-const cellStyle = {
-  textAlign: "center"
-};
-
 const statusMap = {
   traverse: 0,
   make: 1,
@@ -97,9 +100,11 @@ const statusComponents = [
 
 const LoadingMessages = ({ status, count, totalCount }) => {
   const currentStatusIndex = statusMap[status];
-
+  const lastStatusComponent = statusComponents.slice(-1)[0];
+  const isFileTreeLoaded = currentStatusIndex >= lastStatusComponent.index;
+  const { t } = useTranslation();
   return (
-    <React.Fragment>
+    <>
       {statusComponents.map(({ index, Component }) => (
         <Component
           key={index}
@@ -109,14 +114,17 @@ const LoadingMessages = ({ status, count, totalCount }) => {
           waiting={currentStatusIndex < index}
         />
       ))}
-    </React.Fragment>
+      {isFileTreeLoaded && (
+        <SimpleLoader loaderText={t("folderDropzone.justAMoment")} />
+      )}
+    </>
   );
 };
 
 const Presentational = ({ status, count, totalCount, loadedPath }) => (
   <div className="grid-y grid-frame align-center">
     <div className="cell">
-      <div style={cellStyle}>
+      <MainCell>
         {isJsonFile(loadedPath) ? (
           <LoadingJson />
         ) : (
@@ -126,26 +134,23 @@ const Presentational = ({ status, count, totalCount, loadedPath }) => (
             totalCount={totalCount}
           />
         )}
-      </div>
+      </MainCell>
     </div>
   </div>
 );
 
-const WaitingScreen = props => {
-  const {
-    api: { loading_state }
-  } = props;
-  const status = loading_state.status();
-  const count = loading_state.count();
-  const totalCount = loading_state.totalCount();
-  return (
-    <Presentational
-      {...props}
-      status={status}
-      count={count}
-      totalCount={totalCount}
-    />
-  );
-};
+const WaitingScreen = ({
+  loadedPath,
+  api: {
+    loading_state: { status, count, totalCount }
+  }
+}) => (
+  <Presentational
+    status={status()}
+    count={count()}
+    totalCount={totalCount()}
+    loadedPath={loadedPath}
+  />
+);
 
 export default WaitingScreen;

@@ -16,9 +16,9 @@ export default function IcicleApiToProps({
   getChildrenIdFromId
 }) {
   const icicle_state = api.icicle_state;
-
   const lockSequence = icicle_state.lock_sequence();
   const isLocked = lockSequence.length > 0;
+
   const tags = useSelector(getTagsFromStore);
 
   const filesAndFoldersMetadata = useSelector(

@@ -15,7 +15,8 @@
       "computingFileDepth": "Computation of file depth",
       "didYouKnow": "Did you know?",
       "warning": "Warning!",
-      "wrongJsonVersion": "The file you dropped wasn't produced with the same version of Archifiltre"
+      "wrongJsonVersion": "The file you dropped wasn't produced with the same version of Archifiltre",
+      "justAMoment": "Just a moment..."
     },
     "report": {
       "comments": "Comments",

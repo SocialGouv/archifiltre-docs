@@ -4,6 +4,7 @@ import thunk from "redux-thunk";
 import { from } from "rxjs";
 import { DispatchExts } from "../../reducers/archifiltre-types";
 import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
+import { initialState as filesAndFoldersInitialState } from "../../reducers/files-and-folders/files-and-folders-reducer";
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 import { StoreState } from "../../reducers/store";
 import {
@@ -72,8 +73,8 @@ const emptyStore = createEmptyStore();
 const storeContent = {
   ...emptyStore,
   filesAndFolders: wrapStoreWithUndoable({
-    filesAndFolders,
-    hashes: {}
+    ...filesAndFoldersInitialState,
+    filesAndFolders
   }),
   filesAndFoldersMetadata: { filesAndFoldersMetadata },
   tags: wrapStoreWithUndoable({ tags })
@@ -81,8 +82,8 @@ const storeContent = {
 
 describe("resip-exporter-thunk", () => {
   describe("resipExporterThunk", () => {
-    const writeFileMock = fs.writeFile as jest.Mock<any>;
-    const mockedGenerateResipExport$ = generateResipExport$ as jest.Mock<any>;
+    const writeFileMock = fs.writeFile as jest.Mock;
+    const mockedGenerateResipExport$ = generateResipExport$ as jest.Mock;
     const savePath = "/path/to/save/the/file";
     const resipCsv = [["resipCsv", "header"]];
 

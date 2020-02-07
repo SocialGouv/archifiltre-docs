@@ -8,6 +8,7 @@ import {
   setFilesAndFoldersAlias,
   setFilesAndFoldersHashes
 } from "./files-and-folders-actions";
+import { initialState as filesAndFoldersInitialState } from "./files-and-folders-reducer";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
 import {
   updateAliasThunk,
@@ -31,6 +32,7 @@ const newHash2 = "new-hash-2";
 const testState = {
   ...emptyStoreState,
   filesAndFolders: wrapStoreWithUndoable({
+    ...filesAndFoldersInitialState,
     filesAndFolders: {
       [updateId1]: createFilesAndFolders({
         id: updateId1
@@ -43,8 +45,7 @@ const testState = {
         hash: "unchangedHash",
         id: unupdatedId
       })
-    },
-    hashes: {}
+    }
   })
 };
 

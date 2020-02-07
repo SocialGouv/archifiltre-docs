@@ -5,6 +5,8 @@ export const SET_FILES_AND_FOLDERS_ALIAS = "FILES_AND_FOLDERS/SET_ALIAS";
 export const SET_FILES_AND_FOLDERS_HASHES = "FILES_AND_FOLDERS/SET_HASHES";
 export const ADD_COMMENTS_ON_FILES_AND_FOLDERS =
   "FILES_AND_FOLDERS/ADD_COMMENTS";
+export const MARK_AS_TO_DELETE = "FILES_AND_FOLDERS/MARK_AS_TO_DELETE";
+export const UNMARK_AS_TO_DELETE = "FILES_AND_FOLDERS/UNMARK_AS_TO_DELETE";
 
 export interface FilesAndFolders {
   id: string;
@@ -28,6 +30,7 @@ export interface HashesMap {
 export interface FilesAndFoldersState {
   filesAndFolders: FilesAndFoldersMap;
   hashes: HashesMap;
+  elementsToDelete: string[];
 }
 
 interface InitializeFilesAndFoldersAction extends Action {
@@ -52,8 +55,20 @@ interface AddCommentsOnFilesAndFoldersAction extends Action {
   comments: string;
 }
 
+interface MarkAsToDelete extends Action {
+  type: typeof MARK_AS_TO_DELETE;
+  filesAndFoldersId: string;
+}
+
+interface UnmarkAsToDelete extends Action {
+  type: typeof UNMARK_AS_TO_DELETE;
+  filesAndFoldersId: string;
+}
+
 export type FilesAndFoldersActionTypes =
   | InitializeFilesAndFoldersAction
   | SetFilesAndFoldersAliasAction
   | AddCommentsOnFilesAndFoldersAction
-  | SetFilesAndFoldersHashesAction;
+  | SetFilesAndFoldersHashesAction
+  | MarkAsToDelete
+  | UnmarkAsToDelete;

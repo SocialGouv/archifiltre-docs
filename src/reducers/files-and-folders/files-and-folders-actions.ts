@@ -4,8 +4,10 @@ import {
   FilesAndFoldersMap,
   HashesMap,
   INITIALIZE_FILES_AND_FOLDERS,
+  MARK_AS_TO_DELETE,
   SET_FILES_AND_FOLDERS_ALIAS,
-  SET_FILES_AND_FOLDERS_HASHES
+  SET_FILES_AND_FOLDERS_HASHES,
+  UNMARK_AS_TO_DELETE
 } from "./files-and-folders-types";
 
 /**
@@ -56,4 +58,26 @@ export const addCommentsOnFilesAndFolders = (
   comments,
   filesAndFoldersId,
   type: ADD_COMMENTS_ON_FILES_AND_FOLDERS
+});
+
+/**
+ * Marks an element as to delete
+ * @param filesAndFoldersId
+ */
+export const markAsToDelete = (
+  filesAndFoldersId: string
+): FilesAndFoldersActionTypes => ({
+  filesAndFoldersId,
+  type: MARK_AS_TO_DELETE
+});
+
+/**
+ * Unmark an element as to delete
+ * @param filesAndFoldersId
+ */
+export const unmarkAsToDelete = (
+  filesAndFoldersId: string
+): FilesAndFoldersActionTypes => ({
+  filesAndFoldersId,
+  type: UNMARK_AS_TO_DELETE
 });

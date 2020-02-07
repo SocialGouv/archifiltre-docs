@@ -2,6 +2,7 @@ import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { DispatchExts } from "../../reducers/archifiltre-types";
 import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
+import { initialState as filesAndFoldersInitialState } from "../../reducers/files-and-folders/files-and-folders-reducer";
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 import { StoreState } from "../../reducers/store";
 import {
@@ -55,6 +56,7 @@ describe("json-exporter", () => {
       const store = mockStore({
         ...createEmptyStore(),
         filesAndFolders: wrapStoreWithUndoable({
+          ...filesAndFoldersInitialState,
           filesAndFolders,
           hashes
         }),

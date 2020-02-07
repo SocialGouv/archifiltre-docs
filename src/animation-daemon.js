@@ -1,16 +1,15 @@
 import { generateRandomString } from "util/random-gen-util";
-import { Map } from "immutable";
 
 const genId = () => generateRandomString(40);
 
-let queue = Map();
+const queue = {};
 
 const animationLoop = () => {
-  const [...keys] = queue.keys();
+  const keys = Object.keys(queue);
   const visible_array = [];
 
   keys.forEach((animation_id, i) => {
-    const animation = queue.get(animation_id);
+    const animation = queue[animation_id];
     const visible = animation.visible;
     const measure = animation.measure;
 
@@ -22,7 +21,7 @@ const animationLoop = () => {
   });
 
   keys.forEach((animation_id, i) => {
-    const animation = queue.get(animation_id);
+    const animation = queue[animation_id];
     const mutate = animation.mutate;
 
     if (visible_array[i]) {
@@ -42,10 +41,10 @@ export function animate(visible, measure, mutate) {
     measure,
     mutate
   };
-  queue = queue.set(animation_id, animation);
+  queue[animation_id] = animation;
   return animation_id;
 }
 
 export function clear(animation_id) {
-  queue = queue.delete(animation_id);
+  delete queue[animation_id];
 }

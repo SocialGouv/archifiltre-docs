@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
+import { initialState as filesAndFoldersInitialState } from "./files-and-folders-reducer";
 import {
   decomposePathToElement,
   getFileCount,
@@ -80,8 +81,8 @@ describe("files-and-folders-selectors", () => {
       const testStore = {
         ...emptyStore,
         filesAndFolders: wrapStoreWithUndoable({
-          filesAndFolders: filesAndFoldersMap,
-          hashes: {}
+          ...filesAndFoldersInitialState,
+          filesAndFolders: filesAndFoldersMap
         })
       };
       expect(getFilesAndFoldersFromStore(testStore)).toEqual(
@@ -185,7 +186,7 @@ describe("files-and-folders-selectors", () => {
       const testStore = {
         ...emptyStore,
         filesAndFolders: wrapStoreWithUndoable({
-          filesAndFolders: {},
+          ...filesAndFoldersInitialState,
           hashes: hashesMap
         })
       };

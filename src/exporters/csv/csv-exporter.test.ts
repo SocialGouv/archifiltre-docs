@@ -4,6 +4,7 @@ import thunk from "redux-thunk";
 import { of } from "rxjs";
 import { DispatchExts } from "../../reducers/archifiltre-types";
 import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
+import { initialState as filesAndFoldersInitialState } from "../../reducers/files-and-folders/files-and-folders-reducer";
 import {
   COMPLETE_LOADING,
   LoadingInfoTypes,
@@ -102,7 +103,11 @@ const emptyStore = createEmptyStore();
 
 const testState = {
   ...emptyStore,
-  filesAndFolders: wrapStoreWithUndoable({ filesAndFolders, hashes }),
+  filesAndFolders: wrapStoreWithUndoable({
+    ...filesAndFoldersInitialState,
+    filesAndFolders,
+    hashes
+  }),
   filesAndFoldersMetadata: { filesAndFoldersMetadata },
   tags: wrapStoreWithUndoable({ tags })
 };

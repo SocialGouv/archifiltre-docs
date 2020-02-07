@@ -4,6 +4,7 @@ import thunk from "redux-thunk";
 import { of } from "rxjs";
 import { DispatchExts } from "../reducers/archifiltre-types";
 import { setFilesAndFoldersHashes } from "../reducers/files-and-folders/files-and-folders-actions";
+import { initialState as filesAndFoldersInitialState } from "../reducers/files-and-folders/files-and-folders-reducer";
 import { createFilesAndFolders } from "../reducers/files-and-folders/files-and-folders-test-utils";
 import {
   completeLoadingAction,
@@ -67,6 +68,7 @@ const folderHashes = {
 const testStore = mockStore({
   ...createEmptyStore(),
   filesAndFolders: wrapStoreWithUndoable({
+    ...filesAndFoldersInitialState,
     filesAndFolders,
     hashes: fileHashes
   })

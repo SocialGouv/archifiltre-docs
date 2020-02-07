@@ -1,20 +1,23 @@
 import {
   addCommentsOnFilesAndFolders,
   initializeFilesAndFolders,
+  markAsToDelete,
   setFilesAndFoldersAlias,
-  setFilesAndFoldersHashes
+  setFilesAndFoldersHashes,
+  unmarkAsToDelete
 } from "./files-and-folders-actions";
 import { filesAndFoldersReducer } from "./files-and-folders-reducer";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
 import { FilesAndFoldersState } from "./files-and-folders-types";
 
+const baseState: FilesAndFoldersState = {
+  elementsToDelete: [],
+  filesAndFolders: {},
+  hashes: {}
+};
+
 describe("files-and-folders-reducer", () => {
   describe("INITIALIZE_FILES_AND_FOLDERS", () => {
-    const initialState: FilesAndFoldersState = {
-      filesAndFolders: {},
-      hashes: {}
-    };
-
     it("should replace the state with the provided filesAndFoldersMap", () => {
       const firstId = "/rootFolder/filename";
       const filesAndFolders = {
@@ -32,12 +35,12 @@ describe("files-and-folders-reducer", () => {
 
       expect(
         filesAndFoldersReducer(
-          initialState,
+          baseState,
           initializeFilesAndFolders(filesAndFolders)
         )
       ).toEqual({
-        filesAndFolders,
-        hashes: {}
+        ...baseState,
+        filesAndFolders
       });
     });
   });
@@ -50,6 +53,7 @@ describe("files-and-folders-reducer", () => {
       const unchangedAlias = "unchanged-alias";
 
       const initialState: FilesAndFoldersState = {
+        ...baseState,
         filesAndFolders: {
           [changedId]: createFilesAndFolders({
             alias: "base-alias",
@@ -59,8 +63,7 @@ describe("files-and-folders-reducer", () => {
             alias: unchangedAlias,
             id: unchangedId
           })
-        },
-        hashes: {}
+        }
       };
 
       const nextState = filesAndFoldersReducer(
@@ -69,6 +72,7 @@ describe("files-and-folders-reducer", () => {
       );
 
       expect(nextState).toEqual({
+        ...baseState,
         filesAndFolders: {
           [changedId]: createFilesAndFolders({
             alias: newAlias,
@@ -78,8 +82,7 @@ describe("files-and-folders-reducer", () => {
             alias: unchangedAlias,
             id: unchangedId
           })
-        },
-        hashes: {}
+        }
       });
     });
   });
@@ -96,6 +99,7 @@ describe("files-and-folders-reducer", () => {
       };
 
       const initialState: FilesAndFoldersState = {
+        ...baseState,
         filesAndFolders: {
           [changedId]: createFilesAndFolders({
             id: changedId
@@ -115,6 +119,7 @@ describe("files-and-folders-reducer", () => {
       );
 
       expect(nextState).toEqual({
+        ...baseState,
         filesAndFolders: {
           [changedId]: createFilesAndFolders({
             id: changedId
@@ -139,6 +144,7 @@ describe("files-and-folders-reducer", () => {
       const unchangedComment = "unchanged-comment";
 
       const initialState: FilesAndFoldersState = {
+        ...baseState,
         filesAndFolders: {
           [changedId]: createFilesAndFolders({
             comments: "base-comments",
@@ -148,8 +154,7 @@ describe("files-and-folders-reducer", () => {
             comments: unchangedComment,
             id: unchangedId
           })
-        },
-        hashes: {}
+        }
       };
 
       const nextState = filesAndFoldersReducer(
@@ -158,6 +163,7 @@ describe("files-and-folders-reducer", () => {
       );
 
       expect(nextState).toEqual({
+        ...baseState,
         filesAndFolders: {
           [changedId]: createFilesAndFolders({
             comments: newComment,
@@ -167,8 +173,53 @@ describe("files-and-folders-reducer", () => {
             comments: unchangedComment,
             id: unchangedId
           })
-        },
-        hashes: {}
+        }
+      });
+    });
+  });
+
+  describe("MARK_AS_TO_DELETE", () => {
+    it("should add the non existing file id to the delete list", () => {
+      const ffId = "test-ffid";
+      const nextState = filesAndFoldersReducer(baseState, markAsToDelete(ffId));
+
+      expect(nextState).toEqual({
+        ...baseState,
+        elementsToDelete: [ffId]
+      });
+    });
+
+    it("should not add the existing file id to the delete list", () => {
+      const ffId = "test-ffid";
+      const initialState = {
+        ...baseState,
+        elementsToDelete: [ffId]
+      };
+      const nextState = filesAndFoldersReducer(
+        initialState,
+        markAsToDelete(ffId)
+      );
+
+      expect(nextState).toEqual(initialState);
+    });
+  });
+
+  describe("UNMARK_AS_TO_DELETE", () => {
+    it("should remove the existing file id from the delete list", () => {
+      const ffId = "test-ffid";
+      const undeletedFfId = "deleted-ffid";
+      const initialState = {
+        ...baseState,
+        elementsToDelete: [ffId, undeletedFfId]
+      };
+      const nextState = filesAndFoldersReducer(
+        initialState,
+        unmarkAsToDelete(undeletedFfId)
+      );
+
+      expect(nextState).toEqual({
+        ...baseState,
+        elementsToDelete: [ffId]
       });
     });
   });

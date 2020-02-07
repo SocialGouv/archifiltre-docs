@@ -7,6 +7,7 @@ import { StoreState } from "./store";
  */
 export const createEmptyStore = (): StoreState => ({
   filesAndFolders: wrapStoreWithUndoable({
+    elementsToDelete: [],
     filesAndFolders: {},
     hashes: {}
   }),

@@ -1,5 +1,3 @@
-import { traverseFileTree } from "util/file-sys-util";
-
 import * as VirtualFileSystem from "datastore/virtual-file-system";
 import { hookCounter } from "./util/hook-utils";
 import {
@@ -7,6 +5,7 @@ import {
   createAsyncWorkerForChildProcess
 } from "./util/async-worker-util";
 import { MessageTypes } from "./util/batch-process/batch-process-util-types";
+import { loadFilesAndFoldersFromFileSystem } from "./files-and-folders-loader/files-and-folders-loader";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
 
@@ -75,7 +74,7 @@ function loadFolder(folderPath) {
   );
   let origin;
   try {
-    [, origin] = traverseFileTree(traverseHook, folderPath);
+    origin = loadFilesAndFoldersFromFileSystem(folderPath, traverseHook);
   } catch (err) {
     reportFatal(err);
     reportWarning("Error in traverseFileTree");

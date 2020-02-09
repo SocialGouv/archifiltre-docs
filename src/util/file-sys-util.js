@@ -57,56 +57,13 @@ export const mkdir = path => {
  *
  * @param path
  */
-const convertToPosixAbsolutePath = path => {
+export const convertToPosixAbsolutePath = path => {
   const array = path.split(Path.sep);
   if (array[0] !== "") {
     array.unshift("");
   }
 
   return array.join("/");
-};
-
-/**
- * Recursive function for traverseFileTree
- * @param hook
- * @param path
- * @returns {([[*, *]]|[])|Array|*[][]}
- */
-const recTraverseFileTree = (hook, path) => {
-  try {
-    const stats = Fs.statSync(path);
-    if (stats.isDirectory()) {
-      return Fs.readdirSync(path)
-        .map(a => recTraverseFileTree(hook, Path.join(path, a)))
-        .reduce((acc, val) => acc.concat(val), []);
-    } else {
-      hook();
-      const file = {
-        size: stats.size,
-        lastModified: stats.mtimeMs
-      };
-      return [[file, path]];
-    }
-  } catch (error) {
-    hook({ path, error: error.message });
-    return [];
-  }
-};
-
-/**
- * Calls the hook function for every file in the tree
- * @param hook - The function called for each file
- * @param folderPath - The path of the folder to traverse.
- * @returns {[string, Array]} - folderPath and array containing all the files
- */
-export const traverseFileTree = (hook, folderPath) => {
-  let origin = recTraverseFileTree(hook, folderPath);
-  folderPath = Path.dirname(folderPath);
-  origin = origin.map(([file, path]) => [
-    file,
-    convertToPosixAbsolutePath(path.slice(folderPath.length))
-  ]);
-  return [folderPath, origin];
 };
 
 export function isJsonFile(path) {

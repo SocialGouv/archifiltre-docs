@@ -1,4 +1,4 @@
-import _, { keyBy } from "lodash";
+import _ from "lodash";
 import path from "path";
 import AsyncHandleDrop from "../async-handle-drop";
 import { mapToNewVersionNumbers } from "../components/header/a-new-version-is-available";
@@ -111,19 +111,17 @@ export const loadFilesAndFoldersFromPathThunk = (
   const loadingStart = new Date().getTime();
   try {
     const virtualFileSystem = await AsyncHandleDrop(hook, fileOrFolderPath);
-    const jsonVersion = mapToNewVersionNumbers(`${virtualFileSystem.version}`);
-    const currentVersion = mapToNewVersionNumbers(version);
-    if (
-      isJsonFile(fileOrFolderPath) &&
-      versionComparator(jsonVersion, currentVersion) !== 0
-    ) {
-      displayJsonNotification();
+
+    if (isJsonFile(fileOrFolderPath)) {
+      const jsonVersion = mapToNewVersionNumbers(
+        `${virtualFileSystem.version}`
+      );
+      const currentVersion = mapToNewVersionNumbers(version);
+      if (versionComparator(jsonVersion, currentVersion) !== 0) {
+        displayJsonNotification();
+      }
     }
-    if (!isJsonFile(fileOrFolderPath)) {
-      dispatch(initStoreFromVirtualFileSystemThunk(virtualFileSystem));
-    } else {
-      dispatch(initStoreFromJsonThunk(virtualFileSystem));
-    }
+    dispatch(initStore(virtualFileSystem));
     finishedToLoadFiles();
     const loadingEnd = new Date().getTime();
     const loadingTime = `${(loadingEnd - loadingStart) / 1000}s`; // Loading time in seconds
@@ -136,7 +134,7 @@ export const loadFilesAndFoldersFromPathThunk = (
     api.undo.commit();
 
     if (!isJsonFile(fileOrFolderPath)) {
-      const filesAndFolders = virtualFileSystem.files_and_folders;
+      const filesAndFolders = virtualFileSystem.filesAndFolders;
       const paths = getFiles(filesAndFoldersMapToArray(filesAndFolders)).map(
         file => file.id
       );
@@ -150,85 +148,13 @@ export const loadFilesAndFoldersFromPathThunk = (
       // TODO: Remove this once real estate setters are no longer used
       await wait();
 
-      dispatch(computeHashesThunk(virtualFileSystem.original_path));
+      dispatch(computeHashesThunk(virtualFileSystem.originalPath));
     }
   } catch (error) {
     // tslint:disable-next-line:no-console
     console.error(error);
     api.loading_state.errorLoadingFiles();
   }
-};
-
-interface VirtualFileSystemFilesAndFolders {
-  alias: string;
-  children: string[];
-  comments: string;
-  depth: number;
-  name: string;
-  file_size: number;
-  file_last_modified: number;
-  size: number;
-  last_modified_average: number;
-  last_modified_max: number;
-  last_modified_median: number;
-  last_modified_min: number;
-  nb_files: number;
-  sort_by_size_index: number[];
-  sort_by_date_index: number[];
-}
-
-interface VirtualFileSystemFilesAndFoldersMap {
-  [id: string]: VirtualFileSystemFilesAndFolders;
-}
-
-interface VirtualFileSystem {
-  files_and_folders: VirtualFileSystemFilesAndFoldersMap;
-  tags: TagMap;
-  session_name: string;
-  original_path: string;
-}
-
-const initStoreFromVirtualFileSystemThunk = ({
-  files_and_folders: filesAndFolders,
-  original_path: originalPath,
-  tags
-}: VirtualFileSystem): ArchifiltreThunkAction => dispatch => {
-  dispatch(initializeTags(tags));
-  const formattedFilesAndFolders = Object.entries(filesAndFolders).map(
-    ([
-      id,
-      { name, alias, comments, children, file_size, file_last_modified }
-    ]) => ({
-      alias,
-      children,
-      comments,
-      file_last_modified,
-      file_size,
-      hash: null,
-      id,
-      name
-    })
-  );
-  const transformedFilesAndFolders = keyBy(formattedFilesAndFolders, "id");
-  dispatch(initializeFilesAndFolders(transformedFilesAndFolders));
-
-  const formattedMetadata = Object.entries(filesAndFolders).map(([id, ff]) => ({
-    averageLastModified: ff.last_modified_average,
-    childrenTotalSize: ff.size,
-    id,
-    maxLastModified: ff.last_modified_max,
-    medianLastModified: ff.last_modified_median,
-    minLastModified: ff.last_modified_min,
-    nbChildrenFiles: ff.nb_files,
-    sortByDateIndex: ff.sort_by_date_index,
-    sortBySizeIndex: ff.sort_by_size_index
-  }));
-
-  const transformedMetadata = keyBy(formattedMetadata, "id");
-
-  dispatch(initFilesAndFoldersMetatada(transformedMetadata));
-  dispatch(setOriginalPath(originalPath));
-  dispatch(setSessionName(translations.t("common.projectName")));
 };
 
 interface InitStoreThunkParam {
@@ -247,7 +173,7 @@ interface InitStoreThunkParam {
  * @param hashesMap
  * @param tags
  */
-const initStoreFromJsonThunk = ({
+const initStore = ({
   filesAndFolders,
   filesAndFoldersMetadata,
   hashes,
@@ -257,10 +183,14 @@ const initStoreFromJsonThunk = ({
 }: InitStoreThunkParam): ArchifiltreThunkAction => dispatch => {
   dispatch(initializeFilesAndFolders(filesAndFolders));
   dispatch(initFilesAndFoldersMetatada(filesAndFoldersMetadata));
-  dispatch(setFilesAndFoldersHashes(hashes));
   dispatch(setOriginalPath(originalPath));
-  dispatch(setSessionName(sessionName));
-  dispatch(initializeTags(tags));
+  dispatch(setSessionName(sessionName || translations.t("common.projectName")));
+  if (hashes) {
+    dispatch(setFilesAndFoldersHashes(hashes));
+  }
+  if (tags) {
+    dispatch(initializeTags(tags));
+  }
 };
 
 export const resetStoreThunk = (

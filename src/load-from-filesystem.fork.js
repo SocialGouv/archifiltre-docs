@@ -1,11 +1,14 @@
-import * as VirtualFileSystem from "datastore/virtual-file-system";
 import { hookCounter } from "./util/hook-utils";
 import {
   AsyncWorkerEvent,
   createAsyncWorkerForChildProcess
 } from "./util/async-worker-util";
 import { MessageTypes } from "./util/batch-process/batch-process-util-types";
-import { loadFilesAndFoldersFromFileSystem } from "./files-and-folders-loader/files-and-folders-loader";
+import {
+  createFilesAndFoldersDataStructure,
+  createFilesAndFoldersMetadataDataStructure,
+  loadFilesAndFoldersFromFileSystem
+} from "./files-and-folders-loader/files-and-folders-loader";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
 
@@ -98,9 +101,9 @@ function loadFolder(folderPath) {
       }),
     { interval: MIN_MESSAGE_INTERVAL, internalHook: errorReportHook }
   );
-  let vfs;
+  let filesAndFolders;
   try {
-    vfs = VirtualFileSystem.make(origin, folderPath, makeHook);
+    filesAndFolders = createFilesAndFoldersDataStructure(origin, makeHook);
     reportResult({
       status: "make",
       count: getMakeCount(),
@@ -111,40 +114,21 @@ function loadFolder(folderPath) {
     reportWarning("Error in vfs.make");
     return;
   }
-  const derivateTotalCount = vfs.get("files_and_folders").count();
+  const derivateTotalCount = Object.keys(filesAndFolders).length;
   reportResult({
     status: "derivateFF",
     count: 0,
     totalCount: derivateTotalCount
   });
 
-  const derivateThrottledHook = (count, type) => {
-    if (type === "reducedFilesAndFolders") {
-      reportResult({
-        status: "derivateFF",
-        count,
-        totalCount: derivateTotalCount
-      });
-    } else if (type === "divedFilesAndFolders") {
-      reportResult({
-        status: "divedFF",
-        count: count - derivateTotalCount,
-        totalCount: derivateTotalCount
-      });
-    }
-  };
-
-  const { hook: derivateHook, getCount: getDerivateCount } = hookCounter(
-    derivateThrottledHook,
-    {
-      interval: MIN_MESSAGE_INTERVAL
-    }
-  );
+  let filesAndFoldersMetadata;
   try {
-    vfs = VirtualFileSystem.derivate(vfs, derivateHook);
+    filesAndFoldersMetadata = createFilesAndFoldersMetadataDataStructure(
+      filesAndFolders
+    );
     asyncWorker.postMessage({
       status: "divedFF",
-      count: getDerivateCount() / 2,
+      count: Object.keys(filesAndFolders).length,
       totalCount: derivateTotalCount
     });
   } catch (error) {
@@ -153,7 +137,11 @@ function loadFolder(folderPath) {
   }
   reportComplete({
     status: MessageTypes.COMPLETE,
-    vfs: VirtualFileSystem.toJs(vfs)
+    vfs: {
+      filesAndFolders,
+      filesAndFoldersMetadata,
+      originalPath: folderPath
+    }
   });
 }
 

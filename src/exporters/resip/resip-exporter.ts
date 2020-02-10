@@ -1,8 +1,10 @@
 import dateFormat from "dateformat";
+import _ from "lodash";
 import path from "path";
 import { tagHasFfId } from "../../reducers/tags/tags-selectors";
 import translations from "../../translations/translations";
 import { makeEmptyArray, replaceValue } from "../../util/array-util";
+import { isExactFileOrAncestor } from "../../util/file-and-folders-utils";
 import { empty } from "../../util/function-util";
 
 const nameChangedText = oldName =>
@@ -155,12 +157,28 @@ const wrapWithHook = (mapper, sideEffect) => (
 };
 
 /**
+ * Check if an ancestor of the fileAndFolders is marked as deleted
+ * @param ffId
+ * @param elementsToDelete
+ */
+const isAncestorDeleted = (ffId: string, elementsToDelete: string[]): boolean =>
+  _.some(elementsToDelete, toDeleteId =>
+    isExactFileOrAncestor(ffId, toDeleteId)
+  );
+
+/**
  * Formats the fileStructure and tag into a csv that can be imported in RESIP
  * @param filesAndFolders - The files and folder structure
  * @param tags - The tags structure
+ * @param elementsToDelete
  * @param [hook]
  */
-const resipExporter = (filesAndFolders, tags, hook = empty) => {
+const resipExporter = (
+  filesAndFolders,
+  tags,
+  elementsToDelete,
+  hook = empty
+) => {
   let sipId = 0;
 
   const addSipId = ff => {
@@ -177,6 +195,7 @@ const resipExporter = (filesAndFolders, tags, hook = empty) => {
     }));
 
   const dataWithSipId = Object.keys(filesAndFolders)
+    .filter(id => !isAncestorDeleted(id, elementsToDelete))
     .filter(id => id !== "")
     .map(wrapWithHook(ffId => ({ id: ffId, ...filesAndFolders[ffId] }), hook))
     .map(wrapWithHook(addSipId, hook))

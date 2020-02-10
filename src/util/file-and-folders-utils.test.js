@@ -8,6 +8,7 @@ import {
   findAllFoldersWithNoSubfolder,
   getFiles,
   getFolders,
+  isExactFileOrAncestor,
   sortFoldersByChildrenCount,
   sortFoldersByDepth
 } from "./file-and-folders-utils";
@@ -461,6 +462,29 @@ describe("file-and-folders-common", () => {
       it("should return the right hashes", () => {
         expect(result).toEqual(expectedResults);
       });
+    });
+  });
+
+  describe("isExactFileOrAncestor", () => {
+    it("should return true when the suspected ancestor is an ancestor", () => {
+      expect(
+        isExactFileOrAncestor("/path/to/ancestor/child", "/path/to/ancestor")
+      ).toBe(true);
+    });
+
+    it("should return true when the file and the suspected ancestor are the same", () => {
+      expect(isExactFileOrAncestor("/path/to/file", "/path/to/file")).toBe(
+        true
+      );
+    });
+
+    it("should return false when the suspected ancestor is not an ancestor", () => {
+      expect(
+        isExactFileOrAncestor(
+          "/path/to/ancestor/child",
+          "/path/to/non-ancestor"
+        )
+      ).toBe(false);
     });
   });
 });

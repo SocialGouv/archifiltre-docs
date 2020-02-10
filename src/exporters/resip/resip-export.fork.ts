@@ -20,10 +20,15 @@ asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, ({ type, data }) => {
     };
     const { hook, getCount } = hookCounter(messageHook);
 
-    const { filesAndFolders, tags, language } = data;
+    const { filesAndFolders, tags, elementsToDelete, language } = data;
     translations.changeLanguage(language);
 
-    const resipExportData = resipExporter(filesAndFolders, tags, hook);
+    const resipExportData = resipExporter(
+      filesAndFolders,
+      tags,
+      elementsToDelete,
+      hook
+    );
 
     asyncWorker.postMessage({
       result: { count: getCount(), resipCsv: resipExportData },

@@ -1,9 +1,7 @@
 /* eslint-disable no-fallthrough */
-
 import { generateRandomString } from "util/random-gen-util";
-import * as FilesAndFolders from "../../datastore/files-and-folders";
 import { mapValues, pick } from "lodash";
-import fp from "lodash/fp";
+import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/files-and-folders-loader";
 
 export const fromAnyJsonToJs = json => {
   let js = JSON.parse(json);
@@ -159,16 +157,8 @@ export const v12JsToV13Js = v12 => {
 };
 
 export const v13JsToV14Js = v13 => {
-  const filesAndFoldersImmutable = FilesAndFolders.fromJs(
-    v13.files_and_folders
-  );
-
-  const v13filesAndFolders = FilesAndFolders.toJs(
-    FilesAndFolders.computeDerived(filesAndFoldersImmutable)
-  );
-
   const filesAndFolders = mapValues(
-    v13filesAndFolders,
+    v13.files_and_folders,
     (fileAndFolders, id) => ({
       ...pick(fileAndFolders, [
         "name",
@@ -182,31 +172,8 @@ export const v13JsToV14Js = v13 => {
     })
   );
 
-  const oldKeyToNewKeyMap = {
-    last_modified_max: "maxLastModified",
-    last_modified_min: "minLastModified",
-    last_modified_median: "medianLastModified",
-    last_modified_average: "averageLastModified",
-    nb_files: "nbChildrenFiles",
-    size: "childrenTotalSize",
-    sort_by_size_index: "sortBySizeIndex",
-    sort_by_date_index: "sortByDateIndex"
-  };
-  const filesAndFoldersMetadata = mapValues(
-    v13filesAndFolders,
-    fp.compose(
-      fp.mapKeys(key => oldKeyToNewKeyMap[key]),
-      fp.pick([
-        "last_modified_max",
-        "last_modified_min",
-        "last_modified_median",
-        "last_modified_average",
-        "nb_files",
-        "sort_by_size_index",
-        "sort_by_date_index",
-        "size"
-      ])
-    )
+  const filesAndFoldersMetadata = createFilesAndFoldersMetadataDataStructure(
+    filesAndFolders
   );
 
   return {

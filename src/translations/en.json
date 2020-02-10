@@ -35,7 +35,8 @@
       "fileHashExplanation": "This hash is a file footprint computed with the MD5 algorithm",
       "folderHashExplanation": "This hash is a footprint (computed with the MD5 algorithm) of this folder's children hashes concatenation",
       "clickHereToAddComments": "Click here to add comments!",
-      "copied": "Copied!"
+      "copied": "Copied!",
+      "toDeleteButtonLabel": "To delete"
     },
     "workspace": {
       "colorCode": "Color code:",

@@ -141,7 +141,14 @@ class ReportCellTags extends React.Component {
   }
 
   render() {
-    const { is_dummy, cells_style, tagsForCurrentFile } = this.props;
+    const {
+      is_dummy,
+      cells_style,
+      tagsForCurrentFile,
+      isLocked,
+      isCurrentFileMarkedToDelete,
+      toggleCurrentFileDeleteState
+    } = this.props;
     const { editing, candidate_tag } = this.state;
     const {
       onClick,
@@ -181,12 +188,15 @@ class ReportCellTags extends React.Component {
           <br />
           <div className="grid-x" style={tagsStyle}>
             <TagsEditable
+              isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
+              isLocked={isLocked}
               tagsForCurrentFile={tagsForCurrentFile}
               editing={editing}
               onKeyUp={onKeyUp}
               removeHandlerFactory={removeHandlerFactory}
               candidate_tag={candidate_tag}
               onChange={onChange}
+              toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
             />
           </div>
         </div>

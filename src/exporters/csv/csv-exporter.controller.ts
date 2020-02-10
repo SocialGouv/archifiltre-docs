@@ -13,6 +13,7 @@ export interface GenerateCsvExportOptions {
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   hashes?: HashesMap;
+  elementsToDelete?: string[];
   tags: TagMap;
 }
 

@@ -33,7 +33,7 @@ const MarkToDeleteButton: FC<MarkToDeleteButtonProps> = ({
           active={isCurrentFileMarkedToDelete}
           onClick={handleClick}
         >
-          {t("report.toDeleteButtonLabel")}
+          {t("common.toDelete")}
         </TagBadge>
       </div>
     </ButtonWrapper>

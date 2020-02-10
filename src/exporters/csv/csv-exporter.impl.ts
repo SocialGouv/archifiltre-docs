@@ -15,6 +15,7 @@ import { formatPathForUserSystem } from "../../util/file-sys-util";
 
 interface MakeCsvHeaderOptions {
   withHashes: boolean;
+  withFilesToDelete: boolean;
 }
 
 /**
@@ -22,7 +23,10 @@ interface MakeCsvHeaderOptions {
  * @param tags
  * @param withHash
  */
-const makeCsvHeader = (tags: Tag[], { withHashes }: MakeCsvHeaderOptions) => {
+const makeCsvHeader = (
+  tags: Tag[],
+  { withHashes, withFilesToDelete }: MakeCsvHeaderOptions
+) => {
   const header = [
     "",
     translations.t("csvHeader.path"),
@@ -40,6 +44,10 @@ const makeCsvHeader = (tags: Tag[], { withHashes }: MakeCsvHeaderOptions) => {
 
   if (withHashes) {
     header.push(translations.t("csvHeader.hash"));
+  }
+
+  if (withFilesToDelete) {
+    header.push(translations.t("common.toDelete"));
   }
 
   const tagNames = tags.map(({ name }, index) => `tag${index} : ${name}`);
@@ -113,6 +121,7 @@ const getTagsForFileOrAncestors = (
 interface CsvExporterData {
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
+  elementsToDelete: string[];
   hashes?: HashesMap;
   language: string;
   tags: TagMap;
@@ -121,6 +130,7 @@ interface CsvExporterData {
 /**
  * Handles the initialize message for the CSV exporter fork
  * @param asyncWorker - The async worker instance
+ * @param elementsToDelete
  * @param filesAndFolders
  * @param filesAndFoldersMetadata
  * @param hashes
@@ -130,6 +140,7 @@ interface CsvExporterData {
 export const onInitialize: WorkerMessageHandler = async (
   asyncWorker,
   {
+    elementsToDelete = [],
     filesAndFolders,
     filesAndFoldersMetadata,
     hashes,
@@ -141,9 +152,11 @@ export const onInitialize: WorkerMessageHandler = async (
 
   const orderedTags = sortBy(tags, "name");
   const withHashes = hashes !== undefined;
-  const header = makeCsvHeader(orderedTags, { withHashes });
+  const withFilesToDelete = elementsToDelete.length > 0;
+  const header = makeCsvHeader(orderedTags, { withHashes, withFilesToDelete });
   const folderText = translations.t("common.folder");
   const fileText = translations.t("common.file");
+  const toDeleteText = translations.t("common.toDelete");
   const tagIdByFfIdMap = tagIdByFfId(tags);
 
   const lines = Object.keys(filesAndFolders)
@@ -185,6 +198,13 @@ export const onInitialize: WorkerMessageHandler = async (
 
       if (hashes) {
         line.push(hashes[ffId]);
+      }
+
+      if (withFilesToDelete) {
+        const fileToDeleteText = elementsToDelete.includes(ffId)
+          ? toDeleteText
+          : "";
+        line.push(fileToDeleteText);
       }
 
       const tagsForCurrentFile = getTagsForFileOrAncestors(

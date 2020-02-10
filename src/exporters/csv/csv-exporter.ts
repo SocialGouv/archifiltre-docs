@@ -2,6 +2,7 @@ import { promises as fs } from "fs";
 import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   getFilesAndFoldersFromStore,
+  getFilesToDeleteFromStore,
   getHashesFromStore
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { from } from "rxjs";
@@ -55,8 +56,10 @@ export const csvExporterThunk = (
   const filesAndFolders = getFilesAndFoldersFromStore(state);
   const filesAndFoldersMetadata = getFilesAndFoldersMetadataFromStore(state);
   const hashes = getHashesFromStore(state);
+  const elementsToDelete = getFilesToDeleteFromStore(state);
 
   const data: GenerateCsvExportOptions = {
+    elementsToDelete,
     filesAndFolders,
     filesAndFoldersMetadata,
     hashes: undefined,

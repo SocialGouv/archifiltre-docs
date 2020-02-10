@@ -105,6 +105,7 @@ const testState = {
   ...emptyStore,
   filesAndFolders: wrapStoreWithUndoable({
     ...filesAndFoldersInitialState,
+    elementsToDelete: [taggedFfId],
     filesAndFolders,
     hashes
   }),
@@ -132,8 +133,10 @@ describe("csv-exporter", () => {
         await store.dispatch(csvExporterThunk(name));
 
         expect(generateCsvExportMock).toHaveBeenCalledWith({
+          elementsToDelete: [taggedFfId],
           filesAndFolders,
           filesAndFoldersMetadata,
+          hashes: undefined,
           tags
         });
         expect(writeFileMock).toHaveBeenCalledWith(
@@ -171,6 +174,7 @@ describe("csv-exporter", () => {
         await store.dispatch(csvExporterThunk(name, { withHashes: true }));
 
         expect(generateCsvExportMock).toHaveBeenCalledWith({
+          elementsToDelete: [taggedFfId],
           filesAndFolders,
           filesAndFoldersMetadata,
           hashes,

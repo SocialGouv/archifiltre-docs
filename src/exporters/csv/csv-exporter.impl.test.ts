@@ -185,5 +185,45 @@ describe("csv-exporter.impl", () => {
         }
       ]);
     });
+
+    it("should handle elementsToDelete", async () => {
+      const asyncWorker = createAsyncWorkerMock();
+      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"first_modified";"last_modified";"new name";"description";"file/folder";"depth";"hash (MD5)";"To delete";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
+      const csvFirstLine = `"";"/root";"5";"root";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"0";"${rootFolderHash}";"";"";""`;
+      const csvSecondLine = `"";"/root/folder";"12";"folder";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"1";"${taggedHash}";"";"${tag2Name}";"${tagName}"`;
+      const csvThirdLine = `"";"/root/folder/ff-id.txt";"22";"ff-id.txt";".txt";"10000";"01/01/1970";"01/01/1970";"${alias}";"${comments}";"file";"2";"${firstChildIdHash}";"To delete";"${tag2Name}";"${tagName}"`;
+      const expectedCsv = [
+        csvHeader,
+        csvFirstLine,
+        csvSecondLine,
+        csvThirdLine
+      ].join("\n");
+
+      await onInitialize(asyncWorker, {
+        elementsToDelete: ["/root/folder/ff-id.txt"],
+        filesAndFolders,
+        filesAndFoldersMetadata,
+        hashes,
+        language: "en",
+        tags
+      });
+
+      const calls = asyncWorker.postMessage.mock.calls;
+
+      expect(calls.length).toBe(5);
+
+      expect(getResultCall(calls)).toEqual([
+        {
+          result: expectedCsv,
+          type: MessageTypes.RESULT
+        }
+      ]);
+
+      expect(getCompleteCall(calls)).toEqual([
+        {
+          type: MessageTypes.COMPLETE
+        }
+      ]);
+    });
   });
 });

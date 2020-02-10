@@ -73,24 +73,6 @@ export function isJsonFile(path) {
 
 export const readFileSync = Fs.readFileSync;
 
-export const recTraverseFileTreeForHook = (hook, path) => {
-  try {
-    const stats = Fs.statSync(path);
-    if (stats.isDirectory()) {
-      return Fs.readdirSync(path).map(a =>
-        recTraverseFileTreeForHook(hook, Path.join(path, a))
-      );
-    } else {
-      const name = path.split("/")[path.split("/").length - 1];
-      const data = Fs.readFileSync(path);
-      hook(name, data);
-      return;
-    }
-  } catch (e) {
-    return;
-  }
-};
-
 /**
  * Get the number of files with .zip extension
  * @param filePaths - list of strings representing file paths

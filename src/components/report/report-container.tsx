@@ -2,7 +2,12 @@ import React, { FC, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
+  markAsToDelete,
+  unmarkAsToDelete
+} from "../../reducers/files-and-folders/files-and-folders-actions";
+import {
   getFilesAndFoldersFromStore,
+  getFilesToDeleteFromStore,
   getHashesFromStore
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import {
@@ -48,6 +53,9 @@ const ReportContainer: FC<ReportContainerProps> = ({ api, fillColor }) => {
   )[filesAndFoldersId];
   const { originalPath } = useSelector(getWorkspaceMetadataFromStore);
 
+  const filesToDelete = useSelector(getFilesToDeleteFromStore);
+  const isCurrentFileMarkedToDelete = filesToDelete.includes(filesAndFoldersId);
+
   const dispatch = useDispatch();
 
   const createTag = useCallback(
@@ -82,6 +90,12 @@ const ReportContainer: FC<ReportContainerProps> = ({ api, fillColor }) => {
     [dispatch, api, filesAndFoldersId]
   );
 
+  const toggleCurrentFileDeleteState = useCallback(() => {
+    isCurrentFileMarkedToDelete
+      ? dispatch(unmarkAsToDelete(filesAndFoldersId))
+      : dispatch(markAsToDelete(filesAndFoldersId));
+  }, [dispatch, isCurrentFileMarkedToDelete, filesAndFoldersId]);
+
   return (
     <ReportApiToProps
       originalPath={originalPath}
@@ -90,8 +104,10 @@ const ReportContainer: FC<ReportContainerProps> = ({ api, fillColor }) => {
       filesAndFolders={filesAndFolders}
       filesAndFoldersId={filesAndFoldersId}
       filesAndFoldersMetadata={filesAndFoldersMetadata}
+      isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
       updateAlias={updateAlias}
       updateComment={updateComment}
+      toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
       api={api}
       fillColor={fillColor}
       createTag={createTag}

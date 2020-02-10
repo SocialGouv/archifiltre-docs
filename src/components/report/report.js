@@ -239,6 +239,8 @@ const Report = ({
   filesAndFolders,
   filesAndFoldersMetadata,
   tagsForCurrentFile,
+  isCurrentFileMarkedToDelete,
+  toggleCurrentFileDeleteState,
   originalPath,
   onChangeAlias,
   fillColor,
@@ -294,12 +296,15 @@ const Report = ({
             <div className="cell small-6" style={{ paddingRight: pad }}>
               <TagsCell
                 is_dummy={!isActive}
+                isLocked={isLocked}
+                isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
                 cells_style={cellsStyle}
                 nodeId={nodeId}
                 tagsForCurrentFile={tagsForCurrentFile}
                 filesAndFoldersId={filesAndFoldersId}
                 createTag={createTag}
                 untag={untag}
+                toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
               />
             </div>
             <div className="cell small-6">
@@ -333,10 +338,12 @@ export default function ReportApiToProps({
   createTag,
   untag,
   currentFileHash,
+  isCurrentFileMarkedToDelete,
   tagsForCurrentFile,
   filesAndFolders,
   filesAndFoldersId,
   filesAndFoldersMetadata,
+  toggleCurrentFileDeleteState,
   updateAlias,
   updateComment,
   fillColor
@@ -371,10 +378,12 @@ export default function ReportApiToProps({
       filesAndFolders={filesAndFolders}
       filesAndFoldersMetadata={filesAndFoldersMetadata}
       tagsForCurrentFile={tagsForCurrentFile}
+      isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
       originalPath={originalPath}
       isFocused={isFocused}
       isLocked={isLocked}
       fillColor={fillColor}
+      toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
       createTag={createTag}
       untag={untag}
       updateComment={updateComment}

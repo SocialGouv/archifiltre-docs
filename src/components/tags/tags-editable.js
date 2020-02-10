@@ -1,6 +1,7 @@
 import React from "react";
 import Tag from "components/tags/tag";
 import { withTranslation } from "react-i18next";
+import MarkToDeleteButton from "./mark-to-delete-button";
 
 const inputStyle = {
   width: "7em",
@@ -30,10 +31,13 @@ class TagsEditable extends React.Component {
     const {
       tagsForCurrentFile,
       editing,
+      isLocked,
+      isCurrentFileMarkedToDelete,
       candidate_tag,
       onChange,
       onKeyUp,
-      removeHandlerFactory
+      removeHandlerFactory,
+      toggleCurrentFileDeleteState
     } = this.props;
 
     const tagsToElements = () =>
@@ -82,7 +86,17 @@ class TagsEditable extends React.Component {
       );
     }
 
-    return <div className="grid-x">{answer}</div>;
+    return (
+      <div className="grid-x">
+        {(isLocked || isCurrentFileMarkedToDelete) && (
+          <MarkToDeleteButton
+            isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
+            onClick={toggleCurrentFileDeleteState}
+          />
+        )}
+        {answer}
+      </div>
+    );
   }
 }
 

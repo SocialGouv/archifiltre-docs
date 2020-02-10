@@ -11,6 +11,7 @@ import translations from "../../translations/translations";
 import { WorkerMessageHandler } from "../../util/async-worker-util";
 import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
 import { arrayToCsv } from "../../util/csv-util";
+import { isExactFileOrAncestor } from "../../util/file-and-folders-utils";
 import { formatPathForUserSystem } from "../../util/file-sys-util";
 
 interface MakeCsvHeaderOptions {
@@ -86,17 +87,6 @@ const tagIdByFfId = (tags: TagMap) => {
   });
 
   return tagIdByFfIdMap;
-};
-
-/**
- * Determines if suspectedParentId is an ancestor (or the same file) of baseElementId
- * @param baseElementId
- * @param suspectedAncestorId
- */
-const isExactFileOrAncestor = (baseElementId, suspectedAncestorId) => {
-  const index = baseElementId.indexOf(suspectedAncestorId);
-  const trailingChar = baseElementId[suspectedAncestorId.length];
-  return index === 0 && (trailingChar === undefined || trailingChar === "/");
 };
 
 interface TagByFfIdMap {

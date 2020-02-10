@@ -17,11 +17,13 @@ interface ResipExportProgress {
  * Returns an observable that emits the final result and the progress state of the export
  * @param filesAndFolders
  * @param tags
+ * @param elementsToDelete
  * @returns {Observable<ResipExportProgress>} An observable to follow the export progress
  */
 export const generateResipExport$ = (
   filesAndFolders: FilesAndFoldersMap,
-  tags: TagMap
+  tags: TagMap,
+  elementsToDelete: string[]
 ): Observable<ResipExportProgress> => {
   addTracker({
     title: ActionTitle.RESIP_EXPORT,
@@ -32,7 +34,7 @@ export const generateResipExport$ = (
   );
 
   return backgroundWorkerProcess$(
-    { filesAndFolders, tags, language: getLanguage()[0] },
+    { filesAndFolders, tags, elementsToDelete, language: getLanguage()[0] },
     ResipExportAsyncWorker
   );
 };

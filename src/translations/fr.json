@@ -35,7 +35,8 @@
       "fileHashExplanation": "Ce hash est une empreinte de fichier calculée avec l'algorithme MD5",
       "folderHashExplanation": "Ce hash est une empreinte (calculée avec l'algorithme MD5) de la concaténation des hashs des enfants de ce dossier",
       "clickHereToAddComments": "Cliquez ici pour ajouter une description !",
-      "copied": "Copié !"
+      "copied": "Copié !",
+      "toDeleteButtonLabel": "À supprimer"
     },
     "workspace": {
       "colorCode": "Code couleurs :",

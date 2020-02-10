@@ -24,6 +24,13 @@ export const getFilesAndFoldersFromStore = (
 ): FilesAndFoldersMap => getCurrentState(store.filesAndFolders).filesAndFolders;
 
 /**
+ * Get the list of files marked as ToDelete from the store
+ * @param store
+ */
+export const getFilesToDeleteFromStore = (store: StoreState): string[] =>
+  getCurrentState(store.filesAndFolders).elementsToDelete;
+
+/**
  * Reduces a filesAndFolders tree to a single value
  * @param filesAndFoldersMap - A files and folders map
  * @param rootId - The files and folders rootId

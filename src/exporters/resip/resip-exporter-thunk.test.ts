@@ -69,11 +69,14 @@ const filesAndFoldersMetadata = {
     minLastModified: 1000
   })
 };
+
+const elementsToDelete = ["ff-id-to-delete"];
 const emptyStore = createEmptyStore();
 const storeContent = {
   ...emptyStore,
   filesAndFolders: wrapStoreWithUndoable({
     ...filesAndFoldersInitialState,
+    elementsToDelete,
     filesAndFolders
   }),
   filesAndFoldersMetadata: { filesAndFoldersMetadata },
@@ -106,7 +109,8 @@ describe("resip-exporter-thunk", () => {
 
       expect(mockedGenerateResipExport$).toHaveBeenCalledWith(
         filesAndFolders,
-        tags
+        tags,
+        elementsToDelete
       );
       expect(writeFileMock).toHaveBeenCalledWith(
         savePath,

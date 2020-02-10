@@ -158,3 +158,14 @@ export const computeFolderHashes = (filesAndFolders, hashes, hook) => {
   const baseFolder = "";
   return recComputeFolderHash(filesAndFolders, hashes, baseFolder, hook);
 };
+
+/**
+ * Determines if suspectedParentId is an ancestor (or the same file) of baseElementId
+ * @param baseElementId
+ * @param suspectedAncestorId
+ */
+export const isExactFileOrAncestor = (baseElementId, suspectedAncestorId) => {
+  const index = baseElementId.indexOf(suspectedAncestorId);
+  const trailingChar = baseElementId[suspectedAncestorId.length];
+  return index === 0 && (trailingChar === undefined || trailingChar === "/");
+};

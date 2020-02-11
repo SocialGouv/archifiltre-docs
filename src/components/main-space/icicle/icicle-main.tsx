@@ -2,6 +2,7 @@ import { sum } from "lodash";
 import React, {
   FC,
   memo,
+  MouseEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -20,7 +21,13 @@ import MinimapBracket from "../minimap-bracket";
 import Ruler from "../ruler";
 import AnimatedIcicle from "./animated-icicle";
 import Icicle from "./icicle";
+import { DimsAndId } from "./icicle-rect";
 import { FillColor } from "./icicle-types";
+
+export type IcicleMouseHandler = (
+  dimsAndId: DimsAndId,
+  event: MouseEvent
+) => void;
 
 /**
  * The ratio of the svg taken by the icicle view.
@@ -59,6 +66,7 @@ interface IcicleMainProps {
   fillColor: FillColor;
   sequence: string[];
   hover_sequence: string[];
+  elementsToDelete: string[];
   getChildrenIdFromId: (id: string) => string[];
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
   width_by_size: boolean;
@@ -81,6 +89,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
   fillColor,
   sequence,
   hover_sequence: hoverSequence,
+  elementsToDelete,
   getChildrenIdFromId,
   getFfByFfId,
   width_by_size: widthBySize,
@@ -268,6 +277,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
         dx={icicleWidth}
         dy={icicleHeight}
         tags={tags}
+        elementsToDelete={elementsToDelete}
         root_id={rootId}
         display_root={displayRoot}
         fWidth={computeWidth}
@@ -324,6 +334,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
           root_id={rootId}
           display_root={ArrayUtil.empty}
           fWidth={computeWidth}
+          elementsToDelete={elementsToDelete}
           normalizeWidth={normalizeWidth}
           trueFHeight={normalizeHeight}
           getChildrenIdFromId={getChildrenIdFromId}

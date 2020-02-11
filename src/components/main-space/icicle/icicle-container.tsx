@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   getFilesAndFoldersFromStore,
+  getFilesToDeleteFromStore,
   getMaxDepth,
   ROOT_FF_ID
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
@@ -26,6 +27,7 @@ export default function IcicleApiToProps({
   );
 
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
+  const elementsToDelete = useSelector(getFilesToDeleteFromStore);
 
   const getFfByFfId = useCallback(
     (ffId: string) => ({
@@ -56,6 +58,7 @@ export default function IcicleApiToProps({
       originalPath={originalPath}
       fillColor={fillColor}
       getChildrenIdFromId={getChildrenIdFromId}
+      elementsToDelete={elementsToDelete}
       getFfByFfId={getFfByFfId}
       maxDepth={maxDepth}
       hover_sequence={icicle_state.hover_sequence()}

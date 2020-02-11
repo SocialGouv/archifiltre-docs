@@ -3,7 +3,7 @@ import { updateIn } from "immutable";
 import IcicleRect from "./icicle-rect";
 import * as FunctionUtil from "../../../util/function-util";
 import IcicleRecursive from "./icicle-recursive";
-import IcicleTags from "./icicle-tags";
+import IcicleEnrichments from "./icicle-enrichments";
 
 export default class Icicle extends PureComponent {
   constructor(props) {
@@ -96,6 +96,7 @@ export default class Icicle extends PureComponent {
       fWidth,
       getChildrenIdFromId,
       normalizeWidth,
+      elementsToDelete,
       onIcicleRectClickHandler: onClickHandler,
       onIcicleRectDoubleClickHandler: onDoubleClickHandler,
       onIcicleRectMouseOverHandler: onMouseOverHandler,
@@ -190,10 +191,11 @@ export default class Icicle extends PureComponent {
         {lockedHoveredComponents}
         {lockedNotHoveredComponents}
         {unlockedHoveredComponents}
-        <IcicleTags
+        <IcicleEnrichments
           tags={tags}
           dims={dims}
-          tag_id_to_highlight={tag_id_to_highlight}
+          highlightedTagId={tag_id_to_highlight}
+          elementsToDelete={elementsToDelete}
           onClick={onClickHandler}
           onDoubleClick={onDoubleClickHandler}
           onMouseOver={onMouseOverHandler}

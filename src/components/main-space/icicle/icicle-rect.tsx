@@ -4,14 +4,14 @@ import * as FunctionUtil from "util/function-util";
 import { FillColor } from "./icicle-types";
 import SvgRectangle from "./svg-rectangle";
 
-interface Dims {
+export interface Dims {
   x: number;
   y: number;
   dx: number;
   dy: number;
 }
 
-interface DimsAndId {
+export interface DimsAndId {
   id: string;
   dims: () => Dims;
 }

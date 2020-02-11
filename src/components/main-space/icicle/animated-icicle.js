@@ -117,12 +117,7 @@ export default class AnimatedIcicle extends PureComponent {
   }
 
   render() {
-    const props = this.props;
-
-    const x = props.x;
-    const y = props.y;
-    const dx = props.dx;
-    const dy = props.dy;
+    const { x, y, dx, dy } = this.props;
 
     const state = this.state;
     const prevProps = state.prevProps;
@@ -149,7 +144,7 @@ export default class AnimatedIcicle extends PureComponent {
           </g>
           <g>
             <Icicle
-              {...props}
+              {...this.props}
               onIcicleRectDoubleClickHandler={
                 this.onIcicleRectDoubleClickHandler
               }

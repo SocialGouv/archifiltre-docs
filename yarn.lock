@@ -1338,6 +1338,11 @@ amdefine@>=0.0.4:
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
   integrity sha1-SlKCrBZHKek2Gbz9OtFR+BfOkfU=
 
+angular-expressions@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/angular-expressions/-/angular-expressions-1.0.1.tgz#ec80db6c7e3ef7863c2a7fef93cd59e083020ce4"
+  integrity sha512-rMBuCZzxKNO706Bo5TarLowMXmScOR78fnSuWQSYaAAF23HsLt0gAVWo4PJtRtGBsRAV8pJjXUOGjgkMNlt56g==
+
 ansi-align@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/ansi-align/-/ansi-align-3.0.0.tgz#b536b371cf687caaef236c18d3e21fe3797467cb"
@@ -3847,12 +3852,12 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-docxtemplater@^3.15.0:
-  version "3.15.0"
-  resolved "https://registry.yarnpkg.com/docxtemplater/-/docxtemplater-3.15.0.tgz#129aae5b50a98f88f25f72f9291440948ace25e4"
-  integrity sha512-Zv3IoJoz31n4mfNbv0+njWBoJ8J2F7CxqEEsLspTJIbNbdQuoeAxtIP/a0o16hUnDcu0qfdXnSNLd4f58LUhKA==
+docxtemplater@3.16.9:
+  version "3.16.9"
+  resolved "https://registry.yarnpkg.com/docxtemplater/-/docxtemplater-3.16.9.tgz#4ddb6729284cf50295e9396a087e57c37e811bb6"
+  integrity sha512-WJml4hyukbj1bo/7hSFvQv7zxusJkt85hJQqdUVvIWDIszhu0KeihsNy3QKa+6Jrq+9junKD2ZXa9dKIE0BIQw==
   dependencies:
-    xmldom "^0.1.27"
+    xmldom "^0.2.1"
 
 dom-converter@^0.2:
   version "0.2.0"
@@ -12967,10 +12972,10 @@ xmlcreate@^2.0.0:
   resolved "https://registry.yarnpkg.com/xmlcreate/-/xmlcreate-2.0.1.tgz#2ec38bd7b708d213fd1a90e2431c4af9c09f6a52"
   integrity sha512-MjGsXhKG8YjTKrDCXseFo3ClbMGvUD4en29H2Cev1dv4P/chlpw6KdYmlCWDkhosBVKRDjM836+3e3pm1cBNJA==
 
-xmldom@^0.1.27:
-  version "0.1.27"
-  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.27.tgz#d501f97b3bdb403af8ef9ecc20573187aadac0e9"
-  integrity sha1-1QH5ezvbQDr4757MIFcxh6rawOk=
+xmldom@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.2.1.tgz#cac9465066f161e1c3302793ea4dbe59c518274f"
+  integrity sha512-kXXiYvmblIgEemGeB75y97FyaZavx6SQhGppLw5TKWAD2Wd0KAly0g23eVLh17YcpxZpnFym1Qk/eaRjy1APPg==
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.2"

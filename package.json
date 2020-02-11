@@ -120,9 +120,10 @@
   "dependencies": {
     "@sentry/browser": "^5.4.0",
     "@types/pizzip": "^3.0.1",
+    "angular-expressions": "^1.0.1",
     "csv-parse": "^4.8.2",
     "dateformat": "3.0.3",
-    "docxtemplater": "^3.15.0",
+    "docxtemplater": "3.16.9",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-lodash-fp": "^2.2.0-a1",
     "fast-memoize": "^2.5.1",

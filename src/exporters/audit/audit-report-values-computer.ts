@@ -16,16 +16,19 @@ import {
   take,
   takeRight
 } from "lodash/fp";
+import path from "path";
 import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { octet2HumanReadableFormat } from "../../components/main-space/ruler";
 import {
   FilesAndFoldersCollection,
-  getFiles
+  getFiles,
+  isFile
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import {
   FilesAndFolders,
   HashesMap
 } from "../../reducers/files-and-folders/files-and-folders-types";
+import translations from "../../translations/translations";
 import {
   countDuplicateFilesTotalSize,
   countDuplicatesPercentForFiles,
@@ -46,6 +49,7 @@ import {
 } from "../../util/functionnal-programming-utils";
 import { curriedFormatPercent, percent } from "../../util/numbers-util";
 import {
+  AuditReportElementWithType,
   AuditReportFileWithCount,
   AuditReportFileWithDate,
   AuditReportFileWithSize
@@ -271,3 +275,20 @@ export const getDuplicatesWithTheBiggestSize = compose(
   ),
   getBiggestDuplicatedFolders(5)
 );
+
+export const getElementsToDelete = (
+  filesAndFolders,
+  elementsToDelete
+): AuditReportElementWithType[] => {
+  const folderText = translations.t("common.folder");
+  const fileText = translations.t("common.file");
+  return elementsToDelete
+    .map(filesAndFoldersId => filesAndFolders[filesAndFoldersId])
+    .map(
+      (fileAndFolder): AuditReportElementWithType => ({
+        name: fileAndFolder.name,
+        path: formatPathForUserSystem(fileAndFolder.id),
+        type: isFile(fileAndFolder) ? fileText : folderText
+      })
+    );
+};

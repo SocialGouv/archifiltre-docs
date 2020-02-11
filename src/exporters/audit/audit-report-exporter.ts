@@ -7,6 +7,7 @@ import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-met
 import {
   getFileCount,
   getFilesAndFoldersFromStore,
+  getFilesToDeleteFromStore,
   getFoldersCount,
   getHashesFromStore,
   getMaxDepth
@@ -33,6 +34,7 @@ import {
   getDuplicateFoldersPercent,
   getDuplicatesWithTheBiggestSize,
   getDuplicatesWithTheMostCopy,
+  getElementsToDelete,
   getExtensionsList,
   getHumanReadableDuplicateTotalSize,
   getLongestPathFile,
@@ -46,7 +48,8 @@ const ROOT_ID = "";
 export const computeAuditReportData = (
   filesAndFolders: FilesAndFoldersMap,
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap,
-  filesAndFoldersHashes: HashesMap
+  filesAndFoldersHashes: HashesMap,
+  elementsToDelete: string[]
 ): AuditReportData => ({
   totalFoldersCount: getFoldersCount(filesAndFolders),
   totalFilesCount: getFileCount(filesAndFolders),
@@ -112,7 +115,8 @@ export const computeAuditReportData = (
     filesAndFolders,
     filesAndFoldersMetadata,
     filesAndFoldersHashes
-  )
+  ),
+  elementsToDelete: getElementsToDelete(filesAndFolders, elementsToDelete)
 });
 // tslint:enable:object-literal-sort-keys
 
@@ -132,10 +136,16 @@ export const auditReportExporterThunk = (
     getState()
   );
   const hashes = getHashesFromStore(getState());
+  const elementsToDelete = getFilesToDeleteFromStore(getState());
   saveBlob(
     name,
     generateAuditReportDocx(
-      computeAuditReportData(filesAndFolders, filesAndFoldersMetadata, hashes)
+      computeAuditReportData(
+        filesAndFolders,
+        filesAndFoldersMetadata,
+        hashes,
+        elementsToDelete
+      )
     )
   );
 };

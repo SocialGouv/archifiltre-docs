@@ -1,5 +1,5 @@
 import path from "path";
-import { createChartReplacer, exportToDocX } from "../../util/docx-util";
+import { createChartReplacer, exportToDocX } from "../../util/docx/docx-util";
 
 interface AuditReportFile {
   name: string;
@@ -16,6 +16,10 @@ export interface AuditReportFileWithSize extends AuditReportFile {
 
 export interface AuditReportFileWithCount extends AuditReportFile {
   count: number;
+}
+
+export interface AuditReportElementWithType extends AuditReportFile {
+  type: string;
 }
 
 export interface AuditReportData {
@@ -55,6 +59,7 @@ export interface AuditReportData {
   duplicateTotalSize: string;
   duplicates: AuditReportFileWithCount[];
   biggestDuplicateFolders: AuditReportFileWithSize[];
+  elementsToDelete: AuditReportElementWithType[];
 }
 
 const TEMPLATE_PATH = path.resolve(

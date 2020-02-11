@@ -2,6 +2,7 @@ import Docxtemplater from "docxtemplater";
 import fs from "fs";
 import path from "path";
 import PizZip from "pizzip";
+import { angularParser } from "./angular-parser";
 
 export type FileReplacer = (zip: PizZip, values: DocXValuesMap) => PizZip;
 
@@ -29,6 +30,7 @@ export const exportToDocX = (
   const docxZip = new PizZip(templateContent);
   const modifiedZip = new Docxtemplater()
     .loadZip(docxZip)
+    .setOptions({ parser: angularParser })
     .setData(values)
     .render()
     .getZip();

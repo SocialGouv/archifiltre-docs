@@ -11,8 +11,6 @@ const tagId = "test-tag-id";
 const tagId2 = "test-tag-id-2";
 const rootId = "";
 const tag2Name = "tag2";
-const alias = "test-alias";
-const comments = "test-comments";
 const tags = {
   [tagId]: {
     ffIds: [taggedFfId],
@@ -28,9 +26,7 @@ const tags = {
 
 const filesAndFolders = {
   [rootId]: {
-    alias: "",
     children: [rootFolderId],
-    comments: "",
     file_last_modified: 1571325669,
     file_size: 10,
     hash: null,
@@ -38,9 +34,7 @@ const filesAndFolders = {
     name: ""
   },
   [rootFolderId]: {
-    alias: "",
     children: [taggedFfId],
-    comments: "",
     file_last_modified: 1571325669,
     file_size: 10,
     hash: null,
@@ -48,9 +42,7 @@ const filesAndFolders = {
     name: "root"
   },
   [taggedFfId]: {
-    alias: "",
     children: [firstChildId],
-    comments: "",
     file_last_modified: 1571325669,
     file_size: 10,
     hash: null,
@@ -58,9 +50,7 @@ const filesAndFolders = {
     name: "folder"
   },
   [firstChildId]: {
-    alias,
     children: [],
-    comments,
     file_last_modified: 1571325669,
     file_size: 10,
     hash: null,
@@ -104,6 +94,20 @@ const hashes = {
   [firstChildId]: firstChildIdHash
 };
 
+const rootAlias = "root-alias";
+const firstChildIdAlias = "aliased-element";
+const aliases = {
+  [rootId]: rootAlias,
+  [firstChildId]: firstChildIdAlias
+};
+
+const rootComment = "root-comment";
+const firstChildIdComment = "commented-element";
+const comments = {
+  [rootId]: rootComment,
+  [firstChildId]: firstChildIdComment
+};
+
 const getResultCall = calls => calls[calls.length - 2];
 const getCompleteCall = calls => calls[calls.length - 1];
 
@@ -114,7 +118,7 @@ describe("csv-exporter.impl", () => {
       const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"first_modified";"last_modified";"new name";"description";"file/folder";"depth";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
       const csvFirstLine = `"";"/root";"5";"root";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"0";"";""`;
       const csvSecondLine = `"";"/root/folder";"12";"folder";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"1";"${tag2Name}";"${tagName}"`;
-      const csvThirdLine = `"";"/root/folder/ff-id.txt";"22";"ff-id.txt";".txt";"10000";"01/01/1970";"01/01/1970";"${alias}";"${comments}";"file";"2";"${tag2Name}";"${tagName}"`;
+      const csvThirdLine = `"";"${firstChildId}";"22";"ff-id.txt";".txt";"10000";"01/01/1970";"01/01/1970";"${aliases[firstChildId]}";"${comments[firstChildId]}";"file";"2";"${tag2Name}";"${tagName}"`;
       const expectedCsv = [
         csvHeader,
         csvFirstLine,
@@ -123,6 +127,8 @@ describe("csv-exporter.impl", () => {
       ].join("\n");
 
       await onInitialize(asyncWorker, {
+        aliases,
+        comments,
         filesAndFolders,
         filesAndFoldersMetadata,
         language: "en",
@@ -152,7 +158,7 @@ describe("csv-exporter.impl", () => {
       const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"first_modified";"last_modified";"new name";"description";"file/folder";"depth";"hash (MD5)";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
       const csvFirstLine = `"";"/root";"5";"root";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"0";"${rootFolderHash}";"";""`;
       const csvSecondLine = `"";"/root/folder";"12";"folder";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"1";"${taggedHash}";"${tag2Name}";"${tagName}"`;
-      const csvThirdLine = `"";"/root/folder/ff-id.txt";"22";"ff-id.txt";".txt";"10000";"01/01/1970";"01/01/1970";"${alias}";"${comments}";"file";"2";"${firstChildIdHash}";"${tag2Name}";"${tagName}"`;
+      const csvThirdLine = `"";"${firstChildId}";"22";"ff-id.txt";".txt";"10000";"01/01/1970";"01/01/1970";"${aliases[firstChildId]}";"${comments[firstChildId]}";"file";"2";"${firstChildIdHash}";"${tag2Name}";"${tagName}"`;
       const expectedCsv = [
         csvHeader,
         csvFirstLine,
@@ -161,6 +167,8 @@ describe("csv-exporter.impl", () => {
       ].join("\n");
 
       await onInitialize(asyncWorker, {
+        aliases,
+        comments,
         filesAndFolders,
         filesAndFoldersMetadata,
         hashes,
@@ -191,7 +199,7 @@ describe("csv-exporter.impl", () => {
       const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"first_modified";"last_modified";"new name";"description";"file/folder";"depth";"hash (MD5)";"To delete";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
       const csvFirstLine = `"";"/root";"5";"root";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"0";"${rootFolderHash}";"";"";""`;
       const csvSecondLine = `"";"/root/folder";"12";"folder";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"1";"${taggedHash}";"";"${tag2Name}";"${tagName}"`;
-      const csvThirdLine = `"";"/root/folder/ff-id.txt";"22";"ff-id.txt";".txt";"10000";"01/01/1970";"01/01/1970";"${alias}";"${comments}";"file";"2";"${firstChildIdHash}";"To delete";"${tag2Name}";"${tagName}"`;
+      const csvThirdLine = `"";"/root/folder/ff-id.txt";"22";"ff-id.txt";".txt";"10000";"01/01/1970";"01/01/1970";"${aliases[firstChildId]}";"${comments[firstChildId]}";"file";"2";"${firstChildIdHash}";"To delete";"${tag2Name}";"${tagName}"`;
       const expectedCsv = [
         csvHeader,
         csvFirstLine,
@@ -200,6 +208,8 @@ describe("csv-exporter.impl", () => {
       ].join("\n");
 
       await onInitialize(asyncWorker, {
+        aliases,
+        comments,
         elementsToDelete: ["/root/folder/ff-id.txt"],
         filesAndFolders,
         filesAndFoldersMetadata,

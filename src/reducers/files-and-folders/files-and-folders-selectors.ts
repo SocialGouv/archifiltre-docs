@@ -179,6 +179,20 @@ export const getHashesFromStore = (store: StoreState): HashesMap =>
   getCurrentState(store.filesAndFolders).hashes;
 
 /**
+ * Gets the comments map from the redux state
+ * @param store - The current redux state
+ */
+export const getCommentsFromStore = (store: StoreState): HashesMap =>
+  getCurrentState(store.filesAndFolders).comments;
+
+/**
+ * Gets the aliases map from the redux state
+ * @param store - The current redux state
+ */
+export const getAliasesFromStore = (store: StoreState): HashesMap =>
+  getCurrentState(store.filesAndFolders).aliases;
+
+/**
  * Returns true if the filesAndFolders is a file
  * @param filesAndFolders
  */

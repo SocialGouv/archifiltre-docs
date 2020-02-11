@@ -3,6 +3,8 @@ import path from "path";
 import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { getFilesAndFoldersDepth } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import {
+  AliasMap,
+  CommentsMap,
   FilesAndFoldersMap,
   HashesMap
 } from "../../reducers/files-and-folders/files-and-folders-types";
@@ -109,6 +111,8 @@ const getTagsForFileOrAncestors = (
     .value();
 
 interface CsvExporterData {
+  aliases: AliasMap;
+  comments: CommentsMap;
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   elementsToDelete: string[];
@@ -120,6 +124,8 @@ interface CsvExporterData {
 /**
  * Handles the initialize message for the CSV exporter fork
  * @param asyncWorker - The async worker instance
+ * @param aliases
+ * @param comments
  * @param elementsToDelete
  * @param filesAndFolders
  * @param filesAndFoldersMetadata
@@ -130,6 +136,8 @@ interface CsvExporterData {
 export const onInitialize: WorkerMessageHandler = async (
   asyncWorker,
   {
+    aliases,
+    comments,
     elementsToDelete = [],
     filesAndFolders,
     filesAndFoldersMetadata,
@@ -139,7 +147,6 @@ export const onInitialize: WorkerMessageHandler = async (
   }: CsvExporterData
 ) => {
   await translations.changeLanguage(language);
-
   const orderedTags = sortBy(tags, "name");
   const withHashes = hashes !== undefined;
   const withFilesToDelete = elementsToDelete.length > 0;
@@ -165,8 +172,6 @@ export const onInitialize: WorkerMessageHandler = async (
       const lastModifiedDate = formatOutputDate(
         currentMetadata.maxLastModified
       );
-      const alias = currentFf.alias;
-      const comments = currentFf.comments;
       const fileOrFolder =
         currentFf.children.length === 0 ? fileText : folderText;
       const depth = `${getFilesAndFoldersDepth(ffId)}`;
@@ -180,8 +185,8 @@ export const onInitialize: WorkerMessageHandler = async (
         size,
         firstModifiedDate,
         lastModifiedDate,
-        alias,
-        comments,
+        aliases[ffId] || "",
+        comments[ffId] || "",
         fileOrFolder,
         depth
       ];

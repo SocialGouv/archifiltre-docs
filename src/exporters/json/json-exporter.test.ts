@@ -44,6 +44,13 @@ const hashes = {
   [fileAndFolder1Id]: "mock-hash"
 };
 
+const aliases = {
+  [fileAndFolder1Id]: "test-alias"
+};
+const comments = {
+  [fileAndFolder1Id]: "test-comment"
+};
+
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
 const sessionName = "session-name";
 const originalPath = "/original/path";
@@ -57,6 +64,8 @@ describe("json-exporter", () => {
         ...createEmptyStore(),
         filesAndFolders: wrapStoreWithUndoable({
           ...filesAndFoldersInitialState,
+          aliases,
+          comments,
           filesAndFolders,
           hashes
         }),
@@ -77,6 +86,8 @@ describe("json-exporter", () => {
       );
 
       const expectedSavedData = JSON.stringify({
+        aliases,
+        comments,
         filesAndFolders,
         filesAndFoldersMetadata,
         hashes,

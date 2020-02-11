@@ -15,7 +15,7 @@ const ArchifiltreVersionText = styled.div`
   font-size: 0.7em;
 `;
 
-const versionSubtitle = `v${version} Nosy Narwhal`;
+const versionSubtitle = `v${version} Optimistic Otter`;
 
 const ArchifiltreLogo: FC = () => (
   <ArchifiltreLogoWrapper>

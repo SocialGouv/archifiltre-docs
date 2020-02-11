@@ -2,6 +2,8 @@ import { promises as fs } from "fs";
 import { map, takeLast } from "rxjs/operators";
 import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import {
+  getAliasesFromStore,
+  getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
@@ -29,11 +31,19 @@ export const resipExporterThunk = (
   const state = getState();
   const tags = getTagsFromStore(state);
   const filesAndFolders = getFilesAndFoldersFromStore(state);
-  const elementToDelete = getFilesToDeleteFromStore(state);
+  const aliases = getAliasesFromStore(state);
+  const comments = getCommentsFromStore(state);
+  const elementsToDelete = getFilesToDeleteFromStore(state);
 
   notifyInfo(resipExportStartedMessage, resipExportTitle);
   return new Promise(resolve => {
-    generateResipExport$(filesAndFolders, tags, elementToDelete)
+    generateResipExport$({
+      aliases,
+      comments,
+      elementsToDelete,
+      filesAndFolders,
+      tags
+    })
       .pipe(takeLast(1))
       .pipe(map(({ resipCsv }) => arrayToCsv(resipCsv)))
       .subscribe(async stringCsv => {

@@ -3,6 +3,8 @@ import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
+  getAliasesFromStore,
+  getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getHashesFromStore
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
@@ -34,6 +36,8 @@ export const jsonExporterThunk = ({
   const fileName = makeNameWithExt(sessionName, "json");
 
   const exportedData = {
+    aliases: getAliasesFromStore(state),
+    comments: getCommentsFromStore(state),
     filesAndFolders: getFilesAndFoldersFromStore(state),
     filesAndFoldersMetadata: getFilesAndFoldersMetadataFromStore(state),
     hashes: getHashesFromStore(state),

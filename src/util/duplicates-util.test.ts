@@ -209,11 +209,9 @@ describe("duplicates-util", () => {
       );
       expect(biggestDuplicatedFolders.length).toBe(1);
       expect(biggestDuplicatedFolders[0]).toEqual({
-        alias: "",
         averageLastModified: 3000,
         children: ["folder-1-id/file-5-id", "folder-1-id/file-6-id"],
         childrenTotalSize: 1000,
-        comments: "",
         count: 2,
         file_last_modified: 0,
         file_size: 0,
@@ -234,11 +232,9 @@ describe("duplicates-util", () => {
         getBiggestDuplicatedFolders(1)(filesMap, metadataMap, hashesMap)
       ).toEqual([
         {
-          alias: "",
           averageLastModified: 3000,
           children: ["folder-1-id/file-5-id", "folder-1-id/file-6-id"],
           childrenTotalSize: 1000,
-          comments: "",
           count: 2,
           file_last_modified: 0,
           file_size: 0,

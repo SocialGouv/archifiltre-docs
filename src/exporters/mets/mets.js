@@ -15,6 +15,7 @@ import {
 import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
+import { getDisplayName } from "../../util/file-and-folders-utils";
 
 const XML = require("xml");
 const dateFormat = require("dateformat");
@@ -207,9 +208,9 @@ export const makePremisEvent = (id, type, date, detail, agents, object) => {
  * @param {string} DMDID identifier of the related descriptive section
  * @param {string} hash md5 hash of the file
  */
-export const makeFileElement = (item, ID, DMDID, hash) => {
+export const makeFileElement = (item, ID, DMDID, hash, alias) => {
   const originalName = item.name;
-  const aliasName = item.alias === "" ? originalName : item.alias;
+  const aliasName = getDisplayName(originalName, alias);
   const internalURI = "master/" + aliasName;
 
   const fileContent = [];
@@ -267,7 +268,7 @@ export const makeObjectDiv = (item, item_tags, ID, order, FILEID) => {
 
 /**
  * Recursive function to traverse the FF and gather METS sections
- * @param {string} root item to record
+ * @param {string} filesAndFoldersId item to record
  * @param {string} rootpath relative path
  * @param {string} absolutepath absolute path
  * @param {Object} counters dictionary of counters to generate unique identifiers
@@ -282,12 +283,14 @@ export const makeObjectDiv = (item, item_tags, ID, order, FILEID) => {
  * @param {function} contentWriter function to gather payload to be added to the package
  */
 const recTraverseDB = (
-  root,
+  filesAndFoldersId,
   rootpath,
   absolutepath,
   counters,
   readFromFF,
   readTags,
+  aliases,
+  comments,
   elementsToDelete,
   addToDmd,
   addToMASTER,
@@ -296,8 +299,8 @@ const recTraverseDB = (
   HMupdate,
   contentWriter
 ) => {
-  const item = readFromFF(root);
-  const tags = readTags(root);
+  const item = readFromFF(filesAndFoldersId);
+  const tags = readTags(filesAndFoldersId);
   const ID = makeId();
 
   // Ignore files with exclude tag
@@ -305,7 +308,7 @@ const recTraverseDB = (
     return;
   }
 
-  if (elementsToDelete.includes(root)) {
+  if (elementsToDelete.includes(filesAndFoldersId)) {
     return;
   }
 
@@ -353,8 +356,8 @@ const recTraverseDB = (
     );
 
     const lastModified = dateFormat(item.maxLastModified, DATE_FORMAT);
-    const comment = item.comments;
-    if (comment.length > 0) {
+    const comment = comments[filesAndFoldersId];
+    if (comment && comment.length > 0) {
       dmdContent.push(makeObj("dc:title", comment.replace(/[^\w ]/g, "_")));
     }
     dmdContent.push(makeObj("dcterms:modified", lastModified));
@@ -364,7 +367,8 @@ const recTraverseDB = (
       item,
       "master." + idFile,
       "DMD." + idDmd,
-      hash
+      hash,
+      aliases[filesAndFoldersId]
     );
     addToMASTER(itemFile);
 
@@ -393,6 +397,8 @@ const recTraverseDB = (
         counters,
         readFromFF,
         readTags,
+        aliases,
+        comments,
         elementsToDelete,
         addToDmd,
         addToMASTER,
@@ -413,6 +419,8 @@ const recTraverseDB = (
  */
 const makeMetsContent = (
   {
+    aliases,
+    comments,
     elementsToDelete,
     filesAndFolders,
     filesAndFoldersMetadata,
@@ -518,6 +526,8 @@ const makeMetsContent = (
       counters,
       FFreader,
       tagReader,
+      aliases,
+      comments,
       elementsToDelete,
       DMDwriter,
       MASTERwriter,
@@ -572,6 +582,8 @@ const makeMetsContent = (
  * @param {Object} tags - The tag map of the redux store
  */
 export const makeSIP = async ({
+  aliases,
+  comments,
   elementsToDelete,
   filesAndFolders,
   filesAndFoldersMetadata,
@@ -595,6 +607,8 @@ export const makeSIP = async ({
 
   makeMetsContent(
     {
+      aliases,
+      comments,
       elementsToDelete,
       filesAndFolders,
       filesAndFoldersMetadata,

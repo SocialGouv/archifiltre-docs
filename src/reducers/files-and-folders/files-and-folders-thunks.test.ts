@@ -5,7 +5,7 @@ import { StoreState } from "../store";
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
   addCommentsOnFilesAndFolders,
-  setFilesAndFoldersAlias,
+  setFilesAndFoldersAliases,
   setFilesAndFoldersHashes
 } from "./files-and-folders-actions";
 import { initialState as filesAndFoldersInitialState } from "./files-and-folders-reducer";
@@ -75,7 +75,7 @@ describe("file-and-folders-thunks.test.ts", () => {
       store.dispatch(updateAliasThunk(ffId, alias));
 
       expect(store.getActions()).toEqual([
-        setFilesAndFoldersAlias(ffId, alias)
+        setFilesAndFoldersAliases({ [ffId]: alias })
       ]);
     });
   });
@@ -88,7 +88,7 @@ describe("file-and-folders-thunks.test.ts", () => {
       store.dispatch(updateCommentThunk(ffId, comment));
 
       expect(store.getActions()).toEqual([
-        addCommentsOnFilesAndFolders(ffId, comment)
+        addCommentsOnFilesAndFolders({ [ffId]: comment })
       ]);
     });
   });

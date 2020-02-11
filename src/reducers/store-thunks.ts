@@ -18,10 +18,14 @@ import { ArchifiltreThunkAction } from "./archifiltre-types";
 import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata/files-and-folders-metadata-actions";
 import { FilesAndFoldersMetadataMap } from "./files-and-folders-metadata/files-and-folders-metadata-types";
 import {
+  addCommentsOnFilesAndFolders,
   initializeFilesAndFolders,
+  setFilesAndFoldersAliases,
   setFilesAndFoldersHashes
 } from "./files-and-folders/files-and-folders-actions";
 import {
+  AliasMap,
+  CommentsMap,
   FilesAndFoldersMap,
   HashesMap
 } from "./files-and-folders/files-and-folders-types";
@@ -158,6 +162,8 @@ export const loadFilesAndFoldersFromPathThunk = (
 };
 
 interface InitStoreThunkParam {
+  aliases: AliasMap;
+  comments: CommentsMap;
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   hashes: HashesMap;
@@ -174,6 +180,8 @@ interface InitStoreThunkParam {
  * @param tags
  */
 const initStore = ({
+  aliases,
+  comments,
   filesAndFolders,
   filesAndFoldersMetadata,
   hashes,
@@ -185,11 +193,21 @@ const initStore = ({
   dispatch(initFilesAndFoldersMetatada(filesAndFoldersMetadata));
   dispatch(setOriginalPath(originalPath));
   dispatch(setSessionName(sessionName || translations.t("common.projectName")));
+
   if (hashes) {
     dispatch(setFilesAndFoldersHashes(hashes));
   }
+
   if (tags) {
     dispatch(initializeTags(tags));
+  }
+
+  if (aliases) {
+    dispatch(setFilesAndFoldersAliases(aliases));
+  }
+
+  if (comments) {
+    dispatch(addCommentsOnFilesAndFolders(comments));
   }
 };
 

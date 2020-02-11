@@ -18,9 +18,13 @@ describe("resip-exporter", () => {
         }
       );
       expect(
-        resipExporter(input.files_and_folders, input.tags, [
-          "/files/1bd93af4554f1/225e5b63fce14"
-        ])
+        resipExporter({
+          aliases: input.aliases,
+          comments: input.comments,
+          elementsToDelete: ["/files/1bd93af4554f1/225e5b63fce14"],
+          filesAndFolders: input.files_and_folders,
+          tags: input.tags
+        })
       ).toEqual(fileSystemFormatedOutput);
     });
   });

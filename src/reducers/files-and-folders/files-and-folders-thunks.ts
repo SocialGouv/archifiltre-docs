@@ -3,7 +3,7 @@ import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { ArchifiltreThunkAction } from "../archifiltre-types";
 import {
   addCommentsOnFilesAndFolders,
-  setFilesAndFoldersAlias,
+  setFilesAndFoldersAliases,
   setFilesAndFoldersHashes
 } from "./files-and-folders-actions";
 
@@ -36,7 +36,7 @@ export const updateAliasThunk = (
     type: ActionType.TRACK_EVENT,
     value: `Created alias: "${newAlias}"`
   });
-  dispatch(setFilesAndFoldersAlias(filesAndFoldersId, newAlias));
+  dispatch(setFilesAndFoldersAliases({ [filesAndFoldersId]: newAlias }));
 };
 
 /**
@@ -48,5 +48,5 @@ export const updateCommentThunk = (
   filesAndFoldersId,
   comments
 ): ArchifiltreThunkAction => dispatch => {
-  dispatch(addCommentsOnFilesAndFolders(filesAndFoldersId, comments));
+  dispatch(addCommentsOnFilesAndFolders({ [filesAndFoldersId]: comments }));
 };

@@ -46,6 +46,14 @@ const filesAndFolders = {
   id2: createFilesAndFolders({ id: "id2" })
 };
 
+const aliases = {
+  id1: "alias"
+};
+
+const comments = {
+  id2: "comments"
+};
+
 const filesAndFoldersMetadata = {
   "": createFilesAndFoldersMetadata({
     averageLastModified: 3000,
@@ -76,6 +84,8 @@ const storeContent = {
   ...emptyStore,
   filesAndFolders: wrapStoreWithUndoable({
     ...filesAndFoldersInitialState,
+    aliases,
+    comments,
     elementsToDelete,
     filesAndFolders
   }),
@@ -107,11 +117,13 @@ describe("resip-exporter-thunk", () => {
 
       await store.dispatch(resipExporterThunk(savePath));
 
-      expect(mockedGenerateResipExport$).toHaveBeenCalledWith(
+      expect(mockedGenerateResipExport$).toHaveBeenCalledWith({
+        aliases,
+        comments,
+        elementsToDelete,
         filesAndFolders,
-        tags,
-        elementsToDelete
-      );
+        tags
+      });
       expect(writeFileMock).toHaveBeenCalledWith(
         savePath,
         '"resipCsv";"header"'

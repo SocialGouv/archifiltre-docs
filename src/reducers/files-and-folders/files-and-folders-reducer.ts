@@ -12,34 +12,12 @@ import {
 } from "./files-and-folders-types";
 
 export const initialState: FilesAndFoldersState = {
+  aliases: {},
+  comments: {},
   elementsToDelete: [],
   filesAndFolders: {},
   hashes: {}
 };
-
-/**
- * Create a new state with the [propName] prop of the filesAndFoldersId FF
- * set to propValue
- * @param state
- * @param filesAndFoldersId
- * @param propName
- * @param propValue
- */
-const setFilesAndFoldersProp = <PropType>(
-  state: FilesAndFoldersState,
-  filesAndFoldersId: string,
-  propName: string,
-  propValue: PropType
-): FilesAndFoldersState => ({
-  ...state,
-  filesAndFolders: {
-    ...state.filesAndFolders,
-    [filesAndFoldersId]: {
-      ...state.filesAndFolders[filesAndFoldersId],
-      [propName]: propValue
-    }
-  }
-});
 
 /**
  * Reducer that handles files and folders data structure
@@ -54,12 +32,13 @@ const filesAndFoldersReducer = (
     case INITIALIZE_FILES_AND_FOLDERS:
       return { ...state, filesAndFolders: action.filesAndFolders };
     case SET_FILES_AND_FOLDERS_ALIAS:
-      return setFilesAndFoldersProp(
-        state,
-        action.filesAndFoldersId,
-        "alias",
-        action.alias
-      );
+      return {
+        ...state,
+        aliases: {
+          ...state.aliases,
+          ...action.aliases
+        }
+      };
     case SET_FILES_AND_FOLDERS_HASHES:
       return {
         ...state,
@@ -69,12 +48,13 @@ const filesAndFoldersReducer = (
         }
       };
     case ADD_COMMENTS_ON_FILES_AND_FOLDERS:
-      return setFilesAndFoldersProp(
-        state,
-        action.filesAndFoldersId,
-        "comments",
-        action.comments
-      );
+      return {
+        ...state,
+        comments: {
+          ...state.comments,
+          ...action.comments
+        }
+      };
     case MARK_AS_TO_DELETE:
       return {
         ...state,

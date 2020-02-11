@@ -23,6 +23,7 @@ import ReactTooltip from "react-tooltip";
 import { useTranslation } from "react-i18next";
 import { lookup } from "mime-types";
 import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { getDisplayName } from "../../util/file-and-folders-utils";
 
 const pad = "1em";
 
@@ -235,6 +236,8 @@ const Report = ({
   updateComment,
   currentFilesAndFolders,
   currentFileHash,
+  currentFileAlias,
+  currentFileComment,
   filesAndFoldersId,
   filesAndFolders,
   filesAndFoldersMetadata,
@@ -251,8 +254,6 @@ const Report = ({
 
   let children = [];
   let nodeName = "";
-  let nodeAlias = "";
-  let nodeComments = "";
   let nodeId = "";
   let displayName = "";
   let bracketName = "";
@@ -261,11 +262,9 @@ const Report = ({
   if (isActive) {
     children = currentFilesAndFolders.children;
     nodeName = currentFilesAndFolders.name;
-    nodeAlias = currentFilesAndFolders.alias;
-    nodeComments = currentFilesAndFolders.comments;
     nodeId = currentFilesAndFolders.id;
-    displayName = nodeAlias === "" ? nodeName : nodeAlias;
-    bracketName = nodeAlias === "" ? "" : nodeName;
+    displayName = getDisplayName(nodeName, currentFileAlias);
+    bracketName = currentFileAlias === "" ? "" : nodeName;
     isFolder = children.length > 0;
   }
 
@@ -311,7 +310,7 @@ const Report = ({
               <CommentsCell
                 is_dummy={!isActive}
                 cells_style={cellsStyle}
-                comments={nodeComments}
+                comments={currentFileComment}
                 filesAndFoldersId={filesAndFoldersId}
                 updateComment={updateComment}
               />
@@ -338,6 +337,8 @@ export default function ReportApiToProps({
   createTag,
   untag,
   currentFileHash,
+  currentFileAlias,
+  currentFileComment,
   isCurrentFileMarkedToDelete,
   tagsForCurrentFile,
   filesAndFolders,
@@ -374,6 +375,8 @@ export default function ReportApiToProps({
     <Report
       currentFilesAndFolders={currentFilesAndFolders}
       currentFileHash={currentFileHash}
+      currentFileAlias={currentFileAlias}
+      currentFileComment={currentFileComment}
       filesAndFoldersId={filesAndFoldersId}
       filesAndFolders={filesAndFolders}
       filesAndFoldersMetadata={filesAndFoldersMetadata}

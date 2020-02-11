@@ -99,12 +99,28 @@ const hashes = {
   [taggedFfId]: taggedHash
 };
 
+const rootComment = "root-comment";
+const elementComment = "element-comment";
+const comments = {
+  [rootId]: rootComment,
+  [taggedFfId]: elementComment
+};
+
+const rootAlias = "root-alias";
+const elementAlias = "element-alias";
+const aliases = {
+  [rootId]: rootAlias,
+  [taggedFfId]: elementAlias
+};
+
 const emptyStore = createEmptyStore();
 
 const testState = {
   ...emptyStore,
   filesAndFolders: wrapStoreWithUndoable({
     ...filesAndFoldersInitialState,
+    aliases,
+    comments,
     elementsToDelete: [taggedFfId],
     filesAndFolders,
     hashes
@@ -133,6 +149,8 @@ describe("csv-exporter", () => {
         await store.dispatch(csvExporterThunk(name));
 
         expect(generateCsvExportMock).toHaveBeenCalledWith({
+          aliases,
+          comments,
           elementsToDelete: [taggedFfId],
           filesAndFolders,
           filesAndFoldersMetadata,
@@ -174,6 +192,8 @@ describe("csv-exporter", () => {
         await store.dispatch(csvExporterThunk(name, { withHashes: true }));
 
         expect(generateCsvExportMock).toHaveBeenCalledWith({
+          aliases,
+          comments,
           elementsToDelete: [taggedFfId],
           filesAndFolders,
           filesAndFoldersMetadata,

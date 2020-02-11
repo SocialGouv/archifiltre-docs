@@ -34,6 +34,14 @@ const filesAndFolders = {
   id2: createFilesAndFolders({ id: "id2" })
 };
 
+const comments = {
+  id1: "comment"
+};
+
+const aliases = {
+  id2: "alias"
+};
+
 const filesAndFoldersMetadata = {
   "": createFilesAndFoldersMetadata({
     averageLastModified: 3000,
@@ -68,6 +76,8 @@ const storeContent: StoreState = {
   ...emptyStore,
   filesAndFolders: wrapStoreWithUndoable({
     ...filesAndFoldersInitialState,
+    aliases,
+    comments,
     elementsToDelete,
     filesAndFolders
   }),
@@ -92,6 +102,8 @@ describe("mets-export-thunk", () => {
       );
 
       expect(mockedMakeSIP).toHaveBeenCalledWith({
+        aliases,
+        comments,
         elementsToDelete,
         filesAndFolders,
         filesAndFoldersMetadata,

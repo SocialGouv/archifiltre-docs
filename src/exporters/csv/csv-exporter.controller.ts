@@ -1,6 +1,8 @@
 import { getLanguage } from "../../languages";
 import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import {
+  AliasMap,
+  CommentsMap,
   FilesAndFoldersMap,
   HashesMap
 } from "../../reducers/files-and-folders/files-and-folders-types";
@@ -10,6 +12,8 @@ import { backgroundWorkerProcess$ } from "../../util/batch-process/batch-process
 import CsvExporterFork from "./csv-exporter.fork";
 
 export interface GenerateCsvExportOptions {
+  aliases: AliasMap;
+  comments: CommentsMap;
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   hashes?: HashesMap;

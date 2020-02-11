@@ -12,7 +12,10 @@ import React, {
 import { animate, clear } from "../../../animation-daemon";
 import { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { decomposePathToElement } from "../../../reducers/files-and-folders/files-and-folders-selectors";
-import { FilesAndFolders } from "../../../reducers/files-and-folders/files-and-folders-types";
+import {
+  AliasMap,
+  FilesAndFolders
+} from "../../../reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "../../../reducers/tags/tags-types";
 import * as ArrayUtil from "../../../util/array-util";
 import * as FunctionUtil from "../../../util/function-util";
@@ -59,6 +62,7 @@ const shouldRenderChildMinimap = (x: number, elementWidth: number): boolean => {
 
 interface IcicleMainProps {
   api: any;
+  aliases: AliasMap;
   tags: TagMap;
   originalPath: string;
   root_id: string;
@@ -82,6 +86,7 @@ interface IcicleMainProps {
 
 const IcicleMain: FC<IcicleMainProps> = ({
   api,
+  aliases,
   tags,
   originalPath,
   root_id: rootId,
@@ -307,6 +312,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
 
       <BreadCrumbs
         api={api}
+        aliases={aliases}
         originalPath={originalPath}
         getFfByFfId={getFfByFfId}
         maxDepth={maxDepth}

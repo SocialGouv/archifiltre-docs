@@ -1,6 +1,8 @@
 import { promises as fs } from "fs";
 import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
+  getAliasesFromStore,
+  getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
   getHashesFromStore
@@ -56,9 +58,13 @@ export const csvExporterThunk = (
   const filesAndFolders = getFilesAndFoldersFromStore(state);
   const filesAndFoldersMetadata = getFilesAndFoldersMetadataFromStore(state);
   const hashes = getHashesFromStore(state);
+  const comments = getCommentsFromStore(state);
+  const aliases = getAliasesFromStore(state);
   const elementsToDelete = getFilesToDeleteFromStore(state);
 
   const data: GenerateCsvExportOptions = {
+    aliases,
+    comments,
     elementsToDelete,
     filesAndFolders,
     filesAndFoldersMetadata,

@@ -6,6 +6,8 @@ import {
   unmarkAsToDelete
 } from "../../reducers/files-and-folders/files-and-folders-actions";
 import {
+  getAliasesFromStore,
+  getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
   getHashesFromStore
@@ -41,6 +43,11 @@ const ReportContainer: FC<ReportContainerProps> = ({ api, fillColor }) => {
   const tagsForCurrentFile = useSelector((state: StoreState) =>
     getTagsByIds(getTagsFromStore(state), tagIdsForCurrentFile)
   );
+
+  const currentFileAlias =
+    useSelector(getAliasesFromStore)[filesAndFoldersId] || "";
+  const currentFileComment =
+    useSelector(getCommentsFromStore)[filesAndFoldersId] || "";
 
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
 
@@ -101,6 +108,8 @@ const ReportContainer: FC<ReportContainerProps> = ({ api, fillColor }) => {
       originalPath={originalPath}
       tagsForCurrentFile={tagsForCurrentFile}
       currentFileHash={currentFileHash}
+      currentFileAlias={currentFileAlias}
+      currentFileComment={currentFileComment}
       filesAndFolders={filesAndFolders}
       filesAndFoldersId={filesAndFoldersId}
       filesAndFoldersMetadata={filesAndFoldersMetadata}

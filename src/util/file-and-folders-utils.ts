@@ -169,3 +169,16 @@ export const isExactFileOrAncestor = (baseElementId, suspectedAncestorId) => {
   const trailingChar = baseElementId[suspectedAncestorId.length];
   return index === 0 && (trailingChar === undefined || trailingChar === "/");
 };
+
+/**
+ * Displays an element name depending on its original name and optional alias
+ * @param elementName - element original name
+ * @param elementAlias - element optional alias
+ */
+export const getDisplayName = (
+  elementName: string,
+  elementAlias: string | undefined
+) =>
+  elementAlias !== undefined && elementAlias !== ""
+    ? elementAlias
+    : elementName;

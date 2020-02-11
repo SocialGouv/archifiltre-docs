@@ -1,5 +1,7 @@
 import {
   ADD_COMMENTS_ON_FILES_AND_FOLDERS,
+  AliasMap,
+  CommentsMap,
   FilesAndFoldersActionTypes,
   FilesAndFoldersMap,
   HashesMap,
@@ -23,15 +25,12 @@ export const initializeFilesAndFolders = (
 
 /**
  * Action to set an alias to a FileAndFolder
- * @param filesAndFoldersId
- * @param alias
+ * @param aliases
  */
-export const setFilesAndFoldersAlias = (
-  filesAndFoldersId: string,
-  alias: string
+export const setFilesAndFoldersAliases = (
+  aliases: AliasMap
 ): FilesAndFoldersActionTypes => ({
-  alias,
-  filesAndFoldersId,
+  aliases,
   type: SET_FILES_AND_FOLDERS_ALIAS
 });
 
@@ -48,15 +47,12 @@ export const setFilesAndFoldersHashes = (
 
 /**
  * Add comments on a FileAndFolder
- * @param filesAndFoldersId
  * @param comments
  */
 export const addCommentsOnFilesAndFolders = (
-  filesAndFoldersId: string,
-  comments: string
+  comments: CommentsMap
 ): FilesAndFoldersActionTypes => ({
   comments,
-  filesAndFoldersId,
   type: ADD_COMMENTS_ON_FILES_AND_FOLDERS
 });
 

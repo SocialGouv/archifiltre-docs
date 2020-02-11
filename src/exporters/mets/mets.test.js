@@ -49,9 +49,9 @@ describe("mets module", () => {
   });
 
   describe("with an item, its ID, its associated DMDID and a hash", () => {
+    const alias = "alias.test";
     const testItem = {
       name: "test.test",
-      alias: "alias.test",
       file_size: 100
     };
 
@@ -60,7 +60,7 @@ describe("mets module", () => {
     const testmd5Hash = "123456789abcdef0123456789abcdef0";
     it("should generate a proper file section", () => {
       expect(
-        makeFileElement(testItem, testId, testDmdId, testmd5Hash)
+        makeFileElement(testItem, testId, testDmdId, testmd5Hash, alias)
       ).toStrictEqual(outputFileTag);
     });
   });

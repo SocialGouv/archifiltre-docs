@@ -3,11 +3,16 @@
     "session_name": "Nom du projet",
     "original_path": "/Users/clementberthou/Dev/incub/random-files/files/1bd93af4554f1/6f37b9341287/2072aeb72d432",
     "version": 11,
+    "aliases": {
+      "/files/1bd93af4554f1/1b2e8af880f7d": "FileAlias",
+      "/files/1bd93af4554f1": "FolderAlias"
+    },
+    "comments": {},
     "files_and_folders": {
       "": {
+        "id": "",
+        "hash": null,
         "name": "",
-        "alias": "",
-        "comments": "",
         "children": [
           "/files"
         ],
@@ -35,9 +40,9 @@
         ]
       },
       "/files/1bd93af4554f1/1b2e8af880f7d": {
+        "id": "/files/1bd93af4554f1/1b2e8af880f7d",
+        "hash": null,
         "name": "1b2e8af880f7d",
-        "alias": "FileAlias",
-        "comments": "",
         "children": [],
         "file_size": 49,
         "file_last_modified": 1563979128306.0234,
@@ -55,9 +60,9 @@
         "sort_by_date_index": []
       },
       "/files/1bd93af4554f1/1a6d2646d7501": {
+        "id": "/files/1bd93af4554f1/1a6d2646d7501",
+        "hash": null,
         "name": "1a6d2646d7501",
-        "alias": "",
-        "comments": "",
         "children": [],
         "file_size": 49,
         "file_last_modified": 1563979128306.2227,
@@ -75,9 +80,9 @@
         "sort_by_date_index": []
       },
       "/files/2cb6ab95bf3ac": {
+        "id": "/files/2cb6ab95bf3ac",
+        "hash": null,
         "name": "2cb6ab95bf3ac",
-        "alias": "",
-        "comments": "",
         "children": [],
         "file_size": 49,
         "file_last_modified": 1563979128304.0352,
@@ -95,9 +100,9 @@
         "sort_by_date_index": []
       },
       "/files": {
+        "id": "/files",
+        "hash": null,
         "name": "files",
-        "alias": "",
-        "comments": "",
         "children": [
           "/files/1bd93af4554f1",
           "/files/2cb6ab95bf3ac",
@@ -131,9 +136,9 @@
         ]
       },
       "/files/307b77f2e0a0e": {
+        "id": "/files/307b77f2e0a0e",
+        "hash": null,
         "name": "307b77f2e0a0e",
-        "alias": "",
-        "comments": "",
         "children": [],
         "file_size": 49,
         "file_last_modified": 1563979128303.9539,
@@ -151,9 +156,9 @@
         "sort_by_date_index": []
       },
       "/files/1bd93af4554f1": {
+        "id": "/files/1bd93af4554f1",
+        "hash": null,
         "name": "1bd93af4554f1",
-        "alias": "FolderAlias",
-        "comments": "",
         "children": [
           "/files/1bd93af4554f1/1a6d2646d7501",
           "/files/1bd93af4554f1/1b2e8af880f7d",
@@ -185,9 +190,9 @@
         ]
       },
       "/files/1bd93af4554f1/225e5b63fce14": {
+        "id": "/files/1bd93af4554f1/225e5b63fce14",
+        "hash": null,
         "name": "225e5b63fce14",
-        "alias": "",
-        "comments": "",
         "children": [
           "/files/1bd93af4554f1/225e5b63fce14/2a2471c1172cd"
         ],
@@ -211,9 +216,9 @@
         ]
       },
       "/files/1bd93af4554f1/225e5b63fce14/2a2471c1172cd": {
+        "id": "/files/1bd93af4554f1/225e5b63fce14/2a2471c1172cd",
+        "hash": null,
         "name": "2a2471c1172cd",
-        "alias": "",
-        "comments": "",
         "children": [],
         "file_size": 49,
         "file_last_modified": 1563979128306.3845,
@@ -233,6 +238,7 @@
     },
     "tags": {
       "TCcONU59jtMvCWLMI1XSIjYXPFNfQ9ROTwYc66TE": {
+        "id": "TCcONU59jtMvCWLMI1XSIjYXPFNfQ9ROTwYc66TE",
         "name": "TestTag1",
         "ffIds": [
           "/files",
@@ -241,6 +247,7 @@
         "size": 245
       },
       "TtA5LtMKjIgx0QNVYNlyIkGX99rUImL5G2BL9OsP": {
+        "id": "TtA5LtMKjIgx0QNVYNlyIkGX99rUImL5G2BL9OsP",
         "name": "TestTag2",
         "ffIds": [
           "/files/1bd93af4554f1/1b2e8af880f7d",

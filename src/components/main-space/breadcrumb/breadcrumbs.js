@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Breadcrumb } from "./breadcrumb";
 import { makeEmptyArray } from "../../../util/array-util";
 import { ROOT_FF_ID } from "../../../reducers/files-and-folders/files-and-folders-selectors";
+import { getDisplayName } from "../../../util/file-and-folders-utils";
 
 const computeCumulative = array => {
   const ans = [0];
@@ -19,7 +20,7 @@ class Breadcrumbs extends React.PureComponent {
 
     this.trueFHeight = this.trueFHeight.bind(this);
     this.computeDim = this.computeDim.bind(this);
-    this.getDisplayName = this.getDisplayName.bind(this);
+    this.getNodeDisplayName = this.getNodeDisplayName.bind(this);
     this.getInactiveBreadcrumbs = this.getInactiveBreadcrumbs.bind(this);
     this.getFillColor = this.getFillColor.bind(this);
     this.getOpacity = this.getOpacity.bind(this);
@@ -59,9 +60,10 @@ class Breadcrumbs extends React.PureComponent {
     };
   }
 
-  getDisplayName(nodeId) {
-    const node = this.props.getFfByFfId(nodeId);
-    return node.alias === "" ? node.name : node.alias;
+  getNodeDisplayName(nodeId) {
+    const { aliases, getFfByFfId } = this.props;
+    const node = getFfByFfId(nodeId);
+    return getDisplayName(node.name, aliases[nodeId]);
   }
 
   getInactiveBreadcrumbs(maxHeight) {
@@ -114,7 +116,9 @@ class Breadcrumbs extends React.PureComponent {
       <g style={{ opacity: isFocused || isLocked ? 1 : 0.3, stroke: "#fff" }}>
         {breadcrumbs.map((nodeId, depth) => {
           const fillColor = this.getFillColor(isActive, nodeId);
-          const displayName = isActive ? this.getDisplayName(nodeId) : nodeId;
+          const displayName = isActive
+            ? this.getNodeDisplayName(nodeId)
+            : nodeId;
           const opacity = this.getOpacity(isLocked, nodeId);
           const isFirst = depth === 0;
           const isLast = isActive
@@ -149,7 +153,7 @@ class Breadcrumbs extends React.PureComponent {
 }
 
 export default function BreadcrumbsApiToProps(props) {
-  const { api, maxDepth, getFfByFfId, originalPath } = props;
+  const { api, aliases, maxDepth, getFfByFfId, originalPath } = props;
   const { icicle_state } = api;
   const breadcrumb_sequence = icicle_state.sequence();
   const { t } = useTranslation();
@@ -157,6 +161,7 @@ export default function BreadcrumbsApiToProps(props) {
   return (
     <Breadcrumbs
       {...props}
+      aliases={aliases}
       originalPath={originalPath}
       breadcrumb_sequence={breadcrumb_sequence}
       isFocused={icicle_state.isFocused()}

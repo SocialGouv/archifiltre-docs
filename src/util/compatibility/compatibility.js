@@ -1,6 +1,7 @@
 /* eslint-disable no-fallthrough */
 import { generateRandomString } from "util/random-gen-util";
-import { mapValues, pick } from "lodash";
+import _, { mapValues, pick } from "lodash";
+import fp from "lodash/fp";
 import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/files-and-folders-loader";
 
 export const fromAnyJsonToJs = json => {
@@ -21,6 +22,8 @@ export const fromAnyJsonToJs = json => {
     case 13:
     case 13.1:
       js = v13JsToV14Js(js);
+    case "2.0.0":
+      js = v2ToV21Js(js);
   }
   return js;
 };
@@ -183,5 +186,29 @@ export const v13JsToV14Js = v13 => {
     tags: v13.tags,
     sessionName: v13.session_name,
     originalPath: v13.original_path
+  };
+};
+
+export const v2ToV21Js = v2 => {
+  const filesAndFolders = _.mapValues(
+    v2.filesAndFolders,
+    fp.pick(["name", "children", "file_size", "file_last_modified"])
+  );
+
+  const comments = _(v2.filesAndFolders)
+    .mapValues(({ comments }) => comments)
+    .pickBy(comment => comment !== "")
+    .value();
+  const aliases = _(v2.filesAndFolders)
+    .mapValues(({ alias }) => alias)
+    .pickBy(alias => alias !== "")
+    .value();
+
+  return {
+    ...v2,
+    version: 2.1,
+    filesAndFolders,
+    aliases,
+    comments
   };
 };

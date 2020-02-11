@@ -88,9 +88,7 @@ export const createFilesAndFolders = ({
   file_size = 0,
   id
 }: CreateFilesAndFoldersOptions): FilesAndFolders => ({
-  alias: "",
   children,
-  comments: "",
   file_last_modified,
   file_size,
   hash: null,
@@ -129,9 +127,7 @@ export const createFilesAndFoldersDataStructure = (
 
   ffInfo.forEach(([{ lastModified, size }, currentPath]) => {
     filesAndFolders[currentPath] = {
-      alias: "",
       children: [],
-      comments: "",
       file_last_modified: lastModified,
       file_size: size,
       hash: null,

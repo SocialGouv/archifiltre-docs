@@ -1,6 +1,8 @@
 import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
+  getAliasesFromStore,
+  getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
@@ -27,9 +29,13 @@ export const metsExporterThunk = ({
   const filesAndFolders = getFilesAndFoldersFromStore(state);
   const filesAndFoldersMetadata = getFilesAndFoldersMetadataFromStore(state);
   const tags = getTagsFromStore(state);
+  const aliases = getAliasesFromStore(state);
+  const comments = getCommentsFromStore(state);
   const elementsToDelete = getFilesToDeleteFromStore(state);
 
   makeSIP({
+    aliases,
+    comments,
     elementsToDelete,
     filesAndFolders,
     filesAndFoldersMetadata,

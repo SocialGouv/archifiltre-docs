@@ -1,10 +1,20 @@
 import dateFormat from "dateformat";
 import _ from "lodash";
 import path from "path";
+import {
+  AliasMap,
+  CommentsMap,
+  FilesAndFolders,
+  FilesAndFoldersMap
+} from "../../reducers/files-and-folders/files-and-folders-types";
 import { tagHasFfId } from "../../reducers/tags/tags-selectors";
+import { TagMap } from "../../reducers/tags/tags-types";
 import translations from "../../translations/translations";
 import { makeEmptyArray, replaceValue } from "../../util/array-util";
-import { isExactFileOrAncestor } from "../../util/file-and-folders-utils";
+import {
+  getDisplayName,
+  isExactFileOrAncestor
+} from "../../util/file-and-folders-utils";
 import { empty } from "../../util/function-util";
 
 const nameChangedText = oldName =>
@@ -39,9 +49,11 @@ const formatDescriptionLevel = ff => {
 /**
  * Gets the title of a file or folder
  * @param ff - a file or folder data object
+ * @param aliases - the map containing all aliases
  * @returns {string} The file title
  */
-const formatTitle = ff => (ff.alias !== "" ? ff.alias : path.basename(ff.id));
+const formatTitle = (ff: FilesAndFolders, aliases: AliasMap) =>
+  getDisplayName(path.basename(ff.id), aliases[ff.id]);
 
 /**
  * Formats the date to "yyyy-mm-dd"
@@ -67,28 +79,33 @@ const addParentId = (fileOrFolder, index, fileAndFolders) => {
   };
 };
 
-const formatCustodialHistory = fileAndFolder =>
-  fileAndFolder.alias !== "" ? nameChangedText(fileAndFolder.name) : "";
+const formatCustodialHistory = (fileAndFolder, aliases) =>
+  aliases[fileAndFolder.id] ? nameChangedText(fileAndFolder.name) : "";
 
 /**
  * Mapper that transform enriched archifiltre data to Resip compatible data
- * @param enrichedFilesAndFolders
+ * @param aliases
+ * @param comments
  * @returns {Object} - Resip compatible data
  */
-const transformDefaultFormatToResip = enrichedFilesAndFolders => ({
+const transformDefaultFormatToResip = (
+  aliases,
+  comments
+) => enrichedFilesAndFolders => ({
   ID: enrichedFilesAndFolders.ID,
   ParentID: enrichedFilesAndFolders.ParentID,
   // tslint:disable-next-line:object-literal-sort-keys
   File: formatFile(enrichedFilesAndFolders),
   DescriptionLevel: formatDescriptionLevel(enrichedFilesAndFolders),
-  Title: formatTitle(enrichedFilesAndFolders),
+  Title: formatTitle(enrichedFilesAndFolders, aliases),
   StartDate: formatDate(enrichedFilesAndFolders.last_modified_min),
   EndDate: formatDate(enrichedFilesAndFolders.last_modified_max),
   TransactedDate: formatDate(Date.now()),
   "CustodialHistory.CustodialHistoryItem": formatCustodialHistory(
-    enrichedFilesAndFolders
+    enrichedFilesAndFolders,
+    aliases
   ),
-  Description: enrichedFilesAndFolders.comments,
+  Description: comments[enrichedFilesAndFolders.id] || "",
   Tags: enrichedFilesAndFolders.tags
 });
 
@@ -156,6 +173,14 @@ const wrapWithHook = (mapper, sideEffect) => (
   return mapper(mappedElement, mappedIndex, mappedArray);
 };
 
+interface ResipExporterOptions {
+  aliases: AliasMap;
+  comments: CommentsMap;
+  elementsToDelete: string[];
+  filesAndFolders: FilesAndFoldersMap;
+  tags: TagMap;
+}
+
 /**
  * Check if an ancestor of the fileAndFolders is marked as deleted
  * @param ffId
@@ -168,15 +193,21 @@ const isAncestorDeleted = (ffId: string, elementsToDelete: string[]): boolean =>
 
 /**
  * Formats the fileStructure and tag into a csv that can be imported in RESIP
+ * @param aliases - the aliases map
+ * @param comments - the comments map
  * @param filesAndFolders - The files and folder structure
  * @param tags - The tags structure
  * @param elementsToDelete
  * @param [hook]
  */
 const resipExporter = (
-  filesAndFolders,
-  tags,
-  elementsToDelete,
+  {
+    aliases,
+    comments,
+    elementsToDelete,
+    filesAndFolders,
+    tags
+  }: ResipExporterOptions,
   hook = empty
 ) => {
   let sipId = 0;
@@ -202,7 +233,9 @@ const resipExporter = (
     .map(wrapWithHook(addParentId, hook))
     .map(wrapWithHook(addTagsToFf(tagsWithIndex), hook));
 
-  const formattedData = dataWithSipId.map(transformDefaultFormatToResip);
+  const formattedData = dataWithSipId.map(
+    transformDefaultFormatToResip(aliases, comments)
+  );
 
   return formatToCsv(formattedData, tagsWithIndex);
 };

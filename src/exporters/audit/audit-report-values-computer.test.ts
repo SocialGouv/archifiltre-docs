@@ -6,6 +6,7 @@ import {
   countFileTypes,
   formatAuditReportDate,
   getBiggestFiles,
+  getElementsToDelete,
   getLongestPathFile,
   getOldestFiles,
   percentFileTypes,
@@ -166,6 +167,25 @@ describe("audit-report-values-computer", () => {
         file2Description,
         file3Description,
         file3Description
+      ]);
+    });
+  });
+
+  describe("getElementsToDelete", () => {
+    it("should return the list of elements to delete", () => {
+      expect(
+        getElementsToDelete(filesAndFoldersMap, [folderId2, fileId1])
+      ).toEqual([
+        {
+          name: "base-name",
+          path: folderId2,
+          type: "folder"
+        },
+        {
+          name: fileName1,
+          path: fileId1,
+          type: "file"
+        }
       ]);
     });
   });

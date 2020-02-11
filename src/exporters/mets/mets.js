@@ -273,6 +273,7 @@ export const makeObjectDiv = (item, item_tags, ID, order, FILEID) => {
  * @param {Object} counters dictionary of counters to generate unique identifiers
  * @param {function} readFromFF function to retrieve info from the FF
  * @param {function} readTags function to retrieve the tags from the FF
+ * @param {string[]} elementsToDelete the list of elements marked for deletion
  * @param {function} addToDmd function to add a descriptive section
  * @param {function} addToMASTER function to add a file section to the fileSec
  * @param {function} addToDIV function to add a div section to the structMap
@@ -287,6 +288,7 @@ const recTraverseDB = (
   counters,
   readFromFF,
   readTags,
+  elementsToDelete,
   addToDmd,
   addToMASTER,
   addToDIV,
@@ -300,6 +302,10 @@ const recTraverseDB = (
 
   // Ignore files with exclude tag
   if (tags.includes(DUMMY_EXCLUDE_TAG)) {
+    return;
+  }
+
+  if (elementsToDelete.includes(root)) {
     return;
   }
 
@@ -387,6 +393,7 @@ const recTraverseDB = (
         counters,
         readFromFF,
         readTags,
+        elementsToDelete,
         addToDmd,
         addToMASTER,
         addToDIV,
@@ -405,7 +412,14 @@ const recTraverseDB = (
  * @param {Array} metsContent preload METS to be filled up
  */
 const makeMetsContent = (
-  { filesAndFolders, filesAndFoldersMetadata, tags, originalPath, sessionName },
+  {
+    elementsToDelete,
+    filesAndFolders,
+    filesAndFoldersMetadata,
+    tags,
+    originalPath,
+    sessionName
+  },
   contentWriter,
   metsContent
 ) => {
@@ -504,6 +518,7 @@ const makeMetsContent = (
       counters,
       FFreader,
       tagReader,
+      elementsToDelete,
       DMDwriter,
       MASTERwriter,
       DIVwriter,
@@ -557,6 +572,7 @@ const makeMetsContent = (
  * @param {Object} tags - The tag map of the redux store
  */
 export const makeSIP = async ({
+  elementsToDelete,
   filesAndFolders,
   filesAndFoldersMetadata,
   tags,
@@ -579,6 +595,7 @@ export const makeSIP = async ({
 
   makeMetsContent(
     {
+      elementsToDelete,
       filesAndFolders,
       filesAndFoldersMetadata,
       tags,

@@ -58,6 +58,8 @@ const filesAndFoldersMetadata = {
   })
 };
 
+const elementsToDelete = ["deleted-ffid"];
+
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
 
 const emptyStore = createEmptyStore();
@@ -66,6 +68,7 @@ const storeContent: StoreState = {
   ...emptyStore,
   filesAndFolders: wrapStoreWithUndoable({
     ...filesAndFoldersInitialState,
+    elementsToDelete,
     filesAndFolders
   }),
   filesAndFoldersMetadata: { filesAndFoldersMetadata },
@@ -89,6 +92,7 @@ describe("mets-export-thunk", () => {
       );
 
       expect(mockedMakeSIP).toHaveBeenCalledWith({
+        elementsToDelete,
         filesAndFolders,
         filesAndFoldersMetadata,
         originalPath,

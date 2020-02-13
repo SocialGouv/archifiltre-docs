@@ -14,6 +14,7 @@ import { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-met
 import { decomposePathToElement } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import {
   AliasMap,
+  CommentsMap,
   FilesAndFolders
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "../../../reducers/tags/tags-types";
@@ -63,6 +64,7 @@ const shouldRenderChildMinimap = (x: number, elementWidth: number): boolean => {
 interface IcicleMainProps {
   api: any;
   aliases: AliasMap;
+  comments: CommentsMap;
   tags: TagMap;
   originalPath: string;
   root_id: string;
@@ -87,6 +89,7 @@ interface IcicleMainProps {
 const IcicleMain: FC<IcicleMainProps> = ({
   api,
   aliases,
+  comments,
   tags,
   originalPath,
   root_id: rootId,
@@ -276,6 +279,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
   const icicle = (
     <g>
       <AnimatedIcicle
+        aliases={aliases}
+        comments={comments}
         api={api}
         x={0}
         y={0}
@@ -332,6 +337,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
           style={{ fill: "white", opacity: "0.4" }}
         />
         <Icicle
+          aliases={aliases}
+          comments={comments}
           api={api}
           x={minimapX + 5}
           y={minimapY + 5}

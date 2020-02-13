@@ -88,6 +88,8 @@ export default class Icicle extends PureComponent {
 
     const {
       api,
+      aliases,
+      comments,
       computeWidthRec,
       display_root,
       dx,
@@ -166,7 +168,6 @@ export default class Icicle extends PureComponent {
 
     const dims = this.state.dims;
     const tag_id_to_highlight = icicle_state.tagIdToHighlight();
-
     return (
       <g>
         <g style={style}>
@@ -193,6 +194,8 @@ export default class Icicle extends PureComponent {
         {unlockedHoveredComponents}
         <IcicleEnrichments
           tags={tags}
+          aliases={aliases}
+          comments={comments}
           dims={dims}
           highlightedTagId={tag_id_to_highlight}
           elementsToDelete={elementsToDelete}

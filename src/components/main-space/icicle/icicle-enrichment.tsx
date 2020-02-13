@@ -4,7 +4,9 @@ import { Dims } from "./icicle-rect";
 
 enum EnrichmentTypes {
   TAG,
-  TO_DELETE
+  TO_DELETE,
+  ALIAS,
+  COMMENT
 }
 
 export enum OPACITY {
@@ -14,7 +16,9 @@ export enum OPACITY {
 
 const ENRICHMENT_COLORS = {
   [EnrichmentTypes.TAG]: "rgb(10, 50, 100)",
-  [EnrichmentTypes.TO_DELETE]: "rgb(250,0,0)"
+  [EnrichmentTypes.TO_DELETE]: "rgb(250,0,0)",
+  [EnrichmentTypes.ALIAS]: "rgb(145,218,242)",
+  [EnrichmentTypes.COMMENT]: "rgb(3,161,214)"
 };
 
 interface IcicleEnrichmentProps {
@@ -22,6 +26,8 @@ interface IcicleEnrichmentProps {
   dims: Dims;
   hasTag: boolean;
   isToDelete: boolean;
+  hasAlias: boolean;
+  hasComment: boolean;
   opacity: OPACITY;
   onClick: IcicleMouseHandler;
   onDoubleClick: IcicleMouseHandler;
@@ -33,6 +39,8 @@ const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
   dims,
   hasTag,
   isToDelete,
+  hasAlias,
+  hasComment,
   opacity,
   onClick,
   onDoubleClick,
@@ -63,7 +71,9 @@ const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
 
   const enrichments = [
     ...(hasTag ? [EnrichmentTypes.TAG] : []),
-    ...(isToDelete ? [EnrichmentTypes.TO_DELETE] : [])
+    ...(isToDelete ? [EnrichmentTypes.TO_DELETE] : []),
+    ...(hasAlias ? [EnrichmentTypes.ALIAS] : []),
+    ...(hasComment ? [EnrichmentTypes.COMMENT] : [])
   ];
   const heightDivider = Math.max(enrichments.length * 2, 3);
   return (

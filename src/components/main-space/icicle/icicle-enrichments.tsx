@@ -1,5 +1,9 @@
 import _ from "lodash";
 import React, { FC } from "react";
+import {
+  AliasMap,
+  CommentsMap
+} from "../../../reducers/files-and-folders/files-and-folders-types";
 import { tagMapToArray } from "../../../reducers/tags/tags-selectors";
 import { TagMap } from "../../../reducers/tags/tags-types";
 import IcicleEnrichment, { OPACITY } from "./icicle-enrichment";
@@ -7,6 +11,8 @@ import { IcicleMouseHandler } from "./icicle-main";
 import { Dims } from "./icicle-rect";
 
 interface IcicleEnrichmentsProps {
+  aliases: AliasMap;
+  comments: CommentsMap;
   tags: TagMap;
   elementsToDelete: string[];
   highlightedTagId: string;
@@ -31,6 +37,8 @@ const isHighlighted = (ffId, tags, higlightedTagId) => {
 };
 
 const IcicleEnrichments: FC<IcicleEnrichmentsProps> = ({
+  aliases,
+  comments,
   tags,
   highlightedTagId,
   dims,
@@ -49,7 +57,12 @@ const IcicleEnrichments: FC<IcicleEnrichmentsProps> = ({
 
   const displayedElementsToDelete = elementsToDelete.filter(isElementDisplayed);
 
-  const enrichedElements = _.union(taggedFiles, displayedElementsToDelete);
+  const enrichedElements = _.union(
+    taggedFiles,
+    displayedElementsToDelete,
+    Object.keys(aliases),
+    Object.keys(comments)
+  );
 
   return (
     <g>
@@ -60,6 +73,8 @@ const IcicleEnrichments: FC<IcicleEnrichmentsProps> = ({
           dims={dims[ffId]}
           hasTag={taggedFiles.includes(ffId)}
           isToDelete={displayedElementsToDelete.includes(ffId)}
+          hasAlias={ffId in aliases}
+          hasComment={ffId in comments}
           opacity={
             isHighlighted(ffId, tags, highlightedTagId)
               ? OPACITY.HIGHLIGHTED

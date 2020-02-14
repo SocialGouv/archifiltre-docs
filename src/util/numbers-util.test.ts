@@ -1,4 +1,9 @@
-import { curriedFormatPercent, formatPercent, percent } from "./numbers-util";
+import {
+  curriedFormatPercent,
+  formatPercent,
+  percent,
+  ratio
+} from "./numbers-util";
 
 describe("numbers-util", () => {
   describe("percent", () => {
@@ -44,6 +49,16 @@ describe("numbers-util", () => {
   describe("curriedFormatPercent", () => {
     it("with set number of decimals", () => {
       expect(curriedFormatPercent({ numbersOfDecimals: 2 })(1 / 3)).toBe(33.33);
+    });
+  });
+
+  describe("ratio", () => {
+    it("should work with default min value", () => {
+      expect(ratio(10, { max: 20 })).toBe(0.5);
+    });
+
+    it("should work with set min value", () => {
+      expect(ratio(15, { max: 20, min: 10 })).toBe(0.5);
     });
   });
 });

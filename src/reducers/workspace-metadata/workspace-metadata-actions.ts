@@ -1,4 +1,6 @@
 import {
+  IciclesSortMethod,
+  SET_ICICLES_SORT_METHOD,
   SET_ORIGINAL_PATH,
   SET_SESSION_NAME,
   WorkspaceMetadataAction
@@ -16,4 +18,15 @@ export const setOriginalPath = (
 ): WorkspaceMetadataAction => ({
   originalPath,
   type: SET_ORIGINAL_PATH
+});
+
+/**
+ * Sets the sorting method of the icicles
+ * @param sortMethod
+ */
+export const setIciclesSortMethod = (
+  sortMethod: IciclesSortMethod
+): WorkspaceMetadataAction => ({
+  sortMethod,
+  type: SET_ICICLES_SORT_METHOD
 });

@@ -10,7 +10,8 @@ import {
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
-  getHashesFromStore
+  getHashesFromStore,
+  ROOT_FF_ID
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import {
   updateAliasThunk,
@@ -23,7 +24,11 @@ import {
   getTagsByIds,
   getTagsFromStore
 } from "../../reducers/tags/tags-selectors";
-import { getWorkspaceMetadataFromStore } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
+import {
+  getWorkspaceMetadataFromStore,
+  useWorkspaceMetadata
+} from "../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { useFillColor } from "../../util/color-util";
 import ReportApiToProps from "./report";
 
 interface ReportContainerProps {
@@ -31,9 +36,10 @@ interface ReportContainerProps {
   fillColor: (ffId: string) => string;
 }
 
-const ReportContainer: FC<ReportContainerProps> = ({ api, fillColor }) => {
+const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
   /* <Legacy> : to replace */
   const sequence = api.icicle_state.sequence();
+  const displayRoot = api.icicle_state.display_root();
   const filesAndFoldersId = sequence[sequence.length - 1];
   /* </Legacy> */
   const tagIdsForCurrentFile = useSelector((state: StoreState) =>
@@ -62,6 +68,15 @@ const ReportContainer: FC<ReportContainerProps> = ({ api, fillColor }) => {
 
   const filesToDelete = useSelector(getFilesToDeleteFromStore);
   const isCurrentFileMarkedToDelete = filesToDelete.includes(filesAndFoldersId);
+
+  const { iciclesSortMethod } = useWorkspaceMetadata();
+
+  const fillColor = useFillColor(
+    filesAndFolders,
+    filesAndFoldersMetadata,
+    iciclesSortMethod,
+    displayRoot
+  );
 
   const dispatch = useDispatch();
 

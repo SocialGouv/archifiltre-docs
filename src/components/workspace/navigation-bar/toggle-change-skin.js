@@ -7,6 +7,7 @@ import styled from "styled-components";
 import * as Color from "util/color-util";
 import { useTranslation } from "react-i18next";
 import Bubble from "../../header/dashboard/bubble";
+import { FaChevronDown } from "react-icons/fa";
 
 const buttonStyle = {
   margin: 0,
@@ -21,30 +22,33 @@ const ButtonWrapper = styled.div`
   border-radius: 5px;
 `;
 
-const Presentational = ({ toggleChangeSkin, change_skin }) => {
+const ButtonTextWrapper = styled.span`
+  display: flex;
+`;
+
+const ToggleButton = ({ toggleChangeSkin, changeSkin, label }) => {
+  const buttonLabel = changeSkin ? (
+    label
+  ) : (
+    <ButtonTextWrapper>
+      {label} <FaChevronDown style={{ verticalAlign: "middle" }} />
+    </ButtonTextWrapper>
+  );
+  return (
+    <ButtonWrapper>
+      {mkTB(
+        toggleChangeSkin,
+        buttonLabel,
+        changeSkin,
+        Color.parentFolder(),
+        buttonStyle
+      )}
+    </ButtonWrapper>
+  );
+};
+
+const Presentational = ({ toggleChangeSkin, changeSkin }) => {
   const { t } = useTranslation();
-  const byTypeButton = (
-    <ButtonWrapper>
-      {mkTB(
-        toggleChangeSkin,
-        t("workspace.type"),
-        change_skin,
-        Color.parentFolder(),
-        buttonStyle
-      )}
-    </ButtonWrapper>
-  );
-  const byDateButton = (
-    <ButtonWrapper>
-      {mkTB(
-        toggleChangeSkin,
-        t("workspace.dates"),
-        !change_skin,
-        Color.parentFolder(),
-        buttonStyle
-      )}
-    </ButtonWrapper>
-  );
   return (
     <div className="grid-x align-middle" style={{ minWidth: "25em" }}>
       <div className="cell small-4">
@@ -52,8 +56,36 @@ const Presentational = ({ toggleChangeSkin, change_skin }) => {
       </div>
       <div className="cell small-4">
         <Bubble
-          comp={change_skin ? byDateButton : byTypeButton}
-          sub_comp={change_skin ? byTypeButton : byDateButton}
+          comp={
+            changeSkin ? (
+              <ToggleButton
+                toggleChangeSkin={toggleChangeSkin}
+                changeSkin={!changeSkin}
+                label={t("workspace.dates")}
+              />
+            ) : (
+              <ToggleButton
+                toggleChangeSkin={toggleChangeSkin}
+                changeSkin={changeSkin}
+                label={t("workspace.type")}
+              />
+            )
+          }
+          sub_comp={
+            changeSkin ? (
+              <ToggleButton
+                toggleChangeSkin={toggleChangeSkin}
+                changeSkin={changeSkin}
+                label={t("workspace.type")}
+              />
+            ) : (
+              <ToggleButton
+                toggleChangeSkin={toggleChangeSkin}
+                changeSkin={!changeSkin}
+                label={t("workspace.dates")}
+              />
+            )
+          }
         />
       </div>
     </div>
@@ -66,7 +98,7 @@ const ToggleWidthBySize = ({
   }
 }) => (
   <Presentational
-    change_skin={changeSkin()}
+    changeSkin={changeSkin()}
     toggleChangeSkin={toggleChangeSkin}
   />
 );

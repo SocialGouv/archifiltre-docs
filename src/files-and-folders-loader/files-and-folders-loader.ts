@@ -192,7 +192,7 @@ export const createFilesAndFoldersMetadataDataStructure = (
       ff.children.map(childId => metadata[childId].nbChildrenFiles)
     );
     const sortByDateIndex = indexSort(
-      childId => metadata[childId].maxLastModified,
+      childId => metadata[childId].averageLastModified,
       _(ff.children)
     ).value();
 

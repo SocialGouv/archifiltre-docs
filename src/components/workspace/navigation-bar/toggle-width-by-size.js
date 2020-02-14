@@ -8,6 +8,7 @@ import * as Color from "util/color-util";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import Bubble from "../../header/dashboard/bubble";
+import { FaChevronDown } from "react-icons/fa";
 
 const buttonStyle = {
   margin: 0,
@@ -22,30 +23,33 @@ const ButtonWrapper = styled.div`
   border-radius: 5px;
 `;
 
-const Presentational = ({ toggleChangeWidthBySize, width_by_size }) => {
+const ButtonTextWrapper = styled.span`
+  display: flex;
+`;
+
+const ToggleButton = ({ toggleChangeWidthBySize, widthBySize, label }) => {
+  const buttonLabel = widthBySize ? (
+    label
+  ) : (
+    <ButtonTextWrapper>
+      {label} <FaChevronDown style={{ verticalAlign: "middle" }} />
+    </ButtonTextWrapper>
+  );
+  return (
+    <ButtonWrapper>
+      {mkTB(
+        toggleChangeWidthBySize,
+        buttonLabel,
+        widthBySize,
+        Color.parentFolder(),
+        buttonStyle
+      )}
+    </ButtonWrapper>
+  );
+};
+
+const Presentational = ({ toggleChangeWidthBySize, widthBySize }) => {
   const { t } = useTranslation();
-  const bySizeButton = (
-    <ButtonWrapper>
-      {mkTB(
-        toggleChangeWidthBySize,
-        t("workspace.bySize"),
-        !width_by_size,
-        Color.parentFolder(),
-        buttonStyle
-      )}
-    </ButtonWrapper>
-  );
-  const byNumberButton = (
-    <ButtonWrapper>
-      {mkTB(
-        toggleChangeWidthBySize,
-        t("workspace.byNumber"),
-        width_by_size,
-        Color.parentFolder(),
-        buttonStyle
-      )}
-    </ButtonWrapper>
-  );
   return (
     <div className="grid-x align-middle" style={{ minWidth: "25em" }}>
       <div className="cell small-4">
@@ -53,8 +57,36 @@ const Presentational = ({ toggleChangeWidthBySize, width_by_size }) => {
       </div>
       <div className="cell small-4">
         <Bubble
-          comp={width_by_size ? bySizeButton : byNumberButton}
-          sub_comp={width_by_size ? byNumberButton : bySizeButton}
+          comp={
+            widthBySize ? (
+              <ToggleButton
+                toggleChangeWidthBySize={toggleChangeWidthBySize}
+                widthBySize={!widthBySize}
+                label={t("workspace.bySize")}
+              />
+            ) : (
+              <ToggleButton
+                toggleChangeWidthBySize={toggleChangeWidthBySize}
+                widthBySize={widthBySize}
+                label={t("workspace.byNumber")}
+              />
+            )
+          }
+          sub_comp={
+            widthBySize ? (
+              <ToggleButton
+                toggleChangeWidthBySize={toggleChangeWidthBySize}
+                widthBySize={widthBySize}
+                label={t("workspace.byNumber")}
+              />
+            ) : (
+              <ToggleButton
+                toggleChangeWidthBySize={toggleChangeWidthBySize}
+                widthBySize={!widthBySize}
+                label={t("workspace.bySize")}
+              />
+            )
+          }
         />
       </div>
     </div>
@@ -67,7 +99,7 @@ const ToggleWidthBySize = ({
   }
 }) => (
   <Presentational
-    width_by_size={widthBySize()}
+    widthBySize={widthBySize()}
     toggleChangeWidthBySize={toggleChangeWidthBySize}
   />
 );

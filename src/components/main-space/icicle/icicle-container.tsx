@@ -10,16 +10,18 @@ import {
   ROOT_FF_ID
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "../../../reducers/tags/tags-selectors";
-import { getWorkspaceMetadataFromStore } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
+import {
+  getWorkspaceMetadataFromStore,
+  useWorkspaceMetadata
+} from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { IciclesSortMethod } from "../../../reducers/workspace-metadata/workspace-metadata-types";
+import { useFillColor } from "../../../util/color-util";
 import IcicleMain from "./icicle-main";
 
-export default function IcicleApiToProps({
-  api,
-  fillColor,
-  getChildrenIdFromId
-}) {
+export default function IcicleApiToProps({ api }) {
   const icicle_state = api.icicle_state;
   const lockSequence = icicle_state.lock_sequence();
+  const displayRoot = icicle_state.display_root();
   const isLocked = lockSequence.length > 0;
 
   const tags = useSelector(getTagsFromStore);
@@ -32,6 +34,8 @@ export default function IcicleApiToProps({
   const aliases = useSelector(getAliasesFromStore);
   const comments = useSelector(getCommentsFromStore);
   const elementsToDelete = useSelector(getFilesToDeleteFromStore);
+
+  const { iciclesSortMethod } = useWorkspaceMetadata();
 
   const getFfByFfId = useCallback(
     (ffId: string) => ({
@@ -54,6 +58,26 @@ export default function IcicleApiToProps({
   );
 
   const { originalPath } = useSelector(getWorkspaceMetadataFromStore);
+
+  const getChildrenIdFromId = useCallback(
+    (id: string): string[] => {
+      const children = filesAndFolders[id].children;
+      const metadata = filesAndFoldersMetadata[id];
+      const orderArray =
+        iciclesSortMethod === IciclesSortMethod.SORT_BY_DATE
+          ? metadata.sortByDateIndex
+          : metadata.sortBySizeIndex;
+      return orderArray.map(childIndex => children[childIndex]);
+    },
+    [filesAndFolders, filesAndFoldersMetadata, iciclesSortMethod]
+  );
+
+  const fillColor = useFillColor(
+    filesAndFolders,
+    filesAndFoldersMetadata,
+    iciclesSortMethod,
+    displayRoot
+  );
 
   return (
     <IcicleMain

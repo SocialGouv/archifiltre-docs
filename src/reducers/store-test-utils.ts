@@ -1,6 +1,7 @@
 import { UndoableState } from "./enhancers/undoable/undoable-types";
 import { initialState as loadingInfoInitialState } from "./loading-info/loading-info-reducer";
 import { StoreState } from "./store";
+import { IciclesSortMethod } from "./workspace-metadata/workspace-metadata-types";
 
 /**
  * Create an empty store state for testing purposes
@@ -21,6 +22,7 @@ export const createEmptyStore = (): StoreState => ({
     tags: {}
   }),
   workspaceMetadata: wrapStoreWithUndoable({
+    iciclesSortMethod: IciclesSortMethod.SORT_BY_TYPE,
     originalPath: "",
     sessionName: ""
   })

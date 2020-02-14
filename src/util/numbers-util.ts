@@ -1,5 +1,6 @@
 import { curryRight } from "lodash";
 import { curry } from "lodash/fp";
+import { number } from "prop-types";
 
 /**
  * Get a percent value rounded to the right number of decimals
@@ -35,3 +36,11 @@ export const formatPercent = (
  */
 export const curriedFormatPercent = options => value =>
   formatPercent(value, options);
+
+interface RatioOptions {
+  min?: number;
+  max: number;
+}
+
+export const ratio = (value: number, { min = 0, max }: RatioOptions) =>
+  (value - min) / (max - min);

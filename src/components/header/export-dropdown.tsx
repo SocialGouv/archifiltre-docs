@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
+import { FaChevronDown } from "react-icons/fa";
 import AuditReportButton, {
   ExportToAuditReport
 } from "../buttons/audit-report-button";
@@ -36,7 +37,8 @@ const ExportDropdown: FC<ExportDropdownProps> = ({
       comp={
         <TextAlignCenter>
           <Button id="export-menu" width={ButtonWidth.WITH_SPACES}>
-            {t("header.export")}
+            {t("header.export")}{" "}
+            <FaChevronDown style={{ verticalAlign: "inherit" }} />
           </Button>
         </TextAlignCenter>
       }

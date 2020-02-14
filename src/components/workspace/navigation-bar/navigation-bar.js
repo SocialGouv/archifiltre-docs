@@ -1,8 +1,8 @@
 import React from "react";
 
 import BackToRootButton from "components/buttons/back-to-root-button";
-import ToggleChangeSkin from "components/workspace/navigation-bar/toggle-change-skin";
 import ToggleWidthBySize from "components/workspace/navigation-bar/toggle-width-by-size";
+import IciclesSortOrderPicker from "./icicle-sort-order-picker";
 
 const gridStyle = {
   background: "white",
@@ -13,7 +13,7 @@ const gridStyle = {
   margin: "0.5em 0"
 };
 
-const NavigationBar = ({ api }) => (
+const NavigationBar = ({ api, iciclesSortMethod, setIciclesSortMethod }) => (
   <div style={gridStyle} className="grid-x align-middle">
     <div className="cell small-2">
       <BackToRootButton api={api} />
@@ -22,7 +22,10 @@ const NavigationBar = ({ api }) => (
       <div className="flex-container">
         <div className="flex-child-grow" />
         <div className="flex-child-auto">
-          <ToggleChangeSkin api={api} />
+          <IciclesSortOrderPicker
+            iciclesSortMethod={iciclesSortMethod}
+            setIciclesSortMethod={setIciclesSortMethod}
+          />
         </div>
       </div>
     </div>

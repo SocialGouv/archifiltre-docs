@@ -1,4 +1,11 @@
 import { FileType, getFileTypeFromFileName } from "./file-types-util";
+import {
+  isFile,
+  ROOT_FF_ID
+} from "../reducers/files-and-folders/files-and-folders-selectors";
+import { ratio } from "./numbers-util";
+import { useCallback, useMemo } from "react";
+import { IciclesSortMethod } from "../reducers/workspace-metadata/workspace-metadata-types";
 
 export const SUCCESS_GREEN = "#1E8E17";
 
@@ -73,4 +80,78 @@ export const placeholder = () => PLACEHOLDER_COLOR;
 export const fromFileName = name => {
   const fileType = getFileTypeFromFileName(name);
   return colors[fileType];
+};
+
+/**
+ * Hook that returns the fillColorByType method. It allows to get the color of a node using its id.
+ * @param filesAndFolders
+ * @param displayRoot
+ * @returns {*}
+ */
+const useFillColorByType = (filesAndFolders, displayRoot) =>
+  useCallback(
+    id => {
+      const element = filesAndFolders[id];
+
+      if (isFile(element)) {
+        return fromFileName(element.name);
+      }
+
+      return displayRoot.includes(id) ? parentFolder() : folder();
+    },
+    [filesAndFolders, displayRoot]
+  );
+
+const dateGradient = gradient(leastRecentDate(), mostRecentDate());
+
+/**
+ * Hook that returns the fillColorByDate method. It allows to get the color of a node using its id.
+ * @param filesAndFoldersMetadata
+ * @returns {*}
+ */
+const useFillColorByDate = filesAndFoldersMetadata =>
+  useCallback(
+    id => {
+      const { minLastModified, maxLastModified } = filesAndFoldersMetadata[
+        ROOT_FF_ID
+      ];
+      const { averageLastModified } = filesAndFoldersMetadata[id];
+      return toRgba(
+        dateGradient(
+          ratio(averageLastModified, {
+            min: minLastModified,
+            max: maxLastModified
+          })
+        )
+      );
+    },
+    [filesAndFoldersMetadata]
+  );
+
+/**
+ * Hook that returns the fillColor method. It returns the color of a node based on its id and the selected
+ * sorting method.
+ * @param filesAndFolders
+ * @param filesAndFoldersMetadata
+ * @param iciclesSortMethod
+ * @param displayRoot
+ * @returns {*}
+ */
+export const useFillColor = (
+  filesAndFolders,
+  filesAndFoldersMetadata,
+  iciclesSortMethod,
+  displayRoot
+) => {
+  const fillColorByType = useFillColorByType(filesAndFolders, displayRoot);
+
+  const fillColorByDate = useFillColorByDate(filesAndFoldersMetadata);
+
+  return useMemo(
+    () =>
+      iciclesSortMethod === IciclesSortMethod.SORT_BY_DATE
+        ? fillColorByDate
+        : fillColorByType,
+    [iciclesSortMethod, fillColorByDate, fillColorByType]
+  );
 };

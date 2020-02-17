@@ -1,6 +1,8 @@
 import { Action } from "redux";
 
 export const INITIALIZE_FILES_AND_FOLDERS = "FILES_AND_FOLDERS/INITIALIZE";
+export const REMOVE_CHILD = "FILES_AND_FOLDERS/REMOVE_CHILD";
+export const ADD_CHILD = "FILES_AND_FOLDERS/ADD_CHILD";
 export const SET_FILES_AND_FOLDERS_ALIAS = "FILES_AND_FOLDERS/SET_ALIAS";
 export const SET_FILES_AND_FOLDERS_HASHES = "FILES_AND_FOLDERS/SET_HASHES";
 export const ADD_COMMENTS_ON_FILES_AND_FOLDERS =
@@ -14,7 +16,7 @@ export interface FilesAndFolders {
   children: string[];
   file_size: number;
   file_last_modified: number;
-  hash: string | null;
+  virtualPath: string;
 }
 
 export interface FilesAndFoldersMap {
@@ -46,6 +48,18 @@ interface InitializeFilesAndFoldersAction extends Action {
   filesAndFolders: FilesAndFoldersMap;
 }
 
+interface RemoveChildAction extends Action {
+  type: typeof REMOVE_CHILD;
+  childId: string;
+  parentId: string;
+}
+
+interface AddChildAction extends Action {
+  type: typeof ADD_CHILD;
+  childId: string;
+  parentId: string;
+}
+
 interface SetFilesAndFoldersAliasAction extends Action {
   type: typeof SET_FILES_AND_FOLDERS_ALIAS;
   aliases: AliasMap;
@@ -73,6 +87,8 @@ interface UnmarkAsToDelete extends Action {
 
 export type FilesAndFoldersActionTypes =
   | InitializeFilesAndFoldersAction
+  | AddChildAction
+  | RemoveChildAction
   | SetFilesAndFoldersAliasAction
   | AddCommentsOnFilesAndFoldersAction
   | SetFilesAndFoldersHashesAction

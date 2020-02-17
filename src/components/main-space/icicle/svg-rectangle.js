@@ -18,6 +18,7 @@ export default class SvgRectangle extends PureComponent {
 
     return (
       <rect
+        data-draggable-id={elementId}
         data-test-id={elementId}
         className="node"
         x={x}

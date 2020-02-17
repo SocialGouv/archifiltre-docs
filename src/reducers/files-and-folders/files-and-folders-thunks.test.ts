@@ -38,11 +38,9 @@ const testState = {
         id: updateId1
       }),
       [updateId2]: createFilesAndFolders({
-        hash: "oldHash2",
         id: updateId2
       }),
       [unupdatedId]: createFilesAndFolders({
-        hash: "unchangedHash",
         id: unupdatedId
       })
     }

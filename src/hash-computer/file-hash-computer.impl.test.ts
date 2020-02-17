@@ -1,5 +1,6 @@
 import { createAsyncWorkerMock } from "../util/async-worker-test-utils";
 import { MessageTypes } from "../util/batch-process/batch-process-util-types";
+import { formatPathForUserSystem } from "../util/file-sys-util";
 import { computeHash } from "../util/hash-util";
 import { onData, onInitialize } from "./file-hash-computer.impl";
 
@@ -27,8 +28,14 @@ describe("file-hash-computer.impl", () => {
 
       expect(asyncWorker.postMessage).toHaveBeenCalledWith({
         result: [
-          { param: "/path1", result: "hash(/base/path1)" },
-          { param: "/path2", result: "hash(/base/path2)" }
+          {
+            param: "/path1",
+            result: `hash(${formatPathForUserSystem("/base/path1")})`
+          },
+          {
+            param: "/path2",
+            result: `hash(${formatPathForUserSystem("/base/path2")})`
+          }
         ],
         type: MessageTypes.RESULT
       });
@@ -37,7 +44,7 @@ describe("file-hash-computer.impl", () => {
     it("should handle errored paths", () => {
       const error = new Error("test-error");
       computeHashMock.mockImplementation((path: string) => {
-        if (path === "/base/path2") {
+        if (path === formatPathForUserSystem("/base/path2")) {
           throw error;
         }
 
@@ -49,7 +56,10 @@ describe("file-hash-computer.impl", () => {
 
       expect(asyncWorker.postMessage).toHaveBeenCalledWith({
         result: [
-          { param: "/path1", result: "hash(/base/path1)" },
+          {
+            param: "/path1",
+            result: `hash(${formatPathForUserSystem("/base/path1")})`
+          },
           { param: "/path2", result: null }
         ],
         type: MessageTypes.RESULT

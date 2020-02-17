@@ -1,7 +1,7 @@
 import { octet2HumanReadableFormat } from "../../components/main-space/ruler";
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
+import { formatPathForUserSystem } from "../../util/file-sys-util";
 import { FileType } from "../../util/file-types-util";
-import { isWindows } from "../../util/os-util";
 import {
   countFileTypes,
   formatAuditReportDate,
@@ -16,16 +16,12 @@ import {
 
 const folderId1 = "folder-id-1";
 const folderId2 = `${folderId1}/folder-id-2`;
-const folder2WindowsPath = `${folderId1}\\folder-id-2`;
 const fileName1 = "file-id-1.xml";
 const fileName2 = "file-id-2.ppt";
 const fileName3 = "file-id-31.docx";
 const fileId1 = `${folderId1}/${fileName1}`;
-const file1WindowsPath = `${folderId1}\\${fileName1}`;
 const fileId2 = `${folderId2}/${fileName2}`;
-const file2WindowsPath = `${folder2WindowsPath}\\${fileName2}`;
 const fileId3 = `${folderId2}/${fileName3}`;
-const file3WindowsPath = `${folder2WindowsPath}\\${fileName3}`;
 const file1 = createFilesAndFolders({
   file_last_modified: 1531670400000,
   file_size: 1000,
@@ -128,13 +124,13 @@ describe("audit-report-values-computer", () => {
       const file2Description = {
         date: formatAuditReportDate(file2.file_last_modified),
         name: file2.name,
-        path: isWindows() ? file2WindowsPath : file2.id
+        path: formatPathForUserSystem(file2.id)
       };
 
       const file3Description = {
         date: formatAuditReportDate(file3.file_last_modified),
         name: file3.name,
-        path: isWindows() ? file3WindowsPath : file3.id
+        path: formatPathForUserSystem(file3.id)
       };
       expect(getOldestFiles(sortingTestArray)).toEqual([
         file2Description,
@@ -160,13 +156,13 @@ describe("audit-report-values-computer", () => {
     it("should return the description of the oldest files", () => {
       const file2Description = {
         name: file2.name,
-        path: isWindows() ? file2WindowsPath : file2.id,
+        path: formatPathForUserSystem(file2.id),
         size: octet2HumanReadableFormat(file2.file_size)
       };
 
       const file3Description = {
         name: file3.name,
-        path: isWindows() ? file3WindowsPath : file3.id,
+        path: formatPathForUserSystem(file3.id),
         size: octet2HumanReadableFormat(file3.file_size)
       };
       expect(getBiggestFiles(sortingTestArray)).toEqual([
@@ -186,12 +182,12 @@ describe("audit-report-values-computer", () => {
       ).toEqual([
         {
           name: "base-name",
-          path: isWindows() ? folder2WindowsPath : folderId2,
+          path: formatPathForUserSystem(folderId2),
           type: "folder"
         },
         {
           name: fileName1,
-          path: isWindows() ? file1WindowsPath : fileId1,
+          path: formatPathForUserSystem(fileId1),
           type: "file"
         }
       ]);

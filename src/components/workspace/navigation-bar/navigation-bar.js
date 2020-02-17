@@ -3,7 +3,6 @@ import React from "react";
 import BackToRootButton from "components/buttons/back-to-root-button";
 import ToggleWidthBySize from "components/workspace/navigation-bar/toggle-width-by-size";
 import IciclesSortOrderPicker from "./icicle-sort-order-picker";
-import MoveElement from "./move-element.tsx";
 
 const gridStyle = {
   background: "white",
@@ -14,12 +13,7 @@ const gridStyle = {
   margin: "0.5em 0"
 };
 
-const NavigationBar = ({
-  api,
-  iciclesSortMethod,
-  setIciclesSortMethod,
-  moveElement
-}) => (
+const NavigationBar = ({ api, iciclesSortMethod, setIciclesSortMethod }) => (
   <div style={gridStyle} className="grid-x align-middle">
     <div className="cell small-2">
       <BackToRootButton api={api} />
@@ -42,9 +36,6 @@ const NavigationBar = ({
           <ToggleWidthBySize api={api} />
         </div>
       </div>
-    </div>
-    <div>
-      <MoveElement moveElement={moveElement} />
     </div>
   </div>
 );

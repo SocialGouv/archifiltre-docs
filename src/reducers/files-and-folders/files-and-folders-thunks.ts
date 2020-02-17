@@ -59,6 +59,11 @@ export const updateCommentThunk = (
   dispatch(addCommentsOnFilesAndFolders({ [filesAndFoldersId]: comments }));
 };
 
+/**
+ * Allows to virtually move a file system element to another location
+ * @param elementId
+ * @param newParentId
+ */
 export const moveElement = (elementId, newParentId): ArchifiltreThunkAction => (
   dispatch,
   getState

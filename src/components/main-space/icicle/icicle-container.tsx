@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   getAliasesFromStore,
@@ -9,6 +9,7 @@ import {
   getMaxDepth,
   ROOT_FF_ID,
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
+import { moveElement } from "../../../reducers/files-and-folders/files-and-folders-thunks";
 import { getTagsFromStore } from "../../../reducers/tags/tags-selectors";
 import {
   getWorkspaceMetadataFromStore,
@@ -23,6 +24,8 @@ export default function IcicleApiToProps({ api }) {
   const lockSequence = icicle_state.lock_sequence();
   const displayRoot = icicle_state.display_root();
   const isLocked = lockSequence.length > 0;
+
+  const dispatch = useDispatch();
 
   const tags = useSelector(getTagsFromStore);
 
@@ -79,6 +82,12 @@ export default function IcicleApiToProps({ api }) {
     displayRoot
   );
 
+  const moveElementCallback = useCallback(
+    (movedElement, targetFolder) =>
+      dispatch(moveElement(movedElement, targetFolder)),
+    [dispatch]
+  );
+
   return (
     <IcicleMain
       api={api}
@@ -101,6 +110,7 @@ export default function IcicleApiToProps({ api }) {
       setFocus={icicle_state.setFocus}
       setNoFocus={icicle_state.setNoFocus}
       setNoHover={icicle_state.setNoHover}
+      moveElement={moveElementCallback}
       tags={tags}
       unlock={icicle_state.unlock}
     />

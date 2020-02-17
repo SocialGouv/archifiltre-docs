@@ -122,6 +122,7 @@ describe("resip-exporter-thunk", () => {
         comments,
         elementsToDelete,
         filesAndFolders,
+        filesAndFoldersMetadata,
         tags
       });
       expect(writeFileMock).toHaveBeenCalledWith(

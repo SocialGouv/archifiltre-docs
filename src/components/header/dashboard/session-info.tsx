@@ -1,4 +1,5 @@
 import React, { FC, useCallback } from "react";
+import { FaFile, FaFolder, FaPen } from "react-icons/fa";
 import { RIEInput } from "riek";
 import styled from "styled-components";
 import { octet2HumanReadableFormat } from "../../main-space/ruler";
@@ -49,12 +50,12 @@ const SessionInfo: FC<SessionInfoProps> = ({
           validate={s => s.replace(/\s/g, "").length > 0}
         />
         &ensp;
-        <i className="fi-pencil edit_hover_pencil" style={{ opacity: "0.3" }} />
+        <FaPen className="edit_hover_pencil" style={{ opacity: "0.3" }} />
       </SessionNameCell>
       <b>
-        {nbFolders} <i className="fi-folder" />
+        {nbFolders} <FaFolder style={{ verticalAlign: "bottom" }} />
         &ensp;&ensp;
-        {nbFiles} <i className="fi-page" />
+        {nbFiles} <FaFile style={{ verticalAlign: "bottom" }} />
         &ensp;&ensp;
         {octet2HumanReadableFormat(volume)}
       </b>

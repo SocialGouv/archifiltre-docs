@@ -1,21 +1,19 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 import AreaEmphasized from "../area-components/area-emphasized";
-import RefreshButton from "../buttons/refresh-button";
 import { useTranslation } from "react-i18next";
+import Button, { ButtonAngles, ButtonColor } from "../common/button";
+import { FaRedo } from "react-icons/fa";
 
 const NEW_HINT_INTERVAL = 15000;
 
 const hintsContainerStyle = {
   position: "relative",
   display: "flex",
-
   minHeight: "150px",
-
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
-
   textAlign: "center"
 };
 
@@ -26,9 +24,7 @@ const hintsTextContainerStyle = {
 
 const refreshButtonContainerStyle = {
   position: "absolute",
-
   right: 0,
-
   fontSize: "36px"
 };
 
@@ -64,7 +60,14 @@ const Hint = ({ hints = [] }) => {
         <div>{hints[hintIndex]}</div>
       </div>
       <div style={refreshButtonContainerStyle}>
-        <RefreshButton onClick={nextHint} />
+        <Button
+          color={ButtonColor.DISABLED}
+          angles={ButtonAngles.CIRCLE}
+          id="refresh-button"
+          onClick={nextHint}
+        >
+          <FaRedo />
+        </Button>
       </div>
     </div>
   );

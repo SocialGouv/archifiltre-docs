@@ -4,6 +4,7 @@ import CommentsEditable from "components/report/comments-editable";
 import { withTranslation } from "react-i18next";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
+import { FaPen } from "react-icons/fa";
 
 class ReportCellComments extends React.Component {
   constructor(props) {
@@ -168,10 +169,7 @@ class ReportCellComments extends React.Component {
             <b>{props.t("report.comments")}</b>
             <span>
               &ensp;
-              <i
-                className="fi-pencil edit_hover_pencil"
-                style={{ opacity: "0.3" }}
-              />
+              <FaPen className="edit_hover_pencil" style={{ opacity: "0.3" }} />
             </span>
             <br />
           </div>

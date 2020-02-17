@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import { map, takeLast } from "rxjs/operators";
 import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
+import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   getAliasesFromStore,
   getCommentsFromStore,
@@ -31,6 +32,7 @@ export const resipExporterThunk = (
   const state = getState();
   const tags = getTagsFromStore(state);
   const filesAndFolders = getFilesAndFoldersFromStore(state);
+  const filesAndFoldersMetadata = getFilesAndFoldersMetadataFromStore(state);
   const aliases = getAliasesFromStore(state);
   const comments = getCommentsFromStore(state);
   const elementsToDelete = getFilesToDeleteFromStore(state);
@@ -42,6 +44,7 @@ export const resipExporterThunk = (
       comments,
       elementsToDelete,
       filesAndFolders,
+      filesAndFoldersMetadata,
       tags
     })
       .pipe(takeLast(1))

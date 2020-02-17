@@ -1,6 +1,7 @@
 import dateFormat from "dateformat";
 import _ from "lodash";
 import path from "path";
+import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import {
   AliasMap,
   CommentsMap,
@@ -86,11 +87,13 @@ const formatCustodialHistory = (fileAndFolder, aliases) =>
  * Mapper that transform enriched archifiltre data to Resip compatible data
  * @param aliases
  * @param comments
+ * @param filesAndFoldersMetadata
  * @returns {Object} - Resip compatible data
  */
 const transformDefaultFormatToResip = (
-  aliases,
-  comments
+  aliases: AliasMap,
+  comments: CommentsMap,
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap
 ) => enrichedFilesAndFolders => ({
   ID: enrichedFilesAndFolders.ID,
   ParentID: enrichedFilesAndFolders.ParentID,
@@ -98,8 +101,12 @@ const transformDefaultFormatToResip = (
   File: formatFile(enrichedFilesAndFolders),
   DescriptionLevel: formatDescriptionLevel(enrichedFilesAndFolders),
   Title: formatTitle(enrichedFilesAndFolders, aliases),
-  StartDate: formatDate(enrichedFilesAndFolders.last_modified_min),
-  EndDate: formatDate(enrichedFilesAndFolders.last_modified_max),
+  StartDate: formatDate(
+    filesAndFoldersMetadata[enrichedFilesAndFolders.id].minLastModified
+  ),
+  EndDate: formatDate(
+    filesAndFoldersMetadata[enrichedFilesAndFolders.id].maxLastModified
+  ),
   TransactedDate: formatDate(Date.now()),
   "CustodialHistory.CustodialHistoryItem": formatCustodialHistory(
     enrichedFilesAndFolders,
@@ -178,6 +185,7 @@ interface ResipExporterOptions {
   comments: CommentsMap;
   elementsToDelete: string[];
   filesAndFolders: FilesAndFoldersMap;
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   tags: TagMap;
 }
 
@@ -196,6 +204,7 @@ const isAncestorDeleted = (ffId: string, elementsToDelete: string[]): boolean =>
  * @param aliases - the aliases map
  * @param comments - the comments map
  * @param filesAndFolders - The files and folder structure
+ * @param filesAndFoldersMetadata
  * @param tags - The tags structure
  * @param elementsToDelete
  * @param [hook]
@@ -206,6 +215,7 @@ const resipExporter = (
     comments,
     elementsToDelete,
     filesAndFolders,
+    filesAndFoldersMetadata,
     tags
   }: ResipExporterOptions,
   hook = empty
@@ -228,13 +238,22 @@ const resipExporter = (
   const dataWithSipId = Object.keys(filesAndFolders)
     .filter(id => !isAncestorDeleted(id, elementsToDelete))
     .filter(id => id !== "")
-    .map(wrapWithHook(ffId => ({ id: ffId, ...filesAndFolders[ffId] }), hook))
+    .map(
+      wrapWithHook(
+        ffId => ({
+          id: ffId,
+          ...filesAndFolders[ffId],
+          ...filesAndFoldersMetadata[ffId]
+        }),
+        hook
+      )
+    )
     .map(wrapWithHook(addSipId, hook))
     .map(wrapWithHook(addParentId, hook))
     .map(wrapWithHook(addTagsToFf(tagsWithIndex), hook));
 
   const formattedData = dataWithSipId.map(
-    transformDefaultFormatToResip(aliases, comments)
+    transformDefaultFormatToResip(aliases, comments, filesAndFoldersMetadata)
   );
 
   return formatToCsv(formattedData, tagsWithIndex);

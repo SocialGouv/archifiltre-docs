@@ -25,13 +25,21 @@ asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, ({ type, data }) => {
       comments,
       elementsToDelete,
       filesAndFolders,
+      filesAndFoldersMetadata,
       tags,
       language
     } = data;
     translations.changeLanguage(language);
 
     const resipExportData = resipExporter(
-      { aliases, comments, elementsToDelete, filesAndFolders, tags },
+      {
+        aliases,
+        comments,
+        elementsToDelete,
+        filesAndFolders,
+        filesAndFoldersMetadata,
+        tags
+      },
       hook
     );
 

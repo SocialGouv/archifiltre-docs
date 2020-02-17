@@ -1,5 +1,14 @@
 import { FilesAndFolders } from "./files-and-folders-types";
 
+interface CreateFilesAndFoldersOptions {
+  id: string;
+  file_last_modified?: number;
+  children?: string[];
+  file_size?: number;
+  name?: string;
+  virtualPath?: string;
+}
+
 /**
  * Utility function to create a prefilled filesAndFolders.
  * @param id
@@ -11,16 +20,16 @@ import { FilesAndFolders } from "./files-and-folders-types";
  */
 export const createFilesAndFolders = ({
   id,
-  hash = "",
   file_last_modified = 0,
-  children = [] as string[],
+  children = [],
   file_size = 0,
-  name = "base-name"
-}): FilesAndFolders => ({
+  name = "base-name",
+  virtualPath
+}: CreateFilesAndFoldersOptions): FilesAndFolders => ({
   children,
   file_last_modified,
   file_size,
-  hash,
   id,
-  name
+  name,
+  virtualPath: virtualPath || id
 });

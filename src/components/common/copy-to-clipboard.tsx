@@ -1,6 +1,7 @@
 import { clipboard } from "electron";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { FaClipboardCheck, FaRegClipboard } from "react-icons/all";
 import {
   NotificationDuration,
   notifyInfo
@@ -25,7 +26,7 @@ export const CopyToClipboard = ({ stringToCopy }) => {
 
   return (
     <div className="copy-to-clipboard" style={{ width: "20px" }}>
-      <i className={isCopied ? "fi-check" : "fi-page-copy"} onClick={onClick} />
+      {isCopied ? <FaClipboardCheck /> : <FaRegClipboard onClick={onClick} />}
     </div>
   );
 };

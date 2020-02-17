@@ -3,6 +3,7 @@ import React from "react";
 import Tag from "components/tags/tag";
 
 import MultiLinesInput from "components/tags/multi-lines-input";
+import { FaTrash, FaTimes, FaPlus, FaPen } from "react-icons/fa";
 
 const cell_shrink_style = {
   padding: "0em 0.1em"
@@ -61,7 +62,7 @@ class AllTagsItem extends React.Component {
 
     const deleteBubble = (
       <div className="tags_bubble tags_cross" onClick={deleteTag}>
-        <i className="fi-trash" />
+        <FaTrash style={{ width: "50%", height: "50%" }} />
       </div>
     );
 
@@ -69,11 +70,11 @@ class AllTagsItem extends React.Component {
       <div className="tags_bubble tags_count">{tag_number}</div>
     ) : node_has_tag ? (
       <div className="tags_bubble tags_cross" onClick={removeTagFromNode}>
-        <i className="fi-x" />
+        <FaTimes style={{ width: "50%", height: "50%" }} />
       </div>
     ) : (
       <div className="tags_bubble tags_add" onClick={addTagToNode}>
-        <i className="fi-plus" />
+        <FaPlus style={{ width: "50%", height: "50%" }} />
       </div>
     );
 
@@ -105,8 +106,8 @@ class AllTagsItem extends React.Component {
     const pencil = editing ? (
       <span />
     ) : (
-      <i
-        className="fi-pencil edit_hover_pencil"
+      <FaPen
+        className="edit_hover_pencil"
         style={{ opacity: "0.3", paddingLeft: "0.4em" }}
       />
     );

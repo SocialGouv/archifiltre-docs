@@ -1,10 +1,7 @@
 import React from "react";
 
 import { mkRB } from "components/buttons/button";
-
-const arrow_style = {
-  fontSize: "1.6em"
-};
+import { FaUndo, FaRedo } from "react-icons/fa";
 
 class CtrlZ extends React.Component {
   constructor(props) {
@@ -36,7 +33,7 @@ class CtrlZ extends React.Component {
           <div className="cell small-6">
             {mkRB(
               this.props.api.undo.undo,
-              <i className="fi-arrow-left" style={arrow_style} />,
+              <FaUndo />,
               this.props.api.undo.hasAPast(),
               ""
             )}
@@ -44,7 +41,7 @@ class CtrlZ extends React.Component {
           <div className="cell small-6">
             {mkRB(
               this.props.api.undo.redo,
-              <i className="fi-arrow-right" style={arrow_style} />,
+              <FaRedo />,
               this.props.api.undo.hasAFuture(),
               ""
             )}

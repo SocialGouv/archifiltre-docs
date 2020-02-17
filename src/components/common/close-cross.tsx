@@ -1,5 +1,6 @@
 import React from "react";
+import { FaTimes } from "react-icons/fa";
 
-const CloseCross = () => <i className="fi-x" />;
+const CloseCross = () => <FaTimes />;
 
 export default CloseCross;

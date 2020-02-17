@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { withTranslation } from "react-i18next";
+import { FaTags } from "react-icons/fa";
 
 const contentStyle = {
   fontSize: "0.8em",
@@ -108,11 +109,10 @@ class AllTags extends React.Component {
         >
           <div className="cell">
             <TextAlignCenter>
-              <i
-                className="fi-pricetag-multiple"
+              <FaTags
                 style={{
                   color: Color.placeholder(),
-                  fontSize: "4em",
+                  fontSize: "3em",
                   lineHeight: 0
                 }}
               />

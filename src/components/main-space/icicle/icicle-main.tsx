@@ -27,6 +27,7 @@ import AnimatedIcicle from "./animated-icicle";
 import Icicle from "./icicle";
 import { DimsAndId } from "./icicle-rect";
 import { FillColor } from "./icicle-types";
+import { useMovableElements } from "./use-movable-elements";
 
 export type IcicleMouseHandler = (
   dimsAndId: DimsAndId,
@@ -81,6 +82,7 @@ interface IcicleMainProps {
   setDisplayRoot: (pathToElement: string[]) => void;
   lock: (pathToElement: string[], dims: any) => void;
   unlock: () => void;
+  moveElement: (movedElementId: string, targetFolderId: string) => void;
   setFocus: (pathToElement: string[], dims: any) => void;
   setNoFocus: () => void;
   setNoHover: () => void;
@@ -106,6 +108,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
   setDisplayRoot,
   lock,
   unlock,
+  moveElement,
   setFocus,
   setNoFocus,
   setNoHover
@@ -272,6 +275,10 @@ const IcicleMain: FC<IcicleMainProps> = ({
     setNoHover();
   }, []);
 
+  const { onIcicleMouseUp, onIcicleMouseDown } = useMovableElements(
+    moveElement
+  );
+
   const minimapX = icicleWidth + MINIMAP_LEFT_MARGIN;
   const minimapY = icicleHeight + MINIMAP_TOP_MARGIN;
   const minimapWidth = breadcrumbsWidth - MINIMAP_LEFT_MARGIN;
@@ -385,6 +392,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
       ref={svgRef}
       onClick={onClickHandler}
       onMouseLeave={onMouseLeaveHandler}
+      onMouseUp={onIcicleMouseUp}
+      onMouseDown={onIcicleMouseDown}
     >
       {icicle}
     </svg>

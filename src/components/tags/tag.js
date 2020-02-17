@@ -1,6 +1,7 @@
 import React from "react";
 
 import TagBadge from "./tag-badge";
+import { FaTimes } from "react-icons/fa";
 
 const defaultComponentStyle = {
   fontWeight: "bold"
@@ -21,7 +22,7 @@ const Tag = ({
         removeHandler();
       }}
     >
-      <i className="fi-x" />
+      <FaTimes style={{ width: "50%", height: "50%" }} />
     </div>
   );
 

@@ -5,6 +5,7 @@ import Button, {
   ButtonColor,
   ButtonSize
 } from "../common/button";
+import { FaSearchMinus } from "react-icons/fa";
 
 const Presentational = ({ backToRoot, isZoomed }) => {
   const { t } = useTranslation();
@@ -19,7 +20,7 @@ const Presentational = ({ backToRoot, isZoomed }) => {
       disabled={!isZoomed}
     >
       <span>
-        <i className="fi-zoom-out" />
+        <FaSearchMinus style={{ verticalAlign: "bottom" }} />
         &ensp;{t("workspace.backToRoot")}
       </span>
     </Button>

@@ -1,5 +1,5 @@
 import React from "react";
-import Icon, { MAGNIFYING_GLASS_ICON } from "./icon";
+import Icon, { SEARCH_ICON } from "./icon";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -30,7 +30,7 @@ const ClickableIcon = props => (
   <Wrapper onClick={props.onClick}>
     <Icon {...props} />
     <Overlay>
-      <Icon icon={MAGNIFYING_GLASS_ICON} color="black" />
+      <Icon icon={SEARCH_ICON} color="black" />
     </Overlay>
   </Wrapper>
 );

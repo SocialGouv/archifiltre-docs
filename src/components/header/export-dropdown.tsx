@@ -38,7 +38,7 @@ const ExportDropdown: FC<ExportDropdownProps> = ({
         <TextAlignCenter>
           <Button id="export-menu" width={ButtonWidth.WITH_SPACES}>
             {t("header.export")}{" "}
-            <FaChevronDown style={{ verticalAlign: "inherit" }} />
+            <FaChevronDown style={{ verticalAlign: "top" }} />
           </Button>
         </TextAlignCenter>
       }

@@ -147,6 +147,11 @@
   display: initial;
 }
 
+.spinner {
+  -webkit-animation: icon-spin 2s infinite linear;
+  animation: icon-spin 2s infinite linear;
+}
+
 body {
   -webkit-background-size: cover;
   -moz-background-size: cover;

@@ -6,6 +6,7 @@ import TagsEditable from "components/tags/tags-editable";
 import { withTranslation } from "react-i18next";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
+import { FaPen } from "react-icons/fa";
 
 const tagsStyle = {
   overflowY: "auto",
@@ -180,10 +181,7 @@ class ReportCellTags extends React.Component {
           <b>{this.props.t("workspace.tags")}</b>
           <span>
             &ensp;
-            <i
-              className="fi-pencil edit_hover_pencil"
-              style={{ opacity: "0.3" }}
-            />
+            <FaPen className="edit_hover_pencil" style={{ opacity: "0.3" }} />
           </span>
           <br />
           <div className="grid-x" style={tagsStyle}>

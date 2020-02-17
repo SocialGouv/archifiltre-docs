@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import { lookup } from "mime-types";
 import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { getDisplayName } from "../../util/file-and-folders-utils";
+import { FaPen, FaInfoCircle } from "react-icons/fa";
 
 const pad = "1em";
 
@@ -100,7 +101,7 @@ const Name = ({
           propName="new_display_name"
         />
         &ensp;
-        <i className="fi-pencil edit_hover_pencil" style={{ opacity: "0.3" }} />
+        <FaPen className="edit_hover_pencil" style={{ opacity: "0.3" }} />
       </span>
     );
   }
@@ -210,7 +211,7 @@ const InfoCell = ({
         <b>
           {t("report.hash")}&nbsp;
           <span data-tip={hashExplanationText} data-for="hash-explanation">
-            <i className="fi-info" />
+            <FaInfoCircle style={{ verticalAlign: "text-bottom" }} />
           </span>
           &nbsp;:&nbsp;
         </b>

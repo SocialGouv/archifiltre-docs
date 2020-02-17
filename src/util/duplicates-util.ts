@@ -82,7 +82,7 @@ const groupFileIdsByHashes: Mapper<HashesMap, DuplicatesIdMap> = memoize(
 const removeIncompleteFilesAndFolders: Mapper<
   FilesAndFoldersMap,
   FilesAndFoldersMap
-> = omitBy<FilesAndFolders>(
+> = omitBy<FilesAndFolders & { hash: string }>(
   filesAndFolders =>
     filesAndFolders.name === undefined && filesAndFolders.hash === ""
 );
@@ -142,7 +142,9 @@ const getFilteredDuplicatesMap = (
 ): Merger<FilesAndFoldersCollection, HashesMap, DuplicatesMap> =>
   memoize(
     compose(
-      groupBy(({ hash }: FilesAndFolders): string => hash || ""),
+      groupBy(
+        ({ hash }: FilesAndFolders & { hash: string }): string => hash || ""
+      ),
       filterFilesAndFoldersAndMerge(filesAndFoldersFilter)
     )
   );

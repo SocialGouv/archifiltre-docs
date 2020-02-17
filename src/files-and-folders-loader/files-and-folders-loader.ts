@@ -83,6 +83,7 @@ interface CreateFilesAndFoldersOptions {
   file_last_modified?: number;
   file_size?: number;
   id: string;
+  virtualPath?: string;
 }
 
 /**
@@ -91,19 +92,21 @@ interface CreateFilesAndFoldersOptions {
  * @param file_last_modified
  * @param file_size
  * @param id
+ * @param virtualPath
  */
 export const createFilesAndFolders = ({
   children = [],
   file_last_modified = 0,
   file_size = 0,
   id,
+  virtualPath,
 }: CreateFilesAndFoldersOptions): FilesAndFolders => ({
   children,
   file_last_modified,
   file_size,
-  hash: null,
   id,
   name: path.basename(id),
+  virtualPath: virtualPath || path.basename(id),
 });
 
 /**
@@ -136,14 +139,12 @@ export const createFilesAndFoldersDataStructure = (
   };
 
   ffInfo.forEach(([{ lastModified, size }, currentPath]) => {
-    filesAndFolders[currentPath] = {
+    filesAndFolders[currentPath] = createFilesAndFolders({
       children: [],
       file_last_modified: lastModified,
       file_size: size,
-      hash: null,
       id: currentPath,
-      name: path.basename(currentPath),
-    };
+    });
     recursivelyAddParentFolders(currentPath);
     if (hook) {
       hook();

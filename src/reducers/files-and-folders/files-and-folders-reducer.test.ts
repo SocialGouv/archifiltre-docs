@@ -1,7 +1,9 @@
 import {
+  addChild,
   addCommentsOnFilesAndFolders,
   initializeFilesAndFolders,
   markAsToDelete,
+  removeChild,
   setFilesAndFoldersAliases,
   setFilesAndFoldersHashes,
   unmarkAsToDelete,
@@ -23,14 +25,13 @@ describe("files-and-folders-reducer", () => {
     it("should replace the state with the provided filesAndFoldersMap", () => {
       const firstId = "/rootFolder/filename";
       const filesAndFolders = {
-        [firstId]: {
+        [firstId]: createFilesAndFolders({
           children: [],
           file_last_modified: 1570615679168,
           file_size: 10,
-          hash: null,
           id: firstId,
           name: "filename",
-        },
+        }),
       };
 
       expect(
@@ -41,6 +42,71 @@ describe("files-and-folders-reducer", () => {
       ).toEqual({
         ...baseState,
         filesAndFolders,
+      });
+    });
+  });
+
+  describe("ADD_CHILD", () => {
+    it("should add the element as its parent child and update the virtualPath", () => {
+      const parentId = "/1";
+      const childId = "/2";
+      const existingChildID = "/1/3";
+      const parent = createFilesAndFolders({
+        children: [existingChildID],
+        id: parentId,
+      });
+      const child = createFilesAndFolders({ id: childId });
+      const filesAndFolders = {
+        [parentId]: parent,
+        [childId]: child,
+      };
+
+      const state = { ...baseState, filesAndFolders };
+      expect(
+        filesAndFoldersReducer(state, addChild(parentId, childId))
+      ).toEqual({
+        ...baseState,
+        filesAndFolders: {
+          [parentId]: {
+            ...parent,
+            children: [existingChildID, childId],
+          },
+          [childId]: {
+            ...child,
+            virtualPath: "/1/base-name",
+          },
+        },
+      });
+    });
+  });
+
+  describe("REMOVE_CHILD", () => {
+    it("should remove the child from the parent children", () => {
+      const parentId = "/1";
+      const childId = "/2";
+      const existingChildID = "/1/3";
+      const parent = createFilesAndFolders({
+        children: [existingChildID, childId],
+        id: parentId,
+      });
+      const child = createFilesAndFolders({ id: childId });
+      const filesAndFolders = {
+        [parentId]: parent,
+        [childId]: child,
+      };
+
+      const state = { ...baseState, filesAndFolders };
+      expect(
+        filesAndFoldersReducer(state, removeChild(parentId, childId))
+      ).toEqual({
+        ...baseState,
+        filesAndFolders: {
+          ...filesAndFolders,
+          [parentId]: {
+            ...parent,
+            children: [existingChildID],
+          },
+        },
       });
     });
   });

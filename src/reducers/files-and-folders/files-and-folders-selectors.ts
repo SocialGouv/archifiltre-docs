@@ -290,3 +290,6 @@ const decomposePathToElementImpl = (id: string): string[] =>
  * Memoized function that decomposes the path to an element into each of the parent elements.
  */
 export const decomposePathToElement = memoize(decomposePathToElementImpl);
+
+export const findElementParent = (childId: string, filesAndFolders) =>
+  _.find(filesAndFolders, ({ children }) => children.includes(childId));

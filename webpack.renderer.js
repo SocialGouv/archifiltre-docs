@@ -18,7 +18,7 @@ const workerRootFolder = mode =>
     : "require('path').join(require('electron').remote.app.getAppPath(),'/electron/dist/')";
 
 module.exports = (env, argv = {}) => ({
-  devtool: "source-map",
+  devtool: argv.mode === "development" ? "source-map" : false,
   entry: {
     app: "./src/app.js"
   },

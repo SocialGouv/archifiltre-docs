@@ -3,7 +3,6 @@ const webpack = require("webpack");
 require("dotenv").config();
 
 module.exports = {
-  mode: "development",
   entry: {
     main: "./src/electron-main.js"
   },

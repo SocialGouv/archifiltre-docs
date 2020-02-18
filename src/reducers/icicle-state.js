@@ -40,7 +40,6 @@ const reader = {
   hover_dims: () => state => state.get("dims"),
   tagIdToHighlight: () => state => state.get("tag_id_to_highlight"),
   display_root: () => state => state.get("display_root"),
-  isFocused: () => state => state.get("hover_seq").length > 0,
   isLocked,
   isZoomed: () => state => state.get("display_root").length > 0,
   changeSkin: () => state => state.get("change_skin"),

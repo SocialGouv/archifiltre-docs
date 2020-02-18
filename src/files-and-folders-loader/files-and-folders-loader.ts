@@ -96,7 +96,7 @@ export const createFilesAndFolders = ({
   file_size,
   id,
   name: path.basename(id),
-  virtualPath: virtualPath || path.basename(id)
+  virtualPath: virtualPath || id
 });
 
 /**

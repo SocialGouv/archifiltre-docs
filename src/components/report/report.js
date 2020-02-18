@@ -342,7 +342,7 @@ export default function ReportApiToProps({
 }) {
   const icicle_state = api.icicle_state;
 
-  const isFocused = icicle_state.isFocused();
+  const isFocused = filesAndFoldersId !== "";
   const isLocked = icicle_state.isLocked();
 
   const isActive = isFocused || isLocked;

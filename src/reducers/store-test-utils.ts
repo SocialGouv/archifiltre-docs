@@ -12,7 +12,8 @@ export const createEmptyStore = (): StoreState => ({
     comments: {},
     elementsToDelete: [],
     filesAndFolders: {},
-    hashes: {}
+    hashes: {},
+    virtualPathToId: {}
   }),
   filesAndFoldersMetadata: {
     filesAndFoldersMetadata: {}
@@ -22,6 +23,7 @@ export const createEmptyStore = (): StoreState => ({
     tags: {}
   }),
   workspaceMetadata: wrapStoreWithUndoable({
+    hoveredElementId: "",
     iciclesSortMethod: IciclesSortMethod.SORT_BY_TYPE,
     originalPath: "",
     sessionName: ""

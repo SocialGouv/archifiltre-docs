@@ -8,7 +8,8 @@ import { StoreState } from "../store";
 import {
   FilesAndFolders,
   FilesAndFoldersMap,
-  HashesMap
+  HashesMap,
+  VirtualPathToIdMap
 } from "./files-and-folders-types";
 
 export const ROOT_FF_ID = "";
@@ -29,6 +30,14 @@ export const getFilesAndFoldersFromStore = (
  */
 export const getFilesToDeleteFromStore = (store: StoreState): string[] =>
   getCurrentState(store.filesAndFolders).elementsToDelete;
+
+/**
+ * Gets the map from virtual path to id
+ * @param store
+ */
+export const getVirtualPathToIdFromStore = (
+  store: StoreState
+): VirtualPathToIdMap => getCurrentState(store.filesAndFolders).virtualPathToId;
 
 /**
  * Reduces a filesAndFolders tree to a single value
@@ -293,3 +302,13 @@ export const decomposePathToElement = memoize(decomposePathToElementImpl);
 
 export const findElementParent = (childId: string, filesAndFolders) =>
   _.find(filesAndFolders, ({ children }) => children.includes(childId));
+
+/**
+ * Retrieve an element based on its virtual path
+ * @param filesAndFolders
+ * @param virtualPath
+ */
+export const getElementByVirtualPath = (
+  filesAndFolders: FilesAndFoldersMap,
+  virtualPath: string
+): FilesAndFolders | undefined => _.find(filesAndFolders, { virtualPath });

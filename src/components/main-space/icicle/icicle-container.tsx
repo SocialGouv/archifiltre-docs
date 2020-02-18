@@ -2,15 +2,18 @@ import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
+  decomposePathToElement,
   getAliasesFromStore,
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
   getMaxDepth,
+  getVirtualPathToIdFromStore,
   ROOT_FF_ID
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import { moveElement } from "../../../reducers/files-and-folders/files-and-folders-thunks";
 import { getTagsFromStore } from "../../../reducers/tags/tags-selectors";
+import { setHoveredElementId } from "../../../reducers/workspace-metadata/workspace-metadata-actions";
 import {
   getWorkspaceMetadataFromStore,
   useWorkspaceMetadata
@@ -33,12 +36,14 @@ export default function IcicleApiToProps({ api }) {
     getFilesAndFoldersMetadataFromStore
   );
 
+  const virtualPathToIdMap = useSelector(getVirtualPathToIdFromStore);
+
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
   const aliases = useSelector(getAliasesFromStore);
   const comments = useSelector(getCommentsFromStore);
   const elementsToDelete = useSelector(getFilesToDeleteFromStore);
 
-  const { iciclesSortMethod } = useWorkspaceMetadata();
+  const { iciclesSortMethod, hoveredElementId } = useWorkspaceMetadata();
 
   const getFfByFfId = useCallback(
     (ffId: string) => ({
@@ -59,6 +64,23 @@ export default function IcicleApiToProps({ api }) {
     },
     [icicle_state.lock, api.undo.commit]
   );
+
+  const setFocus = useCallback(id => dispatch(setHoveredElementId(id)), [
+    dispatch
+  ]);
+
+  const setNoFocus = useCallback(() => dispatch(setHoveredElementId("")), [
+    dispatch
+  ]);
+
+  const hoverSequence = useMemo(() => {
+    const { virtualPath: hoveredElementVirtualPath } = filesAndFolders[
+      hoveredElementId
+    ];
+    return decomposePathToElement(hoveredElementVirtualPath)
+      .slice(1)
+      .map(virtualPath => virtualPathToIdMap[virtualPath] || virtualPath);
+  }, [hoveredElementId, filesAndFolders, virtualPathToIdMap]);
 
   const { originalPath } = useSelector(getWorkspaceMetadataFromStore);
 
@@ -100,16 +122,17 @@ export default function IcicleApiToProps({ api }) {
       elementsToDelete={elementsToDelete}
       getFfByFfId={getFfByFfId}
       maxDepth={maxDepth}
-      hover_sequence={icicle_state.hover_sequence()}
+      hoveredElementId={hoveredElementId}
+      hoverSequence={hoverSequence}
       isLocked={isLocked}
       lock={lock}
       width_by_size={icicle_state.widthBySize()}
       root_id={ROOT_FF_ID}
       sequence={icicle_state.sequence()}
       setDisplayRoot={icicle_state.setDisplayRoot}
-      setFocus={icicle_state.setFocus}
-      setNoFocus={icicle_state.setNoFocus}
-      setNoHover={icicle_state.setNoHover}
+      setFocus={setFocus}
+      setNoFocus={setNoFocus}
+      setNoHover={setNoFocus}
       moveElement={moveElementCallback}
       tags={tags}
       unlock={icicle_state.unlock}

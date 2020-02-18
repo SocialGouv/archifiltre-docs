@@ -10,8 +10,7 @@ import {
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
-  getHashesFromStore,
-  ROOT_FF_ID
+  getHashesFromStore
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import {
   updateAliasThunk,
@@ -40,7 +39,10 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
   /* <Legacy> : to replace */
   const sequence = api.icicle_state.sequence();
   const displayRoot = api.icicle_state.display_root();
-  const filesAndFoldersId = sequence[sequence.length - 1];
+
+  const { hoveredElementId } = useWorkspaceMetadata();
+
+  const filesAndFoldersId = sequence[sequence.length - 1] || hoveredElementId;
   /* </Legacy> */
   const tagIdsForCurrentFile = useSelector((state: StoreState) =>
     getAllTagIdsForFile(getTagsFromStore(state), filesAndFoldersId)

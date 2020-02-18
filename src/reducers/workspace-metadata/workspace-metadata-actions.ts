@@ -1,5 +1,6 @@
 import {
   IciclesSortMethod,
+  SET_HOVERED_ELEMENT_ID,
   SET_ICICLES_SORT_METHOD,
   SET_ORIGINAL_PATH,
   SET_SESSION_NAME,
@@ -29,4 +30,15 @@ export const setIciclesSortMethod = (
 ): WorkspaceMetadataAction => ({
   sortMethod,
   type: SET_ICICLES_SORT_METHOD
+});
+
+/**
+ * Sets the hovered element ID in the workspace
+ * @param hoveredElementId
+ */
+export const setHoveredElementId = (
+  hoveredElementId: string
+): WorkspaceMetadataAction => ({
+  hoveredElementId,
+  type: SET_HOVERED_ELEMENT_ID
 });

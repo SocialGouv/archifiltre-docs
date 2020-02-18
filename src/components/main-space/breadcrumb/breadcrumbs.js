@@ -97,16 +97,18 @@ class Breadcrumbs extends React.PureComponent {
       isLocked,
       api: {
         icicle_state: icicleState,
-        icicle_state: { lock_sequence, hover_sequence }
+        icicle_state: { lock_sequence }
       },
+      hoverSequence,
       originalPath,
       root_id,
       maxDepth
     } = this.props;
     const trueFHeight = this.trueFHeight;
-    const nodesWithRootId = isFocused ? hover_sequence() : lock_sequence();
+    const activeBreadcrumbs = isFocused
+      ? hoverSequence
+      : lock_sequence().slice(1);
     const inactiveBreadcrumbs = this.getInactiveBreadcrumbs(maxDepth);
-    const activeBreadcrumbs = nodesWithRootId.slice(1);
     const breadcrumbSequenceHeight = activeBreadcrumbs.map(trueFHeight);
     const cumulatedBreadcrumbSequenceHeight = computeCumulative(
       breadcrumbSequenceHeight
@@ -156,9 +158,16 @@ class Breadcrumbs extends React.PureComponent {
 }
 
 export default function BreadcrumbsApiToProps(props) {
-  const { api, aliases, maxDepth, getFfByFfId, originalPath } = props;
+  const {
+    api,
+    aliases,
+    maxDepth,
+    getFfByFfId,
+    originalPath,
+    hoverSequence
+  } = props;
   const { icicle_state } = api;
-  const breadcrumb_sequence = icicle_state.sequence();
+  const breadcrumb_sequence = hoverSequence || icicle_state.sequence();
   const { t } = useTranslation();
 
   return (
@@ -167,7 +176,7 @@ export default function BreadcrumbsApiToProps(props) {
       aliases={aliases}
       originalPath={originalPath}
       breadcrumb_sequence={breadcrumb_sequence}
-      isFocused={icicle_state.isFocused()}
+      isFocused={hoverSequence.length > 0}
       isLocked={icicle_state.isLocked()}
       maxDepth={maxDepth}
       getFfByFfId={getFfByFfId}

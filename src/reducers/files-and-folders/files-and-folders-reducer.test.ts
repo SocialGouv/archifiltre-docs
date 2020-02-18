@@ -17,7 +17,8 @@ const baseState: FilesAndFoldersState = {
   comments: {},
   elementsToDelete: [],
   filesAndFolders: {},
-  hashes: {}
+  hashes: {},
+  virtualPathToId: {}
 };
 
 describe("files-and-folders-reducer", () => {
@@ -75,6 +76,9 @@ describe("files-and-folders-reducer", () => {
             ...child,
             virtualPath: "/1/base-name"
           }
+        },
+        virtualPathToId: {
+          ["/1/base-name"]: childId
         }
       });
     });

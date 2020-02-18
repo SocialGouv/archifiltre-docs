@@ -35,12 +35,17 @@ export interface AliasMap {
   [id: string]: string;
 }
 
+export interface VirtualPathToIdMap {
+  [id: string]: string;
+}
+
 export interface FilesAndFoldersState {
   filesAndFolders: FilesAndFoldersMap;
   hashes: HashesMap;
   aliases: AliasMap;
   comments: CommentsMap;
   elementsToDelete: string[];
+  virtualPathToId: VirtualPathToIdMap;
 }
 
 interface InitializeFilesAndFoldersAction extends Action {

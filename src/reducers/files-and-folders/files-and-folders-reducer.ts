@@ -19,7 +19,8 @@ export const initialState: FilesAndFoldersState = {
   comments: {},
   elementsToDelete: [],
   filesAndFolders: {},
-  hashes: {}
+  hashes: {},
+  virtualPathToId: {}
 };
 
 /**
@@ -37,6 +38,7 @@ const filesAndFoldersReducer = (
     case ADD_CHILD:
       const parent = state.filesAndFolders[action.parentId];
       const child = state.filesAndFolders[action.childId];
+      const virtualPath = path.join(parent.virtualPath, child.name);
       return {
         ...state,
         filesAndFolders: {
@@ -47,8 +49,12 @@ const filesAndFoldersReducer = (
           },
           [action.childId]: {
             ...child,
-            virtualPath: path.join(parent.virtualPath, child.name)
+            virtualPath
           }
+        },
+        virtualPathToId: {
+          ...state.virtualPathToId,
+          [virtualPath]: action.childId
         }
       };
     case REMOVE_CHILD:

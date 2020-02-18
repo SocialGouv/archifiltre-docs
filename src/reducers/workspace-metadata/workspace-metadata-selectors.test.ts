@@ -3,6 +3,7 @@ import { getWorkspaceMetadataFromStore } from "./workspace-metadata-selectors";
 import { IciclesSortMethod } from "./workspace-metadata-types";
 
 const workspaceMetadata = {
+  hoveredElementId: "",
   iciclesSortMethod: IciclesSortMethod.SORT_BY_DATE,
   originalPath: "original-path",
   sessionName: "session-name"

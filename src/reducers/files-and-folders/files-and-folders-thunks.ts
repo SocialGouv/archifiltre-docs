@@ -1,6 +1,7 @@
 import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/files-and-folders-loader";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
+import { isExactFileOrAncestor } from "../../util/file-and-folders-utils";
 import { ArchifiltreThunkAction } from "../archifiltre-types";
 import { initFilesAndFoldersMetatada } from "../files-and-folders-metadata/files-and-folders-metadata-actions";
 import {
@@ -12,7 +13,8 @@ import {
 } from "./files-and-folders-actions";
 import {
   findElementParent,
-  getFilesAndFoldersFromStore
+  getFilesAndFoldersFromStore,
+  isFile
 } from "./files-and-folders-selectors";
 
 interface FfHashMap {
@@ -70,7 +72,14 @@ export const moveElement = (elementId, newParentId): ArchifiltreThunkAction => (
 ) => {
   const filesAndFolders = getFilesAndFoldersFromStore(getState());
   const parent = findElementParent(elementId, filesAndFolders);
-
+  const newParentVirtualPath = filesAndFolders[newParentId].virtualPath;
+  const elementVirtualPath = filesAndFolders[elementId].virtualPath;
+  if (
+    isExactFileOrAncestor(newParentVirtualPath, elementVirtualPath) ||
+    isFile(filesAndFolders[newParentId])
+  ) {
+    return;
+  }
   dispatch(removeChild(parent.id, elementId));
   dispatch(addChild(newParentId, elementId));
 

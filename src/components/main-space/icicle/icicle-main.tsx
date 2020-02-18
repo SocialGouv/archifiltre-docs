@@ -25,7 +25,7 @@ import MinimapBracket from "../minimap-bracket";
 import Ruler from "../ruler";
 import AnimatedIcicle from "./animated-icicle";
 import Icicle from "./icicle";
-import { DimsAndId } from "./icicle-rect";
+import { Dims, DimsAndId } from "./icicle-rect";
 import { FillColor } from "./icicle-types";
 import { useMovableElements } from "./use-movable-elements";
 
@@ -62,6 +62,10 @@ const shouldRenderChildMinimap = (x: number, elementWidth: number): boolean => {
   return elementWidth > minimumMinimapElementWidth;
 };
 
+interface DimsMap {
+  [id: string]: Dims;
+}
+
 interface IcicleMainProps {
   api: any;
   aliases: AliasMap;
@@ -72,7 +76,8 @@ interface IcicleMainProps {
   display_root: string;
   fillColor: FillColor;
   sequence: string[];
-  hover_sequence: string[];
+  hoveredElementId: string;
+  hoverSequence: string[];
   elementsToDelete: string[];
   getChildrenIdFromId: (id: string) => string[];
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
@@ -83,7 +88,7 @@ interface IcicleMainProps {
   lock: (pathToElement: string[], dims: any) => void;
   unlock: () => void;
   moveElement: (movedElementId: string, targetFolderId: string) => void;
-  setFocus: (pathToElement: string[], dims: any) => void;
+  setFocus: (id: string) => void;
   setNoFocus: () => void;
   setNoHover: () => void;
 }
@@ -98,7 +103,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
   display_root: displayRoot,
   fillColor,
   sequence,
-  hover_sequence: hoverSequence,
+  hoveredElementId,
+  hoverSequence,
   elementsToDelete,
   getChildrenIdFromId,
   getFfByFfId,
@@ -117,6 +123,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
     viewBoxHeight: 300,
     viewBoxWidth: 1000
   });
+
+  const [hoveredDims, setHoveredDims] = useState<Dims | {}>({});
 
   const icicleHeight = viewBoxHeight * ICICLES_VIEWBOX_RATIO;
   const icicleWidth = viewBoxWidth * ICICLES_VIEWBOX_RATIO;
@@ -241,9 +249,9 @@ const IcicleMain: FC<IcicleMainProps> = ({
    * Handles click on icicle rectangle
    */
   const onIcicleRectClickHandler = useCallback(
-    ({ id, dims }, event) => {
+    ({ id, dims: newDims }, event) => {
       event.stopPropagation();
-      lock(decomposePathToElement(id), dims());
+      lock(decomposePathToElement(id), newDims());
     },
     [lock]
   );
@@ -262,10 +270,11 @@ const IcicleMain: FC<IcicleMainProps> = ({
    * Handles mouse over icicle rectangle
    */
   const onIcicleRectMouseOverHandler = useCallback(
-    ({ id, dims }) => {
-      setFocus(decomposePathToElement(id), dims());
+    ({ id, dims: newDims }) => {
+      setHoveredDims(newDims());
+      setFocus(id);
     },
-    [decomposePathToElement, setFocus]
+    [decomposePathToElement, setFocus, setHoveredDims]
   );
 
   /**
@@ -303,7 +312,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
         getChildrenIdFromId={getChildrenIdFromId}
         fillColor={fillColor}
         sequence={sequence}
-        hover_sequence={hoverSequence}
+        hoverSequence={hoverSequence}
         shouldRenderChild={isIcicleInViewport}
         onIcicleRectClickHandler={onIcicleRectClickHandler}
         onIcicleRectDoubleClickHandler={onIcicleRectDoubleClickHandler}
@@ -319,7 +328,10 @@ const IcicleMain: FC<IcicleMainProps> = ({
         y={icicleHeight}
         dx={icicleWidth}
         dy={rulerHeight}
+        hoverSequence={hoverSequence}
+        hoveredElementId={hoveredElementId}
         fillColor={fillColor}
+        hoveredDims={hoveredDims}
       />
 
       <BreadCrumbs
@@ -331,6 +343,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
         x={icicleWidth}
         dx={breadcrumbsWidth}
         dy={icicleHeight}
+        hoverSequence={hoverSequence}
         trueFHeight={normalizeHeight}
         fillColor={fillColor}
       />
@@ -360,7 +373,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
           getChildrenIdFromId={getChildrenIdFromId}
           fillColor={fillColor}
           sequence={sequence}
-          hover_sequence={hoverSequence}
+          hoverSequence={hoverSequence}
           shouldRenderChild={shouldRenderChildMinimap}
           onIcicleRectClickHandler={FunctionUtil.empty}
           onIcicleRectDoubleClickHandler={FunctionUtil.empty}

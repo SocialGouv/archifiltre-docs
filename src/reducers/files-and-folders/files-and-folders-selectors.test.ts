@@ -4,6 +4,7 @@ import { initialState as filesAndFoldersInitialState } from "./files-and-folders
 import {
   decomposePathToElement,
   findElementParent,
+  getElementByVirtualPath,
   getFileCount,
   getFiles,
   getFilesAndFoldersAverageLastModified,
@@ -287,6 +288,14 @@ describe("files-and-folders-selectors", () => {
       expect(findElementParent(child12Id, filesAndFoldersTestMap)).toEqual(
         child1
       );
+    });
+  });
+
+  describe("getElementByVirtualPath", () => {
+    it("should find the right element", () => {
+      expect(
+        getElementByVirtualPath(filesAndFoldersTestMap, child11Id)
+      ).toEqual(child11);
     });
   });
 });

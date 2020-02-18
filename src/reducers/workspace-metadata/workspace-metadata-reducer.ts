@@ -1,6 +1,7 @@
 import undoable from "../enhancers/undoable/undoable";
 import {
   IciclesSortMethod,
+  SET_HOVERED_ELEMENT_ID,
   SET_ICICLES_SORT_METHOD,
   SET_ORIGINAL_PATH,
   SET_SESSION_NAME,
@@ -9,6 +10,7 @@ import {
 } from "./workspace-metadata-types";
 
 const initialState: WorkspaceMetadataState = {
+  hoveredElementId: "",
   iciclesSortMethod: IciclesSortMethod.SORT_BY_TYPE,
   originalPath: "",
   sessionName: "",
@@ -25,6 +27,8 @@ const workspaceMetadataReducer = (
       return { ...state, originalPath: action.originalPath };
     case SET_ICICLES_SORT_METHOD:
       return { ...state, iciclesSortMethod: action.sortMethod };
+    case SET_HOVERED_ELEMENT_ID:
+      return { ...state, hoveredElementId: action.hoveredElementId };
     default:
       return state;
   }

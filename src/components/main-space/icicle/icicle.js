@@ -99,6 +99,7 @@ export default class Icicle extends PureComponent {
       getChildrenIdFromId,
       normalizeWidth,
       elementsToDelete,
+      hoverSequence,
       onIcicleRectClickHandler: onClickHandler,
       onIcicleRectDoubleClickHandler: onDoubleClickHandler,
       onIcicleRectMouseOverHandler: onMouseOverHandler,
@@ -129,26 +130,25 @@ export default class Icicle extends PureComponent {
     const icicle_state = api.icicle_state;
 
     const style = {};
-    if (icicle_state.isFocused() || icicle_state.isLocked()) {
+    if (hoverSequence.length > 0 || icicle_state.isLocked()) {
       style.opacity = 0.3;
     }
 
     const lock = icicle_state.lock_sequence();
-    const hover = icicle_state.hover_sequence();
 
     // Locked + hovered => 1
     // Locked + not hovered => 0.6
     // NotLocked + hovered => 0.3
     let lockedHovered;
-    if (hover.length > 0) {
-      lockedHovered = lock.filter((id) => hover.includes(id));
+    if (hoverSequence.length > 0) {
+      lockedHovered = lock.filter((id) => hoverSequence.includes(id));
     } else {
       lockedHovered = lock;
     }
 
-    const lockedNotHovered = lock.filter((id) => !hover.includes(id));
+    const lockedNotHovered = lock.filter((id) => !hoverSequence.includes(id));
 
-    const unlockedHovered = hover.filter((id) => !lock.includes(id));
+    const unlockedHovered = hoverSequence.filter((id) => !lock.includes(id));
 
     const lockedHoveredComponents = arrayOfIdToComponents(
       "lockedDisplay",

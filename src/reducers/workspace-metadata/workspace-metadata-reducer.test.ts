@@ -1,4 +1,5 @@
 import {
+  setHoveredElementId,
   setIciclesSortMethod,
   setOriginalPath,
   setSessionName,
@@ -7,6 +8,7 @@ import { workspaceMetadataReducer } from "./workspace-metadata-reducer";
 import { IciclesSortMethod } from "./workspace-metadata-types";
 
 const baseState = {
+  hoveredElementId: "",
   iciclesSortMethod: IciclesSortMethod.SORT_BY_TYPE,
   originalPath: "original-path",
   sessionName: "session",
@@ -49,6 +51,20 @@ describe("workspace-metadata-reducer", () => {
     expect(nextState).toEqual({
       ...baseState,
       iciclesSortMethod: sortMethod,
+    });
+  });
+
+  it("shoule handle SET_HOVERED_ELEMENT_ID", () => {
+    const hoveredElementId = "hovered-id";
+
+    const nextState = workspaceMetadataReducer(
+      baseState,
+      setHoveredElementId(hoveredElementId)
+    );
+
+    expect(nextState).toEqual({
+      ...baseState,
+      hoveredElementId
     });
   });
 });

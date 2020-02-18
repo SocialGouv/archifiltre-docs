@@ -20,6 +20,7 @@ export const initialState: FilesAndFoldersState = {
   elementsToDelete: [],
   filesAndFolders: {},
   hashes: {},
+  virtualPathToId: {},
 };
 
 /**
@@ -37,19 +38,24 @@ const filesAndFoldersReducer = (
     case ADD_CHILD:
       const parent = state.filesAndFolders[action.parentId];
       const child = state.filesAndFolders[action.childId];
+      const virtualPath = path.join(parent.virtualPath, child.name);
       return {
         ...state,
         filesAndFolders: {
           ...state.filesAndFolders,
           [action.parentId]: {
             ...parent,
-            children: _.uniq(parent.children.concat([action.childId]))
+            children: _.uniq(parent.children.concat([action.childId])),
           },
           [action.childId]: {
             ...child,
-            virtualPath: path.join(parent.virtualPath, child.name)
-          }
-        }
+            virtualPath,
+          },
+        },
+        virtualPathToId: {
+          ...state.virtualPathToId,
+          [virtualPath]: action.childId,
+        },
       };
     case REMOVE_CHILD:
       return {
@@ -61,9 +67,9 @@ const filesAndFoldersReducer = (
             children: _.without(
               state.filesAndFolders[action.parentId].children,
               action.childId
-            )
-          }
-        }
+            ),
+          },
+        },
       };
     case SET_FILES_AND_FOLDERS_ALIAS:
       return {

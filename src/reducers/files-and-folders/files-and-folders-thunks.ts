@@ -12,7 +12,7 @@ import {
 } from "./files-and-folders-actions";
 import {
   findElementParent,
-  getFilesAndFoldersFromStore
+  getFilesAndFoldersFromStore,
 } from "./files-and-folders-selectors";
 
 interface FfHashMap {

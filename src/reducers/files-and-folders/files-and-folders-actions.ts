@@ -88,7 +88,7 @@ export const unmarkAsToDelete = (
 export const removeChild = (parentId, childId): FilesAndFoldersActionTypes => ({
   childId,
   parentId,
-  type: REMOVE_CHILD
+  type: REMOVE_CHILD,
 });
 
 /**
@@ -99,5 +99,5 @@ export const removeChild = (parentId, childId): FilesAndFoldersActionTypes => ({
 export const addChild = (parentId, childId): FilesAndFoldersActionTypes => ({
   childId,
   parentId,
-  type: ADD_CHILD
+  type: ADD_CHILD,
 });

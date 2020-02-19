@@ -188,6 +188,7 @@ class AllTags extends React.Component {
 const AllTagsApiToProps = ({
   api,
   tags,
+  focusedNodeId,
   renameTag,
   deleteTag,
   deleteTagged,
@@ -202,9 +203,6 @@ const AllTagsApiToProps = ({
 
   const rootElementId = "";
   const total_volume = filesAndFoldersMetadata[rootElementId].childrenTotalSize;
-
-  const sequence = icicle_state.sequence();
-  const focused_node_id = sequence[sequence.length - 1];
 
   const tag_id_to_highlight = icicle_state.tagIdToHighlight();
 
@@ -244,7 +242,7 @@ const AllTagsApiToProps = ({
   return (
     <AllTags
       tag_id_to_highlight={tag_id_to_highlight}
-      focused_node_id={focused_node_id}
+      focused_node_id={focusedNodeId}
       total_volume={total_volume}
       highlightTag={highlightTag}
       stopHighlightingTag={stopHighlightingTag}

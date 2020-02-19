@@ -1,7 +1,6 @@
 import BreadCrumbPoly from "./breadcrumb-poly";
 import BreadCrumbText from "./breadcrumb-text";
 import React, { useCallback } from "react";
-import { decomposePathToElement } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import { CopyToClipboard } from "../../common/copy-to-clipboard";
 import { formatPathForUserSystem } from "../../../util/file-sys-util";
 
@@ -24,7 +23,7 @@ export const Breadcrumb = ({
   isFirst,
   isLast,
   opacity,
-  icicleState,
+  onBreadcrumbClick,
   originalPath,
   isActive
 }) => {
@@ -33,15 +32,28 @@ export const Breadcrumb = ({
       if (!isActive) {
         return;
       }
-      event.stopPropagation();
-      icicleState.lock(decomposePathToElement(nodeId), {
-        x: x_poly,
-        y: y_poly,
-        dx: width_poly,
-        dy: height_poly
-      });
+      onBreadcrumbClick(
+        {
+          id: nodeId,
+          dims: () => ({
+            x: x_poly,
+            y: y_poly,
+            dx: width_poly,
+            dy: height_poly
+          })
+        },
+        event
+      );
     },
-    [height_poly, width_poly, x_poly, y_poly, icicleState, nodeId, isActive]
+    [
+      height_poly,
+      width_poly,
+      x_poly,
+      y_poly,
+      onBreadcrumbClick,
+      nodeId,
+      isActive
+    ]
   );
 
   const basePath = originalPath.substring(0, originalPath.lastIndexOf("/"));

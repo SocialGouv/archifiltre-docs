@@ -84,7 +84,7 @@ class Breadcrumbs extends React.PureComponent {
   }
 
   getOpacity(isLocked, nodeId) {
-    return this.props.api.icicle_state.lock_sequence().includes(nodeId)
+    return this.props.lockedSequence.includes(nodeId)
       ? 1
       : isLocked
       ? 0.4
@@ -95,19 +95,15 @@ class Breadcrumbs extends React.PureComponent {
     const {
       isFocused,
       isLocked,
-      api: {
-        icicle_state: icicleState,
-        icicle_state: { lock_sequence }
-      },
+      onBreadcrumbClick,
       hoverSequence,
+      lockedSequence,
       originalPath,
       root_id,
       maxDepth
     } = this.props;
     const trueFHeight = this.trueFHeight;
-    const activeBreadcrumbs = isFocused
-      ? hoverSequence
-      : lock_sequence().slice(1);
+    const activeBreadcrumbs = isFocused ? hoverSequence : lockedSequence;
     const inactiveBreadcrumbs = this.getInactiveBreadcrumbs(maxDepth);
     const breadcrumbSequenceHeight = activeBreadcrumbs.map(trueFHeight);
     const cumulatedBreadcrumbSequenceHeight = computeCumulative(
@@ -146,7 +142,7 @@ class Breadcrumbs extends React.PureComponent {
               isLast={isLast}
               isFirst={isFirst}
               opacity={opacity}
-              icicleState={icicleState}
+              onBreadcrumbClick={onBreadcrumbClick}
               originalPath={originalPath}
               isActive={isActive}
             />
@@ -159,15 +155,13 @@ class Breadcrumbs extends React.PureComponent {
 
 export default function BreadcrumbsApiToProps(props) {
   const {
-    api,
     aliases,
     maxDepth,
     getFfByFfId,
     originalPath,
-    hoverSequence
+    hoverSequence,
+    lockedSequence
   } = props;
-  const { icicle_state } = api;
-  const breadcrumb_sequence = hoverSequence || icicle_state.sequence();
   const { t } = useTranslation();
 
   return (
@@ -175,9 +169,8 @@ export default function BreadcrumbsApiToProps(props) {
       {...props}
       aliases={aliases}
       originalPath={originalPath}
-      breadcrumb_sequence={breadcrumb_sequence}
       isFocused={hoverSequence.length > 0}
-      isLocked={icicle_state.isLocked()}
+      isLocked={lockedSequence.length > 0}
       maxDepth={maxDepth}
       getFfByFfId={getFfByFfId}
       root_id={ROOT_FF_ID}

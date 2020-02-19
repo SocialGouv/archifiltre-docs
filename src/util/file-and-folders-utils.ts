@@ -194,6 +194,26 @@ export const getDisplayName = (
     : elementName;
 
 /**
+ * Create a element id sequence from the virtual path of a file
+ * @param targetElementId
+ * @param filesAndFolders
+ * @param virtualPathToIdMap
+ */
+export const createFilePathSequence = (
+  targetElementId: string,
+  filesAndFolders: FilesAndFoldersMap,
+  virtualPathToIdMap: VirtualPathToIdMap
+): string[] => {
+  const { virtualPath: targetElementVirtualPath } = filesAndFolders[
+    targetElementId
+  ];
+
+  return decomposePathToElement(targetElementVirtualPath)
+    .slice(1)
+    .map((virtualPath) => virtualPathToIdMap[virtualPath] || virtualPath);
+};
+
+/**
  * Returns the mime type of the filesAndFolders parameter. Indicates if the format is unknown or if the element is a folder
  * @param filesAndFolders
  */
@@ -223,24 +243,4 @@ export const getAllChildren = (filesAndFoldersMap, filesAndFoldersId) => {
 
   getAllChildrenRec(filesAndFoldersId);
   return allChildren;
-};
-
-/**
- * Create a element id sequence from the virtual path of a file
- * @param targetElementId
- * @param filesAndFolders
- * @param virtualPathToIdMap
- */
-export const createFilePathSequence = (
-  targetElementId: string,
-  filesAndFolders: FilesAndFoldersMap,
-  virtualPathToIdMap: VirtualPathToIdMap
-): string[] => {
-  const { virtualPath: targetElementVirtualPath } = filesAndFolders[
-    targetElementId
-  ];
-
-  return decomposePathToElement(targetElementVirtualPath)
-    .slice(1)
-    .map((virtualPath) => virtualPathToIdMap[virtualPath] || virtualPath);
 };

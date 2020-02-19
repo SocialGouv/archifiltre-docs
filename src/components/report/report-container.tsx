@@ -37,12 +37,11 @@ interface ReportContainerProps {
 
 const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
   /* <Legacy> : to replace */
-  const sequence = api.icicle_state.sequence();
   const displayRoot = api.icicle_state.display_root();
 
-  const { hoveredElementId } = useWorkspaceMetadata();
+  const { hoveredElementId, lockedElementId } = useWorkspaceMetadata();
 
-  const filesAndFoldersId = sequence[sequence.length - 1] || hoveredElementId;
+  const filesAndFoldersId = lockedElementId || hoveredElementId;
   /* </Legacy> */
   const tagIdsForCurrentFile = useSelector((state: StoreState) =>
     getAllTagIdsForFile(getTagsFromStore(state), filesAndFoldersId)
@@ -124,6 +123,7 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
     <ReportApiToProps
       originalPath={originalPath}
       tagsForCurrentFile={tagsForCurrentFile}
+      isLocked={lockedElementId !== ""}
       currentFileHash={currentFileHash}
       currentFileAlias={currentFileAlias}
       currentFileComment={currentFileComment}
@@ -134,7 +134,6 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
       updateAlias={updateAlias}
       updateComment={updateComment}
       toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
-      api={api}
       fillColor={fillColor}
       createTag={createTag}
       untag={untag}

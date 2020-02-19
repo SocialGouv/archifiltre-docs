@@ -324,7 +324,6 @@ const Report = ({
 
 export default function ReportApiToProps({
   originalPath,
-  api,
   createTag,
   untag,
   currentFileHash,
@@ -335,15 +334,13 @@ export default function ReportApiToProps({
   filesAndFolders,
   filesAndFoldersId,
   filesAndFoldersMetadata,
+  isLocked,
   toggleCurrentFileDeleteState,
   updateAlias,
   updateComment,
   fillColor,
 }) {
-  const icicle_state = api.icicle_state;
-
   const isFocused = filesAndFoldersId !== "";
-  const isLocked = icicle_state.isLocked();
 
   const isActive = isFocused || isLocked;
 

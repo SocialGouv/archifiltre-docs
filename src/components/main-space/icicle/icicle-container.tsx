@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
-  decomposePathToElement,
   getAliasesFromStore,
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
@@ -13,20 +12,22 @@ import {
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import { moveElement } from "../../../reducers/files-and-folders/files-and-folders-thunks";
 import { getTagsFromStore } from "../../../reducers/tags/tags-selectors";
-import { setHoveredElementId } from "../../../reducers/workspace-metadata/workspace-metadata-actions";
+import {
+  setHoveredElementId,
+  setLockedElementId,
+} from "../../../reducers/workspace-metadata/workspace-metadata-actions";
 import {
   getWorkspaceMetadataFromStore,
   useWorkspaceMetadata,
 } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { IciclesSortMethod } from "../../../reducers/workspace-metadata/workspace-metadata-types";
 import { useFillColor } from "../../../util/color-util";
+import { createFilePathSequence } from "../../../util/file-and-folders-utils";
 import IcicleMain from "./icicle-main";
 
 export default function IcicleApiToProps({ api }) {
   const icicle_state = api.icicle_state;
-  const lockSequence = icicle_state.lock_sequence();
   const displayRoot = icicle_state.display_root();
-  const isLocked = lockSequence.length > 0;
 
   const dispatch = useDispatch();
 
@@ -43,7 +44,11 @@ export default function IcicleApiToProps({ api }) {
   const comments = useSelector(getCommentsFromStore);
   const elementsToDelete = useSelector(getFilesToDeleteFromStore);
 
-  const { iciclesSortMethod, hoveredElementId } = useWorkspaceMetadata();
+  const {
+    iciclesSortMethod,
+    hoveredElementId,
+    lockedElementId,
+  } = useWorkspaceMetadata();
 
   const getFfByFfId = useCallback(
     (ffId: string) => ({
@@ -58,11 +63,11 @@ export default function IcicleApiToProps({ api }) {
   ]);
 
   const lock = useCallback(
-    (...args) => {
-      icicle_state.lock(...args);
+    (id) => {
+      dispatch(setLockedElementId(id));
       api.undo.commit();
     },
-    [icicle_state.lock, api.undo.commit]
+    [dispatch, api.undo.commit]
   );
 
   const setFocus = useCallback((id) => dispatch(setHoveredElementId(id)), [
@@ -73,14 +78,29 @@ export default function IcicleApiToProps({ api }) {
     dispatch,
   ]);
 
-  const hoverSequence = useMemo(() => {
-    const { virtualPath: hoveredElementVirtualPath } = filesAndFolders[
-      hoveredElementId
-    ];
-    return decomposePathToElement(hoveredElementVirtualPath)
-      .slice(1)
-      .map((virtualPath) => virtualPathToIdMap[virtualPath] || virtualPath);
-  }, [hoveredElementId, filesAndFolders, virtualPathToIdMap]);
+  const unlock = useCallback(() => dispatch(setLockedElementId("")), [
+    dispatch,
+  ]);
+
+  const hoverSequence = useMemo(
+    () =>
+      createFilePathSequence(
+        hoveredElementId,
+        filesAndFolders,
+        virtualPathToIdMap
+      ),
+    [hoveredElementId, filesAndFolders, virtualPathToIdMap]
+  );
+
+  const lockedSequence = useMemo(
+    () =>
+      createFilePathSequence(
+        lockedElementId,
+        filesAndFolders,
+        virtualPathToIdMap
+      ),
+    [lockedElementId, filesAndFolders, virtualPathToIdMap]
+  );
 
   const { originalPath } = useSelector(getWorkspaceMetadataFromStore);
 
@@ -123,19 +143,19 @@ export default function IcicleApiToProps({ api }) {
       getFfByFfId={getFfByFfId}
       maxDepth={maxDepth}
       hoveredElementId={hoveredElementId}
+      lockedElementId={lockedElementId}
       hoverSequence={hoverSequence}
-      isLocked={isLocked}
+      lockedSequence={lockedSequence}
       lock={lock}
       width_by_size={icicle_state.widthBySize()}
       root_id={ROOT_FF_ID}
-      sequence={icicle_state.sequence()}
       setDisplayRoot={icicle_state.setDisplayRoot}
       setFocus={setFocus}
       setNoFocus={setNoFocus}
       setNoHover={setNoFocus}
       moveElement={moveElementCallback}
       tags={tags}
-      unlock={icicle_state.unlock}
+      unlock={unlock}
     />
   );
 }

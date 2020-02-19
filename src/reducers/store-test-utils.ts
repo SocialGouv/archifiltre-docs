@@ -27,6 +27,7 @@ export const createEmptyStore = (): StoreState => ({
   workspaceMetadata: wrapStoreWithUndoable({
     hoveredElementId: "",
     iciclesSortMethod: IciclesSortMethod.SORT_BY_TYPE,
+    lockedElementId: "",
     originalPath: "",
     sessionName: "",
   }),

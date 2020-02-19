@@ -3,6 +3,7 @@ import {
   IciclesSortMethod,
   SET_HOVERED_ELEMENT_ID,
   SET_ICICLES_SORT_METHOD,
+  SET_LOCKED_ELEMENT_ID,
   SET_ORIGINAL_PATH,
   SET_SESSION_NAME,
   WorkspaceMetadataAction,
@@ -12,6 +13,7 @@ import {
 const initialState: WorkspaceMetadataState = {
   hoveredElementId: "",
   iciclesSortMethod: IciclesSortMethod.SORT_BY_TYPE,
+  lockedElementId: "",
   originalPath: "",
   sessionName: "",
 };
@@ -29,6 +31,8 @@ const workspaceMetadataReducer = (
       return { ...state, iciclesSortMethod: action.sortMethod };
     case SET_HOVERED_ELEMENT_ID:
       return { ...state, hoveredElementId: action.hoveredElementId };
+    case SET_LOCKED_ELEMENT_ID:
+      return { ...state, lockedElementId: action.lockedElementId };
     default:
       return state;
   }

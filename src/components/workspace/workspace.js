@@ -42,7 +42,6 @@ const WorkspaceApiToProps = props => {
     getFfByFfId: props.getFfByFfId,
     display_root: icicle_state.display_root(),
     root_id: ROOT_FF_ID,
-    change_skin: icicle_state.changeSkin(),
     width_by_size: icicle_state.widthBySize()
   };
 

@@ -9,6 +9,7 @@ import {
   unmarkAsToDelete,
 } from "./files-and-folders-actions";
 import { filesAndFoldersReducer } from "./files-and-folders-reducer";
+import { ROOT_FF_ID } from "./files-and-folders-selectors";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
 import { FilesAndFoldersState } from "./files-and-folders-types";
 
@@ -79,6 +80,73 @@ describe("files-and-folders-reducer", () => {
         },
         virtualPathToId: {
           ["/1/base-name"]: childId,
+        },
+      });
+    });
+
+    it("should recursively update the children virtual path", () => {
+      const rootFolderId = "/root-folder";
+      const folder1Id = "/root-folder/folder1";
+      const folder2Id = "/root-folder/folder2";
+      const file1Id = "/root-folder/folder1/file1";
+      const file2Id = "/root-folder/folder2/file2";
+      const rootFf = createFilesAndFolders({
+        children: [rootFolderId],
+        id: ROOT_FF_ID,
+      });
+      const rootFolder = createFilesAndFolders({
+        children: [folder1Id],
+        id: rootFolderId,
+        name: "root-folder",
+      });
+      const folder1 = createFilesAndFolders({
+        children: [file1Id],
+        id: folder1Id,
+        name: "folder1",
+      });
+      const folder2 = createFilesAndFolders({
+        children: [file2Id],
+        id: folder2Id,
+        name: "folder2",
+      });
+      const file1 = createFilesAndFolders({ id: file1Id, name: "file1" });
+      const file2 = createFilesAndFolders({ id: file2Id, name: "file2" });
+      const filesAndFolders = {
+        [ROOT_FF_ID]: rootFf,
+        [rootFolderId]: rootFolder,
+        [folder1Id]: folder1,
+        [folder2Id]: folder2,
+        [file1Id]: file1,
+        [file2Id]: file2,
+      };
+
+      const folder2NextVirtualPath = "/root-folder/folder1/folder2";
+      const file2NextVirtualPath = "/root-folder/folder1/folder2/file2";
+
+      const initialState = { ...baseState, filesAndFolders };
+
+      const nextState = filesAndFoldersReducer(
+        initialState,
+        addChild(folder1Id, folder2Id)
+      );
+
+      expect(nextState).toEqual({
+        ...baseState,
+        filesAndFolders: {
+          ...filesAndFolders,
+          [folder1Id]: { ...folder1, children: [file1Id, folder2Id] },
+          [folder2Id]: {
+            ...folder2,
+            virtualPath: folder2NextVirtualPath,
+          },
+          [file2Id]: {
+            ...file2,
+            virtualPath: file2NextVirtualPath,
+          },
+        },
+        virtualPathToId: {
+          [folder2NextVirtualPath]: folder2Id,
+          [file2NextVirtualPath]: file2Id,
         },
       });
     });

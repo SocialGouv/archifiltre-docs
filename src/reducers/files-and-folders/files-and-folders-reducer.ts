@@ -24,6 +24,54 @@ export const initialState: FilesAndFoldersState = {
 };
 
 /**
+ * Generates updated filesAndFolders map and virtualPathToId map for the moved filesAndFolders
+ * @param filesAndFolders
+ * @param virtualPathToId
+ * @param movedElementId
+ * @param newParentVirtualPath
+ */
+const updateChildVirtualPath = (
+  filesAndFolders,
+  virtualPathToId,
+  movedElementId,
+  newParentVirtualPath
+) => {
+  const updatedFilesAndFolders = {
+    ...filesAndFolders
+  };
+
+  const updatedVirtualPathToId = {
+    ...virtualPathToId
+  };
+
+  const updateChildVirtualPathRec = (currentId, currentParentVirtualPath) => {
+    const filesAndFolder = updatedFilesAndFolders[currentId];
+
+    const virtualPath = path.join(
+      currentParentVirtualPath,
+      filesAndFolder.name
+    );
+
+    updatedVirtualPathToId[virtualPath] = currentId;
+    updatedFilesAndFolders[currentId] = {
+      ...filesAndFolder,
+      virtualPath
+    };
+
+    filesAndFolder.children.map(childId =>
+      updateChildVirtualPathRec(childId, virtualPath)
+    );
+  };
+
+  updateChildVirtualPathRec(movedElementId, newParentVirtualPath);
+
+  return {
+    filesAndFolders: updatedFilesAndFolders,
+    virtualPathToId: updatedVirtualPathToId
+  };
+};
+
+/**
  * Reducer that handles files and folders data structure
  * @param state
  * @param action
@@ -37,25 +85,22 @@ const filesAndFoldersReducer = (
       return { ...state, filesAndFolders: action.filesAndFolders };
     case ADD_CHILD:
       const parent = state.filesAndFolders[action.parentId];
-      const child = state.filesAndFolders[action.childId];
-      const virtualPath = path.join(parent.virtualPath, child.name);
+      const { filesAndFolders, virtualPathToId } = updateChildVirtualPath(
+        state.filesAndFolders,
+        state.virtualPathToId,
+        action.childId,
+        parent.virtualPath
+      );
       return {
         ...state,
         filesAndFolders: {
-          ...state.filesAndFolders,
+          ...filesAndFolders,
           [action.parentId]: {
             ...parent,
             children: _.uniq(parent.children.concat([action.childId]))
-          },
-          [action.childId]: {
-            ...child,
-            virtualPath
           }
         },
-        virtualPathToId: {
-          ...state.virtualPathToId,
-          [virtualPath]: action.childId
-        }
+        virtualPathToId
       };
     case REMOVE_CHILD:
       return {

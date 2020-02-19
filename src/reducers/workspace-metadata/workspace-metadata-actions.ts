@@ -2,6 +2,7 @@ import {
   IciclesSortMethod,
   SET_HOVERED_ELEMENT_ID,
   SET_ICICLES_SORT_METHOD,
+  SET_LOCKED_ELEMENT_ID,
   SET_ORIGINAL_PATH,
   SET_SESSION_NAME,
   WorkspaceMetadataAction
@@ -41,4 +42,11 @@ export const setHoveredElementId = (
 ): WorkspaceMetadataAction => ({
   hoveredElementId,
   type: SET_HOVERED_ELEMENT_ID
+});
+
+export const setLockedElementId = (
+  lockedElementId: string
+): WorkspaceMetadataAction => ({
+  lockedElementId,
+  type: SET_LOCKED_ELEMENT_ID
 });

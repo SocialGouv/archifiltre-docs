@@ -55,7 +55,9 @@
       "level": "Niveau",
       "impossibleMove": "Déplacement impossible",
       "cannotMoveElement": "Impossible de déplacer le fichier ou dossier ici",
-      "nameConflict": "Conflit de nom avec un élément de ce dossier"
+      "nameConflict": "Conflit de nom avec un élément de ce dossier",
+      "moveElementsMode": "Mode Déplacement",
+      "normalMode": "Mode normal"
     },
     "header": {
       "export": "Exporter",

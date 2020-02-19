@@ -19,7 +19,7 @@ import {
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "../../../reducers/tags/tags-types";
 import * as ArrayUtil from "../../../util/array-util";
-import * as FunctionUtil from "../../../util/function-util";
+import { empty } from "../../../util/function-util";
 import BreadCrumbs from "../breadcrumb/breadcrumbs";
 import MinimapBracket from "../minimap-bracket";
 import Ruler from "../ruler";
@@ -27,6 +27,7 @@ import AnimatedIcicle from "./animated-icicle";
 import Icicle from "./icicle";
 import { Dims, DimsAndId } from "./icicle-rect";
 import { FillColor } from "./icicle-types";
+import { useFileMoveActiveState } from "./use-file-move-active-state";
 import { useMovableElements } from "./use-movable-elements";
 
 export type IcicleMouseHandler = (
@@ -279,6 +280,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
     setNoHover();
   }, []);
 
+  const { isFileMoveActive } = useFileMoveActiveState();
+
   const { onIcicleMouseUp, onIcicleMouseDown } = useMovableElements(
     moveElement
   );
@@ -372,9 +375,9 @@ const IcicleMain: FC<IcicleMainProps> = ({
           hoverSequence={hoverSequence}
           lockedSequence={lockedSequence}
           shouldRenderChild={shouldRenderChildMinimap}
-          onIcicleRectClickHandler={FunctionUtil.empty}
-          onIcicleRectDoubleClickHandler={FunctionUtil.empty}
-          onIcicleRectMouseOverHandler={FunctionUtil.empty}
+          onIcicleRectClickHandler={empty}
+          onIcicleRectDoubleClickHandler={empty}
+          onIcicleRectMouseOverHandler={empty}
           computeWidthRec={computeWidthRec}
           tags={tags}
         />
@@ -401,8 +404,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
       ref={svgRef}
       onClick={onClickHandler}
       onMouseLeave={onMouseLeaveHandler}
-      onMouseUp={onIcicleMouseUp}
-      onMouseDown={onIcicleMouseDown}
+      onMouseUp={isFileMoveActive ? onIcicleMouseUp : empty}
+      onMouseDown={isFileMoveActive ? onIcicleMouseDown : empty}
     >
       {icicle}
     </svg>

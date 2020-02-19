@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import Button, { ButtonColor, ButtonSize } from "../common/button";
 import { FaSearchMinus } from "react-icons/fa";
+import Button, { ButtonColor, ButtonSize } from "../common/button";
 
 const Presentational = ({ backToRoot, isZoomed }) => {
   const { t } = useTranslation();

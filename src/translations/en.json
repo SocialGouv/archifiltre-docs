@@ -57,7 +57,9 @@
       "level": "Level",
       "impossibleMove": "Impossible to move",
       "cannotMoveElement": "Cannot move file or folder here",
-      "nameConflict": "Name conflict with one of this folder elements"
+      "nameConflict": "Name conflict with one of this folder elements",
+      "moveElementsMode": "Move mode",
+      "normalMode": "Normal mode"
     },
     "header": {
       "export": "Export",

@@ -3,6 +3,7 @@ import React, { FC, useCallback, useEffect } from "react";
 import * as FunctionUtil from "util/function-util";
 import { FillColor } from "./icicle-types";
 import SvgRectangle from "./svg-rectangle";
+import { useFileMoveActiveState } from "./use-file-move-active-state";
 
 export interface Dims {
   x: number;
@@ -18,8 +19,11 @@ export interface DimsAndId {
 
 type MouseHandler = (dimsAndId: DimsAndId, e: MouseEvent) => void;
 
-const ACTIVE_ELEMENT_CURSOR = "pointer";
-const INACTIVE_ELEMENT_CURSOR = "initial";
+enum CursorState {
+  ACTIVE_ELEMENT_CURSOR = "pointer",
+  INACTIVE_ELEMENT_CURSOR = "initial",
+  MOVE_CURSOR = "move"
+}
 
 interface IcicleRectProps {
   opacity: number;
@@ -82,14 +86,20 @@ const IcicleRect: FC<IcicleRectProps> = ({
     [onMouseOverHandler, getDims, id]
   );
 
+  const { isFileMoveActive } = useFileMoveActiveState();
+
   useEffect(() => {
     registerDims(x, dx, y, dy, id);
   });
 
-  const cursor =
-    onClickHandler === FunctionUtil.empty
-      ? INACTIVE_ELEMENT_CURSOR
-      : ACTIVE_ELEMENT_CURSOR;
+  let cursor = CursorState.INACTIVE_ELEMENT_CURSOR;
+
+  if (onClickHandler !== FunctionUtil.empty) {
+    cursor = CursorState.ACTIVE_ELEMENT_CURSOR;
+  }
+  if (isFileMoveActive) {
+    cursor = CursorState.MOVE_CURSOR;
+  }
 
   return (
     <g>

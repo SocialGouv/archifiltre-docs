@@ -9,7 +9,6 @@ const State = Record({
   dims: {},
   tag_id_to_highlight: "",
   display_root: [],
-  change_skin: false,
   width_by_size: true
 });
 
@@ -43,7 +42,6 @@ const reader = {
   isFocused: () => state => state.get("hover_seq").length > 0,
   isLocked,
   isZoomed: () => state => state.get("display_root").length > 0,
-  changeSkin: () => state => state.get("change_skin"),
   widthBySize: () => state => state.get("width_by_size")
 };
 
@@ -106,15 +104,6 @@ const setNoTagIdToHighlight = () => state => {
   return state;
 };
 
-const toggleChangeSkin = () => state => {
-  addTracker({
-    title: ActionTitle.TOGGLE_VIEW_BY_TYPE_DATES,
-    type: ActionType.TRACK_EVENT
-  });
-  state = state.update("change_skin", a => !a);
-  return state;
-};
-
 const toggleChangeWidthBySize = () => state => {
   addTracker({
     title: ActionTitle.TOGGLE_VIEW_BY_VOLUME_NUMBER,
@@ -139,7 +128,6 @@ const writer = {
   setNoDisplayRoot,
   setTagIdToHighlight,
   setNoTagIdToHighlight,
-  toggleChangeSkin,
   toggleChangeWidthBySize,
   reInit
 };

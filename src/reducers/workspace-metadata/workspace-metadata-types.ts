@@ -4,12 +4,14 @@ export const SET_ICICLES_SORT_METHOD =
   "WORKSPACE_METADATA/SET_ICICLE_SORT_METHOD";
 export const SET_HOVERED_ELEMENT_ID =
   "WORKSPACE_METADATA/SET_HOVERED_ELEMENT_ID";
+export const SET_LOCKED_ELEMENT_ID = "WORKSPACE_METADATA/SET_LOCKED_ELEMENT_ID";
 
 export interface WorkspaceMetadataState {
   sessionName: string;
   originalPath: string;
   iciclesSortMethod: IciclesSortMethod;
   hoveredElementId: string;
+  lockedElementId: string;
 }
 
 export enum IciclesSortMethod {
@@ -37,8 +39,14 @@ interface SetHoveredElementId {
   hoveredElementId: string;
 }
 
+interface SetLockedElementId {
+  type: typeof SET_LOCKED_ELEMENT_ID;
+  lockedElementId: string;
+}
+
 export type WorkspaceMetadataAction =
   | SetSessionNameAction
   | SetOriginalPathAction
   | SetIciclesSortMethod
-  | SetHoveredElementId;
+  | SetHoveredElementId
+  | SetLockedElementId;

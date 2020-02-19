@@ -4,6 +4,7 @@ import {
   countDeeperFolders,
   countFoldersWithMoreThanNChildren,
   countLongerPath,
+  createFilePathSequence,
   filesAndFoldersMapToArray,
   findAllFoldersWithNoSubfolder,
   getFiles,
@@ -12,6 +13,7 @@ import {
   sortFoldersByChildrenCount,
   sortFoldersByDepth
 } from "./file-and-folders-utils";
+import { createFilesAndFolders } from "../reducers/files-and-folders/files-and-folders-test-utils";
 
 describe("file-and-folders-common", () => {
   describe("countFoldersWithMoreThanNChildren", () => {
@@ -485,6 +487,34 @@ describe("file-and-folders-common", () => {
           "/path/to/non-ancestor"
         )
       ).toBe(false);
+    });
+  });
+
+  describe("createFilePathSequence", () => {
+    it("should return the decomposed sequence", () => {
+      const targetFileId = "/folder/other-folder/another-one/file-name";
+      const movedFolderVirtualPath = "/folder/virtual-folder";
+      const targetFileVirtualPath = "/folder/virtual-folder/file-name";
+      const movedFolderId = "/folder/other-folder/another-one";
+      const filesAndFolders = {
+        [targetFileId]: createFilesAndFolders({
+          id: targetFileId,
+          virtualPath: targetFileVirtualPath
+        })
+      };
+
+      const virtualPathToIdMap = {
+        [movedFolderVirtualPath]: movedFolderId,
+        [targetFileVirtualPath]: targetFileId
+      };
+
+      expect(
+        createFilePathSequence(
+          targetFileId,
+          filesAndFolders,
+          virtualPathToIdMap
+        )
+      ).toEqual(["/folder", movedFolderId, targetFileId]);
     });
   });
 });

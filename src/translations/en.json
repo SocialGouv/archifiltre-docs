@@ -94,7 +94,8 @@
       "description": "description",
       "fileOrFolder": "file/folder",
       "depth": "depth",
-      "hash": "hash (MD5)"
+      "hash": "hash (MD5)",
+      "fileCount": "number of files"
     },
     "export": {
       "metsExportErrorTitle": "METS export error",

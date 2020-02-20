@@ -10,48 +10,51 @@ import resipExporter from "./resip-exporter";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
 
-asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, ({ type, data }) => {
-  if (type === "initialize") {
-    const messageHook = count => {
-      asyncWorker.postMessage({
-        result: { count, resipCsv: [] },
-        type: MessageTypes.RESULT
-      });
-    };
-    const { hook, getCount } = hookCounter(messageHook);
+asyncWorker.addEventListener(
+  AsyncWorkerEvent.MESSAGE,
+  ({ type, data }: any) => {
+    if (type === "initialize") {
+      const messageHook = count => {
+        asyncWorker.postMessage({
+          result: { count, resipCsv: [] },
+          type: MessageTypes.RESULT
+        });
+      };
+      const { hook, getCount } = hookCounter(messageHook);
 
-    const {
-      aliases,
-      comments,
-      elementsToDelete,
-      filesAndFolders,
-      filesAndFoldersMetadata,
-      tags,
-      language
-    } = data;
-    translations.changeLanguage(language);
-
-    const resipExportData = resipExporter(
-      {
+      const {
         aliases,
         comments,
         elementsToDelete,
         filesAndFolders,
         filesAndFoldersMetadata,
-        tags
-      },
-      hook
-    );
+        tags,
+        language
+      } = data;
+      translations.changeLanguage(language);
 
-    asyncWorker.postMessage({
-      result: { count: getCount(), resipCsv: resipExportData },
-      type: MessageTypes.RESULT
-    });
+      const resipExportData = resipExporter(
+        {
+          aliases,
+          comments,
+          elementsToDelete,
+          filesAndFolders,
+          filesAndFoldersMetadata,
+          tags
+        },
+        hook
+      );
 
-    asyncWorker.postMessage({
-      type: MessageTypes.COMPLETE
-    });
+      asyncWorker.postMessage({
+        result: { count: getCount(), resipCsv: resipExportData },
+        type: MessageTypes.RESULT
+      });
+
+      asyncWorker.postMessage({
+        type: MessageTypes.COMPLETE
+      });
+    }
   }
-});
+);
 
 export default fakeChildProcess;

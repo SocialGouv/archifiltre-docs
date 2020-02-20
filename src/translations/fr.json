@@ -94,7 +94,8 @@
       "description": "description",
       "fileOrFolder": "fichier/répertoire",
       "depth": "profondeur",
-      "hash": "empreinte (MD5)"
+      "hash": "empreinte (MD5)",
+      "fileCount": "nombre de fichiers"
     },
     "export": {
       "metsExportErrorTitle": "Erreur dans l'export METS",

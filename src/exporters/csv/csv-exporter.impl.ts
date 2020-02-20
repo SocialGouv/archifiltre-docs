@@ -42,7 +42,8 @@ const makeCsvHeader = (
     translations.t("csvHeader.newName"),
     translations.t("csvHeader.description"),
     translations.t("csvHeader.fileOrFolder"),
-    translations.t("csvHeader.depth")
+    translations.t("csvHeader.depth"),
+    translations.t("csvHeader.fileCount")
   ];
 
   if (withHashes) {
@@ -175,6 +176,7 @@ export const onInitialize: WorkerMessageHandler = async (
       const fileOrFolder =
         currentFf.children.length === 0 ? fileText : folderText;
       const depth = `${getFilesAndFoldersDepth(ffId)}`;
+      const fileCount = `${currentMetadata.nbChildrenFiles}`;
 
       const line = [
         "",
@@ -188,7 +190,8 @@ export const onInitialize: WorkerMessageHandler = async (
         aliases[ffId] || "",
         comments[ffId] || "",
         fileOrFolder,
-        depth
+        depth,
+        fileCount
       ];
 
       if (hashes) {

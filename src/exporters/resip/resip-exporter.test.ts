@@ -3,6 +3,7 @@ import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-
 import { ROOT_FF_ID } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 import { createTag } from "../../reducers/tags/tags-test-util";
+import { formatPathForUserSystem } from "../../util/file-sys-util";
 import resipExporter from "./resip-exporter";
 
 // We advance to a specific date for TransactedDate to be setup correctly
@@ -145,7 +146,7 @@ describe("resip-exporter", () => {
         [
           "4",
           "3",
-          "folder1-name/file2-name",
+          `${formatPathForUserSystem("folder1-name/file2-name")}`,
           "Item",
           file2Alias,
           "2019-08-05",

@@ -1,7 +1,9 @@
 import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/files-and-folders-loader";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
+import translations from "../../translations/translations";
 import { isExactFileOrAncestor } from "../../util/file-and-folders-utils";
+import { notifyInfo } from "../../util/notifications-util";
 import { ArchifiltreThunkAction } from "../archifiltre-types";
 import { initFilesAndFoldersMetatada } from "../files-and-folders-metadata/files-and-folders-metadata-actions";
 import {
@@ -61,6 +63,15 @@ export const updateCommentThunk = (
   dispatch(addCommentsOnFilesAndFolders({ [filesAndFoldersId]: comments }));
 };
 
+const isMoveValid = (filesAndFolders, newParentId, elementId) => {
+  const newParentVirtualPath = filesAndFolders[newParentId].virtualPath;
+  const elementVirtualPath = filesAndFolders[elementId].virtualPath;
+  return (
+    isExactFileOrAncestor(newParentVirtualPath, elementVirtualPath) ||
+    isFile(filesAndFolders[newParentId])
+  );
+};
+
 /**
  * Allows to virtually move a file system element to another location
  * @param elementId
@@ -72,14 +83,11 @@ export const moveElement = (elementId, newParentId): ArchifiltreThunkAction => (
 ) => {
   const filesAndFolders = getFilesAndFoldersFromStore(getState());
   const parent = findElementParent(elementId, filesAndFolders);
-  const newParentVirtualPath = filesAndFolders[newParentId].virtualPath;
-  const elementVirtualPath = filesAndFolders[elementId].virtualPath;
-  if (
-    isExactFileOrAncestor(newParentVirtualPath, elementVirtualPath) ||
-    isFile(filesAndFolders[newParentId])
-  ) {
+  if (isMoveValid(filesAndFolders, newParentId, elementId)) {
+    notifyInfo(translations.t("workspace.cannotMoveElement"), "");
     return;
   }
+
   dispatch(removeChild(parent.id, elementId));
   dispatch(addChild(newParentId, elementId));
 

@@ -52,7 +52,8 @@
       "clickHereToAddTags": "Click here to add tags!!",
       "newTag": "New tag",
       "file": "File",
-      "level": "Level"
+      "level": "Level",
+      "cannotMoveElement": "Cannot move file or folder here"
     },
     "header": {
       "export": "Export",

@@ -85,23 +85,26 @@ export const setupChildWorkerListeners = (
   asyncWorker: AsyncWorker,
   { onInitialize, onData }: SetupChildWorkerListenersOptions
 ) => {
-  asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, ({ data, type }) => {
-    switch (type) {
-      case MessageTypes.INITIALIZE:
-        if (!onInitialize) {
+  asyncWorker.addEventListener(
+    AsyncWorkerEvent.MESSAGE,
+    ({ data, type }: any) => {
+      switch (type) {
+        case MessageTypes.INITIALIZE:
+          if (!onInitialize) {
+            break;
+          }
+          onInitialize(asyncWorker, data);
           break;
-        }
-        onInitialize(asyncWorker, data);
-        break;
 
-      case MessageTypes.DATA:
-        if (!onData) {
+        case MessageTypes.DATA:
+          if (!onData) {
+            break;
+          }
+          onData(asyncWorker, data);
           break;
-        }
-        onData(asyncWorker, data);
-        break;
+      }
     }
-  });
+  );
 };
 
 /**

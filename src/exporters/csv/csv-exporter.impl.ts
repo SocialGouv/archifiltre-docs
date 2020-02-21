@@ -13,7 +13,10 @@ import translations from "../../translations/translations";
 import { WorkerMessageHandler } from "../../util/async-worker-util";
 import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
 import { arrayToCsv } from "../../util/csv-util";
-import { isExactFileOrAncestor } from "../../util/file-and-folders-utils";
+import {
+  getType,
+  isExactFileOrAncestor
+} from "../../util/file-and-folders-utils";
 import { formatPathForUserSystem } from "../../util/file-sys-util";
 
 interface MakeCsvHeaderOptions {
@@ -43,7 +46,8 @@ const makeCsvHeader = (
     translations.t("csvHeader.description"),
     translations.t("csvHeader.fileOrFolder"),
     translations.t("csvHeader.depth"),
-    translations.t("csvHeader.fileCount")
+    translations.t("csvHeader.fileCount"),
+    translations.t("csvHeader.type")
   ];
 
   if (withHashes) {
@@ -177,6 +181,7 @@ export const onInitialize: WorkerMessageHandler = async (
         currentFf.children.length === 0 ? fileText : folderText;
       const depth = `${getFilesAndFoldersDepth(ffId)}`;
       const fileCount = `${currentMetadata.nbChildrenFiles}`;
+      const type = getType(currentFf);
 
       const line = [
         "",
@@ -191,7 +196,8 @@ export const onInitialize: WorkerMessageHandler = async (
         comments[ffId] || "",
         fileOrFolder,
         depth,
-        fileCount
+        fileCount,
+        type
       ];
 
       if (hashes) {

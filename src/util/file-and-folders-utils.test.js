@@ -8,6 +8,7 @@ import {
   findAllFoldersWithNoSubfolder,
   getFiles,
   getFolders,
+  getType,
   isExactFileOrAncestor,
   sortFoldersByChildrenCount,
   sortFoldersByDepth
@@ -485,6 +486,29 @@ describe("file-and-folders-common", () => {
           "/path/to/non-ancestor"
         )
       ).toBe(false);
+    });
+  });
+
+  describe("getType", () => {
+    it("should return folder when a folder is given", () => {
+      const folder = {
+        children: ["folder1"]
+      };
+      expect(getType(folder)).toBe("folder");
+    });
+    it("should return csv when a csv filePath is given", () => {
+      const csvFile = {
+        id: "file.csv",
+        children: []
+      };
+      expect(getType(csvFile)).toBe("csv");
+    });
+    it("should return unknown when an unknown file format is given", () => {
+      const folder = {
+        id: "file.unknown",
+        children: []
+      };
+      expect(getType(folder)).toBe("unknown");
     });
   });
 });

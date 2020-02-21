@@ -74,7 +74,7 @@
       "folder": "folder",
       "originalName": "This element original title was '{{oldName}}'",
       "byteChar": "B",
-      "unknown": "Unknown",
+      "unknown": "unknown",
       "toDelete": "To delete"
     },
     "hash": {
@@ -95,7 +95,8 @@
       "fileOrFolder": "file/folder",
       "depth": "depth",
       "hash": "hash (MD5)",
-      "fileCount": "number of files"
+      "fileCount": "number of files",
+      "type": "type"
     },
     "export": {
       "metsExportErrorTitle": "METS export error",

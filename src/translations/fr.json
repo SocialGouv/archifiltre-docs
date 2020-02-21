@@ -74,7 +74,7 @@
       "folder": "répertoire",
       "originalName": "Cet élément était originellement intitulé '{{oldName}}'",
       "byteChar": "o",
-      "unknown": "Inconnu",
+      "unknown": "inconnu",
       "toDelete": "À supprimer"
     },
     "hash": {
@@ -95,7 +95,8 @@
       "fileOrFolder": "fichier/répertoire",
       "depth": "profondeur",
       "hash": "empreinte (MD5)",
-      "fileCount": "nombre de fichiers"
+      "fileCount": "nombre de fichiers",
+      "type": "type"
     },
     "export": {
       "metsExportErrorTitle": "Erreur dans l'export METS",

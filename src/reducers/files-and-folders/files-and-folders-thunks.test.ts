@@ -1,6 +1,8 @@
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/files-and-folders-loader";
+import translations from "../../translations/translations";
+import { notifyInfo } from "../../util/notifications-util";
 import { DispatchExts } from "../archifiltre-types";
 import { initFilesAndFoldersMetatada } from "../files-and-folders-metadata/files-and-folders-metadata-actions";
 import { createFilesAndFoldersMetadata } from "../files-and-folders-metadata/files-and-folders-metadata-test-utils";
@@ -27,6 +29,10 @@ import {
 } from "./files-and-folders-thunks";
 import { ADD_CHILD } from "./files-and-folders-types";
 
+jest.mock("../../util/notifications-util", () => ({
+  notifyInfo: jest.fn()
+}));
+
 jest.mock("../../logging/tracker", () => ({
   addTracker: jest.fn()
 }));
@@ -35,6 +41,7 @@ jest.mock("../../files-and-folders-loader/files-and-folders-loader", () => ({
   createFilesAndFoldersMetadataDataStructure: jest.fn()
 }));
 
+const notifyInfoMock = notifyInfo as jest.Mock;
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
 
 const emptyStoreState = createEmptyStore();
@@ -63,70 +70,74 @@ const testState = {
 };
 
 describe("file-and-folders-thunks.test.ts", () => {
-  describe("", () => {
+  describe("moveElement", () => {
+    const rootFolderId = "/root-folder";
+    const file1Id = "/root-folder/file-1-id";
+    const folderId = "/root-folder/folder";
+    const file2Id = "/root-folder/folder/file-2-id";
+    const filesAndFolders = {
+      [ROOT_FF_ID]: createFilesAndFolders({
+        children: [rootFolderId],
+        id: ""
+      }),
+      [rootFolderId]: createFilesAndFolders({
+        children: [file1Id, folderId],
+        id: rootFolderId
+      }),
+      [file1Id]: createFilesAndFolders({ id: file1Id, name: "test" }),
+      [folderId]: createFilesAndFolders({
+        children: [file2Id],
+        id: folderId
+      }),
+      [file2Id]: createFilesAndFolders({ id: file2Id })
+    };
+
+    const filesAndFolders2 = {
+      ...filesAndFolders,
+      [file1Id]: createFilesAndFolders({
+        id: file1Id,
+        virtualPath: `${folderId}/file-1-id`
+      }),
+      [folderId]: createFilesAndFolders({
+        children: [file2Id, file1Id],
+        id: folderId
+      }),
+      [rootFolderId]: createFilesAndFolders({
+        children: [folderId],
+        id: rootFolderId
+      })
+    };
+
+    const state1 = {
+      ...createEmptyStore(),
+      filesAndFolders: wrapStoreWithUndoable({
+        ...initialState,
+        filesAndFolders
+      })
+    };
+    const state2 = {
+      ...createEmptyStore(),
+      filesAndFolders: wrapStoreWithUndoable({
+        ...initialState,
+        filesAndFolders: filesAndFolders2
+      })
+    };
+
+    const createFilesAndFoldersMetadataDataStructureMock = createFilesAndFoldersMetadataDataStructure as jest.Mock;
+    const newMetadata = {
+      [file1Id]: createFilesAndFoldersMetadata({})
+    };
+
+    beforeEach(() => {
+      notifyInfoMock.mockReset();
+      createFilesAndFoldersMetadataDataStructureMock.mockReset();
+    });
+
     it("should do the right steps to move the element", () => {
-      const rootFolderId = "/root-folder";
-      const file1Id = "/root-folder/file-1-id";
-      const folderId = "/root-folder/folder";
-      const file2Id = "/root-folder/folder/file-2-id";
-      const filesAndFolders = {
-        [ROOT_FF_ID]: createFilesAndFolders({
-          children: [rootFolderId],
-          id: ""
-        }),
-        [rootFolderId]: createFilesAndFolders({
-          children: [file1Id, folderId],
-          id: rootFolderId
-        }),
-        [file1Id]: createFilesAndFolders({ id: file1Id }),
-        [folderId]: createFilesAndFolders({
-          children: [file2Id],
-          id: folderId
-        }),
-        [file2Id]: createFilesAndFolders({ id: file2Id })
-      };
-
-      const filesAndFolders2 = {
-        ...filesAndFolders,
-        [file1Id]: createFilesAndFolders({
-          id: file1Id,
-          virtualPath: `${folderId}/file-1-id`
-        }),
-        [folderId]: createFilesAndFolders({
-          children: [file2Id, file1Id],
-          id: folderId
-        }),
-        [rootFolderId]: createFilesAndFolders({
-          children: [folderId],
-          id: rootFolderId
-        })
-      };
-
-      const state1 = {
-        ...createEmptyStore(),
-        filesAndFolders: wrapStoreWithUndoable({
-          ...initialState,
-          filesAndFolders
-        })
-      };
-      const state2 = {
-        ...createEmptyStore(),
-        filesAndFolders: wrapStoreWithUndoable({
-          ...initialState,
-          filesAndFolders: filesAndFolders2
-        })
-      };
-
-      const createFilesAndFoldersMetadataDataStructureMock = createFilesAndFoldersMetadataDataStructure as jest.Mock;
-      const newMetadata = {
-        [file1Id]: createFilesAndFoldersMetadata({})
-      };
-
+      let addChildCalled = false;
       createFilesAndFoldersMetadataDataStructureMock.mockReturnValue(
         newMetadata
       );
-
-      let addChildCalled = false;
       const store = mockStore(() => (addChildCalled ? state2 : state1));
       store.subscribe(() => {
         const actions = store.getActions();
@@ -146,6 +157,48 @@ describe("file-and-folders-thunks.test.ts", () => {
         addChild(folderId, file1Id),
         initFilesAndFoldersMetatada(newMetadata)
       ]);
+    });
+    it("should block an element move from a parent to its child", () => {
+      const store = mockStore(() => state1);
+
+      store.dispatch(moveElement(rootFolderId, folderId));
+
+      expect(
+        createFilesAndFoldersMetadataDataStructureMock
+      ).not.toHaveBeenCalled();
+
+      expect(notifyInfoMock).toHaveBeenCalledWith(
+        translations.t("workspace.cannotMoveElement"),
+        translations.t("workspace.impossibleMove")
+      );
+    });
+    it("should block an element move to a file element", () => {
+      const store = mockStore(() => state2);
+
+      store.dispatch(moveElement(file1Id, file2Id));
+
+      expect(
+        createFilesAndFoldersMetadataDataStructureMock
+      ).not.toHaveBeenCalled();
+
+      expect(notifyInfoMock).toHaveBeenCalledWith(
+        translations.t("workspace.cannotMoveElement"),
+        translations.t("workspace.impossibleMove")
+      );
+    });
+    it("should block an element move if name conflict in target folder", () => {
+      const store = mockStore(() => state1);
+
+      store.dispatch(moveElement(file2Id, rootFolderId));
+
+      expect(
+        createFilesAndFoldersMetadataDataStructureMock
+      ).not.toHaveBeenCalled();
+
+      expect(notifyInfoMock).toHaveBeenCalledWith(
+        translations.t("workspace.nameConflict"),
+        translations.t("workspace.impossibleMove")
+      );
     });
   });
   describe("updateFilesAndFolderHashes", () => {

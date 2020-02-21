@@ -21,9 +21,7 @@ import Icon, {
 import ClickableIcon from "../common/clickable-icon";
 import ReactTooltip from "react-tooltip";
 import { useTranslation } from "react-i18next";
-import { lookup } from "mime-types";
-import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import { getDisplayName } from "../../util/file-and-folders-utils";
+import { getDisplayName, getType } from "../../util/file-and-folders-utils";
 import { FaPen, FaInfoCircle } from "react-icons/fa";
 
 const pad = "1em";
@@ -47,12 +45,6 @@ const overflowEllipsisStyle = {
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
   overflow: "hidden"
-};
-
-const getType = (filesAndFolders, filesAndFoldersId, t) => {
-  if (!isFile(filesAndFolders)) return t("common.folder");
-  const mimeType = lookup(filesAndFoldersId);
-  return mimeType ? mimeType.split("/").pop() : t("common.unknown");
 };
 
 const ElementIcon = ({
@@ -198,9 +190,7 @@ const InfoCell = ({
   const hashExplanationText = isFolder
     ? t("report.folderHashExplanation")
     : t("report.fileHashExplanation");
-  const typeLabel = placeholder
-    ? "..."
-    : getType(currentFilesAndFolders, filesAndFoldersId, t);
+  const typeLabel = placeholder ? "..." : getType(currentFilesAndFolders);
 
   return (
     <div style={infoCellStyle}>

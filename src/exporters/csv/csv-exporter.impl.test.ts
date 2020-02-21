@@ -116,18 +116,20 @@ describe("csv-exporter.impl", () => {
   describe("onInitialize", () => {
     it("should return the right csv without hashes", async () => {
       const asyncWorker = createAsyncWorkerMock();
-      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"first_modified";"last_modified";"new name";"description";"file/folder";"depth";"number of files";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
+      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"first_modified";"last_modified";"new name";"description";"file/folder";"depth";"number of files";"type";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
       const csvFirstLine = `"";"${formatPathForUserSystem(
         rootFolderId
-      )}";"5";"root";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"0";"1";"";""`;
+      )}";"5";"root";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"0";"1";"folder";"";""`;
       const csvSecondLine = `"";"${formatPathForUserSystem(
         taggedFfId
-      )}";"12";"folder";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"1";"1";"${tag2Name}";"${tagName}"`;
+      )}";"12";"folder";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"1";"1";"folder";"${tag2Name}";"${tagName}"`;
       const csvThirdLine = `"";"${formatPathForUserSystem(
         firstChildId
       )}";"22";"ff-id.txt";".txt";"10000";"01/01/1970";"01/01/1970";"${
         aliases[firstChildId]
-      }";"${comments[firstChildId]}";"file";"2";"1";"${tag2Name}";"${tagName}"`;
+      }";"${
+        comments[firstChildId]
+      }";"file";"2";"1";"unknown";"${tag2Name}";"${tagName}"`;
       const expectedCsv = [
         csvHeader,
         csvFirstLine,
@@ -164,20 +166,20 @@ describe("csv-exporter.impl", () => {
 
     it("should return the right csv with hashes", async () => {
       const asyncWorker = createAsyncWorkerMock();
-      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"first_modified";"last_modified";"new name";"description";"file/folder";"depth";"number of files";"hash (MD5)";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
+      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"first_modified";"last_modified";"new name";"description";"file/folder";"depth";"number of files";"type";"hash (MD5)";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
       const csvFirstLine = `"";"${formatPathForUserSystem(
         rootFolderId
-      )}";"5";"root";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"0";"1";"${rootFolderHash}";"";""`;
+      )}";"5";"root";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"0";"1";"folder";"${rootFolderHash}";"";""`;
       const csvSecondLine = `"";"${formatPathForUserSystem(
         taggedFfId
-      )}";"12";"folder";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"1";"1";"${taggedHash}";"${tag2Name}";"${tagName}"`;
+      )}";"12";"folder";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"1";"1";"folder";"${taggedHash}";"${tag2Name}";"${tagName}"`;
       const csvThirdLine = `"";"${formatPathForUserSystem(
         firstChildId
       )}";"22";"ff-id.txt";".txt";"10000";"01/01/1970";"01/01/1970";"${
         aliases[firstChildId]
       }";"${
         comments[firstChildId]
-      }";"file";"2";"1";"${firstChildIdHash}";"${tag2Name}";"${tagName}"`;
+      }";"file";"2";"1";"unknown";"${firstChildIdHash}";"${tag2Name}";"${tagName}"`;
       const expectedCsv = [
         csvHeader,
         csvFirstLine,
@@ -215,20 +217,20 @@ describe("csv-exporter.impl", () => {
 
     it("should handle elementsToDelete", async () => {
       const asyncWorker = createAsyncWorkerMock();
-      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"first_modified";"last_modified";"new name";"description";"file/folder";"depth";"number of files";"hash (MD5)";"To delete";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
+      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"first_modified";"last_modified";"new name";"description";"file/folder";"depth";"number of files";"type";"hash (MD5)";"To delete";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
       const csvFirstLine = `"";"${formatPathForUserSystem(
         rootFolderId
-      )}";"5";"root";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"0";"1";"${rootFolderHash}";"";"";""`;
+      )}";"5";"root";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"0";"1";"folder";"${rootFolderHash}";"";"";""`;
       const csvSecondLine = `"";"${formatPathForUserSystem(
         taggedFfId
-      )}";"12";"folder";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"1";"1";"${taggedHash}";"";"${tag2Name}";"${tagName}"`;
+      )}";"12";"folder";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"1";"1";"folder";"${taggedHash}";"";"${tag2Name}";"${tagName}"`;
       const csvThirdLine = `"";"${formatPathForUserSystem(
         firstChildId
       )}";"22";"ff-id.txt";".txt";"10000";"01/01/1970";"01/01/1970";"${
         aliases[firstChildId]
       }";"${
         comments[firstChildId]
-      }";"file";"2";"1";"${firstChildIdHash}";"To delete";"${tag2Name}";"${tagName}"`;
+      }";"file";"2";"1";"unknown";"${firstChildIdHash}";"To delete";"${tag2Name}";"${tagName}"`;
       const expectedCsv = [
         csvHeader,
         csvFirstLine,

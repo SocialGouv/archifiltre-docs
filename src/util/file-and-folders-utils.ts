@@ -1,4 +1,7 @@
 import md5 from "js-md5";
+import { lookup } from "mime-types";
+import { isFile } from "../reducers/files-and-folders/files-and-folders-selectors";
+import translations from "../translations/translations";
 import { countItems } from "./array-util";
 
 /**
@@ -182,3 +185,17 @@ export const getDisplayName = (
   elementAlias !== undefined && elementAlias !== ""
     ? elementAlias
     : elementName;
+
+/**
+ * Returns the mime type of the filesAndFolders parameter. Indicates if the format is unknown or if the element is a folder
+ * @param filesAndFolders
+ */
+export const getType = filesAndFolders => {
+  if (!isFile(filesAndFolders)) {
+    return translations.t("common.folder");
+  }
+  const mimeType = lookup(filesAndFolders.id);
+  return mimeType
+    ? mimeType.split("/").pop()
+    : translations.t("common.unknown");
+};

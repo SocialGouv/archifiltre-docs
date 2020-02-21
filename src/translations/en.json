@@ -52,7 +52,10 @@
       "clickHereToAddTags": "Click here to add tags!!",
       "newTag": "New tag",
       "file": "File",
-      "level": "Level"
+      "level": "Level",
+      "impossibleMove": "Impossible to move",
+      "cannotMoveElement": "Cannot move file or folder here",
+      "nameConflict": "Name conflict with one of this folder elements"
     },
     "header": {
       "export": "Export",

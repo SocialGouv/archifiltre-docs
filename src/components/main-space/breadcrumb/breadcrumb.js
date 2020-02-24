@@ -62,7 +62,7 @@ export const Breadcrumb = ({
       <foreignObject
         x={x_text}
         y={y_text}
-        width={width_text}
+        width={Math.max(0, width_text)}
         height={height_text}
         className="breadcrumb-label"
       >

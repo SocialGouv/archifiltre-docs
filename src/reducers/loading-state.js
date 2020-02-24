@@ -10,7 +10,7 @@ const State = Record({
   error: false
 });
 
-const property_name = "loading_state";
+const propertyName = "loading_state";
 
 const initialState = () => new State();
 
@@ -24,7 +24,6 @@ const reader = {
 };
 
 const startToLoadFiles = () => state => {
-  console.time("loaded");
   return state
     .update("start", () => true)
     .update("finish", () => false)
@@ -36,7 +35,6 @@ const setCount = a => state => state.set("traverse_file_count", a);
 const setTotalCount = a => state => state.set("total_count", a);
 
 const finishedToLoadFiles = () => state => {
-  console.timeEnd("loaded");
   return state
     .update("start", () => true)
     .update("finish", () => true)
@@ -64,7 +62,7 @@ const writer = {
 };
 
 export default RealEstate.create({
-  property_name,
+  property_name: propertyName,
   initialState,
   reader,
   writer

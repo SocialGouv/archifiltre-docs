@@ -48,6 +48,7 @@ class ANewVersionIsAvailable extends React.PureComponent {
   }
 
   componentDidMount() {
+    if (MODE !== "production") return;
     request({
       method: "GET",
       url: `${ARCHIFILTRE_SITE_URL}/api-version.json`

@@ -78,23 +78,24 @@ const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
   const heightDivider = Math.max(enrichments.length * 2, 3);
   return (
     <>
-      {enrichments.map((enrichmentType, index) => (
-        <rect
-          key={`enrichment-${ffId}-${enrichmentType}`}
-          x={dims.x + 1}
-          y={dims.y + 1 + (index * dims.dy) / heightDivider}
-          width={dims.dx - 2}
-          height={dims.dy / heightDivider}
-          style={{
-            fill: ENRICHMENT_COLORS[enrichmentType],
-            opacity,
-            stroke: "none"
-          }}
-          onClick={handleClick}
-          onDoubleClick={handleDoubleClick}
-          onMouseOver={handleMouseOver}
-        />
-      ))}
+      {dims &&
+        enrichments.map((enrichmentType, index) => (
+          <rect
+            key={`enrichment-${ffId}-${enrichmentType}`}
+            x={dims.x + 1}
+            y={dims.y + 1 + (index * dims.dy) / heightDivider}
+            width={dims.dx - 2}
+            height={dims.dy / heightDivider}
+            style={{
+              fill: ENRICHMENT_COLORS[enrichmentType],
+              opacity,
+              stroke: "none"
+            }}
+            onClick={handleClick}
+            onDoubleClick={handleDoubleClick}
+            onMouseOver={handleMouseOver}
+          />
+        ))}
     </>
   );
 };

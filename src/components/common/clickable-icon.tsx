@@ -1,6 +1,6 @@
 import React from "react";
-import Icon, { SEARCH_ICON } from "./icon";
 import styled from "styled-components";
+import Icon, { SEARCH_ICON } from "./icon";
 
 const Wrapper = styled.div`
   position: relative;
@@ -34,9 +34,5 @@ const ClickableIcon = props => (
     </Overlay>
   </Wrapper>
 );
-
-ClickableIcon.propTypes = {
-  ...Icon.propTypes
-};
 
 export default ClickableIcon;

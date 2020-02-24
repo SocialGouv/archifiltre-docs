@@ -276,6 +276,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
   const minimapY = icicleHeight + MINIMAP_TOP_MARGIN;
   const minimapWidth = breadcrumbsWidth - MINIMAP_LEFT_MARGIN;
   const minimapHeight = rulerHeight - 2 * MINIMAP_TOP_MARGIN;
+
   const icicle = (
     <g>
       <AnimatedIcicle
@@ -332,8 +333,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
         <rect
           x={minimapX}
           y={minimapY}
-          width={minimapWidth}
-          height={minimapHeight}
+          width={Math.max(0, minimapWidth)}
+          height={Math.max(0, minimapHeight)}
           style={{ fill: "white", opacity: "0.4" }}
         />
         <Icicle

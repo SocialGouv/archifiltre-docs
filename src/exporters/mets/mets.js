@@ -16,6 +16,7 @@ import { isFile } from "../../reducers/files-and-folders/files-and-folders-selec
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { getDisplayName } from "../../util/file-and-folders-utils";
+import { v4 as uuidv4 } from "uuid";
 
 const XML = require("xml");
 const dateFormat = require("dateformat");
@@ -23,7 +24,6 @@ const Path = require("path");
 const fs = require("fs");
 const JSZip = require("jszip");
 const MD5 = require("js-md5");
-const uuidv4 = require("uuid/v4");
 
 // =================================
 // AUXILIARY FUNCTIONS AND VARIABLES

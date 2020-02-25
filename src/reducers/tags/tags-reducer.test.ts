@@ -1,4 +1,4 @@
-import uuid from "uuid/v4";
+import { v4 as uuid } from "uuid";
 import {
   addTag,
   deleteTag,
@@ -11,7 +11,9 @@ import {
 import { tagsReducer } from "./tags-reducer";
 import { TagsState } from "./tags-types";
 
-jest.mock("uuid/v4", () => jest.fn());
+jest.mock("uuid", () => ({
+  v4: jest.fn()
+}));
 
 const setup = ({ mockTagId = "" } = {}) => {
   uuid.mockReset();

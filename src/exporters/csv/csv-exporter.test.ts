@@ -24,7 +24,9 @@ jest.mock("./csv-exporter.controller", () => ({
   generateCsvExport$: jest.fn()
 }));
 
-jest.mock("uuid/v4", () => () => "test-uuid");
+jest.mock("uuid", () => ({
+  v4: () => "test-uuid"
+}));
 
 jest.mock("../../util/file-system-util", () => ({
   promptUserForSave: jest.fn(filename =>

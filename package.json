@@ -100,7 +100,7 @@
     "jest": "25.1.0",
     "jest-date-mock": "1.0.8",
     "jsdoc-to-markdown": "5.0.3",
-    "lint-staged": "10.0.7",
+    "lint-staged": "10.0.8",
     "node-sass": "4.13.1",
     "prettier": "1.19.1",
     "rmfr": "2.0.0",

@@ -18,7 +18,9 @@ import { advanceTo } from "jest-date-mock";
 advanceTo(new Date(2019, 7, 5, 1, 0, 0, 0));
 // Mock to give a defined value for the uuid
 const mockUuid = "12345678-1234-1234-abcd-123456789abc";
-jest.mock("uuid/v4", () => () => mockUuid);
+jest.mock("uuid", () => ({
+  v4: () => mockUuid
+}));
 
 // BAD HACK to be able to compare 'undefined' values...
 // The undefined values are needed in order to generate self-closed tags

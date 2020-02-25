@@ -23,7 +23,7 @@ const Path = require("path");
 const fs = require("fs");
 const JSZip = require("jszip");
 const MD5 = require("js-md5");
-const uuidv4 = require("uuid/v4");
+import { v4 } from "uuid";
 
 // =================================
 // AUXILIARY FUNCTIONS AND VARIABLES
@@ -161,7 +161,7 @@ export const makePremisEvent = (id, type, date, detail, agents, object) => {
   premisEvent.push(
     makeObj("premis:eventIdentifier", [
       makeObj("premis:eventIdentifierType", "UUID"),
-      makeObj("premis:eventIdentifierValue", uuidv4())
+      makeObj("premis:eventIdentifierValue", v4())
     ])
   );
   premisEvent.push(makeObj("premis:eventType", type));

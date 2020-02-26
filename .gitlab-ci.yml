@@ -82,9 +82,11 @@ Build-master:
     - yarn build-prod
     - export ARCHIFILTRE_VERSION="$(node -e 'console.log(require("./package.json").version)')"
     - mv dist/win-x64/archifiltre\ $ARCHIFILTRE_VERSION.exe dist/win-x64/archifiltre-master.exe
+    - mv dist/mac-x64/archifiltre-$ARCHIFILTRE_VERSION.dmg dist/mac-x64/archifiltre-master.dmg
   artifacts:
     paths:
       - dist/win-x64/archifiltre-master.exe
+      - dist/mac-x64/archifiltre-master.dmg
     expire_in: 1 week
   cache:
     key: ${CI_JOB_NAME}

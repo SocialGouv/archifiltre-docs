@@ -21,6 +21,8 @@ const folder1LastModifiedMax = Date.parse("15 Jul 2018");
 const file2Id = "/root-folder/folder1-name/file2-name";
 const file2Name = "file2-name";
 const file2Alias = "file2-alias";
+const movedFileId = "/root-folder/folder1-name/moved-file-name";
+const movedFileVirtualPath = "/root-folder/moved-file-name";
 const folderToDeleteId = "folder-to-delete-id";
 const fileToDeleteId = "folder-to-delete-id";
 const tag1Id = "tag-1-id";
@@ -32,7 +34,7 @@ const filesAndFolders = {
     id: ROOT_FF_ID
   }),
   [rootFolderId]: createFilesAndFolders({
-    children: [file1Id, folder1Id],
+    children: [file1Id, folder1Id, movedFileId],
     id: rootFolderId
   }),
   [file1Id]: createFilesAndFolders({
@@ -45,6 +47,10 @@ const filesAndFolders = {
   [file2Id]: createFilesAndFolders({
     id: file2Id,
     name: file2Name
+  }),
+  [movedFileId]: createFilesAndFolders({
+    id: movedFileId,
+    virtualPath: movedFileVirtualPath
   }),
   [folderToDeleteId]: createFilesAndFolders({
     children: [fileToDeleteId],
@@ -61,7 +67,8 @@ const filesAndFoldersMetadata = {
     maxLastModified: folder1LastModifiedMax,
     minLastModified: folder1LastModifiedMin
   }),
-  [file2Id]: createFilesAndFoldersMetadata({})
+  [file2Id]: createFilesAndFoldersMetadata({}),
+  [movedFileId]: createFilesAndFoldersMetadata({})
 };
 
 const tags = {
@@ -153,6 +160,19 @@ describe("resip-exporter", () => {
           "2019-08-05",
           "2019-08-05",
           `This element original title was '${file2Name}'`,
+          "",
+          ""
+        ],
+        [
+          "5",
+          "1",
+          "folder1-name/moved-file-name",
+          "Item",
+          "moved-file-name",
+          "2019-08-05",
+          "2019-08-05",
+          "2019-08-05",
+          "",
           "",
           ""
         ]

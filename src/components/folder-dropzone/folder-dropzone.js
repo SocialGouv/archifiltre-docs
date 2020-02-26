@@ -13,7 +13,7 @@ class FolderDropzone extends React.Component {
     super(props);
 
     this.style_dropzone = {
-      border: "0.2em dashed #868686",
+      border: "3px dashed #868686",
       borderRadius: "3em"
     };
 

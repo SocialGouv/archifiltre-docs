@@ -1,7 +1,7 @@
 import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { makeNameWithExt } from "util/file-sys-util";
-import Button, { ButtonWidth } from "../common/button";
+import Button from "../common/button";
 
 export type ExportToAuditReport = (name: string) => void;
 
@@ -31,7 +31,6 @@ const AuditReportButton: FC<AuditReportButtonProps> = ({
         id="audit-report-button"
         onClick={onClick}
         disabled={!areHashesReady}
-        width={ButtonWidth.WITH_SPACES}
       >
         {t("header.auditReport")}
       </Button>

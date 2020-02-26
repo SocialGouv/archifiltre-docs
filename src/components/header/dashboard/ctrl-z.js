@@ -30,20 +30,22 @@ class CtrlZ extends React.Component {
     if (this.props.visible) {
       return (
         <div className="grid-x grid-padding-x">
-          <div className="cell small-6">
+          <div className="cell small-5">
             {mkRB(
               this.props.api.undo.undo,
-              <FaUndo />,
+              <FaUndo style={{ width: "100%", height: "100%" }} />,
               this.props.api.undo.hasAPast(),
-              ""
+              "",
+              { width: "45px", height: "45px" }
             )}
           </div>
-          <div className="cell small-6">
+          <div className="cell small-5">
             {mkRB(
               this.props.api.undo.redo,
               <FaRedo />,
               this.props.api.undo.hasAFuture(),
-              ""
+              "",
+              { width: "45px", height: "45px" }
             )}
           </div>
         </div>

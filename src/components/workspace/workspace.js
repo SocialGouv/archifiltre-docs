@@ -10,7 +10,7 @@ const Workspace = ({ api }) => (
   <div className="grid-y grid-frame">
     <div className="cell">
       <div className="grid-x">
-        <div className="cell small-10" style={{ paddingRight: ".9375em" }}>
+        <div className="cell small-10" style={{ paddingRight: "10px" }}>
           <Report api={api} />
         </div>
         <div className="cell small-2">

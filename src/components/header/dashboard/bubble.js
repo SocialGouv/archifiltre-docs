@@ -26,10 +26,17 @@ export default class Bubble extends React.Component {
 
   render() {
     const { mouseOver } = this.state;
-    const { comp, sub_comp } = this.props;
+    const {
+      comp,
+      sub_comp,
+      backgroundColor = "",
+      borderRadius = 0,
+      width = "100%"
+    } = this.props;
 
     const style = {
-      position: "relative"
+      position: "relative",
+      width
     };
 
     const subStyle = {
@@ -37,7 +44,9 @@ export default class Bubble extends React.Component {
       position: "absolute",
       top: "100%",
       width: "100%",
-      zIndex: 3
+      zIndex: 3,
+      backgroundColor,
+      borderRadius
     };
 
     if (mouseOver) {

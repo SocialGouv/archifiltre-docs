@@ -6,7 +6,7 @@ import * as Color from "util/color-util";
 
 import { withTranslation } from "react-i18next";
 import version, { versionComparator } from "../../version.ts";
-import Button, { ButtonAngles, ButtonColor } from "../common/button";
+import Button, { ButtonColor } from "../common/button";
 import { mkRB } from "../buttons/button";
 
 const { shell } = require("electron");
@@ -96,7 +96,6 @@ class ANewVersionIsAvailable extends React.PureComponent {
                 id="download-last-version"
                 onClick={this.download}
                 color={ButtonColor.INFO}
-                angles={ButtonAngles.ROUNDED}
               >
                 {t("header.downloadIt")}
               </Button>

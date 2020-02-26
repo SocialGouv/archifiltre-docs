@@ -32,7 +32,16 @@ const ButtonCell = styled.div`
 `;
 
 const SmallButtonCell = styled.div`
-  min-width: 3em;
+  min-width: 4em;
+`;
+
+const TextAlignRight = styled.div`
+  text-align: right;
+`;
+
+const FlexCenter = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 const DashBoard = ({
@@ -94,27 +103,29 @@ const DashBoard = ({
 
       {shouldDisplayActions && (
         <ButtonCell>
-          <TextAlignCenter>
+          <TextAlignRight>
             <SaveButton
               originalPath={originalPath}
               sessionName={sessionName}
               exportToJson={exportToJson}
             />
-          </TextAlignCenter>
+          </TextAlignRight>
         </ButtonCell>
       )}
 
       {shouldDisplayActions && (
         <ButtonCell>
-          <ExportDropdown
-            areHashesReady={areHashesReady}
-            originalPath={originalPath}
-            sessionName={sessionName}
-            exportToAuditReport={exportToAuditReport}
-            exportToMets={exportToMets}
-            exportToResip={exportToResip}
-            exportToCsv={exportToCsv}
-          />
+          <FlexCenter>
+            <ExportDropdown
+              areHashesReady={areHashesReady}
+              originalPath={originalPath}
+              sessionName={sessionName}
+              exportToAuditReport={exportToAuditReport}
+              exportToMets={exportToMets}
+              exportToResip={exportToResip}
+              exportToCsv={exportToCsv}
+            />
+          </FlexCenter>
         </ButtonCell>
       )}
       {shouldDisplayPreviousSession && (

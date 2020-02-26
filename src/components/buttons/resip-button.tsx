@@ -1,7 +1,7 @@
 import path from "path";
 import React, { FC, useCallback } from "react";
 import { makeNameWithExt } from "../../util/file-sys-util";
-import Button, { ButtonWidth } from "../common/button";
+import Button from "../common/button";
 
 const label = "RESIP";
 
@@ -27,7 +27,7 @@ const ResipButton: FC<ResipButtonProps> = ({
   }, [exportToResip, name]);
 
   return (
-    <Button id="resip-button" onClick={onClick} width={ButtonWidth.WITH_SPACES}>
+    <Button id="resip-button" onClick={onClick}>
       {label}
     </Button>
   );

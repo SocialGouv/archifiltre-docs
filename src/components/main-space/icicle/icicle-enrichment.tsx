@@ -70,10 +70,10 @@ const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
   );
 
   const enrichments = [
-    ...(hasTag ? [EnrichmentTypes.TAG] : []),
     ...(isToDelete ? [EnrichmentTypes.TO_DELETE] : []),
     ...(hasAlias ? [EnrichmentTypes.ALIAS] : []),
-    ...(hasComment ? [EnrichmentTypes.COMMENT] : [])
+    ...(hasComment ? [EnrichmentTypes.COMMENT] : []),
+    ...(hasTag ? [EnrichmentTypes.TAG] : [])
   ];
   const heightDivider = Math.max(enrichments.length * 2, 3);
   return (

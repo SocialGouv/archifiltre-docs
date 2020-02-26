@@ -1,10 +1,6 @@
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import Button, {
-  ButtonAngles,
-  ButtonColor,
-  ButtonSize
-} from "../common/button";
+import Button, { ButtonColor, ButtonSize } from "../common/button";
 import { FaSearchMinus } from "react-icons/fa";
 
 const Presentational = ({ backToRoot, isZoomed }) => {
@@ -13,7 +9,6 @@ const Presentational = ({ backToRoot, isZoomed }) => {
   return (
     <Button
       id="zoom-out-button"
-      angles={ButtonAngles.ROUNDED}
       color={ButtonColor.ICICLE_ACTION}
       size={ButtonSize.SMALL}
       onClick={backToRoot}

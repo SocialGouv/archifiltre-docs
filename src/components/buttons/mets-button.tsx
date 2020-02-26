@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from "react";
-import Button, { ButtonWidth } from "../common/button";
+import Button from "../common/button";
 
 const metsButtonLabel = (
   <span>
@@ -35,12 +35,7 @@ const MetsButton: FC<MetsButtonProps> = ({
   }, [exportToMets, originalPath, sessionName]);
 
   return (
-    <Button
-      id="mets-export-button"
-      onClick={onClick}
-      width={ButtonWidth.WITH_SPACES}
-      disabled={isDisabled}
-    >
+    <Button id="mets-export-button" onClick={onClick} disabled={isDisabled}>
       {metsButtonLabel}
     </Button>
   );

@@ -15,7 +15,6 @@ export enum ButtonWidth {
 }
 
 export enum ButtonAngles {
-  SQUARED = 0,
   ROUNDED = "5px",
   CIRCLE = "50%"
 }
@@ -31,7 +30,7 @@ const InnerButton = styled.button`
   vertical-align: middle;
   padding: ${({ size }) =>
     size === ButtonSize.SMALL ? "0.3em 0.45em" : "0.85em 1em"};
-  border-radius: ${({ angles = ButtonAngles.SQUARED }) => angles};
+  border-radius: ${({ angles = ButtonAngles.ROUNDED }) => angles};
   font-family: inherit;
   font-size: 0.9rem;
   -webkit-appearance: none;
@@ -73,7 +72,7 @@ const Button: FC<ButtonProps> = ({
   color = ButtonColor.SUCCESS,
   disabled = false,
   width,
-  angles = ButtonAngles.SQUARED,
+  angles = ButtonAngles.ROUNDED,
   onClick = empty,
   size = ButtonSize.NORMAL
 }) => (

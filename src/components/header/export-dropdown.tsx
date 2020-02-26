@@ -7,10 +7,8 @@ import AuditReportButton, {
 import CsvButton, { ExportToCsv } from "../buttons/csv-button";
 import MetsButton, { ExportToMets } from "../buttons/mets-button";
 import ResipButton, { ExportToResip } from "../buttons/resip-button";
-import Button, { ButtonWidth } from "../common/button";
-import TextAlignCenter from "../common/text-align-center";
+import Button, { ButtonColor, ButtonWidth } from "../common/button";
 import Bubble from "./dashboard/bubble";
-import BubbleCell from "./dashboard/bubble-cell";
 
 interface ExportDropdownProps {
   areHashesReady: boolean;
@@ -34,48 +32,39 @@ const ExportDropdown: FC<ExportDropdownProps> = ({
   const { t } = useTranslation();
   return (
     <Bubble
+      backgroundColor={ButtonColor.SUCCESS}
+      width={ButtonWidth.WITH_SPACES}
+      borderRadius="5px"
       comp={
-        <TextAlignCenter>
-          <Button id="export-menu" width={ButtonWidth.WITH_SPACES}>
-            {t("header.export")}{" "}
-            <FaChevronDown style={{ verticalAlign: "top" }} />
-          </Button>
-        </TextAlignCenter>
+        <Button id="export-menu">
+          {t("header.export")}{" "}
+          <FaChevronDown style={{ verticalAlign: "top" }} />
+        </Button>
       }
       sub_comp={
         <div className="grid-x">
-          <BubbleCell>
-            <AuditReportButton
-              sessionName={sessionName}
-              areHashesReady={areHashesReady}
-              exportToAuditReport={exportToAuditReport}
-            />
-          </BubbleCell>
-          <BubbleCell>
-            <CsvButton sessionName={sessionName} exportToCsv={exportToCsv} />
-          </BubbleCell>
-          <BubbleCell>
-            <CsvButton
-              sessionName={sessionName}
-              exportToCsv={exportToCsv}
-              areHashesReady={areHashesReady}
-              exportWithHashes={true}
-            />
-          </BubbleCell>
-          <BubbleCell>
-            <ResipButton
-              originalPath={originalPath}
-              sessionName={sessionName}
-              exportToResip={exportToResip}
-            />
-          </BubbleCell>
-          <BubbleCell>
-            <MetsButton
-              originalPath={originalPath}
-              sessionName={sessionName}
-              exportToMets={exportToMets}
-            />
-          </BubbleCell>
+          <AuditReportButton
+            sessionName={sessionName}
+            areHashesReady={areHashesReady}
+            exportToAuditReport={exportToAuditReport}
+          />
+          <CsvButton sessionName={sessionName} exportToCsv={exportToCsv} />
+          <CsvButton
+            sessionName={sessionName}
+            exportToCsv={exportToCsv}
+            areHashesReady={areHashesReady}
+            exportWithHashes={true}
+          />
+          <ResipButton
+            originalPath={originalPath}
+            sessionName={sessionName}
+            exportToResip={exportToResip}
+          />
+          <MetsButton
+            originalPath={originalPath}
+            sessionName={sessionName}
+            exportToMets={exportToMets}
+          />
         </div>
       }
     />

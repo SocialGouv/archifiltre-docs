@@ -14,6 +14,7 @@ import { WorkerMessageHandler } from "../../util/async-worker-util";
 import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
 import { arrayToCsv } from "../../util/csv-util";
 import {
+  getAllChildren,
   getType,
   isExactFileOrAncestor
 } from "../../util/file-and-folders-utils";
@@ -115,6 +116,20 @@ const getTagsForFileOrAncestors = (
     .flatten()
     .value();
 
+/**
+ * Get all children of elements to delete
+ * @param filesAndFolders
+ * @param elementsToDelete
+ */
+const getChildrenToDelete = (filesAndFolders, elementsToDelete) => {
+  return _(elementsToDelete)
+    .flatMap(elementToDelete =>
+      getAllChildren(filesAndFolders, elementToDelete)
+    )
+    .uniq()
+    .value();
+};
+
 interface CsvExporterData {
   aliases: AliasMap;
   comments: CommentsMap;
@@ -152,9 +167,13 @@ export const onInitialize: WorkerMessageHandler = async (
   }: CsvExporterData
 ) => {
   await translations.changeLanguage(language);
+  const elementsToDeleteWithChildren = getChildrenToDelete(
+    filesAndFolders,
+    elementsToDelete
+  );
   const orderedTags = sortBy(tags, "name");
   const withHashes = hashes !== undefined;
-  const withFilesToDelete = elementsToDelete.length > 0;
+  const withFilesToDelete = elementsToDeleteWithChildren.length > 0;
   const header = makeCsvHeader(orderedTags, { withHashes, withFilesToDelete });
   const folderText = translations.t("common.folder");
   const fileText = translations.t("common.file");
@@ -205,7 +224,7 @@ export const onInitialize: WorkerMessageHandler = async (
       }
 
       if (withFilesToDelete) {
-        const fileToDeleteText = elementsToDelete.includes(ffId)
+        const fileToDeleteText = elementsToDeleteWithChildren.includes(ffId)
           ? toDeleteText
           : "";
         line.push(fileToDeleteText);

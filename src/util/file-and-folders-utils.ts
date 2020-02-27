@@ -199,3 +199,21 @@ export const getType = filesAndFolders => {
     ? mimeType.split("/").pop()
     : translations.t("common.unknown");
 };
+
+/**
+ * Get all children of a given filesAndFolders node
+ * @param filesAndFoldersMap - list of all files and folders
+ * @param filesAndFoldersId - filesAndFoldersId of the node to get children from
+ */
+export const getAllChildren = (filesAndFoldersMap, filesAndFoldersId) => {
+  const allChildren: string[] = [];
+
+  const getAllChildrenRec = currentId => {
+    const { children } = filesAndFoldersMap[currentId];
+    allChildren.push(currentId);
+    children.forEach(childId => getAllChildrenRec(childId));
+  };
+
+  getAllChildrenRec(filesAndFoldersId);
+  return allChildren;
+};

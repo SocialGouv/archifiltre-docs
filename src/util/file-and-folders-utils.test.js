@@ -6,6 +6,7 @@ import {
   countLongerPath,
   filesAndFoldersMapToArray,
   findAllFoldersWithNoSubfolder,
+  getAllChildren,
   getFiles,
   getFolders,
   getType,
@@ -509,6 +510,54 @@ describe("file-and-folders-common", () => {
         children: []
       };
       expect(getType(folder)).toBe("unknown");
+    });
+  });
+
+  describe("getAllChildren", () => {
+    const fileAndFolders = {
+      "": {
+        children: ["folder1", "folder2", "file1"]
+      },
+      folder1: {
+        children: ["folder1/folder1", "folder1/file1"]
+      },
+      "folder1/folder1": {
+        children: ["folder1/folder1/file1", "folder1/folder1/file2"]
+      },
+      "folder1/folder1/file1": {
+        children: []
+      },
+      "folder1/folder1/file2": {
+        children: []
+      },
+      "folder1/file1": {
+        children: []
+      },
+      folder2: {
+        children: ["folder2/file1"]
+      },
+      "folder2/file1": {
+        children: []
+      },
+      file1: {
+        children: []
+      }
+    };
+    it("should return a recursive list of all children nodes", () => {
+      expect(getAllChildren(fileAndFolders, "")).toStrictEqual([
+        "",
+        "folder1",
+        "folder1/folder1",
+        "folder1/folder1/file1",
+        "folder1/folder1/file2",
+        "folder1/file1",
+        "folder2",
+        "folder2/file1",
+        "file1"
+      ]);
+    });
+    it("should return a one element list when a file is given", () => {
+      expect(getAllChildren(fileAndFolders, "file1")).toStrictEqual(["file1"]);
     });
   });
 });

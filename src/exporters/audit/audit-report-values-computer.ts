@@ -16,7 +16,6 @@ import {
   take,
   takeRight
 } from "lodash/fp";
-import path from "path";
 import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { octet2HumanReadableFormat } from "../../components/main-space/ruler";
 import {
@@ -284,6 +283,7 @@ export const getDuplicatesWithTheBiggestSize = compose(
 
 export const getElementsToDelete = (
   filesAndFolders,
+  filesAndFoldersMetadata,
   elementsToDelete
 ): AuditReportElementWithType[] => {
   const folderText = translations.t("common.folder");
@@ -292,8 +292,14 @@ export const getElementsToDelete = (
     .map(filesAndFoldersId => filesAndFolders[filesAndFoldersId])
     .map(
       (fileAndFolder): AuditReportElementWithType => ({
+        date: formatAuditReportDate(
+          filesAndFoldersMetadata[fileAndFolder.id].maxLastModified
+        ),
         name: fileAndFolder.name,
         path: formatPathForUserSystem(fileAndFolder.id),
+        size: octet2HumanReadableFormat(
+          filesAndFoldersMetadata[fileAndFolder.id].childrenTotalSize
+        ),
         type: isFile(fileAndFolder) ? fileText : folderText
       })
     );

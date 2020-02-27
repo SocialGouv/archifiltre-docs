@@ -125,7 +125,11 @@ export const computeAuditReportData = (
     filesAndFoldersMetadata,
     filesAndFoldersHashes
   ),
-  elementsToDelete: getElementsToDelete(filesAndFolders, elementsToDelete)
+  elementsToDelete: getElementsToDelete(
+    filesAndFolders,
+    filesAndFoldersMetadata,
+    elementsToDelete
+  )
 });
 // tslint:enable:object-literal-sort-keys
 

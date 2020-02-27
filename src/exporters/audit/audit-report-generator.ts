@@ -20,6 +20,8 @@ export interface AuditReportFileWithCount extends AuditReportFile {
 
 export interface AuditReportElementWithType extends AuditReportFile {
   type: string;
+  size: string;
+  date: string;
 }
 
 export interface AuditReportData {

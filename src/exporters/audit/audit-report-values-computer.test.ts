@@ -1,4 +1,5 @@
 import { octet2HumanReadableFormat } from "../../components/main-space/ruler";
+import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 import { formatPathForUserSystem } from "../../util/file-sys-util";
 import { FileType } from "../../util/file-types-util";
@@ -68,6 +69,33 @@ const filesAndFoldersMap = {
   [fileId1]: file1,
   [fileId2]: file2,
   [fileId3]: file3
+};
+
+const filesAndFoldersMetadataMap = {
+  "": createFilesAndFoldersMetadata({
+    childrenTotalSize: 3000,
+    maxLastModified: 3000
+  }),
+  [folderId1]: createFilesAndFoldersMetadata({
+    childrenTotalSize: 3000,
+    maxLastModified: 3000
+  }),
+  [folderId2]: createFilesAndFoldersMetadata({
+    childrenTotalSize: 3000,
+    maxLastModified: 3000
+  }),
+  [fileId1]: createFilesAndFoldersMetadata({
+    childrenTotalSize: 3000,
+    maxLastModified: 3000
+  }),
+  [fileId2]: createFilesAndFoldersMetadata({
+    childrenTotalSize: 3000,
+    maxLastModified: 3000
+  }),
+  [fileId3]: createFilesAndFoldersMetadata({
+    childrenTotalSize: 0,
+    maxLastModified: 0
+  })
 };
 
 describe("audit-report-values-computer", () => {
@@ -178,16 +206,23 @@ describe("audit-report-values-computer", () => {
   describe("getElementsToDelete", () => {
     it("should return the list of elements to delete", () => {
       expect(
-        getElementsToDelete(filesAndFoldersMap, [folderId2, fileId1])
+        getElementsToDelete(filesAndFoldersMap, filesAndFoldersMetadataMap, [
+          folderId2,
+          fileId1
+        ])
       ).toEqual([
         {
+          date: "01/01/1970",
           name: "base-name",
           path: formatPathForUserSystem(folderId2),
+          size: "3 kB",
           type: "folder"
         },
         {
+          date: "01/01/1970",
           name: fileName1,
           path: formatPathForUserSystem(fileId1),
+          size: "3 kB",
           type: "file"
         }
       ]);

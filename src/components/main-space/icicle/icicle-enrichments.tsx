@@ -33,7 +33,7 @@ const isHighlighted = (ffId, tags, higlightedTagId) => {
     return true;
   }
 
-  return tags[higlightedTagId].ffIds.includes(ffId);
+  return tags[higlightedTagId]?.ffIds.includes(ffId);
 };
 
 const IcicleEnrichments: FC<IcicleEnrichmentsProps> = ({

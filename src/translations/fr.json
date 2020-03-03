@@ -63,7 +63,8 @@
       "downloadIt": "téléchargez la !",
       "csvWithHash": "CSV avec empreintes",
       "csvWithHashDisabledMessage": "Vous devez attendre que les hashs aient été calculés",
-      "loadPreviousSessionButtonLabel": "Recharger la session précédente"
+      "loadPreviousSessionButtonLabel": "Recharger la session précédente",
+      "help": "Aide"
     },
     "common": {
       "error": "Oups ! Une erreur s'est produite.",

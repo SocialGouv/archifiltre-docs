@@ -84,7 +84,7 @@
     "awesome-typescript-loader": "5.2.1",
     "concurrently": "5.1.0",
     "copy-webpack-plugin": "5.1.1",
-    "cross-env": "7.0.1",
+    "cross-env": "7.0.2",
     "css-loader": "3.4.2",
     "deep-equal": "2.0.1",
     "dotenv": "8.2.0",

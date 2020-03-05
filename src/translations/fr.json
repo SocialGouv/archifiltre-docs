@@ -16,7 +16,7 @@
       "didYouKnow": "Le saviez-vous ?",
       "warning": "Attention !",
       "wrongJsonVersion": "Le fichier que vous avez déposé n'a pas été produit avec la même version d'Archifiltre",
-      "justAMoment": "Encore un instant..."
+      "loadingVisualization": "Visualisation en cours de chargement..."
     },
     "report": {
       "comments": "Description",

@@ -115,7 +115,7 @@ const LoadingMessages = ({ status, count, totalCount }) => {
         />
       ))}
       {isFileTreeLoaded && (
-        <SimpleLoader loaderText={t("folderDropzone.justAMoment")} />
+        <SimpleLoader loaderText={t("folderDropzone.loadingVisualization")} />
       )}
     </>
   );

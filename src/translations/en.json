@@ -16,7 +16,7 @@
       "didYouKnow": "Did you know?",
       "warning": "Warning!",
       "wrongJsonVersion": "The file you dropped wasn't produced with the same version of Archifiltre",
-      "justAMoment": "Just a moment..."
+      "loadingVisualization": "Loading visualization..."
     },
     "report": {
       "comments": "Comments",

@@ -1,8 +1,10 @@
+import { shell } from "electron";
 import React, { FC } from "react";
+import { useTranslation } from "react-i18next";
+import ReactTooltip from "react-tooltip";
 import styled from "styled-components";
 import version from "../../version";
 import { HelpLink } from "./help-link";
-import WhatsNewLink from "./whats-new-link";
 
 const ArchifiltreLogoWrapper = styled.span`
   line-height: 1.5em;
@@ -10,23 +12,40 @@ const ArchifiltreLogoWrapper = styled.span`
 
 const ArchifiltreLogoText = styled.div`
   font-size: 2em;
+  letter-spacing: 0.16em;
 `;
 
-const ArchifiltreVersionText = styled.div`
-  font-size: 0.7em;
+const ArchifiltreVersionText = styled.a`
+  font-size: 0.8em;
 `;
+
+const onClick = event => {
+  event.preventDefault();
+  shell.openExternal(`${ARCHIFILTRE_SITE_URL}/#changelog`);
+};
 
 const versionSubtitle = `v${version} Optimistic Otter`;
 
-const ArchifiltreLogo: FC = () => (
-  <ArchifiltreLogoWrapper>
-    <ArchifiltreLogoText>
-      <b>archifiltre</b> <HelpLink />
-    </ArchifiltreLogoText>
-    <ArchifiltreVersionText>
-      {versionSubtitle} {" • "} <WhatsNewLink />
-    </ArchifiltreVersionText>
-  </ArchifiltreLogoWrapper>
-);
+const ArchifiltreLogo: FC = () => {
+  const { t } = useTranslation();
+  return (
+    <ArchifiltreLogoWrapper>
+      <ArchifiltreLogoText>
+        <b>archifiltre</b>
+      </ArchifiltreLogoText>
+      <ArchifiltreVersionText
+        onClick={onClick}
+        target="_blank"
+        role="link"
+        data-tip={t("report.whatsNew")}
+        data-for="whats-new"
+      >
+        {versionSubtitle}
+      </ArchifiltreVersionText>
+      <HelpLink />
+      <ReactTooltip place="bottom" id="whats-new" />
+    </ArchifiltreLogoWrapper>
+  );
+};
 
 export default ArchifiltreLogo;

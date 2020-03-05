@@ -17,7 +17,7 @@ const onClick = event => {
 };
 
 const QuestionCircle = styled(FaQuestionCircle)`
-  width: 0.6em;
+  margin-left: 5px;
   vertical-align: middle;
   color: dimgrey;
   cursor: pointer;

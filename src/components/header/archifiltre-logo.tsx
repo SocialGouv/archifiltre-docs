@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import { FaQuestionCircle } from "react-icons/fa";
 import styled from "styled-components";
 import version from "../../version";
 import { HelpLink } from "./help-link";

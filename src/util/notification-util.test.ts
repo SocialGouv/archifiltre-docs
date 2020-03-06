@@ -1,4 +1,5 @@
 import { NotificationManager } from "react-notifications";
+import { empty } from "./function-util";
 import { notifyError, notifyInfo, notifySuccess } from "./notifications-util";
 
 jest.mock("react-notifications", () => ({
@@ -15,6 +16,7 @@ describe("notification-util", () => {
       const notificationMessage = "notificationMessage";
       const notificationTitle = "notificationTitle";
       const expectedTimeout = 5000;
+      const callback = empty;
       notifySuccess(notificationMessage, notificationTitle);
 
       const successMock = NotificationManager.success as jest.Mock;
@@ -22,7 +24,8 @@ describe("notification-util", () => {
       expect(successMock).toHaveBeenCalledWith(
         notificationMessage,
         notificationTitle,
-        expectedTimeout
+        expectedTimeout,
+        callback
       );
     });
   });
@@ -32,6 +35,7 @@ describe("notification-util", () => {
       const notificationMessage = "notificationMessage";
       const notificationTitle = "notificationTitle";
       const expectedTimeout = 5000;
+      const callback = empty;
       notifyError(notificationMessage, notificationTitle);
 
       const errorMock = NotificationManager.error as jest.Mock;
@@ -39,7 +43,8 @@ describe("notification-util", () => {
       expect(errorMock).toHaveBeenCalledWith(
         notificationMessage,
         notificationTitle,
-        expectedTimeout
+        expectedTimeout,
+        callback
       );
     });
   });
@@ -49,6 +54,7 @@ describe("notification-util", () => {
       const notificationMessage = "notificationMessage";
       const notificationTitle = "notificationTitle";
       const expectedTimeout = 5000;
+      const callback = empty;
       notifyInfo(notificationMessage, notificationTitle);
 
       const infoMock = NotificationManager.info as jest.Mock;
@@ -56,7 +62,8 @@ describe("notification-util", () => {
       expect(infoMock).toHaveBeenCalledWith(
         notificationMessage,
         notificationTitle,
-        expectedTimeout
+        expectedTimeout,
+        callback
       );
     });
   });

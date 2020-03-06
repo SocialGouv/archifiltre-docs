@@ -1,8 +1,8 @@
 import { NotificationManager } from "react-notifications";
+import { empty } from "./function-util";
 
 export enum NotificationDuration {
   NORMAL = 5000,
-  LONG = 10000,
   PERMANENT = Number.MAX_SAFE_INTEGER
 }
 
@@ -11,13 +11,15 @@ export enum NotificationDuration {
  * @param message - The notification message
  * @param title - The notification title
  * @param notificationDuration - The notification duration (in ms)
+ * @param callback - The function called on notification click
  */
 export const notifySuccess = (
   message: string,
   title: string,
-  notificationDuration = NotificationDuration.NORMAL
+  notificationDuration = NotificationDuration.NORMAL,
+  callback = empty
 ): void => {
-  NotificationManager.success(message, title, notificationDuration);
+  NotificationManager.success(message, title, notificationDuration, callback);
 };
 
 /**
@@ -25,13 +27,15 @@ export const notifySuccess = (
  * @param message - The notification message
  * @param title - The notification title
  * @param notificationDuration - The notification duration (in ms)
+ * @param callback - The function called on notification click
  */
 export const notifyError = (
   message: string,
   title: string,
-  notificationDuration = NotificationDuration.NORMAL
+  notificationDuration = NotificationDuration.NORMAL,
+  callback = empty
 ): void => {
-  NotificationManager.error(message, title, notificationDuration);
+  NotificationManager.error(message, title, notificationDuration, callback);
 };
 
 /**
@@ -39,11 +43,13 @@ export const notifyError = (
  * @param message - The notification message
  * @param title - The notification title
  * @param notificationDuration - The notification duration (in ms)
+ * @param callback - The function called on notification click
  */
 export const notifyInfo = (
   message: string,
   title: string,
-  notificationDuration = NotificationDuration.NORMAL
+  notificationDuration = NotificationDuration.NORMAL,
+  callback = empty
 ): void => {
-  NotificationManager.info(message, title, notificationDuration);
+  NotificationManager.info(message, title, notificationDuration, callback);
 };

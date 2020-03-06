@@ -40,6 +40,12 @@ jest.mock("fs", () => ({
   }
 }));
 
+jest.mock("electron", () => ({
+  shell: {
+    openExternal: jest.fn()
+  }
+}));
+
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
 
 const tagName = "test-tag-1";

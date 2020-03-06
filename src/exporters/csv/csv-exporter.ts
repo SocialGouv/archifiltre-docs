@@ -1,3 +1,4 @@
+import { shell } from "electron";
 import { promises as fs } from "fs";
 import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
@@ -21,7 +22,11 @@ import { LoadingInfoTypes } from "../../reducers/loading-info/loading-info-types
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import translations from "../../translations/translations";
 import { promptUserForSave } from "../../util/file-system-util";
-import { notifyInfo, notifySuccess } from "../../util/notifications-util";
+import {
+  NotificationDuration,
+  notifyInfo,
+  notifySuccess
+} from "../../util/notifications-util";
 import {
   generateCsvExport$,
   GenerateCsvExportOptions
@@ -104,7 +109,12 @@ export const csvExporterThunk = (
           const csvExportSuccessMessage = translations.t(
             "export.csvExportSuccessMessage"
           );
-          notifySuccess(csvExportSuccessMessage, csvExportTitle);
+          notifySuccess(
+            csvExportSuccessMessage,
+            csvExportTitle,
+            NotificationDuration.NORMAL,
+            () => shell.openItem(exportFilePath)
+          );
           resolve();
         }
       });

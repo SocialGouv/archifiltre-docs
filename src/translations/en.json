@@ -117,6 +117,9 @@
     "replay": {
       "title": "Restore previous session",
       "error": "An error occurred while restoring the previous session."
+    },
+    "search": {
+      "title": "Search and filter"
     }
   }
 }

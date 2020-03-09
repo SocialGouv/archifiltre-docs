@@ -26,6 +26,7 @@ import { initTracker } from "./logging/tracker.ts";
 import "./translations/translations";
 import BackgroundLoadingInfoContainer from "./components/background-loading-info/background-loading-info-container";
 import styled from "styled-components";
+import Modal from "react-modal";
 
 document.title = `Archifiltre v${version}`;
 
@@ -47,6 +48,7 @@ const app = () => {
   if (document.body !== null) {
     document.body.appendChild(rootDiv);
   }
+  Modal.setAppElement("#root");
 
   ReactDOM.render(
     <Provider store={store}>

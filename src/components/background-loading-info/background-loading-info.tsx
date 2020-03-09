@@ -1,5 +1,5 @@
 import React, { FC, memo, useCallback, useState } from "react";
-import { FaChevronLeft } from "react-icons/fa";
+import { FaChevronRight } from "react-icons/fa";
 import styled from "styled-components";
 import { LoadingInfo } from "../../reducers/loading-info/loading-info-types";
 import { SUCCESS_GREEN } from "../../util/color-util";
@@ -9,7 +9,7 @@ import LoadingSpinnerOrCloseCross from "./loading-spinner-or-close-cross";
 const BottomRightArea = memo(styled.div`
   position: fixed;
   bottom: 20px;
-  left: 20px;
+  right: 20px;
   background-color: white;
   display: flex;
   border-radius: 2px;
@@ -59,7 +59,7 @@ const BackgroundLoadingInfo: FC<BackgroundLoadingInfoProps> = ({
     <BottomRightArea>
       <ToggleAndLoaderArea>
         <ToggleArrow collapsed={collapsed} onClick={toggleCollapsed}>
-          <FaChevronLeft style={{ color: SUCCESS_GREEN }} />
+          <FaChevronRight style={{ color: SUCCESS_GREEN }} />
         </ToggleArrow>
         {collapsed && (
           <LoadingSpinnerOrCloseCross

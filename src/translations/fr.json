@@ -117,6 +117,9 @@
     "replay": {
       "title": "Chargement de la session précédente",
       "error": "Une erreur s'est produite lors du chargement de la session précédente."
+    },
+    "search": {
+      "title": "Rechercher et filtrer"
     }
   }
 }

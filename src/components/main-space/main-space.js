@@ -4,8 +4,6 @@ import FolderDropzone from "components/folder-dropzone/folder-dropzone-container
 import WorkSpace from "components/workspace/workspace-container";
 import WaitingScreen from "components/folder-dropzone/waiting-screen";
 import ErrorScreen from "components/errors/error-screen";
-import Hint from "components/folder-dropzone/hint";
-import { hints } from "hints.ts";
 import styled from "styled-components";
 
 const gridStyle = {
@@ -54,9 +52,6 @@ const MainSpace = props => {
       <div className="grid-y grid-padding-x grid-frame align-center">
         <div className="cell">
           <WaitingScreen api={api} loadedPath={loadedPath} />
-        </div>
-        <div className="cell shrink">
-          <Hint hints={hints} />
         </div>
       </div>
     );

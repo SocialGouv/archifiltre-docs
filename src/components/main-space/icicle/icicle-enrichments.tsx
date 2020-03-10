@@ -36,6 +36,8 @@ const isHighlighted = (ffId, tags, higlightedTagId) => {
   return tags[higlightedTagId]?.ffIds.includes(ffId);
 };
 
+const removeEmptyValues = elementMap => _.pickBy(elementMap);
+
 const IcicleEnrichments: FC<IcicleEnrichmentsProps> = ({
   aliases,
   comments,
@@ -56,12 +58,13 @@ const IcicleEnrichments: FC<IcicleEnrichmentsProps> = ({
     .value();
 
   const displayedElementsToDelete = elementsToDelete.filter(isElementDisplayed);
-
+  const filteredAliases = removeEmptyValues(aliases);
+  const filteredComments = removeEmptyValues(comments);
   const enrichedElements = _.union(
     taggedFiles,
     displayedElementsToDelete,
-    Object.keys(aliases),
-    Object.keys(comments)
+    Object.keys(filteredAliases),
+    Object.keys(filteredComments)
   );
 
   return (
@@ -73,8 +76,8 @@ const IcicleEnrichments: FC<IcicleEnrichmentsProps> = ({
           dims={dims[ffId]}
           hasTag={taggedFiles.includes(ffId)}
           isToDelete={displayedElementsToDelete.includes(ffId)}
-          hasAlias={ffId in aliases}
-          hasComment={ffId in comments}
+          hasAlias={ffId in filteredAliases}
+          hasComment={ffId in filteredComments}
           opacity={
             isHighlighted(ffId, tags, highlightedTagId)
               ? OPACITY.HIGHLIGHTED

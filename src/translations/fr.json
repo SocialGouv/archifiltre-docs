@@ -99,6 +99,7 @@
       "size": "poids (octet)",
       "firstModified": "date de première modification",
       "lastModified": "date de dernière modification",
+      "newPath": "nouveau chemin",
       "newName": "nouveau nom",
       "description": "description",
       "fileOrFolder": "fichier/répertoire",

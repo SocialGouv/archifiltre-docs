@@ -43,6 +43,7 @@ const makeCsvHeader = (
     translations.t("csvHeader.size"),
     translations.t("csvHeader.firstModified"),
     translations.t("csvHeader.lastModified"),
+    translations.t("csvHeader.newPath"),
     translations.t("csvHeader.newName"),
     translations.t("csvHeader.description"),
     translations.t("csvHeader.fileOrFolder"),
@@ -198,6 +199,10 @@ export const onInitialize: WorkerMessageHandler = async (
       );
       const fileOrFolder =
         currentFf.children.length === 0 ? fileText : folderText;
+      const newPath =
+        currentFf.virtualPath !== ffId
+          ? formatPathForUserSystem(currentFf.virtualPath)
+          : "";
       const depth = `${getFilesAndFoldersDepth(ffId)}`;
       const fileCount = `${currentMetadata.nbChildrenFiles}`;
       const type = getType(currentFf);
@@ -211,6 +216,7 @@ export const onInitialize: WorkerMessageHandler = async (
         size,
         firstModifiedDate,
         lastModifiedDate,
+        newPath,
         aliases[ffId] || "",
         comments[ffId] || "",
         fileOrFolder,

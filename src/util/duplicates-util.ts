@@ -296,7 +296,7 @@ export const getBiggestDuplicatedFolders = (nbDuplicatedItems: number) => (
   filesAndFoldersMap: FilesAndFoldersMap,
   filesAndFoldersMetadataMap: FilesAndFoldersMetadataMap,
   hashesMap: HashesMap
-): Array<FilesAndFolders & FilesAndFoldersMetadata & { count: number }> => {
+): (FilesAndFolders & FilesAndFoldersMetadata & { count: number })[] => {
   const duplicatesMap = getFoldersDuplicatesMap(filesAndFoldersMap, hashesMap);
 
   return _(duplicatesMap)

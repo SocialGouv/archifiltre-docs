@@ -9,7 +9,7 @@ import {
   getHashesFromStore
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
-import { makeNameWithExt, save } from "../../util/file-sys-util";
+import { getNameWithExtension, save } from "../../util/file-sys-util";
 
 interface JsonExporterThunkArgs {
   sessionName: string;
@@ -33,7 +33,7 @@ export const jsonExporterThunk = ({
     type: ActionType.TRACK_EVENT
   });
   const state = getState();
-  const fileName = makeNameWithExt(sessionName, "json");
+  const fileName = getNameWithExtension(sessionName, "json");
 
   const exportedData = {
     aliases: getAliasesFromStore(state),

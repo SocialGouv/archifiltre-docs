@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { makeNameWithExt } from "util/file-sys-util";
+import { getNameWithExtension } from "util/file-sys-util";
 import Button from "../common/button";
 
 export type ExportToAuditReport = (name: string) => void;
@@ -17,7 +17,7 @@ const AuditReportButton: FC<AuditReportButtonProps> = ({
   exportToAuditReport
 }) => {
   const { t } = useTranslation();
-  const name = makeNameWithExt(`${sessionName}-Audit`, "docx");
+  const name = getNameWithExtension(`${sessionName}-Audit`, "docx");
   const onClick = useCallback(() => exportToAuditReport(name), [
     exportToAuditReport,
     name

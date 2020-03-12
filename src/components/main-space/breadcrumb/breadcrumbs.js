@@ -63,7 +63,10 @@ class Breadcrumbs extends React.PureComponent {
   getNodeDisplayName(nodeId) {
     const { aliases, getFfByFfId } = this.props;
     const node = getFfByFfId(nodeId);
-    return getDisplayName(node.name, aliases[nodeId]);
+    const hasAlias = aliases[nodeId] !== "" && aliases[nodeId] !== undefined;
+    return `${getDisplayName(node.name, aliases[nodeId])}${
+      hasAlias ? ` (${node.name})` : ""
+    }`;
   }
 
   getInactiveBreadcrumbs(maxHeight) {

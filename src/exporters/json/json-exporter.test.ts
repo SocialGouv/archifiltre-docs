@@ -14,7 +14,7 @@ import { save } from "../../util/file-sys-util";
 import { jsonExporterThunk } from "./json-exporter";
 
 jest.mock("../../util/file-sys-util", () => ({
-  makeNameWithExt: (name, ext) => `${name}.${ext}`,
+  getNameWithExtension: (name, ext) => `${name}.${ext}`,
   save: jest.fn()
 }));
 

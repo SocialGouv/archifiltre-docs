@@ -1,11 +1,10 @@
+import fs from "fs";
 import path from "path";
-
-const Fs = require("fs");
-const Path = require("path");
 import FileSaver from "file-saver";
 import { countItems } from "./array-util";
+import dateFormat from "dateformat";
 
-const utf8_byte_order_mark = "\ufeff";
+const utf8ByteOrderMark = "\ufeff";
 
 export const UTF8 = "utf-8";
 
@@ -15,50 +14,49 @@ export const UTF8 = "utf-8";
  * @param content - The string content to save
  * @param format - The specific format (ex: UTF8)
  */
-export function save(name, content, { format = "" } = {}) {
+export const save = (name, content, { format = "" } = {}) => {
   let fileHead = "";
 
   if (format === UTF8) {
-    fileHead += utf8_byte_order_mark;
+    fileHead += utf8ByteOrderMark;
   }
 
   const writtenData = fileHead + content;
   const blob = new Blob([writtenData], { type: "text/plain;charset=utf-8" });
   saveBlob(name, blob);
-}
+};
 
 /**
  * Saves a blob into a file
  * @param name - The default file name
  * @param blob - The blob to save into a file
  */
-export function saveBlob(name, blob) {
+export const saveBlob = (name, blob) => {
   FileSaver.saveAs(blob, name);
-}
-
-export const makeNameWithExt = (name, ext) => {
-  return name + "_" + new Date().getTime() + "." + ext;
 };
 
-export const mkdir = path => {
-  if (Fs.existsSync(path) === false) {
-    mkdir(Path.dirname(path));
-    Fs.mkdirSync(path);
+export const getNameWithExtension = (name, extension) =>
+  `${name}_${dateFormat(new Date(), "yyyy_mm_dd_HH_MM")}.${extension}`;
+
+export const mkdir = dirPath => {
+  if (!fs.existsSync(dirPath)) {
+    mkdir(path.dirname(dirPath));
+    fs.mkdirSync(dirPath);
   }
 };
 
 /**
  * Path in archifiltre should always start with '/'
  * When we drop a folder which is at the root of a file
- * system (like '/myfolder' or 'C:\myfolder' path),
+ * system (like '/myfFolder' or 'C:\myFolder' path),
  * dirname return '/' or 'C:\', so path parameter may be wrong
- * i.e. : myfolder/my/file instead of /myfolder/my/file
- *     or myfolder\my\file instead of \myfolder\my\file
+ * i.e. : myFolder/my/file instead of /myFolder/my/file
+ *     or myFolder\my\file instead of \myFolder\my\file
  *
- * @param path
+ * @param filePath
  */
-export const convertToPosixAbsolutePath = path => {
-  const array = path.split(Path.sep);
+export const convertToPosixAbsolutePath = filePath => {
+  const array = filePath.split(path.sep);
   if (array[0] !== "") {
     array.unshift("");
   }
@@ -66,12 +64,12 @@ export const convertToPosixAbsolutePath = path => {
   return array.join("/");
 };
 
-export function isJsonFile(path) {
-  const stats = Fs.statSync(path);
-  return stats.isFile() && Path.extname(path) === ".json";
-}
+export const isJsonFile = filePath => {
+  const stats = fs.statSync(filePath);
+  return stats.isFile() && path.extname(filePath) === ".json";
+};
 
-export const readFileSync = Fs.readFileSync;
+export const readFileSync = fs.readFileSync;
 
 /**
  * Get the number of files with .zip extension

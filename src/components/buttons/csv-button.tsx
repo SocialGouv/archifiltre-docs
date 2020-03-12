@@ -2,7 +2,7 @@ import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import ReactTooltip from "react-tooltip";
 import styled from "styled-components";
-import { makeNameWithExt } from "util/file-sys-util";
+import { getNameWithExtension } from "util/file-sys-util";
 import Button from "../common/button";
 
 interface ExportToCsvOptions {
@@ -28,7 +28,7 @@ const CsvButton: FC<CsvButtonProps> = ({
   exportToCsv,
   exportWithHashes = false
 }) => {
-  const name = makeNameWithExt(sessionName, "csv");
+  const name = getNameWithExtension(sessionName, "csv");
   const { t } = useTranslation();
   const buttonLabel = exportWithHashes ? t("header.csvWithHash") : "CSV";
   const isDisabled = exportWithHashes && !areHashesReady;

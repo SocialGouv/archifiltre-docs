@@ -2,25 +2,48 @@ import _ from "lodash";
 import React from "react";
 
 import TagsEditable from "components/tags/tags-editable";
-
+import styled from "styled-components";
 import { withTranslation } from "react-i18next";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { FaPen } from "react-icons/fa";
 
-const tagsStyle = {
-  overflowY: "auto",
-  overflowX: "hidden",
-  maxHeight: "5em"
+const TagsWrapper = styled.div`
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 5em;
+`;
+
+type ReportCellTagsProps = {
+  createTagged: (value: string, filesAndFoldersId: string) => void;
+  filesAndFoldersId: string;
+  nodeId: string;
+  tagsForCurrentFile: { ffIds: string[]; id: string; name: string }[];
+  deleteTagged: (tagId: string, nodeId: string) => void;
+  is_dummy: boolean;
+  cells_style: {};
+  isLocked: boolean;
+  isCurrentFileMarkedToDelete: boolean;
+  toggleCurrentFileDeleteState: boolean;
+  t: (translation: string) => string;
+  node_id: string;
 };
 
-class ReportCellTags extends React.Component {
+type ReportCellTagsState = {
+  editing: boolean;
+  candidateTag: string;
+};
+
+class ReportCellTags extends React.Component<
+  ReportCellTagsProps,
+  ReportCellTagsState
+> {
+  private wrapperRef;
   constructor(props) {
     super(props);
-
     this.state = {
       editing: false,
-      candidate_tag: ""
+      candidateTag: ""
     };
 
     this.startEditing = this.startEditing.bind(this);
@@ -39,13 +62,13 @@ class ReportCellTags extends React.Component {
   startEditing() {
     this.setState({
       editing: true,
-      candidate_tag: ""
+      candidateTag: ""
     });
   }
 
-  setCandidateTag(candidate_tag) {
+  setCandidateTag(candidateTag) {
     this.setState({
-      candidate_tag
+      candidateTag
     });
   }
 
@@ -60,41 +83,37 @@ class ReportCellTags extends React.Component {
     this.setCandidateTag(value);
   }
 
+  addTag(event, value) {
+    event.preventDefault();
+    const { createTagged, filesAndFoldersId } = this.props;
+    if (value.length !== 0) {
+      addTracker({
+        title: ActionTitle.TAG_ADDED,
+        type: ActionType.TRACK_EVENT,
+        value: `Created tag: "${value}"`,
+        eventValue: value
+      });
+      createTagged(value, filesAndFoldersId);
+      this.setCandidateTag("");
+    }
+  }
+
   onKeyUp(event) {
     const keyCode = event.keyCode;
     const value = event.target.value;
-
-    const {
-      filesAndFoldersId,
-      tagsForCurrentFile,
-      createTagged,
-      deleteTagged
-    } = this.props;
-
-    const { stopEditing, setCandidateTag } = this;
-
+    const { filesAndFoldersId, tagsForCurrentFile, deleteTagged } = this.props;
     const backspaceKeyCode = 8;
     const enterKeyCode = 13;
     const escapeKeyCode = 27;
     if (keyCode === backspaceKeyCode) {
-      if (value.length === 0 && tagsForCurrentFile.size > 0) {
-        deleteTagged(filesAndFoldersId, _.last(tagsForCurrentFile).id);
+      if (value.length === 0 && tagsForCurrentFile.length > 0) {
+        deleteTagged(filesAndFoldersId, _.last(tagsForCurrentFile)?.id || "");
       }
     } else if (keyCode === enterKeyCode) {
-      event.preventDefault();
-      if (value.length !== 0) {
-        addTracker({
-          title: ActionTitle.TAG_ADDED,
-          type: ActionType.TRACK_EVENT,
-          value: `Created tag: "${value}"`,
-          eventValue: value
-        });
-        createTagged(value, filesAndFoldersId);
-        setCandidateTag("");
-      }
+      this.addTag(event, value);
     } else if (keyCode === escapeKeyCode) {
       event.stopPropagation();
-      stopEditing();
+      this.stopEditing();
     }
   }
 
@@ -105,12 +124,8 @@ class ReportCellTags extends React.Component {
 
   onClick(event) {
     event.stopPropagation();
-
-    const editing = this.state.editing;
-    const startEditing = this.startEditing;
-
-    if (editing === false) {
-      startEditing();
+    if (!this.state.editing) {
+      this.startEditing();
     }
   }
 
@@ -122,21 +137,20 @@ class ReportCellTags extends React.Component {
     document.removeEventListener("mousedown", this.handleClickOutside);
   }
 
-  setWrapperRef(dom_element) {
-    this.wrapper_ref = dom_element;
+  setWrapperRef(domElement) {
+    this.wrapperRef = domElement;
   }
 
   handleClickOutside(event) {
     const { node_id, createTagged } = this.props;
-    const { editing, candidate_tag } = this.state;
-    const { stopEditing, wrapper_ref } = this;
-
-    if (wrapper_ref && !wrapper_ref.contains(event.target)) {
+    const { editing, candidateTag } = this.state;
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       if (editing) {
-        stopEditing();
-        if (candidate_tag.replace(/\s/g, "").length > 0) {
-          createTagged(candidate_tag, node_id);
+        this.stopEditing();
+        if (candidateTag.replace(/\s/g, "").length > 0) {
+          createTagged(candidateTag, node_id);
         }
+        this.addTag(event, candidateTag);
       }
     }
   }
@@ -148,24 +162,18 @@ class ReportCellTags extends React.Component {
       tagsForCurrentFile,
       isLocked,
       isCurrentFileMarkedToDelete,
-      toggleCurrentFileDeleteState
+      toggleCurrentFileDeleteState,
+      t
     } = this.props;
-    const { editing, candidate_tag } = this.state;
-    const {
-      onClick,
-      onKeyUp,
-      onChange,
-      removeHandlerFactory,
-      setWrapperRef
-    } = this;
+    const { editing, candidateTag } = this.state;
 
     if (is_dummy) {
       return (
         <div className="cell small-6" style={cells_style}>
-          <b>{this.props.t("workspace.tags")}</b>
+          <b>{t("workspace.tags")}</b>
           <br />
           <span style={{ fontStyle: "italic" }}>
-            {this.props.t("workspace.yourTagsHere") + "..."}
+            {`${t("workspace.yourTagsHere")}...`}
           </span>
         </div>
       );
@@ -173,30 +181,30 @@ class ReportCellTags extends React.Component {
       return (
         <div
           data-test-id="tag-edit-box"
-          ref={setWrapperRef}
+          ref={this.setWrapperRef}
           className="edit_hover_container"
           style={cells_style}
-          onClick={onClick}
+          onClick={this.onClick}
         >
-          <b>{this.props.t("workspace.tags")}</b>
+          <b>{t("workspace.tags")}</b>
           <span>
             &ensp;
             <FaPen className="edit_hover_pencil" style={{ opacity: "0.3" }} />
           </span>
           <br />
-          <div className="grid-x" style={tagsStyle}>
+          <TagsWrapper className="grid-x">
             <TagsEditable
               isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
               isLocked={isLocked}
               tagsForCurrentFile={tagsForCurrentFile}
               editing={editing}
-              onKeyUp={onKeyUp}
-              removeHandlerFactory={removeHandlerFactory}
-              candidate_tag={candidate_tag}
-              onChange={onChange}
+              onKeyUp={this.onKeyUp}
+              removeHandlerFactory={this.removeHandlerFactory}
+              candidate_tag={candidateTag}
+              onChange={this.onChange}
               toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
             />
-          </div>
+          </TagsWrapper>
         </div>
       );
     }

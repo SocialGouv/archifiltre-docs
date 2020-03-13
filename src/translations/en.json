@@ -46,10 +46,10 @@
       "bySize": "By size",
       "byNumber": "By count",
       "allTags": "All tags",
-      "noTags": "No tag at the moment.",
+      "noTags": "No tag at the moment",
       "tags": "Tags",
       "yourTagsHere": "Your tags here",
-      "clickHereToAddTags": "Click here to add tags!!",
+      "clickHereToAddTags": "Click here to add tags!",
       "newTag": "New tag",
       "file": "File",
       "level": "Level"

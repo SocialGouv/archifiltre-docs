@@ -4,6 +4,7 @@ import {
   LoadingInfoAction,
   LoadingInfoState,
   PROGRESS_LOADING,
+  REGISTER_ERROR,
   RESET_LOADING,
   START_LOADING,
   UPDATE_LOADING
@@ -12,6 +13,7 @@ import {
 export const initialState: LoadingInfoState = {
   complete: [],
   dismissed: [],
+  errors: [],
   loading: [],
   loadingInfo: {}
 };
@@ -76,6 +78,12 @@ const loadingInfoReducer = (
         ...state,
         complete: [...state.complete, action.id],
         loading: state.loading.filter(id => id !== action.id)
+      };
+
+    case REGISTER_ERROR:
+      return {
+        ...state,
+        errors: [...state.errors, action.error]
       };
 
     case RESET_LOADING:

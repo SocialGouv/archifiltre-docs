@@ -11,8 +11,11 @@ import {
   getFiles
 } from "../util/file-and-folders-utils";
 import { countZipFiles, isJsonFile } from "../util/file-sys-util";
-import { NotificationDuration, notifyInfo } from "../util/notifications-util";
-import { wait } from "../util/promise-util";
+import {
+  NotificationDuration,
+  notifyError,
+  notifyInfo
+} from "../util/notifications-util";
 import version, { versionComparator } from "../version";
 import { ArchifiltreThunkAction } from "./archifiltre-types";
 import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata/files-and-folders-metadata-actions";
@@ -29,7 +32,11 @@ import {
   FilesAndFoldersMap,
   HashesMap
 } from "./files-and-folders/files-and-folders-types";
-import { resetLoadingAction } from "./loading-info/loading-info-actions";
+import {
+  registerErrorAction,
+  resetLoadingAction
+} from "./loading-info/loading-info-actions";
+import { ArchifiltreError } from "./loading-info/loading-info-types";
 import { clearActionReplayFile } from "./middleware/persist-actions-middleware";
 import { initializeTags, resetTags } from "./tags/tags-actions";
 import { TagMap } from "./tags/tags-types";
@@ -37,6 +44,7 @@ import {
   setOriginalPath,
   setSessionName
 } from "./workspace-metadata/workspace-metadata-actions";
+import { getArchifiltreErrors } from "./loading-info/loading-info-selectors";
 
 /**
  * Notifies the user that there is a Zip in the loaded files
@@ -62,6 +70,17 @@ const displayJsonNotification = () => {
 };
 
 /**
+ * Notifies the user that errors occurred while loading the folder
+ */
+const displayErrorNotification = () => {
+  notifyError(
+    translations.t("folderDropzone.errorsWhileLoading"),
+    translations.t("folderDropzone.error"),
+    NotificationDuration.PERMANENT
+  );
+};
+
+/**
  * Handles tracking events sent to Matomo
  * @param paths of files that need to be tracked
  */
@@ -81,6 +100,14 @@ const handleTracking = paths => {
   });
 };
 
+interface HookParam {
+  status?: string;
+  count?: number;
+  totalCount?: number;
+}
+
+const defaultHookParam: HookParam = {};
+
 /**
  * Loads a files
  * @param fileOrFolderPath
@@ -89,7 +116,7 @@ const handleTracking = paths => {
 export const loadFilesAndFoldersFromPathThunk = (
   fileOrFolderPath: string,
   { api }: any
-): ArchifiltreThunkAction => async dispatch => {
+): ArchifiltreThunkAction => async (dispatch, getState) => {
   const {
     startToLoadFiles,
     setStatus,
@@ -98,7 +125,14 @@ export const loadFilesAndFoldersFromPathThunk = (
     finishedToLoadFiles
   } = api.loading_state;
 
-  const hook = ({ status, count, totalCount }) => {
+  const hook = (
+    error: ArchifiltreError | null,
+    { status, count, totalCount } = defaultHookParam
+  ) => {
+    if (error) {
+      dispatch(registerErrorAction(error));
+      return;
+    }
     setStatus(status);
     if (count) {
       setCount(count);
@@ -148,9 +182,11 @@ export const loadFilesAndFoldersFromPathThunk = (
         displayZipNotification(zipFileCount);
       }
 
-      // We defer the thunk execution to wait for the real estate setters to complete
-      // TODO: Remove this once real estate setters are no longer used
-      await wait();
+      const errors = getArchifiltreErrors(getState());
+
+      if (errors.length > 0) {
+        displayErrorNotification();
+      }
 
       dispatch(computeHashesThunk(virtualFileSystem.originalPath));
     }

@@ -2,11 +2,13 @@ import {
   completeLoadingAction,
   dismissAllComplete,
   progressLoadingAction,
+  registerErrorAction,
   resetLoadingAction,
   startLoadingAction,
   updateLoadingAction
 } from "./loading-info-actions";
 import loadingInfoReducer, { initialState } from "./loading-info-reducer";
+import { createArchifiltreError } from "./loading-info-selectors";
 import { createLoadingInfo } from "./loading-info-test-utils";
 import { LoadingInfoState } from "./loading-info-types";
 
@@ -24,6 +26,7 @@ const completeLoading = createLoadingInfo({ id: completeLoadingId });
 const baseState: LoadingInfoState = {
   complete: [completeLoadingId],
   dismissed: [],
+  errors: [],
   loading: [previouslyLoadingId, otherPreviouslyLoadingId],
   loadingInfo: {
     [previouslyLoadingId]: previouslyLoading,
@@ -49,8 +52,7 @@ describe("loading-info-reducer", () => {
           )
         )
       ).toEqual({
-        complete: [completeLoadingId],
-        dismissed: [],
+        ...baseState,
         loading: [previouslyLoadingId, otherPreviouslyLoadingId, newLoadingId],
         loadingInfo: {
           [previouslyLoadingId]: previouslyLoading,
@@ -73,8 +75,7 @@ describe("loading-info-reducer", () => {
           updateLoadingAction(previouslyLoadingId, newProgress, newGoal)
         )
       ).toEqual({
-        complete: [completeLoadingId],
-        dismissed: [],
+        ...baseState,
         loading: [previouslyLoadingId, otherPreviouslyLoadingId],
         loadingInfo: {
           [previouslyLoadingId]: {
@@ -99,8 +100,7 @@ describe("loading-info-reducer", () => {
           progressLoadingAction(previouslyLoadingId, progress)
         )
       ).toEqual({
-        complete: [completeLoadingId],
-        dismissed: [],
+        ...baseState,
         loading: [previouslyLoadingId, otherPreviouslyLoadingId],
         loadingInfo: {
           [previouslyLoadingId]: {
@@ -122,14 +122,33 @@ describe("loading-info-reducer", () => {
           completeLoadingAction(previouslyLoadingId)
         )
       ).toEqual({
+        ...baseState,
         complete: [completeLoadingId, previouslyLoadingId],
-        dismissed: [],
         loading: [otherPreviouslyLoadingId],
         loadingInfo: {
           [previouslyLoadingId]: previouslyLoading,
           [otherPreviouslyLoadingId]: otherPreviouslyLoading,
           [completeLoadingId]: completeLoading
         }
+      });
+    });
+  });
+
+  describe("REGISTER_ERROR", () => {
+    it("should add the error to the list", () => {
+      const baseError = createArchifiltreError({
+        filePath: "/base"
+      });
+      const error = createArchifiltreError({});
+      const previousState = {
+        ...baseState,
+        errors: [baseError]
+      };
+      expect(
+        loadingInfoReducer(previousState, registerErrorAction(error))
+      ).toEqual({
+        ...baseState,
+        errors: [baseError, error]
       });
     });
   });
@@ -145,6 +164,7 @@ describe("loading-info-reducer", () => {
   describe("DISMISS_ALL_COMPLETE", () => {
     it("should remove all the complete elements", () => {
       expect(loadingInfoReducer(baseState, dismissAllComplete())).toEqual({
+        ...baseState,
         complete: [],
         dismissed: [completeLoadingId],
         loading: [previouslyLoadingId, otherPreviouslyLoadingId],

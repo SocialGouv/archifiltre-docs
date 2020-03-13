@@ -1,9 +1,11 @@
 import {
+  ArchifiltreError,
   COMPLETE_LOADING,
   DISMISS_ALL_COMPLETE,
   LoadingInfoAction,
   LoadingInfoTypes,
   PROGRESS_LOADING,
+  REGISTER_ERROR,
   RESET_LOADING,
   START_LOADING,
   UPDATE_LOADING
@@ -67,6 +69,17 @@ export const progressLoadingAction = (
 export const completeLoadingAction = (id: string): LoadingInfoAction => ({
   id,
   type: COMPLETE_LOADING
+});
+
+/**
+ * Register an error to the error stack
+ * @param error
+ */
+export const registerErrorAction = (
+  error: ArchifiltreError
+): LoadingInfoAction => ({
+  error,
+  type: REGISTER_ERROR
 });
 
 /**

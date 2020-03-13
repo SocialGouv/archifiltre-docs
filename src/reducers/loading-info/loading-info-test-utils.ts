@@ -1,4 +1,9 @@
-import { LoadingInfo, LoadingInfoTypes } from "./loading-info-types";
+import {
+  ArchifiltreError,
+  ArchifiltreErrorType,
+  LoadingInfo,
+  LoadingInfoTypes
+} from "./loading-info-types";
 
 interface CreateLoadingInfoParams {
   id: string;

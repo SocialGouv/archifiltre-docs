@@ -1,9 +1,12 @@
 import { NotificationManager } from "react-notifications";
 import { empty } from "./function-util";
 
+// aproximatively equals 3 years as Number.MAX_SAFE_INTEGER is not working
+const arbitrarilyLongTime = 100000000000;
+
 export enum NotificationDuration {
   NORMAL = 5000,
-  PERMANENT = Number.MAX_SAFE_INTEGER
+  PERMANENT = arbitrarilyLongTime
 }
 
 /**

@@ -7,6 +7,8 @@ import {
 } from "./util/async-worker-util";
 import { reportError, reportInfo, reportWarning } from "./logging/reporter";
 import { MessageTypes } from "./util/batch-process/batch-process-util-types";
+import { createArchifiltreError } from "./reducers/loading-info/loading-info-selectors";
+import { ArchifiltreErrorType } from "./reducers/loading-info/loading-info-types";
 
 export default (hook, droppedElementPath) => {
   return new Promise((resolve, reject) => {
@@ -32,15 +34,22 @@ export default (hook, droppedElementPath) => {
           break;
         case MessageTypes.ERROR:
           reportError(event.data.message);
+          hook(
+            createArchifiltreError({
+              type: ArchifiltreErrorType.LOADING_FILE_SYSTEM,
+              filePath: event.data.message.path,
+              reason: event.data.message.error
+            })
+          );
           break;
         case MessageTypes.WARNING:
           reportWarning(event.data.message);
           break;
         case MessageTypes.RESULT:
-          hook(event.data.message);
+          hook(null, event.data.message);
           break;
         default:
-          hook(event.data);
+          hook(null, event.data);
       }
     });
 

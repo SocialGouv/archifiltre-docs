@@ -16,6 +16,8 @@
       "didYouKnow": "Did you know?",
       "warning": "Warning!",
       "wrongJsonVersion": "The file you dropped wasn't produced with the same version of Archifiltre",
+      "error": "Error!",
+      "errorsWhileLoading": "An error occurred while loading. Click to check the error log.",
       "loadingVisualization": "Loading visualization..."
     },
     "report": {

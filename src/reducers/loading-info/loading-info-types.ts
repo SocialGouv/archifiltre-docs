@@ -2,12 +2,24 @@ export const START_LOADING = "LOADING_INFO/START_LOADING";
 export const UPDATE_LOADING = "LOADING_INFO/UPDATE_LOADING";
 export const PROGRESS_LOADING = "LOADING_INFO/PROGRESS_LOADING";
 export const COMPLETE_LOADING = "LOADING_INFO/COMPLETE_LOADING";
+export const REGISTER_ERROR = "LOADING_INFO/REGISTER_ERROR";
 export const RESET_LOADING = "LOADING_INFO/RESET_LOADING";
 export const DISMISS_ALL_COMPLETE = "LOADING_INFO/DISMISS_ALL_COMPLETE";
 
 export enum LoadingInfoTypes {
   HASH_COMPUTING = "hash-computing",
   EXPORT = "export"
+}
+
+export enum ArchifiltreErrorType {
+  LOADING_FILE_SYSTEM = "loadingFromFileSystem",
+  COMPUTING_HASHES = "computingHashes"
+}
+
+export interface ArchifiltreError {
+  type: ArchifiltreErrorType;
+  filePath: string;
+  reason: string;
 }
 
 export interface LoadingInfo {
@@ -27,6 +39,7 @@ export interface LoadingInfoState {
   loading: string[];
   complete: string[];
   dismissed: string[];
+  errors: ArchifiltreError[];
 }
 
 interface StartLoadingAction {
@@ -55,6 +68,11 @@ interface CompleteLoadingAction {
   id: string;
 }
 
+interface RegisterErrorAction {
+  type: typeof REGISTER_ERROR;
+  error: ArchifiltreError;
+}
+
 interface ResetLoadingAction {
   type: typeof RESET_LOADING;
 }
@@ -68,5 +86,6 @@ export type LoadingInfoAction =
   | UpdateLoadingAction
   | ProgressLoadingAction
   | CompleteLoadingAction
+  | RegisterErrorAction
   | ResetLoadingAction
   | DismissAllComplete;

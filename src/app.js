@@ -27,6 +27,7 @@ import "./translations/translations";
 import BackgroundLoadingInfoContainer from "./components/background-loading-info/background-loading-info-container";
 import styled from "styled-components";
 import Modal from "react-modal";
+import Modals from "./components/modals/modals";
 
 document.title = `Archifiltre v${version}`;
 
@@ -71,6 +72,7 @@ const app = () => {
                 <BackgroundLoadingInfoContainer />
               </App>
               <NotificationContainer />
+              <Modals />
             </ErrorBoundary>
           );
         }}

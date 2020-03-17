@@ -1,5 +1,6 @@
 import { UndoableState } from "./enhancers/undoable/undoable-types";
 import { initialState as loadingInfoInitialState } from "./loading-info/loading-info-reducer";
+import { initialState as modalInitialState } from "./modal/modal-reducer";
 import { StoreState } from "./store";
 import { IciclesSortMethod } from "./workspace-metadata/workspace-metadata-types";
 
@@ -18,6 +19,7 @@ export const createEmptyStore = (): StoreState => ({
     filesAndFoldersMetadata: {}
   },
   loadingInfo: loadingInfoInitialState,
+  modal: modalInitialState,
   tags: wrapStoreWithUndoable({
     tags: {}
   }),

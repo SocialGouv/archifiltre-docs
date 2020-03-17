@@ -127,6 +127,9 @@
       "size": "Size",
       "fileLastModified": "Last modification",
       "path": "Path"
+    },
+    "errorsModal": {
+      "title": "Errors list"
     }
   }
 }

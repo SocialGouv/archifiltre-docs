@@ -5,6 +5,35 @@ interface ErrorMessageMap {
   default: string;
 }
 
+export enum ArchifiltreFileSystemErrorCode {
+  ENOENT = "ENOENT",
+  EBUSY = "EBUSY",
+  EACCES = "EACCES"
+}
+
+export enum UnknownError {
+  UNKNOWN = "UNKNOWN"
+}
+
+interface FsErrorToArchifiltreError {
+  [code: string]: ArchifiltreFileSystemErrorCode;
+}
+
+const fsErrorToArchifiltreError: FsErrorToArchifiltreError = {
+  ENOENT: ArchifiltreFileSystemErrorCode.ENOENT,
+  EBUSY: ArchifiltreFileSystemErrorCode.EBUSY,
+  EACCES: ArchifiltreFileSystemErrorCode.EACCES
+};
+
+export type ArchifiltreErrorCode =
+  | ArchifiltreFileSystemErrorCode
+  | UnknownError;
+
+export const convertFsErrorToArchifiltreError = (
+  errorCode: string
+): ArchifiltreFileSystemErrorCode | UnknownError =>
+  fsErrorToArchifiltreError[errorCode] || UnknownError.UNKNOWN;
+
 /**
  * Reports an error based on the error code
  * @param errorCode - The error code

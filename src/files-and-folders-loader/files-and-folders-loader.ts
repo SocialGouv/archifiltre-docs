@@ -11,9 +11,14 @@ import { medianOnSortedArray } from "../util/array-util";
 import { convertToPosixAbsolutePath } from "../util/file-sys-util";
 import { empty } from "../util/function-util";
 import { indexSort } from "../util/list-util";
+import {
+  ArchifiltreErrorCode,
+  convertFsErrorToArchifiltreError
+} from "../util/error-util";
 
 interface LoadFilesAndFoldersFromFileSystemError {
-  error: string;
+  message: string;
+  code: ArchifiltreErrorCode;
   path: string;
 }
 
@@ -39,6 +44,7 @@ export const loadFilesAndFoldersFromFileSystem = (
   const loadFilesAndFoldersFromFileSystemRec = (currentPath: string) => {
     try {
       const stats = fs.statSync(currentPath);
+
       if (stats.isDirectory()) {
         const children = fs.readdirSync(currentPath);
         children.forEach(childPath =>
@@ -58,7 +64,11 @@ export const loadFilesAndFoldersFromFileSystem = (
         convertToPosixAbsolutePath(path.relative(rootPath, currentPath))
       ]);
     } catch (error) {
-      hook({ path: currentPath, error: error.message });
+      hook({
+        path: currentPath,
+        message: error.message,
+        code: convertFsErrorToArchifiltreError(error.code)
+      });
     }
   };
 

@@ -45,6 +45,8 @@ import {
   setSessionName
 } from "./workspace-metadata/workspace-metadata-actions";
 import { getArchifiltreErrors } from "./loading-info/loading-info-selectors";
+import { openModalAction } from "./modal/modal-actions";
+import { Modal } from "./modal/modal-types";
 
 /**
  * Notifies the user that there is a Zip in the loaded files
@@ -72,11 +74,12 @@ const displayJsonNotification = () => {
 /**
  * Notifies the user that errors occurred while loading the folder
  */
-const displayErrorNotification = () => {
+const displayErrorNotification = () => dispatch => {
   notifyError(
     translations.t("folderDropzone.errorsWhileLoading"),
     translations.t("folderDropzone.error"),
-    NotificationDuration.PERMANENT
+    NotificationDuration.PERMANENT,
+    () => dispatch(openModalAction(Modal.ERROR_MODAL))
   );
 };
 
@@ -185,7 +188,7 @@ export const loadFilesAndFoldersFromPathThunk = (
       const errors = getArchifiltreErrors(getState());
 
       if (errors.length > 0) {
-        displayErrorNotification();
+        dispatch(displayErrorNotification());
       }
 
       dispatch(computeHashesThunk(virtualFileSystem.originalPath));

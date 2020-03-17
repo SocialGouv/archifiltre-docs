@@ -127,6 +127,9 @@
       "size": "Taille",
       "fileLastModified": "Dernière modification",
       "path": "Chemin"
+    },
+    "errorsModal": {
+      "title": "Liste des erreurs"
     }
   }
 }

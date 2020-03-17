@@ -38,7 +38,8 @@ export default (hook, droppedElementPath) => {
             createArchifiltreError({
               type: ArchifiltreErrorType.LOADING_FILE_SYSTEM,
               filePath: event.data.message.path,
-              reason: event.data.message.error
+              reason: event.data.message.error,
+              code: event.data.message.code
             })
           );
           break;

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { FaSearch } from "react-icons/all";
 import Button, {
   ButtonAngles,
@@ -6,11 +6,10 @@ import Button, {
   ButtonSize
 } from "../common/button";
 import { SearchModalContainer } from "../search-modal/search-modal-container";
+import { useModal } from "../../hooks/useModal";
 
 export const SearchButton = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = useCallback(() => setIsModalOpen(true), [setIsModalOpen]);
-  const closeModal = useCallback(() => setIsModalOpen(false), [setIsModalOpen]);
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   return (
     <>

@@ -18,7 +18,7 @@ const workerRootFolder = mode =>
     : "require('path').join(require('electron').remote.app.getAppPath(),'/electron/dist/')";
 
 module.exports = (env, argv = {}) => ({
-  devtool: argv.mode === "development" ? "source-map" : false,
+  devtool: argv.mode === "development" ? "cheap-module-eval-source-map" : false,
   entry: {
     app: "./src/app.js"
   },
@@ -62,7 +62,9 @@ module.exports = (env, argv = {}) => ({
 
   resolve: {
     modules: [path.resolve(__dirname, "src"), "node_modules"],
-    extensions: [".mjs", ".ts", ".tsx", ".js", ".jsx", ".json"]
+    extensions: [".mjs", ".ts", ".tsx", ".js", ".json"],
+    symlinks: false,
+    cacheWithContext: false
   },
 
   module: {
@@ -70,6 +72,7 @@ module.exports = (env, argv = {}) => ({
       // This loader won't work if it is not defined before the typescript loader
       {
         test: /\.fork\.[jt]s$/,
+        include: path.resolve(__dirname, "src"),
         use: {
           loader: "webpack-fork-loader",
           options: {
@@ -80,17 +83,21 @@ module.exports = (env, argv = {}) => ({
       },
       {
         test: /\.[tj]sx?$/,
-        exclude: /(node_modules|bower_components)/,
+        include: path.resolve(__dirname, "src"),
         loader: "awesome-typescript-loader"
       },
       {
         test: /\.js$/,
+        include: path.resolve(__dirname, "src"),
         loader: "source-map-loader",
         enforce: "pre"
       },
       {
         test: /\.css$|\.scss$/,
-        exclude: /(node_modules|bower_components)/,
+        include: [
+          path.resolve(__dirname, "src/css"),
+          path.resolve(__dirname, "static/fonts")
+        ],
         use: [
           { loader: "style-loader" },
           { loader: "css-loader" },
@@ -105,11 +112,8 @@ module.exports = (env, argv = {}) => ({
         ]
       },
       {
-        test: /\.worker\.js$/,
-        use: { loader: "worker-loader" }
-      },
-      {
         test: /\.svg/,
+        include: path.resolve(__dirname, "node_modules/react-notifications"),
         use: [
           {
             loader: "svg-url-loader",
@@ -117,12 +121,15 @@ module.exports = (env, argv = {}) => ({
               limit: 1024,
               name: "[name].[ext]"
             }
-          },
-          "image-webpack-loader"
+          }
         ]
       },
       {
         test: /\.(otf|ttf|eot|woff|woff2)$/,
+        include: [
+          path.resolve(__dirname, "static/fonts"),
+          path.resolve(__dirname, "node_modules/react-notifications/lib/fonts")
+        ],
         use: [
           {
             loader: "url-loader",
@@ -137,8 +144,15 @@ module.exports = (env, argv = {}) => ({
     ]
   },
 
+  optimization: {
+    removeAvailableModules: false,
+    removeEmptyChunks: false,
+    splitChunks: false
+  },
+
   output: {
     filename: "[name].bundle.js",
-    path: path.resolve(__dirname, "electron/dist")
+    path: path.resolve(__dirname, "electron/dist"),
+    pathinfo: false
   }
 });

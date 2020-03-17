@@ -9,7 +9,8 @@ module.exports = {
   target: "electron-main",
   output: {
     filename: "main.js",
-    path: path.resolve(__dirname, "electron/dist")
+    path: path.resolve(__dirname, "electron/dist"),
+    pathinfo: false
   },
   resolve: {
     extensions: [".ts", ".js"]
@@ -33,7 +34,7 @@ module.exports = {
     rules: [
       {
         test: /\.[tj]sx?$/,
-        exclude: /(node_modules|bower_components)/,
+        include: path.resolve(__dirname, "src"),
         loader: "awesome-typescript-loader"
       }
     ]

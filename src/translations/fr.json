@@ -121,7 +121,12 @@
       "error": "Une erreur s'est produite lors du chargement de la session précédente."
     },
     "search": {
-      "title": "Rechercher et filtrer"
+      "title": "Rechercher et filtrer",
+      "name": "Nom",
+      "type": "Type",
+      "size": "Taille",
+      "fileLastModified": "Dernière modification",
+      "path": "Chemin"
     }
   }
 }

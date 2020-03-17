@@ -1,8 +1,10 @@
-import React from "react";
+import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaTimes } from "react-icons/all";
 import Modal from "react-modal";
 import styled from "styled-components";
+import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import { FilesAndFoldersTable } from "./files-and-folders-table";
 
 const HeaderWrapper = styled.div`
   display: flex;
@@ -14,8 +16,19 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-export const SearchModal = ({ isModalOpen, closeModal }) => {
+interface SearchModalProps {
+  isModalOpen: boolean;
+  closeModal: () => void;
+  filesAndFolders: FilesAndFoldersMap;
+}
+
+export const SearchModal: FC<SearchModalProps> = ({
+  isModalOpen,
+  closeModal,
+  filesAndFolders
+}) => {
   const { t } = useTranslation();
+
   return (
     <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
       <HeaderWrapper>
@@ -24,6 +37,7 @@ export const SearchModal = ({ isModalOpen, closeModal }) => {
           <FaTimes />
         </CloseButton>
       </HeaderWrapper>
+      <FilesAndFoldersTable filesAndFolders={filesAndFolders} />
     </Modal>
   );
 };

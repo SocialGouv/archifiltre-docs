@@ -1,3 +1,5 @@
+import { ArchifiltreErrorCode } from "../../util/error-util";
+
 export const START_LOADING = "LOADING_INFO/START_LOADING";
 export const UPDATE_LOADING = "LOADING_INFO/UPDATE_LOADING";
 export const PROGRESS_LOADING = "LOADING_INFO/PROGRESS_LOADING";
@@ -20,6 +22,7 @@ export interface ArchifiltreError {
   type: ArchifiltreErrorType;
   filePath: string;
   reason: string;
+  code: ArchifiltreErrorCode;
 }
 
 export interface LoadingInfo {

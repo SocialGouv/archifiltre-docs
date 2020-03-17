@@ -5,7 +5,7 @@ import Button, {
   ButtonColor,
   ButtonSize
 } from "../common/button";
-import { SearchModal } from "../search-modal/search-modal";
+import { SearchModalContainer } from "../search-modal/search-modal-container";
 
 export const SearchButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +23,7 @@ export const SearchButton = () => {
       >
         <FaSearch />
       </Button>
-      <SearchModal isModalOpen={isModalOpen} closeModal={closeModal} />
+      <SearchModalContainer isModalOpen={isModalOpen} closeModal={closeModal} />
     </>
   );
 };

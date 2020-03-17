@@ -121,7 +121,12 @@
       "error": "An error occurred while restoring the previous session."
     },
     "search": {
-      "title": "Search and filter"
+      "title": "Search and filter",
+      "name": "Name",
+      "type": "Type",
+      "size": "Size",
+      "fileLastModified": "Last modification",
+      "path": "Path"
     }
   }
 }

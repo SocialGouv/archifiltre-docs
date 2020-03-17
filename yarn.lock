@@ -10083,6 +10083,11 @@ react-redux@^7.1.1:
     prop-types "^15.7.2"
     react-is "^16.9.0"
 
+react-table@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.0.0.tgz#3297e454cbffe916626b184f5394d7e7e098fa36"
+  integrity sha512-/RKUYLuqrupUs0qHdjdQLmgwdQ9mgXPnpshqv2T+OQUGhTu0XuLXVc6GOIywemXNf6qjL3dj81O6zALLK74Emw==
+
 react-tooltip@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-4.0.0.tgz#a3ea46c9fae6ceeaa0969000793ad75c49f9572c"

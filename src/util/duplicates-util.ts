@@ -41,6 +41,7 @@ import {
   FilesAndFoldersMap,
   HashesMap
 } from "../reducers/files-and-folders/files-and-folders-types";
+import translations from "../translations/translations";
 import { Mapper, Merger } from "./functionnal-programming-utils";
 
 export interface DuplicatesMap {
@@ -315,3 +316,17 @@ export const getBiggestDuplicatedFolders = (nbDuplicatedItems: number) => (
     }))
     .value();
 };
+
+/**
+ * Returns true if a file and folder element has at least one duplicate, false otherwise
+ * @param hashes - map of hashes of the file tree
+ * @param fileOrFolder - file or folder to check
+ */
+export const hasDuplicate = (
+  hashes: HashesMap = {},
+  fileOrFolder: FilesAndFolders
+) =>
+  _(hashes)
+    .omit(fileOrFolder.id)
+    .values()
+    .some(hash => hash === hashes[fileOrFolder.id]);

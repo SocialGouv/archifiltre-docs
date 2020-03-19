@@ -7,7 +7,8 @@ import {
   countDuplicatesPercentForFiles,
   countDuplicatesPercentForFolders,
   getBiggestDuplicatedFolders,
-  getMostDuplicatedFiles
+  getMostDuplicatedFiles,
+  hasDuplicate
 } from "./duplicates-util";
 
 const folder1Id = "folder-1-id";
@@ -249,6 +250,16 @@ describe("duplicates-util", () => {
           sortBySizeIndex: [0]
         }
       ]);
+    });
+  });
+
+  describe("hasDuplicate", () => {
+    it("should return true if element has at least one duplicate", () => {
+      expect(hasDuplicate(hashesMap, file1)).toEqual(true);
+    });
+
+    it("should return false if element has no duplicates", () => {
+      expect(hasDuplicate(hashesMap, file2)).toEqual(false);
     });
   });
 });

@@ -19,6 +19,7 @@ import {
   isExactFileOrAncestor
 } from "../../util/file-and-folders-utils";
 import { formatPathForUserSystem } from "../../util/file-sys-util";
+import { hasDuplicate } from "../../util/duplicates-util";
 
 interface MakeCsvHeaderOptions {
   withHashes: boolean;
@@ -52,7 +53,10 @@ const makeCsvHeader = (
   ];
 
   if (withHashes) {
-    header.push(translations.t("csvHeader.hash"));
+    header.push(
+      translations.t("csvHeader.hash"),
+      translations.t("csvHeader.duplicate")
+    );
   }
 
   if (withFilesToDelete) {
@@ -201,6 +205,9 @@ export const onInitialize: WorkerMessageHandler = async (
       const depth = `${getFilesAndFoldersDepth(ffId)}`;
       const fileCount = `${currentMetadata.nbChildrenFiles}`;
       const type = getType(currentFf);
+      const elementHasDuplicate = hasDuplicate(hashes, currentFf)
+        ? translations.t("common.yes")
+        : translations.t("common.no");
 
       const line = [
         "",
@@ -220,7 +227,7 @@ export const onInitialize: WorkerMessageHandler = async (
       ];
 
       if (hashes) {
-        line.push(hashes[ffId]);
+        line.push(hashes[ffId], elementHasDuplicate);
       }
 
       if (withFilesToDelete) {

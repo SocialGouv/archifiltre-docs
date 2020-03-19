@@ -78,7 +78,9 @@
       "originalName": "Cet élément était originellement intitulé '{{oldName}}'",
       "byteChar": "o",
       "unknown": "inconnu",
-      "toDelete": "À supprimer"
+      "toDelete": "À supprimer",
+      "yes": "Oui",
+      "no": "Non"
     },
     "hash": {
       "loadingInfoLabel": "Chargement des empreintes de fichiers et dossiers",
@@ -99,7 +101,8 @@
       "depth": "profondeur",
       "hash": "empreinte (MD5)",
       "fileCount": "nombre de fichiers",
-      "type": "type"
+      "type": "type",
+      "duplicate": "redondance"
     },
     "export": {
       "metsExportErrorTitle": "Erreur dans l'export METS",

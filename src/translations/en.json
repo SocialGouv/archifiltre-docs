@@ -129,7 +129,15 @@
       "path": "Path"
     },
     "errorsModal": {
-      "title": "Errors list"
+      "title": "Errors list",
+      "errorCode": "Error Code",
+      "errorDescription": "Error Description",
+      "errorDescriptions": {
+        "ENOENT": "The file cannot be found.",
+        "EBUSY": "The resource is busy. Maybe it's currently used by another process.",
+        "EACCES": "You do not have the rights to access this file.",
+        "UNKNOWN": "Unknown or unhandled error."
+      }
     }
   }
 }

@@ -130,7 +130,9 @@
       "type": "Type",
       "size": "Size",
       "fileLastModified": "Last modification",
-      "path": "Path"
+      "path": "Path",
+      "searchPlaceholder": "Search",
+      "noResult": "No result"
     },
     "errorsModal": {
       "title": "Errors list",

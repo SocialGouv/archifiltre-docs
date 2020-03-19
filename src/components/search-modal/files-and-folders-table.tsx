@@ -1,9 +1,9 @@
 import React from "react";
 import translations from "../../translations/translations";
-import { useTable } from "react-table";
 import { getType } from "../../util/file-and-folders-utils";
 import { octet2HumanReadableFormat } from "../main-space/ruler";
 import dateFormat from "dateformat";
+import Table from "../common/table";
 
 const columns = [
   {
@@ -49,40 +49,6 @@ const getData = filesAndFolders =>
       };
     });
 
-export const FilesAndFoldersTable = ({ filesAndFolders }) => {
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow
-  } = useTable({
-    columns,
-    data: getData(filesAndFolders)
-  });
-  return (
-    <table {...getTableProps()}>
-      <thead>
-        {headerGroups.map(headerGroup => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps()}>{column.render("Header")}</th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map(row => {
-          prepareRow(row);
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map(cell => {
-                return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  );
-};
+export const FilesAndFoldersTable = ({ filesAndFolders }) => (
+  <Table columns={columns} data={getData(filesAndFolders)} />
+);

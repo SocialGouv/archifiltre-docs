@@ -1,32 +1,9 @@
-import React from "react";
-import translations from "../../translations/translations";
+import dateFormat from "dateformat";
+import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { getType } from "../../util/file-and-folders-utils";
 import { octet2HumanReadableFormat } from "../main-space/ruler";
-import dateFormat from "dateformat";
 import Table from "../common/table";
-
-const columns = [
-  {
-    Header: translations.t("search.name"),
-    accessor: "name"
-  },
-  {
-    Header: translations.t("search.type"),
-    accessor: "type"
-  },
-  {
-    Header: translations.t("search.size"),
-    accessor: "fileSize"
-  },
-  {
-    Header: translations.t("search.fileLastModified"),
-    accessor: "lastModified"
-  },
-  {
-    Header: translations.t("search.path"),
-    accessor: "path"
-  }
-];
 
 type FilesAndFoldersTableItem = {
   name: string;
@@ -49,6 +26,33 @@ const getData = filesAndFolders =>
       };
     });
 
-export const FilesAndFoldersTable = ({ filesAndFolders }) => (
-  <Table columns={columns} data={getData(filesAndFolders)} />
-);
+export const FilesAndFoldersTable = ({ filesAndFolders }) => {
+  const { t } = useTranslation();
+  const data = useMemo(() => getData(filesAndFolders), [filesAndFolders]);
+  const columns = useMemo(
+    () => [
+      {
+        Header: t("search.name"),
+        accessor: "name"
+      },
+      {
+        Header: t("search.type"),
+        accessor: "type"
+      },
+      {
+        Header: t("search.size"),
+        accessor: "fileSize"
+      },
+      {
+        Header: t("search.fileLastModified"),
+        accessor: "lastModified"
+      },
+      {
+        Header: t("search.path"),
+        accessor: "path"
+      }
+    ],
+    [t]
+  );
+  return <Table columns={columns} data={data} />;
+};

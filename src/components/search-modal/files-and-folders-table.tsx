@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { getType } from "../../util/file-and-folders-utils";
 import { octet2HumanReadableFormat } from "../main-space/ruler";
 import Table from "../common/table";
+import { isEmpty } from "lodash";
 
 type FilesAndFoldersTableItem = {
   name: string;
@@ -54,5 +55,9 @@ export const FilesAndFoldersTable = ({ filesAndFolders }) => {
     ],
     [t]
   );
-  return <Table columns={columns} data={data} />;
+  return isEmpty(filesAndFolders) ? (
+    <span>{t("search.noResult")}</span>
+  ) : (
+    <Table columns={columns} data={data} />
+  );
 };

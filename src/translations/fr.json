@@ -130,7 +130,9 @@
       "type": "Type",
       "size": "Taille",
       "fileLastModified": "Dernière modification",
-      "path": "Chemin"
+      "path": "Chemin",
+      "searchPlaceholder": "Rechercher",
+      "noResult": "Pas de résultat"
     },
     "errorsModal": {
       "title": "Liste des erreurs",

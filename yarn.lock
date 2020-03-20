@@ -3648,12 +3648,12 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-docxtemplater@3.17.1:
-  version "3.17.1"
-  resolved "https://registry.yarnpkg.com/docxtemplater/-/docxtemplater-3.17.1.tgz#95f5de44b8d66068c1ade55070bb70e7ba255fe7"
-  integrity sha512-IkTjLTe4wQ9oGCjUNe8+kyEcnN5sH8ewHNFwnkfBYvqtxDo4ygCEtfa65rJa1zujCUlLJnoufZn5/l27Kz1W6g==
+docxtemplater@3.17.2:
+  version "3.17.2"
+  resolved "https://registry.yarnpkg.com/docxtemplater/-/docxtemplater-3.17.2.tgz#8e5b89ceac45bb9e2d962df08b72ce69bdc0fe72"
+  integrity sha512-8eP/D2b4VVnTCLE8bkaNXqekDal3dZLguOR6kAEnr0bm6KGJ9oEPCX9cE3fMtcRIGXGoedMDymJRsDa1dDkg+w==
   dependencies:
-    xmldom "^0.2.1"
+    xmldom "^0.3.0"
 
 dom-converter@^0.2:
   version "0.2.0"
@@ -12165,10 +12165,10 @@ xmlcreate@^2.0.0:
   resolved "https://registry.yarnpkg.com/xmlcreate/-/xmlcreate-2.0.1.tgz#2ec38bd7b708d213fd1a90e2431c4af9c09f6a52"
   integrity sha512-MjGsXhKG8YjTKrDCXseFo3ClbMGvUD4en29H2Cev1dv4P/chlpw6KdYmlCWDkhosBVKRDjM836+3e3pm1cBNJA==
 
-xmldom@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.2.1.tgz#cac9465066f161e1c3302793ea4dbe59c518274f"
-  integrity sha512-kXXiYvmblIgEemGeB75y97FyaZavx6SQhGppLw5TKWAD2Wd0KAly0g23eVLh17YcpxZpnFym1Qk/eaRjy1APPg==
+xmldom@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.3.0.tgz#e625457f4300b5df9c2e1ecb776147ece47f3e5a"
+  integrity sha512-z9s6k3wxE+aZHgXYxSTpGDo7BYOUfJsIRyoZiX6HTjwpwfS2wpQBQKa2fD+ShLyPkqDYo5ud7KitmLZ2Cd6r0g==
 
 xregexp@^4.3.0:
   version "4.3.0"

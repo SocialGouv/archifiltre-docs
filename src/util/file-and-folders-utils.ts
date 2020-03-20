@@ -208,7 +208,7 @@ export const createFilePathSequence = (
     targetElementId
   ];
 
-  return decomposePathToElement(targetElementVirtualPath)
+  return decomposePathToElement(targetElementVirtualPath || targetElementId)
     .slice(1)
     .map(virtualPath => virtualPathToIdMap[virtualPath] || virtualPath);
 };

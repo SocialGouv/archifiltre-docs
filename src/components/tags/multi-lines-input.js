@@ -5,7 +5,7 @@ export default class MultiLinesInput extends React.Component {
     super(props);
 
     this.state = {
-      value: props.value
+      value: props.value,
     };
 
     this.onBlur = this.onBlur.bind(this);
@@ -29,7 +29,7 @@ export default class MultiLinesInput extends React.Component {
   onChange(event) {
     const value = event.target.value.replace("\n", "");
     this.setState({
-      value
+      value,
     });
   }
 
@@ -48,7 +48,7 @@ export default class MultiLinesInput extends React.Component {
       padding: 0,
       margin: 0,
       border: 0,
-      height: "5em"
+      height: "5em",
     };
 
     return (

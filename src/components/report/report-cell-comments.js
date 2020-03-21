@@ -12,7 +12,7 @@ class ReportCellComments extends React.Component {
 
     this.state = {
       editing: false,
-      comments: ""
+      comments: "",
     };
 
     this.startInput = this.startInput.bind(this);
@@ -36,13 +36,13 @@ class ReportCellComments extends React.Component {
 
     this.setState({
       editing: true,
-      comments
+      comments,
     });
   }
 
   input(comments) {
     this.setState({
-      comments
+      comments,
     });
   }
 
@@ -57,11 +57,11 @@ class ReportCellComments extends React.Component {
       title: ActionTitle.DESCRIPTION_ADDED,
       type: ActionType.TRACK_EVENT,
       value: `Created description: "${comments}"`,
-      eventValue: comments
+      eventValue: comments,
     });
     this.setState({
       editing: false,
-      comments: ""
+      comments: "",
     });
   }
 
@@ -143,7 +143,7 @@ class ReportCellComments extends React.Component {
     const comments_style = {
       overflowY: editing ? "" : "auto",
       overflowX: "hidden",
-      maxHeight: "5.5em"
+      maxHeight: "5.5em",
     };
 
     if (is_dummy) {

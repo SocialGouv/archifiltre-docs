@@ -6,7 +6,7 @@ import {
   getAliasesFromStore,
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
-  getFilesToDeleteFromStore
+  getFilesToDeleteFromStore,
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import translations from "../../translations/translations";
@@ -38,18 +38,18 @@ export const resipExporterThunk = (
   const elementsToDelete = getFilesToDeleteFromStore(state);
 
   notifyInfo(resipExportStartedMessage, resipExportTitle);
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     generateResipExport$({
       aliases,
       comments,
       elementsToDelete,
       filesAndFolders,
       filesAndFoldersMetadata,
-      tags
+      tags,
     })
       .pipe(takeLast(1))
       .pipe(map(({ resipCsv }) => arrayToCsv(resipCsv)))
-      .subscribe(async stringCsv => {
+      .subscribe(async (stringCsv) => {
         await fs.writeFile(filePath, stringCsv);
         notifySuccess(resipExportSuccessMessage, resipExportTitle);
         resolve();

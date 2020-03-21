@@ -2,7 +2,7 @@ import { computeHash } from "./hash-util";
 import md5File from "md5-file";
 
 jest.mock("md5-file", () => ({
-  sync: jest.fn()
+  sync: jest.fn(),
 }));
 
 describe("hash-util", () => {

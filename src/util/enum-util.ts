@@ -1,5 +1,5 @@
 export const getEnumKeyFromValue = (key, enumeration): typeof enumeration =>
-  Object.keys(enumeration).find(enumKey => enumeration[enumKey] === key);
+  Object.keys(enumeration).find((enumKey) => enumeration[enumKey] === key);
 
 export const isValueInEnum = (value, enumeration) =>
   Object.values(enumeration).includes(value);

@@ -23,14 +23,14 @@ interface MetsButtonProps {
 const MetsButton: FC<MetsButtonProps> = ({
   exportToMets,
   originalPath,
-  sessionName
+  sessionName,
 }) => {
   const isDisabled = originalPath === "";
 
   const onClick = useCallback(() => {
     exportToMets({
       originalPath,
-      sessionName
+      sessionName,
     });
   }, [exportToMets, originalPath, sessionName]);
 

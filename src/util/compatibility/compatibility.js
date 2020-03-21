@@ -4,7 +4,7 @@ import _, { mapValues, pick } from "lodash";
 import fp from "lodash/fp";
 import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/files-and-folders-loader";
 
-export const fromAnyJsonToJs = json => {
+export const fromAnyJsonToJs = (json) => {
   let js = JSON.parse(json);
 
   const version = js.version;
@@ -28,7 +28,7 @@ export const fromAnyJsonToJs = json => {
   return js;
 };
 
-const v8JsToV9Js = v8 => {
+const v8JsToV9Js = (v8) => {
   const v9 = Object.assign({}, v8);
   v9.version = 9;
 
@@ -40,7 +40,7 @@ const v8JsToV9Js = v8 => {
 
   const mapOldToNewId = {};
 
-  const v8TreeToV9Ffs = tree => {
+  const v8TreeToV9Ffs = (tree) => {
     const table = tree.table;
 
     const remakePath = (key, table) => {
@@ -90,15 +90,17 @@ const v8JsToV9Js = v8 => {
         depth: 0,
         nb_files: 0,
         sort_by_size_index: [],
-        sort_by_date_index: []
+        sort_by_date_index: [],
       };
     }
 
-    const computeChildren = key => {
+    const computeChildren = (key) => {
       const node = table[key];
       const children = node.children;
       if (children.length) {
-        ans[mapOldToNewId[key]].children = children.map(a => mapOldToNewId[a]);
+        ans[mapOldToNewId[key]].children = children.map(
+          (a) => mapOldToNewId[a]
+        );
         children.map(computeChildren);
       }
     };
@@ -110,12 +112,12 @@ const v8JsToV9Js = v8 => {
 
   v9.files_and_folders = v8TreeToV9Ffs(v8.tree);
 
-  const v8TagsToV9Tags = tags => {
+  const v8TagsToV9Tags = (tags) => {
     const ans = {};
     for (const key in tags) {
       ans[generateRandomString(40)] = {
         name: key,
-        ff_ids: tags[key].map(a => mapOldToNewId[a])
+        ff_ids: tags[key].map((a) => mapOldToNewId[a]),
       };
     }
     return ans;
@@ -126,25 +128,25 @@ const v8JsToV9Js = v8 => {
   return v9;
 };
 
-export const v9JsToV10Js = v9 => {
+export const v9JsToV10Js = (v9) => {
   const v10 = Object.assign({}, v9);
   v10.version = 10;
 
   return v10;
 };
 
-export const v10JsToV11Js = v10 => {
+export const v10JsToV11Js = (v10) => {
   const v11 = Object.assign({}, v10);
   v11.version = 11;
 
   return v11;
 };
 
-export const v12JsToV13Js = v12 => {
+export const v12JsToV13Js = (v12) => {
   const reformatTag = (id, { ff_ids, name }) => ({
     ffIds: ff_ids,
     id,
-    name
+    name,
   });
   return {
     ...v12,
@@ -152,14 +154,14 @@ export const v12JsToV13Js = v12 => {
     tags: Object.keys(v12.tags).reduce(
       (tagMap, tagId) => ({
         ...tagMap,
-        [tagId]: reformatTag(tagId, v12.tags[tagId])
+        [tagId]: reformatTag(tagId, v12.tags[tagId]),
       }),
       {}
-    )
+    ),
   };
 };
 
-export const v13JsToV14Js = v13 => {
+export const v13JsToV14Js = (v13) => {
   const filesAndFolders = mapValues(
     v13.files_and_folders,
     (fileAndFolders, id) => ({
@@ -169,9 +171,9 @@ export const v13JsToV14Js = v13 => {
         "comments",
         "children",
         "file_size",
-        "file_last_modified"
+        "file_last_modified",
       ]),
-      id
+      id,
     })
   );
 
@@ -185,11 +187,11 @@ export const v13JsToV14Js = v13 => {
     filesAndFoldersMetadata,
     tags: v13.tags,
     sessionName: v13.session_name,
-    originalPath: v13.original_path
+    originalPath: v13.original_path,
   };
 };
 
-export const v2ToV21Js = v2 => {
+export const v2ToV21Js = (v2) => {
   const filesAndFolders = _.mapValues(
     v2.filesAndFolders,
     fp.pick(["name", "children", "file_size", "file_last_modified"])
@@ -197,11 +199,11 @@ export const v2ToV21Js = v2 => {
 
   const comments = _(v2.filesAndFolders)
     .mapValues(({ comments }) => comments)
-    .pickBy(comment => comment !== "")
+    .pickBy((comment) => comment !== "")
     .value();
   const aliases = _(v2.filesAndFolders)
     .mapValues(({ alias }) => alias)
-    .pickBy(alias => alias !== "")
+    .pickBy((alias) => alias !== "")
     .value();
 
   return {
@@ -209,6 +211,6 @@ export const v2ToV21Js = v2 => {
     version: 2.1,
     filesAndFolders,
     aliases,
-    comments
+    comments,
   };
 };

@@ -11,9 +11,9 @@ export default class AnimatedIcicle extends PureComponent {
 
     this.state = {
       prevStyle: {
-        display: "none"
+        display: "none",
       },
-      prevProps: props
+      prevProps: props,
     };
 
     this.onIcicleRectDoubleClickHandler = this.onIcicleRectDoubleClickHandler.bind(
@@ -28,14 +28,14 @@ export default class AnimatedIcicle extends PureComponent {
   onIcicleRectDoubleClickHandler(props, event) {
     addTracker({
       title: ActionTitle.ICICLE_ZOOM,
-      type: ActionType.TRACK_EVENT
+      type: ActionType.TRACK_EVENT,
     });
     this.setState(
       {
         prevProps: this.props,
         prevStyle: {
-          display: "inherit"
-        }
+          display: "inherit",
+        },
       },
       () => {
         this.props.onIcicleRectDoubleClickHandler(props, event);
@@ -53,12 +53,12 @@ export default class AnimatedIcicle extends PureComponent {
 
         Promise.all([
           this.ani(prev_dom_element, false, target_x, target_dx, x, dx),
-          this.ani(dom_element, true, x, dx, target_x, target_dx)
+          this.ani(dom_element, true, x, dx, target_x, target_dx),
         ]).then(() => {
           this.setState({
             prevStyle: {
-              display: "none"
-            }
+              display: "none",
+            },
           });
         });
       }
@@ -66,7 +66,7 @@ export default class AnimatedIcicle extends PureComponent {
   }
 
   ani(domElement, inv, target_x, target_dx, x, dx) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const getTime = () => new Date().getTime();
       const init_time = getTime();
       const target_time = 1000;
@@ -82,14 +82,14 @@ export default class AnimatedIcicle extends PureComponent {
         target[0] = target[0] * target[1];
       }
 
-      let vector = init.map((val, i) => a => val + (target[i] - val) * a);
+      let vector = init.map((val, i) => (a) => val + (target[i] - val) * a);
       if (inv) {
-        vector = target.map((val, i) => a => val + (init[i] - val) * a);
+        vector = target.map((val, i) => (a) => val + (init[i] - val) * a);
       }
 
       const visible = () => true;
       const measure = () => {};
-      const mutate = animationId => {
+      const mutate = (animationId) => {
         const ratio = zeroToOne();
         const translateX = vector[0](ratio);
         const scaleX = vector[1](ratio);
@@ -112,7 +112,7 @@ export default class AnimatedIcicle extends PureComponent {
 
   ref(dom_element) {
     this.setState({
-      dom_element
+      dom_element,
     });
   }
 

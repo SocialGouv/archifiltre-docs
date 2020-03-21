@@ -5,7 +5,7 @@ import {
   registerErrorAction,
   resetLoadingAction,
   startLoadingAction,
-  updateLoadingAction
+  updateLoadingAction,
 } from "./loading-info-actions";
 import loadingInfoReducer, { initialState } from "./loading-info-reducer";
 import { createArchifiltreError } from "./loading-info-selectors";
@@ -14,11 +14,11 @@ import { LoadingInfoState } from "./loading-info-types";
 
 const previouslyLoadingId = "prev-loading-id";
 const previouslyLoading = createLoadingInfo({
-  id: previouslyLoadingId
+  id: previouslyLoadingId,
 });
 const otherPreviouslyLoadingId = "other-prev-loading-id";
 const otherPreviouslyLoading = createLoadingInfo({
-  id: otherPreviouslyLoadingId
+  id: otherPreviouslyLoadingId,
 });
 const completeLoadingId = "complete-loading-id";
 const completeLoading = createLoadingInfo({ id: completeLoadingId });
@@ -31,8 +31,8 @@ const baseState: LoadingInfoState = {
   loadingInfo: {
     [previouslyLoadingId]: previouslyLoading,
     [otherPreviouslyLoadingId]: otherPreviouslyLoading,
-    [completeLoadingId]: completeLoading
-  }
+    [completeLoadingId]: completeLoading,
+  },
 };
 
 describe("loading-info-reducer", () => {
@@ -58,8 +58,8 @@ describe("loading-info-reducer", () => {
           [previouslyLoadingId]: previouslyLoading,
           [otherPreviouslyLoadingId]: otherPreviouslyLoading,
           [newLoadingId]: newLoading,
-          [completeLoadingId]: completeLoading
-        }
+          [completeLoadingId]: completeLoading,
+        },
       });
     });
   });
@@ -81,11 +81,11 @@ describe("loading-info-reducer", () => {
           [previouslyLoadingId]: {
             ...previouslyLoading,
             goal: newGoal,
-            progress: newProgress
+            progress: newProgress,
           },
           [otherPreviouslyLoadingId]: otherPreviouslyLoading,
-          [completeLoadingId]: completeLoading
-        }
+          [completeLoadingId]: completeLoading,
+        },
       });
     });
   });
@@ -105,11 +105,11 @@ describe("loading-info-reducer", () => {
         loadingInfo: {
           [previouslyLoadingId]: {
             ...previouslyLoading,
-            progress: previouslyLoading.progress + progress
+            progress: previouslyLoading.progress + progress,
           },
           [otherPreviouslyLoadingId]: otherPreviouslyLoading,
-          [completeLoadingId]: completeLoading
-        }
+          [completeLoadingId]: completeLoading,
+        },
       });
     });
   });
@@ -128,8 +128,8 @@ describe("loading-info-reducer", () => {
         loadingInfo: {
           [previouslyLoadingId]: previouslyLoading,
           [otherPreviouslyLoadingId]: otherPreviouslyLoading,
-          [completeLoadingId]: completeLoading
-        }
+          [completeLoadingId]: completeLoading,
+        },
       });
     });
   });
@@ -137,18 +137,18 @@ describe("loading-info-reducer", () => {
   describe("REGISTER_ERROR", () => {
     it("should add the error to the list", () => {
       const baseError = createArchifiltreError({
-        filePath: "/base"
+        filePath: "/base",
       });
       const error = createArchifiltreError({});
       const previousState = {
         ...baseState,
-        errors: [baseError]
+        errors: [baseError],
       };
       expect(
         loadingInfoReducer(previousState, registerErrorAction(error))
       ).toEqual({
         ...baseState,
-        errors: [baseError, error]
+        errors: [baseError, error],
       });
     });
   });
@@ -171,8 +171,8 @@ describe("loading-info-reducer", () => {
         loadingInfo: {
           [previouslyLoadingId]: previouslyLoading,
           [otherPreviouslyLoadingId]: otherPreviouslyLoading,
-          [completeLoadingId]: completeLoading
-        }
+          [completeLoadingId]: completeLoading,
+        },
       });
     });
   });

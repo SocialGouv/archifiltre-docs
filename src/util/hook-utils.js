@@ -27,6 +27,6 @@ export const hookCounter = (
 
   return {
     hook,
-    getCount: () => count
+    getCount: () => count,
   };
 };

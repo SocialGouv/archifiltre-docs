@@ -16,7 +16,7 @@ interface ResipButtonProps {
 const ResipButton: FC<ResipButtonProps> = ({
   originalPath,
   sessionName,
-  exportToResip
+  exportToResip,
 }) => {
   const savePath = path.join(originalPath, `${sessionName}-RESIP`);
 

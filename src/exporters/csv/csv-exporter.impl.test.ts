@@ -16,13 +16,13 @@ const tags = {
   [tagId]: {
     ffIds: [taggedFfId],
     id: tagId,
-    name: tagName
+    name: tagName,
   },
   [tagId2]: {
     ffIds: [taggedFfId],
     id: tagId2,
-    name: tag2Name
-  }
+    name: tag2Name,
+  },
 };
 
 const filesAndFolders = {
@@ -32,7 +32,7 @@ const filesAndFolders = {
     file_size: 10,
     hash: null,
     id: rootId,
-    name: ""
+    name: "",
   },
   [rootFolderId]: {
     children: [taggedFfId],
@@ -40,7 +40,7 @@ const filesAndFolders = {
     file_size: 10,
     hash: null,
     id: rootId,
-    name: "root"
+    name: "root",
   },
   [taggedFfId]: {
     children: [firstChildId],
@@ -48,7 +48,7 @@ const filesAndFolders = {
     file_size: 10,
     hash: null,
     id: taggedFfId,
-    name: "folder"
+    name: "folder",
   },
   [firstChildId]: {
     children: [],
@@ -56,8 +56,8 @@ const filesAndFolders = {
     file_size: 10,
     hash: null,
     id: taggedFfId,
-    name: "ff-id.txt"
-  }
+    name: "ff-id.txt",
+  },
 };
 
 const filesAndFoldersMetadata = {
@@ -66,22 +66,22 @@ const filesAndFoldersMetadata = {
     childrenTotalSize: 10000,
     maxLastModified: 10000,
     medianLastModified: 4000,
-    minLastModified: 1000
+    minLastModified: 1000,
   }),
   [taggedFfId]: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 10000,
     maxLastModified: 10000,
     medianLastModified: 4000,
-    minLastModified: 1000
+    minLastModified: 1000,
   }),
   [firstChildId]: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 10000,
     maxLastModified: 10000,
     medianLastModified: 4000,
-    minLastModified: 1000
-  })
+    minLastModified: 1000,
+  }),
 };
 
 const rootHash = "root-tag";
@@ -92,25 +92,25 @@ const hashes = {
   [rootId]: rootHash,
   [rootFolderId]: rootFolderHash,
   [taggedFfId]: taggedHash,
-  [firstChildId]: firstChildIdHash
+  [firstChildId]: firstChildIdHash,
 };
 
 const rootAlias = "root-alias";
 const firstChildIdAlias = "aliased-element";
 const aliases = {
   [rootId]: rootAlias,
-  [firstChildId]: firstChildIdAlias
+  [firstChildId]: firstChildIdAlias,
 };
 
 const rootComment = "root-comment";
 const firstChildIdComment = "commented-element";
 const comments = {
   [rootId]: rootComment,
-  [firstChildId]: firstChildIdComment
+  [firstChildId]: firstChildIdComment,
 };
 
-const getResultCall = calls => calls[calls.length - 2];
-const getCompleteCall = calls => calls[calls.length - 1];
+const getResultCall = (calls) => calls[calls.length - 2];
+const getCompleteCall = (calls) => calls[calls.length - 1];
 
 describe("csv-exporter.impl", () => {
   describe("onInitialize", () => {
@@ -134,7 +134,7 @@ describe("csv-exporter.impl", () => {
         csvHeader,
         csvFirstLine,
         csvSecondLine,
-        csvThirdLine
+        csvThirdLine,
       ].join("\n");
 
       await onInitialize(asyncWorker, {
@@ -143,7 +143,7 @@ describe("csv-exporter.impl", () => {
         filesAndFolders,
         filesAndFoldersMetadata,
         language: "en",
-        tags
+        tags,
       });
 
       const calls = asyncWorker.postMessage.mock.calls;
@@ -153,14 +153,14 @@ describe("csv-exporter.impl", () => {
       expect(getResultCall(calls)).toEqual([
         {
           result: expectedCsv,
-          type: MessageTypes.RESULT
-        }
+          type: MessageTypes.RESULT,
+        },
       ]);
 
       expect(getCompleteCall(calls)).toEqual([
         {
-          type: MessageTypes.COMPLETE
-        }
+          type: MessageTypes.COMPLETE,
+        },
       ]);
     });
 
@@ -184,7 +184,7 @@ describe("csv-exporter.impl", () => {
         csvHeader,
         csvFirstLine,
         csvSecondLine,
-        csvThirdLine
+        csvThirdLine,
       ].join("\n");
 
       await onInitialize(asyncWorker, {
@@ -194,7 +194,7 @@ describe("csv-exporter.impl", () => {
         filesAndFoldersMetadata,
         hashes,
         language: "en",
-        tags
+        tags,
       });
 
       const calls = asyncWorker.postMessage.mock.calls;
@@ -204,14 +204,14 @@ describe("csv-exporter.impl", () => {
       expect(getResultCall(calls)).toEqual([
         {
           result: expectedCsv,
-          type: MessageTypes.RESULT
-        }
+          type: MessageTypes.RESULT,
+        },
       ]);
 
       expect(getCompleteCall(calls)).toEqual([
         {
-          type: MessageTypes.COMPLETE
-        }
+          type: MessageTypes.COMPLETE,
+        },
       ]);
     });
 
@@ -235,7 +235,7 @@ describe("csv-exporter.impl", () => {
         csvHeader,
         csvFirstLine,
         csvSecondLine,
-        csvThirdLine
+        csvThirdLine,
       ].join("\n");
 
       await onInitialize(asyncWorker, {
@@ -246,7 +246,7 @@ describe("csv-exporter.impl", () => {
         filesAndFoldersMetadata,
         hashes,
         language: "en",
-        tags
+        tags,
       });
 
       const calls = asyncWorker.postMessage.mock.calls;
@@ -256,14 +256,14 @@ describe("csv-exporter.impl", () => {
       expect(getResultCall(calls)).toEqual([
         {
           result: expectedCsv,
-          type: MessageTypes.RESULT
-        }
+          type: MessageTypes.RESULT,
+        },
       ]);
 
       expect(getCompleteCall(calls)).toEqual([
         {
-          type: MessageTypes.COMPLETE
-        }
+          type: MessageTypes.COMPLETE,
+        },
       ]);
     });
   });

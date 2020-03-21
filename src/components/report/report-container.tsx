@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   markAsToDelete,
-  unmarkAsToDelete
+  unmarkAsToDelete,
 } from "../../reducers/files-and-folders/files-and-folders-actions";
 import {
   getAliasesFromStore,
@@ -11,22 +11,22 @@ import {
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
   getHashesFromStore,
-  ROOT_FF_ID
+  ROOT_FF_ID,
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import {
   updateAliasThunk,
-  updateCommentThunk
+  updateCommentThunk,
 } from "../../reducers/files-and-folders/files-and-folders-thunks";
 import { StoreState } from "../../reducers/store";
 import { addTag, untagFile } from "../../reducers/tags/tags-actions";
 import {
   getAllTagIdsForFile,
   getTagsByIds,
-  getTagsFromStore
+  getTagsFromStore,
 } from "../../reducers/tags/tags-selectors";
 import {
   getWorkspaceMetadataFromStore,
-  useWorkspaceMetadata
+  useWorkspaceMetadata,
 } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { useFillColor } from "../../util/color-util";
 import ReportApiToProps from "./report";
@@ -97,7 +97,7 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
   );
 
   const updateComment = useCallback(
-    comments => {
+    (comments) => {
       dispatch(updateCommentThunk(filesAndFoldersId, comments));
       api.undo.commit();
     },
@@ -105,7 +105,7 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
   );
 
   const updateAlias = useCallback(
-    alias => {
+    (alias) => {
       dispatch(updateAliasThunk(filesAndFoldersId, alias));
       api.undo.commit();
     },

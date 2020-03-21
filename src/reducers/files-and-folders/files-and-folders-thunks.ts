@@ -4,7 +4,7 @@ import { ArchifiltreThunkAction } from "../archifiltre-types";
 import {
   addCommentsOnFilesAndFolders,
   setFilesAndFoldersAliases,
-  setFilesAndFoldersHashes
+  setFilesAndFoldersHashes,
 } from "./files-and-folders-actions";
 
 interface FfHashMap {
@@ -17,7 +17,7 @@ interface FfHashMap {
  */
 export const updateFilesAndFoldersHashes = (
   hashes: FfHashMap
-): ArchifiltreThunkAction => dispatch => {
+): ArchifiltreThunkAction => (dispatch) => {
   dispatch(setFilesAndFoldersHashes(hashes));
 };
 
@@ -29,12 +29,12 @@ export const updateFilesAndFoldersHashes = (
 export const updateAliasThunk = (
   filesAndFoldersId: string,
   newAlias: string
-): ArchifiltreThunkAction => dispatch => {
+): ArchifiltreThunkAction => (dispatch) => {
   addTracker({
     eventValue: newAlias,
     title: ActionTitle.ALIAS_ADDED,
     type: ActionType.TRACK_EVENT,
-    value: `Created alias: "${newAlias}"`
+    value: `Created alias: "${newAlias}"`,
   });
   dispatch(setFilesAndFoldersAliases({ [filesAndFoldersId]: newAlias }));
 };
@@ -47,6 +47,6 @@ export const updateAliasThunk = (
 export const updateCommentThunk = (
   filesAndFoldersId,
   comments
-): ArchifiltreThunkAction => dispatch => {
+): ArchifiltreThunkAction => (dispatch) => {
   dispatch(addCommentsOnFilesAndFolders({ [filesAndFoldersId]: comments }));
 };

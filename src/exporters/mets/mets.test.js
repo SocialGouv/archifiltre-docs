@@ -3,14 +3,14 @@ import {
   outputDmdSec,
   outputProvMd,
   outputFileTag,
-  outputDivTag
+  outputDivTag,
 } from "./mets.test.data.json";
 import {
   makeHeader,
   makeDmdSec,
   makePremisEvent,
   makeFileElement,
-  makeObjectDiv
+  makeObjectDiv,
 } from "./mets";
 import { advanceTo } from "jest-date-mock";
 
@@ -19,7 +19,7 @@ advanceTo(new Date(2019, 7, 5, 1, 0, 0, 0));
 // Mock to give a defined value for the uuid
 const mockUuid = "12345678-1234-1234-abcd-123456789abc";
 jest.mock("uuid", () => ({
-  v4: () => mockUuid
+  v4: () => mockUuid,
 }));
 
 // BAD HACK to be able to compare 'undefined' values...
@@ -54,7 +54,7 @@ describe("mets module", () => {
     const alias = "alias.test";
     const testItem = {
       name: "test.test",
-      file_size: 100
+      file_size: 100,
     };
 
     const testId = "TEST_ID";

@@ -2,7 +2,7 @@ import {
   curriedFormatPercent,
   formatPercent,
   percent,
-  ratio
+  ratio,
 } from "./numbers-util";
 
 describe("numbers-util", () => {

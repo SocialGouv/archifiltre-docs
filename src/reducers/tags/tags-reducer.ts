@@ -13,11 +13,11 @@ import {
   TAG_FILE,
   TagsActionTypes,
   TagsState,
-  UNTAG_FILE
+  UNTAG_FILE,
 } from "./tags-types";
 
 const initialState: TagsState = {
-  tags: {}
+  tags: {},
 };
 
 /**
@@ -32,9 +32,9 @@ const tagFile = (state: TagsState, tagId: string, ffId: string): TagsState => ({
     ...state.tags,
     [tagId]: {
       ...state.tags[tagId],
-      ffIds: [...new Set([...state.tags[tagId].ffIds, ffId])]
-    }
-  }
+      ffIds: [...new Set([...state.tags[tagId].ffIds, ffId])],
+    },
+  },
 });
 
 /**
@@ -58,9 +58,9 @@ const createTag = (
       [completeTagId]: {
         ffIds: [ffId],
         id: completeTagId,
-        name: tagName
-      }
-    }
+        name: tagName,
+      },
+    },
   };
 };
 
@@ -91,8 +91,8 @@ const tagsReducer = (
       return {
         tags: {
           ...state.tags,
-          [action.tagId]: { ...state.tags[action.tagId], name: action.tagName }
-        }
+          [action.tagId]: { ...state.tags[action.tagId], name: action.tagName },
+        },
       };
     case DELETE_TAG:
       return { tags: removeKey(state.tags, action.tagId) };
@@ -104,9 +104,9 @@ const tagsReducer = (
           ...state.tags,
           [action.tagId]: {
             ...state.tags[action.tagId],
-            ffIds: _.without([...state.tags[action.tagId].ffIds], action.ffId)
-          }
-        }
+            ffIds: _.without([...state.tags[action.tagId].ffIds], action.ffId),
+          },
+        },
       };
     default:
       return state;

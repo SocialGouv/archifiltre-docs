@@ -14,11 +14,11 @@ class FolderDropzone extends React.Component {
 
     this.style_dropzone = {
       border: "3px dashed #868686",
-      borderRadius: "3em"
+      borderRadius: "3em",
     };
 
     this.style_placeholder = {
-      fontSize: "3em"
+      fontSize: "3em",
     };
     this.handleDrop = this.handleDrop.bind(this);
     this.loadFromPath = this.loadFromPath.bind(this);

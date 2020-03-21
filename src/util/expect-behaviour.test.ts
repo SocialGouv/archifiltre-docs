@@ -2,7 +2,7 @@ import { reportWarning } from "../logging/reporter";
 import { expectToBeDefined } from "./expect-behaviour";
 
 jest.mock("../logging/reporter", () => ({
-  reportWarning: jest.fn()
+  reportWarning: jest.fn(),
 }));
 
 const reportWarningMock = reportWarning as jest.Mock;
@@ -20,7 +20,7 @@ describe("expect-behaviour", () => {
         JSON.stringify({
           actual: undefined,
           message: mockMessage,
-          type: "expectToBeDefined"
+          type: "expectToBeDefined",
         })
       );
     });
@@ -36,7 +36,7 @@ describe("expect-behaviour", () => {
         JSON.stringify({
           actual: null,
           message: mockMessage,
-          type: "expectToBeDefined"
+          type: "expectToBeDefined",
         })
       );
     });

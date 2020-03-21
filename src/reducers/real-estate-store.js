@@ -26,11 +26,11 @@ function makeStore(compiled_real_estate) {
 
       this.api = {};
 
-      reader_key.forEach(key => {
+      reader_key.forEach((key) => {
         this.api[key] = (...args) => flat_api[key](...args)(this.state);
       });
 
-      writer_key.forEach(key => {
+      writer_key.forEach((key) => {
         this.api[key] = (...args) => this.updateState(key, args);
       });
 
@@ -44,7 +44,7 @@ function makeStore(compiled_real_estate) {
         state only once every callstack */
       if (!this.stateChangePending) {
         this.stateChangePending = true;
-        this.upcomingStateChange = state => state;
+        this.upcomingStateChange = (state) => state;
         setImmediate(() => {
           this.stateChangePending = false;
           this.setState(this.upcomingStateChange);
@@ -68,11 +68,11 @@ function makeStore(compiled_real_estate) {
 
   return {
     Store,
-    ApiContext
+    ApiContext,
   };
 }
 
-const flattenApi = api => {
+const flattenApi = (api) => {
   const flat_api = {};
   for (const key1 in api) {
     for (const key2 in api[key1]) {
@@ -82,7 +82,7 @@ const flattenApi = api => {
   return flat_api;
 };
 
-const unflattenApi = flat_api => {
+const unflattenApi = (flat_api) => {
   const api = {};
   for (const key in flat_api) {
     const split = key.split("|");

@@ -7,18 +7,18 @@ import RoundedAreaInnerBlock from "../area-components/rounded-area-inner-block";
 import { useTranslation } from "react-i18next";
 
 const loaderBlockTitleStyle = {
-  display: "flex"
+  display: "flex",
 };
 
 const loaderContainerStyle = {
   display: "flex",
   justifyContent: "center",
-  fontSize: "3em"
+  fontSize: "3em",
 };
 
 const counterContainerStyle = {
   display: "flex",
-  justifyContent: "center"
+  justifyContent: "center",
 };
 
 /**

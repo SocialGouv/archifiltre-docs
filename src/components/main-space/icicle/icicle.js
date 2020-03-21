@@ -10,7 +10,7 @@ export default class Icicle extends PureComponent {
     super(props);
 
     this.state = {
-      dims: {}
+      dims: {},
     };
 
     this.registerDims = this.registerDims.bind(this);
@@ -26,7 +26,7 @@ export default class Icicle extends PureComponent {
       this.setState({ dims: {} });
       this.shouldResetDims = false;
     }
-    this.setState(state =>
+    this.setState((state) =>
       updateIn(state, ["dims", id], () => {
         return { x, dx, y, dy };
       })
@@ -50,8 +50,8 @@ export default class Icicle extends PureComponent {
 
       const state = this.state;
 
-      const array_of_id_without_root_id = array_of_id.filter(id => id !== "");
-      return array_of_id_without_root_id.map(id => {
+      const array_of_id_without_root_id = array_of_id.filter((id) => id !== "");
+      return array_of_id_without_root_id.map((id) => {
         const dims = state.dims[id];
         if (dims === undefined) {
           return <g key={key_prefix + id} />;
@@ -106,7 +106,7 @@ export default class Icicle extends PureComponent {
       shouldRenderChild,
       tags,
       x,
-      y
+      y,
     } = this.props;
 
     const trueFHeight = this.trueFHeight;
@@ -141,14 +141,14 @@ export default class Icicle extends PureComponent {
     // NotLocked + hovered => 0.3
     let lockedHovered;
     if (hover.length > 0) {
-      lockedHovered = lock.filter(id => hover.includes(id));
+      lockedHovered = lock.filter((id) => hover.includes(id));
     } else {
       lockedHovered = lock;
     }
 
-    const lockedNotHovered = lock.filter(id => !hover.includes(id));
+    const lockedNotHovered = lock.filter((id) => !hover.includes(id));
 
-    const unlockedHovered = hover.filter(id => !lock.includes(id));
+    const unlockedHovered = hover.filter((id) => !lock.includes(id));
 
     const lockedHoveredComponents = arrayOfIdToComponents(
       "lockedDisplay",

@@ -7,21 +7,21 @@ export enum ButtonColor {
   SUCCESS = "#4d9e25",
   ERROR = "#e04d1c",
   ICICLE_ACTION = "#f99a0b",
-  DISABLED = "#a8a8a8"
+  DISABLED = "#a8a8a8",
 }
 
 export enum ButtonWidth {
-  WITH_SPACES = "90%"
+  WITH_SPACES = "90%",
 }
 
 export enum ButtonAngles {
   ROUNDED = "5px",
-  CIRCLE = "50%"
+  CIRCLE = "50%",
 }
 
 export enum ButtonSize {
   SMALL,
-  NORMAL
+  NORMAL,
 }
 
 const InnerButton = styled.button`
@@ -74,7 +74,7 @@ const Button: FC<ButtonProps> = ({
   width,
   angles = ButtonAngles.ROUNDED,
   onClick = empty,
-  size = ButtonSize.NORMAL
+  size = ButtonSize.NORMAL,
 }) => (
   <InnerButton
     id={id}

@@ -2,7 +2,7 @@ import React from "react";
 
 const areaTitleStyle = {
   fontFamily: "QuicksandBold",
-  fontSize: "1.5em"
+  fontSize: "1.5em",
 };
 
 /**

@@ -13,7 +13,7 @@ type FilesAndFoldersTableItem = {
   id: string;
 };
 
-const getData = filesAndFolders =>
+const getData = (filesAndFolders) =>
   Object.values(filesAndFolders)
     .filter(({ id }) => id)
     .map((fileOrFolder: FilesAndFoldersTableItem) => {
@@ -22,7 +22,7 @@ const getData = filesAndFolders =>
         fileSize: octet2HumanReadableFormat(fileOrFolder.file_size),
         lastModified: dateFormat(fileOrFolder.file_last_modified, "dd/mm/yyyy"),
         path: fileOrFolder.id,
-        type: getType(fileOrFolder)
+        type: getType(fileOrFolder),
       };
     });
 
@@ -33,24 +33,24 @@ export const FilesAndFoldersTable = ({ filesAndFolders }) => {
     () => [
       {
         Header: t("search.name"),
-        accessor: "name"
+        accessor: "name",
       },
       {
         Header: t("search.type"),
-        accessor: "type"
+        accessor: "type",
       },
       {
         Header: t("search.size"),
-        accessor: "fileSize"
+        accessor: "fileSize",
       },
       {
         Header: t("search.fileLastModified"),
-        accessor: "lastModified"
+        accessor: "lastModified",
       },
       {
         Header: t("search.path"),
-        accessor: "path"
-      }
+        accessor: "path",
+      },
     ],
     [t]
   );

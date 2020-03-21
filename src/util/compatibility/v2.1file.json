@@ -2,9 +2,7 @@
   "filesAndFolders": {
     "": {
       "name": "",
-      "children": [
-        "/20105395a1463"
-      ],
+      "children": ["/20105395a1463"],
       "file_size": 0,
       "file_last_modified": 0
     },
@@ -248,12 +246,8 @@
       "medianLastModified": 1563979128000,
       "minLastModified": 1563979128000,
       "nbChildrenFiles": 24,
-      "sortBySizeIndex": [
-        0
-      ],
-      "sortByDateIndex": [
-        0
-      ],
+      "sortBySizeIndex": [0],
+      "sortByDateIndex": [0],
       "id": ""
     },
     "/20105395a1463/48aae2b5c1d5/38227abdd817c": {
@@ -307,18 +301,8 @@
       "medianLastModified": 1563979128000,
       "minLastModified": 1563979128000,
       "nbChildrenFiles": 4,
-      "sortBySizeIndex": [
-        3,
-        2,
-        1,
-        0
-      ],
-      "sortByDateIndex": [
-        0,
-        1,
-        2,
-        3
-      ],
+      "sortBySizeIndex": [3, 2, 1, 0],
+      "sortByDateIndex": [0, 1, 2, 3],
       "id": "/20105395a1463/27badbdda7644/4f81ec05d8ca"
     },
     "/20105395a1463/1ae425d947741/be289752e849": {
@@ -328,20 +312,8 @@
       "medianLastModified": 1563979128000,
       "minLastModified": 1563979128000,
       "nbChildrenFiles": 5,
-      "sortBySizeIndex": [
-        4,
-        3,
-        2,
-        1,
-        0
-      ],
-      "sortByDateIndex": [
-        0,
-        1,
-        2,
-        3,
-        4
-      ],
+      "sortBySizeIndex": [4, 3, 2, 1, 0],
+      "sortByDateIndex": [0, 1, 2, 3, 4],
       "id": "/20105395a1463/1ae425d947741/be289752e849"
     },
     "/20105395a1463/27badbdda7644/4f81ec05d8ca/1157e31e37349": {
@@ -362,18 +334,8 @@
       "medianLastModified": 1563979128000,
       "minLastModified": 1563979128000,
       "nbChildrenFiles": 9,
-      "sortBySizeIndex": [
-        3,
-        2,
-        1,
-        0
-      ],
-      "sortByDateIndex": [
-        0,
-        1,
-        2,
-        3
-      ],
+      "sortBySizeIndex": [3, 2, 1, 0],
+      "sortByDateIndex": [0, 1, 2, 3],
       "id": "/20105395a1463/1ae425d947741"
     },
     "/20105395a1463/27badbdda7644/1446e126cb54a": {
@@ -405,14 +367,8 @@
       "medianLastModified": 1563979128000,
       "minLastModified": 1563979128000,
       "nbChildrenFiles": 2,
-      "sortBySizeIndex": [
-        1,
-        0
-      ],
-      "sortByDateIndex": [
-        0,
-        1
-      ],
+      "sortBySizeIndex": [1, 0],
+      "sortByDateIndex": [0, 1],
       "id": "/20105395a1463/1ae425d947741/2a606e09b51d9"
     },
     "/20105395a1463/1ae425d947741/22c603ff439d2": {
@@ -444,18 +400,8 @@
       "medianLastModified": 1563979128000,
       "minLastModified": 1563979128000,
       "nbChildrenFiles": 8,
-      "sortBySizeIndex": [
-        3,
-        1,
-        2,
-        0
-      ],
-      "sortByDateIndex": [
-        0,
-        1,
-        2,
-        3
-      ],
+      "sortBySizeIndex": [3, 1, 2, 0],
+      "sortByDateIndex": [0, 1, 2, 3],
       "id": "/20105395a1463/27badbdda7644"
     },
     "/20105395a1463/1ae425d947741/2a606e09b51d9/9b7b884d1be7": {
@@ -542,14 +488,8 @@
       "medianLastModified": 1563979128000,
       "minLastModified": 1563979128000,
       "nbChildrenFiles": 2,
-      "sortBySizeIndex": [
-        1,
-        0
-      ],
-      "sortByDateIndex": [
-        0,
-        1
-      ],
+      "sortBySizeIndex": [1, 0],
+      "sortByDateIndex": [0, 1],
       "id": "/20105395a1463/27badbdda7644/1ebfb46f28ab9"
     },
     "/20105395a1463/27badbdda7644/4f81ec05d8ca/15fb72bc97965": {
@@ -581,20 +521,8 @@
       "medianLastModified": 1563979128000,
       "minLastModified": 1563979128000,
       "nbChildrenFiles": 5,
-      "sortBySizeIndex": [
-        4,
-        3,
-        2,
-        1,
-        0
-      ],
-      "sortByDateIndex": [
-        0,
-        1,
-        2,
-        3,
-        4
-      ],
+      "sortBySizeIndex": [4, 3, 2, 1, 0],
+      "sortByDateIndex": [0, 1, 2, 3, 4],
       "id": "/20105395a1463/48aae2b5c1d5"
     },
     "/20105395a1463/1ae425d947741/be289752e849/1b95e3ed95447": {
@@ -637,20 +565,8 @@
       "medianLastModified": 1563979128000,
       "minLastModified": 1563979128000,
       "nbChildrenFiles": 24,
-      "sortBySizeIndex": [
-        0,
-        2,
-        4,
-        3,
-        1
-      ],
-      "sortByDateIndex": [
-        0,
-        1,
-        2,
-        3,
-        4
-      ],
+      "sortBySizeIndex": [0, 2, 4, 3, 1],
+      "sortByDateIndex": [0, 1, 2, 3, 4],
       "id": "/20105395a1463"
     },
     "/20105395a1463/1ae425d947741/22a4416648bc9": {
@@ -852,9 +768,7 @@
   "sessionName": "Nom du projet",
   "tags": {
     "f6058884-1183-406d-aecd-27eb956688ea": {
-      "ffIds": [
-        "/20105395a1463"
-      ],
+      "ffIds": ["/20105395a1463"],
       "id": "f6058884-1183-406d-aecd-27eb956688ea",
       "name": "tag1"
     }

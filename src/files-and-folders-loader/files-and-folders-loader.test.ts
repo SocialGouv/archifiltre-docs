@@ -2,7 +2,7 @@ import {
   createFilesAndFolders,
   createFilesAndFoldersDataStructure,
   createFilesAndFoldersMetadataDataStructure,
-  FilesAndFoldersElementInfo
+  FilesAndFoldersElementInfo,
 } from "./files-and-folders-loader";
 
 const ff1LastModified = 100000;
@@ -10,56 +10,56 @@ const ff1Size = 12345;
 const ff1Path = "/root/folder/bob";
 const ff1 = {
   lastModified: ff1LastModified,
-  size: ff1Size
+  size: ff1Size,
 };
 const ff2LastModified = 2000;
 const ff2Size = 2000;
 const ff2Path = "/root/folder/michael";
 const ff2 = {
   lastModified: ff2LastModified,
-  size: ff2Size
+  size: ff2Size,
 };
 const ff3LastModified = 30000;
 const ff3Size = 3000;
 const ff3Path = "/root/johnny";
 const ff3 = {
   lastModified: ff3LastModified,
-  size: ff3Size
+  size: ff3Size,
 };
 const origin: FilesAndFoldersElementInfo[] = [
   [ff1, ff1Path],
   [ff2, ff2Path],
-  [ff3, ff3Path]
+  [ff3, ff3Path],
 ];
 
 const expectedFilesAndFolders = {
   "": createFilesAndFolders({
     children: ["/root"],
-    id: ""
+    id: "",
   }),
   "/root": createFilesAndFolders({
     children: ["/root/folder", "/root/johnny"],
-    id: "/root"
+    id: "/root",
   }),
   "/root/folder": createFilesAndFolders({
     children: [ff1Path, ff2Path],
-    id: "/root/folder"
+    id: "/root/folder",
   }),
   [ff1Path]: createFilesAndFolders({
     file_last_modified: ff1LastModified,
     file_size: ff1Size,
-    id: ff1Path
+    id: ff1Path,
   }),
   [ff2Path]: createFilesAndFolders({
     file_last_modified: ff2LastModified,
     file_size: ff2Size,
-    id: ff2Path
+    id: ff2Path,
   }),
   [ff3Path]: createFilesAndFolders({
     file_last_modified: ff3LastModified,
     file_size: ff3Size,
-    id: ff3Path
-  })
+    id: ff3Path,
+  }),
 };
 
 const expectedMetadata = {
@@ -71,7 +71,7 @@ const expectedMetadata = {
     minLastModified: 2000,
     nbChildrenFiles: 3,
     sortByDateIndex: [0],
-    sortBySizeIndex: [0]
+    sortBySizeIndex: [0],
   },
   "/root": {
     averageLastModified: 44000,
@@ -81,7 +81,7 @@ const expectedMetadata = {
     minLastModified: 2000,
     nbChildrenFiles: 3,
     sortByDateIndex: [1, 0],
-    sortBySizeIndex: [0, 1]
+    sortBySizeIndex: [0, 1],
   },
   "/root/folder": {
     averageLastModified: 51000,
@@ -91,7 +91,7 @@ const expectedMetadata = {
     minLastModified: 2000,
     nbChildrenFiles: 2,
     sortByDateIndex: [1, 0],
-    sortBySizeIndex: [0, 1]
+    sortBySizeIndex: [0, 1],
   },
   "/root/folder/bob": {
     averageLastModified: 100000,
@@ -101,7 +101,7 @@ const expectedMetadata = {
     minLastModified: 100000,
     nbChildrenFiles: 1,
     sortByDateIndex: [],
-    sortBySizeIndex: []
+    sortBySizeIndex: [],
   },
   "/root/folder/michael": {
     averageLastModified: 2000,
@@ -111,7 +111,7 @@ const expectedMetadata = {
     minLastModified: 2000,
     nbChildrenFiles: 1,
     sortByDateIndex: [],
-    sortBySizeIndex: []
+    sortBySizeIndex: [],
   },
   "/root/johnny": {
     averageLastModified: 30000,
@@ -121,8 +121,8 @@ const expectedMetadata = {
     minLastModified: 30000,
     nbChildrenFiles: 1,
     sortByDateIndex: [],
-    sortBySizeIndex: []
-  }
+    sortBySizeIndex: [],
+  },
 };
 
 describe("files-and-folders-loader", () => {

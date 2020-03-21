@@ -7,14 +7,14 @@ import en from "./en.json";
 i18n.use(initReactI18next).init({
   resources: {
     en,
-    fr
+    fr,
   },
   lng: getLanguage()[0],
   fallbackLng: "en",
 
   interpolation: {
-    escapeValue: false
-  }
+    escapeValue: false,
+  },
 });
 
 export default i18n;

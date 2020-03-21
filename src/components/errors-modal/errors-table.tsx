@@ -14,16 +14,16 @@ const ErrorsTable: FC<ErrorsTableProps> = ({ errors }) => {
     () => [
       {
         Header: t("common.file"),
-        accessor: "filePath"
+        accessor: "filePath",
       },
       {
         Header: t("errorsModal.errorCode"),
-        accessor: "code"
+        accessor: "code",
       },
       {
         Header: t("errorsModal.errorDescription"),
-        accessor: ({ code }) => t(`errorsModal.errorDescriptions.${code}`)
-      }
+        accessor: ({ code }) => t(`errorsModal.errorDescriptions.${code}`),
+      },
     ],
     [t]
   );

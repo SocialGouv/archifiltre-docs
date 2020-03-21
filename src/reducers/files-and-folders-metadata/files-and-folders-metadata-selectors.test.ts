@@ -12,8 +12,8 @@ describe("files-and-folders-metadata-selectors", () => {
           childrenTotalSize: 1000,
           maxLastModified: 500,
           medianLastModified: 300,
-          minLastModified: 100
-        })
+          minLastModified: 100,
+        }),
       };
 
       const emptyStore = createEmptyStore();
@@ -21,8 +21,8 @@ describe("files-and-folders-metadata-selectors", () => {
       const testStore = {
         ...emptyStore,
         filesAndFoldersMetadata: {
-          filesAndFoldersMetadata
-        }
+          filesAndFoldersMetadata,
+        },
       };
 
       expect(getFilesAndFoldersMetadataFromStore(testStore)).toEqual(

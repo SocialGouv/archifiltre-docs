@@ -3,7 +3,7 @@ import React from "react";
 const areaEmphasizedStyle = {
   fontFamily: "QuicksandBold",
   fontStyle: "italic",
-  fontSize: "20px"
+  fontSize: "20px",
 };
 
 /**

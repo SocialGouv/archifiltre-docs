@@ -7,14 +7,14 @@ import {
   TAG_FILE,
   TagMap,
   TagsActionTypes,
-  UNTAG_FILE
+  UNTAG_FILE,
 } from "./tags-types";
 
 /**
  * Action to reset tags
  */
 export const resetTags = (): TagsActionTypes => ({
-  type: RESET_TAGS
+  type: RESET_TAGS,
 });
 
 /**
@@ -23,7 +23,7 @@ export const resetTags = (): TagsActionTypes => ({
  */
 export const initializeTags = (tags: TagMap): TagsActionTypes => ({
   tags,
-  type: INITIALIZE_TAGS
+  type: INITIALIZE_TAGS,
 });
 
 /**
@@ -40,7 +40,7 @@ export const addTag = (
   ffId,
   tagId,
   tagName,
-  type: ADD_TAG
+  type: ADD_TAG,
 });
 
 /**
@@ -51,7 +51,7 @@ export const addTag = (
 export const renameTag = (tagId: string, tagName: string): TagsActionTypes => ({
   tagId,
   tagName,
-  type: RENAME_TAG
+  type: RENAME_TAG,
 });
 
 /**
@@ -60,7 +60,7 @@ export const renameTag = (tagId: string, tagName: string): TagsActionTypes => ({
  */
 export const deleteTag = (tagId: string): TagsActionTypes => ({
   tagId,
-  type: DELETE_TAG
+  type: DELETE_TAG,
 });
 
 /**
@@ -71,7 +71,7 @@ export const deleteTag = (tagId: string): TagsActionTypes => ({
 export const tagFile = (tagId: string, ffId: string): TagsActionTypes => ({
   ffId,
   tagId,
-  type: TAG_FILE
+  type: TAG_FILE,
 });
 
 /**
@@ -82,5 +82,5 @@ export const tagFile = (tagId: string, ffId: string): TagsActionTypes => ({
 export const untagFile = (tagId: string, ffId: string): TagsActionTypes => ({
   ffId,
   tagId,
-  type: UNTAG_FILE
+  type: UNTAG_FILE,
 });

@@ -15,14 +15,14 @@ describe("record-util", () => {
     const a = M.createFactory(
       { a: 1, b: 2 },
       {
-        toJs: a => {
+        toJs: (a) => {
           a.b *= 2;
           return a;
         },
-        fromJs: a => {
+        fromJs: (a) => {
           a.b *= 2;
           return a;
-        }
+        },
       }
     )({ a: 10, b: 20 });
     const empty = M.emptyFactory();
@@ -35,19 +35,19 @@ describe("record-util", () => {
     const a = M.createFactory(
       { a: 1, b: 2 },
       {
-        toJs: a => {
+        toJs: (a) => {
           a.b *= 2;
           return a;
         },
-        fromJs: a => {
+        fromJs: (a) => {
           a.b *= 2;
           return a;
-        }
+        },
       }
     )({ a: 10, b: 20 });
     const b = M.createFactory(
       { o: "tss", em: 79, a: 9 },
-      { toJs: a => a, fromJs: a => a }
+      { toJs: (a) => a, fromJs: (a) => a }
     )({ o: "tsstss", em: 0, a: 1 });
     const c = M.createFactory(
       { t: 0 },
@@ -55,7 +55,7 @@ describe("record-util", () => {
         toJs: () => {
           return { t: "sautiensrautiena" };
         },
-        fromJs: a => a
+        fromJs: (a) => a,
       }
     )({ t: 3 });
 
@@ -66,28 +66,28 @@ describe("record-util", () => {
     const a = M.createFactory(
       { a: 1, b: 2 },
       {
-        toJs: a => {
+        toJs: (a) => {
           a.b *= 2;
           return a;
         },
-        fromJs: a => {
+        fromJs: (a) => {
           a.b *= 2;
           return a;
-        }
+        },
       }
     );
 
     const b = M.createFactory(
       { a: 10, c: 20, d: 30 },
       {
-        toJs: a => {
+        toJs: (a) => {
           a.d *= 2;
           return a;
         },
-        fromJs: a => {
+        fromJs: (a) => {
           a.d *= 2;
           return a;
-        }
+        },
       }
     );
     const c = M.compose(b(), a().set("a", 12));
@@ -96,14 +96,14 @@ describe("record-util", () => {
       a: 10,
       b: 2,
       c: 20,
-      d: 30
+      d: 30,
     });
 
     expect(c.constructor.toJs(c)).toEqual({
       a: 10,
       b: 4,
       c: 20,
-      d: 60
+      d: 60,
     });
 
     expect(
@@ -112,28 +112,28 @@ describe("record-util", () => {
           a: 10,
           b: 2,
           c: 20,
-          d: 30
+          d: 30,
         })
         .toObject()
     ).toEqual({
       a: 10,
       b: 4,
       c: 20,
-      d: 60
+      d: 60,
     });
 
     expect(
       c.constructor
         .fromJs({
           b: 2,
-          d: 40
+          d: 40,
         })
         .toObject()
     ).toEqual({
       a: 10,
       b: 4,
       c: 20,
-      d: 80
+      d: 80,
     });
   });
 });

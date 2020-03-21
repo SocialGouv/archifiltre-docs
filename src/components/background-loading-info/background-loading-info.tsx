@@ -43,12 +43,12 @@ interface BackgroundLoadingInfoProps {
 const BackgroundLoadingInfo: FC<BackgroundLoadingInfoProps> = ({
   loadingItems,
   isLoading,
-  dismissAll
+  dismissAll,
 }) => {
   const [collapsed, setCollapsed] = useState(true);
   const toggleCollapsed = useCallback(() => setCollapsed(!collapsed), [
     collapsed,
-    setCollapsed
+    setCollapsed,
   ]);
   const isActive = loadingItems.length > 0;
 
@@ -70,7 +70,7 @@ const BackgroundLoadingInfo: FC<BackgroundLoadingInfoProps> = ({
       </ToggleAndLoaderArea>
       {!collapsed && (
         <LoadingBarArea>
-          {loadingItems.map(loadingInfo => (
+          {loadingItems.map((loadingInfo) => (
             <LoadingInfoDisplay
               key={loadingInfo.id}
               loadingInfo={loadingInfo}

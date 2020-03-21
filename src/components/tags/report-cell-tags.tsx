@@ -43,7 +43,7 @@ class ReportCellTags extends React.Component<
     super(props);
     this.state = {
       editing: false,
-      candidateTag: ""
+      candidateTag: "",
     };
 
     this.startEditing = this.startEditing.bind(this);
@@ -62,19 +62,19 @@ class ReportCellTags extends React.Component<
   startEditing() {
     this.setState({
       editing: true,
-      candidateTag: ""
+      candidateTag: "",
     });
   }
 
   setCandidateTag(candidateTag) {
     this.setState({
-      candidateTag
+      candidateTag,
     });
   }
 
   stopEditing() {
     this.setState({
-      editing: false
+      editing: false,
     });
   }
 
@@ -91,7 +91,7 @@ class ReportCellTags extends React.Component<
         title: ActionTitle.TAG_ADDED,
         type: ActionType.TRACK_EVENT,
         value: `Created tag: "${value}"`,
-        eventValue: value
+        eventValue: value,
       });
       createTagged(value, filesAndFoldersId);
       this.setCandidateTag("");
@@ -163,7 +163,7 @@ class ReportCellTags extends React.Component<
       isLocked,
       isCurrentFileMarkedToDelete,
       toggleCurrentFileDeleteState,
-      t
+      t,
     } = this.props;
     const { editing, candidateTag } = this.state;
 
@@ -211,7 +211,7 @@ class ReportCellTags extends React.Component<
   }
 }
 
-const ReportCellTagsApiToProps = props => (
+const ReportCellTagsApiToProps = (props) => (
   <ReportCellTags
     {...props}
     tagsForCurrentFile={props.tagsForCurrentFile}

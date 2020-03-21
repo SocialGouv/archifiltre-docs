@@ -5,7 +5,7 @@ import { FileType, getFileType } from "./file-types-util";
 const createFileWithExt = (extension: string): FilesAndFolders =>
   createFilesAndFolders({
     id: `folder/file.${extension}`,
-    name: `file.${extension}`
+    name: `file.${extension}`,
   });
 
 describe("file-types-util", () => {

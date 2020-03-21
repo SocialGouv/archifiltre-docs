@@ -5,7 +5,7 @@ import {
   getArchifiltreErrors,
   getCompleteLoadingInfo,
   getLoadingInfoFromStore,
-  getRunningLoadingInfo
+  getRunningLoadingInfo,
 } from "./loading-info-selectors";
 import { createLoadingInfo } from "./loading-info-test-utils";
 
@@ -15,7 +15,7 @@ const completeLoadingInfoId = "completeLoadingInfo";
 const completeLoadingInfo = createLoadingInfo({ id: completeLoadingInfoId });
 
 const error = createArchifiltreError({
-  reason: "test-error"
+  reason: "test-error",
 });
 
 const loadingInfoState = {
@@ -25,13 +25,13 @@ const loadingInfoState = {
   loading: [loadingLoadingInfoId],
   loadingInfo: {
     [loadingLoadingInfoId]: loadingLoadingInfo,
-    [completeLoadingInfoId]: completeLoadingInfo
-  }
+    [completeLoadingInfoId]: completeLoadingInfo,
+  },
 };
 
 const testStore: StoreState = {
   ...createEmptyStore(),
-  loadingInfo: loadingInfoState
+  loadingInfo: loadingInfoState,
 };
 
 describe("loading-info-selectors", () => {
@@ -44,7 +44,7 @@ describe("loading-info-selectors", () => {
   describe("getRunningLoadingInfo", () => {
     it("should return the currently running loading info", () => {
       expect(getRunningLoadingInfo(loadingInfoState)).toEqual([
-        loadingLoadingInfo
+        loadingLoadingInfo,
       ]);
     });
   });
@@ -52,7 +52,7 @@ describe("loading-info-selectors", () => {
   describe("getCompleteLoadingInfo", () => {
     it("should return the currently running loading info", () => {
       expect(getCompleteLoadingInfo(loadingInfoState)).toEqual([
-        completeLoadingInfo
+        completeLoadingInfo,
       ]);
     });
   });

@@ -39,7 +39,7 @@ export const createFilesAndFoldersMetadata = ({
   childrenTotalSize,
   nbChildrenFiles,
   sortBySizeIndex,
-  sortByDateIndex
+  sortByDateIndex,
 }: OptionalMetadata): FilesAndFoldersMetadata => ({
   averageLastModified: averageLastModified || DEFAULT_AVERAGE_LAST_MODIFIED,
   childrenTotalSize: childrenTotalSize || DEFAULT_CHILDREN_TOTAL_SIZE,
@@ -48,5 +48,5 @@ export const createFilesAndFoldersMetadata = ({
   minLastModified: minLastModified || DEFAULT_MIN_LAST_MODIFIED,
   nbChildrenFiles: nbChildrenFiles || DEFAULT_NB_CHILDREN_FILE,
   sortByDateIndex: sortByDateIndex || DEFAULT_SORT_BY_DATE_INDEX,
-  sortBySizeIndex: sortBySizeIndex || DEFAULT_SORT_BY_SIZE_INDEX
+  sortBySizeIndex: sortBySizeIndex || DEFAULT_SORT_BY_SIZE_INDEX,
 });

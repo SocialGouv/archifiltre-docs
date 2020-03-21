@@ -6,7 +6,7 @@ import TextAlignCenter from "components/common/text-align-center";
 import CtrlZ from "components/header/dashboard/ctrl-z";
 import {
   getFileCount,
-  getFoldersCount
+  getFoldersCount,
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import ExportDropdown from "../export-dropdown";
 import SessionInfo from "./session-info";
@@ -63,7 +63,7 @@ const DashBoard = ({
   exportToJson,
   exportToAuditReport,
   resetWorkspace,
-  reloadPreviousSession
+  reloadPreviousSession,
 }) => {
   const shouldDisplayActions =
     started === true && finished === true && error === false;
@@ -164,20 +164,20 @@ export default function DashBoardApiToProps({
   reloadPreviousSession,
   rootFilesAndFoldersMetadata,
   filesAndFolders,
-  setSessionName
+  setSessionName,
 }) {
   const {
-    loading_state: { isFinished, isInError, isStarted }
+    loading_state: { isFinished, isInError, isStarted },
   } = api;
   const finished = isFinished();
   const error = isInError();
   const started = isStarted();
 
   const nbFiles = useMemo(() => getFileCount(filesAndFolders), [
-    filesAndFolders
+    filesAndFolders,
   ]);
   const nbFolders = useMemo(() => getFoldersCount(filesAndFolders), [
-    filesAndFolders
+    filesAndFolders,
   ]);
   const volume = rootFilesAndFoldersMetadata.childrenTotalSize;
 

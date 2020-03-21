@@ -31,7 +31,7 @@ export default createStore(
     loadingInfo: loadingInfoReducer,
     modal: modalReducer,
     tags: tagsReducer,
-    workspaceMetadata: workspaceMetadataReducer
+    workspaceMetadata: workspaceMetadataReducer,
   }),
   applyMiddleware(thunk, persistActions)
 );

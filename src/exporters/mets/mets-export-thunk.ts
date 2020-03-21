@@ -4,7 +4,7 @@ import {
   getAliasesFromStore,
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
-  getFilesToDeleteFromStore
+  getFilesToDeleteFromStore,
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import { makeSIP } from "./mets";
@@ -20,7 +20,7 @@ interface MetsExportThunkOptions {
  */
 export const metsExporterThunk = ({
   originalPath,
-  sessionName
+  sessionName,
 }: MetsExportThunkOptions): ArchifiltreThunkAction => (
   dispatch,
   getState
@@ -41,6 +41,6 @@ export const metsExporterThunk = ({
     filesAndFoldersMetadata,
     originalPath,
     sessionName,
-    tags
+    tags,
   });
 };

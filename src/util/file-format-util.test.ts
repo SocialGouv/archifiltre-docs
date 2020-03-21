@@ -2,11 +2,11 @@ import { formatFileContentForResip } from "./file-format-util";
 import { isWindows } from "./os-util";
 
 jest.mock("iconv-lite", () => ({
-  encode: (content, format) => Buffer.from(`encoded(${content}, ${format})`)
+  encode: (content, format) => Buffer.from(`encoded(${content}, ${format})`),
 }));
 
 jest.mock("./os-util", () => ({
-  isWindows: jest.fn()
+  isWindows: jest.fn(),
 }));
 
 const isWindowsMock = isWindows as jest.Mock<any>;

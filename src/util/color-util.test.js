@@ -6,13 +6,15 @@ import { arbitraryRgba } from "../test/custom-arbitraries";
 describe("color", () => {
   it("(fromRgba . toRgba) a", () => {
     fc.assert(
-      fc.property(arbitraryRgba, color => equal(color, fromRgba(toRgba(color))))
+      fc.property(arbitraryRgba, (color) =>
+        equal(color, fromRgba(toRgba(color)))
+      )
     );
   });
 
   it("(fromHex . toHex) a", () => {
     fc.assert(
-      fc.property(arbitraryRgba, color =>
+      fc.property(arbitraryRgba, (color) =>
         equal(setAlpha(1, color), fromHex(toHex(color)))
       )
     );

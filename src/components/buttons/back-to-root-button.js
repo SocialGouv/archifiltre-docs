@@ -25,8 +25,8 @@ const Presentational = ({ backToRoot, isZoomed }) => {
 const BackToRoot = ({
   api: {
     icicle_state: { setNoDisplayRoot, setNoFocus, isZoomed },
-    undo: { commit }
-  }
+    undo: { commit },
+  },
 }) => {
   const backToRoot = useCallback(() => {
     setNoDisplayRoot();

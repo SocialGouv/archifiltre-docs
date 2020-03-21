@@ -17,7 +17,7 @@ import {
   getFoldersCount,
   getHashesFromStore,
   getMaxDepth,
-  isFile
+  isFile,
 } from "./files-and-folders-selectors";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
 
@@ -38,27 +38,27 @@ const child11Id = `${child1Id}/file1`;
 const child12Id = `${child1Id}/file2`;
 const rootFolder = createFilesAndFolders({
   children: [child1Id, child2Id],
-  id: rootFolderId
+  id: rootFolderId,
 });
 const child1 = createFilesAndFolders({
   children: [child11Id, child12Id],
-  id: child1Id
+  id: child1Id,
 });
 const child11 = createFilesAndFolders({
   file_last_modified: minLastModified,
   file_size: 10,
-  id: child11Id
+  id: child11Id,
 });
 const child12 = createFilesAndFolders({
   file_last_modified: maxLastModified,
   file_size: 100,
-  id: child11Id
+  id: child11Id,
 });
 
 const child2 = createFilesAndFolders({
   file_last_modified: medianLastModified,
   file_size: 1000,
-  id: child2Id
+  id: child2Id,
 });
 
 const filesAndFoldersTestMap = {
@@ -66,7 +66,7 @@ const filesAndFoldersTestMap = {
   [child1Id]: child1,
   [child11Id]: child11,
   [child12Id]: child12,
-  [child2Id]: child2
+  [child2Id]: child2,
 };
 
 describe("files-and-folders-selectors", () => {
@@ -76,14 +76,14 @@ describe("files-and-folders-selectors", () => {
       const filesAndFolders1 = createFilesAndFolders({ id: fileId });
       const emptyStore = createEmptyStore();
       const filesAndFoldersMap = {
-        [fileId]: filesAndFolders1
+        [fileId]: filesAndFolders1,
       };
       const testStore = {
         ...emptyStore,
         filesAndFolders: wrapStoreWithUndoable({
           ...filesAndFoldersInitialState,
-          filesAndFolders: filesAndFoldersMap
-        })
+          filesAndFolders: filesAndFoldersMap,
+        }),
       };
       expect(getFilesAndFoldersFromStore(testStore)).toEqual(
         filesAndFoldersMap
@@ -113,7 +113,7 @@ describe("files-and-folders-selectors", () => {
       expect(filesMap).toEqual({
         [child2Id]: child2,
         [child11Id]: child11,
-        [child12Id]: child12
+        [child12Id]: child12,
       });
     });
   });
@@ -139,7 +139,7 @@ describe("files-and-folders-selectors", () => {
       const average = _.mean([
         minLastModified,
         medianLastModified,
-        maxLastModified
+        maxLastModified,
       ]);
       expect(
         getFilesAndFoldersAverageLastModified(
@@ -181,14 +181,14 @@ describe("files-and-folders-selectors", () => {
       const hash = "hash";
       const emptyStore = createEmptyStore();
       const hashesMap = {
-        [fileId]: hash
+        [fileId]: hash,
       };
       const testStore = {
         ...emptyStore,
         filesAndFolders: wrapStoreWithUndoable({
           ...filesAndFoldersInitialState,
-          hashes: hashesMap
-        })
+          hashes: hashesMap,
+        }),
       };
       expect(getHashesFromStore(testStore)).toEqual(hashesMap);
     });
@@ -198,7 +198,7 @@ describe("files-and-folders-selectors", () => {
     it("should return true if the element is a file", () => {
       const filesAndFolders = createFilesAndFolders({
         children: [],
-        id: "test"
+        id: "test",
       });
 
       expect(isFile(filesAndFolders)).toBe(true);
@@ -207,7 +207,7 @@ describe("files-and-folders-selectors", () => {
     it("should return false if the element is a folder", () => {
       const filesAndFolders = createFilesAndFolders({
         children: ["child1"],
-        id: "test"
+        id: "test",
       });
 
       expect(isFile(filesAndFolders)).toBe(false);
@@ -221,7 +221,7 @@ describe("files-and-folders-selectors", () => {
 
       const filesAndFoldersMap = {
         [fileId]: createFilesAndFolders({ id: fileId, children: [] }),
-        [folderId]: createFilesAndFolders({ id: folderId, children: [fileId] })
+        [folderId]: createFilesAndFolders({ id: folderId, children: [fileId] }),
       };
 
       expect(getFileCount(filesAndFoldersMap)).toBe(1);
@@ -235,7 +235,7 @@ describe("files-and-folders-selectors", () => {
 
       const filesAndFoldersMap = {
         [fileId]: createFilesAndFolders({ id: fileId, children: [] }),
-        [folderId]: createFilesAndFolders({ id: folderId, children: [fileId] })
+        [folderId]: createFilesAndFolders({ id: folderId, children: [fileId] }),
       };
 
       expect(getFoldersCount(filesAndFoldersMap)).toBe(1);
@@ -253,14 +253,14 @@ describe("files-and-folders-selectors", () => {
         "": createFilesAndFolders({ id: "", children: [folderId] }),
         [folderId]: createFilesAndFolders({
           children: [otherFileId, subfolderId],
-          id: folderId
+          id: folderId,
         }),
         [subfolderId]: createFilesAndFolders({
           children: [deepestFileId],
-          id: subfolderId
+          id: subfolderId,
         }),
         [otherFileId]: createFilesAndFolders({ id: otherFileId }),
-        [deepestFileId]: createFilesAndFolders({ id: deepestFileId })
+        [deepestFileId]: createFilesAndFolders({ id: deepestFileId }),
       };
 
       expect(getMaxDepth(filesAndFoldersMap)).toBe(3);
@@ -276,7 +276,7 @@ describe("files-and-folders-selectors", () => {
         "/f1",
         "/f1/f2",
         "/f1/f2/f3",
-        "/f1/f2/f3/file"
+        "/f1/f2/f3/file",
       ]);
     });
   });

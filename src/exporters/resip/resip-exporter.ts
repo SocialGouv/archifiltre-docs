@@ -6,7 +6,7 @@ import {
   AliasMap,
   CommentsMap,
   FilesAndFolders,
-  FilesAndFoldersMap
+  FilesAndFoldersMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import { tagHasFfId } from "../../reducers/tags/tags-selectors";
 import { TagMap } from "../../reducers/tags/tags-types";
@@ -14,15 +14,15 @@ import translations from "../../translations/translations";
 import { makeEmptyArray, replaceValue } from "../../util/array-util";
 import {
   getDisplayName,
-  isExactFileOrAncestor
+  isExactFileOrAncestor,
 } from "../../util/file-and-folders-utils";
 import { empty } from "../../util/function-util";
 
-const nameChangedText = oldName =>
+const nameChangedText = (oldName) =>
   translations.t("common.originalName", { oldName });
 
-const formatFile = ff => {
-  const removeStartingSlash = str =>
+const formatFile = (ff) => {
+  const removeStartingSlash = (str) =>
     str.indexOf("/") === 0 ? str.substring(1) : str;
 
   const resipFilePath = removeStartingSlash(ff.id)
@@ -39,7 +39,7 @@ const formatFile = ff => {
  * @param ff
  * @returns {string}
  */
-const formatDescriptionLevel = ff => {
+const formatDescriptionLevel = (ff) => {
   if (ff.children.length === 0) {
     return "Item";
   }
@@ -60,7 +60,7 @@ const formatTitle = (ff: FilesAndFolders, aliases: AliasMap) =>
  * Formats the date to "yyyy-mm-dd"
  * @param date
  */
-const formatDate = date => dateFormat(date, "yyyy-mm-dd");
+const formatDate = (date) => dateFormat(date, "yyyy-mm-dd");
 
 /**
  * Mapper to enrich fileOrFolder with parentId.
@@ -76,7 +76,7 @@ const addParentId = (fileOrFolder, index, fileAndFolders) => {
 
   return {
     ...fileOrFolder,
-    ParentID: parent && parent.ID
+    ParentID: parent && parent.ID,
   };
 };
 
@@ -94,7 +94,7 @@ const transformDefaultFormatToResip = (
   aliases: AliasMap,
   comments: CommentsMap,
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap
-) => enrichedFilesAndFolders => ({
+) => (enrichedFilesAndFolders) => ({
   ID: enrichedFilesAndFolders.ID,
   ParentID: enrichedFilesAndFolders.ParentID,
   // tslint:disable-next-line:object-literal-sort-keys
@@ -113,7 +113,7 @@ const transformDefaultFormatToResip = (
     aliases
   ),
   Description: comments[enrichedFilesAndFolders.id] || "",
-  Tags: enrichedFilesAndFolders.tags
+  Tags: enrichedFilesAndFolders.tags,
 });
 
 /**
@@ -128,9 +128,9 @@ const getAllTagsByFfId = (tags, ffId) =>
     []
   );
 
-const addTagsToFf = tags => ff => ({
+const addTagsToFf = (tags) => (ff) => ({
   ...ff,
-  tags: getAllTagsByFfId(tags, ff.id)
+  tags: getAllTagsByFfId(tags, ff.id),
 });
 
 const formatToCsv = (sipFilesAndFolders, tags) => {
@@ -144,15 +144,15 @@ const formatToCsv = (sipFilesAndFolders, tags) => {
     "EndDate",
     "TransactedDate",
     "CustodialHistory.CustodialHistoryItem",
-    "Description"
+    "Description",
   ];
   const tagsFields = tags.map((tag, index) => `Content.Tag.${index}`);
 
   const firstRow = fieldsOrder.concat(tagsFields);
 
-  const dataRows = sipFilesAndFolders.map(sipFileAndFolder => {
+  const dataRows = sipFilesAndFolders.map((sipFileAndFolder) => {
     const baseFileAndFolder = fieldsOrder.map(
-      field => sipFileAndFolder[field] || ""
+      (field) => sipFileAndFolder[field] || ""
     );
     const tagsCells = sipFileAndFolder.Tags.reduce(
       (acc, { ID, name }) => replaceValue(acc, ID, name),
@@ -195,7 +195,7 @@ interface ResipExporterOptions {
  * @param elementsToDelete
  */
 const isAncestorDeleted = (ffId: string, elementsToDelete: string[]): boolean =>
-  _.some(elementsToDelete, toDeleteId =>
+  _.some(elementsToDelete, (toDeleteId) =>
     isExactFileOrAncestor(ffId, toDeleteId)
   );
 
@@ -216,34 +216,34 @@ const resipExporter = (
     elementsToDelete,
     filesAndFolders,
     filesAndFoldersMetadata,
-    tags
+    tags,
   }: ResipExporterOptions,
   hook = empty
 ) => {
   let sipId = 0;
 
-  const addSipId = ff => {
+  const addSipId = (ff) => {
     sipId = sipId + 1;
     return { ...ff, ID: `${sipId}` };
   };
 
   const tagsWithIndex = Object.keys(tags)
-    .map(tagId => tags[tagId])
+    .map((tagId) => tags[tagId])
     .filter(({ ffIds }) => ffIds.length !== 0)
     .map((tag, tagIndex) => ({
       ...tag,
-      ID: tagIndex
+      ID: tagIndex,
     }));
 
   const dataWithSipId = Object.keys(filesAndFolders)
-    .filter(id => !isAncestorDeleted(id, elementsToDelete))
-    .filter(id => id !== "")
+    .filter((id) => !isAncestorDeleted(id, elementsToDelete))
+    .filter((id) => id !== "")
     .map(
       wrapWithHook(
-        ffId => ({
+        (ffId) => ({
           id: ffId,
           ...filesAndFolders[ffId],
-          ...filesAndFoldersMetadata[ffId]
+          ...filesAndFoldersMetadata[ffId],
         }),
         hook
       )

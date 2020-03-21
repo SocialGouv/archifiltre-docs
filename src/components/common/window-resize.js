@@ -10,13 +10,13 @@ class WindowResize extends React.PureComponent {
 
     const { reader, writer } = UserData.create({
       width: 620,
-      height: 600
+      height: 600,
     });
 
     this.state = {
       win: remote.getCurrentWindow(),
       reader,
-      writer
+      writer,
     };
 
     this.onResize = this.onResize.bind(this);
@@ -31,7 +31,7 @@ class WindowResize extends React.PureComponent {
 
     writer({
       width,
-      height
+      height,
     });
   }
 
@@ -68,13 +68,13 @@ export default class WindowResizeErrorHandler extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasError: false
+      hasError: false,
     };
   }
 
   componentDidCatch() {
     this.setState({
-      hasError: true
+      hasError: true,
     });
   }
 

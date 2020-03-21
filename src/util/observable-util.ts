@@ -3,7 +3,7 @@ import { map, tap } from "rxjs/operators";
 
 export enum DataProcessingStatus {
   ERROR = "error",
-  RESULT = "result"
+  RESULT = "result",
 }
 
 interface DataProcessingError {
@@ -43,7 +43,7 @@ export const operateOnDataProcessingStream = (
   status$: DataProcessingStream,
   {
     error: errorOperator = identity,
-    result: resultOperator = identity
+    result: resultOperator = identity,
   }: DataProcessingStreamOperators
 ): DataProcessingStream => {
   const [results$, errors$] = partition(
@@ -54,13 +54,13 @@ export const operateOnDataProcessingStream = (
   const processedResults$ = results$.pipe(
     map(({ result }) => result),
     resultOperator,
-    map(result => ({ type: DataProcessingStatus.RESULT, result }))
+    map((result) => ({ type: DataProcessingStatus.RESULT, result }))
   );
 
   const processedErrors$ = errors$.pipe(
     map(({ error }) => error),
     errorOperator,
-    map(error => ({ type: DataProcessingStatus.ERROR, error }))
+    map((error) => ({ type: DataProcessingStatus.ERROR, error }))
   );
 
   return merge(processedResults$, processedErrors$);

@@ -39,7 +39,7 @@ export function animate(visible, measure, mutate) {
   const animation = {
     visible,
     measure,
-    mutate
+    mutate,
   };
   queue[animation_id] = animation;
   return animation_id;

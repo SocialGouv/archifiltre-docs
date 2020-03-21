@@ -4,7 +4,7 @@ const breadcrumbTextStyle = {
   paddingRight: "5px",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
-  overflow: "hidden"
+  overflow: "hidden",
 };
 
 const smartClip = (text, availableSpace, fontWidth) => {
@@ -21,7 +21,7 @@ const smartClip = (text, availableSpace, fontWidth) => {
   return text;
 };
 
-const BreadcrumbText = props => {
+const BreadcrumbText = (props) => {
   const { text, dx } = props;
   const availableSpace = 0.8 * dx;
   const fontWidth = 6;

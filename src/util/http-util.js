@@ -1,9 +1,9 @@
-export const request = obj => {
+export const request = (obj) => {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open(obj.method || "GET", obj.url);
     if (obj.headers) {
-      Object.keys(obj.headers).forEach(key => {
+      Object.keys(obj.headers).forEach((key) => {
         xhr.setRequestHeader(key, obj.headers[key]);
       });
     }

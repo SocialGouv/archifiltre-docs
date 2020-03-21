@@ -8,7 +8,7 @@ import {
   REGISTER_ERROR,
   RESET_LOADING,
   START_LOADING,
-  UPDATE_LOADING
+  UPDATE_LOADING,
 } from "./loading-info-types";
 
 /**
@@ -28,7 +28,7 @@ export const startLoadingAction = (
   id,
   label,
   loadingType: type,
-  type: START_LOADING
+  type: START_LOADING,
 });
 
 /**
@@ -45,7 +45,7 @@ export const updateLoadingAction = (
   goal,
   id,
   progress,
-  type: UPDATE_LOADING
+  type: UPDATE_LOADING,
 });
 
 /**
@@ -59,7 +59,7 @@ export const progressLoadingAction = (
 ): LoadingInfoAction => ({
   id,
   progress,
-  type: PROGRESS_LOADING
+  type: PROGRESS_LOADING,
 });
 
 /**
@@ -68,7 +68,7 @@ export const progressLoadingAction = (
  */
 export const completeLoadingAction = (id: string): LoadingInfoAction => ({
   id,
-  type: COMPLETE_LOADING
+  type: COMPLETE_LOADING,
 });
 
 /**
@@ -79,19 +79,19 @@ export const registerErrorAction = (
   error: ArchifiltreError
 ): LoadingInfoAction => ({
   error,
-  type: REGISTER_ERROR
+  type: REGISTER_ERROR,
 });
 
 /**
  * Resets the loading data.
  */
 export const resetLoadingAction = (): LoadingInfoAction => ({
-  type: RESET_LOADING
+  type: RESET_LOADING,
 });
 
 /**
  * Dismisses all the complete loadingInfo
  */
 export const dismissAllComplete = (): LoadingInfoAction => ({
-  type: DISMISS_ALL_COMPLETE
+  type: DISMISS_ALL_COMPLETE,
 });

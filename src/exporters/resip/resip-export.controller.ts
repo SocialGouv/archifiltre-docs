@@ -6,7 +6,7 @@ import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-met
 import {
   AliasMap,
   CommentsMap,
-  FilesAndFoldersMap
+  FilesAndFoldersMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "../../reducers/tags/tags-types";
 import { createAsyncWorkerControllerClass } from "../../util/async-worker-util";
@@ -43,11 +43,11 @@ export const generateResipExport$ = ({
   elementsToDelete,
   filesAndFolders,
   filesAndFoldersMetadata,
-  tags
+  tags,
 }: GenerateResipExportOptions): Observable<ResipExportProgress> => {
   addTracker({
     title: ActionTitle.RESIP_EXPORT,
-    type: ActionType.TRACK_EVENT
+    type: ActionType.TRACK_EVENT,
   });
   const ResipExportAsyncWorker = createAsyncWorkerControllerClass(
     ResipExportFork
@@ -61,7 +61,7 @@ export const generateResipExport$ = ({
       filesAndFolders,
       filesAndFoldersMetadata,
       language: getLanguage()[0],
-      tags
+      tags,
     },
     ResipExportAsyncWorker
   );

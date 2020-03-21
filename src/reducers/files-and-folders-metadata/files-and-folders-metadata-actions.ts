@@ -2,7 +2,7 @@ import {
   FilesAndFoldersMetadata,
   FilesAndFoldersMetadataAction,
   FilesAndFoldersMetadataMap,
-  INIT_FILES_AND_FOLDERS_METADATA
+  INIT_FILES_AND_FOLDERS_METADATA,
 } from "./files-and-folders-metadata-types";
 
 /**
@@ -14,5 +14,5 @@ export const initFilesAndFoldersMetatada = (
   metadata: FilesAndFoldersMetadataMap
 ): FilesAndFoldersMetadataAction => ({
   metadata,
-  type: INIT_FILES_AND_FOLDERS_METADATA
+  type: INIT_FILES_AND_FOLDERS_METADATA,
 });

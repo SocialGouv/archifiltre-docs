@@ -2,7 +2,7 @@ import os from "os";
 import { isWindows } from "./os-util";
 
 jest.mock("os", () => ({
-  type: jest.fn()
+  type: jest.fn(),
 }));
 
 describe("os-util", () => {

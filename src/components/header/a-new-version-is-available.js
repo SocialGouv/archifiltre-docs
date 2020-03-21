@@ -13,11 +13,11 @@ const { shell } = require("electron");
 
 const bannerStyle = {
   backgroundColor: Color.folder(),
-  border: "0.1em black solid"
+  border: "0.1em black solid",
 };
 
 const cellStyle = {
-  padding: "0.3em 0.3em"
+  padding: "0.3em 0.3em",
 };
 
 /**
@@ -25,7 +25,7 @@ const cellStyle = {
  * @param version number to map
  * @returns {string|*}
  */
-export const mapToNewVersionNumbers = version => {
+export const mapToNewVersionNumbers = (version) => {
   if (version.split(".").length === 1) {
     return `1.${version}.0`;
   }
@@ -40,7 +40,7 @@ class ANewVersionIsAvailable extends React.PureComponent {
     super(props);
     this.state = {
       display: false,
-      lastVersion: -1
+      lastVersion: -1,
     };
 
     this.setState = this.setState.bind(this);
@@ -51,26 +51,26 @@ class ANewVersionIsAvailable extends React.PureComponent {
     if (MODE !== "production") return;
     request({
       method: "GET",
-      url: `${ARCHIFILTRE_SITE_URL}/api-version.json`
+      url: `${ARCHIFILTRE_SITE_URL}/api-version.json`,
     })
-      .then(result => {
+      .then((result) => {
         const lastVersion = mapToNewVersionNumbers(result.lastVersion);
         const currentVersion = version;
         if (versionComparator(currentVersion, lastVersion) === -1) {
           this.setState({
             display: true,
-            lastVersion
+            lastVersion,
           });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
       });
   }
 
   displayNone() {
     this.setState({
-      display: false
+      display: false,
     });
   }
 
@@ -88,7 +88,7 @@ class ANewVersionIsAvailable extends React.PureComponent {
           <div className="grid-x align-center align-middle">
             <div className="cell shrink" style={cellStyle}>
               {this.props.t("header.aNewVersionIsOut", {
-                version: lastVersion
+                version: lastVersion,
               })}
             </div>
             <div className="cell shrink" style={cellStyle}>

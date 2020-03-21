@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaChevronDown } from "react-icons/fa";
 import AuditReportButton, {
-  ExportToAuditReport
+  ExportToAuditReport,
 } from "../buttons/audit-report-button";
 import CsvButton, { ExportToCsv } from "../buttons/csv-button";
 import MetsButton, { ExportToMets } from "../buttons/mets-button";
@@ -27,7 +27,7 @@ const ExportDropdown: FC<ExportDropdownProps> = ({
   exportToAuditReport,
   exportToCsv,
   exportToMets,
-  exportToResip
+  exportToResip,
 }) => {
   const { t } = useTranslation();
   return (

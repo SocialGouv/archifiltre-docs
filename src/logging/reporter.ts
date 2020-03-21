@@ -16,28 +16,28 @@ enum Level {
   HTTP = "http",
   VERBOSE = "verbose",
   DEBUG = "debug",
-  SILLY = "silly"
+  SILLY = "silly",
 }
 
 const logger = createLogger({
   transports: [
     new WinstonConsoleLogger({
-      level: Level.SILLY
-    })
-  ]
+      level: Level.SILLY,
+    }),
+  ],
 });
 
 if (isProd()) {
   const sentryUrl = SENTRY_DSN;
 
   Sentry.init({
-    dsn: sentryUrl
+    dsn: sentryUrl,
   });
 
   logger.add(
     new WinstonSentry({
       dsn: sentryUrl,
-      level: Level.WARN
+      level: Level.WARN,
     })
   );
 
@@ -49,7 +49,7 @@ if (isProd()) {
       dirname: logsDirectory,
       filename: "archifiltre-logs-%DATE%",
       level: Level.INFO,
-      maxFiles: "7d"
+      maxFiles: "7d",
     })
   );
 }
@@ -62,7 +62,7 @@ if (isProd()) {
 const handleLog = (message: any, level: Level) => {
   const logData = {
     message,
-    time: dateFormat("isoDateTime")
+    time: dateFormat("isoDateTime"),
   };
 
   logger[level](logData);
@@ -72,7 +72,7 @@ const handleLog = (message: any, level: Level) => {
  * Reports an error to the log server.
  * @param err
  */
-export const reportError = err => {
+export const reportError = (err) => {
   handleLog(err, Level.ERROR);
 };
 
@@ -80,7 +80,7 @@ export const reportError = err => {
  * Reports a warning
  * @param message
  */
-export const reportWarning = message => {
+export const reportWarning = (message) => {
   handleLog(message, Level.WARN);
 };
 
@@ -88,7 +88,7 @@ export const reportWarning = message => {
  * Reports an info
  * @param message
  */
-export const reportInfo = message => {
+export const reportInfo = (message) => {
   handleLog(message, Level.INFO);
 };
 

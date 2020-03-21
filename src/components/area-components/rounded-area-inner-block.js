@@ -6,7 +6,7 @@ const roundedAreaInnerBlockStyle = {
   paddingTop: roundedAreaInnerBlockPadding,
   paddingRight: roundedAreaInnerBlockPadding,
   paddingBottom: roundedAreaInnerBlockPadding,
-  paddingLeft: roundedAreaInnerBlockPadding
+  paddingLeft: roundedAreaInnerBlockPadding,
 };
 
 /**

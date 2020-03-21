@@ -38,7 +38,7 @@ interface LoadingInfoProps {
 
 const LoadingInfoDisplay: FC<LoadingInfoProps> = ({
   loadingInfo,
-  color = "black"
+  color = "black",
 }) => (
   <LoadingBarContainer color={color}>
     <LoadingBarName>{loadingInfo.label}</LoadingBarName>

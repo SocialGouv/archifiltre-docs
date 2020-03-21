@@ -4,7 +4,7 @@ import { dismissAllComplete } from "../../reducers/loading-info/loading-info-act
 import {
   getCompleteLoadingInfo,
   getLoadingInfoFromStore,
-  getRunningLoadingInfo
+  getRunningLoadingInfo,
 } from "../../reducers/loading-info/loading-info-selectors";
 import BackgroundLoadingInfo from "./background-loading-info";
 
@@ -14,7 +14,7 @@ const BackgroundLoadingInfoContainer = () => {
 
   const loadingItems = useMemo(() => getRunningLoadingInfo(loadingInfoState), [
     loadingInfoState.loading,
-    loadingInfoState.loadingInfo
+    loadingInfoState.loadingInfo,
   ]);
 
   const completedItems = useMemo(
@@ -24,11 +24,11 @@ const BackgroundLoadingInfoContainer = () => {
 
   const displayedItems = useMemo(() => [...loadingItems, ...completedItems], [
     loadingItems,
-    completedItems
+    completedItems,
   ]);
 
   const dismissAll = useCallback(() => dispatch(dismissAllComplete()), [
-    dispatch
+    dispatch,
   ]);
 
   const isLoading = loadingInfoState.loading.length > 0;

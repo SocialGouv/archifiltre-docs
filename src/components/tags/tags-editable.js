@@ -8,11 +8,11 @@ const inputStyle = {
   border: "none",
   background: "none",
   outline: "none",
-  borderBottom: "3px solid rgb(10, 50, 100)"
+  borderBottom: "3px solid rgb(10, 50, 100)",
 };
 
 const cellShrinkStyle = {
-  padding: "0.3em"
+  padding: "0.3em",
 };
 
 class TagsEditable extends React.Component {
@@ -37,12 +37,12 @@ class TagsEditable extends React.Component {
       onChange,
       onKeyUp,
       removeHandlerFactory,
-      toggleCurrentFileDeleteState
+      toggleCurrentFileDeleteState,
     } = this.props;
 
     const tagsToElements = () =>
       tagsForCurrentFile
-        .map(tag => (
+        .map((tag) => (
           <div className="cell shrink" key={tag.id} style={cellShrinkStyle}>
             <Tag
               text={tag.name}
@@ -61,12 +61,12 @@ class TagsEditable extends React.Component {
         <div className="cell shrink" key="__input__" style={cellShrinkStyle}>
           <input
             style={inputStyle}
-            onMouseUp={event => {
+            onMouseUp={(event) => {
               event.stopPropagation();
             }}
             onKeyUp={onKeyUp}
             placeholder={this.props.t("workspace.newTag")}
-            ref={component => {
+            ref={(component) => {
               this.textInput = component;
             }}
             value={candidate_tag}

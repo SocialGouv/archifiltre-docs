@@ -6,13 +6,13 @@ import {
   renameTag,
   resetTags,
   tagFile,
-  untagFile
+  untagFile,
 } from "./tags-actions";
 import { tagsReducer } from "./tags-reducer";
 import { TagsState } from "./tags-types";
 
 jest.mock("uuid", () => ({
-  v4: jest.fn()
+  v4: jest.fn(),
 }));
 
 const setup = ({ mockTagId = "" } = {}) => {
@@ -29,23 +29,23 @@ describe("tags-reducer", () => {
         tagId: {
           ffIds: ["ffId"],
           id: "tagId",
-          name: "tag-name"
-        }
-      }
+          name: "tag-name",
+        },
+      },
     };
 
     it("should reset the state to an empty store", () => {
       const nextState = tagsReducer(initialState, resetTags());
 
       expect(nextState).toEqual({
-        tags: {}
+        tags: {},
       });
     });
   });
 
   describe("INITIALIZE_TAGS", () => {
     const initialState: TagsState = {
-      tags: {}
+      tags: {},
     };
 
     it("should replace the state with the provided tagMap", () => {
@@ -54,19 +54,19 @@ describe("tags-reducer", () => {
         [firstId]: {
           ffIds: ["ff1", "ff2"],
           id: firstId,
-          name: "name"
-        }
+          name: "name",
+        },
       };
 
       expect(tagsReducer(initialState, initializeTags(tags))).toEqual({
-        tags
+        tags,
       });
     });
   });
 
   describe("ADD_TAG", () => {
     const initialState: TagsState = {
-      tags: {}
+      tags: {},
     };
     describe("with a generated id", () => {
       it("should add the tag to the map", () => {
@@ -82,9 +82,9 @@ describe("tags-reducer", () => {
             [tagId]: {
               ffIds: [ffId],
               id: tagId,
-              name: tagName
-            }
-          }
+              name: tagName,
+            },
+          },
         });
       });
     });
@@ -106,9 +106,9 @@ describe("tags-reducer", () => {
             [tagId]: {
               ffIds: [ffId],
               id: tagId,
-              name: tagName
-            }
-          }
+              name: tagName,
+            },
+          },
         });
       });
     });
@@ -125,9 +125,9 @@ describe("tags-reducer", () => {
             [tagId]: {
               ffIds: [existingFfId],
               id: tagId,
-              name: tagName
-            }
-          }
+              name: tagName,
+            },
+          },
         };
 
         const nextState = tagsReducer(baseState, addTag(tagName, newFfId));
@@ -137,9 +137,9 @@ describe("tags-reducer", () => {
             [tagId]: {
               ffIds: [existingFfId, newFfId],
               id: tagId,
-              name: tagName
-            }
-          }
+              name: tagName,
+            },
+          },
         });
       });
     });
@@ -155,9 +155,9 @@ describe("tags-reducer", () => {
           [tagId]: {
             ffIds,
             id: tagId,
-            name: "baseName"
-          }
-        }
+            name: "baseName",
+          },
+        },
       };
 
       const nextState = tagsReducer(initialState, renameTag(tagId, newName));
@@ -167,9 +167,9 @@ describe("tags-reducer", () => {
           [tagId]: {
             ffIds,
             id: tagId,
-            name: newName
-          }
-        }
+            name: newName,
+          },
+        },
       });
     });
   });
@@ -182,9 +182,9 @@ describe("tags-reducer", () => {
           [tagId]: {
             ffIds: ["test-ffid"],
             id: tagId,
-            name: "baseName"
-          }
-        }
+            name: "baseName",
+          },
+        },
       };
 
       const nextState = tagsReducer(initialState, deleteTag(tagId));
@@ -204,9 +204,9 @@ describe("tags-reducer", () => {
           [tagId]: {
             ffIds: [existingFfid],
             id: tagId,
-            name: tagName
-          }
-        }
+            name: tagName,
+          },
+        },
       };
 
       const nextState = tagsReducer(initialState, tagFile(tagId, ffId));
@@ -216,9 +216,9 @@ describe("tags-reducer", () => {
           [tagId]: {
             ffIds: [existingFfid, ffId],
             id: tagId,
-            name: tagName
-          }
-        }
+            name: tagName,
+          },
+        },
       });
     });
     it("should keep only one version of a ffId if it is already present", () => {
@@ -230,9 +230,9 @@ describe("tags-reducer", () => {
           [tagId]: {
             ffIds: [existingFfid],
             id: tagId,
-            name: tagName
-          }
-        }
+            name: tagName,
+          },
+        },
       };
 
       const nextState = tagsReducer(initialState, tagFile(tagId, existingFfid));
@@ -242,9 +242,9 @@ describe("tags-reducer", () => {
           [tagId]: {
             ffIds: [existingFfid],
             id: tagId,
-            name: tagName
-          }
-        }
+            name: tagName,
+          },
+        },
       });
     });
   });
@@ -260,9 +260,9 @@ describe("tags-reducer", () => {
           [tagId]: {
             ffIds: [existingFfid, ffIdToRemove],
             id: tagId,
-            name: tagName
-          }
-        }
+            name: tagName,
+          },
+        },
       };
 
       const nextState = tagsReducer(
@@ -275,9 +275,9 @@ describe("tags-reducer", () => {
           [tagId]: {
             ffIds: [existingFfid],
             id: tagId,
-            name: tagName
-          }
-        }
+            name: tagName,
+          },
+        },
       });
     });
   });

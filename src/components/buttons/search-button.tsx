@@ -3,7 +3,7 @@ import { FaSearch } from "react-icons/all";
 import Button, {
   ButtonAngles,
   ButtonColor,
-  ButtonSize
+  ButtonSize,
 } from "../common/button";
 import { SearchModalContainer } from "../search-modal/search-modal-container";
 import { useModal } from "../../hooks/useModal";

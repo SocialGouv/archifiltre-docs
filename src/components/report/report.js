@@ -16,7 +16,7 @@ import path from "path";
 import Icon, {
   FOLDER_ICON,
   PAGE_ICON,
-  PAGE_MULTIPLE_ICON
+  PAGE_MULTIPLE_ICON,
 } from "../common/icon";
 import ClickableIcon from "../common/clickable-icon";
 import ReactTooltip from "react-tooltip";
@@ -30,21 +30,21 @@ const cellsStyle = {
   borderRadius: "1em",
   padding: "0.6em 1em 0 1em",
   fontSize: "0.8em",
-  height: "8em"
+  height: "8em",
 };
 
 const infoCellStyle = {
-  fontSize: "0.8em"
+  fontSize: "0.8em",
 };
 
 const marginPaddingCompensate = {
-  padding: "0.2em 0.8em"
+  padding: "0.2em 0.8em",
 };
 
 const overflowEllipsisStyle = {
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
-  overflow: "hidden"
+  overflow: "hidden",
 };
 
 const ElementIcon = ({
@@ -52,7 +52,7 @@ const ElementIcon = ({
   isFolder,
   fillColor,
   filesAndFoldersId,
-  onClick
+  onClick,
 }) => {
   const icon = isFolder ? FOLDER_ICON : PAGE_ICON;
 
@@ -70,7 +70,7 @@ const Name = ({
   bracketName = "",
   nodeName = "",
   filesAndFoldersId,
-  onChangeAlias
+  onChangeAlias,
 }) => {
   const { t } = useTranslation();
   if (placeholder) {
@@ -99,7 +99,7 @@ const Name = ({
   }
 };
 
-const RealName = props => {
+const RealName = (props) => {
   const { bracketName } = props;
   const placeholder = props.placeholder;
   const { t } = useTranslation();
@@ -114,7 +114,7 @@ const RealName = props => {
       <div
         style={{
           fontStyle: "italic",
-          visibility: bracketName === "" ? "hidden" : ""
+          visibility: bracketName === "" ? "hidden" : "",
         }}
       >
         ({bracketName})
@@ -132,7 +132,7 @@ const NameCell = ({
   isFolder,
   fillColor,
   originalPath,
-  onChangeAlias
+  onChangeAlias,
 }) => (
   <div className="grid-x align-middle" style={{ height: "3.2em" }}>
     <div className="cell shrink" style={{ paddingRight: pad }}>
@@ -173,7 +173,7 @@ const InfoCell = ({
   placeholder = false,
   filesAndFolders,
   filesAndFoldersId,
-  filesAndFoldersMetadata
+  filesAndFoldersMetadata,
 }) => {
   const { t } = useTranslation();
   const currentFilesAndFolders = filesAndFolders[filesAndFoldersId];
@@ -239,7 +239,7 @@ const Report = ({
   onChangeAlias,
   fillColor,
   isFocused,
-  isLocked
+  isLocked,
 }) => {
   const isActive = isFocused || isLocked;
 
@@ -264,7 +264,7 @@ const Report = ({
       style={{
         opacity: isActive ? 1 : 0.5,
         background: "white",
-        borderRadius: "5px"
+        borderRadius: "5px",
       }}
     >
       <div className="grid-x" style={{ padding: pad }}>
@@ -338,7 +338,7 @@ export default function ReportApiToProps({
   toggleCurrentFileDeleteState,
   updateAlias,
   updateComment,
-  fillColor
+  fillColor,
 }) {
   const icicle_state = api.icicle_state;
 
@@ -353,7 +353,7 @@ export default function ReportApiToProps({
 
   // TODO: Refactor this method to use a standard value instead of the riekInputResult value
   const onChangeAlias = useCallback(
-    (propName, id, oldName) => riekInputResult => {
+    (propName, id, oldName) => (riekInputResult) => {
       let newAlias =
         riekInputResult[propName] === oldName ? "" : riekInputResult[propName];
       newAlias = newAlias.replace(/^\s*|\s*$/g, "");

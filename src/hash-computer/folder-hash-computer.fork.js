@@ -1,7 +1,7 @@
 import { computeFolderHashes } from "../util/file-and-folders-utils";
 import {
   AsyncWorkerEvent,
-  createAsyncWorkerForChildProcess
+  createAsyncWorkerForChildProcess,
 } from "../util/async-worker-util";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
@@ -14,7 +14,7 @@ asyncWorker.addEventListener(
         // We batch the results to avoid overloading the main process
         const BATCH_SIZE = 500;
         let batchResult = {};
-        const computeFolderHashHook = hashObject => {
+        const computeFolderHashHook = (hashObject) => {
           batchResult = { ...batchResult, ...hashObject };
 
           if (Object.keys(batchResult).length === BATCH_SIZE) {

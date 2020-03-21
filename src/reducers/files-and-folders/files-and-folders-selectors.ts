@@ -8,7 +8,7 @@ import { StoreState } from "../store";
 import {
   FilesAndFolders,
   FilesAndFoldersMap,
-  HashesMap
+  HashesMap,
 } from "./files-and-folders-types";
 
 export const ROOT_FF_ID = "";
@@ -56,7 +56,7 @@ const reduceFilesAndFolders = <ReduceResultType>(
   ) => ReduceResultType
 ) => {
   const currentFilesAndFolders = filesAndFoldersMap[rootId];
-  const childrenValues = currentFilesAndFolders.children.map(childId =>
+  const childrenValues = currentFilesAndFolders.children.map((childId) =>
     reduceFilesAndFolders(filesAndFoldersMap, childId, reducer)
   );
 
@@ -94,7 +94,7 @@ export const getFilesAndFoldersMinLastModified = (
     (childrenValues, currentFilesAndFolders) =>
       _.min(
         [currentFilesAndFolders.file_last_modified, ...childrenValues].filter(
-          lastModifiedDate => lastModifiedDate !== 0
+          (lastModifiedDate) => lastModifiedDate !== 0
         )
       )
   );
@@ -117,7 +117,7 @@ const getAllLastModified = (
       } else {
         return [
           ..._.flatten(childrenValues),
-          currentFilesAndFolders.file_last_modified
+          currentFilesAndFolders.file_last_modified,
         ];
       }
     }

@@ -11,7 +11,7 @@ let basePath;
  * @param paths - the paths for which to compute the hashes
  */
 const computeHashBatch = (asyncWorker: AsyncWorker, paths: string[]) => {
-  const result = paths.map(param => {
+  const result = paths.map((param) => {
     let hash;
     try {
       hash = computeHash(path.join(basePath, param));
@@ -19,13 +19,13 @@ const computeHashBatch = (asyncWorker: AsyncWorker, paths: string[]) => {
       hash = null;
       asyncWorker.postMessage({
         error: { param, error: error.toString() },
-        type: MessageTypes.ERROR
+        type: MessageTypes.ERROR,
       });
     }
 
     return {
       param,
-      result: hash
+      result: hash,
     };
   });
 

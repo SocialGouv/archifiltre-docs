@@ -5,7 +5,7 @@ import { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metada
 import { isFile } from "../reducers/files-and-folders/files-and-folders-selectors";
 import {
   FilesAndFolders,
-  FilesAndFoldersMap
+  FilesAndFoldersMap,
 } from "../reducers/files-and-folders/files-and-folders-types";
 import { medianOnSortedArray } from "../util/array-util";
 import { convertToPosixAbsolutePath } from "../util/file-sys-util";
@@ -13,7 +13,7 @@ import { empty } from "../util/function-util";
 import { indexSort } from "../util/list-util";
 import {
   ArchifiltreErrorCode,
-  convertFsErrorToArchifiltreError
+  convertFsErrorToArchifiltreError,
 } from "../util/error-util";
 
 interface LoadFilesAndFoldersFromFileSystemError {
@@ -47,7 +47,7 @@ export const loadFilesAndFoldersFromFileSystem = (
 
       if (stats.isDirectory()) {
         const children = fs.readdirSync(currentPath);
-        children.forEach(childPath =>
+        children.forEach((childPath) =>
           loadFilesAndFoldersFromFileSystemRec(
             path.join(currentPath, childPath)
           )
@@ -59,15 +59,15 @@ export const loadFilesAndFoldersFromFileSystem = (
       files.push([
         {
           lastModified: stats.mtimeMs,
-          size: stats.size
+          size: stats.size,
         },
-        convertToPosixAbsolutePath(path.relative(rootPath, currentPath))
+        convertToPosixAbsolutePath(path.relative(rootPath, currentPath)),
       ]);
     } catch (error) {
       hook({
         path: currentPath,
         message: error.message,
-        code: convertFsErrorToArchifiltreError(error.code)
+        code: convertFsErrorToArchifiltreError(error.code),
       });
     }
   };
@@ -96,14 +96,14 @@ export const createFilesAndFolders = ({
   children = [],
   file_last_modified = 0,
   file_size = 0,
-  id
+  id,
 }: CreateFilesAndFoldersOptions): FilesAndFolders => ({
   children,
   file_last_modified,
   file_size,
   hash: null,
   id,
-  name: path.basename(id)
+  name: path.basename(id),
 });
 
 /**
@@ -117,13 +117,13 @@ export const createFilesAndFoldersDataStructure = (
 ): FilesAndFoldersMap => {
   const filesAndFolders: FilesAndFoldersMap = {};
 
-  const recursivelyAddParentFolders = elementPath => {
+  const recursivelyAddParentFolders = (elementPath) => {
     const parentPath = path.dirname(elementPath);
     if (!filesAndFolders[parentPath]) {
       const normalizedParentPath = parentPath !== "/" ? parentPath : "";
       filesAndFolders[normalizedParentPath] = createFilesAndFolders({
         children: [elementPath],
-        id: normalizedParentPath
+        id: normalizedParentPath,
       });
 
       if (normalizedParentPath !== "") {
@@ -142,7 +142,7 @@ export const createFilesAndFoldersDataStructure = (
       file_size: size,
       hash: null,
       id: currentPath,
-      name: path.basename(currentPath)
+      name: path.basename(currentPath),
     };
     recursivelyAddParentFolders(currentPath);
     if (hook) {
@@ -165,7 +165,7 @@ export const createFilesAndFoldersMetadataDataStructure = (
   const metadata: FilesAndFoldersMetadataMap = {};
   const lastModifiedLists = {};
 
-  const computeMetadataRec = id => {
+  const computeMetadataRec = (id) => {
     const ff = filesAndFolders[id];
     hook();
     if (isFile(ff)) {
@@ -177,21 +177,21 @@ export const createFilesAndFoldersMetadataDataStructure = (
         minLastModified: ff.file_last_modified,
         nbChildrenFiles: 1,
         sortByDateIndex: [],
-        sortBySizeIndex: []
+        sortBySizeIndex: [],
       };
       lastModifiedLists[id] = [ff.file_last_modified];
       return;
     }
 
-    ff.children.forEach(childId => computeMetadataRec(childId));
+    ff.children.forEach((childId) => computeMetadataRec(childId));
 
     lastModifiedLists[id] = _(ff.children)
-      .map(childId => lastModifiedLists[childId])
+      .map((childId) => lastModifiedLists[childId])
       .flatten()
       .sortBy()
       .value();
     const childrenTotalSize = _.sum(
-      ff.children.map(childId => metadata[childId].childrenTotalSize)
+      ff.children.map((childId) => metadata[childId].childrenTotalSize)
     );
     const averageLastModified = _.mean(lastModifiedLists[id]);
     const medianLastModified = medianOnSortedArray(lastModifiedLists[id]);
@@ -199,15 +199,15 @@ export const createFilesAndFoldersMetadataDataStructure = (
       lastModifiedLists[id][lastModifiedLists[id].length - 1];
     const minLastModified = lastModifiedLists[id][0];
     const nbChildrenFiles = _.sum(
-      ff.children.map(childId => metadata[childId].nbChildrenFiles)
+      ff.children.map((childId) => metadata[childId].nbChildrenFiles)
     );
     const sortByDateIndex = indexSort(
-      childId => metadata[childId].averageLastModified,
+      (childId) => metadata[childId].averageLastModified,
       _(ff.children)
     ).value();
 
     const sortBySizeIndex = indexSort(
-      childId => metadata[childId].childrenTotalSize,
+      (childId) => metadata[childId].childrenTotalSize,
       _(ff.children)
     )
       .reverse()
@@ -221,7 +221,7 @@ export const createFilesAndFoldersMetadataDataStructure = (
       minLastModified,
       nbChildrenFiles,
       sortByDateIndex,
-      sortBySizeIndex
+      sortBySizeIndex,
     };
   };
 

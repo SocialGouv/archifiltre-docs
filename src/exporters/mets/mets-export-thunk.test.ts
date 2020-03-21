@@ -7,13 +7,13 @@ import { createFilesAndFolders } from "../../reducers/files-and-folders/files-an
 import { StoreState } from "../../reducers/store";
 import {
   createEmptyStore,
-  wrapStoreWithUndoable
+  wrapStoreWithUndoable,
 } from "../../reducers/store-test-utils";
 import { makeSIP } from "./mets";
 import { metsExporterThunk } from "./mets-export-thunk";
 
 jest.mock("./mets", () => ({
-  makeSIP: jest.fn()
+  makeSIP: jest.fn(),
 }));
 
 const tagName = "test-tag-1";
@@ -24,22 +24,22 @@ const tags = {
   [tagId]: {
     ffIds: [taggedFfId],
     id: tagId,
-    name: tagName
-  }
+    name: tagName,
+  },
 };
 
 const filesAndFolders = {
   "": createFilesAndFolders({ id: "" }),
   id1: createFilesAndFolders({ id: "id1" }),
-  id2: createFilesAndFolders({ id: "id2" })
+  id2: createFilesAndFolders({ id: "id2" }),
 };
 
 const comments = {
-  id1: "comment"
+  id1: "comment",
 };
 
 const aliases = {
-  id2: "alias"
+  id2: "alias",
 };
 
 const filesAndFoldersMetadata = {
@@ -48,22 +48,22 @@ const filesAndFoldersMetadata = {
     childrenTotalSize: 10000,
     maxLastModified: 1570615679168,
     medianLastModified: 4000,
-    minLastModified: 1000
+    minLastModified: 1000,
   }),
   id1: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 10000,
     maxLastModified: 1570615679168,
     medianLastModified: 4000,
-    minLastModified: 1000
+    minLastModified: 1000,
   }),
   id2: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 10000,
     maxLastModified: 1570615679168,
     medianLastModified: 4000,
-    minLastModified: 1000
-  })
+    minLastModified: 1000,
+  }),
 };
 
 const elementsToDelete = ["deleted-ffid"];
@@ -79,10 +79,10 @@ const storeContent: StoreState = {
     aliases,
     comments,
     elementsToDelete,
-    filesAndFolders
+    filesAndFolders,
   }),
   filesAndFoldersMetadata: { filesAndFoldersMetadata },
-  tags: wrapStoreWithUndoable({ tags })
+  tags: wrapStoreWithUndoable({ tags }),
 };
 
 describe("mets-export-thunk", () => {
@@ -97,7 +97,7 @@ describe("mets-export-thunk", () => {
       store.dispatch(
         metsExporterThunk({
           originalPath,
-          sessionName
+          sessionName,
         })
       );
 
@@ -109,7 +109,7 @@ describe("mets-export-thunk", () => {
         filesAndFoldersMetadata,
         originalPath,
         sessionName,
-        tags
+        tags,
       });
     });
   });

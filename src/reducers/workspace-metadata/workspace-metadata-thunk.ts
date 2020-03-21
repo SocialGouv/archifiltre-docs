@@ -3,7 +3,7 @@ import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { ArchifiltreThunkAction } from "../archifiltre-types";
 import {
   setIciclesSortMethod,
-  setSessionName
+  setSessionName,
 } from "./workspace-metadata-actions";
 import { IciclesSortMethod } from "./workspace-metadata-types";
 
@@ -15,7 +15,7 @@ import { IciclesSortMethod } from "./workspace-metadata-types";
 export const setSessionNameThunk = (
   sessionName: string,
   api: any
-): ArchifiltreThunkAction => dispatch => {
+): ArchifiltreThunkAction => (dispatch) => {
   if (sessionName.length > 0) {
     dispatch(setSessionName(sessionName));
     api.undo.commit();
@@ -24,10 +24,10 @@ export const setSessionNameThunk = (
 
 export const setIciclesSortMethodThunk = (
   iciclesSortMethod: IciclesSortMethod
-): ArchifiltreThunkAction => dispatch => {
+): ArchifiltreThunkAction => (dispatch) => {
   addTracker({
     title: ActionTitle.TOGGLE_VIEW_BY_TYPE_DATES,
-    type: ActionType.TRACK_EVENT
+    type: ActionType.TRACK_EVENT,
   });
 
   dispatch(setIciclesSortMethod(iciclesSortMethod));

@@ -9,24 +9,24 @@ import { createFilesAndFolders } from "../../reducers/files-and-folders/files-an
 import { StoreState } from "../../reducers/store";
 import {
   createEmptyStore,
-  wrapStoreWithUndoable
+  wrapStoreWithUndoable,
 } from "../../reducers/store-test-utils";
 import { notifyInfo, notifySuccess } from "../../util/notifications-util";
 import { generateResipExport$ } from "./resip-export.controller";
 import { resipExporterThunk } from "./resip-exporter-thunk";
 
 jest.mock("./resip-export.controller", () => ({
-  generateResipExport$: jest.fn()
+  generateResipExport$: jest.fn(),
 }));
 
 jest.mock("fs", () => ({
   promises: {
-    writeFile: jest.fn()
-  }
+    writeFile: jest.fn(),
+  },
 }));
 jest.mock("../../util/notifications-util", () => ({
   notifyInfo: jest.fn(),
-  notifySuccess: jest.fn()
+  notifySuccess: jest.fn(),
 }));
 
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
@@ -37,21 +37,21 @@ const tags = {
   [tagId]: {
     ffIds: [taggedFfId],
     id: tagId,
-    name: tagName
-  }
+    name: tagName,
+  },
 };
 const filesAndFolders = {
   "": createFilesAndFolders({ id: "" }),
   id1: createFilesAndFolders({ id: "id1" }),
-  id2: createFilesAndFolders({ id: "id2" })
+  id2: createFilesAndFolders({ id: "id2" }),
 };
 
 const aliases = {
-  id1: "alias"
+  id1: "alias",
 };
 
 const comments = {
-  id2: "comments"
+  id2: "comments",
 };
 
 const filesAndFoldersMetadata = {
@@ -60,22 +60,22 @@ const filesAndFoldersMetadata = {
     childrenTotalSize: 10000,
     maxLastModified: 1570615679168,
     medianLastModified: 4000,
-    minLastModified: 1000
+    minLastModified: 1000,
   }),
   id1: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 10000,
     maxLastModified: 1570615679168,
     medianLastModified: 4000,
-    minLastModified: 1000
+    minLastModified: 1000,
   }),
   id2: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 10000,
     maxLastModified: 1570615679168,
     medianLastModified: 4000,
-    minLastModified: 1000
-  })
+    minLastModified: 1000,
+  }),
 };
 
 const elementsToDelete = ["ff-id-to-delete"];
@@ -87,10 +87,10 @@ const storeContent = {
     aliases,
     comments,
     elementsToDelete,
-    filesAndFolders
+    filesAndFolders,
   }),
   filesAndFoldersMetadata: { filesAndFoldersMetadata },
-  tags: wrapStoreWithUndoable({ tags })
+  tags: wrapStoreWithUndoable({ tags }),
 };
 
 describe("resip-exporter-thunk", () => {
@@ -107,7 +107,7 @@ describe("resip-exporter-thunk", () => {
       mockedGenerateResipExport$.mockReturnValue(
         from([
           { count: 0, result: [] },
-          { count: 100, resipCsv }
+          { count: 100, resipCsv },
         ])
       );
     });
@@ -123,7 +123,7 @@ describe("resip-exporter-thunk", () => {
         elementsToDelete,
         filesAndFolders,
         filesAndFoldersMetadata,
-        tags
+        tags,
       });
       expect(writeFileMock).toHaveBeenCalledWith(
         savePath,

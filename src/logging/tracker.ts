@@ -22,16 +22,16 @@ export const initTracker = () => {
   window._paq = window._paq || [];
   addMatomoTracker({
     type: MatomoActionType.SET_SITE_ID,
-    value: MATOMO_APPLICATION_ID
+    value: MATOMO_APPLICATION_ID,
   });
   addMatomoTracker({
     type: MatomoActionType.SET_TRACKER_URL,
-    value: `${MATOMO_URL}/piwik.php`
+    value: `${MATOMO_URL}/piwik.php`,
   });
   addMatomoTracker({ type: MatomoActionType.ENABLE_LINK_TRACKING });
   addMatomoTracker({
     type: MatomoActionType.SET_CUSTOM_URL,
-    value: location.pathname
+    value: location.pathname,
   });
   addMatomoTracker({ type: MatomoActionType.TRACK_PAGE_VIEW });
   const scriptElement = document.createElement("script");
@@ -47,9 +47,9 @@ export const initTracker = () => {
  * Removes the null and undefined values from a trackerAction object
  * @param trackerAction
  */
-const sanitizeTrackerData = trackerAction =>
+const sanitizeTrackerData = (trackerAction) =>
   Object.values(trackerAction).filter(
-    actionProperty =>
+    (actionProperty) =>
       !_.isUndefined(actionProperty) && !_.isNull(actionProperty)
   );
 
@@ -73,7 +73,7 @@ const mapActionToMatomoAction = (
       MatomoActionTitle
     ),
     value: trackerAction.value,
-    eventValue: trackerAction.eventValue
+    eventValue: trackerAction.eventValue,
   };
 };
 
@@ -110,7 +110,7 @@ enum MatomoActionType {
   ENABLE_LINK_TRACKING = "enableLinkTracking",
   SET_CUSTOM_URL = "setCustomUrl",
   TRACK_PAGE_VIEW = "trackPageView",
-  TRACK_EVENT = "trackEvent"
+  TRACK_EVENT = "trackEvent",
 }
 
 enum MatomoActionTitle {
@@ -126,5 +126,5 @@ enum MatomoActionTitle {
   TAG_ADDED = "Tag added to file/folder",
   DESCRIPTION_ADDED = "Description added to file/folder",
   ALIAS_ADDED = "Alias added to file/folder",
-  LOADING_TIME = "Loading time"
+  LOADING_TIME = "Loading time",
 }

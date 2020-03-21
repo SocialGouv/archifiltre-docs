@@ -44,7 +44,7 @@ const Workspace = ({ api }) => (
   </div>
 );
 
-const WorkspaceApiToProps = props => {
+const WorkspaceApiToProps = (props) => {
   const api = props.api;
   const icicle_state = api.icicle_state;
 
@@ -53,7 +53,7 @@ const WorkspaceApiToProps = props => {
     getFfByFfId: props.getFfByFfId,
     display_root: icicle_state.display_root(),
     root_id: ROOT_FF_ID,
-    width_by_size: icicle_state.widthBySize()
+    width_by_size: icicle_state.widthBySize(),
   };
 
   return <Workspace {...childProps} />;

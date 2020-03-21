@@ -8,15 +8,15 @@ describe("undoable-selectors", () => {
         value: string;
       }
       const current = {
-        value: "test-value"
+        value: "test-value",
       };
       const undoableState: UndoableState<TestState> = {
         current,
         future: [],
         past: [],
         present: {
-          value: "present-value"
-        }
+          value: "present-value",
+        },
       };
 
       expect(getCurrentState(undoableState)).toEqual(current);

@@ -54,7 +54,7 @@ const app = () => {
   ReactDOM.render(
     <Provider store={store}>
       <Store>
-        {props => {
+        {(props) => {
           const api = props.api;
           return (
             <ErrorBoundary api={api}>
@@ -84,12 +84,12 @@ const app = () => {
 
 window.addEventListener("load", app);
 
-document.ondragover = document.ondrop = event => {
+document.ondragover = document.ondrop = (event) => {
   event.preventDefault();
   return false;
 };
 
-window.ondragover = window.ondrop = event => {
+window.ondragover = window.ondrop = (event) => {
   event.preventDefault();
   return false;
 };

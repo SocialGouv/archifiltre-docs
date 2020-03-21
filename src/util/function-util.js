@@ -1,6 +1,6 @@
 export const empty = () => {};
 
-export const identity = param => param;
+export const identity = (param) => param;
 
 /**
  * Composes single-argument functions from right to left. The rightmost
@@ -14,7 +14,7 @@ export const identity = param => param;
  */
 export function compose(...funcs) {
   if (funcs.length === 0) {
-    return arg => arg;
+    return (arg) => arg;
   }
 
   if (funcs.length === 1) {

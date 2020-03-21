@@ -1,80 +1,95 @@
 {
   "outputHeader": {
     "mets:metsHdr": [
-        {
-            "_attr": {
-                "ID": "HDR.1",
-                "CREATEDATE": "2019-08-05T01:00:00",
-                "LASTMODDATE": "2019-08-05T01:00:00"
-            }
-        },
-        {
-            "mets:altRecordID": [
-                { "_attr": { "TYPE": "producerIdentifier" } },
-                "ADNUM"
-            ]
-        },
-        {
-            "mets:altRecordID": [
-                { "_attr": { "TYPE": "productionIdentifier" } },
-                "TEST_PRODUCTION_IDENTIFIER"
-            ]
+      {
+        "_attr": {
+          "ID": "HDR.1",
+          "CREATEDATE": "2019-08-05T01:00:00",
+          "LASTMODDATE": "2019-08-05T01:00:00"
         }
+      },
+      {
+        "mets:altRecordID": [
+          { "_attr": { "TYPE": "producerIdentifier" } },
+          "ADNUM"
+        ]
+      },
+      {
+        "mets:altRecordID": [
+          { "_attr": { "TYPE": "productionIdentifier" } },
+          "TEST_PRODUCTION_IDENTIFIER"
+        ]
+      }
     ]
   },
   "outputDmdSec": {
     "mets:dmdSec": [
       { "_attr": { "ID": "TEST_ID" } },
-      { "mets:mdWrap": [
-        { "_attr": { "MIMETYPE": "text/xml", "MDTYPE": "DC" } },
-        { "mets:xmlData" : [
-          {"spar_dc:spar_dc": [
-            { "dc:title": "TEST" }
-          ]}
-        ]}
-      ]}
+      {
+        "mets:mdWrap": [
+          { "_attr": { "MIMETYPE": "text/xml", "MDTYPE": "DC" } },
+          { "mets:xmlData": [{ "spar_dc:spar_dc": [{ "dc:title": "TEST" }] }] }
+        ]
+      }
     ]
   },
   "outputProvMd": {
     "mets:digiprovMD": [
       { "_attr": { "ID": "TEST_ID" } },
-      { "mets:mdWrap": [
-        { "_attr": { "MIMETYPE": "text/xml", "MDTYPE": "PREMIS:EVENT" } },
-        { "mets:xmlData" : [
-          { "premis:event" : [
-            { "premis:eventIdentifier": [
-              { "premis:eventIdentifierType" : "UUID" },
-              { "premis:eventIdentifierValue": "12345678-1234-1234-abcd-123456789abc" }
-            ]},
-            { "premis:eventType" : "testEvent" },
-            { "premis:eventDateTime": "2019-08-05T01:00:00" }
-          ]}
-        ]}
-      ]}
+      {
+        "mets:mdWrap": [
+          { "_attr": { "MIMETYPE": "text/xml", "MDTYPE": "PREMIS:EVENT" } },
+          {
+            "mets:xmlData": [
+              {
+                "premis:event": [
+                  {
+                    "premis:eventIdentifier": [
+                      { "premis:eventIdentifierType": "UUID" },
+                      {
+                        "premis:eventIdentifierValue": "12345678-1234-1234-abcd-123456789abc"
+                      }
+                    ]
+                  },
+                  { "premis:eventType": "testEvent" },
+                  { "premis:eventDateTime": "2019-08-05T01:00:00" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     ]
   },
   "outputFileTag": {
     "mets:file": [
-      { "_attr": { 
-        "ID": "TEST_ID",
-        "DMDID": "TEST_DMDID",
-        "CHECKSUMTYPE": "MD5",
-        "CHECKSUM": "123456789abcdef0123456789abcdef0",
-        "SIZE" : 100 }
+      {
+        "_attr": {
+          "ID": "TEST_ID",
+          "DMDID": "TEST_DMDID",
+          "CHECKSUMTYPE": "MD5",
+          "CHECKSUM": "123456789abcdef0123456789abcdef0",
+          "SIZE": 100
+        }
       },
-      { "mets:FLocat" : [
-        { "_attr": { "LOCTYPE": "URL", "xlink:type": "simple", "xlink:href": "master/alias.test" } },
-        null
-      ]}
+      {
+        "mets:FLocat": [
+          {
+            "_attr": {
+              "LOCTYPE": "URL",
+              "xlink:type": "simple",
+              "xlink:href": "master/alias.test"
+            }
+          },
+          null
+        ]
+      }
     ]
   },
   "outputDivTag": {
     "mets:div": [
-      { "_attr" : { "ID": "TEST_ID", "TYPE": "object", "ORDER": 10 } },
-      { "mets:fptr" : [
-        { "_attr": { "FILEID": "master.10" } },
-        null
-      ]}
+      { "_attr": { "ID": "TEST_ID", "TYPE": "object", "ORDER": 10 } },
+      { "mets:fptr": [{ "_attr": { "FILEID": "master.10" } }, null] }
     ]
   }
 }

@@ -9,14 +9,14 @@ class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasError: false
+      hasError: false,
     };
   }
 
   componentDidCatch(error, info) {
     reportError({ error, info });
     this.setState({
-      hasError: true
+      hasError: true,
     });
   }
 
@@ -29,7 +29,7 @@ class ErrorBoundary extends React.Component {
           <div
             className="cell small-1"
             style={{
-              textAlign: "center"
+              textAlign: "center",
             }}
           >
             <h1>{t("common.somethingWentWrong")}</h1>

@@ -4,7 +4,7 @@ import {
   REDO,
   UNDO,
   UndoableActionTypes,
-  UndoableState
+  UndoableState,
 } from "./undoable-types";
 
 const undoable = <WrappedState, Action extends redux.Action>(
@@ -15,7 +15,7 @@ const undoable = <WrappedState, Action extends redux.Action>(
     current: initialState,
     future: [],
     past: [],
-    present: initialState
+    present: initialState,
   };
 
   return (state = wrappedInitialState, action) => {
@@ -30,7 +30,7 @@ const undoable = <WrappedState, Action extends redux.Action>(
           current: present,
           future: [state.present, ...state.future],
           past,
-          present
+          present,
         };
       case REDO:
         [present, ...future] = state.future;
@@ -38,21 +38,21 @@ const undoable = <WrappedState, Action extends redux.Action>(
           current: present,
           future,
           past: [state.present, ...state.past],
-          present
+          present,
         };
       case COMMIT:
         return {
           current: state.current,
           future: [],
           past: [state.present, ...state.past],
-          present: state.current
+          present: state.current,
         };
       default:
         return {
           current: reducer(state.current, action as Action),
           future: state ? state.future : [],
           past: state ? state.past : [],
-          present: state.present
+          present: state.present,
         };
     }
   };

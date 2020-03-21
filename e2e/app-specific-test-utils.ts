@@ -62,7 +62,7 @@ export const getElementByTestId = (app, testId: string) =>
  * Start editing tag box
  * @param app - The spectron app object
  */
-const enableTagEdition = async app => {
+const enableTagEdition = async (app) => {
   await getElementByTestId(app, "tag-edit-box").click();
 };
 
@@ -70,7 +70,7 @@ const enableTagEdition = async app => {
  * Start editing tag box
  * @param app - The spectron app object
  */
-const enableDescriptionEdition = async app => {
+const enableDescriptionEdition = async (app) => {
   await getElementByTestId(app, "description-edit-box").click();
 };
 

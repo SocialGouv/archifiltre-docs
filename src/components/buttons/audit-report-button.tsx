@@ -14,13 +14,13 @@ interface AuditReportButtonProps {
 const AuditReportButton: FC<AuditReportButtonProps> = ({
   areHashesReady,
   sessionName,
-  exportToAuditReport
+  exportToAuditReport,
 }) => {
   const { t } = useTranslation();
   const name = getNameWithExtension(`${sessionName}-Audit`, "docx");
   const onClick = useCallback(() => exportToAuditReport(name), [
     exportToAuditReport,
-    name
+    name,
   ]);
   return (
     <span

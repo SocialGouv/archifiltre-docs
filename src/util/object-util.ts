@@ -5,7 +5,7 @@
  */
 export const compose = (mergedObject: object, baseObject: object): object => ({
   ...baseObject,
-  ...mergedObject
+  ...mergedObject,
 });
 
 /**
@@ -46,5 +46,5 @@ export const removeKey = (
   { [key]: _, ...rest }: { [s: string]: any },
   key: any
 ) => ({
-  ...rest
+  ...rest,
 });

@@ -6,8 +6,8 @@ jest.mock("react-notifications", () => ({
   NotificationManager: {
     error: jest.fn(),
     info: jest.fn(),
-    success: jest.fn()
-  }
+    success: jest.fn(),
+  },
 }));
 
 describe("notification-util", () => {

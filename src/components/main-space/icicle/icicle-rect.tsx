@@ -52,7 +52,7 @@ const IcicleRect: FC<IcicleRectProps> = ({
   registerDims,
   onClickHandler,
   onDoubleClickHandler,
-  onMouseOverHandler
+  onMouseOverHandler,
 }) => {
   /**
    * Formats the element dimensions into an object.

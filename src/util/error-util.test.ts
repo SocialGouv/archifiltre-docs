@@ -2,14 +2,14 @@ import { handleError } from "./error-util";
 import { notifyError } from "./notifications-util";
 
 jest.mock("./notifications-util", () => ({
-  notifyError: jest.fn()
+  notifyError: jest.fn(),
 }));
 
 const HANDLED_CODE = "handled-code";
 
 const ERROR_MAP = {
   default: "default-error",
-  [HANDLED_CODE]: "handled-error"
+  [HANDLED_CODE]: "handled-error",
 };
 
 const ERROR_TITLE = "error-title";

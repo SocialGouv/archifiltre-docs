@@ -8,8 +8,8 @@ const store: StoreState = {
   ...createEmptyStore(),
   modal: {
     ...initialState,
-    openModal: Modal.ERROR_MODAL
-  }
+    openModal: Modal.ERROR_MODAL,
+  },
 };
 
 describe("getOpenModalFromStore", () => {

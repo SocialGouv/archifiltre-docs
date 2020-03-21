@@ -7,7 +7,7 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState
+  useState,
 } from "react";
 import { animate, clear } from "../../../animation-daemon";
 import { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
@@ -15,7 +15,7 @@ import { decomposePathToElement } from "../../../reducers/files-and-folders/file
 import {
   AliasMap,
   CommentsMap,
-  FilesAndFolders
+  FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "../../../reducers/tags/tags-types";
 import * as ArrayUtil from "../../../util/array-util";
@@ -47,7 +47,7 @@ const MINIMAP_TOP_MARGIN = 10;
  */
 const normalizeWidth = (widths: number[]) => {
   const totalWidth = sum(widths);
-  return widths.map(a => a / totalWidth);
+  return widths.map((a) => a / totalWidth);
 };
 
 /**
@@ -108,11 +108,11 @@ const IcicleMain: FC<IcicleMainProps> = ({
   unlock,
   setFocus,
   setNoFocus,
-  setNoHover
+  setNoHover,
 }) => {
   const [{ viewBoxHeight, viewBoxWidth }, setViewboxState] = useState({
     viewBoxHeight: 300,
-    viewBoxWidth: 1000
+    viewBoxWidth: 1000,
   });
 
   const icicleHeight = viewBoxHeight * ICICLES_VIEWBOX_RATIO;
@@ -147,7 +147,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
    * Returns the total size of the child elements based on its id
    */
   const getElementTotalSize = useCallback(
-    id => getFfByFfId(id).childrenTotalSize,
+    (id) => getFfByFfId(id).childrenTotalSize,
     [getFfByFfId]
   );
 
@@ -155,7 +155,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
    * Returns the total number of children files of an element based on its id
    */
   const getElementChildrenFilesCount = useCallback(
-    id => getFfByFfId(id).nbChildrenFiles,
+    (id) => getFfByFfId(id).nbChildrenFiles,
     [getFfByFfId]
   );
 
@@ -180,7 +180,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
         const [parentId, childId] = ids;
         const childrenIds = getChildrenIdFromId(parentId);
         const widths = normalizeWidth(childrenIds.map(computeWidth)).map(
-          a => a * dx
+          (a) => a * dx
         );
         const cumulatedWidths = ArrayUtil.computeCumulative(widths);
         const childIndex = childrenIds.indexOf(childId);
@@ -196,7 +196,9 @@ const IcicleMain: FC<IcicleMainProps> = ({
   /**
    * Normalizes the height based on the maxDepth of the file tree
    */
-  const normalizeHeight = useCallback(height => height / maxDepth, [maxDepth]);
+  const normalizeHeight = useCallback((height) => height / maxDepth, [
+    maxDepth,
+  ]);
 
   /**
    * Determines if an icicle is in the viewport. It allows icicles not to be rendered if they are too far left

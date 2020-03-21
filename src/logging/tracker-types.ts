@@ -6,7 +6,7 @@ export interface TrackerAction {
 }
 
 export enum ActionType {
-  TRACK_EVENT = "trackEvent"
+  TRACK_EVENT = "trackEvent",
 }
 
 export enum ActionTitle {
@@ -22,5 +22,5 @@ export enum ActionTitle {
   TAG_ADDED = "Tag added to file/folder",
   DESCRIPTION_ADDED = "Description added to file/folder",
   ALIAS_ADDED = "Alias added to file/folder",
-  LOADING_TIME = "Loading time"
+  LOADING_TIME = "Loading time",
 }

@@ -12,7 +12,7 @@ require("dotenv").config();
  * @param mode - the build mode. "development" or "production".
  * @returns {string}
  */
-const workerRootFolder = mode =>
+const workerRootFolder = (mode) =>
   mode === "development"
     ? JSON.stringify(path.join(__dirname, "electron/dist/"))
     : "require('path').join(require('electron').remote.app.getAppPath(),'/electron/dist/')";
@@ -20,11 +20,11 @@ const workerRootFolder = mode =>
 module.exports = (env, argv = {}) => ({
   devtool: argv.mode === "development" ? "cheap-module-eval-source-map" : false,
   entry: {
-    app: "./src/app.js"
+    app: "./src/app.js",
   },
 
   externals: {
-    "iconv-lite": "require('iconv-lite')"
+    "iconv-lite": "require('iconv-lite')",
   },
   plugins: [
     new CopyWebpackPlugin(["static"]),
@@ -32,7 +32,7 @@ module.exports = (env, argv = {}) => ({
       inject: "head",
       filename: "index.html",
       template: "static/index.html",
-      excludeChunks: ["stats"]
+      excludeChunks: ["stats"],
     }),
     new webpack.DefinePlugin({
       MODE: JSON.stringify(argv.mode || "development"),
@@ -45,26 +45,26 @@ module.exports = (env, argv = {}) => ({
       MATOMO_URL: JSON.stringify(process.env.MATOMO_URL),
       FORCE_TRACKING: !!JSON.stringify(process.env.FORCE_TRACKING),
       ARCHIFILTRE_SITE_URL: JSON.stringify(process.env.ARCHIFILTRE_SITE_URL),
-      SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN)
-    })
+      SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
+    }),
   ],
 
   target: "electron-renderer",
 
   devServer: {
-    writeToDisk: name => /(\.fork\.[jt]s|main\.bundle\.js)$/.test(name),
+    writeToDisk: (name) => /(\.fork\.[jt]s|main\.bundle\.js)$/.test(name),
     contentBase: path.resolve(__dirname, "electron/dist"),
     port: 8000,
     compress: true,
     hot: true,
-    inline: false
+    inline: false,
   },
 
   resolve: {
     modules: [path.resolve(__dirname, "src"), "node_modules"],
     extensions: [".mjs", ".ts", ".tsx", ".js", ".json"],
     symlinks: false,
-    cacheWithContext: false
+    cacheWithContext: false,
   },
 
   module: {
@@ -77,26 +77,26 @@ module.exports = (env, argv = {}) => ({
           loader: "webpack-fork-loader",
           options: {
             publicPath: workerRootFolder(argv.mode),
-            evalPath: true
-          }
-        }
+            evalPath: true,
+          },
+        },
       },
       {
         test: /\.[tj]sx?$/,
         include: path.resolve(__dirname, "src"),
-        loader: "awesome-typescript-loader"
+        loader: "awesome-typescript-loader",
       },
       {
         test: /\.js$/,
         include: path.resolve(__dirname, "src"),
         loader: "source-map-loader",
-        enforce: "pre"
+        enforce: "pre",
       },
       {
         test: /\.css$|\.scss$/,
         include: [
           path.resolve(__dirname, "src/css"),
-          path.resolve(__dirname, "static/fonts")
+          path.resolve(__dirname, "static/fonts"),
         ],
         use: [
           { loader: "style-loader" },
@@ -105,11 +105,11 @@ module.exports = (env, argv = {}) => ({
             loader: "sass-loader",
             options: {
               sassOptions: {
-                includePaths: ["./node_modules"]
-              }
-            }
-          }
-        ]
+                includePaths: ["./node_modules"],
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.svg/,
@@ -119,16 +119,16 @@ module.exports = (env, argv = {}) => ({
             loader: "svg-url-loader",
             options: {
               limit: 1024,
-              name: "[name].[ext]"
-            }
-          }
-        ]
+              name: "[name].[ext]",
+            },
+          },
+        ],
       },
       {
         test: /\.(otf|ttf|eot|woff|woff2)$/,
         include: [
           path.resolve(__dirname, "static/fonts"),
-          path.resolve(__dirname, "node_modules/react-notifications/lib/fonts")
+          path.resolve(__dirname, "node_modules/react-notifications/lib/fonts"),
         ],
         use: [
           {
@@ -136,23 +136,23 @@ module.exports = (env, argv = {}) => ({
             options: {
               limit: 1000,
               name: "[name].[ext]",
-              outputPath: "fonts/"
-            }
-          }
-        ]
-      }
-    ]
+              outputPath: "fonts/",
+            },
+          },
+        ],
+      },
+    ],
   },
 
   optimization: {
     removeAvailableModules: false,
     removeEmptyChunks: false,
-    splitChunks: false
+    splitChunks: false,
   },
 
   output: {
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "electron/dist"),
-    pathinfo: false
-  }
+    pathinfo: false,
+  },
 });

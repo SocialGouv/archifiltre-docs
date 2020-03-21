@@ -31,10 +31,10 @@ const SessionInfo: FC<SessionInfoProps> = ({
   onChangeSessionName,
   nbFolders,
   nbFiles,
-  volume
+  volume,
 }) => {
   const sessionNameChanged = useCallback(
-    rieInput => {
+    (rieInput) => {
       onChangeSessionName(rieInput[SESSION_NAME_PROP]);
     },
     [onChangeSessionName]
@@ -47,7 +47,7 @@ const SessionInfo: FC<SessionInfoProps> = ({
           change={sessionNameChanged}
           propName={SESSION_NAME_PROP}
           className="session_name editable_text"
-          validate={s => s.replace(/\s/g, "").length > 0}
+          validate={(s) => s.replace(/\s/g, "").length > 0}
         />
         &ensp;
         <FaPen className="edit_hover_pencil" style={{ opacity: "0.3" }} />

@@ -3,8 +3,8 @@
 }
 
 .active_button {
-  -webkit-transition : filter 0.25s ease-out;
-  transition : filter 0.25s ease-out;
+  -webkit-transition: filter 0.25s ease-out;
+  transition: filter 0.25s ease-out;
   outline: none;
 }
 
@@ -18,7 +18,7 @@
 }
 
 .comments:focus {
-  padding: 0 ;
+  padding: 0;
   margin: 0;
 }
 
@@ -35,8 +35,8 @@
 }
 
 .tags_add {
-  -webkit-transition : filter 0.25s ease-out;
-  transition : filter 0.25s ease-out;
+  -webkit-transition: filter 0.25s ease-out;
+  transition: filter 0.25s ease-out;
   background-color: #4d9e25;
   cursor: pointer;
 }
@@ -47,14 +47,14 @@
 }
 
 .tags_cross {
-  -webkit-transition : filter 0.25s ease-out;
-  transition : filter 0.25s ease-out;
+  -webkit-transition: filter 0.25s ease-out;
+  transition: filter 0.25s ease-out;
   cursor: pointer;
   background-color: #e04d1c;
   border-radius: 1em;
 }
 
-.tags_cross:hover{
+.tags_cross:hover {
   -webkit-filter: brightness(85%);
   filter: brightness(120%);
 }
@@ -69,10 +69,10 @@
 }
 
 .background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
 }
 
 ::selection {
@@ -80,29 +80,26 @@
   background-color: rgb(10, 50, 100);
 }
 
-::-webkit-scrollbar-track
-{
+::-webkit-scrollbar-track {
   border-radius: 10px;
   background-color: rgba(190, 200, 180, 0.3);
 }
 
-::-webkit-scrollbar
-{
+::-webkit-scrollbar {
   border-radius: 10px;
   width: 12px;
   background-color: rgba(190, 200, 180, 0.3);
 }
 
-::-webkit-scrollbar-thumb
-{
+::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-color: #555;
 }
 
-.edit_hover_container .edit_hover_pencil{
+.edit_hover_container .edit_hover_pencil {
   visibility: hidden;
 }
-.edit_hover_container:hover .edit_hover_pencil{
+.edit_hover_container:hover .edit_hover_pencil {
   visibility: visible;
 }
 
@@ -111,7 +108,6 @@
   border-radius: 1em;
   cursor: text;
 }
-
 
 .editable_text:focus {
   border: none;
@@ -158,7 +154,7 @@ body {
   -o-background-size: cover;
   background-size: cover;
   background: #ced3cc;
-  background-repeat:no-repeat;
+  background-repeat: no-repeat;
   background: -webkit-linear-gradient(to bottom, #ecefea, #ced3cc);
   background: -moz-linear-gradient(to bottom, #ecefea, #ced3cc);
   background: -ms-linear-gradient(to bottom, #ecefea, #ced3cc);
@@ -166,7 +162,7 @@ body {
   background: linear-gradient(to bottom, #ecefea, #ced3cc);
 }
 
-
-*, h4 {
-  font-family: 'Quicksand', sans-serif;
+*,
+h4 {
+  font-family: "Quicksand", sans-serif;
 }

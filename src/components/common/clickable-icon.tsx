@@ -26,7 +26,7 @@ const Overlay = styled.div`
   }
 `;
 
-const ClickableIcon = props => (
+const ClickableIcon = (props) => (
   <Wrapper onClick={props.onClick}>
     <Icon {...props} />
     <Overlay>

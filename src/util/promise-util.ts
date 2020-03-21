@@ -3,4 +3,4 @@
  * @param time
  */
 export const wait = (time?: number) =>
-  new Promise(resolve => setTimeout(resolve, time));
+  new Promise((resolve) => setTimeout(resolve, time));

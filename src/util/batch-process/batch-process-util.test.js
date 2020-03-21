@@ -2,16 +2,16 @@ import {
   aggregateErrorsToMap,
   aggregateResultsToMap,
   backgroundWorkerProcess$,
-  computeBatch$
+  computeBatch$,
 } from "./batch-process-util";
 import { reportError } from "../../logging/reporter.ts";
 
 jest.mock("os", () => ({
-  cpus: () => [1, 2, 3, 4]
+  cpus: () => [1, 2, 3, 4],
 }));
 
 jest.mock("../../logging/reporter", () => ({
-  reportError: jest.fn()
+  reportError: jest.fn(),
 }));
 
 const NB_CPUS = 4;
@@ -24,14 +24,14 @@ const makeWorkerMock = () => {
   const WorkerBuilder = jest.fn(() => ({
     postMessage,
     addEventListener,
-    terminate
+    terminate,
   }));
 
   return {
     WorkerBuilder,
     postMessage,
     addEventListener,
-    terminate
+    terminate,
   };
 };
 
@@ -66,7 +66,7 @@ describe("batch-process-util", () => {
       ({ postMessage, addEventListener, WorkerBuilder } = makeWorkerMock());
       responseObservable = computeBatch$(testData, WorkerBuilder, {
         batchSize,
-        initialValues
+        initialValues,
       });
       responseObservable.subscribe(
         responseObserver,
@@ -81,22 +81,22 @@ describe("batch-process-util", () => {
     it("should handle initial values", () => {
       expect(postMessage).toHaveBeenCalledWith({
         type: "initialize",
-        data: initialValues
+        data: initialValues,
       });
     });
 
     it("should send fragmented computation message", () => {
       expect(postMessage).toHaveBeenCalledWith({
         type: "data",
-        data: [0, 1]
+        data: [0, 1],
       });
       expect(postMessage).toHaveBeenCalledWith({
         type: "data",
-        data: [2, 3]
+        data: [2, 3],
       });
       expect(postMessage).toHaveBeenCalledWith({
         type: "data",
-        data: [4, 5]
+        data: [4, 5],
       });
       //
       expect(postMessage).toHaveBeenCalledTimes(NB_WORKERS * 2);
@@ -107,9 +107,9 @@ describe("batch-process-util", () => {
       const resultMessage = {
         result: [
           { param: 0, result: "R0" },
-          { param: 1, result: "R1" }
+          { param: 1, result: "R1" },
         ],
-        type: "result"
+        type: "result",
       };
       messageCallback({ data: resultMessage });
       expect(responseObserver).toHaveBeenCalledWith(resultMessage);
@@ -127,9 +127,9 @@ describe("batch-process-util", () => {
             type: "result",
             result: [
               { param: callIndex * 2, result: `R${callIndex * 2}` },
-              { param: callIndex * 2 + 1, result: `R${callIndex * 2 + 1}` }
-            ]
-          }
+              { param: callIndex * 2 + 1, result: `R${callIndex * 2 + 1}` },
+            ],
+          },
         });
       }
 
@@ -160,7 +160,7 @@ describe("batch-process-util", () => {
         terminate,
         postMessage,
         addEventListener,
-        WorkerBuilder
+        WorkerBuilder,
       } = makeWorkerMock());
       result$ = backgroundWorkerProcess$(initialData, WorkerBuilder);
       result$.subscribe(responseObserver, errorObserver, completeObserver);
@@ -171,7 +171,7 @@ describe("batch-process-util", () => {
     it("should correctly initialize the worker", () => {
       expect(postMessage).toHaveBeenCalledWith({
         type: "initialize",
-        data: initialData
+        data: initialData,
       });
     });
     it("should proxy results from the worker", () => {
@@ -203,13 +203,13 @@ describe("batch-process-util", () => {
       const resultsArray = [
         { param: "1", result: "value1" },
         { param: "2", result: "value2" },
-        { param: "3", result: "value3" }
+        { param: "3", result: "value3" },
       ];
 
       expect(aggregateResultsToMap(resultsArray)).toEqual({
         "1": "value1",
         "2": "value2",
-        "3": "value3"
+        "3": "value3",
       });
     });
   });
@@ -219,13 +219,13 @@ describe("batch-process-util", () => {
       const errorsArray = [
         { param: "1", error: "error1" },
         { param: "2", error: "error2" },
-        { param: "3", error: "error3" }
+        { param: "3", error: "error3" },
       ];
 
       expect(aggregateErrorsToMap(errorsArray)).toEqual({
         "1": "error1",
         "2": "error2",
-        "3": "error3"
+        "3": "error3",
       });
     });
   });

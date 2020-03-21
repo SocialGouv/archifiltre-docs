@@ -9,7 +9,7 @@ import {
   clickIcicleElement,
   exportToResip,
   waitForAppReady,
-  waitForSuccessNotification
+  waitForSuccessNotification,
 } from "./app-specific-test-utils";
 import { startApp } from "./e2e-test-utils";
 
@@ -55,7 +55,7 @@ describe("Export to RESIP", () => {
         const exportFolderPath = path.join(__dirname, "../test-folder");
         const exportFolder = fs.readdirSync(exportFolderPath);
 
-        const resipExportFilePath = exportFolder.find(folderName =>
+        const resipExportFilePath = exportFolder.find((folderName) =>
           /(Nom du projet|Project name)-RESIP_/.test(folderName)
         );
 
@@ -82,7 +82,7 @@ describe("Export to RESIP", () => {
           "CustodialHistory.CustodialHistoryItem",
           "Description",
           "Content.Tag.0",
-          "Content.Tag.1"
+          "Content.Tag.1",
         ]);
 
         const todayDate = dateFormat(Date.now(), "yyyy-mm-dd");
@@ -98,7 +98,7 @@ describe("Export to RESIP", () => {
           "",
           "",
           "",
-          ""
+          "",
         ]);
         expect(lines).toContainEqual([
           "2",
@@ -112,7 +112,7 @@ describe("Export to RESIP", () => {
           "",
           "",
           "",
-          ""
+          "",
         ]);
         expect(lines).toContainEqual([
           "3",
@@ -126,7 +126,7 @@ describe("Export to RESIP", () => {
           "",
           description,
           tag0Name,
-          tag1Name
+          tag1Name,
         ]);
         expect(lines).toContainEqual([
           "4",
@@ -140,7 +140,7 @@ describe("Export to RESIP", () => {
           "",
           "",
           "",
-          ""
+          "",
         ]);
       });
     },

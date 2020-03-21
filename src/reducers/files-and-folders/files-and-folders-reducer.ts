@@ -8,7 +8,7 @@ import {
   MARK_AS_TO_DELETE,
   SET_FILES_AND_FOLDERS_ALIAS,
   SET_FILES_AND_FOLDERS_HASHES,
-  UNMARK_AS_TO_DELETE
+  UNMARK_AS_TO_DELETE,
 } from "./files-and-folders-types";
 
 export const initialState: FilesAndFoldersState = {
@@ -16,7 +16,7 @@ export const initialState: FilesAndFoldersState = {
   comments: {},
   elementsToDelete: [],
   filesAndFolders: {},
-  hashes: {}
+  hashes: {},
 };
 
 /**
@@ -36,31 +36,31 @@ const filesAndFoldersReducer = (
         ...state,
         aliases: {
           ...state.aliases,
-          ...action.aliases
-        }
+          ...action.aliases,
+        },
       };
     case SET_FILES_AND_FOLDERS_HASHES:
       return {
         ...state,
         hashes: {
           ...state.hashes,
-          ...action.hashes
-        }
+          ...action.hashes,
+        },
       };
     case ADD_COMMENTS_ON_FILES_AND_FOLDERS:
       return {
         ...state,
         comments: {
           ...state.comments,
-          ...action.comments
-        }
+          ...action.comments,
+        },
       };
     case MARK_AS_TO_DELETE:
       return {
         ...state,
         elementsToDelete: [
-          ...new Set([...state.elementsToDelete, action.filesAndFoldersId])
-        ]
+          ...new Set([...state.elementsToDelete, action.filesAndFoldersId]),
+        ],
       };
     case UNMARK_AS_TO_DELETE:
       return {
@@ -68,7 +68,7 @@ const filesAndFoldersReducer = (
         elementsToDelete: _.without(
           state.elementsToDelete,
           action.filesAndFoldersId
-        )
+        ),
       };
     default:
       return state;

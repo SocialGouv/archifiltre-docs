@@ -7,7 +7,7 @@ class CtrlZ extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onKeyDownHandler = e => {
+    this.onKeyDownHandler = (e) => {
       if (e.ctrlKey === true) {
         if (e.key === "z") {
           this.props.api.undo.undo();

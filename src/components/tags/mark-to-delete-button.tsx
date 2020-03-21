@@ -15,11 +15,11 @@ interface MarkToDeleteButtonProps {
 
 const MarkToDeleteButton: FC<MarkToDeleteButtonProps> = ({
   isCurrentFileMarkedToDelete,
-  onClick
+  onClick,
 }) => {
   const { t } = useTranslation();
   const handleClick = useCallback(
-    event => {
+    (event) => {
       event.stopPropagation();
       onClick(event);
     },

@@ -8,19 +8,19 @@ export default class Bubble extends React.Component {
     this.onMouseLeave = this.onMouseLeave.bind(this);
 
     this.state = {
-      mouseOver: false
+      mouseOver: false,
     };
   }
 
   onMouseEnter() {
     this.setState({
-      mouseOver: true
+      mouseOver: true,
     });
   }
 
   onMouseLeave() {
     this.setState({
-      mouseOver: false
+      mouseOver: false,
     });
   }
 
@@ -31,12 +31,12 @@ export default class Bubble extends React.Component {
       sub_comp,
       backgroundColor = "",
       borderRadius = 0,
-      width = "100%"
+      width = "100%",
     } = this.props;
 
     const style = {
       position: "relative",
-      width
+      width,
     };
 
     const subStyle = {
@@ -46,7 +46,7 @@ export default class Bubble extends React.Component {
       width: "100%",
       zIndex: 3,
       backgroundColor,
-      borderRadius
+      borderRadius,
     };
 
     if (mouseOver) {

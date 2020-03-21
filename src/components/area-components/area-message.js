@@ -2,7 +2,7 @@ import React from "react";
 
 const areaMessageStyle = {
   fontFamily: "QuickSand",
-  fontSize: "1.5em"
+  fontSize: "1.5em",
 };
 
 /**

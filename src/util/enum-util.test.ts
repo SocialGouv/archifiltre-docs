@@ -1,19 +1,19 @@
 import {
   getEnumKeyFromValue,
   isValueInEnum,
-  mapValueBetweenEnums
+  mapValueBetweenEnums,
 } from "./enum-util";
 
 enum SourceEnum {
   FIRST_VALUE = "firstValue",
   SECOND_VALUE = "secondValue",
-  THIRD_VALUE = "secondValue"
+  THIRD_VALUE = "secondValue",
 }
 
 enum DestinationEnum {
   FIRST_VALUE = "firstValueFromDestination",
   SECOND_VALUE = "secondValueFromDestination",
-  THIRD_VALUE = "secondValueFromDestination"
+  THIRD_VALUE = "secondValueFromDestination",
 }
 
 describe("enum-util", () => {

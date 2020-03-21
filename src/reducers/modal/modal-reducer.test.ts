@@ -11,7 +11,7 @@ describe("modal-reducer", () => {
       );
       expect(nextState).toEqual({
         ...initialState,
-        openModal: Modal.ERROR_MODAL
+        openModal: Modal.ERROR_MODAL,
       });
     });
   });
@@ -20,13 +20,13 @@ describe("modal-reducer", () => {
     it("should set the open modal to null", () => {
       const baseState = {
         ...initialState,
-        openModal: Modal.ERROR_MODAL
+        openModal: Modal.ERROR_MODAL,
       };
       const nextState = modalReducer(baseState, closeModalAction());
 
       expect(nextState).toEqual({
         ...initialState,
-        openModal: null
+        openModal: null,
       });
     });
   });

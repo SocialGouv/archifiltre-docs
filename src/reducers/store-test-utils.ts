@@ -13,21 +13,21 @@ export const createEmptyStore = (): StoreState => ({
     comments: {},
     elementsToDelete: [],
     filesAndFolders: {},
-    hashes: {}
+    hashes: {},
   }),
   filesAndFoldersMetadata: {
-    filesAndFoldersMetadata: {}
+    filesAndFoldersMetadata: {},
   },
   loadingInfo: loadingInfoInitialState,
   modal: modalInitialState,
   tags: wrapStoreWithUndoable({
-    tags: {}
+    tags: {},
   }),
   workspaceMetadata: wrapStoreWithUndoable({
     iciclesSortMethod: IciclesSortMethod.SORT_BY_TYPE,
     originalPath: "",
-    sessionName: ""
-  })
+    sessionName: "",
+  }),
 });
 
 /**
@@ -40,5 +40,5 @@ export const wrapStoreWithUndoable = <State>(
   current: store,
   future: [],
   past: [],
-  present: store
+  present: store,
 });

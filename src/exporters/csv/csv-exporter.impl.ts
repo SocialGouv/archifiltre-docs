@@ -6,7 +6,7 @@ import {
   AliasMap,
   CommentsMap,
   FilesAndFoldersMap,
-  HashesMap
+  HashesMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import { Tag, TagMap } from "../../reducers/tags/tags-types";
 import translations from "../../translations/translations";
@@ -16,7 +16,7 @@ import { arrayToCsv } from "../../util/csv-util";
 import {
   getAllChildren,
   getType,
-  isExactFileOrAncestor
+  isExactFileOrAncestor,
 } from "../../util/file-and-folders-utils";
 import { formatPathForUserSystem } from "../../util/file-sys-util";
 import { hasDuplicate } from "../../util/duplicates-util";
@@ -49,7 +49,7 @@ const makeCsvHeader = (
     translations.t("csvHeader.fileOrFolder"),
     translations.t("csvHeader.depth"),
     translations.t("csvHeader.fileCount"),
-    translations.t("csvHeader.type")
+    translations.t("csvHeader.type"),
   ];
 
   if (withHashes) {
@@ -74,7 +74,7 @@ const makeCsvHeader = (
  * Simple date formatting function for performance matters.
  * @param timestamp
  */
-const formatOutputDate = timestamp => {
+const formatOutputDate = (timestamp) => {
   const date = new Date(timestamp);
   const day = `0${date.getUTCDate()}`.slice(-2);
   const month = `0${date.getMonth() + 1}`.slice(-2);
@@ -88,9 +88,9 @@ const formatOutputDate = timestamp => {
  */
 const tagIdByFfId = (tags: TagMap) => {
   const tagIdByFfIdMap = {};
-  Object.keys(tags).forEach(tagId => {
+  Object.keys(tags).forEach((tagId) => {
     const tag = tags[tagId];
-    tag.ffIds.forEach(ffId => {
+    tag.ffIds.forEach((ffId) => {
       if (!tagIdByFfIdMap[ffId]) {
         tagIdByFfIdMap[ffId] = [];
       }
@@ -115,8 +115,8 @@ const getTagsForFileOrAncestors = (
   elementId
 ): string[] =>
   _(Object.keys(tagIdByFfIdMap))
-    .filter(ffId => isExactFileOrAncestor(elementId, ffId))
-    .map(matchedFfId => tagIdByFfIdMap[matchedFfId])
+    .filter((ffId) => isExactFileOrAncestor(elementId, ffId))
+    .map((matchedFfId) => tagIdByFfIdMap[matchedFfId])
     .flatten()
     .value();
 
@@ -127,7 +127,7 @@ const getTagsForFileOrAncestors = (
  */
 const getChildrenToDelete = (filesAndFolders, elementsToDelete) => {
   return _(elementsToDelete)
-    .flatMap(elementToDelete =>
+    .flatMap((elementToDelete) =>
       getAllChildren(filesAndFolders, elementToDelete)
     )
     .uniq()
@@ -167,7 +167,7 @@ export const onInitialize: WorkerMessageHandler = async (
     filesAndFoldersMetadata,
     hashes,
     language,
-    tags
+    tags,
   }: CsvExporterData
 ) => {
   await translations.changeLanguage(language);
@@ -185,7 +185,7 @@ export const onInitialize: WorkerMessageHandler = async (
   const tagIdByFfIdMap = tagIdByFfId(tags);
 
   const lines = Object.keys(filesAndFolders)
-    .filter(ffId => ffId !== "")
+    .filter((ffId) => ffId !== "")
     .map((ffId): string[] => {
       const currentFf = filesAndFolders[ffId];
       const currentMetadata = filesAndFoldersMetadata[ffId];
@@ -223,7 +223,7 @@ export const onInitialize: WorkerMessageHandler = async (
         fileOrFolder,
         depth,
         fileCount,
-        type
+        type,
       ];
 
       if (hashes) {
@@ -242,7 +242,7 @@ export const onInitialize: WorkerMessageHandler = async (
         ffId
       );
 
-      const tagsArray = orderedTags.map(tag =>
+      const tagsArray = orderedTags.map((tag) =>
         tagsForCurrentFile.includes(tag.id) ? tag.name : ""
       );
 
@@ -250,7 +250,7 @@ export const onInitialize: WorkerMessageHandler = async (
 
       asyncWorker.postMessage({
         result: ffId,
-        type: MessageTypes.RESULT
+        type: MessageTypes.RESULT,
       });
 
       return line;
@@ -258,10 +258,10 @@ export const onInitialize: WorkerMessageHandler = async (
 
   asyncWorker.postMessage({
     result: arrayToCsv([header, ...lines]),
-    type: MessageTypes.RESULT
+    type: MessageTypes.RESULT,
   });
 
   asyncWorker.postMessage({
-    type: MessageTypes.COMPLETE
+    type: MessageTypes.COMPLETE,
   });
 };

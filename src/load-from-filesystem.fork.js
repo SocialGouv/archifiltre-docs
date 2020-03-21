@@ -1,13 +1,13 @@
 import { hookCounter } from "./util/hook-utils";
 import {
   AsyncWorkerEvent,
-  createAsyncWorkerForChildProcess
+  createAsyncWorkerForChildProcess,
 } from "./util/async-worker-util";
 import { MessageTypes } from "./util/batch-process/batch-process-util-types";
 import {
   createFilesAndFoldersDataStructure,
   createFilesAndFoldersMetadataDataStructure,
-  loadFilesAndFoldersFromFileSystem
+  loadFilesAndFoldersFromFileSystem,
 } from "./files-and-folders-loader/files-and-folders-loader";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
@@ -16,7 +16,7 @@ const asyncWorker = createAsyncWorkerForChildProcess();
  * Reports an error to the main thread
  * @param message
  */
-const reportError = message => {
+const reportError = (message) => {
   asyncWorker.postMessage({ type: MessageTypes.ERROR, message });
 };
 
@@ -24,7 +24,7 @@ const reportError = message => {
  * Reports a warning to the main thread
  * @param message
  */
-const reportWarning = message => {
+const reportWarning = (message) => {
   asyncWorker.postMessage({ type: MessageTypes.WARNING, message });
 };
 
@@ -32,7 +32,7 @@ const reportWarning = message => {
  * Reports a fatal error to the main thread
  * @param message
  */
-const reportFatal = message => {
+const reportFatal = (message) => {
   asyncWorker.postMessage({ type: MessageTypes.FATAL, message });
 };
 
@@ -40,7 +40,7 @@ const reportFatal = message => {
  * Reports a result to the main thread
  * @param message
  */
-const reportResult = message => {
+const reportResult = (message) => {
   asyncWorker.postMessage({ type: MessageTypes.RESULT, message });
 };
 
@@ -48,11 +48,11 @@ const reportResult = message => {
  * Reports completion to the main thread
  * @param message
  */
-const reportComplete = message => {
+const reportComplete = (message) => {
   asyncWorker.postMessage({ type: MessageTypes.COMPLETE, message });
 };
 
-const errorReportHook = error => {
+const errorReportHook = (error) => {
   if (error) {
     reportError(error);
     return false;
@@ -69,10 +69,10 @@ function loadFolder(folderPath) {
 
   reportResult({ status: "traverse", count: 0 });
   const { hook: traverseHook, getCount: getTraverseCount } = hookCounter(
-    count => reportResult({ status: "traverse", count }),
+    (count) => reportResult({ status: "traverse", count }),
     {
       interval: MIN_MESSAGE_INTERVAL,
-      internalHook: errorReportHook
+      internalHook: errorReportHook,
     }
   );
   let origin;
@@ -89,15 +89,15 @@ function loadFolder(folderPath) {
   reportResult({
     status: "make",
     count: 0,
-    totalCount: totalMakeCount
+    totalCount: totalMakeCount,
   });
 
   const { hook: makeHook, getCount: getMakeCount } = hookCounter(
-    count =>
+    (count) =>
       reportResult({
         status: "make",
         count,
-        totalCount: totalMakeCount
+        totalCount: totalMakeCount,
       }),
     { interval: MIN_MESSAGE_INTERVAL, internalHook: errorReportHook }
   );
@@ -107,7 +107,7 @@ function loadFolder(folderPath) {
     reportResult({
       status: "make",
       count: getMakeCount(),
-      totalCount: totalMakeCount
+      totalCount: totalMakeCount,
     });
   } catch (err) {
     reportFatal(err);
@@ -118,7 +118,7 @@ function loadFolder(folderPath) {
   reportResult({
     status: "derivateFF",
     count: 0,
-    totalCount: derivateTotalCount
+    totalCount: derivateTotalCount,
   });
 
   let filesAndFoldersMetadata;
@@ -129,7 +129,7 @@ function loadFolder(folderPath) {
     asyncWorker.postMessage({
       status: "divedFF",
       count: Object.keys(filesAndFolders).length,
-      totalCount: derivateTotalCount
+      totalCount: derivateTotalCount,
     });
   } catch (error) {
     reportFatal(error);
@@ -140,8 +140,8 @@ function loadFolder(folderPath) {
     vfs: {
       filesAndFolders,
       filesAndFoldersMetadata,
-      originalPath: folderPath
-    }
+      originalPath: folderPath,
+    },
   });
 }
 

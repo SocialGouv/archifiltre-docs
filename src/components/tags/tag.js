@@ -4,7 +4,7 @@ import TagBadge from "./tag-badge";
 import { FaTimes } from "react-icons/fa";
 
 const defaultComponentStyle = {
-  fontWeight: "bold"
+  fontWeight: "bold",
 };
 
 const Tag = ({
@@ -12,12 +12,12 @@ const Tag = ({
   custom_style: customStyle,
   clickHandler,
   text,
-  editing
+  editing,
 }) => {
   const cross = (
     <div
       className="tags_bubble tags_cross"
-      onMouseUp={e => {
+      onMouseUp={(e) => {
         e.stopPropagation();
         removeHandler();
       }}
@@ -28,7 +28,7 @@ const Tag = ({
 
   const componentStyle = {
     ...defaultComponentStyle,
-    ...customStyle
+    ...customStyle,
   };
 
   return (

@@ -12,7 +12,7 @@ export enum FileType {
   IMAGE = "image",
   VIDEO = "video",
   AUDIO = "audio",
-  OTHER = "other"
+  OTHER = "other",
 }
 
 // tslint:disable:object-literal-sort-keys
@@ -75,7 +75,7 @@ export const fileTypesByExtensions = {
   ".tar": FileType.OTHER,
   ".tgz": FileType.OTHER,
   ".arc": FileType.OTHER,
-  ".warc": FileType.OTHER
+  ".warc": FileType.OTHER,
 };
 // tslint:enable:object-literal-sort-keys
 

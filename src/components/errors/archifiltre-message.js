@@ -3,12 +3,12 @@ import { ContactUs } from "./contact-us";
 
 const grid_style = {
   padding: "0em 5em",
-  height: "100%"
+  height: "100%",
 };
 
 const imgStyle = {
   width: "150px",
-  height: "150px"
+  height: "150px",
 };
 
 const ArchifiltreMessage = ({ children }) => (

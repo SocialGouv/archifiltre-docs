@@ -10,21 +10,21 @@ import {
   getFilesToDeleteFromStore,
   getFoldersCount,
   getHashesFromStore,
-  getMaxDepth
+  getMaxDepth,
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import {
   FilesAndFoldersMap,
-  HashesMap
+  HashesMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import {
   countDuplicateFiles,
-  countDuplicateFolders
+  countDuplicateFolders,
 } from "../../util/duplicates-util";
 import { formatPathForUserSystem, saveBlob } from "../../util/file-sys-util";
 import { FileType } from "../../util/file-types-util";
 import {
   AuditReportData,
-  generateAuditReportDocx
+  generateAuditReportDocx,
 } from "./audit-report-generator";
 import {
   countFileTypes,
@@ -39,7 +39,7 @@ import {
   getHumanReadableDuplicateTotalSize,
   getLongestPathFile,
   getOldestFiles,
-  percentFileTypes
+  percentFileTypes,
 } from "./audit-report-values-computer";
 
 const ROOT_ID = "";
@@ -129,7 +129,7 @@ export const computeAuditReportData = (
     filesAndFolders,
     filesAndFoldersMetadata,
     elementsToDelete
-  )
+  ),
 });
 // tslint:enable:object-literal-sort-keys
 
@@ -142,7 +142,7 @@ export const auditReportExporterThunk = (
 ): ArchifiltreThunkAction => (dispatch, getState) => {
   addTracker({
     title: ActionTitle.AUDIT_REPORT_EXPORT,
-    type: ActionType.TRACK_EVENT
+    type: ActionType.TRACK_EVENT,
   });
   const filesAndFolders = getFilesAndFoldersFromStore(getState());
   const filesAndFoldersMetadata = getFilesAndFoldersMetadataFromStore(

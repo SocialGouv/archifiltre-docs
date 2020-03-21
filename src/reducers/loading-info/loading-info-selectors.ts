@@ -3,7 +3,7 @@ import {
   ArchifiltreError,
   ArchifiltreErrorType,
   LoadingInfo,
-  LoadingInfoState
+  LoadingInfoState,
 } from "./loading-info-types";
 import { ArchifiltreErrorCode, UnknownError } from "../../util/error-util";
 import { useSelector } from "react-redux";
@@ -22,8 +22,8 @@ export const getLoadingInfoFromStore = (store: StoreState): LoadingInfoState =>
  */
 export const getRunningLoadingInfo = ({
   loading,
-  loadingInfo
-}: LoadingInfoState): LoadingInfo[] => loading.map(id => loadingInfo[id]);
+  loadingInfo,
+}: LoadingInfoState): LoadingInfo[] => loading.map((id) => loadingInfo[id]);
 
 /**
  * Returns  the currently completed LoadingInfo
@@ -32,8 +32,8 @@ export const getRunningLoadingInfo = ({
  */
 export const getCompleteLoadingInfo = ({
   complete,
-  loadingInfo
-}: LoadingInfoState): LoadingInfo[] => complete.map(id => loadingInfo[id]);
+  loadingInfo,
+}: LoadingInfoState): LoadingInfo[] => complete.map((id) => loadingInfo[id]);
 
 /**
  * Selector for the errors list
@@ -63,10 +63,10 @@ export const createArchifiltreError = ({
   type = ArchifiltreErrorType.LOADING_FILE_SYSTEM,
   filePath = "/root",
   reason = "NOT_FOUND",
-  code = UnknownError.UNKNOWN
+  code = UnknownError.UNKNOWN,
 }: CreateArchifiltreErrorParams): ArchifiltreError => ({
   code,
   filePath,
   reason,
-  type
+  type,
 });

@@ -19,17 +19,17 @@ export const Breadcrumb = ({
     x_text,
     y_text,
     width_text,
-    height_text
+    height_text,
   },
   isFirst,
   isLast,
   opacity,
   icicleState,
   originalPath,
-  isActive
+  isActive,
 }) => {
   const onClickHandler = useCallback(
-    event => {
+    (event) => {
       if (!isActive) {
         return;
       }
@@ -38,7 +38,7 @@ export const Breadcrumb = ({
         x: x_poly,
         y: y_poly,
         dx: width_poly,
-        dy: height_poly
+        dy: height_poly,
       });
     },
     [height_poly, width_poly, x_poly, y_poly, icicleState, nodeId, isActive]

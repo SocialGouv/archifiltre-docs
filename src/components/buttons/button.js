@@ -4,7 +4,7 @@ export function mkRB(click_action, label, enabled, color, custom_style = {}) {
   const defaultButtonStyle = {
     backgroundColor: color ? color : "#4d9e25",
     borderRadius: "50%",
-    marginBottom: 0
+    marginBottom: 0,
   };
 
   const buttonStyle = { ...defaultButtonStyle, ...custom_style };
@@ -44,7 +44,7 @@ export function mkTB(click_action, label, enabled, color, custom_style) {
     opacity: enabled ? 1 : 0.7,
     transition: "all 0.2s ease-out",
     WebkitTransition: "all 0.2s ease-out",
-    cursor: enabled ? "pointer" : "default"
+    cursor: enabled ? "pointer" : "default",
   };
 
   const buttonStyle = { ...defaultButtonStyle, ...custom_style };

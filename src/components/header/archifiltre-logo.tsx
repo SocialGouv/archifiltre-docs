@@ -19,7 +19,7 @@ const ArchifiltreVersionText = styled.a`
   font-size: 0.8em;
 `;
 
-const onClick = event => {
+const onClick = (event) => {
   event.preventDefault();
   shell.openExternal(`${ARCHIFILTRE_SITE_URL}/#changelog`);
 };

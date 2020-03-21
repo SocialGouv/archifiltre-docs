@@ -4,7 +4,7 @@ import {
   deleteTag,
   renameTag,
   tagFile,
-  untagFile
+  untagFile,
 } from "../../reducers/tags/tags-actions";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import AllTags from "./all-tags";
@@ -23,8 +23,8 @@ const AllTagsContainer: FC<AllTagsContainerProps> = ({ api }) => {
     [dispatch]
   );
 
-  const deleteTagCallback = useCallback(tagId => dispatch(deleteTag(tagId)), [
-    dispatch
+  const deleteTagCallback = useCallback((tagId) => dispatch(deleteTag(tagId)), [
+    dispatch,
   ]);
 
   const deleteTaggedCallback = useCallback(

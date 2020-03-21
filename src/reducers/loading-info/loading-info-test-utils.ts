@@ -17,11 +17,11 @@ export const createLoadingInfo = ({
   type = LoadingInfoTypes.HASH_COMPUTING,
   progress = DEFAULT_PROGRESS,
   goal = DEFAULT_GOAL,
-  label = DEFAULT_LABEL
+  label = DEFAULT_LABEL,
 }: CreateLoadingInfoParams): LoadingInfo => ({
   goal,
   id,
   label,
   progress,
-  type
+  type,
 });

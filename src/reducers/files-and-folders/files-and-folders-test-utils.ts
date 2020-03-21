@@ -15,12 +15,12 @@ export const createFilesAndFolders = ({
   file_last_modified = 0,
   children = [] as string[],
   file_size = 0,
-  name = "base-name"
+  name = "base-name",
 }): FilesAndFolders => ({
   children,
   file_last_modified,
   file_size,
   hash,
   id,
-  name
+  name,
 });

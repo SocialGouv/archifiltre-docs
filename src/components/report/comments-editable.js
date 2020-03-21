@@ -8,7 +8,7 @@ const inputStyle = {
   outline: "none",
   resize: "none",
   minHeight: "5.5em",
-  borderBottom: "3px solid rgb(5, 120, 200)"
+  borderBottom: "3px solid rgb(5, 120, 200)",
 };
 
 class CommentsEditable extends React.Component {
@@ -34,7 +34,7 @@ class CommentsEditable extends React.Component {
     const textareaRef = this.textareaRef;
 
     const onKeyUp = props.onKeyUp;
-    const onMouseUp = e => e.stopPropagation();
+    const onMouseUp = (e) => e.stopPropagation();
     const onBlur = props.onBlur;
 
     const editing = props.editing;
@@ -58,7 +58,7 @@ class CommentsEditable extends React.Component {
         <div
           style={{
             wordWrap: "break-word",
-            whiteSpace: "pre-wrap"
+            whiteSpace: "pre-wrap",
           }}
         >
           {comments}

@@ -2,7 +2,7 @@ import {
   aggregateErrorsToMap,
   aggregateResultsToMap,
   backgroundWorkerProcess$,
-  computeBatch$
+  computeBatch$,
 } from "../util/batch-process/batch-process-util";
 
 import FileHashFork from "./file-hash-computer.fork";
@@ -26,20 +26,20 @@ export const computeHashes$ = (paths, { initialValues: { basePath } }) => {
   const FileHashWorker = createAsyncWorkerControllerClass(FileHashFork);
   const hashes$ = computeBatch$(paths, FileHashWorker, {
     batchSize: BATCH_SIZE,
-    initialValues: { basePath }
+    initialValues: { basePath },
   });
 
-  const bufferAndMerge = aggregator =>
+  const bufferAndMerge = (aggregator) =>
     compose(
-      map(bufferedObjects => Object.assign({}, ...bufferedObjects)),
-      filter(buffer => buffer.length !== 0),
+      map((bufferedObjects) => Object.assign({}, ...bufferedObjects)),
+      filter((buffer) => buffer.length !== 0),
       bufferTime(BUFFER_TIME),
       map(aggregator)
     );
 
   return operateOnDataProcessingStream(hashes$, {
     error: bufferAndMerge(aggregateErrorsToMap),
-    result: bufferAndMerge(aggregateResultsToMap)
+    result: bufferAndMerge(aggregateResultsToMap),
   });
 };
 
@@ -58,6 +58,6 @@ export const computeFolderHashes$ = ({ filesAndFolders, hashes }) => {
 
   return hashes$
     .pipe(bufferTime(BUFFER_TIME))
-    .pipe(filter(buffer => buffer.length !== 0))
-    .pipe(map(bufferedObjects => Object.assign({}, ...bufferedObjects)));
+    .pipe(filter((buffer) => buffer.length !== 0))
+    .pipe(map((bufferedObjects) => Object.assign({}, ...bufferedObjects)));
 };

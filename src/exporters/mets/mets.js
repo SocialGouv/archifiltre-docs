@@ -10,7 +10,7 @@ import {
   METS_EXPORT_ERROR_TITLE,
   METS_EXPORT_UNHANDLED_ERROR,
   metsExportErrorCannotAccessFile,
-  metsExportErrorFileDoesNotExist
+  metsExportErrorFileDoesNotExist,
 } from "./mets-errors";
 import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { addTracker } from "../../logging/tracker";
@@ -29,7 +29,7 @@ const MD5 = require("js-md5");
 // AUXILIARY FUNCTIONS AND VARIABLES
 // =================================
 const makeObj = (key, value) => ({
-  [key]: value
+  [key]: value,
 });
 
 const makeId = () => {
@@ -67,7 +67,7 @@ const makeManifestRootAttributes = () => {
     "xmlns:dcterms": "http://purl.org/dc/terms/",
     "xmlns:spar_dc": "http://bibnum.bnf.fr/ns/spar_dc",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:schemaLocation": METS_SOURCE
+    "xsi:schemaLocation": METS_SOURCE,
   };
 };
 
@@ -75,25 +75,25 @@ const makeManifestRootAttributes = () => {
  * Returns a formatted METS header (metsHdr)
  * @param {string} pid productionIdentifier
  */
-export const makeHeader = pid => {
+export const makeHeader = (pid) => {
   return {
     "mets:metsHdr": [
       {
         _attr: {
           ID: "HDR.1",
           CREATEDATE: makeCreationDate(),
-          LASTMODDATE: makeCreationDate()
-        }
+          LASTMODDATE: makeCreationDate(),
+        },
       },
       makeObj("mets:altRecordID", [
         { _attr: makeObj("TYPE", "producerIdentifier") },
-        DUMMY_PRODUCERIDENTIFIER
+        DUMMY_PRODUCERIDENTIFIER,
       ]),
       makeObj("mets:altRecordID", [
         { _attr: makeObj("TYPE", "productionIdentifier") },
-        pid
-      ])
-    ]
+        pid,
+      ]),
+    ],
   };
 };
 
@@ -108,9 +108,9 @@ export const makeDmdSec = (id, content) => {
       { _attr: makeObj("ID", id) },
       makeObj("mets:mdWrap", [
         { _attr: { MIMETYPE: "text/xml", MDTYPE: "DC" } },
-        makeObj("mets:xmlData", [makeObj("spar_dc:spar_dc", content)])
-      ])
-    ]
+        makeObj("mets:xmlData", [makeObj("spar_dc:spar_dc", content)]),
+      ]),
+    ],
   };
 };
 
@@ -125,8 +125,8 @@ const makePremisAgent = (agentType, agentValue, agentRole) => {
     "premis:linkingAgentIdentifier": [
       makeObj("premis:linkingAgentIdentifierType", agentType),
       makeObj("premis:linkingAgentIdentifierValue", agentValue),
-      makeObj("premis:linkingAgentRole", agentRole)
-    ]
+      makeObj("premis:linkingAgentRole", agentRole),
+    ],
   };
 };
 
@@ -161,7 +161,7 @@ export const makePremisEvent = (id, type, date, detail, agents, object) => {
   premisEvent.push(
     makeObj("premis:eventIdentifier", [
       makeObj("premis:eventIdentifierType", "UUID"),
-      makeObj("premis:eventIdentifierValue", uuidv4())
+      makeObj("premis:eventIdentifierValue", uuidv4()),
     ])
   );
   premisEvent.push(makeObj("premis:eventType", type));
@@ -181,7 +181,7 @@ export const makePremisEvent = (id, type, date, detail, agents, object) => {
   }
 
   if (agents !== undefined) {
-    agents.forEach(a => {
+    agents.forEach((a) => {
       premisEvent.push(a);
     });
   }
@@ -195,9 +195,9 @@ export const makePremisEvent = (id, type, date, detail, agents, object) => {
       { _attr: makeObj("ID", id) },
       makeObj("mets:mdWrap", [
         { _attr: { MIMETYPE: "text/xml", MDTYPE: "PREMIS:EVENT" } },
-        makeObj("mets:xmlData", [makeObj("premis:event", premisEvent)])
-      ])
-    ]
+        makeObj("mets:xmlData", [makeObj("premis:event", premisEvent)]),
+      ]),
+    ],
   };
 };
 
@@ -221,8 +221,8 @@ export const makeFileElement = (item, ID, DMDID, hash, alias) => {
       DMDID: DMDID,
       CHECKSUMTYPE: HASH_ALGORITHM,
       CHECKSUM: hash,
-      SIZE: Math.max(item.file_size, 1)
-    }
+      SIZE: Math.max(item.file_size, 1),
+    },
   });
   // "MIMETYPE": "DUMMY_MIMETYPE"
 
@@ -232,10 +232,10 @@ export const makeFileElement = (item, ID, DMDID, hash, alias) => {
         _attr: {
           LOCTYPE: "URL",
           "xlink:type": "simple",
-          "xlink:href": internalURI
-        }
+          "xlink:href": internalURI,
+        },
       },
-      undefined // self-closed tag
+      undefined, // self-closed tag
     ])
   );
 
@@ -261,8 +261,8 @@ export const makeObjectDiv = (item, item_tags, ID, order, FILEID) => {
     { _attr: { ID: ID, TYPE: "object", ORDER: order } },
     makeObj("mets:fptr", [
       { _attr: { FILEID: FILEID } },
-      undefined // self-closed tag
-    ])
+      undefined, // self-closed tag
+    ]),
   ]);
 };
 
@@ -326,7 +326,7 @@ const recTraverseDB = (
         {
           EACCES: metsExportErrorCannotAccessFile(URI),
           ENOENT: metsExportErrorFileDoesNotExist(URI),
-          default: METS_EXPORT_UNHANDLED_ERROR
+          default: METS_EXPORT_UNHANDLED_ERROR,
         },
         METS_EXPORT_ERROR_TITLE
       );
@@ -351,7 +351,7 @@ const recTraverseDB = (
     dmdContent.push(
       makeObj("dc:source", [
         { _attr: { "xsi:type": "spar_dc:originalName" } },
-        relativeURI
+        relativeURI,
       ])
     );
 
@@ -389,7 +389,7 @@ const recTraverseDB = (
     contentWriter(hash, data);
   } else {
     // it's a folder continue the traversal
-    item.children.forEach(childId => {
+    item.children.forEach((childId) => {
       recTraverseDB(
         childId,
         Path.join(rootpath, item.name),
@@ -426,7 +426,7 @@ const makeMetsContent = (
     filesAndFoldersMetadata,
     tags,
     originalPath,
-    sessionName
+    sessionName,
   },
   contentWriter,
   metsContent
@@ -438,7 +438,7 @@ const makeMetsContent = (
     dmdCount: 2,
     amdCount: 1,
     fileCount: 1,
-    objCount: 1
+    objCount: 1,
   };
 
   // Arrays to store the sections while traversing the FF
@@ -456,7 +456,7 @@ const makeMetsContent = (
     makeObj("dc:type", "electronic document"),
     makeObj("dc:relation", [
       { _attr: { "xsi:type": "spar_dc:ark" } },
-      DUMMY_ARK
+      DUMMY_ARK,
     ])
   );
   DMD_children.push(makeDmdSec("DMD.1", dmdContent));
@@ -493,7 +493,7 @@ const makeMetsContent = (
           "channelIdentifier",
           "info:bnf/spar/context/DUMMMY_CHANNEL",
           "authorizer"
-        )
+        ),
       ],
       makePremisObject("productionIdentifier", sessionName)
     )
@@ -506,19 +506,20 @@ const makeMetsContent = (
     hashmap = hashmap.update(hash, updater);
   };
 
-  const FFreader = ffId => ({
+  const FFreader = (ffId) => ({
     ...filesAndFolders[ffId],
-    ...filesAndFoldersMetadata[ffId]
+    ...filesAndFoldersMetadata[ffId],
   });
-  const tagReader = ffId => getAllTagsForFile(tags, ffId).map(tag => tag.name);
+  const tagReader = (ffId) =>
+    getAllTagsForFile(tags, ffId).map((tag) => tag.name);
 
-  const DMDwriter = item => DMD_children.push(item);
-  const MASTERwriter = item => MASTER_children.push(item);
-  const DIVwriter = item => DIV_children.push(item);
+  const DMDwriter = (item) => DMD_children.push(item);
+  const MASTERwriter = (item) => MASTER_children.push(item);
+  const DIVwriter = (item) => DIV_children.push(item);
 
   const ROOT_ID = "";
 
-  filesAndFolders[ROOT_ID].children.forEach(ffId => {
+  filesAndFolders[ROOT_ID].children.forEach((ffId) => {
     recTraverseDB(
       ffId,
       "",
@@ -545,11 +546,11 @@ const makeMetsContent = (
       ID: "DIV.2",
       TYPE: "group",
       DMDID: "DMD.1",
-      ADMID: amdIds.join(" ")
-    }
+      ADMID: amdIds.join(" "),
+    },
   });
   // Add all the divs at the object level
-  DIV_children.forEach(div => {
+  DIV_children.forEach((div) => {
     groupContent.push(div);
   });
 
@@ -558,12 +559,12 @@ const makeMetsContent = (
     { _attr: makeObj("TYPE", "physical") },
     makeObj("mets:div", [
       { _attr: { ID: "DIV.1", TYPE: "set" } },
-      makeObj("mets:div", groupContent)
-    ])
+      makeObj("mets:div", groupContent),
+    ]),
   ]);
 
   // Populate the METS
-  DMD_children.forEach(dmd => {
+  DMD_children.forEach((dmd) => {
     metsContent.push(dmd);
   });
   metsContent.push(makeObj("mets:amdSec", digiprovsContent));
@@ -589,11 +590,11 @@ export const makeSIP = async ({
   filesAndFoldersMetadata,
   tags,
   originalPath,
-  sessionName
+  sessionName,
 }) => {
   addTracker({
     title: ActionTitle.METS_EXPORT,
-    type: ActionType.TRACK_EVENT
+    type: ActionType.TRACK_EVENT,
   });
   const sip = new JSZip();
   const content = sip.folder("master");
@@ -614,7 +615,7 @@ export const makeSIP = async ({
       filesAndFoldersMetadata,
       tags,
       originalPath,
-      sessionName
+      sessionName,
     },
     addToContent,
     metsContent
@@ -622,8 +623,8 @@ export const makeSIP = async ({
 
   const manifest_obj = [
     {
-      "mets:mets": metsContent
-    }
+      "mets:mets": metsContent,
+    },
   ];
 
   const manifest_str = XML(manifest_obj, { indent: "  " });

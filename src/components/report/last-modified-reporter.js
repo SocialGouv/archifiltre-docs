@@ -13,7 +13,7 @@ const RedDot = () => {
         width: "0.5em",
         backgroundColor: "red",
         borderRadius: "50%",
-        margin: "auto"
+        margin: "auto",
       }}
     />
   );
@@ -26,7 +26,7 @@ const BlackCursor = () => {
         height: "1em",
         width: "0.2em",
         backgroundColor: "black",
-        margin: "auto"
+        margin: "auto",
       }}
     />
   );
@@ -35,7 +35,7 @@ const BlackCursor = () => {
 const LastModifiedReporter = ({
   filesAndFoldersId,
   placeholder,
-  filesAndFoldersMetadata
+  filesAndFoldersMetadata,
 }) => {
   let lm_max = "...";
   let lm_median = "...";

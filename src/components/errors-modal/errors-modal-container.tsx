@@ -12,7 +12,7 @@ const ErrorsModalContainer: FC = () => {
   const dispatch = useDispatch();
 
   const closeModal = useCallback(() => dispatch(closeModalAction()), [
-    dispatch
+    dispatch,
   ]);
 
   const isModalOpen = openModal === Modal.ERROR_MODAL;

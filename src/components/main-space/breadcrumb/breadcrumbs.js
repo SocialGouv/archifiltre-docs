@@ -6,7 +6,7 @@ import { makeEmptyArray } from "../../../util/array-util";
 import { ROOT_FF_ID } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import { getDisplayName } from "../../../util/file-and-folders-utils";
 
-const computeCumulative = array => {
+const computeCumulative = (array) => {
   const ans = [0];
   for (let i = 0; i < array.length - 1; i++) {
     ans.push(array[i] + ans[i]);
@@ -56,7 +56,7 @@ class Breadcrumbs extends React.PureComponent {
       x_text,
       y_text,
       width_text,
-      height_text: height
+      height_text: height,
     };
   }
 
@@ -97,11 +97,11 @@ class Breadcrumbs extends React.PureComponent {
       isLocked,
       api: {
         icicle_state: icicleState,
-        icicle_state: { lock_sequence, hover_sequence }
+        icicle_state: { lock_sequence, hover_sequence },
       },
       originalPath,
       root_id,
-      maxDepth
+      maxDepth,
     } = this.props;
     const trueFHeight = this.trueFHeight;
     const nodesWithRootId = isFocused ? hover_sequence() : lock_sequence();

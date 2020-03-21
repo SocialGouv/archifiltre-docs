@@ -21,7 +21,7 @@ interface SaveButtonProps {
 const SaveButton: FC<SaveButtonProps> = ({
   originalPath,
   sessionName,
-  exportToJson
+  exportToJson,
 }) => {
   const { t } = useTranslation();
 

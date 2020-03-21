@@ -8,13 +8,13 @@ import { ActionTitle, ActionType } from "../logging/tracker-types";
 import translations from "../translations/translations";
 import {
   filesAndFoldersMapToArray,
-  getFiles
+  getFiles,
 } from "../util/file-and-folders-utils";
 import { countZipFiles, isJsonFile } from "../util/file-sys-util";
 import {
   NotificationDuration,
   notifyError,
-  notifyInfo
+  notifyInfo,
 } from "../util/notifications-util";
 import version, { versionComparator } from "../version";
 import { ArchifiltreThunkAction } from "./archifiltre-types";
@@ -24,17 +24,17 @@ import {
   addCommentsOnFilesAndFolders,
   initializeFilesAndFolders,
   setFilesAndFoldersAliases,
-  setFilesAndFoldersHashes
+  setFilesAndFoldersHashes,
 } from "./files-and-folders/files-and-folders-actions";
 import {
   AliasMap,
   CommentsMap,
   FilesAndFoldersMap,
-  HashesMap
+  HashesMap,
 } from "./files-and-folders/files-and-folders-types";
 import {
   registerErrorAction,
-  resetLoadingAction
+  resetLoadingAction,
 } from "./loading-info/loading-info-actions";
 import { ArchifiltreError } from "./loading-info/loading-info-types";
 import { clearActionReplayFile } from "./middleware/persist-actions-middleware";
@@ -42,7 +42,7 @@ import { initializeTags, resetTags } from "./tags/tags-actions";
 import { TagMap } from "./tags/tags-types";
 import {
   setOriginalPath,
-  setSessionName
+  setSessionName,
 } from "./workspace-metadata/workspace-metadata-actions";
 import { getArchifiltreErrors } from "./loading-info/loading-info-selectors";
 import { openModalAction } from "./modal/modal-actions";
@@ -52,7 +52,7 @@ import { Modal } from "./modal/modal-types";
  * Notifies the user that there is a Zip in the loaded files
  * @param zipCount - The number of zip files detected
  */
-const displayZipNotification = zipCount => {
+const displayZipNotification = (zipCount) => {
   notifyInfo(
     translations.t("folderDropzone.zipNotificationMessage"),
     `${zipCount} ${translations.t("folderDropzone.zipNotificationTitle")}`,
@@ -74,7 +74,7 @@ const displayJsonNotification = () => {
 /**
  * Notifies the user that errors occurred while loading the folder
  */
-const displayErrorNotification = () => dispatch => {
+const displayErrorNotification = () => (dispatch) => {
   notifyError(
     translations.t("folderDropzone.errorsWhileLoading"),
     translations.t("folderDropzone.error"),
@@ -87,7 +87,7 @@ const displayErrorNotification = () => dispatch => {
  * Handles tracking events sent to Matomo
  * @param paths of files that need to be tracked
  */
-const handleTracking = paths => {
+const handleTracking = (paths) => {
   const elementsByExtension = _(paths)
     .map(path.extname)
     .countBy(_.identity())
@@ -99,7 +99,7 @@ const handleTracking = paths => {
     eventValue: paths.length,
     title: ActionTitle.FILE_TREE_DROP,
     type: ActionType.TRACK_EVENT,
-    value: elementsByExtension
+    value: elementsByExtension,
   });
 };
 
@@ -125,7 +125,7 @@ export const loadFilesAndFoldersFromPathThunk = (
     setStatus,
     setCount,
     setTotalCount,
-    finishedToLoadFiles
+    finishedToLoadFiles,
   } = api.loading_state;
 
   const hook = (
@@ -170,14 +170,14 @@ export const loadFilesAndFoldersFromPathThunk = (
       eventValue: loadingTime,
       title: ActionTitle.LOADING_TIME,
       type: ActionType.TRACK_EVENT,
-      value: `Loading time: ${loadingTime}`
+      value: `Loading time: ${loadingTime}`,
     });
     api.undo.commit();
 
     if (!isJsonFile(fileOrFolderPath)) {
       const filesAndFolders = virtualFileSystem.filesAndFolders;
       const paths = getFiles(filesAndFoldersMapToArray(filesAndFolders)).map(
-        file => file.id
+        (file) => file.id
       );
       handleTracking(paths);
       const zipFileCount = countZipFiles(paths);
@@ -226,8 +226,8 @@ const initStore = ({
   hashes,
   originalPath,
   sessionName,
-  tags
-}: InitStoreThunkParam): ArchifiltreThunkAction => dispatch => {
+  tags,
+}: InitStoreThunkParam): ArchifiltreThunkAction => (dispatch) => {
   dispatch(initializeFilesAndFolders(filesAndFolders));
   dispatch(initFilesAndFoldersMetatada(filesAndFoldersMetadata));
   dispatch(setOriginalPath(originalPath));
@@ -250,9 +250,9 @@ const initStore = ({
   }
 };
 
-export const resetStoreThunk = (
-  api: any
-): ArchifiltreThunkAction => dispatch => {
+export const resetStoreThunk = (api: any): ArchifiltreThunkAction => (
+  dispatch
+) => {
   const { loading_state, icicle_state, undo } = api;
   dispatch(resetTags());
   dispatch(resetLoadingAction());

@@ -8,11 +8,11 @@ interface ErrorMessageMap {
 export enum ArchifiltreFileSystemErrorCode {
   ENOENT = "ENOENT",
   EBUSY = "EBUSY",
-  EACCES = "EACCES"
+  EACCES = "EACCES",
 }
 
 export enum UnknownError {
-  UNKNOWN = "UNKNOWN"
+  UNKNOWN = "UNKNOWN",
 }
 
 interface FsErrorToArchifiltreError {
@@ -22,7 +22,7 @@ interface FsErrorToArchifiltreError {
 const fsErrorToArchifiltreError: FsErrorToArchifiltreError = {
   ENOENT: ArchifiltreFileSystemErrorCode.ENOENT,
   EBUSY: ArchifiltreFileSystemErrorCode.EBUSY,
-  EACCES: ArchifiltreFileSystemErrorCode.EACCES
+  EACCES: ArchifiltreFileSystemErrorCode.EACCES,
 };
 
 export type ArchifiltreErrorCode =

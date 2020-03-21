@@ -2,7 +2,7 @@ import translations from "../../translations/translations";
 import {
   AsyncWorkerEvent,
   createAsyncWorkerForChildProcess,
-  fakeChildProcess
+  fakeChildProcess,
 } from "../../util/async-worker-util";
 import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
 import { hookCounter } from "../../util/hook-utils";
@@ -14,10 +14,10 @@ asyncWorker.addEventListener(
   AsyncWorkerEvent.MESSAGE,
   ({ type, data }: any) => {
     if (type === "initialize") {
-      const messageHook = count => {
+      const messageHook = (count) => {
         asyncWorker.postMessage({
           result: { count, resipCsv: [] },
-          type: MessageTypes.RESULT
+          type: MessageTypes.RESULT,
         });
       };
       const { hook, getCount } = hookCounter(messageHook);
@@ -29,7 +29,7 @@ asyncWorker.addEventListener(
         filesAndFolders,
         filesAndFoldersMetadata,
         tags,
-        language
+        language,
       } = data;
       translations.changeLanguage(language);
 
@@ -40,18 +40,18 @@ asyncWorker.addEventListener(
           elementsToDelete,
           filesAndFolders,
           filesAndFoldersMetadata,
-          tags
+          tags,
         },
         hook
       );
 
       asyncWorker.postMessage({
         result: { count: getCount(), resipCsv: resipExportData },
-        type: MessageTypes.RESULT
+        type: MessageTypes.RESULT,
       });
 
       asyncWorker.postMessage({
-        type: MessageTypes.COMPLETE
+        type: MessageTypes.COMPLETE,
       });
     }
   }

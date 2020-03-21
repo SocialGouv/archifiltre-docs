@@ -6,11 +6,11 @@ import { setFilesAndFoldersHashes } from "../reducers/files-and-folders/files-an
 import {
   getFilesAndFoldersFromStore,
   getFilesMap,
-  getHashesFromStore
+  getHashesFromStore,
 } from "../reducers/files-and-folders/files-and-folders-selectors";
 import {
   completeLoadingAction,
-  progressLoadingAction
+  progressLoadingAction,
 } from "../reducers/loading-info/loading-info-actions";
 import { startLoading } from "../reducers/loading-info/loading-info-operations";
 import { LoadingInfoTypes } from "../reducers/loading-info/loading-info-types";
@@ -19,7 +19,7 @@ import { NotificationDuration, notifyError } from "../util/notifications-util";
 import { operateOnDataProcessingStream } from "../util/observable-util";
 import {
   computeFolderHashes$,
-  computeHashes$
+  computeHashes$,
 } from "./hash-computer.controller";
 
 /**
@@ -31,10 +31,7 @@ export const computeHashesThunk = (
 ): ArchifiltreThunkAction => async (dispatch, getState) => {
   const state = getState();
 
-  const basePath = originalPath
-    .split(path.sep)
-    .slice(0, -1)
-    .join(path.sep);
+  const basePath = originalPath.split(path.sep).slice(0, -1).join(path.sep);
 
   const filesAndFolders = getFilesAndFoldersFromStore(state);
   const ffIds = Object.keys(getFilesMap(filesAndFolders));
@@ -43,7 +40,7 @@ export const computeHashesThunk = (
 
   const loadingHashLabel = translations.t("hash.loadingInfoLabel");
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const loadingActionId = dispatch(
       startLoading(
         LoadingInfoTypes.HASH_COMPUTING,
@@ -53,7 +50,7 @@ export const computeHashesThunk = (
     );
 
     const hashes$ = computeHashes$(ffIds, { initialValues: { basePath } });
-    const onNewHashesComputed = newHashes => {
+    const onNewHashesComputed = (newHashes) => {
       dispatch(
         progressLoadingAction(loadingActionId, Object.keys(newHashes).length)
       );
@@ -62,11 +59,11 @@ export const computeHashesThunk = (
     let loadingErrorsCount = 0;
     operateOnDataProcessingStream(hashes$, {
       // tslint:disable-next-line:no-console
-      error: tap(error => {
+      error: tap((error) => {
         reportError(error);
         loadingErrorsCount++;
       }),
-      result: tap(onNewHashesComputed)
+      result: tap(onNewHashesComputed),
     }).subscribe({
       complete: () => {
         const hashes = getHashesFromStore(getState());
@@ -86,9 +83,9 @@ export const computeHashesThunk = (
             }
             resolve();
           },
-          next: onNewHashesComputed
+          next: onNewHashesComputed,
         });
-      }
+      },
     });
   });
 };

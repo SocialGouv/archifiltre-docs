@@ -11,7 +11,7 @@ import { identity } from "../function-util";
 export function angularParser(tag) {
   if (tag === ".") {
     return {
-      get: identity
+      get: identity,
     };
   }
   const expr = expressions.compile(tag.replace(/(’|“|”|‘)/g, "'"));
@@ -24,6 +24,6 @@ export function angularParser(tag) {
         obj = { ...obj, ...scopeList[i] };
       }
       return expr(scope, obj);
-    }
+    },
   };
 }

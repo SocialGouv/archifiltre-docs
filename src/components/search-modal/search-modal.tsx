@@ -14,7 +14,7 @@ interface SearchModalProps {
 export const SearchModal: FC<SearchModalProps> = ({
   isModalOpen,
   closeModal,
-  filesAndFolders
+  filesAndFolders,
 }) => {
   const { t } = useTranslation();
 

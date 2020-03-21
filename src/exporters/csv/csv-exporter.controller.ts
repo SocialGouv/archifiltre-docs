@@ -4,7 +4,7 @@ import {
   AliasMap,
   CommentsMap,
   FilesAndFoldersMap,
-  HashesMap
+  HashesMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "../../reducers/tags/tags-types";
 import { createAsyncWorkerControllerClass } from "../../util/async-worker-util";

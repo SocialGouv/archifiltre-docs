@@ -1,7 +1,7 @@
 import {
   setIciclesSortMethod,
   setOriginalPath,
-  setSessionName
+  setSessionName,
 } from "./workspace-metadata-actions";
 import { workspaceMetadataReducer } from "./workspace-metadata-reducer";
 import { IciclesSortMethod } from "./workspace-metadata-types";
@@ -9,7 +9,7 @@ import { IciclesSortMethod } from "./workspace-metadata-types";
 const baseState = {
   iciclesSortMethod: IciclesSortMethod.SORT_BY_TYPE,
   originalPath: "original-path",
-  sessionName: "session"
+  sessionName: "session",
 };
 
 describe("workspace-metadata-reducer", () => {
@@ -22,7 +22,7 @@ describe("workspace-metadata-reducer", () => {
 
     expect(nextState).toEqual({
       ...baseState,
-      sessionName
+      sessionName,
     });
   });
 
@@ -35,7 +35,7 @@ describe("workspace-metadata-reducer", () => {
 
     expect(nextState).toEqual({
       ...baseState,
-      originalPath
+      originalPath,
     });
   });
 
@@ -48,7 +48,7 @@ describe("workspace-metadata-reducer", () => {
 
     expect(nextState).toEqual({
       ...baseState,
-      iciclesSortMethod: sortMethod
+      iciclesSortMethod: sortMethod,
     });
   });
 });

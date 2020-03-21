@@ -14,7 +14,7 @@ interface ErrorsModalProps {
 const ErrorsModal: FC<ErrorsModalProps> = ({
   isModalOpen,
   closeModal,
-  errors
+  errors,
 }) => {
   const { t } = useTranslation();
 

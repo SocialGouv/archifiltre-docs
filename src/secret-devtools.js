@@ -8,7 +8,7 @@ const prevKey = [];
 const password = "devtools";
 const password_len = password.length;
 
-const keyUpCallback = event => {
+const keyUpCallback = (event) => {
   prevKey.push(event.key);
   if (password_len < prevKey.length) {
     prevKey.shift();
@@ -29,5 +29,5 @@ const disable = () => {
 
 export const SecretDevtools = {
   enable,
-  disable
+  disable,
 };

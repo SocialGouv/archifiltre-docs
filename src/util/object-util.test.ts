@@ -6,17 +6,17 @@ describe("object-util", () => {
     it("should properly create an object with first object merged into second object", () => {
       const first = {
         firstKey: "firstValue",
-        overlappedKey: "firstOverlappedValue"
+        overlappedKey: "firstOverlappedValue",
       };
       const second = {
         overlappedKey: "secondOverlappedValue",
-        secondKey: "secondValue"
+        secondKey: "secondValue",
       };
 
       expect(compose(first, second)).toEqual({
         firstKey: "firstValue",
         overlappedKey: "firstOverlappedValue",
-        secondKey: "secondValue"
+        secondKey: "secondValue",
       });
     });
 
@@ -54,14 +54,14 @@ describe("object-util", () => {
       const baseObject = {
         keyInList1: "value1",
         keyInList2: "value2",
-        keyNotInList1: "valueNot1"
+        keyNotInList1: "valueNot1",
       };
 
       const keys = ["keyInList1", "keyInList2", "keyNotInObject"];
 
       expect(extractKeys(keys, baseObject)).toEqual({
         keyInList1: "value1",
-        keyInList2: "value2"
+        keyInList2: "value2",
       });
     });
   });

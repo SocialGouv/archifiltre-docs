@@ -10,7 +10,7 @@ const gridStyle = {
   minHeight: "2.5em",
   maxHeight: "2.5em",
   padding: "0.2em 1em",
-  margin: "0.5em 0"
+  margin: "0.5em 0",
 };
 
 const NavigationBar = ({ api, iciclesSortMethod, setIciclesSortMethod }) => (

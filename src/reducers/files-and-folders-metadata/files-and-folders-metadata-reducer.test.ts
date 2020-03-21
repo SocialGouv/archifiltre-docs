@@ -4,7 +4,7 @@ import { createFilesAndFoldersMetadata } from "./files-and-folders-metadata-test
 import { FilesAndFoldersMetadataState } from "./files-and-folders-metadata-types";
 
 const initialState: FilesAndFoldersMetadataState = {
-  filesAndFoldersMetadata: {}
+  filesAndFoldersMetadata: {},
 };
 
 describe("files-and-folders-metadata-reducer", () => {
@@ -16,8 +16,8 @@ describe("files-and-folders-metadata-reducer", () => {
           childrenTotalSize: 10000,
           maxLastModified: 10000,
           medianLastModified: 4000,
-          minLastModified: 1000
-        })
+          minLastModified: 1000,
+        }),
       };
 
       const nextState = reducer(
@@ -26,7 +26,7 @@ describe("files-and-folders-metadata-reducer", () => {
       );
 
       expect(nextState).toEqual({
-        filesAndFoldersMetadata: addedMetadata
+        filesAndFoldersMetadata: addedMetadata,
       });
     });
   });

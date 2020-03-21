@@ -37,7 +37,7 @@ export default class IcicleRecursive extends React.PureComponent {
 
     const children = getChildrenIdFromId(id);
     const children_width = normalizeWidth(children.map(fWidth)).map(
-      a => a * width
+      (a) => a * width
     );
     const cumulated_children_width = ArrayUtil.computeCumulative(
       children_width

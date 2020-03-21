@@ -10,7 +10,7 @@ import {
   sortTags,
   tagHasFfId,
   tagMapHasTags,
-  tagMapToArray
+  tagMapToArray,
 } from "../../reducers/tags/tags-selectors";
 import { useSelector } from "react-redux";
 import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
@@ -22,7 +22,7 @@ const contentStyle = {
   fontSize: "0.8em",
   overflowY: "auto",
   overflowX: "hidden",
-  height: "100%"
+  height: "100%",
 };
 
 class AllTags extends React.Component {
@@ -30,7 +30,7 @@ class AllTags extends React.Component {
     super(props);
 
     this.state = {
-      editing_tag_id: ""
+      editing_tag_id: "",
     };
 
     this.startEditingTagFactory = this.startEditingTagFactory.bind(this);
@@ -40,13 +40,13 @@ class AllTags extends React.Component {
   startEditingTagFactory(editing_tag_id) {
     return () =>
       this.setState({
-        editing_tag_id
+        editing_tag_id,
       });
   }
 
   stopEditingTag() {
     this.setState({
-      editing_tag_id: ""
+      editing_tag_id: "",
     });
   }
 
@@ -63,7 +63,7 @@ class AllTags extends React.Component {
       onDeleteTag,
       onRenameTag,
       onAddTagged,
-      onDeleteTagged
+      onDeleteTagged,
     } = this.props;
 
     const { editing_tag_id } = this.state;
@@ -75,12 +75,12 @@ class AllTags extends React.Component {
       background: "white",
       height: "100%",
       borderRadius: "5px",
-      padding: "0.5em 0 1em 0"
+      padding: "0.5em 0 1em 0",
     };
 
     let tagsContent;
 
-    const computeOpacity = tag_id => {
+    const computeOpacity = (tag_id) => {
       if (editing_tag_id.length > 0) {
         if (editing_tag_id === tag_id) {
           return 1;
@@ -113,7 +113,7 @@ class AllTags extends React.Component {
                 style={{
                   color: Color.placeholder(),
                   fontSize: "3em",
-                  lineHeight: 0
+                  lineHeight: 0,
                 }}
               />
             </TextAlignCenter>
@@ -127,7 +127,7 @@ class AllTags extends React.Component {
       );
     } else {
       const tagsList = sortTags(tagMapToArray(tags))
-        .map(tag => {
+        .map((tag) => {
           const size = getTagSize(
             tag,
             filesAndFolders,
@@ -192,7 +192,7 @@ const AllTagsApiToProps = ({
   deleteTag,
   deleteTagged,
   addTagged,
-  t
+  t,
 }) => {
   const { icicle_state } = api;
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
@@ -208,7 +208,7 @@ const AllTagsApiToProps = ({
 
   const tag_id_to_highlight = icicle_state.tagIdToHighlight();
 
-  const highlightTag = tag_id => () => {
+  const highlightTag = (tag_id) => () => {
     icicle_state.setTagIdToHighlight(tag_id);
   };
 
@@ -216,12 +216,12 @@ const AllTagsApiToProps = ({
     icicle_state.setNoTagIdToHighlight();
   };
 
-  const onRenameTag = tagId => name => {
+  const onRenameTag = (tagId) => (name) => {
     renameTag(tagId, name);
     api.undo.commit();
   };
 
-  const onDeleteTag = tagId => () => {
+  const onDeleteTag = (tagId) => () => {
     deleteTag(tagId);
     icicle_state.setNoTagIdToHighlight();
     api.undo.commit();

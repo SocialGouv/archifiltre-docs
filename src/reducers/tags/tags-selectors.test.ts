@@ -12,7 +12,7 @@ import {
   Order,
   sortTags,
   tagMapHasTags,
-  tagMapToArray
+  tagMapToArray,
 } from "./tags-selectors";
 import { Tag } from "./tags-types";
 
@@ -26,18 +26,18 @@ describe("tags-selectors", () => {
         [foundTagID]: {
           ffIds: [ffId, "fakeFFid"],
           id: foundTagID,
-          name: "found"
+          name: "found",
         },
         unfound: {
           ffIds: ["unwanted", "unwanted2"],
           id: "unfound",
-          name: "unfound"
+          name: "unfound",
         },
         [secondFoundTagID]: {
           ffIds: [ffId, "fakeFFid2"],
           id: secondFoundTagID,
-          name: "found2"
-        }
+          name: "found2",
+        },
       };
 
       expect(getAllTagIdsForFile(tags, ffId).sort()).toEqual(
@@ -53,22 +53,22 @@ describe("tags-selectors", () => {
       const foundTag = {
         ffIds: [ffId, "fakeFFid"],
         id: foundTagID,
-        name: "found"
+        name: "found",
       };
       const secondFoundTagID = "secondFoundTagID";
       const secondFoundTag = {
         ffIds: [ffId, "fakeFFid2"],
         id: secondFoundTagID,
-        name: "found2"
+        name: "found2",
       };
       const tags = {
         [foundTagID]: foundTag,
         unfound: {
           ffIds: ["unwanted", "unwanted2"],
           id: "2",
-          name: "unfound"
+          name: "unfound",
         },
-        [secondFoundTagID]: secondFoundTag
+        [secondFoundTagID]: secondFoundTag,
       };
 
       expect(sortTags(getAllTagsForFile(tags, ffId))).toEqual(
@@ -84,12 +84,12 @@ describe("tags-selectors", () => {
       const foundTag = {
         ffIds: ["fakeFFid"],
         id: foundTagID,
-        name: "found"
+        name: "found",
       };
       const secondFoundTag = {
         ffIds: ["fakeFFid2"],
         id: secondFoungTagID,
-        name: "found2"
+        name: "found2",
       };
 
       const tags = {
@@ -97,9 +97,9 @@ describe("tags-selectors", () => {
         unfound: {
           ffIds: ["unwanted", "unwanted2"],
           id: "unfound",
-          name: "unfound"
+          name: "unfound",
         },
-        [secondFoungTagID]: secondFoundTag
+        [secondFoungTagID]: secondFoundTag,
       };
 
       const tagComparator = (tag1: Tag, tag2: Tag): number =>
@@ -118,8 +118,8 @@ describe("tags-selectors", () => {
         unfound: {
           ffIds: ["unwanted", "unwanted2"],
           id: "unfound",
-          name: "unfound"
-        }
+          name: "unfound",
+        },
       };
 
       expect(getTagByName(tagMap, "notContained")).toEqual(undefined);
@@ -131,15 +131,15 @@ describe("tags-selectors", () => {
       const foundTag = {
         ffIds: ["fakeFFid"],
         id: foundTagID,
-        name: foundTagName
+        name: foundTagName,
       };
       const tagMap = {
         [foundTagID]: foundTag,
         unfound: {
           ffIds: ["unwanted", "unwanted2"],
           id: "unfound",
-          name: "unfound"
-        }
+          name: "unfound",
+        },
       };
 
       expect(getTagByName(tagMap, foundTagName)).toEqual(foundTag);
@@ -151,28 +151,28 @@ describe("tags-selectors", () => {
     const firstTag = {
       ffIds: ["ffid"],
       id: firstTagId,
-      name: "1TagName"
+      name: "1TagName",
     };
 
     const secondTagId = "2secondTagId";
     const secondTag = {
       ffIds: ["ffid"],
       id: secondTagId,
-      name: "2TagName"
+      name: "2TagName",
     };
 
     const thirdTagId = "1thirdTagId";
     const thirdTag = {
       ffIds: ["ffid"],
       id: thirdTagId,
-      name: "3TagName"
+      name: "3TagName",
     };
     describe("with default parameter", () => {
       it("should order the tags in asc order based on name field", () => {
         expect(sortTags([secondTag, firstTag, thirdTag])).toEqual([
           firstTag,
           secondTag,
-          thirdTag
+          thirdTag,
         ]);
       });
     });
@@ -205,19 +205,19 @@ describe("tags-selectors", () => {
       const tag = {
         ffIds: [taggedFfId, taggedChildrenFfId],
         id: tagId,
-        name: tagName
+        name: tagName,
       };
 
       const filesAndFolders = {
         [rootId]: createFilesAndFolders({
           children: [taggedFfId],
-          id: ""
+          id: "",
         }),
         [taggedFfId]: createFilesAndFolders({
           children: [taggedChildrenFfId],
-          id: taggedFfId
+          id: taggedFfId,
         }),
-        [taggedChildrenFfId]: createFilesAndFolders({ id: taggedChildrenFfId })
+        [taggedChildrenFfId]: createFilesAndFolders({ id: taggedChildrenFfId }),
       };
 
       const filesAndFoldersMetadata = {
@@ -226,15 +226,15 @@ describe("tags-selectors", () => {
           childrenTotalSize: taggedParentSize,
           maxLastModified: 10000,
           medianLastModified: 4000,
-          minLastModified: 1000
+          minLastModified: 1000,
         }),
         [taggedChildrenFfId]: createFilesAndFoldersMetadata({
           averageLastModified: 3000,
           childrenTotalSize: 1000,
           maxLastModified: 10000,
           medianLastModified: 4000,
-          minLastModified: 1000
-        })
+          minLastModified: 1000,
+        }),
       };
 
       expect(getTagSize(tag, filesAndFolders, filesAndFoldersMetadata)).toEqual(
@@ -253,8 +253,8 @@ describe("tags-selectors", () => {
         id: {
           ffIds: ["ffId "],
           id: "id",
-          name: "tag"
-        }
+          name: "tag",
+        },
       };
 
       expect(tagMapHasTags(tagMap)).toBe(true);
@@ -267,17 +267,17 @@ describe("tags-selectors", () => {
       const tag1 = {
         ffIds: ["ffId"],
         id: tag1Id,
-        name: "tag"
+        name: "tag",
       };
       const tag2Id = "id2";
       const tag2 = {
         ffIds: ["ffId"],
         id: tag2Id,
-        name: "tag2"
+        name: "tag2",
       };
       const tagMap = {
         [tag1Id]: tag1,
-        [tag2Id]: tag2
+        [tag2Id]: tag2,
       };
 
       expect(sortTags(tagMapToArray(tagMap))).toEqual(sortTags([tag1, tag2]));
@@ -290,18 +290,18 @@ describe("tags-selectors", () => {
         id: {
           ffIds: ["ffId"],
           id: "id",
-          name: "name"
-        }
+          name: "name",
+        },
       };
 
       const tagState = {
-        tags
+        tags,
       };
 
       const emptyStore = createEmptyStore();
       const storeState: StoreState = {
         ...emptyStore,
-        tags: wrapStoreWithUndoable(tagState)
+        tags: wrapStoreWithUndoable(tagState),
       };
 
       expect(getTagsFromStore(storeState)).toEqual(tags);

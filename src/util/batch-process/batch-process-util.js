@@ -23,14 +23,14 @@ const initWorkers = (
 ) =>
   makeEmptyArray(workerCount, null)
     .map(() => new WorkerBuilder())
-    .map(worker => {
+    .map((worker) => {
       worker.postMessage({ type: "initialize", data: initialValues });
       if (onMessage) {
-        worker.addEventListener("message", message => {
+        worker.addEventListener("message", (message) => {
           onMessage(worker, message);
         });
       }
-      worker.addEventListener("error", error =>
+      worker.addEventListener("error", (error) =>
         console.error("WorkerError", error)
       );
       return worker;
@@ -47,8 +47,8 @@ export const computeBatch$ = (
    * Observable that emits when a worker is available.
    * @type {Observable<Worker>}
    */
-  const workerAvailable$ = new Observable(observer => {
-    workers.map(worker => {
+  const workerAvailable$ = new Observable((observer) => {
+    workers.map((worker) => {
       worker.addEventListener("message", ({ data: { type } }) => {
         if (type === "result") {
           observer.next(worker);
@@ -61,23 +61,23 @@ export const computeBatch$ = (
   const queue = chunk(data, batchSize);
   const queueLength = queue.length;
 
-  return new Observable(observer => {
+  return new Observable((observer) => {
     let completed = 0;
     workerAvailable$
       .pipe(
-        map(worker => {
+        map((worker) => {
           if (queue.length > 0) {
             const sentData = queue.shift();
             worker.postMessage({
               type: "data",
-              data: sentData
+              data: sentData,
             });
           }
         })
       )
       .subscribe();
 
-    workers.map(worker => {
+    workers.map((worker) => {
       worker.addEventListener(
         "message",
         ({ data: { type, result, error } }) => {
@@ -86,7 +86,7 @@ export const computeBatch$ = (
             completed = completed + 1;
             if (completed === queueLength) {
               observer.complete();
-              workers.forEach(worker => worker.terminate());
+              workers.forEach((worker) => worker.terminate());
             }
           }
           if (type === "error") {
@@ -105,7 +105,7 @@ export const computeBatch$ = (
  * @returns {Observable} - A rxjs observable piping progress.
  */
 export const backgroundWorkerProcess$ = (data, WorkerBuilder) => {
-  return new Observable(observer => {
+  return new Observable((observer) => {
     const onMessage = (worker, { data: { type, result: data, error } }) => {
       switch (type) {
         case "result":
@@ -128,12 +128,12 @@ export const backgroundWorkerProcess$ = (data, WorkerBuilder) => {
     initWorkers(WorkerBuilder, {
       onMessage,
       initialValues: data,
-      workerCount: 1
+      workerCount: 1,
     });
   });
 };
 
-const aggregateToMap = (paramFieldName, resultFieldName) => valuesArray => {
+const aggregateToMap = (paramFieldName, resultFieldName) => (valuesArray) => {
   const valuesMap = {};
   for (let index = 0; index < valuesArray.length; index++) {
     const currentValue = valuesArray[index];

@@ -5,13 +5,13 @@ import {
   SET_ORIGINAL_PATH,
   SET_SESSION_NAME,
   WorkspaceMetadataAction,
-  WorkspaceMetadataState
+  WorkspaceMetadataState,
 } from "./workspace-metadata-types";
 
 const initialState: WorkspaceMetadataState = {
   iciclesSortMethod: IciclesSortMethod.SORT_BY_TYPE,
   originalPath: "",
-  sessionName: ""
+  sessionName: "",
 };
 
 const workspaceMetadataReducer = (

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { FaClipboardCheck, FaRegClipboard } from "react-icons/all";
 import {
   NotificationDuration,
-  notifyInfo
+  notifyInfo,
 } from "../../util/notifications-util";
 
 export const CopyToClipboard = ({ stringToCopy }) => {
@@ -13,7 +13,7 @@ export const CopyToClipboard = ({ stringToCopy }) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const onClick = useCallback(
-    event => {
+    (event) => {
       event.stopPropagation();
       clipboard.writeText(stringToCopy);
       setIsCopied(true);

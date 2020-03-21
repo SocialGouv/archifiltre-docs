@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { loadFilesAndFoldersFromPathThunk } from "../../reducers/store-thunks";
 import FolderDropzone from "./folder-dropzone";
 
-const FolderDropzoneContainer: FC = props => {
+const FolderDropzoneContainer: FC = (props) => {
   const dispatch = useDispatch();
 
   const loadFromPath = useCallback(

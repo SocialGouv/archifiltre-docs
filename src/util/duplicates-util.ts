@@ -20,26 +20,26 @@ import {
   spread,
   sum,
   takeRight,
-  toArray
+  toArray,
 } from "lodash/fp";
 
 import _ from "lodash";
 
 import {
   FilesAndFoldersMetadata,
-  FilesAndFoldersMetadataMap
+  FilesAndFoldersMetadataMap,
 } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import {
   FilesAndFoldersCollection,
   getFiles,
   getFilesMap,
   getFolders,
-  getFoldersMap
+  getFoldersMap,
 } from "../reducers/files-and-folders/files-and-folders-selectors";
 import {
   FilesAndFolders,
   FilesAndFoldersMap,
-  HashesMap
+  HashesMap,
 } from "../reducers/files-and-folders/files-and-folders-types";
 import translations from "../translations/translations";
 import { Mapper, Merger } from "./functionnal-programming-utils";
@@ -58,7 +58,7 @@ export interface DuplicatesIdMap {
 const argsToArray = memoize(
   (filesAndFoldersMap: FilesAndFoldersMap, hashesMap: HashesMap) => [
     filesAndFoldersMap,
-    hashesMap
+    hashesMap,
   ]
 );
 
@@ -84,7 +84,7 @@ const removeIncompleteFilesAndFolders: Mapper<
   FilesAndFoldersMap,
   FilesAndFoldersMap
 > = omitBy<FilesAndFolders>(
-  filesAndFolders =>
+  (filesAndFolders) =>
     filesAndFolders.name === undefined && filesAndFolders.hash === ""
 );
 
@@ -104,7 +104,7 @@ const mergeFilesAndFoldersAndHashes: Merger<
     ): FilesAndFoldersMap =>
       _.mapValues(filesAndFolders, (fileAndFolder, key) => ({
         ...fileAndFolder,
-        hash: hashes[key]
+        hash: hashes[key],
       }))
   )
 );
@@ -129,7 +129,7 @@ const filterFilesAndFoldersAndMerge = (
       spread(mergeFilesAndFoldersAndHashes),
       overArgs(argsToArray, [
         compose(getFilesAndFoldersMap, filesAndFoldersFilter),
-        identity
+        identity,
       ])
     )
   );
@@ -302,17 +302,17 @@ export const getBiggestDuplicatedFolders = (nbDuplicatedItems: number) => (
 
   return _(duplicatesMap)
     .sortBy(
-      filesAndFoldersList =>
+      (filesAndFoldersList) =>
         (filesAndFoldersList.length - 1) *
         filesAndFoldersMetadataMap[filesAndFoldersList[0].id].childrenTotalSize
     )
     .takeRight(nbDuplicatedItems)
-    .filter(filesAndFoldersList => filesAndFoldersList.length > 1)
+    .filter((filesAndFoldersList) => filesAndFoldersList.length > 1)
     .reverse()
-    .map(duplicatedItemsList => ({
+    .map((duplicatedItemsList) => ({
       ...duplicatedItemsList[0],
       ...filesAndFoldersMetadataMap[duplicatedItemsList[0].id],
-      count: duplicatedItemsList.length
+      count: duplicatedItemsList.length,
     }))
     .value();
 };
@@ -329,4 +329,4 @@ export const hasDuplicate = (
   _(hashes)
     .omit(fileOrFolder.id)
     .values()
-    .some(hash => hash === hashes[fileOrFolder.id]);
+    .some((hash) => hash === hashes[fileOrFolder.id]);

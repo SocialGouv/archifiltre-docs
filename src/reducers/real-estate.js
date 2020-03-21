@@ -1,11 +1,11 @@
 import * as ObjectUtil from "util/object-util.ts";
 
-export const create = state => {
+export const create = (state) => {
   const property_name = state.property_name;
-  const get = s => s[property_name];
+  const get = (s) => s[property_name];
   const set = (a, s) => ObjectUtil.compose({ [property_name]: a }, s);
 
-  const initialState = s => set(state.initialState(), s);
+  const initialState = (s) => set(state.initialState(), s);
 
   const reader = {};
   for (const key in state.reader) {
@@ -19,7 +19,7 @@ export const create = state => {
   return {
     initialState,
     reader,
-    writer
+    writer,
   };
 };
 
@@ -36,7 +36,7 @@ const updateGetAndSet = (
 
   if (old_obj[old_key].get === undefined) {
     new_key = property_name + "|" + old_key;
-    update = a => [a];
+    update = (a) => [a];
   }
 
   new_obj[new_key] = (...args) => old_obj[old_key](...args);
@@ -45,50 +45,50 @@ const updateGetAndSet = (
 };
 
 export const empty = () => {
-  const initialState = s => s;
+  const initialState = (s) => s;
   const reader = {};
   const writer = {};
   return {
     initialState,
     reader,
-    writer
+    writer,
   };
 };
 
 export const compose = (a, b) => {
-  const initialState = s => a.initialState(b.initialState(s));
+  const initialState = (s) => a.initialState(b.initialState(s));
   const reader = ObjectUtil.compose(a.reader, b.reader);
   const writer = ObjectUtil.compose(a.writer, b.writer);
   return {
     initialState,
     reader,
-    writer
+    writer,
   };
 };
 
-const compileGet = get => {
+const compileGet = (get) => {
   if (get.length === 0) {
-    return s => s;
+    return (s) => s;
   } else {
-    return s => compileGet(get.slice(1))(get[0](s));
+    return (s) => compileGet(get.slice(1))(get[0](s));
   }
 };
 
 const compileSet = (get, set) => {
   if (set.length === 0) {
-    return a => a;
+    return (a) => a;
   } else {
     return (a, s) =>
       set[0](compileSet(get.slice(1), set.slice(1))(a, get[0](s)), s);
   }
 };
 
-const cache = f => {
+const cache = (f) => {
   const equal = (a, b) => a === b;
   let last_args = [Symbol()];
   let last_state = Symbol();
   let last_ans;
-  return (...args) => state => {
+  return (...args) => (state) => {
     const same_args = args.reduce(
       (acc, val, ind) => acc && val === last_args[ind],
       true
@@ -102,7 +102,7 @@ const cache = f => {
   };
 };
 
-export const compile = real_estate => {
+export const compile = (real_estate) => {
   const initialState = () => real_estate.initialState({});
   const api = {};
 
@@ -110,7 +110,7 @@ export const compile = real_estate => {
     const f = real_estate.reader[key];
     const get = compileGet(f.get);
     const cachedF = cache(f);
-    api[key] = (...args) => state => cachedF(...args)(get(state));
+    api[key] = (...args) => (state) => cachedF(...args)(get(state));
     delete api[key].get;
     delete api[key].set;
     api[key].reader = true;
@@ -120,7 +120,7 @@ export const compile = real_estate => {
     const f = real_estate.writer[key];
     const get = compileGet(f.get);
     const set = compileSet(f.get, f.set);
-    api[key] = (...args) => state => set(f(...args)(get(state)), state);
+    api[key] = (...args) => (state) => set(f(...args)(get(state)), state);
     delete api[key].get;
     delete api[key].set;
     api[key].writer = true;
@@ -138,11 +138,11 @@ export const compile = real_estate => {
 
   return {
     initialState,
-    api
+    api,
   };
 };
 
-export const createHigherOrder = higher_order => {
+export const createHigherOrder = (higher_order) => {
   const get = higher_order.get;
   const set = higher_order.set;
 
@@ -161,7 +161,7 @@ export const createHigherOrder = higher_order => {
       property_name,
       initialState,
       reader: ObjectUtil.compose(higher_order.reader, reader),
-      writer: ObjectUtil.compose(higher_order.writer, writer)
+      writer: ObjectUtil.compose(higher_order.writer, writer),
     });
   };
 };

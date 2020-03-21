@@ -38,7 +38,7 @@ export const saveBlob = (name, blob) => {
 export const getNameWithExtension = (name, extension) =>
   `${name}_${dateFormat(new Date(), "yyyy_mm_dd_HH_MM")}.${extension}`;
 
-export const mkdir = dirPath => {
+export const mkdir = (dirPath) => {
   if (!fs.existsSync(dirPath)) {
     mkdir(path.dirname(dirPath));
     fs.mkdirSync(dirPath);
@@ -55,7 +55,7 @@ export const mkdir = dirPath => {
  *
  * @param filePath
  */
-export const convertToPosixAbsolutePath = filePath => {
+export const convertToPosixAbsolutePath = (filePath) => {
   const array = filePath.split(path.sep);
   if (array[0] !== "") {
     array.unshift("");
@@ -64,7 +64,7 @@ export const convertToPosixAbsolutePath = filePath => {
   return array.join("/");
 };
 
-export const isJsonFile = filePath => {
+export const isJsonFile = (filePath) => {
   const stats = fs.statSync(filePath);
   return stats.isFile() && path.extname(filePath) === ".json";
 };
@@ -75,8 +75,8 @@ export const readFileSync = fs.readFileSync;
  * Get the number of files with .zip extension
  * @param filePaths - list of strings representing file paths
  */
-export const countZipFiles = filePaths =>
-  countItems(filePath => path.extname(filePath) === ".zip")(filePaths);
+export const countZipFiles = (filePaths) =>
+  countItems((filePath) => path.extname(filePath) === ".zip")(filePaths);
 
 /**
  * Formats a path for the user file system
@@ -87,5 +87,5 @@ export const countZipFiles = filePaths =>
  * console.log(formatPathForUserSystem("/folder/file"))
  * // => \folder\file
  */
-export const formatPathForUserSystem = formattedPath =>
+export const formatPathForUserSystem = (formattedPath) =>
   path.normalize(formattedPath);

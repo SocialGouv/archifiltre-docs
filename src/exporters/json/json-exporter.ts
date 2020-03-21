@@ -6,7 +6,7 @@ import {
   getAliasesFromStore,
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
-  getHashesFromStore
+  getHashesFromStore,
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import { getNameWithExtension, save } from "../../util/file-sys-util";
@@ -26,11 +26,11 @@ interface JsonExporterThunkArgs {
 export const jsonExporterThunk = ({
   sessionName,
   originalPath,
-  version
+  version,
 }: JsonExporterThunkArgs): ArchifiltreThunkAction => (dispatch, getState) => {
   addTracker({
     title: ActionTitle.JSON_EXPORT,
-    type: ActionType.TRACK_EVENT
+    type: ActionType.TRACK_EVENT,
   });
   const state = getState();
   const fileName = getNameWithExtension(sessionName, "json");
@@ -44,7 +44,7 @@ export const jsonExporterThunk = ({
     originalPath,
     sessionName,
     tags: getTagsFromStore(state),
-    version
+    version,
   };
 
   save(fileName, JSON.stringify(exportedData));

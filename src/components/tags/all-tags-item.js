@@ -6,7 +6,7 @@ import MultiLinesInput from "components/tags/multi-lines-input";
 import { FaTrash, FaTimes, FaPlus, FaPen } from "react-icons/fa";
 
 const cell_shrink_style = {
-  padding: "0em 0.1em"
+  padding: "0em 0.1em",
 };
 
 class AllTagsItem extends React.Component {
@@ -34,7 +34,7 @@ class AllTagsItem extends React.Component {
       renameTag,
       stopEditingTag,
       startEditingTag,
-      highlightTag
+      highlightTag,
     } = this.props;
 
     const componentStyle = {
@@ -42,13 +42,13 @@ class AllTagsItem extends React.Component {
       width: "100%",
       background: "none",
       margin: "0",
-      padding: "4px 0.5em"
+      padding: "4px 0.5em",
     };
 
     const contentStyle = {
       opacity: opacity,
       position: "relative",
-      zIndex: "1"
+      zIndex: "1",
     };
 
     const backgroundStyle = {
@@ -57,7 +57,7 @@ class AllTagsItem extends React.Component {
       height: "100%",
       width: `${percentage}%`,
       opacity: "0.2",
-      backgroundColor: "rgb(10, 50, 100)"
+      backgroundColor: "rgb(10, 50, 100)",
     };
 
     const deleteBubble = (
@@ -83,7 +83,7 @@ class AllTagsItem extends React.Component {
       tagPill = (
         <MultiLinesInput
           value={tag}
-          onFinish={value => {
+          onFinish={(value) => {
             if (value !== "") {
               renameTag(value);
             }

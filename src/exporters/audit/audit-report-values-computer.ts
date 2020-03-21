@@ -14,18 +14,18 @@ import {
   sortBy,
   sum,
   take,
-  takeRight
+  takeRight,
 } from "lodash/fp";
 import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { octet2HumanReadableFormat } from "../../components/main-space/ruler";
 import {
   FilesAndFoldersCollection,
   getFiles,
-  isFile
+  isFile,
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import {
   FilesAndFolders,
-  HashesMap
+  HashesMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import translations from "../../translations/translations";
 import {
@@ -33,25 +33,25 @@ import {
   countDuplicatesPercentForFiles,
   countDuplicatesPercentForFolders,
   getBiggestDuplicatedFolders,
-  getMostDuplicatedFiles
+  getMostDuplicatedFiles,
 } from "../../util/duplicates-util";
 import { formatPathForUserSystem } from "../../util/file-sys-util";
 import {
   FileType,
   getExtensionsForEachFileType,
-  getFileType
+  getFileType,
 } from "../../util/file-types-util";
 import {
   Accessor,
   Mapper,
-  Merger
+  Merger,
 } from "../../util/functionnal-programming-utils";
 import { curriedFormatPercent, percent } from "../../util/numbers-util";
 import {
   AuditReportElementWithType,
   AuditReportFileWithCount,
   AuditReportFileWithDate,
-  AuditReportFileWithSize
+  AuditReportFileWithSize,
 } from "./audit-report-generator";
 
 type FileTypeMap<T> = {
@@ -102,7 +102,7 @@ export const countFileTypes: Mapper<
       [FileType.IMAGE]: 0,
       [FileType.VIDEO]: 0,
       [FileType.AUDIO]: 0,
-      [FileType.OTHER]: 0
+      [FileType.OTHER]: 0,
     }),
     countBy(identity),
     map(getFileType),
@@ -144,7 +144,7 @@ export const getExtensionsList: Accessor<FileTypeMap<string>> = memoize(
       [FileType.IMAGE]: "",
       [FileType.VIDEO]: "",
       [FileType.AUDIO]: "",
-      [FileType.OTHER]: ""
+      [FileType.OTHER]: "",
     }),
     mapValues(join(", ")),
     getExtensionsForEachFileType
@@ -172,7 +172,7 @@ export const getOldestFiles: Mapper<
     ({ name, id, file_last_modified }): AuditReportFileWithDate => ({
       date: formatAuditReportDate(file_last_modified),
       name,
-      path: formatPathForUserSystem(id)
+      path: formatPathForUserSystem(id),
     })
   ),
   take(5),
@@ -201,7 +201,7 @@ export const getBiggestFiles: Mapper<
     ({ name, id, file_size }): AuditReportFileWithSize => ({
       name,
       path: formatPathForUserSystem(id),
-      size: octet2HumanReadableFormat(file_size)
+      size: octet2HumanReadableFormat(file_size),
     })
   ),
   reverse,
@@ -257,7 +257,7 @@ export const getDuplicatesWithTheMostCopy: Merger<
   map((filesAndFolders: FilesAndFolders[]) => ({
     count: filesAndFolders.length - 1,
     name: filesAndFolders[0].name,
-    path: formatPathForUserSystem(filesAndFolders[0].id)
+    path: formatPathForUserSystem(filesAndFolders[0].id),
   })),
   getMostDuplicatedFiles(5)
 );
@@ -275,7 +275,7 @@ export const getDuplicatesWithTheBiggestSize = compose(
       path: formatPathForUserSystem(filesAndFolders.id),
       size: octet2HumanReadableFormat(
         (filesAndFolders.count - 1) * filesAndFolders.childrenTotalSize
-      )
+      ),
     })
   ),
   getBiggestDuplicatedFolders(5)
@@ -289,7 +289,7 @@ export const getElementsToDelete = (
   const folderText = translations.t("common.folder");
   const fileText = translations.t("common.file");
   return elementsToDelete
-    .map(filesAndFoldersId => filesAndFolders[filesAndFoldersId])
+    .map((filesAndFoldersId) => filesAndFolders[filesAndFoldersId])
     .map(
       (fileAndFolder): AuditReportElementWithType => ({
         date: formatAuditReportDate(
@@ -300,7 +300,7 @@ export const getElementsToDelete = (
         size: octet2HumanReadableFormat(
           filesAndFoldersMetadata[fileAndFolder.id].childrenTotalSize
         ),
-        type: isFile(fileAndFolder) ? fileText : folderText
+        type: isFile(fileAndFolder) ? fileText : folderText,
       })
     );
 };

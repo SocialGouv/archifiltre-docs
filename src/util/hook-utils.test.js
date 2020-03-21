@@ -1,14 +1,14 @@
 import { hookCounter } from "./hook-utils";
 import { advanceBy, advanceTo } from "jest-date-mock";
 
-const setup = options => {
+const setup = (options) => {
   const throttledHook = jest.fn();
   const { hook, getCount } = hookCounter(throttledHook, options);
   advanceTo(new Date());
   return {
     throttledHook,
     hook,
-    getCount
+    getCount,
   };
 };
 
@@ -31,7 +31,7 @@ describe("hookUtils", () => {
     describe("with custom interval", () => {
       it("should debounce correctly", () => {
         const { hook, throttledHook } = setup({
-          interval: 300
+          interval: 300,
         });
         hook();
         advanceBy(200);

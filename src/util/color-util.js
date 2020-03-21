@@ -1,7 +1,7 @@
 import { FileType, getFileTypeFromFileName } from "./file-types-util";
 import {
   isFile,
-  ROOT_FF_ID
+  ROOT_FF_ID,
 } from "../reducers/files-and-folders/files-and-folders-selectors";
 import { ratio } from "./numbers-util";
 import { useCallback, useMemo } from "react";
@@ -9,7 +9,7 @@ import { IciclesSortMethod } from "../reducers/workspace-metadata/workspace-meta
 
 export const SUCCESS_GREEN = "#1E8E17";
 
-export const gradient = (a, b) => zero_to_one => {
+export const gradient = (a, b) => (zero_to_one) => {
   const ans = a
     .map((a, i) => a + (b[i] - a) * zero_to_one)
     .map((a, i) => {
@@ -27,15 +27,15 @@ export const setAlpha = (alpha, color) => {
   return color.slice(0, -1).concat([alpha]);
 };
 
-export const toRgba = a => `rgba(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
-export const fromRgba = a =>
+export const toRgba = (a) => `rgba(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
+export const fromRgba = (a) =>
   a
     .split(/rgba\(|, |\)/)
-    .filter(a => a !== "")
+    .filter((a) => a !== "")
     .map(Number);
 
-export const toHex = a => {
-  a = a.map(Number).map(a => {
+export const toHex = (a) => {
+  a = a.map(Number).map((a) => {
     a = a.toString(16);
     if (a.length < 2) {
       a = "0" + a;
@@ -45,11 +45,11 @@ export const toHex = a => {
   return `#${a[0]}${a[1]}${a[2]}`;
 };
 
-export const fromHex = a => {
+export const fromHex = (a) => {
   a = a
     .split(/#|([0-9a-f]{2})/)
-    .filter(a => a && a !== "")
-    .map(a => parseInt(a, 16));
+    .filter((a) => a && a !== "")
+    .map((a) => parseInt(a, 16));
   const default_alpha = 1;
   a.push(default_alpha);
   return a;
@@ -72,7 +72,7 @@ const colors = {
   [FileType.IMAGE]: "#b574f2",
   [FileType.VIDEO]: "#6700c7",
   [FileType.AUDIO]: "#ff35dd",
-  [FileType.OTHER]: "#8a8c93"
+  [FileType.OTHER]: "#8a8c93",
 };
 
 export const folder = () => FOLDER_COLOR;
@@ -80,7 +80,7 @@ export const parentFolder = () => PARENT_FOLDER_COLOR;
 
 export const placeholder = () => PLACEHOLDER_COLOR;
 
-export const fromFileName = name => {
+export const fromFileName = (name) => {
   const fileType = getFileTypeFromFileName(name);
   return colors[fileType];
 };
@@ -93,7 +93,7 @@ export const fromFileName = name => {
  */
 const useFillColorByType = (filesAndFolders, displayRoot) =>
   useCallback(
-    id => {
+    (id) => {
       const element = filesAndFolders[id];
 
       if (isFile(element)) {
@@ -112,9 +112,9 @@ const dateGradient = gradient(leastRecentDate(), mostRecentDate());
  * @param filesAndFoldersMetadata
  * @returns {*}
  */
-const useFillColorByDate = filesAndFoldersMetadata =>
+const useFillColorByDate = (filesAndFoldersMetadata) =>
   useCallback(
-    id => {
+    (id) => {
       const { minLastModified, maxLastModified } = filesAndFoldersMetadata[
         ROOT_FF_ID
       ];
@@ -123,7 +123,7 @@ const useFillColorByDate = filesAndFoldersMetadata =>
         dateGradient(
           ratio(averageLastModified, {
             min: minLastModified,
-            max: maxLastModified
+            max: maxLastModified,
           })
         )
       );

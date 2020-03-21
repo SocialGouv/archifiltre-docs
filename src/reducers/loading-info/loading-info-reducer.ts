@@ -7,7 +7,7 @@ import {
   REGISTER_ERROR,
   RESET_LOADING,
   START_LOADING,
-  UPDATE_LOADING
+  UPDATE_LOADING,
 } from "./loading-info-types";
 
 export const initialState: LoadingInfoState = {
@@ -15,7 +15,7 @@ export const initialState: LoadingInfoState = {
   dismissed: [],
   errors: [],
   loading: [],
-  loadingInfo: {}
+  loadingInfo: {},
 };
 
 const loadingInfoReducer = (
@@ -34,9 +34,9 @@ const loadingInfoReducer = (
             id: action.id,
             label: action.label,
             progress: 0,
-            type: action.loadingType
-          }
-        }
+            type: action.loadingType,
+          },
+        },
       };
     case UPDATE_LOADING:
       if (!state.loadingInfo[action.id]) {
@@ -49,9 +49,9 @@ const loadingInfoReducer = (
           [action.id]: {
             ...state.loadingInfo[action.id],
             goal: action.goal,
-            progress: action.progress
-          }
-        }
+            progress: action.progress,
+          },
+        },
       };
 
     case PROGRESS_LOADING:
@@ -65,9 +65,9 @@ const loadingInfoReducer = (
           ...state.loadingInfo,
           [action.id]: {
             ...currentLoadingInfo,
-            progress: currentLoadingInfo.progress + action.progress
-          }
-        }
+            progress: currentLoadingInfo.progress + action.progress,
+          },
+        },
       };
 
     case COMPLETE_LOADING:
@@ -77,13 +77,13 @@ const loadingInfoReducer = (
       return {
         ...state,
         complete: [...state.complete, action.id],
-        loading: state.loading.filter(id => id !== action.id)
+        loading: state.loading.filter((id) => id !== action.id),
       };
 
     case REGISTER_ERROR:
       return {
         ...state,
-        errors: [...state.errors, action.error]
+        errors: [...state.errors, action.error],
       };
 
     case RESET_LOADING:
@@ -93,7 +93,7 @@ const loadingInfoReducer = (
       return {
         ...state,
         complete: [],
-        dismissed: [...state.dismissed, ...state.complete]
+        dismissed: [...state.dismissed, ...state.complete],
       };
   }
   return state;

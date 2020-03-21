@@ -5,7 +5,7 @@ import { computeHash } from "../util/hash-util";
 import { onData, onInitialize } from "./file-hash-computer.impl";
 
 jest.mock("../util/hash-util", () => ({
-  computeHash: jest.fn()
+  computeHash: jest.fn(),
 }));
 
 const basePath = "/base";
@@ -30,14 +30,14 @@ describe("file-hash-computer.impl", () => {
         result: [
           {
             param: "/path1",
-            result: `hash(${formatPathForUserSystem("/base/path1")})`
+            result: `hash(${formatPathForUserSystem("/base/path1")})`,
           },
           {
             param: "/path2",
-            result: `hash(${formatPathForUserSystem("/base/path2")})`
-          }
+            result: `hash(${formatPathForUserSystem("/base/path2")})`,
+          },
         ],
-        type: MessageTypes.RESULT
+        type: MessageTypes.RESULT,
       });
     });
 
@@ -58,16 +58,16 @@ describe("file-hash-computer.impl", () => {
         result: [
           {
             param: "/path1",
-            result: `hash(${formatPathForUserSystem("/base/path1")})`
+            result: `hash(${formatPathForUserSystem("/base/path1")})`,
           },
-          { param: "/path2", result: null }
+          { param: "/path2", result: null },
         ],
-        type: MessageTypes.RESULT
+        type: MessageTypes.RESULT,
       });
 
       expect(asyncWorker.postMessage).toHaveBeenCalledWith({
         error: { param: "/path2", error: error.toString() },
-        type: MessageTypes.ERROR
+        type: MessageTypes.ERROR,
       });
     });
   });

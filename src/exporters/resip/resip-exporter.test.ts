@@ -29,28 +29,28 @@ const tag1Name = "tag-1-name";
 const filesAndFolders = {
   [ROOT_FF_ID]: createFilesAndFolders({
     children: [rootFolderId],
-    id: ROOT_FF_ID
+    id: ROOT_FF_ID,
   }),
   [rootFolderId]: createFilesAndFolders({
     children: [file1Id, folder1Id],
-    id: rootFolderId
+    id: rootFolderId,
   }),
   [file1Id]: createFilesAndFolders({
-    id: file1Id
+    id: file1Id,
   }),
   [folder1Id]: createFilesAndFolders({
     children: [file2Id],
-    id: folder1Id
+    id: folder1Id,
   }),
   [file2Id]: createFilesAndFolders({
     id: file2Id,
-    name: file2Name
+    name: file2Name,
   }),
   [folderToDeleteId]: createFilesAndFolders({
     children: [fileToDeleteId],
-    id: folderToDeleteId
+    id: folderToDeleteId,
   }),
-  [fileToDeleteId]: createFilesAndFolders({ id: fileToDeleteId })
+  [fileToDeleteId]: createFilesAndFolders({ id: fileToDeleteId }),
 };
 
 const filesAndFoldersMetadata = {
@@ -59,21 +59,21 @@ const filesAndFoldersMetadata = {
   [file1Id]: createFilesAndFoldersMetadata({}),
   [folder1Id]: createFilesAndFoldersMetadata({
     maxLastModified: folder1LastModifiedMax,
-    minLastModified: folder1LastModifiedMin
+    minLastModified: folder1LastModifiedMin,
   }),
-  [file2Id]: createFilesAndFoldersMetadata({})
+  [file2Id]: createFilesAndFoldersMetadata({}),
 };
 
 const tags = {
-  [tag1Id]: createTag({ id: tag1Id, name: tag1Name, ffIds: [file1Id] })
+  [tag1Id]: createTag({ id: tag1Id, name: tag1Name, ffIds: [file1Id] }),
 };
 
 const aliases = {
-  [file2Id]: file2Alias
+  [file2Id]: file2Alias,
 };
 
 const comments = {
-  [folder1Id]: folder1Comments
+  [folder1Id]: folder1Comments,
 };
 
 const elementsToDelete = [folderToDeleteId];
@@ -88,7 +88,7 @@ describe("resip-exporter", () => {
           elementsToDelete,
           filesAndFolders,
           filesAndFoldersMetadata,
-          tags
+          tags,
         })
       ).toEqual([
         [
@@ -102,7 +102,7 @@ describe("resip-exporter", () => {
           "TransactedDate",
           "CustodialHistory.CustodialHistoryItem",
           "Description",
-          "Content.Tag.0"
+          "Content.Tag.0",
         ],
         [
           "1",
@@ -115,7 +115,7 @@ describe("resip-exporter", () => {
           "2019-08-05",
           "",
           "",
-          ""
+          "",
         ],
         [
           "2",
@@ -128,7 +128,7 @@ describe("resip-exporter", () => {
           "2019-08-05",
           "",
           "",
-          "tag-1-name"
+          "tag-1-name",
         ],
         [
           "3",
@@ -141,7 +141,7 @@ describe("resip-exporter", () => {
           "2019-08-05",
           "",
           folder1Comments,
-          ""
+          "",
         ],
         [
           "4",
@@ -154,8 +154,8 @@ describe("resip-exporter", () => {
           "2019-08-05",
           `This element original title was '${file2Name}'`,
           "",
-          ""
-        ]
+          "",
+        ],
       ]);
     });
   });

@@ -35,7 +35,7 @@ export const makeEmptyArray = <T>(nbElements: number, defaultValue: T): T[] =>
 export const replaceValue = <T>(array: T[], index: number, newValue: T) => [
   ...array.slice(0, index),
   newValue,
-  ...array.slice(index + 1)
+  ...array.slice(index + 1),
 ];
 
 /**

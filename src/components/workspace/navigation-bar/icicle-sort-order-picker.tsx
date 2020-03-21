@@ -15,7 +15,7 @@ const buttonStyle = {
   fontSize: "1em",
   fontWeight: "bold",
   margin: 0,
-  padding: "0.3em 10%"
+  padding: "0.3em 10%",
 };
 
 const ButtonWrapper = styled.div`
@@ -49,7 +49,7 @@ interface IciclesSortOrderPickerProps {
 
 const IciclesSortOrderPicker: FC<IciclesSortOrderPickerProps> = ({
   iciclesSortMethod,
-  setIciclesSortMethod
+  setIciclesSortMethod,
 }) => {
   const { t } = useTranslation();
 

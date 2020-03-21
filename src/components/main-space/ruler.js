@@ -33,7 +33,7 @@ const makeRulerText = (nodeSize, totalSize, node) => {
   return rulerInfo.join(" | ");
 };
 
-const Ruler = props => {
+const Ruler = (props) => {
   const {
     x,
     y,
@@ -45,7 +45,7 @@ const Ruler = props => {
     total_size,
     fillColor,
     node_id,
-    getFfByFfId
+    getFfByFfId,
   } = props;
   const rulerX = x;
   const rulerY = y;
@@ -79,7 +79,7 @@ const Ruler = props => {
           y={rulerY + (rulerDy * 1) / 3}
           width={dims.dx}
           height="0.3em"
-          onClick={e => {
+          onClick={(e) => {
             e.stopPropagation();
           }}
           onMouseOver={() => {}}
@@ -102,7 +102,7 @@ const Ruler = props => {
   return <g>{res}</g>;
 };
 
-export const octet2HumanReadableFormat = o => {
+export const octet2HumanReadableFormat = (o) => {
   const unit = byteChar;
   const To = o / Math.pow(1000, 4);
   if (To > 1) {
@@ -123,7 +123,7 @@ export const octet2HumanReadableFormat = o => {
   return o + " " + unit;
 };
 
-const getFilesAndFoldersNumber = node => {
+const getFilesAndFoldersNumber = (node) => {
   return isFile(node) ? null : `${node.nbChildrenFiles} fichier(s)`;
 };
 
@@ -144,7 +144,7 @@ const computeTextPosition = (x, dx, w, mode) => {
 export default function RulerApiToProps(props) {
   const {
     api: { icicle_state },
-    getFfByFfId
+    getFfByFfId,
   } = props;
 
   const nodeId = icicle_state.sequence().slice(-1)[0];

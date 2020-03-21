@@ -12,7 +12,7 @@ import { Tag, TagMap } from "./tags-types";
  * @returns The list of tagIds for the file
  */
 export const getAllTagIdsForFile = (tagMap: TagMap, ffId: string): string[] =>
-  Object.keys(tagMap).filter(key => tagHasFfId(tagMap[key], ffId));
+  Object.keys(tagMap).filter((key) => tagHasFfId(tagMap[key], ffId));
 
 /**
  * Returns all the tags that are associated to the provided ffId
@@ -21,7 +21,7 @@ export const getAllTagIdsForFile = (tagMap: TagMap, ffId: string): string[] =>
  * @returns The list of tags for the file
  */
 export const getAllTagsForFile = (tagMap: TagMap, ffId: string): Tag[] =>
-  tagMapToArray(tagMap).filter(tag => tagHasFfId(tag, ffId));
+  tagMapToArray(tagMap).filter((tag) => tagHasFfId(tag, ffId));
 
 /**
  * Returns the tags corresponding to the ids in tagIds
@@ -29,7 +29,7 @@ export const getAllTagsForFile = (tagMap: TagMap, ffId: string): Tag[] =>
  * @param tagIds - the tags ids
  */
 export const getTagsByIds = (tagMap: TagMap, tagIds: string[]): Tag[] =>
-  tagIds.map(tagId => tagMap[tagId] || null).filter(tag => tag !== null);
+  tagIds.map((tagId) => tagMap[tagId] || null).filter((tag) => tag !== null);
 
 /**
  * Checks if the tag name already exist
@@ -37,14 +37,14 @@ export const getTagsByIds = (tagMap: TagMap, tagIds: string[]): Tag[] =>
  * @param name
  */
 export const getTagByName = (tagMap: TagMap, name: string): Tag | undefined =>
-  _.find(tagMapToArray(tagMap), tag => tag.name === name);
+  _.find(tagMapToArray(tagMap), (tag) => tag.name === name);
 
 /**
  * Order for sorting functions
  */
 export enum Order {
   ASC,
-  DESC
+  DESC,
 }
 
 export interface SortTagOptions {
@@ -95,12 +95,12 @@ export const getTagSize = (
 ): number => {
   const parentIsTagged = (taggedFfidsList, potentialChildId) =>
     taggedFfidsList.some(
-      potentialParentId =>
+      (potentialParentId) =>
         potentialChildId.indexOf(potentialParentId) === 0 &&
         potentialChildId[potentialParentId.length] === "/"
     );
 
-  const taggedFfIds = tag.ffIds.filter(id => !parentIsTagged(tag.ffIds, id));
+  const taggedFfIds = tag.ffIds.filter((id) => !parentIsTagged(tag.ffIds, id));
 
   return taggedFfIds.reduce(
     (totalSize, id) =>

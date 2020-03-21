@@ -26,7 +26,7 @@ const CsvButton: FC<CsvButtonProps> = ({
   areHashesReady = false,
   sessionName,
   exportToCsv,
-  exportWithHashes = false
+  exportWithHashes = false,
 }) => {
   const name = getNameWithExtension(sessionName, "csv");
   const { t } = useTranslation();

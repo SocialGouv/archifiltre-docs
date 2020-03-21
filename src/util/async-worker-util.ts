@@ -1,11 +1,11 @@
 import { ChildProcess } from "child_process";
 import {
   MessageTypes,
-  WorkerMessage
+  WorkerMessage,
 } from "./batch-process/batch-process-util-types";
 
 export enum AsyncWorkerEvent {
-  MESSAGE = "message"
+  MESSAGE = "message",
 }
 
 export interface AsyncWorker {
@@ -24,16 +24,16 @@ export const createAsyncWorkerForChildProcess = (): AsyncWorker => {
   const localProcess = process as NodeJS.Process;
   return {
     addEventListener: (eventType, listener) => {
-      localProcess.addListener(eventType, event => {
+      localProcess.addListener(eventType, (event) => {
         listener(event);
       });
     },
-    postMessage: message => {
+    postMessage: (message) => {
       if (!localProcess || !localProcess.send) {
         throw new Error("This must be called in a forked process");
       }
       localProcess.send(message);
-    }
+    },
   };
 };
 
@@ -46,17 +46,17 @@ export const createAsyncWorkerForChildProcessController = (
 ): AsyncWorker => ({
   addEventListener: (eventType, listener) => {
     // Small adaptation for current BackgroundProcess and BatchProcess workers
-    childProcess.addListener(eventType, data => listener({ ...data, data }));
+    childProcess.addListener(eventType, (data) => listener({ ...data, data }));
   },
-  postMessage: message => childProcess.send(message),
-  terminate: () => childProcess.kill()
+  postMessage: (message) => childProcess.send(message),
+  terminate: () => childProcess.kill(),
 });
 
 /**
  * Creates a wrapper class for the childProcess contructor to be used in batch-process-common
  * @param ChildProcessContructor
  */
-export const createAsyncWorkerControllerClass = ChildProcessContructor => {
+export const createAsyncWorkerControllerClass = (ChildProcessContructor) => {
   return class AsyncWorkerController {
     constructor() {
       const childProcess = new ChildProcessContructor();

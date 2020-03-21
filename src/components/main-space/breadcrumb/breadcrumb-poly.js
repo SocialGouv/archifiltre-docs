@@ -1,6 +1,6 @@
 import React from "react";
 
-const BreadcrumbPoly = props => {
+const BreadcrumbPoly = (props) => {
   const { x, y, dx, dy, isFirst, isLast, fillColor, opacity } = props;
   const notch = dy / 10;
 

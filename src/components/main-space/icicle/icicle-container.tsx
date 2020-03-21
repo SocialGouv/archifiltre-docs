@@ -7,12 +7,12 @@ import {
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
   getMaxDepth,
-  ROOT_FF_ID
+  ROOT_FF_ID,
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "../../../reducers/tags/tags-selectors";
 import {
   getWorkspaceMetadataFromStore,
-  useWorkspaceMetadata
+  useWorkspaceMetadata,
 } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { IciclesSortMethod } from "../../../reducers/workspace-metadata/workspace-metadata-types";
 import { useFillColor } from "../../../util/color-util";
@@ -40,13 +40,13 @@ export default function IcicleApiToProps({ api }) {
   const getFfByFfId = useCallback(
     (ffId: string) => ({
       ...filesAndFoldersMetadata[ffId],
-      ...filesAndFolders[ffId]
+      ...filesAndFolders[ffId],
     }),
     [filesAndFoldersMetadata, filesAndFolders]
   );
 
   const maxDepth = useMemo(() => getMaxDepth(filesAndFolders), [
-    filesAndFolders
+    filesAndFolders,
   ]);
 
   const lock = useCallback(
@@ -67,7 +67,7 @@ export default function IcicleApiToProps({ api }) {
         iciclesSortMethod === IciclesSortMethod.SORT_BY_DATE
           ? metadata.sortByDateIndex
           : metadata.sortBySizeIndex;
-      return orderArray.map(childIndex => children[childIndex]);
+      return orderArray.map((childIndex) => children[childIndex]);
     },
     [filesAndFolders, filesAndFoldersMetadata, iciclesSortMethod]
   );

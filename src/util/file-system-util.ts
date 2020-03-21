@@ -9,7 +9,7 @@ export const promptUserForSave = async (
   filename: string
 ): Promise<string | undefined> => {
   const { filePath } = await remote.dialog.showSaveDialog({
-    defaultPath: filename
+    defaultPath: filename,
   });
   return filePath;
 };

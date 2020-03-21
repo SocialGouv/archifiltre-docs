@@ -14,18 +14,18 @@ const roundedAreaStyle = {
   borderRadius: "32px",
   overflow: "hidden",
   marginTop: roundedAreaMarginSize,
-  marginBottom: roundedAreaMarginSize
+  marginBottom: roundedAreaMarginSize,
 };
 
 const styles = {
   [NORMAL]: {
     ...roundedAreaStyle,
-    backgroundColor: toRgba([121, 121, 121, 0.4])
+    backgroundColor: toRgba([121, 121, 121, 0.4]),
   },
   [LIGHT]: {
     ...roundedAreaStyle,
-    backgroundColor: toRgba([121, 121, 121, 0.15])
-  }
+    backgroundColor: toRgba([121, 121, 121, 0.15]),
+  },
 };
 
 /**

@@ -19,7 +19,7 @@ const TagBadgeContent = styled.button`
 
 export enum TagBadgeColor {
   TAG = "rgb(10, 50, 100)",
-  DELETE = "rgb(250,0,0)"
+  DELETE = "rgb(250,0,0)",
 }
 
 interface TagBadgeProps {
@@ -32,7 +32,7 @@ const TagBadge: FC<TagBadgeProps> = ({
   children,
   color = TagBadgeColor.TAG,
   onClick = empty,
-  active = true
+  active = true,
 }) => (
   <TagBadgeContainer>
     <TagBadgeContent color={color} active={active} onClick={onClick}>

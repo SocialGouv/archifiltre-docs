@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { FC } from "react";
 import {
   AliasMap,
-  CommentsMap
+  CommentsMap,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { tagMapToArray } from "../../../reducers/tags/tags-selectors";
 import { TagMap } from "../../../reducers/tags/tags-types";
@@ -36,7 +36,7 @@ const isHighlighted = (ffId, tags, higlightedTagId) => {
   return tags[higlightedTagId]?.ffIds.includes(ffId);
 };
 
-const removeEmptyValues = elementMap => _.pickBy(elementMap);
+const removeEmptyValues = (elementMap) => _.pickBy(elementMap);
 
 const IcicleEnrichments: FC<IcicleEnrichmentsProps> = ({
   aliases,
@@ -47,9 +47,9 @@ const IcicleEnrichments: FC<IcicleEnrichmentsProps> = ({
   elementsToDelete,
   onClick,
   onDoubleClick,
-  onMouseOver
+  onMouseOver,
 }) => {
-  const isElementDisplayed = ffId => dims[ffId] !== undefined;
+  const isElementDisplayed = (ffId) => dims[ffId] !== undefined;
   const tagArray = tagMapToArray(tags);
   const taggedFiles = _(tagArray)
     .flatMap(({ ffIds }) => ffIds)
@@ -69,7 +69,7 @@ const IcicleEnrichments: FC<IcicleEnrichmentsProps> = ({
 
   return (
     <g>
-      {enrichedElements.map(ffId => (
+      {enrichedElements.map((ffId) => (
         <IcicleEnrichment
           key={`${ffId}-enrichment}`}
           ffId={ffId}

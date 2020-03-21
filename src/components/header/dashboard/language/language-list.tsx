@@ -10,12 +10,12 @@ interface LanguageListProps {
 const availableLanguages = [
   {
     id: "fr",
-    name: "Français"
+    name: "Français",
   },
   {
     id: "en",
-    name: "English"
-  }
+    name: "English",
+  },
 ];
 
 const LanguageCell = styled.div`
@@ -25,7 +25,7 @@ const LanguageCell = styled.div`
 
 const LanguageList: FC<LanguageListProps> = ({
   setLanguage,
-  excludeLanguage
+  excludeLanguage,
 }) => {
   return (
     <div className="grid-x">

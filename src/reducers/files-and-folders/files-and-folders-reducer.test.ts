@@ -4,7 +4,7 @@ import {
   markAsToDelete,
   setFilesAndFoldersAliases,
   setFilesAndFoldersHashes,
-  unmarkAsToDelete
+  unmarkAsToDelete,
 } from "./files-and-folders-actions";
 import { filesAndFoldersReducer } from "./files-and-folders-reducer";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
@@ -15,7 +15,7 @@ const baseState: FilesAndFoldersState = {
   comments: {},
   elementsToDelete: [],
   filesAndFolders: {},
-  hashes: {}
+  hashes: {},
 };
 
 describe("files-and-folders-reducer", () => {
@@ -29,8 +29,8 @@ describe("files-and-folders-reducer", () => {
           file_size: 10,
           hash: null,
           id: firstId,
-          name: "filename"
-        }
+          name: "filename",
+        },
       };
 
       expect(
@@ -40,7 +40,7 @@ describe("files-and-folders-reducer", () => {
         )
       ).toEqual({
         ...baseState,
-        filesAndFolders
+        filesAndFolders,
       });
     });
   });
@@ -53,22 +53,22 @@ describe("files-and-folders-reducer", () => {
       const unchangedAlias = "unchanged-alias";
 
       const newAliases = {
-        [changedId]: newAlias
+        [changedId]: newAlias,
       };
 
       const initialState: FilesAndFoldersState = {
         ...baseState,
         aliases: {
-          [unchangedId]: unchangedAlias
+          [unchangedId]: unchangedAlias,
         },
         filesAndFolders: {
           [changedId]: createFilesAndFolders({
-            id: changedId
+            id: changedId,
           }),
           [unchangedId]: createFilesAndFolders({
-            id: unchangedId
-          })
-        }
+            id: unchangedId,
+          }),
+        },
       };
 
       const nextState = filesAndFoldersReducer(
@@ -80,16 +80,16 @@ describe("files-and-folders-reducer", () => {
         ...baseState,
         aliases: {
           [changedId]: newAlias,
-          [unchangedId]: unchangedAlias
+          [unchangedId]: unchangedAlias,
         },
         filesAndFolders: {
           [changedId]: createFilesAndFolders({
-            id: changedId
+            id: changedId,
           }),
           [unchangedId]: createFilesAndFolders({
-            id: unchangedId
-          })
-        }
+            id: unchangedId,
+          }),
+        },
       });
     });
   });
@@ -102,22 +102,22 @@ describe("files-and-folders-reducer", () => {
       const unchangedHash = "unchanged-hash";
 
       const newHashes = {
-        [changedId]: newHash
+        [changedId]: newHash,
       };
 
       const initialState: FilesAndFoldersState = {
         ...baseState,
         filesAndFolders: {
           [changedId]: createFilesAndFolders({
-            id: changedId
+            id: changedId,
           }),
           [unchangedId]: createFilesAndFolders({
-            id: unchangedId
-          })
+            id: unchangedId,
+          }),
         },
         hashes: {
-          [unchangedId]: unchangedHash
-        }
+          [unchangedId]: unchangedHash,
+        },
       };
 
       const nextState = filesAndFoldersReducer(
@@ -129,16 +129,16 @@ describe("files-and-folders-reducer", () => {
         ...baseState,
         filesAndFolders: {
           [changedId]: createFilesAndFolders({
-            id: changedId
+            id: changedId,
           }),
           [unchangedId]: createFilesAndFolders({
-            id: unchangedId
-          })
+            id: unchangedId,
+          }),
         },
         hashes: {
           [changedId]: newHash,
-          [unchangedId]: unchangedHash
-        }
+          [unchangedId]: unchangedHash,
+        },
       });
     });
   });
@@ -151,22 +151,22 @@ describe("files-and-folders-reducer", () => {
       const unchangedComment = "unchanged-comment";
 
       const newComments = {
-        [changedId]: newComment
+        [changedId]: newComment,
       };
 
       const initialState: FilesAndFoldersState = {
         ...baseState,
         comments: {
-          [unchangedId]: unchangedComment
+          [unchangedId]: unchangedComment,
         },
         filesAndFolders: {
           [changedId]: createFilesAndFolders({
-            id: changedId
+            id: changedId,
           }),
           [unchangedId]: createFilesAndFolders({
-            id: unchangedId
-          })
-        }
+            id: unchangedId,
+          }),
+        },
       };
 
       const nextState = filesAndFoldersReducer(
@@ -178,16 +178,16 @@ describe("files-and-folders-reducer", () => {
         ...baseState,
         comments: {
           [changedId]: newComment,
-          [unchangedId]: unchangedComment
+          [unchangedId]: unchangedComment,
         },
         filesAndFolders: {
           [changedId]: createFilesAndFolders({
-            id: changedId
+            id: changedId,
           }),
           [unchangedId]: createFilesAndFolders({
-            id: unchangedId
-          })
-        }
+            id: unchangedId,
+          }),
+        },
       });
     });
   });
@@ -199,7 +199,7 @@ describe("files-and-folders-reducer", () => {
 
       expect(nextState).toEqual({
         ...baseState,
-        elementsToDelete: [ffId]
+        elementsToDelete: [ffId],
       });
     });
 
@@ -207,7 +207,7 @@ describe("files-and-folders-reducer", () => {
       const ffId = "test-ffid";
       const initialState = {
         ...baseState,
-        elementsToDelete: [ffId]
+        elementsToDelete: [ffId],
       };
       const nextState = filesAndFoldersReducer(
         initialState,
@@ -224,7 +224,7 @@ describe("files-and-folders-reducer", () => {
       const undeletedFfId = "deleted-ffid";
       const initialState = {
         ...baseState,
-        elementsToDelete: [ffId, undeletedFfId]
+        elementsToDelete: [ffId, undeletedFfId],
       };
       const nextState = filesAndFoldersReducer(
         initialState,
@@ -233,7 +233,7 @@ describe("files-and-folders-reducer", () => {
 
       expect(nextState).toEqual({
         ...baseState,
-        elementsToDelete: [ffId]
+        elementsToDelete: [ffId],
       });
     });
   });

@@ -26,7 +26,7 @@ const saveActionsFromStack = async () => {
   const actionsToSave = actionStack.splice(0, actionStack.length);
   saving = true;
   const actionsToSaveText = actionsToSave
-    .map(action => JSON.stringify(action))
+    .map((action) => JSON.stringify(action))
     .join("\n")
     .concat("\n");
   try {
@@ -42,14 +42,14 @@ const saveActionsFromStack = async () => {
  * Replays to store all the actions present in the previous session file.
  * @param api
  */
-export const replayActionsThunk = (api: any) => async dispatch => {
+export const replayActionsThunk = (api: any) => async (dispatch) => {
   try {
     const previousActions = await fs.readFile(previousSessionFilePath, "utf8");
     const previousActionsArray = previousActions
       .trim()
       .split("\n")
-      .map(actionString => JSON.parse(actionString));
-    previousActionsArray.forEach(action => dispatch(action));
+      .map((actionString) => JSON.parse(actionString));
+    previousActionsArray.forEach((action) => dispatch(action));
     api.loading_state.finishedToLoadFiles();
   } catch (err) {
     reportError(err.message);
@@ -95,7 +95,7 @@ export const usePreviousSession = () => {
 /**
  * Middleware to persist into a file all the dispatched actions
  */
-export const persistActions: Middleware = () => next => action => {
+export const persistActions: Middleware = () => (next) => (action) => {
   saveAction(action);
   return next(action);
 };

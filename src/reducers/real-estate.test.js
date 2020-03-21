@@ -7,13 +7,13 @@ describe("real-estate", () => {
     property_name: "state1",
     initialState: () => 0,
     reader: {
-      isZero: () => s => s === 0,
-      print: blabla => s => blabla + " : " + s
+      isZero: () => (s) => s === 0,
+      print: (blabla) => (s) => blabla + " : " + s,
     },
     writer: {
-      add: a => s => s + a,
-      sub: a => s => s - a
-    }
+      add: (a) => (s) => s + a,
+      sub: (a) => (s) => s - a,
+    },
   });
 
   const state2 = M.create({
@@ -22,31 +22,31 @@ describe("real-estate", () => {
       return { baba: "baba" };
     },
     reader: {
-      read: () => s => s.baba
+      read: () => (s) => s.baba,
     },
     writer: {
-      write: a => s => {
+      write: (a) => (s) => {
         s = Object.assign({}, s);
         s.baba = a;
         return s;
-      }
-    }
+      },
+    },
   });
 
   const higherOrder = M.createHigherOrder({
-    initialState: s => {
+    initialState: (s) => {
       return { origin: s, current: s };
     },
-    get: s => s.current,
+    get: (s) => s.current,
     set: (a, s) => ObjectUtil.compose({ current: a }, s),
     reader: {
-      getCurrent: () => s => s.current
+      getCurrent: () => (s) => s.current,
     },
     writer: {
-      goBackToOrigin: () => s => {
+      goBackToOrigin: () => (s) => {
         return { origin: s.origin, current: s.origin };
-      }
-    }
+      },
+    },
   });
 
   it("basic test", () => {
@@ -57,8 +57,8 @@ describe("real-estate", () => {
     expect(store).toEqual({
       state1: 0,
       state2: {
-        baba: "baba"
-      }
+        baba: "baba",
+      },
     });
 
     store = api.state2.write("ahah")(store);
@@ -68,8 +68,8 @@ describe("real-estate", () => {
     expect(store).toEqual({
       state1: 4,
       state2: {
-        baba: "ahah"
-      }
+        baba: "ahah",
+      },
     });
 
     expect(api.state2.read()(store)).toBe("ahah");
@@ -89,16 +89,16 @@ describe("real-estate", () => {
         origin: {
           state1: 0,
           state2: {
-            baba: "baba"
-          }
+            baba: "baba",
+          },
         },
         current: {
           state1: 0,
           state2: {
-            baba: "baba"
-          }
-        }
-      }
+            baba: "baba",
+          },
+        },
+      },
     });
 
     store = api.state2.write("ahah")(store);
@@ -110,16 +110,16 @@ describe("real-estate", () => {
         origin: {
           state1: 0,
           state2: {
-            baba: "baba"
-          }
+            baba: "baba",
+          },
         },
         current: {
           state1: 4,
           state2: {
-            baba: "ahah"
-          }
-        }
-      }
+            baba: "ahah",
+          },
+        },
+      },
     });
 
     expect(api.state2.read()(store)).toBe("ahah");
@@ -129,8 +129,8 @@ describe("real-estate", () => {
     expect(api.ho.getCurrent()(store)).toEqual({
       state1: 4,
       state2: {
-        baba: "ahah"
-      }
+        baba: "ahah",
+      },
     });
 
     store = api.ho.goBackToOrigin()(store);
@@ -138,8 +138,8 @@ describe("real-estate", () => {
     expect(api.ho.getCurrent()(store)).toEqual({
       state1: 0,
       state2: {
-        baba: "baba"
-      }
+        baba: "baba",
+      },
     });
 
     expect(store).toEqual({
@@ -147,16 +147,16 @@ describe("real-estate", () => {
         origin: {
           state1: 0,
           state2: {
-            baba: "baba"
-          }
+            baba: "baba",
+          },
         },
         current: {
           state1: 0,
           state2: {
-            baba: "baba"
-          }
-        }
-      }
+            baba: "baba",
+          },
+        },
+      },
     });
   });
 
@@ -166,14 +166,14 @@ describe("real-estate", () => {
       property_name: "state",
       initialState: () => 0,
       reader: {
-        isZero: () => s => {
+        isZero: () => (s) => {
           sideeffect++;
           return s === 0;
-        }
+        },
       },
       writer: {
-        add: a => s => s + a
-      }
+        add: (a) => (s) => s + a,
+      },
     });
 
     const { initialState, api } = M.compile(state);

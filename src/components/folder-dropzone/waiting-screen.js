@@ -45,11 +45,11 @@ const Traverse = ({ count, complete, totalCount }) => (
  * @param {Object} translationText - A string of the translation to find
  * @returns {React.Component}
  */
-const makeLoadingComponent = translationText => ({
+const makeLoadingComponent = (translationText) => ({
   count,
   totalCount,
   complete,
-  waiting
+  waiting,
 }) => {
   const { t } = useTranslation();
   let displayedCount;
@@ -76,26 +76,26 @@ const statusMap = {
   traverse: 0,
   make: 1,
   derivateFF: 2,
-  divedFF: 3
+  divedFF: 3,
 };
 
 const statusComponents = [
   {
     index: statusMap.traverse,
-    Component: Traverse
+    Component: Traverse,
   },
   {
     index: statusMap.make,
-    Component: Make
+    Component: Make,
   },
   {
     index: statusMap.derivateFF,
-    Component: DerivateFF
+    Component: DerivateFF,
   },
   {
     index: statusMap.divedFF,
-    Component: DivedFF
-  }
+    Component: DivedFF,
+  },
 ];
 
 const LoadingMessages = ({ status, count, totalCount }) => {
@@ -142,8 +142,8 @@ const Presentational = ({ status, count, totalCount, loadedPath }) => (
 const WaitingScreen = ({
   loadedPath,
   api: {
-    loading_state: { status, count, totalCount }
-  }
+    loading_state: { status, count, totalCount },
+  },
 }) => (
   <Presentational
     status={status()}

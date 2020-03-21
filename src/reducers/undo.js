@@ -5,32 +5,32 @@ import store from "./store.ts";
 import {
   commitAction,
   redoAction,
-  undoAction
+  undoAction,
 } from "./enhancers/undoable/undoable-actions";
 
 const length_limit = 1000;
 
-const initialState = s => {
+const initialState = (s) => {
   return {
     content: s,
     past: [],
     present: s,
-    future: []
+    future: [],
   };
 };
 
-const get = s => s.content;
+const get = (s) => s.content;
 const set = (a, s) => ObjectUtil.compose({ content: a }, s);
 
-const hasAPast = () => state => state.past.length !== 0;
-const hasAFuture = () => state => state.future.length !== 0;
+const hasAPast = () => (state) => state.past.length !== 0;
+const hasAFuture = () => (state) => state.future.length !== 0;
 
 const reader = {
   hasAPast,
-  hasAFuture
+  hasAFuture,
 };
 
-const commit = () => state => {
+const commit = () => (state) => {
   state = Object.assign({}, state);
   store.dispatch(commitAction());
   state.past = state.past.concat([state.present]);
@@ -42,7 +42,7 @@ const commit = () => state => {
   return state;
 };
 
-const undo = () => state => {
+const undo = () => (state) => {
   state = Object.assign({}, state);
   store.dispatch(undoAction());
   if (hasAPast()(state)) {
@@ -54,7 +54,7 @@ const undo = () => state => {
   return state;
 };
 
-const redo = () => state => {
+const redo = () => (state) => {
   state = Object.assign({}, state);
   store.dispatch(redoAction());
   if (hasAFuture()(state)) {
@@ -69,7 +69,7 @@ const redo = () => state => {
 const writer = {
   commit,
   undo,
-  redo
+  redo,
 };
 
 export default RealEstate.createHigherOrder({
@@ -77,5 +77,5 @@ export default RealEstate.createHigherOrder({
   get,
   set,
   reader,
-  writer
+  writer,
 });

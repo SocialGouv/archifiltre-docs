@@ -3,7 +3,7 @@ import {
   countItems,
   makeEmptyArray,
   medianOnSortedArray,
-  replaceValue
+  replaceValue,
 } from "./array-util";
 
 describe("array-util", () => {
@@ -31,7 +31,7 @@ describe("array-util", () => {
         DEFAULT_VALUE,
         DEFAULT_VALUE,
         DEFAULT_VALUE,
-        DEFAULT_VALUE
+        DEFAULT_VALUE,
       ]);
     });
 
@@ -89,7 +89,7 @@ describe("array-util", () => {
   });
 
   describe("countItems", () => {
-    const predicate = value => value;
+    const predicate = (value) => value;
 
     describe("with an empty array", () => {
       it("should return 0", () => {

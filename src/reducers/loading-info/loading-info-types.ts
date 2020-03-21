@@ -10,12 +10,12 @@ export const DISMISS_ALL_COMPLETE = "LOADING_INFO/DISMISS_ALL_COMPLETE";
 
 export enum LoadingInfoTypes {
   HASH_COMPUTING = "hash-computing",
-  EXPORT = "export"
+  EXPORT = "export",
 }
 
 export enum ArchifiltreErrorType {
   LOADING_FILE_SYSTEM = "loadingFromFileSystem",
-  COMPUTING_HASHES = "computingHashes"
+  COMPUTING_HASHES = "computingHashes",
 }
 
 export interface ArchifiltreError {

@@ -9,7 +9,7 @@ import {
   MARK_AS_TO_DELETE,
   SET_FILES_AND_FOLDERS_ALIAS,
   SET_FILES_AND_FOLDERS_HASHES,
-  UNMARK_AS_TO_DELETE
+  UNMARK_AS_TO_DELETE,
 } from "./files-and-folders-types";
 
 /**
@@ -20,7 +20,7 @@ export const initializeFilesAndFolders = (
   filesAndFolders: FilesAndFoldersMap
 ): FilesAndFoldersActionTypes => ({
   filesAndFolders,
-  type: INITIALIZE_FILES_AND_FOLDERS
+  type: INITIALIZE_FILES_AND_FOLDERS,
 });
 
 /**
@@ -31,7 +31,7 @@ export const setFilesAndFoldersAliases = (
   aliases: AliasMap
 ): FilesAndFoldersActionTypes => ({
   aliases,
-  type: SET_FILES_AND_FOLDERS_ALIAS
+  type: SET_FILES_AND_FOLDERS_ALIAS,
 });
 
 /**
@@ -42,7 +42,7 @@ export const setFilesAndFoldersHashes = (
   hashes: HashesMap
 ): FilesAndFoldersActionTypes => ({
   hashes,
-  type: SET_FILES_AND_FOLDERS_HASHES
+  type: SET_FILES_AND_FOLDERS_HASHES,
 });
 
 /**
@@ -53,7 +53,7 @@ export const addCommentsOnFilesAndFolders = (
   comments: CommentsMap
 ): FilesAndFoldersActionTypes => ({
   comments,
-  type: ADD_COMMENTS_ON_FILES_AND_FOLDERS
+  type: ADD_COMMENTS_ON_FILES_AND_FOLDERS,
 });
 
 /**
@@ -64,7 +64,7 @@ export const markAsToDelete = (
   filesAndFoldersId: string
 ): FilesAndFoldersActionTypes => ({
   filesAndFoldersId,
-  type: MARK_AS_TO_DELETE
+  type: MARK_AS_TO_DELETE,
 });
 
 /**
@@ -75,5 +75,5 @@ export const unmarkAsToDelete = (
   filesAndFoldersId: string
 ): FilesAndFoldersActionTypes => ({
   filesAndFoldersId,
-  type: UNMARK_AS_TO_DELETE
+  type: UNMARK_AS_TO_DELETE,
 });

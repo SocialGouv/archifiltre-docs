@@ -6,7 +6,7 @@ export enum MessageTypes {
   FATAL = "fatal",
   INITIALIZE = "initialize",
   LOG = "log",
-  RESULT = "result"
+  RESULT = "result",
 }
 
 interface Message {

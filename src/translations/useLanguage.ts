@@ -10,7 +10,7 @@ export const useLanguage = (): [string, (language: string) => void] => {
   const [innerLanguage, setInnerLanguage] = useState(translations.language);
 
   useEffect(() => {
-    const onLanguageChanged = lang => {
+    const onLanguageChanged = (lang) => {
       setInnerLanguage(lang);
     };
     translations.on("languageChanged", onLanguageChanged);

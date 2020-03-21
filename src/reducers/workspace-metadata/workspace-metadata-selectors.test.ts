@@ -5,12 +5,12 @@ import { IciclesSortMethod } from "./workspace-metadata-types";
 const workspaceMetadata = {
   iciclesSortMethod: IciclesSortMethod.SORT_BY_DATE,
   originalPath: "original-path",
-  sessionName: "session-name"
+  sessionName: "session-name",
 };
 
 const store = {
   ...createEmptyStore(),
-  workspaceMetadata: wrapStoreWithUndoable(workspaceMetadata)
+  workspaceMetadata: wrapStoreWithUndoable(workspaceMetadata),
 };
 
 describe("workspace-metadata-selectors", () => {

@@ -9,7 +9,7 @@ import styled from "styled-components";
  * Opens the wiki in a browser
  * @param event
  */
-const onClick = event => {
+const onClick = (event) => {
   event.preventDefault();
   shell.openExternal(
     "https://github.com/SocialGouv/archifiltre/wiki/Wiki-Archifiltre"

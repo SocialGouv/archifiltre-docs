@@ -2,11 +2,11 @@ import {
   CLOSE_MODAL,
   ModalAction,
   ModalState,
-  OPEN_MODAL
+  OPEN_MODAL,
 } from "./modal-types";
 
 export const initialState: ModalState = {
-  openModal: null
+  openModal: null,
 };
 
 const modalReducer = (
@@ -16,11 +16,11 @@ const modalReducer = (
   switch (action.type) {
     case OPEN_MODAL:
       return {
-        openModal: action.modal
+        openModal: action.modal,
       };
     case CLOSE_MODAL:
       return {
-        openModal: null
+        openModal: null,
       };
   }
 

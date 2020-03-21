@@ -8,7 +8,7 @@ import {
   countDuplicatesPercentForFolders,
   getBiggestDuplicatedFolders,
   getMostDuplicatedFiles,
-  hasDuplicate
+  hasDuplicate,
 } from "./duplicates-util";
 
 const folder1Id = "folder-1-id";
@@ -27,39 +27,39 @@ const file1Size = 1000;
 const file5Size = 2500;
 const file1 = createFilesAndFolders({
   file_size: file1Size,
-  id: file1Id
+  id: file1Id,
 });
 const file2 = createFilesAndFolders({
   file_size: 2000,
-  id: file2Id
+  id: file2Id,
 });
 const file3 = createFilesAndFolders({
   file_size: file1Size,
-  id: file3Id
+  id: file3Id,
 });
 const file4 = createFilesAndFolders({
   file_size: file1Size,
-  id: file4Id
+  id: file4Id,
 });
 
 const file5 = createFilesAndFolders({
   file_size: file5Size,
-  id: file5Id
+  id: file5Id,
 });
 
 const file6 = createFilesAndFolders({
   file_size: file5Size,
-  id: file6Id
+  id: file6Id,
 });
 
 const folder1 = createFilesAndFolders({
   children: [file5Id, file6Id],
-  id: folder1Id
+  id: folder1Id,
 });
 
 const folder2 = createFilesAndFolders({
   children: [file5Id, file6Id],
-  id: folder2Id
+  id: folder2Id,
 });
 
 const file1WithHash = { ...file1, hash: hash1 };
@@ -76,7 +76,7 @@ const filesMap = {
   [file5Id]: file5,
   [file6Id]: file6,
   [folder1Id]: folder1,
-  [folder2Id]: folder2
+  [folder2Id]: folder2,
 };
 
 const metadataMap = {
@@ -85,57 +85,57 @@ const metadataMap = {
     childrenTotalSize: 10000,
     maxLastModified: 1570615679168,
     medianLastModified: 4000,
-    minLastModified: 1000
+    minLastModified: 1000,
   }),
   [file2Id]: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 1000,
     maxLastModified: 10000,
     medianLastModified: 4000,
-    minLastModified: 1000
+    minLastModified: 1000,
   }),
   [file3Id]: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 1000,
     maxLastModified: 10000,
     medianLastModified: 4000,
-    minLastModified: 1000
+    minLastModified: 1000,
   }),
   [file4Id]: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 10000,
     maxLastModified: 1570615679168,
     medianLastModified: 4000,
-    minLastModified: 1000
+    minLastModified: 1000,
   }),
   [file5Id]: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 1000,
     maxLastModified: 10000,
     medianLastModified: 4000,
-    minLastModified: 1000
+    minLastModified: 1000,
   }),
   [file6Id]: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 1000,
     maxLastModified: 10000,
     medianLastModified: 4000,
-    minLastModified: 1000
+    minLastModified: 1000,
   }),
   [folder1Id]: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 1000,
     maxLastModified: 10000,
     medianLastModified: 4000,
-    minLastModified: 1000
+    minLastModified: 1000,
   }),
   [folder2Id]: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 1000,
     maxLastModified: 10000,
     medianLastModified: 4000,
-    minLastModified: 1000
-  })
+    minLastModified: 1000,
+  }),
 };
 
 const hashesMap = {
@@ -146,7 +146,7 @@ const hashesMap = {
   [file5Id]: hash3,
   [file6Id]: hash3,
   [folder1Id]: folderHash,
-  [folder2Id]: folderHash
+  [folder2Id]: folderHash,
 };
 
 describe("duplicates-util", () => {
@@ -190,13 +190,13 @@ describe("duplicates-util", () => {
     it("should only return the duplicated items if too many are required", () => {
       expect(getMostDuplicatedFiles(3)(filesMap, hashesMap)).toEqual([
         [file1WithHash, file3WithHash, file4WithHash],
-        [file5WithHash, file6WithHash]
+        [file5WithHash, file6WithHash],
       ]);
     });
 
     it("should not return too many duplicated items", () => {
       expect(getMostDuplicatedFiles(1)(filesMap, hashesMap)).toEqual([
-        [file1WithHash, file3WithHash, file4WithHash]
+        [file1WithHash, file3WithHash, file4WithHash],
       ]);
     });
   });
@@ -224,7 +224,7 @@ describe("duplicates-util", () => {
         name: "base-name",
         nbChildrenFiles: 1,
         sortByDateIndex: [0],
-        sortBySizeIndex: [0]
+        sortBySizeIndex: [0],
       });
     });
 
@@ -247,8 +247,8 @@ describe("duplicates-util", () => {
           name: "base-name",
           nbChildrenFiles: 1,
           sortByDateIndex: [0],
-          sortBySizeIndex: [0]
-        }
+          sortBySizeIndex: [0],
+        },
       ]);
     });
   });

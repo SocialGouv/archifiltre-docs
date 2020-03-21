@@ -6,18 +6,18 @@ import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
   addCommentsOnFilesAndFolders,
   setFilesAndFoldersAliases,
-  setFilesAndFoldersHashes
+  setFilesAndFoldersHashes,
 } from "./files-and-folders-actions";
 import { initialState as filesAndFoldersInitialState } from "./files-and-folders-reducer";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
 import {
   updateAliasThunk,
   updateCommentThunk,
-  updateFilesAndFoldersHashes
+  updateFilesAndFoldersHashes,
 } from "./files-and-folders-thunks";
 
 jest.mock("../../logging/tracker", () => ({
-  addTracker: jest.fn()
+  addTracker: jest.fn(),
 }));
 
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
@@ -35,18 +35,18 @@ const testState = {
     ...filesAndFoldersInitialState,
     filesAndFolders: {
       [updateId1]: createFilesAndFolders({
-        id: updateId1
+        id: updateId1,
       }),
       [updateId2]: createFilesAndFolders({
         hash: "oldHash2",
-        id: updateId2
+        id: updateId2,
       }),
       [unupdatedId]: createFilesAndFolders({
         hash: "unchangedHash",
-        id: unupdatedId
-      })
-    }
-  })
+        id: unupdatedId,
+      }),
+    },
+  }),
 };
 
 describe("file-and-folders-thunks.test.ts", () => {
@@ -54,7 +54,7 @@ describe("file-and-folders-thunks.test.ts", () => {
     it("should dispatch an update action for each ff", () => {
       const hashes = {
         [updateId1]: newHash1,
-        [updateId2]: newHash2
+        [updateId2]: newHash2,
       };
 
       const store = mockStore(testState);
@@ -75,7 +75,7 @@ describe("file-and-folders-thunks.test.ts", () => {
       store.dispatch(updateAliasThunk(ffId, alias));
 
       expect(store.getActions()).toEqual([
-        setFilesAndFoldersAliases({ [ffId]: alias })
+        setFilesAndFoldersAliases({ [ffId]: alias }),
       ]);
     });
   });
@@ -88,7 +88,7 @@ describe("file-and-folders-thunks.test.ts", () => {
       store.dispatch(updateCommentThunk(ffId, comment));
 
       expect(store.getActions()).toEqual([
-        addCommentsOnFilesAndFolders({ [ffId]: comment })
+        addCommentsOnFilesAndFolders({ [ffId]: comment }),
       ]);
     });
   });

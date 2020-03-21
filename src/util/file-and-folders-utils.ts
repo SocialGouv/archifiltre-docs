@@ -10,8 +10,8 @@ import { countItems } from "./array-util";
  * @param folders - The folder list
  * @returns {function(*=): *}
  */
-export const countFoldersWithMoreThanNChildren = nbChildren => folders =>
-  countItems(folder => folder.children.length > nbChildren)(folders);
+export const countFoldersWithMoreThanNChildren = (nbChildren) => (folders) =>
+  countItems((folder) => folder.children.length > nbChildren)(folders);
 
 /**
  * Counts folder that are deeper than maxDepth
@@ -19,8 +19,8 @@ export const countFoldersWithMoreThanNChildren = nbChildren => folders =>
  * @param folders - The folder list
  * @returns {function(*=): *}
  */
-export const countDeeperFolders = maxDepth => folders =>
-  countItems(folder => folder.depth > maxDepth)(folders);
+export const countDeeperFolders = (maxDepth) => (folders) =>
+  countItems((folder) => folder.depth > maxDepth)(folders);
 
 /**
  * Counts the number of path longer than maxLength
@@ -28,15 +28,15 @@ export const countDeeperFolders = maxDepth => folders =>
  * @param paths - The list of paths
  * @returns {function(*=): *}
  */
-export const countLongerPath = maxLength => paths =>
-  countItems(path => path.length > maxLength)(paths);
+export const countLongerPath = (maxLength) => (paths) =>
+  countItems((path) => path.length > maxLength)(paths);
 
 /**
  * Sorts folders by number of childrens in a decreasing order
  * @param folders
  * @returns {Array}
  */
-export const sortFoldersByChildrenCount = folders =>
+export const sortFoldersByChildrenCount = (folders) =>
   folders.sort(
     (folder1, folder2) => folder2.children.length - folder1.children.length
   );
@@ -46,7 +46,7 @@ export const sortFoldersByChildrenCount = folders =>
  * @param folders
  * @returns {Array}
  */
-export const sortFoldersByDepth = folders =>
+export const sortFoldersByDepth = (folders) =>
   folders.sort((folder1, folder2) => folder2.depth - folder1.depth);
 
 /**
@@ -54,10 +54,10 @@ export const sortFoldersByDepth = folders =>
  * @param fileAndFoldersMap - A map of filesAndFolders
  * @returns {Array}
  */
-export const findAllFoldersWithNoSubfolder = fileAndFoldersMap => {
+export const findAllFoldersWithNoSubfolder = (fileAndFoldersMap) => {
   const baseNodeId = "";
 
-  const findFoldersWithNoSubfolderRec = nodeId => {
+  const findFoldersWithNoSubfolderRec = (nodeId) => {
     const currentNode = fileAndFoldersMap[nodeId];
     if (!currentNode) {
       throw new Error(`${nodeId} is undefined`);
@@ -87,12 +87,12 @@ export const findAllFoldersWithNoSubfolder = fileAndFoldersMap => {
  * @param filesAndFolders - An object with id (the path) as a key and the fileAndFolders data as a value
  * @returns {{Object}[]}
  */
-export const filesAndFoldersMapToArray = filesAndFolders =>
+export const filesAndFoldersMapToArray = (filesAndFolders) =>
   Object.keys(filesAndFolders)
-    .filter(id => id !== "")
-    .map(key => ({
+    .filter((id) => id !== "")
+    .map((key) => ({
       ...filesAndFolders[key],
-      id: key
+      id: key,
     }));
 
 /**
@@ -100,7 +100,7 @@ export const filesAndFoldersMapToArray = filesAndFolders =>
  * @param filesAndFoldersArray
  * @returns {*}
  */
-export const getFiles = filesAndFoldersArray =>
+export const getFiles = (filesAndFoldersArray) =>
   filesAndFoldersArray.filter(({ children }) => children.length === 0);
 
 /**
@@ -108,7 +108,7 @@ export const getFiles = filesAndFoldersArray =>
  * @param filesAndFolders
  * @returns {*}
  */
-export const getFolders = filesAndFolders =>
+export const getFolders = (filesAndFolders) =>
   filesAndFolders.filter(({ children }) => children.length > 0);
 
 /**
@@ -131,14 +131,14 @@ const recComputeFolderHash = (filesAndFolders, hashes, id, hook) => {
   }
 
   const childrenResults = children
-    .map(childId =>
+    .map((childId) =>
       recComputeFolderHash(filesAndFolders, hashes, childId, hook)
     )
     .reduce((acc, folderHashes) => ({ ...acc, ...folderHashes }));
 
   const currentFolderHash = md5(
     children
-      .map(childId => childrenResults[childId])
+      .map((childId) => childrenResults[childId])
       .sort()
       .join("")
   );
@@ -190,7 +190,7 @@ export const getDisplayName = (
  * Returns the mime type of the filesAndFolders parameter. Indicates if the format is unknown or if the element is a folder
  * @param filesAndFolders
  */
-export const getType = filesAndFolders => {
+export const getType = (filesAndFolders) => {
   if (!isFile(filesAndFolders)) {
     return translations.t("common.folder");
   }
@@ -208,10 +208,10 @@ export const getType = filesAndFolders => {
 export const getAllChildren = (filesAndFoldersMap, filesAndFoldersId) => {
   const allChildren: string[] = [];
 
-  const getAllChildrenRec = currentId => {
+  const getAllChildrenRec = (currentId) => {
     const { children } = filesAndFoldersMap[currentId];
     allChildren.push(currentId);
-    children.forEach(childId => getAllChildrenRec(childId));
+    children.forEach((childId) => getAllChildrenRec(childId));
   };
 
   getAllChildrenRec(filesAndFoldersId);

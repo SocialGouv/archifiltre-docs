@@ -15,7 +15,7 @@ const buttonStyle = {
   padding: "0.3em 10%",
   fontSize: "1em",
   fontWeight: "bold",
-  borderRadius: "0.4em"
+  borderRadius: "0.4em",
 };
 
 const ButtonWrapper = styled.div`
@@ -95,8 +95,8 @@ const Presentational = ({ toggleChangeWidthBySize, widthBySize }) => {
 
 const ToggleWidthBySize = ({
   api: {
-    icicle_state: { widthBySize, toggleChangeWidthBySize }
-  }
+    icicle_state: { widthBySize, toggleChangeWidthBySize },
+  },
 }) => (
   <Presentational
     widthBySize={widthBySize()}

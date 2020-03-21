@@ -7,7 +7,7 @@ import { createFilesAndFolders } from "../../reducers/files-and-folders/files-an
 import { StoreState } from "../../reducers/store";
 import {
   createEmptyStore,
-  wrapStoreWithUndoable
+  wrapStoreWithUndoable,
 } from "../../reducers/store-test-utils";
 import { createTag } from "../../reducers/tags/tags-test-util";
 import { save } from "../../util/file-sys-util";
@@ -15,40 +15,40 @@ import { jsonExporterThunk } from "./json-exporter";
 
 jest.mock("../../util/file-sys-util", () => ({
   getNameWithExtension: (name, ext) => `${name}.${ext}`,
-  save: jest.fn()
+  save: jest.fn(),
 }));
 
 const fileAndFolder1Id = "ff-id-1";
 const fileAndFolder1 = createFilesAndFolders({
-  id: fileAndFolder1Id
+  id: fileAndFolder1Id,
 });
 
 const filesAndFolders = {
-  [fileAndFolder1Id]: fileAndFolder1
+  [fileAndFolder1Id]: fileAndFolder1,
 };
 
 const fileAndFolderMetadata1 = createFilesAndFoldersMetadata({});
 
 const filesAndFoldersMetadata = {
-  [fileAndFolder1Id]: fileAndFolderMetadata1
+  [fileAndFolder1Id]: fileAndFolderMetadata1,
 };
 
 const tag1Id = "tag-1-id";
 const tag1 = createTag({ id: tag1Id });
 
 const tags = {
-  [tag1Id]: tag1
+  [tag1Id]: tag1,
 };
 
 const hashes = {
-  [fileAndFolder1Id]: "mock-hash"
+  [fileAndFolder1Id]: "mock-hash",
 };
 
 const aliases = {
-  [fileAndFolder1Id]: "test-alias"
+  [fileAndFolder1Id]: "test-alias",
 };
 const comments = {
-  [fileAndFolder1Id]: "test-comment"
+  [fileAndFolder1Id]: "test-comment",
 };
 
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
@@ -67,21 +67,21 @@ describe("json-exporter", () => {
           aliases,
           comments,
           filesAndFolders,
-          hashes
+          hashes,
         }),
         filesAndFoldersMetadata: {
-          filesAndFoldersMetadata
+          filesAndFoldersMetadata,
         },
         tags: wrapStoreWithUndoable({
-          tags
-        })
+          tags,
+        }),
       });
 
       store.dispatch(
         jsonExporterThunk({
           originalPath,
           sessionName,
-          version
+          version,
         })
       );
 
@@ -94,7 +94,7 @@ describe("json-exporter", () => {
         originalPath,
         sessionName,
         tags,
-        version
+        version,
       });
 
       expect(save).toHaveBeenCalledWith(jsonFileName, expectedSavedData);

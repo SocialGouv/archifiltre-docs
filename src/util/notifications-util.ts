@@ -6,7 +6,7 @@ const arbitrarilyLongTime = 100000000000;
 
 export enum NotificationDuration {
   NORMAL = 5000,
-  PERMANENT = arbitrarilyLongTime
+  PERMANENT = arbitrarilyLongTime,
 }
 
 /**

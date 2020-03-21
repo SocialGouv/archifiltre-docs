@@ -3,7 +3,7 @@ import LoadFromJsonFork from "./load-from-json.fork";
 import { isJsonFile } from "./util/file-sys-util";
 import {
   AsyncWorkerEvent,
-  createAsyncWorkerForChildProcessController
+  createAsyncWorkerForChildProcessController,
 } from "./util/async-worker-util";
 import { reportError, reportInfo, reportWarning } from "./logging/reporter";
 import { MessageTypes } from "./util/batch-process/batch-process-util-types";
@@ -17,12 +17,12 @@ export default (hook, droppedElementPath) => {
       : new LoadFromFilesystemFork();
 
     const asyncWorker = createAsyncWorkerForChildProcessController(worker);
-    asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, event => {
+    asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, (event) => {
       switch (event.data.type) {
         case MessageTypes.COMPLETE:
           reportInfo({
             path: droppedElementPath,
-            type: "elementLoadedSuccessfully"
+            type: "elementLoadedSuccessfully",
           });
           asyncWorker.terminate();
           resolve(event.data.message.vfs);
@@ -39,7 +39,7 @@ export default (hook, droppedElementPath) => {
               type: ArchifiltreErrorType.LOADING_FILE_SYSTEM,
               filePath: event.data.message.path,
               reason: event.data.message.error,
-              code: event.data.message.code
+              code: event.data.message.code,
             })
           );
           break;
@@ -56,7 +56,7 @@ export default (hook, droppedElementPath) => {
 
     reportInfo({ path: droppedElementPath, type: "elementDropped" });
     asyncWorker.postMessage({
-      droppedElementPath
+      droppedElementPath,
     });
   });
 };

@@ -6,7 +6,7 @@ import {
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
-  getHashesFromStore
+  getHashesFromStore,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { from } from "rxjs";
 import { bufferTime, flatMap, last, tap } from "rxjs/operators";
@@ -15,7 +15,7 @@ import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import {
   completeLoadingAction,
-  progressLoadingAction
+  progressLoadingAction,
 } from "../../reducers/loading-info/loading-info-actions";
 import { startLoading } from "../../reducers/loading-info/loading-info-operations";
 import { LoadingInfoTypes } from "../../reducers/loading-info/loading-info-types";
@@ -25,11 +25,11 @@ import { promptUserForSave } from "../../util/file-system-util";
 import {
   NotificationDuration,
   notifyInfo,
-  notifySuccess
+  notifySuccess,
 } from "../../util/notifications-util";
 import {
   generateCsvExport$,
-  GenerateCsvExportOptions
+  GenerateCsvExportOptions,
 } from "./csv-exporter.controller";
 
 /**
@@ -49,7 +49,7 @@ export const csvExporterThunk = (
 
   addTracker({
     title: ActionTitle.CSV_EXPORT,
-    type: ActionType.TRACK_EVENT
+    type: ActionType.TRACK_EVENT,
   });
 
   const csvExportStartedMessage = translations.t(
@@ -74,7 +74,7 @@ export const csvExporterThunk = (
     filesAndFolders,
     filesAndFoldersMetadata,
     hashes: undefined,
-    tags
+    tags,
   };
 
   if (withHashes) {
@@ -94,13 +94,15 @@ export const csvExporterThunk = (
   const LOADING_BAR_UPDATE_INTERVAL = 1000;
 
   const csvExportData$ = generateCsvExport$(data);
-  await new Promise(resolve => {
+  await new Promise((resolve) => {
     csvExportData$
       .pipe(bufferTime(LOADING_BAR_UPDATE_INTERVAL))
       .pipe(
-        tap(buffer => dispatch(progressLoadingAction(loadingId, buffer.length)))
+        tap((buffer) =>
+          dispatch(progressLoadingAction(loadingId, buffer.length))
+        )
       )
-      .pipe(flatMap(buffer => from(buffer)))
+      .pipe(flatMap((buffer) => from(buffer)))
       .pipe(last())
       .subscribe({
         next: async (csv: string) => {
@@ -116,7 +118,7 @@ export const csvExporterThunk = (
             () => shell.openItem(exportFilePath)
           );
           resolve();
-        }
+        },
       });
   });
 };

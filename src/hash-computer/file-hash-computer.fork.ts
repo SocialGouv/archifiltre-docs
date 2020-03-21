@@ -1,7 +1,7 @@
 import {
   createAsyncWorkerForChildProcess,
   fakeChildProcess,
-  setupChildWorkerListeners
+  setupChildWorkerListeners,
 } from "../util/async-worker-util";
 import { onData, onInitialize } from "./file-hash-computer.impl";
 
@@ -9,7 +9,7 @@ const asyncWorker = createAsyncWorkerForChildProcess();
 
 setupChildWorkerListeners(asyncWorker, {
   onData,
-  onInitialize
+  onInitialize,
 });
 
 export default fakeChildProcess;

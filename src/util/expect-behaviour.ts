@@ -14,7 +14,7 @@ export const expectToBeDefined = <T>(actual: T, message: string): boolean => {
       JSON.stringify({
         actual,
         message,
-        type: "expectToBeDefined"
+        type: "expectToBeDefined",
       })
     );
   }

@@ -4,7 +4,7 @@ import { fromAnyJsonToJs } from "util/compatibility/compatibility";
 
 import {
   AsyncWorkerEvent,
-  createAsyncWorkerForChildProcess
+  createAsyncWorkerForChildProcess,
 } from "./util/async-worker-util";
 import { MessageTypes } from "./util/batch-process/batch-process-util-types";
 
@@ -18,7 +18,7 @@ const asyncWorker = createAsyncWorkerForChildProcess();
  * they are not anymore generated with a byte order mark
  * @param content
  */
-const removeByteOrderMark = content =>
+const removeByteOrderMark = (content) =>
   content[0] !== "{" ? content.slice(1) : content;
 
 /**
@@ -34,8 +34,8 @@ function loadJsonConfig(droppedFolderPath) {
   asyncWorker.postMessage({
     type: MessageTypes.COMPLETE,
     message: {
-      vfs: js
-    }
+      vfs: js,
+    },
   });
 }
 

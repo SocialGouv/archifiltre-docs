@@ -9,41 +9,41 @@ import {
   COMPLETE_LOADING,
   LoadingInfoTypes,
   PROGRESS_LOADING,
-  START_LOADING
+  START_LOADING,
 } from "../../reducers/loading-info/loading-info-types";
 import { StoreState } from "../../reducers/store";
 import {
   createEmptyStore,
-  wrapStoreWithUndoable
+  wrapStoreWithUndoable,
 } from "../../reducers/store-test-utils";
 import { promptUserForSave } from "../../util/file-system-util";
 import { csvExporterThunk } from "./csv-exporter";
 import { generateCsvExport$ } from "./csv-exporter.controller";
 
 jest.mock("./csv-exporter.controller", () => ({
-  generateCsvExport$: jest.fn()
+  generateCsvExport$: jest.fn(),
 }));
 
 jest.mock("uuid", () => ({
-  v4: () => "test-uuid"
+  v4: () => "test-uuid",
 }));
 
 jest.mock("../../util/file-system-util", () => ({
-  promptUserForSave: jest.fn(filename =>
+  promptUserForSave: jest.fn((filename) =>
     Promise.resolve(`/path/to/${filename}`)
-  )
+  ),
 }));
 
 jest.mock("fs", () => ({
   promises: {
-    writeFile: jest.fn()
-  }
+    writeFile: jest.fn(),
+  },
 }));
 
 jest.mock("electron", () => ({
   shell: {
-    openExternal: jest.fn()
-  }
+    openExternal: jest.fn(),
+  },
 }));
 
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
@@ -58,13 +58,13 @@ const tags = {
   [tagId]: {
     ffIds: [taggedFfId],
     id: tagId,
-    name: tagName
+    name: tagName,
   },
   [tagId2]: {
     ffIds: [taggedFfId],
     id: tagId2,
-    name: tag2Name
-  }
+    name: tag2Name,
+  },
 };
 
 const filesAndFolders = {
@@ -76,7 +76,7 @@ const filesAndFolders = {
     file_size: 10,
     hash: null,
     id: rootId,
-    name: "root"
+    name: "root",
   },
   [taggedFfId]: {
     alias: "",
@@ -86,8 +86,8 @@ const filesAndFolders = {
     file_size: 10,
     hash: null,
     id: taggedFfId,
-    name: "filename"
-  }
+    name: "filename",
+  },
 };
 
 const filesAndFoldersMetadata = {
@@ -96,29 +96,29 @@ const filesAndFoldersMetadata = {
     childrenTotalSize: 10000,
     maxLastModified: 10000,
     medianLastModified: 4000,
-    minLastModified: 1000
-  })
+    minLastModified: 1000,
+  }),
 };
 
 const rootHash = "root-tag";
 const taggedHash = "tagged-hash";
 const hashes = {
   [rootId]: rootHash,
-  [taggedFfId]: taggedHash
+  [taggedFfId]: taggedHash,
 };
 
 const rootComment = "root-comment";
 const elementComment = "element-comment";
 const comments = {
   [rootId]: rootComment,
-  [taggedFfId]: elementComment
+  [taggedFfId]: elementComment,
 };
 
 const rootAlias = "root-alias";
 const elementAlias = "element-alias";
 const aliases = {
   [rootId]: rootAlias,
-  [taggedFfId]: elementAlias
+  [taggedFfId]: elementAlias,
 };
 
 const emptyStore = createEmptyStore();
@@ -131,10 +131,10 @@ const testState = {
     comments,
     elementsToDelete: [taggedFfId],
     filesAndFolders,
-    hashes
+    hashes,
   }),
   filesAndFoldersMetadata: { filesAndFoldersMetadata },
-  tags: wrapStoreWithUndoable({ tags })
+  tags: wrapStoreWithUndoable({ tags }),
 };
 
 const generateCsvExportMock = generateCsvExport$ as jest.Mock;
@@ -163,13 +163,13 @@ describe("csv-exporter", () => {
           filesAndFolders,
           filesAndFoldersMetadata,
           hashes: undefined,
-          tags
+          tags,
         });
         expect(writeFileMock).toHaveBeenCalledWith(
           `/path/to/${name}`,
           csvValue,
           {
-            encoding: "utf-8"
+            encoding: "utf-8",
           }
         );
         expect(store.getActions()).toEqual([
@@ -178,17 +178,17 @@ describe("csv-exporter", () => {
             id: "test-uuid",
             label: "Creating the CSV export file",
             loadingType: LoadingInfoTypes.EXPORT,
-            type: START_LOADING
+            type: START_LOADING,
           },
           {
             id: "test-uuid",
             progress: 3,
-            type: PROGRESS_LOADING
+            type: PROGRESS_LOADING,
           },
           {
             id: "test-uuid",
-            type: COMPLETE_LOADING
-          }
+            type: COMPLETE_LOADING,
+          },
         ]);
       });
     });
@@ -206,14 +206,14 @@ describe("csv-exporter", () => {
           filesAndFolders,
           filesAndFoldersMetadata,
           hashes,
-          tags
+          tags,
         });
 
         expect(writeFileMock).toHaveBeenCalledWith(
           `/path/to/${name}`,
           csvValue,
           {
-            encoding: "utf-8"
+            encoding: "utf-8",
           }
         );
 
@@ -223,17 +223,17 @@ describe("csv-exporter", () => {
             id: "test-uuid",
             label: "Creating the CSV export file",
             loadingType: LoadingInfoTypes.EXPORT,
-            type: START_LOADING
+            type: START_LOADING,
           },
           {
             id: "test-uuid",
             progress: 3,
-            type: PROGRESS_LOADING
+            type: PROGRESS_LOADING,
           },
           {
             id: "test-uuid",
-            type: COMPLETE_LOADING
-          }
+            type: COMPLETE_LOADING,
+          },
         ]);
       });
     });

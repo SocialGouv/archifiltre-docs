@@ -16,7 +16,7 @@ const WorkspaceContainer: FC<WorkspaceContainerProps> = ({ api }) => {
   );
 
   const getFfByFfId = useCallback(
-    id => ({ ...filesAndFolders[id], ...filesAndFoldersMetadata[id] }),
+    (id) => ({ ...filesAndFolders[id], ...filesAndFoldersMetadata[id] }),
     [filesAndFolders, filesAndFoldersMetadata]
   );
   return <Workspace api={api} getFfByFfId={getFfByFfId} />;

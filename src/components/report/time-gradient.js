@@ -10,9 +10,9 @@ const cursorWidthRatio = 0.0075;
 const cursorWidth = svgWidth * cursorWidthRatio;
 
 const CURSOR_ARRAY_KEYS = [
-  { key: "min", getter: metadata => metadata.minLastModified },
-  { key: "median", getter: metadata => metadata.medianLastModified },
-  { key: "max", getter: metadata => metadata.maxLastModified }
+  { key: "min", getter: (metadata) => metadata.minLastModified },
+  { key: "median", getter: (metadata) => metadata.medianLastModified },
+  { key: "max", getter: (metadata) => metadata.maxLastModified },
 ];
 
 const Cursor = ({ ratio }) => (
@@ -33,7 +33,7 @@ const TimeGradient = ({ filesAndFoldersId, filesAndFoldersMetadata }) => {
   const rootMetadata = filesAndFoldersMetadata[rootId];
   const maxTime = rootMetadata.maxLastModified;
   const minTime = rootMetadata.minLastModified;
-  const computeRelativePosition = time =>
+  const computeRelativePosition = (time) =>
     (time - minTime) / (maxTime - minTime);
 
   let cursorArray = [];

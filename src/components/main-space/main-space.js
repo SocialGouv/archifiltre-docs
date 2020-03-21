@@ -7,7 +7,7 @@ import ErrorScreen from "components/errors/error-screen";
 import styled from "styled-components";
 
 const gridStyle = {
-  padding: "0em 5em"
+  padding: "0em 5em",
 };
 
 const WorkspaceWrapper = styled.div`
@@ -15,7 +15,7 @@ const WorkspaceWrapper = styled.div`
   height: 100%;
 `;
 
-const MainSpace = props => {
+const MainSpace = (props) => {
   const { api } = props;
   const { loading_state } = api;
   const [loadedPath, setLoadedPath] = useState();

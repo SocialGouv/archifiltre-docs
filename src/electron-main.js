@@ -16,7 +16,7 @@ if (app.isPackaged) {
     companyName: "SocialGouv",
     productName: "Archifiltre",
     ignoreSystemCrashHandler: true,
-    submitURL: SENTRY_MINIDUMP_URL
+    submitURL: SENTRY_MINIDUMP_URL,
   });
 }
 
@@ -41,17 +41,17 @@ let win;
 const getLanguage = () => app.getLocale().slice(0, 2);
 
 const preventNavigation = () => {
-  win.on("will-navigate", event => {
+  win.on("will-navigate", (event) => {
     event.preventDefault();
   });
 
-  win.webContents.on("will-navigate", event => {
+  win.webContents.on("will-navigate", (event) => {
     event.preventDefault();
   });
 };
 
 const askBeforeLeaving = () => {
-  win.on("close", event => {
+  win.on("close", (event) => {
     event.preventDefault();
     const language = getLanguage();
     let title;
@@ -80,10 +80,10 @@ const askBeforeLeaving = () => {
       title: title,
       message: message,
       detail: detail,
-      cancelId: 0
+      cancelId: 0,
     };
     const promiseResponse = dialog.showMessageBox(win, options);
-    promiseResponse.then(obj => {
+    promiseResponse.then((obj) => {
       if (obj.response === 1) {
         win.destroy();
       }
@@ -98,9 +98,9 @@ function createWindow() {
     height: 800,
     webPreferences: {
       nodeIntegration: true,
-      nodeIntegrationInWorker: true
+      nodeIntegrationInWorker: true,
     },
-    show: false
+    show: false,
   });
 
   // and load the index.html of the app.

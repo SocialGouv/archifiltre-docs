@@ -29,7 +29,7 @@ interface LoadingSpinnerOrCloseCrossProps {
 
 const LoadingSpinnerOrCloseCross: FC<LoadingSpinnerOrCloseCrossProps> = ({
   isLoading,
-  onClose = empty
+  onClose = empty,
 }) => {
   if (isLoading) {
     return (

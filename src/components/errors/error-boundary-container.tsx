@@ -9,7 +9,7 @@ const ErrorBoundaryContainer: FC = ({ children }) => {
   const { t } = useTranslation();
   const {
     sessionName: currentSessionName,
-    originalPath: currentOriginalPath
+    originalPath: currentOriginalPath,
   } = useSelector(getWorkspaceMetadataFromStore);
 
   const dispatch = useDispatch();

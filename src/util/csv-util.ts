@@ -28,7 +28,7 @@ interface FlattenLineOptions {
  */
 const flattenLine = ({
   cellSeparator,
-  doubleQuoteEscapeCharacter
+  doubleQuoteEscapeCharacter,
 }: FlattenLineOptions) => (lineArray: string[]): string =>
   lineArray
     .map(escapeDoubleQuotes(doubleQuoteEscapeCharacter))

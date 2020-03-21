@@ -3,21 +3,21 @@ import {
   SET_ICICLES_SORT_METHOD,
   SET_ORIGINAL_PATH,
   SET_SESSION_NAME,
-  WorkspaceMetadataAction
+  WorkspaceMetadataAction,
 } from "./workspace-metadata-types";
 
 export const setSessionName = (
   sessionName: string
 ): WorkspaceMetadataAction => ({
   sessionName,
-  type: SET_SESSION_NAME
+  type: SET_SESSION_NAME,
 });
 
 export const setOriginalPath = (
   originalPath: string
 ): WorkspaceMetadataAction => ({
   originalPath,
-  type: SET_ORIGINAL_PATH
+  type: SET_ORIGINAL_PATH,
 });
 
 /**
@@ -28,5 +28,5 @@ export const setIciclesSortMethod = (
   sortMethod: IciclesSortMethod
 ): WorkspaceMetadataAction => ({
   sortMethod,
-  type: SET_ICICLES_SORT_METHOD
+  type: SET_ICICLES_SORT_METHOD,
 });

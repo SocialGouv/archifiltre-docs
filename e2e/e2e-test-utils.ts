@@ -10,7 +10,7 @@ export const startApp = async (): Promise<Application> => {
 
   const app = new Application({
     args: [path.join(__dirname, "..")],
-    path: path.resolve(__dirname, electronPath)
+    path: path.resolve(__dirname, electronPath),
   });
 
   return app.start();
@@ -21,7 +21,7 @@ export const startApp = async (): Promise<Application> => {
  * @param time - The waiting time
  */
 export const wait = (time: number): Promise<void> =>
-  new Promise(resolve => setTimeout(resolve, time));
+  new Promise((resolve) => setTimeout(resolve, time));
 
 /**
  * Types the text as keyboard input. Handles unicode characters for non text keys.
@@ -45,11 +45,11 @@ const typeLetter = async (app, letter: string): Promise<void> => {
     {
       actions: [
         { type: "keyDown", value: letter },
-        { type: "keyUp", value: letter }
+        { type: "keyUp", value: letter },
       ],
       id: "typeLetter",
-      type: "key"
-    }
+      type: "key",
+    },
   ]);
 };
 
@@ -84,13 +84,13 @@ export const clickOnPosition = async (
           duration: 0,
           type: "pointerMove",
           x,
-          y
+          y,
         },
         { type: "pointerDown", button: 0 },
-        { type: "pointerUp", button: 0 }
+        { type: "pointerUp", button: 0 },
       ],
       id: "click-on-icicle-1",
-      type: "pointer"
-    }
+      type: "pointer",
+    },
   ]);
 };

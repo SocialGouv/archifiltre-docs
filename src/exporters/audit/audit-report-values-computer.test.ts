@@ -12,7 +12,7 @@ import {
   getOldestFiles,
   percentFileTypes,
   sortFilesByLastModifiedDate,
-  sortFilesBySize
+  sortFilesBySize,
 } from "./audit-report-values-computer";
 
 const folderId1 = "folder-id-1";
@@ -27,21 +27,21 @@ const file1 = createFilesAndFolders({
   file_last_modified: 1531670400000,
   file_size: 1000,
   id: fileId1,
-  name: fileName1
+  name: fileName1,
 });
 
 const file2 = createFilesAndFolders({
   file_last_modified: 900277200000,
   file_size: 5000,
   id: fileId2,
-  name: fileName2
+  name: fileName2,
 });
 
 const file3 = createFilesAndFolders({
   file_last_modified: 962568000000,
   file_size: 2000,
   id: fileId3,
-  name: fileName3
+  name: fileName3,
 });
 
 const sortingTestArray = [
@@ -53,49 +53,49 @@ const sortingTestArray = [
   file3,
   file2,
   file1,
-  file2
+  file2,
 ];
 
 const filesAndFoldersMap = {
   "": createFilesAndFolders({ id: "", children: [folderId1] }),
   [folderId1]: createFilesAndFolders({
     children: [folderId2, fileId1],
-    id: folderId1
+    id: folderId1,
   }),
   [folderId2]: createFilesAndFolders({
     children: [fileId2, fileId3],
-    id: folderId2
+    id: folderId2,
   }),
   [fileId1]: file1,
   [fileId2]: file2,
-  [fileId3]: file3
+  [fileId3]: file3,
 };
 
 const filesAndFoldersMetadataMap = {
   "": createFilesAndFoldersMetadata({
     childrenTotalSize: 3000,
-    maxLastModified: 3000
+    maxLastModified: 3000,
   }),
   [folderId1]: createFilesAndFoldersMetadata({
     childrenTotalSize: 3000,
-    maxLastModified: 3000
+    maxLastModified: 3000,
   }),
   [folderId2]: createFilesAndFoldersMetadata({
     childrenTotalSize: 3000,
-    maxLastModified: 3000
+    maxLastModified: 3000,
   }),
   [fileId1]: createFilesAndFoldersMetadata({
     childrenTotalSize: 3000,
-    maxLastModified: 3000
+    maxLastModified: 3000,
   }),
   [fileId2]: createFilesAndFoldersMetadata({
     childrenTotalSize: 3000,
-    maxLastModified: 3000
+    maxLastModified: 3000,
   }),
   [fileId3]: createFilesAndFoldersMetadata({
     childrenTotalSize: 0,
-    maxLastModified: 0
-  })
+    maxLastModified: 0,
+  }),
 };
 
 describe("audit-report-values-computer", () => {
@@ -116,7 +116,7 @@ describe("audit-report-values-computer", () => {
         [FileType.IMAGE]: 0,
         [FileType.VIDEO]: 0,
         [FileType.AUDIO]: 0,
-        [FileType.OTHER]: 1
+        [FileType.OTHER]: 1,
       });
     });
   });
@@ -132,7 +132,7 @@ describe("audit-report-values-computer", () => {
         [FileType.IMAGE]: 0,
         [FileType.VIDEO]: 0,
         [FileType.AUDIO]: 0,
-        [FileType.OTHER]: 33.33
+        [FileType.OTHER]: 33.33,
       });
     });
   });
@@ -142,7 +142,7 @@ describe("audit-report-values-computer", () => {
       expect(sortFilesByLastModifiedDate([file1, file2, file3])).toEqual([
         file2,
         file3,
-        file1
+        file1,
       ]);
     });
   });
@@ -152,20 +152,20 @@ describe("audit-report-values-computer", () => {
       const file2Description = {
         date: formatAuditReportDate(file2.file_last_modified),
         name: file2.name,
-        path: formatPathForUserSystem(file2.id)
+        path: formatPathForUserSystem(file2.id),
       };
 
       const file3Description = {
         date: formatAuditReportDate(file3.file_last_modified),
         name: file3.name,
-        path: formatPathForUserSystem(file3.id)
+        path: formatPathForUserSystem(file3.id),
       };
       expect(getOldestFiles(sortingTestArray)).toEqual([
         file2Description,
         file2Description,
         file2Description,
         file3Description,
-        file3Description
+        file3Description,
       ]);
     });
   });
@@ -175,7 +175,7 @@ describe("audit-report-values-computer", () => {
       expect(sortFilesBySize([file1, file2, file3])).toEqual([
         file1,
         file3,
-        file2
+        file2,
       ]);
     });
   });
@@ -185,20 +185,20 @@ describe("audit-report-values-computer", () => {
       const file2Description = {
         name: file2.name,
         path: formatPathForUserSystem(file2.id),
-        size: octet2HumanReadableFormat(file2.file_size)
+        size: octet2HumanReadableFormat(file2.file_size),
       };
 
       const file3Description = {
         name: file3.name,
         path: formatPathForUserSystem(file3.id),
-        size: octet2HumanReadableFormat(file3.file_size)
+        size: octet2HumanReadableFormat(file3.file_size),
       };
       expect(getBiggestFiles(sortingTestArray)).toEqual([
         file2Description,
         file2Description,
         file2Description,
         file3Description,
-        file3Description
+        file3Description,
       ]);
     });
   });
@@ -208,7 +208,7 @@ describe("audit-report-values-computer", () => {
       expect(
         getElementsToDelete(filesAndFoldersMap, filesAndFoldersMetadataMap, [
           folderId2,
-          fileId1
+          fileId1,
         ])
       ).toEqual([
         {
@@ -216,15 +216,15 @@ describe("audit-report-values-computer", () => {
           name: "base-name",
           path: formatPathForUserSystem(folderId2),
           size: "3 kB",
-          type: "folder"
+          type: "folder",
         },
         {
           date: "01/01/1970",
           name: fileName1,
           path: formatPathForUserSystem(fileId1),
           size: "3 kB",
-          type: "file"
-        }
+          type: "file",
+        },
       ]);
     });
   });

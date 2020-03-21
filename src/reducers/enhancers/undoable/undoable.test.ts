@@ -2,28 +2,28 @@ import undoable from "./undoable";
 import { commitAction, redoAction, undoAction } from "./undoable-actions";
 
 const state0 = {
-  count: 0
+  count: 0,
 };
 const state1 = {
-  count: 1
+  count: 1,
 };
 
 const state2 = {
-  count: 2
+  count: 2,
 };
 
 const state3 = {
-  count: 3
+  count: 3,
 };
 
 const state4 = {
-  count: 4
+  count: 4,
 };
 
 const testReducer = (state, action) => {
   if (action.type === "INCREMENT") {
     return {
-      count: state.count + 1
+      count: state.count + 1,
     };
   }
   return state;
@@ -34,7 +34,7 @@ const baseTestState = {
   current: state2,
   future: [state3, state4],
   past: [state1, state0],
-  present: state2
+  present: state2,
 };
 
 describe("undoable", () => {
@@ -46,7 +46,7 @@ describe("undoable", () => {
         current: state0,
         future: [],
         past: [],
-        present: state0
+        present: state0,
       });
     });
   });
@@ -58,7 +58,7 @@ describe("undoable", () => {
         current: state1,
         future: [state2, state3, state4],
         past: [state0],
-        present: state1
+        present: state1,
       });
     });
   });
@@ -71,7 +71,7 @@ describe("undoable", () => {
         current: state3,
         future: [state4],
         past: [state2, state1, state0],
-        present: state3
+        present: state3,
       });
     });
   });
@@ -84,7 +84,7 @@ describe("undoable", () => {
         current: state2,
         future: [],
         past: [state2, state1, state0],
-        present: state2
+        present: state2,
       });
     });
   });
@@ -95,11 +95,11 @@ describe("undoable", () => {
 
       expect(nextState).toEqual({
         current: {
-          count: 3
+          count: 3,
         },
         future: [state3, state4],
         past: [state1, state0],
-        present: state2
+        present: state2,
       });
     });
   });

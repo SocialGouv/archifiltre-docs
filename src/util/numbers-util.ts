@@ -34,7 +34,7 @@ export const formatPercent = (
 /**
  * Curried version of format percent, where first arg is the options.
  */
-export const curriedFormatPercent = options => value =>
+export const curriedFormatPercent = (options) => (value) =>
   formatPercent(value, options);
 
 interface RatioOptions {

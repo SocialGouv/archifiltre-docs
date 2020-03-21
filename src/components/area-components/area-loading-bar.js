@@ -7,14 +7,14 @@ import AreaMessage from "./area-message";
 const progressBarContainer = {
   position: "relative",
   width: "100%",
-  height: "100%"
+  height: "100%",
 };
 
 const progressBarStyle = {
   position: "absolute",
   backgroundColor: toRgba([121, 121, 121, 0.3]),
   width: "70%",
-  height: "100%"
+  height: "100%",
 };
 
 const progressBarPercent = {
@@ -23,7 +23,7 @@ const progressBarPercent = {
   height: "100%",
   width: "100%",
   justifyContent: "center",
-  alignItems: "center"
+  alignItems: "center",
 };
 
 const progressBarText = {
@@ -32,7 +32,7 @@ const progressBarText = {
   paddingTop: "20px",
   paddingRight: "40px",
   paddingBottom: "20px",
-  paddingLeft: "40px"
+  paddingLeft: "40px",
 };
 
 /**

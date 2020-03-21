@@ -1,11 +1,11 @@
 import {
   FilesAndFoldersMetadataAction,
   FilesAndFoldersMetadataState,
-  INIT_FILES_AND_FOLDERS_METADATA
+  INIT_FILES_AND_FOLDERS_METADATA,
 } from "./files-and-folders-metadata-types";
 
 const initialState: FilesAndFoldersMetadataState = {
-  filesAndFoldersMetadata: {}
+  filesAndFoldersMetadata: {},
 };
 
 /**
@@ -20,7 +20,7 @@ const filesAndFoldersMetadataReducer = (
   switch (action.type) {
     case INIT_FILES_AND_FOLDERS_METADATA:
       return {
-        filesAndFoldersMetadata: action.metadata
+        filesAndFoldersMetadata: action.metadata,
       };
     default:
       return state;

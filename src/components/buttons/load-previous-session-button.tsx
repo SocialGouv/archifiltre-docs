@@ -13,7 +13,7 @@ const ButtonWrapper = styled.div`
 `;
 
 const LoadPreviousSessionButton: FC<LoadPreviousSessionButtonProps> = ({
-  reloadPreviousSession
+  reloadPreviousSession,
 }) => {
   const { t } = useTranslation();
   return (

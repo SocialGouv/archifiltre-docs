@@ -95,7 +95,7 @@
     "eslint": "6.8.0",
     "eslint-import-resolver-webpack": "0.12.1",
     "fast-check": "1.23.0",
-    "html-webpack-plugin": "4.0.0",
+    "html-webpack-plugin": "4.0.1",
     "husky": "4.2.3",
     "jest": "25.1.0",
     "jest-date-mock": "1.0.8",

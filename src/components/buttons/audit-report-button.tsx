@@ -2,6 +2,7 @@ import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { getNameWithExtension } from "util/file-sys-util";
 import Button from "../common/button";
+import styled from "styled-components";
 
 export type ExportToAuditReport = (name: string) => void;
 
@@ -10,6 +11,10 @@ interface AuditReportButtonProps {
   sessionName: string;
   exportToAuditReport: ExportToAuditReport;
 }
+
+const Wrapper = styled.span`
+  width: 100%;
+`;
 
 const AuditReportButton: FC<AuditReportButtonProps> = ({
   areHashesReady,
@@ -23,7 +28,7 @@ const AuditReportButton: FC<AuditReportButtonProps> = ({
     name,
   ]);
   return (
-    <span
+    <Wrapper
       data-tip={!areHashesReady ? t("header.csvWithHashDisabledMessage") : ""}
       data-for="disabledCSVTooltip"
     >
@@ -34,7 +39,7 @@ const AuditReportButton: FC<AuditReportButtonProps> = ({
       >
         {t("header.auditReport")}
       </Button>
-    </span>
+    </Wrapper>
   );
 };
 

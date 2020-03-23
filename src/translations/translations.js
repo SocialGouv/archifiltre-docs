@@ -3,11 +3,13 @@ import { initReactI18next } from "react-i18next";
 import { getLanguage } from "../languages";
 import fr from "./fr.json";
 import en from "./en.json";
+import de from "./de.json";
 
 i18n.use(initReactI18next).init({
   resources: {
     en,
     fr,
+    de,
   },
   lng: getLanguage()[0],
   fallbackLng: "en",

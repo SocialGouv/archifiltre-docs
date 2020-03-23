@@ -80,7 +80,8 @@
       "unknown": "unknown",
       "toDelete": "To delete",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "files": "file(s)"
     },
     "hash": {
       "loadingInfoLabel": "Loading files and folders hashes",

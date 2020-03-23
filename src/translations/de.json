@@ -1,0 +1,120 @@
+{
+  "translation": {
+    "folderDropzone": {
+      "placeholder": "Legen Sie hier ein Verzeichnis ab!",
+      "placeholderSubtitle": "Sie können auch eine zuvor aus Archifiltre exportierte JSON-Datei ablegen.",
+      "zipNotificationTitle": "ZIP-Datei(en) entdeckt",
+      "zipNotificationMessage": "Archifiltre kann ZIP-Dateien nicht verarbeiten, bitte entpacken Sie diese, um sie einzulesen",
+      "disclaimerSubtitle": "Ihre Daten werden Ihren Rechner nicht verlassen. Nur Sie können sehen, was in dieser Anwendung geschieht.",
+      "loadingErrorTitle": "Fehler beim Laden",
+      "loadingErrorMessage": "Wahrscheinlich haben Sie weder einen Ordner noch eine Datei abgelegt.",
+      "filesLoaded": "Dateien geladen",
+      "jsonLoading": "Laden von JSON",
+      "constructingDataModel": "Aufbau des Datenmodells",
+      "computingDerivedData": "Berechnung der abgeleiteten Daten",
+      "computingFileDepth": "Berechnung der Ordnertiefe",
+      "didYouKnow": "Wussten Sie schon?",
+      "warning": "Warnung!",
+      "wrongJsonVersion": "Die Datei, die Sie abgelegt haben, ist nicht mit der gleichen Version von Archifiltre erstellt worden.",
+      "justAMoment": "Nur einen Augenblick..."
+    },
+    "report": {
+      "comments": "Kommentare",
+      "yourCommentsHere": "Ihre Kommentare hier..",
+      "lastModified": "Zuletzt geändert",
+      "max": "max",
+      "min": "min",
+      "average": "Durchschnitt",
+      "median": "Median",
+      "whatsNew": "Was gibt es Neues?",
+      "fileOrFolderNamePlaceholder": "Name des Ordners oder der Datei",
+      "fileOrFolderRealNamePlaceholder": "Tatsächlicher Name",
+      "size": "Größe",
+      "hash": "Hash-Wert",
+      "type": "Typ",
+      "fileHashExplanation": "Dieser Hash-Wert ist ein durch einen MD5 Algorithmus berechneter digitaler Fingerabdruck der Datei",
+      "folderHashExplanation": "Dieser Hash-Wert ist ein (durch einen MD5 Algorithmus berechneter) digitaler Fingerabdruck der Verknüpfung der Hash-Werte der Unterordner dieses Ordners",
+      "clickHereToAddComments": "Klicken Sie hier um Kommentare hinzuzufügen!",
+      "copied": "Kopieren beendet!"
+    },
+    "workspace": {
+      "colorCode": "Farbcode:",
+      "type": "Nach Typ",
+      "dates": "Nach Datum",
+      "backToRoot": "Zurück zum obersten Verzeichnis",
+      "display": "Anzeige:",
+      "bySize": "Nach Größe",
+      "byNumber": "Nach Anzahl",
+      "allTags": "Alle Tags",
+      "noTags": "Im Augenblick kein Tag",
+      "tags": "Tags",
+      "yourTagsHere": "Ihre Tags hier",
+      "clickHereToAddTags": "Hier klicken, um Tags hinzuzufügen!",
+      "newTag": "Neuer Tag",
+      "file": "Datei",
+      "level": "Ebene",
+      "cannotMoveElement": "Die Datei oder der Ordner kann hierher nicht verschoben werden."
+    },
+    "header": {
+      "export": "Exportieren",
+      "auditReport": "Prüfbericht",
+      "close": "Schließen",
+      "save": "Speichern",
+      "aNewVersionIsOut": "Version {{version}} von Archifiltre ist erschienen!",
+      "downloadIt": "Laden Sie die neue Version herunter!",
+      "csvWithHash": "CSV mit Hash-Werten",
+      "csvWithHashDisabledMessage": "Bitte warten, bis die Hash-Werte berechnet wurden",
+      "loadPreviousSessionButtonLabel": "Vorherige Sitzung laden"
+    },
+    "common": {
+      "error": "Ups! Ein Fehler ist aufgetreten.",
+      "contactUs": "Hier klicken, um uns zu kontaktieren",
+      "somethingWentWrong": "Da ist etwas schiefgegangen.",
+      "projectName": "Projektname",
+      "file": "Datei",
+      "folder": "Ordner",
+      "originalName": "Der ursprüngliche Name des Elements war '{{oldName}}'",
+      "byteChar": "B",
+      "unknown": "Unbekannt",
+      "toDelete": "Zu löschen"
+    },
+    "hash": {
+      "loadingInfoLabel": "Laden der Hash-Werte von Dateien und Ordnern",
+      "loadingErrorMessage": "Beim Laden der Hash-Werte ist ein Fehler aufgetreten. Für Mehr Details können Sie die Protokolldatei prüfen.",
+      "title": "Hash-Werte"
+    },
+    "csvHeader": {
+      "path": "Pfad",
+      "pathLength": "Pfadlänge",
+      "name": "Name",
+      "extension": "Dateiendung",
+      "size": "Größe (Byte)",
+      "firstModified": "Erste Änderung",
+      "lastModified": "Letzte Änderung",
+      "newName": "Neuer Name",
+      "description": "Beschreibung",
+      "fileOrFolder": "Datei/Ordner",
+      "depth": "Tiefe",
+      "hash": "Hash-Wert (MD5)"
+    },
+    "export": {
+      "metsExportErrorTitle": "Fehler im METS-Export",
+      "metsExportErrorFileDoesNotExist": "Die Datei \"{{filePath}}\" kann nicht gefunden werden. Möglicherweise wurde sie verschoben oder gelöscht.",
+      "metsExportErrorCannotAccessFile": "Auf die Datei \"{{filePath}}\" kann nicht zugegriffen werden. Möglicherweise haben Sie den Zugriff auf die Datei verloren.",
+      "metsExportUnhandledError": "Ein unerwarteter Fehler ist aufgetreten",
+      "exportSuccessTitle": "METS-Export",
+      "exportSuccessMessage": "Der METS-Export wurde als ZIP-Datei im Quellordner des Projektes angelegt",
+      "resipExportSuccessMessage": "Die Metadatendatei ist in den Basisordner des Projektes exportiert worden",
+      "resipExportTitle": "Resip-Export",
+      "resipExportStartedMessage": "Resip-Export begonnen",
+      "csvExportTitle": "CSV-Export",
+      "csvExportStartedMessage": "CSV-Export begonnen",
+      "csvExportSuccessMessage": "CSV-Export beendet",
+      "creatingCsvExport": "CSV-Exportdatei wird erstellt"
+    },
+    "replay": {
+      "title": "Vorherige Sitzung laden",
+      "error": "Beim Laden der vorherigen Sitzung ist ein Fehler aufgetreten."
+    }
+  }
+}

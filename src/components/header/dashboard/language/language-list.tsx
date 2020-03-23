@@ -16,6 +16,10 @@ const availableLanguages = [
     id: "en",
     name: "English",
   },
+  {
+    id: "de",
+    name: "Deutsch",
+  },
 ];
 
 const LanguageCell = styled.div`

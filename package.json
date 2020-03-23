@@ -102,7 +102,7 @@
     "jsdoc-to-markdown": "5.0.3",
     "lint-staged": "10.0.8",
     "node-sass": "4.13.1",
-    "prettier": "2.0.1",
+    "prettier": "2.0.2",
     "rmfr": "2.0.0",
     "sass-loader": "8.0.2",
     "source-map-loader": "0.2.4",

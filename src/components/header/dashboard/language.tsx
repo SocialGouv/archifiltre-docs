@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { useLanguage } from "../../../translations/useLanguage";
+import { ButtonColor } from "../../common/button";
 import TextAlignCenter from "../../common/text-align-center";
 import Bubble from "./bubble";
 import LanguageButton from "./language/language-button";
@@ -10,6 +11,8 @@ const LanguagePicker: FC = () => {
 
   return (
     <Bubble
+      backgroundColor={ButtonColor.SUCCESS}
+      borderRadius="5px"
       comp={
         <TextAlignCenter>
           <LanguageButton languageName={language} />

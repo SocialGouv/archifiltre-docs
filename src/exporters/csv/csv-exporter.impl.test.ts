@@ -217,7 +217,7 @@ describe("csv-exporter.impl", () => {
 
     it("should handle elementsToDelete", async () => {
       const asyncWorker = createAsyncWorkerMock();
-      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"first_modified";"last_modified";"new name";"description";"file/folder";"depth";"number of files";"type";"hash (MD5)";"duplicate";"To delete";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
+      const csvHeader = `"";"path";"path length";"name";"extension";"size (octet)";"first_modified";"last_modified";"new name";"description";"file/folder";"depth";"number of files";"type";"hash (MD5)";"duplicate";"To be deleted";"tag0 : ${tag2Name}";"tag1 : ${tagName}"`;
       const csvFirstLine = `"";"${formatPathForUserSystem(
         rootFolderId
       )}";"5";"root";"";"10000";"01/01/1970";"01/01/1970";"";"";"folder";"0";"1";"folder";"${rootFolderHash}";"No";"";"";""`;
@@ -230,7 +230,7 @@ describe("csv-exporter.impl", () => {
         aliases[firstChildId]
       }";"${
         comments[firstChildId]
-      }";"file";"2";"1";"unknown";"${firstChildIdHash}";"Yes";"To delete";"${tag2Name}";"${tagName}"`;
+      }";"file";"2";"1";"unknown";"${firstChildIdHash}";"Yes";"To be deleted";"${tag2Name}";"${tagName}"`;
       const expectedCsv = [
         csvHeader,
         csvFirstLine,

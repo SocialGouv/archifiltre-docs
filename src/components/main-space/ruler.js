@@ -124,7 +124,9 @@ export const octet2HumanReadableFormat = (o) => {
 };
 
 const getFilesAndFoldersNumber = (node) => {
-  return isFile(node) ? null : `${node.nbChildrenFiles} fichier(s)`;
+  return isFile(node)
+    ? null
+    : `${node.nbChildrenFiles} ${translations.t("common.files")}`;
 };
 
 const computeRulerTextDisplayMode = (candidatePosition, l, w, fw) => {

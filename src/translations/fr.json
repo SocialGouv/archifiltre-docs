@@ -80,7 +80,8 @@
       "unknown": "inconnu",
       "toDelete": "À supprimer",
       "yes": "Oui",
-      "no": "Non"
+      "no": "Non",
+      "files": "fichier(s)"
     },
     "hash": {
       "loadingInfoLabel": "Chargement des empreintes de fichiers et dossiers",

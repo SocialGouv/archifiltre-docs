@@ -85,7 +85,7 @@
     },
     "hash": {
       "loadingInfoLabel": "Chargement des empreintes de fichiers et dossiers",
-      "loadingErrorMessage": "Une erreur s'est produite lors du chargement des empreintes. Consultez le fichier de logs pour plus de détails.",
+      "loadingErrorMessage": "Une erreur s'est produite lors du chargement des empreintes. Cliquez ici pour plus de détails.",
       "title": "Empreintes"
     },
     "csvHeader": {

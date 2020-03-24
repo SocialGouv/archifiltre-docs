@@ -85,7 +85,7 @@
     },
     "hash": {
       "loadingInfoLabel": "Loading files and folders hashes",
-      "loadingErrorMessage": "An error occurred while loading hashes. You can check the log file for more details.",
+      "loadingErrorMessage": "An error occurred while loading hashes. Click here for more details.",
       "title": "Hash"
     },
     "csvHeader": {

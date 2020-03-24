@@ -11,9 +11,13 @@ import {
 import {
   completeLoadingAction,
   progressLoadingAction,
+  registerErrorAction,
 } from "../reducers/loading-info/loading-info-actions";
 import { startLoading } from "../reducers/loading-info/loading-info-operations";
-import { LoadingInfoTypes } from "../reducers/loading-info/loading-info-types";
+import {
+  ArchifiltreError,
+  LoadingInfoTypes,
+} from "../reducers/loading-info/loading-info-types";
 import translations from "../translations/translations";
 import { NotificationDuration, notifyError } from "../util/notifications-util";
 import { operateOnDataProcessingStream } from "../util/observable-util";
@@ -21,6 +25,8 @@ import {
   computeFolderHashes$,
   computeHashes$,
 } from "./hash-computer.controller";
+import { openModalAction } from "../reducers/modal/modal-actions";
+import { Modal } from "../reducers/modal/modal-types";
 
 /**
  * Thunk that computes files and folders hashes
@@ -59,8 +65,9 @@ export const computeHashesThunk = (
     let loadingErrorsCount = 0;
     operateOnDataProcessingStream(hashes$, {
       // tslint:disable-next-line:no-console
-      error: tap((error) => {
-        reportError(error);
+      error: tap((errors: ArchifiltreError[]) => {
+        reportError(errors);
+        errors.forEach((error) => dispatch(registerErrorAction(error)));
         loadingErrorsCount++;
       }),
       result: tap(onNewHashesComputed),
@@ -78,7 +85,8 @@ export const computeHashesThunk = (
               notifyError(
                 loadingErrorMessage,
                 hashTitle,
-                NotificationDuration.PERMANENT
+                NotificationDuration.PERMANENT,
+                () => dispatch(openModalAction(Modal.ERROR_MODAL))
               );
             }
             resolve();

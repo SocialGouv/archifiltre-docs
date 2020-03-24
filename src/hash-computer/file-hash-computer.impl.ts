@@ -2,6 +2,8 @@ import path from "path";
 import { AsyncWorker } from "../util/async-worker-util";
 import { MessageTypes } from "../util/batch-process/batch-process-util-types";
 import { computeHash } from "../util/hash-util";
+import { createArchifiltreError } from "../reducers/loading-info/loading-info-selectors";
+import { ArchifiltreErrorType } from "../reducers/loading-info/loading-info-types";
 
 let basePath;
 
@@ -18,7 +20,12 @@ const computeHashBatch = (asyncWorker: AsyncWorker, paths: string[]) => {
     } catch (error) {
       hash = null;
       asyncWorker.postMessage({
-        error: { param, error: error.toString() },
+        error: createArchifiltreError({
+          filePath: param,
+          code: error.code,
+          reason: error.toString(),
+          type: ArchifiltreErrorType.COMPUTING_HASHES,
+        }),
         type: MessageTypes.ERROR,
       });
     }

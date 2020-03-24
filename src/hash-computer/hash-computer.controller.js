@@ -1,5 +1,5 @@
+import { flatten } from "lodash";
 import {
-  aggregateErrorsToMap,
   aggregateResultsToMap,
   backgroundWorkerProcess$,
   computeBatch$,
@@ -29,17 +29,20 @@ export const computeHashes$ = (paths, { initialValues: { basePath } }) => {
     initialValues: { basePath },
   });
 
-  const bufferAndMerge = (aggregator) =>
+  const objectMerger = (bufferedObjects) =>
+    Object.assign({}, ...bufferedObjects);
+
+  const bufferAndMerge = (aggregator, merger) =>
     compose(
-      map((bufferedObjects) => Object.assign({}, ...bufferedObjects)),
+      map(merger),
       filter((buffer) => buffer.length !== 0),
       bufferTime(BUFFER_TIME),
       map(aggregator)
     );
 
   return operateOnDataProcessingStream(hashes$, {
-    error: bufferAndMerge(aggregateErrorsToMap),
-    result: bufferAndMerge(aggregateResultsToMap),
+    error: bufferAndMerge(flatten, flatten),
+    result: bufferAndMerge(aggregateResultsToMap, objectMerger),
   });
 };
 

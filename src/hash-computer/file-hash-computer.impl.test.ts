@@ -3,6 +3,8 @@ import { MessageTypes } from "../util/batch-process/batch-process-util-types";
 import { formatPathForUserSystem } from "../util/file-sys-util";
 import { computeHash } from "../util/hash-util";
 import { onData, onInitialize } from "./file-hash-computer.impl";
+import { ArchifiltreErrorType } from "../reducers/loading-info/loading-info-types";
+import { UnknownError } from "../util/error-util";
 
 jest.mock("../util/hash-util", () => ({
   computeHash: jest.fn(),
@@ -66,7 +68,12 @@ describe("file-hash-computer.impl", () => {
       });
 
       expect(asyncWorker.postMessage).toHaveBeenCalledWith({
-        error: { param: "/path2", error: error.toString() },
+        error: {
+          code: UnknownError.UNKNOWN,
+          filePath: "/path2",
+          reason: "Error: test-error",
+          type: ArchifiltreErrorType.COMPUTING_HASHES,
+        },
         type: MessageTypes.ERROR,
       });
     });

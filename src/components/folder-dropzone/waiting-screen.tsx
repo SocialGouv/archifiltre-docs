@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 
 import IndexingBlock from "./indexing-block";
 import AreaLoadingBar from "../area-components/area-loading-bar";
@@ -21,19 +21,52 @@ const MainCell = styled.div`
   text-align: center;
 `;
 
-const SimpleLoader = ({ loaderText }) => (
+interface SimpleLoaderProps {
+  loaderText: string;
+}
+
+interface TraverseProps {
+  count: number;
+  complete: boolean;
+  totalCount: number;
+  waiting: boolean;
+}
+
+interface LoadingMessagesProps {
+  status: number;
+  count: number;
+  totalCount: number;
+}
+interface PresentationalProps {
+  status: number;
+  count: number;
+  totalCount: number;
+  loadedPath: string;
+}
+
+interface WaitingScreenProps {
+  loadedPath: string;
+  api;
+}
+
+const SimpleLoader: FC<SimpleLoaderProps> = ({ loaderText }) => (
   <SimpleLoaderContainer>
     <SimpleLoaderText>{loaderText}</SimpleLoaderText>
     <Loader loading={true} />
   </SimpleLoaderContainer>
 );
 
-const LoadingJson = () => {
+const LoadingJson: FC = () => {
   const { t } = useTranslation();
   return <SimpleLoader loaderText={t("folderDropzone.jsonLoading")} />;
 };
 
-const Traverse = ({ count, complete, totalCount }) => (
+const Traverse: FC<TraverseProps> = ({
+  count,
+  complete,
+  totalCount,
+  waiting,
+}) => (
   <IndexingBlock
     fileCount={!complete ? count : totalCount}
     loading={!complete}
@@ -53,7 +86,7 @@ const makeLoadingComponent = (translationText) => ({
 }) => {
   const { t } = useTranslation();
   let displayedCount;
-  if (waiting === true) {
+  if (waiting) {
     displayedCount = 0;
   } else if (complete === true) {
     displayedCount = totalCount;
@@ -98,7 +131,11 @@ const statusComponents = [
   },
 ];
 
-const LoadingMessages = ({ status, count, totalCount }) => {
+const LoadingMessages: FC<LoadingMessagesProps> = ({
+  status,
+  count,
+  totalCount,
+}) => {
   const currentStatusIndex = statusMap[status];
   const lastStatusComponent = statusComponents.slice(-1)[0];
   const isFileTreeLoaded = currentStatusIndex >= lastStatusComponent.index;
@@ -121,7 +158,12 @@ const LoadingMessages = ({ status, count, totalCount }) => {
   );
 };
 
-const Presentational = ({ status, count, totalCount, loadedPath }) => (
+const Presentational: FC<PresentationalProps> = ({
+  status,
+  count,
+  totalCount,
+  loadedPath,
+}) => (
   <div className="grid-y grid-frame align-center">
     <div className="cell">
       <MainCell>
@@ -139,7 +181,7 @@ const Presentational = ({ status, count, totalCount, loadedPath }) => (
   </div>
 );
 
-const WaitingScreen = ({
+const WaitingScreen: FC<WaitingScreenProps> = ({
   loadedPath,
   api: {
     loading_state: { status, count, totalCount },

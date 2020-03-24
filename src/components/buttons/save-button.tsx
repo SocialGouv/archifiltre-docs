@@ -12,7 +12,6 @@ interface ExportToJsonOptions {
 export type ExportToJson = (options: ExportToJsonOptions) => void;
 
 interface SaveButtonProps {
-  api: any;
   originalPath: string;
   sessionName: string;
   exportToJson: ExportToJson;

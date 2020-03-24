@@ -1,11 +1,25 @@
 import React from "react";
 
 import SaveButton from "components/buttons/save-button";
-import { reportError } from "../../logging/reporter.ts";
+import { reportError } from "../../logging/reporter";
 import { ContactUs } from "./contact-us";
 import { withTranslation } from "react-i18next";
 
-class ErrorBoundary extends React.Component {
+interface ErrorBoundaryProps {
+  t: (key: string) => string;
+  originalPath: string;
+  sessionName: string;
+  exportToJson: () => void;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,7 +35,7 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
-    const { t, originalPath, sessionName, exportToJson } = this.props;
+    const { t, originalPath, sessionName, exportToJson, children } = this.props;
 
     if (this.state.hasError) {
       return (
@@ -45,7 +59,7 @@ class ErrorBoundary extends React.Component {
         </div>
       );
     }
-    return this.props.children;
+    return children;
   }
 }
 

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { FC } from "react";
 import ArchifiltreMessage from "./archifiltre-message";
 import { useTranslation } from "react-i18next";
 
-const ErrorScreen = () => {
+const ErrorScreen: FC = () => {
   const { t } = useTranslation();
   return <ArchifiltreMessage>{t("common.error")}</ArchifiltreMessage>;
 };

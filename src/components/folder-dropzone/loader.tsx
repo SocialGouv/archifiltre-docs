@@ -10,6 +10,7 @@ const rotate = keyframes`
     transform: rotate(360deg);
   }
 `;
+
 const Rotating = styled.div`
   display: flex;
   animation: 1s ${rotate} linear infinite;

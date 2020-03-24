@@ -5,7 +5,8 @@
   },
   "globals": {
     "MATOMO_APPLICATION_ID": "readonly",
-    "MATOMO_URL": "readonly"
+    "MATOMO_URL": "readonly",
+    "AUTOLOAD": "readonly"
   },
   "overrides": [
     {

@@ -2,24 +2,25 @@ import React from "react";
 import AreaTitle from "../area-components/area-title";
 import Loader from "./loader";
 import AreaMessage from "../area-components/area-message";
-import RoundedArea from "../area-components/rounded-area";
+import { RoundedArea } from "../area-components/rounded-area";
 import RoundedAreaInnerBlock from "../area-components/rounded-area-inner-block";
 import { useTranslation } from "react-i18next";
+import styled from "styled-components";
 
-const loaderBlockTitleStyle = {
-  display: "flex",
-};
+const LoaderBlockTitle = styled.div`
+  display: flex;
+`;
 
-const loaderContainerStyle = {
-  display: "flex",
-  justifyContent: "center",
-  fontSize: "3em",
-};
+const LoaderContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  font-size: 3em;
+`;
 
-const counterContainerStyle = {
-  display: "flex",
-  justifyContent: "center",
-};
+const CounterContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 /**
  * Block displaying content file count while content is indexing
@@ -31,17 +32,17 @@ const IndexingBlock = ({ fileCount = 0, loading }) => {
   return (
     <RoundedArea>
       <RoundedAreaInnerBlock>
-        <div style={loaderBlockTitleStyle}>
+        <LoaderBlockTitle>
           <AreaTitle>Indexation</AreaTitle>
-        </div>
-        <div style={loaderContainerStyle}>
+        </LoaderBlockTitle>
+        <LoaderContainer>
           <Loader loading={loading} />
-        </div>
-        <div style={counterContainerStyle}>
+        </LoaderContainer>
+        <CounterContainer>
           <AreaMessage>
             {fileCount.toLocaleString()} {t("folderDropzone.filesLoaded")}
           </AreaMessage>
-        </div>
+        </CounterContainer>
       </RoundedAreaInnerBlock>
     </RoundedArea>
   );

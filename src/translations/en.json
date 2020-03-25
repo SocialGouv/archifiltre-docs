@@ -138,7 +138,8 @@
       "fileLastModified": "Last modification",
       "path": "Path",
       "searchPlaceholder": "Search",
-      "noResult": "No result"
+      "noResult": "No result",
+      "page": "Page"
     },
     "errorsModal": {
       "title": "Errors list",

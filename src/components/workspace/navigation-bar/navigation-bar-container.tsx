@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useWorkspaceMetadata } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { setIciclesSortMethodThunk } from "../../../reducers/workspace-metadata/workspace-metadata-thunk";
 import { IciclesSortMethod } from "../../../reducers/workspace-metadata/workspace-metadata-types";
-import NavigationBar from "./navigation-bar";
+import { NavigationBar } from "./navigation-bar";
 
 const NavigationBarContainer = ({ api }) => {
   const { iciclesSortMethod } = useWorkspaceMetadata();

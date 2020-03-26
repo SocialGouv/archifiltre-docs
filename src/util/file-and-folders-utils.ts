@@ -1,6 +1,13 @@
 import md5 from "js-md5";
 import { lookup } from "mime-types";
-import { isFile } from "../reducers/files-and-folders/files-and-folders-selectors";
+import {
+  decomposePathToElement,
+  isFile,
+} from "../reducers/files-and-folders/files-and-folders-selectors";
+import {
+  FilesAndFoldersMap,
+  VirtualPathToIdMap,
+} from "../reducers/files-and-folders/files-and-folders-types";
 import translations from "../translations/translations";
 import { countItems } from "./array-util";
 
@@ -185,6 +192,26 @@ export const getDisplayName = (
   elementAlias !== undefined && elementAlias !== ""
     ? elementAlias
     : elementName;
+
+/**
+ * Create a element id sequence from the virtual path of a file
+ * @param targetElementId
+ * @param filesAndFolders
+ * @param virtualPathToIdMap
+ */
+export const createFilePathSequence = (
+  targetElementId: string,
+  filesAndFolders: FilesAndFoldersMap,
+  virtualPathToIdMap: VirtualPathToIdMap
+): string[] => {
+  const { virtualPath: targetElementVirtualPath } = filesAndFolders[
+    targetElementId
+  ];
+
+  return decomposePathToElement(targetElementVirtualPath)
+    .slice(1)
+    .map((virtualPath) => virtualPathToIdMap[virtualPath] || virtualPath);
+};
 
 /**
  * Returns the mime type of the filesAndFolders parameter. Indicates if the format is unknown or if the element is a folder

@@ -84,7 +84,7 @@ class Breadcrumbs extends React.PureComponent {
   }
 
   getOpacity(isLocked, nodeId) {
-    return this.props.api.icicle_state.lock_sequence().includes(nodeId)
+    return this.props.lockedSequence.includes(nodeId)
       ? 1
       : isLocked
       ? 0.4
@@ -95,18 +95,16 @@ class Breadcrumbs extends React.PureComponent {
     const {
       isFocused,
       isLocked,
-      api: {
-        icicle_state: icicleState,
-        icicle_state: { lock_sequence, hover_sequence },
-      },
+      onBreadcrumbClick,
+      hoverSequence,
+      lockedSequence,
       originalPath,
       root_id,
       maxDepth,
     } = this.props;
     const trueFHeight = this.trueFHeight;
-    const nodesWithRootId = isFocused ? hover_sequence() : lock_sequence();
+    const activeBreadcrumbs = isFocused ? hoverSequence : lockedSequence;
     const inactiveBreadcrumbs = this.getInactiveBreadcrumbs(maxDepth);
-    const activeBreadcrumbs = nodesWithRootId.slice(1);
     const breadcrumbSequenceHeight = activeBreadcrumbs.map(trueFHeight);
     const cumulatedBreadcrumbSequenceHeight = computeCumulative(
       breadcrumbSequenceHeight
@@ -144,7 +142,7 @@ class Breadcrumbs extends React.PureComponent {
               isLast={isLast}
               isFirst={isFirst}
               opacity={opacity}
-              icicleState={icicleState}
+              onBreadcrumbClick={onBreadcrumbClick}
               originalPath={originalPath}
               isActive={isActive}
             />
@@ -156,9 +154,14 @@ class Breadcrumbs extends React.PureComponent {
 }
 
 export default function BreadcrumbsApiToProps(props) {
-  const { api, aliases, maxDepth, getFfByFfId, originalPath } = props;
-  const { icicle_state } = api;
-  const breadcrumb_sequence = icicle_state.sequence();
+  const {
+    aliases,
+    maxDepth,
+    getFfByFfId,
+    originalPath,
+    hoverSequence,
+    lockedSequence,
+  } = props;
   const { t } = useTranslation();
 
   return (
@@ -166,9 +169,8 @@ export default function BreadcrumbsApiToProps(props) {
       {...props}
       aliases={aliases}
       originalPath={originalPath}
-      breadcrumb_sequence={breadcrumb_sequence}
-      isFocused={icicle_state.isFocused()}
-      isLocked={icicle_state.isLocked()}
+      isFocused={hoverSequence.length > 0}
+      isLocked={lockedSequence.length > 0}
       maxDepth={maxDepth}
       getFfByFfId={getFfByFfId}
       root_id={ROOT_FF_ID}

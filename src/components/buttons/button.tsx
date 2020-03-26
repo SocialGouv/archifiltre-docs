@@ -1,20 +1,20 @@
 import React from "react";
 
-export function mkRB(click_action, label, enabled, color, custom_style = {}) {
+export function mkRB(clickAction, label, enabled, color, customStyle = {}) {
   const defaultButtonStyle = {
     backgroundColor: color ? color : "#4d9e25",
     borderRadius: "50%",
     marginBottom: 0,
   };
 
-  const buttonStyle = { ...defaultButtonStyle, ...custom_style };
+  const buttonStyle = { ...defaultButtonStyle, ...customStyle };
 
   if (enabled) {
     return (
       <button
         type="button"
         className="button active_button"
-        onClick={click_action}
+        onClick={clickAction}
         style={buttonStyle}
       >
         {label}
@@ -25,7 +25,7 @@ export function mkRB(click_action, label, enabled, color, custom_style = {}) {
       <button
         type="button"
         className="button"
-        onClick={click_action}
+        onClick={clickAction}
         style={buttonStyle}
         disabled
       >
@@ -35,25 +35,25 @@ export function mkRB(click_action, label, enabled, color, custom_style = {}) {
   }
 }
 
-export function mkTB(click_action, label, enabled, color, custom_style) {
+export function mkTB(clickAction, label, enabled, color, customStyle) {
   const defaultButtonStyle = {
-    color: color ? color : "#4d9e25",
+    WebkitTransition: "all 0.2s ease-out",
     backgroundColor: enabled
       ? "rgba(249, 154, 11, 0)"
       : "rgba(249, 154, 11, 0.2)",
+    color: color ? color : "#4d9e25",
+    cursor: enabled ? "pointer" : "default",
     opacity: enabled ? 1 : 0.7,
     transition: "all 0.2s ease-out",
-    WebkitTransition: "all 0.2s ease-out",
-    cursor: enabled ? "pointer" : "default",
   };
 
-  const buttonStyle = { ...defaultButtonStyle, ...custom_style };
+  const buttonStyle = { ...defaultButtonStyle, ...customStyle };
 
   if (enabled) {
     return (
       <button
         className="clear button active_button"
-        onClick={click_action}
+        onClick={clickAction}
         style={buttonStyle}
       >
         {label}

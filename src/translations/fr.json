@@ -54,7 +54,12 @@
       "clickHereToAddTags": "Cliquez ici pour ajouter des tags !",
       "newTag": "Nouveau tag",
       "file": "Fichier",
-      "level": "Niveau"
+      "level": "Niveau",
+      "impossibleMove": "Déplacement impossible",
+      "cannotMoveElement": "Impossible de déplacer le fichier ou dossier ici",
+      "nameConflict": "Conflit de nom avec un élément de ce dossier",
+      "moveElementsMode": "Mode Déplacement",
+      "normalMode": "Mode normal"
     },
     "header": {
       "export": "Exporter",
@@ -96,6 +101,7 @@
       "size": "poids (octet)",
       "firstModified": "date de première modification",
       "lastModified": "date de dernière modification",
+      "newPath": "nouveau chemin",
       "newName": "nouveau nom",
       "description": "description",
       "fileOrFolder": "fichier/répertoire",

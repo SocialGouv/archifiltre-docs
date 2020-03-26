@@ -1,11 +1,14 @@
 import _ from "lodash";
+import path from "path";
 import undoable from "../enhancers/undoable/undoable";
 import {
+  ADD_CHILD,
   ADD_COMMENTS_ON_FILES_AND_FOLDERS,
   FilesAndFoldersActionTypes,
   FilesAndFoldersState,
   INITIALIZE_FILES_AND_FOLDERS,
   MARK_AS_TO_DELETE,
+  REMOVE_CHILD,
   SET_FILES_AND_FOLDERS_ALIAS,
   SET_FILES_AND_FOLDERS_HASHES,
   UNMARK_AS_TO_DELETE,
@@ -17,6 +20,55 @@ export const initialState: FilesAndFoldersState = {
   elementsToDelete: [],
   filesAndFolders: {},
   hashes: {},
+  virtualPathToId: {},
+};
+
+/**
+ * Generates updated filesAndFolders map and virtualPathToId map for the moved filesAndFolders
+ * @param filesAndFolders
+ * @param virtualPathToId
+ * @param movedElementId
+ * @param newParentVirtualPath
+ */
+const updateChildVirtualPath = (
+  filesAndFolders,
+  virtualPathToId,
+  movedElementId,
+  newParentVirtualPath
+) => {
+  const updatedFilesAndFolders = {
+    ...filesAndFolders,
+  };
+
+  const updatedVirtualPathToId = {
+    ...virtualPathToId,
+  };
+
+  const updateChildVirtualPathRec = (currentId, currentParentVirtualPath) => {
+    const filesAndFolder = updatedFilesAndFolders[currentId];
+
+    const virtualPath = path.join(
+      currentParentVirtualPath,
+      filesAndFolder.name
+    );
+
+    updatedVirtualPathToId[virtualPath] = currentId;
+    updatedFilesAndFolders[currentId] = {
+      ...filesAndFolder,
+      virtualPath,
+    };
+
+    filesAndFolder.children.map((childId) =>
+      updateChildVirtualPathRec(childId, virtualPath)
+    );
+  };
+
+  updateChildVirtualPathRec(movedElementId, newParentVirtualPath);
+
+  return {
+    filesAndFolders: updatedFilesAndFolders,
+    virtualPathToId: updatedVirtualPathToId,
+  };
 };
 
 /**
@@ -31,6 +83,39 @@ const filesAndFoldersReducer = (
   switch (action.type) {
     case INITIALIZE_FILES_AND_FOLDERS:
       return { ...state, filesAndFolders: action.filesAndFolders };
+    case ADD_CHILD:
+      const parent = state.filesAndFolders[action.parentId];
+      const { filesAndFolders, virtualPathToId } = updateChildVirtualPath(
+        state.filesAndFolders,
+        state.virtualPathToId,
+        action.childId,
+        parent.virtualPath
+      );
+      return {
+        ...state,
+        filesAndFolders: {
+          ...filesAndFolders,
+          [action.parentId]: {
+            ...parent,
+            children: _.uniq(parent.children.concat([action.childId])),
+          },
+        },
+        virtualPathToId,
+      };
+    case REMOVE_CHILD:
+      return {
+        ...state,
+        filesAndFolders: {
+          ...state.filesAndFolders,
+          [action.parentId]: {
+            ...state.filesAndFolders[action.parentId],
+            children: _.without(
+              state.filesAndFolders[action.parentId].children,
+              action.childId
+            ),
+          },
+        },
+      };
     case SET_FILES_AND_FOLDERS_ALIAS:
       return {
         ...state,

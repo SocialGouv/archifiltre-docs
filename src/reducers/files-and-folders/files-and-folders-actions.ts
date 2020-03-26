@@ -1,4 +1,5 @@
 import {
+  ADD_CHILD,
   ADD_COMMENTS_ON_FILES_AND_FOLDERS,
   AliasMap,
   CommentsMap,
@@ -7,6 +8,7 @@ import {
   HashesMap,
   INITIALIZE_FILES_AND_FOLDERS,
   MARK_AS_TO_DELETE,
+  REMOVE_CHILD,
   SET_FILES_AND_FOLDERS_ALIAS,
   SET_FILES_AND_FOLDERS_HASHES,
   UNMARK_AS_TO_DELETE,
@@ -76,4 +78,26 @@ export const unmarkAsToDelete = (
 ): FilesAndFoldersActionTypes => ({
   filesAndFoldersId,
   type: UNMARK_AS_TO_DELETE,
+});
+
+/**
+ * Remove the child of a files and folders
+ * @param parentId
+ * @param childId
+ */
+export const removeChild = (parentId, childId): FilesAndFoldersActionTypes => ({
+  childId,
+  parentId,
+  type: REMOVE_CHILD,
+});
+
+/**
+ * Remove the
+ * @param parentId
+ * @param childId
+ */
+export const addChild = (parentId, childId): FilesAndFoldersActionTypes => ({
+  childId,
+  parentId,
+  type: ADD_CHILD,
 });

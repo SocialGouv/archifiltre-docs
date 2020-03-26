@@ -3,6 +3,8 @@ import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import { initialState as filesAndFoldersInitialState } from "./files-and-folders-reducer";
 import {
   decomposePathToElement,
+  findElementParent,
+  getElementByVirtualPath,
   getFileCount,
   getFiles,
   getFilesAndFoldersAverageLastModified,
@@ -278,6 +280,22 @@ describe("files-and-folders-selectors", () => {
         "/f1/f2/f3",
         "/f1/f2/f3/file",
       ]);
+    });
+  });
+
+  describe("findElementParent", () => {
+    it("should return the element parent", () => {
+      expect(findElementParent(child12Id, filesAndFoldersTestMap)).toEqual(
+        child1
+      );
+    });
+  });
+
+  describe("getElementByVirtualPath", () => {
+    it("should find the right element", () => {
+      expect(
+        getElementByVirtualPath(filesAndFoldersTestMap, child11Id)
+      ).toEqual(child11);
     });
   });
 });

@@ -19,14 +19,16 @@ import {
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "../../../reducers/tags/tags-types";
 import * as ArrayUtil from "../../../util/array-util";
-import * as FunctionUtil from "../../../util/function-util";
+import { empty } from "../../../util/function-util";
 import BreadCrumbs from "../breadcrumb/breadcrumbs";
 import MinimapBracket from "../minimap-bracket";
 import Ruler from "../ruler";
 import AnimatedIcicle from "./animated-icicle";
 import Icicle from "./icicle";
-import { DimsAndId } from "./icicle-rect";
+import { Dims, DimsAndId } from "./icicle-rect";
 import { FillColor } from "./icicle-types";
+import { useFileMoveActiveState } from "./use-file-move-active-state";
+import { useMovableElements } from "./use-movable-elements";
 
 export type IcicleMouseHandler = (
   dimsAndId: DimsAndId,
@@ -70,18 +72,20 @@ interface IcicleMainProps {
   root_id: string;
   display_root: string;
   fillColor: FillColor;
-  sequence: string[];
-  hover_sequence: string[];
+  hoveredElementId: string;
+  lockedElementId: string;
+  hoverSequence: string[];
+  lockedSequence: string[];
   elementsToDelete: string[];
   getChildrenIdFromId: (id: string) => string[];
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
   width_by_size: boolean;
   maxDepth: number;
-  isLocked: boolean;
   setDisplayRoot: (pathToElement: string[]) => void;
-  lock: (pathToElement: string[], dims: any) => void;
+  lock: (id: string) => void;
   unlock: () => void;
-  setFocus: (pathToElement: string[], dims: any) => void;
+  moveElement: (movedElementId: string, targetFolderId: string) => void;
+  setFocus: (id: string) => void;
   setNoFocus: () => void;
   setNoHover: () => void;
 }
@@ -95,17 +99,19 @@ const IcicleMain: FC<IcicleMainProps> = ({
   root_id: rootId,
   display_root: displayRoot,
   fillColor,
-  sequence,
-  hover_sequence: hoverSequence,
+  hoveredElementId,
+  lockedElementId,
+  hoverSequence,
+  lockedSequence,
   elementsToDelete,
   getChildrenIdFromId,
   getFfByFfId,
   width_by_size: widthBySize,
   maxDepth,
-  isLocked,
   setDisplayRoot,
   lock,
   unlock,
+  moveElement,
   setFocus,
   setNoFocus,
   setNoHover,
@@ -114,6 +120,9 @@ const IcicleMain: FC<IcicleMainProps> = ({
     viewBoxHeight: 300,
     viewBoxWidth: 1000,
   });
+
+  const [hoveredDims, setHoveredDims] = useState<Dims | {}>({});
+  const [lockedDims, setLockedDims] = useState<Dims | {}>({});
 
   const icicleHeight = viewBoxHeight * ICICLES_VIEWBOX_RATIO;
   const icicleWidth = viewBoxWidth * ICICLES_VIEWBOX_RATIO;
@@ -224,17 +233,14 @@ const IcicleMain: FC<IcicleMainProps> = ({
    */
   const onClickHandler = useCallback(() => {
     unlock();
-    setNoFocus();
   }, [unlock, setNoFocus]);
 
   /**
    * Handle viewport mouse leave.
    */
   const onMouseLeaveHandler = useCallback(() => {
-    if (!isLocked) {
-      setNoFocus();
-    }
-  }, [isLocked, setNoFocus]);
+    setNoFocus();
+  }, [setNoFocus]);
 
   /**
    * Handles click on icicle rectangle
@@ -242,9 +248,10 @@ const IcicleMain: FC<IcicleMainProps> = ({
   const onIcicleRectClickHandler = useCallback(
     ({ id, dims }, event) => {
       event.stopPropagation();
-      lock(decomposePathToElement(id), dims());
+      lock(id);
+      setLockedDims(dims());
     },
-    [lock]
+    [lock, setLockedDims]
   );
 
   /**
@@ -262,9 +269,10 @@ const IcicleMain: FC<IcicleMainProps> = ({
    */
   const onIcicleRectMouseOverHandler = useCallback(
     ({ id, dims }) => {
-      setFocus(decomposePathToElement(id), dims());
+      setHoveredDims(dims());
+      setFocus(id);
     },
-    [decomposePathToElement, setFocus]
+    [decomposePathToElement, setFocus, setHoveredDims]
   );
 
   /**
@@ -273,6 +281,12 @@ const IcicleMain: FC<IcicleMainProps> = ({
   const onIcicleMouseLeave = useCallback(() => {
     setNoHover();
   }, []);
+
+  const { isFileMoveActive } = useFileMoveActiveState();
+
+  const { onIcicleMouseUp, onIcicleMouseDown } = useMovableElements(
+    moveElement
+  );
 
   const minimapX = icicleWidth + MINIMAP_LEFT_MARGIN;
   const minimapY = icicleHeight + MINIMAP_TOP_MARGIN;
@@ -298,8 +312,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
         trueFHeight={normalizeHeight}
         getChildrenIdFromId={getChildrenIdFromId}
         fillColor={fillColor}
-        sequence={sequence}
-        hover_sequence={hoverSequence}
+        hoverSequence={hoverSequence}
+        lockedSequence={lockedSequence}
         shouldRenderChild={isIcicleInViewport}
         onIcicleRectClickHandler={onIcicleRectClickHandler}
         onIcicleRectDoubleClickHandler={onIcicleRectDoubleClickHandler}
@@ -309,17 +323,19 @@ const IcicleMain: FC<IcicleMainProps> = ({
       />
 
       <Ruler
-        api={api}
         getFfByFfId={getFfByFfId}
         x={0}
         y={icicleHeight}
         dx={icicleWidth}
         dy={rulerHeight}
+        hoveredElementId={hoveredElementId}
+        lockedElementId={lockedElementId}
         fillColor={fillColor}
+        hoveredDims={hoveredDims}
+        lockedDims={lockedDims}
       />
 
       <BreadCrumbs
-        api={api}
         aliases={aliases}
         originalPath={originalPath}
         getFfByFfId={getFfByFfId}
@@ -327,6 +343,9 @@ const IcicleMain: FC<IcicleMainProps> = ({
         x={icicleWidth}
         dx={breadcrumbsWidth}
         dy={icicleHeight}
+        hoverSequence={hoverSequence}
+        lockedSequence={lockedSequence}
+        onBreadcrumbClick={onIcicleRectClickHandler}
         trueFHeight={normalizeHeight}
         fillColor={fillColor}
       />
@@ -355,12 +374,12 @@ const IcicleMain: FC<IcicleMainProps> = ({
           trueFHeight={normalizeHeight}
           getChildrenIdFromId={getChildrenIdFromId}
           fillColor={fillColor}
-          sequence={sequence}
-          hover_sequence={hoverSequence}
+          hoverSequence={hoverSequence}
+          lockedSequence={lockedSequence}
           shouldRenderChild={shouldRenderChildMinimap}
-          onIcicleRectClickHandler={FunctionUtil.empty}
-          onIcicleRectDoubleClickHandler={FunctionUtil.empty}
-          onIcicleRectMouseOverHandler={FunctionUtil.empty}
+          onIcicleRectClickHandler={empty}
+          onIcicleRectDoubleClickHandler={empty}
+          onIcicleRectMouseOverHandler={empty}
           computeWidthRec={computeWidthRec}
           tags={tags}
         />
@@ -387,6 +406,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
       ref={svgRef}
       onClick={onClickHandler}
       onMouseLeave={onMouseLeaveHandler}
+      onMouseUp={isFileMoveActive ? onIcicleMouseUp : empty}
+      onMouseDown={isFileMoveActive ? onIcicleMouseDown : empty}
     >
       {icicle}
     </svg>

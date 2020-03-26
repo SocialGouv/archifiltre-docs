@@ -145,11 +145,16 @@ const computeTextPosition = (x, dx, w, mode) => {
 
 export default function RulerApiToProps(props) {
   const {
-    api: { icicle_state },
     getFfByFfId,
+    hoveredElementId,
+    lockedElementId,
+    hoveredDims,
+    lockedDims,
   } = props;
 
-  const nodeId = icicle_state.sequence().slice(-1)[0];
+  const isHovered = hoveredElementId !== "";
+  const isLocked = lockedElementId !== "";
+  const nodeId = hoveredElementId || lockedElementId;
   const totalSize = getFfByFfId("").childrenTotalSize;
   const node = getFfByFfId(nodeId);
   const nodeSize = node ? node.childrenTotalSize : null;
@@ -157,8 +162,8 @@ export default function RulerApiToProps(props) {
   return (
     <Ruler
       {...props}
-      dims={icicle_state.hover_dims()}
-      isFocused={icicle_state.isFocused()}
+      dims={isHovered ? hoveredDims : lockedDims}
+      isFocused={isHovered || isLocked}
       node_size={nodeSize}
       node_id={nodeId}
       total_size={totalSize}

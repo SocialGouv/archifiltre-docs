@@ -225,6 +225,7 @@ describe("duplicates-util", () => {
         nbChildrenFiles: 1,
         sortByDateIndex: [0],
         sortBySizeIndex: [0],
+        virtualPath: "folder-1-id",
       });
     });
 
@@ -248,6 +249,7 @@ describe("duplicates-util", () => {
           nbChildrenFiles: 1,
           sortByDateIndex: [0],
           sortBySizeIndex: [0],
+          virtualPath: "folder-1-id",
         },
       ]);
     });

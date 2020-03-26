@@ -5,6 +5,7 @@ import { of } from "rxjs";
 import { DispatchExts } from "../../reducers/archifiltre-types";
 import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { initialState as filesAndFoldersInitialState } from "../../reducers/files-and-folders/files-and-folders-reducer";
+import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 import {
   COMPLETE_LOADING,
   LoadingInfoTypes,
@@ -68,26 +69,20 @@ const tags = {
 };
 
 const filesAndFolders = {
-  [rootId]: {
-    alias: "",
+  [rootId]: createFilesAndFolders({
     children: [taggedFfId],
-    comments: "",
     file_last_modified: 1571325669,
     file_size: 10,
-    hash: null,
     id: rootId,
     name: "root",
-  },
-  [taggedFfId]: {
-    alias: "",
+  }),
+  [taggedFfId]: createFilesAndFolders({
     children: [],
-    comments: "",
     file_last_modified: 1571325669,
     file_size: 10,
-    hash: null,
     id: taggedFfId,
     name: "filename",
-  },
+  }),
 };
 
 const filesAndFoldersMetadata = {

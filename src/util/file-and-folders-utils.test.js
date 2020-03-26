@@ -4,6 +4,7 @@ import {
   countDeeperFolders,
   countFoldersWithMoreThanNChildren,
   countLongerPath,
+  createFilePathSequence,
   filesAndFoldersMapToArray,
   findAllFoldersWithNoSubfolder,
   getAllChildren,
@@ -14,6 +15,7 @@ import {
   sortFoldersByChildrenCount,
   sortFoldersByDepth,
 } from "./file-and-folders-utils";
+import { createFilesAndFolders } from "../reducers/files-and-folders/files-and-folders-test-utils";
 
 describe("file-and-folders-common", () => {
   describe("countFoldersWithMoreThanNChildren", () => {
@@ -490,6 +492,34 @@ describe("file-and-folders-common", () => {
     });
   });
 
+  describe("createFilePathSequence", () => {
+    it("should return the decomposed sequence", () => {
+      const targetFileId = "/folder/other-folder/another-one/file-name";
+      const movedFolderVirtualPath = "/folder/virtual-folder";
+      const targetFileVirtualPath = "/folder/virtual-folder/file-name";
+      const movedFolderId = "/folder/other-folder/another-one";
+      const filesAndFolders = {
+        [targetFileId]: createFilesAndFolders({
+          id: targetFileId,
+          virtualPath: targetFileVirtualPath,
+        }),
+      };
+
+      const virtualPathToIdMap = {
+        [movedFolderVirtualPath]: movedFolderId,
+        [targetFileVirtualPath]: targetFileId,
+      };
+
+      expect(
+        createFilePathSequence(
+          targetFileId,
+          filesAndFolders,
+          virtualPathToIdMap
+        )
+      ).toEqual(["/folder", movedFolderId, targetFileId]);
+    });
+  });
+
   describe("getType", () => {
     it("should return folder when a folder is given", () => {
       const folder = {
@@ -543,6 +573,7 @@ describe("file-and-folders-common", () => {
         children: [],
       },
     };
+
     it("should return a recursive list of all children nodes", () => {
       expect(getAllChildren(fileAndFolders, "")).toStrictEqual([
         "",
@@ -556,6 +587,7 @@ describe("file-and-folders-common", () => {
         "file1",
       ]);
     });
+
     it("should return a one element list when a file is given", () => {
       expect(getAllChildren(fileAndFolders, "file1")).toStrictEqual(["file1"]);
     });

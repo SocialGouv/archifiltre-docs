@@ -54,7 +54,12 @@
       "clickHereToAddTags": "Click here to add tags!",
       "newTag": "New tag",
       "file": "File",
-      "level": "Level"
+      "level": "Level",
+      "impossibleMove": "Impossible to move",
+      "cannotMoveElement": "Cannot move file or folder here",
+      "nameConflict": "Name conflict with one of this folder elements",
+      "moveElementsMode": "Move mode",
+      "normalMode": "Normal mode"
     },
     "header": {
       "export": "Export",
@@ -96,6 +101,7 @@
       "size": "size (octet)",
       "firstModified": "first_modified",
       "lastModified": "last_modified",
+      "newPath": "new path",
       "newName": "new name",
       "description": "description",
       "fileOrFolder": "file/folder",

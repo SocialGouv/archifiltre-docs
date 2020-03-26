@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Icicle from "components/main-space/icicle/icicle-container";
 import Report from "components/report/report-container";
@@ -13,6 +13,14 @@ const SearchButtonWrapper = styled.div`
   left: 0;
   bottom: 0;
 `;
+
+const workspaceMode = {
+  isFileMoveActive: false,
+  // eslint-disable-next-line no-unused-vars
+  setIsFileMoveActive: (isMoveActive) => {},
+};
+
+export const WorkspaceContext = React.createContext(workspaceMode);
 
 const Workspace = ({ api }) => (
   <div className="grid-y grid-frame">
@@ -55,8 +63,15 @@ const WorkspaceApiToProps = (props) => {
     root_id: ROOT_FF_ID,
     width_by_size: icicle_state.widthBySize(),
   };
+  const [isFileMoveActive, setIsFileMoveActive] = useState(false);
 
-  return <Workspace {...childProps} />;
+  return (
+    <WorkspaceContext.Provider
+      value={{ isFileMoveActive, setIsFileMoveActive }}
+    >
+      <Workspace {...childProps} />
+    </WorkspaceContext.Provider>
+  );
 };
 
 export default WorkspaceApiToProps;

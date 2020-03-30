@@ -150,6 +150,10 @@
         "EACCES": "Vous n'avez pas les droit pour accéder à cette resource.",
         "UNKNOWN": "Erreur inconnue ou non supportée."
       }
+    },
+    "settingsModal": {
+      "title": "Paramètres",
+      "language": "Langue"
     }
   }
 }

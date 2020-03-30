@@ -10,10 +10,10 @@ import {
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import ExportDropdown from "../export-dropdown";
 import SessionInfo from "./session-info";
-import LanguagePicker from "./language";
 import styled from "styled-components";
 import ArchifiltreLogo from "../archifiltre-logo";
 import LoadPreviousSessionButton from "../../buttons/load-previous-session-button";
+import SettingsButton from "./settings-button";
 
 const HeaderLine = styled.div`
   width: 100%;
@@ -32,7 +32,7 @@ const ButtonCell = styled.div`
 `;
 
 const SmallButtonCell = styled.div`
-  min-width: 4em;
+  min-width: 3em;
 `;
 
 const TextAlignRight = styled.div`
@@ -136,7 +136,7 @@ const DashBoard = ({
         </ButtonCell>
       )}
       <SmallButtonCell>
-        <LanguagePicker />
+        <SettingsButton />
       </SmallButtonCell>
       {shouldDisplayReset && (
         <ButtonCell>

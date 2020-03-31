@@ -1,7 +1,3 @@
-import { curryRight } from "lodash";
-import { curry } from "lodash/fp";
-import { number } from "prop-types";
-
 /**
  * Get a percent value rounded to the right number of decimals
  * @param value - The numerator count

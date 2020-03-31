@@ -1,7 +1,6 @@
 module.exports = {
   extends: ["@socialgouv/eslint-config-react"],
   rules: {
-    "react/prop-types": "off",
     "jsx-a11y/mouse-events-have-key-events": "off",
     "no-console": "off",
     "jsx-a11y/click-events-have-key-events": "off",

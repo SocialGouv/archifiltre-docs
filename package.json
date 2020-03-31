@@ -140,7 +140,6 @@
     "md5-file": "^4.0.0",
     "mime-types": "^2.1.26",
     "pizzip": "^3.0.6",
-    "prop-types": "^15.7.2",
     "raven": "^2.6.4",
     "react": "^16.9.5",
     "react-dom": "^16.9.5",

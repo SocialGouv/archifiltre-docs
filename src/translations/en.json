@@ -150,6 +150,10 @@
         "EACCES": "You do not have the rights to access this file.",
         "UNKNOWN": "Unknown or unhandled error."
       }
+    },
+    "settingsModal": {
+      "title": "Settings",
+      "language": "Language"
     }
   }
 }

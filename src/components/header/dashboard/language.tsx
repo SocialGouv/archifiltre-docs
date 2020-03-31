@@ -1,27 +1,34 @@
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 import { useLanguage } from "../../../translations/useLanguage";
-import { ButtonColor } from "../../common/button";
-import TextAlignCenter from "../../common/text-align-center";
-import Bubble from "./bubble";
-import LanguageButton from "./language/language-button";
-import LanguageList from "./language/language-list";
+
+const availableLanguages = [
+  {
+    value: "fr",
+    label: "🇫🇷 Français",
+  },
+  {
+    value: "en",
+    label: "🇬🇧 English",
+  },
+  {
+    value: "de",
+    label: "🇩🇪 Deutsch",
+  },
+];
 
 const LanguagePicker: FC = () => {
   const [language, setLanguage] = useLanguage();
 
+  const onChange = useCallback((event) => setLanguage(event.target.value), []);
+
   return (
-    <Bubble
-      backgroundColor={ButtonColor.SUCCESS}
-      borderRadius="5px"
-      comp={
-        <TextAlignCenter>
-          <LanguageButton languageName={language} />
-        </TextAlignCenter>
-      }
-      sub_comp={
-        <LanguageList setLanguage={setLanguage} excludeLanguage={language} />
-      }
-    />
+    <select onChange={onChange} value={language}>
+      {availableLanguages.map((availableLanguage) => (
+        <option value={availableLanguage.value}>
+          {availableLanguage.label}
+        </option>
+      ))}
+    </select>
   );
 };
 

@@ -10,6 +10,12 @@ const HeaderWrapper = styled.div`
 
 const CloseButton = styled.button`
   cursor: pointer;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  &:hover {
+    background-color: #ededed;
+  }
 `;
 
 interface ModalHeaderProps {

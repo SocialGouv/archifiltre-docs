@@ -1,11 +1,11 @@
 import React, { FC, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Modal from "react-modal";
-import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import { FilesAndFoldersMap } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { FilesAndFoldersTable } from "./files-and-folders-table";
-import ModalHeader from "../modals/modal-header";
+import ModalHeader from "../modal-header";
 import { SearchBar } from "./search-bar";
-import { useSearch } from "./use-search";
+import { useSearch } from "../../../hooks/use-search";
 
 interface SearchModalProps {
   isModalOpen: boolean;

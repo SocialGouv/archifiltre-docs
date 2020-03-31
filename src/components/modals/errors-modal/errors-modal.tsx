@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import Modal from "react-modal";
-import ModalHeader from "../modals/modal-header";
+import ModalHeader from "../../modals/modal-header";
 import { useTranslation } from "react-i18next";
-import { ArchifiltreError } from "../../reducers/loading-info/loading-info-types";
+import { ArchifiltreError } from "../../../reducers/loading-info/loading-info-types";
 import ErrorsTable from "./errors-table";
 
 interface ErrorsModalProps {

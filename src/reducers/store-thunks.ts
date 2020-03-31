@@ -1,7 +1,7 @@
 import _ from "lodash";
 import path from "path";
 import AsyncHandleDrop from "../async-handle-drop";
-import { mapToNewVersionNumbers } from "../components/header/a-new-version-is-available";
+import { mapToNewVersionNumbers } from "../components/header/new-version-checker";
 import { computeHashesThunk } from "../hash-computer/hash-computer-thunk";
 import { addTracker } from "../logging/tracker";
 import { ActionTitle, ActionType } from "../logging/tracker-types";

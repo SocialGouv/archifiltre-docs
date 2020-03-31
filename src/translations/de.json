@@ -61,7 +61,7 @@
       "close": "Schließen",
       "save": "Speichern",
       "aNewVersionIsOut": "Version {{version}} von Archifiltre ist erschienen!",
-      "downloadIt": "Laden Sie die neue Version herunter!",
+      "download": "Laden Sie die neue Version herunter!",
       "csvWithHash": "CSV mit Hash-Werten",
       "csvWithHashDisabledMessage": "Bitte warten, bis die Hash-Werte berechnet wurden",
       "loadPreviousSessionButtonLabel": "Vorherige Sitzung laden"

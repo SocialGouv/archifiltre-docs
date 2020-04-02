@@ -25,4 +25,6 @@ export const versionComparator = (
   return 0;
 };
 
+export const versionName = "Poetic Papangue";
+
 export default version;

@@ -24,6 +24,8 @@ export const fromAnyJsonToJs = (json) => {
       js = v13JsToV14Js(js);
     case "2.0.0":
       js = v2ToV21Js(js);
+    case "2.1.0":
+      js = v21ToV22Js(js);
   }
   return js;
 };
@@ -212,5 +214,20 @@ export const v2ToV21Js = (v2) => {
     filesAndFolders,
     aliases,
     comments,
+  };
+};
+
+export const v21ToV22Js = (v21) => {
+  const filesAndFolders = _.mapValues(
+    v21.filesAndFolders,
+    (fileAndFolder, id) => ({
+      ...fileAndFolder,
+      id,
+    })
+  );
+
+  return {
+    ...v21,
+    filesAndFolders,
   };
 };

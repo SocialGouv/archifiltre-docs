@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import ReactTooltip from "react-tooltip";
 import styled from "styled-components";
-import version from "../../version";
+import version, { versionName } from "../../version";
 import { HelpLink } from "./help-link";
 
 const ArchifiltreLogoWrapper = styled.span`
@@ -24,7 +24,7 @@ const onClick = (event) => {
   shell.openExternal(`${ARCHIFILTRE_SITE_URL}/#changelog`);
 };
 
-const versionSubtitle = `v${version} Optimistic Otter`;
+const versionSubtitle = `v${version} ${versionName}`;
 
 const ArchifiltreLogo: FC = () => {
   const { t } = useTranslation();

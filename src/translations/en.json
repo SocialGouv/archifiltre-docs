@@ -67,7 +67,7 @@
       "close": "Close",
       "save": "Save",
       "aNewVersionIsOut": "Version {{version}} of Archifiltre is out!",
-      "downloadIt": "download it!",
+      "download": "Download",
       "csvWithHash": "CSV with hashes",
       "csvWithHashDisabledMessage": "You must wait for hashes to have been computed",
       "loadPreviousSessionButtonLabel": "Load previous session",

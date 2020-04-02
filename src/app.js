@@ -12,8 +12,8 @@ import ReactDOM from "react-dom";
 import ErrorBoundary from "components/errors/error-boundary-container";
 import MainSpace from "components/main-space/main-space";
 import Header from "components/header/header.tsx";
-import ANewVersionIsAvailable from "components/header/a-new-version-is-available";
-import WindowResize from "components/common/window-resize";
+import { NewVersionChecker } from "components/header/new-version-checker";
+import WindowResize from "components/common/window-resize-handler";
 
 import { Store } from "reducers/real-estate-store";
 import { Provider } from "react-redux";
@@ -61,7 +61,7 @@ const app = () => {
               <WindowResize />
               <App className="grid-y grid-frame">
                 <div className="cell">
-                  <ANewVersionIsAvailable />
+                  <NewVersionChecker />
                 </div>
                 <div className="cell">
                   <Header api={api} />

@@ -1,13 +1,19 @@
-import React, { useMemo } from "react";
+import React, { FC, useMemo } from "react";
 
-import SaveButton from "components/buttons/save-button";
-import ReinitButton from "components/buttons/reinit-button.tsx";
+import SaveButton, { ExportToJson } from "components/buttons/save-button";
+import ReinitButton, { ResetWorkspace } from "components/buttons/reinit-button";
 import TextAlignCenter from "components/common/text-align-center";
-import CtrlZ from "components/header/dashboard/ctrl-z";
+import UndoRedo from "components/header/dashboard/undo-redo";
+import { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import {
   getFileCount,
   getFoldersCount,
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
+import { FilesAndFoldersMap } from "../../../reducers/files-and-folders/files-and-folders-types";
+import { ExportToAuditReport } from "../../buttons/audit-report-button";
+import { ExportToCsv } from "../../buttons/csv-button";
+import { ExportToMets } from "../../buttons/mets-button";
+import { ExportToResip } from "../../buttons/resip-button";
 import ExportDropdown from "../export-dropdown";
 import SessionInfo from "./session-info";
 import styled from "styled-components";
@@ -44,7 +50,47 @@ const FlexCenter = styled.div`
   justify-content: center;
 `;
 
-const DashBoard = ({
+interface DashboardProps {
+  areHashesReady: boolean;
+  started: boolean;
+  finished: boolean;
+  error: boolean;
+  hasPreviousSession: boolean;
+  originalPath: string;
+  sessionName: string;
+  onChangeSessionName: (newName: string) => void;
+  nbFolders: number;
+  nbFiles: number;
+  volume: number;
+  api: any;
+  exportToCsv: ExportToCsv;
+  exportToResip: ExportToResip;
+  exportToMets: ExportToMets;
+  exportToJson: ExportToJson;
+  exportToAuditReport: ExportToAuditReport;
+  resetWorkspace: ResetWorkspace;
+  reloadPreviousSession: () => void;
+}
+
+interface DashbordApiToPropsProps {
+  api: any;
+  areHashesReady: boolean;
+  originalPath: string;
+  hasPreviousSession: boolean;
+  sessionName: string;
+  exportToCsv: ExportToCsv;
+  exportToResip: ExportToResip;
+  exportToMets: ExportToMets;
+  exportToJson: ExportToJson;
+  exportToAuditReport: ExportToAuditReport;
+  resetWorkspace: ResetWorkspace;
+  reloadPreviousSession: () => void;
+  rootFilesAndFoldersMetadata: FilesAndFoldersMetadata;
+  filesAndFolders: FilesAndFoldersMap;
+  setSessionName: (newName: string) => void;
+}
+
+const DashBoard: FC<DashboardProps> = ({
   areHashesReady,
   started,
   finished,
@@ -65,16 +111,11 @@ const DashBoard = ({
   resetWorkspace,
   reloadPreviousSession,
 }) => {
-  const shouldDisplayActions =
-    started === true && finished === true && error === false;
-
-  const shouldDisplayReset = started === true && finished === true;
+  const shouldDisplayActions = started && finished && !error;
+  const shouldDisplayReset = started && finished;
   const shouldDisplayPreviousSession =
-    started === false &&
-    finished === false &&
-    error === false &&
-    hasPreviousSession === true;
-  const shouldDisplayNavigationArrows = started === finished && error === false;
+    !started && !finished && !error && hasPreviousSession;
+  const shouldDisplayNavigationArrows = started === finished && !error;
 
   return (
     <HeaderLine>
@@ -84,7 +125,9 @@ const DashBoard = ({
 
       <Spacer />
       <div>
-        {shouldDisplayNavigationArrows && <CtrlZ visible={true} api={api} />}
+        {shouldDisplayNavigationArrows && (
+          <UndoRedo isVisible={true} api={api} />
+        )}
       </div>
 
       <div>
@@ -149,7 +192,7 @@ const DashBoard = ({
   );
 };
 
-export default function DashBoardApiToProps({
+const DashBoardApiToProps: FC<DashbordApiToPropsProps> = ({
   api,
   areHashesReady,
   originalPath,
@@ -165,7 +208,7 @@ export default function DashBoardApiToProps({
   rootFilesAndFoldersMetadata,
   filesAndFolders,
   setSessionName,
-}) {
+}) => {
   const {
     loading_state: { isFinished, isInError, isStarted },
   } = api;
@@ -204,4 +247,6 @@ export default function DashBoardApiToProps({
       reloadPreviousSession={reloadPreviousSession}
     />
   );
-}
+};
+
+export default DashBoardApiToProps;

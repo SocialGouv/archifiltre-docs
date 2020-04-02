@@ -1,10 +1,18 @@
 import React from "react";
 
 import * as UserData from "user-data";
+import { remote } from "electron";
 
-const { remote } = require("electron");
+interface WindowResizeState {
+  win;
+  reader;
+  writer;
+}
 
-class WindowResize extends React.PureComponent {
+export default class WindowResize extends React.PureComponent<
+  {},
+  WindowResizeState
+> {
   constructor(props) {
     super(props);
 
@@ -23,10 +31,7 @@ class WindowResize extends React.PureComponent {
   }
 
   onResize() {
-    const state = this.state;
-    const win = state.win;
-    const writer = state.writer;
-
+    const { win, writer } = this.state;
     const [width, height] = win.getSize();
 
     writer({
@@ -36,10 +41,7 @@ class WindowResize extends React.PureComponent {
   }
 
   componentDidMount() {
-    const state = this.state;
-    const win = state.win;
-    const reader = state.reader;
-
+    const { win, reader } = this.state;
     const { width, height } = reader();
 
     win.setSize(width, height);
@@ -56,36 +58,11 @@ class WindowResize extends React.PureComponent {
   }
 
   componentDidCatch(error, info) {
+    // tslint:disable-next-line:no-console
     console.log(error, info);
   }
 
   render() {
     return null;
-  }
-}
-
-export default class WindowResizeErrorHandler extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hasError: false,
-    };
-  }
-
-  componentDidCatch() {
-    this.setState({
-      hasError: true,
-    });
-  }
-
-  render() {
-    const { hasError } = this.state;
-
-    if (hasError) {
-      remote.getCurrentWindow().show();
-      return null;
-    } else {
-      return <WindowResize />;
-    }
   }
 }

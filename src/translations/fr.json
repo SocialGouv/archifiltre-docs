@@ -67,7 +67,7 @@
       "close": "Fermer",
       "save": "Enregistrer",
       "aNewVersionIsOut": "La version {{version}} d'Archifiltre est sortie !",
-      "downloadIt": "téléchargez la !",
+      "download": "Télécharger",
       "csvWithHash": "CSV avec empreintes",
       "csvWithHashDisabledMessage": "Vous devez attendre que les hashs aient été calculés",
       "loadPreviousSessionButtonLabel": "Recharger la session précédente",

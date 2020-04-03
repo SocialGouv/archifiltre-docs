@@ -1,5 +1,5 @@
 import React from "react";
-import { FaSearch } from "react-icons/all";
+import { FaSearch } from "react-icons/fa";
 import Button, {
   ButtonAngles,
   ButtonColor,

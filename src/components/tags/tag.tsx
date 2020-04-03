@@ -1,13 +1,17 @@
-import React from "react";
+import React, { FC } from "react";
 
 import TagBadge from "./tag-badge";
 import { FaTimes } from "react-icons/fa";
 
-const defaultComponentStyle = {
-  fontWeight: "bold",
-};
+interface TagProps {
+  removeHandler: () => void;
+  custom_style: any;
+  clickHandler: any;
+  text: string;
+  editing: boolean;
+}
 
-const Tag = ({
+const Tag: FC<TagProps> = ({
   removeHandler,
   custom_style: customStyle,
   clickHandler,
@@ -27,7 +31,7 @@ const Tag = ({
   );
 
   const componentStyle = {
-    ...defaultComponentStyle,
+    fontWeight: "bold",
     ...customStyle,
   };
 

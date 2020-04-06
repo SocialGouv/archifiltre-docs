@@ -28,6 +28,7 @@ export default class SvgRectangle extends PureComponent {
         onClick={onClickHandler}
         onDoubleClick={onDoubleClickHandler}
         onMouseOver={onMouseOverHandler}
+        onFocus={onMouseOverHandler}
         style={{ fill, opacity, stroke, cursor }}
       />
     );

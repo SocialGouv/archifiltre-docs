@@ -82,7 +82,6 @@ const Ruler = (props) => {
           onClick={(e) => {
             e.stopPropagation();
           }}
-          onMouseOver={() => {}}
           style={{ fill: fillColor(node_id) }}
         />
         <text

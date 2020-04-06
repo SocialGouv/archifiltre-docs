@@ -205,6 +205,7 @@ export default class Icicle extends PureComponent {
           onClick={onClickHandler}
           onDoubleClick={onDoubleClickHandler}
           onMouseOver={onMouseOverHandler}
+          onFocus={onMouseOverHandler}
         />
       </g>
     );

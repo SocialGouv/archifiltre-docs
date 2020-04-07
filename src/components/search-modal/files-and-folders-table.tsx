@@ -35,22 +35,27 @@ export const FilesAndFoldersTable = ({ filesAndFolders }) => {
       {
         Header: t("search.name"),
         accessor: "name",
+        maxWidth: 100,
       },
       {
         Header: t("search.type"),
         accessor: "type",
+        maxWidth: 100,
       },
       {
         Header: t("search.size"),
         accessor: "fileSize",
+        maxWidth: 100,
       },
       {
         Header: t("search.fileLastModified"),
         accessor: "lastModified",
+        maxWidth: 100,
       },
       {
         Header: t("search.path"),
         accessor: "path",
+        maxWidth: 200,
       },
     ],
     [t]

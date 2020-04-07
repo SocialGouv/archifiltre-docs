@@ -138,7 +138,8 @@
       "fileLastModified": "Dernière modification",
       "path": "Chemin",
       "searchPlaceholder": "Rechercher",
-      "noResult": "Pas de résultat"
+      "noResult": "Pas de résultat",
+      "page": "Page"
     },
     "errorsModal": {
       "title": "Liste des erreurs",

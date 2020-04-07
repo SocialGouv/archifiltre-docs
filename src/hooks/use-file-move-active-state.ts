@@ -1,5 +1,5 @@
 import { useCallback, useContext } from "react";
-import { WorkspaceContext } from "../../workspace/workspace";
+import { WorkspaceContext } from "../components/workspace/workspace";
 
 export const useFileMoveActiveState = () => {
   const { isFileMoveActive, setIsFileMoveActive } = useContext(

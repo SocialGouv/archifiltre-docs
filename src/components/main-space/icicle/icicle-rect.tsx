@@ -3,7 +3,7 @@ import React, { FC, useCallback, useEffect } from "react";
 import * as FunctionUtil from "util/function-util";
 import { FillColor } from "./icicle-types";
 import SvgRectangle from "./svg-rectangle";
-import { useFileMoveActiveState } from "./use-file-move-active-state";
+import { useFileMoveActiveState } from "../../../hooks/use-file-move-active-state";
 
 export interface Dims {
   x: number;

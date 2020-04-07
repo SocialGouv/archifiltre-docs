@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from "react";
-import { useLanguage } from "../../../translations/useLanguage";
+import { useLanguage } from "../../../hooks/use-language";
 
 const availableLanguages = [
   {

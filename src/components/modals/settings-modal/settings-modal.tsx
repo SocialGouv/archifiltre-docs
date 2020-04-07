@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import LanguagePicker from "../../header/dashboard/language";
 import ModalHeader from "../../modals/modal-header";
-import LanguagePicker from "./language";
 import Modal from "react-modal";
 import styled from "styled-components";
 

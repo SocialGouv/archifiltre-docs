@@ -1,7 +1,7 @@
 import { shell } from "electron";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { FaQuestionCircle } from "react-icons/all";
+import { FaQuestionCircle } from "react-icons/fa";
 import ReactTooltip from "react-tooltip";
 import styled from "styled-components";
 

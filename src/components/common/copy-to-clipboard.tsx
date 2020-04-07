@@ -1,7 +1,7 @@
 import { clipboard } from "electron";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaClipboardCheck, FaRegClipboard } from "react-icons/all";
+import { FaClipboardCheck, FaRegClipboard } from "react-icons/fa";
 import {
   NotificationDuration,
   notifyInfo,

@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaArrowsAlt } from "react-icons/fa";
 import Button, { ButtonColor, ButtonSize } from "../common/button";
-import { useFileMoveActiveState } from "../main-space/icicle/use-file-move-active-state";
+import { useFileMoveActiveState } from "../../hooks/use-file-move-active-state";
 
 export const MoveFilesButton = () => {
   const { t } = useTranslation();

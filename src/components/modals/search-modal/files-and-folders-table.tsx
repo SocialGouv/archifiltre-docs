@@ -1,9 +1,9 @@
 import dateFormat from "dateformat";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { getType } from "../../util/file-and-folders-utils";
-import { octet2HumanReadableFormat } from "../main-space/ruler";
-import Table from "../common/table";
+import { getType } from "../../../util/file-and-folders-utils";
+import { octet2HumanReadableFormat } from "../../main-space/ruler";
+import Table from "../../common/table";
 import { isEmpty } from "lodash";
 
 type FilesAndFoldersTableItem = {

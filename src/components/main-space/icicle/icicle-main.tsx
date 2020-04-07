@@ -27,8 +27,8 @@ import AnimatedIcicle from "./animated-icicle";
 import Icicle from "./icicle";
 import { Dims, DimsAndId } from "./icicle-rect";
 import { FillColor } from "./icicle-types";
-import { useFileMoveActiveState } from "./use-file-move-active-state";
-import { useMovableElements } from "./use-movable-elements";
+import { useFileMoveActiveState } from "../../../hooks/use-file-move-active-state";
+import { useMovableElements } from "../../../hooks/use-movable-elements";
 
 export type IcicleMouseHandler = (
   dimsAndId: DimsAndId,

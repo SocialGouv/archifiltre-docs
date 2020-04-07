@@ -10,11 +10,13 @@ import {
   getFoldersCount,
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import { FilesAndFoldersMap } from "../../../reducers/files-and-folders/files-and-folders-types";
-import { ExportToAuditReport } from "../../buttons/audit-report-button";
-import { ExportToCsv } from "../../buttons/csv-button";
-import { ExportToMets } from "../../buttons/mets-button";
-import { ExportToResip } from "../../buttons/resip-button";
-import ExportDropdown from "../export-dropdown";
+import {
+  ExportToAuditReport,
+  ExportToCsv,
+  ExportToMets,
+  ExportToResip,
+} from "../../common/export-types";
+import ExportButton from "./export-button";
 import SessionInfo from "./session-info";
 import styled from "styled-components";
 import ArchifiltreLogo from "../archifiltre-logo";
@@ -38,16 +40,13 @@ const ButtonCell = styled.div`
 `;
 
 const SmallButtonCell = styled.div`
+  padding-left: 5px;
+  padding-right: 5px;
   min-width: 3em;
 `;
 
 const TextAlignRight = styled.div`
   text-align: right;
-`;
-
-const FlexCenter = styled.div`
-  display: flex;
-  justify-content: center;
 `;
 
 interface DashboardProps {
@@ -157,19 +156,15 @@ const DashBoard: FC<DashboardProps> = ({
       )}
 
       {shouldDisplayActions && (
-        <ButtonCell>
-          <FlexCenter>
-            <ExportDropdown
-              areHashesReady={areHashesReady}
-              originalPath={originalPath}
-              sessionName={sessionName}
-              exportToAuditReport={exportToAuditReport}
-              exportToMets={exportToMets}
-              exportToResip={exportToResip}
-              exportToCsv={exportToCsv}
-            />
-          </FlexCenter>
-        </ButtonCell>
+        <SmallButtonCell>
+          <ExportButton
+            areHashesReady={areHashesReady}
+            exportToAuditReport={exportToAuditReport}
+            exportToMets={exportToMets}
+            exportToResip={exportToResip}
+            exportToCsv={exportToCsv}
+          />
+        </SmallButtonCell>
       )}
       {shouldDisplayPreviousSession && (
         <ButtonCell>

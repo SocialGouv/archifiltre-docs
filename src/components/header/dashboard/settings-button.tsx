@@ -1,8 +1,8 @@
 import React from "react";
 import { FaCog } from "react-icons/fa";
-import { useModal } from "../../../hooks/useModal";
-import Button, { ButtonAngles, ButtonSize } from "../../common/button";
-import SettingsModal from "./settings-modal";
+import { useModal } from "../../../hooks/use-modal";
+import Button, { ButtonAngles } from "../../common/button";
+import SettingsModal from "../../modals/settings-modal/settings-modal";
 
 const SettingsButton = () => {
   const { isModalOpen, openModal, closeModal } = useModal();

@@ -155,6 +155,10 @@
     "settingsModal": {
       "title": "Settings",
       "language": "Language"
+    },
+    "exportModal": {
+      "title": "Export",
+      "buttonTitle": "Export"
     }
   }
 }

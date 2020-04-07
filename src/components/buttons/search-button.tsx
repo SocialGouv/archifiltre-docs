@@ -5,8 +5,8 @@ import Button, {
   ButtonColor,
   ButtonSize,
 } from "../common/button";
-import { SearchModalContainer } from "../search-modal/search-modal-container";
-import { useModal } from "../../hooks/useModal";
+import { SearchModalContainer } from "../modals/search-modal/search-modal-container";
+import { useModal } from "../../hooks/use-modal";
 
 export const SearchButton = () => {
   const { isModalOpen, openModal, closeModal } = useModal();

@@ -1,7 +1,7 @@
 import { shell } from "electron";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaTimes } from "react-icons/all";
+import { FaTimes } from "react-icons/fa";
 import styled from "styled-components";
 
 import { request } from "util/http-util";

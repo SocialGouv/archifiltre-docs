@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { FaTimes } from "react-icons/all";
+import { FaTimes } from "react-icons/fa";
 
 const HeaderWrapper = styled.div`
   display: flex;

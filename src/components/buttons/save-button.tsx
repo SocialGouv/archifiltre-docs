@@ -1,5 +1,6 @@
 import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { FaSave } from "react-icons/fa";
 import version from "../../version";
 import Button, { ButtonWidth } from "../common/button";
 
@@ -34,8 +35,9 @@ const SaveButton: FC<SaveButtonProps> = ({
       id="json-export-button"
       onClick={onClick}
       width={ButtonWidth.WITH_SPACES}
+      tooltipText={t("header.save")}
     >
-      {t("header.save")}
+      <FaSave />
     </Button>
   );
 };

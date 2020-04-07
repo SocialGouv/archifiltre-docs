@@ -3,13 +3,14 @@ import React, { FC, useMemo } from "react";
 import SaveButton, { ExportToJson } from "components/buttons/save-button";
 import ReinitButton, { ResetWorkspace } from "components/buttons/reinit-button";
 import TextAlignCenter from "components/common/text-align-center";
-import UndoRedo from "components/header/dashboard/undo-redo";
+import UndoRedo from "components/header/dashboard/undo-redo-button";
 import { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import {
   getFileCount,
   getFoldersCount,
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import { FilesAndFoldersMap } from "../../../reducers/files-and-folders/files-and-folders-types";
+import { SearchButton } from "../../buttons/search-button";
 import {
   ExportToAuditReport,
   ExportToCsv,
@@ -35,18 +36,8 @@ const Spacer = styled.div`
   flex-grow: 1;
 `;
 
-const ButtonCell = styled.div`
-  min-width: 9em;
-`;
-
-const SmallButtonCell = styled.div`
-  padding-left: 5px;
-  padding-right: 5px;
+export const SmallButtonCell = styled.div`
   min-width: 3em;
-`;
-
-const TextAlignRight = styled.div`
-  text-align: right;
 `;
 
 interface DashboardProps {
@@ -123,11 +114,6 @@ const DashBoard: FC<DashboardProps> = ({
       </div>
 
       <Spacer />
-      <div>
-        {shouldDisplayNavigationArrows && (
-          <UndoRedo isVisible={true} api={api} />
-        )}
-      </div>
 
       <div>
         {shouldDisplayActions && (
@@ -144,44 +130,71 @@ const DashBoard: FC<DashboardProps> = ({
       <Spacer />
 
       {shouldDisplayActions && (
-        <ButtonCell>
-          <TextAlignRight>
+        <SmallButtonCell>
+          <TextAlignCenter>
+            <SearchButton />
+          </TextAlignCenter>
+        </SmallButtonCell>
+      )}
+
+      {shouldDisplayNavigationArrows && (
+        <>
+          <TextAlignCenter>
+            <SmallButtonCell>
+              <UndoRedo isVisible={true} api={api} isUndo={true} />
+            </SmallButtonCell>
+          </TextAlignCenter>
+          <TextAlignCenter>
+            <SmallButtonCell>
+              <UndoRedo isVisible={true} api={api} isUndo={false} />
+            </SmallButtonCell>
+          </TextAlignCenter>
+        </>
+      )}
+
+      {shouldDisplayActions && (
+        <SmallButtonCell>
+          <TextAlignCenter>
             <SaveButton
               originalPath={originalPath}
               sessionName={sessionName}
               exportToJson={exportToJson}
             />
-          </TextAlignRight>
-        </ButtonCell>
+          </TextAlignCenter>
+        </SmallButtonCell>
       )}
 
       {shouldDisplayActions && (
         <SmallButtonCell>
-          <ExportButton
-            areHashesReady={areHashesReady}
-            exportToAuditReport={exportToAuditReport}
-            exportToMets={exportToMets}
-            exportToResip={exportToResip}
-            exportToCsv={exportToCsv}
-          />
+          <TextAlignCenter>
+            <ExportButton
+              areHashesReady={areHashesReady}
+              exportToAuditReport={exportToAuditReport}
+              exportToMets={exportToMets}
+              exportToResip={exportToResip}
+              exportToCsv={exportToCsv}
+            />
+          </TextAlignCenter>
         </SmallButtonCell>
       )}
       {shouldDisplayPreviousSession && (
-        <ButtonCell>
+        <SmallButtonCell>
           <LoadPreviousSessionButton
             reloadPreviousSession={reloadPreviousSession}
           />
-        </ButtonCell>
+        </SmallButtonCell>
       )}
       <SmallButtonCell>
-        <SettingsButton />
+        <TextAlignCenter>
+          <SettingsButton />
+        </TextAlignCenter>
       </SmallButtonCell>
       {shouldDisplayReset && (
-        <ButtonCell>
+        <SmallButtonCell>
           <TextAlignCenter>
             <ReinitButton resetWorkspace={resetWorkspace} />
           </TextAlignCenter>
-        </ButtonCell>
+        </SmallButtonCell>
       )}
     </HeaderLine>
   );

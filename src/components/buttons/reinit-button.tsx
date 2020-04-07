@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
+import { FaSignOutAlt } from "react-icons/fa";
 import Button, { ButtonColor, ButtonWidth } from "../common/button";
 
 export type ResetWorkspace = () => void;
@@ -17,8 +18,9 @@ const ReinitButton: FC<ReinitButtonProps> = ({ resetWorkspace }) => {
       onClick={resetWorkspace}
       width={ButtonWidth.WITH_SPACES}
       color={ButtonColor.ERROR}
+      tooltipText={t("header.close")}
     >
-      {t("header.close")}
+      <FaSignOutAlt />
     </Button>
   );
 };

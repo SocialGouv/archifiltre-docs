@@ -150,7 +150,7 @@
       "errorDescriptions": {
         "ENOENT": "Le fichier est introuvable",
         "EBUSY": "La resource est occupée. Elle est peut-être utilisée par un autre processus.",
-        "EACCES": "Vous n'avez pas les droit pour accéder à cette resource.",
+        "EACCES": "Vous n'avez pas les droits pour accéder à cette resource.",
         "UNKNOWN": "Erreur inconnue ou non supportée."
       }
     },

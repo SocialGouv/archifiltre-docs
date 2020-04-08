@@ -5,6 +5,7 @@ import Report from "components/report/report-container";
 import AllTags from "components/tags/all-tags-container";
 import NavigationBar from "components/workspace/navigation-bar/navigation-bar-container";
 import { ROOT_FF_ID } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import Grid from "@material-ui/core/Grid";
 
 const workspaceMode = {
   isFileMoveActive: false,
@@ -15,30 +16,25 @@ const workspaceMode = {
 export const WorkspaceContext = React.createContext(workspaceMode);
 
 const Workspace = ({ api }) => (
-  <div className="grid-y grid-frame">
-    <div className="cell">
-      <div className="grid-x">
-        <div className="cell small-10" style={{ paddingRight: "10px" }}>
-          <Report api={api} />
-        </div>
-        <div className="cell small-2">
-          <AllTags api={api} />
-        </div>
-      </div>
-    </div>
+  <Grid container>
+    <Grid container>
+      <Grid item xs={10}>
+        <Report api={api} />
+      </Grid>
+      <Grid item xs={2}>
+        <AllTags api={api} />
+      </Grid>
+    </Grid>
 
-    <div className="cell">
-      <div className="grid-x align-center">
-        <div className="cell">
-          <NavigationBar api={api} />
-        </div>
-      </div>
-    </div>
-
-    <div className="cell auto">
-      <Icicle api={api} />
-    </div>
-  </div>
+    <Grid container>
+      <Grid item xs={12}>
+        <NavigationBar api={api} />
+      </Grid>
+      <Grid item xs={12} style={{ height: "100vh" }}>
+        <Icicle api={api} />
+      </Grid>
+    </Grid>
+  </Grid>
 );
 
 const WorkspaceApiToProps = (props) => {

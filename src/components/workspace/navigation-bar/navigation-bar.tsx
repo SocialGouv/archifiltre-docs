@@ -19,29 +19,21 @@ export const NavigationBar = ({
   iciclesSortMethod,
   setIciclesSortMethod,
 }) => (
-  <Grid className="grid-x align-middle">
-    <div className="cell small-2">
+  <Grid container>
+    <Grid item xs={2}>
       <BackToRootButton api={api} />
-    </div>
-    <div className="cell small-4">
-      <div className="flex-container">
-        <div className="flex-child-auto">
-          <IciclesSortOrderPicker
-            iciclesSortMethod={iciclesSortMethod}
-            setIciclesSortMethod={setIciclesSortMethod}
-          />
-        </div>
-      </div>
-    </div>
-    <div className="cell small-4">
-      <div className="flex-container">
-        <div className="flex-child-auto">
-          <ToggleWidthBySize api={api} />
-        </div>
-      </div>
-    </div>
-    <div className="cell small-2">
+    </Grid>
+    <Grid item xs={4}>
+      <IciclesSortOrderPicker
+        iciclesSortMethod={iciclesSortMethod}
+        setIciclesSortMethod={setIciclesSortMethod}
+      />
+    </Grid>
+    <Grid item xs={4}>
+      <ToggleWidthBySize api={api} />
+    </Grid>
+    <Grid item xs={2}>
       <MoveFilesButton />
-    </div>
+    </Grid>
   </Grid>
 );

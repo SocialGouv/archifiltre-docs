@@ -1,3 +1,4 @@
+import Grid from "@material-ui/core/Grid";
 import React, { FC, useCallback, useState } from "react";
 
 import TagListItem from "components/tags/all-tags-item";
@@ -121,19 +122,16 @@ const AllTags: FC<AllTagsProps> = ({
 
   return (
     <Wrapper tags={tags}>
-      <div className="grid-y" style={{ height: "100%" }}>
-        <div className="cell shrink">
+      <Grid container style={{ height: "100%" }}>
+        <Grid item>
           <TextAlignCenter>
             <b>{t("workspace.allTags")}</b>
           </TextAlignCenter>
-        </div>
-        <div className="cell auto">
+        </Grid>
+        <Grid item>
           {!tagMapHasTags(tags) && (
-            <div
-              className="grid-y grid-frame align-center"
-              style={{ height: "75%" }}
-            >
-              <div className="cell">
+            <Grid container style={{ height: "75%" }}>
+              <Grid item>
                 <TextAlignCenter>
                   <FaTags
                     style={{
@@ -143,21 +141,21 @@ const AllTags: FC<AllTagsProps> = ({
                     }}
                   />
                 </TextAlignCenter>
-              </div>
-              <div className="cell">
+              </Grid>
+              <Grid item>
                 <TextAlignCenter>
                   <em>{t("workspace.noTags")}</em>
                 </TextAlignCenter>
-              </div>
-            </div>
+              </Grid>
+            </Grid>
           )}
           {tagMapHasTags(tags) && (
             <TagsContent onMouseLeave={stopHighlightingTag}>
               {tagsList}
             </TagsContent>
           )}
-        </div>
-      </div>
+        </Grid>
+      </Grid>
     </Wrapper>
   );
 };

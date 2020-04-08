@@ -4,17 +4,7 @@ import FolderDropzone from "components/folder-dropzone/folder-dropzone-container
 import WorkSpace from "components/workspace/workspace-container";
 import WaitingScreen from "components/folder-dropzone/waiting-screen";
 import ErrorScreen from "components/errors/error-screen";
-import styled from "styled-components";
 import { Grid } from "@material-ui/core";
-
-const gridStyle = {
-  padding: "0em 5em",
-};
-
-const WorkspaceWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-`;
 
 const MainSpace = (props) => {
   const { api } = props;
@@ -26,38 +16,29 @@ const MainSpace = (props) => {
 
   if (error === true) {
     return (
-      <div
-        className="grid-y grid-padding-x grid-frame align-center"
-        style={gridStyle}
-      >
-        <div className="cell small-8">
-          <ErrorScreen api={api} />
-        </div>
-      </div>
+      <Grid>
+        <ErrorScreen api={api} />
+      </Grid>
     );
   }
   if (started === false && finished === false) {
     return (
-      <Grid>
+      <Grid container>
         <FolderDropzone api={api} setLoadedPath={setLoadedPath} />
       </Grid>
     );
   }
   if (started === true && finished === false) {
     return (
-      <div className="grid-y grid-padding-x grid-frame align-center">
-        <div className="cell">
-          <WaitingScreen api={api} loadedPath={loadedPath} />
-        </div>
-      </div>
+      <Grid>
+        <WaitingScreen api={api} loadedPath={loadedPath} />
+      </Grid>
     );
   }
   return (
-    <div className="grid-y grid-padding-x grid-frame align-center">
-      <WorkspaceWrapper>
-        <WorkSpace api={api} />
-      </WorkspaceWrapper>
-    </div>
+    <Grid container>
+      <WorkSpace api={api} />
+    </Grid>
   );
 };
 

@@ -71,7 +71,9 @@
       "csvWithHash": "CSV with hashes",
       "csvWithHashDisabledMessage": "You must wait for hashes to have been computed",
       "loadPreviousSessionButtonLabel": "Load previous session",
-      "help": "Help"
+      "help": "Help",
+      "undo": "Undo",
+      "redo": "Redo"
     },
     "common": {
       "error": "Oops ! An error occurred.",

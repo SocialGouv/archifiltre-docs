@@ -1,6 +1,7 @@
 import React, { FC, MouseEventHandler } from "react";
 import styled from "styled-components";
 import { empty } from "../../util/function-util";
+import ReactTooltip from "react-tooltip";
 
 export enum ButtonColor {
   INFO = "#1779ba",
@@ -64,6 +65,7 @@ interface ButtonProps {
   onClick?: MouseEventHandler;
   angles?: ButtonAngles;
   size?: ButtonSize;
+  tooltipText?: string;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -75,19 +77,25 @@ const Button: FC<ButtonProps> = ({
   angles = ButtonAngles.ROUNDED,
   onClick = empty,
   size = ButtonSize.NORMAL,
+  tooltipText = "",
 }) => (
-  <InnerButton
-    id={id}
-    color={color}
-    data-test-id={id}
-    disabled={disabled}
-    width={width}
-    angles={angles}
-    size={size}
-    onClick={onClick}
-  >
-    {children}
-  </InnerButton>
+  <>
+    <InnerButton
+      id={id}
+      color={color}
+      data-test-id={id}
+      disabled={disabled}
+      width={width}
+      angles={angles}
+      size={size}
+      onClick={onClick}
+      data-tip={tooltipText}
+      data-for={`${id}-tooltip`}
+    >
+      {children}
+    </InnerButton>
+    <ReactTooltip place="bottom" id={`${id}-tooltip`} />
+  </>
 );
 
 export default Button;

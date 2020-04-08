@@ -119,7 +119,7 @@
     "webpack-dev-server": "3.10.3"
   },
   "dependencies": {
-    "@sentry/browser": "^5.4.0",
+    "@sentry/browser": "^5.15.4",
     "@types/pizzip": "^3.0.1",
     "angular-expressions": "^1.0.1",
     "csv-parse": "^4.8.2",

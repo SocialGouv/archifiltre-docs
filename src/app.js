@@ -37,6 +37,7 @@ initTracker();
 const App = styled.div`
   padding: 0.975em;
   height: 100vh;
+  box-sizing: border-box;
 `;
 
 /**This is the entrypoint for the app. */

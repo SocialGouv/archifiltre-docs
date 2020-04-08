@@ -1,3 +1,11 @@
 @import "~react-notifications/lib/notifications.css";
 @import "../../static/fonts/fonts.css";
 @import "app.css";
+
+#root {
+  padding: unset;
+}
+
+body {
+  margin: unset;
+}

@@ -5,6 +5,7 @@ import WorkSpace from "components/workspace/workspace-container";
 import WaitingScreen from "components/folder-dropzone/waiting-screen";
 import ErrorScreen from "components/errors/error-screen";
 import styled from "styled-components";
+import { Grid } from "@material-ui/core";
 
 const gridStyle = {
   padding: "0em 5em",
@@ -37,14 +38,9 @@ const MainSpace = (props) => {
   }
   if (started === false && finished === false) {
     return (
-      <div
-        className="grid-y grid-padding-x grid-frame align-center"
-        style={gridStyle}
-      >
-        <div className="cell small-8">
-          <FolderDropzone api={api} setLoadedPath={setLoadedPath} />
-        </div>
-      </div>
+      <Grid>
+        <FolderDropzone api={api} setLoadedPath={setLoadedPath} />
+      </Grid>
     );
   }
   if (started === true && finished === false) {

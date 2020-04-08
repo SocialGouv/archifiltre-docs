@@ -1,7 +1,6 @@
 // Enables reporter to hook into the environment so it captures uncaught errors
 import "./logging/reporter.ts";
 
-import "foundation-sites";
 import "./css/index.scss";
 import "css/app.css";
 
@@ -25,9 +24,10 @@ import { NotificationContainer } from "react-notifications";
 import { initTracker } from "./logging/tracker.ts";
 import "./translations/translations";
 import BackgroundLoadingInfoContainer from "./components/background-loading-info/background-loading-info-container";
-import styled from "styled-components";
 import Modal from "react-modal";
 import Modals from "./components/modals/modals";
+import Grid from "@material-ui/core/Grid";
+import styled from "styled-components";
 
 document.title = `Archifiltre v${version}`;
 
@@ -35,10 +35,8 @@ SecretDevtools.enable();
 initTracker();
 
 const App = styled.div`
-  padding-top: 0.975em;
-  padding-right: 0.975em;
-  padding-bottom: 0.975em;
-  padding-left: 0.975em;
+  padding: 0.975em;
+  height: 100vh;
 `;
 
 /**This is the entrypoint for the app. */
@@ -54,22 +52,23 @@ const app = () => {
   ReactDOM.render(
     <Provider store={store}>
       <Store>
-        {(props) => {
-          const api = props.api;
+        {({ api }) => {
           return (
             <ErrorBoundary api={api}>
               <WindowResize />
-              <App className="grid-y grid-frame">
-                <div className="cell">
-                  <NewVersionChecker />
-                </div>
-                <div className="cell">
-                  <Header api={api} />
-                </div>
-                <div className="cell auto">
-                  <MainSpace api={api} />
-                </div>
-                <BackgroundLoadingInfoContainer />
+              <App>
+                <Grid container spacing={1} height="100%">
+                  <Grid item xs={12}>
+                    <NewVersionChecker />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Header api={api} />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <MainSpace api={api} />
+                  </Grid>
+                  <BackgroundLoadingInfoContainer />
+                </Grid>
               </App>
               <NotificationContainer />
               <Modals />

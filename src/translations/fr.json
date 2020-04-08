@@ -71,7 +71,9 @@
       "csvWithHash": "CSV avec empreintes",
       "csvWithHashDisabledMessage": "Vous devez attendre que les hashs aient été calculés",
       "loadPreviousSessionButtonLabel": "Recharger la session précédente",
-      "help": "Aide"
+      "help": "Aide",
+      "undo": "Annuler",
+      "redo": "Rétablir"
     },
     "common": {
       "error": "Oups ! Une erreur s'est produite.",

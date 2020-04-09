@@ -1111,10 +1111,10 @@ amdefine@>=0.0.4:
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
   integrity sha1-SlKCrBZHKek2Gbz9OtFR+BfOkfU=
 
-angular-expressions@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/angular-expressions/-/angular-expressions-1.0.1.tgz#ec80db6c7e3ef7863c2a7fef93cd59e083020ce4"
-  integrity sha512-rMBuCZzxKNO706Bo5TarLowMXmScOR78fnSuWQSYaAAF23HsLt0gAVWo4PJtRtGBsRAV8pJjXUOGjgkMNlt56g==
+angular-expressions@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/angular-expressions/-/angular-expressions-1.1.1.tgz#45fb8a5da8dc0fb854e717f71e8251c9d6bdae31"
+  integrity sha512-gH9UO5r0HTmQWOfet9dC6ekWZ0hnOzCy62OUcV79XuUh0wqaLzVHcv7STWfIA5hxn39TA4mYs1EKukCsgGIvwg==
 
 ansi-align@^3.0.0:
   version "3.0.0"

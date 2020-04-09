@@ -1,3 +1,4 @@
+import Grid from "@material-ui/core/Grid";
 import React, { FC, useCallback, useState } from "react";
 import styled from "styled-components";
 
@@ -51,9 +52,9 @@ const Bubble: FC<BubbleProps> = ({
         backgroundColor={backgroundColor}
         borderRadius={borderRadius}
       >
-        <div className="grid-x align-center">
-          <div className="cell">{sub_comp}</div>
-        </div>
+        <Grid container direction="row" alignItems="center">
+          <Grid item>{sub_comp}</Grid>
+        </Grid>
       </SubComponent>
     </Container>
   );

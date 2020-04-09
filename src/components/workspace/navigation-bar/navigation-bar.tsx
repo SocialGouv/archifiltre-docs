@@ -1,3 +1,4 @@
+import Grid from "@material-ui/core/Grid";
 import BackToRootButton from "components/buttons/back-to-root-button";
 import ToggleWidthBySize from "components/workspace/navigation-bar/toggle-width-by-size";
 import React from "react";
@@ -5,7 +6,7 @@ import styled from "styled-components";
 import { MoveFilesButton } from "../../buttons/move-files-button";
 import IciclesSortOrderPicker from "./icicle-sort-order-picker";
 
-const Grid = styled.div`
+const StyledGrid = styled(Grid)`
   background: white;
   border-radius: 5px;
   margin: 0.5em 0;
@@ -19,7 +20,7 @@ export const NavigationBar = ({
   iciclesSortMethod,
   setIciclesSortMethod,
 }) => (
-  <Grid container>
+  <StyledGrid container>
     <Grid item xs={2}>
       <BackToRootButton api={api} />
     </Grid>
@@ -35,5 +36,5 @@ export const NavigationBar = ({
     <Grid item xs={2}>
       <MoveFilesButton />
     </Grid>
-  </Grid>
+  </StyledGrid>
 );

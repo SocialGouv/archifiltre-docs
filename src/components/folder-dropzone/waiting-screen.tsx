@@ -46,7 +46,7 @@ interface PresentationalProps {
 
 interface WaitingScreenProps {
   loadedPath: string;
-  api;
+  api: any;
 }
 
 const SimpleLoader: FC<SimpleLoaderProps> = ({ loaderText }) => (

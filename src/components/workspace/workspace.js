@@ -17,7 +17,7 @@ export const WorkspaceContext = React.createContext(workspaceMode);
 
 const Workspace = ({ api }) => (
   <Grid container>
-    <Grid container>
+    <Grid container spacing={1}>
       <Grid item xs={10}>
         <Report api={api} />
       </Grid>
@@ -25,7 +25,6 @@ const Workspace = ({ api }) => (
         <AllTags api={api} />
       </Grid>
     </Grid>
-
     <Grid container>
       <Grid item xs={12}>
         <NavigationBar api={api} />

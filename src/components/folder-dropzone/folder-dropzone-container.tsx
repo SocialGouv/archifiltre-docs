@@ -4,7 +4,7 @@ import { loadFilesAndFoldersFromPathThunk } from "../../reducers/store-thunks";
 import FolderDropzone from "./folder-dropzone";
 
 interface FolderDropzoneContainerProps {
-  api;
+  api: any;
   setLoadedPath: (path: string) => void;
 }
 

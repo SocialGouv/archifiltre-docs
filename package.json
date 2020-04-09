@@ -130,7 +130,7 @@
     "fast-memoize": "^2.5.2",
     "file-saver": "2.0.2",
     "foundation-sites": "^6.6.3",
-    "i18next": "^19.0.1",
+    "i18next": "^19.4.0",
     "iconv-lite": "^0.5.0",
     "immutable": "4.0.0-rc.12",
     "jquery": "^3.4.1",

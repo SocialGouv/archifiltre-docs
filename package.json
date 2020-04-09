@@ -152,7 +152,7 @@
     "react-table": "^7.0.4",
     "react-tooltip": "^4.0.0",
     "redux": "^4.0.5",
-    "redux-mock-store": "^1.5.3",
+    "redux-mock-store": "^1.5.4",
     "redux-thunk": "^2.3.0",
     "riek": "1.1.0",
     "rxjs": "^6.5.5",

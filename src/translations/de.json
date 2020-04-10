@@ -38,11 +38,9 @@
       "copied": "Kopieren beendet!"
     },
     "workspace": {
-      "colorCode": "Farbcode:",
       "type": "Nach Typ",
       "dates": "Nach Datum",
       "backToRoot": "Zurück zum obersten Verzeichnis",
-      "display": "Anzeige:",
       "bySize": "Nach Größe",
       "byNumber": "Nach Anzahl",
       "allTags": "Alle Tags",

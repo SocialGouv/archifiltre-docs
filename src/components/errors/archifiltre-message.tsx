@@ -1,8 +1,9 @@
 import React, { FC } from "react";
 import { ContactUs } from "./contact-us";
 import styled from "styled-components";
+import Grid from "@material-ui/core/Grid";
 
-const Grid = styled.div`
+const StyledGrid = styled(Grid)`
   padding: 0em 5em;
   height: 100%;
 `;
@@ -13,7 +14,7 @@ const Image = styled.img`
 `;
 
 const ArchifiltreMessage: FC = ({ children }) => (
-  <Grid className="grid-y grid-padding-x align-spaced align-middle">
+  <StyledGrid container alignItems="center">
     <Image alt="archifiltre-logo" src="imgs/archifiltre.png" />
     <h3>
       {children}
@@ -21,7 +22,7 @@ const ArchifiltreMessage: FC = ({ children }) => (
       <br />
       <ContactUs />
     </h3>
-  </Grid>
+  </StyledGrid>
 );
 
 export default ArchifiltreMessage;

@@ -15,8 +15,8 @@ export interface WorkspaceMetadataState {
 }
 
 export enum IciclesSortMethod {
-  SORT_BY_TYPE,
-  SORT_BY_DATE,
+  SORT_BY_TYPE = "byType",
+  SORT_BY_DATE = "byDate",
 }
 
 interface SetSessionNameAction {

@@ -21,20 +21,20 @@ export const NavigationBar = ({
   setIciclesSortMethod,
 }) => (
   <StyledGrid container>
-    <Grid item xs={2}>
+    <Grid item xs={3}>
       <BackToRootButton api={api} />
     </Grid>
-    <Grid item xs={4}>
+    <Grid item xs={3}>
+      <MoveFilesButton />
+    </Grid>
+    <Grid item xs={3}>
       <IciclesSortOrderPicker
         iciclesSortMethod={iciclesSortMethod}
         setIciclesSortMethod={setIciclesSortMethod}
       />
     </Grid>
-    <Grid item xs={4}>
+    <Grid item xs={3}>
       <ToggleWidthBySize api={api} />
-    </Grid>
-    <Grid item xs={2}>
-      <MoveFilesButton />
     </Grid>
   </StyledGrid>
 );

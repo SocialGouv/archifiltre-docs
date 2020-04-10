@@ -26,7 +26,7 @@ import "./translations/translations";
 import BackgroundLoadingInfoContainer from "./components/background-loading-info/background-loading-info-container";
 import Modal from "react-modal";
 import Modals from "./components/modals/modals";
-import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
 import styled from "styled-components";
 
 document.title = `Archifiltre v${version}`;
@@ -58,18 +58,21 @@ const app = () => {
             <ErrorBoundary api={api}>
               <WindowResize />
               <App>
-                <Grid container spacing={1} height="100%">
-                  <Grid item xs={12}>
-                    <NewVersionChecker />
-                  </Grid>
-                  <Grid item xs={12}>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  height="100%"
+                  width="100%"
+                >
+                  <Box>
                     <Header api={api} />
-                  </Grid>
-                  <Grid item xs={12}>
+                  </Box>
+                  <Box flexGrow={1} flexShrink={1}>
                     <MainSpace api={api} />
-                  </Grid>
+                  </Box>
                   <BackgroundLoadingInfoContainer />
-                </Grid>
+                </Box>
+                <NewVersionChecker />
               </App>
               <NotificationContainer />
               <Modals />

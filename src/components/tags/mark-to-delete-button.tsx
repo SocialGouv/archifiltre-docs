@@ -2,6 +2,7 @@ import React, { FC, MouseEventHandler, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import TagBadge, { TagBadgeColor } from "./tag-badge";
+import Grid from "@material-ui/core/Grid";
 
 const ButtonWrapper = styled.div`
   padding: 0.3em;
@@ -27,7 +28,7 @@ const MarkToDeleteButton: FC<MarkToDeleteButtonProps> = ({
   );
   return (
     <ButtonWrapper>
-      <div className="grid-x">
+      <Grid container>
         <TagBadge
           color={TagBadgeColor.DELETE}
           active={isCurrentFileMarkedToDelete}
@@ -35,7 +36,7 @@ const MarkToDeleteButton: FC<MarkToDeleteButtonProps> = ({
         >
           {t("common.toDelete")}
         </TagBadge>
-      </div>
+      </Grid>
     </ButtonWrapper>
   );
 };

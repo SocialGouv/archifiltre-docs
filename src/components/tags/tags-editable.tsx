@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { empty } from "../../util/function-util";
 import MarkToDeleteButton from "./mark-to-delete-button";
 import styled from "styled-components";
+import Grid from "@material-ui/core/Grid";
 
 const Input = styled.input`
   width: 7em;
@@ -13,7 +14,7 @@ const Input = styled.input`
   border-bottom: 3px solid rgb(10, 50, 100);
 `;
 
-const CellShrink = styled.div`
+const CellShrink = styled(Grid)`
   padding: 0.3em;
 `;
 
@@ -54,7 +55,7 @@ const TagsEditable: FC<TagsEditableProps> = ({
     () =>
       tagsForCurrentFile
         .map((tag) => (
-          <CellShrink className="cell shrink" key={tag.id}>
+          <CellShrink key={tag.id}>
             <Tag
               text={tag.name}
               editing={editing}
@@ -73,7 +74,7 @@ const TagsEditable: FC<TagsEditableProps> = ({
   if (editing) {
     const elements = tagsToElements();
     const inputBox = (
-      <CellShrink className="cell shrink" key="__input__">
+      <CellShrink key="__input__">
         <Input
           onMouseUp={(event) => {
             event.stopPropagation();
@@ -92,14 +93,14 @@ const TagsEditable: FC<TagsEditableProps> = ({
     answer = tagsToElements();
   } else {
     answer = (
-      <CellShrink className="cell shrink" key="__closing__">
+      <CellShrink item key="__closing__">
         <span>{t("workspace.clickHereToAddTags")}</span>
       </CellShrink>
     );
   }
 
   return (
-    <div className="grid-x">
+    <Grid container>
       {(isLocked || isCurrentFileMarkedToDelete) && (
         <MarkToDeleteButton
           isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
@@ -107,7 +108,7 @@ const TagsEditable: FC<TagsEditableProps> = ({
         />
       )}
       {answer}
-    </div>
+    </Grid>
   );
 };
 

@@ -23,11 +23,8 @@ import { FaTags } from "react-icons/fa";
 import styled from "styled-components";
 import { TagMap } from "../../reducers/tags/tags-types";
 
-const TagsContent = styled.div`
+const TagsContent = styled(Grid)`
   font-size: 0.8em;
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: 100%;
 `;
 
 const Wrapper = styled.div`
@@ -122,25 +119,27 @@ const AllTags: FC<AllTagsProps> = ({
 
   return (
     <Wrapper tags={tags}>
-      <Grid container style={{ height: "100%" }}>
+      <Grid container direction="column" justify="center" alignItems="center">
         <Grid item>
-          <TextAlignCenter>
-            <b>{t("workspace.allTags")}</b>
-          </TextAlignCenter>
+          <b>{t("workspace.allTags")}</b>
         </Grid>
         <Grid item>
           {!tagMapHasTags(tags) && (
-            <Grid container style={{ height: "75%" }}>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              spacing={1}
+            >
               <Grid item>
-                <TextAlignCenter>
-                  <FaTags
-                    style={{
-                      color: Color.placeholder(),
-                      fontSize: "3em",
-                      lineHeight: 0,
-                    }}
-                  />
-                </TextAlignCenter>
+                <FaTags
+                  style={{
+                    color: Color.placeholder(),
+                    fontSize: "3em",
+                    lineHeight: 0,
+                  }}
+                />
               </Grid>
               <Grid item>
                 <TextAlignCenter>
@@ -150,7 +149,7 @@ const AllTags: FC<AllTagsProps> = ({
             </Grid>
           )}
           {tagMapHasTags(tags) && (
-            <TagsContent onMouseLeave={stopHighlightingTag}>
+            <TagsContent container onMouseLeave={stopHighlightingTag}>
               {tagsList}
             </TagsContent>
           )}

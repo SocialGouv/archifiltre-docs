@@ -6,6 +6,7 @@ import AllTags from "components/tags/all-tags-container";
 import NavigationBar from "components/workspace/navigation-bar/navigation-bar-container";
 import { ROOT_FF_ID } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
 
 const workspaceMode = {
   isFileMoveActive: false,
@@ -16,24 +17,28 @@ const workspaceMode = {
 export const WorkspaceContext = React.createContext(workspaceMode);
 
 const Workspace = ({ api }) => (
-  <Grid container>
-    <Grid container spacing={1}>
-      <Grid item xs={10}>
-        <Report api={api} />
+  <Box display="flex" flexDirection="column" height="100%">
+    <Box flexGrow={0} style={{ minHeight: "20%" }}>
+      <Grid container spacing={1}>
+        <Grid item xs={10}>
+          <Report api={api} />
+        </Grid>
+        <Grid item xs={2}>
+          <AllTags api={api} />
+        </Grid>
       </Grid>
-      <Grid item xs={2}>
-        <AllTags api={api} />
-      </Grid>
-    </Grid>
-    <Grid container>
-      <Grid item xs={12}>
-        <NavigationBar api={api} />
-      </Grid>
-      <Grid item xs={12} style={{ height: "100vh" }}>
-        <Icicle api={api} />
-      </Grid>
-    </Grid>
-  </Grid>
+    </Box>
+    <Box flexGrow={1} flexBasis="auto" flexShrink={1}>
+      <Box display="flex" flexDirection="column" height="100%">
+        <Box flexGrow={0}>
+          <NavigationBar api={api} />
+        </Box>
+        <Box flexGrow={1}>
+          <Icicle api={api} />
+        </Box>
+      </Box>
+    </Box>
+  </Box>
 );
 
 const WorkspaceApiToProps = (props) => {

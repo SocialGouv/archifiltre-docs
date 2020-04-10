@@ -134,8 +134,8 @@ const NameCell = ({
   originalPath,
   onChangeAlias,
 }) => (
-  <div className="grid-x align-middle" style={{ height: "3.2em" }}>
-    <div className="cell shrink" style={{ paddingRight: pad }}>
+  <Grid container style={{ height: "3.2em" }}>
+    <Grid item style={{ paddingRight: pad }}>
       <ElementIcon
         placeholder={placeholder}
         isFolder={isFolder}
@@ -146,10 +146,10 @@ const NameCell = ({
           shell.openItem(itemPath);
         }}
       />
-    </div>
-    <div className="cell auto">
-      <div className="grid-x">
-        <div className="cell small-12">
+    </Grid>
+    <Grid item>
+      <Grid item>
+        <Grid item>
           <Name
             placeholder={placeholder}
             onChangeAlias={onChangeAlias}
@@ -158,14 +158,14 @@ const NameCell = ({
             bracketName={bracketName}
             nodeName={nodeName}
           />
-        </div>
-        <div className="cell small-12">
+        </Grid>
+        <Grid item xs={12}>
           {" "}
           <RealName placeholder={placeholder} bracketName={bracketName} />
-        </div>
-      </div>
-    </div>
-  </div>
+        </Grid>
+      </Grid>
+    </Grid>
+  </Grid>
 );
 
 const InfoCell = ({

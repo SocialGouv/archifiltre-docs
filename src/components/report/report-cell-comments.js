@@ -5,6 +5,7 @@ import { withTranslation } from "react-i18next";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { FaPen } from "react-icons/fa";
+import Grid from "@material-ui/core/Grid";
 
 class ReportCellComments extends React.Component {
   constructor(props) {
@@ -148,20 +149,21 @@ class ReportCellComments extends React.Component {
 
     if (is_dummy) {
       return (
-        <div className="cell small-6" style={cells_style}>
+        <Grid item style={cells_style}>
           <b>{props.t("report.comments")}</b>
           <br />
           <span style={{ fontStyle: "italic" }}>
             {props.t("report.yourCommentsHere")}
           </span>
-        </div>
+        </Grid>
       );
     } else {
       return (
-        <div
+        <Grid
+          item
           data-test-id="description-edit-box"
           ref={setWrapperRef}
-          className="cell small-6 edit_hover_container"
+          className="edit_hover_container"
           style={cells_style}
           onClick={onClick}
         >
@@ -181,7 +183,7 @@ class ReportCellComments extends React.Component {
               comments={comments}
             />
           </div>
-        </div>
+        </Grid>
       );
     }
   }

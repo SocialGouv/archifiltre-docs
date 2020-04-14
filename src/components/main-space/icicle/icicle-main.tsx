@@ -4,12 +4,10 @@ import React, {
   memo,
   MouseEvent,
   useCallback,
-  useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import { animate, clear } from "../../../animation-daemon";
 import { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { decomposePathToElement } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import {
@@ -116,10 +114,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
   setNoFocus,
   setNoHover,
 }) => {
-  const [{ viewBoxHeight, viewBoxWidth }, setViewboxState] = useState({
-    viewBoxHeight: 300,
-    viewBoxWidth: 1000,
-  });
+  const viewBoxWidth = 1000;
+  const viewBoxHeight = 300;
 
   const [hoveredDims, setHoveredDims] = useState<Dims | {}>({});
   const [lockedDims, setLockedDims] = useState<Dims | {}>({});
@@ -131,26 +127,10 @@ const IcicleMain: FC<IcicleMainProps> = ({
 
   const svgRef = useRef<SVGSVGElement>(null);
 
-  /**
-   * Setup the listeners for the zoom in / zoom out animations
-   */
-  useEffect(() => {
-    const domElement = svgRef.current;
-    let animationId;
-    if (domElement) {
-      const visible = () => true;
-      const measure = () => {
-        const width = domElement.width.baseVal.value;
-        const height = domElement.height.baseVal.value;
-        if (viewBoxHeight !== height || viewBoxWidth !== width) {
-          setViewboxState({ viewBoxHeight: height, viewBoxWidth: width });
-        }
-      };
-      const mutate = () => null;
-      animationId = animate(visible, measure, mutate);
-    }
-    return () => clear(animationId);
-  }, [svgRef, setViewboxState, viewBoxHeight, viewBoxWidth]);
+  const minimapX = icicleWidth + MINIMAP_LEFT_MARGIN;
+  const minimapY = icicleHeight + MINIMAP_TOP_MARGIN;
+  const minimapWidth = breadcrumbsWidth - MINIMAP_LEFT_MARGIN;
+  const minimapHeight = rulerHeight - 2 * MINIMAP_TOP_MARGIN;
 
   /**
    * Returns the total size of the child elements based on its id
@@ -205,7 +185,13 @@ const IcicleMain: FC<IcicleMainProps> = ({
   /**
    * Normalizes the height based on the maxDepth of the file tree
    */
-  const normalizeHeight = useCallback((height) => height / maxDepth, [
+  const normalizeHeight = useCallback(() => icicleHeight / maxDepth, [
+    icicleHeight,
+    maxDepth,
+  ]);
+
+  const normalizeMinimapHeight = useCallback(() => minimapHeight / maxDepth, [
+    minimapHeight,
     maxDepth,
   ]);
 
@@ -288,13 +274,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
     moveElement
   );
 
-  const minimapX = icicleWidth + MINIMAP_LEFT_MARGIN;
-  const minimapY = icicleHeight + MINIMAP_TOP_MARGIN;
-  const minimapWidth = breadcrumbsWidth - MINIMAP_LEFT_MARGIN;
-  const minimapHeight = rulerHeight - 2 * MINIMAP_TOP_MARGIN;
-
   const icicle = (
-    <g>
+    <>
       <AnimatedIcicle
         aliases={aliases}
         comments={comments}
@@ -371,7 +352,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
           fWidth={computeWidth}
           elementsToDelete={elementsToDelete}
           normalizeWidth={normalizeWidth}
-          trueFHeight={normalizeHeight}
+          trueFHeight={normalizeMinimapHeight}
           getChildrenIdFromId={getChildrenIdFromId}
           fillColor={fillColor}
           hoverSequence={hoverSequence}
@@ -393,7 +374,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
           fillColor={fillColor}
         />
       </g>
-    </g>
+    </>
   );
 
   return (
@@ -402,7 +383,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
       viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
       width="100%"
       height="100%"
-      preserveAspectRatio="xMidYMid meet"
+      preserveAspectRatio="none"
       ref={svgRef}
       onClick={onClickHandler}
       onMouseLeave={onMouseLeaveHandler}

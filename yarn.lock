@@ -8966,10 +8966,10 @@ react-table@^7.0.4:
   dependencies:
     "@scarf/scarf" "^0.1.5"
 
-react-tooltip@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-4.2.1.tgz#7cb2ea0e32c95d4e91f6de7bc83a2b23375d4238"
-  integrity sha512-UnbPca1JJsCeJ/6bnBdivacciEFw5JjfFSALCnFbQkTfTo6kcPF0ryO+mUiMNIoaUBTI28wGlcDEQxfICQivcA==
+react-tooltip@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-4.2.3.tgz#da9bdc9f4322392fb43de0dd6cf002f95e43d35b"
+  integrity sha512-VduZryAPVlgnSLlq6qukBrzBkiATXorx3FzC1eX3OaCknPxTuULEQwR0nJkxo2MgpzKMw0t9LFjzVbS9KQGaYA==
   dependencies:
     prop-types "^15.7.2"
     uuid "^7.0.3"

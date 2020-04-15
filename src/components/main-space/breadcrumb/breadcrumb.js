@@ -1,4 +1,4 @@
-import BreadCrumbPoly from "./breadcrumb-poly";
+import BreadCrumbPoly from "./breadcrumb-poly-new";
 import BreadCrumbText from "./breadcrumb-text";
 import React, { useCallback } from "react";
 import { CopyToClipboard } from "../../common/copy-to-clipboard";

@@ -1,7 +1,7 @@
 import React from "react";
 import * as Color from "util/color-util";
 import { useTranslation } from "react-i18next";
-import { Breadcrumb } from "./breadcrumb";
+import { Breadcrumb } from "./breadcrumb-new";
 import { makeEmptyArray } from "../../../util/array-util";
 import { ROOT_FF_ID } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import { getDisplayName } from "../../../util/file-and-folders-utils";

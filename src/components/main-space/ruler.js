@@ -78,7 +78,7 @@ const Ruler = (props) => {
           x={dims.x}
           y={rulerY + (rulerDy * 1) / 3}
           width={dims.dx}
-          height="0.3em"
+          height={(rulerDy * 1) / 3}
           onClick={(e) => {
             e.stopPropagation();
           }}

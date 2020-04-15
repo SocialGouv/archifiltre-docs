@@ -877,10 +877,10 @@
     hoist-non-react-statics "^3.3.0"
     redux "^4.0.0"
 
-"@types/react-table@7.0.14":
-  version "7.0.14"
-  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-7.0.14.tgz#6670a7712c334b7f31445e79d8c3489f330bb16c"
-  integrity sha512-TDXx0r5izh5wb73o63jde2WSPgbmvfq9E6JgcbK/P1q/DDKuVtQ8LC4FqyDasVS4BEv4+tZpaCNTW6Ww3N3luA==
+"@types/react-table@7.0.16":
+  version "7.0.16"
+  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-7.0.16.tgz#3db6518fe07d79c58213e2b959983b353ba59457"
+  integrity sha512-SDFRUnWWN16rL/N1bpV4GKp4EAoulmrHbHoWCNUldrqVBYI9m9o+sYqNPP2E5NVUW7HQJf15rHKFN13F6v49Uw==
   dependencies:
     "@types/react" "*"
 

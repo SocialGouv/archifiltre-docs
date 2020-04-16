@@ -20,7 +20,7 @@ import { TagMap } from "../../../reducers/tags/tags-types";
 import * as ArrayUtil from "../../../util/array-util";
 import { empty } from "../../../util/function-util";
 import MinimapBracket from "../minimap-bracket";
-import Ruler from "../ruler-new";
+import Ruler from "../ruler";
 import AnimatedIcicle from "./animated-icicle";
 import Icicle from "./icicle";
 import { Dims, DimsAndId } from "./icicle-rect";
@@ -341,6 +341,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
             lockedDims={lockedDims}
             lockedElementId={lockedElementId}
             totalSize={viewBoxWidth}
+            fillColor={fillColor}
           />
         </RulerWrapper>
       </IcicleViewport>

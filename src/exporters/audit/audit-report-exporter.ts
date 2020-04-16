@@ -1,4 +1,3 @@
-import { octet2HumanReadableFormat } from "../../components/main-space/ruler";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
@@ -20,7 +19,11 @@ import {
   countDuplicateFiles,
   countDuplicateFolders,
 } from "../../util/duplicates-util";
-import { formatPathForUserSystem, saveBlob } from "../../util/file-sys-util";
+import {
+  formatPathForUserSystem,
+  octet2HumanReadableFormat,
+  saveBlob,
+} from "../../util/file-sys-util";
 import { FileType } from "../../util/file-types-util";
 import {
   AuditReportData,

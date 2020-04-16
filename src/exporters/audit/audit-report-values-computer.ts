@@ -17,7 +17,6 @@ import {
   takeRight,
 } from "lodash/fp";
 import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { octet2HumanReadableFormat } from "../../components/main-space/ruler";
 import {
   FilesAndFoldersCollection,
   getFiles,
@@ -35,7 +34,10 @@ import {
   getBiggestDuplicatedFolders,
   getMostDuplicatedFiles,
 } from "../../util/duplicates-util";
-import { formatPathForUserSystem } from "../../util/file-sys-util";
+import {
+  formatPathForUserSystem,
+  octet2HumanReadableFormat,
+} from "../../util/file-sys-util";
 import {
   FileType,
   getExtensionsForEachFileType,

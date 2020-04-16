@@ -1,8 +1,15 @@
+import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import {
+  AliasMap,
+  CommentsMap,
+  FilesAndFoldersMap,
+} from "../../reducers/files-and-folders/files-and-folders-types";
+import { TagMap } from "../../reducers/tags/tags-types";
 import translations from "../../translations/translations";
 import path from "path";
 import { generateRandomString } from "util/random-gen-util";
 import { Map } from "immutable";
-import version from "version.ts";
+import version from "version";
 import { getAllTagsForFile } from "../../reducers/tags/tags-selectors";
 import { notifySuccess } from "../../util/notifications-util";
 import { handleError } from "../../util/error-util";
@@ -18,30 +25,26 @@ import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { getDisplayName } from "../../util/file-and-folders-utils";
 import { v4 as uuidv4 } from "uuid";
 
-const XML = require("xml");
-const dateFormat = require("dateformat");
-const Path = require("path");
-const fs = require("fs");
-const JSZip = require("jszip");
-const MD5 = require("js-md5");
-
+import MD5 from "js-md5";
+import XML from "xml";
+import dateFormat from "dateformat";
+import fs from "fs";
+import JSZip from "jszip";
 // =================================
 // AUXILIARY FUNCTIONS AND VARIABLES
 // =================================
-const makeObj = (key, value) => ({
+const makeObj = (key: string, value: any) => ({
   [key]: value,
 });
 
 const makeId = () => {
-  return "_" + generateRandomString(40);
+  return `_${generateRandomString(40)}`;
 };
 
 const DATE_FORMAT = "yyyy-mm-dd'T'HH:MM:ss";
 const HASH_ALGORITHM = "MD5";
 
-const makeCreationDate = () => {
-  return dateFormat(new Date(), DATE_FORMAT);
-};
+const makeCreationDate = () => dateFormat(new Date(), DATE_FORMAT);
 
 // =================================
 // DUMMY VALUES
@@ -75,34 +78,32 @@ const makeManifestRootAttributes = () => {
  * Returns a formatted METS header (metsHdr)
  * @param {string} pid productionIdentifier
  */
-export const makeHeader = (pid) => {
-  return {
-    "mets:metsHdr": [
-      {
-        _attr: {
-          ID: "HDR.1",
-          CREATEDATE: makeCreationDate(),
-          LASTMODDATE: makeCreationDate(),
-        },
+export const makeHeader = (pid: string) => ({
+  "mets:metsHdr": [
+    {
+      _attr: {
+        ID: "HDR.1",
+        CREATEDATE: makeCreationDate(),
+        LASTMODDATE: makeCreationDate(),
       },
-      makeObj("mets:altRecordID", [
-        { _attr: makeObj("TYPE", "producerIdentifier") },
-        DUMMY_PRODUCERIDENTIFIER,
-      ]),
-      makeObj("mets:altRecordID", [
-        { _attr: makeObj("TYPE", "productionIdentifier") },
-        pid,
-      ]),
-    ],
-  };
-};
+    },
+    makeObj("mets:altRecordID", [
+      { _attr: makeObj("TYPE", "producerIdentifier") },
+      DUMMY_PRODUCERIDENTIFIER,
+    ]),
+    makeObj("mets:altRecordID", [
+      { _attr: makeObj("TYPE", "productionIdentifier") },
+      pid,
+    ]),
+  ],
+});
 
 /**
  * Returns a formatted descriptive section (dmdSec)
  * @param {string} id identifier of the section
  * @param {Array} content a block of descriptive information in Dublin Core
  */
-export const makeDmdSec = (id, content) => {
+export const makeDmdSec = (id: string, content: object[]) => {
   return {
     "mets:dmdSec": [
       { _attr: makeObj("ID", id) },
@@ -120,7 +121,11 @@ export const makeDmdSec = (id, content) => {
  * @param {string} agentValue the value of the identifier
  * @param {string} agentRole the role of the linking agent
  */
-const makePremisAgent = (agentType, agentValue, agentRole) => {
+const makePremisAgent = (
+  agentType: string,
+  agentValue: string,
+  agentRole: string
+) => {
   return {
     "premis:linkingAgentIdentifier": [
       makeObj("premis:linkingAgentIdentifierType", agentType),
@@ -136,8 +141,12 @@ const makePremisAgent = (agentType, agentValue, agentRole) => {
  * @param {string} objectValue the value of the identifier
  * @param {string} objectRole an optional role of the linking object
  */
-const makePremisObject = (objectType, objectValue, objectRole) => {
-  const loiContent = [];
+const makePremisObject = (
+  objectType: string,
+  objectValue: string,
+  objectRole: string | undefined
+) => {
+  const loiContent = [] as object[];
   loiContent.push(makeObj("premis:linkingObjectIdentifierType", objectType));
   loiContent.push(makeObj("premis:linkingObjectIdentifierValue", objectValue));
   if (objectRole !== undefined) {
@@ -156,8 +165,15 @@ const makePremisObject = (objectType, objectValue, objectRole) => {
  * @param {Array} agents array of linking agents, if any
  * @param {Object} object an optional linking object
  */
-export const makePremisEvent = (id, type, date, detail, agents, object) => {
-  const premisEvent = [];
+export const makePremisEvent = (
+  id: string,
+  type: string,
+  date: any,
+  detail: string | undefined,
+  agents: object[] | undefined,
+  object: object | undefined
+) => {
+  const premisEvent = [] as object[];
   premisEvent.push(
     makeObj("premis:eventIdentifier", [
       makeObj("premis:eventIdentifierType", "UUID"),
@@ -181,8 +197,8 @@ export const makePremisEvent = (id, type, date, detail, agents, object) => {
   }
 
   if (agents !== undefined) {
-    agents.forEach((a) => {
-      premisEvent.push(a);
+    agents.forEach((agent) => {
+      premisEvent.push(agent);
     });
   }
 
@@ -207,18 +223,25 @@ export const makePremisEvent = (id, type, date, detail, agents, object) => {
  * @param {string} ID identifier of the element
  * @param {string} DMDID identifier of the related descriptive section
  * @param {string} hash md5 hash of the file
+ * @param {string} alias of the file
  */
-export const makeFileElement = (item, ID, DMDID, hash, alias) => {
+export const makeFileElement = (
+  item: any,
+  ID: string,
+  DMDID: string,
+  hash: string,
+  alias: string
+) => {
   const originalName = item.name;
   const aliasName = getDisplayName(originalName, alias);
-  const internalURI = "master/" + aliasName;
+  const internalURI = `master/${aliasName}`;
 
-  const fileContent = [];
+  const fileContent = [] as object[];
 
   fileContent.push({
     _attr: {
-      ID: ID,
-      DMDID: DMDID,
+      ID,
+      DMDID,
       CHECKSUMTYPE: HASH_ALGORITHM,
       CHECKSUM: hash,
       SIZE: Math.max(item.file_size, 1),
@@ -245,59 +268,60 @@ export const makeFileElement = (item, ID, DMDID, hash, alias) => {
 /**
  * Returns a formatted div element of object level for the structMap section
  * @param {*} item file from the FF
- * @param {Array} item_tags tags associated with the item
+ * @param {Array} itemTags is an array of tags
  * @param {string} ID identifien of the element
  * @param {number} order sequential order of the element
  * @param {string} FILEID identifier of the associated file element in the fileSec
  */
-export const makeObjectDiv = (item, item_tags, ID, order, FILEID) => {
-  /*
-  item_tags.forEach(a => {
-    AU_content.push(makeObj("xsi:Tag", a));
-  });
-  */
-
-  return makeObj("mets:div", [
-    { _attr: { ID: ID, TYPE: "object", ORDER: order } },
+export const makeObjectDiv = (
+  item: any,
+  itemTags: any,
+  ID: string,
+  order: number,
+  FILEID: string
+) =>
+  makeObj("mets:div", [
+    { _attr: { ID, TYPE: "object", ORDER: order } },
     makeObj("mets:fptr", [
-      { _attr: { FILEID: FILEID } },
+      { _attr: { FILEID } },
       undefined, // self-closed tag
     ]),
   ]);
-};
 
 /**
  * Recursive function to traverse the FF and gather METS sections
  * @param {string} filesAndFoldersId item to record
- * @param {string} rootpath relative path
- * @param {string} absolutepath absolute path
+ * @param {string} rootPath relative path
+ * @param {string} absolutePath absolute path
  * @param {Object} counters dictionary of counters to generate unique identifiers
  * @param {function} readFromFF function to retrieve info from the FF
  * @param {function} readTags function to retrieve the tags from the FF
+ * @param {AliasMap} aliases is a map of aliases
+ * @param {CommentsMap} comments is a map of comments
  * @param {string[]} elementsToDelete the list of elements marked for deletion
  * @param {function} addToDmd function to add a descriptive section
  * @param {function} addToMASTER function to add a file section to the fileSec
  * @param {function} addToDIV function to add a div section to the structMap
- * @param {function} HMread function to read from the hashmap of the items
- * @param {function} HMupdate function to update the hashmap of the items
+ * @param {function} HMRead function to read from the hashmap of the items
+ * @param {function} HMUpdate function to update the hashmap of the items
  * @param {function} contentWriter function to gather payload to be added to the package
  */
 const recTraverseDB = (
-  filesAndFoldersId,
-  rootpath,
-  absolutepath,
-  counters,
-  readFromFF,
-  readTags,
-  aliases,
-  comments,
-  elementsToDelete,
-  addToDmd,
-  addToMASTER,
-  addToDIV,
-  HMread,
-  HMupdate,
-  contentWriter
+  filesAndFoldersId: string,
+  rootPath: string,
+  absolutePath: string,
+  counters: any,
+  readFromFF: (filesAndFoldersId: string) => any,
+  readTags: (filesAndFoldersId: string) => any,
+  aliases: AliasMap,
+  comments: CommentsMap,
+  elementsToDelete: string[],
+  addToDmd: (object: any) => void,
+  addToMASTER: (object: any) => void,
+  addToDIV: (object: any) => void,
+  HMRead: () => any,
+  HMUpdate: (hash: string, id: any) => void,
+  contentWriter: (hash: string, data: object) => void
 ) => {
   const item = readFromFF(filesAndFoldersId);
   const tags = readTags(filesAndFoldersId);
@@ -315,14 +339,14 @@ const recTraverseDB = (
   if (isFile(item)) {
     // it's a file
     const cleanRootpath =
-      rootpath.charAt(0) === "/" ? rootpath.substring(1) : rootpath;
-    const URI = Path.join(absolutepath, cleanRootpath, item.name);
+      rootPath.charAt(0) === "/" ? rootPath.substring(1) : rootPath;
+    const URI = path.join(absolutePath, cleanRootpath, item.name);
     let data;
     try {
       data = fs.readFileSync(URI);
-    } catch (err) {
+    } catch (error) {
       handleError(
-        err.code,
+        error.code,
         {
           EACCES: metsExportErrorCannotAccessFile(URI),
           ENOENT: metsExportErrorFileDoesNotExist(URI),
@@ -334,8 +358,8 @@ const recTraverseDB = (
     }
     const hash = MD5(data);
 
-    if (HMread().has(hash)) {
-      // doublon !!!
+    if (HMRead().has(hash)) {
+      // duplicate!
       return;
     }
 
@@ -344,9 +368,9 @@ const recTraverseDB = (
 
     const idDmd = counters.dmdCount;
     counters.dmdCount = idDmd + 1;
-    const dmdContent = [];
+    const dmdContent = [] as object[];
     // make sure we use / in uri even on Windows
-    const relativeURI = Path.join(cleanRootpath, item.name).replace(/\\/g, "/");
+    const relativeURI = path.join(cleanRootpath, item.name).replace(/\\/g, "/");
 
     dmdContent.push(
       makeObj("dc:source", [
@@ -384,7 +408,7 @@ const recTraverseDB = (
     );
     addToDIV(itemDIV);
 
-    HMupdate(hash, () => ID);
+    HMUpdate(hash, () => ID);
 
     contentWriter(hash, data);
   } else {
@@ -392,8 +416,8 @@ const recTraverseDB = (
     item.children.forEach((childId) => {
       recTraverseDB(
         childId,
-        Path.join(rootpath, item.name),
-        absolutepath,
+        path.join(rootPath, item.name),
+        absolutePath,
         counters,
         readFromFF,
         readTags,
@@ -403,13 +427,24 @@ const recTraverseDB = (
         addToDmd,
         addToMASTER,
         addToDIV,
-        HMread,
-        HMupdate,
+        HMRead,
+        HMUpdate,
         contentWriter
       );
     });
   }
 };
+
+interface GlobalState {
+  aliases: AliasMap;
+  comments: CommentsMap;
+  elementsToDelete: string[];
+  filesAndFolders: FilesAndFoldersMap;
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
+  tags: TagMap;
+  originalPath: string;
+  sessionName: string;
+}
 
 /**
  * Returns the METS content by traversing the FF
@@ -427,9 +462,9 @@ const makeMetsContent = (
     tags,
     originalPath,
     sessionName,
-  },
-  contentWriter,
-  metsContent
+  }: GlobalState,
+  contentWriter: (hash: string, data: object) => void,
+  metsContent: object[]
 ) => {
   const folderpath = path.join(originalPath, "/../");
 
@@ -442,14 +477,14 @@ const makeMetsContent = (
   };
 
   // Arrays to store the sections while traversing the FF
-  const DMD_children = [];
-  const MASTER_children = [];
-  const DIV_children = [];
+  const DMDChildren = [] as object[];
+  const MASTERChildren = [] as object[];
+  const DIVChildren = [] as object[];
 
-  MASTER_children.push({ _attr: { USE: "master", ID: "GRP.1" } });
+  MASTERChildren.push({ _attr: { USE: "master", ID: "GRP.1" } });
 
   // Make first dmd for the group
-  const dmdContent = [];
+  const dmdContent = [] as object[];
   // Need to get the item of the first folder to retrieve the title (in the comment ?)
   dmdContent.push(
     makeObj("dc:title", "DUMMMY_TITLE"),
@@ -459,11 +494,11 @@ const makeMetsContent = (
       DUMMY_ARK,
     ])
   );
-  DMD_children.push(makeDmdSec("DMD.1", dmdContent));
+  DMDChildren.push(makeDmdSec("DMD.1", dmdContent));
 
   // Create the digiprovMD sections
-  const digiprovsContent = [];
-  const amdIds = [];
+  const digiprovsContent = [] as object[];
+  const amdIds = [] as string[];
 
   // Define the event for the whole group
   // First a 'preconditioning' event
@@ -474,7 +509,8 @@ const makeMetsContent = (
       "preconditioning",
       dateFormat(new Date(), DATE_FORMAT),
       undefined,
-      [makePremisAgent("application", "Archifiltre v" + version, "performer")]
+      [makePremisAgent("application", "Archifiltre v" + version, "performer")],
+      undefined
     )
   );
   // Skip the documentReception event ?
@@ -495,12 +531,12 @@ const makeMetsContent = (
           "authorizer"
         ),
       ],
-      makePremisObject("productionIdentifier", sessionName)
+      makePremisObject("productionIdentifier", sessionName, undefined)
     )
   );
 
-  //Traversing database
-  let hashmap = new Map();
+  // Traversing database
+  let hashmap = Map();
   const HMread = () => hashmap;
   const HMupdate = (hash, updater) => {
     hashmap = hashmap.update(hash, updater);
@@ -513,9 +549,9 @@ const makeMetsContent = (
   const tagReader = (ffId) =>
     getAllTagsForFile(tags, ffId).map((tag) => tag.name);
 
-  const DMDwriter = (item) => DMD_children.push(item);
-  const MASTERwriter = (item) => MASTER_children.push(item);
-  const DIVwriter = (item) => DIV_children.push(item);
+  const DMDwriter = (item) => DMDChildren.push(item);
+  const MASTERwriter = (item) => MASTERChildren.push(item);
+  const DIVwriter = (item) => DIVChildren.push(item);
 
   const ROOT_ID = "";
 
@@ -539,8 +575,8 @@ const makeMetsContent = (
     );
   });
 
-  //Composition of StructMap
-  const groupContent = [];
+  // Composition of StructMap
+  const groupContent = [] as object[];
   groupContent.push({
     _attr: {
       ID: "DIV.2",
@@ -550,12 +586,12 @@ const makeMetsContent = (
     },
   });
   // Add all the divs at the object level
-  DIV_children.forEach((div) => {
+  DIVChildren.forEach((div) => {
     groupContent.push(div);
   });
 
   // Build the physical structMap
-  const DIV_root = makeObj("mets:structMap", [
+  const divRoot = makeObj("mets:structMap", [
     { _attr: makeObj("TYPE", "physical") },
     makeObj("mets:div", [
       { _attr: { ID: "DIV.1", TYPE: "set" } },
@@ -564,14 +600,14 @@ const makeMetsContent = (
   ]);
 
   // Populate the METS
-  DMD_children.forEach((dmd) => {
+  DMDChildren.forEach((dmd) => {
     metsContent.push(dmd);
   });
   metsContent.push(makeObj("mets:amdSec", digiprovsContent));
   metsContent.push(
-    makeObj("mets:fileSec", [makeObj("mets:fileGrp", MASTER_children)])
+    makeObj("mets:fileSec", [makeObj("mets:fileGrp", MASTERChildren)])
   );
-  metsContent.push(DIV_root);
+  metsContent.push(divRoot);
 };
 
 // =================================
@@ -591,7 +627,7 @@ export const makeSIP = async ({
   tags,
   originalPath,
   sessionName,
-}) => {
+}: GlobalState) => {
   addTracker({
     title: ActionTitle.METS_EXPORT,
     type: ActionType.TRACK_EVENT,
@@ -602,7 +638,7 @@ export const makeSIP = async ({
     content.file(filename.replace(/[^a-zA-Z0-9.\\/+=@_]+/g, "_"), data);
   };
 
-  const metsContent = [];
+  const metsContent = [] as object[];
   metsContent.push({ _attr: makeManifestRootAttributes() });
   metsContent.push(makeHeader(sessionName));
 
@@ -621,15 +657,15 @@ export const makeSIP = async ({
     metsContent
   ); // will also compute ZIP
 
-  const manifest_obj = [
+  const manifestObj = [
     {
       "mets:mets": metsContent,
     },
   ];
 
-  const manifest_str = XML(manifest_obj, { indent: "  " });
+  const manifestStr = XML(manifestObj, { indent: "  " });
 
-  sip.file("manifest.xml", manifest_str);
+  sip.file("manifest.xml", manifestStr);
 
   const exportFilePath = path.join(originalPath, "..", `${sessionName}.zip`);
 

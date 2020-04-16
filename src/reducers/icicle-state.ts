@@ -3,13 +3,19 @@ import * as RealEstate from "reducers/real-estate";
 import { addTracker } from "../logging/tracker";
 import { ActionTitle, ActionType } from "../logging/tracker-types";
 
+declare global {
+  interface Document {
+    selection: any;
+  }
+}
+
 const State = Record({
   tag_id_to_highlight: "",
   display_root: [],
   width_by_size: true,
 });
 
-const property_name = "icicle_state";
+const propertyName = "icicle_state";
 
 const initialState = () => new State();
 
@@ -20,8 +26,8 @@ const reader = {
   widthBySize: () => (state) => state.get("width_by_size"),
 };
 
-const setDisplayRoot = (root_seq) => (state) => {
-  state = state.update("display_root", () => root_seq);
+const setDisplayRoot = (rootSequence) => (state) => {
+  state = state.update("display_root", () => rootSequence);
   clearSelection();
   return state;
 };
@@ -34,7 +40,7 @@ const setNoDisplayRoot = () => (state) => {
 
 const clearSelection = () => {
   if (window.getSelection) {
-    window.getSelection().removeAllRanges();
+    window.getSelection()?.removeAllRanges();
   } else if (document.selection) {
     document.selection.empty();
   }
@@ -72,7 +78,7 @@ const writer = {
 };
 
 export default RealEstate.create({
-  property_name,
+  property_name: propertyName,
   initialState,
   reader,
   writer,

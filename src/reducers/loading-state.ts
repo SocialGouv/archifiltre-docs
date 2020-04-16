@@ -42,7 +42,6 @@ const finishedToLoadFiles = () => (state) => {
 };
 
 const errorLoadingFiles = () => (state) => {
-  console.log("errorLoadingFiles");
   return state
     .update("start", () => true)
     .update("finish", () => true)

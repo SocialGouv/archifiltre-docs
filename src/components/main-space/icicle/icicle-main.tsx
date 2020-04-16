@@ -27,7 +27,7 @@ import { Dims, DimsAndId } from "./icicle-rect";
 import { FillColor } from "./icicle-types";
 import { useFileMoveActiveState } from "../../../hooks/use-file-move-active-state";
 import { useMovableElements } from "../../../hooks/use-movable-elements";
-import BreadcrumbsNew from "../breadcrumb/breadcrumbs-new";
+import BreadcrumbsNew from "../breadcrumb/breadcrumbs";
 
 export type IcicleMouseHandler = (
   dimsAndId: DimsAndId,
@@ -37,32 +37,39 @@ export type IcicleMouseHandler = (
 const Viewport = styled.div`
   display: flex;
   height: 100%;
+  justify-content: space-between;
 `;
 
 const IcicleViewport = styled.div`
   height: 100%;
-  width: 75%;
+  width: 74%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 `;
 
 const IcicleWrapper = styled.div`
-  height: 75%;
+  height: 74%;
 `;
 
 const RulerWrapper = styled.div`
-  height: 25%;
+  height: 24%;
 `;
 
 const BreadcrumbsViewport = styled.div`
   height: 100%;
-  width: 25%;
+  width: 24%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 `;
 
 const BreadcrumbsWrapper = styled.div`
-  height: 75%;
+  height: 74%;
 `;
 
 const MinimapWrapper = styled.div`
-  height: 25%;
+  height: 24%;
   padding: 5px;
   background-color: rgba(255, 255, 255, 0.4);
 `;
@@ -348,9 +355,14 @@ const IcicleMain: FC<IcicleMainProps> = ({
       <BreadcrumbsViewport>
         <BreadcrumbsWrapper>
           <BreadcrumbsNew
+            aliases={aliases}
+            originalPath={originalPath}
+            fillColor={fillColor}
             depth={maxDepth}
             lockedSequence={lockedSequence}
+            hoveredSequence={hoverSequence}
             getFfByFfId={getFfByFfId}
+            onBreadcrumbClick={onIcicleRectClickHandler}
           />
         </BreadcrumbsWrapper>
         <MinimapWrapper>

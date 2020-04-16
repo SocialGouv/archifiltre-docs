@@ -15,8 +15,6 @@ import { octet2HumanReadableFormat } from "../../util/file-sys-util";
 const RulerWrapper = styled.div`
   width: 100%;
   height: 100%;
-  padding-top: 10px;
-  padding-bottom: 10px;
 `;
 
 const RulerMarker = styled.div`
@@ -25,6 +23,13 @@ const RulerMarker = styled.div`
   border: 1px solid white;
 `;
 
+const RulerTextWrapper = styled.div`
+  white-space: nowrap;
+`;
+
+/**
+ * Dummy dims
+ */
 const EmptyDims: Dims = {
   x: 0,
   dx: 0,
@@ -32,6 +37,10 @@ const EmptyDims: Dims = {
   dy: 0,
 };
 
+/**
+ * Get the number of child files from a node
+ * @param node
+ */
 const getFilesAndFoldersCount = (
   node: FilesAndFolders & FilesAndFoldersMetadata
 ) => {
@@ -146,9 +155,9 @@ const Ruler: FC<RulerProps> = ({
           width: `${(elementDims.dx / totalSize) * 100}%`,
         }}
       />
-      <div style={{ marginLeft: `${textMargin}px`, whiteSpace: "nowrap" }}>
+      <RulerTextWrapper style={{ marginLeft: `${textMargin}px` }}>
         <span ref={textRef}>{rulerText}</span>
-      </div>
+      </RulerTextWrapper>
     </RulerWrapper>
   );
 };

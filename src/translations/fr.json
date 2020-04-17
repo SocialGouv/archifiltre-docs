@@ -126,7 +126,8 @@
       "csvExportTitle": "Export CSV",
       "csvExportStartedMessage": "L'export CSV a commencé",
       "csvExportSuccessMessage": "L'export CSV est terminé",
-      "creatingCsvExport": "Création de l'export CSV"
+      "creatingCsvExport": "Création de l'export CSV",
+      "creatingCsvExportWithHashes": "Création de l'export CSV avec empreintes"
     },
     "replay": {
       "title": "Chargement de la session précédente",

@@ -82,7 +82,9 @@ export const csvExporterThunk = (
   }
 
   const nbFilesAndFolders = Object.keys(filesAndFolders).length;
-  const creatingCsvExportMessage = translations.t("export.creatingCsvExport");
+  const creatingCsvExportMessage = withHashes
+    ? translations.t("export.creatingCsvExportWithHashes")
+    : translations.t("export.creatingCsvExport");
   const loadingId = dispatch(
     startLoading(
       LoadingInfoTypes.EXPORT,

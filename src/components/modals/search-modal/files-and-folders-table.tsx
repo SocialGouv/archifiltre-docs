@@ -2,9 +2,9 @@ import dateFormat from "dateformat";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { getType } from "../../../util/file-and-folders-utils";
-import { octet2HumanReadableFormat } from "../../main-space/ruler";
 import Table from "../../common/table";
 import { isEmpty } from "lodash";
+import { octet2HumanReadableFormat } from "../../../util/file-sys-util";
 
 type FilesAndFoldersTableItem = {
   name: string;
@@ -20,7 +20,7 @@ const getData = (filesAndFolders) =>
     .map((fileOrFolder: FilesAndFoldersTableItem) => {
       return {
         name: fileOrFolder.name,
-        fileSize: octet2HumanReadableFormat(fileOrFolder.file_size),
+        fileSize: octet2HumanReadableFormat(+fileOrFolder.file_size),
         lastModified: dateFormat(fileOrFolder.file_last_modified, "dd/mm/yyyy"),
         path: fileOrFolder.id,
         type: getType(fileOrFolder),

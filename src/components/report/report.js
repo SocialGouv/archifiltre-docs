@@ -5,8 +5,6 @@ import { RIEInput } from "riek";
 import TagsCell from "components/tags/report-cell-tags";
 import CommentsCell from "components/report/report-cell-comments";
 
-import { octet2HumanReadableFormat } from "components/main-space/ruler";
-
 import LastModifiedReporter from "components/report/last-modified-reporter";
 
 import * as Color from "util/color-util";
@@ -23,6 +21,7 @@ import ReactTooltip from "react-tooltip";
 import { useTranslation } from "react-i18next";
 import { getDisplayName, getType } from "../../util/file-and-folders-utils";
 import { FaPen, FaInfoCircle } from "react-icons/fa";
+import { octet2HumanReadableFormat } from "../../util/file-sys-util";
 
 const pad = "1em";
 

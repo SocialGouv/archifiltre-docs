@@ -6,7 +6,7 @@ import { AggregatedTableInstance, AggregatedTableState } from "./table-types";
 
 interface TableProps {
   data: any[];
-  columns: Column[];
+  columns: Column<object>[];
 }
 
 const Table: FC<TableProps> = ({ columns, data }) => {
@@ -24,16 +24,16 @@ const Table: FC<TableProps> = ({ columns, data }) => {
     nextPage,
     previousPage,
     state,
-  } = useTable(
+  } = useTable<object>(
     {
       columns,
       data,
     },
     useSortBy,
     usePagination
-  ) as AggregatedTableInstance<any>;
+  ) as AggregatedTableInstance<object>;
 
-  const { pageIndex } = state as AggregatedTableState<any>;
+  const { pageIndex } = state as AggregatedTableState<object>;
 
   return (
     <div>

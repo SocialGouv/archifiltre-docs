@@ -3,7 +3,7 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import { AggregatedColumn } from "../common/table-types";
 
 interface SortIndicatorProps {
-  column: AggregatedColumn<any>;
+  column: AggregatedColumn<object>;
 }
 
 const SortIndicator: FC<SortIndicatorProps> = ({ column }) => (

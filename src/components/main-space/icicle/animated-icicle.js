@@ -128,30 +128,31 @@ export default class AnimatedIcicle extends PureComponent {
     const svg_id = generateRandomString(40);
 
     return (
-      <g
-        clipPath={"url(#" + svg_id + ")"}
-        onMouseLeave={this.props.onIcicleMouseLeave}
-      >
-        <defs>
-          <clipPath id={svg_id}>
-            <rect x={x} y={y} width={dx} height={dy} />
-          </clipPath>
-        </defs>
-
-        <g ref={ref}>
-          <g style={prevStyle}>
-            {prevStyle.display !== "none" && <Icicle {...prevProps} />}
-          </g>
-          <g>
-            <Icicle
-              {...this.props}
-              onIcicleRectDoubleClickHandler={
-                this.onIcicleRectDoubleClickHandler
-              }
-            />
+      <>
+        <clipPath id={svg_id}>
+          <rect x={x} y={y} width={dx} height={dy} />
+        </clipPath>
+        <g
+          x={0}
+          y={0}
+          clipPath={"url(#" + svg_id + ")"}
+          onMouseLeave={this.props.onIcicleMouseLeave}
+        >
+          <g ref={ref}>
+            <g style={prevStyle}>
+              {prevStyle.display !== "none" && <Icicle {...prevProps} />}
+            </g>
+            <g>
+              <Icicle
+                {...this.props}
+                onIcicleRectDoubleClickHandler={
+                  this.onIcicleRectDoubleClickHandler
+                }
+              />
+            </g>
           </g>
         </g>
-      </g>
+      </>
     );
   }
 }

@@ -4,12 +4,11 @@ import React, {
   memo,
   MouseEvent,
   useCallback,
-  useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import { animate, clear } from "../../../animation-daemon";
+import styled from "styled-components";
 import { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { decomposePathToElement } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import {
@@ -20,7 +19,6 @@ import {
 import { TagMap } from "../../../reducers/tags/tags-types";
 import * as ArrayUtil from "../../../util/array-util";
 import { empty } from "../../../util/function-util";
-import BreadCrumbs from "../breadcrumb/breadcrumbs";
 import MinimapBracket from "../minimap-bracket";
 import Ruler from "../ruler";
 import AnimatedIcicle from "./animated-icicle";
@@ -29,19 +27,52 @@ import { Dims, DimsAndId } from "./icicle-rect";
 import { FillColor } from "./icicle-types";
 import { useFileMoveActiveState } from "../../../hooks/use-file-move-active-state";
 import { useMovableElements } from "../../../hooks/use-movable-elements";
+import BreadcrumbsNew from "../breadcrumb/breadcrumbs";
 
 export type IcicleMouseHandler = (
   dimsAndId: DimsAndId,
   event: MouseEvent
 ) => void;
 
-/**
- * The ratio of the svg taken by the icicle view.
- */
-const ICICLES_VIEWBOX_RATIO = 3 / 4;
+const Viewport = styled.div`
+  display: flex;
+  height: 100%;
+  justify-content: space-between;
+`;
 
-const MINIMAP_LEFT_MARGIN = 30;
-const MINIMAP_TOP_MARGIN = 10;
+const IcicleViewport = styled.div`
+  height: 100%;
+  width: 74%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+`;
+
+const IcicleWrapper = styled.div`
+  height: 74%;
+`;
+
+const RulerWrapper = styled.div`
+  height: 24%;
+`;
+
+const BreadcrumbsViewport = styled.div`
+  height: 100%;
+  width: 24%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+`;
+
+const BreadcrumbsWrapper = styled.div`
+  height: 74%;
+`;
+
+const MinimapWrapper = styled.div`
+  height: 24%;
+  padding: 5px;
+  background-color: rgba(255, 255, 255, 0.4);
+`;
 
 /**
  * Returns the array of widths divided by the sum of the widths.
@@ -116,41 +147,16 @@ const IcicleMain: FC<IcicleMainProps> = ({
   setNoFocus,
   setNoHover,
 }) => {
-  const [{ viewBoxHeight, viewBoxWidth }, setViewboxState] = useState({
-    viewBoxHeight: 300,
-    viewBoxWidth: 1000,
-  });
+  const viewBoxWidth = 1000;
+  const viewBoxHeight = 300;
 
-  const [hoveredDims, setHoveredDims] = useState<Dims | {}>({});
-  const [lockedDims, setLockedDims] = useState<Dims | {}>({});
+  const [hoveredDims, setHoveredDims] = useState<Dims | null>(null);
+  const [lockedDims, setLockedDims] = useState<Dims | null>(null);
 
-  const icicleHeight = viewBoxHeight * ICICLES_VIEWBOX_RATIO;
-  const icicleWidth = viewBoxWidth * ICICLES_VIEWBOX_RATIO;
-  const breadcrumbsWidth = viewBoxWidth - icicleWidth;
-  const rulerHeight = viewBoxHeight - icicleHeight;
+  const icicleHeight = viewBoxHeight;
+  const icicleWidth = viewBoxWidth;
 
   const svgRef = useRef<SVGSVGElement>(null);
-
-  /**
-   * Setup the listeners for the zoom in / zoom out animations
-   */
-  useEffect(() => {
-    const domElement = svgRef.current;
-    let animationId;
-    if (domElement) {
-      const visible = () => true;
-      const measure = () => {
-        const width = domElement.width.baseVal.value;
-        const height = domElement.height.baseVal.value;
-        if (viewBoxHeight !== height || viewBoxWidth !== width) {
-          setViewboxState({ viewBoxHeight: height, viewBoxWidth: width });
-        }
-      };
-      const mutate = () => null;
-      animationId = animate(visible, measure, mutate);
-    }
-    return () => clear(animationId);
-  }, [svgRef, setViewboxState, viewBoxHeight, viewBoxWidth]);
 
   /**
    * Returns the total size of the child elements based on its id
@@ -205,7 +211,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
   /**
    * Normalizes the height based on the maxDepth of the file tree
    */
-  const normalizeHeight = useCallback((height) => height / maxDepth, [
+  const normalizeHeight = useCallback(() => icicleHeight / maxDepth, [
+    icicleHeight,
     maxDepth,
   ]);
 
@@ -288,129 +295,122 @@ const IcicleMain: FC<IcicleMainProps> = ({
     moveElement
   );
 
-  const minimapX = icicleWidth + MINIMAP_LEFT_MARGIN;
-  const minimapY = icicleHeight + MINIMAP_TOP_MARGIN;
-  const minimapWidth = breadcrumbsWidth - MINIMAP_LEFT_MARGIN;
-  const minimapHeight = rulerHeight - 2 * MINIMAP_TOP_MARGIN;
-
-  const icicle = (
-    <g>
-      <AnimatedIcicle
-        aliases={aliases}
-        comments={comments}
-        api={api}
-        x={0}
-        y={0}
-        dx={icicleWidth}
-        dy={icicleHeight}
-        tags={tags}
-        elementsToDelete={elementsToDelete}
-        root_id={rootId}
-        display_root={displayRoot}
-        fWidth={computeWidth}
-        normalizeWidth={normalizeWidth}
-        trueFHeight={normalizeHeight}
-        getChildrenIdFromId={getChildrenIdFromId}
-        fillColor={fillColor}
-        hoverSequence={hoverSequence}
-        lockedSequence={lockedSequence}
-        shouldRenderChild={isIcicleInViewport}
-        onIcicleRectClickHandler={onIcicleRectClickHandler}
-        onIcicleRectDoubleClickHandler={onIcicleRectDoubleClickHandler}
-        onIcicleRectMouseOverHandler={onIcicleRectMouseOverHandler}
-        onIcicleMouseLeave={onIcicleMouseLeave}
-        computeWidthRec={computeWidthRec}
-      />
-
-      <Ruler
-        getFfByFfId={getFfByFfId}
-        x={0}
-        y={icicleHeight}
-        dx={icicleWidth}
-        dy={rulerHeight}
-        hoveredElementId={hoveredElementId}
-        lockedElementId={lockedElementId}
-        fillColor={fillColor}
-        hoveredDims={hoveredDims}
-        lockedDims={lockedDims}
-      />
-
-      <BreadCrumbs
-        aliases={aliases}
-        originalPath={originalPath}
-        getFfByFfId={getFfByFfId}
-        maxDepth={maxDepth}
-        x={icicleWidth}
-        dx={breadcrumbsWidth}
-        dy={icicleHeight}
-        hoverSequence={hoverSequence}
-        lockedSequence={lockedSequence}
-        onBreadcrumbClick={onIcicleRectClickHandler}
-        trueFHeight={normalizeHeight}
-        fillColor={fillColor}
-      />
-
-      <g>
-        <rect
-          x={minimapX}
-          y={minimapY}
-          width={Math.max(0, minimapWidth)}
-          height={Math.max(0, minimapHeight)}
-          style={{ fill: "white", opacity: "0.4" }}
-        />
-        <Icicle
-          aliases={aliases}
-          comments={comments}
-          api={api}
-          x={minimapX + 5}
-          y={minimapY + 5}
-          dx={minimapWidth - 10}
-          dy={minimapHeight - 10}
-          root_id={rootId}
-          display_root={ArrayUtil.empty}
-          fWidth={computeWidth}
-          elementsToDelete={elementsToDelete}
-          normalizeWidth={normalizeWidth}
-          trueFHeight={normalizeHeight}
-          getChildrenIdFromId={getChildrenIdFromId}
-          fillColor={fillColor}
-          hoverSequence={hoverSequence}
-          lockedSequence={lockedSequence}
-          shouldRenderChild={shouldRenderChildMinimap}
-          onIcicleRectClickHandler={empty}
-          onIcicleRectDoubleClickHandler={empty}
-          onIcicleRectMouseOverHandler={empty}
-          computeWidthRec={computeWidthRec}
-          tags={tags}
-        />
-        <MinimapBracket
-          x={minimapX + 5}
-          y={minimapY + 5}
-          dx={minimapWidth - 10}
-          dy={minimapHeight - 10}
-          display_root={displayRoot}
-          computeWidthRec={computeWidthRec}
-          fillColor={fillColor}
-        />
-      </g>
-    </g>
-  );
-
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
-      width="100%"
-      height="100%"
-      preserveAspectRatio="xMidYMid meet"
-      ref={svgRef}
-      onClick={onClickHandler}
-      onMouseLeave={onMouseLeaveHandler}
-      onMouseUp={isFileMoveActive ? onIcicleMouseUp : empty}
-      onMouseDown={isFileMoveActive ? onIcicleMouseDown : empty}
-    >
-      {icicle}
-    </svg>
+    <Viewport>
+      <IcicleViewport>
+        <IcicleWrapper>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
+            width="100%"
+            height="100%"
+            preserveAspectRatio="none"
+            ref={svgRef}
+            onClick={onClickHandler}
+            onMouseLeave={onMouseLeaveHandler}
+            onMouseUp={isFileMoveActive ? onIcicleMouseUp : empty}
+            onMouseDown={isFileMoveActive ? onIcicleMouseDown : empty}
+          >
+            <AnimatedIcicle
+              aliases={aliases}
+              comments={comments}
+              api={api}
+              x={0}
+              y={0}
+              dx={icicleWidth}
+              dy={icicleHeight}
+              tags={tags}
+              elementsToDelete={elementsToDelete}
+              root_id={rootId}
+              display_root={displayRoot}
+              fWidth={computeWidth}
+              normalizeWidth={normalizeWidth}
+              trueFHeight={normalizeHeight}
+              getChildrenIdFromId={getChildrenIdFromId}
+              fillColor={fillColor}
+              hoverSequence={hoverSequence}
+              lockedSequence={lockedSequence}
+              shouldRenderChild={isIcicleInViewport}
+              onIcicleRectClickHandler={onIcicleRectClickHandler}
+              onIcicleRectDoubleClickHandler={onIcicleRectDoubleClickHandler}
+              onIcicleRectMouseOverHandler={onIcicleRectMouseOverHandler}
+              onIcicleMouseLeave={onIcicleMouseLeave}
+              computeWidthRec={computeWidthRec}
+            />
+          </svg>
+        </IcicleWrapper>
+        <RulerWrapper>
+          <Ruler
+            getFfByFfId={getFfByFfId}
+            widthUnit={viewBoxWidth}
+            hoveredDims={hoveredDims}
+            hoveredElementId={hoveredElementId}
+            lockedDims={lockedDims}
+            lockedElementId={lockedElementId}
+            totalSize={viewBoxWidth}
+            fillColor={fillColor}
+          />
+        </RulerWrapper>
+      </IcicleViewport>
+      <BreadcrumbsViewport>
+        <BreadcrumbsWrapper>
+          <BreadcrumbsNew
+            aliases={aliases}
+            originalPath={originalPath}
+            fillColor={fillColor}
+            depth={maxDepth}
+            lockedSequence={lockedSequence}
+            hoveredSequence={hoverSequence}
+            getFfByFfId={getFfByFfId}
+            onBreadcrumbClick={onIcicleRectClickHandler}
+          />
+        </BreadcrumbsWrapper>
+        <MinimapWrapper>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
+            width="100%"
+            height="100%"
+            preserveAspectRatio="none"
+          >
+            <Icicle
+              aliases={aliases}
+              comments={comments}
+              api={api}
+              x={0}
+              y={0}
+              dx={icicleWidth}
+              dy={icicleHeight}
+              root_id={rootId}
+              display_root={ArrayUtil.empty}
+              fWidth={computeWidth}
+              elementsToDelete={elementsToDelete}
+              normalizeWidth={normalizeWidth}
+              trueFHeight={normalizeHeight}
+              getChildrenIdFromId={getChildrenIdFromId}
+              fillColor={fillColor}
+              hoverSequence={hoverSequence}
+              lockedSequence={lockedSequence}
+              shouldRenderChild={shouldRenderChildMinimap}
+              onIcicleRectClickHandler={empty}
+              onIcicleRectDoubleClickHandler={empty}
+              onIcicleRectMouseOverHandler={empty}
+              computeWidthRec={computeWidthRec}
+              tags={tags}
+            />
+            <MinimapBracket
+              x={0}
+              y={0}
+              dx={viewBoxWidth}
+              dy={viewBoxHeight}
+              display_root={displayRoot}
+              computeWidthRec={computeWidthRec}
+              fillColor={fillColor}
+            />
+          </svg>
+        </MinimapWrapper>
+      </BreadcrumbsViewport>
+    </Viewport>
   );
 };
 

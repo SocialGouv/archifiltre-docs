@@ -2,7 +2,7 @@ import React, { FC, useCallback } from "react";
 import { FaFile, FaFolder, FaPen } from "react-icons/fa";
 import { RIEInput } from "riek";
 import styled from "styled-components";
-import { octet2HumanReadableFormat } from "../../main-space/ruler";
+import { octet2HumanReadableFormat } from "../../../util/file-sys-util";
 
 const SessionInfoCell = styled.div`
   line-height: 1em;

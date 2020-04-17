@@ -1,7 +1,9 @@
-import { octet2HumanReadableFormat } from "../../components/main-space/ruler";
 import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import { formatPathForUserSystem } from "../../util/file-sys-util";
+import {
+  formatPathForUserSystem,
+  octet2HumanReadableFormat,
+} from "../../util/file-sys-util";
 import { FileType } from "../../util/file-types-util";
 import {
   countFileTypes,

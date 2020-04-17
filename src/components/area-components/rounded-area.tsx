@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { toRgba } from "../../util/color-util";
+import { toRgba } from "util/color/color-util";
 import styled from "styled-components";
 
 export const LIGHT = "area-light";

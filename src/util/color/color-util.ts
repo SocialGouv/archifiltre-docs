@@ -1,62 +1,43 @@
-import { FileType, getFileTypeFromFileName } from "./file-types-util";
+import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import { FileType, getFileTypeFromFileName } from "../file-types-util";
 import {
   isFile,
   ROOT_FF_ID,
-} from "../reducers/files-and-folders/files-and-folders-selectors";
-import { ratio } from "./numbers-util";
+} from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { ratio } from "../numbers-util";
 import { useCallback, useMemo } from "react";
-import { IciclesSortMethod } from "../reducers/workspace-metadata/workspace-metadata-types";
+import { IciclesSortMethod } from "../../reducers/workspace-metadata/workspace-metadata-types";
 
 export const SUCCESS_GREEN = "#1E8E17";
 
-export const gradient = (a, b) => (zero_to_one) => {
-  const ans = a
-    .map((a, i) => a + (b[i] - a) * zero_to_one)
-    .map((a, i) => {
-      if (i !== 3) {
-        return Math.round(a);
+export const gradient = (firstColor: number[], secondColor: number[]) => (
+  zeroToOne: number
+): number[] =>
+  firstColor
+    .map((color, index) => color + (secondColor[index] - color) * zeroToOne)
+    .map((color, index) => {
+      if (index !== 3) {
+        return Math.round(color);
       } else {
-        return a;
+        return color;
       }
     });
 
-  return ans;
-};
-
-export const setAlpha = (alpha, color) => {
+export const setAlpha = (alpha: number, color: number[]): number[] => {
   return color.slice(0, -1).concat([alpha]);
 };
 
-export const toRgba = (a) => `rgba(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
-export const fromRgba = (a) =>
-  a
+export const toRgba = (color: number[]): string =>
+  `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${color[3]})`;
+
+export const fromRgba = (color: string): number[] =>
+  color
     .split(/rgba\(|, |\)/)
     .filter((a) => a !== "")
     .map(Number);
 
-export const toHex = (a) => {
-  a = a.map(Number).map((a) => {
-    a = a.toString(16);
-    if (a.length < 2) {
-      a = "0" + a;
-    }
-    return a;
-  });
-  return `#${a[0]}${a[1]}${a[2]}`;
-};
-
-export const fromHex = (a) => {
-  a = a
-    .split(/#|([0-9a-f]{2})/)
-    .filter((a) => a && a !== "")
-    .map((a) => parseInt(a, 16));
-  const default_alpha = 1;
-  a.push(default_alpha);
-  return a;
-};
-
 export const mostRecentDate = () => [255, 216, 155, 1];
-export const mediumDate = () => [255, 140, 0, 1];
 export const leastRecentDate = () => [20, 86, 130, 1];
 
 const PLACEHOLDER_COLOR = "#8a8c93";
@@ -80,7 +61,7 @@ export const parentFolder = () => PARENT_FOLDER_COLOR;
 
 export const placeholder = () => PLACEHOLDER_COLOR;
 
-export const fromFileName = (name) => {
+export const fromFileName = (name: string): string => {
   const fileType = getFileTypeFromFileName(name);
   return colors[fileType];
 };
@@ -91,7 +72,10 @@ export const fromFileName = (name) => {
  * @param displayRoot
  * @returns {*}
  */
-const useFillColorByType = (filesAndFolders, displayRoot) =>
+const useFillColorByType = (
+  filesAndFolders: FilesAndFoldersMap,
+  displayRoot: string[]
+) =>
   useCallback(
     (id) => {
       const element = filesAndFolders[id];
@@ -112,7 +96,9 @@ const dateGradient = gradient(leastRecentDate(), mostRecentDate());
  * @param filesAndFoldersMetadata
  * @returns {*}
  */
-const useFillColorByDate = (filesAndFoldersMetadata) =>
+const useFillColorByDate = (
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap
+) =>
   useCallback(
     (id) => {
       const { minLastModified, maxLastModified } = filesAndFoldersMetadata[
@@ -141,10 +127,10 @@ const useFillColorByDate = (filesAndFoldersMetadata) =>
  * @returns {*}
  */
 export const useFillColor = (
-  filesAndFolders,
-  filesAndFoldersMetadata,
-  iciclesSortMethod,
-  displayRoot
+  filesAndFolders: FilesAndFoldersMap,
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap,
+  iciclesSortMethod: IciclesSortMethod,
+  displayRoot: string[]
 ) => {
   const fillColorByType = useFillColorByType(filesAndFolders, displayRoot);
 

@@ -7,7 +7,7 @@ import CommentsCell from "components/report/report-cell-comments";
 
 import LastModifiedReporter from "components/report/last-modified-reporter";
 
-import * as Color from "util/color-util";
+import * as Color from "util/color/color-util";
 
 import { shell } from "electron";
 import path from "path";

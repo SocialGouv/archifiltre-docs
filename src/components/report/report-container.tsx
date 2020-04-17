@@ -27,7 +27,7 @@ import {
   getWorkspaceMetadataFromStore,
   useWorkspaceMetadata,
 } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
-import { useFillColor } from "../../util/color-util";
+import { useFillColor } from "../../util/color/color-util";
 import ReportApiToProps from "./report";
 
 interface ReportContainerProps {

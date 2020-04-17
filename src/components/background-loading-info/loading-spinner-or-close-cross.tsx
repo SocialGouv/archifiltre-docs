@@ -1,6 +1,6 @@
 import React, { FC, memo } from "react";
 import styled from "styled-components";
-import { SUCCESS_GREEN } from "../../util/color-util";
+import { SUCCESS_GREEN } from "util/color/color-util";
 import { empty } from "../../util/function-util";
 import CloseCross from "../common/close-cross";
 import Spinner from "../common/spinner";

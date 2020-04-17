@@ -2,7 +2,7 @@ import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import { getWorkspaceMetadataFromStore } from "./workspace-metadata-selectors";
 import {
   IciclesSortMethod,
-  WorkspaceMetadataState
+  WorkspaceMetadataState,
 } from "./workspace-metadata-types";
 
 const workspaceMetadata: WorkspaceMetadataState = {

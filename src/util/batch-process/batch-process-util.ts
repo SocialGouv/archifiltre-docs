@@ -1,12 +1,18 @@
 import { cpus } from "os";
 import { Observable } from "rxjs";
 import { chunk } from "lodash";
-import { reportError } from "../../logging/reporter.ts";
+import { reportError } from "../../logging/reporter";
 import { makeEmptyArray } from "../array-util";
 import { map } from "rxjs/operators";
 
 // We create NB_CPUS - 1 processes to optimize computation
 const NB_CPUS = cpus().length - 1 > 0 ? cpus().length - 1 : 1;
+
+interface InitWorkersData {
+  onMessage?: (worker: any, data: any) => void;
+  initialValues?: any;
+  workerCount?: number;
+}
 
 /**
  *
@@ -18,9 +24,9 @@ const NB_CPUS = cpus().length - 1 > 0 ? cpus().length - 1 : 1;
  * @returns {Array<Worker>} - The list of the workers
  */
 const initWorkers = (
-  WorkerBuilder,
-  { onMessage, initialValues, workerCount = NB_CPUS }
-) =>
+  WorkerBuilder: any,
+  { onMessage, initialValues, workerCount = NB_CPUS }: InitWorkersData
+): Worker[] =>
   makeEmptyArray(workerCount, null)
     .map(() => new WorkerBuilder())
     .map((worker) => {
@@ -31,16 +37,20 @@ const initWorkers = (
         });
       }
       worker.addEventListener("error", (error) =>
+        // tslint:disable-next-line:no-console
         console.error("WorkerError", error)
       );
       return worker;
     });
 
 export const computeBatch$ = (
-  data,
-  WorkerBuilder,
-  { batchSize, initialValues }
-) => {
+  data: any,
+  WorkerBuilder: any,
+  {
+    batchSize,
+    initialValues,
+  }: { batchSize: number; initialValues: InitWorkersData }
+): Observable<any> => {
   const workers = initWorkers(WorkerBuilder, { initialValues });
 
   /**
@@ -65,7 +75,7 @@ export const computeBatch$ = (
     let completed = 0;
     workerAvailable$
       .pipe(
-        map((worker) => {
+        map((worker: Worker) => {
           if (queue.length > 0) {
             const sentData = queue.shift();
             worker.postMessage({
@@ -86,7 +96,7 @@ export const computeBatch$ = (
             completed = completed + 1;
             if (completed === queueLength) {
               observer.complete();
-              workers.forEach((worker) => worker.terminate());
+              workers.forEach((workerElement) => workerElement.terminate());
             }
           }
           if (type === "error") {
@@ -100,12 +110,15 @@ export const computeBatch$ = (
 
 /**
  * Delegates work to a single worker. Progress will be piped in the returned Observable
- * @param data - The data processed. It will be sent to the worker in an "initialize" message.
+ * @param processedData - The data processed. It will be sent to the worker in an "initialize" message.
  * @param WorkerBuilder - The Worker constructor.
  * @returns {Observable} - A rxjs observable piping progress.
  */
-export const backgroundWorkerProcess$ = (data, WorkerBuilder) => {
-  return new Observable((observer) => {
+export const backgroundWorkerProcess$ = (
+  processedData: any,
+  WorkerBuilder: any
+): Observable<any> =>
+  new Observable((observer) => {
     const onMessage = (worker, { data: { type, result: data, error } }) => {
       switch (type) {
         case "result":
@@ -119,25 +132,27 @@ export const backgroundWorkerProcess$ = (data, WorkerBuilder) => {
           observer.complete();
           break;
         case "log":
+          // tslint:disable-next-line:no-console
           console.log("Logging :", data);
           break;
         default:
+          // tslint:disable-next-line:no-console
           console.log(`Unhandled message : ${type}`);
       }
     };
     initWorkers(WorkerBuilder, {
       onMessage,
-      initialValues: data,
+      initialValues: processedData,
       workerCount: 1,
     });
   });
-};
 
-const aggregateToMap = (paramFieldName, resultFieldName) => (valuesArray) => {
+const aggregateToMap = (paramFieldName: string, resultFieldName: string) => (
+  valuesArray: any[]
+): object => {
   const valuesMap = {};
-  for (let index = 0; index < valuesArray.length; index++) {
-    const currentValue = valuesArray[index];
-    valuesMap[currentValue[paramFieldName]] = currentValue[resultFieldName];
+  for (const value of valuesArray) {
+    valuesMap[value[paramFieldName]] = value[resultFieldName];
   }
   return valuesMap;
 };

@@ -3,8 +3,32 @@ import { generateRandomString } from "util/random-gen-util";
 import _, { mapValues, pick } from "lodash";
 import fp from "lodash/fp";
 import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/files-and-folders-loader";
+import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 
-export const fromAnyJsonToJs = (json) => {
+interface V8 {
+  version: number;
+  content_queue: any;
+  tree: any;
+  tags: any;
+  tags_sizes: number;
+  parent_path: any;
+}
+
+interface V9To12 {
+  files_and_folders: any;
+}
+
+interface V13 {
+  session_name: string;
+  original_path: string;
+  tags: any;
+}
+
+interface V21 {
+  filesAndFolders: any;
+}
+
+export const fromAnyJsonToJs = (json: string): object => {
   let js = JSON.parse(json);
 
   const version = js.version;
@@ -30,8 +54,8 @@ export const fromAnyJsonToJs = (json) => {
   return js;
 };
 
-const v8JsToV9Js = (v8) => {
-  const v9 = Object.assign({}, v8);
+const v8JsToV9Js = (v8: V8 & V9To12): object => {
+  const v9 = { ...v8 };
   v9.version = 9;
 
   delete v9.content_queue;
@@ -43,7 +67,7 @@ const v8JsToV9Js = (v8) => {
   const mapOldToNewId = {};
 
   const v8TreeToV9Ffs = (tree) => {
-    const table = tree.table;
+    const treeTable = tree.table;
 
     const remakePath = (key, table) => {
       const node = table[key];
@@ -57,47 +81,49 @@ const v8JsToV9Js = (v8) => {
     };
 
     const ans = {};
-    for (const key in table) {
-      const path = remakePath(key, table);
-      mapOldToNewId[key] = path;
-      const node = table[key];
+    for (const key in treeTable) {
+      if (treeTable.hasOwnProperty(key)) {
+        const path = remakePath(key, treeTable);
+        mapOldToNewId[key] = path;
+        const node = treeTable[key];
 
-      const name = node.name;
-      const content = node.content;
-      const alias = content.alias;
-      const comments = content.comments;
+        const name = node.name;
+        const content = node.content;
+        const alias = content.alias;
+        const comments = content.comments;
 
-      let file_size = 0;
-      let file_last_modified = 0;
-      if (node.children.length === 0) {
-        file_size = content.size;
-        file_last_modified = content.last_modified.max;
+        let fileSize = 0;
+        let fileLastModified = 0;
+        if (node.children.length === 0) {
+          fileSize = content.size;
+          fileLastModified = content.last_modified.max;
+        }
+
+        ans[path] = {
+          name,
+          alias,
+          comments,
+          file_size: fileSize,
+          file_last_modified: fileLastModified,
+
+          children: [],
+
+          size: 0,
+          last_modified_max: 0,
+          last_modified_list: [],
+          last_modified_min: Number.MAX_SAFE_INTEGER,
+          last_modified_median: null,
+          last_modified_average: null,
+          depth: 0,
+          nb_files: 0,
+          sort_by_size_index: [],
+          sort_by_date_index: [],
+        };
       }
-
-      ans[path] = {
-        name,
-        alias,
-        comments,
-        file_size,
-        file_last_modified,
-
-        children: [],
-
-        size: 0,
-        last_modified_max: 0,
-        last_modified_list: [],
-        last_modified_min: Number.MAX_SAFE_INTEGER,
-        last_modified_median: null,
-        last_modified_average: null,
-        depth: 0,
-        nb_files: 0,
-        sort_by_size_index: [],
-        sort_by_date_index: [],
-      };
     }
 
     const computeChildren = (key) => {
-      const node = table[key];
+      const node = treeTable[key];
       const children = node.children;
       if (children.length) {
         ans[mapOldToNewId[key]].children = children.map(
@@ -117,10 +143,12 @@ const v8JsToV9Js = (v8) => {
   const v8TagsToV9Tags = (tags) => {
     const ans = {};
     for (const key in tags) {
-      ans[generateRandomString(40)] = {
-        name: key,
-        ff_ids: tags[key].map((a) => mapOldToNewId[a]),
-      };
+      if (tags.hasOwnProperty(key)) {
+        ans[generateRandomString(40)] = {
+          name: key,
+          ff_ids: tags[key].map((a) => mapOldToNewId[a]),
+        };
+      }
     }
     return ans;
   };
@@ -130,21 +158,21 @@ const v8JsToV9Js = (v8) => {
   return v9;
 };
 
-export const v9JsToV10Js = (v9) => {
-  const v10 = Object.assign({}, v9);
+export const v9JsToV10Js = (v9: V8 & V9To12): object => {
+  const v10 = { ...v9 };
   v10.version = 10;
 
   return v10;
 };
 
-export const v10JsToV11Js = (v10) => {
-  const v11 = Object.assign({}, v10);
+export const v10JsToV11Js = (v10: V8 & V9To12): object => {
+  const v11 = { ...v10 };
   v11.version = 11;
 
   return v11;
 };
 
-export const v12JsToV13Js = (v12) => {
+export const v12JsToV13Js = (v12: V8 & V9To12): object => {
   const reformatTag = (id, { ff_ids, name }) => ({
     ffIds: ff_ids,
     id,
@@ -163,7 +191,7 @@ export const v12JsToV13Js = (v12) => {
   };
 };
 
-export const v13JsToV14Js = (v13) => {
+export const v13JsToV14Js = (v13: V9To12 & V13): object => {
   const filesAndFolders = mapValues(
     v13.files_and_folders,
     (fileAndFolders, id) => ({
@@ -174,6 +202,7 @@ export const v13JsToV14Js = (v13) => {
         "children",
         "file_size",
         "file_last_modified",
+        "virtualPath",
       ]),
       id,
     })
@@ -193,17 +222,18 @@ export const v13JsToV14Js = (v13) => {
   };
 };
 
-export const v2ToV21Js = (v2) => {
+export const v2ToV21Js = (v2: V21): object => {
   const filesAndFolders = _.mapValues(
     v2.filesAndFolders,
     fp.pick(["name", "children", "file_size", "file_last_modified"])
   );
 
-  const comments = _(v2.filesAndFolders)
+  const filteredComments = _(v2.filesAndFolders)
     .mapValues(({ comments }) => comments)
     .pickBy((comment) => comment !== "")
     .value();
-  const aliases = _(v2.filesAndFolders)
+
+  const filteredAliases = _(v2.filesAndFolders)
     .mapValues(({ alias }) => alias)
     .pickBy((alias) => alias !== "")
     .value();
@@ -212,12 +242,12 @@ export const v2ToV21Js = (v2) => {
     ...v2,
     version: 2.1,
     filesAndFolders,
-    aliases,
-    comments,
+    aliases: filteredAliases,
+    comments: filteredComments,
   };
 };
 
-export const v21ToV22Js = (v21) => {
+export const v21ToV22Js = (v21: V21): object => {
   const filesAndFolders = _.mapValues(
     v21.filesAndFolders,
     (fileAndFolder, id) => ({

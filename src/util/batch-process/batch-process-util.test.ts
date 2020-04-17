@@ -4,7 +4,7 @@ import {
   backgroundWorkerProcess$,
   computeBatch$,
 } from "./batch-process-util";
-import { reportError } from "../../logging/reporter.ts";
+import { reportError } from "../../logging/reporter";
 
 jest.mock("os", () => ({
   cpus: () => [1, 2, 3, 4],
@@ -13,6 +13,8 @@ jest.mock("os", () => ({
 jest.mock("../../logging/reporter", () => ({
   reportError: jest.fn(),
 }));
+
+const reportErrorMock = reportError as jest.Mock;
 
 const NB_CPUS = 4;
 const NB_WORKERS = NB_CPUS - 1;
@@ -57,9 +59,10 @@ describe("batch-process-util", () => {
 
     const testData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     const batchSize = 2;
-    const initialValues = { test: "test" };
+    const initialValues = { test: "test", initialValues: {} };
 
     beforeEach(() => {
+      reportErrorMock.mockReset();
       responseObserver = jest.fn();
       completeObserver = jest.fn();
       errorObserver = jest.fn();
@@ -151,7 +154,7 @@ describe("batch-process-util", () => {
     let errorObserver;
 
     beforeEach(() => {
-      reportError.mockReset();
+      reportErrorMock.mockReset();
       responseObserver = jest.fn();
       completeObserver = jest.fn();
       errorObserver = jest.fn();
@@ -184,7 +187,7 @@ describe("batch-process-util", () => {
       const error = "test-error";
       const messageCallback = getEventCallback(addEventListener, "message");
       messageCallback({ data: { type: "error", error } });
-      expect(reportError).toHaveBeenCalledWith(error);
+      expect(reportErrorMock).toHaveBeenCalledWith(error);
     });
     it("should complete the observer on complete message", () => {
       const messageCallback = getEventCallback(addEventListener, "message");

@@ -21,7 +21,7 @@ import {
   useWorkspaceMetadata,
 } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { IciclesSortMethod } from "../../../reducers/workspace-metadata/workspace-metadata-types";
-import { useFillColor } from "../../../util/color-util";
+import { useFillColor } from "../../../util/color/color-util";
 import { createFilePathSequence } from "../../../util/file-and-folders-utils";
 import IcicleMain from "./icicle-main";
 

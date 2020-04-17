@@ -2,7 +2,7 @@ import React, { FC, memo, useCallback, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import styled from "styled-components";
 import { LoadingInfo } from "../../reducers/loading-info/loading-info-types";
-import { SUCCESS_GREEN } from "../../util/color-util";
+import { SUCCESS_GREEN } from "util/color/color-util";
 import LoadingInfoDisplay from "./loading-info-display";
 import LoadingSpinnerOrCloseCross from "./loading-spinner-or-close-cross";
 import SquaredButton from "./squared-button";

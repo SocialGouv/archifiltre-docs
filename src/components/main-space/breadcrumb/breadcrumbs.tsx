@@ -10,7 +10,7 @@ import { makeEmptyArray } from "../../../util/array-util";
 import { FillColor } from "../icicle/icicle-types";
 import { formatPathForUserSystem } from "../../../util/file-sys-util";
 import { DimsAndId } from "../icicle/icicle-rect";
-import { placeholder } from "../../../util/color-util";
+import { placeholder } from "../../../util/color/color-util";
 
 const BreadcrumbsWrapper = styled.div`
   display: flex;

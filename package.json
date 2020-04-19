@@ -97,7 +97,7 @@
     "fast-check": "1.24.1",
     "html-webpack-plugin": "4.2.0",
     "husky": "4.2.5",
-    "jest": "25.3.0",
+    "jest": "25.4.0",
     "jest-date-mock": "1.0.8",
     "jsdoc-to-markdown": "5.0.3",
     "lint-staged": "10.1.3",

@@ -5,6 +5,8 @@ import { LoadingInfo } from "../../reducers/loading-info/loading-info-types";
 import { SUCCESS_GREEN } from "../../util/color-util";
 import LoadingInfoDisplay from "./loading-info-display";
 import LoadingSpinnerOrCloseCross from "./loading-spinner-or-close-cross";
+import SquaredButton from "./squared-button";
+import { Grid } from "@material-ui/core";
 
 const BottomRightArea = memo(styled.div`
   position: fixed;
@@ -13,11 +15,7 @@ const BottomRightArea = memo(styled.div`
   background-color: white;
   display: flex;
   border-radius: 2px;
-  border: 0.5px solid ${SUCCESS_GREEN};
-`);
-
-const ToggleAndLoaderArea = memo(styled.div`
-  width: 37px;
+  border: 1px solid ${SUCCESS_GREEN};
 `);
 
 const LoadingBarArea = memo(styled.div`
@@ -26,13 +24,9 @@ const LoadingBarArea = memo(styled.div`
   padding-bottom: 12px;
 `);
 
-const ToggleArrow = memo(styled.button`
-  stroke: green;
-  width: 37px;
-  height: 37px;
-  cursor: pointer;
+const ToggleArrow = styled(SquaredButton)`
   ${({ collapsed }) => (collapsed ? "transform: rotate(0.5turn)" : "")}
-`);
+`;
 
 interface BackgroundLoadingInfoProps {
   loadingItems: LoadingInfo[];
@@ -57,28 +51,38 @@ const BackgroundLoadingInfo: FC<BackgroundLoadingInfoProps> = ({
   }
   return (
     <BottomRightArea>
-      <ToggleAndLoaderArea>
-        <ToggleArrow collapsed={collapsed} onClick={toggleCollapsed}>
-          <FaChevronLeft style={{ color: SUCCESS_GREEN }} />
-        </ToggleArrow>
-        {collapsed && (
-          <LoadingSpinnerOrCloseCross
-            isLoading={isLoading}
-            onClose={dismissAll}
-          />
+      <Grid container>
+        <Grid item>
+          <Grid container direction="column">
+            <Grid item>
+              <ToggleArrow collapsed={collapsed} onClick={toggleCollapsed}>
+                <FaChevronLeft style={{ color: SUCCESS_GREEN }} />
+              </ToggleArrow>
+            </Grid>
+            <Grid item>
+              {collapsed && (
+                <LoadingSpinnerOrCloseCross
+                  isLoading={isLoading}
+                  onClose={dismissAll}
+                />
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
+        {!collapsed && (
+          <Grid item>
+            <LoadingBarArea>
+              {loadingItems.map((loadingInfo) => (
+                <LoadingInfoDisplay
+                  key={loadingInfo.id}
+                  loadingInfo={loadingInfo}
+                  color={SUCCESS_GREEN}
+                />
+              ))}
+            </LoadingBarArea>
+          </Grid>
         )}
-      </ToggleAndLoaderArea>
-      {!collapsed && (
-        <LoadingBarArea>
-          {loadingItems.map((loadingInfo) => (
-            <LoadingInfoDisplay
-              key={loadingInfo.id}
-              loadingInfo={loadingInfo}
-              color={SUCCESS_GREEN}
-            />
-          ))}
-        </LoadingBarArea>
-      )}
+      </Grid>
     </BottomRightArea>
   );
 };

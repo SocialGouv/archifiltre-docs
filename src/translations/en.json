@@ -40,11 +40,9 @@
       "copied": "Copied!"
     },
     "workspace": {
-      "colorCode": "Color code:",
       "type": "By type",
       "dates": "By dates",
       "backToRoot": "Back to root",
-      "display": "Display:",
       "bySize": "By size",
       "byNumber": "By count",
       "allTags": "All tags",
@@ -68,6 +66,7 @@
       "save": "Save",
       "aNewVersionIsOut": "Version {{version}} of Archifiltre is out!",
       "download": "Download",
+      "cancel": "Cancel",
       "csvWithHash": "CSV with hashes",
       "csvWithHashDisabledMessage": "You must wait for hashes to have been computed",
       "loadPreviousSessionButtonLabel": "Load previous session",

@@ -1,3 +1,4 @@
+import { Grid } from "@material-ui/core";
 import React, { FC } from "react";
 
 import IndexingBlock from "./indexing-block";
@@ -46,7 +47,7 @@ interface PresentationalProps {
 
 interface WaitingScreenProps {
   loadedPath: string;
-  api;
+  api: any;
 }
 
 const SimpleLoader: FC<SimpleLoaderProps> = ({ loaderText }) => (
@@ -164,8 +165,8 @@ const Presentational: FC<PresentationalProps> = ({
   totalCount,
   loadedPath,
 }) => (
-  <div className="grid-y grid-frame align-center">
-    <div className="cell">
+  <Grid container direction="column">
+    <Grid item>
       <MainCell>
         {isJsonFile(loadedPath) ? (
           <LoadingJson />
@@ -177,8 +178,8 @@ const Presentational: FC<PresentationalProps> = ({
           />
         )}
       </MainCell>
-    </div>
-  </div>
+    </Grid>
+  </Grid>
 );
 
 const WaitingScreen: FC<WaitingScreenProps> = ({

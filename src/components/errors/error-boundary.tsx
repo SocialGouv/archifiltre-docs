@@ -3,6 +3,7 @@ import React from "react";
 import SaveButton from "components/buttons/save-button";
 import { reportError } from "../../logging/reporter";
 import { ContactUs } from "./contact-us";
+import Grid from "@material-ui/core/Grid";
 import { withTranslation } from "react-i18next";
 
 interface ErrorBoundaryProps {
@@ -39,13 +40,8 @@ class ErrorBoundary extends React.Component<
 
     if (this.state.hasError) {
       return (
-        <div className="grid-y grid-frame align-center">
-          <div
-            className="cell small-1"
-            style={{
-              textAlign: "center",
-            }}
-          >
+        <Grid container>
+          <Grid item xs={1}>
             <h1>{t("common.somethingWentWrong")}</h1>
             <h4>
               <ContactUs />
@@ -55,8 +51,8 @@ class ErrorBoundary extends React.Component<
               sessionName={sessionName}
               exportToJson={exportToJson}
             />
-          </div>
-        </div>
+          </Grid>
+        </Grid>
       );
     }
     return children;

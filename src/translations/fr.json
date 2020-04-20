@@ -40,11 +40,9 @@
       "copied": "Copié !"
     },
     "workspace": {
-      "colorCode": "Code couleurs :",
       "type": "Par type",
       "dates": "Par dates",
       "backToRoot": "Retour à la racine",
-      "display": "Affichage :",
       "bySize": "Par volume",
       "byNumber": "Par nombre",
       "allTags": "Tous les tags",
@@ -68,6 +66,7 @@
       "save": "Enregistrer",
       "aNewVersionIsOut": "La version {{version}} d'Archifiltre est sortie !",
       "download": "Télécharger",
+      "cancel": "Annuler",
       "csvWithHash": "CSV avec empreintes",
       "csvWithHashDisabledMessage": "Vous devez attendre que les hashs aient été calculés",
       "loadPreviousSessionButtonLabel": "Recharger la session précédente",

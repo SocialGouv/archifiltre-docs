@@ -7,8 +7,9 @@ import { withTranslation } from "react-i18next";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { FaPen } from "react-icons/fa";
+import Grid from "@material-ui/core/Grid";
 
-const TagsWrapper = styled.div`
+const TagsWrapper = styled(Grid)`
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 5em;
@@ -169,13 +170,13 @@ class ReportCellTags extends React.Component<
 
     if (is_dummy) {
       return (
-        <div className="cell small-6" style={cells_style}>
+        <Grid item style={cells_style}>
           <b>{t("workspace.tags")}</b>
           <br />
           <span style={{ fontStyle: "italic" }}>
             {`${t("workspace.yourTagsHere")}...`}
           </span>
-        </div>
+        </Grid>
       );
     } else {
       return (
@@ -192,7 +193,7 @@ class ReportCellTags extends React.Component<
             <FaPen className="edit_hover_pencil" style={{ opacity: "0.3" }} />
           </span>
           <br />
-          <TagsWrapper className="grid-x">
+          <TagsWrapper>
             <TagsEditable
               isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
               isLocked={isLocked}

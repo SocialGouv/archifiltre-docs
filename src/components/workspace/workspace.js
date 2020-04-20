@@ -5,6 +5,7 @@ import Report from "components/report/report-container";
 import AllTags from "components/tags/all-tags-container";
 import NavigationBar from "components/workspace/navigation-bar/navigation-bar-container";
 import { ROOT_FF_ID } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import Box from "@material-ui/core/Box";
 
 const workspaceMode = {
   isFileMoveActive: false,
@@ -15,30 +16,33 @@ const workspaceMode = {
 export const WorkspaceContext = React.createContext(workspaceMode);
 
 const Workspace = ({ api }) => (
-  <div className="grid-y grid-frame">
-    <div className="cell">
-      <div className="grid-x">
-        <div className="cell small-10" style={{ paddingRight: "10px" }}>
+  <Box display="flex" flexDirection="column" height="100%">
+    <Box
+      flexGrow={0}
+      flexShrink={0}
+      flexBasis="auto"
+      style={{ minHeight: "0px", width: "100%" }}
+    >
+      <Box display="flex" flexDirection="row" flexWrap="wrap" height="100%">
+        <Box width={5 / 6} pr="3px" boxSizing="border-box">
           <Report api={api} />
-        </div>
-        <div className="cell small-2">
+        </Box>
+        <Box width={1 / 6} pl="3px" boxSizing="border-box">
           <AllTags api={api} />
-        </div>
-      </div>
-    </div>
-
-    <div className="cell">
-      <div className="grid-x align-center">
-        <div className="cell">
+        </Box>
+      </Box>
+    </Box>
+    <Box flexGrow={1} flexShrink={1} flexBasis="auto">
+      <Box display="flex" flexDirection="column" height="100%">
+        <Box flexGrow={0}>
           <NavigationBar api={api} />
-        </div>
-      </div>
-    </div>
-
-    <div className="cell auto">
-      <Icicle api={api} />
-    </div>
-  </div>
+        </Box>
+        <Box flexGrow={1}>
+          <Icicle api={api} />
+        </Box>
+      </Box>
+    </Box>
+  </Box>
 );
 
 const WorkspaceApiToProps = (props) => {

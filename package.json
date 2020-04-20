@@ -119,6 +119,7 @@
     "webpack-dev-server": "3.10.3"
   },
   "dependencies": {
+    "@material-ui/core": "^4.9.9",
     "@sentry/browser": "^5.15.4",
     "@types/pizzip": "^3.0.1",
     "angular-expressions": "^1.1.1",
@@ -129,7 +130,6 @@
     "eslint-plugin-lodash-fp": "^2.2.0-a1",
     "fast-memoize": "^2.5.2",
     "file-saver": "2.0.2",
-    "foundation-sites": "^6.6.3",
     "i18next": "^19.4.3",
     "iconv-lite": "^0.5.1",
     "immutable": "4.0.0-rc.12",

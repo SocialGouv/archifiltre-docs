@@ -22,6 +22,7 @@ import { useTranslation } from "react-i18next";
 import { getDisplayName, getType } from "../../util/file-and-folders-utils";
 import { FaPen, FaInfoCircle } from "react-icons/fa";
 import { octet2HumanReadableFormat } from "../../util/file-sys-util";
+import Grid from "@material-ui/core/Grid";
 
 const pad = "1em";
 
@@ -30,6 +31,7 @@ const cellsStyle = {
   padding: "0.6em 1em 0 1em",
   fontSize: "0.8em",
   height: "8em",
+  boxSizing: "border-box",
 };
 
 const infoCellStyle = {
@@ -133,8 +135,8 @@ const NameCell = ({
   originalPath,
   onChangeAlias,
 }) => (
-  <div className="grid-x align-middle" style={{ height: "3.2em" }}>
-    <div className="cell shrink" style={{ paddingRight: pad }}>
+  <Grid container style={{ height: "3.2em" }}>
+    <Grid item style={{ paddingRight: pad }}>
       <ElementIcon
         placeholder={placeholder}
         isFolder={isFolder}
@@ -145,10 +147,10 @@ const NameCell = ({
           shell.openItem(itemPath);
         }}
       />
-    </div>
-    <div className="cell auto">
-      <div className="grid-x">
-        <div className="cell small-12">
+    </Grid>
+    <Grid item>
+      <Grid item>
+        <Grid item>
           <Name
             placeholder={placeholder}
             onChangeAlias={onChangeAlias}
@@ -157,14 +159,14 @@ const NameCell = ({
             bracketName={bracketName}
             nodeName={nodeName}
           />
-        </div>
-        <div className="cell small-12">
+        </Grid>
+        <Grid item xs={12}>
           {" "}
           <RealName placeholder={placeholder} bracketName={bracketName} />
-        </div>
-      </div>
-    </div>
-  </div>
+        </Grid>
+      </Grid>
+    </Grid>
+  </Grid>
 );
 
 const InfoCell = ({
@@ -266,10 +268,10 @@ const Report = ({
         borderRadius: "5px",
       }}
     >
-      <div className="grid-x" style={{ padding: pad }}>
-        <div className="cell small-8" style={{ paddingRight: pad }}>
-          <div className="grid-x">
-            <div className="cell small-12" style={{ paddingBottom: pad }}>
+      <Grid container style={{ padding: pad }}>
+        <Grid item xs={8} style={{ paddingRight: pad }}>
+          <Grid container>
+            <Grid item xs={12} style={{ paddingBottom: pad }}>
               <NameCell
                 placeholder={!isActive}
                 filesAndFoldersId={filesAndFoldersId}
@@ -281,8 +283,8 @@ const Report = ({
                 onChangeAlias={onChangeAlias}
                 originalPath={originalPath}
               />
-            </div>
-            <div className="cell small-6" style={{ paddingRight: pad }}>
+            </Grid>
+            <Grid item xs={6} style={{ paddingRight: pad }}>
               <TagsCell
                 is_dummy={!isActive}
                 isLocked={isLocked}
@@ -295,8 +297,8 @@ const Report = ({
                 untag={untag}
                 toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
               />
-            </div>
-            <div className="cell small-6">
+            </Grid>
+            <Grid item xs={6}>
               <CommentsCell
                 is_dummy={!isActive}
                 cells_style={cellsStyle}
@@ -304,10 +306,10 @@ const Report = ({
                 filesAndFoldersId={filesAndFoldersId}
                 updateComment={updateComment}
               />
-            </div>
-          </div>
-        </div>
-        <div className="cell small-4">
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={4}>
           <InfoCell
             currentFileHash={currentFileHash}
             filesAndFolders={filesAndFolders}
@@ -315,8 +317,8 @@ const Report = ({
             filesAndFoldersMetadata={filesAndFoldersMetadata}
             placeholder={!isActive}
           />
-        </div>
-      </div>
+        </Grid>
+      </Grid>
     </div>
   );
 };

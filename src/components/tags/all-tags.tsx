@@ -1,3 +1,5 @@
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
 import React, { FC, useCallback, useState } from "react";
 
 import TagListItem from "components/tags/all-tags-item";
@@ -22,19 +24,22 @@ import { FaTags } from "react-icons/fa";
 import styled from "styled-components";
 import { TagMap } from "../../reducers/tags/tags-types";
 
-const TagsContent = styled.div`
+const TagsContent = styled(Box)`
   font-size: 0.8em;
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: 100%;
 `;
 
 const Wrapper = styled.div`
+  box-sizing: border-box;
   opacity: ${({ tags }) => (Object.keys(tags).length > 0 ? 1 : 0.5)};
   background: white;
   height: 100%;
   border-radius: 5px;
-  padding: 0.5em 0 1em 0;
+  padding: 0.5em;
+`;
+
+const AllTagsTitle = styled.div`
+  text-align: center;
+  font-weight: bold;
 `;
 
 interface AllTagsProps {
@@ -121,43 +126,65 @@ const AllTags: FC<AllTagsProps> = ({
 
   return (
     <Wrapper tags={tags}>
-      <div className="grid-y" style={{ height: "100%" }}>
-        <div className="cell shrink">
-          <TextAlignCenter>
-            <b>{t("workspace.allTags")}</b>
-          </TextAlignCenter>
-        </div>
-        <div className="cell auto">
+      <Box
+        display="flex"
+        flexDirection="column"
+        flexWrap="nowrap"
+        height="100%"
+      >
+        <Box
+          flexShrink="0"
+          flexGrow="0"
+          flexBasis="auto"
+          height="auto"
+          minHeight="0px"
+          minWidth="0px"
+          width="100%"
+        >
+          <AllTagsTitle>{t("workspace.allTags")}</AllTagsTitle>
+        </Box>
+        <Box
+          flexShrink="1"
+          flexGrow="1"
+          flexBasis="0px"
+          height="auto"
+          minHeight="0px"
+          minWidth="0px"
+          width="100%"
+        >
           {!tagMapHasTags(tags) && (
-            <div
-              className="grid-y grid-frame align-center"
-              style={{ height: "75%" }}
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              spacing={1}
             >
-              <div className="cell">
-                <TextAlignCenter>
-                  <FaTags
-                    style={{
-                      color: Color.placeholder(),
-                      fontSize: "3em",
-                      lineHeight: 0,
-                    }}
-                  />
-                </TextAlignCenter>
-              </div>
-              <div className="cell">
+              <Grid item>
+                <FaTags
+                  style={{
+                    color: Color.placeholder(),
+                    fontSize: "3em",
+                    lineHeight: 0,
+                  }}
+                />
+              </Grid>
+              <Grid item>
                 <TextAlignCenter>
                   <em>{t("workspace.noTags")}</em>
                 </TextAlignCenter>
-              </div>
-            </div>
+              </Grid>
+            </Grid>
           )}
           {tagMapHasTags(tags) && (
-            <TagsContent onMouseLeave={stopHighlightingTag}>
-              {tagsList}
-            </TagsContent>
+            <div style={{ overflow: "hidden auto", height: "100%" }}>
+              <TagsContent onMouseLeave={stopHighlightingTag}>
+                {tagsList}
+              </TagsContent>
+            </div>
           )}
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Wrapper>
   );
 };

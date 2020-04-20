@@ -24,7 +24,9 @@ jest.mock("uuid", () => ({
 
 // BAD HACK to be able to compare 'undefined' values...
 // The undefined values are needed in order to generate self-closed tags
+// @ts-ignore
 outputFileTag["mets:file"][1]["mets:FLocat"][1] = undefined;
+// @ts-ignore
 outputDivTag["mets:div"][1]["mets:fptr"][1] = undefined;
 
 // Test suite
@@ -46,7 +48,16 @@ describe("mets module", () => {
     const testId = "TEST_ID";
     const testTypeEvent = "testEvent";
     it("should generate a proper digiprovMD", () => {
-      expect(makePremisEvent(testId, testTypeEvent)).toEqual(outputProvMd);
+      expect(
+        makePremisEvent(
+          testId,
+          testTypeEvent,
+          undefined,
+          undefined,
+          undefined,
+          undefined
+        )
+      ).toEqual(outputProvMd);
     });
   });
 

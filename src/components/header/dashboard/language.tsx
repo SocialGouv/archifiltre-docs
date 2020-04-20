@@ -24,7 +24,7 @@ const LanguagePicker: FC = () => {
   return (
     <select onChange={onChange} value={language}>
       {availableLanguages.map((availableLanguage) => (
-        <option value={availableLanguage.value}>
+        <option value={availableLanguage.value} key={availableLanguage.value}>
           {availableLanguage.label}
         </option>
       ))}

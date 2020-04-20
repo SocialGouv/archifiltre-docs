@@ -31,6 +31,7 @@ const cellsStyle = {
   padding: "0.6em 1em 0 1em",
   fontSize: "0.8em",
   height: "8em",
+  boxSizing: "border-box",
 };
 
 const infoCellStyle = {

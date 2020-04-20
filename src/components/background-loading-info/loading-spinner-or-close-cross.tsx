@@ -4,23 +4,14 @@ import { SUCCESS_GREEN } from "../../util/color-util";
 import { empty } from "../../util/function-util";
 import CloseCross from "../common/close-cross";
 import Spinner from "../common/spinner";
+import SquaredButton from "./squared-button";
 
 const Loader = memo(styled.div`
   width: 37px;
   height: 37px;
   padding: 10px 10px 10px 10px;
+  box-sizing: border-box;
 `);
-
-const CloseCrossContainer = styled.button`
-  width: 37px;
-  height: 37px;
-  line-height: 37px;
-  font-size: 18px;
-  vertical-align: middle;
-  text-align: center;
-  color: ${SUCCESS_GREEN};
-  cursor: pointer;
-`;
 
 interface LoadingSpinnerOrCloseCrossProps {
   isLoading: boolean;
@@ -39,9 +30,9 @@ const LoadingSpinnerOrCloseCross: FC<LoadingSpinnerOrCloseCrossProps> = ({
     );
   }
   return (
-    <CloseCrossContainer onClick={onClose}>
+    <SquaredButton onClick={onClose}>
       <CloseCross />
-    </CloseCrossContainer>
+    </SquaredButton>
   );
 };
 

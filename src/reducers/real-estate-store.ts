@@ -1,42 +1,47 @@
 import React from "react";
 import root_reducer from "reducers/root-reducer";
-import * as ObjectUtil from "util/object-util.ts";
+import * as ObjectUtil from "util/object-util";
 import { compose } from "../util/function-util";
 
-function makeStore(compiled_real_estate) {
-  const initialState = compiled_real_estate.initialState;
-  const flat_api = flattenApi(compiled_real_estate.api);
-  const writer_key = [];
-  const reader_key = [];
+function makeStore(compiledRealEstate) {
+  const initialState = compiledRealEstate.initialState;
+  const flatApi = flattenApi(compiledRealEstate.api);
+  const writerKey = [] as string[];
+  const readerKey = [] as string[];
 
-  for (const key in flat_api) {
-    if (flat_api[key].reader) {
-      reader_key.push(key);
-    }
-    if (flat_api[key].writer) {
-      writer_key.push(key);
+  for (const key in flatApi) {
+    if (flatApi.hasOwnProperty(key)) {
+      if (flatApi[key].reader) {
+        readerKey.push(key);
+      }
+      if (flatApi[key].writer) {
+        writerKey.push(key);
+      }
     }
   }
 
+  // tslint:disable-next-line:no-shadowed-variable
   class Store extends React.Component {
+    private api;
+    private getApi;
+    private stateChangePending;
+    private upcomingStateChange;
     constructor(props) {
       super(props);
 
       this.state = initialState();
-
       this.api = {};
 
-      reader_key.forEach((key) => {
-        this.api[key] = (...args) => flat_api[key](...args)(this.state);
+      readerKey.forEach((key) => {
+        this.api[key] = (...args) => flatApi[key](...args)(this.state);
       });
 
-      writer_key.forEach((key) => {
+      writerKey.forEach((key) => {
         this.api[key] = (...args) => this.updateState(key, args);
       });
 
       this.api = unflattenApi(this.api);
-
-      this.getApi = () => Object.assign({}, this.api);
+      this.getApi = () => ({ ...this.api });
     }
 
     updateState(key, args) {
@@ -52,18 +57,20 @@ function makeStore(compiled_real_estate) {
       }
       // We chain all the state updates and calls them afterwards
       this.upcomingStateChange = compose(
-        flat_api[key](...args),
+        flatApi[key](...args),
         this.upcomingStateChange
       );
     }
 
     render() {
+      // @ts-ignore
       return this.props.children(
         ObjectUtil.compose({ api: this.getApi() }, this.props)
       );
     }
   }
 
+  // tslint:disable-next-line:no-shadowed-variable
   const ApiContext = React.createContext({});
 
   return {
@@ -73,23 +80,29 @@ function makeStore(compiled_real_estate) {
 }
 
 const flattenApi = (api) => {
-  const flat_api = {};
+  const flatApi = {};
   for (const key1 in api) {
-    for (const key2 in api[key1]) {
-      flat_api[key1 + "|" + key2] = api[key1][key2];
+    if (api.hasOwnProperty(key1)) {
+      for (const key2 in api[key1]) {
+        if (api[key1].hasOwnProperty(key2)) {
+          flatApi[key1 + "|" + key2] = api[key1][key2];
+        }
+      }
     }
   }
-  return flat_api;
+  return flatApi;
 };
 
-const unflattenApi = (flat_api) => {
+const unflattenApi = (flatApi) => {
   const api = {};
-  for (const key in flat_api) {
-    const split = key.split("|");
-    if (api[split[0]] === undefined) {
-      api[split[0]] = {};
+  for (const key in flatApi) {
+    if (flatApi.hasOwnProperty(key)) {
+      const split = key.split("|");
+      if (api[split[0]] === undefined) {
+        api[split[0]] = {};
+      }
+      api[split[0]][split[1]] = flatApi[key];
     }
-    api[split[0]][split[1]] = flat_api[key];
   }
   return api;
 };

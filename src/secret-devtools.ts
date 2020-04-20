@@ -1,16 +1,16 @@
-const { ipcRenderer } = require("electron");
+import { ipcRenderer } from "electron";
 
 const openDevtools = () => {
   ipcRenderer.send("open-devtools");
 };
 
-const prevKey = [];
+const prevKey = [] as string[];
 const password = "devtools";
-const password_len = password.length;
+const passwordLength = password.length;
 
 const keyUpCallback = (event) => {
   prevKey.push(event.key);
-  if (password_len < prevKey.length) {
+  if (passwordLength < prevKey.length) {
     prevKey.shift();
   }
   const seq = prevKey.join("");

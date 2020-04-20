@@ -1,9 +1,15 @@
-import * as M from "reducers/real-estate";
+import * as RealEstate from "reducers/real-estate";
+import * as ObjectUtil from "util/object-util";
 
-import * as ObjectUtil from "util/object-util.ts";
+interface ApiProps {
+  state1: any;
+  state2: any;
+  ho: any;
+  state: any;
+}
 
 describe("real-estate", () => {
-  const state1 = M.create({
+  const state1 = RealEstate.create({
     property_name: "state1",
     initialState: () => 0,
     reader: {
@@ -16,7 +22,7 @@ describe("real-estate", () => {
     },
   });
 
-  const state2 = M.create({
+  const state2 = RealEstate.create({
     property_name: "state2",
     initialState: () => {
       return { baba: "baba" };
@@ -26,14 +32,14 @@ describe("real-estate", () => {
     },
     writer: {
       write: (a) => (s) => {
-        s = Object.assign({}, s);
+        s = { ...s };
         s.baba = a;
         return s;
       },
     },
   });
 
-  const higherOrder = M.createHigherOrder({
+  const higherOrder = RealEstate.createHigherOrder({
     initialState: (s) => {
       return { origin: s, current: s };
     },
@@ -50,9 +56,10 @@ describe("real-estate", () => {
   });
 
   it("basic test", () => {
-    const { initialState, api } = M.compile(M.compose(state2, state1));
+    const realEstate = RealEstate.compile(RealEstate.compose(state2, state1));
 
-    let store = initialState();
+    let store = realEstate.initialState();
+    const api = realEstate.api as ApiProps;
 
     expect(store).toEqual({
       state1: 0,
@@ -78,11 +85,12 @@ describe("real-estate", () => {
   });
 
   it("higher order test", () => {
-    const { initialState, api } = M.compile(
-      higherOrder("ho", M.compose(state2, state1))
+    const realEstate = RealEstate.compile(
+      higherOrder("ho", RealEstate.compose(state2, state1))
     );
 
-    let store = initialState();
+    let store = realEstate.initialState();
+    const api = realEstate.api as ApiProps;
 
     expect(store).toEqual({
       ho: {
@@ -162,7 +170,7 @@ describe("real-estate", () => {
 
   it("cache test", () => {
     let sideeffect = 0;
-    const state = M.create({
+    const state = RealEstate.create({
       property_name: "state",
       initialState: () => 0,
       reader: {
@@ -176,9 +184,10 @@ describe("real-estate", () => {
       },
     });
 
-    const { initialState, api } = M.compile(state);
+    const realEstate = RealEstate.compile(state);
 
-    let store = initialState();
+    let store = realEstate.initialState();
+    const api = realEstate.api as ApiProps;
 
     expect(store).toEqual({ state: 0 });
 

@@ -1,3 +1,4 @@
+import Grid from "@material-ui/core/Grid";
 import React, { FC } from "react";
 
 import Tag from "components/tags/tag";
@@ -6,8 +7,8 @@ import { FaTrash, FaTimes, FaPlus, FaPen } from "react-icons/fa";
 import styled from "styled-components";
 import { empty } from "../../util/function-util";
 
-const CellShrink = styled.div`
-  padding: 0em 0.1em;
+const CellShrink = styled(Grid)`
+  padding: 0 0.1em;
 `;
 
 const Container = styled.div`
@@ -18,7 +19,7 @@ const Container = styled.div`
   padding: 4px 0.5em;
 `;
 
-const Item = styled.div`
+const Item = styled(Grid)`
   opacity: ${({ opacity }) => opacity};
   position: relative;
   z-index: 1;
@@ -120,12 +121,16 @@ const AllTagsItem: FC<AllTagsItemProps> = ({
   );
 
   return (
-    <Container className="edit_hover_container" onMouseEnter={highlightTag}>
-      <Item className="grid-x" opacity={opacity}>
-        <CellShrink className="cell shrink">{deleteBubble}</CellShrink>
-        <CellShrink className="cell shrink">{countOrActionBubble}</CellShrink>
-        <CellShrink className="cell auto">{tagPill}</CellShrink>
-        <CellShrink className="cell shrink">{pencil}</CellShrink>
+    <Container
+      container
+      className="edit_hover_container"
+      onMouseEnter={highlightTag}
+    >
+      <Item container opacity={opacity}>
+        <CellShrink item>{deleteBubble}</CellShrink>
+        <CellShrink item>{countOrActionBubble}</CellShrink>
+        <CellShrink item>{tagPill}</CellShrink>
+        <CellShrink item>{pencil}</CellShrink>
       </Item>
       <Background className="background" percentage={percentage} />
     </Container>

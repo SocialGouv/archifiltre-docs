@@ -16,6 +16,8 @@ const ArchifiltreLogoText = styled.div`
 `;
 
 const ArchifiltreVersionText = styled.a`
+  cursor: pointer;
+  color: dodgerblue;
   font-size: 0.8em;
 `;
 

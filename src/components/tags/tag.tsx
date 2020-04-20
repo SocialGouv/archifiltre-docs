@@ -2,6 +2,7 @@ import React, { FC } from "react";
 
 import TagBadge from "./tag-badge";
 import { FaTimes } from "react-icons/fa";
+import Grid from "@material-ui/core/Grid";
 
 interface TagProps {
   removeHandler: () => void;
@@ -36,12 +37,12 @@ const Tag: FC<TagProps> = ({
   };
 
   return (
-    <div className="grid-x" style={componentStyle} onClick={clickHandler}>
+    <Grid container style={componentStyle} onClick={clickHandler}>
       <TagBadge>{text}</TagBadge>
-      <div className="cell shrink" style={{ marginLeft: "-0.3em" }}>
+      <Grid item style={{ marginLeft: "-0.3em" }}>
         {editing ? cross : <span />}
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 };
 

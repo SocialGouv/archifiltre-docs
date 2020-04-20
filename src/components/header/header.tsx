@@ -1,3 +1,4 @@
+import Grid from "@material-ui/core/Grid";
 import React, { FC } from "react";
 
 import Dashboard from "components/header/dashboard/dashboard-container";
@@ -8,9 +9,9 @@ interface HeaderProps {
 
 const Header: FC<HeaderProps> = ({ api }) => {
   return (
-    <div className="grid-x grid-padding-y align-middle">
+    <Grid container>
       <Dashboard api={api} />
-    </div>
+    </Grid>
   );
 };
 

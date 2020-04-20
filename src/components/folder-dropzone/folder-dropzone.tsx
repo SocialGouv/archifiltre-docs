@@ -1,10 +1,11 @@
+import Grid from "@material-ui/core/Grid";
 import React, { FC, useCallback, useEffect } from "react";
 import path from "path";
 import styled from "styled-components";
-import TextAlignCenter from "components/common/text-align-center";
 import { expectToBeDefined } from "../../util/expect-behaviour";
 import { notifyError } from "../../util/notifications-util";
 import { useTranslation } from "react-i18next";
+import TextAlignCenter from "../common/text-align-center";
 
 declare global {
   const AUTOLOAD: string;
@@ -16,13 +17,26 @@ interface FolderDropzoneProps {
   setLoadedPath;
 }
 
-const Dropzone = styled.div`
-  border: 2px dashed #868686;
-  border-radius: 3em;
+const Dropzone = styled(Grid)`
+  border: 1px dashed #868686;
+  border-radius: 5px;
+  height: 100%;
+`;
+
+const DropzoneWrapper = styled.div`
+  width: 75%;
+  height: 75%;
 `;
 
 const Placeholder = styled.div`
   font-size: 3em;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 `;
 
 const FolderDropzone: FC<FolderDropzoneProps> = ({
@@ -65,34 +79,30 @@ const FolderDropzone: FC<FolderDropzoneProps> = ({
   }, []);
 
   return (
-    <Dropzone
-      className="grid-y grid-frame align-center"
-      onDragOver={handleDragover}
-      onDrop={handleDrop}
-    >
-      <div className="cell">
-        <TextAlignCenter>
-          <Placeholder id="drag-drop-text">
-            {t("folderDropzone.placeholder")}
-          </Placeholder>
-        </TextAlignCenter>
-      </div>
-      <div className="cell">
-        <TextAlignCenter>
-          <div>{t("folderDropzone.placeholderSubtitle")}</div>
-        </TextAlignCenter>
-      </div>
-      <div className="cell">
-        <TextAlignCenter>
-          <div>
-            <em>
-              <br />
-              {t("folderDropzone.disclaimerSubtitle")}
-            </em>
-          </div>
-        </TextAlignCenter>
-      </div>
-    </Dropzone>
+    <Wrapper>
+      <DropzoneWrapper>
+        <Dropzone
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+          onDragOver={handleDragover}
+          onDrop={handleDrop}
+        >
+          <Grid item>
+            <Placeholder>{t("folderDropzone.placeholder")}</Placeholder>
+          </Grid>
+          <Grid item>
+            <div>{t("folderDropzone.placeholderSubtitle")}</div>
+          </Grid>
+          <Grid item>
+            <TextAlignCenter>
+              <em>{t("folderDropzone.disclaimerSubtitle")}</em>
+            </TextAlignCenter>
+          </Grid>
+        </Dropzone>
+      </DropzoneWrapper>
+    </Wrapper>
   );
 };
 

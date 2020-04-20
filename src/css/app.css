@@ -1,7 +1,3 @@
-.root_button {
-  cursor: pointer;
-}
-
 .active_button {
   -webkit-transition: filter 0.25s ease-out;
   transition: filter 0.25s ease-out;
@@ -11,15 +7,6 @@
 .active_button:hover {
   -webkit-filter: brightness(120%);
   filter: brightness(120%);
-}
-
-.comments {
-  font-size: 1em;
-}
-
-.comments:focus {
-  padding: 0;
-  margin: 0;
 }
 
 .tags_bubble {
@@ -57,15 +44,6 @@
 .tags_cross:hover {
   -webkit-filter: brightness(85%);
   filter: brightness(120%);
-}
-
-.visibleonhover {
-  pointer-events: auto !important;
-}
-
-.visibleonhover:hover {
-  visibility: visible !important;
-  opacity: 1 !important;
 }
 
 .background {

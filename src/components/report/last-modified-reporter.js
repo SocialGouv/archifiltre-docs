@@ -1,9 +1,8 @@
 import React from "react";
 
-import TimeGradient from "components/report/time-gradient";
-
 import { epochToFormattedUtcDateString } from "../../util/date-util";
 import { useTranslation } from "react-i18next";
+import Grid from "@material-ui/core/Grid";
 
 const RedDot = () => {
   return (
@@ -53,42 +52,51 @@ const LastModifiedReporter = ({
   }
 
   return (
-    <div className="grid-x align-middle">
-      <div className="cell small-12">
+    <Grid container>
+      <Grid item xs={12}>
         <b>{t("report.lastModified")} :</b>
-      </div>
+      </Grid>
 
-      <div className="cell small-1">
+      <Grid item xs={1}>
         <BlackCursor />
-      </div>
-      <div className="cell small-5">{t("report.min")} :</div>
-      <div className="cell small-6">{lm_min}</div>
+      </Grid>
+      <Grid item xs={5}>
+        {t("report.min")} :
+      </Grid>
+      <Grid item xs={6}>
+        {lm_min}
+      </Grid>
 
-      <div className="cell small-1">
+      <Grid item xs={1}>
         <RedDot />
-      </div>
-      <div className="cell small-5">{t("report.average")} :</div>
-      <div className="cell small-6">{lm_average}</div>
+      </Grid>
+      <Grid item xs={5}>
+        {t("report.average")} :
+      </Grid>
+      <Grid item xs={6}>
+        {lm_average}
+      </Grid>
 
-      <div className="cell small-1">
+      <Grid item xs={1}>
         <BlackCursor />
-      </div>
-      <div className="cell small-5">{t("report.median")} :</div>
-      <div className="cell small-6">{lm_median}</div>
+      </Grid>
+      <Grid item xs={5}>
+        {t("report.median")} :
+      </Grid>
+      <Grid item xs={6}>
+        {lm_median}
+      </Grid>
 
-      <div className="cell small-1">
+      <Grid item xs={1}>
         <BlackCursor />
-      </div>
-      <div className="cell small-5">{t("report.max")} :</div>
-      <div className="cell small-6">{lm_max}</div>
-
-      <div className="cell small-12" style={{ paddingTop: "0.5em" }}>
-        <TimeGradient
-          filesAndFoldersId={filesAndFoldersId}
-          filesAndFoldersMetadata={filesAndFoldersMetadata}
-        />
-      </div>
-    </div>
+      </Grid>
+      <Grid item xs={5}>
+        {t("report.max")} :
+      </Grid>
+      <Grid item xs={6}>
+        {lm_max}
+      </Grid>
+    </Grid>
   );
 };
 

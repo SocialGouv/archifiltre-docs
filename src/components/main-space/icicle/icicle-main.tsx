@@ -76,7 +76,7 @@ const MinimapWrapper = styled.div`
 
 /**
  * Returns the array of widths divided by the sum of the widths.
- * @param widths - thes widths to normalize
+ * @param widths - the widths to normalize
  */
 const normalizeWidth = (widths: number[]) => {
   const totalWidth = sum(widths);

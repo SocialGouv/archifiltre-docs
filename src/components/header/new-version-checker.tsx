@@ -1,25 +1,20 @@
 import { shell } from "electron";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaTimes } from "react-icons/fa";
-import styled from "styled-components";
-
+import Modal from "react-modal";
 import { request } from "util/http-util";
 import version, { versionComparator } from "../../version";
-import Button, { ButtonAngles, ButtonColor } from "../common/button";
+import Button, { ButtonColor } from "../common/button";
+import ModalHeader from "../modals/modal-header";
+import Grid from "@material-ui/core/Grid";
 
-const Banner = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 3;
-  background-color: white;
-`;
-
-const Cell = styled.div`
-  padding: 0.3em 0.3em;
-`;
+const modalStyle = {
+  content: {
+    width: "40%",
+    height: "20%",
+    transform: "translate(80%, 160%)",
+  },
+};
 
 /**
  * Maps a version number to this format: MAJOR.MINOR.PATCH
@@ -65,39 +60,33 @@ export const NewVersionChecker = () => {
     shell,
   ]);
 
-  const hideBanner = useCallback(() => setIsDisplayed(false), [setIsDisplayed]);
+  const onClose = useCallback(() => setIsDisplayed(false), [setIsDisplayed]);
 
   if (!isDisplayed) return false;
   return (
-    <Banner className="grid-x">
-      <div className="cell auto">
-        <div className="grid-x align-center align-middle">
-          <Cell className="cell shrink">
-            {t("header.aNewVersionIsOut", {
-              version: lastVersion,
-            })}
-          </Cell>
-          <Cell className="cell shrink">
-            <Button
-              id="download-last-version"
-              onClick={download}
-              color={ButtonColor.SUCCESS}
-            >
-              {t("header.download")}
-            </Button>
-          </Cell>
-        </div>
-      </div>
-      <Cell className="cell shrink">
-        <Button
-          id="close-banner"
-          color={ButtonColor.DISABLED}
-          angles={ButtonAngles.CIRCLE}
-          onClick={hideBanner}
-        >
-          <FaTimes />
-        </Button>
-      </Cell>
-    </Banner>
+    <Modal isOpen={isDisplayed} onRequestClose={onClose} style={modalStyle}>
+      <ModalHeader
+        title={t("header.aNewVersionIsOut", {
+          version: lastVersion,
+        })}
+        onClose={onClose}
+      />
+      <Grid container spacing={1}>
+        <Grid item xs={6}>
+          <Button
+            id="download-last-version"
+            onClick={download}
+            color={ButtonColor.SUCCESS}
+          >
+            {t("header.download")}
+          </Button>
+        </Grid>
+        <Grid item xs={6}>
+          <Button id="cancel" onClick={onClose} color={ButtonColor.DISABLED}>
+            {t("header.cancel")}
+          </Button>
+        </Grid>
+      </Grid>
+    </Modal>
   );
 };

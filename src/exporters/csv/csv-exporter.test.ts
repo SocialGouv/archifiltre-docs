@@ -216,7 +216,7 @@ describe("csv-exporter", () => {
           {
             goal: 2,
             id: "test-uuid",
-            label: "Creating the CSV export file",
+            label: "Creating the CSV with hashes export file",
             loadingType: LoadingInfoTypes.EXPORT,
             type: START_LOADING,
           },

@@ -1,12 +1,12 @@
-import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
-import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
+import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   getAliasesFromStore,
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
-} from "../../reducers/files-and-folders/files-and-folders-selectors";
-import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
+} from "reducers/files-and-folders/files-and-folders-selectors";
+import { getTagsFromStore } from "reducers/tags/tags-selectors";
 import { makeSIP } from "./mets";
 
 interface MetsExportThunkOptions {

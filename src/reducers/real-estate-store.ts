@@ -1,7 +1,7 @@
 import React from "react";
 import root_reducer from "reducers/root-reducer";
-import * as ObjectUtil from "util/object-util";
-import { compose } from "../util/function-util";
+import * as ObjectUtil from "util/object/object-util";
+import { compose } from "util/function/function-util";
 
 function makeStore(compiledRealEstate) {
   const initialState = compiledRealEstate.initialState;

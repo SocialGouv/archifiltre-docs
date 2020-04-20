@@ -1,8 +1,8 @@
 import path from "path";
 import { useCallback } from "react";
 import { useSelector } from "react-redux";
-import { getWorkspaceMetadataFromStore } from "../reducers/workspace-metadata/workspace-metadata-selectors";
-import { getNameWithExtension } from "../util/file-sys-util";
+import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
+import { getNameWithExtension } from "util/file-system/file-sys-util";
 
 export const useResipExport = ({ exportToResip }) => {
   const { sessionName, originalPath } = useSelector(

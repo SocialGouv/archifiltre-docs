@@ -1,5 +1,5 @@
 import path from "path";
-import { createChartReplacer, exportToDocX } from "../../util/docx/docx-util";
+import { createChartReplacer, exportToDocX } from "util/docx/docx-util";
 
 interface AuditReportFile {
   name: string;

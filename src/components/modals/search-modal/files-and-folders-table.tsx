@@ -1,10 +1,10 @@
 import dateFormat from "dateformat";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { getType } from "../../../util/file-and-folders-utils";
+import { getType } from "util/files-and-folders/file-and-folders-utils";
 import Table from "../../common/table";
 import { isEmpty } from "lodash";
-import { octet2HumanReadableFormat } from "../../../util/file-sys-util";
+import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 
 type FilesAndFoldersTableItem = {
   name: string;

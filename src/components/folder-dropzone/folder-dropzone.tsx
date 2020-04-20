@@ -2,10 +2,10 @@ import Grid from "@material-ui/core/Grid";
 import React, { FC, useCallback, useEffect } from "react";
 import path from "path";
 import styled from "styled-components";
-import { expectToBeDefined } from "../../util/expect-behaviour";
-import { notifyError } from "../../util/notifications-util";
+import TextAlignCenter from "components/common/text-align-center";
+import { expectToBeDefined } from "util/expect-behaviour/expect-behaviour";
+import { notifyError } from "util/notification/notifications-util";
 import { useTranslation } from "react-i18next";
-import TextAlignCenter from "../common/text-align-center";
 
 declare global {
   const AUTOLOAD: string;

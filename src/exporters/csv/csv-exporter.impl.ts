@@ -1,25 +1,25 @@
 import _, { sortBy } from "lodash";
 import path from "path";
-import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { getFilesAndFoldersDepth } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { getFilesAndFoldersDepth } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   AliasMap,
   CommentsMap,
   FilesAndFoldersMap,
   HashesMap,
-} from "../../reducers/files-and-folders/files-and-folders-types";
-import { Tag, TagMap } from "../../reducers/tags/tags-types";
-import translations from "../../translations/translations";
-import { WorkerMessageHandler } from "../../util/async-worker-util";
-import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
-import { arrayToCsv } from "../../util/csv-util";
+} from "reducers/files-and-folders/files-and-folders-types";
+import { Tag, TagMap } from "reducers/tags/tags-types";
+import translations from "translations/translations";
+import { WorkerMessageHandler } from "util/async-worker/async-worker-util";
+import { MessageTypes } from "util/batch-process/batch-process-util-types";
+import { arrayToCsv } from "util/csv/csv-util";
 import {
   getAllChildren,
   getType,
   isExactFileOrAncestor,
-} from "../../util/file-and-folders-utils";
-import { formatPathForUserSystem } from "../../util/file-sys-util";
-import { hasDuplicate } from "../../util/duplicates-util";
+} from "util/files-and-folders/file-and-folders-utils";
+import { formatPathForUserSystem } from "util/file-system/file-sys-util";
+import { hasDuplicate } from "util/duplicates/duplicates-util";
 
 interface MakeCsvHeaderOptions {
   withHashes: boolean;

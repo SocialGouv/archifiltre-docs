@@ -3,7 +3,6 @@ import { generateRandomString } from "util/random-gen-util";
 import _, { mapValues, pick } from "lodash";
 import fp from "lodash/fp";
 import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/files-and-folders-loader";
-import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 
 interface V8 {
   version: number;
@@ -15,6 +14,7 @@ interface V8 {
 }
 
 interface V9To12 {
+  tags: any;
   files_and_folders: any;
 }
 

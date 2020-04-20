@@ -1,7 +1,7 @@
 import { Record } from "immutable";
 import * as RealEstate from "reducers/real-estate";
-import { addTracker } from "../logging/tracker";
-import { ActionTitle, ActionType } from "../logging/tracker-types";
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
 
 declare global {
   interface Document {

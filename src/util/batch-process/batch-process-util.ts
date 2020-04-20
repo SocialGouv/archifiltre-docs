@@ -2,7 +2,7 @@ import { cpus } from "os";
 import { Observable } from "rxjs";
 import { chunk } from "lodash";
 import { reportError } from "../../logging/reporter";
-import { makeEmptyArray } from "../array-util";
+import { makeEmptyArray } from "util/array/array-util";
 import { map } from "rxjs/operators";
 
 // We create NB_CPUS - 1 processes to optimize computation

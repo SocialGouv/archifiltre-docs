@@ -5,7 +5,7 @@ import {
   LoadingInfo,
   LoadingInfoState,
 } from "./loading-info-types";
-import { ArchifiltreErrorCode, UnknownError } from "../../util/error-util";
+import { ArchifiltreErrorCode, UnknownError } from "util/error/error-util";
 import { useSelector } from "react-redux";
 
 /**

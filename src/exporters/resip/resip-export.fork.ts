@@ -1,11 +1,11 @@
-import translations from "../../translations/translations";
+import translations from "translations/translations";
 import {
   AsyncWorkerEvent,
   createAsyncWorkerForChildProcess,
   fakeChildProcess,
-} from "../../util/async-worker-util";
-import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
-import { hookCounter } from "../../util/hook-utils";
+} from "util/async-worker/async-worker-util";
+import { MessageTypes } from "util/batch-process/batch-process-util-types";
+import { hookCounter } from "util/hook/hook-utils";
 import resipExporter from "./resip-exporter";
 
 const asyncWorker = createAsyncWorkerForChildProcess();

@@ -1,5 +1,5 @@
 // Enables reporter to hook into the environment so it captures uncaught errors
-import "./logging/reporter.ts";
+import "logging/reporter.ts";
 
 import "./css/index.scss";
 import "css/app.css";
@@ -21,13 +21,13 @@ import store from "reducers/store.ts";
 import version from "version.ts";
 
 import { NotificationContainer } from "react-notifications";
-import { initTracker } from "./logging/tracker.ts";
-import "./translations/translations";
-import BackgroundLoadingInfoContainer from "./components/background-loading-info/background-loading-info-container";
+import { initTracker } from "logging/tracker.ts";
+import "translations/translations";
+import BackgroundLoadingInfoContainer from "components/background-loading-info/background-loading-info-container";
 import Modal from "react-modal";
-import Modals from "./components/modals/modals";
 import Box from "@material-ui/core/Box";
 import styled from "styled-components";
+import Modals from "components/modals/modals";
 
 document.title = `Archifiltre v${version}`;
 

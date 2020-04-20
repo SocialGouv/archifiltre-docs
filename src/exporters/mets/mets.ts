@@ -1,28 +1,28 @@
-import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import {
   AliasMap,
   CommentsMap,
   FilesAndFoldersMap,
-} from "../../reducers/files-and-folders/files-and-folders-types";
-import { TagMap } from "../../reducers/tags/tags-types";
-import translations from "../../translations/translations";
+} from "reducers/files-and-folders/files-and-folders-types";
+import { TagMap } from "reducers/tags/tags-types";
+import translations from "translations/translations";
 import path from "path";
 import { generateRandomString } from "util/random-gen-util";
 import { Map } from "immutable";
+import { getAllTagsForFile } from "reducers/tags/tags-selectors";
 import version from "version";
-import { getAllTagsForFile } from "../../reducers/tags/tags-selectors";
-import { notifySuccess } from "../../util/notifications-util";
-import { handleError } from "../../util/error-util";
+import { notifySuccess } from "util/notification/notifications-util";
+import { handleError } from "util/error/error-util";
 import {
   METS_EXPORT_ERROR_TITLE,
   METS_EXPORT_UNHANDLED_ERROR,
   metsExportErrorCannotAccessFile,
   metsExportErrorFileDoesNotExist,
 } from "./mets-errors";
-import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import { addTracker } from "../../logging/tracker";
-import { ActionTitle, ActionType } from "../../logging/tracker-types";
-import { getDisplayName } from "../../util/file-and-folders-utils";
+import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
+import { getDisplayName } from "util/files-and-folders/file-and-folders-utils";
 import { v4 as uuidv4 } from "uuid";
 
 import MD5 from "js-md5";

@@ -1,6 +1,6 @@
 import React, { FC, MouseEventHandler } from "react";
 import styled from "styled-components";
-import { empty } from "../../util/function-util";
+import { empty } from "util/function/function-util";
 
 const TagBadgeContainer = styled.div`
   padding-right: 0;

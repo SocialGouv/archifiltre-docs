@@ -2,16 +2,19 @@ import { promises as fs } from "fs";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { from } from "rxjs";
-import { DispatchExts } from "../../reducers/archifiltre-types";
-import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
-import { initialState as filesAndFoldersInitialState } from "../../reducers/files-and-folders/files-and-folders-reducer";
-import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import { StoreState } from "../../reducers/store";
+import { DispatchExts } from "reducers/archifiltre-types";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
+import { initialState as filesAndFoldersInitialState } from "reducers/files-and-folders/files-and-folders-reducer";
+import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
+import { StoreState } from "reducers/store";
 import {
   createEmptyStore,
   wrapStoreWithUndoable,
-} from "../../reducers/store-test-utils";
-import { notifyInfo, notifySuccess } from "../../util/notifications-util";
+} from "reducers/store-test-utils";
+import {
+  notifyInfo,
+  notifySuccess,
+} from "util/notification/notifications-util";
 import { generateResipExport$ } from "./resip-export.controller";
 import { resipExporterThunk } from "./resip-exporter-thunk";
 
@@ -24,7 +27,7 @@ jest.mock("fs", () => ({
     writeFile: jest.fn(),
   },
 }));
-jest.mock("../../util/notifications-util", () => ({
+jest.mock("util/notification/notifications-util", () => ({
   notifyInfo: jest.fn(),
   notifySuccess: jest.fn(),
 }));

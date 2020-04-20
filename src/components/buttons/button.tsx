@@ -1,40 +1,5 @@
 import React from "react";
 
-export function mkRB(clickAction, label, enabled, color, customStyle = {}) {
-  const defaultButtonStyle = {
-    backgroundColor: color ? color : "#4d9e25",
-    borderRadius: "50%",
-    marginBottom: 0,
-  };
-
-  const buttonStyle = { ...defaultButtonStyle, ...customStyle };
-
-  if (enabled) {
-    return (
-      <button
-        type="button"
-        className="button active_button"
-        onClick={clickAction}
-        style={buttonStyle}
-      >
-        {label}
-      </button>
-    );
-  } else {
-    return (
-      <button
-        type="button"
-        className="button"
-        onClick={clickAction}
-        style={buttonStyle}
-        disabled
-      >
-        {label}
-      </button>
-    );
-  }
-}
-
 export function mkTB(clickAction, label, enabled, color, customStyle) {
   const defaultButtonStyle = {
     WebkitTransition: "all 0.2s ease-out",

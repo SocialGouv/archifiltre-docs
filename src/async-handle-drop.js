@@ -1,10 +1,10 @@
 import LoadFromFilesystemFork from "./load-from-filesystem.fork";
 import LoadFromJsonFork from "./load-from-json.fork";
-import { isJsonFile } from "./util/file-sys-util";
+import { isJsonFile } from "util/file-system/file-sys-util";
 import {
   AsyncWorkerEvent,
   createAsyncWorkerForChildProcessController,
-} from "./util/async-worker-util";
+} from "util/async-worker/async-worker-util";
 import { reportError, reportInfo, reportWarning } from "./logging/reporter";
 import { MessageTypes } from "./util/batch-process/batch-process-util-types";
 import { createArchifiltreError } from "./reducers/loading-info/loading-info-selectors";

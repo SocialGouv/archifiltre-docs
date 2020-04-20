@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect } from "react";
 
-import * as FunctionUtil from "util/function-util";
+import * as FunctionUtil from "util/function/function-util";
 import { FillColor } from "./icicle-types";
 import SvgRectangle from "./svg-rectangle";
 import { useFileMoveActiveState } from "../../../hooks/use-file-move-active-state";

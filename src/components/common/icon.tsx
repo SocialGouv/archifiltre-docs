@@ -1,7 +1,7 @@
 import React from "react";
 import { FaCopy, FaFile, FaFolder, FaSearch } from "react-icons/fa";
 import styled from "styled-components";
-import { empty } from "../../util/function-util";
+import { empty } from "util/function/function-util";
 
 export const FOLDER_ICON = FaFolder;
 export const PAGE_ICON = FaFile;

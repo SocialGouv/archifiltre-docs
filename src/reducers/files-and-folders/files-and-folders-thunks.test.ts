@@ -1,8 +1,8 @@
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/files-and-folders-loader";
-import translations from "../../translations/translations";
-import { notifyInfo } from "../../util/notifications-util";
+import { createFilesAndFoldersMetadataDataStructure } from "files-and-folders-loader/files-and-folders-loader";
+import translations from "translations/translations";
+import { notifyInfo } from "util/notification/notifications-util";
 import { DispatchExts } from "../archifiltre-types";
 import { initFilesAndFoldersMetatada } from "../files-and-folders-metadata/files-and-folders-metadata-actions";
 import { createFilesAndFoldersMetadata } from "../files-and-folders-metadata/files-and-folders-metadata-test-utils";
@@ -29,7 +29,7 @@ import {
 } from "./files-and-folders-thunks";
 import { ADD_CHILD } from "./files-and-folders-types";
 
-jest.mock("../../util/notifications-util", () => ({
+jest.mock("util/notification/notifications-util", () => ({
   notifyInfo: jest.fn(),
 }));
 

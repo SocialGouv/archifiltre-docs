@@ -1,16 +1,16 @@
 import { Observable } from "rxjs";
-import { getLanguage } from "../../languages";
-import { addTracker } from "../../logging/tracker";
-import { ActionTitle, ActionType } from "../../logging/tracker-types";
-import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { getLanguage } from "languages";
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import {
   AliasMap,
   CommentsMap,
   FilesAndFoldersMap,
-} from "../../reducers/files-and-folders/files-and-folders-types";
-import { TagMap } from "../../reducers/tags/tags-types";
-import { createAsyncWorkerControllerClass } from "../../util/async-worker-util";
-import { backgroundWorkerProcess$ } from "../../util/batch-process/batch-process-util";
+} from "reducers/files-and-folders/files-and-folders-types";
+import { TagMap } from "reducers/tags/tags-types";
+import { createAsyncWorkerControllerClass } from "util/async-worker/async-worker-util";
+import { backgroundWorkerProcess$ } from "util/batch-process/batch-process-util";
 import ResipExportFork from "./resip-export.fork";
 
 interface ResipExportProgress {

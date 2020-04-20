@@ -1,16 +1,16 @@
 import styled from "styled-components";
-import { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
-import { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
+import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { Dims } from "./icicle/icicle-rect";
 import {
   isFile,
   ROOT_FF_ID,
-} from "../../reducers/files-and-folders/files-and-folders-selectors";
-import translations from "../../translations/translations";
-import { percent } from "../../util/numbers-util";
+} from "reducers/files-and-folders/files-and-folders-selectors";
+import translations from "translations/translations";
+import { percent } from "util/numbers/numbers-util";
 import { FillColor } from "./icicle/icicle-types";
-import { octet2HumanReadableFormat } from "../../util/file-sys-util";
+import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 
 const RulerWrapper = styled.div`
   width: 100%;

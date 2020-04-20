@@ -1,4 +1,4 @@
-import { ArchifiltreErrorCode } from "../../util/error-util";
+import { ArchifiltreErrorCode } from "util/error/error-util";
 
 export const START_LOADING = "LOADING_INFO/START_LOADING";
 export const UPDATE_LOADING = "LOADING_INFO/UPDATE_LOADING";

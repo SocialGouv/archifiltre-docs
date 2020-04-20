@@ -5,7 +5,7 @@ import { FaClipboardCheck, FaRegClipboard } from "react-icons/fa";
 import {
   NotificationDuration,
   notifyInfo,
-} from "../../util/notifications-util";
+} from "util/notification/notifications-util";
 
 export const CopyToClipboard = ({ stringToCopy }) => {
   const { t } = useTranslation();

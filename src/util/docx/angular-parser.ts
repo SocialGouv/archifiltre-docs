@@ -1,5 +1,5 @@
 import expressions from "angular-expressions";
-import { identity } from "../function-util";
+import { identity } from "util/function/function-util";
 
 // All the code comes from the docx-templater doc.
 // To add custom filters, check the documentation page : https://docxtemplater.readthedocs.io/en/latest/angular_parse.html#angular-parser

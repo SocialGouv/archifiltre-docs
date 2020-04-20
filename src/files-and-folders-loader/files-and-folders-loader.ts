@@ -1,20 +1,20 @@
 import fs from "fs";
 import _ from "lodash";
 import path from "path";
-import { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { isFile } from "../reducers/files-and-folders/files-and-folders-selectors";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   FilesAndFolders,
   FilesAndFoldersMap,
-} from "../reducers/files-and-folders/files-and-folders-types";
-import { medianOnSortedArray } from "../util/array-util";
-import { convertToPosixAbsolutePath } from "../util/file-sys-util";
-import { empty } from "../util/function-util";
-import { indexSort } from "../util/list-util";
+} from "reducers/files-and-folders/files-and-folders-types";
+import { medianOnSortedArray } from "util/array/array-util";
+import { convertToPosixAbsolutePath } from "util/file-system/file-sys-util";
+import { empty } from "util/function/function-util";
+import { indexSort, indexSortReverse } from "util/list-util";
 import {
   ArchifiltreErrorCode,
   convertFsErrorToArchifiltreError,
-} from "../util/error-util";
+} from "util/error/error-util";
 
 interface LoadFilesAndFoldersFromFileSystemError {
   message: string;
@@ -203,16 +203,14 @@ export const createFilesAndFoldersMetadataDataStructure = (
       ff.children.map((childId) => metadata[childId].nbChildrenFiles)
     );
     const sortByDateIndex = indexSort(
-      (childId) => metadata[childId].averageLastModified,
-      _(ff.children)
-    ).value();
+      (childId: string) => metadata[childId].averageLastModified,
+      ff.children
+    );
 
-    const sortBySizeIndex = indexSort(
-      (childId) => metadata[childId].childrenTotalSize,
-      _(ff.children)
-    )
-      .reverse()
-      .value();
+    const sortBySizeIndex = indexSortReverse(
+      (childId: string) => metadata[childId].childrenTotalSize,
+      ff.children
+    );
 
     metadata[id] = {
       averageLastModified,

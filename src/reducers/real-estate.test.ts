@@ -1,5 +1,5 @@
+import * as ObjectUtil from "util/object/object-util";
 import * as RealEstate from "reducers/real-estate";
-import * as ObjectUtil from "util/object-util";
 
 interface ApiProps {
   state1: any;

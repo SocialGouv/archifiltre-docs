@@ -3,15 +3,15 @@ import {
   aggregateResultsToMap,
   backgroundWorkerProcess$,
   computeBatch$,
-} from "../util/batch-process/batch-process-util";
+} from "util/batch-process/batch-process-util";
 
 import FileHashFork from "./file-hash-computer.fork";
 import FolderHashFork from "./folder-hash-computer.fork.js";
 
 import { bufferTime, map, filter } from "rxjs/operators";
-import { createAsyncWorkerControllerClass } from "../util/async-worker-util";
+import { createAsyncWorkerControllerClass } from "util/async-worker/async-worker-util";
 import { compose } from "redux";
-import { operateOnDataProcessingStream } from "../util/observable-util";
+import { operateOnDataProcessingStream } from "util/observable/observable-util";
 
 const BATCH_SIZE = 500;
 const BUFFER_TIME = 1000;

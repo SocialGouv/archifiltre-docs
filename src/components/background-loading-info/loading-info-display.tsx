@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { LoadingInfo } from "../../reducers/loading-info/loading-info-types";
-import { percent } from "../../util/numbers-util";
+import { LoadingInfo } from "reducers/loading-info/loading-info-types";
+import { percent } from "util/numbers/numbers-util";
 
 const getColor = ({ color }) => color;
 

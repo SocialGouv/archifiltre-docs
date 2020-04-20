@@ -1,13 +1,16 @@
-import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
-import { FileType, getFileTypeFromFileName } from "../file-types-util";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
+import {
+  FileType,
+  getFileTypeFromFileName,
+} from "util/file-types/file-types-util";
 import {
   isFile,
   ROOT_FF_ID,
-} from "../../reducers/files-and-folders/files-and-folders-selectors";
-import { ratio } from "../numbers-util";
+} from "reducers/files-and-folders/files-and-folders-selectors";
+import { ratio } from "util/numbers/numbers-util";
 import { useCallback, useMemo } from "react";
-import { IciclesSortMethod } from "../../reducers/workspace-metadata/workspace-metadata-types";
+import { IciclesSortMethod } from "reducers/workspace-metadata/workspace-metadata-types";
 
 export const SUCCESS_GREEN = "#1E8E17";
 

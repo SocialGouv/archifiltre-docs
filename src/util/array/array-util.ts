@@ -1,4 +1,5 @@
-import { fill } from "lodash";
+import _, { fill } from "lodash";
+import { FilterMethod } from "typings/filter-types";
 
 /**
  * Adds cumulatively the values of an array (starting with a 0) without the last element
@@ -60,6 +61,46 @@ export const medianOnSortedArray = (sortedArray: number[]): number => {
   }
 
   return (sortedArray[arrayLength / 2] + sortedArray[arrayLength / 2 - 1]) / 2;
+};
+
+export enum BooleanOperator {
+  AND,
+  OR,
+}
+
+const methodByOperator = {
+  [BooleanOperator.AND]: _.every,
+  [BooleanOperator.OR]: _.some,
+};
+
+/**
+ * Apply a list of filters to an array
+ * @param array to be filtered
+ * @param filters to be applied
+ * @param booleanOperator to join the filters
+ */
+export const applyFiltersList = <T>(
+  array: T[],
+  filters: FilterMethod<T>[],
+  booleanOperator: BooleanOperator = BooleanOperator.AND
+) => array.filter(joinFilters(filters, booleanOperator));
+
+/**
+ * Merges filters using a boolean operator
+ * @param filters to be applied
+ * @param booleanOperator to join the filters
+ */
+export const joinFilters = <T>(
+  filters: FilterMethod<T>[],
+  booleanOperator: BooleanOperator = BooleanOperator.AND
+): FilterMethod<T> => {
+  if (filters.length === 0) {
+    return () => true;
+  }
+  return (element: T): boolean =>
+    methodByOperator[booleanOperator](filters, (filter: FilterMethod<T>) =>
+      filter(element)
+    );
 };
 
 export const empty = [];

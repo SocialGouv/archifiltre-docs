@@ -1,6 +1,9 @@
 import {
+  applyFiltersList,
+  BooleanOperator,
   computeCumulative,
   countItems,
+  joinFilters,
   makeEmptyArray,
   medianOnSortedArray,
   replaceValue,
@@ -125,6 +128,50 @@ describe("array-util", () => {
       it("should return the mean of the two middle value", () => {
         expect(medianOnSortedArray(sortedArray)).toEqual(5);
       });
+    });
+  });
+
+  describe("applyFiltersList", () => {
+    const isOdd = (x: number) => x % 2 === 1;
+    const isMultipleOf3 = (x: number) => x % 3 === 0;
+    const arrayToFilter = [1, 3, 2, 6, 4, 7, 9];
+    const filters = [isOdd, isMultipleOf3];
+
+    it("should apply a list of filters to an array of numbers", () => {
+      expect(applyFiltersList(arrayToFilter, filters)).toEqual([3, 9]);
+    });
+
+    it("should apply a list of filters to an array of numbers with or operator", () => {
+      expect(
+        applyFiltersList(arrayToFilter, filters, BooleanOperator.OR)
+      ).toEqual([1, 3, 6, 7, 9]);
+    });
+  });
+
+  describe("joinFilters", () => {
+    const isOdd = (x: number) => x % 2 === 1;
+    const isMultipleOf3 = (x: number) => x % 3 === 0;
+
+    it("should join a list of filters with or operator", () => {
+      const filterMethods = joinFilters(
+        [isOdd, isMultipleOf3],
+        BooleanOperator.OR
+      );
+      expect(filterMethods(3)).toEqual(true);
+      expect(filterMethods(5)).toEqual(true);
+      expect(filterMethods(6)).toEqual(true);
+      expect(filterMethods(8)).toEqual(false);
+    });
+
+    it("should join a list of filters with and operator", () => {
+      const filterMethods = joinFilters(
+        [isOdd, isMultipleOf3],
+        BooleanOperator.AND
+      );
+      expect(filterMethods(3)).toEqual(true);
+      expect(filterMethods(5)).toEqual(false);
+      expect(filterMethods(6)).toEqual(false);
+      expect(filterMethods(8)).toEqual(false);
     });
   });
 });

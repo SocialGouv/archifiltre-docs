@@ -141,7 +141,8 @@
       "path": "Chemin",
       "searchPlaceholder": "Rechercher",
       "noResult": "Pas de résultat",
-      "page": "Page"
+      "page": "Page",
+      "tag": "Tag"
     },
     "errorsModal": {
       "title": "Liste des erreurs",

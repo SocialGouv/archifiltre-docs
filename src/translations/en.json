@@ -141,7 +141,8 @@
       "path": "Path",
       "searchPlaceholder": "Search",
       "noResult": "No result",
-      "page": "Page"
+      "page": "Page",
+      "tag": "Tag"
     },
     "errorsModal": {
       "title": "Errors list",

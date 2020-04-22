@@ -2,22 +2,22 @@ import { promises as fs } from "fs";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { of } from "rxjs";
-import { DispatchExts } from "../../reducers/archifiltre-types";
-import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
-import { initialState as filesAndFoldersInitialState } from "../../reducers/files-and-folders/files-and-folders-reducer";
-import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
+import { DispatchExts } from "reducers/archifiltre-types";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
+import { initialState as filesAndFoldersInitialState } from "reducers/files-and-folders/files-and-folders-reducer";
+import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import {
   COMPLETE_LOADING,
   LoadingInfoTypes,
   PROGRESS_LOADING,
   START_LOADING,
-} from "../../reducers/loading-info/loading-info-types";
-import { StoreState } from "../../reducers/store";
+} from "reducers/loading-info/loading-info-types";
+import { StoreState } from "reducers/store";
 import {
   createEmptyStore,
   wrapStoreWithUndoable,
-} from "../../reducers/store-test-utils";
-import { promptUserForSave } from "../../util/file-system-util";
+} from "reducers/store-test-utils";
+import { promptUserForSave } from "util/file-system/file-system-util";
 import { csvExporterThunk } from "./csv-exporter";
 import { generateCsvExport$ } from "./csv-exporter.controller";
 
@@ -29,7 +29,7 @@ jest.mock("uuid", () => ({
   v4: () => "test-uuid",
 }));
 
-jest.mock("../../util/file-system-util", () => ({
+jest.mock("util/file-system/file-system-util", () => ({
   promptUserForSave: jest.fn((filename) =>
     Promise.resolve(`/path/to/${filename}`)
   ),

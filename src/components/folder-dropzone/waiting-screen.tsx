@@ -3,7 +3,7 @@ import React, { FC } from "react";
 
 import IndexingBlock from "./indexing-block";
 import AreaLoadingBar from "../area-components/area-loading-bar";
-import { isJsonFile } from "../../util/file-sys-util";
+import { isJsonFile } from "util/file-system/file-sys-util";
 import Loader from "./loader";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";

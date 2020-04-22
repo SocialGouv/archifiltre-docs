@@ -5,7 +5,7 @@ import Tag from "components/tags/tag";
 import MultiLinesInput from "components/tags/multi-lines-input";
 import { FaTrash, FaTimes, FaPlus, FaPen } from "react-icons/fa";
 import styled from "styled-components";
-import { empty } from "../../util/function-util";
+import { empty } from "util/function/function-util";
 
 const CellShrink = styled(Grid)`
   padding: 0 0.1em;

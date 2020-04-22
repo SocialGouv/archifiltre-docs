@@ -1,12 +1,12 @@
-import { createAsyncWorkerMock } from "../util/async-worker-test-utils";
+import { createAsyncWorkerMock } from "util/async-worker/async-worker-test-utils";
 import { MessageTypes } from "../util/batch-process/batch-process-util-types";
-import { formatPathForUserSystem } from "../util/file-sys-util";
-import { computeHash } from "../util/hash-util";
+import { formatPathForUserSystem } from "util/file-system/file-sys-util";
+import { computeHash } from "util/hash/hash-util";
 import { onData, onInitialize } from "./file-hash-computer.impl";
 import { ArchifiltreErrorType } from "../reducers/loading-info/loading-info-types";
-import { UnknownError } from "../util/error-util";
+import { UnknownError } from "util/error/error-util";
 
-jest.mock("../util/hash-util", () => ({
+jest.mock("../util/hash/hash-util", () => ({
   computeHash: jest.fn(),
 }));
 

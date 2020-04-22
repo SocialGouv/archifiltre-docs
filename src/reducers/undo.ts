@@ -1,4 +1,4 @@
-import * as ObjectUtil from "util/object-util";
+import * as ObjectUtil from "util/object/object-util";
 import * as RealEstate from "reducers/real-estate";
 
 import store from "./store";

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { epochToFormattedUtcDateString } from "../../util/date-util";
+import { epochToFormattedUtcDateString } from "util/date/date-util";
 import { useTranslation } from "react-i18next";
 import Grid from "@material-ui/core/Grid";
 

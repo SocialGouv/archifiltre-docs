@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { SUCCESS_GREEN } from "../../util/color-util";
+import { SUCCESS_GREEN } from "util/color/color-util";
 
 const SquaredButton = styled.button`
   width: 37px;

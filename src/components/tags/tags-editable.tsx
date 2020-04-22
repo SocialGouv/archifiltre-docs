@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useRef } from "react";
 import Tag from "components/tags/tag";
 import { useTranslation } from "react-i18next";
-import { empty } from "../../util/function-util";
+import { empty } from "util/function/function-util";
 import MarkToDeleteButton from "./mark-to-delete-button";
 import styled from "styled-components";
 import Grid from "@material-ui/core/Grid";

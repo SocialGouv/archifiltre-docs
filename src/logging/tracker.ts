@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { compose } from "lodash/fp";
-import { mapValueBetweenEnums } from "../util/enum-util";
+import { mapValueBetweenEnums } from "util/enum/enum-util";
 import { ActionTitle, ActionType, TrackerAction } from "./tracker-types";
 
 declare global {

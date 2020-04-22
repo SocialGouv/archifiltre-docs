@@ -1,8 +1,8 @@
-import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
-import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import { createAsyncWorkerMock } from "../../util/async-worker-test-utils";
-import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
-import { formatPathForUserSystem } from "../../util/file-sys-util";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
+import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
+import { createAsyncWorkerMock } from "util/async-worker/async-worker-test-utils";
+import { MessageTypes } from "util/batch-process/batch-process-util-types";
+import { formatPathForUserSystem } from "util/file-system/file-sys-util";
 import { onInitialize } from "./csv-exporter.impl";
 
 const tagName = "test-tag-1";

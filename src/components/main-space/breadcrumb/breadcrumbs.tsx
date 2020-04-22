@@ -4,13 +4,13 @@ import {
   AliasMap,
   FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
-import { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import Breadcrumb, { BreadcrumbOpacity } from "./breadcrumb";
-import { makeEmptyArray } from "../../../util/array-util";
+import { makeEmptyArray } from "util/array/array-util";
 import { FillColor } from "../icicle/icicle-types";
-import { formatPathForUserSystem } from "../../../util/file-sys-util";
+import { formatPathForUserSystem } from "util/file-system/file-sys-util";
 import { DimsAndId } from "../icicle/icicle-rect";
-import { placeholder } from "../../../util/color-util";
+import { placeholder } from "util/color/color-util";
 
 const BreadcrumbsWrapper = styled.div`
   display: flex;

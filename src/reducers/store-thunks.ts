@@ -1,21 +1,21 @@
 import _ from "lodash";
 import path from "path";
-import AsyncHandleDrop from "../async-handle-drop";
-import { mapToNewVersionNumbers } from "../components/header/new-version-checker";
-import { computeHashesThunk } from "../hash-computer/hash-computer-thunk";
-import { addTracker } from "../logging/tracker";
-import { ActionTitle, ActionType } from "../logging/tracker-types";
-import translations from "../translations/translations";
+import AsyncHandleDrop from "async-handle-drop";
+import { mapToNewVersionNumbers } from "components/header/new-version-checker";
+import { computeHashesThunk } from "hash-computer/hash-computer-thunk";
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
+import translations from "translations/translations";
 import {
   filesAndFoldersMapToArray,
   getFiles,
-} from "../util/file-and-folders-utils";
-import { countZipFiles, isJsonFile } from "../util/file-sys-util";
+} from "util/files-and-folders/file-and-folders-utils";
+import { countZipFiles, isJsonFile } from "util/file-system/file-sys-util";
 import {
   NotificationDuration,
   notifyError,
   notifyInfo,
-} from "../util/notifications-util";
+} from "util/notification/notifications-util";
 import version, { versionComparator } from "../version";
 import { ArchifiltreThunkAction } from "./archifiltre-types";
 import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata/files-and-folders-metadata-actions";

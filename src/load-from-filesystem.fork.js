@@ -1,8 +1,8 @@
-import { hookCounter } from "./util/hook-utils";
+import { hookCounter } from "util/hook/hook-utils";
 import {
   AsyncWorkerEvent,
   createAsyncWorkerForChildProcess,
-} from "./util/async-worker-util";
+} from "util/async-worker/async-worker-util";
 import { MessageTypes } from "./util/batch-process/batch-process-util-types";
 import {
   createFilesAndFoldersDataStructure,

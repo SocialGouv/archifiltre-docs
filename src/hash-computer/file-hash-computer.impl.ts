@@ -1,7 +1,7 @@
 import path from "path";
-import { AsyncWorker } from "../util/async-worker-util";
-import { MessageTypes } from "../util/batch-process/batch-process-util-types";
-import { computeHash } from "../util/hash-util";
+import { AsyncWorker } from "util/async-worker/async-worker-util";
+import { MessageTypes } from "util/batch-process/batch-process-util-types";
+import { computeHash } from "util/hash/hash-util";
 import { createArchifiltreError } from "../reducers/loading-info/loading-info-selectors";
 import { ArchifiltreErrorType } from "../reducers/loading-info/loading-info-types";
 

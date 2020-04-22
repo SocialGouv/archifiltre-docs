@@ -1,8 +1,8 @@
-import { addTracker } from "../../logging/tracker";
-import { ActionTitle, ActionType } from "../../logging/tracker-types";
-import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
-import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
+import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
+import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import {
   getFileCount,
   getFilesAndFoldersFromStore,
@@ -10,21 +10,21 @@ import {
   getFoldersCount,
   getHashesFromStore,
   getMaxDepth,
-} from "../../reducers/files-and-folders/files-and-folders-selectors";
+} from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   FilesAndFoldersMap,
   HashesMap,
-} from "../../reducers/files-and-folders/files-and-folders-types";
+} from "reducers/files-and-folders/files-and-folders-types";
 import {
   countDuplicateFiles,
   countDuplicateFolders,
-} from "../../util/duplicates-util";
+} from "util/duplicates/duplicates-util";
 import {
   formatPathForUserSystem,
   octet2HumanReadableFormat,
   saveBlob,
-} from "../../util/file-sys-util";
-import { FileType } from "../../util/file-types-util";
+} from "util/file-system/file-sys-util";
+import { FileType } from "util/file-types/file-types-util";
 import {
   AuditReportData,
   generateAuditReportDocx,

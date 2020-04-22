@@ -1,8 +1,8 @@
-import { computeFolderHashes } from "../util/file-and-folders-utils";
+import { computeFolderHashes } from "util/files-and-folders/file-and-folders-utils";
 import {
   AsyncWorkerEvent,
   createAsyncWorkerForChildProcess,
-} from "../util/async-worker-util";
+} from "util/async-worker/async-worker-util";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
 

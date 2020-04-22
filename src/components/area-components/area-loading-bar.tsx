@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { RoundedArea, LIGHT } from "./rounded-area";
-import { toRgba } from "../../util/color-util";
+import { toRgba } from "util/color/color-util";
 import AreaTitle from "./area-title";
 import AreaMessage from "./area-message";
 import styled from "styled-components";

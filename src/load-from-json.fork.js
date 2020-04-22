@@ -1,12 +1,12 @@
-import { readFileSync } from "util/file-sys-util";
+import { readFileSync } from "util/file-system/file-sys-util";
 
 import { fromAnyJsonToJs } from "util/compatibility/compatibility";
 
 import {
   AsyncWorkerEvent,
   createAsyncWorkerForChildProcess,
-} from "./util/async-worker-util";
-import { MessageTypes } from "./util/batch-process/batch-process-util-types";
+} from "util/async-worker/async-worker-util";
+import { MessageTypes } from "util/batch-process/batch-process-util-types";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
 

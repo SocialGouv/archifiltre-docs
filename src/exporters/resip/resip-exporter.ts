@@ -1,22 +1,22 @@
 import dateFormat from "dateformat";
 import _ from "lodash";
 import path from "path";
-import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import {
   AliasMap,
   CommentsMap,
   FilesAndFolders,
   FilesAndFoldersMap,
-} from "../../reducers/files-and-folders/files-and-folders-types";
-import { tagHasFfId } from "../../reducers/tags/tags-selectors";
-import { TagMap } from "../../reducers/tags/tags-types";
-import translations from "../../translations/translations";
-import { makeEmptyArray, replaceValue } from "../../util/array-util";
+} from "reducers/files-and-folders/files-and-folders-types";
+import { tagHasFfId } from "reducers/tags/tags-selectors";
+import { TagMap } from "reducers/tags/tags-types";
+import translations from "translations/translations";
+import { makeEmptyArray, replaceValue } from "util/array/array-util";
 import {
   getDisplayName,
   isExactFileOrAncestor,
-} from "../../util/file-and-folders-utils";
-import { empty } from "../../util/function-util";
+} from "util/files-and-folders/file-and-folders-utils";
+import { empty } from "util/function/function-util";
 
 const nameChangedText = (oldName) =>
   translations.t("common.originalName", { oldName });

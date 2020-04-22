@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import { getWorkspaceMetadataFromStore } from "../reducers/workspace-metadata/workspace-metadata-selectors";
-import { getNameWithExtension } from "../util/file-sys-util";
+import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
+import { getNameWithExtension } from "util/file-system/file-sys-util";
 
 export const useCsvExport = ({
   exportToCsv,

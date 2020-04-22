@@ -1,10 +1,10 @@
-import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
-import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
+import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import {
   formatPathForUserSystem,
   octet2HumanReadableFormat,
-} from "../../util/file-sys-util";
-import { FileType } from "../../util/file-types-util";
+} from "util/file-system/file-sys-util";
+import { FileType } from "util/file-types/file-types-util";
 import {
   countFileTypes,
   formatAuditReportDate,

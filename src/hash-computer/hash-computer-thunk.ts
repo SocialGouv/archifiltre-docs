@@ -1,32 +1,35 @@
 import path from "path";
 import { tap } from "rxjs/operators";
-import { reportError } from "../logging/reporter";
-import { ArchifiltreThunkAction } from "../reducers/archifiltre-types";
-import { setFilesAndFoldersHashes } from "../reducers/files-and-folders/files-and-folders-actions";
+import { reportError } from "logging/reporter";
+import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
+import { setFilesAndFoldersHashes } from "reducers/files-and-folders/files-and-folders-actions";
 import {
   getFilesAndFoldersFromStore,
   getFilesMap,
   getHashesFromStore,
-} from "../reducers/files-and-folders/files-and-folders-selectors";
+} from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   completeLoadingAction,
   progressLoadingAction,
   registerErrorAction,
-} from "../reducers/loading-info/loading-info-actions";
-import { startLoading } from "../reducers/loading-info/loading-info-operations";
+} from "reducers/loading-info/loading-info-actions";
+import { startLoading } from "reducers/loading-info/loading-info-operations";
 import {
   ArchifiltreError,
   LoadingInfoTypes,
-} from "../reducers/loading-info/loading-info-types";
-import translations from "../translations/translations";
-import { NotificationDuration, notifyError } from "../util/notifications-util";
-import { operateOnDataProcessingStream } from "../util/observable-util";
+} from "reducers/loading-info/loading-info-types";
+import translations from "translations/translations";
+import {
+  NotificationDuration,
+  notifyError,
+} from "util/notification/notifications-util";
+import { operateOnDataProcessingStream } from "util/observable/observable-util";
 import {
   computeFolderHashes$,
   computeHashes$,
 } from "./hash-computer.controller";
-import { openModalAction } from "../reducers/modal/modal-actions";
-import { Modal } from "../reducers/modal/modal-types";
+import { openModalAction } from "reducers/modal/modal-actions";
+import { Modal } from "reducers/modal/modal-types";
 
 /**
  * Thunk that computes files and folders hashes

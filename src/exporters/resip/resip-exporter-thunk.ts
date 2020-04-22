@@ -1,17 +1,20 @@
 import { promises as fs } from "fs";
 import { map, takeLast } from "rxjs/operators";
-import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
-import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
+import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   getAliasesFromStore,
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
-} from "../../reducers/files-and-folders/files-and-folders-selectors";
-import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
-import translations from "../../translations/translations";
-import { arrayToCsv } from "../../util/csv-util";
-import { notifyInfo, notifySuccess } from "../../util/notifications-util";
+} from "reducers/files-and-folders/files-and-folders-selectors";
+import { getTagsFromStore } from "reducers/tags/tags-selectors";
+import translations from "translations/translations";
+import { arrayToCsv } from "util/csv/csv-util";
+import {
+  notifyInfo,
+  notifySuccess,
+} from "util/notification/notifications-util";
 import { generateResipExport$ } from "./resip-export.controller";
 
 const resipExportTitle = translations.t("export.resipExportTitle");

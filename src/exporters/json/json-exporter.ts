@@ -1,15 +1,15 @@
-import { addTracker } from "../../logging/tracker";
-import { ActionTitle, ActionType } from "../../logging/tracker-types";
-import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
-import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
+import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
+import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   getAliasesFromStore,
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getHashesFromStore,
-} from "../../reducers/files-and-folders/files-and-folders-selectors";
-import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
-import { getNameWithExtension, save } from "../../util/file-sys-util";
+} from "reducers/files-and-folders/files-and-folders-selectors";
+import { getTagsFromStore } from "reducers/tags/tags-selectors";
+import { getNameWithExtension, save } from "util/file-system/file-sys-util";
 
 interface JsonExporterThunkArgs {
   sessionName: string;

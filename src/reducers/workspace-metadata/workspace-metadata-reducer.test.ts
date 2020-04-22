@@ -66,7 +66,7 @@ describe("workspace-metadata-reducer", () => {
 
     expect(nextState).toEqual({
       ...baseState,
-      hoveredElementId
+      hoveredElementId,
     });
   });
 
@@ -79,7 +79,7 @@ describe("workspace-metadata-reducer", () => {
 
     expect(nextState).toEqual({
       ...baseState,
-      lockedElementId
+      lockedElementId,
     });
   });
 });

@@ -10,23 +10,23 @@ import {
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { from } from "rxjs";
 import { bufferTime, flatMap, last, tap } from "rxjs/operators";
-import { addTracker } from "../../logging/tracker";
-import { ActionTitle, ActionType } from "../../logging/tracker-types";
-import { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
+import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
 import {
   completeLoadingAction,
   progressLoadingAction,
-} from "../../reducers/loading-info/loading-info-actions";
-import { startLoading } from "../../reducers/loading-info/loading-info-operations";
-import { LoadingInfoTypes } from "../../reducers/loading-info/loading-info-types";
-import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
-import translations from "../../translations/translations";
-import { promptUserForSave } from "../../util/file-system-util";
+} from "reducers/loading-info/loading-info-actions";
+import { startLoading } from "reducers/loading-info/loading-info-operations";
+import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
+import { getTagsFromStore } from "reducers/tags/tags-selectors";
+import translations from "translations/translations";
+import { promptUserForSave } from "util/file-system/file-system-util";
 import {
   NotificationDuration,
   notifyInfo,
   notifySuccess,
-} from "../../util/notifications-util";
+} from "util/notification/notifications-util";
 import {
   generateCsvExport$,
   GenerateCsvExportOptions,

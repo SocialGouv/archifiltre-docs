@@ -21,34 +21,34 @@ import {
   FilesAndFoldersCollection,
   getFiles,
   isFile,
-} from "../../reducers/files-and-folders/files-and-folders-selectors";
+} from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   FilesAndFolders,
   HashesMap,
-} from "../../reducers/files-and-folders/files-and-folders-types";
-import translations from "../../translations/translations";
+} from "reducers/files-and-folders/files-and-folders-types";
+import translations from "translations/translations";
 import {
   countDuplicateFilesTotalSize,
   countDuplicatesPercentForFiles,
   countDuplicatesPercentForFolders,
   getBiggestDuplicatedFolders,
   getMostDuplicatedFiles,
-} from "../../util/duplicates-util";
+} from "util/duplicates/duplicates-util";
 import {
   formatPathForUserSystem,
   octet2HumanReadableFormat,
-} from "../../util/file-sys-util";
+} from "util/file-system/file-sys-util";
 import {
   FileType,
   getExtensionsForEachFileType,
   getFileType,
-} from "../../util/file-types-util";
+} from "util/file-types/file-types-util";
 import {
   Accessor,
   Mapper,
   Merger,
 } from "../../util/functionnal-programming-utils";
-import { curriedFormatPercent, percent } from "../../util/numbers-util";
+import { curriedFormatPercent, percent } from "util/numbers/numbers-util";
 import {
   AuditReportElementWithType,
   AuditReportFileWithCount,

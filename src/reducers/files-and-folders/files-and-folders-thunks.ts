@@ -1,9 +1,9 @@
-import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/files-and-folders-loader";
-import { addTracker } from "../../logging/tracker";
-import { ActionTitle, ActionType } from "../../logging/tracker-types";
-import translations from "../../translations/translations";
-import { isExactFileOrAncestor } from "../../util/file-and-folders-utils";
-import { notifyInfo } from "../../util/notifications-util";
+import { createFilesAndFoldersMetadataDataStructure } from "files-and-folders-loader/files-and-folders-loader";
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
+import translations from "translations/translations";
+import { isExactFileOrAncestor } from "util/files-and-folders/file-and-folders-utils";
+import { notifyInfo } from "util/notification/notifications-util";
 import { ArchifiltreThunkAction } from "../archifiltre-types";
 import { initFilesAndFoldersMetatada } from "../files-and-folders-metadata/files-and-folders-metadata-actions";
 import {

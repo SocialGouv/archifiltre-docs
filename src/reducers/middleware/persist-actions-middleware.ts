@@ -3,9 +3,9 @@ import { promises as fs } from "fs";
 import path from "path";
 import { useEffect, useState } from "react";
 import { Middleware } from "redux";
-import { reportError, reportInfo } from "../../logging/reporter";
-import translations from "../../translations/translations";
-import { notifyError } from "../../util/notifications-util";
+import { reportError, reportInfo } from "logging/reporter";
+import translations from "translations/translations";
+import { notifyError } from "util/notification/notifications-util";
 
 const userFolderPath = remote.app.getPath("userData");
 export const previousSessionFilePath = path.join(

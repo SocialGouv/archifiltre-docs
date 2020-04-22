@@ -1,5 +1,4 @@
 import {
-  FilesAndFoldersMetadata,
   FilesAndFoldersMetadataAction,
   FilesAndFoldersMetadataMap,
   INIT_FILES_AND_FOLDERS_METADATA,

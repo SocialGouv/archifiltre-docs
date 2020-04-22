@@ -2,20 +2,20 @@ import path from "path";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { of } from "rxjs";
-import { DispatchExts } from "../reducers/archifiltre-types";
-import { setFilesAndFoldersHashes } from "../reducers/files-and-folders/files-and-folders-actions";
-import { initialState as filesAndFoldersInitialState } from "../reducers/files-and-folders/files-and-folders-reducer";
-import { createFilesAndFolders } from "../reducers/files-and-folders/files-and-folders-test-utils";
+import { DispatchExts } from "reducers/archifiltre-types";
+import { setFilesAndFoldersHashes } from "reducers/files-and-folders/files-and-folders-actions";
+import { initialState as filesAndFoldersInitialState } from "reducers/files-and-folders/files-and-folders-reducer";
+import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import {
   completeLoadingAction,
   progressLoadingAction,
-} from "../reducers/loading-info/loading-info-actions";
-import { LoadingInfoTypes } from "../reducers/loading-info/loading-info-types";
-import { StoreState } from "../reducers/store";
+} from "reducers/loading-info/loading-info-actions";
+import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
+import { StoreState } from "reducers/store";
 import {
   createEmptyStore,
   wrapStoreWithUndoable,
-} from "../reducers/store-test-utils";
+} from "reducers/store-test-utils";
 import { computeHashesThunk } from "./hash-computer-thunk";
 import {
   computeFolderHashes$,

@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { v4 as uuid } from "uuid";
 
-import { removeKey } from "../../util/object-util";
+import { removeKey } from "util/object/object-util";
 import undoable from "../enhancers/undoable/undoable";
 import { getTagByName } from "./tags-selectors";
 import {

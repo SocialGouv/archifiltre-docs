@@ -5,7 +5,7 @@ import React, { FC, useCallback, useState } from "react";
 import TagListItem from "components/tags/all-tags-item";
 import TextAlignCenter from "components/common/text-align-center";
 
-import * as Color from "util/color-util";
+import * as Color from "util/color/color-util";
 import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 

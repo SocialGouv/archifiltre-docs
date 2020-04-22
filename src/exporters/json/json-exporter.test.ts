@@ -1,19 +1,19 @@
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import { DispatchExts } from "../../reducers/archifiltre-types";
-import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
-import { initialState as filesAndFoldersInitialState } from "../../reducers/files-and-folders/files-and-folders-reducer";
-import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import { StoreState } from "../../reducers/store";
+import { DispatchExts } from "reducers/archifiltre-types";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
+import { initialState as filesAndFoldersInitialState } from "reducers/files-and-folders/files-and-folders-reducer";
+import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
+import { StoreState } from "reducers/store";
 import {
   createEmptyStore,
   wrapStoreWithUndoable,
-} from "../../reducers/store-test-utils";
-import { createTag } from "../../reducers/tags/tags-test-util";
-import { save } from "../../util/file-sys-util";
+} from "reducers/store-test-utils";
+import { createTag } from "reducers/tags/tags-test-util";
+import { save } from "util/file-system/file-sys-util";
 import { jsonExporterThunk } from "./json-exporter";
 
-jest.mock("../../util/file-sys-util", () => ({
+jest.mock("util/file-system/file-sys-util", () => ({
   getNameWithExtension: (name, ext) => `${name}.${ext}`,
   save: jest.fn(),
 }));

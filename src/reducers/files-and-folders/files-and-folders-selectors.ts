@@ -1,8 +1,8 @@
 import memoize from "fast-memoize";
 import _ from "lodash";
 import fp from "lodash/fp";
-import { medianOnSortedArray } from "../../util/array-util";
-import { Mapper, not, size } from "../../util/functionnal-programming-utils";
+import { medianOnSortedArray } from "util/array/array-util";
+import { Mapper, not, size } from "util/functionnal-programming-utils";
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
 import { StoreState } from "../store";
 import {

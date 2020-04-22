@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   getAliasesFromStore,
   getCommentsFromStore,
@@ -9,20 +9,20 @@ import {
   getMaxDepth,
   getVirtualPathToIdFromStore,
   ROOT_FF_ID,
-} from "../../../reducers/files-and-folders/files-and-folders-selectors";
-import { moveElement } from "../../../reducers/files-and-folders/files-and-folders-thunks";
-import { getTagsFromStore } from "../../../reducers/tags/tags-selectors";
+} from "reducers/files-and-folders/files-and-folders-selectors";
+import { moveElement } from "reducers/files-and-folders/files-and-folders-thunks";
+import { getTagsFromStore } from "reducers/tags/tags-selectors";
 import {
   setHoveredElementId,
   setLockedElementId,
-} from "../../../reducers/workspace-metadata/workspace-metadata-actions";
+} from "reducers/workspace-metadata/workspace-metadata-actions";
 import {
   getWorkspaceMetadataFromStore,
   useWorkspaceMetadata,
-} from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
-import { IciclesSortMethod } from "../../../reducers/workspace-metadata/workspace-metadata-types";
-import { useFillColor } from "../../../util/color-util";
-import { createFilePathSequence } from "../../../util/file-and-folders-utils";
+} from "reducers/workspace-metadata/workspace-metadata-selectors";
+import { IciclesSortMethod } from "reducers/workspace-metadata/workspace-metadata-types";
+import { useFillColor } from "util/color/color-util";
+import { createFilePathSequence } from "util/files-and-folders/file-and-folders-utils";
 import IcicleMain from "./icicle-main";
 
 export default function IcicleApiToProps({ api }) {

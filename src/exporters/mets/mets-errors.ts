@@ -1,4 +1,4 @@
-import translations from "../../translations/translations";
+import translations from "translations/translations";
 
 export const METS_EXPORT_ERROR_TITLE = translations.t(
   "export.metsExportErrorTitle"

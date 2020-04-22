@@ -7,7 +7,7 @@ import CommentsCell from "components/report/report-cell-comments";
 
 import LastModifiedReporter from "components/report/last-modified-reporter";
 
-import * as Color from "util/color-util";
+import * as Color from "util/color/color-util";
 
 import { shell } from "electron";
 import path from "path";
@@ -19,10 +19,13 @@ import Icon, {
 import ClickableIcon from "../common/clickable-icon";
 import ReactTooltip from "react-tooltip";
 import { useTranslation } from "react-i18next";
-import { getDisplayName, getType } from "../../util/file-and-folders-utils";
+import {
+  getDisplayName,
+  getType,
+} from "util/files-and-folders/file-and-folders-utils";
 import { FaPen, FaInfoCircle } from "react-icons/fa";
-import { octet2HumanReadableFormat } from "../../util/file-sys-util";
 import Grid from "@material-ui/core/Grid";
+import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 
 const pad = "1em";
 

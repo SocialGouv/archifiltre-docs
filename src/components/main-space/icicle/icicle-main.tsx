@@ -9,24 +9,24 @@ import React, {
   useState,
 } from "react";
 import styled from "styled-components";
-import { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { decomposePathToElement } from "../../../reducers/files-and-folders/files-and-folders-selectors";
+import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { decomposePathToElement } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   AliasMap,
   CommentsMap,
   FilesAndFolders,
-} from "../../../reducers/files-and-folders/files-and-folders-types";
-import { TagMap } from "../../../reducers/tags/tags-types";
-import * as ArrayUtil from "../../../util/array-util";
-import { empty } from "../../../util/function-util";
+} from "reducers/files-and-folders/files-and-folders-types";
+import { TagMap } from "reducers/tags/tags-types";
+import * as ArrayUtil from "util/array/array-util";
+import { empty } from "util/function/function-util";
 import MinimapBracket from "../minimap-bracket";
 import Ruler from "../ruler";
 import AnimatedIcicle from "./animated-icicle";
 import Icicle from "./icicle";
 import { Dims, DimsAndId } from "./icicle-rect";
 import { FillColor } from "./icicle-types";
-import { useFileMoveActiveState } from "../../../hooks/use-file-move-active-state";
-import { useMovableElements } from "../../../hooks/use-movable-elements";
+import { useFileMoveActiveState } from "hooks/use-file-move-active-state";
+import { useMovableElements } from "hooks/use-movable-elements";
 import BreadcrumbsNew from "../breadcrumb/breadcrumbs";
 
 export type IcicleMouseHandler = (

@@ -1,5 +1,5 @@
-import * as ObjectUtil from "util/object-util";
-import * as FsUtil from "util/file-sys-util";
+import * as ObjectUtil from "util/object/object-util";
+import * as FsUtil from "util/file-system/file-sys-util";
 
 import Fs from "fs";
 import Path from "path";

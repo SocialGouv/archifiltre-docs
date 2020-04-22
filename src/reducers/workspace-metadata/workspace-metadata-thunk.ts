@@ -1,5 +1,5 @@
-import { addTracker } from "../../logging/tracker";
-import { ActionTitle, ActionType } from "../../logging/tracker-types";
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
 import { ArchifiltreThunkAction } from "../archifiltre-types";
 import {
   setIciclesSortMethod,

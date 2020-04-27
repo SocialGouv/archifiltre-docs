@@ -2,9 +2,6 @@ import React, { useCallback } from "react";
 
 import { RIEInput } from "riek";
 
-import TagsCell from "components/tags/report-cell-tags";
-import CommentsCell from "components/report/report-cell-comments";
-
 import LastModifiedReporter from "components/report/last-modified-reporter";
 
 import * as Color from "util/color/color-util";
@@ -26,16 +23,17 @@ import {
 import { FaPen, FaInfoCircle } from "react-icons/fa";
 import Grid from "@material-ui/core/Grid";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
+import Paper from "@material-ui/core/Paper";
+import styled from "styled-components";
+import SessionInfo from "../header/dashboard/session-info";
 
-const pad = "1em";
+const CategoryTitle = styled.h3`
+  margin: 5px 0;
+`;
 
-const cellsStyle = {
-  borderRadius: "1em",
-  padding: "0.6em 1em 0 1em",
-  fontSize: "0.8em",
-  height: "8em",
-  boxSizing: "border-box",
-};
+const StyledGrid = styled(Grid)`
+  padding: 10px;
+`;
 
 const infoCellStyle = {
   fontSize: "0.8em",
@@ -138,8 +136,8 @@ const NameCell = ({
   originalPath,
   onChangeAlias,
 }) => (
-  <Grid container style={{ height: "3.2em" }}>
-    <Grid item style={{ paddingRight: pad }}>
+  <Grid container>
+    <Grid item>
       <ElementIcon
         placeholder={placeholder}
         isFolder={isFolder}
@@ -226,30 +224,29 @@ const InfoCell = ({
 };
 
 const Report = ({
-  createTag,
-  untag,
-  updateComment,
   currentFilesAndFolders,
   currentFileHash,
   currentFileAlias,
-  currentFileComment,
   filesAndFoldersId,
   filesAndFolders,
   filesAndFoldersMetadata,
-  tagsForCurrentFile,
-  isCurrentFileMarkedToDelete,
-  toggleCurrentFileDeleteState,
   originalPath,
   onChangeAlias,
   fillColor,
   isFocused,
   isLocked,
+  sessionName,
+  setSessionName,
+  nbFiles,
+  nbFolders,
+  volume,
 }) => {
+  const { t } = useTranslation();
+
   const isActive = isFocused || isLocked;
 
   let children = [];
   let nodeName = "";
-  let nodeId = "";
   let displayName = "";
   let bracketName = "";
   let isFolder = false;
@@ -257,24 +254,35 @@ const Report = ({
   if (isActive) {
     children = currentFilesAndFolders.children;
     nodeName = currentFilesAndFolders.name;
-    nodeId = currentFilesAndFolders.id;
     displayName = getDisplayName(nodeName, currentFileAlias);
     bracketName = currentFileAlias === "" ? "" : nodeName;
     isFolder = children.length > 0;
   }
 
   return (
-    <div
-      style={{
-        opacity: isActive ? 1 : 0.5,
-        background: "white",
-        borderRadius: "5px",
-      }}
-    >
-      <Grid container style={{ padding: pad }}>
-        <Grid item xs={8} style={{ paddingRight: pad }}>
-          <Grid container>
-            <Grid item xs={12} style={{ paddingBottom: pad }}>
+    <Grid container spacing={1}>
+      <Grid item xs={6}>
+        <CategoryTitle>{t("report.fileTreeInfo")}</CategoryTitle>
+        <Paper>
+          <StyledGrid container>
+            <Grid item xs={12}>
+              <SessionInfo
+                sessionName={sessionName}
+                onChangeSessionName={setSessionName}
+                nbFolders={nbFiles}
+                nbFiles={nbFolders}
+                volume={volume}
+              />
+            </Grid>
+          </StyledGrid>
+        </Paper>
+      </Grid>
+
+      <Grid item xs={6}>
+        <CategoryTitle>{t("report.elementInfo")}</CategoryTitle>
+        <Paper>
+          <StyledGrid container>
+            <Grid item xs={6}>
               <NameCell
                 placeholder={!isActive}
                 filesAndFoldersId={filesAndFoldersId}
@@ -287,62 +295,37 @@ const Report = ({
                 originalPath={originalPath}
               />
             </Grid>
-            <Grid item xs={6} style={{ paddingRight: pad }}>
-              <TagsCell
-                is_dummy={!isActive}
-                isLocked={isLocked}
-                isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
-                cells_style={cellsStyle}
-                nodeId={nodeId}
-                tagsForCurrentFile={tagsForCurrentFile}
-                filesAndFoldersId={filesAndFoldersId}
-                createTag={createTag}
-                untag={untag}
-                toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
-              />
-            </Grid>
             <Grid item xs={6}>
-              <CommentsCell
-                is_dummy={!isActive}
-                cells_style={cellsStyle}
-                comments={currentFileComment}
+              <InfoCell
+                currentFileHash={currentFileHash}
+                filesAndFolders={filesAndFolders}
                 filesAndFoldersId={filesAndFoldersId}
-                updateComment={updateComment}
+                filesAndFoldersMetadata={filesAndFoldersMetadata}
+                placeholder={!isActive}
               />
             </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={4}>
-          <InfoCell
-            currentFileHash={currentFileHash}
-            filesAndFolders={filesAndFolders}
-            filesAndFoldersId={filesAndFoldersId}
-            filesAndFoldersMetadata={filesAndFoldersMetadata}
-            placeholder={!isActive}
-          />
-        </Grid>
+          </StyledGrid>
+        </Paper>
       </Grid>
-    </div>
+    </Grid>
   );
 };
 
 export default function ReportApiToProps({
   originalPath,
-  createTag,
-  untag,
   currentFileHash,
   currentFileAlias,
-  currentFileComment,
-  isCurrentFileMarkedToDelete,
-  tagsForCurrentFile,
   filesAndFolders,
   filesAndFoldersId,
   filesAndFoldersMetadata,
   isLocked,
-  toggleCurrentFileDeleteState,
   updateAlias,
-  updateComment,
   fillColor,
+  sessionName,
+  setSessionName,
+  nbFiles,
+  nbFolders,
+  volume,
 }) {
   const isFocused = filesAndFoldersId !== "";
 
@@ -368,21 +351,19 @@ export default function ReportApiToProps({
       currentFilesAndFolders={currentFilesAndFolders}
       currentFileHash={currentFileHash}
       currentFileAlias={currentFileAlias}
-      currentFileComment={currentFileComment}
       filesAndFoldersId={filesAndFoldersId}
       filesAndFolders={filesAndFolders}
       filesAndFoldersMetadata={filesAndFoldersMetadata}
-      tagsForCurrentFile={tagsForCurrentFile}
-      isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
       originalPath={originalPath}
       isFocused={isFocused}
       isLocked={isLocked}
       fillColor={fillColor}
-      toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
-      createTag={createTag}
-      untag={untag}
-      updateComment={updateComment}
       onChangeAlias={onChangeAlias}
+      sessionName={sessionName}
+      setSessionName={setSessionName}
+      nbFiles={nbFiles}
+      nbFolders={nbFolders}
+      volume={volume}
     />
   );
 }

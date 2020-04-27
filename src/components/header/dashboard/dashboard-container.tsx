@@ -1,22 +1,17 @@
 import React, { FC, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { auditReportExporterThunk } from "../../../exporters/audit/audit-report-exporter";
-import { csvExporterThunk } from "../../../exporters/csv/csv-exporter";
-import { jsonExporterThunk } from "../../../exporters/json/json-exporter";
-import { metsExporterThunk } from "../../../exporters/mets/mets-export-thunk";
-import { resipExporterThunk } from "../../../exporters/resip/resip-exporter-thunk";
-import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import {
-  getFilesAndFoldersFromStore,
-  getHashesFromStore,
-} from "../../../reducers/files-and-folders/files-and-folders-selectors";
+import { auditReportExporterThunk } from "exporters/audit/audit-report-exporter";
+import { csvExporterThunk } from "exporters/csv/csv-exporter";
+import { jsonExporterThunk } from "exporters/json/json-exporter";
+import { metsExporterThunk } from "exporters/mets/mets-export-thunk";
+import { resipExporterThunk } from "exporters/resip/resip-exporter-thunk";
+import { getHashesFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   replayActionsThunk,
   usePreviousSession,
-} from "../../../reducers/middleware/persist-actions-middleware";
-import { resetStoreThunk } from "../../../reducers/store-thunks";
-import { getWorkspaceMetadataFromStore } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
-import { setSessionNameThunk } from "../../../reducers/workspace-metadata/workspace-metadata-thunk";
+} from "reducers/middleware/persist-actions-middleware";
+import { resetStoreThunk } from "reducers/store-thunks";
+import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import Dashboard from "./dashboard";
 
 interface DashboardContainerProps {
@@ -70,14 +65,6 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
     api,
   ]);
 
-  const setSessionName = useCallback(
-    (newSessionName) => dispatch(setSessionNameThunk(newSessionName, api)),
-    [dispatch, api]
-  );
-
-  const metadata = useSelector(getFilesAndFoldersMetadataFromStore);
-  const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
-  const rootFilesAndFoldersMetadata = metadata[""] || {};
   const hashes = useSelector(getHashesFromStore);
   const areHashesReady = hashes[ROOT_ID] !== undefined;
   const { sessionName, originalPath } = useSelector(
@@ -98,9 +85,6 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
       exportToJson={exportToJson}
       reloadPreviousSession={reloadPreviousSession}
       resetWorkspace={resetWorkspace}
-      rootFilesAndFoldersMetadata={rootFilesAndFoldersMetadata}
-      filesAndFolders={filesAndFolders}
-      setSessionName={setSessionName}
     />
   );
 };

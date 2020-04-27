@@ -129,7 +129,7 @@
     "eslint-plugin-lodash-fp": "^2.2.0-a1",
     "fast-memoize": "^2.5.2",
     "file-saver": "2.0.2",
-    "i18next": "^19.4.3",
+    "i18next": "^19.4.4",
     "iconv-lite": "^0.5.1",
     "immutable": "4.0.0-rc.12",
     "jquery": "^3.5.0",

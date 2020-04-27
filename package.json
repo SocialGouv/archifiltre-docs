@@ -122,7 +122,7 @@
     "@sentry/browser": "^5.15.5",
     "@types/pizzip": "^3.0.1",
     "angular-expressions": "^1.1.1",
-    "csv-parse": "^4.8.9",
+    "csv-parse": "^4.9.0",
     "dateformat": "3.0.3",
     "docxtemplater": "3.17.6",
     "eslint-plugin-import": "^2.20.2",

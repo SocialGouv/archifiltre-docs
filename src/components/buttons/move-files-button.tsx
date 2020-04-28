@@ -1,27 +1,29 @@
-import React, { useCallback } from "react";
+import Button from "@material-ui/core/Button";
+import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaArrowsAlt } from "react-icons/fa";
-import Button, { ButtonColor, ButtonSize } from "../common/button";
-import { useFileMoveActiveState } from "../../hooks/use-file-move-active-state";
+import { useFileMoveActiveState } from "hooks/use-file-move-active-state";
 
-export const MoveFilesButton = () => {
+const MoveFilesButton: FC = () => {
   const { t } = useTranslation();
   const { isFileMoveActive, setFileMoveActive } = useFileMoveActiveState();
   const toggleMoveElements = useCallback(() => {
     setFileMoveActive(!isFileMoveActive);
   }, [setFileMoveActive, isFileMoveActive]);
+
   return (
     <Button
-      id="move-files-button"
-      color={ButtonColor.ICICLE_ACTION}
-      size={ButtonSize.SMALL}
+      variant="outlined"
+      color="primary"
+      size="small"
       onClick={toggleMoveElements}
+      startIcon={<FaArrowsAlt />}
     >
-      <FaArrowsAlt style={{ verticalAlign: "bottom" }} />
-      &ensp;
       {isFileMoveActive
         ? t("workspace.normalMode")
         : t("workspace.moveElementsMode")}
     </Button>
   );
 };
+
+export default MoveFilesButton;

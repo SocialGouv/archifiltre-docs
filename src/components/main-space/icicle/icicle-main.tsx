@@ -1,3 +1,4 @@
+import Paper from "@material-ui/core/Paper";
 import { sum } from "lodash";
 import React, {
   FC,
@@ -34,10 +35,11 @@ export type IcicleMouseHandler = (
   event: MouseEvent
 ) => void;
 
-const Viewport = styled.div`
+const Viewport = styled(Paper)`
   display: flex;
-  height: 100%;
+  height: 97.5%;
   justify-content: space-between;
+  padding: 5px;
 `;
 
 const IcicleViewport = styled.div`

@@ -11,6 +11,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       maxWidth: 150,
       borderRadius: 5,
       border: "1px solid #ced4da",
+      backgroundColor: "white",
     },
   })
 );

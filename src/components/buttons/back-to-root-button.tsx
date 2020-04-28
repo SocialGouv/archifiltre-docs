@@ -1,40 +1,40 @@
-import React, { useCallback } from "react";
+import Button from "@material-ui/core/Button";
+import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSearchMinus } from "react-icons/fa";
-import Button, { ButtonColor, ButtonSize } from "../common/button";
 
-const Presentational = ({ backToRoot, isZoomed }) => {
-  const { t } = useTranslation();
+interface BackToRootProps {
+  api: any;
+  setNoFocus: any;
+}
 
-  return (
-    <Button
-      id="zoom-out-button"
-      color={ButtonColor.ICICLE_ACTION}
-      size={ButtonSize.SMALL}
-      onClick={backToRoot}
-      disabled={!isZoomed}
-    >
-      <span>
-        <FaSearchMinus style={{ verticalAlign: "bottom" }} />
-        &ensp;{t("workspace.backToRoot")}
-      </span>
-    </Button>
-  );
-};
-
-const BackToRoot = ({
+const BackToRoot: FC<BackToRootProps> = ({
   api: {
-    icicle_state: { setNoDisplayRoot, setNoFocus, isZoomed },
+    icicle_state: { setNoDisplayRoot, isZoomed },
     undo: { commit },
   },
+  setNoFocus,
 }) => {
+  const { t } = useTranslation();
+
   const backToRoot = useCallback(() => {
     setNoDisplayRoot();
     setNoFocus();
     commit();
   }, [setNoDisplayRoot, setNoFocus, commit]);
 
-  return <Presentational isZoomed={isZoomed()} backToRoot={backToRoot} />;
+  return (
+    <Button
+      variant="outlined"
+      color="primary"
+      size="small"
+      onClick={backToRoot}
+      disabled={!isZoomed()}
+      startIcon={<FaSearchMinus />}
+    >
+      {t("workspace.backToRoot")}
+    </Button>
+  );
 };
 
 export default BackToRoot;

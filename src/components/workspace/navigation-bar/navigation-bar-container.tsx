@@ -1,8 +1,9 @@
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { useWorkspaceMetadata } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
-import { setIciclesSortMethodThunk } from "../../../reducers/workspace-metadata/workspace-metadata-thunk";
-import { IciclesSortMethod } from "../../../reducers/workspace-metadata/workspace-metadata-types";
+import { setLockedElementId } from "reducers/workspace-metadata/workspace-metadata-actions";
+import { useWorkspaceMetadata } from "reducers/workspace-metadata/workspace-metadata-selectors";
+import { setIciclesSortMethodThunk } from "reducers/workspace-metadata/workspace-metadata-thunk";
+import { IciclesSortMethod } from "reducers/workspace-metadata/workspace-metadata-types";
 import { NavigationBar } from "./navigation-bar";
 
 const NavigationBarContainer = ({ api }) => {
@@ -15,11 +16,16 @@ const NavigationBarContainer = ({ api }) => {
     [dispatch]
   );
 
+  const setNoFocus = useCallback(() => dispatch(setLockedElementId("")), [
+    dispatch,
+  ]);
+
   return (
     <NavigationBar
       api={api}
       iciclesSortMethod={iciclesSortMethod}
       setIciclesSortMethod={setIciclesSortMethodCallback}
+      setNoFocus={setNoFocus}
     />
   );
 };

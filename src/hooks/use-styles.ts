@@ -12,5 +12,14 @@ export const useStyles = makeStyles((theme: Theme) =>
       borderRadius: 5,
       border: "1px solid #ced4da",
     },
+    closeButton: {
+      position: "absolute",
+      right: theme.spacing(3),
+      top: theme.spacing(2),
+      color: theme.palette.grey[500],
+    },
+    dialogContent: {
+      padding: theme.spacing(2),
+    },
   })
 );

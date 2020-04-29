@@ -1,5 +1,7 @@
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 import React, { FC } from "react";
-import Modal from "react-modal";
+import { useStyles } from "../../../hooks/use-styles";
 import ModalHeader from "../../modals/modal-header";
 import { useTranslation } from "react-i18next";
 import { ArchifiltreError } from "../../../reducers/loading-info/loading-info-types";
@@ -17,12 +19,15 @@ const ErrorsModal: FC<ErrorsModalProps> = ({
   errors,
 }) => {
   const { t } = useTranslation();
+  const classes = useStyles();
 
   return (
-    <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
+    <Dialog open={isModalOpen} onClose={closeModal} fullWidth maxWidth="lg">
       <ModalHeader title={t("errorsModal.title")} onClose={closeModal} />
-      <ErrorsTable errors={errors} />
-    </Modal>
+      <DialogContent className={classes.dialogContent}>
+        <ErrorsTable errors={errors} />
+      </DialogContent>
+    </Dialog>
   );
 };
 

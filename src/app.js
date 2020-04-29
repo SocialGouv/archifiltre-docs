@@ -24,7 +24,6 @@ import { NotificationContainer } from "react-notifications";
 import { initTracker } from "logging/tracker.ts";
 import "translations/translations";
 import BackgroundLoadingInfoContainer from "components/background-loading-info/background-loading-info-container";
-import Modal from "react-modal";
 import Box from "@material-ui/core/Box";
 import styled from "styled-components";
 import Modals from "components/modals/modals";
@@ -48,7 +47,6 @@ const app = () => {
   if (document.body !== null) {
     document.body.appendChild(rootDiv);
   }
-  Modal.setAppElement("#root");
 
   ReactDOM.render(
     <Provider store={store}>

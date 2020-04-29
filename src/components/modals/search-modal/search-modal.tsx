@@ -1,18 +1,20 @@
 import { Grid } from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
 import React, { FC, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Modal from "react-modal";
 import {
   FilesAndFolders,
   FilesAndFoldersMap,
 } from "reducers/files-and-folders/files-and-folders-types";
 import { useSearchAndFilters } from "hooks/use-search-and-filters";
 import { TagMap } from "reducers/tags/tags-types";
+import { useStyles } from "../../../hooks/use-styles";
 import { FilesAndFoldersTable } from "./files-and-folders-table";
 import ModalHeader from "../modal-header";
 import { FilterMethod } from "typings/filter-types";
 import Filters from "./filters/filters";
 import { SearchBar } from "./search-bar";
+import DialogContent from "@material-ui/core/DialogContent";
 
 interface SearchModalProps {
   isModalOpen: boolean;
@@ -28,6 +30,7 @@ export const SearchModal: FC<SearchModalProps> = ({
   tags,
 }) => {
   const { t } = useTranslation();
+  const classes = useStyles();
   const filesAndFoldersArray = useMemo(() => Object.values(filesAndFolders), [
     filesAndFolders,
   ]);
@@ -40,17 +43,25 @@ export const SearchModal: FC<SearchModalProps> = ({
   );
 
   return (
-    <Modal isOpen={isModalOpen} onRequestClose={closeModal}>
+    <Dialog
+      open={isModalOpen}
+      onClose={closeModal}
+      fullWidth
+      maxWidth="lg"
+      scroll="paper"
+    >
       <ModalHeader title={t("search.title")} onClose={closeModal} />
-      <Grid container spacing={1}>
-        <SearchBar setSearchTerm={setSearchTerm} />
-        <Filters
-          setFilters={setFilters}
-          filesAndFolders={filesAndFoldersArray}
-          tags={tags}
-        />
-      </Grid>
-      <FilesAndFoldersTable filesAndFolders={filteredFilesAndFolders} />
-    </Modal>
+      <DialogContent className={classes.dialogContent} dividers>
+        <Grid container spacing={1}>
+          <SearchBar setSearchTerm={setSearchTerm} />
+          <Filters
+            setFilters={setFilters}
+            filesAndFolders={filesAndFoldersArray}
+            tags={tags}
+          />
+        </Grid>
+        <FilesAndFoldersTable filesAndFolders={filteredFilesAndFolders} />
+      </DialogContent>
+    </Dialog>
   );
 };

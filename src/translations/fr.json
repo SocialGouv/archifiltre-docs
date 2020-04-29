@@ -70,6 +70,7 @@
       "auditReport": "Rapport d'audit",
       "close": "Fermer",
       "save": "Enregistrer",
+      "newVersion": "Nouvelle version",
       "aNewVersionIsOut": "La version {{version}} d'Archifiltre est sortie !",
       "download": "Télécharger",
       "cancel": "Annuler",

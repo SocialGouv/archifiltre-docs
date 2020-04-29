@@ -1,21 +1,24 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 
 import Icicle from "components/main-space/icicle/icicle-container";
-import Report from "components/report/report-container";
-import AllTags from "components/tags/all-tags-container";
 import NavigationBar from "components/workspace/navigation-bar/navigation-bar-container";
 import { ROOT_FF_ID } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import Box from "@material-ui/core/Box";
+import NavigationTabs from "./navigation-tabs";
 
 const workspaceMode = {
   isFileMoveActive: false,
-  // eslint-disable-next-line no-unused-vars
+  // tslint:disable-next-line:no-empty
   setIsFileMoveActive: (isMoveActive) => {},
 };
 
+interface WorkspaceProps {
+  api: any;
+}
+
 export const WorkspaceContext = React.createContext(workspaceMode);
 
-const Workspace = ({ api }) => (
+const Workspace: FC<WorkspaceProps> = ({ api }) => (
   <Box display="flex" flexDirection="column" height="100%">
     <Box
       flexGrow={0}
@@ -24,12 +27,7 @@ const Workspace = ({ api }) => (
       style={{ minHeight: "0px", width: "100%" }}
     >
       <Box display="flex" flexDirection="row" flexWrap="wrap" height="100%">
-        <Box width={5 / 6} pr="3px" boxSizing="border-box">
-          <Report api={api} />
-        </Box>
-        <Box width={1 / 6} pl="3px" boxSizing="border-box">
-          <AllTags api={api} />
-        </Box>
+        <NavigationTabs api={api} />
       </Box>
     </Box>
     <Box flexGrow={1} flexShrink={1} flexBasis="auto">

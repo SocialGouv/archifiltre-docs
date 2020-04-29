@@ -4,51 +4,21 @@ import { epochToFormattedUtcDateString } from "util/date/date-util";
 import { useTranslation } from "react-i18next";
 import Grid from "@material-ui/core/Grid";
 
-const RedDot = () => {
-  return (
-    <div
-      style={{
-        height: "0.5em",
-        width: "0.5em",
-        backgroundColor: "red",
-        borderRadius: "50%",
-        margin: "auto",
-      }}
-    />
-  );
-};
-
-const BlackCursor = () => {
-  return (
-    <div
-      style={{
-        height: "1em",
-        width: "0.2em",
-        backgroundColor: "black",
-        margin: "auto",
-      }}
-    />
-  );
-};
-
 const LastModifiedReporter = ({
   filesAndFoldersId,
   placeholder,
   filesAndFoldersMetadata,
 }) => {
-  let lm_max = "...";
-  let lm_median = "...";
-  let lm_average = "...";
-  let lm_min = "...";
-
   const { t } = useTranslation();
+  let maxDate = "...";
+  let medianDate = "...";
+  let minDate = "...";
 
   if (placeholder === false) {
     const metadata = filesAndFoldersMetadata[filesAndFoldersId];
-    lm_max = epochToFormattedUtcDateString(metadata.maxLastModified);
-    lm_median = epochToFormattedUtcDateString(metadata.medianLastModified);
-    lm_average = epochToFormattedUtcDateString(metadata.averageLastModified);
-    lm_min = epochToFormattedUtcDateString(metadata.minLastModified);
+    maxDate = epochToFormattedUtcDateString(metadata.maxLastModified);
+    medianDate = epochToFormattedUtcDateString(metadata.medianLastModified);
+    minDate = epochToFormattedUtcDateString(metadata.minLastModified);
   }
 
   return (
@@ -57,44 +27,25 @@ const LastModifiedReporter = ({
         <b>{t("report.lastModified")} :</b>
       </Grid>
 
-      <Grid item xs={1}>
-        <BlackCursor />
-      </Grid>
-      <Grid item xs={5}>
+      <Grid item xs={4}>
         {t("report.min")} :
       </Grid>
-      <Grid item xs={6}>
-        {lm_min}
+      <Grid item xs={8}>
+        {minDate}
       </Grid>
 
-      <Grid item xs={1}>
-        <RedDot />
-      </Grid>
-      <Grid item xs={5}>
-        {t("report.average")} :
-      </Grid>
-      <Grid item xs={6}>
-        {lm_average}
-      </Grid>
-
-      <Grid item xs={1}>
-        <BlackCursor />
-      </Grid>
-      <Grid item xs={5}>
+      <Grid item xs={4}>
         {t("report.median")} :
       </Grid>
-      <Grid item xs={6}>
-        {lm_median}
+      <Grid item xs={8}>
+        {medianDate}
       </Grid>
 
-      <Grid item xs={1}>
-        <BlackCursor />
-      </Grid>
-      <Grid item xs={5}>
+      <Grid item xs={4}>
         {t("report.max")} :
       </Grid>
-      <Grid item xs={6}>
-        {lm_max}
+      <Grid item xs={8}>
+        {maxDate}
       </Grid>
     </Grid>
   );

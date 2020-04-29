@@ -37,7 +37,9 @@
       "fileHashExplanation": "This hash is a file digital fingerprint computed with the MD5 algorithm",
       "folderHashExplanation": "This hash is a digital fingerprint (computed with the MD5 algorithm) of this folder's children hashes concatenation",
       "clickHereToAddComments": "Click here to add comments!",
-      "copied": "Copied!"
+      "copied": "Copied!",
+      "fileTreeInfo": "File tree information",
+      "elementInfo": "Element information"
     },
     "workspace": {
       "type": "By type",
@@ -57,7 +59,11 @@
       "cannotMoveElement": "Cannot move file or folder here",
       "nameConflict": "Name conflict with one of this folder elements",
       "moveElementsMode": "Move mode",
-      "normalMode": "Normal mode"
+      "normalMode": "Normal mode",
+      "general": "General",
+      "enrichment": "Enrichment",
+      "audit": "Audit",
+      "duplicates": "Duplicates"
     },
     "header": {
       "export": "Export",

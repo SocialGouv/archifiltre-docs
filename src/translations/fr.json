@@ -37,7 +37,9 @@
       "fileHashExplanation": "Ce hash est une empreinte de fichier calculée avec l'algorithme MD5",
       "folderHashExplanation": "Ce hash est une empreinte (calculée avec l'algorithme MD5) de la concaténation des hashs des enfants de ce dossier",
       "clickHereToAddComments": "Cliquez ici pour ajouter une description !",
-      "copied": "Copié !"
+      "copied": "Copié !",
+      "fileTreeInfo": "Caractéristiques de l'arborescence",
+      "elementInfo": "Caractéristiques de l'élément"
     },
     "workspace": {
       "type": "Par type",
@@ -57,7 +59,11 @@
       "cannotMoveElement": "Impossible de déplacer le fichier ou dossier ici",
       "nameConflict": "Conflit de nom avec un élément de ce dossier",
       "moveElementsMode": "Mode Déplacement",
-      "normalMode": "Mode normal"
+      "normalMode": "Mode normal",
+      "general": "Général",
+      "enrichment": "Enrichissement",
+      "audit": "Audit",
+      "duplicates": "Redondances"
     },
     "header": {
       "export": "Exporter",

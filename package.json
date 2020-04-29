@@ -144,7 +144,6 @@
     "react-dom": "^16.13.1",
     "react-i18next": "^11.4.0",
     "react-icons": "^3.10.0",
-    "react-modal": "^3.11.2",
     "react-notifications": "^1.6.0",
     "react-redux": "^7.2.0",
     "react-table": "^7.0.4",

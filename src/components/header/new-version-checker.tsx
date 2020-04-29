@@ -1,20 +1,15 @@
+import { Button } from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
 import { shell } from "electron";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Modal from "react-modal";
 import { request } from "util/http-util";
+import { useStyles } from "../../hooks/use-styles";
+import { reportError } from "../../logging/reporter";
 import version, { versionComparator } from "../../version";
-import Button, { ButtonColor } from "../common/button";
 import ModalHeader from "../modals/modal-header";
-import Grid from "@material-ui/core/Grid";
-
-const modalStyle = {
-  content: {
-    width: "40%",
-    height: "20%",
-    transform: "translate(80%, 160%)",
-  },
-};
 
 /**
  * Maps a version number to this format: MAJOR.MINOR.PATCH
@@ -35,6 +30,7 @@ export const NewVersionChecker = () => {
   const [isDisplayed, setIsDisplayed] = useState(false);
   const [lastVersion, setLastVersion] = useState(-1);
   const { t } = useTranslation();
+  const classes = useStyles();
 
   useEffect(() => {
     if (MODE !== "production") return;
@@ -51,8 +47,7 @@ export const NewVersionChecker = () => {
         }
       })
       .catch((error) => {
-        // tslint:disable-next-line:no-console
-        console.error(error);
+        reportError(error);
       });
   }, []);
 
@@ -64,29 +59,21 @@ export const NewVersionChecker = () => {
 
   if (!isDisplayed) return false;
   return (
-    <Modal isOpen={isDisplayed} onRequestClose={onClose} style={modalStyle}>
-      <ModalHeader
-        title={t("header.aNewVersionIsOut", {
+    <Dialog open={isDisplayed} onClose={onClose}>
+      <ModalHeader title={t("header.newVersion")} onClose={onClose} />
+      <DialogContent className={classes.dialogContent}>
+        {t("header.aNewVersionIsOut", {
           version: lastVersion,
         })}
-        onClose={onClose}
-      />
-      <Grid container spacing={1}>
-        <Grid item xs={6}>
-          <Button
-            id="download-last-version"
-            onClick={download}
-            color={ButtonColor.SUCCESS}
-          >
-            {t("header.download")}
-          </Button>
-        </Grid>
-        <Grid item xs={6}>
-          <Button id="cancel" onClick={onClose} color={ButtonColor.DISABLED}>
-            {t("header.cancel")}
-          </Button>
-        </Grid>
-      </Grid>
-    </Modal>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={download} color="primary">
+          {t("header.download")}
+        </Button>
+        <Button onClick={onClose} color="primary">
+          {t("header.cancel")}
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };

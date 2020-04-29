@@ -1,7 +1,7 @@
 import React, { FC, memo } from "react";
 import { Column, usePagination, useSortBy, useTable } from "react-table";
-import Paginator from "../search-modal/paginator";
-import SortIndicator from "../search-modal/sort-indicator";
+import Paginator from "../modals/search-modal/paginator";
+import SortIndicator from "../modals/search-modal/sort-indicator";
 import { AggregatedTableInstance, AggregatedTableState } from "./table-types";
 
 interface TableProps {

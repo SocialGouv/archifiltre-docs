@@ -64,6 +64,7 @@
       "auditReport": "Audit report",
       "close": "Close",
       "save": "Save",
+      "newVersion": "New version",
       "aNewVersionIsOut": "Version {{version}} of Archifiltre is out!",
       "download": "Download",
       "cancel": "Cancel",

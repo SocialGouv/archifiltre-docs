@@ -1,38 +1,25 @@
-import React, { FC, useCallback } from "react";
+import React, { FC, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import {
-  markAsToDelete,
-  unmarkAsToDelete,
-} from "../../reducers/files-and-folders/files-and-folders-actions";
+import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   getAliasesFromStore,
-  getCommentsFromStore,
+  getFileCount,
   getFilesAndFoldersFromStore,
-  getFilesToDeleteFromStore,
+  getFoldersCount,
   getHashesFromStore,
-} from "../../reducers/files-and-folders/files-and-folders-selectors";
-import {
-  updateAliasThunk,
-  updateCommentThunk,
-} from "../../reducers/files-and-folders/files-and-folders-thunks";
-import { StoreState } from "../../reducers/store";
-import { addTag, untagFile } from "../../reducers/tags/tags-actions";
-import {
-  getAllTagIdsForFile,
-  getTagsByIds,
-  getTagsFromStore,
-} from "../../reducers/tags/tags-selectors";
+} from "reducers/files-and-folders/files-and-folders-selectors";
+import { updateAliasThunk } from "reducers/files-and-folders/files-and-folders-thunks";
+import { StoreState } from "reducers/store";
 import {
   getWorkspaceMetadataFromStore,
   useWorkspaceMetadata,
-} from "../../reducers/workspace-metadata/workspace-metadata-selectors";
-import { useFillColor } from "../../util/color/color-util";
+} from "reducers/workspace-metadata/workspace-metadata-selectors";
+import { useFillColor } from "util/color/color-util";
+import { setSessionNameThunk } from "../../reducers/workspace-metadata/workspace-metadata-thunk";
 import ReportApiToProps from "./report";
 
 interface ReportContainerProps {
   api: any;
-  fillColor: (ffId: string) => string;
 }
 
 const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
@@ -43,18 +30,9 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
 
   const filesAndFoldersId = lockedElementId || hoveredElementId;
   /* </Legacy> */
-  const tagIdsForCurrentFile = useSelector((state: StoreState) =>
-    getAllTagIdsForFile(getTagsFromStore(state), filesAndFoldersId)
-  );
-
-  const tagsForCurrentFile = useSelector((state: StoreState) =>
-    getTagsByIds(getTagsFromStore(state), tagIdsForCurrentFile)
-  );
 
   const currentFileAlias =
     useSelector(getAliasesFromStore)[filesAndFoldersId] || "";
-  const currentFileComment =
-    useSelector(getCommentsFromStore)[filesAndFoldersId] || "";
 
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
 
@@ -67,9 +45,6 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
   )[filesAndFoldersId];
   const { originalPath } = useSelector(getWorkspaceMetadataFromStore);
 
-  const filesToDelete = useSelector(getFilesToDeleteFromStore);
-  const isCurrentFileMarkedToDelete = filesToDelete.includes(filesAndFoldersId);
-
   const { iciclesSortMethod } = useWorkspaceMetadata();
 
   const fillColor = useFillColor(
@@ -81,30 +56,6 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
 
   const dispatch = useDispatch();
 
-  const createTag = useCallback(
-    (tagName, ffId) => {
-      dispatch(addTag(tagName, ffId));
-      api.undo.commit();
-    },
-    [dispatch, api]
-  );
-
-  const untag = useCallback(
-    (tagName, ffId) => {
-      dispatch(untagFile(tagName, ffId));
-      api.undo.commit();
-    },
-    [dispatch, api]
-  );
-
-  const updateComment = useCallback(
-    (comments) => {
-      dispatch(updateCommentThunk(filesAndFoldersId, comments));
-      api.undo.commit();
-    },
-    [dispatch, api, filesAndFoldersId]
-  );
-
   const updateAlias = useCallback(
     (alias) => {
       dispatch(updateAliasThunk(filesAndFoldersId, alias));
@@ -113,30 +64,40 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
     [dispatch, api, filesAndFoldersId]
   );
 
-  const toggleCurrentFileDeleteState = useCallback(() => {
-    isCurrentFileMarkedToDelete
-      ? dispatch(unmarkAsToDelete(filesAndFoldersId))
-      : dispatch(markAsToDelete(filesAndFoldersId));
-  }, [dispatch, isCurrentFileMarkedToDelete, filesAndFoldersId]);
+  const { sessionName } = useSelector(getWorkspaceMetadataFromStore);
+
+  const setSessionName = useCallback(
+    (newSessionName) => dispatch(setSessionNameThunk(newSessionName, api)),
+    [dispatch, api]
+  );
+
+  const nbFiles = useMemo(() => getFileCount(filesAndFolders), [
+    filesAndFolders,
+  ]);
+  const nbFolders = useMemo(() => getFoldersCount(filesAndFolders), [
+    filesAndFolders,
+  ]);
+  const metadata = useSelector(getFilesAndFoldersMetadataFromStore);
+  const rootFilesAndFoldersMetadata = metadata[""] || {};
+
+  const volume = rootFilesAndFoldersMetadata.childrenTotalSize;
 
   return (
     <ReportApiToProps
       originalPath={originalPath}
-      tagsForCurrentFile={tagsForCurrentFile}
       isLocked={lockedElementId !== ""}
       currentFileHash={currentFileHash}
       currentFileAlias={currentFileAlias}
-      currentFileComment={currentFileComment}
       filesAndFolders={filesAndFolders}
       filesAndFoldersId={filesAndFoldersId}
       filesAndFoldersMetadata={filesAndFoldersMetadata}
-      isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
       updateAlias={updateAlias}
-      updateComment={updateComment}
-      toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
       fillColor={fillColor}
-      createTag={createTag}
-      untag={untag}
+      sessionName={sessionName}
+      setSessionName={setSessionName}
+      nbFiles={nbFiles}
+      nbFolders={nbFolders}
+      volume={volume}
     />
   );
 };

@@ -1,15 +1,9 @@
-import React, { FC, useMemo } from "react";
+import React, { FC } from "react";
 
 import SaveButton, { ExportToJson } from "components/buttons/save-button";
 import ReinitButton, { ResetWorkspace } from "components/buttons/reinit-button";
 import TextAlignCenter from "components/common/text-align-center";
 import UndoRedo from "components/header/dashboard/undo-redo-button";
-import { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import {
-  getFileCount,
-  getFoldersCount,
-} from "../../../reducers/files-and-folders/files-and-folders-selectors";
-import { FilesAndFoldersMap } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { SearchButton } from "../../buttons/search-button";
 import {
   ExportToAuditReport,
@@ -18,7 +12,6 @@ import {
   ExportToResip,
 } from "../../common/export-types";
 import ExportButton from "./export-button";
-import SessionInfo from "./session-info";
 import styled from "styled-components";
 import ArchifiltreLogo from "../archifiltre-logo";
 import LoadPreviousSessionButton from "../../buttons/load-previous-session-button";
@@ -48,10 +41,6 @@ interface DashboardProps {
   hasPreviousSession: boolean;
   originalPath: string;
   sessionName: string;
-  onChangeSessionName: (newName: string) => void;
-  nbFolders: number;
-  nbFiles: number;
-  volume: number;
   api: any;
   exportToCsv: ExportToCsv;
   exportToResip: ExportToResip;
@@ -75,9 +64,6 @@ interface DashbordApiToPropsProps {
   exportToAuditReport: ExportToAuditReport;
   resetWorkspace: ResetWorkspace;
   reloadPreviousSession: () => void;
-  rootFilesAndFoldersMetadata: FilesAndFoldersMetadata;
-  filesAndFolders: FilesAndFoldersMap;
-  setSessionName: (newName: string) => void;
 }
 
 const DashBoard: FC<DashboardProps> = ({
@@ -88,10 +74,6 @@ const DashBoard: FC<DashboardProps> = ({
   hasPreviousSession,
   originalPath,
   sessionName,
-  onChangeSessionName,
-  nbFolders,
-  nbFiles,
-  volume,
   api,
   exportToCsv,
   exportToResip,
@@ -111,20 +93,6 @@ const DashBoard: FC<DashboardProps> = ({
     <HeaderLine>
       <div>
         <ArchifiltreLogo />
-      </div>
-
-      <Spacer />
-
-      <div>
-        {shouldDisplayActions && (
-          <SessionInfo
-            sessionName={sessionName}
-            onChangeSessionName={onChangeSessionName}
-            nbFolders={nbFolders}
-            nbFiles={nbFiles}
-            volume={volume}
-          />
-        )}
       </div>
 
       <Spacer />
@@ -213,9 +181,6 @@ const DashBoardApiToProps: FC<DashbordApiToPropsProps> = ({
   exportToAuditReport,
   resetWorkspace,
   reloadPreviousSession,
-  rootFilesAndFoldersMetadata,
-  filesAndFolders,
-  setSessionName,
 }) => {
   const {
     loading_state: { isFinished, isInError, isStarted },
@@ -223,14 +188,6 @@ const DashBoardApiToProps: FC<DashbordApiToPropsProps> = ({
   const finished = isFinished();
   const error = isInError();
   const started = isStarted();
-
-  const nbFiles = useMemo(() => getFileCount(filesAndFolders), [
-    filesAndFolders,
-  ]);
-  const nbFolders = useMemo(() => getFoldersCount(filesAndFolders), [
-    filesAndFolders,
-  ]);
-  const volume = rootFilesAndFoldersMetadata.childrenTotalSize;
 
   return (
     <DashBoard
@@ -240,12 +197,8 @@ const DashBoardApiToProps: FC<DashbordApiToPropsProps> = ({
       finished={finished}
       error={error}
       hasPreviousSession={hasPreviousSession}
-      nbFiles={nbFiles}
-      nbFolders={nbFolders}
-      volume={volume}
       sessionName={sessionName}
       originalPath={originalPath}
-      onChangeSessionName={setSessionName}
       exportToCsv={exportToCsv}
       exportToResip={exportToResip}
       exportToMets={exportToMets}

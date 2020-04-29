@@ -2,6 +2,7 @@ import Select from "@material-ui/core/Select";
 import React, { useCallback } from "react";
 
 import { useTranslation } from "react-i18next";
+import { useStyles } from "hooks/use-styles";
 
 const ToggleWidthBySize = ({
   api: {
@@ -9,6 +10,7 @@ const ToggleWidthBySize = ({
   },
 }) => {
   const { t } = useTranslation();
+  const classes = useStyles();
 
   const handleChange = useCallback(
     (event) => {
@@ -19,7 +21,12 @@ const ToggleWidthBySize = ({
   );
 
   return (
-    <Select native value={widthBySize.toString()} onChange={handleChange}>
+    <Select
+      native
+      value={widthBySize.toString()}
+      onChange={handleChange}
+      className={classes.select}
+    >
       <option value="true">{t("workspace.bySize")}</option>
       <option value="false">{t("workspace.byNumber")}</option>
     </Select>

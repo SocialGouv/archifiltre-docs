@@ -29,33 +29,31 @@ const getData = (filesAndFolders) =>
 
 export const FilesAndFoldersTable = ({ filesAndFolders }) => {
   const { t } = useTranslation();
-  const data = useMemo(() => getData(filesAndFolders), [filesAndFolders]);
+  const data = useMemo(() => getData(filesAndFolders), [
+    getData,
+    filesAndFolders,
+  ]);
   const columns = useMemo(
     () => [
       {
-        Header: t("search.name"),
+        name: t("search.name"),
         accessor: "name",
-        maxWidth: 200,
       },
       {
-        Header: t("search.type"),
+        name: t("search.type"),
         accessor: "type",
-        maxWidth: 200,
       },
       {
-        Header: t("search.size"),
+        name: t("search.size"),
         accessor: "fileSize",
-        maxWidth: 200,
       },
       {
-        Header: t("search.fileLastModified"),
+        name: t("search.fileLastModified"),
         accessor: "lastModified",
-        maxWidth: 200,
       },
       {
-        Header: t("search.path"),
+        name: t("search.path"),
         accessor: "path",
-        maxWidth: 400,
       },
     ],
     [t]

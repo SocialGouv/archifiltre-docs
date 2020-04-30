@@ -22,5 +22,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     dialogContent: {
       padding: theme.spacing(2),
     },
+    headerButton: {
+      height: "100%",
+      minWidth: 0,
+    },
   })
 );

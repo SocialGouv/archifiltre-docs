@@ -1,8 +1,10 @@
+import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
 import React, { FC, useCallback, useEffect } from "react";
 
 import { useTranslation } from "react-i18next";
 import { FaUndo, FaRedo } from "react-icons/fa";
-import Button, { ButtonWidth } from "../../common/button";
+import { useStyles } from "hooks/use-styles";
 
 interface UndoRedoButtonProps {
   isVisible: boolean;
@@ -16,6 +18,7 @@ const UndoRedoButton: FC<UndoRedoButtonProps> = ({
   isUndo = true,
 }) => {
   const { t } = useTranslation();
+  const classes = useStyles();
 
   const onKeyDownHandler = useCallback(({ ctrlKey, key }) => {
     if (ctrlKey) {
@@ -34,17 +37,20 @@ const UndoRedoButton: FC<UndoRedoButtonProps> = ({
   });
 
   if (!isVisible) return null;
-
+  const title = isUndo ? t("header.undo") : t("header.redo");
   return (
-    <Button
-      id={isUndo ? "undo-button" : "redo-button"}
-      width={ButtonWidth.WITH_SPACES}
-      onClick={isUndo ? api.undo.undo : api.undo.redo}
-      disabled={isUndo ? !api.undo.hasAPast() : !api.undo.hasAFuture()}
-      tooltipText={isUndo ? t("header.undo") : t("header.redo")}
-    >
-      {isUndo ? <FaUndo /> : <FaRedo />}
-    </Button>
+    <Tooltip title={title}>
+      <Button
+        id={isUndo ? "undo-button" : "redo-button"}
+        color="primary"
+        variant="contained"
+        className={classes.headerButton}
+        onClick={isUndo ? api.undo.undo : api.undo.redo}
+        disabled={isUndo ? !api.undo.hasAPast() : !api.undo.hasAFuture()}
+      >
+        {isUndo ? <FaUndo /> : <FaRedo />}
+      </Button>
+    </Tooltip>
   );
 };
 

@@ -1,7 +1,9 @@
+import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@material-ui/core/Button";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSignOutAlt } from "react-icons/fa";
-import Button, { ButtonColor, ButtonWidth } from "../common/button";
+import { useStyles } from "hooks/use-styles";
 
 export type ResetWorkspace = () => void;
 
@@ -10,18 +12,22 @@ interface ReinitButtonProps {
 }
 
 const ReinitButton: FC<ReinitButtonProps> = ({ resetWorkspace }) => {
+  const classes = useStyles();
   const { t } = useTranslation();
+  const title = t("header.close");
 
   return (
-    <Button
-      id="reset-workspace-button"
-      onClick={resetWorkspace}
-      width={ButtonWidth.WITH_SPACES}
-      color={ButtonColor.ERROR}
-      tooltipText={t("header.close")}
-    >
-      <FaSignOutAlt />
-    </Button>
+    <Tooltip title={title}>
+      <Button
+        id="reset-workspace-button"
+        onClick={resetWorkspace}
+        color="primary"
+        variant="contained"
+        className={classes.headerButton}
+      >
+        <FaSignOutAlt />
+      </Button>
+    </Tooltip>
   );
 };
 

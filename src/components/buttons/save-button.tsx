@@ -1,8 +1,10 @@
+import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
 import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSave } from "react-icons/fa";
+import { useStyles } from "hooks/use-styles";
 import version from "../../version";
-import Button, { ButtonWidth } from "../common/button";
 
 interface ExportToJsonOptions {
   sessionName: string;
@@ -24,21 +26,25 @@ const SaveButton: FC<SaveButtonProps> = ({
   exportToJson,
 }) => {
   const { t } = useTranslation();
+  const classes = useStyles();
 
   const onClick = useCallback(
     () => exportToJson({ originalPath, sessionName, version }),
     [exportToJson, originalPath, sessionName]
   );
-
+  const title = t("header.save");
   return (
-    <Button
-      id="json-export-button"
-      onClick={onClick}
-      width={ButtonWidth.WITH_SPACES}
-      tooltipText={t("header.save")}
-    >
-      <FaSave />
-    </Button>
+    <Tooltip title={title}>
+      <Button
+        id="json-export-button"
+        color="primary"
+        variant="contained"
+        className={classes.headerButton}
+        onClick={onClick}
+      >
+        <FaSave />
+      </Button>
+    </Tooltip>
   );
 };
 

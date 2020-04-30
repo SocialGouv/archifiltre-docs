@@ -1,8 +1,7 @@
+import Box from "@material-ui/core/Box";
 import React, { FC } from "react";
-
 import SaveButton, { ExportToJson } from "components/buttons/save-button";
 import ReinitButton, { ResetWorkspace } from "components/buttons/reinit-button";
-import TextAlignCenter from "components/common/text-align-center";
 import UndoRedo from "components/header/dashboard/undo-redo-button";
 import { SearchButton } from "../../buttons/search-button";
 import {
@@ -19,18 +18,6 @@ import SettingsButton from "./settings-button";
 
 const HeaderLine = styled.div`
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 0.975em;
-  align-items: center;
-`;
-
-const Spacer = styled.div`
-  flex-grow: 1;
-`;
-
-export const SmallButtonCell = styled.div`
-  min-width: 3em;
 `;
 
 interface DashboardProps {
@@ -91,50 +78,37 @@ const DashBoard: FC<DashboardProps> = ({
 
   return (
     <HeaderLine>
-      <div>
-        <ArchifiltreLogo />
-      </div>
-
-      <Spacer />
-
-      {shouldDisplayActions && (
-        <SmallButtonCell>
-          <TextAlignCenter>
+      <Box display="flex">
+        <Box>
+          <ArchifiltreLogo />
+        </Box>
+        <Box flexGrow={1} />
+        {shouldDisplayActions && (
+          <Box>
             <SearchButton />
-          </TextAlignCenter>
-        </SmallButtonCell>
-      )}
-
-      {shouldDisplayNavigationArrows && (
-        <>
-          <TextAlignCenter>
-            <SmallButtonCell>
-              <UndoRedo isVisible={true} api={api} isUndo={true} />
-            </SmallButtonCell>
-          </TextAlignCenter>
-          <TextAlignCenter>
-            <SmallButtonCell>
-              <UndoRedo isVisible={true} api={api} isUndo={false} />
-            </SmallButtonCell>
-          </TextAlignCenter>
-        </>
-      )}
-
-      {shouldDisplayActions && (
-        <SmallButtonCell>
-          <TextAlignCenter>
+          </Box>
+        )}
+        {shouldDisplayNavigationArrows && (
+          <Box pl={1}>
+            <UndoRedo isVisible={true} api={api} isUndo={true} />
+          </Box>
+        )}
+        {shouldDisplayNavigationArrows && (
+          <Box pl={1}>
+            <UndoRedo isVisible={true} api={api} isUndo={false} />
+          </Box>
+        )}
+        {shouldDisplayActions && (
+          <Box pl={1}>
             <SaveButton
               originalPath={originalPath}
               sessionName={sessionName}
               exportToJson={exportToJson}
             />
-          </TextAlignCenter>
-        </SmallButtonCell>
-      )}
-
-      {shouldDisplayActions && (
-        <SmallButtonCell>
-          <TextAlignCenter>
+          </Box>
+        )}
+        {shouldDisplayActions && (
+          <Box pl={1}>
             <ExportButton
               areHashesReady={areHashesReady}
               exportToAuditReport={exportToAuditReport}
@@ -142,28 +116,24 @@ const DashBoard: FC<DashboardProps> = ({
               exportToResip={exportToResip}
               exportToCsv={exportToCsv}
             />
-          </TextAlignCenter>
-        </SmallButtonCell>
-      )}
-      {shouldDisplayPreviousSession && (
-        <SmallButtonCell>
-          <LoadPreviousSessionButton
-            reloadPreviousSession={reloadPreviousSession}
-          />
-        </SmallButtonCell>
-      )}
-      <SmallButtonCell>
-        <TextAlignCenter>
+          </Box>
+        )}
+        {shouldDisplayPreviousSession && (
+          <Box pl={1}>
+            <LoadPreviousSessionButton
+              reloadPreviousSession={reloadPreviousSession}
+            />
+          </Box>
+        )}
+        <Box pl={1}>
           <SettingsButton />
-        </TextAlignCenter>
-      </SmallButtonCell>
-      {shouldDisplayReset && (
-        <SmallButtonCell>
-          <TextAlignCenter>
+        </Box>
+        {shouldDisplayReset && (
+          <Box pl={1}>
             <ReinitButton resetWorkspace={resetWorkspace} />
-          </TextAlignCenter>
-        </SmallButtonCell>
-      )}
+          </Box>
+        )}
+      </Box>
     </HeaderLine>
   );
 };

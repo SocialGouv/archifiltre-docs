@@ -1,33 +1,33 @@
+import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSyncAlt } from "react-icons/fa";
-import styled from "styled-components";
-import Button from "../common/button";
+import { useStyles } from "../../hooks/use-styles";
 
 interface LoadPreviousSessionButtonProps {
   reloadPreviousSession: () => void;
 }
 
-const ButtonWrapper = styled.div`
-  margin-left: 5px;
-  margin-right: 5px;
-  min-width: 3em;
-`;
-
 const LoadPreviousSessionButton: FC<LoadPreviousSessionButtonProps> = ({
   reloadPreviousSession,
 }) => {
   const { t } = useTranslation();
+  const classes = useStyles();
+  const title = t("header.loadPreviousSessionButtonLabel");
+
   return (
-    <ButtonWrapper>
+    <Tooltip title={title}>
       <Button
         id="loadPreviousSession"
+        color="primary"
+        variant="contained"
+        className={classes.headerButton}
         onClick={reloadPreviousSession}
-        tooltipText={t("header.loadPreviousSessionButtonLabel")}
       >
         <FaSyncAlt />
       </Button>
-    </ButtonWrapper>
+    </Tooltip>
   );
 };
 

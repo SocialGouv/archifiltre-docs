@@ -1,7 +1,10 @@
+import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
 import React, { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { FaDownload } from "react-icons/fa";
-import { useModal } from "../../../hooks/use-modal";
-import Button, { ButtonAngles } from "../../common/button";
+import { useModal } from "hooks/use-modal";
+import { useStyles } from "../../../hooks/use-styles";
 import {
   ExportToAuditReport,
   ExportToCsv,
@@ -25,17 +28,24 @@ const ExportButton: FC<ExportButtonProps> = ({
   exportToResip,
   exportToCsv,
 }) => {
+  const { t } = useTranslation();
   const { isModalOpen, openModal, closeModal } = useModal();
+  const classes = useStyles();
+  const title = t("header.export");
 
   return (
     <>
-      <Button
-        id="settings-button"
-        angles={ButtonAngles.ROUNDED}
-        onClick={openModal}
-      >
-        <FaDownload />
-      </Button>
+      <Tooltip title={title}>
+        <Button
+          id="settings-button"
+          color="primary"
+          variant="contained"
+          className={classes.headerButton}
+          onClick={openModal}
+        >
+          <FaDownload />
+        </Button>
+      </Tooltip>
       <ExportModal
         isModalOpen={isModalOpen}
         closeModal={closeModal}

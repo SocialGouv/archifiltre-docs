@@ -3,7 +3,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import { shell } from "electron";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { request } from "util/http-util";
 import { useStyles } from "../../hooks/use-styles";
@@ -26,7 +26,7 @@ export const mapToNewVersionNumbers = (lastVersion) => {
   return lastVersion;
 };
 
-export const NewVersionChecker = () => {
+export const NewVersionChecker: FC = () => {
   const [isDisplayed, setIsDisplayed] = useState(false);
   const [lastVersion, setLastVersion] = useState(-1);
   const { t } = useTranslation();
@@ -57,7 +57,7 @@ export const NewVersionChecker = () => {
 
   const onClose = useCallback(() => setIsDisplayed(false), [setIsDisplayed]);
 
-  if (!isDisplayed) return false;
+  if (!isDisplayed) return null;
   return (
     <Dialog open={isDisplayed} onClose={onClose}>
       <ModalHeader title={t("header.newVersion")} onClose={onClose} />

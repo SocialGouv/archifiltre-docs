@@ -20,7 +20,7 @@ const workerRootFolder = (mode) =>
 module.exports = (env, argv = {}) => ({
   devtool: argv.mode === "development" ? "cheap-module-eval-source-map" : false,
   entry: {
-    app: "./src/app.js",
+    app: "./src/app.tsx",
   },
 
   externals: {

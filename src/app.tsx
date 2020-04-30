@@ -10,18 +10,18 @@ import ReactDOM from "react-dom";
 
 import ErrorBoundary from "components/errors/error-boundary-container";
 import MainSpace from "components/main-space/main-space";
-import Header from "components/header/header.tsx";
+import Header from "components/header/header";
 import { NewVersionChecker } from "components/header/new-version-checker";
 import WindowResize from "components/common/window-resize-handler";
 
 import { Store } from "reducers/real-estate-store";
 import { Provider } from "react-redux";
-import store from "reducers/store.ts";
+import store from "reducers/store";
 
-import version from "version.ts";
+import version from "version";
 
 import { NotificationContainer } from "react-notifications";
-import { initTracker } from "logging/tracker.ts";
+import { initTracker } from "logging/tracker";
 import "translations/translations";
 import BackgroundLoadingInfoContainer from "components/background-loading-info/background-loading-info-container";
 import Box from "@material-ui/core/Box";
@@ -39,7 +39,7 @@ const App = styled.div`
   box-sizing: border-box;
 `;
 
-/**This is the entrypoint for the app. */
+/** This is the entrypoint for the app. */
 const app = () => {
   const rootDiv = document.createElement("div");
   rootDiv.setAttribute("id", "root");
@@ -53,7 +53,7 @@ const app = () => {
       <Store>
         {({ api }) => {
           return (
-            <ErrorBoundary api={api}>
+            <ErrorBoundary>
               <WindowResize />
               <App>
                 <Box

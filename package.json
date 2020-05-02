@@ -97,7 +97,7 @@
     "fast-check": "1.24.2",
     "html-webpack-plugin": "4.2.1",
     "husky": "4.2.5",
-    "jest": "25.5.2",
+    "jest": "25.5.4",
     "jest-date-mock": "1.0.8",
     "lint-staged": "10.2.1",
     "node-sass": "^4.14.0",

@@ -1,94 +1,66 @@
-import React, { FC, memo } from "react";
-import { Column, usePagination, useSortBy, useTable } from "react-table";
+import { Table as MuiTable } from "@material-ui/core";
+import TableContainer from "@material-ui/core/TableContainer";
+import Paper from "@material-ui/core/Paper";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import React, { FC, memo, useCallback, useState } from "react";
 import Paginator from "../modals/search-modal/paginator";
-import SortIndicator from "../modals/search-modal/sort-indicator";
-import { AggregatedTableInstance, AggregatedTableState } from "./table-types";
 
 interface TableProps {
   data: any[];
-  columns: Column<object>[];
+  columns: any[];
 }
 
 const Table: FC<TableProps> = ({ columns, data }) => {
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    prepareRow,
-    page,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    state,
-  } = useTable<object>(
-    {
-      columns,
-      data,
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
+  const handleChangePage = useCallback(
+    (event: any, newPage: number) => {
+      setPage(newPage);
     },
-    useSortBy,
-    usePagination
-  ) as AggregatedTableInstance<object>;
-
-  const { pageIndex } = state as AggregatedTableState<object>;
-
+    [setPage]
+  );
+  const handleChangeRowsPerPage = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(0);
+    },
+    [setRowsPerPage, setPage]
+  );
   return (
     <div>
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  style={{ maxWidth: column.maxWidth }}
-                  // @ts-ignore
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                >
-                  {column.render("Header")}
-                  {/*
-                    // @ts-ignore */}
-                  <SortIndicator column={column} />
-                </th>
+      <TableContainer component={Paper}>
+        <MuiTable>
+          <TableHead>
+            <TableRow>
+              {columns.map(({ name }, columnIndex) => (
+                <TableCell key={`${name}-${columnIndex}`}>{name}</TableCell>
               ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    // @ts-ignore
-                    <td
-                      style={{
-                        maxWidth: cell.column.maxWidth,
-                        wordWrap: "break-word",
-                      }}
-                      {...cell.getCellProps()}
-                    >
-                      {cell.render("Cell")}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, rowIndex) => (
+                <TableRow key={`${row.name}-${rowIndex}`}>
+                  {columns.map(({ accessor }, columnIndex) => (
+                    <TableCell key={`${accessor}-${columnIndex}`}>
+                      {row[accessor]}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+          </TableBody>
+        </MuiTable>
+      </TableContainer>
       <Paginator
-        gotoPage={gotoPage}
-        canPreviousPage={canPreviousPage}
-        previousPage={previousPage}
-        nextPage={nextPage}
-        canNextPage={canNextPage}
-        pageCount={pageCount}
-        pageIndex={pageIndex}
-        pageOptions={pageOptions}
+        pageCount={data.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        handleChangePage={handleChangePage}
+        handleChangeRowsPerPage={handleChangeRowsPerPage}
       />
     </div>
   );

@@ -1,12 +1,7 @@
-import React, { FC } from "react";
+import React from "react";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
-import { AggregatedColumn } from "../../common/table-types";
 
-interface SortIndicatorProps {
-  column: AggregatedColumn<object>;
-}
-
-const SortIndicator: FC<SortIndicatorProps> = ({ column }) => (
+const SortIndicator = ({ column }) => (
   <span>
     {column.isSorted ? (
       column.isSortedDesc ? (

@@ -1,7 +1,7 @@
 import Table from "../../common/table";
 import React, { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { ArchifiltreError } from "../../../reducers/loading-info/loading-info-types";
+import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 
 interface ErrorsTableProps {
   errors: ArchifiltreError[];
@@ -13,15 +13,15 @@ const ErrorsTable: FC<ErrorsTableProps> = ({ errors }) => {
   const columns = useMemo(
     () => [
       {
-        Header: t("common.file"),
+        name: t("common.file"),
         accessor: "filePath",
       },
       {
-        Header: t("errorsModal.errorCode"),
+        name: t("errorsModal.errorCode"),
         accessor: "code",
       },
       {
-        Header: t("errorsModal.errorDescription"),
+        name: t("errorsModal.errorDescription"),
         accessor: ({ code }) => t(`errorsModal.errorDescriptions.${code}`),
       },
     ],

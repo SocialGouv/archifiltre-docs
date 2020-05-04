@@ -1,6 +1,4 @@
-import React, { useCallback } from "react";
-
-import { RIEInput } from "riek";
+import React from "react";
 
 import LastModifiedReporter from "components/report/last-modified-reporter";
 
@@ -20,12 +18,13 @@ import {
   getDisplayName,
   getType,
 } from "util/files-and-folders/file-and-folders-utils";
-import { FaPen, FaInfoCircle } from "react-icons/fa";
+import { FaInfoCircle } from "react-icons/fa";
 import Grid from "@material-ui/core/Grid";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import Paper from "@material-ui/core/Paper";
 import styled from "styled-components";
 import SessionInfo from "../header/dashboard/session-info";
+import EditableField from "../fields/editable-field";
 
 const CategoryTitle = styled.h3`
   margin: 5px 0;
@@ -39,9 +38,10 @@ const infoCellStyle = {
   fontSize: "0.8em",
 };
 
-const marginPaddingCompensate = {
-  padding: "0.2em 0.8em",
-};
+const ElementNameCell = styled.div`
+  margin: 0.2em -0.8em;
+  padding: 0.2em 0.8em;
+`;
 
 const overflowEllipsisStyle = {
   whiteSpace: "nowrap",
@@ -70,8 +70,6 @@ const Name = ({
   displayName = "",
   placeholder,
   bracketName = "",
-  nodeName = "",
-  filesAndFoldersId,
   onChangeAlias,
 }) => {
   const { t } = useTranslation();
@@ -83,20 +81,15 @@ const Name = ({
     );
   } else {
     return (
-      <span className="edit_hover_container" style={marginPaddingCompensate}>
-        <RIEInput
+      <ElementNameCell>
+        <EditableField
+          multiline={true}
+          trimValue={true}
+          selectTextOnFocus={true}
           value={displayName || bracketName}
-          change={onChangeAlias(
-            "new_display_name",
-            filesAndFoldersId,
-            nodeName
-          )}
-          className="editable_text element_name bold"
-          propName="new_display_name"
+          onChange={onChangeAlias}
         />
-        &ensp;
-        <FaPen className="edit_hover_pencil" style={{ opacity: "0.3" }} />
-      </span>
+      </ElementNameCell>
     );
   }
 };
@@ -335,17 +328,6 @@ export default function ReportApiToProps({
     ? filesAndFolders[filesAndFoldersId]
     : {};
 
-  // TODO: Refactor this method to use a standard value instead of the riekInputResult value
-  const onChangeAlias = useCallback(
-    (propName, id, oldName) => (riekInputResult) => {
-      let newAlias =
-        riekInputResult[propName] === oldName ? "" : riekInputResult[propName];
-      newAlias = newAlias.replace(/^\s*|\s*$/g, "");
-      updateAlias(newAlias);
-    },
-    [updateAlias]
-  );
-
   return (
     <Report
       currentFilesAndFolders={currentFilesAndFolders}
@@ -358,7 +340,7 @@ export default function ReportApiToProps({
       isFocused={isFocused}
       isLocked={isLocked}
       fillColor={fillColor}
-      onChangeAlias={onChangeAlias}
+      onChangeAlias={updateAlias}
       sessionName={sessionName}
       setSessionName={setSessionName}
       nbFiles={nbFiles}

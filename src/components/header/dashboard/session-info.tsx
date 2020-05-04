@@ -1,8 +1,8 @@
-import React, { FC, useCallback } from "react";
-import { FaFile, FaFolder, FaPen } from "react-icons/fa";
-import { RIEInput } from "riek";
+import React, { FC } from "react";
+import { FaFile, FaFolder } from "react-icons/fa";
 import styled from "styled-components";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
+import EditableField from "../../fields/editable-field";
 
 const SessionInfoCell = styled.div`
   line-height: 1em;
@@ -15,8 +15,6 @@ const SessionNameCell = styled.div`
   margin: 0.2em -0.8em;
   padding: 0.2em 0.8em;
 `;
-
-const SESSION_NAME_PROP = "new_session_name";
 
 interface SessionInfoProps {
   sessionName: string;
@@ -33,24 +31,15 @@ const SessionInfo: FC<SessionInfoProps> = ({
   nbFiles,
   volume,
 }) => {
-  const sessionNameChanged = useCallback(
-    (rieInput) => {
-      onChangeSessionName(rieInput[SESSION_NAME_PROP]);
-    },
-    [onChangeSessionName]
-  );
   return (
     <SessionInfoCell>
-      <SessionNameCell className="edit_hover_container">
-        <RIEInput
+      <SessionNameCell>
+        <EditableField
+          trimValue={true}
           value={sessionName}
-          change={sessionNameChanged}
-          propName={SESSION_NAME_PROP}
-          className="session_name editable_text"
-          validate={(s) => s.replace(/\s/g, "").length > 0}
+          onChange={onChangeSessionName}
+          selectTextOnFocus={true}
         />
-        &ensp;
-        <FaPen className="edit_hover_pencil" style={{ opacity: "0.3" }} />
       </SessionNameCell>
       <b>
         {nbFolders} <FaFolder style={{ verticalAlign: "bottom" }} />

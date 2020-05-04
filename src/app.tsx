@@ -27,6 +27,8 @@ import BackgroundLoadingInfoContainer from "components/background-loading-info/b
 import Box from "@material-ui/core/Box";
 import styled from "styled-components";
 import Modals from "components/modals/modals";
+import ThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
+import defaultTheme from "./theme/default-theme";
 
 document.title = `Archifiltre v${version}`;
 
@@ -50,34 +52,36 @@ const app = () => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <Store>
-        {({ api }) => {
-          return (
-            <ErrorBoundary>
-              <WindowResize />
-              <App>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  height="100%"
-                  width="100%"
-                >
-                  <Box>
-                    <Header api={api} />
+      <ThemeProvider theme={defaultTheme}>
+        <Store>
+          {({ api }) => {
+            return (
+              <ErrorBoundary>
+                <WindowResize />
+                <App>
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    height="100%"
+                    width="100%"
+                  >
+                    <Box>
+                      <Header api={api} />
+                    </Box>
+                    <Box flexGrow={1} flexShrink={1}>
+                      <MainSpace api={api} />
+                    </Box>
+                    <BackgroundLoadingInfoContainer />
                   </Box>
-                  <Box flexGrow={1} flexShrink={1}>
-                    <MainSpace api={api} />
-                  </Box>
-                  <BackgroundLoadingInfoContainer />
-                </Box>
-                <NewVersionChecker />
-              </App>
-              <NotificationContainer />
-              <Modals />
-            </ErrorBoundary>
-          );
-        }}
-      </Store>
+                  <NewVersionChecker />
+                </App>
+                <NotificationContainer />
+                <Modals />
+              </ErrorBoundary>
+            );
+          }}
+        </Store>
+      </ThemeProvider>
     </Provider>,
     rootDiv
   );

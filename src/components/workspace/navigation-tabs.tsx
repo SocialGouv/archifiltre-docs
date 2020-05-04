@@ -11,6 +11,10 @@ const StyledTabs = styled(Tabs)`
   width: 100%;
 `;
 
+const StyledPanel = styled.div`
+  width: 100%;
+`;
+
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -18,14 +22,14 @@ interface TabPanelProps {
 }
 
 const TabPanel = ({ children, value, index }: TabPanelProps) => (
-  <div
+  <StyledPanel
     role="tabpanel"
     hidden={value !== index}
     id={`tabpanel-${index}`}
     aria-labelledby={`tab-${index}`}
   >
     {value === index && <Box boxSizing="border-box">{children}</Box>}
-  </div>
+  </StyledPanel>
 );
 
 const a11yProps = (index: number) => ({

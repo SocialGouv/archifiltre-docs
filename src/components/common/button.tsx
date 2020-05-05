@@ -25,7 +25,13 @@ export enum ButtonSize {
   NORMAL,
 }
 
-const InnerButton = styled.button`
+interface InnerButtonProps {
+  width: ButtonWidth;
+  size: ButtonSize;
+  angles: ButtonAngles;
+}
+
+const InnerButton = styled.button<InnerButtonProps>`
   display: inline-block;
   width: ${({ width = "100%" }) => width};
   vertical-align: middle;
@@ -73,7 +79,7 @@ const Button: FC<ButtonProps> = ({
   children,
   color = ButtonColor.SUCCESS,
   disabled = false,
-  width,
+  width = ButtonWidth.WITH_SPACES,
   angles = ButtonAngles.ROUNDED,
   onClick = empty,
   size = ButtonSize.NORMAL,

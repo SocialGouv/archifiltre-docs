@@ -15,7 +15,11 @@ const ExportContainer = styled.div`
   display: flex;
 `;
 
-const CheckboxLabel = styled.span`
+interface CheckboxLabelProps {
+  isDisabled: boolean;
+}
+
+const CheckboxLabel = styled.span<CheckboxLabelProps>`
   color: ${({ isDisabled }) => (isDisabled ? "grey" : "initial")};
 `;
 

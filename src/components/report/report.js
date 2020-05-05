@@ -23,8 +23,8 @@ import Grid from "@material-ui/core/Grid";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import Paper from "@material-ui/core/Paper";
 import styled from "styled-components";
-import SessionInfo from "../header/dashboard/session-info";
 import EditableField from "../fields/editable-field";
+import SessionInfo from "./session-info/session-info";
 
 const CategoryTitle = styled.h3`
   margin: 5px 0;

@@ -11,7 +11,11 @@ const ProgressBarContainer = styled.div`
   height: 100%;
 `;
 
-const ProgressBar = styled.div`
+interface ProgressBarProps {
+  width: number;
+}
+
+const ProgressBar = styled.div<ProgressBarProps>`
   position: absolute;
   background-color: ${toRgba([121, 121, 121, 0.3])};
   width: 70%;

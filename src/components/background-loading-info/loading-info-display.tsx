@@ -18,7 +18,12 @@ const LoadingBar = styled.div`
   border-radius: 3px;
 `;
 
-const InnerLoadingBar = styled.div`
+interface InnerLoadingBarProps {
+  loadingPercent: number;
+  color: string;
+}
+
+const InnerLoadingBar = styled.div<InnerLoadingBarProps>`
   height: 6px;
   background-color: ${getColor};
   border-radius: 3px;

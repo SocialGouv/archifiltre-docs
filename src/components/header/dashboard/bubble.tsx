@@ -2,12 +2,22 @@ import Grid from "@material-ui/core/Grid";
 import React, { FC, useCallback, useState } from "react";
 import styled from "styled-components";
 
-const Container = styled.div`
+interface ContainerProps {
+  width: string;
+}
+
+const Container = styled.div<ContainerProps>`
   position: relative;
   width: ${({ width }) => width};
 `;
 
-const SubComponent = styled.div`
+interface SubComponentProps {
+  isMouseOver: boolean;
+  backgroundColor: string;
+  borderRadius: string | number;
+}
+
+const SubComponent = styled.div<SubComponentProps>`
   display: ${({ isMouseOver }) => (isMouseOver ? "initial" : "none")};
   position: absolute;
   top: 100%;

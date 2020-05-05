@@ -28,6 +28,9 @@ import SessionInfo from "./session-info/session-info";
 
 const CategoryTitle = styled.h3`
   margin: 5px 0;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 20px;
 `;
 
 const StyledGrid = styled(Grid)`
@@ -233,6 +236,8 @@ const Report = ({
   nbFiles,
   nbFolders,
   volume,
+  oldestFileTimestamp,
+  newestFileTimestamp,
 }) => {
   const { t } = useTranslation();
 
@@ -265,6 +270,8 @@ const Report = ({
                 nbFolders={nbFiles}
                 nbFiles={nbFolders}
                 volume={volume}
+                oldestFileTimestamp={oldestFileTimestamp}
+                newestFileTimestamp={newestFileTimestamp}
               />
             </Grid>
           </StyledGrid>
@@ -319,6 +326,8 @@ export default function ReportApiToProps({
   nbFiles,
   nbFolders,
   volume,
+  oldestFileTimestamp,
+  newestFileTimestamp,
 }) {
   const isFocused = filesAndFoldersId !== "";
 
@@ -346,6 +355,8 @@ export default function ReportApiToProps({
       nbFiles={nbFiles}
       nbFolders={nbFolders}
       volume={volume}
+      oldestFileTimestamp={oldestFileTimestamp}
+      newestFileTimestamp={newestFileTimestamp}
     />
   );
 }

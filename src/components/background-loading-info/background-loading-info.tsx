@@ -24,7 +24,11 @@ const LoadingBarArea = memo(styled.div`
   padding-bottom: 12px;
 `);
 
-const ToggleArrow = styled(SquaredButton)`
+interface ToggleArrowProps {
+  collapsed: boolean;
+}
+
+const ToggleArrow = styled(SquaredButton)<ToggleArrowProps>`
   ${({ collapsed }) => (collapsed ? "transform: rotate(0.5turn)" : "")}
 `;
 

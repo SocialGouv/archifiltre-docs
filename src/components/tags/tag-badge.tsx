@@ -7,7 +7,12 @@ const TagBadgeContainer = styled.div`
   word-break: break-word;
 `;
 
-const TagBadgeContent = styled.button`
+interface TagBadgeContentProps {
+  active: boolean;
+  color: string;
+}
+
+const TagBadgeContent = styled.button<TagBadgeContentProps>`
   height: 100%;
   color: white;
   background-color: ${({ color }) => color};

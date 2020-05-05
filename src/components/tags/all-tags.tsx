@@ -28,7 +28,11 @@ const TagsContent = styled(Box)`
   font-size: 0.8em;
 `;
 
-const Wrapper = styled.div`
+interface WrapperProps {
+  tags: TagMap;
+}
+
+const Wrapper = styled.div<WrapperProps>`
   box-sizing: border-box;
   opacity: ${({ tags }) => (Object.keys(tags).length > 0 ? 1 : 0.5)};
   background: white;
@@ -50,7 +54,7 @@ interface AllTagsProps {
   total_volume: number;
   focused_node_id: string;
   highlightTag: (tagId: string) => void;
-  stopHighlightingTag: (tagId: string) => void;
+  stopHighlightingTag: () => void;
   onDeleteTag: (tagId: string) => void;
   onRenameTag: (tagId: string) => void;
   onAddTagged: (nodeId: string, tagId: string) => void;

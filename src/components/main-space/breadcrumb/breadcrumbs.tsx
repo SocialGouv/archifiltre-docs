@@ -18,7 +18,11 @@ const BreadcrumbsWrapper = styled.div`
   height: 100%;
 `;
 
-const BreadcrumbWrapper = styled.div`
+interface BreadcrumbWrapperProps {
+  depth: number;
+}
+
+const BreadcrumbWrapper = styled.div<BreadcrumbWrapperProps>`
   height: ${({ depth }) => `${100 / depth}%`};
 `;
 

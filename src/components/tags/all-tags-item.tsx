@@ -1,4 +1,4 @@
-import Grid from "@material-ui/core/Grid";
+import Grid, { GridProps } from "@material-ui/core/Grid";
 import React, { FC } from "react";
 
 import Tag from "components/tags/tag";
@@ -6,8 +6,9 @@ import MultiLinesInput from "components/tags/multi-lines-input";
 import { FaTrash, FaTimes, FaPlus, FaPen } from "react-icons/fa";
 import styled from "styled-components";
 import { empty } from "util/function/function-util";
+import Item = Electron.Item;
 
-const CellShrink = styled(Grid)`
+const CellShrink = styled(Grid)<GridProps>`
   padding: 0 0.1em;
 `;
 
@@ -19,13 +20,21 @@ const Container = styled.div`
   padding: 4px 0.5em;
 `;
 
-const Item = styled(Grid)`
+interface ItemProps {
+  opacity: number;
+}
+
+const Item = styled(Grid)<ItemProps & GridProps>`
   opacity: ${({ opacity }) => opacity};
   position: relative;
   z-index: 1;
 `;
 
-const Background = styled.div`
+interface BackgroundProps {
+  percentage: string | number;
+}
+
+const Background = styled.div<BackgroundProps>`
   transition: all 0.4s;
   -webkit-transition: all 0.4s;
   height: 100%;
@@ -121,11 +130,7 @@ const AllTagsItem: FC<AllTagsItemProps> = ({
   );
 
   return (
-    <Container
-      container
-      className="edit_hover_container"
-      onMouseEnter={highlightTag}
-    >
+    <Container className="edit_hover_container" onMouseEnter={highlightTag}>
       <Item container opacity={opacity}>
         <CellShrink item>{deleteBubble}</CellShrink>
         <CellShrink item>{countOrActionBubble}</CellShrink>

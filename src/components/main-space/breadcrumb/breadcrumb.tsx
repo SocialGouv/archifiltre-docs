@@ -4,7 +4,11 @@ import BreadcrumbPoly from "./breadcrumb-poly";
 import { CopyToClipboard } from "../../common/copy-to-clipboard";
 import { Dims, DimsAndId } from "../icicle/icicle-rect";
 
-const BreadcrumbWrapper = styled.div`
+interface BreadcrumbWrapperProps {
+  active: boolean;
+}
+
+const BreadcrumbWrapper = styled.div<BreadcrumbWrapperProps>`
   width: 100%;
   height: 100%;
   display: flex;
@@ -12,7 +16,11 @@ const BreadcrumbWrapper = styled.div`
   opacity: ${({ active }) => (active ? 1 : 0.3)};
 `;
 
-const CopyToClipboardWrapper = styled.div`
+interface CopyToClipboardProps {
+  active: boolean;
+}
+
+const CopyToClipboardWrapper = styled.div<CopyToClipboardProps>`
   visibility: hidden;
   ${BreadcrumbWrapper}:hover & {
     visibility: ${({ active }) => (active ? "visible" : "hidden")};

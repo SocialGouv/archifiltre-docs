@@ -12,9 +12,9 @@ export const SEARCH_ICON = FaSearch;
 const Icon = ({ icon, color, onClick = empty }) => {
   const IconComponent = icon;
   return (
-    <div onClick={onClick}>
+    <span onClick={onClick}>
       <IconComponent color={color} style={{ fontSize: "3em" }} />
-    </div>
+    </span>
   );
 };
 

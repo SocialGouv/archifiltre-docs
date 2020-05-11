@@ -30,6 +30,8 @@
       "fileOrFolderNamePlaceholder": "Name des Ordners oder der Datei",
       "fileOrFolderRealNamePlaceholder": "Tatsächlicher Name",
       "size": "Größe",
+      "files": "Daten",
+      "folders": "Ordner",
       "hash": "Hash-Wert",
       "type": "Typ",
       "fileHashExplanation": "Dieser Hash-Wert ist ein durch einen MD5 Algorithmus berechneter digitaler Fingerabdruck der Datei",

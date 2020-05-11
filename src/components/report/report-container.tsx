@@ -81,6 +81,8 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
   const rootFilesAndFoldersMetadata = metadata[""] || {};
 
   const volume = rootFilesAndFoldersMetadata.childrenTotalSize;
+  const oldestFileTimestamp = rootFilesAndFoldersMetadata.minLastModified;
+  const newestFileTimestamp = rootFilesAndFoldersMetadata.maxLastModified;
 
   return (
     <ReportApiToProps
@@ -98,6 +100,8 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
       nbFiles={nbFiles}
       nbFolders={nbFolders}
       volume={volume}
+      oldestFileTimestamp={oldestFileTimestamp}
+      newestFileTimestamp={newestFileTimestamp}
     />
   );
 };

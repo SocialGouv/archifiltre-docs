@@ -1,20 +1,8 @@
 import React, { FC } from "react";
-import { FaFile, FaFolder } from "react-icons/fa";
-import styled from "styled-components";
-import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import EditableField from "../../fields/editable-field";
-
-const SessionInfoCell = styled.div`
-  line-height: 1em;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-`;
-
-const SessionNameCell = styled.div`
-  margin: 0.2em -0.8em;
-  padding: 0.2em 0.8em;
-`;
+import { Box } from "@material-ui/core";
+import SessionElementsDetails from "./session-elements-details";
+import BoundaryDates from "./boundary-dates";
 
 interface SessionInfoProps {
   sessionName: string;
@@ -22,6 +10,8 @@ interface SessionInfoProps {
   nbFolders: number;
   nbFiles: number;
   volume: number;
+  newestFileTimestamp: number;
+  oldestFileTimestamp: number;
 }
 
 const SessionInfo: FC<SessionInfoProps> = ({
@@ -30,25 +20,33 @@ const SessionInfo: FC<SessionInfoProps> = ({
   nbFolders,
   nbFiles,
   volume,
+  newestFileTimestamp,
+  oldestFileTimestamp,
 }) => {
   return (
-    <SessionInfoCell>
-      <SessionNameCell>
+    <Box display="flex" flexDirection="column" justifyContent="space-between">
+      <Box marginY={0.5}>
         <EditableField
           trimValue={true}
           value={sessionName}
           onChange={onChangeSessionName}
           selectTextOnFocus={true}
         />
-      </SessionNameCell>
-      <b>
-        {nbFolders} <FaFolder style={{ verticalAlign: "bottom" }} />
-        &ensp;&ensp;
-        {nbFiles} <FaFile style={{ verticalAlign: "bottom" }} />
-        &ensp;&ensp;
-        {octet2HumanReadableFormat(volume)}
-      </b>
-    </SessionInfoCell>
+      </Box>
+      <Box marginY={0.5}>
+        <SessionElementsDetails
+          nbFiles={nbFiles}
+          nbFolders={nbFolders}
+          volume={volume}
+        />
+      </Box>
+      <Box marginY={0.5}>
+        <BoundaryDates
+          oldestFileTimestamp={oldestFileTimestamp}
+          newestFileTimestamp={newestFileTimestamp}
+        />
+      </Box>
+    </Box>
   );
 };
 

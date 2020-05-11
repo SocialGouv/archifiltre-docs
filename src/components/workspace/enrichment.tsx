@@ -1,7 +1,9 @@
+import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
+import AllTagsButton from "../buttons/all-tags-button";
 import CommentsCell from "../report/report-cell-comments";
 import TagsCell from "../tags/report-cell-tags";
 import styled from "styled-components";
@@ -34,6 +36,7 @@ interface EnrichmentProps {
   filesAndFoldersId: string;
   isLocked: boolean;
   isActive: boolean;
+  api: any;
 }
 
 const Enrichment: FC<EnrichmentProps> = ({
@@ -48,6 +51,7 @@ const Enrichment: FC<EnrichmentProps> = ({
   filesAndFoldersId,
   isLocked,
   isActive,
+  api,
 }) => {
   const { t } = useTranslation();
 
@@ -60,7 +64,10 @@ const Enrichment: FC<EnrichmentProps> = ({
         </Paper>
       </StyledGrid>
       <StyledGrid item xs={4}>
-        <CategoryTitle>{t("workspace.tags")}</CategoryTitle>
+        <Box display="flex" justifyContent="space-between">
+          <CategoryTitle>{t("workspace.tags")}</CategoryTitle>
+          <AllTagsButton api={api} />
+        </Box>
         <Paper>
           <TagsCell
             is_dummy={!isActive}

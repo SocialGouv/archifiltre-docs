@@ -1,6 +1,6 @@
 import React from "react";
 
-import SaveButton from "components/buttons/save-button";
+import SaveButton from "components/header/dashboard/save-button";
 import { reportError } from "../../logging/reporter";
 import { ContactUs } from "./contact-us";
 import Grid from "@material-ui/core/Grid";

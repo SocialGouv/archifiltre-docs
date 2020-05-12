@@ -22,6 +22,7 @@ export const SearchButton = () => {
           variant="contained"
           className={classes.headerButton}
           onClick={openModal}
+          disableElevation
         >
           <FaSearch />
         </Button>

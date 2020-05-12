@@ -12,8 +12,6 @@ import { ratio } from "util/numbers/numbers-util";
 import { useCallback, useMemo } from "react";
 import { IciclesSortMethod } from "reducers/workspace-metadata/workspace-metadata-types";
 
-export const SUCCESS_GREEN = "#1E8E17";
-
 export const gradient = (firstColor: number[], secondColor: number[]) => (
   zeroToOne: number
 ): number[] =>

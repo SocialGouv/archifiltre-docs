@@ -22,6 +22,7 @@ const SettingsButton = () => {
           variant="contained"
           className={classes.headerButton}
           onClick={openModal}
+          disableElevation
         >
           <FaCog />
         </Button>

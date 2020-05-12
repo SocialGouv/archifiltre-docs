@@ -1,8 +1,8 @@
+import useTheme from "@material-ui/core/styles/useTheme";
 import React, { FC, memo } from "react";
+import { FaTimes } from "react-icons/fa";
 import styled from "styled-components";
-import { SUCCESS_GREEN } from "util/color/color-util";
 import { empty } from "util/function/function-util";
-import CloseCross from "../common/close-cross";
 import Spinner from "../common/spinner";
 import SquaredButton from "./squared-button";
 
@@ -22,16 +22,17 @@ const LoadingSpinnerOrCloseCross: FC<LoadingSpinnerOrCloseCrossProps> = ({
   isLoading,
   onClose = empty,
 }) => {
+  const theme = useTheme();
   if (isLoading) {
     return (
       <Loader>
-        <Spinner color={SUCCESS_GREEN} />
+        <Spinner color={theme.palette.secondary.main} />
       </Loader>
     );
   }
   return (
-    <SquaredButton onClick={onClose}>
-      <CloseCross />
+    <SquaredButton onClick={onClose} theme={theme}>
+      <FaTimes style={{ color: theme.palette.secondary.main }} />
     </SquaredButton>
   );
 };

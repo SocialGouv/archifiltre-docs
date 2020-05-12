@@ -14,7 +14,7 @@ const MoveFilesButton: FC = () => {
   return (
     <Button
       variant="outlined"
-      color="primary"
+      color="secondary"
       size="small"
       onClick={toggleMoveElements}
       startIcon={<FaArrowsAlt />}

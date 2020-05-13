@@ -1,9 +1,9 @@
 import Box from "@material-ui/core/Box";
 import React, { FC } from "react";
-import SaveButton, { ExportToJson } from "components/buttons/save-button";
-import ReinitButton, { ResetWorkspace } from "components/buttons/reinit-button";
+import SaveButton, { ExportToJson } from "./save-button";
+import ReinitButton, { ResetWorkspace } from "./reinit-button";
 import UndoRedo from "components/header/dashboard/undo-redo-button";
-import { SearchButton } from "../../buttons/search-button";
+import { SearchButton } from "./search-button";
 import {
   ExportToAuditReport,
   ExportToCsv,

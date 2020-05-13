@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { v4 as uuid } from "uuid";
 
-import { removeKey } from "util/object/object-util";
 import undoable from "../enhancers/undoable/undoable";
 import { getTagByName } from "./tags-selectors";
 import {
@@ -95,7 +94,7 @@ const tagsReducer = (
         },
       };
     case DELETE_TAG:
-      return { tags: removeKey(state.tags, action.tagId) };
+      return { tags: _.omit(state.tags, action.tagId) };
     case TAG_FILE:
       return tagFile(state, action.tagId, action.ffId);
     case UNTAG_FILE:

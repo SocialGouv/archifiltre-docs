@@ -36,15 +36,3 @@ export const extractKeys = <U>(keys: string[], obj: { [key: string]: U }) => {
  * @param a
  */
 export const copy = (a: object): object => ({ ...a });
-
-/**
- * Create a new object with the key removed
- * @param object - the object to remove the key from
- * @param key - the key to remove
- */
-export const removeKey = (
-  { [key]: _, ...rest }: { [s: string]: any },
-  key: any
-) => ({
-  ...rest,
-});

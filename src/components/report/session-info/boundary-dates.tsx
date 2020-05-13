@@ -2,9 +2,9 @@ import React, { FC } from "react";
 import dateFormat from "dateformat";
 import { useTranslation } from "react-i18next";
 import Box from "@material-ui/core/Box";
-import TextInfo from "../../text/text-info";
 import BoundaryDate from "./boundary-date";
 import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
 
 interface BoundaryDatesProps {
   oldestFileTimestamp: number;
@@ -19,7 +19,7 @@ const BoundaryDates: FC<BoundaryDatesProps> = ({
   return (
     <Box display="flex" flexDirection="column">
       <Box>
-        <TextInfo uppercase={true}>{t("report.boundaryDates")}</TextInfo>
+        <Typography variant="h5">{t("report.boundaryDates")}</Typography>
       </Box>
       <Box>
         <Grid container spacing={2}>

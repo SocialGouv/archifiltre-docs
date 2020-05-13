@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import Box from "@material-ui/core/Box";
-import TextInfo, { TextSize } from "../../text/text-info";
+import Typography from "@material-ui/core/Typography";
 
 interface BoundaryDateProps {
   title: string;
@@ -10,12 +10,10 @@ interface BoundaryDateProps {
 const BoundaryDate: FC<BoundaryDateProps> = ({ title, content }) => (
   <Box display="flex" flexDirection="column">
     <Box>
-      <TextInfo size={TextSize.SMALL} uppercase={true}>
-        {title}
-      </TextInfo>
+      <Typography variant="h6">{title}</Typography>
     </Box>
     <Box>
-      <TextInfo bold={false}>{content}</TextInfo>
+      <Typography variant="body2">{content}</Typography>
     </Box>
   </Box>
 );

@@ -94,6 +94,7 @@ const EditableField: FC<EditableFieldProps> = ({
         multiline={multiline}
         type="text"
         inputRef={inputRef}
+        fullWidth={true}
         value={localValue}
         onChange={handleChange}
         onFocus={handleFocus}

@@ -1,4 +1,6 @@
+import { TFunction } from "i18next";
 import React, { FC, memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import {
   AliasMap,
@@ -80,12 +82,16 @@ const makeFiller = ({
 
 /**
  * Create a list of filler Breadcrumbs with the right depth, used when nothing is locked or focused
- * @param depth
+ * @param depth - breadcrumbs depth
+ * @param t - translation function
  */
-const makeBreadcrumbsFillers = (depth: number): BreadcrumbProps[] => [
+const makeBreadcrumbsFillers = (
+  depth: number,
+  t: TFunction
+): BreadcrumbProps[] => [
   makeFiller({
     id: "filler1",
-    name: "Niveau 1",
+    name: "1",
     isFirst: true,
     isLast: depth === 1,
   }),
@@ -93,7 +99,7 @@ const makeBreadcrumbsFillers = (depth: number): BreadcrumbProps[] => [
     ? [
         makeFiller({
           id: "filler2",
-          name: "Niveau 2",
+          name: "2",
           isFirst: false,
           isLast: false,
         }),
@@ -123,7 +129,7 @@ const makeBreadcrumbsFillers = (depth: number): BreadcrumbProps[] => [
     ? [
         makeFiller({
           id: "filler-file",
-          name: "Fichier",
+          name: t("workspace.file"),
           isFirst: false,
           isLast: true,
         }),
@@ -163,7 +169,8 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({
   originalPath,
   onBreadcrumbClick,
 }) => {
-  const fillers = useMemo(() => makeBreadcrumbsFillers(depth), [depth]);
+  const { t } = useTranslation();
+  const fillers = useMemo(() => makeBreadcrumbsFillers(depth, t), [depth]);
   const filesAndFolders: BreadcrumbProps[] = useMemo(() => {
     if (hoveredSequence.length === 0 && lockedSequence.length === 0) {
       return fillers;

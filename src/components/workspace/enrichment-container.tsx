@@ -92,6 +92,7 @@ const EnrichmentContainer: FC<EnrichmentContainerProps> = ({ api }) => {
       filesAndFoldersId={filesAndFoldersId}
       isLocked={isLocked}
       isActive={isActive}
+      api={api}
     />
   );
 };

@@ -28,24 +28,6 @@ const TagsContent = styled(Box)`
   font-size: 0.8em;
 `;
 
-interface WrapperProps {
-  tags: TagMap;
-}
-
-const Wrapper = styled.div<WrapperProps>`
-  box-sizing: border-box;
-  opacity: ${({ tags }) => (Object.keys(tags).length > 0 ? 1 : 0.5)};
-  background: white;
-  height: 100%;
-  border-radius: 5px;
-  padding: 0.5em;
-`;
-
-const AllTagsTitle = styled.div`
-  text-align: center;
-  font-weight: bold;
-`;
-
 interface AllTagsProps {
   tags: TagMap;
   filesAndFolders: FilesAndFoldersMap;
@@ -129,24 +111,13 @@ const AllTags: FC<AllTagsProps> = ({
     .reduce((acc, val) => [...acc, val], []);
 
   return (
-    <Wrapper tags={tags}>
+    <div>
       <Box
         display="flex"
         flexDirection="column"
         flexWrap="nowrap"
         height="100%"
       >
-        <Box
-          flexShrink="0"
-          flexGrow="0"
-          flexBasis="auto"
-          height="auto"
-          minHeight="0px"
-          minWidth="0px"
-          width="100%"
-        >
-          <AllTagsTitle>{t("workspace.allTags")}</AllTagsTitle>
-        </Box>
         <Box
           flexShrink="1"
           flexGrow="1"
@@ -189,7 +160,7 @@ const AllTags: FC<AllTagsProps> = ({
           )}
         </Box>
       </Box>
-    </Wrapper>
+    </div>
   );
 };
 

@@ -4,7 +4,7 @@ import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSave } from "react-icons/fa";
 import { useStyles } from "hooks/use-styles";
-import version from "../../version";
+import version from "../../../version";
 
 interface ExportToJsonOptions {
   sessionName: string;

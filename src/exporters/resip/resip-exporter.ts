@@ -241,7 +241,6 @@ const resipExporter = (
     .map(
       wrapWithHook(
         (ffId) => ({
-          id: ffId,
           ...filesAndFolders[ffId],
           ...filesAndFoldersMetadata[ffId],
         }),

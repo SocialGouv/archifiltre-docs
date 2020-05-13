@@ -1,7 +1,7 @@
+import { Tooltip } from "@material-ui/core";
 import { shell } from "electron";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import ReactTooltip from "react-tooltip";
 import styled from "styled-components";
 import version, { versionName } from "../../version";
 import { HelpLink } from "./help-link";
@@ -30,22 +30,18 @@ const versionSubtitle = `v${version} ${versionName}`;
 
 const ArchifiltreLogo: FC = () => {
   const { t } = useTranslation();
+  const title = t("report.whatsNew");
   return (
     <ArchifiltreLogoWrapper>
       <ArchifiltreLogoText>
         <b>archifiltre</b>
       </ArchifiltreLogoText>
-      <ArchifiltreVersionText
-        onClick={onClick}
-        target="_blank"
-        role="link"
-        data-tip={t("report.whatsNew")}
-        data-for="whats-new"
-      >
-        {versionSubtitle}
-      </ArchifiltreVersionText>
+      <Tooltip title={title}>
+        <ArchifiltreVersionText onClick={onClick} target="_blank" role="link">
+          {versionSubtitle}
+        </ArchifiltreVersionText>
+      </Tooltip>
       <HelpLink />
-      <ReactTooltip place="bottom" id="whats-new" />
     </ArchifiltreLogoWrapper>
   );
 };

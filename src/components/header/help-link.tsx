@@ -1,8 +1,8 @@
+import { Tooltip } from "@material-ui/core";
 import { shell } from "electron";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaQuestionCircle } from "react-icons/fa";
-import ReactTooltip from "react-tooltip";
 import styled from "styled-components";
 
 /**
@@ -25,14 +25,12 @@ const QuestionCircle = styled(FaQuestionCircle)`
 
 export const HelpLink: FC = () => {
   const { t } = useTranslation();
+  const title = t("header.help");
   return (
-    <>
-      <QuestionCircle
-        onClick={onClick}
-        data-tip={t("header.help")}
-        data-for="help-button"
-      />
-      <ReactTooltip place="bottom" id="help-button" />
-    </>
+    <Tooltip title={title}>
+      <span>
+        <QuestionCircle onClick={onClick} />
+      </span>
+    </Tooltip>
   );
 };

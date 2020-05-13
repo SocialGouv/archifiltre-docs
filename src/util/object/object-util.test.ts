@@ -1,5 +1,5 @@
 import fc from "fast-check";
-import { compose, copy, extractKeys, removeKey } from "./object-util";
+import { compose, copy, extractKeys } from "./object-util";
 
 describe("object-util", () => {
   describe("compose", () => {
@@ -79,33 +79,6 @@ describe("object-util", () => {
       fc.assert(
         fc.property(fc.object(), (obj: any) => {
           expect(copy(obj)).toEqual(obj);
-        })
-      );
-    });
-  });
-
-  describe("removeKey", () => {
-    it("should remove the key", () => {
-      fc.assert(
-        fc.property(
-          fc.object(),
-          fc.string(),
-          fc.anything(),
-          (obj: any, key, value) => {
-            expect(removeKey({ ...obj, [key]: value }, key)).toEqual(
-              removeKey(obj, key)
-            );
-          }
-        )
-      );
-    });
-
-    it("should not modify the original object", () => {
-      fc.assert(
-        fc.property(fc.object(), fc.string(), (obj: any, key) => {
-          const backup = copy(obj);
-          removeKey(obj, key);
-          expect(obj).toEqual(backup);
         })
       );
     });

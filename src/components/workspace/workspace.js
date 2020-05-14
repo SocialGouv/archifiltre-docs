@@ -5,14 +5,6 @@ import Report from "components/report/report-container";
 import AllTags from "components/tags/all-tags-container";
 import NavigationBar from "components/workspace/navigation-bar/navigation-bar-container";
 import { ROOT_FF_ID } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import { SearchButton } from "../buttons/search-button";
-import styled from "styled-components";
-
-const SearchButtonWrapper = styled.div`
-  position: absolute;
-  left: 0;
-  bottom: 0;
-`;
 
 const Workspace = ({ api }) => (
   <div className="grid-y grid-frame">
@@ -38,9 +30,6 @@ const Workspace = ({ api }) => (
     <div className="cell auto">
       <Icicle api={api} />
     </div>
-    <SearchButtonWrapper>
-      <SearchButton />
-    </SearchButtonWrapper>
   </div>
 );
 

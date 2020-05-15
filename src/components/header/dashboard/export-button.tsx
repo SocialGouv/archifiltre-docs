@@ -42,6 +42,7 @@ const ExportButton: FC<ExportButtonProps> = ({
           variant="contained"
           className={classes.headerButton}
           onClick={openModal}
+          disableElevation
         >
           <FaDownload />
         </Button>

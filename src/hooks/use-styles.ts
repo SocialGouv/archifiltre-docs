@@ -7,12 +7,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingLeft: theme.spacing(1),
       paddingRight: theme.spacing(1),
     },
-    select: {
-      maxWidth: 150,
-      borderRadius: 5,
-      border: "1px solid #ced4da",
-      backgroundColor: "white",
-    },
     closeButton: {
       position: "absolute",
       right: theme.spacing(3),
@@ -26,8 +20,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       padding: 0,
     },
     headerButton: {
-      height: "100%",
+      height: "45px",
+      width: "45px",
       minWidth: 0,
+    },
+    tab: {
+      minWidth: 0,
+      padding: theme.spacing(1),
     },
   })
 );

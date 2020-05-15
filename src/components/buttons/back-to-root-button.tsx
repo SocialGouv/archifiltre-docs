@@ -26,7 +26,7 @@ const BackToRoot: FC<BackToRootProps> = ({
   return (
     <Button
       variant="outlined"
-      color="primary"
+      color="secondary"
       size="small"
       onClick={backToRoot}
       disabled={!isZoomed()}

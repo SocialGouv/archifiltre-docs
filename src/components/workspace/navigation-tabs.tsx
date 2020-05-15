@@ -3,6 +3,7 @@ import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 import React, { FC, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useStyles } from "../../hooks/use-styles";
 import Report from "../report/report-container";
 import styled from "styled-components";
 import Enrichment from "./enrichment-container";
@@ -43,6 +44,7 @@ interface NavigationTabsProps {
 
 const NavigationTabs: FC<NavigationTabsProps> = ({ api }) => {
   const { t } = useTranslation();
+  const classes = useStyles();
   const [value, setValue] = useState(0);
 
   const handleChange = useCallback(
@@ -54,11 +56,32 @@ const NavigationTabs: FC<NavigationTabsProps> = ({ api }) => {
 
   return (
     <>
-      <StyledTabs value={value} onChange={handleChange}>
-        <Tab label={t("workspace.general")} {...a11yProps(0)} />
-        <Tab label={t("workspace.enrichment")} {...a11yProps(1)} />
-        <Tab label={t("workspace.audit")} {...a11yProps(2)} />
-        <Tab label={t("workspace.duplicates")} {...a11yProps(3)} />
+      <StyledTabs
+        value={value}
+        onChange={handleChange}
+        indicatorColor="primary"
+        textColor="primary"
+      >
+        <Tab
+          label={t("workspace.general")}
+          className={classes.tab}
+          {...a11yProps(0)}
+        />
+        <Tab
+          label={t("workspace.enrichment")}
+          className={classes.tab}
+          {...a11yProps(1)}
+        />
+        <Tab
+          label={t("workspace.audit")}
+          className={classes.tab}
+          {...a11yProps(2)}
+        />
+        <Tab
+          label={t("workspace.duplicates")}
+          className={classes.tab}
+          {...a11yProps(3)}
+        />
       </StyledTabs>
       <TabPanel value={value} index={0}>
         <Report api={api} />

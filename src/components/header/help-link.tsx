@@ -19,8 +19,10 @@ const onClick = (event) => {
 const QuestionCircle = styled(FaQuestionCircle)`
   margin-left: 5px;
   vertical-align: middle;
-  color: dimgrey;
+  color: darkgrey;
   cursor: pointer;
+  width: 0.8em;
+  height: auto;
 `;
 
 export const HelpLink: FC = () => {

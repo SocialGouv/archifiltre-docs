@@ -1,7 +1,6 @@
 import { Checkbox, Input, ListItemText, Select } from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import React, { FC, useCallback } from "react";
-import { useStyles } from "hooks/use-styles";
 
 interface FilterProps {
   name: string;
@@ -16,8 +15,6 @@ const Filter: FC<FilterProps> = ({
   selectedOptions,
   setSelectedOptions,
 }) => {
-  const classes = useStyles();
-
   const handleChange = useCallback(
     (event) => {
       setSelectedOptions(event.target.value);
@@ -33,8 +30,8 @@ const Filter: FC<FilterProps> = ({
       renderValue={(selected: string[]) => selected.join(", ")}
       onChange={handleChange}
       input={<Input />}
-      className={classes.select}
       label={name}
+      disableUnderline={true}
     >
       {availableOptions.map((option, index) => (
         <MenuItem key={`${name}-${index}-${option}`} value={option}>

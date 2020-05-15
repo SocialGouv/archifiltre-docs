@@ -40,16 +40,19 @@ const UndoRedoButton: FC<UndoRedoButtonProps> = ({
   const title = isUndo ? t("header.undo") : t("header.redo");
   return (
     <Tooltip title={title}>
-      <Button
-        id={isUndo ? "undo-button" : "redo-button"}
-        color="primary"
-        variant="contained"
-        className={classes.headerButton}
-        onClick={isUndo ? api.undo.undo : api.undo.redo}
-        disabled={isUndo ? !api.undo.hasAPast() : !api.undo.hasAFuture()}
-      >
-        {isUndo ? <FaUndo /> : <FaRedo />}
-      </Button>
+      <span>
+        <Button
+          id={isUndo ? "undo-button" : "redo-button"}
+          color="primary"
+          variant="contained"
+          className={classes.headerButton}
+          onClick={isUndo ? api.undo.undo : api.undo.redo}
+          disabled={isUndo ? !api.undo.hasAPast() : !api.undo.hasAFuture()}
+          disableElevation
+        >
+          {isUndo ? <FaUndo /> : <FaRedo />}
+        </Button>
+      </span>
     </Tooltip>
   );
 };

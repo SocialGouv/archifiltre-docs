@@ -1,7 +1,9 @@
+import withTheme from "@material-ui/core/styles/withTheme";
 import React, { FC } from "react";
 import styled from "styled-components";
 import { LoadingInfo } from "reducers/loading-info/loading-info-types";
 import { percent } from "util/numbers/numbers-util";
+import { ThemedProps } from "../../theme/default-theme";
 
 const getColor = ({ color }) => color;
 
@@ -11,12 +13,12 @@ const LoadingBarContainer = styled.div`
   padding-bottom: 10px;
 `;
 
-const LoadingBar = styled.div`
+const LoadingBar = withTheme(styled.div<ThemedProps>`
   width: 285px;
   height: 6px;
-  border: 0.5px solid green;
+  border: ${({ theme }) => `0.5px solid ${theme.palette.secondary.main}`};
   border-radius: 3px;
-`;
+`);
 
 interface InnerLoadingBarProps {
   loadingPercent: number;

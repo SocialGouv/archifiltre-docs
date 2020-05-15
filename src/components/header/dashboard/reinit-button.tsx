@@ -24,6 +24,7 @@ const ReinitButton: FC<ReinitButtonProps> = ({ resetWorkspace }) => {
         color="primary"
         variant="contained"
         className={classes.headerButton}
+        disableElevation
       >
         <FaSignOutAlt />
       </Button>

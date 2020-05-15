@@ -1,14 +1,3 @@
-.active_button {
-  -webkit-transition: filter 0.25s ease-out;
-  transition: filter 0.25s ease-out;
-  outline: none;
-}
-
-.active_button:hover {
-  -webkit-filter: brightness(120%);
-  filter: brightness(120%);
-}
-
 .tags_bubble {
   font-weight: bold;
   color: white;
@@ -87,57 +76,8 @@
   cursor: text;
 }
 
-.editable_text:focus {
-  border: none;
-  background: none;
-  outline: none;
-}
-
-.session_name {
-  display: inline-block;
-  font-weight: bold;
-  font-size: 1.2em;
-  width: 85%;
-  height: 1.2em;
-  padding-bottom: 0.5em;
-}
-
-.bold {
-  font-weight: bold;
-}
-
-.element_name {
-  display: inline-block;
-  min-width: 30%;
-}
-
-.breadcrumb-label:hover .copy-to-clipboard {
-  visibility: visible;
-  display: inline-block;
-}
-
-.breadcrumb-label .copy-to-clipboard {
-  visibility: hidden;
-  display: initial;
-}
-
-.spinner {
-  -webkit-animation: icon-spin 2s infinite linear;
-  animation: icon-spin 2s infinite linear;
-}
-
 body {
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  background: #ced3cc;
-  background-repeat: no-repeat;
-  background: -webkit-linear-gradient(to bottom, #ecefea, #ced3cc);
-  background: -moz-linear-gradient(to bottom, #ecefea, #ced3cc);
-  background: -ms-linear-gradient(to bottom, #ecefea, #ced3cc);
-  background: -o-linear-gradient(to bottom, #ecefea, #ced3cc);
-  background: linear-gradient(to bottom, #ecefea, #ced3cc);
+  background-color: #fafafa;
 }
 
 *,

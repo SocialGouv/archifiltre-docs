@@ -24,6 +24,7 @@ const LoadPreviousSessionButton: FC<LoadPreviousSessionButtonProps> = ({
         variant="contained"
         className={classes.headerButton}
         onClick={reloadPreviousSession}
+        disableElevation
       >
         <FaSyncAlt />
       </Button>

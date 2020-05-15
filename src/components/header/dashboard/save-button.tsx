@@ -41,6 +41,7 @@ const SaveButton: FC<SaveButtonProps> = ({
         variant="contained"
         className={classes.headerButton}
         onClick={onClick}
+        disableElevation
       >
         <FaSave />
       </Button>

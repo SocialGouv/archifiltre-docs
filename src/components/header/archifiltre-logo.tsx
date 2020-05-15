@@ -1,8 +1,10 @@
-import { Tooltip } from "@material-ui/core";
+import { Theme, Tooltip } from "@material-ui/core";
+import withTheme from "@material-ui/core/styles/withTheme";
 import { shell } from "electron";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
+import { ThemedProps } from "../../theme/default-theme";
 import version, { versionName } from "../../version";
 import { HelpLink } from "./help-link";
 
@@ -15,11 +17,11 @@ const ArchifiltreLogoText = styled.div`
   letter-spacing: 0.16em;
 `;
 
-const ArchifiltreVersionText = styled.a`
+const ArchifiltreVersionText = withTheme(styled.a<ThemedProps>`
   cursor: pointer;
-  color: dodgerblue;
+  color: ${({ theme }) => theme.palette.primary.main};
   font-size: 0.8em;
-`;
+`);
 
 const onClick = (event) => {
   event.preventDefault();

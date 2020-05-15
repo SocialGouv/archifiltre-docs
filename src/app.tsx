@@ -27,7 +27,7 @@ import BackgroundLoadingInfoContainer from "components/background-loading-info/b
 import Box from "@material-ui/core/Box";
 import styled from "styled-components";
 import Modals from "components/modals/modals";
-import ThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
+import { ThemeProvider } from "@material-ui/core/styles";
 import defaultTheme from "./theme/default-theme";
 
 document.title = `Archifiltre v${version}`;

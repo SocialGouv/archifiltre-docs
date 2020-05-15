@@ -8,7 +8,8 @@ import { ThemedProps } from "../../theme/default-theme";
 import LoadingInfoDisplay from "./loading-info-display";
 import LoadingSpinnerOrCloseCross from "./loading-spinner-or-close-cross";
 import SquaredButton from "./squared-button";
-import { Grid } from "@material-ui/core";
+import { Grid, Theme } from "@material-ui/core";
+import muiStyled from "@material-ui/core/styles/styled";
 
 const BottomLeftArea = withTheme(styled.div<ThemedProps>`
   position: fixed;
@@ -30,9 +31,11 @@ interface ToggleArrowProps {
   collapsed: boolean;
 }
 
-const ToggleArrow = styled(SquaredButton)<ToggleArrowProps & ThemedProps>`
-  ${({ collapsed }) => (collapsed ? "transform: rotate(0.5turn)" : "")}
-`;
+const ToggleArrow = muiStyled(SquaredButton)<Theme, ToggleArrowProps>(
+  ({ collapsed }) => ({
+    transform: collapsed ? "rotate(0.5turn)" : undefined,
+  })
+);
 
 interface BackgroundLoadingInfoProps {
   loadingItems: LoadingInfo[];

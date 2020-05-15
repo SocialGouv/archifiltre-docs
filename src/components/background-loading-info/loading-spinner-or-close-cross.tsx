@@ -31,7 +31,7 @@ const LoadingSpinnerOrCloseCross: FC<LoadingSpinnerOrCloseCrossProps> = ({
     );
   }
   return (
-    <SquaredButton onClick={onClose} theme={theme}>
+    <SquaredButton onClick={onClose}>
       <FaTimes style={{ color: theme.palette.secondary.main }} />
     </SquaredButton>
   );

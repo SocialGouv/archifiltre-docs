@@ -100,6 +100,7 @@
       "somethingWentWrong": "Something went wrong.",
       "projectName": "Project name",
       "file": "file",
+      "file_plural": "files",
       "folder": "folder",
       "originalName": "This element original title was '{{oldName}}'",
       "byteChar": "B",
@@ -107,7 +108,18 @@
       "toDelete": "To be deleted",
       "yes": "Yes",
       "no": "No",
-      "files": "file(s)"
+      "files": "file(s)",
+      "fileTypes": {
+        "presentation": "Presentation",
+        "publication": "Publication",
+        "spreadsheet": "Spreadsheet",
+        "email": "Email",
+        "document": "Document",
+        "image": "Image",
+        "video": "Video",
+        "audio": "Audio",
+        "other": "Other"
+      }
     },
     "hash": {
       "loadingInfoLabel": "Loading files and folders hashes",
@@ -182,6 +194,11 @@
     "exportModal": {
       "title": "Export",
       "buttonTitle": "Export"
+    },
+    "audit": {
+      "fileCountInfoTitle": "File count in the file tree",
+      "fileTreeDepthTitle": "Depth of the file tree",
+      "fileTypeRepartitionTitle": "File types in the file tree"
     }
   }
 }

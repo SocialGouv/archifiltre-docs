@@ -100,6 +100,7 @@
       "somethingWentWrong": "Une erreur s'est produite.",
       "projectName": "Nom du projet",
       "file": "fichier",
+      "file_plural": "fichiers",
       "folder": "répertoire",
       "originalName": "Cet élément était originellement intitulé '{{oldName}}'",
       "byteChar": "o",
@@ -107,7 +108,18 @@
       "toDelete": "À éliminer",
       "yes": "Oui",
       "no": "Non",
-      "files": "fichier(s)"
+      "files": "fichier(s)",
+      "fileTypes": {
+        "presentation": "Présentation",
+        "publication": "Publication",
+        "spreadsheet": "Tableur",
+        "email": "Email",
+        "document": "Document",
+        "image": "Image",
+        "video": "Vidéo",
+        "audio": "Audio",
+        "other": "Autre"
+      }
     },
     "hash": {
       "loadingInfoLabel": "Chargement des empreintes de fichiers et dossiers",
@@ -182,6 +194,11 @@
     "exportModal": {
       "title": "Export",
       "buttonTitle": "Exporter"
+    },
+    "audit": {
+      "fileCountInfoTitle": "Nombre de fichiers sur l'arborescence",
+      "fileTreeDepthTitle": "Niveau de profondeur sur l'arborescence",
+      "fileTypeRepartitionTitle": "Répartition des fichiers dans l'arborescence"
     }
   }
 }

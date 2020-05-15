@@ -23,6 +23,12 @@ const defaultTheme = createMuiTheme({
       },
     },
     MuiTypography: {
+      h4: {
+        fontFamily: "QuicksandBold",
+        textTransform: "uppercase",
+        fontSize: "1.25rem",
+        lineHeight: "1.25rem",
+      },
       h5: {
         fontFamily: "QuicksandBold",
         textTransform: "uppercase",

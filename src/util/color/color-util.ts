@@ -45,7 +45,7 @@ const PLACEHOLDER_COLOR = "#8a8c93";
 const PARENT_FOLDER_COLOR = "#f99a0b";
 const FOLDER_COLOR = "#fabf0b";
 
-const colors = {
+export const colors = {
   [FileType.PUBLICATION]: "#b4250c",
   [FileType.PRESENTATION]: "#f75b40",
   [FileType.SPREADSHEET]: "#52d11a",

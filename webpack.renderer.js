@@ -27,7 +27,7 @@ module.exports = (env, argv = {}) => ({
     "iconv-lite": "require('iconv-lite')",
   },
   plugins: [
-    new CopyWebpackPlugin(["static"]),
+    new CopyWebpackPlugin({ patterns: ["static"] }),
     new HtmlWebpackPlugin({
       inject: "head",
       filename: "index.html",

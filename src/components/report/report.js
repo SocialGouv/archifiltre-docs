@@ -5,7 +5,8 @@ import Paper from "@material-ui/core/Paper";
 import styled from "styled-components";
 import SessionInfo from "./session-info/session-info";
 import ElementCharacteristics from "./element-characteristics/element-characteristics";
-import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
+import { getType } from "util/files-and-folders/file-and-folders-utils";
 
 const CategoryTitle = styled.h3`
   margin: 5px 0;
@@ -61,6 +62,8 @@ const Report = ({
     ? filesAndFoldersMetadata[filesAndFoldersId].medianLastModified
     : 0;
 
+  const type = getType(currentFilesAndFolders);
+
   if (isActive) {
     nodeName = currentFilesAndFolders.name;
     bracketName = currentFileAlias === "" ? "" : nodeName;
@@ -102,6 +105,7 @@ const Report = ({
                 minLastModifiedTimestamp={minLastModifiedTimestamp}
                 maxLastModifiedTimestamp={maxLastModifiedTimestamp}
                 medianLastModifiedTimestamp={medianLastModifiedTimestamp}
+                type={type}
               />
             </Grid>
           </StyledGrid>

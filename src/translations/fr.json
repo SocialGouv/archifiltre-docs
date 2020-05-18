@@ -48,7 +48,9 @@
       "clickHereToAddComments": "Cliquez ici pour ajouter une description !",
       "copied": "Copié !",
       "fileTreeInfo": "Caractéristiques de l'arborescence",
-      "elementInfo": "Caractéristiques de l'élément"
+      "elementInfo": "Caractéristiques de l'élément",
+      "boundaryDatesExplanation": "Les dates extrêmes sont calculées sur l'ensemble de l'aborescence",
+      "medianExplanation": "Il y a autant d'éléments modifiés avant qu'après cette date"
     },
     "workspace": {
       "type": "Par type",

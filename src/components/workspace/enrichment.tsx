@@ -90,7 +90,6 @@ const Enrichment: FC<EnrichmentProps> = ({
             is_dummy={!isActive}
             cells_style={cellsStyle}
             comments={currentFileComment}
-            filesAndFoldersId={filesAndFoldersId}
             updateComment={updateComment}
           />
         </Paper>

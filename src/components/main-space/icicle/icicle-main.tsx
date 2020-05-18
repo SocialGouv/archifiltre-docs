@@ -405,9 +405,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
               y={0}
               dx={viewBoxWidth}
               dy={viewBoxHeight}
-              display_root={displayRoot}
+              displayRoot={displayRoot}
               computeWidthRec={computeWidthRec}
-              fillColor={fillColor}
             />
           </svg>
         </MinimapWrapper>

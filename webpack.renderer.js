@@ -4,6 +4,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 require("dotenv").config();
 
+const isDev = (mode) => mode === "development";
+
 /**
  * Return code that will compute the path of the folder containing worker file,
  * which is the electron/dist folder in development mode, and the app.asar/electron/dist
@@ -13,12 +15,12 @@ require("dotenv").config();
  * @returns {string}
  */
 const workerRootFolder = (mode) =>
-  mode === "development"
+  isDev(mode)
     ? JSON.stringify(path.join(__dirname, "electron/dist/"))
     : "require('path').join(require('electron').remote.app.getAppPath(),'/electron/dist/')";
 
 module.exports = (env, argv = {}) => ({
-  devtool: argv.mode === "development" ? "cheap-module-eval-source-map" : false,
+  devtool: isDev(argv.mode) ? "cheap-module-eval-source-map" : false,
   entry: {
     app: "./src/app.tsx",
   },
@@ -27,7 +29,9 @@ module.exports = (env, argv = {}) => ({
     "iconv-lite": "require('iconv-lite')",
   },
   plugins: [
-    new CopyWebpackPlugin({ patterns: ["static"] }),
+    ...(isDev(argv.mode)
+      ? []
+      : [new CopyWebpackPlugin({ patterns: ["static"] })]),
     new HtmlWebpackPlugin({
       inject: "head",
       filename: "index.html",
@@ -36,8 +40,9 @@ module.exports = (env, argv = {}) => ({
     }),
     new webpack.DefinePlugin({
       MODE: JSON.stringify(argv.mode || "development"),
-      STATIC_ASSETS_PATH:
-        argv.mode === "development" ? JSON.stringify("static/") : "__dirname",
+      STATIC_ASSETS_PATH: isDev(argv.mode)
+        ? JSON.stringify("static/")
+        : "__dirname",
       AUTOLOAD: argv.autoload
         ? JSON.stringify(argv.autoload)
         : JSON.stringify(""),

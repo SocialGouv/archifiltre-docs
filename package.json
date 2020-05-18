@@ -90,7 +90,7 @@
     "deep-equal": "2.0.3",
     "dotenv": "8.2.0",
     "electron": "8.3.0",
-    "electron-builder": "22.6.0",
+    "electron-builder": "22.6.1",
     "electron-react-devtools": "0.5.3",
     "eslint": "7.0.0",
     "eslint-import-resolver-webpack": "0.12.1",

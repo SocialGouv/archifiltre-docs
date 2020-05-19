@@ -117,7 +117,7 @@ export const csvExporterThunk = (
             csvExportSuccessMessage,
             csvExportTitle,
             NotificationDuration.NORMAL,
-            () => shell.openItem(exportFilePath)
+            () => shell.openPath(exportFilePath)
           );
           resolve();
         },

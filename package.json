@@ -14,7 +14,7 @@
     "test": "jest \"src/.*\\.test\\.[jt]s\"",
     "e2e": "jest \"e2e/.*\\\\.test\\\\.[jt]s\"",
     "prepare-prod": "webpack --progress --mode production --config webpack.electron-main.js && webpack --progress --mode production",
-    "build-prod": "yarn prepare-prod && yarn win32 && yarn win64 && yarn linux",
+    "build-prod": "yarn prepare-prod && yarn win32 && yarn win64 && yarn linux && yarn mac",
     "win32": "electron-builder --windows portable --ia32",
     "win64": "electron-builder --windows portable --x64",
     "mac": "electron-builder --mac dmg",

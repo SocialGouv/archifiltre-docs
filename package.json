@@ -99,7 +99,7 @@
     "husky": "4.2.5",
     "jest": "25.5.4",
     "jest-date-mock": "1.0.8",
-    "lint-staged": "10.2.2",
+    "lint-staged": "10.2.4",
     "node-sass": "^4.14.1",
     "prettier": "2.0.5",
     "rmfr": "2.0.0",

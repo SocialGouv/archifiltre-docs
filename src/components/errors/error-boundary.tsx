@@ -1,3 +1,4 @@
+import { TFunction } from "i18next";
 import React from "react";
 
 import SaveButton from "components/header/dashboard/save-button";
@@ -5,9 +6,10 @@ import { reportError } from "../../logging/reporter";
 import { ContactUs } from "./contact-us";
 import Grid from "@material-ui/core/Grid";
 import { withTranslation } from "react-i18next";
+import styled from "styled-components";
 
 interface ErrorBoundaryProps {
-  t: (key: string) => string;
+  t: TFunction;
   originalPath: string;
   sessionName: string;
   exportToJson: () => void;
@@ -16,6 +18,10 @@ interface ErrorBoundaryProps {
 interface ErrorBoundaryState {
   hasError: boolean;
 }
+
+const Wrapper = styled(Grid)`
+  height: 100vh;
+`;
 
 class ErrorBoundary extends React.Component<
   ErrorBoundaryProps,
@@ -40,19 +46,28 @@ class ErrorBoundary extends React.Component<
 
     if (this.state.hasError) {
       return (
-        <Grid container>
-          <Grid item xs={1}>
+        <Wrapper
+          container
+          direction="column"
+          justify="center"
+          alignItems="center"
+        >
+          <Grid item>
             <h1>{t("common.somethingWentWrong")}</h1>
+          </Grid>
+          <Grid item>
             <h4>
               <ContactUs />
             </h4>
+          </Grid>
+          <Grid item>
             <SaveButton
               originalPath={originalPath}
               sessionName={sessionName}
               exportToJson={exportToJson}
             />
           </Grid>
-        </Grid>
+        </Wrapper>
       );
     }
     return children;

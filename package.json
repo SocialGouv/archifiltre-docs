@@ -79,7 +79,7 @@
     "@types/lodash": "4.14.151",
     "@types/react": "16.9.35",
     "@types/react-dom": "16.9.8",
-    "@types/react-redux": "7.1.8",
+    "@types/react-redux": "7.1.9",
     "@types/redux-mock-store": "1.0.2",
     "@types/styled-components": "^5.1.0",
     "awesome-typescript-loader": "5.2.1",

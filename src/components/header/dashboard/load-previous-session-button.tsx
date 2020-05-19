@@ -3,7 +3,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSyncAlt } from "react-icons/fa";
-import { useStyles } from "../../hooks/use-styles";
+import { useStyles } from "hooks/use-styles";
 
 interface LoadPreviousSessionButtonProps {
   reloadPreviousSession: () => void;

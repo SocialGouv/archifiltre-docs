@@ -13,7 +13,7 @@ import {
 import ExportButton from "./export-button";
 import styled from "styled-components";
 import ArchifiltreLogo from "../archifiltre-logo";
-import LoadPreviousSessionButton from "../../buttons/load-previous-session-button";
+import LoadPreviousSessionButton from "./load-previous-session-button";
 import SettingsButton from "./settings-button";
 
 const HeaderLine = styled.div`

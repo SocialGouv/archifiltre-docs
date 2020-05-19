@@ -72,7 +72,9 @@
       "general": "Général",
       "enrichment": "Enrichissement",
       "audit": "Audit",
-      "duplicates": "Redondances"
+      "duplicates": "Redondances",
+      "hideTabs": "Cacher les onglets",
+      "showTabs": "Montrer les onglets"
     },
     "header": {
       "export": "Exporter",

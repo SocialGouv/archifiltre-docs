@@ -206,7 +206,7 @@ export const getAliasesFromStore = (store: StoreState): HashesMap =>
  * @param filesAndFolders
  */
 export const isFile = (filesAndFolders: FilesAndFolders): boolean =>
-  filesAndFolders.children.length === 0;
+  filesAndFolders?.children.length === 0;
 
 /**
  * Removes the root folder from a filesAndFolders collection

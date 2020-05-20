@@ -48,7 +48,10 @@
       "clickHereToAddComments": "Click here to add comments!",
       "copied": "Copied!",
       "fileTreeInfo": "File tree information",
-      "elementInfo": "Element information"
+      "elementInfo": "Element information",
+      "boundaryDatesExplanation": "Boundary dates are computed on the whole file tree",
+      "medianExplanation": "There are as many elements modified before than after this date"
+
     },
     "workspace": {
       "type": "By type",

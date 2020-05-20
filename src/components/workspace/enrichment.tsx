@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import AllTagsButton from "../buttons/all-tags-button";
+import AllTagsButton from "./all-tags-button";
 import CommentsCell from "../report/report-cell-comments";
 import TagsCell from "../tags/report-cell-tags";
 import styled from "styled-components";

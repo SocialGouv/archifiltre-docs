@@ -14,10 +14,6 @@ const Input = styled.input`
   border-bottom: 3px solid rgb(10, 50, 100);
 `;
 
-const CellShrink = styled(Grid)`
-  padding: 0.3em;
-`;
-
 interface TagsEditableProps {
   tagsForCurrentFile;
   editing;
@@ -55,7 +51,7 @@ const TagsEditable: FC<TagsEditableProps> = ({
     () =>
       tagsForCurrentFile
         .map((tag) => (
-          <CellShrink key={tag.id}>
+          <Grid item key={tag.id}>
             <Tag
               text={tag.name}
               editing={editing}
@@ -63,7 +59,7 @@ const TagsEditable: FC<TagsEditableProps> = ({
               custom_style=""
               clickHandler={empty}
             />
-          </CellShrink>
+          </Grid>
         ))
         .reduce((accumulator, value) => [...accumulator, value], []),
     [tagsForCurrentFile, editing, removeHandlerFactory]
@@ -74,7 +70,7 @@ const TagsEditable: FC<TagsEditableProps> = ({
   if (editing) {
     const elements = tagsToElements();
     const inputBox = (
-      <CellShrink key="__input__">
+      <Grid item>
         <Input
           onMouseUp={(event) => {
             event.stopPropagation();
@@ -85,7 +81,7 @@ const TagsEditable: FC<TagsEditableProps> = ({
           value={candidate_tag}
           onChange={onChange}
         />
-      </CellShrink>
+      </Grid>
     );
 
     answer = [...elements, inputBox];
@@ -93,15 +89,15 @@ const TagsEditable: FC<TagsEditableProps> = ({
     answer = tagsToElements();
   } else {
     answer = (
-      <CellShrink item key="__closing__">
+      <Grid item>
         <span>{t("workspace.clickHereToAddTags")}</span>
-      </CellShrink>
+      </Grid>
     );
   }
 
   return (
     <Grid container>
-      {(isLocked || isCurrentFileMarkedToDelete) && (
+      {(editing || isCurrentFileMarkedToDelete) && (
         <MarkToDeleteButton
           isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
           onClick={toggleCurrentFileDeleteState}

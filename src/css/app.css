@@ -63,19 +63,6 @@
   background-color: #555;
 }
 
-.edit_hover_container .edit_hover_pencil {
-  visibility: hidden;
-}
-.edit_hover_container:hover .edit_hover_pencil {
-  visibility: visible;
-}
-
-.edit_hover_container:hover {
-  background-color: rgba(190, 200, 180, 0.3);
-  border-radius: 1em;
-  cursor: text;
-}
-
 body {
   background-color: #fafafa;
 }

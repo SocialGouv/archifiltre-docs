@@ -105,7 +105,7 @@
     "rmfr": "2.0.0",
     "sass-loader": "8.0.2",
     "source-map-loader": "0.2.4",
-    "spectron": "10.0.1",
+    "spectron": "11.0.0",
     "style-loader": "1.2.1",
     "svg-url-loader": "5.0.0",
     "ts-jest": "26.0.0",

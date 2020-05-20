@@ -72,7 +72,9 @@
       "general": "General",
       "enrichment": "Enrichment",
       "audit": "Audit",
-      "duplicates": "Duplicates"
+      "duplicates": "Duplicates",
+      "hideTabs": "Hide tabs",
+      "showTabs": "Show tabs"
     },
     "header": {
       "export": "Export",

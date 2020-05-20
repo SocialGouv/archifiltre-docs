@@ -1,7 +1,7 @@
 import Button from "@material-ui/core/Button";
 import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { FaArrowsAlt } from "react-icons/fa";
+import { FaArrowsAlt, FaHandPointer } from "react-icons/fa";
 import { useFileMoveActiveState } from "hooks/use-file-move-active-state";
 
 const MoveFilesButton: FC = () => {
@@ -17,7 +17,7 @@ const MoveFilesButton: FC = () => {
       color="secondary"
       size="small"
       onClick={toggleMoveElements}
-      startIcon={<FaArrowsAlt />}
+      startIcon={isFileMoveActive ? <FaHandPointer /> : <FaArrowsAlt />}
     >
       {isFileMoveActive
         ? t("workspace.normalMode")

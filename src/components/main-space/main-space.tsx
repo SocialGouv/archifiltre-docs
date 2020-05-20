@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 
 import FolderDropzone from "components/folder-dropzone/folder-dropzone-container";
-import WorkSpace from "components/workspace/workspace-container";
+import WorkSpace from "components/workspace/workspace";
 import WaitingScreen from "components/folder-dropzone/waiting-screen";
 import ErrorScreen from "components/errors/error-screen";
 

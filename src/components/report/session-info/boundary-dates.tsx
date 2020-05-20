@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import dateFormat from "dateformat";
 import { useTranslation } from "react-i18next";
 import Box from "@material-ui/core/Box";
+import HelpTooltip from "../../common/help-tooltip";
 import BoundaryDate from "./boundary-date";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -19,7 +20,10 @@ const BoundaryDates: FC<BoundaryDatesProps> = ({
   return (
     <Box display="flex" flexDirection="column">
       <Box>
-        <Typography variant="h5">{t("report.boundaryDates")}</Typography>
+        <Typography variant="h5">
+          {t("report.boundaryDates")}&nbsp;
+          <HelpTooltip tooltipText={t("report.boundaryDatesExplanation")} />
+        </Typography>
       </Box>
       <Box>
         <Grid container spacing={2}>

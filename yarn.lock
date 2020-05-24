@@ -10483,10 +10483,10 @@ supports-hyperlinks@^2.0.0:
     has-flag "^4.0.0"
     supports-color "^7.0.0"
 
-svg-url-loader@5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/svg-url-loader/-/svg-url-loader-5.0.0.tgz#0cbcfc4eed916df485ec879fb0cf6ea4340e57bc"
-  integrity sha512-KI7KRxYd1PuStyvSX4H/pB2i3PC1mMqP6reizU3TsieZJRW5TvWm4obmAzlWsI0SgvECK5oGYywDLxSMbat06w==
+svg-url-loader@5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/svg-url-loader/-/svg-url-loader-5.0.1.tgz#d94b5056feb48301b35ade6fbd0817a0785bcef8"
+  integrity sha512-U6t6p6iwtG1P7RWcA8Bevud5fMCpmxAQfjHn7vqHFl00d+Geoj1N0kP1HhTJfVUoDtyLJysEMzrSJERnn0m81w==
   dependencies:
     file-loader "~6.0.0"
     loader-utils "~2.0.0"

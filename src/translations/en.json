@@ -22,7 +22,7 @@
     },
     "report": {
       "comments": "Comments",
-      "yourCommentsHere": "Your comments here...",
+      "yourCommentsHere": "Select an item to add a comment",
       "lastModified": "Last modified",
       "max": "max",
       "min": "min",
@@ -50,7 +50,8 @@
       "fileTreeInfo": "File tree information",
       "elementInfo": "Element information",
       "boundaryDatesExplanation": "Dates of the oldest and newest elements in this file tree",
-      "medianExplanation": "This is the date at which half of this folder's files have been \"closed\". There are as many elements modified before than after this date"
+      "medianExplanation": "This is the date at which half of this folder's files have been \"closed\". There are as many elements modified before than after this date",
+      "noElementSelected": "Select an item to see its characteristics"
     },
     "workspace": {
       "type": "By type",
@@ -61,7 +62,7 @@
       "allTags": "All tags",
       "noTags": "No tag at the moment",
       "tags": "Tags",
-      "yourTagsHere": "Your tags here",
+      "yourTagsHere": "Select an item to add tags",
       "clickHereToAddTags": "Click here to add tags!",
       "newTag": "New tag",
       "file": "File",

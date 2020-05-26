@@ -22,7 +22,7 @@
     },
     "report": {
       "comments": "Description",
-      "yourCommentsHere": "Votre description ici...",
+      "yourCommentsHere": "Sélectionnez un élément pour ajouter une description",
       "lastModified": "Dernière modification",
       "max": "max",
       "min": "min",
@@ -50,7 +50,8 @@
       "fileTreeInfo": "Caractéristiques de l'arborescence",
       "elementInfo": "Caractéristiques de l'élément",
       "boundaryDatesExplanation": "Dates de l'élément le plus ancien et de l'élément le plus récent contenu dans cette arborescence",
-      "medianExplanation": "C’est la date à laquelle la moitié des fichiers contenus dans ce dossier a été « clôturée ». Il y a autant d'éléments modifiés avant qu'après cette date médiane."
+      "medianExplanation": "C’est la date à laquelle la moitié des fichiers contenus dans ce dossier a été « clôturée ». Il y a autant d'éléments modifiés avant qu'après cette date médiane.",
+      "noElementSelected": "Sélectionnez un élément pour voir ses caractéristiques"
     },
     "workspace": {
       "type": "Par type",
@@ -61,7 +62,7 @@
       "allTags": "Tous les tags",
       "noTags": "Aucun tag pour l'instant",
       "tags": "Tags",
-      "yourTagsHere": "Vos tags ici",
+      "yourTagsHere": "Sélectionnez un élément pour ajouter des tags",
       "clickHereToAddTags": "Cliquez ici pour ajouter des tags !",
       "newTag": "Nouveau tag",
       "file": "Fichier",

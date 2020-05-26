@@ -4,7 +4,6 @@ import CommentsEditable from "components/report/comments-editable";
 import { withTranslation } from "react-i18next";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
-import { FaPen } from "react-icons/fa";
 import Grid from "@material-ui/core/Grid";
 
 class ReportCellComments extends React.Component {
@@ -135,26 +134,15 @@ class ReportCellComments extends React.Component {
     const onBlur = this.onBlur;
 
     const is_dummy = props.is_dummy;
-    const cells_style = props.cells_style;
 
     const editing = state.editing;
 
     const comments = this.comments();
 
-    const comments_style = {
-      overflowY: editing ? "" : "auto",
-      overflowX: "hidden",
-      maxHeight: "5.5em",
-    };
-
     if (is_dummy) {
       return (
-        <Grid item style={cells_style}>
-          <b>{props.t("report.comments")}</b>
-          <br />
-          <span style={{ fontStyle: "italic" }}>
-            {props.t("report.yourCommentsHere")}
-          </span>
+        <Grid container alignItems="center">
+          <Grid item>{props.t("report.yourCommentsHere")}</Grid>
         </Grid>
       );
     } else {
@@ -163,26 +151,14 @@ class ReportCellComments extends React.Component {
           item
           data-test-id="description-edit-box"
           ref={setWrapperRef}
-          className="edit_hover_container"
-          style={cells_style}
           onClick={onClick}
         >
-          <div>
-            <b>{props.t("report.comments")}</b>
-            <span>
-              &ensp;
-              <FaPen className="edit_hover_pencil" style={{ opacity: "0.3" }} />
-            </span>
-            <br />
-          </div>
-          <div style={comments_style}>
-            <CommentsEditable
-              onKeyUp={onKeyUp}
-              onBlur={onBlur}
-              editing={editing}
-              comments={comments}
-            />
-          </div>
+          <CommentsEditable
+            onKeyUp={onKeyUp}
+            onBlur={onBlur}
+            editing={editing}
+            comments={comments}
+          />
         </Grid>
       );
     }

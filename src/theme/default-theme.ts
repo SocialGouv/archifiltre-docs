@@ -1,13 +1,13 @@
 import createMuiTheme, { Theme } from "@material-ui/core/styles/createMuiTheme";
 import blue from "@material-ui/core/colors/blue";
-import indigo from "@material-ui/core/colors/indigo";
+import grey from "@material-ui/core/colors/grey";
 
 export interface ThemedProps {
   theme: Theme;
 }
 
 const primaryColor = blue;
-const secondaryColor = indigo;
+const secondaryColor = grey;
 
 const defaultTheme = createMuiTheme({
   palette: {

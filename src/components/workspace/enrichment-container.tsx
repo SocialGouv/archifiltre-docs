@@ -1,14 +1,21 @@
 import React, { FC, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   markAsToDelete,
   unmarkAsToDelete,
 } from "../../reducers/files-and-folders/files-and-folders-actions";
 import {
+  getAliasesFromStore,
   getCommentsFromStore,
+  getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
+  getHashesFromStore,
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import { updateCommentThunk } from "../../reducers/files-and-folders/files-and-folders-thunks";
+import {
+  updateAliasThunk,
+  updateCommentThunk,
+} from "../../reducers/files-and-folders/files-and-folders-thunks";
 import { StoreState } from "../../reducers/store";
 import { addTag, untagFile } from "../../reducers/tags/tags-actions";
 import {
@@ -53,6 +60,8 @@ const EnrichmentContainer: FC<EnrichmentContainerProps> = ({ api }) => {
     [dispatch, api, filesAndFoldersId]
   );
 
+  const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
+
   const currentFileComment =
     useSelector(getCommentsFromStore)[filesAndFoldersId] || "";
 
@@ -79,6 +88,29 @@ const EnrichmentContainer: FC<EnrichmentContainerProps> = ({ api }) => {
 
   const nodeId = isActive ? filesAndFoldersId : "";
 
+  const currentFilesAndFolders = isActive
+    ? filesAndFolders[filesAndFoldersId]
+    : null;
+
+  const filesAndFoldersMetadata = useSelector(
+    getFilesAndFoldersMetadataFromStore
+  );
+
+  const currentFileHash = useSelector((state: StoreState) =>
+    getHashesFromStore(state)
+  )[filesAndFoldersId];
+
+  const currentFileAlias =
+    useSelector(getAliasesFromStore)[filesAndFoldersId] || "";
+
+  const onChangeAlias = useCallback(
+    (alias) => {
+      dispatch(updateAliasThunk(filesAndFoldersId, alias));
+      api.undo.commit();
+    },
+    [dispatch, api, filesAndFoldersId]
+  );
+
   return (
     <Enrichment
       createTag={createTag}
@@ -93,6 +125,11 @@ const EnrichmentContainer: FC<EnrichmentContainerProps> = ({ api }) => {
       isLocked={isLocked}
       isActive={isActive}
       api={api}
+      currentFilesAndFolders={currentFilesAndFolders}
+      filesAndFoldersMetadata={filesAndFoldersMetadata}
+      currentFileAlias={currentFileAlias}
+      currentFileHash={currentFileHash}
+      onChangeAlias={onChangeAlias}
     />
   );
 };

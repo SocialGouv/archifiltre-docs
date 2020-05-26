@@ -6,7 +6,6 @@ import styled from "styled-components";
 import { withTranslation } from "react-i18next";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
-import { FaPen } from "react-icons/fa";
 import Grid from "@material-ui/core/Grid";
 
 const TagsWrapper = styled(Grid)`
@@ -22,7 +21,6 @@ type ReportCellTagsProps = {
   tagsForCurrentFile: { ffIds: string[]; id: string; name: string }[];
   deleteTagged: (tagId: string, nodeId: string) => void;
   is_dummy: boolean;
-  cells_style: {};
   isLocked: boolean;
   isCurrentFileMarkedToDelete: boolean;
   toggleCurrentFileDeleteState: boolean;
@@ -159,7 +157,6 @@ class ReportCellTags extends React.Component<
   render() {
     const {
       is_dummy,
-      cells_style,
       tagsForCurrentFile,
       isLocked,
       isCurrentFileMarkedToDelete,
@@ -170,12 +167,8 @@ class ReportCellTags extends React.Component<
 
     if (is_dummy) {
       return (
-        <Grid item style={cells_style}>
-          <b>{t("workspace.tags")}</b>
-          <br />
-          <span style={{ fontStyle: "italic" }}>
-            {`${t("workspace.yourTagsHere")}...`}
-          </span>
+        <Grid container alignItems="center">
+          <Grid item>{t("workspace.yourTagsHere")}</Grid>
         </Grid>
       );
     } else {
@@ -183,16 +176,8 @@ class ReportCellTags extends React.Component<
         <div
           data-test-id="tag-edit-box"
           ref={this.setWrapperRef}
-          className="edit_hover_container"
-          style={cells_style}
           onClick={this.onClick}
         >
-          <b>{t("workspace.tags")}</b>
-          <span>
-            &ensp;
-            <FaPen className="edit_hover_pencil" style={{ opacity: "0.3" }} />
-          </span>
-          <br />
           <TagsWrapper>
             <TagsEditable
               isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}

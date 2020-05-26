@@ -9,11 +9,9 @@ import { getType } from "util/files-and-folders/file-and-folders-utils";
 import InfoBoxPaper from "../info-boxes/common/info-box-paper";
 import Box from "@material-ui/core/Box";
 
-const CategoryTitle = styled.h3`
+const CategoryTitle = styled.h4`
   margin: 5px 0;
-  text-transform: uppercase;
   font-weight: bold;
-  font-size: 20px;
 `;
 
 const Report = ({
@@ -37,8 +35,6 @@ const Report = ({
 
   const isActive = isFocused || isLocked;
 
-  let nodeName = "";
-  let bracketName = "";
   const isFolder = currentFilesAndFolders
     ? !isFile(currentFilesAndFolders)
     : false;
@@ -61,10 +57,7 @@ const Report = ({
 
   const type = getType(currentFilesAndFolders);
 
-  if (isActive) {
-    nodeName = currentFilesAndFolders.name;
-    bracketName = currentFileAlias === "" ? "" : nodeName;
-  }
+  const nodeName = isActive ? currentFilesAndFolders.name : "";
 
   return (
     <Grid container spacing={1}>
@@ -104,7 +97,7 @@ const Report = ({
                 <Grid item xs={12}>
                   <ElementCharacteristics
                     elementName={nodeName}
-                    elementOriginalName={bracketName}
+                    elementAlias={currentFileAlias}
                     elementSize={elementSize}
                     hash={currentFileHash}
                     isFolder={isFolder}

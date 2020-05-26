@@ -56,7 +56,7 @@ import {
   AuditReportFileWithSize,
 } from "./audit-report-generator";
 
-type FileTypeMap<T> = {
+export type FileTypeMap<T> = {
   [key in FileType]: T;
 };
 /**

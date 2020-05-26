@@ -39,7 +39,7 @@
       "initialName": "Initial name",
       "hash": "Hash",
       "type": "Type",
-      "lastModifications": "Last modifications",
+      "lastModifications": "Last modification dates",
       "minimum": "minimum",
       "maximum": "maximum",
       "median": "median",
@@ -49,9 +49,8 @@
       "copied": "Copied!",
       "fileTreeInfo": "File tree information",
       "elementInfo": "Element information",
-      "boundaryDatesExplanation": "Boundary dates are computed on the whole file tree",
-      "medianExplanation": "There are as many elements modified before than after this date"
-
+      "boundaryDatesExplanation": "Dates of the oldest and newest elements in this file tree",
+      "medianExplanation": "This is the date at which half of this folder's files have been \"closed\". There are as many elements modified before than after this date"
     },
     "workspace": {
       "type": "By type",
@@ -76,8 +75,8 @@
       "enrichment": "Enrichment",
       "audit": "Audit",
       "duplicates": "Duplicates",
-      "hideTabs": "Hide tabs",
-      "showTabs": "Show tabs"
+      "hideTabs": "Hide characteristics",
+      "showTabs": "Show characteristics"
     },
     "header": {
       "export": "Export",

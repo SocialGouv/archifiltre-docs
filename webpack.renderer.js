@@ -1,6 +1,7 @@
 const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const webpack = require("webpack");
 require("dotenv").config();
 
@@ -29,6 +30,7 @@ module.exports = (env, argv = {}) => ({
     "iconv-lite": "require('iconv-lite')",
   },
   plugins: [
+    new CleanWebpackPlugin(),
     ...(isDev(argv.mode)
       ? []
       : [new CopyWebpackPlugin({ patterns: ["static"] })]),

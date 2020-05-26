@@ -2,6 +2,7 @@ import Grid from "@material-ui/core/Grid";
 import React, { FC } from "react";
 import Box from "@material-ui/core/Box";
 import dateFormat from "dateformat";
+import { FaPen } from "react-icons/fa";
 import HelpTooltip from "../../common/help-tooltip";
 import EditableField from "../../fields/editable-field";
 import { useTranslation } from "react-i18next";
@@ -41,14 +42,8 @@ const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
   return (
     <Box display="flex" flexDirection="column" justifyContent="space-between">
       <Box marginY={0.5}>
-        <EditableField
-          trimValue={true}
-          selectTextOnFocus={true}
-          value={elementAlias || elementName}
-          onChange={onElementNameChange}
-        />
         <Box display="flex">
-          <Box marginRight={0.5}>
+          <Box marginRight={2}>
             <Typography variant="body2">
               {isFolder ? (
                 <Icon icon={FOLDER_ICON} color="black" />
@@ -60,11 +55,16 @@ const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
           {elementName !== "" && (
             <Box>
               <Box>
-                <Typography variant="body2">{elementName}</Typography>
+                <EditableField
+                  trimValue={true}
+                  selectTextOnFocus={true}
+                  value={elementAlias || elementName}
+                  onChange={onElementNameChange}
+                />
               </Box>
               <Box>
                 <Typography variant="body2">
-                  ({t("report.initialName")})
+                  ({elementAlias ? elementName : t("report.initialName")})
                 </Typography>
               </Box>
             </Box>

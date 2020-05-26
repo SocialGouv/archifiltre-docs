@@ -2,7 +2,7 @@ import React, { FC, useCallback, useMemo } from "react";
 import { IcicleMouseHandler } from "./icicle-main";
 import { Dims } from "./icicle-rect";
 
-enum EnrichmentTypes {
+export enum EnrichmentTypes {
   TAG,
   TO_DELETE,
   ALIAS,
@@ -14,7 +14,7 @@ export enum OPACITY {
   NOT_HIGHLIGHTED = 0.2,
 }
 
-const ENRICHMENT_COLORS = {
+export const ENRICHMENT_COLORS = {
   [EnrichmentTypes.TAG]: "rgb(10, 50, 100)",
   [EnrichmentTypes.TO_DELETE]: "rgb(250,0,0)",
   [EnrichmentTypes.ALIAS]: "rgb(145,218,242)",

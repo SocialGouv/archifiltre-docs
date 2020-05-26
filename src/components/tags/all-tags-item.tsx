@@ -130,7 +130,7 @@ const AllTagsItem: FC<AllTagsItemProps> = ({
   );
 
   return (
-    <Container className="edit_hover_container" onMouseEnter={highlightTag}>
+    <Container onMouseEnter={highlightTag}>
       <Item container opacity={opacity}>
         <CellShrink item>{deleteBubble}</CellShrink>
         <CellShrink item>{countOrActionBubble}</CellShrink>

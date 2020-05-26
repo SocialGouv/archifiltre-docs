@@ -8,7 +8,6 @@ const StyledTextArea = styled.textarea`
   background: none;
   outline: none;
   resize: none;
-  border-bottom: 3px solid rgb(5, 120, 200);
 `;
 
 const Comments = styled.div`

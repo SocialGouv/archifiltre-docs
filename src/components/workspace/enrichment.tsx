@@ -3,6 +3,16 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
+import { FaCircle } from "react-icons/fa";
+import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
+import { getType } from "../../util/files-and-folders/file-and-folders-utils";
+import {
+  ENRICHMENT_COLORS,
+  EnrichmentTypes,
+} from "../main-space/icicle/icicle-enrichment";
+import ElementCharacteristics from "../report/element-characteristics/element-characteristics";
 import AllTagsButton from "./all-tags-button";
 import CommentsCell from "../report/report-cell-comments";
 import TagsCell from "../tags/report-cell-tags";
@@ -12,31 +22,29 @@ const StyledGrid = styled(Grid)`
   padding: 10px;
 `;
 
-const CategoryTitle = styled.h3`
+const CategoryTitle = styled.h4`
   margin: 5px 0;
+  font-weight: bold;
 `;
-
-const cellsStyle = {
-  borderRadius: "1em",
-  padding: "0.6em 1em 0 1em",
-  fontSize: "0.8em",
-  height: "8em",
-  boxSizing: "border-box",
-};
 
 interface EnrichmentProps {
   createTag;
   untag;
   updateComment;
-  currentFileComment;
+  currentFileComment: string;
   tagsForCurrentFile;
-  isCurrentFileMarkedToDelete;
+  isCurrentFileMarkedToDelete: boolean;
   toggleCurrentFileDeleteState;
   nodeId: string;
   filesAndFoldersId: string;
   isLocked: boolean;
   isActive: boolean;
   api: any;
+  currentFilesAndFolders: FilesAndFolders | null;
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
+  currentFileAlias: string;
+  currentFileHash: string;
+  onChangeAlias: (newAlias: string) => void;
 }
 
 const Enrichment: FC<EnrichmentProps> = ({
@@ -52,46 +60,121 @@ const Enrichment: FC<EnrichmentProps> = ({
   isLocked,
   isActive,
   api,
+  currentFilesAndFolders,
+  filesAndFoldersMetadata,
+  currentFileAlias,
+  currentFileHash,
+  onChangeAlias,
 }) => {
   const { t } = useTranslation();
+
+  const isFolder = currentFilesAndFolders
+    ? !isFile(currentFilesAndFolders)
+    : false;
+
+  const elementSize = currentFilesAndFolders
+    ? filesAndFoldersMetadata[filesAndFoldersId].childrenTotalSize
+    : 0;
+
+  const maxLastModifiedTimestamp = currentFilesAndFolders
+    ? filesAndFoldersMetadata[filesAndFoldersId].maxLastModified
+    : 0;
+
+  const minLastModifiedTimestamp = currentFilesAndFolders
+    ? filesAndFoldersMetadata[filesAndFoldersId].minLastModified
+    : 0;
+
+  const medianLastModifiedTimestamp = currentFilesAndFolders
+    ? filesAndFoldersMetadata[filesAndFoldersId].medianLastModified
+    : 0;
+
+  const type = getType(currentFilesAndFolders);
+
+  const nodeName = isActive ? currentFilesAndFolders?.name : "";
+  const elementAlias = isActive ? currentFileAlias : "";
 
   return (
     <Grid container spacing={1}>
       <StyledGrid item xs={4}>
-        <CategoryTitle>{t("report.elementInfo")}</CategoryTitle>
+        <CategoryTitle>
+          {t("report.elementInfo")}&nbsp;
+          <FaCircle
+            style={{
+              color: ENRICHMENT_COLORS[EnrichmentTypes.ALIAS],
+              verticalAlign: "middle",
+            }}
+          />
+        </CategoryTitle>
         <Paper>
-          <p>TEST</p>
+          <StyledGrid container>
+            <Grid item>
+              <ElementCharacteristics
+                elementName={nodeName || ""}
+                elementAlias={elementAlias}
+                elementSize={elementSize}
+                hash={currentFileHash}
+                isFolder={isFolder}
+                onElementNameChange={onChangeAlias}
+                minLastModifiedTimestamp={minLastModifiedTimestamp}
+                maxLastModifiedTimestamp={maxLastModifiedTimestamp}
+                medianLastModifiedTimestamp={medianLastModifiedTimestamp}
+                type={type}
+              />
+            </Grid>
+          </StyledGrid>
+        </Paper>
+      </StyledGrid>
+      <StyledGrid item xs={4}>
+        <CategoryTitle>
+          {t("report.comments")}&nbsp;
+          <FaCircle
+            style={{
+              color: ENRICHMENT_COLORS[EnrichmentTypes.COMMENT],
+              verticalAlign: "middle",
+            }}
+          />
+        </CategoryTitle>
+        <Paper>
+          <StyledGrid container>
+            <Grid item>
+              <CommentsCell
+                is_dummy={!isActive}
+                comments={currentFileComment}
+                updateComment={updateComment}
+              />
+            </Grid>
+          </StyledGrid>
         </Paper>
       </StyledGrid>
       <StyledGrid item xs={4}>
         <Box display="flex" justifyContent="space-between">
-          <CategoryTitle>{t("workspace.tags")}</CategoryTitle>
+          <CategoryTitle>
+            {t("workspace.tags")}&nbsp;
+            <FaCircle
+              style={{
+                color: ENRICHMENT_COLORS[EnrichmentTypes.TAG],
+                verticalAlign: "middle",
+              }}
+            />
+          </CategoryTitle>
           <AllTagsButton api={api} />
         </Box>
         <Paper>
-          <TagsCell
-            is_dummy={!isActive}
-            isLocked={isLocked}
-            isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
-            cells_style={cellsStyle}
-            nodeId={nodeId}
-            tagsForCurrentFile={tagsForCurrentFile}
-            filesAndFoldersId={filesAndFoldersId}
-            createTag={createTag}
-            untag={untag}
-            toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
-          />
-        </Paper>
-      </StyledGrid>
-      <StyledGrid item xs={4}>
-        <CategoryTitle>{t("report.comments")}</CategoryTitle>
-        <Paper>
-          <CommentsCell
-            is_dummy={!isActive}
-            cells_style={cellsStyle}
-            comments={currentFileComment}
-            updateComment={updateComment}
-          />
+          <StyledGrid container>
+            <Grid item>
+              <TagsCell
+                is_dummy={!isActive}
+                isLocked={isLocked}
+                isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
+                nodeId={nodeId}
+                tagsForCurrentFile={tagsForCurrentFile}
+                filesAndFoldersId={filesAndFoldersId}
+                createTag={createTag}
+                untag={untag}
+                toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
+              />
+            </Grid>
+          </StyledGrid>
         </Paper>
       </StyledGrid>
     </Grid>

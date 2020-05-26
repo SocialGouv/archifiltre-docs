@@ -2,7 +2,7 @@ import { Tooltip } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { FaCog } from "react-icons/fa";
+import { FaTags } from "react-icons/fa";
 import AllTagsModal from "../modals/all-tags-modal/all-tags-modal";
 import { useModal } from "hooks/use-modal";
 
@@ -19,7 +19,7 @@ const AllTagsButton: FC<AllTagsButtonProps> = ({ api }) => {
     <>
       <Tooltip title={title}>
         <IconButton id="all-tags-button" size="small" onClick={openModal}>
-          <FaCog />
+          <FaTags />
         </IconButton>
       </Tooltip>
       <AllTagsModal

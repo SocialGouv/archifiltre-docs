@@ -7,6 +7,7 @@ import { useStyles } from "../../hooks/use-styles";
 import Report from "../report/report-container";
 import styled from "styled-components";
 import Enrichment from "./enrichment-container";
+import Audit from "./audit";
 
 const StyledTabs = styled(Tabs)`
   width: 100%;
@@ -90,7 +91,7 @@ const NavigationTabs: FC<NavigationTabsProps> = ({ api }) => {
         <Enrichment api={api} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Work in progress
+        <Audit />
       </TabPanel>
       <TabPanel value={value} index={3}>
         Work in progress

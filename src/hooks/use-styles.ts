@@ -28,5 +28,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       minWidth: 0,
       padding: theme.spacing(1),
     },
+    largeIndicatorText: {
+      fontSize: "3rem",
+      fontFamily: "QuicksandBold",
+    },
   })
 );

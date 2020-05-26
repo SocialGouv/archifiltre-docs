@@ -1,22 +1,19 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import styled from "styled-components";
 import SessionInfo from "./session-info/session-info";
 import ElementCharacteristics from "./element-characteristics/element-characteristics";
 import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
 import { getType } from "util/files-and-folders/file-and-folders-utils";
+import InfoBoxPaper from "../info-boxes/common/info-box-paper";
+import Box from "@material-ui/core/Box";
 
 const CategoryTitle = styled.h3`
   margin: 5px 0;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 20px;
-`;
-
-const StyledGrid = styled(Grid)`
-  padding: 10px;
 `;
 
 const Report = ({
@@ -72,44 +69,56 @@ const Report = ({
   return (
     <Grid container spacing={1}>
       <Grid item xs={6}>
-        <CategoryTitle>{t("report.fileTreeInfo")}</CategoryTitle>
-        <Paper>
-          <StyledGrid container>
-            <Grid item xs={12}>
-              <SessionInfo
-                sessionName={sessionName}
-                onChangeSessionName={setSessionName}
-                nbFolders={nbFiles}
-                nbFiles={nbFolders}
-                volume={volume}
-                oldestFileTimestamp={oldestFileTimestamp}
-                newestFileTimestamp={newestFileTimestamp}
-              />
-            </Grid>
-          </StyledGrid>
-        </Paper>
+        <Box display="flex" flexDirection="column" height="100%">
+          <Box>
+            <CategoryTitle>{t("report.fileTreeInfo")}</CategoryTitle>
+          </Box>
+          <Box flexGrow={1}>
+            <InfoBoxPaper>
+              <Grid container>
+                <Grid item xs={12}>
+                  <SessionInfo
+                    sessionName={sessionName}
+                    onChangeSessionName={setSessionName}
+                    nbFolders={nbFiles}
+                    nbFiles={nbFolders}
+                    volume={volume}
+                    oldestFileTimestamp={oldestFileTimestamp}
+                    newestFileTimestamp={newestFileTimestamp}
+                  />
+                </Grid>
+              </Grid>
+            </InfoBoxPaper>
+          </Box>
+        </Box>
       </Grid>
 
       <Grid item xs={6}>
-        <CategoryTitle>{t("report.elementInfo")}</CategoryTitle>
-        <Paper>
-          <StyledGrid container>
-            <Grid item xs={12}>
-              <ElementCharacteristics
-                elementName={nodeName}
-                elementOriginalName={bracketName}
-                elementSize={elementSize}
-                hash={currentFileHash}
-                isFolder={isFolder}
-                onElementNameChange={onChangeAlias}
-                minLastModifiedTimestamp={minLastModifiedTimestamp}
-                maxLastModifiedTimestamp={maxLastModifiedTimestamp}
-                medianLastModifiedTimestamp={medianLastModifiedTimestamp}
-                type={type}
-              />
-            </Grid>
-          </StyledGrid>
-        </Paper>
+        <Box display="flex" flexDirection="column" height="100%">
+          <Box>
+            <CategoryTitle>{t("report.elementInfo")}</CategoryTitle>
+          </Box>
+          <Box flexGrow={1}>
+            <InfoBoxPaper>
+              <Grid container>
+                <Grid item xs={12}>
+                  <ElementCharacteristics
+                    elementName={nodeName}
+                    elementOriginalName={bracketName}
+                    elementSize={elementSize}
+                    hash={currentFileHash}
+                    isFolder={isFolder}
+                    onElementNameChange={onChangeAlias}
+                    minLastModifiedTimestamp={minLastModifiedTimestamp}
+                    maxLastModifiedTimestamp={maxLastModifiedTimestamp}
+                    medianLastModifiedTimestamp={medianLastModifiedTimestamp}
+                    type={type}
+                  />
+                </Grid>
+              </Grid>
+            </InfoBoxPaper>
+          </Box>
+        </Box>
       </Grid>
     </Grid>
   );

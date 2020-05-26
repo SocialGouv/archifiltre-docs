@@ -11,6 +11,7 @@ stages:
   - "Code Quality"
   - "Build for branch"
   - "Build for master"
+  - "Build binaries for branch"
 
 Docker:
   stage: "Build docker build image"
@@ -20,9 +21,9 @@ Docker:
   before_script:
     - echo "$CI_JOB_TOKEN" | docker login $CI_REGISTRY -u gitlab-ci-token --password-stdin
   script:
-    - docker pull $CI_REGISTRY_IMAGE:master || true
-    - docker build --cache-from $CI_REGISTRY_IMAGE:master -t $CI_REGISTRY_IMAGE:master - < Dockerfile
-    - docker push $CI_REGISTRY_IMAGE:master
+    - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME - < Dockerfile
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
 
 Quality:
   stage: "Code Quality"
@@ -40,12 +41,58 @@ Quality:
 
 Build-branch:
   stage: "Build for branch"
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  before_script:
+    - yarn --frozen-lockfile
+  script:
+    - cp .env.prod .env
+    - yarn prepare-prod
+  cache:
+    key: ${CI_JOB_NAME}
+    paths:
+      - node_modules/
+      - $HOME/.cache/electron
+      - $HOME/.cache/electron-builder
+  only:
+    - branches
+  except:
+    - master
+
+Build-master:
+  stage: "Build for master"
   image: $CI_REGISTRY_IMAGE:master
   before_script:
     - yarn --frozen-lockfile
   script:
     - cp .env.prod .env
-    - yarn build-prod
+    - yarn prepare-prod
+    - yarn win64
+    - export ARCHIFILTRE_VERSION="$(node -e 'console.log(require("./package.json").version)')"
+    - mv dist/win-x64/archifiltre\ $ARCHIFILTRE_VERSION.exe dist/win-x64/archifiltre-master.exe
+  artifacts:
+    paths:
+      - dist/win-x64/archifiltre-master.exe
+    expire_in: 1 week
+  cache:
+    key: ${CI_JOB_NAME}
+    paths:
+      - node_modules/
+      - $HOME/.cache/electron
+      - $HOME/.cache/electron-builder
+  only:
+    - master
+
+Build-branch-bins:
+  stage: "Build binaries for branch"
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  before_script:
+    - yarn --frozen-lockfile
+  script:
+    - cp .env.prod .env
+    - yarn prepare-prod
+    - yarn win32
+    - yarn win64
+    - yarn linux
     - export ARCHIFILTRE_VERSION="$(node -e 'console.log(require("./package.json").version)')"
     - git remote add upstream https://github.com/${CI_PROJECT_PATH}
     - git fetch upstream +refs/pull/*/merge:refs/remotes/origin/pr/*
@@ -67,30 +114,4 @@ Build-branch:
       - node_modules/
       - $HOME/.cache/electron
       - $HOME/.cache/electron-builder
-  only:
-    - branches
-  except:
-    - master
-
-Build-master:
-  stage: "Build for master"
-  image: $CI_REGISTRY_IMAGE:master
-  before_script:
-    - yarn --frozen-lockfile
-  script:
-    - cp .env.prod .env
-    - yarn build-prod
-    - export ARCHIFILTRE_VERSION="$(node -e 'console.log(require("./package.json").version)')"
-    - mv dist/win-x64/archifiltre\ $ARCHIFILTRE_VERSION.exe dist/win-x64/archifiltre-master.exe
-  artifacts:
-    paths:
-      - dist/win-x64/archifiltre-master.exe
-    expire_in: 1 week
-  cache:
-    key: ${CI_JOB_NAME}
-    paths:
-      - node_modules/
-      - $HOME/.cache/electron
-      - $HOME/.cache/electron-builder
-  only:
-    - master
+  when: manual

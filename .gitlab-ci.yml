@@ -21,9 +21,9 @@ Docker:
   before_script:
     - echo "$CI_JOB_TOKEN" | docker login $CI_REGISTRY -u gitlab-ci-token --password-stdin
   script:
-    - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME || true
-    - docker build --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME - < Dockerfile
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+    - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG - < Dockerfile
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
 
 Quality:
   stage: "Code Quality"
@@ -41,7 +41,7 @@ Quality:
 
 Build-branch:
   stage: "Build for branch"
-  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   before_script:
     - yarn --frozen-lockfile
   script:
@@ -84,7 +84,7 @@ Build-master:
 
 Build-branch-bins:
   stage: "Build binaries for branch"
-  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   before_script:
     - yarn --frozen-lockfile
   script:

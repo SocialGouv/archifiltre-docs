@@ -30,7 +30,9 @@ module.exports = (env, argv = {}) => ({
     "iconv-lite": "require('iconv-lite')",
   },
   plugins: [
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ["**/*", "!main.js"],
+    }),
     ...(isDev(argv.mode)
       ? []
       : [new CopyWebpackPlugin({ patterns: ["static"] })]),

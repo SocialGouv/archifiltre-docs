@@ -17,6 +17,8 @@ interface EditableFieldProps {
   submitOnBlur?: boolean;
   value: string;
   onChange: (value: string) => void;
+  placeholder?: string;
+  rowsMax?: number;
 }
 
 const EditableField: FC<EditableFieldProps> = ({
@@ -26,6 +28,8 @@ const EditableField: FC<EditableFieldProps> = ({
   submitOnBlur = true,
   value,
   onChange,
+  placeholder = "",
+  rowsMax = 0,
 }) => {
   const [isFocused, setFocus] = useState(false);
   const [localValue, setLocalValue] = useState(value);
@@ -101,6 +105,8 @@ const EditableField: FC<EditableFieldProps> = ({
         onBlur={handleBlur}
         onKeyDown={handleKeyPress}
         disableUnderline={!isFocused}
+        placeholder={placeholder}
+        rowsMax={rowsMax}
       />
     </form>
   );

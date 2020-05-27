@@ -73,8 +73,8 @@
   "devDependencies": {
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
-    "@socialgouv/eslint-config-react": "0.22.1",
-    "@socialgouv/tslint-config-recommended": "0.22.1",
+    "@socialgouv/eslint-config-react": "0.25.0",
+    "@socialgouv/tslint-config-recommended": "0.25.0",
     "@types/jest": "25.2.3",
     "@types/lodash": "4.14.152",
     "@types/react": "16.9.35",

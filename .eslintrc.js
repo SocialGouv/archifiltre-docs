@@ -15,6 +15,7 @@ module.exports = {
     SENTRY_DSN: "readonly",
     SENTRY_MINIDUMP_URL: "readonly",
     REACT_DEV_TOOLS_PATH: "readonly",
+    WRITE_DEBUG: "readonly",
   },
   plugins: ["lodash-fp"],
   overrides: [

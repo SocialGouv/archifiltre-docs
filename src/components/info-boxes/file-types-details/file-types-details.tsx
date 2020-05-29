@@ -4,6 +4,7 @@ import { Box } from "@material-ui/core";
 import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
 import { useTranslation } from "react-i18next";
+import CategoryTitle from "../../common/category-title";
 import InfoBoxPaper from "../common/info-box-paper";
 import { FileTypeMap } from "../../../exporters/audit/audit-report-values-computer";
 import HorizontalStackedBar, {
@@ -13,11 +14,6 @@ import HorizontalStackedBar, {
 import { colors } from "../../../util/color/color-util";
 import { octet2HumanReadableFormat } from "../../../util/file-system/file-sys-util";
 import { TFunction } from "i18next";
-
-const TitleWrapper = styled(Box)`
-  padding-top: 10px;
-  padding-bottom: 10px;
-`;
 
 interface FileTypesDetailsProps {
   elementsCountsByType: FileTypeMap<number>;
@@ -78,11 +74,7 @@ const FileTypesDetails: FC<FileTypesDetailsProps> = ({
 
   return (
     <Box display="flex" flexDirection="column" height="100%">
-      <TitleWrapper>
-        <Typography variant="h4">
-          {t("audit.fileTypeRepartitionTitle")}
-        </Typography>
-      </TitleWrapper>
+      <CategoryTitle>{t("audit.fileTypeRepartitionTitle")}</CategoryTitle>
       <Box flexGrow={1}>
         <InfoBoxPaper>
           <Box

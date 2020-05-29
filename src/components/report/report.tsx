@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import Grid from "@material-ui/core/Grid";
-import styled from "styled-components";
 import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 import SessionInfo from "./session-info/session-info";
@@ -10,11 +9,7 @@ import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
 import { getType } from "util/files-and-folders/file-and-folders-utils";
 import InfoBoxPaper from "../info-boxes/common/info-box-paper";
 import Box from "@material-ui/core/Box";
-
-const CategoryTitle = styled.h4`
-  margin: 5px 0;
-  font-weight: bold;
-`;
+import CategoryTitle from "../common/category-title";
 
 type ReportProps = {
   currentFileHash: string;

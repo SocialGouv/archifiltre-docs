@@ -200,6 +200,12 @@
       "fileCountInfoTitle": "Nombre de fichiers sur l'arborescence",
       "fileTreeDepthTitle": "Niveau de profondeur sur l'arborescence",
       "fileTypeRepartitionTitle": "Répartition des fichiers dans l'arborescence"
+    },
+    "duplicates": {
+      "duplicateElements": "Elements redondants",
+      "nonDuplicateElements": "Elements non redondants",
+      "elements": "élements",
+      "duplicatesDistribution": "Répartition des redondances"
     }
   }
 }

@@ -1,7 +1,9 @@
-import React from "react";
+import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import Grid from "@material-ui/core/Grid";
 import styled from "styled-components";
+import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 import SessionInfo from "./session-info/session-info";
 import ElementCharacteristics from "./element-characteristics/element-characteristics";
 import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
@@ -14,15 +16,31 @@ const CategoryTitle = styled.h4`
   font-weight: bold;
 `;
 
-const Report = ({
-  currentFilesAndFolders,
+type ReportProps = {
+  currentFileHash: string;
+  currentFileAlias: string;
+  filesAndFolders: FilesAndFoldersMap;
+  filesAndFoldersId: string;
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
+  isLocked: boolean;
+  updateAlias: (newAlias: string) => void;
+  sessionName: string;
+  setSessionName: (newSessionName: string) => void;
+  nbFiles: number;
+  nbFolders: number;
+  volume: number;
+  oldestFileTimestamp: number;
+  newestFileTimestamp: number;
+};
+
+const Report: FC<ReportProps> = ({
   currentFileHash,
   currentFileAlias,
+  filesAndFolders,
   filesAndFoldersId,
   filesAndFoldersMetadata,
-  onChangeAlias,
-  isFocused,
   isLocked,
+  updateAlias,
   sessionName,
   setSessionName,
   nbFiles,
@@ -32,8 +50,13 @@ const Report = ({
   newestFileTimestamp,
 }) => {
   const { t } = useTranslation();
+  const isFocused = filesAndFoldersId !== "";
 
   const isActive = isFocused || isLocked;
+
+  const currentFilesAndFolders = isActive
+    ? filesAndFolders[filesAndFoldersId]
+    : null;
 
   const isFolder = currentFilesAndFolders
     ? !isFile(currentFilesAndFolders)
@@ -57,7 +80,7 @@ const Report = ({
 
   const type = getType(currentFilesAndFolders);
 
-  const nodeName = isActive ? currentFilesAndFolders.name : "";
+  const nodeName = isActive ? currentFilesAndFolders?.name : "";
 
   return (
     <Grid container spacing={1}>
@@ -96,12 +119,12 @@ const Report = ({
               <Grid container>
                 <Grid item xs={12}>
                   <ElementCharacteristics
-                    elementName={nodeName}
+                    elementName={nodeName || ""}
                     elementAlias={currentFileAlias}
                     elementSize={elementSize}
                     hash={currentFileHash}
                     isFolder={isFolder}
-                    onElementNameChange={onChangeAlias}
+                    onElementNameChange={updateAlias}
                     minLastModifiedTimestamp={minLastModifiedTimestamp}
                     maxLastModifiedTimestamp={maxLastModifiedTimestamp}
                     medianLastModifiedTimestamp={medianLastModifiedTimestamp}
@@ -117,52 +140,4 @@ const Report = ({
   );
 };
 
-export default function ReportApiToProps({
-  originalPath,
-  currentFileHash,
-  currentFileAlias,
-  filesAndFolders,
-  filesAndFoldersId,
-  filesAndFoldersMetadata,
-  isLocked,
-  updateAlias,
-  fillColor,
-  sessionName,
-  setSessionName,
-  nbFiles,
-  nbFolders,
-  volume,
-  oldestFileTimestamp,
-  newestFileTimestamp,
-}) {
-  const isFocused = filesAndFoldersId !== "";
-
-  const isActive = isFocused || isLocked;
-
-  const currentFilesAndFolders = isActive
-    ? filesAndFolders[filesAndFoldersId]
-    : null;
-
-  return (
-    <Report
-      currentFilesAndFolders={currentFilesAndFolders}
-      currentFileHash={currentFileHash}
-      currentFileAlias={currentFileAlias}
-      filesAndFoldersId={filesAndFoldersId}
-      filesAndFolders={filesAndFolders}
-      filesAndFoldersMetadata={filesAndFoldersMetadata}
-      originalPath={originalPath}
-      isFocused={isFocused}
-      isLocked={isLocked}
-      fillColor={fillColor}
-      onChangeAlias={updateAlias}
-      sessionName={sessionName}
-      setSessionName={setSessionName}
-      nbFiles={nbFiles}
-      nbFolders={nbFolders}
-      volume={volume}
-      oldestFileTimestamp={oldestFileTimestamp}
-      newestFileTimestamp={newestFileTimestamp}
-    />
-  );
-}
+export default Report;

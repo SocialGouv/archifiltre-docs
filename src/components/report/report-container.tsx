@@ -14,7 +14,6 @@ import {
   getWorkspaceMetadataFromStore,
   useWorkspaceMetadata,
 } from "reducers/workspace-metadata/workspace-metadata-selectors";
-import { useFillColor } from "util/color/color-util";
 import { setSessionNameThunk } from "../../reducers/workspace-metadata/workspace-metadata-thunk";
 import ReportApiToProps from "./report";
 
@@ -23,13 +22,9 @@ interface ReportContainerProps {
 }
 
 const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
-  /* <Legacy> : to replace */
-  const displayRoot = api.icicle_state.display_root();
-
   const { hoveredElementId, lockedElementId } = useWorkspaceMetadata();
 
   const filesAndFoldersId = lockedElementId || hoveredElementId;
-  /* </Legacy> */
 
   const currentFileAlias =
     useSelector(getAliasesFromStore)[filesAndFoldersId] || "";
@@ -43,16 +38,6 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
   const currentFileHash = useSelector((state: StoreState) =>
     getHashesFromStore(state)
   )[filesAndFoldersId];
-  const { originalPath } = useSelector(getWorkspaceMetadataFromStore);
-
-  const { iciclesSortMethod } = useWorkspaceMetadata();
-
-  const fillColor = useFillColor(
-    filesAndFolders,
-    filesAndFoldersMetadata,
-    iciclesSortMethod,
-    displayRoot
-  );
 
   const dispatch = useDispatch();
 
@@ -86,7 +71,6 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
 
   return (
     <ReportApiToProps
-      originalPath={originalPath}
       isLocked={lockedElementId !== ""}
       currentFileHash={currentFileHash}
       currentFileAlias={currentFileAlias}
@@ -94,7 +78,6 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
       filesAndFoldersId={filesAndFoldersId}
       filesAndFoldersMetadata={filesAndFoldersMetadata}
       updateAlias={updateAlias}
-      fillColor={fillColor}
       sessionName={sessionName}
       setSessionName={setSessionName}
       nbFiles={nbFiles}

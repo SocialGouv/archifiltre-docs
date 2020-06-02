@@ -1,23 +1,26 @@
-import React, { useMemo } from "react";
+import React, { FC, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   getFilesAndFoldersFromStore,
   getHashesFromStore,
-} from "../../../reducers/files-and-folders/files-and-folders-selectors";
+} from "reducers/files-and-folders/files-and-folders-selectors";
 import {
+  countDuplicateFiles,
   countDuplicateFilesTotalSize,
-  countDuplicates,
-} from "../../../util/duplicates/duplicates-util";
+} from "util/duplicates/duplicates-util";
 import DuplicatesChart from "./duplicates-chart";
 
-const DuplicatesChartContainer = () => {
+const DuplicatesChartContainer: FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
   const hashes = useSelector(getHashesFromStore);
   const metadata = useSelector(getFilesAndFoldersMetadataFromStore);
   const rootFilesAndFoldersMetadata = metadata[""] || {};
 
-  const duplicatesNumber = useMemo(() => countDuplicates(hashes), [hashes]);
+  const duplicatesNumber = useMemo(
+    () => countDuplicateFiles(filesAndFoldersMap, hashes),
+    [filesAndFoldersMap, hashes]
+  );
   const nonDuplicatesNumber = useMemo(
     () => Object.values(filesAndFoldersMap).length - duplicatesNumber,
     [filesAndFoldersMap, duplicatesNumber]

@@ -205,7 +205,8 @@
       "duplicateElements": "Elements redondants",
       "nonDuplicateElements": "Elements non redondants",
       "elements": "élements",
-      "duplicatesDistribution": "Répartition des redondances"
+      "duplicatesDistribution": "Répartition des redondances",
+      "duplicates": "redondances"
     }
   }
 }

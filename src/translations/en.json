@@ -205,7 +205,8 @@
       "duplicateElements": "Duplicate elements",
       "nonDuplicateElements": "Non duplicate elements",
       "elements": "elements",
-      "duplicatesDistribution": "Duplicates Distribution"
+      "duplicatesDistribution": "Duplicates Distribution",
+      "duplicates": "duplicates"
     }
   }
 }

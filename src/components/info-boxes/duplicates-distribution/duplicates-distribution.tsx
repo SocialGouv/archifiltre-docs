@@ -3,11 +3,10 @@ import styled from "styled-components";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Box } from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
 import CategoryTitle from "../../common/category-title";
 import InfoBoxPaper from "../common/info-box-paper";
 import DuplicatesChart from "./duplicates-chart-container";
-import DuplicatesDistributionChart from "./duplicates-distribution-chart";
+import DuplicatesDistributionChart from "./duplicates-distribution-chart-container";
 
 const TitleWrapper = styled(Box)`
   padding-top: 12px;

@@ -55,6 +55,7 @@ module.exports = (env, argv = {}) => ({
       FORCE_TRACKING: !!JSON.stringify(process.env.FORCE_TRACKING),
       ARCHIFILTRE_SITE_URL: JSON.stringify(process.env.ARCHIFILTRE_SITE_URL),
       SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
+      WRITE_DEBUG: process.env.WRITE_DEBUG,
     }),
   ],
 

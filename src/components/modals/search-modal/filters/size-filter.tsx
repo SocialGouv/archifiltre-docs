@@ -8,9 +8,9 @@ interface SizeFilterProps {
   setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
 }
 
-const kBToB = 1024;
-const MBToB = 1048576;
-const GBToB = 1073741824;
+const kBToB = 1000;
+const MBToB = 1000 * 1000;
+const GBToB = 1000 * 1000 * 1000;
 
 const availableOptions = [
   { label: "< 1ko", method: ({ file_size }) => file_size < kBToB },

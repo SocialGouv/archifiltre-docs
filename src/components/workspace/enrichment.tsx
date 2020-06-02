@@ -1,6 +1,5 @@
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCircle } from "react-icons/fa";
@@ -12,15 +11,12 @@ import {
   ENRICHMENT_COLORS,
   EnrichmentTypes,
 } from "../main-space/icicle/icicle-enrichment";
+import CommentCell from "../report/comment-cell";
 import ElementCharacteristics from "../report/element-characteristics/element-characteristics";
 import AllTagsButton from "./all-tags-button";
-import CommentsCell from "../report/report-cell-comments";
 import TagsCell from "../tags/report-cell-tags";
 import styled from "styled-components";
-
-const StyledGrid = styled(Grid)`
-  padding: 10px;
-`;
+import InfoBoxPaper from "../info-boxes/common/info-box-paper";
 
 const CategoryTitle = styled.h4`
   margin: 5px 0;
@@ -95,88 +91,104 @@ const Enrichment: FC<EnrichmentProps> = ({
 
   return (
     <Grid container spacing={1}>
-      <StyledGrid item xs={4}>
-        <CategoryTitle>
-          {t("report.elementInfo")}&nbsp;
-          <FaCircle
-            style={{
-              color: ENRICHMENT_COLORS[EnrichmentTypes.ALIAS],
-              verticalAlign: "middle",
-            }}
-          />
-        </CategoryTitle>
-        <Paper>
-          <StyledGrid container>
-            <Grid item>
-              <ElementCharacteristics
-                elementName={nodeName || ""}
-                elementAlias={elementAlias}
-                elementSize={elementSize}
-                hash={currentFileHash}
-                isFolder={isFolder}
-                onElementNameChange={onChangeAlias}
-                minLastModifiedTimestamp={minLastModifiedTimestamp}
-                maxLastModifiedTimestamp={maxLastModifiedTimestamp}
-                medianLastModifiedTimestamp={medianLastModifiedTimestamp}
-                type={type}
+      <Grid item xs={4}>
+        <Box display="flex" flexDirection="column" height="100%">
+          <Box>
+            <CategoryTitle>
+              {t("report.elementInfo")}&nbsp;
+              <FaCircle
+                style={{
+                  color: ENRICHMENT_COLORS[EnrichmentTypes.ALIAS],
+                  verticalAlign: "middle",
+                }}
               />
-            </Grid>
-          </StyledGrid>
-        </Paper>
-      </StyledGrid>
-      <StyledGrid item xs={4}>
-        <CategoryTitle>
-          {t("report.comments")}&nbsp;
-          <FaCircle
-            style={{
-              color: ENRICHMENT_COLORS[EnrichmentTypes.COMMENT],
-              verticalAlign: "middle",
-            }}
-          />
-        </CategoryTitle>
-        <Paper>
-          <StyledGrid container>
-            <Grid item>
-              <CommentsCell
-                is_dummy={!isActive}
-                comments={currentFileComment}
-                updateComment={updateComment}
-              />
-            </Grid>
-          </StyledGrid>
-        </Paper>
-      </StyledGrid>
-      <StyledGrid item xs={4}>
-        <Box display="flex" justifyContent="space-between">
-          <CategoryTitle>
-            {t("workspace.tags")}&nbsp;
-            <FaCircle
-              style={{
-                color: ENRICHMENT_COLORS[EnrichmentTypes.TAG],
-                verticalAlign: "middle",
-              }}
-            />
-          </CategoryTitle>
-          <AllTagsButton api={api} />
+            </CategoryTitle>
+          </Box>
+          <Box flexGrow={1}>
+            <InfoBoxPaper>
+              <Grid container>
+                <Grid item>
+                  <ElementCharacteristics
+                    elementName={nodeName || ""}
+                    elementAlias={elementAlias}
+                    elementSize={elementSize}
+                    hash={currentFileHash}
+                    isFolder={isFolder}
+                    onElementNameChange={onChangeAlias}
+                    minLastModifiedTimestamp={minLastModifiedTimestamp}
+                    maxLastModifiedTimestamp={maxLastModifiedTimestamp}
+                    medianLastModifiedTimestamp={medianLastModifiedTimestamp}
+                    type={type}
+                  />
+                </Grid>
+              </Grid>
+            </InfoBoxPaper>
+          </Box>
         </Box>
-        <Paper>
-          <StyledGrid container>
-            <Grid item>
-              <TagsCell
-                is_dummy={!isActive}
-                isLocked={isLocked}
-                isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
-                nodeId={nodeId}
-                tagsForCurrentFile={tagsForCurrentFile}
-                filesAndFoldersId={filesAndFoldersId}
-                createTag={createTag}
-                untag={untag}
-                toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
+      </Grid>
+      <Grid item xs={4}>
+        <Box display="flex" flexDirection="column" height="100%">
+          <Box>
+            <CategoryTitle>
+              {t("report.comments")}&nbsp;
+              <FaCircle
+                style={{
+                  color: ENRICHMENT_COLORS[EnrichmentTypes.COMMENT],
+                  verticalAlign: "middle",
+                }}
               />
-            </Grid>
-          </StyledGrid>
-        </Paper>
-      </StyledGrid>
+            </CategoryTitle>
+          </Box>
+          <Box flexGrow={1}>
+            <InfoBoxPaper>
+              <Grid container>
+                <Grid item xs={12}>
+                  <CommentCell
+                    isActive={isActive}
+                    comment={currentFileComment}
+                    updateComment={updateComment}
+                  />
+                </Grid>
+              </Grid>
+            </InfoBoxPaper>
+          </Box>
+        </Box>
+      </Grid>
+      <Grid item xs={4}>
+        <Box display="flex" flexDirection="column" height="100%">
+          <Box display="flex" justifyContent="space-between">
+            <CategoryTitle>
+              {t("workspace.tags")}&nbsp;
+              <FaCircle
+                style={{
+                  color: ENRICHMENT_COLORS[EnrichmentTypes.TAG],
+                  verticalAlign: "middle",
+                }}
+              />
+            </CategoryTitle>
+            <AllTagsButton api={api} />
+          </Box>
+          <Box flexGrow={1}>
+            <InfoBoxPaper>
+              <Grid container>
+                <Grid item>
+                  <TagsCell
+                    is_dummy={!isActive}
+                    isLocked={isLocked}
+                    isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
+                    nodeId={nodeId}
+                    tagsForCurrentFile={tagsForCurrentFile}
+                    filesAndFoldersId={filesAndFoldersId}
+                    createTag={createTag}
+                    untag={untag}
+                    toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
+                  />
+                </Grid>
+              </Grid>
+            </InfoBoxPaper>
+          </Box>
+        </Box>
+      </Grid>
     </Grid>
   );
 };

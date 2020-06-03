@@ -14,13 +14,18 @@ export interface AsyncWorker {
     listener: EventListener
   ) => void;
   postMessage: (message: WorkerMessage) => void;
-  terminate?: () => void;
 }
+
+type ProcessControllerAsyncWorker = AsyncWorker & {
+  terminate: () => void;
+};
+
+type ChildProcessAsyncWorker = AsyncWorker;
 
 /**
  * Creates an AsyncWorker bound to the current ChildProcess context
  */
-export const createAsyncWorkerForChildProcess = (): AsyncWorker => {
+export const createAsyncWorkerForChildProcess = (): ChildProcessAsyncWorker => {
   const localProcess = process as NodeJS.Process;
   return {
     addEventListener: (eventType, listener) => {
@@ -43,7 +48,7 @@ export const createAsyncWorkerForChildProcess = (): AsyncWorker => {
  */
 export const createAsyncWorkerForChildProcessController = (
   childProcess: ChildProcess
-): AsyncWorker => ({
+): ProcessControllerAsyncWorker => ({
   addEventListener: (eventType, listener) => {
     // Small adaptation for current BackgroundProcess and BatchProcess workers
     childProcess.addListener(eventType, (data) => listener({ ...data, data }));

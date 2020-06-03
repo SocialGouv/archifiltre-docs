@@ -1,6 +1,5 @@
 import _ from "lodash";
 import path from "path";
-import AsyncHandleDrop from "async-handle-drop";
 import { mapToNewVersionNumbers } from "components/header/new-version-checker";
 import { computeHashesThunk } from "hash-computer/hash-computer-thunk";
 import { addTracker } from "logging/tracker";
@@ -47,6 +46,7 @@ import {
 import { getArchifiltreErrors } from "./loading-info/loading-info-selectors";
 import { openModalAction } from "./modal/modal-actions";
 import { Modal } from "./modal/modal-types";
+import { loadFileTree } from "../util/file-tree-loader/file-tree-loader";
 
 /**
  * Notifies the user that there is a Zip in the loaded files
@@ -151,7 +151,7 @@ export const loadFilesAndFoldersFromPathThunk = (
   startToLoadFiles();
   const loadingStart = new Date().getTime();
   try {
-    const virtualFileSystem = await AsyncHandleDrop(hook, fileOrFolderPath);
+    const virtualFileSystem = await loadFileTree(fileOrFolderPath, hook);
 
     if (isJsonFile(fileOrFolderPath)) {
       const jsonVersion = mapToNewVersionNumbers(

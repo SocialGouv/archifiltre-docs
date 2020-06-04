@@ -18,8 +18,9 @@ const defaultTheme = createMuiTheme({
     MuiInput: {
       input: {
         fontFamily: "QuicksandBold",
-        textTransform: "uppercase",
         fontSize: "0.75rem",
+        paddingTop: 0,
+        paddingBottom: 0,
       },
     },
     MuiTypography: {

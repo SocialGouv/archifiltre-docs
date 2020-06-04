@@ -9,24 +9,40 @@ export enum MessageTypes {
   RESULT = "result",
 }
 
-interface Message {
-  type: MessageTypes;
-}
-
-interface ErrorMessage extends Message {
+interface ErrorMessage {
+  type: typeof MessageTypes.ERROR;
   error: object;
 }
 
-interface ResultMessage extends Message {
+interface ResultMessage {
+  type: typeof MessageTypes.RESULT;
   result: any;
 }
 
-interface InitializeMessage extends Message {
+interface InitializeMessage {
+  type: typeof MessageTypes.INITIALIZE;
   data: any;
 }
 
+interface CompleteMessage {
+  type: typeof MessageTypes.COMPLETE;
+  result?: any;
+}
+
+interface WarningMessage {
+  type: typeof MessageTypes.WARNING;
+  warning: any;
+}
+
+interface FatalMessage {
+  type: typeof MessageTypes.FATAL;
+  error: any;
+}
+
 export type WorkerMessage =
-  | Message
   | ErrorMessage
   | ResultMessage
-  | InitializeMessage;
+  | InitializeMessage
+  | CompleteMessage
+  | WarningMessage
+  | FatalMessage;

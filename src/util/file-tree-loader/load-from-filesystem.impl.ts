@@ -1,58 +1,39 @@
 import { hookCounter } from "util/hook/hook-utils";
 import {
-  AsyncWorkerEvent,
+  AsyncWorker,
   createAsyncWorkerForChildProcess,
 } from "util/async-worker/async-worker-util";
-import { MessageTypes } from "./util/batch-process/batch-process-util-types";
+import { MessageTypes } from "../batch-process/batch-process-util-types";
 import {
   createFilesAndFoldersDataStructure,
   createFilesAndFoldersMetadataDataStructure,
   loadFilesAndFoldersFromFileSystem,
-} from "./files-and-folders-loader/files-and-folders-loader";
+} from "../../files-and-folders-loader/files-and-folders-loader";
 
-const asyncWorker = createAsyncWorkerForChildProcess();
+type Reporter = (message: any) => void;
 
-/**
- * Reports an error to the main thread
- * @param message
- */
-const reportError = (message) => {
-  asyncWorker.postMessage({ type: MessageTypes.ERROR, message });
+type Reporters = {
+  reportError: Reporter;
+  reportWarning: Reporter;
+  reportFatal: Reporter;
+  reportResult: Reporter;
+  reportComplete: Reporter;
 };
 
-/**
- * Reports a warning to the main thread
- * @param message
- */
-const reportWarning = (message) => {
-  asyncWorker.postMessage({ type: MessageTypes.WARNING, message });
-};
+const createReporters = (asyncWorker: AsyncWorker): Reporters => ({
+  reportError: (error: any) =>
+    asyncWorker.postMessage({ type: MessageTypes.ERROR, error }),
+  reportWarning: (warning: any) =>
+    asyncWorker.postMessage({ type: MessageTypes.WARNING, warning }),
+  reportFatal: (error: any) =>
+    asyncWorker.postMessage({ type: MessageTypes.FATAL, error }),
+  reportResult: (result: any) =>
+    asyncWorker.postMessage({ type: MessageTypes.RESULT, result }),
+  reportComplete: (result: any) =>
+    asyncWorker.postMessage({ type: MessageTypes.COMPLETE, result }),
+});
 
-/**
- * Reports a fatal error to the main thread
- * @param message
- */
-const reportFatal = (message) => {
-  asyncWorker.postMessage({ type: MessageTypes.FATAL, message });
-};
-
-/**
- * Reports a result to the main thread
- * @param message
- */
-const reportResult = (message) => {
-  asyncWorker.postMessage({ type: MessageTypes.RESULT, message });
-};
-
-/**
- * Reports completion to the main thread
- * @param message
- */
-const reportComplete = (message) => {
-  asyncWorker.postMessage({ type: MessageTypes.COMPLETE, message });
-};
-
-const errorReportHook = (error) => {
+const createErrorReportHook = (reportError: Reporter) => (error: any) => {
   if (error) {
     reportError(error);
     return false;
@@ -62,17 +43,26 @@ const errorReportHook = (error) => {
 
 /**
  * Recursively generates a file system from a dropped folder
+ * @param asyncWorker
  * @param folderPath
  */
-function loadFolder(folderPath) {
+export const loadFolder = (asyncWorker: AsyncWorker, folderPath: string) => {
   const MIN_MESSAGE_INTERVAL = 300;
+
+  const {
+    reportResult,
+    reportError,
+    reportFatal,
+    reportComplete,
+    reportWarning,
+  } = createReporters(asyncWorker);
 
   reportResult({ status: "traverse", count: 0 });
   const { hook: traverseHook, getCount: getTraverseCount } = hookCounter(
     (count) => reportResult({ status: "traverse", count }),
     {
       interval: MIN_MESSAGE_INTERVAL,
-      internalHook: errorReportHook,
+      internalHook: createErrorReportHook(reportError),
     }
   );
   let origin;
@@ -99,7 +89,10 @@ function loadFolder(folderPath) {
         count,
         totalCount: totalMakeCount,
       }),
-    { interval: MIN_MESSAGE_INTERVAL, internalHook: errorReportHook }
+    {
+      interval: MIN_MESSAGE_INTERVAL,
+      internalHook: createErrorReportHook(reportError),
+    }
   );
   let filesAndFolders;
   try {
@@ -126,7 +119,7 @@ function loadFolder(folderPath) {
     filesAndFoldersMetadata = createFilesAndFoldersMetadataDataStructure(
       filesAndFolders
     );
-    asyncWorker.postMessage({
+    reportResult({
       status: "divedFF",
       count: Object.keys(filesAndFolders).length,
       totalCount: derivateTotalCount,
@@ -143,13 +136,4 @@ function loadFolder(folderPath) {
       originalPath: folderPath,
     },
   });
-}
-
-asyncWorker.addEventListener(
-  AsyncWorkerEvent.MESSAGE,
-  ({ droppedElementPath }) => {
-    loadFolder(droppedElementPath);
-  }
-);
-
-export default {};
+};

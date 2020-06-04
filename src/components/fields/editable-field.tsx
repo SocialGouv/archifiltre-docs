@@ -1,3 +1,4 @@
+import { InputAdornment } from "@material-ui/core";
 import Input from "@material-ui/core/Input";
 import React, {
   ChangeEvent,
@@ -9,6 +10,8 @@ import React, {
   useEffect,
   FormEvent,
 } from "react";
+import { FaPen } from "react-icons/all";
+import { useStyles } from "../../hooks/use-styles";
 
 interface EditableFieldProps {
   multiline?: boolean;
@@ -92,6 +95,8 @@ const EditableField: FC<EditableFieldProps> = ({
     [value, setLocalValue, setFocus, blurInput]
   );
 
+  const classes = useStyles();
+
   return (
     <form ref={formRef} onSubmit={handleSubmit}>
       <Input
@@ -107,6 +112,12 @@ const EditableField: FC<EditableFieldProps> = ({
         disableUnderline={!isFocused}
         placeholder={placeholder}
         rowsMax={rowsMax}
+        className={classes.editableField}
+        endAdornment={
+          <InputAdornment position="end">
+            <FaPen />
+          </InputAdornment>
+        }
       />
     </form>
   );

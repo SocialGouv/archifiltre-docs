@@ -32,5 +32,9 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: "3rem",
       fontFamily: "QuicksandBold",
     },
+    editableField: {
+      fontSize: "0.625rem",
+      fontFamily: "Quicksand",
+    },
   })
 );

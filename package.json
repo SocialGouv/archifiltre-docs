@@ -119,7 +119,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.10.1",
-    "@sentry/browser": "^5.16.1",
+    "@sentry/browser": "^5.17.0",
     "@types/pizzip": "^3.0.1",
     "angular-expressions": "^1.1.1",
     "clean-webpack-plugin": "^3.0.0",

@@ -64,7 +64,7 @@
       "tags": "Tags",
       "yourTagsHere": "Select an item to add tags",
       "clickHereToAddTags": "Click here to add tags!",
-      "newTag": "New tag",
+      "newTag": "Find or add a tag",
       "file": "File",
       "level": "Level",
       "impossibleMove": "Impossible to move",
@@ -77,7 +77,8 @@
       "audit": "Audit",
       "duplicates": "Duplicates",
       "hideTabs": "Hide characteristics",
-      "showTabs": "Show characteristics"
+      "showTabs": "Show characteristics",
+      "noOptions": "No results - Press enter to add a new tag"
     },
     "header": {
       "export": "Export",

@@ -71,6 +71,11 @@ const defaultTheme = createMuiTheme({
         color: secondaryColor.A400,
       },
     },
+    MuiChip: {
+      root: {
+        margin: "2px",
+      },
+    },
   },
 });
 

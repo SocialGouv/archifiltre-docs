@@ -15,7 +15,7 @@ import {
   useWorkspaceMetadata,
 } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import { setSessionNameThunk } from "../../reducers/workspace-metadata/workspace-metadata-thunk";
-import ReportApiToProps from "./report";
+import Report from "./report";
 
 interface ReportContainerProps {
   api: any;
@@ -70,7 +70,7 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
   const newestFileTimestamp = rootFilesAndFoldersMetadata.maxLastModified;
 
   return (
-    <ReportApiToProps
+    <Report
       isLocked={lockedElementId !== ""}
       currentFileHash={currentFileHash}
       currentFileAlias={currentFileAlias}

@@ -1,5 +1,7 @@
 import _ from "lodash";
 import { v4 as uuid } from "uuid";
+import { addTracker } from "../../logging/tracker";
+import { ActionTitle, ActionType } from "../../logging/tracker-types";
 
 import undoable from "../enhancers/undoable/undoable";
 import { getTagByName } from "./tags-selectors";
@@ -51,6 +53,12 @@ const createTag = (
   tagId: string
 ): TagsState => {
   const completeTagId = tagId === "" ? uuid() : tagId;
+  addTracker({
+    title: ActionTitle.TAG_ADDED,
+    type: ActionType.TRACK_EVENT,
+    value: `Created tag: "${tagName}"`,
+    eventValue: tagName,
+  });
   return {
     tags: {
       ...state.tags,

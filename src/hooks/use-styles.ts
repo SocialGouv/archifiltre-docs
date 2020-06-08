@@ -36,5 +36,15 @@ export const useStyles = makeStyles((theme: Theme) =>
       fontSize: "0.625rem",
       fontFamily: "Quicksand",
     },
+    toDeleteChip: {
+      backgroundColor: theme.palette.error.main,
+      "&:hover, &:focus": {
+        backgroundColor: theme.palette.error.main,
+      },
+      color: "white",
+      "& > svg": {
+        color: "white",
+      },
+    },
   })
 );

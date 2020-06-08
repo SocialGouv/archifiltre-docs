@@ -191,7 +191,11 @@ export const loadFilesAndFoldersFromPathThunk = (
         dispatch(displayErrorNotification());
       }
 
-      dispatch(computeHashesThunk(virtualFileSystem.originalPath));
+      dispatch(
+        computeHashesThunk(virtualFileSystem.originalPath, {
+          ignoreFileHashes: virtualFileSystem.hashes !== null,
+        })
+      );
     }
   } catch (error) {
     // tslint:disable-next-line:no-console

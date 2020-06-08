@@ -1,11 +1,16 @@
 import fs from "fs";
 import _ from "lodash";
+import parse from "csv-parse/lib/sync";
 import path from "path";
+import readline from "readline";
+import { Readable } from "stream";
+import { once } from "events";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   FilesAndFolders,
   FilesAndFoldersMap,
+  HashesMap,
 } from "reducers/files-and-folders/files-and-folders-types";
 import { medianOnSortedArray } from "util/array/array-util";
 import { convertToPosixAbsolutePath } from "util/file-system/file-sys-util";
@@ -15,6 +20,7 @@ import {
   ArchifiltreErrorCode,
   convertFsErrorToArchifiltreError,
 } from "util/error/error-util";
+import { identifyFileFormat } from "../util/file-format/file-format-util";
 
 interface LoadFilesAndFoldersFromFileSystemError {
   message: string;
@@ -75,6 +81,88 @@ export const loadFilesAndFoldersFromFileSystem = (
   loadFilesAndFoldersFromFileSystemRec(folderPath);
 
   return files;
+};
+
+type LoadFilesAndFoldersFromExportFileContentResult = {
+  hashes: HashesMap;
+  files: FilesAndFoldersElementInfo[];
+  rootPath: string;
+};
+
+/**
+ * Creates an origin structure from an archifiltre export file
+ * @param exportFilePath - The path of an export file generating by archifiltre command line exporter
+ * @param hook - A hook called after each file is processed.
+ */
+export const loadFilesAndFoldersFromExportFile = async (
+  exportFilePath: string,
+  hook: () => void = empty
+): Promise<LoadFilesAndFoldersFromExportFileContentResult> => {
+  const fileFormat = await identifyFileFormat(exportFilePath);
+  const fileStream = fs.createReadStream(exportFilePath, fileFormat);
+
+  return loadFilesAndFoldersFromExportFileContent(fileStream, hook);
+};
+
+/**
+ * Creates an origin structure from an archifiltre export file content
+ * @param exportFileContent - The content of an export file generating by archifiltre command line exporter
+ * @param hook - A hook called after each file is processed.
+ */
+export const loadFilesAndFoldersFromExportFileContent = async (
+  exportFileContent: Readable,
+  hook: () => void = empty
+): Promise<LoadFilesAndFoldersFromExportFileContentResult> => {
+  const lineReader = readline.createInterface({
+    input: exportFileContent,
+    crlfDelay: Infinity,
+  });
+
+  let lineCount = 0;
+  let basePath = "";
+  let rootPath = "";
+  let pathImpl: typeof path.win32 | typeof path.posix = path;
+  const hashes: HashesMap = {};
+  const files: FilesAndFoldersElementInfo[] = [];
+  for await (const line of lineReader) {
+    switch (lineCount) {
+      case 0:
+        break;
+      case 1:
+        const os = line.trim();
+        pathImpl = os === "windows" ? path.win32 : path.posix;
+        break;
+      case 2:
+        basePath = line.trim();
+        rootPath = pathImpl.dirname(basePath);
+        break;
+      default:
+        const [[filePath, fileSize, fileLastModified, fileHash]] = parse(
+          line.trim()
+        );
+        const id = convertToPosixAbsolutePath(
+          pathImpl.relative(rootPath, filePath),
+          { separator: pathImpl.sep }
+        );
+        hashes[id] = fileHash;
+        files.push([
+          {
+            lastModified: +fileLastModified,
+            size: +fileSize,
+          },
+          id,
+        ]);
+        hook();
+    }
+
+    lineCount++;
+  }
+
+  return {
+    files,
+    hashes,
+    rootPath: basePath,
+  };
 };
 
 interface CreateFilesAndFoldersOptions {

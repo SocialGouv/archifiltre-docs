@@ -1,14 +1,14 @@
+import fs from "fs";
 import { hookCounter } from "util/hook/hook-utils";
-import {
-  AsyncWorker,
-  createAsyncWorkerForChildProcess,
-} from "util/async-worker/async-worker-util";
+import { AsyncWorker } from "util/async-worker/async-worker-util";
 import { MessageTypes } from "../batch-process/batch-process-util-types";
 import {
   createFilesAndFoldersDataStructure,
   createFilesAndFoldersMetadataDataStructure,
+  loadFilesAndFoldersFromExportFile,
   loadFilesAndFoldersFromFileSystem,
 } from "../../files-and-folders-loader/files-and-folders-loader";
+import { HashesMap } from "../../reducers/files-and-folders/files-and-folders-types";
 
 type Reporter = (message: any) => void;
 
@@ -46,7 +46,10 @@ const createErrorReportHook = (reportError: Reporter) => (error: any) => {
  * @param asyncWorker
  * @param folderPath
  */
-export const loadFolder = (asyncWorker: AsyncWorker, folderPath: string) => {
+export const loadFolder = async (
+  asyncWorker: AsyncWorker,
+  folderPath: string
+) => {
   const MIN_MESSAGE_INTERVAL = 300;
 
   const {
@@ -66,8 +69,19 @@ export const loadFolder = (asyncWorker: AsyncWorker, folderPath: string) => {
     }
   );
   let origin;
+  let hashes: HashesMap | null = null;
+  let rootPath: string | null = null;
   try {
-    origin = loadFilesAndFoldersFromFileSystem(folderPath, traverseHook);
+    const isExportFile = !fs.statSync(folderPath).isDirectory();
+    if (isExportFile) {
+      ({
+        files: origin,
+        hashes,
+        rootPath,
+      } = await loadFilesAndFoldersFromExportFile(folderPath, traverseHook));
+    } else {
+      origin = loadFilesAndFoldersFromFileSystem(folderPath, traverseHook);
+    }
   } catch (err) {
     reportFatal(err);
     reportWarning("Error in traverseFileTree");
@@ -128,12 +142,14 @@ export const loadFolder = (asyncWorker: AsyncWorker, folderPath: string) => {
     reportFatal(error);
     reportWarning("Error in vfs.derivate");
   }
+
   reportComplete({
     status: MessageTypes.COMPLETE,
     vfs: {
       filesAndFolders,
       filesAndFoldersMetadata,
-      originalPath: folderPath,
+      originalPath: rootPath || folderPath,
+      hashes,
     },
   });
 };

@@ -7,6 +7,7 @@ import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-met
 import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
 import { getType } from "../../util/files-and-folders/file-and-folders-utils";
+import CategoryTitle from "../common/category-title";
 import {
   ENRICHMENT_COLORS,
   EnrichmentTypes,
@@ -17,11 +18,6 @@ import AllTagsButton from "./all-tags-button";
 import TagsCell from "../tags/report-cell-tags";
 import styled from "styled-components";
 import InfoBoxPaper from "../info-boxes/common/info-box-paper";
-
-const CategoryTitle = styled.h4`
-  margin: 5px 0;
-  font-weight: bold;
-`;
 
 interface EnrichmentProps {
   createTag;

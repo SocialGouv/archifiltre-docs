@@ -18,6 +18,9 @@ Docker:
   services:
     - docker:$DOCKER_VERSION-dind
   image: docker:$DOCKER_VERSION
+  only:
+    changes:
+      - Dockerfile
   before_script:
     - echo "$CI_JOB_TOKEN" | docker login $CI_REGISTRY -u gitlab-ci-token --password-stdin
   script:

@@ -200,6 +200,13 @@
       "fileCountInfoTitle": "File count in the file tree",
       "fileTreeDepthTitle": "Depth of the file tree",
       "fileTypeRepartitionTitle": "File types in the file tree"
+    },
+    "duplicates": {
+      "duplicateElements": "Duplicate elements",
+      "nonDuplicateElements": "Non duplicate elements",
+      "elements": "elements",
+      "duplicatesDistribution": "Duplicates Distribution",
+      "duplicates": "duplicates"
     }
   }
 }

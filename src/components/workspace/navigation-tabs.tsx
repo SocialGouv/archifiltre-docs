@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useStyles } from "../../hooks/use-styles";
 import Report from "../report/report-container";
 import styled from "styled-components";
+import Duplicates from "./duplicates";
 import Enrichment from "./enrichment-container";
 import Audit from "./audit";
 
@@ -94,7 +95,7 @@ const NavigationTabs: FC<NavigationTabsProps> = ({ api }) => {
         <Audit />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Work in progress
+        <Duplicates />
       </TabPanel>
     </>
   );

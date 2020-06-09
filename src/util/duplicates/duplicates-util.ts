@@ -2,6 +2,8 @@ import memoize from "fast-memoize";
 import {
   add,
   compose,
+  constant,
+  defaults,
   divide,
   filter,
   groupBy,
@@ -9,13 +11,15 @@ import {
   invertBy,
   keyBy,
   map,
+  mapValues,
   omitBy,
   over,
   overArgs,
   pick,
+  pickBy,
   reduce,
   reverse,
-  size,
+  size as lodashSize,
   sortBy,
   spread,
   sum,
@@ -42,6 +46,8 @@ import {
   HashesMap,
 } from "reducers/files-and-folders/files-and-folders-types";
 import { Mapper, Merger } from "util/functionnal-programming-utils";
+import { FileTypeMap } from "exporters/audit/audit-report-values-computer";
+import { FileType, getFileType } from "../file-types/file-types-util";
 
 export interface DuplicatesMap {
   [hash: string]: FilesAndFolders[];
@@ -137,7 +143,7 @@ const filterFilesAndFoldersAndMerge = (
  * Filters the files and folders and generates the duplicates map
  * @param filesAndFoldersFilter
  */
-const getFilteredDuplicatesMap = (
+export const getFilteredDuplicatesMap = (
   filesAndFoldersFilter: Mapper<FilesAndFoldersCollection, FilesAndFoldersMap>
 ): Merger<FilesAndFoldersCollection, HashesMap, DuplicatesMap> =>
   memoize(
@@ -206,7 +212,7 @@ export const countDuplicateFolders: Merger<
 export const countDuplicatesPercent: Mapper<
   FilesAndFoldersMap,
   number
-> = memoize(compose(spread(divide), over([countDuplicates, size])));
+> = memoize(compose(spread(divide), over([countDuplicates, lodashSize])));
 
 /**
  * Returns the percentage of duplicated files
@@ -290,6 +296,8 @@ export const getMostDuplicatedFiles = (
 
 const getFoldersDuplicatesMap = getFilteredDuplicatesMap(getFoldersMap);
 
+export const getFilesDuplicatesMap = getFilteredDuplicatesMap(getFilesMap);
+
 /**
  * Get the duplicated files where the duplicates take the most space
  * @param nbDuplicatedItems
@@ -331,3 +339,63 @@ export const hasDuplicate = (
     .omit(fileOrFolder.id)
     .values()
     .some((hash) => hash === hashes[fileOrFolder.id]);
+
+type Size = {
+  size: number;
+};
+
+const sumSizes = (sizes: Size[]) =>
+  sizes.reduce((sizesSum, { size }) => sizesSum + size, 0);
+
+const getFileSize = (filesAndFolders: FilesAndFolders): number =>
+  filesAndFolders.file_size;
+
+const createCountDuplicateFiles = (
+  mapFilesAndFoldersToNumber: Mapper<FilesAndFolders, number>
+): Mapper<DuplicatesMap, FileTypeMap<number>> =>
+  compose(
+    defaults({
+      [FileType.PUBLICATION]: 0,
+      [FileType.PRESENTATION]: 0,
+      [FileType.SPREADSHEET]: 0,
+      [FileType.EMAIL]: 0,
+      [FileType.DOCUMENT]: 0,
+      [FileType.IMAGE]: 0,
+      [FileType.VIDEO]: 0,
+      [FileType.AUDIO]: 0,
+      [FileType.OTHER]: 0,
+    }),
+    mapValues(sumSizes),
+    groupBy("type"),
+    mapValues((filesAndFoldersArray: FilesAndFolders[]) =>
+      filesAndFoldersArray.slice(1).reduce(
+        (accumulator, element) => ({
+          type: getFileType(element),
+          size: accumulator.size + mapFilesAndFoldersToNumber(element),
+        }),
+        { type: FileType.OTHER, size: 0 }
+      )
+    ),
+    pickBy(
+      (filesAndFoldersArray: FilesAndFolders[]) =>
+        filesAndFoldersArray.length > 1
+    )
+  );
+
+/**
+ * Gets the size of of every duplicate file
+ * @param filesAndFolders
+ */
+export const countDuplicateFileSizes: Mapper<
+  DuplicatesMap,
+  FileTypeMap<number>
+> = createCountDuplicateFiles(getFileSize);
+
+/**
+ * Gets the type of of every duplicate file
+ * @param filesAndFolders
+ */
+export const countDuplicateFileTypes: Mapper<
+  DuplicatesMap,
+  FileTypeMap<number>
+> = createCountDuplicateFiles(constant(1));

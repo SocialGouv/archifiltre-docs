@@ -1,12 +1,16 @@
 import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
+import { FileType } from "../file-types/file-types-util";
 import {
   countDuplicateFiles,
+  countDuplicateFileSizes,
   countDuplicateFilesTotalSize,
+  countDuplicateFileTypes,
   countDuplicateFolders,
   countDuplicatesPercentForFiles,
   countDuplicatesPercentForFolders,
   getBiggestDuplicatedFolders,
+  getFilesDuplicatesMap,
   getMostDuplicatedFiles,
   hasDuplicate,
 } from "./duplicates-util";
@@ -149,6 +153,37 @@ const hashesMap = {
   [folder2Id]: folderHash,
 };
 
+const csvFileId = "csv-file-id";
+const imgFileId = "img-file-id";
+const csvFile2Id = "csv-file-2-id";
+const imgFile2Id = "img-file-2-id";
+const csvFileName = "csv-file.csv";
+const imgFileName = "img-file.jpg";
+const csvHash = "first-hash-value";
+const imgHash = "second-hash-value";
+const csvFileSize = 4000;
+const imgFileSize = 200;
+const csvFile = createFilesAndFolders({
+  file_size: csvFileSize,
+  id: csvFileId,
+  name: csvFileName,
+});
+const imgFile = createFilesAndFolders({
+  file_size: imgFileSize,
+  id: imgFileId,
+  name: imgFileName,
+});
+const csvFile2 = createFilesAndFolders({
+  file_size: csvFileSize,
+  id: csvFile2Id,
+  name: csvFileName,
+});
+const imgFile2 = createFilesAndFolders({
+  file_size: imgFileSize,
+  id: imgFile2Id,
+  name: imgFileName,
+});
+
 describe("duplicates-util", () => {
   describe("countDuplicateFiles", () => {
     it("should count the number of duplicates", () => {
@@ -262,6 +297,70 @@ describe("duplicates-util", () => {
 
     it("should return false if element has no duplicates", () => {
       expect(hasDuplicate(hashesMap, file2)).toEqual(false);
+    });
+  });
+
+  describe("countDuplicateFileSizes", () => {
+    it("should return the duplicates sizes grouped by type", () => {
+      const duplicatesMap = getFilesDuplicatesMap(
+        {
+          ...filesMap,
+          [csvFileId]: csvFile,
+          [imgFileId]: imgFile,
+          [csvFile2Id]: csvFile2,
+          [imgFile2Id]: imgFile2,
+        },
+        {
+          ...hashesMap,
+          [csvFileId]: csvHash,
+          [imgFileId]: imgHash,
+          [csvFile2Id]: csvHash,
+          [imgFile2Id]: imgHash,
+        }
+      );
+      expect(countDuplicateFileSizes(duplicatesMap)).toEqual({
+        [FileType.PUBLICATION]: 0,
+        [FileType.PRESENTATION]: 0,
+        [FileType.SPREADSHEET]: 10000,
+        [FileType.EMAIL]: 0,
+        [FileType.DOCUMENT]: 0,
+        [FileType.IMAGE]: 400,
+        [FileType.VIDEO]: 0,
+        [FileType.AUDIO]: 0,
+        [FileType.OTHER]: 2500,
+      });
+    });
+  });
+
+  describe("countDuplicateFileTypes", () => {
+    it("should return the duplicates sizes grouped by type", () => {
+      const duplicatesMap = getFilesDuplicatesMap(
+        {
+          ...filesMap,
+          [csvFileId]: csvFile,
+          [imgFileId]: imgFile,
+          [csvFile2Id]: csvFile2,
+          [imgFile2Id]: imgFile2,
+        },
+        {
+          ...hashesMap,
+          [csvFileId]: csvHash,
+          [imgFileId]: imgHash,
+          [csvFile2Id]: csvHash,
+          [imgFile2Id]: imgHash,
+        }
+      );
+      expect(countDuplicateFileTypes(duplicatesMap)).toEqual({
+        [FileType.PUBLICATION]: 0,
+        [FileType.PRESENTATION]: 0,
+        [FileType.SPREADSHEET]: 4,
+        [FileType.EMAIL]: 0,
+        [FileType.DOCUMENT]: 0,
+        [FileType.IMAGE]: 2,
+        [FileType.VIDEO]: 0,
+        [FileType.AUDIO]: 0,
+        [FileType.OTHER]: 1,
+      });
     });
   });
 });

@@ -206,7 +206,11 @@
       "nonDuplicateElements": "Elements non redondants",
       "elements": "élements",
       "duplicatesDistribution": "Répartition des redondances",
-      "duplicates": "redondances"
+      "duplicates": "redondances",
+      "duplicatesByType": "Répartition des redondances par type d'élément",
+      "filesNumber": "Nombre de fichiers",
+      "spaceUsed": "Espace sur l'arborescence",
+      "percentage": "Pourcentage (taille)"
     }
   }
 }

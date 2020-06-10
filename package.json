@@ -130,7 +130,7 @@
     "csv-parse": "^4.10.1",
     "dateformat": "3.0.3",
     "docxtemplater": "3.17.6",
-    "eslint-plugin-import": "^2.21.1",
+    "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-lodash-fp": "^2.2.0-a1",
     "fast-memoize": "^2.5.2",
     "file-saver": "2.0.2",

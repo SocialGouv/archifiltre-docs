@@ -206,8 +206,12 @@
       "duplicateElements": "Duplicate elements",
       "nonDuplicateElements": "Non duplicate elements",
       "elements": "elements",
-      "duplicatesDistribution": "Duplicates Distribution",
-      "duplicates": "duplicates"
+      "duplicatesDistribution": "Duplicates distribution",
+      "duplicates": "duplicates",
+      "duplicatesByType": "Duplicates distribution by element type",
+      "filesNumber": "Number of files",
+      "spaceUsed": "Size in file tree",
+      "percentage": "Percentage (size)"
     }
   }
 }

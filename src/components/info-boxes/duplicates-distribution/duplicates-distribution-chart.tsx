@@ -8,7 +8,6 @@ import {
   Tooltip,
 } from "@devexpress/dx-react-chart-material-ui";
 import { FileTypeMap } from "exporters/audit/audit-report-values-computer";
-import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { colors } from "util/color/color-util";
 import styled from "styled-components";
 import _ from "lodash";
@@ -19,13 +18,11 @@ const ColoredText = styled.span<{ color: string }>`
 `;
 
 type DuplicatesDistributionChartProps = {
-  filesAndFoldersMap: FilesAndFoldersMap;
   fileTypesCount: FileTypeMap<number>;
   fileSizesCount: any;
 };
 
 const DuplicatesDistributionChart: FC<DuplicatesDistributionChartProps> = ({
-  filesAndFoldersMap,
   fileTypesCount,
   fileSizesCount,
 }) => {
@@ -40,7 +37,7 @@ const DuplicatesDistributionChart: FC<DuplicatesDistributionChartProps> = ({
         value: fileTypeValue,
         size: fileSizesCount[fileType],
       })),
-    [filesAndFoldersMap]
+    [fileTypesCount, fileSizesCount]
   );
 
   const scheme = useMemo(() => {

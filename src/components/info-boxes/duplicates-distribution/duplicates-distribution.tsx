@@ -1,5 +1,4 @@
 import Grid from "@material-ui/core/Grid";
-import styled from "styled-components";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Box } from "@material-ui/core";
@@ -8,20 +7,15 @@ import InfoBoxPaper from "../common/info-box-paper";
 import DuplicatesChart from "./duplicates-chart-container";
 import DuplicatesDistributionChart from "./duplicates-distribution-chart-container";
 
-const TitleWrapper = styled(Box)`
-  padding-top: 12px;
-  padding-bottom: 12px;
-`;
-
 const DuplicatesDistribution: FC = () => {
   const { t } = useTranslation();
 
   return (
-    <Box>
-      <TitleWrapper>
-        <CategoryTitle>{t("duplicates.duplicatesDistribution")}</CategoryTitle>
-      </TitleWrapper>
+    <Box display="flex" flexDirection="column" height="100%">
       <Box>
+        <CategoryTitle>{t("duplicates.duplicatesDistribution")}</CategoryTitle>
+      </Box>
+      <Box flexGrow={1}>
         <InfoBoxPaper>
           <Grid container>
             <Grid item xs={6}>

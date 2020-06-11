@@ -11,9 +11,16 @@ import Paginator from "../modals/search-modal/paginator";
 interface TableProps {
   data: any[];
   columns: any[];
+  isPaginatorDisplayed?: boolean;
+  isDense?: boolean;
 }
 
-const Table: FC<TableProps> = ({ columns, data }) => {
+const Table: FC<TableProps> = ({
+  columns,
+  data,
+  isPaginatorDisplayed = true,
+  isDense = false,
+}) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const handleChangePage = useCallback(
@@ -32,7 +39,7 @@ const Table: FC<TableProps> = ({ columns, data }) => {
   return (
     <div>
       <TableContainer component={Paper}>
-        <MuiTable>
+        <MuiTable size={isDense ? "small" : "medium"}>
           <TableHead>
             <TableRow>
               {columns.map(({ name }, columnIndex) => (
@@ -55,13 +62,15 @@ const Table: FC<TableProps> = ({ columns, data }) => {
           </TableBody>
         </MuiTable>
       </TableContainer>
-      <Paginator
-        pageCount={data.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        handleChangePage={handleChangePage}
-        handleChangeRowsPerPage={handleChangeRowsPerPage}
-      />
+      {isPaginatorDisplayed && (
+        <Paginator
+          pageCount={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          handleChangePage={handleChangePage}
+          handleChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      )}
     </div>
   );
 };

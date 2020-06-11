@@ -46,6 +46,10 @@ export const mkdir = (dirPath) => {
   }
 };
 
+type ConvertToPosixAbsolutePathOptions = {
+  separator?: string;
+};
+
 /**
  * Path in archifiltre should always start with '/'
  * When we drop a folder which is at the root of a file
@@ -55,9 +59,14 @@ export const mkdir = (dirPath) => {
  *     or myFolder\my\file instead of \myFolder\my\file
  *
  * @param filePath
+ * @param options
+ * @param options.separator
  */
-export const convertToPosixAbsolutePath = (filePath) => {
-  const array = filePath.split(path.sep);
+export const convertToPosixAbsolutePath = (
+  filePath: string,
+  { separator = path.sep }: ConvertToPosixAbsolutePathOptions = {}
+) => {
+  const array = filePath.split(separator);
   if (array[0] !== "") {
     array.unshift("");
   }

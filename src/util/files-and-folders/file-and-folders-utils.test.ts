@@ -9,6 +9,7 @@ import {
   findAllFoldersWithNoSubfolder,
   getAllChildren,
   getFiles,
+  getFirstLevelName,
   getFolders,
   getType,
   isExactFileOrAncestor,
@@ -594,6 +595,16 @@ describe("file-and-folders-common", () => {
 
     it("should return a one element list when a file is given", () => {
       expect(getAllChildren(fileAndFolders, "file1")).toStrictEqual(["file1"]);
+    });
+  });
+
+  describe("getFirstLevelName", () => {
+    it("should return the name of the first level element", () => {
+      const filesAndFoldersMap = {
+        "": createFilesAndFolders({ id: "", children: ["/file1"] }),
+        "/file1": createFilesAndFolders({ id: "/file1", children: [] }),
+      };
+      expect(getFirstLevelName(filesAndFoldersMap)).toBe("file1");
     });
   });
 });

@@ -6,7 +6,10 @@ import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-f
 import SessionInfo from "./session-info/session-info";
 import ElementCharacteristics from "./element-characteristics/element-characteristics";
 import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
-import { getType } from "util/files-and-folders/file-and-folders-utils";
+import {
+  getFirstLevelName,
+  getType,
+} from "util/files-and-folders/file-and-folders-utils";
 import InfoBoxPaper from "../info-boxes/common/info-box-paper";
 import Box from "@material-ui/core/Box";
 import CategoryTitle from "../common/category-title";
@@ -77,6 +80,8 @@ const Report: FC<ReportProps> = ({
 
   const nodeName = isActive ? currentFilesAndFolders?.name : "";
 
+  const firstLevelName = getFirstLevelName(filesAndFolders);
+
   return (
     <Grid container spacing={1}>
       <Grid item xs={6}>
@@ -96,6 +101,7 @@ const Report: FC<ReportProps> = ({
                     volume={volume}
                     oldestFileTimestamp={oldestFileTimestamp}
                     newestFileTimestamp={newestFileTimestamp}
+                    firstLevelName={firstLevelName}
                   />
                 </Grid>
               </Grid>

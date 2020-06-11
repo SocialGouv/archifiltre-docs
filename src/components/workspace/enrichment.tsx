@@ -3,10 +3,10 @@ import Grid from "@material-ui/core/Grid";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCircle } from "react-icons/fa";
-import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
-import { getType } from "../../util/files-and-folders/file-and-folders-utils";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
+import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
+import { getType } from "util/files-and-folders/file-and-folders-utils";
 import CategoryTitle from "../common/category-title";
 import {
   ENRICHMENT_COLORS,
@@ -14,9 +14,8 @@ import {
 } from "../main-space/icicle/icicle-enrichment";
 import CommentCell from "../report/comment-cell";
 import ElementCharacteristics from "../report/element-characteristics/element-characteristics";
+import TagCell from "../tags/tag-cell-container";
 import AllTagsButton from "./all-tags-button";
-import TagsCell from "../tags/report-cell-tags";
-import styled from "styled-components";
 import InfoBoxPaper from "../info-boxes/common/info-box-paper";
 
 interface EnrichmentProps {
@@ -29,7 +28,6 @@ interface EnrichmentProps {
   toggleCurrentFileDeleteState;
   nodeId: string;
   filesAndFoldersId: string;
-  isLocked: boolean;
   isActive: boolean;
   api: any;
   currentFilesAndFolders: FilesAndFolders | null;
@@ -49,7 +47,6 @@ const Enrichment: FC<EnrichmentProps> = ({
   toggleCurrentFileDeleteState,
   nodeId,
   filesAndFoldersId,
-  isLocked,
   isActive,
   api,
   currentFilesAndFolders,
@@ -167,14 +164,12 @@ const Enrichment: FC<EnrichmentProps> = ({
           <Box flexGrow={1}>
             <InfoBoxPaper>
               <Grid container>
-                <Grid item>
-                  <TagsCell
-                    is_dummy={!isActive}
-                    isLocked={isLocked}
+                <Grid item xs={12}>
+                  <TagCell
+                    isActive={isActive}
                     isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
                     nodeId={nodeId}
                     tagsForCurrentFile={tagsForCurrentFile}
-                    filesAndFoldersId={filesAndFoldersId}
                     createTag={createTag}
                     untag={untag}
                     toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}

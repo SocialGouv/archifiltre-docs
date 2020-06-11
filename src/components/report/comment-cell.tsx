@@ -1,6 +1,8 @@
+import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { FaHandPointer } from "react-icons/fa";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import EditableField from "../fields/editable-field";
@@ -42,9 +44,16 @@ const CommentCell: FC<CommentCellProps> = ({
       rowsMax={8}
     />
   ) : (
-    <Grid container alignItems="center">
-      <Grid item>{t("report.yourCommentsHere")}</Grid>
-    </Grid>
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <FaHandPointer />
+      &nbsp;
+      {t("report.yourCommentsHere")}
+    </Box>
   );
 };
 

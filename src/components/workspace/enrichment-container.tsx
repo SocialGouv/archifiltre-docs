@@ -122,7 +122,6 @@ const EnrichmentContainer: FC<EnrichmentContainerProps> = ({ api }) => {
       toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
       nodeId={nodeId}
       filesAndFoldersId={filesAndFoldersId}
-      isLocked={isLocked}
       isActive={isActive}
       api={api}
       currentFilesAndFolders={currentFilesAndFolders}

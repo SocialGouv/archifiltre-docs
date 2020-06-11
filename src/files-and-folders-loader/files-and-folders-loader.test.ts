@@ -3,7 +3,10 @@ import {
   createFilesAndFoldersDataStructure,
   createFilesAndFoldersMetadataDataStructure,
   FilesAndFoldersElementInfo,
+  loadFilesAndFoldersFromExportFileContent,
 } from "./files-and-folders-loader";
+
+import { Readable } from "stream";
 
 const ff1LastModified = 100000;
 const ff1Size = 12345;
@@ -126,6 +129,117 @@ const expectedMetadata = {
 };
 
 describe("files-and-folders-loader", () => {
+  describe("loadFilesAndFoldersFromExportFileContent", () => {
+    it("should read a linux generated file", async () => {
+      const exportFileContent = `1.0.0
+unix
+/basePath/files
+"/basePath/files/file.txt",5,1584108263,d8e8fca2dc0f896fd7cb4cb0031ba249
+"/basePath/files/file",49,1563979128,0052aa96e1e52f1a0d6489731155dce3
+"/basePath/files/file2",8196,1582727849,87706eb5706972ee4134891ca9cb6708
+"/basePath/files/folder/file with space",49,1563979128,0052aa96e1e52f1a0d6489731155dce3
+`;
+      const stream = Readable.from(exportFileContent);
+
+      const loadedData = await loadFilesAndFoldersFromExportFileContent(stream);
+
+      expect(loadedData).toEqual({
+        files: [
+          [
+            {
+              lastModified: 1584108263,
+              size: 5,
+            },
+            "/files/file.txt",
+          ],
+          [
+            {
+              lastModified: 1563979128,
+              size: 49,
+            },
+            "/files/file",
+          ],
+          [
+            {
+              lastModified: 1582727849,
+              size: 8196,
+            },
+            "/files/file2",
+          ],
+          [
+            {
+              lastModified: 1563979128,
+              size: 49,
+            },
+            "/files/folder/file with space",
+          ],
+        ],
+        hashes: {
+          "/files/file.txt": "d8e8fca2dc0f896fd7cb4cb0031ba249",
+          "/files/file": "0052aa96e1e52f1a0d6489731155dce3",
+          "/files/file2": "87706eb5706972ee4134891ca9cb6708",
+          "/files/folder/file with space": "0052aa96e1e52f1a0d6489731155dce3",
+        },
+        rootPath: "/basePath/files",
+      });
+    });
+
+    it("should read a windows generated file", async () => {
+      const exportFileContent = `1.0.0\r
+windows\r
+C:\\basePath\\files\r
+"C:\\basePath\\files\\file.txt",5,1584108263,d8e8fca2dc0f896fd7cb4cb0031ba249\r
+"C:\\basePath\\files\\file",49,1563979128,0052aa96e1e52f1a0d6489731155dce3\r
+"C:\\basePath\\files\\file2",8196,1582727849,87706eb5706972ee4134891ca9cb6708\r
+"C:\\basePath\\files\\folder\\file with space",49,1563979128,0052aa96e1e52f1a0d6489731155dce3\r
+`;
+
+      const stream = Readable.from(exportFileContent);
+
+      const loadedData = await loadFilesAndFoldersFromExportFileContent(stream);
+
+      expect(loadedData).toEqual({
+        files: [
+          [
+            {
+              lastModified: 1584108263,
+              size: 5,
+            },
+            "/files/file.txt",
+          ],
+          [
+            {
+              lastModified: 1563979128,
+              size: 49,
+            },
+            "/files/file",
+          ],
+          [
+            {
+              lastModified: 1582727849,
+              size: 8196,
+            },
+            "/files/file2",
+          ],
+          [
+            {
+              lastModified: 1563979128,
+              size: 49,
+            },
+            "/files/folder/file with space",
+          ],
+        ],
+        hashes: {
+          "/files/file.txt": "d8e8fca2dc0f896fd7cb4cb0031ba249",
+          "/files/file": "0052aa96e1e52f1a0d6489731155dce3",
+          "/files/file2": "87706eb5706972ee4134891ca9cb6708",
+          "/files/folder/file with space": "0052aa96e1e52f1a0d6489731155dce3",
+        },
+        rootPath: "C:\\basePath\\files",
+      });
+    });
+  });
+
   describe("createFilesAndFoldersDataStructure", () => {
     it("should return the right structure", () => {
       expect(createFilesAndFoldersDataStructure(origin)).toEqual(

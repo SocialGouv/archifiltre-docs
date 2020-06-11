@@ -30,13 +30,23 @@ import {
 } from "./hash-computer.controller";
 import { openModalAction } from "reducers/modal/modal-actions";
 import { Modal } from "reducers/modal/modal-types";
+import { Observable, of } from "rxjs";
+
+type ComputeHashesThunkOptions = {
+  ignoreFileHashes?: boolean;
+};
 
 /**
  * Thunk that computes files and folders hashes
  * @param originalPath
+ * @param options
+ * @param options.ignoreFileHashes - allows to ignore file hashes computation if they have already been loaded.
  */
 export const computeHashesThunk = (
-  originalPath: string
+  originalPath: string,
+  { ignoreFileHashes = false }: ComputeHashesThunkOptions = {
+    ignoreFileHashes: false,
+  }
 ): ArchifiltreThunkAction => async (dispatch, getState) => {
   const state = getState();
 
@@ -66,15 +76,28 @@ export const computeHashesThunk = (
       dispatch(setFilesAndFoldersHashes(newHashes));
     };
     let loadingErrorsCount = 0;
-    operateOnDataProcessingStream(hashes$, {
-      // tslint:disable-next-line:no-console
-      error: tap((errors: ArchifiltreError[]) => {
-        reportError(errors);
-        errors.forEach((error) => dispatch(registerErrorAction(error)));
-        loadingErrorsCount++;
-      }),
-      result: tap(onNewHashesComputed),
-    }).subscribe({
+
+    const fileHashesComputer$ = ignoreFileHashes
+      ? of()
+      : operateOnDataProcessingStream(hashes$, {
+          error: tap((errors: ArchifiltreError[]) => {
+            reportError(errors);
+            errors.forEach((error) => dispatch(registerErrorAction(error)));
+            loadingErrorsCount++;
+          }),
+          result: tap(onNewHashesComputed),
+        });
+
+    if (ignoreFileHashes) {
+      dispatch(
+        progressLoadingAction(
+          loadingActionId,
+          Object.keys(getHashesFromStore(getState())).length
+        )
+      );
+    }
+
+    fileHashesComputer$.subscribe({
       complete: () => {
         const hashes = getHashesFromStore(getState());
         computeFolderHashes$({ filesAndFolders, hashes }).subscribe({

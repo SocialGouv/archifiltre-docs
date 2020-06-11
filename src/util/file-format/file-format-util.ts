@@ -1,16 +1,23 @@
-import iconv from "iconv-lite";
-import { isWindows } from "util/os/os-util";
+import { once } from "events";
+import fs from "fs";
+
+type FileFormats = "utf8" | "ucs2";
 
 /**
- * Converts the RESIP csv to the windows1252 format if archifiltre is run on windows.
- * This is the format used by RESIP if it's running on windows, while UTF-8 is used on OSX and linux platforms.
- * @param fileContent - The csv content for the resip export
+ * Try to guess the file format based on the file first bytes
+ * @param filePath - The path of the file to inspect
  * @returns {string}
  */
-export const formatFileContentForResip = (fileContent: string): Buffer => {
-  if (isWindows()) {
-    return iconv.encode(fileContent, "CP1252");
-  }
+export const identifyFileFormat = async (
+  filePath: string
+): Promise<FileFormats> => {
+  const fileStream = fs.createReadStream(filePath);
+  await once(fileStream, "readable");
+  const fileFirstTwoBytes = fileStream.read(2);
 
-  return Buffer.from(fileContent);
+  const ucs2FileStart = Buffer.from([0xff, 0xfe]);
+  if (Buffer.compare(fileFirstTwoBytes, ucs2FileStart) === 0) {
+    return "ucs2";
+  }
+  return "utf8";
 };

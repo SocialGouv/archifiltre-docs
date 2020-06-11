@@ -1,33 +1,18 @@
-import { formatFileContentForResip } from "./file-format-util";
-import { isWindows } from "util/os/os-util";
-
-jest.mock("iconv-lite", () => ({
-  encode: (content, format) => Buffer.from(`encoded(${content}, ${format})`),
-}));
-
-jest.mock("util/os/os-util", () => ({
-  isWindows: jest.fn(),
-}));
-
-const isWindowsMock = isWindows as jest.Mock;
-const baseContent = "base-content";
+import { identifyFileFormat } from "./file-format-util";
+import path from "path";
 
 describe("file-format-util", () => {
-  describe("formatFileContentForResip", () => {
-    it("should encode to windows-1252 format on windows", () => {
-      isWindowsMock.mockReturnValue(true);
-
-      expect(formatFileContentForResip(baseContent)).toEqual(
-        Buffer.from(`encoded(${baseContent}, CP1252)`)
-      );
+  describe("identifyFileFormat", () => {
+    it("should identify ucs2 files", async () => {
+      const filePath = path.join(__dirname, "ucs2-file");
+      const type = await identifyFileFormat(filePath);
+      expect(type).toBe("ucs2");
     });
 
-    it("should not encode format on other platforms", () => {
-      isWindowsMock.mockReturnValue(false);
-
-      expect(formatFileContentForResip(baseContent)).toEqual(
-        Buffer.from(baseContent)
-      );
+    it("should default to utf8 files", async () => {
+      const filePath = path.join(__dirname, "utf8-file");
+      const type = await identifyFileFormat(filePath);
+      expect(type).toBe("utf8");
     });
   });
 });

@@ -312,3 +312,10 @@ export const getElementByVirtualPath = (
   filesAndFolders: FilesAndFoldersMap,
   virtualPath: string
 ): FilesAndFolders | undefined => _.find(filesAndFolders, { virtualPath });
+
+/**
+ * Returns true when all hashes are computed, false otherwise
+ * @param hashesMap
+ */
+export const getAreHashesReady = (store: StoreState): boolean =>
+  getHashesFromStore(store)[ROOT_FF_ID] !== undefined;

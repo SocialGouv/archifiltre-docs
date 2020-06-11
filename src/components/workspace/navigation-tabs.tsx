@@ -3,7 +3,9 @@ import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 import React, { FC, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 import { useStyles } from "../../hooks/use-styles";
+import { getAreHashesReady } from "reducers/files-and-folders/files-and-folders-selectors";
 import Report from "../report/report-container";
 import styled from "styled-components";
 import Duplicates from "./duplicates";
@@ -48,6 +50,7 @@ const NavigationTabs: FC<NavigationTabsProps> = ({ api }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const [value, setValue] = useState(0);
+  const areHashesReady = useSelector(getAreHashesReady);
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -80,6 +83,7 @@ const NavigationTabs: FC<NavigationTabsProps> = ({ api }) => {
           {...a11yProps(2)}
         />
         <Tab
+          disabled={!areHashesReady}
           label={t("workspace.duplicates")}
           className={classes.tab}
           {...a11yProps(3)}

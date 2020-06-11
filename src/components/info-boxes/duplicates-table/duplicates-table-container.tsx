@@ -9,10 +9,16 @@ import {
   countDuplicateFileTypes,
   getFilesDuplicatesMap,
 } from "util/duplicates/duplicates-util";
-import DuplicatesDistributionChart from "./duplicates-distribution-chart";
+import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { percent } from "../../../util/numbers/numbers-util";
+import DuplicatesTable from "./duplicates-table";
+import _ from "lodash";
 
-const DuplicatesDistributionChartContainer: FC = () => {
+const DuplicatesTableContainer: FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
+  const filesAndFoldersMetadataMap = useSelector(
+    getFilesAndFoldersMetadataFromStore
+  );
   const hashesMap = useSelector(getHashesFromStore);
 
   const duplicatesMap = useMemo(
@@ -28,12 +34,23 @@ const DuplicatesDistributionChartContainer: FC = () => {
     duplicatesMap,
   ]);
 
+  const filePercentagesCount = useMemo(
+    () =>
+      _.mapValues(fileSizesCount, (fileSize) =>
+        percent(fileSize, filesAndFoldersMetadataMap[""].childrenTotalSize, {
+          numbersOfDecimals: 2,
+        })
+      ),
+    [fileSizesCount]
+  );
+
   return (
-    <DuplicatesDistributionChart
+    <DuplicatesTable
       fileTypesCount={fileTypesCount}
       fileSizesCount={fileSizesCount}
+      filePercentagesCount={filePercentagesCount}
     />
   );
 };
 
-export default DuplicatesDistributionChartContainer;
+export default DuplicatesTableContainer;

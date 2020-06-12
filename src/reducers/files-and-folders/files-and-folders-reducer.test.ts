@@ -3,6 +3,7 @@ import {
   addCommentsOnFilesAndFolders,
   initializeFilesAndFolders,
   markAsToDelete,
+  markElementsToDelete,
   removeChild,
   setFilesAndFoldersAliases,
   setFilesAndFoldersHashes,
@@ -372,6 +373,29 @@ describe("files-and-folders-reducer", () => {
       expect(nextState).toEqual({
         ...baseState,
         elementsToDelete: [ffId],
+      });
+    });
+  });
+
+  describe("MARK_ELEMENTS_TO_DELETE", () => {
+    it("should add all element marked only once", () => {
+      const existingId = "existing-id";
+      const duplicatedId = "duplicated-id";
+      const newId = "new-id";
+      const elementsIds = [duplicatedId, newId];
+      const initialState = {
+        ...baseState,
+        elementsToDelete: [existingId, duplicatedId],
+      };
+
+      const nextState = filesAndFoldersReducer(
+        initialState,
+        markElementsToDelete(elementsIds)
+      );
+
+      expect(nextState).toEqual({
+        ...baseState,
+        elementsToDelete: [existingId, duplicatedId, newId],
       });
     });
   });

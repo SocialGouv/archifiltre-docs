@@ -8,6 +8,7 @@ import {
   HashesMap,
   INITIALIZE_FILES_AND_FOLDERS,
   MARK_AS_TO_DELETE,
+  MARK_ELEMENTS_TO_DELETE,
   REMOVE_CHILD,
   SET_FILES_AND_FOLDERS_ALIAS,
   SET_FILES_AND_FOLDERS_HASHES,
@@ -67,6 +68,17 @@ export const markAsToDelete = (
 ): FilesAndFoldersActionTypes => ({
   filesAndFoldersId,
   type: MARK_AS_TO_DELETE,
+});
+
+/**
+ * Mark multiple elements to delete
+ * @param elementIds
+ */
+export const markElementsToDelete = (
+  elementIds: string[]
+): FilesAndFoldersActionTypes => ({
+  elementIds,
+  type: MARK_ELEMENTS_TO_DELETE,
 });
 
 /**

@@ -27,6 +27,8 @@ const filesAndFolders = {
   [fileAndFolder1Id]: fileAndFolder1,
 };
 
+const elementsToDelete = [fileAndFolder1Id];
+
 const fileAndFolderMetadata1 = createFilesAndFoldersMetadata({});
 
 const filesAndFoldersMetadata = {
@@ -68,6 +70,7 @@ describe("json-exporter", () => {
           comments,
           filesAndFolders,
           hashes,
+          elementsToDelete,
         }),
         filesAndFoldersMetadata: {
           filesAndFoldersMetadata,
@@ -88,6 +91,7 @@ describe("json-exporter", () => {
       const expectedSavedData = JSON.stringify({
         aliases,
         comments,
+        elementsToDelete,
         filesAndFolders,
         filesAndFoldersMetadata,
         hashes,

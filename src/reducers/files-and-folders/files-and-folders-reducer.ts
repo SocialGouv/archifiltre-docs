@@ -8,6 +8,7 @@ import {
   FilesAndFoldersState,
   INITIALIZE_FILES_AND_FOLDERS,
   MARK_AS_TO_DELETE,
+  MARK_ELEMENTS_TO_DELETE,
   REMOVE_CHILD,
   SET_FILES_AND_FOLDERS_ALIAS,
   SET_FILES_AND_FOLDERS_HASHES,
@@ -154,6 +155,13 @@ const filesAndFoldersReducer = (
           state.elementsToDelete,
           action.filesAndFoldersId
         ),
+      };
+    case MARK_ELEMENTS_TO_DELETE:
+      return {
+        ...state,
+        elementsToDelete: [
+          ...new Set([...state.elementsToDelete, ...action.elementIds]),
+        ],
       };
     default:
       return state;

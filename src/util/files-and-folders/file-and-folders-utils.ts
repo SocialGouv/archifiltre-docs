@@ -244,3 +244,11 @@ export const getAllChildren = (filesAndFoldersMap, filesAndFoldersId) => {
   getAllChildrenRec(filesAndFoldersId);
   return allChildren;
 };
+
+/**
+ * Returns the name of the first level, without the initial /
+ * @param filesAndFoldersMap - list of all files and folders
+ */
+export const getFirstLevelName = (
+  filesAndFoldersMap: FilesAndFoldersMap
+): string => filesAndFoldersMap[""].children[0].slice(1);

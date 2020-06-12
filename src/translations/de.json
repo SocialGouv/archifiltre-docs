@@ -70,7 +70,6 @@
       "error": "Ups! Ein Fehler ist aufgetreten.",
       "contactUs": "Hier klicken, um uns zu kontaktieren",
       "somethingWentWrong": "Da ist etwas schiefgegangen.",
-      "projectName": "Projektname",
       "file": "Datei",
       "folder": "Ordner",
       "originalName": "Der ursprüngliche Name des Elements war '{{oldName}}'",

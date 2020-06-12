@@ -113,8 +113,8 @@ const EditableField: FC<EditableFieldProps> = ({
         placeholder={placeholder}
         rowsMax={rowsMax}
         className={classes.editableField}
-        endAdornment={
-          <InputAdornment position="end">
+        startAdornment={
+          <InputAdornment position="start">
             <FaPen />
           </InputAdornment>
         }

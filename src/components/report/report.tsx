@@ -91,8 +91,8 @@ const Report: FC<ReportProps> = ({
                   <SessionInfo
                     sessionName={sessionName}
                     onChangeSessionName={setSessionName}
-                    nbFolders={nbFiles}
-                    nbFiles={nbFolders}
+                    nbFolders={nbFolders}
+                    nbFiles={nbFiles}
                     volume={volume}
                     oldestFileTimestamp={oldestFileTimestamp}
                     newestFileTimestamp={newestFileTimestamp}

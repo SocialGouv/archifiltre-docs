@@ -5,7 +5,10 @@ import { csvExporterThunk } from "exporters/csv/csv-exporter";
 import { jsonExporterThunk } from "exporters/json/json-exporter";
 import { metsExporterThunk } from "exporters/mets/mets-export-thunk";
 import { resipExporterThunk } from "exporters/resip/resip-exporter-thunk";
-import { getHashesFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
+import {
+  getAreHashesReady,
+  getHashesFromStore,
+} from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   replayActionsThunk,
   usePreviousSession,
@@ -17,8 +20,6 @@ import Dashboard from "./dashboard";
 interface DashboardContainerProps {
   api: any;
 }
-
-const ROOT_ID = "";
 
 const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
   const dispatch = useDispatch();
@@ -65,8 +66,7 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
     api,
   ]);
 
-  const hashes = useSelector(getHashesFromStore);
-  const areHashesReady = hashes[ROOT_ID] !== undefined;
+  const areHashesReady = useSelector(getAreHashesReady);
   const { sessionName, originalPath } = useSelector(
     getWorkspaceMetadataFromStore
   );

@@ -8,6 +8,7 @@ import translations from "translations/translations";
 import {
   filesAndFoldersMapToArray,
   getFiles,
+  getFirstLevelName,
 } from "util/files-and-folders/file-and-folders-utils";
 import { countZipFiles, isJsonFile } from "util/file-system/file-sys-util";
 import {
@@ -238,7 +239,7 @@ const initStore = ({
   dispatch(initializeFilesAndFolders(filesAndFolders));
   dispatch(initFilesAndFoldersMetatada(filesAndFoldersMetadata));
   dispatch(setOriginalPath(originalPath));
-  dispatch(setSessionName(sessionName || translations.t("common.projectName")));
+  dispatch(setSessionName(sessionName || getFirstLevelName(filesAndFolders)));
 
   if (hashes) {
     dispatch(setFilesAndFoldersHashes(hashes));

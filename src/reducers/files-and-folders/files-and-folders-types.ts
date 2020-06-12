@@ -9,6 +9,8 @@ export const ADD_COMMENTS_ON_FILES_AND_FOLDERS =
   "FILES_AND_FOLDERS/ADD_COMMENTS";
 export const MARK_AS_TO_DELETE = "FILES_AND_FOLDERS/MARK_AS_TO_DELETE";
 export const UNMARK_AS_TO_DELETE = "FILES_AND_FOLDERS/UNMARK_AS_TO_DELETE";
+export const MARK_ELEMENTS_TO_DELETE =
+  "FILES_AND_FOLDERS/MARK_ELEMENTS_TO_DELETE";
 
 export interface FilesAndFolders {
   id: string;
@@ -90,6 +92,11 @@ interface UnmarkAsToDelete extends Action {
   filesAndFoldersId: string;
 }
 
+interface MarkElementsToDelete extends Action {
+  type: typeof MARK_ELEMENTS_TO_DELETE;
+  elementIds: string[];
+}
+
 export type FilesAndFoldersActionTypes =
   | InitializeFilesAndFoldersAction
   | AddChildAction
@@ -98,4 +105,5 @@ export type FilesAndFoldersActionTypes =
   | AddCommentsOnFilesAndFoldersAction
   | SetFilesAndFoldersHashesAction
   | MarkAsToDelete
-  | UnmarkAsToDelete;
+  | UnmarkAsToDelete
+  | MarkElementsToDelete;

@@ -22,6 +22,7 @@ import { FilesAndFoldersMetadataMap } from "./files-and-folders-metadata/files-a
 import {
   addCommentsOnFilesAndFolders,
   initializeFilesAndFolders,
+  markElementsToDelete,
   setFilesAndFoldersAliases,
   setFilesAndFoldersHashes,
 } from "./files-and-folders/files-and-folders-actions";
@@ -207,6 +208,7 @@ export const loadFilesAndFoldersFromPathThunk = (
 interface InitStoreThunkParam {
   aliases: AliasMap;
   comments: CommentsMap;
+  elementsToDelete?: string[];
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   hashes: HashesMap;
@@ -225,6 +227,7 @@ interface InitStoreThunkParam {
 const initStore = ({
   aliases,
   comments,
+  elementsToDelete,
   filesAndFolders,
   filesAndFoldersMetadata,
   hashes,
@@ -251,6 +254,10 @@ const initStore = ({
 
   if (comments) {
     dispatch(addCommentsOnFilesAndFolders(comments));
+  }
+
+  if (elementsToDelete) {
+    dispatch(markElementsToDelete(elementsToDelete));
   }
 };
 

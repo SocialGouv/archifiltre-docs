@@ -44,12 +44,12 @@ const Workspace: FC<WorkspaceProps> = ({ api }) => {
             {!areTabsHidden && <NavigationTabs api={api} />}
           </Box>
         </Box>
-        <Box flexGrow={1} flexShrink={1} flexBasis="auto">
+        <Box flexGrow={1} flexShrink={1} flexBasis="auto" overflow="hidden">
           <Box display="flex" flexDirection="column" height="100%">
             <Box flexGrow={0}>
               <NavigationBar api={api} />
             </Box>
-            <Box flexGrow={1}>
+            <Box flexGrow={1} overflow="hidden">
               <Icicle api={api} />
             </Box>
           </Box>

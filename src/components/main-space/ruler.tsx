@@ -150,9 +150,9 @@ const Ruler: FC<RulerProps> = ({
     <RulerWrapper ref={wrapperRef}>
       <RulerMarker
         style={{
-          marginLeft: `${(elementDims.x / widthUnit) * 100}%`,
+          marginLeft: `${Math.max(0, (elementDims.x / widthUnit) * 100)}%`,
           backgroundColor: fillColor(elementId),
-          width: `${(elementDims.dx / totalSize) * 100}%`,
+          width: `${Math.min(100, (elementDims.dx / totalSize) * 100)}%`,
         }}
       />
       <RulerTextWrapper style={{ marginLeft: `${textMargin}px` }}>

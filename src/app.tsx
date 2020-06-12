@@ -68,7 +68,7 @@ const app = () => {
                     <Box>
                       <Header api={api} />
                     </Box>
-                    <Box flexGrow={1} flexShrink={1}>
+                    <Box flexGrow={1} flexShrink={1} overflow="hidden">
                       <MainSpace api={api} />
                     </Box>
                     <BackgroundLoadingInfoContainer />

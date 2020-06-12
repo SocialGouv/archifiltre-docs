@@ -40,13 +40,14 @@ export default class Icicle extends PureComponent {
 
   arrayOfIdToComponents(key_prefix, opacity, array_of_id) {
     if (array_of_id.length) {
-      const props = this.props;
-
-      const onClickHandler = props.onIcicleRectClickHandler;
-      const onDoubleClickHandler = props.onIcicleRectDoubleClickHandler;
-      const onMouseOverHandler = props.onIcicleRectMouseOverHandler;
-
-      const fillColor = props.fillColor;
+      const {
+        fillColor,
+        onIcicleRectClickHandler,
+        onIcicleRectDoubleClickHandler,
+        onIcicleRectMouseOverHandler,
+        x: viewportStartIndex,
+        dx: viewportWidth,
+      } = this.props;
 
       const state = this.state;
 
@@ -56,8 +57,12 @@ export default class Icicle extends PureComponent {
         if (dims === undefined) {
           return <g key={key_prefix + id} />;
         }
-        const x = dims.x;
-        const dx = dims.dx;
+        // We must limit these values as svg rendering will not display elements if the x value
+        // is too low. Around -34000000 seems to prevent the svg rect from rendering
+        // This fix is not really clean, but a cleaner fix would request us to dive deeper into the svg sizes
+        // computation.
+        const x = Math.max(viewportStartIndex, dims.x);
+        const dx = Math.min(viewportWidth, dims.dx);
         const y = dims.y;
         const dy = dims.dy;
 
@@ -71,9 +76,9 @@ export default class Icicle extends PureComponent {
             dy={dy}
             opacity={opacity}
             fillColor={fillColor}
-            onClickHandler={onClickHandler}
-            onDoubleClickHandler={onDoubleClickHandler}
-            onMouseOverHandler={onMouseOverHandler}
+            onClickHandler={onIcicleRectClickHandler}
+            onDoubleClickHandler={onIcicleRectDoubleClickHandler}
+            onMouseOverHandler={onIcicleRectMouseOverHandler}
             registerDims={FunctionUtil.empty}
           />
         );

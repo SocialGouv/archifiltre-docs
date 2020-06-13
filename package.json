@@ -87,7 +87,7 @@
     "concurrently": "5.2.0",
     "copy-webpack-plugin": "6.0.2",
     "cross-env": "7.0.2",
-    "css-loader": "3.5.3",
+    "css-loader": "3.6.0",
     "deep-equal": "2.0.3",
     "dotenv": "8.2.0",
     "electron": "9.0.3",

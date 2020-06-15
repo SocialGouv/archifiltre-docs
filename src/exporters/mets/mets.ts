@@ -635,7 +635,7 @@ export const makeSIP = async ({
   const sip = new JSZip();
   const content = sip.folder("master");
   const addToContent = (filename, data) => {
-    content.file(filename.replace(/[^a-zA-Z0-9.\\/+=@_]+/g, "_"), data);
+    content?.file(filename.replace(/[^a-zA-Z0-9.\\/+=@_]+/g, "_"), data);
   };
 
   const metsContent = [] as object[];

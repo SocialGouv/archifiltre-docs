@@ -1,38 +1,20 @@
 import dateFormat from "dateformat";
-import React, { useMemo } from "react";
+import React, { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { getType } from "util/files-and-folders/file-and-folders-utils";
 import Table from "../../common/table";
 import { isEmpty } from "lodash";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
+import { FilesAndFolders } from "../../../reducers/files-and-folders/files-and-folders-types";
 
-type FilesAndFoldersTableItem = {
-  name: string;
-  type: string;
-  file_size: string;
-  file_last_modified: string;
-  id: string;
+type FilesAndFoldersTableProps = {
+  filesAndFolders: FilesAndFolders[];
 };
 
-const getData = (filesAndFolders) =>
-  Object.values(filesAndFolders)
-    .filter(({ id }) => id)
-    .map((fileOrFolder: FilesAndFoldersTableItem) => {
-      return {
-        name: fileOrFolder.name,
-        fileSize: octet2HumanReadableFormat(+fileOrFolder.file_size),
-        lastModified: dateFormat(fileOrFolder.file_last_modified, "dd/mm/yyyy"),
-        path: fileOrFolder.id,
-        type: getType(fileOrFolder),
-      };
-    });
-
-export const FilesAndFoldersTable = ({ filesAndFolders }) => {
+export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
+  filesAndFolders,
+}) => {
   const { t } = useTranslation();
-  const data = useMemo(() => getData(filesAndFolders), [
-    getData,
-    filesAndFolders,
-  ]);
   const columns = useMemo(
     () => [
       {
@@ -41,19 +23,21 @@ export const FilesAndFoldersTable = ({ filesAndFolders }) => {
       },
       {
         name: t("search.type"),
-        accessor: "type",
+        accessor: (element: FilesAndFolders) => getType(element),
       },
       {
         name: t("search.size"),
-        accessor: "fileSize",
+        accessor: ({ file_size }: FilesAndFolders) =>
+          octet2HumanReadableFormat(file_size),
       },
       {
         name: t("search.fileLastModified"),
-        accessor: "lastModified",
+        accessor: ({ file_last_modified }: FilesAndFolders) =>
+          dateFormat(file_last_modified, "dd/mm/yyyy"),
       },
       {
         name: t("search.path"),
-        accessor: "path",
+        accessor: "id",
       },
     ],
     [t]
@@ -61,6 +45,6 @@ export const FilesAndFoldersTable = ({ filesAndFolders }) => {
   return isEmpty(filesAndFolders) ? (
     <span>{t("search.noResult")}</span>
   ) : (
-    <Table columns={columns} data={data} />
+    <Table columns={columns} data={filesAndFolders} />
   );
 };

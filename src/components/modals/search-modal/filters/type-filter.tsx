@@ -6,6 +6,7 @@ import { getType } from "util/files-and-folders/file-and-folders-utils";
 import { BooleanOperator, joinFilters } from "util/array/array-util";
 import Filter from "./filter";
 import { FilterMethod } from "typings/filter-types";
+import { useDeferredMemo } from "../../../../hooks/use-deferred-memo";
 
 interface TypeFilterProps {
   filesAndFolders: FilesAndFolders[];
@@ -16,7 +17,7 @@ const TypeFilter: FC<TypeFilterProps> = ({ filesAndFolders, setFilters }) => {
   const { t } = useTranslation();
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
-  const availableOptions = useMemo(
+  const availableOptions = useDeferredMemo(
     () =>
       _(filesAndFolders)
         .map((fileOrFolder) => getType(fileOrFolder))
@@ -37,7 +38,7 @@ const TypeFilter: FC<TypeFilterProps> = ({ filesAndFolders, setFilters }) => {
   return (
     <Filter
       name={t("search.type")}
-      availableOptions={availableOptions}
+      availableOptions={availableOptions || []}
       selectedOptions={selectedOptions}
       setSelectedOptions={setSelectedOptions}
     />

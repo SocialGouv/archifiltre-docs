@@ -1,9 +1,9 @@
 import React, { FC, useCallback, useMemo, useState } from "react";
 import styled from "styled-components";
-import { useAuditReport } from "../../../hooks/use-audit-report";
-import { useCsvExport } from "../../../hooks/use-csv-export";
-import { useMetsExport } from "../../../hooks/use-mets-export";
-import { useResipExport } from "../../../hooks/use-resip-export";
+import { useAuditReport } from "hooks/use-audit-report";
+import { useCsvExport } from "hooks/use-csv-export";
+import { useMetsExport } from "hooks/use-mets-export";
+import { useResipExport } from "hooks/use-resip-export";
 import {
   ExportToAuditReport,
   ExportToCsv,

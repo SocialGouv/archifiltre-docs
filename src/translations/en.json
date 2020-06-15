@@ -78,7 +78,8 @@
       "duplicates": "Duplicates",
       "hideTabs": "Hide characteristics",
       "showTabs": "Show characteristics",
-      "noOptions": "No results - Press enter to add a new tag"
+      "noOptions": "No results - Press enter to add a new tag",
+      "tagItemTooltip": "Tag number (volume percentage)"
     },
     "header": {
       "export": "Export",

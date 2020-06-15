@@ -1,3 +1,4 @@
+import { Typography } from "@material-ui/core";
 import React, { FC } from "react";
 import { FaTimes } from "react-icons/fa";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -12,8 +13,8 @@ interface ModalHeaderProps {
 const ModalHeader: FC<ModalHeaderProps> = ({ title, onClose }) => {
   const classes = useStyles();
   return (
-    <MuiDialogTitle>
-      <div>{title}</div>
+    <MuiDialogTitle disableTypography>
+      <Typography variant="h5">{title}</Typography>
       {onClose ? (
         <IconButton
           size="small"

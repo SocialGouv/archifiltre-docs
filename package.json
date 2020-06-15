@@ -159,7 +159,7 @@
     "uuid": "8.1.0",
     "webpack-fork-loader": "^1.0.1",
     "winston": "^3.2.1",
-    "winston-daily-rotate-file": "^4.4.2",
+    "winston-daily-rotate-file": "^4.5.0",
     "winston-sentry-raven-transport": "^1.2.0",
     "winston-transport": "^4.3.0",
     "xml": "^1.0.1"

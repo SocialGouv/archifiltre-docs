@@ -3,14 +3,16 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    input: {
+    searchInput: {
       paddingLeft: theme.spacing(1),
       paddingRight: theme.spacing(1),
+      borderRadius: 5,
+      border: `1px solid ${theme.palette.secondary.main}`,
     },
     closeButton: {
       position: "absolute",
-      right: theme.spacing(3),
-      top: theme.spacing(2),
+      right: theme.spacing(2),
+      top: theme.spacing(1.5),
       color: theme.palette.grey[500],
     },
     dialogContent: {

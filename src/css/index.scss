@@ -1,6 +1,5 @@
 @import "~react-notifications/lib/notifications.css";
 @import "../../static/fonts/fonts.css";
-@import "app.css";
 
 #root {
   padding: unset;
@@ -8,4 +7,10 @@
 
 body {
   margin: unset;
+  background-color: #fafafa;
+}
+
+*,
+h4 {
+  font-family: "Quicksand", sans-serif;
 }

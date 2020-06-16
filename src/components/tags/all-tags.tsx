@@ -1,28 +1,27 @@
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import React, { FC, useCallback, useState } from "react";
+import React, { FC } from "react";
 
 import TagListItem from "components/tags/all-tags-item";
 import TextAlignCenter from "components/common/text-align-center";
 
 import * as Color from "util/color/color-util";
-import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 
 import {
   getTagSize,
   sortTags,
-  tagHasFfId,
   tagMapHasTags,
   tagMapToArray,
-} from "../../reducers/tags/tags-selectors";
+} from "reducers/tags/tags-selectors";
 import { useSelector } from "react-redux";
-import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
+import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { useTranslation } from "react-i18next";
 import { FaTags } from "react-icons/fa";
 import styled from "styled-components";
-import { TagMap } from "../../reducers/tags/tags-types";
+import { TagMap } from "reducers/tags/tags-types";
 
 const TagsContent = styled(Box)`
   font-size: 0.8em;
@@ -32,83 +31,40 @@ interface AllTagsProps {
   tags: TagMap;
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
-  tag_id_to_highlight: string;
-  total_volume: number;
-  focused_node_id: string;
-  highlightTag: (tagId: string) => void;
+  totalVolume: number;
   stopHighlightingTag: () => void;
   onDeleteTag: (tagId: string) => void;
   onRenameTag: (tagId: string) => void;
-  onAddTagged: (nodeId: string, tagId: string) => void;
-  onDeleteTagged: (nodeId: string, tagId: string) => void;
 }
 
 const AllTags: FC<AllTagsProps> = ({
   tags,
   filesAndFolders,
   filesAndFoldersMetadata,
-  tag_id_to_highlight,
-  total_volume,
-  focused_node_id,
-  highlightTag,
+  totalVolume,
   stopHighlightingTag,
   onDeleteTag,
   onRenameTag,
-  onAddTagged,
-  onDeleteTagged,
 }) => {
   const { t } = useTranslation();
-  const [editingTagId, setEditingTagId] = useState("");
-  const startEditingTagFactory = useCallback(
-    (newEditingTagId) => () => setEditingTagId(newEditingTagId),
-    [setEditingTagId]
-  );
-  const stopEditingTag = useCallback(() => setEditingTagId(""), [
-    setEditingTagId,
-  ]);
-  const computeOpacity = useCallback(
-    (tagId) => {
-      if (editingTagId.length > 0) {
-        return editingTagId === tagId ? 1 : 0.2;
-      } else if (tag_id_to_highlight.length > 0) {
-        return tag_id_to_highlight === tagId ? 1 : 0.2;
-      } else {
-        return 1;
-      }
-    },
-    [editingTagId, tag_id_to_highlight]
-  );
 
   const tagsList = sortTags(tagMapToArray(tags))
     .map((tag) => {
       const size = getTagSize(tag, filesAndFolders, filesAndFoldersMetadata);
-      const opacity = computeOpacity(tag.id);
-      const percentage = Math.floor((size / total_volume) * 100);
-      const editing = editingTagId === tag.id;
-      const shouldDisplayCount = focused_node_id === undefined;
-      const nodeHasTag = tagHasFfId(tag, focused_node_id);
 
       return (
         <TagListItem
           key={tag.id}
           tag={tag.name}
-          opacity={opacity}
-          editing={editing}
-          percentage={percentage}
-          shoud_display_count={shouldDisplayCount}
-          node_has_tag={nodeHasTag}
-          tag_number={tag.ffIds.length}
-          highlightTag={highlightTag(tag.id)}
-          startEditingTag={startEditingTagFactory(tag.id)}
-          stopEditingTag={stopEditingTag}
+          size={size}
+          totalVolume={totalVolume}
+          tagNumber={tag.ffIds.length}
           deleteTag={onDeleteTag(tag.id)}
           renameTag={onRenameTag(tag.id)}
-          addTagToNode={onAddTagged(focused_node_id, tag.id)}
-          removeTagFromNode={onDeleteTagged(focused_node_id, tag.id)}
         />
       );
     })
-    .reduce((acc, val) => [...acc, val], []);
+    .reduce((accumulator, value) => [...accumulator, value], []);
 
   return (
     <div>
@@ -167,21 +123,15 @@ const AllTags: FC<AllTagsProps> = ({
 interface AllTagsApiToPropsPros {
   api: any;
   tags: TagMap;
-  focusedNodeId: string;
   renameTag: (tagId: string, name: string) => void;
   deleteTag: (tagId: string) => void;
-  deleteTagged: (nodeId: string, tagId: string) => void;
-  addTagged: (nodeId: string, tagId: string) => void;
 }
 
 const AllTagsApiToProps: FC<AllTagsApiToPropsPros> = ({
   api,
   tags,
-  focusedNodeId,
   renameTag,
   deleteTag,
-  deleteTagged,
-  addTagged,
 }) => {
   const { icicle_state } = api;
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
@@ -191,12 +141,6 @@ const AllTagsApiToProps: FC<AllTagsApiToPropsPros> = ({
 
   const rootElementId = "";
   const totalVolume = filesAndFoldersMetadata[rootElementId].childrenTotalSize;
-
-  const tagIdToHighlight = icicle_state.tagIdToHighlight();
-
-  const highlightTag = (tagId) => () => {
-    icicle_state.setTagIdToHighlight(tagId);
-  };
 
   const stopHighlightingTag = () => {
     icicle_state.setNoTagIdToHighlight();
@@ -213,31 +157,12 @@ const AllTagsApiToProps: FC<AllTagsApiToPropsPros> = ({
     api.undo.commit();
   };
 
-  const onAddTagged = (ffId, tagId) => () => {
-    if (ffId !== undefined) {
-      addTagged(tagId, ffId);
-      api.undo.commit();
-    }
-  };
-
-  const onDeleteTagged = (ffId, tagId) => () => {
-    if (ffId !== undefined) {
-      deleteTagged(tagId, ffId);
-      api.undo.commit();
-    }
-  };
-
   return (
     <AllTags
-      tag_id_to_highlight={tagIdToHighlight}
-      focused_node_id={focusedNodeId}
-      total_volume={totalVolume}
-      highlightTag={highlightTag}
+      totalVolume={totalVolume}
       stopHighlightingTag={stopHighlightingTag}
       onRenameTag={onRenameTag}
       onDeleteTag={onDeleteTag}
-      onAddTagged={onAddTagged}
-      onDeleteTagged={onDeleteTagged}
       tags={tags}
       filesAndFolders={filesAndFolders}
       filesAndFoldersMetadata={filesAndFoldersMetadata}

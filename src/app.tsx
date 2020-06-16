@@ -2,7 +2,6 @@
 import "logging/reporter.ts";
 
 import "./css/index.scss";
-import "css/app.css";
 
 import { SecretDevtools } from "secret-devtools";
 import React from "react";

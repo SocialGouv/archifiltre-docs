@@ -1,10 +1,10 @@
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import React, { FC } from "react";
-import { useStyles } from "../../../hooks/use-styles";
+import { useStyles } from "hooks/use-styles";
 import ModalHeader from "../../modals/modal-header";
 import { useTranslation } from "react-i18next";
-import { ArchifiltreError } from "../../../reducers/loading-info/loading-info-types";
+import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 import ErrorsTable from "./errors-table";
 
 interface ErrorsModalProps {

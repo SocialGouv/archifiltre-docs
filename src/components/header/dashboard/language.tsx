@@ -1,5 +1,6 @@
+import { Select } from "@material-ui/core";
 import React, { FC, useCallback } from "react";
-import { useLanguage } from "../../../hooks/use-language";
+import { useLanguage } from "hooks/use-language";
 
 const availableLanguages = [
   {
@@ -22,13 +23,13 @@ const LanguagePicker: FC = () => {
   const onChange = useCallback((event) => setLanguage(event.target.value), []);
 
   return (
-    <select onChange={onChange} value={language}>
+    <Select onChange={onChange} value={language} variant="outlined">
       {availableLanguages.map((availableLanguage) => (
         <option value={availableLanguage.value} key={availableLanguage.value}>
           {availableLanguage.label}
         </option>
       ))}
-    </select>
+    </Select>
   );
 };
 

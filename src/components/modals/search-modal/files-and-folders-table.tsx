@@ -23,7 +23,11 @@ export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
       },
       {
         name: t("search.type"),
-        accessor: (element: FilesAndFolders) => getType(element),
+        accessor: (element: FilesAndFolders) =>
+          getType(element, {
+            folderLabel: t("common.folder"),
+            unknownLabel: t("common.unknown"),
+          }),
       },
       {
         name: t("search.size"),

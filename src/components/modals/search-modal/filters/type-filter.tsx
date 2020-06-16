@@ -13,17 +13,31 @@ interface TypeFilterProps {
   setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
 }
 
+type ComputeOptionsOptions = {
+  folderLabel: string;
+  unknownLabel: string;
+};
+
+const computeOptions = (
+  filesAndFolders: FilesAndFolders[],
+  { folderLabel, unknownLabel }: ComputeOptionsOptions
+): string[] =>
+  _(filesAndFolders)
+    .map((fileOrFolder) => getType(fileOrFolder, { folderLabel, unknownLabel }))
+    .uniq()
+    .value();
+
 const TypeFilter: FC<TypeFilterProps> = ({ filesAndFolders, setFilters }) => {
   const { t } = useTranslation();
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   const availableOptions = useDeferredMemo(
     () =>
-      _(filesAndFolders)
-        .map((fileOrFolder) => getType(fileOrFolder))
-        .uniq()
-        .value(),
-    [filesAndFolders]
+      computeOptions(filesAndFolders, {
+        folderLabel: t("common.folder"),
+        unknownLabel: t("common.unknown"),
+      }),
+    [filesAndFolders, t]
   );
 
   useEffect(() => {

@@ -213,18 +213,30 @@ export const createFilePathSequence = (
     .map((virtualPath) => virtualPathToIdMap[virtualPath] || virtualPath);
 };
 
+type GetTypeOptions = {
+  folderLabel?: string;
+  unknownLabel?: string;
+};
+
 /**
  * Returns the mime type of the filesAndFolders parameter. Indicates if the format is unknown or if the element is a folder
  * @param filesAndFolders
+ * @param options
+ * @param options.folderLabel
+ * @param options.unknownLabel
  */
-export const getType = (filesAndFolders) => {
+export const getType = (
+  filesAndFolders,
+  {
+    folderLabel = translations.t("common.folder"),
+    unknownLabel = translations.t("common.unknown"),
+  }: GetTypeOptions = {}
+) => {
   if (!isFile(filesAndFolders)) {
-    return translations.t("common.folder");
+    return folderLabel;
   }
   const mimeType = lookup(filesAndFolders.id);
-  return mimeType
-    ? mimeType.split("/").pop()
-    : translations.t("common.unknown");
+  return mimeType ? mimeType.split("/").pop() : unknownLabel;
 };
 
 /**

@@ -1,6 +1,7 @@
 import { Grid } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import Paper from "@material-ui/core/Paper";
+import { compose, omit, values } from "lodash/fp";
 import React, { FC, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -37,9 +38,10 @@ export const SearchModal: FC<SearchModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
-  const filesAndFoldersArray = useMemo(() => Object.values(filesAndFolders), [
-    filesAndFolders,
-  ]);
+  const filesAndFoldersArray = useMemo(
+    () => compose(values, omit(""))(filesAndFolders),
+    [filesAndFolders]
+  );
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<FilterMethod<FilesAndFolders>[]>([]);
   const filteredFilesAndFolders = useSearchAndFilters(

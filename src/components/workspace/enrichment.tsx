@@ -1,8 +1,9 @@
 import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
+import Grid, { GridProps } from "@material-ui/core/Grid";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCircle } from "react-icons/fa";
+import styled from "styled-components";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
 import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
@@ -36,6 +37,10 @@ interface EnrichmentProps {
   currentFileHash: string;
   onChangeAlias: (newAlias: string) => void;
 }
+
+const FullHeightGrid = styled(Grid)<GridProps>`
+  height: 100%;
+`;
 
 const Enrichment: FC<EnrichmentProps> = ({
   createTag,
@@ -83,7 +88,7 @@ const Enrichment: FC<EnrichmentProps> = ({
   const elementAlias = isActive ? currentFileAlias : "";
 
   return (
-    <Grid container spacing={1}>
+    <FullHeightGrid container spacing={1}>
       <Grid item xs={4}>
         <Box display="flex" flexDirection="column" height="100%">
           <Box>
@@ -180,7 +185,7 @@ const Enrichment: FC<EnrichmentProps> = ({
           </Box>
         </Box>
       </Grid>
-    </Grid>
+    </FullHeightGrid>
   );
 };
 

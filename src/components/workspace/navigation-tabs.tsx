@@ -44,9 +44,13 @@ const a11yProps = (index: number) => ({
 
 interface NavigationTabsProps {
   api: any;
+  setAreIcicleDisplayed: (areIcicleDisplayed: boolean) => void;
 }
 
-const NavigationTabs: FC<NavigationTabsProps> = ({ api }) => {
+const NavigationTabs: FC<NavigationTabsProps> = ({
+  api,
+  setAreIcicleDisplayed,
+}) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const [value, setValue] = useState(0);
@@ -55,8 +59,11 @@ const NavigationTabs: FC<NavigationTabsProps> = ({ api }) => {
   const handleChange = useCallback(
     (event: React.ChangeEvent<{}>, newValue: number) => {
       setValue(newValue);
+      newValue === 3
+        ? setAreIcicleDisplayed(false)
+        : setAreIcicleDisplayed(true);
     },
-    [setValue]
+    [setValue, setAreIcicleDisplayed]
   );
 
   return (

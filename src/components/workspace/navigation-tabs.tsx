@@ -18,6 +18,7 @@ const StyledTabs = styled(Tabs)`
 
 const StyledPanel = styled.div`
   width: 100%;
+  min-height: 12.5rem;
 `;
 
 interface TabPanelProps {
@@ -33,7 +34,11 @@ const TabPanel = ({ children, value, index }: TabPanelProps) => (
     id={`tabpanel-${index}`}
     aria-labelledby={`tab-${index}`}
   >
-    {value === index && <Box boxSizing="border-box">{children}</Box>}
+    {value === index && (
+      <Box height="100%" boxSizing="border-box">
+        {children}
+      </Box>
+    )}
   </StyledPanel>
 );
 

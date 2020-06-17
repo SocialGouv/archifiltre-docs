@@ -119,14 +119,15 @@ export const getFolders = (filesAndFolders) =>
   filesAndFolders.filter(({ children }) => children.length > 0);
 
 /**
- * Recursive function for computing folder hashes
+ * Recursive function for computing folder hashes. This function is asynchronous to avoid blocking
+ * the event loop when computing lots of hashes.
  * @param {Object} filesAndFolders - A file and folders map
  * @param {Object} hashes - A HashesMap
  * @param {String} id - The current folder ID (base is "")
  * @param {function} hook - A hook called after each computation
  * @returns {Object} - The map of all hashes for each id
  */
-const recComputeFolderHash = (filesAndFolders, hashes, id, hook) => {
+const recComputeFolderHash = async (filesAndFolders, hashes, id, hook) => {
   const { children } = filesAndFolders[id];
   const hash = hashes[id];
   if (hash) {
@@ -137,11 +138,13 @@ const recComputeFolderHash = (filesAndFolders, hashes, id, hook) => {
     return { [id]: null };
   }
 
-  const childrenResults = children
-    .map((childId) =>
+  const childResults = await Promise.all(
+    children.map((childId) =>
       recComputeFolderHash(filesAndFolders, hashes, childId, hook)
     )
-    .reduce((acc, folderHashes) => ({ ...acc, ...folderHashes }));
+  );
+
+  const childrenResults = Object.assign({}, ...childResults);
 
   const currentFolderHash = md5(
     children

@@ -385,9 +385,9 @@ describe("file-and-folders-common", () => {
   });
 
   describe("computeFolderHashes", () => {
-    const setup = (fileAndFolders, hashes) => {
+    const setup = async (fileAndFolders, hashes) => {
       const hook = jest.fn();
-      const result = computeFolderHashes(fileAndFolders, hashes, hook);
+      const result = await computeFolderHashes(fileAndFolders, hashes, hook);
 
       return { hook, result };
     };
@@ -456,8 +456,8 @@ describe("file-and-folders-common", () => {
       let hook;
       let result;
 
-      beforeAll(() => {
-        ({ hook, result } = setup(filesAndFolders, hashes));
+      beforeAll(async () => {
+        ({ hook, result } = await setup(filesAndFolders, hashes));
       });
 
       it("should call the hook with the right hashes", () => {

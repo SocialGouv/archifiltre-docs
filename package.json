@@ -94,7 +94,7 @@
     "electron-builder": "22.7.0",
     "electron-react-devtools": "0.5.3",
     "eslint": "7.2.0",
-    "eslint-import-resolver-webpack": "0.12.1",
+    "eslint-import-resolver-webpack": "0.12.2",
     "fast-check": "1.25.1",
     "html-webpack-plugin": "4.3.0",
     "husky": "4.2.5",

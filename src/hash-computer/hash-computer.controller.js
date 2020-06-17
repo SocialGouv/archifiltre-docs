@@ -77,13 +77,8 @@ export const computeHashes$ = (paths, { initialValues: { basePath } }) => {
  */
 export const computeFolderHashes$ = ({ filesAndFolders, hashes }) => {
   const FolderHashWorker = createAsyncWorkerControllerClass(FolderHashFork);
-  const hashes$ = backgroundWorkerProcess$(
+  return backgroundWorkerProcess$(
     { filesAndFolders, hashes },
     FolderHashWorker
   );
-
-  return hashes$
-    .pipe(bufferTime(BUFFER_TIME))
-    .pipe(filter((buffer) => buffer.length !== 0))
-    .pipe(map((bufferedObjects) => Object.assign({}, ...bufferedObjects)));
 };

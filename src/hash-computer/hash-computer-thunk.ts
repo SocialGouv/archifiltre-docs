@@ -30,7 +30,7 @@ import {
 } from "./hash-computer.controller";
 import { openModalAction } from "reducers/modal/modal-actions";
 import { Modal } from "reducers/modal/modal-types";
-import { Observable, of } from "rxjs";
+import { of } from "rxjs";
 
 type ComputeHashesThunkOptions = {
   ignoreFileHashes?: boolean;

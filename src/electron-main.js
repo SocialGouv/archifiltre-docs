@@ -97,6 +97,7 @@ function createWindow() {
     width: 1500,
     height: 800,
     webPreferences: {
+      enableRemoteModule: true,
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
     },

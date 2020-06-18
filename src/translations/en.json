@@ -211,7 +211,8 @@
       "duplicatesByType": "Duplicates distribution by element type",
       "filesNumber": "Number of files",
       "spaceUsed": "Size in file tree",
-      "percentage": "Percentage (size)"
+      "percentage": "Percentage (size)",
+      "duplicatesList": "Duplicates list"
     }
   }
 }

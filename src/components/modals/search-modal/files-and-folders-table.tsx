@@ -5,7 +5,7 @@ import { getType } from "util/files-and-folders/file-and-folders-utils";
 import Table from "../../common/table";
 import { isEmpty } from "lodash";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
-import { FilesAndFolders } from "../../../reducers/files-and-folders/files-and-folders-types";
+import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
 
 type FilesAndFoldersTableProps = {
   filesAndFolders: FilesAndFolders[];

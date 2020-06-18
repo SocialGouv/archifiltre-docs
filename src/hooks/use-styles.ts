@@ -3,6 +3,9 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    body2Box: {
+      fontSize: "0.625rem",
+    },
     searchInput: {
       paddingLeft: theme.spacing(1),
       paddingRight: theme.spacing(1),

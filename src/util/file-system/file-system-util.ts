@@ -1,4 +1,6 @@
-import { remote } from "electron";
+import { remote, shell } from "electron";
+import translations from "translations/translations";
+import { notifyError } from "util/notification/notifications-util";
 
 /**
  * Prompts the user to save a file. Returns the file path if the user confirmed
@@ -12,4 +14,21 @@ export const promptUserForSave = async (
     defaultPath: filename,
   });
   return filePath;
+};
+
+/**
+ * Open a fileSystem element with the default app (folder are opened with the file browsing app)
+ * @param elementPath
+ */
+export const openExternalElement = async (
+  elementPath: string
+): Promise<void> => {
+  const error = await shell.openPath(elementPath);
+
+  if (error) {
+    notifyError(
+      translations.t("report.openElementErrorMessage"),
+      translations.t("report.openElementErrorTitle")
+    );
+  }
 };

@@ -146,7 +146,7 @@
     "raven": "^2.6.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-i18next": "^11.6.0",
+    "react-i18next": "^11.7.0",
     "react-icons": "^3.10.0",
     "react-notifications": "^1.6.0",
     "react-redux": "^7.2.0",

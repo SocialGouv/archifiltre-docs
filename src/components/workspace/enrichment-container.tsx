@@ -60,8 +60,6 @@ const EnrichmentContainer: FC<EnrichmentContainerProps> = ({ api }) => {
     [dispatch, api, filesAndFoldersId]
   );
 
-  const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
-
   const currentFileComment =
     useSelector(getCommentsFromStore)[filesAndFoldersId] || "";
 
@@ -88,29 +86,6 @@ const EnrichmentContainer: FC<EnrichmentContainerProps> = ({ api }) => {
 
   const nodeId = isActive ? filesAndFoldersId : "";
 
-  const currentFilesAndFolders = isActive
-    ? filesAndFolders[filesAndFoldersId]
-    : null;
-
-  const filesAndFoldersMetadata = useSelector(
-    getFilesAndFoldersMetadataFromStore
-  );
-
-  const currentFileHash = useSelector((state: StoreState) =>
-    getHashesFromStore(state)
-  )[filesAndFoldersId];
-
-  const currentFileAlias =
-    useSelector(getAliasesFromStore)[filesAndFoldersId] || "";
-
-  const onChangeAlias = useCallback(
-    (alias) => {
-      dispatch(updateAliasThunk(filesAndFoldersId, alias));
-      api.undo.commit();
-    },
-    [dispatch, api, filesAndFoldersId]
-  );
-
   return (
     <Enrichment
       createTag={createTag}
@@ -121,14 +96,8 @@ const EnrichmentContainer: FC<EnrichmentContainerProps> = ({ api }) => {
       isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
       toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
       nodeId={nodeId}
-      filesAndFoldersId={filesAndFoldersId}
       isActive={isActive}
       api={api}
-      currentFilesAndFolders={currentFilesAndFolders}
-      filesAndFoldersMetadata={filesAndFoldersMetadata}
-      currentFileAlias={currentFileAlias}
-      currentFileHash={currentFileHash}
-      onChangeAlias={onChangeAlias}
     />
   );
 };

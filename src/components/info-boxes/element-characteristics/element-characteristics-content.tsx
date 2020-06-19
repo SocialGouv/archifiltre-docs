@@ -9,13 +9,17 @@ import { useTranslation } from "react-i18next";
 import Icon, { FOLDER_ICON, PAGE_ICON } from "../../common/icon";
 import { octet2HumanReadableFormat } from "../../../util/file-system/file-sys-util";
 import { Typography } from "@material-ui/core";
-import BoundaryDate from "../session-info/boundary-date";
+import BoundaryDate from "../../report/session-info/boundary-date";
 import ElementCharacteristic from "./element-characteristic";
+import { openExternalElement } from "../../../util/file-system/file-system-util";
+import ClickableIcon from "../../common/clickable-icon";
+import { useStyles } from "../../../hooks/use-styles";
 
-interface ElementCharacteristicsContentProps {
+export type ElementCharacteristicsContentProps = {
   elementName: string;
   elementAlias: string;
   elementSize: number;
+  elementPath: string;
   minLastModifiedTimestamp: number;
   maxLastModifiedTimestamp: number;
   medianLastModifiedTimestamp: number;
@@ -23,12 +27,13 @@ interface ElementCharacteristicsContentProps {
   isFolder: boolean;
   onElementNameChange: (name: string) => void;
   type: string;
-}
+};
 
 const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
   elementName,
   elementAlias,
   elementSize,
+  elementPath,
   hash,
   isFolder,
   minLastModifiedTimestamp,
@@ -38,19 +43,30 @@ const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
   type,
 }) => {
   const { t } = useTranslation();
+  const { body2Box } = useStyles();
+
+  const openElement = () => openExternalElement(elementPath);
 
   return (
     <Box display="flex" flexDirection="column" justifyContent="space-between">
       <Box marginY={0.5}>
         <Box display="flex">
           <Box marginRight={2}>
-            <Typography variant="body2">
+            <Box className={body2Box}>
               {isFolder ? (
-                <Icon icon={FOLDER_ICON} color="black" />
+                <ClickableIcon
+                  onClick={openElement}
+                  icon={FOLDER_ICON}
+                  color="black"
+                />
               ) : (
-                <Icon icon={PAGE_ICON} color="black" />
+                <ClickableIcon
+                  onClick={openElement}
+                  icon={PAGE_ICON}
+                  color="black"
+                />
               )}
-            </Typography>
+            </Box>
           </Box>
           {elementName !== "" && (
             <Box>

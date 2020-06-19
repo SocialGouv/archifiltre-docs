@@ -14,10 +14,11 @@ import {
   EnrichmentTypes,
 } from "../main-space/icicle/icicle-enrichment";
 import CommentCell from "../report/comment-cell";
-import ElementCharacteristics from "../report/element-characteristics/element-characteristics";
+import ElementCharacteristics from "../info-boxes/element-characteristics/element-characteristics";
 import TagCell from "../tags/tag-cell-container";
 import AllTagsButton from "./all-tags-button";
 import InfoBoxPaper from "../info-boxes/common/info-box-paper";
+import ElementCharacteristicsContainer from "../info-boxes/element-characteristics/element-characteristics-container";
 
 interface EnrichmentProps {
   createTag;
@@ -28,14 +29,8 @@ interface EnrichmentProps {
   isCurrentFileMarkedToDelete: boolean;
   toggleCurrentFileDeleteState;
   nodeId: string;
-  filesAndFoldersId: string;
   isActive: boolean;
   api: any;
-  currentFilesAndFolders: FilesAndFolders | null;
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
-  currentFileAlias: string;
-  currentFileHash: string;
-  onChangeAlias: (newAlias: string) => void;
 }
 
 const FullHeightGrid = styled(Grid)<GridProps>`
@@ -51,41 +46,10 @@ const Enrichment: FC<EnrichmentProps> = ({
   isCurrentFileMarkedToDelete,
   toggleCurrentFileDeleteState,
   nodeId,
-  filesAndFoldersId,
   isActive,
   api,
-  currentFilesAndFolders,
-  filesAndFoldersMetadata,
-  currentFileAlias,
-  currentFileHash,
-  onChangeAlias,
 }) => {
   const { t } = useTranslation();
-
-  const isFolder = currentFilesAndFolders
-    ? !isFile(currentFilesAndFolders)
-    : false;
-
-  const elementSize = currentFilesAndFolders
-    ? filesAndFoldersMetadata[filesAndFoldersId].childrenTotalSize
-    : 0;
-
-  const maxLastModifiedTimestamp = currentFilesAndFolders
-    ? filesAndFoldersMetadata[filesAndFoldersId].maxLastModified
-    : 0;
-
-  const minLastModifiedTimestamp = currentFilesAndFolders
-    ? filesAndFoldersMetadata[filesAndFoldersId].minLastModified
-    : 0;
-
-  const medianLastModifiedTimestamp = currentFilesAndFolders
-    ? filesAndFoldersMetadata[filesAndFoldersId].medianLastModified
-    : 0;
-
-  const type = getType(currentFilesAndFolders);
-
-  const nodeName = isActive ? currentFilesAndFolders?.name : "";
-  const elementAlias = isActive ? currentFileAlias : "";
 
   return (
     <FullHeightGrid container spacing={1}>
@@ -106,18 +70,7 @@ const Enrichment: FC<EnrichmentProps> = ({
             <InfoBoxPaper>
               <Grid container>
                 <Grid item>
-                  <ElementCharacteristics
-                    elementName={nodeName || ""}
-                    elementAlias={elementAlias}
-                    elementSize={elementSize}
-                    hash={currentFileHash}
-                    isFolder={isFolder}
-                    onElementNameChange={onChangeAlias}
-                    minLastModifiedTimestamp={minLastModifiedTimestamp}
-                    maxLastModifiedTimestamp={maxLastModifiedTimestamp}
-                    medianLastModifiedTimestamp={medianLastModifiedTimestamp}
-                    type={type}
-                  />
+                  <ElementCharacteristicsContainer api={api} />
                 </Grid>
               </Grid>
             </InfoBoxPaper>

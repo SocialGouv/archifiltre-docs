@@ -4,7 +4,6 @@ import Grid from "@material-ui/core/Grid";
 import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 import SessionInfo from "./session-info/session-info";
-import ElementCharacteristics from "./element-characteristics/element-characteristics";
 import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   getFirstLevelName,
@@ -13,15 +12,10 @@ import {
 import InfoBoxPaper from "../info-boxes/common/info-box-paper";
 import Box from "@material-ui/core/Box";
 import CategoryTitle from "../common/category-title";
+import ElementCharacteristicsContainer from "../info-boxes/element-characteristics/element-characteristics-container";
 
 type ReportProps = {
-  currentFileHash: string;
-  currentFileAlias: string;
   filesAndFolders: FilesAndFoldersMap;
-  filesAndFoldersId: string;
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
-  isLocked: boolean;
-  updateAlias: (newAlias: string) => void;
   sessionName: string;
   setSessionName: (newSessionName: string) => void;
   nbFiles: number;
@@ -29,16 +23,11 @@ type ReportProps = {
   volume: number;
   oldestFileTimestamp: number;
   newestFileTimestamp: number;
+  api: any;
 };
 
 const Report: FC<ReportProps> = ({
-  currentFileHash,
-  currentFileAlias,
   filesAndFolders,
-  filesAndFoldersId,
-  filesAndFoldersMetadata,
-  isLocked,
-  updateAlias,
   sessionName,
   setSessionName,
   nbFiles,
@@ -46,39 +35,9 @@ const Report: FC<ReportProps> = ({
   volume,
   oldestFileTimestamp,
   newestFileTimestamp,
+  api,
 }) => {
   const { t } = useTranslation();
-  const isFocused = filesAndFoldersId !== "";
-
-  const isActive = isFocused || isLocked;
-
-  const currentFilesAndFolders = isActive
-    ? filesAndFolders[filesAndFoldersId]
-    : null;
-
-  const isFolder = currentFilesAndFolders
-    ? !isFile(currentFilesAndFolders)
-    : false;
-
-  const elementSize = currentFilesAndFolders
-    ? filesAndFoldersMetadata[filesAndFoldersId].childrenTotalSize
-    : 0;
-
-  const maxLastModifiedTimestamp = currentFilesAndFolders
-    ? filesAndFoldersMetadata[filesAndFoldersId].maxLastModified
-    : 0;
-
-  const minLastModifiedTimestamp = currentFilesAndFolders
-    ? filesAndFoldersMetadata[filesAndFoldersId].minLastModified
-    : 0;
-
-  const medianLastModifiedTimestamp = currentFilesAndFolders
-    ? filesAndFoldersMetadata[filesAndFoldersId].medianLastModified
-    : 0;
-
-  const type = getType(currentFilesAndFolders);
-
-  const nodeName = isActive ? currentFilesAndFolders?.name : "";
 
   const firstLevelName = getFirstLevelName(filesAndFolders);
 
@@ -119,18 +78,7 @@ const Report: FC<ReportProps> = ({
             <InfoBoxPaper>
               <Grid container>
                 <Grid item xs={12}>
-                  <ElementCharacteristics
-                    elementName={nodeName || ""}
-                    elementAlias={currentFileAlias}
-                    elementSize={elementSize}
-                    hash={currentFileHash}
-                    isFolder={isFolder}
-                    onElementNameChange={updateAlias}
-                    minLastModifiedTimestamp={minLastModifiedTimestamp}
-                    maxLastModifiedTimestamp={maxLastModifiedTimestamp}
-                    medianLastModifiedTimestamp={medianLastModifiedTimestamp}
-                    type={type}
-                  />
+                  <ElementCharacteristicsContainer api={api} />
                 </Grid>
               </Grid>
             </InfoBoxPaper>

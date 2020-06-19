@@ -1,24 +1,14 @@
 import React, { FC } from "react";
-import ElementCharacteristicsContent from "./element-characteristics-content";
+import ElementCharacteristicsContent, {
+  ElementCharacteristicsContentProps,
+} from "./element-characteristics-content";
 import ElementCharacteristicsPlaceholder from "./element-characteristics-placeholder";
 
-interface ElementCharacteristicsProps {
-  elementName: string;
-  elementAlias: string;
-  elementSize: number;
-  minLastModifiedTimestamp: number;
-  maxLastModifiedTimestamp: number;
-  medianLastModifiedTimestamp: number;
-  hash: string;
-  isFolder: boolean;
-  onElementNameChange: (name: string) => void;
-  type: string;
-}
-
-const ElementCharacteristics: FC<ElementCharacteristicsProps> = ({
+const ElementCharacteristics: FC<ElementCharacteristicsContentProps> = ({
   elementName,
   elementAlias,
   elementSize,
+  elementPath,
   hash,
   isFolder,
   minLastModifiedTimestamp,
@@ -34,6 +24,7 @@ const ElementCharacteristics: FC<ElementCharacteristicsProps> = ({
       elementName={elementName}
       elementAlias={elementAlias}
       elementSize={elementSize}
+      elementPath={elementPath}
       minLastModifiedTimestamp={minLastModifiedTimestamp}
       maxLastModifiedTimestamp={maxLastModifiedTimestamp}
       medianLastModifiedTimestamp={medianLastModifiedTimestamp}

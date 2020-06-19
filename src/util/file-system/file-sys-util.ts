@@ -120,3 +120,13 @@ export const octet2HumanReadableFormat = (size: number): string => {
   }
   return size + " " + unit;
 };
+
+/**
+ * Returns the element absolute path based on the partition base path and the element id
+ * @param basePath
+ * @param relativePath
+ */
+export const getAbsolutePath = (
+  basePath: string,
+  relativePath: string
+): string => path.join(basePath, "..", relativePath);

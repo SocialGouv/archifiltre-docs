@@ -430,43 +430,43 @@
     ajv "^6.12.0"
     ajv-keywords "^3.4.1"
 
-"@devexpress/dx-chart-core@2.6.3":
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-chart-core/-/dx-chart-core-2.6.3.tgz#c643632bdf5983e2302f07b8bb3d21c96385b606"
-  integrity sha512-L85F4CxB1ZhPZMjTaA/7nFe/VYAdnP1M3loR/twuPqBHifxEIB39zXNf+J73YqNycqt5Orzqpytab9RYNB5org==
+"@devexpress/dx-chart-core@2.6.4":
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-chart-core/-/dx-chart-core-2.6.4.tgz#274132d0f8a684d01bbf02eeb435dd8958e6a1d0"
+  integrity sha512-HNOG3yHZHLOXTsU2OraUW8ep2NXu1bUdo2bDBKSi8KDSMq++CBQJwK+1tcDtMpBHjZmKq2yTkbrVcGACBNgfVA==
   dependencies:
     d3-array "^2.4.0"
     d3-scale "^3.2.0"
     d3-shape "^1.3.7"
 
-"@devexpress/dx-core@2.6.3":
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-core/-/dx-core-2.6.3.tgz#dc522c9c596e2ee553d45c388362e00a60822397"
-  integrity sha512-MMOPm+UQdxliq0IidfsgOryYCJsFVRHtILZeMyHMs9I8IFbV8DuDwkhzNNr2/RjRZ3GVm4ZuxnWjbeOSUdft8A==
+"@devexpress/dx-core@2.6.4":
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-core/-/dx-core-2.6.4.tgz#d3599fef60c4121f8c1968149de29f246c2bcaae"
+  integrity sha512-7EN0m/bZU+yN9ZVEAxZXsZwLT2d6rhfZaE7Fnukb0xytX5AB0ABO+I1ixxCmCiBpH7qw89gbFQZJzecZ+V4CaA==
 
-"@devexpress/dx-react-chart-material-ui@^2.6.3":
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-chart-material-ui/-/dx-react-chart-material-ui-2.6.3.tgz#1d816909b1035496e24950b0106f82366f41ec09"
-  integrity sha512-d/QwCaVRIJzCYwMfs32qXjOrSFd8sJbGh768lWhUJLNFW/L7bwJUvm7GYYzDby+DvsrjChO0f0nQgyt0o69XQg==
+"@devexpress/dx-react-chart-material-ui@^2.6.4":
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-chart-material-ui/-/dx-react-chart-material-ui-2.6.4.tgz#6a98b73075c2bfdb37547d891886e3220edcd10a"
+  integrity sha512-/vNbv0kdc8mpBNruKoWM/9A0KiW/lPpvm/gslkq3MLXuS9Vta+p6Pg3wIxyWM6sX48kgmkRNfe1/0Rtv8l0MBA==
   dependencies:
     clsx "^1.0.4"
     prop-types "^15.7.2"
 
-"@devexpress/dx-react-chart@^2.6.3":
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-chart/-/dx-react-chart-2.6.3.tgz#ac09f1c16b2fe19002d485a9046a63bbc84269b7"
-  integrity sha512-CzfPwBUWO5yrp0Z93yTsxEbybM5TWhS0GLbINFNJr1kovO6CSfBPotvd3OQYEkb+EbIiCnqBNQwqkSqdQwHOdg==
+"@devexpress/dx-react-chart@^2.6.4":
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-chart/-/dx-react-chart-2.6.4.tgz#743e5055f42cc9266b5e0405ac1977edc26b844d"
+  integrity sha512-SPWfK5ZWVQVWX+FPonPMpwnagX8cr8xpIGvGWz504oXlLYmn2kAwe+sTp6f6zn1xTww3HR1RokJCq0xmiuZ8ng==
   dependencies:
-    "@devexpress/dx-chart-core" "2.6.3"
+    "@devexpress/dx-chart-core" "2.6.4"
     d3-scale "^3.2.0"
     d3-shape "^1.3.7"
 
-"@devexpress/dx-react-core@^2.6.3":
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-core/-/dx-react-core-2.6.3.tgz#536fb946c59d0932408e829974666296208f1268"
-  integrity sha512-lKmmhHCfOBfkEFaa/SOt7DjdMLvkHqgwIiWBXaZEqK6kJk4u0Y5+yWJLUo0O9RNszaKQzAoDMQUupi47fbCPWg==
+"@devexpress/dx-react-core@^2.6.4":
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-core/-/dx-react-core-2.6.4.tgz#40157a4e89d40868885127a6259be8b822f2d024"
+  integrity sha512-2pelB+ghg9+uPxpNESVQywOkYIwEZnMftegEjIa/WzQkNohp5UrJ/osIgDKxSEWvHw76HPPTs/zRRllhY8P3rw==
   dependencies:
-    "@devexpress/dx-core" "2.6.3"
+    "@devexpress/dx-core" "2.6.4"
     prop-types "^15.7.2"
 
 "@electron/get@^1.0.1", "@electron/get@^1.12.2":

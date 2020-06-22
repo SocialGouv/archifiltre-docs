@@ -1,15 +1,24 @@
 import hidefile from "hidefile";
 import path from "path";
+import winattr from "winattr";
+import { isWindows } from "../os/os-util";
 
 /**
  * Check if a file is hidden (starts with a dot on unix or has the hidden attribute on windows)
+ * The main problem with hidefile, is that it considers a file hidden on windows if it both has the
+ * hidden attribute and starts with a dot. So we have to directly read the attribute using winattr.
  * @param elementPath
  */
-const isHidden = (elementPath: string) => hidefile.isHiddenSync(elementPath);
+const isHidden = (elementPath: string) =>
+  isWindows()
+    ? winattr.getSync(elementPath).hidden
+    : hidefile.isHiddenSync(elementPath);
 
 const IGNORED_NAMES = ["thumbs.db", ".ds_store"];
 const IGNORED_EXTS = ["lnk", "tmp", "ini"];
-const IGNORED_PATTERNS = [/^\$/];
+const IGNORED_PATTERNS = [
+  /^\$/, // matches files starting with $
+];
 
 /**
  * Check if a file is specifically ignored based on its filename

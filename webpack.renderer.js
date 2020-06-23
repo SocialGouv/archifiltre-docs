@@ -103,6 +103,10 @@ module.exports = (env, argv = {}) => ({
         enforce: "pre",
       },
       {
+        test: /.node$/,
+        loader: "node-loader",
+      },
+      {
         test: /\.css$|\.scss$/,
         include: [
           path.resolve(__dirname, "src/css"),

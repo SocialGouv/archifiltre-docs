@@ -101,6 +101,7 @@
     "jest": "26.0.1",
     "jest-date-mock": "1.0.8",
     "lint-staged": "10.2.11",
+    "node-loader": "^0.6.0",
     "node-sass": "^4.14.1",
     "prettier": "2.0.5",
     "rmfr": "2.0.0",
@@ -116,7 +117,8 @@
     "webpack": "4.43.0",
     "webpack-bundle-analyzer": "3.8.0",
     "webpack-cli": "3.3.12",
-    "webpack-dev-server": "3.11.0"
+    "webpack-dev-server": "3.11.0",
+    "winattr": "^3.0.0"
   },
   "dependencies": {
     "@devexpress/dx-react-chart": "^2.6.4",
@@ -135,6 +137,7 @@
     "eslint-plugin-lodash-fp": "^2.2.0-a1",
     "fast-memoize": "^2.5.2",
     "file-saver": "2.0.2",
+    "hidefile": "^3.0.0",
     "i18next": "^19.5.1",
     "immutable": "4.0.0-rc.12",
     "js-md5": "0.7.3",

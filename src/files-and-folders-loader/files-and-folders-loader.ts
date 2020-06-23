@@ -21,6 +21,7 @@ import {
   convertFsErrorToArchifiltreError,
 } from "util/error/error-util";
 import { identifyFileFormat } from "../util/file-format/file-format-util";
+import { shouldIgnoreElement } from "../util/hidden-file/hidden-file-util";
 
 interface LoadFilesAndFoldersFromFileSystemError {
   message: string;
@@ -49,6 +50,9 @@ export const loadFilesAndFoldersFromFileSystem = (
 
   const loadFilesAndFoldersFromFileSystemRec = (currentPath: string) => {
     try {
+      if (shouldIgnoreElement(currentPath)) {
+        return;
+      }
       const stats = fs.statSync(currentPath);
 
       if (stats.isDirectory()) {

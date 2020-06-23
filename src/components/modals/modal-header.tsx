@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 import React, { FC } from "react";
 import { FaTimes } from "react-icons/fa";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";

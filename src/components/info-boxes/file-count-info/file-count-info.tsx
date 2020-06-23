@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { Box } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 import CategoryTitle from "../../common/category-title";
 import { ExportToAuditReport } from "../../common/export-types";
 import LargeIndicatorText from "../common/large-indicator-text";

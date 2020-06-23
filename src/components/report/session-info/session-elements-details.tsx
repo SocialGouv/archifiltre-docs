@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { Box } from "@material-ui/core";
 import SessionElementsDetail from "./session-elements-detail";
 import { octet2HumanReadableFormat } from "../../../util/file-system/file-sys-util";
 import Grid from "@material-ui/core/Grid";

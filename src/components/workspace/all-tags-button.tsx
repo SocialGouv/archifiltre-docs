@@ -1,4 +1,4 @@
-import { Tooltip } from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";

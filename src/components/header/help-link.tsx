@@ -1,4 +1,4 @@
-import { Tooltip } from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
 import { shell } from "electron";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";

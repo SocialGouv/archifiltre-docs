@@ -1,4 +1,7 @@
-import { Checkbox, Input, ListItemText, Select } from "@material-ui/core";
+import Checkbox from "@material-ui/core/Checkbox";
+import Input from "@material-ui/core/Input";
+import ListItemText from "@material-ui/core/ListItemText";
+import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import React, { FC, useCallback } from "react";
 

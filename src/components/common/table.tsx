@@ -1,4 +1,4 @@
-import { Table as MuiTable } from "@material-ui/core";
+import MuiTable from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import TableBody from "@material-ui/core/TableBody";

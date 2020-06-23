@@ -1,4 +1,6 @@
-import { InputBase, InputAdornment, Grid } from "@material-ui/core";
+import InputBase from "@material-ui/core/InputBase";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Grid from "@material-ui/core/Grid";
 import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSearch } from "react-icons/fa";

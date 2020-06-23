@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
 import React, { FC, useEffect, useState } from "react";
 import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "reducers/tags/tags-types";

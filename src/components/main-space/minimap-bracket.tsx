@@ -5,8 +5,8 @@ type MinimapBracketProps = {
   y: number;
   dx: number;
   dy: number;
-  displayRoot: string;
-  computeWidthRec: (displayRoot: string, x: number, dx: number) => any;
+  displayRoot: string[];
+  computeWidthRec: (displayRoot: string[], x: number, dx: number) => any;
 };
 
 const MinimapBracket: FC<MinimapBracketProps> = ({

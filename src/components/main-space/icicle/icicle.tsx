@@ -21,7 +21,7 @@ export type DimsMap = {
   [id: string]: Dims;
 };
 
-type IcicleProps = {
+export type IcicleProps = {
   trueFHeight: () => number;
   computeWidthRec: (ids: string[], x: number, dx: number) => [number, number][];
   displayRoot: string[];

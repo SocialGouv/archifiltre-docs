@@ -13,6 +13,8 @@ const SvgRectangle = ({
   stroke,
   cursor,
   elementId,
+  ignorePointerEvents = false,
+  strokeWidth = 1,
 }) => (
   <rect
     data-draggable-id={elementId}
@@ -26,7 +28,14 @@ const SvgRectangle = ({
     onDoubleClick={onDoubleClickHandler}
     onMouseOver={onMouseOverHandler}
     onFocus={onMouseOverHandler}
-    style={{ fill, opacity, stroke, cursor }}
+    style={{
+      fill,
+      opacity,
+      stroke,
+      cursor,
+      pointerEvents: ignorePointerEvents ? "none" : "inherit",
+      strokeWidth,
+    }}
   />
 );
 

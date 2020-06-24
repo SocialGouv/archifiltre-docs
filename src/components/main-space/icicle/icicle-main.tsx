@@ -27,7 +27,7 @@ import Icicle from "./icicle";
 import { Dims, DimsAndId } from "./icicle-rect";
 import { FillColor } from "./icicle-types";
 import { useFileMoveActiveState } from "hooks/use-file-move-active-state";
-import { useMovableElements } from "hooks/use-movable-elements";
+import { MoveElement, useMovableElements } from "hooks/use-movable-elements";
 import BreadcrumbsNew from "../breadcrumb/breadcrumbs";
 
 export type IcicleMouseHandler = (
@@ -154,6 +154,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
 
   const [hoveredDims, setHoveredDims] = useState<Dims | null>(null);
   const [lockedDims, setLockedDims] = useState<Dims | null>(null);
+  const [movedElementId, setMovedElementId] = useState("");
+  const [movedElementTime, setMovedElementTime] = useState(0);
 
   const icicleHeight = viewBoxHeight;
   const icicleWidth = viewBoxWidth;
@@ -293,8 +295,17 @@ const IcicleMain: FC<IcicleMainProps> = ({
 
   const { isFileMoveActive } = useFileMoveActiveState();
 
+  const moveElementHandler = useCallback<MoveElement>(
+    (newMovedElementId, targetFolderId) => {
+      setMovedElementId(newMovedElementId);
+      setMovedElementTime(Date.now());
+      moveElement(newMovedElementId, targetFolderId);
+    },
+    [moveElement, setMovedElementId]
+  );
+
   const { onIcicleMouseUp, onIcicleMouseDown } = useMovableElements(
-    moveElement
+    moveElementHandler
   );
 
   return (
@@ -338,6 +349,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
               onIcicleRectMouseOverHandler={onIcicleRectMouseOverHandler}
               onIcicleMouseLeave={onIcicleMouseLeave}
               computeWidthRec={computeWidthRec}
+              movedElementId={movedElementId}
+              movedElementTime={movedElementTime}
             />
           </svg>
         </IcicleWrapper>

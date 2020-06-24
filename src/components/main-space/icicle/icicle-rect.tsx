@@ -1,7 +1,7 @@
-import React, { FC, useCallback, useEffect } from "react";
+import React, { FC, useCallback, useEffect, MouseEvent } from "react";
 
 import * as FunctionUtil from "util/function/function-util";
-import { FillColor } from "./icicle-types";
+import { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 import SvgRectangle from "./svg-rectangle";
 import { useFileMoveActiveState } from "../../../hooks/use-file-move-active-state";
 
@@ -16,8 +16,6 @@ export interface DimsAndId {
   id: string;
   dims: () => Dims;
 }
-
-type MouseHandler = (dimsAndId: DimsAndId, e: MouseEvent) => void;
 
 enum CursorState {
   ACTIVE_ELEMENT_CURSOR = "pointer",
@@ -40,9 +38,9 @@ interface IcicleRectProps {
     dy: number,
     id: string
   ) => void;
-  onClickHandler: MouseHandler;
-  onDoubleClickHandler: MouseHandler;
-  onMouseOverHandler: MouseHandler;
+  onClickHandler: IcicleMouseActionHandler;
+  onDoubleClickHandler: IcicleMouseActionHandler;
+  onMouseOverHandler: IcicleMouseActionHandler;
 }
 
 const IcicleRect: FC<IcicleRectProps> = ({

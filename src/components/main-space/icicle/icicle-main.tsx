@@ -103,7 +103,7 @@ interface IcicleMainProps {
   tags: TagMap;
   originalPath: string;
   root_id: string;
-  display_root: string;
+  display_root: string[];
   fillColor: FillColor;
   hoveredElementId: string;
   lockedElementId: string;

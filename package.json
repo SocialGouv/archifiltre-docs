@@ -2,8 +2,8 @@
   "name": "archifiltre",
   "version": "2.2.0",
   "description": "Explorer plus plus for archive",
-  "author": "",
-  "license": "ISC",
+  "author": "Fabrique des ministère sociaux",
+  "license": "MIT",
   "main": "electron/dist/main.js",
   "scripts": {
     "dev": "concurrently -k \"yarn dev-main\" \"yarn dev-renderer\"",

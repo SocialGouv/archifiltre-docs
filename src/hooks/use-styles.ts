@@ -1,5 +1,6 @@
-import { createStyles, Theme } from "@material-ui/core";
+import createStyles from "@material-ui/core/styles/createStyles";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import { Theme } from "@material-ui/core/styles/createMuiTheme";
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,16 +41,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     editableField: {
       fontSize: "0.625rem",
       fontFamily: "Quicksand",
-    },
-    toDeleteChip: {
-      backgroundColor: theme.palette.error.main,
-      "&:hover, &:focus": {
-        backgroundColor: theme.palette.error.main,
-      },
-      color: "white",
-      "& > svg": {
-        color: "white",
-      },
     },
   })
 );

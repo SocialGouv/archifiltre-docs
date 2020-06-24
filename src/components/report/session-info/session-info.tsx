@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import EditableField from "../../fields/editable-field";
-import { Box, Typography } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
 import SessionElementsDetails from "./session-elements-details";
 import BoundaryDates from "./boundary-dates";
 

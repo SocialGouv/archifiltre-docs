@@ -1,4 +1,4 @@
-import { Box } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 import { isEmpty } from "lodash";
 import React, { FC, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

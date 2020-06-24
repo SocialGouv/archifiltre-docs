@@ -8,7 +8,8 @@ import { ThemedProps } from "../../theme/default-theme";
 import LoadingInfoDisplay from "./loading-info-display";
 import LoadingSpinnerOrCloseCross from "./loading-spinner-or-close-cross";
 import SquaredButton from "./squared-button";
-import { Grid, Theme } from "@material-ui/core";
+import { Theme } from "@material-ui/core/styles/createMuiTheme";
+import Grid from "@material-ui/core/Grid";
 import muiStyled from "@material-ui/core/styles/styled";
 
 const BottomLeftArea = withTheme(styled.div<ThemedProps>`

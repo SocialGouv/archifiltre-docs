@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
 import React, { FC } from "react";
 
 import IndexingBlock from "./indexing-block";

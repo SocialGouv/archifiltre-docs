@@ -1,4 +1,4 @@
-import { Theme, Tooltip } from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
 import withTheme from "@material-ui/core/styles/withTheme";
 import { shell } from "electron";
 import React, { FC } from "react";

@@ -1,4 +1,4 @@
-import { Select } from "@material-ui/core";
+import Select from "@material-ui/core/Select";
 import React, { FC, useCallback } from "react";
 import { useLanguage } from "hooks/use-language";
 

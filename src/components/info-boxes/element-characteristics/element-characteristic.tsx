@@ -1,6 +1,6 @@
 import React, { FC, ReactNode } from "react";
 import Box from "@material-ui/core/Box";
-import { Typography } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 
 interface ElementCharacteristicProps {
   name: ReactNode;

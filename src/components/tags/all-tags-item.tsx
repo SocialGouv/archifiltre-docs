@@ -1,4 +1,5 @@
-import { Chip, IconButton } from "@material-ui/core";
+import Chip from "@material-ui/core/Chip";
+import IconButton from "@material-ui/core/IconButton";
 import Box from "@material-ui/core/Box";
 import Tooltip from "@material-ui/core/Tooltip";
 import React, { FC, useCallback, useMemo, useState } from "react";

@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from "react";
 import { FileType } from "../../../util/file-types/file-types-util";
-import { Box } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { useTranslation } from "react-i18next";
 import CategoryTitle from "../../common/category-title";

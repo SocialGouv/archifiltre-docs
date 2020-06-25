@@ -10,7 +10,11 @@ import {
   getFiles,
   getFirstLevelName,
 } from "util/files-and-folders/file-and-folders-utils";
-import { countZipFiles, isJsonFile } from "util/file-system/file-sys-util";
+import {
+  countZipFiles,
+  isJsonFile,
+  isRootPath,
+} from "util/file-system/file-sys-util";
 import {
   NotificationDuration,
   notifyError,
@@ -88,6 +92,13 @@ const displayErrorNotification = () => (dispatch) => {
   );
 };
 
+const displayRootPathError = () => (dispatch) => {
+  notifyError(
+    translations.t("folderDropzone.errorsWhileLoading"),
+    translations.t("folderDropzone.rootElementError")
+  );
+};
+
 /**
  * Handles tracking events sent to Matomo
  * @param paths of files that need to be tracked
@@ -144,6 +155,11 @@ export const loadFilesAndFoldersFromPathThunk = (
       setTotalCount(totalCount);
     }
   };
+
+  if (isRootPath(fileOrFolderPath)) {
+    dispatch(displayRootPathError());
+    return;
+  }
 
   await clearActionReplayFile();
 

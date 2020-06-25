@@ -130,3 +130,10 @@ export const getAbsolutePath = (
   basePath: string,
   relativePath: string
 ): string => path.join(basePath, "..", relativePath);
+
+/**
+ * Checks if the path is a filesystem root (ex: "C:\" pour windows ou "/" pour posix)
+ * @param testPath
+ */
+export const isRootPath = (testPath: string): boolean =>
+  path.dirname(testPath) === testPath;

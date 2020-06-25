@@ -18,7 +18,8 @@
       "wrongJsonVersion": "Le fichier que vous avez déposé n'a pas été produit avec la même version d'Archifiltre",
       "error": "Erreur !",
       "errorsWhileLoading": "Une erreur s'est produite lors du chargement. Cliquez pour voir la liste des erreurs.",
-      "loadingVisualization": "Visualisation en cours de chargement..."
+      "loadingVisualization": "Visualisation en cours de chargement...",
+      "rootElementError": "Archifiltre ne peux actuellement pas directement lire un disque ou un dossier racine. Veuillez déposer un dossier enfant."
     },
     "report": {
       "comments": "Description",

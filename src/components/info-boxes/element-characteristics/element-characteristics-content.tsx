@@ -68,7 +68,7 @@ const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
             </Box>
           </Box>
           {elementName !== "" && (
-            <Box>
+            <Box width="100%">
               <Box>
                 <EditableField
                   trimValue={true}

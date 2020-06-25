@@ -18,7 +18,8 @@
       "wrongJsonVersion": "The file you dropped wasn't produced with the same version of Archifiltre",
       "error": "Error!",
       "errorsWhileLoading": "An error occurred while loading. Click to check the error log.",
-      "loadingVisualization": "Loading visualization..."
+      "loadingVisualization": "Loading visualization...",
+      "rootElementError": "Archifiltre cannot currently read a drive or a root folder. Please drop a child folder instead."
     },
     "report": {
       "comments": "Comments",

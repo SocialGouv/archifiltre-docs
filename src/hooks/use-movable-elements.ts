@@ -1,6 +1,9 @@
 import { MouseEvent, useCallback, useRef } from "react";
 
-export type MoveElement = (movedElementId: string, targetFolderId) => void;
+export type MoveElement = (
+  movedElementId: string,
+  targetFolderId: string
+) => void;
 
 /**
  * Hook to handle drag and drop of icicle elements

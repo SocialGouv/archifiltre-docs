@@ -16,6 +16,7 @@ import {
   CommentsMap,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "../../../reducers/tags/tags-types";
+import IcicleHightlightElement from "./icicle-highlight-element";
 
 export type DimsMap = {
   [id: string]: Dims;
@@ -45,6 +46,8 @@ export type IcicleProps = {
   comments: CommentsMap;
   tags: TagMap;
   elementsToDelete: string[];
+  movedElementId?: string;
+  movedElementTime?: number;
 };
 
 const Icicle: FC<IcicleProps> = ({
@@ -71,6 +74,8 @@ const Icicle: FC<IcicleProps> = ({
   comments,
   tags,
   elementsToDelete,
+  movedElementId = "",
+  movedElementTime = 0,
 }) => {
   const [dims, setDims] = useState<DimsMap>({});
   const dimsRef = useRef<DimsMap>({});
@@ -200,6 +205,11 @@ const Icicle: FC<IcicleProps> = ({
         onClick={onIcicleRectClickHandler}
         onDoubleClick={onIcicleRectDoubleClickHandler}
         onMouseOver={onIcicleRectMouseOverHandler}
+      />
+      <IcicleHightlightElement
+        dimsMap={dims}
+        highlightedElementId={movedElementId}
+        highlightedElementTime={movedElementTime}
       />
     </g>
   );

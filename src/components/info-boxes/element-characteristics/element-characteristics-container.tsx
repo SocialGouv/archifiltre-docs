@@ -49,7 +49,6 @@ const ElementCharacteristicsContainer: FC = () => {
   const updateAlias = useCallback(
     (alias) => {
       dispatch(updateAliasThunk(currentElementId, alias));
-      dispatch(commitAction());
     },
     [dispatch, currentElementId]
   );

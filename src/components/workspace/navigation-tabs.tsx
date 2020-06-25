@@ -102,7 +102,7 @@ const NavigationTabs: FC<NavigationTabsProps> = ({
         />
       </StyledTabs>
       <TabPanel value={value} index={0}>
-        <Report api={api} />
+        <Report />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Enrichment api={api} />

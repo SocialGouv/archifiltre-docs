@@ -6,19 +6,18 @@ import {
   setSessionName,
 } from "./workspace-metadata-actions";
 import { IciclesSortMethod } from "./workspace-metadata-types";
+import { commitAction } from "../enhancers/undoable/undoable-actions";
 
 /**
  * Set the session name.
  * @param sessionName
- * @param api - The old api. Used for conditional committing. Will be removed when all data will be handled in the redux store.
  */
 export const setSessionNameThunk = (
-  sessionName: string,
-  api: any
+  sessionName: string
 ): ArchifiltreThunkAction => (dispatch) => {
   if (sessionName.length > 0) {
     dispatch(setSessionName(sessionName));
-    api.undo.commit();
+    dispatch(commitAction());
   }
 };
 

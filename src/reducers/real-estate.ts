@@ -144,31 +144,3 @@ export const compile = (realEstate) => {
     api,
   };
 };
-
-export const createHigherOrder = (higherOrder) => {
-  const get = higherOrder.get;
-  const set = higherOrder.set;
-
-  return (propertyName, realEstate) => {
-    const initialState = () =>
-      higherOrder.initialState(realEstate.initialState({}));
-    const reader = {};
-    for (const key in realEstate.reader) {
-      if (realEstate.reader.hasOwnProperty(key)) {
-        updateGetAndSet(get, set, propertyName, key, realEstate.reader, reader);
-      }
-    }
-    const writer = {};
-    for (const key in realEstate.writer) {
-      if (realEstate.writer.hasOwnProperty(key)) {
-        updateGetAndSet(get, set, propertyName, key, realEstate.writer, writer);
-      }
-    }
-    return create({
-      property_name: propertyName,
-      initialState,
-      reader: ObjectUtil.compose(higherOrder.reader, reader),
-      writer: ObjectUtil.compose(higherOrder.writer, writer),
-    });
-  };
-};

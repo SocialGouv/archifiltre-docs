@@ -15,13 +15,14 @@ import {
   tagMapHasTags,
   tagMapToArray,
 } from "reducers/tags/tags-selectors";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
 import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { useTranslation } from "react-i18next";
 import { FaTags } from "react-icons/fa";
 import styled from "styled-components";
 import { TagMap } from "reducers/tags/tags-types";
+import { commitAction } from "../../reducers/enhancers/undoable/undoable-actions";
 
 const TagsContent = styled(Box)`
   font-size: 0.8em;
@@ -138,6 +139,7 @@ const AllTagsApiToProps: FC<AllTagsApiToPropsPros> = ({
   const filesAndFoldersMetadata = useSelector(
     getFilesAndFoldersMetadataFromStore
   );
+  const dispatch = useDispatch();
 
   const rootElementId = "";
   const totalVolume = filesAndFoldersMetadata[rootElementId].childrenTotalSize;
@@ -148,13 +150,13 @@ const AllTagsApiToProps: FC<AllTagsApiToPropsPros> = ({
 
   const onRenameTag = (tagId) => (name) => {
     renameTag(tagId, name);
-    api.undo.commit();
+    dispatch(commitAction());
   };
 
   const onDeleteTag = (tagId) => () => {
     deleteTag(tagId);
     icicle_state.setNoTagIdToHighlight();
-    api.undo.commit();
+    dispatch(commitAction());
   };
 
   return (

@@ -36,6 +36,10 @@ interface DashboardProps {
   exportToAuditReport: ExportToAuditReport;
   resetWorkspace: ResetWorkspace;
   reloadPreviousSession: () => void;
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
 }
 
 interface DashbordApiToPropsProps {
@@ -51,6 +55,10 @@ interface DashbordApiToPropsProps {
   exportToAuditReport: ExportToAuditReport;
   resetWorkspace: ResetWorkspace;
   reloadPreviousSession: () => void;
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
 }
 
 const DashBoard: FC<DashboardProps> = ({
@@ -61,7 +69,6 @@ const DashBoard: FC<DashboardProps> = ({
   hasPreviousSession,
   originalPath,
   sessionName,
-  api,
   exportToCsv,
   exportToResip,
   exportToMets,
@@ -69,6 +76,10 @@ const DashBoard: FC<DashboardProps> = ({
   exportToAuditReport,
   resetWorkspace,
   reloadPreviousSession,
+  undo,
+  redo,
+  canUndo,
+  canRedo,
 }) => {
   const shouldDisplayActions = started && finished && !error;
   const shouldDisplayReset = started && finished;
@@ -90,12 +101,24 @@ const DashBoard: FC<DashboardProps> = ({
         )}
         {shouldDisplayNavigationArrows && (
           <Box pl={1}>
-            <UndoRedo isVisible={true} api={api} isUndo={true} />
+            <UndoRedo
+              isVisible={true}
+              undo={undo}
+              redo={redo}
+              isUndo={true}
+              isActive={canUndo}
+            />
           </Box>
         )}
         {shouldDisplayNavigationArrows && (
           <Box pl={1}>
-            <UndoRedo isVisible={true} api={api} isUndo={false} />
+            <UndoRedo
+              isVisible={true}
+              undo={undo}
+              redo={redo}
+              isUndo={false}
+              isActive={canRedo}
+            />
           </Box>
         )}
         {shouldDisplayActions && (
@@ -151,6 +174,10 @@ const DashBoardApiToProps: FC<DashbordApiToPropsProps> = ({
   exportToAuditReport,
   resetWorkspace,
   reloadPreviousSession,
+  undo,
+  redo,
+  canUndo,
+  canRedo,
 }) => {
   const {
     loading_state: { isFinished, isInError, isStarted },
@@ -176,6 +203,10 @@ const DashBoardApiToProps: FC<DashbordApiToPropsProps> = ({
       exportToAuditReport={exportToAuditReport}
       resetWorkspace={resetWorkspace}
       reloadPreviousSession={reloadPreviousSession}
+      undo={undo}
+      redo={redo}
+      canUndo={canUndo}
+      canRedo={canRedo}
     />
   );
 };

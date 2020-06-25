@@ -12,14 +12,9 @@ import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and
 import { updateAliasThunk } from "../../../reducers/files-and-folders/files-and-folders-thunks";
 import { getType } from "../../../util/files-and-folders/file-and-folders-utils";
 import { getAbsolutePath } from "../../../util/file-system/file-sys-util";
+import { commitAction } from "../../../reducers/enhancers/undoable/undoable-actions";
 
-type ElementCharacteristicsContainerProps = {
-  api: any;
-};
-
-const ElementCharacteristicsContainer: FC<ElementCharacteristicsContainerProps> = ({
-  api,
-}) => {
+const ElementCharacteristicsContainer: FC = () => {
   const {
     hoveredElementId,
     lockedElementId,
@@ -54,9 +49,9 @@ const ElementCharacteristicsContainer: FC<ElementCharacteristicsContainerProps> 
   const updateAlias = useCallback(
     (alias) => {
       dispatch(updateAliasThunk(currentElementId, alias));
-      api.undo.commit();
+      dispatch(commitAction());
     },
-    [dispatch, api, currentElementId]
+    [dispatch, currentElementId]
   );
 
   return (

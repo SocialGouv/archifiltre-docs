@@ -19,7 +19,6 @@ const IcicleHightlightElement: FC<IcicleHightlightElementProps> = ({
   highlightedElementTime,
 }) => {
   const dims = dimsMap[highlightedElementId];
-  const { x, dx, y, dy } = dims;
 
   const highlightedElementControl = `${highlightedElementId}:${highlightedElementTime}`;
 
@@ -35,10 +34,10 @@ const IcicleHightlightElement: FC<IcicleHightlightElementProps> = ({
   return !dims || !highlightedElementId ? null : (
     <g>
       <SvgRectangle
-        x={x}
-        dx={dx}
-        y={y}
-        dy={dy}
+        x={dims.x}
+        dx={dims.dx}
+        y={dims.y}
+        dy={dims.dy}
         fill="transparent"
         stroke="red"
         onClickHandler={empty}

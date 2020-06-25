@@ -1,8 +1,5 @@
 module.exports = {
   extends: ["@socialgouv/eslint-config-react"],
-  rules: {
-    "react/prop-types": "off",
-  },
   settings: {
     "import/resolver": "webpack",
   },

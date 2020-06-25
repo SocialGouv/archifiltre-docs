@@ -5,10 +5,7 @@ import { csvExporterThunk } from "exporters/csv/csv-exporter";
 import { jsonExporterThunk } from "exporters/json/json-exporter";
 import { metsExporterThunk } from "exporters/mets/mets-export-thunk";
 import { resipExporterThunk } from "exporters/resip/resip-exporter-thunk";
-import {
-  getAreHashesReady,
-  getHashesFromStore,
-} from "reducers/files-and-folders/files-and-folders-selectors";
+import { getAreHashesReady } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   replayActionsThunk,
   usePreviousSession,
@@ -16,6 +13,17 @@ import {
 import { resetStoreThunk } from "reducers/store-thunks";
 import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import Dashboard from "./dashboard";
+import {
+  redoAction,
+  undoAction,
+} from "../../../reducers/enhancers/undoable/undoable-actions";
+import { StoreState } from "../../../reducers/store";
+import {
+  canStateRedo,
+  canStateUndo,
+} from "../../../reducers/enhancers/undoable/undoable-selectors";
+import { useLoadingStep } from "../../../reducers/loading-state/loading-state-selectors";
+import { LoadingStep } from "../../../reducers/loading-state/loading-state-types";
 
 interface DashboardContainerProps {
   api: any;
@@ -24,6 +32,12 @@ interface DashboardContainerProps {
 const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
   const dispatch = useDispatch();
   const hasPreviousSession = usePreviousSession();
+
+  const loadingStep = useLoadingStep();
+  const finished = loadingStep === LoadingStep.FINISHED;
+  const error = loadingStep === LoadingStep.ERROR;
+  const started =
+    loadingStep === LoadingStep.STARTED || loadingStep === LoadingStep.FINISHED;
 
   const reloadPreviousSession = useCallback(() => {
     dispatch(replayActionsThunk(api));
@@ -47,6 +61,21 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
   const exportToAuditReport = useCallback(
     (name) => dispatch(auditReportExporterThunk(name)),
     [dispatch]
+  );
+
+  const undo = useCallback(() => {
+    dispatch(undoAction());
+  }, [dispatch]);
+
+  const redo = useCallback(() => {
+    dispatch(redoAction());
+  }, [dispatch]);
+
+  const canRedo = useSelector((store: StoreState) =>
+    canStateRedo(store.filesAndFolders)
+  );
+  const canUndo = useSelector((store: StoreState) =>
+    canStateUndo(store.filesAndFolders)
   );
 
   const exportToJson = useCallback(
@@ -73,7 +102,6 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
 
   return (
     <Dashboard
-      api={api}
       areHashesReady={areHashesReady}
       hasPreviousSession={hasPreviousSession}
       originalPath={originalPath}
@@ -85,6 +113,13 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
       exportToJson={exportToJson}
       reloadPreviousSession={reloadPreviousSession}
       resetWorkspace={resetWorkspace}
+      finished={finished}
+      error={error}
+      started={started}
+      undo={undo}
+      redo={redo}
+      canRedo={canRedo}
+      canUndo={canUndo}
     />
   );
 };

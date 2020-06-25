@@ -70,7 +70,7 @@ const Enrichment: FC<EnrichmentProps> = ({
             <InfoBoxPaper>
               <Grid container>
                 <Grid item>
-                  <ElementCharacteristicsContainer api={api} />
+                  <ElementCharacteristicsContainer />
                 </Grid>
               </Grid>
             </InfoBoxPaper>

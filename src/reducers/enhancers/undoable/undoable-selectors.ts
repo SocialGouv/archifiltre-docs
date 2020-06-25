@@ -7,3 +7,11 @@ import { UndoableState } from "./undoable-types";
 export const getCurrentState = <WrappedState>(
   state: UndoableState<WrappedState>
 ): WrappedState => state.current;
+
+export const canStateUndo = <WrappedState>(
+  state: UndoableState<WrappedState>
+): boolean => state.past.length > 0;
+
+export const canStateRedo = <WrappedState>(
+  state: UndoableState<WrappedState>
+): boolean => state.future.length > 0;

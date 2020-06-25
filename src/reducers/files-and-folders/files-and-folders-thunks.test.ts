@@ -28,6 +28,7 @@ import {
   updateFilesAndFoldersHashes,
 } from "./files-and-folders-thunks";
 import { ADD_CHILD } from "./files-and-folders-types";
+import { commitAction } from "../enhancers/undoable/undoable-actions";
 
 jest.mock("util/notification/notifications-util", () => ({
   notifyInfo: jest.fn(),
@@ -227,6 +228,7 @@ describe("file-and-folders-thunks.test.ts", () => {
 
       expect(store.getActions()).toEqual([
         setFilesAndFoldersAliases({ [ffId]: alias }),
+        commitAction(),
       ]);
     });
   });

@@ -25,6 +25,7 @@ import {
 } from "../../reducers/tags/tags-selectors";
 import { useWorkspaceMetadata } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
 import Enrichment from "./enrichment";
+import { commitAction } from "../../reducers/enhancers/undoable/undoable-actions";
 
 interface EnrichmentContainerProps {
   api: any;
@@ -39,25 +40,25 @@ const EnrichmentContainer: FC<EnrichmentContainerProps> = ({ api }) => {
   const createTag = useCallback(
     (tagName, ffId) => {
       dispatch(addTag(tagName, ffId));
-      api.undo.commit();
+      dispatch(commitAction());
     },
-    [dispatch, api]
+    [dispatch]
   );
 
   const untag = useCallback(
     (tagName, ffId) => {
       dispatch(untagFile(tagName, ffId));
-      api.undo.commit();
+      dispatch(commitAction());
     },
-    [dispatch, api]
+    [dispatch]
   );
 
   const updateComment = useCallback(
     (comments) => {
       dispatch(updateCommentThunk(filesAndFoldersId, comments));
-      api.undo.commit();
+      dispatch(commitAction());
     },
-    [dispatch, api, filesAndFoldersId]
+    [dispatch, filesAndFoldersId]
   );
 
   const currentFileComment =

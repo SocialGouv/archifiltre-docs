@@ -15,6 +15,8 @@ import styled from "styled-components";
 import ArchifiltreLogo from "../archifiltre-logo";
 import LoadPreviousSessionButton from "./load-previous-session-button";
 import SettingsButton from "./settings-button";
+import { useLoadingStep } from "../../../reducers/loading-state/loading-state-selectors";
+import { LoadingStep } from "../../../reducers/loading-state/loading-state-types";
 
 const HeaderLine = styled.div`
   width: 100%;
@@ -28,7 +30,6 @@ interface DashboardProps {
   hasPreviousSession: boolean;
   originalPath: string;
   sessionName: string;
-  api: any;
   exportToCsv: ExportToCsv;
   exportToResip: ExportToResip;
   exportToMets: ExportToMets;
@@ -36,21 +37,10 @@ interface DashboardProps {
   exportToAuditReport: ExportToAuditReport;
   resetWorkspace: ResetWorkspace;
   reloadPreviousSession: () => void;
-}
-
-interface DashbordApiToPropsProps {
-  api: any;
-  areHashesReady: boolean;
-  originalPath: string;
-  hasPreviousSession: boolean;
-  sessionName: string;
-  exportToCsv: ExportToCsv;
-  exportToResip: ExportToResip;
-  exportToMets: ExportToMets;
-  exportToJson: ExportToJson;
-  exportToAuditReport: ExportToAuditReport;
-  resetWorkspace: ResetWorkspace;
-  reloadPreviousSession: () => void;
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
 }
 
 const DashBoard: FC<DashboardProps> = ({
@@ -61,7 +51,6 @@ const DashBoard: FC<DashboardProps> = ({
   hasPreviousSession,
   originalPath,
   sessionName,
-  api,
   exportToCsv,
   exportToResip,
   exportToMets,
@@ -69,6 +58,10 @@ const DashBoard: FC<DashboardProps> = ({
   exportToAuditReport,
   resetWorkspace,
   reloadPreviousSession,
+  undo,
+  redo,
+  canUndo,
+  canRedo,
 }) => {
   const shouldDisplayActions = started && finished && !error;
   const shouldDisplayReset = started && finished;
@@ -90,12 +83,24 @@ const DashBoard: FC<DashboardProps> = ({
         )}
         {shouldDisplayNavigationArrows && (
           <Box pl={1}>
-            <UndoRedo isVisible={true} api={api} isUndo={true} />
+            <UndoRedo
+              isVisible={true}
+              undo={undo}
+              redo={redo}
+              isUndo={true}
+              isActive={canUndo}
+            />
           </Box>
         )}
         {shouldDisplayNavigationArrows && (
           <Box pl={1}>
-            <UndoRedo isVisible={true} api={api} isUndo={false} />
+            <UndoRedo
+              isVisible={true}
+              undo={undo}
+              redo={redo}
+              isUndo={false}
+              isActive={canRedo}
+            />
           </Box>
         )}
         {shouldDisplayActions && (
@@ -138,46 +143,4 @@ const DashBoard: FC<DashboardProps> = ({
   );
 };
 
-const DashBoardApiToProps: FC<DashbordApiToPropsProps> = ({
-  api,
-  areHashesReady,
-  originalPath,
-  hasPreviousSession,
-  sessionName,
-  exportToCsv,
-  exportToResip,
-  exportToMets,
-  exportToJson,
-  exportToAuditReport,
-  resetWorkspace,
-  reloadPreviousSession,
-}) => {
-  const {
-    loading_state: { isFinished, isInError, isStarted },
-  } = api;
-  const finished = isFinished();
-  const error = isInError();
-  const started = isStarted();
-
-  return (
-    <DashBoard
-      api={api}
-      areHashesReady={areHashesReady}
-      started={started}
-      finished={finished}
-      error={error}
-      hasPreviousSession={hasPreviousSession}
-      sessionName={sessionName}
-      originalPath={originalPath}
-      exportToCsv={exportToCsv}
-      exportToResip={exportToResip}
-      exportToMets={exportToMets}
-      exportToJson={exportToJson}
-      exportToAuditReport={exportToAuditReport}
-      resetWorkspace={resetWorkspace}
-      reloadPreviousSession={reloadPreviousSession}
-    />
-  );
-};
-
-export default DashBoardApiToProps;
+export default DashBoard;

@@ -1,14 +1,9 @@
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import Grid from "@material-ui/core/Grid";
-import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 import SessionInfo from "./session-info/session-info";
-import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
-import {
-  getFirstLevelName,
-  getType,
-} from "util/files-and-folders/file-and-folders-utils";
+import { getFirstLevelName } from "util/files-and-folders/file-and-folders-utils";
 import InfoBoxPaper from "../info-boxes/common/info-box-paper";
 import Box from "@material-ui/core/Box";
 import CategoryTitle from "../common/category-title";
@@ -23,7 +18,6 @@ type ReportProps = {
   volume: number;
   oldestFileTimestamp: number;
   newestFileTimestamp: number;
-  api: any;
 };
 
 const Report: FC<ReportProps> = ({
@@ -35,7 +29,6 @@ const Report: FC<ReportProps> = ({
   volume,
   oldestFileTimestamp,
   newestFileTimestamp,
-  api,
 }) => {
   const { t } = useTranslation();
 
@@ -78,7 +71,7 @@ const Report: FC<ReportProps> = ({
             <InfoBoxPaper>
               <Grid container>
                 <Grid item xs={12}>
-                  <ElementCharacteristicsContainer api={api} />
+                  <ElementCharacteristicsContainer />
                 </Grid>
               </Grid>
             </InfoBoxPaper>

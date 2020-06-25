@@ -22,7 +22,7 @@ type HorizontalStackedBarProps = {
 
 type BarProps = {
   color: string;
-  widthRatio: number;
+  widthratio: number;
 };
 
 /**
@@ -33,7 +33,7 @@ type BarProps = {
  */
 const Bar = styled(Box)<BoxProps & BarProps>`
   background-color: ${({ color }) => color};
-  width: ${({ widthRatio }) => `${widthRatio}%`};
+  width: ${({ widthratio }) => `${widthratio}%`};
   height: 80px;
 `;
 
@@ -50,7 +50,7 @@ const HorizontalStackedBar: FC<HorizontalStackedBarProps> = ({
     <Box display="flex" flexWrap="nowrap" width="100%">
       {bars.map(({ key, color }) => (
         <Tooltip key={key} title={renderTooltipContent(key)}>
-          <Bar color={color} widthRatio={(data[key] / total) * 100} />
+          <Bar color={color} widthratio={(data[key] / total) * 100} />
         </Tooltip>
       ))}
     </Box>

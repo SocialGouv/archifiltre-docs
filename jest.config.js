@@ -3,14 +3,14 @@
 
 module.exports = {
   coverageDirectory: "coverage",
-  moduleFileExtensions: ["js", "jsx", "ts", "tsx"],
-  moduleDirectories: ["src", "node_modules"],
-  setupFiles: ["jest-date-mock"],
   globals: {
-    STATIC_ASSETS_PATH: ".",
+    FORCE_TRACKING: false,
     MODE: "development",
     SENTRY_DSN: "https://sentry-mock-url.io",
-    FORCE_TRACKING: false,
+    STATIC_ASSETS_PATH: ".",
   },
+  moduleDirectories: ["src", "node_modules"],
+  moduleFileExtensions: ["js", "jsx", "ts", "tsx"],
   preset: "ts-jest/presets/js-with-ts",
+  setupFiles: ["jest-date-mock"],
 };

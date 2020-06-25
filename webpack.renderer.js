@@ -21,97 +21,58 @@ const workerRootFolder = (mode) =>
     : "require('path').join(require('electron').remote.app.getAppPath(),'/electron/dist/')";
 
 module.exports = (env, argv = {}) => ({
+  devServer: {
+    compress: true,
+    contentBase: path.resolve(__dirname, "electron/dist"),
+    hot: true,
+    inline: false,
+    port: 8000,
+    writeToDisk: (name) => /(\.fork\.[jt]s|main\.bundle\.js)$/.test(name),
+  },
   devtool: isDev(argv.mode) ? "cheap-module-eval-source-map" : false,
+
   entry: {
     app: "./src/app.tsx",
   },
-
   externals: {
     "iconv-lite": "require('iconv-lite')",
-  },
-  plugins: [
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ["**/*", "!main.js"],
-    }),
-    ...(isDev(argv.mode)
-      ? []
-      : [new CopyWebpackPlugin({ patterns: ["static"] })]),
-    new HtmlWebpackPlugin({
-      inject: "head",
-      filename: "index.html",
-      template: "static/index.html",
-      excludeChunks: ["stats"],
-    }),
-    new webpack.DefinePlugin({
-      MODE: JSON.stringify(argv.mode || "development"),
-      STATIC_ASSETS_PATH: isDev(argv.mode)
-        ? JSON.stringify("static/")
-        : "__dirname",
-      AUTOLOAD: argv.autoload
-        ? JSON.stringify(argv.autoload)
-        : JSON.stringify(""),
-      MATOMO_APPLICATION_ID: process.env.MATOMO_APPLICATION_ID,
-      MATOMO_URL: JSON.stringify(process.env.MATOMO_URL),
-      FORCE_TRACKING: !!JSON.stringify(process.env.FORCE_TRACKING),
-      ARCHIFILTRE_SITE_URL: JSON.stringify(process.env.ARCHIFILTRE_SITE_URL),
-      SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
-      WRITE_DEBUG: process.env.WRITE_DEBUG,
-    }),
-  ],
-
-  target: "electron-renderer",
-
-  devServer: {
-    writeToDisk: (name) => /(\.fork\.[jt]s|main\.bundle\.js)$/.test(name),
-    contentBase: path.resolve(__dirname, "electron/dist"),
-    port: 8000,
-    compress: true,
-    hot: true,
-    inline: false,
-  },
-
-  resolve: {
-    modules: [path.resolve(__dirname, "src"), "node_modules"],
-    extensions: [".mjs", ".ts", ".tsx", ".js", ".json"],
-    symlinks: false,
-    cacheWithContext: false,
   },
 
   module: {
     rules: [
       // This loader won't work if it is not defined before the typescript loader
       {
-        test: /\.fork\.[jt]s$/,
         include: path.resolve(__dirname, "src"),
+        test: /\.fork\.[jt]s$/,
         use: {
           loader: "webpack-fork-loader",
           options: {
-            publicPath: workerRootFolder(argv.mode),
             evalPath: true,
+            publicPath: workerRootFolder(argv.mode),
           },
         },
       },
       {
-        test: /\.[tj]sx?$/,
         include: path.resolve(__dirname, "src"),
         loader: "awesome-typescript-loader",
+        test: /\.[tj]sx?$/,
       },
       {
-        test: /\.js$/,
+        enforce: "pre",
         include: path.resolve(__dirname, "src"),
         loader: "source-map-loader",
-        enforce: "pre",
+        test: /\.js$/,
       },
       {
-        test: /.node$/,
         loader: "node-loader",
+        test: /.node$/,
       },
       {
-        test: /\.css$|\.scss$/,
         include: [
           path.resolve(__dirname, "src/css"),
           path.resolve(__dirname, "static/fonts"),
         ],
+        test: /\.css$|\.scss$/,
         use: [
           { loader: "style-loader" },
           { loader: "css-loader" },
@@ -126,8 +87,8 @@ module.exports = (env, argv = {}) => ({
         ],
       },
       {
-        test: /\.svg/,
         include: path.resolve(__dirname, "node_modules/react-notifications"),
+        test: /\.svg/,
         use: [
           {
             loader: "svg-url-loader",
@@ -139,11 +100,11 @@ module.exports = (env, argv = {}) => ({
         ],
       },
       {
-        test: /\.(otf|ttf|eot|woff|woff2)$/,
         include: [
           path.resolve(__dirname, "static/fonts"),
           path.resolve(__dirname, "node_modules/react-notifications/lib/fonts"),
         ],
+        test: /\.(otf|ttf|eot|woff|woff2)$/,
         use: [
           {
             loader: "url-loader",
@@ -169,4 +130,43 @@ module.exports = (env, argv = {}) => ({
     path: path.resolve(__dirname, "electron/dist"),
     pathinfo: false,
   },
+
+  plugins: [
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ["**/*", "!main.js"],
+    }),
+    ...(isDev(argv.mode)
+      ? []
+      : [new CopyWebpackPlugin({ patterns: ["static"] })]),
+    new HtmlWebpackPlugin({
+      excludeChunks: ["stats"],
+      filename: "index.html",
+      inject: "head",
+      template: "static/index.html",
+    }),
+    new webpack.DefinePlugin({
+      ARCHIFILTRE_SITE_URL: JSON.stringify(process.env.ARCHIFILTRE_SITE_URL),
+      AUTOLOAD: argv.autoload
+        ? JSON.stringify(argv.autoload)
+        : JSON.stringify(""),
+      FORCE_TRACKING: !!JSON.stringify(process.env.FORCE_TRACKING),
+      MATOMO_APPLICATION_ID: process.env.MATOMO_APPLICATION_ID,
+      MATOMO_URL: JSON.stringify(process.env.MATOMO_URL),
+      MODE: JSON.stringify(argv.mode || "development"),
+      SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
+      STATIC_ASSETS_PATH: isDev(argv.mode)
+        ? JSON.stringify("static/")
+        : "__dirname",
+      WRITE_DEBUG: process.env.WRITE_DEBUG,
+    }),
+  ],
+
+  resolve: {
+    cacheWithContext: false,
+    extensions: [".mjs", ".ts", ".tsx", ".js", ".json"],
+    modules: [path.resolve(__dirname, "src"), "node_modules"],
+    symlinks: false,
+  },
+
+  target: "electron-renderer",
 });

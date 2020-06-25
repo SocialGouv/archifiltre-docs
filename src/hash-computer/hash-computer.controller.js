@@ -1,20 +1,19 @@
+import { remote } from "electron";
 import { flatten } from "lodash";
 import path from "path";
+import { compose } from "redux";
+import { bufferTime, filter, map, tap } from "rxjs/operators";
+import { createAsyncWorkerControllerClass } from "util/async-worker/async-worker-util";
 import {
   aggregateResultsToMap,
   backgroundWorkerProcess$,
   computeBatch$,
 } from "util/batch-process/batch-process-util";
+import { operateOnDataProcessingStream } from "util/observable/observable-util";
 
+import { createBufferedFileWriter } from "../util/buffered-file-writer/buffered-file-writer";
 import FileHashFork from "./file-hash-computer.fork";
 import FolderHashFork from "./folder-hash-computer.fork.js";
-
-import { bufferTime, map, filter, tap } from "rxjs/operators";
-import { createAsyncWorkerControllerClass } from "util/async-worker/async-worker-util";
-import { compose } from "redux";
-import { operateOnDataProcessingStream } from "util/observable/observable-util";
-import { createBufferedFileWriter } from "../util/buffered-file-writer/buffered-file-writer";
-import { remote } from "electron";
 
 const BATCH_SIZE = 500;
 const BUFFER_TIME = 1000;

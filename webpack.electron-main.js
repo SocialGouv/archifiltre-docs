@@ -3,40 +3,40 @@ const webpack = require("webpack");
 require("dotenv").config();
 
 module.exports = {
+  devServer: {
+    writeToDisk: true,
+  },
   entry: {
     main: "./src/electron-main.js",
   },
-  target: "electron-main",
+  module: {
+    rules: [
+      {
+        include: path.resolve(__dirname, "src"),
+        loader: "awesome-typescript-loader",
+        test: /\.[tj]sx?$/,
+      },
+    ],
+  },
+  node: {
+    __dirname: false,
+  },
   output: {
     filename: "main.js",
     path: path.resolve(__dirname, "electron/dist"),
     pathinfo: false,
   },
-  resolve: {
-    extensions: [".ts", ".js"],
-  },
-  node: {
-    __dirname: false,
-  },
-  devServer: {
-    writeToDisk: true,
-  },
   plugins: [
     new webpack.DefinePlugin({
-      SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
-      SENTRY_MINIDUMP_URL: JSON.stringify(process.env.SENTRY_MINIDUMP_URL),
       REACT_DEV_TOOLS_PATH: process.env.REACT_DEV_TOOLS_PATH
         ? JSON.stringify(process.env.REACT_DEV_TOOLS_PATH)
         : '""',
+      SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
+      SENTRY_MINIDUMP_URL: JSON.stringify(process.env.SENTRY_MINIDUMP_URL),
     }),
   ],
-  module: {
-    rules: [
-      {
-        test: /\.[tj]sx?$/,
-        include: path.resolve(__dirname, "src"),
-        loader: "awesome-typescript-loader",
-      },
-    ],
+  resolve: {
+    extensions: [".ts", ".js"],
   },
+  target: "electron-main",
 };

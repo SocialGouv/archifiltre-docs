@@ -1,26 +1,26 @@
 module.exports = {
   extends: ["@socialgouv/eslint-config-react"],
-  settings: {
-    "import/resolver": "webpack",
-  },
   globals: {
-    MODE: "readonly",
-    STATIC_ASSETS_PATH: "readonly",
+    ARCHIFILTRE_SITE_URL: "readonly",
     AUTOLOAD: "readonly",
     FORCE_TRACKING: "readonly",
-    ARCHIFILTRE_SITE_URL: "readonly",
+    MODE: "readonly",
+    REACT_DEV_TOOLS_PATH: "readonly",
     SENTRY_DSN: "readonly",
     SENTRY_MINIDUMP_URL: "readonly",
-    REACT_DEV_TOOLS_PATH: "readonly",
+    STATIC_ASSETS_PATH: "readonly",
     WRITE_DEBUG: "readonly",
   },
-  plugins: ["lodash-fp"],
   overrides: [
     {
-      files: ["src/**/*.test.js", "src/**/*.test.ts", "src/test/**/*.js"],
       env: {
         jest: true,
       },
+      files: ["src/**/*.test.js", "src/**/*.test.ts", "src/test/**/*.js"],
     },
   ],
+  plugins: ["lodash-fp"],
+  settings: {
+    "import/resolver": "webpack",
+  },
 };

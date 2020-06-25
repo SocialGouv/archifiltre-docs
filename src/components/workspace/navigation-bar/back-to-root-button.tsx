@@ -11,7 +11,6 @@ interface BackToRootProps {
 const BackToRoot: FC<BackToRootProps> = ({
   api: {
     icicle_state: { setNoDisplayRoot, isZoomed },
-    undo: { commit },
   },
   setNoFocus,
 }) => {
@@ -20,8 +19,7 @@ const BackToRoot: FC<BackToRootProps> = ({
   const backToRoot = useCallback(() => {
     setNoDisplayRoot();
     setNoFocus();
-    commit();
-  }, [setNoDisplayRoot, setNoFocus, commit]);
+  }, [setNoDisplayRoot, setNoFocus]);
 
   return (
     <Button

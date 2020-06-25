@@ -14,12 +14,15 @@ import workspaceMetadataReducer from "./workspace-metadata/workspace-metadata-re
 import { WorkspaceMetadataState } from "./workspace-metadata/workspace-metadata-types";
 import { ModalState } from "./modal/modal-types";
 import modalReducer from "./modal/modal-reducer";
+import { LoadingState } from "./loading-state/loading-state-types";
+import loadingStateReducer from "./loading-state/loading-state-reducer";
 
 export interface StoreState {
   tags: UndoableState<TagsState>;
   filesAndFolders: UndoableState<FilesAndFoldersState>;
   filesAndFoldersMetadata: FilesAndFoldersMetadataState;
   loadingInfo: LoadingInfoState;
+  loadingState: UndoableState<LoadingState>;
   modal: ModalState;
   workspaceMetadata: UndoableState<WorkspaceMetadataState>;
 }
@@ -29,6 +32,7 @@ export default createStore(
     filesAndFolders: filesAndFoldersReducer,
     filesAndFoldersMetadata: filesAndFoldersMetadataReducer,
     loadingInfo: loadingInfoReducer,
+    loadingState: loadingStateReducer,
     modal: modalReducer,
     tags: tagsReducer,
     workspaceMetadata: workspaceMetadataReducer,

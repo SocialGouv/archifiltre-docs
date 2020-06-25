@@ -10,11 +10,7 @@ import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/works
 import { setSessionNameThunk } from "../../reducers/workspace-metadata/workspace-metadata-thunk";
 import Report from "./report";
 
-interface ReportContainerProps {
-  api: any;
-}
-
-const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
+const ReportContainer: FC = () => {
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
 
   const dispatch = useDispatch();
@@ -22,8 +18,8 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
   const { sessionName } = useSelector(getWorkspaceMetadataFromStore);
 
   const setSessionName = useCallback(
-    (newSessionName) => dispatch(setSessionNameThunk(newSessionName, api)),
-    [dispatch, api]
+    (newSessionName) => dispatch(setSessionNameThunk(newSessionName)),
+    [dispatch]
   );
 
   const nbFiles = useMemo(() => getFileCount(filesAndFolders), [
@@ -41,7 +37,6 @@ const ReportContainer: FC<ReportContainerProps> = ({ api }) => {
 
   return (
     <Report
-      api={api}
       filesAndFolders={filesAndFolders}
       sessionName={sessionName}
       setSessionName={setSessionName}

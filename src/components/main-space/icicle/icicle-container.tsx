@@ -65,9 +65,8 @@ export default function IcicleApiToProps({ api }) {
   const lock = useCallback(
     (id) => {
       dispatch(setLockedElementId(id));
-      api.undo.commit();
     },
-    [dispatch, api.undo.commit]
+    [dispatch]
   );
 
   const setFocus = useCallback((id) => dispatch(setHoveredElementId(id)), [

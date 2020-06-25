@@ -60,17 +60,23 @@ const EditableField: FC<EditableFieldProps> = ({
     [setLocalValue]
   );
 
+  const submitValueChange = useCallback(() => {
+    const submittedValue = trimValue ? localValue.trim() : localValue;
+
+    if (submittedValue !== value) {
+      onChange(submittedValue);
+    }
+  }, [localValue, onChange]);
+
   const handleSubmit = useCallback(
     (event?: FormEvent<HTMLFormElement>) => {
       event?.preventDefault();
       blurInput();
-      const submittedValue = trimValue ? localValue.trim() : localValue;
-
-      if (submittedValue !== value) {
-        onChange(submittedValue);
+      if (!submitOnBlur) {
+        submitValueChange();
       }
     },
-    [onChange, localValue, blurInput]
+    [submitValueChange, blurInput]
   );
 
   const handleFocus = useCallback(() => {
@@ -79,7 +85,7 @@ const EditableField: FC<EditableFieldProps> = ({
 
   const handleBlur = useCallback(() => {
     if (submitOnBlur) {
-      handleSubmit();
+      submitValueChange();
     }
     setFocus(false);
   }, [setFocus, formRef, submitOnBlur, handleSubmit]);

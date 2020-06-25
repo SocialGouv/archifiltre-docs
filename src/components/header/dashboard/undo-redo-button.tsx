@@ -8,27 +8,34 @@ import { useStyles } from "hooks/use-styles";
 
 interface UndoRedoButtonProps {
   isVisible: boolean;
-  api: any;
   isUndo?: boolean;
+  undo: () => void;
+  redo: () => void;
+  isActive: boolean;
 }
 
 const UndoRedoButton: FC<UndoRedoButtonProps> = ({
   isVisible,
-  api,
   isUndo = true,
+  undo,
+  redo,
+  isActive,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
-  const onKeyDownHandler = useCallback(({ ctrlKey, key }) => {
-    if (ctrlKey) {
-      if (key === "z") {
-        api.undo.undo();
-      } else if (key === "Z") {
-        api.undo.redo();
+  const onKeyDownHandler = useCallback(
+    ({ ctrlKey, key }) => {
+      if (ctrlKey) {
+        if (key === "z") {
+          undo();
+        } else if (key === "Z") {
+          redo();
+        }
       }
-    }
-  }, []);
+    },
+    [undo, redo]
+  );
 
   useEffect(() => {
     document.body.addEventListener("keydown", onKeyDownHandler, false);
@@ -46,8 +53,8 @@ const UndoRedoButton: FC<UndoRedoButtonProps> = ({
           color="primary"
           variant="contained"
           className={classes.headerButton}
-          onClick={isUndo ? api.undo.undo : api.undo.redo}
-          disabled={isUndo ? !api.undo.hasAPast() : !api.undo.hasAFuture()}
+          onClick={isUndo ? undo : redo}
+          disabled={!isActive}
           disableElevation
         >
           {isUndo ? <FaUndo /> : <FaRedo />}

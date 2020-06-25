@@ -49,6 +49,9 @@ import { getArchifiltreErrors } from "./loading-info/loading-info-selectors";
 import { openModalAction } from "./modal/modal-actions";
 import { Modal } from "./modal/modal-types";
 import { loadFileTree } from "../util/file-tree-loader/file-tree-loader";
+import { commitAction } from "./enhancers/undoable/undoable-actions";
+import { setLoadingStep } from "./loading-state/loading-state-actions";
+import { LoadingStep } from "./loading-state/loading-state-types";
 
 /**
  * Notifies the user that there is a Zip in the loaded files
@@ -122,13 +125,7 @@ export const loadFilesAndFoldersFromPathThunk = (
   fileOrFolderPath: string,
   { api }: any
 ): ArchifiltreThunkAction => async (dispatch, getState) => {
-  const {
-    startToLoadFiles,
-    setStatus,
-    setCount,
-    setTotalCount,
-    finishedToLoadFiles,
-  } = api.loading_state;
+  const { setStatus, setCount, setTotalCount } = api.loading_state;
 
   const hook = (
     error: ArchifiltreError | null,
@@ -150,7 +147,10 @@ export const loadFilesAndFoldersFromPathThunk = (
 
   await clearActionReplayFile();
 
-  startToLoadFiles();
+  setCount(0);
+  setTotalCount(0);
+  setStatus("");
+  dispatch(setLoadingStep(LoadingStep.STARTED));
   const loadingStart = new Date().getTime();
   try {
     const virtualFileSystem = await loadFileTree(fileOrFolderPath, hook);
@@ -165,7 +165,7 @@ export const loadFilesAndFoldersFromPathThunk = (
       }
     }
     dispatch(initStore(virtualFileSystem));
-    finishedToLoadFiles();
+    dispatch(setLoadingStep(LoadingStep.FINISHED));
     const loadingEnd = new Date().getTime();
     const loadingTime = `${(loadingEnd - loadingStart) / 1000}s`; // Loading time in seconds
     addTracker({
@@ -174,7 +174,7 @@ export const loadFilesAndFoldersFromPathThunk = (
       type: ActionType.TRACK_EVENT,
       value: `Loading time: ${loadingTime}`,
     });
-    api.undo.commit();
+    dispatch(commitAction());
 
     if (!isJsonFile(fileOrFolderPath)) {
       const filesAndFolders = virtualFileSystem.filesAndFolders;
@@ -202,7 +202,7 @@ export const loadFilesAndFoldersFromPathThunk = (
   } catch (error) {
     // tslint:disable-next-line:no-console
     console.error(error);
-    api.loading_state.errorLoadingFiles();
+    dispatch(setLoadingStep(LoadingStep.ERROR));
   }
 };
 
@@ -265,12 +265,12 @@ const initStore = ({
 export const resetStoreThunk = (api: any): ArchifiltreThunkAction => (
   dispatch
 ) => {
-  const { loading_state, icicle_state, undo } = api;
+  const { loading_state, icicle_state } = api;
   dispatch(resetTags());
   dispatch(resetLoadingAction());
   loading_state.reInit();
   icicle_state.reInit();
   icicle_state.setNoFocus();
   icicle_state.setNoDisplayRoot();
-  undo.commit();
+  dispatch(commitAction());
 };

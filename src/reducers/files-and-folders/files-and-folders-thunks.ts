@@ -19,6 +19,7 @@ import {
   isFile,
 } from "./files-and-folders-selectors";
 import { FilesAndFoldersMap } from "./files-and-folders-types";
+import { commitAction } from "../enhancers/undoable/undoable-actions";
 
 interface FfHashMap {
   [fileAndFoldersId: string]: string;
@@ -49,7 +50,9 @@ export const updateAliasThunk = (
     type: ActionType.TRACK_EVENT,
     value: `Created alias: "${newAlias}"`,
   });
+
   dispatch(setFilesAndFoldersAliases({ [filesAndFoldersId]: newAlias }));
+  dispatch(commitAction());
 };
 
 /**

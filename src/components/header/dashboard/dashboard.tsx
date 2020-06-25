@@ -15,6 +15,8 @@ import styled from "styled-components";
 import ArchifiltreLogo from "../archifiltre-logo";
 import LoadPreviousSessionButton from "./load-previous-session-button";
 import SettingsButton from "./settings-button";
+import { useLoadingStep } from "../../../reducers/loading-state/loading-state-selectors";
+import { LoadingStep } from "../../../reducers/loading-state/loading-state-types";
 
 const HeaderLine = styled.div`
   width: 100%;
@@ -27,26 +29,6 @@ interface DashboardProps {
   error: boolean;
   hasPreviousSession: boolean;
   originalPath: string;
-  sessionName: string;
-  api: any;
-  exportToCsv: ExportToCsv;
-  exportToResip: ExportToResip;
-  exportToMets: ExportToMets;
-  exportToJson: ExportToJson;
-  exportToAuditReport: ExportToAuditReport;
-  resetWorkspace: ResetWorkspace;
-  reloadPreviousSession: () => void;
-  undo: () => void;
-  redo: () => void;
-  canUndo: boolean;
-  canRedo: boolean;
-}
-
-interface DashbordApiToPropsProps {
-  api: any;
-  areHashesReady: boolean;
-  originalPath: string;
-  hasPreviousSession: boolean;
   sessionName: string;
   exportToCsv: ExportToCsv;
   exportToResip: ExportToResip;
@@ -161,54 +143,4 @@ const DashBoard: FC<DashboardProps> = ({
   );
 };
 
-const DashBoardApiToProps: FC<DashbordApiToPropsProps> = ({
-  api,
-  areHashesReady,
-  originalPath,
-  hasPreviousSession,
-  sessionName,
-  exportToCsv,
-  exportToResip,
-  exportToMets,
-  exportToJson,
-  exportToAuditReport,
-  resetWorkspace,
-  reloadPreviousSession,
-  undo,
-  redo,
-  canUndo,
-  canRedo,
-}) => {
-  const {
-    loading_state: { isFinished, isInError, isStarted },
-  } = api;
-  const finished = isFinished();
-  const error = isInError();
-  const started = isStarted();
-
-  return (
-    <DashBoard
-      api={api}
-      areHashesReady={areHashesReady}
-      started={started}
-      finished={finished}
-      error={error}
-      hasPreviousSession={hasPreviousSession}
-      sessionName={sessionName}
-      originalPath={originalPath}
-      exportToCsv={exportToCsv}
-      exportToResip={exportToResip}
-      exportToMets={exportToMets}
-      exportToJson={exportToJson}
-      exportToAuditReport={exportToAuditReport}
-      resetWorkspace={resetWorkspace}
-      reloadPreviousSession={reloadPreviousSession}
-      undo={undo}
-      redo={redo}
-      canUndo={canUndo}
-      canRedo={canRedo}
-    />
-  );
-};
-
-export default DashBoardApiToProps;
+export default DashBoard;

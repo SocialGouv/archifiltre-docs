@@ -22,6 +22,8 @@ import {
   canStateRedo,
   canStateUndo,
 } from "../../../reducers/enhancers/undoable/undoable-selectors";
+import { useLoadingStep } from "../../../reducers/loading-state/loading-state-selectors";
+import { LoadingStep } from "../../../reducers/loading-state/loading-state-types";
 
 interface DashboardContainerProps {
   api: any;
@@ -30,6 +32,12 @@ interface DashboardContainerProps {
 const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
   const dispatch = useDispatch();
   const hasPreviousSession = usePreviousSession();
+
+  const loadingStep = useLoadingStep();
+  const finished = loadingStep === LoadingStep.FINISHED;
+  const error = loadingStep === LoadingStep.ERROR;
+  const started =
+    loadingStep === LoadingStep.STARTED || loadingStep === LoadingStep.FINISHED;
 
   const reloadPreviousSession = useCallback(() => {
     dispatch(replayActionsThunk(api));
@@ -94,7 +102,6 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
 
   return (
     <Dashboard
-      api={api}
       areHashesReady={areHashesReady}
       hasPreviousSession={hasPreviousSession}
       originalPath={originalPath}
@@ -106,6 +113,9 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
       exportToJson={exportToJson}
       reloadPreviousSession={reloadPreviousSession}
       resetWorkspace={resetWorkspace}
+      finished={finished}
+      error={error}
+      started={started}
       undo={undo}
       redo={redo}
       canRedo={canRedo}

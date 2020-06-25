@@ -4,25 +4,24 @@ import FolderDropzone from "components/folder-dropzone/folder-dropzone-container
 import WorkSpace from "components/workspace/workspace";
 import WaitingScreen from "components/folder-dropzone/waiting-screen";
 import ErrorScreen from "components/errors/error-screen";
+import { useLoadingStep } from "../../reducers/loading-state/loading-state-selectors";
+import { LoadingStep } from "../../reducers/loading-state/loading-state-types";
 
 interface MainSpaceProps {
   api: any;
 }
 
 const MainSpace: FC<MainSpaceProps> = ({ api }) => {
-  const { loading_state } = api;
   const [loadedPath, setLoadedPath] = useState("");
-  const started = loading_state.isStarted();
-  const finished = loading_state.isFinished();
-  const error = loading_state.isInError();
+  const step = useLoadingStep();
 
-  if (error) {
+  if (step === LoadingStep.ERROR) {
     return <ErrorScreen />;
   }
-  if (!started && !finished) {
+  if (step === LoadingStep.WAITING) {
     return <FolderDropzone api={api} setLoadedPath={setLoadedPath} />;
   }
-  if (started && !finished) {
+  if (step === LoadingStep.STARTED) {
     return <WaitingScreen api={api} loadedPath={loadedPath} />;
   }
   return <WorkSpace api={api} />;

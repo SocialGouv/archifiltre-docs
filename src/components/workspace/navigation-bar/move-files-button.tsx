@@ -3,6 +3,11 @@ import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaArrowsAlt, FaHandPointer } from "react-icons/fa";
 import { useFileMoveActiveState } from "hooks/use-file-move-active-state";
+import styled from "styled-components";
+
+const BetaText = styled.span`
+  font-size: 0.5rem !important;
+`;
 
 const MoveFilesButton: FC = () => {
   const { t } = useTranslation();
@@ -18,6 +23,7 @@ const MoveFilesButton: FC = () => {
       size="small"
       onClick={toggleMoveElements}
       startIcon={isFileMoveActive ? <FaHandPointer /> : <FaArrowsAlt />}
+      endIcon={<BetaText>BETA</BetaText>}
     >
       {isFileMoveActive
         ? t("workspace.normalMode")

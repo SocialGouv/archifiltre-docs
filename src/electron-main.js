@@ -14,8 +14,8 @@ if (app.isPackaged) {
   // Enable electron crash reporter to get logs in case of low level crash
   crashReporter.start({
     companyName: "SocialGouv",
-    productName: "Archifiltre",
     ignoreSystemCrashHandler: true,
+    productName: "Archifiltre",
     submitURL: SENTRY_MINIDUMP_URL,
   });
 }
@@ -74,13 +74,13 @@ const askBeforeLeaving = () => {
       yes = "yes";
     }
     const options = {
-      type: "warning",
       buttons: [no, yes],
-      defaultId: 0,
-      title: title,
-      message: message,
-      detail: detail,
       cancelId: 0,
+      defaultId: 0,
+      detail: detail,
+      message: message,
+      title: title,
+      type: "warning",
     };
     const promiseResponse = dialog.showMessageBox(win, options);
     promiseResponse.then((obj) => {
@@ -94,14 +94,14 @@ const askBeforeLeaving = () => {
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1500,
     height: 800,
+    show: false,
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
     },
-    show: false,
+    width: 1500,
   });
 
   // and load the index.html of the app.

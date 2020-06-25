@@ -1,8 +1,9 @@
-import { computeFolderHashes } from "util/files-and-folders/file-and-folders-utils";
 import {
   AsyncWorkerEvent,
   createAsyncWorkerForChildProcess,
 } from "util/async-worker/async-worker-util";
+import { computeFolderHashes } from "util/files-and-folders/file-and-folders-utils";
+
 import { MessageTypes } from "../util/batch-process/batch-process-util-types";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
@@ -20,8 +21,8 @@ asyncWorker.addEventListener(
 
           if (Object.keys(batchResult).length >= BATCH_SIZE) {
             asyncWorker.postMessage({
-              type: MessageTypes.RESULT,
               result: batchResult,
+              type: MessageTypes.RESULT,
             });
             batchResult = {};
           }
@@ -35,11 +36,11 @@ asyncWorker.addEventListener(
 
         // flushing remaining results
         asyncWorker.postMessage({
-          type: MessageTypes.RESULT,
           result: batchResult,
+          type: MessageTypes.RESULT,
         });
       } catch (error) {
-        asyncWorker.postMessage({ type: MessageTypes.ERROR, error });
+        asyncWorker.postMessage({ error, type: MessageTypes.ERROR });
       }
 
       asyncWorker.postMessage({ type: MessageTypes.COMPLETE });

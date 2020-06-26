@@ -4,12 +4,6 @@ import SaveButton, { ExportToJson } from "./save-button";
 import ReinitButton, { ResetWorkspace } from "./reinit-button";
 import UndoRedo from "components/header/dashboard/undo-redo-button";
 import { SearchButton } from "./search-button";
-import {
-  ExportToAuditReport,
-  ExportToCsv,
-  ExportToMets,
-  ExportToResip,
-} from "../../common/export-types";
 import ExportButton from "./export-button";
 import styled from "styled-components";
 import ArchifiltreLogo from "../archifiltre-logo";
@@ -21,18 +15,13 @@ const HeaderLine = styled.div`
 `;
 
 interface DashboardProps {
-  areHashesReady: boolean;
   started: boolean;
   finished: boolean;
   error: boolean;
   hasPreviousSession: boolean;
   originalPath: string;
   sessionName: string;
-  exportToCsv: ExportToCsv;
-  exportToResip: ExportToResip;
-  exportToMets: ExportToMets;
   exportToJson: ExportToJson;
-  exportToAuditReport: ExportToAuditReport;
   resetWorkspace: ResetWorkspace;
   reloadPreviousSession: () => void;
   undo: () => void;
@@ -42,18 +31,13 @@ interface DashboardProps {
 }
 
 const DashBoard: FC<DashboardProps> = ({
-  areHashesReady,
   started,
   finished,
   error,
   hasPreviousSession,
   originalPath,
   sessionName,
-  exportToCsv,
-  exportToResip,
-  exportToMets,
   exportToJson,
-  exportToAuditReport,
   resetWorkspace,
   reloadPreviousSession,
   undo,
@@ -112,13 +96,7 @@ const DashBoard: FC<DashboardProps> = ({
         )}
         {shouldDisplayActions && (
           <Box pl={1}>
-            <ExportButton
-              areHashesReady={areHashesReady}
-              exportToAuditReport={exportToAuditReport}
-              exportToMets={exportToMets}
-              exportToResip={exportToResip}
-              exportToCsv={exportToCsv}
-            />
+            <ExportButton />
           </Box>
         )}
         {shouldDisplayPreviousSession && (

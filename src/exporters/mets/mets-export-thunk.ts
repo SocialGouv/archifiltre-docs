@@ -7,24 +7,16 @@ import {
   getFilesToDeleteFromStore,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "reducers/tags/tags-selectors";
+import { getWorkspaceMetadataFromStore } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { makeSIP } from "./mets";
-
-interface MetsExportThunkOptions {
-  originalPath: string;
-  sessionName: string;
-}
 
 /**
  * Thunk to export to METS
- * @param state - The application state as ImmutableJS Record
+ * @param exportPath
  */
-export const metsExporterThunk = ({
-  originalPath,
-  sessionName,
-}: MetsExportThunkOptions): ArchifiltreThunkAction => (
-  dispatch,
-  getState
-): void => {
+export const metsExporterThunk = (
+  exportPath: string
+): ArchifiltreThunkAction => (dispatch, getState): void => {
   const state = getState();
   const filesAndFolders = getFilesAndFoldersFromStore(state);
   const filesAndFoldersMetadata = getFilesAndFoldersMetadataFromStore(state);
@@ -32,6 +24,7 @@ export const metsExporterThunk = ({
   const aliases = getAliasesFromStore(state);
   const comments = getCommentsFromStore(state);
   const elementsToDelete = getFilesToDeleteFromStore(state);
+  const { sessionName, originalPath } = getWorkspaceMetadataFromStore(state);
 
   makeSIP({
     aliases,
@@ -39,6 +32,7 @@ export const metsExporterThunk = ({
     elementsToDelete,
     filesAndFolders,
     filesAndFoldersMetadata,
+    exportPath,
     originalPath,
     sessionName,
     tags,

@@ -126,7 +126,7 @@
     "@devexpress/dx-react-core": "^2.6.4",
     "@material-ui/core": "^4.10.2",
     "@material-ui/lab": "^4.0.0-alpha.56",
-    "@sentry/browser": "^5.18.0",
+    "@sentry/browser": "^5.18.1",
     "@types/pizzip": "^3.0.1",
     "angular-expressions": "^1.1.1",
     "clean-webpack-plugin": "^3.0.0",

@@ -12,6 +12,7 @@ import {
   keyBy,
   map,
   mapValues,
+  omit,
   omitBy,
   over,
   overArgs,
@@ -25,6 +26,7 @@ import {
   sum,
   takeRight,
   toArray,
+  values,
 } from "lodash/fp";
 
 import _ from "lodash";
@@ -66,14 +68,6 @@ const argsToArray = memoize(
     hashesMap,
   ]
 );
-
-/**
- * Groups filesAndFolders (with hash) by hash
- */
-const groupFilesAndFoldersByHash: Mapper<
-  FilesAndFoldersMap,
-  DuplicatesMap
-> = memoize(groupBy<FilesAndFolders>("hash"));
 
 /**
  * Groups filesAndFolders ids by hash
@@ -148,8 +142,15 @@ export const getFilteredDuplicatesMap = (
 ): Merger<FilesAndFoldersCollection, HashesMap, DuplicatesMap> =>
   memoize(
     compose(
+      omit<
+        {
+          [hash: string]: FilesAndFolders & { hash: string };
+        },
+        string
+      >(""),
       groupBy(
-        ({ hash }: FilesAndFolders & { hash: string }): string => hash || ""
+        ({ hash }: FilesAndFolders & { hash: string | null }): string =>
+          hash || ""
       ),
       filterFilesAndFoldersAndMerge(filesAndFoldersFilter)
     )
@@ -233,34 +234,6 @@ export const countDuplicatesPercentForFolders: Merger<
 > = memoize(compose(countDuplicatesPercent, getHashesForFolders));
 
 /**
- * Counts the total size of duplicated elements
- */
-export const countDuplicatesTotalSize: Mapper<
-  FilesAndFoldersMap,
-  number
-> = memoize(
-  compose(
-    sum,
-    map(
-      (filesAndFolders: FilesAndFolders[]) =>
-        filesAndFolders[0].file_size * (filesAndFolders.length - 1)
-    ),
-    groupFilesAndFoldersByHash
-  )
-);
-
-/**
- * Returns the total size of duplicate elements
- */
-export const countDuplicateFilesTotalSize: Merger<
-  FilesAndFoldersMap,
-  HashesMap,
-  number
-> = memoize(
-  compose(countDuplicatesTotalSize, filterFilesAndFoldersAndMerge(getFilesMap))
-);
-
-/**
  * Returns the nbDuplicatedItems most duplicated items
  * @param nbDuplicatedItems
  */
@@ -297,6 +270,41 @@ export const getMostDuplicatedFiles = (
 const getFoldersDuplicatesMap = getFilteredDuplicatesMap(getFoldersMap);
 
 export const getFilesDuplicatesMap = getFilteredDuplicatesMap(getFilesMap);
+
+/**
+ * Sums the number of duplicates in a duplicates map based on the count method for element values
+ * @param countMethod
+ */
+const countDuplicatesInDuplicatesMap = (
+  countMethod: (file: FilesAndFolders) => number
+): Mapper<DuplicatesMap, number> =>
+  compose(
+    sum,
+    values,
+    mapValues((filesAndFoldersList: FilesAndFolders[]) =>
+      filesAndFoldersList
+        .slice(1)
+        .reduce(
+          (count, fileAndfolder: FilesAndFolders) =>
+            count + countMethod(fileAndfolder),
+          0
+        )
+    )
+  );
+
+/**
+ * Returns the total size of duplicate elements
+ */
+export const countDuplicateFilesTotalSize: Merger<
+  FilesAndFoldersMap,
+  HashesMap,
+  number
+> = memoize(
+  compose(
+    countDuplicatesInDuplicatesMap(({ file_size }) => file_size),
+    getFilesDuplicatesMap
+  )
+);
 
 /**
  * Get the duplicated files where the duplicates take the most space
@@ -338,6 +346,7 @@ export const hasDuplicate = (
   _(hashes)
     .omit(fileOrFolder.id)
     .values()
+    .filter((hash) => hash !== null)
     .some((hash) => hash === hashes[fileOrFolder.id]);
 
 type Size = {

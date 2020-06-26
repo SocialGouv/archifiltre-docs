@@ -26,7 +26,7 @@ export interface FilesAndFoldersMap {
 }
 
 export interface HashesMap {
-  [id: string]: string;
+  [id: string]: string | null;
 }
 
 export interface CommentsMap {

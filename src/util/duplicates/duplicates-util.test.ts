@@ -159,8 +159,8 @@ const csvFile2Id = "csv-file-2-id";
 const imgFile2Id = "img-file-2-id";
 const csvFileName = "csv-file.csv";
 const imgFileName = "img-file.jpg";
-const csvHash = "first-hash-value";
-const imgHash = "second-hash-value";
+const csvHash = "csv-hash-value";
+const imgHash = "img-hash-value";
 const csvFileSize = 4000;
 const imgFileSize = 200;
 const csvFile = createFilesAndFolders({
@@ -219,6 +219,17 @@ describe("duplicates-util", () => {
         2 * file1Size + file5Size
       );
     });
+
+    it("should not include null hashes as duplicates", () => {
+      expect(
+        countDuplicateFilesTotalSize(filesMap, {
+          ...hashesMap,
+          [file1Id]: null,
+          [file3Id]: null,
+          [file4Id]: null,
+        })
+      ).toEqual(file5Size);
+    });
   });
 
   describe("getMostDuplicatedFiles", () => {
@@ -227,6 +238,16 @@ describe("duplicates-util", () => {
         [file1WithHash, file3WithHash, file4WithHash],
         [file5WithHash, file6WithHash],
       ]);
+    });
+
+    it("should not consider null hashes as duplicates", () => {
+      expect(
+        getMostDuplicatedFiles(3)(filesMap, {
+          ...hashesMap,
+          [file1Id]: null,
+          [file3Id]: null,
+        })
+      ).toEqual([[file5WithHash, file6WithHash]]);
     });
 
     it("should not return too many duplicated items", () => {
@@ -264,6 +285,15 @@ describe("duplicates-util", () => {
       });
     });
 
+    it("should not consider null hashes as duplicates", () => {
+      const biggestDuplicatedFolders = getBiggestDuplicatedFolders(3)(
+        filesMap,
+        metadataMap,
+        { ...hashesMap, [folder1Id]: null, [folder2Id]: null }
+      );
+      expect(biggestDuplicatedFolders.length).toBe(0);
+    });
+
     it("should not return too many duplicated items", () => {
       expect(
         getBiggestDuplicatedFolders(1)(filesMap, metadataMap, hashesMap)
@@ -291,12 +321,25 @@ describe("duplicates-util", () => {
   });
 
   describe("hasDuplicate", () => {
-    it("should return true if element has at least one duplicate", () => {
-      expect(hasDuplicate(hashesMap, file1)).toEqual(true);
+    describe("without null hashes", () => {
+      it("should return true if element has at least one duplicate", () => {
+        expect(hasDuplicate(hashesMap, file1)).toEqual(true);
+      });
+
+      it("should return false if element has no duplicates", () => {
+        expect(hasDuplicate(hashesMap, file2)).toEqual(false);
+      });
     });
 
-    it("should return false if element has no duplicates", () => {
-      expect(hasDuplicate(hashesMap, file2)).toEqual(false);
+    describe("with null hashes", () => {
+      it("should ignore the null hashes elements", () => {
+        expect(
+          hasDuplicate(
+            { ...hashesMap, [file1Id]: null, [file4Id]: null },
+            file1
+          )
+        ).toEqual(false);
+      });
     });
   });
 
@@ -321,13 +364,46 @@ describe("duplicates-util", () => {
       expect(countDuplicateFileSizes(duplicatesMap)).toEqual({
         [FileType.PUBLICATION]: 0,
         [FileType.PRESENTATION]: 0,
-        [FileType.SPREADSHEET]: 10000,
+        [FileType.SPREADSHEET]: 4000,
         [FileType.EMAIL]: 0,
         [FileType.DOCUMENT]: 0,
-        [FileType.IMAGE]: 400,
+        [FileType.IMAGE]: 200,
         [FileType.VIDEO]: 0,
         [FileType.AUDIO]: 0,
-        [FileType.OTHER]: 2500,
+        [FileType.OTHER]: 4500,
+      });
+    });
+
+    describe("with null hashes", () => {
+      it("should ignore the null hashes", () => {
+        const duplicatesMap = getFilesDuplicatesMap(
+          {
+            ...filesMap,
+            [csvFileId]: csvFile,
+            [imgFileId]: imgFile,
+            [csvFile2Id]: csvFile2,
+            [imgFile2Id]: imgFile2,
+          },
+          {
+            ...hashesMap,
+            [csvFileId]: null,
+            [imgFileId]: null,
+            [csvFile2Id]: null,
+            [imgFile2Id]: null,
+          }
+        );
+
+        expect(countDuplicateFileSizes(duplicatesMap)).toEqual({
+          [FileType.PUBLICATION]: 0,
+          [FileType.PRESENTATION]: 0,
+          [FileType.SPREADSHEET]: 0,
+          [FileType.EMAIL]: 0,
+          [FileType.DOCUMENT]: 0,
+          [FileType.IMAGE]: 0,
+          [FileType.VIDEO]: 0,
+          [FileType.AUDIO]: 0,
+          [FileType.OTHER]: 4500,
+        });
       });
     });
   });
@@ -353,13 +429,45 @@ describe("duplicates-util", () => {
       expect(countDuplicateFileTypes(duplicatesMap)).toEqual({
         [FileType.PUBLICATION]: 0,
         [FileType.PRESENTATION]: 0,
-        [FileType.SPREADSHEET]: 4,
+        [FileType.SPREADSHEET]: 1,
         [FileType.EMAIL]: 0,
         [FileType.DOCUMENT]: 0,
-        [FileType.IMAGE]: 2,
+        [FileType.IMAGE]: 1,
         [FileType.VIDEO]: 0,
         [FileType.AUDIO]: 0,
-        [FileType.OTHER]: 1,
+        [FileType.OTHER]: 3,
+      });
+    });
+
+    describe("with null hashes", () => {
+      it("should ignore the null hashes", () => {
+        const duplicatesMap = getFilesDuplicatesMap(
+          {
+            ...filesMap,
+            [csvFileId]: csvFile,
+            [imgFileId]: imgFile,
+            [csvFile2Id]: csvFile2,
+            [imgFile2Id]: imgFile2,
+          },
+          {
+            ...hashesMap,
+            [csvFileId]: null,
+            [imgFileId]: null,
+            [csvFile2Id]: null,
+            [imgFile2Id]: null,
+          }
+        );
+        expect(countDuplicateFileTypes(duplicatesMap)).toEqual({
+          [FileType.PUBLICATION]: 0,
+          [FileType.PRESENTATION]: 0,
+          [FileType.SPREADSHEET]: 0,
+          [FileType.EMAIL]: 0,
+          [FileType.DOCUMENT]: 0,
+          [FileType.IMAGE]: 0,
+          [FileType.VIDEO]: 0,
+          [FileType.AUDIO]: 0,
+          [FileType.OTHER]: 3,
+        });
       });
     });
   });

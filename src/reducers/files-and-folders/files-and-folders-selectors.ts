@@ -6,6 +6,8 @@ import { Mapper, not, size } from "util/functionnal-programming-utils";
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
 import { StoreState } from "../store";
 import {
+  AliasMap,
+  CommentsMap,
   FilesAndFolders,
   FilesAndFoldersMap,
   HashesMap,
@@ -191,14 +193,14 @@ export const getHashesFromStore = (store: StoreState): HashesMap =>
  * Gets the comments map from the redux state
  * @param store - The current redux state
  */
-export const getCommentsFromStore = (store: StoreState): HashesMap =>
+export const getCommentsFromStore = (store: StoreState): CommentsMap =>
   getCurrentState(store.filesAndFolders).comments;
 
 /**
  * Gets the aliases map from the redux state
  * @param store - The current redux state
  */
-export const getAliasesFromStore = (store: StoreState): HashesMap =>
+export const getAliasesFromStore = (store: StoreState): AliasMap =>
   getCurrentState(store.filesAndFolders).aliases;
 
 /**

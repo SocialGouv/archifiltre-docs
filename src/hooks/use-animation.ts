@@ -25,16 +25,19 @@ export const useAnimatedValue = (
   useEffect(() => {
     const startTime = Date.now();
     setValue(initialValue);
+    let animationFrame;
 
     const handleNextFrame = () => {
       const progress = linearProgress(startTime, duration, Date.now());
       const nextValue = progress * (targetValue - initialValue) + initialValue;
       setValue(nextValue);
       if (progress < 1) {
-        requestAnimationFrame(handleNextFrame);
+        animationFrame = requestAnimationFrame(handleNextFrame);
       }
     };
     handleNextFrame();
+
+    return () => cancelAnimationFrame(animationFrame);
   }, [initialValue, targetValue, duration, animationDependency]);
 
   return value;

@@ -185,6 +185,7 @@
       "title": "Errors list",
       "errorCode": "Error Code",
       "errorDescription": "Error Description",
+      "element": "Element (file or folder)",
       "errorDescriptions": {
         "ENOENT": "The file cannot be found.",
         "EBUSY": "The resource is busy. Maybe it's currently used by another process.",

@@ -51,7 +51,6 @@ export const replayActionsThunk = (api: any) => async (dispatch) => {
       .map((actionString) => JSON.parse(actionString));
     await clearActionReplayFile();
     previousActionsArray.forEach((action) => dispatch(action));
-    api.loading_state.finishedToLoadFiles();
   } catch (err) {
     reportError(err.message);
     notifyError(translations.t("replay.error"), translations.t("replay.title"));

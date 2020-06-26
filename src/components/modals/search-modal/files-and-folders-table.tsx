@@ -22,6 +22,7 @@ export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
         accessor: "name",
       },
       {
+        id: "type",
         name: t("search.type"),
         accessor: (element: FilesAndFolders) =>
           getType(element, {
@@ -30,11 +31,13 @@ export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
           }),
       },
       {
+        id: "size",
         name: t("search.size"),
         accessor: ({ file_size }: FilesAndFolders) =>
           octet2HumanReadableFormat(file_size),
       },
       {
+        id: "lastModified",
         name: t("search.fileLastModified"),
         accessor: ({ file_last_modified }: FilesAndFolders) =>
           dateFormat(file_last_modified, "dd/mm/yyyy"),

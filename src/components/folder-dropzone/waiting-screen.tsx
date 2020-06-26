@@ -1,5 +1,5 @@
 import Grid from "@material-ui/core/Grid";
-import React, { FC } from "react";
+import React, { FC, useMemo } from "react";
 
 import IndexingBlock from "./indexing-block";
 import AreaLoadingBar from "../area-components/area-loading-bar";
@@ -164,23 +164,32 @@ const Presentational: FC<PresentationalProps> = ({
   count,
   totalCount,
   loadedPath,
-}) => (
-  <Grid container direction="column">
-    <Grid item>
-      <MainCell>
-        {isJsonFile(loadedPath) ? (
-          <LoadingJson />
-        ) : (
-          <LoadingMessages
-            status={status}
-            count={count}
-            totalCount={totalCount}
-          />
-        )}
-      </MainCell>
+}) => {
+  const isJson = useMemo(() => {
+    try {
+      return isJsonFile(loadedPath);
+    } catch (error) {
+      return false;
+    }
+  }, [loadedPath]);
+  return (
+    <Grid container direction="column">
+      <Grid item>
+        <MainCell>
+          {isJson ? (
+            <LoadingJson />
+          ) : (
+            <LoadingMessages
+              status={status}
+              count={count}
+              totalCount={totalCount}
+            />
+          )}
+        </MainCell>
+      </Grid>
     </Grid>
-  </Grid>
-);
+  );
+};
 
 const WaitingScreen: FC<WaitingScreenProps> = ({
   loadedPath,

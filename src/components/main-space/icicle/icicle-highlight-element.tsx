@@ -1,54 +1,36 @@
 import React, { FC } from "react";
-import SvgRectangle from "./svg-rectangle";
+import IcicleHightlightElementRectangle from "./icicle-highlight-element-rectangle";
 import { DimsMap } from "./icicle";
-import { empty } from "../../../util/function/function-util";
-import { useAnimatedValue } from "../../../hooks/use-animation";
-import { useFileMoveActiveState } from "../../../hooks/use-file-move-active-state";
+import { IcicleMouseActionHandler } from "./icicle-types";
 
 type IcicleHightlightElementProps = {
   dimsMap: DimsMap;
   highlightedElementId: string;
   highlightedElementTime: number;
+  onClickHandler: IcicleMouseActionHandler;
+  onDoubleClickHandler: IcicleMouseActionHandler;
+  onMouseOverHandler: IcicleMouseActionHandler;
 };
-
-const ICICLE_HIGHLIGHT_DURATION = 3000;
 
 const IcicleHightlightElement: FC<IcicleHightlightElementProps> = ({
   dimsMap,
   highlightedElementId,
   highlightedElementTime,
+  onClickHandler,
+  onDoubleClickHandler,
+  onMouseOverHandler,
 }) => {
   const dims = dimsMap[highlightedElementId];
 
-  const highlightedElementControl = `${highlightedElementId}:${highlightedElementTime}`;
-
-  const animatedOpacity = useAnimatedValue(
-    1,
-    0,
-    ICICLE_HIGHLIGHT_DURATION,
-    highlightedElementControl
-  );
-
-  const { isFileMoveActive } = useFileMoveActiveState();
-
   return !dims || !highlightedElementId ? null : (
-    <g>
-      <SvgRectangle
-        x={dims.x}
-        dx={dims.dx}
-        y={dims.y}
-        dy={dims.dy}
-        fill="transparent"
-        stroke="red"
-        onClickHandler={empty}
-        onDoubleClickHandler={empty}
-        onMouseOverHandler={empty}
-        opacity={animatedOpacity}
-        cursor={isFileMoveActive ? "move" : "pointer"}
-        elementId={highlightedElementId}
-        strokeWidth={3}
-      />
-    </g>
+    <IcicleHightlightElementRectangle
+      dims={dims}
+      highlightedElementId={highlightedElementId}
+      highlightedElementTime={highlightedElementTime}
+      onClickHandler={onClickHandler}
+      onDoubleClickHandler={onDoubleClickHandler}
+      onMouseOverHandler={onMouseOverHandler}
+    />
   );
 };
 

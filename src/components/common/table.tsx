@@ -7,6 +7,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React, { FC, memo, useCallback, useState } from "react";
 import Paginator from "../modals/search-modal/paginator";
+import TableValue from "./table-value";
 
 interface TableProps {
   data: any[];
@@ -52,9 +53,9 @@ const Table: FC<TableProps> = ({
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, rowIndex) => (
                 <TableRow key={`${row.name}-${rowIndex}`}>
-                  {columns.map(({ accessor }, columnIndex) => (
-                    <TableCell key={`${accessor}-${columnIndex}`}>
-                      {row[accessor]}
+                  {columns.map(({ accessor, id }, columnIndex) => (
+                    <TableCell key={`${id || accessor}-${columnIndex}`}>
+                      <TableValue row={row} column={columns[columnIndex]} />
                     </TableCell>
                   ))}
                 </TableRow>

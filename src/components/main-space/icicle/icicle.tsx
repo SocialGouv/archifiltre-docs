@@ -210,6 +210,9 @@ const Icicle: FC<IcicleProps> = ({
         dimsMap={dims}
         highlightedElementId={movedElementId}
         highlightedElementTime={movedElementTime}
+        onClickHandler={onIcicleRectClickHandler}
+        onDoubleClickHandler={onIcicleRectDoubleClickHandler}
+        onMouseOverHandler={onIcicleRectMouseOverHandler}
       />
     </g>
   );

@@ -35,8 +35,8 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
     loadingStep === LoadingStep.STARTED || loadingStep === LoadingStep.FINISHED;
 
   const reloadPreviousSession = useCallback(() => {
-    dispatch(replayActionsThunk(api));
-  }, [dispatch, api]);
+    dispatch(replayActionsThunk());
+  }, [dispatch]);
 
   const undo = useCallback(() => {
     dispatch(undoAction());

@@ -189,19 +189,55 @@ describe("duplicates-util", () => {
     it("should count the number of duplicates", () => {
       expect(countDuplicateFiles(filesMap, hashesMap)).toEqual(3);
     });
+
+    describe("with null hashes", () => {
+      it("should ignore the null hashes", () => {
+        expect(
+          countDuplicateFiles(filesMap, {
+            ...hashesMap,
+            [file1Id]: null,
+            [file3Id]: null,
+            [file4Id]: null,
+          })
+        ).toBe(1);
+      });
+    });
   });
 
   describe("countDuplicateFolders", () => {
     it("should count the number of duplicates", () => {
-      expect(countDuplicateFolders(filesMap, hashesMap)).toEqual(1);
+      expect(countDuplicateFolders(filesMap, hashesMap)).toBe(1);
+    });
+
+    describe("with null hashes", () => {
+      it("should ignore the null hashes", () => {
+        expect(
+          countDuplicateFolders(filesMap, {
+            ...hashesMap,
+            [folder1Id]: null,
+            [folder2Id]: null,
+          })
+        ).toBe(0);
+      });
     });
   });
 
   describe("countDuplicatesPercentForFiles", () => {
     it("should count the percent of duplicates", () => {
-      expect(countDuplicatesPercentForFiles(filesMap, hashesMap)).toEqual(
-        3 / 6
-      );
+      expect(countDuplicatesPercentForFiles(filesMap, hashesMap)).toBe(3 / 6);
+    });
+
+    describe("with null hashes", () => {
+      it("should ignore the null hashes", () => {
+        expect(
+          countDuplicatesPercentForFiles(filesMap, {
+            ...hashesMap,
+            [file1Id]: null,
+            [file3Id]: null,
+            [file4Id]: null,
+          })
+        ).toEqual(1 / 6);
+      });
     });
   });
 
@@ -210,6 +246,18 @@ describe("duplicates-util", () => {
       expect(countDuplicatesPercentForFolders(filesMap, hashesMap)).toEqual(
         1 / 2
       );
+    });
+
+    describe("with null hashes", () => {
+      it("should ignore the null hashes", () => {
+        expect(
+          countDuplicatesPercentForFolders(filesMap, {
+            ...hashesMap,
+            [folder1Id]: null,
+            [folder2Id]: null,
+          })
+        ).toBe(0);
+      });
     });
   });
 

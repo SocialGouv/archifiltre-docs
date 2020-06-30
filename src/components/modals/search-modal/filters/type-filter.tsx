@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
 import { getType } from "util/files-and-folders/file-and-folders-utils";

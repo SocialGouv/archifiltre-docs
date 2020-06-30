@@ -12,7 +12,6 @@ import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and
 import { updateAliasThunk } from "../../../reducers/files-and-folders/files-and-folders-thunks";
 import { getType } from "../../../util/files-and-folders/file-and-folders-utils";
 import { getAbsolutePath } from "../../../util/file-system/file-sys-util";
-import { commitAction } from "../../../reducers/enhancers/undoable/undoable-actions";
 
 const ElementCharacteristicsContainer: FC = () => {
   const {

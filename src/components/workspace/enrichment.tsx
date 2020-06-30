@@ -4,17 +4,12 @@ import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCircle } from "react-icons/fa";
 import styled from "styled-components";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
-import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
-import { getType } from "util/files-and-folders/file-and-folders-utils";
 import CategoryTitle from "../common/category-title";
 import {
   ENRICHMENT_COLORS,
   EnrichmentTypes,
 } from "../main-space/icicle/icicle-enrichment";
 import CommentCell from "../report/comment-cell";
-import ElementCharacteristics from "../info-boxes/element-characteristics/element-characteristics";
 import TagCell from "../tags/tag-cell-container";
 import AllTagsButton from "./all-tags-button";
 import InfoBoxPaper from "../info-boxes/common/info-box-paper";

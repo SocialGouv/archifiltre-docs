@@ -4,7 +4,6 @@ import parse from "csv-parse/lib/sync";
 import path from "path";
 import readline from "readline";
 import { Readable } from "stream";
-import { once } from "events";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
 import {

@@ -1,5 +1,4 @@
 import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
 import React, { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";

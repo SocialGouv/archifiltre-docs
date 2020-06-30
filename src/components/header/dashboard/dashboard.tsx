@@ -15,8 +15,6 @@ import styled from "styled-components";
 import ArchifiltreLogo from "../archifiltre-logo";
 import LoadPreviousSessionButton from "./load-previous-session-button";
 import SettingsButton from "./settings-button";
-import { useLoadingStep } from "../../../reducers/loading-state/loading-state-selectors";
-import { LoadingStep } from "../../../reducers/loading-state/loading-state-types";
 
 const HeaderLine = styled.div`
   width: 100%;

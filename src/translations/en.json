@@ -59,6 +59,7 @@
     "workspace": {
       "type": "By type",
       "dates": "By dates",
+      "alphanumeric": "Alphanumerically",
       "backToRoot": "Back to root",
       "bySize": "By size",
       "byNumber": "By count",

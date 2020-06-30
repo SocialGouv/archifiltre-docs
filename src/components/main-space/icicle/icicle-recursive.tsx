@@ -1,7 +1,7 @@
 import React, { FC, memo } from "react";
 import * as ArrayUtil from "util/array/array-util";
 
-import IcicleRect, { DimsAndId } from "./icicle-rect";
+import IcicleRect from "./icicle-rect";
 import { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 
 type IcicleRecursiveProps = {

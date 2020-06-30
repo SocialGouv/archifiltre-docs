@@ -8,7 +8,6 @@ import { tagMapToArray } from "../../../reducers/tags/tags-selectors";
 import { TagMap } from "../../../reducers/tags/tags-types";
 import IcicleEnrichment, { OPACITY } from "./icicle-enrichment";
 import { IcicleMouseHandler } from "./icicle-main";
-import { Dims } from "./icicle-rect";
 import { DimsMap } from "./icicle";
 
 interface IcicleEnrichmentsProps {

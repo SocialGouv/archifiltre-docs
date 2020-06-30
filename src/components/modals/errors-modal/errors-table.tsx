@@ -13,7 +13,7 @@ const ErrorsTable: FC<ErrorsTableProps> = ({ errors }) => {
   const columns = useMemo(
     () => [
       {
-        name: t("common.file"),
+        name: t("errorsModal.element"),
         accessor: "filePath",
       },
       {

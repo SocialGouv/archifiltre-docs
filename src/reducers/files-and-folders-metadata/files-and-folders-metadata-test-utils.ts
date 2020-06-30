@@ -9,6 +9,7 @@ interface OptionalMetadata {
   nbChildrenFiles?: number;
   sortBySizeIndex?: number[];
   sortByDateIndex?: number[];
+  sortAlphaNumericallyIndex?: number[];
 }
 
 const DEFAULT_MAX_LAST_MODIFIED = 0;
@@ -19,6 +20,7 @@ const DEFAULT_CHILDREN_TOTAL_SIZE = 1000;
 const DEFAULT_NB_CHILDREN_FILE = 1;
 const DEFAULT_SORT_BY_SIZE_INDEX = [0];
 const DEFAULT_SORT_BY_DATE_INDEX = [0];
+const DEFAULT_SORT_ALPHA_NUMERICALLY_INDEX = [0];
 
 /**
  * Test common to create FilesAndFoldersMetadata with only the tested parameters
@@ -30,6 +32,7 @@ const DEFAULT_SORT_BY_DATE_INDEX = [0];
  * @param nbChildrenFiles
  * @param sortBySizeIndex
  * @param sortByDateIndex
+ * @param sortAlphaNumericallyIndex
  */
 export const createFilesAndFoldersMetadata = ({
   maxLastModified,
@@ -40,6 +43,7 @@ export const createFilesAndFoldersMetadata = ({
   nbChildrenFiles,
   sortBySizeIndex,
   sortByDateIndex,
+  sortAlphaNumericallyIndex,
 }: OptionalMetadata): FilesAndFoldersMetadata => ({
   averageLastModified: averageLastModified || DEFAULT_AVERAGE_LAST_MODIFIED,
   childrenTotalSize: childrenTotalSize || DEFAULT_CHILDREN_TOTAL_SIZE,
@@ -49,4 +53,6 @@ export const createFilesAndFoldersMetadata = ({
   nbChildrenFiles: nbChildrenFiles || DEFAULT_NB_CHILDREN_FILE,
   sortByDateIndex: sortByDateIndex || DEFAULT_SORT_BY_DATE_INDEX,
   sortBySizeIndex: sortBySizeIndex || DEFAULT_SORT_BY_SIZE_INDEX,
+  sortAlphaNumericallyIndex:
+    sortAlphaNumericallyIndex || DEFAULT_SORT_ALPHA_NUMERICALLY_INDEX,
 });

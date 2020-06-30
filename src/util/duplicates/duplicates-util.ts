@@ -1,6 +1,5 @@
 import memoize from "fast-memoize";
 import {
-  add,
   compose,
   constant,
   defaults,
@@ -8,17 +7,13 @@ import {
   filter,
   groupBy,
   identity,
-  invertBy,
   keyBy,
-  map,
   mapValues,
   omit,
   omitBy,
   over,
   overArgs,
-  pick,
   pickBy,
-  reduce,
   reverse,
   size as lodashSize,
   sortBy,
@@ -55,10 +50,6 @@ export interface DuplicatesMap {
   [hash: string]: FilesAndFolders[];
 }
 
-export interface DuplicatesIdMap {
-  [hash: string]: string[];
-}
-
 /**
  * Utility function to transform function args into an array of args
  */
@@ -67,13 +58,6 @@ const argsToArray = memoize(
     filesAndFoldersMap,
     hashesMap,
   ]
-);
-
-/**
- * Groups filesAndFolders ids by hash
- */
-const groupFileIdsByHashes: Mapper<HashesMap, DuplicatesIdMap> = memoize(
-  invertBy(identity)
 );
 
 /**
@@ -155,83 +139,6 @@ export const getFilteredDuplicatesMap = (
       filterFilesAndFoldersAndMerge(filesAndFoldersFilter)
     )
   );
-
-/**
- * Counts the number of duplicates in a FilesAndFoldersMap
- * @param filesAndFoldersMap
- */
-export const countDuplicates: Mapper<HashesMap, number> = memoize(
-  compose(
-    reduce(add)(0),
-    map<DuplicatesIdMap, number>((fileIds: string[]) => fileIds.length - 1),
-    groupFileIdsByHashes
-  )
-);
-
-/**
- * Returns the hashesMap with only hashes corresponding to files
- */
-const getHashesForFile = memoize(
-  compose(
-    spread(pick),
-    overArgs(argsToArray, [compose(map("id"), getFiles), identity])
-  )
-);
-
-/**
- * Returns the hashesMap with only hashes corresponding to folders
- */
-const getHashesForFolders = memoize(
-  compose(
-    spread(pick),
-    overArgs(argsToArray, [compose(map("id"), getFolders), identity])
-  )
-);
-
-/**
- * Counts the number of duplicated files
- */
-export const countDuplicateFiles: Merger<
-  FilesAndFoldersCollection,
-  HashesMap,
-  number
-> = memoize(compose(countDuplicates, getHashesForFile));
-
-/**
- * Counts the number of duplicated folders
- */
-export const countDuplicateFolders: Merger<
-  FilesAndFoldersCollection,
-  HashesMap,
-  number
-> = memoize(compose(countDuplicates, getHashesForFolders));
-
-/**
- * Counts the percentage of duplicates in a FilesAndFoldersMap
- * @param filesAndFoldersMap
- */
-export const countDuplicatesPercent: Mapper<
-  FilesAndFoldersMap,
-  number
-> = memoize(compose(spread(divide), over([countDuplicates, lodashSize])));
-
-/**
- * Returns the percentage of duplicated files
- */
-export const countDuplicatesPercentForFiles: Merger<
-  FilesAndFoldersMap,
-  HashesMap,
-  number
-> = memoize(compose(countDuplicatesPercent, getHashesForFile));
-
-/**
- * Returns the percentage of duplicated folders
- */
-export const countDuplicatesPercentForFolders: Merger<
-  FilesAndFoldersMap,
-  HashesMap,
-  number
-> = memoize(compose(countDuplicatesPercent, getHashesForFolders));
 
 /**
  * Returns the nbDuplicatedItems most duplicated items
@@ -408,3 +315,65 @@ export const countDuplicateFileTypes: Mapper<
   DuplicatesMap,
   FileTypeMap<number>
 > = createCountDuplicateFiles(constant(1));
+
+/**
+ * Counts the number of duplicated files
+ */
+export const countDuplicateFiles: Merger<
+  FilesAndFoldersCollection,
+  HashesMap,
+  number
+> = memoize(
+  compose(countDuplicatesInDuplicatesMap(constant(1)), getFilesDuplicatesMap)
+);
+
+/**
+ * Returns the percentage of duplicated files
+ */
+export const countDuplicatesPercentForFiles: Merger<
+  FilesAndFoldersMap,
+  HashesMap,
+  number
+> = memoize(
+  compose(
+    spread(divide),
+    over([
+      compose(
+        countDuplicatesInDuplicatesMap(constant(1)),
+        getFilesDuplicatesMap
+      ),
+      compose(lodashSize, getFiles),
+    ])
+  )
+);
+
+/**
+ * Counts the number of duplicated folders
+ */
+export const countDuplicateFolders: Merger<
+  FilesAndFoldersCollection,
+  HashesMap,
+  number
+> = memoize(
+  compose(countDuplicatesInDuplicatesMap(constant(1)), getFoldersDuplicatesMap)
+);
+
+/**
+ * Returns the percentage of duplicated folders
+ */
+export const countDuplicatesPercentForFolders: Merger<
+  FilesAndFoldersMap,
+  HashesMap,
+  number
+> = memoize(
+  compose(
+    spread(divide),
+    over([
+      compose(
+        countDuplicatesInDuplicatesMap(constant(1)),
+        getFoldersDuplicatesMap
+      ),
+      compose(lodashSize, getFolders),
+    ])
+  )
+);

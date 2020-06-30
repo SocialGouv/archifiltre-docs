@@ -185,6 +185,7 @@
       "title": "Liste des erreurs",
       "errorCode": "Code d'erreur",
       "errorDescription": "Description",
+      "element": "Élément (fichier ou répertoire)",
       "errorDescriptions": {
         "ENOENT": "Le fichier est introuvable",
         "EBUSY": "La resource est occupée. Elle est peut-être utilisée par un autre processus.",
@@ -206,9 +207,9 @@
       "fileTypeRepartitionTitle": "Répartition des fichiers dans l'arborescence"
     },
     "duplicates": {
-      "duplicateElements": "Elements redondants",
-      "nonDuplicateElements": "Elements non redondants",
-      "elements": "élements",
+      "duplicateElements": "Éléments redondants",
+      "nonDuplicateElements": "Éléments non redondants",
+      "elements": "éléments",
       "duplicatesDistribution": "Répartition des redondances",
       "duplicates": "redondances",
       "duplicatesByType": "Répartition des redondances par type d'élément",

@@ -15,7 +15,7 @@ const DuplicatesDistribution: FC = () => {
       <Box>
         <CategoryTitle>{t("duplicates.duplicatesDistribution")}</CategoryTitle>
       </Box>
-      <Box flexGrow={1}>
+      <Box flexGrow={1} minHeight={0}>
         <InfoBoxPaper>
           <Grid container>
             <Grid item xs={6}>

@@ -69,7 +69,7 @@ const DuplicatesDistributionChart: FC<DuplicatesDistributionChartProps> = ({
   );
 
   return (
-    <Chart data={chartData} height={170}>
+    <Chart data={chartData} height={140}>
       <Palette scheme={scheme} />
       <PieSeries valueField="value" argumentField="key" innerRadius={0.6} />
       <EventTracker />

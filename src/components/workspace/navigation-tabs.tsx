@@ -18,7 +18,7 @@ const StyledTabs = styled(Tabs)`
 
 const StyledPanel = styled.div`
   width: 100%;
-  min-height: 12.5rem;
+  height: 12.5rem;
 `;
 
 interface TabPanelProps {

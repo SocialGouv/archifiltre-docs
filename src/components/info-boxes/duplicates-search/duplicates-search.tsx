@@ -65,7 +65,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
         </CategoryTitle>
         <SearchBar setSearchTerm={setSearchTerm} />
       </Box>
-      <Box flexGrow={1}>
+      <Box flexGrow={1} minHeight={0} overflow="auto">
         {isEmpty(filteredFilesAndFolders) ? (
           <span>{t("search.noResult")}</span>
         ) : (

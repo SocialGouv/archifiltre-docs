@@ -2,16 +2,21 @@ import Grid from "@material-ui/core/Grid";
 import React, { FC } from "react";
 import DuplicatesDistribution from "../info-boxes/duplicates-distribution/duplicates-distribution";
 import DuplicatesTable from "../info-boxes/duplicates-table/duplicates-table-container";
+import styled from "styled-components";
+
+const StyledGrid = styled(Grid)`
+  height: 100%;
+`;
 
 const Duplicates: FC = () => (
-  <Grid container spacing={1}>
-    <Grid item xs={6}>
+  <StyledGrid container spacing={1}>
+    <StyledGrid item xs={6}>
       <DuplicatesDistribution />
-    </Grid>
-    <Grid item xs={6}>
+    </StyledGrid>
+    <StyledGrid item xs={6}>
       <DuplicatesTable />
-    </Grid>
-  </Grid>
+    </StyledGrid>
+  </StyledGrid>
 );
 
 export default Duplicates;

@@ -1,21 +1,14 @@
 import React, { FC, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   markAsToDelete,
   unmarkAsToDelete,
 } from "../../reducers/files-and-folders/files-and-folders-actions";
 import {
-  getAliasesFromStore,
   getCommentsFromStore,
-  getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
-  getHashesFromStore,
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import {
-  updateAliasThunk,
-  updateCommentThunk,
-} from "../../reducers/files-and-folders/files-and-folders-thunks";
+import { updateCommentThunk } from "../../reducers/files-and-folders/files-and-folders-thunks";
 import { StoreState } from "../../reducers/store";
 import { addTag, untagFile } from "../../reducers/tags/tags-actions";
 import {

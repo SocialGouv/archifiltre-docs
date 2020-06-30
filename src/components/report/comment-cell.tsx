@@ -1,5 +1,4 @@
 import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
 import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaHandPointer } from "react-icons/fa";

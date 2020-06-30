@@ -10,6 +10,7 @@ export interface FilesAndFoldersMetadata {
   nbChildrenFiles: number;
   sortBySizeIndex: number[];
   sortByDateIndex: number[];
+  sortAlphaNumericallyIndex: number[];
 }
 
 export interface FilesAndFoldersMetadataMap {

@@ -75,6 +75,7 @@ const expectedMetadata = {
     nbChildrenFiles: 3,
     sortByDateIndex: [0],
     sortBySizeIndex: [0],
+    sortAlphaNumericallyIndex: [0],
   },
   "/root": {
     averageLastModified: 44000,
@@ -85,6 +86,7 @@ const expectedMetadata = {
     nbChildrenFiles: 3,
     sortByDateIndex: [1, 0],
     sortBySizeIndex: [0, 1],
+    sortAlphaNumericallyIndex: [0, 1],
   },
   "/root/folder": {
     averageLastModified: 51000,
@@ -95,6 +97,7 @@ const expectedMetadata = {
     nbChildrenFiles: 2,
     sortByDateIndex: [1, 0],
     sortBySizeIndex: [0, 1],
+    sortAlphaNumericallyIndex: [0, 1],
   },
   "/root/folder/bob": {
     averageLastModified: 100000,
@@ -105,6 +108,7 @@ const expectedMetadata = {
     nbChildrenFiles: 1,
     sortByDateIndex: [],
     sortBySizeIndex: [],
+    sortAlphaNumericallyIndex: [],
   },
   "/root/folder/michael": {
     averageLastModified: 2000,
@@ -115,6 +119,7 @@ const expectedMetadata = {
     nbChildrenFiles: 1,
     sortByDateIndex: [],
     sortBySizeIndex: [],
+    sortAlphaNumericallyIndex: [],
   },
   "/root/johnny": {
     averageLastModified: 30000,
@@ -125,6 +130,7 @@ const expectedMetadata = {
     nbChildrenFiles: 1,
     sortByDateIndex: [],
     sortBySizeIndex: [],
+    sortAlphaNumericallyIndex: [],
   },
 };
 

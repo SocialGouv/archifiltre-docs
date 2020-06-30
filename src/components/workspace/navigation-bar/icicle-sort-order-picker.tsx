@@ -32,6 +32,9 @@ const IciclesSortOrderPicker: FC<IciclesSortOrderPickerProps> = ({
       <option value={IciclesSortMethod.SORT_BY_DATE}>
         {t("workspace.dates")}
       </option>
+      <option value={IciclesSortMethod.SORT_ALPHA_NUMERICALLY}>
+        {t("workspace.alphanumeric")}
+      </option>
     </Select>
   );
 };

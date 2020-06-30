@@ -1,20 +1,23 @@
 import _, { LoDashImplicitArrayWrapper } from "lodash";
 
-const performSort = <Type>(
-  getter: (value: Type) => number,
+const performSort = <Type, SortReferenceType>(
+  getter: (value: Type) => SortReferenceType,
   list: any[]
 ): LoDashImplicitArrayWrapper<number> =>
   _(list)
-    .map((element, index) => [getter(element), index])
+    .map((element, index): [SortReferenceType, number] => [
+      getter(element),
+      index,
+    ])
     .sortBy((element) => element[0])
     .map((element) => element[1]);
 
-export const indexSort = <Type>(
-  getter: (value: Type) => number,
+export const indexSort = <Type, SortReferenceType>(
+  getter: (value: Type) => SortReferenceType,
   list: string[]
 ): number[] => performSort(getter, list).value();
 
-export const indexSortReverse = <Type>(
-  getter: (value: Type) => number,
+export const indexSortReverse = <Type, SortReferenceType>(
+  getter: (value: Type) => SortReferenceType,
   list: string[]
 ): number[] => performSort(getter, list).reverse().value();

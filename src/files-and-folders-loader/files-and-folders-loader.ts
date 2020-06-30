@@ -271,6 +271,7 @@ export const createFilesAndFoldersMetadataDataStructure = (
         nbChildrenFiles: 1,
         sortByDateIndex: [],
         sortBySizeIndex: [],
+        sortAlphaNumericallyIndex: [],
       };
       lastModifiedLists[id] = [ff.file_last_modified];
       return;
@@ -304,6 +305,11 @@ export const createFilesAndFoldersMetadataDataStructure = (
       ff.children
     );
 
+    const sortAlphaNumericallyIndex = indexSort(
+      (childId: string) => filesAndFolders[childId].name,
+      ff.children
+    );
+
     metadata[id] = {
       averageLastModified,
       childrenTotalSize,
@@ -313,6 +319,7 @@ export const createFilesAndFoldersMetadataDataStructure = (
       nbChildrenFiles,
       sortByDateIndex,
       sortBySizeIndex,
+      sortAlphaNumericallyIndex,
     };
   };
 

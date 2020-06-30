@@ -107,10 +107,12 @@ export default function IcicleApiToProps({ api }) {
     (id: string): string[] => {
       const children = filesAndFolders[id].children;
       const metadata = filesAndFoldersMetadata[id];
-      const orderArray =
-        iciclesSortMethod === IciclesSortMethod.SORT_BY_DATE
-          ? metadata.sortByDateIndex
-          : metadata.sortBySizeIndex;
+      const orderArray = {
+        [IciclesSortMethod.SORT_BY_DATE]: metadata.sortByDateIndex,
+        [IciclesSortMethod.SORT_BY_TYPE]: metadata.sortBySizeIndex,
+        [IciclesSortMethod.SORT_ALPHA_NUMERICALLY]:
+          metadata.sortAlphaNumericallyIndex,
+      }[iciclesSortMethod];
       return orderArray.map((childIndex) => children[childIndex]);
     },
     [filesAndFolders, filesAndFoldersMetadata, iciclesSortMethod]

@@ -28,6 +28,10 @@ interface V21 {
   filesAndFolders: any;
 }
 
+interface V22 {
+  filesAndFolders: any;
+}
+
 export const fromAnyJsonToJs = (json: string): object => {
   let js = JSON.parse(json);
 
@@ -208,8 +212,9 @@ export const v13JsToV14Js = (v13: V9To12 & V13): object => {
     })
   );
 
-  const filesAndFoldersMetadata = createFilesAndFoldersMetadataDataStructure(
-    filesAndFolders
+  const filesAndFoldersMetadata = _.mapValues(
+    createFilesAndFoldersMetadataDataStructure(filesAndFolders),
+    fp.omit("sortAlphaNumericallyIndex")
   );
 
   return {
@@ -259,5 +264,16 @@ export const v21ToV22Js = (v21: V21): object => {
   return {
     ...v21,
     filesAndFolders,
+  };
+};
+
+export const v22ToV30Js = (v22: V22): object => {
+  const filesAndFoldersMetadata = createFilesAndFoldersMetadataDataStructure(
+    v22.filesAndFolders
+  );
+
+  return {
+    ...v22,
+    filesAndFoldersMetadata,
   };
 };

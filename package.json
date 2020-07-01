@@ -22,7 +22,8 @@
     "lint": "eslint . && tslint -p .",
     "lint-fix": "eslint --fix .",
     "postinstall": "electron-builder install-app-deps",
-    "analyze-bundle": "webpack --profile --json > stats.json && sed -i -e 1,4d stats.json && webpack-bundle-analyzer ./stats.json"
+    "analyze-bundle": "webpack --profile --json > stats.json && sed -i -e 1,4d stats.json && webpack-bundle-analyzer ./stats.json",
+    "generate-translation-csv": "node ./scripts/diff-translations.js"
   },
   "build": {
     "appId": "io.github.archifiltre",
@@ -88,6 +89,7 @@
     "copy-webpack-plugin": "6.0.2",
     "cross-env": "7.0.2",
     "css-loader": "3.6.0",
+    "csv-stringify": "^5.5.0",
     "deep-equal": "2.0.3",
     "dotenv": "8.2.0",
     "electron": "9.0.5",

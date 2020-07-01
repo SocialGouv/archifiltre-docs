@@ -160,6 +160,18 @@ asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, ({ data, type }) => {
 export default fakeChildProcess;
 ```
 
+### Translations
+
+Translations are managed using i18n json files in `src/translations/`. To make it easier for translators to work, we
+created a script that allows to generate csv containing the english text (which is our reference) and another
+language translation. This will simplify identifying the missing translations. To do that, simply run :
+
+```bash
+yarn generate-translation-csv
+```
+
+You will then find your translations csv in the `./translations` folder.
+
 ### CI
 
 - We are making a CI platform on GitLab. We have a [mirrored repository](https://gitlab.factory.social.gouv.fr/SocialGouv/archifiltre) for that.

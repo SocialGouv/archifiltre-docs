@@ -6,37 +6,20 @@ import _, { negate } from "lodash";
 import React, { FC, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { identity } from "util/function/function-util";
-import { exportConfig, ExportType, IsActiveOptions } from "./export-config";
+import {
+  exportConfig,
+  ExportType,
+  IsActiveOptions,
+  mapValuesFromExportType,
+} from "./export-config";
 import ExportOptions, { ExportTypesMap } from "./export-options";
 
 const getInitialExportPaths = (originalPath: string, sessionName: string) =>
-  Object.assign(
-    {},
-    ...Object.values(ExportType).map((exportType) => ({
-      [exportType]: exportConfig[exportType].exportPath(
-        originalPath,
-        sessionName
-      ),
-    }))
+  mapValuesFromExportType((exportType) =>
+    exportConfig[exportType].exportPath(originalPath, sessionName)
   );
 
-const initialExportCheckMap = {
-  [ExportType.AUDIT]: false,
-  [ExportType.CSV]: false,
-  [ExportType.CSV_WITH_HASHES]: false,
-  [ExportType.RESIP]: false,
-  [ExportType.METS]: false,
-};
-
-function mapValuesFromExportType<T>(
-  iteratee: (value: ExportType) => T
-): ExportTypesMap<T> {
-  return _(ExportType)
-    .values()
-    .keyBy()
-    .mapValues(iteratee)
-    .value() as ExportTypesMap<T>;
-}
+const initialExportCheckMap = mapValuesFromExportType(() => false);
 
 const computeEnabledExports = (
   options: IsActiveOptions

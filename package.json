@@ -23,7 +23,8 @@
     "lint-fix": "eslint --fix .",
     "postinstall": "electron-builder install-app-deps",
     "analyze-bundle": "webpack --profile --json > stats.json && sed -i -e 1,4d stats.json && webpack-bundle-analyzer ./stats.json",
-    "generate-translation-csv": "node ./scripts/diff-translations.js"
+    "generate-translation-csv": "node ./scripts/diff-translations.js",
+    "import-translation-csv": "node ./scripts/translation-csv-to-json"
   },
   "build": {
     "appId": "io.github.archifiltre",
@@ -167,6 +168,7 @@
     "winston-daily-rotate-file": "^4.5.0",
     "winston-sentry-raven-transport": "^1.2.0",
     "winston-transport": "^4.4.0",
-    "xml": "^1.0.1"
+    "xml": "^1.0.1",
+    "yargs": "^15.3.1"
   }
 }

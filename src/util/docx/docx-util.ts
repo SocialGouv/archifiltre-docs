@@ -21,7 +21,7 @@ export const exportToDocX = (
   templatePath: string,
   values: DocXValuesMap,
   ...replacers: FileReplacer[]
-): Blob => {
+): Buffer => {
   const templateContent = fs.readFileSync(
     path.resolve("./static", templatePath),
     "binary"
@@ -40,7 +40,7 @@ export const exportToDocX = (
     modifiedZip
   );
 
-  return replacedZip.generate({ type: "blob" });
+  return replacedZip.generate({ type: "nodebuffer" });
 };
 
 /**

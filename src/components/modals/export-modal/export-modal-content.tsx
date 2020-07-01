@@ -2,13 +2,12 @@ import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import { useStyles } from "hooks/use-styles";
-import { negate } from "lodash";
+import _, { negate } from "lodash";
 import React, { FC, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { identity } from "util/function/function-util";
-import { exportConfig, ExportType } from "./export-config";
+import { exportConfig, ExportType, IsActiveOptions } from "./export-config";
 import ExportOptions, { ExportTypesMap } from "./export-options";
-import _ from "lodash";
 
 const getInitialExportPaths = (originalPath: string, sessionName: string) =>
   Object.assign(
@@ -29,20 +28,27 @@ const initialExportCheckMap = {
   [ExportType.METS]: false,
 };
 
-const mapValuesFromExportType = <T>(
+function mapValuesFromExportType<T>(
   iteratee: (value: ExportType) => T
-): ExportTypesMap<T> =>
-   _(ExportType).values().keyBy().mapValues(iteratee).value();
+): ExportTypesMap<T> {
+  return _(ExportType)
+    .values()
+    .keyBy()
+    .mapValues(iteratee)
+    .value() as ExportTypesMap<T>;
+}
 
-const computeEnabledExports = (options: {
-  areHashesReady: boolean;
-}): ExportTypesMap<boolean> =>
-    mapValuesFromExportType((exportType) => {
+const computeEnabledExports = (
+  options: IsActiveOptions
+): ExportTypesMap<boolean> =>
+  mapValuesFromExportType((exportType) => {
     const { isActive } = exportConfig[exportType];
     return typeof isActive === "function" ? isActive(options) : isActive;
   });
 
-const defaultEnabledExports: ExportTypesMap<boolean> = mapValuesFromExportType(() => false);
+const defaultEnabledExports: ExportTypesMap<boolean> = mapValuesFromExportType(
+  () => false
+);
 
 type ExportModalContentProps = {
   areHashesReady: boolean;

@@ -39,9 +39,9 @@ const ExportOptions: FC<ExportOptionsProps> = ({
               setActiveExportValue(exportType, value)
             }
             label={t(exportConfig[exportType].label)}
-            disabledExplanation={
+            disabledExplanation={t(
               exportConfig[exportType].disabledExplanation || ""
-            }
+            )}
           />
           <ExportInput
             exportFilePath={exportPaths[exportType]}

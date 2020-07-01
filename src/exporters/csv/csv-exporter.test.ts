@@ -17,7 +17,6 @@ import {
   createEmptyStore,
   wrapStoreWithUndoable,
 } from "reducers/store-test-utils";
-import { promptUserForSave } from "util/file-system/file-system-util";
 import { csvExporterThunk } from "./csv-exporter";
 import { generateCsvExport$ } from "./csv-exporter.controller";
 
@@ -27,12 +26,6 @@ jest.mock("./csv-exporter.controller", () => ({
 
 jest.mock("uuid", () => ({
   v4: () => "test-uuid",
-}));
-
-jest.mock("util/file-system/file-system-util", () => ({
-  promptUserForSave: jest.fn((filename) =>
-    Promise.resolve(`/path/to/${filename}`)
-  ),
 }));
 
 jest.mock("fs", () => ({
@@ -133,7 +126,6 @@ const testState = {
 };
 
 const generateCsvExportMock = generateCsvExport$ as jest.Mock;
-const promptUserForSaveMock = promptUserForSave as jest.Mock;
 const writeFileMock = fs.writeFile as jest.Mock;
 const csvValue = "csv-value";
 
@@ -148,8 +140,8 @@ describe("csv-exporter", () => {
     describe("withoutHashes", () => {
       it("should generate valid csv data", async () => {
         const store = mockStore(testState);
-        const name = "test-name";
-        await store.dispatch(csvExporterThunk(name));
+        const exportPath = "test-export-path";
+        await store.dispatch(csvExporterThunk(exportPath));
 
         expect(generateCsvExportMock).toHaveBeenCalledWith({
           aliases,
@@ -160,13 +152,9 @@ describe("csv-exporter", () => {
           hashes: undefined,
           tags,
         });
-        expect(writeFileMock).toHaveBeenCalledWith(
-          `/path/to/${name}`,
-          csvValue,
-          {
-            encoding: "utf-8",
-          }
-        );
+        expect(writeFileMock).toHaveBeenCalledWith(exportPath, csvValue, {
+          encoding: "utf-8",
+        });
         expect(store.getActions()).toEqual([
           {
             goal: 2,
@@ -191,8 +179,10 @@ describe("csv-exporter", () => {
     describe("withHashes", () => {
       it("should generate valid csv data", async () => {
         const store = mockStore(testState);
-        const name = "test-name";
-        await store.dispatch(csvExporterThunk(name, { withHashes: true }));
+        const exportPath = "test-export-path";
+        await store.dispatch(
+          csvExporterThunk(exportPath, { withHashes: true })
+        );
 
         expect(generateCsvExportMock).toHaveBeenCalledWith({
           aliases,
@@ -204,13 +194,9 @@ describe("csv-exporter", () => {
           tags,
         });
 
-        expect(writeFileMock).toHaveBeenCalledWith(
-          `/path/to/${name}`,
-          csvValue,
-          {
-            encoding: "utf-8",
-          }
-        );
+        expect(writeFileMock).toHaveBeenCalledWith(exportPath, csvValue, {
+          encoding: "utf-8",
+        });
 
         expect(store.getActions()).toEqual([
           {
@@ -230,21 +216,6 @@ describe("csv-exporter", () => {
             type: COMPLETE_LOADING,
           },
         ]);
-      });
-    });
-
-    describe("when user cancels save", () => {
-      it("should not do anything", async () => {
-        promptUserForSaveMock.mockReset();
-        promptUserForSaveMock.mockResolvedValue(undefined);
-
-        const store = mockStore(testState);
-
-        await store.dispatch(csvExporterThunk(name));
-
-        expect(generateCsvExportMock).not.toHaveBeenCalled();
-        expect(writeFileMock).not.toHaveBeenCalled();
-        expect(store.getActions()).toEqual([]);
       });
     });
   });

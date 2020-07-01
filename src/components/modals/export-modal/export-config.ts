@@ -14,7 +14,7 @@ export enum ExportType {
   METS = "METS",
 }
 
-type IsActiveOptions = {
+export type IsActiveOptions = {
   areHashesReady: boolean;
 };
 

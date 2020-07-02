@@ -174,7 +174,7 @@ You will then find your translations csv in the `./translations` folder.
 
 Once your translator filled the CSV, you can import it back. Assuming that the first column of the csv is the path,
 the second your reference language and the following columns the translated languages, you can do, for a file that
-contains french translation in the third column and german translation in the fourth :
+contains french translation in the third column and german translation in the fourth:
 
 ```bash
 yarn import-translation-csv ./translations/fr-de.csv fr de

@@ -6,7 +6,6 @@ import {
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
-  getHashesFromStore,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { from } from "rxjs";
 import { bufferTime, flatMap, last, tap } from "rxjs/operators";
@@ -31,6 +30,7 @@ import {
   generateCsvExport$,
   GenerateCsvExportOptions,
 } from "./csv-exporter.controller";
+import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
 
 /**
  * Thunk that generates the csv array for the CSV export with the first line being

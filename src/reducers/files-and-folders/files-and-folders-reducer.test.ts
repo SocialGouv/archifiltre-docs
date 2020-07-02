@@ -6,7 +6,6 @@ import {
   markElementsToDelete,
   removeChild,
   setFilesAndFoldersAliases,
-  setFilesAndFoldersHashes,
   unmarkAsToDelete,
 } from "./files-and-folders-actions";
 import { filesAndFoldersReducer } from "./files-and-folders-reducer";
@@ -19,7 +18,6 @@ const baseState: FilesAndFoldersState = {
   comments: {},
   elementsToDelete: [],
   filesAndFolders: {},
-  hashes: {},
   virtualPathToId: {},
 };
 
@@ -228,55 +226,6 @@ describe("files-and-folders-reducer", () => {
           [unchangedId]: createFilesAndFolders({
             id: unchangedId,
           }),
-        },
-      });
-    });
-  });
-
-  describe("SET_FILES_AND_FOLDERS_HASHES", () => {
-    it("should replace the file and folder alias", () => {
-      const changedId = "changed-id";
-      const unchangedId = "unchanged-id";
-      const newHash = "new-hash";
-      const unchangedHash = "unchanged-hash";
-
-      const newHashes = {
-        [changedId]: newHash,
-      };
-
-      const initialState: FilesAndFoldersState = {
-        ...baseState,
-        filesAndFolders: {
-          [changedId]: createFilesAndFolders({
-            id: changedId,
-          }),
-          [unchangedId]: createFilesAndFolders({
-            id: unchangedId,
-          }),
-        },
-        hashes: {
-          [unchangedId]: unchangedHash,
-        },
-      };
-
-      const nextState = filesAndFoldersReducer(
-        initialState,
-        setFilesAndFoldersHashes(newHashes)
-      );
-
-      expect(nextState).toEqual({
-        ...baseState,
-        filesAndFolders: {
-          [changedId]: createFilesAndFolders({
-            id: changedId,
-          }),
-          [unchangedId]: createFilesAndFolders({
-            id: unchangedId,
-          }),
-        },
-        hashes: {
-          [changedId]: newHash,
-          [unchangedId]: unchangedHash,
         },
       });
     });

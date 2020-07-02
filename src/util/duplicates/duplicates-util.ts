@@ -40,11 +40,11 @@ import {
 import {
   FilesAndFolders,
   FilesAndFoldersMap,
-  HashesMap,
 } from "reducers/files-and-folders/files-and-folders-types";
 import { Mapper, Merger } from "util/functionnal-programming-utils";
 import { FileTypeMap } from "exporters/audit/audit-report-values-computer";
 import { FileType, getFileType } from "../file-types/file-types-util";
+import { HashesMap } from "reducers/hashes/hashes-types";
 
 export interface DuplicatesMap {
   [hash: string]: FilesAndFolders[];

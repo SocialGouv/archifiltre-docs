@@ -10,9 +10,9 @@ import {
   CommentsMap,
   FilesAndFolders,
   FilesAndFoldersMap,
-  HashesMap,
   VirtualPathToIdMap,
 } from "./files-and-folders-types";
+import { getHashesFromStore } from "../hashes/hashes-selectors";
 
 export const ROOT_FF_ID = "";
 
@@ -181,13 +181,6 @@ export const getFilesAndFoldersTotalSize = (
  */
 export const getFilesAndFoldersDepth = (filesAndFoldersId: string): number =>
   filesAndFoldersId.split("/").length - 2;
-
-/**
- * Gets the hashes map from the redux state
- * @param store - The current redux state
- */
-export const getHashesFromStore = (store: StoreState): HashesMap =>
-  getCurrentState(store.filesAndFolders).hashes;
 
 /**
  * Gets the comments map from the redux state

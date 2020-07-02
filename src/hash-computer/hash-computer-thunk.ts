@@ -2,11 +2,9 @@ import path from "path";
 import { tap } from "rxjs/operators";
 import { reportError } from "logging/reporter";
 import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
-import { setFilesAndFoldersHashes } from "reducers/files-and-folders/files-and-folders-actions";
 import {
   getFilesAndFoldersFromStore,
   getFilesMap,
-  getHashesFromStore,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   completeLoadingAction,
@@ -31,6 +29,8 @@ import {
 import { openModalAction } from "reducers/modal/modal-actions";
 import { Modal } from "reducers/modal/modal-types";
 import { of } from "rxjs";
+import { setFilesAndFoldersHashes } from "reducers/hashes/hashes-actions";
+import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
 
 type ComputeHashesThunkOptions = {
   ignoreFileHashes?: boolean;

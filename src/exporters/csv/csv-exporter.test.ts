@@ -126,9 +126,9 @@ const testState = {
     comments,
     elementsToDelete: [taggedFfId],
     filesAndFolders,
-    hashes,
   }),
   filesAndFoldersMetadata: { filesAndFoldersMetadata },
+  hashes: { hashes },
   tags: wrapStoreWithUndoable({ tags }),
 };
 

@@ -6,7 +6,6 @@ import {
   AliasMap,
   CommentsMap,
   FilesAndFoldersMap,
-  HashesMap,
 } from "reducers/files-and-folders/files-and-folders-types";
 import { Tag, TagMap } from "reducers/tags/tags-types";
 import translations from "translations/translations";
@@ -20,6 +19,7 @@ import {
 } from "util/files-and-folders/file-and-folders-utils";
 import { formatPathForUserSystem } from "util/file-system/file-sys-util";
 import { hasDuplicate } from "util/duplicates/duplicates-util";
+import { HashesMap } from "reducers/hashes/hashes-types";
 
 interface MakeCsvHeaderOptions {
   withHashes: boolean;

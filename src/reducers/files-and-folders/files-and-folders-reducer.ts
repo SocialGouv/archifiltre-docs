@@ -11,7 +11,6 @@ import {
   MARK_ELEMENTS_TO_DELETE,
   REMOVE_CHILD,
   SET_FILES_AND_FOLDERS_ALIAS,
-  SET_FILES_AND_FOLDERS_HASHES,
   UNMARK_AS_TO_DELETE,
 } from "./files-and-folders-types";
 
@@ -20,7 +19,6 @@ export const initialState: FilesAndFoldersState = {
   comments: {},
   elementsToDelete: [],
   filesAndFolders: {},
-  hashes: {},
   virtualPathToId: {},
 };
 
@@ -123,14 +121,6 @@ const filesAndFoldersReducer = (
         aliases: {
           ...state.aliases,
           ...action.aliases,
-        },
-      };
-    case SET_FILES_AND_FOLDERS_HASHES:
-      return {
-        ...state,
-        hashes: {
-          ...state.hashes,
-          ...action.hashes,
         },
       };
     case ADD_COMMENTS_ON_FILES_AND_FOLDERS:

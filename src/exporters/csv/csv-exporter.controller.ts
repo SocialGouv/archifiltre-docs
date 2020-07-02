@@ -4,12 +4,12 @@ import {
   AliasMap,
   CommentsMap,
   FilesAndFoldersMap,
-  HashesMap,
 } from "reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "reducers/tags/tags-types";
 import { createAsyncWorkerControllerClass } from "util/async-worker/async-worker-util";
 import { backgroundWorkerProcess$ } from "util/batch-process/batch-process-util";
 import CsvExporterFork from "./csv-exporter.fork";
+import { HashesMap } from "reducers/hashes/hashes-types";
 
 export interface GenerateCsvExportOptions {
   aliases: AliasMap;

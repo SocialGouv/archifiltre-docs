@@ -11,7 +11,6 @@ import {
   addCommentsOnFilesAndFolders,
   removeChild,
   setFilesAndFoldersAliases,
-  setFilesAndFoldersHashes,
 } from "./files-and-folders-actions";
 import {
   findElementParent,
@@ -20,20 +19,6 @@ import {
 } from "./files-and-folders-selectors";
 import { FilesAndFoldersMap } from "./files-and-folders-types";
 import { commitAction } from "../enhancers/undoable/undoable-actions";
-
-interface FfHashMap {
-  [fileAndFoldersId: string]: string;
-}
-
-/**
- * Updated multiple fileAndFolders hashes
- * @param hashes
- */
-export const updateFilesAndFoldersHashes = (
-  hashes: FfHashMap
-): ArchifiltreThunkAction => (dispatch) => {
-  dispatch(setFilesAndFoldersHashes(hashes));
-};
 
 /**
  * Updates the files and folders alias

@@ -1,15 +1,13 @@
 import React, { FC, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import {
-  getFilesAndFoldersFromStore,
-  getHashesFromStore,
-} from "reducers/files-and-folders/files-and-folders-selectors";
+import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   countDuplicateFiles,
   countDuplicateFilesTotalSize,
 } from "util/duplicates/duplicates-util";
 import DuplicatesChart from "./duplicates-chart";
+import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
 
 const DuplicatesChartContainer: FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);

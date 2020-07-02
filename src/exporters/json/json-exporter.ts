@@ -7,10 +7,10 @@ import {
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
-  getHashesFromStore,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "reducers/tags/tags-selectors";
 import { getNameWithExtension, save } from "util/file-system/file-sys-util";
+import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
 
 interface JsonExporterThunkArgs {
   sessionName: string;

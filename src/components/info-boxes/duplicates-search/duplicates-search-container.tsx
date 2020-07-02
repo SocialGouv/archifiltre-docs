@@ -1,12 +1,10 @@
 import React, { FC, useMemo } from "react";
 import { useSelector } from "react-redux";
-import {
-  getFilesAndFoldersFromStore,
-  getHashesFromStore,
-} from "reducers/files-and-folders/files-and-folders-selectors";
+import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
 import { getFilesDuplicatesMap } from "util/duplicates/duplicates-util";
 import DuplicatesSearch from "./duplicates-search";
 import _ from "lodash";
+import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
 
 const DuplicatesSearchContainer: FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);

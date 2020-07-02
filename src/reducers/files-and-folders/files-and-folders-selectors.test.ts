@@ -17,7 +17,6 @@ import {
   getFilesMap,
   getFolders,
   getFoldersCount,
-  getHashesFromStore,
   getMaxDepth,
   isFile,
 } from "./files-and-folders-selectors";
@@ -174,25 +173,6 @@ describe("files-and-folders-selectors", () => {
   describe("getFilesAndFoldersDepth", () => {
     it("should find the depth root folder", () => {
       expect(getFilesAndFoldersDepth(child1Id)).toEqual(1);
-    });
-  });
-
-  describe("getHashesFromStore", () => {
-    it("should return the current store", () => {
-      const fileId = "base-id";
-      const hash = "hash";
-      const emptyStore = createEmptyStore();
-      const hashesMap = {
-        [fileId]: hash,
-      };
-      const testStore = {
-        ...emptyStore,
-        filesAndFolders: wrapStoreWithUndoable({
-          ...filesAndFoldersInitialState,
-          hashes: hashesMap,
-        }),
-      };
-      expect(getHashesFromStore(testStore)).toEqual(hashesMap);
     });
   });
 

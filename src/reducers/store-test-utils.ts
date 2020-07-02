@@ -4,6 +4,7 @@ import { initialState as modalInitialState } from "./modal/modal-reducer";
 import { StoreState } from "./store";
 import { IciclesSortMethod } from "./workspace-metadata/workspace-metadata-types";
 import { initialState as loadingStateInitialState } from "./loading-state/loading-state-reducer";
+import { initialState as hashesInitialState } from "./hashes/hashes-reducer";
 
 /**
  * Create an empty store state for testing purposes
@@ -14,12 +15,12 @@ export const createEmptyStore = (): StoreState => ({
     comments: {},
     elementsToDelete: [],
     filesAndFolders: {},
-    hashes: {},
     virtualPathToId: {},
   }),
   filesAndFoldersMetadata: {
     filesAndFoldersMetadata: {},
   },
+  hashes: hashesInitialState,
   loadingInfo: loadingInfoInitialState,
   loadingState: wrapStoreWithUndoable(loadingStateInitialState),
   modal: modalInitialState,

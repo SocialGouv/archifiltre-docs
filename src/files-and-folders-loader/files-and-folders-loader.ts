@@ -9,7 +9,6 @@ import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   FilesAndFolders,
   FilesAndFoldersMap,
-  HashesMap,
 } from "reducers/files-and-folders/files-and-folders-types";
 import { medianOnSortedArray } from "util/array/array-util";
 import { convertToPosixAbsolutePath } from "util/file-system/file-sys-util";
@@ -21,6 +20,7 @@ import {
 } from "util/error/error-util";
 import { identifyFileFormat } from "../util/file-format/file-format-util";
 import { shouldIgnoreElement } from "../util/hidden-file/hidden-file-util";
+import { HashesMap } from "reducers/hashes/hashes-types";
 
 interface LoadFilesAndFoldersFromFileSystemError {
   message: string;

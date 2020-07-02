@@ -13,7 +13,6 @@ import {
   addCommentsOnFilesAndFolders,
   removeChild,
   setFilesAndFoldersAliases,
-  setFilesAndFoldersHashes,
 } from "./files-and-folders-actions";
 import {
   initialState,
@@ -25,10 +24,11 @@ import {
   moveElement,
   updateAliasThunk,
   updateCommentThunk,
-  updateFilesAndFoldersHashes,
 } from "./files-and-folders-thunks";
 import { ADD_CHILD } from "./files-and-folders-types";
 import { commitAction } from "../enhancers/undoable/undoable-actions";
+import { setFilesAndFoldersHashes } from "../hashes/hashes-actions";
+import { updateFilesAndFoldersHashes } from "../hashes/hashes-thunks";
 
 jest.mock("util/notification/notifications-util", () => ({
   notifyInfo: jest.fn(),

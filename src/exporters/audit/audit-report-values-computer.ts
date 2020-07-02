@@ -22,10 +22,7 @@ import {
   getFiles,
   isFile,
 } from "reducers/files-and-folders/files-and-folders-selectors";
-import {
-  FilesAndFolders,
-  HashesMap,
-} from "reducers/files-and-folders/files-and-folders-types";
+import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
 import translations from "translations/translations";
 import {
   countDuplicateFilesTotalSize,
@@ -43,11 +40,7 @@ import {
   getExtensionsForEachFileType,
   getFileType,
 } from "util/file-types/file-types-util";
-import {
-  Accessor,
-  Mapper,
-  Merger,
-} from "../../util/functionnal-programming-utils";
+import { Accessor, Mapper, Merger } from "util/functionnal-programming-utils";
 import { curriedFormatPercent, percent } from "util/numbers/numbers-util";
 import {
   AuditReportElementWithType,
@@ -55,6 +48,7 @@ import {
   AuditReportFileWithDate,
   AuditReportFileWithSize,
 } from "./audit-report-generator";
+import { HashesMap } from "reducers/hashes/hashes-types";
 
 export type FileTypeMap<T> = {
   [key in FileType]: T;

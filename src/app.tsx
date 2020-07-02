@@ -2,20 +2,16 @@
 import "logging/reporter.ts";
 
 import "./css/index.scss";
+import Providers from "components/providers";
 
 import { SecretDevtools } from "secret-devtools";
 import React from "react";
 import ReactDOM from "react-dom";
 
-import ErrorBoundary from "components/errors/error-boundary-container";
 import MainSpace from "components/main-space/main-space";
 import Header from "components/header/header";
 import { NewVersionChecker } from "components/header/new-version-checker";
 import WindowResize from "components/common/window-resize-handler";
-
-import { Store } from "reducers/real-estate-store";
-import { Provider } from "react-redux";
-import store from "reducers/store";
 
 import version from "version";
 
@@ -26,8 +22,6 @@ import BackgroundLoadingInfoContainer from "components/background-loading-info/b
 import Box from "@material-ui/core/Box";
 import styled from "styled-components";
 import Modals from "components/modals/modals";
-import { ThemeProvider } from "@material-ui/core/styles";
-import defaultTheme from "./theme/default-theme";
 
 document.title = `Archifiltre v${version}`;
 
@@ -50,38 +44,32 @@ const app = () => {
   }
 
   ReactDOM.render(
-    <Provider store={store}>
-      <ThemeProvider theme={defaultTheme}>
-        <Store>
-          {({ api }) => {
-            return (
-              <ErrorBoundary>
-                <WindowResize />
-                <App>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    height="100%"
-                    width="100%"
-                  >
-                    <Box>
-                      <Header api={api} />
-                    </Box>
-                    <Box flexGrow={1} flexShrink={1} overflow="hidden">
-                      <MainSpace api={api} />
-                    </Box>
-                    <BackgroundLoadingInfoContainer />
-                  </Box>
-                  <NewVersionChecker />
-                </App>
-                <NotificationContainer />
-                <Modals />
-              </ErrorBoundary>
-            );
-          }}
-        </Store>
-      </ThemeProvider>
-    </Provider>,
+    <Providers>
+      {({ api }) => (
+        <>
+          <WindowResize />
+          <App>
+            <Box
+              display="flex"
+              flexDirection="column"
+              height="100%"
+              width="100%"
+            >
+              <Box>
+                <Header api={api} />
+              </Box>
+              <Box flexGrow={1} flexShrink={1} overflow="hidden">
+                <MainSpace api={api} />
+              </Box>
+              <BackgroundLoadingInfoContainer />
+            </Box>
+            <NewVersionChecker />
+          </App>
+          <NotificationContainer />
+          <Modals />
+        </>
+      )}
+    </Providers>,
     rootDiv
   );
 };

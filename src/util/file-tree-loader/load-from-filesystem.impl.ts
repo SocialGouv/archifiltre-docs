@@ -8,7 +8,7 @@ import {
   loadFilesAndFoldersFromExportFile,
   loadFilesAndFoldersFromFileSystem,
 } from "../../files-and-folders-loader/files-and-folders-loader";
-import { HashesMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import { HashesMap } from "reducers/hashes/hashes-types";
 
 type Reporter = (message: any) => void;
 

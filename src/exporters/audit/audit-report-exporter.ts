@@ -8,13 +8,9 @@ import {
   getFilesAndFoldersFromStore,
   getFilesToDeleteFromStore,
   getFoldersCount,
-  getHashesFromStore,
   getMaxDepth,
 } from "reducers/files-and-folders/files-and-folders-selectors";
-import {
-  FilesAndFoldersMap,
-  HashesMap,
-} from "reducers/files-and-folders/files-and-folders-types";
+import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import {
   countDuplicateFiles,
   countDuplicateFolders,
@@ -44,6 +40,8 @@ import {
   getOldestFiles,
   percentFileTypes,
 } from "./audit-report-values-computer";
+import { HashesMap } from "reducers/hashes/hashes-types";
+import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
 
 const ROOT_ID = "";
 

@@ -16,11 +16,14 @@ import { ModalState } from "./modal/modal-types";
 import modalReducer from "./modal/modal-reducer";
 import { LoadingState } from "./loading-state/loading-state-types";
 import loadingStateReducer from "./loading-state/loading-state-reducer";
+import { hashesReducer } from "./hashes/hashes-reducer";
+import { HashesState } from "./hashes/hashes-types";
 
 export interface StoreState {
   tags: UndoableState<TagsState>;
   filesAndFolders: UndoableState<FilesAndFoldersState>;
   filesAndFoldersMetadata: FilesAndFoldersMetadataState;
+  hashes: HashesState;
   loadingInfo: LoadingInfoState;
   loadingState: UndoableState<LoadingState>;
   modal: ModalState;
@@ -31,6 +34,7 @@ export default createStore(
   combineReducers({
     filesAndFolders: filesAndFoldersReducer,
     filesAndFoldersMetadata: filesAndFoldersMetadataReducer,
+    hashes: hashesReducer,
     loadingInfo: loadingInfoReducer,
     loadingState: loadingStateReducer,
     modal: modalReducer,

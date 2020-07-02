@@ -5,13 +5,11 @@ import {
   CommentsMap,
   FilesAndFoldersActionTypes,
   FilesAndFoldersMap,
-  HashesMap,
   INITIALIZE_FILES_AND_FOLDERS,
   MARK_AS_TO_DELETE,
   MARK_ELEMENTS_TO_DELETE,
   REMOVE_CHILD,
   SET_FILES_AND_FOLDERS_ALIAS,
-  SET_FILES_AND_FOLDERS_HASHES,
   UNMARK_AS_TO_DELETE,
 } from "./files-and-folders-types";
 
@@ -35,17 +33,6 @@ export const setFilesAndFoldersAliases = (
 ): FilesAndFoldersActionTypes => ({
   aliases,
   type: SET_FILES_AND_FOLDERS_ALIAS,
-});
-
-/**
- * Action to set hashes to FileAndFolders
- * @param hashes
- */
-export const setFilesAndFoldersHashes = (
-  hashes: HashesMap
-): FilesAndFoldersActionTypes => ({
-  hashes,
-  type: SET_FILES_AND_FOLDERS_HASHES,
 });
 
 /**

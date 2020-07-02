@@ -10,7 +10,6 @@ import {
   AliasMap,
   CommentsMap,
   FilesAndFoldersMap,
-  HashesMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { TagMap } from "../../reducers/tags/tags-types";
@@ -20,6 +19,7 @@ import {
 } from "../../reducers/loading-info/loading-info-types";
 import { reportError, reportInfo, reportWarning } from "../../logging/reporter";
 import { createArchifiltreError } from "../../reducers/loading-info/loading-info-selectors";
+import { HashesMap } from "reducers/hashes/hashes-types";
 
 type LoadFileTreeHook = (error: null | ArchifiltreError, data?: any) => void;
 

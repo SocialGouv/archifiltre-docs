@@ -69,11 +69,13 @@ describe("json-exporter", () => {
           aliases,
           comments,
           filesAndFolders,
-          hashes,
           elementsToDelete,
         }),
         filesAndFoldersMetadata: {
           filesAndFoldersMetadata,
+        },
+        hashes: {
+          hashes,
         },
         tags: wrapStoreWithUndoable({
           tags,

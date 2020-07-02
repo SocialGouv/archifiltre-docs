@@ -29,13 +29,11 @@ import {
   initializeFilesAndFolders,
   markElementsToDelete,
   setFilesAndFoldersAliases,
-  setFilesAndFoldersHashes,
 } from "./files-and-folders/files-and-folders-actions";
 import {
   AliasMap,
   CommentsMap,
   FilesAndFoldersMap,
-  HashesMap,
 } from "./files-and-folders/files-and-folders-types";
 import {
   registerErrorAction,
@@ -56,6 +54,8 @@ import { loadFileTree } from "../util/file-tree-loader/file-tree-loader";
 import { commitAction } from "./enhancers/undoable/undoable-actions";
 import { setLoadingStep } from "./loading-state/loading-state-actions";
 import { LoadingStep } from "./loading-state/loading-state-types";
+import { HashesMap } from "./hashes/hashes-types";
+import { setFilesAndFoldersHashes } from "./hashes/hashes-actions";
 
 /**
  * Notifies the user that there is a Zip in the loaded files

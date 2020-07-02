@@ -1,8 +1,6 @@
-import React, { FC, useCallback, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { auditReportExporterThunk } from "exporters/audit/audit-report-exporter";
+import React, { FC, useMemo } from "react";
+import { useSelector } from "react-redux";
 import {
-  getAreHashesReady,
   getFileCount,
   getFilesAndFoldersFromStore,
 } from "reducers/files-and-folders/files-and-folders-selectors";
@@ -15,20 +13,7 @@ const FileCountInfoContainer: FC = () => {
     filesAndFoldersMap,
   ]);
 
-  const areHashesReady = useSelector(getAreHashesReady);
-  const dispatch = useDispatch();
-  const exportToAuditReport = useCallback(
-    (name) => dispatch(auditReportExporterThunk(name)),
-    [dispatch]
-  );
-
-  return (
-    <FileCountInfo
-      fileCount={fileCount}
-      areHashesReady={areHashesReady}
-      exportToAuditReport={exportToAuditReport}
-    />
-  );
+  return <FileCountInfo fileCount={fileCount} />;
 };
 
 export default FileCountInfoContainer;

@@ -9,6 +9,7 @@ import React, {
   useRef,
   useEffect,
   FormEvent,
+  ReactNode,
 } from "react";
 import { FaPen } from "react-icons/all";
 import { useStyles } from "../../hooks/use-styles";
@@ -22,6 +23,8 @@ interface EditableFieldProps {
   onChange: (value: string) => void;
   placeholder?: string;
   rowsMax?: number;
+  startAdornment?: ReactNode;
+  endAdornment?: ReactNode;
 }
 
 const EditableField: FC<EditableFieldProps> = ({
@@ -33,6 +36,12 @@ const EditableField: FC<EditableFieldProps> = ({
   onChange,
   placeholder = "",
   rowsMax = 0,
+  startAdornment = (
+    <InputAdornment position="start">
+      <FaPen />
+    </InputAdornment>
+  ),
+  endAdornment,
 }) => {
   const [isFocused, setFocus] = useState(false);
   const [localValue, setLocalValue] = useState(value);
@@ -119,11 +128,8 @@ const EditableField: FC<EditableFieldProps> = ({
         placeholder={placeholder}
         rowsMax={rowsMax}
         className={classes.editableField}
-        startAdornment={
-          <InputAdornment position="start">
-            <FaPen />
-          </InputAdornment>
-        }
+        startAdornment={startAdornment}
+        endAdornment={endAdornment}
       />
     </form>
   );

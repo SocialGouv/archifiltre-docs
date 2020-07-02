@@ -94,7 +94,7 @@ const CHART_TEMPLATE_PATH = path.resolve(
  */
 export const generateAuditReportDocx = (
   auditReportData: AuditReportData
-): Blob =>
+): Buffer =>
   exportToDocX(
     TEMPLATE_PATH,
     auditReportData,

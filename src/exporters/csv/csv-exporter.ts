@@ -20,7 +20,6 @@ import { startLoading } from "reducers/loading-info/loading-info-operations";
 import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
 import { getTagsFromStore } from "reducers/tags/tags-selectors";
 import translations from "translations/translations";
-import { promptUserForSave } from "util/file-system/file-system-util";
 import {
   NotificationDuration,
   notifyInfo,
@@ -41,12 +40,6 @@ export const csvExporterThunk = (
   name: string,
   { withHashes = false } = {}
 ): ArchifiltreThunkAction => async (dispatch, getState) => {
-  const exportFilePath = await promptUserForSave(name);
-
-  if (!exportFilePath) {
-    return;
-  }
-
   addTracker({
     title: ActionTitle.CSV_EXPORT,
     type: ActionType.TRACK_EVENT,
@@ -109,7 +102,7 @@ export const csvExporterThunk = (
       .subscribe({
         next: async (csv: string) => {
           dispatch(completeLoadingAction(loadingId));
-          await fs.writeFile(exportFilePath, csv, { encoding: "utf-8" });
+          await fs.writeFile(name, csv, { encoding: "utf-8" });
           const csvExportSuccessMessage = translations.t(
             "export.csvExportSuccessMessage"
           );
@@ -117,7 +110,7 @@ export const csvExporterThunk = (
             csvExportSuccessMessage,
             csvExportTitle,
             NotificationDuration.NORMAL,
-            () => shell.openPath(exportFilePath)
+            () => shell.openPath(name)
           );
           resolve();
         },

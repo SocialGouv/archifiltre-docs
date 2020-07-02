@@ -18,7 +18,6 @@ import {
 import {
   formatPathForUserSystem,
   octet2HumanReadableFormat,
-  saveBlob,
 } from "util/file-system/file-sys-util";
 import { FileType } from "util/file-types/file-types-util";
 import {
@@ -42,6 +41,7 @@ import {
 } from "./audit-report-values-computer";
 import { HashesMap } from "reducers/hashes/hashes-types";
 import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
+import fs from "fs";
 
 const ROOT_ID = "";
 
@@ -140,7 +140,7 @@ export const computeAuditReportData = (
  */
 export const auditReportExporterThunk = (
   name: string
-): ArchifiltreThunkAction => (dispatch, getState) => {
+): ArchifiltreThunkAction => (dispatch, getState): Promise<void> => {
   addTracker({
     title: ActionTitle.AUDIT_REPORT_EXPORT,
     type: ActionType.TRACK_EVENT,
@@ -151,7 +151,7 @@ export const auditReportExporterThunk = (
   );
   const hashes = getHashesFromStore(getState());
   const elementsToDelete = getFilesToDeleteFromStore(getState());
-  saveBlob(
+  return fs.promises.writeFile(
     name,
     generateAuditReportDocx(
       computeAuditReportData(

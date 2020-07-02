@@ -10,7 +10,7 @@ import {
   WorkspaceMetadataState,
 } from "./workspace-metadata-types";
 
-const initialState: WorkspaceMetadataState = {
+export const initialState: WorkspaceMetadataState = {
   hoveredElementId: "",
   iciclesSortMethod: IciclesSortMethod.SORT_BY_TYPE,
   lockedElementId: "",

@@ -1,11 +1,6 @@
 import React, { FC, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { auditReportExporterThunk } from "exporters/audit/audit-report-exporter";
-import { csvExporterThunk } from "exporters/csv/csv-exporter";
 import { jsonExporterThunk } from "exporters/json/json-exporter";
-import { metsExporterThunk } from "exporters/mets/mets-export-thunk";
-import { resipExporterThunk } from "exporters/resip/resip-exporter-thunk";
-import { getAreHashesReady } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   replayActionsThunk,
   usePreviousSession,
@@ -16,14 +11,14 @@ import Dashboard from "./dashboard";
 import {
   redoAction,
   undoAction,
-} from "../../../reducers/enhancers/undoable/undoable-actions";
-import { StoreState } from "../../../reducers/store";
+} from "reducers/enhancers/undoable/undoable-actions";
+import { StoreState } from "reducers/store";
 import {
   canStateRedo,
   canStateUndo,
-} from "../../../reducers/enhancers/undoable/undoable-selectors";
-import { useLoadingStep } from "../../../reducers/loading-state/loading-state-selectors";
-import { LoadingStep } from "../../../reducers/loading-state/loading-state-types";
+} from "reducers/enhancers/undoable/undoable-selectors";
+import { useLoadingStep } from "reducers/loading-state/loading-state-selectors";
+import { LoadingStep } from "reducers/loading-state/loading-state-types";
 
 interface DashboardContainerProps {
   api: any;
@@ -42,26 +37,6 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
   const reloadPreviousSession = useCallback(() => {
     dispatch(replayActionsThunk(api));
   }, [dispatch, api]);
-
-  const exportToCsv = useCallback(
-    (name, options) => dispatch(csvExporterThunk(name, options)),
-    [dispatch]
-  );
-
-  const exportToResip = useCallback(
-    (name) => dispatch(resipExporterThunk(name)),
-    [dispatch]
-  );
-
-  const exportToMets = useCallback(
-    (state) => dispatch(metsExporterThunk(state)),
-    [dispatch]
-  );
-
-  const exportToAuditReport = useCallback(
-    (name) => dispatch(auditReportExporterThunk(name)),
-    [dispatch]
-  );
 
   const undo = useCallback(() => {
     dispatch(undoAction());
@@ -95,21 +70,15 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
     api,
   ]);
 
-  const areHashesReady = useSelector(getAreHashesReady);
   const { sessionName, originalPath } = useSelector(
     getWorkspaceMetadataFromStore
   );
 
   return (
     <Dashboard
-      areHashesReady={areHashesReady}
       hasPreviousSession={hasPreviousSession}
       originalPath={originalPath}
       sessionName={sessionName}
-      exportToAuditReport={exportToAuditReport}
-      exportToCsv={exportToCsv}
-      exportToResip={exportToResip}
-      exportToMets={exportToMets}
       exportToJson={exportToJson}
       reloadPreviousSession={reloadPreviousSession}
       resetWorkspace={resetWorkspace}

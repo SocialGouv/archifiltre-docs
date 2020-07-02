@@ -442,6 +442,7 @@ interface GlobalState {
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   tags: TagMap;
+  exportPath: string;
   originalPath: string;
   sessionName: string;
 }
@@ -461,6 +462,7 @@ const makeMetsContent = (
     filesAndFoldersMetadata,
     tags,
     originalPath,
+    exportPath,
     sessionName,
   }: GlobalState,
   contentWriter: (hash: string, data: object) => void,
@@ -627,6 +629,7 @@ export const makeSIP = async ({
   tags,
   originalPath,
   sessionName,
+  exportPath,
 }: GlobalState) => {
   addTracker({
     title: ActionTitle.METS_EXPORT,
@@ -650,6 +653,7 @@ export const makeSIP = async ({
       filesAndFolders,
       filesAndFoldersMetadata,
       tags,
+      exportPath,
       originalPath,
       sessionName,
     },
@@ -667,14 +671,12 @@ export const makeSIP = async ({
 
   sip.file("manifest.xml", manifestStr);
 
-  const exportFilePath = path.join(originalPath, "..", `${sessionName}.zip`);
-
   // final ZIP output
   const exportedData = await sip.generateAsync({ type: "nodebuffer" });
 
   const exportSuccessTitle = translations.t("export.exportSuccessTitle");
   const exportSuccessMessage = translations.t("export.exportSuccessMessage");
 
-  fs.writeFileSync(exportFilePath, exportedData);
+  fs.writeFileSync(exportPath, exportedData);
   notifySuccess(exportSuccessMessage, exportSuccessTitle);
 };

@@ -11,6 +11,7 @@ import {
 } from "reducers/store-test-utils";
 import { makeSIP } from "./mets";
 import { metsExporterThunk } from "./mets-export-thunk";
+import { initialState as workspaceMetadataInitialState } from "../../reducers/workspace-metadata/workspace-metadata-reducer";
 
 jest.mock("./mets", () => ({
   makeSIP: jest.fn(),
@@ -66,6 +67,12 @@ const filesAndFoldersMetadata = {
   }),
 };
 
+const workspaceMetadata = {
+  ...workspaceMetadataInitialState,
+  sessionName: "test-session-name",
+  originalPath: "test-original-path",
+};
+
 const elementsToDelete = ["deleted-ffid"];
 
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
@@ -83,6 +90,7 @@ const storeContent: StoreState = {
   }),
   filesAndFoldersMetadata: { filesAndFoldersMetadata },
   tags: wrapStoreWithUndoable({ tags }),
+  workspaceMetadata: wrapStoreWithUndoable(workspaceMetadata),
 };
 
 describe("mets-export-thunk", () => {
@@ -91,15 +99,9 @@ describe("mets-export-thunk", () => {
       const mockedMakeSIP = makeSIP as jest.Mock;
       const store = mockStore(storeContent);
 
-      const originalPath = "original-path";
-      const sessionName = "session-name";
+      const exportPath = "test-export-path";
 
-      store.dispatch(
-        metsExporterThunk({
-          originalPath,
-          sessionName,
-        })
-      );
+      store.dispatch(metsExporterThunk(exportPath));
 
       expect(mockedMakeSIP).toHaveBeenCalledWith({
         aliases,
@@ -107,8 +109,9 @@ describe("mets-export-thunk", () => {
         elementsToDelete,
         filesAndFolders,
         filesAndFoldersMetadata,
-        originalPath,
-        sessionName,
+        originalPath: workspaceMetadata.originalPath,
+        exportPath,
+        sessionName: workspaceMetadata.sessionName,
         tags,
       });
     });

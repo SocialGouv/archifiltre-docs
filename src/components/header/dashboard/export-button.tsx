@@ -4,30 +4,10 @@ import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaDownload } from "react-icons/fa";
 import { useModal } from "hooks/use-modal";
-import { useStyles } from "../../../hooks/use-styles";
-import {
-  ExportToAuditReport,
-  ExportToCsv,
-  ExportToMets,
-  ExportToResip,
-} from "../../common/export-types";
+import { useStyles } from "hooks/use-styles";
 import ExportModal from "../../modals/export-modal/export-modal";
 
-interface ExportButtonProps {
-  areHashesReady: boolean;
-  exportToAuditReport: ExportToAuditReport;
-  exportToMets: ExportToMets;
-  exportToResip: ExportToResip;
-  exportToCsv: ExportToCsv;
-}
-
-const ExportButton: FC<ExportButtonProps> = ({
-  areHashesReady,
-  exportToAuditReport,
-  exportToMets,
-  exportToResip,
-  exportToCsv,
-}) => {
+const ExportButton: FC = () => {
   const { t } = useTranslation();
   const { isModalOpen, openModal, closeModal } = useModal();
   const classes = useStyles();
@@ -47,15 +27,7 @@ const ExportButton: FC<ExportButtonProps> = ({
           <FaDownload />
         </Button>
       </Tooltip>
-      <ExportModal
-        isModalOpen={isModalOpen}
-        closeModal={closeModal}
-        areHashesReady={areHashesReady}
-        exportToAuditReport={exportToAuditReport}
-        exportToMets={exportToMets}
-        exportToResip={exportToResip}
-        exportToCsv={exportToCsv}
-      />
+      <ExportModal isModalOpen={isModalOpen} closeModal={closeModal} />
     </>
   );
 };

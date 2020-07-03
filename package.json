@@ -140,7 +140,7 @@
     "fast-memoize": "^2.5.2",
     "file-saver": "2.0.2",
     "hidefile": "^3.0.0",
-    "i18next": "^19.5.3",
+    "i18next": "^19.5.4",
     "immutable": "4.0.0-rc.12",
     "js-md5": "0.7.3",
     "jszip": "3.5.0",

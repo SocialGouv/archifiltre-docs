@@ -23,30 +23,39 @@ const defaultTheme = createMuiTheme({
         paddingBottom: 0,
       },
     },
+    MuiInputAdornment: {
+      root: {
+        fontSize: "0.75rem",
+      },
+    },
     MuiTypography: {
       h4: {
-        fontFamily: "QuicksandBold",
+        fontFamily: "Quicksand",
         textTransform: "uppercase",
         fontSize: "1.25rem",
         lineHeight: "1.25rem",
       },
       h5: {
-        fontFamily: "QuicksandBold",
+        fontFamily: "Quicksand",
         textTransform: "uppercase",
         fontSize: "0.75rem",
         lineHeight: 4 / 3,
       },
       h6: {
-        fontFamily: "QuicksandBold",
+        fontFamily: "Quicksand",
         textTransform: "uppercase",
         fontSize: "0.625rem",
       },
       body1: {
-        fontFamily: "Quicksand",
+        fontFamily: "QuicksandBold",
         fontSize: "0.75rem",
         lineHeight: 4 / 3,
       },
       body2: {
+        fontFamily: "QuicksandBold",
+        fontSize: "0.625rem",
+      },
+      subtitle2: {
         fontFamily: "Quicksand",
         fontSize: "0.625rem",
       },

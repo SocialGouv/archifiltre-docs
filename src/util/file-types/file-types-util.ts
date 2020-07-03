@@ -15,7 +15,6 @@ export enum FileType {
   OTHER = "other",
 }
 
-// tslint:disable:object-literal-sort-keys
 export const fileTypesByExtensions = {
   ".pdf": FileType.PUBLICATION, // les PDF
   ".epub": FileType.PUBLICATION,
@@ -77,7 +76,6 @@ export const fileTypesByExtensions = {
   ".arc": FileType.OTHER,
   ".warc": FileType.OTHER,
 };
-// tslint:enable:object-literal-sort-keys
 
 /**
  * Returns the file type of a file

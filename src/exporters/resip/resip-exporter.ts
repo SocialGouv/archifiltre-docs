@@ -97,7 +97,6 @@ const transformDefaultFormatToResip = (
 ) => (enrichedFilesAndFolders) => ({
   ID: enrichedFilesAndFolders.ID,
   ParentID: enrichedFilesAndFolders.ParentID,
-  // tslint:disable-next-line:object-literal-sort-keys
   File: formatFile(enrichedFilesAndFolders),
   DescriptionLevel: formatDescriptionLevel(enrichedFilesAndFolders),
   Title: formatTitle(enrichedFilesAndFolders, aliases),

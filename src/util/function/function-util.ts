@@ -1,4 +1,3 @@
-// tslint:disable-next-line:no-empty
 export const empty = () => {};
 
 export const identity = (param: any) => param;

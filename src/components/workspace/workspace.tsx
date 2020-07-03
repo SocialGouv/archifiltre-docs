@@ -9,9 +9,7 @@ import NavigationTabs from "./navigation-tabs";
 const workspaceState = {
   isFileMoveActive: false,
   areTabsHidden: false,
-  // tslint:disable-next-line:no-empty
   setIsFileMoveActive: (isMoveActive) => {},
-  // tslint:disable-next-line:no-empty
   setAreTabsHidden: (areTabsHidden) => {},
 };
 

@@ -45,7 +45,6 @@ import fs from "fs";
 
 const ROOT_ID = "";
 
-// tslint:disable:object-literal-sort-keys
 export const computeAuditReportData = (
   filesAndFolders: FilesAndFoldersMap,
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap,
@@ -132,7 +131,6 @@ export const computeAuditReportData = (
     elementsToDelete
   ),
 });
-// tslint:enable:object-literal-sort-keys
 
 /**
  * Thunk to export an audit

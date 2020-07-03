@@ -11,7 +11,6 @@ export const useLogPropChange = (props) => {
       (key) => props[key] !== testRef.current[key]
     );
 
-    // tslint:disable-next-line:no-console
     console.log(changedElements);
     testRef.current = props;
   }, Object.entries(props));

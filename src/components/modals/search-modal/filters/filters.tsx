@@ -1,4 +1,4 @@
-import Grid from "@material-ui/core/Grid";
+import { Box } from "@material-ui/core";
 import React, { FC, useEffect, useState } from "react";
 import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "reducers/tags/tags-types";
@@ -29,24 +29,24 @@ const Filters: FC<FiltersProps> = ({ filesAndFolders, tags, setFilters }) => {
   }, [setFilters, typeFilters, sizeFilters, tagFilters]);
 
   return (
-    <>
-      <Grid item xs={2}>
+    <Box display="flex" padding={1}>
+      <Box flex={1} paddingRight={1}>
         <TypeFilter
           filesAndFolders={filesAndFolders}
           setFilters={setTypeFilters}
         />
-      </Grid>
-      <Grid item xs={2}>
+      </Box>
+      <Box flex={1} paddingRight={1}>
         <SizeFilter setFilters={setSizeFilters} />
-      </Grid>
-      <Grid item xs={2}>
+      </Box>
+      <Box flex={1}>
         <TagFilter
           filesAndFolders={filesAndFolders}
           tags={tags}
           setFilters={setTagFilters}
         />
-      </Grid>
-    </>
+      </Box>
+    </Box>
   );
 };
 

@@ -59,11 +59,15 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
   return (
     <Box display="flex" flexDirection="column" height="100%">
       <Box display="flex" justifyContent="space-between" pt={1} pb={1}>
-        <CategoryTitle>
-          {t("duplicates.duplicatesList")}&nbsp;-&nbsp;
-          {`${filteredFilesAndFolders.length} ${t("duplicates.elements")}`}
-        </CategoryTitle>
-        <SearchBar setSearchTerm={setSearchTerm} />
+        <Box flex={1} display="flex" alignItems="center">
+          <CategoryTitle>
+            {t("duplicates.duplicatesList")}&nbsp;-&nbsp;
+            {`${filteredFilesAndFolders.length} ${t("duplicates.elements")}`}
+          </CategoryTitle>
+        </Box>
+        <Box flex={1} paddingLeft={1}>
+          <SearchBar setSearchTerm={setSearchTerm} />
+        </Box>
       </Box>
       <Box flexGrow={1} minHeight={0} overflow="auto">
         {isEmpty(filteredFilesAndFolders) ? (

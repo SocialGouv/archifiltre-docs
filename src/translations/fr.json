@@ -181,7 +181,8 @@
       "searchPlaceholder": "Rechercher",
       "noResult": "Pas de résultat",
       "page": "Page",
-      "tag": "Tag"
+      "tag": "Tag",
+      "noAvailableOption": "Pas d'option disponible"
     },
     "errorsModal": {
       "title": "Liste des erreurs",

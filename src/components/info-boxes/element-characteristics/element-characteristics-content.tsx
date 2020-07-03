@@ -78,7 +78,7 @@ const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
                 />
               </Box>
               <Box>
-                <Typography variant="body2">
+                <Typography variant="subtitle2">
                   ({elementAlias ? elementName : t("report.initialName")})
                 </Typography>
               </Box>

@@ -8,7 +8,6 @@ import Audit from "./audit";
 
 const StyledPanel = styled.div`
   width: 100%;
-  height: 12.5rem;
 `;
 
 type TabPanelProps = {

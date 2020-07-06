@@ -58,7 +58,6 @@ export default class WindowResize extends React.PureComponent<
   }
 
   componentDidCatch(error, info) {
-    // tslint:disable-next-line:no-console
     console.log(error, info);
   }
 

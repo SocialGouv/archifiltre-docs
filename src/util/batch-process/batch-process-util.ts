@@ -37,7 +37,6 @@ const initWorkers = (
         });
       }
       worker.addEventListener("error", (error) =>
-        // tslint:disable-next-line:no-console
         console.error("WorkerError", error)
       );
       return worker;
@@ -132,11 +131,9 @@ export const backgroundWorkerProcess$ = (
           observer.complete();
           break;
         case "log":
-          // tslint:disable-next-line:no-console
           console.log("Logging :", data);
           break;
         default:
-          // tslint:disable-next-line:no-console
           console.log(`Unhandled message : ${type}`);
       }
     };

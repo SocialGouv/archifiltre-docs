@@ -119,5 +119,4 @@ export const setupChildWorkerListeners = (
  * import { fakeChildProcess } from "./async-worker-util";
  * export default fakeChildProcess;
  */
-// tslint:disable-next-line:no-object-literal-type-assertion
 export const fakeChildProcess = {} as ChildProcess & (new () => ChildProcess);

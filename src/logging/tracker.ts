@@ -66,7 +66,6 @@ const mapActionToMatomoAction = (
       ActionType,
       MatomoActionType
     ),
-    // tslint:disable-next-line:object-literal-sort-keys
     title: mapValueBetweenEnums(
       trackerAction.title,
       ActionTitle,

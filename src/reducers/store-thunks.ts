@@ -216,7 +216,6 @@ export const loadFilesAndFoldersFromPathThunk = (
       );
     }
   } catch (error) {
-    // tslint:disable-next-line:no-console
     console.error(error);
     dispatch(setLoadingStep(LoadingStep.ERROR));
   }

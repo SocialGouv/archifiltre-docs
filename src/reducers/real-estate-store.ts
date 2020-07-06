@@ -20,7 +20,6 @@ function makeStore(compiledRealEstate) {
     }
   }
 
-  // tslint:disable-next-line:no-shadowed-variable
   class Store extends React.Component {
     private api;
     private getApi;
@@ -70,7 +69,6 @@ function makeStore(compiledRealEstate) {
     }
   }
 
-  // tslint:disable-next-line:no-shadowed-variable
   const ApiContext = React.createContext({});
 
   return {

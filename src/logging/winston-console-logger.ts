@@ -12,13 +12,10 @@ export default class WinstonConsoleLogger extends TransportStream {
   public log(info: object, callback: () => void) {
     const message = info[MESSAGE];
     if (info[LEVEL] === "error") {
-      // tslint:disable-next-line:no-console
       console.error(message);
     } else if (info[LEVEL] === "warning") {
-      // tslint:disable-next-line:no-console
       console.warn(message);
     } else {
-      // tslint:disable-next-line:no-console
       console.log(message);
     }
 

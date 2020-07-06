@@ -4,17 +4,17 @@ import { shell } from "electron";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { ThemedProps } from "../../theme/default-theme";
+import { ThemedProps } from "theme/default-theme";
 import version, { versionName } from "../../version";
 import { HelpLink } from "./help-link";
 
 const ArchifiltreLogoWrapper = styled.span`
-  line-height: 1.5em;
+  line-height: 1.5rem;
 `;
 
 const ArchifiltreLogoText = styled.div`
-  font-size: 2em;
-  letter-spacing: 0.16em;
+  font-size: 1.6rem;
+  letter-spacing: 0.16rem;
 `;
 
 const ArchifiltreVersionText = withTheme(styled.a<ThemedProps>`

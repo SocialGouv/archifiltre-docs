@@ -1,12 +1,91 @@
+import fs from "fs";
+import { sortBy } from "lodash";
 import {
+  asyncLoadFilesAndFoldersFromFileSystem,
   createFilesAndFolders,
   createFilesAndFoldersDataStructure,
   createFilesAndFoldersMetadataDataStructure,
   FilesAndFoldersElementInfo,
   loadFilesAndFoldersFromExportFileContent,
+  loadFilesAndFoldersFromFileSystem,
 } from "./files-and-folders-loader";
 
 import { Readable } from "stream";
+import { empty } from "util/function/function-util";
+// @ts-ignore
+import { setMockFs as hiddenFileSetMockFs } from "util/hidden-file/hidden-file-util";
+
+type FsMockElement = {
+  isDirectory: boolean;
+  children: string[];
+  mtimeMs: number;
+  size: number;
+  isHidden: boolean;
+};
+
+type FsMockElementMap = {
+  [id: string]: FsMockElement;
+};
+
+jest.mock("fs", () => {
+  let underlyingFs: FsMockElementMap = {};
+
+  const setMockFs = (mockedFs: FsMockElementMap): void => {
+    underlyingFs = mockedFs;
+  };
+
+  const makeStatObject = (fsMockElement: FsMockElement) => ({
+    isDirectory: () => fsMockElement.isDirectory,
+    mtimeMs: fsMockElement.mtimeMs,
+    size: fsMockElement.size,
+  });
+
+  const module = {
+    promises: {
+      stat: (path: string) =>
+        underlyingFs[path]
+          ? Promise.resolve(makeStatObject(underlyingFs[path]))
+          : Promise.reject(),
+      readdir: (path: string) => Promise.resolve(underlyingFs[path].children),
+    },
+    statSync: (path: string) => {
+      if (!underlyingFs[path]) {
+        throw new Error();
+      }
+      return makeStatObject(underlyingFs[path]);
+    },
+    readdirSync: (path: string) => {
+      return underlyingFs[path].children;
+    },
+    setMockFs,
+  };
+
+  return {
+    __esModule: true,
+    ...module,
+    default: module,
+  };
+});
+
+jest.mock("util/hidden-file/hidden-file-util", () => {
+  let underlyingFs: FsMockElementMap = {};
+  const setMockFs = (mockedFs: FsMockElementMap): void => {
+    underlyingFs = mockedFs;
+  };
+
+  const module = {
+    shouldIgnoreElement: (path) => underlyingFs[path].isHidden,
+    asyncShouldIgnoreElement: (path) =>
+      Promise.resolve(underlyingFs[path].isHidden),
+    setMockFs,
+  };
+
+  return {
+    __esModule: true,
+    ...module,
+    default: module,
+  };
+});
 
 const ff1LastModified = 100000;
 const ff1Size = 12345;
@@ -134,7 +213,100 @@ const expectedMetadata = {
   },
 };
 
+const rootPath = "/root-path";
+
+const mockFs: FsMockElementMap = {
+  "/root-path": {
+    isHidden: false,
+    isDirectory: true,
+    children: ["folder1", "file1"],
+    size: 0,
+    mtimeMs: 0,
+  },
+  "/root-path/file1": {
+    isHidden: false,
+    isDirectory: false,
+    children: [],
+    size: 10,
+    mtimeMs: 10,
+  },
+  "/root-path/folder1": {
+    isHidden: false,
+    isDirectory: true,
+    children: ["file1", "file2"],
+    size: 0,
+    mtimeMs: 0,
+  },
+  "/root-path/folder1/file1": {
+    isHidden: false,
+    isDirectory: false,
+    children: [],
+    size: 20,
+    mtimeMs: 20,
+  },
+  "/root-path/folder1/file2": {
+    isHidden: false,
+    isDirectory: false,
+    children: [],
+    size: 30,
+    mtimeMs: 30,
+  },
+};
+
 describe("files-and-folders-loader", () => {
+  describe("loadFromFilesystem", () => {
+    beforeEach(() => {
+      // @ts-ignore
+      fs.setMockFs(mockFs);
+      hiddenFileSetMockFs(mockFs);
+    });
+    const sortMethod = (element) => element[1];
+    const expectedOrigin = sortBy(
+      [
+        [
+          {
+            lastModified: 10,
+            size: 10,
+          },
+          `${rootPath}/file1`,
+        ],
+        [
+          {
+            lastModified: 20,
+            size: 20,
+          },
+          `${rootPath}/folder1/file1`,
+        ],
+        [
+          {
+            lastModified: 30,
+            size: 30,
+          },
+          `${rootPath}/folder1/file2`,
+        ],
+      ],
+      sortMethod
+    );
+    describe("sync", () => {
+      it("should load the right origins", () => {
+        const resultOrigin = loadFilesAndFoldersFromFileSystem(rootPath, empty);
+
+        expect(sortBy(resultOrigin, sortMethod)).toEqual(expectedOrigin);
+      });
+    });
+
+    describe("async", () => {
+      it("should load the right origins", async () => {
+        const resultOrigin = await asyncLoadFilesAndFoldersFromFileSystem(
+          rootPath,
+          empty
+        );
+
+        expect(sortBy(resultOrigin, sortMethod)).toEqual(expectedOrigin);
+      });
+    });
+  });
+
   describe("loadFilesAndFoldersFromExportFileContent", () => {
     it("should read a linux generated file", async () => {
       const exportFileContent = `1.0.0

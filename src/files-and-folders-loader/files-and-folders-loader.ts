@@ -19,7 +19,10 @@ import {
   convertFsErrorToArchifiltreError,
 } from "util/error/error-util";
 import { identifyFileFormat } from "../util/file-format/file-format-util";
-import { shouldIgnoreElement } from "../util/hidden-file/hidden-file-util";
+import {
+  asyncShouldIgnoreElement,
+  shouldIgnoreElement,
+} from "../util/hidden-file/hidden-file-util";
 import { HashesMap } from "reducers/hashes/hashes-types";
 
 interface LoadFilesAndFoldersFromFileSystemError {
@@ -35,6 +38,8 @@ interface FilesAndFoldersInfo {
 
 export type FilesAndFoldersElementInfo = [FilesAndFoldersInfo, string];
 
+type ErrorHook<Error> = (error?: Error) => void;
+
 /**
  * Recursively load all the children files from the file system
  * @param folderPath - The folder base path
@@ -42,7 +47,7 @@ export type FilesAndFoldersElementInfo = [FilesAndFoldersInfo, string];
  */
 export const loadFilesAndFoldersFromFileSystem = (
   folderPath: string,
-  hook: (error?: LoadFilesAndFoldersFromFileSystemError) => void
+  hook: ErrorHook<LoadFilesAndFoldersFromFileSystemError>
 ): FilesAndFoldersElementInfo[] => {
   const files: FilesAndFoldersElementInfo[] = [];
   const rootPath = path.dirname(folderPath);
@@ -82,6 +87,54 @@ export const loadFilesAndFoldersFromFileSystem = (
   };
 
   loadFilesAndFoldersFromFileSystemRec(folderPath);
+
+  return files;
+};
+
+export const asyncLoadFilesAndFoldersFromFileSystem = async (
+  folderPath: string,
+  hook: ErrorHook<LoadFilesAndFoldersFromFileSystemError>
+) => {
+  const files: FilesAndFoldersElementInfo[] = [];
+  const rootPath = path.dirname(folderPath);
+
+  const loadFilesAndFoldersFromFileSystemRec = async (currentPath: string) => {
+    try {
+      if (await asyncShouldIgnoreElement(currentPath)) {
+        return;
+      }
+      const stats = await fs.promises.stat(currentPath);
+
+      if (stats.isDirectory()) {
+        const children = await fs.promises.readdir(currentPath);
+        await Promise.all(
+          children.map((childPath) =>
+            loadFilesAndFoldersFromFileSystemRec(
+              path.join(currentPath, childPath)
+            )
+          )
+        );
+        return;
+      }
+
+      hook();
+      files.push([
+        {
+          lastModified: stats.mtimeMs,
+          size: stats.size,
+        },
+        convertToPosixAbsolutePath(path.relative(rootPath, currentPath)),
+      ]);
+    } catch (error) {
+      hook({
+        path: currentPath,
+        message: error.message,
+        code: convertFsErrorToArchifiltreError(error.code),
+      });
+    }
+  };
+
+  await loadFilesAndFoldersFromFileSystemRec(folderPath);
 
   return files;
 };

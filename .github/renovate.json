@@ -1,6 +1,6 @@
 {
   "enabled": true,
   "extends": [
-    "github>SocialGouv/renovate-config"
+    "github>SocialGouv/renovate-config:light"
   ]
 }

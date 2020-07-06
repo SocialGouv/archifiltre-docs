@@ -5,7 +5,7 @@ import styled from "styled-components";
 import {
   AliasMap,
   FilesAndFolders,
-} from "../../../reducers/files-and-folders/files-and-folders-types";
+} from "reducers/files-and-folders/files-and-folders-types";
 import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import Breadcrumb, { BreadcrumbOpacity } from "./breadcrumb";
 import { makeEmptyArray } from "util/array/array-util";
@@ -42,6 +42,7 @@ interface BreadcrumbsProps {
 interface MakeFillerArgs {
   id: string;
   name: string;
+  alias: string | null;
   isFirst: boolean;
   isLast: boolean;
 }
@@ -49,6 +50,7 @@ interface MakeFillerArgs {
 interface BreadcrumbProps {
   id: string;
   name: string;
+  alias: string | null;
   opacity: BreadcrumbOpacity;
   color: string;
   isFirst: boolean;
@@ -61,17 +63,20 @@ interface BreadcrumbProps {
  * Create a filler Breadcrumb, used when nothing is locked or focused
  * @param id
  * @param name
+ * @param alias
  * @param isFirst
  * @param isLast
  */
 const makeFiller = ({
   id,
   name,
+  alias,
   isFirst,
   isLast,
 }: MakeFillerArgs): BreadcrumbProps => ({
   id,
   name,
+  alias,
   isFirst,
   isLast,
   opacity: BreadcrumbOpacity.LOCKED,
@@ -92,6 +97,7 @@ const makeBreadcrumbsFillers = (
   makeFiller({
     id: "filler1",
     name: "1",
+    alias: null,
     isFirst: true,
     isLast: depth === 1,
   }),
@@ -100,6 +106,7 @@ const makeBreadcrumbsFillers = (
         makeFiller({
           id: "filler2",
           name: "2",
+          alias: null,
           isFirst: false,
           isLast: false,
         }),
@@ -110,6 +117,7 @@ const makeBreadcrumbsFillers = (
         makeFiller({
           id: "filler3",
           name: "...",
+          alias: null,
           isFirst: false,
           isLast: false,
         }),
@@ -120,6 +128,7 @@ const makeBreadcrumbsFillers = (
         makeFiller({
           id: "filler4",
           name: "...",
+          alias: null,
           isFirst: false,
           isLast: false,
         }),
@@ -130,24 +139,13 @@ const makeBreadcrumbsFillers = (
         makeFiller({
           id: "filler-file",
           name: t("workspace.file"),
+          alias: null,
           isFirst: false,
           isLast: true,
         }),
       ]
     : []),
 ];
-
-/**
- * Returns the name displayed for each breadcrumb
- * @param node
- * @param aliases
- */
-const getDisplayName = (node: FilesAndFolders, aliases: AliasMap) => {
-  const { id, name } = node;
-  const alias = aliases[id];
-
-  return alias ? `${alias} (${name})` : name;
-};
 
 /**
  * Returns the absolute path of the corresponding file
@@ -183,7 +181,8 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({
       isFirst: index === 0,
       isLast: index === depth - 1,
       isActive: true,
-      name: getDisplayName(node, aliases),
+      name: node.name,
+      alias: aliases[node.id],
       path: getPathToCopy(originalPath, node.id),
       opacity:
         lockedSequence[index] === node.id
@@ -205,12 +204,23 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({
   return (
     <BreadcrumbsWrapper>
       {filesAndFolders.map(
-        ({ id, name, opacity, color, isActive, isFirst, isLast, path }) => (
+        ({
+          id,
+          name,
+          alias,
+          opacity,
+          color,
+          isActive,
+          isFirst,
+          isLast,
+          path,
+        }) => (
           <BreadcrumbWrapper key={`breadcrumb-wrapper-${id}`} depth={depth}>
             <Breadcrumb
               id={id}
               key={`breadcrumb-${id}`}
               name={name}
+              alias={alias}
               path={path}
               active={isActive}
               opacity={opacity}

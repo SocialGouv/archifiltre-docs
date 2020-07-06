@@ -1,5 +1,7 @@
 import Box from "@material-ui/core/Box";
+import { useTabsState } from "components/header/dashboard/tabs-context";
 import React, { FC } from "react";
+import TabsHeader from "../../workspace/tabs-header";
 import SaveButton, { ExportToJson } from "./save-button";
 import ReinitButton, { ResetWorkspace } from "./reinit-button";
 import UndoRedo from "components/header/dashboard/undo-redo-button";
@@ -14,7 +16,7 @@ const HeaderLine = styled.div`
   width: 100%;
 `;
 
-interface DashboardProps {
+type DashboardProps = {
   started: boolean;
   finished: boolean;
   error: boolean;
@@ -28,7 +30,7 @@ interface DashboardProps {
   redo: () => void;
   canUndo: boolean;
   canRedo: boolean;
-}
+};
 
 const DashBoard: FC<DashboardProps> = ({
   started,
@@ -50,6 +52,7 @@ const DashBoard: FC<DashboardProps> = ({
   const shouldDisplayPreviousSession =
     !started && !finished && !error && hasPreviousSession;
   const shouldDisplayNavigationArrows = started === finished && !error;
+  const { setAreIciclesDisplayed, tabIndex, setTabIndex } = useTabsState();
 
   return (
     <HeaderLine>
@@ -58,6 +61,18 @@ const DashBoard: FC<DashboardProps> = ({
           <ArchifiltreLogo />
         </Box>
         <Box flexGrow={1} />
+        {shouldDisplayActions && (
+          <>
+            <Box>
+              <TabsHeader
+                setAreIciclesDisplayed={setAreIciclesDisplayed}
+                tabIndex={tabIndex}
+                setTabIndex={setTabIndex}
+              />
+            </Box>
+            <Box flexGrow={1} />
+          </>
+        )}
         {shouldDisplayActions && (
           <Box>
             <SearchButton />

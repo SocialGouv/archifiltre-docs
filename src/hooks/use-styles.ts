@@ -30,10 +30,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       width: "45px",
       minWidth: 0,
     },
-    tab: {
-      minWidth: 0,
-      padding: theme.spacing(1),
-    },
     largeIndicatorText: {
       fontSize: "3rem",
       fontFamily: "QuicksandBold",

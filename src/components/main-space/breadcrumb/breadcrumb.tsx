@@ -4,6 +4,10 @@ import BreadcrumbPoly from "./breadcrumb-poly";
 import { CopyToClipboard } from "../../common/copy-to-clipboard";
 import { Dims, DimsAndId } from "../icicle/icicle-rect";
 
+const ItalicText = styled.span`
+  font-style: italic;
+`;
+
 interface BreadcrumbWrapperProps {
   active: boolean;
 }
@@ -67,17 +71,18 @@ const emptyDims: Dims = {
  */
 const dimsGetter = (): Dims => emptyDims;
 
-interface BreadcrumbProps {
+type BreadcrumbProps = {
   active: boolean;
   opacity: BreadcrumbOpacity;
   color: string;
   isFirst: boolean;
   isLast: boolean;
   name: string;
+  alias: string | null;
   path: string;
   id: string;
   onBreadcrumbClick: (dimsAndId: DimsAndId, event) => void;
-}
+};
 
 const Breadcrumb: FC<BreadcrumbProps> = ({
   active,
@@ -86,6 +91,7 @@ const Breadcrumb: FC<BreadcrumbProps> = ({
   opacity,
   color,
   name,
+  alias,
   path,
   id,
   onBreadcrumbClick,
@@ -110,7 +116,15 @@ const Breadcrumb: FC<BreadcrumbProps> = ({
         />
       </BreadcrumbPolyWrapper>
       <Spacer />
-      <BreadcrumbTextWrapper>{name}</BreadcrumbTextWrapper>
+      <BreadcrumbTextWrapper>
+        {alias ? (
+          <span>
+            {alias} <ItalicText>({name})</ItalicText>
+          </span>
+        ) : (
+          <span>{name}</span>
+        )}
+      </BreadcrumbTextWrapper>
       <SmallSpacer />
       <CopyToClipboardWrapper active={active}>
         <CopyToClipboard stringToCopy={path} />

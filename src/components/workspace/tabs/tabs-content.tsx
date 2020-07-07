@@ -1,10 +1,10 @@
 import Box from "@material-ui/core/Box";
 import React, { FC } from "react";
-import Report from "../report/report-container";
+import Report from "components/report/report-container";
 import styled from "styled-components";
-import Duplicates from "./duplicates";
-import Enrichment from "./enrichment-container";
-import Audit from "./audit";
+import Duplicates from "../duplicates";
+import Enrichment from "../enrichment-container";
+import Audit from "../audit";
 
 const StyledPanel = styled.div`
   width: 100%;

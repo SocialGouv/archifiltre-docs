@@ -5,7 +5,7 @@ import Icicle from "components/main-space/icicle/icicle-container";
 import NavigationBar from "components/workspace/navigation-bar/navigation-bar-container";
 import Box from "@material-ui/core/Box";
 import DuplicatesSearch from "../info-boxes/duplicates-search/duplicates-search-container";
-import TabsContent from "./tabs-content";
+import TabsContent from "./tabs/tabs-content";
 
 const workspaceState = {
   isFileMoveActive: false,

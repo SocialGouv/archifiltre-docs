@@ -6,11 +6,11 @@ import React, { FC, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-type TabContentProps = {
+type TabContentHeaderProps = {
   title: string;
 };
 
-const TabContent: FC<TabContentProps> = ({ children, title }) => {
+const TabContentHeader: FC<TabContentHeaderProps> = ({ children, title }) => {
   const { t } = useTranslation();
   const [isContentHidden, setIsContentHidden] = useState(false);
   const toggleIsContentHidden = useCallback(
@@ -49,4 +49,4 @@ const TabContent: FC<TabContentProps> = ({ children, title }) => {
   );
 };
 
-export default TabContent;
+export default TabContentHeader;

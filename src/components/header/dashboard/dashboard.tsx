@@ -1,7 +1,7 @@
 import Box from "@material-ui/core/Box";
 import { useTabsState } from "components/header/dashboard/tabs-context";
 import React, { FC } from "react";
-import TabsHeader from "../../workspace/tabs-header";
+import TabsHeader from "components/workspace/tabs/tabs-header";
 import SaveButton, { ExportToJson } from "./save-button";
 import ReinitButton, { ResetWorkspace } from "./reinit-button";
 import UndoRedo from "components/header/dashboard/undo-redo-button";

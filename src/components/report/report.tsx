@@ -1,10 +1,11 @@
+import { Divider } from "@material-ui/core";
+import TabContent from "components/workspace/tab-content";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import Grid from "@material-ui/core/Grid";
-import { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import SessionInfo from "./session-info/session-info";
 import { getFirstLevelName } from "util/files-and-folders/file-and-folders-utils";
-import InfoBoxPaper from "../info-boxes/common/info-box-paper";
 import Box from "@material-ui/core/Box";
 import CategoryTitle from "../common/category-title";
 import ElementCharacteristicsContainer from "../info-boxes/element-characteristics/element-characteristics-container";
@@ -35,14 +36,14 @@ const Report: FC<ReportProps> = ({
   const firstLevelName = getFirstLevelName(filesAndFolders);
 
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={6}>
-        <Box display="flex" flexDirection="column" height="100%">
-          <Box>
-            <CategoryTitle>{t("report.fileTreeInfo")}</CategoryTitle>
-          </Box>
-          <Box flexGrow={1}>
-            <InfoBoxPaper>
+    <TabContent title={t("report.info")}>
+      <Box display="flex" height="100%">
+        <Box flex={1}>
+          <Box display="flex" flexDirection="column" height="100%">
+            <Box>
+              <CategoryTitle>{t("report.fileTree")}</CategoryTitle>
+            </Box>
+            <Box flexGrow={1}>
               <Grid container>
                 <Grid item xs={12}>
                   <SessionInfo
@@ -57,28 +58,28 @@ const Report: FC<ReportProps> = ({
                   />
                 </Grid>
               </Grid>
-            </InfoBoxPaper>
+            </Box>
           </Box>
         </Box>
-      </Grid>
-
-      <Grid item xs={6}>
-        <Box display="flex" flexDirection="column" height="100%">
-          <Box>
-            <CategoryTitle>{t("report.elementInfo")}</CategoryTitle>
-          </Box>
-          <Box flexGrow={1}>
-            <InfoBoxPaper>
+        <Box padding={2}>
+          <Divider orientation="vertical" />
+        </Box>
+        <Box flex={1}>
+          <Box display="flex" flexDirection="column" height="100%">
+            <Box>
+              <CategoryTitle>{t("report.element")}</CategoryTitle>
+            </Box>
+            <Box flexGrow={1}>
               <Grid container>
                 <Grid item xs={12}>
                   <ElementCharacteristicsContainer />
                 </Grid>
               </Grid>
-            </InfoBoxPaper>
+            </Box>
           </Box>
         </Box>
-      </Grid>
-    </Grid>
+      </Box>
+    </TabContent>
   );
 };
 

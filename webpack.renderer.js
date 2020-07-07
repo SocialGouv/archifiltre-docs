@@ -1,6 +1,7 @@
 const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ElectronNativePlugin = require("electron-native-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const webpack = require("webpack");
 require("dotenv").config();
@@ -20,14 +21,17 @@ const workerRootFolder = (mode) =>
     ? JSON.stringify(path.join(__dirname, "electron/dist/"))
     : "require('path').join(require('electron').remote.app.getAppPath(),'/electron/dist/')";
 
+const relativeOutputPath = "./electron/dist";
+const outputPath = path.resolve(__dirname, relativeOutputPath);
+
 module.exports = (env, argv = {}) => ({
   devServer: {
     compress: true,
-    contentBase: path.resolve(__dirname, "electron/dist"),
+    contentBase: outputPath,
     hot: true,
     inline: false,
     port: 8000,
-    writeToDisk: (name) => /(\.fork\.[jt]s|main\.bundle\.js)$/.test(name),
+    writeToDisk: (name) => /(\.fork\.[jt]s|main\.bundle\.js|\.node)$/.test(name),
   },
   devtool: isDev(argv.mode) ? "cheap-module-eval-source-map" : false,
 
@@ -64,8 +68,8 @@ module.exports = (env, argv = {}) => ({
         test: /\.js$/,
       },
       {
-        loader: "node-loader",
-        test: /.node$/,
+        test: /\.node$/,
+        use: "node-loader"
       },
       {
         include: [
@@ -120,6 +124,7 @@ module.exports = (env, argv = {}) => ({
   },
 
   optimization: {
+    minimize: false,
     removeAvailableModules: false,
     removeEmptyChunks: false,
     splitChunks: false,
@@ -127,11 +132,22 @@ module.exports = (env, argv = {}) => ({
 
   output: {
     filename: "[name].bundle.js",
-    path: path.resolve(__dirname, "electron/dist"),
+    path: outputPath,
     pathinfo: false,
   },
 
   plugins: [
+      new ElectronNativePlugin({
+        outputPath: "./src/fileinfo/build/Release",
+        userModules: [
+            "./src/fileinfo/"
+        ]
+      }),
+      new CopyWebpackPlugin({ patterns: ["src/fileinfo/build/Release/fileinfo.node"]}),
+      new webpack.NormalModuleReplacementPlugin(
+          /^bindings$/,
+          `${__dirname}/src/custom-bindings/bindings`
+      ),
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: ["**/*", "!main.js"],
     }),

@@ -52,7 +52,7 @@ const Enrichment: FC<EnrichmentProps> = ({
         <Box display="flex" flexDirection="column" height="100%">
           <Box>
             <CategoryTitle>
-              {t("report.elementInfo")}&nbsp;
+              {t("report.element")}&nbsp;
               <FaCircle
                 style={{
                   color: ENRICHMENT_COLORS[EnrichmentTypes.ALIAS],

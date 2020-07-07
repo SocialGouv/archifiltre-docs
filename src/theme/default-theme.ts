@@ -29,10 +29,15 @@ const defaultTheme = createMuiTheme({
       },
     },
     MuiTypography: {
-      h4: {
+      h3: {
         fontFamily: "Quicksand",
         textTransform: "uppercase",
-        fontSize: "1.25rem",
+        fontSize: "1rem",
+        lineHeight: "1.25rem",
+      },
+      h4: {
+        fontFamily: "Quicksand",
+        fontSize: "1rem",
         lineHeight: "1.25rem",
       },
       h5: {

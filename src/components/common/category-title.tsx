@@ -1,8 +1,8 @@
-import styled from "styled-components";
+import Typography from "@material-ui/core/Typography";
+import React from "react";
 
-const CategoryTitle = styled.h4`
-  margin: 5px 0;
-  font-weight: bold;
-`;
+const CategoryTitle = ({ children }) => (
+  <Typography variant="h4">{children}</Typography>
+);
 
 export default CategoryTitle;

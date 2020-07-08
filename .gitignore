@@ -1,6 +1,6 @@
 ElectronNativeSubstitutionMap.json
 /src/fileinfo/build
-/src/fileinfo/bin*
+/src/fileinfo/bin/
 /translations/
 .DS_Store
 node_modules/

@@ -11,6 +11,8 @@ import {
   map,
   mapValues,
   reverse,
+  groupBy,
+  sumBy,
   sortBy,
   sum,
   take,
@@ -102,6 +104,37 @@ export const countFileTypes: Mapper<
     }),
     countBy(identity),
     map(getFileType),
+    Object.values,
+    getFiles
+  )
+);
+
+/**
+ * Gets the sizes of files of every types
+ * @param filesAndFolders
+ */
+export const countFileSizes: Mapper<
+  FilesAndFoldersCollection,
+  FileTypeMap<number>
+> = memoize(
+  compose(
+    defaults({
+      [FileType.PUBLICATION]: 0,
+      [FileType.PRESENTATION]: 0,
+      [FileType.SPREADSHEET]: 0,
+      [FileType.EMAIL]: 0,
+      [FileType.DOCUMENT]: 0,
+      [FileType.IMAGE]: 0,
+      [FileType.VIDEO]: 0,
+      [FileType.AUDIO]: 0,
+      [FileType.OTHER]: 0,
+    }),
+    mapValues(sumBy("size")),
+    groupBy("type"),
+    map((fileOrFolder) => ({
+      type: getFileType(fileOrFolder),
+      size: fileOrFolder.file_size,
+    })),
     Object.values,
     getFiles
   )

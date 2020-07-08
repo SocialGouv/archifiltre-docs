@@ -6,8 +6,8 @@ import {
   countDuplicateFileTypes,
   getFilesDuplicatesMap,
 } from "util/duplicates/duplicates-util";
-import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { percent } from "../../../util/numbers/numbers-util";
+import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { percent } from "util/numbers/numbers-util";
 import DuplicatesTable from "./duplicates-table";
 import _ from "lodash";
 import { getHashesFromStore } from "reducers/hashes/hashes-selectors";

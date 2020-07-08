@@ -1,7 +1,7 @@
 import Box from "@material-ui/core/Box";
+import NoElementSelectedPlaceholder from "components/info-boxes/element-characteristics/no-element-selected-placeholder";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { FaHandPointer } from "react-icons/fa";
 import { Tag } from "reducers/tags/tags-types";
 import TagCellChips from "./tag-cell-chips";
 import TagCellInput from "./tag-cell-input";
@@ -30,7 +30,7 @@ const TagCell: FC<TagCellProps> = ({
   const { t } = useTranslation();
 
   return isActive ? (
-    <div>
+    <Box>
       <TagCellChips
         tagsForCurrentFile={tagsForCurrentFile}
         untag={untag}
@@ -43,18 +43,9 @@ const TagCell: FC<TagCellProps> = ({
         createTag={createTag}
         nodeId={nodeId}
       />
-    </div>
-  ) : (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <FaHandPointer />
-      &nbsp;
-      {t("workspace.yourTagsHere")}
     </Box>
+  ) : (
+    <NoElementSelectedPlaceholder title={t("workspace.yourTagsHere")} />
   );
 };
 

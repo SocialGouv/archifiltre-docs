@@ -1,3 +1,4 @@
+import CategoryTitle from "components/common/category-title";
 import TabContentHeader from "components/workspace/tabs/tab-content-header";
 import TabsLayout from "components/workspace/tabs/tabs-layout";
 import React, { FC } from "react";
@@ -34,7 +35,7 @@ const Report: FC<ReportProps> = ({
 
   const components = [
     {
-      title: t("report.fileTree"),
+      title: <CategoryTitle>{t("report.fileTree")}</CategoryTitle>,
       content: (
         <SessionInfo
           sessionName={sessionName}
@@ -49,7 +50,7 @@ const Report: FC<ReportProps> = ({
       ),
     },
     {
-      title: t("report.element"),
+      title: <CategoryTitle>{t("report.element")}</CategoryTitle>,
       content: <ElementCharacteristicsContainer />,
     },
   ];

@@ -1,11 +1,11 @@
 import { Divider } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import CategoryTitle from "components/common/category-title";
 import React, { FC, ReactNode } from "react";
 
 type ComponentElement = {
-  title: string;
+  title: ReactNode;
   content: ReactNode;
+  widthRatio?: number;
 };
 
 type TabsLayoutProps = {
@@ -15,14 +15,19 @@ type TabsLayoutProps = {
 const TabsLayout: FC<TabsLayoutProps> = ({ components }) => {
   return (
     <Box display="flex" height="100%">
-      {components.map(({ title, content }, index) => (
+      {components.map(({ title, content, widthRatio = 1 }, index) => (
         <React.Fragment key={`tab-content-${index}`}>
-          <Box flex={1}>
-            <Box display="flex" flexDirection="column" height="100%">
-              <Box>
-                <CategoryTitle>{title}</CategoryTitle>
+          <Box flex={widthRatio}>
+            <Box
+              display="flex"
+              flexDirection="column"
+              height="100%"
+              paddingTop={1}
+            >
+              <Box>{title}</Box>
+              <Box flexGrow={1} overflow="auto">
+                {content}
               </Box>
-              <Box flexGrow={1}>{content}</Box>
             </Box>
           </Box>
           {components.length - 1 !== index && (

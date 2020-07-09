@@ -55,9 +55,7 @@
       "medianExplanation": "This is the date at which half of this folder's files have been \"closed\". There are as many elements modified before than after this date",
       "noElementSelected": "Select an item to see its characteristics",
       "openElementErrorMessage": "Archifiltre could not open the chosen element",
-      "openElementErrorTitle": "Opening element",
-      "metadataElement": "Original metadata: element",
-      "metadataDescription": "Enriched metadata: description"
+      "openElementErrorTitle": "Opening element"
     },
     "workspace": {
       "type": "By type",

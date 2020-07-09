@@ -55,9 +55,7 @@
       "medianExplanation": "C’est la date à laquelle la moitié des fichiers contenus dans ce dossier a été « clôturée ». Il y a autant d'éléments modifiés avant qu'après cette date médiane.",
       "noElementSelected": "Sélectionnez un élément pour voir ses caractéristiques",
       "openElementErrorMessage": "Archifiltre n'a pas réussi à ouvrir l'élément sélectionné",
-      "openElementErrorTitle": "Ouverture de l'élément",
-      "metadataElement": "Métadonnées d'origine: élément",
-      "metadataDescription": "Métadonnées enrichies: description"
+      "openElementErrorTitle": "Ouverture de l'élément"
     },
     "workspace": {
       "type": "Par type",

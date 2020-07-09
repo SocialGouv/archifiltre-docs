@@ -38,7 +38,7 @@ const SessionInfo: FC<SessionInfoProps> = ({
       </Box>
       {firstLevelName !== sessionName && (
         <Box>
-          <Typography variant="body2">({firstLevelName})</Typography>
+          <Typography variant="subtitle2">({firstLevelName})</Typography>
         </Box>
       )}
     </Box>

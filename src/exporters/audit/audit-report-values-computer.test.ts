@@ -6,6 +6,7 @@ import {
 } from "util/file-system/file-sys-util";
 import { FileType } from "util/file-types/file-types-util";
 import {
+  countFileSizes,
   countFileTypes,
   formatAuditReportDate,
   getBiggestFiles,
@@ -119,6 +120,22 @@ describe("audit-report-values-computer", () => {
         [FileType.VIDEO]: 0,
         [FileType.AUDIO]: 0,
         [FileType.OTHER]: 1,
+      });
+    });
+  });
+
+  describe("countFileSizes", () => {
+    it("should count each file sizes sum", () => {
+      expect(countFileSizes(filesAndFoldersMap)).toEqual({
+        [FileType.PUBLICATION]: 0,
+        [FileType.PRESENTATION]: 5000,
+        [FileType.SPREADSHEET]: 0,
+        [FileType.EMAIL]: 0,
+        [FileType.DOCUMENT]: 2000,
+        [FileType.IMAGE]: 0,
+        [FileType.VIDEO]: 0,
+        [FileType.AUDIO]: 0,
+        [FileType.OTHER]: 1000,
       });
     });
   });

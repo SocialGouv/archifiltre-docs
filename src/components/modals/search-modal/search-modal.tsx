@@ -1,4 +1,4 @@
-import Grid from "@material-ui/core/Grid";
+import { Box } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import Paper from "@material-ui/core/Paper";
 import { compose, omit, values } from "lodash/fp";
@@ -61,21 +61,28 @@ export const SearchModal: FC<SearchModalProps> = ({
     >
       <ModalHeader title={t("search.title")} onClose={closeModal} />
       <DialogContent className={classes.dialogContent} dividers>
-        <Grid container spacing={1}>
-          <Grid item xs={12}>
-            <Grid container spacing={1}>
-              <SearchBar setSearchTerm={setSearchTerm} />
-              <Filters
-                setFilters={setFilters}
-                filesAndFolders={filesAndFoldersArray}
-                tags={tags}
-              />
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <FilesAndFoldersTable filesAndFolders={filteredFilesAndFolders} />
-          </Grid>
-        </Grid>
+        <Box display="flex" flexDirection="column">
+          <Box>
+            <Box display="flex">
+              <Box
+                flex={1}
+                display="flex"
+                alignItems="flex-end"
+                paddingBottom={1}
+              >
+                <SearchBar setSearchTerm={setSearchTerm} />
+              </Box>
+              <Box flex={1}>
+                <Filters
+                  setFilters={setFilters}
+                  filesAndFolders={filesAndFoldersArray}
+                  tags={tags}
+                />
+              </Box>
+            </Box>
+          </Box>
+          <FilesAndFoldersTable filesAndFolders={filteredFilesAndFolders} />
+        </Box>
       </DialogContent>
     </Dialog>
   );

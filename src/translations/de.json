@@ -16,7 +16,10 @@
       "didYouKnow": "Wussten Sie schon?",
       "warning": "Warnung!",
       "wrongJsonVersion": "Die Datei, die Sie abgelegt haben, ist nicht mit der gleichen Version von Archifiltre erstellt worden.",
-      "justAMoment": "Nur einen Augenblick..."
+      "error": "Fehler!",
+      "errorsWhileLoading": "Ein Fehler ist beim Laden aufgetreten. Klicken Sie zum Überprüfen den Fehler-Log.",
+      "loadingVisualization": "Die Darstellung wird geladen…",
+      "rootElementError": "Archifiltre kann derzeitig kein Laufwerk oder Root-Verzeichnis lesen. Bitte legen Sie einen Unterordner an."
     },
     "report": {
       "comments": "Kommentare",
@@ -25,23 +28,38 @@
       "max": "max",
       "min": "min",
       "average": "Durchschnitt",
-      "median": "Median",
       "whatsNew": "Was gibt es Neues?",
       "fileOrFolderNamePlaceholder": "Name des Ordners oder der Datei",
       "fileOrFolderRealNamePlaceholder": "Tatsächlicher Name",
       "size": "Größe",
-      "files": "Daten",
       "folders": "Ordner",
+      "files": "Daten",
+      "boundaryDates": "Anfangs- und Enddatum",
+      "oldestFile": "Ältester Ordner",
+      "newestFile": "Jüngster Ordner",
+      "initialName": "Ursprünglicher Name",
       "hash": "Hash-Wert",
       "type": "Typ",
+      "lastModifications": "Letztes Änderungsdatum",
+      "minimum": "Minimum",
+      "maximum": "Maximum",
+      "median": "Median",
       "fileHashExplanation": "Dieser Hash-Wert ist ein durch einen MD5 Algorithmus berechneter digitaler Fingerabdruck der Datei",
       "folderHashExplanation": "Dieser Hash-Wert ist ein (durch einen MD5 Algorithmus berechneter) digitaler Fingerabdruck der Verknüpfung der Hash-Werte der Unterordner dieses Ordners",
       "clickHereToAddComments": "Klicken Sie hier um Kommentare hinzuzufügen!",
-      "copied": "Kopieren beendet!"
+      "copied": "Kopieren beendet!",
+      "fileTreeInfo": "Dateibaumeigenschaften",
+      "elementInfo": "Elementinformationen",
+      "boundaryDatesExplanation": "Datum der ältesten und jüngsten Elemente im Dateibaum",
+      "medianExplanation": "Das ist das Datum, an dem die Hälfte der Dateien dieses Ordners geschlossen wurden. Es gibt genauso viele bearbeitete Elemente vor wie nach diesem Datum.",
+      "noElementSelected": "Wählen Sie ein Element aus, um seine Eigenschaften zu sehen",
+      "openElementErrorMessage": "Archifiltre konnte das ausgewählte Element nicht öffnen",
+      "openElementErrorTitle": "Element wird geöffnet"
     },
     "workspace": {
       "type": "Nach Typ",
       "dates": "Nach Datum",
+      "alphanumeric": "Alphanumerisch",
       "backToRoot": "Zurück zum obersten Verzeichnis",
       "bySize": "Nach Größe",
       "byNumber": "Nach Anzahl",
@@ -53,29 +71,61 @@
       "newTag": "Neuer Tag",
       "file": "Datei",
       "level": "Ebene",
-      "cannotMoveElement": "Die Datei oder der Ordner kann hierher nicht verschoben werden."
+      "impossibleMove": "Nicht möglich zu bewegen",
+      "cannotMoveElement": "Die Datei oder der Ordner kann hierher nicht verschoben werden.",
+      "nameConflict": "Namenskonflikt mit einem anderen Ordnerelement",
+      "moveElementsMode": "Bewegungsmodus",
+      "normalMode": "Normaler Modus",
+      "general": "Allgemein",
+      "enrichment": "Zusatze",
+      "audit": "Audit",
+      "duplicates": "Duplikat",
+      "hideTabs": "Eigenschaften verstecken",
+      "showTabs": "Eigenschaften anzeigen",
+      "noOptions": "Keine Ergebnisse - Drücken Sie “Enter”, um einen neuer Tag hinzuzufügen",
+      "tagItemTooltip": "Tag Nummer (Volumenprozent)"
     },
     "header": {
       "export": "Exportieren",
       "auditReport": "Prüfbericht",
       "close": "Schließen",
       "save": "Speichern",
+      "newVersion": "Neue Version",
       "aNewVersionIsOut": "Version {{version}} von Archifiltre ist erschienen!",
       "download": "Laden Sie die neue Version herunter!",
+      "cancel": "Abbrechen",
       "csvWithHash": "CSV mit Hash-Werten",
       "csvWithHashDisabledMessage": "Bitte warten, bis die Hash-Werte berechnet wurden",
-      "loadPreviousSessionButtonLabel": "Vorherige Sitzung laden"
+      "loadPreviousSessionButtonLabel": "Vorherige Sitzung laden",
+      "help": "Hilfe",
+      "undo": "Zurück",
+      "redo": "Wiederherstellen"
     },
     "common": {
       "error": "Ups! Ein Fehler ist aufgetreten.",
       "contactUs": "Hier klicken, um uns zu kontaktieren",
       "somethingWentWrong": "Da ist etwas schiefgegangen.",
       "file": "Datei",
+      "file_plural": "Dateien",
       "folder": "Ordner",
       "originalName": "Der ursprüngliche Name des Elements war '{{oldName}}'",
       "byteChar": "B",
       "unknown": "Unbekannt",
-      "toDelete": "Zu löschen"
+      "toDelete": "Zu löschen",
+      "yes": "Ja",
+      "no": "Nein",
+      "files": "Datei(en)",
+      "fileTypes": {
+        "presentation": "Präsentation",
+        "publication": "Veröffentlichung",
+        "spreadsheet": "Tabelle",
+        "email": "Email",
+        "document": "Dokument",
+        "image": "Bild",
+        "video": "Video",
+        "audio": "Audio",
+        "other": "Andere"
+      }
     },
     "hash": {
       "loadingInfoLabel": "Laden der Hash-Werte von Dateien und Ordnern",
@@ -90,11 +140,15 @@
       "size": "Größe (Byte)",
       "firstModified": "Erste Änderung",
       "lastModified": "Letzte Änderung",
+      "newPath": "Neuer Pfad",
       "newName": "Neuer Name",
       "description": "Beschreibung",
       "fileOrFolder": "Datei/Ordner",
       "depth": "Tiefe",
-      "hash": "Hash-Wert (MD5)"
+      "hash": "Hash-Wert (MD5)",
+      "fileCount": "Anzahl der Dateien",
+      "type": "Typ",
+      "duplicate": "Duplikat"
     },
     "export": {
       "metsExportErrorTitle": "Fehler im METS-Export",
@@ -109,11 +163,61 @@
       "csvExportTitle": "CSV-Export",
       "csvExportStartedMessage": "CSV-Export begonnen",
       "csvExportSuccessMessage": "CSV-Export beendet",
-      "creatingCsvExport": "CSV-Exportdatei wird erstellt"
+      "creatingCsvExport": "CSV-Exportdatei wird erstellt",
+      "creatingCsvExportWithHashes": "CSV-Exportdatei mit Hash-Wert wird erstellt"
     },
     "replay": {
       "title": "Vorherige Sitzung laden",
       "error": "Beim Laden der vorherigen Sitzung ist ein Fehler aufgetreten."
+    },
+    "search": {
+      "title": "Suchen und filtern",
+      "name": "Name",
+      "type": "Typ",
+      "size": "Größe",
+      "fileLastModified": "Letzte Änderung",
+      "path": "Pfad",
+      "searchPlaceholder": "Suchen",
+      "noResult": "Keine Ergebnisse",
+      "page": "Seite",
+      "tag": "Tag"
+    },
+    "errorsModal": {
+      "title": "Fehlerliste",
+      "errorCode": "Fehlercode",
+      "errorDescription": "Fehlerbeschreibung",
+      "element": "Element (Datei oder Ordner)",
+      "errorDescriptions": {
+        "ENOENT": "Die Datei kann nicht gefunden werden.",
+        "EBUSY": "",
+        "EACCES": "Keine Zugriffsrechte auf diese Datei.",
+        "UNKNOWN": "Unbekannter oder unbehandelter Fehler"
+      }
+    },
+    "settingsModal": {
+      "title": "Einstellungen",
+      "language": "Sprache"
+    },
+    "exportModal": {
+      "title": "Export",
+      "buttonTitle": "Exportieren"
+    },
+    "audit": {
+      "fileCountInfoTitle": "Dateianzahl im Dateibaum",
+      "fileTreeDepthTitle": "Tiefe des Dateibaum",
+      "fileTypeRepartitionTitle": "Dateitypen im Dateibaum"
+    },
+    "duplicates": {
+      "duplicateElements": "doppelte Elemente",
+      "nonDuplicateElements": "Nicht doppelte Elemente",
+      "elements": "Elemente",
+      "duplicatesDistribution": "Verteilung von Duplikaten",
+      "duplicates": "Duplikate",
+      "duplicatesByType": "Verteilung von Duplikaten nach Elementtyp",
+      "filesNumber": "Anzahl der Dateien",
+      "spaceUsed": "Größe im Dateibaum",
+      "percentage": "Prozentsatz (Größe)",
+      "duplicatesList": "Liste der Duplikate"
     }
   }
 }

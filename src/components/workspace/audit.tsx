@@ -1,24 +1,32 @@
+import CategoryTitle from "components/common/category-title";
+import AuditInfo from "components/workspace/audit-info";
+import TabContentHeader from "components/workspace/tabs/tab-content-header";
+import TabsLayout from "components/workspace/tabs/tabs-layout";
 import React, { FC } from "react";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import FileCountInfoContainer from "../info-boxes/file-count-info/file-count-info-container";
-import FileTreeDepthContainer from "../info-boxes/file-tree-depth/file-tree-depth-container";
+import { useTranslation } from "react-i18next";
 import FileTypesDetailsContainer from "../info-boxes/file-types-details/files-types-details-container";
 
-const Audit: FC = () => (
-  <Grid container spacing={1}>
-    <Grid item sm={6}>
-      <Box display="flex" flexDirection="column">
-        <FileCountInfoContainer />
-      </Box>
-      <Box>
-        <FileTreeDepthContainer />
-      </Box>
-    </Grid>
-    <Grid item sm={6}>
-      <FileTypesDetailsContainer />
-    </Grid>
-  </Grid>
-);
+const Audit: FC = () => {
+  const { t } = useTranslation();
+  const components = [
+    {
+      title: <CategoryTitle>{t("audit.fileCountInfoTitle")}</CategoryTitle>,
+      content: <AuditInfo />,
+      widthRatio: 1,
+    },
+    {
+      title: (
+        <CategoryTitle>{t("audit.fileTypeRepartitionTitle")}</CategoryTitle>
+      ),
+      content: <FileTypesDetailsContainer />,
+      widthRatio: 2,
+    },
+  ];
+  return (
+    <TabContentHeader title={t("audit.fileTreeAudit")}>
+      <TabsLayout components={components} />
+    </TabContentHeader>
+  );
+};
 
 export default Audit;

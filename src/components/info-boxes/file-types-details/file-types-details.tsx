@@ -3,8 +3,6 @@ import { FileType } from "util/file-types/file-types-util";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { useTranslation } from "react-i18next";
-import CategoryTitle from "../../common/category-title";
-import InfoBoxPaper from "../common/info-box-paper";
 import { FileTypeMap } from "exporters/audit/audit-report-values-computer";
 import HorizontalStackedBar, {
   HorizontalStackedBarOption,
@@ -72,27 +70,11 @@ const FileTypesDetails: FC<FileTypesDetailsProps> = ({
   );
 
   return (
-    <Box display="flex" flexDirection="column" height="100%">
-      <CategoryTitle>{t("audit.fileTypeRepartitionTitle")}</CategoryTitle>
-      <Box flexGrow={1}>
-        <InfoBoxPaper>
-          <Box
-            display="flex"
-            flexDirection="column"
-            height="100%"
-            justifyContent="center"
-          >
-            <Box>
-              <HorizontalStackedBar
-                data={elementsCountsByType}
-                bars={bars}
-                renderTooltipContent={renderTooltipContent}
-              />
-            </Box>
-          </Box>
-        </InfoBoxPaper>
-      </Box>
-    </Box>
+    <HorizontalStackedBar
+      data={elementsCountsByType}
+      bars={bars}
+      renderTooltipContent={renderTooltipContent}
+    />
   );
 };
 

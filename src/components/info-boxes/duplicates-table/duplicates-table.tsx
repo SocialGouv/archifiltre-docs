@@ -2,9 +2,7 @@ import Box from "@material-ui/core/Box";
 import React, { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
-import CategoryTitle from "../../common/category-title";
 import Table from "../../common/table";
-import InfoBoxPaper from "../common/info-box-paper";
 import DuplicatesTableType from "./duplicates-table-type";
 
 type DuplicatesTableProps = {
@@ -56,24 +54,13 @@ const DuplicatesTable: FC<DuplicatesTableProps> = ({
   );
 
   return (
-    <Box display="flex" flexDirection="column" height="100%">
-      <Box>
-        <CategoryTitle>{t("duplicates.duplicatesByType")}</CategoryTitle>
-      </Box>
-      <Box flexGrow={1} minHeight={0}>
-        <InfoBoxPaper padding="0">
-          <Box height="100%" overflow="hidden">
-            <Box height="100%" overflow="auto">
-              <Table
-                columns={columns}
-                data={data}
-                isPaginatorDisplayed={false}
-                isDense={true}
-              />
-            </Box>
-          </Box>
-        </InfoBoxPaper>
-      </Box>
+    <Box overflow="hidden">
+      <Table
+        columns={columns}
+        data={data}
+        isPaginatorDisplayed={false}
+        isDense={true}
+      />
     </Box>
   );
 };

@@ -1,9 +1,8 @@
-import Box from "@material-ui/core/Box";
+import NoElementSelectedPlaceholder from "components/info-boxes/element-characteristics/no-element-selected-placeholder";
 import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { FaHandPointer } from "react-icons/fa";
-import { addTracker } from "../../logging/tracker";
-import { ActionTitle, ActionType } from "../../logging/tracker-types";
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
 import EditableField from "../fields/editable-field";
 
 type CommentCellProps = {
@@ -39,20 +38,11 @@ const CommentCell: FC<CommentCellProps> = ({
       selectTextOnFocus={true}
       value={comment}
       onChange={handleChange}
-      placeholder={t("report.yourCommentsHere")}
+      placeholder={t("report.clickHereToAddComments")}
       rowsMax={8}
     />
   ) : (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <FaHandPointer />
-      &nbsp;
-      {t("report.yourCommentsHere")}
-    </Box>
+    <NoElementSelectedPlaceholder title={t("report.yourCommentsHere")} />
   );
 };
 

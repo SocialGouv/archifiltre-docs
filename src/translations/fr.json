@@ -55,7 +55,9 @@
       "medianExplanation": "C’est la date à laquelle la moitié des fichiers contenus dans ce dossier a été « clôturée ». Il y a autant d'éléments modifiés avant qu'après cette date médiane.",
       "noElementSelected": "Sélectionnez un élément pour voir ses caractéristiques",
       "openElementErrorMessage": "Archifiltre n'a pas réussi à ouvrir l'élément sélectionné",
-      "openElementErrorTitle": "Ouverture de l'élément"
+      "openElementErrorTitle": "Ouverture de l'élément",
+      "metadataElement": "Métadonnées d'origine: élément",
+      "metadataDescription": "Métadonnées enrichies: description"
     },
     "workspace": {
       "type": "Par type",
@@ -84,7 +86,8 @@
       "hide": "Cacher",
       "show": "Afficher",
       "noOptions": "Pas de résultats - Appuyez sur Entrer pour ajouter un nouveau tag",
-      "tagItemTooltip": "Nombre d'utilisation du tag (pourcentage du volume)"
+      "tagItemTooltip": "Nombre d'utilisation du tag (pourcentage du volume)",
+      "metadata": "Métadonnées"
     },
     "header": {
       "export": "Exporter",
@@ -108,6 +111,8 @@
       "somethingWentWrong": "Une erreur s'est produite.",
       "file": "fichier",
       "file_plural": "fichiers",
+      "level": "niveau",
+      "level_plural": "niveaux",
       "folder": "répertoire",
       "originalName": "Cet élément était originellement intitulé '{{oldName}}'",
       "byteChar": "o",
@@ -205,21 +210,22 @@
       "buttonTitle": "Exporter"
     },
     "audit": {
-      "fileCountInfoTitle": "Nombre de fichiers sur l'arborescence",
-      "fileTreeDepthTitle": "Niveau de profondeur sur l'arborescence",
-      "fileTypeRepartitionTitle": "Répartition des fichiers dans l'arborescence"
+      "fileCountInfoTitle": "Nombre de fichiers",
+      "fileTreeDepthTitle": "Niveau de profondeur",
+      "fileTypeRepartitionTitle": "Répartition par type de fichiers",
+      "fileTreeAudit": "Audit de l'arborescence"
     },
     "duplicates": {
       "duplicateElements": "Éléments redondants",
       "nonDuplicateElements": "Éléments non redondants",
       "elements": "éléments",
-      "duplicatesDistribution": "Répartition des redondances",
+      "duplicatesDistribution": "Par répartition",
       "duplicates": "redondances",
-      "duplicatesByType": "Répartition des redondances par type d'élément",
+      "duplicatesByType": "Par type d'élément",
       "filesNumber": "Nombre de fichiers",
       "spaceUsed": "Espace sur l'arborescence",
       "percentage": "Pourcentage (taille)",
-      "duplicatesList": "Liste de redondances"
+      "duplicatesList": "Liste des éléments"
     }
   }
 }

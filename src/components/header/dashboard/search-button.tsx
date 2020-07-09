@@ -19,7 +19,7 @@ export const SearchButton = () => {
         <Button
           id="search-button"
           color="primary"
-          variant="contained"
+          variant="outlined"
           className={classes.headerButton}
           onClick={openModal}
           disableElevation

@@ -1,12 +1,18 @@
 import createMuiTheme, { Theme } from "@material-ui/core/styles/createMuiTheme";
-import blue from "@material-ui/core/colors/blue";
 import grey from "@material-ui/core/colors/grey";
 
 export interface ThemedProps {
   theme: Theme;
 }
 
-const primaryColor = blue;
+const darkBlue = {
+  light: "#576393",
+  main: "#2E3D79",
+  dark: "#202a54",
+  contrastText: "#fff",
+};
+
+const primaryColor = darkBlue;
 const secondaryColor = grey;
 
 const defaultTheme = createMuiTheme({

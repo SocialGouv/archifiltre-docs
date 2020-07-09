@@ -51,7 +51,7 @@ const UndoRedoButton: FC<UndoRedoButtonProps> = ({
         <Button
           id={isUndo ? "undo-button" : "redo-button"}
           color="primary"
-          variant="contained"
+          variant="outlined"
           className={classes.headerButton}
           onClick={isUndo ? undo : redo}
           disabled={!isActive}

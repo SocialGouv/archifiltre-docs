@@ -27,7 +27,8 @@ module.exports = (env, argv = {}) => ({
     hot: true,
     inline: false,
     port: 8000,
-    writeToDisk: (name) => /(\.fork\.[jt]s|main\.bundle\.js)$/.test(name),
+    writeToDisk: (name) =>
+      /(\.fork\.[jt]s|main\.bundle\.js|\.node)$/.test(name),
   },
   devtool: isDev(argv.mode) ? "cheap-module-eval-source-map" : false,
 
@@ -132,6 +133,9 @@ module.exports = (env, argv = {}) => ({
   },
 
   plugins: [
+    new CopyWebpackPlugin({
+      patterns: ["node_modules/fswin"],
+    }),
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: ["**/*", "!main.js"],
     }),

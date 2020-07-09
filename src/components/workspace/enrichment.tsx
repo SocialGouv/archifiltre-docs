@@ -1,21 +1,18 @@
-import Box from "@material-ui/core/Box";
-import Grid, { GridProps } from "@material-ui/core/Grid";
+import ColorCircle from "components/common/color-circle";
+import TabContentHeader from "components/workspace/tabs/tab-content-header";
+import TabsLayout from "components/workspace/tabs/tabs-layout";
+import TagHeader from "components/workspace/tag-header";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { FaCircle } from "react-icons/fa";
-import styled from "styled-components";
-import CategoryTitle from "../common/category-title";
 import {
   ENRICHMENT_COLORS,
   EnrichmentTypes,
 } from "../main-space/icicle/icicle-enrichment";
 import CommentCell from "../report/comment-cell";
 import TagCell from "../tags/tag-cell-container";
-import AllTagsButton from "./all-tags-button";
-import InfoBoxPaper from "../info-boxes/common/info-box-paper";
 import ElementCharacteristicsContainer from "../info-boxes/element-characteristics/element-characteristics-container";
 
-interface EnrichmentProps {
+type EnrichmentProps = {
   createTag;
   untag;
   updateComment;
@@ -26,12 +23,7 @@ interface EnrichmentProps {
   nodeId: string;
   isActive: boolean;
   api: any;
-}
-
-const FullHeightGrid = styled(Grid)<GridProps>`
-  height: 100%;
-`;
-
+};
 const Enrichment: FC<EnrichmentProps> = ({
   createTag,
   untag,
@@ -46,94 +38,51 @@ const Enrichment: FC<EnrichmentProps> = ({
 }) => {
   const { t } = useTranslation();
 
+  const components = [
+    {
+      title: (
+        <>
+          {t("report.metadataElement")}
+          <ColorCircle color={ENRICHMENT_COLORS[EnrichmentTypes.ALIAS]} />
+        </>
+      ),
+      content: <ElementCharacteristicsContainer />,
+    },
+    {
+      title: (
+        <>
+          {t("report.metadataDescription")}
+          <ColorCircle color={ENRICHMENT_COLORS[EnrichmentTypes.COMMENT]} />
+        </>
+      ),
+      content: (
+        <CommentCell
+          isActive={isActive}
+          comment={currentFileComment}
+          updateComment={updateComment}
+        />
+      ),
+    },
+    {
+      title: <TagHeader api={api} />,
+      content: (
+        <TagCell
+          isActive={isActive}
+          isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
+          nodeId={nodeId}
+          tagsForCurrentFile={tagsForCurrentFile}
+          createTag={createTag}
+          untag={untag}
+          toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
+        />
+      ),
+    },
+  ];
+
   return (
-    <FullHeightGrid container spacing={1}>
-      <Grid item xs={4}>
-        <Box display="flex" flexDirection="column" height="100%">
-          <Box>
-            <CategoryTitle>
-              {t("report.element")}&nbsp;
-              <FaCircle
-                style={{
-                  color: ENRICHMENT_COLORS[EnrichmentTypes.ALIAS],
-                  verticalAlign: "middle",
-                }}
-              />
-            </CategoryTitle>
-          </Box>
-          <Box flexGrow={1}>
-            <InfoBoxPaper>
-              <Grid container>
-                <Grid item>
-                  <ElementCharacteristicsContainer />
-                </Grid>
-              </Grid>
-            </InfoBoxPaper>
-          </Box>
-        </Box>
-      </Grid>
-      <Grid item xs={4}>
-        <Box display="flex" flexDirection="column" height="100%">
-          <Box>
-            <CategoryTitle>
-              {t("report.comments")}&nbsp;
-              <FaCircle
-                style={{
-                  color: ENRICHMENT_COLORS[EnrichmentTypes.COMMENT],
-                  verticalAlign: "middle",
-                }}
-              />
-            </CategoryTitle>
-          </Box>
-          <Box flexGrow={1}>
-            <InfoBoxPaper>
-              <Grid container>
-                <Grid item xs={12}>
-                  <CommentCell
-                    isActive={isActive}
-                    comment={currentFileComment}
-                    updateComment={updateComment}
-                  />
-                </Grid>
-              </Grid>
-            </InfoBoxPaper>
-          </Box>
-        </Box>
-      </Grid>
-      <Grid item xs={4}>
-        <Box display="flex" flexDirection="column" height="100%">
-          <Box display="flex" justifyContent="space-between">
-            <CategoryTitle>
-              {t("workspace.tags")}&nbsp;
-              <FaCircle
-                style={{
-                  color: ENRICHMENT_COLORS[EnrichmentTypes.TAG],
-                  verticalAlign: "middle",
-                }}
-              />
-            </CategoryTitle>
-            <AllTagsButton api={api} />
-          </Box>
-          <Box flexGrow={1}>
-            <InfoBoxPaper>
-              <Grid container>
-                <Grid item xs={12}>
-                  <TagCell
-                    isActive={isActive}
-                    isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
-                    nodeId={nodeId}
-                    tagsForCurrentFile={tagsForCurrentFile}
-                    createTag={createTag}
-                    untag={untag}
-                    toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
-                  />
-                </Grid>
-              </Grid>
-            </InfoBoxPaper>
-          </Box>
-        </Box>
-      </Grid>
-    </FullHeightGrid>
+    <TabContentHeader title={t("workspace.metadata")}>
+      <TabsLayout components={components} />
+    </TabContentHeader>
   );
 };
 

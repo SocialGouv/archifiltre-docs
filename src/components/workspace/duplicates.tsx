@@ -1,22 +1,31 @@
-import Grid from "@material-ui/core/Grid";
+import CategoryTitle from "components/common/category-title";
+import TabContentHeader from "components/workspace/tabs/tab-content-header";
+import TabsLayout from "components/workspace/tabs/tabs-layout";
 import React, { FC } from "react";
+import { useTranslation } from "react-i18next";
 import DuplicatesDistribution from "../info-boxes/duplicates-distribution/duplicates-distribution";
 import DuplicatesTable from "../info-boxes/duplicates-table/duplicates-table-container";
-import styled from "styled-components";
 
-const StyledGrid = styled(Grid)`
-  height: 100%;
-`;
+const Duplicates: FC = () => {
+  const { t } = useTranslation();
 
-const Duplicates: FC = () => (
-  <StyledGrid container spacing={1}>
-    <StyledGrid item xs={6}>
-      <DuplicatesDistribution />
-    </StyledGrid>
-    <StyledGrid item xs={6}>
-      <DuplicatesTable />
-    </StyledGrid>
-  </StyledGrid>
-);
+  const components = [
+    {
+      title: (
+        <CategoryTitle>{t("duplicates.duplicatesDistribution")}</CategoryTitle>
+      ),
+      content: <DuplicatesDistribution />,
+    },
+    {
+      title: <CategoryTitle>{t("duplicates.duplicatesByType")}</CategoryTitle>,
+      content: <DuplicatesTable />,
+    },
+  ];
+  return (
+    <TabContentHeader title={t("workspace.duplicates")}>
+      <TabsLayout components={components} />
+    </TabContentHeader>
+  );
+};
 
 export default Duplicates;

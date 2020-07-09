@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Tag } from "reducers/tags/tags-types";
-import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
+import { getTagsFromStore } from "reducers/tags/tags-selectors";
 import TagCell from "./tag-cell";
 
 type TagCellContainerProps = {

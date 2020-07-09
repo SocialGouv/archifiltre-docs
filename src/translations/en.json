@@ -55,7 +55,9 @@
       "medianExplanation": "This is the date at which half of this folder's files have been \"closed\". There are as many elements modified before than after this date",
       "noElementSelected": "Select an item to see its characteristics",
       "openElementErrorMessage": "Archifiltre could not open the chosen element",
-      "openElementErrorTitle": "Opening element"
+      "openElementErrorTitle": "Opening element",
+      "metadataElement": "Original metadata: element",
+      "metadataDescription": "Enriched metadata: description"
     },
     "workspace": {
       "type": "By type",
@@ -84,7 +86,8 @@
       "hide": "Hide",
       "show": "Show",
       "noOptions": "No results - Press enter to add a new tag",
-      "tagItemTooltip": "Tag number (volume percentage)"
+      "tagItemTooltip": "Tag number (volume percentage)",
+      "metadata": "Metadata"
     },
     "header": {
       "export": "Export",
@@ -108,6 +111,8 @@
       "somethingWentWrong": "Something went wrong.",
       "file": "file",
       "file_plural": "files",
+      "level": "level",
+      "level_plural": "levels",
       "folder": "folder",
       "originalName": "This element original title was '{{oldName}}'",
       "byteChar": "B",
@@ -205,21 +210,22 @@
       "buttonTitle": "Export"
     },
     "audit": {
-      "fileCountInfoTitle": "File count in the file tree",
-      "fileTreeDepthTitle": "Depth of the file tree",
-      "fileTypeRepartitionTitle": "File types in the file tree"
+      "fileCountInfoTitle": "File count",
+      "fileTreeDepthTitle": "Depth",
+      "fileTypeRepartitionTitle": "Distribution by type",
+      "fileTreeAudit": "File tree audit"
     },
     "duplicates": {
       "duplicateElements": "Duplicate elements",
       "nonDuplicateElements": "Non duplicate elements",
       "elements": "elements",
-      "duplicatesDistribution": "Duplicates distribution",
+      "duplicatesDistribution": "By distribution",
       "duplicates": "duplicates",
-      "duplicatesByType": "Duplicates distribution by element type",
+      "duplicatesByType": "By element type",
       "filesNumber": "Number of files",
       "spaceUsed": "Size in file tree",
       "percentage": "Percentage (size)",
-      "duplicatesList": "Duplicates list"
+      "duplicatesList": "Elements list"
     }
   }
 }

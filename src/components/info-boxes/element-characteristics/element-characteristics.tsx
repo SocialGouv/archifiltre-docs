@@ -1,8 +1,9 @@
 import React, { FC } from "react";
+import { useTranslation } from "react-i18next";
 import ElementCharacteristicsContent, {
   ElementCharacteristicsContentProps,
 } from "./element-characteristics-content";
-import ElementCharacteristicsPlaceholder from "./element-characteristics-placeholder";
+import NoElementSelectedPlaceholder from "components/info-boxes/element-characteristics/no-element-selected-placeholder";
 
 const ElementCharacteristics: FC<ElementCharacteristicsContentProps> = ({
   elementName,
@@ -16,9 +17,10 @@ const ElementCharacteristics: FC<ElementCharacteristicsContentProps> = ({
   medianLastModifiedTimestamp,
   onElementNameChange,
   type,
-}) =>
-  elementName === "" ? (
-    <ElementCharacteristicsPlaceholder />
+}) => {
+  const { t } = useTranslation();
+  return elementName === "" ? (
+    <NoElementSelectedPlaceholder title={t("report.noElementSelected")} />
   ) : (
     <ElementCharacteristicsContent
       elementName={elementName}
@@ -34,5 +36,6 @@ const ElementCharacteristics: FC<ElementCharacteristicsContentProps> = ({
       type={type}
     />
   );
+};
 
 export default ElementCharacteristics;

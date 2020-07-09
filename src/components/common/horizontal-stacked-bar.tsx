@@ -34,7 +34,7 @@ type BarProps = {
 const Bar = styled(Box)<BoxProps & BarProps>`
   background-color: ${({ color }) => color};
   width: ${({ widthratio }) => `${widthratio}%`};
-  height: 80px;
+  height: 100px;
 `;
 
 const HorizontalStackedBar: FC<HorizontalStackedBarProps> = ({

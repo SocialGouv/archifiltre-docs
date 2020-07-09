@@ -90,6 +90,8 @@ const ExportModalContent: FC<ExportModalContentProps> = ({
       <DialogActions>
         <Button
           color="primary"
+          variant="contained"
+          disableElevation
           disabled={Object.values(activeExports).every(negate(identity))}
           onClick={onExport}
         >

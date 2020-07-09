@@ -3,11 +3,11 @@ import { hookCounter } from "util/hook/hook-utils";
 import { AsyncWorker } from "util/async-worker/async-worker-util";
 import { MessageTypes } from "../batch-process/batch-process-util-types";
 import {
+  asyncLoadFilesAndFoldersFromFileSystem,
   createFilesAndFoldersDataStructure,
   createFilesAndFoldersMetadataDataStructure,
   loadFilesAndFoldersFromExportFile,
-  loadFilesAndFoldersFromFileSystem,
-} from "../../files-and-folders-loader/files-and-folders-loader";
+} from "files-and-folders-loader/files-and-folders-loader";
 import { HashesMap } from "reducers/hashes/hashes-types";
 
 type Reporter = (message: any) => void;
@@ -80,7 +80,10 @@ export const loadFolder = async (
         rootPath,
       } = await loadFilesAndFoldersFromExportFile(folderPath, traverseHook));
     } else {
-      origin = loadFilesAndFoldersFromFileSystem(folderPath, traverseHook);
+      origin = await asyncLoadFilesAndFoldersFromFileSystem(
+        folderPath,
+        traverseHook
+      );
     }
   } catch (err) {
     reportFatal(err);

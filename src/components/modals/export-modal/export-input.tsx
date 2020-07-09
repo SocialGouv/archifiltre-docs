@@ -31,7 +31,7 @@ const ExportInput: FC<ExportInputProps> = ({
     if (filePath) {
       setExportsPathsValue(filePath);
     }
-  }, []);
+  }, [setExportsPathsValue]);
 
   return (
     <Box display="flex" alignItems="center">

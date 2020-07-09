@@ -42,14 +42,19 @@ const DuplicatesTable: FC<DuplicatesTableProps> = ({
 
   const data = useMemo(
     () =>
-      Object.entries(fileTypesCount).map(([fileType, fileTypeValue]) => {
-        return {
-          type: <DuplicatesTableType fileType={fileType} />,
-          nbFiles: fileTypeValue,
-          size: octet2HumanReadableFormat(fileSizesCount[fileType]),
-          percentage: `${filePercentagesCount[fileType]} %`,
-        };
-      }),
+      Object.entries(fileTypesCount)
+        .sort(
+          ([, firstValue]: [any, number], [, secondValue]: [any, number]) =>
+            secondValue - firstValue
+        )
+        .map(([fileType, fileTypeValue]) => {
+          return {
+            type: <DuplicatesTableType fileType={fileType} />,
+            nbFiles: fileTypeValue,
+            size: octet2HumanReadableFormat(fileSizesCount[fileType]),
+            percentage: `${filePercentagesCount[fileType]} %`,
+          };
+        }),
     [fileTypesCount, fileSizesCount, filePercentagesCount]
   );
 

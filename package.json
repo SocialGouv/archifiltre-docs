@@ -134,6 +134,7 @@
     "eslint-plugin-lodash-fp": "^2.2.0-a1",
     "fast-memoize": "^2.5.2",
     "file-saver": "2.0.2",
+    "fswin": "^3.19.908",
     "hidefile": "^3.0.0",
     "i18next": "^19.5.4",
     "immutable": "4.0.0-rc.12",

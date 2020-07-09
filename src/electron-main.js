@@ -95,7 +95,7 @@ function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     height: 800,
-    show: false,
+    show: !app.isPackaged,
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true,

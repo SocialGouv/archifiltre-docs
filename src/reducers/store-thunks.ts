@@ -44,6 +44,7 @@ import { clearActionReplayFile } from "./middleware/persist-actions-middleware";
 import { initializeTags, resetTags } from "./tags/tags-actions";
 import { TagMap } from "./tags/tags-types";
 import {
+  setLockedElementId,
   setOriginalPath,
   setSessionName,
 } from "./workspace-metadata/workspace-metadata-actions";
@@ -285,7 +286,8 @@ export const resetStoreThunk = (api: any): ArchifiltreThunkAction => (
   dispatch(resetLoadingAction());
   loading_state.reInit();
   icicle_state.reInit();
-  icicle_state.setNoFocus();
+  dispatch(setLockedElementId(""));
+  dispatch(setLoadingStep(LoadingStep.WAITING));
   icicle_state.setNoDisplayRoot();
   dispatch(commitAction());
 };

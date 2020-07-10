@@ -1,20 +1,21 @@
 import Box from "@material-ui/core/Box";
 import { useTabsState } from "components/header/dashboard/tabs-context";
+import UserButton from "components/header/dashboard/user-button";
 import React, { FC } from "react";
 import TabsHeader from "components/workspace/tabs/tabs-header";
 import SaveButton, { ExportToJson } from "./save-button";
-import ReinitButton, { ResetWorkspace } from "./reinit-button";
 import UndoRedo from "components/header/dashboard/undo-redo-button";
 import { SearchButton } from "./search-button";
 import ExportButton from "./export-button";
 import styled from "styled-components";
 import ArchifiltreLogo from "../archifiltre-logo";
 import LoadPreviousSessionButton from "./load-previous-session-button";
-import SettingsButton from "./settings-button";
 
 const HeaderLine = styled.div`
   width: 100%;
 `;
+
+export type ResetWorkspace = () => void;
 
 type DashboardProps = {
   started: boolean;
@@ -122,13 +123,11 @@ const DashBoard: FC<DashboardProps> = ({
           </Box>
         )}
         <Box pl={1}>
-          <SettingsButton />
+          <UserButton
+            resetWorkspace={resetWorkspace}
+            shouldDisplayReset={shouldDisplayReset}
+          />
         </Box>
-        {shouldDisplayReset && (
-          <Box pl={1}>
-            <ReinitButton resetWorkspace={resetWorkspace} />
-          </Box>
-        )}
       </Box>
     </HeaderLine>
   );

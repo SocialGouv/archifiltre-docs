@@ -22,14 +22,14 @@ type DuplicatesChartProps = {
   duplicatesNumber: number;
   nonDuplicatesNumber: number;
   duplicatesSize: number;
-  nonDuplictesSize: number;
+  nonDuplicatesSize: number;
 };
 
 const DuplicatesChart: FC<DuplicatesChartProps> = ({
   duplicatesNumber,
   nonDuplicatesNumber,
   duplicatesSize,
-  nonDuplictesSize,
+  nonDuplicatesSize,
 }) => {
   const { t } = useTranslation();
   const [targetItem, setTargetItem] = useState();
@@ -46,10 +46,10 @@ const DuplicatesChart: FC<DuplicatesChartProps> = ({
         key: "nonDuplicates",
         label: t("duplicates.nonDuplicateElements"),
         value: nonDuplicatesNumber,
-        size: nonDuplictesSize,
+        size: nonDuplicatesSize,
       },
     ],
-    [duplicatesNumber, duplicatesSize, nonDuplicatesNumber, nonDuplictesSize]
+    [duplicatesNumber, duplicatesSize, nonDuplicatesNumber, nonDuplicatesSize]
   );
 
   const onTargetItemChange = useCallback(

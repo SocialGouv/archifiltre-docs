@@ -33,7 +33,7 @@ const ExportInput: FC<ExportInputProps> = ({
     if (filePath) {
       setExportsPathsValue(filePath);
     }
-  }, []);
+  }, [setExportsPathsValue]);
 
   const browseTitle = t("common.browse");
 

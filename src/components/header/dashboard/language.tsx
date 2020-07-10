@@ -23,7 +23,7 @@ const LanguagePicker: FC = () => {
   const onChange = useCallback((event) => setLanguage(event.target.value), []);
 
   return (
-    <Select onChange={onChange} value={language} variant="outlined">
+    <Select onChange={onChange} value={language} variant="outlined" native>
       {availableLanguages.map((availableLanguage) => (
         <option value={availableLanguage.value} key={availableLanguage.value}>
           {availableLanguage.label}

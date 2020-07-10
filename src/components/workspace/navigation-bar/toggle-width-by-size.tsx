@@ -11,16 +11,15 @@ const ToggleWidthBySize = ({
 
   const handleChange = useCallback(
     (event) => {
-      if (widthBySize.toString() !== event.target.value)
+      if (widthBySize().toString() !== event.target.value)
         toggleChangeWidthBySize();
     },
     [widthBySize]
   );
-
   return (
     <Select
       native
-      value={widthBySize.toString()}
+      value={widthBySize().toString()}
       onChange={handleChange}
       disableUnderline={true}
     >

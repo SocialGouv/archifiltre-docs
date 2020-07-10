@@ -212,7 +212,9 @@
       "fileCountInfoTitle": "File count",
       "fileTreeDepthTitle": "Depth",
       "fileTypeRepartitionTitle": "Distribution by type",
-      "fileTreeAudit": "File tree audit"
+      "fileTreeAudit": "File tree audit",
+      "report": "Audit report",
+      "reportReadyMessage": "The full audit report is ready."
     },
     "duplicates": {
       "duplicateElements": "Duplicate elements",

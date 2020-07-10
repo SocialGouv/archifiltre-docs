@@ -131,7 +131,8 @@
         "video": "Vidéo",
         "audio": "Audio",
         "other": "Autre"
-      }
+      },
+      "browse": "Parcourir"
     },
     "hash": {
       "loadingInfoLabel": "Chargement des empreintes de fichiers et dossiers",

@@ -131,7 +131,8 @@
         "video": "Video",
         "audio": "Audio",
         "other": "Other"
-      }
+      },
+      "browse": "Browse"
     },
     "hash": {
       "loadingInfoLabel": "Loading files and folders hashes",

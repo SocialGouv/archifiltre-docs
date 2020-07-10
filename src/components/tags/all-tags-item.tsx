@@ -2,6 +2,7 @@ import Chip from "@material-ui/core/Chip";
 import IconButton from "@material-ui/core/IconButton";
 import Box from "@material-ui/core/Box";
 import Tooltip from "@material-ui/core/Tooltip";
+import EllipsisText from "components/tags/ellipsis-text";
 import React, { FC, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaTrash, FaPen } from "react-icons/fa";
@@ -47,7 +48,10 @@ const AllTagsItem: FC<AllTagsItemProps> = ({
         </IconButton>
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="center" pr={1}>
-        <Chip size="small" label={tag} />
+        <Chip
+          size="small"
+          label={<EllipsisText maxWidth={150}>{tag}</EllipsisText>}
+        />
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="center" pr={1}>
         <Tooltip title={tooltipText}>

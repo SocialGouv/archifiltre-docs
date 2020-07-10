@@ -52,7 +52,7 @@ const DuplicatesTable: FC<DuplicatesTableProps> = ({
             type: <DuplicatesTableType fileType={fileType} />,
             nbFiles: fileTypeValue,
             size: octet2HumanReadableFormat(fileSizesCount[fileType]),
-            percentage: `${filePercentagesCount[fileType]} %`,
+            percentage: `${filePercentagesCount[fileType] || "<0.01"} %`,
           };
         }),
     [fileTypesCount, fileSizesCount, filePercentagesCount]

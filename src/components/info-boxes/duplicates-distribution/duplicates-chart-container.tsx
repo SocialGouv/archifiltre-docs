@@ -1,7 +1,10 @@
 import React, { FC, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
+import {
+  getFiles,
+  getFilesAndFoldersFromStore,
+} from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   countDuplicateFiles,
   countDuplicateFilesTotalSize,
@@ -20,14 +23,14 @@ const DuplicatesChartContainer: FC = () => {
     [filesAndFoldersMap, hashes]
   );
   const nonDuplicatesNumber = useMemo(
-    () => Object.values(filesAndFoldersMap).length - duplicatesNumber,
+    () => getFiles(filesAndFoldersMap).length - duplicatesNumber,
     [filesAndFoldersMap, duplicatesNumber]
   );
   const duplicatesSize = useMemo(
     () => countDuplicateFilesTotalSize(filesAndFoldersMap, hashes),
     [filesAndFoldersMap, hashes]
   );
-  const nonDuplictesSize = useMemo(
+  const nonDuplicatesSize = useMemo(
     () => rootFilesAndFoldersMetadata.childrenTotalSize - duplicatesSize,
     [rootFilesAndFoldersMetadata, duplicatesSize]
   );
@@ -37,7 +40,7 @@ const DuplicatesChartContainer: FC = () => {
       duplicatesNumber={duplicatesNumber}
       nonDuplicatesNumber={nonDuplicatesNumber}
       duplicatesSize={duplicatesSize}
-      nonDuplictesSize={nonDuplictesSize}
+      nonDuplicatesSize={nonDuplicatesSize}
     />
   );
 };

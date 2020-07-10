@@ -20,10 +20,11 @@ import {
   getWorkspaceMetadataFromStore,
   useWorkspaceMetadata,
 } from "reducers/workspace-metadata/workspace-metadata-selectors";
-import { IciclesSortMethod } from "reducers/workspace-metadata/workspace-metadata-types";
 import { useFillColor } from "util/color/color-util";
 import { createFilePathSequence } from "util/files-and-folders/file-and-folders-utils";
 import IcicleMain from "./icicle-main";
+import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
+import { useIcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-selectors";
 
 export default function IcicleApiToProps({ api }) {
   const icicle_state = api.icicle_state;
@@ -44,11 +45,9 @@ export default function IcicleApiToProps({ api }) {
   const comments = useSelector(getCommentsFromStore);
   const elementsToDelete = useSelector(getFilesToDeleteFromStore);
 
-  const {
-    iciclesSortMethod,
-    hoveredElementId,
-    lockedElementId,
-  } = useWorkspaceMetadata();
+  const { hoveredElementId, lockedElementId } = useWorkspaceMetadata();
+
+  const icicleSortMethod = useIcicleSortMethod();
 
   const getFfByFfId = useCallback(
     (ffId: string) => ({
@@ -108,20 +107,20 @@ export default function IcicleApiToProps({ api }) {
       const children = filesAndFolders[id].children;
       const metadata = filesAndFoldersMetadata[id];
       const orderArray = {
-        [IciclesSortMethod.SORT_BY_DATE]: metadata.sortByDateIndex,
-        [IciclesSortMethod.SORT_BY_TYPE]: metadata.sortBySizeIndex,
-        [IciclesSortMethod.SORT_ALPHA_NUMERICALLY]:
+        [IcicleSortMethod.SORT_BY_DATE]: metadata.sortByDateIndex,
+        [IcicleSortMethod.SORT_BY_TYPE]: metadata.sortBySizeIndex,
+        [IcicleSortMethod.SORT_ALPHA_NUMERICALLY]:
           metadata.sortAlphaNumericallyIndex,
-      }[iciclesSortMethod];
+      }[icicleSortMethod];
       return orderArray.map((childIndex) => children[childIndex]);
     },
-    [filesAndFolders, filesAndFoldersMetadata, iciclesSortMethod]
+    [filesAndFolders, filesAndFoldersMetadata, icicleSortMethod]
   );
 
   const fillColor = useFillColor(
     filesAndFolders,
     filesAndFoldersMetadata,
-    iciclesSortMethod,
+    icicleSortMethod,
     displayRoot
   );
 

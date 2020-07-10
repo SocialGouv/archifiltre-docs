@@ -1,18 +1,18 @@
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { setLockedElementId } from "reducers/workspace-metadata/workspace-metadata-actions";
-import { useWorkspaceMetadata } from "reducers/workspace-metadata/workspace-metadata-selectors";
-import { setIciclesSortMethodThunk } from "reducers/workspace-metadata/workspace-metadata-thunk";
-import { IciclesSortMethod } from "reducers/workspace-metadata/workspace-metadata-types";
 import { NavigationBar } from "./navigation-bar";
+import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
+import { setIcicleSortMethodThunk } from "reducers/icicle-sort-method/icicle-sort-method-thunk";
+import { useIcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-selectors";
 
 const NavigationBarContainer = ({ api }) => {
-  const { iciclesSortMethod } = useWorkspaceMetadata();
+  const icicleSortMethod = useIcicleSortMethod();
   const dispatch = useDispatch();
 
-  const setIciclesSortMethodCallback = useCallback(
-    (sortMethod: IciclesSortMethod) =>
-      dispatch(setIciclesSortMethodThunk(sortMethod)),
+  const setIcicleSortMethodCallback = useCallback(
+    (sortMethod: IcicleSortMethod) =>
+      dispatch(setIcicleSortMethodThunk(sortMethod)),
     [dispatch]
   );
 
@@ -23,8 +23,8 @@ const NavigationBarContainer = ({ api }) => {
   return (
     <NavigationBar
       api={api}
-      iciclesSortMethod={iciclesSortMethod}
-      setIciclesSortMethod={setIciclesSortMethodCallback}
+      icicleSortMethod={icicleSortMethod}
+      setIcicleSortMethod={setIcicleSortMethodCallback}
       setNoFocus={setNoFocus}
     />
   );

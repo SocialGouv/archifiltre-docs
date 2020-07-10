@@ -212,7 +212,9 @@
       "fileCountInfoTitle": "Nombre de fichiers",
       "fileTreeDepthTitle": "Niveau de profondeur",
       "fileTypeRepartitionTitle": "Répartition par type de fichiers",
-      "fileTreeAudit": "Audit de l'arborescence"
+      "fileTreeAudit": "Audit de l'arborescence",
+      "report": "Rapport d'audit",
+      "reportReadyMessage": "Le rapport d'audit complet est prêt."
     },
     "duplicates": {
       "duplicateElements": "Éléments redondants",

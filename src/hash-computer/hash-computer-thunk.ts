@@ -20,6 +20,7 @@ import translations from "translations/translations";
 import {
   NotificationDuration,
   notifyError,
+  notifySuccess,
 } from "util/notification/notifications-util";
 import { operateOnDataProcessingStream } from "util/observable/observable-util";
 import {
@@ -103,6 +104,10 @@ export const computeHashesThunk = (
         computeFolderHashes$({ filesAndFolders, hashes }).subscribe({
           complete: () => {
             dispatch(completeLoadingAction(loadingActionId));
+            notifySuccess(
+              translations.t("audit.reportReadyMessage"),
+              translations.t("audit.report")
+            );
             if (loadingErrorsCount > 0) {
               const loadingErrorMessage = translations.t(
                 "hash.loadingErrorMessage"

@@ -42,7 +42,7 @@ const Enrichment: FC<EnrichmentProps> = ({
     {
       title: (
         <>
-          {t("report.metadataElement")}
+          {t("report.element")}
           <ColorCircle color={ENRICHMENT_COLORS[EnrichmentTypes.ALIAS]} />
         </>
       ),
@@ -51,7 +51,7 @@ const Enrichment: FC<EnrichmentProps> = ({
     {
       title: (
         <>
-          {t("report.metadataDescription")}
+          {t("report.comments")}
           <ColorCircle color={ENRICHMENT_COLORS[EnrichmentTypes.COMMENT]} />
         </>
       ),

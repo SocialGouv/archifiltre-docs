@@ -4,22 +4,22 @@ import { useTranslation } from "react-i18next";
 import { FaSearchMinus } from "react-icons/fa";
 
 interface BackToRootProps {
-  api: any;
+  isZoomed: boolean;
   setNoFocus: any;
+  resetZoom: () => void;
 }
 
 const BackToRoot: FC<BackToRootProps> = ({
-  api: {
-    icicle_state: { setNoDisplayRoot, isZoomed },
-  },
+  isZoomed,
+  resetZoom,
   setNoFocus,
 }) => {
   const { t } = useTranslation();
 
   const backToRoot = useCallback(() => {
-    setNoDisplayRoot();
+    resetZoom();
     setNoFocus();
-  }, [setNoDisplayRoot, setNoFocus]);
+  }, [resetZoom, setNoFocus]);
 
   return (
     <Button
@@ -27,7 +27,7 @@ const BackToRoot: FC<BackToRootProps> = ({
       color="secondary"
       size="small"
       onClick={backToRoot}
-      disabled={!isZoomed()}
+      disabled={!isZoomed}
       startIcon={<FaSearchMinus />}
     >
       {t("workspace.backToRoot")}

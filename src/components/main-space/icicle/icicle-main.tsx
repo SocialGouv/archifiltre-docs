@@ -11,7 +11,6 @@ import React, {
 } from "react";
 import styled from "styled-components";
 import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { decomposePathToElement } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   AliasMap,
   CommentsMap,
@@ -102,8 +101,8 @@ interface IcicleMainProps {
   comments: CommentsMap;
   tags: TagMap;
   originalPath: string;
-  root_id: string;
-  display_root: string[];
+  rootId: string;
+  displayRoot: string[];
   fillColor: FillColor;
   hoveredElementId: string;
   lockedElementId: string;
@@ -112,9 +111,9 @@ interface IcicleMainProps {
   elementsToDelete: string[];
   getChildrenIdFromId: (id: string) => string[];
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
-  width_by_size: boolean;
+  widthBySize: boolean;
   maxDepth: number;
-  setDisplayRoot: (pathToElement: string[]) => void;
+  zoomElement: (elementId) => void;
   lock: (id: string) => void;
   unlock: () => void;
   moveElement: (movedElementId: string, targetFolderId: string) => void;
@@ -129,8 +128,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
   comments,
   tags,
   originalPath,
-  root_id: rootId,
-  display_root: displayRoot,
+  rootId,
+  displayRoot,
   fillColor,
   hoveredElementId,
   lockedElementId,
@@ -139,9 +138,9 @@ const IcicleMain: FC<IcicleMainProps> = ({
   elementsToDelete,
   getChildrenIdFromId,
   getFfByFfId,
-  width_by_size: widthBySize,
+  widthBySize,
   maxDepth,
-  setDisplayRoot,
+  zoomElement,
   lock,
   unlock,
   moveElement,
@@ -270,9 +269,9 @@ const IcicleMain: FC<IcicleMainProps> = ({
    */
   const onIcicleRectDoubleClickHandler = useCallback(
     ({ id }) => {
-      setDisplayRoot(decomposePathToElement(id));
+      zoomElement(id);
     },
-    [decomposePathToElement, setDisplayRoot]
+    [zoomElement]
   );
 
   /**
@@ -283,7 +282,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
       setHoveredDims(dims());
       setFocus(id);
     },
-    [decomposePathToElement, setFocus, setHoveredDims]
+    [setFocus, setHoveredDims]
   );
 
   /**

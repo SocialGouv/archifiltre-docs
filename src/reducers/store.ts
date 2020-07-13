@@ -20,6 +20,8 @@ import { hashesReducer } from "./hashes/hashes-reducer";
 import { HashesState } from "./hashes/hashes-types";
 import { IcicleSortMethodState } from "reducers/icicle-sort-method/icicle-sort-method-types";
 import icicleSortMethodReducer from "reducers/icicle-sort-method/icicle-sort-method-reducer";
+import mainspaceSelectionReducer from "reducers/main-space-selection/mainspace-selection-reducer";
+import { MainSpaceSelectionState } from "reducers/main-space-selection/main-space-selection-types";
 
 export interface StoreState {
   tags: UndoableState<TagsState>;
@@ -29,6 +31,7 @@ export interface StoreState {
   icicleSortMethod: IcicleSortMethodState;
   loadingInfo: LoadingInfoState;
   loadingState: UndoableState<LoadingState>;
+  mainSpaceSelection: MainSpaceSelectionState;
   modal: ModalState;
   workspaceMetadata: UndoableState<WorkspaceMetadataState>;
 }
@@ -41,6 +44,7 @@ export default createStore(
     icicleSortMethod: icicleSortMethodReducer,
     loadingInfo: loadingInfoReducer,
     loadingState: loadingStateReducer,
+    mainSpaceSelection: mainspaceSelectionReducer,
     modal: modalReducer,
     tags: tagsReducer,
     workspaceMetadata: workspaceMetadataReducer,

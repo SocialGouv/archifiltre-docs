@@ -10,7 +10,7 @@ import {
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { ratio } from "util/numbers/numbers-util";
 import { useCallback, useMemo } from "react";
-import { IciclesSortMethod } from "reducers/workspace-metadata/workspace-metadata-types";
+import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
 
 export const gradient = (firstColor: number[], secondColor: number[]) => (
   zeroToOne: number
@@ -130,7 +130,7 @@ const useFillColorByDate = (
 export const useFillColor = (
   filesAndFolders: FilesAndFoldersMap,
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap,
-  iciclesSortMethod: IciclesSortMethod,
+  iciclesSortMethod: IcicleSortMethod,
   displayRoot: string[]
 ) => {
   const fillColorByType = useFillColorByType(filesAndFolders, displayRoot);
@@ -139,7 +139,7 @@ export const useFillColor = (
 
   return useMemo(
     () =>
-      iciclesSortMethod === IciclesSortMethod.SORT_BY_DATE
+      iciclesSortMethod === IcicleSortMethod.SORT_BY_DATE
         ? fillColorByDate
         : fillColorByType,
     [iciclesSortMethod, fillColorByDate, fillColorByType]

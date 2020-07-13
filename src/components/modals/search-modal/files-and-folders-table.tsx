@@ -6,13 +6,17 @@ import Table from "../../common/table";
 import { isEmpty } from "lodash";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
 
 type FilesAndFoldersTableProps = {
   filesAndFolders: FilesAndFolders[];
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
 };
 
 export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
   filesAndFolders,
+  filesAndFoldersMetadata,
 }) => {
   const { t } = useTranslation();
   const columns = useMemo(
@@ -33,8 +37,12 @@ export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
       {
         id: "size",
         name: t("search.size"),
-        accessor: ({ file_size }: FilesAndFolders) =>
-          octet2HumanReadableFormat(file_size),
+        accessor: (element: FilesAndFolders) =>
+          octet2HumanReadableFormat(
+            isFile(element)
+              ? element.file_size
+              : filesAndFoldersMetadata[element.id].childrenTotalSize
+          ),
       },
       {
         id: "lastModified",
@@ -47,7 +55,7 @@ export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
         accessor: "id",
       },
     ],
-    [t]
+    [t, filesAndFoldersMetadata]
   );
   return isEmpty(filesAndFolders) ? (
     <span>{t("search.noResult")}</span>

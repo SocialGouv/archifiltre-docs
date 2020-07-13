@@ -416,8 +416,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
             <MinimapBracket
               x={0}
               y={0}
-              dx={viewBoxWidth}
-              dy={viewBoxHeight}
+              viewportWidth={viewBoxWidth}
+              viewportHeight={viewBoxHeight}
               displayRoot={displayRoot}
               computeWidthRec={computeWidthRec}
             />

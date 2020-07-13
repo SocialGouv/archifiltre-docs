@@ -9,7 +9,7 @@ import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method
 
 const baseState = {
   hoveredElementId: "",
-  iciclesSortMethod: IcicleSortMethod.SORT_BY_TYPE,
+  iciclesSortMethod: IcicleSortMethod.SORT_BY_SIZE,
   lockedElementId: "",
   originalPath: "original-path",
   sessionName: "session",

@@ -29,8 +29,6 @@ import { useZoomedElement } from "reducers/main-space-selection/main-space-selec
 import { zoomElement } from "reducers/main-space-selection/main-space-selection-action";
 
 export default function IcicleApiToProps({ api }) {
-  const icicle_state = api.icicle_state;
-
   const dispatch = useDispatch();
 
   const tags = useSelector(getTagsFromStore);
@@ -49,7 +47,11 @@ export default function IcicleApiToProps({ api }) {
 
   const { hoveredElementId, lockedElementId } = useWorkspaceMetadata();
 
-  const icicleSortMethod = useIcicleSortMethod();
+  const {
+    icicleSortMethod,
+    icicleColorMode,
+    elementWeightMethod,
+  } = useIcicleSortMethod();
 
   const getFfByFfId = useCallback(
     (ffId: string) => ({
@@ -125,7 +127,7 @@ export default function IcicleApiToProps({ api }) {
       const metadata = filesAndFoldersMetadata[id];
       const orderArray = {
         [IcicleSortMethod.SORT_BY_DATE]: metadata.sortByDateIndex,
-        [IcicleSortMethod.SORT_BY_TYPE]: metadata.sortBySizeIndex,
+        [IcicleSortMethod.SORT_BY_SIZE]: metadata.sortBySizeIndex,
         [IcicleSortMethod.SORT_ALPHA_NUMERICALLY]:
           metadata.sortAlphaNumericallyIndex,
       }[icicleSortMethod];
@@ -137,7 +139,7 @@ export default function IcicleApiToProps({ api }) {
   const fillColor = useFillColor(
     filesAndFolders,
     filesAndFoldersMetadata,
-    icicleSortMethod,
+    icicleColorMode,
     zoomedElementSequence
   );
 
@@ -164,7 +166,7 @@ export default function IcicleApiToProps({ api }) {
       hoverSequence={hoverSequence}
       lockedSequence={lockedSequence}
       lock={lock}
-      widthBySize={icicle_state.widthBySize()}
+      elementWeightMethod={elementWeightMethod}
       rootId={ROOT_FF_ID}
       zoomElement={setZoomedElement}
       setFocus={setFocus}

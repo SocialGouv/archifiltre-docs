@@ -28,6 +28,7 @@ import { FillColor } from "./icicle-types";
 import { useFileMoveActiveState } from "hooks/use-file-move-active-state";
 import { MoveElement, useMovableElements } from "hooks/use-movable-elements";
 import BreadcrumbsNew from "../breadcrumb/breadcrumbs";
+import { ElementWeightMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
 
 export type IcicleMouseHandler = (
   dimsAndId: DimsAndId,
@@ -111,7 +112,7 @@ interface IcicleMainProps {
   elementsToDelete: string[];
   getChildrenIdFromId: (id: string) => string[];
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
-  widthBySize: boolean;
+  elementWeightMethod: ElementWeightMethod;
   maxDepth: number;
   zoomElement: (elementId) => void;
   lock: (id: string) => void;
@@ -138,7 +139,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
   elementsToDelete,
   getChildrenIdFromId,
   getFfByFfId,
-  widthBySize,
+  elementWeightMethod,
   maxDepth,
   zoomElement,
   lock,
@@ -182,8 +183,11 @@ const IcicleMain: FC<IcicleMainProps> = ({
    * widthBySize boolean
    */
   const computeWidth = useMemo(
-    () => (widthBySize ? getElementTotalSize : getElementChildrenFilesCount),
-    [widthBySize, getElementTotalSize, getElementChildrenFilesCount]
+    () =>
+      elementWeightMethod === ElementWeightMethod.BY_VOLUME
+        ? getElementTotalSize
+        : getElementChildrenFilesCount,
+    [elementWeightMethod, getElementTotalSize, getElementChildrenFilesCount]
   );
 
   /**

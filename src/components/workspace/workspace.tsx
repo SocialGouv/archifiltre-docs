@@ -49,7 +49,7 @@ const Workspace: FC<WorkspaceProps> = ({ api }) => {
           {areIciclesDisplayed ? (
             <Box display="flex" flexDirection="column" height="100%">
               <Box flexGrow={0}>
-                <NavigationBar api={api} />
+                <NavigationBar />
               </Box>
               <Box flexGrow={1} overflow="hidden">
                 <Icicle api={api} />

@@ -25,7 +25,7 @@ const TagCellInput: FC<TagCellInputProps> = ({
 
   const addTag = useCallback(
     (newName) => {
-      if (newName.length === 0) {
+      if (!newName || newName.length === 0) {
         return;
       }
       createTag(newName, nodeId);
@@ -53,13 +53,14 @@ const TagCellInput: FC<TagCellInputProps> = ({
   return (
     <Autocomplete
       options={availableTags}
-      getOptionLabel={({ name }) => name}
+      getOptionLabel={({ name }) => name || ""}
       onChange={handleChange}
       blurOnSelect={true}
       disableClearable={true}
       clearOnEscape
       clearOnBlur
       fullWidth
+      freeSolo
       noOptionsText={t("workspace.noOptions")}
       renderInput={(params) => (
         <TextField

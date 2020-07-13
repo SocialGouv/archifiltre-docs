@@ -57,6 +57,7 @@ import { setLoadingStep } from "./loading-state/loading-state-actions";
 import { LoadingStep } from "./loading-state/loading-state-types";
 import { HashesMap } from "./hashes/hashes-types";
 import { setFilesAndFoldersHashes } from "./hashes/hashes-actions";
+import { resetZoom } from "reducers/main-space-selection/main-space-selection-action";
 
 /**
  * Notifies the user that there is a Zip in the loaded files
@@ -288,6 +289,6 @@ export const resetStoreThunk = (api: any): ArchifiltreThunkAction => (
   icicle_state.reInit();
   dispatch(setLockedElementId(""));
   dispatch(setLoadingStep(LoadingStep.WAITING));
-  icicle_state.setNoDisplayRoot();
+  dispatch(resetZoom());
   dispatch(commitAction());
 };

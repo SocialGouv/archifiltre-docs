@@ -13,21 +13,29 @@ const Wrapper = styled.div`
 
 type NavigationBarProps = {
   api: any;
+  isZoomed: boolean;
   icicleSortMethod: IcicleSortMethod;
   setIcicleSortMethod: (sortMethod: IcicleSortMethod) => void;
   setNoFocus: () => void;
+  resetZoom: () => void;
 };
 
 export const NavigationBar: FC<NavigationBarProps> = ({
   api,
+  isZoomed,
   icicleSortMethod,
   setIcicleSortMethod,
   setNoFocus,
+  resetZoom,
 }) => (
   <Wrapper>
     <Box display="flex">
       <Box pt={1} pr={1}>
-        <BackToRootButton api={api} setNoFocus={setNoFocus} />
+        <BackToRootButton
+          isZoomed={isZoomed}
+          resetZoom={resetZoom}
+          setNoFocus={setNoFocus}
+        />
       </Box>
       <Box pt={1} pr={1}>
         <MoveFilesButton />

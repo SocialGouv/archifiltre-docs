@@ -25,10 +25,11 @@ import { createFilePathSequence } from "util/files-and-folders/file-and-folders-
 import IcicleMain from "./icicle-main";
 import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
 import { useIcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-selectors";
+import { useZoomedElement } from "reducers/main-space-selection/main-space-selection-selectors";
+import { zoomElement } from "reducers/main-space-selection/main-space-selection-action";
 
 export default function IcicleApiToProps({ api }) {
   const icicle_state = api.icicle_state;
-  const displayRoot = icicle_state.display_root();
 
   const dispatch = useDispatch();
 
@@ -44,6 +45,7 @@ export default function IcicleApiToProps({ api }) {
   const aliases = useSelector(getAliasesFromStore);
   const comments = useSelector(getCommentsFromStore);
   const elementsToDelete = useSelector(getFilesToDeleteFromStore);
+  const zoomedElementId = useZoomedElement();
 
   const { hoveredElementId, lockedElementId } = useWorkspaceMetadata();
 
@@ -80,6 +82,11 @@ export default function IcicleApiToProps({ api }) {
     dispatch,
   ]);
 
+  const setZoomedElement = useCallback(
+    (elementId: string) => dispatch(zoomElement(elementId)),
+    [dispatch]
+  );
+
   const hoverSequence = useMemo(
     () =>
       createFilePathSequence(
@@ -98,6 +105,16 @@ export default function IcicleApiToProps({ api }) {
         virtualPathToIdMap
       ),
     [lockedElementId, filesAndFolders, virtualPathToIdMap]
+  );
+
+  const zoomedElementSequence = useMemo(
+    () =>
+      createFilePathSequence(
+        zoomedElementId,
+        filesAndFolders,
+        virtualPathToIdMap
+      ),
+    [zoomedElementId, filesAndFolders, virtualPathToIdMap]
   );
 
   const { originalPath } = useSelector(getWorkspaceMetadataFromStore);
@@ -121,7 +138,7 @@ export default function IcicleApiToProps({ api }) {
     filesAndFolders,
     filesAndFoldersMetadata,
     icicleSortMethod,
-    displayRoot
+    zoomedElementSequence
   );
 
   const moveElementCallback = useCallback(
@@ -135,7 +152,7 @@ export default function IcicleApiToProps({ api }) {
       api={api}
       aliases={aliases}
       comments={comments}
-      display_root={icicle_state.display_root()}
+      displayRoot={zoomedElementSequence}
       originalPath={originalPath}
       fillColor={fillColor}
       getChildrenIdFromId={getChildrenIdFromId}
@@ -147,9 +164,9 @@ export default function IcicleApiToProps({ api }) {
       hoverSequence={hoverSequence}
       lockedSequence={lockedSequence}
       lock={lock}
-      width_by_size={icicle_state.widthBySize()}
-      root_id={ROOT_FF_ID}
-      setDisplayRoot={icicle_state.setDisplayRoot}
+      widthBySize={icicle_state.widthBySize()}
+      rootId={ROOT_FF_ID}
+      zoomElement={setZoomedElement}
       setFocus={setFocus}
       setNoFocus={setNoFocus}
       setNoHover={setNoFocus}

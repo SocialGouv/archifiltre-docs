@@ -21,29 +21,7 @@ const initialState = () => new State();
 
 const reader = {
   tagIdToHighlight: () => (state) => state.get("tag_id_to_highlight"),
-  display_root: () => (state) => state.get("display_root"),
-  isZoomed: () => (state) => state.get("display_root").length > 0,
   widthBySize: () => (state) => state.get("width_by_size"),
-};
-
-const setDisplayRoot = (rootSequence) => (state) => {
-  state = state.update("display_root", () => rootSequence);
-  clearSelection();
-  return state;
-};
-
-const setNoDisplayRoot = () => (state) => {
-  state = state.update("display_root", () => []);
-  clearSelection();
-  return state;
-};
-
-const clearSelection = () => {
-  if (window.getSelection) {
-    window.getSelection()?.removeAllRanges();
-  } else if (document.selection) {
-    document.selection.empty();
-  }
 };
 
 const setTagIdToHighlight = (tag) => (state) => {
@@ -69,8 +47,6 @@ const toggleChangeWidthBySize = () => (state) => {
 const reInit = () => () => initialState();
 
 const writer = {
-  setDisplayRoot,
-  setNoDisplayRoot,
   setTagIdToHighlight,
   setNoTagIdToHighlight,
   toggleChangeWidthBySize,

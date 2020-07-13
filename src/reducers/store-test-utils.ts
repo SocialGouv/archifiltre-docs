@@ -6,6 +6,7 @@ import { initialState as loadingStateInitialState } from "./loading-state/loadin
 import { initialState as hashesInitialState } from "./hashes/hashes-reducer";
 import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
 import { initialState as icicleSortMethodInitialState } from "reducers/icicle-sort-method/icicle-sort-method-reducer";
+import { initialState as mainSpaceSelectionInitialState } from "reducers/main-space-selection/mainspace-selection-reducer";
 
 /**
  * Create an empty store state for testing purposes
@@ -25,6 +26,7 @@ export const createEmptyStore = (): StoreState => ({
   icicleSortMethod: icicleSortMethodInitialState,
   loadingInfo: loadingInfoInitialState,
   loadingState: wrapStoreWithUndoable(loadingStateInitialState),
+  mainSpaceSelection: mainSpaceSelectionInitialState,
   modal: modalInitialState,
   tags: wrapStoreWithUndoable({
     tags: {},

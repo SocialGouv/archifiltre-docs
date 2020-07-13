@@ -42,7 +42,7 @@ const saveActionsFromStack = async () => {
  * Replays to store all the actions present in the previous session file.
  * @param api
  */
-export const replayActionsThunk = (api: any) => async (dispatch) => {
+export const replayActionsThunk = () => async (dispatch) => {
   try {
     const previousActions = await fs.readFile(previousSessionFilePath, "utf8");
     const previousActionsArray = previousActions

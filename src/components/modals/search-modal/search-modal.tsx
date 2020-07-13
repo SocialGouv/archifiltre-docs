@@ -18,6 +18,7 @@ import { FilterMethod } from "typings/filter-types";
 import Filters from "./filters/filters";
 import { SearchBar } from "./search-bar";
 import DialogContent from "@material-ui/core/DialogContent";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 
 const StyledPaper = styled(Paper)`
   min-height: 90%;
@@ -27,6 +28,7 @@ interface SearchModalProps {
   isModalOpen: boolean;
   closeModal: () => void;
   filesAndFolders: FilesAndFoldersMap;
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   tags: TagMap;
 }
 
@@ -34,6 +36,7 @@ export const SearchModal: FC<SearchModalProps> = ({
   isModalOpen,
   closeModal,
   filesAndFolders,
+  filesAndFoldersMetadata,
   tags,
 }) => {
   const { t } = useTranslation();
@@ -81,7 +84,10 @@ export const SearchModal: FC<SearchModalProps> = ({
               </Box>
             </Box>
           </Box>
-          <FilesAndFoldersTable filesAndFolders={filteredFilesAndFolders} />
+          <FilesAndFoldersTable
+            filesAndFolders={filteredFilesAndFolders}
+            filesAndFoldersMetadata={filesAndFoldersMetadata}
+          />
         </Box>
       </DialogContent>
     </Dialog>

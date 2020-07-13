@@ -29,7 +29,7 @@ const Filters: FC<FiltersProps> = ({ filesAndFolders, tags, setFilters }) => {
   }, [setFilters, typeFilters, sizeFilters, tagFilters]);
 
   return (
-    <Box display="flex" padding={1}>
+    <Box display="flex" paddingLeft={1} paddingBottom={1} paddingTop={1}>
       <Box flex={1} paddingRight={1}>
         <TypeFilter
           filesAndFolders={filesAndFolders}

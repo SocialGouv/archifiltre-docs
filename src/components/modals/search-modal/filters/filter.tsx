@@ -1,3 +1,4 @@
+import Box from "@material-ui/core/Box";
 import InputLabel from "@material-ui/core/InputLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Input from "@material-ui/core/Input";
@@ -30,8 +31,10 @@ const Filter: FC<FilterProps> = ({
   );
 
   return (
-    <div>
-      <InputLabel>{name}</InputLabel>
+    <Box>
+      <Box paddingBottom={1}>
+        <InputLabel>{name}</InputLabel>
+      </Box>
       <Select
         multiple
         fullWidth
@@ -40,6 +43,17 @@ const Filter: FC<FilterProps> = ({
         onChange={handleChange}
         input={<Input />}
         disableUnderline={true}
+        MenuProps={{
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "center",
+          },
+          transformOrigin: {
+            vertical: "top",
+            horizontal: "center",
+          },
+          getContentAnchorEl: null,
+        }}
       >
         {availableOptions.length === 0 ? (
           <option disabled>{t("search.noAvailableOption")}</option>
@@ -52,7 +66,7 @@ const Filter: FC<FilterProps> = ({
           ))
         )}
       </Select>
-    </div>
+    </Box>
   );
 };
 

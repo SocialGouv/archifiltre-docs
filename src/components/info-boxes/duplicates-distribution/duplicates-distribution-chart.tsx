@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, useState } from "react";
+import React, { FC, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import { EventTracker, Palette } from "@devexpress/dx-react-chart";
@@ -10,7 +10,6 @@ import {
 import { FileTypeMap } from "exporters/audit/audit-report-values-computer";
 import { colors } from "util/color/color-util";
 import styled from "styled-components";
-import _ from "lodash";
 
 const ColoredText = styled.span<{ color: string }>`
   display: block;
@@ -27,7 +26,6 @@ const DuplicatesDistributionChart: FC<DuplicatesDistributionChartProps> = ({
   fileSizesCount,
 }) => {
   const { t } = useTranslation();
-  const [targetItem, setTargetItem] = useState();
 
   const chartData = useMemo(
     () =>
@@ -40,15 +38,9 @@ const DuplicatesDistributionChart: FC<DuplicatesDistributionChartProps> = ({
     [fileTypesCount, fileSizesCount]
   );
 
-  const scheme = useMemo(() => {
-    const sortedChartData = _.sortBy(chartData, "value").reverse();
-    return sortedChartData.map(({ key }) => colors[key]);
-  }, []);
-
-  const onTargetItemChange = useCallback(
-    (newTargetItem) => setTargetItem(newTargetItem),
-    [setTargetItem]
-  );
+  const scheme = useMemo(() => chartData.map(({ key }) => colors[key]), [
+    chartData,
+  ]);
 
   const getTooltipContent = useCallback(
     ({ targetItem: { point } }) => {
@@ -73,11 +65,7 @@ const DuplicatesDistributionChart: FC<DuplicatesDistributionChartProps> = ({
       <Palette scheme={scheme} />
       <PieSeries valueField="value" argumentField="key" innerRadius={0.6} />
       <EventTracker />
-      <Tooltip
-        targetItem={targetItem}
-        onTargetItemChange={onTargetItemChange}
-        contentComponent={getTooltipContent}
-      />
+      <Tooltip contentComponent={getTooltipContent} />
     </Chart>
   );
 };

@@ -120,4 +120,5 @@ export const moveElement = (elementId, newParentId): ArchifiltreThunkAction => (
   );
 
   dispatch(initFilesAndFoldersMetatada(newMetadata));
+  dispatch(commitAction());
 };

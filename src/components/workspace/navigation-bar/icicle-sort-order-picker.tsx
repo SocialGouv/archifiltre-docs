@@ -2,37 +2,40 @@ import Select from "@material-ui/core/Select";
 import React, { FC, useCallback } from "react";
 
 import { useTranslation } from "react-i18next";
-import { IciclesSortMethod } from "reducers/workspace-metadata/workspace-metadata-types";
+import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
 
 interface IciclesSortOrderPickerProps {
-  iciclesSortMethod: IciclesSortMethod;
-  setIciclesSortMethod: (sortMethod: IciclesSortMethod) => void;
+  icicleSortMethod: IcicleSortMethod;
+  setIcicleSortMethod: (sortMethod: IcicleSortMethod) => void;
 }
 
 const IciclesSortOrderPicker: FC<IciclesSortOrderPickerProps> = ({
-  iciclesSortMethod,
-  setIciclesSortMethod,
+  icicleSortMethod,
+  setIcicleSortMethod,
 }) => {
   const { t } = useTranslation();
 
-  const handleChange = useCallback((event) => {
-    setIciclesSortMethod(event.target.value);
-  }, []);
+  const handleChange = useCallback(
+    (event) => {
+      setIcicleSortMethod(event.target.value);
+    },
+    [setIcicleSortMethod]
+  );
 
   return (
     <Select
       native
-      value={iciclesSortMethod}
+      value={icicleSortMethod}
       onChange={handleChange}
       disableUnderline={true}
     >
-      <option value={IciclesSortMethod.SORT_BY_TYPE}>
+      <option value={IcicleSortMethod.SORT_BY_TYPE}>
         {t("workspace.type")}
       </option>
-      <option value={IciclesSortMethod.SORT_BY_DATE}>
+      <option value={IcicleSortMethod.SORT_BY_DATE}>
         {t("workspace.dates")}
       </option>
-      <option value={IciclesSortMethod.SORT_ALPHA_NUMERICALLY}>
+      <option value={IcicleSortMethod.SORT_ALPHA_NUMERICALLY}>
         {t("workspace.alphanumeric")}
       </option>
     </Select>

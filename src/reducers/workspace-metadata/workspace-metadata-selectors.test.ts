@@ -1,13 +1,9 @@
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import { getWorkspaceMetadataFromStore } from "./workspace-metadata-selectors";
-import {
-  IciclesSortMethod,
-  WorkspaceMetadataState,
-} from "./workspace-metadata-types";
+import { WorkspaceMetadataState } from "./workspace-metadata-types";
 
 const workspaceMetadata: WorkspaceMetadataState = {
   hoveredElementId: "",
-  iciclesSortMethod: IciclesSortMethod.SORT_BY_DATE,
   lockedElementId: "",
   originalPath: "original-path",
   sessionName: "session-name",

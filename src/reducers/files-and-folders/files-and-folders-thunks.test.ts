@@ -157,6 +157,7 @@ describe("file-and-folders-thunks.test.ts", () => {
         removeChild(rootFolderId, file1Id),
         addChild(folderId, file1Id),
         initFilesAndFoldersMetatada(newMetadata),
+        commitAction(),
       ]);
     });
     it("should block an element move from a parent to its child", () => {

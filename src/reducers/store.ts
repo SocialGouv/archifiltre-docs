@@ -18,12 +18,15 @@ import { LoadingState } from "./loading-state/loading-state-types";
 import loadingStateReducer from "./loading-state/loading-state-reducer";
 import { hashesReducer } from "./hashes/hashes-reducer";
 import { HashesState } from "./hashes/hashes-types";
+import { IcicleSortMethodState } from "reducers/icicle-sort-method/icicle-sort-method-types";
+import icicleSortMethodReducer from "reducers/icicle-sort-method/icicle-sort-method-reducer";
 
 export interface StoreState {
   tags: UndoableState<TagsState>;
   filesAndFolders: UndoableState<FilesAndFoldersState>;
   filesAndFoldersMetadata: FilesAndFoldersMetadataState;
   hashes: HashesState;
+  icicleSortMethod: IcicleSortMethodState;
   loadingInfo: LoadingInfoState;
   loadingState: UndoableState<LoadingState>;
   modal: ModalState;
@@ -35,6 +38,7 @@ export default createStore(
     filesAndFolders: filesAndFoldersReducer,
     filesAndFoldersMetadata: filesAndFoldersMetadataReducer,
     hashes: hashesReducer,
+    icicleSortMethod: icicleSortMethodReducer,
     loadingInfo: loadingInfoReducer,
     loadingState: loadingStateReducer,
     modal: modalReducer,

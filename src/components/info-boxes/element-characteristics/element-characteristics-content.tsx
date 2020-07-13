@@ -131,13 +131,13 @@ const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
                   <HelpTooltip tooltipText={t("report.medianExplanation")} />
                 </>
               }
-              content={dateFormat(maxLastModifiedTimestamp, "dd/mm/yyyy")}
+              content={dateFormat(medianLastModifiedTimestamp, "dd/mm/yyyy")}
             />
           </Grid>
           <Grid item>
             <BoundaryDate
               title={t("report.maximum")}
-              content={dateFormat(medianLastModifiedTimestamp, "dd/mm/yyyy")}
+              content={dateFormat(maxLastModifiedTimestamp, "dd/mm/yyyy")}
             />
           </Grid>
         </Grid>

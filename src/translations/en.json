@@ -58,6 +58,9 @@
       "openElementErrorTitle": "Opening element"
     },
     "workspace": {
+      "ordering": "Ordering",
+      "coloring": "Coloring",
+      "weight": "Weight",
       "type": "By type",
       "dates": "By dates",
       "alphanumeric": "Alphanumerically",

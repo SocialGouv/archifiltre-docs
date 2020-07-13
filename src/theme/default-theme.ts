@@ -79,7 +79,6 @@ const defaultTheme = createMuiTheme({
       },
       select: {
         padding: `6px 16px 6px 8px`,
-        maxWidth: 150,
         borderRadius: 5,
         border: `1px solid ${secondaryColor.A400}`,
         color: secondaryColor.A400,

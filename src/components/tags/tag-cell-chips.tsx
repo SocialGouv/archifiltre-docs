@@ -1,4 +1,5 @@
 import Chip from "@material-ui/core/Chip";
+import EllipsisText from "components/tags/ellipsis-text";
 import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaTrash } from "react-icons/fa";
@@ -60,7 +61,12 @@ const TagCellChips: FC<TagCellChipsProps> = ({
         icon={<FaTrash style={{ height: "50%" }} />}
       />
       {tagsForCurrentFile.map(({ id, name }) => (
-        <Chip size="small" key={id} label={name} onDelete={handleDelete(id)} />
+        <Chip
+          size="small"
+          key={id}
+          label={<EllipsisText>{name}</EllipsisText>}
+          onDelete={handleDelete(id)}
+        />
       ))}
     </>
   );

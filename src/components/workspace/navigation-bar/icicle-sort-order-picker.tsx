@@ -31,6 +31,7 @@ const IciclesSortOrderPicker: FC<IciclesSortOrderPickerProps> = ({
   ];
   return (
     <OptionsPicker
+      title={t("workspace.ordering")}
       value={icicleSortMethod}
       setValue={setIcicleSortMethod}
       options={options}

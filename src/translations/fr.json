@@ -1,6 +1,9 @@
 {
   "translation": {
     "folderDropzone": {
+      "ordering": "Classement",
+      "coloring": "Colorisation",
+      "weight":  "Pondération",
       "placeholder": "Glissez-déposez un répertoire ici !",
       "placeholderSubtitle": "Vous pouvez aussi déposer un fichier JSON précédement exporté depuis Archifiltre.",
       "zipNotificationTitle": "fichier(s) zip détecté(s)",

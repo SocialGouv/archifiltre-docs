@@ -26,6 +26,7 @@ const ElementWeightMethodPicker: FC<ElementWeightMethodPickerProps> = ({
   ];
   return (
     <OptionsPicker
+      title={t("workspace.weight")}
       value={elementWeightMethod}
       setValue={setElementWeightMethod}
       options={options}

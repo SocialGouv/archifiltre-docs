@@ -27,6 +27,7 @@ const IcicleColorModePicker: FC<IcicleColorModePickerProps> = ({
 
   return (
     <OptionsPicker
+      title={t("workspace.coloring")}
       value={icicleColorMode}
       setValue={setIcicleColorMode}
       options={options}

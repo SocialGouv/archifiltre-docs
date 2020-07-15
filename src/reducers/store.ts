@@ -26,7 +26,7 @@ import { MainSpaceSelectionState } from "reducers/main-space-selection/main-spac
 export interface StoreState {
   tags: UndoableState<TagsState>;
   filesAndFolders: UndoableState<FilesAndFoldersState>;
-  filesAndFoldersMetadata: FilesAndFoldersMetadataState;
+  filesAndFoldersMetadata: UndoableState<FilesAndFoldersMetadataState>;
   hashes: HashesState;
   icicleSortMethod: IcicleSortMethodState;
   loadingInfo: LoadingInfoState;

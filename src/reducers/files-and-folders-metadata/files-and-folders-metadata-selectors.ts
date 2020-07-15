@@ -1,5 +1,6 @@
 import { StoreState } from "../store";
 import { FilesAndFoldersMetadataMap } from "./files-and-folders-metadata-types";
+import { getCurrentState } from "reducers/enhancers/undoable/undoable-selectors";
 
 /**
  * Gets the files and folder metadata map from the redux state
@@ -8,4 +9,4 @@ import { FilesAndFoldersMetadataMap } from "./files-and-folders-metadata-types";
 export const getFilesAndFoldersMetadataFromStore = (
   store: StoreState
 ): FilesAndFoldersMetadataMap =>
-  store.filesAndFoldersMetadata.filesAndFoldersMetadata;
+  getCurrentState(store.filesAndFoldersMetadata).filesAndFoldersMetadata;

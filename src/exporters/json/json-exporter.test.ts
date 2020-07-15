@@ -71,9 +71,9 @@ describe("json-exporter", () => {
           filesAndFolders,
           elementsToDelete,
         }),
-        filesAndFoldersMetadata: {
+        filesAndFoldersMetadata: wrapStoreWithUndoable({
           filesAndFoldersMetadata,
-        },
+        }),
         hashes: {
           hashes,
         },

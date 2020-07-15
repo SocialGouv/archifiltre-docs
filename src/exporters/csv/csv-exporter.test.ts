@@ -120,7 +120,7 @@ const testState = {
     elementsToDelete: [taggedFfId],
     filesAndFolders,
   }),
-  filesAndFoldersMetadata: { filesAndFoldersMetadata },
+  filesAndFoldersMetadata: wrapStoreWithUndoable({ filesAndFoldersMetadata }),
   hashes: { hashes },
   tags: wrapStoreWithUndoable({ tags }),
 };

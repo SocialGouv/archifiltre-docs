@@ -1,5 +1,5 @@
 import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata-actions";
-import reducer from "./files-and-folders-metadata-reducer";
+import { filesAndFoldersMetadataReducer } from "./files-and-folders-metadata-reducer";
 import { createFilesAndFoldersMetadata } from "./files-and-folders-metadata-test-utils";
 import { FilesAndFoldersMetadataState } from "./files-and-folders-metadata-types";
 
@@ -20,7 +20,7 @@ describe("files-and-folders-metadata-reducer", () => {
         }),
       };
 
-      const nextState = reducer(
+      const nextState = filesAndFoldersMetadataReducer(
         initialState,
         initFilesAndFoldersMetatada(addedMetadata)
       );

@@ -7,6 +7,7 @@ import { initialState as hashesInitialState } from "./hashes/hashes-reducer";
 import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
 import { initialState as icicleSortMethodInitialState } from "reducers/icicle-sort-method/icicle-sort-method-reducer";
 import { initialState as mainSpaceSelectionInitialState } from "reducers/main-space-selection/mainspace-selection-reducer";
+import { initialState as filesAndFoldersMetadataInitialState } from "reducers/files-and-folders-metadata/files-and-folders-metadata-reducer";
 
 /**
  * Create an empty store state for testing purposes
@@ -19,9 +20,9 @@ export const createEmptyStore = (): StoreState => ({
     filesAndFolders: {},
     virtualPathToId: {},
   }),
-  filesAndFoldersMetadata: {
-    filesAndFoldersMetadata: {},
-  },
+  filesAndFoldersMetadata: wrapStoreWithUndoable(
+    filesAndFoldersMetadataInitialState
+  ),
   hashes: hashesInitialState,
   icicleSortMethod: icicleSortMethodInitialState,
   loadingInfo: loadingInfoInitialState,

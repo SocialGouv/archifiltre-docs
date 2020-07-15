@@ -88,7 +88,7 @@ const storeContent: StoreState = {
     elementsToDelete,
     filesAndFolders,
   }),
-  filesAndFoldersMetadata: { filesAndFoldersMetadata },
+  filesAndFoldersMetadata: wrapStoreWithUndoable({ filesAndFoldersMetadata }),
   tags: wrapStoreWithUndoable({ tags }),
   workspaceMetadata: wrapStoreWithUndoable(workspaceMetadata),
 };

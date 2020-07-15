@@ -3,6 +3,13 @@ import { generateRandomString } from "util/random-gen-util";
 import _, { mapValues, pick } from "lodash";
 import fp from "lodash/fp";
 import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/files-and-folders-loader";
+import {
+  AliasMap,
+  CommentsMap,
+  FilesAndFoldersMap,
+} from "reducers/files-and-folders/files-and-folders-types";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { TagMap } from "reducers/tags/tags-types";
 
 interface V8 {
   version: number;
@@ -32,7 +39,18 @@ interface V22 {
   filesAndFolders: any;
 }
 
-export const fromAnyJsonToJs = (json: string): object => {
+export type VirtualFileSystem = {
+  filesAndFolders: FilesAndFoldersMap;
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
+  tags: TagMap;
+  aliases: AliasMap;
+  comments: CommentsMap;
+  sessionName: string;
+  originalPath: string;
+  version: string;
+};
+
+export const fromAnyJsonToJs = (json: string): VirtualFileSystem => {
   let js = JSON.parse(json);
 
   const version = js.version;

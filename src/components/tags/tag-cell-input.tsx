@@ -18,8 +18,15 @@ const TagCellInput: FC<TagCellInputProps> = ({
   const { t } = useTranslation();
   const [newTagName, setNewTagName] = useState("");
 
-  const onTextInput = useCallback(
-    (event) => setNewTagName(event.target.value),
+  const onInputChange = useCallback(
+    (event, value, reason) => {
+      // We do not update the state when the input value changes programmatically as
+      // the inputChange event occurs after the autocomplete change event, preventing us from
+      // resetting the input value
+      if (reason !== "reset") {
+        setNewTagName(value);
+      }
+    },
     [setNewTagName]
   );
 
@@ -42,8 +49,8 @@ const TagCellInput: FC<TagCellInputProps> = ({
   );
 
   const onKeyDown = useCallback(
-    ({ keyCode }) => {
-      if (keyCode === 13) {
+    ({ key }) => {
+      if (key === "Enter") {
         addTag(newTagName);
       }
     },
@@ -62,12 +69,13 @@ const TagCellInput: FC<TagCellInputProps> = ({
       fullWidth
       freeSolo
       noOptionsText={t("workspace.noOptions")}
+      inputValue={newTagName}
+      onInputChange={onInputChange}
       renderInput={(params) => (
         <TextField
           {...params}
           label={t("workspace.newTag")}
           margin="normal"
-          onChange={onTextInput}
           onKeyDown={onKeyDown}
         />
       )}

@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import Select from "@material-ui/core/Select";
 import Box from "@material-ui/core/Box";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import InputBase from "@material-ui/core/InputBase";
+import Input from "@material-ui/core/Input";
 
 type OptionValue = string | number;
 
@@ -54,10 +54,10 @@ export default function OptionsPicker<ValueType extends OptionValue>({
       <Select
         native
         onChange={handleChange}
-        disableUnderline={true}
         value={value}
+        disableUnderline={true}
         input={
-          <InputBase
+          <Input
             classes={
               title
                 ? {
@@ -77,12 +77,11 @@ export default function OptionsPicker<ValueType extends OptionValue>({
       {title && (
         <Select
           native
+          defaultValue="Title"
           disableUnderline={true}
-          input={
-            <InputBase classes={title ? { root: disableClick } : undefined} />
-          }
+          input={<Input classes={title ? { root: disableClick } : undefined} />}
         >
-          <option selected>{title}</option>
+          <option value="Title">{title}</option>
           {options.map(({ value, label }) => (
             <option key={`displayed-${value}`} value={value}>
               {label}

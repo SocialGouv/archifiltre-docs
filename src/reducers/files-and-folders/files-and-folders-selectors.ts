@@ -204,6 +204,13 @@ export const isFile = (filesAndFolders: FilesAndFolders): boolean =>
   filesAndFolders?.children.length === 0;
 
 /**
+ * Returns true if the filesAndFolders is a folder
+ * @param filesAndFolders
+ */
+export const isFolder = (filesAndFolders: FilesAndFolders): boolean =>
+  !isFile(filesAndFolders);
+
+/**
  * Removes the root folder from a filesAndFolders collection
  * @param filesAndFolders
  */

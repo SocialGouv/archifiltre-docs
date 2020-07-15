@@ -2,6 +2,7 @@ import { AsyncWorker } from "../async-worker/async-worker-util";
 import { readFileSync } from "../file-system/file-sys-util";
 import { fromAnyJsonToJs } from "../compatibility/compatibility";
 import { MessageTypes } from "../batch-process/batch-process-util-types";
+import { removeIgnoredElementsFromVirtualFileSystem } from "util/virtual-file-system-util/virtual-file-system-util";
 
 /**
  * Remove the byte order mark
@@ -23,7 +24,7 @@ export const onInitialize = (asyncWorker: AsyncWorker, jsonPath: string) => {
   asyncWorker.postMessage({
     type: MessageTypes.COMPLETE,
     result: {
-      vfs: js,
+      vfs: removeIgnoredElementsFromVirtualFileSystem(js),
     },
   });
 };

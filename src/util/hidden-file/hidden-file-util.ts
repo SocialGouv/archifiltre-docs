@@ -48,16 +48,17 @@ const asyncIsHidden = async (elementPath: string): Promise<boolean> =>
     : promiseIsHidden(elementPath);
 
 const IGNORED_NAMES = ["thumbs.db", ".ds_store"];
-const IGNORED_EXTS = ["lnk", "tmp", "ini"];
+const IGNORED_EXTS = [".lnk", ".tmp", ".ini"];
 const IGNORED_PATTERNS = [
   /^\$/, // matches files starting with $
+  /^~/, // matches files stating with ~
 ];
 
 /**
  * Check if a file is specifically ignored based on its filename
  * @param elementPath
  */
-const isIgnored = (elementPath: string): boolean => {
+export const isIgnored = (elementPath: string): boolean => {
   const elementName = path.basename(elementPath).toLowerCase();
   return (
     IGNORED_NAMES.includes(elementName) ||

@@ -46,7 +46,7 @@ const updateChildVirtualPath = (
   const updateChildVirtualPathRec = (currentId, currentParentVirtualPath) => {
     const filesAndFolder = updatedFilesAndFolders[currentId];
 
-    const virtualPath = path.join(
+    const virtualPath = path.posix.join(
       currentParentVirtualPath,
       filesAndFolder.name
     );

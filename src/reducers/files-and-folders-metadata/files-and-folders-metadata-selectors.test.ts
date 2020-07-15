@@ -1,4 +1,4 @@
-import { createEmptyStore } from "../store-test-utils";
+import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import { getFilesAndFoldersMetadataFromStore } from "./files-and-folders-metadata-selectors";
 import { createFilesAndFoldersMetadata } from "./files-and-folders-metadata-test-utils";
 import { FilesAndFoldersMetadataMap } from "./files-and-folders-metadata-types";
@@ -20,9 +20,9 @@ describe("files-and-folders-metadata-selectors", () => {
 
       const testStore = {
         ...emptyStore,
-        filesAndFoldersMetadata: {
+        filesAndFoldersMetadata: wrapStoreWithUndoable({
           filesAndFoldersMetadata,
-        },
+        }),
       };
 
       expect(getFilesAndFoldersMetadataFromStore(testStore)).toEqual(

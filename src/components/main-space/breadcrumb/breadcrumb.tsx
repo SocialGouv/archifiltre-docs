@@ -3,10 +3,7 @@ import styled from "styled-components";
 import BreadcrumbPoly from "./breadcrumb-poly";
 import { CopyToClipboard } from "../../common/copy-to-clipboard";
 import { Dims, DimsAndId } from "../icicle/icicle-rect";
-
-const ItalicText = styled.span`
-  font-style: italic;
-`;
+import BreadcrumbText from "components/main-space/breadcrumb/breadcrumb-text";
 
 interface BreadcrumbWrapperProps {
   active: boolean;
@@ -32,6 +29,7 @@ const CopyToClipboardWrapper = styled.div<CopyToClipboardProps>`
 `;
 
 const BreadcrumbPolyWrapper = styled.div`
+  display: flex;
   width: 5%;
   flex-shrink: 0;
 `;
@@ -117,13 +115,7 @@ const Breadcrumb: FC<BreadcrumbProps> = ({
       </BreadcrumbPolyWrapper>
       <Spacer />
       <BreadcrumbTextWrapper>
-        {alias ? (
-          <span>
-            {alias} <ItalicText>({name})</ItalicText>
-          </span>
-        ) : (
-          <span>{name}</span>
-        )}
+        <BreadcrumbText name={name} alias={alias} />
       </BreadcrumbTextWrapper>
       <SmallSpacer />
       <CopyToClipboardWrapper active={active}>

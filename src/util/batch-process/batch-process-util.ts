@@ -45,10 +45,7 @@ const initWorkers = (
 export const computeBatch$ = (
   data: any,
   WorkerBuilder: any,
-  {
-    batchSize,
-    initialValues,
-  }: { batchSize: number; initialValues: InitWorkersData }
+  { batchSize, initialValues }: { batchSize: number; initialValues: any }
 ): Observable<any> => {
   const workers = initWorkers(WorkerBuilder, { initialValues });
 
@@ -144,16 +141,46 @@ export const backgroundWorkerProcess$ = (
     });
   });
 
-const aggregateToMap = (paramFieldName: string, resultFieldName: string) => (
-  valuesArray: any[]
-): object => {
-  const valuesMap = {};
-  for (const value of valuesArray) {
-    valuesMap[value[paramFieldName]] = value[resultFieldName];
-  }
-  return valuesMap;
+export type BatchProcessResult<T> = {
+  param: string;
+  result: T;
 };
 
-export const aggregateResultsToMap = aggregateToMap("param", "result");
+export type BatchProcessError = {
+  param: string;
+  error: any;
+};
 
-export const aggregateErrorsToMap = aggregateToMap("param", "error");
+type AggregatedResult<T> = {
+  [key: string]: T;
+};
+
+export const aggregateResultsToMap = <T>(
+  results: BatchProcessResult<T>[]
+): AggregatedResult<T> => {
+  const valuesMap: AggregatedResult<T> = {};
+
+  return results
+    .map((result: BatchProcessResult<T>) => ({ [result.param]: result.result }))
+    .reduce(
+      (aggregatedResult: AggregatedResult<T>, result: AggregatedResult<T>) =>
+        Object.assign(aggregatedResult, result),
+      valuesMap
+    );
+};
+
+export const aggregateErrorsToMap = (
+  errors: BatchProcessError[]
+): AggregatedResult<any> => {
+  const valuesMap: AggregatedResult<any> = {};
+
+  return errors
+    .map((result: BatchProcessError) => ({ [result.param]: result.error }))
+    .reduce(
+      (
+        aggregatedResult: AggregatedResult<any>,
+        result: AggregatedResult<any>
+      ) => Object.assign(aggregatedResult, result),
+      valuesMap
+    );
+};

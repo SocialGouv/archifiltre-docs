@@ -15,3 +15,4 @@ declare const STATIC_ASSETS_PATH: string;
 declare const SENTRY_DSN: string;
 declare const SENTRY_MINIDUMP_URL: string;
 declare const ARCHIFILTRE_SITE_URL: string;
+declare const WRITE_DEBUG: string;

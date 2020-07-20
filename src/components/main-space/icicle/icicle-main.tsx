@@ -97,7 +97,6 @@ const shouldRenderChildMinimap = (x: number, elementWidth: number): boolean => {
 };
 
 interface IcicleMainProps {
-  api: any;
   aliases: AliasMap;
   comments: CommentsMap;
   tags: TagMap;
@@ -124,7 +123,6 @@ interface IcicleMainProps {
 }
 
 const IcicleMain: FC<IcicleMainProps> = ({
-  api,
   aliases,
   comments,
   tags,
@@ -330,7 +328,6 @@ const IcicleMain: FC<IcicleMainProps> = ({
             <AnimatedIcicle
               aliases={aliases}
               comments={comments}
-              api={api}
               x={0}
               y={0}
               dx={icicleWidth}
@@ -394,7 +391,6 @@ const IcicleMain: FC<IcicleMainProps> = ({
             <Icicle
               aliases={aliases}
               comments={comments}
-              api={api}
               x={0}
               y={0}
               dx={icicleWidth}

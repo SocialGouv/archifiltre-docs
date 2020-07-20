@@ -32,17 +32,16 @@ const TabPanel: FC<TabPanelProps> = ({ children, value, index }) => (
 );
 
 interface TabsContentProps {
-  api: any;
   tabIndex: number;
 }
 
-const TabsContent: FC<TabsContentProps> = ({ api, tabIndex }) => (
+const TabsContent: FC<TabsContentProps> = ({ tabIndex }) => (
   <Box width="100%">
     <TabPanel value={tabIndex} index={0}>
       <Report />
     </TabPanel>
     <TabPanel value={tabIndex} index={1}>
-      <Enrichment api={api} />
+      <Enrichment />
     </TabPanel>
     <TabPanel value={tabIndex} index={2}>
       <Audit />

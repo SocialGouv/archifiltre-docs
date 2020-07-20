@@ -20,7 +20,7 @@ const mainspaceRoutingMap: ComponentMap<MainSpaceRouterProps, LoadingStep> = {
   [LoadingStep.STARTED]: ({ api, loadedPath }) => (
     <WaitingScreen api={api} loadedPath={loadedPath} />
   ),
-  [LoadingStep.FINISHED]: ({ api }) => <WorkSpace api={api} />,
+  [LoadingStep.FINISHED]: () => <WorkSpace />,
 };
 
 const MainSpaceRouter = switchComponent(

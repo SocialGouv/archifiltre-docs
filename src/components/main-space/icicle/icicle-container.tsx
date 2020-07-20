@@ -28,7 +28,7 @@ import { useIcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-met
 import { useZoomedElement } from "reducers/main-space-selection/main-space-selection-selectors";
 import { zoomElement } from "reducers/main-space-selection/main-space-selection-action";
 
-export default function IcicleApiToProps({ api }) {
+export default function IcicleApiToProps() {
   const dispatch = useDispatch();
 
   const tags = useSelector(getTagsFromStore);
@@ -151,7 +151,6 @@ export default function IcicleApiToProps({ api }) {
 
   return (
     <IcicleMain
-      api={api}
       aliases={aliases}
       comments={comments}
       displayRoot={zoomedElementSequence}

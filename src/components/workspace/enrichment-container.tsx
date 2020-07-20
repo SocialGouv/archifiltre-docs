@@ -20,11 +20,7 @@ import { useWorkspaceMetadata } from "../../reducers/workspace-metadata/workspac
 import Enrichment from "./enrichment";
 import { commitAction } from "../../reducers/enhancers/undoable/undoable-actions";
 
-interface EnrichmentContainerProps {
-  api: any;
-}
-
-const EnrichmentContainer: FC<EnrichmentContainerProps> = ({ api }) => {
+const EnrichmentContainer: FC = () => {
   const dispatch = useDispatch();
   const { hoveredElementId, lockedElementId } = useWorkspaceMetadata();
 
@@ -91,7 +87,6 @@ const EnrichmentContainer: FC<EnrichmentContainerProps> = ({ api }) => {
       toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
       nodeId={nodeId}
       isActive={isActive}
-      api={api}
     />
   );
 };

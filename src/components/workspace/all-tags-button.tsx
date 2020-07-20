@@ -6,11 +6,7 @@ import { FaTags } from "react-icons/fa";
 import AllTagsModal from "../modals/all-tags-modal/all-tags-modal";
 import { useModal } from "hooks/use-modal";
 
-interface AllTagsButtonProps {
-  api: any;
-}
-
-const AllTagsButton: FC<AllTagsButtonProps> = ({ api }) => {
+const AllTagsButton: FC = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const { t } = useTranslation();
   const title = t("workspace.allTags");
@@ -22,11 +18,7 @@ const AllTagsButton: FC<AllTagsButtonProps> = ({ api }) => {
           <FaTags />
         </IconButton>
       </Tooltip>
-      <AllTagsModal
-        isModalOpen={isModalOpen}
-        closeModal={closeModal}
-        api={api}
-      />
+      <AllTagsModal isModalOpen={isModalOpen} closeModal={closeModal} />
     </>
   );
 };

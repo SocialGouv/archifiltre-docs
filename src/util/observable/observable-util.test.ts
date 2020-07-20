@@ -1,4 +1,4 @@
-import { of } from "rxjs";
+import { identity, of } from "rxjs";
 import { map, toArray } from "rxjs/operators";
 import {
   DataProcessingStatus,
@@ -31,7 +31,9 @@ describe("observable-utl", () => {
     it("should return the same stream with no operators", (done) => {
       const baseStream = of(...streamData);
 
-      const testedStream = operateOnDataProcessingStream(baseStream, {});
+      const testedStream = operateOnDataProcessingStream(baseStream, {
+        result: identity,
+      });
 
       testStream(testedStream, (result) => {
         expect(result).toEqual(expect.arrayContaining(streamData));
@@ -69,9 +71,13 @@ describe("observable-utl", () => {
 
       const error = map((errorValue: string) => `processed-${errorValue}`);
 
-      const testedStream = operateOnDataProcessingStream(baseStream, {
-        error,
-      });
+      const testedStream = operateOnDataProcessingStream<string, string>(
+        baseStream,
+        {
+          result: identity,
+          error,
+        }
+      );
 
       testStream(testedStream, (results) => {
         expect(results).toEqual(

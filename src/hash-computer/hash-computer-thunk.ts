@@ -26,7 +26,7 @@ import { operateOnDataProcessingStream } from "util/observable/observable-util";
 import {
   computeFolderHashes$,
   computeHashes$,
-} from "./hash-computer.controller";
+} from "hash-computer/hash-computer.controller";
 import { openModalAction } from "reducers/modal/modal-actions";
 import { Modal } from "reducers/modal/modal-types";
 import { of } from "rxjs";

@@ -15,14 +15,9 @@ const StyledPaper = styled(Paper)`
 interface SettingsModalProps {
   isModalOpen: boolean;
   closeModal: () => void;
-  api: any;
 }
 
-const AllTagsModal: FC<SettingsModalProps> = ({
-  isModalOpen,
-  closeModal,
-  api,
-}) => {
+const AllTagsModal: FC<SettingsModalProps> = ({ isModalOpen, closeModal }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
@@ -36,7 +31,7 @@ const AllTagsModal: FC<SettingsModalProps> = ({
     >
       <ModalHeader title={t("workspace.allTags")} onClose={closeModal} />
       <DialogContent className={classes.allTagsDialogContent} dividers>
-        <AllTagsContainer api={api} />
+        <AllTagsContainer />
       </DialogContent>
     </Dialog>
   );

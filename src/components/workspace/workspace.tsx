@@ -14,13 +14,9 @@ const workspaceState = {
   setAreTabsHidden: (areTabsHidden) => {},
 };
 
-interface WorkspaceProps {
-  api: any;
-}
-
 export const WorkspaceContext = React.createContext(workspaceState);
 
-const Workspace: FC<WorkspaceProps> = ({ api }) => {
+const Workspace: FC = () => {
   const [isFileMoveActive, setIsFileMoveActive] = useState(false);
   const [areTabsHidden, setAreTabsHidden] = useState(false);
   const { areIciclesDisplayed, tabIndex } = useTabsState();
@@ -42,7 +38,7 @@ const Workspace: FC<WorkspaceProps> = ({ api }) => {
           style={{ minHeight: "0px", width: "100%" }}
         >
           <Box display="flex" flexDirection="row" flexWrap="wrap" height="100%">
-            {!areTabsHidden && <TabsContent api={api} tabIndex={tabIndex} />}
+            {!areTabsHidden && <TabsContent tabIndex={tabIndex} />}
           </Box>
         </Box>
         <Box flexGrow={1} flexShrink={1} flexBasis="auto" overflow="hidden">
@@ -52,7 +48,7 @@ const Workspace: FC<WorkspaceProps> = ({ api }) => {
                 <NavigationBar />
               </Box>
               <Box flexGrow={1} overflow="hidden">
-                <Icicle api={api} />
+                <Icicle />
               </Box>
             </Box>
           ) : (

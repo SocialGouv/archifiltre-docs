@@ -15,17 +15,14 @@ const FolderDropzoneContainer: FC<FolderDropzoneContainerProps> = ({
   const dispatch = useDispatch();
 
   const loadFromPath = useCallback(
-    (path: string) => dispatch(loadFilesAndFoldersFromPathThunk(path, { api })),
-    [dispatch]
+    (path: string) => {
+      setLoadedPath(path);
+      dispatch(loadFilesAndFoldersFromPathThunk(path, { api }));
+    },
+    [dispatch, api, setLoadedPath]
   );
 
-  return (
-    <FolderDropzone
-      loadFromPath={loadFromPath}
-      api={api}
-      setLoadedPath={setLoadedPath}
-    />
-  );
+  return <FolderDropzone loadFromPath={loadFromPath} />;
 };
 
 export default FolderDropzoneContainer;

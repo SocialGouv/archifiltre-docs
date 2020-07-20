@@ -12,9 +12,7 @@ declare global {
 }
 
 interface FolderDropzoneProps {
-  loadFromPath;
-  api;
-  setLoadedPath;
+  loadFromPath: (path: string) => void;
 }
 
 const Dropzone = styled(Grid)`
@@ -39,11 +37,7 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const FolderDropzone: FC<FolderDropzoneProps> = ({
-  loadFromPath,
-  api,
-  setLoadedPath,
-}) => {
+const FolderDropzone: FC<FolderDropzoneProps> = ({ loadFromPath }) => {
   const { t } = useTranslation();
 
   const handleDragover = useCallback((event) => {
@@ -66,10 +60,12 @@ const FolderDropzone: FC<FolderDropzoneProps> = ({
     loadPath(event.dataTransfer.files[0].path);
   }, []);
 
-  const loadPath = useCallback((loadedPath) => {
-    setLoadedPath(loadedPath);
-    loadFromPath(loadedPath, { api });
-  }, []);
+  const loadPath = useCallback(
+    (loadedPath) => {
+      loadFromPath(loadedPath);
+    },
+    [loadFromPath]
+  );
 
   useEffect(() => {
     if (AUTOLOAD !== "") {

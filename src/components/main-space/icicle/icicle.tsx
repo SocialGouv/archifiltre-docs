@@ -30,7 +30,6 @@ export type IcicleProps = {
   y: number;
   dx: number;
   dy: number;
-  api: any;
   hoverSequence: string[];
   lockedSequence: string[];
   rootId: string;
@@ -59,7 +58,6 @@ const Icicle: FC<IcicleProps> = ({
   dx,
   dy,
   rootId,
-  api: { icicle_state: icicleState },
   hoverSequence,
   lockedSequence,
   getChildrenIdFromId,
@@ -139,7 +137,7 @@ const Icicle: FC<IcicleProps> = ({
     (id) => !lockedSequence.includes(id)
   );
 
-  const tagIdToHighlight: string = icicleState.tagIdToHighlight();
+  const tagIdToHighlight = "";
 
   return (
     <g>

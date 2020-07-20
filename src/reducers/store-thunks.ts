@@ -282,11 +282,10 @@ const initStore = ({
 export const resetStoreThunk = (api: any): ArchifiltreThunkAction => (
   dispatch
 ) => {
-  const { loading_state, icicle_state } = api;
+  const { loading_state } = api;
   dispatch(resetTags());
   dispatch(resetLoadingAction());
   loading_state.reInit();
-  icicle_state.reInit();
   dispatch(setLockedElementId(""));
   dispatch(setLoadingStep(LoadingStep.WAITING));
   dispatch(resetZoom());

@@ -3,14 +3,10 @@ import React, { FC } from "react";
 
 import Dashboard from "components/header/dashboard/dashboard-container";
 
-interface HeaderProps {
-  api: any;
-}
-
-const Header: FC<HeaderProps> = ({ api }) => {
+const Header: FC = () => {
   return (
     <Grid container>
-      <Dashboard api={api} />
+      <Dashboard />
     </Grid>
   );
 };

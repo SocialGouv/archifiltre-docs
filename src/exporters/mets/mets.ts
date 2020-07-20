@@ -8,7 +8,6 @@ import { TagMap } from "reducers/tags/tags-types";
 import translations from "translations/translations";
 import path from "path";
 import { generateRandomString } from "util/random-gen-util";
-import { Map } from "immutable";
 import { getAllTagsForFile } from "reducers/tags/tags-selectors";
 import version from "version";
 import { notifySuccess } from "util/notification/notifications-util";
@@ -358,7 +357,7 @@ const recTraverseDB = (
     }
     const hash = MD5(data);
 
-    if (HMRead().has(hash)) {
+    if (HMRead()[hash]) {
       // duplicate!
       return;
     }
@@ -538,10 +537,10 @@ const makeMetsContent = (
   );
 
   // Traversing database
-  let hashmap = Map();
+  let hashmap = {};
   const HMread = () => hashmap;
   const HMupdate = (hash, updater) => {
-    hashmap = hashmap.update(hash, updater);
+    hashmap[hash] = updater(hashmap[hash], hash);
   };
 
   const FFreader = (ffId) => ({

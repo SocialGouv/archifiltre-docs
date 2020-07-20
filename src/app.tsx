@@ -45,30 +45,21 @@ const app = () => {
 
   ReactDOM.render(
     <Providers>
-      {({ api }) => (
-        <>
-          <WindowResize />
-          <App>
-            <Box
-              display="flex"
-              flexDirection="column"
-              height="100%"
-              width="100%"
-            >
-              <Box>
-                <Header api={api} />
-              </Box>
-              <Box flexGrow={1} flexShrink={1} overflow="hidden">
-                <MainSpace api={api} />
-              </Box>
-              <BackgroundLoadingInfoContainer />
-            </Box>
-            <NewVersionChecker />
-          </App>
-          <NotificationContainer />
-          <Modals />
-        </>
-      )}
+      <WindowResize />
+      <App>
+        <Box display="flex" flexDirection="column" height="100%" width="100%">
+          <Box>
+            <Header />
+          </Box>
+          <Box flexGrow={1} flexShrink={1} overflow="hidden">
+            <MainSpace />
+          </Box>
+          <BackgroundLoadingInfoContainer />
+        </Box>
+        <NewVersionChecker />
+      </App>
+      <NotificationContainer />
+      <Modals />
     </Providers>,
     rootDiv
   );

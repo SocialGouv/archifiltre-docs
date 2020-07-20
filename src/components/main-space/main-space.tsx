@@ -3,11 +3,7 @@ import React, { FC, useState } from "react";
 import { useLoadingStep } from "reducers/loading-state/loading-state-selectors";
 import MainSpaceRouter from "./main-space-router";
 
-interface MainSpaceProps {
-  api: any;
-}
-
-const MainSpace: FC<MainSpaceProps> = ({ api }) => {
+const MainSpace: FC = () => {
   const [loadedPath, setLoadedPath] = useState("");
   const step = useLoadingStep();
 
@@ -16,7 +12,6 @@ const MainSpace: FC<MainSpaceProps> = ({ api }) => {
       step={step}
       loadedPath={loadedPath}
       setLoadedPath={setLoadedPath}
-      api={api}
     />
   );
 };

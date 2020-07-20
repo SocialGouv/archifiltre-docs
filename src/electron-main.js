@@ -6,6 +6,8 @@ const { dialog } = require("electron");
 
 const path = require("path");
 
+app.allowRendererProcessReuse = false;
+
 // Initializes sentry logging for production build
 if (app.isPackaged) {
   // Initialize sentry error reporter

@@ -11,18 +11,18 @@ interface DataProcessingError {
   error: any;
 }
 
-interface DataProcessingResult {
+type DataProcessingResult<T> = {
   type: DataProcessingStatus;
-  result: any;
-}
+  result: T;
+};
 
-type DataProcessingElement = DataProcessingError | DataProcessingResult;
+type DataProcessingElement<T> = DataProcessingError | DataProcessingResult<T>;
 
-type DataProcessingStream = Observable<DataProcessingElement>;
+export type DataProcessingStream<T> = Observable<DataProcessingElement<T>>;
 
-interface DataProcessingStreamOperators {
+interface DataProcessingStreamOperators<Input, Output> {
   error?: OperatorFunction<any, any>;
-  result?: OperatorFunction<any, any>;
+  result: OperatorFunction<Input, Output>;
 }
 
 /**
@@ -39,17 +39,20 @@ interface DataProcessingStreamOperators {
  *   )
  * });
  */
-export const operateOnDataProcessingStream = (
-  status$: DataProcessingStream,
+export const operateOnDataProcessingStream = <Input, Output>(
+  status$: DataProcessingStream<Input>,
   {
     error: errorOperator = identity,
-    result: resultOperator = identity,
-  }: DataProcessingStreamOperators
-): DataProcessingStream => {
+    result: resultOperator,
+  }: DataProcessingStreamOperators<Input, Output>
+): DataProcessingStream<Output> => {
   const [results$, errors$] = partition(
     status$,
     ({ type }) => type === DataProcessingStatus.RESULT
-  ) as [Observable<DataProcessingResult>, Observable<DataProcessingError>];
+  ) as [
+    Observable<DataProcessingResult<Input>>,
+    Observable<DataProcessingError>
+  ];
 
   const processedResults$ = results$.pipe(
     map(({ result }) => result),

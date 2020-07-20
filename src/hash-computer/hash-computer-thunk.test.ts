@@ -19,7 +19,7 @@ import { computeHashesThunk } from "./hash-computer-thunk";
 import {
   computeFolderHashes$,
   computeHashes$,
-} from "./hash-computer.controller";
+} from "hash-computer/hash-computer.controller";
 import { setFilesAndFoldersHashes } from "reducers/hashes/hashes-actions";
 
 jest.mock("./hash-computer.controller", () => ({

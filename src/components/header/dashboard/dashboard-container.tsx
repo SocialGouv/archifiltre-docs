@@ -20,11 +20,7 @@ import {
 import { useLoadingStep } from "reducers/loading-state/loading-state-selectors";
 import { LoadingStep } from "reducers/loading-state/loading-state-types";
 
-interface DashboardContainerProps {
-  api: any;
-}
-
-const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
+const DashboardContainer: FC = () => {
   const dispatch = useDispatch();
   const hasPreviousSession = usePreviousSession();
 
@@ -65,9 +61,8 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ api }) => {
     [dispatch]
   );
 
-  const resetWorkspace = useCallback(() => dispatch(resetStoreThunk(api)), [
+  const resetWorkspace = useCallback(() => dispatch(resetStoreThunk()), [
     dispatch,
-    api,
   ]);
 
   const { sessionName, originalPath } = useSelector(

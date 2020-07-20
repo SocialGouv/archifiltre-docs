@@ -7,6 +7,7 @@ import { isJsonFile } from "util/file-system/file-sys-util";
 import Loader from "./loader";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
+import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
 
 const SimpleLoaderContainer = styled.div`
   display: flex;
@@ -27,27 +28,22 @@ interface SimpleLoaderProps {
 }
 
 interface TraverseProps {
-  count: number;
-  complete: boolean;
-  totalCount: number;
-  waiting: boolean;
+  indexedFilesCount: number;
+  step: FileSystemLoadingStep;
 }
 
 interface LoadingMessagesProps {
-  status: number;
-  count: number;
-  totalCount: number;
+  step: FileSystemLoadingStep;
+  indexedFilesCount: number;
+  constructedDataModelElementsCount: number;
+  derivedElementsCount: number;
 }
-interface PresentationalProps {
-  status: number;
-  count: number;
-  totalCount: number;
-  loadedPath: string;
-}
-
 interface WaitingScreenProps {
+  step: FileSystemLoadingStep;
+  indexedFilesCount: number;
+  constructedDataModelElementsCount: number;
+  derivedElementsCount: number;
   loadedPath: string;
-  api: any;
 }
 
 const SimpleLoader: FC<SimpleLoaderProps> = ({ loaderText }) => (
@@ -62,15 +58,10 @@ const LoadingJson: FC = () => {
   return <SimpleLoader loaderText={t("folderDropzone.jsonLoading")} />;
 };
 
-const Traverse: FC<TraverseProps> = ({
-  count,
-  complete,
-  totalCount,
-  waiting,
-}) => (
+const Traverse: FC<TraverseProps> = ({ indexedFilesCount, step }) => (
   <IndexingBlock
-    fileCount={!complete ? count : totalCount}
-    loading={!complete}
+    fileCount={indexedFilesCount}
+    loading={step === FileSystemLoadingStep.INDEXING}
   />
 );
 
@@ -79,23 +70,11 @@ const Traverse: FC<TraverseProps> = ({
  * @param {Object} translationText - A string of the translation to find
  * @returns {React.Component}
  */
-const makeLoadingComponent = (translationText) => ({
-  count,
-  totalCount,
-  complete,
-  waiting,
-}) => {
+const makeLoadingComponent = (translationText) => ({ count, totalCount }) => {
   const { t } = useTranslation();
-  let displayedCount;
-  if (waiting) {
-    displayedCount = 0;
-  } else if (complete === true) {
-    displayedCount = totalCount;
-  } else {
-    displayedCount = count;
-  }
 
-  const percentage = totalCount ? (displayedCount / totalCount) * 100 : 0;
+  const percentage =
+    totalCount > 0 ? Math.min((count / totalCount) * 100, 100) : 0;
 
   return (
     <AreaLoadingBar progress={percentage}>{t(translationText)}</AreaLoadingBar>
@@ -104,54 +83,26 @@ const makeLoadingComponent = (translationText) => ({
 
 const Make = makeLoadingComponent("folderDropzone.constructingDataModel");
 const DerivateFF = makeLoadingComponent("folderDropzone.computingDerivedData");
-const DivedFF = makeLoadingComponent("folderDropzone.computingFileDepth");
-
-const statusMap = {
-  traverse: 0,
-  make: 1,
-  derivateFF: 2,
-  divedFF: 3,
-};
-
-const statusComponents = [
-  {
-    index: statusMap.traverse,
-    Component: Traverse,
-  },
-  {
-    index: statusMap.make,
-    Component: Make,
-  },
-  {
-    index: statusMap.derivateFF,
-    Component: DerivateFF,
-  },
-  {
-    index: statusMap.divedFF,
-    Component: DivedFF,
-  },
-];
 
 const LoadingMessages: FC<LoadingMessagesProps> = ({
-  status,
-  count,
-  totalCount,
+  step,
+  indexedFilesCount,
+  constructedDataModelElementsCount,
+  derivedElementsCount,
 }) => {
-  const currentStatusIndex = statusMap[status];
-  const lastStatusComponent = statusComponents.slice(-1)[0];
-  const isFileTreeLoaded = currentStatusIndex >= lastStatusComponent.index;
+  const isFileTreeLoaded = step === FileSystemLoadingStep.COMPLETE;
   const { t } = useTranslation();
   return (
     <>
-      {statusComponents.map(({ index, Component }) => (
-        <Component
-          key={index}
-          count={count}
-          totalCount={totalCount}
-          complete={currentStatusIndex > index}
-          waiting={currentStatusIndex < index}
-        />
-      ))}
+      <Traverse indexedFilesCount={indexedFilesCount} step={step} />
+      <Make
+        count={constructedDataModelElementsCount}
+        totalCount={indexedFilesCount}
+      />
+      <DerivateFF
+        count={derivedElementsCount}
+        totalCount={constructedDataModelElementsCount}
+      />
       {isFileTreeLoaded && (
         <SimpleLoader loaderText={t("folderDropzone.loadingVisualization")} />
       )}
@@ -159,10 +110,11 @@ const LoadingMessages: FC<LoadingMessagesProps> = ({
   );
 };
 
-const Presentational: FC<PresentationalProps> = ({
-  status,
-  count,
-  totalCount,
+const WaitingScreen: FC<WaitingScreenProps> = ({
+  step,
+  indexedFilesCount,
+  constructedDataModelElementsCount,
+  derivedElementsCount,
   loadedPath,
 }) => {
   const isJson = useMemo(() => {
@@ -180,9 +132,12 @@ const Presentational: FC<PresentationalProps> = ({
             <LoadingJson />
           ) : (
             <LoadingMessages
-              status={status}
-              count={count}
-              totalCount={totalCount}
+              step={step}
+              indexedFilesCount={indexedFilesCount}
+              constructedDataModelElementsCount={
+                constructedDataModelElementsCount
+              }
+              derivedElementsCount={derivedElementsCount}
             />
           )}
         </MainCell>
@@ -190,19 +145,5 @@ const Presentational: FC<PresentationalProps> = ({
     </Grid>
   );
 };
-
-const WaitingScreen: FC<WaitingScreenProps> = ({
-  loadedPath,
-  api: {
-    loading_state: { status, count, totalCount },
-  },
-}) => (
-  <Presentational
-    status={status()}
-    count={count()}
-    totalCount={totalCount()}
-    loadedPath={loadedPath}
-  />
-);
 
 export default WaitingScreen;

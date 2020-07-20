@@ -22,7 +22,6 @@ type EnrichmentProps = {
   toggleCurrentFileDeleteState;
   nodeId: string;
   isActive: boolean;
-  api: any;
 };
 const Enrichment: FC<EnrichmentProps> = ({
   createTag,
@@ -34,7 +33,6 @@ const Enrichment: FC<EnrichmentProps> = ({
   toggleCurrentFileDeleteState,
   nodeId,
   isActive,
-  api,
 }) => {
   const { t } = useTranslation();
 
@@ -64,7 +62,7 @@ const Enrichment: FC<EnrichmentProps> = ({
       ),
     },
     {
-      title: <TagHeader api={api} />,
+      title: <TagHeader />,
       content: (
         <TagCell
           isActive={isActive}

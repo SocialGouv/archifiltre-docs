@@ -9,11 +9,7 @@ import AllTagsButton from "components/workspace/all-tags-button";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 
-type TagHeaderProps = {
-  api: any;
-};
-
-const TagHeader: FC<TagHeaderProps> = ({ api }) => {
+const TagHeader: FC = () => {
   const { t } = useTranslation();
 
   return (
@@ -22,7 +18,7 @@ const TagHeader: FC<TagHeaderProps> = ({ api }) => {
         {t("workspace.tags")}&nbsp;
         <ColorCircle color={ENRICHMENT_COLORS[EnrichmentTypes.TAG]} />
       </CategoryTitle>
-      <AllTagsButton api={api} />
+      <AllTagsButton />
     </Box>
   );
 };

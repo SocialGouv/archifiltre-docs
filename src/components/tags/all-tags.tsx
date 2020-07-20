@@ -33,7 +33,6 @@ interface AllTagsProps {
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   totalVolume: number;
-  stopHighlightingTag: () => void;
   onDeleteTag: (tagId: string) => void;
   onRenameTag: (tagId: string) => void;
 }
@@ -43,7 +42,6 @@ const AllTags: FC<AllTagsProps> = ({
   filesAndFolders,
   filesAndFoldersMetadata,
   totalVolume,
-  stopHighlightingTag,
   onDeleteTag,
   onRenameTag,
 }) => {
@@ -110,9 +108,7 @@ const AllTags: FC<AllTagsProps> = ({
           )}
           {tagMapHasTags(tags) && (
             <div style={{ overflow: "hidden auto", height: "100%" }}>
-              <TagsContent onMouseLeave={stopHighlightingTag}>
-                {tagsList}
-              </TagsContent>
+              <TagsContent>{tagsList}</TagsContent>
             </div>
           )}
         </Box>
@@ -122,19 +118,16 @@ const AllTags: FC<AllTagsProps> = ({
 };
 
 interface AllTagsApiToPropsPros {
-  api: any;
   tags: TagMap;
   renameTag: (tagId: string, name: string) => void;
   deleteTag: (tagId: string) => void;
 }
 
 const AllTagsApiToProps: FC<AllTagsApiToPropsPros> = ({
-  api,
   tags,
   renameTag,
   deleteTag,
 }) => {
-  const { icicle_state } = api;
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
   const filesAndFoldersMetadata = useSelector(
     getFilesAndFoldersMetadataFromStore
@@ -144,10 +137,6 @@ const AllTagsApiToProps: FC<AllTagsApiToPropsPros> = ({
   const rootElementId = "";
   const totalVolume = filesAndFoldersMetadata[rootElementId].childrenTotalSize;
 
-  const stopHighlightingTag = () => {
-    icicle_state.setNoTagIdToHighlight();
-  };
-
   const onRenameTag = (tagId) => (name) => {
     renameTag(tagId, name);
     dispatch(commitAction());
@@ -155,14 +144,12 @@ const AllTagsApiToProps: FC<AllTagsApiToPropsPros> = ({
 
   const onDeleteTag = (tagId) => () => {
     deleteTag(tagId);
-    icicle_state.setNoTagIdToHighlight();
     dispatch(commitAction());
   };
 
   return (
     <AllTags
       totalVolume={totalVolume}
-      stopHighlightingTag={stopHighlightingTag}
       onRenameTag={onRenameTag}
       onDeleteTag={onDeleteTag}
       tags={tags}

@@ -9,6 +9,7 @@ import {
   loadFilesAndFoldersFromExportFile,
 } from "files-and-folders-loader/files-and-folders-loader";
 import { HashesMap } from "reducers/hashes/hashes-types";
+import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
 
 type Reporter = (message: any) => void;
 
@@ -60,9 +61,9 @@ export const loadFolder = async (
     reportWarning,
   } = createReporters(asyncWorker);
 
-  reportResult({ status: "traverse", count: 0 });
+  reportResult({ status: FileSystemLoadingStep.INDEXING, count: 0 });
   const { hook: traverseHook, getCount: getTraverseCount } = hookCounter(
-    (count) => reportResult({ status: "traverse", count }),
+    (count) => reportResult({ status: FileSystemLoadingStep.INDEXING, count }),
     {
       interval: MIN_MESSAGE_INTERVAL,
       internalHook: createErrorReportHook(reportError),
@@ -90,11 +91,14 @@ export const loadFolder = async (
     reportWarning("Error in traverseFileTree");
     return;
   }
-  reportResult({ status: "traverse", count: getTraverseCount() });
+  reportResult({
+    status: FileSystemLoadingStep.INDEXING,
+    count: getTraverseCount(),
+  });
 
   const totalMakeCount = getTraverseCount();
   reportResult({
-    status: "make",
+    status: FileSystemLoadingStep.FILES_AND_FOLDERS,
     count: 0,
     totalCount: totalMakeCount,
   });
@@ -102,7 +106,7 @@ export const loadFolder = async (
   const { hook: makeHook, getCount: getMakeCount } = hookCounter(
     (count) =>
       reportResult({
-        status: "make",
+        status: FileSystemLoadingStep.FILES_AND_FOLDERS,
         count,
         totalCount: totalMakeCount,
       }),
@@ -115,18 +119,18 @@ export const loadFolder = async (
   try {
     filesAndFolders = createFilesAndFoldersDataStructure(origin, makeHook);
     reportResult({
-      status: "make",
+      status: FileSystemLoadingStep.FILES_AND_FOLDERS,
       count: getMakeCount(),
       totalCount: totalMakeCount,
     });
   } catch (err) {
     reportFatal(err);
-    reportWarning("Error in vfs.make");
+    reportWarning("Error in FileSystemLoadingStep.FILES_AND_FOLDERS");
     return;
   }
   const derivateTotalCount = Object.keys(filesAndFolders).length;
   reportResult({
-    status: "derivateFF",
+    status: FileSystemLoadingStep.METADATA,
     count: 0,
     totalCount: derivateTotalCount,
   });
@@ -137,14 +141,18 @@ export const loadFolder = async (
       filesAndFolders
     );
     reportResult({
-      status: "divedFF",
+      status: FileSystemLoadingStep.METADATA,
       count: Object.keys(filesAndFolders).length,
       totalCount: derivateTotalCount,
     });
   } catch (error) {
     reportFatal(error);
-    reportWarning("Error in vfs.derivate");
+    reportWarning("Error in FileSystemLoadingStep.METADATA");
   }
+
+  reportResult({
+    status: FileSystemLoadingStep.COMPLETE,
+  });
 
   reportComplete({
     status: MessageTypes.COMPLETE,

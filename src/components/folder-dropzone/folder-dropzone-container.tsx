@@ -4,12 +4,10 @@ import { loadFilesAndFoldersFromPathThunk } from "../../reducers/store-thunks";
 import FolderDropzone from "./folder-dropzone";
 
 interface FolderDropzoneContainerProps {
-  api: any;
   setLoadedPath: (path: string) => void;
 }
 
 const FolderDropzoneContainer: FC<FolderDropzoneContainerProps> = ({
-  api,
   setLoadedPath,
 }) => {
   const dispatch = useDispatch();
@@ -17,9 +15,9 @@ const FolderDropzoneContainer: FC<FolderDropzoneContainerProps> = ({
   const loadFromPath = useCallback(
     (path: string) => {
       setLoadedPath(path);
-      dispatch(loadFilesAndFoldersFromPathThunk(path, { api }));
+      dispatch(loadFilesAndFoldersFromPathThunk(path));
     },
-    [dispatch, api, setLoadedPath]
+    [dispatch, setLoadedPath]
   );
 
   return <FolderDropzone loadFromPath={loadFromPath} />;

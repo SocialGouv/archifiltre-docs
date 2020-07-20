@@ -51,10 +51,20 @@ import {
 import { getArchifiltreErrors } from "./loading-info/loading-info-selectors";
 import { openModalAction } from "./modal/modal-actions";
 import { Modal } from "./modal/modal-types";
-import { loadFileTree } from "../util/file-tree-loader/file-tree-loader";
+import { loadFileTree } from "util/file-tree-loader/file-tree-loader";
 import { commitAction } from "./enhancers/undoable/undoable-actions";
-import { setLoadingStep } from "./loading-state/loading-state-actions";
-import { LoadingStep } from "./loading-state/loading-state-types";
+import {
+  resetLoadingState,
+  setConstructedDataModelElementsCount,
+  setDerivedElementsCount,
+  setFileSystemLoadingStep,
+  setIndexedFilesCount,
+  setLoadingStep,
+} from "./loading-state/loading-state-actions";
+import {
+  FileSystemLoadingStep,
+  LoadingStep,
+} from "./loading-state/loading-state-types";
 import { HashesMap } from "./hashes/hashes-types";
 import { setFilesAndFoldersHashes } from "./hashes/hashes-actions";
 import { resetZoom } from "reducers/main-space-selection/main-space-selection-action";
@@ -94,7 +104,7 @@ const displayErrorNotification = () => (dispatch) => {
   );
 };
 
-const displayRootPathError = () => (dispatch) => {
+const displayRootPathError = () => () => {
   notifyError(
     translations.t("folderDropzone.errorsWhileLoading"),
     translations.t("folderDropzone.rootElementError")
@@ -122,7 +132,7 @@ const handleTracking = (paths) => {
 };
 
 interface HookParam {
-  status?: string;
+  status?: string | FileSystemLoadingStep;
   count?: number;
   totalCount?: number;
 }
@@ -132,29 +142,34 @@ const defaultHookParam: HookParam = {};
 /**
  * Loads a files
  * @param fileOrFolderPath
- * @param api - The real estate api. Will be removed with real estate.
  */
 export const loadFilesAndFoldersFromPathThunk = (
-  fileOrFolderPath: string,
-  { api }: any
+  fileOrFolderPath: string
 ): ArchifiltreThunkAction => async (dispatch, getState) => {
-  const { setStatus, setCount, setTotalCount } = api.loading_state;
-
   const hook = (
     error: ArchifiltreError | null,
-    { status, count, totalCount } = defaultHookParam
+    { status, count = 0 } = defaultHookParam
   ) => {
     if (error) {
       dispatch(registerErrorAction(error));
       return;
     }
-    setStatus(status);
-    if (count) {
-      setCount(count);
-    }
 
-    if (totalCount) {
-      setTotalCount(totalCount);
+    switch (status) {
+      case FileSystemLoadingStep.INDEXING:
+        dispatch(setIndexedFilesCount(count));
+        dispatch(setFileSystemLoadingStep(status));
+        break;
+      case FileSystemLoadingStep.FILES_AND_FOLDERS:
+        dispatch(setConstructedDataModelElementsCount(count));
+        dispatch(setFileSystemLoadingStep(status));
+        break;
+      case FileSystemLoadingStep.METADATA:
+        dispatch(setDerivedElementsCount(count));
+        dispatch(setFileSystemLoadingStep(status));
+        break;
+      case FileSystemLoadingStep.COMPLETE:
+        dispatch(setFileSystemLoadingStep(FileSystemLoadingStep.COMPLETE));
     }
   };
 
@@ -165,9 +180,6 @@ export const loadFilesAndFoldersFromPathThunk = (
 
   await clearActionReplayFile();
 
-  setCount(0);
-  setTotalCount(0);
-  setStatus("");
   dispatch(setLoadingStep(LoadingStep.STARTED));
   const loadingStart = new Date().getTime();
   try {
@@ -279,13 +291,10 @@ const initStore = ({
   }
 };
 
-export const resetStoreThunk = (api: any): ArchifiltreThunkAction => (
-  dispatch
-) => {
-  const { loading_state } = api;
+export const resetStoreThunk = (): ArchifiltreThunkAction => (dispatch) => {
   dispatch(resetTags());
   dispatch(resetLoadingAction());
-  loading_state.reInit();
+  dispatch(resetLoadingState());
   dispatch(setLockedElementId(""));
   dispatch(setLoadingStep(LoadingStep.WAITING));
   dispatch(resetZoom());

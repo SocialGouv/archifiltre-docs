@@ -48,8 +48,9 @@
       "folderHashExplanation": "Dieser Hash-Wert ist ein (durch einen MD5 Algorithmus berechneter) digitaler Fingerabdruck der Verknüpfung der Hash-Werte der Unterordner dieses Ordners",
       "clickHereToAddComments": "Klicken Sie hier um Kommentare hinzuzufügen!",
       "copied": "Kopieren beendet!",
-      "fileTreeInfo": "Dateibaumeigenschaften",
-      "elementInfo": "Elementinformationen",
+      "fileTree": "Verzeichnisbaum",
+      "element": "Element",
+      "info": "Eigenschaften",
       "boundaryDatesExplanation": "Datum der ältesten und jüngsten Elemente im Dateibaum",
       "medianExplanation": "Das ist das Datum, an dem die Hälfte der Dateien dieses Ordners geschlossen wurden. Es gibt genauso viele bearbeitete Elemente vor wie nach diesem Datum.",
       "noElementSelected": "Wählen Sie ein Element aus, um seine Eigenschaften zu sehen",
@@ -57,6 +58,9 @@
       "openElementErrorTitle": "Element wird geöffnet"
     },
     "workspace": {
+      "ordering": "Anordnung",
+      "coloring": "Farbgebung",
+      "weight": "Gewichtung",
       "type": "Nach Typ",
       "dates": "Nach Datum",
       "alphanumeric": "Alphanumerisch",
@@ -77,13 +81,14 @@
       "moveElementsMode": "Bewegungsmodus",
       "normalMode": "Normaler Modus",
       "general": "Allgemein",
-      "enrichment": "Zusatze",
+      "enrichment": "Anreicherung",
       "audit": "Audit",
       "duplicates": "Duplikat",
-      "hideTabs": "Eigenschaften verstecken",
-      "showTabs": "Eigenschaften anzeigen",
-      "noOptions": "Keine Ergebnisse - Drücken Sie “Enter”, um einen neuer Tag hinzuzufügen",
-      "tagItemTooltip": "Tag Nummer (Volumenprozent)"
+      "hide": "Verbergen",
+      "show": "Anzeigen",
+      "noOptions": "Keine Ergebnisse - Drücken Sie “Enter”, um einen neuen Tag hinzuzufügen",
+      "tagItemTooltip": "Tag Nummer (Volumenprozent)",
+      "metadata": "Metadaten"
     },
     "header": {
       "export": "Exportieren",
@@ -91,8 +96,8 @@
       "close": "Schließen",
       "save": "Speichern",
       "newVersion": "Neue Version",
-      "aNewVersionIsOut": "Version {{version}} von Archifiltre ist erschienen!",
-      "download": "Laden Sie die neue Version herunter!",
+      "aNewVersionIsOut": "Version {{version}} von Archifiltre steht bereit!",
+      "download": "Herunterladen",
       "cancel": "Abbrechen",
       "csvWithHash": "CSV mit Hash-Werten",
       "csvWithHashDisabledMessage": "Bitte warten, bis die Hash-Werte berechnet wurden",
@@ -107,6 +112,8 @@
       "somethingWentWrong": "Da ist etwas schiefgegangen.",
       "file": "Datei",
       "file_plural": "Dateien",
+      "level": "Ebene",
+      "level_plural": "Ebenen",
       "folder": "Ordner",
       "originalName": "Der ursprüngliche Name des Elements war '{{oldName}}'",
       "byteChar": "B",
@@ -119,13 +126,14 @@
         "presentation": "Präsentation",
         "publication": "Veröffentlichung",
         "spreadsheet": "Tabelle",
-        "email": "Email",
+        "email": "E-Mail",
         "document": "Dokument",
         "image": "Bild",
         "video": "Video",
         "audio": "Audio",
         "other": "Andere"
-      }
+      },
+      "browse": "Stöbern"
     },
     "hash": {
       "loadingInfoLabel": "Laden der Hash-Werte von Dateien und Ordnern",
@@ -180,7 +188,8 @@
       "searchPlaceholder": "Suchen",
       "noResult": "Keine Ergebnisse",
       "page": "Seite",
-      "tag": "Tag"
+      "tag": "Tag",
+      "noAvailableOption": "Option nicht verfügbar"
     },
     "errorsModal": {
       "title": "Fehlerliste",
@@ -189,7 +198,7 @@
       "element": "Element (Datei oder Ordner)",
       "errorDescriptions": {
         "ENOENT": "Die Datei kann nicht gefunden werden.",
-        "EBUSY": "",
+        "EBUSY": "Die Quelle ist besetzt und wird vielleicht von einem anderen Prozess benutzt. ",
         "EACCES": "Keine Zugriffsrechte auf diese Datei.",
         "UNKNOWN": "Unbekannter oder unbehandelter Fehler"
       }
@@ -205,7 +214,10 @@
     "audit": {
       "fileCountInfoTitle": "Dateianzahl im Dateibaum",
       "fileTreeDepthTitle": "Tiefe des Dateibaum",
-      "fileTypeRepartitionTitle": "Dateitypen im Dateibaum"
+      "fileTypeRepartitionTitle": "Dateitypen im Dateibaum",
+      "fileTreeAudit": "Verzeichnisbaum-Audit",
+      "report": "Audit-Report",
+      "reportReadyMessage": "Der vollständige Audit-Report steht bereit."
     },
     "duplicates": {
       "duplicateElements": "doppelte Elemente",

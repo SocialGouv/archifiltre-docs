@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from "react";
+import React, { FC, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
@@ -12,17 +12,18 @@ import DuplicatesTable from "./duplicates-table";
 import _ from "lodash";
 import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
 
+const removeZeroValues = <Key extends string | number, Value>(
+  obj: {
+    [key in Key]: Value;
+  }
+): _.Dictionary<Value> => _.pickBy<Value>(obj);
+
 const DuplicatesTableContainer: FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
   const filesAndFoldersMetadataMap = useSelector(
     getFilesAndFoldersMetadataFromStore
   );
   const hashesMap = useSelector(getHashesFromStore);
-
-  const removeZeroValues = useCallback(
-    (object) => _.pickBy(object, (value, key) => value !== 0),
-    []
-  );
 
   const duplicatesMap = useMemo(
     () => getFilesDuplicatesMap(filesAndFoldersMap, hashesMap),
@@ -43,9 +44,13 @@ const DuplicatesTableContainer: FC = () => {
     () =>
       removeZeroValues(
         _.mapValues(fileSizesCount, (fileSize) =>
-          percent(fileSize, filesAndFoldersMetadataMap[""].childrenTotalSize, {
-            numbersOfDecimals: 2,
-          })
+          percent(
+            fileSize || 0,
+            filesAndFoldersMetadataMap[""].childrenTotalSize,
+            {
+              numbersOfDecimals: 2,
+            }
+          )
         )
       ),
     [fileSizesCount]

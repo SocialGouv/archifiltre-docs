@@ -59,7 +59,7 @@
     },
     "workspace": {
       "ordering": "Classement",
-      "coloring": "Colorisation",
+      "coloring": "Coloration",
       "weight":  "Pondération",
       "type": "Par type",
       "dates": "Par dates",

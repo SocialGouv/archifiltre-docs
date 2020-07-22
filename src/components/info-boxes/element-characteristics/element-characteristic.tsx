@@ -11,7 +11,7 @@ const ElementCharacteristic: FC<ElementCharacteristicProps> = ({
   name,
   value,
 }) => (
-  <Box display="flex">
+  <Box display="flex" whiteSpace="nowrap">
     <Box marginRight={0.5}>
       <Typography variant="h5">{name} : </Typography>
     </Box>

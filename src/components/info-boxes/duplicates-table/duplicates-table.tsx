@@ -2,7 +2,7 @@ import Box from "@material-ui/core/Box";
 import React, { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
-import Table from "../../common/table";
+import Table from "components/common/table/table";
 import DuplicatesTableType from "./duplicates-table-type";
 
 type DuplicatesTableProps = {

@@ -5,6 +5,7 @@ import { getFilesDuplicatesMap } from "util/duplicates/duplicates-util";
 import DuplicatesSearch from "./duplicates-search";
 import _ from "lodash";
 import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
+import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
 
 const DuplicatesSearchContainer: FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
@@ -17,8 +18,7 @@ const DuplicatesSearchContainer: FC = () => {
     return _(filesDuplicatesMap)
       .pickBy((filesAndFoldersArray) => filesAndFoldersArray.length > 1)
       .values()
-      .flatten()
-      .value();
+      .value() as FilesAndFolders[][];
   }, [filesAndFoldersMap, hashesMap]);
 
   return <DuplicatesSearch duplicatesList={duplicatesList} />;

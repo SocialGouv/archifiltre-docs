@@ -60,6 +60,6 @@ export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
   return isEmpty(filesAndFolders) ? (
     <span>{t("search.noResult")}</span>
   ) : (
-    <Table columns={columns} data={filesAndFolders} />
+    <Table rowId="id" columns={columns} data={filesAndFolders} />
   );
 };

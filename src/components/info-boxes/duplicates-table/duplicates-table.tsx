@@ -61,6 +61,7 @@ const DuplicatesTable: FC<DuplicatesTableProps> = ({
   return (
     <Box overflow="hidden">
       <Table
+        rowId="type"
         columns={columns}
         data={data}
         isPaginatorDisplayed={false}

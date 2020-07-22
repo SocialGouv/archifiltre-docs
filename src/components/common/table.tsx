@@ -5,23 +5,37 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import React, { FC, memo, useCallback, useState } from "react";
+import React, {
+  memo,
+  ReactElement,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import Paginator from "../modals/search-modal/paginator";
 import TableValue from "./table-value";
+import {
+  Column,
+  RowIdAccessor,
+  RowRenderer,
+} from "components/common/table-types";
 
-interface TableProps {
-  data: any[];
-  columns: any[];
+type TableProps<T> = {
+  data: T[];
+  columns: Column<T>[];
+  rowId: RowIdAccessor<T>;
   isPaginatorDisplayed?: boolean;
   isDense?: boolean;
-}
+  rowRenderer?: RowRenderer<T>;
+};
 
-const Table: FC<TableProps> = ({
+function Table<T>({
   columns,
   data,
+  rowId,
   isPaginatorDisplayed = true,
   isDense = false,
-}) => {
+}: TableProps<T>): ReactElement<any, any> | null {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const handleChangePage = useCallback(
@@ -36,6 +50,10 @@ const Table: FC<TableProps> = ({
       setPage(0);
     },
     [setRowsPerPage, setPage]
+  );
+  const rowIdAccessor = useMemo(
+    () => (typeof rowId === "function" ? rowId : (row: T) => row[rowId]),
+    [rowId]
   );
   return (
     <div>
@@ -52,7 +70,7 @@ const Table: FC<TableProps> = ({
             {data
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, rowIndex) => (
-                <TableRow key={`${row.name}-${rowIndex}`}>
+                <TableRow key={`${rowIdAccessor(row)}-${rowIndex}`}>
                   {columns.map(({ accessor, id }, columnIndex) => (
                     <TableCell key={`${id || accessor}-${columnIndex}`}>
                       <TableValue row={row} column={columns[columnIndex]} />
@@ -74,6 +92,6 @@ const Table: FC<TableProps> = ({
       )}
     </div>
   );
-};
+}
 
 export default memo(Table);

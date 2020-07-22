@@ -10,6 +10,7 @@ import CategoryTitle from "../../common/category-title";
 import Table from "../../common/table";
 import dateFormat from "dateformat";
 import { SearchBar } from "../../modals/search-modal/search-bar";
+import { Column } from "components/common/table-types";
 
 type DuplicatesSearchProps = {
   duplicatesList;
@@ -24,7 +25,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
     []
   );
 
-  const columns = useMemo(
+  const columns: Column<FilesAndFolders>[] = useMemo(
     () => [
       {
         name: t("search.name"),
@@ -73,7 +74,11 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
         {isEmpty(filteredFilesAndFolders) ? (
           <span>{t("search.noResult")}</span>
         ) : (
-          <Table columns={columns} data={filteredFilesAndFolders} />
+          <Table
+            columns={columns}
+            data={filteredFilesAndFolders}
+            rowId="name"
+          />
         )}
       </Box>
     </Box>

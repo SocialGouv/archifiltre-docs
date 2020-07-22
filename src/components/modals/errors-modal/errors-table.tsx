@@ -27,7 +27,7 @@ const ErrorsTable: FC<ErrorsTableProps> = ({ errors }) => {
     ],
     [t]
   );
-  return <Table data={errors} columns={columns} />;
+  return <Table rowId="filePath" data={errors} columns={columns} />;
 };
 
 export default ErrorsTable;

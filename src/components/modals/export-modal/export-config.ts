@@ -12,8 +12,8 @@ export enum ExportType {
   AUDIT = "AUDIT",
   CSV = "CSV",
   CSV_WITH_HASHES = "CSV_WITH_HASHES",
-  RESIP = "RESIP",
   METS = "METS",
+  RESIP = "RESIP",
 }
 
 export type IsActiveOptions = {
@@ -26,6 +26,7 @@ type ExportConfig = {
   exportFunction: (exportPath: string) => ArchifiltreThunkAction;
   disabledExplanation?: string;
   exportPath: (originalPath: string, sessionName: string) => string;
+  isFilePickerDisabled?: boolean;
 };
 
 type ExportConfigMap = {
@@ -106,6 +107,7 @@ export const exportConfig: ExportConfigMap = {
         getNameWithExtension(`${sessionName}-${fileSuffix}`, extension)
       );
     },
+    isFilePickerDisabled: true,
   },
   [ExportType.METS]: {
     isActive: true,

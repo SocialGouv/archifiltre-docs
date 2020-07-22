@@ -48,6 +48,7 @@ const ExportOptions: FC<ExportOptionsProps> = ({
             setExportsPathsValue={(value) =>
               setExportsPathsValue(exportType, value)
             }
+            isFilePickerDisabled={exportConfig[exportType].isFilePickerDisabled}
           />
         </ExportContainer>
       ))}

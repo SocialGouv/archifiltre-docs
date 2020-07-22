@@ -7,7 +7,7 @@ import {
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { useWorkspaceMetadata } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import ElementCharacteristics from "./element-characteristics";
-import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { updateAliasThunk } from "reducers/files-and-folders/files-and-folders-thunks";
 import { getType } from "util/files-and-folders/file-and-folders-utils";
 import { getAbsolutePath } from "util/file-system/file-sys-util";

@@ -6,13 +6,13 @@ import HelpTooltip from "../../common/help-tooltip";
 import EditableField from "../../fields/editable-field";
 import { useTranslation } from "react-i18next";
 import { FOLDER_ICON, PAGE_ICON } from "../../common/icon";
-import { octet2HumanReadableFormat } from "../../../util/file-system/file-sys-util";
+import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import Typography from "@material-ui/core/Typography";
 import BoundaryDate from "../../report/session-info/boundary-date";
 import ElementCharacteristic from "./element-characteristic";
-import { openExternalElement } from "../../../util/file-system/file-system-util";
+import { openExternalElement } from "util/file-system/file-system-util";
 import ClickableIcon from "../../common/clickable-icon";
-import { useStyles } from "../../../hooks/use-styles";
+import { useStyles } from "hooks/use-styles";
 
 export type ElementCharacteristicsContentProps = {
   elementName: string;
@@ -87,7 +87,7 @@ const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
         </Box>
       </Box>
       <Box display="flex">
-        <Box marginY={0.5}>
+        <Box marginY={0.5} flex={1}>
           <ElementCharacteristic
             name={t("report.size")}
             value={octet2HumanReadableFormat(elementSize)}
@@ -108,7 +108,7 @@ const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
             value={hash}
           />
         </Box>
-        <Box>
+        <Box marginY={0.5} flex={1}>
           <ElementCharacteristic name={t("report.type")} value={type} />
         </Box>
       </Box>

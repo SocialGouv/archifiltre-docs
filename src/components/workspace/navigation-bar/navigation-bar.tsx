@@ -52,19 +52,19 @@ export const NavigationBar: FC<NavigationBarProps> = ({
         <MoveFilesButton />
       </Box>
       <Box flexGrow={1} />
-      <Box p={1}>
+      <Box pt={1} pl={1}>
         <IciclesSortOrderPicker
           icicleSortMethod={icicleSortMethod}
           setIcicleSortMethod={setIcicleSortMethod}
         />
       </Box>
-      <Box p={1}>
+      <Box pt={1} pl={1}>
         <ElementWeightMethodPicker
           elementWeightMethod={elementWeightMethod}
           setElementWeightMethod={setElementWeightMethod}
         />
       </Box>
-      <Box pt={1}>
+      <Box pt={1} pl={1}>
         <IcicleColorModePicker
           icicleColorMode={icicleColorMode}
           setIcicleColorMode={setIcicleColorMode}

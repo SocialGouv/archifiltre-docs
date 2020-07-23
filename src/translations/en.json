@@ -172,7 +172,8 @@
       "csvExportStartedMessage": "CSV export started",
       "csvExportSuccessMessage": "CSV export succeeded",
       "creatingCsvExport": "Creating the CSV export file",
-      "creatingCsvExportWithHashes": "Creating the CSV with hashes export file"
+      "creatingCsvExportWithHashes": "Creating the CSV with hashes export file",
+      "creatingResipExport": "Creating the Resip export file"
     },
     "replay": {
       "title": "Restore previous session",

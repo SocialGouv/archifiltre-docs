@@ -1,5 +1,5 @@
 import { promises as fs } from "fs";
-import { map, takeLast } from "rxjs/operators";
+import { map, takeLast, tap } from "rxjs/operators";
 import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
 import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
@@ -16,6 +16,14 @@ import {
   notifySuccess,
 } from "util/notification/notifications-util";
 import { generateResipExport$ } from "./resip-export.controller";
+import {
+  completeLoadingAction,
+  progressLoadingAction,
+  startLoadingAction,
+} from "reducers/loading-info/loading-info-actions";
+import { v4 as uuid } from "uuid";
+import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
+import { RESIP_HOOK_CALL_PER_ELEMENT } from "exporters/resip/resip-exporter";
 
 const resipExportTitle = translations.t("export.resipExportTitle");
 const resipExportSuccessMessage = translations.t(
@@ -41,6 +49,17 @@ export const resipExporterThunk = (
   const elementsToDelete = getFilesToDeleteFromStore(state);
 
   notifyInfo(resipExportStartedMessage, resipExportTitle);
+  const loadingActionId = uuid();
+  dispatch(
+    startLoadingAction(
+      loadingActionId,
+      LoadingInfoTypes.EXPORT,
+      RESIP_HOOK_CALL_PER_ELEMENT * Object.keys(filesAndFolders).length,
+      "RESIP"
+    )
+  );
+
+  let lastCount = 0;
   return new Promise((resolve) => {
     generateResipExport$({
       aliases,
@@ -50,11 +69,18 @@ export const resipExporterThunk = (
       filesAndFoldersMetadata,
       tags,
     })
+      .pipe(
+        tap(({ count }) => {
+          dispatch(progressLoadingAction(loadingActionId, count - lastCount));
+          lastCount = count;
+        })
+      )
       .pipe(takeLast(1))
       .pipe(map(({ resipCsv }) => arrayToCsv(resipCsv)))
       .subscribe(async (stringCsv) => {
         await fs.writeFile(filePath, stringCsv);
         notifySuccess(resipExportSuccessMessage, resipExportTitle);
+        dispatch(completeLoadingAction(loadingActionId));
         resolve();
       });
   });

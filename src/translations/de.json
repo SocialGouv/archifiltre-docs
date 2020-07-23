@@ -172,7 +172,8 @@
       "csvExportStartedMessage": "CSV-Export begonnen",
       "csvExportSuccessMessage": "CSV-Export beendet",
       "creatingCsvExport": "CSV-Exportdatei wird erstellt",
-      "creatingCsvExportWithHashes": "CSV-Exportdatei mit Hash-Wert wird erstellt"
+      "creatingCsvExportWithHashes": "CSV-Exportdatei mit Hash-Wert wird erstellt",
+      "creatingResipExport": "RESIP-Exportdatei wird erstellt"
     },
     "replay": {
       "title": "Vorherige Sitzung laden",

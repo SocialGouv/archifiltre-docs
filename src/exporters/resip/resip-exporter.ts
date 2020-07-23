@@ -198,6 +198,8 @@ const isAncestorDeleted = (ffId: string, elementsToDelete: string[]): boolean =>
     isExactFileOrAncestor(ffId, toDeleteId)
   );
 
+export const RESIP_HOOK_CALL_PER_ELEMENT = 4;
+
 /**
  * Formats the fileStructure and tag into a csv that can be imported in RESIP
  * @param aliases - the aliases map

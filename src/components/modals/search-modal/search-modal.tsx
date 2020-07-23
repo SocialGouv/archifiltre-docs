@@ -19,6 +19,7 @@ import Filters from "./filters/filters";
 import { SearchBar } from "./search-bar";
 import DialogContent from "@material-ui/core/DialogContent";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { useDebouncedSearchFilter } from "hooks/use-debounced-search-filter";
 
 const StyledPaper = styled(Paper)`
   min-height: 90%;
@@ -47,10 +48,19 @@ export const SearchModal: FC<SearchModalProps> = ({
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<FilterMethod<FilesAndFolders>[]>([]);
+
+  const nameFilter = useDebouncedSearchFilter<FilesAndFolders>(
+    "name",
+    searchTerm
+  );
+
+  const searchFilters = useMemo(() => [nameFilter].concat(filters), [
+    nameFilter,
+    filters,
+  ]);
   const filteredFilesAndFolders = useSearchAndFilters(
     filesAndFoldersArray,
-    searchTerm,
-    filters
+    searchFilters
   );
 
   return (

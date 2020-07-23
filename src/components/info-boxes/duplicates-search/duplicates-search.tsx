@@ -1,57 +1,133 @@
 import Box from "@material-ui/core/Box";
-import { isEmpty } from "lodash";
-import React, { FC, useMemo, useState } from "react";
+import { isEmpty, maxBy } from "lodash";
+import React, { FC, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import styled from "styled-components";
 import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
 import { useSearchAndFilters } from "../../../hooks/use-search-and-filters";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import { getType } from "util/files-and-folders/file-and-folders-utils";
 import CategoryTitle from "../../common/category-title";
-import Table from "../../common/table";
+import Table from "components/common/table/table";
 import dateFormat from "dateformat";
 import { SearchBar } from "../../modals/search-modal/search-bar";
-import { Column } from "components/common/table-types";
+import { Column } from "components/common/table/table-types";
+import { makeTableExpandableRow } from "components/common/table/table-expandable-row";
+import { useDebouncedValue } from "hooks/use-debounced-value";
+
+const SEARCH_INPUT_DEBOUNCE = 300;
+
+const HiddenSpan = styled.span`
+  visibility: hidden;
+`;
 
 type DuplicatesSearchProps = {
-  duplicatesList;
+  duplicatesList: FilesAndFolders[][];
 };
 
 const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
   const { t } = useTranslation();
-  const [searchTerm, setSearchTerm] = useState("");
-  const filteredFilesAndFolders = useSearchAndFilters(
-    duplicatesList,
-    searchTerm,
-    []
-  );
 
-  const columns: Column<FilesAndFolders>[] = useMemo(
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebouncedValue(
+    searchTerm,
+    SEARCH_INPUT_DEBOUNCE
+  );
+  const filterName = useCallback(
+    (row: FilesAndFolders[]) =>
+      row.some((element) =>
+        element.name
+          .toLowerCase()
+          .includes(debouncedSearchTerm.trim().toLowerCase())
+      ),
+    [debouncedSearchTerm]
+  );
+  const filteredFilesAndFolders = useSearchAndFilters(duplicatesList, [
+    filterName,
+  ]);
+
+  const headerProps = useMemo(
     () => [
       {
-        name: t("search.name"),
-        accessor: "name",
+        accessor: (row: FilesAndFolders[], index = 0) => row[index].name,
       },
       {
-        name: t("search.type"),
-        accessor: (element: FilesAndFolders) =>
-          getType(element, {
+        accessor: (row: FilesAndFolders[], index = 0) =>
+          getType(row[index], {
             folderLabel: t("common.folder"),
             unknownLabel: t("common.unknown"),
           }),
       },
       {
+        accessor: (row: FilesAndFolders[], index = 0) =>
+          octet2HumanReadableFormat(row[index].file_size),
+      },
+      {
+        accessor: (row) => row.length,
+      },
+      {
+        accessor: (row: FilesAndFolders[], index = 0) =>
+          dateFormat(row[index].file_last_modified, "dd/mm/yyyy"),
+      },
+      {
+        id: "path",
+        accessor: (row: FilesAndFolders[]) => (
+          <HiddenSpan>
+            {maxBy(row, (element) => element.id.length)?.id}
+          </HiddenSpan>
+        ),
+      },
+    ],
+    [t]
+  );
+
+  const TableExpandableRow = useMemo(
+    () => makeTableExpandableRow(headerProps),
+    [headerProps]
+  );
+
+  const columns: Column<FilesAndFolders[]>[] = useMemo(
+    () => [
+      {
+        id: "emptyColumn",
+        name: "",
+        accessor: "",
+      },
+      {
+        id: "name",
+        name: t("search.name"),
+        accessor: (row: FilesAndFolders[], index = 0) => row[index].name,
+      },
+      {
+        id: "type",
+        name: t("search.type"),
+        accessor: (row: FilesAndFolders[], index = 0) =>
+          getType(row[index], {
+            folderLabel: t("common.folder"),
+            unknownLabel: t("common.unknown"),
+          }),
+      },
+      {
+        id: "size",
         name: t("search.size"),
-        accessor: ({ file_size }: FilesAndFolders) =>
-          octet2HumanReadableFormat(file_size),
+        accessor: (row: FilesAndFolders[], index = 0) =>
+          octet2HumanReadableFormat(row[index].file_size),
       },
       {
+        id: "elementsCount",
+        name: t("duplicates.filesNumber"),
+        accessor: "",
+      },
+      {
+        id: "fileLastModified",
         name: t("search.fileLastModified"),
-        accessor: ({ file_last_modified }: FilesAndFolders) =>
-          dateFormat(file_last_modified, "dd/mm/yyyy"),
+        accessor: (row: FilesAndFolders[], index = 0) =>
+          dateFormat(row[index].file_last_modified, "dd/mm/yyyy"),
       },
       {
+        id: "id",
         name: t("search.path"),
-        accessor: "id",
+        accessor: (row: FilesAndFolders[], index = 0) => row[index].id,
       },
     ],
     [t]
@@ -78,6 +154,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
             columns={columns}
             data={filteredFilesAndFolders}
             rowId="name"
+            RowRendererComp={TableExpandableRow}
           />
         )}
       </Box>

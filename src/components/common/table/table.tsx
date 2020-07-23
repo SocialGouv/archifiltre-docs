@@ -12,13 +12,13 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import Paginator from "../modals/search-modal/paginator";
-import TableValue from "./table-value";
+import Paginator from "components/modals/search-modal/paginator";
 import {
   Column,
   RowIdAccessor,
   RowRenderer,
-} from "components/common/table-types";
+} from "components/common/table/table-types";
+import TableDefaultRow from "components/common/table/table-default-row";
 
 type TableProps<T> = {
   data: T[];
@@ -26,7 +26,7 @@ type TableProps<T> = {
   rowId: RowIdAccessor<T>;
   isPaginatorDisplayed?: boolean;
   isDense?: boolean;
-  rowRenderer?: RowRenderer<T>;
+  RowRendererComp?: RowRenderer<T>;
 };
 
 function Table<T>({
@@ -35,6 +35,7 @@ function Table<T>({
   rowId,
   isPaginatorDisplayed = true,
   isDense = false,
+  RowRendererComp = TableDefaultRow,
 }: TableProps<T>): ReactElement<any, any> | null {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
@@ -70,13 +71,11 @@ function Table<T>({
             {data
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, rowIndex) => (
-                <TableRow key={`${rowIdAccessor(row)}-${rowIndex}`}>
-                  {columns.map(({ accessor, id }, columnIndex) => (
-                    <TableCell key={`${id || accessor}-${columnIndex}`}>
-                      <TableValue row={row} column={columns[columnIndex]} />
-                    </TableCell>
-                  ))}
-                </TableRow>
+                <RowRendererComp
+                  key={`${rowIdAccessor(row)}-${rowIndex}`}
+                  row={row}
+                  columns={columns}
+                />
               ))}
           </TableBody>
         </MuiTable>

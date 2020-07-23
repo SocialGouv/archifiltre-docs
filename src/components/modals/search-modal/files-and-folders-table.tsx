@@ -2,7 +2,7 @@ import dateFormat from "dateformat";
 import React, { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { getType } from "util/files-and-folders/file-and-folders-utils";
-import Table from "../../common/table";
+import Table from "components/common/table/table";
 import { isEmpty } from "lodash";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";

@@ -1,4 +1,4 @@
-import Table from "../../common/table";
+import Table from "components/common/table/table";
 import React, { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { ArchifiltreError } from "reducers/loading-info/loading-info-types";

@@ -2,10 +2,17 @@ import { remote } from "electron";
 import { promises as fs } from "fs";
 import path from "path";
 import { useEffect, useState } from "react";
-import { Middleware } from "redux";
+import { Action, Middleware } from "redux";
 import { reportError, reportInfo } from "logging/reporter";
 import translations from "translations/translations";
 import { notifyError } from "util/notification/notifications-util";
+import {
+  loadingStateActionTypes,
+  LoadingStep,
+} from "reducers/loading-state/loading-state-types";
+import { setLoadingStep } from "reducers/loading-state/loading-state-actions";
+
+const IGNORED_ACTIONS = [...loadingStateActionTypes];
 
 const userFolderPath = remote.app.getPath("userData");
 export const previousSessionFilePath = path.join(
@@ -51,6 +58,7 @@ export const replayActionsThunk = () => async (dispatch) => {
       .map((actionString) => JSON.parse(actionString));
     await clearActionReplayFile();
     previousActionsArray.forEach((action) => dispatch(action));
+    dispatch(setLoadingStep(LoadingStep.FINISHED));
   } catch (err) {
     reportError(err.message);
     notifyError(translations.t("replay.error"), translations.t("replay.title"));
@@ -68,7 +76,10 @@ export const clearActionReplayFile = async () => {
   }
 };
 
-const saveAction = (action: any) => {
+const saveAction = (action: Action) => {
+  if (IGNORED_ACTIONS.includes(action.type)) {
+    return;
+  }
   actionStack.push(action);
   saveActionsFromStack();
 };
@@ -95,7 +106,7 @@ export const usePreviousSession = () => {
 /**
  * Middleware to persist into a file all the dispatched actions
  */
-export const persistActions: Middleware = () => (next) => (action) => {
+export const persistActions: Middleware = () => (next) => (action: Action) => {
   saveAction(action);
   return next(action);
 };

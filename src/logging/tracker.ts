@@ -13,10 +13,10 @@ declare global {
   const MATOMO_URL: string;
 }
 /**
- * Inits the trackers needed for monitioring, here Matomo
+ * Inits the trackers needed for monitoring, here Matomo
  */
-export const initTracker = () => {
-  if (!FORCE_TRACKING && MODE !== "production") {
+export const initTracker = (isActive: boolean): void => {
+  if ((!FORCE_TRACKING && MODE !== "production") || !isActive) {
     return;
   }
   window._paq = window._paq || [];

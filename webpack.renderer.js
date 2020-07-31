@@ -153,7 +153,7 @@ module.exports = (env, argv = {}) => ({
       AUTOLOAD: argv.autoload
         ? JSON.stringify(argv.autoload)
         : JSON.stringify(""),
-      FORCE_TRACKING: !!JSON.stringify(process.env.FORCE_TRACKING),
+      FORCE_TRACKING: JSON.stringify(process.env.FORCE_TRACKING === "true"),
       MATOMO_APPLICATION_ID: process.env.MATOMO_APPLICATION_ID,
       MATOMO_URL: JSON.stringify(process.env.MATOMO_URL),
       MODE: JSON.stringify(argv.mode || "development"),

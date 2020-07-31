@@ -133,7 +133,8 @@
         "audio": "Audio",
         "other": "Other"
       },
-      "browse": "Browse"
+      "browse": "Browse",
+      "reload": "Reload"
     },
     "hash": {
       "loadingInfoLabel": "Loading files and folders hashes",
@@ -206,7 +207,11 @@
     },
     "settingsModal": {
       "title": "Settings",
-      "language": "Language"
+      "language": "Language",
+      "privacy": "Privacy",
+      "trackingData": "Usage data and statistics",
+      "monitoringData": "Technical usage data (helps us fixing bugs)",
+      "reloadExplanation": "You need to reload the app to apply new settings"
     },
     "exportModal": {
       "title": "Export",

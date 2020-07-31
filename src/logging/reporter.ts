@@ -27,7 +27,14 @@ const logger = createLogger({
   ],
 });
 
-if (isProd()) {
+/**
+ * Inits the reporter here Sentry
+ */
+export const initReporter = (isActive: boolean): void => {
+  if (!isProd() || !isActive) {
+    return;
+  }
+
   const sentryUrl = SENTRY_DSN;
 
   Sentry.init({
@@ -52,7 +59,7 @@ if (isProd()) {
       maxFiles: "7d",
     })
   );
-}
+};
 
 /**
  * Sends a message to the log server.
@@ -91,5 +98,3 @@ export const reportWarning = (message) => {
 export const reportInfo = (message) => {
   handleLog(message, Level.INFO);
 };
-
-reportInfo("Archifiltre started");

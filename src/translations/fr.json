@@ -133,7 +133,8 @@
         "audio": "Audio",
         "other": "Autre"
       },
-      "browse": "Parcourir"
+      "browse": "Parcourir",
+      "reload": "Recharger"
     },
     "hash": {
       "loadingInfoLabel": "Chargement des empreintes de fichiers et dossiers",
@@ -206,7 +207,11 @@
     },
     "settingsModal": {
       "title": "Paramètres",
-      "language": "Langue"
+      "language": "Langue",
+      "privacy": "Confidentialité",
+      "trackingData": "Données et statistiques d'utilisation",
+      "monitoringData": "Données techniques d'utilisation (nous aide à la résolution de bugs)",
+      "reloadExplanation": "Vous devez redémarrer l'application pour appliquer les nouveaux paramètres"
     },
     "exportModal": {
       "title": "Export",

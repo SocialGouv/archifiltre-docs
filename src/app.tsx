@@ -1,8 +1,9 @@
 // Enables reporter to hook into the environment so it captures uncaught errors
-import "logging/reporter.ts";
+import { initReporter, reportInfo } from "logging/reporter";
 
 import "./css/index.scss";
 import Providers from "components/providers";
+import { getInitialUserSettings, initUserSettings } from "persistent-settings";
 
 import { SecretDevtools } from "secret-devtools";
 import React from "react";
@@ -23,10 +24,15 @@ import Box from "@material-ui/core/Box";
 import styled from "styled-components";
 import Modals from "components/modals/modals";
 
+reportInfo("Archifiltre started");
+
 document.title = `Archifiltre v${version}`;
 
 SecretDevtools.enable();
-initTracker();
+initUserSettings();
+const { isTrackingEnabled, isMonitoringEnabled } = getInitialUserSettings();
+initTracker(isTrackingEnabled);
+initReporter(isMonitoringEnabled);
 
 const App = styled.div`
   padding: 0.975em;

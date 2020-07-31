@@ -1,8 +1,6 @@
 import Menu from "@material-ui/core/Menu";
 import Button from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
-import SettingsModal from "components/modals/settings-modal/settings-modal";
-import { useModal } from "hooks/use-modal";
 import { useStyles } from "hooks/use-styles";
 import React, { FC, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,17 +8,13 @@ import { FaCog, FaSignOutAlt, FaUser } from "react-icons/fa";
 
 type UserButtonProps = {
   resetWorkspace: any;
-  shouldDisplayReset: boolean;
+  openModal: () => void;
 };
 
-const UserButton: FC<UserButtonProps> = ({
-  resetWorkspace,
-  shouldDisplayReset,
-}) => {
+const UserButton: FC<UserButtonProps> = ({ resetWorkspace, openModal }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { isModalOpen, openModal, closeModal } = useModal();
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
@@ -42,6 +36,8 @@ const UserButton: FC<UserButtonProps> = ({
     handleClose();
     resetWorkspace();
   }, [handleClose]);
+
+  const settingsModalTitle = t("settingsModal.title");
 
   return (
     <div>
@@ -72,16 +68,13 @@ const UserButton: FC<UserButtonProps> = ({
       >
         <MenuItem onClick={onSettingsClick}>
           <FaCog />
-          &nbsp;{t("settingsModal.title")}
+          &nbsp;{settingsModalTitle}
         </MenuItem>
-        {shouldDisplayReset && (
-          <MenuItem onClick={onCloseClick}>
-            <FaSignOutAlt />
-            &nbsp;{t("header.close")}
-          </MenuItem>
-        )}
+        <MenuItem onClick={onCloseClick}>
+          <FaSignOutAlt />
+          &nbsp;{t("header.close")}
+        </MenuItem>
       </Menu>
-      <SettingsModal isModalOpen={isModalOpen} closeModal={closeModal} />
     </div>
   );
 };

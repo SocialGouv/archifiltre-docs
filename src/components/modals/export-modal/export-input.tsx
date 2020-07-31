@@ -45,9 +45,11 @@ const ExportInput: FC<ExportInputProps> = ({
         <FilePath>{exportFilePath}</FilePath>
       </Tooltip>
       <HideableTooltip title={browseTitle} isVisible={!isFilePickerDisabled}>
-        <Button onClick={onClick} disabled={isFilePickerDisabled}>
-          <FaFolderOpen />
-        </Button>
+        <span>
+          <Button onClick={onClick} disabled={isFilePickerDisabled}>
+            <FaFolderOpen />
+          </Button>
+        </span>
       </HideableTooltip>
     </Box>
   );

@@ -211,7 +211,10 @@
       "privacy": "Confidentialité",
       "trackingData": "Données et statistiques d'utilisation",
       "monitoringData": "Données techniques d'utilisation (nous aide à la résolution de bugs)",
-      "reloadExplanation": "Vous devez redémarrer l'application pour appliquer les nouveaux paramètres"
+      "reloadExplanation": "Vous devez redémarrer l'application pour appliquer les nouveaux paramètres",
+      "about": "À propos",
+      "website": "Site web",
+      "wiki": "Wiki"
     },
     "exportModal": {
       "title": "Export",

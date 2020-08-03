@@ -170,7 +170,7 @@ describe("file-and-folders-thunks.test.ts", () => {
       ).not.toHaveBeenCalled();
 
       expect(notifyInfoMock).toHaveBeenCalledWith(
-        translations.t("workspace.cannotMoveElement"),
+        translations.t("workspace.cannotMoveToChild"),
         translations.t("workspace.impossibleMove")
       );
     });
@@ -184,7 +184,7 @@ describe("file-and-folders-thunks.test.ts", () => {
       ).not.toHaveBeenCalled();
 
       expect(notifyInfoMock).toHaveBeenCalledWith(
-        translations.t("workspace.cannotMoveElement"),
+        translations.t("workspace.cannotMoveToFile"),
         translations.t("workspace.impossibleMove")
       );
     });

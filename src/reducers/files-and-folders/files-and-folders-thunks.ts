@@ -54,7 +54,8 @@ export const updateCommentThunk = (
 
 export enum IsMoveValidError {
   nameConflict = "nameConflict",
-  cannotMoveElement = "cannotMoveElement",
+  cannotMoveToChild = "cannotMoveToChild",
+  cannotMoveToFile = "cannotMoveToFile",
 }
 
 /**
@@ -76,13 +77,12 @@ const isMoveValid = (
   const isNameConflict = newSiblingsNames.includes(
     filesAndFolders[elementId].name
   );
-  if (
-    isExactFileOrAncestor(newParentVirtualPath, elementVirtualPath) ||
-    isFile(filesAndFolders[newParentId])
-  ) {
-    return IsMoveValidError.cannotMoveElement;
+  if (isExactFileOrAncestor(newParentVirtualPath, elementVirtualPath)) {
+    return IsMoveValidError.cannotMoveToChild;
   }
-
+  if (isFile(filesAndFolders[newParentId])) {
+    return IsMoveValidError.cannotMoveToFile;
+  }
   if (isNameConflict) {
     return IsMoveValidError.nameConflict;
   }
@@ -103,10 +103,7 @@ export const moveElement = (elementId, newParentId): ArchifiltreThunkAction => (
   const parent = findElementParent(elementId, filesAndFolders);
   const error = isMoveValid(filesAndFolders, newParentId, elementId);
   if (error) {
-    const errorMessage =
-      error === IsMoveValidError.cannotMoveElement
-        ? translations.t("workspace.cannotMoveElement")
-        : translations.t("workspace.nameConflict");
+    const errorMessage = translations.t(`workspace.${error}`);
     notifyInfo(errorMessage, translations.t("workspace.impossibleMove"));
     return;
   }

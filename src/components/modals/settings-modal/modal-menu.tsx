@@ -4,7 +4,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { useTranslation } from "react-i18next";
-import { FaFlag, FaLock } from "react-icons/fa";
+import { FaFlag, FaInfoCircle, FaLock } from "react-icons/fa";
 
 type ModalMenuProps = {
   selectedItem: number;
@@ -21,6 +21,10 @@ const ModalMenu: FC<ModalMenuProps> = ({ selectedItem, setSelectedItem }) => {
     {
       label: t("settingsModal.privacy"),
       icon: <FaLock />,
+    },
+    {
+      label: t("settingsModal.about"),
+      icon: <FaInfoCircle />,
     },
   ];
 

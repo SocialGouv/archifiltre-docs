@@ -211,7 +211,10 @@
       "privacy": "Privacy",
       "trackingData": "Usage data and statistics",
       "monitoringData": "Technical usage data (helps us fixing bugs)",
-      "reloadExplanation": "You need to reload the app to apply new settings"
+      "reloadExplanation": "You need to reload the app to apply new settings",
+      "about": "About",
+      "website": "Website",
+      "wiki": "Wiki"
     },
     "exportModal": {
       "title": "Export",

@@ -1,6 +1,6 @@
 import Box from "@material-ui/core/Box";
 import { useTabsState } from "components/header/dashboard/tabs-context";
-import UserButton from "components/header/dashboard/user-button";
+import OptionsButton from "components/header/dashboard/options-button";
 import React, { FC } from "react";
 import TabsHeader from "components/workspace/tabs/tabs-header";
 import SaveButton, { ExportToJson } from "./save-button";
@@ -123,7 +123,7 @@ const DashBoard: FC<DashboardProps> = ({
           </Box>
         )}
         <Box pl={1}>
-          <UserButton
+          <OptionsButton
             resetWorkspace={resetWorkspace}
             shouldDisplayReset={shouldDisplayReset}
           />

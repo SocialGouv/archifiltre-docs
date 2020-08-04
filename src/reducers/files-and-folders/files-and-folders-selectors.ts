@@ -13,6 +13,7 @@ import {
   VirtualPathToIdMap,
 } from "./files-and-folders-types";
 import { getHashesFromStore } from "../hashes/hashes-selectors";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 
 export const ROOT_FF_ID = "";
 
@@ -30,8 +31,83 @@ export const getFilesAndFoldersFromStore = (
  * Get the list of files marked as ToDelete from the store
  * @param store
  */
-export const getFilesToDeleteFromStore = (store: StoreState): string[] =>
+export const getElementsToDeleteFromStore = (store: StoreState): string[] =>
   getCurrentState(store.filesAndFolders).elementsToDelete;
+
+/**
+ * Get the number of children files in a list
+ */
+export const getFilesTotalCount = (
+  elementsIds: string[],
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap
+) => {
+  return elementsIds.reduce(
+    (count, elementId) =>
+      count + filesAndFoldersMetadata[elementId]?.nbChildrenFiles,
+    0
+  );
+};
+
+/**
+ * Get the size of children files in a list
+ */
+export const getFilesTotalSize = (
+  elementsIds: string[],
+  filesAndFoldersMap: FilesAndFoldersMap,
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap
+) => {
+  const filteredElementsIds = excludeChildNodes(
+    elementsIds,
+    filesAndFoldersMap
+  );
+  return filteredElementsIds.reduce(
+    (count, elementId) =>
+      count + filesAndFoldersMetadata[elementId]?.childrenTotalSize,
+    0
+  );
+};
+
+/**
+ * Recursive function to remove all the child nodes of "elementId"
+ * @param elementIds
+ * @param filesAndFoldersMap
+ * @param elementId
+ */
+const excludeChildrenNodesRec = (
+  elementIds: string[],
+  filesAndFoldersMap: FilesAndFoldersMap,
+  elementId
+) => {
+  const nextElementIds = elementIds.includes(elementId)
+    ? elementIds.filter((currentElement) => currentElement !== elementId)
+    : elementIds;
+  const { children } = filesAndFoldersMap[elementId];
+
+  return children.reduce(
+    (nextElementIds, childId) =>
+      excludeChildrenNodesRec(nextElementIds, filesAndFoldersMap, childId),
+    nextElementIds
+  );
+};
+
+/**
+ * Remove the child nodes of an existing node in the elementIds list
+ * @param elementIds
+ * @param filesAndFolders
+ */
+export const excludeChildNodes = (
+  elementIds: string[],
+  filesAndFolders: FilesAndFoldersMap
+): string[] =>
+  elementIds.reduce(
+    (nextElementIds, elementId) =>
+      filesAndFolders[elementId].children.reduce(
+        (acc, childId) =>
+          excludeChildrenNodesRec(acc, filesAndFolders, childId),
+        nextElementIds
+      ),
+    elementIds
+  );
 
 /**
  * Gets the map from virtual path to id

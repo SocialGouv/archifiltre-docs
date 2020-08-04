@@ -3,6 +3,7 @@ import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import { initialState as filesAndFoldersInitialState } from "./files-and-folders-reducer";
 import {
   decomposePathToElement,
+  excludeChildNodes,
   findElementParent,
   getElementByVirtualPath,
   getFileCount,
@@ -19,8 +20,10 @@ import {
   getFoldersCount,
   getMaxDepth,
   isFile,
+  getFilesTotalSize,
 } from "./files-and-folders-selectors";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 
 /**
  * Returns a timestamp from date string
@@ -276,6 +279,87 @@ describe("files-and-folders-selectors", () => {
       expect(
         getElementByVirtualPath(filesAndFoldersTestMap, child11Id)
       ).toEqual(child11);
+    });
+  });
+
+  describe("excludeChildNodes", () => {
+    it("should remove the child nodes ids from the list", () => {
+      const parentId = "parent-id";
+      const folderId = "folder-id";
+      const ignoredChildId = "ignored-child-id";
+      const nonIgnoredChildId = "non-ignored-child-id";
+
+      const filesAndFoldersMap = {
+        "": createFilesAndFolders({ id: "", children: [parentId, folderId] }),
+        [parentId]: createFilesAndFolders({
+          id: parentId,
+          children: [ignoredChildId],
+        }),
+        [folderId]: createFilesAndFolders({
+          id: folderId,
+          children: [nonIgnoredChildId],
+        }),
+        [ignoredChildId]: createFilesAndFolders({ id: ignoredChildId }),
+        [nonIgnoredChildId]: createFilesAndFolders({ id: nonIgnoredChildId }),
+      };
+
+      const elementIds = [parentId, ignoredChildId, nonIgnoredChildId];
+
+      expect(excludeChildNodes(elementIds, filesAndFoldersMap).sort()).toEqual(
+        [parentId, nonIgnoredChildId].sort()
+      );
+    });
+  });
+
+  describe("getFilesTotalSize", () => {
+    it("should remove the child nodes ids from the list", () => {
+      const parentId = "parent-id";
+      const parentSize = 1000;
+      const folderId = "folder-id";
+      const folderSize = 10000;
+      const ignoredChildId = "ignored-child-id";
+      const ignoredChildSize = 100;
+      const nonIgnoredChildId = "non-ignored-child-id";
+      const nonIgnoredChildSize = 10;
+
+      const filesAndFoldersMap = {
+        "": createFilesAndFolders({ id: "", children: [parentId, folderId] }),
+        [parentId]: createFilesAndFolders({
+          id: parentId,
+          children: [ignoredChildId],
+        }),
+        [folderId]: createFilesAndFolders({
+          id: folderId,
+          children: [nonIgnoredChildId],
+        }),
+        [ignoredChildId]: createFilesAndFolders({ id: ignoredChildId }),
+        [nonIgnoredChildId]: createFilesAndFolders({ id: nonIgnoredChildId }),
+      };
+
+      const filesAndFoldersMetadataMap = {
+        [parentId]: createFilesAndFoldersMetadata({
+          childrenTotalSize: parentSize,
+        }),
+        [folderId]: createFilesAndFoldersMetadata({
+          childrenTotalSize: folderSize,
+        }),
+        [ignoredChildId]: createFilesAndFoldersMetadata({
+          childrenTotalSize: ignoredChildSize,
+        }),
+        [nonIgnoredChildId]: createFilesAndFoldersMetadata({
+          childrenTotalSize: nonIgnoredChildSize,
+        }),
+      };
+
+      const elementIds = [parentId, ignoredChildId, nonIgnoredChildId];
+
+      expect(
+        getFilesTotalSize(
+          elementIds,
+          filesAndFoldersMap,
+          filesAndFoldersMetadataMap
+        )
+      ).toEqual(nonIgnoredChildSize + parentSize);
     });
   });
 });

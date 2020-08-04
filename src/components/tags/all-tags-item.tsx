@@ -13,9 +13,9 @@ interface AllTagsItemProps {
   tag;
   size: number;
   totalVolume: number;
-  deleteTag: any;
+  deleteTag?: () => void;
   tagNumber: number;
-  renameTag: any;
+  renameTag?: (newName: string) => void;
 }
 
 const AllTagsItem: FC<AllTagsItemProps> = ({
@@ -34,7 +34,7 @@ const AllTagsItem: FC<AllTagsItemProps> = ({
 
   const onInputChange = useCallback(
     (newValue) => {
-      renameTag(newValue);
+      renameTag && renameTag(newValue);
       setIsEditing(false);
     },
     [setIsEditing]
@@ -42,11 +42,18 @@ const AllTagsItem: FC<AllTagsItemProps> = ({
 
   return (
     <Box display="flex">
-      <Box display="flex" flexDirection="column" justifyContent="center" pr={1}>
-        <IconButton size="small" onClick={deleteTag}>
-          <FaTrash />
-        </IconButton>
-      </Box>
+      {deleteTag && (
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          pr={1}
+        >
+          <IconButton size="small" onClick={deleteTag}>
+            <FaTrash />
+          </IconButton>
+        </Box>
+      )}
       <Box display="flex" flexDirection="column" justifyContent="center" pr={1}>
         <Chip
           size="small"
@@ -58,18 +65,20 @@ const AllTagsItem: FC<AllTagsItemProps> = ({
           <span>{`${tagNumber} (${percent(size, totalVolume)}%)`}</span>
         </Tooltip>
       </Box>
-      <Box display="flex" flexDirection="column" justifyContent="center">
-        {isEditing ? (
-          <EditableField
-            trimValue={true}
-            selectTextOnFocus={true}
-            value={tag}
-            onChange={onInputChange}
-          />
-        ) : (
-          <FaPen onClick={startEditing} />
-        )}
-      </Box>
+      {renameTag && (
+        <Box display="flex" flexDirection="column" justifyContent="center">
+          {isEditing ? (
+            <EditableField
+              trimValue={true}
+              selectTextOnFocus={true}
+              value={tag}
+              onChange={onInputChange}
+            />
+          ) : (
+            <FaPen onClick={startEditing} />
+          )}
+        </Box>
+      )}
     </Box>
   );
 };

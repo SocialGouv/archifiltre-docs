@@ -5,7 +5,7 @@ import {
   getAliasesFromStore,
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
-  getFilesToDeleteFromStore,
+  getElementsToDeleteFromStore,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { from } from "rxjs";
 import { bufferTime, flatMap, last, tap } from "rxjs/operators";
@@ -58,7 +58,7 @@ export const csvExporterThunk = (
   const hashes = getHashesFromStore(state);
   const comments = getCommentsFromStore(state);
   const aliases = getAliasesFromStore(state);
-  const elementsToDelete = getFilesToDeleteFromStore(state);
+  const elementsToDelete = getElementsToDeleteFromStore(state);
 
   const data: GenerateCsvExportOptions = {
     aliases,

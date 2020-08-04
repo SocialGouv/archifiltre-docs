@@ -6,7 +6,7 @@ import {
 } from "../../reducers/files-and-folders/files-and-folders-actions";
 import {
   getCommentsFromStore,
-  getFilesToDeleteFromStore,
+  getElementsToDeleteFromStore,
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { updateCommentThunk } from "../../reducers/files-and-folders/files-and-folders-thunks";
 import { StoreState } from "../../reducers/store";
@@ -61,7 +61,7 @@ const EnrichmentContainer: FC = () => {
     getTagsByIds(getTagsFromStore(state), tagIdsForCurrentFile)
   );
 
-  const filesToDelete = useSelector(getFilesToDeleteFromStore);
+  const filesToDelete = useSelector(getElementsToDeleteFromStore);
   const isCurrentFileMarkedToDelete = filesToDelete.includes(filesAndFoldersId);
 
   const toggleCurrentFileDeleteState = useCallback(() => {

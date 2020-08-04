@@ -6,7 +6,7 @@ import {
   getAliasesFromStore,
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
-  getFilesToDeleteFromStore,
+  getElementsToDeleteFromStore,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "reducers/tags/tags-selectors";
 import translations from "translations/translations";
@@ -46,7 +46,7 @@ export const resipExporterThunk = (
   const filesAndFoldersMetadata = getFilesAndFoldersMetadataFromStore(state);
   const aliases = getAliasesFromStore(state);
   const comments = getCommentsFromStore(state);
-  const elementsToDelete = getFilesToDeleteFromStore(state);
+  const elementsToDelete = getElementsToDeleteFromStore(state);
 
   notifyInfo(resipExportStartedMessage, resipExportTitle);
   const loadingActionId = uuid();

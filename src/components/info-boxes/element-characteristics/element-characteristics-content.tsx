@@ -1,4 +1,5 @@
 import Grid from "@material-ui/core/Grid";
+import HashInfo from "components/info-boxes/element-characteristics/hash-info";
 import React, { FC } from "react";
 import Box from "@material-ui/core/Box";
 import dateFormat from "dateformat";
@@ -105,7 +106,7 @@ const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
                 />
               </>
             }
-            value={hash}
+            value={<HashInfo hash={hash} />}
           />
         </Box>
         <Box marginY={0.5} flex={1}>

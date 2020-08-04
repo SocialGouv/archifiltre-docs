@@ -5,7 +5,7 @@ import {
   getAliasesFromStore,
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
-  getFilesToDeleteFromStore,
+  getElementsToDeleteFromStore,
   getMaxDepth,
   getVirtualPathToIdFromStore,
   ROOT_FF_ID,
@@ -42,7 +42,7 @@ export default function IcicleApiToProps() {
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
   const aliases = useSelector(getAliasesFromStore);
   const comments = useSelector(getCommentsFromStore);
-  const elementsToDelete = useSelector(getFilesToDeleteFromStore);
+  const elementsToDelete = useSelector(getElementsToDeleteFromStore);
   const zoomedElementId = useZoomedElement();
 
   const { hoveredElementId, lockedElementId } = useWorkspaceMetadata();

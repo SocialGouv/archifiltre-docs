@@ -1,6 +1,6 @@
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import React, { FC } from "react";
+import React, { FC, useMemo } from "react";
 
 import TagListItem from "components/tags/all-tags-item";
 import TextAlignCenter from "components/common/text-align-center";
@@ -16,7 +16,11 @@ import {
   tagMapToArray,
 } from "reducers/tags/tags-selectors";
 import { useDispatch, useSelector } from "react-redux";
-import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
+import {
+  getElementsToDeleteFromStore,
+  getFilesAndFoldersFromStore,
+  getFilesTotalSize,
+} from "reducers/files-and-folders/files-and-folders-selectors";
 import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { useTranslation } from "react-i18next";
 import { FaTags } from "react-icons/fa";
@@ -33,8 +37,10 @@ interface AllTagsProps {
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   totalVolume: number;
-  onDeleteTag: (tagId: string) => void;
-  onRenameTag: (tagId: string) => void;
+  filesToDeleteSize: number;
+  filesToDeleteCount: number;
+  onDeleteTag: (tagId: string) => () => void;
+  onRenameTag: (tagId: string) => (newName: string) => void;
 }
 
 const AllTags: FC<AllTagsProps> = ({
@@ -42,6 +48,8 @@ const AllTags: FC<AllTagsProps> = ({
   filesAndFolders,
   filesAndFoldersMetadata,
   totalVolume,
+  filesToDeleteSize,
+  filesToDeleteCount,
   onDeleteTag,
   onRenameTag,
 }) => {
@@ -63,7 +71,15 @@ const AllTags: FC<AllTagsProps> = ({
         />
       );
     })
-    .reduce((accumulator, value) => [...accumulator, value], []);
+    .reduce((accumulator, value) => [...accumulator, value], [
+      <TagListItem
+        key="to-delete"
+        tag={t("common.toDelete")}
+        size={filesToDeleteSize}
+        totalVolume={totalVolume}
+        tagNumber={filesToDeleteCount}
+      />,
+    ]);
 
   return (
     <div>
@@ -132,10 +148,23 @@ const AllTagsApiToProps: FC<AllTagsApiToPropsPros> = ({
   const filesAndFoldersMetadata = useSelector(
     getFilesAndFoldersMetadataFromStore
   );
+  const elementsToDelete = useSelector(getElementsToDeleteFromStore);
+
   const dispatch = useDispatch();
 
   const rootElementId = "";
   const totalVolume = filesAndFoldersMetadata[rootElementId].childrenTotalSize;
+
+  const filesToDeleteCount = elementsToDelete.length;
+  const filesToDeleteSize = useMemo(
+    () =>
+      getFilesTotalSize(
+        elementsToDelete,
+        filesAndFolders,
+        filesAndFoldersMetadata
+      ),
+    [elementsToDelete, filesAndFolders, filesAndFoldersMetadata]
+  );
 
   const onRenameTag = (tagId) => (name) => {
     renameTag(tagId, name);
@@ -155,6 +184,8 @@ const AllTagsApiToProps: FC<AllTagsApiToPropsPros> = ({
       tags={tags}
       filesAndFolders={filesAndFolders}
       filesAndFoldersMetadata={filesAndFoldersMetadata}
+      filesToDeleteSize={filesToDeleteSize}
+      filesToDeleteCount={filesToDeleteCount}
     />
   );
 };

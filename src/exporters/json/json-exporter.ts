@@ -6,7 +6,7 @@ import {
   getAliasesFromStore,
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
-  getFilesToDeleteFromStore,
+  getElementsToDeleteFromStore,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "reducers/tags/tags-selectors";
 import { getNameWithExtension, save } from "util/file-system/file-sys-util";
@@ -39,7 +39,7 @@ export const jsonExporterThunk = ({
   const exportedData = {
     aliases: getAliasesFromStore(state),
     comments: getCommentsFromStore(state),
-    elementsToDelete: getFilesToDeleteFromStore(state),
+    elementsToDelete: getElementsToDeleteFromStore(state),
     filesAndFolders: getFilesAndFoldersFromStore(state),
     filesAndFoldersMetadata: getFilesAndFoldersMetadataFromStore(state),
     hashes: getHashesFromStore(state),

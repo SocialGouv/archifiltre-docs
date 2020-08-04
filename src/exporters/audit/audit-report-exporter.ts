@@ -6,7 +6,7 @@ import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/
 import {
   getFileCount,
   getFilesAndFoldersFromStore,
-  getFilesToDeleteFromStore,
+  getElementsToDeleteFromStore,
   getFoldersCount,
   getMaxDepth,
 } from "reducers/files-and-folders/files-and-folders-selectors";
@@ -148,7 +148,7 @@ export const auditReportExporterThunk = (
     getState()
   );
   const hashes = getHashesFromStore(getState());
-  const elementsToDelete = getFilesToDeleteFromStore(getState());
+  const elementsToDelete = getElementsToDeleteFromStore(getState());
   return fs.promises.writeFile(
     name,
     generateAuditReportDocx(

@@ -4,7 +4,7 @@ import {
   getAliasesFromStore,
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
-  getFilesToDeleteFromStore,
+  getElementsToDeleteFromStore,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "reducers/tags/tags-selectors";
 import { getWorkspaceMetadataFromStore } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
@@ -23,7 +23,7 @@ export const metsExporterThunk = (
   const tags = getTagsFromStore(state);
   const aliases = getAliasesFromStore(state);
   const comments = getCommentsFromStore(state);
-  const elementsToDelete = getFilesToDeleteFromStore(state);
+  const elementsToDelete = getElementsToDeleteFromStore(state);
   const { sessionName, originalPath } = getWorkspaceMetadataFromStore(state);
 
   makeSIP({

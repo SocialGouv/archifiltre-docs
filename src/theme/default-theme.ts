@@ -34,6 +34,11 @@ const defaultTheme = createMuiTheme({
         fontSize: "0.75rem",
       },
     },
+    MuiButton: {
+      outlinedSecondary: {
+        borderColor: secondaryColor.A400,
+      },
+    },
     MuiTypography: {
       h3: {
         fontFamily: "Quicksand",

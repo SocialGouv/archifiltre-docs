@@ -19,12 +19,18 @@ import {
   JsonFileInfo,
   PartialFileSystem,
   WithErrorHook,
+  WithFilesAndFolders,
   WithHashes,
   WithResultHook,
+  WithVirtualPathToIdMap,
 } from "files-and-folders-loader/files-and-folders-loader-types";
 import { convertJsonToCurrentVersion } from "util/compatibility/compatibility";
 import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
 import { removeIgnoredElementsFromVirtualFileSystem } from "util/virtual-file-system-util/virtual-file-system-util";
+import {
+  reduceFilesAndFolders,
+  ROOT_FF_ID,
+} from "reducers/files-and-folders/files-and-folders-selectors";
 import { sanitizeHooks } from "files-and-folders-loader/file-system-loading-process-utils";
 
 interface FilesAndFoldersInfo {
@@ -288,6 +294,31 @@ const removeByteOrderMark = (content) =>
   content[0] !== "{" ? content.slice(1) : content;
 
 /**
+ * Initialize the reference map between virtualPath and id
+ * @param fileSystem
+ */
+const computeVirtualPathToIdMap = <T extends WithFilesAndFolders>(
+  fileSystem: T
+): T & WithVirtualPathToIdMap => {
+  const virtualPathToIdMap = {};
+
+  reduceFilesAndFolders(
+    fileSystem.filesAndFolders,
+    ROOT_FF_ID,
+    (childrenValues, { id, virtualPath }) => {
+      if (virtualPath !== id) {
+        virtualPathToIdMap[virtualPath] = id;
+      }
+    }
+  );
+
+  return {
+    ...fileSystem,
+    virtualPathToIdMap,
+  };
+};
+
+/**
  * Create the loader to load archifiltre data from a JSON file
  * @param jsonFilePath
  */
@@ -298,6 +329,7 @@ export const makeJsonFileLoader = (
   const sanitizedContent = removeByteOrderMark(jsonContent);
 
   return compose(
+    computeVirtualPathToIdMap,
     removeIgnoredElementsFromVirtualFileSystem,
     convertJsonToCurrentVersion
   )(sanitizedContent);

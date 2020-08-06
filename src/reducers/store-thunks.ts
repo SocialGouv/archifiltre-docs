@@ -23,18 +23,13 @@ import {
 import version, { versionComparator } from "../version";
 import { ArchifiltreThunkAction } from "./archifiltre-types";
 import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata/files-and-folders-metadata-actions";
-import { FilesAndFoldersMetadataMap } from "./files-and-folders-metadata/files-and-folders-metadata-types";
 import {
   addCommentsOnFilesAndFolders,
   initializeFilesAndFolders,
+  initVirtualPathToIdMap,
   markElementsToDelete,
   setFilesAndFoldersAliases,
 } from "./files-and-folders/files-and-folders-actions";
-import {
-  AliasMap,
-  CommentsMap,
-  FilesAndFoldersMap,
-} from "./files-and-folders/files-and-folders-types";
 import {
   registerErrorAction,
   resetLoadingAction,
@@ -42,7 +37,6 @@ import {
 import { ArchifiltreError } from "./loading-info/loading-info-types";
 import { clearActionReplayFile } from "./middleware/persist-actions-middleware";
 import { initializeTags, resetTags } from "./tags/tags-actions";
-import { TagMap } from "./tags/tags-types";
 import {
   setLockedElementId,
   setOriginalPath,
@@ -65,9 +59,9 @@ import {
   FileSystemLoadingStep,
   LoadingStep,
 } from "./loading-state/loading-state-types";
-import { HashesMap } from "./hashes/hashes-types";
 import { setFilesAndFoldersHashes } from "./hashes/hashes-actions";
 import { resetZoom } from "reducers/main-space-selection/main-space-selection-action";
+import { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
 
 /**
  * Notifies the user that there is a Zip in the loaded files
@@ -237,18 +231,6 @@ export const loadFilesAndFoldersFromPathThunk = (
   }
 };
 
-interface InitStoreThunkParam {
-  aliases: AliasMap;
-  comments: CommentsMap;
-  elementsToDelete?: string[];
-  filesAndFolders: FilesAndFoldersMap;
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
-  hashes: HashesMap;
-  originalPath: string;
-  sessionName: string;
-  tags: TagMap;
-}
-
 /**
  * Initializes the store with the data extracted from the JSON object
  * @param filesAndFolders
@@ -266,12 +248,14 @@ const initStore = ({
   originalPath,
   sessionName,
   tags,
-}: InitStoreThunkParam): ArchifiltreThunkAction => (dispatch) => {
+  virtualPathToIdMap,
+}: VirtualFileSystem): ArchifiltreThunkAction => (dispatch) => {
   dispatch(initializeFilesAndFolders(filesAndFolders));
   dispatch(initFilesAndFoldersMetatada(filesAndFoldersMetadata));
   dispatch(setOriginalPath(originalPath));
   dispatch(setSessionName(sessionName || getFirstLevelName(filesAndFolders)));
 
+  dispatch(initVirtualPathToIdMap(virtualPathToIdMap));
   if (hashes) {
     dispatch(setFilesAndFoldersHashes(hashes));
   }

@@ -1,35 +1,31 @@
 import fs from "fs";
-import _ from "lodash";
+import { compose } from "lodash/fp";
 import parse from "csv-parse/lib/sync";
 import path from "path";
 import readline from "readline";
 import { Readable } from "stream";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   FilesAndFolders,
   FilesAndFoldersMap,
 } from "reducers/files-and-folders/files-and-folders-types";
-import { medianOnSortedArray } from "util/array/array-util";
 import { convertToPosixAbsolutePath } from "util/file-system/file-sys-util";
 import { empty } from "util/function/function-util";
-import { indexSort, indexSortReverse } from "util/list-util";
-import {
-  ArchifiltreErrorCode,
-  convertFsErrorToArchifiltreError,
-} from "util/error/error-util";
-import { identifyFileFormat } from "../util/file-format/file-format-util";
-import {
-  asyncShouldIgnoreElement,
-  shouldIgnoreElement,
-} from "../util/hidden-file/hidden-file-util";
+import { convertFsErrorToArchifiltreError } from "util/error/error-util";
+import { identifyFileFormat } from "util/file-format/file-format-util";
+import { asyncShouldIgnoreElement } from "util/hidden-file/hidden-file-util";
 import { HashesMap } from "reducers/hashes/hashes-types";
-
-interface LoadFilesAndFoldersFromFileSystemError {
-  message: string;
-  code: ArchifiltreErrorCode;
-  path: string;
-}
+import {
+  FilesAndFoldersLoader,
+  JsonFileInfo,
+  PartialFileSystem,
+  WithErrorHook,
+  WithHashes,
+  WithResultHook,
+} from "files-and-folders-loader/files-and-folders-loader-types";
+import { convertJsonToCurrentVersion } from "util/compatibility/compatibility";
+import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
+import { removeIgnoredElementsFromVirtualFileSystem } from "util/virtual-file-system-util/virtual-file-system-util";
+import { sanitizeHooks } from "files-and-folders-loader/file-system-loading-process-utils";
 
 interface FilesAndFoldersInfo {
   lastModified: number;
@@ -38,62 +34,12 @@ interface FilesAndFoldersInfo {
 
 export type FilesAndFoldersElementInfo = [FilesAndFoldersInfo, string];
 
-type ErrorHook<Error> = (error?: Error) => void;
-
-/**
- * Recursively load all the children files from the file system
- * @param folderPath - The folder base path
- * @param hook - An error first hook with no argument, called every time a file is added.
- */
-export const loadFilesAndFoldersFromFileSystem = (
-  folderPath: string,
-  hook: ErrorHook<LoadFilesAndFoldersFromFileSystemError>
-): FilesAndFoldersElementInfo[] => {
-  const files: FilesAndFoldersElementInfo[] = [];
-  const rootPath = path.dirname(folderPath);
-
-  const loadFilesAndFoldersFromFileSystemRec = (currentPath: string) => {
-    try {
-      if (shouldIgnoreElement(currentPath)) {
-        return;
-      }
-      const stats = fs.statSync(currentPath);
-
-      if (stats.isDirectory()) {
-        const children = fs.readdirSync(currentPath);
-        children.forEach((childPath) =>
-          loadFilesAndFoldersFromFileSystemRec(
-            path.join(currentPath, childPath)
-          )
-        );
-        return;
-      }
-
-      hook();
-      files.push([
-        {
-          lastModified: stats.mtimeMs,
-          size: stats.size,
-        },
-        convertToPosixAbsolutePath(path.relative(rootPath, currentPath)),
-      ]);
-    } catch (error) {
-      hook({
-        path: currentPath,
-        message: error.message,
-        code: convertFsErrorToArchifiltreError(error.code),
-      });
-    }
-  };
-
-  loadFilesAndFoldersFromFileSystemRec(folderPath);
-
-  return files;
-};
-
 export const asyncLoadFilesAndFoldersFromFileSystem = async (
   folderPath: string,
-  hook: ErrorHook<LoadFilesAndFoldersFromFileSystemError>
+  { onResult, onError }: WithResultHook & WithErrorHook = {
+    onResult: empty,
+    onError: empty,
+  }
 ) => {
   const files: FilesAndFoldersElementInfo[] = [];
   const rootPath = path.dirname(folderPath);
@@ -117,7 +63,7 @@ export const asyncLoadFilesAndFoldersFromFileSystem = async (
         return;
       }
 
-      hook();
+      onResult();
       files.push([
         {
           lastModified: stats.mtimeMs,
@@ -126,7 +72,7 @@ export const asyncLoadFilesAndFoldersFromFileSystem = async (
         convertToPosixAbsolutePath(path.relative(rootPath, currentPath)),
       ]);
     } catch (error) {
-      hook({
+      onError({
         path: currentPath,
         message: error.message,
         code: convertFsErrorToArchifiltreError(error.code),
@@ -148,16 +94,16 @@ type LoadFilesAndFoldersFromExportFileContentResult = {
 /**
  * Creates an origin structure from an archifiltre export file
  * @param exportFilePath - The path of an export file generating by archifiltre command line exporter
- * @param hook - A hook called after each file is processed.
+ * @param hooks
  */
 export const loadFilesAndFoldersFromExportFile = async (
   exportFilePath: string,
-  hook: () => void = empty
+  hooks?: WithResultHook
 ): Promise<LoadFilesAndFoldersFromExportFileContentResult> => {
   const fileFormat = await identifyFileFormat(exportFilePath);
   const fileStream = fs.createReadStream(exportFilePath, fileFormat);
 
-  return loadFilesAndFoldersFromExportFileContent(fileStream, hook);
+  return loadFilesAndFoldersFromExportFileContent(fileStream, hooks);
 };
 
 /**
@@ -167,7 +113,7 @@ export const loadFilesAndFoldersFromExportFile = async (
  */
 export const loadFilesAndFoldersFromExportFileContent = async (
   exportFileContent: Readable,
-  hook: () => void = empty
+  { onResult }: WithResultHook = { onResult: empty }
 ): Promise<LoadFilesAndFoldersFromExportFileContentResult> => {
   const lineReader = readline.createInterface({
     input: exportFileContent,
@@ -208,7 +154,7 @@ export const loadFilesAndFoldersFromExportFileContent = async (
           },
           id,
         ]);
-        hook();
+        onResult();
     }
 
     lineCount++;
@@ -260,7 +206,7 @@ export const createFilesAndFolders = ({
  */
 export const createFilesAndFoldersDataStructure = (
   ffInfo: FilesAndFoldersElementInfo[],
-  hook?: () => void
+  { onResult }: WithResultHook = { onResult: empty }
 ): FilesAndFoldersMap => {
   const filesAndFolders: FilesAndFoldersMap = {};
 
@@ -290,92 +236,93 @@ export const createFilesAndFoldersDataStructure = (
       id: currentPath,
     });
     recursivelyAddParentFolders(currentPath);
-    if (hook) {
-      hook();
-    }
+    onResult();
   });
 
   return filesAndFolders;
 };
 
 /**
- * Compute the metadata from the filesAndFolders
- * @param filesAndFolders
- * @param hook
+ * Create the loader to load from archifiltre data from the file system folder
+ * @param folderPath
  */
-export const createFilesAndFoldersMetadataDataStructure = (
-  filesAndFolders: FilesAndFoldersMap,
-  hook = empty
-): FilesAndFoldersMetadataMap => {
-  const metadata: FilesAndFoldersMetadataMap = {};
-  const lastModifiedLists = {};
+export const makeFileSystemLoader = (
+  folderPath: string
+): FilesAndFoldersLoader => async (makeHooks) => {
+  const sanitizedHooks = sanitizeHooks(makeHooks);
 
-  const computeMetadataRec = (id) => {
-    const ff = filesAndFolders[id];
-    hook();
-    if (isFile(ff)) {
-      metadata[id] = {
-        averageLastModified: ff.file_last_modified,
-        childrenTotalSize: ff.file_size,
-        maxLastModified: ff.file_last_modified,
-        medianLastModified: ff.file_last_modified,
-        minLastModified: ff.file_last_modified,
-        nbChildrenFiles: 1,
-        sortByDateIndex: [],
-        sortBySizeIndex: [],
-        sortAlphaNumericallyIndex: [],
-      };
-      lastModifiedLists[id] = [ff.file_last_modified];
-      return;
-    }
+  const indexingHooks = sanitizedHooks(FileSystemLoadingStep.INDEXING);
 
-    ff.children.forEach((childId) => computeMetadataRec(childId));
+  indexingHooks.onStart();
+  const fileSystemInfo = await asyncLoadFilesAndFoldersFromFileSystem(
+    folderPath,
+    indexingHooks
+  );
+  indexingHooks.onComplete();
 
-    lastModifiedLists[id] = _(ff.children)
-      .map((childId) => lastModifiedLists[childId])
-      .flatten()
-      .sortBy()
-      .value();
-    const childrenTotalSize = _.sum(
-      ff.children.map((childId) => metadata[childId].childrenTotalSize)
-    );
-    const averageLastModified = _.mean(lastModifiedLists[id]);
-    const medianLastModified = medianOnSortedArray(lastModifiedLists[id]);
-    const maxLastModified =
-      lastModifiedLists[id][lastModifiedLists[id].length - 1];
-    const minLastModified = lastModifiedLists[id][0];
-    const nbChildrenFiles = _.sum(
-      ff.children.map((childId) => metadata[childId].nbChildrenFiles)
-    );
-    const sortByDateIndex = indexSort(
-      (childId: string) => metadata[childId].averageLastModified,
-      ff.children
-    );
+  const filesAndFoldersHooks = sanitizedHooks(
+    FileSystemLoadingStep.FILES_AND_FOLDERS
+  );
+  filesAndFoldersHooks.onStart();
+  const filesAndFolders = createFilesAndFoldersDataStructure(
+    fileSystemInfo,
+    filesAndFoldersHooks
+  );
+  filesAndFoldersHooks.onComplete();
 
-    const sortBySizeIndex = indexSortReverse(
-      (childId: string) => metadata[childId].childrenTotalSize,
-      ff.children
-    );
-
-    const sortAlphaNumericallyIndex = indexSort(
-      (childId: string) => filesAndFolders[childId].name,
-      ff.children
-    );
-
-    metadata[id] = {
-      averageLastModified,
-      childrenTotalSize,
-      maxLastModified,
-      medianLastModified,
-      minLastModified,
-      nbChildrenFiles,
-      sortByDateIndex,
-      sortBySizeIndex,
-      sortAlphaNumericallyIndex,
-    };
+  return {
+    filesAndFolders,
+    originalPath: folderPath,
   };
+};
 
-  computeMetadataRec("");
+/**
+ * Remove the byte order mark
+ * Until v10, json files were generated with a
+ * byte order mark at their start
+ * We upgrade file-saver from 1.3.3 to 2.0.2,
+ * they are not anymore generated with a byte order mark
+ * @param content
+ */
+const removeByteOrderMark = (content) =>
+  content[0] !== "{" ? content.slice(1) : content;
 
-  return metadata;
+/**
+ * Create the loader to load archifiltre data from a JSON file
+ * @param jsonFilePath
+ */
+export const makeJsonFileLoader = (
+  jsonFilePath: string
+): FilesAndFoldersLoader => (): JsonFileInfo => {
+  const jsonContent = fs.readFileSync(jsonFilePath, "utf8");
+  const sanitizedContent = removeByteOrderMark(jsonContent);
+
+  return compose(
+    removeIgnoredElementsFromVirtualFileSystem,
+    convertJsonToCurrentVersion
+  )(sanitizedContent);
+};
+
+/**
+ * Create the loader for command line generated export files
+ * @param exportFilePath
+ */
+export const makeExportFileLoader = (
+  exportFilePath: string
+): FilesAndFoldersLoader => async (
+  hooksCreator
+): Promise<PartialFileSystem & WithHashes> => {
+  const hooks = sanitizeHooks(hooksCreator)(FileSystemLoadingStep.INDEXING);
+  hooks.onStart();
+  const exportFileData = await loadFilesAndFoldersFromExportFile(
+    exportFilePath,
+    hooks
+  );
+  hooks.onComplete();
+
+  return {
+    filesAndFolders: createFilesAndFoldersDataStructure(exportFileData.files),
+    hashes: exportFileData.hashes,
+    originalPath: exportFileData.rootPath,
+  };
 };

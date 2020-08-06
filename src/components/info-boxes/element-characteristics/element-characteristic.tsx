@@ -4,7 +4,7 @@ import Typography from "@material-ui/core/Typography";
 
 interface ElementCharacteristicProps {
   name: ReactNode;
-  value: string;
+  value: ReactNode;
 }
 
 const ElementCharacteristic: FC<ElementCharacteristicProps> = ({

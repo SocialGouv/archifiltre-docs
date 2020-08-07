@@ -1,7 +1,6 @@
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { DispatchExts } from "reducers/archifiltre-types";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { initialState as filesAndFoldersInitialState } from "reducers/files-and-folders/files-and-folders-reducer";
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import { StoreState } from "reducers/store";
@@ -28,12 +27,6 @@ const filesAndFolders = {
 };
 
 const elementsToDelete = [fileAndFolder1Id];
-
-const fileAndFolderMetadata1 = createFilesAndFoldersMetadata({});
-
-const filesAndFoldersMetadata = {
-  [fileAndFolder1Id]: fileAndFolderMetadata1,
-};
 
 const tag1Id = "tag-1-id";
 const tag1 = createTag({ id: tag1Id });
@@ -71,9 +64,6 @@ describe("json-exporter", () => {
           filesAndFolders,
           elementsToDelete,
         }),
-        filesAndFoldersMetadata: wrapStoreWithUndoable({
-          filesAndFoldersMetadata,
-        }),
         hashes: {
           hashes,
         },
@@ -95,7 +85,6 @@ describe("json-exporter", () => {
         comments,
         elementsToDelete,
         filesAndFolders,
-        filesAndFoldersMetadata,
         hashes,
         originalPath,
         sessionName,

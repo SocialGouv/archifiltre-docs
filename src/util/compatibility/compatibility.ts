@@ -2,14 +2,8 @@
 import { generateRandomString } from "util/random-gen-util";
 import _, { mapValues, pick } from "lodash";
 import fp from "lodash/fp";
-import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/files-and-folders-loader";
-import {
-  AliasMap,
-  CommentsMap,
-  FilesAndFoldersMap,
-} from "reducers/files-and-folders/files-and-folders-types";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { TagMap } from "reducers/tags/tags-types";
+import { JsonFileInfo } from "files-and-folders-loader/files-and-folders-loader-types";
+import { createFilesAndFoldersMetadataDataStructure } from "files-and-folders-loader/file-system-loading-process-utils";
 
 interface V8 {
   version: number;
@@ -35,22 +29,7 @@ interface V21 {
   filesAndFolders: any;
 }
 
-interface V22 {
-  filesAndFolders: any;
-}
-
-export type VirtualFileSystem = {
-  filesAndFolders: FilesAndFoldersMap;
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
-  tags: TagMap;
-  aliases: AliasMap;
-  comments: CommentsMap;
-  sessionName: string;
-  originalPath: string;
-  version: string;
-};
-
-export const fromAnyJsonToJs = (json: string): VirtualFileSystem => {
+export const convertJsonToCurrentVersion = (json: string): JsonFileInfo => {
   let js = JSON.parse(json);
 
   const version = js.version;
@@ -282,16 +261,5 @@ export const v21ToV22Js = (v21: V21): object => {
   return {
     ...v21,
     filesAndFolders,
-  };
-};
-
-export const v22ToV30Js = (v22: V22): object => {
-  const filesAndFoldersMetadata = createFilesAndFoldersMetadataDataStructure(
-    v22.filesAndFolders
-  );
-
-  return {
-    ...v22,
-    filesAndFoldersMetadata,
   };
 };

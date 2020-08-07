@@ -1,4 +1,3 @@
-import { createFilesAndFoldersMetadataDataStructure } from "files-and-folders-loader/files-and-folders-loader";
 import { addTracker } from "logging/tracker";
 import { ActionTitle, ActionType } from "logging/tracker-types";
 import translations from "translations/translations";
@@ -19,6 +18,7 @@ import {
 } from "./files-and-folders-selectors";
 import { FilesAndFoldersMap } from "./files-and-folders-types";
 import { commitAction } from "../enhancers/undoable/undoable-actions";
+import { createFilesAndFoldersMetadataDataStructure } from "files-and-folders-loader/file-system-loading-process-utils";
 
 /**
  * Updates the files and folders alias

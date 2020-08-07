@@ -1,6 +1,5 @@
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import { createFilesAndFoldersMetadataDataStructure } from "files-and-folders-loader/files-and-folders-loader";
 import translations from "translations/translations";
 import { notifyInfo } from "util/notification/notifications-util";
 import { DispatchExts } from "../archifiltre-types";
@@ -29,6 +28,7 @@ import { ADD_CHILD } from "./files-and-folders-types";
 import { commitAction } from "../enhancers/undoable/undoable-actions";
 import { setFilesAndFoldersHashes } from "../hashes/hashes-actions";
 import { updateFilesAndFoldersHashes } from "../hashes/hashes-thunks";
+import { createFilesAndFoldersMetadataDataStructure } from "files-and-folders-loader/file-system-loading-process-utils";
 
 jest.mock("util/notification/notifications-util", () => ({
   notifyInfo: jest.fn(),
@@ -38,7 +38,7 @@ jest.mock("../../logging/tracker", () => ({
   addTracker: jest.fn(),
 }));
 
-jest.mock("../../files-and-folders-loader/files-and-folders-loader", () => ({
+jest.mock("files-and-folders-loader/file-system-loading-process-utils", () => ({
   createFilesAndFoldersMetadataDataStructure: jest.fn(),
 }));
 

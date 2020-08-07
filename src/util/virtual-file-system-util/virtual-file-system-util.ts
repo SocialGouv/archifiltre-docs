@@ -1,12 +1,12 @@
-import { VirtualFileSystem } from "util/compatibility/compatibility";
 import { isIgnored } from "util/hidden-file/hidden-file-util";
 import { chain, pick, intersection } from "lodash";
 import { compose } from "lodash/fp";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
-import { createFilesAndFoldersMetadataDataStructure } from "files-and-folders-loader/files-and-folders-loader";
 import { Tag, TagMap } from "reducers/tags/tags-types";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
+import { createFilesAndFoldersMetadataDataStructure } from "files-and-folders-loader/file-system-loading-process-utils";
 
 export type WithFilesAndFolders = { filesAndFolders: FilesAndFoldersMap };
 export type WithFilesAndFoldersMetadata = {
@@ -140,10 +140,13 @@ export const removeUnusedTagsFromVirtualFileSystem = <
 /**
  * Clean up ignored files name from a VirtualFileSystem
  */
-export const removeIgnoredElementsFromVirtualFileSystem = compose(
-  removeUnusedTagsFromVirtualFileSystem,
-  removeUnusedAliasesFromVirtualFileSystem,
-  removeUnusedCommentsFromVirtualFileSystem,
-  recomputeVirtualFileSystemMetadata,
-  removeIgnoredFilesAndFoldersFromVirtualFileSystem
-);
+export const removeIgnoredElementsFromVirtualFileSystem = (
+  virtualFileSystem: VirtualFileSystem
+): VirtualFileSystem =>
+  compose(
+    removeUnusedTagsFromVirtualFileSystem,
+    removeUnusedAliasesFromVirtualFileSystem,
+    removeUnusedCommentsFromVirtualFileSystem,
+    recomputeVirtualFileSystemMetadata,
+    removeIgnoredFilesAndFoldersFromVirtualFileSystem
+  )(virtualFileSystem);

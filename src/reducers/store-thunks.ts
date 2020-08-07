@@ -225,7 +225,9 @@ export const loadFilesAndFoldersFromPathThunk = (
 
       dispatch(
         computeHashesThunk(virtualFileSystem.originalPath, {
-          ignoreFileHashes: virtualFileSystem.hashes !== null,
+          ignoreFileHashes:
+            virtualFileSystem.hashes !== null &&
+            Object.keys(virtualFileSystem.hashes).length > 0,
         })
       );
     }

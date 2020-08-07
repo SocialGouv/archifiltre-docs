@@ -1,7 +1,6 @@
 import { addTracker } from "logging/tracker";
 import { ActionTitle, ActionType } from "logging/tracker-types";
 import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   getAliasesFromStore,
   getCommentsFromStore,
@@ -41,7 +40,6 @@ export const jsonExporterThunk = ({
     comments: getCommentsFromStore(state),
     elementsToDelete: getElementsToDeleteFromStore(state),
     filesAndFolders: getFilesAndFoldersFromStore(state),
-    filesAndFoldersMetadata: getFilesAndFoldersMetadataFromStore(state),
     hashes: getHashesFromStore(state),
     originalPath,
     sessionName,

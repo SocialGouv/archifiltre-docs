@@ -1,19 +1,22 @@
 import fs from "fs";
 import { sortBy } from "lodash";
+import version from "version";
 import {
   asyncLoadFilesAndFoldersFromFileSystem,
   createFilesAndFolders,
   createFilesAndFoldersDataStructure,
-  createFilesAndFoldersMetadataDataStructure,
   FilesAndFoldersElementInfo,
   loadFilesAndFoldersFromExportFileContent,
-  loadFilesAndFoldersFromFileSystem,
 } from "./files-and-folders-loader";
 
 import { Readable } from "stream";
-import { empty } from "util/function/function-util";
+
 // @ts-ignore
 import { setMockFs as hiddenFileSetMockFs } from "util/hidden-file/hidden-file-util";
+import {
+  createFilesAndFoldersMetadataDataStructure,
+  loadFileSystemFromFilesAndFoldersLoader,
+} from "files-and-folders-loader/file-system-loading-process-utils";
 
 type FsMockElement = {
   isDirectory: boolean;
@@ -287,19 +290,11 @@ describe("files-and-folders-loader", () => {
       ],
       sortMethod
     );
-    describe("sync", () => {
-      it("should load the right origins", () => {
-        const resultOrigin = loadFilesAndFoldersFromFileSystem(rootPath, empty);
-
-        expect(sortBy(resultOrigin, sortMethod)).toEqual(expectedOrigin);
-      });
-    });
 
     describe("async", () => {
       it("should load the right origins", async () => {
         const resultOrigin = await asyncLoadFilesAndFoldersFromFileSystem(
-          rootPath,
-          empty
+          rootPath
         );
 
         expect(sortBy(resultOrigin, sortMethod)).toEqual(expectedOrigin);
@@ -431,6 +426,32 @@ C:\\basePath\\files\r
       expect(
         createFilesAndFoldersMetadataDataStructure(expectedFilesAndFolders)
       ).toEqual(expectedMetadata);
+    });
+  });
+
+  describe("loadFileSystemFromFilesAndFoldersLoader", () => {
+    it("should prefill unset fields", async () => {
+      const loadFilesAndFolders = async () => ({
+        filesAndFolders: expectedFilesAndFolders,
+        originalPath: "/basePath",
+      });
+
+      const virtualFileSystem = await loadFileSystemFromFilesAndFoldersLoader(
+        loadFilesAndFolders
+      );
+
+      expect(virtualFileSystem).toEqual({
+        aliases: {},
+        comments: {},
+        elementsToDelete: [],
+        filesAndFolders: expectedFilesAndFolders,
+        filesAndFoldersMetadata: expectedMetadata,
+        hashes: {},
+        originalPath: "/basePath",
+        sessionName: "",
+        tags: {},
+        version,
+      });
     });
   });
 });

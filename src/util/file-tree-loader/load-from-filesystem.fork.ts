@@ -3,10 +3,10 @@ import {
   fakeChildProcess,
   setupChildWorkerListeners,
 } from "util/async-worker/async-worker-util";
-import { loadFolder } from "./load-from-filesystem.impl";
+import { loadVirtualFileSystem } from "./load-from-filesystem.impl";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
 
-setupChildWorkerListeners(asyncWorker, { onInitialize: loadFolder });
+setupChildWorkerListeners(asyncWorker, { onInitialize: loadVirtualFileSystem });
 
 export default fakeChildProcess;

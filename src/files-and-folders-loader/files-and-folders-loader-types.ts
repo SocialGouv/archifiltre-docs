@@ -2,6 +2,7 @@ import {
   AliasMap,
   CommentsMap,
   FilesAndFoldersMap,
+  VirtualPathToIdMap,
 } from "reducers/files-and-folders/files-and-folders-types";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { HashesMap } from "reducers/hashes/hashes-types";
@@ -18,7 +19,8 @@ export type VirtualFileSystem = WithAliases &
   WithOriginalPath &
   WithSessionName &
   WithTags &
-  WithVersion;
+  WithVersion &
+  WithVirtualPathToIdMap;
 
 export type WithFilesAndFolders<T = {}> = T & {
   filesAndFolders: FilesAndFoldersMap;
@@ -60,6 +62,10 @@ export type WithVersion<T = {}> = T & {
   version: string;
 };
 
+export type WithVirtualPathToIdMap<T = {}> = T & {
+  virtualPathToIdMap: VirtualPathToIdMap;
+};
+
 export type PartialFileSystem = Partial<VirtualFileSystem> &
   WithFilesAndFolders &
   WithOriginalPath;
@@ -69,7 +75,8 @@ export type JsonFileInfo = PartialFileSystem &
   WithAliases &
   WithComments &
   WithHashes &
-  WithVersion;
+  WithVersion &
+  WithVirtualPathToIdMap;
 
 export enum LoadType {
   FILESYSTEM,

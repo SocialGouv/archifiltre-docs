@@ -6,6 +6,7 @@ import {
   ADD_COMMENTS_ON_FILES_AND_FOLDERS,
   FilesAndFoldersActionTypes,
   FilesAndFoldersState,
+  INIT_VIRTUAL_PATH_TO_ID_MAP,
   INITIALIZE_FILES_AND_FOLDERS,
   MARK_AS_TO_DELETE,
   MARK_ELEMENTS_TO_DELETE,
@@ -152,6 +153,11 @@ const filesAndFoldersReducer = (
         elementsToDelete: [
           ...new Set([...state.elementsToDelete, ...action.elementIds]),
         ],
+      };
+    case INIT_VIRTUAL_PATH_TO_ID_MAP:
+      return {
+        ...state,
+        virtualPathToId: action.virtualPathToIdMap,
       };
     default:
       return state;

@@ -134,7 +134,7 @@ export const getVirtualPathToIdFromStore = (
  *        _.max([currentFilesAndFolders.file_last_modified, ...childrenValues])
  *    );
  */
-const reduceFilesAndFolders = <ReduceResultType>(
+export const reduceFilesAndFolders = <ReduceResultType>(
   filesAndFoldersMap: FilesAndFoldersMap,
   rootId: string,
   reducer: (

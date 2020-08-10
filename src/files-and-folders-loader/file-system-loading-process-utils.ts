@@ -160,6 +160,7 @@ export const loadFileSystemFromFilesAndFoldersLoader = async (
       sessionName: "",
       tags: {},
       version,
+      virtualPathToIdMap: {},
     }),
     tap(() => metadataHooks.onComplete()),
     (
@@ -189,7 +190,7 @@ const isFileSystemLoad = (loadPath: string) =>
 const isJsonLoad = (loadPath: string) => isJsonFile(loadPath);
 
 /**
- * Returns the load type required to load the element located at loadPath
+ * Return the load type required to load the element located at loadPath
  * @param loadPath
  */
 export const getLoadType = (loadPath: string): LoadType => {

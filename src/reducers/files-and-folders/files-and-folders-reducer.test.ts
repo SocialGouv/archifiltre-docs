@@ -2,6 +2,7 @@ import {
   addChild,
   addCommentsOnFilesAndFolders,
   initializeFilesAndFolders,
+  initVirtualPathToIdMap,
   markAsToDelete,
   markElementsToDelete,
   removeChild,
@@ -345,6 +346,24 @@ describe("files-and-folders-reducer", () => {
       expect(nextState).toEqual({
         ...baseState,
         elementsToDelete: [existingId, duplicatedId, newId],
+      });
+    });
+  });
+
+  describe("INIT_VIRTUAL_PATH_TO_ID_MAP", () => {
+    it("should initialize the map", () => {
+      const virtualPathToId = {
+        "virtual-path": "id",
+      };
+
+      const nextState = filesAndFoldersReducer(
+        baseState,
+        initVirtualPathToIdMap(virtualPathToId)
+      );
+
+      expect(nextState).toEqual({
+        ...baseState,
+        virtualPathToId,
       });
     });
   });

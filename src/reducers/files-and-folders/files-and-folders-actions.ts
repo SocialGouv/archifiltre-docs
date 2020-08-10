@@ -5,12 +5,14 @@ import {
   CommentsMap,
   FilesAndFoldersActionTypes,
   FilesAndFoldersMap,
+  INIT_VIRTUAL_PATH_TO_ID_MAP,
   INITIALIZE_FILES_AND_FOLDERS,
   MARK_AS_TO_DELETE,
   MARK_ELEMENTS_TO_DELETE,
   REMOVE_CHILD,
   SET_FILES_AND_FOLDERS_ALIAS,
   UNMARK_AS_TO_DELETE,
+  VirtualPathToIdMap,
 } from "./files-and-folders-types";
 
 /**
@@ -99,4 +101,11 @@ export const addChild = (parentId, childId): FilesAndFoldersActionTypes => ({
   childId,
   parentId,
   type: ADD_CHILD,
+});
+
+export const initVirtualPathToIdMap = (
+  virtualPathToIdMap: VirtualPathToIdMap
+): FilesAndFoldersActionTypes => ({
+  type: INIT_VIRTUAL_PATH_TO_ID_MAP,
+  virtualPathToIdMap,
 });

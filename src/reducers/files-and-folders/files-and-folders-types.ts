@@ -11,6 +11,8 @@ export const MARK_AS_TO_DELETE = "FILES_AND_FOLDERS/MARK_AS_TO_DELETE";
 export const UNMARK_AS_TO_DELETE = "FILES_AND_FOLDERS/UNMARK_AS_TO_DELETE";
 export const MARK_ELEMENTS_TO_DELETE =
   "FILES_AND_FOLDERS/MARK_ELEMENTS_TO_DELETE";
+export const INIT_VIRTUAL_PATH_TO_ID_MAP =
+  "FILES_AND_FOLDERS/INIT_VIRTUAL_PATH_TO_ID_MAP";
 
 export interface FilesAndFolders {
   id: string;
@@ -87,6 +89,11 @@ interface MarkElementsToDelete extends Action {
   elementIds: string[];
 }
 
+interface InitVirtualPathToIdMap extends Action {
+  type: typeof INIT_VIRTUAL_PATH_TO_ID_MAP;
+  virtualPathToIdMap: VirtualPathToIdMap;
+}
+
 export type FilesAndFoldersActionTypes =
   | InitializeFilesAndFoldersAction
   | AddChildAction
@@ -96,4 +103,5 @@ export type FilesAndFoldersActionTypes =
   | SetFilesAndFoldersHashesAction
   | MarkAsToDelete
   | UnmarkAsToDelete
-  | MarkElementsToDelete;
+  | MarkElementsToDelete
+  | InitVirtualPathToIdMap;

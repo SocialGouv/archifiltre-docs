@@ -451,6 +451,7 @@ C:\\basePath\\files\r
         sessionName: "",
         tags: {},
         version,
+        virtualPathToIdMap: {},
       });
     });
   });

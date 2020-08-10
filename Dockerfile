@@ -9,6 +9,7 @@ RUN wget -nc https://dl.winehq.org/wine-builds/winehq.key \
   && apt-add-repository https://dl.winehq.org/wine-builds/debian/ \
   && apt-get -yq update \
   && apt-get -yq install --install-recommends winehq-stable \
-  && apt-get -yq install libtool automake autoconf nasm
+  && apt-get -yq install libtool automake autoconf nasm \
+  && apt-get -yq install xxd
 
 ENTRYPOINT ["yarn", "build-prod"]

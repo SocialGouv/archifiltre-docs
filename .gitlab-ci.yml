@@ -12,6 +12,9 @@ stages:
   - "Build for branch"
   - "Build for master"
   - "Build binaries for branch"
+  - "Build release assets"
+  - "Create github release"
+  - "Upload release assets"
 
 Docker:
   stage: "Build docker build image"
@@ -118,3 +121,70 @@ Build-branch-bins:
       - $HOME/.cache/electron
       - $HOME/.cache/electron-builder
   when: manual
+
+Build-Release-Assets:
+  stage: "Build release assets"
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  before_script:
+    - yarn --frozen-lockfile
+  only:
+    - tags
+  script:
+    - cp .env.prod .env
+    - yarn prepare-prod
+    - yarn win32
+    - yarn win64
+    - yarn linux
+  artifacts:
+    paths:
+      - dist/win-ia32/archifiltre *.exe
+      - dist/win-x64/archifiltre *.exe
+      - dist/linux-x64/archifiltre-*.AppImage
+    expire_in: 1 day
+
+Create-github-release:
+  stage: "Create github release"
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  only:
+    - tags
+  script:
+    - curl -X POST https://${GITHUB_TOKEN}@api.github.com/repos/SocialGouv/archifiltre/releases -d '{"tag_name":"'$CI_COMMIT_TAG'","prerelease":true}'
+  artifacts:
+    paths:
+      - dist/win-ia32/archifiltre *.exe
+      - dist/win-x64/archifiltre *.exe
+      - dist/linux-x64/archifiltre-*.AppImage
+    expire_in: 1 day
+
+Upload-win32-Assets:
+  stage: "Upload release assets"
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  only:
+    - tags
+  script:
+    - export BINARY_PATH=$(ls dist/win-ia32/archifiltre\ *.exe)
+    - export GITHUB_REPO=SocialGouv/archifiltre
+    - export ASSET_NAME=archifiltre-32bits-$CI_COMMIT_TAG.exe
+    - ./scripts/upload-assets.sh
+
+Upload-win64-Assets:
+  stage: "Upload release assets"
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  only:
+    - tags
+  script:
+    - export BINARY_PATH=$(ls dist/win-x64/archifiltre\ *.exe)
+    - export GITHUB_REPO=SocialGouv/archifiltre
+    - export ASSET_NAME=archifiltre-64bits-$CI_COMMIT_TAG.exe
+    - ./scripts/upload-assets.sh
+
+Upload-unix-Assets:
+  stage: "Upload release assets"
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  only:
+    - tags
+  script:
+    - export BINARY_PATH=$(ls dist/linux-x64/archifiltre-*.AppImage)
+    - export GITHUB_REPO=SocialGouv/archifiltre
+    - export ASSET_NAME=linux-64bits-$CI_COMMIT_TAG.AppImage
+    - ./scripts/upload-assets.sh

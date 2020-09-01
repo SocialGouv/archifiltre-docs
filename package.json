@@ -110,7 +110,7 @@
     "style-loader": "1.2.1",
     "svg-url-loader": "6.0.0",
     "ts-jest": "26.3.0",
-    "typescript": "3.9.7",
+    "typescript": "4.0.2",
     "url-loader": "4.1.0",
     "webpack": "4.44.1",
     "webpack-bundle-analyzer": "3.8.0",

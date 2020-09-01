@@ -1,8 +1,8 @@
 import { TFunction } from "i18next";
 import React from "react";
 
-import SaveButton from "components/header/dashboard/save-button";
-import { reportError } from "../../logging/reporter";
+import SaveButton from "components/header/save-button";
+import { reportError } from "logging/reporter";
 import { ContactUs } from "./contact-us";
 import Grid from "@material-ui/core/Grid";
 import { withTranslation } from "react-i18next";

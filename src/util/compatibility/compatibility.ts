@@ -10,7 +10,7 @@ interface V8 {
   content_queue: any;
   tree: any;
   tags: any;
-  tags_sizes: number;
+  tags_sizes: any;
   parent_path: any;
 }
 

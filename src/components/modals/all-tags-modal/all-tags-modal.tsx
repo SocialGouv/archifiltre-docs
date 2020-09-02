@@ -4,8 +4,8 @@ import Dialog from "@material-ui/core/Dialog";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { useStyles } from "hooks/use-styles";
-import ModalHeader from "../../modals/modal-header";
-import AllTagsContainer from "../../tags/all-tags-container";
+import ModalHeader from "components/modals/modal-header";
+import AllTagsContainer from "components/main-space/workspace/enrichment/tags/all-tags-container";
 import styled from "styled-components";
 
 const StyledPaper = styled(Paper)`

@@ -6,8 +6,8 @@ import { shell } from "electron";
 import React, { FC, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { request } from "util/http-util";
-import { useStyles } from "../../hooks/use-styles";
-import { reportError } from "../../logging/reporter";
+import { useStyles } from "hooks/use-styles";
+import { reportError } from "logging/reporter";
 import version, { versionComparator } from "../../version";
 import ModalHeader from "../modals/modal-header";
 

@@ -3,8 +3,7 @@ import Box from "@material-ui/core/Box";
 import { shell } from "electron";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { FaGlobeAmericas, FaInfo } from "react-icons/all";
-import { FaQuestionCircle } from "react-icons/fa";
+import { FaGlobeAmericas, FaInfo, FaQuestionCircle } from "react-icons/fa";
 import { versionName } from "version";
 import { version } from "../../../../package.json";
 

@@ -1,9 +1,9 @@
 import React from "react";
 import { LoadingStep } from "reducers/loading-state/loading-state-types";
 import FolderDropzone from "components/folder-dropzone/folder-dropzone-container";
-import WorkSpace from "components/workspace/workspace";
+import WorkSpace from "components/main-space/workspace/workspace";
 import ErrorScreen from "components/errors/error-screen";
-import { ComponentMap, switchComponent } from "../../hoc/switchComponent";
+import { ComponentMap, switchComponent } from "hoc/switchComponent";
 import WaitingScreenContainer from "components/folder-dropzone/waiting-screen-container";
 
 type MainSpaceRouterProps = {

@@ -136,7 +136,7 @@
         "other": "Other"
       },
       "browse": "Browse",
-      "reload": "Reload"
+      "reload": "Save and reload"
     },
     "hash": {
       "loadingInfoLabel": "Loading files and folders hashes",

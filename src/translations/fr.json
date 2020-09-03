@@ -81,7 +81,6 @@
       "cannotMoveToFile": "Impossible de déplacer un élément vers un fichier",
       "nameConflict": "Conflit de nom avec un élément de ce dossier",
       "moveElementsMode": "Mode Déplacement",
-      "normalMode": "Mode normal",
       "general": "Général",
       "enrichment": "Enrichissement",
       "audit": "Audit",

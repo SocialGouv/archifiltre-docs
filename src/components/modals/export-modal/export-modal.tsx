@@ -15,7 +15,7 @@ const ExportModal: FC<ExportModalProps> = ({ isModalOpen, closeModal }) => {
   return (
     <Dialog open={isModalOpen} onClose={closeModal} fullWidth maxWidth="sm">
       <ModalHeader title={t("exportModal.title")} onClose={closeModal} />
-      <ExportModalContent />
+      <ExportModalContent closeModal={closeModal} />
     </Dialog>
   );
 };

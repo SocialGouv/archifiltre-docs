@@ -4,9 +4,9 @@ import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-ty
 import Filter from "./filter";
 import { FilterMethod } from "typings/filter-types";
 
-interface SizeFilterProps {
+type SizeFilterProps = {
   setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
-}
+};
 
 const kBToB = 1000;
 const MBToB = 1000 * 1000;

@@ -25,13 +25,13 @@ const StyledPaper = styled(Paper)`
   min-height: 90%;
 `;
 
-interface SearchModalProps {
+type SearchModalProps = {
   isModalOpen: boolean;
   closeModal: () => void;
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   tags: TagMap;
-}
+};
 
 export const SearchModal: FC<SearchModalProps> = ({
   isModalOpen,

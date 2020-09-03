@@ -8,16 +8,16 @@ import Grid from "@material-ui/core/Grid";
 import { withTranslation } from "react-i18next";
 import styled from "styled-components";
 
-interface ErrorBoundaryProps {
+type ErrorBoundaryProps = {
   t: TFunction;
   originalPath: string;
   sessionName: string;
   exportToJson: () => void;
-}
+};
 
-interface ErrorBoundaryState {
+type ErrorBoundaryState = {
   hasError: boolean;
-}
+};
 
 const Wrapper = styled(Grid)`
   height: 100vh;

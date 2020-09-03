@@ -4,7 +4,7 @@ import React, { FC, memo, useCallback, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import styled from "styled-components";
 import { LoadingInfo } from "reducers/loading-info/loading-info-types";
-import { ThemedProps } from "../../theme/default-theme";
+import { ThemedProps } from "theme/default-theme";
 import LoadingInfoDisplay from "./loading-info-display";
 import LoadingSpinnerOrCloseCross from "./loading-spinner-or-close-cross";
 import SquaredButton from "./squared-button";
@@ -28,9 +28,9 @@ const LoadingBarArea = memo(styled.div`
   padding-bottom: 12px;
 `);
 
-interface ToggleArrowProps {
+type ToggleArrowProps = {
   collapsed: boolean;
-}
+};
 
 const ToggleArrow = muiStyled(SquaredButton)<Theme, ToggleArrowProps>(
   ({ collapsed }) => ({
@@ -38,11 +38,11 @@ const ToggleArrow = muiStyled(SquaredButton)<Theme, ToggleArrowProps>(
   })
 );
 
-interface BackgroundLoadingInfoProps {
+type BackgroundLoadingInfoProps = {
   loadingItems: LoadingInfo[];
   isLoading: boolean;
   dismissAll: () => void;
-}
+};
 
 const BackgroundLoadingInfo: FC<BackgroundLoadingInfoProps> = ({
   loadingItems,

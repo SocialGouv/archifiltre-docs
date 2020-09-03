@@ -3,11 +3,11 @@ import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSearchMinus } from "react-icons/fa";
 
-interface BackToRootProps {
+type BackToRootProps = {
   isZoomed: boolean;
   setNoFocus: any;
   resetZoom: () => void;
-}
+};
 
 const BackToRoot: FC<BackToRootProps> = ({
   isZoomed,

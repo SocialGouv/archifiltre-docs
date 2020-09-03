@@ -96,7 +96,7 @@ const shouldRenderChildMinimap = (x: number, elementWidth: number): boolean => {
   return elementWidth > minimumMinimapElementWidth;
 };
 
-interface IcicleMainProps {
+type IcicleMainProps = {
   aliases: AliasMap;
   comments: CommentsMap;
   tags: TagMap;
@@ -120,7 +120,7 @@ interface IcicleMainProps {
   setFocus: (id: string) => void;
   setNoFocus: () => void;
   setNoHover: () => void;
-}
+};
 
 const IcicleMain: FC<IcicleMainProps> = ({
   aliases,

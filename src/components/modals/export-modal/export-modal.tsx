@@ -4,10 +4,10 @@ import { useTranslation } from "react-i18next";
 import ModalHeader from "../../modals/modal-header";
 import ExportModalContent from "./export-modal-content-container";
 
-interface ExportModalProps {
+type ExportModalProps = {
   isModalOpen: boolean;
   closeModal: () => void;
-}
+};
 
 const ExportModal: FC<ExportModalProps> = ({ isModalOpen, closeModal }) => {
   const { t } = useTranslation();

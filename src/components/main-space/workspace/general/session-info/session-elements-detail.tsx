@@ -2,10 +2,10 @@ import React, { FC } from "react";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 
-interface SessionElementsDetailProps {
+type SessionElementsDetailProps = {
   title: string;
   content: string | number;
-}
+};
 
 const SessionElementsDetail: FC<SessionElementsDetailProps> = ({
   title,

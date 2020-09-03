@@ -4,11 +4,11 @@ import SessionElementsDetail from "./session-elements-detail";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import Grid from "@material-ui/core/Grid";
 
-interface SessionElementsDetailsProps {
+type SessionElementsDetailsProps = {
   nbFiles: number;
   nbFolders: number;
   volume: number;
-}
+};
 
 const SessionElementsDetails: FC<SessionElementsDetailsProps> = ({
   nbFolders,

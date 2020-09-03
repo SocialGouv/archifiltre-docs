@@ -86,7 +86,7 @@ const makeRulerText = (
   return rulerInfo.join(" | ");
 };
 
-interface RulerProps {
+type RulerProps = {
   widthUnit: number;
   totalSize: number;
   hoveredDims: Dims | null;
@@ -95,7 +95,7 @@ interface RulerProps {
   hoveredElementId: string;
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
   fillColor: FillColor;
-}
+};
 
 const Ruler: FC<RulerProps> = ({
   widthUnit,

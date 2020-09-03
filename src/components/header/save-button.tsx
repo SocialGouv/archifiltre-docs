@@ -6,19 +6,19 @@ import { FaSave } from "react-icons/fa";
 import { useStyles } from "hooks/use-styles";
 import version from "../../version";
 
-interface ExportToJsonOptions {
+type ExportToJsonOptions = {
   sessionName: string;
   originalPath: string;
   version: string;
-}
+};
 
 export type ExportToJson = (options: ExportToJsonOptions) => void;
 
-interface SaveButtonProps {
+type SaveButtonProps = {
   originalPath: string;
   sessionName: string;
   exportToJson: ExportToJson;
-}
+};
 
 const SaveButton: FC<SaveButtonProps> = ({
   originalPath,

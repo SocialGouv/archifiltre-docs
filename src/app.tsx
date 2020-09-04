@@ -3,14 +3,17 @@ import { initReporter, reportInfo } from "logging/reporter";
 
 import "./css/index.scss";
 import Providers from "components/common/providers";
-import { getInitialUserSettings, initUserSettings } from "persistent-settings";
+import {
+  getInitialUserSettings,
+  initUserSettings,
+} from "persistence/persistent-settings";
+import { initPreviousSessions } from "persistence/previous-sessions";
 
 import { SecretDevtools } from "secret-devtools";
 import React from "react";
 import ReactDOM from "react-dom";
 
 import MainSpace from "components/main-space/main-space";
-import Header from "components/header/header-container";
 import { NewVersionChecker } from "components/header/new-version-checker";
 import WindowResize from "components/common/window-resize-handler";
 
@@ -30,6 +33,7 @@ document.title = `Archifiltre v${version}`;
 
 SecretDevtools.enable();
 initUserSettings();
+initPreviousSessions();
 const { isTrackingEnabled, isMonitoringEnabled } = getInitialUserSettings();
 initTracker(isTrackingEnabled);
 initReporter(isMonitoringEnabled);
@@ -54,9 +58,6 @@ const app = () => {
       <WindowResize />
       <App>
         <Box display="flex" flexDirection="column" height="100%" width="100%">
-          <Box>
-            <Header />
-          </Box>
           <Box flexGrow={1} flexShrink={1} overflow="hidden">
             <MainSpace />
           </Box>

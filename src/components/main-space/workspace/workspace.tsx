@@ -7,6 +7,8 @@ import Box from "@material-ui/core/Box";
 import DuplicatesSearch from "components/main-space/duplicates-search/duplicates-search-container";
 import TabsContent from "./tabs/tabs-content";
 
+import Header from "components/header/header-container";
+
 const workspaceState = {
   isFileMoveActive: false,
   areTabsHidden: false,
@@ -31,6 +33,7 @@ const Workspace: FC = () => {
       }}
     >
       <Box display="flex" flexDirection="column" height="100%">
+        <Header />
         <Box
           flexGrow={0}
           flexShrink={0}

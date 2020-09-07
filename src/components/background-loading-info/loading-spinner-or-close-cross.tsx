@@ -13,10 +13,10 @@ const Loader = memo(styled.div`
   box-sizing: border-box;
 `);
 
-interface LoadingSpinnerOrCloseCrossProps {
+type LoadingSpinnerOrCloseCrossProps = {
   isLoading: boolean;
   onClose: () => void;
-}
+};
 
 const LoadingSpinnerOrCloseCross: FC<LoadingSpinnerOrCloseCrossProps> = ({
   isLoading,

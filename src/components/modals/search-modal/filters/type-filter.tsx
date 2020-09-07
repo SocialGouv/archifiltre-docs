@@ -6,12 +6,12 @@ import { getType } from "util/files-and-folders/file-and-folders-utils";
 import { BooleanOperator, joinFilters } from "util/array/array-util";
 import Filter from "./filter";
 import { FilterMethod } from "typings/filter-types";
-import { useDeferredMemo } from "../../../../hooks/use-deferred-memo";
+import { useDeferredMemo } from "hooks/use-deferred-memo";
 
-interface TypeFilterProps {
+type TypeFilterProps = {
   filesAndFolders: FilesAndFolders[];
   setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
-}
+};
 
 type ComputeOptionsOptions = {
   folderLabel: string;

@@ -12,10 +12,10 @@ const StyledPaper = styled(Paper)`
   min-height: 50%;
 `;
 
-interface SettingsModalProps {
+type SettingsModalProps = {
   isModalOpen: boolean;
   closeModal: () => void;
-}
+};
 
 const AllTagsModal: FC<SettingsModalProps> = ({ isModalOpen, closeModal }) => {
   const { t } = useTranslation();

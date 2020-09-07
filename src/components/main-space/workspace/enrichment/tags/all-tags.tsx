@@ -32,7 +32,7 @@ const TagsContent = styled(Box)`
   font-size: 0.8em;
 `;
 
-interface AllTagsProps {
+type AllTagsProps = {
   tags: TagMap;
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
@@ -41,7 +41,7 @@ interface AllTagsProps {
   filesToDeleteCount: number;
   onDeleteTag: (tagId: string) => () => void;
   onRenameTag: (tagId: string) => (newName: string) => void;
-}
+};
 
 const AllTags: FC<AllTagsProps> = ({
   tags,
@@ -133,13 +133,13 @@ const AllTags: FC<AllTagsProps> = ({
   );
 };
 
-interface AllTagsApiToPropsPros {
+type AllTagsApiToPropsProps = {
   tags: TagMap;
   renameTag: (tagId: string, name: string) => void;
   deleteTag: (tagId: string) => void;
-}
+};
 
-const AllTagsApiToProps: FC<AllTagsApiToPropsPros> = ({
+const AllTagsApiToProps: FC<AllTagsApiToPropsProps> = ({
   tags,
   renameTag,
   deleteTag,

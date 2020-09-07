@@ -3,11 +3,11 @@ import React from "react";
 import * as UserData from "user-data";
 import { remote } from "electron";
 
-interface WindowResizeState {
+type WindowResizeState = {
   win;
   reader;
   writer;
-}
+};
 
 export default class WindowResize extends React.PureComponent<
   {},

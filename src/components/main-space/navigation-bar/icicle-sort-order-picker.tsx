@@ -4,10 +4,10 @@ import { useTranslation } from "react-i18next";
 import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
 import OptionsPicker from "./options-picker";
 
-interface IciclesSortOrderPickerProps {
+type IciclesSortOrderPickerProps = {
   icicleSortMethod: IcicleSortMethod;
   setIcicleSortMethod: (sortMethod: IcicleSortMethod) => void;
-}
+};
 
 const IciclesSortOrderPicker: FC<IciclesSortOrderPickerProps> = ({
   icicleSortMethod,

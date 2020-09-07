@@ -5,9 +5,9 @@ import { useTranslation } from "react-i18next";
 import { FaSearch } from "react-icons/fa";
 import { useStyles } from "hooks/use-styles";
 
-interface SearchBarProps {
+type SearchBarProps = {
   setSearchTerm: (searchTerm: string) => void;
-}
+};
 
 export const SearchBar: FC<SearchBarProps> = ({ setSearchTerm }) => {
   const { t } = useTranslation();

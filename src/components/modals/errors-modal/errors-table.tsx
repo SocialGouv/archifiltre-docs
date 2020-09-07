@@ -3,9 +3,9 @@ import React, { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 
-interface ErrorsTableProps {
+type ErrorsTableProps = {
   errors: ArchifiltreError[];
-}
+};
 
 const ErrorsTable: FC<ErrorsTableProps> = ({ errors }) => {
   const { t } = useTranslation();

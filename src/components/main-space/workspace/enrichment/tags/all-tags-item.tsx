@@ -9,14 +9,14 @@ import { FaTrash, FaPen } from "react-icons/fa";
 import { percent } from "util/numbers/numbers-util";
 import EditableField from "components/common/editable-field";
 
-interface AllTagsItemProps {
+type AllTagsItemProps = {
   tag;
   size: number;
   totalVolume: number;
   deleteTag?: () => void;
   tagNumber: number;
   renameTag?: (newName: string) => void;
-}
+};
 
 const AllTagsItem: FC<AllTagsItemProps> = ({
   tag,

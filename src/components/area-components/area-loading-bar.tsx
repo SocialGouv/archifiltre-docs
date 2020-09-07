@@ -11,9 +11,9 @@ const ProgressBarContainer = styled.div`
   height: 100%;
 `;
 
-interface ProgressBarProps {
+type ProgressBarProps = {
   width: number;
-}
+};
 
 const ProgressBar = styled.div<ProgressBarProps>`
   position: absolute;
@@ -41,9 +41,9 @@ const ProgressBarText = styled.div`
   padding-left: 40px;
 `;
 
-interface AreaLoadingBarProps {
+type AreaLoadingBarProps = {
   progress: number;
-}
+};
 
 /**
  * Component for displaying a full width loading bar

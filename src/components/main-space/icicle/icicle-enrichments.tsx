@@ -10,7 +10,7 @@ import IcicleEnrichment, { OPACITY } from "./icicle-enrichment";
 import { IcicleMouseHandler } from "./icicle-main";
 import { DimsMap } from "./icicle";
 
-interface IcicleEnrichmentsProps {
+type IcicleEnrichmentsProps = {
   aliases: AliasMap;
   comments: CommentsMap;
   tags: TagMap;
@@ -20,7 +20,7 @@ interface IcicleEnrichmentsProps {
   onClick: IcicleMouseHandler;
   onDoubleClick: IcicleMouseHandler;
   onMouseOver: IcicleMouseHandler;
-}
+};
 
 /**
  * Determines if the IcicleEnrichment should be highlighted

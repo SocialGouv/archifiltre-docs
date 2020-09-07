@@ -5,9 +5,9 @@ import { CopyToClipboard } from "../../common/copy-to-clipboard";
 import { Dims, DimsAndId } from "../icicle/icicle-rect";
 import BreadcrumbText from "components/main-space/breadcrumb/breadcrumb-text";
 
-interface BreadcrumbWrapperProps {
+type BreadcrumbWrapperProps = {
   active: boolean;
-}
+};
 
 const BreadcrumbWrapper = styled.div<BreadcrumbWrapperProps>`
   width: 100%;
@@ -17,9 +17,9 @@ const BreadcrumbWrapper = styled.div<BreadcrumbWrapperProps>`
   opacity: ${({ active }) => (active ? 1 : 0.3)};
 `;
 
-interface CopyToClipboardProps {
+type CopyToClipboardProps = {
   active: boolean;
-}
+};
 
 const CopyToClipboardWrapper = styled.div<CopyToClipboardProps>`
   visibility: hidden;

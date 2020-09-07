@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import SessionElementsDetails from "./session-elements-details";
 import BoundaryDates from "./boundary-dates";
 
-interface SessionInfoProps {
+type SessionInfoProps = {
   sessionName: string;
   onChangeSessionName: (name: string) => void;
   nbFolders: number;
@@ -14,7 +14,7 @@ interface SessionInfoProps {
   newestFileTimestamp: number;
   oldestFileTimestamp: number;
   firstLevelName: string;
-}
+};
 
 const SessionInfo: FC<SessionInfoProps> = ({
   sessionName,

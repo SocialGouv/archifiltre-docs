@@ -5,9 +5,9 @@ import { useTranslation } from "react-i18next";
 import { FaSyncAlt } from "react-icons/fa";
 import { useStyles } from "hooks/use-styles";
 
-interface LoadPreviousSessionButtonProps {
+type LoadPreviousSessionButtonProps = {
   reloadPreviousSession: () => void;
-}
+};
 
 const LoadPreviousSessionButton: FC<LoadPreviousSessionButtonProps> = ({
   reloadPreviousSession,

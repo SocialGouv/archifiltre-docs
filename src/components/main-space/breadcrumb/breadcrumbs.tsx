@@ -20,15 +20,15 @@ const BreadcrumbsWrapper = styled.div`
   height: 100%;
 `;
 
-interface BreadcrumbWrapperProps {
+type BreadcrumbWrapperProps = {
   depth: number;
-}
+};
 
 const BreadcrumbWrapper = styled.div<BreadcrumbWrapperProps>`
   height: ${({ depth }) => `${100 / depth}%`};
 `;
 
-interface BreadcrumbsProps {
+type BreadcrumbsProps = {
   depth: number;
   lockedSequence: string[];
   hoveredSequence: string[];
@@ -37,17 +37,17 @@ interface BreadcrumbsProps {
   aliases: AliasMap;
   originalPath: string;
   onBreadcrumbClick: (dimsAndId: DimsAndId, event) => void;
-}
+};
 
-interface MakeFillerArgs {
+type MakeFillerArgs = {
   id: string;
   name: string;
   alias: string | null;
   isFirst: boolean;
   isLast: boolean;
-}
+};
 
-interface BreadcrumbProps {
+type BreadcrumbProps = {
   id: string;
   name: string;
   alias: string | null;
@@ -57,7 +57,7 @@ interface BreadcrumbProps {
   isLast: boolean;
   path: string;
   isActive: boolean;
-}
+};
 
 /**
  * Create a filler Breadcrumb, used when nothing is locked or focused

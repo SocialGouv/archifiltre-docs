@@ -2,10 +2,10 @@ import React, { FC, ReactNode } from "react";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 
-interface ElementCharacteristicProps {
+type ElementCharacteristicProps = {
   name: ReactNode;
   value: ReactNode;
-}
+};
 
 const ElementCharacteristic: FC<ElementCharacteristicProps> = ({
   name,

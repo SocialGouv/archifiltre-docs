@@ -7,11 +7,11 @@ import { useTranslation } from "react-i18next";
 import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 import ErrorsTable from "./errors-table";
 
-interface ErrorsModalProps {
+type ErrorsModalProps = {
   isModalOpen: boolean;
   closeModal: () => void;
   errors: ArchifiltreError[];
-}
+};
 
 const ErrorsModal: FC<ErrorsModalProps> = ({
   isModalOpen,

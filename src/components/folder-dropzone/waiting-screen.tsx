@@ -23,28 +23,29 @@ const MainCell = styled.div`
   text-align: center;
 `;
 
-interface SimpleLoaderProps {
+type SimpleLoaderProps = {
   loaderText: string;
-}
+};
 
-interface TraverseProps {
+type TraverseProps = {
   indexedFilesCount: number;
   step: FileSystemLoadingStep;
-}
+};
 
-interface LoadingMessagesProps {
+type LoadingMessagesProps = {
   step: FileSystemLoadingStep;
   indexedFilesCount: number;
   constructedDataModelElementsCount: number;
   derivedElementsCount: number;
-}
-interface WaitingScreenProps {
+};
+
+type WaitingScreenProps = {
   step: FileSystemLoadingStep;
   indexedFilesCount: number;
   constructedDataModelElementsCount: number;
   derivedElementsCount: number;
   loadedPath: string;
-}
+};
 
 const SimpleLoader: FC<SimpleLoaderProps> = ({ loaderText }) => (
   <SimpleLoaderContainer>

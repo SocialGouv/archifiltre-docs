@@ -7,11 +7,11 @@ import SizeFilter from "./size-filter";
 import TagFilter from "./tag-filter";
 import TypeFilter from "./type-filter";
 
-interface FiltersProps {
+type FiltersProps = {
   filesAndFolders: FilesAndFolders[];
   tags: TagMap;
   setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
-}
+};
 
 const Filters: FC<FiltersProps> = ({ filesAndFolders, tags, setFilters }) => {
   const [typeFilters, setTypeFilters] = useState<

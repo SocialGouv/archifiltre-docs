@@ -1,11 +1,11 @@
 import React, { FC, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { loadFilesAndFoldersFromPathThunk } from "../../reducers/store-thunks";
+import { loadFilesAndFoldersFromPathThunk } from "reducers/store-thunks";
 import FolderDropzone from "./folder-dropzone";
 
-interface FolderDropzoneContainerProps {
+type FolderDropzoneContainerProps = {
   setLoadedPath: (path: string) => void;
-}
+};
 
 const FolderDropzoneContainer: FC<FolderDropzoneContainerProps> = ({
   setLoadedPath,

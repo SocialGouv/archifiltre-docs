@@ -5,11 +5,11 @@ import { TagMap } from "reducers/tags/tags-types";
 import Filter from "./filter";
 import { FilterMethod } from "typings/filter-types";
 
-interface TagFilterProps {
+type TagFilterProps = {
   filesAndFolders: FilesAndFolders[];
   tags: TagMap;
   setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
-}
+};
 
 const makeTagFilter = (
   tags: TagMap,

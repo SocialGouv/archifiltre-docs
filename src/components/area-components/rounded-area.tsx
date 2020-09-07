@@ -20,9 +20,9 @@ const StyledRoundedArea = styled.div`
       : toRgba([121, 121, 121, 0.4])};
 `;
 
-interface RoundedAreaProps {
+type RoundedAreaProps = {
   color?: string;
-}
+};
 
 /**
  * An area with rounded angles to display content

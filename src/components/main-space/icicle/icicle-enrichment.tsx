@@ -21,7 +21,7 @@ export const ENRICHMENT_COLORS = {
   [EnrichmentTypes.COMMENT]: "rgb(3,161,214)",
 };
 
-interface IcicleEnrichmentProps {
+type IcicleEnrichmentProps = {
   ffId: string;
   dims: Dims;
   hasTag: boolean;
@@ -32,7 +32,7 @@ interface IcicleEnrichmentProps {
   onClick: IcicleMouseHandler;
   onDoubleClick: IcicleMouseHandler;
   onMouseOver: IcicleMouseHandler;
-}
+};
 
 const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
   ffId,

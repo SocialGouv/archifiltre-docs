@@ -31,9 +31,9 @@ const TabPanel: FC<TabPanelProps> = ({ children, value, index }) => (
   </StyledPanel>
 );
 
-interface TabsContentProps {
+type TabsContentProps = {
   tabIndex: number;
-}
+};
 
 const TabsContent: FC<TabsContentProps> = ({ tabIndex }) => (
   <Box width="100%">

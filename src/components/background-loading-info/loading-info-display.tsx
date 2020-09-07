@@ -20,10 +20,10 @@ const LoadingBar = withTheme(styled.div<ThemedProps>`
   border-radius: 3px;
 `);
 
-interface InnerLoadingBarProps {
+type InnerLoadingBarProps = {
   loadingPercent: number;
   color: string;
-}
+};
 
 const InnerLoadingBar = styled.div<InnerLoadingBarProps>`
   height: 6px;
@@ -38,10 +38,10 @@ const LoadingBarName = styled.h3`
   line-height: 13px;
 `;
 
-interface LoadingInfoProps {
+type LoadingInfoProps = {
   loadingInfo: LoadingInfo;
   color: string;
-}
+};
 
 const LoadingInfoDisplay: FC<LoadingInfoProps> = ({
   loadingInfo,

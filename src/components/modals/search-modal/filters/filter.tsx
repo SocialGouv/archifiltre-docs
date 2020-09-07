@@ -8,12 +8,12 @@ import MenuItem from "@material-ui/core/MenuItem";
 import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
-interface FilterProps {
+type FilterProps = {
   name: string;
   availableOptions: string[];
   selectedOptions: string[];
   setSelectedOptions: (options: string[]) => void;
-}
+};
 
 const Filter: FC<FilterProps> = ({
   name,

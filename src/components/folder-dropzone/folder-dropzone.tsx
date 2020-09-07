@@ -11,9 +11,9 @@ declare global {
   const AUTOLOAD: string;
 }
 
-interface FolderDropzoneProps {
+type FolderDropzoneProps = {
   loadFromPath: (path: string) => void;
-}
+};
 
 const Dropzone = styled(Grid)`
   border: 1px dashed #868686;

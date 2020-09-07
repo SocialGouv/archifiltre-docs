@@ -2,9 +2,9 @@ import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import LargeIndicatorText from "components/common/large-indicator-text";
 
-interface FileTreeDepthProps {
+type FileTreeDepthProps = {
   fileTreeDepth: number;
-}
+};
 
 const FileTreeDepth: FC<FileTreeDepthProps> = ({ fileTreeDepth }) => {
   const { t } = useTranslation();

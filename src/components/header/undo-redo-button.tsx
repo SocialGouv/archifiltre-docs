@@ -6,13 +6,13 @@ import { useTranslation } from "react-i18next";
 import { FaUndo, FaRedo } from "react-icons/fa";
 import { useStyles } from "hooks/use-styles";
 
-interface UndoRedoButtonProps {
+type UndoRedoButtonProps = {
   isVisible: boolean;
   isUndo?: boolean;
   undo: () => void;
   redo: () => void;
   isActive: boolean;
-}
+};
 
 const UndoRedoButton: FC<UndoRedoButtonProps> = ({
   isVisible,

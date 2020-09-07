@@ -11,12 +11,12 @@ type Option<ValueType extends OptionValue> = {
   label: string;
 };
 
-interface OptionsPickerProps<ValueType extends OptionValue> {
+type OptionsPickerProps<ValueType extends OptionValue> = {
   title?: string;
   value: ValueType;
   setValue: (value: ValueType) => void;
   options: Option<ValueType>[];
-}
+};
 
 const useStyles = makeStyles(() => ({
   hidden: {

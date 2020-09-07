@@ -1,9 +1,9 @@
 import { FC, memo } from "react";
 import styled, { keyframes } from "styled-components";
 
-interface SpinnerProps {
+type SpinnerProps = {
   color?: string;
-}
+};
 
 const rotate = keyframes`
   from {

@@ -3,19 +3,19 @@ import React, { FC, useCallback, useEffect, MouseEvent } from "react";
 import * as FunctionUtil from "util/function/function-util";
 import { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 import SvgRectangle from "./svg-rectangle";
-import { useFileMoveActiveState } from "../../../hooks/use-file-move-active-state";
+import { useFileMoveActiveState } from "hooks/use-file-move-active-state";
 
-export interface Dims {
+export type Dims = {
   x: number;
   y: number;
   dx: number;
   dy: number;
-}
+};
 
-export interface DimsAndId {
+export type DimsAndId = {
   id: string;
   dims: () => Dims;
-}
+};
 
 enum CursorState {
   ACTIVE_ELEMENT_CURSOR = "pointer",
@@ -23,7 +23,7 @@ enum CursorState {
   MOVE_CURSOR = "move",
 }
 
-interface IcicleRectProps {
+type IcicleRectProps = {
   opacity: number;
   x: number;
   dx: number;
@@ -41,7 +41,7 @@ interface IcicleRectProps {
   onClickHandler: IcicleMouseActionHandler;
   onDoubleClickHandler: IcicleMouseActionHandler;
   onMouseOverHandler: IcicleMouseActionHandler;
-}
+};
 
 const IcicleRect: FC<IcicleRectProps> = ({
   x,

@@ -12,10 +12,10 @@ import { colors } from "util/color/color-util";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import { TFunction } from "i18next";
 
-interface FileTypesDetailsProps {
+type FileTypesDetailsProps = {
   elementsCountsByType: FileTypeMap<number>;
   elementsSizesByType: FileTypeMap<number>;
-}
+};
 
 const makeBarConfig = (type: FileType): HorizontalStackedBarOption => ({
   key: type,

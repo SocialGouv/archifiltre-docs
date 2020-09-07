@@ -38,6 +38,7 @@ type ExportModalContentProps = {
   originalPath: string;
   sessionName: string;
   startExport: (exportId: ExportType, exportPath: string) => void;
+  closeModal: () => void;
 };
 
 const ExportModalContent: FC<ExportModalContentProps> = ({
@@ -45,6 +46,7 @@ const ExportModalContent: FC<ExportModalContentProps> = ({
   originalPath,
   sessionName,
   startExport,
+  closeModal,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -61,15 +63,14 @@ const ExportModalContent: FC<ExportModalContentProps> = ({
     [areHashesReady]
   );
 
-  const onExport = useCallback(
-    () =>
-      Object.values(ExportType)
-        .filter((exportId) => activeExports[exportId])
-        .forEach((exportId: ExportType) =>
-          startExport(exportId, exportPaths[exportId])
-        ),
-    [startExport, activeExports, exportPaths]
-  );
+  const onExport = useCallback(() => {
+    closeModal();
+    return Object.values(ExportType)
+      .filter((exportId) => activeExports[exportId])
+      .forEach((exportId: ExportType) =>
+        startExport(exportId, exportPaths[exportId])
+      );
+  }, [startExport, activeExports, exportPaths]);
 
   const setActiveExportValue = (exportType: ExportType, value: boolean) =>
     setActiveExports({ ...activeExports, [exportType]: value });

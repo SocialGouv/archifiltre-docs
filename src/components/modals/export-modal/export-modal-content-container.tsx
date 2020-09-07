@@ -5,7 +5,13 @@ import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/works
 import { exportConfig, ExportType } from "./export-config";
 import ExportModalContent from "./export-modal-content";
 
-const ExportModalContentContainer: FC = () => {
+type ExportModalContentContainerProps = {
+  closeModal: () => void;
+};
+
+const ExportModalContentContainer: FC<ExportModalContentContainerProps> = ({
+  closeModal,
+}) => {
   const { originalPath, sessionName } = useSelector(
     getWorkspaceMetadataFromStore
   );
@@ -24,6 +30,7 @@ const ExportModalContentContainer: FC = () => {
       originalPath={originalPath}
       sessionName={sessionName}
       startExport={startExport}
+      closeModal={closeModal}
     />
   );
 };

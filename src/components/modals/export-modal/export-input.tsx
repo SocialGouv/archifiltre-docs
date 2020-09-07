@@ -14,8 +14,9 @@ const FilePath = styled.span`
   width: 300px;
 `;
 
-const HideableTooltip = styled(Tooltip)<{ isVisible: boolean }>`
-  visibility: ${({ isVisible }) => (isVisible ? "visible" : "hidden")};
+const HideableTooltip = styled(Tooltip)<{ isvisible: string }>`
+  visibility: ${({ isvisible }) =>
+    isvisible === "true" ? "visible" : "hidden"};
 `;
 
 type ExportInputProps = {
@@ -44,12 +45,15 @@ const ExportInput: FC<ExportInputProps> = ({
       <Tooltip title={exportFilePath}>
         <FilePath>{exportFilePath}</FilePath>
       </Tooltip>
-      <HideableTooltip title={browseTitle} isVisible={!isFilePickerDisabled}>
-        <span>
+      <HideableTooltip
+        title={browseTitle}
+        isvisible={(!isFilePickerDisabled).toString()}
+      >
+        <div>
           <Button onClick={onClick} disabled={isFilePickerDisabled}>
             <FaFolderOpen />
           </Button>
-        </span>
+        </div>
       </HideableTooltip>
     </Box>
   );

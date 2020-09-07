@@ -79,7 +79,6 @@
       "cannotMoveElement": "Die Datei oder der Ordner kann hierher nicht verschoben werden.",
       "nameConflict": "Namenskonflikt mit einem anderen Ordnerelement",
       "moveElementsMode": "Bewegungsmodus",
-      "normalMode": "Normaler Modus",
       "general": "Allgemein",
       "enrichment": "Anreicherung",
       "audit": "Audit",

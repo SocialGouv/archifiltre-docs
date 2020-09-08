@@ -89,7 +89,7 @@
     "csv-stringify": "^5.5.1",
     "deep-equal": "2.0.3",
     "dotenv": "8.2.0",
-    "electron": "9.2.1",
+    "electron": "10.1.1",
     "electron-builder": "22.8.0",
     "electron-react-devtools": "0.5.3",
     "eslint": "7.8.0",

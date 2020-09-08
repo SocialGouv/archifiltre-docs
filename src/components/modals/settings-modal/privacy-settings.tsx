@@ -1,3 +1,5 @@
+import { Theme } from "@material-ui/core";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 import Tooltip from "@material-ui/core/Tooltip";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -9,8 +11,18 @@ import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { reloadApp } from "util/electron/electron-util";
 
+const useStyles = makeStyles((theme: Theme) => ({
+  enabled: {
+    color: theme.palette.secondary.main,
+  },
+  disabled: {
+    color: theme.palette.grey["500"],
+  },
+}));
+
 const PrivacySettings = () => {
   const { t } = useTranslation();
+  const classes = useStyles();
 
   const {
     isTrackingEnabled: defaultIsTrackingEnabled,
@@ -48,6 +60,9 @@ const PrivacySettings = () => {
             <Switch checked={isTrackingEnabled} onChange={toggleTracking} />
           }
           label={t("settingsModal.trackingData")}
+          classes={{
+            label: isTrackingEnabled ? classes.enabled : classes.disabled,
+          }}
         />
       </Box>
       <Box>
@@ -56,6 +71,9 @@ const PrivacySettings = () => {
             <Switch checked={isMonitoringEnabled} onChange={toggleMonitoring} />
           }
           label={t("settingsModal.monitoringData")}
+          classes={{
+            label: isMonitoringEnabled ? classes.enabled : classes.disabled,
+          }}
         />
       </Box>
       <Box pt={1}>

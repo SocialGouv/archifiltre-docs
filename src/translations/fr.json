@@ -175,7 +175,8 @@
       "csvExportSuccessMessage": "L'export CSV est terminé",
       "creatingCsvExport": "Création de l'export CSV",
       "creatingCsvExportWithHashes": "Création de l'export CSV avec empreintes",
-      "creatingResipExport": "Création de l'export RESIP"
+      "creatingResipExport": "Création de l'export RESIP",
+      "treeCsv": "CSV hiérarchisé"
     },
     "replay": {
       "title": "Chargement de la session précédente",

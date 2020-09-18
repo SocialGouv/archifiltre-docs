@@ -1,7 +1,7 @@
 import { cpus } from "os";
 import { Observable } from "rxjs";
 import { chunk } from "lodash";
-import { reportError } from "../../logging/reporter";
+import { reportError } from "logging/reporter";
 import { makeEmptyArray } from "util/array/array-util";
 import { map } from "rxjs/operators";
 

@@ -19,6 +19,7 @@ import {
 } from "reducers/store-test-utils";
 import { csvExporterThunk } from "./csv-exporter";
 import { generateCsvExport$ } from "./csv-exporter.controller";
+import { initialState } from "reducers/hashes/hashes-reducer";
 
 jest.mock("./csv-exporter.controller", () => ({
   generateCsvExport$: jest.fn(),
@@ -121,7 +122,7 @@ const testState = {
     filesAndFolders,
   }),
   filesAndFoldersMetadata: wrapStoreWithUndoable({ filesAndFoldersMetadata }),
-  hashes: { hashes },
+  hashes: { ...initialState, hashes },
   tags: wrapStoreWithUndoable({ tags }),
 };
 

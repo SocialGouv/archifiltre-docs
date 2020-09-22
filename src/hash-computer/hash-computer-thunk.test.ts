@@ -15,12 +15,15 @@ import {
   createEmptyStore,
   wrapStoreWithUndoable,
 } from "reducers/store-test-utils";
-import { computeHashesThunk } from "./hash-computer-thunk";
+import { firstHashesComputingThunk } from "./hash-computer-thunk";
 import {
   computeFolderHashes$,
   computeHashes$,
 } from "hash-computer/hash-computer.controller";
-import { setFilesAndFoldersHashes } from "reducers/hashes/hashes-actions";
+import {
+  resetErroredHashes,
+  setFilesAndFoldersHashes,
+} from "reducers/hashes/hashes-actions";
 
 jest.mock("./hash-computer.controller", () => ({
   computeFolderHashes$: jest.fn(),
@@ -71,10 +74,10 @@ const testStore = mockStore({
     ...filesAndFoldersInitialState,
     filesAndFolders,
   }),
-  hashes: { hashes: fileHashes },
+  hashes: { hashes: fileHashes, erroredHashes: [] },
 });
 
-describe("computeHashesThunk", () => {
+describe("firstHashesComputingThunk", () => {
   it("should compute hashes and save them", async () => {
     const computeHashes$Mock = computeHashes$ as jest.Mock;
     const computeFolderHashes$Mock = computeFolderHashes$ as jest.Mock;
@@ -82,7 +85,7 @@ describe("computeHashesThunk", () => {
       of({ type: "result", result: fileHashes })
     );
     computeFolderHashes$Mock.mockImplementation(() => of(folderHashes));
-    await testStore.dispatch(computeHashesThunk(originalPath));
+    await testStore.dispatch(firstHashesComputingThunk(originalPath));
     expect(computeHashes$).toHaveBeenCalledWith([ffId1], {
       initialValues: { basePath: expectedBasePath },
     });
@@ -99,6 +102,7 @@ describe("computeHashesThunk", () => {
         loadingType: LoadingInfoTypes.HASH_COMPUTING,
         type: "start-loading",
       },
+      resetErroredHashes(),
       progressLoadingAction("fake-id", 1),
       setFilesAndFoldersHashes(fileHashes),
       progressLoadingAction("fake-id", 1),

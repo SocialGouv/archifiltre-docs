@@ -135,7 +135,8 @@
         "other": "Autre"
       },
       "browse": "Parcourir",
-      "reload": "Sauvegarder et recharger"
+      "reload": "Sauvegarder et recharger",
+      "retry": "Réessayer"
     },
     "hash": {
       "loadingInfoLabel": "Chargement des empreintes de fichiers et dossiers",

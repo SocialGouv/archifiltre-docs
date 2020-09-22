@@ -12,7 +12,9 @@ const About: FC = () => {
 
   const onSiteClick = (event) => {
     event.preventDefault();
-    shell.openExternal(`${ARCHIFILTRE_SITE_URL}/produit#${version}`);
+    shell.openExternal(
+      `${ARCHIFILTRE_SITE_URL}/produit#${version.replace(/\./g, "")}`
+    );
   };
 
   const onWikiClick = (event) => {

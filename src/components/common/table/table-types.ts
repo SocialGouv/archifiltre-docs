@@ -5,10 +5,10 @@ export type FunctionAccessor<T> = (
   index?: number
 ) => string | ReactElement;
 
-export type TableAccessor<T> = string | FunctionAccessor<T>;
+export type TableAccessor<T> = keyof T | FunctionAccessor<T>;
 
 export type Column<T> = {
-  id?: string;
+  id: string;
   name: string;
   accessor: TableAccessor<T>;
 };
@@ -20,6 +20,6 @@ export type RowRendererProps<T> = {
 
 export type RowRenderer<T> = ComponentType<RowRendererProps<T>>;
 
-type RowIdAccessorFunction<T> = (row: T) => string;
+type RowIdAccessorFunction<T> = (row: T) => keyof T;
 
-export type RowIdAccessor<T> = string | RowIdAccessorFunction<T>;
+export type RowIdAccessor<T> = keyof T | RowIdAccessorFunction<T>;

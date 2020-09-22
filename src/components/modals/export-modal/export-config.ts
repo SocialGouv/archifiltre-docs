@@ -1,5 +1,6 @@
 import { ExportTypesMap } from "components/modals/export-modal/export-options";
 import { csvExporterThunk } from "exporters/csv/csv-exporter";
+import { treeCsvExporterThunk } from "exporters/csv/tree-csv-exporter";
 import _ from "lodash";
 import path from "path";
 import { auditReportExporterThunk } from "exporters/audit/audit-report-exporter";
@@ -12,6 +13,7 @@ export enum ExportType {
   AUDIT = "AUDIT",
   CSV = "CSV",
   CSV_WITH_HASHES = "CSV_WITH_HASHES",
+  TREE_CSV = "TREE_CSV",
   METS = "METS",
   RESIP = "RESIP",
 }
@@ -50,6 +52,7 @@ const exportFilesConfigs = {
     fileSuffix: "csvWithHashes",
     extension: "csv",
   },
+  [ExportType.TREE_CSV]: { fileSuffix: "treeCsv", extension: "csv" },
   [ExportType.RESIP]: { fileSuffix: "resip", extension: "csv" },
   [ExportType.METS]: { fileSuffix: "mets", extension: "zip" },
 };
@@ -95,6 +98,13 @@ export const exportConfig: ExportConfigMap = {
         sessionName,
         ExportType.CSV_WITH_HASHES
       ),
+  },
+  [ExportType.TREE_CSV]: {
+    isActive: true,
+    label: "export.treeCsv",
+    exportFunction: (exportPath) => treeCsvExporterThunk(exportPath),
+    exportPath: (originalPath, sessionName) =>
+      computeExportFilePath(originalPath, sessionName, ExportType.TREE_CSV),
   },
   [ExportType.RESIP]: {
     isActive: true,

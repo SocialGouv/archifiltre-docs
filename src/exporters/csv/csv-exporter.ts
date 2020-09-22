@@ -1,5 +1,3 @@
-import { shell } from "electron";
-import { promises as fs } from "fs";
 import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   getAliasesFromStore,
@@ -7,24 +5,13 @@ import {
   getFilesAndFoldersFromStore,
   getElementsToDeleteFromStore,
 } from "reducers/files-and-folders/files-and-folders-selectors";
-import { from } from "rxjs";
-import { bufferTime, flatMap, last, tap } from "rxjs/operators";
 import { addTracker } from "logging/tracker";
 import { ActionTitle, ActionType } from "logging/tracker-types";
 import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
-import {
-  completeLoadingAction,
-  progressLoadingAction,
-} from "reducers/loading-info/loading-info-actions";
-import { startLoading } from "reducers/loading-info/loading-info-operations";
-import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
 import { getTagsFromStore } from "reducers/tags/tags-selectors";
 import translations from "translations/translations";
-import {
-  NotificationDuration,
-  notifyInfo,
-  notifySuccess,
-} from "util/notification/notifications-util";
+import { handleFileExportThunk } from "util/export/export-util";
+import { notifyInfo } from "util/notification/notifications-util";
 import {
   generateCsvExport$,
   GenerateCsvExportOptions,
@@ -48,8 +35,8 @@ export const csvExporterThunk = (
   const csvExportStartedMessage = translations.t(
     "export.csvExportStartedMessage"
   );
-  const csvExportTitle = translations.t("export.csvExportTitle");
-  notifyInfo(csvExportStartedMessage, csvExportTitle);
+  const exportNotificationTitle = translations.t("export.csvExportTitle");
+  notifyInfo(csvExportStartedMessage, exportNotificationTitle);
 
   const state = getState();
   const tags = getTagsFromStore(state);
@@ -74,46 +61,22 @@ export const csvExporterThunk = (
     data.hashes = hashes;
   }
 
-  const nbFilesAndFolders = Object.keys(filesAndFolders).length;
-  const creatingCsvExportMessage = withHashes
+  const totalProgress = Object.keys(filesAndFolders).length;
+  const loaderMessage = withHashes
     ? translations.t("export.creatingCsvExportWithHashes")
     : translations.t("export.creatingCsvExport");
-  const loadingId = dispatch(
-    startLoading(
-      LoadingInfoTypes.EXPORT,
-      nbFilesAndFolders,
-      creatingCsvExportMessage
-    )
-  );
 
-  const LOADING_BAR_UPDATE_INTERVAL = 1000;
+  const exportSuccessMessage = translations.t("export.csvExportSuccessMessage");
 
   const csvExportData$ = generateCsvExport$(data);
-  await new Promise((resolve) => {
-    csvExportData$
-      .pipe(bufferTime(LOADING_BAR_UPDATE_INTERVAL))
-      .pipe(
-        tap((buffer) =>
-          dispatch(progressLoadingAction(loadingId, buffer.length))
-        )
-      )
-      .pipe(flatMap((buffer) => from(buffer)))
-      .pipe(last())
-      .subscribe({
-        next: async (csv: string) => {
-          dispatch(completeLoadingAction(loadingId));
-          await fs.writeFile(name, csv, { encoding: "utf-8" });
-          const csvExportSuccessMessage = translations.t(
-            "export.csvExportSuccessMessage"
-          );
-          notifySuccess(
-            csvExportSuccessMessage,
-            csvExportTitle,
-            NotificationDuration.NORMAL,
-            () => shell.openPath(name)
-          );
-          resolve();
-        },
-      });
-  });
+
+  return dispatch(
+    handleFileExportThunk(csvExportData$, {
+      totalProgress,
+      loaderMessage,
+      exportNotificationTitle,
+      exportFileName: name,
+      exportSuccessMessage,
+    })
+  );
 };

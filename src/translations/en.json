@@ -1,8 +1,8 @@
 {
   "translation": {
     "folderDropzone": {
-      "placeholder": "Drop a directory here!",
-      "placeholderSubtitle": "You may also drop a JSON file previously exported from Archifiltre.",
+      "placeholder": "Drop a directory or an Archifiltre JSON here",
+      "placeholderSubtitle": "No modification on the original directory",
       "zipNotificationTitle": "zip(s) file(s) detected",
       "zipNotificationMessage": "Archifiltre doesn't handle zips, please unzip them to read them",
       "disclaimerSubtitle": "Your data won't leave your computer. Only you can see what happens in this app.",
@@ -19,7 +19,13 @@
       "error": "Error!",
       "errorsWhileLoading": "An error occurred while loading. Click to check the error log.",
       "loadingVisualization": "Loading visualization...",
-      "rootElementError": "Archifiltre cannot currently read a drive or a root folder. Please drop a child folder instead."
+      "rootElementError": "Archifiltre cannot currently read a drive or a root folder. Please drop a child folder instead.",
+      "updatePrivacySettings": "Update privacy settings",
+      "contactUs": "Contact us",
+      "faq": "FAQ",
+      "documentation": "Documentation",
+      "newDirectory": "New directory",
+      "slug": "Visualise and improve your file trees !"
     },
     "report": {
       "comments": "Comments",

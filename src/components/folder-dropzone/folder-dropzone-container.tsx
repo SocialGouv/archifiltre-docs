@@ -1,5 +1,9 @@
 import React, { FC, useCallback } from "react";
 import { useDispatch } from "react-redux";
+import {
+  replayActionsThunk,
+  usePreviousSession,
+} from "reducers/middleware/persist-actions-middleware";
 import { loadFilesAndFoldersFromPathThunk } from "reducers/store-thunks";
 import FolderDropzone from "./folder-dropzone";
 
@@ -20,7 +24,19 @@ const FolderDropzoneContainer: FC<FolderDropzoneContainerProps> = ({
     [dispatch, setLoadedPath]
   );
 
-  return <FolderDropzone loadFromPath={loadFromPath} />;
+  const hasPreviousSession = usePreviousSession();
+
+  const reloadPreviousSession = useCallback(() => {
+    dispatch(replayActionsThunk());
+  }, [dispatch]);
+
+  return (
+    <FolderDropzone
+      loadFromPath={loadFromPath}
+      hasPreviousSession={hasPreviousSession}
+      reloadPreviousSession={reloadPreviousSession}
+    />
+  );
 };
 
 export default FolderDropzoneContainer;

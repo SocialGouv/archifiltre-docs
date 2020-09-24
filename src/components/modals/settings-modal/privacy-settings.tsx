@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import { useUserSettings } from "hooks/use-user-settings";
-import { getInitialUserSettings } from "persistent-settings";
+import { getInitialUserSettings } from "persistence/persistent-settings";
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { reloadApp } from "util/electron/electron-util";

@@ -9,13 +9,13 @@ const StyledGrid = styled(Grid)`
 `;
 
 const Image = styled.img`
-  width: 150px;
-  height: 150px;
+  width: 222px;
+  height: 33px;
 `;
 
 const ArchifiltreMessage: FC = ({ children }) => (
   <StyledGrid container alignItems="center">
-    <Image alt="archifiltre-logo" src="imgs/archifiltre.png" />
+    <Image alt="archifiltre-logo" src="imgs/logo.png" />
     <h3>
       {children}
       <br />

@@ -11,6 +11,8 @@ declare module "*.svg" {
   export default content;
 }
 
+declare module "*.png";
+
 declare const STATIC_ASSETS_PATH: string;
 declare const SENTRY_DSN: string;
 declare const SENTRY_MINIDUMP_URL: string;

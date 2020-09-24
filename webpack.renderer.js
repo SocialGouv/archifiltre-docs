@@ -117,6 +117,11 @@ module.exports = (env, argv = {}) => ({
           },
         ],
       },
+      {
+        include: [path.resolve(__dirname, "static/imgs")],
+        loader: "url-loader",
+        test: /\.(png|jpg)$/,
+      },
     ],
   },
 

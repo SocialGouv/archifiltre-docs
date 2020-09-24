@@ -2,7 +2,7 @@ import {
   getInitialUserSettings,
   saveUserSettings,
   UserSettings,
-} from "persistent-settings";
+} from "persistence/persistent-settings";
 import { useCallback, useEffect, useState } from "react";
 
 type UseUserSettingsResult = {

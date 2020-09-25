@@ -11,12 +11,12 @@ export enum MessageTypes {
 
 export type ErrorMessage = {
   type: typeof MessageTypes.ERROR;
-  error: object;
+  error: any;
 };
 
-export type ResultMessage = {
+export type ResultMessage<T = any> = {
   type: typeof MessageTypes.RESULT;
-  result: any;
+  result: T;
 };
 
 type InitializeMessage = {

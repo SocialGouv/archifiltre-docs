@@ -8,17 +8,12 @@
       "disclaimerSubtitle": "Ihre Daten werden Ihren Rechner nicht verlassen. Nur Sie können sehen, was in dieser Anwendung geschieht.",
       "loadingErrorTitle": "Fehler beim Laden",
       "loadingErrorMessage": "Wahrscheinlich haben Sie weder einen Ordner noch eine Datei abgelegt.",
-      "filesLoaded": "Dateien geladen",
+      "indexedFiles": "Dateien geladen",
       "jsonLoading": "Laden von JSON",
-      "constructingDataModel": "Aufbau des Datenmodells",
-      "computingDerivedData": "Berechnung der abgeleiteten Daten",
-      "computingFileDepth": "Berechnung der Ordnertiefe",
-      "didYouKnow": "Wussten Sie schon?",
       "warning": "Warnung!",
       "wrongJsonVersion": "Die Datei, die Sie abgelegt haben, ist nicht mit der gleichen Version von Archifiltre erstellt worden.",
       "error": "Fehler!",
       "errorsWhileLoading": "Ein Fehler ist beim Laden aufgetreten. Klicken Sie zum Überprüfen den Fehler-Log.",
-      "loadingVisualization": "Die Darstellung wird geladen…",
       "rootElementError": "Archifiltre kann derzeitig kein Laufwerk oder Root-Verzeichnis lesen. Bitte legen Sie einen Unterordner an."
     },
     "report": {

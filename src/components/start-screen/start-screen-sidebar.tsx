@@ -6,11 +6,11 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Tooltip from "@material-ui/core/Tooltip";
 import EllipsisText from "components/main-space/workspace/enrichment/tags/ellipsis-text";
-import { shell } from "electron";
+import { remote, shell } from "electron";
+import path from "path";
 import { getPreviousSessions } from "persistence/previous-sessions";
 import React, { FC, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { remote } from "electron";
 import {
   FaBook,
   FaCog,
@@ -20,7 +20,6 @@ import {
   FaQuestionCircle,
   FaSyncAlt,
 } from "react-icons/fa";
-import path from "path";
 
 const onFaqClick = () => {
   shell.openExternal(`${ARCHIFILTRE_SITE_URL}/faq`);
@@ -36,18 +35,20 @@ const onDocumentationClick = () => {
   );
 };
 
-type FolderDropzoneSidebarProps = {
+type StartScreenSidebarProps = {
   hasPreviousSession: boolean;
   reloadPreviousSession: () => void;
   openModal: () => void;
   loadPath: (path: string) => void;
+  isLoading: boolean;
 };
 
-const FolderDropzoneSidebar: FC<FolderDropzoneSidebarProps> = ({
+const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
   hasPreviousSession,
   reloadPreviousSession,
   openModal,
   loadPath,
+  isLoading,
 }) => {
   const { t } = useTranslation();
   const [previousSessions, setPreviousSessions] = useState<string[]>([]);
@@ -68,14 +69,18 @@ const FolderDropzoneSidebar: FC<FolderDropzoneSidebarProps> = ({
     <Box display="flex" flexDirection="column" height="100%" maxWidth={250}>
       <Box>
         <List component="nav">
-          <ListItem button onClick={onNewDirectoryClick}>
+          <ListItem button onClick={onNewDirectoryClick} disabled={isLoading}>
             <ListItemIcon>
               <FaPlus />
             </ListItemIcon>
             <ListItemText primary={t("folderDropzone.newDirectory")} />
           </ListItem>
           {hasPreviousSession && (
-            <ListItem button onClick={reloadPreviousSession}>
+            <ListItem
+              button
+              onClick={reloadPreviousSession}
+              disabled={isLoading}
+            >
               <ListItemIcon>
                 <FaSyncAlt />
               </ListItemIcon>
@@ -91,7 +96,11 @@ const FolderDropzoneSidebar: FC<FolderDropzoneSidebarProps> = ({
         <List component="nav">
           {previousSessions.map((previousDirectory) => (
             <Tooltip title={previousDirectory} key={previousDirectory}>
-              <ListItem button onClick={() => loadPath(previousDirectory)}>
+              <ListItem
+                button
+                onClick={() => loadPath(previousDirectory)}
+                disabled={isLoading}
+              >
                 <ListItemIcon>
                   <FaFolderOpen />
                 </ListItemIcon>
@@ -141,4 +150,4 @@ const FolderDropzoneSidebar: FC<FolderDropzoneSidebarProps> = ({
   );
 };
 
-export default FolderDropzoneSidebar;
+export default StartScreenSidebar;

@@ -26,8 +26,8 @@ const createReporters = (asyncWorker: AsyncWorker): Reporters => ({
     asyncWorker.postMessage({ type: MessageTypes.FATAL, error }),
   reportResult: (result: any) =>
     asyncWorker.postMessage({ type: MessageTypes.RESULT, result }),
-  reportComplete: (result: any) =>
-    asyncWorker.postMessage({ type: MessageTypes.COMPLETE, result }),
+  reportComplete: () =>
+    asyncWorker.postMessage({ type: MessageTypes.COMPLETE }),
 });
 
 /**
@@ -64,8 +64,9 @@ export const loadVirtualFileSystem = async (
     hooksCreator
   );
 
+  reportResult({ status: MessageTypes.RESULT, result: fileSystem });
+
   reportComplete({
     status: MessageTypes.COMPLETE,
-    vfs: fileSystem,
   });
 };

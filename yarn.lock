@@ -3918,10 +3918,10 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-docxtemplater@3.19.3:
-  version "3.19.3"
-  resolved "https://registry.yarnpkg.com/docxtemplater/-/docxtemplater-3.19.3.tgz#69b315f321a7260a6d96beed83ba8fb8f0b6e576"
-  integrity sha512-4kDFv1CMCOzRxKNmNDZwhUXXfoGi2Y6AWIIUBtDdz0bXWmzAT1yZJ+x7EGG2J+kz9dk/1mZR1wT4oMkOFPWORw==
+docxtemplater@3.19.5:
+  version "3.19.5"
+  resolved "https://registry.yarnpkg.com/docxtemplater/-/docxtemplater-3.19.5.tgz#5c695ad0c28ad6bfd22504b7d33e4ff2a9e54081"
+  integrity sha512-T6mLQK8rnBOU4EmsJ/DLrZdlWFxHoG5nOy7LY6Wjd1nww0Osu5BFPCTgtcFwrj3EfLb5wz5HiReoz9rV9NBfng==
   dependencies:
     xmldom "^0.3.0"
 
@@ -9207,10 +9207,10 @@ react-dom@^16.13.1:
     prop-types "^15.6.2"
     scheduler "^0.19.1"
 
-react-i18next@^11.7.2:
-  version "11.7.2"
-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.7.2.tgz#b3cb94ad3b85c25e3d4802a141139d65238b976f"
-  integrity sha512-Djj3K3hh5Tecla2CI9rLO3TZBYGMFrGilm0JY4cLofAQONCi5TK6nVmUPKoB59n1ZffgjfgJt6zlbE9aGF6Q0Q==
+react-i18next@^11.7.3:
+  version "11.7.3"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.7.3.tgz#256461c46baf5b3208c3c6860ca4e569fc7ed053"
+  integrity sha512-7sYZqVZgdaS9Z0ZH6nuJFErCD0zz5wK3jR4/xCrWjZcxHHF3GRu7BXdicbSPprZV4ZYz7LJzxxMHO7dg5Qb70A==
   dependencies:
     "@babel/runtime" "^7.3.1"
     html-parse-stringify2 "2.0.1"

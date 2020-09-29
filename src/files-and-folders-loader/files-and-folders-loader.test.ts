@@ -320,28 +320,28 @@ unix
         files: [
           [
             {
-              lastModified: 1584108263,
+              lastModified: 1584108263000,
               size: 5,
             },
             "/files/file.txt",
           ],
           [
             {
-              lastModified: 1563979128,
+              lastModified: 1563979128000,
               size: 49,
             },
             "/files/file",
           ],
           [
             {
-              lastModified: 1582727849,
+              lastModified: 1582727849000,
               size: 8196,
             },
             "/files/file2",
           ],
           [
             {
-              lastModified: 1563979128,
+              lastModified: 1563979128000,
               size: 49,
             },
             "/files/folder/file with space",
@@ -375,28 +375,28 @@ C:\\basePath\\files\r
         files: [
           [
             {
-              lastModified: 1584108263,
+              lastModified: 1584108263000,
               size: 5,
             },
             "/files/file.txt",
           ],
           [
             {
-              lastModified: 1563979128,
+              lastModified: 1563979128000,
               size: 49,
             },
             "/files/file",
           ],
           [
             {
-              lastModified: 1582727849,
+              lastModified: 1582727849000,
               size: 8196,
             },
             "/files/file2",
           ],
           [
             {
-              lastModified: 1563979128,
+              lastModified: 1563979128000,
               size: 49,
             },
             "/files/folder/file with space",

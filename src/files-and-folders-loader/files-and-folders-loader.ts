@@ -155,7 +155,7 @@ export const loadFilesAndFoldersFromExportFileContent = async (
         hashes[id] = fileHash;
         files.push([
           {
-            lastModified: +fileLastModified,
+            lastModified: +fileLastModified * 1000,
             size: +fileSize,
           },
           id,

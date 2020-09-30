@@ -11,6 +11,7 @@ import {
 import { createTag } from "reducers/tags/tags-test-util";
 import { save } from "util/file-system/file-sys-util";
 import { jsonExporterThunk } from "./json-exporter";
+import { initialState as hashesReducerInitialState } from "reducers/hashes/hashes-reducer";
 
 jest.mock("util/file-system/file-sys-util", () => ({
   getNameWithExtension: (name, ext) => `${name}.${ext}`,
@@ -65,6 +66,7 @@ describe("json-exporter", () => {
           elementsToDelete,
         }),
         hashes: {
+          ...hashesReducerInitialState,
           hashes,
         },
         tags: wrapStoreWithUndoable({

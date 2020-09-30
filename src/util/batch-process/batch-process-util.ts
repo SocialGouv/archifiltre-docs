@@ -4,6 +4,7 @@ import { chunk } from "lodash";
 import { reportError } from "logging/reporter";
 import { makeEmptyArray } from "util/array/array-util";
 import { map } from "rxjs/operators";
+import { MessageTypes } from "util/batch-process/batch-process-util-types";
 
 // We create NB_CPUS - 1 processes to optimize computation
 const NB_CPUS = cpus().length - 1 > 0 ? cpus().length - 1 : 1;
@@ -75,7 +76,7 @@ export const computeBatch$ = (
           if (queue.length > 0) {
             const sentData = queue.shift();
             worker.postMessage({
-              type: "data",
+              type: MessageTypes.DATA,
               data: sentData,
             });
           }
@@ -87,7 +88,7 @@ export const computeBatch$ = (
       worker.addEventListener(
         "message",
         ({ data: { type, result, error } }) => {
-          if (type === "result") {
+          if (type === MessageTypes.RESULT) {
             observer.next({ type, result });
             completed = completed + 1;
             if (completed === queueLength) {
@@ -95,7 +96,7 @@ export const computeBatch$ = (
               workers.forEach((workerElement) => workerElement.terminate());
             }
           }
-          if (type === "error") {
+          if (type === MessageTypes.ERROR) {
             observer.next({ type, error: [error] });
           }
         }

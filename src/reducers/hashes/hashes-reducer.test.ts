@@ -1,6 +1,6 @@
 import { setFilesAndFoldersHashes } from "./hashes-actions";
 import { HashesState } from "./hashes-types";
-import { hashesReducer } from "./hashes-reducer";
+import { hashesReducer, initialState } from "./hashes-reducer";
 
 describe("hashesReducer", () => {
   describe("SET_FILES_AND_FOLDERS_HASHES", () => {
@@ -14,18 +14,20 @@ describe("hashesReducer", () => {
         [changedId]: newHash,
       };
 
-      const initialState: HashesState = {
+      const baseState: HashesState = {
+        ...initialState,
         hashes: {
           [unchangedId]: unchangedHash,
         },
       };
 
       const nextState = hashesReducer(
-        initialState,
+        baseState,
         setFilesAndFoldersHashes(newHashes)
       );
 
       expect(nextState).toEqual({
+        ...initialState,
         hashes: {
           [changedId]: newHash,
           [unchangedId]: unchangedHash,

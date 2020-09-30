@@ -1,7 +1,7 @@
 import _ from "lodash";
 import path from "path";
 import { mapToNewVersionNumbers } from "components/header/new-version-checker";
-import { computeHashesThunk } from "hash-computer/hash-computer-thunk";
+import { firstHashesComputingThunk } from "hash-computer/hash-computer-thunk";
 import { addTracker } from "logging/tracker";
 import { ActionTitle, ActionType } from "logging/tracker-types";
 import translations from "translations/translations";
@@ -218,7 +218,7 @@ export const loadFilesAndFoldersFromPathThunk = (
       }
 
       dispatch(
-        computeHashesThunk(virtualFileSystem.originalPath, {
+        firstHashesComputingThunk(virtualFileSystem.originalPath, {
           ignoreFileHashes:
             virtualFileSystem.hashes !== null &&
             Object.keys(virtualFileSystem.hashes).length > 0,

@@ -6,8 +6,8 @@ export type ArchifiltreThunk = <Args>(
   ...args: Args[]
 ) => ArchifiltreThunkAction;
 
-export type ArchifiltreThunkAction = ThunkAction<
-  void,
+export type ArchifiltreThunkAction<ReturnType = void> = ThunkAction<
+  ReturnType,
   StoreState,
   {},
   AnyAction

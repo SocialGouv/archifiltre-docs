@@ -164,6 +164,6 @@
     "winston-sentry-raven-transport": "^1.2.0",
     "winston-transport": "^4.4.0",
     "xml": "^1.0.1",
-    "yargs": "^15.4.1"
+    "yargs": "^16.0.3"
   }
 }

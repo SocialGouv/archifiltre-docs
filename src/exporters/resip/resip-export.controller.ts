@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { getLanguage } from "languages";
+import translations from "translations/translations";
 import { addTracker } from "logging/tracker";
 import { ActionTitle, ActionType } from "logging/tracker-types";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
@@ -52,6 +52,7 @@ export const generateResipExport$ = ({
   const ResipExportAsyncWorker = createAsyncWorkerControllerClass(
     ResipExportFork
   );
+  const { language } = translations;
 
   return backgroundWorkerProcess$(
     {
@@ -60,7 +61,7 @@ export const generateResipExport$ = ({
       elementsToDelete,
       filesAndFolders,
       filesAndFoldersMetadata,
-      language: getLanguage()[0],
+      language,
       tags,
     },
     ResipExportAsyncWorker

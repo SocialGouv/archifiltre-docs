@@ -1,4 +1,4 @@
-import { getLanguage } from "languages";
+import translations from "translations/translations";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import {
   AliasMap,
@@ -27,7 +27,7 @@ export interface GenerateCsvExportOptions {
  * @returns an observable that emits each time a file is computed and emits the export string as the last value
  */
 export const generateCsvExport$ = (data: GenerateCsvExportOptions) => {
-  const language = getLanguage()[0];
+  const { language } = translations;
   const CsvExporterAsyncWorker = createAsyncWorkerControllerClass(
     CsvExporterFork
   );

@@ -3,6 +3,7 @@ import {
   MessageTypes,
   WorkerMessage,
 } from "../batch-process/batch-process-util-types";
+import translations from "translations/translations";
 
 export enum AsyncWorkerEvent {
   MESSAGE = "message",
@@ -92,9 +93,12 @@ export const setupChildWorkerListeners = (
 ) => {
   asyncWorker.addEventListener(
     AsyncWorkerEvent.MESSAGE,
-    ({ data, type }: any) => {
+    async ({ data, type }: any) => {
       switch (type) {
         case MessageTypes.INITIALIZE:
+          if (data.language) {
+            await translations.changeLanguage(data.language);
+          }
           if (!onInitialize) {
             break;
           }

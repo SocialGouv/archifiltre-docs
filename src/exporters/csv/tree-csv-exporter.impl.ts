@@ -1,13 +1,11 @@
 import { getFilesAndFoldersDepth } from "reducers/files-and-folders/files-and-folders-selectors";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
-import translations from "translations/translations";
 import { WorkerMessageHandler } from "util/async-worker/async-worker-util";
 import { MessageTypes } from "util/batch-process/batch-process-util-types";
 import { arrayToCsv } from "util/csv/csv-util";
 
 interface CsvExporterData {
   filesAndFoldersMap: FilesAndFoldersMap;
-  language: string;
 }
 
 /**
@@ -18,9 +16,8 @@ interface CsvExporterData {
  */
 export const onInitialize: WorkerMessageHandler = async (
   asyncWorker,
-  { filesAndFoldersMap, language }: CsvExporterData
+  { filesAndFoldersMap }: CsvExporterData
 ) => {
-  await translations.changeLanguage(language);
   const header = [""];
   const lines = Object.keys(filesAndFoldersMap)
     .sort((firstElement, secondElement) => {

@@ -12,7 +12,7 @@ const asyncWorker = createAsyncWorkerForChildProcess();
 
 asyncWorker.addEventListener(
   AsyncWorkerEvent.MESSAGE,
-  ({ type, data }: any) => {
+  async ({ type, data }: any) => {
     if (type === "initialize") {
       const messageHook = (count) => {
         asyncWorker.postMessage({
@@ -31,7 +31,7 @@ asyncWorker.addEventListener(
         tags,
         language,
       } = data;
-      translations.changeLanguage(language);
+      await translations.changeLanguage(language);
 
       const resipExportData = resipExporter(
         {

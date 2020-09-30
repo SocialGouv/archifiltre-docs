@@ -142,7 +142,6 @@ interface CsvExporterData {
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   elementsToDelete: string[];
   hashes?: HashesMap;
-  language: string;
   tags: TagMap;
 }
 
@@ -167,11 +166,9 @@ export const onInitialize: WorkerMessageHandler = async (
     filesAndFolders,
     filesAndFoldersMetadata,
     hashes,
-    language,
     tags,
   }: CsvExporterData
 ) => {
-  await translations.changeLanguage(language);
   const elementsToDeleteWithChildren = getChildrenToDelete(
     filesAndFolders,
     elementsToDelete

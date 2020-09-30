@@ -1,4 +1,4 @@
-import { getLanguage } from "languages";
+import translations from "translations/translations";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { createAsyncWorkerControllerClass } from "util/async-worker/async-worker-util";
 import { backgroundWorkerProcess$ } from "util/batch-process/batch-process-util";
@@ -12,7 +12,7 @@ import TreeCsvExporterFork from "./tree-csv-exporter.fork";
 export const generateTreeCsvExport$ = (
   filesAndFoldersMap: FilesAndFoldersMap
 ) => {
-  const language = getLanguage()[0];
+  const { language } = translations;
   const TreeCsvExporterAsyncWorker = createAsyncWorkerControllerClass(
     TreeCsvExporterFork
   );

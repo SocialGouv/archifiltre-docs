@@ -1,5 +1,4 @@
 import { Action } from "redux";
-import { SetFilesAndFoldersHashesAction } from "../hashes/hashes-types";
 
 export const INITIALIZE_FILES_AND_FOLDERS = "FILES_AND_FOLDERS/INITIALIZE";
 export const REMOVE_CHILD = "FILES_AND_FOLDERS/REMOVE_CHILD";
@@ -100,7 +99,6 @@ export type FilesAndFoldersActionTypes =
   | RemoveChildAction
   | SetFilesAndFoldersAliasAction
   | AddCommentsOnFilesAndFoldersAction
-  | SetFilesAndFoldersHashesAction
   | MarkAsToDelete
   | UnmarkAsToDelete
   | MarkElementsToDelete

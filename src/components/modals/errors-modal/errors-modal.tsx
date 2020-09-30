@@ -1,6 +1,6 @@
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import React, { FC } from "react";
+import React, { FC, ReactNode } from "react";
 import { useStyles } from "hooks/use-styles";
 import ModalHeader from "../../modals/modal-header";
 import { useTranslation } from "react-i18next";
@@ -11,12 +11,14 @@ type ErrorsModalProps = {
   isModalOpen: boolean;
   closeModal: () => void;
   errors: ArchifiltreError[];
+  footer?: ReactNode;
 };
 
 const ErrorsModal: FC<ErrorsModalProps> = ({
   isModalOpen,
   closeModal,
   errors,
+  footer,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -27,6 +29,7 @@ const ErrorsModal: FC<ErrorsModalProps> = ({
       <DialogContent className={classes.dialogContent}>
         <ErrorsTable errors={errors} />
       </DialogContent>
+      {footer}
     </Dialog>
   );
 };

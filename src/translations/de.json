@@ -155,7 +155,8 @@
       "hash": "Hash-Wert (MD5)",
       "fileCount": "Anzahl der Dateien",
       "type": "Typ",
-      "duplicate": "Duplikat"
+      "duplicate": "Duplikat",
+      "toDelete": "Zu löschen"
     },
     "export": {
       "metsExportErrorTitle": "Fehler im METS-Export",

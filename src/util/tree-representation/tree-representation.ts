@@ -2,7 +2,7 @@ import {
   FilesAndFolders,
   FilesAndFoldersMap,
 } from "reducers/files-and-folders/files-and-folders-types";
-import { getFilesAndFoldersDepth } from "reducers/files-and-folders/files-and-folders-selectors";
+import { getDepthFromPath } from "reducers/files-and-folders/files-and-folders-selectors";
 import { makeObjectKeyComparator } from "util/sort-utils/sort-utils";
 
 /**
@@ -26,7 +26,7 @@ export const computeTreeStructureArray = (
     .sort(makeObjectKeyComparator<FilesAndFolders>("virtualPath"))
     .map((filesAndFolders) => {
       const { virtualPath, name } = filesAndFolders;
-      const depth = getFilesAndFoldersDepth(virtualPath);
+      const depth = getDepthFromPath(virtualPath);
       const shiftArray = depth <= 0 ? [] : new Array(depth).fill("");
       return [...shiftArray, name];
     });

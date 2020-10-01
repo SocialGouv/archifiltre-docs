@@ -158,7 +158,7 @@ describe("csv-exporter", () => {
         });
         expect(store.getActions()).toEqual([
           {
-            goal: 2,
+            goal: 3,
             id: "test-uuid",
             label: "Creating the CSV export file",
             loadingType: LoadingInfoTypes.EXPORT,
@@ -201,7 +201,7 @@ describe("csv-exporter", () => {
 
         expect(store.getActions()).toEqual([
           {
-            goal: 2,
+            goal: 3,
             id: "test-uuid",
             label: "Creating the CSV with hashes export file",
             loadingType: LoadingInfoTypes.EXPORT,

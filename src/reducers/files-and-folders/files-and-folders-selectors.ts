@@ -255,7 +255,7 @@ export const getFilesAndFoldersTotalSize = (
  * Get the depth of the selected filesAndFolders
  * @param filesAndFoldersId
  */
-export const getFilesAndFoldersDepth = (filesAndFoldersId: string): number =>
+export const getDepthFromPath = (filesAndFoldersId: string): number =>
   filesAndFoldersId.split("/").length - 2;
 
 /**

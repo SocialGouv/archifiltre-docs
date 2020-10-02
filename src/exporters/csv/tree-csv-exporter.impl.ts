@@ -1,8 +1,8 @@
-import { getFilesAndFoldersDepth } from "reducers/files-and-folders/files-and-folders-selectors";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { WorkerMessageHandler } from "util/async-worker/async-worker-util";
 import { MessageTypes } from "util/batch-process/batch-process-util-types";
 import { arrayToCsv } from "util/csv/csv-util";
+import { computeTreeStructureArray } from "util/tree-representation/tree-representation";
 
 interface CsvExporterData {
   filesAndFoldersMap: FilesAndFoldersMap;
@@ -19,21 +19,7 @@ export const onInitialize: WorkerMessageHandler = async (
   { filesAndFoldersMap }: CsvExporterData
 ) => {
   const header = [""];
-  const lines = Object.keys(filesAndFoldersMap)
-    .sort((firstElement, secondElement) => {
-      const firstVirtualPath = filesAndFoldersMap[firstElement].virtualPath;
-      const secondVirtualPath = filesAndFoldersMap[secondElement].virtualPath;
-      if (firstVirtualPath === secondVirtualPath) {
-        return 0;
-      }
-      return firstVirtualPath > secondVirtualPath ? 1 : -1;
-    })
-    .map((ffId) => {
-      const { virtualPath, name } = filesAndFoldersMap[ffId];
-      const depth = getFilesAndFoldersDepth(virtualPath);
-      const shiftArray = depth <= 0 ? [] : new Array(depth).fill("");
-      return [...shiftArray, name];
-    });
+  const lines = computeTreeStructureArray(filesAndFoldersMap);
 
   asyncWorker.postMessage({
     result: arrayToCsv([header, ...lines]),

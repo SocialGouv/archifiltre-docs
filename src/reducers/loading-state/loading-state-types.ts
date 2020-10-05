@@ -19,7 +19,6 @@ export const loadingStateActionTypes = [
 
 export enum LoadingStep {
   WAITING,
-  STARTED,
   FINISHED,
   ERROR,
 }

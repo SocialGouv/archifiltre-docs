@@ -2,16 +2,17 @@ import { Typography } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import FolderDropzoneSidebar from "components/folder-dropzone/folder-dropzone-sidebar";
+import Dropzone from "components/start-screen/dropzone";
+import LoadingBlock from "components/start-screen/loading-block";
+import StartScreenSidebar from "components/start-screen/start-screen-sidebar";
 import SettingsModal from "components/modals/settings-modal/settings-modal";
 import { useModal } from "hooks/use-modal";
 import { savePreviousSession } from "persistence/previous-sessions";
-import React, { FC, useCallback, useEffect } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import path from "path";
-import { FaEye, FaLock, FaPlus } from "react-icons/fa";
+import { FaEye, FaLock } from "react-icons/fa";
+import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
 import styled from "styled-components";
-import { expectToBeDefined } from "util/expect-behaviour/expect-behaviour";
-import { notifyError } from "util/notification/notifications-util";
 import { useTranslation } from "react-i18next";
 import logo from "../../../static/imgs/logo.png";
 
@@ -19,25 +20,19 @@ declare global {
   const AUTOLOAD: string;
 }
 
-type FolderDropzoneProps = {
+type StartScreenProps = {
   loadFromPath: (path: string) => void;
   hasPreviousSession: boolean;
   reloadPreviousSession: () => void;
+  isLoading: boolean;
+  fileSystemLoadingStep: FileSystemLoadingStep;
+  indexedFilesCount: number;
+  cancelLoading: () => void;
 };
 
 const DropzoneWrapper = styled(Grid)`
   flex: 1;
-`;
-
-const Dropzone = styled(Grid)`
-  border: 1px dashed #868686;
-  border-radius: 5px;
-  height: 100%;
-`;
-
-const Placeholder = styled.div`
-  font-size: 1.5em;
-  text-align: center;
+  display: flex;
 `;
 
 const Wrapper = styled.div`
@@ -47,45 +42,22 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const PlaceholderContainer = styled(Grid)`
-  padding: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
 const FullHeightGrid = styled(Grid)`
   height: 100%;
 `;
 
-const FolderDropzone: FC<FolderDropzoneProps> = ({
+const StartScreen: FC<StartScreenProps> = ({
   loadFromPath,
   hasPreviousSession,
   reloadPreviousSession,
+  isLoading,
+  fileSystemLoadingStep,
+  indexedFilesCount,
+  cancelLoading,
 }) => {
   const { t } = useTranslation();
   const { isModalOpen, openModal, closeModal } = useModal();
-
-  const handleDragover = useCallback((event) => {
-    event.preventDefault();
-  }, []);
-
-  const handleDrop = useCallback((event) => {
-    event.preventDefault();
-
-    const isFileDefined = expectToBeDefined(event.dataTransfer.files[0], "");
-
-    if (!isFileDefined) {
-      notifyError(
-        t("folderDropzone.loadingErrorMessage"),
-        t("folderDropzone.loadingErrorTitle")
-      );
-      return;
-    }
-
-    loadPath(event.dataTransfer.files[0].path);
-  }, []);
+  const [loadedPath, setLoadedPath] = useState("");
 
   const loadPath = useCallback(
     (loadedPath) => {
@@ -104,11 +76,12 @@ const FolderDropzone: FC<FolderDropzoneProps> = ({
 
   return (
     <Wrapper>
-      <FolderDropzoneSidebar
+      <StartScreenSidebar
         hasPreviousSession={hasPreviousSession}
         reloadPreviousSession={reloadPreviousSession}
         openModal={openModal}
         loadPath={loadPath}
+        isLoading={isLoading}
       />
       <FullHeightGrid
         container
@@ -125,19 +98,16 @@ const FolderDropzone: FC<FolderDropzoneProps> = ({
           </Box>
         </Grid>
         <DropzoneWrapper item>
-          <Dropzone
-            container
-            direction="row"
-            justify="center"
-            alignItems="center"
-            onDragOver={handleDragover}
-            onDrop={handleDrop}
-          >
-            <PlaceholderContainer item>
-              <FaPlus />
-              <Placeholder>{t("folderDropzone.placeholder")}</Placeholder>
-            </PlaceholderContainer>
-          </Dropzone>
+          {isLoading ? (
+            <LoadingBlock
+              fileSystemLoadingStep={fileSystemLoadingStep}
+              indexedFilesCount={indexedFilesCount}
+              loadedPath={loadedPath}
+              cancelLoading={cancelLoading}
+            />
+          ) : (
+            <Dropzone loadPath={loadPath} setLoadedPath={setLoadedPath} />
+          )}
         </DropzoneWrapper>
         <Grid item>
           <Box display="flex" pb={2}>
@@ -165,4 +135,4 @@ const FolderDropzone: FC<FolderDropzoneProps> = ({
   );
 };
 
-export default FolderDropzone;
+export default StartScreen;

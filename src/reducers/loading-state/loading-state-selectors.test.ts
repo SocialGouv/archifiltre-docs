@@ -22,7 +22,7 @@ describe("loading-state-selectors", () => {
 
   describe("getLoadingStepFromStore", () => {
     it("should return the loadingState", () => {
-      const step = LoadingStep.STARTED;
+      const step = LoadingStep.FINISHED;
       const loadingState = {
         ...initialState,
         step,

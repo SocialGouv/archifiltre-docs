@@ -9,7 +9,7 @@ import {
   getFileCount,
   getFiles,
   getFilesAndFoldersAverageLastModified,
-  getFilesAndFoldersDepth,
+  getDepthFromPath,
   getFilesAndFoldersFromStore,
   getFilesAndFoldersMaxLastModified,
   getFilesAndFoldersMedianLastModified,
@@ -173,9 +173,9 @@ describe("files-and-folders-selectors", () => {
     });
   });
 
-  describe("getFilesAndFoldersDepth", () => {
+  describe("getDepthFromPath", () => {
     it("should find the depth root folder", () => {
-      expect(getFilesAndFoldersDepth(child1Id)).toEqual(1);
+      expect(getDepthFromPath(child1Id)).toEqual(1);
     });
   });
 

@@ -61,7 +61,7 @@ export const csvExporterThunk = (
     data.hashes = hashes;
   }
 
-  const totalProgress = Object.keys(filesAndFolders).length;
+  const totalProgress = Object.keys(filesAndFolders).length + 1;
   const loaderMessage = withHashes
     ? translations.t("export.creatingCsvExportWithHashes")
     : translations.t("export.creatingCsvExport");

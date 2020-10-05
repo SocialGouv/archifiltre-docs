@@ -14,6 +14,10 @@ export interface AsyncWorker {
     eventType: AsyncWorkerEvent,
     listener: EventListener
   ) => void;
+  removeEventListener: (
+    eventType: AsyncWorkerEvent,
+    listener: EventListener
+  ) => void;
   postMessage: (message: WorkerMessage) => void;
 }
 
@@ -33,6 +37,9 @@ export const createAsyncWorkerForChildProcess = (): ChildProcessAsyncWorker => {
       localProcess.addListener(eventType, (event) => {
         listener(event);
       });
+    },
+    removeEventListener: (eventType, listener) => {
+      localProcess.removeListener("loaded", listener);
     },
     postMessage: (message) => {
       if (!localProcess || !localProcess.send) {
@@ -54,18 +61,21 @@ export const createAsyncWorkerForChildProcessController = (
     // Small adaptation for current BackgroundProcess and BatchProcess workers
     childProcess.addListener(eventType, (data) => listener({ ...data, data }));
   },
+  removeEventListener: (eventType, listener) => {
+    childProcess.removeListener(eventType, listener);
+  },
   postMessage: (message) => childProcess.send(message),
   terminate: () => childProcess.kill(),
 });
 
 /**
  * Creates a wrapper class for the childProcess contructor to be used in batch-process-common
- * @param ChildProcessContructor
+ * @param ChildProcessConstructor
  */
-export const createAsyncWorkerControllerClass = (ChildProcessContructor) => {
+export const createAsyncWorkerControllerClass = (ChildProcessConstructor) => {
   return class AsyncWorkerController {
     constructor() {
-      const childProcess = new ChildProcessContructor();
+      const childProcess = new ChildProcessConstructor();
       return createAsyncWorkerForChildProcessController(childProcess);
     }
   };

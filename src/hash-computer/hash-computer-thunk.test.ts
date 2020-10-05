@@ -24,6 +24,7 @@ import {
   resetErroredHashes,
   setFilesAndFoldersHashes,
 } from "reducers/hashes/hashes-actions";
+import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
 
 jest.mock("./hash-computer.controller", () => ({
   computeFolderHashes$: jest.fn(),
@@ -57,6 +58,7 @@ const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
 const ffId1 = "ff-id-1";
 const ff1 = createFilesAndFolders({ id: ffId1 });
 const filesAndFolders = {
+  [ROOT_FF_ID]: createFilesAndFolders({ id: ROOT_FF_ID, children: [ffId1] }),
   [ffId1]: ff1,
 };
 
@@ -97,7 +99,7 @@ describe("firstHashesComputingThunk", () => {
 
     expect(testStore.getActions()).toEqual([
       {
-        goal: 1,
+        goal: 2,
         label: "default-name",
         loadingType: LoadingInfoTypes.HASH_COMPUTING,
         type: "start-loading",

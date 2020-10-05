@@ -9,6 +9,7 @@ import {
   backgroundWorkerProcess$,
   BatchProcessResult,
   computeBatch$,
+  filterResults,
 } from "util/batch-process/batch-process-util";
 import {
   DataProcessingStream,
@@ -117,8 +118,7 @@ export const computeFolderHashes$ = ({
   hashes,
 }: ComputeFolderHashesOptions): Observable<HashesMap> => {
   const FolderHashWorker = createAsyncWorkerControllerClass(FolderHashFork);
-  return backgroundWorkerProcess$(
-    { filesAndFolders, hashes },
-    FolderHashWorker
-  );
+  return backgroundWorkerProcess$({ filesAndFolders, hashes }, FolderHashWorker)
+    .pipe(filterResults())
+    .pipe(map(({ result }) => result));
 };

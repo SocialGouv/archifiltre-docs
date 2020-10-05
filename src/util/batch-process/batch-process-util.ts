@@ -1,10 +1,15 @@
 import { cpus } from "os";
-import { Observable } from "rxjs";
+import { fromEvent, merge, Observable } from "rxjs";
 import { chunk } from "lodash";
 import { reportError } from "logging/reporter";
 import { makeEmptyArray } from "util/array/array-util";
-import { map } from "rxjs/operators";
-import { MessageTypes } from "util/batch-process/batch-process-util-types";
+import { filter, map, takeWhile, tap } from "rxjs/operators";
+import {
+  ErrorMessage,
+  MessageTypes,
+  ResultMessage,
+  WorkerMessage,
+} from "util/batch-process/batch-process-util-types";
 
 // We create NB_CPUS - 1 processes to optimize computation
 const NB_CPUS = cpus().length - 1 > 0 ? cpus().length - 1 : 1;
@@ -31,7 +36,10 @@ const initWorkers = (
   makeEmptyArray(workerCount, null)
     .map(() => new WorkerBuilder())
     .map((worker) => {
-      worker.postMessage({ type: "initialize", data: initialValues });
+      worker.postMessage({
+        type: MessageTypes.INITIALIZE,
+        data: initialValues,
+      });
       if (onMessage) {
         worker.addEventListener("message", (message) => {
           onMessage(worker, message);
@@ -42,6 +50,40 @@ const initWorkers = (
       );
       return worker;
     });
+
+const initWorkers$ = (
+  WorkerBuilder: any,
+  { initialValues, workerCount = NB_CPUS }: InitWorkersData
+): Observable<{ worker: Worker; message: WorkerMessage }> =>
+  merge(
+    ...makeEmptyArray(workerCount, null)
+      .map(() => new WorkerBuilder())
+      .map((worker) => {
+        worker.addEventListener("error", (error) =>
+          reportError({ type: "WorkerError", error })
+        );
+        worker.postMessage({ type: "initialize", data: initialValues });
+        return worker;
+      })
+      .map(
+        (worker): Observable<{ worker: Worker; message: WorkerMessage }> =>
+          fromEvent(worker, "message")
+            .pipe(
+              tap(({ type }) => {
+                if (type === MessageTypes.COMPLETE) {
+                  worker.terminate();
+                }
+              })
+            )
+            .pipe(takeWhile(({ type }) => type !== MessageTypes.COMPLETE))
+            .pipe(
+              map((message: WorkerMessage) => ({
+                worker,
+                message,
+              }))
+            )
+      )
+  );
 
 export const computeBatch$ = (
   data: any,
@@ -105,6 +147,18 @@ export const computeBatch$ = (
   });
 };
 
+type LookUp<U, T> = U extends { type: T } ? U : never;
+
+const onMessageType = <T extends MessageTypes>(
+  type: T,
+  effect: (message: LookUp<WorkerMessage, T>) => void
+) =>
+  tap((message: WorkerMessage) => {
+    if (message.type === type) {
+      effect(message as LookUp<WorkerMessage, T>);
+    }
+  });
+
 /**
  * Delegates work to a single worker. Progress will be piped in the returned Observable
  * @param processedData - The data processed. It will be sent to the worker in an "initialize" message.
@@ -114,33 +168,29 @@ export const computeBatch$ = (
 export const backgroundWorkerProcess$ = (
   processedData: any,
   WorkerBuilder: any
-): Observable<any> =>
-  new Observable((observer) => {
-    const onMessage = (worker, { data: { type, result: data, error } }) => {
-      switch (type) {
-        case "result":
-          observer.next(data);
-          break;
-        case "error":
-          reportError(error);
-          break;
-        case "complete":
-          worker.terminate();
-          observer.complete();
-          break;
-        case "log":
-          console.log("Logging :", data);
-          break;
-        default:
-          console.log(`Unhandled message : ${type}`);
-      }
-    };
-    initWorkers(WorkerBuilder, {
-      onMessage,
-      initialValues: processedData,
-      workerCount: 1,
-    });
-  });
+): Observable<ResultMessage | ErrorMessage> =>
+  initWorkers$(WorkerBuilder, {
+    initialValues: processedData,
+    workerCount: 1,
+  })
+    .pipe(map(({ message }) => message))
+    .pipe(
+      onMessageType(MessageTypes.ERROR, (message) => {
+        reportError(message.error);
+      })
+    )
+    .pipe(
+      onMessageType(MessageTypes.LOG, (message) => {
+        console.log("Logging :", message.data);
+      })
+    )
+    .pipe(
+      filter<WorkerMessage, ErrorMessage | ResultMessage>(
+        (message: WorkerMessage): message is ResultMessage | ErrorMessage =>
+          message.type === MessageTypes.RESULT ||
+          message.type === MessageTypes.ERROR
+      )
+    );
 
 export type BatchProcessResult<T> = {
   param: string;
@@ -185,3 +235,9 @@ export const aggregateErrorsToMap = (
       valuesMap
     );
 };
+
+export const filterResults = () =>
+  filter(
+    (message: WorkerMessage): message is ResultMessage =>
+      message.type === MessageTypes.RESULT
+  );

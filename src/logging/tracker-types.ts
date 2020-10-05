@@ -13,6 +13,7 @@ export enum ActionTitle {
   FILE_TREE_DROP = "FileTreeDrop",
   AUDIT_REPORT_EXPORT = "Audit report export",
   CSV_EXPORT = "CSV Export",
+  CSV_WITH_HASHES_EXPORT = "CSV with hashes Export",
   RESIP_EXPORT = "RESIP Export",
   METS_EXPORT = "METS Export",
   JSON_EXPORT = "JSON Export",
@@ -23,4 +24,9 @@ export enum ActionTitle {
   DESCRIPTION_ADDED = "Description added to file/folder",
   ALIAS_ADDED = "Alias added to file/folder",
   LOADING_TIME = "Loading time",
+  MOVE_MODE_ENABLED = "Move mode enabled",
+  SEARCH_PERFORMED = "Search performed",
+  ELEMENT_MOVED = "Element moved",
+  ELEMENT_MARKED_TO_DELETE = "Element marked to delete",
+  CLICK_ON_TAB = "Click on tab",
 }

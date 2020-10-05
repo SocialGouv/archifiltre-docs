@@ -1,9 +1,20 @@
 import InputBase from "@material-ui/core/InputBase";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
 import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSearch } from "react-icons/fa";
 import { useStyles } from "hooks/use-styles";
+
+const handleTracking = (searchTerm) => {
+  if (searchTerm.length !== 0) {
+    addTracker({
+      title: ActionTitle.SEARCH_PERFORMED,
+      type: ActionType.TRACK_EVENT,
+    });
+  }
+};
 
 type SearchBarProps = {
   setSearchTerm: (searchTerm: string) => void;
@@ -15,6 +26,7 @@ export const SearchBar: FC<SearchBarProps> = ({ setSearchTerm }) => {
   const onChange = useCallback(
     (event) => {
       setSearchTerm(event.target.value);
+      handleTracking(event.target.value);
     },
     [setSearchTerm]
   );

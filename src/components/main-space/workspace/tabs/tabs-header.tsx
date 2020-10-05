@@ -3,7 +3,9 @@ import createStyles from "@material-ui/core/styles/createStyles";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
-import React, { FC, useCallback } from "react";
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
+import React, { FC, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { getAreHashesReady } from "reducers/files-and-folders/files-and-folders-selectors";
@@ -43,8 +45,27 @@ const TabsHeader: FC<TabsHeaderProps> = ({
   const classes = useLocalStyles();
   const areHashesReady = useSelector(getAreHashesReady);
 
+  const tabData = useMemo(
+    () => [
+      { label: t("workspace.general"), disabled: false },
+      { label: t("workspace.enrichment"), disabled: false },
+      { label: t("workspace.audit"), disabled: false },
+      { label: t("workspace.duplicates"), disabled: !areHashesReady },
+    ],
+    [t, areHashesReady]
+  );
+
+  const handleTracking = (tabIndex) => {
+    addTracker({
+      title: ActionTitle.CLICK_ON_TAB,
+      value: `Click on ${t(tabData[tabIndex].label)}`,
+      type: ActionType.TRACK_EVENT,
+    });
+  };
+
   const handleChange = useCallback(
     (event: React.ChangeEvent<{}>, newValue: number) => {
+      handleTracking(newValue);
       setTabIndex(newValue);
       newValue === 3
         ? setAreIciclesDisplayed(false)
@@ -60,27 +81,15 @@ const TabsHeader: FC<TabsHeaderProps> = ({
       indicatorColor="primary"
       textColor="primary"
     >
-      <Tab
-        label={t("workspace.general")}
-        className={classes.tab}
-        {...a11yProps(0)}
-      />
-      <Tab
-        label={t("workspace.enrichment")}
-        className={classes.tab}
-        {...a11yProps(1)}
-      />
-      <Tab
-        label={t("workspace.audit")}
-        className={classes.tab}
-        {...a11yProps(2)}
-      />
-      <Tab
-        disabled={!areHashesReady}
-        label={t("workspace.duplicates")}
-        className={classes.tab}
-        {...a11yProps(3)}
-      />
+      {tabData.map(({ label, disabled }, index) => (
+        <Tab
+          key={`${label}- ${index}`}
+          label={label}
+          className={classes.tab}
+          {...a11yProps(index)}
+          disabled={disabled}
+        />
+      ))}
     </Tabs>
   );
 };

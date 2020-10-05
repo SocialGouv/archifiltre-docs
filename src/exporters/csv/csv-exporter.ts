@@ -20,7 +20,9 @@ export const csvExporterThunk = (
   { withHashes = false } = {}
 ): ArchifiltreThunkAction => async (dispatch, getState) => {
   addTracker({
-    title: ActionTitle.CSV_EXPORT,
+    title: withHashes
+      ? ActionTitle.CSV_WITH_HASHES_EXPORT
+      : ActionTitle.CSV_EXPORT,
     type: ActionType.TRACK_EVENT,
   });
 

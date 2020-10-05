@@ -10,8 +10,12 @@ import {
 } from "reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "reducers/tags/tags-types";
 import { createAsyncWorkerControllerClass } from "util/async-worker/async-worker-util";
-import { backgroundWorkerProcess$ } from "util/batch-process/batch-process-util";
+import {
+  backgroundWorkerProcess$,
+  filterResults,
+} from "util/batch-process/batch-process-util";
 import ResipExportFork from "./resip-export.fork";
+import { map } from "rxjs/operators";
 
 interface ResipExportProgress {
   count: number;
@@ -65,5 +69,7 @@ export const generateResipExport$ = ({
       tags,
     },
     ResipExportAsyncWorker
-  );
+  )
+    .pipe(filterResults())
+    .pipe(map(({ result }) => result));
 };

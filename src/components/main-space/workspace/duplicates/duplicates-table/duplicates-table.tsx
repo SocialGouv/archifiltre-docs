@@ -1,14 +1,26 @@
 import Box from "@material-ui/core/Box";
-import React, { FC, useMemo } from "react";
+import { Column } from "components/common/table/table-types";
+import React, { FC, ReactNode, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import Table from "components/common/table/table";
 import DuplicatesTableType from "./duplicates-table-type";
 
+type NumberMap = {
+  [id: string]: number;
+};
+
+type TableData = {
+  type: ReactNode;
+  nbFiles: number;
+  size: string;
+  percentage: string;
+};
+
 type DuplicatesTableProps = {
-  fileTypesCount;
-  fileSizesCount;
-  filePercentagesCount;
+  fileTypesCount: NumberMap;
+  fileSizesCount: NumberMap;
+  filePercentagesCount: NumberMap;
 };
 
 const DuplicatesTable: FC<DuplicatesTableProps> = ({
@@ -18,21 +30,25 @@ const DuplicatesTable: FC<DuplicatesTableProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const columns = useMemo(
+  const columns: Column<TableData>[] = useMemo(
     () => [
       {
+        id: "type",
         name: t("search.type"),
         accessor: "type",
       },
       {
+        id: "nbFiles",
         name: t("duplicates.filesNumber"),
         accessor: "nbFiles",
       },
       {
+        id: "size",
         name: t("duplicates.spaceUsed"),
         accessor: "size",
       },
       {
+        id: "percentage",
         name: t("duplicates.percentage"),
         accessor: "percentage",
       },

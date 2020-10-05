@@ -1,3 +1,4 @@
+import { Column } from "components/common/table/table-types";
 import dateFormat from "dateformat";
 import React, { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -19,9 +20,10 @@ export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
   filesAndFoldersMetadata,
 }) => {
   const { t } = useTranslation();
-  const columns = useMemo(
+  const columns: Column<FilesAndFolders>[] = useMemo(
     () => [
       {
+        id: "name",
         name: t("search.name"),
         accessor: "name",
       },
@@ -51,6 +53,7 @@ export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
           dateFormat(file_last_modified, "dd/mm/yyyy"),
       },
       {
+        id: "path",
         name: t("search.path"),
         accessor: "id",
       },

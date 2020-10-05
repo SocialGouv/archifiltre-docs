@@ -91,7 +91,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
       {
         id: "emptyColumn",
         name: "",
-        accessor: "",
+        accessor: () => "",
       },
       {
         id: "name",
@@ -116,7 +116,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
       {
         id: "elementsCount",
         name: t("duplicates.filesNumber"),
-        accessor: "",
+        accessor: () => "",
       },
       {
         id: "fileLastModified",
@@ -153,7 +153,6 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
           <Table
             columns={columns}
             data={filteredFilesAndFolders}
-            rowId="name"
             RowRendererComp={TableExpandableRow}
           />
         )}

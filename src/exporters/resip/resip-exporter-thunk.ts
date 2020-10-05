@@ -1,5 +1,5 @@
 import { promises as fs } from "fs";
-import { map, takeLast, tap } from "rxjs/operators";
+import { takeLast, tap } from "rxjs/operators";
 import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
 import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
@@ -39,7 +39,7 @@ const resipExportStartedMessage = translations.t(
  */
 export const resipExporterThunk = (
   filePath: string
-): ArchifiltreThunkAction => (dispatch, getState) => {
+): ArchifiltreThunkAction => async (dispatch, getState) => {
   const state = getState();
   const tags = getTagsFromStore(state);
   const filesAndFolders = getFilesAndFoldersFromStore(state);
@@ -54,34 +54,33 @@ export const resipExporterThunk = (
     startLoadingAction(
       loadingActionId,
       LoadingInfoTypes.EXPORT,
-      RESIP_HOOK_CALL_PER_ELEMENT * Object.keys(filesAndFolders).length,
+      // We remove the root folder
+      RESIP_HOOK_CALL_PER_ELEMENT * (Object.keys(filesAndFolders).length - 1),
       "RESIP"
     )
   );
 
   let lastCount = 0;
-  return new Promise((resolve) => {
-    generateResipExport$({
-      aliases,
-      comments,
-      elementsToDelete,
-      filesAndFolders,
-      filesAndFoldersMetadata,
-      tags,
-    })
-      .pipe(
-        tap(({ count }) => {
-          dispatch(progressLoadingAction(loadingActionId, count - lastCount));
-          lastCount = count;
-        })
-      )
-      .pipe(takeLast(1))
-      .pipe(map(({ resipCsv }) => arrayToCsv(resipCsv)))
-      .subscribe(async (stringCsv) => {
-        await fs.writeFile(filePath, stringCsv);
-        notifySuccess(resipExportSuccessMessage, resipExportTitle);
-        dispatch(completeLoadingAction(loadingActionId));
-        resolve();
-      });
-  });
+
+  const { resipCsv } = await generateResipExport$({
+    aliases,
+    comments,
+    elementsToDelete,
+    filesAndFolders,
+    filesAndFoldersMetadata,
+    tags,
+  })
+    .pipe(
+      tap(({ count }) => {
+        dispatch(progressLoadingAction(loadingActionId, count - lastCount));
+        lastCount = count;
+      })
+    )
+    .pipe(takeLast(1))
+    .toPromise();
+
+  await fs.writeFile(filePath, arrayToCsv(resipCsv));
+
+  notifySuccess(resipExportSuccessMessage, resipExportTitle);
+  dispatch(completeLoadingAction(loadingActionId));
 };

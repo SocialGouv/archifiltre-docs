@@ -8,7 +8,7 @@ import {
 import { startLoading } from "reducers/loading-info/loading-info-operations";
 import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
 import { from, Observable } from "rxjs";
-import { bufferTime, mergeMap, last, tap } from "rxjs/operators";
+import { bufferTime, mergeMap, tap } from "rxjs/operators";
 import {
   NotificationDuration,
   notifySuccess,
@@ -33,33 +33,25 @@ export const handleFileExportThunk = (
     exportFileName,
     exportSuccessMessage,
   }: ExportOptions
-): ArchifiltreThunkAction => (dispatch) => {
+): ArchifiltreThunkAction => async (dispatch) => {
   const loadingId = dispatch(
     startLoading(LoadingInfoTypes.EXPORT, totalProgress, loaderMessage)
   );
 
-  return new Promise((resolve) => {
-    exportData$
-      .pipe(bufferTime(LOADING_BAR_UPDATE_INTERVAL))
-      .pipe(
-        tap((buffer) =>
-          dispatch(progressLoadingAction(loadingId, buffer.length))
-        )
-      )
-      .pipe(mergeMap((buffer) => from(buffer)))
-      .pipe(last())
-      .subscribe({
-        next: async (csv: string) => {
-          dispatch(completeLoadingAction(loadingId));
-          await fs.writeFile(exportFileName, csv, { encoding: "utf-8" });
-          notifySuccess(
-            exportSuccessMessage,
-            exportNotificationTitle,
-            NotificationDuration.NORMAL,
-            () => shell.openPath(exportFileName)
-          );
-          resolve();
-        },
-      });
-  });
+  const { result } = await exportData$
+    .pipe(bufferTime(LOADING_BAR_UPDATE_INTERVAL))
+    .pipe(
+      tap((buffer) => dispatch(progressLoadingAction(loadingId, buffer.length)))
+    )
+    .pipe(mergeMap((buffer) => from(buffer)))
+    .toPromise();
+
+  dispatch(completeLoadingAction(loadingId));
+  await fs.writeFile(exportFileName, result, { encoding: "utf-8" });
+  notifySuccess(
+    exportSuccessMessage,
+    exportNotificationTitle,
+    NotificationDuration.NORMAL,
+    () => shell.openPath(exportFileName)
+  );
 };

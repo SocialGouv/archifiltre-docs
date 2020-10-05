@@ -165,7 +165,8 @@
       "hash": "hash (MD5)",
       "fileCount": "number of files",
       "type": "type",
-      "duplicate": "duplicate"
+      "duplicate": "duplicate",
+      "toDelete": "To be deleted"
     },
     "export": {
       "metsExportErrorTitle": "METS export error",

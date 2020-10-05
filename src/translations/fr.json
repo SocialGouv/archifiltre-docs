@@ -165,7 +165,8 @@
       "hash": "empreinte (MD5)",
       "fileCount": "nombre de fichiers",
       "type": "type",
-      "duplicate": "redondance"
+      "duplicate": "redondance",
+      "toDelete": "À éliminer"
     },
     "export": {
       "metsExportErrorTitle": "Erreur dans l'export METS",

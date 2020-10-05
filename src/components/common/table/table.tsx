@@ -2,9 +2,7 @@ import MuiTable from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import EnhancedTableHead from "components/common/table/enhanced-table-head";
 import React, {
   memo,
   ReactElement,
@@ -19,11 +17,17 @@ import {
   RowRenderer,
 } from "components/common/table/table-types";
 import TableDefaultRow from "components/common/table/table-default-row";
+import {
+  accessorToFunction,
+  getComparator,
+  Order,
+  stableSort,
+} from "util/table/table-util";
 
 type TableProps<T> = {
   data: T[];
   columns: Column<T>[];
-  rowId: RowIdAccessor<T>;
+  rowId?: RowIdAccessor<T>;
   isPaginatorDisplayed?: boolean;
   isDense?: boolean;
   RowRendererComp?: RowRenderer<T>;
@@ -53,26 +57,46 @@ function Table<T>({
     [setRowsPerPage, setPage]
   );
   const rowIdAccessor = useMemo(
-    () => (typeof rowId === "function" ? rowId : (row: T) => row[rowId]),
+    () =>
+      typeof rowId === "function"
+        ? rowId
+        : (row: T) => (rowId ? row[rowId] : undefined),
     [rowId]
   );
+
+  const [order, setOrder] = useState<Order>("asc");
+  const [orderBy, setOrderBy] = useState<number>(0);
+
+  const sortedColumnAccessor = useMemo(
+    () => accessorToFunction(columns[orderBy].accessor),
+    [columns, orderBy]
+  );
+
+  const handleRequestSort = (event: React.MouseEvent, property: number) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
+  const comparator = getComparator(order, sortedColumnAccessor);
+  const sortedData = stableSort<T>(data, comparator);
+
   return (
     <div>
       <TableContainer component={Paper}>
         <MuiTable size={isDense ? "small" : "medium"}>
-          <TableHead>
-            <TableRow>
-              {columns.map(({ name }, columnIndex) => (
-                <TableCell key={`${name}-${columnIndex}`}>{name}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
+          <EnhancedTableHead
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+            columns={columns}
+          />
           <TableBody>
-            {data
+            {sortedData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, rowIndex) => (
                 <RowRendererComp
-                  key={`${rowIdAccessor(row)}-${rowIndex}`}
+                  key={`${rowIdAccessor(row) || rowIndex}`}
                   row={row}
                   columns={columns}
                 />
@@ -93,4 +117,4 @@ function Table<T>({
   );
 }
 
-export default memo(Table);
+export default memo(Table) as typeof Table;

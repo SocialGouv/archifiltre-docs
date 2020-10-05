@@ -1,9 +1,10 @@
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import { computeTreeStructureArray } from "util/tree-representation/tree-representation";
+import { toArray } from "rxjs/operators";
 
 describe("tree-representation", () => {
   describe("computeTreeStructureArray", () => {
-    it("should correctly represent file structure", () => {
+    it("should correctly represent file structure", async () => {
       const filesAndFoldersMap = {
         "": createFilesAndFolders({ id: "", children: ["/root"] }),
         "/root": createFilesAndFolders({
@@ -27,7 +28,11 @@ describe("tree-representation", () => {
         }),
       };
 
-      expect(computeTreeStructureArray(filesAndFoldersMap)).toEqual([
+      const result = await computeTreeStructureArray(filesAndFoldersMap)
+        .pipe(toArray())
+        .toPromise();
+
+      expect(result).toEqual([
         ["root"],
         ["", "folder"],
         ["", "", "child"],

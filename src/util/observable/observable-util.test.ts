@@ -1,23 +1,21 @@
 import { identity, of } from "rxjs";
 import { map, toArray } from "rxjs/operators";
-import {
-  DataProcessingStatus,
-  operateOnDataProcessingStream,
-} from "./observable-util";
+import { MessageTypes } from "util/batch-process/batch-process-util-types";
+import { operateOnDataProcessingStream } from "./observable-util";
 
 const resultElement = {
   result: "result",
-  type: DataProcessingStatus.RESULT,
+  type: MessageTypes.RESULT as const,
 };
 
 const resultElement2 = {
   result: "result2",
-  type: DataProcessingStatus.RESULT,
+  type: MessageTypes.RESULT as const,
 };
 
 const errorElement = {
   error: "error",
-  type: DataProcessingStatus.ERROR,
+  type: MessageTypes.ERROR as const,
 };
 
 const streamData = [resultElement, errorElement, resultElement2];
@@ -29,14 +27,16 @@ const testStream = (stream, test) => {
 describe("observable-utl", () => {
   describe("operateOnDataProcessingStream", () => {
     it("should return the same stream with no operators", (done) => {
+      const resultMapper = jest.fn(identity);
       const baseStream = of(...streamData);
 
       const testedStream = operateOnDataProcessingStream(baseStream, {
-        result: identity,
+        result: map(resultMapper),
       });
 
       testStream(testedStream, (result) => {
         expect(result).toEqual(expect.arrayContaining(streamData));
+        expect(resultMapper).toHaveBeenCalledTimes(2);
         done();
       });
     });
@@ -55,11 +55,11 @@ describe("observable-utl", () => {
           expect.arrayContaining([
             {
               result: "processed-result",
-              type: DataProcessingStatus.RESULT,
+              type: MessageTypes.RESULT,
             },
             {
               result: "processed-result2",
-              type: DataProcessingStatus.RESULT,
+              type: MessageTypes.RESULT,
             },
             errorElement,
           ])
@@ -86,7 +86,7 @@ describe("observable-utl", () => {
             resultElement2,
             {
               error: "processed-error",
-              type: DataProcessingStatus.ERROR,
+              type: MessageTypes.ERROR,
             },
           ])
         );

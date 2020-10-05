@@ -1,6 +1,6 @@
+import { chunk } from "lodash";
 import { cpus } from "os";
 import { fromEvent, merge, Observable } from "rxjs";
-import { chunk } from "lodash";
 import { reportError } from "logging/reporter";
 import { makeEmptyArray } from "util/array/array-util";
 import { filter, map, takeWhile, tap } from "rxjs/operators";
@@ -51,13 +51,21 @@ const initWorkers = (
       return worker;
     });
 
+type InitWorkersResult = {
+  result$: Observable<{ worker: Worker; message: WorkerMessage }>;
+  terminate: () => void;
+};
+
 const initWorkers$ = (
   WorkerBuilder: any,
   { initialValues, workerCount = NB_CPUS }: InitWorkersData
-): Observable<{ worker: Worker; message: WorkerMessage }> =>
-  merge(
-    ...makeEmptyArray(workerCount, null)
-      .map(() => new WorkerBuilder())
+): InitWorkersResult => {
+  const workers = makeEmptyArray(workerCount, null).map(
+    () => new WorkerBuilder()
+  );
+
+  const result$ = merge(
+    ...workers
       .map((worker) => {
         worker.addEventListener("error", (error) =>
           reportError({ type: "WorkerError", error })
@@ -84,6 +92,11 @@ const initWorkers$ = (
             )
       )
   );
+  const terminate = () => {
+    workers.forEach((worker) => worker.terminate());
+  };
+  return { result$, terminate };
+};
 
 export const computeBatch$ = (
   data: any,
@@ -169,10 +182,22 @@ export const backgroundWorkerProcess$ = (
   processedData: any,
   WorkerBuilder: any
 ): Observable<ResultMessage | ErrorMessage> =>
-  initWorkers$(WorkerBuilder, {
+  cancelableBackgroundWorkerProcess$(processedData, WorkerBuilder).result$;
+
+type CancelableBackgroundWorkerProcessResult = {
+  result$: Observable<ResultMessage | ErrorMessage>;
+  terminate: () => void;
+};
+
+export const cancelableBackgroundWorkerProcess$ = (
+  processedData: any,
+  WorkerBuilder: any
+): CancelableBackgroundWorkerProcessResult => {
+  const { result$, terminate } = initWorkers$(WorkerBuilder, {
     initialValues: processedData,
     workerCount: 1,
-  })
+  });
+  const processedResult$ = result$
     .pipe(map(({ message }) => message))
     .pipe(
       onMessageType(MessageTypes.ERROR, (message) => {
@@ -191,6 +216,8 @@ export const backgroundWorkerProcess$ = (
           message.type === MessageTypes.ERROR
       )
     );
+  return { result$: processedResult$, terminate };
+};
 
 export type BatchProcessResult<T> = {
   param: string;

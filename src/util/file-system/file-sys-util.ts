@@ -74,9 +74,17 @@ export const convertToPosixAbsolutePath = (
   return array.join("/");
 };
 
-export const isJsonFile = (filePath) => {
-  const stats = fs.statSync(filePath);
-  return stats.isFile() && path.extname(filePath) === ".json";
+/**
+ * Returns true if the file is a JSON, false otherwise
+ * @param filePath
+ */
+export const isJsonFile = (filePath: string): boolean => {
+  try {
+    const stats = fs.statSync(filePath);
+    return stats.isFile() && path.extname(filePath) === ".json";
+  } catch (error) {
+    return false;
+  }
 };
 
 export const readFileSync = fs.readFileSync;

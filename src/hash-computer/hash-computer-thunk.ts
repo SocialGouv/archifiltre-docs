@@ -157,7 +157,8 @@ export const computeHashesThunk = (
   const state = getState();
   const filesAndFolders = getFilesAndFoldersFromStore(state);
 
-  const foldersCount = getFoldersCount(filesAndFolders);
+  // We also compute the root folder hash
+  const foldersCount = getFoldersCount(filesAndFolders) + 1;
 
   const loadingActionId = dispatch(
     startLoading(

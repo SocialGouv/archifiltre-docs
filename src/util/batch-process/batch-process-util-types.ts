@@ -9,35 +9,40 @@ export enum MessageTypes {
   RESULT = "result",
 }
 
-interface ErrorMessage {
+export type ErrorMessage = {
   type: typeof MessageTypes.ERROR;
   error: object;
-}
+};
 
-interface ResultMessage {
+export type ResultMessage = {
   type: typeof MessageTypes.RESULT;
   result: any;
-}
+};
 
-interface InitializeMessage {
+type InitializeMessage = {
   type: typeof MessageTypes.INITIALIZE;
   data: any;
-}
+};
 
-interface CompleteMessage {
+type CompleteMessage = {
   type: typeof MessageTypes.COMPLETE;
   result?: any;
-}
+};
 
-interface WarningMessage {
+type WarningMessage = {
   type: typeof MessageTypes.WARNING;
   warning: any;
-}
+};
 
-interface FatalMessage {
+type FatalMessage = {
   type: typeof MessageTypes.FATAL;
   error: any;
-}
+};
+
+type LogMessage = {
+  type: typeof MessageTypes.LOG;
+  data: any;
+};
 
 export type WorkerMessage =
   | ErrorMessage
@@ -45,4 +50,5 @@ export type WorkerMessage =
   | InitializeMessage
   | CompleteMessage
   | WarningMessage
-  | FatalMessage;
+  | FatalMessage
+  | LogMessage;

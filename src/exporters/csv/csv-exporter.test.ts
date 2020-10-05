@@ -135,7 +135,9 @@ describe("csv-exporter", () => {
     beforeEach(() => {
       writeFileMock.mockReset();
       generateCsvExportMock.mockReset();
-      generateCsvExportMock.mockReturnValue(of(undefined, undefined, csvValue));
+      generateCsvExportMock.mockReturnValue(
+        of(undefined, undefined, { result: csvValue })
+      );
       writeFileMock.mockResolvedValue(undefined);
     });
     describe("withoutHashes", () => {

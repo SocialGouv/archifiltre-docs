@@ -22,12 +22,12 @@ const createExcelWorkbook = ({ treeCsv, csvArray }, translator: TFunction) => {
   utils.book_append_sheet(
     workbook,
     csvWorkSheet,
-    translator("common.treeStats")
+    translator("export.treeStats")
   );
   utils.book_append_sheet(
     workbook,
     treeCsvWorkSheet,
-    translator("common.treeVisualizing")
+    translator("export.treeVisualizing")
   );
   return workbook;
 };

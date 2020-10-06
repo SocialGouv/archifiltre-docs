@@ -1,4 +1,3 @@
-import { shell } from "electron";
 import { promises as fs } from "fs";
 import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
 import {
@@ -13,6 +12,7 @@ import {
   NotificationDuration,
   notifySuccess,
 } from "util/notification/notifications-util";
+import { openExternalElement } from "util/file-system/file-system-util";
 
 type ExportOptions = {
   totalProgress: number;
@@ -52,6 +52,6 @@ export const handleFileExportThunk = (
     exportSuccessMessage,
     exportNotificationTitle,
     NotificationDuration.NORMAL,
-    () => shell.openPath(exportFileName)
+    () => openExternalElement(exportFileName)
   );
 };

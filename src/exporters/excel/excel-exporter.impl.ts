@@ -8,6 +8,9 @@ import translations from "translations/translations";
 import { utils, write } from "xlsx";
 import { TFunction } from "i18next";
 
+export const getExcelExportProgressGoal = (filesAndFoldersCount: number) =>
+  2 * filesAndFoldersCount;
+
 export type CreateExcelWorkbookParams = {
   treeCsv: string[][];
   csvArray: string[][];

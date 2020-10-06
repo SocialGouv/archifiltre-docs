@@ -181,7 +181,13 @@
       "creatingCsvExport": "Création de l'export CSV",
       "creatingCsvExportWithHashes": "Création de l'export CSV avec empreintes",
       "creatingResipExport": "Création de l'export RESIP",
-      "treeCsv": "CSV hiérarchisé"
+      "treeCsv": "CSV hiérarchisé",
+      "excelExportProgressLabel": "Création de l'export Excel",
+      "excelExportStartedMessage": "L'export Excel a commencé",
+      "excelExportSuccessMessage": "L'export Excel est terminé",
+      "excelExportTitle": "Export Excel",
+      "treeStats": "Statistiques de l'arborescence",
+      "treeVisualizing": "Visualisation de l'arborescence"
     },
     "replay": {
       "title": "Chargement de la session précédente",

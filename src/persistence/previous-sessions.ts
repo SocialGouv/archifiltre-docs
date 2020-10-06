@@ -14,11 +14,11 @@ const getPreviousSessionsPath = (): string => {
  */
 const sanitizePreviousSessions = (previousSessions: string[]) => {
   const sanitizedPreviousSessions = previousSessions.map((session) =>
-    session.replace("\r", "")
+    session.replace(/\r/g, "")
   );
 
   return sanitizedPreviousSessions
-    .map((session) => session.replace("\r", ""))
+    .map((session) => session.replace(/\r/g, ""))
     .filter(
       (session, index) => sanitizedPreviousSessions.indexOf(session) === index
     )

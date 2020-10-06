@@ -13,6 +13,7 @@ import {
 } from "reducers/loading-info/loading-info-actions";
 import {
   NotificationDuration,
+  notifyInfo,
   notifySuccess,
 } from "util/notification/notifications-util";
 import { openExternalElement } from "util/file-system/file-system-util";
@@ -26,6 +27,11 @@ export const excelExporterThunk = (
   const loadingLabel = translations.t("export.excelExportProgressLabel");
 
   const elementsCount = Object.keys(exportData.filesAndFolders).length;
+
+  notifyInfo(
+    translations.t("export.excelExportStartedMessage"),
+    translations.t("export.excelExportTitle")
+  );
 
   const loadingId = dispatch(
     startLoading(
@@ -50,7 +56,7 @@ export const excelExporterThunk = (
 
   notifySuccess(
     translations.t("export.excelExportSuccessMessage"),
-    translations.t("export.excelExportSuccessTitle"),
+    translations.t("export.excelExportTitle"),
     NotificationDuration.NORMAL,
     () => openExternalElement(name)
   );

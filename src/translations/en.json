@@ -181,7 +181,13 @@
       "creatingCsvExport": "Creating the CSV export file",
       "creatingCsvExportWithHashes": "Creating the CSV with hashes export file",
       "creatingResipExport": "Creating the Resip export file",
-      "treeCsv": "Tree CSV"
+      "treeCsv": "Tree CSV",
+      "excelExportProgressLabel": "Creating Excel export",
+      "excelExportStartedMessage": "Excel export started",
+      "excelExportSuccessMessage": "Excel export succeeded",
+      "excelExportTitle": "Excel export",
+      "treeStats": "File tree statistics",
+      "treeVisualizing": "File tree visualizing"
     },
     "replay": {
       "title": "Restore previous session",

@@ -8,6 +8,7 @@ import { metsExporterThunk } from "exporters/mets/mets-export-thunk";
 import { resipExporterThunk } from "exporters/resip/resip-exporter-thunk";
 import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
 import { getNameWithExtension } from "util/file-system/file-sys-util";
+import { excelExporterThunk } from "exporters/excel/excel-exporter";
 
 export enum ExportType {
   AUDIT = "AUDIT",
@@ -16,6 +17,7 @@ export enum ExportType {
   TREE_CSV = "TREE_CSV",
   METS = "METS",
   RESIP = "RESIP",
+  EXCEL = "EXCEL",
 }
 
 export type IsActiveOptions = {
@@ -55,6 +57,7 @@ const exportFilesConfigs = {
   [ExportType.TREE_CSV]: { fileSuffix: "treeCsv", extension: "csv" },
   [ExportType.RESIP]: { fileSuffix: "resip", extension: "csv" },
   [ExportType.METS]: { fileSuffix: "mets", extension: "zip" },
+  [ExportType.EXCEL]: { fileSuffix: "excel", extension: "xlsx" },
 };
 
 const computeExportFilePath = (
@@ -125,5 +128,12 @@ export const exportConfig: ExportConfigMap = {
     exportFunction: (exportPath) => metsExporterThunk(exportPath),
     exportPath: (originalPath, sessionName) =>
       computeExportFilePath(originalPath, sessionName, ExportType.METS),
+  },
+  [ExportType.EXCEL]: {
+    isActive: ({ areHashesReady }) => areHashesReady,
+    label: "Excel",
+    exportFunction: (exportPath) => excelExporterThunk(exportPath),
+    exportPath: (originalPath, sessionName) =>
+      computeExportFilePath(originalPath, sessionName, ExportType.EXCEL),
   },
 };

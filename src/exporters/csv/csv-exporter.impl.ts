@@ -13,7 +13,7 @@ import { HashesMap } from "reducers/hashes/hashes-types";
 import { exportToCsv } from "util/array-export/array-export";
 import { tap, toArray } from "rxjs/operators";
 
-type CsvExporterData = {
+export type CsvExporterData = {
   aliases: AliasMap;
   comments: CommentsMap;
   filesAndFolders: FilesAndFoldersMap;

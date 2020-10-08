@@ -1,3 +1,5 @@
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
 import React, { FC, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,6 +21,15 @@ import {
 import { useWorkspaceMetadata } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import Enrichment from "./enrichment";
 import { commitAction } from "reducers/enhancers/undoable/undoable-actions";
+
+const handleTracking = (isCurrentFileMarkedToDelete) => {
+  if (!isCurrentFileMarkedToDelete) {
+    addTracker({
+      title: ActionTitle.ELEMENT_MARKED_TO_DELETE,
+      type: ActionType.TRACK_EVENT,
+    });
+  }
+};
 
 const EnrichmentContainer: FC = () => {
   const dispatch = useDispatch();
@@ -65,6 +76,7 @@ const EnrichmentContainer: FC = () => {
   const isCurrentFileMarkedToDelete = filesToDelete.includes(filesAndFoldersId);
 
   const toggleCurrentFileDeleteState = useCallback(() => {
+    handleTracking(isCurrentFileMarkedToDelete);
     isCurrentFileMarkedToDelete
       ? dispatch(unmarkAsToDelete(filesAndFoldersId))
       : dispatch(markAsToDelete(filesAndFoldersId));

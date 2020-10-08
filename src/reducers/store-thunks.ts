@@ -5,6 +5,8 @@ import { mapToNewVersionNumbers } from "components/header/new-version-checker";
 import { firstHashesComputingThunk } from "hash-computer/hash-computer-thunk";
 import { addTracker } from "logging/tracker";
 import { ActionTitle, ActionType } from "logging/tracker-types";
+import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
 import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 import { tap } from "rxjs/operators";
 import translations from "translations/translations";
@@ -18,6 +20,7 @@ import {
   countZipFiles,
   isJsonFile,
   isRootPath,
+  octet2HumanReadableFormat,
 } from "util/file-system/file-sys-util";
 import { empty } from "util/function/function-util";
 import {
@@ -121,12 +124,26 @@ const displayRootPathError = () => {
  * Handles tracking events sent to Matomo
  * @param paths of files that need to be tracked
  */
-const handleTracking = (paths) => {
+const handleTracking = (paths, filesAndFoldersMap): ArchifiltreThunkAction => (
+  dispatch,
+  getState
+) => {
+  const filesAndFoldersMetadataMap = getFilesAndFoldersMetadataFromStore(
+    getState()
+  );
+
+  const treeVolume = filesAndFoldersMetadataMap[ROOT_FF_ID].childrenTotalSize;
+
+  const fileCount = paths.length;
+  const foldersCount = Object.keys(filesAndFoldersMap).length - fileCount;
+
   const elementsByExtension = _(paths)
     .map(path.extname)
     .countBy(_.identity())
     .map((count, extension) => `${extension || "[No extension]"}: ${count}`)
-    .unshift(`Files dropped: ${paths.length}`)
+    .unshift(`Folders dropped: ${foldersCount}`)
+    .unshift(`Files dropped: ${fileCount}`)
+    .unshift(`Total volume: ${octet2HumanReadableFormat(treeVolume)}`)
     .join("; \r\n");
 
   addTracker({
@@ -188,7 +205,7 @@ const handleNonJsonFileThunk = (
     const paths = getFiles(
       filesAndFoldersMapToArray(virtualFileSystem.filesAndFolders)
     ).map((file) => file.id);
-    handleTracking(paths);
+    dispatch(handleTracking(paths, virtualFileSystem.filesAndFolders));
     handleZipNotificationDisplay(paths);
     dispatch(handleErrorNotificationDisplay());
     dispatch(handleHashComputing(virtualFileSystem));

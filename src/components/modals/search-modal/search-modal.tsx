@@ -58,6 +58,7 @@ export const SearchModal: FC<SearchModalProps> = ({
     nameFilter,
     filters,
   ]);
+
   const filteredFilesAndFolders = useSearchAndFilters(
     filesAndFoldersArray,
     searchFilters

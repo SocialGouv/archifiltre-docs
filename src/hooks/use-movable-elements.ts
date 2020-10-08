@@ -1,9 +1,18 @@
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
 import { MouseEvent, useCallback, useRef } from "react";
 
 export type MoveElement = (
   movedElementId: string,
   targetFolderId: string
 ) => void;
+
+const handleTracking = () => {
+  addTracker({
+    title: ActionTitle.ELEMENT_MOVED,
+    type: ActionType.TRACK_EVENT,
+  });
+};
 
 /**
  * Hook to handle drag and drop of icicle elements
@@ -15,6 +24,7 @@ export const useMovableElements = (onElementMoved: MoveElement) => {
 
   const onIcicleMouseDown = useCallback(
     (event: MouseEvent) => {
+      handleTracking();
       const target = event.target as HTMLElement;
       draggedElementRef.current =
         target.attributes["data-draggable-id"]?.value || "";

@@ -1,19 +1,10 @@
+import ExportCategoryOptions from "components/modals/export-modal/export-category-options";
 import React, { FC } from "react";
-import { useTranslation } from "react-i18next";
-import styled from "styled-components";
-import ExportCheckbox from "./export-checkbox";
-import { exportConfig, ExportType } from "./export-config";
-import ExportInput from "./export-input";
+import { ExportCategory, ExportType } from "./export-config";
 
 export type ExportTypesMap<ValueType> = {
   [exportType in ExportType]: ValueType;
 };
-
-const ExportContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 10px;
-`;
 
 type ExportOptionsProps = {
   enabledExports: ExportTypesMap<boolean>;
@@ -27,33 +18,19 @@ const ExportOptions: FC<ExportOptionsProps> = ({
   exportPaths,
   setActiveExportValue,
   setExportsPathsValue,
-}) => {
-  const { t } = useTranslation();
-  return (
-    <>
-      {Object.values(ExportType).map((exportType: ExportType) => (
-        <ExportContainer key={exportType}>
-          <ExportCheckbox
-            isActive={enabledExports[exportType]}
-            setActiveExportValue={(value) =>
-              setActiveExportValue(exportType, value)
-            }
-            label={t(exportConfig[exportType].label)}
-            disabledExplanation={t(
-              exportConfig[exportType].disabledExplanation || ""
-            )}
-          />
-          <ExportInput
-            exportFilePath={exportPaths[exportType]}
-            setExportsPathsValue={(value) =>
-              setExportsPathsValue(exportType, value)
-            }
-            isFilePickerDisabled={exportConfig[exportType].isFilePickerDisabled}
-          />
-        </ExportContainer>
-      ))}
-    </>
-  );
-};
+}) => (
+  <>
+    {Object.values(ExportCategory).map((exportCategory) => (
+      <ExportCategoryOptions
+        exportCategory={exportCategory}
+        key={exportCategory}
+        enabledExports={enabledExports}
+        exportPaths={exportPaths}
+        setActiveExportValue={setActiveExportValue}
+        setExportsPathsValue={setExportsPathsValue}
+      />
+    ))}
+  </>
+);
 
 export default ExportOptions;

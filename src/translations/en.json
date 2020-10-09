@@ -204,7 +204,8 @@
       "noResult": "No result",
       "page": "Page",
       "tag": "Tag",
-      "noAvailableOption": "No available option"
+      "noAvailableOption": "No available option",
+      "visualizeElement": "Visualize element"
     },
     "errorsModal": {
       "title": "Errors list",

@@ -204,7 +204,8 @@
       "noResult": "Pas de résultat",
       "page": "Page",
       "tag": "Tag",
-      "noAvailableOption": "Pas d'option disponible"
+      "noAvailableOption": "Pas d'option disponible",
+      "visualizeElement": "Visualiser l'élément"
     },
     "errorsModal": {
       "title": "Liste des erreurs",

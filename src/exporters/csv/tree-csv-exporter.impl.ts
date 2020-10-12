@@ -4,6 +4,7 @@ import { MessageTypes } from "util/batch-process/batch-process-util-types";
 import { arrayToCsv } from "util/csv/csv-util";
 import { computeTreeStructureArray } from "util/tree-representation/tree-representation";
 import { tap, toArray } from "rxjs/operators";
+import { flatten } from "lodash";
 
 interface CsvExporterData {
   filesAndFoldersMap: FilesAndFoldersMap;
@@ -24,13 +25,14 @@ export const onInitialize: WorkerMessageHandler = async (
     .pipe(
       tap((lineComputed) => {
         asyncWorker.postMessage({
-          result: lineComputed,
+          result: lineComputed.length,
           type: MessageTypes.RESULT,
         });
-      })
+      }),
+      toArray()
     )
-    .pipe(toArray())
-    .toPromise();
+    .toPromise()
+    .then(flatten);
 
   asyncWorker.postMessage({
     result: arrayToCsv([header, ...lines]),

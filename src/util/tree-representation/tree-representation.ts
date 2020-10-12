@@ -4,8 +4,19 @@ import {
 } from "reducers/files-and-folders/files-and-folders-types";
 import { getDepthFromPath } from "reducers/files-and-folders/files-and-folders-selectors";
 import { makeObjectKeyComparator } from "util/sort-utils/sort-utils";
-import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { interval, Observable } from "rxjs";
+import { map, take } from "rxjs/operators";
+import { chunk } from "lodash";
+
+const computeTreeSection = (filesAndFolders: FilesAndFolders[]): string[][] =>
+  filesAndFolders.map((filesAndFolders) => {
+    const { virtualPath, name } = filesAndFolders;
+    const depth = getDepthFromPath(virtualPath);
+    const shiftArray = depth <= 0 ? [] : new Array(depth).fill("");
+    return [...shiftArray, name];
+  });
+
+const CHUNK_SIZE = 1000;
 
 /**
  * Computes a tree array of a FilesAndFoldersMap
@@ -22,16 +33,16 @@ import { map } from "rxjs/operators";
  */
 export const computeTreeStructureArray = (
   filesAndFoldersMap: FilesAndFoldersMap
-): Observable<string[]> =>
-  from(
-    Object.values(filesAndFoldersMap)
-      .filter(({ id }) => id !== "")
-      .sort(makeObjectKeyComparator<FilesAndFolders>("virtualPath"))
-  ).pipe(
-    map((filesAndFolders) => {
-      const { virtualPath, name } = filesAndFolders;
-      const depth = getDepthFromPath(virtualPath);
-      const shiftArray = depth <= 0 ? [] : new Array(depth).fill("");
-      return [...shiftArray, name];
-    })
+): Observable<string[][]> => {
+  const filesAndFolders = Object.values(filesAndFoldersMap)
+    .filter(({ id }) => id !== "")
+    .sort(makeObjectKeyComparator<FilesAndFolders>("virtualPath"));
+
+  const chunks = chunk(filesAndFolders, CHUNK_SIZE);
+
+  return interval().pipe(
+    take(chunks.length),
+    map((index) => chunks[index]),
+    map(computeTreeSection)
   );
+};

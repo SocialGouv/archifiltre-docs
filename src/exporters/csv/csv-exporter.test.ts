@@ -20,6 +20,7 @@ import {
 import { csvExporterThunk } from "./csv-exporter";
 import { generateCsvExport$ } from "./csv-exporter.controller";
 import { initialState } from "reducers/hashes/hashes-reducer";
+import { MessageTypes } from "util/batch-process/batch-process-util-types";
 
 jest.mock("./csv-exporter.controller", () => ({
   generateCsvExport$: jest.fn(),
@@ -130,13 +131,22 @@ const generateCsvExportMock = generateCsvExport$ as jest.Mock;
 const writeFileMock = fs.writeFile as jest.Mock;
 const csvValue = "csv-value";
 
+const resultMessage = <T>(result: T) => ({
+  type: MessageTypes.RESULT,
+  result,
+});
+
+const errorMessage = () => ({
+  type: MessageTypes.ERROR,
+});
+
 describe("csv-exporter", () => {
   describe("csvExporterThunk", () => {
     beforeEach(() => {
       writeFileMock.mockReset();
       generateCsvExportMock.mockReset();
       generateCsvExportMock.mockReturnValue(
-        of(undefined, undefined, { result: csvValue })
+        of(resultMessage(3), errorMessage(), resultMessage(csvValue))
       );
       writeFileMock.mockResolvedValue(undefined);
     });

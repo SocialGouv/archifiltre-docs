@@ -8,14 +8,15 @@ import {
 import { TFunction } from "i18next";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { TagMap } from "reducers/tags/tags-types";
-import { concat, from, Observable } from "rxjs";
-import { filter, map } from "rxjs/operators";
+import { concat, from, interval, Observable } from "rxjs";
+import { map, take } from "rxjs/operators";
 import {
   CellConfig,
   makeRowConfig,
 } from "util/array-export/make-array-export-config";
 import _ from "lodash";
 import { getAllChildren } from "util/files-and-folders/file-and-folders-utils";
+import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
 
 type CsvExporterData = {
   aliases: AliasMap;
@@ -32,16 +33,24 @@ type WithRowConfig = { rowConfig: CellConfig[] };
 type WithHashes = { hashes: HashesMap };
 type WithIdsToDelete = { idsToDelete: string[] };
 
+const CHUNK_SIZE = 1000;
+
 const makeExportBody = ({
   rowConfig,
   filesAndFolders,
   filesAndFoldersMetadata,
   ...rest
-}: CsvExporterData & WithRowConfig & WithHashes & WithIdsToDelete) =>
-  from(Object.values(filesAndFolders))
-    .pipe(filter(({ id }) => id !== ""))
-    .pipe(
-      map((element) =>
+}: CsvExporterData & WithRowConfig & WithHashes & WithIdsToDelete) => {
+  const filesAndFoldersChunks = _.chunk(
+    Object.values(filesAndFolders).filter(({ id }) => id !== ROOT_FF_ID),
+    CHUNK_SIZE
+  );
+
+  return interval().pipe(
+    take(filesAndFoldersChunks.length),
+    map((index) => filesAndFoldersChunks[index]),
+    map((chunk) =>
+      chunk.map((element) =>
         rowConfig.map((cellConfig) =>
           cellConfig.accessor({
             ...element,
@@ -50,7 +59,9 @@ const makeExportBody = ({
           })
         )
       )
-    );
+    )
+  );
+};
 
 /**
  * Get all children of elements to delete
@@ -111,8 +122,8 @@ export const exportToCsv = compose(
         output: string[][];
       } & WithHashes &
       WithIdsToDelete
-  ): Observable<string[]> =>
-    concat(from(params.output), makeExportBody(params)),
+  ): Observable<string[][]> =>
+    concat(from([params.output]), makeExportBody(params)),
   (params) => ({
     ...params,
     output: [params.rowConfig.map(({ title }) => title)],

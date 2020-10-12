@@ -6,13 +6,15 @@ import {
 } from "reducers/loading-info/loading-info-actions";
 import { startLoading } from "reducers/loading-info/loading-info-operations";
 import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
-import { from, Observable } from "rxjs";
-import { bufferTime, mergeMap, tap } from "rxjs/operators";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
 import {
   NotificationDuration,
   notifySuccess,
 } from "util/notification/notifications-util";
 import { openExternalElement } from "util/file-system/file-system-util";
+import { filterResults } from "util/batch-process/batch-process-util";
+import { ResultMessage } from "util/batch-process/batch-process-util-types";
 
 type ExportOptions = {
   totalProgress: number;
@@ -22,7 +24,8 @@ type ExportOptions = {
   exportSuccessMessage: string;
 };
 
-const LOADING_BAR_UPDATE_INTERVAL = 1000;
+export const isProgressResult = ({ result }: ResultMessage): boolean =>
+  typeof result === "number";
 
 export const handleFileExportThunk = (
   exportData$: Observable<any>,
@@ -39,11 +42,14 @@ export const handleFileExportThunk = (
   );
 
   const { result } = await exportData$
-    .pipe(bufferTime(LOADING_BAR_UPDATE_INTERVAL))
     .pipe(
-      tap((buffer) => dispatch(progressLoadingAction(loadingId, buffer.length)))
+      filterResults(),
+      tap((message) => {
+        if (isProgressResult(message)) {
+          dispatch(progressLoadingAction(loadingId, message.result));
+        }
+      })
     )
-    .pipe(mergeMap((buffer) => from(buffer)))
     .toPromise();
 
   dispatch(completeLoadingAction(loadingId));

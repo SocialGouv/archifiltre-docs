@@ -18,6 +18,8 @@ import {
 } from "util/notification/notifications-util";
 import { openExternalElement } from "util/file-system/file-system-util";
 import { getExcelExportProgressGoal } from "exporters/excel/excel-exporter.impl";
+import { ResultMessage } from "util/batch-process/batch-process-util-types";
+import { isProgressResult } from "util/export/export-util";
 
 export const excelExporterThunk = (
   name: string
@@ -43,16 +45,18 @@ export const excelExporterThunk = (
 
   const { result } = await generateExcelExport$(exportData)
     .pipe(
-      tap(() => {
-        dispatch(progressLoadingAction(loadingId, 1));
-      }),
-      filterResults()
+      filterResults(),
+      tap((message: ResultMessage) => {
+        if (isProgressResult(message)) {
+          dispatch(progressLoadingAction(loadingId, message.result));
+        }
+      })
     )
     .toPromise();
 
-  dispatch(completeLoadingAction(loadingId));
-
   await fs.writeFile(name, result, "binary");
+
+  dispatch(completeLoadingAction(loadingId));
 
   notifySuccess(
     translations.t("export.excelExportSuccessMessage"),

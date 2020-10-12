@@ -2,7 +2,10 @@ import StartScreen from "components/start-screen/start-screen";
 import React, { FC, useCallback, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ArchifiltreDispatch } from "reducers/archifiltre-types";
-import { setLoadingStep } from "reducers/loading-state/loading-state-actions";
+import {
+  resetLoadingState,
+  setLoadingStep,
+} from "reducers/loading-state/loading-state-actions";
 import { getLoadingStateFromStore } from "reducers/loading-state/loading-state-selectors";
 import { LoadingStep } from "reducers/loading-state/loading-state-types";
 import {
@@ -43,6 +46,7 @@ const StartScreenContainer: FC = () => {
     terminateRef.current();
     dispatch(setLoadingStep(LoadingStep.WAITING));
     setIsLoading(false);
+    dispatch(resetLoadingState());
   }, [terminateRef, dispatch, setIsLoading]);
 
   return (

@@ -14,6 +14,7 @@ import {
 } from "util/notification/notifications-util";
 import { openExternalElement } from "util/file-system/file-system-util";
 import { filterResults } from "util/batch-process/batch-process-util";
+import { ResultMessage } from "util/batch-process/batch-process-util-types";
 
 type ExportOptions = {
   totalProgress: number;
@@ -22,6 +23,9 @@ type ExportOptions = {
   exportNotificationTitle: string;
   exportSuccessMessage: string;
 };
+
+export const isProgressResult = ({ result }: ResultMessage): boolean =>
+  typeof result === "number";
 
 export const handleFileExportThunk = (
   exportData$: Observable<any>,
@@ -40,9 +44,9 @@ export const handleFileExportThunk = (
   const { result } = await exportData$
     .pipe(
       filterResults(),
-      tap(({ result }) => {
-        if (typeof result === "number") {
-          dispatch(progressLoadingAction(loadingId, result));
+      tap((message) => {
+        if (isProgressResult(message)) {
+          dispatch(progressLoadingAction(loadingId, message.result));
         }
       })
     )

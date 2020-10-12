@@ -16,6 +16,7 @@ import {
 } from "util/array-export/make-array-export-config";
 import _ from "lodash";
 import { getAllChildren } from "util/files-and-folders/file-and-folders-utils";
+import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
 
 type CsvExporterData = {
   aliases: AliasMap;
@@ -41,7 +42,7 @@ const makeExportBody = ({
   ...rest
 }: CsvExporterData & WithRowConfig & WithHashes & WithIdsToDelete) => {
   const filesAndFoldersChunks = _.chunk(
-    Object.values(filesAndFolders).filter(({ id }) => id !== ""),
+    Object.values(filesAndFolders).filter(({ id }) => id !== ROOT_FF_ID),
     CHUNK_SIZE
   );
 

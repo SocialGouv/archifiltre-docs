@@ -9,8 +9,12 @@ import { utils, write } from "xlsx";
 import { TFunction } from "i18next";
 import { flatten } from "lodash";
 
+const TREE_CSV_PROGRESS_WEIGHT = 1;
+const CSV_EXPORT_PROGRESS_WEIGHT = 10;
+
 export const getExcelExportProgressGoal = (filesAndFoldersCount: number) =>
-  2 * filesAndFoldersCount;
+  (TREE_CSV_PROGRESS_WEIGHT + CSV_EXPORT_PROGRESS_WEIGHT) *
+  filesAndFoldersCount;
 
 export type CreateExcelWorkbookParams = {
   treeCsv: string[][];
@@ -44,7 +48,7 @@ export const exportToExcel = async (
       tap((lines) => {
         worker.postMessage({
           type: MessageTypes.RESULT,
-          result: lines.length,
+          result: TREE_CSV_PROGRESS_WEIGHT * lines.length,
         });
       }),
       toArray()
@@ -59,8 +63,8 @@ export const exportToExcel = async (
     .pipe(
       tap((lines) => {
         worker.postMessage({
-          result: lines.length,
           type: MessageTypes.RESULT,
+          result: CSV_EXPORT_PROGRESS_WEIGHT * lines.length,
         });
       }),
       toArray()

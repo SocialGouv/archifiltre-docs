@@ -19,6 +19,7 @@ import {
 import { openExternalElement } from "util/file-system/file-system-util";
 import { getExcelExportProgressGoal } from "exporters/excel/excel-exporter.impl";
 import { ResultMessage } from "util/batch-process/batch-process-util-types";
+import { isProgressResult } from "util/export/export-util";
 
 export const excelExporterThunk = (
   name: string
@@ -45,9 +46,9 @@ export const excelExporterThunk = (
   const { result } = await generateExcelExport$(exportData)
     .pipe(
       filterResults(),
-      tap(({ result }: ResultMessage) => {
-        if (typeof result === "number") {
-          dispatch(progressLoadingAction(loadingId, result));
+      tap((message: ResultMessage) => {
+        if (isProgressResult(message)) {
+          dispatch(progressLoadingAction(loadingId, message.result));
         }
       })
     )

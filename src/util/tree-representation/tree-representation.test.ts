@@ -1,6 +1,7 @@
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import { computeTreeStructureArray } from "util/tree-representation/tree-representation";
 import { toArray } from "rxjs/operators";
+import { flatten } from "lodash";
 
 describe("tree-representation", () => {
   describe("computeTreeStructureArray", () => {
@@ -31,8 +32,8 @@ describe("tree-representation", () => {
       const result = await computeTreeStructureArray(filesAndFoldersMap)
         .pipe(toArray())
         .toPromise();
-
-      expect(result).toEqual([
+      const flatResult = flatten(result);
+      expect(flatResult).toEqual([
         ["root"],
         ["", "folder"],
         ["", "", "child"],

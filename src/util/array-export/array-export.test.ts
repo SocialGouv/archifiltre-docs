@@ -3,6 +3,7 @@ import { createFilesAndFolders } from "reducers/files-and-folders/files-and-fold
 import { formatPathForUserSystem } from "util/file-system/file-sys-util";
 import { exportToCsv } from "util/array-export/array-export";
 import { toArray } from "rxjs/operators";
+import { flatten } from "lodash";
 
 const tagName = "test-tag-1";
 const rootFolderId = "/root";
@@ -207,6 +208,7 @@ describe("array-export", () => {
         })
           .pipe(toArray())
           .toPromise()
+          .then(flatten)
       ).toEqual(expectedCsv);
     });
 
@@ -315,6 +317,7 @@ describe("array-export", () => {
         })
           .pipe(toArray())
           .toPromise()
+          .then(flatten)
       ).toEqual(expectedCsv);
     });
 
@@ -427,6 +430,7 @@ describe("array-export", () => {
         })
           .pipe(toArray())
           .toPromise()
+          .then(flatten)
       ).toEqual(expectedCsv);
     });
   });

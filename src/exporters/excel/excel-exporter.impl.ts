@@ -7,6 +7,7 @@ import { exportToCsv } from "util/array-export/array-export";
 import translations from "translations/translations";
 import { utils, write } from "xlsx";
 import { TFunction } from "i18next";
+import { flatten } from "lodash";
 
 export const getExcelExportProgressGoal = (filesAndFoldersCount: number) =>
   2 * filesAndFoldersCount;
@@ -40,30 +41,32 @@ export const exportToExcel = async (
   const translator = translations.t.bind(translations);
   const treeCsv = await computeTreeStructureArray(params.filesAndFolders)
     .pipe(
-      tap((line) => {
+      tap((lines) => {
         worker.postMessage({
           type: MessageTypes.RESULT,
-          result: line,
+          result: lines.length,
         });
       }),
       toArray()
     )
-    .toPromise();
+    .toPromise()
+    .then(flatten);
 
   const csvArray = await exportToCsv({
     ...params,
     translator,
   })
     .pipe(
-      tap((row) =>
+      tap((lines) => {
         worker.postMessage({
-          result: row[0],
+          result: lines.length,
           type: MessageTypes.RESULT,
-        })
-      ),
+        });
+      }),
       toArray()
     )
-    .toPromise();
+    .toPromise()
+    .then(flatten);
 
   const xlsxWorkbook = createExcelWorkbook({ treeCsv, csvArray }, translator);
 

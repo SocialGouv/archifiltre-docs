@@ -12,6 +12,7 @@ import { arrayToCsv } from "util/csv/csv-util";
 import { HashesMap } from "reducers/hashes/hashes-types";
 import { exportToCsv } from "util/array-export/array-export";
 import { tap, toArray } from "rxjs/operators";
+import { flatten } from "lodash";
 
 export type CsvExporterData = {
   aliases: AliasMap;
@@ -60,13 +61,14 @@ export const onInitialize: WorkerMessageHandler = async (
     .pipe(
       tap((row) =>
         asyncWorker.postMessage({
-          result: row[0],
+          result: row.length,
           type: MessageTypes.RESULT,
         })
-      )
+      ),
+      toArray()
     )
-    .pipe(toArray())
-    .toPromise();
+    .toPromise()
+    .then(flatten);
 
   asyncWorker.postMessage({
     result: arrayToCsv(array),

@@ -232,7 +232,10 @@
     },
     "exportModal": {
       "title": "Export",
-      "buttonTitle": "Exporter"
+      "buttonTitle": "Exporter",
+      "EXCHANGE_WITH_ERMS": "Export pour transfert",
+      "RECORDS_INVENTORY": "Récolement",
+      "AUDIT": "Audit"
     },
     "audit": {
       "fileCountInfoTitle": "Nombre de fichiers",

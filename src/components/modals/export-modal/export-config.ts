@@ -20,6 +20,12 @@ export enum ExportType {
   EXCEL = "EXCEL",
 }
 
+export enum ExportCategory {
+  EXCHANGE_WITH_ERMS = "EXCHANGE_WITH_ERMS",
+  RECORDS_INVENTORY = "RECORDS_INVENTORY",
+  AUDIT = "AUDIT",
+}
+
 export type IsActiveOptions = {
   areHashesReady: boolean;
 };
@@ -31,6 +37,7 @@ type ExportConfig = {
   disabledExplanation?: string;
   exportPath: (originalPath: string, sessionName: string) => string;
   isFilePickerDisabled?: boolean;
+  category: ExportCategory;
 };
 
 type ExportConfigMap = {
@@ -81,6 +88,7 @@ export const exportConfig: ExportConfigMap = {
     disabledExplanation: "header.csvWithHashDisabledMessage",
     exportPath: (originalPath, sessionName) =>
       computeExportFilePath(originalPath, sessionName, ExportType.AUDIT),
+    category: ExportCategory.AUDIT,
   },
   [ExportType.CSV]: {
     isActive: true,
@@ -88,6 +96,7 @@ export const exportConfig: ExportConfigMap = {
     exportFunction: (exportPath) => csvExporterThunk(exportPath),
     exportPath: (originalPath, sessionName) =>
       computeExportFilePath(originalPath, sessionName, ExportType.CSV),
+    category: ExportCategory.RECORDS_INVENTORY,
   },
   [ExportType.CSV_WITH_HASHES]: {
     isActive: ({ areHashesReady }) => areHashesReady,
@@ -101,6 +110,7 @@ export const exportConfig: ExportConfigMap = {
         sessionName,
         ExportType.CSV_WITH_HASHES
       ),
+    category: ExportCategory.RECORDS_INVENTORY,
   },
   [ExportType.TREE_CSV]: {
     isActive: true,
@@ -108,6 +118,15 @@ export const exportConfig: ExportConfigMap = {
     exportFunction: (exportPath) => treeCsvExporterThunk(exportPath),
     exportPath: (originalPath, sessionName) =>
       computeExportFilePath(originalPath, sessionName, ExportType.TREE_CSV),
+    category: ExportCategory.RECORDS_INVENTORY,
+  },
+  [ExportType.EXCEL]: {
+    isActive: ({ areHashesReady }) => areHashesReady,
+    label: "Excel",
+    exportFunction: (exportPath) => excelExporterThunk(exportPath),
+    exportPath: (originalPath, sessionName) =>
+      computeExportFilePath(originalPath, sessionName, ExportType.EXCEL),
+    category: ExportCategory.RECORDS_INVENTORY,
   },
   [ExportType.RESIP]: {
     isActive: true,
@@ -121,6 +140,7 @@ export const exportConfig: ExportConfigMap = {
       );
     },
     isFilePickerDisabled: true,
+    category: ExportCategory.EXCHANGE_WITH_ERMS,
   },
   [ExportType.METS]: {
     isActive: true,
@@ -128,12 +148,6 @@ export const exportConfig: ExportConfigMap = {
     exportFunction: (exportPath) => metsExporterThunk(exportPath),
     exportPath: (originalPath, sessionName) =>
       computeExportFilePath(originalPath, sessionName, ExportType.METS),
-  },
-  [ExportType.EXCEL]: {
-    isActive: ({ areHashesReady }) => areHashesReady,
-    label: "Excel",
-    exportFunction: (exportPath) => excelExporterThunk(exportPath),
-    exportPath: (originalPath, sessionName) =>
-      computeExportFilePath(originalPath, sessionName, ExportType.EXCEL),
+    category: ExportCategory.EXCHANGE_WITH_ERMS,
   },
 };

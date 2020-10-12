@@ -98,6 +98,7 @@ export const SearchModal: FC<SearchModalProps> = ({
           <FilesAndFoldersTable
             filesAndFolders={filteredFilesAndFolders}
             filesAndFoldersMetadata={filesAndFoldersMetadata}
+            closeModal={closeModal}
           />
         </Box>
       </DialogContent>

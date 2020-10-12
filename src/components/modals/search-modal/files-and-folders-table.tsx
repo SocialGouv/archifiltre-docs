@@ -1,3 +1,4 @@
+import { makeTableActionRow } from "components/common/table/action-row";
 import { Column } from "components/common/table/table-types";
 import dateFormat from "dateformat";
 import React, { FC, useMemo } from "react";
@@ -13,11 +14,13 @@ import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
 type FilesAndFoldersTableProps = {
   filesAndFolders: FilesAndFolders[];
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
+  closeModal: () => void;
 };
 
 export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
   filesAndFolders,
   filesAndFoldersMetadata,
+  closeModal,
 }) => {
   const { t } = useTranslation();
   const columns: Column<FilesAndFolders>[] = useMemo(
@@ -57,12 +60,27 @@ export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
         name: t("search.path"),
         accessor: "id",
       },
+      {
+        id: "emptyColumn",
+        name: "",
+        accessor: () => "",
+      },
     ],
     [t, filesAndFoldersMetadata]
   );
+
+  const TableActionRow = useMemo(() => makeTableActionRow(closeModal), [
+    closeModal,
+  ]);
+
   return isEmpty(filesAndFolders) ? (
     <span>{t("search.noResult")}</span>
   ) : (
-    <Table rowId="id" columns={columns} data={filesAndFolders} />
+    <Table
+      rowId="id"
+      columns={columns}
+      data={filesAndFolders}
+      RowRendererComp={TableActionRow}
+    />
   );
 };

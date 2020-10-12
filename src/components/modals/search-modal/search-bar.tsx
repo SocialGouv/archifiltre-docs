@@ -17,10 +17,11 @@ const handleTracking = (searchTerm) => {
 };
 
 type SearchBarProps = {
+  value: string;
   setSearchTerm: (searchTerm: string) => void;
 };
 
-export const SearchBar: FC<SearchBarProps> = ({ setSearchTerm }) => {
+export const SearchBar: FC<SearchBarProps> = ({ setSearchTerm, value }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const onChange = useCallback(
@@ -39,6 +40,7 @@ export const SearchBar: FC<SearchBarProps> = ({ setSearchTerm }) => {
       type="search"
       placeholder={t("search.searchPlaceholder")}
       onChange={onChange}
+      value={value}
       startAdornment={
         <InputAdornment position="start">
           <FaSearch />

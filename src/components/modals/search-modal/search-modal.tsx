@@ -2,7 +2,7 @@ import { Box } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import Paper from "@material-ui/core/Paper";
 import { compose, omit, values } from "lodash/fp";
-import React, { FC, useMemo, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   FilesAndFolders,
@@ -59,6 +59,16 @@ export const SearchModal: FC<SearchModalProps> = ({
     filters,
   ]);
 
+  /**
+   * Resets the filters when the modal closes
+   */
+  useEffect(() => {
+    if (!isModalOpen) {
+      setSearchTerm("");
+      setFilters([]);
+    }
+  }, [isModalOpen, setSearchTerm, setFilters]);
+
   const filteredFilesAndFolders = useSearchAndFilters(
     filesAndFoldersArray,
     searchFilters
@@ -84,7 +94,7 @@ export const SearchModal: FC<SearchModalProps> = ({
                 alignItems="flex-end"
                 paddingBottom={1}
               >
-                <SearchBar setSearchTerm={setSearchTerm} />
+                <SearchBar value={searchTerm} setSearchTerm={setSearchTerm} />
               </Box>
               <Box flex={1}>
                 <Filters

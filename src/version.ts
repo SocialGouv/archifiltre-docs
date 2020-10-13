@@ -25,6 +25,6 @@ export const versionComparator = (
   return 0;
 };
 
-export const versionName = "Poetic Papangue";
+export const versionName = "Queer Quetzal";
 
 export default version;

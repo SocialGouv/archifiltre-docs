@@ -143,7 +143,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
           </CategoryTitle>
         </Box>
         <Box flex={1} paddingLeft={1}>
-          <SearchBar setSearchTerm={setSearchTerm} />
+          <SearchBar value={searchTerm} setSearchTerm={setSearchTerm} />
         </Box>
       </Box>
       <Box flexGrow={1} minHeight={0} overflow="auto">

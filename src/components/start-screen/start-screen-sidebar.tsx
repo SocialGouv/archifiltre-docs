@@ -17,12 +17,12 @@ import {
   FaEnvelope,
   FaFolderOpen,
   FaPlus,
-  FaQuestionCircle,
+  FaGrinStars,
   FaSyncAlt,
 } from "react-icons/fa";
 
-const onFaqClick = () => {
-  shell.openExternal(`${ARCHIFILTRE_SITE_URL}/faq`);
+const onFeedbackClick = () => {
+  shell.openExternal("https://bit.ly/315pAd8");
 };
 
 const onContactClick = () => {
@@ -126,11 +126,11 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
             </ListItemIcon>
             <ListItemText primary={t("settingsModal.title")} />
           </ListItem>
-          <ListItem button onClick={onFaqClick}>
+          <ListItem button onClick={onFeedbackClick}>
             <ListItemIcon>
-              <FaQuestionCircle />
+              <FaGrinStars />
             </ListItemIcon>
-            <ListItemText primary={t("folderDropzone.faq")} />
+            <ListItemText primary={t("folderDropzone.feedback")} />
           </ListItem>
           <ListItem button onClick={onDocumentationClick}>
             <ListItemIcon>

@@ -1,4 +1,5 @@
 import { Action } from "redux";
+import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 
 export const INITIALIZE_FILES_AND_FOLDERS = "FILES_AND_FOLDERS/INITIALIZE";
 export const REMOVE_CHILD = "FILES_AND_FOLDERS/REMOVE_CHILD";
@@ -12,6 +13,10 @@ export const MARK_ELEMENTS_TO_DELETE =
   "FILES_AND_FOLDERS/MARK_ELEMENTS_TO_DELETE";
 export const INIT_VIRTUAL_PATH_TO_ID_MAP =
   "FILES_AND_FOLDERS/INIT_VIRTUAL_PATH_TO_ID_MAP";
+export const REGISTER_ERRORED_ELEMENTS =
+  "FILES_AND_FOLDERS/REGISTER_ERRORED_ELEMENTS";
+export const RESET_ERRORED_ELEMENTS =
+  "FILES_AND_FOLDERS/RESET_ERRORED_ELEMENTS";
 
 export interface FilesAndFolders {
   id: string;
@@ -43,6 +48,7 @@ export interface FilesAndFoldersState {
   aliases: AliasMap;
   comments: CommentsMap;
   elementsToDelete: string[];
+  erroredFilesAndFolders: ArchifiltreError[];
   virtualPathToId: VirtualPathToIdMap;
 }
 
@@ -93,6 +99,15 @@ interface InitVirtualPathToIdMap extends Action {
   virtualPathToIdMap: VirtualPathToIdMap;
 }
 
+interface RegisterErroredElements extends Action {
+  type: typeof REGISTER_ERRORED_ELEMENTS;
+  elements: ArchifiltreError[];
+}
+
+interface ResetErroredElements extends Action {
+  type: typeof RESET_ERRORED_ELEMENTS;
+}
+
 export type FilesAndFoldersActionTypes =
   | InitializeFilesAndFoldersAction
   | AddChildAction
@@ -102,4 +117,6 @@ export type FilesAndFoldersActionTypes =
   | MarkAsToDelete
   | UnmarkAsToDelete
   | MarkElementsToDelete
-  | InitVirtualPathToIdMap;
+  | InitVirtualPathToIdMap
+  | RegisterErroredElements
+  | ResetErroredElements;

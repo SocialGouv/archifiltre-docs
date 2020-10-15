@@ -1,11 +1,10 @@
 import { isJsonFile } from "util/file-system/file-sys-util";
 import {
-  FileLoaderCreatorMap,
+  FileLoaderCreator,
   FilesAndFoldersLoader,
   FileSystemLoadingHooks,
   FileSystemLoadingHooksCreator,
   FileSystemReporters,
-  LoadType,
   PartialFileSystem,
   VirtualFileSystem,
   WithMetadata,
@@ -25,10 +24,13 @@ import _ from "lodash";
 import { medianOnSortedArray } from "util/array/array-util";
 import { indexSort, indexSortReverse } from "util/list-util";
 import {
+  asyncLoadFilesAndFoldersFromFileSystem,
   makeExportFileLoader,
   makeFileSystemLoader,
   makeJsonFileLoader,
+  retryLoadFromFileSystem,
 } from "files-and-folders-loader/files-and-folders-loader";
+import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 
 /**
  * Compute the metadata from the filesAndFoldersMap
@@ -189,26 +191,34 @@ const isFileSystemLoad = (loadPath: string) =>
  */
 const isJsonLoad = (loadPath: string) => isJsonFile(loadPath);
 
+type GetLoadTypeOptions = {
+  filesAndFolders?: FilesAndFoldersMap;
+  erroredPaths?: ArchifiltreError[];
+};
+
 /**
  * Return the load type required to load the element located at loadPath
  * @param loadPath
  */
-export const getLoadType = (loadPath: string): LoadType => {
+export const getLoader = (
+  loadPath: string,
+  { filesAndFolders, erroredPaths }: GetLoadTypeOptions = {}
+): FileLoaderCreator => {
   if (isFileSystemLoad(loadPath)) {
-    return LoadType.FILESYSTEM;
+    if (filesAndFolders && erroredPaths) {
+      const paths = (erroredPaths || []).map(({ filePath }) => filePath);
+      return makeFileSystemLoader(
+        retryLoadFromFileSystem({ filesAndFolders, erroredPaths: paths })
+      );
+    }
+    return makeFileSystemLoader(asyncLoadFilesAndFoldersFromFileSystem);
   }
 
   if (isJsonLoad(loadPath)) {
-    return LoadType.JSON_FILE;
+    return makeJsonFileLoader;
   }
 
-  return LoadType.EXPORT_FILE;
-};
-
-export const fileLoaderCreatorMap: FileLoaderCreatorMap = {
-  [LoadType.EXPORT_FILE]: makeExportFileLoader,
-  [LoadType.JSON_FILE]: makeJsonFileLoader,
-  [LoadType.FILESYSTEM]: makeFileSystemLoader,
+  return makeExportFileLoader;
 };
 
 /**

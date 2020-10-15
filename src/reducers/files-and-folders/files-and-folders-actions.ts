@@ -9,11 +9,14 @@ import {
   INITIALIZE_FILES_AND_FOLDERS,
   MARK_AS_TO_DELETE,
   MARK_ELEMENTS_TO_DELETE,
+  REGISTER_ERRORED_ELEMENTS,
   REMOVE_CHILD,
+  RESET_ERRORED_ELEMENTS,
   SET_FILES_AND_FOLDERS_ALIAS,
   UNMARK_AS_TO_DELETE,
   VirtualPathToIdMap,
 } from "./files-and-folders-types";
+import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 
 /**
  * Action to set the initial state of the files and folders store
@@ -108,4 +111,15 @@ export const initVirtualPathToIdMap = (
 ): FilesAndFoldersActionTypes => ({
   type: INIT_VIRTUAL_PATH_TO_ID_MAP,
   virtualPathToIdMap,
+});
+
+export const registerErroredElements = (
+  elements: ArchifiltreError[]
+): FilesAndFoldersActionTypes => ({
+  type: REGISTER_ERRORED_ELEMENTS,
+  elements,
+});
+
+export const resetErroredElements = (): FilesAndFoldersActionTypes => ({
+  type: RESET_ERRORED_ELEMENTS,
 });

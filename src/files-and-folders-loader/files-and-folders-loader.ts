@@ -16,6 +16,7 @@ import { asyncShouldIgnoreElement } from "util/hidden-file/hidden-file-util";
 import { HashesMap } from "reducers/hashes/hashes-types";
 import {
   FilesAndFoldersLoader,
+  FileSystemLoadingHooks,
   JsonFileInfo,
   PartialFileSystem,
   WithErrorHook,
@@ -28,26 +29,45 @@ import { convertJsonToCurrentVersion } from "util/compatibility/compatibility";
 import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
 import { removeIgnoredElementsFromVirtualFileSystem } from "util/virtual-file-system-util/virtual-file-system-util";
 import {
+  isFile,
   reduceFilesAndFolders,
   ROOT_FF_ID,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { sanitizeHooks } from "files-and-folders-loader/file-system-loading-process-utils";
+import { ArchifiltreErrorType } from "reducers/loading-info/loading-info-types";
 
 interface FilesAndFoldersInfo {
   lastModified: number;
   size: number;
 }
 
-export type FilesAndFoldersElementInfo = [FilesAndFoldersInfo, string];
+export type FilesElementInfo = [FilesAndFoldersInfo, string];
 
-export const asyncLoadFilesAndFoldersFromFileSystem = async (
+export const getFilesElementInfosFromFilesAndFolders = (
+  filesAndFolders: FilesAndFoldersMap
+): FilesElementInfo[] =>
+  Object.values(filesAndFolders)
+    .filter(isFile)
+    .map(({ id, file_last_modified, file_size }) => [
+      {
+        lastModified: file_last_modified,
+        size: file_size,
+      },
+      id,
+    ]);
+
+const loadFilesAndFoldersFromFileSystemImpl = async (
   folderPath: string,
+  {
+    rootPaths,
+    fileInfos = [],
+  }: { fileInfos?: FilesElementInfo[]; rootPaths: string[] },
   { onResult, onError }: WithResultHook & WithErrorHook = {
     onResult: empty,
     onError: empty,
   }
 ) => {
-  const files: FilesAndFoldersElementInfo[] = [];
+  const files = [...fileInfos];
   const rootPath = path.dirname(folderPath);
 
   const loadFilesAndFoldersFromFileSystemRec = async (currentPath: string) => {
@@ -79,21 +99,58 @@ export const asyncLoadFilesAndFoldersFromFileSystem = async (
       ]);
     } catch (error) {
       onError({
-        path: currentPath,
-        message: error.message,
+        type: ArchifiltreErrorType.LOADING_FILE_SYSTEM,
+        filePath: currentPath,
+        reason: error.message,
         code: convertFsErrorToArchifiltreError(error.code),
       });
     }
   };
 
-  await loadFilesAndFoldersFromFileSystemRec(folderPath);
+  await Promise.all(
+    rootPaths.map((elementPath) =>
+      loadFilesAndFoldersFromFileSystemRec(elementPath)
+    )
+  );
 
   return files;
 };
 
+export const retryLoadFromFileSystem = ({
+  filesAndFolders,
+  erroredPaths,
+}: WithFilesAndFolders & { erroredPaths: string[] }) => async (
+  folderPath: string,
+  { onResult, onError }: WithResultHook & WithErrorHook = {
+    onResult: empty,
+    onError: empty,
+  }
+) => {
+  const fileInfos = getFilesElementInfosFromFilesAndFolders(filesAndFolders);
+
+  return loadFilesAndFoldersFromFileSystemImpl(
+    folderPath,
+    { rootPaths: erroredPaths, fileInfos },
+    { onResult, onError }
+  );
+};
+
+export const asyncLoadFilesAndFoldersFromFileSystem = async (
+  folderPath: string,
+  { onResult, onError }: WithResultHook & WithErrorHook = {
+    onResult: empty,
+    onError: empty,
+  }
+) =>
+  loadFilesAndFoldersFromFileSystemImpl(
+    folderPath,
+    { rootPaths: [folderPath] },
+    { onResult, onError }
+  );
+
 type LoadFilesAndFoldersFromExportFileContentResult = {
   hashes: HashesMap;
-  files: FilesAndFoldersElementInfo[];
+  files: FilesElementInfo[];
   rootPath: string;
 };
 
@@ -131,7 +188,7 @@ export const loadFilesAndFoldersFromExportFileContent = async (
   let rootPath = "";
   let pathImpl: typeof path.win32 | typeof path.posix = path;
   const hashes: HashesMap = {};
-  const files: FilesAndFoldersElementInfo[] = [];
+  const files: FilesElementInfo[] = [];
   for await (const line of lineReader) {
     switch (lineCount) {
       case 0:
@@ -211,7 +268,7 @@ export const createFilesAndFolders = ({
  * @param hook
  */
 export const createFilesAndFoldersDataStructure = (
-  ffInfo: FilesAndFoldersElementInfo[],
+  ffInfo: FilesElementInfo[],
   { onResult }: WithResultHook = { onResult: empty }
 ): FilesAndFoldersMap => {
   const filesAndFolders: FilesAndFoldersMap = {};
@@ -248,11 +305,16 @@ export const createFilesAndFoldersDataStructure = (
   return filesAndFolders;
 };
 
+type LoadFunction = (
+  folderPath: string,
+  hooks: FileSystemLoadingHooks
+) => Promise<FilesElementInfo[]>;
+
 /**
  * Create the loader to load from archifiltre data from the file system folder
  * @param folderPath
  */
-export const makeFileSystemLoader = (
+export const makeFileSystemLoader = (loadFunction: LoadFunction) => (
   folderPath: string
 ): FilesAndFoldersLoader => async (makeHooks) => {
   const sanitizedHooks = sanitizeHooks(makeHooks);

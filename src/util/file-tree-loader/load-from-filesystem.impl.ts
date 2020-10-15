@@ -1,11 +1,12 @@
 import { AsyncWorker } from "util/async-worker/async-worker-util";
 import { MessageTypes } from "../batch-process/batch-process-util-types";
 import {
-  fileLoaderCreatorMap,
-  getLoadType,
+  getLoader,
   loadFileSystemFromFilesAndFoldersLoader,
   makeFileLoadingHooksCreator,
 } from "files-and-folders-loader/file-system-loading-process-utils";
+import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
+import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 
 type Reporter = (message: any) => void;
 
@@ -30,6 +31,12 @@ const createReporters = (asyncWorker: AsyncWorker): Reporters => ({
     asyncWorker.postMessage({ type: MessageTypes.COMPLETE }),
 });
 
+type LoadVirtualFileSystemParams = {
+  path: string;
+  filesAndFolders?: FilesAndFoldersMap;
+  erroredPaths?: ArchifiltreError[];
+};
+
 /**
  * Recursively generates a file system from a dropped folder
  * @param asyncWorker
@@ -37,7 +44,7 @@ const createReporters = (asyncWorker: AsyncWorker): Reporters => ({
  */
 export const loadVirtualFileSystem = async (
   asyncWorker: AsyncWorker,
-  loadPath: string
+  { path, filesAndFolders, erroredPaths }: LoadVirtualFileSystemParams
 ) => {
   const {
     reportResult,
@@ -46,12 +53,12 @@ export const loadVirtualFileSystem = async (
     reportComplete,
   } = createReporters(asyncWorker);
 
-  const filesAndFoldersLoadingType = getLoadType(loadPath);
+  const filesAndFoldersLoaderCreator = getLoader(path, {
+    filesAndFolders,
+    erroredPaths,
+  });
 
-  const filesAndFoldersLoaderCreator =
-    fileLoaderCreatorMap[filesAndFoldersLoadingType];
-
-  const filesAndFoldersLoader = filesAndFoldersLoaderCreator(loadPath);
+  const filesAndFoldersLoader = filesAndFoldersLoaderCreator(path);
 
   const hooksCreator = makeFileLoadingHooksCreator({
     reportResult,

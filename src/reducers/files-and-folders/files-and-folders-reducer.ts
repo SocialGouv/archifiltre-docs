@@ -10,7 +10,9 @@ import {
   INITIALIZE_FILES_AND_FOLDERS,
   MARK_AS_TO_DELETE,
   MARK_ELEMENTS_TO_DELETE,
+  REGISTER_ERRORED_ELEMENTS,
   REMOVE_CHILD,
+  RESET_ERRORED_ELEMENTS,
   SET_FILES_AND_FOLDERS_ALIAS,
   UNMARK_AS_TO_DELETE,
 } from "./files-and-folders-types";
@@ -19,6 +21,7 @@ export const initialState: FilesAndFoldersState = {
   aliases: {},
   comments: {},
   elementsToDelete: [],
+  erroredFilesAndFolders: [],
   filesAndFolders: {},
   virtualPathToId: {},
 };
@@ -158,6 +161,19 @@ const filesAndFoldersReducer = (
       return {
         ...state,
         virtualPathToId: action.virtualPathToIdMap,
+      };
+    case REGISTER_ERRORED_ELEMENTS:
+      return {
+        ...state,
+        erroredFilesAndFolders: [
+          ...state.erroredFilesAndFolders,
+          ...action.elements,
+        ],
+      };
+    case RESET_ERRORED_ELEMENTS:
+      return {
+        ...state,
+        erroredFilesAndFolders: [],
       };
     default:
       return state;

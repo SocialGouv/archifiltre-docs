@@ -5,7 +5,7 @@ import {
   asyncLoadFilesAndFoldersFromFileSystem,
   createFilesAndFolders,
   createFilesAndFoldersDataStructure,
-  FilesAndFoldersElementInfo,
+  FilesElementInfo,
   loadFilesAndFoldersFromExportFileContent,
 } from "./files-and-folders-loader";
 
@@ -111,7 +111,7 @@ const ff3 = {
   lastModified: ff3LastModified,
   size: ff3Size,
 };
-const origin: FilesAndFoldersElementInfo[] = [
+const origin: FilesElementInfo[] = [
   [ff1, ff1Path],
   [ff2, ff2Path],
   [ff3, ff3Path],

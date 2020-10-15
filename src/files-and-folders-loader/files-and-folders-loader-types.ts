@@ -9,6 +9,7 @@ import { HashesMap } from "reducers/hashes/hashes-types";
 import { TagMap } from "reducers/tags/tags-types";
 import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
 import { ArchifiltreErrorCode } from "util/error/error-util";
+import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 
 export type VirtualFileSystem = WithAliases &
   WithComments &
@@ -78,12 +79,6 @@ export type JsonFileInfo = PartialFileSystem &
   WithVersion &
   WithVirtualPathToIdMap;
 
-export enum LoadType {
-  FILESYSTEM,
-  EXPORT_FILE,
-  JSON_FILE,
-}
-
 type ResultData = {
   status: FileSystemLoadingStep;
   count: number;
@@ -116,7 +111,7 @@ export type WithResultHook<T = {}> = T & {
 };
 
 export type WithErrorHook<T = {}> = T & {
-  onError: (error: WorkerError) => void;
+  onError: (error: ArchifiltreError) => void;
 };
 
 export type FileSystemLoadingHooks = {
@@ -130,7 +125,3 @@ export type FileSystemLoadingHooksCreator = (
 ) => FileSystemLoadingHooks;
 
 export type FileLoaderCreator = (path: string) => FilesAndFoldersLoader;
-
-export type FileLoaderCreatorMap = {
-  [loadType in LoadType]: FileLoaderCreator;
-};

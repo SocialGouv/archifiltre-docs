@@ -14,6 +14,8 @@ import {
 } from "./files-and-folders-types";
 import { getHashesFromStore } from "../hashes/hashes-selectors";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
+import { useSelector } from "react-redux";
 
 export const ROOT_FF_ID = "";
 
@@ -393,7 +395,18 @@ export const getElementByVirtualPath = (
 
 /**
  * Returns true when all hashes are computed, false otherwise
- * @param hashesMap
+ * @param store
  */
 export const getAreHashesReady = (store: StoreState): boolean =>
   getHashesFromStore(store)[ROOT_FF_ID] !== undefined;
+
+/**
+ * Get the registered errored files and folders
+ */
+export const getErroredFilesAndFolders = (
+  store: StoreState
+): ArchifiltreError[] =>
+  getCurrentState(store.filesAndFolders).erroredFilesAndFolders;
+
+export const useFilesAndFoldersErrors = () =>
+  useSelector(getErroredFilesAndFolders);

@@ -4,6 +4,7 @@ export const CLOSE_MODAL = "MODAL/CLOSE_MODAL";
 export enum Modal {
   ERROR_MODAL = "errorModal",
   HASHES_ERROR_MODAL = "hashesErrorModal",
+  FIlES_AND_FOLDERS_ERRORS_MODAL = "filesAndFoldersErrorModal",
 }
 
 export interface ModalState {

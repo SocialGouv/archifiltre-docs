@@ -5,22 +5,21 @@ import {
   initVirtualPathToIdMap,
   markAsToDelete,
   markElementsToDelete,
+  registerErroredElements,
   removeChild,
   setFilesAndFoldersAliases,
   unmarkAsToDelete,
 } from "./files-and-folders-actions";
-import { filesAndFoldersReducer } from "./files-and-folders-reducer";
+import {
+  filesAndFoldersReducer,
+  initialState,
+} from "./files-and-folders-reducer";
 import { ROOT_FF_ID } from "./files-and-folders-selectors";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
 import { FilesAndFoldersState } from "./files-and-folders-types";
+import { createArchifiltreError } from "reducers/loading-info/loading-info-selectors";
 
-const baseState: FilesAndFoldersState = {
-  aliases: {},
-  comments: {},
-  elementsToDelete: [],
-  filesAndFolders: {},
-  virtualPathToId: {},
-};
+const baseState: FilesAndFoldersState = initialState;
 
 describe("files-and-folders-reducer", () => {
   describe("INITIALIZE_FILES_AND_FOLDERS", () => {
@@ -364,6 +363,20 @@ describe("files-and-folders-reducer", () => {
       expect(nextState).toEqual({
         ...baseState,
         virtualPathToId,
+      });
+    });
+  });
+
+  describe("REGISTER_ERRORED_ELEMENTS", () => {
+    it("should register errored elements", () => {
+      const nextState = filesAndFoldersReducer(
+        baseState,
+        registerErroredElements([createArchifiltreError({})])
+      );
+
+      expect(nextState).toEqual({
+        ...nextState,
+        erroredFilesAndFolders: [createArchifiltreError({})],
       });
     });
   });

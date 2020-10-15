@@ -6,8 +6,11 @@ import { firstHashesComputingThunk } from "hash-computer/hash-computer-thunk";
 import { addTracker } from "logging/tracker";
 import { ActionTitle, ActionType } from "logging/tracker-types";
 import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
-import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
+import {
+  getErroredFilesAndFolders,
+  getFilesAndFoldersFromStore,
+  ROOT_FF_ID,
+} from "reducers/files-and-folders/files-and-folders-selectors";
 import { tap } from "rxjs/operators";
 import translations from "translations/translations";
 import { filterResults } from "util/batch-process/batch-process-util";
@@ -40,6 +43,8 @@ import {
   initializeFilesAndFolders,
   initVirtualPathToIdMap,
   markElementsToDelete,
+  registerErroredElements,
+  resetErroredElements,
   setFilesAndFoldersAliases,
 } from "./files-and-folders/files-and-folders-actions";
 import {
@@ -53,7 +58,6 @@ import {
   setOriginalPath,
   setSessionName,
 } from "./workspace-metadata/workspace-metadata-actions";
-import { getArchifiltreErrors } from "./loading-info/loading-info-selectors";
 import { openModalAction } from "./modal/modal-actions";
 import { Modal } from "./modal/modal-types";
 import {
@@ -76,6 +80,10 @@ import {
 import { setFilesAndFoldersHashes } from "./hashes/hashes-actions";
 import { resetZoom } from "reducers/main-space-selection/main-space-selection-action";
 import { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
+import { ErrorMessage } from "util/batch-process/batch-process-util-types";
+import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
+import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
+import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
 
 /**
  * Notifies the user that there is a Zip in the loaded files
@@ -108,7 +116,7 @@ const displayErrorNotification = () => (dispatch) => {
     translations.t("folderDropzone.errorsWhileLoading"),
     translations.t("folderDropzone.error"),
     NotificationDuration.PERMANENT,
-    () => dispatch(openModalAction(Modal.ERROR_MODAL))
+    () => dispatch(openModalAction(Modal.FIlES_AND_FOLDERS_ERRORS_MODAL))
   );
 };
 
@@ -178,7 +186,7 @@ const handleErrorNotificationDisplay = (): ArchifiltreThunkAction => async (
   dispatch,
   getState
 ) => {
-  const errors = getArchifiltreErrors(getState());
+  const errors = getErroredFilesAndFolders(getState());
 
   if (errors.length > 0) {
     dispatch(displayErrorNotification());
@@ -237,8 +245,9 @@ const handleVirtualFileSystemThunk = (
 };
 
 const makeLoadFilesAndFoldersErrorHandler = (dispatch: ArchifiltreDispatch) =>
-  tap<ArchifiltreError>((error) => {
+  tap<ErrorMessage>(({ error }) => {
     dispatch(registerErrorAction(error));
+    dispatch(registerErroredElements([error]));
   });
 
 const makeLoadFilesAndFoldersResultHandler = (dispatch: ArchifiltreDispatch) =>
@@ -262,9 +271,19 @@ const makeLoadFilesAndFoldersResultHandler = (dispatch: ArchifiltreDispatch) =>
   });
 
 const loadFilesAndFoldersAfterInitThunk = (
-  fileOrFolderPath: string
+  fileOrFolderPath: string,
+  {
+    filesAndFolders,
+    erroredPaths,
+  }: {
+    filesAndFolders?: FilesAndFoldersMap;
+    erroredPaths?: ArchifiltreError[];
+  } = {}
 ): ArchifiltreThunkAction<VirtualFileSystemLoader> => (dispatch) => {
-  const { result$, terminate } = loadFileTree(fileOrFolderPath);
+  const { result$, terminate } = loadFileTree(fileOrFolderPath, {
+    filesAndFolders,
+    erroredPaths,
+  });
   const virtualFileSystem = operateOnDataProcessingStream<HookParam, HookParam>(
     result$,
     {
@@ -283,6 +302,25 @@ const loadFilesAndFoldersAfterInitThunk = (
     virtualFileSystem,
     terminate,
   };
+};
+
+export const reloadFilesAndFoldersThunk = (): ArchifiltreThunkAction => (
+  dispatch,
+  getState
+) => {
+  const state = getState();
+  const { originalPath } = getWorkspaceMetadataFromStore(state);
+  const filesAndFolders = getFilesAndFoldersFromStore(state);
+  const erroredPaths = getErroredFilesAndFolders(state);
+
+  dispatch(resetErroredElements());
+
+  return dispatch(
+    loadFilesAndFoldersAfterInitThunk(originalPath, {
+      filesAndFolders,
+      erroredPaths,
+    })
+  );
 };
 
 type VirtualFileSystemLoader = {
@@ -381,5 +419,6 @@ export const resetStoreThunk = (): ArchifiltreThunkAction => (dispatch) => {
   dispatch(setLockedElementId(""));
   dispatch(setLoadingStep(LoadingStep.WAITING));
   dispatch(resetZoom());
+  dispatch(resetErroredElements());
   dispatch(commitAction());
 };

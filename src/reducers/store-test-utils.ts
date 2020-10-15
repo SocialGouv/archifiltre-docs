@@ -8,18 +8,13 @@ import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method
 import { initialState as icicleSortMethodInitialState } from "reducers/icicle-sort-method/icicle-sort-method-reducer";
 import { initialState as mainSpaceSelectionInitialState } from "reducers/main-space-selection/mainspace-selection-reducer";
 import { initialState as filesAndFoldersMetadataInitialState } from "reducers/files-and-folders-metadata/files-and-folders-metadata-reducer";
+import { initialState as filesAndFoldersInitialState } from "reducers/files-and-folders/files-and-folders-reducer";
 
 /**
  * Create an empty store state for testing purposes
  */
 export const createEmptyStore = (): StoreState => ({
-  filesAndFolders: wrapStoreWithUndoable({
-    aliases: {},
-    comments: {},
-    elementsToDelete: [],
-    filesAndFolders: {},
-    virtualPathToId: {},
-  }),
+  filesAndFolders: wrapStoreWithUndoable(filesAndFoldersInitialState),
   filesAndFoldersMetadata: wrapStoreWithUndoable(
     filesAndFoldersMetadataInitialState
   ),

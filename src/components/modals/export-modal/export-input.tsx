@@ -10,8 +10,9 @@ import styled from "styled-components";
 const FilePath = styled.span`
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
   width: 300px;
+  direction: rtl;
+  text-overflow: ellipsis;
 `;
 
 const HideableTooltip = styled(Tooltip)<{ isvisible: string }>`

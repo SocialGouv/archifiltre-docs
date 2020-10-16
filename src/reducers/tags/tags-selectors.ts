@@ -110,13 +110,6 @@ export const getTagSize = (
 };
 
 /**
- * Returns true if a TagMap has tags, false otherwise.
- * @param tagMap
- */
-export const tagMapHasTags = (tagMap: TagMap): boolean =>
-  Object.keys(tagMap).length !== 0;
-
-/**
  * Transforms a tagMap to a tag Array
  * @param tagMap
  */

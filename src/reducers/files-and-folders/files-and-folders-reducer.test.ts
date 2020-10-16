@@ -9,6 +9,7 @@ import {
   removeChild,
   setFilesAndFoldersAliases,
   unmarkAsToDelete,
+  unmarkElementsToDelete,
 } from "./files-and-folders-actions";
 import {
   filesAndFoldersReducer,
@@ -345,6 +346,29 @@ describe("files-and-folders-reducer", () => {
       expect(nextState).toEqual({
         ...baseState,
         elementsToDelete: [existingId, duplicatedId, newId],
+      });
+    });
+  });
+
+  describe("UNMARK_ELEMENTS_TO_DELETE", () => {
+    it("should add all element marked only once", () => {
+      const removedId1 = "removed-id";
+      const removedId2 = "removed-id-2";
+      const remainingId = "remaining-id";
+      const elementsIds = [removedId1, remainingId, removedId2];
+      const initialState = {
+        ...baseState,
+        elementsToDelete: elementsIds,
+      };
+
+      const nextState = filesAndFoldersReducer(
+        initialState,
+        unmarkElementsToDelete([removedId1, removedId2])
+      );
+
+      expect(nextState).toEqual({
+        ...baseState,
+        elementsToDelete: [remainingId],
       });
     });
   });

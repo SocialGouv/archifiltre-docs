@@ -16,7 +16,7 @@ export const treeCsvExporterThunk = (
   name: string
 ): ArchifiltreThunkAction => async (dispatch, getState) => {
   addTracker({
-    title: ActionTitle.CSV_EXPORT,
+    title: ActionTitle.TREE_CSV_EXPORT,
     type: ActionType.TRACK_EVENT,
   });
 

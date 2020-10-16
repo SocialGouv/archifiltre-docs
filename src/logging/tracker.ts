@@ -120,6 +120,8 @@ enum MatomoActionTitle {
   RESIP_EXPORT = "RESIP Export",
   METS_EXPORT = "METS Export",
   JSON_EXPORT = "JSON Export",
+  TREE_CSV_EXPORT = "Tree CSV Export",
+  EXCEL_EXPORT = "Excel Export",
   TOGGLE_VIEW_BY_VOLUME_NUMBER = "Toggle view by volume or number",
   TOGGLE_VIEW_BY_TYPE_DATES = "Toggle view by type or dates",
   ICICLE_ZOOM = "Zoom on icicle",

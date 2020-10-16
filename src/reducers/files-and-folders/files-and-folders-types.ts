@@ -11,6 +11,8 @@ export const MARK_AS_TO_DELETE = "FILES_AND_FOLDERS/MARK_AS_TO_DELETE";
 export const UNMARK_AS_TO_DELETE = "FILES_AND_FOLDERS/UNMARK_AS_TO_DELETE";
 export const MARK_ELEMENTS_TO_DELETE =
   "FILES_AND_FOLDERS/MARK_ELEMENTS_TO_DELETE";
+export const UNMARK_ELEMENTS_TO_DELETE =
+  "FILES_AND_FOLDERS/UNMARK_ELEMENTS_TO_DELETE";
 export const INIT_VIRTUAL_PATH_TO_ID_MAP =
   "FILES_AND_FOLDERS/INIT_VIRTUAL_PATH_TO_ID_MAP";
 export const REGISTER_ERRORED_ELEMENTS =
@@ -94,6 +96,11 @@ interface MarkElementsToDelete extends Action {
   elementIds: string[];
 }
 
+interface UnmarkElementsToDelete extends Action {
+  type: typeof UNMARK_ELEMENTS_TO_DELETE;
+  elementIds: string[];
+}
+
 interface InitVirtualPathToIdMap extends Action {
   type: typeof INIT_VIRTUAL_PATH_TO_ID_MAP;
   virtualPathToIdMap: VirtualPathToIdMap;
@@ -117,6 +124,7 @@ export type FilesAndFoldersActionTypes =
   | MarkAsToDelete
   | UnmarkAsToDelete
   | MarkElementsToDelete
+  | UnmarkElementsToDelete
   | InitVirtualPathToIdMap
   | RegisterErroredElements
   | ResetErroredElements;

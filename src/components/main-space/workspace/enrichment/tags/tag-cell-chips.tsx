@@ -1,30 +1,8 @@
 import Chip from "@material-ui/core/Chip";
 import EllipsisText from "./ellipsis-text";
 import React, { FC, useCallback } from "react";
-import { useTranslation } from "react-i18next";
-import { FaTrash } from "react-icons/fa";
 import { Tag } from "reducers/tags/tags-types";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import createStyles from "@material-ui/core/styles/createStyles";
-import { Theme } from "@material-ui/core/styles/createMuiTheme";
-
-// We need to use a specific call to makeStyles for Chip based components,
-// as it seems there are still some bug when Mui default classes override makeStyles classes
-// when used with Chip/Avatar components : https://github.com/mui-org/material-ui/issues/16456
-const useLocalStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    toDeleteChip: {
-      backgroundColor: theme.palette.error.main,
-      "&:hover, &:focus": {
-        backgroundColor: theme.palette.error.main,
-      },
-      color: "white",
-      "& > svg": {
-        color: "white",
-      },
-    },
-  })
-);
+import ToDeleteChip from "components/common/to-delete-chip";
 
 type TagCellChipsProps = {
   tagsForCurrentFile: Tag[];
@@ -41,9 +19,6 @@ const TagCellChips: FC<TagCellChipsProps> = ({
   isCurrentFileMarkedToDelete,
   toggleCurrentFileDeleteState,
 }) => {
-  const { t } = useTranslation();
-  const classes = useLocalStyles();
-
   const handleDelete = useCallback(
     (id) => () => {
       untag(id, nodeId);
@@ -53,12 +28,9 @@ const TagCellChips: FC<TagCellChipsProps> = ({
 
   return (
     <>
-      <Chip
-        size="small"
-        label={t("common.toDelete")}
-        className={isCurrentFileMarkedToDelete ? classes.toDeleteChip : ""}
+      <ToDeleteChip
+        checked={isCurrentFileMarkedToDelete}
         onClick={toggleCurrentFileDeleteState}
-        icon={<FaTrash style={{ height: "50%" }} />}
       />
       {tagsForCurrentFile.map(({ id, name }) => (
         <Chip

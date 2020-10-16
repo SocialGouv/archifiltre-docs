@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _, { without } from "lodash";
 import path from "path";
 import undoable from "../enhancers/undoable/undoable";
 import {
@@ -15,6 +15,7 @@ import {
   RESET_ERRORED_ELEMENTS,
   SET_FILES_AND_FOLDERS_ALIAS,
   UNMARK_AS_TO_DELETE,
+  UNMARK_ELEMENTS_TO_DELETE,
 } from "./files-and-folders-types";
 
 export const initialState: FilesAndFoldersState = {
@@ -156,6 +157,11 @@ const filesAndFoldersReducer = (
         elementsToDelete: [
           ...new Set([...state.elementsToDelete, ...action.elementIds]),
         ],
+      };
+    case UNMARK_ELEMENTS_TO_DELETE:
+      return {
+        ...state,
+        elementsToDelete: without(state.elementsToDelete, ...action.elementIds),
       };
     case INIT_VIRTUAL_PATH_TO_ID_MAP:
       return {

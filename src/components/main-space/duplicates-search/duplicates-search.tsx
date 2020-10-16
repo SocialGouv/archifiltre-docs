@@ -11,9 +11,10 @@ import CategoryTitle from "components/common/category-title";
 import Table from "components/common/table/table";
 import dateFormat from "dateformat";
 import { SearchBar } from "components/modals/search-modal/search-bar";
-import { Column } from "components/common/table/table-types";
+import { Column, HeaderColumn } from "components/common/table/table-types";
 import { makeTableExpandableRow } from "components/common/table/table-expandable-row";
 import { useDebouncedValue } from "hooks/use-debounced-value";
+import ToDeleteChip from "components/common/to-delete-chip";
 
 const SEARCH_INPUT_DEBOUNCE = 300;
 
@@ -23,9 +24,17 @@ const HiddenSpan = styled.span`
 
 type DuplicatesSearchProps = {
   duplicatesList: FilesAndFolders[][];
+  elementsToDelete: string[];
+  tagAsToDelete: (ids: string[]) => void;
+  untagAsToDelete: (ids: string[]) => void;
 };
 
-const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
+const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
+  duplicatesList,
+  elementsToDelete,
+  tagAsToDelete,
+  untagAsToDelete,
+}) => {
   const { t } = useTranslation();
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -46,39 +55,72 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
     filterName,
   ]);
 
-  const headerProps = useMemo(
+  const data = useMemo(
+    () =>
+      duplicatesList.map((filesAndFoldersList) =>
+        filesAndFoldersList.map((filesAndFolders) => ({
+          ...filesAndFolders,
+          toDelete: elementsToDelete.includes(filesAndFolders.id),
+        }))
+      ),
+    [duplicatesList, elementsToDelete]
+  );
+
+  const headerProps: HeaderColumn<
+    (FilesAndFolders & { toDelete: boolean })[]
+  >[] = useMemo(
     () => [
       {
-        accessor: (row: FilesAndFolders[], index = 0) => row[index].name,
+        id: "name",
+        accessor: (row, index = 0) => row[index].name,
       },
       {
-        accessor: (row: FilesAndFolders[], index = 0) =>
+        id: "fileOrFolder",
+        accessor: (row, index = 0) =>
           getType(row[index], {
             folderLabel: t("common.folder"),
             unknownLabel: t("common.unknown"),
           }),
       },
       {
-        accessor: (row: FilesAndFolders[], index = 0) =>
+        id: "fileSize",
+        accessor: (row, index = 0) =>
           octet2HumanReadableFormat(row[index].file_size),
       },
       {
+        id: "pathLength",
         accessor: (row) => row.length,
       },
       {
-        accessor: (row: FilesAndFolders[], index = 0) =>
+        id: "lastModified",
+        accessor: (row, index = 0) =>
           dateFormat(row[index].file_last_modified, "dd/mm/yyyy"),
       },
       {
         id: "path",
-        accessor: (row: FilesAndFolders[]) => (
+        accessor: (row) => (
           <HiddenSpan>
             {maxBy(row, (element) => element.id.length)?.id}
           </HiddenSpan>
         ),
       },
+      {
+        id: "toDelete",
+        accessor: (row) => {
+          const ids = row.map(({ id }) => id);
+          const checked = row.every(({ toDelete }) => toDelete);
+          return (
+            <ToDeleteChip
+              checked={checked}
+              onClick={() => {
+                checked ? untagAsToDelete(ids) : tagAsToDelete(ids);
+              }}
+            />
+          );
+        },
+      },
     ],
-    [t]
+    [t, untagAsToDelete, tagAsToDelete]
   );
 
   const TableExpandableRow = useMemo(
@@ -86,7 +128,9 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
     [headerProps]
   );
 
-  const columns: Column<FilesAndFolders[]>[] = useMemo(
+  const columns: Column<
+    (FilesAndFolders & { toDelete: boolean })[]
+  >[] = useMemo(
     () => [
       {
         id: "emptyColumn",
@@ -129,8 +173,23 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
         name: t("search.path"),
         accessor: (row: FilesAndFolders[], index = 0) => row[index].id,
       },
+      {
+        id: "toDelete",
+        name: t("common.toDelete"),
+        accessor: (row, index = 0) => {
+          const { id, toDelete } = row[index];
+          return (
+            <ToDeleteChip
+              checked={toDelete}
+              onClick={() => {
+                toDelete ? untagAsToDelete([id]) : tagAsToDelete([id]);
+              }}
+            />
+          );
+        },
+      },
     ],
-    [t]
+    [t, tagAsToDelete, untagAsToDelete]
   );
 
   return (
@@ -152,7 +211,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({ duplicatesList }) => {
         ) : (
           <Table
             columns={columns}
-            data={filteredFilesAndFolders}
+            data={data}
             RowRendererComp={TableExpandableRow}
           />
         )}

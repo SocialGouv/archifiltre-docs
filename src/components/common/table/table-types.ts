@@ -13,6 +13,15 @@ export type Column<T> = {
   accessor: TableAccessor<T>;
 };
 
+export type HeaderColumn<T> =
+  | {
+      id: string;
+      accessor: FunctionAccessor<T>;
+    }
+  | {
+      accessor: keyof T;
+    };
+
 export type RowRendererProps<T> = {
   columns: Column<T>[];
   row: T;

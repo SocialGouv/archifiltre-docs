@@ -14,6 +14,7 @@ import {
   RESET_ERRORED_ELEMENTS,
   SET_FILES_AND_FOLDERS_ALIAS,
   UNMARK_AS_TO_DELETE,
+  UNMARK_ELEMENTS_TO_DELETE,
   VirtualPathToIdMap,
 } from "./files-and-folders-types";
 import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
@@ -82,6 +83,17 @@ export const unmarkAsToDelete = (
 ): FilesAndFoldersActionTypes => ({
   filesAndFoldersId,
   type: UNMARK_AS_TO_DELETE,
+});
+
+/**
+ * Mark multiple elements to delete
+ * @param elementIds
+ */
+export const unmarkElementsToDelete = (
+  elementIds: string[]
+): FilesAndFoldersActionTypes => ({
+  elementIds,
+  type: UNMARK_ELEMENTS_TO_DELETE,
 });
 
 /**

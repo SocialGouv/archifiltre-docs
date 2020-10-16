@@ -11,19 +11,19 @@ import { getNameWithExtension } from "util/file-system/file-sys-util";
 import { excelExporterThunk } from "exporters/excel/excel-exporter";
 
 export enum ExportType {
-  AUDIT = "AUDIT",
+  EXCEL = "EXCEL",
   CSV = "CSV",
   CSV_WITH_HASHES = "CSV_WITH_HASHES",
   TREE_CSV = "TREE_CSV",
-  METS = "METS",
+  AUDIT = "AUDIT",
   RESIP = "RESIP",
-  EXCEL = "EXCEL",
+  METS = "METS",
 }
 
 export enum ExportCategory {
-  EXCHANGE_WITH_ERMS = "EXCHANGE_WITH_ERMS",
   RECORDS_INVENTORY = "RECORDS_INVENTORY",
   AUDIT = "AUDIT",
+  EXCHANGE_WITH_ERMS = "EXCHANGE_WITH_ERMS",
 }
 
 export type IsActiveOptions = {

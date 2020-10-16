@@ -1,3 +1,5 @@
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
 import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
 import { generateExcelExport$ } from "exporters/excel/excel-exporter-controller";
 import { getCsvExportParamsFromStore } from "util/array-export/array-export-utils";
@@ -24,6 +26,11 @@ import { isProgressResult } from "util/export/export-util";
 export const excelExporterThunk = (
   name: string
 ): ArchifiltreThunkAction => async (dispatch, getState) => {
+  addTracker({
+    title: ActionTitle.EXCEL_EXPORT,
+    type: ActionType.TRACK_EVENT,
+  });
+
   const exportData = getCsvExportParamsFromStore(getState());
 
   const loadingLabel = translations.t("export.excelExportProgressLabel");

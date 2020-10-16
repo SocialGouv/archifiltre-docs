@@ -1,4 +1,7 @@
-import createMuiTheme, { Theme } from "@material-ui/core/styles/createMuiTheme";
+import createMuiTheme, {
+  Theme,
+  ThemeOptions,
+} from "@material-ui/core/styles/createMuiTheme";
 import grey from "@material-ui/core/colors/grey";
 
 export interface ThemedProps {
@@ -15,7 +18,7 @@ const darkBlue = {
 const primaryColor = darkBlue;
 const secondaryColor = grey;
 
-const defaultTheme = createMuiTheme({
+export const themeOptions: ThemeOptions = {
   palette: {
     primary: primaryColor,
     secondary: secondaryColor,
@@ -101,6 +104,8 @@ const defaultTheme = createMuiTheme({
       },
     },
   },
-});
+};
+
+const defaultTheme = createMuiTheme(themeOptions);
 
 export default defaultTheme;

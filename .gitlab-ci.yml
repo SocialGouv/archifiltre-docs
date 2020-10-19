@@ -71,7 +71,7 @@ Build-master:
     - yarn prepare-prod
     - yarn win64
     - export ARCHIFILTRE_VERSION="$(node -e 'console.log(require("./package.json").version)')"
-    - mv dist/win-x64/archifiltre\ $ARCHIFILTRE_VERSION.exe dist/win-x64/archifiltre-master.exe
+    - mv dist/win-x64/archifiltre-$ARCHIFILTRE_VERSION.exe dist/win-x64/archifiltre-master.exe
   artifacts:
     paths:
       - dist/win-x64/archifiltre-master.exe
@@ -104,11 +104,11 @@ Build-branch-bins:
       curl --request POST \
         --url https://${GITHUB_TOKEN}@api.github.com/repos/SocialGouv/archifiltre/issues/${PR_ID}/comments \
         --header 'content-type: application/json' \
-        --data '{"body": "Download Artifacts :\n\n - [win-ia32]('${CI_PROJECT_URL}'/-/jobs/'${CI_JOB_ID}'/artifacts/raw/dist/win-ia32/archifiltre%20'${ARCHIFILTRE_VERSION}'.exe)\n - [win-x64]('${CI_PROJECT_URL}'/-/jobs/'${CI_JOB_ID}'/artifacts/raw/dist/win-x64/archifiltre%20'${ARCHIFILTRE_VERSION}'.exe)\n  - [linux-x64]('${CI_PROJECT_URL}'/-/jobs/'${CI_JOB_ID}'/artifacts/raw/dist/linux-x64/archifiltre-'${ARCHIFILTRE_VERSION}'.AppImage)"}'
+        --data '{"body": "Download Artifacts :\n\n - [win-ia32]('${CI_PROJECT_URL}'/-/jobs/'${CI_JOB_ID}'/artifacts/raw/dist/win-ia32/archifiltre-${ARCHIFILTRE_VERSION}'.exe)\n - [win-x64]('${CI_PROJECT_URL}'/-/jobs/'${CI_JOB_ID}'/artifacts/raw/dist/win-x64/archifiltre-${ARCHIFILTRE_VERSION}'.exe)\n  - [linux-x64]('${CI_PROJECT_URL}'/-/jobs/'${CI_JOB_ID}'/artifacts/raw/dist/linux-x64/archifiltre-'${ARCHIFILTRE_VERSION}'.AppImage)"}'
   artifacts:
     paths:
-      - dist/win-ia32/archifiltre *.exe
-      - dist/win-x64/archifiltre *.exe
+      - dist/win-ia32/archifiltre-*.exe
+      - dist/win-x64/archifiltre-*.exe
       - dist/linux-x64/archifiltre-*.AppImage
     expire_in: 1 week
   cache:

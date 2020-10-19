@@ -205,11 +205,12 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
           <SearchBar value={searchTerm} setSearchTerm={setSearchTerm} />
         </Box>
       </Box>
-      <Box flexGrow={1} minHeight={0} overflow="auto">
+      <Box flexGrow={1} minHeight={0}>
         {isEmpty(filteredFilesAndFolders) ? (
           <span>{t("search.noResult")}</span>
         ) : (
           <Table
+            stickyHeader={true}
             columns={columns}
             data={data}
             RowRendererComp={TableExpandableRow}

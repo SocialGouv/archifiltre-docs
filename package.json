@@ -29,6 +29,7 @@
   },
   "build": {
     "appId": "io.github.archifiltre",
+    "artifactName": "archifiltre-${version}.${ext}",
     "files": [
       "electron/dist",
       "electron/build/icon.*",

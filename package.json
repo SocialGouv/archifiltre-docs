@@ -18,6 +18,8 @@
     "build-prod": "yarn prepare-prod && yarn win32 && yarn win64 && yarn linux && yarn mac",
     "win32": "electron-builder --windows portable --ia32",
     "win64": "electron-builder --windows portable --x64",
+    "win32-msi": "electron-builder --windows portable --ia32 --windows=msi",
+    "win64-msi": "electron-builder --windows portable --x64 --windows=msi",
     "mac": "electron-builder --mac dmg",
     "linux": "electron-builder --linux AppImage",
     "lint": "eslint .",

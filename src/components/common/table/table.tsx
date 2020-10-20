@@ -8,6 +8,7 @@ import React, {
   ReactElement,
   useCallback,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import Paginator from "components/modals/search-modal/paginator";
@@ -23,6 +24,7 @@ import {
   Order,
   stableSort,
 } from "util/table/table-util";
+import { useElementHeight } from "hooks/use-element-height";
 
 type TableProps<T> = {
   data: T[];
@@ -31,6 +33,7 @@ type TableProps<T> = {
   isPaginatorDisplayed?: boolean;
   isDense?: boolean;
   RowRendererComp?: RowRenderer<T>;
+  stickyHeader?: boolean;
 };
 
 function Table<T>({
@@ -40,6 +43,7 @@ function Table<T>({
   isPaginatorDisplayed = true,
   isDense = false,
   RowRendererComp = TableDefaultRow,
+  stickyHeader = false,
 }: TableProps<T>): ReactElement<any, any> | null {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
@@ -81,10 +85,27 @@ function Table<T>({
   const comparator = getComparator(order, sortedColumnAccessor);
   const sortedData = stableSort<T>(data, comparator);
 
+  const tableRef = useRef<HTMLDivElement | null>(null);
+  const paginationRef = useRef<HTMLDivElement | null>(null);
+
+  const tableHeight = useElementHeight(tableRef);
+  const paginationHeight = useElementHeight(paginationRef);
+
+  const containerStyle = stickyHeader ? { height: "100%" } : {};
+
+  const tableContainerStyle = stickyHeader
+    ? {
+        maxHeight: `${tableHeight - paginationHeight}px`,
+      }
+    : {};
+
   return (
-    <div>
-      <TableContainer component={Paper}>
-        <MuiTable size={isDense ? "small" : "medium"}>
+    <div ref={tableRef} style={containerStyle}>
+      <TableContainer component={Paper} style={tableContainerStyle}>
+        <MuiTable
+          size={isDense ? "small" : "medium"}
+          stickyHeader={stickyHeader}
+        >
           <EnhancedTableHead
             order={order}
             orderBy={orderBy}
@@ -106,6 +127,7 @@ function Table<T>({
       </TableContainer>
       {isPaginatorDisplayed && (
         <Paginator
+          ref={paginationRef}
           pageCount={data.length}
           rowsPerPage={rowsPerPage}
           page={page}

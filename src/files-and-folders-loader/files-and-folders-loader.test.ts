@@ -357,14 +357,69 @@ unix
       });
     });
 
-    it("should read a windows generated file", async () => {
+    it("should read a 1.0.0 windows generated file", async () => {
       const exportFileContent = `1.0.0\r
 windows\r
 C:\\basePath\\files\r
-"C:\\basePath\\files\\file.txt",5,1584108263,d8e8fca2dc0f896fd7cb4cb0031ba249\r
-"C:\\basePath\\files\\file",49,1563979128,0052aa96e1e52f1a0d6489731155dce3\r
-"C:\\basePath\\files\\file2",8196,1582727849,87706eb5706972ee4134891ca9cb6708\r
-"C:\\basePath\\files\\folder\\file with space",49,1563979128,0052aa96e1e52f1a0d6489731155dce3\r
+"C:\\basePath\\files\\file.txt",5,1584108263,0000,d8e8fca2dc0f896fd7cb4cb0031ba249\r
+"C:\\basePath\\files\\file",49,1563979128,0000,0052aa96e1e52f1a0d6489731155dce3\r
+"C:\\basePath\\files\\file2",8196,1582727849,0000,87706eb5706972ee4134891ca9cb6708\r
+"C:\\basePath\\files\\folder\\file with space",49,1563979128,0000,0052aa96e1e52f1a0d6489731155dce3\r
+`;
+
+      const stream = Readable.from(exportFileContent);
+
+      const loadedData = await loadFilesAndFoldersFromExportFileContent(stream);
+
+      expect(loadedData).toEqual({
+        files: [
+          [
+            {
+              lastModified: 1584108263000,
+              size: 5,
+            },
+            "/files/file.txt",
+          ],
+          [
+            {
+              lastModified: 1563979128000,
+              size: 49,
+            },
+            "/files/file",
+          ],
+          [
+            {
+              lastModified: 1582727849000,
+              size: 8196,
+            },
+            "/files/file2",
+          ],
+          [
+            {
+              lastModified: 1563979128000,
+              size: 49,
+            },
+            "/files/folder/file with space",
+          ],
+        ],
+        hashes: {
+          "/files/file.txt": "d8e8fca2dc0f896fd7cb4cb0031ba249",
+          "/files/file": "0052aa96e1e52f1a0d6489731155dce3",
+          "/files/file2": "87706eb5706972ee4134891ca9cb6708",
+          "/files/folder/file with space": "0052aa96e1e52f1a0d6489731155dce3",
+        },
+        rootPath: "C:\\basePath\\files",
+      });
+    });
+
+    it("should read a 1.0.1 windows generated file", async () => {
+      const exportFileContent = `1.0.1\r
+windows\r
+C:\\basePath\\files\r
+"C:\\basePath\\files\\file.txt",5,"1584108263,0000",d8e8fca2dc0f896fd7cb4cb0031ba249\r
+"C:\\basePath\\files\\file",49,"1563979128,0000",0052aa96e1e52f1a0d6489731155dce3\r
+"C:\\basePath\\files\\file2",8196,"1582727849,0000",87706eb5706972ee4134891ca9cb6708\r
+"C:\\basePath\\files\\folder\\file with space",49,"1563979128,0000",0052aa96e1e52f1a0d6489731155dce3\r
 `;
 
       const stream = Readable.from(exportFileContent);

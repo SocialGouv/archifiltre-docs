@@ -11,7 +11,6 @@ import {
   getTagSize,
   Order,
   sortTags,
-  tagMapHasTags,
   tagMapToArray,
 } from "./tags-selectors";
 import { Tag } from "./tags-types";
@@ -240,24 +239,6 @@ describe("tags-selectors", () => {
       expect(getTagSize(tag, filesAndFolders, filesAndFoldersMetadata)).toEqual(
         taggedParentSize
       );
-    });
-  });
-
-  describe("tagMapHasTags", () => {
-    it("should return false if there is no tag", () => {
-      expect(tagMapHasTags({})).toBe(false);
-    });
-
-    it("should return true if there is at least a tag", () => {
-      const tagMap = {
-        id: {
-          ffIds: ["ffId "],
-          id: "id",
-          name: "tag",
-        },
-      };
-
-      expect(tagMapHasTags(tagMap)).toBe(true);
     });
   });
 

@@ -8,12 +8,12 @@ if ($Path -eq "") {
 }
 $absolutePath = Resolve-Path -Path "$($Path)"
 $files = get-ChildItem -Recurse -Path "$($absolutePath)" | where {! $_.PSIsContainer}
-Write-Output "1.0.0"
+Write-Output "1.0.1"
 Write-Output "windows"
 Write-Output "$($absolutePath)"
 
 foreach ($file in $files) {
   $lastModifiedDate = (Get-Date -Date $file.LastWriteTime.ToUniversalTime() -UFormat %s)
   $fileHash = (Get-FileHash -Algorithm MD5 -LiteralPath $file.FullName).Hash
-  Write-Output "`"$($file.FullName)`",$($file.length),$($lastModifiedDate),$($fileHash)"
+  Write-Output "`"$($file.FullName)`",$($file.length),`"$($lastModifiedDate)`",$($fileHash)"
 }

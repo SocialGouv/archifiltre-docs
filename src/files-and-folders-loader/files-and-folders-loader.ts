@@ -169,6 +169,34 @@ export const loadFilesAndFoldersFromExportFile = async (
   return loadFilesAndFoldersFromExportFileContent(fileStream, hooks);
 };
 
+const latestVersion = "windows-1.0.1";
+
+type LoadedLine = {
+  filePath: string;
+  fileSize: string;
+  fileLastModified: string;
+  fileHash: string;
+};
+type LineLoader = (parsedLine: string[]) => LoadedLine;
+
+const LINE_LOADERS = {
+  "windows-1.0.0": ([[filePath, fileSize, fileLastModified, _, fileHash]]) => ({
+    filePath,
+    fileSize,
+    fileLastModified,
+    fileHash,
+  }),
+  [latestVersion]: ([[filePath, fileSize, fileLastModified, fileHash]]) => ({
+    filePath,
+    fileSize,
+    fileLastModified,
+    fileHash,
+  }),
+};
+
+const getLineLoader = (version: string): LineLoader =>
+  LINE_LOADERS[version] || LINE_LOADERS[latestVersion];
+
 /**
  * Creates an origin structure from an archifiltre export file content
  * @param exportFileContent - The content of an export file generating by archifiltre command line exporter
@@ -189,12 +217,15 @@ export const loadFilesAndFoldersFromExportFileContent = async (
   let pathImpl: typeof path.win32 | typeof path.posix = path;
   const hashes: HashesMap = {};
   const files: FilesElementInfo[] = [];
+  let version = latestVersion;
+  let os = "windows";
   for await (const line of lineReader) {
     switch (lineCount) {
       case 0:
+        version = line.trim();
         break;
       case 1:
-        const os = line.trim();
+        os = line.trim();
         pathImpl = os === "windows" ? path.win32 : path.posix;
         break;
       case 2:
@@ -202,17 +233,19 @@ export const loadFilesAndFoldersFromExportFileContent = async (
         rootPath = pathImpl.dirname(basePath);
         break;
       default:
-        const [[filePath, fileSize, fileLastModified, fileHash]] = parse(
-          line.trim()
+        const loader = getLineLoader(`${os}-${version}`);
+        const { filePath, fileSize, fileLastModified, fileHash } = loader(
+          parse(line.trim())
         );
         const id = convertToPosixAbsolutePath(
           pathImpl.relative(rootPath, filePath),
           { separator: pathImpl.sep }
         );
-        hashes[id] = fileHash;
+        hashes[id] = fileHash.toLowerCase();
+        const lastModifiedWithoutComma = fileLastModified.replace(",", ".");
         files.push([
           {
-            lastModified: +fileLastModified * 1000,
+            lastModified: +lastModifiedWithoutComma * 1000,
             size: +fileSize,
           },
           id,

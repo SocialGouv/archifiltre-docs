@@ -1,15 +1,13 @@
 import TablePagination from "@material-ui/core/TablePagination";
-import React from "react";
+import React, { forwardRef, MutableRefObject } from "react";
 
-const Paginator = ({
-  pageCount,
-  rowsPerPage,
-  page,
-  handleChangePage,
-  handleChangeRowsPerPage,
-}) => {
+const Paginator = (
+  { pageCount, rowsPerPage, page, handleChangePage, handleChangeRowsPerPage },
+  ref: MutableRefObject<HTMLDivElement | null>
+) => {
   return (
     <TablePagination
+      ref={ref}
       rowsPerPageOptions={[]}
       component="div"
       count={pageCount}
@@ -24,4 +22,4 @@ const Paginator = ({
   );
 };
 
-export default Paginator;
+export default forwardRef(Paginator);

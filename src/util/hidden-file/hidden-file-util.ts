@@ -47,7 +47,7 @@ const asyncIsHidden = async (elementPath: string): Promise<boolean> =>
     ? asyncIsFileHiddenOnWindows(elementPath)
     : promiseIsHidden(elementPath);
 
-const IGNORED_NAMES = ["thumbs.db", ".ds_store"];
+const IGNORED_NAMES = ["thumbs.db", ".ds_store", ".gitkeep"];
 const IGNORED_EXTS = [".lnk", ".tmp", ".ini"];
 const IGNORED_PATTERNS = [
   /^\$/, // matches files starting with $

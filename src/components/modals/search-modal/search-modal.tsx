@@ -18,26 +18,30 @@ import { FilterMethod } from "typings/filter-types";
 import Filters from "./filters/filters";
 import { SearchBar } from "./search-bar";
 import DialogContent from "@material-ui/core/DialogContent";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { useDebouncedSearchFilter } from "hooks/use-debounced-search-filter";
+import { Column } from "components/common/table/table-types";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
 
 const StyledPaper = styled(Paper)`
   height: 90%;
 `;
 
 type SearchModalProps = {
+  exportToCsv: (data: FilesAndFolders[]) => void;
   isModalOpen: boolean;
   closeModal: () => void;
+  columns: Column<FilesAndFolders>[];
   filesAndFolders: FilesAndFoldersMap;
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   tags: TagMap;
 };
 
 export const SearchModal: FC<SearchModalProps> = ({
+  exportToCsv,
   isModalOpen,
+  columns,
   closeModal,
   filesAndFolders,
-  filesAndFoldersMetadata,
   tags,
 }) => {
   const { t } = useTranslation();
@@ -108,12 +112,22 @@ export const SearchModal: FC<SearchModalProps> = ({
           <Box flex={1}>
             <FilesAndFoldersTable
               filesAndFolders={filteredFilesAndFolders}
-              filesAndFoldersMetadata={filesAndFoldersMetadata}
+              columns={columns}
               closeModal={closeModal}
             />
           </Box>
         </Box>
       </DialogContent>
+      <DialogActions>
+        <Button
+          color="primary"
+          variant="contained"
+          disableElevation
+          onClick={() => exportToCsv(filteredFilesAndFolders)}
+        >
+          {t("exportModal.buttonTitle")}
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };

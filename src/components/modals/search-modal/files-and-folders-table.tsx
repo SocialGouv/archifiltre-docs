@@ -77,6 +77,7 @@ export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
     <span>{t("search.noResult")}</span>
   ) : (
     <Table
+      stickyHeader={true}
       rowId="id"
       columns={columns}
       data={filesAndFolders}

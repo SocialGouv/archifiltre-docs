@@ -22,7 +22,7 @@ import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/
 import { useDebouncedSearchFilter } from "hooks/use-debounced-search-filter";
 
 const StyledPaper = styled(Paper)`
-  min-height: 90%;
+  height: 90%;
 `;
 
 type SearchModalProps = {
@@ -85,7 +85,7 @@ export const SearchModal: FC<SearchModalProps> = ({
     >
       <ModalHeader title={t("search.title")} onClose={closeModal} />
       <DialogContent className={classes.dialogContent} dividers>
-        <Box display="flex" flexDirection="column">
+        <Box display="flex" flexDirection="column" height="100%">
           <Box>
             <Box display="flex">
               <Box
@@ -105,11 +105,13 @@ export const SearchModal: FC<SearchModalProps> = ({
               </Box>
             </Box>
           </Box>
-          <FilesAndFoldersTable
-            filesAndFolders={filteredFilesAndFolders}
-            filesAndFoldersMetadata={filesAndFoldersMetadata}
-            closeModal={closeModal}
-          />
+          <Box flex={1}>
+            <FilesAndFoldersTable
+              filesAndFolders={filteredFilesAndFolders}
+              filesAndFoldersMetadata={filesAndFoldersMetadata}
+              closeModal={closeModal}
+            />
+          </Box>
         </Box>
       </DialogContent>
     </Dialog>

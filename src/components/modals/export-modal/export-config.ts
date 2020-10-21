@@ -123,6 +123,7 @@ export const exportConfig: ExportConfigMap = {
   [ExportType.EXCEL]: {
     isActive: ({ areHashesReady }) => areHashesReady,
     label: "Excel",
+    disabledExplanation: "header.csvWithHashDisabledMessage",
     exportFunction: (exportPath) => excelExporterThunk(exportPath),
     exportPath: (originalPath, sessionName) =>
       computeExportFilePath(originalPath, sessionName, ExportType.EXCEL),

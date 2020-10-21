@@ -37,7 +37,7 @@ const Header: FC<HeaderActionsProps> = ({
   canUndo,
   canRedo,
 }) => {
-  const { setAreIciclesDisplayed, tabIndex, setTabIndex } = useTabsState();
+  const { tabIndex, setTabIndex } = useTabsState();
 
   return (
     <HeaderLine>
@@ -48,11 +48,7 @@ const Header: FC<HeaderActionsProps> = ({
         <Box flexGrow={1} />
         <>
           <Box>
-            <TabsHeader
-              setAreIciclesDisplayed={setAreIciclesDisplayed}
-              tabIndex={tabIndex}
-              setTabIndex={setTabIndex}
-            />
+            <TabsHeader tabIndex={tabIndex} setTabIndex={setTabIndex} />
           </Box>
           <Box flexGrow={1} />
         </>

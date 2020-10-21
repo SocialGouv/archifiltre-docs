@@ -7,7 +7,6 @@ import defaultTheme from "theme/default-theme";
 import { TabsContext } from "../header/tabs-context";
 
 const Providers: FC = ({ children }) => {
-  const [areIciclesDisplayed, setAreIciclesDisplayed] = useState(true);
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
@@ -16,9 +15,7 @@ const Providers: FC = ({ children }) => {
         <ErrorBoundary>
           <TabsContext.Provider
             value={{
-              areIciclesDisplayed,
               tabIndex,
-              setAreIciclesDisplayed,
               setTabIndex,
             }}
           >

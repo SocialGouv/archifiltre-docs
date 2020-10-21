@@ -58,7 +58,7 @@ const app = () => {
       <WindowResize />
       <App>
         <Box display="flex" flexDirection="column" height="100%" width="100%">
-          <Box flexGrow={1} flexShrink={1} overflow="hidden">
+          <Box height="100%">
             <MainSpace />
           </Box>
           <BackgroundLoadingInfoContainer />

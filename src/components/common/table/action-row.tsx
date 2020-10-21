@@ -4,7 +4,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Column } from "components/common/table/table-types";
 import TableValue from "components/common/table/table-value";
-import React, { ReactElement, useCallback, useMemo } from "react";
+import React, { ReactElement, useCallback, useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { FaEye } from "react-icons/all";
 import { useDispatch } from "react-redux";
@@ -13,6 +13,7 @@ import {
   setHoveredElementId,
   setLockedElementId,
 } from "reducers/workspace-metadata/workspace-metadata-actions";
+import { TabsContext } from "components/header/tabs-context";
 
 type ActionRowProps = {
   columns: Column<FilesAndFolders>[];
@@ -22,6 +23,8 @@ type ActionRowProps = {
 export function makeTableActionRow(closeModal) {
   return function ({ columns, row }: ActionRowProps): ReactElement {
     const { t } = useTranslation();
+
+    const { setTabIndex } = useContext(TabsContext);
 
     const dispatch = useDispatch();
 
@@ -40,9 +43,10 @@ export function makeTableActionRow(closeModal) {
       (id) => {
         setFocus(id);
         lock(id);
+        setTabIndex(0);
         closeModal();
       },
-      [setFocus, lock]
+      [setFocus, lock, setTabIndex]
     );
 
     const title = useMemo(() => t("search.visualizeElement"), [t]);

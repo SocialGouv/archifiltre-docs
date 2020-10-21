@@ -9,6 +9,7 @@ export type ExportTypesMap<ValueType> = {
 type ExportOptionsProps = {
   enabledExports: ExportTypesMap<boolean>;
   exportPaths: ExportTypesMap<string>;
+  isValidPaths: ExportTypesMap<boolean>;
   setActiveExportValue: (exportType: ExportType, value: boolean) => void;
   setExportsPathsValue: (exportType: ExportType, value: string) => void;
 };
@@ -16,6 +17,7 @@ type ExportOptionsProps = {
 const ExportOptions: FC<ExportOptionsProps> = ({
   enabledExports,
   exportPaths,
+  isValidPaths,
   setActiveExportValue,
   setExportsPathsValue,
 }) => (
@@ -26,6 +28,7 @@ const ExportOptions: FC<ExportOptionsProps> = ({
         key={exportCategory}
         enabledExports={enabledExports}
         exportPaths={exportPaths}
+        isValidPaths={isValidPaths}
         setActiveExportValue={setActiveExportValue}
         setExportsPathsValue={setExportsPathsValue}
       />

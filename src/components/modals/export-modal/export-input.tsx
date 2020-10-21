@@ -6,14 +6,18 @@ import { useTranslation } from "react-i18next";
 import { FaFolderOpen } from "react-icons/fa";
 import { promptUserForSave } from "util/file-system/file-system-util";
 import styled from "styled-components";
+import withTheme from "@material-ui/core/styles/withTheme";
+import { ThemedProps } from "theme/default-theme";
 
-const FilePath = styled.span`
+const FilePath = withTheme(styled.span<{ hasError: boolean } & ThemedProps>`
   white-space: nowrap;
   overflow: hidden;
   width: 300px;
   direction: rtl;
   text-overflow: ellipsis;
-`;
+  color: ${({ hasError, theme }) =>
+    hasError ? theme.palette.error.main : "inherit"};
+`);
 
 const HideableTooltip = styled(Tooltip)<{ isvisible: string }>`
   visibility: ${({ isvisible }) =>
@@ -22,12 +26,14 @@ const HideableTooltip = styled(Tooltip)<{ isvisible: string }>`
 
 type ExportInputProps = {
   exportFilePath: string;
+  isValid: boolean;
   setExportsPathsValue: (value: string) => void;
   isFilePickerDisabled?: boolean;
 };
 
 const ExportInput: FC<ExportInputProps> = ({
   exportFilePath,
+  isValid,
   setExportsPathsValue,
   isFilePickerDisabled = false,
 }) => {
@@ -44,7 +50,7 @@ const ExportInput: FC<ExportInputProps> = ({
   return (
     <Box display="flex" alignItems="center">
       <Tooltip title={exportFilePath}>
-        <FilePath>{exportFilePath}</FilePath>
+        <FilePath hasError={!isValid}>{exportFilePath}</FilePath>
       </Tooltip>
       <HideableTooltip
         title={browseTitle}

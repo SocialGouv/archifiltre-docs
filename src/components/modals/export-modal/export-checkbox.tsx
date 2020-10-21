@@ -26,7 +26,9 @@ const ExportCheckbox: FC<ExportOptionProps> = ({
     <FormControlLabel
       disabled={!isActive}
       control={<Checkbox onChange={onChange} />}
-      label={`${label}${!isActive ? ` (${disabledExplanation})` : ""}`}
+      label={`${label}${
+        !isActive && disabledExplanation ? ` (${disabledExplanation})` : ""
+      }`}
     />
   );
 };

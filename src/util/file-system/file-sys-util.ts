@@ -1,5 +1,5 @@
 import fs from "fs";
-import path from "path";
+import path, { dirname } from "path";
 import FileSaver from "file-saver";
 import { countItems } from "util/array//array-util";
 import dateFormat from "dateformat";
@@ -145,3 +145,18 @@ export const getAbsolutePath = (
  */
 export const isRootPath = (testPath: string): boolean =>
   path.dirname(testPath) === testPath;
+
+export const isValidFilePath = async (path: string) => {
+  const folderPath = dirname(path);
+
+  return folderExists(folderPath);
+};
+
+export const folderExists = async (path: string): Promise<boolean> => {
+  try {
+    const stats = await fs.promises.stat(path);
+    return stats.isDirectory();
+  } catch (err) {
+    return false;
+  }
+};

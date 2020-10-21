@@ -57,7 +57,9 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
     const path = await remote.dialog.showOpenDialog({
       properties: ["openDirectory"],
     });
-    loadPath(path.filePaths[0]);
+    if (path.filePaths.length > 0) {
+      loadPath(path.filePaths[0]);
+    }
   }, [loadPath]);
 
   useEffect(() => {

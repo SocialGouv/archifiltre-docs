@@ -2,7 +2,7 @@ import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import { useStyles } from "hooks/use-styles";
-import _, { negate } from "lodash";
+import _, { find, negate } from "lodash";
 import React, { FC, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { identity } from "util/function/function-util";
@@ -13,6 +13,7 @@ import {
   mapValuesFromExportType,
 } from "./export-config";
 import ExportOptions, { ExportTypesMap } from "./export-options";
+import { isValidFilePath } from "util/file-system/file-sys-util";
 
 const getInitialExportPaths = (originalPath: string, sessionName: string) =>
   mapValuesFromExportType((exportType) =>
@@ -32,6 +33,23 @@ const computeEnabledExports = (
 const defaultEnabledExports: ExportTypesMap<boolean> = mapValuesFromExportType(
   () => false
 );
+
+const computeExportPathsValidityMap = async (
+  exportPathsMap: ExportTypesMap<string>
+): Promise<ExportTypesMap<boolean>> => {
+  const resultsArray = await Promise.all(
+    Object.keys(exportPathsMap).map((key: ExportType) =>
+      isValidFilePath(exportPathsMap[key]).then((isValid) => ({
+        key,
+        isValid,
+      }))
+    )
+  );
+
+  return mapValuesFromExportType(
+    (key) => find(resultsArray, { key })?.isValid || false
+  );
+};
 
 type ExportModalContentProps = {
   areHashesReady: boolean;
@@ -57,6 +75,7 @@ const ExportModalContent: FC<ExportModalContentProps> = ({
   const [enabledExports, setEnabledExports] = useState<ExportTypesMap<boolean>>(
     defaultEnabledExports
   );
+  const [validPaths, setValidPaths] = useState(initialExportCheckMap);
 
   useEffect(
     () => setEnabledExports(computeEnabledExports({ areHashesReady })),
@@ -72,6 +91,10 @@ const ExportModalContent: FC<ExportModalContentProps> = ({
       );
   }, [startExport, activeExports, exportPaths]);
 
+  useEffect(() => {
+    computeExportPathsValidityMap(exportPaths).then(setValidPaths);
+  }, [exportPaths, setValidPaths]);
+
   const setActiveExportValue = (exportType: ExportType, value: boolean) =>
     setActiveExports({ ...activeExports, [exportType]: value });
 
@@ -84,6 +107,7 @@ const ExportModalContent: FC<ExportModalContentProps> = ({
         <ExportOptions
           enabledExports={enabledExports}
           exportPaths={exportPaths}
+          isValidPaths={validPaths}
           setActiveExportValue={setActiveExportValue}
           setExportsPathsValue={setExportsPathsValue}
         />

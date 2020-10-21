@@ -14,6 +14,7 @@ const ExportContainer = styled.div`
 type ExportTypeOptionProps = {
   exportType;
   enabledExports;
+  isPathValid: boolean;
   setActiveExportValue;
   exportPaths;
   setExportsPathsValue;
@@ -22,6 +23,7 @@ type ExportTypeOptionProps = {
 const ExportTypeOption: FC<ExportTypeOptionProps> = ({
   exportType,
   enabledExports,
+  isPathValid,
   setActiveExportValue,
   exportPaths,
   setExportsPathsValue,
@@ -31,7 +33,7 @@ const ExportTypeOption: FC<ExportTypeOptionProps> = ({
   return (
     <ExportContainer key={exportType}>
       <ExportCheckbox
-        isActive={enabledExports[exportType]}
+        isActive={enabledExports[exportType] && isPathValid}
         setActiveExportValue={(value) =>
           setActiveExportValue(exportType, value)
         }
@@ -42,6 +44,7 @@ const ExportTypeOption: FC<ExportTypeOptionProps> = ({
       />
       <ExportInput
         exportFilePath={exportPaths[exportType]}
+        isValid={isPathValid}
         setExportsPathsValue={(value) =>
           setExportsPathsValue(exportType, value)
         }

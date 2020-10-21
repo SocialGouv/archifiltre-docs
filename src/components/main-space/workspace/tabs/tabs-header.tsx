@@ -31,16 +31,11 @@ const a11yProps = (index: number) => ({
 });
 
 type TabsHeaderProps = {
-  setAreIciclesDisplayed: (areIcicleDisplayed: boolean) => void;
   setTabIndex: (tabIndex: number) => void;
   tabIndex: number;
 };
 
-const TabsHeader: FC<TabsHeaderProps> = ({
-  setAreIciclesDisplayed,
-  setTabIndex,
-  tabIndex,
-}) => {
+const TabsHeader: FC<TabsHeaderProps> = ({ setTabIndex, tabIndex }) => {
   const { t } = useTranslation();
   const classes = useLocalStyles();
   const areHashesReady = useSelector(getAreHashesReady);
@@ -67,11 +62,8 @@ const TabsHeader: FC<TabsHeaderProps> = ({
     (event: React.ChangeEvent<{}>, newValue: number) => {
       handleTracking(newValue);
       setTabIndex(newValue);
-      newValue === 3
-        ? setAreIciclesDisplayed(false)
-        : setAreIciclesDisplayed(true);
     },
-    [setTabIndex, setAreIciclesDisplayed]
+    [setTabIndex]
   );
 
   return (

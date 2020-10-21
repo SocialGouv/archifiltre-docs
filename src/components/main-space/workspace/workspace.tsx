@@ -18,10 +18,12 @@ const workspaceState = {
 
 export const WorkspaceContext = React.createContext(workspaceState);
 
+const areIciclesDisplayed = (tabIndex: number) => tabIndex !== 3;
+
 const Workspace: FC = () => {
   const [isFileMoveActive, setIsFileMoveActive] = useState(false);
   const [areTabsHidden, setAreTabsHidden] = useState(false);
-  const { areIciclesDisplayed, tabIndex } = useTabsState();
+  const { tabIndex } = useTabsState();
 
   return (
     <WorkspaceContext.Provider
@@ -45,7 +47,7 @@ const Workspace: FC = () => {
           </Box>
         </Box>
         <Box flexGrow={1} flexShrink={1} flexBasis="auto" overflow="hidden">
-          {areIciclesDisplayed ? (
+          {areIciclesDisplayed(tabIndex) ? (
             <Box display="flex" flexDirection="column" height="100%">
               <Box flexGrow={0}>
                 <NavigationBar />

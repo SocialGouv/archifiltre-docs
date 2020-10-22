@@ -34,6 +34,11 @@ if (app.isPackaged) {
   Menu.setApplicationMenu(null);
 }
 
+if (!app.isPackaged) {
+  console.log("not-packaged");
+  app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
+}
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
@@ -100,6 +105,7 @@ function createWindow() {
       enableRemoteModule: true,
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
+      webSecurity: app.isPackaged,
     },
     width: 1500,
   });

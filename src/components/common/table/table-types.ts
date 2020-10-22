@@ -1,5 +1,12 @@
 import { ComponentType, ReactElement } from "react";
 
+export enum WordBreak {
+  NORMAL = "normal",
+  BREAK_ALL = "break-all",
+  BREAK_WORD = "break-word",
+  KEEP_ALL = "keep-all",
+}
+
 export type FunctionAccessor<T> = (
   value: T,
   index?: number
@@ -7,10 +14,15 @@ export type FunctionAccessor<T> = (
 
 export type TableAccessor<T> = keyof T | FunctionAccessor<T>;
 
+export type CellStyle = {
+  wordBreak?: WordBreak;
+};
+
 export type Column<T> = {
   id: string;
   name: string;
   accessor: TableAccessor<T>;
+  cellStyle?: CellStyle;
 };
 
 export type HeaderColumn<T> =

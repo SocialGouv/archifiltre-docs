@@ -11,7 +11,11 @@ import CategoryTitle from "components/common/category-title";
 import Table from "components/common/table/table";
 import dateFormat from "dateformat";
 import { SearchBar } from "components/modals/search-modal/search-bar";
-import { Column, HeaderColumn } from "components/common/table/table-types";
+import {
+  Column,
+  HeaderColumn,
+  WordBreak,
+} from "components/common/table/table-types";
 import { makeTableExpandableRow } from "components/common/table/table-expandable-row";
 import { useDebouncedValue } from "hooks/use-debounced-value";
 import ToDeleteChip from "components/common/to-delete-chip";
@@ -172,6 +176,9 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
         id: "id",
         name: t("search.path"),
         accessor: (row: FilesAndFolders[], index = 0) => row[index].id,
+        cellStyle: {
+          wordBreak: WordBreak.BREAK_ALL,
+        },
       },
       {
         id: "toDelete",

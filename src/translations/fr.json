@@ -111,6 +111,7 @@
       "redo": "Rétablir"
     },
     "common": {
+      "exportActionTitle": "Exporter",
       "error": "Oups ! Une erreur s'est produite.",
       "contactUs": "Cliquez ici pour nous contacter",
       "somethingWentWrong": "Une erreur s'est produite.",
@@ -205,7 +206,9 @@
       "page": "Page",
       "tag": "Tag",
       "noAvailableOption": "Pas d'option disponible",
-      "visualizeElement": "Visualiser l'élément"
+      "visualizeElement": "Visualiser l'élément",
+      "exportNotificationTitle": "Export des résultats de recherche",
+      "exportNotificationMessage": "L'export CSV est terminé."
     },
     "errorsModal": {
       "title": "Liste des erreurs",
@@ -217,7 +220,9 @@
         "EBUSY": "La resource est occupée. Elle est peut-être utilisée par un autre processus.",
         "EACCES": "Vous n'avez pas les droits pour accéder à cette resource.",
         "UNKNOWN": "Erreur inconnue ou non supportée."
-      }
+      },
+      "exportNotificationTitle": "Export des erreurs",
+      "exportNotificationMessage": "L'export CSV est terminé."
     },
     "settingsModal": {
       "title": "Paramètres",

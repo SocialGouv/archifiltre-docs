@@ -33,13 +33,14 @@ export const NewVersionChecker: FC = () => {
   const classes = useStyles();
 
   useEffect(() => {
-    if (MODE !== "production") return;
     request({
       method: "GET",
       url: `${ARCHIFILTRE_SITE_URL}/api-version.json`,
     })
       .then((result) => {
-        const previousVersion = mapToNewVersionNumbers(result.lastVersion);
+        const previousVersion = mapToNewVersionNumbers(
+          JSON.parse(result).lastVersion
+        );
         const currentVersion = version;
         if (versionComparator(currentVersion, previousVersion) === -1) {
           setIsDisplayed(true);

@@ -26,11 +26,16 @@ export function makeTableExpandableRow<T>(headerProps: HeaderProps<T>) {
               size="normal"
             />
           </TableCell>
-          {slicedColumns.map(({ id }, columnIndex) => {
+          {slicedColumns.map(({ id, cellStyle }, columnIndex) => {
             const { accessor } = headerProps[columnIndex];
             return (
               <TableCell key={`${id || accessor}-${columnIndex}`}>
-                <TableValue row={rows} accessor={accessor} index={0} />
+                <TableValue
+                  row={rows}
+                  accessor={accessor}
+                  index={0}
+                  cellStyle={cellStyle}
+                />
               </TableCell>
             );
           })}
@@ -39,12 +44,13 @@ export function makeTableExpandableRow<T>(headerProps: HeaderProps<T>) {
           rows instanceof Array &&
           rows.map((row, rowIndex) => (
             <TableRow key={`row-${rowIndex}`}>
-              {columns.map(({ accessor, id }, columnIndex) => (
+              {columns.map(({ accessor, id, cellStyle }, columnIndex) => (
                 <TableCell key={`${id || accessor}-${rowIndex}-${columnIndex}`}>
                   <TableValue
                     index={rowIndex}
                     row={rows}
                     accessor={columns[columnIndex].accessor}
+                    cellStyle={cellStyle}
                   />
                 </TableCell>
               ))}

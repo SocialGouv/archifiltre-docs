@@ -3,6 +3,7 @@ import fs from "fs";
 import { reportError } from "logging/reporter";
 import path from "path";
 import _ from "lodash";
+import { getLanguage } from "languages";
 
 export type UserSettings = {
   isTrackingEnabled: boolean;
@@ -13,23 +14,26 @@ export type UserSettings = {
 const defaultUserSettings: UserSettings = {
   isTrackingEnabled: true,
   isMonitoringEnabled: true,
-  language: "en",
+  language: getLanguage()[0] || "en",
 };
 
-let initialUserSettings = defaultUserSettings;
+let initialUserSettings: UserSettings | undefined;
 
 /**
  * Initialize user settings to values in user-settings.json
  */
 export const initUserSettings = () => {
-  const userSettingsFilePath = getUserSettingsFilePath();
-  initialUserSettings = readUserSettings(userSettingsFilePath);
+  if (!initialUserSettings && MODE !== "test") {
+    const userSettingsFilePath = getUserSettingsFilePath();
+    initialUserSettings = readUserSettings(userSettingsFilePath);
+  }
 };
 
 /**
  * Getter for initial user settings
  */
-export const getInitialUserSettings = () => initialUserSettings;
+export const getInitialUserSettings = () =>
+  initialUserSettings || defaultUserSettings;
 
 const getUserSettingsFilePath = () => {
   const userFolderPath = remote.app.getPath("userData");

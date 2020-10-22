@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import translations from "translations/translations";
-
-const setLanguage = (language: string) => translations.changeLanguage(language);
+import { useUserSettings } from "hooks/use-user-settings";
 
 /**
  * Hook that allows to get and change the application language
  */
 export const useLanguage = (): [string, (language: string) => void] => {
   const [innerLanguage, setInnerLanguage] = useState(translations.language);
+  const { setUserSettings } = useUserSettings();
 
   useEffect(() => {
     const onLanguageChanged = (lang) => {
@@ -17,6 +17,16 @@ export const useLanguage = (): [string, (language: string) => void] => {
 
     return () => translations.off("languageChanged", onLanguageChanged);
   }, [setInnerLanguage]);
+
+  const setLanguage = useCallback(
+    async (language: string) => {
+      setUserSettings({
+        language,
+      });
+      await translations.changeLanguage(language);
+    },
+    [setUserSettings]
+  );
 
   return [innerLanguage, setLanguage];
 };

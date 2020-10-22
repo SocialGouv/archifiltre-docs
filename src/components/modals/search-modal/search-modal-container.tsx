@@ -28,11 +28,11 @@ export const SearchModalContainer = ({ isModalOpen, closeModal }) => {
 
       await exportTableToCsvFile(data, exportedColumns, {
         defaultFilePath: path.join(originalPath, `${sessionName}-search.csv`),
-        notificationMessage: "Message",
-        notificationTitle: "Title",
+        notificationMessage: t("search.exportNotificationMessage"),
+        notificationTitle: t("search.exportNotificationTitle"),
       });
     },
-    [columns]
+    [columns, t]
   );
 
   return (

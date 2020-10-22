@@ -26,6 +26,7 @@ import BackgroundLoadingInfoContainer from "components/background-loading-info/b
 import Box from "@material-ui/core/Box";
 import styled from "styled-components";
 import Modals from "components/modals/modals";
+import { setupLanguage } from "util/language/language-util";
 
 reportInfo("Archifiltre started");
 
@@ -33,6 +34,7 @@ document.title = `Archifiltre v${version}`;
 
 SecretDevtools.enable();
 initUserSettings();
+setupLanguage();
 initPreviousSessions();
 const { isTrackingEnabled, isMonitoringEnabled } = getInitialUserSettings();
 initTracker(isTrackingEnabled);

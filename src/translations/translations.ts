@@ -3,12 +3,6 @@ import { initReactI18next } from "react-i18next";
 import fr from "./fr.json";
 import en from "./en.json";
 import de from "./de.json";
-import {
-  getInitialUserSettings,
-  initUserSettings,
-} from "persistence/persistent-settings";
-
-initUserSettings();
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -16,7 +10,7 @@ i18n.use(initReactI18next).init({
     fr,
     de,
   },
-  lng: getInitialUserSettings().language,
+  lng: "en",
   fallbackLng: "en",
 
   interpolation: {

@@ -10,9 +10,13 @@ const TableDefaultRow = function <T>({
 }: RowRendererProps<T>): ReactElement {
   return (
     <TableRow>
-      {columns.map(({ accessor, id }, columnIndex) => (
+      {columns.map(({ accessor, cellStyle, id }, columnIndex) => (
         <TableCell key={`${id || accessor}-${columnIndex}`}>
-          <TableValue row={row} accessor={columns[columnIndex].accessor} />
+          <TableValue
+            row={row}
+            accessor={columns[columnIndex].accessor}
+            cellStyle={cellStyle}
+          />
         </TableCell>
       ))}
     </TableRow>

@@ -53,8 +53,7 @@ export function makeTableActionRow(closeModal) {
 
     return (
       <TableRow>
-        {columns.map(({ id }, columnIndex) => {
-          const { accessor } = columns[columnIndex];
+        {columns.map(({ id, cellStyle, accessor }, columnIndex) => {
           return (
             <TableCell key={`${id || accessor}-${columnIndex}`}>
               {id === "emptyColumn" ? (
@@ -64,7 +63,12 @@ export function makeTableActionRow(closeModal) {
                   </IconButton>
                 </Tooltip>
               ) : (
-                <TableValue row={row} accessor={accessor} index={0} />
+                <TableValue
+                  row={row}
+                  accessor={accessor}
+                  index={0}
+                  cellStyle={cellStyle}
+                />
               )}
             </TableCell>
           );

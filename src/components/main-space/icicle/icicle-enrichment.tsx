@@ -76,6 +76,12 @@ const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
     ...(hasTag ? [EnrichmentTypes.TAG] : []),
   ];
   const heightDivider = Math.max(enrichments.length * 2, 3);
+  const width = dims.dx - 2;
+
+  if (width <= 0) {
+    return null;
+  }
+
   return (
     <>
       {dims &&
@@ -84,7 +90,7 @@ const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
             key={`enrichment-${ffId}-${enrichmentType}`}
             x={dims.x + 1}
             y={dims.y + 1 + (index * dims.dy) / heightDivider}
-            width={dims.dx - 2}
+            width={width}
             height={dims.dy / heightDivider}
             style={{
               fill: ENRICHMENT_COLORS[enrichmentType],

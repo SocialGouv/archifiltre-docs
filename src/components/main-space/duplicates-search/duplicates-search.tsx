@@ -57,13 +57,13 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
 
   const data = useMemo(
     () =>
-      duplicatesList.map((filesAndFoldersList) =>
+      filteredFilesAndFolders.map((filesAndFoldersList) =>
         filesAndFoldersList.map((filesAndFolders) => ({
           ...filesAndFolders,
           toDelete: elementsToDelete.includes(filesAndFolders.id),
         }))
       ),
-    [duplicatesList, elementsToDelete]
+    [filteredFilesAndFolders, elementsToDelete]
   );
 
   const headerProps: HeaderColumn<

@@ -50,7 +50,7 @@ export const getPreviousSessions = (): string[] => {
     if (previousSessions === "") {
       return [];
     }
-    const previousSessionsList = previousSessions.split("\n");
+    const previousSessionsList = previousSessions.trim().split("\n");
     return sanitizePreviousSessions(previousSessionsList);
   } catch (error) {
     reportError(error);

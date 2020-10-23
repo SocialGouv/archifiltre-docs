@@ -1,17 +1,23 @@
 import { TFunction } from "i18next";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { useMemo } from "react";
-import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
+import React, { useMemo } from "react";
+import {
+  ElementWithToDelete,
+  FilesAndFolders,
+} from "reducers/files-and-folders/files-and-folders-types";
 import { getType } from "util/files-and-folders/file-and-folders-utils";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
 import dateFormat from "dateformat";
-import { Column } from "components/common/table/table-types";
+import { Column, WordBreak } from "components/common/table/table-types";
+import ToDeleteChip from "components/common/to-delete-chip";
 
 export const useSearchModalTableColumns = (
   t: TFunction,
-  metadata: FilesAndFoldersMetadataMap
-): Column<FilesAndFolders>[] =>
+  metadata: FilesAndFoldersMetadataMap,
+  tagAsToDelete: (id: string) => void,
+  untagAsToDelete: (id: string) => void
+): Column<ElementWithToDelete>[] =>
   useMemo(
     () => [
       {
@@ -48,6 +54,21 @@ export const useSearchModalTableColumns = (
         id: "path",
         name: t("search.path"),
         accessor: "id",
+        cellStyle: {
+          wordBreak: WordBreak.BREAK_ALL,
+        },
+      },
+      {
+        id: "toDelete",
+        name: t("common.toDelete"),
+        accessor: ({ id, toDelete }: ElementWithToDelete) => (
+          <ToDeleteChip
+            checked={toDelete}
+            onClick={() => {
+              toDelete ? untagAsToDelete(id) : tagAsToDelete(id);
+            }}
+          />
+        ),
       },
       {
         id: "emptyColumn",

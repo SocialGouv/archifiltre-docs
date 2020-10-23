@@ -8,7 +8,7 @@ import React, { ReactElement, useCallback, useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { FaEye } from "react-icons/all";
 import { useDispatch } from "react-redux";
-import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
+import { ElementWithToDelete } from "reducers/files-and-folders/files-and-folders-types";
 import {
   setHoveredElementId,
   setLockedElementId,
@@ -16,8 +16,8 @@ import {
 import { TabsContext } from "components/header/tabs-context";
 
 type ActionRowProps = {
-  columns: Column<FilesAndFolders>[];
-  row: FilesAndFolders;
+  columns: Column<ElementWithToDelete>[];
+  row: ElementWithToDelete;
 };
 
 export function makeTableActionRow(closeModal) {

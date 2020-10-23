@@ -29,6 +29,10 @@ export interface FilesAndFolders {
   virtualPath: string;
 }
 
+export interface ElementWithToDelete extends FilesAndFolders {
+  toDelete: boolean;
+}
+
 export interface FilesAndFoldersMap {
   [id: string]: FilesAndFolders;
 }

@@ -1,12 +1,11 @@
 import { Box } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import Paper from "@material-ui/core/Paper";
-import { compose, omit, values } from "lodash/fp";
 import React, { FC, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  ElementWithToDelete,
   FilesAndFolders,
-  FilesAndFoldersMap,
 } from "reducers/files-and-folders/files-and-folders-types";
 import { useSearchAndFilters } from "hooks/use-search-and-filters";
 import { TagMap } from "reducers/tags/tags-types";
@@ -22,6 +21,7 @@ import { useDebouncedSearchFilter } from "hooks/use-debounced-search-filter";
 import { Column } from "components/common/table/table-types";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
+import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
 
 const StyledPaper = styled(Paper)`
   height: 90%;
@@ -31,8 +31,8 @@ type SearchModalProps = {
   exportToCsv: (data: FilesAndFolders[]) => void;
   isModalOpen: boolean;
   closeModal: () => void;
-  columns: Column<FilesAndFolders>[];
-  filesAndFolders: FilesAndFoldersMap;
+  columns: Column<ElementWithToDelete>[];
+  filesAndFolders: ElementWithToDelete[];
   tags: TagMap;
 };
 
@@ -47,13 +47,15 @@ export const SearchModal: FC<SearchModalProps> = ({
   const { t } = useTranslation();
   const classes = useStyles();
   const filesAndFoldersArray = useMemo(
-    () => compose(values, omit(""))(filesAndFolders),
+    () => filesAndFolders.filter(({ id }) => id !== ROOT_FF_ID),
     [filesAndFolders]
   );
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState<FilterMethod<FilesAndFolders>[]>([]);
+  const [filters, setFilters] = useState<FilterMethod<ElementWithToDelete>[]>(
+    []
+  );
 
-  const nameFilter = useDebouncedSearchFilter<FilesAndFolders>(
+  const nameFilter = useDebouncedSearchFilter<ElementWithToDelete>(
     "name",
     searchTerm
   );

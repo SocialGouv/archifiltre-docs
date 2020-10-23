@@ -26,7 +26,8 @@ const ErrorsTable: FC<ErrorsTableProps> = ({ errors }) => {
       {
         id: "description",
         name: t("errorsModal.errorDescription"),
-        accessor: ({ code }) => t(`errorsModal.errorDescriptions.${code}`),
+        accessor: ({ code }) =>
+          t(`errorsModal.errorDescriptions.${code}`) as string,
       },
     ],
     [t]

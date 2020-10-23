@@ -69,12 +69,15 @@ function Table<T>({
   );
 
   const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<number>(0);
+  const [orderBy, setOrderBy] = useState<number>(-1);
 
-  const sortedColumnAccessor = useMemo(
-    () => accessorToFunction(columns[orderBy].accessor),
-    [columns, orderBy]
-  );
+  const sortedColumnAccessor = useMemo(() => {
+    const sortAccessor =
+      columns[orderBy]?.sortAccessor ||
+      columns[orderBy]?.accessor ||
+      (() => "");
+    return accessorToFunction(sortAccessor);
+  }, [columns, orderBy]);
 
   const handleRequestSort = (event: React.MouseEvent, property: number) => {
     const isAsc = orderBy === property && order === "asc";

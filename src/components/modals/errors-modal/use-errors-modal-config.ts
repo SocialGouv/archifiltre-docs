@@ -12,16 +12,20 @@ export const useErrorsModalConfig = (
         id: "filePath",
         name: t("errorsModal.element"),
         accessor: "filePath",
+        sortable: true,
       },
       {
         id: "code",
         name: t("errorsModal.errorCode"),
         accessor: "code",
+        sortable: true,
       },
       {
         id: "description",
         name: t("errorsModal.errorDescription"),
-        accessor: ({ code }) => t(`errorsModal.errorDescriptions.${code}`),
+        accessor: ({ code }) =>
+          t(`errorsModal.errorDescriptions.${code}`) as string,
+        sortable: true,
       },
     ],
     [t]

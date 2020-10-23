@@ -188,7 +188,8 @@
       "excelExportSuccessMessage": "Excel export succeeded",
       "excelExportTitle": "Excel export",
       "treeStats": "File tree statistics",
-      "treeVisualizing": "File tree visualizing"
+      "treeVisualizing": "File tree visualizing",
+      "creatingTreeCsvExport": "Creating tree csv export"
     },
     "replay": {
       "title": "Restore previous session",

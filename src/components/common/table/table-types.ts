@@ -10,7 +10,7 @@ export enum WordBreak {
 export type FunctionAccessor<T> = (
   value: T,
   index?: number
-) => string | ReactElement;
+) => string | number | ReactElement;
 
 export type TableAccessor<T> = keyof T | FunctionAccessor<T>;
 
@@ -23,6 +23,7 @@ export type Column<T> = {
   name: string;
   accessor: TableAccessor<T>;
   cellStyle?: CellStyle;
+  sortAccessor?: TableAccessor<T>;
 };
 
 export type HeaderColumn<T> =

@@ -93,7 +93,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
           octet2HumanReadableFormat(row[index].file_size),
       },
       {
-        id: "pathLength",
+        id: "elementsCount",
         accessor: (row) => row.length,
       },
       {
@@ -139,11 +139,13 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
         id: "emptyColumn",
         name: "",
         accessor: () => "",
+        sortable: false,
       },
       {
         id: "name",
         name: t("search.name"),
         accessor: (row: FilesAndFolders[], index = 0) => row[index].name,
+        sortable: true,
       },
       {
         id: "type",
@@ -153,23 +155,32 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
             folderLabel: t("common.folder"),
             unknownLabel: t("common.unknown"),
           }),
+        sortable: true,
       },
       {
         id: "size",
         name: t("search.size"),
         accessor: (row: FilesAndFolders[], index = 0) =>
           octet2HumanReadableFormat(row[index].file_size),
+        sortable: true,
+        sortAccessor: (row: FilesAndFolders[], index = 0) =>
+          row[index].file_size,
       },
       {
         id: "elementsCount",
         name: t("duplicates.filesNumber"),
         accessor: () => "",
+        sortable: true,
+        sortAccessor: (row: FilesAndFolders[]) => row.length,
       },
       {
         id: "fileLastModified",
         name: t("search.fileLastModified"),
         accessor: (row: FilesAndFolders[], index = 0) =>
           dateFormat(row[index].file_last_modified, "dd/mm/yyyy"),
+        sortable: true,
+        sortAccessor: (row: FilesAndFolders[], index = 0) =>
+          row[index].file_last_modified,
       },
       {
         id: "id",
@@ -178,10 +189,12 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
         cellStyle: {
           wordBreak: WordBreak.BREAK_ALL,
         },
+        sortable: true,
       },
       {
         id: "toDelete",
         name: t("common.toDelete"),
+        sortable: false,
         accessor: (row, index = 0) => {
           const { id, toDelete } = row[index];
           return (

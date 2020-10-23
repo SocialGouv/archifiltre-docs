@@ -3,7 +3,10 @@ import { isEmpty, maxBy } from "lodash";
 import React, { FC, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
+import {
+  ElementWithToDelete,
+  FilesAndFolders,
+} from "reducers/files-and-folders/files-and-folders-types";
 import { useSearchAndFilters } from "hooks/use-search-and-filters";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import { getType } from "util/files-and-folders/file-and-folders-utils";
@@ -70,9 +73,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
     [filteredFilesAndFolders, elementsToDelete]
   );
 
-  const headerProps: HeaderColumn<
-    (FilesAndFolders & { toDelete: boolean })[]
-  >[] = useMemo(
+  const headerProps: HeaderColumn<ElementWithToDelete[]>[] = useMemo(
     () => [
       {
         id: "name",
@@ -132,9 +133,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
     [headerProps]
   );
 
-  const columns: Column<
-    (FilesAndFolders & { toDelete: boolean })[]
-  >[] = useMemo(
+  const columns: Column<ElementWithToDelete[]>[] = useMemo(
     () => [
       {
         id: "emptyColumn",

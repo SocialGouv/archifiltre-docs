@@ -4,11 +4,11 @@ import React, { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import Table from "components/common/table/table";
 import { isEmpty } from "lodash";
-import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
+import { ElementWithToDelete } from "reducers/files-and-folders/files-and-folders-types";
 
 type FilesAndFoldersTableProps = {
-  columns: Column<FilesAndFolders>[];
-  filesAndFolders: FilesAndFolders[];
+  columns: Column<ElementWithToDelete>[];
+  filesAndFolders: ElementWithToDelete[];
   closeModal: () => void;
 };
 

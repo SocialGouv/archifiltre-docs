@@ -56,7 +56,8 @@ const EnhancedTableHead: FC<EnhancedTableHeadProps> = ({
             <TableSortLabel
               active={orderBy === index}
               direction={orderBy === index ? order : "asc"}
-              onClick={createSortHandler(index)}
+              onClick={column.sortable ? createSortHandler(index) : undefined}
+              hideSortIcon={!column.sortable}
             >
               {column.name}
               {orderBy === index ? (

@@ -24,6 +24,7 @@ export const useSearchModalTableColumns = (
         id: "name",
         name: t("search.name"),
         accessor: "name",
+        sortable: true,
       },
       {
         id: "type",
@@ -33,6 +34,7 @@ export const useSearchModalTableColumns = (
             folderLabel: t("common.folder"),
             unknownLabel: t("common.unknown"),
           }),
+        sortable: true,
       },
       {
         id: "size",
@@ -43,17 +45,25 @@ export const useSearchModalTableColumns = (
               ? element.file_size
               : metadata[element.id].childrenTotalSize
           ),
+        sortable: true,
+        sortAccessor: (element: FilesAndFolders) =>
+          isFile(element)
+            ? element.file_size
+            : metadata[element.id].childrenTotalSize,
       },
       {
         id: "lastModified",
         name: t("search.fileLastModified"),
         accessor: ({ file_last_modified }: FilesAndFolders) =>
           dateFormat(file_last_modified, "dd/mm/yyyy"),
+        sortable: true,
+        sortAccessor: "file_last_modified",
       },
       {
         id: "path",
         name: t("search.path"),
         accessor: "id",
+        sortable: true,
         cellStyle: {
           wordBreak: WordBreak.BREAK_ALL,
         },
@@ -74,6 +84,7 @@ export const useSearchModalTableColumns = (
         id: "emptyColumn",
         name: "",
         accessor: () => "",
+        sortable: false,
       },
     ],
     [t, metadata]

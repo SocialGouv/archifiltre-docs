@@ -188,7 +188,8 @@
       "excelExportSuccessMessage": "L'export Excel est terminé",
       "excelExportTitle": "Export Excel",
       "treeStats": "Statistiques de l'arborescence",
-      "treeVisualizing": "Visualisation de l'arborescence"
+      "treeVisualizing": "Visualisation de l'arborescence",
+      "creatingTreeCsvExport": "Création de l'export csv hiérarchisé"
     },
     "replay": {
       "title": "Chargement de la session précédente",

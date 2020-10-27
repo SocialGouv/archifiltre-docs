@@ -1,26 +1,21 @@
 import useTheme from "@material-ui/core/styles/useTheme";
-import withTheme from "@material-ui/core/styles/withTheme";
 import React, { FC, memo, useCallback, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import styled from "styled-components";
 import { LoadingInfo } from "reducers/loading-info/loading-info-types";
-import { ThemedProps } from "theme/default-theme";
 import LoadingInfoDisplay from "./loading-info-display";
 import LoadingSpinnerOrCloseCross from "./loading-spinner-or-close-cross";
-import SquaredButton from "./squared-button";
-import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import Grid from "@material-ui/core/Grid";
-import muiStyled from "@material-ui/core/styles/styled";
+import { IconButton } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
+import Card from "@material-ui/core/Card";
 
-const BottomLeftArea = withTheme(styled.div<ThemedProps>`
+const BottomLeftArea = styled(Card)`
   position: fixed;
   bottom: 20px;
   left: 20px;
-  background-color: white;
   display: flex;
-  border-radius: 2px;
-  border: ${({ theme }) => `1px solid ${theme.palette.secondary.main}`};
-`);
+`;
 
 const LoadingBarArea = memo(styled.div`
   padding-right: 20px;
@@ -29,14 +24,12 @@ const LoadingBarArea = memo(styled.div`
 `);
 
 type ToggleArrowProps = {
-  collapsed: boolean;
+  collapsed: string;
 };
 
-const ToggleArrow = muiStyled(SquaredButton)<Theme, ToggleArrowProps>(
-  ({ collapsed }) => ({
-    transform: collapsed ? "rotate(0.5turn)" : undefined,
-  })
-);
+const ToggleArrow = styled(IconButton)<ToggleArrowProps>(({ collapsed }) => ({
+  transform: collapsed === "true" ? "rotate(0.5turn)" : undefined,
+}));
 
 type BackgroundLoadingInfoProps = {
   loadingItems: LoadingInfo[];
@@ -66,18 +59,26 @@ const BackgroundLoadingInfo: FC<BackgroundLoadingInfoProps> = ({
         <Grid item>
           <Grid container direction="column">
             <Grid item>
-              <ToggleArrow collapsed={collapsed} onClick={toggleCollapsed}>
-                <FaChevronLeft
-                  style={{ color: theme.palette.secondary.main }}
-                />
-              </ToggleArrow>
+              <Box p={1}>
+                <ToggleArrow
+                  size="small"
+                  collapsed={collapsed.toString()}
+                  onClick={toggleCollapsed}
+                >
+                  <FaChevronLeft
+                    style={{ color: theme.palette.secondary.main }}
+                  />
+                </ToggleArrow>
+              </Box>
             </Grid>
             <Grid item>
               {collapsed && (
-                <LoadingSpinnerOrCloseCross
-                  isLoading={isLoading}
-                  onClose={dismissAll}
-                />
+                <Box p={1}>
+                  <LoadingSpinnerOrCloseCross
+                    isLoading={isLoading}
+                    onClose={dismissAll}
+                  />
+                </Box>
               )}
             </Grid>
           </Grid>

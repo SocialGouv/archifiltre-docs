@@ -1,0 +1,154 @@
+name: CI
+on:
+  - push
+  - pull_request
+
+jobs:
+  Quality:
+    strategy:
+      # Don't fast-fail on tag and master
+      fail-fast: ${{ github.event_name == 'pull_request' || (github.ref !=
+        'refs/heads/master' && !startsWith(github.ref, 'refs/tags/')) }}
+
+    name: Quality Control on Node 14.x (ubuntu-latest)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Node.js 14.x
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 14.x
+
+      - name: Get yarn cache directory path
+        id: init
+        shell: bash
+        run: |
+          echo "::set-output name=yarn_cache::$(yarn cache dir)"
+          #
+          echo "Node $(node --version)"
+          echo "Yarn $(yarn --version)"
+
+      - uses: actions/checkout@v2
+
+      - name: Cache Yarn packages
+        id: yarn_cache_packages
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.init.outputs.yarn_cache }}
+          key: ${{ runner.os }}-yarn_cache-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn_cache-
+
+      - name: Installing
+        run: |
+          sed -i "s/postinstall/disabled-postinstall/g" package.json
+          yarn --frozen-lockfile --perfer-offline
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Unit tests
+        run: yarn test-coverage
+
+      - name: Send test coverage to codecov
+        continue-on-error: true
+        uses: codecov/codecov-action@v1
+
+      - name: Set .env to production
+        run: cp .env.prod .env
+
+      - name: Build electron
+        run: webpack --mode production --config webpack.electron-main.js
+
+      - name: Build renderer
+        run: webpack webpack --mode production
+
+      - name: Archive dist
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v2
+        with:
+          name: electron-dist
+          path: electron/dist/
+
+  Build:
+    if: github.event_name == 'push'
+    needs:
+      - Quality
+
+    strategy:
+      matrix:
+        config:
+          - name: Windows 64-bits
+            os: windows-latest
+            script: win64
+          - name: Windows 32-bits
+            os: windows-latest
+            script: win32
+          - name: MSI Windows 64-bits
+            os: windows-latest
+            script: win64-msi
+          - name: MSI Windows 32-bits
+            os: windows-latest
+            script: win32-msi
+          - name: MacOS
+            os: macOS-latest
+            script: mac
+          - name: Linux
+            os: ubuntu-latest
+            script: linux
+
+    name: Build binary for ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ARCHIFILTRE_VERSION: ${{ github.sha }}
+
+    steps:
+      - name: Set up Node.js 14.x
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 14.x
+
+      - name: Get yarn cache directory path
+        id: init
+        shell: bash
+        run: |
+          echo "::set-output name=yarn_cache::$(yarn cache dir)"
+          echo "::set-output name=version::$(node -e 'console.log(require("./package.json").version)')"
+          #
+          echo "Node $(node --version)"
+          echo "Yarn $(yarn --version)"
+
+      - uses: actions/checkout@v2
+
+      - name: Cache Yarn packages
+        id: yarn_cache_packages
+        uses: actions/cache@v1
+        with:
+          path: |
+            ${{ steps.init.outputs.yarn_cache }}
+          key: ${{ runner.os }}-yarn_cache-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn_cache-
+
+      - name: Installing
+        run: yarn --frozen-lockfile --perfer-offline
+        env:
+          ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
+          ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
+
+      - name: Download dist form build job
+        uses: actions/download-artifact@v2
+        with:
+          name: electron-dist
+          path: electron/dist/
+
+      - name: Build
+        run: yarn ${{ matrix.config.script }}
+
+      - name: Archive dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.config.script }}-bin
+          path: dist/*/archifiltre-*

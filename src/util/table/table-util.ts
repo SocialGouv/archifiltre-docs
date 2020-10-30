@@ -135,3 +135,12 @@ export const exportTableToCsvFile = async <
     }
   );
 };
+
+export const maxPage = (pageSize: number, dataSize: number) =>
+  Math.max(0, Math.floor((dataSize - 1) / pageSize));
+
+export const limitPageIndex = (
+  pageSize: number,
+  dataSize: number,
+  currentPage: number
+) => Math.min(currentPage, maxPage(pageSize, dataSize));

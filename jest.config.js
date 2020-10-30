@@ -12,5 +12,5 @@ module.exports = {
   moduleDirectories: ["src", "node_modules"],
   moduleFileExtensions: ["js", "jsx", "ts", "tsx"],
   preset: "ts-jest/presets/js-with-ts",
-  setupFiles: ["jest-date-mock", "<rootDir>/test-util/mock-electron.js"],
+  setupFiles: ["jest-date-mock", "<rootDir>/tests/test-util/mock-electron.js"],
 };

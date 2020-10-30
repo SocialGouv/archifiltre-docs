@@ -7,6 +7,7 @@ import React, {
   memo,
   ReactElement,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -20,6 +21,7 @@ import {
 import TableDefaultRow from "components/common/table/table-default-row";
 import {
   accessorToFunction,
+  limitPageIndex,
   getComparator,
   Order,
   stableSort,
@@ -101,6 +103,10 @@ function Table<T>({
         maxHeight: `${tableHeight - paginationHeight}px`,
       }
     : {};
+
+  useEffect(() => {
+    setPage(limitPageIndex(rowsPerPage, data.length, page));
+  }, [data.length, setPage, page, rowsPerPage]);
 
   return (
     <div ref={tableRef} style={containerStyle}>

@@ -5,23 +5,28 @@ import {
 } from "../batch-process/batch-process-util-types";
 import translations from "translations/translations";
 
-export enum AsyncWorkerEvent {
+export enum WorkerEventType {
   MESSAGE = "message",
+  EXIT = "exit",
+  ERROR = "error",
 }
 
-export interface AsyncWorker {
-  addEventListener: (
-    eventType: AsyncWorkerEvent,
-    listener: EventListener
-  ) => void;
-  removeEventListener: (
-    eventType: AsyncWorkerEvent,
-    listener: EventListener
-  ) => void;
+type AsyncWorkerEventType = WorkerEventType.MESSAGE;
+
+export type AsyncWorkerControllerEvent =
+  | AsyncWorkerEventType
+  | WorkerEventType.EXIT
+  | WorkerEventType.ERROR;
+
+export type AsyncWorker<EventType = AsyncWorkerEventType> = {
+  addEventListener: (eventType: EventType, listener: EventListener) => void;
+  removeEventListener: (eventType: EventType, listener: EventListener) => void;
   postMessage: (message: WorkerMessage) => void;
-}
+};
 
-type ProcessControllerAsyncWorker = AsyncWorker & {
+export type ProcessControllerAsyncWorker = AsyncWorker<
+  AsyncWorkerControllerEvent
+> & {
   terminate: () => void;
 };
 
@@ -58,8 +63,9 @@ export const createAsyncWorkerForChildProcessController = (
   childProcess: ChildProcess
 ): ProcessControllerAsyncWorker => ({
   addEventListener: (eventType, listener) => {
-    // Small adaptation for current BackgroundProcess and BatchProcess workers
-    childProcess.addListener(eventType, (data) => listener({ ...data, data }));
+    childProcess.addListener(eventType, (data) => {
+      listener(data);
+    });
   },
   removeEventListener: (eventType, listener) => {
     childProcess.removeListener(eventType, listener);
@@ -102,7 +108,7 @@ export const setupChildWorkerListeners = (
   { onInitialize, onData }: SetupChildWorkerListenersOptions
 ) => {
   asyncWorker.addEventListener(
-    AsyncWorkerEvent.MESSAGE,
+    WorkerEventType.MESSAGE,
     async ({ data, type }: any) => {
       switch (type) {
         case MessageTypes.INITIALIZE:
@@ -113,6 +119,7 @@ export const setupChildWorkerListeners = (
             break;
           }
           onInitialize(asyncWorker, data);
+          asyncWorker.postMessage({ type: MessageTypes.READY });
           break;
 
         case MessageTypes.DATA:

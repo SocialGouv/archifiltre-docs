@@ -3,7 +3,6 @@ import { flatten } from "lodash";
 import path from "path";
 import { compose } from "redux";
 import { bufferTime, filter, map, tap } from "rxjs/operators";
-import { createAsyncWorkerControllerClass } from "util/async-worker/async-worker-util";
 import {
   aggregateResultsToMap,
   backgroundWorkerProcess$,
@@ -42,8 +41,7 @@ export const computeHashes$ = (
   paths: string[],
   { initialValues: { basePath } }: ComputeHashesOptions
 ): DataProcessingStream<HashesMap> => {
-  const FileHashWorker = createAsyncWorkerControllerClass(FileHashFork);
-  const hashes$ = computeBatch$(paths, FileHashWorker, {
+  const hashes$ = computeBatch$(paths, FileHashFork, {
     batchSize: BATCH_SIZE,
     initialValues: { basePath },
   });
@@ -117,8 +115,7 @@ export const computeFolderHashes$ = ({
   filesAndFolders,
   hashes,
 }: ComputeFolderHashesOptions): Observable<HashesMap> => {
-  const FolderHashWorker = createAsyncWorkerControllerClass(FolderHashFork);
-  return backgroundWorkerProcess$({ filesAndFolders, hashes }, FolderHashWorker)
+  return backgroundWorkerProcess$({ filesAndFolders, hashes }, FolderHashFork)
     .pipe(filterResults())
     .pipe(map(({ result }) => result));
 };

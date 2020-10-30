@@ -1,13 +1,25 @@
 import {
   aggregateErrorsToMap,
   aggregateResultsToMap,
-  backgroundWorkerProcess$,
-  computeBatch$,
+  processQueueWithWorkers,
+  setupWorkers$,
 } from "./batch-process-util";
-import { reportError } from "logging/reporter";
-import { MessageTypes } from "util/batch-process/batch-process-util-types";
-import { toArray } from "rxjs/operators";
-import EventEmitter from "events";
+import {
+  InitializeMessage,
+  MessageTypes,
+  ReadyMessage,
+  ResultMessage,
+  WorkerMessage,
+} from "util/batch-process/batch-process-util-types";
+import { take, toArray } from "rxjs/operators";
+import {
+  AsyncWorkerControllerEvent,
+  ProcessControllerAsyncWorker,
+  WorkerEventType,
+} from "util/async-worker/async-worker-util";
+import { makeEmptyArray } from "util/array/array-util";
+import { range, remove } from "lodash";
+import { Subject } from "rxjs";
 
 jest.mock("os", () => ({
   cpus: () => [1, 2, 3, 4],
@@ -17,171 +29,161 @@ jest.mock("../../logging/reporter", () => ({
   reportError: jest.fn(),
 }));
 
-const reportErrorMock = reportError as jest.Mock;
-
-const NB_CPUS = 4;
-const NB_WORKERS = NB_CPUS - 1;
-
-const makeWorkerMock = () => {
-  const postMessage = jest.fn();
-  const addEventListener = jest.fn();
-  const terminate = jest.fn();
-  const WorkerBuilder = jest.fn(() => ({
-    postMessage,
-    addEventListener,
-    terminate,
-  }));
-
-  return {
-    WorkerBuilder,
-    postMessage,
-    addEventListener,
-    terminate,
+class TestWorker implements ProcessControllerAsyncWorker {
+  listenersPool = {
+    [WorkerEventType.EXIT]: [] as (() => void)[],
+    [WorkerEventType.MESSAGE]: [] as ((data: any) => void)[],
+    [WorkerEventType.ERROR]: [] as ((data: any) => void)[],
   };
-};
-
-const getEventCallback = (addEventListener, eventType) => {
-  return (...args) => {
-    const callbacks = addEventListener.mock.calls.filter(
-      ([type]) => type === eventType
-    );
-    return callbacks.map(([, callback]) => callback(...args));
-  };
-};
+  addEventListener(type, callback) {
+    this.listenersPool[type].push(callback);
+  }
+  removeEventListener(type, callback) {
+    remove(this.listenersPool[type], callback);
+  }
+  postMessage = jest.fn();
+  trigger(event: AsyncWorkerControllerEvent, data?: any) {
+    this.listenersPool[event].forEach((callback) => callback(data));
+  }
+  terminate = jest.fn();
+}
 
 describe("batch-process-util", () => {
-  describe("computeBatch$", () => {
-    let postMessage;
-    let addEventListener;
-    let WorkerBuilder;
-
-    let responseObservable;
-    let responseObserver;
-    let completeObserver;
-    let errorObserver;
-
-    const testData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    const batchSize = 2;
-    const initialValues = { test: "test", initialValues: {} };
-
-    beforeEach(() => {
-      reportErrorMock.mockReset();
-      responseObserver = jest.fn();
-      completeObserver = jest.fn();
-      errorObserver = jest.fn();
-      ({ postMessage, addEventListener, WorkerBuilder } = makeWorkerMock());
-      responseObservable = computeBatch$(testData, WorkerBuilder, {
-        batchSize,
-        initialValues,
+  describe("setupWorkers$", () => {
+    it("should create a correct observable with complete message", (done) => {
+      const workers = makeEmptyArray(4, null).map(() => new TestWorker());
+      const initialValues = "initValues";
+      const { result$ } = setupWorkers$(workers, initialValues);
+      const makeResult = <T>(result: T): ResultMessage<T> => ({
+        type: MessageTypes.RESULT,
+        result,
       });
-      responseObservable.subscribe(
-        responseObserver,
-        errorObserver,
-        completeObserver
+
+      const makeInitialize = (data: any): InitializeMessage => ({
+        type: MessageTypes.INITIALIZE,
+        data,
+      });
+
+      result$
+        .pipe(toArray())
+        .toPromise()
+        .then((result) => {
+          expect(result).toEqual(
+            workers.map((worker, index) => ({
+              worker,
+              message: makeResult(`test${index}`),
+            }))
+          );
+          workers.forEach((worker) => {
+            expect(worker.postMessage).toHaveBeenCalledTimes(1);
+            expect(worker.postMessage).toHaveBeenCalledWith(
+              makeInitialize(initialValues)
+            );
+          });
+          done();
+        });
+
+      const complete = { type: MessageTypes.COMPLETE };
+
+      workers.forEach((worker, index) =>
+        worker.trigger(WorkerEventType.MESSAGE, makeResult(`test${index}`))
+      );
+
+      workers.forEach((worker, index) =>
+        worker.trigger(WorkerEventType.MESSAGE, complete)
       );
     });
-    it("should instantiate the worker", async () => {
-      expect(WorkerBuilder).toHaveBeenCalledTimes(NB_WORKERS);
-    });
 
-    it("should handle initial values", () => {
-      expect(postMessage).toHaveBeenCalledWith({
-        type: "initialize",
-        data: initialValues,
+    it("should create a correct observable without complete message", (done) => {
+      const workers = makeEmptyArray(4, null).map(() => new TestWorker());
+      const initialValues = "initValues";
+      const { result$ } = setupWorkers$(workers, initialValues);
+      const makeResult = <T>(result: T): ResultMessage<T> => ({
+        type: MessageTypes.RESULT,
+        result,
       });
-    });
 
-    it("should send fragmented computation message", () => {
-      expect(postMessage).toHaveBeenCalledWith({
-        type: "data",
-        data: [0, 1],
+      const makeInitialize = (data: any): InitializeMessage => ({
+        type: MessageTypes.INITIALIZE,
+        data,
       });
-      expect(postMessage).toHaveBeenCalledWith({
-        type: "data",
-        data: [2, 3],
-      });
-      expect(postMessage).toHaveBeenCalledWith({
-        type: "data",
-        data: [4, 5],
-      });
-      //
-      expect(postMessage).toHaveBeenCalledTimes(NB_WORKERS * 2);
-    });
 
-    it("should correctly send responses", () => {
-      const messageCallback = getEventCallback(addEventListener, "message");
-      const resultMessage = {
-        result: [
-          { param: 0, result: "R0" },
-          { param: 1, result: "R1" },
-        ],
-        type: "result",
-      };
-      messageCallback({ data: resultMessage });
-      expect(responseObserver).toHaveBeenCalledWith(resultMessage);
-    });
-
-    it("should correctly complete the work", () => {
-      const messageCallback = getEventCallback(addEventListener, "message");
-      for (
-        let callIndex = 0;
-        callIndex < testData.length / batchSize;
-        callIndex++
-      ) {
-        messageCallback({
-          data: {
-            type: "result",
-            result: [
-              { param: callIndex * 2, result: `R${callIndex * 2}` },
-              { param: callIndex * 2 + 1, result: `R${callIndex * 2 + 1}` },
-            ],
-          },
+      result$
+        .pipe(take(4), toArray())
+        .toPromise()
+        .then((result) => {
+          expect(result).toEqual(
+            workers.map((worker, index) => ({
+              worker,
+              message: makeResult(`test${index}`),
+            }))
+          );
+          workers.forEach((worker) => {
+            expect(worker.postMessage).toHaveBeenCalledTimes(1);
+            expect(worker.postMessage).toHaveBeenCalledWith(
+              makeInitialize(initialValues)
+            );
+          });
+          done();
         });
-      }
 
-      expect(completeObserver).toHaveBeenCalled();
+      workers.forEach((worker, index) =>
+        worker.trigger(WorkerEventType.MESSAGE, makeResult(`test${index}`))
+      );
     });
   });
 
-  describe("backgroundWorkerProcess$", () => {
-    it("should proxy messages from the worker", async () => {
-      const eventEmitter = new EventEmitter();
-
-      let resolver;
-
-      const initialized = new Promise((resolve) => (resolver = resolve));
-      class Worker {
-        addEventListener(type: string, callback) {
-          eventEmitter.addListener(type, callback);
-        }
-
-        removeEventListener(type: string, callback) {
-          eventEmitter.removeListener(type, callback);
-        }
-
-        postMessage = () => {
-          resolver();
-        };
-        terminate = jest.fn();
-      }
-
-      const results$ = backgroundWorkerProcess$("initialData", Worker);
-
-      await initialized;
-
-      const testResult = "test-result";
-      const result = { type: MessageTypes.RESULT, result: testResult };
-      const error = { type: MessageTypes.ERROR, error: "test-error" };
-
-      const resultPromise = results$.pipe(toArray()).toPromise();
-
-      eventEmitter.emit("message", result);
-      eventEmitter.emit("message", error);
-      eventEmitter.emit("message", {
-        type: MessageTypes.COMPLETE,
+  describe("processQueueWithWorkers", () => {
+    it("should handle queue processing", async () => {
+      const makeResult = (result: string): ResultMessage => ({
+        type: MessageTypes.RESULT,
+        result,
+      });
+      const makeReady = (): ReadyMessage => ({
+        type: MessageTypes.READY,
       });
 
-      expect(await resultPromise).toEqual([result, error]);
+      const workers = makeEmptyArray(4, null).map(() => new TestWorker());
+      const workers$ = new Subject<{
+        worker: ProcessControllerAsyncWorker;
+        message: WorkerMessage;
+      }>();
+      const data = range(0, 21);
+
+      const results$ = processQueueWithWorkers(workers$, data, 4);
+
+      workers.forEach((worker) =>
+        setTimeout(() =>
+          workers$.next({
+            worker,
+            message: makeReady(),
+          })
+        )
+      );
+
+      const triggerResult = (index) =>
+        setTimeout(() => {
+          const worker = workers[index % 4];
+          workers$.next({
+            worker,
+            message: makeResult(`${index}`),
+          });
+        });
+
+      for (let i = 0; i < 6; i++) {
+        triggerResult(i);
+      }
+
+      const messages = await results$.pipe(toArray()).toPromise();
+
+      expect(messages).toEqual([
+        makeResult("0"),
+        makeResult("1"),
+        makeResult("2"),
+        makeResult("3"),
+        makeResult("4"),
+        makeResult("5"),
+      ]);
     });
   });
 

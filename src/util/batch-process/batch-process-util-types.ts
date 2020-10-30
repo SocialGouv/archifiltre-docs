@@ -1,4 +1,5 @@
 export enum MessageTypes {
+  READY = "ready",
   COMPLETE = "complete",
   DATA = "data",
   ERROR = "error",
@@ -8,6 +9,10 @@ export enum MessageTypes {
   LOG = "log",
   RESULT = "result",
 }
+
+export type ReadyMessage = {
+  type: typeof MessageTypes.READY;
+};
 
 export type ErrorMessage = {
   type: typeof MessageTypes.ERROR;
@@ -19,8 +24,13 @@ export type ResultMessage<T = any> = {
   result: T;
 };
 
-type InitializeMessage = {
+export type InitializeMessage = {
   type: typeof MessageTypes.INITIALIZE;
+  data: any;
+};
+
+type DataMessage = {
+  type: typeof MessageTypes.DATA;
   data: any;
 };
 
@@ -45,10 +55,12 @@ type LogMessage = {
 };
 
 export type WorkerMessage =
+  | ReadyMessage
   | ErrorMessage
   | ResultMessage
   | InitializeMessage
   | CompleteMessage
   | WarningMessage
   | FatalMessage
-  | LogMessage;
+  | LogMessage
+  | DataMessage;

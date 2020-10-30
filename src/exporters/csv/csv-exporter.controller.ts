@@ -6,7 +6,6 @@ import {
   FilesAndFoldersMap,
 } from "reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "reducers/tags/tags-types";
-import { createAsyncWorkerControllerClass } from "util/async-worker/async-worker-util";
 import { backgroundWorkerProcess$ } from "util/batch-process/batch-process-util";
 import CsvExporterFork from "./csv-exporter.fork";
 import { HashesMap } from "reducers/hashes/hashes-types";
@@ -28,11 +27,5 @@ export interface GenerateCsvExportOptions {
  */
 export const generateCsvExport$ = (data: GenerateCsvExportOptions) => {
   const { language } = translations;
-  const CsvExporterAsyncWorker = createAsyncWorkerControllerClass(
-    CsvExporterFork
-  );
-  return backgroundWorkerProcess$(
-    { ...data, language },
-    CsvExporterAsyncWorker
-  );
+  return backgroundWorkerProcess$({ ...data, language }, CsvExporterFork);
 };

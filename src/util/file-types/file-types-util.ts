@@ -64,6 +64,7 @@ export const fileTypesByExtensions = {
   ".mp4": FileType.VIDEO,
   ".mov": FileType.VIDEO,
   ".mkv": FileType.VIDEO,
+  ".mpeg": FileType.VIDEO,
   ".mp3": FileType.AUDIO, // formats audio
   ".wav": FileType.AUDIO,
   ".rf64": FileType.AUDIO,

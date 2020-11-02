@@ -148,7 +148,7 @@
     "mime-types": "^2.1.27",
     "pizzip": "^3.0.6",
     "raven": "^2.6.4",
-    "react": "^16.14.0",
+    "react": "^17.0.1",
     "react-dom": "^16.14.0",
     "react-i18next": "^11.7.3",
     "react-icons": "^3.11.0",

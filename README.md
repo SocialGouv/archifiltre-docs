@@ -2,6 +2,8 @@
 
 Archifiltre allows you to visualize and improve your file trees. Learn more about it [here](https://archifiltre.fabrique.social.gouv.fr/).
 
+![Presentation](docs/presentation.png)
+
 ### Launch the app
 
 First install the dependencies
@@ -70,6 +72,7 @@ Once built, production binaries are found in the dist folder, each in their corr
 
 To contribute, see more [here](https://github.com/SocialGouv/archifiltre/blob/master/CONTRIBUTING.md)
 
+To know more about the project architecture, go [here](https://github.com/SocialGouv/archifiltre/blob/master/docs/README.md)
 
 ## Import script
 

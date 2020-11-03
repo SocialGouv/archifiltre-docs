@@ -46,6 +46,16 @@ const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
   onDoubleClick,
   onMouseOver,
 }) => {
+  if (!dims || !dims.dx) {
+    return null;
+  }
+
+  const width = dims.dx - 2;
+
+  if (width <= 0) {
+    return null;
+  }
+
   const getDims = useCallback(() => dims, [dims]);
   const callbackParameter = useMemo(
     () => ({
@@ -76,11 +86,6 @@ const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
     ...(hasTag ? [EnrichmentTypes.TAG] : []),
   ];
   const heightDivider = Math.max(enrichments.length * 2, 3);
-  const width = dims.dx - 2;
-
-  if (width <= 0) {
-    return null;
-  }
 
   return (
     <>

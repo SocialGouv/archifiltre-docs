@@ -95,8 +95,6 @@ Build-branch-bins:
     - yarn prepare-prod
     - yarn win32
     - yarn win64
-    - yarn win32-msi
-    - yarn win64-msi
     - yarn linux
     - export ARCHIFILTRE_VERSION="$(node -e 'console.log(require("./package.json").version)')"
     - git remote add upstream https://github.com/${CI_PROJECT_PATH}
@@ -110,9 +108,7 @@ Build-branch-bins:
   artifacts:
     paths:
       - dist/win-ia32/archifiltre-*.exe
-      - dist/win-ia32/archifiltre-*.msi
       - dist/win-x64/archifiltre-*.exe
-      - dist/win-x64/archifiltre-*.msi
       - dist/linux-x64/archifiltre-*.AppImage
     expire_in: 1 week
   cache:

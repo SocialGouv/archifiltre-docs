@@ -81,17 +81,8 @@ jobs:
 
     strategy:
       matrix:
-        exclude:
-          - isMaster: true
-            script: win32
-          - isMaster: true
-            script: win32-msi
-          - isMaster: true
-            script: mac
-          - isMaster: true
-            script: linux
         isMaster:
-          - ${{ contains(github.ref, 'douglasduteil/ci-github-switch-to-github-ci') }}
+          - ${{ github.ref == 'refs/heads/douglasduteil/ci-github-switch-to-github-ci' }}
         config:
           - name: Windows 64-bits
             os: windows-latest

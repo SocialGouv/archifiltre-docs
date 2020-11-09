@@ -107,7 +107,7 @@ jobs:
             os: ubuntu-latest
             script: linux
 
-    name: Build binary for ${{ matrix.config.name }}
+    # name: Build binary for ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
 
     env:

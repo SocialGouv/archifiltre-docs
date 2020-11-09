@@ -71,7 +71,11 @@ jobs:
           path: electron/dist/
 
   Build:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' &&
+      (
+      github.ref == 'refs/heads/douglasduteil/ci-github-switch-to-github-ci' && startsWith(matrix.config.script, 'win64') ||
+      startsWith(github.ref, 'refs/tags/')
+      )
     needs:
       - Quality
 

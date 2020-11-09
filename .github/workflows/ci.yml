@@ -82,7 +82,7 @@ jobs:
     strategy:
       matrix:
         exclude:
-          - isMaster: true
+          - isMaster: false
             script: win32
         isMaster:
           - ${{ github.ref == 'refs/heads/douglasduteil/ci-github-switch-to-github-ci' }}

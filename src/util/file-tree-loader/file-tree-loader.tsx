@@ -3,7 +3,6 @@ import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-type
 import { Observable } from "rxjs";
 import { cancelableBackgroundWorkerProcess$ } from "util/batch-process/batch-process-util";
 import LoadFromFileSystemWorker from "./load-from-filesystem.fork";
-import { createAsyncWorkerControllerClass } from "../async-worker/async-worker-util";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 
@@ -28,13 +27,8 @@ type LoadFileTreeParams = {
 export const loadFileTree = (
   droppedElementPath: string,
   params: LoadFileTreeParams
-): LoadFileTreeResponse => {
-  const asyncWorker = createAsyncWorkerControllerClass(
+): LoadFileTreeResponse =>
+  cancelableBackgroundWorkerProcess$(
+    { path: droppedElementPath, ...params },
     LoadFromFileSystemWorker
   );
-
-  return cancelableBackgroundWorkerProcess$(
-    { path: droppedElementPath, ...params },
-    asyncWorker
-  );
-};

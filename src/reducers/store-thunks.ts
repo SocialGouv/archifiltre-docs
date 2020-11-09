@@ -84,6 +84,7 @@ import { ErrorMessage } from "util/batch-process/batch-process-util-types";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
+import workerManager from "util/worker-manager/worker-manager";
 
 /**
  * Notifies the user that there is a Zip in the loaded files
@@ -421,4 +422,5 @@ export const resetStoreThunk = (): ArchifiltreThunkAction => (dispatch) => {
   dispatch(resetZoom());
   dispatch(resetErroredElements());
   dispatch(commitAction());
+  workerManager.clear();
 };

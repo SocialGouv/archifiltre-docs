@@ -9,7 +9,6 @@ import {
   FilesAndFoldersMap,
 } from "reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "reducers/tags/tags-types";
-import { createAsyncWorkerControllerClass } from "util/async-worker/async-worker-util";
 import {
   backgroundWorkerProcess$,
   filterResults,
@@ -53,9 +52,6 @@ export const generateResipExport$ = ({
     title: ActionTitle.RESIP_EXPORT,
     type: ActionType.TRACK_EVENT,
   });
-  const ResipExportAsyncWorker = createAsyncWorkerControllerClass(
-    ResipExportFork
-  );
   const { language } = translations;
 
   return backgroundWorkerProcess$(
@@ -68,7 +64,7 @@ export const generateResipExport$ = ({
       language,
       tags,
     },
-    ResipExportAsyncWorker
+    ResipExportFork
   )
     .pipe(filterResults())
     .pipe(map(({ result }) => result));

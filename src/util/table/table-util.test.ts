@@ -1,7 +1,9 @@
 import {
   accessorToFunction,
   applyAccessorToTableValue,
+  limitPageIndex,
   getComparator,
+  maxPage,
   stableSort,
   tableContentToArray,
 } from "util/table/table-util";
@@ -106,6 +108,30 @@ describe("table-util", () => {
         ["first-name", "accessor(first-value)"],
         ["second-name", "accessor(second-value)"],
       ]);
+    });
+  });
+
+  describe("maxPage", () => {
+    it("should handle 0 elements", () => {
+      expect(maxPage(10, 0)).toBe(0);
+    });
+
+    it("should handle full pages", () => {
+      expect(maxPage(10, 20)).toBe(1);
+    });
+
+    it("should handle one element pages", () => {
+      expect(maxPage(10, 11)).toBe(1);
+    });
+  });
+
+  describe("limitPageIndex", () => {
+    it("should handle page overflow", () => {
+      expect(limitPageIndex(10, 20, 3)).toBe(1);
+    });
+
+    it("should not touch well indexed pages", () => {
+      expect(limitPageIndex(10, 30, 1)).toBe(1);
     });
   });
 });

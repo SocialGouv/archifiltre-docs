@@ -1,9 +1,10 @@
-import withTheme from "@material-ui/core/styles/withTheme";
 import React, { FC } from "react";
 import styled from "styled-components";
 import { LoadingInfo } from "reducers/loading-info/loading-info-types";
 import { percent } from "util/numbers/numbers-util";
-import { ThemedProps } from "../../theme/default-theme";
+import { LinearProgress } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
 
 const getColor = ({ color }) => color;
 
@@ -13,29 +14,13 @@ const LoadingBarContainer = styled.div`
   padding-bottom: 10px;
 `;
 
-const LoadingBar = withTheme(styled.div<ThemedProps>`
-  width: 285px;
-  height: 6px;
-  border: ${({ theme }) => `0.5px solid ${theme.palette.secondary.main}`};
-  border-radius: 3px;
-`);
-
-type InnerLoadingBarProps = {
-  loadingPercent: number;
-  color: string;
-};
-
-const InnerLoadingBar = styled.div<InnerLoadingBarProps>`
-  height: 6px;
-  background-color: ${getColor};
-  border-radius: 3px;
-  ${({ loadingPercent }) => `width: ${loadingPercent}%`}
-`;
-
 const LoadingBarName = styled.h3`
-  text-align: right;
   font-size: 10px;
   line-height: 13px;
+`;
+
+const RoundedLinearProgress = styled(LinearProgress)`
+  border-radius: 5px;
 `;
 
 type LoadingInfoProps = {
@@ -49,15 +34,20 @@ const LoadingInfoDisplay: FC<LoadingInfoProps> = ({
 }) => (
   <LoadingBarContainer color={color}>
     <LoadingBarName>{loadingInfo.label}</LoadingBarName>
-    <LoadingBarName>
-      {percent(loadingInfo.progress, loadingInfo.goal)} %
-    </LoadingBarName>
-    <LoadingBar>
-      <InnerLoadingBar
-        color={color}
-        loadingPercent={(loadingInfo.progress / loadingInfo.goal) * 100}
-      />
-    </LoadingBar>
+    <Box display="flex" alignItems="center">
+      <Box width="100%" mr={1}>
+        <RoundedLinearProgress
+          color="secondary"
+          variant="determinate"
+          value={(loadingInfo.progress / loadingInfo.goal) * 100}
+        />
+      </Box>
+      <Box minWidth={35}>
+        <Typography variant="body2">
+          {percent(loadingInfo.progress, loadingInfo.goal)} %
+        </Typography>
+      </Box>
+    </Box>
   </LoadingBarContainer>
 );
 

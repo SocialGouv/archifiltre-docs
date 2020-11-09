@@ -22,7 +22,7 @@ describe("Export to RESIP", () => {
   }, 10000);
 
   afterEach(async () => {
-    await rmfr("test-folder/*-RESIP_*.csv", { glob: true });
+    await rmfr("tests/test-folder/*-RESIP_*.csv", { glob: true });
     if (app && app.isRunning()) {
       return app.stop();
     }
@@ -41,7 +41,7 @@ describe("Export to RESIP", () => {
 
         await waitForAppReady(app);
 
-        await clickIcicleElement(app, "/test-folder/child/index.csv");
+        await clickIcicleElement(app, "/tests/test-folder/child/index.csv");
 
         await addTags(app, [tag0Name, tag1Name]);
         await addDescription(app, description);
@@ -52,7 +52,7 @@ describe("Export to RESIP", () => {
         await waitForSuccessNotification(app, RESIP_EXPORT_SUCCESS_MESSAGE);
 
         // Finding the RESIP export file
-        const exportFolderPath = path.join(__dirname, "../test-folder");
+        const exportFolderPath = path.join(__dirname, "../tests/test-folder");
         const exportFolder = fs.readdirSync(exportFolderPath);
 
         const resipExportFilePath = exportFolder.find((folderName) =>

@@ -85,6 +85,15 @@ jobs:
           - isMaster: true
             config:
               script: linux
+          - isMaster: true
+            config:
+              script: mac
+          - isMaster: true
+            config:
+              script: win32
+          - isMaster: true
+            config:
+              script: win32-msi
         isMaster:
           - ${{ github.ref == 'refs/heads/douglasduteil/ci-github-switch-to-github-ci' }}
         config:

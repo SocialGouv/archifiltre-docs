@@ -83,10 +83,6 @@ jobs:
       matrix:
         exclude:
           - isMaster: true
-            config:
-              - name: Linux
-                os: ubuntu-latest
-                script: linux
         isMaster:
           - ${{ github.ref == 'refs/heads/douglasduteil/ci-github-switch-to-github-ci' }}
         config:

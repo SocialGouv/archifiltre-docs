@@ -84,9 +84,7 @@ jobs:
         exclude:
           - isMaster: false
             config:
-              - name: Windows 64-bits
-                os: windows-latest
-                script: win64
+              - script: win64
         isMaster:
           - ${{ github.ref == 'refs/heads/douglasduteil/ci-github-switch-to-github-ci' }}
         config:

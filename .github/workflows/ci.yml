@@ -83,7 +83,10 @@ jobs:
       matrix:
         exclude:
           - isMaster: false
-            script: win32
+            config:
+              - name: Windows 64-bits
+                os: windows-latest
+                script: win32
         isMaster:
           - ${{ github.ref == 'refs/heads/douglasduteil/ci-github-switch-to-github-ci' }}
         config:

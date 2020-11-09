@@ -73,7 +73,7 @@ jobs:
   Build:
     if: github.event_name == 'push' &&
       (
-      github.ref == 'refs/heads/douglasduteil/ci-github-switch-to-github-ci' ||
+      github.ref == 'refs/heads/master' ||
       startsWith(github.ref, 'refs/tags/')
       )
     needs:
@@ -95,7 +95,7 @@ jobs:
             config:
               script: win32-msi
         isMaster:
-          - ${{ github.ref == 'refs/heads/douglasduteil/ci-github-switch-to-github-ci' }}
+          - ${{ github.ref == 'refs/heads/master' }}
         config:
           - name: Windows 64-bits
             os: windows-latest
@@ -116,7 +116,7 @@ jobs:
             os: ubuntu-latest
             script: linux
 
-    # name: Build binary for ${{ matrix.config.name }}
+    name: Build binary for ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
 
     env:

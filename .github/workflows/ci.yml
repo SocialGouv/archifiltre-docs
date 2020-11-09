@@ -61,7 +61,7 @@ jobs:
         run: webpack --mode production --config webpack.electron-main.js
 
       - name: Build renderer
-        run: webpack webpack --mode production
+        run: webpack --mode production
 
       - name: Archive dist
         if: github.event_name == 'push'

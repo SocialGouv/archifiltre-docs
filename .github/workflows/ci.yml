@@ -98,6 +98,9 @@ jobs:
           - isMaster: true
             config:
               script: win32-msi
+          - isMaster: true
+            config:
+              script: win64-msi
         isMaster:
           - ${{ github.ref == 'refs/heads/master' }}
         config:
@@ -138,7 +141,7 @@ jobs:
         shell: bash
         run: |
           echo "::set-output name=yarn_cache::$(yarn cache dir)"
-          echo "::set-output name=version::$(node -e 'console.log(require("./package.json").version)')"
+          echo "::set-output name=version::$(node -e 'console.log(require(\"./package.json\").version)')"
           #
           echo "Node $(node --version)"
           echo "Yarn $(yarn --version)"

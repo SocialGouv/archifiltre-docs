@@ -1,3 +1,10 @@
+# [3.2.0-beta.3](https://github.com/SocialGouv/archifiltre/compare/v3.2.0-beta.2...v3.2.0-beta.3) (2020-11-12)
+
+
+### Bug Fixes
+
+* **github:** ensure to be allow to push multiple assets ([0b9cc73](https://github.com/SocialGouv/archifiltre/commit/0b9cc73080d9f01f8ca904029299100d205d6dfc))
+
 # [3.2.0-beta.2](https://github.com/SocialGouv/archifiltre/compare/v3.2.0-beta.1...v3.2.0-beta.2) (2020-11-12)
 
 

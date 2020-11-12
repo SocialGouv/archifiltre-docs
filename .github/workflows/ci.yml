@@ -223,13 +223,18 @@ jobs:
       # actions/download-artifact will create subdirectory per artifact
       - name: Build
         run: |
-          mkdir -p dist/
-          mv linux-bin/*/archifiltre-*.AppImage dist/
-          mv mac-bin/*/archifiltre-*.dmg dist/
-          mv win32-bin/*/archifiltre-*.exe dist/archifiltre-${{ needs.Quality.outputs.next_version }}-32bit.exe
-          mv win32-msi-bin/*/archifiltre-*.msi dist/archifiltre-${{ needs.Quality.outputs.next_version }}-32bit.msi
-          mv win64-bin/*/archifiltre-*.exe dist/
-          mv win64-msi-bin/*/archifiltre-*.msi dist/
+          mkdir -p dist/linux
+          mv linux-bin/*/archifiltre-*.AppImage dist/linux/
+          mkdir -p dist/mac
+          mv mac-bin/*/archifiltre-*.dmg dist/mac/
+          mkdir -p dist/win32
+          mv win32-bin/*/archifiltre-*.exe dist/win32/archifiltre-${{ needs.Quality.outputs.next_version }}-32bit.exe
+          mkdir -p dist/win32-msi
+          mv win32-msi-bin/*/archifiltre-*.msi dist/win32-msi/archifiltre-${{ needs.Quality.outputs.next_version }}-32bit.msi
+          mkdir -p dist/win64
+          mv win64-bin/*/archifiltre-*.exe dist/win64/
+          mkdir -p dist/win64-msi
+          mv win64-msi-bin/*/archifiltre-*.msi dist/win64-msi/
 
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2

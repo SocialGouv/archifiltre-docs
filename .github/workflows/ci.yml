@@ -6,7 +6,6 @@ on:
 
 jobs:
   Quality:
-    if:  ${{ github.event_name != 'workflow_dispatch' }}
     strategy:
       # Don't fast-fail on tag and master
       fail-fast: ${{ github.event_name == 'pull_request' || (github.ref !=
@@ -36,15 +35,15 @@ jobs:
         id: yarn_cache_packages
         uses: actions/cache@v2
         with:
-         path: ${{ steps.init.outputs.yarn_cache }}
-         key: ${{ runner.os }}-yarn_cache-${{ hashFiles('**/yarn.lock') }}
-         restore-keys: |
-           ${{ runner.os }}-yarn_cache-
+          path: ${{ steps.init.outputs.yarn_cache }}
+          key: ${{ runner.os }}-yarn_cache-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn_cache-
 
       - name: Installing
         run: |
-         sed -i "s/postinstall/disabled-postinstall/g" package.json
-         yarn --frozen-lockfile --perfer-offline
+          sed -i "s/postinstall/disabled-postinstall/g" package.json
+          yarn --frozen-lockfile --perfer-offline
 
       - name: Lint
         run: yarn lint
@@ -58,6 +57,12 @@ jobs:
 
       - name: Set .env to production
         run: cp .env.prod .env
+
+      - name: Build next version
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          npx semantic-release --plugins @semantic-release/commit-analyzer @semantic-release/npm
+          node -e 'console.log(require(\"./package.json\").version)'
 
       - name: Build electron
         run: webpack --mode production --config webpack.electron-main.js
@@ -182,10 +187,16 @@ jobs:
           path: dist/*/archifiltre-*
 
   Release:
-    if:  ${{ github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    needs:
+      - Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Download all dist form build jobs
+        uses: actions/download-artifact@v2
+
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2
         with:

@@ -8,4 +8,6 @@ plugins:
         - CHANGELOG.md
         - package.json
       message: "chore(release): version ${nextRelease.version}\n\n${nextRelease.notes}"
-  - "@semantic-release/github"
+  - - "@semantic-release/github"
+    - assets:
+        - path: dist/*/archifiltre-*

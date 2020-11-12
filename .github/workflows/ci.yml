@@ -200,7 +200,7 @@ jobs:
         run: |
           mkdir -p dist/${{ matrix.config.script }}
           echo "Fake ${{ steps.init.outputs.version }}"
-          touch dist/${{ matrix.config.script }}/archifiltre-${{ steps.init.outputs.version }}
+          echo "${{ steps.init.outputs.version }}" > dist/${{ matrix.config.script }}/archifiltre-${{ steps.init.outputs.version }}
 
       - name: Archive dist
         uses: actions/upload-artifact@v2

@@ -76,7 +76,6 @@ jobs:
         run: |
           # HACK(douglasduteil): Remove the tag made by this command...
           # I do not know how to stop semantic-release from pushing this tag :(
-          node -e 'console.log(require("./package.json").version
           version=$(node -e 'console.log(require("./package.json").version)')
           echo "Removing v${version}"
           git push origin :v${version}

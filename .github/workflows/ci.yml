@@ -55,9 +55,6 @@ jobs:
         continue-on-error: true
         uses: codecov/codecov-action@v1
 
-      - name: Set .env to production
-        run: cp .env.prod .env
-
       - name: Build next version
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
@@ -68,6 +65,15 @@ jobs:
           version=$(node -e 'console.log(require("./package.json").version)')
           echo "[haked-semantic-release] › Removing tag v${version}"
           git push origin :v${version}
+
+      - name: Set .env to production
+        run: cp .env.prod .env
+
+      - name: Build electron
+        run: webpack --mode production --config webpack.electron-main.js
+
+      - name: Build renderer
+        run: webpack --mode production
 
       - name: Archive dist
         uses: actions/upload-artifact@v2

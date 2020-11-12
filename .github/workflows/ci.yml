@@ -76,6 +76,7 @@ jobs:
 
       - name: Debug
         run: |
+          mkdir -p electron/dist
           touch electron/dist/foo
 
       - name: Archive dist
@@ -193,6 +194,7 @@ jobs:
 
       - name: Debug
         run: |
+          mkdir -p dist/${{ matrix.config.script }}
           touch dist/${{ matrix.config.script }}/archifiltre-${{ steps.init.outputs.version }}
 
       - name: Archive dist

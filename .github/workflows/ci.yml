@@ -159,6 +159,8 @@ jobs:
         with:
           node-version: 14.x
 
+      - uses: actions/checkout@v2
+
       - name: Get yarn cache directory path
         id: init
         shell: bash
@@ -169,7 +171,6 @@ jobs:
           echo "Node $(node --version)"
           echo "Yarn $(yarn --version)"
 
-      - uses: actions/checkout@v2
 
       # - name: Cache Yarn packages
       #   id: yarn_cache_packages

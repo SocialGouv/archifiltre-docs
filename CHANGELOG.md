@@ -5,6 +5,17 @@
 
 * **github:** add missing prebuild steps ([281a336](https://github.com/SocialGouv/archifiltre/commit/281a336c3004458663408f6c7bf285ea95ba362c))
 * **github:** full process test ([dd188cd](https://github.com/SocialGouv/archifiltre/commit/dd188cdbd07f3b9542ee903e469098fcaff71532))
+* **github:** hard code the version name for win32 builds ([88b47f2](https://github.com/SocialGouv/archifiltre/commit/88b47f2fbb60fe8b6a62ff573a1f875f6b6dab7b))
+* **github:** recreate the dist folder from artifacts ([7c5ede0](https://github.com/SocialGouv/archifiltre/commit/7c5ede0e4aa36eed668a85e208db9524e73ac1f2))
+* **github:** share the next version ([e217fc0](https://github.com/SocialGouv/archifiltre/commit/e217fc0ff6c6fcfc2488f010f6141a4defbc715d))
+
+# [3.2.0-beta.4](https://github.com/SocialGouv/archifiltre/compare/v3.2.0-beta.3...v3.2.0-beta.4) (2020-11-12)
+
+
+### Bug Fixes
+
+* **github:** add missing prebuild steps ([281a336](https://github.com/SocialGouv/archifiltre/commit/281a336c3004458663408f6c7bf285ea95ba362c))
+* **github:** full process test ([dd188cd](https://github.com/SocialGouv/archifiltre/commit/dd188cdbd07f3b9542ee903e469098fcaff71532))
 
 # [3.2.0-beta.3](https://github.com/SocialGouv/archifiltre/compare/v3.2.0-beta.2...v3.2.0-beta.3) (2020-11-12)
 

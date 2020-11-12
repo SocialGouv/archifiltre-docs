@@ -6,6 +6,7 @@ on:
 
 jobs:
   Quality:
+    if:  ${{ github.event_name != 'workflow_dispatch' }}
     strategy:
       # Don't fast-fail on tag and master
       fail-fast: ${{ github.event_name == 'pull_request' || (github.ref !=
@@ -182,8 +183,6 @@ jobs:
 
   Release:
     if:  ${{ github.event_name == 'workflow_dispatch' }}
-    needs:
-      - Quality
     runs-on: ubuntu-latest
     steps:
       - name: Semantic Release

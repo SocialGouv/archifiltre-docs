@@ -10,4 +10,4 @@ plugins:
       message: "chore(release): version ${nextRelease.version}\n\n${nextRelease.notes}"
   - - "@semantic-release/github"
     - assets:
-        - path: "*-bin/*/archifiltre-*"
+        - path: dist/*/archifiltre-*

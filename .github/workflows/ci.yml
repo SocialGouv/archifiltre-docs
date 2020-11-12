@@ -218,6 +218,18 @@ jobs:
       - name: Download all dist form build jobs
         uses: actions/download-artifact@v2
 
+      # HACK(douglasduteil): move wanted artifacts to dist folder
+      # actions/download-artifact will create subdirectory per artifact
+      - name: Build
+        run: |
+          mkdir -p dist/
+          mv linux-bin/*/archifiltre-3.1.1.AppImage dist/
+          mv mac-bin/*/archifiltre-3.1.1.dmg dist/
+          mv win-ia32-bin/*/archifiltre-3.1.1-32bit.msi dist/
+          mv win32-msi-bin/*/ archifiltre-3.1.1-32bit.exe dist/
+          mv win64-bin/*/archifiltre-3.1.1.exe dist/
+          mv win64-msi-bin/*/archifiltre-3.1.1.msi dist/
+
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2
         with:

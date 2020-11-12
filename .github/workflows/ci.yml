@@ -62,7 +62,7 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
           npx semantic-release --plugins @semantic-release/commit-analyzer @semantic-release/npm
-          node -e 'console.log(require(\"./package.json\").version)'
+          node -e 'console.log(require("./package.json").version)'
 
       - name: Build electron
         run: webpack --mode production --config webpack.electron-main.js

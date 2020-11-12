@@ -1,3 +1,11 @@
+# [3.2.0-beta.4](https://github.com/SocialGouv/archifiltre/compare/v3.2.0-beta.3...v3.2.0-beta.4) (2020-11-12)
+
+
+### Bug Fixes
+
+* **github:** add missing prebuild steps ([281a336](https://github.com/SocialGouv/archifiltre/commit/281a336c3004458663408f6c7bf285ea95ba362c))
+* **github:** full process test ([dd188cd](https://github.com/SocialGouv/archifiltre/commit/dd188cdbd07f3b9542ee903e469098fcaff71532))
+
 # [3.2.0-beta.3](https://github.com/SocialGouv/archifiltre/compare/v3.2.0-beta.2...v3.2.0-beta.3) (2020-11-12)
 
 

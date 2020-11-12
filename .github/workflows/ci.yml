@@ -73,6 +73,7 @@ jobs:
       #   run: webpack --mode production
 
       - name: Debug
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
           # HACK(douglasduteil): Remove the tag made by this command...
           # I do not know how to stop semantic-release from pushing this tag :(

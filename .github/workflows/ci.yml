@@ -63,12 +63,10 @@ jobs:
         run: |
           npx semantic-release --plugins @semantic-release/commit-analyzer @semantic-release/npm
           
-          version=$(node -e 'console.log(require("./package.json").version)')
-
           # HACK(douglasduteil): Remove the tag made by this command...
           # I do not know how to stop semantic-release from pushing this tag :(
           version=$(node -e 'console.log(require("./package.json").version)')
-          echo "...Removing v${version}..."
+          echo "[haked-semantic-release] › Removing tag v${version}"
           git push origin :v${version}
           mkdir -p electron/dist
           touch electron/dist/foo
@@ -129,9 +127,9 @@ jobs:
           # - name: MSI Windows 32-bits
           #   os: windows-latest
           #   script: win32-msi
-          # - name: MacOS
-          #   os: macOS-latest
-          #   script: mac
+          - name: MacOS
+            os: macOS-latest
+            script: mac
           - name: Linux
             os: ubuntu-latest
             script: linux
@@ -191,7 +189,7 @@ jobs:
         run: |
           mkdir -p dist/${{ matrix.config.script }}
           echo "Fake ${{ steps.init.outputs.version }}"
-          echo "${{ steps.init.outputs.version }}" > dist/${{ matrix.config.script }}/archifiltre-${{ steps.init.outputs.version }}
+          echo "${{ steps.init.outputs.version }}" > dist/${{ matrix.config.script }}/archifiltre-${{ matrix.config.script }}-${{ steps.init.outputs.version }}
 
       - name: Archive dist
         uses: actions/upload-artifact@v2

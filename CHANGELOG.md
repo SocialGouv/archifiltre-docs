@@ -1,3 +1,10 @@
+# [3.2.0-beta.5](https://github.com/SocialGouv/archifiltre/compare/v3.2.0-beta.4...v3.2.0-beta.5) (2020-11-12)
+
+
+### Bug Fixes
+
+* **github:** hard code the version name for win32 builds (2) ([2bb9e11](https://github.com/SocialGouv/archifiltre/commit/2bb9e11f56694ea84ac9051b6d5100cb2852c22d))
+
 # [3.2.0-beta.4](https://github.com/SocialGouv/archifiltre/compare/v3.2.0-beta.3...v3.2.0-beta.4) (2020-11-12)
 
 

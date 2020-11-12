@@ -65,7 +65,7 @@ jobs:
           version=$(node -e 'console.log(require("./package.json").version)')
           # HACK(douglasduteil): Remove the tag made by this command...
           # I do not know how to stop semantic-release from pushing this tag :(
-          git tag -D ${version}
+          git push origin :${version}
           echo "Building ${version}"
 
       # - name: Build electron

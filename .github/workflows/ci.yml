@@ -163,7 +163,7 @@ jobs:
         shell: bash
         run: |
           echo "::set-output name=yarn_cache::$(yarn cache dir)"
-          echo "::set-output name=version::$(node -e 'console.log(require(\"./package.json\").version)')"
+          echo "::set-output name=version::$(node -e 'console.log(require("./package.json").version)')"
           #
           echo "Node $(node --version)"
           echo "Yarn $(yarn --version)"

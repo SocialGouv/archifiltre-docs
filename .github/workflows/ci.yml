@@ -31,32 +31,32 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      # - name: Cache Yarn packages
-      #   id: yarn_cache_packages
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: ${{ steps.init.outputs.yarn_cache }}
-      #     key: ${{ runner.os }}-yarn_cache-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-yarn_cache-
+      - name: Cache Yarn packages
+        id: yarn_cache_packages
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.init.outputs.yarn_cache }}
+          key: ${{ runner.os }}-yarn_cache-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn_cache-
 
-      # - name: Installing
-      #   run: |
-      #     sed -i "s/postinstall/disabled-postinstall/g" package.json
-      #     yarn --frozen-lockfile --perfer-offline
+      - name: Installing
+        run: |
+          sed -i "s/postinstall/disabled-postinstall/g" package.json
+          yarn --frozen-lockfile --perfer-offline
 
-      # - name: Lint
-      #   run: yarn lint
+      - name: Lint
+        run: yarn lint
 
-      # - name: Unit tests
-      #   run: yarn test-coverage
+      - name: Unit tests
+        run: yarn test-coverage
 
-      # - name: Send test coverage to codecov
-      #   continue-on-error: true
-      #   uses: codecov/codecov-action@v1
+      - name: Send test coverage to codecov
+        continue-on-error: true
+        uses: codecov/codecov-action@v1
 
-      # - name: Set .env to production
-      #   run: cp .env.prod .env
+      - name: Set .env to production
+        run: cp .env.prod .env
 
       - name: Build next version
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -68,8 +68,6 @@ jobs:
           version=$(node -e 'console.log(require("./package.json").version)')
           echo "[haked-semantic-release] › Removing tag v${version}"
           git push origin :v${version}
-          mkdir -p electron/dist
-          touch electron/dist/foo
 
       - name: Archive dist
         uses: actions/upload-artifact@v2
@@ -115,18 +113,18 @@ jobs:
         isMaster:
           - ${{ github.ref == 'refs/heads/master' }}
         config:
-          # - name: Windows 64-bits
-          #   os: windows-latest
-          #   script: win64
-          # - name: Windows 32-bits
-          #   os: windows-latest
-          #   script: win32
-          # - name: MSI Windows 64-bits
-          #   os: windows-latest
-          #   script: win64-msi
-          # - name: MSI Windows 32-bits
-          #   os: windows-latest
-          #   script: win32-msi
+          - name: Windows 64-bits
+            os: windows-latest
+            script: win64
+          - name: Windows 32-bits
+            os: windows-latest
+            script: win32
+          - name: MSI Windows 64-bits
+            os: windows-latest
+            script: win64-msi
+          - name: MSI Windows 32-bits
+            os: windows-latest
+            script: win32-msi
           - name: MacOS
             os: macOS-latest
             script: mac
@@ -160,21 +158,21 @@ jobs:
           echo "Yarn $(yarn --version)"
 
 
-      # - name: Cache Yarn packages
-      #   id: yarn_cache_packages
-      #   uses: actions/cache@v1
-      #   with:
-      #     path: |
-      #       ${{ steps.init.outputs.yarn_cache }}
-      #     key: ${{ runner.os }}-yarn_cache-${{ hashFiles('yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-yarn_cache-
+      - name: Cache Yarn packages
+        id: yarn_cache_packages
+        uses: actions/cache@v1
+        with:
+          path: |
+            ${{ steps.init.outputs.yarn_cache }}
+          key: ${{ runner.os }}-yarn_cache-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn_cache-
 
-      # - name: Installing
-      #   run: yarn --frozen-lockfile --perfer-offline
-      #   env:
-      #     ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
-      #     ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
+      - name: Installing
+        run: yarn --frozen-lockfile --perfer-offline
+        env:
+          ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
+          ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
 
       - name: Download dist form build job
         uses: actions/download-artifact@v2
@@ -182,14 +180,8 @@ jobs:
           name: electron-dist
           path: electron/dist/
 
-      # - name: Build
-      #   run: yarn ${{ matrix.config.script }}
-
-      - name: Debug
-        run: |
-          mkdir -p dist/${{ matrix.config.script }}
-          echo "Fake ${{ steps.init.outputs.version }}"
-          echo "${{ steps.init.outputs.version }}" > dist/${{ matrix.config.script }}/archifiltre-${{ matrix.config.script }}-${{ steps.init.outputs.version }}
+      - name: Build
+        run: yarn ${{ matrix.config.script }}
 
       - name: Archive dist
         uses: actions/upload-artifact@v2

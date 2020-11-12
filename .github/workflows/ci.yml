@@ -118,21 +118,21 @@ jobs:
         isMaster:
           - ${{ github.ref == 'refs/heads/master' }}
         config:
-          - name: Windows 64-bits
-            os: windows-latest
-            script: win64
-          - name: Windows 32-bits
-            os: windows-latest
-            script: win32
-          - name: MSI Windows 64-bits
-            os: windows-latest
-            script: win64-msi
-          - name: MSI Windows 32-bits
-            os: windows-latest
-            script: win32-msi
-          - name: MacOS
-            os: macOS-latest
-            script: mac
+          # - name: Windows 64-bits
+          #   os: windows-latest
+          #   script: win64
+          # - name: Windows 32-bits
+          #   os: windows-latest
+          #   script: win32
+          # - name: MSI Windows 64-bits
+          #   os: windows-latest
+          #   script: win64-msi
+          # - name: MSI Windows 32-bits
+          #   os: windows-latest
+          #   script: win32-msi
+          # - name: MacOS
+          #   os: macOS-latest
+          #   script: mac
           - name: Linux
             os: ubuntu-latest
             script: linux

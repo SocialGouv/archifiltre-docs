@@ -62,7 +62,8 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
           npx semantic-release --plugins @semantic-release/commit-analyzer @semantic-release/npm
-          node -e 'console.log(require("./package.json").version)'
+          verision=$(node -e 'console.log(require("./package.json").version)')
+          echo "Building ${version}"
 
       - name: Build electron
         run: webpack --mode production --config webpack.electron-main.js
@@ -79,7 +80,10 @@ jobs:
   Build:
     # We build on any distribution channel
     # see https://github.com/semantic-release/semantic-release/blob/master/docs/usage/configuration.md#branches
-    if: github.event_name == 'push' &&
+    if: |
+      (
+        github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+      ) &&
       (
         contains(
           'refs/heads/master,refs/heads/beta,refs/heads/next,refs/heads/alpha',

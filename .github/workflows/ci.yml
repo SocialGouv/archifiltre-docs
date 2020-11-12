@@ -45,18 +45,18 @@ jobs:
           sed -i "s/postinstall/disabled-postinstall/g" package.json
           yarn --frozen-lockfile --perfer-offline
 
-      - name: Lint
-        run: yarn lint
+      # - name: Lint
+      #   run: yarn lint
 
-      - name: Unit tests
-        run: yarn test-coverage
+      # - name: Unit tests
+      #   run: yarn test-coverage
 
-      - name: Send test coverage to codecov
-        continue-on-error: true
-        uses: codecov/codecov-action@v1
+      # - name: Send test coverage to codecov
+      #   continue-on-error: true
+      #   uses: codecov/codecov-action@v1
 
-      - name: Set .env to production
-        run: cp .env.prod .env
+      # - name: Set .env to production
+      #   run: cp .env.prod .env
 
       - name: Build next version
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -65,14 +65,18 @@ jobs:
           version=$(node -e 'console.log(require("./package.json").version)')
           # HACK(douglasduteil): Remove the tag made by this command...
           # I do not know how to stop semantic-release from pushing this tag :(
-          git tad -D ${version}
+          git tag -D ${version}
           echo "Building ${version}"
 
-      - name: Build electron
-        run: webpack --mode production --config webpack.electron-main.js
+      # - name: Build electron
+      #   run: webpack --mode production --config webpack.electron-main.js
 
-      - name: Build renderer
-        run: webpack --mode production
+      # - name: Build renderer
+      #   run: webpack --mode production
+
+      - name: Debug
+        run: |
+          touch electron/dist/foo
 
       - name: Archive dist
         uses: actions/upload-artifact@v2
@@ -184,8 +188,12 @@ jobs:
           name: electron-dist
           path: electron/dist/
 
-      - name: Build
-        run: yarn ${{ matrix.config.script }}
+      # - name: Build
+      #   run: yarn ${{ matrix.config.script }}
+
+      - name: Debug
+        run: |
+          touch dist/${{ matrix.config.script }}/archifiltre-${{ steps.init.outputs.version }}
 
       - name: Archive dist
         uses: actions/upload-artifact@v2

@@ -78,6 +78,7 @@ jobs:
           # I do not know how to stop semantic-release from pushing this tag :(
           node -e 'console.log(require("./package.json").version)  
           version=$(node -e 'console.log(require("./package.json").version)')
+          echo "Removing v${version}"
           git push origin :v${version}
           mkdir -p electron/dist
           touch electron/dist/foo
@@ -198,6 +199,7 @@ jobs:
       - name: Debug
         run: |
           mkdir -p dist/${{ matrix.config.script }}
+          echo "Fake ${{ steps.init.outputs.version }}"
           touch dist/${{ matrix.config.script }}/archifiltre-${{ steps.init.outputs.version }}
 
       - name: Archive dist

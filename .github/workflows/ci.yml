@@ -62,7 +62,10 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
           npx semantic-release --plugins @semantic-release/commit-analyzer @semantic-release/npm
-          verision=$(node -e 'console.log(require("./package.json").version)')
+          version=$(node -e 'console.log(require("./package.json").version)')
+          # HACK(douglasduteil): Remove the tag made by this command...
+          # I do not know how to stop semantic-release from pushing this tag :(
+          git tad -D ${version}
           echo "Building ${version}"
 
       - name: Build electron

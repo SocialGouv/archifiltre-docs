@@ -1,3 +1,10 @@
+# [3.2.0-beta.2](https://github.com/SocialGouv/archifiltre/compare/v3.2.0-beta.1...v3.2.0-beta.2) (2020-11-12)
+
+
+### Bug Fixes
+
+* **github:** try building the next release (17) ([ca896a0](https://github.com/SocialGouv/archifiltre/commit/ca896a0e3e24ce68220e3909d1af6a59ac89cae6))
+
 # [3.2.0-beta.1](https://github.com/SocialGouv/archifiltre/compare/v3.1.1...v3.2.0-beta.1) (2020-11-12)
 
 

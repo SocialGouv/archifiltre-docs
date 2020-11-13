@@ -165,7 +165,7 @@ jobs:
         shell: bash
         run: |
           yarn global add replace
-          $(yarn global bin)/replace '"version": ".*"' '"version": "${{ needs.Quality.outputs.next_version }}"' ./package.json
+          $(yarn global bin)/replace '"version": "[^"]+"' '"version": "${{ needs.Quality.outputs.next_version }}"' ./package.json
 
       - name: Get yarn cache directory path
         id: init

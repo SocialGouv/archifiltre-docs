@@ -162,6 +162,7 @@ jobs:
 
       - name: Build next version
         if: ${{ github.event_name == 'workflow_dispatch' }}
+        shell: bash
         run: |
           npx replace '"version": ".*"' '"version": "${{ needs.Quality.outputs.next_version }}"' ./package.json
 

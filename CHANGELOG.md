@@ -1,3 +1,13 @@
+# [3.2.0-beta.6](https://github.com/SocialGouv/archifiltre/compare/v3.2.0-beta.5...v3.2.0-beta.6) (2020-11-13)
+
+
+### Bug Fixes
+
+* **github:** hard code the version name for win32 builds (3) ([a137b6c](https://github.com/SocialGouv/archifiltre/commit/a137b6c493e6fe2f0630e14fd2a403fa175217a2))
+* **github:** hard code the version name for win32 builds (4) ([dc49221](https://github.com/SocialGouv/archifiltre/commit/dc4922166d2bdb947bde98d1765b6203126f34ef))
+* **github:** hard code the version name for win32 builds (5) ([840a73d](https://github.com/SocialGouv/archifiltre/commit/840a73ddc215b5153280f417716665c2c3ada8c4))
+* **github:** windows does not have sed :( ([730f793](https://github.com/SocialGouv/archifiltre/commit/730f7938131d7b6fdefe0916cccefa4f75ee9e99))
+
 # [3.2.0-beta.5](https://github.com/SocialGouv/archifiltre/compare/v3.2.0-beta.4...v3.2.0-beta.5) (2020-11-12)
 
 

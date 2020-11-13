@@ -64,22 +64,13 @@ jobs:
         run: webpack --mode production
 
       - name: Archive dist
-        if: github.event_name == 'push' &&
-          (
-          github.ref == 'refs/heads/master' ||
-          startsWith(github.ref, 'refs/tags/')
-          )
         uses: actions/upload-artifact@v2
         with:
           name: electron-dist
           path: electron/dist/
 
   Build:
-    if: github.event_name == 'push' &&
-      (
-      github.ref == 'refs/heads/master' ||
-      startsWith(github.ref, 'refs/tags/')
-      )
+    if: github.event_name == 'push'
     needs:
       - Quality
 
@@ -102,7 +93,7 @@ jobs:
             config:
               script: win64-msi
         isMaster:
-          - ${{ github.ref == 'refs/heads/master' }}
+          - true
         config:
           - name: Windows 64-bits
             os: windows-latest
@@ -141,12 +132,15 @@ jobs:
         shell: bash
         run: |
           echo "::set-output name=yarn_cache::$(yarn cache dir)"
-          echo "::set-output name=version::$(node -e 'console.log(require(\"./package.json\").version)')"
           #
           echo "Node $(node --version)"
           echo "Yarn $(yarn --version)"
 
       - uses: actions/checkout@v2
+
+      - name: Get archifiltre version
+        id: archifiltre_version
+        run: echo "::set-output name=version::$(node -e 'console.log(require(`./package.json`).version)')"
 
       - name: Cache Yarn packages
         id: yarn_cache_packages
@@ -178,3 +172,13 @@ jobs:
         with:
           name: ${{ matrix.config.script }}-bin
           path: dist/*/archifiltre-*
+
+      - name: Upload artifact to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: https://uploads.github.com/repos/SocialGouv/archifiltre/releases/33907771/assets
+          asset_path: dist/win-x64/archifiltre-${{ steps.archifiltre_version.outputs.version }}.exe
+          asset_name: archifiltre-master.exe
+          asset_content_type: application/x-binary

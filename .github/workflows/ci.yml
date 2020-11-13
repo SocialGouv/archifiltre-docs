@@ -164,7 +164,8 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' }}
         shell: bash
         run: |
-          npx replace '"version": ".*"' '"version": "${{ needs.Quality.outputs.next_version }}"' ./package.json
+          yarn global add replace
+          $(yarn global bin)/replace '"version": ".*"' '"version": "${{ needs.Quality.outputs.next_version }}"' ./package.json
 
       - name: Get yarn cache directory path
         id: init
@@ -175,7 +176,6 @@ jobs:
           #
           echo "Node $(node --version)"
           echo "Yarn $(yarn --version)"
-
 
       - name: Cache Yarn packages
         id: yarn_cache_packages

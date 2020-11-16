@@ -30,7 +30,7 @@ module.exports = (env, argv = {}) => ({
     writeToDisk: (name) =>
       /(\.fork\.[jt]s|main\.bundle\.js|\.node)$/.test(name),
   },
-  devtool: isDev(argv.mode) ? "cheap-module-eval-source-map" : false,
+  devtool: isDev(argv.mode) ? "eval-cheap-module-source-map" : false,
 
   entry: {
     app: "./src/app.tsx",

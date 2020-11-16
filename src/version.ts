@@ -1,4 +1,4 @@
-import { version } from "../package.json";
+import packageJson from "../package.json";
 
 /**
  * Compares two versions with the format MAJOR.MINOR.PATCH
@@ -27,4 +27,4 @@ export const versionComparator = (
 
 export const versionName = "Queer Quetzal";
 
-export default version;
+export default packageJson.version;

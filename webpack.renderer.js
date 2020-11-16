@@ -135,6 +135,7 @@ module.exports = (env, argv = {}) => ({
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "electron/dist"),
     pathinfo: false,
+    publicPath: process.env.ASSET_PATH || "/",
   },
 
   plugins: [

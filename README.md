@@ -10,9 +10,6 @@
 </p>
 
 <br>
-<br>
-<br>
-<br>
 
 Archifiltre allows you to visualize and improve your file trees. Learn more about it [here](https://archifiltre.fabrique.social.gouv.fr/).
 

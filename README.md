@@ -1,4 +1,18 @@
-# Archifiltre
+<h1 align="center">
+  <p align="center">Archifiltre</p>
+</h1>
+
+<p align="center">
+  <a href="https://github.com/SocialGouv/archifiltre/actions/"><img src="https://github.com/SocialGouv/archifiltre/workflows/CI/badge.svg" alt="Github Master CI Status"></a>
+  <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache--2.0-yellow.svg" alt="License: Apache-2.0"></a>
+  <a href="https://img.shields.io/github/v/release/SocialGouv/archifiltre"><img src="https://img.shields.io/github/v/release/SocialGouv/archifiltre" alt="Npm version"></a>
+  <a href="https://codecov.io/gh/SocialGouv/archifiltre"><img src="https://codecov.io/gh/SocialGouv/archifiltre/branch/master/graph/badge.svg" alt="codecov"></a>
+</p>
+
+<br>
+<br>
+<br>
+<br>
 
 Archifiltre allows you to visualize and improve your file trees. Learn more about it [here](https://archifiltre.fabrique.social.gouv.fr/).
 

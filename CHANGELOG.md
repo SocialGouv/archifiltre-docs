@@ -1,3 +1,16 @@
+# [3.2.0](https://github.com/SocialGouv/archifiltre/compare/v3.1.1...v3.2.0) (2020-11-17)
+
+
+### Bug Fixes
+
+* **github:** unify behaviour of release channels ([003abbd](https://github.com/SocialGouv/archifiltre/commit/003abbd9467024b707e8892d11680712ab3c9b64))
+* run branch builds on pull requests ([#1118](https://github.com/SocialGouv/archifiltre/issues/1118)) ([1e0b306](https://github.com/SocialGouv/archifiltre/commit/1e0b3062bd3a79db0b59510d6914de5352b53860))
+
+
+### Features
+
+* **github:** allow manual build trigged on github ([#1120](https://github.com/SocialGouv/archifiltre/issues/1120)) ([792f3cf](https://github.com/SocialGouv/archifiltre/commit/792f3cfcded25a95687d97b40e7c3ceaa3f628cd)), closes [#1095](https://github.com/SocialGouv/archifiltre/issues/1095) [#1010](https://github.com/SocialGouv/archifiltre/issues/1010) [#1121](https://github.com/SocialGouv/archifiltre/issues/1121)
+
 # [3.2.0-beta.6](https://github.com/SocialGouv/archifiltre/compare/v3.2.0-beta.5...v3.2.0-beta.6) (2020-11-13)
 
 

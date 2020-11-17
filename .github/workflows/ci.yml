@@ -14,6 +14,9 @@ jobs:
     name: Quality Control on Node 14.x (ubuntu-latest)
     runs-on: ubuntu-latest
 
+    outputs:
+      next_version: ${{ steps.next.outputs.next_version }}
+
     steps:
       - name: Set up Node.js 14.x
         uses: actions/setup-node@v2-beta
@@ -35,15 +38,15 @@ jobs:
         id: yarn_cache_packages
         uses: actions/cache@v2
         with:
-         path: ${{ steps.init.outputs.yarn_cache }}
-         key: ${{ runner.os }}-yarn_cache-${{ hashFiles('**/yarn.lock') }}
-         restore-keys: |
-           ${{ runner.os }}-yarn_cache-
+          path: ${{ steps.init.outputs.yarn_cache }}
+          key: ${{ runner.os }}-yarn_cache-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn_cache-
 
       - name: Installing
         run: |
-         sed -i "s/postinstall/disabled-postinstall/g" package.json
-         yarn --frozen-lockfile --perfer-offline
+          sed -i "s/postinstall/disabled-postinstall/g" package.json
+          yarn --frozen-lockfile --perfer-offline
 
       - name: Lint
         run: yarn lint
@@ -55,6 +58,21 @@ jobs:
         continue-on-error: true
         uses: codecov/codecov-action@v1
 
+      - name: Build next version
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        id: next
+        run: |
+          npx semantic-release --plugins @semantic-release/commit-analyzer @semantic-release/npm
+          
+          # HACK(douglasduteil): Remove the tag made by this command...
+          # I do not know how to stop semantic-release from pushing this tag :(
+          version=$(node -e 'console.log(require("./package.json").version)')
+          echo "[haked-semantic-release] › Removing tag v${version}"
+          git push origin :v${version}
+
+          # HACK(douglasduteil): Store the version for future builds
+          echo "::set-output name=next_version::${version}"
+
       - name: Set .env to production
         run: cp .env.prod .env
 
@@ -65,21 +83,24 @@ jobs:
         run: webpack --mode production
 
       - name: Archive dist
-        if: github.event_name == 'push' &&
-          (
-          github.ref == 'refs/heads/master' ||
-          startsWith(github.ref, 'refs/tags/')
-          )
         uses: actions/upload-artifact@v2
         with:
           name: electron-dist
           path: electron/dist/
 
   Build:
-    if: github.event_name == 'push' &&
+    # We build on any distribution channel
+    # see https://github.com/semantic-release/semantic-release/blob/master/docs/usage/configuration.md#branches
+    if: |
       (
-      github.ref == 'refs/heads/master' ||
-      startsWith(github.ref, 'refs/tags/')
+        github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+      ) &&
+      (
+        contains(
+          'refs/heads/master,refs/heads/beta,refs/heads/next,refs/heads/alpha',
+          github.ref
+        ) ||
+        startsWith(github.ref, 'refs/tags/')
       )
     needs:
       - Quality
@@ -137,17 +158,24 @@ jobs:
         with:
           node-version: 14.x
 
+      - uses: actions/checkout@v2
+
+      - name: Build next version
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        shell: bash
+        run: |
+          yarn global add replace
+          $(yarn global bin)/replace '"version": "[^"]+"' '"version": "${{ needs.Quality.outputs.next_version }}"' ./package.json
+
       - name: Get yarn cache directory path
         id: init
         shell: bash
         run: |
           echo "::set-output name=yarn_cache::$(yarn cache dir)"
-          echo "::set-output name=version::$(node -e 'console.log(require(\"./package.json\").version)')"
+          echo "::set-output name=version::$(node -e "console.log(require('./package.json').version);")"
           #
           echo "Node $(node --version)"
           echo "Yarn $(yarn --version)"
-
-      - uses: actions/checkout@v2
 
       - name: Cache Yarn packages
         id: yarn_cache_packages
@@ -179,3 +207,46 @@ jobs:
         with:
           name: ${{ matrix.config.script }}-bin
           path: dist/*/archifiltre-*
+
+  Release:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    needs:
+      - Quality
+      - Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download all dist form build jobs
+        uses: actions/download-artifact@v2
+
+      # HACK(douglasduteil): move wanted artifacts to dist folder
+      # actions/download-artifact will create subdirectory per artifact
+      - name: Build
+        run: |
+          mkdir -p dist/linux
+          mv linux-bin/*/archifiltre-*.AppImage dist/linux/
+          mkdir -p dist/mac
+          mv mac-bin/*/archifiltre-*.dmg dist/mac/
+          mkdir -p dist/win32
+          mv win32-bin/*/archifiltre-*.exe dist/win32/archifiltre-${{ needs.Quality.outputs.next_version }}-32bit.exe
+          mkdir -p dist/win32-msi
+          mv win32-msi-bin/*/archifiltre-*.msi dist/win32-msi/archifiltre-${{ needs.Quality.outputs.next_version }}-32bit.msi
+          mkdir -p dist/win64
+          mv win64-bin/*/archifiltre-*.exe dist/win64/
+          mkdir -p dist/win64-msi
+          mv win64-msi-bin/*/archifiltre-*.msi dist/win64-msi/
+
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          extra_plugins: |
+            @semantic-release/changelog
+            @semantic-release/exec
+            @semantic-release/git
+        env:
+          GIT_AUTHOR_EMAIL: ${{ secrets.SOCIALGROOVYBOT_EMAIL }}
+          GIT_AUTHOR_NAME: ${{ secrets.SOCIALGROOVYBOT_NAME }}
+          GIT_COMMITTER_EMAIL: ${{ secrets.SOCIALGROOVYBOT_EMAIL }}
+          GIT_COMMITTER_NAME: ${{ secrets.SOCIALGROOVYBOT_NAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

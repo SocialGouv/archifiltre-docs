@@ -108,23 +108,30 @@ jobs:
     strategy:
       matrix:
         exclude:
-          - isMaster: true
+          - isReleaseChanel: true
+            isWorkflowDispatch: false
             config:
               script: linux
-          - isMaster: true
+          - isReleaseChanel: true
+            isWorkflowDispatch: false
             config:
               script: mac
-          - isMaster: true
+          - isReleaseChanel: true
+            isWorkflowDispatch: false
             config:
               script: win32
-          - isMaster: true
+          - isReleaseChanel: true
+            isWorkflowDispatch: false
             config:
               script: win32-msi
-          - isMaster: true
+          - isReleaseChanel: true
+            isWorkflowDispatch: false
             config:
               script: win64-msi
-        isMaster:
-          - ${{ github.ref == 'refs/heads/master' }}
+        isWorkflowDispatch:
+          - ${{ github.event_name == 'workflow_dispatch' }}
+        isReleaseChanel:
+          - ${{ contains('refs/heads/master,refs/heads/beta,refs/heads/next,refs/heads/alpha', github.ref) }}
         config:
           - name: Windows 64-bits
             os: windows-latest

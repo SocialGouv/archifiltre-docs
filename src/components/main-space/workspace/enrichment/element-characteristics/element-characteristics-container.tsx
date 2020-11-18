@@ -3,12 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAliasesFromStore,
   getFilesAndFoldersFromStore,
+  getRealLastModified,
   isFile,
+  useLastModifiedDateOverrides,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { useWorkspaceMetadata } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import ElementCharacteristics from "./element-characteristics";
 import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { updateAliasThunk } from "reducers/files-and-folders/files-and-folders-thunks";
+import {
+  overrideLastModifiedDateThunk,
+  updateAliasThunk,
+} from "reducers/files-and-folders/files-and-folders-thunks";
 import { getType } from "util/files-and-folders/file-and-folders-utils";
 import { getAbsolutePath } from "util/file-system/file-sys-util";
 import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
@@ -25,6 +30,8 @@ const ElementCharacteristicsContainer: FC = () => {
   );
   const aliases = useSelector(getAliasesFromStore);
   const hashes = useSelector(getHashesFromStore);
+  const lastModifiedOverrides = useLastModifiedDateOverrides();
+
   const dispatch = useDispatch();
 
   const currentElementId = lockedElementId || hoveredElementId;
@@ -44,10 +51,22 @@ const ElementCharacteristicsContainer: FC = () => {
   const isFolder = currentElement && !isFile(currentElement);
   const type = (currentElement && getType(currentElement)) || "";
   const currentElementPath = getAbsolutePath(originalPath, currentElementId);
+  const lastModified = getRealLastModified(
+    currentElementId,
+    filesAndFolders,
+    lastModifiedOverrides
+  );
 
   const updateAlias = useCallback(
     (alias) => {
       dispatch(updateAliasThunk(currentElementId, alias));
+    },
+    [dispatch, currentElementId]
+  );
+
+  const updateLastModifiedDate = useCallback(
+    (timestamp: number) => {
+      dispatch(overrideLastModifiedDateThunk(currentElementId, timestamp));
     },
     [dispatch, currentElementId]
   );
@@ -65,6 +84,8 @@ const ElementCharacteristicsContainer: FC = () => {
       isFolder={isFolder}
       type={type}
       onElementNameChange={updateAlias}
+      lastModified={lastModified}
+      onLastModifiedChange={updateLastModifiedDate}
     />
   );
 };

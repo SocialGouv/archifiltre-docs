@@ -3,7 +3,7 @@ import EditableField from "../../../../common/editable-field";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import SessionElementsDetails from "./session-elements-details";
-import BoundaryDates from "./boundary-dates";
+import WorkspaceBoundaryDates from "components/main-space/workspace/general/session-info/workspace-boundary-dates";
 
 type SessionInfoProps = {
   sessionName: string;
@@ -50,7 +50,7 @@ const SessionInfo: FC<SessionInfoProps> = ({
       />
     </Box>
     <Box marginY={0.5}>
-      <BoundaryDates
+      <WorkspaceBoundaryDates
         oldestFileTimestamp={oldestFileTimestamp}
         newestFileTimestamp={newestFileTimestamp}
       />

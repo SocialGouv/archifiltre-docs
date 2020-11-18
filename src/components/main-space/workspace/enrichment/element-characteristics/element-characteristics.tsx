@@ -1,41 +1,13 @@
-import React, { FC } from "react";
-import { useTranslation } from "react-i18next";
 import ElementCharacteristicsContent, {
   ElementCharacteristicsContentProps,
 } from "./element-characteristics-content";
-import NoElementSelectedPlaceholder from "./no-element-selected-placeholder";
+import { branch } from "hoc/branch";
+import ElementCharacteristicsNoElement from "components/main-space/workspace/enrichment/element-characteristics/element-characteristics-no-element";
 
-const ElementCharacteristics: FC<ElementCharacteristicsContentProps> = ({
-  elementName,
-  elementAlias,
-  elementSize,
-  elementPath,
-  hash,
-  isFolder,
-  minLastModifiedTimestamp,
-  maxLastModifiedTimestamp,
-  medianLastModifiedTimestamp,
-  onElementNameChange,
-  type,
-}) => {
-  const { t } = useTranslation();
-  return elementName === "" ? (
-    <NoElementSelectedPlaceholder title={t("report.noElementSelected")} />
-  ) : (
-    <ElementCharacteristicsContent
-      elementName={elementName}
-      elementAlias={elementAlias}
-      elementSize={elementSize}
-      elementPath={elementPath}
-      minLastModifiedTimestamp={minLastModifiedTimestamp}
-      maxLastModifiedTimestamp={maxLastModifiedTimestamp}
-      medianLastModifiedTimestamp={medianLastModifiedTimestamp}
-      hash={hash}
-      isFolder={isFolder}
-      onElementNameChange={onElementNameChange}
-      type={type}
-    />
-  );
-};
+const ElementCharacteristics = branch<ElementCharacteristicsContentProps>(
+  ({ elementName }) => elementName === "",
+  ElementCharacteristicsNoElement,
+  ElementCharacteristicsContent
+);
 
 export default ElementCharacteristics;

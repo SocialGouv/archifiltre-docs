@@ -137,6 +137,7 @@ function createWindow() {
 
   preventNavigation();
 
+  console.log(app.isPackaged, process.env.NODE_ENV);
   // Open the DevTools.
   if (!app.isPackaged && process.env.NODE_ENV !== "test") {
     devToolsLoaded.then(() => win.webContents.openDevTools());

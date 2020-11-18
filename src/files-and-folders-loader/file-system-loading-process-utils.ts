@@ -16,7 +16,10 @@ import version from "version";
 import { tap } from "util/functionnal-programming-utils";
 import fs from "fs";
 import { hookCounter } from "util/hook/hook-utils";
-import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
+import {
+  FilesAndFoldersMap,
+  LastModifiedMap,
+} from "reducers/files-and-folders/files-and-folders-types";
 import { empty } from "util/function/function-util";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
@@ -32,6 +35,10 @@ import {
 } from "files-and-folders-loader/files-and-folders-loader";
 import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 
+type Overrides = {
+  lastModified?: LastModifiedMap;
+};
+
 /**
  * Compute the metadata from the filesAndFoldersMap
  * @param filesAndFoldersMap
@@ -39,9 +46,8 @@ import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
  */
 export const createFilesAndFoldersMetadataDataStructure = (
   filesAndFoldersMap: FilesAndFoldersMap,
-  { onResult }: WithResultHook = {
-    onResult: empty,
-  }
+  { onResult = empty }: Partial<WithResultHook> = {},
+  { lastModified = {} }: Overrides = {}
 ): FilesAndFoldersMetadataMap => {
   const metadata: FilesAndFoldersMetadataMap = {};
   const lastModifiedLists = {};
@@ -50,18 +56,22 @@ export const createFilesAndFoldersMetadataDataStructure = (
     const element = filesAndFoldersMap[id];
     onResult();
     if (isFile(element)) {
+      const fileLastModified =
+        lastModified[id] !== undefined
+          ? lastModified[id]
+          : element.file_last_modified;
       metadata[id] = {
-        averageLastModified: element.file_last_modified,
+        averageLastModified: fileLastModified,
         childrenTotalSize: element.file_size,
-        maxLastModified: element.file_last_modified,
-        medianLastModified: element.file_last_modified,
-        minLastModified: element.file_last_modified,
+        maxLastModified: fileLastModified,
+        medianLastModified: fileLastModified,
+        minLastModified: fileLastModified,
         nbChildrenFiles: 1,
         sortByDateIndex: [],
         sortBySizeIndex: [],
         sortAlphaNumericallyIndex: [],
       };
-      lastModifiedLists[id] = [element.file_last_modified];
+      lastModifiedLists[id] = [fileLastModified];
       return;
     }
 

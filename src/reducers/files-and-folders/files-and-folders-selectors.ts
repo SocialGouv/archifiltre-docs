@@ -10,6 +10,7 @@ import {
   CommentsMap,
   FilesAndFolders,
   FilesAndFoldersMap,
+  LastModifiedMap,
   VirtualPathToIdMap,
 } from "./files-and-folders-types";
 import { getHashesFromStore } from "../hashes/hashes-selectors";
@@ -35,6 +36,24 @@ export const getFilesAndFoldersFromStore = (
  */
 export const getElementsToDeleteFromStore = (store: StoreState): string[] =>
   getCurrentState(store.filesAndFolders).elementsToDelete;
+
+/**
+ * Get the last modification date overrides from the store
+ * @param store
+ */
+export const getLastModifiedDateOverrides = (
+  store: StoreState
+): LastModifiedMap =>
+  getCurrentState(store.filesAndFolders).overrideLastModified;
+
+export const useLastModifiedDateOverrides = (): LastModifiedMap =>
+  useSelector(getLastModifiedDateOverrides);
+
+export const getRealLastModified = (
+  id: string,
+  filesAndFolders: FilesAndFoldersMap,
+  lastModifiedMap: LastModifiedMap
+): number => lastModifiedMap[id] || filesAndFolders[id].file_last_modified;
 
 /**
  * Get the number of children files in a list

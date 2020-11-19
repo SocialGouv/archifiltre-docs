@@ -180,11 +180,12 @@ type LoadedLine = {
 type LineLoader = (parsedLine: string[]) => LoadedLine;
 
 const LINE_LOADERS = {
-  "windows-1.0.0": ([[filePath, fileSize, fileLastModified, _, fileHash]]) => ({
+  "windows-1.0.0": ([[filePath, fileSize, fileLastModified, ...rest]]) => ({
     filePath,
     fileSize,
     fileLastModified,
-    fileHash,
+    // Whe take the last element as the rest, as the last modified date may be an integer or a float (randomly)
+    fileHash: rest[rest.length - 1],
   }),
   [latestVersion]: ([[filePath, fileSize, fileLastModified, fileHash]]) => ({
     filePath,

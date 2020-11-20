@@ -1,6 +1,12 @@
 const Raven = require("raven");
 
-const { app, BrowserWindow, crashReporter, Menu } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  crashReporter,
+  Menu,
+  session,
+} = require("electron");
 
 const { dialog } = require("electron");
 
@@ -35,7 +41,6 @@ if (app.isPackaged) {
 }
 
 if (!app.isPackaged) {
-  console.log("not-packaged");
   app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
 }
 
@@ -117,15 +122,24 @@ function createWindow() {
     win.loadURL("http://localhost:8000");
   }
 
+  let devToolsLoaded = Promise.resolve();
   if (REACT_DEV_TOOLS_PATH !== "") {
-    BrowserWindow.addDevToolsExtension(REACT_DEV_TOOLS_PATH);
+    try {
+      devToolsLoaded = session.defaultSession
+        .loadExtension(REACT_DEV_TOOLS_PATH)
+        .catch((err) => {
+          console.error("Cannot load react dev tools.", err);
+        });
+    } catch (err) {
+      console.error("Error loading React dev tools", err);
+    }
   }
 
   preventNavigation();
 
   // Open the DevTools.
   if (!app.isPackaged && process.env.NODE_ENV !== "test") {
-    win.webContents.openDevTools();
+    devToolsLoaded.then(() => win.webContents.openDevTools());
   }
 
   if (app.isPackaged) {

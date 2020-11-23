@@ -46,6 +46,9 @@ const aliases = {
 const comments = {
   [fileAndFolder1Id]: "test-comment",
 };
+const overrideLastModified = {
+  [fileAndFolder1Id]: 10,
+};
 
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);
 const sessionName = "session-name";
@@ -64,6 +67,7 @@ describe("json-exporter", () => {
           comments,
           filesAndFolders,
           elementsToDelete,
+          overrideLastModified,
         }),
         hashes: {
           ...hashesReducerInitialState,
@@ -89,6 +93,7 @@ describe("json-exporter", () => {
         filesAndFolders,
         hashes,
         originalPath,
+        overrideLastModified,
         sessionName,
         tags,
         version,

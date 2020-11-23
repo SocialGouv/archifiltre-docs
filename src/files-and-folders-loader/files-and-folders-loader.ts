@@ -1,5 +1,5 @@
 import fs from "fs";
-import { compose } from "lodash/fp";
+import { compose, defaults } from "lodash/fp";
 import parse from "csv-parse/lib/sync";
 import path from "path";
 import readline from "readline";
@@ -425,6 +425,9 @@ export const makeJsonFileLoader = (
   const sanitizedContent = removeByteOrderMark(jsonContent);
 
   return compose(
+    defaults({
+      overrideLastModified: {},
+    }),
     computeVirtualPathToIdMap,
     removeIgnoredElementsFromVirtualFileSystem,
     convertJsonToCurrentVersion

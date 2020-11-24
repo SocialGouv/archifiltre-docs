@@ -2,6 +2,7 @@ import {
   AliasMap,
   CommentsMap,
   FilesAndFoldersMap,
+  LastModifiedMap,
   VirtualPathToIdMap,
 } from "reducers/files-and-folders/files-and-folders-types";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
@@ -18,6 +19,7 @@ export type VirtualFileSystem = WithAliases &
   WithMetadata &
   WithHashes &
   WithOriginalPath &
+  WithOverrideLastModified &
   WithSessionName &
   WithTags &
   WithVersion &
@@ -67,6 +69,10 @@ export type WithVirtualPathToIdMap<T = {}> = T & {
   virtualPathToIdMap: VirtualPathToIdMap;
 };
 
+export type WithOverrideLastModified<T = {}> = T & {
+  overrideLastModified: LastModifiedMap;
+};
+
 export type PartialFileSystem = Partial<VirtualFileSystem> &
   WithFilesAndFolders &
   WithOriginalPath;
@@ -76,6 +82,7 @@ export type JsonFileInfo = PartialFileSystem &
   WithAliases &
   WithComments &
   WithHashes &
+  WithOverrideLastModified &
   WithVersion &
   WithVirtualPathToIdMap;
 

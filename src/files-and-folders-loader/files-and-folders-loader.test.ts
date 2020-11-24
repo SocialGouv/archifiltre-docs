@@ -545,6 +545,7 @@ C:\\basePath\\files\r
         filesAndFoldersMetadata: expectedMetadata,
         hashes: {},
         originalPath: "/basePath",
+        overrideLastModified: {},
         sessionName: "",
         tags: {},
         version,

@@ -6,6 +6,7 @@ import {
   ADD_COMMENTS_ON_FILES_AND_FOLDERS,
   FilesAndFoldersActionTypes,
   FilesAndFoldersState,
+  INIT_OVERRIDE_LAST_MODIFIED,
   INIT_VIRTUAL_PATH_TO_ID_MAP,
   INITIALIZE_FILES_AND_FOLDERS,
   MARK_AS_TO_DELETE,
@@ -14,6 +15,7 @@ import {
   REGISTER_ERRORED_ELEMENTS,
   REMOVE_CHILD,
   RESET_ERRORED_ELEMENTS,
+  RESET_OVERRIDE_LAST_MODIFIED,
   SET_FILES_AND_FOLDERS_ALIAS,
   UNMARK_AS_TO_DELETE,
   UNMARK_ELEMENTS_TO_DELETE,
@@ -190,6 +192,16 @@ const filesAndFoldersReducer = (
           ...state.overrideLastModified,
           [action.elementId]: action.lastModified,
         },
+      };
+    case INIT_OVERRIDE_LAST_MODIFIED:
+      return {
+        ...state,
+        overrideLastModified: action.overrideLastModified,
+      };
+    case RESET_OVERRIDE_LAST_MODIFIED:
+      return {
+        ...state,
+        overrideLastModified: initialState.overrideLastModified,
       };
     default:
       return state;

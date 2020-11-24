@@ -5,14 +5,17 @@ import {
   CommentsMap,
   FilesAndFoldersActionTypes,
   FilesAndFoldersMap,
+  INIT_OVERRIDE_LAST_MODIFIED,
   INIT_VIRTUAL_PATH_TO_ID_MAP,
   INITIALIZE_FILES_AND_FOLDERS,
+  LastModifiedMap,
   MARK_AS_TO_DELETE,
   MARK_ELEMENTS_TO_DELETE,
   OVERRIDE_LAST_MODIFIED,
   REGISTER_ERRORED_ELEMENTS,
   REMOVE_CHILD,
   RESET_ERRORED_ELEMENTS,
+  RESET_OVERRIDE_LAST_MODIFIED,
   SET_FILES_AND_FOLDERS_ALIAS,
   UNMARK_AS_TO_DELETE,
   UNMARK_ELEMENTS_TO_DELETE,
@@ -144,4 +147,15 @@ export const overrideLastModified = (
   type: OVERRIDE_LAST_MODIFIED,
   elementId,
   lastModified,
+});
+
+export const initOverrideLastModified = (
+  overrideLastModified: LastModifiedMap
+): FilesAndFoldersActionTypes => ({
+  type: INIT_OVERRIDE_LAST_MODIFIED,
+  overrideLastModified,
+});
+
+export const resetOverrideLastModified = (): FilesAndFoldersActionTypes => ({
+  type: RESET_OVERRIDE_LAST_MODIFIED,
 });

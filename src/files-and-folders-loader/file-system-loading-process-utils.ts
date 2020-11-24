@@ -169,6 +169,7 @@ export const loadFileSystemFromFilesAndFoldersLoader = async (
       comments: {},
       elementsToDelete: [],
       hashes: {},
+      overrideLastModified: {},
       sessionName: "",
       tags: {},
       version,

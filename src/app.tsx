@@ -44,6 +44,7 @@ const App = styled.div`
   padding: 0.975em;
   height: 100vh;
   box-sizing: border-box;
+  overflow: hidden;
 `;
 
 /** This is the entrypoint for the app. */

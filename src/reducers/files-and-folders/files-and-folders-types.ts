@@ -19,6 +19,8 @@ export const REGISTER_ERRORED_ELEMENTS =
   "FILES_AND_FOLDERS/REGISTER_ERRORED_ELEMENTS";
 export const RESET_ERRORED_ELEMENTS =
   "FILES_AND_FOLDERS/RESET_ERRORED_ELEMENTS";
+export const OVERRIDE_LAST_MODIFIED =
+  "FILES_AND_FOLDERS/OVERRIDE_LAST_MODIFIED";
 
 export interface FilesAndFolders {
   id: string;
@@ -49,6 +51,10 @@ export interface VirtualPathToIdMap {
   [id: string]: string;
 }
 
+export interface LastModifiedMap {
+  [id: string]: number;
+}
+
 export interface FilesAndFoldersState {
   filesAndFolders: FilesAndFoldersMap;
   aliases: AliasMap;
@@ -56,6 +62,7 @@ export interface FilesAndFoldersState {
   elementsToDelete: string[];
   erroredFilesAndFolders: ArchifiltreError[];
   virtualPathToId: VirtualPathToIdMap;
+  overrideLastModified: LastModifiedMap;
 }
 
 interface InitializeFilesAndFoldersAction extends Action {
@@ -119,6 +126,12 @@ interface ResetErroredElements extends Action {
   type: typeof RESET_ERRORED_ELEMENTS;
 }
 
+interface OverrideLastModified extends Action {
+  type: typeof OVERRIDE_LAST_MODIFIED;
+  lastModified: number;
+  elementId: string;
+}
+
 export type FilesAndFoldersActionTypes =
   | InitializeFilesAndFoldersAction
   | AddChildAction
@@ -131,4 +144,5 @@ export type FilesAndFoldersActionTypes =
   | UnmarkElementsToDelete
   | InitVirtualPathToIdMap
   | RegisterErroredElements
-  | ResetErroredElements;
+  | ResetErroredElements
+  | OverrideLastModified;

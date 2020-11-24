@@ -7,12 +7,12 @@ import BoundaryDate from "./boundary-date";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-type BoundaryDatesProps = {
+export type WorkspaceBoundaryDatesProps = {
   oldestFileTimestamp: number;
   newestFileTimestamp: number;
 };
 
-const BoundaryDates: FC<BoundaryDatesProps> = ({
+const WorkspaceBoundaryDates: FC<WorkspaceBoundaryDatesProps> = ({
   oldestFileTimestamp,
   newestFileTimestamp,
 }) => {
@@ -45,4 +45,4 @@ const BoundaryDates: FC<BoundaryDatesProps> = ({
   );
 };
 
-export default BoundaryDates;
+export default WorkspaceBoundaryDates;

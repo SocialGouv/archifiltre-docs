@@ -1,18 +1,18 @@
 import Select from "@material-ui/core/Select";
 import React, { FC, useCallback } from "react";
-import { useLanguage } from "hooks/use-language";
+import { Language, useLanguage } from "hooks/use-language";
 
 const availableLanguages = [
   {
-    value: "fr",
+    value: Language.FR,
     label: "🇫🇷 Français",
   },
   {
-    value: "en",
+    value: Language.EN,
     label: "🇬🇧 English",
   },
   {
-    value: "de",
+    value: Language.DE,
     label: "🇩🇪 Deutsch",
   },
 ];

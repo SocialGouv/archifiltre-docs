@@ -10,6 +10,7 @@ import {
   INITIALIZE_FILES_AND_FOLDERS,
   MARK_AS_TO_DELETE,
   MARK_ELEMENTS_TO_DELETE,
+  OVERRIDE_LAST_MODIFIED,
   REGISTER_ERRORED_ELEMENTS,
   REMOVE_CHILD,
   RESET_ERRORED_ELEMENTS,
@@ -25,6 +26,7 @@ export const initialState: FilesAndFoldersState = {
   erroredFilesAndFolders: [],
   filesAndFolders: {},
   virtualPathToId: {},
+  overrideLastModified: {},
 };
 
 /**
@@ -180,6 +182,14 @@ const filesAndFoldersReducer = (
       return {
         ...state,
         erroredFilesAndFolders: [],
+      };
+    case OVERRIDE_LAST_MODIFIED:
+      return {
+        ...state,
+        overrideLastModified: {
+          ...state.overrideLastModified,
+          [action.elementId]: action.lastModified,
+        },
       };
     default:
       return state;

@@ -15,10 +15,12 @@ jest.mock("uuid", () => ({
   v4: jest.fn(),
 }));
 
+const uuidMock = uuid as jest.Mock;
+
 const setup = ({ mockTagId = "" } = {}) => {
-  uuid.mockReset();
+  uuidMock.mockReset();
   if (mockTagId !== "") {
-    uuid.mockReturnValue(mockTagId);
+    uuidMock.mockReturnValue(mockTagId);
   }
 };
 

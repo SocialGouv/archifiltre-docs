@@ -1,19 +1,17 @@
-import Grid from "@material-ui/core/Grid";
 import HashInfo from "components/main-space/workspace/enrichment/element-characteristics/hash-info";
 import React, { FC } from "react";
 import Box from "@material-ui/core/Box";
-import dateFormat from "dateformat";
 import HelpTooltip from "components/common/help-tooltip";
 import EditableField from "components/common/editable-field";
 import { useTranslation } from "react-i18next";
 import { FOLDER_ICON, PAGE_ICON } from "components/common/icon";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import Typography from "@material-ui/core/Typography";
-import BoundaryDate from "components/main-space/workspace/general/session-info/boundary-date";
 import ElementCharacteristic from "./element-characteristic";
 import { openExternalElement } from "util/file-system/file-system-util";
 import ClickableIcon from "components/common/clickable-icon";
 import { useStyles } from "hooks/use-styles";
+import LastModifiedDate from "components/main-space/workspace/general/session-info/last-modified-date";
 
 export type ElementCharacteristicsContentProps = {
   elementName: string;
@@ -23,9 +21,11 @@ export type ElementCharacteristicsContentProps = {
   minLastModifiedTimestamp: number;
   maxLastModifiedTimestamp: number;
   medianLastModifiedTimestamp: number;
+  lastModified: number;
   hash: string;
   isFolder: boolean;
   onElementNameChange: (name: string) => void;
+  onLastModifiedChange: (timestamp: number) => void;
   type: string;
 };
 
@@ -39,6 +39,8 @@ const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
   minLastModifiedTimestamp,
   maxLastModifiedTimestamp,
   medianLastModifiedTimestamp,
+  lastModified,
+  onLastModifiedChange,
   onElementNameChange,
   type,
 }) => {
@@ -117,31 +119,14 @@ const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
         <Box>
           <Typography variant="h5">{t("report.lastModifications")}</Typography>
         </Box>
-        <Grid container spacing={2}>
-          <Grid item>
-            <BoundaryDate
-              title={t("report.minimum")}
-              content={dateFormat(minLastModifiedTimestamp, "dd/mm/yyyy")}
-            />
-          </Grid>
-          <Grid item>
-            <BoundaryDate
-              title={
-                <>
-                  {t("report.median")}&nbsp;
-                  <HelpTooltip tooltipText={t("report.medianExplanation")} />
-                </>
-              }
-              content={dateFormat(medianLastModifiedTimestamp, "dd/mm/yyyy")}
-            />
-          </Grid>
-          <Grid item>
-            <BoundaryDate
-              title={t("report.maximum")}
-              content={dateFormat(maxLastModifiedTimestamp, "dd/mm/yyyy")}
-            />
-          </Grid>
-        </Grid>
+        <LastModifiedDate
+          isFile={!isFolder}
+          lastModified={lastModified}
+          onDateChange={onLastModifiedChange}
+          minLastModifiedTimestamp={minLastModifiedTimestamp}
+          medianLastModifiedTimestamp={medianLastModifiedTimestamp}
+          maxLastModifiedTimestamp={maxLastModifiedTimestamp}
+        />
       </Box>
     </Box>
   );

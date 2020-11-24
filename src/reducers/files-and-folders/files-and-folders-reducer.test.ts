@@ -2,6 +2,7 @@ import {
   addChild,
   addCommentsOnFilesAndFolders,
   initializeFilesAndFolders,
+  initOverrideLastModified,
   initVirtualPathToIdMap,
   markAsToDelete,
   markElementsToDelete,
@@ -420,6 +421,23 @@ describe("files-and-folders-reducer", () => {
         overrideLastModified: {
           [overiddenId]: newDate,
         },
+      });
+    });
+  });
+
+  describe("INIT_OVERRIDE_LAST_MODIFIED", () => {
+    it("should register the override", () => {
+      const override = {
+        id: 1000,
+      };
+      const nextState = filesAndFoldersReducer(
+        baseState,
+        initOverrideLastModified(override)
+      );
+
+      expect(nextState).toEqual({
+        ...nextState,
+        overrideLastModified: override,
       });
     });
   });

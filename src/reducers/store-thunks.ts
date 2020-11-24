@@ -41,10 +41,12 @@ import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata/files-
 import {
   addCommentsOnFilesAndFolders,
   initializeFilesAndFolders,
+  initOverrideLastModified,
   initVirtualPathToIdMap,
   markElementsToDelete,
   registerErroredElements,
   resetErroredElements,
+  resetOverrideLastModified,
   setFilesAndFoldersAliases,
 } from "./files-and-folders/files-and-folders-actions";
 import {
@@ -382,6 +384,7 @@ const initStore = ({
   filesAndFoldersMetadata,
   hashes,
   originalPath,
+  overrideLastModified,
   sessionName,
   tags,
   virtualPathToIdMap,
@@ -392,6 +395,7 @@ const initStore = ({
   dispatch(setSessionName(sessionName || getFirstLevelName(filesAndFolders)));
 
   dispatch(initVirtualPathToIdMap(virtualPathToIdMap));
+  dispatch(initOverrideLastModified(overrideLastModified));
   if (hashes) {
     dispatch(setFilesAndFoldersHashes(hashes));
   }
@@ -422,5 +426,6 @@ export const resetStoreThunk = (): ArchifiltreThunkAction => (dispatch) => {
   dispatch(resetZoom());
   dispatch(resetErroredElements());
   dispatch(commitAction());
+  dispatch(resetOverrideLastModified());
   workerManager.clear();
 };

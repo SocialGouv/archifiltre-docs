@@ -6,6 +6,7 @@ import {
   getCommentsFromStore,
   getFilesAndFoldersFromStore,
   getElementsToDeleteFromStore,
+  getLastModifiedDateOverrides,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { getTagsFromStore } from "reducers/tags/tags-selectors";
 import { getNameWithExtension, save } from "util/file-system/file-sys-util";
@@ -42,6 +43,7 @@ export const jsonExporterThunk = ({
     filesAndFolders: getFilesAndFoldersFromStore(state),
     hashes: getHashesFromStore(state),
     originalPath,
+    overrideLastModified: getLastModifiedDateOverrides(state),
     sessionName,
     tags: getTagsFromStore(state),
     version,

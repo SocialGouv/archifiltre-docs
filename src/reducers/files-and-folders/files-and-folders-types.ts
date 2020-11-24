@@ -21,6 +21,10 @@ export const RESET_ERRORED_ELEMENTS =
   "FILES_AND_FOLDERS/RESET_ERRORED_ELEMENTS";
 export const OVERRIDE_LAST_MODIFIED =
   "FILES_AND_FOLDERS/OVERRIDE_LAST_MODIFIED";
+export const INIT_OVERRIDE_LAST_MODIFIED =
+  "FILES_AND_FOLDERS/INIT_OVERRIDE_LAST_MODIFIED";
+export const RESET_OVERRIDE_LAST_MODIFIED =
+  "FILES_AND_FOLDERS/RESET_OVERRIDE_LAST_MODIFIED";
 
 export interface FilesAndFolders {
   id: string;
@@ -132,6 +136,15 @@ interface OverrideLastModified extends Action {
   elementId: string;
 }
 
+interface InitOverrideLastModified extends Action {
+  type: typeof INIT_OVERRIDE_LAST_MODIFIED;
+  overrideLastModified: LastModifiedMap;
+}
+
+interface ResetOverrideLastModified extends Action {
+  type: typeof RESET_OVERRIDE_LAST_MODIFIED;
+}
+
 export type FilesAndFoldersActionTypes =
   | InitializeFilesAndFoldersAction
   | AddChildAction
@@ -145,4 +158,6 @@ export type FilesAndFoldersActionTypes =
   | InitVirtualPathToIdMap
   | RegisterErroredElements
   | ResetErroredElements
-  | OverrideLastModified;
+  | OverrideLastModified
+  | InitOverrideLastModified
+  | ResetOverrideLastModified;

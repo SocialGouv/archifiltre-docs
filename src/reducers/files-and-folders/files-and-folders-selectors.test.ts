@@ -21,9 +21,12 @@ import {
   getMaxDepth,
   isFile,
   getFilesTotalSize,
+  getLastModifiedDateOverrides,
+  getRealLastModified,
 } from "./files-and-folders-selectors";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
 import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
+import { StoreState } from "reducers/store";
 
 /**
  * Returns a timestamp from date string
@@ -92,6 +95,57 @@ describe("files-and-folders-selectors", () => {
       expect(getFilesAndFoldersFromStore(testStore)).toEqual(
         filesAndFoldersMap
       );
+    });
+  });
+
+  describe("getLastModifiedDateOverrides", () => {
+    it("should return the current store", () => {
+      const overrideLastModified = {
+        test: 100,
+      };
+      const emptyStore = createEmptyStore();
+      const testStore: StoreState = {
+        ...emptyStore,
+        filesAndFolders: wrapStoreWithUndoable({
+          ...filesAndFoldersInitialState,
+          overrideLastModified,
+        }),
+      };
+      expect(getLastModifiedDateOverrides(testStore)).toEqual(
+        overrideLastModified
+      );
+    });
+  });
+
+  describe("getRealLastModified", () => {
+    it("should return the override if there is one", () => {
+      const filesAndFolders = {
+        overrideId: createFilesAndFolders({
+          id: "overrideId",
+          file_last_modified: 10,
+        }),
+      };
+      const overrides = {
+        overrideId: 20,
+      };
+      expect(
+        getRealLastModified("overrideId", filesAndFolders, overrides)
+      ).toBe(20);
+    });
+
+    it("should return the defaultValue if there is no override", () => {
+      const filesAndFolders = {
+        noOverrideId: createFilesAndFolders({
+          id: "noOverrideId",
+          file_last_modified: 10,
+        }),
+      };
+      const overrides = {
+        overrideId: 20,
+      };
+      expect(
+        getRealLastModified("noOverrideId", filesAndFolders, overrides)
+      ).toBe(10);
     });
   });
 

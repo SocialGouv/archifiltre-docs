@@ -482,6 +482,48 @@ C:\\basePath\\files\r
         createFilesAndFoldersMetadataDataStructure(expectedFilesAndFolders)
       ).toEqual(expectedMetadata);
     });
+
+    it("shoud handle overrides", () => {
+      const overrideLastModified = 40000;
+      const lastModified = {
+        [ff1Path]: overrideLastModified,
+      };
+      expect(
+        createFilesAndFoldersMetadataDataStructure(
+          expectedFilesAndFolders,
+          {},
+          {
+            lastModified,
+          }
+        )
+      ).toEqual({
+        ...expectedMetadata,
+        "": {
+          ...expectedMetadata[""],
+          averageLastModified: 24000,
+          maxLastModified: 40000,
+        },
+        "/root": {
+          ...expectedMetadata["/root"],
+          averageLastModified: 24000,
+          maxLastModified: 40000,
+          sortByDateIndex: [0, 1],
+        },
+        "/root/folder": {
+          ...expectedMetadata["/root/folder"],
+          averageLastModified: 21000,
+          maxLastModified: 40000,
+          medianLastModified: 21000,
+        },
+        [ff1Path]: {
+          ...expectedMetadata[ff1Path],
+          averageLastModified: 40000,
+          maxLastModified: 40000,
+          medianLastModified: 40000,
+          minLastModified: 40000,
+        },
+      });
+    });
   });
 
   describe("loadFileSystemFromFilesAndFoldersLoader", () => {

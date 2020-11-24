@@ -5,6 +5,7 @@ import {
   initVirtualPathToIdMap,
   markAsToDelete,
   markElementsToDelete,
+  overrideLastModified,
   registerErroredElements,
   removeChild,
   setFilesAndFoldersAliases,
@@ -401,6 +402,24 @@ describe("files-and-folders-reducer", () => {
       expect(nextState).toEqual({
         ...nextState,
         erroredFilesAndFolders: [createArchifiltreError({})],
+      });
+    });
+  });
+
+  describe("OVERRIDE_LAST_MODIFIED", () => {
+    it("should register the override", () => {
+      const overiddenId = "overriden-id";
+      const newDate = 10289893;
+      const nextState = filesAndFoldersReducer(
+        baseState,
+        overrideLastModified(overiddenId, newDate)
+      );
+
+      expect(nextState).toEqual({
+        ...nextState,
+        overrideLastModified: {
+          [overiddenId]: newDate,
+        },
       });
     });
   });

@@ -10,6 +10,7 @@ import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
   addChild,
   addCommentsOnFilesAndFolders,
+  overrideLastModified,
   removeChild,
   setFilesAndFoldersAliases,
 } from "./files-and-folders-actions";
@@ -21,6 +22,7 @@ import { ROOT_FF_ID } from "./files-and-folders-selectors";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
 import {
   moveElement,
+  overrideLastModifiedDateThunk,
   updateAliasThunk,
   updateCommentThunk,
 } from "./files-and-folders-thunks";
@@ -52,21 +54,23 @@ const unupdatedId = "no-update";
 const newHash1 = "new-hash-1";
 const newHash2 = "new-hash-2";
 
+const filesAndFolders = {
+  [updateId1]: createFilesAndFolders({
+    id: updateId1,
+  }),
+  [updateId2]: createFilesAndFolders({
+    id: updateId2,
+  }),
+  [unupdatedId]: createFilesAndFolders({
+    id: unupdatedId,
+  }),
+};
+
 const testState = {
   ...emptyStoreState,
   filesAndFolders: wrapStoreWithUndoable({
     ...filesAndFoldersInitialState,
-    filesAndFolders: {
-      [updateId1]: createFilesAndFolders({
-        id: updateId1,
-      }),
-      [updateId2]: createFilesAndFolders({
-        id: updateId2,
-      }),
-      [unupdatedId]: createFilesAndFolders({
-        id: unupdatedId,
-      }),
-    },
+    filesAndFolders,
   }),
 };
 
@@ -243,6 +247,25 @@ describe("file-and-folders-thunks.test.ts", () => {
 
       expect(store.getActions()).toEqual([
         addCommentsOnFilesAndFolders({ [ffId]: comment }),
+      ]);
+    });
+  });
+
+  describe("overrideLastModifiedDateThunk", () => {
+    it("should dispatch the right actions", () => {
+      const store = mockStore(testState);
+      const overrideDate = 20;
+      store.dispatch(overrideLastModifiedDateThunk(updateId1, overrideDate));
+
+      const newMetadata = createFilesAndFoldersMetadataDataStructure(
+        filesAndFolders,
+        {},
+        {}
+      );
+
+      expect(store.getActions()).toEqual([
+        overrideLastModified(updateId1, overrideDate),
+        initFilesAndFoldersMetatada(newMetadata),
       ]);
     });
   });

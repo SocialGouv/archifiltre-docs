@@ -8,12 +8,14 @@ import { initFilesAndFoldersMetatada } from "../files-and-folders-metadata/files
 import {
   addChild,
   addCommentsOnFilesAndFolders,
+  overrideLastModified,
   removeChild,
   setFilesAndFoldersAliases,
 } from "./files-and-folders-actions";
 import {
   findElementParent,
   getFilesAndFoldersFromStore,
+  getLastModifiedDateOverrides,
   isFile,
 } from "./files-and-folders-selectors";
 import { FilesAndFoldersMap } from "./files-and-folders-types";
@@ -118,4 +120,21 @@ export const moveElement = (elementId, newParentId): ArchifiltreThunkAction => (
 
   dispatch(initFilesAndFoldersMetatada(newMetadata));
   dispatch(commitAction());
+};
+
+export const overrideLastModifiedDateThunk = (
+  elementId: string,
+  lastModified: number
+): ArchifiltreThunkAction => (dispatch, getState) => {
+  dispatch(overrideLastModified(elementId, lastModified));
+
+  const store = getState();
+  const filesAndFolders = getFilesAndFoldersFromStore(store);
+  const lastModifiedOverrides = getLastModifiedDateOverrides(store);
+  const metadata = createFilesAndFoldersMetadataDataStructure(
+    filesAndFolders,
+    {},
+    { lastModified: lastModifiedOverrides }
+  );
+  dispatch(initFilesAndFoldersMetatada(metadata));
 };

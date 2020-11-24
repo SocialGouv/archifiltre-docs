@@ -9,6 +9,7 @@ import {
   INITIALIZE_FILES_AND_FOLDERS,
   MARK_AS_TO_DELETE,
   MARK_ELEMENTS_TO_DELETE,
+  OVERRIDE_LAST_MODIFIED,
   REGISTER_ERRORED_ELEMENTS,
   REMOVE_CHILD,
   RESET_ERRORED_ELEMENTS,
@@ -134,4 +135,13 @@ export const registerErroredElements = (
 
 export const resetErroredElements = (): FilesAndFoldersActionTypes => ({
   type: RESET_ERRORED_ELEMENTS,
+});
+
+export const overrideLastModified = (
+  elementId: string,
+  lastModified: number
+): FilesAndFoldersActionTypes => ({
+  type: OVERRIDE_LAST_MODIFIED,
+  elementId,
+  lastModified,
 });

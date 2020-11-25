@@ -63,7 +63,7 @@ jobs:
         id: next
         run: |
           npx semantic-release --plugins @semantic-release/commit-analyzer @semantic-release/npm
-          
+
           # HACK(douglasduteil): Remove the tag made by this command...
           # I do not know how to stop semantic-release from pushing this tag :(
           version=$(node -e 'console.log(require("./package.json").version)')
@@ -214,6 +214,31 @@ jobs:
         with:
           name: ${{ matrix.config.script }}-bin
           path: dist/*/archifiltre-*
+
+  PreRelease:
+    if: ${{ github.event_name != 'workflow_dispatch' &&  contains('refs/heads/master,refs/heads/beta,refs/heads/next,refs/heads/alpha', github.ref) }}
+    needs:
+      - Quality
+      - Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download all dist from build jobs
+        uses: actions/download-artifact@v2
+
+      - name: Rename build asset
+        run: |
+          mkdir -p dist/win64-bin
+          mv win64-bin/*/archifiltre-*.exe dist/win64-bin/archifiltre-master.exe
+
+      - name: Upload to latest-build
+        uses: eine/tip@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: dist/win64-bin/archifiltre-master.exe
+          tag: latest-build
+          rm: true
 
   Release:
     if: ${{ github.event_name == 'workflow_dispatch' }}

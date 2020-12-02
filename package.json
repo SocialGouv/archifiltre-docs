@@ -21,7 +21,7 @@
     "win64": "electron-builder --windows portable --x64",
     "win32-msi": "electron-builder --windows portable --ia32 --windows=msi",
     "win64-msi": "electron-builder --windows portable --x64 --windows=msi",
-    "mac": "electron-builder --mac dmg",
+    "mac": "chmod +x ./scripts/certificates/add-osx-cert.sh && ./scripts/certificates/add-osx-cert.sh && electron-builder --mac dmg",
     "linux": "electron-builder --linux AppImage",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",

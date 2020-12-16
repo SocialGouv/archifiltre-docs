@@ -15,6 +15,7 @@ const BottomLeftArea = styled(Card)`
   bottom: 20px;
   left: 20px;
   display: flex;
+  z-index: 2;
 `;
 
 const LoadingBarArea = memo(styled.div`

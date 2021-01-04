@@ -23,6 +23,7 @@ import {
   countZipFiles,
   isJsonFile,
   isRootPath,
+  isValidFolderPath,
   octet2HumanReadableFormat,
 } from "util/file-system/file-sys-util";
 import { empty } from "util/function/function-util";
@@ -124,16 +125,26 @@ const displayErrorNotification = () => (dispatch) => {
 };
 
 const displayRootPathError = () => {
-  notifyError(
-    translations.t("folderDropzone.errorsWhileLoading"),
-    translations.t("folderDropzone.rootElementError")
-  );
+  const errorMessage = translations.t("folderDropzone.errorsWhileLoading");
+  const errorTitle = translations.t("folderDropzone.rootElementError");
+  return displayPathError(errorMessage, errorTitle);
+};
+
+const displayInvalidPathError = () => {
+  const errorMessage = translations.t("folderDropzone.cannotFindPath");
+  const errorTitle = translations.t("folderDropzone.error");
+  return displayPathError(errorMessage, errorTitle);
+};
+
+const displayPathError = (errorMessage: string, errorTitle: string) => {
+  notifyError(errorMessage, errorTitle);
   return { virtualFileSystem: Promise.reject(), terminate: empty };
 };
 
 /**
  * Handles tracking events sent to Matomo
  * @param paths of files that need to be tracked
+ * @param filesAndFoldersMap
  */
 const handleTracking = (paths, filesAndFoldersMap): ArchifiltreThunkAction => (
   dispatch,
@@ -364,10 +375,15 @@ export const loadFilesAndFoldersFromPathThunk = (
   fileOrFolderPath: string
 ): ArchifiltreThunkAction<Promise<VirtualFileSystemLoader>> => async (
   dispatch
-) =>
-  isRootPath(fileOrFolderPath)
-    ? displayRootPathError()
-    : dispatch(loadFilesAndFoldersFromValidPathThunk(fileOrFolderPath));
+) => {
+  if (isRootPath(fileOrFolderPath)) {
+    return displayRootPathError();
+  }
+  if (!isValidFolderPath(fileOrFolderPath)) {
+    return displayInvalidPathError();
+  }
+  return dispatch(loadFilesAndFoldersFromValidPathThunk(fileOrFolderPath));
+};
 
 /**
  * Initializes the store with the data extracted from the JSON object

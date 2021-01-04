@@ -1,7 +1,7 @@
 import { TFunction } from "i18next";
 import React from "react";
 
-import SaveButton from "components/header/save-button";
+import SaveButton, { ExportToJson } from "components/header/save-button";
 import { reportError } from "logging/reporter";
 import { ContactUs } from "./contact-us";
 import Grid from "@material-ui/core/Grid";
@@ -12,7 +12,7 @@ type ErrorBoundaryProps = {
   t: TFunction;
   originalPath: string;
   sessionName: string;
-  exportToJson: () => void;
+  exportToJson: ExportToJson;
 };
 
 type ErrorBoundaryState = {

@@ -1,5 +1,5 @@
 import path from "path";
-import { isRootPath } from "./file-sys-util";
+import { isRootPath, isValidFolderPath } from "./file-sys-util";
 
 jest.mock("path", () => {
   const actualPath = jest.requireActual("path");
@@ -77,6 +77,14 @@ describe("file-sys-util", () => {
       it("shouldn't detect a folder as the rootPath", () => {
         expect(isRootPath("/folder")).toBe(false);
       });
+    });
+  });
+  describe("isValidFolderPath", () => {
+    it("should return false with a path that doesn't exist", () => {
+      expect(isValidFolderPath("/invalid-path")).toBe(false);
+    });
+    it("should return true with a path that exists", () => {
+      expect(isValidFolderPath("/")).toBe(true);
     });
   });
 });

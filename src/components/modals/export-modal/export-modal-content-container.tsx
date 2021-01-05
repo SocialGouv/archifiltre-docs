@@ -4,6 +4,8 @@ import { getAreHashesReady } from "reducers/files-and-folders/files-and-folders-
 import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import { exportConfig, ExportType } from "./export-config";
 import ExportModalContent from "./export-modal-content";
+import { addTracker } from "logging/tracker";
+import { ActionType } from "logging/tracker-types";
 
 type ExportModalContentContainerProps = {
   closeModal: () => void;
@@ -20,7 +22,11 @@ const ExportModalContentContainer: FC<ExportModalContentContainerProps> = ({
   const dispatch = useDispatch();
 
   const startExport = (exportId: ExportType, exportPath: string) => {
-    const { exportFunction } = exportConfig[exportId];
+    const { exportFunction, trackingTitle } = exportConfig[exportId];
+    addTracker({
+      title: trackingTitle,
+      type: ActionType.TRACK_EVENT,
+    });
     dispatch(exportFunction(exportPath));
   };
 

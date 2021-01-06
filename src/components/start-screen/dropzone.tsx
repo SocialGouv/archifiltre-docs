@@ -47,6 +47,16 @@ const Dropzone: FC<DropzoneProps> = ({ loadPath, setLoadedPath }) => {
     (event) => {
       event.preventDefault();
 
+      const areMultipleFoldersDropped = event.dataTransfer.files.length > 1;
+
+      if (areMultipleFoldersDropped) {
+        notifyError(
+          t("folderDropzone.multipleFoldersDroppedErrorMessage"),
+          t("folderDropzone.multipleFoldersDroppedErrorTitle")
+        );
+        return;
+      }
+
       const isFileDefined = expectToBeDefined(event.dataTransfer.files[0], "");
 
       if (!isFileDefined) {

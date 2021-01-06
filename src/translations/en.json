@@ -22,7 +22,9 @@
       "documentation": "Documentation",
       "newDirectory": "New directory",
       "slug": "Visualise and improve your file trees !",
-      "cancelLoading": "Cancel loading"
+      "cancelLoading": "Cancel loading",
+      "multipleFoldersDroppedErrorMessage": "Archifiltre cannot read several folders at the same time",
+      "multipleFoldersDroppedErrorTitle": "Several folders dropped"
     },
     "report": {
       "comments": "Comments",

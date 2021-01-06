@@ -23,6 +23,7 @@
       "newDirectory": "New directory",
       "slug": "Visualise and improve your file trees !",
       "cancelLoading": "Cancel loading",
+      "cannotFindPath": "Cannot find folder path",
       "multipleFoldersDroppedErrorMessage": "Archifiltre cannot read several folders at the same time",
       "multipleFoldersDroppedErrorTitle": "Several folders dropped"
     },

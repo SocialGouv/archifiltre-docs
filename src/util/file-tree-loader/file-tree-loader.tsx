@@ -15,10 +15,6 @@ export type HookParam = {
   vfs?: VirtualFileSystem;
 };
 
-export type CompleteHookParam = HookParam & {
-  vfs: VirtualFileSystem;
-};
-
 type LoadFileTreeParams = {
   filesAndFolders?: FilesAndFoldersMap;
   erroredPaths?: ArchifiltreError[];

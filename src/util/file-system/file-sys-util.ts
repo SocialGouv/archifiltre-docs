@@ -152,7 +152,7 @@ export const isValidFilePath = async (path: string) => {
   return folderExists(folderPath);
 };
 
-export const folderExists = async (path: string): Promise<boolean> => {
+const folderExists = async (path: string): Promise<boolean> => {
   try {
     const stats = await fs.promises.stat(path);
     return stats.isDirectory();
@@ -160,3 +160,5 @@ export const folderExists = async (path: string): Promise<boolean> => {
     return false;
   }
 };
+
+export const isValidFolderPath = (path: string): boolean => fs.existsSync(path);

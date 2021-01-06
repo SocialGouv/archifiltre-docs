@@ -22,7 +22,9 @@
       "documentation": "Documentation",
       "newDirectory": "Nouveau répertoire",
       "slug": "Visualisez et améliorez vos arborescences de fichiers !",
-      "cancelLoading": "Annuler le chargement"
+      "cancelLoading": "Annuler le chargement",
+      "multipleFoldersDroppedErrorMessage": "Archifiltre ne peut pas lire plusieurs dossiers à la fois",
+      "multipleFoldersDroppedErrorTitle": "Plusieurs dossiers déposés"
     },
     "report": {
       "comments": "Description",

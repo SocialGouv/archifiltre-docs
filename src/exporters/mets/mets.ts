@@ -19,8 +19,6 @@ import {
   metsExportErrorFileDoesNotExist,
 } from "./mets-errors";
 import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
 import { getDisplayName } from "util/files-and-folders/file-and-folders-utils";
 import { v4 as uuidv4 } from "uuid";
 
@@ -630,10 +628,6 @@ export const makeSIP = async ({
   sessionName,
   exportPath,
 }: GlobalState) => {
-  addTracker({
-    title: ActionTitle.METS_EXPORT,
-    type: ActionType.TRACK_EVENT,
-  });
   const sip = new JSZip();
   const content = sip.folder("master");
   const addToContent = (filename, data) => {

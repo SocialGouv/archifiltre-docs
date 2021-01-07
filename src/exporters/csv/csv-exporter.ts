@@ -1,5 +1,3 @@
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
 import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
 import translations from "translations/translations";
 import { handleFileExportThunk } from "util/export/export-util";
@@ -19,13 +17,6 @@ export const csvExporterThunk = (
   name: string,
   { withHashes = false } = {}
 ): ArchifiltreThunkAction => async (dispatch, getState) => {
-  addTracker({
-    title: withHashes
-      ? ActionTitle.CSV_WITH_HASHES_EXPORT
-      : ActionTitle.CSV_EXPORT,
-    type: ActionType.TRACK_EVENT,
-  });
-
   const csvExportStartedMessage = translations.t(
     "export.csvExportStartedMessage"
   );

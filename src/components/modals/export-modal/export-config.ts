@@ -9,6 +9,7 @@ import { resipExporterThunk } from "exporters/resip/resip-exporter-thunk";
 import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
 import { getNameWithExtension } from "util/file-system/file-sys-util";
 import { excelExporterThunk } from "exporters/excel/excel-exporter";
+import { ActionTitle } from "logging/tracker-types";
 
 export enum ExportType {
   EXCEL = "EXCEL",
@@ -38,6 +39,7 @@ type ExportConfig = {
   exportPath: (originalPath: string, sessionName: string) => string;
   isFilePickerDisabled?: boolean;
   category: ExportCategory;
+  trackingTitle: ActionTitle;
 };
 
 type ExportConfigMap = {
@@ -89,6 +91,7 @@ export const exportConfig: ExportConfigMap = {
     exportPath: (originalPath, sessionName) =>
       computeExportFilePath(originalPath, sessionName, ExportType.AUDIT),
     category: ExportCategory.AUDIT,
+    trackingTitle: ActionTitle.AUDIT_REPORT_EXPORT,
   },
   [ExportType.CSV]: {
     isActive: true,
@@ -97,6 +100,7 @@ export const exportConfig: ExportConfigMap = {
     exportPath: (originalPath, sessionName) =>
       computeExportFilePath(originalPath, sessionName, ExportType.CSV),
     category: ExportCategory.RECORDS_INVENTORY,
+    trackingTitle: ActionTitle.CSV_EXPORT,
   },
   [ExportType.CSV_WITH_HASHES]: {
     isActive: ({ areHashesReady }) => areHashesReady,
@@ -111,6 +115,7 @@ export const exportConfig: ExportConfigMap = {
         ExportType.CSV_WITH_HASHES
       ),
     category: ExportCategory.RECORDS_INVENTORY,
+    trackingTitle: ActionTitle.CSV_WITH_HASHES_EXPORT,
   },
   [ExportType.TREE_CSV]: {
     isActive: true,
@@ -119,6 +124,7 @@ export const exportConfig: ExportConfigMap = {
     exportPath: (originalPath, sessionName) =>
       computeExportFilePath(originalPath, sessionName, ExportType.TREE_CSV),
     category: ExportCategory.RECORDS_INVENTORY,
+    trackingTitle: ActionTitle.TREE_CSV_EXPORT,
   },
   [ExportType.EXCEL]: {
     isActive: ({ areHashesReady }) => areHashesReady,
@@ -128,6 +134,7 @@ export const exportConfig: ExportConfigMap = {
     exportPath: (originalPath, sessionName) =>
       computeExportFilePath(originalPath, sessionName, ExportType.EXCEL),
     category: ExportCategory.RECORDS_INVENTORY,
+    trackingTitle: ActionTitle.EXCEL_EXPORT,
   },
   [ExportType.RESIP]: {
     isActive: true,
@@ -142,6 +149,7 @@ export const exportConfig: ExportConfigMap = {
     },
     isFilePickerDisabled: true,
     category: ExportCategory.EXCHANGE_WITH_ERMS,
+    trackingTitle: ActionTitle.RESIP_EXPORT,
   },
   [ExportType.METS]: {
     isActive: true,
@@ -150,5 +158,6 @@ export const exportConfig: ExportConfigMap = {
     exportPath: (originalPath, sessionName) =>
       computeExportFilePath(originalPath, sessionName, ExportType.METS),
     category: ExportCategory.EXCHANGE_WITH_ERMS,
+    trackingTitle: ActionTitle.METS_EXPORT,
   },
 };

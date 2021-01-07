@@ -1,7 +1,5 @@
 import { Observable } from "rxjs";
 import translations from "translations/translations";
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import {
   AliasMap,
@@ -48,10 +46,6 @@ export const generateResipExport$ = ({
   filesAndFoldersMetadata,
   tags,
 }: GenerateResipExportOptions): Observable<ResipExportProgress> => {
-  addTracker({
-    title: ActionTitle.RESIP_EXPORT,
-    type: ActionType.TRACK_EVENT,
-  });
   const { language } = translations;
 
   return backgroundWorkerProcess$(

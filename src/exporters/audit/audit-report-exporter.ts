@@ -1,5 +1,3 @@
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
 import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
 import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
@@ -139,10 +137,6 @@ export const computeAuditReportData = (
 export const auditReportExporterThunk = (
   name: string
 ): ArchifiltreThunkAction => (dispatch, getState): Promise<void> => {
-  addTracker({
-    title: ActionTitle.AUDIT_REPORT_EXPORT,
-    type: ActionType.TRACK_EVENT,
-  });
   const filesAndFolders = getFilesAndFoldersFromStore(getState());
   const filesAndFoldersMetadata = getFilesAndFoldersMetadataFromStore(
     getState()

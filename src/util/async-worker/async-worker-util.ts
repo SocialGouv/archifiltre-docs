@@ -24,9 +24,7 @@ export type AsyncWorker<EventType = AsyncWorkerEventType> = {
   postMessage: (message: WorkerMessage) => void;
 };
 
-export type ProcessControllerAsyncWorker = AsyncWorker<
-  AsyncWorkerControllerEvent
-> & {
+export type ProcessControllerAsyncWorker = AsyncWorker<AsyncWorkerControllerEvent> & {
   terminate: () => void;
 };
 
@@ -90,46 +88,66 @@ export const createAsyncWorkerControllerClass = (ChildProcessConstructor) => {
 export type WorkerMessageHandler = (
   asyncWorker: AsyncWorker,
   data: any
-) => void;
+) => void | Promise<void>;
 
 interface SetupChildWorkerListenersOptions {
   onInitialize?: WorkerMessageHandler;
   onData?: WorkerMessageHandler;
 }
 
+export const makeChildWorkerMessageCallback = (
+  asyncWorker: AsyncWorker,
+  { onInitialize, onData }: SetupChildWorkerListenersOptions
+) => async ({ data, type }: any) => {
+  switch (type) {
+    case MessageTypes.INITIALIZE:
+      if (data.language) {
+        await translations.changeLanguage(data.language);
+      }
+      if (!onInitialize) {
+        break;
+      }
+      try {
+        await onInitialize(asyncWorker, data);
+        asyncWorker.postMessage({ type: MessageTypes.READY });
+      } catch (err) {
+        asyncWorker.postMessage({
+          type: MessageTypes.FATAL,
+          error: err.toString(),
+        });
+      }
+      break;
+
+    case MessageTypes.DATA:
+      if (!onData) {
+        break;
+      }
+      try {
+        await onData(asyncWorker, data);
+      } catch (err) {
+        asyncWorker.postMessage({
+          type: MessageTypes.FATAL,
+          error: err.toString(),
+        });
+      }
+      break;
+  }
+};
+
 /**
  * Setup the listeners on an async worker. Each callback will be called when each message type is received.
  * @param asyncWorker - The async worker
- * @param onInitialize - The callback for MessageTypes.INITIALIZE messages
- * @param onData - The callback for MessageTypes.DATA messages
+ * @param listeners
+ * @param listeners.onInitialize - The callback for MessageTypes.INITIALIZE messages
+ * @param listeners.onData - The callback for MessageTypes.DATA messages
  */
 export const setupChildWorkerListeners = (
   asyncWorker: AsyncWorker,
-  { onInitialize, onData }: SetupChildWorkerListenersOptions
+  listeners: SetupChildWorkerListenersOptions
 ) => {
   asyncWorker.addEventListener(
     WorkerEventType.MESSAGE,
-    async ({ data, type }: any) => {
-      switch (type) {
-        case MessageTypes.INITIALIZE:
-          if (data.language) {
-            await translations.changeLanguage(data.language);
-          }
-          if (!onInitialize) {
-            break;
-          }
-          onInitialize(asyncWorker, data);
-          asyncWorker.postMessage({ type: MessageTypes.READY });
-          break;
-
-        case MessageTypes.DATA:
-          if (!onData) {
-            break;
-          }
-          onData(asyncWorker, data);
-          break;
-      }
-    }
+    makeChildWorkerMessageCallback(asyncWorker, listeners)
   );
 };
 

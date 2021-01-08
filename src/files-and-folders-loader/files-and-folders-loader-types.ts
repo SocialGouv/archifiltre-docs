@@ -9,8 +9,8 @@ import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/
 import { HashesMap } from "reducers/hashes/hashes-types";
 import { TagMap } from "reducers/tags/tags-types";
 import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
-import { ArchifiltreErrorCode } from "util/error/error-util";
-import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
+import { ArchifiltreError } from "util/error/error-util";
+import { ArchifiltreErrorCode } from "util/error/error-codes";
 
 export type VirtualFileSystem = WithAliases &
   WithComments &

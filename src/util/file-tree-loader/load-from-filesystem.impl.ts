@@ -6,7 +6,7 @@ import {
   makeFileLoadingHooksCreator,
 } from "files-and-folders-loader/file-system-loading-process-utils";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
-import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
+import { ArchifiltreError } from "util/error/error-util";
 
 type Reporter = (message: any) => void;
 

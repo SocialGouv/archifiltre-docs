@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 import { cancelableBackgroundWorkerProcess$ } from "util/batch-process/batch-process-util";
 import LoadFromFileSystemWorker from "./load-from-filesystem.fork";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
-import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
+import { ArchifiltreError } from "util/error/error-util";
 
 type LoadFileTreeResponse = { result$: Observable<any>; terminate: () => void };
 

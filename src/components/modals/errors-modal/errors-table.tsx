@@ -2,7 +2,7 @@ import Table from "components/common/table/table";
 import { Column } from "components/common/table/table-types";
 import React, { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
+import { ArchifiltreError } from "util/error/error-util";
 
 type ErrorsTableProps = {
   errors: ArchifiltreError[];

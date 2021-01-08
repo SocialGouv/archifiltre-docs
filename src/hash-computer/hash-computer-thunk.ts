@@ -13,10 +13,7 @@ import {
   registerErrorAction,
 } from "reducers/loading-info/loading-info-actions";
 import { startLoading } from "reducers/loading-info/loading-info-operations";
-import {
-  ArchifiltreError,
-  LoadingInfoTypes,
-} from "reducers/loading-info/loading-info-types";
+import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
 import translations from "translations/translations";
 import {
   NotificationDuration,
@@ -40,6 +37,7 @@ import {
   getHashesFromStore,
 } from "reducers/hashes/hashes-selectors";
 import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
+import { ArchifiltreError } from "util/error/error-util";
 
 const computeFileHashesIgnoredThunk = (
   loadingActionId: string,

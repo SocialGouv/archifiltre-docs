@@ -15,8 +15,8 @@ import {
 } from "./files-and-folders-types";
 import { getHashesFromStore } from "../hashes/hashes-selectors";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 import { useSelector } from "react-redux";
+import { ArchifiltreError } from "util/error/error-util";
 
 export const ROOT_FF_ID = "";
 

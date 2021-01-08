@@ -10,7 +10,10 @@ import {
 } from "reducers/files-and-folders/files-and-folders-types";
 import { convertToPosixAbsolutePath } from "util/file-system/file-sys-util";
 import { empty } from "util/function/function-util";
-import { convertFsErrorToArchifiltreError } from "util/error/error-util";
+import {
+  ArchifiltreErrorType,
+  convertFsErrorToArchifiltreError,
+} from "util/error/error-util";
 import { identifyFileFormat } from "util/file-format/file-format-util";
 import { asyncShouldIgnoreElement } from "util/hidden-file/hidden-file-util";
 import { HashesMap } from "reducers/hashes/hashes-types";
@@ -34,7 +37,6 @@ import {
   ROOT_FF_ID,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { sanitizeHooks } from "files-and-folders-loader/file-system-loading-process-utils";
-import { ArchifiltreErrorType } from "reducers/loading-info/loading-info-types";
 
 interface FilesAndFoldersInfo {
   lastModified: number;

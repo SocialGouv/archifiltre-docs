@@ -5,7 +5,7 @@ import {
   RESET_ERRORED_HASHES,
   SET_FILES_AND_FOLDERS_HASHES,
 } from "./hashes-types";
-import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
+import { ArchifiltreError } from "util/error/error-util";
 
 /**
  * Action to set hashes to FileAndFolders

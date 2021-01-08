@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "concurrently -k \"yarn dev-main\" \"yarn dev-renderer\"",
     "dev-main": "webpack --mode development --config webpack.electron-main.js --watch",
-    "dev-renderer": "webpack-dev-server --mode development",
+    "dev-renderer": "webpack serve --mode development",
     "dev-test": "concurrently -k \"yarn dev-main\" \"yarn dev-renderer --autoload ./tests/test-folder\"",
     "dev-app": "cross-env DEV_SERVER=true electron ./electron/dist/main",
     "test": "jest \"src/.*\\.test\\.[jt]s\"",
@@ -118,7 +118,7 @@
     "url-loader": "4.1.1",
     "webpack": "5.11.1",
     "webpack-bundle-analyzer": "3.9.0",
-    "webpack-cli": "3.3.12",
+    "webpack-cli": "4.3.1",
     "webpack-dev-server": "3.11.1"
   },
   "dependencies": {

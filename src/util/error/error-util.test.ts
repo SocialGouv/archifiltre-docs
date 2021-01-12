@@ -1,5 +1,8 @@
-import { handleError } from "./error-util";
+import { handleError, makeErrorHandler } from "./error-util";
 import { notifyError } from "util/notification/notifications-util";
+import { createArchifiltreError } from "reducers/loading-info/loading-info-selectors";
+import { ArchifiltreFileSystemErrorCode } from "util/error/error-codes";
+import { empty } from "util/function/function-util";
 
 jest.mock("util/notification/notifications-util", () => ({
   notifyError: jest.fn(),
@@ -36,6 +39,43 @@ describe("error-util", () => {
         ERROR_MAP[HANDLED_CODE],
         ERROR_TITLE
       );
+    });
+  });
+
+  describe("makeErrorHandler", () => {
+    describe("with a handled error type", () => {
+      it("should call the right error handler", async () => {
+        const errorCallback = jest.fn();
+        const errorConfig = {
+          [ArchifiltreFileSystemErrorCode.EACCES]: errorCallback,
+          default: empty,
+        };
+
+        const error = createArchifiltreError({
+          code: ArchifiltreFileSystemErrorCode.EACCES,
+        });
+
+        await makeErrorHandler(errorConfig)(error);
+
+        expect(errorCallback).toHaveBeenCalledWith(error);
+      });
+    });
+
+    describe("with a default fallback", () => {
+      it("should call the right error handler", async () => {
+        const errorCallback = jest.fn();
+        const errorConfig = {
+          default: errorCallback,
+        };
+
+        const error = createArchifiltreError({
+          code: ArchifiltreFileSystemErrorCode.EACCES,
+        });
+
+        await makeErrorHandler(errorConfig)(error);
+
+        expect(errorCallback).toHaveBeenCalledWith(error);
+      });
     });
   });
 });

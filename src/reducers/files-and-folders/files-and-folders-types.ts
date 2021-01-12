@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
+import { ArchifiltreError } from "util/error/error-util";
 
 export const INITIALIZE_FILES_AND_FOLDERS = "FILES_AND_FOLDERS/INITIALIZE";
 export const REMOVE_CHILD = "FILES_AND_FOLDERS/REMOVE_CHILD";

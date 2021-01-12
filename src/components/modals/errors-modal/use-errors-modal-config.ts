@@ -1,7 +1,7 @@
 import { TFunction } from "i18next";
 import { useMemo } from "react";
-import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 import { Column } from "components/common/table/table-types";
+import { ArchifiltreError } from "util/error/error-util";
 
 export const useErrorsModalConfig = (
   t: TFunction

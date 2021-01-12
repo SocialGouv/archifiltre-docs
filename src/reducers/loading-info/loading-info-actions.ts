@@ -1,5 +1,4 @@
 import {
-  ArchifiltreError,
   COMPLETE_LOADING,
   DISMISS_ALL_COMPLETE,
   LoadingInfoAction,
@@ -10,6 +9,7 @@ import {
   START_LOADING,
   UPDATE_LOADING,
 } from "./loading-info-types";
+import { ArchifiltreError } from "util/error/error-util";
 
 /**
  * Action to start a loading display

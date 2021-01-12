@@ -1,12 +1,8 @@
 import { StoreState } from "../store";
-import {
-  ArchifiltreError,
-  ArchifiltreErrorType,
-  LoadingInfo,
-  LoadingInfoState,
-} from "./loading-info-types";
-import { ArchifiltreErrorCode, UnknownError } from "util/error/error-util";
+import { LoadingInfo, LoadingInfoState } from "./loading-info-types";
+import { ArchifiltreError, ArchifiltreErrorType } from "util/error/error-util";
 import { useSelector } from "react-redux";
+import { ArchifiltreErrorCode, UnknownError } from "util/error/error-codes";
 
 /**
  * Returns the loadingInfo from the store

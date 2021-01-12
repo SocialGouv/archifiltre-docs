@@ -3,8 +3,8 @@ import { MessageTypes } from "../util/batch-process/batch-process-util-types";
 import { formatPathForUserSystem } from "util/file-system/file-sys-util";
 import { computeHash } from "util/hash/hash-util";
 import { onData, onInitialize } from "./file-hash-computer.impl";
-import { ArchifiltreErrorType } from "../reducers/loading-info/loading-info-types";
-import { UnknownError } from "util/error/error-util";
+import { ArchifiltreErrorType } from "util/error/error-util";
+import { UnknownError } from "util/error/error-codes";
 
 jest.mock("../util/hash/hash-util", () => ({
   computeHash: jest.fn(),

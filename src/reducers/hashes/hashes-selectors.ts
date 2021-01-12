@@ -1,7 +1,7 @@
 import { StoreState } from "../store";
 import { HashesMap } from "./hashes-types";
-import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 import { useSelector } from "react-redux";
+import { ArchifiltreError } from "util/error/error-util";
 
 /**
  * Gets the hashes map from the redux state

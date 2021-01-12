@@ -4,10 +4,10 @@ import React, { FC } from "react";
 import { useStyles } from "hooks/use-styles";
 import ModalHeader from "../../modals/modal-header";
 import { useTranslation } from "react-i18next";
-import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 import ErrorsTable from "./errors-table";
 import { DialogActions } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import { ArchifiltreError } from "util/error/error-util";
 
 type ModalAction = {
   id: string;

@@ -21,7 +21,7 @@ import {
   UNMARK_ELEMENTS_TO_DELETE,
   VirtualPathToIdMap,
 } from "./files-and-folders-types";
-import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
+import { ArchifiltreError } from "util/error/error-util";
 
 /**
  * Action to set the initial state of the files and folders store

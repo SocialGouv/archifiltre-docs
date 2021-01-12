@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { compose } from "lodash/fp";
 import { reportError } from "logging/reporter";
 import path from "path";
 import { mapToNewVersionNumbers } from "components/header/new-version-checker";
@@ -35,8 +36,8 @@ import {
 import { operateOnDataProcessingStream } from "util/observable/observable-util";
 import version, { versionComparator } from "../version";
 import {
-  ArchifiltreThunkAction,
   ArchifiltreDispatch,
+  ArchifiltreThunkAction,
 } from "./archifiltre-types";
 import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata/files-and-folders-metadata-actions";
 import {
@@ -85,9 +86,15 @@ import { resetZoom } from "reducers/main-space-selection/main-space-selection-ac
 import { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
 import { ErrorMessage } from "util/batch-process/batch-process-util-types";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
-import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
 import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import workerManager from "util/worker-manager/worker-manager";
+import {
+  ArchifiltreError,
+  ArchifiltreErrorType,
+  makeErrorHandler,
+} from "util/error/error-util";
+import { ArchifiltreStoreThunkErrorCode } from "util/error/error-codes";
+import { copyToClipboard } from "util/clipboard/clipboard";
 
 /**
  * Notifies the user that there is a Zip in the loaded files
@@ -124,21 +131,35 @@ const displayErrorNotification = () => (dispatch) => {
   );
 };
 
+const errorResponse = { virtualFileSystem: Promise.reject(), terminate: empty };
+
 const displayRootPathError = () => {
   const errorMessage = translations.t("folderDropzone.errorsWhileLoading");
   const errorTitle = translations.t("folderDropzone.rootElementError");
-  return displayPathError(errorMessage, errorTitle);
+  return displayError(errorMessage, errorTitle);
 };
 
 const displayInvalidPathError = () => {
   const errorMessage = translations.t("folderDropzone.cannotFindPath");
   const errorTitle = translations.t("folderDropzone.error");
-  return displayPathError(errorMessage, errorTitle);
+  return displayError(errorMessage, errorTitle);
 };
 
-const displayPathError = (errorMessage: string, errorTitle: string) => {
+const displayUnexpectedError = (errorReason: string) => {
+  const errorTitle = translations.t("folderDropzone.unexpectedError");
+  const errorMessage = translations.t("folderDropzone.unexpectedErrorMessage");
+  reportError(errorReason);
+  return notifyError(
+    errorMessage,
+    errorTitle,
+    NotificationDuration.PERMANENT,
+    () => copyToClipboard(errorReason)
+  );
+};
+
+const displayError = (errorMessage: string, errorTitle: string) => {
   notifyError(errorMessage, errorTitle);
-  return { virtualFileSystem: Promise.reject(), terminate: empty };
+  return errorResponse;
 };
 
 /**
@@ -371,18 +392,60 @@ const loadFilesAndFoldersFromValidPathThunk = (
   return { virtualFileSystem, terminate };
 };
 
+const createArchifiltreStoreThunkError = (
+  code: ArchifiltreStoreThunkErrorCode,
+  reason?: string
+): ArchifiltreError => ({
+  type: ArchifiltreErrorType.STORE_THUNK,
+  code,
+  reason: "",
+  filePath: "",
+});
+
+const failIfRootPath = (path: string) => {
+  if (isRootPath(path)) {
+    throw createArchifiltreStoreThunkError(
+      ArchifiltreStoreThunkErrorCode.ROOT_PATH
+    );
+  }
+  return path;
+};
+
+const failIfInvalidPath = (path: string) => {
+  if (!isValidFolderPath(path)) {
+    throw createArchifiltreStoreThunkError(
+      ArchifiltreStoreThunkErrorCode.INVALID_PATH
+    );
+  }
+  return path;
+};
+
+const displayUnknownError = () => errorResponse;
+
 export const loadFilesAndFoldersFromPathThunk = (
   fileOrFolderPath: string
 ): ArchifiltreThunkAction<Promise<VirtualFileSystemLoader>> => async (
   dispatch
 ) => {
-  if (isRootPath(fileOrFolderPath)) {
-    return displayRootPathError();
+  try {
+    const { virtualFileSystem, terminate } = await compose(
+      (path) => dispatch(loadFilesAndFoldersFromValidPathThunk(path)),
+      failIfInvalidPath,
+      failIfRootPath
+    )(fileOrFolderPath);
+
+    virtualFileSystem.catch((err: ArchifiltreError) => {
+      displayUnexpectedError(err.reason);
+    });
+
+    return { virtualFileSystem, terminate };
+  } catch (err) {
+    return await makeErrorHandler({
+      [ArchifiltreStoreThunkErrorCode.ROOT_PATH]: displayRootPathError,
+      [ArchifiltreStoreThunkErrorCode.INVALID_PATH]: displayInvalidPathError,
+      default: displayUnknownError,
+    })(err);
   }
-  if (!isValidFolderPath(fileOrFolderPath)) {
-    return displayInvalidPathError();
-  }
-  return dispatch(loadFilesAndFoldersFromValidPathThunk(fileOrFolderPath));
 };
 
 /**

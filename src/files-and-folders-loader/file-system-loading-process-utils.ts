@@ -33,7 +33,7 @@ import {
   makeJsonFileLoader,
   retryLoadFromFileSystem,
 } from "files-and-folders-loader/files-and-folders-loader";
-import { ArchifiltreError } from "reducers/loading-info/loading-info-types";
+import { ArchifiltreError } from "util/error/error-util";
 
 type Overrides = {
   lastModified?: LastModifiedMap;

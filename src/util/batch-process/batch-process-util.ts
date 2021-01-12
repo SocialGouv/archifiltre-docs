@@ -18,6 +18,8 @@ import {
   ProcessControllerAsyncWorker,
   WorkerEventType,
 } from "util/async-worker/async-worker-util";
+import { createArchifiltreError } from "reducers/loading-info/loading-info-selectors";
+import { ArchifiltreErrorType } from "util/error/error-util";
 
 // We create NB_CPUS - 1 processes to optimize computation
 const NB_CPUS = cpus().length - 1 > 0 ? cpus().length - 1 : 1;
@@ -62,12 +64,21 @@ export const setupWorkers$ = (
       })
       .map(
         (worker): Observable<MessageAndWorker> =>
-          (fromEvent(worker, WorkerEventType.MESSAGE) as Observable<
-            WorkerMessage
-          >).pipe(
+          (fromEvent(
+            worker,
+            WorkerEventType.MESSAGE
+          ) as Observable<WorkerMessage>).pipe(
             tap(({ type }) => {
               if (type === MessageTypes.COMPLETE) {
                 worker.terminate();
+              }
+            }),
+            tap((message) => {
+              if (message.type === MessageTypes.FATAL) {
+                throw createArchifiltreError({
+                  type: ArchifiltreErrorType.BATCH_PROCESS_ERROR,
+                  reason: message.error,
+                });
               }
             }),
             takeWhile(({ type }) => type !== MessageTypes.COMPLETE),

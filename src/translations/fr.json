@@ -25,7 +25,9 @@
       "cancelLoading": "Annuler le chargement",
       "cannotFindPath": "Impossible de trouver le chemin vers ce dossier",
       "multipleFoldersDroppedErrorMessage": "Archifiltre ne peut pas lire plusieurs dossiers à la fois",
-      "multipleFoldersDroppedErrorTitle": "Plusieurs dossiers déposés"
+      "multipleFoldersDroppedErrorTitle": "Plusieurs dossiers déposés",
+      "unexpectedError":  "Erreur inattendue",
+      "unexpectedErrorMessage":  "Une erreur inattendue s'est produite. Cliquez ici pour copier les détails de l'erreur."
     },
     "report": {
       "comments": "Description",

@@ -8,3 +8,4 @@ tmp
 etc/
 dist/
 .env
+yarn-error.log

@@ -13,6 +13,18 @@ export interface FilesAndFoldersMetadata {
   sortAlphaNumericallyIndex: number[];
 }
 
+export const filesAndFoldersMetadataKeys: (keyof FilesAndFoldersMetadata)[] = [
+  "maxLastModified",
+  "minLastModified",
+  "medianLastModified",
+  "averageLastModified",
+  "childrenTotalSize",
+  "nbChildrenFiles",
+  "sortBySizeIndex",
+  "sortByDateIndex",
+  "sortAlphaNumericallyIndex",
+];
+
 export interface FilesAndFoldersMetadataMap {
   [filesAndFoldersId: string]: FilesAndFoldersMetadata;
 }

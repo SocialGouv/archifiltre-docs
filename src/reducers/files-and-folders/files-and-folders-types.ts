@@ -35,6 +35,15 @@ export interface FilesAndFolders {
   virtualPath: string;
 }
 
+export const filesAndFoldersKeys: (keyof FilesAndFolders)[] = [
+  "id",
+  "name",
+  "children",
+  "file_size",
+  "file_last_modified",
+  "virtualPath",
+];
+
 export interface ElementWithToDelete extends FilesAndFolders {
   toDelete: boolean;
 }

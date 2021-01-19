@@ -8,6 +8,7 @@ export enum MessageTypes {
   INITIALIZE = "initialize",
   LOG = "log",
   RESULT = "result",
+  STREAM_READ = "streamRead",
 }
 
 export type ReadyMessage = {
@@ -22,6 +23,10 @@ export type ErrorMessage = {
 export type ResultMessage<T = any> = {
   type: typeof MessageTypes.RESULT;
   result: T;
+};
+
+export type StreamReadMessage = {
+  type: typeof MessageTypes.STREAM_READ;
 };
 
 export type InitializeMessage = {
@@ -58,6 +63,7 @@ export type WorkerMessage =
   | ReadyMessage
   | ErrorMessage
   | ResultMessage
+  | StreamReadMessage
   | InitializeMessage
   | CompleteMessage
   | WarningMessage

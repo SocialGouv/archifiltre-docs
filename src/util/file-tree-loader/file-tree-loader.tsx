@@ -5,6 +5,10 @@ import { cancelableBackgroundWorkerProcess$ } from "util/batch-process/batch-pro
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { ArchifiltreError } from "util/error/error-util";
 import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
+import { remote } from "electron";
+import { Readable } from "stream";
+import { parseVFSFromStream } from "util/vfs-stream/vfs-stream";
+import { MessageTypes } from "util/batch-process/batch-process-util-types";
 
 type LoadFileTreeResponse = { result$: Observable<any>; terminate: () => void };
 
@@ -20,13 +24,30 @@ type LoadFileTreeParams = {
   erroredPaths?: ArchifiltreError[];
 };
 
+type StreamParserResult = {
+  status: MessageTypes;
+  result: VirtualFileSystem;
+};
+
+const streamParser = async (stream: Readable): Promise<StreamParserResult> => {
+  const vfs = await parseVFSFromStream(stream);
+  return { status: MessageTypes.RESULT, result: vfs };
+};
+
 export const loadFileTree = (
   droppedElementPath: string,
   params: LoadFileTreeParams
 ): LoadFileTreeResponse =>
   cancelableBackgroundWorkerProcess$(
-    { path: droppedElementPath, ...params },
-    createAsyncWorkerForChildProcessControllerFactory(
-      "load-from-filesystem.fork"
+    {
+      path: droppedElementPath,
+      resultFolderPath: remote.app.getPath("userData"),
+      ...params,
+    },
+    createAsyncWorkerForChildProcessControllerFactory<StreamParserResult>(
+      "load-from-filesystem.fork",
+      {
+        dataStreamProcessor: streamParser,
+      }
     )
   );

@@ -23,7 +23,12 @@ export type VirtualFileSystem = WithAliases &
   WithSessionName &
   WithTags &
   WithVersion &
-  WithVirtualPathToIdMap;
+  WithVirtualPathToIdMap &
+  WithIsOnFileSystem;
+
+export type WithIsOnFileSystem<T = {}> = T & {
+  isOnFileSystem: boolean;
+};
 
 export type WithFilesAndFolders<T = {}> = T & {
   filesAndFolders: FilesAndFoldersMap;

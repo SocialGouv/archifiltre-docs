@@ -62,7 +62,7 @@ export const stringifyObjectToStream = <Data, SerializedData>(
   console.log(sentSize);
 };
 
-export type StreamSerializer<Data> = (stream: Writable, data: Data) => void;
+export type MessageSerializer<Data> = (stream: Writable, data: Data) => void;
 
 type FolderHashComputerData = WithFilesAndFolders & WithHashes;
 

@@ -20,6 +20,11 @@ import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders
 import { HashesMap } from "reducers/hashes/hashes-types";
 import { Observable, OperatorFunction } from "rxjs";
 import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
+import {
+  InitializeMessage,
+  MessageTypes,
+} from "util/batch-process/batch-process-util-types";
+import { folderHashComputerInputToStream } from "util/vfs-stream/vfs-stream";
 
 const BATCH_SIZE = 500;
 const BUFFER_TIME = 1000;
@@ -107,6 +112,14 @@ type ComputeFolderHashesOptions = {
   hashes: HashesMap;
 };
 
+const initMessageSerializer = (stream, message: InitializeMessage) => {
+  folderHashComputerInputToStream(stream, message.data);
+};
+
+const messageSerializers = {
+  [MessageTypes.INITIALIZE]: initMessageSerializer,
+};
+
 /**
  * Returns an observable that will dispatch computed hashes every second
  * @param filesAndFolders - The filesAndFolders
@@ -120,7 +133,8 @@ export const computeFolderHashes$ = ({
   return backgroundWorkerProcess$(
     { filesAndFolders, hashes },
     createAsyncWorkerForChildProcessControllerFactory(
-      "folder-hash-computer.fork"
+      "folder-hash-computer.fork",
+      { messageSerializers }
     )
   )
     .pipe(filterResults())

@@ -2,12 +2,21 @@ import { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-lo
 import { createFilesAndFolders } from "files-and-folders-loader/files-and-folders-loader";
 import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import {
+  folderHashComputerInputToStream,
+  parseFolderHashComputerInputFromStream,
   parseVFSFromStream,
   stringifyVFSToStream,
 } from "util/vfs-stream/vfs-stream";
 import { MockWritable } from "stdio-mock";
 import * as Stream from "stream";
 import { times } from "lodash";
+
+const extractDataFromMock = (writeable: MockWritable): Promise<Buffer[]> =>
+  new Promise((resolve) => {
+    writeable.on("finish", () => {
+      resolve(writeable.data());
+    });
+  });
 
 describe("vfs-stream", () => {
   it("should parse sent vfs", async () => {
@@ -57,14 +66,36 @@ describe("vfs-stream", () => {
     // @ts-ignore
     stringifyVFSToStream(writeable, vfs);
 
-    const data: Buffer[] = await new Promise((resolve) => {
-      writeable.on("finish", () => {
-        resolve(writeable.data());
-      });
-    });
+    const data: Buffer[] = await extractDataFromMock(writeable);
 
     const parsedVfs = await parseVFSFromStream(Stream.Readable.from(data));
 
     expect(parsedVfs).toEqual(vfs);
+  });
+
+  it("should send and parse FolderHashComputerInput", async () => {
+    const inputData = {
+      filesAndFolders: {
+        id1: createFilesAndFolders({ id: "id1" }),
+        id2: createFilesAndFolders({ id: "id2" }),
+      },
+      hashes: {
+        id1: "id1-hash",
+        id2: "id2-hash",
+      },
+    };
+
+    const writeable = new MockWritable();
+
+    // @ts-ignore
+    folderHashComputerInputToStream(writeable, inputData);
+
+    const data = await extractDataFromMock(writeable);
+
+    const parsedData = await parseFolderHashComputerInputFromStream(
+      Stream.Readable.from(data)
+    );
+
+    expect(parsedData).toEqual(inputData);
   });
 });

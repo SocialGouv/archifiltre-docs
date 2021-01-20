@@ -1,19 +1,21 @@
 import { ChildProcess } from "child_process";
 import { without } from "lodash";
 import {
-  createAsyncWorkerForChildProcessController,
   ProcessControllerAsyncWorker,
   WorkerEventType,
 } from "util/async-worker/async-worker-util";
 
 export type ChildProcessConstructor = ChildProcess & { new (): ChildProcess };
 
+export type ProcessControllerAsyncWorkerFactory = () => ProcessControllerAsyncWorker;
+
 class WorkerManager {
   workerControllers: ProcessControllerAsyncWorker[] = [];
 
-  spawn(Constructor: ChildProcessConstructor): ProcessControllerAsyncWorker {
-    const childProcess = new Constructor();
-    const worker = createAsyncWorkerForChildProcessController(childProcess);
+  spawn(
+    asyncWorkerFactory: ProcessControllerAsyncWorkerFactory
+  ): ProcessControllerAsyncWorker {
+    const worker = asyncWorkerFactory();
     this.workerControllers = [...this.workerControllers, worker];
     worker.addEventListener(WorkerEventType.EXIT, () => {
       this.workerControllers = without(this.workerControllers, worker);

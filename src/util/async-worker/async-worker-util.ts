@@ -1,9 +1,9 @@
-import { ChildProcess } from "child_process";
 import {
   MessageTypes,
   WorkerMessage,
 } from "../batch-process/batch-process-util-types";
 import translations from "translations/translations";
+import { ChildProcess } from "child_process";
 
 export enum WorkerEventType {
   MESSAGE = "message",
@@ -28,62 +28,11 @@ export type ProcessControllerAsyncWorker = AsyncWorker<AsyncWorkerControllerEven
   terminate: () => void;
 };
 
-type ChildProcessAsyncWorker = AsyncWorker;
-
-/**
- * Creates an AsyncWorker bound to the current ChildProcess context
- */
-export const createAsyncWorkerForChildProcess = (): ChildProcessAsyncWorker => {
-  const localProcess = process as NodeJS.Process;
-  return {
-    addEventListener: (eventType, listener) => {
-      localProcess.addListener(eventType, (event) => {
-        listener(event);
-      });
-    },
-    removeEventListener: (eventType, listener) => {
-      localProcess.removeListener("loaded", listener);
-    },
-    postMessage: (message) => {
-      if (!localProcess || !localProcess.send) {
-        throw new Error("This must be called in a forked process");
-      }
-      localProcess.send(message);
-    },
-  };
+export type ChildProcessControllerAsyncWorker = ProcessControllerAsyncWorker & {
+  childProcess: ChildProcess;
 };
 
-/**
- * Creates an AsyncWorker from a ChildProcess
- * @param childProcess
- */
-export const createAsyncWorkerForChildProcessController = (
-  childProcess: ChildProcess
-): ProcessControllerAsyncWorker => ({
-  addEventListener: (eventType, listener) => {
-    childProcess.addListener(eventType, (data) => {
-      listener(data);
-    });
-  },
-  removeEventListener: (eventType, listener) => {
-    childProcess.removeListener(eventType, listener);
-  },
-  postMessage: (message) => childProcess.send(message),
-  terminate: () => childProcess.kill(),
-});
-
-/**
- * Creates a wrapper class for the childProcess contructor to be used in batch-process-common
- * @param ChildProcessConstructor
- */
-export const createAsyncWorkerControllerClass = (ChildProcessConstructor) => {
-  return class AsyncWorkerController {
-    constructor() {
-      const childProcess = new ChildProcessConstructor();
-      return createAsyncWorkerForChildProcessController(childProcess);
-    }
-  };
-};
+export type ChildProcessAsyncWorker = AsyncWorker;
 
 export type WorkerMessageHandler = (
   asyncWorker: AsyncWorker,
@@ -150,12 +99,3 @@ export const setupChildWorkerListeners = (
     makeChildWorkerMessageCallback(asyncWorker, listeners)
   );
 };
-
-/**
- * Fake object used to declare a file as a ChildProcess for the typescript compiler
- * @example
- * // my-child-process.fork.ts
- * import { fakeChildProcess } from "./async-worker-util";
- * export default fakeChildProcess;
- */
-export const fakeChildProcess = {} as ChildProcess & (new () => ChildProcess);

@@ -1,4 +1,3 @@
-import { chunk } from "lodash";
 import { cpus } from "os";
 import { fromEvent, merge, Observable, Subject } from "rxjs";
 import { reportError } from "logging/reporter";
@@ -12,7 +11,7 @@ import {
   WorkerMessage,
 } from "util/batch-process/batch-process-util-types";
 import workerManager, {
-  ChildProcessConstructor,
+  ProcessControllerAsyncWorkerFactory,
 } from "util/worker-manager/worker-manager";
 import {
   ProcessControllerAsyncWorker,
@@ -41,10 +40,12 @@ type InitWorkersResult = {
 };
 
 const spawnWorkers = (
-  WorkerBuilder: ChildProcessConstructor,
+  asyncWorkerFactory: ProcessControllerAsyncWorkerFactory,
   count = NB_CPUS
 ): ProcessControllerAsyncWorker[] =>
-  makeEmptyArray(count, null).map(() => workerManager.spawn(WorkerBuilder));
+  makeEmptyArray(count, null).map(() =>
+    workerManager.spawn(asyncWorkerFactory)
+  );
 
 export const setupWorkers$ = (
   workers: ProcessControllerAsyncWorker[],
@@ -96,10 +97,10 @@ export const setupWorkers$ = (
 };
 
 export const initWorkers$ = (
-  WorkerBuilder: ChildProcessConstructor,
+  asyncWorkerFactory: ProcessControllerAsyncWorkerFactory,
   { initialValues, workerCount = NB_CPUS }: InitWorkersData
 ): InitWorkersResult => {
-  const workers = spawnWorkers(WorkerBuilder, workerCount);
+  const workers = spawnWorkers(asyncWorkerFactory, workerCount);
 
   return setupWorkers$(workers, initialValues);
 };
@@ -121,17 +122,20 @@ export const processQueueWithWorkers = (
   data: any[],
   batchSize: number
 ) => {
-  const queue = chunk(data, batchSize);
-  const queueLength = queue.length;
-
+  let index = 0;
   const subject = new Subject();
+  const messageCount = Math.ceil(data.length / batchSize);
 
   results$
     .pipe(
       filter(filterResultsErrorsAndReady),
       tap(({ worker, message }) => {
-        if (queue.length > 0) {
-          worker.postMessage({ type: MessageTypes.DATA, data: queue.shift() });
+        if (index < data.length) {
+          worker.postMessage({
+            type: MessageTypes.DATA,
+            data: data.slice(index, index + batchSize),
+          });
+          index += batchSize;
         }
       })
     )
@@ -140,16 +144,16 @@ export const processQueueWithWorkers = (
   return subject.pipe(
     map(({ message }) => message),
     filter(filterResultsAndErrors),
-    take(queueLength)
+    take(messageCount)
   );
 };
 
 export const computeBatch$ = (
   data: any,
-  WorkerBuilder: ChildProcessConstructor,
+  asyncWorkerFactory: ProcessControllerAsyncWorkerFactory,
   { batchSize, initialValues }: { batchSize: number; initialValues: any }
 ): Observable<any> => {
-  const { result$ } = initWorkers$(WorkerBuilder, { initialValues });
+  const { result$ } = initWorkers$(asyncWorkerFactory, { initialValues });
 
   return processQueueWithWorkers(result$, data, batchSize);
 };
@@ -169,14 +173,14 @@ const onMessageType = <T extends MessageTypes>(
 /**
  * Delegates work to a single worker. Progress will be piped in the returned Observable
  * @param processedData - The data processed. It will be sent to the worker in an "initialize" message.
- * @param WorkerBuilder - The Worker constructor.
+ * @param asyncWorkerFactory
  * @returns {Observable} - A rxjs observable piping progress.
  */
 export const backgroundWorkerProcess$ = (
   processedData: any,
-  WorkerBuilder: ChildProcessConstructor
+  asyncWorkerFactory: ProcessControllerAsyncWorkerFactory
 ): Observable<ResultMessage | ErrorMessage> =>
-  cancelableBackgroundWorkerProcess$(processedData, WorkerBuilder).result$;
+  cancelableBackgroundWorkerProcess$(processedData, asyncWorkerFactory).result$;
 
 type CancelableBackgroundWorkerProcessResult = {
   result$: Observable<ResultMessage | ErrorMessage>;
@@ -185,9 +189,9 @@ type CancelableBackgroundWorkerProcessResult = {
 
 export const cancelableBackgroundWorkerProcess$ = (
   processedData: any,
-  WorkerBuilder: ChildProcessConstructor
+  asyncWorkerFactory: ProcessControllerAsyncWorkerFactory
 ): CancelableBackgroundWorkerProcessResult => {
-  const { result$, terminate } = initWorkers$(WorkerBuilder, {
+  const { result$, terminate } = initWorkers$(asyncWorkerFactory, {
     initialValues: processedData,
     workerCount: 1,
   });

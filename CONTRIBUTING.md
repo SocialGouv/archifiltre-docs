@@ -85,39 +85,32 @@ A basic new ChildProcess would look like :
 ```typescript
 // child-process.controller.ts
 import MyChildProcess from "./child-process.fork.ts";
-import { createAsyncWorkerControllerClass, AsyncWorkerEvent } from "../util/async-worker-util";
-import { MessageTypes } from "../util/batch-process/batch-process-util-types";
+import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
+import { MessageTypes } from "util/batch-process/batch-process-util-types";
+import { cancelableBackgroundWorkerProcess$ } from "util/batch-process/batch-process-util";
 
 export const runMyChildProcess = () => {
-  // We build a "newable" entity which is easier to use if you need to spawn mutliple process
-  const AsyncProcess = createAsyncWorkerControllerClass(MyChildProcess);
+    // We build a factory that return the AsyncWorker object. The parameter is the child process file name
+    const asyncProcessFactory = createAsyncWorkerForChildProcessControllerFactory("my-child-process.fork");
 
-  const asyncProcess = new AsyncProcess();
-
-  asyncProcess.postMessage({ type: MessageTypes.INITIALIZE, data: "hello" });
-  asyncProcess.addEventListener(AsyncWorkerEvent.MESSAGE, (message) => { console.log("messageReceived", message) });
+    const result$ = cancelableBackgroundWorkerProcess$({ data }, asyncProcessFactory);
+    
+    // use the result observable
 }
 ```
+
 ```typescript
-// child-process.fork.ts
-import {
-  AsyncWorkerEvent,
-  createAsyncWorkerForChildProcess,
-  fakeChildProcess
-} from "../util/async-worker-util";
+// my-child-process.fork.ts
 import { MessageTypes } from "../util/batch-process/batch-process-util-types";
+import { createAsyncWorkerForChildProcess } from "util/async-worker/child-process";
+import { setupChildWorkerListeners } from "util/async-worker/async-worker-util";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
 
-asyncWorker.addEventListener(AsyncWorkerEvent.MESSAGE, ({ data, type }) => {
-  if (type === MessageTypes.INITIALIZE) {
-    asyncWorker.postMessage({ type: MessageTypes.RESULT, result: "hello" });
-  }
-});
-
-// This export allows typescript compiler to not throw type errors. It will not really be used
-// as it will be replaced by webpack-fork-loader
-export default fakeChildProcess;
+setupChildWorkerListeners(asyncWorker, {
+    onInitialize: () => console.log("handleInitializeMessage"),
+    onData: () => console.log("handleDataMessage"),
+})
 ```
 
 ## Translations

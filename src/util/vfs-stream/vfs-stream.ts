@@ -140,9 +140,7 @@ class MessageDeserializer extends Transform {
     encoding: string,
     callback: (error?: Error | null) => void
   ) {
-    this.queue = this.queue
-      ? joinBuffers(this.queue, new Uint8Array(chunk))
-      : new Uint8Array(chunk);
+    this.queue = joinBuffers(this.queue, new Uint8Array(chunk));
     this._read();
 
     callback();

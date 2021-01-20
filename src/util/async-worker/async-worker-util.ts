@@ -60,7 +60,6 @@ export const makeChildWorkerMessageCallback = (
         await onInitialize(asyncWorker, data);
         asyncWorker.postMessage({ type: MessageTypes.READY });
       } catch (err) {
-        console.error(err);
         asyncWorker.postMessage({
           type: MessageTypes.FATAL,
           error: err.toString(),
@@ -75,7 +74,6 @@ export const makeChildWorkerMessageCallback = (
       try {
         await onData(asyncWorker, data);
       } catch (err) {
-        console.error(err);
         asyncWorker.postMessage({
           type: MessageTypes.FATAL,
           error: err.toString(),

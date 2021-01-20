@@ -138,7 +138,6 @@
     "docxtemplater": "3.19.9",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-lodash-fp": "^2.2.0-a1",
-    "fast-memoize": "^2.5.2",
     "file-saver": "2.0.5",
     "fswin": "^3.19.908",
     "hidefile": "^3.0.0",

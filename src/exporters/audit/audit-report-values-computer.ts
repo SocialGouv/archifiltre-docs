@@ -1,5 +1,4 @@
 import dateFormat from "dateformat";
-import memoize from "fast-memoize";
 import _ from "lodash";
 import {
   compose,
@@ -64,7 +63,6 @@ export const formatAuditReportDate = (timestamp: number): string =>
 
 /**
  * Sorts a FilesAndFoldersMap or FilesAndFolders[] by path length in a descending order.
- * Function is memoized for better composition
  * @param filesAndFolders
  */
 const sortFilesAndFoldersByPathLength: Mapper<
@@ -74,7 +72,6 @@ const sortFilesAndFoldersByPathLength: Mapper<
 
 /**
  * Gets the file with the longest path
- * Function is memoized for better composition
  * @param filesAndFolders
  */
 export const getLongestPathFile: Mapper<
@@ -89,24 +86,22 @@ export const getLongestPathFile: Mapper<
 export const countFileTypes: Mapper<
   FilesAndFoldersCollection,
   FileTypeMap<number>
-> = memoize(
-  compose(
-    defaults({
-      [FileType.PUBLICATION]: 0,
-      [FileType.PRESENTATION]: 0,
-      [FileType.SPREADSHEET]: 0,
-      [FileType.EMAIL]: 0,
-      [FileType.DOCUMENT]: 0,
-      [FileType.IMAGE]: 0,
-      [FileType.VIDEO]: 0,
-      [FileType.AUDIO]: 0,
-      [FileType.OTHER]: 0,
-    }),
-    countBy(identity),
-    map(getFileType),
-    Object.values,
-    getFiles
-  )
+> = compose(
+  defaults({
+    [FileType.PUBLICATION]: 0,
+    [FileType.PRESENTATION]: 0,
+    [FileType.SPREADSHEET]: 0,
+    [FileType.EMAIL]: 0,
+    [FileType.DOCUMENT]: 0,
+    [FileType.IMAGE]: 0,
+    [FileType.VIDEO]: 0,
+    [FileType.AUDIO]: 0,
+    [FileType.OTHER]: 0,
+  }),
+  countBy(identity),
+  map(getFileType),
+  Object.values,
+  getFiles
 );
 
 /**
@@ -116,28 +111,26 @@ export const countFileTypes: Mapper<
 export const countFileSizes: Mapper<
   FilesAndFoldersCollection,
   FileTypeMap<number>
-> = memoize(
-  compose(
-    defaults({
-      [FileType.PUBLICATION]: 0,
-      [FileType.PRESENTATION]: 0,
-      [FileType.SPREADSHEET]: 0,
-      [FileType.EMAIL]: 0,
-      [FileType.DOCUMENT]: 0,
-      [FileType.IMAGE]: 0,
-      [FileType.VIDEO]: 0,
-      [FileType.AUDIO]: 0,
-      [FileType.OTHER]: 0,
-    }),
-    mapValues(sumBy("size")),
-    groupBy("type"),
-    map((fileOrFolder) => ({
-      type: getFileType(fileOrFolder),
-      size: fileOrFolder.file_size,
-    })),
-    Object.values,
-    getFiles
-  )
+> = compose(
+  defaults({
+    [FileType.PUBLICATION]: 0,
+    [FileType.PRESENTATION]: 0,
+    [FileType.SPREADSHEET]: 0,
+    [FileType.EMAIL]: 0,
+    [FileType.DOCUMENT]: 0,
+    [FileType.IMAGE]: 0,
+    [FileType.VIDEO]: 0,
+    [FileType.AUDIO]: 0,
+    [FileType.OTHER]: 0,
+  }),
+  mapValues(sumBy("size")),
+  groupBy("type"),
+  map((fileOrFolder) => ({
+    type: getFileType(fileOrFolder),
+    size: fileOrFolder.file_size,
+  })),
+  Object.values,
+  getFiles
 );
 
 const sumFileType: Mapper<FileTypeMap<number>, number> = compose(
@@ -162,22 +155,20 @@ export const percentFileTypes: Mapper<
 /**
  * Gets the list of extensions for each file
  */
-export const getExtensionsList: Accessor<FileTypeMap<string>> = memoize(
-  compose(
-    defaults({
-      [FileType.PUBLICATION]: "",
-      [FileType.PRESENTATION]: "",
-      [FileType.SPREADSHEET]: "",
-      [FileType.EMAIL]: "",
-      [FileType.DOCUMENT]: "",
-      [FileType.IMAGE]: "",
-      [FileType.VIDEO]: "",
-      [FileType.AUDIO]: "",
-      [FileType.OTHER]: "",
-    }),
-    mapValues(join(", ")),
-    getExtensionsForEachFileType
-  )
+export const getExtensionsList: Accessor<FileTypeMap<string>> = compose(
+  defaults({
+    [FileType.PUBLICATION]: "",
+    [FileType.PRESENTATION]: "",
+    [FileType.SPREADSHEET]: "",
+    [FileType.EMAIL]: "",
+    [FileType.DOCUMENT]: "",
+    [FileType.IMAGE]: "",
+    [FileType.VIDEO]: "",
+    [FileType.AUDIO]: "",
+    [FileType.OTHER]: "",
+  }),
+  mapValues(join(", ")),
+  getExtensionsForEachFileType
 );
 
 /**
@@ -216,7 +207,7 @@ export const getOldestFiles: Mapper<
 export const sortFilesBySize: Mapper<
   FilesAndFoldersCollection,
   FilesAndFoldersCollection
-> = memoize(sortBy(({ file_size }) => file_size));
+> = sortBy(({ file_size }) => file_size);
 
 /**
  * Returns the 5 oldest files info by last modified date

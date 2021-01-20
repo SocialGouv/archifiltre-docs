@@ -1,4 +1,3 @@
-import memoize from "fast-memoize";
 import _ from "lodash";
 import fp from "lodash/fp";
 import { medianOnSortedArray } from "util/array/array-util";
@@ -314,7 +313,7 @@ export const isFolder = (filesAndFolders: FilesAndFolders): boolean =>
 const removeRootFolder: Mapper<
   FilesAndFoldersCollection,
   FilesAndFoldersCollection
-> = memoize(fp.filter(({ id }) => id !== ""));
+> = fp.filter(({ id }) => id !== "");
 
 /**
  * Get the files only from files and folders
@@ -323,7 +322,7 @@ const removeRootFolder: Mapper<
 export const getFiles: Mapper<
   FilesAndFoldersCollection,
   FilesAndFolders[]
-> = memoize(fp.filter(isFile));
+> = fp.filter(isFile);
 
 /**
  * Get only files from files and folders
@@ -331,7 +330,7 @@ export const getFiles: Mapper<
 export const getFilesMap: Mapper<
   FilesAndFoldersMap,
   FilesAndFoldersMap
-> = memoize(fp.pickBy(isFile));
+> = fp.pickBy(isFile);
 
 /**
  * Get only folders from files and folders
@@ -339,7 +338,7 @@ export const getFilesMap: Mapper<
 export const getFoldersMap: Mapper<
   FilesAndFoldersMap,
   FilesAndFoldersMap
-> = memoize(fp.pickBy(fp.compose([not, isFile])));
+> = fp.pickBy(fp.compose([not, isFile]));
 
 /**
  * Get folders only from files and folders
@@ -348,22 +347,26 @@ export const getFoldersMap: Mapper<
 export const getFolders: Mapper<
   FilesAndFoldersCollection,
   FilesAndFolders[]
-> = memoize(fp.filter(fp.compose([not, isFile])));
+> = fp.filter(fp.compose([not, isFile]));
 
 /**
  * Returns the number of files in a FilesAndFoldersMap
  * @param filesAndFoldersMap
  */
-export const getFileCount: Mapper<FilesAndFoldersMap, number> = memoize(
-  fp.compose(size, getFiles, removeRootFolder)
+export const getFileCount: Mapper<FilesAndFoldersMap, number> = fp.compose(
+  size,
+  getFiles,
+  removeRootFolder
 );
 
 /**
  * Returns the number of folders in a FilesAndFoldersMap
  * @param filesAndFoldersMap
  */
-export const getFoldersCount: Mapper<FilesAndFoldersMap, number> = memoize(
-  fp.compose(size, getFolders, removeRootFolder)
+export const getFoldersCount: Mapper<FilesAndFoldersMap, number> = fp.compose(
+  size,
+  getFolders,
+  removeRootFolder
 );
 
 /**
@@ -383,21 +386,15 @@ export const getMaxDepth = (filesAndFoldersMap: FilesAndFoldersMap): number =>
   );
 
 /**
- * Decomposes the path to an element into each of the parent elements.
- * @param id
+ * Memoized function that decomposes the path to an element into each of the parent elements.
  */
-const decomposePathToElementImpl = (id: string): string[] =>
+export const decomposePathToElement = (id: string): string[] =>
   id.split("/").map(($, i) =>
     id
       .split("/")
       .slice(0, i + 1)
       .join("/")
   );
-
-/**
- * Memoized function that decomposes the path to an element into each of the parent elements.
- */
-export const decomposePathToElement = memoize(decomposePathToElementImpl);
 
 export const findElementParent = (childId: string, filesAndFolders) =>
   _.find(filesAndFolders, ({ children }) => children.includes(childId));

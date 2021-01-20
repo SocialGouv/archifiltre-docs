@@ -131,7 +131,10 @@ const displayErrorNotification = () => (dispatch) => {
   );
 };
 
-const errorResponse = { virtualFileSystem: Promise.reject(), terminate: empty };
+const makeErrorResponse = () => ({
+  virtualFileSystem: Promise.reject(),
+  terminate: empty,
+});
 
 const displayRootPathError = () => {
   const errorMessage = translations.t("folderDropzone.errorsWhileLoading");
@@ -159,7 +162,7 @@ const displayUnexpectedError = (errorReason: string) => {
 
 const displayError = (errorMessage: string, errorTitle: string) => {
   notifyError(errorMessage, errorTitle);
-  return errorResponse;
+  return makeErrorResponse();
 };
 
 /**
@@ -420,7 +423,7 @@ const failIfInvalidPath = (path: string) => {
   return path;
 };
 
-const displayUnknownError = () => errorResponse;
+const displayUnknownError = () => makeErrorResponse();
 
 export const loadFilesAndFoldersFromPathThunk = (
   fileOrFolderPath: string

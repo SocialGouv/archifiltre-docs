@@ -5,7 +5,6 @@ import { cancelableBackgroundWorkerProcess$ } from "util/batch-process/batch-pro
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { ArchifiltreError } from "util/error/error-util";
 import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
-import { remote } from "electron";
 import { Readable } from "stream";
 import { parseVFSFromStream } from "util/vfs-stream/vfs-stream";
 import { MessageTypes } from "util/batch-process/batch-process-util-types";
@@ -41,7 +40,6 @@ export const loadFileTree = (
   cancelableBackgroundWorkerProcess$(
     {
       path: droppedElementPath,
-      resultFolderPath: remote.app.getPath("userData"),
       ...params,
     },
     createAsyncWorkerForChildProcessControllerFactory<StreamParserResult>(

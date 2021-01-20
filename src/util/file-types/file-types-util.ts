@@ -1,4 +1,3 @@
-import memoize from "fast-memoize";
 import { invertBy } from "lodash";
 import path from "path";
 import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
@@ -97,6 +96,5 @@ export const getFileTypeFromFileName = (fileName: string): FileType => {
 /**
  * Returns the extensions associated to each file type
  */
-export const getExtensionsForEachFileType = memoize(() =>
-  invertBy(fileTypesByExtensions)
-);
+export const getExtensionsForEachFileType = () =>
+  invertBy(fileTypesByExtensions);

@@ -22,6 +22,7 @@
     "win32-msi": "electron-builder --windows portable --ia32 --windows=msi",
     "win64-msi": "electron-builder --windows portable --x64 --windows=msi",
     "mac": "electron-builder --mac dmg",
+    "mac-local": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dmg",
     "linux": "electron-builder --linux AppImage",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",

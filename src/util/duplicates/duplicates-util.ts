@@ -1,4 +1,3 @@
-import memoize from "fast-memoize";
 import {
   compose,
   constant,
@@ -53,12 +52,10 @@ export interface DuplicatesMap {
 /**
  * Utility function to transform function args into an array of args
  */
-const argsToArray = memoize(
-  (filesAndFoldersMap: FilesAndFoldersMap, hashesMap: HashesMap) => [
-    filesAndFoldersMap,
-    hashesMap,
-  ]
-);
+const argsToArray = (
+  filesAndFoldersMap: FilesAndFoldersMap,
+  hashesMap: HashesMap
+) => [filesAndFoldersMap, hashesMap];
 
 /**
  * Filters out imcomplete files and folders from merge
@@ -78,18 +75,16 @@ const mergeFilesAndFoldersAndHashes: Merger<
   FilesAndFoldersMap,
   HashesMap,
   FilesAndFoldersMap
-> = memoize(
-  compose(
-    removeIncompleteFilesAndFolders,
-    (
-      filesAndFolders: FilesAndFoldersMap,
-      hashes: HashesMap
-    ): FilesAndFoldersMap =>
-      _.mapValues(filesAndFolders, (fileAndFolder, key) => ({
-        ...fileAndFolder,
-        hash: hashes[key],
-      }))
-  )
+> = compose(
+  removeIncompleteFilesAndFolders,
+  (
+    filesAndFolders: FilesAndFoldersMap,
+    hashes: HashesMap
+  ): FilesAndFoldersMap =>
+    _.mapValues(filesAndFolders, (fileAndFolder, key) => ({
+      ...fileAndFolder,
+      hash: hashes[key],
+    }))
 );
 
 /**
@@ -98,7 +93,7 @@ const mergeFilesAndFoldersAndHashes: Merger<
 const getFilesAndFoldersMap: Mapper<
   FilesAndFoldersCollection,
   FilesAndFoldersMap
-> = memoize(keyBy<FilesAndFolders>("id"));
+> = keyBy<FilesAndFolders>("id");
 
 /**
  * Filters the input filesAndFolders using the provided filter function and merges hashes into them
@@ -107,14 +102,12 @@ const getFilesAndFoldersMap: Mapper<
 const filterFilesAndFoldersAndMerge = (
   filesAndFoldersFilter: Mapper<FilesAndFoldersCollection, FilesAndFoldersMap>
 ) =>
-  memoize(
-    compose(
-      spread(mergeFilesAndFoldersAndHashes),
-      overArgs(argsToArray, [
-        compose(getFilesAndFoldersMap, filesAndFoldersFilter),
-        identity,
-      ])
-    )
+  compose(
+    spread(mergeFilesAndFoldersAndHashes),
+    overArgs(argsToArray, [
+      compose(getFilesAndFoldersMap, filesAndFoldersFilter),
+      identity,
+    ])
   );
 
 /**
@@ -124,20 +117,18 @@ const filterFilesAndFoldersAndMerge = (
 export const getFilteredDuplicatesMap = (
   filesAndFoldersFilter: Mapper<FilesAndFoldersCollection, FilesAndFoldersMap>
 ): Merger<FilesAndFoldersCollection, HashesMap, DuplicatesMap> =>
-  memoize(
-    compose(
-      omit<
-        {
-          [hash: string]: FilesAndFolders & { hash: string };
-        },
-        string
-      >(""),
-      groupBy(
-        ({ hash }: FilesAndFolders & { hash: string | null }): string =>
-          hash || ""
-      ),
-      filterFilesAndFoldersAndMerge(filesAndFoldersFilter)
-    )
+  compose(
+    omit<
+      {
+        [hash: string]: FilesAndFolders & { hash: string };
+      },
+      string
+    >(""),
+    groupBy(
+      ({ hash }: FilesAndFolders & { hash: string | null }): string =>
+        hash || ""
+    ),
+    filterFilesAndFoldersAndMerge(filesAndFoldersFilter)
   );
 
 /**
@@ -147,17 +138,15 @@ export const getFilteredDuplicatesMap = (
 const getMostDuplicatedItems = (
   nbDuplicatedItems: number
 ): Mapper<FilesAndFoldersMap, FilesAndFolders[][]> =>
-  memoize(
-    compose(
-      toArray,
-      reverse,
-      takeRight(nbDuplicatedItems),
-      filter<FilesAndFolders[]>(
-        (filesAndFolders: FilesAndFolders[]) => filesAndFolders.length > 1
-      ),
-      sortBy<FilesAndFolders[]>("length"),
-      Object.values
-    )
+  compose(
+    toArray,
+    reverse,
+    takeRight(nbDuplicatedItems),
+    filter<FilesAndFolders[]>(
+      (filesAndFolders: FilesAndFolders[]) => filesAndFolders.length > 1
+    ),
+    sortBy<FilesAndFolders[]>("length"),
+    Object.values
   );
 
 /**
@@ -167,11 +156,9 @@ const getMostDuplicatedItems = (
 export const getMostDuplicatedFiles = (
   nbDuplicatedItems: number
 ): Merger<FilesAndFoldersMap, HashesMap, FilesAndFolders[][]> =>
-  memoize(
-    compose(
-      getMostDuplicatedItems(nbDuplicatedItems),
-      getFilteredDuplicatesMap(getFilesMap)
-    )
+  compose(
+    getMostDuplicatedItems(nbDuplicatedItems),
+    getFilteredDuplicatesMap(getFilesMap)
   );
 
 const getFoldersDuplicatesMap = getFilteredDuplicatesMap(getFoldersMap);
@@ -206,11 +193,9 @@ export const countDuplicateFilesTotalSize: Merger<
   FilesAndFoldersMap,
   HashesMap,
   number
-> = memoize(
-  compose(
-    countDuplicatesInDuplicatesMap(({ file_size }) => file_size),
-    getFilesDuplicatesMap
-  )
+> = compose(
+  countDuplicatesInDuplicatesMap(({ file_size }) => file_size),
+  getFilesDuplicatesMap
 );
 
 /**
@@ -323,9 +308,7 @@ export const countDuplicateFiles: Merger<
   FilesAndFoldersCollection,
   HashesMap,
   number
-> = memoize(
-  compose(countDuplicatesInDuplicatesMap(constant(1)), getFilesDuplicatesMap)
-);
+> = compose(countDuplicatesInDuplicatesMap(constant(1)), getFilesDuplicatesMap);
 
 /**
  * Returns the percentage of duplicated files
@@ -334,17 +317,12 @@ export const countDuplicatesPercentForFiles: Merger<
   FilesAndFoldersMap,
   HashesMap,
   number
-> = memoize(
-  compose(
-    spread(divide),
-    over([
-      compose(
-        countDuplicatesInDuplicatesMap(constant(1)),
-        getFilesDuplicatesMap
-      ),
-      compose(lodashSize, getFiles),
-    ])
-  )
+> = compose(
+  spread(divide),
+  over([
+    compose(countDuplicatesInDuplicatesMap(constant(1)), getFilesDuplicatesMap),
+    compose(lodashSize, getFiles),
+  ])
 );
 
 /**
@@ -354,8 +332,9 @@ export const countDuplicateFolders: Merger<
   FilesAndFoldersCollection,
   HashesMap,
   number
-> = memoize(
-  compose(countDuplicatesInDuplicatesMap(constant(1)), getFoldersDuplicatesMap)
+> = compose(
+  countDuplicatesInDuplicatesMap(constant(1)),
+  getFoldersDuplicatesMap
 );
 
 /**
@@ -365,15 +344,13 @@ export const countDuplicatesPercentForFolders: Merger<
   FilesAndFoldersMap,
   HashesMap,
   number
-> = memoize(
-  compose(
-    spread(divide),
-    over([
-      compose(
-        countDuplicatesInDuplicatesMap(constant(1)),
-        getFoldersDuplicatesMap
-      ),
-      compose(lodashSize, getFolders),
-    ])
-  )
+> = compose(
+  spread(divide),
+  over([
+    compose(
+      countDuplicatesInDuplicatesMap(constant(1)),
+      getFoldersDuplicatesMap
+    ),
+    compose(lodashSize, getFolders),
+  ])
 );

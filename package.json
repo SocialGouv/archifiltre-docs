@@ -133,7 +133,6 @@
     "@material-ui/core": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@sentry/browser": "^5.29.2",
-    "JSONStream": "^1.3.5",
     "angular-expressions": "^1.1.1",
     "clean-webpack-plugin": "^3.0.0",
     "csv-parse": "^4.14.2",

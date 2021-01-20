@@ -14,7 +14,6 @@ import {
   FolderHashComputerInput,
   VFSElementMessage,
 } from "util/vfs-stream/vfs-stream-messages";
-import { createTimer } from "debug/debug";
 import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
 import { WithFilesAndFolders } from "util/virtual-file-system-util/virtual-file-system-util";
@@ -127,9 +126,6 @@ const sections: (keyof VirtualFileSystem)[] = [
   "hashes",
 ];
 
-const writeTimer = createTimer();
-const readTimer = createTimer();
-
 class MessageDeserializer extends Transform {
   static MESSAGE_LENGTH_SIZE = 4;
 
@@ -144,11 +140,9 @@ class MessageDeserializer extends Transform {
     encoding: string,
     callback: (error?: Error | null) => void
   ) {
-    writeTimer.start();
     this.queue = this.queue
       ? joinBuffers(this.queue, new Uint8Array(chunk))
       : new Uint8Array(chunk);
-    writeTimer.stop();
     this._read();
 
     callback();
@@ -174,17 +168,13 @@ class MessageDeserializer extends Transform {
 
   _read() {
     if (this.canRead()) {
-      readTimer.start();
       const { content, endIndex } = readBufferMessageWithLength(this.queue);
       this.push(content);
       this.queue = this.queue.slice(endIndex);
-      readTimer.stop();
       this._read();
     }
   }
 }
-
-const deserializingTimer = createTimer();
 
 type ParseSerializedDataFromStreamOptions<OutputData, DeserializedData> = {
   withJsonInitializing?: boolean;
@@ -211,10 +201,8 @@ export const parseSerializedDataFromStream = <OutputData, DeserializedData>(
       Object.assign(outputData, baseData);
       isFirstMessage = false;
     } else {
-      deserializingTimer.start();
       const deserializedData = deserializer(message);
       merger(outputData, deserializedData);
-      deserializingTimer.stop();
     }
   };
 
@@ -233,9 +221,6 @@ export const parseSerializedDataFromStream = <OutputData, DeserializedData>(
     });
 
     deserializer.on("end", () => {
-      console.log("read", readTimer.getTime());
-      console.log("write", writeTimer.getTime());
-      console.log("deserial", deserializingTimer.getTime());
       resolve(outputData);
     });
   });

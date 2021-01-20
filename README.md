@@ -60,6 +60,9 @@ First, prepare the build in production mode
 yarn prepare-prod
 ```
 
+To sign the app manually and locally, you can use the command `yarn env-linux` or `env-windows` depending on your platform.
+Otherwise, running a GitHub pipeline through a pull request will automatically sign Archifiltre.
+
 Then you can package the app for the right platform:
 
 ```bash

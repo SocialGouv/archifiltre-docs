@@ -2,9 +2,9 @@ import { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-lo
 import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
 import { Observable } from "rxjs";
 import { cancelableBackgroundWorkerProcess$ } from "util/batch-process/batch-process-util";
-import LoadFromFileSystemWorker from "./load-from-filesystem.fork";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { ArchifiltreError } from "util/error/error-util";
+import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
 
 type LoadFileTreeResponse = { result$: Observable<any>; terminate: () => void };
 
@@ -26,5 +26,7 @@ export const loadFileTree = (
 ): LoadFileTreeResponse =>
   cancelableBackgroundWorkerProcess$(
     { path: droppedElementPath, ...params },
-    LoadFromFileSystemWorker
+    createAsyncWorkerForChildProcessControllerFactory(
+      "load-from-filesystem.fork"
+    )
   );

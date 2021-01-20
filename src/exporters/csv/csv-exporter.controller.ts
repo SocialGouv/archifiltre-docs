@@ -7,8 +7,8 @@ import {
 } from "reducers/files-and-folders/files-and-folders-types";
 import { TagMap } from "reducers/tags/tags-types";
 import { backgroundWorkerProcess$ } from "util/batch-process/batch-process-util";
-import CsvExporterFork from "./csv-exporter.fork";
 import { HashesMap } from "reducers/hashes/hashes-types";
+import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
 
 export interface GenerateCsvExportOptions {
   aliases: AliasMap;
@@ -27,5 +27,8 @@ export interface GenerateCsvExportOptions {
  */
 export const generateCsvExport$ = (data: GenerateCsvExportOptions) => {
   const { language } = translations;
-  return backgroundWorkerProcess$({ ...data, language }, CsvExporterFork);
+  return backgroundWorkerProcess$(
+    { ...data, language },
+    createAsyncWorkerForChildProcessControllerFactory("csv-exporter.fork")
+  );
 };

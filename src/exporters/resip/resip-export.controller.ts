@@ -11,8 +11,8 @@ import {
   backgroundWorkerProcess$,
   filterResults,
 } from "util/batch-process/batch-process-util";
-import ResipExportFork from "./resip-export.fork";
 import { map } from "rxjs/operators";
+import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
 
 interface ResipExportProgress {
   count: number;
@@ -58,7 +58,7 @@ export const generateResipExport$ = ({
       language,
       tags,
     },
-    ResipExportFork
+    createAsyncWorkerForChildProcessControllerFactory("resip-export.fork")
   )
     .pipe(filterResults())
     .pipe(map(({ result }) => result));

@@ -1,12 +1,9 @@
 import translations from "translations/translations";
-import {
-  createAsyncWorkerForChildProcess,
-  fakeChildProcess,
-  WorkerEventType,
-} from "util/async-worker/async-worker-util";
+import { WorkerEventType } from "util/async-worker/async-worker-util";
 import { MessageTypes } from "util/batch-process/batch-process-util-types";
 import { hookCounter } from "util/hook/hook-utils";
 import resipExporter from "./resip-exporter";
+import { createAsyncWorkerForChildProcess } from "util/async-worker/child-process";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
 
@@ -56,5 +53,3 @@ asyncWorker.addEventListener(
     }
   }
 );
-
-export default fakeChildProcess;

@@ -16,11 +16,10 @@ import {
 } from "util/observable/observable-util";
 
 import { createBufferedFileWriter } from "util/buffered-file-writer/buffered-file-writer";
-import FileHashFork from "./file-hash-computer.fork";
-import FolderHashFork from "./folder-hash-computer.fork";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { HashesMap } from "reducers/hashes/hashes-types";
 import { Observable, OperatorFunction } from "rxjs";
+import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
 
 const BATCH_SIZE = 500;
 const BUFFER_TIME = 1000;
@@ -41,7 +40,10 @@ export const computeHashes$ = (
   paths: string[],
   { initialValues: { basePath } }: ComputeHashesOptions
 ): DataProcessingStream<HashesMap> => {
-  const hashes$ = computeBatch$(paths, FileHashFork, {
+  const workerFactory = createAsyncWorkerForChildProcessControllerFactory(
+    "file-hash-computer.fork"
+  );
+  const hashes$ = computeBatch$(paths, workerFactory, {
     batchSize: BATCH_SIZE,
     initialValues: { basePath },
   });
@@ -115,7 +117,12 @@ export const computeFolderHashes$ = ({
   filesAndFolders,
   hashes,
 }: ComputeFolderHashesOptions): Observable<HashesMap> => {
-  return backgroundWorkerProcess$({ filesAndFolders, hashes }, FolderHashFork)
+  return backgroundWorkerProcess$(
+    { filesAndFolders, hashes },
+    createAsyncWorkerForChildProcessControllerFactory(
+      "folder-hash-computer.fork"
+    )
+  )
     .pipe(filterResults())
     .pipe(map(({ result }) => result));
 };

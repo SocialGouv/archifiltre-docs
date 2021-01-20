@@ -1,7 +1,7 @@
 import translations from "translations/translations";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { backgroundWorkerProcess$ } from "util/batch-process/batch-process-util";
-import TreeCsvExporterFork from "./tree-csv-exporter.fork";
+import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
 
 /**
  * Asynchronously generates a tree csv export
@@ -14,6 +14,6 @@ export const generateTreeCsvExport$ = (
   const { language } = translations;
   return backgroundWorkerProcess$(
     { filesAndFoldersMap, language },
-    TreeCsvExporterFork
+    createAsyncWorkerForChildProcessControllerFactory("tree-csv-exporter.fork")
   );
 };

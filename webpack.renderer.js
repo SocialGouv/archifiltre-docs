@@ -1,8 +1,8 @@
 const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const webpack = require("webpack");
+const glob = require("glob");
 require("dotenv").config();
 
 const isDev = (mode) => mode === "development";
@@ -20,6 +20,17 @@ const workerRootFolder = (mode) =>
     ? JSON.stringify(path.join(__dirname, "electron/dist/"))
     : "require('path').join(require('electron').remote.app.getAppPath(),'/electron/dist/')";
 
+const workers = glob
+  .sync("./**/*.fork.ts")
+  .map((filePath) => [
+    path.basename(filePath, path.extname(filePath)),
+    filePath,
+  ])
+  .reduce((acc, [name, filePath]) => {
+    acc[name] = filePath;
+    return acc;
+  }, {});
+
 module.exports = (env, argv = {}) => ({
   devServer: {
     compress: true,
@@ -27,13 +38,13 @@ module.exports = (env, argv = {}) => ({
     hot: true,
     inline: false,
     port: 8000,
-    writeToDisk: (name) =>
-      /(\.fork\.[jt]s|main\.bundle\.js|\.node)$/.test(name),
+    writeToDisk: (name) => /(\.(fork)\.[jt]s|main\.js|\.node)$/.test(name),
   },
   devtool: isDev(argv.mode) ? "eval-cheap-module-source-map" : false,
 
   entry: {
     app: "./src/app.tsx",
+    ...workers,
   },
   externals: {
     "iconv-lite": "require('iconv-lite')",
@@ -41,18 +52,6 @@ module.exports = (env, argv = {}) => ({
 
   module: {
     rules: [
-      // This loader won't work if it is not defined before the typescript loader
-      {
-        include: path.resolve(__dirname, "src"),
-        test: /\.fork\.[jt]s$/,
-        use: {
-          loader: "webpack-fork-loader",
-          options: {
-            evalPath: true,
-            publicPath: workerRootFolder(argv.mode),
-          },
-        },
-      },
       {
         include: path.resolve(__dirname, "src"),
         loader: "awesome-typescript-loader",
@@ -132,7 +131,7 @@ module.exports = (env, argv = {}) => ({
   },
 
   output: {
-    filename: "[name].bundle.js",
+    filename: "[name].js",
     path: path.resolve(__dirname, "electron/dist"),
     pathinfo: false,
     publicPath: process.env.ASSET_PATH || "/",
@@ -142,14 +141,11 @@ module.exports = (env, argv = {}) => ({
     new CopyWebpackPlugin({
       patterns: ["node_modules/fswin"],
     }),
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ["**/*", "!main.js"],
-    }),
     ...(isDev(argv.mode)
       ? []
       : [new CopyWebpackPlugin({ patterns: ["static"] })]),
     new HtmlWebpackPlugin({
-      excludeChunks: ["stats"],
+      excludeChunks: Object.keys(workers),
       filename: "index.html",
       inject: "head",
       template: "static/index.html",
@@ -167,6 +163,7 @@ module.exports = (env, argv = {}) => ({
       STATIC_ASSETS_PATH: isDev(argv.mode)
         ? JSON.stringify("static/")
         : "__dirname",
+      WORKER_ROOT_FOLDER: workerRootFolder(argv.mode),
       WRITE_DEBUG: process.env.WRITE_DEBUG,
     }),
   ],
@@ -178,5 +175,5 @@ module.exports = (env, argv = {}) => ({
     symlinks: false,
   },
 
-  target: "electron-renderer",
+  target: "electron-main",
 });

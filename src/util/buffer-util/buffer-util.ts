@@ -1,11 +1,16 @@
+const UINT_32_BYTE_SIZE = 4;
+
+// The message length is encoded as a 32 bits unsigned int
+export const MESSAGE_SIZE_CHUNK_LENGTH = UINT_32_BYTE_SIZE;
+
 /**
  * Transforms a javascript Unsigned int to a Uint8array
  * @param num
  */
 const numberToUint8Array = (num: number) => {
-  const b = new ArrayBuffer(4);
-  new DataView(b).setUint32(0, num);
-  return new Uint8Array(b);
+  const buffer = new ArrayBuffer(UINT_32_BYTE_SIZE);
+  new DataView(buffer).setUint32(0, num);
+  return new Uint8Array(buffer);
 };
 
 /**
@@ -54,7 +59,7 @@ export const readBufferMessageWithLength = (
   offset = 0
 ) => {
   const messageSize = new DataView(message.buffer).getUint32(offset);
-  const endIndex = offset + 4 + messageSize;
+  const endIndex = offset + MESSAGE_SIZE_CHUNK_LENGTH + messageSize;
   const content = message.slice(offset + 4, offset + 4 + messageSize);
 
   return { content, endIndex };

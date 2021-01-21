@@ -143,7 +143,6 @@
     "eslint-plugin-lodash-fp": "^2.2.0-a1",
     "file-saver": "2.0.5",
     "fswin": "^3.19.908",
-    "glob": "^7.1.6",
     "hidefile": "^3.0.0",
     "i18next": "^19.8.4",
     "js-md5": "0.7.3",

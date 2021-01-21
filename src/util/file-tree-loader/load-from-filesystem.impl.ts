@@ -13,6 +13,7 @@ import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders
 import { ArchifiltreError } from "util/error/error-util";
 import * as fs from "fs";
 import { stringifyVFSToStream } from "util/file-tree-loader/load-from-filesystem-serializer";
+import { RESULT_STREAM_FILE_DESCRIPTOR } from "util/async-worker/child-process";
 
 type Reporter = (message: any) => void;
 
@@ -39,7 +40,9 @@ const createReporters = (asyncWorker: AsyncWorker): Reporters => ({
 
 const reportResultStream = async (result: any) => {
   // @ts-ignore
-  const stream = fs.createWriteStream(null, { fd: 3 });
+  const stream = fs.createWriteStream(null, {
+    fd: RESULT_STREAM_FILE_DESCRIPTOR,
+  });
   stringifyVFSToStream(stream, result);
 };
 

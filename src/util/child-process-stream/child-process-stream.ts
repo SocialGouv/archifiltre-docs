@@ -2,6 +2,7 @@ import { Readable, Transform, Writable } from "stream";
 import {
   bufferMessageWithLength,
   joinBuffers,
+  MESSAGE_SIZE_CHUNK_LENGTH,
   readBufferMessageWithLength,
   uint8ArrayToString,
 } from "util/buffer-util/buffer-util";
@@ -60,8 +61,6 @@ export type MessageSerializer<Data> = (stream: Writable, data: Data) => void;
  * using stringifyObjectToStream
  */
 class MessageDeserializer extends Transform {
-  static MESSAGE_LENGTH_SIZE = 4;
-
   private queue: Uint8Array = new Uint8Array();
   constructor() {
     super({
@@ -91,9 +90,8 @@ class MessageDeserializer extends Transform {
   private canRead() {
     return (
       this.queue &&
-      this.queue.length >= MessageDeserializer.MESSAGE_LENGTH_SIZE &&
-      this.getMessageLength() + MessageDeserializer.MESSAGE_LENGTH_SIZE <=
-        this.queue.length
+      this.queue.length >= MESSAGE_SIZE_CHUNK_LENGTH &&
+      this.getMessageLength() + MESSAGE_SIZE_CHUNK_LENGTH <= this.queue.length
     );
   }
 

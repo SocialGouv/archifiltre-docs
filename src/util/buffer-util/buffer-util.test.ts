@@ -1,6 +1,7 @@
 import {
   bufferMessageWithLength,
   joinBuffers,
+  MESSAGE_SIZE_CHUNK_LENGTH,
   readBufferMessageWithLength,
   uint8ArrayToString,
 } from "util/buffer-util/buffer-util";
@@ -18,7 +19,9 @@ describe("buffer-util", () => {
       );
 
       expect(uint8ArrayToString(response.content)).toEqual(message1);
-      expect(response.endIndex).toEqual(Buffer.from(message1).length + 4);
+      expect(response.endIndex).toEqual(
+        Buffer.from(message1).length + MESSAGE_SIZE_CHUNK_LENGTH
+      );
     });
   });
 });

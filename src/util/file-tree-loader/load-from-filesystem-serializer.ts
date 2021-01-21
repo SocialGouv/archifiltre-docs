@@ -35,6 +35,10 @@ class VFSElementMessage extends Message<VFSElementMessage> {
   public hash: string | null;
 }
 
+/**
+ * Serialize extracted data to binary using protobuf
+ * @param element
+ */
 export const serializeField = (element: {
   hash: string | null;
   key: string;

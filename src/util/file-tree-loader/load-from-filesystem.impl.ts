@@ -12,7 +12,7 @@ import {
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { ArchifiltreError } from "util/error/error-util";
 import * as fs from "fs";
-import { stringifyVFSToStream } from "util/vfs-stream/vfs-stream";
+import { stringifyVFSToStream } from "util/file-tree-loader/load-from-filesystem-serializer";
 
 type Reporter = (message: any) => void;
 

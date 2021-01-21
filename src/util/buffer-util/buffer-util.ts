@@ -1,9 +1,17 @@
+/**
+ * Transforms a javascript Unsigned int to a Uint8array
+ * @param num
+ */
 const numberToUint8Array = (num: number) => {
   const b = new ArrayBuffer(4);
   new DataView(b).setUint32(0, num);
   return new Uint8Array(b);
 };
 
+/**
+ * Utility to concatenate Uint8Array
+ * @param buffers
+ */
 export const joinBuffers = (...buffers: Uint8Array[]) => {
   const positions = buffers.reduce(
     (acc, buffer, index) => [...acc, (acc[index - 1] || 0) + buffer.length],
@@ -20,14 +28,27 @@ export const joinBuffers = (...buffers: Uint8Array[]) => {
   return joinedBuffer;
 };
 
+/**
+ * Prepend the buffer size as an Uint32 to a buffer
+ * @param message
+ */
 export const bufferMessageWithLength = (message: Uint8Array) => {
   const bufferLengthArrayBuffer = numberToUint8Array(message.length);
   return joinBuffers(bufferLengthArrayBuffer, message);
 };
 
+/**
+ * Transform an Uint8 array into a string
+ * @param message
+ */
 export const uint8ArrayToString = (message: Uint8Array) =>
   Buffer.from(message.buffer).toString();
 
+/**
+ * Reads the message with length starting at offset from the buffer
+ * @param message
+ * @param offset
+ */
 export const readBufferMessageWithLength = (
   message: Uint8Array,
   offset = 0
@@ -37,29 +58,4 @@ export const readBufferMessageWithLength = (
   const content = message.slice(offset + 4, offset + 4 + messageSize);
 
   return { content, endIndex };
-};
-
-export const readBufferedMessages = (message: Uint8Array) => {
-  const bufferSize = message.length;
-  let currentOffset = 0;
-
-  const messages: Uint8Array[] = [];
-  let previousOffset = 0;
-
-  while (currentOffset < bufferSize && bufferSize - currentOffset >= 4) {
-    const { endIndex, content } = readBufferMessageWithLength(
-      message,
-      currentOffset
-    );
-    previousOffset = currentOffset;
-    currentOffset = endIndex;
-    messages.push(content);
-  }
-
-  const isBufferOverloaded = currentOffset > bufferSize;
-
-  return {
-    messages: isBufferOverloaded ? messages.slice(0, -1) : messages,
-    rest: isBufferOverloaded ? message.slice(previousOffset) : null,
-  };
 };

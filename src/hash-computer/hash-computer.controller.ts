@@ -24,7 +24,7 @@ import {
   InitializeMessage,
   MessageTypes,
 } from "util/batch-process/batch-process-util-types";
-import { folderHashComputerInputToStream } from "util/vfs-stream/vfs-stream";
+import { folderHashComputerInputToStream } from "hash-computer/folder-hash-computer-serializer";
 
 const BATCH_SIZE = 500;
 const BUFFER_TIME = 1000;

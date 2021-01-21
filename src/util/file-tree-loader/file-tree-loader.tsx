@@ -6,8 +6,8 @@ import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders
 import { ArchifiltreError } from "util/error/error-util";
 import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
 import { Readable } from "stream";
-import { parseVFSFromStream } from "util/vfs-stream/vfs-stream";
 import { MessageTypes } from "util/batch-process/batch-process-util-types";
+import { parseVFSFromStream } from "util/file-tree-loader/load-from-filesystem-serializer";
 
 type LoadFileTreeResponse = { result$: Observable<any>; terminate: () => void };
 

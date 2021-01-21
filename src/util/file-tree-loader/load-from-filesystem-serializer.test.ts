@@ -1,15 +1,13 @@
-import { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
+import { times } from "lodash";
 import { createFilesAndFolders } from "files-and-folders-loader/files-and-folders-loader";
 import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
+import { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
+import { MockWritable } from "stdio-mock";
+import Stream from "stream";
 import {
-  folderHashComputerInputToStream,
-  parseFolderHashComputerInputFromStream,
   parseVFSFromStream,
   stringifyVFSToStream,
-} from "util/vfs-stream/vfs-stream";
-import { MockWritable } from "stdio-mock";
-import * as Stream from "stream";
-import { times } from "lodash";
+} from "util/file-tree-loader/load-from-filesystem-serializer";
 
 const extractDataFromMock = (writeable: MockWritable): Promise<Buffer[]> =>
   new Promise((resolve) => {
@@ -18,8 +16,8 @@ const extractDataFromMock = (writeable: MockWritable): Promise<Buffer[]> =>
     });
   });
 
-describe("vfs-stream", () => {
-  it("should parse sent vfs", async () => {
+describe("load-from-filesystem-serializer", () => {
+  it("should send and parse a VirtualFileSystem", async () => {
     const filesAndFolders = times(10, (index) =>
       createFilesAndFolders({
         id: `${index}`,
@@ -71,31 +69,5 @@ describe("vfs-stream", () => {
     const parsedVfs = await parseVFSFromStream(Stream.Readable.from(data));
 
     expect(parsedVfs).toEqual(vfs);
-  });
-
-  it("should send and parse FolderHashComputerInput", async () => {
-    const inputData = {
-      filesAndFolders: {
-        id1: createFilesAndFolders({ id: "id1" }),
-        id2: createFilesAndFolders({ id: "id2" }),
-      },
-      hashes: {
-        id1: "id1-hash",
-        id2: "id2-hash",
-      },
-    };
-
-    const writeable = new MockWritable();
-
-    // @ts-ignore
-    folderHashComputerInputToStream(writeable, inputData);
-
-    const data = await extractDataFromMock(writeable);
-
-    const parsedData = await parseFolderHashComputerInputFromStream(
-      Stream.Readable.from(data)
-    );
-
-    expect(parsedData).toEqual(inputData);
   });
 });

@@ -1,33 +1,4 @@
 import { Field, Message, Type } from "protobufjs";
-import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
-import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-
-@Type.d("VFSElement")
-export class VFSElementMessage extends Message<VFSElementMessage> {
-  @Field.d(1, "string")
-  public key: string;
-
-  @Field.d(2, "FilesAndFolders")
-  public filesAndFolders: FilesAndFolders;
-
-  @Field.d(3, "FilesAndFoldersMetadata")
-  public filesAndFoldersMetadata: FilesAndFoldersMetadata;
-
-  @Field.d(4, "string")
-  public hash: string | null;
-}
-
-@Type.d("FolderHashComputerInput")
-export class FolderHashComputerInput extends Message<FolderHashComputerInput> {
-  @Field.d(1, "string")
-  public key: string;
-
-  @Field.d(2, "FilesAndFolders")
-  public filesAndFolders: FilesAndFolders;
-
-  @Field.d(3, "string")
-  public hash: string | null;
-}
 
 @Type.d("FilesAndFolders")
 export class FilesAndFoldersMessage extends Message<FilesAndFoldersMessage> {

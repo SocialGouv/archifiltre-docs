@@ -9,7 +9,7 @@ import {
   MessageTypes,
   WorkerMessage,
 } from "util/batch-process/batch-process-util-types";
-import { MessageSerializer } from "util/vfs-stream/vfs-stream";
+import { MessageSerializer } from "util/child-process-stream/child-process-stream";
 import { EventEmitter } from "events";
 
 type StreamMessageParser = (stream) => Promise<WorkerMessage>;

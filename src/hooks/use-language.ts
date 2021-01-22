@@ -8,6 +8,8 @@ export enum Language {
   DE = "de",
 }
 
+export type WithLanguage<T> = T & { language: Language };
+
 /**
  * Hook that allows to get and change the application language
  */

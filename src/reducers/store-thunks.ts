@@ -236,9 +236,7 @@ const handleHashComputing = (
 ): ArchifiltreThunkAction => async (dispatch) => {
   dispatch(
     firstHashesComputingThunk(virtualFileSystem.originalPath, {
-      ignoreFileHashes:
-        virtualFileSystem.hashes !== null &&
-        Object.keys(virtualFileSystem.hashes).length > 0,
+      ignoreFileHashes: !virtualFileSystem.isOnFileSystem,
     })
   );
 };

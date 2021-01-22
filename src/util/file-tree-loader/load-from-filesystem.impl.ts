@@ -1,12 +1,19 @@
-import { AsyncWorker } from "util/async-worker/async-worker-util";
+import {
+  AsyncWorker,
+  WorkerEventType,
+} from "util/async-worker/async-worker-util";
 import { MessageTypes } from "../batch-process/batch-process-util-types";
 import {
   getLoader,
+  isFileSystemLoad,
   loadFileSystemFromFilesAndFoldersLoader,
   makeFileLoadingHooksCreator,
 } from "files-and-folders-loader/file-system-loading-process-utils";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { ArchifiltreError } from "util/error/error-util";
+import * as fs from "fs";
+import { stringifyVFSToStream } from "util/file-tree-loader/load-from-filesystem-serializer";
+import { RESULT_STREAM_FILE_DESCRIPTOR } from "util/async-worker/child-process";
 
 type Reporter = (message: any) => void;
 
@@ -31,6 +38,14 @@ const createReporters = (asyncWorker: AsyncWorker): Reporters => ({
     asyncWorker.postMessage({ type: MessageTypes.COMPLETE }),
 });
 
+const reportResultStream = async (result: any) => {
+  // @ts-ignore
+  const stream = fs.createWriteStream(null, {
+    fd: RESULT_STREAM_FILE_DESCRIPTOR,
+  });
+  stringifyVFSToStream(stream, result);
+};
+
 type LoadVirtualFileSystemParams = {
   path: string;
   filesAndFolders?: FilesAndFoldersMap;
@@ -53,6 +68,8 @@ export const loadVirtualFileSystem = async (
     reportComplete,
   } = createReporters(asyncWorker);
 
+  const isOnFileSystem = isFileSystemLoad(path);
+
   const filesAndFoldersLoaderCreator = getLoader(path, {
     filesAndFolders,
     erroredPaths,
@@ -68,10 +85,21 @@ export const loadVirtualFileSystem = async (
 
   const fileSystem = await loadFileSystemFromFilesAndFoldersLoader(
     filesAndFoldersLoader,
-    hooksCreator
+    hooksCreator,
+    {
+      isOnFileSystem,
+    }
   );
 
-  reportResult({ status: MessageTypes.RESULT, result: fileSystem });
+  await reportResultStream(fileSystem);
+
+  await new Promise<void>((resolve) =>
+    asyncWorker.addEventListener(WorkerEventType.MESSAGE, ({ type }) => {
+      if (type === MessageTypes.STREAM_READ) {
+        resolve();
+      }
+    })
+  );
 
   reportComplete({
     status: MessageTypes.COMPLETE,

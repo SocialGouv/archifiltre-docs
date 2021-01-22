@@ -146,10 +146,14 @@ export const sanitizeHooks = (hooksCreator?: FileSystemLoadingHooksCreator) => (
  * Generic function to load the app based on a loader for a specific file type.
  * @param loadFromSource
  * @param hooksCreator
+ * @param overrides
  */
 export const loadFileSystemFromFilesAndFoldersLoader = async (
   loadFromSource: FilesAndFoldersLoader,
-  hooksCreator?: FileSystemLoadingHooksCreator
+  hooksCreator?: FileSystemLoadingHooksCreator,
+  overrides?: {
+    isOnFileSystem: boolean;
+  }
 ): Promise<VirtualFileSystem> => {
   const baseFileSystem = await loadFromSource(hooksCreator);
 
@@ -169,6 +173,7 @@ export const loadFileSystemFromFilesAndFoldersLoader = async (
       comments: {},
       elementsToDelete: [],
       hashes: {},
+      isOnFileSystem: Boolean(overrides?.isOnFileSystem),
       overrideLastModified: {},
       sessionName: "",
       tags: {},
@@ -193,7 +198,7 @@ export const loadFileSystemFromFilesAndFoldersLoader = async (
  * Check if the element needs to be loaded with the file system loader
  * @param loadPath
  */
-const isFileSystemLoad = (loadPath: string) =>
+export const isFileSystemLoad = (loadPath: string) =>
   fs.statSync(loadPath).isDirectory();
 
 /**

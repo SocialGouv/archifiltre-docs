@@ -9,6 +9,11 @@ import { TagMap } from "reducers/tags/tags-types";
 import { backgroundWorkerProcess$ } from "util/batch-process/batch-process-util";
 import { HashesMap } from "reducers/hashes/hashes-types";
 import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
+import {
+  InitializeMessage,
+  MessageTypes,
+} from "util/batch-process/batch-process-util-types";
+import { stringifyCsvExporterOptionsToStream } from "exporters/csv/csv-exporter-serializer";
 
 export interface GenerateCsvExportOptions {
   aliases: AliasMap;
@@ -20,6 +25,9 @@ export interface GenerateCsvExportOptions {
   tags: TagMap;
 }
 
+const initMessageSerializer = (stream, { data }: InitializeMessage) =>
+  stringifyCsvExporterOptionsToStream(stream, data);
+
 /**
  * Asynchronously generates a csv export
  * @param data
@@ -29,6 +37,10 @@ export const generateCsvExport$ = (data: GenerateCsvExportOptions) => {
   const { language } = translations;
   return backgroundWorkerProcess$(
     { ...data, language },
-    createAsyncWorkerForChildProcessControllerFactory("csv-exporter.fork")
+    createAsyncWorkerForChildProcessControllerFactory("csv-exporter.fork", {
+      messageSerializers: {
+        [MessageTypes.INITIALIZE]: initMessageSerializer,
+      },
+    })
   );
 };

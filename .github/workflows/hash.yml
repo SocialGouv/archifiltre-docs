@@ -1,0 +1,18 @@
+name: Release
+
+on:
+  release:
+    types: [published, prereleased]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: MCJack123/ghaction-Generate-Release-Hashes@v2
+        with:
+          hash-type: sha512
+          file-name: hashes.txt
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Asset Hashes
+          path: hashes.txt

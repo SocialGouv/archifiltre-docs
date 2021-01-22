@@ -271,6 +271,15 @@ jobs:
           mkdir -p dist/win64-msi
           mv win64-msi-bin/*/archifiltre-*.msi dist/win64-msi/
 
+      - name: Generate hashes
+        run: |
+          openssl dgst -sha512 dist/linux/archifiltre-*.AppImage > dist/linux/archifiltre-linux.sha512
+          openssl dgst -sha512 dist/mac/archifiltre-*.dmg > dist/mac/archifiltre-mac.sha512
+          openssl dgst -sha512 dist/win32/archifiltre-*.exe > dist/win32/archifiltre-win32.sha512
+          openssl dgst -sha512 dist/win32-msi/archifiltre-*.msi > dist/win32-msi/archifiltre-win32-msi.sha512
+          openssl dgst -sha512 dist/win64/archifiltre-*.exe > dist/win64/archifiltre-win64.sha512
+          openssl dgst -sha512 dist/win64-msi/archifiltre-*.msi > dist/win64-msi/archifiltre-win64-msi.sha512
+
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2
         with:

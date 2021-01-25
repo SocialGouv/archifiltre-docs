@@ -1,3 +1,34 @@
+# [3.2.0](https://github.com/SocialGouv/archifiltre/compare/v3.1.1...v3.2.0) (2021-01-25)
+
+
+### Bug Fixes
+
+* add translations for loading screen error message ([#1152](https://github.com/SocialGouv/archifiltre/issues/1152)) ([fc2b412](https://github.com/SocialGouv/archifiltre/commit/fc2b412358b41244d45d89d68b79d28ae12f97ce))
+* fix production bug caused by worker refactoring ([#1160](https://github.com/SocialGouv/archifiltre/issues/1160)) ([dec7842](https://github.com/SocialGouv/archifiltre/commit/dec784280167d4d59c154037ebbf8e75aa791b3a))
+* remove javascript rejected promise error in console ([#1161](https://github.com/SocialGouv/archifiltre/issues/1161)) ([293d2b8](https://github.com/SocialGouv/archifiltre/commit/293d2b88e086c4518c21dc3afba25d8dda89792d))
+* stream data between child and main process to prevent memory overload([#1157](https://github.com/SocialGouv/archifiltre/issues/1157)) ([b9e5512](https://github.com/SocialGouv/archifiltre/commit/b9e5512af055acb45660a3d70e46c7d390441dbf))
+* **background-loading-info:** fix z-index ([#1139](https://github.com/SocialGouv/archifiltre/issues/1139)) ([b3ebbcd](https://github.com/SocialGouv/archifiltre/commit/b3ebbcd85fb6ab5d59f80b9e9458f17021f5bee3))
+* **deps:** update all dependencies ([#1142](https://github.com/SocialGouv/archifiltre/issues/1142)) ([188b53d](https://github.com/SocialGouv/archifiltre/commit/188b53d90738e17a0b00cf42377f1ab45ae74c1b))
+* **deps:** update all dependencies ([#1155](https://github.com/SocialGouv/archifiltre/issues/1155)) ([50da2cb](https://github.com/SocialGouv/archifiltre/commit/50da2cbadef49c0a2bf625cec0944cd520c8b9d4))
+* **deps:** update all non-major dependencies ([#1145](https://github.com/SocialGouv/archifiltre/issues/1145)) ([5aaf0cc](https://github.com/SocialGouv/archifiltre/commit/5aaf0cccb3bd87d73d1383735ac193f426baae89))
+* fix loading of older versions of the script file ([#1124](https://github.com/SocialGouv/archifiltre/issues/1124)) ([6c2c67b](https://github.com/SocialGouv/archifiltre/commit/6c2c67b6b2511885f47ff3852ad68aee18131619))
+* fix scroll bars on loading screen ([#1128](https://github.com/SocialGouv/archifiltre/issues/1128)) ([e256f2f](https://github.com/SocialGouv/archifiltre/commit/e256f2f7e36f487f44b686ca5872fffedd3f31a2))
+* **github:** unify behaviour of release channels ([003abbd](https://github.com/SocialGouv/archifiltre/commit/003abbd9467024b707e8892d11680712ab3c9b64))
+* run branch builds on pull requests ([#1118](https://github.com/SocialGouv/archifiltre/issues/1118)) ([1e0b306](https://github.com/SocialGouv/archifiltre/commit/1e0b3062bd3a79db0b59510d6914de5352b53860))
+
+
+### Features
+
+* **hashes:** add release hashes in pipeline ([#1156](https://github.com/SocialGouv/archifiltre/issues/1156)) ([a8c90ea](https://github.com/SocialGouv/archifiltre/commit/a8c90ea34449c60b4385515e321a683d2046cfe8)), closes [#1139](https://github.com/SocialGouv/archifiltre/issues/1139) [#1142](https://github.com/SocialGouv/archifiltre/issues/1142) [#1155](https://github.com/SocialGouv/archifiltre/issues/1155) [#1145](https://github.com/SocialGouv/archifiltre/issues/1145) [#1124](https://github.com/SocialGouv/archifiltre/issues/1124) [#1128](https://github.com/SocialGouv/archifiltre/issues/1128) [#1118](https://github.com/SocialGouv/archifiltre/issues/1118) [#1149](https://github.com/SocialGouv/archifiltre/issues/1149) [#1141](https://github.com/SocialGouv/archifiltre/issues/1141) [#1140](https://github.com/SocialGouv/archifiltre/issues/1140) [#1146](https://github.com/SocialGouv/archifiltre/issues/1146) [#1126](https://github.com/SocialGouv/archifiltre/issues/1126) [#1129](https://github.com/SocialGouv/archifiltre/issues/1129) [#1095](https://github.com/SocialGouv/archifiltre/issues/1095) [#1010](https://github.com/SocialGouv/archifiltre/issues/1010) [#1121](https://github.com/SocialGouv/archifiltre/issues/1121)
+* **signing:** add code signing certificate for Windows ([#1154](https://github.com/SocialGouv/archifiltre/issues/1154)) ([45cb612](https://github.com/SocialGouv/archifiltre/commit/45cb6128824d696539b5d5707303d19e541333b9))
+* improve file system loading error handling ([#1149](https://github.com/SocialGouv/archifiltre/issues/1149)) ([e07e2c4](https://github.com/SocialGouv/archifiltre/commit/e07e2c4f8c267141214a279fc1b55cce1700f80f))
+* **dropzone:** add error notification when multiple folders are dropped ([#1141](https://github.com/SocialGouv/archifiltre/issues/1141)) ([8dfcd24](https://github.com/SocialGouv/archifiltre/commit/8dfcd2462fc3d15ba187bed21d9216469ea6e61a))
+* **error-screen:** add reload button on error screen ([#1140](https://github.com/SocialGouv/archifiltre/issues/1140)) ([3961b76](https://github.com/SocialGouv/archifiltre/commit/3961b76a2f3c360869703f2f36f0ad76467cdb96))
+* **start-screen:** add error message when invalid path loaded ([#1146](https://github.com/SocialGouv/archifiltre/issues/1146)) ([342fac0](https://github.com/SocialGouv/archifiltre/commit/342fac03cd9eb6395463b9bade9bf0f23b0e8952))
+* allow to edit element date ([#1126](https://github.com/SocialGouv/archifiltre/issues/1126)) ([02d0939](https://github.com/SocialGouv/archifiltre/commit/02d0939c9ee1f6c4360f125fdabcef8a6ccf4b3d))
+* allow to save and load updated dates ([#1129](https://github.com/SocialGouv/archifiltre/issues/1129)) ([8b856ba](https://github.com/SocialGouv/archifiltre/commit/8b856baad4fd69f4b4018bdd0a9a26a43796b7e1))
+* **github:** allow manual build trigged on github ([#1120](https://github.com/SocialGouv/archifiltre/issues/1120)) ([792f3cf](https://github.com/SocialGouv/archifiltre/commit/792f3cfcded25a95687d97b40e7c3ceaa3f628cd)), closes [#1095](https://github.com/SocialGouv/archifiltre/issues/1095) [#1010](https://github.com/SocialGouv/archifiltre/issues/1010) [#1121](https://github.com/SocialGouv/archifiltre/issues/1121)
+
 # [3.2.0](https://github.com/SocialGouv/archifiltre/compare/v3.1.1...v3.2.0) (2021-01-22)
 
 

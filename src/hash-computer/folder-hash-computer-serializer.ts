@@ -8,6 +8,13 @@ import {
   stringifyObjectToStream,
 } from "util/child-process-stream/child-process-stream";
 import { Field, Message, Type } from "protobufjs";
+import {
+  extractFilesAndFolders,
+  extractHashes,
+  extractKey,
+  extractKeysFromFilesAndFolders,
+  makeDataExtractor,
+} from "util/child-process-stream/common-serializer";
 
 @Type.d("FolderHashComputerInput")
 class FolderHashComputerInputMessage extends Message<FolderHashComputerInputMessage> {
@@ -37,19 +44,12 @@ export const folderHashComputerInputToStream = (
     FolderHashComputerData,
     FolderHashComputerSerializedData
   >(stream, data, {
-    keyExtractor: (inputData) => Object.keys(inputData.filesAndFolders),
-    dataExtractor: (
-      inputData,
-      key
-    ): {
-      key: string;
-      filesAndFolders: FilesAndFolders;
-      hash: string | null;
-    } => ({
-      key,
-      filesAndFolders: inputData.filesAndFolders[key],
-      hash: inputData.hashes[key],
-    }),
+    keyExtractor: extractKeysFromFilesAndFolders,
+    dataExtractor: makeDataExtractor(
+      extractKey,
+      extractFilesAndFolders,
+      extractHashes
+    ),
     dataSerializer: (dataToSerialize) => {
       const message = FolderHashComputerInputMessage.create(dataToSerialize);
       return FolderHashComputerInputMessage.encode(message).finish();

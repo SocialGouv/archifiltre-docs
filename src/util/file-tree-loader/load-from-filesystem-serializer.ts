@@ -13,6 +13,15 @@ import {
 import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
 import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { Field, Message, Type } from "protobufjs";
+import {
+  extractFilesAndFolders,
+  extractFilesAndFoldersMetadata,
+  extractHashes,
+  extractKey,
+  extractKeysFromFilesAndFolders,
+  makeDataExtractor,
+  OmitProtobuf,
+} from "util/child-process-stream/common-serializer";
 
 const sections: (keyof VirtualFileSystem)[] = [
   "filesAndFolders",
@@ -26,10 +35,10 @@ class VFSElementMessage extends Message<VFSElementMessage> {
   public key: string;
 
   @Field.d(2, FilesAndFoldersMessage)
-  public filesAndFolders: FilesAndFoldersMessage;
+  public filesAndFolders: FilesAndFolders;
 
   @Field.d(3, FilesAndFoldersMetadataMessage)
-  public filesAndFoldersMetadata: FilesAndFoldersMetadataMessage;
+  public filesAndFoldersMetadata: FilesAndFoldersMetadata;
 
   @Field.d(4, "string")
   public hash: string | null;
@@ -55,17 +64,20 @@ export const stringifyVFSToStream = (
 ) => {
   const base = omit(vfs, sections);
   sendStringToStream(stream, JSON.stringify(base));
-  stringifyObjectToStream(stream, vfs, {
-    keyExtractor: (virtualFileSystem) =>
-      Object.keys(virtualFileSystem.filesAndFolders),
-    dataExtractor: (virtualFileSystem, elementKey) => ({
-      key: elementKey,
-      filesAndFolders: vfs.filesAndFolders[elementKey],
-      filesAndFoldersMetadata: vfs.filesAndFoldersMetadata[elementKey],
-      hash: vfs.hashes[elementKey],
-    }),
-    dataSerializer: serializeField,
-  });
+  stringifyObjectToStream<VirtualFileSystem, OmitProtobuf<VFSElementMessage>>(
+    stream,
+    vfs,
+    {
+      keyExtractor: extractKeysFromFilesAndFolders,
+      dataExtractor: makeDataExtractor(
+        extractKey,
+        extractFilesAndFolders,
+        extractFilesAndFoldersMetadata,
+        extractHashes
+      ),
+      dataSerializer: serializeField,
+    }
+  );
   stream.end();
 };
 

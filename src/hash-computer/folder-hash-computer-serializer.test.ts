@@ -13,7 +13,7 @@ const extractDataFromMock = (writeable: MockWritable): Promise<Buffer[]> =>
     });
   });
 
-describe("vfs-stream", () => {
+describe("folder-hash-computer-serializer", () => {
   it("should send and parse FolderHashComputerInput", async () => {
     const inputData = {
       filesAndFolders: {

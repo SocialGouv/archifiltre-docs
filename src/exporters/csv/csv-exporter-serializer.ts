@@ -5,7 +5,6 @@ import {
   FilesAndFoldersMetadataMessage,
 } from "util/child-process-stream/child-process-stream-messages";
 import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { WithFilesAndFolders } from "util/virtual-file-system-util/virtual-file-system-util";
 import { GenerateCsvExportOptions } from "exporters/csv/csv-exporter.controller";
 import { Readable, Writable } from "stream";
 import { omit } from "lodash";
@@ -15,6 +14,15 @@ import {
   stringifyObjectToStream,
 } from "util/child-process-stream/child-process-stream";
 import { Language, WithLanguage } from "hooks/use-language";
+import {
+  extractFilesAndFolders,
+  extractFilesAndFoldersMetadata,
+  extractHashes,
+  extractKey,
+  extractKeysFromFilesAndFolders,
+  makeDataExtractor,
+  OmitProtobuf,
+} from "util/child-process-stream/common-serializer";
 
 @Type.d("CsvExporterSerializerMessage")
 export class CsvExporterSerializerMessage extends Message<CsvExporterSerializerMessage> {
@@ -36,23 +44,6 @@ const dataSerializer = (element: CsvExporterSerializerMessage): Uint8Array => {
   return CsvExporterSerializerMessage.encode(message).finish();
 };
 
-const keyExtractor = (data: WithFilesAndFolders) =>
-  Object.keys(data.filesAndFolders);
-
-const dataExtractor = (
-  {
-    filesAndFolders,
-    filesAndFoldersMetadata,
-    hashes,
-  }: GenerateCsvExportOptions,
-  key: string
-) => ({
-  key,
-  filesAndFolders: filesAndFolders[key],
-  filesAndFoldersMetadata: filesAndFoldersMetadata[key],
-  hash: (hashes && hashes[key]) || null,
-});
-
 export const stringifyCsvExporterOptionsToStream = (
   stream: Writable,
   options: WithLanguage<GenerateCsvExportOptions>
@@ -63,9 +54,17 @@ export const stringifyCsvExporterOptionsToStream = (
     "hashes",
   ]);
   sendStringToStream(stream, JSON.stringify(base));
-  stringifyObjectToStream(stream, options, {
-    keyExtractor,
-    dataExtractor,
+  stringifyObjectToStream<
+    WithLanguage<GenerateCsvExportOptions>,
+    OmitProtobuf<CsvExporterSerializerMessage>
+  >(stream, options, {
+    keyExtractor: extractKeysFromFilesAndFolders,
+    dataExtractor: makeDataExtractor(
+      extractKey,
+      extractFilesAndFolders,
+      extractFilesAndFoldersMetadata,
+      extractHashes
+    ),
     dataSerializer,
   });
   stream.end();

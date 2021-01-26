@@ -7,7 +7,7 @@ import { tap, toArray } from "rxjs/operators";
 import { flatten } from "lodash";
 
 interface CsvExporterData {
-  filesAndFoldersMap: FilesAndFoldersMap;
+  filesAndFolders: FilesAndFoldersMap;
 }
 
 /**
@@ -18,10 +18,10 @@ interface CsvExporterData {
  */
 export const onInitialize: WorkerMessageHandler = async (
   asyncWorker,
-  { filesAndFoldersMap }: CsvExporterData
+  { filesAndFolders }: CsvExporterData
 ) => {
   const header = [""];
-  const lines = await computeTreeStructureArray(filesAndFoldersMap)
+  const lines = await computeTreeStructureArray(filesAndFolders)
     .pipe(
       tap((lineComputed) => {
         asyncWorker.postMessage({

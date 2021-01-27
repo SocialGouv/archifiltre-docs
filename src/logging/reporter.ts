@@ -7,7 +7,7 @@ import DailyRotateFile from "winston-daily-rotate-file";
 import WinstonSentry from "winston-sentry-raven-transport";
 import WinstonConsoleLogger from "./winston-console-logger";
 
-const isProd = () => MODE === "production";
+//const isProd = () => MODE === "production";
 
 enum Level {
   ERROR = "error",
@@ -30,21 +30,31 @@ const logger = createLogger({
 /**
  * Inits the reporter here Sentry
  */
-export const initReporter = (isActive: boolean): void => {
-  if (!isProd() || !isActive) {
+export const initReporter = async (isActive: boolean): void => {
+  /*if (!isProd() || !isActive) {
     return;
-  }
+  }*/
 
   const sentryUrl = SENTRY_DSN;
-
   Sentry.init({
     dsn: sentryUrl,
+    beforeSend(event, hint) {
+      console.log("TESTRYETXDFYGIUHOJ");
+      console.log(">>>>>>>>", event);
+      console.log("========", hint);
+      return event;
+    },
   });
-
   logger.add(
     new WinstonSentry({
       dsn: sentryUrl,
       level: Level.WARN,
+      config: {
+        beforeSend(event) {
+          console.log("LOLILOL");
+          return event;
+        },
+      },
     })
   );
 

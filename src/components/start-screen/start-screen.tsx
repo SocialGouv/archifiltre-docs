@@ -15,6 +15,7 @@ import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-type
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import logo from "../../../static/imgs/logo.png";
+import { reportError } from "../../logging/reporter";
 
 declare global {
   const AUTOLOAD: string;
@@ -58,7 +59,7 @@ const StartScreen: FC<StartScreenProps> = ({
   const { t } = useTranslation();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [loadedPath, setLoadedPath] = useState("");
-
+  reportError("LOL");
   const loadPath = useCallback(
     (loadedPath) => {
       loadFromPath(loadedPath);

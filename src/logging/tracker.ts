@@ -31,7 +31,7 @@ export const initTracker = (isActive: boolean): void => {
   addMatomoTracker({ type: MatomoActionType.ENABLE_LINK_TRACKING });
   addMatomoTracker({
     type: MatomoActionType.SET_CUSTOM_URL,
-    value: location.pathname,
+    value: `https://archifiltre/`,
   });
   addMatomoTracker({ type: MatomoActionType.TRACK_PAGE_VIEW });
   const scriptElement = document.createElement("script");

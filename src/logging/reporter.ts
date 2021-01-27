@@ -4,10 +4,12 @@ import electron from "electron";
 import path from "path";
 import { createLogger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
-import WinstonSentry from "winston-sentry-raven-transport";
+import WinstonSentry from "winston-transport-sentry-node";
 import WinstonConsoleLogger from "./winston-console-logger";
+import { Event as SentryEvent } from "@sentry/browser";
+import { merge } from "lodash";
 
-//const isProd = () => MODE === "production";
+const isProd = () => MODE === "production";
 
 enum Level {
   ERROR = "error",
@@ -30,31 +32,23 @@ const logger = createLogger({
 /**
  * Inits the reporter here Sentry
  */
-export const initReporter = async (isActive: boolean): void => {
-  /*if (!isProd() || !isActive) {
+export const initReporter = (isActive: boolean): void => {
+  if (!isProd() || !isActive) {
     return;
-  }*/
+  }
 
-  const sentryUrl = SENTRY_DSN;
-  Sentry.init({
-    dsn: sentryUrl,
-    beforeSend(event, hint) {
-      console.log("TESTRYETXDFYGIUHOJ");
-      console.log(">>>>>>>>", event);
-      console.log("========", hint);
-      return event;
+  const sentryOptions = {
+    dsn: SENTRY_DSN,
+    beforeSend(event) {
+      return anonymizeEvent(event);
     },
-  });
+  };
+
+  Sentry.init(sentryOptions);
   logger.add(
     new WinstonSentry({
-      dsn: sentryUrl,
+      sentry: sentryOptions,
       level: Level.WARN,
-      config: {
-        beforeSend(event) {
-          console.log("LOLILOL");
-          return event;
-        },
-      },
     })
   );
 
@@ -107,4 +101,19 @@ export const reportWarning = (message) => {
  */
 export const reportInfo = (message) => {
   handleLog(message, Level.INFO);
+};
+
+/**
+ * Anonymizes the event of Archifiltre to send an obfuscated string to Matomo
+ * @param event
+ */
+const anonymizeEvent = (event: SentryEvent) => {
+  const values = event?.exception?.values?.map((value) => {
+    const frames = value?.stacktrace?.frames?.map((frame) => {
+      const filename = path.basename(frame?.filename || "");
+      return merge(frame, { filename });
+    });
+    return merge(value, { stacktrace: { frames } });
+  });
+  return merge(event, { exception: { values } });
 };

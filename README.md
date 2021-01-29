@@ -60,8 +60,26 @@ First, prepare the build in production mode
 yarn prepare-prod
 ```
 
-To sign the app manually and locally, you can use the command `yarn env-linux` or `env-windows` depending on your platform.
-Otherwise, running a GitHub pipeline through a pull request will automatically sign Archifiltre.
+### Preparation (code signing)
+
+#### Windows
+
+To sign the app manually and locally, you can use the command `yarn env-linux` or `yarn env-windows` depending on your platform.
+Otherwise, running a GitHub pipeline through a pull request will automatically sign Archifiltre for Windows.
+
+#### Mac
+
+To build the app locally without signing, you can run `yarn mac-local`.
+Otherwise, running a GitHub pipeline through a pull request will automatically sign Archifiltre for Mac.
+
+Note: the file `electron/build/entitlments.mac.plist` contains the following flag: `com.apple.security.cs.allow-unsigned-executable-memory`. 
+To notarize the app, this flag needs to be set to `true` to activate the "Hardened Runtime", a security mecanism by Apple.
+
+#### Linux
+
+There is no code signing on Linux, but every release has a SHA512 file corresponding to each binary. This can be used on a Linux system.
+
+### Build the app
 
 Then you can package the app for the right platform:
 

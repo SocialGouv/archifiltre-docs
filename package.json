@@ -170,8 +170,8 @@
     "uuid": "8.3.2",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0",
-    "winston-sentry-raven-transport": "^1.2.0",
     "winston-transport": "^4.4.0",
+    "winston-transport-sentry-node": "^0.7.0",
     "xlsx": "^0.16.9",
     "xml": "^1.0.1",
     "yargs": "^16.2.0"

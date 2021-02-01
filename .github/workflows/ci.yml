@@ -188,7 +188,7 @@ jobs:
 
       - name: Cache Yarn packages
         id: yarn_cache_packages
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: |
             ${{ steps.init.outputs.yarn_cache }}

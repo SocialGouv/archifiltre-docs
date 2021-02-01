@@ -1902,10 +1902,10 @@ amdefine@>=0.0.4:
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
   integrity sha1-SlKCrBZHKek2Gbz9OtFR+BfOkfU=
 
-angular-expressions@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/angular-expressions/-/angular-expressions-1.1.1.tgz#45fb8a5da8dc0fb854e717f71e8251c9d6bdae31"
-  integrity sha512-gH9UO5r0HTmQWOfet9dC6ekWZ0hnOzCy62OUcV79XuUh0wqaLzVHcv7STWfIA5hxn39TA4mYs1EKukCsgGIvwg==
+angular-expressions@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/angular-expressions/-/angular-expressions-1.1.2.tgz#9115a9f36c252ac83246bc49cb26802f84bf622f"
+  integrity sha512-nTu8idKKtQeUGSY+Wk0x/jhM+m0fnqK7XlYdLmfKLqcrn3TRbkGqxID4pfste3qPJq7zQeliGIlIY3VivC/rpQ==
 
 ansi-align@^3.0.0:
   version "3.0.0"
@@ -6100,10 +6100,10 @@ hyphenate-style-name@^1.0.3:
   resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz#691879af8e220aea5750e8827db4ef62a54e361d"
   integrity sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==
 
-i18next@^19.8.4:
-  version "19.8.4"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-19.8.4.tgz#447718f2a26319b8debdbcc6fbc1a9761be7316b"
-  integrity sha512-FfVPNWv+felJObeZ6DSXZkj9QM1Ivvh7NcFCgA8XPtJWHz0iXVa9BUy+QY8EPrCLE+vWgDfV/sc96BgXVo6HAA==
+i18next@^19.8.5:
+  version "19.8.5"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-19.8.5.tgz#8275c98ab98faffa348de2c34c2fd80ffeadb999"
+  integrity sha512-mDuH/mvnNXZmvqxl3akSZuJtbX7ou7M66kzfXQTfRngTZ9cAjktlx4yVzA+gS9VPZp51eZOQAGfEDbFcnyvliw==
   dependencies:
     "@babel/runtime" "^7.12.0"
 

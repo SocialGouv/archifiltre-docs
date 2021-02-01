@@ -36,6 +36,7 @@
   "build": {
     "appId": "io.github.archifiltre",
     "artifactName": "archifiltre-${version}.${ext}",
+    "afterSign": "scripts/mac/notarize.js",
     "files": [
       "electron/dist",
       "electron/build/icon.*",
@@ -45,7 +46,12 @@
       "output": "dist/${os}-${arch}"
     },
     "mac": {
-      "icon": "./electron/build/icon.icns"
+      "category": "public.app-category.productivity",
+      "icon": "./electron/build/icon.icns",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "./electron/build/entitlements.mac.plist",
+      "entitlementsInherit": "./electron/build/entitlements.mac.plist"
     },
     "win": {
       "icon": "./electron/build/icon.png"
@@ -98,6 +104,7 @@
     "deep-equal": "2.0.5",
     "electron": "11.2.1",
     "electron-builder": "22.9.1",
+    "electron-notarize": "^1.0.0",
     "electron-react-devtools": "0.5.3",
     "eslint": "7.19.0",
     "eslint-import-resolver-webpack": "0.13.0",

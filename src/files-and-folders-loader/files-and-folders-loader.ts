@@ -189,6 +189,12 @@ const LINE_LOADERS = {
     // Whe take the last element as the rest, as the last modified date may be an integer or a float (randomly)
     fileHash: rest[rest.length - 1],
   }),
+  "unix-1.0.0": ([[filePath, fileLastModified, fileSize, fileHash]]) => ({
+    filePath,
+    fileLastModified,
+    fileSize,
+    fileHash,
+  }),
   [latestVersion]: ([[filePath, fileSize, fileLastModified, fileHash]]) => ({
     filePath,
     fileSize,

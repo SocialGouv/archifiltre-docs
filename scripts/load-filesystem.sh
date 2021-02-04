@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-VERSION=1.0.0
+VERSION=1.0.1
 
 if [[ $1 = "" ]]
 then
@@ -18,7 +18,7 @@ esac
 if [[ $machine = Linux ]]
 then
   STAT="stat -c"
-  STAT_FORMAT="\"%n\",%Y,%s"
+  STAT_FORMAT="\"%n\",%s,%Y"
   MD5=md5sum
 else
   STAT="stat -f"

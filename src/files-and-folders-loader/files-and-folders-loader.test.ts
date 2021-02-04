@@ -307,10 +307,10 @@ describe("files-and-folders-loader", () => {
       const exportFileContent = `1.0.0
 unix
 /basePath/files
-"/basePath/files/file.txt",5,1584108263,d8e8fca2dc0f896fd7cb4cb0031ba249
-"/basePath/files/file",49,1563979128,0052aa96e1e52f1a0d6489731155dce3
-"/basePath/files/file2",8196,1582727849,87706eb5706972ee4134891ca9cb6708
-"/basePath/files/folder/file with space",49,1563979128,0052aa96e1e52f1a0d6489731155dce3
+"/basePath/files/file.txt",1584108263,5,d8e8fca2dc0f896fd7cb4cb0031ba249
+"/basePath/files/file",1563979128,49,0052aa96e1e52f1a0d6489731155dce3
+"/basePath/files/file2",1582727849,8196,87706eb5706972ee4134891ca9cb6708
+"/basePath/files/folder/file with space",1563979128,49,0052aa96e1e52f1a0d6489731155dce3
 `;
       const stream = Readable.from(exportFileContent);
 

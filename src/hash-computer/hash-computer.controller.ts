@@ -1,5 +1,4 @@
 import { remote } from "electron";
-import { flatten } from "lodash";
 import path from "path";
 import { compose } from "redux";
 import { bufferTime, filter, map, tap } from "rxjs/operators";
@@ -65,16 +64,19 @@ export const computeHashes$ = (
   const hashesMapMerger = (bufferedObjects: HashesMap[]): HashesMap =>
     Object.assign({}, ...bufferedObjects);
 
+  const bufferAndFilter = <Input>(
+    bufferTimeSpan: number
+  ): OperatorFunction<Input, Input[]> =>
+    compose(
+      filter((buffer: Input[]) => buffer.length !== 0),
+      bufferTime<Input>(bufferTimeSpan)
+    );
+
   const bufferAndMerge = <Input, AggregatorOutput, Output extends object>(
     aggregator: (input: Input[]) => AggregatorOutput,
     merger: (input: AggregatorOutput[]) => Output
   ): OperatorFunction<Input[], Output> =>
-    compose(
-      map(merger),
-      filter((buffer: AggregatorOutput[]) => buffer.length !== 0),
-      bufferTime(BUFFER_TIME),
-      map(aggregator)
-    );
+    compose(map(merger), bufferAndFilter(BUFFER_TIME), map(aggregator));
 
   const resultProcessingFunction = bufferAndMerge<
     BatchProcessResult<string>,
@@ -95,8 +97,8 @@ export const computeHashes$ = (
 
   const errorProcessor =
     WRITE_DEBUG === "true"
-      ? compose(tap(errorFileWriter.write), bufferAndMerge(flatten, flatten))
-      : bufferAndMerge(flatten, flatten);
+      ? compose(tap(errorFileWriter.write), bufferAndFilter(BUFFER_TIME))
+      : bufferAndFilter(BUFFER_TIME);
 
   return operateOnDataProcessingStream<BatchProcessResult<string>[], HashesMap>(
     hashes$,

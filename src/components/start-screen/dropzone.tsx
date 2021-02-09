@@ -51,8 +51,8 @@ const Dropzone: FC<DropzoneProps> = ({ loadPath, setLoadedPath }) => {
 
       if (areMultipleFoldersDropped) {
         notifyError(
-          t("folderDropzone.multipleFoldersDroppedErrorMessage"),
-          t("folderDropzone.multipleFoldersDroppedErrorTitle")
+          t("startScreen.multipleFoldersDroppedErrorMessage"),
+          t("startScreen.multipleFoldersDroppedErrorTitle")
         );
         return;
       }
@@ -61,8 +61,8 @@ const Dropzone: FC<DropzoneProps> = ({ loadPath, setLoadedPath }) => {
 
       if (!isFileDefined) {
         notifyError(
-          t("folderDropzone.loadingErrorMessage"),
-          t("folderDropzone.loadingErrorTitle")
+          t("startScreen.loadingErrorMessage"),
+          t("startScreen.loadingErrorTitle")
         );
         return;
       }
@@ -84,7 +84,7 @@ const Dropzone: FC<DropzoneProps> = ({ loadPath, setLoadedPath }) => {
     >
       <PlaceholderContainer item>
         <Icon />
-        <Placeholder>{t("folderDropzone.placeholder")}</Placeholder>
+        <Placeholder>{t("startScreen.placeholder")}</Placeholder>
       </PlaceholderContainer>
     </DropzoneContainer>
   );

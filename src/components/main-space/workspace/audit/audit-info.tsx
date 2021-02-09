@@ -13,7 +13,7 @@ const AuditInfo: FC = () => {
         <FileCountInfoContainer />
       </Box>
       <Box paddingTop={3}>
-        <CategoryTitle>{t("audit.fileTreeDepthTitle")}</CategoryTitle>
+        <CategoryTitle>{t("workspace.audit.fileTreeDepthTitle")}</CategoryTitle>
       </Box>
       <Box>
         <FileTreeDepthContainer />

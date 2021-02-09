@@ -75,7 +75,7 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
             <ListItemIcon>
               <FaPlus />
             </ListItemIcon>
-            <ListItemText primary={t("folderDropzone.newDirectory")} />
+            <ListItemText primary={t("startScreen.newDirectory")} />
           </ListItem>
           {hasPreviousSession && (
             <ListItem
@@ -132,19 +132,19 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
             <ListItemIcon>
               <FaGrinStars />
             </ListItemIcon>
-            <ListItemText primary={t("folderDropzone.feedback")} />
+            <ListItemText primary={t("startScreen.feedback")} />
           </ListItem>
           <ListItem button onClick={onDocumentationClick}>
             <ListItemIcon>
               <FaBook />
             </ListItemIcon>
-            <ListItemText primary={t("folderDropzone.documentation")} />
+            <ListItemText primary={t("startScreen.documentation")} />
           </ListItem>
           <ListItem button onClick={onContactClick}>
             <ListItemIcon>
               <FaEnvelope />
             </ListItemIcon>
-            <ListItemText primary={t("folderDropzone.contactUs")} />
+            <ListItemText primary={t("startScreen.contactUs")} />
           </ListItem>
         </List>
       </Box>

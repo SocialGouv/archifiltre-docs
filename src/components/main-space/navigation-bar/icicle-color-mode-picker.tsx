@@ -17,17 +17,17 @@ const IcicleColorModePicker: FC<IcicleColorModePickerProps> = ({
   const options = [
     {
       value: IcicleColorMode.BY_TYPE,
-      label: t("workspace.type"),
+      label: t("navigationBar.type"),
     },
     {
       value: IcicleColorMode.BY_DATE,
-      label: t("workspace.dates"),
+      label: t("navigationBar.dates"),
     },
   ];
 
   return (
     <OptionsPicker
-      title={t("workspace.coloring")}
+      title={t("navigationBar.coloring")}
       value={icicleColorMode}
       setValue={setIcicleColorMode}
       options={options}

@@ -49,7 +49,7 @@ const DuplicatesDistributionChart: FC<DuplicatesDistributionChartProps> = ({
         <div>
           <div>{label}</div>
           <ColoredText color={colors[key]}>{`${value} ${t(
-            "duplicates.duplicates"
+            "workspace.duplicatesTitle"
           )}`}</ColoredText>
           <ColoredText color={colors[key]}>
             {octet2HumanReadableFormat(size)}

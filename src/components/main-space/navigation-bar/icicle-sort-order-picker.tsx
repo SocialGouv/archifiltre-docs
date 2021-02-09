@@ -18,20 +18,20 @@ const IciclesSortOrderPicker: FC<IciclesSortOrderPickerProps> = ({
   const options = [
     {
       value: IcicleSortMethod.SORT_BY_SIZE,
-      label: t("workspace.bySize"),
+      label: t("navigationBar.bySize"),
     },
     {
       value: IcicleSortMethod.SORT_BY_DATE,
-      label: t("workspace.dates"),
+      label: t("navigationBar.dates"),
     },
     {
       value: IcicleSortMethod.SORT_ALPHA_NUMERICALLY,
-      label: t("workspace.alphanumeric"),
+      label: t("navigationBar.alphanumeric"),
     },
   ];
   return (
     <OptionsPicker
-      title={t("workspace.ordering")}
+      title={t("navigationBar.ordering")}
       value={icicleSortMethod}
       setValue={setIcicleSortMethod}
       options={options}

@@ -34,8 +34,8 @@ const LoadingBlock: FC<LoadingBlockProps> = ({
     fileSystemLoadingStep !== FileSystemLoadingStep.INDEXING;
 
   const loaderText = isJsonFile(loadedPath)
-    ? t("folderDropzone.jsonLoading")
-    : `${indexedFilesCount} ${t("folderDropzone.indexedFiles")}`;
+    ? t("startScreen.jsonLoading")
+    : `${indexedFilesCount} ${t("startScreen.indexedFiles")}`;
 
   return (
     <Grid container direction="row" justify="center" alignItems="center">
@@ -44,7 +44,7 @@ const LoadingBlock: FC<LoadingBlockProps> = ({
           <LoadingSpinner loaderText={loaderText} isLoading={!isIndexingDone} />
           {isIndexingDone && (
             <Box display="flex" justifyContent="center">
-              <Box pr={1}>{t("folderDropzone.almostDone")}</Box>
+              <Box pr={1}>{t("startScreen.almostDone")}</Box>
               <CircularProgress size={12} style={{ alignSelf: "center" }} />
             </Box>
           )}
@@ -56,7 +56,7 @@ const LoadingBlock: FC<LoadingBlockProps> = ({
             size="small"
             onClick={cancelLoading}
           >
-            {t("folderDropzone.cancelLoading")}
+            {t("startScreen.cancelLoading")}
           </Button>
         </Box>
       </StyledGrid>

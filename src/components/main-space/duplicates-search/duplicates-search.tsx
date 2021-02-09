@@ -168,7 +168,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
       },
       {
         id: "elementsCount",
-        name: t("duplicates.filesNumber"),
+        name: t("workspace.duplicates.filesNumber"),
         accessor: () => "",
         sortable: true,
         sortAccessor: (row: FilesAndFolders[]) => row.length,
@@ -216,8 +216,10 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
       <Box display="flex" justifyContent="space-between" pt={1} pb={1}>
         <Box flex={1} display="flex" alignItems="center">
           <CategoryTitle>
-            {t("duplicates.duplicatesList")}&nbsp;-&nbsp;
-            {`${filteredFilesAndFolders.length} ${t("duplicates.elements")}`}
+            {t("workspace.duplicates.duplicatesList")}&nbsp;-&nbsp;
+            {`${filteredFilesAndFolders.length} ${t(
+              "workspace.duplicates.elements"
+            )}`}
           </CategoryTitle>
         </Box>
         <Box flex={1} paddingLeft={1}>

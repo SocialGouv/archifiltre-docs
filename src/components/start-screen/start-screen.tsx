@@ -94,7 +94,7 @@ const StartScreen: FC<StartScreenProps> = ({
             <Box pb={2}>
               <img alt="Logo Archifiltre" src={logo} height={40} />
             </Box>
-            <Typography variant="h3">{t("folderDropzone.slug")}</Typography>
+            <Typography variant="h3">{t("startScreen.slug")}</Typography>
           </Box>
         </Grid>
         <DropzoneWrapper item>
@@ -114,10 +114,10 @@ const StartScreen: FC<StartScreenProps> = ({
             <FaLock />
             &nbsp;
             <Typography variant="body1">
-              {t("folderDropzone.disclaimerSubtitle")}
+              {t("startScreen.disclaimerSubtitle")}
               <br />
               <Button color="primary" size="small" onClick={openModal}>
-                {t("folderDropzone.updatePrivacySettings")}
+                {t("startScreen.updatePrivacySettings")}
               </Button>
             </Typography>
           </Box>
@@ -125,7 +125,7 @@ const StartScreen: FC<StartScreenProps> = ({
             <FaEye />
             &nbsp;
             <Typography variant="body1">
-              {t("folderDropzone.placeholderSubtitle")}
+              {t("startScreen.placeholderSubtitle")}
             </Typography>
           </Box>
         </Grid>

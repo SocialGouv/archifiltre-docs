@@ -12,17 +12,23 @@ const Duplicates: FC = () => {
   const components = [
     {
       title: (
-        <CategoryTitle>{t("duplicates.duplicatesDistribution")}</CategoryTitle>
+        <CategoryTitle>
+          {t("workspace.duplicates.duplicatesDistribution")}
+        </CategoryTitle>
       ),
       content: <DuplicatesDistribution />,
     },
     {
-      title: <CategoryTitle>{t("duplicates.duplicatesByType")}</CategoryTitle>,
+      title: (
+        <CategoryTitle>
+          {t("workspace.duplicates.duplicatesByType")}
+        </CategoryTitle>
+      ),
       content: <DuplicatesTable />,
     },
   ];
   return (
-    <TabContentHeader title={t("workspace.duplicates")}>
+    <TabContentHeader title={t("workspace.duplicatesTitle")}>
       <TabsLayout components={components} />
     </TabContentHeader>
   );

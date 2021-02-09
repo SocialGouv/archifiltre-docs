@@ -179,8 +179,8 @@ export const computeHashesThunk = (
   dispatch(completeLoadingAction(loadingActionId));
 
   notifySuccess(
-    translations.t("audit.reportReadyMessage"),
-    translations.t("audit.report")
+    translations.t("workspace.audit.reportReadyMessage"),
+    translations.t("workspace.audit.report")
   );
 
   if (fileHashesErrorsCount > 0) {

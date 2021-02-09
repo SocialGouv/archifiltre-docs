@@ -1,6 +1,6 @@
 {
   "translation": {
-    "folderDropzone": {
+    "startScreen": {
       "placeholder": "Drop a directory or an Archifiltre JSON here",
       "placeholderSubtitle": "No modification on the original directory",
       "zipNotificationTitle": "zip(s) file(s) detected",
@@ -66,7 +66,7 @@
       "openElementErrorTitle": "Opening element",
       "hashIconExplanation": "This icon is a graphical representation of this element's hash"
     },
-    "workspace": {
+    "navigationBar": {
       "ordering": "Ordering",
       "coloring": "Coloring",
       "weight": "Weight",
@@ -75,7 +75,35 @@
       "alphanumeric": "Alphanumeric",
       "backToRoot": "Back to root",
       "bySize": "By size",
-      "byNumber": "By count",
+      "byNumber": "By count"
+    },
+    "workspace": {
+      "general": {
+
+      },
+      "enrichment": {
+
+      },
+      "audit": {
+        "fileCountInfoTitle": "File count",
+        "fileTreeDepthTitle": "Depth",
+        "fileTypeRepartitionTitle": "Distribution by type",
+        "fileTreeAudit": "File tree audit",
+        "report": "Audit report",
+        "reportReadyMessage": "The full audit report is ready."
+      },
+      "duplicates": {
+        "duplicateElements": "Duplicate elements",
+        "nonDuplicateElements": "Non duplicate elements",
+        "elements": "elements",
+        "duplicatesDistribution": "By distribution",
+        "duplicates": "duplicates",
+        "duplicatesByType": "By element type",
+        "filesNumber": "Number of files",
+        "spaceUsed": "Size in file tree",
+        "percentage": "Percentage (size)",
+        "duplicatesList": "Elements list"
+      },
       "allTags": "All tags",
       "noTags": "No tag at the moment",
       "tags": "Tags",
@@ -89,10 +117,10 @@
       "cannotMoveToFile": "Cannot move an element to a file",
       "nameConflict": "Name conflict with one of this folder elements",
       "moveElementsMode": "Move mode",
-      "general": "General",
-      "enrichment": "Enrichment",
-      "audit": "Audit",
-      "duplicates": "Duplicates",
+      "generalTitle": "General",
+      "enrichmentTitle": "Enrichment",
+      "auditTitle": "Audit",
+      "duplicatesTitle": "Duplicates",
       "hide": "Hide",
       "show": "Show",
       "noOptions": "No results - Press enter to add a new tag",
@@ -247,26 +275,6 @@
       "EXCHANGE_WITH_ERMS": "Exchange with an ERMS",
       "RECORDS_INVENTORY": "Records inventory",
       "AUDIT": "Audit"
-    },
-    "audit": {
-      "fileCountInfoTitle": "File count",
-      "fileTreeDepthTitle": "Depth",
-      "fileTypeRepartitionTitle": "Distribution by type",
-      "fileTreeAudit": "File tree audit",
-      "report": "Audit report",
-      "reportReadyMessage": "The full audit report is ready."
-    },
-    "duplicates": {
-      "duplicateElements": "Duplicate elements",
-      "nonDuplicateElements": "Non duplicate elements",
-      "elements": "elements",
-      "duplicatesDistribution": "By distribution",
-      "duplicates": "duplicates",
-      "duplicatesByType": "By element type",
-      "filesNumber": "Number of files",
-      "spaceUsed": "Size in file tree",
-      "percentage": "Percentage (size)",
-      "duplicatesList": "Elements list"
     }
   }
 }

@@ -30,7 +30,7 @@ const BackToRoot: FC<BackToRootProps> = ({
       disabled={!isZoomed}
       startIcon={<FaSearchMinus />}
     >
-      {t("workspace.backToRoot")}
+      {t("navigationBar.backToRoot")}
     </Button>
   );
 };

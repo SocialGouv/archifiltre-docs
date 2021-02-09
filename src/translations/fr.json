@@ -1,6 +1,6 @@
 {
   "translation": {
-    "folderDropzone": {
+    "startScreen": {
       "placeholder": "Glissez-déposez un répertoire ou un JSON Archifiltre ici",
       "placeholderSubtitle": "Pas de modification du répertoire original",
       "zipNotificationTitle": "fichier(s) zip détecté(s)",
@@ -66,7 +66,7 @@
       "openElementErrorTitle": "Ouverture de l'élément",
       "hashIconExplanation": "Cette icône est une représentation graphique du hash de cet élément"
     },
-    "workspace": {
+    "navigationBar": {
       "ordering": "Classement",
       "coloring": "Coloration",
       "weight":  "Pondération",
@@ -75,7 +75,35 @@
       "alphanumeric": "Alphanumérique",
       "backToRoot": "Retour à la racine",
       "bySize": "Par volume",
-      "byNumber": "Par nombre",
+      "byNumber": "Par nombre"
+    },
+    "workspace": {
+      "general": {
+
+      },
+      "enrichment": {
+
+      },
+      "audit": {
+        "fileCountInfoTitle": "Nombre de fichiers",
+        "fileTreeDepthTitle": "Niveau de profondeur",
+        "fileTypeRepartitionTitle": "Répartition par type de fichiers",
+        "fileTreeAudit": "Audit de l'arborescence",
+        "report": "Rapport d'audit",
+        "reportReadyMessage": "Le rapport d'audit complet est prêt."
+      },
+      "duplicates": {
+        "duplicateElements": "Éléments redondants",
+        "nonDuplicateElements": "Éléments non redondants",
+        "elements": "éléments",
+        "duplicatesDistribution": "Par répartition",
+        "duplicates": "redondances",
+        "duplicatesByType": "Par type d'élément",
+        "filesNumber": "Nombre de fichiers",
+        "spaceUsed": "Espace sur l'arborescence",
+        "percentage": "Pourcentage (taille)",
+        "duplicatesList": "Liste des éléments"
+      },
       "allTags": "Tous les tags",
       "noTags": "Aucun tag pour l'instant",
       "tags": "Tags",
@@ -89,10 +117,10 @@
       "cannotMoveToFile": "Impossible de déplacer un élément vers un fichier",
       "nameConflict": "Conflit de nom avec un élément de ce dossier",
       "moveElementsMode": "Mode Déplacement",
-      "general": "Général",
-      "enrichment": "Enrichissement",
-      "audit": "Audit",
-      "duplicates": "Redondances",
+      "generalTitle": "Général",
+      "enrichmentTitle": "Enrichissement",
+      "auditTitle": "Audit",
+      "duplicatesTitle": "Redondances",
       "hide": "Cacher",
       "show": "Afficher",
       "noOptions": "Pas de résultats - Appuyez sur Entrer pour ajouter un nouveau tag",
@@ -247,26 +275,6 @@
       "EXCHANGE_WITH_ERMS": "Export pour transfert",
       "RECORDS_INVENTORY": "Récolement",
       "AUDIT": "Audit"
-    },
-    "audit": {
-      "fileCountInfoTitle": "Nombre de fichiers",
-      "fileTreeDepthTitle": "Niveau de profondeur",
-      "fileTypeRepartitionTitle": "Répartition par type de fichiers",
-      "fileTreeAudit": "Audit de l'arborescence",
-      "report": "Rapport d'audit",
-      "reportReadyMessage": "Le rapport d'audit complet est prêt."
-    },
-    "duplicates": {
-      "duplicateElements": "Éléments redondants",
-      "nonDuplicateElements": "Éléments non redondants",
-      "elements": "éléments",
-      "duplicatesDistribution": "Par répartition",
-      "duplicates": "redondances",
-      "duplicatesByType": "Par type d'élément",
-      "filesNumber": "Nombre de fichiers",
-      "spaceUsed": "Espace sur l'arborescence",
-      "percentage": "Pourcentage (taille)",
-      "duplicatesList": "Liste des éléments"
     }
   }
 }

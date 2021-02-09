@@ -42,10 +42,10 @@ const TabsHeader: FC<TabsHeaderProps> = ({ setTabIndex, tabIndex }) => {
 
   const tabData = useMemo(
     () => [
-      { label: t("workspace.general"), disabled: false },
-      { label: t("workspace.enrichment"), disabled: false },
-      { label: t("workspace.audit"), disabled: false },
-      { label: t("workspace.duplicates"), disabled: !areHashesReady },
+      { label: t("workspace.generalTitle"), disabled: false },
+      { label: t("workspace.enrichmentTitle"), disabled: false },
+      { label: t("workspace.auditTitle"), disabled: false },
+      { label: t("workspace.duplicatesTitle"), disabled: !areHashesReady },
     ],
     [t, areHashesReady]
   );

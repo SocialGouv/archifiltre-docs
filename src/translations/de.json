@@ -1,6 +1,6 @@
 {
   "translation": {
-    "folderDropzone": {
+    "startScreen": {
       "placeholder": "Legen Sie hier ein Verzeichnis ab!",
       "placeholderSubtitle": "Sie können auch eine zuvor aus Archifiltre exportierte JSON-Datei ablegen.",
       "zipNotificationTitle": "ZIP-Datei(en) entdeckt",
@@ -52,7 +52,7 @@
       "openElementErrorMessage": "Archifiltre konnte das ausgewählte Element nicht öffnen",
       "openElementErrorTitle": "Element wird geöffnet"
     },
-    "workspace": {
+    "navigationBar": {
       "ordering": "Anordnung",
       "coloring": "Farbgebung",
       "weight": "Gewichtung",
@@ -61,7 +61,35 @@
       "alphanumeric": "Alphanumerisch",
       "backToRoot": "Zurück zum obersten Verzeichnis",
       "bySize": "Nach Größe",
-      "byNumber": "Nach Anzahl",
+      "byNumber": "Nach Anzahl"
+    },
+    "workspace": {
+      "general": {
+
+      },
+      "enrichment": {
+
+      },
+      "audit": {
+        "fileCountInfoTitle": "Dateianzahl im Dateibaum",
+        "fileTreeDepthTitle": "Tiefe des Dateibaum",
+        "fileTypeRepartitionTitle": "Dateitypen im Dateibaum",
+        "fileTreeAudit": "Verzeichnisbaum-Audit",
+        "report": "Audit-Report",
+        "reportReadyMessage": "Der vollständige Audit-Report steht bereit."
+      },
+      "duplicates": {
+        "duplicateElements": "doppelte Elemente",
+        "nonDuplicateElements": "Nicht doppelte Elemente",
+        "elements": "Elemente",
+        "duplicatesDistribution": "Verteilung von Duplikaten",
+        "duplicates": "Duplikate",
+        "duplicatesByType": "Verteilung von Duplikaten nach Elementtyp",
+        "filesNumber": "Anzahl der Dateien",
+        "spaceUsed": "Größe im Dateibaum",
+        "percentage": "Prozentsatz (Größe)",
+        "duplicatesList": "Liste der Duplikate"
+      },
       "allTags": "Alle Tags",
       "noTags": "Im Augenblick kein Tag",
       "tags": "Tags",
@@ -74,10 +102,10 @@
       "cannotMoveElement": "Die Datei oder der Ordner kann hierher nicht verschoben werden.",
       "nameConflict": "Namenskonflikt mit einem anderen Ordnerelement",
       "moveElementsMode": "Bewegungsmodus",
-      "general": "Allgemein",
-      "enrichment": "Anreicherung",
-      "audit": "Audit",
-      "duplicates": "Duplikat",
+      "generalTitle": "Allgemein",
+      "enrichmentTitle": "Anreicherung",
+      "auditTitle": "Audit",
+      "duplicatesTitle": "Duplikat",
       "hide": "Verbergen",
       "show": "Anzeigen",
       "noOptions": "Keine Ergebnisse - Drücken Sie “Enter”, um einen neuen Tag hinzuzufügen",
@@ -206,26 +234,6 @@
     "exportModal": {
       "title": "Export",
       "buttonTitle": "Exportieren"
-    },
-    "audit": {
-      "fileCountInfoTitle": "Dateianzahl im Dateibaum",
-      "fileTreeDepthTitle": "Tiefe des Dateibaum",
-      "fileTypeRepartitionTitle": "Dateitypen im Dateibaum",
-      "fileTreeAudit": "Verzeichnisbaum-Audit",
-      "report": "Audit-Report",
-      "reportReadyMessage": "Der vollständige Audit-Report steht bereit."
-    },
-    "duplicates": {
-      "duplicateElements": "doppelte Elemente",
-      "nonDuplicateElements": "Nicht doppelte Elemente",
-      "elements": "Elemente",
-      "duplicatesDistribution": "Verteilung von Duplikaten",
-      "duplicates": "Duplikate",
-      "duplicatesByType": "Verteilung von Duplikaten nach Elementtyp",
-      "filesNumber": "Anzahl der Dateien",
-      "spaceUsed": "Größe im Dateibaum",
-      "percentage": "Prozentsatz (Größe)",
-      "duplicatesList": "Liste der Duplikate"
     }
   }
 }

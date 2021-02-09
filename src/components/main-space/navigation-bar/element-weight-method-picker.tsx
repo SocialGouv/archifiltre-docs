@@ -17,16 +17,16 @@ const ElementWeightMethodPicker: FC<ElementWeightMethodPickerProps> = ({
   const options = [
     {
       value: ElementWeightMethod.BY_VOLUME,
-      label: t("workspace.bySize"),
+      label: t("navigationBar.bySize"),
     },
     {
       value: ElementWeightMethod.BY_FILE_COUNT,
-      label: t("workspace.byNumber"),
+      label: t("navigationBar.byNumber"),
     },
   ];
   return (
     <OptionsPicker
-      title={t("workspace.weight")}
+      title={t("navigationBar.weight")}
       value={elementWeightMethod}
       setValue={setElementWeightMethod}
       options={options}

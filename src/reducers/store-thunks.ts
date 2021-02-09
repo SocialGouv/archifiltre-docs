@@ -102,8 +102,8 @@ import { copyToClipboard } from "util/clipboard/clipboard";
  */
 const displayZipNotification = (zipCount) => {
   notifyInfo(
-    translations.t("folderDropzone.zipNotificationMessage"),
-    `${zipCount} ${translations.t("folderDropzone.zipNotificationTitle")}`,
+    translations.t("startScreen.zipNotificationMessage"),
+    `${zipCount} ${translations.t("startScreen.zipNotificationTitle")}`,
     NotificationDuration.PERMANENT
   );
 };
@@ -113,8 +113,8 @@ const displayZipNotification = (zipCount) => {
  */
 const displayJsonNotification = () => {
   notifyInfo(
-    translations.t("folderDropzone.wrongJsonVersion"),
-    translations.t("folderDropzone.warning"),
+    translations.t("startScreen.wrongJsonVersion"),
+    translations.t("startScreen.warning"),
     NotificationDuration.PERMANENT
   );
 };
@@ -124,8 +124,8 @@ const displayJsonNotification = () => {
  */
 const displayErrorNotification = () => (dispatch) => {
   notifyError(
-    translations.t("folderDropzone.errorsWhileLoading"),
-    translations.t("folderDropzone.error"),
+    translations.t("startScreen.errorsWhileLoading"),
+    translations.t("startScreen.error"),
     NotificationDuration.PERMANENT,
     () => dispatch(openModalAction(Modal.FIlES_AND_FOLDERS_ERRORS_MODAL))
   );
@@ -137,20 +137,20 @@ const makeErrorResponse = () => ({
 });
 
 const displayRootPathError = () => {
-  const errorMessage = translations.t("folderDropzone.errorsWhileLoading");
-  const errorTitle = translations.t("folderDropzone.rootElementError");
+  const errorMessage = translations.t("startScreen.errorsWhileLoading");
+  const errorTitle = translations.t("startScreen.rootElementError");
   return displayError(errorMessage, errorTitle);
 };
 
 const displayInvalidPathError = () => {
-  const errorMessage = translations.t("folderDropzone.cannotFindPath");
-  const errorTitle = translations.t("folderDropzone.error");
+  const errorMessage = translations.t("startScreen.cannotFindPath");
+  const errorTitle = translations.t("startScreen.error");
   return displayError(errorMessage, errorTitle);
 };
 
 const displayUnexpectedError = (errorReason: string) => {
-  const errorTitle = translations.t("folderDropzone.unexpectedError");
-  const errorMessage = translations.t("folderDropzone.unexpectedErrorMessage");
+  const errorTitle = translations.t("startScreen.unexpectedError");
+  const errorMessage = translations.t("startScreen.unexpectedErrorMessage");
   reportError(errorReason);
   return notifyError(
     errorMessage,

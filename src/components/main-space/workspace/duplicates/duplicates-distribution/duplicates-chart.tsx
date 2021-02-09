@@ -38,13 +38,13 @@ const DuplicatesChart: FC<DuplicatesChartProps> = ({
     () => [
       {
         key: "duplicates",
-        label: t("duplicates.duplicateElements"),
+        label: t("workspace.duplicates.duplicateElements"),
         value: duplicatesNumber,
         size: duplicatesSize,
       },
       {
         key: "nonDuplicates",
-        label: t("duplicates.nonDuplicateElements"),
+        label: t("workspace.duplicates.nonDuplicateElements"),
         value: nonDuplicatesNumber,
         size: nonDuplicatesSize,
       },
@@ -64,7 +64,7 @@ const DuplicatesChart: FC<DuplicatesChartProps> = ({
         <div>
           <div>{label}</div>
           <ColoredText color={scheme[point]}>{`${value} ${t(
-            "duplicates.elements"
+            "workspace.duplicates.elements"
           )}`}</ColoredText>
           <ColoredText color={scheme[point]}>
             {octet2HumanReadableFormat(size)}

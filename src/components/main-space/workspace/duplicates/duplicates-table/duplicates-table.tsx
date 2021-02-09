@@ -40,20 +40,20 @@ const DuplicatesTable: FC<DuplicatesTableProps> = ({
       },
       {
         id: "nbFiles",
-        name: t("duplicates.filesNumber"),
+        name: t("workspace.duplicates.filesNumber"),
         accessor: "nbFiles",
         sortable: true,
       },
       {
         id: "size",
-        name: t("duplicates.spaceUsed"),
+        name: t("workspace.duplicates.spaceUsed"),
         accessor: ({ size }) => octet2HumanReadableFormat(size),
         sortable: true,
         sortAccessor: "size",
       },
       {
         id: "percentage",
-        name: t("duplicates.percentage"),
+        name: t("workspace.duplicates.percentage"),
         accessor: ({ percentage }) => `${percentage || "<0.01"} %`,
         sortable: true,
         sortAccessor: "percentage",

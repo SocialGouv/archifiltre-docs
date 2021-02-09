@@ -10,20 +10,24 @@ const Audit: FC = () => {
   const { t } = useTranslation();
   const components = [
     {
-      title: <CategoryTitle>{t("audit.fileCountInfoTitle")}</CategoryTitle>,
+      title: (
+        <CategoryTitle>{t("workspace.audit.fileCountInfoTitle")}</CategoryTitle>
+      ),
       content: <AuditInfo />,
       widthRatio: 1,
     },
     {
       title: (
-        <CategoryTitle>{t("audit.fileTypeRepartitionTitle")}</CategoryTitle>
+        <CategoryTitle>
+          {t("workspace.audit.fileTypeRepartitionTitle")}
+        </CategoryTitle>
       ),
       content: <FileTypesDetailsContainer />,
       widthRatio: 2,
     },
   ];
   return (
-    <TabContentHeader title={t("audit.fileTreeAudit")}>
+    <TabContentHeader title={t("workspace.audit.fileTreeAudit")}>
       <TabsLayout components={components} />
     </TabContentHeader>
   );

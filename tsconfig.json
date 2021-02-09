@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "incremental": true,
     "experimentalDecorators": true,
     "outDir": "./dist/",        // path to output directory
     "sourceMap": true,          // allow sourcemap support
@@ -11,7 +12,7 @@
     "moduleResolution": "node",
     "baseUrl": "src",
     "esModuleInterop": true,
-    "lib": ["es6", "webworker", "scripthost", "dom"],
+    "lib": ["es6", "scripthost", "dom"],
     "resolveJsonModule": true,
     "noUnusedLocals": true,
     "types": ["react", "jest", "node"]       // This is a dirty-fix to ignore @types/react-native that is added

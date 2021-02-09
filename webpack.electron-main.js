@@ -1,5 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 require("dotenv").config();
 
 module.exports = {
@@ -13,7 +14,10 @@ module.exports = {
     rules: [
       {
         include: path.resolve(__dirname, "src"),
-        loader: "awesome-typescript-loader",
+        loader: "ts-loader",
+        options: {
+          transpileOnly: true,
+        },
         test: /\.[tj]sx?$/,
       },
     ],
@@ -27,6 +31,7 @@ module.exports = {
     pathinfo: false,
   },
   plugins: [
+    new ForkTsCheckerWebpackPlugin(),
     new webpack.DefinePlugin({
       REACT_DEV_TOOLS_PATH: process.env.REACT_DEV_TOOLS_PATH
         ? JSON.stringify(process.env.REACT_DEV_TOOLS_PATH)

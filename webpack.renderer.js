@@ -3,6 +3,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 const glob = require("glob");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 require("dotenv").config();
 
 const isDev = (mode) => mode === "development";
@@ -54,7 +55,10 @@ module.exports = (env, argv = {}) => ({
     rules: [
       {
         include: path.resolve(__dirname, "src"),
-        loader: "awesome-typescript-loader",
+        loader: "ts-loader",
+        options: {
+          transpileOnly: true,
+        },
         test: /\.[tj]sx?$/,
       },
       {
@@ -138,8 +142,18 @@ module.exports = (env, argv = {}) => ({
   },
 
   plugins: [
+    new ForkTsCheckerWebpackPlugin(),
     new CopyWebpackPlugin({
-      patterns: ["node_modules/fswin"],
+      patterns: [
+        {
+          from: "node_modules/fswin/electron",
+          to: "electron",
+        },
+        {
+          from: "node_modules/fswin/node",
+          to: "node",
+        },
+      ],
     }),
     ...(isDev(argv.mode)
       ? []
@@ -175,5 +189,5 @@ module.exports = (env, argv = {}) => ({
     symlinks: false,
   },
 
-  target: "electron-main",
+  target: "electron-renderer",
 });

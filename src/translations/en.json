@@ -246,7 +246,10 @@
       "buttonTitle": "Export",
       "EXCHANGE_WITH_ERMS": "Exchange with an ERMS",
       "RECORDS_INVENTORY": "Records inventory",
-      "AUDIT": "Audit"
+      "AUDIT": "Audit",
+      "selectAll": "Select all",
+      "unselectAll": "Unselect all",
+      "browseAll": "Browse for all"
     },
     "audit": {
       "fileCountInfoTitle": "File count",

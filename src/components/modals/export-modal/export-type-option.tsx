@@ -1,9 +1,13 @@
 import ExportCheckbox from "components/modals/export-modal/export-checkbox";
-import { exportConfig } from "components/modals/export-modal/export-config";
+import {
+  exportConfig,
+  ExportType,
+} from "components/modals/export-modal/export-config";
 import ExportInput from "components/modals/export-modal/export-input";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
+import { ExportTypesMap } from "./export-options";
 
 const ExportContainer = styled.div`
   display: flex;
@@ -12,12 +16,13 @@ const ExportContainer = styled.div`
 `;
 
 type ExportTypeOptionProps = {
-  exportType;
-  enabledExports;
+  exportType: ExportType;
+  enabledExports: ExportTypesMap<boolean>;
   isPathValid: boolean;
-  setActiveExportValue;
-  exportPaths;
-  setExportsPathsValue;
+  exportPaths: ExportTypesMap<string>;
+  setActiveExportValue: (exportType: ExportType, value: boolean) => void;
+  setExportsPathsValue: (exportType: ExportType, value: string) => void;
+  activeExports: ExportTypesMap<boolean>;
 };
 
 const ExportTypeOption: FC<ExportTypeOptionProps> = ({
@@ -27,6 +32,7 @@ const ExportTypeOption: FC<ExportTypeOptionProps> = ({
   setActiveExportValue,
   exportPaths,
   setExportsPathsValue,
+  activeExports,
 }) => {
   const { t } = useTranslation();
 
@@ -41,6 +47,7 @@ const ExportTypeOption: FC<ExportTypeOptionProps> = ({
         disabledExplanation={t(
           exportConfig[exportType].disabledExplanation || ""
         )}
+        checked={activeExports[exportType]}
       />
       <ExportInput
         exportFilePath={exportPaths[exportType]}

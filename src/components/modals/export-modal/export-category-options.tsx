@@ -14,6 +14,7 @@ type ExportCategoryOptionsProps = {
   enabledExports: ExportTypesMap<boolean>;
   exportPaths: ExportTypesMap<string>;
   isValidPaths: ExportTypesMap<boolean>;
+  activeExports: ExportTypesMap<boolean>;
   setActiveExportValue: (exportType: ExportType, value: boolean) => void;
   setExportsPathsValue: (exportType: ExportType, value: string) => void;
 };
@@ -21,9 +22,10 @@ type ExportCategoryOptionsProps = {
 const ExportCategoryOptions: FC<ExportCategoryOptionsProps> = ({
   exportCategory,
   enabledExports,
-  setActiveExportValue,
-  isValidPaths,
   exportPaths,
+  isValidPaths,
+  activeExports,
+  setActiveExportValue,
   setExportsPathsValue,
 }) => {
   const { t } = useTranslation();
@@ -46,6 +48,7 @@ const ExportCategoryOptions: FC<ExportCategoryOptionsProps> = ({
             setActiveExportValue={setActiveExportValue}
             exportPaths={exportPaths}
             setExportsPathsValue={setExportsPathsValue}
+            activeExports={activeExports}
           />
         ))}
     </Box>

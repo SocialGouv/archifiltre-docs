@@ -246,7 +246,10 @@
       "buttonTitle": "Exporter",
       "EXCHANGE_WITH_ERMS": "Export pour transfert",
       "RECORDS_INVENTORY": "Récolement",
-      "AUDIT": "Audit"
+      "AUDIT": "Audit",
+      "selectAll": "Tout sélectionner",
+      "unselectAll": "Tout désélectionner",
+      "browseAll": "Parcourir pour tous"
     },
     "audit": {
       "fileCountInfoTitle": "Nombre de fichiers",

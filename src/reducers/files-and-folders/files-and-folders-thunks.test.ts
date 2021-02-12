@@ -4,7 +4,6 @@ import translations from "translations/translations";
 import { notifyInfo } from "util/notification/notifications-util";
 import { DispatchExts } from "../archifiltre-types";
 import { initFilesAndFoldersMetatada } from "../files-and-folders-metadata/files-and-folders-metadata-actions";
-import { createFilesAndFoldersMetadata } from "../files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { StoreState } from "../store";
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
@@ -31,6 +30,7 @@ import { commitAction } from "../enhancers/undoable/undoable-actions";
 import { setFilesAndFoldersHashes } from "../hashes/hashes-actions";
 import { updateFilesAndFoldersHashes } from "../hashes/hashes-thunks";
 import { createFilesAndFoldersMetadataDataStructure } from "files-and-folders-loader/file-system-loading-process-utils";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 jest.mock("util/notification/notifications-util", () => ({
   notifyInfo: jest.fn(),

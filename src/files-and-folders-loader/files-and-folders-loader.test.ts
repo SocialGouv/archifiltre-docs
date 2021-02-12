@@ -17,6 +17,7 @@ import {
   createFilesAndFoldersMetadataDataStructure,
   loadFileSystemFromFilesAndFoldersLoader,
 } from "files-and-folders-loader/file-system-loading-process-utils";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 type FsMockElement = {
   isDirectory: boolean;
@@ -148,7 +149,7 @@ const expectedFilesAndFolders = {
 };
 
 const expectedMetadata = {
-  "": {
+  "": createFilesAndFoldersMetadata({
     averageLastModified: 44000,
     childrenTotalSize: 17345,
     maxLastModified: 100000,
@@ -158,8 +159,8 @@ const expectedMetadata = {
     sortByDateIndex: [0],
     sortBySizeIndex: [0],
     sortAlphaNumericallyIndex: [0],
-  },
-  "/root": {
+  }),
+  "/root": createFilesAndFoldersMetadata({
     averageLastModified: 44000,
     childrenTotalSize: 17345,
     maxLastModified: 100000,
@@ -169,8 +170,8 @@ const expectedMetadata = {
     sortByDateIndex: [1, 0],
     sortBySizeIndex: [0, 1],
     sortAlphaNumericallyIndex: [0, 1],
-  },
-  "/root/folder": {
+  }),
+  "/root/folder": createFilesAndFoldersMetadata({
     averageLastModified: 51000,
     childrenTotalSize: 14345,
     maxLastModified: 100000,
@@ -180,8 +181,8 @@ const expectedMetadata = {
     sortByDateIndex: [1, 0],
     sortBySizeIndex: [0, 1],
     sortAlphaNumericallyIndex: [0, 1],
-  },
-  "/root/folder/bob": {
+  }),
+  "/root/folder/bob": createFilesAndFoldersMetadata({
     averageLastModified: 100000,
     childrenTotalSize: 12345,
     maxLastModified: 100000,
@@ -191,8 +192,8 @@ const expectedMetadata = {
     sortByDateIndex: [],
     sortBySizeIndex: [],
     sortAlphaNumericallyIndex: [],
-  },
-  "/root/folder/michael": {
+  }),
+  "/root/folder/michael": createFilesAndFoldersMetadata({
     averageLastModified: 2000,
     childrenTotalSize: 2000,
     maxLastModified: 2000,
@@ -202,8 +203,8 @@ const expectedMetadata = {
     sortByDateIndex: [],
     sortBySizeIndex: [],
     sortAlphaNumericallyIndex: [],
-  },
-  "/root/johnny": {
+  }),
+  "/root/johnny": createFilesAndFoldersMetadata({
     averageLastModified: 30000,
     childrenTotalSize: 3000,
     maxLastModified: 30000,
@@ -213,7 +214,7 @@ const expectedMetadata = {
     sortByDateIndex: [],
     sortBySizeIndex: [],
     sortAlphaNumericallyIndex: [],
-  },
+  }),
 };
 
 const rootPath = "/root-path";

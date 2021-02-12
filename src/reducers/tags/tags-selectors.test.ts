@@ -1,4 +1,3 @@
-import { createFilesAndFoldersMetadata } from "../files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { createFilesAndFolders } from "../files-and-folders/files-and-folders-test-utils";
 import { StoreState } from "../store";
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
@@ -14,6 +13,7 @@ import {
   tagMapToArray,
 } from "./tags-selectors";
 import { Tag } from "./tags-types";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 describe("tags-selectors", () => {
   describe("getAllTagIdsForFile", () => {

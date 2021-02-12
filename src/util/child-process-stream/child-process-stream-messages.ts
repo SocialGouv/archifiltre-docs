@@ -49,4 +49,13 @@ export class FilesAndFoldersMetadataMessage extends Message<FilesAndFoldersMetad
 
   @Field.d(9, "float", "repeated")
   public sortAlphaNumericallyIndex: number[];
+
+  @Field.d(10, "float")
+  public initialMinLastModified: number;
+
+  @Field.d(11, "float")
+  public initialMedianLastModified: number;
+
+  @Field.d(12, "float")
+  public initialMaxLastModified: number;
 }

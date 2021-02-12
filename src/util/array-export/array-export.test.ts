@@ -1,9 +1,9 @@
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import { formatPathForUserSystem } from "util/file-system/file-sys-util";
 import { exportToCsv } from "util/array-export/array-export";
 import { toArray } from "rxjs/operators";
 import { flatten } from "lodash";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 const tagName = "test-tag-1";
 const rootFolderId = "/root";
@@ -122,6 +122,8 @@ describe("array-export", () => {
         "translate(csvHeader.size)",
         "translate(csvHeader.firstModified)",
         "translate(csvHeader.lastModified)",
+        "translate(csvHeader.newFirstModified)",
+        "translate(csvHeader.newLastModified)",
         "translate(csvHeader.newPath)",
         "translate(csvHeader.newName)",
         "translate(csvHeader.description)",
@@ -144,6 +146,8 @@ describe("array-export", () => {
         "",
         "",
         "",
+        "",
+        "",
         translator("common.folder"),
         "0",
         "1",
@@ -163,6 +167,8 @@ describe("array-export", () => {
         "",
         "",
         "",
+        "",
+        "",
         translator("common.folder"),
         "1",
         "1",
@@ -179,6 +185,8 @@ describe("array-export", () => {
         "10000",
         "01/01/1970",
         "01/01/1970",
+        "",
+        "",
         `${formatPathForUserSystem(firstChildVirtualPath)}`,
         `${aliases[firstChildId]}`,
         `${comments[firstChildId]}`,
@@ -222,6 +230,8 @@ describe("array-export", () => {
         "translate(csvHeader.size)",
         "translate(csvHeader.firstModified)",
         "translate(csvHeader.lastModified)",
+        "translate(csvHeader.newFirstModified)",
+        "translate(csvHeader.newLastModified)",
         "translate(csvHeader.newPath)",
         "translate(csvHeader.newName)",
         "translate(csvHeader.description)",
@@ -246,6 +256,8 @@ describe("array-export", () => {
         "",
         "",
         "",
+        "",
+        "",
         translator("common.folder"),
         "0",
         "1",
@@ -267,6 +279,8 @@ describe("array-export", () => {
         "",
         "",
         "",
+        "",
+        "",
         translator("common.folder"),
         "1",
         "1",
@@ -285,6 +299,8 @@ describe("array-export", () => {
         "10000",
         "01/01/1970",
         "01/01/1970",
+        "",
+        "",
         `${formatPathForUserSystem(firstChildVirtualPath)}`,
         `${aliases[firstChildId]}`,
         `${comments[firstChildId]}`,
@@ -331,6 +347,8 @@ describe("array-export", () => {
         "translate(csvHeader.size)",
         "translate(csvHeader.firstModified)",
         "translate(csvHeader.lastModified)",
+        "translate(csvHeader.newFirstModified)",
+        "translate(csvHeader.newLastModified)",
         "translate(csvHeader.newPath)",
         "translate(csvHeader.newName)",
         "translate(csvHeader.description)",
@@ -356,6 +374,8 @@ describe("array-export", () => {
         "",
         "",
         "",
+        "",
+        "",
         translator("common.folder"),
         "0",
         "1",
@@ -378,6 +398,8 @@ describe("array-export", () => {
         "",
         "",
         "",
+        "",
+        "",
         translator("common.folder"),
         "1",
         "1",
@@ -397,6 +419,8 @@ describe("array-export", () => {
         "10000",
         "01/01/1970",
         "01/01/1970",
+        "",
+        "",
         `${formatPathForUserSystem(firstChildVirtualPath)}`,
         `${aliases[firstChildId]}`,
         `${comments[firstChildId]}`,

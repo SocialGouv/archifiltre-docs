@@ -8,7 +8,7 @@ import {
   parseCsvExporterOptionsFromStream,
   stringifyCsvExporterOptionsToStream,
 } from "exporters/csv/csv-exporter-serializer";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 const extractDataFromMock = (writeable: MockWritable): Promise<Buffer[]> =>
   new Promise((resolve) => {

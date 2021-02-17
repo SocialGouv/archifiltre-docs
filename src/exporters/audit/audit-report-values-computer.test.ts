@@ -1,4 +1,3 @@
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import {
   formatPathForUserSystem,
@@ -17,6 +16,7 @@ import {
   sortFilesByLastModifiedDate,
   sortFilesBySize,
 } from "./audit-report-values-computer";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 const folderId1 = "folder-id-1";
 const folderId2 = `${folderId1}/folder-id-2`;

@@ -6,6 +6,9 @@ export interface FilesAndFoldersMetadata {
   minLastModified: number;
   medianLastModified: number;
   averageLastModified: number;
+  initialMinLastModified: number;
+  initialMedianLastModified: number;
+  initialMaxLastModified: number;
   childrenTotalSize: number;
   nbChildrenFiles: number;
   sortBySizeIndex: number[];

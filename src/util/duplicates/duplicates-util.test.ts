@@ -1,4 +1,3 @@
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import { FileType } from "../file-types/file-types-util";
 import {
@@ -14,6 +13,7 @@ import {
   getMostDuplicatedFiles,
   hasDuplicate,
 } from "./duplicates-util";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 const folder1Id = "folder-1-id";
 const folder2Id = "folder-2-id";
@@ -325,6 +325,9 @@ describe("duplicates-util", () => {
         maxLastModified: 10000,
         medianLastModified: 4000,
         minLastModified: 1000,
+        initialMaxLastModified: 10000,
+        initialMedianLastModified: 4000,
+        initialMinLastModified: 1000,
         name: "base-name",
         nbChildrenFiles: 1,
         sortByDateIndex: [0],
@@ -359,6 +362,9 @@ describe("duplicates-util", () => {
           maxLastModified: 10000,
           medianLastModified: 4000,
           minLastModified: 1000,
+          initialMaxLastModified: 10000,
+          initialMedianLastModified: 4000,
+          initialMinLastModified: 1000,
           name: "base-name",
           nbChildrenFiles: 1,
           sortByDateIndex: [0],

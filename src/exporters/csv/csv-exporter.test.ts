@@ -3,7 +3,6 @@ import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { of } from "rxjs";
 import { DispatchExts } from "reducers/archifiltre-types";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { initialState as filesAndFoldersInitialState } from "reducers/files-and-folders/files-and-folders-reducer";
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import {
@@ -21,6 +20,7 @@ import { csvExporterThunk } from "./csv-exporter";
 import { generateCsvExport$ } from "./csv-exporter.controller";
 import { initialState } from "reducers/hashes/hashes-reducer";
 import { MessageTypes } from "util/batch-process/batch-process-util-types";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 jest.mock("./csv-exporter.controller", () => ({
   generateCsvExport$: jest.fn(),
@@ -162,7 +162,6 @@ describe("csv-exporter", () => {
           elementsToDelete: [taggedFfId],
           filesAndFolders,
           filesAndFoldersMetadata,
-          hashes: undefined,
           tags,
         });
         expect(writeFileMock).toHaveBeenCalledWith(exportPath, csvValue, {

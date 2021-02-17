@@ -1,6 +1,5 @@
 import { times } from "lodash";
 import { createFilesAndFolders } from "files-and-folders-loader/files-and-folders-loader";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
 import { MockWritable } from "stdio-mock";
 import Stream from "stream";
@@ -8,6 +7,7 @@ import {
   parseVFSFromStream,
   stringifyVFSToStream,
 } from "util/file-tree-loader/load-from-filesystem-serializer";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 const extractDataFromMock = (writeable: MockWritable): Promise<Buffer[]> =>
   new Promise((resolve) => {

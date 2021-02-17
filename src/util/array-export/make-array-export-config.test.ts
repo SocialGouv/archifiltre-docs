@@ -1,13 +1,14 @@
 import { createTag } from "reducers/tags/tags-test-util";
 import { makeRowConfig } from "util/array-export/make-array-export-config";
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { formatPathForUserSystem } from "util/file-system/file-sys-util";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 const rowId = "/filesAndFolders/file-1";
 const fileName = "file-name.csv";
 const fileSize = 1300;
 const firstModification = 900277200000;
+const newModification = 962568000000;
 const lastModification = 1531670400000;
 
 const tags = {
@@ -51,6 +52,7 @@ const rowData = {
   aliases,
   comments,
   idsToDelete,
+  overrideLastModified: {},
 };
 
 describe("make-array-export-config", () => {
@@ -60,190 +62,236 @@ describe("make-array-export-config", () => {
 
     const config = makeRowConfig(translator, tags);
 
-    it("should return the file path", () => {
-      const filePathConfig = config[1];
+    const makeTestRow = ({ rowData, config }) => ({
+      columnLabel,
+      expectedValue,
+    }) => {
+      const title = translator(columnLabel);
+      const columnConfig = config.find((config) => config.title === title);
+      expect(columnConfig?.accessor(rowData)).toEqual(expectedValue);
+    };
 
-      expect(filePathConfig.title).toEqual(translator("csvHeader.path"));
-      expect(filePathConfig.accessor(rowData)).toEqual(
-        formatPathForUserSystem(rowId)
-      );
+    const testRow = makeTestRow({
+      config,
+      rowData,
+    });
+
+    it("should return the file path", () => {
+      testRow({
+        columnLabel: "csvHeader.path",
+        expectedValue: formatPathForUserSystem(rowId),
+      });
     });
 
     it("should return the path length", () => {
-      const filePathConfig = config[2];
-
-      expect(filePathConfig.title).toEqual(translator("csvHeader.pathLength"));
-      expect(filePathConfig.accessor(rowData)).toEqual("23");
+      testRow({
+        columnLabel: "csvHeader.pathLength",
+        expectedValue: "23",
+      });
     });
 
     it("should return the file name", () => {
-      const filePathConfig = config[3];
-
-      expect(filePathConfig.title).toEqual(translator("csvHeader.name"));
-      expect(filePathConfig.accessor(rowData)).toEqual(fileName);
+      testRow({
+        columnLabel: "csvHeader.name",
+        expectedValue: fileName,
+      });
     });
 
     it("should return the file extension", () => {
-      const filePathConfig = config[4];
-
-      expect(filePathConfig.title).toEqual(translator("csvHeader.extension"));
-      expect(filePathConfig.accessor(rowData)).toEqual(".csv");
+      testRow({
+        columnLabel: "csvHeader.extension",
+        expectedValue: ".csv",
+      });
     });
 
     it("should return the file size", () => {
-      const filePathConfig = config[5];
-
-      expect(filePathConfig.title).toEqual(translator("csvHeader.size"));
-      expect(filePathConfig.accessor(rowData)).toEqual("1300");
+      testRow({
+        columnLabel: "csvHeader.size",
+        expectedValue: "1300",
+      });
     });
 
     it("should return the file first modification date", () => {
-      const filePathConfig = config[6];
-
-      expect(filePathConfig.title).toEqual(
-        translator("csvHeader.firstModified")
-      );
-      expect(filePathConfig.accessor(rowData)).toEqual("12/07/1998");
+      testRow({
+        columnLabel: "csvHeader.firstModified",
+        expectedValue: "12/07/1998",
+      });
     });
 
     it("should return the file last modification date", () => {
-      const filePathConfig = config[7];
-
-      expect(filePathConfig.title).toEqual(
-        translator("csvHeader.lastModified")
-      );
-      expect(filePathConfig.accessor(rowData)).toEqual("15/07/2018");
+      testRow({
+        columnLabel: "csvHeader.lastModified",
+        expectedValue: "15/07/2018",
+      });
     });
 
     it("should return the moved file path", () => {
-      const filePathConfig = config[8];
-
-      expect(filePathConfig.title).toEqual(translator("csvHeader.newPath"));
-      expect(filePathConfig.accessor(rowData)).toEqual("newFolder/file1");
+      testRow({
+        columnLabel: "csvHeader.newPath",
+        expectedValue: "newFolder/file1",
+      });
     });
 
     it("should return the file alias", () => {
-      const filePathConfig = config[9];
-
-      expect(filePathConfig.title).toEqual(translator("csvHeader.newName"));
-      expect(filePathConfig.accessor(rowData)).toEqual("row-alias");
+      testRow({
+        columnLabel: "csvHeader.newName",
+        expectedValue: "row-alias",
+      });
     });
 
     it("should return the file description", () => {
-      const filePathConfig = config[10];
-
-      expect(filePathConfig.title).toEqual(translator("csvHeader.description"));
-      expect(filePathConfig.accessor(rowData)).toEqual("row-comments");
+      testRow({
+        columnLabel: "csvHeader.description",
+        expectedValue: "row-comments",
+      });
     });
 
     describe("fileOrFolder value", () => {
       it("for a file", () => {
-        const filePathConfig = config[11];
-
-        expect(filePathConfig.title).toEqual(
-          translator("csvHeader.fileOrFolder")
-        );
-        expect(filePathConfig.accessor(rowData)).toEqual(
-          translator("common.file")
-        );
+        testRow({
+          columnLabel: "csvHeader.fileOrFolder",
+          expectedValue: translator("common.file"),
+        });
       });
 
       it("for a folder", () => {
-        const filePathConfig = config[11];
-
-        expect(filePathConfig.title).toEqual(
-          translator("csvHeader.fileOrFolder")
-        );
-        expect(
-          filePathConfig.accessor({ ...rowData, children: ["child"] })
-        ).toEqual(translator("common.folder"));
+        const customTestRow = makeTestRow({
+          rowData: { ...rowData, children: ["child"] },
+          config,
+        });
+        customTestRow({
+          columnLabel: "csvHeader.fileOrFolder",
+          expectedValue: translator("common.folder"),
+        });
       });
     });
 
     it("should return the depth", () => {
-      const filePathConfig = config[12];
-
-      expect(filePathConfig.title).toEqual(translator("csvHeader.depth"));
-      expect(filePathConfig.accessor(rowData)).toEqual("1");
+      testRow({
+        columnLabel: "csvHeader.depth",
+        expectedValue: "1",
+      });
     });
 
     it("should return the fileCount", () => {
-      const filePathConfig = config[13];
-
-      expect(filePathConfig.title).toEqual(translator("csvHeader.fileCount"));
-      expect(filePathConfig.accessor(rowData)).toEqual("1");
+      testRow({
+        columnLabel: "csvHeader.fileCount",
+        expectedValue: "1",
+      });
     });
 
     describe("type", () => {
       it("should detect folders", () => {
-        const filePathConfig = config[14];
-
-        expect(filePathConfig.title).toEqual(translator("csvHeader.type"));
-        expect(
-          filePathConfig.accessor({ ...rowData, children: ["child"] })
-        ).toEqual(translator("common.folder"));
+        const customTester = makeTestRow({
+          rowData: { ...rowData, children: ["child"] },
+          config,
+        });
+        customTester({
+          columnLabel: "csvHeader.type",
+          expectedValue: translator("common.folder"),
+        });
       });
 
       it("should detect csv", () => {
-        const filePathConfig = config[14];
-
-        expect(filePathConfig.title).toEqual(translator("csvHeader.type"));
-        expect(
-          filePathConfig.accessor({ ...rowData, id: "/parent/file.csv" })
-        ).toEqual("csv");
+        const customTester = makeTestRow({
+          rowData: { ...rowData, id: "/parent/file.csv" },
+          config,
+        });
+        customTester({
+          columnLabel: "csvHeader.type",
+          expectedValue: "csv",
+        });
       });
 
       it("should detect unknown", () => {
-        const filePathConfig = config[14];
-
-        expect(filePathConfig.title).toEqual(translator("csvHeader.type"));
-        expect(filePathConfig.accessor(rowData)).toEqual(
-          translator("common.unknown")
-        );
+        testRow({
+          columnLabel: "csvHeader.type",
+          expectedValue: translator("common.unknown"),
+        });
       });
     });
 
     it("should return the hash", () => {
-      const filePathConfig = config[15];
-
-      expect(filePathConfig.title).toEqual(translator("csvHeader.hash"));
-      expect(filePathConfig.accessor(rowData)).toEqual("row-hash");
+      testRow({
+        columnLabel: "csvHeader.hash",
+        expectedValue: "row-hash",
+      });
     });
 
     describe("duplicate", () => {
       it("should find duplicates", () => {
-        const filePathConfig = config[16];
-
-        expect(filePathConfig.title).toEqual(translator("csvHeader.duplicate"));
-        expect(filePathConfig.accessor(rowData)).toEqual(
-          translator("common.yes")
-        );
+        testRow({
+          columnLabel: "csvHeader.duplicate",
+          expectedValue: translator("common.yes"),
+        });
       });
 
       it("should find non-duplicates", () => {
-        const filePathConfig = config[16];
-
-        expect(filePathConfig.title).toEqual(translator("csvHeader.duplicate"));
-        expect(
-          filePathConfig.accessor({ ...rowData, id: "non-duplicate" })
-        ).toEqual(translator("common.no"));
+        const customTestRow = makeTestRow({
+          rowData: { ...rowData, id: "non-duplicate" },
+          config,
+        });
+        customTestRow({
+          columnLabel: "csvHeader.duplicate",
+          expectedValue: translator("common.no"),
+        });
       });
     });
 
     it("should set toDelete status", () => {
-      const filePathConfig = config[17];
+      testRow({
+        columnLabel: "csvHeader.toDelete",
+        expectedValue: translator("common.toDelete"),
+      });
+    });
 
-      expect(filePathConfig.title).toEqual(translator("csvHeader.toDelete"));
-      expect(filePathConfig.accessor(rowData)).toEqual(
-        translator("common.toDelete")
-      );
+    describe("newFirstModified", () => {
+      it("should be ignored if equal to firstModified", () => {
+        testRow({
+          columnLabel: "csvHeader.newFirstModified",
+          expectedValue: "",
+        });
+      });
+
+      it("should be displayed if different from first modified", () => {
+        const columnConfig = config.find(
+          (config) => config.title === translator("csvHeader.newFirstModified")
+        );
+        expect(
+          columnConfig?.accessor({
+            ...rowData,
+            minLastModified: newModification,
+          })
+        ).toEqual("02/07/2000");
+      });
+    });
+
+    describe("newLastModified", () => {
+      it("should be ignored if equal to lastModified", () => {
+        testRow({
+          columnLabel: "csvHeader.newLastModified",
+          expectedValue: "",
+        });
+      });
+
+      it("should be displayed if different from last modified", () => {
+        const columnConfig = config.find(
+          (config) => config.title === translator("csvHeader.newLastModified")
+        );
+        expect(
+          columnConfig?.accessor({
+            ...rowData,
+            maxLastModified: newModification,
+          })
+        ).toEqual("02/07/2000");
+      });
     });
 
     it("should fill tags", () => {
-      const filePathConfig = config[18];
-
-      expect(filePathConfig.title).toEqual("tag0 : Taggy");
-      expect(filePathConfig.accessor(rowData)).toEqual("Taggy");
+      const columnConfig = config.find(
+        (config) => config.title === "tag0 : Taggy"
+      );
+      expect(columnConfig?.accessor(rowData)).toEqual("Taggy");
     });
   });
 });

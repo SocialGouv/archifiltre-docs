@@ -1,4 +1,4 @@
-import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Box from "@material-ui/core/Box";
 import React, { FC, useCallback } from "react";
@@ -56,11 +56,16 @@ const ExportInput: FC<ExportInputProps> = ({
         title={browseTitle}
         isvisible={(!isFilePickerDisabled).toString()}
       >
-        <div>
-          <Button onClick={onClick} disabled={isFilePickerDisabled}>
+        <Box paddingLeft={1}>
+          <IconButton
+            size="small"
+            color="secondary"
+            onClick={onClick}
+            disabled={isFilePickerDisabled}
+          >
             <FaFolderOpen />
-          </Button>
-        </div>
+          </IconButton>
+        </Box>
       </HideableTooltip>
     </Box>
   );

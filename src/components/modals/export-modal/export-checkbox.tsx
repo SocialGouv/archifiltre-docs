@@ -7,6 +7,7 @@ type ExportOptionProps = {
   label: string;
   isActive: boolean;
   disabledExplanation: string;
+  checked: boolean;
 };
 
 const ExportCheckbox: FC<ExportOptionProps> = ({
@@ -14,6 +15,7 @@ const ExportCheckbox: FC<ExportOptionProps> = ({
   label,
   isActive,
   disabledExplanation,
+  checked,
 }) => {
   const onChange = useCallback(
     (event) => {
@@ -25,7 +27,7 @@ const ExportCheckbox: FC<ExportOptionProps> = ({
   return (
     <FormControlLabel
       disabled={!isActive}
-      control={<Checkbox onChange={onChange} />}
+      control={<Checkbox onChange={onChange} checked={checked} />}
       label={`${label}${
         !isActive && disabledExplanation ? ` (${disabledExplanation})` : ""
       }`}

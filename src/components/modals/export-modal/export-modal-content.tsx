@@ -96,10 +96,13 @@ const ExportModalContent: FC<ExportModalContentProps> = ({
   }, [exportPaths, setValidPaths]);
 
   const setActiveExportValue = (exportType: ExportType, value: boolean) =>
-    setActiveExports({ ...activeExports, [exportType]: value });
+    setActiveExports((activeExports) => ({
+      ...activeExports,
+      [exportType]: value,
+    }));
 
   const setExportsPathsValue = (exportType: ExportType, value: string) =>
-    setExportsPaths({ ...exportPaths, [exportType]: value });
+    setExportsPaths((exportPaths) => ({ ...exportPaths, [exportType]: value }));
 
   return (
     <>
@@ -110,6 +113,7 @@ const ExportModalContent: FC<ExportModalContentProps> = ({
           isValidPaths={validPaths}
           setActiveExportValue={setActiveExportValue}
           setExportsPathsValue={setExportsPathsValue}
+          activeExports={activeExports}
         />
       </DialogContent>
       <DialogActions>

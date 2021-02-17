@@ -1,7 +1,6 @@
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { DispatchExts } from "reducers/archifiltre-types";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { initialState as filesAndFoldersInitialState } from "reducers/files-and-folders/files-and-folders-reducer";
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import { StoreState } from "reducers/store";
@@ -12,6 +11,7 @@ import {
 import { makeSIP } from "./mets";
 import { metsExporterThunk } from "./mets-export-thunk";
 import { initialState as workspaceMetadataInitialState } from "../../reducers/workspace-metadata/workspace-metadata-reducer";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 jest.mock("./mets", () => ({
   makeSIP: jest.fn(),

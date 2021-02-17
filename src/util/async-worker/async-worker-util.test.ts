@@ -16,6 +16,14 @@ const resetMocks = () => {
 };
 
 describe("async-worker-util", () => {
+  const { error } = console;
+  beforeAll(() => {
+    console.error = jest.fn();
+  });
+
+  afterAll(() => {
+    console.error = error;
+  });
   describe("setupChildWorkerListeners", () => {
     describe("on initialize message", () => {
       describe("when the message processing succeeds", () => {

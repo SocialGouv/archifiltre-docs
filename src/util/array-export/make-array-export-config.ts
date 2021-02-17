@@ -51,13 +51,33 @@ const getChildrenTotalSize = compose(
 
 const getFirstModifiedDate = compose(
   formatOutputDate,
-  property<{ minLastModified: number }, "minLastModified">("minLastModified")
+  property<{ initialMinLastModified: number }, "initialMinLastModified">(
+    "initialMinLastModified"
+  )
 );
 
 const getLastModifiedDate = compose(
   formatOutputDate,
-  property<{ maxLastModified: number }, "maxLastModified">("maxLastModified")
+  property<{ initialMaxLastModified: number }, "initialMaxLastModified">(
+    "initialMaxLastModified"
+  )
 );
+
+const getNewLastModifiedDateForFolder = ({
+  initialMaxLastModified,
+  maxLastModified,
+}: AccessorParams) =>
+  initialMaxLastModified === maxLastModified
+    ? ""
+    : formatOutputDate(maxLastModified);
+
+const getNewFirstModifiedDateForFolder = ({
+  initialMinLastModified,
+  minLastModified,
+}: AccessorParams) =>
+  initialMinLastModified === minLastModified
+    ? ""
+    : formatOutputDate(minLastModified);
 
 const getNewPath = ({ virtualPath, id }: { virtualPath: string; id: string }) =>
   virtualPath !== id ? formatPathForUserSystem(virtualPath) : "";
@@ -164,6 +184,8 @@ export const makeRowConfig = (
     createCellConfig("size", getChildrenTotalSize),
     createCellConfig("firstModified", getFirstModifiedDate),
     createCellConfig("lastModified", getLastModifiedDate),
+    createCellConfig("newFirstModified", getNewFirstModifiedDateForFolder),
+    createCellConfig("newLastModified", getNewLastModifiedDateForFolder),
     createCellConfig("newPath", getNewPath),
     createCellConfig("newName", getAlias),
     createCellConfig("description", getComments),

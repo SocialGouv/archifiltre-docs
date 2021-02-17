@@ -3,7 +3,6 @@ import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { from } from "rxjs";
 import { DispatchExts } from "reducers/archifiltre-types";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { initialState as filesAndFoldersInitialState } from "reducers/files-and-folders/files-and-folders-reducer";
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import { StoreState } from "reducers/store";
@@ -17,6 +16,7 @@ import {
 } from "util/notification/notifications-util";
 import { generateResipExport$ } from "./resip-export.controller";
 import { resipExporterThunk } from "./resip-exporter-thunk";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 jest.mock("./resip-export.controller", () => ({
   generateResipExport$: jest.fn(),

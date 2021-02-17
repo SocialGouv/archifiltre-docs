@@ -1,10 +1,10 @@
 import { advanceTo } from "jest-date-mock";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-test-utils";
 import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import { createTag } from "reducers/tags/tags-test-util";
 import { formatPathForUserSystem } from "util/file-system/file-sys-util";
 import resipExporter from "./resip-exporter";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 // We advance to a specific date for TransactedDate to be setup correctly
 advanceTo("2019-08-05");

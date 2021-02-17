@@ -34,6 +34,7 @@ import {
   retryLoadFromFileSystem,
 } from "files-and-folders-loader/files-and-folders-loader";
 import { ArchifiltreError } from "util/error/error-util";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 type Overrides = {
   lastModified?: LastModifiedMap;
@@ -51,6 +52,7 @@ export const createFilesAndFoldersMetadataDataStructure = (
 ): FilesAndFoldersMetadataMap => {
   const metadata: FilesAndFoldersMetadataMap = {};
   const lastModifiedLists = {};
+  const initialLastModifiedLists = {};
 
   const computeMetadataRec = (id) => {
     const element = filesAndFoldersMap[id];
@@ -60,18 +62,22 @@ export const createFilesAndFoldersMetadataDataStructure = (
         lastModified[id] !== undefined
           ? lastModified[id]
           : element.file_last_modified;
-      metadata[id] = {
+      metadata[id] = createFilesAndFoldersMetadata({
         averageLastModified: fileLastModified,
         childrenTotalSize: element.file_size,
         maxLastModified: fileLastModified,
         medianLastModified: fileLastModified,
         minLastModified: fileLastModified,
+        initialMaxLastModified: element.file_last_modified,
+        initialMinLastModified: element.file_last_modified,
+        initialMedianLastModified: element.file_last_modified,
         nbChildrenFiles: 1,
         sortByDateIndex: [],
         sortBySizeIndex: [],
         sortAlphaNumericallyIndex: [],
-      };
+      });
       lastModifiedLists[id] = [fileLastModified];
+      initialLastModifiedLists[id] = [element.file_last_modified];
       return;
     }
 
@@ -82,6 +88,13 @@ export const createFilesAndFoldersMetadataDataStructure = (
       .flatten()
       .sortBy()
       .value();
+
+    initialLastModifiedLists[id] = _(element.children)
+      .map((childId) => initialLastModifiedLists[childId])
+      .flatten()
+      .sortBy()
+      .value();
+
     const childrenTotalSize = _.sum(
       element.children.map((childId) => metadata[childId].childrenTotalSize)
     );
@@ -90,6 +103,14 @@ export const createFilesAndFoldersMetadataDataStructure = (
     const maxLastModified =
       lastModifiedLists[id][lastModifiedLists[id].length - 1];
     const minLastModified = lastModifiedLists[id][0];
+
+    const initialMedianLastModified = medianOnSortedArray(
+      initialLastModifiedLists[id]
+    );
+    const initialMaxLastModified =
+      initialLastModifiedLists[id][initialLastModifiedLists[id].length - 1];
+    const initialMinLastModified = initialLastModifiedLists[id][0];
+
     const nbChildrenFiles = _.sum(
       element.children.map((childId) => metadata[childId].nbChildrenFiles)
     );
@@ -108,17 +129,20 @@ export const createFilesAndFoldersMetadataDataStructure = (
       element.children
     );
 
-    metadata[id] = {
+    metadata[id] = createFilesAndFoldersMetadata({
       averageLastModified,
       childrenTotalSize,
       maxLastModified,
       medianLastModified,
       minLastModified,
+      initialMaxLastModified,
+      initialMedianLastModified,
+      initialMinLastModified,
       nbChildrenFiles,
       sortByDateIndex,
       sortBySizeIndex,
       sortAlphaNumericallyIndex,
-    };
+    });
   };
 
   computeMetadataRec("");

@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import Box from "@material-ui/core/Box";
 import { Button } from "@material-ui/core";
 import { FaFolderOpen } from "react-icons/fa";
-import { ExportType } from "./export-config";
+import { exportConfig, ExportType } from "./export-config";
 import { useTranslation } from "react-i18next";
 import { ExportTypesMap } from "./export-options";
 import { remote } from "electron";
@@ -48,13 +48,15 @@ const ExportControls: FC<ExportControlsProps> = ({
       properties: ["openDirectory"],
     });
 
-    Object.values(ExportType).forEach((exportType) => {
-      if (filePath.filePaths.length > 0) {
-        const folderPath = filePath.filePaths[0];
-        const filename = path.basename(exportPaths[exportType]);
-        setExportsPathsValue(exportType, `${folderPath}/${filename}`);
-      }
-    });
+    Object.values(ExportType)
+      .filter((exportType) => !exportConfig[exportType].isFilePickerDisabled)
+      .forEach((exportType) => {
+        if (filePath.filePaths.length > 0) {
+          const folderPath = filePath.filePaths[0];
+          const filename = path.basename(exportPaths[exportType]);
+          setExportsPathsValue(exportType, `${folderPath}/${filename}`);
+        }
+      });
   };
 
   return (

@@ -1,4 +1,5 @@
 import {
+  boundNumber,
   curriedFormatPercent,
   formatPercent,
   percent,
@@ -59,6 +60,20 @@ describe("numbers-util", () => {
 
     it("should work with set min value", () => {
       expect(ratio(15, { max: 20, min: 10 })).toBe(0.5);
+    });
+  });
+
+  describe("boundNumber", () => {
+    it("should return the value if between bounds", () => {
+      expect(boundNumber(0, 10, 5)).toBe(5);
+    });
+
+    it("should apply lower bound", () => {
+      expect(boundNumber(0, 10, -5)).toBe(0);
+    });
+
+    it("should apply upper bound", () => {
+      expect(boundNumber(0, 10, 15)).toBe(10);
     });
   });
 });

@@ -29,6 +29,7 @@ import { useFileMoveActiveState } from "hooks/use-file-move-active-state";
 import { MoveElement, useMovableElements } from "hooks/use-movable-elements";
 import BreadcrumbsNew from "../breadcrumb/breadcrumbs";
 import { ElementWeightMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
+import { makeZoomReducer, ZoomDirection } from "util/zoom/zoom-util";
 
 export type IcicleMouseHandler = (
   dimsAndId: DimsAndId,
@@ -96,6 +97,11 @@ const shouldRenderChildMinimap = (x: number, elementWidth: number): boolean => {
   return elementWidth > minimumMinimapElementWidth;
 };
 
+const viewBoxWidth = 1000;
+const viewBoxHeight = 300;
+const ZOOM_SPEED = 1.1;
+const zoomReducer = makeZoomReducer(ZOOM_SPEED, viewBoxWidth);
+
 type IcicleMainProps = {
   aliases: AliasMap;
   comments: CommentsMap;
@@ -147,13 +153,12 @@ const IcicleMain: FC<IcicleMainProps> = ({
   setNoFocus,
   setNoHover,
 }) => {
-  const viewBoxWidth = 1000;
-  const viewBoxHeight = 300;
-
   const [hoveredDims, setHoveredDims] = useState<Dims | null>(null);
   const [lockedDims, setLockedDims] = useState<Dims | null>(null);
   const [movedElementId, setMovedElementId] = useState("");
   const [movedElementTime, setMovedElementTime] = useState(0);
+  const [zoomOffset, setZoomOffset] = useState(0);
+  const [zoomRatio, setZoomRatio] = useState(1);
 
   const icicleHeight = viewBoxHeight;
   const icicleWidth = viewBoxWidth;
@@ -228,16 +233,14 @@ const IcicleMain: FC<IcicleMainProps> = ({
   const isIcicleInViewport = useCallback(
     (x, elementWidth) => {
       const minimumDisplayedWidth = 1;
-      const xWindow = 0;
-      const dxWindow = icicleWidth - 1;
-      const elementIsTooFarRight = x + elementWidth < xWindow;
-      const elementIsTooFarLeft = xWindow + dxWindow < x;
+      const elementIsTooFarLeft = x + elementWidth < 0;
+      const elementIsTooFarRight = x > viewBoxWidth;
       if (elementIsTooFarRight || elementIsTooFarLeft) {
         return false;
       }
       return elementWidth > minimumDisplayedWidth;
     },
-    [icicleWidth]
+    [icicleWidth, zoomOffset]
   );
 
   /**
@@ -309,6 +312,24 @@ const IcicleMain: FC<IcicleMainProps> = ({
     moveElementHandler
   );
 
+  const onIcicleMouseWheel = useCallback(
+    ({ wheelDirection, mousePosition }) => {
+      const zoomState = {
+        offset: zoomOffset,
+        ratio: zoomRatio,
+      };
+      const zoomAction = {
+        mousePosition: mousePosition * viewBoxWidth,
+        zoomDirection:
+          wheelDirection > 0 ? ZoomDirection.IN : ZoomDirection.OUT,
+      };
+      const { offset, ratio } = zoomReducer(zoomState, zoomAction);
+      setZoomOffset(offset);
+      setZoomRatio(ratio);
+    },
+    [setZoomOffset, setZoomRatio, zoomRatio]
+  );
+
   return (
     <Viewport>
       <IcicleViewport>
@@ -351,6 +372,9 @@ const IcicleMain: FC<IcicleMainProps> = ({
               computeWidthRec={computeWidthRec}
               movedElementId={movedElementId}
               movedElementTime={movedElementTime}
+              zoomOffset={zoomOffset}
+              zoomRatio={zoomRatio}
+              onIcicleMouseWheel={onIcicleMouseWheel}
             />
           </svg>
         </IcicleWrapper>
@@ -411,6 +435,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
               onIcicleRectMouseOverHandler={empty}
               computeWidthRec={computeWidthRec}
               tags={tags}
+              zoomOffset={0}
+              zoomRatio={1}
             />
             <MinimapBracket
               x={0}

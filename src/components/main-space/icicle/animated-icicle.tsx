@@ -9,8 +9,8 @@ import React, {
 import { animateSvgDomElement } from "animation-daemon";
 import { generateRandomString } from "util/random-gen-util";
 import Icicle, { IcicleProps } from "./icicle";
-import { addTracker } from "../../../logging/tracker";
-import { ActionTitle, ActionType } from "../../../logging/tracker-types";
+import { addTracker } from "logging/tracker";
+import { ActionTitle, ActionType } from "logging/tracker-types";
 import { IcicleMouseActionHandler } from "./icicle-types";
 
 type AnimatedIcicleProps = IcicleProps & {

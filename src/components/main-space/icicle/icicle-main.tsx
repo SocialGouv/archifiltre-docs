@@ -25,11 +25,11 @@ import AnimatedIcicle from "./animated-icicle";
 import Icicle from "./icicle";
 import { Dims, DimsAndId } from "./icicle-rect";
 import { FillColor } from "./icicle-types";
-import { useFileMoveActiveState } from "hooks/use-file-move-active-state";
 import { MoveElement, useMovableElements } from "hooks/use-movable-elements";
 import BreadcrumbsNew from "../breadcrumb/breadcrumbs";
 import { ElementWeightMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
-import { makeZoomReducer, ZoomDirection } from "util/zoom/zoom-util";
+import { useFileMoveActiveState } from "../workspace/file-move-provider";
+import { useZoomContext } from "../workspace/zoom-provider";
 
 export type IcicleMouseHandler = (
   dimsAndId: DimsAndId,
@@ -97,10 +97,9 @@ const shouldRenderChildMinimap = (x: number, elementWidth: number): boolean => {
   return elementWidth > minimumMinimapElementWidth;
 };
 
+export const ZOOM_SPEED = 1.1;
 const viewBoxWidth = 1000;
 const viewBoxHeight = 300;
-const ZOOM_SPEED = 1.1;
-const zoomReducer = makeZoomReducer(ZOOM_SPEED, viewBoxWidth);
 
 type IcicleMainProps = {
   aliases: AliasMap;
@@ -157,8 +156,12 @@ const IcicleMain: FC<IcicleMainProps> = ({
   const [lockedDims, setLockedDims] = useState<Dims | null>(null);
   const [movedElementId, setMovedElementId] = useState("");
   const [movedElementTime, setMovedElementTime] = useState(0);
-  const [zoomOffset, setZoomOffset] = useState(0);
-  const [zoomRatio, setZoomRatio] = useState(1);
+  const {
+    zoomIn,
+    zoomOut,
+    offset: zoomOffset,
+    ratio: zoomRatio,
+  } = useZoomContext();
 
   const icicleHeight = viewBoxHeight;
   const icicleWidth = viewBoxWidth;
@@ -240,7 +243,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
       }
       return elementWidth > minimumDisplayedWidth;
     },
-    [icicleWidth, zoomOffset]
+    [icicleWidth]
   );
 
   /**
@@ -314,20 +317,10 @@ const IcicleMain: FC<IcicleMainProps> = ({
 
   const onIcicleMouseWheel = useCallback(
     ({ wheelDirection, mousePosition }) => {
-      const zoomState = {
-        offset: zoomOffset,
-        ratio: zoomRatio,
-      };
-      const zoomAction = {
-        mousePosition: mousePosition * viewBoxWidth,
-        zoomDirection:
-          wheelDirection > 0 ? ZoomDirection.IN : ZoomDirection.OUT,
-      };
-      const { offset, ratio } = zoomReducer(zoomState, zoomAction);
-      setZoomOffset(offset);
-      setZoomRatio(ratio);
+      const zoomMethod = wheelDirection > 0 ? zoomIn : zoomOut;
+      zoomMethod(mousePosition, ZOOM_SPEED);
     },
-    [setZoomOffset, setZoomRatio, zoomRatio]
+    [zoomIn, zoomOut]
   );
 
   return (
@@ -372,7 +365,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
               computeWidthRec={computeWidthRec}
               movedElementId={movedElementId}
               movedElementTime={movedElementTime}
-              zoomOffset={zoomOffset}
+              zoomOffset={zoomOffset * viewBoxWidth}
               zoomRatio={zoomRatio}
               onIcicleMouseWheel={onIcicleMouseWheel}
             />

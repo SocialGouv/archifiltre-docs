@@ -1,5 +1,5 @@
 import { useTabsState } from "components/header/tabs-context";
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 
 import Icicle from "components/main-space/icicle/icicle-container";
 import NavigationBar from "components/main-space/navigation-bar/navigation-bar-container";
@@ -8,32 +8,15 @@ import DuplicatesSearch from "components/main-space/duplicates-search/duplicates
 import TabsContent from "./tabs/tabs-content";
 
 import Header from "components/header/header-container";
-
-const workspaceState = {
-  isFileMoveActive: false,
-  areTabsHidden: false,
-  setIsFileMoveActive: (isMoveActive) => {},
-  setAreTabsHidden: (areTabsHidden) => {},
-};
-
-export const WorkspaceContext = React.createContext(workspaceState);
+import WorkspaceProviders from "./workspace-providers";
 
 const areIciclesDisplayed = (tabIndex: number) => tabIndex !== 3;
 
 const Workspace: FC = () => {
-  const [isFileMoveActive, setIsFileMoveActive] = useState(false);
-  const [areTabsHidden, setAreTabsHidden] = useState(false);
   const { tabIndex } = useTabsState();
 
   return (
-    <WorkspaceContext.Provider
-      value={{
-        isFileMoveActive,
-        setIsFileMoveActive,
-        areTabsHidden,
-        setAreTabsHidden,
-      }}
-    >
+    <WorkspaceProviders>
       <Box display="flex" flexDirection="column" height="100%">
         <Header />
         <Box
@@ -43,7 +26,7 @@ const Workspace: FC = () => {
           style={{ minHeight: "0px", width: "100%" }}
         >
           <Box display="flex" flexDirection="row" flexWrap="wrap" height="100%">
-            {!areTabsHidden && <TabsContent tabIndex={tabIndex} />}
+            <TabsContent tabIndex={tabIndex} />
           </Box>
         </Box>
         <Box flexGrow={1} flexShrink={1} flexBasis="auto" overflow="hidden">
@@ -61,7 +44,7 @@ const Workspace: FC = () => {
           )}
         </Box>
       </Box>
-    </WorkspaceContext.Provider>
+    </WorkspaceProviders>
   );
 };
 

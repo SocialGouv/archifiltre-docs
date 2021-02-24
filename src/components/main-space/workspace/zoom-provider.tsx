@@ -5,6 +5,7 @@ import { ZoomDirection, zoomReducer } from "util/zoom/zoom-util";
 const zoomState = {
   zoomIn: (mousePosition, zoomSpeed) => {},
   zoomOut: (mousePosition, zoomSpeed) => {},
+  setZoom: (offset, ratio) => {},
   resetZoom: empty,
   ratio: 1,
   offset: 0,
@@ -39,6 +40,14 @@ const ZoomProvider: FC = ({ children }) => {
     [ratio, offset, setRatio, setOffset]
   );
 
+  const setZoom = useCallback(
+    (offset, ratio) => {
+      setOffset(offset);
+      setRatio(ratio);
+    },
+    [setOffset, setRatio]
+  );
+
   const zoomIn = useCallback(
     (mousePosition, zoomSpeed) => {
       applyZoom(ZoomDirection.IN, mousePosition, zoomSpeed);
@@ -54,9 +63,8 @@ const ZoomProvider: FC = ({ children }) => {
   );
 
   const resetZoom = useCallback(() => {
-    setRatio(1);
-    setOffset(0);
-  }, [setRatio, setOffset]);
+    setZoom(0, 1);
+  }, [setZoom]);
 
   return (
     <ZoomContext.Provider
@@ -64,6 +72,7 @@ const ZoomProvider: FC = ({ children }) => {
         zoomIn,
         zoomOut,
         resetZoom,
+        setZoom,
         ratio,
         offset,
       }}

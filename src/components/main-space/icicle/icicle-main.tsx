@@ -107,7 +107,6 @@ type IcicleMainProps = {
   tags: TagMap;
   originalPath: string;
   rootId: string;
-  displayRoot: string[];
   fillColor: FillColor;
   hoveredElementId: string;
   lockedElementId: string;
@@ -118,7 +117,6 @@ type IcicleMainProps = {
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
   elementWeightMethod: ElementWeightMethod;
   maxDepth: number;
-  zoomElement: (elementId) => void;
   lock: (id: string) => void;
   unlock: () => void;
   moveElement: (movedElementId: string, targetFolderId: string) => void;
@@ -133,7 +131,6 @@ const IcicleMain: FC<IcicleMainProps> = ({
   tags,
   originalPath,
   rootId,
-  displayRoot,
   fillColor,
   hoveredElementId,
   lockedElementId,
@@ -144,7 +141,6 @@ const IcicleMain: FC<IcicleMainProps> = ({
   getFfByFfId,
   elementWeightMethod,
   maxDepth,
-  zoomElement,
   lock,
   unlock,
   moveElement,
@@ -159,6 +155,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
   const {
     zoomIn,
     zoomOut,
+    setZoom,
     offset: zoomOffset,
     ratio: zoomRatio,
   } = useZoomContext();
@@ -276,10 +273,13 @@ const IcicleMain: FC<IcicleMainProps> = ({
    * Handles double click on icicle rectangle
    */
   const onIcicleRectDoubleClickHandler = useCallback(
-    ({ id }) => {
-      zoomElement(id);
+    ({ dims }) => {
+      const { x, dx } = dims();
+      const newZoomOffset = zoomOffset + x / (viewBoxWidth * zoomRatio);
+      const newZoomRatio = (zoomRatio * viewBoxWidth) / dx;
+      setZoom(newZoomOffset, newZoomRatio);
     },
-    [zoomElement]
+    [setZoom, zoomRatio, zoomOffset]
   );
 
   /**
@@ -428,12 +428,10 @@ const IcicleMain: FC<IcicleMainProps> = ({
               zoomRatio={1}
             />
             <MinimapBracket
-              x={0}
-              y={0}
+              zoomOffset={zoomOffset}
+              zoomRatio={zoomRatio}
               viewportWidth={viewBoxWidth}
               viewportHeight={viewBoxHeight}
-              displayRoot={displayRoot}
-              computeWidthRec={computeWidthRec}
             />
           </svg>
         </MinimapWrapper>

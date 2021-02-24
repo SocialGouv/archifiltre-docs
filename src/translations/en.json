@@ -73,7 +73,6 @@
       "type": "By type",
       "dates": "By date",
       "alphanumeric": "Alphanumeric",
-      "backToRoot": "Back to root",
       "bySize": "By size",
       "byNumber": "By count",
       "allTags": "All tags",

@@ -4,8 +4,8 @@ import { ActionTitle, ActionType } from "logging/tracker-types";
 import React, { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaArrowsAlt } from "react-icons/fa";
-import { useFileMoveActiveState } from "hooks/use-file-move-active-state";
 import styled from "styled-components";
+import { useFileMoveActiveState } from "../workspace/file-move-provider";
 
 const handleTracking = (isFileMoveActive) => {
   if (!isFileMoveActive) {

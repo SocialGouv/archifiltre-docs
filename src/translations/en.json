@@ -97,7 +97,11 @@
       "show": "Show",
       "noOptions": "No results - Press enter to add a new tag",
       "tagItemTooltip": "Tag number (volume percentage)",
-      "metadata": "Metadata"
+      "metadata": "Metadata",
+      "currentZoom": "Current zoom",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "resetZoom": "Reset zoom"
     },
     "header": {
       "export": "Export",

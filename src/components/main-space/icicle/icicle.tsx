@@ -25,8 +25,6 @@ export type DimsMap = {
 
 export type IcicleProps = {
   trueFHeight: () => number;
-  computeWidthRec: (ids: string[], x: number, dx: number) => [number, number][];
-  displayRoot: string[];
   x: number;
   y: number;
   dx: number;
@@ -54,8 +52,6 @@ export type IcicleProps = {
 };
 
 const Icicle: FC<IcicleProps> = ({
-  computeWidthRec,
-  displayRoot,
   getWidthFromId,
   x,
   y,
@@ -180,8 +176,6 @@ const Icicle: FC<IcicleProps> = ({
         dimsMap={dims}
         opacity={1}
         ids={lockedHovered}
-        viewportStartIndex={x}
-        viewportWidth={dx}
         fillColor={fillColor}
         onIcicleRectClickHandler={onIcicleRectClickHandler}
         onIcicleRectDoubleClickHandler={onIcicleRectDoubleClickHandler}
@@ -191,8 +185,6 @@ const Icicle: FC<IcicleProps> = ({
         dimsMap={dims}
         opacity={0.6}
         ids={lockedNotHovered}
-        viewportStartIndex={x}
-        viewportWidth={dx}
         fillColor={fillColor}
         onIcicleRectClickHandler={onIcicleRectClickHandler}
         onIcicleRectDoubleClickHandler={onIcicleRectDoubleClickHandler}
@@ -202,8 +194,6 @@ const Icicle: FC<IcicleProps> = ({
         dimsMap={dims}
         opacity={0.3}
         ids={unlockedHovered}
-        viewportStartIndex={x}
-        viewportWidth={dx}
         fillColor={fillColor}
         onIcicleRectClickHandler={onIcicleRectClickHandler}
         onIcicleRectDoubleClickHandler={onIcicleRectDoubleClickHandler}

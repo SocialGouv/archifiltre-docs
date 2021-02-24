@@ -97,7 +97,11 @@
       "show": "Afficher",
       "noOptions": "Pas de résultats - Appuyez sur Entrer pour ajouter un nouveau tag",
       "tagItemTooltip": "Nombre d'utilisation du tag (pourcentage du volume)",
-      "metadata": "Métadonnées"
+      "metadata": "Métadonnées",
+      "currentZoom": "Zoom actuel",
+      "zoomIn": "Zoomer",
+      "zoomOut": "Dézoomer",
+      "resetZoom": "Réinitialiser le zoom"
     },
     "header": {
       "export": "Exporter",

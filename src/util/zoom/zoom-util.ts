@@ -14,6 +14,7 @@ type ZoomState = {
 type ZoomAction = {
   mousePosition: number;
   zoomDirection: ZoomDirection;
+  zoomSpeed: number;
 };
 
 const getZoomPower = (zoomDirection: ZoomDirection) =>
@@ -29,27 +30,20 @@ export const computeOffset = (
   mousePosition: number,
   zoomRatio: number,
   newZoomRatio: number,
-  zoomOffset: number,
-  viewBoxWidth: number
+  zoomOffset: number
 ) => {
   const offset =
     mousePosition - (zoomRatio / newZoomRatio) * (mousePosition - zoomOffset);
 
-  return round(boundNumber(0, (1 - 1 / newZoomRatio) * viewBoxWidth, offset));
+  return round(boundNumber(0, 1 - 1 / newZoomRatio, offset), 3);
 };
 
-export const makeZoomReducer = (zoomSpeed: number, viewBoxWidth: number) => (
+export const zoomReducer = (
   { ratio, offset }: ZoomState,
-  { mousePosition, zoomDirection }: ZoomAction
+  { mousePosition, zoomDirection, zoomSpeed }: ZoomAction
 ): ZoomState => {
   const nextRatio = computeZoomRatio(ratio, zoomSpeed, zoomDirection);
-  const nextOffset = computeOffset(
-    mousePosition,
-    ratio,
-    nextRatio,
-    offset,
-    viewBoxWidth
-  );
+  const nextOffset = computeOffset(mousePosition, ratio, nextRatio, offset);
   return {
     ratio: nextRatio,
     offset: nextOffset,

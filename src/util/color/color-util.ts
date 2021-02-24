@@ -42,7 +42,6 @@ export const mostRecentDate = () => [255, 216, 155, 1];
 export const leastRecentDate = () => [20, 86, 130, 1];
 
 const PLACEHOLDER_COLOR = "#8a8c93";
-const PARENT_FOLDER_COLOR = "#f99a0b";
 const FOLDER_COLOR = "#fabf0b";
 
 export const colors = {
@@ -58,7 +57,6 @@ export const colors = {
 };
 
 export const folder = () => FOLDER_COLOR;
-export const parentFolder = () => PARENT_FOLDER_COLOR;
 
 export const placeholder = () => PLACEHOLDER_COLOR;
 
@@ -70,24 +68,16 @@ export const fromFileName = (name: string): string => {
 /**
  * Hook that returns the fillColorByType method. It allows to get the color of a node using its id.
  * @param filesAndFolders
- * @param displayRoot
  * @returns {*}
  */
-const useFillColorByType = (
-  filesAndFolders: FilesAndFoldersMap,
-  displayRoot: string[]
-) =>
+const useFillColorByType = (filesAndFolders: FilesAndFoldersMap) =>
   useCallback(
     (id) => {
       const element = filesAndFolders[id];
 
-      if (isFile(element)) {
-        return fromFileName(element.name);
-      }
-
-      return displayRoot.includes(id) ? parentFolder() : folder();
+      return isFile(element) ? fromFileName(element.name) : folder();
     },
-    [filesAndFolders, displayRoot]
+    [filesAndFolders]
   );
 
 const dateGradient = gradient(leastRecentDate(), mostRecentDate());
@@ -124,16 +114,14 @@ const useFillColorByDate = (
  * @param filesAndFolders
  * @param filesAndFoldersMetadata
  * @param iciclesSortMethod
- * @param displayRoot
  * @returns {*}
  */
 export const useFillColor = (
   filesAndFolders: FilesAndFoldersMap,
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap,
-  iciclesSortMethod: IcicleColorMode,
-  displayRoot: string[]
+  iciclesSortMethod: IcicleColorMode
 ) => {
-  const fillColorByType = useFillColorByType(filesAndFolders, displayRoot);
+  const fillColorByType = useFillColorByType(filesAndFolders);
 
   const fillColorByDate = useFillColorByDate(filesAndFoldersMetadata);
 

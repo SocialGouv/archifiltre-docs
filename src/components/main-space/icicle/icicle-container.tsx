@@ -25,8 +25,6 @@ import { createFilePathSequence } from "util/files-and-folders/file-and-folders-
 import IcicleMain from "./icicle-main";
 import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
 import { useIcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-selectors";
-import { useZoomedElement } from "reducers/main-space-selection/main-space-selection-selectors";
-import { zoomElement } from "reducers/main-space-selection/main-space-selection-action";
 
 export default function IcicleApiToProps() {
   const dispatch = useDispatch();
@@ -43,7 +41,6 @@ export default function IcicleApiToProps() {
   const aliases = useSelector(getAliasesFromStore);
   const comments = useSelector(getCommentsFromStore);
   const elementsToDelete = useSelector(getElementsToDeleteFromStore);
-  const zoomedElementId = useZoomedElement();
 
   const { hoveredElementId, lockedElementId } = useWorkspaceMetadata();
 
@@ -84,11 +81,6 @@ export default function IcicleApiToProps() {
     dispatch,
   ]);
 
-  const setZoomedElement = useCallback(
-    (elementId: string) => dispatch(zoomElement(elementId)),
-    [dispatch]
-  );
-
   const hoverSequence = useMemo(
     () =>
       createFilePathSequence(
@@ -107,16 +99,6 @@ export default function IcicleApiToProps() {
         virtualPathToIdMap
       ),
     [lockedElementId, filesAndFolders, virtualPathToIdMap]
-  );
-
-  const zoomedElementSequence = useMemo(
-    () =>
-      createFilePathSequence(
-        zoomedElementId,
-        filesAndFolders,
-        virtualPathToIdMap
-      ),
-    [zoomedElementId, filesAndFolders, virtualPathToIdMap]
   );
 
   const { originalPath } = useSelector(getWorkspaceMetadataFromStore);
@@ -139,8 +121,7 @@ export default function IcicleApiToProps() {
   const fillColor = useFillColor(
     filesAndFolders,
     filesAndFoldersMetadata,
-    icicleColorMode,
-    zoomedElementSequence
+    icicleColorMode
   );
 
   const moveElementCallback = useCallback(
@@ -153,7 +134,6 @@ export default function IcicleApiToProps() {
     <IcicleMain
       aliases={aliases}
       comments={comments}
-      displayRoot={zoomedElementSequence}
       originalPath={originalPath}
       fillColor={fillColor}
       getChildrenIdFromId={getChildrenIdFromId}
@@ -167,7 +147,6 @@ export default function IcicleApiToProps() {
       lock={lock}
       elementWeightMethod={elementWeightMethod}
       rootId={ROOT_FF_ID}
-      zoomElement={setZoomedElement}
       setFocus={setFocus}
       setNoFocus={setNoFocus}
       setNoHover={setNoFocus}

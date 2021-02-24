@@ -82,7 +82,6 @@ import {
   LoadingStep,
 } from "./loading-state/loading-state-types";
 import { setFilesAndFoldersHashes } from "./hashes/hashes-actions";
-import { resetZoom } from "reducers/main-space-selection/main-space-selection-action";
 import { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
 import { ErrorMessage } from "util/batch-process/batch-process-util-types";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
@@ -503,7 +502,6 @@ export const resetStoreThunk = (): ArchifiltreThunkAction => (dispatch) => {
   dispatch(resetLoadingState());
   dispatch(setLockedElementId(""));
   dispatch(setLoadingStep(LoadingStep.WAITING));
-  dispatch(resetZoom());
   dispatch(resetErroredElements());
   dispatch(commitAction());
   dispatch(resetOverrideLastModified());

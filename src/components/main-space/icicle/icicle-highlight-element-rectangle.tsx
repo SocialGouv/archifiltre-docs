@@ -1,9 +1,9 @@
 import React, { FC, MouseEventHandler } from "react";
 import SvgRectangle from "./svg-rectangle";
-import { useAnimatedValue } from "../../../hooks/use-animation";
-import { useFileMoveActiveState } from "../../../hooks/use-file-move-active-state";
+import { useAnimatedValue } from "hooks/use-animation";
 import { Dims } from "./icicle-rect";
 import { IcicleMouseActionHandler } from "./icicle-types";
+import { useFileMoveActiveState } from "../workspace/file-move-provider";
 
 type IcicleHightlightElementRectangleProps = {
   dims: Dims;

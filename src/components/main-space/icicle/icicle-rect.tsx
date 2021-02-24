@@ -3,7 +3,7 @@ import React, { FC, useCallback, useEffect, MouseEvent } from "react";
 import * as FunctionUtil from "util/function/function-util";
 import { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 import SvgRectangle from "./svg-rectangle";
-import { useFileMoveActiveState } from "hooks/use-file-move-active-state";
+import { useFileMoveActiveState } from "../workspace/file-move-provider";
 
 export type Dims = {
   x: number;

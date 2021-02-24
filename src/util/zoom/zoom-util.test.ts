@@ -1,4 +1,4 @@
-import { computeZoomRatio, makeZoomReducer, ZoomDirection } from "./zoom-util";
+import { computeZoomRatio, ZoomDirection, zoomReducer } from "./zoom-util";
 import fc from "fast-check";
 import _ from "lodash";
 
@@ -11,25 +11,21 @@ describe("zoom-util", () => {
       expect(computeZoomRatio(1.1, 1.1, ZoomDirection.OUT)).toBe(1);
     });
   });
-  describe("makeZoomReducer", () => {
+  describe("zoomReducer", () => {
     it("should preserve the state when zoom in and zoom out on the same position", () => {
-      const viewboxWidth = 1000;
-      const precision = viewboxWidth / 100;
+      const precision = 1 / 100;
       const maxZooms = 10;
-      const zoomReducer = makeZoomReducer(1.1, viewboxWidth);
+      const zoomSpeed = 1.1;
       const arbitraryState = fc
         .integer(1, 1000)
         .chain((ratio) =>
-          fc.tuple(
-            fc.constant(ratio),
-            fc.integer(0, viewboxWidth - viewboxWidth / ratio)
-          )
+          fc.tuple(fc.constant(ratio), fc.float(0, 1 - 1 / ratio))
         )
         .chain(([ratio, offset]) =>
           fc.tuple(
             fc.constant(ratio),
             fc.constant(offset),
-            fc.integer(offset, offset + viewboxWidth / ratio),
+            fc.float(offset, offset + 1 / ratio),
             fc.nat(maxZooms)
           )
         );
@@ -40,11 +36,13 @@ describe("zoom-util", () => {
             const zoomIns = _.range(numberOfZooms).map(() => ({
               mousePosition,
               zoomDirection: ZoomDirection.IN,
+              zoomSpeed,
             }));
 
             const zoomOuts = _.range(numberOfZooms).map(() => ({
               mousePosition,
               zoomDirection: ZoomDirection.OUT,
+              zoomSpeed,
             }));
 
             const zoomInsState = zoomIns.reduce(zoomReducer, { ratio, offset });

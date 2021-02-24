@@ -11,6 +11,7 @@ import {
   IcicleSortMethod,
 } from "reducers/icicle-sort-method/icicle-sort-method-types";
 import IcicleColorModePicker from "./icicle-color-mode-picker";
+import ZoomPicker from "./zoom-picker";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -50,6 +51,9 @@ export const NavigationBar: FC<NavigationBarProps> = ({
       </Box>
       <Box pt={1} pr={1}>
         <MoveFilesButton />
+      </Box>
+      <Box pt={1} pr={1}>
+        <ZoomPicker />
       </Box>
       <Box flexGrow={1} />
       <Box pt={1} pl={1}>

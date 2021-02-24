@@ -8,8 +8,6 @@ type IciclesOverlayProps = {
   dimsMap: DimsMap;
   opacity: number;
   ids: string[];
-  viewportStartIndex: number;
-  viewportWidth: number;
   fillColor: FillColor;
   onIcicleRectClickHandler: IcicleMouseActionHandler;
   onIcicleRectDoubleClickHandler: IcicleMouseActionHandler;
@@ -20,8 +18,6 @@ const IciclesOverlay: FC<IciclesOverlayProps> = ({
   opacity,
   dimsMap,
   ids,
-  viewportStartIndex,
-  viewportWidth,
   fillColor,
   onIcicleRectClickHandler,
   onIcicleRectDoubleClickHandler,
@@ -35,10 +31,7 @@ const IciclesOverlay: FC<IciclesOverlayProps> = ({
           return <g key={id} />;
         }
 
-        const x = Math.max(viewportStartIndex, dims.x);
-        const dx = Math.min(viewportWidth, dims.dx);
-        const y = dims.y;
-        const dy = dims.dy;
+        const { x, y, dx, dy } = dims;
 
         return (
           <IcicleRect

@@ -15,7 +15,7 @@ Archifiltre allows you to visualize and improve your file trees. Learn more abou
 
 ![Presentation](docs/presentation.png)
 
-### Launch the app
+## 🚀 Launch the app
 
 First install the dependencies
 
@@ -52,7 +52,7 @@ You can make the app automatically load a specific folder by doing:
 yarn dev --autoload /absolute/or/relative/path/to/folder
 ```
 
-## Building/releasing the app
+## 🔨 Building/releasing the app
 
 First, prepare the build in production mode
 
@@ -100,12 +100,12 @@ yarn build-prod
 
 Once built, production binaries are found in the dist folder, each in their corresponding platform's subfolder.
 
-## Contributing
+## ✨ Contributing
 
 To contribute, see more [here](https://github.com/SocialGouv/archifiltre/blob/master/CONTRIBUTING.md)
 
 To know more about the project architecture, go [here](https://github.com/SocialGouv/archifiltre/blob/master/docs/README.md)
 
-## Import script
+## 📝 Import script
 
 Archifiltre provides you with an export script that you can run directly on your file server. To know more about it, go [here](https://github.com/SocialGouv/archifiltre/blob/master/scripts/README.md)

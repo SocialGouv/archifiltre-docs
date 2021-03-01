@@ -18,7 +18,7 @@ export const EXPAND_ICON = FaChevronRight;
 export const COLLAPSE_ICON = FaChevronDown;
 
 const IconWrapper = styled.span<{
-  onClick: MouseEventHandler<HTMLSpanElement>;
+  onClick?: MouseEventHandler<HTMLSpanElement>;
 }>`
   ${({ onClick }) => onClick && "cursor: pointer"}
 `;

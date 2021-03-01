@@ -28,8 +28,8 @@ const ZoomPicker: FC = () => {
     callback(...args);
   };
 
-  const onZoomIn = () => zoomIn(0.5, ZOOM_SPEED);
-  const onZoomOut = () => zoomOut(0.5, ZOOM_SPEED);
+  const onZoomIn = () => zoomIn(null, ZOOM_SPEED);
+  const onZoomOut = () => zoomOut(null, ZOOM_SPEED);
 
   const options = [
     {

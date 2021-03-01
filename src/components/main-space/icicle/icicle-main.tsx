@@ -156,6 +156,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
     zoomIn,
     zoomOut,
     setZoom,
+    setDefaultMousePosition,
     offset: zoomOffset,
     ratio: zoomRatio,
   } = useZoomContext();
@@ -248,7 +249,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
    */
   const onClickHandler = useCallback(() => {
     unlock();
-  }, [unlock, setNoFocus]);
+    setDefaultMousePosition(null);
+  }, [unlock, setNoFocus, setDefaultMousePosition]);
 
   /**
    * Handle viewport mouse leave.
@@ -264,9 +266,11 @@ const IcicleMain: FC<IcicleMainProps> = ({
     ({ id, dims }, event) => {
       event.stopPropagation();
       lock(id);
-      setLockedDims(dims());
+      const newDims = dims();
+      setLockedDims(newDims);
+      setDefaultMousePosition((newDims.x + newDims.dx / 2) / viewBoxWidth);
     },
-    [lock, setLockedDims]
+    [lock, setLockedDims, setDefaultMousePosition]
   );
 
   /**

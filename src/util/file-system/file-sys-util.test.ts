@@ -1,5 +1,9 @@
 import path from "path";
-import { isRootPath, isValidFolderPath } from "./file-sys-util";
+import {
+  isRootPath,
+  isValidFolderPath,
+  startPathFromOneLevelAbove,
+} from "./file-sys-util";
 
 jest.mock("path", () => {
   const actualPath = jest.requireActual("path");
@@ -85,6 +89,22 @@ describe("file-sys-util", () => {
     });
     it("should return true with a path that exists", () => {
       expect(isValidFolderPath("/")).toBe(true);
+    });
+  });
+
+  describe("startPathFromOneLevelAbove", () => {
+    describe("when path starts with a /", () => {
+      it("should start the path from the level above", () => {
+        const basePath = "/root/folder/file";
+        expect(startPathFromOneLevelAbove(basePath)).toEqual("folder/file");
+      });
+    });
+
+    describe("when path does not start with a /", () => {
+      it("should start the path from the level above", () => {
+        const basePath = "root/folder/file";
+        expect(startPathFromOneLevelAbove(basePath)).toEqual("folder/file");
+      });
     });
   });
 });

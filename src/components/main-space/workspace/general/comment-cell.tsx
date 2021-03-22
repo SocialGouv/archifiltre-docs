@@ -24,8 +24,7 @@ const CommentCell: FC<CommentCellProps> = ({
       addTracker({
         title: ActionTitle.DESCRIPTION_ADDED,
         type: ActionType.TRACK_EVENT,
-        value: `Created description: "${newComment}"`,
-        eventValue: newComment,
+        value: "Description created",
       });
     },
     [updateComment]

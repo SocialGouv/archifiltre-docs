@@ -38,7 +38,7 @@ const aboutItems = [
     label: "settingsModal.wiki",
   },
   {
-    link: "https://bit.ly/315pAd8",
+    link: "https://archifiltre.fabrique.social.gouv.fr/questionnaire/",
     Icon: FaGrinStars,
     label: "folderDropzone.feedback",
   },

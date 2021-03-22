@@ -22,7 +22,9 @@ import {
 } from "react-icons/fa";
 
 const onFeedbackClick = () => {
-  shell.openExternal("https://bit.ly/315pAd8");
+  shell.openExternal(
+    "https://archifiltre.fabrique.social.gouv.fr/questionnaire/"
+  );
 };
 
 const onContactClick = () => {

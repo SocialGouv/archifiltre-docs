@@ -25,6 +25,6 @@ export const versionComparator = (
   return 0;
 };
 
-export const versionName = "Queer Quetzal";
+export const versionName = "Romantic Raccoon";
 
 export default packageJson.version;

@@ -7,14 +7,14 @@ import {
   IcicleColorMode,
   IcicleSortMethod,
 } from "reducers/icicle-sort-method/icicle-sort-method-types";
-import { setIcicleSortMethodThunk } from "reducers/icicle-sort-method/icicle-sort-method-thunk";
+import {
+  setElementWeightMethodThunk,
+  setIcicleColorModeThunk,
+  setIcicleSortMethodThunk,
+} from "reducers/icicle-sort-method/icicle-sort-method-thunk";
 import { useIcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-selectors";
 import { useIsZoomed } from "reducers/main-space-selection/main-space-selection-selectors";
 import { resetZoom } from "reducers/main-space-selection/main-space-selection-action";
-import {
-  setElementWeightMethod,
-  setIcicleColorMode,
-} from "reducers/icicle-sort-method/icicle-sort-method-actions";
 
 const NavigationBarContainer = () => {
   const {
@@ -41,12 +41,13 @@ const NavigationBarContainer = () => {
   ]);
 
   const setElementWeightMethodCallback = useCallback(
-    (method: ElementWeightMethod) => dispatch(setElementWeightMethod(method)),
+    (method: ElementWeightMethod) =>
+      dispatch(setElementWeightMethodThunk(method)),
     [dispatch]
   );
 
   const setIcicleColorModeCallback = useCallback(
-    (mode: IcicleColorMode) => dispatch(setIcicleColorMode(mode)),
+    (mode: IcicleColorMode) => dispatch(setIcicleColorModeThunk(mode)),
     [dispatch]
   );
 

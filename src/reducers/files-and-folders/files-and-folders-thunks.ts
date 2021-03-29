@@ -32,10 +32,9 @@ export const updateAliasThunk = (
   newAlias: string
 ): ArchifiltreThunkAction => (dispatch) => {
   addTracker({
-    eventValue: newAlias,
     title: ActionTitle.ALIAS_ADDED,
     type: ActionType.TRACK_EVENT,
-    value: `Created alias: "${newAlias}"`,
+    value: "Alias created",
   });
 
   dispatch(setFilesAndFoldersAliases({ [filesAndFoldersId]: newAlias }));

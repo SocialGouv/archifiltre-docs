@@ -77,6 +77,17 @@ const mapActionToMatomoAction = (
 };
 
 /**
+ * Matomo requires a non null non empty string value for any event,
+ * so an "_" is added to events with no value
+ */
+const handleMatomoValue = (matomoAction) => {
+  if (!matomoAction.value) {
+    matomoAction.value = "_";
+  }
+  return matomoAction;
+};
+
+/**
  * Adds a Matomo tracker using an action
  * @param trackerAction
  */
@@ -87,7 +98,8 @@ const addMatomoTracker = (trackerAction: MatomoTrackerAction) => {
 
   if (window._paq) {
     const matomoAction = mapActionToMatomoAction(trackerAction);
-    const sanitizedData = sanitizeTrackerData(matomoAction);
+    const matomoActionWithValue = handleMatomoValue(matomoAction);
+    const sanitizedData = sanitizeTrackerData(matomoActionWithValue);
     window._paq.push(sanitizedData);
   }
 };

@@ -1,6 +1,7 @@
 import React, { FC, useCallback, useContext, useState } from "react";
 import { empty } from "util/function/function-util";
 import { ZoomDirection, zoomReducer } from "util/zoom/zoom-util";
+import { useZoomTracker } from "hooks/use-zoom-tracker";
 
 type ZoomState = {
   zoomIn: (mousePosition: number | null, zoomSpeed: number) => void;
@@ -32,11 +33,12 @@ const ZoomProvider: FC = ({ children }) => {
   const [defaultMousePosition, setDefaultMousePosition] = useState<
     number | null
   >(null);
-
+  const trackZoom = useZoomTracker();
   const viewPortCenter = offset + 1 / (2 * ratio);
 
   const applyZoom = useCallback(
     (zoomDirection, mousePosition, zoomSpeed) => {
+      trackZoom();
       const zoomState = {
         offset,
         ratio,

@@ -147,4 +147,5 @@ enum MatomoActionTitle {
   ELEMENT_MOVED = "Element moved",
   ELEMENT_MARKED_TO_DELETE = "Element marked to delete",
   CLICK_ON_TAB = "Click on tab",
+  ZOOM_PERFORMED = "Zoom performed",
 }

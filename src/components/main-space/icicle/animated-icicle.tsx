@@ -30,7 +30,7 @@ const AnimatedIcicle: FC<AnimatedIcicleProps> = (props) => {
   const onIcicleRectDoubleClick: IcicleMouseActionHandler = useCallback(
     ({ dims, id }, event) => {
       addTracker({
-        title: ActionTitle.ICICLE_ZOOM,
+        title: ActionTitle.ICICLE_DOUBLE_CLICK,
         type: ActionType.TRACK_EVENT,
       });
 

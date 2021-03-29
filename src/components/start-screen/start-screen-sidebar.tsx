@@ -6,7 +6,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Tooltip from "@material-ui/core/Tooltip";
 import EllipsisText from "components/main-space/workspace/enrichment/tags/ellipsis-text";
-import { remote, shell } from "electron";
+import { remote } from "electron";
 import path from "path";
 import { getPreviousSessions } from "persistence/previous-sessions";
 import React, { FC, useCallback, useEffect, useState } from "react";
@@ -20,21 +20,23 @@ import {
   FaGrinStars,
   FaSyncAlt,
 } from "react-icons/fa";
+import {
+  CONTACT_LINK,
+  DOCUMENTATION_LINK,
+  FEEDBACK_LINK,
+} from "../../constants";
+import { openLink } from "util/electron/electron-util";
 
 const onFeedbackClick = () => {
-  shell.openExternal(
-    "https://archifiltre.fabrique.social.gouv.fr/questionnaire/"
-  );
+  openLink(FEEDBACK_LINK);
 };
 
 const onContactClick = () => {
-  shell.openExternal("mailto:archifiltre@sg.social.gouv.fr");
+  openLink(CONTACT_LINK);
 };
 
 const onDocumentationClick = () => {
-  shell.openExternal(
-    "https://github.com/SocialGouv/archifiltre/wiki/Wiki-Archifiltre"
-  );
+  openLink(DOCUMENTATION_LINK);
 };
 
 type StartScreenSidebarProps = {

@@ -1,19 +1,24 @@
 import { createStyles, Link } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import { shell } from "electron";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  FaBook,
   FaEnvelope,
   FaGlobeAmericas,
   FaGrinStars,
   FaInfo,
-  FaQuestionCircle,
 } from "react-icons/fa";
 import { versionName } from "version";
 import packageJson from "../../../../package.json";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
+import {
+  CONTACT_LINK,
+  DOCUMENTATION_LINK,
+  FEEDBACK_LINK,
+} from "../../../constants";
+import { openLink } from "util/electron/electron-util";
 
 const useLocalStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,17 +38,17 @@ const aboutItems = [
     label: "settingsModal.website",
   },
   {
-    link: "https://github.com/SocialGouv/archifiltre/wiki/Wiki-Archifiltre",
-    Icon: FaQuestionCircle,
+    link: DOCUMENTATION_LINK,
+    Icon: FaBook,
     label: "settingsModal.wiki",
   },
   {
-    link: "https://archifiltre.fabrique.social.gouv.fr/questionnaire/",
+    link: FEEDBACK_LINK,
     Icon: FaGrinStars,
     label: "folderDropzone.feedback",
   },
   {
-    link: "mailto:archifiltre@sg.social.gouv.fr",
+    link: CONTACT_LINK,
     Icon: FaEnvelope,
     label: "folderDropzone.contactUs",
   },
@@ -55,7 +60,7 @@ const About: FC = () => {
 
   const onClick = (event, link) => {
     event.preventDefault();
-    shell.openExternal(link);
+    openLink(link);
   };
 
   return (

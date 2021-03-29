@@ -8,6 +8,7 @@ import DuplicatesSearch from "components/main-space/duplicates-search/duplicates
 import TabsContent from "./tabs/tabs-content";
 
 import Header from "components/header/header-container";
+import HelpButton from "../help-button";
 
 const workspaceState = {
   isFileMoveActive: false,
@@ -54,6 +55,9 @@ const Workspace: FC = () => {
               </Box>
               <Box flexGrow={1} overflow="hidden">
                 <Icicle />
+              </Box>
+              <Box position="absolute" bottom={15} right={15}>
+                <HelpButton />
               </Box>
             </Box>
           ) : (

@@ -1,12 +1,13 @@
 import useTheme from "@material-ui/core/styles/useTheme";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { shell } from "electron";
 import styled from "styled-components";
 import { ThemedProps } from "../../theme/default-theme";
+import { CONTACT_LINK } from "../../constants";
+import { openLink } from "../../util/electron/electron-util";
 
 const sendMailToArchifiltre = () => {
-  shell.openExternal("mailto:archifiltre@sg.social.gouv.fr");
+  openLink(CONTACT_LINK);
 };
 
 const ContactLink = styled.a<ThemedProps>`

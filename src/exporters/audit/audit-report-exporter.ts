@@ -40,6 +40,13 @@ import {
 import { HashesMap } from "reducers/hashes/hashes-types";
 import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
 import fs from "fs";
+import {
+  NotificationDuration,
+  notifyInfo,
+  notifySuccess,
+} from "util/notification/notifications-util";
+import translations from "translations/translations";
+import { openExternalElement } from "util/file-system/file-system-util";
 
 const ROOT_ID = "";
 
@@ -48,87 +55,92 @@ export const computeAuditReportData = (
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap,
   filesAndFoldersHashes: HashesMap,
   elementsToDelete: string[]
-): AuditReportData => ({
-  totalFoldersCount: getFoldersCount(filesAndFolders),
-  totalFilesCount: getFileCount(filesAndFolders),
-  totalSize: octet2HumanReadableFormat(
-    filesAndFoldersMetadata[ROOT_ID].childrenTotalSize
-  ),
-  oldestDate: formatAuditReportDate(
-    filesAndFoldersMetadata[ROOT_ID].minLastModified
-  ),
-  newestDate: formatAuditReportDate(
-    filesAndFoldersMetadata[ROOT_ID].maxLastModified
-  ),
-  longestPathLength: getLongestPathFile(filesAndFolders)?.id?.length || 0,
-  longestPathFileName: getLongestPathFile(filesAndFolders)?.name || "",
-  longestPathPath:
-    formatPathForUserSystem(getLongestPathFile(filesAndFolders)?.id) || "",
-  depth: getMaxDepth(filesAndFolders),
-  publicationPercent: percentFileTypes(filesAndFolders)[FileType.PUBLICATION],
-  publicationCount: countFileTypes(filesAndFolders)[FileType.PUBLICATION],
-  publicationFileTypes: getExtensionsList()[FileType.PUBLICATION],
-  presentationPercent: percentFileTypes(filesAndFolders)[FileType.PRESENTATION],
-  presentationCount: countFileTypes(filesAndFolders)[FileType.PRESENTATION],
-  presentationFileTypes: getExtensionsList()[FileType.PRESENTATION],
-  spreadsheetPercent: percentFileTypes(filesAndFolders)[FileType.SPREADSHEET],
-  spreadsheetCount: countFileTypes(filesAndFolders)[FileType.SPREADSHEET],
-  spreadsheetFileTypes: getExtensionsList()[FileType.SPREADSHEET],
-  emailPercent: percentFileTypes(filesAndFolders)[FileType.EMAIL],
-  emailCount: countFileTypes(filesAndFolders)[FileType.EMAIL],
-  emailFileTypes: getExtensionsList()[FileType.EMAIL],
-  documentPercent: percentFileTypes(filesAndFolders)[FileType.DOCUMENT],
-  documentCount: countFileTypes(filesAndFolders)[FileType.DOCUMENT],
-  documentFileTypes: getExtensionsList()[FileType.DOCUMENT],
-  imagePercent: percentFileTypes(filesAndFolders)[FileType.IMAGE],
-  imageCount: countFileTypes(filesAndFolders)[FileType.IMAGE],
-  imageFileTypes: getExtensionsList()[FileType.IMAGE],
-  videoPercent: percentFileTypes(filesAndFolders)[FileType.VIDEO],
-  videoCount: countFileTypes(filesAndFolders)[FileType.VIDEO],
-  videoFileTypes: getExtensionsList()[FileType.VIDEO],
-  audioPercent: percentFileTypes(filesAndFolders)[FileType.AUDIO],
-  audioCount: countFileTypes(filesAndFolders)[FileType.AUDIO],
-  audioFileTypes: getExtensionsList()[FileType.AUDIO],
-  otherPercent: percentFileTypes(filesAndFolders)[FileType.OTHER],
-  otherCount: countFileTypes(filesAndFolders)[FileType.OTHER],
-  otherFileTypes: "les types restants",
-  oldestFiles: getOldestFiles(filesAndFolders),
-  biggestFiles: getBiggestFiles(filesAndFolders),
-  duplicateFolderCount: countDuplicateFolders(
-    filesAndFolders,
-    filesAndFoldersHashes
-  ),
-  duplicateFolderPercent: getDuplicateFoldersPercent(
-    filesAndFolders,
-    filesAndFoldersHashes
-  ),
-  duplicateFileCount: countDuplicateFiles(
-    filesAndFolders,
-    filesAndFoldersHashes
-  ),
-  duplicateFilePercent: getDuplicateFilesPercent(
-    filesAndFolders,
-    filesAndFoldersHashes
-  ),
-  duplicateTotalSize: getHumanReadableDuplicateTotalSize(
-    filesAndFolders,
-    filesAndFoldersHashes
-  ),
-  duplicates: getDuplicatesWithTheMostCopy(
-    filesAndFolders,
-    filesAndFoldersHashes
-  ),
-  biggestDuplicateFolders: getDuplicatesWithTheBiggestSize(
-    filesAndFolders,
-    filesAndFoldersMetadata,
-    filesAndFoldersHashes
-  ),
-  elementsToDelete: getElementsToDelete(
-    filesAndFolders,
-    filesAndFoldersMetadata,
-    elementsToDelete
-  ),
-});
+): AuditReportData => {
+  const longestPathFile = getLongestPathFile(filesAndFolders);
+  const fileTypesPercents = percentFileTypes(filesAndFolders);
+  const fileTypesCounts = countFileTypes(filesAndFolders);
+  const extensionsList = getExtensionsList();
+  return {
+    totalFoldersCount: getFoldersCount(filesAndFolders),
+    totalFilesCount: getFileCount(filesAndFolders),
+    totalSize: octet2HumanReadableFormat(
+      filesAndFoldersMetadata[ROOT_ID].childrenTotalSize
+    ),
+    oldestDate: formatAuditReportDate(
+      filesAndFoldersMetadata[ROOT_ID].minLastModified
+    ),
+    newestDate: formatAuditReportDate(
+      filesAndFoldersMetadata[ROOT_ID].maxLastModified
+    ),
+    longestPathLength: longestPathFile?.id?.length || 0,
+    longestPathFileName: longestPathFile?.name || "",
+    longestPathPath: formatPathForUserSystem(longestPathFile?.id) || "",
+    depth: getMaxDepth(filesAndFolders),
+    publicationPercent: fileTypesPercents[FileType.PUBLICATION],
+    publicationCount: fileTypesCounts[FileType.PUBLICATION],
+    publicationFileTypes: extensionsList[FileType.PUBLICATION],
+    presentationPercent: fileTypesPercents[FileType.PRESENTATION],
+    presentationCount: fileTypesCounts[FileType.PRESENTATION],
+    presentationFileTypes: extensionsList[FileType.PRESENTATION],
+    spreadsheetPercent: fileTypesPercents[FileType.SPREADSHEET],
+    spreadsheetCount: fileTypesCounts[FileType.SPREADSHEET],
+    spreadsheetFileTypes: extensionsList[FileType.SPREADSHEET],
+    emailPercent: fileTypesPercents[FileType.EMAIL],
+    emailCount: fileTypesCounts[FileType.EMAIL],
+    emailFileTypes: extensionsList[FileType.EMAIL],
+    documentPercent: fileTypesPercents[FileType.DOCUMENT],
+    documentCount: fileTypesCounts[FileType.DOCUMENT],
+    documentFileTypes: extensionsList[FileType.DOCUMENT],
+    imagePercent: fileTypesPercents[FileType.IMAGE],
+    imageCount: fileTypesCounts[FileType.IMAGE],
+    imageFileTypes: extensionsList[FileType.IMAGE],
+    videoPercent: fileTypesPercents[FileType.VIDEO],
+    videoCount: fileTypesCounts[FileType.VIDEO],
+    videoFileTypes: extensionsList[FileType.VIDEO],
+    audioPercent: fileTypesPercents[FileType.AUDIO],
+    audioCount: fileTypesCounts[FileType.AUDIO],
+    audioFileTypes: extensionsList[FileType.AUDIO],
+    otherPercent: fileTypesPercents[FileType.OTHER],
+    otherCount: fileTypesCounts[FileType.OTHER],
+    otherFileTypes: "les types restants",
+    oldestFiles: getOldestFiles(filesAndFolders),
+    biggestFiles: getBiggestFiles(filesAndFolders),
+    duplicateFolderCount: countDuplicateFolders(
+      filesAndFolders,
+      filesAndFoldersHashes
+    ),
+    duplicateFolderPercent: getDuplicateFoldersPercent(
+      filesAndFolders,
+      filesAndFoldersHashes
+    ),
+    duplicateFileCount: countDuplicateFiles(
+      filesAndFolders,
+      filesAndFoldersHashes
+    ),
+    duplicateFilePercent: getDuplicateFilesPercent(
+      filesAndFolders,
+      filesAndFoldersHashes
+    ),
+    duplicateTotalSize: getHumanReadableDuplicateTotalSize(
+      filesAndFolders,
+      filesAndFoldersHashes
+    ),
+    duplicates: getDuplicatesWithTheMostCopy(
+      filesAndFolders,
+      filesAndFoldersHashes
+    ),
+    biggestDuplicateFolders: getDuplicatesWithTheBiggestSize(
+      filesAndFolders,
+      filesAndFoldersMetadata,
+      filesAndFoldersHashes
+    ),
+    elementsToDelete: getElementsToDelete(
+      filesAndFolders,
+      filesAndFoldersMetadata,
+      elementsToDelete
+    ),
+  };
+};
 
 /**
  * Thunk to export an audit
@@ -136,14 +148,21 @@ export const computeAuditReportData = (
  */
 export const auditReportExporterThunk = (
   name: string
-): ArchifiltreThunkAction => (dispatch, getState): Promise<void> => {
+): ArchifiltreThunkAction => async (dispatch, getState): Promise<void> => {
+  notifyInfo(
+    translations.t("export.auditReportStarted"),
+    translations.t("export.auditReportTitle")
+  );
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
   const filesAndFolders = getFilesAndFoldersFromStore(getState());
   const filesAndFoldersMetadata = getFilesAndFoldersMetadataFromStore(
     getState()
   );
   const hashes = getHashesFromStore(getState());
   const elementsToDelete = getElementsToDeleteFromStore(getState());
-  return fs.promises.writeFile(
+
+  await fs.promises.writeFile(
     name,
     generateAuditReportDocx(
       computeAuditReportData(
@@ -153,5 +172,12 @@ export const auditReportExporterThunk = (
         elementsToDelete
       )
     )
+  );
+
+  notifySuccess(
+    translations.t("export.auditReportSuccess"),
+    translations.t("export.auditReportTitle"),
+    NotificationDuration.NORMAL,
+    () => openExternalElement(name)
   );
 };

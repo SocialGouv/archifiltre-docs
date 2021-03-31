@@ -102,7 +102,7 @@
     "csv-stringify": "^5.6.2",
     "deep-equal": "2.0.5",
     "electron": "11.3.0",
-    "electron-builder": "22.9.1",
+    "electron-builder": "22.10.5",
     "electron-notarize": "^1.0.0",
     "electron-react-devtools": "0.5.3",
     "eslint": "7.21.0",

@@ -162,3 +162,9 @@ const folderExists = async (path: string): Promise<boolean> => {
 };
 
 export const isValidFolderPath = (path: string): boolean => fs.existsSync(path);
+
+export const startPathFromOneLevelAbove = (elementPath: string) =>
+  (elementPath[0] === "/" ? elementPath.slice(1) : elementPath)
+    .split("/")
+    .slice(1)
+    .join("/");

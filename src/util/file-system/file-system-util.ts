@@ -32,3 +32,6 @@ export const openExternalElement = async (
     );
   }
 };
+
+export const showInFolder = async (elementPath: string) =>
+  shell.showItemInFolder(elementPath);

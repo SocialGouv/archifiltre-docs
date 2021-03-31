@@ -10,6 +10,8 @@ import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
 import { getNameWithExtension } from "util/file-system/file-sys-util";
 import { excelExporterThunk } from "exporters/excel/excel-exporter";
 import { ActionTitle } from "logging/tracker-types";
+import { isWindows } from "util/os/os-util";
+import { deletionScriptExporterThunk } from "exporters/deletion-script/deletion-script-exporter";
 
 export enum ExportType {
   EXCEL = "EXCEL",
@@ -19,12 +21,14 @@ export enum ExportType {
   AUDIT = "AUDIT",
   RESIP = "RESIP",
   METS = "METS",
+  DELETION_SCRIPT = "DELETION",
 }
 
 export enum ExportCategory {
   RECORDS_INVENTORY = "RECORDS_INVENTORY",
   AUDIT = "AUDIT",
   EXCHANGE_WITH_ERMS = "EXCHANGE_WITH_ERMS",
+  UTILITIES = "UTILITIES",
 }
 
 export type IsActiveOptions = {
@@ -67,6 +71,10 @@ const exportFilesConfigs = {
   [ExportType.RESIP]: { fileSuffix: "resip", extension: "csv" },
   [ExportType.METS]: { fileSuffix: "mets", extension: "zip" },
   [ExportType.EXCEL]: { fileSuffix: "excel", extension: "xlsx" },
+  [ExportType.DELETION_SCRIPT]: {
+    fileSuffix: "delete",
+    extension: isWindows() ? "ps1" : "sh",
+  },
 };
 
 const computeExportFilePath = (
@@ -159,5 +167,18 @@ export const exportConfig: ExportConfigMap = {
       computeExportFilePath(originalPath, sessionName, ExportType.METS),
     category: ExportCategory.EXCHANGE_WITH_ERMS,
     trackingTitle: ActionTitle.METS_EXPORT,
+  },
+  [ExportType.DELETION_SCRIPT]: {
+    isActive: true,
+    label: "export.deletionScript",
+    exportFunction: (exportPath) => deletionScriptExporterThunk(exportPath),
+    exportPath: (originalPath, sessionName) =>
+      computeExportFilePath(
+        originalPath,
+        sessionName,
+        ExportType.DELETION_SCRIPT
+      ),
+    category: ExportCategory.UTILITIES,
+    trackingTitle: ActionTitle.DELETION_SCRIPT,
   },
 };

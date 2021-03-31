@@ -23,6 +23,7 @@ export enum ActionTitle {
   TOGGLE_ICICLES_COLOR = "Toggle icicles color",
   TOGGLE_ICICLES_SORT = "Toggle icicles sort",
   ICICLE_DOUBLE_CLICK = "Double click on icicle",
+  DELETION_SCRIPT = "Deletion script",
   TAG_ADDED = "Tag added to file/folder",
   DESCRIPTION_ADDED = "Description added to file/folder",
   ALIAS_ADDED = "Alias added to file/folder",

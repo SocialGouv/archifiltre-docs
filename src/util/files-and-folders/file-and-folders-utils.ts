@@ -267,3 +267,24 @@ export const getAllChildren = (filesAndFoldersMap, filesAndFoldersId) => {
 export const getFirstLevelName = (
   filesAndFoldersMap: FilesAndFoldersMap
 ): string => filesAndFoldersMap[""].children[0].slice(1);
+
+/**
+ * Remove elements for which the parent is already in the array
+ * @param filesAndFolders
+ */
+export const removeChildrenPath = (filesAndFolders: string[]) =>
+  filesAndFolders.reduce<string[]>(
+    (acc, element) =>
+      acc
+        .filter(
+          (includedElement) => !isExactFileOrAncestor(includedElement, element)
+        )
+        .concat(
+          acc.some((includedElement) =>
+            isExactFileOrAncestor(element, includedElement)
+          )
+            ? []
+            : [element]
+        ),
+    []
+  );

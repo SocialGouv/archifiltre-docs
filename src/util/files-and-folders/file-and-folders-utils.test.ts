@@ -13,6 +13,7 @@ import {
   getFolders,
   getType,
   isExactFileOrAncestor,
+  removeChildrenPath,
   sortFoldersByChildrenCount,
   sortFoldersByDepth,
 } from "./file-and-folders-utils";
@@ -605,6 +606,21 @@ describe("file-and-folders-common", () => {
         "/file1": createFilesAndFolders({ id: "/file1", children: [] }),
       };
       expect(getFirstLevelName(filesAndFoldersMap)).toBe("file1");
+    });
+  });
+
+  describe("removeChildrenPath", () => {
+    it("should filter element which have their parent in the array", () => {
+      const elements = [
+        "/parent",
+        "/parent/child",
+        "/parent/child/child",
+        "/other/element",
+      ];
+
+      expect(removeChildrenPath(elements).sort()).toEqual(
+        ["/parent", "/other/element"].sort()
+      );
     });
   });
 });

@@ -197,7 +197,9 @@
       "excelExportTitle": "Excel export",
       "treeStats": "File tree statistics",
       "treeVisualizing": "File tree visualizing",
-      "creatingTreeCsvExport": "Creating tree csv export"
+      "creatingTreeCsvExport": "Creating tree csv export",
+      "deletionScript": "Deletion script",
+      "deletionScriptSuccessMessage": "Deletion script has been generated. Click here to access it."
     },
     "replay": {
       "title": "Restore previous session",
@@ -249,6 +251,7 @@
       "buttonTitle": "Export",
       "EXCHANGE_WITH_ERMS": "Exchange with an ERMS",
       "RECORDS_INVENTORY": "Records inventory",
+      "UTILITIES": "Utilities",
       "AUDIT": "Audit",
       "selectAll": "Select all",
       "unselectAll": "Unselect all",

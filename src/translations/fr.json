@@ -197,7 +197,9 @@
       "excelExportTitle": "Export Excel",
       "treeStats": "Statistiques de l'arborescence",
       "treeVisualizing": "Visualisation de l'arborescence",
-      "creatingTreeCsvExport": "Création de l'export csv hiérarchisé"
+      "creatingTreeCsvExport": "Création de l'export csv hiérarchisé",
+      "deletionScript": "Script de suppression",
+      "deletionScriptSuccessMessage": "Le script de suppression a été généré. Cliquez pour y accéder."
     },
     "replay": {
       "title": "Chargement de la session précédente",
@@ -250,6 +252,7 @@
       "EXCHANGE_WITH_ERMS": "Export pour transfert",
       "RECORDS_INVENTORY": "Récolement",
       "AUDIT": "Audit",
+      "UTILITIES": "Utilitaires",
       "selectAll": "Tout sélectionner",
       "unselectAll": "Tout désélectionner",
       "browseAll": "Parcourir pour tous"

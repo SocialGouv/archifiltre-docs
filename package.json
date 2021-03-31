@@ -36,7 +36,7 @@
   "build": {
     "appId": "io.github.archifiltre",
     "artifactName": "archifiltre-${version}.${ext}",
-    "afterSign": "scripts/mac/notarize.js",
+    "afterSign": "./scripts/afterSign",
     "files": [
       "electron/dist",
       "electron/build/icon.*",

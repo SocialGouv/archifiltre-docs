@@ -159,10 +159,10 @@ module.exports = (env, argv = {}) => ({
       ? []
       : [new CopyWebpackPlugin({ patterns: ["static"] })]),
     new HtmlWebpackPlugin({
-      excludeChunks: Object.keys(workers),
+      chunks: ["app"],
       filename: "index.html",
       inject: "head",
-      template: "static/index.html",
+      template: "src/index.html",
     }),
     new webpack.DefinePlugin({
       ARCHIFILTRE_SITE_URL: JSON.stringify(process.env.ARCHIFILTRE_SITE_URL),

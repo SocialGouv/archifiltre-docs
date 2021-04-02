@@ -1,48 +1,36 @@
 import React, { FC } from "react";
 
 type MinimapBracketProps = {
-  x: number;
-  y: number;
+  zoomOffset: number;
+  zoomRatio: number;
   viewportWidth: number;
   viewportHeight: number;
-  displayRoot: string[];
-  computeWidthRec: (displayRoot: string[], x: number, dx: number) => any;
 };
 
 const MinimapBracket: FC<MinimapBracketProps> = ({
-  x,
-  y,
+  zoomOffset,
+  zoomRatio,
   viewportWidth,
   viewportHeight,
-  displayRoot,
-  computeWidthRec,
 }) => {
-  if (displayRoot.length === 0) {
-    return <g />;
-  }
-  const [minimapX, minimapUnboundWidth] = computeWidthRec(
-    displayRoot,
-    x,
-    viewportWidth
-  ).slice(-1)[0];
-
-  const minimapWidth = Math.max(minimapUnboundWidth, 1);
+  const rightRectangleStart = (zoomOffset + 1 / zoomRatio) * viewportWidth;
+  const rectangleStyle = { fill: "black", opacity: "0.4" };
 
   return (
     <g>
       <rect
         x={0}
         y={0}
-        width={minimapX}
+        width={viewportWidth * zoomOffset}
         height={viewportHeight}
-        style={{ fill: "black", opacity: "0.4" }}
+        style={rectangleStyle}
       />
       <rect
-        x={minimapX + minimapWidth}
-        y={y}
-        width={viewportWidth - (minimapX + minimapWidth)}
+        x={rightRectangleStart}
+        y={0}
+        width={viewportWidth - rightRectangleStart}
         height={viewportHeight}
-        style={{ fill: "black", opacity: "0.4" }}
+        style={rectangleStyle}
       />
     </g>
   );

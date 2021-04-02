@@ -14,9 +14,10 @@ import IciclesOverlay from "./icicles-overlay";
 import {
   AliasMap,
   CommentsMap,
-} from "../../../reducers/files-and-folders/files-and-folders-types";
-import { TagMap } from "../../../reducers/tags/tags-types";
+} from "reducers/files-and-folders/files-and-folders-types";
+import { TagMap } from "reducers/tags/tags-types";
 import IcicleHightlightElement from "./icicle-highlight-element";
+import { empty } from "util/function/function-util";
 
 export type DimsMap = {
   [id: string]: Dims;
@@ -24,8 +25,6 @@ export type DimsMap = {
 
 export type IcicleProps = {
   trueFHeight: () => number;
-  computeWidthRec: (ids: string[], x: number, dx: number) => [number, number][];
-  displayRoot: string[];
   x: number;
   y: number;
   dx: number;
@@ -47,11 +46,12 @@ export type IcicleProps = {
   elementsToDelete: string[];
   movedElementId?: string;
   movedElementTime?: number;
+  zoomOffset: number;
+  zoomRatio: number;
+  onIcicleMouseWheel?: (event: any) => void;
 };
 
 const Icicle: FC<IcicleProps> = ({
-  computeWidthRec,
-  displayRoot,
   getWidthFromId,
   x,
   y,
@@ -74,10 +74,14 @@ const Icicle: FC<IcicleProps> = ({
   elementsToDelete,
   movedElementId = "",
   movedElementTime = 0,
+  zoomOffset,
+  zoomRatio,
+  onIcicleMouseWheel = empty,
 }) => {
   const [dims, setDims] = useState<DimsMap>({});
   const dimsRef = useRef<DimsMap>({});
   const dimsUpdated = useRef<boolean>(false);
+  const icicleRef = useRef<SVGGElement>(null);
 
   dimsUpdated.current = false;
 
@@ -110,7 +114,15 @@ const Icicle: FC<IcicleProps> = ({
     }
   });
 
-  const [xc, dxc] = computeWidthRec(displayRoot, x, dx).slice(-1)[0];
+  const onMouseWheel = ({ clientX, deltaY }: any) => {
+    const { x, width } = icicleRef?.current?.getBoundingClientRect() || clientX;
+    const mousePosition = (clientX - x) / width;
+    const wheelDirection = deltaY > 1 ? 1 : -1;
+    onIcicleMouseWheel({ mousePosition, wheelDirection });
+  };
+
+  const xc = zoomOffset;
+  const dxc = dx / zoomRatio;
 
   const xPrime = (x + (x - xc)) * (dx / dxc);
   const dxPrime = dx * (dx / dxc);
@@ -140,7 +152,7 @@ const Icicle: FC<IcicleProps> = ({
   const tagIdToHighlight = "";
 
   return (
-    <g>
+    <g onWheel={onMouseWheel} ref={icicleRef}>
       <g style={style}>
         <IcicleRecursive
           x={sanitizedXPrime}
@@ -164,8 +176,6 @@ const Icicle: FC<IcicleProps> = ({
         dimsMap={dims}
         opacity={1}
         ids={lockedHovered}
-        viewportStartIndex={x}
-        viewportWidth={dx}
         fillColor={fillColor}
         onIcicleRectClickHandler={onIcicleRectClickHandler}
         onIcicleRectDoubleClickHandler={onIcicleRectDoubleClickHandler}
@@ -175,8 +185,6 @@ const Icicle: FC<IcicleProps> = ({
         dimsMap={dims}
         opacity={0.6}
         ids={lockedNotHovered}
-        viewportStartIndex={x}
-        viewportWidth={dx}
         fillColor={fillColor}
         onIcicleRectClickHandler={onIcicleRectClickHandler}
         onIcicleRectDoubleClickHandler={onIcicleRectDoubleClickHandler}
@@ -186,8 +194,6 @@ const Icicle: FC<IcicleProps> = ({
         dimsMap={dims}
         opacity={0.3}
         ids={unlockedHovered}
-        viewportStartIndex={x}
-        viewportWidth={dx}
         fillColor={fillColor}
         onIcicleRectClickHandler={onIcicleRectClickHandler}
         onIcicleRectDoubleClickHandler={onIcicleRectDoubleClickHandler}
@@ -216,4 +222,6 @@ const Icicle: FC<IcicleProps> = ({
   );
 };
 
-export default memo(Icicle);
+const MemoIcicle = memo(Icicle);
+
+export default MemoIcicle;

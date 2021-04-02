@@ -74,7 +74,6 @@
       "type": "By type",
       "dates": "By date",
       "alphanumeric": "Alphanumeric",
-      "backToRoot": "Back to root",
       "bySize": "By size",
       "byNumber": "By count",
       "allTags": "All tags",
@@ -98,7 +97,11 @@
       "show": "Show",
       "noOptions": "No results - Press enter to add a new tag",
       "tagItemTooltip": "Tag number (volume percentage)",
-      "metadata": "Metadata"
+      "metadata": "Metadata",
+      "currentZoom": "Current zoom",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "resetZoom": "Reset zoom"
     },
     "header": {
       "export": "Export",

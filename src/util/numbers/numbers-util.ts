@@ -40,3 +40,6 @@ interface RatioOptions {
 
 export const ratio = (value: number, { min = 0, max }: RatioOptions) =>
   (value - min) / (max - min);
+
+export const boundNumber = (low: number, high: number, value: number) =>
+  Math.max(Math.min(value, high), low);

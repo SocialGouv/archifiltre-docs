@@ -25,10 +25,11 @@ import AnimatedIcicle from "./animated-icicle";
 import Icicle from "./icicle";
 import { Dims, DimsAndId } from "./icicle-rect";
 import { FillColor } from "./icicle-types";
-import { useFileMoveActiveState } from "hooks/use-file-move-active-state";
 import { MoveElement, useMovableElements } from "hooks/use-movable-elements";
 import BreadcrumbsNew from "../breadcrumb/breadcrumbs";
 import { ElementWeightMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
+import { useFileMoveActiveState } from "../workspace/file-move-provider";
+import { useZoomContext } from "../workspace/zoom-provider";
 
 export type IcicleMouseHandler = (
   dimsAndId: DimsAndId,
@@ -96,13 +97,16 @@ const shouldRenderChildMinimap = (x: number, elementWidth: number): boolean => {
   return elementWidth > minimumMinimapElementWidth;
 };
 
+export const ZOOM_SPEED = 1.1;
+const viewBoxWidth = 1000;
+const viewBoxHeight = 300;
+
 type IcicleMainProps = {
   aliases: AliasMap;
   comments: CommentsMap;
   tags: TagMap;
   originalPath: string;
   rootId: string;
-  displayRoot: string[];
   fillColor: FillColor;
   hoveredElementId: string;
   lockedElementId: string;
@@ -113,7 +117,6 @@ type IcicleMainProps = {
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
   elementWeightMethod: ElementWeightMethod;
   maxDepth: number;
-  zoomElement: (elementId) => void;
   lock: (id: string) => void;
   unlock: () => void;
   moveElement: (movedElementId: string, targetFolderId: string) => void;
@@ -128,7 +131,6 @@ const IcicleMain: FC<IcicleMainProps> = ({
   tags,
   originalPath,
   rootId,
-  displayRoot,
   fillColor,
   hoveredElementId,
   lockedElementId,
@@ -139,7 +141,6 @@ const IcicleMain: FC<IcicleMainProps> = ({
   getFfByFfId,
   elementWeightMethod,
   maxDepth,
-  zoomElement,
   lock,
   unlock,
   moveElement,
@@ -147,13 +148,18 @@ const IcicleMain: FC<IcicleMainProps> = ({
   setNoFocus,
   setNoHover,
 }) => {
-  const viewBoxWidth = 1000;
-  const viewBoxHeight = 300;
-
   const [hoveredDims, setHoveredDims] = useState<Dims | null>(null);
   const [lockedDims, setLockedDims] = useState<Dims | null>(null);
   const [movedElementId, setMovedElementId] = useState("");
   const [movedElementTime, setMovedElementTime] = useState(0);
+  const {
+    zoomIn,
+    zoomOut,
+    setZoom,
+    setDefaultMousePosition,
+    offset: zoomOffset,
+    ratio: zoomRatio,
+  } = useZoomContext();
 
   const icicleHeight = viewBoxHeight;
   const icicleWidth = viewBoxWidth;
@@ -228,10 +234,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
   const isIcicleInViewport = useCallback(
     (x, elementWidth) => {
       const minimumDisplayedWidth = 1;
-      const xWindow = 0;
-      const dxWindow = icicleWidth - 1;
-      const elementIsTooFarRight = x + elementWidth < xWindow;
-      const elementIsTooFarLeft = xWindow + dxWindow < x;
+      const elementIsTooFarLeft = x + elementWidth < 0;
+      const elementIsTooFarRight = x > viewBoxWidth;
       if (elementIsTooFarRight || elementIsTooFarLeft) {
         return false;
       }
@@ -245,7 +249,8 @@ const IcicleMain: FC<IcicleMainProps> = ({
    */
   const onClickHandler = useCallback(() => {
     unlock();
-  }, [unlock, setNoFocus]);
+    setDefaultMousePosition(null);
+  }, [unlock, setNoFocus, setDefaultMousePosition]);
 
   /**
    * Handle viewport mouse leave.
@@ -261,19 +266,24 @@ const IcicleMain: FC<IcicleMainProps> = ({
     ({ id, dims }, event) => {
       event.stopPropagation();
       lock(id);
-      setLockedDims(dims());
+      const newDims = dims();
+      setLockedDims(newDims);
+      setDefaultMousePosition((newDims.x + newDims.dx / 2) / viewBoxWidth);
     },
-    [lock, setLockedDims]
+    [lock, setLockedDims, setDefaultMousePosition]
   );
 
   /**
    * Handles double click on icicle rectangle
    */
   const onIcicleRectDoubleClickHandler = useCallback(
-    ({ id }) => {
-      zoomElement(id);
+    ({ dims }) => {
+      const { x, dx } = dims();
+      const newZoomOffset = zoomOffset + x / (viewBoxWidth * zoomRatio);
+      const newZoomRatio = (zoomRatio * viewBoxWidth) / dx;
+      setZoom(newZoomOffset, newZoomRatio);
     },
-    [zoomElement]
+    [setZoom, zoomRatio, zoomOffset]
   );
 
   /**
@@ -309,6 +319,14 @@ const IcicleMain: FC<IcicleMainProps> = ({
     moveElementHandler
   );
 
+  const onIcicleMouseWheel = useCallback(
+    ({ wheelDirection, mousePosition }) => {
+      const zoomMethod = wheelDirection > 0 ? zoomIn : zoomOut;
+      zoomMethod(mousePosition, ZOOM_SPEED);
+    },
+    [zoomIn, zoomOut]
+  );
+
   return (
     <Viewport>
       <IcicleViewport>
@@ -335,7 +353,6 @@ const IcicleMain: FC<IcicleMainProps> = ({
               tags={tags}
               elementsToDelete={elementsToDelete}
               rootId={rootId}
-              displayRoot={displayRoot}
               getWidthFromId={computeWidth}
               normalizeWidth={normalizeWidth}
               trueFHeight={normalizeHeight}
@@ -348,9 +365,11 @@ const IcicleMain: FC<IcicleMainProps> = ({
               onIcicleRectDoubleClickHandler={onIcicleRectDoubleClickHandler}
               onIcicleRectMouseOverHandler={onIcicleRectMouseOverHandler}
               onIcicleMouseLeave={onIcicleMouseLeave}
-              computeWidthRec={computeWidthRec}
               movedElementId={movedElementId}
               movedElementTime={movedElementTime}
+              zoomOffset={zoomOffset * viewBoxWidth}
+              zoomRatio={zoomRatio}
+              onIcicleMouseWheel={onIcicleMouseWheel}
             />
           </svg>
         </IcicleWrapper>
@@ -396,7 +415,6 @@ const IcicleMain: FC<IcicleMainProps> = ({
               dx={icicleWidth}
               dy={icicleHeight}
               rootId={rootId}
-              displayRoot={ArrayUtil.empty}
               getWidthFromId={computeWidth}
               elementsToDelete={elementsToDelete}
               normalizeWidth={normalizeWidth}
@@ -409,16 +427,15 @@ const IcicleMain: FC<IcicleMainProps> = ({
               onIcicleRectClickHandler={empty}
               onIcicleRectDoubleClickHandler={empty}
               onIcicleRectMouseOverHandler={empty}
-              computeWidthRec={computeWidthRec}
               tags={tags}
+              zoomOffset={0}
+              zoomRatio={1}
             />
             <MinimapBracket
-              x={0}
-              y={0}
+              zoomOffset={zoomOffset}
+              zoomRatio={zoomRatio}
               viewportWidth={viewBoxWidth}
               viewportHeight={viewBoxHeight}
-              displayRoot={displayRoot}
-              computeWidthRec={computeWidthRec}
             />
           </svg>
         </MinimapWrapper>

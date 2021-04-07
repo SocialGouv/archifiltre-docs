@@ -1,14 +1,15 @@
 const Raven = require("raven");
 
+require("@electron/remote/main").initialize();
+
 const {
-  app,
   BrowserWindow,
+  app,
   crashReporter,
   Menu,
   session,
+  dialog,
 } = require("electron");
-
-const { dialog } = require("electron");
 
 const path = require("path");
 

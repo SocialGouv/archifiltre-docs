@@ -1,6 +1,6 @@
 import * as Sentry from "@sentry/browser";
 import dateFormat from "dateformat";
-import electron from "electron";
+import { app } from "@electron/remote";
 import path from "path";
 import { createLogger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
@@ -52,7 +52,7 @@ export const initReporter = (isActive: boolean): void => {
     })
   );
 
-  const logsDirectory = path.join(electron.remote.app.getPath("userData"));
+  const logsDirectory = path.join(app.getPath("userData"));
 
   logger.add(
     new DailyRotateFile({

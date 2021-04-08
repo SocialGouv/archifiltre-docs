@@ -77,8 +77,8 @@ const getTableRow = <
   data: T,
   columns: Column<T>[]
 ): string[] =>
-  columns.map(({ accessor }) =>
-    applyAccessorToTableValue(data, accessor).toString()
+  columns.map(({ accessor, textValueAccessor }) =>
+    applyAccessorToTableValue(data, textValueAccessor || accessor).toString()
   );
 
 const getTableContent = <

@@ -24,6 +24,7 @@ export type Column<T> = {
   accessor: TableAccessor<T>;
   cellStyle?: CellStyle;
   sortAccessor?: TableAccessor<T>;
+  textValueAccessor?: any;
 };
 
 export type HeaderColumn<T> =

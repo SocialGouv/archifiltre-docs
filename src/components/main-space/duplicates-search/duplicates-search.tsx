@@ -45,6 +45,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
   const { t } = useTranslation();
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(0);
   const debouncedSearchTerm = useDebouncedValue(
     searchTerm,
     SEARCH_INPUT_DEBOUNCE
@@ -61,6 +62,14 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
   const filteredFilesAndFolders = useSearchAndFilters(duplicatesList, [
     filterName,
   ]);
+
+  const performSearch = useCallback(
+    (searchValue) => {
+      setSearchTerm(searchValue);
+      setPage(0);
+    },
+    [setSearchTerm, setPage]
+  );
 
   const data = useMemo(
     () =>
@@ -221,7 +230,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
           </CategoryTitle>
         </Box>
         <Box flex={1} paddingLeft={1}>
-          <SearchBar value={searchTerm} setSearchTerm={setSearchTerm} />
+          <SearchBar value={searchTerm} setSearchTerm={performSearch} />
         </Box>
       </Box>
       <Box flexGrow={1} minHeight={0}>
@@ -233,6 +242,8 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
             columns={columns}
             data={data}
             RowRendererComp={TableExpandableRow}
+            page={page}
+            onPageChange={setPage}
           />
         )}
       </Box>

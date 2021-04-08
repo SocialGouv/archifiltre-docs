@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import Paper from "@material-ui/core/Paper";
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ElementWithToDelete,
@@ -54,6 +54,7 @@ export const SearchModal: FC<SearchModalProps> = ({
   const [filters, setFilters] = useState<FilterMethod<ElementWithToDelete>[]>(
     []
   );
+  const [page, setPage] = useState(0);
 
   const nameFilter = useDebouncedSearchFilter<ElementWithToDelete>(
     "name",
@@ -80,6 +81,14 @@ export const SearchModal: FC<SearchModalProps> = ({
     searchFilters
   );
 
+  const performSearch = useCallback(
+    (searchValue) => {
+      setSearchTerm(searchValue);
+      setPage(0);
+    },
+    [setSearchTerm, setPage]
+  );
+
   return (
     <Dialog
       open={isModalOpen}
@@ -100,7 +109,7 @@ export const SearchModal: FC<SearchModalProps> = ({
                 alignItems="flex-end"
                 paddingBottom={1}
               >
-                <SearchBar value={searchTerm} setSearchTerm={setSearchTerm} />
+                <SearchBar value={searchTerm} setSearchTerm={performSearch} />
               </Box>
               <Box flex={1}>
                 <Filters
@@ -116,6 +125,8 @@ export const SearchModal: FC<SearchModalProps> = ({
               filesAndFolders={filteredFilesAndFolders}
               columns={columns}
               closeModal={closeModal}
+              page={page}
+              onPageChange={setPage}
             />
           </Box>
         </Box>

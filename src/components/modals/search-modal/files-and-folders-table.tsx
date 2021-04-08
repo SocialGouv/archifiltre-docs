@@ -10,12 +10,16 @@ type FilesAndFoldersTableProps = {
   columns: Column<ElementWithToDelete>[];
   filesAndFolders: ElementWithToDelete[];
   closeModal: () => void;
+  page?: number;
+  onPageChange?: (page: number) => void;
 };
 
 export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
   columns,
   filesAndFolders,
   closeModal,
+  page,
+  onPageChange,
 }) => {
   const { t } = useTranslation();
 
@@ -32,6 +36,8 @@ export const FilesAndFoldersTable: FC<FilesAndFoldersTableProps> = ({
       columns={columns}
       data={filesAndFolders}
       RowRendererComp={TableActionRow}
+      page={page}
+      onPageChange={onPageChange}
     />
   );
 };

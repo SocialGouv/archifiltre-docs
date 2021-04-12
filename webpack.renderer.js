@@ -19,7 +19,7 @@ const isDev = (mode) => mode === "development";
 const workerRootFolder = (mode) =>
   isDev(mode)
     ? JSON.stringify(path.join(__dirname, "electron/dist/"))
-    : "require('path').join(require('electron').remote.app.getAppPath(),'/electron/dist/')";
+    : "require('path').join(require('@electron/remote').app.getAppPath(),'/electron/dist/')";
 
 const workers = glob
   .sync("./**/*.fork.ts")

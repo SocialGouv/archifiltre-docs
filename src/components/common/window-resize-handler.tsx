@@ -1,4 +1,4 @@
-import { remote } from "electron";
+import { getCurrentWindow } from "@electron/remote";
 import React from "react";
 import WindowResize from "./window-resize";
 
@@ -27,7 +27,7 @@ export default class WindowResizeErrorHandler extends React.Component<
     const { hasError } = this.state;
 
     if (hasError) {
-      remote.getCurrentWindow().show();
+      getCurrentWindow().show();
       return null;
     } else {
       return <WindowResize />;

@@ -1,4 +1,4 @@
-import { remote } from "electron";
+import { app } from "@electron/remote";
 import path from "path";
 import { compose } from "redux";
 import { bufferTime, filter, map, tap } from "rxjs/operators";
@@ -52,7 +52,7 @@ export const computeHashes$ = (
     initialValues: { basePath },
   });
 
-  const userDataPath = remote.app.getPath("userData");
+  const userDataPath = app.getPath("userData");
   const resultFileWriter = createBufferedFileWriter(
     path.join(userDataPath, "hash-result-debug")
   );

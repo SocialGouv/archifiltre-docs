@@ -202,7 +202,10 @@
       "treeVisualizing": "Visualisation de l'arborescence",
       "creatingTreeCsvExport": "Création de l'export csv hiérarchisé",
       "deletionScript": "Script de suppression",
-      "deletionScriptSuccessMessage": "Le script de suppression a été généré. Cliquez pour y accéder."
+      "deletionScriptSuccessMessage": "Le script de suppression a été généré. Cliquez pour y accéder.",
+      "auditReportTitle": "Rapport d'audit",
+      "auditReportStarted": "L'export du rapport d'audit a commencé",
+      "auditReportSuccess": "L'export du rapport d'audit est terminé"
     },
     "replay": {
       "title": "Chargement de la session précédente",

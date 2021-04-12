@@ -250,7 +250,8 @@
       "reloadExplanation": "You need to reload the app to apply new settings",
       "about": "About",
       "website": "Website",
-      "wiki": "Wiki"
+      "wiki": "Wiki",
+      "contactUs": "Contact us : {{email}}"
     },
     "exportModal": {
       "title": "Export",

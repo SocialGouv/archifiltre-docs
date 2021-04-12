@@ -250,7 +250,8 @@
       "reloadExplanation": "Vous devez redémarrer l'application pour appliquer les nouveaux paramètres",
       "about": "À propos",
       "website": "Site web",
-      "wiki": "Wiki"
+      "wiki": "Wiki",
+      "contactUs": "Contactez-nous : {{email}}"
     },
     "exportModal": {
       "title": "Export",

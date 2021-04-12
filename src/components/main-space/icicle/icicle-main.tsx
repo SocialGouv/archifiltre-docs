@@ -321,7 +321,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
 
   const onIcicleMouseWheel = useCallback(
     ({ wheelDirection, mousePosition }) => {
-      const zoomMethod = wheelDirection > 0 ? zoomIn : zoomOut;
+      const zoomMethod = wheelDirection < 0 ? zoomIn : zoomOut;
       zoomMethod(mousePosition, ZOOM_SPEED);
     },
     [zoomIn, zoomOut]

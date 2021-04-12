@@ -53,6 +53,7 @@ const Filter: FC<FilterProps> = ({
             horizontal: "center",
           },
           getContentAnchorEl: null,
+          style: { maxHeight: "80vh" },
         }}
       >
         {availableOptions.length === 0 ? (

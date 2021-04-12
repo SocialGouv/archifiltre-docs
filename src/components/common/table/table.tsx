@@ -27,6 +27,7 @@ import {
   stableSort,
 } from "util/table/table-util";
 import { useElementHeight } from "hooks/use-element-height";
+import { useControllableValue } from "../../../hooks/use-controllable-value";
 
 type TableProps<T> = {
   data: T[];
@@ -36,6 +37,8 @@ type TableProps<T> = {
   isDense?: boolean;
   RowRendererComp?: RowRenderer<T>;
   stickyHeader?: boolean;
+  page?: number;
+  onPageChange?: (page: number) => void;
 };
 
 function Table<T>({
@@ -46,21 +49,23 @@ function Table<T>({
   isDense = false,
   RowRendererComp = TableDefaultRow,
   stickyHeader = false,
+  page,
+  onPageChange,
 }: TableProps<T>): ReactElement<any, any> | null {
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [page, setPage] = useState(0);
+  const [innerPage, setInnerPage] = useControllableValue(0, page, onPageChange);
   const handleChangePage = useCallback(
     (event: any, newPage: number) => {
-      setPage(newPage);
+      setInnerPage(newPage);
     },
-    [setPage]
+    [setInnerPage]
   );
   const handleChangeRowsPerPage = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setRowsPerPage(parseInt(event.target.value, 10));
-      setPage(0);
+      setInnerPage(0);
     },
-    [setRowsPerPage, setPage]
+    [setRowsPerPage, setInnerPage]
   );
   const rowIdAccessor = useMemo(
     () =>
@@ -105,8 +110,8 @@ function Table<T>({
     : {};
 
   useEffect(() => {
-    setPage(limitPageIndex(rowsPerPage, data.length, page));
-  }, [data.length, setPage, page, rowsPerPage]);
+    setInnerPage(limitPageIndex(rowsPerPage, data.length, innerPage));
+  }, [data.length, setInnerPage, innerPage, rowsPerPage]);
 
   return (
     <div ref={tableRef} style={containerStyle}>
@@ -123,7 +128,10 @@ function Table<T>({
           />
           <TableBody>
             {sortedData
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .slice(
+                innerPage * rowsPerPage,
+                innerPage * rowsPerPage + rowsPerPage
+              )
               .map((row, rowIndex) => (
                 <RowRendererComp
                   key={`${rowIdAccessor(row) || rowIndex}`}
@@ -139,7 +147,7 @@ function Table<T>({
           ref={paginationRef}
           pageCount={data.length}
           rowsPerPage={rowsPerPage}
-          page={page}
+          page={innerPage}
           handleChangePage={handleChangePage}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
         />

@@ -202,7 +202,10 @@
       "treeVisualizing": "File tree visualizing",
       "creatingTreeCsvExport": "Creating tree csv export",
       "deletionScript": "Deletion script",
-      "deletionScriptSuccessMessage": "Deletion script has been generated. Click here to access it."
+      "deletionScriptSuccessMessage": "Deletion script has been generated. Click here to access it.",
+      "auditReportTitle": "Audit report",
+      "auditReportStarted": "The audit report export has started",
+      "auditReportSuccess": "The audit report export has succeeded"
     },
     "replay": {
       "title": "Restore previous session",

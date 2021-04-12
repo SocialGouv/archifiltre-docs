@@ -79,6 +79,8 @@ export const useSearchModalTableColumns = (
             }}
           />
         ),
+        textValueAccessor: ({ toDelete }: ElementWithToDelete) =>
+          toDelete ? t("common.yes") : t("common.no"),
       },
       {
         id: "emptyColumn",

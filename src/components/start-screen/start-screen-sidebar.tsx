@@ -6,7 +6,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Tooltip from "@material-ui/core/Tooltip";
 import EllipsisText from "components/main-space/workspace/enrichment/tags/ellipsis-text";
-import { remote } from "electron";
+import { dialog } from "@electron/remote";
 import path from "path";
 import { getPreviousSessions } from "persistence/previous-sessions";
 import React, { FC, useCallback, useEffect, useState } from "react";
@@ -58,7 +58,7 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
   const [previousSessions, setPreviousSessions] = useState<string[]>([]);
 
   const onNewDirectoryClick = useCallback(async () => {
-    const path = await remote.dialog.showOpenDialog({
+    const path = await dialog.showOpenDialog({
       properties: ["openDirectory"],
     });
     if (path.filePaths.length > 0) {

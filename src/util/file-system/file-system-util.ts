@@ -1,4 +1,5 @@
-import { remote, shell } from "electron";
+import { shell } from "electron";
+import { dialog } from "@electron/remote";
 import translations from "translations/translations";
 import { notifyError } from "util/notification/notifications-util";
 
@@ -10,7 +11,7 @@ import { notifyError } from "util/notification/notifications-util";
 export const promptUserForSave = async (
   filename: string
 ): Promise<string | undefined> => {
-  const { filePath } = await remote.dialog.showSaveDialog({
+  const { filePath } = await dialog.showSaveDialog({
     defaultPath: filename,
   });
   return filePath;

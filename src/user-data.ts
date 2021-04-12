@@ -5,12 +5,10 @@ import Fs from "fs";
 import Path from "path";
 import Crypto from "crypto";
 
-import { remote } from "electron";
-
-const App = remote.app;
+import { app } from "@electron/remote";
 
 const randomString = "WbXDHMMHojJEQHzY6TLFBq2LSOQjVktGRSp9HT07";
-const basePath = Path.join(App.getPath("userData"), randomString);
+const basePath = Path.join(app.getPath("userData"), randomString);
 
 interface InitialData {
   width: number;

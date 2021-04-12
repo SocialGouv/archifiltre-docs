@@ -1,4 +1,4 @@
-import { remote } from "electron";
+import { app } from "@electron/remote";
 import fs from "fs";
 import { reportError } from "logging/reporter";
 import path from "path";
@@ -36,7 +36,7 @@ export const getInitialUserSettings = () =>
   initialUserSettings || defaultUserSettings;
 
 const getUserSettingsFilePath = () => {
-  const userFolderPath = remote.app.getPath("userData");
+  const userFolderPath = app.getPath("userData");
   return path.join(userFolderPath, "user-settings.json");
 };
 

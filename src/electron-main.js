@@ -108,6 +108,7 @@ function createWindow() {
     height: 800,
     show: !app.isPackaged,
     webPreferences: {
+      contextIsolation: false,
       enableRemoteModule: true,
       nodeIntegration: true,
       nodeIntegrationInWorker: true,

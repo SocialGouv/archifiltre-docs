@@ -1,7 +1,7 @@
 import React from "react";
 
 import * as UserData from "user-data";
-import { remote } from "electron";
+import { getCurrentWindow } from "@electron/remote";
 
 type WindowResizeState = {
   win;
@@ -22,7 +22,7 @@ export default class WindowResize extends React.PureComponent<
     });
 
     this.state = {
-      win: remote.getCurrentWindow(),
+      win: getCurrentWindow(),
       reader,
       writer,
     };

@@ -1,10 +1,10 @@
-import { remote } from "electron";
+import { app } from "@electron/remote";
 import fs from "fs";
 import { reportError } from "logging/reporter";
 import path from "path";
 
 const getPreviousSessionsPath = (): string => {
-  const userFolderPath = remote.app.getPath("userData");
+  const userFolderPath = app.getPath("userData");
   return path.join(userFolderPath, "previous-sessions");
 };
 

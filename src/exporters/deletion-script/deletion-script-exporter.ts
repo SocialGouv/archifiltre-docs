@@ -15,6 +15,8 @@ import {
 import { TFunction } from "react-i18next";
 import translations from "translations/translations";
 import { showInFolder } from "util/file-system/file-system-util";
+import { isWindows } from "../../util/os/os-util";
+import { encode } from "windows-1252";
 
 const prepareElementsToDelete = compose(
   map(startPathFromOneLevelAbove),
@@ -22,8 +24,19 @@ const prepareElementsToDelete = compose(
   getElementsToDeleteFromStore
 );
 
-const curriedWriteFile = (filePath: string) => (data: string) =>
-  fs.promises.writeFile(filePath, data);
+const windowsFileWriter = (path: string) =>
+  compose(
+    (binaryString: string) =>
+      fs.promises.writeFile(path, binaryString, "binary"),
+    encode
+  );
+
+const unixFileWriter = (path: string) => (data: string) =>
+  fs.promises.writeFile(path, data);
+
+const getFileWriter = () => (isWindows() ? windowsFileWriter : unixFileWriter);
+
+const curriedWriteFile = getFileWriter();
 
 const extractParamsFromState = (state: StoreState) => ({
   originalPath: getWorkspaceMetadataFromStore(state).originalPath,

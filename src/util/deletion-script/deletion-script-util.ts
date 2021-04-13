@@ -28,7 +28,7 @@ const formatWindowsPaths = compose(
 export const generateWindowDeletionScript = (
   rootPath: string,
   pathsToDelete: string[]
-) => `cd ${rootPath}
+) => `cd "${rootPath}"
 $folders = @(${formatWindowsPaths(pathsToDelete)})
 $folders | Remove-Item -Recurse -Force
 `;

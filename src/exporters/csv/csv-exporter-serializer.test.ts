@@ -1,7 +1,6 @@
 import { createFilesAndFolders } from "files-and-folders-loader/files-and-folders-loader";
 import { MockWritable } from "stdio-mock";
 import Stream from "stream";
-import { Language, WithLanguage } from "hooks/use-language";
 import { GenerateCsvExportOptions } from "exporters/csv/csv-exporter.controller";
 import { createTag } from "reducers/tags/tags-test-util";
 import {
@@ -9,6 +8,7 @@ import {
   stringifyCsvExporterOptionsToStream,
 } from "exporters/csv/csv-exporter-serializer";
 import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { Language, WithLanguage } from "util/language/language-types";
 
 const extractDataFromMock = (writeable: MockWritable): Promise<Buffer[]> =>
   new Promise((resolve) => {

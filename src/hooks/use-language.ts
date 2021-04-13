@@ -1,14 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import translations from "translations/translations";
 import { useUserSettings } from "hooks/use-user-settings";
-
-export enum Language {
-  FR = "fr",
-  EN = "en",
-  DE = "de",
-}
-
-export type WithLanguage<T> = T & { language: Language };
+import { Language } from "util/language/language-types";
 
 /**
  * Hook that allows to get and change the application language

@@ -1,12 +1,12 @@
 import { createFilesAndFolders } from "files-and-folders-loader/files-and-folders-loader";
 import { MockWritable } from "stdio-mock";
 import Stream from "stream";
-import { Language } from "hooks/use-language";
 import {
   parseTreeCsvExporterOptionsFromStream,
   stringifyTreeCsvExporterOptionsToStream,
   TreeCsvExporterParams,
 } from "exporters/csv/tree-csv-exporter-serializer";
+import { Language } from "util/language/language-types";
 
 const extractDataFromMock = (writeable: MockWritable): Promise<Buffer[]> =>
   new Promise((resolve) => {

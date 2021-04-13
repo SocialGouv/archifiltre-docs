@@ -13,7 +13,6 @@ import {
   sendStringToStream,
   stringifyObjectToStream,
 } from "util/child-process-stream/child-process-stream";
-import { Language, WithLanguage } from "hooks/use-language";
 import {
   extractFilesAndFolders,
   extractFilesAndFoldersMetadata,
@@ -23,6 +22,7 @@ import {
   makeDataExtractor,
   OmitProtobuf,
 } from "util/child-process-stream/common-serializer";
+import { Language, WithLanguage } from "util/language/language-types";
 
 @Type.d("CsvExporterSerializerMessage")
 export class CsvExporterSerializerMessage extends Message<CsvExporterSerializerMessage> {

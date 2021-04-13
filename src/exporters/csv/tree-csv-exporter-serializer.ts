@@ -11,7 +11,6 @@ import {
   sendStringToStream,
   stringifyObjectToStream,
 } from "util/child-process-stream/child-process-stream";
-import { Language, WithLanguage } from "hooks/use-language";
 import {
   extractFilesAndFolders,
   extractKey,
@@ -20,6 +19,7 @@ import {
   OmitProtobuf,
 } from "util/child-process-stream/common-serializer";
 import { WithFilesAndFolders } from "files-and-folders-loader/files-and-folders-loader-types";
+import { Language, WithLanguage } from "util/language/language-types";
 
 export type TreeCsvExporterParams = WithLanguage<WithFilesAndFolders>;
 

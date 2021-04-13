@@ -11251,6 +11251,11 @@ winattr@^3.0.0:
   dependencies:
     fswin "^3.18.918"
 
+windows-1252@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/windows-1252/-/windows-1252-1.0.0.tgz#721d9467d4da172d2b8dd2a56094b04355fe5976"
+  integrity sha1-ch2UZ9TaFy0rjdKlYJSwQ1X+WXY=
+
 winston-daily-rotate-file@^4.5.2:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/winston-daily-rotate-file/-/winston-daily-rotate-file-4.5.2.tgz#abe72bc8973dcc294faff54ae9a589180cf92866"

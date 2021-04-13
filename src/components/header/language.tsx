@@ -1,6 +1,7 @@
 import Select from "@material-ui/core/Select";
 import React, { FC, useCallback } from "react";
-import { Language, useLanguage } from "hooks/use-language";
+import { useLanguage } from "hooks/use-language";
+import { Language } from "util/language/language-types";
 
 const availableLanguages = [
   {

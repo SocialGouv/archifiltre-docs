@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { useDateInput } from "react-nice-dates";
-import { Language, useLanguage } from "hooks/use-language";
+import { useLanguage } from "hooks/use-language";
 import { de, enUS, fr } from "date-fns/locale";
 import { fromUnixTime, getTime, getYear, isBefore, Locale } from "date-fns";
 import { Input } from "@material-ui/core";
@@ -8,6 +8,7 @@ import { FaPen } from "react-icons/fa";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { compose } from "lodash/fp";
 import { tap } from "util/functionnal-programming-utils";
+import { Language } from "util/language/language-types";
 
 const languagesMap = {
   [Language.FR]: fr,

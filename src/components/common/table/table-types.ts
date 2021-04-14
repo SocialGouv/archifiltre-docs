@@ -43,6 +43,6 @@ export type RowRendererProps<T> = {
 
 export type RowRenderer<T> = ComponentType<RowRendererProps<T>>;
 
-type RowIdAccessorFunction<T> = (row: T) => keyof T;
+type RowIdAccessorFunction<T> = (row: T) => string;
 
 export type RowIdAccessor<T> = keyof T | RowIdAccessorFunction<T>;

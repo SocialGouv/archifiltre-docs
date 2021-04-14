@@ -16,7 +16,6 @@
     "test-coverage": "jest \"src/.*\\.test\\.[jt]s\" --coverage",
     "e2e": "jest \"tests/e2e/.*\\\\.test\\\\.[jt]s\"",
     "prepare-prod": "webpack --progress --mode production --config webpack.electron-main.js && webpack --progress --mode production",
-    "build-prod": "yarn prepare-prod && yarn win32 && yarn win64 && yarn linux && yarn mac",
     "env-linux": "cross-env-shell $(cat .env | xargs)",
     "env-windows": "(for /F \"tokens=*\" %i in (.env) do set %i)",
     "win32": "electron-builder --windows portable --ia32",

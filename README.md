@@ -60,14 +60,14 @@ First, prepare the build in production mode
 yarn prepare-prod
 ```
 
-### Preparation (code signing)
+### ✍️ Preparation (code signing)
 
-#### Windows
+#### 🪟 Windows
 
 To sign the app manually and locally, you can use the command `yarn env-linux` or `yarn env-windows` depending on your platform.
 Otherwise, running a GitHub pipeline through a pull request will automatically sign Archifiltre for Windows.
 
-#### Mac
+#### 🍎 Mac
 
 To build the app locally without signing, you can run `yarn mac-local`.
 Otherwise, running a GitHub pipeline through a pull request will automatically sign Archifiltre for Mac.
@@ -75,11 +75,13 @@ Otherwise, running a GitHub pipeline through a pull request will automatically s
 Note: the file `electron/build/entitlments.mac.plist` contains the following flag: `com.apple.security.cs.allow-unsigned-executable-memory`. 
 To notarize the app, this flag needs to be set to `true` to activate the "Hardened Runtime", a security mecanism by Apple.
 
-#### Linux
+#### 🐧 Linux
 
 There is no code signing on Linux, but every release has a SHA512 file corresponding to each binary. This can be used on a Linux system.
 
-### Build the app
+### 🏗️ Build the app
+
+#### ✋ Manually
 
 Then you can package the app for the right platform:
 
@@ -92,13 +94,17 @@ yarn win32-msi
 yarn win64-msi
 ```
 
-Or you can prepare the build and build for all four platforms with one command:
-
-```bash
-yarn build-prod
-```
-
 Once built, production binaries are found in the dist folder, each in their corresponding platform's subfolder.
+
+#### 🪄 Automatically
+
+To release all the binaries and sign them:
+- Go [here](https://github.com/SocialGouv/archifiltre/actions/workflows/ci.yml) 
+- Click the `Run workflow` menu
+- Select the `master` branch
+- Click `Run workflow`
+
+This will trigger a pipeline and make all binaries and hashes available [here](https://github.com/SocialGouv/archifiltre/releases)
 
 ## ✨ Contributing
 

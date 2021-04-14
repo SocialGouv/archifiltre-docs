@@ -29,6 +29,8 @@ const HiddenSpan = styled.span`
   visibility: hidden;
 `;
 
+const rowIdAccessor = (row: ElementWithToDelete[]) => row[0].id;
+
 type DuplicatesSearchProps = {
   duplicatesList: FilesAndFolders[][];
   elementsToDelete: string[];
@@ -242,6 +244,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
             columns={columns}
             data={data}
             RowRendererComp={TableExpandableRow}
+            rowId={rowIdAccessor}
             page={page}
             onPageChange={setPage}
           />

@@ -113,9 +113,19 @@ function Table<T>({
     setInnerPage(limitPageIndex(rowsPerPage, data.length, innerPage));
   }, [data.length, setInnerPage, innerPage, rowsPerPage]);
 
+  const tableContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    tableContainerRef?.current?.scrollTo(0, 0);
+  }, [innerPage]);
+
   return (
     <div ref={tableRef} style={containerStyle}>
-      <TableContainer component={Paper} style={tableContainerStyle}>
+      <TableContainer
+        component={Paper}
+        style={tableContainerStyle}
+        ref={tableContainerRef}
+      >
         <MuiTable
           size={isDense ? "small" : "medium"}
           stickyHeader={stickyHeader}

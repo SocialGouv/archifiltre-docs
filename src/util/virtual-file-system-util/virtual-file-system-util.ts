@@ -1,5 +1,5 @@
 import { isIgnored } from "util/hidden-file/hidden-file-util";
-import { chain, pick, intersection } from "lodash";
+import _ from "lodash";
 import { compose } from "lodash/fp";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
@@ -36,7 +36,7 @@ const removeHiddenFilesRec = (
     )
   );
 
-  const nextChildren = intersection(
+  const nextChildren = _.intersection(
     element.children,
     Object.keys(nextFilesAndFolders)
   );
@@ -96,7 +96,7 @@ const removeMissingFilesAndFoldersFromFileSystemMap = (
   vfs: T
 ): T => ({
   ...vfs,
-  [key]: pick(vfs[key], Object.keys(vfs.filesAndFolders)),
+  [key]: _.pick(vfs[key], Object.keys(vfs.filesAndFolders)),
 });
 
 /**
@@ -125,11 +125,11 @@ export const removeUnusedTagsFromVirtualFileSystem = <
   const filesAndFoldersKeys = Object.keys(vfs.filesAndFolders);
   return {
     ...vfs,
-    tags: chain(vfs.tags)
+    tags: _.chain(vfs.tags)
       .mapValues(
         (tag: Tag): Tag => ({
           ...tag,
-          ffIds: intersection(tag.ffIds, filesAndFoldersKeys),
+          ffIds: _.intersection(tag.ffIds, filesAndFoldersKeys),
         })
       )
       .pickBy((tag: Tag) => tag.ffIds.length !== 0)

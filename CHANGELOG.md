@@ -1,3 +1,11 @@
+## [3.2.1](https://github.com/SocialGouv/archifiltre/compare/v3.2.0...v3.2.1) (2021-04-19)
+
+
+### Bug Fixes
+
+* fix json loading ([#1258](https://github.com/SocialGouv/archifiltre/issues/1258)) ([79ebabe](https://github.com/SocialGouv/archifiltre/commit/79ebabe18a7abb5d7b363dde468095e3174b6c6c))
+* fix react-i18next security issue ([#1257](https://github.com/SocialGouv/archifiltre/issues/1257)) ([88767af](https://github.com/SocialGouv/archifiltre/commit/88767af9b58898df20a97e3cff195aa482e43a50))
+
 # [3.2.0](https://github.com/SocialGouv/archifiltre/compare/v3.1.1...v3.2.0) (2021-04-14)
 
 

@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { ElementWeightMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
 import OptionsPicker from "./options-picker";
+import { FaWeightHanging } from "react-icons/fa";
 
 type ElementWeightMethodPickerProps = {
   setElementWeightMethod: (method: ElementWeightMethod) => void;
@@ -30,6 +31,7 @@ const ElementWeightMethodPicker: FC<ElementWeightMethodPickerProps> = ({
       value={elementWeightMethod}
       setValue={setElementWeightMethod}
       options={options}
+      icon={<FaWeightHanging />}
     />
   );
 };

@@ -1,8 +1,8 @@
-import React, { useCallback } from "react";
-import Select from "@material-ui/core/Select";
+import React, { ReactNode, useState } from "react";
 import Box from "@material-ui/core/Box";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Input from "@material-ui/core/Input";
+import { Menu, MenuItem } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import { FaCheck } from "react-icons/fa";
 
 type OptionValue = string | number;
 
@@ -16,79 +16,76 @@ type OptionsPickerProps<ValueType extends OptionValue> = {
   value: ValueType;
   setValue: (value: ValueType) => void;
   options: Option<ValueType>[];
+  icon?: ReactNode;
 };
 
-const useStyles = makeStyles(() => ({
-  hidden: {
-    position: "absolute",
-    opacity: 0,
-  },
-  disableClick: {
-    pointerEvents: "none",
-  },
-}));
-
-/*
- * In case of a label, we display the label in a Select, with pointer-events: none.
- * Clicks will go through the displayed element and trigger a 0 opacity Select that
- * will allow the user to pick his choice. This seemed like the better looking way to
- * display the label inside the input while keeping native selects.
- */
 export default function OptionsPicker<ValueType extends OptionValue>({
   title,
   value,
   setValue,
   options,
+  icon = null,
 }: OptionsPickerProps<ValueType>) {
-  const { hidden, disableClick } = useStyles();
-  const handleChange = useCallback(
-    (event) => {
-      const { selectedIndex } = event.currentTarget;
-      const selectedOption = options[selectedIndex];
-      setValue(selectedOption.value);
-    },
-    [value, setValue]
-  );
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const onItemClick = (index) => {
+    const selectedOption = options[index];
+    setValue(selectedOption.value);
+    handleClose();
+  };
   return (
     <Box>
-      <Select
-        native
-        onChange={handleChange}
-        value={value}
-        disableUnderline={true}
-        input={
-          <Input
-            classes={
-              title
-                ? {
-                    root: hidden,
-                  }
-                : undefined
-            }
-          />
-        }
+      <Button
+        aria-controls="options-menu"
+        aria-haspopup="true"
+        onClick={handleClick}
+        variant="outlined"
+        disableElevation={true}
+        color="secondary"
+        size="small"
+        startIcon={icon}
       >
-        {options.map(({ value, label }) => (
-          <option key={`hidden-${value}`} value={value}>
+        {title}
+      </Button>
+      <Menu
+        getContentAnchorEl={null}
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+      >
+        {options.map(({ value: optionValue, label }, index) => (
+          <MenuItem
+            key={optionValue}
+            onClick={() => onItemClick(index)}
+            value={value}
+          >
+            {optionValue === value && (
+              <Box paddingRight={1}>
+                <FaCheck />
+              </Box>
+            )}
             {label}
-          </option>
+          </MenuItem>
         ))}
-      </Select>
-      {title && (
-        <Select
-          native
-          defaultValue="Title"
-          disableUnderline={true}
-          input={<Input classes={title ? { root: disableClick } : undefined} />}
-        >
-          <option value="Title">{title}</option>
-          {options.map(({ value, label }) => (
-            <option key={`displayed-${value}`} value={value}>
-              {label}
-            </option>
-          ))}
-        </Select>
-      )}
+      </Menu>
     </Box>
   );
 }

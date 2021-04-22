@@ -1,7 +1,6 @@
 import { useTabsState } from "components/header/tabs-context";
 import React, { FC } from "react";
 
-import Icicle from "components/main-space/icicle/icicle-container";
 import NavigationBar from "components/main-space/navigation-bar/navigation-bar-container";
 import Box from "@material-ui/core/Box";
 import DuplicatesSearch from "components/main-space/duplicates-search/duplicates-search-container";
@@ -10,15 +9,7 @@ import TabsContent from "./tabs/tabs-content";
 import Header from "components/header/header-container";
 import WorkspaceProviders from "./workspace-providers";
 import HelpButton from "../help-button";
-
-const workspaceState = {
-  isFileMoveActive: false,
-  areTabsHidden: false,
-  setIsFileMoveActive: (isMoveActive) => {},
-  setAreTabsHidden: (areTabsHidden) => {},
-};
-
-export const WorkspaceContext = React.createContext(workspaceState);
+import Icicles from "../new-icicle/icicles-container";
 
 const areIciclesDisplayed = (tabIndex: number) => tabIndex !== 3;
 
@@ -46,7 +37,8 @@ const Workspace: FC = () => {
                 <NavigationBar />
               </Box>
               <Box flexGrow={1} overflow="hidden">
-                <Icicle />
+                {/*<Icicle/>*/}
+                <Icicles />
               </Box>
               <Box position="absolute" bottom={15} right={15}>
                 <HelpButton />

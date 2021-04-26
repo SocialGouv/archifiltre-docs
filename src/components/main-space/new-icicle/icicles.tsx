@@ -5,53 +5,64 @@ import {
   FilesAndFoldersMap,
 } from "reducers/files-and-folders/files-and-folders-types";
 import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { FOLDER_COLOR, fromFileName } from "util/color/color-util";
-
-type Dimensions = {
-  x0: number;
-  y0: number;
-  x1: number;
-  y1: number;
-};
+import { Dimensions, IcicleOrientation } from "./icicle-types";
+import { horizontalConfig, verticalConfig } from "./icicles-config";
 
 type IciclesProps = {
   filesAndFolders: FilesAndFoldersMap;
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
+  treeDepth: number;
+  icicleOrientation: IcicleOrientation;
 };
 
-const viewboxWidth = 1000;
-const viewboxHeight = 300;
+const VIEWBOX_WIDTH = 1000;
+const VIEWBOX_HEIGHT = 300;
 const TRANSITION_DURATION = 750;
 
 const Icicles: FC<IciclesProps> = ({
   filesAndFolders,
-  filesAndFoldersMetadata,
+  treeDepth,
+  icicleOrientation,
 }) => {
   const iciclesRef = useRef(null);
 
-  const format = d3.format(",d");
-
-  const getRectangleHeight = ({ x0, x1 }): number => {
-    return x1 - x0 - Math.min(1, (x1 - x0) / 2);
-  };
+  const {
+    getRectangleHeight,
+    getRectangleWidth,
+    getRectangleX,
+    getRectangleY,
+    getViewboxWidth,
+    getViewboxHeight,
+  } =
+    icicleOrientation === IcicleOrientation.HORIZONTAL
+      ? horizontalConfig
+      : verticalConfig;
 
   const isLabelVisible = ({ x0, x1, y0, y1 }): boolean => {
-    return y1 <= viewboxWidth && y0 >= 0 && x1 - x0 > 16;
+    return y1 <= VIEWBOX_WIDTH && y0 >= 0 && x1 - x0 > 16;
   };
 
   const partition = () => {
     const root = d3
       .hierarchy<FilesAndFolders>(
-        filesAndFolders[ROOT_FF_ID],
+        filesAndFolders[filesAndFolders[ROOT_FF_ID].children[0]],
         (element) =>
           element?.children.map((childId) => filesAndFolders[childId]) ?? []
       )
       .sum((d) => d?.file_size ?? 0);
 
-    return d3
-      .partition<FilesAndFolders>()
-      .size([viewboxHeight, ((root.height + 1) * viewboxWidth) / 10])(root);
+    return d3.partition<FilesAndFolders>().size([
+      getViewboxHeight({
+        rootElementHeight: root.height,
+        treeDepth,
+        viewboxHeight: VIEWBOX_HEIGHT,
+      }),
+      getViewboxWidth({
+        rootElementHeight: root.height,
+        treeDepth,
+        viewboxWidth: VIEWBOX_WIDTH,
+      }),
+    ])(root);
   };
 
   const root = partition();
@@ -69,8 +80,8 @@ const Icicles: FC<IciclesProps> = ({
 
       root.each((dimensions) => {
         dimensionsTarget[dimensions.data.id] = {
-          x0: ((dimensions.x0 - p.x0) / (p.x1 - p.x0)) * viewboxHeight,
-          x1: ((dimensions.x1 - p.x0) / (p.x1 - p.x0)) * viewboxHeight,
+          x0: ((dimensions.x0 - p.x0) / (p.x1 - p.x0)) * VIEWBOX_HEIGHT,
+          x1: ((dimensions.x1 - p.x0) / (p.x1 - p.x0)) * VIEWBOX_HEIGHT,
           y0: dimensions.y0 - p.y0,
           y1: dimensions.y1 - p.y0,
         };
@@ -81,44 +92,39 @@ const Icicles: FC<IciclesProps> = ({
         .duration(TRANSITION_DURATION)
         .attr(
           "transform",
-          (d: any) => `translate(${getDimensions(d).y0},${getDimensions(d).x0})`
+          (d) => `translate(${getDimensions(d).y0},${getDimensions(d).x0})`
         );
 
       rect
         .transition(transition)
-        .attr("height", (d: any) => getRectangleHeight(getDimensions(d)));
+        .attr("height", (d) => getRectangleHeight(getDimensions(d)));
+
       text
         .transition(transition)
-        .attr("fill-opacity", (d: any) => +isLabelVisible(getDimensions(d)));
-      tspan
-        .transition(transition)
-        .attr(
-          "fill-opacity",
-          (d: any) => +isLabelVisible(getDimensions(d)) * 0.7
-        );
+        .attr("fill-opacity", (d) => +isLabelVisible(getDimensions(d)));
     };
 
     const svg = d3
       .select(iciclesRef.current)
       .append("svg")
-      .attr("viewBox", [0, 0, viewboxWidth, viewboxHeight].join(" "))
+      .attr("viewBox", [0, 0, VIEWBOX_WIDTH, VIEWBOX_HEIGHT].join(" "))
       .style("font", "10px Quicksand");
 
     const cell = svg
       .selectAll("g")
       .data(root.descendants())
       .join("g")
-      .attr("transform", ({ x0, y0 }) => `translate(${y0},${x0})`);
+      .attr(
+        "transform",
+        (d) => `translate(${getRectangleX(d)},${getRectangleY(d)})`
+      );
 
     const rect = cell
       .append("rect")
-      .attr("width", ({ y0, y1 }) => y1 - y0 - 1)
-      .attr("height", (d) => getRectangleHeight(d))
+      .attr("width", getRectangleWidth)
+      .attr("height", getRectangleHeight)
       .attr("fill-opacity", 0.6)
-      .attr("fill", (d: any) => {
-        if (!d.depth) {
-          return "#ccc";
-        }
+      .attr("fill", (d) => {
         if (d.data.children.length > 0) {
           return FOLDER_COLOR;
         }
@@ -135,20 +141,14 @@ const Icicles: FC<IciclesProps> = ({
       .attr("y", 13)
       .attr("fill-opacity", (d) => +isLabelVisible(d));
 
-    text.append("tspan").text((d: any) => d.data.name);
-
-    const tspan = text
-      .append("tspan")
-      .attr("fill-opacity", (d: any) => (isLabelVisible(d) ? 0.7 : 0))
-      .text((d: any) => ` ${format(d.value)}`);
+    text.append("tspan").text((d) => d.data.name);
 
     cell.append("title").text(
-      (d: any) =>
+      (d) =>
         `${d
           .ancestors()
           .map((d: any) => d.data.name)
-          .reverse()
-          .join("/")}\n${format(d.value)}`
+          .reverse()}`
     );
   }, []);
 

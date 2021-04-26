@@ -1,19 +1,22 @@
 import React, { FC } from "react";
 import { useSelector } from "react-redux";
-import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
+import {
+  getFilesAndFoldersFromStore,
+  getMaxDepth,
+} from "reducers/files-and-folders/files-and-folders-selectors";
 import Icicles from "./icicles";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { IcicleOrientation } from "./icicle-types";
 
 const IciclesContainer: FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
-  const filesAndFoldersMetadataMap = useSelector(
-    getFilesAndFoldersMetadataFromStore
-  );
+  const treeDepth = getMaxDepth(filesAndFoldersMap);
+  const icicleOrientation = IcicleOrientation.VERTICAL;
 
   return (
     <Icicles
       filesAndFolders={filesAndFoldersMap}
-      filesAndFoldersMetadata={filesAndFoldersMetadataMap}
+      treeDepth={treeDepth}
+      icicleOrientation={icicleOrientation}
     />
   );
 };

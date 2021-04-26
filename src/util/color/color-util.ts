@@ -42,7 +42,7 @@ export const mostRecentDate = () => [255, 216, 155, 1];
 export const leastRecentDate = () => [20, 86, 130, 1];
 
 const PLACEHOLDER_COLOR = "#8a8c93";
-const FOLDER_COLOR = "#fabf0b";
+export const FOLDER_COLOR = "#fabf0b";
 
 export const colors = {
   [FileType.PUBLICATION]: "#b4250c",

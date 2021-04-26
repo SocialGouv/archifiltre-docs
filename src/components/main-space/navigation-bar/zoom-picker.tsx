@@ -64,10 +64,19 @@ const ZoomPicker: FC = () => {
         {title}
       </Button>
       <Menu
+        getContentAnchorEl={null}
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
       >
         {options.map(({ icon, label, onClick }) => (
           <MenuItem key={`displayed-${label}`} onClick={onClick}>

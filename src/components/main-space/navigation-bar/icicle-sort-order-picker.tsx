@@ -3,6 +3,7 @@ import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
 import OptionsPicker from "./options-picker";
+import { FaSortAmountDown } from "react-icons/fa";
 
 type IciclesSortOrderPickerProps = {
   icicleSortMethod: IcicleSortMethod;
@@ -35,6 +36,7 @@ const IciclesSortOrderPicker: FC<IciclesSortOrderPickerProps> = ({
       value={icicleSortMethod}
       setValue={setIcicleSortMethod}
       options={options}
+      icon={<FaSortAmountDown />}
     />
   );
 };

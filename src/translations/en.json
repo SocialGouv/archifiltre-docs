@@ -27,8 +27,8 @@
       "cannotFindPath": "Cannot find folder path",
       "multipleFoldersDroppedErrorMessage": "Archifiltre cannot read several folders at the same time",
       "multipleFoldersDroppedErrorTitle": "Several folders dropped",
-      "unexpectedError":  "Unexpected error",
-      "unexpectedErrorMessage":  "An unexpected error occurred. Click here to copy the error details."
+      "unexpectedError": "Unexpected error",
+      "unexpectedErrorMessage": "An unexpected error occurred. Click here to copy the error details."
     },
     "report": {
       "comments": "Comments",
@@ -136,6 +136,7 @@
       "yes": "Yes",
       "no": "No",
       "files": "file(s)",
+      "folders": "folder(s)",
       "fileTypes": {
         "presentation": "Presentation",
         "publication": "Publication",

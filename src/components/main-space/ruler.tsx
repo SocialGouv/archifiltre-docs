@@ -5,6 +5,7 @@ import React, { FC, useEffect, useRef, useState } from "react";
 import { Dims } from "./icicle/icicle-rect";
 import {
   isFile,
+  isFolder,
   ROOT_FF_ID,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import translations from "translations/translations";
@@ -41,12 +42,21 @@ const EmptyDims: Dims = {
  * Get the number of child files from a node
  * @param node
  */
-const getFilesAndFoldersCount = (
+const getFilesCount = (
   node: FilesAndFolders & FilesAndFoldersMetadata
-) => {
-  return isFile(node)
-    ? null
-    : `${node.nbChildrenFiles} ${translations.t("common.files")}`;
+): string => `${node.nbChildrenFiles} ${translations.t("common.files")}`;
+
+/**
+ * Get the number of child folders from a node
+ * @param node
+ */
+const getFoldersCount = (
+  node: FilesAndFolders & FilesAndFoldersMetadata,
+  getFfById: (id: string) => FilesAndFolders & FilesAndFoldersMetadata
+): string => {
+  const { children } = node;
+  const foldersCount = children.map(getFfById).filter(isFolder).length;
+  return `${foldersCount} ${translations.t("common.folders")}`;
 };
 
 /**
@@ -68,7 +78,8 @@ const makePercentageText = (nodeSize: number, totalSize: number) => {
  */
 const makeRulerText = (
   node: FilesAndFolders & FilesAndFoldersMetadata,
-  rootNode: FilesAndFolders & FilesAndFoldersMetadata
+  rootNode: FilesAndFolders & FilesAndFoldersMetadata,
+  getFfById: (id: string) => FilesAndFolders & FilesAndFoldersMetadata
 ) => {
   const { childrenTotalSize } = node;
   const { childrenTotalSize: rootChildrenTotalSize } = rootNode;
@@ -78,9 +89,10 @@ const makeRulerText = (
   );
   const filesAndFolderSize = octet2HumanReadableFormat(childrenTotalSize);
   const rulerInfo = [percentageText, filesAndFolderSize];
-  const filesAndFoldersNumber = getFilesAndFoldersCount(node);
-  if (filesAndFoldersNumber) {
-    rulerInfo.push(filesAndFoldersNumber);
+
+  if (isFolder(node)) {
+    rulerInfo.push(getFoldersCount(node, getFfById));
+    rulerInfo.push(getFilesCount(node));
   }
 
   return rulerInfo.join(" | ");
@@ -112,7 +124,11 @@ const Ruler: FC<RulerProps> = ({
   const elementId = hoveredElementId || lockedElementId;
 
   const rulerText = elementId
-    ? makeRulerText(getFfByFfId(elementId), getFfByFfId(ROOT_FF_ID))
+    ? makeRulerText(
+        getFfByFfId(elementId),
+        getFfByFfId(ROOT_FF_ID),
+        getFfByFfId
+      )
     : "";
 
   const wrapperRef = useRef<HTMLDivElement>(null);

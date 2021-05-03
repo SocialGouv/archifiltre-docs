@@ -4,7 +4,6 @@ import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/fil
 import React, { FC, useEffect, useRef, useState } from "react";
 import { Dims } from "./icicle/icicle-rect";
 import {
-  isFile,
   isFolder,
   ROOT_FF_ID,
 } from "reducers/files-and-folders/files-and-folders-selectors";
@@ -42,16 +41,15 @@ const EmptyDims: Dims = {
  * Get the number of child files from a node
  * @param node
  */
-const getFilesCount = (
-  node: FilesAndFolders & FilesAndFoldersMetadata
-): string => `${node.nbChildrenFiles} ${translations.t("common.files")}`;
+const getFilesCount = (node: FilesAndFoldersMetadata): string =>
+  `${node.nbChildrenFiles} ${translations.t("common.files")}`;
 
 /**
  * Get the number of child folders from a node
  * @param node
  */
 const getFoldersCount = (
-  node: FilesAndFolders & FilesAndFoldersMetadata,
+  node: FilesAndFolders,
   getFfById: (id: string) => FilesAndFolders & FilesAndFoldersMetadata
 ): string => {
   const { children } = node;

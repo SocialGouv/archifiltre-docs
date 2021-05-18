@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { compose } from "lodash/fp";
-import { reportError } from "logging/reporter";
+import {reportError, reportInfo} from "logging/reporter";
 import path from "path";
 import { mapToNewVersionNumbers } from "components/header/new-version-checker";
 import { firstHashesComputingThunk } from "hash-computer/hash-computer-thunk";
@@ -315,6 +315,7 @@ const loadFilesAndFoldersAfterInitThunk = (
     erroredPaths?: ArchifiltreError[];
   } = {}
 ): ArchifiltreThunkAction<VirtualFileSystemLoader> => (dispatch) => {
+  reportInfo(`Loading path : ${fileOrFolderPath}`);
   const { result$, terminate } = loadFileTree(fileOrFolderPath, {
     filesAndFolders,
     erroredPaths,
@@ -330,6 +331,7 @@ const loadFilesAndFoldersAfterInitThunk = (
     .toPromise()
     .then(({ result: { result } }) => {
       dispatch(handleVirtualFileSystemThunk(fileOrFolderPath, result));
+      reportInfo(`Filesystem loaded : ${fileOrFolderPath}`);
       return result;
     });
 

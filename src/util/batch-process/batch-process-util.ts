@@ -1,6 +1,6 @@
 import { cpus } from "os";
 import { fromEvent, merge, Observable, Subject } from "rxjs";
-import { reportError } from "logging/reporter";
+import {reportError, reportInfo} from "logging/reporter";
 import { makeEmptyArray } from "util/array/array-util";
 import { filter, map, take, takeWhile, tap } from "rxjs/operators";
 import {
@@ -201,7 +201,7 @@ export const cancelableBackgroundWorkerProcess$ = (
       reportError(message.error);
     }),
     onMessageType(MessageTypes.LOG, (message) => {
-      console.log("Logging :", message.data);
+      reportInfo(`Worker message : ${message.data}`);
     }),
     filter<WorkerMessage, ErrorMessage | ResultMessage>(
       (message: WorkerMessage): message is ResultMessage | ErrorMessage =>

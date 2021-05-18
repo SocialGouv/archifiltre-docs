@@ -4,6 +4,7 @@ import {
 } from "../batch-process/batch-process-util-types";
 import translations from "translations/translations";
 import { ChildProcess } from "child_process";
+import { logInfo } from "./async-worker-logger";
 
 export enum WorkerEventType {
   MESSAGE = "message",
@@ -48,6 +49,7 @@ export const makeChildWorkerMessageCallback = (
   asyncWorker: AsyncWorker,
   { onInitialize, onData }: SetupChildWorkerListenersOptions
 ) => async ({ data, type }: any) => {
+  const info = logInfo(asyncWorker);
   switch (type) {
     case MessageTypes.INITIALIZE:
       if (data.language) {
@@ -57,10 +59,14 @@ export const makeChildWorkerMessageCallback = (
         break;
       }
       try {
+        info("Before initialize");
         await onInitialize(asyncWorker, data);
+        info("afterInitialize");
         asyncWorker.postMessage({ type: MessageTypes.READY });
       } catch (err) {
         console.error(err);
+        info("Before fatal");
+        info(`Before fatal ${err.toString()}`);
         asyncWorker.postMessage({
           type: MessageTypes.FATAL,
           error: err.toString(),
@@ -73,9 +79,13 @@ export const makeChildWorkerMessageCallback = (
         break;
       }
       try {
+        info("Before data");
         await onData(asyncWorker, data);
+        info("After data");
       } catch (err) {
         console.error(err);
+        info("Before data fatal");
+        info(`Before data fatal : ${err.toString()}`);
         asyncWorker.postMessage({
           type: MessageTypes.FATAL,
           error: err.toString(),
@@ -96,8 +106,12 @@ export const setupChildWorkerListeners = (
   asyncWorker: AsyncWorker,
   listeners: SetupChildWorkerListenersOptions
 ) => {
-  asyncWorker.addEventListener(
-    WorkerEventType.MESSAGE,
-    makeChildWorkerMessageCallback(asyncWorker, listeners)
-  );
+  try {
+    asyncWorker.addEventListener(
+        WorkerEventType.MESSAGE,
+        makeChildWorkerMessageCallback(asyncWorker, listeners)
+    );
+  } catch (err) {
+    logInfo(asyncWorker)("Setting up listeners");
+  }
 };

@@ -1,6 +1,5 @@
 import path from "path";
-import { tap } from "rxjs/operators";
-import { reportError } from "logging/reporter";
+import {reportError, reportInfo} from "logging/reporter";
 import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
 import {
   getFilesAndFoldersFromStore,
@@ -38,6 +37,8 @@ import {
 } from "reducers/hashes/hashes-selectors";
 import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import { ArchifiltreError } from "util/error/error-util";
+import { tap } from "rxjs/operators";
+import { tap as fpTap } from "util/functionnal-programming-utils";
 
 const computeFileHashesIgnoredThunk = (
   loadingActionId: string,
@@ -56,6 +57,7 @@ const computeFileHashesImplThunk = (
 ): Promise<number> => {
   let loadingErrorsCount = 0;
 
+  reportInfo("Loading file hashes...");
   const basePath = originalPath.split(path.sep).slice(0, -1).join(path.sep);
   const hashes$ = computeHashes$(fileIds, { initialValues: { basePath } });
 
@@ -80,7 +82,7 @@ const computeFileHashesImplThunk = (
     }).subscribe({
       complete: () => resolve(loadingErrorsCount),
     });
-  });
+  }).then(fpTap<number>(() => reportInfo("Loaded file hashes")));
 };
 
 type ComputeFileHashesThunkOptions = {
@@ -111,7 +113,7 @@ const computeFileHashesThunk = (
 const computeFolderHashesThunk = (
   loadingActionId: string
 ): ArchifiltreThunkAction<Promise<void>> => async (dispatch, getState) => {
-  return new Promise((resolve) => {
+  return new Promise<void>((resolve) => {
     const state = getState();
     const hashes = getHashesFromStore(state);
     const filesAndFolders = getFilesAndFoldersFromStore(state);
@@ -122,13 +124,15 @@ const computeFolderHashesThunk = (
       dispatch(setFilesAndFoldersHashes(newHashes));
     };
 
+    reportInfo("Loading folder hashes");
+
     computeFolderHashes$({ filesAndFolders, hashes }).subscribe({
       complete: () => {
         resolve();
       },
       next: onNewHashesComputed,
     });
-  });
+  }).then(fpTap<void>(() => { reportInfo("FolderHashesLoaded") }));
 };
 
 type ComputeHashesThunkOptions = {

@@ -1,4 +1,8 @@
-import { Divider } from "@material-ui/core";
+import {
+  Divider,
+  IconButton,
+  ListItemSecondaryAction,
+} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -20,6 +24,9 @@ import {
   FaGrinStars,
   FaSyncAlt,
 } from "react-icons/fa";
+import { FiTrash2 } from "react-icons/fi";
+import { VscClose } from "react-icons/vsc";
+
 import {
   CONTACT_LINK,
   DOCUMENTATION_LINK,
@@ -56,6 +63,9 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
 }) => {
   const { t } = useTranslation();
   const [previousSessions, setPreviousSessions] = useState<string[]>([]);
+  const [hoveredPreviousSession, setHoveredSessions] = useState<number>(-1);
+
+  const toggleDisplayClearElement = (index) => setHoveredSessions(index);
 
   const onNewDirectoryClick = useCallback(async () => {
     const path = await dialog.showOpenDialog({
@@ -95,17 +105,25 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
               />
             </ListItem>
           )}
+          <ListItem button>
+            <ListItemIcon>
+              <FiTrash2 />
+            </ListItemIcon>
+            <ListItemText primary={t("header.clearHistory")} />
+          </ListItem>
           <Divider />
         </List>
       </Box>
       <Box overflow="auto">
         <List component="nav">
-          {previousSessions.map((previousDirectory) => (
+          {previousSessions.map((previousDirectory, index) => (
             <Tooltip title={previousDirectory} key={previousDirectory}>
               <ListItem
                 button
                 onClick={() => loadPath(previousDirectory)}
                 disabled={isLoading}
+                onMouseOver={() => toggleDisplayClearElement(index)}
+                onMouseLeave={() => toggleDisplayClearElement(-1)}
               >
                 <ListItemIcon>
                   <FaFolderOpen />
@@ -117,6 +135,11 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
                     </EllipsisText>
                   }
                 />
+                {hoveredPreviousSession === index ? (
+                  <IconButton edge="end" size="small">
+                    <VscClose />
+                  </IconButton>
+                ) : null}
               </ListItem>
             </Tooltip>
           ))}

@@ -72,3 +72,12 @@ export const savePreviousSession = async (newSessionPath: string) => {
     reportError(error);
   }
 };
+
+export const clearSession = async () => {
+  try {
+    const previousSessionPath = getPreviousSessionsPath();
+    await fs.writeFileSync(previousSessionPath, "");
+  } catch (error) {
+    reportError(error);
+  }
+};

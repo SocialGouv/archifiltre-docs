@@ -117,7 +117,8 @@
       "loadPreviousSessionButtonLabel": "Recharger la session précédente",
       "help": "Aide",
       "undo": "Annuler",
-      "redo": "Rétablir"
+      "redo": "Rétablir",
+      "clearHistory": "Supprimer tout l'historique des sessions précédentes"
     },
     "common": {
       "exportActionTitle": "Exporter",

@@ -3,6 +3,8 @@ import fs from "fs";
 import { reportError } from "logging/reporter";
 import path from "path";
 
+const MAX_SHORTCUTS_LENGTH = 10;
+
 const getPreviousSessionsPath = (): string => {
   const userFolderPath = app.getPath("userData");
   return path.join(userFolderPath, "previous-sessions");
@@ -22,8 +24,7 @@ const sanitizePreviousSessions = (previousSessions: string[]) => {
     .filter(
       (session, index) => sanitizedPreviousSessions.indexOf(session) === index
     )
-    .filter((session) => !session.includes("\0"))
-    .reverse();
+    .filter((session) => !session.includes("\0"));
 };
 
 /**
@@ -58,15 +59,50 @@ export const getPreviousSessions = (): string[] => {
   }
 };
 
+const removeDuplicateLines = (lines: string): string[] => [
+  ...new Set(lines.trim().split("\n")),
+];
+
 /**
  * Save a new user session in previous-sessions
  * @param newSessionPath - new value for user settings
  */
 export const savePreviousSession = async (newSessionPath: string) => {
   try {
-    await fs.promises.appendFile(
-      getPreviousSessionsPath(),
-      `\r\n${newSessionPath}`
+    const previousSessionsPath = getPreviousSessionsPath();
+    const previousSessions = fs.readFileSync(previousSessionsPath, "utf8");
+    const previousSessionsList = [
+      ...removeDuplicateLines(previousSessions),
+      `\r\n${newSessionPath}`,
+    ]
+      .reverse()
+      .slice(0, MAX_SHORTCUTS_LENGTH)
+      .join("\n")
+      .concat("\n");
+
+    await fs.promises.writeFile(previousSessionsPath, previousSessionsList);
+  } catch (error) {
+    reportError(error);
+  }
+};
+
+const removeClickedElement = (
+  previousSession: string,
+  elementToDelete: string
+) => previousSession.replace(`${elementToDelete}\n`, "");
+
+export const removeOneSessionElement = async (elementToDelete) => {
+  try {
+    const previousSessionsPath = getPreviousSessionsPath();
+    const previousSessions = fs.readFileSync(previousSessionsPath, "utf8");
+    const previousSessionsSanitized = removeClickedElement(
+      previousSessions,
+      elementToDelete
+    );
+
+    await fs.promises.writeFile(
+      previousSessionsPath,
+      previousSessionsSanitized
     );
   } catch (error) {
     reportError(error);

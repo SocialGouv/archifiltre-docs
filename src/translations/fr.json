@@ -118,7 +118,7 @@
       "help": "Aide",
       "undo": "Annuler",
       "redo": "Rétablir",
-      "clearHistory": "Supprimer tout l'historique des sessions précédentes"
+      "clearHistory": "Supprimer l'historique des sessions précédentes"
     },
     "common": {
       "exportActionTitle": "Exporter",

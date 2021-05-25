@@ -117,7 +117,8 @@
       "loadPreviousSessionButtonLabel": "Load previous session",
       "help": "Help",
       "undo": "Undo",
-      "redo": "Redo"
+      "redo": "Redo",
+      "clearHistory": "Clear last sessions history"
     },
     "common": {
       "exportActionTitle": "Export",

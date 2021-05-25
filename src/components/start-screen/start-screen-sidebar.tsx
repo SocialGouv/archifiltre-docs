@@ -1,4 +1,6 @@
-import { Divider } from "@material-ui/core";
+import Divider from "@material-ui/core/Divider";
+
+import IconButton from "@material-ui/core/IconButton";
 import Box from "@material-ui/core/Box";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -8,7 +10,11 @@ import Tooltip from "@material-ui/core/Tooltip";
 import EllipsisText from "components/main-space/workspace/enrichment/tags/ellipsis-text";
 import { dialog } from "@electron/remote";
 import path from "path";
-import { getPreviousSessions } from "persistence/previous-sessions";
+import {
+  clearSession,
+  removeOneSessionElement,
+  getPreviousSessions,
+} from "persistence/previous-sessions";
 import React, { FC, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -19,13 +25,17 @@ import {
   FaPlus,
   FaGrinStars,
   FaSyncAlt,
+  FaTrash,
+  FaTimesCircle,
 } from "react-icons/fa";
+
 import {
   CONTACT_LINK,
   DOCUMENTATION_LINK,
   FEEDBACK_LINK,
 } from "../../constants";
 import { openLink } from "util/electron/electron-util";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const onFeedbackClick = () => {
   openLink(FEEDBACK_LINK);
@@ -47,6 +57,17 @@ type StartScreenSidebarProps = {
   isLoading: boolean;
 };
 
+const useStyles = makeStyles({
+  cross: (props) => ({
+    backgroundColor: "transparent",
+    "&:hover": {
+      backgroundColor: "transparent",
+      color: "#777",
+    },
+    color: "#999",
+  }),
+});
+
 const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
   hasPreviousSession,
   reloadPreviousSession,
@@ -56,6 +77,9 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
 }) => {
   const { t } = useTranslation();
   const [previousSessions, setPreviousSessions] = useState<string[]>([]);
+  const [hoveredPreviousSession, setHoveredSessions] = useState<number>(-1);
+
+  const toggleDisplayClearElement = (index) => setHoveredSessions(index);
 
   const onNewDirectoryClick = useCallback(async () => {
     const path = await dialog.showOpenDialog({
@@ -65,6 +89,15 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
       loadPath(path.filePaths[0]);
     }
   }, [loadPath]);
+
+  const deleteClickedElement = (clickedElement: string): void => {
+    const filteredPreviousSession = previousSessions.filter(
+      (prevElement) => prevElement !== clickedElement
+    );
+    setPreviousSessions(filteredPreviousSession);
+  };
+
+  const classes = useStyles();
 
   useEffect(() => {
     const storedPreviousSessions = getPreviousSessions();
@@ -95,31 +128,64 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
               />
             </ListItem>
           )}
+          <ListItem
+            button
+            onClick={() => {
+              clearSession();
+              setPreviousSessions([]);
+            }}
+            disabled={isLoading}
+          >
+            <ListItemIcon>
+              <FaTrash />
+            </ListItemIcon>
+            <ListItemText primary={t("header.clearHistory")} />
+          </ListItem>
           <Divider />
         </List>
       </Box>
       <Box overflow="auto">
         <List component="nav">
-          {previousSessions.map((previousDirectory) => (
-            <Tooltip title={previousDirectory} key={previousDirectory}>
-              <ListItem
-                button
-                onClick={() => loadPath(previousDirectory)}
-                disabled={isLoading}
-              >
-                <ListItemIcon>
-                  <FaFolderOpen />
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <EllipsisText maxWidth={150} displayTooltip={false}>
-                      {path.parse(previousDirectory).base}
-                    </EllipsisText>
-                  }
-                />
-              </ListItem>
-            </Tooltip>
-          ))}
+          {previousSessions
+            .filter((prevSession) => prevSession !== "")
+            .map((previousDirectory, index) => (
+              <Tooltip title={previousDirectory} key={previousDirectory}>
+                <ListItem
+                  button
+                  onClick={() => loadPath(previousDirectory)}
+                  disabled={isLoading}
+                  onMouseOver={() => toggleDisplayClearElement(index)}
+                  onMouseLeave={() => toggleDisplayClearElement(-1)}
+                >
+                  <ListItemIcon>
+                    <FaFolderOpen />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <EllipsisText maxWidth={150} displayTooltip={false}>
+                        {path.parse(previousDirectory).base}
+                      </EllipsisText>
+                    }
+                  />
+                  {hoveredPreviousSession === index ? (
+                    <IconButton
+                      className={classes.cross}
+                      edge="end"
+                      size="small"
+                      disableRipple
+                      disableFocusRipple
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        removeOneSessionElement(previousDirectory);
+                        deleteClickedElement(previousDirectory);
+                      }}
+                    >
+                      <FaTimesCircle />
+                    </IconButton>
+                  ) : null}
+                </ListItem>
+              </Tooltip>
+            ))}
         </List>
       </Box>
       <Box flex={1} />

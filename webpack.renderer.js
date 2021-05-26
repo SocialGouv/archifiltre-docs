@@ -166,8 +166,11 @@ module.exports = (env, argv = {}) => ({
     }),
     new webpack.DefinePlugin({
       ARCHIFILTRE_SITE_URL: JSON.stringify(process.env.ARCHIFILTRE_SITE_URL),
-      AUTOLOAD: argv.autoload
-        ? JSON.stringify(argv.autoload)
+      AUTOLOAD: process.env.AUTOLOAD
+        ? JSON.stringify(process.env.AUTOLOAD)
+        : JSON.stringify(""),
+      AUTORELOAD: process.env.AUTORELOAD
+        ? JSON.stringify(process.env.AUTORELOAD)
         : JSON.stringify(""),
       FORCE_TRACKING: JSON.stringify(process.env.FORCE_TRACKING === "true"),
       MATOMO_APPLICATION_ID: process.env.MATOMO_APPLICATION_ID,

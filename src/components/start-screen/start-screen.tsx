@@ -18,6 +18,7 @@ import logo from "../../../static/imgs/logo.png";
 
 declare global {
   const AUTOLOAD: string;
+  const AUTORELOAD: string;
 }
 
 type StartScreenProps = {
@@ -71,6 +72,11 @@ const StartScreen: FC<StartScreenProps> = ({
     if (AUTOLOAD !== "") {
       const loadedPath = path.resolve(AUTOLOAD);
       loadPath(loadedPath);
+      return;
+    }
+
+    if (AUTORELOAD !== "") {
+      reloadPreviousSession();
     }
   }, []);
 

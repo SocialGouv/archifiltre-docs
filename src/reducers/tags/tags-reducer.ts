@@ -18,7 +18,13 @@ import {
 } from "./tags-types";
 
 const initialState: TagsState = {
-  tags: {},
+  tags: {
+    "to-delete": {
+      id: "",
+      name: "",
+      ffIds: [""],
+    },
+  },
 };
 
 /**

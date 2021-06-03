@@ -11,9 +11,15 @@ type FiltersProps = {
   filesAndFolders: FilesAndFolders[];
   tags: TagMap;
   setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
+  toDelete: string[];
 };
 
-const Filters: FC<FiltersProps> = ({ filesAndFolders, tags, setFilters }) => {
+const Filters: FC<FiltersProps> = ({
+  filesAndFolders,
+  tags,
+  toDelete,
+  setFilters,
+}) => {
   const [typeFilters, setTypeFilters] = useState<
     FilterMethod<FilesAndFolders>[]
   >([]);
@@ -40,11 +46,7 @@ const Filters: FC<FiltersProps> = ({ filesAndFolders, tags, setFilters }) => {
         <SizeFilter setFilters={setSizeFilters} />
       </Box>
       <Box flex={1}>
-        <TagFilter
-          filesAndFolders={filesAndFolders}
-          tags={tags}
-          setFilters={setTagFilters}
-        />
+        <TagFilter tags={tags} setFilters={setTagFilters} toDelete={toDelete} />
       </Box>
     </Box>
   );

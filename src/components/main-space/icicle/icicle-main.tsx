@@ -83,6 +83,7 @@ const MinimapWrapper = styled.div`
  */
 const normalizeWidth = (widths: number[]) => {
   const totalWidth = sum(widths);
+
   return widths.map((a) => a / totalWidth);
 };
 

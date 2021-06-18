@@ -1,7 +1,12 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useMemo, useRef, useState } from "react";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { getAllRects, getCurrentRect, getRectById } from "./icicles-utils";
+import {
+  getAncestorsPath,
+  getAllRects,
+  switchOpacityDifferences,
+  switchMultipleOpacity,
+} from "./icicles-utils";
 import {
   createCell,
   createRect,
@@ -10,6 +15,7 @@ import {
   createSubtitle,
   createPartition,
 } from "./icicles-elements";
+import { difference } from "lodash";
 
 type IciclesProps = {
   filesAndFolders: FilesAndFoldersMap;
@@ -19,6 +25,7 @@ type IciclesProps = {
   setLockedElement: (id: string) => void;
   resetLockedElement: () => void;
   lockedElementId: string;
+  treeDepth: number;
 };
 
 const Icicles: FC<IciclesProps> = ({
@@ -27,56 +34,60 @@ const Icicles: FC<IciclesProps> = ({
   setLockedElement,
   resetLockedElement,
   lockedElementId,
+  treeDepth,
 }) => {
-  const [currentHoveredElementId, setCurrentHoveredElementId] = useState("");
-  const [currentLockedElementId, setCurrentLockedElementId] = useState("");
   const iciclesRef = useRef(null);
+  const lockedPathRef = useRef<string[]>([]);
+  const hoveredPathRef = useRef<string[]>([]);
 
-  const root = createPartition(filesAndFolders);
+  const root = useMemo(() => createPartition(filesAndFolders), [
+    filesAndFolders,
+  ]);
   let focus = root;
 
   const handleResetLockedElement = ({ target, currentTarget }) => {
-    if (target === currentTarget && currentLockedElementId.length) {
+    if (target === currentTarget) {
       resetLockedElement();
-      setCurrentLockedElementId("");
-      getAllRects(iciclesRef).style("fill-opacity", 0.5);
+      switchMultipleOpacity(lockedPathRef.current, 0.5);
+      lockedPathRef.current = [];
     }
   };
 
-  const handleLockedElement = (_, lockedElement) => {
-    if (lockedElement.data.id === currentLockedElementId) return;
-
-    setLockedElement(lockedElement.data.id);
-    setCurrentLockedElementId(lockedElement.data.id);
-    getCurrentRect(iciclesRef, lockedElement).style("fill-opacity", 1);
-
-    currentLockedElementId.length
-      ? getRectById(iciclesRef, currentLockedElementId).style(
-          "fill-opacity",
-          0.5
-        )
-      : null;
+  const handleLockedElement = (_, { data: { id } }) => {
+    setLockedElement(id);
   };
 
-  const handleSetCurrentHoveredElementId = (_, hoveredElement) => {
-    if (hoveredElement.data.id === currentLockedElementId) return;
+  const handleSetCurrentHoveredElementId = (_, { data: { id } }) => {
+    const ancestorsPaths = getAncestorsPath(id, treeDepth);
+    const removeOpacity = difference(hoveredPathRef.current, [
+      ...ancestorsPaths,
+      ...lockedPathRef.current,
+    ]);
+    const addOpacity = difference(ancestorsPaths, [
+      ...lockedPathRef.current,
+      ...hoveredPathRef.current,
+    ]);
 
-    setCurrentHoveredElementId(hoveredElement.data.id);
-    getCurrentRect(iciclesRef, hoveredElement).style("fill-opacity", 0.75);
+    switchMultipleOpacity(removeOpacity, 0.5);
+    switchMultipleOpacity(addOpacity, 0.75);
+
+    hoveredPathRef.current = ancestorsPaths;
+
+    setHoveredElement(id);
   };
 
-  const handleResetCurrentHoveredElementId = (_, hoveredElement) => {
-    if (hoveredElement.data.id === currentLockedElementId) return;
+  const handleResetCurrentHoveredElementId = ({ target, currentTarget }) => {
+    if (target === currentTarget && hoveredPathRef.current.length > 0) {
+      const removeOpacity = difference(
+        hoveredPathRef.current,
+        lockedPathRef.current
+      );
+      switchMultipleOpacity(removeOpacity, 0.5);
+      hoveredPathRef.current = [];
 
-    setCurrentHoveredElementId("");
-    getCurrentRect(iciclesRef, hoveredElement).style("fill-opacity", 0.5);
-  };
-
-  useEffect(() => {
-    if (!lockedElementId) {
-      setHoveredElement(currentHoveredElementId);
+      setHoveredElement("");
     }
-  }, [lockedElementId, setHoveredElement, currentHoveredElementId]);
+  };
 
   useEffect(() => {
     const iciclesElements = {};
@@ -98,14 +109,24 @@ const Icicles: FC<IciclesProps> = ({
   }, []);
 
   useEffect(() => {
-    getAllRects(iciclesRef)
+    const ancestorsPaths = getAncestorsPath(lockedElementId, treeDepth);
+    switchOpacityDifferences(lockedPathRef.current, ancestorsPaths, 0.5, 1);
+    lockedPathRef.current = ancestorsPaths;
+  }, [lockedElementId]);
+
+  useEffect(() => {
+    getAllRects()
       .on("click", handleLockedElement)
-      .on("mouseover", handleSetCurrentHoveredElementId)
-      .on("mouseout", handleResetCurrentHoveredElementId);
-  }, [currentLockedElementId, iciclesRef]);
+      .on("mouseover", handleSetCurrentHoveredElementId);
+  }, []);
 
   return (
-    <svg ref={iciclesRef} id="icicles" onClick={handleResetLockedElement} />
+    <svg
+      ref={iciclesRef}
+      id="icicles"
+      onClick={handleResetLockedElement}
+      onMouseMove={handleResetCurrentHoveredElementId}
+    />
   );
 };
 

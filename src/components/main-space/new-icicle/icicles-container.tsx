@@ -1,6 +1,9 @@
 import React, { FC, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
+import {
+  getFilesAndFoldersFromStore,
+  getMaxDepth,
+} from "reducers/files-and-folders/files-and-folders-selectors";
 import Icicles from "./icicles";
 import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
@@ -8,6 +11,9 @@ import {
   setLockedElementId,
 } from "reducers/workspace-metadata/workspace-metadata-actions";
 import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
+import { useDebounceCallback } from "hooks/use-debounce-callback";
+
+const DELAY = 150;
 
 const IciclesContainer: FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
@@ -40,15 +46,27 @@ const IciclesContainer: FC = () => {
     [dispatch]
   );
 
+  const debouncedSetHoveredElement = useDebounceCallback(
+    setHoveredElement,
+    DELAY
+  );
+  const debouncedResetHoveredElement = useDebounceCallback(
+    resetHoveredElement,
+    DELAY
+  );
+
+  const treeDepth = getMaxDepth(filesAndFoldersMap);
+
   return (
     <Icicles
       filesAndFolders={filesAndFoldersMap}
       filesAndFoldersMetadata={filesAndFoldersMetadataMap}
-      setHoveredElement={setHoveredElement}
-      resetHoveredElement={resetHoveredElement}
+      setHoveredElement={debouncedSetHoveredElement}
+      resetHoveredElement={debouncedResetHoveredElement}
       setLockedElement={setLockedElement}
       resetLockedElement={resetLockedElement}
       lockedElementId={lockedElementId}
+      treeDepth={treeDepth}
     />
   );
 };

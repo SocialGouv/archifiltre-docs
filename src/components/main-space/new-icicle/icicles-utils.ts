@@ -1,3 +1,4 @@
+import { difference } from "lodash";
 import * as d3 from "d3";
 export const VIEWBOX_WIDTH = 1000;
 export const VIEWBOX_HEIGHT = 300;
@@ -10,21 +11,75 @@ type Dimensions = {
   y1: number;
 };
 
+export const OPACITY_05 = 0.5;
+export const OPACITY_075 = 0.75;
+export const OPACITY_1 = 1;
+
 export const getRectangleHeight = ({ x0, x1 }): number => {
   return x1 - x0 - Math.min(1, (x1 - x0) / 2);
 };
 
-export const getCurrentRect = (icicles, currentElementId) => {
-  const rects = getAllRects(icicles);
-  return rects.filter(({ data: { id } }) => id === currentElementId.data.id);
+export const getAllRects = () => d3.selectAll("rect");
+
+export const getCurrentRect = (currentElementId) =>
+  d3.selectAll("rect").filter(({ data: { id } }) => id === currentElementId);
+
+export const getRectById = (rectId) => d3.select(`rect[id='${rectId}']`);
+
+export const getAncestorsPath = (id, treeDepth) => {
+  const currentRect = getCurrentRect(id).data()[0];
+  let temporaryRect = currentRect;
+  let allAncestorsPath = [];
+  let numberLoop = 0;
+
+  while (temporaryRect.parent && numberLoop <= treeDepth) {
+    allAncestorsPath.push(temporaryRect.data.virtualPath);
+    temporaryRect = temporaryRect.parent;
+
+    numberLoop++;
+  }
+
+  return allAncestorsPath;
 };
 
-export const getAllRects = (icicles) =>
-  d3.select(icicles.current).selectAll("rect");
+export const switchMultipleOpacity = (paths: string[], opacity: number): void =>
+  paths.forEach((path) => changeRectColor(path, opacity));
 
-export const getRectById = (icicles, rectId) => {
-  const rects = getAllRects(icicles);
-  return rects.filter(({ data: { id } }) => id === rectId);
+export const switchOpacityDifferences = (
+  oldPaths: string[],
+  newPaths: string[],
+  emptyOpacity: number,
+  fillOpacity: number
+) => {
+  const removeOpacity = difference(oldPaths, newPaths);
+  const addOpacity = difference(newPaths, oldPaths);
+  switchMultipleOpacity(removeOpacity, emptyOpacity);
+  switchMultipleOpacity(addOpacity, fillOpacity);
+};
+
+export const getAncestors = (node) => {
+  if (!node.parent) return [];
+  return [node.parent, ...getAncestors(node.parent)];
+};
+
+export const getPathDifference = (paths1, paths2) =>
+  paths1.filter((path) => !paths2.includes(path));
+
+export const changeRectColor = (rectId, color) =>
+  getRectById(rectId).style("opacity", color);
+
+export const resetRectsColor = (paths) =>
+  paths.map((path) => changeRectColor(path, OPACITY_05));
+
+export const switchRectColor = (
+  previousRects,
+  nextRects,
+  eventType: string
+) => {
+  const TYPE = eventType === "hover" ? OPACITY_075 : OPACITY_1;
+
+  previousRects.map((rectId) => changeRectColor(rectId, OPACITY_05));
+  nextRects.map((rectId) => changeRectColor(rectId, TYPE));
 };
 
 export const format = d3.format(",d");

@@ -1,6 +1,6 @@
 import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
 import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
-import { fromFileName } from "./../../../util/color/color-util";
+import { fromFileName } from "util/color/color-util";
 import {
   getRectangleHeight,
   isLabelVisible,
@@ -43,9 +43,10 @@ export const createCell = (svg, root) => {
 export const createRect = (cell, elements) => {
   return cell
     .append("rect")
+    .attr("id", (d) => d.data.id)
     .attr("width", ({ y0, y1 }) => y1 - y0 - 1)
     .attr("height", (d) => getRectangleHeight(d))
-    .attr("fill-opacity", 0.5)
+    .attr("opacity", 0.5)
     .attr("fill", (d: any) => {
       if (!d.depth) {
         return "#ccc";

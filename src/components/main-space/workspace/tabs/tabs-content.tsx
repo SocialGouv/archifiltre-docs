@@ -1,10 +1,10 @@
 import Box from "@material-ui/core/Box";
 import React, { FC } from "react";
-import General from "components/main-space/workspace/general/general-container";
 import styled from "styled-components";
 import Duplicates from "components/main-space/workspace/duplicates/duplicates";
-import Enrichment from "components/main-space/workspace/enrichment/enrichment-container";
 import Audit from "components/main-space/workspace/audit/audit";
+import General from "../general/general";
+import EnrichmentContainer from "../enrichment/enrichment-container";
 
 const StyledPanel = styled.div`
   width: 100%;
@@ -41,7 +41,7 @@ const TabsContent: FC<TabsContentProps> = ({ tabIndex }) => (
       <General />
     </TabPanel>
     <TabPanel value={tabIndex} index={1}>
-      <Enrichment />
+      <EnrichmentContainer />
     </TabPanel>
     <TabPanel value={tabIndex} index={2}>
       <Audit />

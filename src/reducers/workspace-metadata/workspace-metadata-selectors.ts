@@ -11,6 +11,18 @@ export const getWorkspaceMetadataFromStore = (
   store: StoreState
 ): WorkspaceMetadataState => getCurrentState(store.workspaceMetadata);
 
+export const getSessionNameFromStore = (store: StoreState): string =>
+  getWorkspaceMetadataFromStore(store).sessionName;
+
+export const getLockedElementIdFromStore = (store: StoreState): string =>
+  getWorkspaceMetadataFromStore(store).lockedElementId;
+
+export const getHoveredElementIdFromStore = (store: StoreState): string =>
+  getWorkspaceMetadataFromStore(store).hoveredElementId;
+
+export const getOriginalPathFromStore = (store: StoreState): string =>
+  getWorkspaceMetadataFromStore(store).originalPath;
+
 /**
  * Hook to retrieve workspace metadata from the redux store
  */

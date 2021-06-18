@@ -2,7 +2,10 @@ import React, { FC, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { jsonExporterThunk } from "exporters/json/json-exporter";
 import { resetStoreThunk } from "reducers/store-thunks";
-import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
+import {
+  getSessionNameFromStore,
+  getOriginalPathFromStore,
+} from "reducers/workspace-metadata/workspace-metadata-selectors";
 import Header from "components/header/header";
 import {
   redoAction,
@@ -48,9 +51,8 @@ const HeaderContainer: FC = () => {
     dispatch,
   ]);
 
-  const { sessionName, originalPath } = useSelector(
-    getWorkspaceMetadataFromStore
-  );
+  const sessionName = useSelector(getSessionNameFromStore);
+  const originalPath = useSelector(getOriginalPathFromStore);
 
   return (
     <Header

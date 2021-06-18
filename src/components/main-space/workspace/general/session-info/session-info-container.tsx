@@ -6,16 +6,17 @@ import {
   getFilesAndFoldersFromStore,
   getFoldersCount,
 } from "reducers/files-and-folders/files-and-folders-selectors";
-import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
+import { getSessionNameFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import { setSessionNameThunk } from "reducers/workspace-metadata/workspace-metadata-thunk";
-import General from "components/main-space/workspace/general/general";
+import SessionInfo from "./session-info";
+import { getFirstLevelName } from "util/files-and-folders/file-and-folders-utils";
 
-const GeneralContainer: FC = () => {
+const SessionInfoContainer: FC = () => {
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
 
   const dispatch = useDispatch();
 
-  const { sessionName } = useSelector(getWorkspaceMetadataFromStore);
+  const sessionName = useSelector(getSessionNameFromStore);
 
   const setSessionName = useCallback(
     (newSessionName) => dispatch(setSessionNameThunk(newSessionName)),
@@ -35,11 +36,13 @@ const GeneralContainer: FC = () => {
   const oldestFileTimestamp = rootFilesAndFoldersMetadata.minLastModified;
   const newestFileTimestamp = rootFilesAndFoldersMetadata.maxLastModified;
 
+  const firstLevelName = getFirstLevelName(filesAndFolders);
+
   return (
-    <General
-      filesAndFolders={filesAndFolders}
+    <SessionInfo
+      firstLevelName={firstLevelName}
       sessionName={sessionName}
-      setSessionName={setSessionName}
+      onChangeSessionName={setSessionName}
       nbFiles={nbFiles}
       nbFolders={nbFolders}
       volume={volume}
@@ -49,4 +52,4 @@ const GeneralContainer: FC = () => {
   );
 };
 
-export default GeneralContainer;
+export default SessionInfoContainer;

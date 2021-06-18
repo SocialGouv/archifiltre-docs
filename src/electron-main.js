@@ -124,6 +124,21 @@ function createWindow() {
     win.loadURL("http://localhost:8000");
   }
 
+  preventNavigation();
+
+  if (app.isPackaged) {
+    askBeforeLeaving();
+  }
+  // Emitted when the window is closed.
+  win.on("closed", () => {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    win = null;
+  });
+}
+
+app.whenReady().then(() => {
   let devToolsLoaded = Promise.resolve();
   if (REACT_DEV_TOOLS_PATH !== "") {
     try {
@@ -137,25 +152,10 @@ function createWindow() {
     }
   }
 
-  preventNavigation();
-
-  console.log(app.isPackaged, process.env.NODE_ENV);
-  // Open the DevTools.
   if (!app.isPackaged && process.env.NODE_ENV !== "test") {
     devToolsLoaded.then(() => win.webContents.openDevTools());
   }
-
-  if (app.isPackaged) {
-    askBeforeLeaving();
-  }
-  // Emitted when the window is closed.
-  win.on("closed", () => {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    win = null;
-  });
-}
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

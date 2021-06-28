@@ -1,13 +1,11 @@
 import { app } from "@electron/remote";
 import path from "path";
 import { compose } from "redux";
-import { bufferTime, filter, map, tap } from "rxjs/operators";
+import {bufferCount, bufferTime, filter, map, tap} from "rxjs/operators";
 import {
   aggregateResultsToMap,
-  backgroundWorkerProcess$,
   BatchProcessResult,
   computeBatch$,
-  filterResults,
 } from "util/batch-process/batch-process-util";
 import {
   DataProcessingStream,
@@ -19,11 +17,7 @@ import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders
 import { HashesMap } from "reducers/hashes/hashes-types";
 import { Observable, OperatorFunction } from "rxjs";
 import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
-import {
-  InitializeMessage,
-  MessageTypes,
-} from "util/batch-process/batch-process-util-types";
-import { folderHashComputerInputToStream } from "hash-computer/folder-hash-computer-serializer";
+import {computeFolderHashes} from "../util/files-and-folders/file-and-folders-utils";
 
 const BATCH_SIZE = 500;
 const BUFFER_TIME = 1000;
@@ -114,14 +108,6 @@ type ComputeFolderHashesOptions = {
   hashes: HashesMap;
 };
 
-const initMessageSerializer = (stream, message: InitializeMessage) => {
-  folderHashComputerInputToStream(stream, message.data);
-};
-
-const messageSerializers = {
-  [MessageTypes.INITIALIZE]: initMessageSerializer,
-};
-
 /**
  * Returns an observable that will dispatch computed hashes every second
  * @param filesAndFolders - The filesAndFolders
@@ -132,13 +118,14 @@ export const computeFolderHashes$ = ({
   filesAndFolders,
   hashes,
 }: ComputeFolderHashesOptions): Observable<HashesMap> => {
-  return backgroundWorkerProcess$(
-    { filesAndFolders, hashes },
-    createAsyncWorkerForChildProcessControllerFactory(
-      "folder-hash-computer.fork",
-      { messageSerializers }
-    )
+  return new Observable<HashesMap>((subscriber) => {
+    computeFolderHashes(filesAndFolders, hashes, (hashesMap) => {
+      subscriber.next(hashesMap);
+    }).then(() => {
+      subscriber.complete()
+    });
+  }).pipe(
+      bufferCount(2000),
+      map((values) => Object.assign({}, ...values)),
   )
-    .pipe(filterResults())
-    .pipe(map(({ result }) => result));
 };

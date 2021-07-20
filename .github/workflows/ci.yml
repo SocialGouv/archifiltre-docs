@@ -18,30 +18,13 @@ jobs:
       next_version: ${{ steps.next.outputs.next_version }}
 
     steps:
-      - name: Set up Node.js 14.x
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: 14.x
-
-      - name: Get yarn cache directory path
-        id: init
-        shell: bash
-        run: |
-          echo "::set-output name=yarn_cache::$(yarn cache dir)"
-          #
-          echo "Node $(node --version)"
-          echo "Yarn $(yarn --version)"
-
       - uses: actions/checkout@v2
 
-      - name: Cache Yarn packages
-        id: yarn_cache_packages
-        uses: actions/cache@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          path: ${{ steps.init.outputs.yarn_cache }}
-          key: ${{ runner.os }}-yarn_cache-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn_cache-
+          node-version: lts/*
+          cache: yarn
 
       - name: Installing
         run: |
@@ -166,12 +149,13 @@ jobs:
       APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
 
     steps:
-      - name: Set up Node.js 14.x
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: 14.x
-
       - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
+          cache: yarn
 
       - name: Build next version
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -189,16 +173,6 @@ jobs:
           #
           echo "Node $(node --version)"
           echo "Yarn $(yarn --version)"
-
-      - name: Cache Yarn packages
-        id: yarn_cache_packages
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.init.outputs.yarn_cache }}
-          key: ${{ runner.os }}-yarn_cache-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn_cache-
 
       - name: Installing
         run: yarn --frozen-lockfile --perfer-offline

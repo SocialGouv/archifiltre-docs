@@ -114,7 +114,7 @@
     "jest": "27.0.6",
     "jest-date-mock": "1.0.8",
     "lint-staged": "11.0.1",
-    "node-loader": "^1.0.3",
+    "node-loader": "^2.0.0",
     "node-sass": "^5.0.0",
     "prettier": "2.2.1",
     "rmfr": "2.0.0",

@@ -93,24 +93,19 @@ jobs:
         exclude:
           - isReleaseChanel: true
             isWorkflowDispatch: false
-            config:
-              script: linux
+            script: linux
           - isReleaseChanel: true
             isWorkflowDispatch: false
-            config:
-              script: mac
+            script: mac
           - isReleaseChanel: true
             isWorkflowDispatch: false
-            config:
-              script: win32
+            script: win32
           - isReleaseChanel: true
             isWorkflowDispatch: false
-            config:
-              script: win32-msi
+            script: win32-msi
           - isReleaseChanel: true
             isWorkflowDispatch: false
-            config:
-              script: win64-msi
+            script: win64-msi
         isWorkflowDispatch:
           - ${{ github.event_name == 'workflow_dispatch' }}
         isReleaseChanel:

@@ -18,30 +18,13 @@ jobs:
       next_version: ${{ steps.next.outputs.next_version }}
 
     steps:
-      - name: Set up Node.js 14.x
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: 14.x
-
-      - name: Get yarn cache directory path
-        id: init
-        shell: bash
-        run: |
-          echo "::set-output name=yarn_cache::$(yarn cache dir)"
-          #
-          echo "Node $(node --version)"
-          echo "Yarn $(yarn --version)"
-
       - uses: actions/checkout@v2
 
-      - name: Cache Yarn packages
-        id: yarn_cache_packages
-        uses: actions/cache@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          path: ${{ steps.init.outputs.yarn_cache }}
-          key: ${{ runner.os }}-yarn_cache-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn_cache-
+          node-version: lts/*
+          cache: yarn
 
       - name: Installing
         run: |
@@ -110,29 +93,24 @@ jobs:
         exclude:
           - isReleaseChanel: true
             isWorkflowDispatch: false
-            config:
-              script: linux
+            script: linux
           - isReleaseChanel: true
             isWorkflowDispatch: false
-            config:
-              script: mac
+            script: mac
           - isReleaseChanel: true
             isWorkflowDispatch: false
-            config:
-              script: win32
+            script: win32
           - isReleaseChanel: true
             isWorkflowDispatch: false
-            config:
-              script: win32-msi
+            script: win32-msi
           - isReleaseChanel: true
             isWorkflowDispatch: false
-            config:
-              script: win64-msi
+            script: win64-msi
         isWorkflowDispatch:
           - ${{ github.event_name == 'workflow_dispatch' }}
         isReleaseChanel:
           - ${{ contains('refs/heads/master,refs/heads/beta,refs/heads/next,refs/heads/alpha', github.ref) }}
-        config:
+        include:
           - name: Windows 64-bits
             os: windows-latest
             script: win64
@@ -152,8 +130,8 @@ jobs:
             os: ubuntu-latest
             script: linux
 
-    name: Build binary for ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
+    name: Build binary for ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
 
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -166,12 +144,13 @@ jobs:
       APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
 
     steps:
-      - name: Set up Node.js 14.x
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: 14.x
-
       - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
+          cache: yarn
 
       - name: Build next version
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -190,16 +169,6 @@ jobs:
           echo "Node $(node --version)"
           echo "Yarn $(yarn --version)"
 
-      - name: Cache Yarn packages
-        id: yarn_cache_packages
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.init.outputs.yarn_cache }}
-          key: ${{ runner.os }}-yarn_cache-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn_cache-
-
       - name: Installing
         run: yarn --frozen-lockfile --perfer-offline
         env:
@@ -213,12 +182,12 @@ jobs:
           path: electron/dist/
 
       - name: Build
-        run: yarn ${{ matrix.config.script }}
+        run: yarn ${{ matrix.script }}
 
       - name: Archive dist
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.config.script }}-bin
+          name: ${{ matrix.script }}-bin
           path: dist/*/archifiltre-*
 
   PreRelease:

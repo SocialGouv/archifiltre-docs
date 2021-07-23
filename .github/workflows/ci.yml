@@ -90,6 +90,19 @@ jobs:
 
     strategy:
       matrix:
+        isWorkflowDispatch:
+          - ${{ github.event_name == 'workflow_dispatch' }}
+        isReleaseChanel:
+          - ${{ contains('refs/heads/master,refs/heads/beta,refs/heads/next,refs/heads/alpha', github.ref) }}
+        script:
+          - linux
+          - mac
+          - win32
+          - win32-msi
+          - win64-msi
+
+        #
+
         exclude:
           - isReleaseChanel: true
             isWorkflowDispatch: false
@@ -106,10 +119,6 @@ jobs:
           - isReleaseChanel: true
             isWorkflowDispatch: false
             script: win64-msi
-        isWorkflowDispatch:
-          - ${{ github.event_name == 'workflow_dispatch' }}
-        isReleaseChanel:
-          - ${{ contains('refs/heads/master,refs/heads/beta,refs/heads/next,refs/heads/alpha', github.ref) }}
         include:
           - name: Windows 64-bits
             os: windows-latest

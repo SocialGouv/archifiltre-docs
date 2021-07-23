@@ -110,7 +110,7 @@ jobs:
           - ${{ github.event_name == 'workflow_dispatch' }}
         isReleaseChanel:
           - ${{ contains('refs/heads/master,refs/heads/beta,refs/heads/next,refs/heads/alpha', github.ref) }}
-        config:
+        include:
           - name: Windows 64-bits
             os: windows-latest
             script: win64
@@ -130,8 +130,8 @@ jobs:
             os: ubuntu-latest
             script: linux
 
-    name: Build binary for ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
+    name: Build binary for ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
 
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -182,12 +182,12 @@ jobs:
           path: electron/dist/
 
       - name: Build
-        run: yarn ${{ matrix.config.script }}
+        run: yarn ${{ matrix.script }}
 
       - name: Archive dist
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.config.script }}-bin
+          name: ${{ matrix.script }}-bin
           path: dist/*/archifiltre-*
 
   PreRelease:

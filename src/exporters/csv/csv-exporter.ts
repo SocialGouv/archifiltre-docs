@@ -37,6 +37,9 @@ export const csvExporterThunk = (
   const loaderMessage = withHashes
     ? translations.t("export.creatingCsvExportWithHashes")
     : translations.t("export.creatingCsvExport");
+  const loadedMessage = withHashes
+    ? translations.t("export.createdCsvExportWithHashes")
+    : translations.t("export.createdCsvExport");
 
   const exportSuccessMessage = translations.t("export.csvExportSuccessMessage");
 
@@ -46,6 +49,7 @@ export const csvExporterThunk = (
     handleFileExportThunk(csvExportData$, {
       totalProgress,
       loaderMessage,
+      loadedMessage,
       exportNotificationTitle,
       exportFileName: name,
       exportSuccessMessage,

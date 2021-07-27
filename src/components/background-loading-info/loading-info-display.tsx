@@ -26,14 +26,16 @@ const RoundedLinearProgress = styled(LinearProgress)`
 type LoadingInfoProps = {
   loadingInfo: LoadingInfo;
   color: string;
+  label: string;
 };
 
 const LoadingInfoDisplay: FC<LoadingInfoProps> = ({
   loadingInfo,
   color = "black",
+  label,
 }) => (
   <LoadingBarContainer color={color}>
-    <LoadingBarName>{loadingInfo.label}</LoadingBarName>
+    <LoadingBarName>{label || loadingInfo.label}</LoadingBarName>
     <Box display="flex" alignItems="center">
       <Box width="100%" mr={1}>
         <RoundedLinearProgress

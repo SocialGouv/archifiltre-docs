@@ -134,6 +134,7 @@ const computeFolderHashesThunk = (
 type ComputeHashesThunkOptions = {
   ignoreFileHashes?: boolean;
   hashesLoadingLabel: string;
+  hashesLoadedLabel: string;
   originalPath: string;
 };
 
@@ -150,6 +151,7 @@ export const computeHashesThunk = (
     ignoreFileHashes = false,
     originalPath,
     hashesLoadingLabel,
+    hashesLoadedLabel,
   }: ComputeHashesThunkOptions
 ): ArchifiltreThunkAction => async (dispatch, getState) => {
   const state = getState();
@@ -162,7 +164,8 @@ export const computeHashesThunk = (
     startLoading(
       LoadingInfoTypes.HASH_COMPUTING,
       foldersCount + filePaths.length,
-      hashesLoadingLabel
+      hashesLoadingLabel,
+      hashesLoadedLabel
     )
   );
 
@@ -211,12 +214,14 @@ export const firstHashesComputingThunk = (
   const filePaths = Object.keys(getFilesMap(filesAndFolders));
 
   const hashesLoadingLabel = translations.t("hash.loadingInfoLabel");
+  const hashesLoadedLabel = translations.t("hash.loadedInfoLabel");
 
   await dispatch(
     computeHashesThunk(filePaths, {
       originalPath,
       ignoreFileHashes,
       hashesLoadingLabel,
+      hashesLoadedLabel,
     })
   );
 };
@@ -230,6 +235,7 @@ export const retryHashesComputingThunk = (): ArchifiltreThunkAction => async (
   const hashErrors = getErroredHashesFromStore(state);
   const { originalPath } = getWorkspaceMetadataFromStore(state);
   const hashesLoadingLabel = translations.t("hash.loadingInfoLabel");
+  const hashesLoadedLabel = translations.t("hash.loadedInfoLabel");
   const erroredPaths = hashErrors.map(({ filePath }) => filePath);
 
   await dispatch(
@@ -237,6 +243,7 @@ export const retryHashesComputingThunk = (): ArchifiltreThunkAction => async (
       originalPath,
       ignoreFileHashes: false,
       hashesLoadingLabel,
+      hashesLoadedLabel,
     })
   );
 };

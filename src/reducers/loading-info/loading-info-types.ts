@@ -19,6 +19,7 @@ export interface LoadingInfo {
   progress: number;
   goal: number;
   label: string;
+  loadedLabel: string;
 }
 
 export interface LoadingInfoMap {
@@ -39,6 +40,7 @@ interface StartLoadingAction {
   loadingType: LoadingInfoTypes;
   goal: number;
   label: string;
+  loadedLabel: string;
 }
 
 interface UpdateLoadingAction {

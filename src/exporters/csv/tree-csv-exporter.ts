@@ -25,6 +25,7 @@ export const treeCsvExporterThunk = (
   // We remove the root element and add the header line
   const totalProgress = Object.keys(filesAndFolders).length;
   const loaderMessage = translations.t("export.creatingTreeCsvExport");
+  const loadedMessage = translations.t("export.createdTreeCsvExport");
   const exportSuccessMessage = translations.t("export.csvExportSuccessMessage");
 
   const treeCsvExportData$ = generateTreeCsvExport$(filesAndFolders);
@@ -33,6 +34,7 @@ export const treeCsvExporterThunk = (
     handleFileExportThunk(treeCsvExportData$, {
       totalProgress,
       loaderMessage,
+      loadedMessage,
       exportNotificationTitle,
       exportFileName: name,
       exportSuccessMessage,

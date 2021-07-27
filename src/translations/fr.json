@@ -155,6 +155,7 @@
     },
     "hash": {
       "loadingInfoLabel": "Chargement des empreintes de fichiers et dossiers",
+      "loadedInfoLabel": "Chargement des empreintes de fichiers et dossiers terminé.",
       "loadingErrorMessage": "Une erreur s'est produite lors du chargement des empreintes. Cliquez ici pour plus de détails.",
       "title": "Empreintes"
     },
@@ -193,7 +194,9 @@
       "csvExportStartedMessage": "L'export CSV a commencé",
       "csvExportSuccessMessage": "L'export CSV est terminé",
       "creatingCsvExport": "Création de l'export CSV",
+      "createdCsvExport": "L'export CSV a été créé",
       "creatingCsvExportWithHashes": "Création de l'export CSV avec empreintes",
+      "createdCsvExportWithHashes": "L'export CSV avec empreintes a été créé",
       "creatingResipExport": "Création de l'export RESIP",
       "treeCsv": "CSV hiérarchisé",
       "excelExportProgressLabel": "Création de l'export Excel",
@@ -203,6 +206,7 @@
       "treeStats": "Statistiques de l'arborescence",
       "treeVisualizing": "Visualisation de l'arborescence",
       "creatingTreeCsvExport": "Création de l'export csv hiérarchisé",
+      "createdTreeCsvExport": "L'export csv hiérarchisé est terminé.",
       "deletionScript": "Script de suppression",
       "deletionScriptSuccessMessage": "Le script de suppression a été généré. Cliquez pour y accéder.",
       "auditReportTitle": "Rapport d'audit",

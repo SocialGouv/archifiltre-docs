@@ -11,9 +11,10 @@ import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
 export const startLoading = (
   type: LoadingInfoTypes,
   goal: number,
-  label: string
+  label: string,
+  loadedLabel: string
 ) => (dispatch) => {
   const id = uuid();
-  dispatch(startLoadingAction(id, type, goal, label));
+  dispatch(startLoadingAction(id, type, goal, label, loadedLabel));
   return id;
 };

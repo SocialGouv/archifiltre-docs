@@ -2,25 +2,25 @@ import { promises as fs } from "fs";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { of } from "rxjs";
-import { DispatchExts } from "reducers/archifiltre-types";
-import { initialState as filesAndFoldersInitialState } from "reducers/files-and-folders/files-and-folders-reducer";
-import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
+import { DispatchExts } from "../../reducers/archifiltre-types";
+import { initialState as filesAndFoldersInitialState } from "../../reducers/files-and-folders/files-and-folders-reducer";
+import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 import {
   COMPLETE_LOADING,
   LoadingInfoTypes,
   PROGRESS_LOADING,
   START_LOADING,
-} from "reducers/loading-info/loading-info-types";
-import { StoreState } from "reducers/store";
+} from "../../reducers/loading-info/loading-info-types";
+import { StoreState } from "../../reducers/store";
 import {
   createEmptyStore,
   wrapStoreWithUndoable,
-} from "reducers/store-test-utils";
+} from "../../reducers/store-test-utils";
 import { csvExporterThunk } from "./csv-exporter";
 import { generateCsvExport$ } from "./csv-exporter.controller";
-import { initialState } from "reducers/hashes/hashes-reducer";
-import { MessageTypes } from "util/batch-process/batch-process-util-types";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { initialState } from "../../reducers/hashes/hashes-reducer";
+import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
+import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 jest.mock("./csv-exporter.controller", () => ({
   generateCsvExport$: jest.fn(),
@@ -172,6 +172,7 @@ describe("csv-exporter", () => {
             goal: 3,
             id: "test-uuid",
             label: "Creating the CSV export file",
+            loadedLabel: "CSV export file has been created",
             loadingType: LoadingInfoTypes.EXPORT,
             type: START_LOADING,
           },
@@ -215,6 +216,7 @@ describe("csv-exporter", () => {
             goal: 3,
             id: "test-uuid",
             label: "Creating the CSV with hashes export file",
+            loadedLabel: "CSV with hashes export file has been created.",
             loadingType: LoadingInfoTypes.EXPORT,
             type: START_LOADING,
           },

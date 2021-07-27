@@ -27,6 +27,7 @@ export const excelExporterThunk = (
   const exportData = getCsvExportParamsFromStore(getState());
 
   const loadingLabel = translations.t("export.excelExportProgressLabel");
+  const loadedLabel = translations.t("export.excelExportSuccessMessage");
 
   const elementsCount = Object.keys(exportData.filesAndFolders).length;
 
@@ -39,7 +40,8 @@ export const excelExporterThunk = (
     startLoading(
       LoadingInfoTypes.EXPORT,
       getExcelExportProgressGoal(elementsCount),
-      loadingLabel
+      loadingLabel,
+      loadedLabel
     )
   );
 

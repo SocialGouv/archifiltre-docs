@@ -22,12 +22,14 @@ export const startLoadingAction = (
   id: string,
   type: LoadingInfoTypes,
   goal: number,
-  label: string
+  label: string,
+  loadedLabel: string
 ): LoadingInfoAction => ({
   goal,
   id,
   label,
   loadingType: type,
+  loadedLabel,
   type: START_LOADING,
 });
 

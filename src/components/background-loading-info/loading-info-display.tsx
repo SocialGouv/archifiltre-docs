@@ -27,12 +27,14 @@ type LoadingInfoProps = {
   loadingInfo: LoadingInfo;
   color: string;
   label: string;
+  isLoaded: boolean;
 };
 
 const LoadingInfoDisplay: FC<LoadingInfoProps> = ({
   loadingInfo,
   color = "black",
   label,
+  isLoaded,
 }) => (
   <LoadingBarContainer color={color}>
     <LoadingBarName>{label || loadingInfo.label}</LoadingBarName>

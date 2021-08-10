@@ -21,7 +21,6 @@ export const treeCsvExporterThunk = (
 
   const state = getState();
   const filesAndFolders = getFilesAndFoldersFromStore(state);
-
   // We remove the root element and add the header line
   const totalProgress = Object.keys(filesAndFolders).length;
   const loaderMessage = translations.t("export.creatingTreeCsvExport");

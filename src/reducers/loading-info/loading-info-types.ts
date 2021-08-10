@@ -4,6 +4,7 @@ export const START_LOADING = "LOADING_INFO/START_LOADING";
 export const UPDATE_LOADING = "LOADING_INFO/UPDATE_LOADING";
 export const PROGRESS_LOADING = "LOADING_INFO/PROGRESS_LOADING";
 export const COMPLETE_LOADING = "LOADING_INFO/COMPLETE_LOADING";
+export const ADD_EXPORTED_PATH = "LOADING_INFO/ADD_EXPORTED_PATH";
 export const REGISTER_ERROR = "LOADING_INFO/REGISTER_ERROR";
 export const RESET_LOADING = "LOADING_INFO/RESET_LOADING";
 export const DISMISS_ALL_COMPLETE = "LOADING_INFO/DISMISS_ALL_COMPLETE";
@@ -20,6 +21,7 @@ export interface LoadingInfo {
   goal: number;
   label: string;
   loadedLabel: string;
+  exportedPath?: string;
 }
 
 export interface LoadingInfoMap {
@@ -41,6 +43,7 @@ interface StartLoadingAction {
   goal: number;
   label: string;
   loadedLabel: string;
+  exportedPath?: string;
 }
 
 interface UpdateLoadingAction {
@@ -59,6 +62,12 @@ interface ProgressLoadingAction {
 interface CompleteLoadingAction {
   type: typeof COMPLETE_LOADING;
   id: string;
+}
+
+interface AddExportedPathAction {
+  type: typeof ADD_EXPORTED_PATH;
+  id: string;
+  exportedPath: string;
 }
 
 interface RegisterErrorAction {
@@ -81,4 +90,5 @@ export type LoadingInfoAction =
   | CompleteLoadingAction
   | RegisterErrorAction
   | ResetLoadingAction
-  | DismissAllComplete;
+  | DismissAllComplete
+  | AddExportedPathAction;

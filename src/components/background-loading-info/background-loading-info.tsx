@@ -57,14 +57,11 @@ const BackgroundLoadingInfo: FC<BackgroundLoadingInfoProps> = ({
       loadingInfo.goal - 1 === loadingInfo.progress,
     []
   );
-  // const showInFolderExportedFile = useCallback((loadingInfo: LoadingInfo) =>
-  //   isLoaded(loadingInfo) ? openExternalElement() : null[loadingItems]
-  // );
 
   const selectLabel = useCallback(
     (loadingInfo: LoadingInfo) =>
       isLoaded(loadingInfo) ? loadingInfo.loadedLabel : loadingInfo.label,
-    [loadingItems]
+    []
   );
   if (!isActive) {
     return null;

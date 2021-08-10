@@ -155,7 +155,7 @@
     },
     "hash": {
       "loadingInfoLabel": "Chargement des empreintes de fichiers et dossiers",
-      "loadedInfoLabel": "Chargement des empreintes de fichiers et dossiers terminé.",
+      "loadedInfoLabel": "Chargement des empreintes de fichiers et dossiers terminé",
       "loadingErrorMessage": "Une erreur s'est produite lors du chargement des empreintes. Cliquez ici pour plus de détails.",
       "title": "Empreintes"
     },
@@ -205,7 +205,7 @@
       "excelExportTitle": "Export Excel",
       "treeStats": "Statistiques de l'arborescence",
       "treeVisualizing": "Visualisation de l'arborescence",
-      "creatingTreeCsvExport": "Création de l'export csv hiérarchisé",
+      "creatingTreeCsvExport": "Création de l'export csv hiérarchisé.",
       "createdTreeCsvExport": "L'export csv hiérarchisé est terminé.",
       "deletionScript": "Script de suppression",
       "deletionScriptSuccessMessage": "Le script de suppression a été généré. Cliquez pour y accéder.",

@@ -18,7 +18,7 @@ const BreadcrumbTextTooltipContent: FC<BreadcrumbTextTooltipContentProps> = ({
 }) =>
   alias ? (
     <Box>
-      <span>`${alias} `</span>
+      <span>{alias}</span>
       <ItalicText>({name})</ItalicText>
     </Box>
   ) : (

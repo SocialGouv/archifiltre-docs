@@ -29,6 +29,7 @@ import {
 import { useElementHeight } from "hooks/use-element-height";
 import { useControllableValue } from "../../../hooks/use-controllable-value";
 import { useTranslation } from "react-i18next";
+import { useDuplicatePageState } from "context/duplicates-page-context";
 
 type TableProps<T> = {
   data: T[];
@@ -55,7 +56,8 @@ function Table<T>({
 }: TableProps<T>): ReactElement<any, any> | null {
   const { t } = useTranslation();
 
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
+  const { rowsPerPage, setRowsPerPage } = useDuplicatePageState();
   const [innerPage, setInnerPage] = useControllableValue(0, page, onPageChange);
   const handleChangePage = useCallback(
     (event: any, newPage: number) => {

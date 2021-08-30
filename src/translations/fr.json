@@ -136,6 +136,7 @@
       "toDelete": "À éliminer",
       "yes": "Oui",
       "no": "Non",
+      "rowsPerPage": "Lignes par page",
       "files": "fichier(s)",
       "folders": "dossier(s)",
       "fileTypes": {

@@ -44,7 +44,6 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
   elementsToDelete,
   tagAsToDelete,
   untagAsToDelete,
-  ...props
 }) => {
   const { t } = useTranslation();
 

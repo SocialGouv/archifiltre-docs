@@ -22,6 +22,7 @@ import {
 import { makeTableExpandableRow } from "components/common/table/table-expandable-row";
 import { useDebouncedValue } from "hooks/use-debounced-value";
 import ToDeleteChip from "components/common/to-delete-chip";
+import { useDuplicatePageState } from "context/duplicates-page-context";
 
 const SEARCH_INPUT_DEBOUNCE = 300;
 
@@ -43,11 +44,13 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
   elementsToDelete,
   tagAsToDelete,
   untagAsToDelete,
+  ...props
 }) => {
   const { t } = useTranslation();
 
+  const { pageIndex, setPageIndex } = useDuplicatePageState();
+
   const [searchTerm, setSearchTerm] = useState("");
-  const [page, setPage] = useState(0);
   const debouncedSearchTerm = useDebouncedValue(
     searchTerm,
     SEARCH_INPUT_DEBOUNCE
@@ -68,9 +71,9 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
   const performSearch = useCallback(
     (searchValue) => {
       setSearchTerm(searchValue);
-      setPage(0);
+      setPageIndex(0);
     },
-    [setSearchTerm, setPage]
+    [setSearchTerm, setPageIndex]
   );
 
   const data = useMemo(
@@ -245,8 +248,8 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
             data={data}
             RowRendererComp={TableExpandableRow}
             rowId={rowIdAccessor}
-            page={page}
-            onPageChange={setPage}
+            page={pageIndex}
+            onPageChange={setPageIndex}
           />
         )}
       </Box>

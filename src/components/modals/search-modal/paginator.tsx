@@ -1,5 +1,6 @@
 import TablePagination from "@material-ui/core/TablePagination";
 import React, { forwardRef, MutableRefObject } from "react";
+import { PaginatorActions } from "./paginator-actions";
 
 const Paginator = (
   {
@@ -25,7 +26,7 @@ const Paginator = (
     labelDisplayedRows={({ from, to, count }) =>
       `${from}-${to === -1 ? count : to}/${count !== -1 ? count : ">" + to}`
     }
-    // showFirst
+    ActionsComponent={PaginatorActions}
   />
 );
 

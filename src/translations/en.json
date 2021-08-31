@@ -137,6 +137,10 @@
       "yes": "Yes",
       "no": "No",
       "rowsPerPage": "Rows per page",
+      "lastPage": "Last page",
+      "firstPage": "First page",
+      "nextPage": "Next page",
+      "previousPage": "Previous page",
       "files": "file(s)",
       "folders": "folder(s)",
       "fileTypes": {

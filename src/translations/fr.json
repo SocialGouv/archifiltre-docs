@@ -137,6 +137,10 @@
       "yes": "Oui",
       "no": "Non",
       "rowsPerPage": "Lignes par page",
+      "lastPage": "Dernière page",
+      "firstPage": "Première page",
+      "nextPage": "Page suivante",
+      "previousPage": "Page précédente",
       "files": "fichier(s)",
       "folders": "dossier(s)",
       "fileTypes": {

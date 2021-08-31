@@ -56,7 +56,6 @@ function Table<T>({
 }: TableProps<T>): ReactElement<any, any> | null {
   const { t } = useTranslation();
 
-  // const [rowsPerPage, setRowsPerPage] = useState(10);
   const { rowsPerPage, setRowsPerPage } = useDuplicatePageState();
   const [innerPage, setInnerPage] = useControllableValue(0, page, onPageChange);
   const handleChangePage = useCallback(

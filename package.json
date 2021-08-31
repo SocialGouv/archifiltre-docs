@@ -85,7 +85,7 @@
     "@commitlint/cli": "13.1.0",
     "@commitlint/config-conventional": "13.1.0",
     "@socialgouv/eslint-config-react": "1.63.0",
-    "@types/jest": "26.0.24",
+    "@types/jest": "27.0.1",
     "@types/lodash": "4.14.172",
     "@types/node": "12",
     "@types/pizzip": "^3.0.2",

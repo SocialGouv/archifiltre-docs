@@ -113,6 +113,7 @@ type IcicleMainProps = {
   hoverSequence: string[];
   lockedSequence: string[];
   elementsToDelete: string[];
+  getAllChildrenFolderCount: (id: string) => number;
   getChildrenIdFromId: (id: string) => string[];
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
   elementWeightMethod: ElementWeightMethod;
@@ -137,6 +138,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
   hoverSequence,
   lockedSequence,
   elementsToDelete,
+  getAllChildrenFolderCount,
   getChildrenIdFromId,
   getFfByFfId,
   elementWeightMethod,
@@ -375,6 +377,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
         </IcicleWrapper>
         <RulerWrapper>
           <Ruler
+            getAllChildrenFolderCount={getAllChildrenFolderCount}
             getFfByFfId={getFfByFfId}
             widthUnit={viewBoxWidth}
             hoveredDims={hoveredDims}

@@ -50,10 +50,9 @@ const getFilesCount = (node: FilesAndFoldersMetadata): string =>
  */
 const getFoldersCount = (
   node: FilesAndFolders,
-  getFfById: (id: string) => FilesAndFolders & FilesAndFoldersMetadata
+  getAllChildrenFolderCount: (id: string) => number
 ): string => {
-  const { children } = node;
-  const foldersCount = children.map(getFfById).filter(isFolder).length;
+  const foldersCount = getAllChildrenFolderCount(node.id);
   return `${foldersCount} ${translations.t("common.folders")}`;
 };
 
@@ -77,7 +76,7 @@ const makePercentageText = (nodeSize: number, totalSize: number) => {
 const makeRulerText = (
   node: FilesAndFolders & FilesAndFoldersMetadata,
   rootNode: FilesAndFolders & FilesAndFoldersMetadata,
-  getFfById: (id: string) => FilesAndFolders & FilesAndFoldersMetadata
+  getAllChildrenFolderCount: (id: string) => number
 ) => {
   const { childrenTotalSize } = node;
   const { childrenTotalSize: rootChildrenTotalSize } = rootNode;
@@ -89,7 +88,7 @@ const makeRulerText = (
   const rulerInfo = [percentageText, filesAndFolderSize];
 
   if (isFolder(node)) {
-    rulerInfo.push(getFoldersCount(node, getFfById));
+    rulerInfo.push(getFoldersCount(node, getAllChildrenFolderCount));
     rulerInfo.push(getFilesCount(node));
   }
 
@@ -103,6 +102,7 @@ type RulerProps = {
   lockedDims: Dims | null;
   lockedElementId: string;
   hoveredElementId: string;
+  getAllChildrenFolderCount: (id: string) => number;
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
   fillColor: FillColor;
 };
@@ -114,6 +114,7 @@ const Ruler: FC<RulerProps> = ({
   hoveredElementId,
   lockedDims = EmptyDims,
   lockedElementId,
+  getAllChildrenFolderCount,
   getFfByFfId,
   fillColor,
 }) => {
@@ -125,7 +126,7 @@ const Ruler: FC<RulerProps> = ({
     ? makeRulerText(
         getFfByFfId(elementId),
         getFfByFfId(ROOT_FF_ID),
-        getFfByFfId
+        getAllChildrenFolderCount
       )
     : "";
 

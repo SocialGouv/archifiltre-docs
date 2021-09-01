@@ -9,6 +9,7 @@ import {
   getMaxDepth,
   getVirtualPathToIdFromStore,
   ROOT_FF_ID,
+  isFolder,
 } from "reducers/files-and-folders/files-and-folders-selectors";
 import { moveElement } from "reducers/files-and-folders/files-and-folders-thunks";
 import { getTagsFromStore } from "reducers/tags/tags-selectors";
@@ -21,7 +22,10 @@ import {
   useWorkspaceMetadata,
 } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import { useFillColor } from "util/color/color-util";
-import { createFilePathSequence } from "util/files-and-folders/file-and-folders-utils";
+import {
+  createFilePathSequence,
+  getAllChildren,
+} from "util/files-and-folders/file-and-folders-utils";
 import IcicleMain from "./icicle-main";
 import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
 import { useIcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-selectors";
@@ -56,6 +60,14 @@ export default function IcicleApiToProps() {
       ...filesAndFolders[ffId],
     }),
     [filesAndFoldersMetadata, filesAndFolders]
+  );
+
+  const getAllChildrenFolderCount = useCallback(
+    (id: string) => {
+      const children = getAllChildren(filesAndFolders, id);
+      return children.map(getFfByFfId).filter(isFolder).length - 1;
+    },
+    [filesAndFolders]
   );
 
   const maxDepth = useMemo(() => getMaxDepth(filesAndFolders), [
@@ -137,6 +149,7 @@ export default function IcicleApiToProps() {
       originalPath={originalPath}
       fillColor={fillColor}
       getChildrenIdFromId={getChildrenIdFromId}
+      getAllChildrenFolderCount={getAllChildrenFolderCount}
       elementsToDelete={elementsToDelete}
       getFfByFfId={getFfByFfId}
       maxDepth={maxDepth}

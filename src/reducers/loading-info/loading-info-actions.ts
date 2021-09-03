@@ -66,9 +66,13 @@ export const progressLoadingAction = (
  * Completes a loading.
  * @param id
  */
-export const completeLoadingAction = (id: string): LoadingInfoAction => ({
+export const completeLoadingAction = (
+  id: string,
+  onClickComplete?: () => unknown
+): LoadingInfoAction => ({
   id,
   type: COMPLETE_LOADING,
+  onClickComplete,
 });
 
 /**

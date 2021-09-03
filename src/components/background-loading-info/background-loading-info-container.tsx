@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { LoadingInfoState } from "reducers/loading-info/loading-info-types";
 import { dismissAllComplete } from "../../reducers/loading-info/loading-info-actions";
 import {
   getCompleteLoadingInfo,
@@ -22,10 +23,10 @@ const BackgroundLoadingInfoContainer = () => {
     [loadingInfoState.complete, loadingInfoState.loadingInfo]
   );
 
-  const displayedItems = useMemo(() => [...loadingItems, ...completedItems], [
-    loadingItems,
-    completedItems,
-  ]);
+  const displayedItems = useMemo(
+    () => [...loadingItems, ...completedItems] as const,
+    [loadingItems, completedItems]
+  );
 
   const dismissAll = useCallback(() => dispatch(dismissAllComplete()), [
     dispatch,

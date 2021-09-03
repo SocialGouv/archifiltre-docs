@@ -52,7 +52,9 @@ export const handleFileExportThunk = (
     )
     .toPromise();
 
-  dispatch(completeLoadingAction(loadingId));
+  dispatch(
+    completeLoadingAction(loadingId, () => openExternalElement(exportFileName))
+  );
   await fs.writeFile(exportFileName, result, { encoding: "utf-8" });
   notifySuccess(
     exportSuccessMessage,

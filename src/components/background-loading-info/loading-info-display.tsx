@@ -2,9 +2,10 @@ import React, { FC } from "react";
 import styled from "styled-components";
 import { LoadingInfo } from "reducers/loading-info/loading-info-types";
 import { percent } from "util/numbers/numbers-util";
-import { LinearProgress } from "@material-ui/core";
+import { Button, LinearProgress } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
+import { FaFolderOpen } from "react-icons/fa";
 
 const getColor = ({ color }) => color;
 
@@ -24,7 +25,7 @@ const RoundedLinearProgress = styled(LinearProgress)`
 `;
 
 type LoadingInfoProps = {
-  loadingInfo: LoadingInfo;
+  loadingInfo: LoadingInfo & { onClickComplete?(): unknown };
   color: string;
 };
 
@@ -47,6 +48,9 @@ const LoadingInfoDisplay: FC<LoadingInfoProps> = ({
           {percent(loadingInfo.progress, loadingInfo.goal)} %
         </Typography>
       </Box>
+      <Button onClick={() => loadingInfo.onClickComplete?.()}>
+        <FaFolderOpen />
+      </Button>
     </Box>
   </LoadingBarContainer>
 );

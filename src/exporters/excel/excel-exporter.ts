@@ -56,7 +56,7 @@ export const excelExporterThunk = (
 
   await fs.writeFile(name, result, "binary");
 
-  dispatch(completeLoadingAction(loadingId));
+  dispatch(completeLoadingAction(loadingId, () => openExternalElement(name)));
 
   notifySuccess(
     translations.t("export.excelExportSuccessMessage"),

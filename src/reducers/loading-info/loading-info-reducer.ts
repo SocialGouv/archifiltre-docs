@@ -76,7 +76,7 @@ const loadingInfoReducer = (
       }
       return {
         ...state,
-        complete: [...state.complete, action.id],
+        complete: [...state.complete, action],
         loading: state.loading.filter((id) => id !== action.id),
       };
 
@@ -93,7 +93,7 @@ const loadingInfoReducer = (
       return {
         ...state,
         complete: [],
-        dismissed: [...state.dismissed, ...state.complete],
+        dismissed: [...state.dismissed, ...state.complete.map(({ id }) => id)],
       };
   }
   return state;

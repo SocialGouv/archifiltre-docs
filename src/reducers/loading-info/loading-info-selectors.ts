@@ -29,7 +29,11 @@ export const getRunningLoadingInfo = ({
 export const getCompleteLoadingInfo = ({
   complete,
   loadingInfo,
-}: LoadingInfoState): LoadingInfo[] => complete.map((id) => loadingInfo[id]);
+}: LoadingInfoState): (LoadingInfo & { onClickComplete?(): unknown })[] =>
+  complete.map(({ id, onClickComplete }) => ({
+    ...loadingInfo[id],
+    onClickComplete,
+  }));
 
 /**
  * Selector for the errors list

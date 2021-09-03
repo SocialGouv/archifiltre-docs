@@ -28,9 +28,10 @@ export interface LoadingInfoMap {
 export interface LoadingInfoState {
   loadingInfo: LoadingInfoMap;
   loading: string[];
-  complete: string[];
+  complete: CompleteLoadingAction[];
   dismissed: string[];
   errors: ArchifiltreError[];
+  onClickComplete?: () => unknown;
 }
 
 interface StartLoadingAction {
@@ -57,6 +58,7 @@ interface ProgressLoadingAction {
 interface CompleteLoadingAction {
   type: typeof COMPLETE_LOADING;
   id: string;
+  onClickComplete?: () => unknown;
 }
 
 interface RegisterErrorAction {

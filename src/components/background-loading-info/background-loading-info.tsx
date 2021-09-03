@@ -33,7 +33,10 @@ const ToggleArrow = styled(IconButton)<ToggleArrowProps>(({ collapsed }) => ({
 }));
 
 type BackgroundLoadingInfoProps = {
-  loadingItems: LoadingInfo[];
+  loadingItems: readonly (
+    | LoadingInfo
+    | (LoadingInfo & { onClickComplete?(): unknown })
+  )[];
   isLoading: boolean;
   dismissAll: () => void;
 };

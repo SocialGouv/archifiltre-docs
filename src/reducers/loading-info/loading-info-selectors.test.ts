@@ -8,18 +8,22 @@ import {
   getRunningLoadingInfo,
 } from "./loading-info-selectors";
 import { createLoadingInfo } from "./loading-info-test-utils";
+import { CompleteLoadingAction, LoadingInfoState } from "./loading-info-types";
 
 const loadingLoadingInfoId = "loading-info-id";
 const loadingLoadingInfo = createLoadingInfo({ id: loadingLoadingInfoId });
 const completeLoadingInfoId = "completeLoadingInfo";
-const completeLoadingInfo = createLoadingInfo({ id: completeLoadingInfoId });
+const completeLoadingInfo = {
+  ...createLoadingInfo({ id: completeLoadingInfoId }),
+  onClickComplete: jest.fn(),
+};
 
 const error = createArchifiltreError({
   reason: "test-error",
 });
 
-const loadingInfoState = {
-  complete: [completeLoadingInfoId],
+const loadingInfoState: LoadingInfoState = {
+  complete: [(completeLoadingInfo as unknown) as CompleteLoadingAction],
   dismissed: [],
   errors: [error],
   loading: [loadingLoadingInfoId],

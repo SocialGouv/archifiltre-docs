@@ -167,24 +167,25 @@ describe("csv-exporter", () => {
         expect(writeFileMock).toHaveBeenCalledWith(exportPath, csvValue, {
           encoding: "utf-8",
         });
-        expect(store.getActions()).toEqual([
-          {
-            goal: 3,
-            id: "test-uuid",
-            label: "Creating the CSV export file",
-            loadingType: LoadingInfoTypes.EXPORT,
-            type: START_LOADING,
-          },
-          {
-            id: "test-uuid",
-            progress: 3,
-            type: PROGRESS_LOADING,
-          },
-          {
-            id: "test-uuid",
-            type: COMPLETE_LOADING,
-          },
-        ]);
+
+        const actions = store.getActions();
+        expect(actions[0]).toEqual({
+          goal: 3,
+          id: "test-uuid",
+          label: "Creating the CSV export file",
+          loadingType: LoadingInfoTypes.EXPORT,
+          type: START_LOADING,
+        });
+        expect(actions[1]).toEqual({
+          id: "test-uuid",
+          progress: 3,
+          type: PROGRESS_LOADING,
+        });
+        actions[2].onClickComplete &&
+          expect(actions[2].onClickComplete).toBeInstanceOf(Function);
+
+        expect(actions[2]).toHaveProperty("id", "test-uuid");
+        expect(actions[2]).toHaveProperty("type", COMPLETE_LOADING);
       });
     });
 
@@ -210,24 +211,24 @@ describe("csv-exporter", () => {
           encoding: "utf-8",
         });
 
-        expect(store.getActions()).toEqual([
-          {
-            goal: 3,
-            id: "test-uuid",
-            label: "Creating the CSV with hashes export file",
-            loadingType: LoadingInfoTypes.EXPORT,
-            type: START_LOADING,
-          },
-          {
-            id: "test-uuid",
-            progress: 3,
-            type: PROGRESS_LOADING,
-          },
-          {
-            id: "test-uuid",
-            type: COMPLETE_LOADING,
-          },
-        ]);
+        const actions = store.getActions();
+        expect(actions[0]).toEqual({
+          goal: 3,
+          id: "test-uuid",
+          label: "Creating the CSV with hashes export file",
+          loadingType: LoadingInfoTypes.EXPORT,
+          type: START_LOADING,
+        });
+        expect(actions[1]).toEqual({
+          id: "test-uuid",
+          progress: 3,
+          type: PROGRESS_LOADING,
+        });
+        actions[2].onClickComplete &&
+          expect(actions[2].onClickComplete).toBeInstanceOf(Function);
+
+        expect(actions[2]).toHaveProperty("id", "test-uuid");
+        expect(actions[2]).toHaveProperty("type", COMPLETE_LOADING);
       });
     });
   });

@@ -55,7 +55,7 @@ interface ProgressLoadingAction {
   progress: number;
 }
 
-interface CompleteLoadingAction {
+export interface CompleteLoadingAction {
   type: typeof COMPLETE_LOADING;
   id: string;
   onClickComplete?: () => unknown;

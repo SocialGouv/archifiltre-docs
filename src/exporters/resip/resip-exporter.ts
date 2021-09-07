@@ -61,7 +61,6 @@ const formatTitle = (ff: FilesAndFolders, aliases: AliasMap) =>
  * @param date
  */
 const formatDate = (date) => dateFormat(date, "yyyy-mm-dd");
-
 /**
  * Mapper to enrich fileOrFolder with parentId.
  * @param fileOrFolder

@@ -100,7 +100,7 @@
     "css-loader": "6.2.0",
     "csv-stringify": "^5.6.4",
     "deep-equal": "2.0.5",
-    "electron": "13.1.9",
+    "electron": "14.0.1",
     "electron-builder": "22.10.5",
     "electron-notarize": "^1.0.1",
     "electron-react-devtools": "0.5.3",

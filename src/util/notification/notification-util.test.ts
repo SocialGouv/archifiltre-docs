@@ -1,5 +1,5 @@
 import { NotificationManager } from "react-notifications";
-import { empty } from "util/function/function-util";
+import { empty } from "../function/function-util";
 import { notifyError, notifyInfo, notifySuccess } from "./notifications-util";
 
 jest.mock("react-notifications", () => ({
@@ -15,7 +15,7 @@ describe("notification-util", () => {
     it("should call the notification library with the right args", () => {
       const notificationMessage = "notificationMessage";
       const notificationTitle = "notificationTitle";
-      const expectedTimeout = 5000;
+      const expectedTimeout = 10000;
       const callback = empty;
       notifySuccess(notificationMessage, notificationTitle);
 
@@ -34,7 +34,7 @@ describe("notification-util", () => {
     it("should call the notification library with the right args", () => {
       const notificationMessage = "notificationMessage";
       const notificationTitle = "notificationTitle";
-      const expectedTimeout = 5000;
+      const expectedTimeout = 10000;
       const callback = empty;
       notifyError(notificationMessage, notificationTitle);
 
@@ -53,7 +53,7 @@ describe("notification-util", () => {
     it("should call the notification library with the right args", () => {
       const notificationMessage = "notificationMessage";
       const notificationTitle = "notificationTitle";
-      const expectedTimeout = 5000;
+      const expectedTimeout = 10000;
       const callback = empty;
       notifyInfo(notificationMessage, notificationTitle);
 

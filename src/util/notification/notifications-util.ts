@@ -5,7 +5,7 @@ import { empty } from "util/function/function-util";
 const arbitrarilyLongTime = 100000000000;
 
 export enum NotificationDuration {
-  NORMAL = 5000,
+  NORMAL = 10000,
   PERMANENT = arbitrarilyLongTime,
 }
 

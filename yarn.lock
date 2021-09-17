@@ -10636,10 +10636,10 @@ winattr@^3.0.0:
   dependencies:
     fswin "^3.18.918"
 
-windows-1252@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/windows-1252/-/windows-1252-1.1.0.tgz#c9d7cb301f779322050f8c12454f277baeb9a98f"
-  integrity sha512-DuZvfW7bAFmIe7+eXkpGWV4SeJ0+HBlrCmFWc57vRcDZBwRomtjj7cnmbrb8UxwnWlxtRLi8W5q7kdku3hoJjw==
+windows-1252@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/windows-1252/-/windows-1252-3.0.2.tgz#d93e7e6f6679d2d7a71cec44f5af64561e43d71e"
+  integrity sha512-5cxJSKEwl0u56v9opqMbJLlF7Q/yOmy+L04tcsGWSMmLQo0DLthFdJjZ8TiF6YF40vYQL3MuwSeXjznLtrpKeQ==
 
 winston-daily-rotate-file@^4.5.5:
   version "4.5.5"

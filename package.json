@@ -144,7 +144,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "csv-parse": "^4.15.4",
     "date-fns": "^2.19.0",
-    "dateformat": "3.0.3",
+    "dateformat": "4.6.1",
     "docxtemplater": "3.21.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-lodash-fp": "^2.2.0-a1",

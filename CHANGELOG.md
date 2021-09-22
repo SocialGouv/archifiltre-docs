@@ -4,6 +4,28 @@
 ### Bug Fixes
 
 * **breadcrumb-tooltip:** remove interpolation string ([#1320](https://github.com/SocialGouv/archifiltre/issues/1320)) ([c5d3e48](https://github.com/SocialGouv/archifiltre/commit/c5d3e485f32df9e2c5548a7e19833966595fe9b6))
+* **breadcrumbs:** sliced breadcrumbs fixed ([f3c8138](https://github.com/SocialGouv/archifiltre/commit/f3c8138eaa5c3016868856a9649df3bebbe1e392))
+* compute folder hashes in main thread ([#1285](https://github.com/SocialGouv/archifiltre/issues/1285)) ([98f818e](https://github.com/SocialGouv/archifiltre/commit/98f818ea2fe0fb01084aa439c69b1ef683d91831))
+* **deps:** lock version for sass and css loaders ([#1346](https://github.com/SocialGouv/archifiltre/issues/1346)) ([21c2934](https://github.com/SocialGouv/archifiltre/commit/21c2934fb0209a55344b321c23142d4615e2fc39))
+* **deps:** update all dependencies ([#1280](https://github.com/SocialGouv/archifiltre/issues/1280)) ([149a5e9](https://github.com/SocialGouv/archifiltre/commit/149a5e9d893bda6781afb0f6eb0a39e102363393))
+* **deps:** update all dependencies ([#1283](https://github.com/SocialGouv/archifiltre/issues/1283)) ([42a7261](https://github.com/SocialGouv/archifiltre/commit/42a7261d4dccff15b8f346d16f69b83a87282097))
+* **deps:** update all dependencies ([#1295](https://github.com/SocialGouv/archifiltre/issues/1295)) ([28da7f9](https://github.com/SocialGouv/archifiltre/commit/28da7f98dd6fcbe00d2a8f446cfd2596533112e6))
+* **deps:** update dependency i18next to v20 ([#1311](https://github.com/SocialGouv/archifiltre/issues/1311)) ([61cece5](https://github.com/SocialGouv/archifiltre/commit/61cece503d5fa0a7586a08b3d28eaa2aafbd6c61))
+* **deps:** update dependency jszip to v3.7.0 [security] ([#1324](https://github.com/SocialGouv/archifiltre/issues/1324)) ([f1c3169](https://github.com/SocialGouv/archifiltre/commit/f1c316989c4a65ea9b2c6ab464632da4adc19117))
+* **deps:** update dependency react-i18next to ^11.11.0 ([#1281](https://github.com/SocialGouv/archifiltre/issues/1281)) ([cc7c8a5](https://github.com/SocialGouv/archifiltre/commit/cc7c8a56125e9871f3862e0e65ee8da7de3989bb))
+* **deps:** update dependency react-icons to v4 ([#1312](https://github.com/SocialGouv/archifiltre/issues/1312)) ([dd17383](https://github.com/SocialGouv/archifiltre/commit/dd17383ba970c75b9a2dc65bb6504c0b317d85dd))
+* **deps:** update dependency windows-1252 to ^1.1.0 ([#1316](https://github.com/SocialGouv/archifiltre/issues/1316)) ([819b86c](https://github.com/SocialGouv/archifiltre/commit/819b86ceffa8d142602d55914e1d8be67c50d5ea))
+* **deps:** update dependency xlsx to ^0.17.0 [security] ([#1299](https://github.com/SocialGouv/archifiltre/issues/1299)) ([cd1ab2d](https://github.com/SocialGouv/archifiltre/commit/cd1ab2da7e00fd517b14652f6d0ea73823626aa0))
+* **deps:** update dependency yargs to v17 ([#1338](https://github.com/SocialGouv/archifiltre/issues/1338)) ([2a5455a](https://github.com/SocialGouv/archifiltre/commit/2a5455a3be0e0885bee84bc87303a2eba6d0954c))
+* fix husky not launching ([#1273](https://github.com/SocialGouv/archifiltre/issues/1273)) ([76d7f02](https://github.com/SocialGouv/archifiltre/commit/76d7f029349f432295e76921fc4d06b0c94a7840))
+* **modal:** increment display time ([#1301](https://github.com/SocialGouv/archifiltre/issues/1301)) ([cdf315c](https://github.com/SocialGouv/archifiltre/commit/cdf315c7f02bed18d2b21c31dd4d89b263200d69))
+
+## [3.2.2](https://github.com/SocialGouv/archifiltre/compare/v3.2.1...v3.2.2) (2021-09-22)
+
+
+### Bug Fixes
+
+* **breadcrumb-tooltip:** remove interpolation string ([#1320](https://github.com/SocialGouv/archifiltre/issues/1320)) ([c5d3e48](https://github.com/SocialGouv/archifiltre/commit/c5d3e485f32df9e2c5548a7e19833966595fe9b6))
 * compute folder hashes in main thread ([#1285](https://github.com/SocialGouv/archifiltre/issues/1285)) ([98f818e](https://github.com/SocialGouv/archifiltre/commit/98f818ea2fe0fb01084aa439c69b1ef683d91831))
 * **deps:** lock version for sass and css loaders ([#1346](https://github.com/SocialGouv/archifiltre/issues/1346)) ([21c2934](https://github.com/SocialGouv/archifiltre/commit/21c2934fb0209a55344b321c23142d4615e2fc39))
 * **deps:** update all dependencies ([#1280](https://github.com/SocialGouv/archifiltre/issues/1280)) ([149a5e9](https://github.com/SocialGouv/archifiltre/commit/149a5e9d893bda6781afb0f6eb0a39e102363393))

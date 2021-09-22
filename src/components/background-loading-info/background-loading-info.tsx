@@ -51,9 +51,22 @@ const BackgroundLoadingInfo: FC<BackgroundLoadingInfoProps> = ({
   ]);
   const isActive = loadingItems.length > 0;
 
+  const isLoaded = useCallback(
+    (loadingInfo: LoadingInfo) =>
+      loadingInfo.goal === loadingInfo.progress ||
+      loadingInfo.goal - 1 === loadingInfo.progress,
+    []
+  );
+
+  const selectLabel = useCallback(
+    (loadingInfo: LoadingInfo) =>
+      isLoaded(loadingInfo) ? loadingInfo.loadedLabel : loadingInfo.label,
+    []
+  );
   if (!isActive) {
     return null;
   }
+
   return (
     <BottomLeftArea>
       <Grid container>
@@ -92,6 +105,8 @@ const BackgroundLoadingInfo: FC<BackgroundLoadingInfoProps> = ({
                   key={loadingInfo.id}
                   loadingInfo={loadingInfo}
                   color={theme.palette.secondary.main}
+                  label={selectLabel(loadingInfo)}
+                  isLoaded={isLoaded(loadingInfo)}
                 />
               ))}
             </LoadingBarArea>

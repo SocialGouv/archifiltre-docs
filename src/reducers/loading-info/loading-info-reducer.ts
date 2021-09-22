@@ -33,6 +33,7 @@ const loadingInfoReducer = (
             goal: action.goal,
             id: action.id,
             label: action.label,
+            loadedLabel: action.loadedLabel,
             progress: 0,
             type: action.loadingType,
           },

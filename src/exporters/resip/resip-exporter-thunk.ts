@@ -25,14 +25,6 @@ import { v4 as uuid } from "uuid";
 import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
 import { RESIP_HOOK_CALL_PER_ELEMENT } from "exporters/resip/resip-exporter";
 
-const resipExportTitle = translations.t("export.resipExportTitle");
-const resipExportSuccessMessage = translations.t(
-  "export.resipExportSuccessMessage"
-);
-const resipExportStartedMessage = translations.t(
-  "export.resipExportStartedMessage"
-);
-
 /**
  * Thunk to export data to Resip
  * @param filePath - name of the output file
@@ -48,6 +40,14 @@ export const resipExporterThunk = (
   const comments = getCommentsFromStore(state);
   const elementsToDelete = getElementsToDeleteFromStore(state);
 
+  const resipExportTitle = translations.t("export.resipExportTitle");
+  const resipExportSuccessMessage = translations.t(
+    "export.resipExportSuccessMessage"
+  );
+  const resipExportStartedMessage = translations.t(
+    "export.resipExportStartedMessage"
+  );
+
   notifyInfo(resipExportStartedMessage, resipExportTitle);
   const loadingActionId = uuid();
   dispatch(
@@ -56,7 +56,8 @@ export const resipExporterThunk = (
       LoadingInfoTypes.EXPORT,
       // We remove the root folder
       RESIP_HOOK_CALL_PER_ELEMENT * (Object.keys(filesAndFolders).length - 1),
-      "RESIP"
+      "RESIP",
+      resipExportSuccessMessage
     )
   );
 

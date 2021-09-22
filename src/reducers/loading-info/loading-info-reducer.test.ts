@@ -48,7 +48,8 @@ describe("loading-info-reducer", () => {
             newLoadingId,
             newLoading.type,
             newLoading.goal,
-            newLoading.label
+            newLoading.label,
+            newLoading.loadedLabel
           )
         )
       ).toEqual({

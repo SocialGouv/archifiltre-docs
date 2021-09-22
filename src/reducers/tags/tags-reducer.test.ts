@@ -40,7 +40,13 @@ describe("tags-reducer", () => {
       const nextState = tagsReducer(initialState, resetTags());
 
       expect(nextState).toEqual({
-        tags: {},
+        tags: {
+          "to-delete": {
+            id: "",
+            name: "",
+            ffIds: [""],
+          },
+        },
       });
     });
   });

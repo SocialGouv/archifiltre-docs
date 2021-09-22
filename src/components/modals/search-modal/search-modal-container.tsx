@@ -76,6 +76,7 @@ export const SearchModalContainer = ({ isModalOpen, closeModal }) => {
     <SearchModal
       exportToCsv={exportToCsv}
       filesAndFolders={filesAndFoldersWithToDelete}
+      toDelete={toDelete}
       columns={columns}
       tags={tags}
       isModalOpen={isModalOpen}

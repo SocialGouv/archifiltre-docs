@@ -34,6 +34,7 @@ type SearchModalProps = {
   columns: Column<ElementWithToDelete>[];
   filesAndFolders: ElementWithToDelete[];
   tags: TagMap;
+  toDelete: string[];
 };
 
 export const SearchModal: FC<SearchModalProps> = ({
@@ -43,6 +44,7 @@ export const SearchModal: FC<SearchModalProps> = ({
   closeModal,
   filesAndFolders,
   tags,
+  toDelete,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -115,6 +117,7 @@ export const SearchModal: FC<SearchModalProps> = ({
                 <Filters
                   setFilters={setFilters}
                   filesAndFolders={filesAndFoldersArray}
+                  toDelete={toDelete}
                   tags={tags}
                 />
               </Box>

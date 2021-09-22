@@ -19,6 +19,7 @@ import { ResultMessage } from "util/batch-process/batch-process-util-types";
 type ExportOptions = {
   totalProgress: number;
   loaderMessage: string;
+  loadedMessage: string;
   exportFileName: string;
   exportNotificationTitle: string;
   exportSuccessMessage: string;
@@ -32,13 +33,19 @@ export const handleFileExportThunk = (
   {
     totalProgress,
     loaderMessage,
+    loadedMessage,
     exportNotificationTitle,
     exportFileName,
     exportSuccessMessage,
   }: ExportOptions
 ): ArchifiltreThunkAction => async (dispatch) => {
   const loadingId = dispatch(
-    startLoading(LoadingInfoTypes.EXPORT, totalProgress, loaderMessage)
+    startLoading(
+      LoadingInfoTypes.EXPORT,
+      totalProgress,
+      loaderMessage,
+      loadedMessage
+    )
   );
 
   const { result } = await exportData$

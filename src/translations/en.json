@@ -160,6 +160,7 @@
     },
     "hash": {
       "loadingInfoLabel": "Loading files and folders hashes",
+      "loadedInfoLabel": "Files and folders hashes are loaded",
       "loadingErrorMessage": "An error occurred while loading hashes. Click here for more details.",
       "title": "Hash"
     },
@@ -198,7 +199,9 @@
       "csvExportStartedMessage": "CSV export started",
       "csvExportSuccessMessage": "CSV export succeeded",
       "creatingCsvExport": "Creating the CSV export file",
+      "createdCsvExport": "CSV export file has been created",
       "creatingCsvExportWithHashes": "Creating the CSV with hashes export file",
+      "createdCsvExportWithHashes": "CSV with hashes export file has been created.",
       "creatingResipExport": "Creating the Resip export file",
       "treeCsv": "Tree CSV",
       "excelExportProgressLabel": "Creating Excel export",
@@ -208,6 +211,7 @@
       "treeStats": "File tree statistics",
       "treeVisualizing": "File tree visualizing",
       "creatingTreeCsvExport": "Creating tree csv export",
+      "createdTreeCsvExport": "Tree csv exported.",
       "deletionScript": "Deletion script",
       "deletionScriptSuccessMessage": "Deletion script has been generated. Click here to access it.",
       "auditReportTitle": "Audit report",

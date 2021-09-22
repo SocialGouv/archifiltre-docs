@@ -1,5 +1,26 @@
 {
   "extends": [
     "github>SocialGouv/renovate-config:light"
+  ],
+  "updatePinnedDependencies": false,
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "node-sass"
+      ],
+      "allowedVersions": "<6"
+    },
+    {
+      "matchPackageNames": [
+        "sass-loader"
+      ],
+      "allowedVersions": "<10"
+    },
+    {
+      "matchPackageNames": [
+        "css-loader"
+      ],
+      "allowedVersions": "<6"
+    }
   ]
 }

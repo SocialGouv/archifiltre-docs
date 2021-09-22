@@ -94,15 +94,15 @@ const makeBreadcrumbsFillers = (
   depth: number,
   t: TFunction
 ): BreadcrumbProps[] => [
-  makeFiller({
-    id: "filler1",
-    name: "1",
-    alias: null,
-    isFirst: true,
-    isLast: depth === 1,
-  }),
-  ...(depth > 2
-    ? [
+    makeFiller({
+      id: "filler1",
+      name: "1",
+      alias: null,
+      isFirst: true,
+      isLast: depth === 1,
+    }),
+    ...(depth > 2
+      ? [
         makeFiller({
           id: "filler2",
           name: "2",
@@ -111,9 +111,9 @@ const makeBreadcrumbsFillers = (
           isLast: false,
         }),
       ]
-    : []),
-  ...(depth > 3
-    ? [
+      : []),
+    ...(depth > 3
+      ? [
         makeFiller({
           id: "filler3",
           name: "...",
@@ -122,9 +122,9 @@ const makeBreadcrumbsFillers = (
           isLast: false,
         }),
       ]
-    : []),
-  ...(depth > 4
-    ? [
+      : []),
+    ...(depth > 4
+      ? [
         makeFiller({
           id: "filler4",
           name: "...",
@@ -133,9 +133,9 @@ const makeBreadcrumbsFillers = (
           isLast: false,
         }),
       ]
-    : []),
-  ...(depth > 1
-    ? [
+      : []),
+    ...(depth > 1
+      ? [
         makeFiller({
           id: "filler-file",
           name: t("workspace.file"),
@@ -144,8 +144,8 @@ const makeBreadcrumbsFillers = (
           isLast: true,
         }),
       ]
-    : []),
-];
+      : []),
+  ];
 
 /**
  * Returns the absolute path of the corresponding file
@@ -202,40 +202,42 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({
 
   const fillerElements = makeEmptyArray(depth - filesAndFolders.length, null);
   return (
-    <BreadcrumbsWrapper>
-      {filesAndFolders.map(
-        ({
-          id,
-          name,
-          alias,
-          opacity,
-          color,
-          isActive,
-          isFirst,
-          isLast,
-          path,
-        }) => (
-          <BreadcrumbWrapper key={`breadcrumb-wrapper-${id}`} depth={depth}>
-            <Breadcrumb
-              id={id}
-              key={`breadcrumb-${id}`}
-              name={name}
-              alias={alias}
-              path={path}
-              active={isActive}
-              opacity={opacity}
-              color={color}
-              isFirst={isFirst}
-              isLast={isLast}
-              onBreadcrumbClick={onBreadcrumbClick}
-            />
-          </BreadcrumbWrapper>
-        )
-      )}
-      {fillerElements.map((_, index) => (
-        <BreadcrumbWrapper key={`breadcrumb-filler-${index}`} depth={depth} />
-      ))}
-    </BreadcrumbsWrapper>
+    <div className="breadcrumbs">
+      <BreadcrumbsWrapper>
+        {filesAndFolders.map(
+          ({
+            id,
+            name,
+            alias,
+            opacity,
+            color,
+            isActive,
+            isFirst,
+            isLast,
+            path,
+          }) => (
+            <BreadcrumbWrapper key={`breadcrumb-wrapper-${id}`} depth={depth}>
+              <Breadcrumb
+                id={id}
+                key={`breadcrumb-${id}`}
+                name={name}
+                alias={alias}
+                path={path}
+                active={isActive}
+                opacity={opacity}
+                color={color}
+                isFirst={isFirst}
+                isLast={isLast}
+                onBreadcrumbClick={onBreadcrumbClick}
+              />
+            </BreadcrumbWrapper>
+          )
+        )}
+        {fillerElements.map((_, index) => (
+          <BreadcrumbWrapper key={`breadcrumb-filler-${index}`} depth={depth} />
+        ))}
+      </BreadcrumbsWrapper>
+    </div>
   );
 };
 

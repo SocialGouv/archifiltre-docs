@@ -7,9 +7,10 @@ on:
 jobs:
   Quality:
     strategy:
-      # Don't fast-fail on tag and master
+      # Don't fast-fail on tag and master and develop
       fail-fast: ${{ github.event_name == 'pull_request' || (github.ref !=
-        'refs/heads/master' && !startsWith(github.ref, 'refs/tags/')) }}
+        'refs/heads/master' && github.ref !=
+        'refs/heads/develop' && !startsWith(github.ref, 'refs/tags/')) }}
 
     name: Quality Control on Node 14.x (ubuntu-latest)
     runs-on: ubuntu-latest

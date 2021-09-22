@@ -202,6 +202,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({
 
   const fillerElements = makeEmptyArray(depth - filesAndFolders.length, null);
   return (
+    <div className="breadcrumb">
     <BreadcrumbsWrapper>
       {filesAndFolders.map(
         ({
@@ -236,6 +237,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({
         <BreadcrumbWrapper key={`breadcrumb-filler-${index}`} depth={depth} />
       ))}
     </BreadcrumbsWrapper>
+    </div>
   );
 };
 

@@ -1,5 +1,44 @@
 #!/usr/bin/env bash
-VERSION=1.0.1
+
+VERSION=1.0.2
+
+# Enable better error messages.
+shopt -s gnu_errfmt
+
+die () {
+    printf '%s\n' "$*" 1>&2
+    exit 1
+}
+
+usage () {
+    cat <<EOF
+bash load-filesystem.sh [OPTION...] DIRECTORY > my-output-file
+ Options:
+   -h, --help    Show this help.
+EOF
+}
+
+while (($# != 0)); do
+    case $1 in
+        -h | --help)
+            usage
+            exit
+            ;;
+        --)
+            # End of all options.
+            shift
+            break
+            ;;
+        -?*)
+            die "unknown option ($1)"
+            ;;
+        *)
+            # Not an option: break.
+            break
+            ;;
+    esac
+    shift
+done
 
 if [[ $1 = "" ]]
 then
@@ -12,7 +51,9 @@ unameOut="$(uname -s)"
 case "${unameOut}" in
   Linux*) machine=Linux;;
   Darwin*) machine=Darwin;;
-  *) machine=Unknown
+  *)
+      die "unsupported system: $unameOut"
+      ;;
 esac
 
 if [[ $machine = Linux ]]
@@ -26,31 +67,30 @@ else
   MD5="md5 -q"
 fi
 
+INITIAL_PATH=$PWD
+
+FILE_PATH=$PWD/$1
+
+cd "$FILE_PATH" || die "could not chdir to $FILE_PATH"
+
+ANALYZED_FOLDER_PATH=$PWD
+
 echo $VERSION
 echo unix
-
-INITIAL_PATH=$(pwd)
-
-FILE_PATH=$(pwd)/$1
-
-cd "$FILE_PATH" || exit
-
-ANALYZED_FOLDER_PATH=$(pwd)
-
 echo "$ANALYZED_FOLDER_PATH"
 
-FILE_PATHS=$(find "$ANALYZED_FOLDER_PATH")
+find "$ANALYZED_FOLDER_PATH" -type f -print0 | while read -r -d '' path; do
+    FILE_STAT=$($STAT "$STAT_FORMAT" "$path")
+    if (($?)); then
+        echo "warning: could not stat $path" 1>&2
+        continue
+    fi
 
-for i in $FILE_PATHS; do
-  if [[ -f "$i" ]]
-  then
-    FILE_STAT=$($STAT "$STAT_FORMAT" "$i")
-    # We use an array to remove the trailing path that is added on linux by md5sum
-    # shellcheck disable=SC2207
-    FILE_HASH=($($MD5 "$i"))
-    # shellcheck disable=SC2128
+    read -r FILE_HASH FILENAME < <($MD5 "$path")
+    if (($?)); then
+        echo "warning: could not md5sum $path" 1>&2
+        continue
+    fi
+
     echo "$FILE_STAT,$FILE_HASH"
-  fi
-done;
-
-cd "$INITIAL_PATH" || exit
+done

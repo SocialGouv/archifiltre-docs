@@ -87,7 +87,7 @@
     "@socialgouv/eslint-config-react": "1.63.0",
     "@types/jest": "27.0.1",
     "@types/lodash": "4.14.172",
-    "@types/node": "12",
+    "@types/node": "16",
     "@types/pizzip": "^3.0.2",
     "@types/react": "17.0.19",
     "@types/react-dom": "17.0.9",

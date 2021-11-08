@@ -1,22 +1,50 @@
-import { computeHash } from "./hash-util";
-import md5File from "md5-file";
-
-jest.mock("md5-file", () => ({
-  sync: jest.fn(),
-}));
-
-const md5FileSyncMock = md5File.sync as jest.Mock;
+import { HashComputingResult, hashErrorToArchifiltreError, hashResult, hashResultsToMap } from "./hash-util";
+import { accessDenied, fileNotFound, unhandledFileError } from "./hash-errors";
 
 describe("hash-util", () => {
-  describe("computeHash", () => {
-    it("should call md5-file sync with the path", () => {
-      const path = "test/path/to/file";
-      const responseHash = "RESPONSEHASHTEST";
+  describe("hashErrorToArchifiltreError", () => {
+    it("should handle fileNotFound error", () => {
+      const filePath = "path1";
+      expect(hashErrorToArchifiltreError(fileNotFound(filePath))).toEqual({
+        "code": "ENOENT",
+        "filePath": "path1",
+        "reason": "FILE_NOT_FOUND",
+        "type": "computingHashes",
+      });
+    });
 
-      md5FileSyncMock.mockReturnValue(responseHash);
+    it("should handle accessDenied error", () => {
+      const filePath = "path1";
+      expect(hashErrorToArchifiltreError(accessDenied(filePath))).toEqual({
+        "code": "EACCES",
+        "filePath": "path1",
+        "reason": "ACCESS_DENIED",
+        "type": "computingHashes",
+      });
+    });
 
-      expect(computeHash(path)).toEqual(responseHash);
-      expect(md5FileSyncMock).toHaveBeenCalledWith(path);
+    it("should handle unknown error", () => {
+      const filePath = "path1";
+      expect(hashErrorToArchifiltreError(unhandledFileError(filePath, "message"))).toEqual({
+        "code": "UNKNOWN",
+        "filePath": "path1",
+        "reason": "UNHANDLED_FILE_ERROR",
+        "type": "computingHashes",
+      });
+    });
+  });
+
+  describe("hashResultsToMap", () => {
+    it("should transform hash computing result array into a hashmap", () => {
+      const data: HashComputingResult[] = [
+        hashResult("path1", "hash1"),
+        hashResult("path2", "hash2")
+      ];
+
+      expect(hashResultsToMap(data)).toEqual({
+        path1: "hash1",
+        path2: "hash2",
+      })
     });
   });
 });

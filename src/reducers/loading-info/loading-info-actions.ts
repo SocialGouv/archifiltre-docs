@@ -5,11 +5,12 @@ import {
   LoadingInfoTypes,
   PROGRESS_LOADING,
   REGISTER_ERROR,
+  REPLACE_ERRORS,
   RESET_LOADING,
   START_LOADING,
   UPDATE_LOADING,
 } from "./loading-info-types";
-import { ArchifiltreError } from "util/error/error-util";
+import { ArchifiltreError, ArchifiltreErrorType } from "util/error/error-util";
 
 /**
  * Action to start a loading display
@@ -39,8 +40,8 @@ export const startLoadingAction = (
  */
 export const updateLoadingAction = (
   id: string,
-  progress: number,
-  goal: number
+  progress?: number,
+  goal?: number
 ): LoadingInfoAction => ({
   goal,
   id,
@@ -80,6 +81,15 @@ export const registerErrorAction = (
 ): LoadingInfoAction => ({
   error,
   type: REGISTER_ERROR,
+});
+
+export const replaceErrorsAction = (
+  errors: ArchifiltreError[],
+  errorType: ArchifiltreErrorType
+): LoadingInfoAction => ({
+  errors,
+  errorType,
+  type: REPLACE_ERRORS,
 });
 
 /**

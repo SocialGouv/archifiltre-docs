@@ -1,5 +1,6 @@
 import path from "path";
-import { tap } from "rxjs/operators";
+import { tap, map } from "rxjs/operators";
+import { map as lodashMap } from "lodash/fp";
 import { reportError } from "logging/reporter";
 import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
 import {
@@ -10,34 +11,27 @@ import {
 import {
   completeLoadingAction,
   progressLoadingAction,
-  registerErrorAction,
+  replaceErrorsAction,
+  updateLoadingAction,
 } from "reducers/loading-info/loading-info-actions";
 import { startLoading } from "reducers/loading-info/loading-info-operations";
 import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
 import translations from "translations/translations";
-import {
-  NotificationDuration,
-  notifyError,
-  notifySuccess,
-} from "util/notification/notifications-util";
-import { operateOnDataProcessingStream } from "util/observable/observable-util";
-import {
-  computeFolderHashes$,
-  computeHashes$,
-} from "hash-computer/hash-computer.controller";
+import { NotificationDuration, notifyError, notifySuccess, } from "util/notification/notifications-util";
+import { computeFolderHashes$, } from "hash-computer/hash-computer.controller";
 import { openModalAction } from "reducers/modal/modal-actions";
 import { Modal } from "reducers/modal/modal-types";
-import {
-  addErroredHashes,
-  resetErroredHashes,
-  setFilesAndFoldersHashes,
-} from "reducers/hashes/hashes-actions";
-import {
-  getErroredHashesFromStore,
-  getHashesFromStore,
-} from "reducers/hashes/hashes-selectors";
+import { addErroredHashes, resetErroredHashes, setFilesAndFoldersHashes, } from "reducers/hashes/hashes-actions";
+import { getErroredHashesFromStore, getHashesFromStore, } from "reducers/hashes/hashes-selectors";
 import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
-import { ArchifiltreError } from "util/error/error-util";
+import { ArchifiltreErrorType } from "util/error/error-util";
+import {
+  computeHashes,
+  HashComputingResult,
+  hashErrorToArchifiltreError,
+  hashResultsToMap
+} from "../util/hash/hash-util";
+import { pipe } from "rxjs";
 
 const computeFileHashesIgnoredThunk = (
   loadingActionId: string,
@@ -54,34 +48,50 @@ const computeFileHashesImplThunk = (
 ): ArchifiltreThunkAction<Promise<number>> => async (
   dispatch
 ): Promise<number> => {
-  let loadingErrorsCount = 0;
+    dispatch(resetErroredHashes());
+    const basePath = path.dirname(originalPath);
+    const hashes$ = computeHashes(fileIds, basePath);
 
-  const basePath = originalPath.split(path.sep).slice(0, -1).join(path.sep);
-  const hashes$ = computeHashes$(fileIds, { initialValues: { basePath } });
+    const getRelativePath = (filePath: string): string => `/${path.relative(basePath, filePath)}`;
 
-  const onNewHashesComputed = (newHashes) => {
-    dispatch(
-      progressLoadingAction(loadingActionId, Object.keys(newHashes).length)
-    );
-    dispatch(setFilesAndFoldersHashes(newHashes));
+    const formatResult = pipe(
+      lodashMap(({ path, ...rest }: HashComputingResult): HashComputingResult => ({
+        ...rest,
+        path: getRelativePath(path)
+      })),
+      hashResultsToMap,
+    )
+
+    const result = await hashes$
+      .pipe(
+        map(({ errors, results, ...rest }) => ({
+          ...rest,
+          results: formatResult(results),
+          errors: errors.map(hashErrorToArchifiltreError)
+        })),
+        tap(({ results, errors }) => {
+          dispatch(
+            updateLoadingAction(loadingActionId, Object.keys(results).length + errors.length)
+          );
+          dispatch(setFilesAndFoldersHashes(results));
+          dispatch(replaceErrorsAction(
+            errors,
+            ArchifiltreErrorType.COMPUTING_HASHES
+          ))
+        })
+      ).toPromise();
+
+    if (result.errors.length) {
+      reportError(result.errors);
+      dispatch(
+        addErroredHashes(
+          result.errors.map(({ filePath, ...rest }) => ({ ...rest, filePath: getRelativePath(filePath) }))
+        )
+      );
+    }
+
+    return result.errors.length;
   };
-
-  dispatch(resetErroredHashes());
-
-  return new Promise((resolve) => {
-    operateOnDataProcessingStream(hashes$, {
-      error: tap((errors: ArchifiltreError[]) => {
-        reportError(errors);
-        errors.forEach((error) => dispatch(registerErrorAction(error)));
-        dispatch(addErroredHashes(errors));
-        loadingErrorsCount++;
-      }),
-      result: tap(onNewHashesComputed),
-    }).subscribe({
-      complete: () => resolve(loadingErrorsCount),
-    });
-  });
-};
 
 type ComputeFileHashesThunkOptions = {
   loadingActionId: string;
@@ -99,14 +109,14 @@ const computeFileHashesThunk = (
 ): ArchifiltreThunkAction<Promise<number>> => async (
   dispatch
 ): Promise<number> => {
-  const filesCount = filePaths.length;
+    const filesCount = filePaths.length;
 
-  return ignoreFileHashes
-    ? dispatch(computeFileHashesIgnoredThunk(loadingActionId, filesCount))
-    : dispatch(
+    return ignoreFileHashes
+      ? dispatch(computeFileHashesIgnoredThunk(loadingActionId, filesCount))
+      : dispatch(
         computeFileHashesImplThunk(originalPath, filePaths, loadingActionId)
       );
-};
+  };
 
 const computeFolderHashesThunk = (
   loadingActionId: string

@@ -1,10 +1,11 @@
-import { ArchifiltreError } from "util/error/error-util";
+import { ArchifiltreError, ArchifiltreErrorType } from "util/error/error-util";
 
 export const START_LOADING = "LOADING_INFO/START_LOADING";
 export const UPDATE_LOADING = "LOADING_INFO/UPDATE_LOADING";
 export const PROGRESS_LOADING = "LOADING_INFO/PROGRESS_LOADING";
 export const COMPLETE_LOADING = "LOADING_INFO/COMPLETE_LOADING";
 export const REGISTER_ERROR = "LOADING_INFO/REGISTER_ERROR";
+export const REPLACE_ERRORS = "LOADING_INFO/REPLACE_ERRORS";
 export const RESET_LOADING = "LOADING_INFO/RESET_LOADING";
 export const DISMISS_ALL_COMPLETE = "LOADING_INFO/DISMISS_ALL_COMPLETE";
 
@@ -44,8 +45,8 @@ interface StartLoadingAction {
 interface UpdateLoadingAction {
   type: typeof UPDATE_LOADING;
   id: string;
-  progress: number;
-  goal: number;
+  progress?: number;
+  goal?: number;
 }
 
 interface ProgressLoadingAction {
@@ -64,6 +65,12 @@ interface RegisterErrorAction {
   error: ArchifiltreError;
 }
 
+interface ReplaceErrorsAction {
+  type: typeof REPLACE_ERRORS;
+  errors: ArchifiltreError[];
+  errorType: ArchifiltreErrorType
+};
+
 interface ResetLoadingAction {
   type: typeof RESET_LOADING;
 }
@@ -78,5 +85,6 @@ export type LoadingInfoAction =
   | ProgressLoadingAction
   | CompleteLoadingAction
   | RegisterErrorAction
+  | ReplaceErrorsAction
   | ResetLoadingAction
   | DismissAllComplete;

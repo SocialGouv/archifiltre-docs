@@ -39,7 +39,8 @@ const loadingInfoReducer = (
         },
       };
     case UPDATE_LOADING:
-      if (!state.loadingInfo[action.id]) {
+      const loadingInfo = state.loadingInfo[action.id];
+      if (!loadingInfo) {
         return state;
       }
       return {
@@ -47,9 +48,9 @@ const loadingInfoReducer = (
         loadingInfo: {
           ...state.loadingInfo,
           [action.id]: {
-            ...state.loadingInfo[action.id],
-            goal: action.goal,
-            progress: action.progress,
+            ...loadingInfo,
+            goal: action.goal || loadingInfo.goal,
+            progress: action.progress || loadingInfo.progress,
           },
         },
       };

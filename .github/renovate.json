@@ -21,6 +21,12 @@
         "css-loader"
       ],
       "allowedVersions": "<6"
+    },
+    {
+      "matchPackageNames": [
+        "@types/node"
+      ],
+      "allowedVersions": "<15"
     }
   ]
 }

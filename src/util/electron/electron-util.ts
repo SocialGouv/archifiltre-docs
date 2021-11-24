@@ -13,3 +13,6 @@ export const reloadApp = (): Promise<void> => ipcRenderer.invoke("resizeWindow")
 export const openLink = (link: string): void => {
   shell.openExternal(link);
 };
+
+export const getPath = (pathId: string): string => 
+   ipcRenderer.sendSync("getPath", pathId)

@@ -7,6 +7,7 @@ import {
   Extension,
   BrowserWindow,
 } from "electron";
+import { loadApp } from "./main/app";
 import { loadHash } from "./main/hash";
 import { loadWindow } from "./main/window";
 const Raven = require("raven");
@@ -167,6 +168,7 @@ app.whenReady().then(() => {
 app.on("ready", () => {
   createWindow();
   loadHash();
+  loadApp();
   if (win) {
     loadWindow(win);
   }

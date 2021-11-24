@@ -5,6 +5,12 @@ export const loadWindow = (window: BrowserWindow) => {
     window.show();
   });
   ipcMain.handle("resizeWindow", () => {
-    window.resize();
+    console.log("SORRY NO RESIZE");
+  });
+  ipcMain.on("getSize", (event) => {
+    event.returnValue = window.getSize();
+  });
+  ipcMain.on("setSize", (event, width: number, heigth: number) => {
+    event.returnValue = window.setSize(width, heigth);
   });
 };

@@ -1,9 +1,9 @@
-import { app } from "electron";
 import fs from "fs";
 import { reportError } from "logging/reporter";
 import path from "path";
 import _ from "lodash";
 import { getLanguage } from "languages";
+import { getPath } from "util/electron/electron-util";
 
 export type UserSettings = {
   isTrackingEnabled: boolean;
@@ -36,7 +36,7 @@ export const getInitialUserSettings = () =>
   initialUserSettings || defaultUserSettings;
 
 const getUserSettingsFilePath = () => {
-  const userFolderPath = app.getPath("userData");
+  const userFolderPath = getPath("userData");
   return path.join(userFolderPath, "user-settings.json");
 };
 

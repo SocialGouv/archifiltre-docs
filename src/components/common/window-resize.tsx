@@ -31,8 +31,8 @@ export default class WindowResize extends React.PureComponent<
   }
 
   onResize() {
-    const { win, writer } = this.state;
-    const [width, height] = win.getSize();
+    const { writer } = this.state;
+    const [width, height] = ipcRenderer.sendSync("getSize");
 
     writer({
       width,
@@ -41,12 +41,12 @@ export default class WindowResize extends React.PureComponent<
   }
 
   componentDidMount() {
-    const { win, reader } = this.state;
+    const { reader } = this.state;
     const { width, height } = reader();
 
-    win.setSize(width, height);
+    ipcRenderer.sendSync("setSize", width, height);
 
-    win.show();
+    ipcRenderer.invoke("showWindow");
 
     const onResize = this.onResize;
     window.addEventListener("resize", onResize);

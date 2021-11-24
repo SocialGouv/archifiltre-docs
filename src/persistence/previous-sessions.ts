@@ -1,12 +1,12 @@
-import { app } from "electron";
 import fs from "fs";
 import { reportError } from "logging/reporter";
 import path from "path";
+import { getPath } from "util/electron/electron-util";
 
 const MAX_SHORTCUTS_LENGTH = 10;
 
 const getPreviousSessionsPath = (): string => {
-  const userFolderPath = app.getPath("userData");
+  const userFolderPath = getPath("userData");
   return path.join(userFolderPath, "previous-sessions");
 };
 

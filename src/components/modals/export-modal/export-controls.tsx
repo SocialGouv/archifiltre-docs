@@ -5,7 +5,7 @@ import { FaFolderOpen } from "react-icons/fa";
 import { exportConfig, ExportType } from "./export-config";
 import { useTranslation } from "react-i18next";
 import { ExportTypesMap } from "./export-options";
-import { dialog } from "@electron/remote";
+import { dialog } from "electron";
 import path from "path";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";

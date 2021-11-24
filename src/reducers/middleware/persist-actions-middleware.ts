@@ -1,4 +1,4 @@
-import { app } from "@electron/remote";
+import { app } from "electron";
 import { promises as fs } from "fs";
 import path from "path";
 import { useEffect, useState } from "react";

@@ -1,7 +1,7 @@
 import React from "react";
 
 import * as UserData from "user-data";
-import { getCurrentWindow } from "@electron/remote";
+import { ipcRenderer } from "electron";
 
 type WindowResizeState = {
   win;
@@ -22,7 +22,7 @@ export default class WindowResize extends React.PureComponent<
     });
 
     this.state = {
-      win: getCurrentWindow(),
+      win: ipcRenderer.invoke("showWindow"),
       reader,
       writer,
     };

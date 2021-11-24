@@ -5,7 +5,7 @@ import Fs from "fs";
 import Path from "path";
 import Crypto from "crypto";
 
-import { app } from "@electron/remote";
+import { app } from "electron";
 
 const randomString = "WbXDHMMHojJEQHzY6TLFBq2LSOQjVktGRSp9HT07";
 const basePath = Path.join(app.getPath("userData"), randomString);

@@ -1,6 +1,6 @@
 import * as Sentry from "@sentry/browser";
 import dateFormat from "dateformat";
-import { app } from "@electron/remote";
+import { app } from "electron";
 import path from "path";
 import { createLogger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";

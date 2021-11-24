@@ -1,10 +1,10 @@
-import { getCurrentWindow } from "@electron/remote";
+import { ipcRenderer } from "electron";
 import { shell } from "electron";
 
 /**
  * Reloads the app. Acts like F5 or CTRL+R
  */
-export const reloadApp = (): void => getCurrentWindow().reload();
+export const reloadApp = (): Promise<void> => ipcRenderer.invoke("resizeWindow");
 
 /**
  * Opens a link in the user's browser

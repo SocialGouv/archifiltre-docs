@@ -8,7 +8,7 @@ module.exports = {
     writeToDisk: true,
   },
   entry: {
-    main: "./src/electron-main.js",
+    main: "./src/electron-main.ts",
   },
   module: {
     rules: [
@@ -42,6 +42,7 @@ module.exports = {
   ],
   resolve: {
     extensions: [".ts", ".js"],
+    modules: [path.resolve(__dirname, "src"), "node_modules"],
   },
   target: "electron-main",
 };

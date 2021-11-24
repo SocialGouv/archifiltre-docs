@@ -1,4 +1,4 @@
-import { app } from "@electron/remote";
+import { app } from "electron";
 import fs from "fs";
 import { reportError } from "logging/reporter";
 import path from "path";

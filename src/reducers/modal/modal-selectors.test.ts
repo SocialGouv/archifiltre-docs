@@ -1,8 +1,8 @@
+import { StoreState } from "../store";
 import { createEmptyStore } from "../store-test-utils";
 import { initialState } from "./modal-reducer";
-import { StoreState } from "../store";
-import { Modal } from "./modal-types";
 import { getOpenModalFromStore } from "./modal-selectors";
+import { Modal } from "./modal-types";
 
 const store: StoreState = {
   ...createEmptyStore(),

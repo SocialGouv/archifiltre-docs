@@ -1,4 +1,5 @@
 import fc from "fast-check";
+
 import { compose, copy, extractKeys } from "./object-util";
 
 describe("object-util", () => {

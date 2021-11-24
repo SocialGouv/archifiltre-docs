@@ -1,9 +1,9 @@
+import { CircularProgress } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
 import useTheme from "@material-ui/core/styles/useTheme";
 import React, { FC } from "react";
 import { FaTimes } from "react-icons/fa";
 import { empty } from "util/function/function-util";
-import { CircularProgress } from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton";
 
 type LoadingSpinnerOrCloseCrossProps = {
   isLoading: boolean;

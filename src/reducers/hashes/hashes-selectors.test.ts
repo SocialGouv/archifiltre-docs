@@ -1,6 +1,6 @@
 import { createEmptyStore } from "../store-test-utils";
-import { getHashesFromStore } from "./hashes-selectors";
 import { initialState } from "./hashes-reducer";
+import { getHashesFromStore } from "./hashes-selectors";
 
 describe("hashes-selectors", () => {
   describe("getHashesFromStore", () => {

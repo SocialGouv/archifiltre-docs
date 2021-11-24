@@ -1,32 +1,33 @@
 import _ from "lodash";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { StoreState } from "reducers/store";
+
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import { initialState as filesAndFoldersInitialState } from "./files-and-folders-reducer";
 import {
   decomposePathToElement,
   excludeChildNodes,
   findElementParent,
+  getDepthFromPath,
   getElementByVirtualPath,
   getFileCount,
   getFiles,
   getFilesAndFoldersAverageLastModified,
-  getDepthFromPath,
   getFilesAndFoldersFromStore,
   getFilesAndFoldersMaxLastModified,
   getFilesAndFoldersMedianLastModified,
   getFilesAndFoldersMinLastModified,
   getFilesAndFoldersTotalSize,
   getFilesMap,
+  getFilesTotalSize,
   getFolders,
   getFoldersCount,
-  getMaxDepth,
-  isFile,
-  getFilesTotalSize,
   getLastModifiedDateOverrides,
+  getMaxDepth,
   getRealLastModified,
+  isFile,
 } from "./files-and-folders-selectors";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
-import { StoreState } from "reducers/store";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 /**
  * Returns a timestamp from date string
@@ -69,11 +70,11 @@ const child2 = createFilesAndFolders({
 });
 
 const filesAndFoldersTestMap = {
-  [rootFolderId]: rootFolder,
-  [child1Id]: child1,
   [child11Id]: child11,
   [child12Id]: child12,
+  [child1Id]: child1,
   [child2Id]: child2,
+  [rootFolderId]: rootFolder,
 };
 
 describe("files-and-folders-selectors", () => {
@@ -121,8 +122,8 @@ describe("files-and-folders-selectors", () => {
     it("should return the override if there is one", () => {
       const filesAndFolders = {
         overrideId: createFilesAndFolders({
-          id: "overrideId",
           file_last_modified: 10,
+          id: "overrideId",
         }),
       };
       const overrides = {
@@ -136,8 +137,8 @@ describe("files-and-folders-selectors", () => {
     it("should return the defaultValue if there is no override", () => {
       const filesAndFolders = {
         noOverrideId: createFilesAndFolders({
-          id: "noOverrideId",
           file_last_modified: 10,
+          id: "noOverrideId",
         }),
       };
       const overrides = {
@@ -169,9 +170,9 @@ describe("files-and-folders-selectors", () => {
     it("should filter out the folders", () => {
       const filesMap = getFilesMap(filesAndFoldersTestMap);
       expect(filesMap).toEqual({
-        [child2Id]: child2,
         [child11Id]: child11,
         [child12Id]: child12,
+        [child2Id]: child2,
       });
     });
   });
@@ -259,8 +260,8 @@ describe("files-and-folders-selectors", () => {
       const folderId = "/folder";
 
       const filesAndFoldersMap = {
-        [fileId]: createFilesAndFolders({ id: fileId, children: [] }),
-        [folderId]: createFilesAndFolders({ id: folderId, children: [fileId] }),
+        [fileId]: createFilesAndFolders({ children: [], id: fileId }),
+        [folderId]: createFilesAndFolders({ children: [fileId], id: folderId }),
       };
 
       expect(getFileCount(filesAndFoldersMap)).toBe(1);
@@ -273,8 +274,8 @@ describe("files-and-folders-selectors", () => {
       const folderId = "/folder";
 
       const filesAndFoldersMap = {
-        [fileId]: createFilesAndFolders({ id: fileId, children: [] }),
-        [folderId]: createFilesAndFolders({ id: folderId, children: [fileId] }),
+        [fileId]: createFilesAndFolders({ children: [], id: fileId }),
+        [folderId]: createFilesAndFolders({ children: [fileId], id: folderId }),
       };
 
       expect(getFoldersCount(filesAndFoldersMap)).toBe(1);
@@ -289,17 +290,17 @@ describe("files-and-folders-selectors", () => {
       const otherFileId = "rootFolder/subfileId";
 
       const filesAndFoldersMap = {
-        "": createFilesAndFolders({ id: "", children: [folderId] }),
+        "": createFilesAndFolders({ children: [folderId], id: "" }),
+        [deepestFileId]: createFilesAndFolders({ id: deepestFileId }),
         [folderId]: createFilesAndFolders({
           children: [otherFileId, subfolderId],
           id: folderId,
         }),
+        [otherFileId]: createFilesAndFolders({ id: otherFileId }),
         [subfolderId]: createFilesAndFolders({
           children: [deepestFileId],
           id: subfolderId,
         }),
-        [otherFileId]: createFilesAndFolders({ id: otherFileId }),
-        [deepestFileId]: createFilesAndFolders({ id: deepestFileId }),
       };
 
       expect(getMaxDepth(filesAndFoldersMap)).toBe(3);
@@ -344,17 +345,17 @@ describe("files-and-folders-selectors", () => {
       const nonIgnoredChildId = "non-ignored-child-id";
 
       const filesAndFoldersMap = {
-        "": createFilesAndFolders({ id: "", children: [parentId, folderId] }),
-        [parentId]: createFilesAndFolders({
-          id: parentId,
-          children: [ignoredChildId],
-        }),
+        "": createFilesAndFolders({ children: [parentId, folderId], id: "" }),
         [folderId]: createFilesAndFolders({
-          id: folderId,
           children: [nonIgnoredChildId],
+          id: folderId,
         }),
         [ignoredChildId]: createFilesAndFolders({ id: ignoredChildId }),
         [nonIgnoredChildId]: createFilesAndFolders({ id: nonIgnoredChildId }),
+        [parentId]: createFilesAndFolders({
+          children: [ignoredChildId],
+          id: parentId,
+        }),
       };
 
       const elementIds = [parentId, ignoredChildId, nonIgnoredChildId];
@@ -377,23 +378,20 @@ describe("files-and-folders-selectors", () => {
       const nonIgnoredChildSize = 10;
 
       const filesAndFoldersMap = {
-        "": createFilesAndFolders({ id: "", children: [parentId, folderId] }),
-        [parentId]: createFilesAndFolders({
-          id: parentId,
-          children: [ignoredChildId],
-        }),
+        "": createFilesAndFolders({ children: [parentId, folderId], id: "" }),
         [folderId]: createFilesAndFolders({
-          id: folderId,
           children: [nonIgnoredChildId],
+          id: folderId,
         }),
         [ignoredChildId]: createFilesAndFolders({ id: ignoredChildId }),
         [nonIgnoredChildId]: createFilesAndFolders({ id: nonIgnoredChildId }),
+        [parentId]: createFilesAndFolders({
+          children: [ignoredChildId],
+          id: parentId,
+        }),
       };
 
       const filesAndFoldersMetadataMap = {
-        [parentId]: createFilesAndFoldersMetadata({
-          childrenTotalSize: parentSize,
-        }),
         [folderId]: createFilesAndFoldersMetadata({
           childrenTotalSize: folderSize,
         }),
@@ -402,6 +400,9 @@ describe("files-and-folders-selectors", () => {
         }),
         [nonIgnoredChildId]: createFilesAndFoldersMetadata({
           childrenTotalSize: nonIgnoredChildSize,
+        }),
+        [parentId]: createFilesAndFoldersMetadata({
+          childrenTotalSize: parentSize,
         }),
       };
 

@@ -1,13 +1,13 @@
+import { Column } from "components/common/table/table-types";
 import {
   accessorToFunction,
   applyAccessorToTableValue,
-  limitPageIndex,
   getComparator,
+  limitPageIndex,
   maxPage,
   stableSort,
   tableContentToArray,
 } from "util/table/table-util";
-import { Column } from "components/common/table/table-types";
 
 describe("table-util", () => {
   describe("stableSort", () => {
@@ -90,14 +90,14 @@ describe("table-util", () => {
 
       const columns: Column<TestData>[] = [
         {
+          accessor: "name",
           id: "name",
           name: "name",
-          accessor: "name",
         },
         {
+          accessor: ({ value }) => `accessor(${value})`,
           id: "value",
           name: "value",
-          accessor: ({ value }) => `accessor(${value})`,
         },
       ];
 

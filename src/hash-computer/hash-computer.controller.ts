@@ -1,8 +1,8 @@
-import { bufferCount, map } from "rxjs/operators";
-
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { HashesMap } from "reducers/hashes/hashes-types";
 import { Observable } from "rxjs";
+import { bufferCount, map } from "rxjs/operators";
+
 import { computeFolderHashes } from "../util/files-and-folders/file-and-folders-utils";
 
 type ComputeFolderHashesOptions = {
@@ -24,10 +24,10 @@ export const computeFolderHashes$ = ({
     computeFolderHashes(filesAndFolders, hashes, (hashesMap) => {
       subscriber.next(hashesMap);
     }).then(() => {
-      subscriber.complete()
+      subscriber.complete();
     });
   }).pipe(
     bufferCount(2000),
-    map((values) => Object.assign({}, ...values)),
-  )
+    map((values) => Object.assign({}, ...values))
+  );
 };

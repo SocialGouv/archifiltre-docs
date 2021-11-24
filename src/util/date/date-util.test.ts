@@ -1,4 +1,5 @@
 import fc from "fast-check";
+
 import { epochToFormattedUtcDateString } from "./date-util";
 
 describe("csv", () => {

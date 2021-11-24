@@ -1,6 +1,7 @@
-import { computeZoomRatio, ZoomDirection, zoomReducer } from "./zoom-util";
 import fc from "fast-check";
 import _ from "lodash";
+
+import { computeZoomRatio, ZoomDirection, zoomReducer } from "./zoom-util";
 
 describe("zoom-util", () => {
   describe("computeZoomRatio", () => {
@@ -45,7 +46,7 @@ describe("zoom-util", () => {
               zoomSpeed,
             }));
 
-            const zoomInsState = zoomIns.reduce(zoomReducer, { ratio, offset });
+            const zoomInsState = zoomIns.reduce(zoomReducer, { offset, ratio });
 
             const finalState = zoomOuts.reduce(zoomReducer, zoomInsState);
 

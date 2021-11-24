@@ -1,10 +1,11 @@
 import { advanceTo } from "jest-date-mock";
 import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { createTag } from "reducers/tags/tags-test-util";
 import { formatPathForUserSystem } from "util/file-system/file-sys-util";
+
 import resipExporter from "./resip-exporter";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 // We advance to a specific date for TransactedDate to be setup correctly
 advanceTo("2019-08-05");
@@ -33,46 +34,46 @@ const filesAndFolders = {
     children: [rootFolderId],
     id: ROOT_FF_ID,
   }),
-  [rootFolderId]: createFilesAndFolders({
-    children: [file1Id, folder1Id, movedFileId],
-    id: rootFolderId,
-  }),
   [file1Id]: createFilesAndFolders({
     id: file1Id,
-  }),
-  [folder1Id]: createFilesAndFolders({
-    children: [file2Id],
-    id: folder1Id,
   }),
   [file2Id]: createFilesAndFolders({
     id: file2Id,
     name: file2Name,
   }),
-  [movedFileId]: createFilesAndFolders({
-    id: movedFileId,
-    virtualPath: movedFileVirtualPath,
+  [fileToDeleteId]: createFilesAndFolders({ id: fileToDeleteId }),
+  [folder1Id]: createFilesAndFolders({
+    children: [file2Id],
+    id: folder1Id,
   }),
   [folderToDeleteId]: createFilesAndFolders({
     children: [fileToDeleteId],
     id: folderToDeleteId,
   }),
-  [fileToDeleteId]: createFilesAndFolders({ id: fileToDeleteId }),
+  [movedFileId]: createFilesAndFolders({
+    id: movedFileId,
+    virtualPath: movedFileVirtualPath,
+  }),
+  [rootFolderId]: createFilesAndFolders({
+    children: [file1Id, folder1Id, movedFileId],
+    id: rootFolderId,
+  }),
 };
 
 const filesAndFoldersMetadata = {
   [ROOT_FF_ID]: createFilesAndFoldersMetadata({}),
-  [rootFolderId]: createFilesAndFoldersMetadata({}),
   [file1Id]: createFilesAndFoldersMetadata({}),
+  [file2Id]: createFilesAndFoldersMetadata({}),
   [folder1Id]: createFilesAndFoldersMetadata({
     maxLastModified: folder1LastModifiedMax,
     minLastModified: folder1LastModifiedMin,
   }),
-  [file2Id]: createFilesAndFoldersMetadata({}),
   [movedFileId]: createFilesAndFoldersMetadata({}),
+  [rootFolderId]: createFilesAndFoldersMetadata({}),
 };
 
 const tags = {
-  [tag1Id]: createTag({ id: tag1Id, name: tag1Name, ffIds: [file1Id] }),
+  [tag1Id]: createTag({ ffIds: [file1Id], id: tag1Id, name: tag1Name }),
 };
 
 const aliases = {

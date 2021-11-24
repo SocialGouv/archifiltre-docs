@@ -1,14 +1,15 @@
-import useTheme from "@material-ui/core/styles/useTheme";
-import React, { FC, memo, useCallback, useState } from "react";
-import { FaChevronLeft } from "react-icons/fa";
-import styled from "styled-components";
-import { LoadingInfo } from "reducers/loading-info/loading-info-types";
-import LoadingInfoDisplay from "./loading-info-display";
-import LoadingSpinnerOrCloseCross from "./loading-spinner-or-close-cross";
-import Grid from "@material-ui/core/Grid";
 import { IconButton } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
+import Grid from "@material-ui/core/Grid";
+import useTheme from "@material-ui/core/styles/useTheme";
+import React, { FC, memo, useCallback, useState } from "react";
+import { FaChevronLeft } from "react-icons/fa";
+import { LoadingInfo } from "reducers/loading-info/loading-info-types";
+import styled from "styled-components";
+
+import LoadingInfoDisplay from "./loading-info-display";
+import LoadingSpinnerOrCloseCross from "./loading-spinner-or-close-cross";
 
 const BottomLeftArea = styled(Card)`
   position: fixed;

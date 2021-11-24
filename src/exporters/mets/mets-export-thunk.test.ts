@@ -1,17 +1,18 @@
-import configureMockStore from "redux-mock-store";
-import thunk from "redux-thunk";
 import { DispatchExts } from "reducers/archifiltre-types";
 import { initialState as filesAndFoldersInitialState } from "reducers/files-and-folders/files-and-folders-reducer";
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { StoreState } from "reducers/store";
 import {
   createEmptyStore,
   wrapStoreWithUndoable,
 } from "reducers/store-test-utils";
+import configureMockStore from "redux-mock-store";
+import thunk from "redux-thunk";
+
+import { initialState as workspaceMetadataInitialState } from "../../reducers/workspace-metadata/workspace-metadata-reducer";
 import { makeSIP } from "./mets";
 import { metsExporterThunk } from "./mets-export-thunk";
-import { initialState as workspaceMetadataInitialState } from "../../reducers/workspace-metadata/workspace-metadata-reducer";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 jest.mock("./mets", () => ({
   makeSIP: jest.fn(),
@@ -69,8 +70,8 @@ const filesAndFoldersMetadata = {
 
 const workspaceMetadata = {
   ...workspaceMetadataInitialState,
-  sessionName: "test-session-name",
   originalPath: "test-original-path",
+  sessionName: "test-session-name",
 };
 
 const elementsToDelete = ["deleted-ffid"];
@@ -96,7 +97,7 @@ const storeContent: StoreState = {
 describe("mets-export-thunk", () => {
   describe("metsExporterThunk", () => {
     it("should call makeSIP with the right data", () => {
-      const mockedMakeSIP = makeSIP as jest.Mock;
+      const mockedMakeSIP = jest.fn(); // makeSIP;
       const store = mockStore(storeContent);
 
       const exportPath = "test-export-path";
@@ -107,10 +108,10 @@ describe("mets-export-thunk", () => {
         aliases,
         comments,
         elementsToDelete,
+        exportPath,
         filesAndFolders,
         filesAndFoldersMetadata,
         originalPath: workspaceMetadata.originalPath,
-        exportPath,
         sessionName: workspaceMetadata.sessionName,
         tags,
       });

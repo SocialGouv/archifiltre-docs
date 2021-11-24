@@ -1,5 +1,6 @@
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
+
 import { FileType, getFileType } from "./file-types-util";
 
 const createFileWithExt = (extension: string): FilesAndFolders =>

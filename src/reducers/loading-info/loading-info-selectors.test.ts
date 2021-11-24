@@ -24,8 +24,8 @@ const loadingInfoState = {
   errors: [error],
   loading: [loadingLoadingInfoId],
   loadingInfo: {
-    [loadingLoadingInfoId]: loadingLoadingInfo,
     [completeLoadingInfoId]: completeLoadingInfo,
+    [loadingLoadingInfoId]: loadingLoadingInfo,
   },
 };
 

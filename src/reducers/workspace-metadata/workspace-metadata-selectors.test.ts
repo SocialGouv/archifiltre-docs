@@ -1,9 +1,9 @@
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
   getHoveredElementIdFromStore,
-  getSessionNameFromStore,
   getLockedElementIdFromStore,
   getOriginalPathFromStore,
+  getSessionNameFromStore,
   getWorkspaceMetadataFromStore,
 } from "./workspace-metadata-selectors";
 import { WorkspaceMetadataState } from "./workspace-metadata-types";

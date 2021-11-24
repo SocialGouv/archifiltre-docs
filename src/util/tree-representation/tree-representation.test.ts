@@ -1,31 +1,31 @@
-import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
-import { computeTreeStructureArray } from "util/tree-representation/tree-representation";
-import { toArray } from "rxjs/operators";
 import { flatten } from "lodash";
+import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
+import { toArray } from "rxjs/operators";
+import { computeTreeStructureArray } from "util/tree-representation/tree-representation";
 
 describe("tree-representation", () => {
   describe("computeTreeStructureArray", () => {
     it("should correctly represent file structure", async () => {
       const filesAndFoldersMap = {
-        "": createFilesAndFolders({ id: "", children: ["/root"] }),
+        "": createFilesAndFolders({ children: ["/root"], id: "" }),
         "/root": createFilesAndFolders({
-          id: "/root",
           children: ["/root/folder"],
+          id: "/root",
           name: "root",
         }),
+        "/root/child1": createFilesAndFolders({
+          id: "/root/child1",
+          name: "child1",
+          virtualPath: "/root/folder/child1",
+        }),
         "/root/folder": createFilesAndFolders({
-          id: "/root/folder",
           children: ["/root/folder/child", "/root/child1"],
+          id: "/root/folder",
           name: "folder",
         }),
         "/root/folder/child": createFilesAndFolders({
           id: "/root/folder/child",
           name: "child",
-        }),
-        "/root/child1": createFilesAndFolders({
-          id: "/root/child1",
-          virtualPath: "/root/folder/child1",
-          name: "child1",
         }),
       };
 

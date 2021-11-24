@@ -1,12 +1,12 @@
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
+import { createTag } from "reducers/tags/tags-test-util";
 import {
   removeIgnoredFilesAndFoldersFromVirtualFileSystem,
   removeUnusedAliasesFromVirtualFileSystem,
   removeUnusedCommentsFromVirtualFileSystem,
   removeUnusedTagsFromVirtualFileSystem,
 } from "util/virtual-file-system-util/virtual-file-system-util";
-import { createTag } from "reducers/tags/tags-test-util";
 
 const folderId = "/root/folder";
 const hiddenFileId = "/root/folder/hidden.tmp";
@@ -16,44 +16,44 @@ const hiddenInEmptyId = "/root/folder/empty/hidden.tmp";
 
 const filesAndFolders: FilesAndFoldersMap = {
   "": createFilesAndFolders({
-    id: "",
     children: ["/root"],
+    id: "",
   }),
   "/root": createFilesAndFolders({
-    id: "/root",
     children: [folderId],
+    id: "/root",
+  }),
+  [emptyFolderId]: createFilesAndFolders({
+    children: [hiddenInEmptyId],
+    id: emptyFolderId,
   }),
   [folderId]: createFilesAndFolders({
-    id: folderId,
     children: [hiddenFileId, normalFileId, emptyFolderId],
+    id: folderId,
   }),
   [hiddenFileId]: createFilesAndFolders({
     id: hiddenFileId,
   }),
-  [normalFileId]: createFilesAndFolders({
-    id: normalFileId,
-  }),
-  [emptyFolderId]: createFilesAndFolders({
-    id: emptyFolderId,
-    children: [hiddenInEmptyId],
-  }),
   [hiddenInEmptyId]: createFilesAndFolders({
     id: hiddenInEmptyId,
+  }),
+  [normalFileId]: createFilesAndFolders({
+    id: normalFileId,
   }),
 };
 
 const cleanFilesAndFolders = {
   "": createFilesAndFolders({
-    id: "",
     children: ["/root"],
+    id: "",
   }),
   "/root": createFilesAndFolders({
-    id: "/root",
     children: [folderId],
+    id: "/root",
   }),
   [folderId]: createFilesAndFolders({
-    id: folderId,
     children: [normalFileId],
+    id: folderId,
   }),
   [normalFileId]: createFilesAndFolders({
     id: normalFileId,
@@ -86,12 +86,12 @@ describe("virtual-file-system-util", () => {
       };
       expect(
         removeUnusedCommentsFromVirtualFileSystem({
-          filesAndFolders: cleanFilesAndFolders,
           comments: baseComments,
+          filesAndFolders: cleanFilesAndFolders,
         })
       ).toEqual({
-        filesAndFolders: cleanFilesAndFolders,
         comments: expectedComments,
+        filesAndFolders: cleanFilesAndFolders,
       });
     });
   });
@@ -109,12 +109,12 @@ describe("virtual-file-system-util", () => {
       };
       expect(
         removeUnusedAliasesFromVirtualFileSystem({
-          filesAndFolders: cleanFilesAndFolders,
           aliases: baseAliases,
+          filesAndFolders: cleanFilesAndFolders,
         })
       ).toEqual({
-        filesAndFolders: cleanFilesAndFolders,
         aliases: expectedAliases,
+        filesAndFolders: cleanFilesAndFolders,
       });
     });
   });
@@ -126,28 +126,28 @@ describe("virtual-file-system-util", () => {
       const removedTagId = "removed-tag-id";
 
       const baseTags = {
-        [unchangedTagId]: createTag({
-          id: unchangedTagId,
-          ffIds: [normalFileId],
-        }),
         [changedTagId]: createTag({
-          id: changedTagId,
           ffIds: [normalFileId, hiddenFileId],
+          id: changedTagId,
         }),
         [removedTagId]: createTag({
-          id: removedTagId,
           ffIds: [hiddenFileId],
+          id: removedTagId,
+        }),
+        [unchangedTagId]: createTag({
+          ffIds: [normalFileId],
+          id: unchangedTagId,
         }),
       };
 
       const expectedTags = {
-        [unchangedTagId]: createTag({
-          id: unchangedTagId,
-          ffIds: [normalFileId],
-        }),
         [changedTagId]: createTag({
-          id: changedTagId,
           ffIds: [normalFileId],
+          id: changedTagId,
+        }),
+        [unchangedTagId]: createTag({
+          ffIds: [normalFileId],
+          id: unchangedTagId,
         }),
       };
 

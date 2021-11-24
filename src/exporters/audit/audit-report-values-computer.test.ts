@@ -1,9 +1,11 @@
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   formatPathForUserSystem,
   octet2HumanReadableFormat,
 } from "util/file-system/file-sys-util";
 import { FileType } from "util/file-types/file-types-util";
+
 import {
   countFileSizes,
   countFileTypes,
@@ -16,7 +18,6 @@ import {
   sortFilesByLastModifiedDate,
   sortFilesBySize,
 } from "./audit-report-values-computer";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 const folderId1 = "folder-id-1";
 const folderId2 = `${folderId1}/folder-id-2`;
@@ -60,7 +61,10 @@ const sortingTestArray = [
 ];
 
 const filesAndFoldersMap = {
-  "": createFilesAndFolders({ id: "", children: [folderId1] }),
+  "": createFilesAndFolders({ children: [folderId1], id: "" }),
+  [fileId1]: file1,
+  [fileId2]: file2,
+  [fileId3]: file3,
   [folderId1]: createFilesAndFolders({
     children: [folderId2, fileId1],
     id: folderId1,
@@ -69,21 +73,10 @@ const filesAndFoldersMap = {
     children: [fileId2, fileId3],
     id: folderId2,
   }),
-  [fileId1]: file1,
-  [fileId2]: file2,
-  [fileId3]: file3,
 };
 
 const filesAndFoldersMetadataMap = {
   "": createFilesAndFoldersMetadata({
-    childrenTotalSize: 3000,
-    maxLastModified: 3000,
-  }),
-  [folderId1]: createFilesAndFoldersMetadata({
-    childrenTotalSize: 3000,
-    maxLastModified: 3000,
-  }),
-  [folderId2]: createFilesAndFoldersMetadata({
     childrenTotalSize: 3000,
     maxLastModified: 3000,
   }),
@@ -98,6 +91,14 @@ const filesAndFoldersMetadataMap = {
   [fileId3]: createFilesAndFoldersMetadata({
     childrenTotalSize: 0,
     maxLastModified: 0,
+  }),
+  [folderId1]: createFilesAndFoldersMetadata({
+    childrenTotalSize: 3000,
+    maxLastModified: 3000,
+  }),
+  [folderId2]: createFilesAndFoldersMetadata({
+    childrenTotalSize: 3000,
+    maxLastModified: 3000,
   }),
 };
 
@@ -199,7 +200,7 @@ describe("audit-report-values-computer", () => {
     });
   });
 
-  describe("getOldestFiles", () => {
+  describe("getBiggestFiles", () => {
     it("should return the description of the oldest files", () => {
       const file2Description = {
         name: file2.name,

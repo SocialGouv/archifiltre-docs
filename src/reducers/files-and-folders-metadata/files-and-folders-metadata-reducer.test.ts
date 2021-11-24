@@ -1,7 +1,8 @@
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+
 import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata-actions";
 import { filesAndFoldersMetadataReducer } from "./files-and-folders-metadata-reducer";
 import { FilesAndFoldersMetadataState } from "./files-and-folders-metadata-types";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 const initialState: FilesAndFoldersMetadataState = {
   filesAndFoldersMetadata: {},

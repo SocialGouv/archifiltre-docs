@@ -1,4 +1,6 @@
 import md5 from "js-md5";
+import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
+
 import {
   computeFolderHashes,
   countDeeperFolders,
@@ -17,7 +19,6 @@ import {
   sortFoldersByChildrenCount,
   sortFoldersByDepth,
 } from "./file-and-folders-utils";
-import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 
 describe("file-and-folders-common", () => {
   describe("countFoldersWithMoreThanNChildren", () => {
@@ -176,38 +177,38 @@ describe("file-and-folders-common", () => {
       it("should return an empty array", () => {
         const foldersToSort = [
           {
-            id: 1,
             depth: 2,
+            id: 1,
           },
           {
-            id: 2,
             depth: 3,
+            id: 2,
           },
           {
-            id: 3,
             depth: 1,
+            id: 3,
           },
           {
-            id: 4,
             depth: 4,
+            id: 4,
           },
         ];
         expect(sortFoldersByDepth(foldersToSort)).toEqual([
           {
-            id: 4,
             depth: 4,
+            id: 4,
           },
           {
-            id: 2,
             depth: 3,
+            id: 2,
           },
           {
-            id: 1,
             depth: 2,
+            id: 1,
           },
           {
-            id: 3,
             depth: 1,
+            id: 3,
           },
         ]);
       });
@@ -238,8 +239,14 @@ describe("file-and-folders-common", () => {
         "": {
           children: ["folder1", "folder2", "file1"],
         },
+        file1: {
+          children: [],
+        },
         folder1: {
           children: ["folder1/folder1", "folder1/file1"],
+        },
+        "folder1/file1": {
+          children: [],
         },
         "folder1/folder1": {
           children: ["folder1/folder1/file1", "folder1/folder1/file2"],
@@ -250,16 +257,10 @@ describe("file-and-folders-common", () => {
         "folder1/folder1/file2": {
           children: [],
         },
-        "folder1/file1": {
-          children: [],
-        },
         folder2: {
           children: ["folder2/file1"],
         },
         "folder2/file1": {
-          children: [],
-        },
-        file1: {
           children: [],
         },
       };
@@ -297,16 +298,16 @@ describe("file-and-folders-common", () => {
           )
         ).toEqual([
           {
-            id: "baseFolder",
             children: ["baseFolder/file1", "baseFolder/file2"],
+            id: "baseFolder",
           },
           {
+            children: [],
             id: "baseFolder/file1",
-            children: [],
           },
           {
-            id: "baseFolder/file2",
             children: [],
+            id: "baseFolder/file2",
           },
         ]);
       });
@@ -318,16 +319,16 @@ describe("file-and-folders-common", () => {
       it("should return the files only", () => {
         const data = [
           {
-            id: "folder",
             children: ["folder/file1", "folder/file2"],
+            id: "folder",
           },
           {
+            children: [],
             id: "folder/file1",
-            children: [],
           },
           {
-            id: "folder/file2",
             children: [],
+            id: "folder/file2",
           },
         ];
 
@@ -335,12 +336,12 @@ describe("file-and-folders-common", () => {
           getFiles(data).sort((file1, file2) => file1.id > file2.id)
         ).toEqual([
           {
-            id: "folder/file1",
             children: [],
+            id: "folder/file1",
           },
           {
-            id: "folder/file2",
             children: [],
+            id: "folder/file2",
           },
         ]);
       });
@@ -352,20 +353,20 @@ describe("file-and-folders-common", () => {
       it("should return the files only", () => {
         const data = [
           {
-            id: "folder",
             children: ["folder/file1", "folder/childFolder"],
+            id: "folder",
           },
           {
+            children: [],
             id: "folder/file1",
-            children: [],
           },
           {
-            id: "folder/childFolder",
             children: ["folder/childFolder/file"],
+            id: "folder/childFolder",
           },
           {
-            id: "folder/childFolder/file",
             children: [],
+            id: "folder/childFolder/file",
           },
         ];
 
@@ -373,12 +374,12 @@ describe("file-and-folders-common", () => {
           getFolders(data).sort((folder1, folder2) => folder1.id > folder2.id)
         ).toEqual([
           {
-            id: "folder",
             children: ["folder/file1", "folder/childFolder"],
+            id: "folder",
           },
           {
-            id: "folder/childFolder",
             children: ["folder/childFolder/file"],
+            id: "folder/childFolder",
           },
         ]);
       });
@@ -408,6 +409,9 @@ describe("file-and-folders-common", () => {
             "baseFolder/file1",
           ],
         },
+        "baseFolder/file1": {
+          children: [],
+        },
         "baseFolder/folder1": {
           children: ["baseFolder/folder1/file1", "baseFolder/folder1/file2"],
         },
@@ -423,16 +427,13 @@ describe("file-and-folders-common", () => {
         "baseFolder/folder2/file1": {
           children: [],
         },
-        "baseFolder/file1": {
-          children: [],
-        },
       };
 
       const hashes = {
+        "baseFolder/file1": "c82250a7c798d52669795d3ea5701158",
         "baseFolder/folder1/file1": "6d3e9fb007bf4069e4f994c290e2841d",
         "baseFolder/folder1/file2": "115c6b34df55fab98666a584e579f6dd",
         "baseFolder/folder2/file1": "24e10ee6f2f885106f7f6473701ebfd0",
-        "baseFolder/file1": "c82250a7c798d52669795d3ea5701158",
       };
 
       const expectedResults = {
@@ -535,15 +536,15 @@ describe("file-and-folders-common", () => {
     });
     it("should return csv when a csv filePath is given", () => {
       const csvFile = {
-        id: "file.csv",
         children: [],
+        id: "file.csv",
       };
       expect(getType(csvFile)).toBe("csv");
     });
     it("should return unknown when an unknown file format is given", () => {
       const folder = {
-        id: "file.unknown",
         children: [],
+        id: "file.unknown",
       };
       expect(getType(folder)).toBe("unknown");
     });
@@ -554,8 +555,14 @@ describe("file-and-folders-common", () => {
       "": {
         children: ["folder1", "folder2", "file1"],
       },
+      file1: {
+        children: [],
+      },
       folder1: {
         children: ["folder1/folder1", "folder1/file1"],
+      },
+      "folder1/file1": {
+        children: [],
       },
       "folder1/folder1": {
         children: ["folder1/folder1/file1", "folder1/folder1/file2"],
@@ -566,16 +573,10 @@ describe("file-and-folders-common", () => {
       "folder1/folder1/file2": {
         children: [],
       },
-      "folder1/file1": {
-        children: [],
-      },
       folder2: {
         children: ["folder2/file1"],
       },
       "folder2/file1": {
-        children: [],
-      },
-      file1: {
         children: [],
       },
     };
@@ -602,8 +603,8 @@ describe("file-and-folders-common", () => {
   describe("getFirstLevelName", () => {
     it("should return the name of the first level element", () => {
       const filesAndFoldersMap = {
-        "": createFilesAndFolders({ id: "", children: ["/file1"] }),
-        "/file1": createFilesAndFolders({ id: "/file1", children: [] }),
+        "": createFilesAndFolders({ children: ["/file1"], id: "" }),
+        "/file1": createFilesAndFolders({ children: [], id: "/file1" }),
       };
       expect(getFirstLevelName(filesAndFoldersMap)).toBe("file1");
     });

@@ -1,9 +1,9 @@
-import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
-import { formatPathForUserSystem } from "util/file-system/file-sys-util";
-import { exportToCsv } from "util/array-export/array-export";
-import { toArray } from "rxjs/operators";
 import { flatten } from "lodash";
+import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { toArray } from "rxjs/operators";
+import { exportToCsv } from "util/array-export/array-export";
+import { formatPathForUserSystem } from "util/file-system/file-sys-util";
 
 const tagName = "test-tag-1";
 const rootFolderId = "/root";
@@ -28,27 +28,6 @@ const tags = {
 };
 
 const filesAndFolders = {
-  [rootId]: createFilesAndFolders({
-    children: [rootFolderId],
-    file_last_modified: 1571325669,
-    file_size: 10,
-    id: rootId,
-    name: "",
-  }),
-  [rootFolderId]: createFilesAndFolders({
-    children: [taggedFfId],
-    file_last_modified: 1571325669,
-    file_size: 10,
-    id: rootFolderId,
-    name: "root",
-  }),
-  [taggedFfId]: createFilesAndFolders({
-    children: [firstChildId],
-    file_last_modified: 1571325669,
-    file_size: 10,
-    id: taggedFfId,
-    name: "folder",
-  }),
   [firstChildId]: createFilesAndFolders({
     children: [],
     file_last_modified: 1571325669,
@@ -57,9 +36,37 @@ const filesAndFolders = {
     name: "ff-id.txt",
     virtualPath: firstChildVirtualPath,
   }),
+  [rootFolderId]: createFilesAndFolders({
+    children: [taggedFfId],
+    file_last_modified: 1571325669,
+    file_size: 10,
+    id: rootFolderId,
+    name: "root",
+  }),
+  [rootId]: createFilesAndFolders({
+    children: [rootFolderId],
+    file_last_modified: 1571325669,
+    file_size: 10,
+    id: rootId,
+    name: "",
+  }),
+  [taggedFfId]: createFilesAndFolders({
+    children: [firstChildId],
+    file_last_modified: 1571325669,
+    file_size: 10,
+    id: taggedFfId,
+    name: "folder",
+  }),
 };
 
 const filesAndFoldersMetadata = {
+  [firstChildId]: createFilesAndFoldersMetadata({
+    averageLastModified: 3000,
+    childrenTotalSize: 10000,
+    maxLastModified: 10000,
+    medianLastModified: 4000,
+    minLastModified: 1000,
+  }),
   [rootFolderId]: createFilesAndFoldersMetadata({
     averageLastModified: 3000,
     childrenTotalSize: 10000,
@@ -74,13 +81,6 @@ const filesAndFoldersMetadata = {
     medianLastModified: 4000,
     minLastModified: 1000,
   }),
-  [firstChildId]: createFilesAndFoldersMetadata({
-    averageLastModified: 3000,
-    childrenTotalSize: 10000,
-    maxLastModified: 10000,
-    medianLastModified: 4000,
-    minLastModified: 1000,
-  }),
 };
 
 const rootHash = "root-tag";
@@ -88,24 +88,24 @@ const rootFolderHash = "root-folder-hash";
 const taggedHash = "tagged-hash";
 const firstChildIdHash = "tagged-hash";
 const hashes = {
-  [rootId]: rootHash,
-  [rootFolderId]: rootFolderHash,
-  [taggedFfId]: taggedHash,
   [firstChildId]: firstChildIdHash,
+  [rootFolderId]: rootFolderHash,
+  [rootId]: rootHash,
+  [taggedFfId]: taggedHash,
 };
 
 const rootAlias = "root-alias";
 const firstChildIdAlias = "aliased-element";
 const aliases = {
-  [rootId]: rootAlias,
   [firstChildId]: firstChildIdAlias,
+  [rootId]: rootAlias,
 };
 
 const rootComment = "root-comment";
 const firstChildIdComment = "commented-element";
 const comments = {
-  [rootId]: rootComment,
   [firstChildId]: firstChildIdComment,
+  [rootId]: rootComment,
 };
 
 const translator = (key) => `translate(${key})`;
@@ -208,10 +208,10 @@ describe("array-export", () => {
         await exportToCsv({
           aliases,
           comments,
+          elementsToDelete: [],
           filesAndFolders,
           filesAndFoldersMetadata,
           tags,
-          elementsToDelete: [],
           translator,
         })
           .pipe(toArray())

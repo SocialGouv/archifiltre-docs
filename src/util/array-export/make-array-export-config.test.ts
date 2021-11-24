@@ -1,8 +1,8 @@
+import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { createTag } from "reducers/tags/tags-test-util";
 import { makeRowConfig } from "util/array-export/make-array-export-config";
-import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import { formatPathForUserSystem } from "util/file-system/file-sys-util";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 const rowId = "/filesAndFolders/file-1";
 const fileName = "file-name.csv";
@@ -13,16 +13,16 @@ const lastModification = 1531670400000;
 
 const tags = {
   taggy: createTag({
+    ffIds: [rowId],
     id: "taggy ",
     name: "Taggy",
-    ffIds: [rowId],
   }),
 };
 
 const hashes = {
-  [rowId]: "row-hash",
   "another-hash": "row-hash",
   "non-duplicate": "other-hash",
+  [rowId]: "row-hash",
 };
 
 const aliases = {
@@ -43,16 +43,16 @@ const rowData = {
   }),
   ...createFilesAndFoldersMetadata({
     childrenTotalSize: fileSize,
-    minLastModified: firstModification,
     maxLastModified: lastModification,
+    minLastModified: firstModification,
     nbChildrenFiles: 1,
   }),
-  tags,
-  hashes,
   aliases,
   comments,
+  hashes,
   idsToDelete,
   overrideLastModified: {},
+  tags,
 };
 
 describe("make-array-export-config", () => {
@@ -156,8 +156,8 @@ describe("make-array-export-config", () => {
 
       it("for a folder", () => {
         const customTestRow = makeTestRow({
-          rowData: { ...rowData, children: ["child"] },
           config,
+          rowData: { ...rowData, children: ["child"] },
         });
         customTestRow({
           columnLabel: "csvHeader.fileOrFolder",
@@ -183,8 +183,8 @@ describe("make-array-export-config", () => {
     describe("type", () => {
       it("should detect folders", () => {
         const customTester = makeTestRow({
-          rowData: { ...rowData, children: ["child"] },
           config,
+          rowData: { ...rowData, children: ["child"] },
         });
         customTester({
           columnLabel: "csvHeader.type",
@@ -194,8 +194,8 @@ describe("make-array-export-config", () => {
 
       it("should detect csv", () => {
         const customTester = makeTestRow({
-          rowData: { ...rowData, id: "/parent/file.csv" },
           config,
+          rowData: { ...rowData, id: "/parent/file.csv" },
         });
         customTester({
           columnLabel: "csvHeader.type",
@@ -228,8 +228,8 @@ describe("make-array-export-config", () => {
 
       it("should find non-duplicates", () => {
         const customTestRow = makeTestRow({
-          rowData: { ...rowData, id: "non-duplicate" },
           config,
+          rowData: { ...rowData, id: "non-duplicate" },
         });
         customTestRow({
           columnLabel: "csvHeader.duplicate",

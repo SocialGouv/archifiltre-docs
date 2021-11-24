@@ -1,13 +1,13 @@
-import { times } from "lodash";
 import { createFilesAndFolders } from "files-and-folders-loader/files-and-folders-loader";
 import { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
+import { times } from "lodash";
+import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { MockWritable } from "stdio-mock";
 import Stream from "stream";
 import {
   parseVFSFromStream,
   stringifyVFSToStream,
 } from "util/file-tree-loader/load-from-filesystem-serializer";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 const extractDataFromMock = (writeable: MockWritable): Promise<Buffer[]> =>
   new Promise((resolve) => {
@@ -20,8 +20,8 @@ describe("load-from-filesystem-serializer", () => {
   it("should send and parse a VirtualFileSystem", async () => {
     const filesAndFolders = times(10, (index) =>
       createFilesAndFolders({
-        id: `${index}`,
         children: index % 2 === 0 ? ["hello"] : [],
+        id: `${index}`,
       })
     ).reduce((acc, element) => {
       acc[element.id] = element;

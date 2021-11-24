@@ -1,8 +1,13 @@
 import _ from "lodash";
 import fp from "lodash/fp";
+import { useSelector } from "react-redux";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { medianOnSortedArray } from "util/array/array-util";
+import { ArchifiltreError } from "util/error/error-util";
 import { Mapper, not, size } from "util/functionnal-programming-utils";
+
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
+import { getHashesFromStore } from "../hashes/hashes-selectors";
 import { StoreState } from "../store";
 import {
   AliasMap,
@@ -12,10 +17,6 @@ import {
   LastModifiedMap,
   VirtualPathToIdMap,
 } from "./files-and-folders-types";
-import { getHashesFromStore } from "../hashes/hashes-selectors";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { useSelector } from "react-redux";
-import { ArchifiltreError } from "util/error/error-util";
 
 export const ROOT_FF_ID = "";
 

@@ -29,9 +29,9 @@ const baseState: LoadingInfoState = {
   errors: [],
   loading: [previouslyLoadingId, otherPreviouslyLoadingId],
   loadingInfo: {
-    [previouslyLoadingId]: previouslyLoading,
-    [otherPreviouslyLoadingId]: otherPreviouslyLoading,
     [completeLoadingId]: completeLoading,
+    [otherPreviouslyLoadingId]: otherPreviouslyLoading,
+    [previouslyLoadingId]: previouslyLoading,
   },
 };
 
@@ -56,10 +56,10 @@ describe("loading-info-reducer", () => {
         ...baseState,
         loading: [previouslyLoadingId, otherPreviouslyLoadingId, newLoadingId],
         loadingInfo: {
-          [previouslyLoadingId]: previouslyLoading,
-          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
-          [newLoadingId]: newLoading,
           [completeLoadingId]: completeLoading,
+          [newLoadingId]: newLoading,
+          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
+          [previouslyLoadingId]: previouslyLoading,
         },
       });
     });
@@ -79,13 +79,13 @@ describe("loading-info-reducer", () => {
         ...baseState,
         loading: [previouslyLoadingId, otherPreviouslyLoadingId],
         loadingInfo: {
+          [completeLoadingId]: completeLoading,
+          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
           [previouslyLoadingId]: {
             ...previouslyLoading,
             goal: newGoal,
             progress: newProgress,
           },
-          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
-          [completeLoadingId]: completeLoading,
         },
       });
     });
@@ -104,12 +104,12 @@ describe("loading-info-reducer", () => {
         ...baseState,
         loading: [previouslyLoadingId, otherPreviouslyLoadingId],
         loadingInfo: {
+          [completeLoadingId]: completeLoading,
+          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
           [previouslyLoadingId]: {
             ...previouslyLoading,
             progress: previouslyLoading.progress + progress,
           },
-          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
-          [completeLoadingId]: completeLoading,
         },
       });
     });
@@ -127,9 +127,9 @@ describe("loading-info-reducer", () => {
         complete: [completeLoadingId, previouslyLoadingId],
         loading: [otherPreviouslyLoadingId],
         loadingInfo: {
-          [previouslyLoadingId]: previouslyLoading,
-          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
           [completeLoadingId]: completeLoading,
+          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
+          [previouslyLoadingId]: previouslyLoading,
         },
       });
     });
@@ -170,9 +170,9 @@ describe("loading-info-reducer", () => {
         dismissed: [completeLoadingId],
         loading: [previouslyLoadingId, otherPreviouslyLoadingId],
         loadingInfo: {
-          [previouslyLoadingId]: previouslyLoading,
-          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
           [completeLoadingId]: completeLoading,
+          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
+          [previouslyLoadingId]: previouslyLoading,
         },
       });
     });

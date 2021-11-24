@@ -1,4 +1,10 @@
-import { isJsonFile } from "util/file-system/file-sys-util";
+import {
+  asyncLoadFilesAndFoldersFromFileSystem,
+  makeExportFileLoader,
+  makeFileSystemLoader,
+  makeJsonFileLoader,
+  retryLoadFromFileSystem,
+} from "files-and-folders-loader/files-and-folders-loader";
 import {
   FileLoaderCreator,
   FilesAndFoldersLoader,
@@ -10,31 +16,25 @@ import {
   WithMetadata,
   WithResultHook,
 } from "files-and-folders-loader/files-and-folders-loader-types";
-import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
-import { compose, defaults } from "lodash/fp";
-import version from "version";
-import { tap } from "util/functionnal-programming-utils";
 import fs from "fs";
-import { hookCounter } from "util/hook/hook-utils";
+import _ from "lodash";
+import { compose, defaults } from "lodash/fp";
+import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
   FilesAndFoldersMap,
   LastModifiedMap,
 } from "reducers/files-and-folders/files-and-folders-types";
-import { empty } from "util/function/function-util";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
-import _ from "lodash";
-import { medianOnSortedArray } from "util/array/array-util";
-import { indexSort, indexSortReverse } from "util/list-util";
-import {
-  asyncLoadFilesAndFoldersFromFileSystem,
-  makeExportFileLoader,
-  makeFileSystemLoader,
-  makeJsonFileLoader,
-  retryLoadFromFileSystem,
-} from "files-and-folders-loader/files-and-folders-loader";
-import { ArchifiltreError } from "util/error/error-util";
 import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
+import { medianOnSortedArray } from "util/array/array-util";
+import { ArchifiltreError } from "util/error/error-util";
+import { isJsonFile } from "util/file-system/file-sys-util";
+import { empty } from "util/function/function-util";
+import { tap } from "util/functionnal-programming-utils";
+import { hookCounter } from "util/hook/hook-utils";
+import { indexSort, indexSortReverse } from "util/list-util";
+import version from "version";
 
 type Overrides = {
   lastModified?: LastModifiedMap;
@@ -65,16 +65,16 @@ export const createFilesAndFoldersMetadataDataStructure = (
       metadata[id] = createFilesAndFoldersMetadata({
         averageLastModified: fileLastModified,
         childrenTotalSize: element.file_size,
+        initialMaxLastModified: element.file_last_modified,
+        initialMedianLastModified: element.file_last_modified,
+        initialMinLastModified: element.file_last_modified,
         maxLastModified: fileLastModified,
         medianLastModified: fileLastModified,
         minLastModified: fileLastModified,
-        initialMaxLastModified: element.file_last_modified,
-        initialMinLastModified: element.file_last_modified,
-        initialMedianLastModified: element.file_last_modified,
         nbChildrenFiles: 1,
+        sortAlphaNumericallyIndex: [],
         sortByDateIndex: [],
         sortBySizeIndex: [],
-        sortAlphaNumericallyIndex: [],
       });
       lastModifiedLists[id] = [fileLastModified];
       initialLastModifiedLists[id] = [element.file_last_modified];
@@ -132,16 +132,16 @@ export const createFilesAndFoldersMetadataDataStructure = (
     metadata[id] = createFilesAndFoldersMetadata({
       averageLastModified,
       childrenTotalSize,
-      maxLastModified,
-      medianLastModified,
-      minLastModified,
       initialMaxLastModified,
       initialMedianLastModified,
       initialMinLastModified,
+      maxLastModified,
+      medianLastModified,
+      minLastModified,
       nbChildrenFiles,
+      sortAlphaNumericallyIndex,
       sortByDateIndex,
       sortBySizeIndex,
-      sortAlphaNumericallyIndex,
     });
   };
 
@@ -160,10 +160,10 @@ export const sanitizeHooks = (hooksCreator?: FileSystemLoadingHooksCreator) => (
   hooksCreator
     ? hooksCreator(step)
     : {
-        onStart: empty,
-        onResult: empty,
-        onError: empty,
         onComplete: empty,
+        onError: empty,
+        onResult: empty,
+        onStart: empty,
       };
 
 /**
@@ -248,7 +248,7 @@ export const getLoader = (
     if (filesAndFolders && erroredPaths) {
       const paths = (erroredPaths || []).map(({ filePath }) => filePath);
       return makeFileSystemLoader(
-        retryLoadFromFileSystem({ filesAndFolders, erroredPaths: paths })
+        retryLoadFromFileSystem({ erroredPaths: paths, filesAndFolders })
       );
     }
     return makeFileSystemLoader(asyncLoadFilesAndFoldersFromFileSystem);
@@ -275,8 +275,8 @@ export const makeFileLoadingHooksCreator = ({
   const resultReporter = (count?: number) => {
     if (count) {
       reportResult({
-        status: step,
         count: count,
+        status: step,
       });
     }
   };
@@ -289,14 +289,14 @@ export const makeFileLoadingHooksCreator = ({
   const onComplete = () => resultReporter(getResultCount());
   const onError = (error: any) =>
     reportError({
-      status: step,
       error,
+      status: step,
     });
 
   return {
-    onStart,
-    onResult,
     onComplete,
     onError,
+    onResult,
+    onStart,
   };
 };

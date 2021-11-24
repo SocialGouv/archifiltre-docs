@@ -1,18 +1,19 @@
-import {
-  outputHeader,
-  outputDmdSec,
-  outputProvMd,
-  outputFileTag,
-  outputDivTag,
-} from "./mets.test.data.json";
-import {
-  makeHeader,
-  makeDmdSec,
-  makePremisEvent,
-  makeFileElement,
-  makeObjectDiv,
-} from "./mets";
 import { advanceTo } from "jest-date-mock";
+
+import {
+  makeDmdSec,
+  makeFileElement,
+  makeHeader,
+  makeObjectDiv,
+  makePremisEvent,
+} from "./mets";
+import {
+  outputDivTag,
+  outputDmdSec,
+  outputFileTag,
+  outputHeader,
+  outputProvMd,
+} from "./mets.test.data.json";
 
 // We advance to a specific date for TransactedDate to be setup correctly
 advanceTo(new Date(2019, 7, 5, 1, 0, 0, 0));
@@ -64,8 +65,8 @@ describe("mets module", () => {
   describe("with an item, its ID, its associated DMDID and a hash", () => {
     const alias = "alias.test";
     const testItem = {
-      name: "test.test",
       file_size: 100,
+      name: "test.test",
     };
 
     const testId = "TEST_ID";

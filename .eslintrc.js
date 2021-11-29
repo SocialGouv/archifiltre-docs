@@ -20,7 +20,7 @@ module.exports = {
     },
   ],
   plugins: ["lodash-fp"],
-  settings: {
-    "import/resolver": "webpack",
-  },
+  // settings: {
+  //   "import/resolver": "webpack",
+  // },
 };

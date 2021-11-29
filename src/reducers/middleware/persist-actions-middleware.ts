@@ -1,4 +1,3 @@
-import { app } from "@electron/remote";
 import { promises as fs } from "fs";
 import path from "path";
 import { useEffect, useState } from "react";
@@ -11,10 +10,11 @@ import {
   LoadingStep,
 } from "reducers/loading-state/loading-state-types";
 import { setLoadingStep } from "reducers/loading-state/loading-state-actions";
+import { getPath } from "util/electron/electron-util";
 
 const IGNORED_ACTIONS = [...loadingStateActionTypes];
 
-const userFolderPath = app.getPath("userData");
+const userFolderPath = getPath("userData");
 export const previousSessionFilePath = path.join(
   userFolderPath,
   "last-session-actions"

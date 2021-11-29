@@ -1,32 +1,32 @@
-import { TFunction } from "i18next";
+import type { Column } from "components/common/table/table-types";
+import type { TFunction } from "i18next";
 import { useMemo } from "react";
-import { Column } from "components/common/table/table-types";
-import { ArchifiltreError } from "util/error/error-util";
+import type { ArchifiltreError } from "util/error/error-util";
 
 export const useErrorsModalConfig = (
-  t: TFunction
+    t: TFunction
 ): Column<ArchifiltreError>[] =>
-  useMemo(
-    () => [
-      {
-        id: "filePath",
-        name: t("errorsModal.element"),
-        accessor: "filePath",
-        sortable: true,
-      },
-      {
-        id: "code",
-        name: t("errorsModal.errorCode"),
-        accessor: "code",
-        sortable: true,
-      },
-      {
-        id: "description",
-        name: t("errorsModal.errorDescription"),
-        accessor: ({ code }) =>
-          t(`errorsModal.errorDescriptions.${code}`) as string,
-        sortable: true,
-      },
-    ],
-    [t]
-  );
+    useMemo(
+        () => [
+            {
+                accessor: "filePath",
+                id: "filePath",
+                name: t("errorsModal.element"),
+                sortable: true,
+            },
+            {
+                accessor: "code",
+                id: "code",
+                name: t("errorsModal.errorCode"),
+                sortable: true,
+            },
+            {
+                accessor: ({ code }) =>
+                    t(`errorsModal.errorDescriptions.${code}`),
+                id: "description",
+                name: t("errorsModal.errorDescription"),
+                sortable: true,
+            },
+        ],
+        [t]
+    );

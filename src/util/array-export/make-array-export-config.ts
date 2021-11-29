@@ -1,35 +1,35 @@
+import type { TFunction } from "i18next";
 import { compose, constant, property, sortBy, toString } from "lodash/fp";
-import { formatPathForUserSystem } from "util/file-system/file-sys-util";
 import { extname } from "path";
 import {
-  AliasMap,
-  CommentsMap,
-  FilesAndFolders,
-} from "reducers/files-and-folders/files-and-folders-types";
-import {
-  getDepthFromPath,
-  isFile,
+    getDepthFromPath,
+    isFile,
 } from "reducers/files-and-folders/files-and-folders-selectors";
-import { HashesMap } from "reducers/hashes/hashes-types";
+import type {
+    AliasMap,
+    CommentsMap,
+    FilesAndFolders,
+} from "reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { HashesMap } from "reducers/hashes/hashes-types";
+import type { Tag, TagMap } from "reducers/tags/tags-types";
 import { hasDuplicate } from "util/duplicates/duplicates-util";
+import { formatPathForUserSystem } from "util/file-system/file-sys-util";
 import {
-  getType,
-  isExactFileOrAncestor,
+    getType,
+    isExactFileOrAncestor,
 } from "util/files-and-folders/file-and-folders-utils";
-import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { TFunction } from "i18next";
-import { Tag, TagMap } from "reducers/tags/tags-types";
 
 /**
  * Simple date formatting function for performance matters.
  * @param timestamp
  */
 const formatOutputDate = (timestamp: number) => {
-  const date = new Date(timestamp);
-  const day = `0${date.getUTCDate()}`.slice(-2);
-  const month = `0${date.getMonth() + 1}`.slice(-2);
-  const year = date.getUTCFullYear();
-  return `${day}/${month}/${year}`;
+    const date = new Date(timestamp);
+    const day = `0${date.getUTCDate()}`.slice(-2);
+    const month = `0${date.getMonth() + 1}`.slice(-2);
+    const year = date.getUTCFullYear();
+    return `${day}/${month}/${year}`;
 };
 
 const getId = property<{ id: string }, "id">("id");
@@ -43,177 +43,180 @@ const getName = property<{ name: string }, "name">("name");
 const getExtension = compose(extname, getName);
 
 const getChildrenTotalSize = compose(
-  toString,
-  property<{ childrenTotalSize: number }, "childrenTotalSize">(
-    "childrenTotalSize"
-  )
+    toString,
+    property<{ childrenTotalSize: number }, "childrenTotalSize">(
+        "childrenTotalSize"
+    )
 );
 
 const getFirstModifiedDate = compose(
-  formatOutputDate,
-  property<{ initialMinLastModified: number }, "initialMinLastModified">(
-    "initialMinLastModified"
-  )
+    formatOutputDate,
+    property<{ initialMinLastModified: number }, "initialMinLastModified">(
+        "initialMinLastModified"
+    )
 );
 
 const getLastModifiedDate = compose(
-  formatOutputDate,
-  property<{ initialMaxLastModified: number }, "initialMaxLastModified">(
-    "initialMaxLastModified"
-  )
+    formatOutputDate,
+    property<{ initialMaxLastModified: number }, "initialMaxLastModified">(
+        "initialMaxLastModified"
+    )
 );
 
 const getNewLastModifiedDateForFolder = ({
-  initialMaxLastModified,
-  maxLastModified,
+    initialMaxLastModified,
+    maxLastModified,
 }: AccessorParams) =>
-  initialMaxLastModified === maxLastModified
-    ? ""
-    : formatOutputDate(maxLastModified);
+    initialMaxLastModified === maxLastModified
+        ? ""
+        : formatOutputDate(maxLastModified);
 
 const getNewFirstModifiedDateForFolder = ({
-  initialMinLastModified,
-  minLastModified,
+    initialMinLastModified,
+    minLastModified,
 }: AccessorParams) =>
-  initialMinLastModified === minLastModified
-    ? ""
-    : formatOutputDate(minLastModified);
+    initialMinLastModified === minLastModified
+        ? ""
+        : formatOutputDate(minLastModified);
 
 const getNewPath = ({ virtualPath, id }: { virtualPath: string; id: string }) =>
-  virtualPath !== id ? formatPathForUserSystem(virtualPath) : "";
+    virtualPath !== id ? formatPathForUserSystem(virtualPath) : "";
 
 const getAlias = ({ aliases, id }: { aliases: AliasMap; id }) =>
-  aliases[id] || "";
+    aliases[id] || "";
 
 const getComments = ({ comments, id }: { comments: CommentsMap; id: string }) =>
-  comments[id] || "";
+    comments[id] || "";
 
 const getFileOrFolderText = ({
-  file,
-  folder,
+    file,
+    folder,
 }: {
-  file: string;
-  folder: string;
+    file: string;
+    folder: string;
 }) => compose((isAFile) => (isAFile ? file : folder), isFile);
 
 const getDepth = compose(toString, getDepthFromPath, getId);
 
 const getFileCount = compose(
-  toString,
-  property<{ nbChildrenFiles: number }, "nbChildrenFiles">("nbChildrenFiles")
+    toString,
+    property<{ nbChildrenFiles: number }, "nbChildrenFiles">("nbChildrenFiles")
 );
 
 const getFileHash = ({ id, hashes }: { id: string; hashes: HashesMap }) =>
-  hashes[id] || "";
+    hashes[id] || "";
 
-const getHasDuplicateText = ({ yes, no }: { yes: string; no: string }) => ({
-  hashes,
-  ...currentFf
-}: { hashes: HashesMap } & FilesAndFolders) =>
-  hasDuplicate(hashes, currentFf) ? yes : no;
+const getHasDuplicateText =
+    ({ yes, no }: { yes: string; no: string }) =>
+    ({ hashes, ...currentFf }: FilesAndFolders & { hashes: HashesMap }) =>
+        hasDuplicate(hashes, currentFf) ? yes : no;
 
-const getTypeText = ({
-  folder: folderLabel,
-  unknown: unknownLabel,
-}: {
-  folder: string;
-  unknown: string;
-}) => (filesAndFolders: FilesAndFolders) =>
-  getType(filesAndFolders, { folderLabel, unknownLabel });
+const getTypeText =
+    ({
+        folder: folderLabel,
+        unknown: unknownLabel,
+    }: {
+        folder: string;
+        unknown: string;
+    }) =>
+    (filesAndFolders: FilesAndFolders) =>
+        getType(filesAndFolders, { folderLabel, unknownLabel });
 
 const getToDeleteText = (toDeleteText: string) =>
-  compose(
-    (isToDelete: boolean) => (isToDelete ? toDeleteText : ""),
-    ({ id, idsToDelete }: { id: string; idsToDelete: string[] }) =>
-      idsToDelete.includes(id)
-  );
+    compose(
+        (isToDelete: boolean) => (isToDelete ? toDeleteText : ""),
+        ({ id, idsToDelete }: { id: string; idsToDelete: string[] }) =>
+            idsToDelete.includes(id)
+    );
 
 const getTagText = ({ name, ffIds }: { name: string; ffIds: string[] }) =>
-  compose(
-    (isTaggged) => (isTaggged ? name : ""),
-    ({ id }: { id: string }) =>
-      ffIds.some((taggedId) => isExactFileOrAncestor(id, taggedId))
-  );
+    compose(
+        (isTaggged) => (isTaggged ? name : ""),
+        ({ id }: { id: string }) =>
+            ffIds.some((taggedId) => isExactFileOrAncestor(id, taggedId))
+    );
 
 type AccessorParams = FilesAndFolders &
-  FilesAndFoldersMetadata & { hashes: HashesMap } & { aliases: AliasMap } & {
-    comments: CommentsMap;
-  } & {
-    idsToDelete: string[];
-  };
+    FilesAndFoldersMetadata & {
+        comments: CommentsMap;
+    } & {
+        idsToDelete: string[];
+    } & { aliases: AliasMap } & { hashes: HashesMap };
 
 type Accessor = (params: AccessorParams) => string;
-export type CellConfig = {
-  id: string;
-  title: string;
-  accessor: Accessor;
-};
+export interface CellConfig {
+    id: string;
+    title: string;
+    accessor: Accessor;
+}
 
-const makeCellConfigCreator = (translate: TFunction) => (
-  id: string,
-  accessor: Accessor
-): CellConfig => ({
-  id,
-  title: id ? translate(`csvHeader.${id}`) : "",
-  accessor,
-});
+const makeCellConfigCreator =
+    (translate: TFunction) =>
+    (id: string, accessor: Accessor): CellConfig => ({
+        accessor,
+        id,
+        title: id ? translate(`csvHeader.${id}`) : "",
+    });
 
 const makeTagsConfig = compose(
-  (tags) =>
-    tags.map(
-      ({ id, name, ffIds }: Tag, index): CellConfig => ({
-        id,
-        title: `tag${index} : ${name}`,
-        accessor: getTagText({ name, ffIds }),
-      })
-    ),
-  sortBy<Tag>("name")
+    (tags) =>
+        tags.map(
+            ({ id, name, ffIds }: Tag, index): CellConfig => ({
+                accessor: getTagText({ ffIds, name }),
+                id,
+                title: `tag${index} : ${name}`,
+            })
+        ),
+    sortBy<Tag>("name")
 );
 
 export const makeRowConfig = (
-  translate: TFunction,
-  tags: TagMap
+    translate: TFunction,
+    tags: TagMap
 ): CellConfig[] => {
-  const createCellConfig = makeCellConfigCreator(translate);
-  return [
-    createCellConfig("", constant("")),
-    createCellConfig("path", getFilePath),
-    createCellConfig("pathLength", getPathLength),
-    createCellConfig("name", getName),
-    createCellConfig("extension", getExtension),
-    createCellConfig("size", getChildrenTotalSize),
-    createCellConfig("firstModified", getFirstModifiedDate),
-    createCellConfig("lastModified", getLastModifiedDate),
-    createCellConfig("newFirstModified", getNewFirstModifiedDateForFolder),
-    createCellConfig("newLastModified", getNewLastModifiedDateForFolder),
-    createCellConfig("newPath", getNewPath),
-    createCellConfig("newName", getAlias),
-    createCellConfig("description", getComments),
-    createCellConfig(
-      "fileOrFolder",
-      getFileOrFolderText({
-        file: translate("common.file"),
-        folder: translate("common.folder"),
-      })
-    ),
-    createCellConfig("depth", getDepth),
-    createCellConfig("fileCount", getFileCount),
-    createCellConfig(
-      "type",
-      getTypeText({
-        folder: translate("common.folder"),
-        unknown: translate("common.unknown"),
-      })
-    ),
-    createCellConfig("hash", getFileHash),
-    createCellConfig(
-      "duplicate",
-      getHasDuplicateText({
-        yes: translate("common.yes"),
-        no: translate("common.no"),
-      })
-    ),
-    createCellConfig("toDelete", getToDeleteText(translate("common.toDelete"))),
-    ...makeTagsConfig(tags),
-  ];
+    const createCellConfig = makeCellConfigCreator(translate);
+    return [
+        createCellConfig("", constant("")),
+        createCellConfig("path", getFilePath),
+        createCellConfig("pathLength", getPathLength),
+        createCellConfig("name", getName),
+        createCellConfig("extension", getExtension),
+        createCellConfig("size", getChildrenTotalSize),
+        createCellConfig("firstModified", getFirstModifiedDate),
+        createCellConfig("lastModified", getLastModifiedDate),
+        createCellConfig("newFirstModified", getNewFirstModifiedDateForFolder),
+        createCellConfig("newLastModified", getNewLastModifiedDateForFolder),
+        createCellConfig("newPath", getNewPath),
+        createCellConfig("newName", getAlias),
+        createCellConfig("description", getComments),
+        createCellConfig(
+            "fileOrFolder",
+            getFileOrFolderText({
+                file: translate("common.file"),
+                folder: translate("common.folder"),
+            })
+        ),
+        createCellConfig("depth", getDepth),
+        createCellConfig("fileCount", getFileCount),
+        createCellConfig(
+            "type",
+            getTypeText({
+                folder: translate("common.folder"),
+                unknown: translate("common.unknown"),
+            })
+        ),
+        createCellConfig("hash", getFileHash),
+        createCellConfig(
+            "duplicate",
+            getHasDuplicateText({
+                no: translate("common.no"),
+                yes: translate("common.yes"),
+            })
+        ),
+        createCellConfig(
+            "toDelete",
+            getToDeleteText(translate("common.toDelete"))
+        ),
+        ...makeTagsConfig(tags),
+    ];
 };

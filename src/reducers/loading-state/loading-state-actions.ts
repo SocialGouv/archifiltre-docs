@@ -1,25 +1,27 @@
+import type {
+    FileSystemLoadingStep,
+    LoadingStateAction,
+    LoadingStep,
+} from "./loading-state-types";
 import {
-  FileSystemLoadingStep,
-  LoadingStateAction,
-  LoadingStep,
-  RESET_LOADING_STATE,
-  SET_DATA_MODEL_ELEMENTS_COUNT,
-  SET_DERIVED_ELEMENTS_COUNT,
-  SET_FILE_SYSTEM_LOADING_STEP,
-  SET_INDEXED_FILES_COUNT,
-  SET_LOADING_STEP,
+    RESET_LOADING_STATE,
+    SET_DATA_MODEL_ELEMENTS_COUNT,
+    SET_DERIVED_ELEMENTS_COUNT,
+    SET_FILE_SYSTEM_LOADING_STEP,
+    SET_INDEXED_FILES_COUNT,
+    SET_LOADING_STEP,
 } from "./loading-state-types";
 
 export const setLoadingStep = (step: LoadingStep): LoadingStateAction => ({
-  step,
-  type: SET_LOADING_STEP,
+    step,
+    type: SET_LOADING_STEP,
 });
 
 export const setFileSystemLoadingStep = (
-  step: FileSystemLoadingStep
+    step: FileSystemLoadingStep
 ): LoadingStateAction => ({
-  step,
-  type: SET_FILE_SYSTEM_LOADING_STEP,
+    step,
+    type: SET_FILE_SYSTEM_LOADING_STEP,
 });
 
 /**
@@ -27,8 +29,8 @@ export const setFileSystemLoadingStep = (
  * @param count
  */
 export const setIndexedFilesCount = (count: number): LoadingStateAction => ({
-  count,
-  type: SET_INDEXED_FILES_COUNT,
+    count,
+    type: SET_INDEXED_FILES_COUNT,
 });
 
 /**
@@ -36,10 +38,10 @@ export const setIndexedFilesCount = (count: number): LoadingStateAction => ({
  * @param count
  */
 export const setConstructedDataModelElementsCount = (
-  count: number
+    count: number
 ): LoadingStateAction => ({
-  count,
-  type: SET_DATA_MODEL_ELEMENTS_COUNT,
+    count,
+    type: SET_DATA_MODEL_ELEMENTS_COUNT,
 });
 
 /**
@@ -47,13 +49,13 @@ export const setConstructedDataModelElementsCount = (
  * @param count
  */
 export const setDerivedElementsCount = (count: number): LoadingStateAction => ({
-  count,
-  type: SET_DERIVED_ELEMENTS_COUNT,
+    count,
+    type: SET_DERIVED_ELEMENTS_COUNT,
 });
 
 /**
  * Reset the loadingState
  */
 export const resetLoadingState = (): LoadingStateAction => ({
-  type: RESET_LOADING_STATE,
+    type: RESET_LOADING_STATE,
 });

@@ -1,20 +1,19 @@
+import type { TagMap, TagsActionTypes } from "./tags-types";
 import {
-  ADD_TAG,
-  DELETE_TAG,
-  INITIALIZE_TAGS,
-  RENAME_TAG,
-  RESET_TAGS,
-  TAG_FILE,
-  TagMap,
-  TagsActionTypes,
-  UNTAG_FILE,
+    ADD_TAG,
+    DELETE_TAG,
+    INITIALIZE_TAGS,
+    RENAME_TAG,
+    RESET_TAGS,
+    TAG_FILE,
+    UNTAG_FILE,
 } from "./tags-types";
 
 /**
  * Action to reset tags
  */
 export const resetTags = (): TagsActionTypes => ({
-  type: RESET_TAGS,
+    type: RESET_TAGS,
 });
 
 /**
@@ -22,8 +21,8 @@ export const resetTags = (): TagsActionTypes => ({
  * @param tags - The tags to set
  */
 export const initializeTags = (tags: TagMap): TagsActionTypes => ({
-  tags,
-  type: INITIALIZE_TAGS,
+    tags,
+    type: INITIALIZE_TAGS,
 });
 
 /**
@@ -33,14 +32,14 @@ export const initializeTags = (tags: TagMap): TagsActionTypes => ({
  * @param [tagId] - Used to force the tag id. Will be obsolete when real-estate tags will be removed.
  */
 export const addTag = (
-  tagName: string,
-  ffId: string,
-  tagId = ""
+    tagName: string,
+    ffId: string,
+    tagId = ""
 ): TagsActionTypes => ({
-  ffId,
-  tagId,
-  tagName,
-  type: ADD_TAG,
+    ffId,
+    tagId,
+    tagName,
+    type: ADD_TAG,
 });
 
 /**
@@ -49,9 +48,9 @@ export const addTag = (
  * @param tagName - The new tag name
  */
 export const renameTag = (tagId: string, tagName: string): TagsActionTypes => ({
-  tagId,
-  tagName,
-  type: RENAME_TAG,
+    tagId,
+    tagName,
+    type: RENAME_TAG,
 });
 
 /**
@@ -59,8 +58,8 @@ export const renameTag = (tagId: string, tagName: string): TagsActionTypes => ({
  * @param tagId - The tag id to remove
  */
 export const deleteTag = (tagId: string): TagsActionTypes => ({
-  tagId,
-  type: DELETE_TAG,
+    tagId,
+    type: DELETE_TAG,
 });
 
 /**
@@ -69,9 +68,9 @@ export const deleteTag = (tagId: string): TagsActionTypes => ({
  * @param ffId - The id of the file to tag
  */
 export const tagFile = (tagId: string, ffId: string): TagsActionTypes => ({
-  ffId,
-  tagId,
-  type: TAG_FILE,
+    ffId,
+    tagId,
+    type: TAG_FILE,
 });
 
 /**
@@ -80,7 +79,7 @@ export const tagFile = (tagId: string, ffId: string): TagsActionTypes => ({
  * @param ffId - The id of the file to untag
  */
 export const untagFile = (tagId: string, ffId: string): TagsActionTypes => ({
-  ffId,
-  tagId,
-  type: UNTAG_FILE,
+    ffId,
+    tagId,
+    type: UNTAG_FILE,
 });

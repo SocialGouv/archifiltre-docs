@@ -1,15 +1,18 @@
-import { StoreState } from "../store";
-import { LoadingInfo, LoadingInfoState } from "./loading-info-types";
-import { ArchifiltreError, ArchifiltreErrorType } from "util/error/error-util";
 import { useSelector } from "react-redux";
-import { ArchifiltreErrorCode, UnknownError } from "util/error/error-codes";
+import type { ArchifiltreErrorCode } from "util/error/error-codes";
+import { UnknownError } from "util/error/error-codes";
+import type { ArchifiltreError } from "util/error/error-util";
+import { ArchifiltreErrorType } from "util/error/error-util";
+
+import type { StoreState } from "../store";
+import type { LoadingInfo, LoadingInfoState } from "./loading-info-types";
 
 /**
  * Returns the loadingInfo from the store
  * @param store
  */
 export const getLoadingInfoFromStore = (store: StoreState): LoadingInfoState =>
-  store.loadingInfo;
+    store.loadingInfo;
 
 /**
  * Returns the currently loading LoadingInfo
@@ -17,8 +20,8 @@ export const getLoadingInfoFromStore = (store: StoreState): LoadingInfoState =>
  * @param loadingInfo - The map of loadingInfo
  */
 export const getRunningLoadingInfo = ({
-  loading,
-  loadingInfo,
+    loading,
+    loadingInfo,
 }: LoadingInfoState): LoadingInfo[] => loading.map((id) => loadingInfo[id]);
 
 /**
@@ -27,8 +30,8 @@ export const getRunningLoadingInfo = ({
  * @param loadingInfo - The map of loadingInfo
  */
 export const getCompleteLoadingInfo = ({
-  complete,
-  loadingInfo,
+    complete,
+    loadingInfo,
 }: LoadingInfoState): LoadingInfo[] => complete.map((id) => loadingInfo[id]);
 
 /**
@@ -36,16 +39,16 @@ export const getCompleteLoadingInfo = ({
  * @param store
  */
 export const getArchifiltreErrors = (store: StoreState): ArchifiltreError[] =>
-  getLoadingInfoFromStore(store).errors;
+    getLoadingInfoFromStore(store).errors;
 
 export const useArchifiltreErrors = (): ArchifiltreError[] =>
-  useSelector(getArchifiltreErrors);
+    useSelector(getArchifiltreErrors);
 
 interface CreateArchifiltreErrorParams {
-  type?: ArchifiltreErrorType;
-  filePath?: string;
-  reason?: string;
-  code?: ArchifiltreErrorCode;
+    type?: ArchifiltreErrorType;
+    filePath?: string;
+    reason?: string;
+    code?: ArchifiltreErrorCode;
 }
 
 /**
@@ -56,13 +59,13 @@ interface CreateArchifiltreErrorParams {
  * @param code
  */
 export const createArchifiltreError = ({
-  type = ArchifiltreErrorType.LOADING_FILE_SYSTEM,
-  filePath = "/root",
-  reason = "NOT_FOUND",
-  code = UnknownError.UNKNOWN,
+    type = ArchifiltreErrorType.LOADING_FILE_SYSTEM,
+    filePath = "/root",
+    reason = "NOT_FOUND",
+    code = UnknownError.UNKNOWN,
 }: CreateArchifiltreErrorParams): ArchifiltreError => ({
-  code,
-  filePath,
-  reason,
-  type,
+    code,
+    filePath,
+    reason,
+    type,
 });

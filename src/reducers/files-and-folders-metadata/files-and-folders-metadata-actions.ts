@@ -1,8 +1,8 @@
-import {
-  FilesAndFoldersMetadataAction,
-  FilesAndFoldersMetadataMap,
-  INIT_FILES_AND_FOLDERS_METADATA,
+import type {
+    FilesAndFoldersMetadataAction,
+    FilesAndFoldersMetadataMap,
 } from "./files-and-folders-metadata-types";
+import { INIT_FILES_AND_FOLDERS_METADATA } from "./files-and-folders-metadata-types";
 
 /**
  * Sets files and folders prcomputed metadata into the store
@@ -10,8 +10,8 @@ import {
  * @param metadata
  */
 export const initFilesAndFoldersMetatada = (
-  metadata: FilesAndFoldersMetadataMap
+    metadata: FilesAndFoldersMetadataMap
 ): FilesAndFoldersMetadataAction => ({
-  metadata,
-  type: INIT_FILES_AND_FOLDERS_METADATA,
+    metadata,
+    type: INIT_FILES_AND_FOLDERS_METADATA,
 });

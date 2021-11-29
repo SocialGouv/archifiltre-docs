@@ -1,24 +1,24 @@
-import React, { FC } from "react";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
+import React from "react";
 
-type SessionElementsDetailProps = {
-  title: string;
-  content: string | number;
-};
+interface SessionElementsDetailProps {
+    title: string;
+    content: number | string;
+}
 
-const SessionElementsDetail: FC<SessionElementsDetailProps> = ({
-  title,
-  content,
+const SessionElementsDetail: React.FC<SessionElementsDetailProps> = ({
+    title,
+    content,
 }) => (
-  <Box>
     <Box>
-      <Typography variant="h5">{title}</Typography>
+        <Box>
+            <Typography variant="h5">{title}</Typography>
+        </Box>
+        <Box>
+            <Typography variant="body1">{content}</Typography>
+        </Box>
     </Box>
-    <Box>
-      <Typography variant="body1">{content}</Typography>
-    </Box>
-  </Box>
 );
 
 export default SessionElementsDetail;

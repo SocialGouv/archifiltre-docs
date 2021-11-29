@@ -8,9 +8,9 @@ export const MESSAGE_SIZE_CHUNK_LENGTH = UINT_32_BYTE_SIZE;
  * @param num
  */
 const numberToUint8Array = (num: number) => {
-  const buffer = new ArrayBuffer(UINT_32_BYTE_SIZE);
-  new DataView(buffer).setUint32(0, num);
-  return new Uint8Array(buffer);
+    const buffer = new ArrayBuffer(UINT_32_BYTE_SIZE);
+    new DataView(buffer).setUint32(0, num);
+    return new Uint8Array(buffer);
 };
 
 /**
@@ -18,19 +18,19 @@ const numberToUint8Array = (num: number) => {
  * @param buffers
  */
 export const joinBuffers = (...buffers: Uint8Array[]) => {
-  const positions = buffers.reduce(
-    (acc, buffer, index) => [...acc, (acc[index - 1] || 0) + buffer.length],
-    []
-  );
-  const totalLength = positions[positions.length - 1];
+    const positions = buffers.reduce(
+        (acc, buffer, index) => [...acc, (acc[index - 1] || 0) + buffer.length],
+        []
+    );
+    const totalLength = positions[positions.length - 1];
 
-  const joinedBuffer = new Uint8Array(totalLength);
+    const joinedBuffer = new Uint8Array(totalLength);
 
-  buffers.forEach((buffer, index) => {
-    joinedBuffer.set(buffer, positions[index - 1] || 0);
-  });
+    buffers.forEach((buffer, index) => {
+        joinedBuffer.set(buffer, positions[index - 1] || 0);
+    });
 
-  return joinedBuffer;
+    return joinedBuffer;
 };
 
 /**
@@ -38,8 +38,8 @@ export const joinBuffers = (...buffers: Uint8Array[]) => {
  * @param message
  */
 export const bufferMessageWithLength = (message: Uint8Array) => {
-  const bufferLengthArrayBuffer = numberToUint8Array(message.length);
-  return joinBuffers(bufferLengthArrayBuffer, message);
+    const bufferLengthArrayBuffer = numberToUint8Array(message.length);
+    return joinBuffers(bufferLengthArrayBuffer, message);
 };
 
 /**
@@ -47,7 +47,7 @@ export const bufferMessageWithLength = (message: Uint8Array) => {
  * @param message
  */
 export const uint8ArrayToString = (message: Uint8Array) =>
-  Buffer.from(message.buffer).toString();
+    Buffer.from(message.buffer).toString();
 
 /**
  * Reads the message with length starting at offset from the buffer
@@ -55,12 +55,12 @@ export const uint8ArrayToString = (message: Uint8Array) =>
  * @param offset
  */
 export const readBufferMessageWithLength = (
-  message: Uint8Array,
-  offset = 0
+    message: Uint8Array,
+    offset = 0
 ) => {
-  const messageSize = new DataView(message.buffer).getUint32(offset);
-  const endIndex = offset + MESSAGE_SIZE_CHUNK_LENGTH + messageSize;
-  const content = message.slice(offset + 4, offset + 4 + messageSize);
+    const messageSize = new DataView(message.buffer).getUint32(offset);
+    const endIndex = offset + MESSAGE_SIZE_CHUNK_LENGTH + messageSize;
+    const content = message.slice(offset + 4, offset + 4 + messageSize);
 
-  return { content, endIndex };
+    return { content, endIndex };
 };

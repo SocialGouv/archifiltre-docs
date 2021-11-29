@@ -1,15 +1,15 @@
-import { useStyles } from "hooks/use-styles";
-import React, { FC } from "react";
 import Typography from "@material-ui/core/Typography";
+import type { FC } from "react";
+import React from "react";
 
-const LargeIndicatorText: FC = ({ children }) => {
-  const { largeIndicatorText } = useStyles();
+import { useStyles } from "../../hooks/use-styles";
 
-  return (
-    <Typography variant="body1" className={largeIndicatorText}>
-      {children}
-    </Typography>
-  );
+export const LargeIndicatorText: FC = ({ children }) => {
+    const { largeIndicatorText } = useStyles();
+
+    return (
+        <Typography variant="body1" className={largeIndicatorText}>
+            {children}
+        </Typography>
+    );
 };
-
-export default LargeIndicatorText;

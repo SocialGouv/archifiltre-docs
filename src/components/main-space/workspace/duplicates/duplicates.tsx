@@ -1,35 +1,39 @@
+import DuplicatesTable from "components/main-space/workspace/duplicates/duplicates-table/duplicates-table-container";
 import TabContentHeader from "components/main-space/workspace/tabs/tab-content-header";
 import TabsLayout, {
-  makeTabComponent,
+    makeTabComponent,
 } from "components/main-space/workspace/tabs/tabs-layout";
-import React, { FC } from "react";
+import type { FC } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import DuplicatesDistribution from "./duplicates-distribution/duplicates-distribution";
-import DuplicatesTable from "components/main-space/workspace/duplicates/duplicates-table/duplicates-table-container";
+
 import TranslatedCategoryTitle from "../tabs/translated-category-title";
+import DuplicatesDistribution from "./duplicates-distribution/duplicates-distribution";
 
 const DuplicatesDistributionTab = makeTabComponent({
-  title: <TranslatedCategoryTitle title="duplicates.duplicatesDistribution" />,
-  content: <DuplicatesDistribution />,
+    content: <DuplicatesDistribution />,
+    title: (
+        <TranslatedCategoryTitle title="duplicates.duplicatesDistribution" />
+    ),
 });
 
 const DuplicatesTableTab = makeTabComponent({
-  title: <TranslatedCategoryTitle title="duplicates.duplicatesByType" />,
-  content: <DuplicatesTable />,
-  isLast: true,
+    content: <DuplicatesTable />,
+    isLast: true,
+    title: <TranslatedCategoryTitle title="duplicates.duplicatesByType" />,
 });
 
 const Duplicates: FC = () => {
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
-  return (
-    <TabContentHeader title={t("workspace.duplicates")}>
-      <TabsLayout>
-        <DuplicatesDistributionTab />
-        <DuplicatesTableTab />
-      </TabsLayout>
-    </TabContentHeader>
-  );
+    return (
+        <TabContentHeader title={t("workspace.duplicates")}>
+            <TabsLayout>
+                <DuplicatesDistributionTab />
+                <DuplicatesTableTab />
+            </TabsLayout>
+        </TabContentHeader>
+    );
 };
 
 export default Duplicates;

@@ -3,17 +3,17 @@ import path from "path";
 import { identifyFileFormat } from "./file-format-util";
 
 describe("file-format-util", () => {
-  describe("identifyFileFormat", () => {
-    it("should identify ucs2 files", async () => {
-      const filePath = path.join(__dirname, "ucs2-file");
-      const type = await identifyFileFormat(filePath);
-      expect(type).toBe("ucs2");
-    });
+    describe("identifyFileFormat", () => {
+        it("should identify ucs2 files", async () => {
+            const filePath = path.join(__dirname, "ucs2-file");
+            const type = await identifyFileFormat(filePath);
+            expect(type).toBe("ucs2");
+        });
 
-    it("should default to utf8 files", async () => {
-      const filePath = path.join(__dirname, "utf8-file");
-      const type = await identifyFileFormat(filePath);
-      expect(type).toBe("utf8");
+        it("should default to utf8 files", async () => {
+            const filePath = path.join(__dirname, "utf8-file");
+            const type = await identifyFileFormat(filePath);
+            expect(type).toBe("utf8");
+        });
     });
-  });
 });

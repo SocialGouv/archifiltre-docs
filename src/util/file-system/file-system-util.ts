@@ -1,5 +1,4 @@
-import { shell } from "electron";
-import { dialog } from "electron";
+import { dialog, shell } from "electron";
 import translations from "translations/translations";
 import { notifyError } from "util/notification/notifications-util";
 
@@ -9,12 +8,12 @@ import { notifyError } from "util/notification/notifications-util";
  * @param filename - Either the default name of the file or the full path to the default file
  */
 export const promptUserForSave = async (
-  filename: string
+    filename: string
 ): Promise<string | undefined> => {
-  const { filePath } = await dialog.showSaveDialog({
-    defaultPath: filename,
-  });
-  return filePath;
+    const { filePath } = await dialog.showSaveDialog({
+        defaultPath: filename,
+    });
+    return filePath;
 };
 
 /**
@@ -22,17 +21,18 @@ export const promptUserForSave = async (
  * @param elementPath
  */
 export const openExternalElement = async (
-  elementPath: string
+    elementPath: string
 ): Promise<void> => {
-  const error = await shell.openPath(elementPath);
+    const error = await shell.openPath(elementPath);
 
-  if (error) {
-    notifyError(
-      translations.t("report.openElementErrorMessage"),
-      translations.t("report.openElementErrorTitle")
-    );
-  }
+    if (error) {
+        notifyError(
+            translations.t("report.openElementErrorMessage"),
+            translations.t("report.openElementErrorTitle")
+        );
+    }
 };
 
-export const showInFolder = async (elementPath: string) =>
-  shell.showItemInFolder(elementPath);
+export const showInFolder = async (elementPath: string) => {
+    shell.showItemInFolder(elementPath);
+};

@@ -1,66 +1,71 @@
-import { compose } from "lodash/fp";
-import { HashesMap } from "reducers/hashes/hashes-types";
-import {
-  AliasMap,
-  CommentsMap,
-  FilesAndFoldersMap,
-} from "reducers/files-and-folders/files-and-folders-types";
-import { TFunction } from "i18next";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { TagMap } from "reducers/tags/tags-types";
-import { concat, from, interval, Observable } from "rxjs";
-import { map, take } from "rxjs/operators";
-import {
-  CellConfig,
-  makeRowConfig,
-} from "util/array-export/make-array-export-config";
+import type { TFunction } from "i18next";
 import _ from "lodash";
-import { getAllChildren } from "util/files-and-folders/file-and-folders-utils";
+import { compose } from "lodash/fp";
 import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
+import type {
+    AliasMap,
+    CommentsMap,
+    FilesAndFoldersMap,
+} from "reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { HashesMap } from "reducers/hashes/hashes-types";
+import type { TagMap } from "reducers/tags/tags-types";
+import type { Observable } from "rxjs";
+import { concat, from, interval } from "rxjs";
+import { map, take } from "rxjs/operators";
+import type { CellConfig } from "util/array-export/make-array-export-config";
+import { makeRowConfig } from "util/array-export/make-array-export-config";
+import { getAllChildren } from "util/files-and-folders/file-and-folders-utils";
 
-type CsvExporterData = {
-  aliases: AliasMap;
-  comments: CommentsMap;
-  filesAndFolders: FilesAndFoldersMap;
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
-  elementsToDelete: string[];
-  hashes?: HashesMap;
-  tags: TagMap;
-  translator: TFunction;
-};
+interface CsvExporterData {
+    aliases: AliasMap;
+    comments: CommentsMap;
+    filesAndFolders: FilesAndFoldersMap;
+    filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
+    elementsToDelete: string[];
+    hashes?: HashesMap;
+    tags: TagMap;
+    translator: TFunction;
+}
 
-type WithRowConfig = { rowConfig: CellConfig[] };
-type WithHashes = { hashes: HashesMap };
-type WithIdsToDelete = { idsToDelete: string[] };
+interface WithRowConfig {
+    rowConfig: CellConfig[];
+}
+interface WithHashes {
+    hashes: HashesMap;
+}
+interface WithIdsToDelete {
+    idsToDelete: string[];
+}
 
 const CHUNK_SIZE = 1000;
 
 const makeExportBody = ({
-  rowConfig,
-  filesAndFolders,
-  filesAndFoldersMetadata,
-  ...rest
-}: CsvExporterData & WithRowConfig & WithHashes & WithIdsToDelete) => {
-  const filesAndFoldersChunks = _.chunk(
-    Object.values(filesAndFolders).filter(({ id }) => id !== ROOT_FF_ID),
-    CHUNK_SIZE
-  );
+    rowConfig,
+    filesAndFolders,
+    filesAndFoldersMetadata,
+    ...rest
+}: CsvExporterData & WithHashes & WithIdsToDelete & WithRowConfig) => {
+    const filesAndFoldersChunks = _.chunk(
+        Object.values(filesAndFolders).filter(({ id }) => id !== ROOT_FF_ID),
+        CHUNK_SIZE
+    );
 
-  return interval().pipe(
-    take(filesAndFoldersChunks.length),
-    map((index) => filesAndFoldersChunks[index]),
-    map((chunk) =>
-      chunk.map((element) =>
-        rowConfig.map((cellConfig) =>
-          cellConfig.accessor({
-            ...element,
-            ...filesAndFoldersMetadata[element.id],
-            ...rest,
-          })
+    return interval().pipe(
+        take(filesAndFoldersChunks.length),
+        map((index) => filesAndFoldersChunks[index]),
+        map((chunk) =>
+            chunk.map((element) =>
+                rowConfig.map((cellConfig) =>
+                    cellConfig.accessor({
+                        ...element,
+                        ...filesAndFoldersMetadata[element.id],
+                        ...rest,
+                    })
+                )
+            )
         )
-      )
-    )
-  );
+    );
 };
 
 /**
@@ -69,76 +74,85 @@ const makeExportBody = ({
  * @param elementsToDelete
  */
 const getChildrenToDelete = (filesAndFolders, elementsToDelete) => {
-  return _(elementsToDelete)
-    .flatMap((elementToDelete) =>
-      getAllChildren(filesAndFolders, elementToDelete)
-    )
-    .uniq()
-    .value();
+    return _(elementsToDelete)
+        .flatMap((elementToDelete) =>
+            getAllChildren(filesAndFolders, elementToDelete)
+        )
+        .uniq()
+        .value();
 };
 
 const prepareIdsToDelete = <
-  T extends { filesAndFolders: FilesAndFoldersMap; elementsToDelete: string[] }
+    T extends {
+        filesAndFolders: FilesAndFoldersMap;
+        elementsToDelete: string[];
+    }
 >(
-  params: T
+    params: T
 ): T & WithIdsToDelete => ({
-  ...params,
-  idsToDelete: getChildrenToDelete(
-    params.filesAndFolders,
-    params.elementsToDelete
-  ),
+    ...params,
+    idsToDelete: getChildrenToDelete(
+        params.filesAndFolders,
+        params.elementsToDelete
+    ),
 });
 
 const normalizeHashes = <T extends { hashes?: HashesMap }>(
-  data: T
+    data: T
 ): T & WithHashes => ({
-  ...data,
-  hashes: data.hashes || {},
+    ...data,
+    hashes: data.hashes || {},
 });
 
 const shouldDisplayDuplicates = (hashes?: HashesMap) =>
-  hashes && Object.keys(hashes).length > 0;
+    hashes && Object.keys(hashes).length > 0;
 
 const removeDuplicateCells = (
-  params: CsvExporterData & WithRowConfig
+    params: CsvExporterData & WithRowConfig
 ): CsvExporterData & WithRowConfig => ({
-  ...params,
-  rowConfig: params.rowConfig.filter(
-    ({ id }) => !["hash", "duplicate"].includes(id)
-  ),
+    ...params,
+    rowConfig: params.rowConfig.filter(
+        ({ id }) => !["hash", "duplicate"].includes(id)
+    ),
 });
 
 const removeToDeleteCells = (
-  params: CsvExporterData & WithRowConfig
+    params: CsvExporterData & WithRowConfig
 ): CsvExporterData & WithRowConfig => ({
-  ...params,
-  rowConfig: params.rowConfig.filter(({ id }) => id !== "toDelete"),
+    ...params,
+    rowConfig: params.rowConfig.filter(({ id }) => id !== "toDelete"),
 });
 
 export const exportToCsv = compose(
-  (
-    params: CsvExporterData &
-      WithRowConfig & {
-        output: string[][];
-      } & WithHashes &
-      WithIdsToDelete
-  ): Observable<string[][]> =>
-    concat(from([params.output]), makeExportBody(params)),
-  (params) => ({
-    ...params,
-    output: [params.rowConfig.map(({ title }) => title)],
-  }),
-  (params: CsvExporterData & WithRowConfig & WithHashes) =>
-    prepareIdsToDelete(params),
-  (params: CsvExporterData & WithRowConfig) => normalizeHashes(params),
-  (params: CsvExporterData & WithRowConfig) =>
-    params.elementsToDelete.length > 0 ? params : removeToDeleteCells(params),
-  (params: CsvExporterData & WithRowConfig) =>
-    shouldDisplayDuplicates(params.hashes)
-      ? params
-      : removeDuplicateCells(params),
-  (csvExporterData: CsvExporterData) => ({
-    rowConfig: makeRowConfig(csvExporterData.translator, csvExporterData.tags),
-    ...csvExporterData,
-  })
+    (
+        params: CsvExporterData &
+            WithHashes &
+            WithIdsToDelete &
+            WithRowConfig & {
+                output: string[][];
+            }
+    ): Observable<string[][]> =>
+        concat(from([params.output]), makeExportBody(params)),
+    (params) => ({
+        ...params,
+        output: [params.rowConfig.map(({ title }) => title)],
+    }),
+    (params: CsvExporterData & WithHashes & WithRowConfig) =>
+        prepareIdsToDelete(params),
+    (params: CsvExporterData & WithRowConfig) => normalizeHashes(params),
+    (params: CsvExporterData & WithRowConfig) =>
+        params.elementsToDelete.length > 0
+            ? params
+            : removeToDeleteCells(params),
+    (params: CsvExporterData & WithRowConfig) =>
+        shouldDisplayDuplicates(params.hashes)
+            ? params
+            : removeDuplicateCells(params),
+    (csvExporterData: CsvExporterData) => ({
+        rowConfig: makeRowConfig(
+            csvExporterData.translator,
+            csvExporterData.tags
+        ),
+        ...csvExporterData,
+    })
 );

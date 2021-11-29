@@ -5,30 +5,30 @@ import { filesAndFoldersMetadataReducer } from "./files-and-folders-metadata-red
 import { FilesAndFoldersMetadataState } from "./files-and-folders-metadata-types";
 
 const initialState: FilesAndFoldersMetadataState = {
-  filesAndFoldersMetadata: {},
+    filesAndFoldersMetadata: {},
 };
 
 describe("files-and-folders-metadata-reducer", () => {
-  describe("INIT_FILES_AND_FOLDERS_METADATA", () => {
-    it("should set the filesAndFolders metadata", () => {
-      const addedMetadata = {
-        testId: createFilesAndFoldersMetadata({
-          averageLastModified: 3000,
-          childrenTotalSize: 10000,
-          maxLastModified: 10000,
-          medianLastModified: 4000,
-          minLastModified: 1000,
-        }),
-      };
+    describe("INIT_FILES_AND_FOLDERS_METADATA", () => {
+        it("should set the filesAndFolders metadata", () => {
+            const addedMetadata = {
+                testId: createFilesAndFoldersMetadata({
+                    averageLastModified: 3000,
+                    childrenTotalSize: 10000,
+                    maxLastModified: 10000,
+                    medianLastModified: 4000,
+                    minLastModified: 1000,
+                }),
+            };
 
-      const nextState = filesAndFoldersMetadataReducer(
-        initialState,
-        initFilesAndFoldersMetatada(addedMetadata)
-      );
+            const nextState = filesAndFoldersMetadataReducer(
+                initialState,
+                initFilesAndFoldersMetatada(addedMetadata)
+            );
 
-      expect(nextState).toEqual({
-        filesAndFoldersMetadata: addedMetadata,
-      });
+            expect(nextState).toEqual({
+                filesAndFoldersMetadata: addedMetadata,
+            });
+        });
     });
-  });
 });

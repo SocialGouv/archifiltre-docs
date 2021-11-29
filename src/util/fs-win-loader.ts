@@ -6,18 +6,18 @@ import { isWindows } from "./os/os-util";
  * We could probably replace this with a proper webpack loader.
  */
 const loadFsWin = (): any => {
-  if (!isWindows()) {
-    return {};
-  }
-  try {
-    // @ts-ignore
-    return __non_webpack_require__(
-      `./electron/dist/electron/${process.arch}/fswin.node`
-    );
-  } catch (err) {
-    // @ts-ignore
-    return __non_webpack_require__(`./electron/${process.arch}/fswin.node`);
-  }
+    if (!isWindows()) {
+        return {};
+    }
+    try {
+        // @ts-expect-error
+        return __non_webpack_require__(
+            `./electron/dist/electron/${process.arch}/fswin.node`
+        );
+    } catch (err) {
+        // @ts-expect-error
+        return __non_webpack_require__(`./electron/${process.arch}/fswin.node`);
+    }
 };
 
 export default loadFsWin();

@@ -9,21 +9,21 @@ import { identity } from "util/function/function-util";
  * @param tag
  */
 export function angularParser(tag) {
-  if (tag === ".") {
+    if (tag === ".") {
+        return {
+            get: identity,
+        };
+    }
+    const expr = expressions.compile(tag.replace(/(’|“|”|‘)/g, "'"));
     return {
-      get: identity,
+        get: (scope, context) => {
+            let obj = {};
+            const scopeList = context.scopeList;
+            const num = context.num;
+            for (let i = 0, len = num + 1; i < len; i++) {
+                obj = { ...obj, ...scopeList[i] };
+            }
+            return expr(scope, obj);
+        },
     };
-  }
-  const expr = expressions.compile(tag.replace(/(’|“|”|‘)/g, "'"));
-  return {
-    get: (scope, context) => {
-      let obj = {};
-      const scopeList = context.scopeList;
-      const num = context.num;
-      for (let i = 0, len = num + 1; i < len; i++) {
-        obj = { ...obj, ...scopeList[i] };
-      }
-      return expr(scope, obj);
-    },
-  };
 }

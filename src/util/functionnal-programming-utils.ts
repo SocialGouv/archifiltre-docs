@@ -1,7 +1,7 @@
 export type Mapper<Input, Output> = (input: Input) => Output;
 export type Merger<Input1, Input2, Output> = (
-  input1: Input1,
-  input2: Input2
+    input1: Input1,
+    input2: Input2
 ) => Output;
 
 export type Accessor<T> = () => T;
@@ -28,9 +28,9 @@ export const size = (array: any[] | string): number => array.length;
  *   filter(({ id }) => id !== "")
  * ]);
  */
-export const tap = <T>(sideEffect: Mapper<T, void>): Mapper<T, T> => (
-  value: T
-) => {
-  sideEffect(value);
-  return value;
-};
+export const tap =
+    <T>(sideEffect: Mapper<T, void>): Mapper<T, T> =>
+    (value: T) => {
+        sideEffect(value);
+        return value;
+    };

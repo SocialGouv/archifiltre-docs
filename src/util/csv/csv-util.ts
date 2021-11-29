@@ -2,13 +2,12 @@
  * Escape doubleQuotes with the specified character (usually " or \)
  * @param doubleQuoteEscapeCharacter
  */
-const escapeDoubleQuotes = (doubleQuoteEscapeCharacter: string) => (
-  stringToEscape: string
-) =>
-  stringToEscape.replace(
-    new RegExp(`"`, "gm"),
-    `${doubleQuoteEscapeCharacter}"`
-  );
+const escapeDoubleQuotes =
+    (doubleQuoteEscapeCharacter: string) => (stringToEscape: string) =>
+        stringToEscape.replace(
+            new RegExp(`"`, "gm"),
+            `${doubleQuoteEscapeCharacter}"`
+        );
 
 /**
  * Wraps a string with double quotes
@@ -17,8 +16,8 @@ const escapeDoubleQuotes = (doubleQuoteEscapeCharacter: string) => (
 const wrapWithQuotes = (wrappedString: string): string => `"${wrappedString}"`;
 
 interface FlattenLineOptions {
-  cellSeparator: string;
-  doubleQuoteEscapeCharacter: string;
+    cellSeparator: string;
+    doubleQuoteEscapeCharacter: string;
 }
 
 /**
@@ -26,14 +25,13 @@ interface FlattenLineOptions {
  * @param separator - The cell separator
  * @param doubleQuoteEscapeCharacter - The character used to escape double quote. Is usually another " or a \
  */
-const flattenLine = ({
-  cellSeparator,
-  doubleQuoteEscapeCharacter,
-}: FlattenLineOptions) => (lineArray: string[]): string =>
-  lineArray
-    .map(escapeDoubleQuotes(doubleQuoteEscapeCharacter))
-    .map(wrapWithQuotes)
-    .join(cellSeparator);
+const flattenLine =
+    ({ cellSeparator, doubleQuoteEscapeCharacter }: FlattenLineOptions) =>
+    (lineArray: string[]): string =>
+        lineArray
+            .map(escapeDoubleQuotes(doubleQuoteEscapeCharacter))
+            .map(wrapWithQuotes)
+            .join(cellSeparator);
 
 /**
  * Converts an matrix of strings to CSV.
@@ -41,11 +39,11 @@ const flattenLine = ({
  * @param matrix - The matrix to convert to CSV
  */
 export const arrayToCsv = (matrix: string[][]): string => {
-  const lineSeparator = "\n";
-  const cellSeparator = ";";
-  const doubleQuoteEscapeCharacter = '"';
+    const lineSeparator = "\n";
+    const cellSeparator = ";";
+    const doubleQuoteEscapeCharacter = '"';
 
-  return matrix
-    .map(flattenLine({ cellSeparator, doubleQuoteEscapeCharacter }))
-    .join(lineSeparator);
+    return matrix
+        .map(flattenLine({ cellSeparator, doubleQuoteEscapeCharacter }))
+        .join(lineSeparator);
 };

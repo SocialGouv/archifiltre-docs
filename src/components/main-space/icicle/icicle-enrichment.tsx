@@ -1,114 +1,121 @@
-import React, { FC, useCallback, useMemo } from "react";
-import { IcicleMouseHandler } from "./icicle-main";
-import { Dims } from "./icicle-rect";
+import React, { useCallback, useMemo } from "react";
+
+import type { IcicleMouseHandler } from "./icicle-main";
+import type { Dims } from "./icicle-rect";
 
 export enum EnrichmentTypes {
-  TAG,
-  TO_DELETE,
-  ALIAS,
-  COMMENT,
+    TAG,
+    TO_DELETE,
+    ALIAS,
+    COMMENT,
 }
 
 export enum OPACITY {
-  HIGHLIGHTED = 1,
-  NOT_HIGHLIGHTED = 0.2,
+    HIGHLIGHTED = 1,
+    NOT_HIGHLIGHTED = 0.2,
 }
 
 export const ENRICHMENT_COLORS = {
-  [EnrichmentTypes.TAG]: "rgb(10, 50, 100)",
-  [EnrichmentTypes.TO_DELETE]: "rgb(250,0,0)",
-  [EnrichmentTypes.ALIAS]: "rgb(145,218,242)",
-  [EnrichmentTypes.COMMENT]: "rgb(3,161,214)",
+    [EnrichmentTypes.TAG]: "rgb(10, 50, 100)",
+    [EnrichmentTypes.TO_DELETE]: "rgb(250,0,0)",
+    [EnrichmentTypes.ALIAS]: "rgb(145,218,242)",
+    [EnrichmentTypes.COMMENT]: "rgb(3,161,214)",
 };
 
-type IcicleEnrichmentProps = {
-  ffId: string;
-  dims: Dims;
-  hasTag: boolean;
-  isToDelete: boolean;
-  hasAlias: boolean;
-  hasComment: boolean;
-  opacity: OPACITY;
-  onClick: IcicleMouseHandler;
-  onDoubleClick: IcicleMouseHandler;
-  onMouseOver: IcicleMouseHandler;
-};
+interface IcicleEnrichmentProps {
+    ffId: string;
+    dims: Dims;
+    hasTag: boolean;
+    isToDelete: boolean;
+    hasAlias: boolean;
+    hasComment: boolean;
+    opacity: OPACITY;
+    onClick: IcicleMouseHandler;
+    onDoubleClick: IcicleMouseHandler;
+    onMouseOver: IcicleMouseHandler;
+}
 
-const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
-  ffId,
-  dims,
-  hasTag,
-  isToDelete,
-  hasAlias,
-  hasComment,
-  opacity,
-  onClick,
-  onDoubleClick,
-  onMouseOver,
+const IcicleEnrichment: React.FC<IcicleEnrichmentProps> = ({
+    ffId,
+    dims,
+    hasTag,
+    isToDelete,
+    hasAlias,
+    hasComment,
+    opacity,
+    onClick,
+    onDoubleClick,
+    onMouseOver,
 }) => {
-  if (!dims || !dims.dx) {
-    return null;
-  }
+    if (!dims || !dims.dx) {
+        return null;
+    }
 
-  const width = dims.dx - 2;
+    const width = dims.dx - 2;
 
-  if (width <= 0) {
-    return null;
-  }
+    if (width <= 0) {
+        return null;
+    }
 
-  const getDims = useCallback(() => dims, [dims]);
-  const callbackParameter = useMemo(
-    () => ({
-      dims: getDims,
-      id: ffId,
-    }),
-    [ffId, getDims]
-  );
-  const handleClick = useCallback(
-    (event) => onClick(callbackParameter, event),
-    [onClick, callbackParameter]
-  );
+    const getDims = useCallback(() => dims, [dims]);
+    const callbackParameter = useMemo(
+        () => ({
+            dims: getDims,
+            id: ffId,
+        }),
+        [ffId, getDims]
+    );
+    const handleClick = useCallback(
+        (event) => {
+            onClick(callbackParameter, event);
+        },
+        [onClick, callbackParameter]
+    );
 
-  const handleDoubleClick = useCallback(
-    (event) => onDoubleClick(callbackParameter, event),
-    [onDoubleClick, callbackParameter]
-  );
+    const handleDoubleClick = useCallback(
+        (event) => {
+            onDoubleClick(callbackParameter, event);
+        },
+        [onDoubleClick, callbackParameter]
+    );
 
-  const handleMouseOver = useCallback(
-    (event) => onMouseOver(callbackParameter, event),
-    [onMouseOver, callbackParameter]
-  );
+    const handleMouseOver = useCallback(
+        (event) => {
+            onMouseOver(callbackParameter, event);
+        },
+        [onMouseOver, callbackParameter]
+    );
 
-  const enrichments = [
-    ...(isToDelete ? [EnrichmentTypes.TO_DELETE] : []),
-    ...(hasAlias ? [EnrichmentTypes.ALIAS] : []),
-    ...(hasComment ? [EnrichmentTypes.COMMENT] : []),
-    ...(hasTag ? [EnrichmentTypes.TAG] : []),
-  ];
-  const heightDivider = Math.max(enrichments.length * 2, 3);
+    const enrichments = [
+        ...(isToDelete ? [EnrichmentTypes.TO_DELETE] : []),
+        ...(hasAlias ? [EnrichmentTypes.ALIAS] : []),
+        ...(hasComment ? [EnrichmentTypes.COMMENT] : []),
+        ...(hasTag ? [EnrichmentTypes.TAG] : []),
+    ];
+    const heightDivider = Math.max(enrichments.length * 2, 3);
 
-  return (
-    <>
-      {dims &&
-        enrichments.map((enrichmentType, index) => (
-          <rect
-            key={`enrichment-${ffId}-${enrichmentType}`}
-            x={dims.x + 1}
-            y={dims.y + 1 + (index * dims.dy) / heightDivider}
-            width={width}
-            height={dims.dy / heightDivider}
-            style={{
-              fill: ENRICHMENT_COLORS[enrichmentType],
-              opacity,
-              stroke: "none",
-            }}
-            onClick={handleClick}
-            onDoubleClick={handleDoubleClick}
-            onMouseOver={handleMouseOver}
-          />
-        ))}
-    </>
-  );
+    return (
+        <>
+            {dims &&
+                enrichments.map((enrichmentType, index) => (
+                    <rect
+                        key={`enrichment-${ffId}-${enrichmentType}`}
+                        x={dims.x + 1}
+                        y={dims.y + 1 + (index * dims.dy) / heightDivider}
+                        width={width}
+                        height={dims.dy / heightDivider}
+                        style={{
+                            fill: ENRICHMENT_COLORS[enrichmentType],
+                            opacity,
+                            stroke: "none",
+                        }}
+                        onClick={handleClick}
+                        onDoubleClick={handleDoubleClick}
+                        onMouseOver={handleMouseOver}
+                    />
+                ))}
+        </>
+    );
 };
 
 export default IcicleEnrichment;

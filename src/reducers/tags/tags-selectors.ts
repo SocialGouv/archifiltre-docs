@@ -1,9 +1,10 @@
 import _ from "lodash";
+
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
-import { FilesAndFoldersMetadataMap } from "../files-and-folders-metadata/files-and-folders-metadata-types";
-import { FilesAndFoldersMap } from "../files-and-folders/files-and-folders-types";
-import { StoreState } from "../store";
-import { Tag, TagMap } from "./tags-types";
+import type { FilesAndFoldersMap } from "../files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadataMap } from "../files-and-folders-metadata/files-and-folders-metadata-types";
+import type { StoreState } from "../store";
+import type { Tag, TagMap } from "./tags-types";
 
 /**
  * Returns all the tags ids that are associated to the provided ffId
@@ -12,7 +13,7 @@ import { Tag, TagMap } from "./tags-types";
  * @returns The list of tagIds for the file
  */
 export const getAllTagIdsForFile = (tagMap: TagMap, ffId: string): string[] =>
-  Object.keys(tagMap).filter((key) => tagHasFfId(tagMap[key], ffId));
+    Object.keys(tagMap).filter((key) => tagHasFfId(tagMap[key], ffId));
 
 /**
  * Returns all the tags that are associated to the provided ffId
@@ -21,7 +22,7 @@ export const getAllTagIdsForFile = (tagMap: TagMap, ffId: string): string[] =>
  * @returns The list of tags for the file
  */
 export const getAllTagsForFile = (tagMap: TagMap, ffId: string): Tag[] =>
-  tagMapToArray(tagMap).filter((tag) => tagHasFfId(tag, ffId));
+    tagMapToArray(tagMap).filter((tag) => tagHasFfId(tag, ffId));
 
 /**
  * Returns the tags corresponding to the ids in tagIds
@@ -29,7 +30,7 @@ export const getAllTagsForFile = (tagMap: TagMap, ffId: string): Tag[] =>
  * @param tagIds - the tags ids
  */
 export const getTagsByIds = (tagMap: TagMap, tagIds: string[]): Tag[] =>
-  tagIds.map((tagId) => tagMap[tagId] || null).filter((tag) => tag !== null);
+    tagIds.map((tagId) => tagMap[tagId] || null).filter((tag) => tag !== null);
 
 /**
  * Checks if the tag name already exist
@@ -37,19 +38,19 @@ export const getTagsByIds = (tagMap: TagMap, tagIds: string[]): Tag[] =>
  * @param name
  */
 export const getTagByName = (tagMap: TagMap, name: string): Tag | undefined =>
-  _.find(tagMapToArray(tagMap), (tag) => tag.name === name);
+    _.find(tagMapToArray(tagMap), (tag) => tag.name === name);
 
 /**
  * Order for sorting functions
  */
 export enum Order {
-  ASC,
-  DESC,
+    ASC,
+    DESC,
 }
 
 export interface SortTagOptions {
-  order?: Order;
-  sortParam?: string;
+    order?: Order;
+    sortParam?: string;
 }
 
 const defaultSortTagOptions: SortTagOptions = {};
@@ -62,23 +63,23 @@ const defaultSortTagOptions: SortTagOptions = {};
  * @param {string} [options.sortParam="name"] - The param to sort on. Defaults to name.
  */
 export const sortTags = (
-  tagList: Tag[],
-  options = defaultSortTagOptions
+    tagList: Tag[],
+    options = defaultSortTagOptions
 ): Tag[] => {
-  const order = options.order || Order.ASC;
-  const sortParam = options.sortParam || "name";
+    const order = options.order || Order.ASC;
+    const sortParam = options.sortParam || "name";
 
-  const sortFunction = (tag1, tag2) => {
-    if (tag1[sortParam] < tag2[sortParam]) {
-      return order === Order.ASC ? -1 : 1;
-    }
-    if (tag1[sortParam] === tag2[sortParam]) {
-      return 0;
-    }
-    return order === Order.ASC ? 1 : -1;
-  };
+    const sortFunction = (tag1, tag2) => {
+        if (tag1[sortParam] < tag2[sortParam]) {
+            return order === Order.ASC ? -1 : 1;
+        }
+        if (tag1[sortParam] === tag2[sortParam]) {
+            return 0;
+        }
+        return order === Order.ASC ? 1 : -1;
+    };
 
-  return tagList.sort(sortFunction);
+    return tagList.sort(sortFunction);
 };
 
 /**
@@ -89,24 +90,26 @@ export const sortTags = (
  * @returns the total size of the tagged files and folders
  */
 export const getTagSize = (
-  tag: Tag,
-  filesAndFolders: FilesAndFoldersMap,
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap
+    tag: Tag,
+    filesAndFolders: FilesAndFoldersMap,
+    filesAndFoldersMetadata: FilesAndFoldersMetadataMap
 ): number => {
-  const parentIsTagged = (taggedFfidsList, potentialChildId) =>
-    taggedFfidsList.some(
-      (potentialParentId) =>
-        potentialChildId.indexOf(potentialParentId) === 0 &&
-        potentialChildId[potentialParentId.length] === "/"
+    const parentIsTagged = (taggedFfidsList, potentialChildId) =>
+        taggedFfidsList.some(
+            (potentialParentId) =>
+                potentialChildId.indexOf(potentialParentId) === 0 &&
+                potentialChildId[potentialParentId.length] === "/"
+        );
+
+    const taggedFfIds = tag.ffIds.filter(
+        (id) => !parentIsTagged(tag.ffIds, id)
     );
 
-  const taggedFfIds = tag.ffIds.filter((id) => !parentIsTagged(tag.ffIds, id));
-
-  return taggedFfIds.reduce(
-    (totalSize, id) =>
-      totalSize + filesAndFoldersMetadata[id].childrenTotalSize,
-    0
-  );
+    return taggedFfIds.reduce(
+        (totalSize, id) =>
+            totalSize + filesAndFoldersMetadata[id].childrenTotalSize,
+        0
+    );
 };
 
 /**
@@ -127,4 +130,4 @@ export const tagHasFfId = (tag: Tag, ffId: string) => tag.ffIds.includes(ffId);
  * @param store - The redux store
  */
 export const getTagsFromStore = (store: StoreState): TagMap =>
-  getCurrentState(store.tags).tags;
+    getCurrentState(store.tags).tags;

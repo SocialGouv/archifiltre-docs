@@ -1,14 +1,14 @@
-import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
-import { HashesMap } from "reducers/hashes/hashes-types";
+import type { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
+import type { HashesMap } from "reducers/hashes/hashes-types";
 import { Observable } from "rxjs";
 import { bufferCount, map } from "rxjs/operators";
 
 import { computeFolderHashes } from "../util/files-and-folders/file-and-folders-utils";
 
-type ComputeFolderHashesOptions = {
-  filesAndFolders: FilesAndFoldersMap;
-  hashes: HashesMap;
-};
+interface ComputeFolderHashesOptions {
+    filesAndFolders: FilesAndFoldersMap;
+    hashes: HashesMap;
+}
 
 /**
  * Returns an observable that will dispatch computed hashes every second
@@ -17,17 +17,17 @@ type ComputeFolderHashesOptions = {
  * @returns {Observable<{}>}
  */
 export const computeFolderHashes$ = ({
-  filesAndFolders,
-  hashes,
+    filesAndFolders,
+    hashes,
 }: ComputeFolderHashesOptions): Observable<HashesMap> => {
-  return new Observable<HashesMap>((subscriber) => {
-    computeFolderHashes(filesAndFolders, hashes, (hashesMap) => {
-      subscriber.next(hashesMap);
-    }).then(() => {
-      subscriber.complete();
-    });
-  }).pipe(
-    bufferCount(2000),
-    map((values) => Object.assign({}, ...values))
-  );
+    return new Observable<HashesMap>((subscriber) => {
+        computeFolderHashes(filesAndFolders, hashes, (hashesMap) => {
+            subscriber.next(hashesMap);
+        }).then(() => {
+            subscriber.complete();
+        });
+    }).pipe(
+        bufferCount(2000),
+        map((values) => Object.assign({}, ...values))
+    );
 };

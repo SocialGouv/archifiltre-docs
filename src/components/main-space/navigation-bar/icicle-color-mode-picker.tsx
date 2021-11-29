@@ -1,40 +1,41 @@
-import React, { FC } from "react";
-import { IcicleColorMode } from "reducers/icicle-sort-method/icicle-sort-method-types";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import OptionsPicker from "./options-picker";
 import { FaPalette } from "react-icons/fa";
+import { IcicleColorMode } from "reducers/icicle-sort-method/icicle-sort-method-types";
 
-type IcicleColorModePickerProps = {
-  icicleColorMode: IcicleColorMode;
-  setIcicleColorMode: (mode: IcicleColorMode) => void;
-};
+import OptionsPicker from "./options-picker";
 
-const IcicleColorModePicker: FC<IcicleColorModePickerProps> = ({
-  icicleColorMode,
-  setIcicleColorMode,
+interface IcicleColorModePickerProps {
+    icicleColorMode: IcicleColorMode;
+    setIcicleColorMode: (mode: IcicleColorMode) => void;
+}
+
+const IcicleColorModePicker: React.FC<IcicleColorModePickerProps> = ({
+    icicleColorMode,
+    setIcicleColorMode,
 }) => {
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
-  const options = [
-    {
-      value: IcicleColorMode.BY_TYPE,
-      label: t("workspace.type"),
-    },
-    {
-      value: IcicleColorMode.BY_DATE,
-      label: t("workspace.dates"),
-    },
-  ];
+    const options = [
+        {
+            label: t("workspace.type"),
+            value: IcicleColorMode.BY_TYPE,
+        },
+        {
+            label: t("workspace.dates"),
+            value: IcicleColorMode.BY_DATE,
+        },
+    ];
 
-  return (
-    <OptionsPicker
-      title={t("workspace.coloring")}
-      value={icicleColorMode}
-      setValue={setIcicleColorMode}
-      options={options}
-      icon={<FaPalette />}
-    />
-  );
+    return (
+        <OptionsPicker
+            title={t("workspace.coloring")}
+            value={icicleColorMode}
+            setValue={setIcicleColorMode}
+            options={options}
+            icon={<FaPalette />}
+        />
+    );
 };
 
 export default IcicleColorModePicker;

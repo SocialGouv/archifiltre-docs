@@ -1,29 +1,30 @@
-import { identity, Observable, OperatorFunction, partition, merge } from "rxjs";
+import type { Observable, OperatorFunction } from "rxjs";
+import { identity, merge, partition } from "rxjs";
 import { map } from "rxjs/operators";
-import {
-  ErrorMessage,
-  MessageTypes,
-  ResultMessage,
+import type {
+    ErrorMessage,
+    ResultMessage,
 } from "util/batch-process/batch-process-util-types";
+import { MessageTypes } from "util/batch-process/batch-process-util-types";
 
-type DataProcessingError = {
-  type: MessageTypes;
-  error: any;
-};
+interface DataProcessingError {
+    type: MessageTypes;
+    error: any;
+}
 
-export type DataProcessingResult<T> = {
-  type: MessageTypes;
-  result: T;
-};
+export interface DataProcessingResult<T> {
+    type: MessageTypes;
+    result: T;
+}
 
 export type DataProcessingElement<T> = ErrorMessage | ResultMessage<T>;
 
 export type DataProcessingStream<T> = Observable<DataProcessingElement<T>>;
 
-type DataProcessingStreamOperators<Input, Output> = {
-  error?: OperatorFunction<any, any>;
-  result: OperatorFunction<Input, Output>;
-};
+interface DataProcessingStreamOperators<Input, Output> {
+    error?: OperatorFunction<any, any>;
+    result: OperatorFunction<Input, Output>;
+}
 
 /**
  * Allows to operate on errors and results of a data processing stream
@@ -40,32 +41,32 @@ type DataProcessingStreamOperators<Input, Output> = {
  * });
  */
 export const operateOnDataProcessingStream = <Input, Output>(
-  status$: DataProcessingStream<Input>,
-  {
-    error: errorOperator = identity,
-    result: resultOperator,
-  }: DataProcessingStreamOperators<Input, Output>
+    status$: DataProcessingStream<Input>,
+    {
+        error: errorOperator = identity,
+        result: resultOperator,
+    }: DataProcessingStreamOperators<Input, Output>
 ): DataProcessingStream<Output> => {
-  const [results$, errors$] = partition(
-    status$,
-    (message): message is ResultMessage<Input> =>
-      message.type === MessageTypes.RESULT
-  ) as [
-    Observable<DataProcessingResult<Input>>,
-    Observable<DataProcessingError>
-  ];
+    const [results$, errors$] = partition(
+        status$,
+        (message): message is ResultMessage<Input> =>
+            message.type === MessageTypes.RESULT
+    ) as [
+        Observable<DataProcessingResult<Input>>,
+        Observable<DataProcessingError>
+    ];
 
-  const processedResults$ = results$.pipe(
-    map(({ result }) => result),
-    resultOperator,
-    map((result) => ({ type: MessageTypes.RESULT as const, result }))
-  );
+    const processedResults$ = results$.pipe(
+        map(({ result }) => result),
+        resultOperator,
+        map((result) => ({ result, type: MessageTypes.RESULT as const }))
+    );
 
-  const processedErrors$ = errors$.pipe(
-    map(({ error }) => error),
-    errorOperator,
-    map((error) => ({ type: MessageTypes.ERROR as const, error }))
-  );
+    const processedErrors$ = errors$.pipe(
+        map(({ error }) => error),
+        errorOperator,
+        map((error) => ({ error, type: MessageTypes.ERROR as const }))
+    );
 
-  return merge(processedResults$, processedErrors$);
+    return merge(processedResults$, processedErrors$);
 };

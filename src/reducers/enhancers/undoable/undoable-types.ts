@@ -3,22 +3,22 @@ export const REDO = "UNDOABLE/REDO";
 export const COMMIT = "UNDOABLE/COMMIT";
 
 export interface UndoableState<WrappedState> {
-  current: WrappedState;
-  past: WrappedState[];
-  present: WrappedState;
-  future: WrappedState[];
+    current: WrappedState;
+    past: WrappedState[];
+    present: WrappedState;
+    future: WrappedState[];
 }
 
 interface UndoAction {
-  type: typeof UNDO;
+    type: typeof UNDO;
 }
 
 interface RedoAction {
-  type: typeof REDO;
+    type: typeof REDO;
 }
 
 interface CommitAction {
-  type: typeof COMMIT;
+    type: typeof COMMIT;
 }
 
-export type UndoableActionTypes = UndoAction | RedoAction | CommitAction;
+export type UndoableActionTypes = CommitAction | RedoAction | UndoAction;

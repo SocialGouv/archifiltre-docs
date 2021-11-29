@@ -1,72 +1,72 @@
 export enum MessageTypes {
-  READY = "ready",
-  COMPLETE = "complete",
-  DATA = "data",
-  ERROR = "error",
-  WARNING = "warning",
-  FATAL = "fatal",
-  INITIALIZE = "initialize",
-  LOG = "log",
-  RESULT = "result",
-  STREAM_READ = "streamRead",
+    READY = "ready",
+    COMPLETE = "complete",
+    DATA = "data",
+    ERROR = "error",
+    WARNING = "warning",
+    FATAL = "fatal",
+    INITIALIZE = "initialize",
+    LOG = "log",
+    RESULT = "result",
+    STREAM_READ = "streamRead",
 }
 
-export type ReadyMessage = {
-  type: typeof MessageTypes.READY;
-};
+export interface ReadyMessage {
+    type: typeof MessageTypes.READY;
+}
 
-export type ErrorMessage = {
-  type: typeof MessageTypes.ERROR;
-  error: any;
-};
+export interface ErrorMessage {
+    type: typeof MessageTypes.ERROR;
+    error: any;
+}
 
-export type ResultMessage<T = any> = {
-  type: typeof MessageTypes.RESULT;
-  result: T;
-};
+export interface ResultMessage<T = any> {
+    type: typeof MessageTypes.RESULT;
+    result: T;
+}
 
-export type StreamReadMessage = {
-  type: typeof MessageTypes.STREAM_READ;
-};
+export interface StreamReadMessage {
+    type: typeof MessageTypes.STREAM_READ;
+}
 
-export type InitializeMessage = {
-  type: typeof MessageTypes.INITIALIZE;
-  data: any;
-};
+export interface InitializeMessage {
+    type: typeof MessageTypes.INITIALIZE;
+    data: any;
+}
 
-type DataMessage = {
-  type: typeof MessageTypes.DATA;
-  data: any;
-};
+interface DataMessage {
+    type: typeof MessageTypes.DATA;
+    data: any;
+}
 
-type CompleteMessage = {
-  type: typeof MessageTypes.COMPLETE;
-  result?: any;
-};
+interface CompleteMessage {
+    type: typeof MessageTypes.COMPLETE;
+    result?: any;
+}
 
-type WarningMessage = {
-  type: typeof MessageTypes.WARNING;
-  warning: any;
-};
+interface WarningMessage {
+    type: typeof MessageTypes.WARNING;
+    warning: any;
+}
 
-type FatalMessage = {
-  type: typeof MessageTypes.FATAL;
-  error: any;
-};
+interface FatalMessage {
+    type: typeof MessageTypes.FATAL;
+    error: any;
+}
 
-type LogMessage = {
-  type: typeof MessageTypes.LOG;
-  data: any;
-};
+interface LogMessage {
+    type: typeof MessageTypes.LOG;
+    data: any;
+}
 
 export type WorkerMessage =
-  | ReadyMessage
-  | ErrorMessage
-  | ResultMessage
-  | StreamReadMessage
-  | InitializeMessage
-  | CompleteMessage
-  | WarningMessage
-  | FatalMessage
-  | LogMessage
-  | DataMessage;
+    | CompleteMessage
+    | DataMessage
+    | ErrorMessage
+    | FatalMessage
+    | InitializeMessage
+    | LogMessage
+    | ReadyMessage
+    | ResultMessage
+    | StreamReadMessage
+    | WarningMessage;

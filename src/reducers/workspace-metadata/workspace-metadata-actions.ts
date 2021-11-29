@@ -1,23 +1,23 @@
+import type { WorkspaceMetadataAction } from "./workspace-metadata-types";
 import {
-  SET_HOVERED_ELEMENT_ID,
-  SET_LOCKED_ELEMENT_ID,
-  SET_ORIGINAL_PATH,
-  SET_SESSION_NAME,
-  WorkspaceMetadataAction,
+    SET_HOVERED_ELEMENT_ID,
+    SET_LOCKED_ELEMENT_ID,
+    SET_ORIGINAL_PATH,
+    SET_SESSION_NAME,
 } from "./workspace-metadata-types";
 
 export const setSessionName = (
-  sessionName: string
+    sessionName: string
 ): WorkspaceMetadataAction => ({
-  sessionName,
-  type: SET_SESSION_NAME,
+    sessionName,
+    type: SET_SESSION_NAME,
 });
 
 export const setOriginalPath = (
-  originalPath: string
+    originalPath: string
 ): WorkspaceMetadataAction => ({
-  originalPath,
-  type: SET_ORIGINAL_PATH,
+    originalPath,
+    type: SET_ORIGINAL_PATH,
 });
 
 /**
@@ -25,10 +25,10 @@ export const setOriginalPath = (
  * @param hoveredElementId
  */
 export const setHoveredElementId = (
-  hoveredElementId: string
+    hoveredElementId: string
 ): WorkspaceMetadataAction => ({
-  hoveredElementId,
-  type: SET_HOVERED_ELEMENT_ID,
+    hoveredElementId,
+    type: SET_HOVERED_ELEMENT_ID,
 });
 
 /**
@@ -36,8 +36,8 @@ export const setHoveredElementId = (
  * @param lockedElementId
  */
 export const setLockedElementId = (
-  lockedElementId: string
+    lockedElementId: string
 ): WorkspaceMetadataAction => ({
-  lockedElementId,
-  type: SET_LOCKED_ELEMENT_ID,
+    lockedElementId,
+    type: SET_LOCKED_ELEMENT_ID,
 });

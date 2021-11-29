@@ -1,167 +1,165 @@
+import { mapToNewVersionNumbers } from "components/header/new-version-checker";
+import type { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
+import { firstHashesComputingThunk } from "hash-computer/hash-computer-thunk";
 import _ from "lodash";
 import { compose } from "lodash/fp";
 import { reportError } from "logging/reporter";
-import path from "path";
-import { mapToNewVersionNumbers } from "components/header/new-version-checker";
-import { firstHashesComputingThunk } from "hash-computer/hash-computer-thunk";
 import { addTracker } from "logging/tracker";
 import { ActionTitle, ActionType } from "logging/tracker-types";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import path from "path";
 import {
-  getErroredFilesAndFolders,
-  getFilesAndFoldersFromStore,
-  ROOT_FF_ID,
+    getErroredFilesAndFolders,
+    getFilesAndFoldersFromStore,
+    ROOT_FF_ID,
 } from "reducers/files-and-folders/files-and-folders-selectors";
+import type { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
+import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import { tap } from "rxjs/operators";
 import translations from "translations/translations";
 import { filterResults } from "util/batch-process/batch-process-util";
+import type { ErrorMessage } from "util/batch-process/batch-process-util-types";
+import { copyToClipboard } from "util/clipboard/clipboard";
+import { ArchifiltreStoreThunkErrorCode } from "util/error/error-codes";
+import type { ArchifiltreError } from "util/error/error-util";
+import { ArchifiltreErrorType, makeErrorHandler } from "util/error/error-util";
 import {
-  filesAndFoldersMapToArray,
-  getFiles,
-  getFirstLevelName,
-} from "util/files-and-folders/file-and-folders-utils";
-import {
-  countZipFiles,
-  isJsonFile,
-  isRootPath,
-  isValidFolderPath,
-  octet2HumanReadableFormat,
+    countZipFiles,
+    isJsonFile,
+    isRootPath,
+    isValidFolderPath,
+    octet2HumanReadableFormat,
 } from "util/file-system/file-sys-util";
+import type { HookParam } from "util/file-tree-loader/file-tree-loader";
+import { loadFileTree } from "util/file-tree-loader/file-tree-loader";
+import {
+    filesAndFoldersMapToArray,
+    getFiles,
+    getFirstLevelName,
+} from "util/files-and-folders/file-and-folders-utils";
 import { empty } from "util/function/function-util";
 import {
-  NotificationDuration,
-  notifyError,
-  notifyInfo,
+    NotificationDuration,
+    notifyError,
+    notifyInfo,
 } from "util/notification/notifications-util";
 import { operateOnDataProcessingStream } from "util/observable/observable-util";
+import workerManager from "util/worker-manager/worker-manager";
+
 import version, { versionComparator } from "../version";
-import {
-  ArchifiltreDispatch,
-  ArchifiltreThunkAction,
+import type {
+    ArchifiltreDispatch,
+    ArchifiltreThunkAction,
 } from "./archifiltre-types";
-import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata/files-and-folders-metadata-actions";
-import {
-  addCommentsOnFilesAndFolders,
-  initializeFilesAndFolders,
-  initOverrideLastModified,
-  initVirtualPathToIdMap,
-  markElementsToDelete,
-  registerErroredElements,
-  resetErroredElements,
-  resetOverrideLastModified,
-  setFilesAndFoldersAliases,
-} from "./files-and-folders/files-and-folders-actions";
-import {
-  registerErrorAction,
-  resetLoadingAction,
-} from "./loading-info/loading-info-actions";
-import { clearActionReplayFile } from "./middleware/persist-actions-middleware";
-import { initializeTags, resetTags } from "./tags/tags-actions";
-import {
-  setLockedElementId,
-  setOriginalPath,
-  setSessionName,
-} from "./workspace-metadata/workspace-metadata-actions";
-import { openModalAction } from "./modal/modal-actions";
-import { Modal } from "./modal/modal-types";
-import {
-  HookParam,
-  loadFileTree,
-} from "util/file-tree-loader/file-tree-loader";
 import { commitAction } from "./enhancers/undoable/undoable-actions";
 import {
-  resetLoadingState,
-  setConstructedDataModelElementsCount,
-  setDerivedElementsCount,
-  setFileSystemLoadingStep,
-  setIndexedFilesCount,
-  setLoadingStep,
+    addCommentsOnFilesAndFolders,
+    initializeFilesAndFolders,
+    initOverrideLastModified,
+    initVirtualPathToIdMap,
+    markElementsToDelete,
+    registerErroredElements,
+    resetErroredElements,
+    resetOverrideLastModified,
+    setFilesAndFoldersAliases,
+} from "./files-and-folders/files-and-folders-actions";
+import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata/files-and-folders-metadata-actions";
+import { setFilesAndFoldersHashes } from "./hashes/hashes-actions";
+import {
+    registerErrorAction,
+    resetLoadingAction,
+} from "./loading-info/loading-info-actions";
+import {
+    resetLoadingState,
+    setConstructedDataModelElementsCount,
+    setDerivedElementsCount,
+    setFileSystemLoadingStep,
+    setIndexedFilesCount,
+    setLoadingStep,
 } from "./loading-state/loading-state-actions";
 import {
-  FileSystemLoadingStep,
-  LoadingStep,
+    FileSystemLoadingStep,
+    LoadingStep,
 } from "./loading-state/loading-state-types";
-import { setFilesAndFoldersHashes } from "./hashes/hashes-actions";
-import { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
-import { ErrorMessage } from "util/batch-process/batch-process-util-types";
-import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
-import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
-import workerManager from "util/worker-manager/worker-manager";
+import { clearActionReplayFile } from "./middleware/persist-actions-middleware";
+import { openModalAction } from "./modal/modal-actions";
+import { Modal } from "./modal/modal-types";
+import { initializeTags, resetTags } from "./tags/tags-actions";
 import {
-  ArchifiltreError,
-  ArchifiltreErrorType,
-  makeErrorHandler,
-} from "util/error/error-util";
-import { ArchifiltreStoreThunkErrorCode } from "util/error/error-codes";
-import { copyToClipboard } from "util/clipboard/clipboard";
+    setLockedElementId,
+    setOriginalPath,
+    setSessionName,
+} from "./workspace-metadata/workspace-metadata-actions";
 
 /**
  * Notifies the user that there is a Zip in the loaded files
  * @param zipCount - The number of zip files detected
  */
 const displayZipNotification = (zipCount) => {
-  notifyInfo(
-    translations.t("folderDropzone.zipNotificationMessage"),
-    `${zipCount} ${translations.t("folderDropzone.zipNotificationTitle")}`,
-    NotificationDuration.PERMANENT
-  );
+    notifyInfo(
+        translations.t("folderDropzone.zipNotificationMessage"),
+        `${zipCount} ${translations.t("folderDropzone.zipNotificationTitle")}`,
+        NotificationDuration.PERMANENT
+    );
 };
 
 /**
  * Notifies the user that the imported JSON version is different from current version
  */
 const displayJsonNotification = () => {
-  notifyInfo(
-    translations.t("folderDropzone.wrongJsonVersion"),
-    translations.t("folderDropzone.warning"),
-    NotificationDuration.PERMANENT
-  );
+    notifyInfo(
+        translations.t("folderDropzone.wrongJsonVersion"),
+        translations.t("folderDropzone.warning"),
+        NotificationDuration.PERMANENT
+    );
 };
 
 /**
  * Notifies the user that errors occurred while loading the folder
  */
 const displayErrorNotification = () => (dispatch) => {
-  notifyError(
-    translations.t("folderDropzone.errorsWhileLoading"),
-    translations.t("folderDropzone.error"),
-    NotificationDuration.PERMANENT,
-    () => dispatch(openModalAction(Modal.FIlES_AND_FOLDERS_ERRORS_MODAL))
-  );
+    notifyError(
+        translations.t("folderDropzone.errorsWhileLoading"),
+        translations.t("folderDropzone.error"),
+        NotificationDuration.PERMANENT,
+        () => dispatch(openModalAction(Modal.FIlES_AND_FOLDERS_ERRORS_MODAL))
+    );
 };
 
 const makeErrorResponse = () => ({
-  virtualFileSystem: Promise.reject(),
-  terminate: empty,
+    terminate: empty,
+    virtualFileSystem: Promise.reject(),
 });
 
 const displayRootPathError = () => {
-  const errorMessage = translations.t("folderDropzone.errorsWhileLoading");
-  const errorTitle = translations.t("folderDropzone.rootElementError");
-  return displayError(errorMessage, errorTitle);
+    const errorMessage = translations.t("folderDropzone.errorsWhileLoading");
+    const errorTitle = translations.t("folderDropzone.rootElementError");
+    return displayError(errorMessage, errorTitle);
 };
 
 const displayInvalidPathError = () => {
-  const errorMessage = translations.t("folderDropzone.cannotFindPath");
-  const errorTitle = translations.t("folderDropzone.error");
-  return displayError(errorMessage, errorTitle);
+    const errorMessage = translations.t("folderDropzone.cannotFindPath");
+    const errorTitle = translations.t("folderDropzone.error");
+    return displayError(errorMessage, errorTitle);
 };
 
 const displayUnexpectedError = (errorReason: string) => {
-  const errorTitle = translations.t("folderDropzone.unexpectedError");
-  const errorMessage = translations.t("folderDropzone.unexpectedErrorMessage");
-  reportError(errorReason);
-  return notifyError(
-    errorMessage,
-    errorTitle,
-    NotificationDuration.PERMANENT,
-    () => copyToClipboard(errorReason)
-  );
+    const errorTitle = translations.t("folderDropzone.unexpectedError");
+    const errorMessage = translations.t(
+        "folderDropzone.unexpectedErrorMessage"
+    );
+    reportError(errorReason);
+    return notifyError(
+        errorMessage,
+        errorTitle,
+        NotificationDuration.PERMANENT,
+        () => copyToClipboard(errorReason)
+    );
 };
 
 const displayError = (errorMessage: string, errorTitle: string) => {
-  notifyError(errorMessage, errorTitle);
-  return makeErrorResponse();
+    notifyError(errorMessage, errorTitle);
+    return makeErrorResponse();
 };
 
 /**
@@ -169,284 +167,304 @@ const displayError = (errorMessage: string, errorTitle: string) => {
  * @param paths of files that need to be tracked
  * @param filesAndFoldersMap
  */
-const handleTracking = (paths, filesAndFoldersMap): ArchifiltreThunkAction => (
-  dispatch,
-  getState
-) => {
-  const filesAndFoldersMetadataMap = getFilesAndFoldersMetadataFromStore(
-    getState()
-  );
+const handleTracking =
+    (paths, filesAndFoldersMap): ArchifiltreThunkAction =>
+    (dispatch, getState) => {
+        const filesAndFoldersMetadataMap = getFilesAndFoldersMetadataFromStore(
+            getState()
+        );
 
-  const treeVolume = filesAndFoldersMetadataMap[ROOT_FF_ID].childrenTotalSize;
+        const treeVolume =
+            filesAndFoldersMetadataMap[ROOT_FF_ID].childrenTotalSize;
 
-  const fileCount = paths.length;
-  const foldersCount = Object.keys(filesAndFoldersMap).length - fileCount;
+        const fileCount = paths.length;
+        const foldersCount = Object.keys(filesAndFoldersMap).length - fileCount;
 
-  const elementsByExtension = _(paths)
-    .map(path.extname)
-    .countBy(_.identity())
-    .map((count, extension) => `${extension || "[No extension]"}: ${count}`)
-    .unshift(`Folders dropped: ${foldersCount}`)
-    .unshift(`Files dropped: ${fileCount}`)
-    .unshift(`Total volume: ${octet2HumanReadableFormat(treeVolume)}`)
-    .join("; \r\n");
+        const elementsByExtension = _(paths)
+            .map(path.extname)
+            .countBy(_.identity())
+            .map(
+                (count, extension) =>
+                    `${extension || "[No extension]"}: ${count}`
+            )
+            .unshift(`Folders dropped: ${foldersCount}`)
+            .unshift(`Files dropped: ${fileCount}`)
+            .unshift(`Total volume: ${octet2HumanReadableFormat(treeVolume)}`)
+            .join("; \r\n");
 
-  addTracker({
-    eventValue: paths.length,
-    title: ActionTitle.FILE_TREE_DROP,
-    type: ActionType.TRACK_EVENT,
-    value: elementsByExtension,
-  });
-};
+        addTracker({
+            eventValue: paths.length,
+            title: ActionTitle.FILE_TREE_DROP,
+            type: ActionType.TRACK_EVENT,
+            value: elementsByExtension,
+        });
+    };
 
 const defaultHookParam: HookParam = {};
 
 const handleLoadingTimeTracking = (loadingStart: number) => {
-  const loadingEnd = new Date().getTime();
-  const loadingTime = `${(loadingEnd - loadingStart) / 1000}s`; // Loading time in seconds
-  addTracker({
-    eventValue: loadingTime,
-    title: ActionTitle.LOADING_TIME,
-    type: ActionType.TRACK_EVENT,
-    value: `Loading time: ${loadingTime}`,
-  });
+    const loadingEnd = new Date().getTime();
+    const loadingTime = `${(loadingEnd - loadingStart) / 1000}s`; // Loading time in seconds
+    addTracker({
+        eventValue: loadingTime,
+        title: ActionTitle.LOADING_TIME,
+        type: ActionType.TRACK_EVENT,
+        value: `Loading time: ${loadingTime}`,
+    });
 };
 
 const handleZipNotificationDisplay = (paths: string[]) => {
-  const zipFileCount = countZipFiles(paths);
-  if (zipFileCount > 0) {
-    displayZipNotification(zipFileCount);
-  }
+    const zipFileCount = countZipFiles(paths);
+    if (zipFileCount > 0) {
+        displayZipNotification(zipFileCount);
+    }
 };
 
-const handleErrorNotificationDisplay = (): ArchifiltreThunkAction => async (
-  dispatch,
-  getState
-) => {
-  const errors = getErroredFilesAndFolders(getState());
+const handleErrorNotificationDisplay =
+    (): ArchifiltreThunkAction => async (dispatch, getState) => {
+        const errors = getErroredFilesAndFolders(getState());
 
-  if (errors.length > 0) {
-    dispatch(displayErrorNotification());
-  }
-};
+        if (errors.length > 0) {
+            dispatch(displayErrorNotification());
+        }
+    };
 
-const handleHashComputing = (
-  virtualFileSystem: VirtualFileSystem
-): ArchifiltreThunkAction => async (dispatch) => {
-  dispatch(
-    firstHashesComputingThunk(virtualFileSystem.originalPath, {
-      ignoreFileHashes: !virtualFileSystem.isOnFileSystem,
-    })
-  );
-};
+const handleHashComputing =
+    (virtualFileSystem: VirtualFileSystem): ArchifiltreThunkAction =>
+    async (dispatch) => {
+        dispatch(
+            firstHashesComputingThunk(virtualFileSystem.originalPath, {
+                ignoreFileHashes: !virtualFileSystem.isOnFileSystem,
+            })
+        );
+    };
 
-const handleNonJsonFileThunk = (
-  fileOrFolderPath: string,
-  virtualFileSystem: VirtualFileSystem
-): ArchifiltreThunkAction => (dispatch) => {
-  if (!isJsonFile(fileOrFolderPath)) {
-    const paths = getFiles(
-      filesAndFoldersMapToArray(virtualFileSystem.filesAndFolders)
-    ).map((file) => file.id);
-    dispatch(handleTracking(paths, virtualFileSystem.filesAndFolders));
-    handleZipNotificationDisplay(paths);
-    dispatch(handleErrorNotificationDisplay());
-    dispatch(handleHashComputing(virtualFileSystem));
-  }
-};
+const handleNonJsonFileThunk =
+    (
+        fileOrFolderPath: string,
+        virtualFileSystem: VirtualFileSystem
+    ): ArchifiltreThunkAction =>
+    (dispatch) => {
+        if (!isJsonFile(fileOrFolderPath)) {
+            const paths = getFiles(
+                filesAndFoldersMapToArray(virtualFileSystem.filesAndFolders)
+            ).map((file) => file.id);
+            dispatch(handleTracking(paths, virtualFileSystem.filesAndFolders));
+            handleZipNotificationDisplay(paths);
+            dispatch(handleErrorNotificationDisplay());
+            dispatch(handleHashComputing(virtualFileSystem));
+        }
+    };
 
 const handleJsonNotificationDisplay = (
-  fileOrFolderPath: string,
-  virtualFileSystem: VirtualFileSystem
+    fileOrFolderPath: string,
+    virtualFileSystem: VirtualFileSystem
 ) => {
-  if (isJsonFile(fileOrFolderPath)) {
-    const jsonVersion = mapToNewVersionNumbers(`${virtualFileSystem.version}`);
-    const currentVersion = mapToNewVersionNumbers(version);
-    if (versionComparator(jsonVersion, currentVersion) !== 0) {
-      displayJsonNotification();
+    if (isJsonFile(fileOrFolderPath)) {
+        const jsonVersion = mapToNewVersionNumbers(
+            `${virtualFileSystem.version}`
+        );
+        const currentVersion = mapToNewVersionNumbers(version);
+        if (versionComparator(jsonVersion, currentVersion) !== 0) {
+            displayJsonNotification();
+        }
     }
-  }
 };
 
-const handleVirtualFileSystemThunk = (
-  fileOrFolderPath: string,
-  virtualFileSystem: VirtualFileSystem
-): ArchifiltreThunkAction => async (dispatch) => {
-  handleJsonNotificationDisplay(fileOrFolderPath, virtualFileSystem);
-  dispatch(initStore(virtualFileSystem));
-  dispatch(setLoadingStep(LoadingStep.FINISHED));
-  dispatch(commitAction());
-  dispatch(handleNonJsonFileThunk(fileOrFolderPath, virtualFileSystem));
-};
+const handleVirtualFileSystemThunk =
+    (
+        fileOrFolderPath: string,
+        virtualFileSystem: VirtualFileSystem
+    ): ArchifiltreThunkAction =>
+    async (dispatch) => {
+        handleJsonNotificationDisplay(fileOrFolderPath, virtualFileSystem);
+        dispatch(initStore(virtualFileSystem));
+        dispatch(setLoadingStep(LoadingStep.FINISHED));
+        dispatch(commitAction());
+        dispatch(handleNonJsonFileThunk(fileOrFolderPath, virtualFileSystem));
+    };
 
 const makeLoadFilesAndFoldersErrorHandler = (dispatch: ArchifiltreDispatch) =>
-  tap<ErrorMessage>(({ error }) => {
-    dispatch(registerErrorAction(error));
-    dispatch(registerErroredElements([error]));
-  });
-
-const makeLoadFilesAndFoldersResultHandler = (dispatch: ArchifiltreDispatch) =>
-  tap<HookParam>(({ status, count = 0 } = defaultHookParam) => {
-    switch (status) {
-      case FileSystemLoadingStep.INDEXING:
-        dispatch(setIndexedFilesCount(count));
-        dispatch(setFileSystemLoadingStep(status));
-        break;
-      case FileSystemLoadingStep.FILES_AND_FOLDERS:
-        dispatch(setConstructedDataModelElementsCount(count));
-        dispatch(setFileSystemLoadingStep(status));
-        break;
-      case FileSystemLoadingStep.METADATA:
-        dispatch(setDerivedElementsCount(count));
-        dispatch(setFileSystemLoadingStep(status));
-        break;
-      case FileSystemLoadingStep.COMPLETE:
-        dispatch(setFileSystemLoadingStep(FileSystemLoadingStep.COMPLETE));
-    }
-  });
-
-const loadFilesAndFoldersAfterInitThunk = (
-  fileOrFolderPath: string,
-  {
-    filesAndFolders,
-    erroredPaths,
-  }: {
-    filesAndFolders?: FilesAndFoldersMap;
-    erroredPaths?: ArchifiltreError[];
-  } = {}
-): ArchifiltreThunkAction<VirtualFileSystemLoader> => (dispatch) => {
-  const { result$, terminate } = loadFileTree(fileOrFolderPath, {
-    filesAndFolders,
-    erroredPaths,
-  });
-  const virtualFileSystem = operateOnDataProcessingStream<HookParam, HookParam>(
-    result$,
-    {
-      error: makeLoadFilesAndFoldersErrorHandler(dispatch),
-      result: makeLoadFilesAndFoldersResultHandler(dispatch),
-    }
-  )
-    .pipe(filterResults())
-    .toPromise()
-    .then(({ result: { result } }) => {
-      dispatch(handleVirtualFileSystemThunk(fileOrFolderPath, result));
-      return result;
+    tap<ErrorMessage>(({ error }) => {
+        dispatch(registerErrorAction(error));
+        dispatch(registerErroredElements([error]));
     });
 
-  return {
-    virtualFileSystem,
-    terminate,
-  };
-};
+const makeLoadFilesAndFoldersResultHandler = (dispatch: ArchifiltreDispatch) =>
+    tap<HookParam>(({ status, count = 0 } = defaultHookParam) => {
+        switch (status) {
+            case FileSystemLoadingStep.INDEXING:
+                dispatch(setIndexedFilesCount(count));
+                dispatch(setFileSystemLoadingStep(status));
+                break;
+            case FileSystemLoadingStep.FILES_AND_FOLDERS:
+                dispatch(setConstructedDataModelElementsCount(count));
+                dispatch(setFileSystemLoadingStep(status));
+                break;
+            case FileSystemLoadingStep.METADATA:
+                dispatch(setDerivedElementsCount(count));
+                dispatch(setFileSystemLoadingStep(status));
+                break;
+            case FileSystemLoadingStep.COMPLETE:
+                dispatch(
+                    setFileSystemLoadingStep(FileSystemLoadingStep.COMPLETE)
+                );
+        }
+    });
 
-export const reloadFilesAndFoldersThunk = (): ArchifiltreThunkAction => (
-  dispatch,
-  getState
-) => {
-  const state = getState();
-  const { originalPath } = getWorkspaceMetadataFromStore(state);
-  const filesAndFolders = getFilesAndFoldersFromStore(state);
-  const erroredPaths = getErroredFilesAndFolders(state);
+const loadFilesAndFoldersAfterInitThunk =
+    (
+        fileOrFolderPath: string,
+        {
+            filesAndFolders,
+            erroredPaths,
+        }: {
+            filesAndFolders?: FilesAndFoldersMap;
+            erroredPaths?: ArchifiltreError[];
+        } = {}
+    ): ArchifiltreThunkAction<VirtualFileSystemLoader> =>
+    (dispatch) => {
+        const { result$, terminate } = loadFileTree(fileOrFolderPath, {
+            erroredPaths,
+            filesAndFolders,
+        });
+        const virtualFileSystem = operateOnDataProcessingStream<
+            HookParam,
+            HookParam
+        >(result$, {
+            error: makeLoadFilesAndFoldersErrorHandler(dispatch),
+            result: makeLoadFilesAndFoldersResultHandler(dispatch),
+        })
+            .pipe(filterResults())
+            .toPromise()
+            .then(({ result: { result } }) => {
+                dispatch(
+                    handleVirtualFileSystemThunk(fileOrFolderPath, result)
+                );
+                return result;
+            });
 
-  dispatch(resetErroredElements());
-
-  return dispatch(
-    loadFilesAndFoldersAfterInitThunk(originalPath, {
-      filesAndFolders,
-      erroredPaths,
-    })
-  );
-};
-
-type VirtualFileSystemLoader = {
-  virtualFileSystem: Promise<VirtualFileSystem>;
-  terminate: () => void;
-};
-
-const tryLoadFilesAndFoldersAfterInitThunk = (
-  fileOrFolderPath: string
-): ArchifiltreThunkAction<VirtualFileSystemLoader> => (dispatch) => {
-  try {
-    return dispatch(loadFilesAndFoldersAfterInitThunk(fileOrFolderPath));
-  } catch (error) {
-    reportError(error);
-    dispatch(setLoadingStep(LoadingStep.ERROR));
-    return {
-      virtualFileSystem: Promise.reject(),
-      terminate: empty,
+        return {
+            terminate,
+            virtualFileSystem,
+        };
     };
-  }
-};
 
-const loadFilesAndFoldersFromValidPathThunk = (
-  fileOrFolderPath: string
-): ArchifiltreThunkAction<Promise<VirtualFileSystemLoader>> => async (
-  dispatch
-) => {
-  await clearActionReplayFile();
-  const loadingStart = new Date().getTime();
-  const { virtualFileSystem, terminate } = dispatch(
-    tryLoadFilesAndFoldersAfterInitThunk(fileOrFolderPath)
-  );
-  virtualFileSystem.then(() => handleLoadingTimeTracking(loadingStart));
-  return { virtualFileSystem, terminate };
-};
+export const reloadFilesAndFoldersThunk =
+    (): ArchifiltreThunkAction => (dispatch, getState) => {
+        const state = getState();
+        const { originalPath } = getWorkspaceMetadataFromStore(state);
+        const filesAndFolders = getFilesAndFoldersFromStore(state);
+        const erroredPaths = getErroredFilesAndFolders(state);
+
+        dispatch(resetErroredElements());
+
+        return dispatch(
+            loadFilesAndFoldersAfterInitThunk(originalPath, {
+                erroredPaths,
+                filesAndFolders,
+            })
+        );
+    };
+
+interface VirtualFileSystemLoader {
+    virtualFileSystem: Promise<VirtualFileSystem>;
+    terminate: () => void;
+}
+
+const tryLoadFilesAndFoldersAfterInitThunk =
+    (
+        fileOrFolderPath: string
+    ): ArchifiltreThunkAction<VirtualFileSystemLoader> =>
+    (dispatch) => {
+        try {
+            return dispatch(
+                loadFilesAndFoldersAfterInitThunk(fileOrFolderPath)
+            );
+        } catch (error) {
+            reportError(error);
+            dispatch(setLoadingStep(LoadingStep.ERROR));
+            return {
+                terminate: empty,
+                virtualFileSystem: Promise.reject(),
+            };
+        }
+    };
+
+const loadFilesAndFoldersFromValidPathThunk =
+    (
+        fileOrFolderPath: string
+    ): ArchifiltreThunkAction<Promise<VirtualFileSystemLoader>> =>
+    async (dispatch) => {
+        await clearActionReplayFile();
+        const loadingStart = new Date().getTime();
+        const { virtualFileSystem, terminate } = dispatch(
+            tryLoadFilesAndFoldersAfterInitThunk(fileOrFolderPath)
+        );
+        virtualFileSystem.then(() => {
+            handleLoadingTimeTracking(loadingStart);
+        });
+        return { terminate, virtualFileSystem };
+    };
 
 const createArchifiltreStoreThunkError = (
-  code: ArchifiltreStoreThunkErrorCode,
-  reason?: string
+    code: ArchifiltreStoreThunkErrorCode,
+    reason?: string
 ): ArchifiltreError => ({
-  type: ArchifiltreErrorType.STORE_THUNK,
-  code,
-  reason: "",
-  filePath: "",
+    code,
+    filePath: "",
+    reason: "",
+    type: ArchifiltreErrorType.STORE_THUNK,
 });
 
 const failIfRootPath = (path: string) => {
-  if (isRootPath(path)) {
-    throw createArchifiltreStoreThunkError(
-      ArchifiltreStoreThunkErrorCode.ROOT_PATH
-    );
-  }
-  return path;
+    if (isRootPath(path)) {
+        throw createArchifiltreStoreThunkError(
+            ArchifiltreStoreThunkErrorCode.ROOT_PATH
+        );
+    }
+    return path;
 };
 
 const failIfInvalidPath = (path: string) => {
-  if (!isValidFolderPath(path)) {
-    throw createArchifiltreStoreThunkError(
-      ArchifiltreStoreThunkErrorCode.INVALID_PATH
-    );
-  }
-  return path;
+    if (!isValidFolderPath(path)) {
+        throw createArchifiltreStoreThunkError(
+            ArchifiltreStoreThunkErrorCode.INVALID_PATH
+        );
+    }
+    return path;
 };
 
 const displayUnknownError = () => makeErrorResponse();
 
-export const loadFilesAndFoldersFromPathThunk = (
-  fileOrFolderPath: string
-): ArchifiltreThunkAction<Promise<VirtualFileSystemLoader>> => async (
-  dispatch
-) => {
-  try {
-    const { virtualFileSystem, terminate } = await compose(
-      (path) => dispatch(loadFilesAndFoldersFromValidPathThunk(path)),
-      failIfInvalidPath,
-      failIfRootPath
-    )(fileOrFolderPath);
+export const loadFilesAndFoldersFromPathThunk =
+    (
+        fileOrFolderPath: string
+    ): ArchifiltreThunkAction<Promise<VirtualFileSystemLoader>> =>
+    async (dispatch) => {
+        try {
+            const { virtualFileSystem, terminate } = await compose(
+                async (path) =>
+                    dispatch(loadFilesAndFoldersFromValidPathThunk(path)),
+                failIfInvalidPath,
+                failIfRootPath
+            )(fileOrFolderPath);
 
-    virtualFileSystem.catch((err: ArchifiltreError) => {
-      displayUnexpectedError(err.reason);
-    });
+            virtualFileSystem.catch((err: ArchifiltreError) => {
+                displayUnexpectedError(err.reason);
+            });
 
-    return { virtualFileSystem, terminate };
-  } catch (err) {
-    return await makeErrorHandler({
-      [ArchifiltreStoreThunkErrorCode.ROOT_PATH]: displayRootPathError,
-      [ArchifiltreStoreThunkErrorCode.INVALID_PATH]: displayInvalidPathError,
-      default: displayUnknownError,
-    })(err);
-  }
-};
+            return { terminate, virtualFileSystem };
+        } catch (err) {
+            return await makeErrorHandler({
+                [ArchifiltreStoreThunkErrorCode.ROOT_PATH]:
+                    displayRootPathError,
+                [ArchifiltreStoreThunkErrorCode.INVALID_PATH]:
+                    displayInvalidPathError,
+                default: displayUnknownError,
+            })(err);
+        }
+    };
 
 /**
  * Initializes the store with the data extracted from the JSON object
@@ -455,55 +473,59 @@ export const loadFilesAndFoldersFromPathThunk = (
  * @param hashesMap
  * @param tags
  */
-const initStore = ({
-  aliases,
-  comments,
-  elementsToDelete,
-  filesAndFolders,
-  filesAndFoldersMetadata,
-  hashes,
-  originalPath,
-  overrideLastModified,
-  sessionName,
-  tags,
-  virtualPathToIdMap,
-}: VirtualFileSystem): ArchifiltreThunkAction => (dispatch) => {
-  dispatch(initializeFilesAndFolders(filesAndFolders));
-  dispatch(initFilesAndFoldersMetatada(filesAndFoldersMetadata));
-  dispatch(setOriginalPath(originalPath));
-  dispatch(setSessionName(sessionName || getFirstLevelName(filesAndFolders)));
+const initStore =
+    ({
+        aliases,
+        comments,
+        elementsToDelete,
+        filesAndFolders,
+        filesAndFoldersMetadata,
+        hashes,
+        originalPath,
+        overrideLastModified,
+        sessionName,
+        tags,
+        virtualPathToIdMap,
+    }: VirtualFileSystem): ArchifiltreThunkAction =>
+    (dispatch) => {
+        dispatch(initializeFilesAndFolders(filesAndFolders));
+        dispatch(initFilesAndFoldersMetatada(filesAndFoldersMetadata));
+        dispatch(setOriginalPath(originalPath));
+        dispatch(
+            setSessionName(sessionName || getFirstLevelName(filesAndFolders))
+        );
 
-  dispatch(initVirtualPathToIdMap(virtualPathToIdMap));
-  dispatch(initOverrideLastModified(overrideLastModified));
-  if (hashes) {
-    dispatch(setFilesAndFoldersHashes(hashes));
-  }
+        dispatch(initVirtualPathToIdMap(virtualPathToIdMap));
+        dispatch(initOverrideLastModified(overrideLastModified));
+        if (hashes) {
+            dispatch(setFilesAndFoldersHashes(hashes));
+        }
 
-  if (tags) {
-    dispatch(initializeTags(tags));
-  }
+        if (tags) {
+            dispatch(initializeTags(tags));
+        }
 
-  if (aliases) {
-    dispatch(setFilesAndFoldersAliases(aliases));
-  }
+        if (aliases) {
+            dispatch(setFilesAndFoldersAliases(aliases));
+        }
 
-  if (comments) {
-    dispatch(addCommentsOnFilesAndFolders(comments));
-  }
+        if (comments) {
+            dispatch(addCommentsOnFilesAndFolders(comments));
+        }
 
-  if (elementsToDelete) {
-    dispatch(markElementsToDelete(elementsToDelete));
-  }
-};
+        if (elementsToDelete) {
+            dispatch(markElementsToDelete(elementsToDelete));
+        }
+    };
 
 export const resetStoreThunk = (): ArchifiltreThunkAction => (dispatch) => {
-  dispatch(resetTags());
-  dispatch(resetLoadingAction());
-  dispatch(resetLoadingState());
-  dispatch(setLockedElementId(""));
-  dispatch(setLoadingStep(LoadingStep.WAITING));
-  dispatch(resetErroredElements());
-  dispatch(commitAction());
-  dispatch(resetOverrideLastModified());
-  workerManager.clear();
+    dispatch(resetTags());
+    dispatch(resetLoadingAction());
+    dispatch(resetLoadingState());
+    dispatch(setLockedElementId(""));
+    dispatch(setLoadingStep(LoadingStep.WAITING));
+    dispatch(resetErroredElements());
+    dispatch(commitAction());
+    dispatch(resetOverrideLastModified());
+    workerManager.clear();
 };

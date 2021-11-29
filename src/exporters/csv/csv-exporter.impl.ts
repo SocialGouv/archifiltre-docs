@@ -1,28 +1,28 @@
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import {
-  AliasMap,
-  CommentsMap,
-  FilesAndFoldersMap,
+import { flatten } from "lodash";
+import type {
+    AliasMap,
+    CommentsMap,
+    FilesAndFoldersMap,
 } from "reducers/files-and-folders/files-and-folders-types";
-import { TagMap } from "reducers/tags/tags-types";
+import type { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { HashesMap } from "reducers/hashes/hashes-types";
+import type { TagMap } from "reducers/tags/tags-types";
+import { tap, toArray } from "rxjs/operators";
 import translations from "translations/translations";
-import { WorkerMessageHandler } from "util/async-worker/async-worker-util";
+import { exportToCsv } from "util/array-export/array-export";
+import type { WorkerMessageHandler } from "util/async-worker/async-worker-util";
 import { MessageTypes } from "util/batch-process/batch-process-util-types";
 import { arrayToCsv } from "util/csv/csv-util";
-import { HashesMap } from "reducers/hashes/hashes-types";
-import { exportToCsv } from "util/array-export/array-export";
-import { tap, toArray } from "rxjs/operators";
-import { flatten } from "lodash";
 
-export type CsvExporterData = {
-  aliases: AliasMap;
-  comments: CommentsMap;
-  filesAndFolders: FilesAndFoldersMap;
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
-  elementsToDelete: string[];
-  hashes?: HashesMap;
-  tags: TagMap;
-};
+export interface CsvExporterData {
+    aliases: AliasMap;
+    comments: CommentsMap;
+    filesAndFolders: FilesAndFoldersMap;
+    filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
+    elementsToDelete: string[];
+    hashes?: HashesMap;
+    tags: TagMap;
+}
 
 /**
  * Handles the initialize message for the CSV exporter fork
@@ -37,45 +37,45 @@ export type CsvExporterData = {
  * @param tags
  */
 export const onInitialize: WorkerMessageHandler = async (
-  asyncWorker,
-  {
-    aliases,
-    comments,
-    elementsToDelete = [],
-    filesAndFolders,
-    filesAndFoldersMetadata,
-    hashes,
-    tags,
-  }: CsvExporterData
+    asyncWorker,
+    {
+        aliases,
+        comments,
+        elementsToDelete = [],
+        filesAndFolders,
+        filesAndFoldersMetadata,
+        hashes,
+        tags,
+    }: CsvExporterData
 ) => {
-  const array = await exportToCsv({
-    aliases,
-    comments,
-    elementsToDelete,
-    filesAndFolders,
-    filesAndFoldersMetadata,
-    hashes,
-    tags,
-    translator: translations.t.bind(translations),
-  })
-    .pipe(
-      tap((row) =>
-        asyncWorker.postMessage({
-          result: row.length,
-          type: MessageTypes.RESULT,
-        })
-      ),
-      toArray()
-    )
-    .toPromise()
-    .then(flatten);
+    const array = await exportToCsv({
+        aliases,
+        comments,
+        elementsToDelete,
+        filesAndFolders,
+        filesAndFoldersMetadata,
+        hashes,
+        tags,
+        translator: translations.t.bind(translations),
+    })
+        .pipe(
+            tap((row) =>
+                asyncWorker.postMessage({
+                    result: row.length,
+                    type: MessageTypes.RESULT,
+                })
+            ),
+            toArray()
+        )
+        .toPromise()
+        .then(flatten);
 
-  asyncWorker.postMessage({
-    result: arrayToCsv(array),
-    type: MessageTypes.RESULT,
-  });
+    asyncWorker.postMessage({
+        result: arrayToCsv(array),
+        type: MessageTypes.RESULT,
+    });
 
-  asyncWorker.postMessage({
-    type: MessageTypes.COMPLETE,
-  });
+    asyncWorker.postMessage({
+        type: MessageTypes.COMPLETE,
+    });
 };

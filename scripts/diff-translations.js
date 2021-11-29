@@ -12,7 +12,7 @@ const translationOutputFolder = path.join(__dirname, "../translations");
  * @returns {any}
  */
 const getTranslation = (language) =>
-  require(path.join(translationFolder, `${language}.json`));
+    require(path.join(translationFolder, `${language}.json`));
 
 const en = getTranslation("en");
 const fr = getTranslation("fr");
@@ -27,29 +27,31 @@ const de = getTranslation("de");
  * @returns {*}
  */
 const computeMissingKeys = (base, objects, rootKey = []) => {
-  const normalizedObjects = objects.map((object) => object || {});
-  return [].concat(
-    ...Object.keys(base).map((key) => {
-      const newRootKeyArray = rootKey.concat(key);
-      const newRootKey = newRootKeyArray.join(".");
-      if (!_.isObject(base[key])) {
-        return [
-          [
-            newRootKey,
-            base[key],
-            ...normalizedObjects.map(
-              (normalizedObject) => normalizedObject[key]
-            ),
-          ],
-        ];
-      }
-      return computeMissingKeys(
-        base[key],
-        normalizedObjects.map((normalizedObject) => normalizedObject[key]),
-        newRootKeyArray
-      );
-    })
-  );
+    const normalizedObjects = objects.map((object) => object || {});
+    return [].concat(
+        ...Object.keys(base).map((key) => {
+            const newRootKeyArray = rootKey.concat(key);
+            const newRootKey = newRootKeyArray.join(".");
+            if (!_.isObject(base[key])) {
+                return [
+                    [
+                        newRootKey,
+                        base[key],
+                        ...normalizedObjects.map(
+                            (normalizedObject) => normalizedObject[key]
+                        ),
+                    ],
+                ];
+            }
+            return computeMissingKeys(
+                base[key],
+                normalizedObjects.map(
+                    (normalizedObject) => normalizedObject[key]
+                ),
+                newRootKeyArray
+            );
+        })
+    );
 };
 
 /**
@@ -59,21 +61,21 @@ const computeMissingKeys = (base, objects, rootKey = []) => {
  * @returns {string}
  */
 const makeHeader = (refLanguage, comparedLanguages) => [
-  "path",
-  `${refLanguage} text`,
-  ...comparedLanguages.map((language) => `${language} translation`),
+    "path",
+    `${refLanguage} text`,
+    ...comparedLanguages.map((language) => `${language} translation`),
 ];
 
 const frCsv = [makeHeader("english", ["french"])].concat(
-  computeMissingKeys(en, [fr])
+    computeMissingKeys(en, [fr])
 );
 
 const deCsv = [makeHeader("english", ["german"])].concat(
-  computeMissingKeys(en, [de])
+    computeMissingKeys(en, [de])
 );
 
 const frDeCsv = [makeHeader("english", ["french", "german"])].concat(
-  computeMissingKeys(en, [fr, de])
+    computeMissingKeys(en, [fr, de])
 );
 
 const stringFrCsv = csvStringify(frCsv);
@@ -84,6 +86,6 @@ fs.mkdirSync(translationOutputFolder, { recursive: true });
 fs.writeFileSync(path.join(translationOutputFolder, "fr.csv"), stringFrCsv);
 fs.writeFileSync(path.join(translationOutputFolder, "de.csv"), stringDeCsv);
 fs.writeFileSync(
-  path.join(translationOutputFolder, "fr-de.csv"),
-  stringFrDeCsv
+    path.join(translationOutputFolder, "fr-de.csv"),
+    stringFrDeCsv
 );

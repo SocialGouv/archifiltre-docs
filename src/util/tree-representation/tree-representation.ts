@@ -1,20 +1,21 @@
-import {
-  FilesAndFolders,
-  FilesAndFoldersMap,
-} from "reducers/files-and-folders/files-and-folders-types";
-import { getDepthFromPath } from "reducers/files-and-folders/files-and-folders-selectors";
-import { makeObjectKeyComparator } from "util/sort-utils/sort-utils";
-import { interval, Observable } from "rxjs";
-import { map, take } from "rxjs/operators";
 import { chunk } from "lodash";
+import { getDepthFromPath } from "reducers/files-and-folders/files-and-folders-selectors";
+import type {
+    FilesAndFolders,
+    FilesAndFoldersMap,
+} from "reducers/files-and-folders/files-and-folders-types";
+import type { Observable } from "rxjs";
+import { interval } from "rxjs";
+import { map, take } from "rxjs/operators";
+import { makeObjectKeyComparator } from "util/sort-utils/sort-utils";
 
 const computeTreeSection = (filesAndFolders: FilesAndFolders[]): string[][] =>
-  filesAndFolders.map((filesAndFolders) => {
-    const { virtualPath, name } = filesAndFolders;
-    const depth = getDepthFromPath(virtualPath);
-    const shiftArray = depth <= 0 ? [] : new Array(depth).fill("");
-    return [...shiftArray, name];
-  });
+    filesAndFolders.map((filesAndFolders) => {
+        const { virtualPath, name } = filesAndFolders;
+        const depth = getDepthFromPath(virtualPath);
+        const shiftArray = depth <= 0 ? [] : new Array(depth).fill("");
+        return [...shiftArray, name];
+    });
 
 const CHUNK_SIZE = 1000;
 
@@ -32,17 +33,17 @@ const CHUNK_SIZE = 1000;
  * // ["", "", "file"]]
  */
 export const computeTreeStructureArray = (
-  filesAndFoldersMap: FilesAndFoldersMap
+    filesAndFoldersMap: FilesAndFoldersMap
 ): Observable<string[][]> => {
-  const filesAndFolders = Object.values(filesAndFoldersMap)
-    .filter(({ id }) => id !== "")
-    .sort(makeObjectKeyComparator<FilesAndFolders>("virtualPath"));
+    const filesAndFolders = Object.values(filesAndFoldersMap)
+        .filter(({ id }) => id !== "")
+        .sort(makeObjectKeyComparator<FilesAndFolders>("virtualPath"));
 
-  const chunks = chunk(filesAndFolders, CHUNK_SIZE);
+    const chunks = chunk(filesAndFolders, CHUNK_SIZE);
 
-  return interval().pipe(
-    take(chunks.length),
-    map((index) => chunks[index]),
-    map(computeTreeSection)
-  );
+    return interval().pipe(
+        take(chunks.length),
+        map((index) => chunks[index]),
+        map(computeTreeSection)
+    );
 };

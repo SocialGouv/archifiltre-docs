@@ -1,12 +1,12 @@
-import { FilesAndFolders } from "./files-and-folders-types";
+import type { FilesAndFolders } from "./files-and-folders-types";
 
 interface CreateFilesAndFoldersOptions {
-  id: string;
-  file_last_modified?: number;
-  children?: string[];
-  file_size?: number;
-  name?: string;
-  virtualPath?: string;
+    id: string;
+    file_last_modified?: number;
+    children?: string[];
+    file_size?: number;
+    name?: string;
+    virtualPath?: string;
 }
 
 /**
@@ -19,17 +19,17 @@ interface CreateFilesAndFoldersOptions {
  * @param name
  */
 export const createFilesAndFolders = ({
-  id,
-  file_last_modified = 0,
-  children = [],
-  file_size = 0,
-  name = "base-name",
-  virtualPath,
+    id,
+    file_last_modified = 0,
+    children = [],
+    file_size = 0,
+    name = "base-name",
+    virtualPath,
 }: CreateFilesAndFoldersOptions): FilesAndFolders => ({
-  children,
-  file_last_modified,
-  file_size,
-  id,
-  name,
-  virtualPath: virtualPath || id,
+    children,
+    file_last_modified,
+    file_size,
+    id,
+    name,
+    virtualPath: virtualPath || id,
 });

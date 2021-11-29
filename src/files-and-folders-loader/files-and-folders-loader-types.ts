@@ -1,139 +1,139 @@
-import {
-  AliasMap,
-  CommentsMap,
-  FilesAndFoldersMap,
-  LastModifiedMap,
-  VirtualPathToIdMap,
+import type {
+    AliasMap,
+    CommentsMap,
+    FilesAndFoldersMap,
+    LastModifiedMap,
+    VirtualPathToIdMap,
 } from "reducers/files-and-folders/files-and-folders-types";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { HashesMap } from "reducers/hashes/hashes-types";
-import { TagMap } from "reducers/tags/tags-types";
-import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
-import { ArchifiltreError } from "util/error/error-util";
-import { ArchifiltreErrorCode } from "util/error/error-codes";
+import type { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { HashesMap } from "reducers/hashes/hashes-types";
+import type { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
+import type { TagMap } from "reducers/tags/tags-types";
+import type { ArchifiltreErrorCode } from "util/error/error-codes";
+import type { ArchifiltreError } from "util/error/error-util";
 
 export type VirtualFileSystem = WithAliases &
-  WithComments &
-  WithElementsToDelete &
-  WithFilesAndFolders &
-  WithMetadata &
-  WithHashes &
-  WithOriginalPath &
-  WithOverrideLastModified &
-  WithSessionName &
-  WithTags &
-  WithVersion &
-  WithVirtualPathToIdMap &
-  WithIsOnFileSystem;
+    WithComments &
+    WithElementsToDelete &
+    WithFilesAndFolders &
+    WithHashes &
+    WithIsOnFileSystem &
+    WithMetadata &
+    WithOriginalPath &
+    WithOverrideLastModified &
+    WithSessionName &
+    WithTags &
+    WithVersion &
+    WithVirtualPathToIdMap;
 
 export type WithIsOnFileSystem<T = {}> = T & {
-  isOnFileSystem: boolean;
+    isOnFileSystem: boolean;
 };
 
 export type WithFilesAndFolders<T = {}> = T & {
-  filesAndFolders: FilesAndFoldersMap;
+    filesAndFolders: FilesAndFoldersMap;
 };
 
 export type WithOriginalPath<T = {}> = T & {
-  originalPath: string;
+    originalPath: string;
 };
 
 export type WithElementsToDelete<T = {}> = T & {
-  elementsToDelete: string[];
+    elementsToDelete: string[];
 };
 
 export type WithMetadata<T = {}> = T & {
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
+    filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
 };
 
 export type WithAliases<T = {}> = T & {
-  aliases: AliasMap;
+    aliases: AliasMap;
 };
 
 export type WithComments<T = {}> = T & {
-  comments: CommentsMap;
+    comments: CommentsMap;
 };
 
 export type WithHashes<T = {}> = T & {
-  hashes: HashesMap;
+    hashes: HashesMap;
 };
 
 export type WithSessionName<T = {}> = T & {
-  sessionName: string;
+    sessionName: string;
 };
 
 export type WithTags<T = {}> = T & {
-  tags: TagMap;
+    tags: TagMap;
 };
 
 export type WithVersion<T = {}> = T & {
-  version: string;
+    version: string;
 };
 
 export type WithVirtualPathToIdMap<T = {}> = T & {
-  virtualPathToIdMap: VirtualPathToIdMap;
+    virtualPathToIdMap: VirtualPathToIdMap;
 };
 
 export type WithOverrideLastModified<T = {}> = T & {
-  overrideLastModified: LastModifiedMap;
+    overrideLastModified: LastModifiedMap;
 };
 
 export type PartialFileSystem = Partial<VirtualFileSystem> &
-  WithFilesAndFolders &
-  WithOriginalPath;
+    WithFilesAndFolders &
+    WithOriginalPath;
 
 export type JsonFileInfo = PartialFileSystem &
-  WithSessionName &
-  WithAliases &
-  WithComments &
-  WithHashes &
-  WithOverrideLastModified &
-  WithVersion &
-  WithVirtualPathToIdMap;
+    WithAliases &
+    WithComments &
+    WithHashes &
+    WithOverrideLastModified &
+    WithSessionName &
+    WithVersion &
+    WithVirtualPathToIdMap;
 
-type ResultData = {
-  status: FileSystemLoadingStep;
-  count: number;
-  totalCount?: number;
-};
+interface ResultData {
+    status: FileSystemLoadingStep;
+    count: number;
+    totalCount?: number;
+}
 
-type WorkerError = {
-  code: ArchifiltreErrorCode;
-  message: string;
-  path: string;
-};
+interface WorkerError {
+    code: ArchifiltreErrorCode;
+    message: string;
+    path: string;
+}
 
-type ErrorData = {
-  status: FileSystemLoadingStep;
-  error: WorkerError;
-};
+interface ErrorData {
+    status: FileSystemLoadingStep;
+    error: WorkerError;
+}
 
-export type FileSystemReporters = {
-  reportResult: (result: ResultData) => void;
-  reportError: (message: ErrorData) => void;
-  reportFatal: (message: any) => void;
-};
+export interface FileSystemReporters {
+    reportResult: (result: ResultData) => void;
+    reportError: (message: ErrorData) => void;
+    reportFatal: (message: any) => void;
+}
 
 export type FilesAndFoldersLoader = (
-  hooksCreator?: FileSystemLoadingHooksCreator
-) => Promise<PartialFileSystem> | PartialFileSystem;
+    hooksCreator?: FileSystemLoadingHooksCreator
+) => PartialFileSystem | Promise<PartialFileSystem>;
 
 export type WithResultHook<T = {}> = T & {
-  onResult: () => void;
+    onResult: () => void;
 };
 
 export type WithErrorHook<T = {}> = T & {
-  onError: (error: ArchifiltreError) => void;
+    onError: (error: ArchifiltreError) => void;
 };
 
-export type FileSystemLoadingHooks = {
-  onStart: () => void;
-  onComplete: () => void;
-} & WithResultHook &
-  WithErrorHook;
+export type FileSystemLoadingHooks = WithErrorHook &
+    WithResultHook & {
+        onStart: () => void;
+        onComplete: () => void;
+    };
 
 export type FileSystemLoadingHooksCreator = (
-  step: FileSystemLoadingStep
+    step: FileSystemLoadingStep
 ) => FileSystemLoadingHooks;
 
 export type FileLoaderCreator = (path: string) => FilesAndFoldersLoader;

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
 const linearProgress = (
-  startTime: number,
-  duration: number,
-  currentTime: number
+    startTime: number,
+    duration: number,
+    currentTime: number
 ) => Math.min(1, (currentTime - startTime) / duration);
 
 /**
@@ -15,30 +15,33 @@ const linearProgress = (
  * @param animationDependency
  */
 export const useAnimatedValue = (
-  initialValue: number,
-  targetValue: number,
-  duration: number,
-  animationDependency: any
+    initialValue: number,
+    targetValue: number,
+    duration: number,
+    animationDependency: any
 ) => {
-  const [value, setValue] = useState(initialValue);
+    const [value, setValue] = useState(initialValue);
 
-  useEffect(() => {
-    const startTime = Date.now();
-    setValue(initialValue);
-    let animationFrame;
+    useEffect(() => {
+        const startTime = Date.now();
+        setValue(initialValue);
+        let animationFrame;
 
-    const handleNextFrame = () => {
-      const progress = linearProgress(startTime, duration, Date.now());
-      const nextValue = progress * (targetValue - initialValue) + initialValue;
-      setValue(nextValue);
-      if (progress < 1) {
-        animationFrame = requestAnimationFrame(handleNextFrame);
-      }
-    };
-    handleNextFrame();
+        const handleNextFrame = () => {
+            const progress = linearProgress(startTime, duration, Date.now());
+            const nextValue =
+                progress * (targetValue - initialValue) + initialValue;
+            setValue(nextValue);
+            if (progress < 1) {
+                animationFrame = requestAnimationFrame(handleNextFrame);
+            }
+        };
+        handleNextFrame();
 
-    return () => cancelAnimationFrame(animationFrame);
-  }, [initialValue, targetValue, duration, animationDependency]);
+        return () => {
+            cancelAnimationFrame(animationFrame);
+        };
+    }, [initialValue, targetValue, duration, animationDependency]);
 
-  return value;
+    return value;
 };

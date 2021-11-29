@@ -1,17 +1,18 @@
 import { addTracker } from "logging/tracker";
 import { ActionTitle, ActionType } from "logging/tracker-types";
-import { MouseEvent, useCallback, useRef } from "react";
+import type { MouseEvent } from "react";
+import { useCallback, useRef } from "react";
 
 export type MoveElement = (
-  movedElementId: string,
-  targetFolderId: string
+    movedElementId: string,
+    targetFolderId: string
 ) => void;
 
 const handleTracking = () => {
-  addTracker({
-    title: ActionTitle.ELEMENT_MOVED,
-    type: ActionType.TRACK_EVENT,
-  });
+    addTracker({
+        title: ActionTitle.ELEMENT_MOVED,
+        type: ActionType.TRACK_EVENT,
+    });
 };
 
 /**
@@ -20,34 +21,35 @@ const handleTracking = () => {
  * @param onElementMoved - The callback called when an element is moved
  */
 export const useMovableElements = (onElementMoved: MoveElement) => {
-  const draggedElementRef = useRef("");
+    const draggedElementRef = useRef("");
 
-  const onIcicleMouseDown = useCallback(
-    (event: MouseEvent) => {
-      handleTracking();
-      const target = event.target as HTMLElement;
-      draggedElementRef.current =
-        target.attributes["data-draggable-id"]?.value || "";
-    },
-    [draggedElementRef]
-  );
+    const onIcicleMouseDown = useCallback(
+        (event: MouseEvent) => {
+            handleTracking();
+            const target = event.target as HTMLElement;
+            draggedElementRef.current =
+                target.attributes["data-draggable-id"]?.value || "";
+        },
+        [draggedElementRef]
+    );
 
-  const onIcicleMouseUp = useCallback(
-    (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      const releasedOnId = target.attributes["data-draggable-id"]?.value || "";
-      const movedElement = draggedElementRef.current;
-      if (
-        releasedOnId !== "" &&
-        releasedOnId !== draggedElementRef.current &&
-        movedElement !== ""
-      ) {
-        onElementMoved(movedElement, releasedOnId);
-        draggedElementRef.current = "";
-      }
-    },
-    [draggedElementRef, onElementMoved]
-  );
+    const onIcicleMouseUp = useCallback(
+        (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            const releasedOnId =
+                target.attributes["data-draggable-id"]?.value || "";
+            const movedElement = draggedElementRef.current;
+            if (
+                releasedOnId !== "" &&
+                releasedOnId !== draggedElementRef.current &&
+                movedElement !== ""
+            ) {
+                onElementMoved(movedElement, releasedOnId);
+                draggedElementRef.current = "";
+            }
+        },
+        [draggedElementRef, onElementMoved]
+    );
 
-  return { onIcicleMouseUp, onIcicleMouseDown };
+    return { onIcicleMouseDown, onIcicleMouseUp };
 };

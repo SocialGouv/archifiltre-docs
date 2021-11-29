@@ -1,9 +1,10 @@
-import React, { ComponentType } from "react";
+import type { ComponentType } from "react";
+import React from "react";
 
-type MapKey = string | number | symbol;
+type MapKey = number | string | symbol;
 
 export type ComponentMap<Props extends object, Key extends MapKey> = {
-  [key in Key]: ComponentType<Props>;
+    [key in Key]: ComponentType<Props>;
 };
 
 /**
@@ -11,16 +12,16 @@ export type ComponentMap<Props extends object, Key extends MapKey> = {
  * @param componentMap
  * @param keySelector
  */
-export const switchComponent = <
-  ComponentProps extends object,
-  Key extends MapKey
->(
-  componentMap: ComponentMap<ComponentProps, Key>,
-  keySelector: (props: ComponentProps) => Key
-): React.ComponentType<ComponentProps> => (props) => {
-  const key = keySelector(props);
-  const SelectedComponent: React.ComponentType<ComponentProps> | undefined =
-    componentMap[key];
+export const switchComponent =
+    <ComponentProps extends object, Key extends MapKey>(
+        componentMap: ComponentMap<ComponentProps, Key>,
+        keySelector: (props: ComponentProps) => Key
+    ): React.ComponentType<ComponentProps> =>
+    (props) => {
+        const key = keySelector(props);
+        const SelectedComponent:
+            | React.ComponentType<ComponentProps>
+            | undefined = componentMap[key];
 
-  return SelectedComponent ? <SelectedComponent {...props} /> : null;
-};
+        return SelectedComponent ? <SelectedComponent {...props} /> : null;
+    };

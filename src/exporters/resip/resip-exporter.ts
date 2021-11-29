@@ -1,37 +1,37 @@
 import dateFormat from "dateformat";
 import _ from "lodash";
 import path from "path";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import {
-  AliasMap,
-  CommentsMap,
-  FilesAndFolders,
-  FilesAndFoldersMap,
+import type {
+    AliasMap,
+    CommentsMap,
+    FilesAndFolders,
+    FilesAndFoldersMap,
 } from "reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { tagHasFfId } from "reducers/tags/tags-selectors";
-import { TagMap } from "reducers/tags/tags-types";
+import type { TagMap } from "reducers/tags/tags-types";
 import translations from "translations/translations";
 import { makeEmptyArray, replaceValue } from "util/array/array-util";
 import {
-  getDisplayName,
-  isExactFileOrAncestor,
+    getDisplayName,
+    isExactFileOrAncestor,
 } from "util/files-and-folders/file-and-folders-utils";
 import { empty } from "util/function/function-util";
 
 const nameChangedText = (oldName) =>
-  translations.t("common.originalName", { oldName });
+    translations.t("common.originalName", { oldName });
 
 const formatFile = (ff) => {
-  const removeStartingSlash = (str) =>
-    str.indexOf("/") === 0 ? str.substring(1) : str;
+    const removeStartingSlash = (str) =>
+        str.indexOf("/") === 0 ? str.substring(1) : str;
 
-  const resipFilePath = removeStartingSlash(ff.id)
-    .split("/")
-    .slice(1)
-    .join("/");
+    const resipFilePath = removeStartingSlash(ff.id)
+        .split("/")
+        .slice(1)
+        .join("/");
 
-  // We format the file path for the current file system
-  return path.join(resipFilePath);
+    // We format the file path for the current file system
+    return path.join(resipFilePath);
 };
 
 /**
@@ -40,11 +40,11 @@ const formatFile = (ff) => {
  * @returns {string}
  */
 const formatDescriptionLevel = (ff) => {
-  if (ff.children.length === 0) {
-    return "Item";
-  }
+    if (ff.children.length === 0) {
+        return "Item";
+    }
 
-  return "RecordGrp";
+    return "RecordGrp";
 };
 
 /**
@@ -54,7 +54,7 @@ const formatDescriptionLevel = (ff) => {
  * @returns {string} The file title
  */
 const formatTitle = (ff: FilesAndFolders, aliases: AliasMap) =>
-  getDisplayName(path.basename(ff.id), aliases[ff.id]);
+    getDisplayName(path.basename(ff.id), aliases[ff.id]);
 
 /**
  * Formats the date to "yyyy-mm-dd"
@@ -70,18 +70,18 @@ const formatDate = (date) => dateFormat(date, "yyyy-mm-dd");
  * @returns {{ParentID: *}} - fileOrFolder with ParentID
  */
 const addParentId = (fileOrFolder, index, fileAndFolders) => {
-  const parent = fileAndFolders.find(({ children }) =>
-    children.includes(fileOrFolder.id)
-  );
+    const parent = fileAndFolders.find(({ children }) =>
+        children.includes(fileOrFolder.id)
+    );
 
-  return {
-    ...fileOrFolder,
-    ParentID: parent && parent.ID,
-  };
+    return {
+        ...fileOrFolder,
+        ParentID: parent && parent.ID,
+    };
 };
 
 const formatCustodialHistory = (fileAndFolder, aliases) =>
-  aliases[fileAndFolder.id] ? nameChangedText(fileAndFolder.name) : "";
+    aliases[fileAndFolder.id] ? nameChangedText(fileAndFolder.name) : "";
 
 /**
  * Mapper that transform enriched archifiltre data to Resip compatible data
@@ -90,30 +90,32 @@ const formatCustodialHistory = (fileAndFolder, aliases) =>
  * @param filesAndFoldersMetadata
  * @returns {Object} - Resip compatible data
  */
-const transformDefaultFormatToResip = (
-  aliases: AliasMap,
-  comments: CommentsMap,
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap
-) => (enrichedFilesAndFolders) => ({
-  ID: enrichedFilesAndFolders.ID,
-  ParentID: enrichedFilesAndFolders.ParentID,
-  File: formatFile(enrichedFilesAndFolders),
-  DescriptionLevel: formatDescriptionLevel(enrichedFilesAndFolders),
-  Title: formatTitle(enrichedFilesAndFolders, aliases),
-  StartDate: formatDate(
-    filesAndFoldersMetadata[enrichedFilesAndFolders.id].minLastModified
-  ),
-  EndDate: formatDate(
-    filesAndFoldersMetadata[enrichedFilesAndFolders.id].maxLastModified
-  ),
-  TransactedDate: formatDate(Date.now()),
-  "CustodialHistory.CustodialHistoryItem": formatCustodialHistory(
-    enrichedFilesAndFolders,
-    aliases
-  ),
-  Description: comments[enrichedFilesAndFolders.id] || "",
-  Tags: enrichedFilesAndFolders.tags,
-});
+const transformDefaultFormatToResip =
+    (
+        aliases: AliasMap,
+        comments: CommentsMap,
+        filesAndFoldersMetadata: FilesAndFoldersMetadataMap
+    ) =>
+    (enrichedFilesAndFolders) => ({
+        "CustodialHistory.CustodialHistoryItem": formatCustodialHistory(
+            enrichedFilesAndFolders,
+            aliases
+        ),
+        Description: comments[enrichedFilesAndFolders.id] || "",
+        DescriptionLevel: formatDescriptionLevel(enrichedFilesAndFolders),
+        EndDate: formatDate(
+            filesAndFoldersMetadata[enrichedFilesAndFolders.id].maxLastModified
+        ),
+        File: formatFile(enrichedFilesAndFolders),
+        ID: enrichedFilesAndFolders.ID,
+        ParentID: enrichedFilesAndFolders.ParentID,
+        StartDate: formatDate(
+            filesAndFoldersMetadata[enrichedFilesAndFolders.id].minLastModified
+        ),
+        Tags: enrichedFilesAndFolders.tags,
+        Title: formatTitle(enrichedFilesAndFolders, aliases),
+        TransactedDate: formatDate(Date.now()),
+    });
 
 /**
  * Returns all tags for the provided fileAndFolder id
@@ -122,46 +124,46 @@ const transformDefaultFormatToResip = (
  * @returns {*}
  */
 const getAllTagsByFfId = (tags, ffId) =>
-  tags.reduce(
-    (tagList, tag) => (tagHasFfId(tag, ffId) ? [...tagList, tag] : tagList),
-    []
-  );
+    tags.reduce(
+        (tagList, tag) => (tagHasFfId(tag, ffId) ? [...tagList, tag] : tagList),
+        []
+    );
 
 const addTagsToFf = (tags) => (ff) => ({
-  ...ff,
-  tags: getAllTagsByFfId(tags, ff.id),
+    ...ff,
+    tags: getAllTagsByFfId(tags, ff.id),
 });
 
 const formatToCsv = (sipFilesAndFolders, tags) => {
-  const fieldsOrder = [
-    "ID",
-    "ParentID",
-    "File",
-    "DescriptionLevel",
-    "Title",
-    "StartDate",
-    "EndDate",
-    "TransactedDate",
-    "CustodialHistory.CustodialHistoryItem",
-    "Description",
-  ];
-  const tagsFields = tags.map((tag, index) => `Content.Tag.${index}`);
+    const fieldsOrder = [
+        "ID",
+        "ParentID",
+        "File",
+        "DescriptionLevel",
+        "Title",
+        "StartDate",
+        "EndDate",
+        "TransactedDate",
+        "CustodialHistory.CustodialHistoryItem",
+        "Description",
+    ];
+    const tagsFields = tags.map((tag, index) => `Content.Tag.${index}`);
 
-  const firstRow = fieldsOrder.concat(tagsFields);
+    const firstRow = fieldsOrder.concat(tagsFields);
 
-  const dataRows = sipFilesAndFolders.map((sipFileAndFolder) => {
-    const baseFileAndFolder = fieldsOrder.map(
-      (field) => sipFileAndFolder[field] || ""
-    );
-    const tagsCells = sipFileAndFolder.Tags.reduce(
-      (acc, { ID, name }) => replaceValue(acc, ID, name),
-      makeEmptyArray(tags.length, "")
-    );
+    const dataRows = sipFilesAndFolders.map((sipFileAndFolder) => {
+        const baseFileAndFolder = fieldsOrder.map(
+            (field) => sipFileAndFolder[field] || ""
+        );
+        const tagsCells = sipFileAndFolder.Tags.reduce(
+            (acc, { ID, name }) => replaceValue(acc, ID, name),
+            makeEmptyArray(tags.length, "")
+        );
 
-    return [...baseFileAndFolder, ...tagsCells];
-  });
+        return [...baseFileAndFolder, ...tagsCells];
+    });
 
-  return [firstRow].concat(dataRows);
+    return [firstRow].concat(dataRows);
 };
 
 /**
@@ -170,22 +172,19 @@ const formatToCsv = (sipFilesAndFolders, tags) => {
  * @param sideEffect - the side effect called with the mapper parameters
  * @returns {function} - The mapper that will call the hook every time the mapper called.
  */
-const wrapWithHook = (mapper, sideEffect) => (
-  mappedElement,
-  mappedIndex,
-  mappedArray
-) => {
-  sideEffect(mappedElement, mappedIndex, mappedArray);
-  return mapper(mappedElement, mappedIndex, mappedArray);
-};
+const wrapWithHook =
+    (mapper, sideEffect) => (mappedElement, mappedIndex, mappedArray) => {
+        sideEffect(mappedElement, mappedIndex, mappedArray);
+        return mapper(mappedElement, mappedIndex, mappedArray);
+    };
 
 interface ResipExporterOptions {
-  aliases: AliasMap;
-  comments: CommentsMap;
-  elementsToDelete: string[];
-  filesAndFolders: FilesAndFoldersMap;
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
-  tags: TagMap;
+    aliases: AliasMap;
+    comments: CommentsMap;
+    elementsToDelete: string[];
+    filesAndFolders: FilesAndFoldersMap;
+    filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
+    tags: TagMap;
 }
 
 /**
@@ -194,9 +193,9 @@ interface ResipExporterOptions {
  * @param elementsToDelete
  */
 const isAncestorDeleted = (ffId: string, elementsToDelete: string[]): boolean =>
-  _.some(elementsToDelete, (toDeleteId) =>
-    isExactFileOrAncestor(ffId, toDeleteId)
-  );
+    _.some(elementsToDelete, (toDeleteId) =>
+        isExactFileOrAncestor(ffId, toDeleteId)
+    );
 
 export const RESIP_HOOK_CALL_PER_ELEMENT = 4;
 
@@ -211,52 +210,56 @@ export const RESIP_HOOK_CALL_PER_ELEMENT = 4;
  * @param [hook]
  */
 const resipExporter = (
-  {
-    aliases,
-    comments,
-    elementsToDelete,
-    filesAndFolders,
-    filesAndFoldersMetadata,
-    tags,
-  }: ResipExporterOptions,
-  hook = empty
+    {
+        aliases,
+        comments,
+        elementsToDelete,
+        filesAndFolders,
+        filesAndFoldersMetadata,
+        tags,
+    }: ResipExporterOptions,
+    hook = empty
 ) => {
-  let sipId = 0;
+    let sipId = 0;
 
-  const addSipId = (ff) => {
-    sipId = sipId + 1;
-    return { ...ff, ID: `${sipId}` };
-  };
+    const addSipId = (ff) => {
+        sipId = sipId + 1;
+        return { ...ff, ID: `${sipId}` };
+    };
 
-  const tagsWithIndex = Object.keys(tags)
-    .map((tagId) => tags[tagId])
-    .filter(({ ffIds }) => ffIds.length !== 0)
-    .map((tag, tagIndex) => ({
-      ...tag,
-      ID: tagIndex,
-    }));
+    const tagsWithIndex = Object.keys(tags)
+        .map((tagId) => tags[tagId])
+        .filter(({ ffIds }) => ffIds.length !== 0)
+        .map((tag, tagIndex) => ({
+            ...tag,
+            ID: tagIndex,
+        }));
 
-  const dataWithSipId = Object.keys(filesAndFolders)
-    .filter((id) => !isAncestorDeleted(id, elementsToDelete))
-    .filter((id) => id !== "")
-    .map(
-      wrapWithHook(
-        (ffId) => ({
-          ...filesAndFolders[ffId],
-          ...filesAndFoldersMetadata[ffId],
-        }),
-        hook
-      )
-    )
-    .map(wrapWithHook(addSipId, hook))
-    .map(wrapWithHook(addParentId, hook))
-    .map(wrapWithHook(addTagsToFf(tagsWithIndex), hook));
+    const dataWithSipId = Object.keys(filesAndFolders)
+        .filter((id) => !isAncestorDeleted(id, elementsToDelete))
+        .filter((id) => id !== "")
+        .map(
+            wrapWithHook(
+                (ffId) => ({
+                    ...filesAndFolders[ffId],
+                    ...filesAndFoldersMetadata[ffId],
+                }),
+                hook
+            )
+        )
+        .map(wrapWithHook(addSipId, hook))
+        .map(wrapWithHook(addParentId, hook))
+        .map(wrapWithHook(addTagsToFf(tagsWithIndex), hook));
 
-  const formattedData = dataWithSipId.map(
-    transformDefaultFormatToResip(aliases, comments, filesAndFoldersMetadata)
-  );
+    const formattedData = dataWithSipId.map(
+        transformDefaultFormatToResip(
+            aliases,
+            comments,
+            filesAndFoldersMetadata
+        )
+    );
 
-  return formatToCsv(formattedData, tagsWithIndex);
+    return formatToCsv(formattedData, tagsWithIndex);
 };
 
 export default resipExporter;

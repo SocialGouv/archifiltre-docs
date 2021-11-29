@@ -1,34 +1,34 @@
 import {
-  asyncLoadFilesAndFoldersFromFileSystem,
-  makeExportFileLoader,
-  makeFileSystemLoader,
-  makeJsonFileLoader,
-  retryLoadFromFileSystem,
+    asyncLoadFilesAndFoldersFromFileSystem,
+    makeExportFileLoader,
+    makeFileSystemLoader,
+    makeJsonFileLoader,
+    retryLoadFromFileSystem,
 } from "files-and-folders-loader/files-and-folders-loader";
-import {
-  FileLoaderCreator,
-  FilesAndFoldersLoader,
-  FileSystemLoadingHooks,
-  FileSystemLoadingHooksCreator,
-  FileSystemReporters,
-  PartialFileSystem,
-  VirtualFileSystem,
-  WithMetadata,
-  WithResultHook,
+import type {
+    FileLoaderCreator,
+    FilesAndFoldersLoader,
+    FileSystemLoadingHooks,
+    FileSystemLoadingHooksCreator,
+    FileSystemReporters,
+    PartialFileSystem,
+    VirtualFileSystem,
+    WithMetadata,
+    WithResultHook,
 } from "files-and-folders-loader/files-and-folders-loader-types";
 import fs from "fs";
 import _ from "lodash";
 import { compose, defaults } from "lodash/fp";
 import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
-import {
-  FilesAndFoldersMap,
-  LastModifiedMap,
+import type {
+    FilesAndFoldersMap,
+    LastModifiedMap,
 } from "reducers/files-and-folders/files-and-folders-types";
 import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
 import { medianOnSortedArray } from "util/array/array-util";
-import { ArchifiltreError } from "util/error/error-util";
+import type { ArchifiltreError } from "util/error/error-util";
 import { isJsonFile } from "util/file-system/file-sys-util";
 import { empty } from "util/function/function-util";
 import { tap } from "util/functionnal-programming-utils";
@@ -36,9 +36,9 @@ import { hookCounter } from "util/hook/hook-utils";
 import { indexSort, indexSortReverse } from "util/list-util";
 import version from "version";
 
-type Overrides = {
-  lastModified?: LastModifiedMap;
-};
+interface Overrides {
+    lastModified?: LastModifiedMap;
+}
 
 /**
  * Compute the metadata from the filesAndFoldersMap
@@ -46,125 +46,131 @@ type Overrides = {
  * @param onResult - Hook called after a new metadata is computed
  */
 export const createFilesAndFoldersMetadataDataStructure = (
-  filesAndFoldersMap: FilesAndFoldersMap,
-  { onResult = empty }: Partial<WithResultHook> = {},
-  { lastModified = {} }: Overrides = {}
+    filesAndFoldersMap: FilesAndFoldersMap,
+    { onResult = empty }: Partial<WithResultHook> = {},
+    { lastModified = {} }: Overrides = {}
 ): FilesAndFoldersMetadataMap => {
-  const metadata: FilesAndFoldersMetadataMap = {};
-  const lastModifiedLists = {};
-  const initialLastModifiedLists = {};
+    const metadata: FilesAndFoldersMetadataMap = {};
+    const lastModifiedLists = {};
+    const initialLastModifiedLists = {};
 
-  const computeMetadataRec = (id) => {
-    const element = filesAndFoldersMap[id];
-    onResult();
-    if (isFile(element)) {
-      const fileLastModified =
-        lastModified[id] !== undefined
-          ? lastModified[id]
-          : element.file_last_modified;
-      metadata[id] = createFilesAndFoldersMetadata({
-        averageLastModified: fileLastModified,
-        childrenTotalSize: element.file_size,
-        initialMaxLastModified: element.file_last_modified,
-        initialMedianLastModified: element.file_last_modified,
-        initialMinLastModified: element.file_last_modified,
-        maxLastModified: fileLastModified,
-        medianLastModified: fileLastModified,
-        minLastModified: fileLastModified,
-        nbChildrenFiles: 1,
-        sortAlphaNumericallyIndex: [],
-        sortByDateIndex: [],
-        sortBySizeIndex: [],
-      });
-      lastModifiedLists[id] = [fileLastModified];
-      initialLastModifiedLists[id] = [element.file_last_modified];
-      return;
-    }
+    const computeMetadataRec = (id) => {
+        const element = filesAndFoldersMap[id];
+        onResult();
+        if (isFile(element)) {
+            const fileLastModified =
+                lastModified[id] !== undefined
+                    ? lastModified[id]
+                    : element.file_last_modified;
+            metadata[id] = createFilesAndFoldersMetadata({
+                averageLastModified: fileLastModified,
+                childrenTotalSize: element.file_size,
+                initialMaxLastModified: element.file_last_modified,
+                initialMedianLastModified: element.file_last_modified,
+                initialMinLastModified: element.file_last_modified,
+                maxLastModified: fileLastModified,
+                medianLastModified: fileLastModified,
+                minLastModified: fileLastModified,
+                nbChildrenFiles: 1,
+                sortAlphaNumericallyIndex: [],
+                sortByDateIndex: [],
+                sortBySizeIndex: [],
+            });
+            lastModifiedLists[id] = [fileLastModified];
+            initialLastModifiedLists[id] = [element.file_last_modified];
+            return;
+        }
 
-    element.children.forEach((childId) => computeMetadataRec(childId));
+        element.children.forEach((childId) => {
+            computeMetadataRec(childId);
+        });
 
-    lastModifiedLists[id] = _(element.children)
-      .map((childId) => lastModifiedLists[childId])
-      .flatten()
-      .sortBy()
-      .value();
+        lastModifiedLists[id] = _(element.children)
+            .map((childId) => lastModifiedLists[childId])
+            .flatten()
+            .sortBy()
+            .value();
 
-    initialLastModifiedLists[id] = _(element.children)
-      .map((childId) => initialLastModifiedLists[childId])
-      .flatten()
-      .sortBy()
-      .value();
+        initialLastModifiedLists[id] = _(element.children)
+            .map((childId) => initialLastModifiedLists[childId])
+            .flatten()
+            .sortBy()
+            .value();
 
-    const childrenTotalSize = _.sum(
-      element.children.map((childId) => metadata[childId].childrenTotalSize)
-    );
-    const averageLastModified = _.mean(lastModifiedLists[id]);
-    const medianLastModified = medianOnSortedArray(lastModifiedLists[id]);
-    const maxLastModified =
-      lastModifiedLists[id][lastModifiedLists[id].length - 1];
-    const minLastModified = lastModifiedLists[id][0];
+        const childrenTotalSize = _.sum(
+            element.children.map(
+                (childId) => metadata[childId].childrenTotalSize
+            )
+        );
+        const averageLastModified = _.mean(lastModifiedLists[id]);
+        const medianLastModified = medianOnSortedArray(lastModifiedLists[id]);
+        const maxLastModified =
+            lastModifiedLists[id][lastModifiedLists[id].length - 1];
+        const minLastModified = lastModifiedLists[id][0];
 
-    const initialMedianLastModified = medianOnSortedArray(
-      initialLastModifiedLists[id]
-    );
-    const initialMaxLastModified =
-      initialLastModifiedLists[id][initialLastModifiedLists[id].length - 1];
-    const initialMinLastModified = initialLastModifiedLists[id][0];
+        const initialMedianLastModified = medianOnSortedArray(
+            initialLastModifiedLists[id]
+        );
+        const initialMaxLastModified =
+            initialLastModifiedLists[id][
+                initialLastModifiedLists[id].length - 1
+            ];
+        const initialMinLastModified = initialLastModifiedLists[id][0];
 
-    const nbChildrenFiles = _.sum(
-      element.children.map((childId) => metadata[childId].nbChildrenFiles)
-    );
-    const sortByDateIndex = indexSort(
-      (childId: string) => metadata[childId].averageLastModified,
-      element.children
-    );
+        const nbChildrenFiles = _.sum(
+            element.children.map((childId) => metadata[childId].nbChildrenFiles)
+        );
+        const sortByDateIndex = indexSort(
+            (childId: string) => metadata[childId].averageLastModified,
+            element.children
+        );
 
-    const sortBySizeIndex = indexSortReverse(
-      (childId: string) => metadata[childId].childrenTotalSize,
-      element.children
-    );
+        const sortBySizeIndex = indexSortReverse(
+            (childId: string) => metadata[childId].childrenTotalSize,
+            element.children
+        );
 
-    const sortAlphaNumericallyIndex = indexSort(
-      (childId: string) => filesAndFoldersMap[childId].name,
-      element.children
-    );
+        const sortAlphaNumericallyIndex = indexSort(
+            (childId: string) => filesAndFoldersMap[childId].name,
+            element.children
+        );
 
-    metadata[id] = createFilesAndFoldersMetadata({
-      averageLastModified,
-      childrenTotalSize,
-      initialMaxLastModified,
-      initialMedianLastModified,
-      initialMinLastModified,
-      maxLastModified,
-      medianLastModified,
-      minLastModified,
-      nbChildrenFiles,
-      sortAlphaNumericallyIndex,
-      sortByDateIndex,
-      sortBySizeIndex,
-    });
-  };
+        metadata[id] = createFilesAndFoldersMetadata({
+            averageLastModified,
+            childrenTotalSize,
+            initialMaxLastModified,
+            initialMedianLastModified,
+            initialMinLastModified,
+            maxLastModified,
+            medianLastModified,
+            minLastModified,
+            nbChildrenFiles,
+            sortAlphaNumericallyIndex,
+            sortByDateIndex,
+            sortBySizeIndex,
+        });
+    };
 
-  computeMetadataRec("");
+    computeMetadataRec("");
 
-  return metadata;
+    return metadata;
 };
 
 /**
  * Handles hook generation when hooksCreator is undefined
  * @param hooksCreator
  */
-export const sanitizeHooks = (hooksCreator?: FileSystemLoadingHooksCreator) => (
-  step: FileSystemLoadingStep
-): FileSystemLoadingHooks =>
-  hooksCreator
-    ? hooksCreator(step)
-    : {
-        onComplete: empty,
-        onError: empty,
-        onResult: empty,
-        onStart: empty,
-      };
+export const sanitizeHooks =
+    (hooksCreator?: FileSystemLoadingHooksCreator) =>
+    (step: FileSystemLoadingStep): FileSystemLoadingHooks =>
+        hooksCreator
+            ? hooksCreator(step)
+            : {
+                  onComplete: empty,
+                  onError: empty,
+                  onResult: empty,
+                  onStart: empty,
+              };
 
 /**
  * Generic function to load the app based on a loader for a specific file type.
@@ -173,49 +179,49 @@ export const sanitizeHooks = (hooksCreator?: FileSystemLoadingHooksCreator) => (
  * @param overrides
  */
 export const loadFileSystemFromFilesAndFoldersLoader = async (
-  loadFromSource: FilesAndFoldersLoader,
-  hooksCreator?: FileSystemLoadingHooksCreator,
-  overrides?: {
-    isOnFileSystem: boolean;
-  }
+    loadFromSource: FilesAndFoldersLoader,
+    hooksCreator?: FileSystemLoadingHooksCreator,
+    overrides?: {
+        isOnFileSystem: boolean;
+    }
 ): Promise<VirtualFileSystem> => {
-  const baseFileSystem = await loadFromSource(hooksCreator);
+    const baseFileSystem = await loadFromSource(hooksCreator);
 
-  const metadataHooks = sanitizeHooks(hooksCreator)(
-    FileSystemLoadingStep.METADATA
-  );
+    const metadataHooks = sanitizeHooks(hooksCreator)(
+        FileSystemLoadingStep.METADATA
+    );
 
-  return compose<
-    [PartialFileSystem],
-    PartialFileSystem,
-    WithMetadata<PartialFileSystem>,
-    WithMetadata<PartialFileSystem>,
-    VirtualFileSystem
-  >(
-    defaults({
-      aliases: {},
-      comments: {},
-      elementsToDelete: [],
-      hashes: {},
-      isOnFileSystem: Boolean(overrides?.isOnFileSystem),
-      overrideLastModified: {},
-      sessionName: "",
-      tags: {},
-      version,
-      virtualPathToIdMap: {},
-    }),
-    tap(() => metadataHooks.onComplete()),
-    (
-      partialFileSystem: PartialFileSystem
-    ): WithMetadata<PartialFileSystem> => ({
-      ...partialFileSystem,
-      filesAndFoldersMetadata: createFilesAndFoldersMetadataDataStructure(
-        partialFileSystem.filesAndFolders,
-        metadataHooks
-      ),
-    }),
-    tap(() => metadataHooks.onStart())
-  )(baseFileSystem);
+    return compose<
+        [PartialFileSystem],
+        PartialFileSystem,
+        WithMetadata<PartialFileSystem>,
+        WithMetadata<PartialFileSystem>,
+        VirtualFileSystem
+    >(
+        defaults({
+            aliases: {},
+            comments: {},
+            elementsToDelete: [],
+            hashes: {},
+            isOnFileSystem: Boolean(overrides?.isOnFileSystem),
+            overrideLastModified: {},
+            sessionName: "",
+            tags: {},
+            version,
+            virtualPathToIdMap: {},
+        }),
+        tap(() => metadataHooks.onComplete()),
+        (
+            partialFileSystem: PartialFileSystem
+        ): WithMetadata<PartialFileSystem> => ({
+            ...partialFileSystem,
+            filesAndFoldersMetadata: createFilesAndFoldersMetadataDataStructure(
+                partialFileSystem.filesAndFolders,
+                metadataHooks
+            ),
+        }),
+        tap(() => metadataHooks.onStart())
+    )(baseFileSystem);
 };
 
 /**
@@ -223,7 +229,7 @@ export const loadFileSystemFromFilesAndFoldersLoader = async (
  * @param loadPath
  */
 export const isFileSystemLoad = (loadPath: string) =>
-  fs.statSync(loadPath).isDirectory();
+    fs.statSync(loadPath).isDirectory();
 
 /**
  * Check if the element needs to be loaded with the JsonLoader
@@ -231,34 +237,37 @@ export const isFileSystemLoad = (loadPath: string) =>
  */
 const isJsonLoad = (loadPath: string) => isJsonFile(loadPath);
 
-type GetLoadTypeOptions = {
-  filesAndFolders?: FilesAndFoldersMap;
-  erroredPaths?: ArchifiltreError[];
-};
+interface GetLoadTypeOptions {
+    filesAndFolders?: FilesAndFoldersMap;
+    erroredPaths?: ArchifiltreError[];
+}
 
 /**
  * Return the load type required to load the element located at loadPath
  * @param loadPath
  */
 export const getLoader = (
-  loadPath: string,
-  { filesAndFolders, erroredPaths }: GetLoadTypeOptions = {}
+    loadPath: string,
+    { filesAndFolders, erroredPaths }: GetLoadTypeOptions = {}
 ): FileLoaderCreator => {
-  if (isFileSystemLoad(loadPath)) {
-    if (filesAndFolders && erroredPaths) {
-      const paths = (erroredPaths || []).map(({ filePath }) => filePath);
-      return makeFileSystemLoader(
-        retryLoadFromFileSystem({ erroredPaths: paths, filesAndFolders })
-      );
+    if (isFileSystemLoad(loadPath)) {
+        if (filesAndFolders && erroredPaths) {
+            const paths = (erroredPaths || []).map(({ filePath }) => filePath);
+            return makeFileSystemLoader(
+                retryLoadFromFileSystem({
+                    erroredPaths: paths,
+                    filesAndFolders,
+                })
+            );
+        }
+        return makeFileSystemLoader(asyncLoadFilesAndFoldersFromFileSystem);
     }
-    return makeFileSystemLoader(asyncLoadFilesAndFoldersFromFileSystem);
-  }
 
-  if (isJsonLoad(loadPath)) {
-    return makeJsonFileLoader;
-  }
+    if (isJsonLoad(loadPath)) {
+        return makeJsonFileLoader;
+    }
 
-  return makeExportFileLoader;
+    return makeExportFileLoader;
 };
 
 /**
@@ -266,37 +275,37 @@ export const getLoader = (
  * @param reportResult
  * @param reportError
  */
-export const makeFileLoadingHooksCreator = ({
-  reportResult,
-  reportError,
-}: FileSystemReporters) => (
-  step: FileSystemLoadingStep
-): FileSystemLoadingHooks => {
-  const resultReporter = (count?: number) => {
-    if (count) {
-      reportResult({
-        count: count,
-        status: step,
-      });
-    }
-  };
+export const makeFileLoadingHooksCreator =
+    ({ reportResult, reportError }: FileSystemReporters) =>
+    (step: FileSystemLoadingStep): FileSystemLoadingHooks => {
+        const resultReporter = (count?: number) => {
+            if (count) {
+                reportResult({
+                    count: count,
+                    status: step,
+                });
+            }
+        };
 
-  const { hook: onResult, getCount: getResultCount } = hookCounter(
-    resultReporter
-  );
+        const { hook: onResult, getCount: getResultCount } =
+            hookCounter(resultReporter);
 
-  const onStart = () => resultReporter(0);
-  const onComplete = () => resultReporter(getResultCount());
-  const onError = (error: any) =>
-    reportError({
-      error,
-      status: step,
-    });
+        const onStart = () => {
+            resultReporter(0);
+        };
+        const onComplete = () => {
+            resultReporter(getResultCount());
+        };
+        const onError = (error: any) =>
+            reportError({
+                error,
+                status: step,
+            });
 
-  return {
-    onComplete,
-    onError,
-    onResult,
-    onStart,
-  };
-};
+        return {
+            onComplete,
+            onError,
+            onResult,
+            onStart,
+        };
+    };

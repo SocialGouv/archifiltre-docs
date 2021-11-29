@@ -1,73 +1,78 @@
 import dateFormat from "dateformat";
 import _ from "lodash";
 import {
-  compose,
-  countBy,
-  defaults,
-  head,
-  identity,
-  join,
-  map,
-  mapValues,
-  reverse,
-  groupBy,
-  sumBy,
-  sortBy,
-  sum,
-  take,
-  takeRight,
+    compose,
+    countBy,
+    defaults,
+    groupBy,
+    head,
+    identity,
+    join,
+    map,
+    mapValues,
+    reverse,
+    sortBy,
+    sum,
+    sumBy,
+    take,
+    takeRight,
 } from "lodash/fp";
-import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { FilesAndFoldersCollection } from "reducers/files-and-folders/files-and-folders-selectors";
 import {
-  FilesAndFoldersCollection,
-  getFiles,
-  isFile,
+    getFiles,
+    isFile,
 } from "reducers/files-and-folders/files-and-folders-selectors";
-import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { HashesMap } from "reducers/hashes/hashes-types";
 import translations from "translations/translations";
 import {
-  countDuplicateFilesTotalSize,
-  countDuplicatesPercentForFiles,
-  countDuplicatesPercentForFolders,
-  getBiggestDuplicatedFolders,
-  getMostDuplicatedFiles,
+    countDuplicateFilesTotalSize,
+    countDuplicatesPercentForFiles,
+    countDuplicatesPercentForFolders,
+    getBiggestDuplicatedFolders,
+    getMostDuplicatedFiles,
 } from "util/duplicates/duplicates-util";
 import {
-  formatPathForUserSystem,
-  octet2HumanReadableFormat,
+    formatPathForUserSystem,
+    octet2HumanReadableFormat,
 } from "util/file-system/file-sys-util";
 import {
-  FileType,
-  getExtensionsForEachFileType,
-  getFileType,
+    FileType,
+    getExtensionsForEachFileType,
+    getFileType,
 } from "util/file-types/file-types-util";
-import { Accessor, Mapper, Merger } from "util/functionnal-programming-utils";
+import type {
+    Accessor,
+    Mapper,
+    Merger,
+} from "util/functionnal-programming-utils";
 import { curriedFormatPercent, percent } from "util/numbers/numbers-util";
-import {
-  AuditReportElementWithType,
-  AuditReportFileWithCount,
-  AuditReportFileWithDate,
-  AuditReportFileWithSize,
+
+import type {
+    AuditReportElementWithType,
+    AuditReportFileWithCount,
+    AuditReportFileWithDate,
+    AuditReportFileWithSize,
 } from "./audit-report-generator";
-import { HashesMap } from "reducers/hashes/hashes-types";
 
 export type FileTypeMap<T> = {
-  [key in FileType]: T;
+    [key in FileType]: T;
 };
 /**
  * Formats the date to the expect audit report format
  * @param timestamp
  */
 export const formatAuditReportDate = (timestamp: number): string =>
-  dateFormat(timestamp, "dd/mm/yyyy");
+    dateFormat(timestamp, "dd/mm/yyyy");
 
 /**
  * Sorts a FilesAndFoldersMap or FilesAndFolders[] by path length in a descending order.
  * @param filesAndFolders
  */
 const sortFilesAndFoldersByPathLength: Mapper<
-  FilesAndFoldersCollection,
-  FilesAndFolders[]
+    FilesAndFoldersCollection,
+    FilesAndFolders[]
 > = sortBy((fileOrFolder: FilesAndFolders) => -fileOrFolder.id.length);
 
 /**
@@ -75,8 +80,8 @@ const sortFilesAndFoldersByPathLength: Mapper<
  * @param filesAndFolders
  */
 export const getLongestPathFile: Mapper<
-  FilesAndFoldersCollection,
-  FilesAndFolders | undefined
+    FilesAndFoldersCollection,
+    FilesAndFolders | undefined
 > = compose(head, sortFilesAndFoldersByPathLength);
 
 /**
@@ -84,24 +89,24 @@ export const getLongestPathFile: Mapper<
  * @param filesAndFolders
  */
 export const countFileTypes: Mapper<
-  FilesAndFoldersCollection,
-  FileTypeMap<number>
+    FilesAndFoldersCollection,
+    FileTypeMap<number>
 > = compose(
-  defaults({
-    [FileType.PUBLICATION]: 0,
-    [FileType.PRESENTATION]: 0,
-    [FileType.SPREADSHEET]: 0,
-    [FileType.EMAIL]: 0,
-    [FileType.DOCUMENT]: 0,
-    [FileType.IMAGE]: 0,
-    [FileType.VIDEO]: 0,
-    [FileType.AUDIO]: 0,
-    [FileType.OTHER]: 0,
-  }),
-  countBy(identity),
-  map(getFileType),
-  Object.values,
-  getFiles
+    defaults({
+        [FileType.PUBLICATION]: 0,
+        [FileType.PRESENTATION]: 0,
+        [FileType.SPREADSHEET]: 0,
+        [FileType.EMAIL]: 0,
+        [FileType.DOCUMENT]: 0,
+        [FileType.IMAGE]: 0,
+        [FileType.VIDEO]: 0,
+        [FileType.AUDIO]: 0,
+        [FileType.OTHER]: 0,
+    }),
+    countBy(identity),
+    map(getFileType),
+    Object.values,
+    getFiles
 );
 
 /**
@@ -109,33 +114,33 @@ export const countFileTypes: Mapper<
  * @param filesAndFolders
  */
 export const countFileSizes: Mapper<
-  FilesAndFoldersCollection,
-  FileTypeMap<number>
+    FilesAndFoldersCollection,
+    FileTypeMap<number>
 > = compose(
-  defaults({
-    [FileType.PUBLICATION]: 0,
-    [FileType.PRESENTATION]: 0,
-    [FileType.SPREADSHEET]: 0,
-    [FileType.EMAIL]: 0,
-    [FileType.DOCUMENT]: 0,
-    [FileType.IMAGE]: 0,
-    [FileType.VIDEO]: 0,
-    [FileType.AUDIO]: 0,
-    [FileType.OTHER]: 0,
-  }),
-  mapValues(sumBy("size")),
-  groupBy("type"),
-  map((fileOrFolder) => ({
-    type: getFileType(fileOrFolder),
-    size: fileOrFolder.file_size,
-  })),
-  Object.values,
-  getFiles
+    defaults({
+        [FileType.PUBLICATION]: 0,
+        [FileType.PRESENTATION]: 0,
+        [FileType.SPREADSHEET]: 0,
+        [FileType.EMAIL]: 0,
+        [FileType.DOCUMENT]: 0,
+        [FileType.IMAGE]: 0,
+        [FileType.VIDEO]: 0,
+        [FileType.AUDIO]: 0,
+        [FileType.OTHER]: 0,
+    }),
+    mapValues(sumBy("size")),
+    groupBy("type"),
+    map((fileOrFolder) => ({
+        size: fileOrFolder.file_size,
+        type: getFileType(fileOrFolder),
+    })),
+    Object.values,
+    getFiles
 );
 
 const sumFileType: Mapper<FileTypeMap<number>, number> = compose(
-  sum,
-  Object.values
+    sum,
+    Object.values
 );
 
 /**
@@ -143,32 +148,32 @@ const sumFileType: Mapper<FileTypeMap<number>, number> = compose(
  * @param filesAndFolders
  */
 export const percentFileTypes: Mapper<
-  FilesAndFoldersCollection,
-  FileTypeMap<number>
+    FilesAndFoldersCollection,
+    FileTypeMap<number>
 > = compose((counts: FileTypeMap<number>) => {
-  const nbFiles = sumFileType(counts);
-  return _.mapValues(counts, (filesForType: number) =>
-    percent(filesForType, nbFiles, { numbersOfDecimals: 2 })
-  );
+    const nbFiles = sumFileType(counts);
+    return _.mapValues(counts, (filesForType: number) =>
+        percent(filesForType, nbFiles, { numbersOfDecimals: 2 })
+    );
 }, countFileTypes);
 
 /**
  * Gets the list of extensions for each file
  */
 export const getExtensionsList: Accessor<FileTypeMap<string>> = compose(
-  defaults({
-    [FileType.PUBLICATION]: "",
-    [FileType.PRESENTATION]: "",
-    [FileType.SPREADSHEET]: "",
-    [FileType.EMAIL]: "",
-    [FileType.DOCUMENT]: "",
-    [FileType.IMAGE]: "",
-    [FileType.VIDEO]: "",
-    [FileType.AUDIO]: "",
-    [FileType.OTHER]: "",
-  }),
-  mapValues(join(", ")),
-  getExtensionsForEachFileType
+    defaults({
+        [FileType.PUBLICATION]: "",
+        [FileType.PRESENTATION]: "",
+        [FileType.SPREADSHEET]: "",
+        [FileType.EMAIL]: "",
+        [FileType.DOCUMENT]: "",
+        [FileType.IMAGE]: "",
+        [FileType.VIDEO]: "",
+        [FileType.AUDIO]: "",
+        [FileType.OTHER]: "",
+    }),
+    mapValues(join(", ")),
+    getExtensionsForEachFileType
 );
 
 /**
@@ -176,8 +181,8 @@ export const getExtensionsList: Accessor<FileTypeMap<string>> = compose(
  * @param filesAndFolders
  */
 export const sortFilesByLastModifiedDate: Mapper<
-  FilesAndFoldersCollection,
-  FilesAndFoldersCollection
+    FilesAndFoldersCollection,
+    FilesAndFoldersCollection
 > = sortBy(({ file_last_modified }) => file_last_modified);
 
 /**
@@ -185,19 +190,19 @@ export const sortFilesByLastModifiedDate: Mapper<
  * @param filesAndFolders
  */
 export const getOldestFiles: Mapper<
-  FilesAndFoldersCollection,
-  AuditReportFileWithDate[]
+    FilesAndFoldersCollection,
+    AuditReportFileWithDate[]
 > = compose(
-  map(
-    ({ name, id, file_last_modified }): AuditReportFileWithDate => ({
-      date: formatAuditReportDate(file_last_modified),
-      name,
-      path: formatPathForUserSystem(id),
-    })
-  ),
-  take(5),
-  sortFilesByLastModifiedDate,
-  getFiles
+    map(
+        ({ name, id, file_last_modified }): AuditReportFileWithDate => ({
+            date: formatAuditReportDate(file_last_modified),
+            name,
+            path: formatPathForUserSystem(id),
+        })
+    ),
+    take(5),
+    sortFilesByLastModifiedDate,
+    getFiles
 );
 
 /**
@@ -205,8 +210,8 @@ export const getOldestFiles: Mapper<
  * @param filesAndFolders
  */
 export const sortFilesBySize: Mapper<
-  FilesAndFoldersCollection,
-  FilesAndFoldersCollection
+    FilesAndFoldersCollection,
+    FilesAndFoldersCollection
 > = sortBy(({ file_size }) => file_size);
 
 /**
@@ -214,20 +219,20 @@ export const sortFilesBySize: Mapper<
  * @param filesAndFolders
  */
 export const getBiggestFiles: Mapper<
-  FilesAndFoldersCollection,
-  AuditReportFileWithSize[]
+    FilesAndFoldersCollection,
+    AuditReportFileWithSize[]
 > = compose(
-  map(
-    ({ name, id, file_size }): AuditReportFileWithSize => ({
-      name,
-      path: formatPathForUserSystem(id),
-      size: octet2HumanReadableFormat(file_size),
-    })
-  ),
-  reverse,
-  takeRight(5),
-  sortFilesBySize,
-  getFiles
+    map(
+        ({ name, id, file_size }): AuditReportFileWithSize => ({
+            name,
+            path: formatPathForUserSystem(id),
+            size: octet2HumanReadableFormat(file_size),
+        })
+    ),
+    reverse,
+    takeRight(5),
+    sortFilesBySize,
+    getFiles
 );
 
 /**
@@ -235,12 +240,12 @@ export const getBiggestFiles: Mapper<
  * @param filesAndFolders
  */
 export const getDuplicateFoldersPercent: Merger<
-  FilesAndFoldersCollection,
-  HashesMap,
-  number
+    FilesAndFoldersCollection,
+    HashesMap,
+    number
 > = compose(
-  curriedFormatPercent({ numbersOfDecimals: 2 }),
-  countDuplicatesPercentForFolders
+    curriedFormatPercent({ numbersOfDecimals: 2 }),
+    countDuplicatesPercentForFolders
 );
 
 /**
@@ -248,12 +253,12 @@ export const getDuplicateFoldersPercent: Merger<
  * @param filesAndFolders
  */
 export const getDuplicateFilesPercent: Merger<
-  FilesAndFoldersCollection,
-  HashesMap,
-  number
+    FilesAndFoldersCollection,
+    HashesMap,
+    number
 > = compose(
-  curriedFormatPercent({ numbersOfDecimals: 2 }),
-  countDuplicatesPercentForFiles
+    curriedFormatPercent({ numbersOfDecimals: 2 }),
+    countDuplicatesPercentForFiles
 );
 
 /**
@@ -261,66 +266,66 @@ export const getDuplicateFilesPercent: Merger<
  * @param filesAndFolders
  */
 export const getHumanReadableDuplicateTotalSize: Merger<
-  FilesAndFoldersCollection,
-  HashesMap,
-  string
+    FilesAndFoldersCollection,
+    HashesMap,
+    string
 > = compose(octet2HumanReadableFormat, countDuplicateFilesTotalSize);
 
 /**
  * Returns the most duplicated files formatted for the audit report
  */
 export const getDuplicatesWithTheMostCopy: Merger<
-  FilesAndFoldersCollection,
-  HashesMap,
-  AuditReportFileWithCount[]
+    FilesAndFoldersCollection,
+    HashesMap,
+    AuditReportFileWithCount[]
 > = compose(
-  map((filesAndFolders: FilesAndFolders[]) => ({
-    count: filesAndFolders.length - 1,
-    name: filesAndFolders[0].name,
-    path: formatPathForUserSystem(filesAndFolders[0].id),
-  })),
-  getMostDuplicatedFiles(5)
+    map((filesAndFolders: FilesAndFolders[]) => ({
+        count: filesAndFolders.length - 1,
+        name: filesAndFolders[0].name,
+        path: formatPathForUserSystem(filesAndFolders[0].id),
+    })),
+    getMostDuplicatedFiles(5)
 );
 
 /**
  * Returns the duplicated folders that take the most space formatted for the audit report
  */
 export const getDuplicatesWithTheBiggestSize = compose(
-  map(
-    (
-      filesAndFolders: FilesAndFolders &
-        FilesAndFoldersMetadata & { count: number }
-    ) => ({
-      name: filesAndFolders.name,
-      path: formatPathForUserSystem(filesAndFolders.id),
-      size: octet2HumanReadableFormat(
-        (filesAndFolders.count - 1) * filesAndFolders.childrenTotalSize
-      ),
-    })
-  ),
-  getBiggestDuplicatedFolders(5)
+    map(
+        (
+            filesAndFolders: FilesAndFolders &
+                FilesAndFoldersMetadata & { count: number }
+        ) => ({
+            name: filesAndFolders.name,
+            path: formatPathForUserSystem(filesAndFolders.id),
+            size: octet2HumanReadableFormat(
+                (filesAndFolders.count - 1) * filesAndFolders.childrenTotalSize
+            ),
+        })
+    ),
+    getBiggestDuplicatedFolders(5)
 );
 
 export const getElementsToDelete = (
-  filesAndFolders,
-  filesAndFoldersMetadata,
-  elementsToDelete
+    filesAndFolders,
+    filesAndFoldersMetadata,
+    elementsToDelete
 ): AuditReportElementWithType[] => {
-  const folderText = translations.t("common.folder");
-  const fileText = translations.t("common.file");
-  return elementsToDelete
-    .map((filesAndFoldersId) => filesAndFolders[filesAndFoldersId])
-    .map(
-      (fileAndFolder): AuditReportElementWithType => ({
-        date: formatAuditReportDate(
-          filesAndFoldersMetadata[fileAndFolder.id].maxLastModified
-        ),
-        name: fileAndFolder.name,
-        path: formatPathForUserSystem(fileAndFolder.id),
-        size: octet2HumanReadableFormat(
-          filesAndFoldersMetadata[fileAndFolder.id].childrenTotalSize
-        ),
-        type: isFile(fileAndFolder) ? fileText : folderText,
-      })
-    );
+    const folderText = translations.t("common.folder");
+    const fileText = translations.t("common.file");
+    return elementsToDelete
+        .map((filesAndFoldersId) => filesAndFolders[filesAndFoldersId])
+        .map(
+            (fileAndFolder): AuditReportElementWithType => ({
+                date: formatAuditReportDate(
+                    filesAndFoldersMetadata[fileAndFolder.id].maxLastModified
+                ),
+                name: fileAndFolder.name,
+                path: formatPathForUserSystem(fileAndFolder.id),
+                size: octet2HumanReadableFormat(
+                    filesAndFoldersMetadata[fileAndFolder.id].childrenTotalSize
+                ),
+                type: isFile(fileAndFolder) ? fileText : folderText,
+            })
+        );
 };

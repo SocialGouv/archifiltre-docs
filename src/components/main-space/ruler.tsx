@@ -1,40 +1,41 @@
-import styled from "styled-components";
-import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
-import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import React, { FC, useEffect, useRef, useState } from "react";
-import { Dims } from "./icicle/icicle-rect";
+import React, { useEffect, useRef, useState } from "react";
 import {
-  isFolder,
-  ROOT_FF_ID,
+    isFolder,
+    ROOT_FF_ID,
 } from "reducers/files-and-folders/files-and-folders-selectors";
+import type { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import styled from "styled-components";
 import translations from "translations/translations";
-import { percent } from "util/numbers/numbers-util";
-import { FillColor } from "./icicle/icicle-types";
 import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
+import { percent } from "util/numbers/numbers-util";
+
+import type { Dims } from "./icicle/icicle-rect";
+import type { FillColor } from "./icicle/icicle-types";
 
 const RulerWrapper = styled.div`
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 `;
 
 const RulerMarker = styled.div`
-  width: 100%;
-  height: 15%;
-  border: 1px solid white;
+    width: 100%;
+    height: 15%;
+    border: 1px solid white;
 `;
 
 const RulerTextWrapper = styled.div`
-  white-space: nowrap;
+    white-space: nowrap;
 `;
 
 /**
  * Dummy dims
  */
 const EmptyDims: Dims = {
-  x: 0,
-  dx: 0,
-  y: 0,
-  dy: 0,
+    dx: 0,
+    dy: 0,
+    x: 0,
+    y: 0,
 };
 
 /**
@@ -42,18 +43,18 @@ const EmptyDims: Dims = {
  * @param node
  */
 const getFilesCount = (node: FilesAndFoldersMetadata): string =>
-  `${node.nbChildrenFiles} ${translations.t("common.files")}`;
+    `${node.nbChildrenFiles} ${translations.t("common.files")}`;
 
 /**
  * Get the number of child folders from a node
  * @param node
  */
 const getFoldersCount = (
-  node: FilesAndFolders,
-  getAllChildrenFolderCount: (id: string) => number
+    node: FilesAndFolders,
+    getAllChildrenFolderCount: (id: string) => number
 ): string => {
-  const foldersCount = getAllChildrenFolderCount(node.id);
-  return `${foldersCount} ${translations.t("common.folders")}`;
+    const foldersCount = getAllChildrenFolderCount(node.id);
+    return `${foldersCount} ${translations.t("common.folders")}`;
 };
 
 /**
@@ -63,8 +64,8 @@ const getFoldersCount = (
  * @returns {string}
  */
 const makePercentageText = (nodeSize: number, totalSize: number) => {
-  const percentage = percent(nodeSize, totalSize, { numbersOfDecimals: 1 });
-  return percentage < 0.1 ? "< 0.1%" : `${percentage}%`;
+    const percentage = percent(nodeSize, totalSize, { numbersOfDecimals: 1 });
+    return percentage < 0.1 ? "< 0.1%" : `${percentage}%`;
 };
 
 /**
@@ -74,107 +75,113 @@ const makePercentageText = (nodeSize: number, totalSize: number) => {
  * @returns {string}
  */
 const makeRulerText = (
-  node: FilesAndFolders & FilesAndFoldersMetadata,
-  rootNode: FilesAndFolders & FilesAndFoldersMetadata,
-  getAllChildrenFolderCount: (id: string) => number
+    node: FilesAndFolders & FilesAndFoldersMetadata,
+    rootNode: FilesAndFolders & FilesAndFoldersMetadata,
+    getAllChildrenFolderCount: (id: string) => number
 ) => {
-  const { childrenTotalSize } = node;
-  const { childrenTotalSize: rootChildrenTotalSize } = rootNode;
-  const percentageText = makePercentageText(
-    childrenTotalSize,
-    rootChildrenTotalSize
-  );
-  const filesAndFolderSize = octet2HumanReadableFormat(childrenTotalSize);
-  const rulerInfo = [percentageText, filesAndFolderSize];
+    const { childrenTotalSize } = node;
+    const { childrenTotalSize: rootChildrenTotalSize } = rootNode;
+    const percentageText = makePercentageText(
+        childrenTotalSize,
+        rootChildrenTotalSize
+    );
+    const filesAndFolderSize = octet2HumanReadableFormat(childrenTotalSize);
+    const rulerInfo = [percentageText, filesAndFolderSize];
 
-  if (isFolder(node)) {
-    rulerInfo.push(getFoldersCount(node, getAllChildrenFolderCount));
-    rulerInfo.push(getFilesCount(node));
-  }
-
-  return rulerInfo.join(" | ");
-};
-
-type RulerProps = {
-  widthUnit: number;
-  totalSize: number;
-  hoveredDims: Dims | null;
-  lockedDims: Dims | null;
-  lockedElementId: string;
-  hoveredElementId: string;
-  getAllChildrenFolderCount: (id: string) => number;
-  getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
-  fillColor: FillColor;
-};
-
-const Ruler: FC<RulerProps> = ({
-  widthUnit,
-  totalSize,
-  hoveredDims = EmptyDims,
-  hoveredElementId,
-  lockedDims = EmptyDims,
-  lockedElementId,
-  getAllChildrenFolderCount,
-  getFfByFfId,
-  fillColor,
-}) => {
-  const elementDims =
-    (hoveredElementId ? hoveredDims : lockedDims) || EmptyDims;
-  const elementId = hoveredElementId || lockedElementId;
-
-  const rulerText = elementId
-    ? makeRulerText(
-        getFfByFfId(elementId),
-        getFfByFfId(ROOT_FF_ID),
-        getAllChildrenFolderCount
-      )
-    : "";
-
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLSpanElement>(null);
-  const [textMargin, setTextMargin] = useState(0);
-
-  useEffect(() => {
-    const wrapper = wrapperRef?.current;
-    const text = textRef?.current;
-    if (wrapper && text) {
-      const { width: wrapperWidth } = wrapper.getBoundingClientRect();
-      const { width: textWidth } = text.getBoundingClientRect();
-
-      const rulerWidth = (elementDims.dx / totalSize) * wrapperWidth;
-
-      const rawTextMargin =
-        (wrapperWidth * elementDims.x) / widthUnit +
-        rulerWidth / 2 -
-        textWidth / 2;
-
-      const normalizedTextMargin = Math.min(
-        Math.max(0, rawTextMargin),
-        wrapperWidth - textWidth
-      );
-
-      setTextMargin(normalizedTextMargin);
+    if (isFolder(node)) {
+        rulerInfo.push(getFoldersCount(node, getAllChildrenFolderCount));
+        rulerInfo.push(getFilesCount(node));
     }
-  }, [rulerText, wrapperRef, textRef, elementDims, widthUnit, totalSize]);
 
-  if (!elementId) {
-    return null;
-  }
+    return rulerInfo.join(" | ");
+};
 
-  return (
-    <RulerWrapper ref={wrapperRef}>
-      <RulerMarker
-        style={{
-          marginLeft: `${Math.max(0, (elementDims.x / widthUnit) * 100)}%`,
-          backgroundColor: fillColor(elementId),
-          width: `${Math.min(100, (elementDims.dx / totalSize) * 100)}%`,
-        }}
-      />
-      <RulerTextWrapper style={{ marginLeft: `${textMargin}px` }}>
-        <span ref={textRef}>{rulerText}</span>
-      </RulerTextWrapper>
-    </RulerWrapper>
-  );
+interface RulerProps {
+    widthUnit: number;
+    totalSize: number;
+    hoveredDims: Dims | null;
+    lockedDims: Dims | null;
+    lockedElementId: string;
+    hoveredElementId: string;
+    getAllChildrenFolderCount: (id: string) => number;
+    getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
+    fillColor: FillColor;
+}
+
+const Ruler: React.FC<RulerProps> = ({
+    widthUnit,
+    totalSize,
+    hoveredDims = EmptyDims,
+    hoveredElementId,
+    lockedDims = EmptyDims,
+    lockedElementId,
+    getAllChildrenFolderCount,
+    getFfByFfId,
+    fillColor,
+}) => {
+    const elementDims =
+        (hoveredElementId ? hoveredDims : lockedDims) || EmptyDims;
+    const elementId = hoveredElementId || lockedElementId;
+
+    const rulerText = elementId
+        ? makeRulerText(
+              getFfByFfId(elementId),
+              getFfByFfId(ROOT_FF_ID),
+              getAllChildrenFolderCount
+          )
+        : "";
+
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const textRef = useRef<HTMLSpanElement>(null);
+    const [textMargin, setTextMargin] = useState(0);
+
+    useEffect(() => {
+        const wrapper = wrapperRef.current;
+        const text = textRef.current;
+        if (wrapper && text) {
+            const { width: wrapperWidth } = wrapper.getBoundingClientRect();
+            const { width: textWidth } = text.getBoundingClientRect();
+
+            const rulerWidth = (elementDims.dx / totalSize) * wrapperWidth;
+
+            const rawTextMargin =
+                (wrapperWidth * elementDims.x) / widthUnit +
+                rulerWidth / 2 -
+                textWidth / 2;
+
+            const normalizedTextMargin = Math.min(
+                Math.max(0, rawTextMargin),
+                wrapperWidth - textWidth
+            );
+
+            setTextMargin(normalizedTextMargin);
+        }
+    }, [rulerText, wrapperRef, textRef, elementDims, widthUnit, totalSize]);
+
+    if (!elementId) {
+        return null;
+    }
+
+    return (
+        <RulerWrapper ref={wrapperRef}>
+            <RulerMarker
+                style={{
+                    backgroundColor: fillColor(elementId),
+                    marginLeft: `${Math.max(
+                        0,
+                        (elementDims.x / widthUnit) * 100
+                    )}%`,
+                    width: `${Math.min(
+                        100,
+                        (elementDims.dx / totalSize) * 100
+                    )}%`,
+                }}
+            />
+            <RulerTextWrapper style={{ marginLeft: `${textMargin}px` }}>
+                <span ref={textRef}>{rulerText}</span>
+            </RulerTextWrapper>
+        </RulerWrapper>
+    );
 };
 
 export default Ruler;

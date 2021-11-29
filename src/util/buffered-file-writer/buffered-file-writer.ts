@@ -1,7 +1,7 @@
 import fs from "fs";
 
 interface BufferedFileWriter {
-  write: (obj: object) => void;
+    write: (obj: object) => void;
 }
 
 /**
@@ -9,29 +9,29 @@ interface BufferedFileWriter {
  * @param filename
  */
 export const createBufferedFileWriter = (
-  filename: string
+    filename: string
 ): BufferedFileWriter => {
-  const buffer: object[] = [];
-  let writing = false;
-  fs.writeFileSync(filename, "");
+    const buffer: object[] = [];
+    let writing = false;
+    fs.writeFileSync(filename, "");
 
-  const writeToFile = async () => {
-    if (buffer.length === 0 || writing) {
-      return;
-    }
-    writing = true;
-    const elementToWrite = buffer.shift();
-    await fs.promises.appendFile(filename, JSON.stringify(elementToWrite));
-    writing = false;
-    writeToFile();
-  };
+    const writeToFile = async () => {
+        if (buffer.length === 0 || writing) {
+            return;
+        }
+        writing = true;
+        const elementToWrite = buffer.shift();
+        await fs.promises.appendFile(filename, JSON.stringify(elementToWrite));
+        writing = false;
+        writeToFile();
+    };
 
-  const write = (obj: object) => {
-    buffer.push(obj);
-    writeToFile();
-  };
+    const write = (obj: object) => {
+        buffer.push(obj);
+        writeToFile();
+    };
 
-  return {
-    write,
-  };
+    return {
+        write,
+    };
 };

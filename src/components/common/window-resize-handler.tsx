@@ -1,36 +1,37 @@
-import React from "react";
-import WindowResize from "./window-resize";
 import { ipcRenderer } from "electron";
+import React, { Component } from "react";
 
-type WindowResizeErrorHandlerState = {
-  hasError: boolean;
-};
+import WindowResize from "./window-resize";
 
-export default class WindowResizeErrorHandler extends React.Component<
-  {},
-  WindowResizeErrorHandlerState
+interface WindowResizeErrorHandlerState {
+    hasError: boolean;
+}
+
+export default class WindowResizeErrorHandler extends Component<
+    unknown,
+    WindowResizeErrorHandlerState
 > {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hasError: false,
-    };
-  }
-
-  componentDidCatch() {
-    this.setState({
-      hasError: true,
-    });
-  }
-
-  render() {
-    const { hasError } = this.state;
-
-    if (hasError) {
-      ipcRenderer.invoke("showWindow");
-      return null;
-    } else {
-      return <WindowResize />;
+    constructor(props: unknown) {
+        super(props);
+        this.state = {
+            hasError: false,
+        };
     }
-  }
+
+    componentDidCatch(): void {
+        this.setState({
+            hasError: true,
+        });
+    }
+
+    render(): React.ReactNode {
+        const { hasError } = this.state;
+
+        if (hasError) {
+            void ipcRenderer.invoke("showWindow");
+            return null;
+        } else {
+            return <WindowResize />;
+        }
+    }
 }

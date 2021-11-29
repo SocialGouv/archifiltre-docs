@@ -3,13 +3,17 @@ import { takeWhile } from "rxjs/operators";
 
 type IsResult<T> = (value: any) => value is T;
 
-export const computeQueue = <Input, Result, Error = never>(computingFn: (param: Input) => Promise<Result | Error>, isResult: IsResult<Result>) => (input: Input[]) =>
-    new Observable<{
-        results: Result[];
-        errors: Error[];
-        remaining: Input[];
-    }>(
-        (observer) => {
+export const computeQueue =
+    <Input, Result, Error = never>(
+        computingFn: (param: Input) => Promise<Error | Result>,
+        isResult: IsResult<Result>
+    ) =>
+    (input: Input[]) =>
+        new Observable<{
+            results: Result[];
+            errors: Error[];
+            remaining: Input[];
+        }>((observer) => {
             let results: Result[] = [];
             let errors: Error[] = [];
             let remaining: Input[] = input;
@@ -27,15 +31,12 @@ export const computeQueue = <Input, Result, Error = never>(computingFn: (param: 
                     }
 
                     observer.next({
-                        results,
                         errors,
-                        remaining
+                        remaining,
+                        results,
                     });
                 }
-            }
+            };
 
             run();
-        }
-    ).pipe(
-        takeWhile(({ remaining }) => remaining.length > 0, true)
-    );
+        }).pipe(takeWhile(({ remaining }) => remaining.length > 0, true));

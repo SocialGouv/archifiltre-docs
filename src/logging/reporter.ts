@@ -1,68 +1,69 @@
+import type { Event as SentryEvent } from "@sentry/browser";
 import * as Sentry from "@sentry/browser";
 import dateFormat from "dateformat";
+import { merge } from "lodash";
 import path from "path";
+import { getPath } from "util/electron/electron-util";
 import { createLogger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 import WinstonSentry from "winston-transport-sentry-node";
+
 import WinstonConsoleLogger from "./winston-console-logger";
-import { Event as SentryEvent } from "@sentry/browser";
-import { merge } from "lodash";
-import { getPath } from "util/electron/electron-util";
 
 const isProd = () => MODE === "production";
 
 enum Level {
-  ERROR = "error",
-  WARN = "warn",
-  INFO = "info",
-  HTTP = "http",
-  VERBOSE = "verbose",
-  DEBUG = "debug",
-  SILLY = "silly",
+    ERROR = "error",
+    WARN = "warn",
+    INFO = "info",
+    HTTP = "http",
+    VERBOSE = "verbose",
+    DEBUG = "debug",
+    SILLY = "silly",
 }
 
 const logger = createLogger({
-  transports: [
-    new WinstonConsoleLogger({
-      level: Level.SILLY,
-    }),
-  ],
+    transports: [
+        new WinstonConsoleLogger({
+            level: Level.SILLY,
+        }),
+    ],
 });
 
 /**
  * Inits the reporter here Sentry
  */
 export const initReporter = (isActive: boolean): void => {
-  if (!isProd() || !isActive) {
-    return;
-  }
+    if (!isProd() || !isActive) {
+        return;
+    }
 
-  const sentryOptions = {
-    dsn: SENTRY_DSN,
-    beforeSend(event) {
-      return anonymizeEvent(event);
-    },
-  };
+    const sentryOptions = {
+        beforeSend(event) {
+            return anonymizeEvent(event);
+        },
+        dsn: SENTRY_DSN,
+    };
 
-  Sentry.init(sentryOptions);
-  logger.add(
-    new WinstonSentry({
-      sentry: sentryOptions,
-      level: Level.WARN,
-    })
-  );
+    Sentry.init(sentryOptions);
+    logger.add(
+        new WinstonSentry({
+            level: Level.WARN,
+            sentry: sentryOptions,
+        })
+    );
 
-  const logsDirectory = path.join(getPath("userData"));
+    const logsDirectory = path.join(getPath("userData"));
 
-  logger.add(
-    new DailyRotateFile({
-      createSymlink: true,
-      dirname: logsDirectory,
-      filename: "archifiltre-logs-%DATE%",
-      level: Level.INFO,
-      maxFiles: "7d",
-    })
-  );
+    logger.add(
+        new DailyRotateFile({
+            createSymlink: true,
+            dirname: logsDirectory,
+            filename: "archifiltre-logs-%DATE%",
+            level: Level.INFO,
+            maxFiles: "7d",
+        })
+    );
 };
 
 /**
@@ -71,12 +72,12 @@ export const initReporter = (isActive: boolean): void => {
  * @param level
  */
 const handleLog = (message: any, level: Level) => {
-  const logData = {
-    message,
-    time: dateFormat("isoDateTime"),
-  };
+    const logData = {
+        message,
+        time: dateFormat("isoDateTime"),
+    };
 
-  logger[level](logData);
+    logger[level](logData);
 };
 
 /**
@@ -84,7 +85,7 @@ const handleLog = (message: any, level: Level) => {
  * @param err
  */
 export const reportError = (err) => {
-  handleLog(err, Level.ERROR);
+    handleLog(err, Level.ERROR);
 };
 
 /**
@@ -92,7 +93,7 @@ export const reportError = (err) => {
  * @param message
  */
 export const reportWarning = (message) => {
-  handleLog(message, Level.WARN);
+    handleLog(message, Level.WARN);
 };
 
 /**
@@ -100,7 +101,7 @@ export const reportWarning = (message) => {
  * @param message
  */
 export const reportInfo = (message) => {
-  handleLog(message, Level.INFO);
+    handleLog(message, Level.INFO);
 };
 
 /**
@@ -108,12 +109,12 @@ export const reportInfo = (message) => {
  * @param event
  */
 const anonymizeEvent = (event: SentryEvent) => {
-  const values = event?.exception?.values?.map((value) => {
-    const frames = value?.stacktrace?.frames?.map((frame) => {
-      const filename = path.basename(frame?.filename || "");
-      return merge(frame, { filename });
+    const values = event.exception?.values?.map((value) => {
+        const frames = value.stacktrace?.frames?.map((frame) => {
+            const filename = path.basename(frame.filename || "");
+            return merge(frame, { filename });
+        });
+        return merge(value, { stacktrace: { frames } });
     });
-    return merge(value, { stacktrace: { frames } });
-  });
-  return merge(event, { exception: { values } });
+    return merge(event, { exception: { values } });
 };

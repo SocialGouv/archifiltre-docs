@@ -5,8 +5,8 @@ import { empty } from "util/function/function-util";
 const arbitrarilyLongTime = 100000000000;
 
 export enum NotificationDuration {
-  NORMAL = 10000,
-  PERMANENT = arbitrarilyLongTime,
+    NORMAL = 10000,
+    PERMANENT = arbitrarilyLongTime,
 }
 
 /**
@@ -17,12 +17,12 @@ export enum NotificationDuration {
  * @param callback - The function called on notification click
  */
 export const notifySuccess = (
-  message: string,
-  title: string,
-  notificationDuration = NotificationDuration.NORMAL,
-  callback = empty
+    message: string,
+    title: string,
+    notificationDuration = NotificationDuration.NORMAL,
+    callback = empty
 ): void => {
-  NotificationManager.success(message, title, notificationDuration, callback);
+    NotificationManager.success(message, title, notificationDuration, callback);
 };
 
 /**
@@ -33,12 +33,12 @@ export const notifySuccess = (
  * @param callback - The function called on notification click
  */
 export const notifyError = (
-  message: string,
-  title: string,
-  notificationDuration = NotificationDuration.NORMAL,
-  callback = empty
+    message: string,
+    title: string,
+    notificationDuration = NotificationDuration.NORMAL,
+    callback = empty
 ): void => {
-  NotificationManager.error(message, title, notificationDuration, callback);
+    NotificationManager.error(message, title, notificationDuration, callback);
 };
 
 /**
@@ -49,10 +49,10 @@ export const notifyError = (
  * @param callback - The function called on notification click
  */
 export const notifyInfo = (
-  message: string,
-  title: string,
-  notificationDuration = NotificationDuration.NORMAL,
-  callback = empty
+    message: string,
+    title: string,
+    notificationDuration = NotificationDuration.NORMAL,
+    callback = empty
 ): void => {
-  NotificationManager.info(message, title, notificationDuration, callback);
+    NotificationManager.info(message, title, notificationDuration, callback);
 };

@@ -1,64 +1,65 @@
-import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
-import { generateDeletionScript } from "util/deletion-script/deletion-script-util";
-import { compose, map } from "lodash/fp";
-import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
-import { getElementsToDeleteFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
-import { removeChildrenPath } from "util/files-and-folders/file-and-folders-utils";
-import { startPathFromOneLevelAbove } from "util/file-system/file-sys-util";
 import * as fs from "fs";
-import { StoreState } from "reducers/store";
-import { liftPromise } from "util/promise/promise-util";
-import {
-  NotificationDuration,
-  notifySuccess,
-} from "util/notification/notifications-util";
-import { TFunction } from "react-i18next";
+import { compose, map } from "lodash/fp";
+import type { TFunction } from "react-i18next";
+import type { ArchifiltreThunkAction } from "reducers/archifiltre-types";
+import { getElementsToDeleteFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
+import type { StoreState } from "reducers/store";
+import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import translations from "translations/translations";
+import { generateDeletionScript } from "util/deletion-script/deletion-script-util";
+import { startPathFromOneLevelAbove } from "util/file-system/file-sys-util";
 import { showInFolder } from "util/file-system/file-system-util";
-import { isWindows } from "../../util/os/os-util";
+import { removeChildrenPath } from "util/files-and-folders/file-and-folders-utils";
+import {
+    NotificationDuration,
+    notifySuccess,
+} from "util/notification/notifications-util";
+import { liftPromise } from "util/promise/promise-util";
 import { encode } from "windows-1252";
 
+import { isWindows } from "../../util/os/os-util";
+
 const prepareElementsToDelete = compose(
-  map(startPathFromOneLevelAbove),
-  removeChildrenPath,
-  getElementsToDeleteFromStore
+    map(startPathFromOneLevelAbove),
+    removeChildrenPath,
+    getElementsToDeleteFromStore
 );
 
 const windowsFileWriter = (path: string) =>
-  compose(
-    (binaryString: string) =>
-      fs.promises.writeFile(path, binaryString, "binary"),
-    encode
-  );
+    compose(
+        async (binaryString: string) =>
+            fs.promises.writeFile(path, binaryString, "binary"),
+        encode
+    );
 
-const unixFileWriter = (path: string) => (data: string) =>
-  fs.promises.writeFile(path, data);
+const unixFileWriter = (path: string) => async (data: string) =>
+    fs.promises.writeFile(path, data);
 
 const getFileWriter = () => (isWindows() ? windowsFileWriter : unixFileWriter);
 
 const curriedWriteFile = getFileWriter();
 
 const extractParamsFromState = (state: StoreState) => ({
-  originalPath: getWorkspaceMetadataFromStore(state).originalPath,
-  elementsToDelete: prepareElementsToDelete(state),
+    elementsToDelete: prepareElementsToDelete(state),
+    originalPath: getWorkspaceMetadataFromStore(state).originalPath,
 });
 
 const success = (t: TFunction, filePath: string) => () =>
-  notifySuccess(
-    t("export.deletionScriptSuccessMessage"),
-    t("export.deletionScript"),
-    NotificationDuration.NORMAL,
-    () => showInFolder(filePath)
-  );
+    notifySuccess(
+        t("export.deletionScriptSuccessMessage"),
+        t("export.deletionScript"),
+        NotificationDuration.NORMAL,
+        () => showInFolder(filePath)
+    );
 
-export const deletionScriptExporterThunk = (
-  filePath: string
-): ArchifiltreThunkAction => (dispatch, getState) => {
-  return compose(
-    liftPromise(success(translations.t.bind(translations), filePath)),
-    curriedWriteFile(filePath),
-    ({ originalPath, elementsToDelete }) =>
-      generateDeletionScript(originalPath, elementsToDelete),
-    extractParamsFromState
-  )(getState());
-};
+export const deletionScriptExporterThunk =
+    (filePath: string): ArchifiltreThunkAction =>
+    (dispatch, getState) => {
+        return compose(
+            liftPromise(success(translations.t.bind(translations), filePath)),
+            curriedWriteFile(filePath),
+            ({ originalPath, elementsToDelete }) =>
+                generateDeletionScript(originalPath, elementsToDelete),
+            extractParamsFromState
+        )(getState());
+    };

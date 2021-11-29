@@ -7,17 +7,17 @@ import { reportWarning } from "logging/reporter";
  * @param message
  */
 export const expectToBeDefined = <T>(actual: T, message: string): boolean => {
-  const isDefined = actual !== undefined && actual !== null;
+    const isDefined = actual !== undefined && actual !== null;
 
-  if (!isDefined) {
-    reportWarning(
-      JSON.stringify({
-        actual,
-        message,
-        type: "expectToBeDefined",
-      })
-    );
-  }
+    if (!isDefined) {
+        reportWarning(
+            JSON.stringify({
+                actual,
+                message,
+                type: "expectToBeDefined",
+            })
+        );
+    }
 
-  return isDefined;
+    return isDefined;
 };

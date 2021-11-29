@@ -1,37 +1,38 @@
-import React, { FC } from "react";
+import React from "react";
+
+import type { DimsMap } from "./icicle";
 import IcicleHightlightElementRectangle from "./icicle-highlight-element-rectangle";
-import { DimsMap } from "./icicle";
-import { IcicleMouseActionHandler } from "./icicle-types";
+import type { IcicleMouseActionHandler } from "./icicle-types";
 
-type IcicleHightlightElementProps = {
-  dimsMap: DimsMap;
-  highlightedElementId: string;
-  highlightedElementTime: number;
-  onClickHandler: IcicleMouseActionHandler;
-  onDoubleClickHandler: IcicleMouseActionHandler;
-  onMouseOverHandler: IcicleMouseActionHandler;
-};
+interface IcicleHightlightElementProps {
+    dimsMap: DimsMap;
+    highlightedElementId: string;
+    highlightedElementTime: number;
+    onClickHandler: IcicleMouseActionHandler;
+    onDoubleClickHandler: IcicleMouseActionHandler;
+    onMouseOverHandler: IcicleMouseActionHandler;
+}
 
-const IcicleHightlightElement: FC<IcicleHightlightElementProps> = ({
-  dimsMap,
-  highlightedElementId,
-  highlightedElementTime,
-  onClickHandler,
-  onDoubleClickHandler,
-  onMouseOverHandler,
+const IcicleHightlightElement: React.FC<IcicleHightlightElementProps> = ({
+    dimsMap,
+    highlightedElementId,
+    highlightedElementTime,
+    onClickHandler,
+    onDoubleClickHandler,
+    onMouseOverHandler,
 }) => {
-  const dims = dimsMap[highlightedElementId];
+    const dims = dimsMap[highlightedElementId];
 
-  return !dims || !highlightedElementId ? null : (
-    <IcicleHightlightElementRectangle
-      dims={dims}
-      highlightedElementId={highlightedElementId}
-      highlightedElementTime={highlightedElementTime}
-      onClickHandler={onClickHandler}
-      onDoubleClickHandler={onDoubleClickHandler}
-      onMouseOverHandler={onMouseOverHandler}
-    />
-  );
+    return !dims || !highlightedElementId ? null : (
+        <IcicleHightlightElementRectangle
+            dims={dims}
+            highlightedElementId={highlightedElementId}
+            highlightedElementTime={highlightedElementTime}
+            onClickHandler={onClickHandler}
+            onDoubleClickHandler={onDoubleClickHandler}
+            onMouseOverHandler={onMouseOverHandler}
+        />
+    );
 };
 
 export default IcicleHightlightElement;

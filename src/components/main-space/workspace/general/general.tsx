@@ -3,7 +3,6 @@ import TabContentHeader from "components/main-space/workspace/tabs/tab-content-h
 import TabsLayout, {
     makeTabComponent,
 } from "components/main-space/workspace/tabs/tabs-layout";
-import type { FC } from "react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -21,7 +20,7 @@ const ElementCharacteristics = makeTabComponent({
     title: <TranslatedCategoryTitle title="report.element" />,
 });
 
-const General: FC = () => {
+const General: React.FC = () => {
     const { t } = useTranslation();
 
     return (

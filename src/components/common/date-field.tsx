@@ -32,7 +32,7 @@ interface DateFieldProps {
 // We assume that we cannot enter dates before 1970
 const MIN_DATE_YEAR = 1970;
 
-const DateField: React.FC<DateFieldProps> = ({ date, onDateChange }) => {
+export const DateField: React.FC<DateFieldProps> = ({ date, onDateChange }) => {
     const [isFocused, setFocus] = useState(false);
     const [language] = useLanguage();
 
@@ -76,5 +76,3 @@ const DateField: React.FC<DateFieldProps> = ({ date, onDateChange }) => {
         />
     );
 };
-
-export default DateField;

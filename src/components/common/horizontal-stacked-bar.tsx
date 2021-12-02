@@ -36,7 +36,7 @@ const Bar = styled(Box)<BarProps & BoxProps>`
     height: 100px;
 `;
 
-const HorizontalStackedBar: React.FC<HorizontalStackedBarProps> = ({
+export const HorizontalStackedBar: React.FC<HorizontalStackedBarProps> = ({
     data,
     bars,
     renderTooltipContent = () => "",
@@ -58,5 +58,3 @@ const HorizontalStackedBar: React.FC<HorizontalStackedBarProps> = ({
         </Box>
     );
 };
-
-export default HorizontalStackedBar;

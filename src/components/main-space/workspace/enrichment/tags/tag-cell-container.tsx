@@ -1,6 +1,5 @@
 import { addTracker } from "logging/tracker";
 import { ActionTitle, ActionType } from "logging/tracker-types";
-import type { FC } from "react";
 import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { commitAction } from "reducers/enhancers/undoable/undoable-actions";
@@ -67,7 +66,7 @@ const handleTracking = (
     }
 };
 
-const TagCellContainer: FC = () => {
+const TagCellContainer: React.FC = () => {
     const dispatch = useDispatch();
 
     const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);

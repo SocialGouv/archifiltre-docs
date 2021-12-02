@@ -1,19 +1,19 @@
-import { addTracker } from "logging/tracker";
-import { ActionType } from "logging/tracker-types";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAreHashesReady } from "reducers/files-and-folders/files-and-folders-selectors";
-import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
 
+import { addTracker } from "../../../logging/tracker";
+import { ActionType } from "../../../logging/tracker-types";
+import { getAreHashesReady } from "../../../reducers/files-and-folders/files-and-folders-selectors";
+import { getWorkspaceMetadataFromStore } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
 import type { ExportType } from "./export-config";
 import { exportConfig } from "./export-config";
-import ExportModalContent from "./export-modal-content";
+import { ExportModalContent } from "./export-modal-content";
 
 interface ExportModalContentContainerProps {
     closeModal: () => void;
 }
 
-const ExportModalContentContainer: React.FC<
+export const ExportModalContentContainer: React.FC<
     ExportModalContentContainerProps
 > = ({ closeModal }) => {
     const { originalPath, sessionName } = useSelector(
@@ -42,5 +42,3 @@ const ExportModalContentContainer: React.FC<
         />
     );
 };
-
-export default ExportModalContentContainer;

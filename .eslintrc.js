@@ -29,8 +29,10 @@ const typescriptConfig = {
     rules: {
         "@typescript-eslint/consistent-type-imports": "error",
         "@typescript-eslint/no-misused-promises": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "import/default": "off",
+        "import/named": "off",
         "no-unused-vars": "off",
         "prefer-template": "warn",
         "unused-imports/no-unused-imports": "error",

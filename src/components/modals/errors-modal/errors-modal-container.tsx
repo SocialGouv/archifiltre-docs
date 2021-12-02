@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 
@@ -8,7 +7,7 @@ import { useOpenModal } from "../../../reducers/modal/modal-selectors";
 import { Modal } from "../../../reducers/modal/modal-types";
 import ErrorsModal from "./errors-modal";
 
-const ErrorsModalContainer: FC = () => {
+const ErrorsModalContainer: React.FC = () => {
     const errors = useArchifiltreErrors();
     const openModal = useOpenModal();
     const dispatch = useDispatch();

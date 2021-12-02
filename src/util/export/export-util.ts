@@ -1,20 +1,24 @@
 import { promises as fs } from "fs";
-import type { ArchifiltreThunkAction } from "reducers/archifiltre-types";
+import type { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
+
+import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import {
     completeLoadingAction,
     progressLoadingAction,
-} from "reducers/loading-info/loading-info-actions";
-import { startLoading } from "reducers/loading-info/loading-info-operations";
-import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
-import type { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
-import { filterResults } from "util/batch-process/batch-process-util";
-import type { ResultMessage } from "util/batch-process/batch-process-util-types";
-import { openExternalElement } from "util/file-system/file-system-util";
+} from "../../reducers/loading-info/loading-info-actions";
+import { startLoading } from "../../reducers/loading-info/loading-info-operations";
+import { LoadingInfoTypes } from "../../reducers/loading-info/loading-info-types";
+import { filterResults } from "../../util/batch-process/batch-process-util";
+import type {
+    ErrorMessage,
+    ResultMessage,
+} from "../../util/batch-process/batch-process-util-types";
+import { openExternalElement } from "../../util/file-system/file-system-util";
 import {
     NotificationDuration,
     notifySuccess,
-} from "util/notification/notifications-util";
+} from "../../util/notification/notifications-util";
 
 interface ExportOptions {
     totalProgress: number;
@@ -30,7 +34,7 @@ export const isProgressResult = ({ result }: ResultMessage): boolean =>
 
 export const handleFileExportThunk =
     (
-        exportData$: Observable<any>,
+        exportData$: Observable<ErrorMessage | ResultMessage>,
         {
             totalProgress,
             loaderMessage,
@@ -41,7 +45,7 @@ export const handleFileExportThunk =
         }: ExportOptions
     ): ArchifiltreThunkAction =>
     async (dispatch) => {
-        const loadingId = dispatch(
+        const loadingId: string = dispatch(
             startLoading(
                 LoadingInfoTypes.EXPORT,
                 totalProgress,
@@ -56,7 +60,10 @@ export const handleFileExportThunk =
                 tap((message) => {
                     if (isProgressResult(message)) {
                         dispatch(
-                            progressLoadingAction(loadingId, message.result)
+                            progressLoadingAction(
+                                loadingId,
+                                message.result as number
+                            )
                         );
                     }
                 })
@@ -64,11 +71,13 @@ export const handleFileExportThunk =
             .toPromise();
 
         dispatch(completeLoadingAction(loadingId));
-        await fs.writeFile(exportFileName, result, { encoding: "utf-8" });
+        await fs.writeFile(exportFileName, result as string, {
+            encoding: "utf-8",
+        });
         notifySuccess(
             exportSuccessMessage,
             exportNotificationTitle,
             NotificationDuration.NORMAL,
-            () => openExternalElement(exportFileName)
+            async () => openExternalElement(exportFileName)
         );
     };

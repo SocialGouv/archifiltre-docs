@@ -1,7 +1,7 @@
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { ClickableIcon } from "components/common/clickable-icon";
-import EditableField from "components/common/editable-field";
+import { EditableField } from "components/common/editable-field";
 import { HelpTooltip } from "components/common/help-tooltip";
 import { FOLDER_ICON, PAGE_ICON } from "components/common/icon";
 import HashInfo from "components/main-space/workspace/enrichment/element-characteristics/hash-info";

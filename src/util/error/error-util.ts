@@ -1,16 +1,15 @@
-import type { ArchifiltreErrorCode } from "util/error/error-codes";
-import {
-    ArchifiltreFileSystemErrorCode,
-    UnknownError,
-} from "util/error/error-codes";
-import { notifyError } from "util/notification/notifications-util";
+import { notifyError } from "../notification/notifications-util";
+import type { ArchifiltreErrorCode } from "./error-codes";
+import { ArchifiltreFileSystemErrorCode, UnknownError } from "./error-codes";
 
+/* eslint-disable @typescript-eslint/naming-convention */
 export enum ArchifiltreErrorType {
     STORE_THUNK = "storeThunk",
     LOADING_FILE_SYSTEM = "loadingFromFileSystem",
     COMPUTING_HASHES = "computingHashes",
     BATCH_PROCESS_ERROR = "batchProcessError",
 }
+/* eslint-enable @typescript-eslint/naming-convention */
 
 export interface ArchifiltreError {
     type: ArchifiltreErrorType;
@@ -35,7 +34,7 @@ const fsErrorToArchifiltreError: FsErrorToArchifiltreError = {
 export const convertFsErrorToArchifiltreError = (
     errorCode: string
 ): ArchifiltreFileSystemErrorCode | UnknownError =>
-    fsErrorToArchifiltreError[errorCode] || UnknownError.UNKNOWN;
+    fsErrorToArchifiltreError[errorCode] ?? UnknownError.UNKNOWN;
 
 /**
  * Reports an error based on the error code
@@ -48,7 +47,7 @@ export const handleError = (
     errorMessages: ErrorMessageMap,
     errorMessageTitle: string
 ): void => {
-    const message = errorMessages[errorCode] || errorMessages.default;
+    const message = errorMessages[errorCode] || errorMessages.default; // eslint-disable-line @typescript-eslint/prefer-nullish-coalescing -- Handle empty string
 
     notifyError(message, errorMessageTitle);
 };
@@ -63,5 +62,5 @@ type ErrorHandlerConfig<T> = {
 
 export const makeErrorHandler =
     <T>(errorHandlerConfig: ErrorHandlerConfig<T>) =>
-    async (error: ArchifiltreError) =>
+    async (error: ArchifiltreError): Promise<T> =>
         (errorHandlerConfig[error.code] ?? errorHandlerConfig.default)(error);

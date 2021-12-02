@@ -6,22 +6,22 @@ import { Application } from "spectron";
  * Starts the electron application
  */
 export const startApp = async (): Promise<Application> => {
-  const electronPath = "" + electron;
+    const electronPath = `${electron}`;
 
-  const app = new Application({
-    args: [path.join(__dirname, "..")],
-    path: path.resolve(__dirname, electronPath),
-  });
+    const app = new Application({
+        args: [path.join(__dirname, "..")],
+        path: path.resolve(__dirname, electronPath),
+    });
 
-  return app.start();
+    return app.start();
 };
 
 /**
  * Returns a promise that resolves after time ms
  * @param time - The waiting time
  */
-export const wait = (time: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, time));
+export const wait = async (time: number): Promise<void> =>
+    new Promise((resolve) => setTimeout(resolve, time));
 
 /**
  * Types the text as keyboard input. Handles unicode characters for non text keys.
@@ -29,10 +29,10 @@ export const wait = (time: number): Promise<void> =>
  * @param text - The text to type
  */
 export const typeText = async (app, text: string): Promise<void> => {
-  const letters = text.split("");
-  for (const letter of letters) {
-    await typeLetter(app, letter);
-  }
+    const letters = text.split("");
+    for (const letter of letters) {
+        await typeLetter(app, letter);
+    }
 };
 
 /**
@@ -41,16 +41,16 @@ export const typeText = async (app, text: string): Promise<void> => {
  * @param letter - The letter to type
  */
 const typeLetter = async (app, letter: string): Promise<void> => {
-  await app.client.actions([
-    {
-      actions: [
-        { type: "keyDown", value: letter },
-        { type: "keyUp", value: letter },
-      ],
-      id: "typeLetter",
-      type: "key",
-    },
-  ]);
+    await app.client.actions([
+        {
+            actions: [
+                { type: "keyDown", value: letter },
+                { type: "keyUp", value: letter },
+            ],
+            id: "typeLetter",
+            type: "key",
+        },
+    ]);
 };
 
 /**
@@ -61,9 +61,9 @@ const typeLetter = async (app, letter: string): Promise<void> => {
  * clickOverElement(app, app.client.$(".element-class"))
  */
 export const clickOverElement = async (app, element): Promise<void> => {
-  const { x, y } = await element.getLocation();
+    const { x, y } = await element.getLocation();
 
-  await clickOnPosition(app, parseInt(x, 10), parseInt(y, 10));
+    await clickOnPosition(app, parseInt(x, 10), parseInt(y, 10));
 };
 
 /**
@@ -73,24 +73,24 @@ export const clickOverElement = async (app, element): Promise<void> => {
  * @param y - the y position. Must be an integer.
  */
 export const clickOnPosition = async (
-  app,
-  x: number,
-  y: number
+    app,
+    x: number,
+    y: number
 ): Promise<void> => {
-  await app.client.actions([
-    {
-      actions: [
+    await app.client.actions([
         {
-          duration: 0,
-          type: "pointerMove",
-          x,
-          y,
+            actions: [
+                {
+                    duration: 0,
+                    type: "pointerMove",
+                    x,
+                    y,
+                },
+                { button: 0, type: "pointerDown" },
+                { button: 0, type: "pointerUp" },
+            ],
+            id: "click-on-icicle-1",
+            type: "pointer",
         },
-        { type: "pointerDown", button: 0 },
-        { type: "pointerUp", button: 0 },
-      ],
-      id: "click-on-icicle-1",
-      type: "pointer",
-    },
-  ]);
+    ]);
 };

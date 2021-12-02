@@ -6,6 +6,7 @@ declare module "*.svg" {
 declare module "*.png";
 
 declare module "react-notifications"; // TODO: use another lib
+declare module "windows-1252";
 
 declare const STATIC_ASSETS_PATH: string;
 declare const SENTRY_DSN: string;

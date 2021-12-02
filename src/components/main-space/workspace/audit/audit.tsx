@@ -2,7 +2,6 @@ import TabContentHeader from "components/main-space/workspace/tabs/tab-content-h
 import TabsLayout, {
     makeTabComponent,
 } from "components/main-space/workspace/tabs/tabs-layout";
-import type { FC } from "react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -22,7 +21,7 @@ const FilesTypesDetails = makeTabComponent({
     widthRatio: 2,
 });
 
-const Audit: FC = () => {
+const Audit: React.FC = () => {
     const { t } = useTranslation();
 
     return (

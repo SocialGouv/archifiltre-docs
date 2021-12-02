@@ -25,9 +25,9 @@ jest.mock("uuid", () => ({
 
 // BAD HACK to be able to compare 'undefined' values...
 // The undefined values are needed in order to generate self-closed tags
-// @ts-ignore
+// @ts-expect-error
 outputFileTag["mets:file"][1]["mets:FLocat"][1] = undefined;
-// @ts-ignore
+// @ts-expect-error
 outputDivTag["mets:div"][1]["mets:fptr"][1] = undefined;
 
 // Test suite

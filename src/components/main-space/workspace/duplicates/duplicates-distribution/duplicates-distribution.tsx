@@ -1,11 +1,10 @@
 import Grid from "@material-ui/core/Grid";
-import type { FC } from "react";
 import React from "react";
 
 import DuplicatesChart from "./duplicates-chart-container";
 import DuplicatesDistributionChart from "./duplicates-distribution-chart-container";
 
-const DuplicatesDistribution: FC = () => {
+const DuplicatesDistribution: React.FC = () => {
     return (
         <Grid container>
             <Grid item xs={6}>

@@ -15,7 +15,6 @@ import {
     getPreviousSessions,
     removeOneSessionElement,
 } from "persistence/previous-sessions";
-import type { FC } from "react";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {

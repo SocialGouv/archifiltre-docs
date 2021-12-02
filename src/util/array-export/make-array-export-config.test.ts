@@ -62,16 +62,15 @@ describe("make-array-export-config", () => {
 
         const config = makeRowConfig(translator, tags);
 
-        const makeTestRow = ({ rowData, config }) => ({
-            columnLabel,
-            expectedValue,
-        }) => {
-            const title = translator(columnLabel);
-            const columnConfig = config.find(
-                (config) => config.title === title
-            );
-            expect(columnConfig?.accessor(rowData)).toEqual(expectedValue);
-        };
+        const makeTestRow =
+            ({ rowData, config }) =>
+            ({ columnLabel, expectedValue }) => {
+                const title = translator(columnLabel);
+                const columnConfig = config.find(
+                    (config) => config.title === title
+                );
+                expect(columnConfig?.accessor(rowData)).toEqual(expectedValue);
+            };
 
         const testRow = makeTestRow({
             config,

@@ -1,5 +1,4 @@
 import _ from "lodash";
-import type { FC } from "react";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
@@ -18,7 +17,7 @@ const removeZeroValues = <Key extends number | string, Value>(obj: {
     [key in Key]: Value;
 }): _.Dictionary<Value> => _.pickBy<Value>(obj);
 
-const DuplicatesTableContainer: FC = () => {
+const DuplicatesTableContainer: React.FC = () => {
     const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
     const filesAndFoldersMetadataMap = useSelector(
         getFilesAndFoldersMetadataFromStore

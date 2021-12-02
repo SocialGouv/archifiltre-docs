@@ -1,13 +1,13 @@
 import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import { useStyles } from "hooks/use-styles";
 import { find, negate } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { isValidFilePath } from "util/file-system/file-sys-util";
-import { identity } from "util/function/function-util";
 
+import { useStyles } from "../../../hooks/use-styles";
+import { isValidFilePath } from "../../../util/file-system/file-sys-util";
+import { identity } from "../../../util/function/function-util";
 import type { IsActiveOptions } from "./export-config";
 import {
     exportConfig,
@@ -40,7 +40,7 @@ const computeExportPathsValidityMap = async (
     exportPathsMap: ExportTypesMap<string>
 ): Promise<ExportTypesMap<boolean>> => {
     const resultsArray = await Promise.all(
-        Object.keys(exportPathsMap).map((key: ExportType) =>
+        Object.keys(exportPathsMap).map(async (key: ExportType) =>
             isValidFilePath(exportPathsMap[key]).then((isValid) => ({
                 isValid,
                 key,
@@ -61,7 +61,7 @@ interface ExportModalContentProps {
     closeModal: () => void;
 }
 
-const ExportModalContent: React.FC<ExportModalContentProps> = ({
+export const ExportModalContent: React.FC<ExportModalContentProps> = ({
     areHashesReady,
     originalPath,
     sessionName,
@@ -138,5 +138,3 @@ const ExportModalContent: React.FC<ExportModalContentProps> = ({
         </>
     );
 };
-
-export default ExportModalContent;

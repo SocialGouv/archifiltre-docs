@@ -1,14 +1,14 @@
 import { Box } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import LanguagePicker from "components/header/language";
+import { LanguagePicker } from "components/header/language";
 import About from "components/modals/settings-modal/about";
 import ModalMenu from "components/modals/settings-modal/modal-menu";
 import PrivacySettings from "components/modals/settings-modal/privacy-settings";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import ModalHeader from "../../modals/modal-header";
+import { ModalHeader } from "../../modals/modal-header";
 
 const availableSettings = [<LanguagePicker />, <PrivacySettings />, <About />];
 

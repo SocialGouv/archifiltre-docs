@@ -1,4 +1,4 @@
-import { StoreState } from "../store";
+import type { StoreState } from "../store";
 import { createEmptyStore } from "../store-test-utils";
 import {
     createArchifiltreError,

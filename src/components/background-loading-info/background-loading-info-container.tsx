@@ -7,9 +7,9 @@ import {
     getLoadingInfoFromStore,
     getRunningLoadingInfo,
 } from "../../reducers/loading-info/loading-info-selectors";
-import BackgroundLoadingInfo from "./background-loading-info";
+import { BackgroundLoadingInfo } from "./background-loading-info";
 
-const BackgroundLoadingInfoContainer: React.FC = () => {
+export const BackgroundLoadingInfoContainer: React.FC = () => {
     const loadingInfoState = useSelector(getLoadingInfoFromStore);
     const dispatch = useDispatch();
 
@@ -43,5 +43,3 @@ const BackgroundLoadingInfoContainer: React.FC = () => {
         />
     );
 };
-
-export default BackgroundLoadingInfoContainer;

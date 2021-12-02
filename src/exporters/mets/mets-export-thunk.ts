@@ -1,13 +1,12 @@
-import type { ArchifiltreThunkAction } from "reducers/archifiltre-types";
+import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import {
     getAliasesFromStore,
     getCommentsFromStore,
     getElementsToDeleteFromStore,
     getFilesAndFoldersFromStore,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { getTagsFromStore } from "reducers/tags/tags-selectors";
-
+} from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import { getWorkspaceMetadataFromStore } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { makeSIP } from "./mets";
 
@@ -29,7 +28,7 @@ export const metsExporterThunk =
         const { sessionName, originalPath } =
             getWorkspaceMetadataFromStore(state);
 
-        makeSIP({
+        void makeSIP({
             aliases,
             comments,
             elementsToDelete,

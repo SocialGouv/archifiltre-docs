@@ -1,6 +1,5 @@
 import { addTracker } from "logging/tracker";
 import { ActionTitle, ActionType } from "logging/tracker-types";
-import type { FC } from "react";
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { commitAction } from "reducers/enhancers/undoable/undoable-actions";
@@ -66,7 +65,7 @@ const handleTracking = (
     }
 };
 
-const EnrichmentContainer: FC = () => {
+const EnrichmentContainer: React.FC = () => {
     const dispatch = useDispatch();
     const { hoveredElementId, lockedElementId } = useWorkspaceMetadata();
 

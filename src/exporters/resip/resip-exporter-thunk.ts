@@ -1,30 +1,30 @@
-import { RESIP_HOOK_CALL_PER_ELEMENT } from "exporters/resip/resip-exporter";
 import { promises as fs } from "fs";
-import type { ArchifiltreThunkAction } from "reducers/archifiltre-types";
+import { takeLast, tap } from "rxjs/operators";
+import { v4 as uuid } from "uuid";
+
+import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import {
     getAliasesFromStore,
     getCommentsFromStore,
     getElementsToDeleteFromStore,
     getFilesAndFoldersFromStore,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+} from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
     completeLoadingAction,
     progressLoadingAction,
     startLoadingAction,
-} from "reducers/loading-info/loading-info-actions";
-import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
-import { getTagsFromStore } from "reducers/tags/tags-selectors";
-import { takeLast, tap } from "rxjs/operators";
-import translations from "translations/translations";
-import { arrayToCsv } from "util/csv/csv-util";
+} from "../../reducers/loading-info/loading-info-actions";
+import { LoadingInfoTypes } from "../../reducers/loading-info/loading-info-types";
+import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
+import translations from "../../translations/translations";
+import { arrayToCsv } from "../../util/csv/csv-util";
 import {
     notifyInfo,
     notifySuccess,
-} from "util/notification/notifications-util";
-import { v4 as uuid } from "uuid";
-
+} from "../../util/notification/notifications-util";
 import { generateResipExport$ } from "./resip-export.controller";
+import { RESIP_HOOK_CALL_PER_ELEMENT } from "./resip-exporter";
 
 /**
  * Thunk to export data to Resip

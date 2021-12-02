@@ -4,7 +4,6 @@
     "incremental": true,
     "experimentalDecorators": true,
     "strictNullChecks": true,
-    "noUncheckedIndexedAccess": true,
     "outDir": "./dist/", // path to output directory
     "sourceMap": true, // allow sourcemap support
     "module": "CommonJS", // specify module code generation

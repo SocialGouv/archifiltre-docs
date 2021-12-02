@@ -1,20 +1,20 @@
+import * as fs from "fs";
+
 import {
     getLoader,
     isFileSystemLoad,
     loadFileSystemFromFilesAndFoldersLoader,
     makeFileLoadingHooksCreator,
-} from "files-and-folders-loader/file-system-loading-process-utils";
-import * as fs from "fs";
-import type { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
-import type { AsyncWorker } from "util/async-worker/async-worker-util";
-import { WorkerEventType } from "util/async-worker/async-worker-util";
-import { RESULT_STREAM_FILE_DESCRIPTOR } from "util/async-worker/child-process";
-import type { ArchifiltreError } from "util/error/error-util";
-import { stringifyVFSToStream } from "util/file-tree-loader/load-from-filesystem-serializer";
-
+} from "../../files-and-folders-loader/file-system-loading-process-utils";
+import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import type { AsyncWorker } from "../async-worker/async-worker-util";
+import { WorkerEventType } from "../async-worker/async-worker-util";
+import { RESULT_STREAM_FILE_DESCRIPTOR } from "../async-worker/child-process";
 import { MessageTypes } from "../batch-process/batch-process-util-types";
+import type { ArchifiltreError } from "../error/error-util";
+import { stringifyVFSToStream } from "./load-from-filesystem-serializer";
 
-type Reporter = (message: any) => void;
+type Reporter = (message: unknown) => void;
 
 interface Reporters {
     reportError: Reporter;
@@ -25,20 +25,25 @@ interface Reporters {
 }
 
 const createReporters = (asyncWorker: AsyncWorker): Reporters => ({
-    reportComplete: () =>
-        asyncWorker.postMessage({ type: MessageTypes.COMPLETE }),
-    reportError: (error: any) =>
-        asyncWorker.postMessage({ error, type: MessageTypes.ERROR }),
-    reportFatal: (error: any) =>
-        asyncWorker.postMessage({ error, type: MessageTypes.FATAL }),
-    reportResult: (result: any) =>
-        asyncWorker.postMessage({ result, type: MessageTypes.RESULT }),
-    reportWarning: (warning: any) =>
-        asyncWorker.postMessage({ type: MessageTypes.WARNING, warning }),
+    reportComplete: () => {
+        asyncWorker.postMessage({ type: MessageTypes.COMPLETE });
+    },
+    reportError: (error: unknown) => {
+        asyncWorker.postMessage({ error, type: MessageTypes.ERROR });
+    },
+    reportFatal: (error: unknown) => {
+        asyncWorker.postMessage({ error, type: MessageTypes.FATAL });
+    },
+    reportResult: (result: unknown) => {
+        asyncWorker.postMessage({ result, type: MessageTypes.RESULT });
+    },
+    reportWarning: (warning: unknown) => {
+        asyncWorker.postMessage({ type: MessageTypes.WARNING, warning });
+    },
 });
 
-const reportResultStream = async (result: any) => {
-    // @ts-expect-error
+const reportResultStream = (result: unknown) => {
+    // @ts-expect-error Create a stream is touchy (?)
     const stream = fs.createWriteStream(null, {
         fd: RESULT_STREAM_FILE_DESCRIPTOR,
     });
@@ -59,7 +64,7 @@ interface LoadVirtualFileSystemParams {
 export const loadVirtualFileSystem = async (
     asyncWorker: AsyncWorker,
     { path, filesAndFolders, erroredPaths }: LoadVirtualFileSystemParams
-) => {
+): Promise<void> => {
     const { reportResult, reportError, reportFatal, reportComplete } =
         createReporters(asyncWorker);
 
@@ -86,15 +91,15 @@ export const loadVirtualFileSystem = async (
         }
     );
 
-    await reportResultStream(fileSystem);
+    reportResultStream(fileSystem);
 
-    await new Promise<void>((resolve) =>
+    await new Promise<void>((resolve) => {
         asyncWorker.addEventListener(WorkerEventType.MESSAGE, ({ type }) => {
             if (type === MessageTypes.STREAM_READ) {
                 resolve();
             }
-        })
-    );
+        });
+    });
 
     reportComplete({
         status: MessageTypes.COMPLETE,

@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -14,7 +13,7 @@ import {
 
 import DuplicatesChart from "./duplicates-chart";
 
-const DuplicatesChartContainer: FC = () => {
+const DuplicatesChartContainer: React.FC = () => {
     const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
     const hashes = useSelector(getHashesFromStore);
     const metadata = useSelector(getFilesAndFoldersMetadataFromStore);

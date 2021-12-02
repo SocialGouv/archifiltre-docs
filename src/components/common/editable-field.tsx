@@ -19,7 +19,7 @@ interface EditableFieldProps {
     endAdornment?: ReactNode;
 }
 
-const EditableField: React.FC<EditableFieldProps> = ({
+export const EditableField: React.FC<EditableFieldProps> = ({
     multiline = false,
     trimValue,
     selectTextOnFocus,
@@ -129,5 +129,3 @@ const EditableField: React.FC<EditableFieldProps> = ({
         </form>
     );
 };
-
-export default EditableField;

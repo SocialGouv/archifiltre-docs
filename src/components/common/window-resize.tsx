@@ -5,10 +5,7 @@ import * as UserData from "../../user-data";
 
 type WindowResizeState = UserData.UserData;
 
-export default class WindowResize extends PureComponent<
-    unknown,
-    WindowResizeState
-> {
+export class WindowResize extends PureComponent<unknown, WindowResizeState> {
     constructor(props: unknown) {
         super(props);
 

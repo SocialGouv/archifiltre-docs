@@ -1,15 +1,14 @@
 import { Box } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import type { FC } from "react";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { reloadApp } from "util/electron/electron-util";
 
 import logo from "../../../static/imgs/logo.png";
+import { reloadApp } from "../../util/electron/electron-util";
 import { ContactUs } from "./contact-us";
 
-const ErrorScreen: FC = () => {
+export const ErrorScreen: React.FC = () => {
     const { t } = useTranslation();
 
     return (
@@ -36,11 +35,9 @@ const ErrorScreen: FC = () => {
             </Box>
             <Box p={2}>
                 <Button variant="outlined" color="primary" onClick={reloadApp}>
-                    Revenir à l'écran d'accueil
+                    {t("common.errorBack")}
                 </Button>
             </Box>
         </Box>
     );
 };
-
-export default ErrorScreen;

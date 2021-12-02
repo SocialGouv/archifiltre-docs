@@ -1,4 +1,4 @@
-import Table from "components/common/table/table";
+import { Table } from "components/common/table/table";
 import type { Column } from "components/common/table/table-types";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";

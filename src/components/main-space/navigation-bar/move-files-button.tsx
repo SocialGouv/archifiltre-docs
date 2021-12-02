@@ -1,7 +1,6 @@
 import Button from "@material-ui/core/Button";
 import { addTracker } from "logging/tracker";
 import { ActionTitle, ActionType } from "logging/tracker-types";
-import type { FC } from "react";
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaArrowsAlt } from "react-icons/fa";
@@ -22,7 +21,7 @@ const BetaText = styled.span`
     font-size: 0.5rem !important;
 `;
 
-const MoveFilesButton: FC = () => {
+const MoveFilesButton: React.FC = () => {
     const { t } = useTranslation();
     const { isFileMoveActive, setFileMoveActive } = useFileMoveActiveState();
     const toggleMoveElements = useCallback(() => {

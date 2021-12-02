@@ -2,7 +2,7 @@ import Box from "@material-ui/core/Box";
 import Chip from "@material-ui/core/Chip";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import EditableField from "components/common/editable-field";
+import { EditableField } from "components/common/editable-field";
 import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaPen, FaTrash } from "react-icons/fa";

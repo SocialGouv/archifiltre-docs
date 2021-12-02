@@ -10,10 +10,9 @@ interface LoadingSpinnerOrCloseCrossProps {
     onClose: () => void;
 }
 
-const LoadingSpinnerOrCloseCross: React.FC<LoadingSpinnerOrCloseCrossProps> = ({
-    isLoading,
-    onClose = noop,
-}) => {
+export const LoadingSpinnerOrCloseCross: React.FC<
+    LoadingSpinnerOrCloseCrossProps
+> = ({ isLoading, onClose = noop }) => {
     const theme = useTheme();
     if (isLoading) {
         return (
@@ -28,5 +27,3 @@ const LoadingSpinnerOrCloseCross: React.FC<LoadingSpinnerOrCloseCrossProps> = ({
         </IconButton>
     );
 };
-
-export default LoadingSpinnerOrCloseCross;

@@ -3,12 +3,29 @@ import {
     getCommentsFromStore,
     getElementsToDeleteFromStore,
     getFilesAndFoldersFromStore,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
-import type { StoreState } from "reducers/store";
-import { getTagsFromStore } from "reducers/tags/tags-selectors";
+} from "../../reducers/files-and-folders/files-and-folders-selectors";
+import type {
+    AliasMap,
+    CommentsMap,
+    FilesAndFoldersMap,
+} from "../../reducers/files-and-folders/files-and-folders-types";
+import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { getHashesFromStore } from "../../reducers/hashes/hashes-selectors";
+import type { HashesMap } from "../../reducers/hashes/hashes-types";
+import type { StoreState } from "../../reducers/store";
+import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
+import type { TagMap } from "../../reducers/tags/tags-types";
 
+interface CsvExportParams {
+    aliases: AliasMap;
+    comments: CommentsMap;
+    elementsToDelete: string[];
+    filesAndFolders: FilesAndFoldersMap;
+    filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
+    hashes: HashesMap;
+    tags: TagMap;
+}
 export const getCsvExportParamsFromStore = (state: StoreState) => ({
     aliases: getAliasesFromStore(state),
     comments: getCommentsFromStore(state),

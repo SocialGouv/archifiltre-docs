@@ -1,10 +1,29 @@
+import fs from "fs";
+import _, { noop } from "lodash";
+import { compose, defaults } from "lodash/fp";
+
+import { isFile } from "../reducers/files-and-folders/files-and-folders-selectors";
+import type {
+    FilesAndFoldersMap,
+    LastModifiedMap,
+} from "../reducers/files-and-folders/files-and-folders-types";
+import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
+import { medianOnSortedArray } from "../util/array/array-util";
+import type { ArchifiltreError } from "../util/error/error-util";
+import { isJsonFile } from "../util/file-system/file-sys-util";
+import { tap } from "../util/functionnal-programming-utils";
+import { hookCounter } from "../util/hook/hook-utils";
+import { indexSort, indexSortReverse } from "../util/list-util";
+import { version } from "../version";
 import {
     asyncLoadFilesAndFoldersFromFileSystem,
     makeExportFileLoader,
     makeFileSystemLoader,
     makeJsonFileLoader,
     retryLoadFromFileSystem,
-} from "files-and-folders-loader/files-and-folders-loader";
+} from "./files-and-folders-loader";
 import type {
     FileLoaderCreator,
     FilesAndFoldersLoader,
@@ -15,26 +34,8 @@ import type {
     VirtualFileSystem,
     WithMetadata,
     WithResultHook,
-} from "files-and-folders-loader/files-and-folders-loader-types";
-import fs from "fs";
-import _ from "lodash";
-import { compose, defaults } from "lodash/fp";
-import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
-import type {
-    FilesAndFoldersMap,
-    LastModifiedMap,
-} from "reducers/files-and-folders/files-and-folders-types";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import type { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
-import { medianOnSortedArray } from "util/array/array-util";
-import type { ArchifiltreError } from "util/error/error-util";
-import { isJsonFile } from "util/file-system/file-sys-util";
-import { empty } from "util/function/function-util";
-import { tap } from "util/functionnal-programming-utils";
-import { hookCounter } from "util/hook/hook-utils";
-import { indexSort, indexSortReverse } from "util/list-util";
-import version from "version";
+    WorkerError,
+} from "./files-and-folders-loader-types";
 
 interface Overrides {
     lastModified?: LastModifiedMap;
@@ -47,18 +48,19 @@ interface Overrides {
  */
 export const createFilesAndFoldersMetadataDataStructure = (
     filesAndFoldersMap: FilesAndFoldersMap,
-    { onResult = empty }: Partial<WithResultHook> = {},
+    { onResult = noop }: Partial<WithResultHook> = {},
     { lastModified = {} }: Overrides = {}
 ): FilesAndFoldersMetadataMap => {
     const metadata: FilesAndFoldersMetadataMap = {};
-    const lastModifiedLists = {};
-    const initialLastModifiedLists = {};
+    const lastModifiedLists: Record<string, number[]> = {};
+    const initialLastModifiedLists: Record<string, number[]> = {};
 
-    const computeMetadataRec = (id) => {
+    const computeMetadataRec = (id: string) => {
         const element = filesAndFoldersMap[id];
         onResult();
         if (isFile(element)) {
             const fileLastModified =
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 lastModified[id] !== undefined
                     ? lastModified[id]
                     : element.file_last_modified;
@@ -166,10 +168,10 @@ export const sanitizeHooks =
         hooksCreator
             ? hooksCreator(step)
             : {
-                  onComplete: empty,
-                  onError: empty,
-                  onResult: empty,
-                  onStart: empty,
+                  onComplete: noop,
+                  onError: noop,
+                  onResult: noop,
+                  onStart: noop,
               };
 
 /**
@@ -210,7 +212,9 @@ export const loadFileSystemFromFilesAndFoldersLoader = async (
             version,
             virtualPathToIdMap: {},
         }),
-        tap(() => metadataHooks.onComplete()),
+        tap(() => {
+            metadataHooks.onComplete();
+        }),
         (
             partialFileSystem: PartialFileSystem
         ): WithMetadata<PartialFileSystem> => ({
@@ -220,7 +224,9 @@ export const loadFileSystemFromFilesAndFoldersLoader = async (
                 metadataHooks
             ),
         }),
-        tap(() => metadataHooks.onStart())
+        tap(() => {
+            metadataHooks.onStart();
+        })
     )(baseFileSystem);
 };
 
@@ -228,7 +234,7 @@ export const loadFileSystemFromFilesAndFoldersLoader = async (
  * Check if the element needs to be loaded with the file system loader
  * @param loadPath
  */
-export const isFileSystemLoad = (loadPath: string) =>
+export const isFileSystemLoad = (loadPath: string): boolean =>
     fs.statSync(loadPath).isDirectory();
 
 /**
@@ -252,7 +258,7 @@ export const getLoader = (
 ): FileLoaderCreator => {
     if (isFileSystemLoad(loadPath)) {
         if (filesAndFolders && erroredPaths) {
-            const paths = (erroredPaths || []).map(({ filePath }) => filePath);
+            const paths = erroredPaths.map(({ filePath }) => filePath);
             return makeFileSystemLoader(
                 retryLoadFromFileSystem({
                     erroredPaths: paths,
@@ -296,11 +302,12 @@ export const makeFileLoadingHooksCreator =
         const onComplete = () => {
             resultReporter(getResultCount());
         };
-        const onError = (error: any) =>
+        const onError = (error: unknown) => {
             reportError({
-                error,
+                error: error as WorkerError,
                 status: step,
             });
+        };
 
         return {
             onComplete,

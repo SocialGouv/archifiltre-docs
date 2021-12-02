@@ -33,8 +33,8 @@ export const useStyles = makeStyles((theme: Theme) =>
             fontSize: "3rem",
         },
         searchInput: {
-            borderRadius: 5,
             border: `1px solid ${theme.palette.secondary.main}`,
+            borderRadius: 5,
             paddingLeft: theme.spacing(1),
             paddingRight: theme.spacing(1),
         },

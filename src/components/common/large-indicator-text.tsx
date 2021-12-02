@@ -1,10 +1,9 @@
 import Typography from "@material-ui/core/Typography";
-import type { FC } from "react";
 import React from "react";
 
 import { useStyles } from "../../hooks/use-styles";
 
-export const LargeIndicatorText: FC = ({ children }) => {
+export const LargeIndicatorText: React.FC = ({ children }) => {
     const { largeIndicatorText } = useStyles();
 
     return (

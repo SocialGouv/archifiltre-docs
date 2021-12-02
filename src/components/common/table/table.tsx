@@ -40,7 +40,7 @@ interface TableProps<T> {
     onPageChange?: (page: number) => void;
 }
 
-const Table = <T,>({
+const _Table = <T,>({
     columns,
     data,
     rowId,
@@ -87,8 +87,7 @@ const Table = <T,>({
     const sortedColumnAccessor = useMemo(() => {
         const sortAccessor =
             columns[orderBy]?.sortAccessor ??
-            columns[orderBy]?.accessor ??
-            (() => "");
+            (columns[orderBy]?.accessor || (() => ""));
         return accessorToFunction(sortAccessor);
     }, [columns, orderBy]);
 
@@ -173,4 +172,4 @@ const Table = <T,>({
     );
 };
 
-export default memo(Table) as typeof Table;
+export const Table = memo(_Table) as typeof _Table;

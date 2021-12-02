@@ -1,18 +1,19 @@
+import type { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+
 import type {
     AliasMap,
     CommentsMap,
     FilesAndFoldersMap,
-} from "reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { TagMap } from "reducers/tags/tags-types";
-import type { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import translations from "translations/translations";
-import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
+} from "../../reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { TagMap } from "../../reducers/tags/tags-types";
+import translations from "../../translations/translations";
+import { createAsyncWorkerForChildProcessControllerFactory } from "../../util/async-worker/child-process";
 import {
     backgroundWorkerProcess$,
     filterResults,
-} from "util/batch-process/batch-process-util";
+} from "../../util/batch-process/batch-process-util";
 
 interface ResipExportProgress {
     count: number;
@@ -60,6 +61,6 @@ export const generateResipExport$ = ({
         },
         createAsyncWorkerForChildProcessControllerFactory("resip-export.fork")
     )
-        .pipe(filterResults())
+        .pipe(filterResults<ResipExportProgress>())
         .pipe(map(({ result }) => result));
 };

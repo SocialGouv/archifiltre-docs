@@ -1,34 +1,34 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/naming-convention */
+import fs from "fs";
+import { sortBy } from "lodash";
+import { Readable } from "stream";
+
+import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+// @ts-expect-error
+import { setMockFs as hiddenFileSetMockFs } from "../util/hidden-file/hidden-file-util";
+import { version } from "../version";
 import {
     createFilesAndFoldersMetadataDataStructure,
     loadFileSystemFromFilesAndFoldersLoader,
-} from "files-and-folders-loader/file-system-loading-process-utils";
-import fs from "fs";
-import { sortBy } from "lodash";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { Readable } from "stream";
-// @ts-ignore
-import { setMockFs as hiddenFileSetMockFs } from "util/hidden-file/hidden-file-util";
-import version from "version";
-
+} from "./file-system-loading-process-utils";
+import type { FilesElementInfo } from "./files-and-folders-loader";
 import {
     asyncLoadFilesAndFoldersFromFileSystem,
     createFilesAndFolders,
     createFilesAndFoldersDataStructure,
-    FilesElementInfo,
     loadFilesAndFoldersFromExportFileContent,
 } from "./files-and-folders-loader";
 
-type FsMockElement = {
+interface FsMockElement {
     isDirectory: boolean;
     children: string[];
     mtimeMs: number;
     size: number;
     isHidden: boolean;
-};
+}
 
-type FsMockElementMap = {
-    [id: string]: FsMockElement;
-};
+type FsMockElementMap = Record<string, FsMockElement>;
 
 jest.mock("fs", () => {
     let underlyingFs: FsMockElementMap = {};
@@ -45,22 +45,22 @@ jest.mock("fs", () => {
 
     const module = {
         promises: {
-            readdir: (path: string) =>
-                Promise.resolve(underlyingFs[path].children),
-            stat: (path: string) =>
+            readdir: async (path: string) =>
+                Promise.resolve(underlyingFs[path].children ?? []),
+            stat: async (path: string) =>
                 underlyingFs[path]
-                    ? Promise.resolve(makeStatObject(underlyingFs[path]))
+                    ? Promise.resolve(makeStatObject(underlyingFs[path]!))
                     : Promise.reject(),
         },
         readdirSync: (path: string) => {
-            return underlyingFs[path].children;
+            return underlyingFs[path].children ?? [];
         },
         setMockFs,
         statSync: (path: string) => {
             if (!underlyingFs[path]) {
                 throw new Error();
             }
-            return makeStatObject(underlyingFs[path]);
+            return makeStatObject(underlyingFs[path]!);
         },
     };
 
@@ -78,10 +78,11 @@ jest.mock("util/hidden-file/hidden-file-util", () => {
     };
 
     const module = {
-        asyncShouldIgnoreElement: (path) =>
-            Promise.resolve(underlyingFs[path].isHidden),
+        asyncShouldIgnoreElement: async (elementPath: string) =>
+            Promise.resolve(!!underlyingFs[elementPath].isHidden),
         setMockFs,
-        shouldIgnoreElement: (path) => underlyingFs[path].isHidden,
+        shouldIgnoreElement: (elementPath: string) =>
+            !!underlyingFs[elementPath].isHidden,
     };
 
     return {
@@ -260,11 +261,16 @@ const mockFs: FsMockElementMap = {
 describe("files-and-folders-loader", () => {
     describe("loadFromFilesystem", () => {
         beforeEach(() => {
-            // @ts-ignore
+            // @ts-expect-error
             fs.setMockFs(mockFs);
             hiddenFileSetMockFs(mockFs);
         });
-        const sortMethod = (element) => element[1];
+        const sortMethod = (
+            element: {
+                lastModified: number;
+                size: number;
+            }[]
+        ) => element[1];
         const expectedOrigin = sortBy(
             [
                 [
@@ -294,9 +300,8 @@ describe("files-and-folders-loader", () => {
 
         describe("async", () => {
             it("should load the right origins", async () => {
-                const resultOrigin = await asyncLoadFilesAndFoldersFromFileSystem(
-                    rootPath
-                );
+                const resultOrigin =
+                    await asyncLoadFilesAndFoldersFromFileSystem(rootPath);
 
                 expect(sortBy(resultOrigin, sortMethod)).toEqual(
                     expectedOrigin
@@ -542,14 +547,15 @@ C:\\basePath\\files\r
 
     describe("loadFileSystemFromFilesAndFoldersLoader", () => {
         it("should prefill unset fields", async () => {
-            const loadFilesAndFolders = async () => ({
+            const loadFilesAndFolders = () => ({
                 filesAndFolders: expectedFilesAndFolders,
                 originalPath: "/basePath",
             });
 
-            const virtualFileSystem = await loadFileSystemFromFilesAndFoldersLoader(
-                loadFilesAndFolders
-            );
+            const virtualFileSystem =
+                await loadFileSystemFromFilesAndFoldersLoader(
+                    loadFilesAndFolders
+                );
 
             expect(virtualFileSystem).toEqual({
                 aliases: {},

@@ -4,17 +4,17 @@ import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSave } from "react-icons/fa";
 
-import type { jsonExporterThunk } from "../../exporters/json/json-exporter";
+import type { ExportToJson } from "../../exporters/json/json-exporter";
 import { useStyles } from "../../hooks/use-styles";
 import { version } from "../../version";
 
 interface SaveButtonProps {
     originalPath: string;
     sessionName: string;
-    exportToJson: typeof jsonExporterThunk;
+    exportToJson: ExportToJson;
 }
 
-const SaveButton: React.FC<SaveButtonProps> = ({
+export const SaveButton: React.FC<SaveButtonProps> = ({
     originalPath,
     sessionName,
     exportToJson,
@@ -41,5 +41,3 @@ const SaveButton: React.FC<SaveButtonProps> = ({
         </Tooltip>
     );
 };
-
-export default SaveButton;

@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,7 +19,7 @@ import { getType } from "util/files-and-folders/file-and-folders-utils";
 
 import ElementCharacteristics from "./element-characteristics";
 
-const ElementCharacteristicsContainer: FC = () => {
+const ElementCharacteristicsContainer: React.FC = () => {
     const { hoveredElementId, lockedElementId, originalPath } =
         useWorkspaceMetadata();
     const filesAndFolders = useSelector(getFilesAndFoldersFromStore);

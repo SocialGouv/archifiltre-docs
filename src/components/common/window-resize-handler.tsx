@@ -1,13 +1,13 @@
 import { ipcRenderer } from "electron";
 import React, { Component } from "react";
 
-import WindowResize from "./window-resize";
+import { WindowResize } from "./window-resize";
 
 interface WindowResizeErrorHandlerState {
     hasError: boolean;
 }
 
-export default class WindowResizeErrorHandler extends Component<
+export class WindowResizeErrorHandler extends Component<
     unknown,
     WindowResizeErrorHandlerState
 > {

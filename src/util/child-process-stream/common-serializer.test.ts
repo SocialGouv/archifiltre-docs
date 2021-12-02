@@ -14,9 +14,9 @@ describe("common-serializer", () => {
                 id1: createFilesAndFolders({ id: "id1" }),
             };
 
-            expect(
-                extractKeysFromFilesAndFolders({ filesAndFolders })
-            ).toEqual(["id", "id1"]);
+            expect(extractKeysFromFilesAndFolders({ filesAndFolders })).toEqual(
+                ["id", "id1"]
+            );
         });
     });
 

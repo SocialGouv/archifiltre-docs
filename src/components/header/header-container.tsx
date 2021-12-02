@@ -1,24 +1,24 @@
-import Header from "components/header/header";
-import { jsonExporterThunk } from "exporters/json/json-exporter";
-import type { FC } from "react";
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+import { jsonExporterThunk } from "../../exporters/json/json-exporter";
 import {
     redoAction,
     undoAction,
-} from "reducers/enhancers/undoable/undoable-actions";
+} from "../../reducers/enhancers/undoable/undoable-actions";
 import {
     canStateRedo,
     canStateUndo,
-} from "reducers/enhancers/undoable/undoable-selectors";
-import type { StoreState } from "reducers/store";
-import { resetStoreThunk } from "reducers/store-thunks";
+} from "../../reducers/enhancers/undoable/undoable-selectors";
+import type { StoreState } from "../../reducers/store";
+import { resetStoreThunk } from "../../reducers/store-thunks";
 import {
     getOriginalPathFromStore,
     getSessionNameFromStore,
-} from "reducers/workspace-metadata/workspace-metadata-selectors";
+} from "../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { Header } from "./header";
 
-const HeaderContainer: FC = () => {
+export const HeaderContainer: React.FC = () => {
     const dispatch = useDispatch();
 
     const undo = useCallback(() => {
@@ -73,5 +73,3 @@ const HeaderContainer: FC = () => {
         />
     );
 };
-
-export default HeaderContainer;

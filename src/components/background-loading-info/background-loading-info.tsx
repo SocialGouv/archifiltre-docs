@@ -8,8 +8,8 @@ import { FaChevronLeft } from "react-icons/fa";
 import styled from "styled-components";
 
 import type { LoadingInfo } from "../../reducers/loading-info/loading-info-types";
-import LoadingInfoDisplay from "./loading-info-display";
-import LoadingSpinnerOrCloseCross from "./loading-spinner-or-close-cross";
+import { LoadingInfoDisplay } from "./loading-info-display";
+import { LoadingSpinnerOrCloseCross } from "./loading-spinner-or-close-cross";
 
 const BottomLeftArea = styled(Card)`
     position: fixed;
@@ -39,7 +39,7 @@ interface BackgroundLoadingInfoProps {
     dismissAll: () => void;
 }
 
-const BackgroundLoadingInfo: React.FC<BackgroundLoadingInfoProps> = ({
+const _BackgroundLoadingInfo: React.FC<BackgroundLoadingInfoProps> = ({
     loadingItems,
     isLoading,
     dismissAll,
@@ -119,4 +119,6 @@ const BackgroundLoadingInfo: React.FC<BackgroundLoadingInfoProps> = ({
     );
 };
 
-export default memo(BackgroundLoadingInfo);
+_BackgroundLoadingInfo.displayName = "BackgroundLoadingInfo";
+
+export const BackgroundLoadingInfo = memo(_BackgroundLoadingInfo);

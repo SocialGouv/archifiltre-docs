@@ -1,5 +1,4 @@
 import { useZoomTracker } from "hooks/use-zoom-tracker";
-import type { FC } from "react";
 import React, { useCallback, useContext, useState } from "react";
 import { empty } from "util/function/function-util";
 import { ZoomDirection, zoomReducer } from "util/zoom/zoom-util";
@@ -28,7 +27,7 @@ const ZoomContext = React.createContext(zoomState);
 
 export const useZoomContext = () => useContext(ZoomContext);
 
-const ZoomProvider: FC = ({ children }) => {
+const ZoomProvider: React.FC = ({ children }) => {
     const [ratio, setRatio] = useState(1);
     const [offset, setOffset] = useState(0);
     const [defaultMousePosition, setDefaultMousePosition] = useState<

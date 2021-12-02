@@ -1,10 +1,11 @@
-import ErrorScreen from "components/errors/error-screen";
-import WorkSpace from "components/main-space/workspace/workspace";
-import StartScreen from "components/start-screen/start-screen-container";
-import type { ComponentMap } from "hoc/switchComponent";
-import { switchComponent } from "hoc/switchComponent";
 import React from "react";
-import { LoadingStep } from "reducers/loading-state/loading-state-types";
+
+import type { ComponentMap } from "../../hoc/switchComponent";
+import { switchComponent } from "../../hoc/switchComponent";
+import { LoadingStep } from "../../reducers/loading-state/loading-state-types";
+import { ErrorScreen } from "../errors/error-screen";
+import { StartScreenContainer as StartScreen } from "../start-screen/start-screen-container";
+import { Workspace } from "./workspace/workspace";
 
 interface MainSpaceRouterProps {
     step: LoadingStep;
@@ -13,12 +14,10 @@ interface MainSpaceRouterProps {
 const mainspaceRoutingMap: ComponentMap<MainSpaceRouterProps, LoadingStep> = {
     [LoadingStep.ERROR]: () => <ErrorScreen />,
     [LoadingStep.WAITING]: () => <StartScreen />,
-    [LoadingStep.FINISHED]: () => <WorkSpace />,
+    [LoadingStep.FINISHED]: () => <Workspace />,
 };
 
-const MainSpaceRouter = switchComponent(
+export const MainSpaceRouter = switchComponent(
     mainspaceRoutingMap,
     ({ step }) => step
 );
-
-export default MainSpaceRouter;

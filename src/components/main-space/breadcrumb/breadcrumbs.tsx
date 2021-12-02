@@ -1,18 +1,20 @@
 import type { TFunction } from "i18next";
 import React, { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import styled from "styled-components";
+
 import type {
     AliasMap,
     FilesAndFolders,
-} from "reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import styled from "styled-components";
-import { makeEmptyArray } from "util/array/array-util";
-import { placeholder } from "util/color/color-util";
-import { formatPathForUserSystem } from "util/file-system/file-sys-util";
-
-import type { DimsAndId } from "../icicle/icicle-rect";
-import type { FillColor } from "../icicle/icicle-types";
+} from "../../../reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { makeEmptyArray } from "../../../util/array/array-util";
+import { placeholder } from "../../../util/color/color-util";
+import { formatPathForUserSystem } from "../../../util/file-system/file-sys-util";
+import type {
+    FillColor,
+    IcicleMouseActionHandler,
+} from "../icicle/icicle-types";
 import Breadcrumb, { BreadcrumbOpacity } from "./breadcrumb";
 
 const BreadcrumbsWrapper = styled.div`
@@ -29,7 +31,7 @@ const BreadcrumbWrapper = styled.div<BreadcrumbWrapperProps>`
     height: ${({ depth }) => `${100 / depth}%`};
 `;
 
-interface BreadcrumbsProps {
+export interface BreadcrumbsProps {
     depth: number;
     lockedSequence: string[];
     hoveredSequence: string[];
@@ -37,7 +39,7 @@ interface BreadcrumbsProps {
     getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
     aliases: AliasMap;
     originalPath: string;
-    onBreadcrumbClick: (dimsAndId: DimsAndId, event) => void;
+    onBreadcrumbClick: IcicleMouseActionHandler;
 }
 
 interface MakeFillerArgs {
@@ -51,7 +53,7 @@ interface MakeFillerArgs {
 interface BreadcrumbProps {
     id: string;
     name: string;
-    alias: string | null;
+    alias?: string | null;
     opacity: BreadcrumbOpacity;
     color: string;
     isFirst: boolean;
@@ -169,7 +171,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
     onBreadcrumbClick,
 }) => {
     const { t } = useTranslation();
-    const fillers = useMemo(() => makeBreadcrumbsFillers(depth, t), [depth]);
+    const fillers = useMemo(() => makeBreadcrumbsFillers(depth, t), [depth, t]);
     const filesAndFolders: BreadcrumbProps[] = useMemo(() => {
         if (hoveredSequence.length === 0 && lockedSequence.length === 0) {
             return fillers;
@@ -225,7 +227,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
                                 id={id}
                                 key={`breadcrumb-${id}`}
                                 name={name}
-                                alias={alias}
+                                alias={alias ?? null}
                                 path={path}
                                 active={isActive}
                                 opacity={opacity}

@@ -1,26 +1,26 @@
-import StartScreen from "components/start-screen/start-screen";
-import type { FC } from "react";
+import { noop } from "lodash";
 import React, { useCallback, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import type { ArchifiltreDispatch } from "reducers/archifiltre-types";
+
+import type { ArchifiltreDispatch } from "../../reducers/archifiltre-types";
 import {
     resetLoadingState,
     setLoadingStep,
-} from "reducers/loading-state/loading-state-actions";
-import { getLoadingStateFromStore } from "reducers/loading-state/loading-state-selectors";
-import { LoadingStep } from "reducers/loading-state/loading-state-types";
+} from "../../reducers/loading-state/loading-state-actions";
+import { getLoadingStateFromStore } from "../../reducers/loading-state/loading-state-selectors";
+import { LoadingStep } from "../../reducers/loading-state/loading-state-types";
 import {
     replayActionsThunk,
     usePreviousSession,
-} from "reducers/middleware/persist-actions-middleware";
-import { loadFilesAndFoldersFromPathThunk } from "reducers/store-thunks";
-import { empty } from "util/function/function-util";
+} from "../../reducers/middleware/persist-actions-middleware";
+import { loadFilesAndFoldersFromPathThunk } from "../../reducers/store-thunks";
+import { StartScreen } from "./start-screen";
 
-const StartScreenContainer: FC = () => {
+export const StartScreenContainer: React.FC = () => {
     const dispatch = useDispatch<ArchifiltreDispatch>();
     const [isLoading, setIsLoading] = useState(false);
 
-    const terminateRef = useRef(empty);
+    const terminateRef = useRef(noop);
 
     const loadFromPath = useCallback(
         async (path: string) => {
@@ -36,7 +36,7 @@ const StartScreenContainer: FC = () => {
     const hasPreviousSession = usePreviousSession();
 
     const reloadPreviousSession = useCallback(() => {
-        dispatch(replayActionsThunk());
+        void dispatch(replayActionsThunk());
     }, [dispatch]);
 
     const { fileSystemLoadingStep, indexedFilesCount } = useSelector(
@@ -62,5 +62,3 @@ const StartScreenContainer: FC = () => {
         />
     );
 };
-
-export default StartScreenContainer;

@@ -15,131 +15,147 @@ export enum FileType {
 }
 
 export const fileTypesByExtensions = {
-    // les PDF
-    ".epub": FileType.PUBLICATION,
-    ".mobi": FileType.PUBLICATION,
-    ".odp": FileType.PRESENTATION,
-    ".pdf": FileType.PUBLICATION,
-    // formats OOo/LO Impress
-".otp": FileType.PRESENTATION,
-
-    
-".pot": FileType.PRESENTATION,
-
-    ".pps": FileType.PRESENTATION,
-
-    ".ppsx": FileType.PRESENTATION,
-
-    ".ppt": FileType.PRESENTATION,
-
-    ".pptm": FileType.PRESENTATION,
-    
     ".csv": FileType.SPREADSHEET,
-    // formats Microsoft PowerPoint
-".pptx": FileType.PRESENTATION,
-    ".eml": FileType.EMAIL,
 
-    ".xls": FileType.SPREADSHEET,
-
-    ".xlsm": FileType.SPREADSHEET,
-    
-    // formats d'email et d'archive email
-".msg": FileType.EMAIL,
-
-    
-    // formats Microsoft Excel
-".xlsx": FileType.SPREADSHEET,
-
-    
     ".doc": FileType.DOCUMENT,
-
-    // dont les vieux
-".xlt": FileType.SPREADSHEET,
 
     ".docm": FileType.DOCUMENT,
 
-    ".xltm": FileType.SPREADSHEET,
+    ".eml": FileType.EMAIL,
 
+    
     // formats Microsoft Word
 ".docx": FileType.DOCUMENT,
 
     
-".xlw": FileType.SPREADSHEET,
+// les PDF
+".epub": FileType.PUBLICATION,
 
-    ".xltx": FileType.SPREADSHEET,
+    ".mobi": FileType.PUBLICATION,
 
+    
     ".dot": FileType.DOCUMENT,
+
+    // formats d'email et d'archive email
+".msg": FileType.EMAIL,
 
     ".dotm": FileType.DOCUMENT,
 
-    // format Csv
-    ".ods": FileType.SPREADSHEET,
-
-    ".dotx": FileType.DOCUMENT,
     
-".jp2": FileType.IMAGE,
-    // formats OOo/LO Calc
-".ots": FileType.SPREADSHEET,
+    ".odp": FileType.PRESENTATION,
+
+    
+".dotx": FileType.DOCUMENT,
+
+    // formats OOo/LO Impress
+".otp": FileType.PRESENTATION,
+
+    ".jp2": FileType.IMAGE,
+
+    ".pdf": FileType.PUBLICATION,
+
     ".gif": FileType.IMAGE,
+
+    ".pot": FileType.PRESENTATION,
+
     ".bmp": FileType.IMAGE,
 
-    ".pst": FileType.EMAIL,
+    ".pps": FileType.PRESENTATION,
 
     ".jpeg": FileType.IMAGE,
 
+    ".ppsx": FileType.PRESENTATION,
+
     ".avi": FileType.VIDEO,
 
-    
-    ".odt": FileType.DOCUMENT,
+    ".ppt": FileType.PRESENTATION,
 
-    
-// formats d'image
+    // formats d'image
 ".jpg": FileType.IMAGE,
 
     
-// formats OOo/LO Writer
-".ott": FileType.DOCUMENT,
+    ".pptm": FileType.PRESENTATION,
 
-    ".txt": FileType.DOCUMENT,
-
-    ".mp4": FileType.VIDEO,
     
-".mkv": FileType.VIDEO,
-    // formats texte standard
-".rtf": FileType.DOCUMENT,
+    ".mp4": FileType.VIDEO,
+
+    // formats Microsoft PowerPoint
+".pptx": FileType.PRESENTATION,
+
+    ".mkv": FileType.VIDEO,
+
+    ".xls": FileType.SPREADSHEET,
+
     ".mov": FileType.VIDEO,
+
+    ".xlsm": FileType.SPREADSHEET,
+
     ".mp3": FileType.AUDIO,
-    ".png": FileType.IMAGE,
 
-    ".flac": FileType.AUDIO,
+    
+".flac": FileType.AUDIO,
 
-    ".svg": FileType.IMAGE,
+    // formats Microsoft Excel
+".xlsx": FileType.SPREADSHEET,
 
     ".mpeg": FileType.VIDEO,
 
-    ".tif": FileType.IMAGE,
+    
+".arc": FileType.OTHER,
+
+    // dont les vieux
+".xlt": FileType.SPREADSHEET,
+
+    // format Csv
+".ods": FileType.SPREADSHEET,
+
+    
+".xltm": FileType.SPREADSHEET,
+
+    ".xlw": FileType.SPREADSHEET,
+
+    ".odt": FileType.DOCUMENT,
 
     ".ogg": FileType.AUDIO,
 
-    ".tiff": FileType.IMAGE,
+    ".xltx": FileType.SPREADSHEET,
 
-    ".arc": FileType.OTHER,
+    // formats OOo/LO Calc
+    ".ots": FileType.SPREADSHEET,
 
-    
-".rf64": FileType.AUDIO,
+    // formats OOo/LO Writer
+    ".ott": FileType.DOCUMENT,
 
-    // formats vidéo
-".wmv": FileType.VIDEO,
+    ".png": FileType.IMAGE,
+
+    ".pst": FileType.EMAIL,
+
+    ".rf64": FileType.AUDIO,
+
+    // formats texte standard
+    ".rtf": FileType.DOCUMENT,
+
+    ".svg": FileType.IMAGE,
 
     // archive : type autre en attendant
     ".tar": FileType.OTHER,
 
     ".tgz": FileType.OTHER,
 
+    ".tif": FileType.IMAGE,
+
+    ".tiff": FileType.IMAGE,
+
+    ".txt": FileType.DOCUMENT,
+
     ".warc": FileType.OTHER,
+
     // formats audio
     ".wav": FileType.AUDIO,
+
     ".wma": FileType.AUDIO,
+    // formats vidéo
+    ".wmv": FileType.VIDEO,
     ".zip": FileType.OTHER,
 };
 

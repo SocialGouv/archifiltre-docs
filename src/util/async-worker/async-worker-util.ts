@@ -1,14 +1,17 @@
 import type { ChildProcess } from "child_process";
-import translations from "translations/translations";
 
+import translations from "../../translations/translations";
 import type { WorkerMessage } from "../batch-process/batch-process-util-types";
 import { MessageTypes } from "../batch-process/batch-process-util-types";
+import type { WithLanguage } from "../language/language-types";
 
+/* eslint-disable @typescript-eslint/naming-convention */
 export enum WorkerEventType {
     MESSAGE = "message",
     EXIT = "exit",
     ERROR = "error",
 }
+/* eslint-enable @typescript-eslint/naming-convention */
 
 type AsyncWorkerEventType = WorkerEventType.MESSAGE;
 
@@ -17,11 +20,17 @@ export type AsyncWorkerControllerEvent =
     | WorkerEventType.ERROR
     | WorkerEventType.EXIT;
 
-export interface AsyncWorker<EventType = AsyncWorkerEventType> {
-    addEventListener: (eventType: EventType, listener: EventListener) => void;
+type AsyncWorkerEvent = Omit<Event, "type"> & WorkerMessage;
+type TypedEventListener = (evt: AsyncWorkerEvent) => void;
+
+export interface AsyncWorker<TEventType = AsyncWorkerEventType> {
+    addEventListener: (
+        eventType: TEventType,
+        listener: TypedEventListener
+    ) => void;
     removeEventListener: (
-        eventType: EventType,
-        listener: EventListener
+        eventType: TEventType,
+        listener: TypedEventListener
     ) => void;
     postMessage: (message: WorkerMessage) => void;
 }
@@ -39,7 +48,7 @@ export type ChildProcessAsyncWorker = AsyncWorker;
 
 export type WorkerMessageHandler = (
     asyncWorker: AsyncWorker,
-    data: any
+    data: unknown
 ) => Promise<void> | void;
 
 interface SetupChildWorkerListenersOptions {
@@ -51,10 +60,12 @@ export const makeChildWorkerMessageCallback =
     (
         asyncWorker: AsyncWorker,
         { onInitialize, onData }: SetupChildWorkerListenersOptions
-    ) =>
-    async ({ data, type }: any) => {
-        switch (type) {
+    ): TypedEventListener =>
+    async (event) => {
+        switch (event.type) {
             case MessageTypes.INITIALIZE:
+                // eslint-disable-next-line no-case-declarations
+                const data = event.data as Partial<WithLanguage<unknown>>;
                 if (data.language) {
                     await translations.changeLanguage(data.language);
                 }
@@ -62,12 +73,12 @@ export const makeChildWorkerMessageCallback =
                     break;
                 }
                 try {
-                    await onInitialize(asyncWorker, data);
+                    await onInitialize(asyncWorker, event.data);
                     asyncWorker.postMessage({ type: MessageTypes.READY });
-                } catch (err) {
+                } catch (err: unknown) {
                     console.error(err);
                     asyncWorker.postMessage({
-                        error: err.toString(),
+                        error: String(err),
                         type: MessageTypes.FATAL,
                     });
                 }
@@ -78,14 +89,16 @@ export const makeChildWorkerMessageCallback =
                     break;
                 }
                 try {
-                    await onData(asyncWorker, data);
-                } catch (err) {
+                    await onData(asyncWorker, event.data);
+                } catch (err: unknown) {
                     console.error(err);
                     asyncWorker.postMessage({
-                        error: err.toString(),
+                        error: String(err),
                         type: MessageTypes.FATAL,
                     });
                 }
+                break;
+            default:
                 break;
         }
     };
@@ -100,7 +113,7 @@ export const makeChildWorkerMessageCallback =
 export const setupChildWorkerListeners = (
     asyncWorker: AsyncWorker,
     listeners: SetupChildWorkerListenersOptions
-) => {
+): void => {
     asyncWorker.addEventListener(
         WorkerEventType.MESSAGE,
         makeChildWorkerMessageCallback(asyncWorker, listeners)

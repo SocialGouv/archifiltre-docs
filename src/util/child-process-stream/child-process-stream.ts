@@ -1,12 +1,13 @@
-import type { Readable, Writable } from "stream";
+import type { Readable, TransformCallback, Writable } from "stream";
 import { Transform } from "stream";
+
 import {
     bufferMessageWithLength,
     joinBuffers,
     MESSAGE_SIZE_CHUNK_LENGTH,
     readBufferMessageWithLength,
     uint8ArrayToString,
-} from "util/buffer-util/buffer-util";
+} from "../buffer-util/buffer-util";
 
 const sendBufferToStream = (stream: Writable, buffer: Uint8Array) => {
     stream.write(bufferMessageWithLength(buffer));
@@ -18,15 +19,15 @@ const sendBufferToStream = (stream: Writable, buffer: Uint8Array) => {
  * @param stream
  * @param data
  */
-export const sendStringToStream = (stream: Writable, data: string) => {
+export const sendStringToStream = (stream: Writable, data: string): void => {
     const arrayBuffer = new Uint8Array(Buffer.from(data));
     sendBufferToStream(stream, arrayBuffer);
 };
 
-interface StringifyObjectToStreamOptions<Data, SerializedData> {
-    keyExtractor: (data: Data) => string[];
-    dataExtractor: (data: Data, key: string) => SerializedData;
-    dataSerializer: (data: SerializedData) => Uint8Array;
+interface StringifyObjectToStreamOptions<TData, TSerializedData> {
+    keyExtractor: (data: TData) => string[];
+    dataExtractor: (data: TData, key: string) => TSerializedData;
+    dataSerializer: (data: TSerializedData) => Uint8Array;
 }
 
 /**
@@ -37,15 +38,15 @@ interface StringifyObjectToStreamOptions<Data, SerializedData> {
  * @param dataExtractor - builds the object to serialize based on the provided key
  * @param dataSerializer - serialize the extracted object to an Uint8 array
  */
-export const stringifyObjectToStream = <Data, SerializedData>(
+export const stringifyObjectToStream = <TData, TSerializedData>(
     stream: Writable,
-    data: Data,
+    data: TData,
     {
         keyExtractor,
         dataExtractor,
         dataSerializer,
-    }: StringifyObjectToStreamOptions<Data, SerializedData>
-) => {
+    }: StringifyObjectToStreamOptions<TData, TSerializedData>
+): void => {
     let sentSize = 0;
     keyExtractor(data).forEach((elementKey) => {
         const serializedData = dataSerializer(dataExtractor(data, elementKey));
@@ -55,7 +56,7 @@ export const stringifyObjectToStream = <Data, SerializedData>(
     console.log(sentSize);
 };
 
-export type MessageSerializer<Data> = (stream: Writable, data: Data) => void;
+export type MessageSerializer<TData> = (stream: Writable, data: TData) => void;
 
 /**
  * A transform stream that allows to separate binary messages sent to a stream
@@ -72,7 +73,7 @@ class MessageDeserializer extends Transform {
 
     _write(
         chunk: Buffer,
-        encoding: string,
+        _encoding: string,
         callback: (error?: Error | null) => void
     ) {
         this.queue = joinBuffers(this.queue, new Uint8Array(chunk));
@@ -81,22 +82,9 @@ class MessageDeserializer extends Transform {
         callback();
     }
 
-    _flush(callback) {
+    _flush(callback: TransformCallback) {
         this._read();
         callback();
-    }
-
-    private getMessageLength() {
-        return new DataView(this.queue.buffer).getUint32(0);
-    }
-
-    private canRead() {
-        return (
-            this.queue &&
-            this.queue.length >= MESSAGE_SIZE_CHUNK_LENGTH &&
-            this.getMessageLength() + MESSAGE_SIZE_CHUNK_LENGTH <=
-                this.queue.length
-        );
     }
 
     _read() {
@@ -109,14 +97,26 @@ class MessageDeserializer extends Transform {
             this._read();
         }
     }
+
+    private getMessageLength() {
+        return new DataView(this.queue.buffer).getUint32(0);
+    }
+
+    private canRead() {
+        return (
+            this.queue.length >= MESSAGE_SIZE_CHUNK_LENGTH &&
+            this.getMessageLength() + MESSAGE_SIZE_CHUNK_LENGTH <=
+                this.queue.length
+        );
+    }
 }
 
-interface ParseSerializedDataFromStreamOptions<OutputData, DeserializedData> {
+interface ParseSerializedDataFromStreamOptions<TOutputData, TDeserializedData> {
     withJsonInitializing?: boolean;
-    deserializer: (data: Uint8Array) => DeserializedData;
+    deserializer: (data: Uint8Array) => TDeserializedData;
     merger: (
-        outputData: OutputData,
-        deserializedData: DeserializedData
+        outputData: TOutputData,
+        deserializedData: TDeserializedData
     ) => void;
 }
 
@@ -129,17 +129,17 @@ interface ParseSerializedDataFromStreamOptions<OutputData, DeserializedData> {
  * @param merger - Merge the deserialized object into the result object. It uses side effects for performance concerns
  */
 export const parseSerializedDataFromStream = async <
-    OutputData,
-    DeserializedData
+    TOutputData,
+    TDeserializedData
 >(
     stream: Readable,
-    initialData: OutputData,
+    initialData: TOutputData,
     {
         withJsonInitializing = false,
         deserializer,
         merger,
-    }: ParseSerializedDataFromStreamOptions<OutputData, DeserializedData>
-): Promise<OutputData> => {
+    }: ParseSerializedDataFromStreamOptions<TOutputData, TDeserializedData>
+): Promise<TOutputData> => {
     const outputData = { ...initialData };
     let isFirstMessage = true;
 
@@ -157,20 +157,20 @@ export const parseSerializedDataFromStream = async <
     };
 
     return new Promise((resolve) => {
-        const deserializer = new MessageDeserializer();
-        stream.pipe(deserializer);
-        deserializer.on("readable", () => {
-            deserializer.resume();
-            let data;
+        const messageDeserializer = new MessageDeserializer();
+        stream.pipe(messageDeserializer);
+        messageDeserializer.on("readable", () => {
+            messageDeserializer.resume();
+            let data: Uint8Array | null = null;
             do {
-                data = deserializer.read();
+                data = messageDeserializer.read();
                 if (data !== null) {
                     parseBinaryMessage(data);
                 }
             } while (data !== null);
         });
 
-        deserializer.on("end", () => {
+        messageDeserializer.on("end", () => {
             resolve(outputData);
         });
     });

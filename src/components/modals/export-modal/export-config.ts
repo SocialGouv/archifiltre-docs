@@ -1,18 +1,20 @@
-import type { ExportTypesMap } from "components/modals/export-modal/export-options";
-import { auditReportExporterThunk } from "exporters/audit/audit-report-exporter";
-import { csvExporterThunk } from "exporters/csv/csv-exporter";
-import { treeCsvExporterThunk } from "exporters/csv/tree-csv-exporter";
-import { deletionScriptExporterThunk } from "exporters/deletion-script/deletion-script-exporter";
-import { excelExporterThunk } from "exporters/excel/excel-exporter";
-import { metsExporterThunk } from "exporters/mets/mets-export-thunk";
-import { resipExporterThunk } from "exporters/resip/resip-exporter-thunk";
 import _ from "lodash";
-import { ActionTitle } from "logging/tracker-types";
 import path from "path";
-import type { ArchifiltreThunkAction } from "reducers/archifiltre-types";
-import { getNameWithExtension } from "util/file-system/file-sys-util";
-import { isWindows } from "util/os/os-util";
 
+import { auditReportExporterThunk } from "../../../exporters/audit/audit-report-exporter";
+import { csvExporterThunk } from "../../../exporters/csv/csv-exporter";
+import { treeCsvExporterThunk } from "../../../exporters/csv/tree-csv-exporter";
+import { deletionScriptExporterThunk } from "../../../exporters/deletion-script/deletion-script-exporter";
+import { excelExporterThunk } from "../../../exporters/excel/excel-exporter";
+import { metsExporterThunk } from "../../../exporters/mets/mets-export-thunk";
+import { resipExporterThunk } from "../../../exporters/resip/resip-exporter-thunk";
+import { ActionTitle } from "../../../logging/tracker-types";
+import type { ArchifiltreThunkAction } from "../../../reducers/archifiltre-types";
+import { getNameWithExtension } from "../../../util/file-system/file-sys-util";
+import { isWindows } from "../../../util/os/os-util";
+import type { ExportTypesMap } from "../export-modal/export-options";
+
+/* eslint-disable @typescript-eslint/naming-convention */
 export enum ExportType {
     EXCEL = "EXCEL",
     CSV = "CSV",
@@ -30,6 +32,7 @@ export enum ExportCategory {
     EXCHANGE_WITH_ERMS = "EXCHANGE_WITH_ERMS",
     UTILITIES = "UTILITIES",
 }
+/* eslint-enable @typescript-eslint/naming-convention */
 
 export interface IsActiveOptions {
     areHashesReady: boolean;
@@ -94,7 +97,9 @@ export const exportConfig: ExportConfigMap = {
     [ExportType.AUDIT]: {
         category: ExportCategory.AUDIT,
         disabledExplanation: "header.csvWithHashDisabledMessage",
-        exportFunction: (exportPath) => auditReportExporterThunk(exportPath),
+        exportFunction(exportPath) {
+            return auditReportExporterThunk(exportPath);
+        },
         exportPath: (originalPath, sessionName) =>
             computeExportFilePath(originalPath, sessionName, ExportType.AUDIT),
         isActive: ({ areHashesReady }) => areHashesReady,
@@ -103,7 +108,9 @@ export const exportConfig: ExportConfigMap = {
     },
     [ExportType.CSV]: {
         category: ExportCategory.RECORDS_INVENTORY,
-        exportFunction: (exportPath) => csvExporterThunk(exportPath),
+        exportFunction(exportPath) {
+            return csvExporterThunk(exportPath);
+        },
         exportPath: (originalPath, sessionName) =>
             computeExportFilePath(originalPath, sessionName, ExportType.CSV),
         isActive: true,

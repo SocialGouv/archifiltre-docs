@@ -1,5 +1,5 @@
 import { createFilesAndFolders } from "files-and-folders-loader/files-and-folders-loader";
-import { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
+import type { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
 import { times } from "lodash";
 import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { MockWritable } from "stdio-mock";
@@ -9,7 +9,9 @@ import {
     stringifyVFSToStream,
 } from "util/file-tree-loader/load-from-filesystem-serializer";
 
-const extractDataFromMock = (writeable: MockWritable): Promise<Buffer[]> =>
+const extractDataFromMock = async (
+    writeable: MockWritable
+): Promise<Buffer[]> =>
     new Promise((resolve) => {
         writeable.on("finish", () => {
             resolve(writeable.data());
@@ -61,7 +63,7 @@ describe("load-from-filesystem-serializer", () => {
 
         const writeable = new MockWritable();
 
-        // @ts-ignore
+        // @ts-expect-error
         stringifyVFSToStream(writeable, vfs);
 
         const data: Buffer[] = await extractDataFromMock(writeable);

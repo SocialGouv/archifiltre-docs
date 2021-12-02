@@ -1,34 +1,34 @@
-import { reportError } from "logging/reporter";
 import { cpus } from "os";
-import { createArchifiltreError } from "reducers/loading-info/loading-info-selectors";
-import type { Observable } from "rxjs";
+import type { Observable, OperatorFunction } from "rxjs";
 import { fromEvent, merge, Subject } from "rxjs";
 import { filter, map, take, takeWhile, tap } from "rxjs/operators";
-import { makeEmptyArray } from "util/array/array-util";
-import type { ProcessControllerAsyncWorker } from "util/async-worker/async-worker-util";
-import { WorkerEventType } from "util/async-worker/async-worker-util";
+
+import { reportError } from "../../logging/reporter";
+import { createArchifiltreError } from "../../reducers/loading-info/loading-info-selectors";
+import type { ProcessControllerAsyncWorker } from "../async-worker/async-worker-util";
+import { WorkerEventType } from "../async-worker/async-worker-util";
+import { ArchifiltreErrorType } from "../error/error-util";
+import type { ProcessControllerAsyncWorkerFactory } from "../worker-manager/worker-manager";
+import workerManager from "../worker-manager/worker-manager";
 import type {
     ErrorMessage,
     ReadyMessage,
     ResultMessage,
     WorkerMessage,
-} from "util/batch-process/batch-process-util-types";
-import { MessageTypes } from "util/batch-process/batch-process-util-types";
-import { ArchifiltreErrorType } from "util/error/error-util";
-import type { ProcessControllerAsyncWorkerFactory } from "util/worker-manager/worker-manager";
-import workerManager from "util/worker-manager/worker-manager";
+} from "./batch-process-util-types";
+import { MessageTypes } from "./batch-process-util-types";
 
 // We create NB_CPUS - 1 processes to optimize computation
 const NB_CPUS = cpus().length - 1 > 0 ? cpus().length - 1 : 1;
 
 interface InitWorkersData {
-    onMessage?: (worker: any, data: any) => void;
-    initialValues?: any;
+    onMessage?: (worker: unknown, data: unknown) => void;
+    initialValues?: unknown;
     workerCount?: number;
 }
 
-interface MessageAndWorker<MessageType = WorkerMessage> {
-    message: MessageType;
+interface MessageAndWorker<TMessageType = WorkerMessage> {
+    message: TMessageType;
     worker: ProcessControllerAsyncWorker;
 }
 
@@ -40,21 +40,25 @@ interface InitWorkersResult {
 const spawnWorkers = (
     asyncWorkerFactory: ProcessControllerAsyncWorkerFactory,
     count = NB_CPUS
-): ProcessControllerAsyncWorker[] =>
-    makeEmptyArray(count, null).map(() =>
-        workerManager.spawn(asyncWorkerFactory)
-    );
+) =>
+    new Array(count)
+        .fill(null)
+        .map(() => workerManager.spawn(asyncWorkerFactory));
 
+interface SetupedWorker {
+    result$: Observable<MessageAndWorker>;
+    terminate: () => void;
+}
 export const setupWorkers$ = (
     workers: ProcessControllerAsyncWorker[],
-    initialValues: any
-) => {
+    initialValues: unknown
+): SetupedWorker => {
     const result$ = merge(
         ...workers
             .map((worker) => {
-                worker.addEventListener(WorkerEventType.ERROR, (error) =>
-                    reportError({ error, type: "WorkerError" })
-                );
+                worker.addEventListener(WorkerEventType.ERROR, (error) => {
+                    reportError({ error, type: "WorkerError" });
+                });
                 worker.postMessage({
                     data: initialValues,
                     type: MessageTypes.INITIALIZE,
@@ -72,7 +76,7 @@ export const setupWorkers$ = (
                         tap((message) => {
                             if (message.type === MessageTypes.FATAL) {
                                 throw createArchifiltreError({
-                                    reason: message.error,
+                                    reason: message.error as string,
                                     type: ArchifiltreErrorType.BATCH_PROCESS_ERROR,
                                 });
                             }
@@ -86,7 +90,9 @@ export const setupWorkers$ = (
             )
     );
     const terminate = () => {
-        workers.forEach((worker) => worker.terminate());
+        workers.forEach((worker) => {
+            worker.terminate();
+        });
     };
     return { result$, terminate };
 };
@@ -114,17 +120,17 @@ const filterResultsAndErrors = (
 
 export const processQueueWithWorkers = (
     results$: Observable<MessageAndWorker>,
-    data: any[],
+    data: unknown[],
     batchSize: number
-) => {
+): Observable<unknown> => {
     let index = 0;
-    const subject = new Subject();
+    const subject = new Subject<MessageAndWorker>();
     const messageCount = Math.ceil(data.length / batchSize);
 
     results$
         .pipe(
             filter(filterResultsErrorsAndReady),
-            tap(({ worker, message }) => {
+            tap(({ worker }) => {
                 if (index < data.length) {
                     worker.postMessage({
                         data: data.slice(index, index + batchSize),
@@ -134,8 +140,8 @@ export const processQueueWithWorkers = (
                 }
             })
         )
-        .subscribe((data) => {
-            subject.next(data);
+        .subscribe((dataSubscribed) => {
+            subject.next(dataSubscribed);
         });
 
     return subject.pipe(
@@ -146,15 +152,16 @@ export const processQueueWithWorkers = (
 };
 
 export const computeBatch$ = (
-    data: any,
+    data: unknown[],
     asyncWorkerFactory: ProcessControllerAsyncWorkerFactory,
-    { batchSize, initialValues }: { batchSize: number; initialValues: any }
-): Observable<any> => {
+    { batchSize, initialValues }: { batchSize: number; initialValues: unknown }
+): Observable<unknown> => {
     const { result$ } = initWorkers$(asyncWorkerFactory, { initialValues });
 
     return processQueueWithWorkers(result$, data, batchSize);
 };
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 type LookUp<U, T> = U extends { type: T } ? U : never;
 
 const onMessageType = <T extends MessageTypes>(
@@ -174,27 +181,27 @@ const onMessageType = <T extends MessageTypes>(
  * @returns {Observable} - A rxjs observable piping progress.
  */
 export const backgroundWorkerProcess$ = (
-    processedData: any,
+    processedData: unknown,
     asyncWorkerFactory: ProcessControllerAsyncWorkerFactory
 ): Observable<ErrorMessage | ResultMessage> =>
     cancelableBackgroundWorkerProcess$(processedData, asyncWorkerFactory)
         .result$;
 
-interface CancelableBackgroundWorkerProcessResult {
-    result$: Observable<ErrorMessage | ResultMessage>;
+interface CancelableBackgroundWorkerProcessResult<T = unknown> {
+    result$: Observable<ErrorMessage | ResultMessage<T>>;
     terminate: () => void;
 }
 
-export const cancelableBackgroundWorkerProcess$ = (
-    processedData: any,
+export const cancelableBackgroundWorkerProcess$ = <T = unknown>(
+    processedData: unknown,
     asyncWorkerFactory: ProcessControllerAsyncWorkerFactory
-): CancelableBackgroundWorkerProcessResult => {
+): CancelableBackgroundWorkerProcessResult<T> => {
     const { result$, terminate } = initWorkers$(asyncWorkerFactory, {
         initialValues: processedData,
         workerCount: 1,
     });
     const processedResult$ = result$.pipe(
-        map(({ message }) => message),
+        map(({ message }): WorkerMessage => message),
         onMessageType(MessageTypes.ERROR, (message) => {
             reportError(message.error);
         }),
@@ -206,7 +213,7 @@ export const cancelableBackgroundWorkerProcess$ = (
                 message.type === MessageTypes.RESULT ||
                 message.type === MessageTypes.ERROR
         )
-    );
+    ) as Observable<ErrorMessage | ResultMessage<T>>;
     return { result$: processedResult$, terminate };
 };
 
@@ -217,7 +224,7 @@ export interface BatchProcessResult<T> {
 
 export interface BatchProcessError {
     param: string;
-    error: any;
+    error: unknown;
 }
 
 type AggregatedResult<T> = Record<string, T>;
@@ -242,22 +249,25 @@ export const aggregateResultsToMap = <T>(
 
 export const aggregateErrorsToMap = (
     errors: BatchProcessError[]
-): AggregatedResult<any> => {
-    const valuesMap: AggregatedResult<any> = {};
+): AggregatedResult<unknown> => {
+    const valuesMap: AggregatedResult<unknown> = {};
 
     return errors
         .map((result: BatchProcessError) => ({ [result.param]: result.error }))
         .reduce(
             (
-                aggregatedResult: AggregatedResult<any>,
-                result: AggregatedResult<any>
+                aggregatedResult: AggregatedResult<unknown>,
+                result: AggregatedResult<unknown>
             ) => Object.assign(aggregatedResult, result),
             valuesMap
         );
 };
 
-export const filterResults = () =>
+export const filterResults = <TResultType>(): OperatorFunction<
+    WorkerMessage,
+    ResultMessage<TResultType>
+> =>
     filter(
-        (message: WorkerMessage): message is ResultMessage =>
+        (message: WorkerMessage): message is ResultMessage<TResultType> =>
             message.type === MessageTypes.RESULT
     );

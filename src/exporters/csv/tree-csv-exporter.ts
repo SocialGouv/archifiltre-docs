@@ -1,9 +1,9 @@
-import { generateTreeCsvExport$ } from "exporters/csv/tree-csv-exporter.controller";
-import type { ArchifiltreThunkAction } from "reducers/archifiltre-types";
-import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
-import translations from "translations/translations";
-import { handleFileExportThunk } from "util/export/export-util";
-import { notifyInfo } from "util/notification/notifications-util";
+import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
+import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import translations from "../../translations/translations";
+import { handleFileExportThunk } from "../../util/export/export-util";
+import { notifyInfo } from "../../util/notification/notifications-util";
+import { generateTreeCsvExport$ } from "./tree-csv-exporter.controller";
 
 /**
  * Thunk that generates the csv array for the CSV export with the first line being

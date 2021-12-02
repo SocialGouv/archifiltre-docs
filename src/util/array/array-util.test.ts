@@ -20,11 +20,7 @@ describe("array-util", () => {
         describe("with [1, 2, 3, 5, 8]", () => {
             it("should count return [0, 1, 3, 6, 11]", () => {
                 expect(computeCumulative([1, 2, 3, 5, 8])).toEqual([
-                    0,
-                    1,
-                    3,
-                    6,
-                    11,
+                    0, 1, 3, 6, 11,
                 ]);
             });
         });

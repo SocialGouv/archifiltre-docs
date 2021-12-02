@@ -1,25 +1,26 @@
-import { getExcelExportProgressGoal } from "exporters/excel/excel-exporter.impl";
-import { generateExcelExport$ } from "exporters/excel/excel-exporter-controller";
 import { promises as fs } from "fs";
-import type { ArchifiltreThunkAction } from "reducers/archifiltre-types";
+import { tap } from "rxjs/operators";
+
+import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import {
     completeLoadingAction,
     progressLoadingAction,
-} from "reducers/loading-info/loading-info-actions";
-import { startLoading } from "reducers/loading-info/loading-info-operations";
-import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
-import { tap } from "rxjs/operators";
-import translations from "translations/translations";
-import { getCsvExportParamsFromStore } from "util/array-export/array-export-utils";
-import { filterResults } from "util/batch-process/batch-process-util";
-import type { ResultMessage } from "util/batch-process/batch-process-util-types";
-import { isProgressResult } from "util/export/export-util";
-import { openExternalElement } from "util/file-system/file-system-util";
+} from "../../reducers/loading-info/loading-info-actions";
+import { startLoading } from "../../reducers/loading-info/loading-info-operations";
+import { LoadingInfoTypes } from "../../reducers/loading-info/loading-info-types";
+import translations from "../../translations/translations";
+import { getCsvExportParamsFromStore } from "../../util/array-export/array-export-utils";
+import { filterResults } from "../../util/batch-process/batch-process-util";
+import type { ResultMessage } from "../../util/batch-process/batch-process-util-types";
+import { isProgressResult } from "../../util/export/export-util";
+import { openExternalElement } from "../../util/file-system/file-system-util";
 import {
     NotificationDuration,
     notifyInfo,
     notifySuccess,
-} from "util/notification/notifications-util";
+} from "../../util/notification/notifications-util";
+import { getExcelExportProgressGoal } from "./excel-exporter.impl";
+import { generateExcelExport$ } from "./excel-exporter-controller";
 
 export const excelExporterThunk =
     (name: string): ArchifiltreThunkAction =>
@@ -47,8 +48,8 @@ export const excelExporterThunk =
 
         const { result } = await generateExcelExport$(exportData)
             .pipe(
-                filterResults(),
-                tap((message: ResultMessage) => {
+                filterResults<number>(),
+                tap((message: ResultMessage<number>) => {
                     if (isProgressResult(message)) {
                         dispatch(
                             progressLoadingAction(loadingId, message.result)
@@ -58,7 +59,7 @@ export const excelExporterThunk =
             )
             .toPromise();
 
-        await fs.writeFile(name, result, "binary");
+        await fs.writeFile(name, String(result), "binary");
 
         dispatch(completeLoadingAction(loadingId));
 
@@ -66,6 +67,6 @@ export const excelExporterThunk =
             translations.t("export.excelExportSuccessMessage"),
             translations.t("export.excelExportTitle"),
             NotificationDuration.NORMAL,
-            () => openExternalElement(name)
+            async () => openExternalElement(name)
         );
     };

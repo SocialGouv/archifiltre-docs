@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,7 +12,7 @@ import { getFirstLevelName } from "util/files-and-folders/file-and-folders-utils
 
 import SessionInfo from "./session-info";
 
-const SessionInfoContainer: FC = () => {
+const SessionInfoContainer: React.FC = () => {
     const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
 
     const dispatch = useDispatch();

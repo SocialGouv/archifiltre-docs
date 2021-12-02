@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import React, { useCallback, useContext, useState } from "react";
 
 const fileMoveState = {
@@ -20,7 +19,7 @@ export const useFileMoveActiveState = () => {
     return { isFileMoveActive, setFileMoveActive };
 };
 
-const FileMoveProvider: FC = ({ children }) => {
+const FileMoveProvider: React.FC = ({ children }) => {
     const [isFileMoveActive, setIsFileMoveActive] = useState(false);
 
     return (

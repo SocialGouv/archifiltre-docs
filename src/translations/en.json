@@ -123,6 +123,7 @@
     "common": {
       "exportActionTitle": "Export",
       "error": "Oops ! An error occurred.",
+      "errorBack": "Return to home screen",
       "contactUs": "Click here to contact us",
       "somethingWentWrong": "Something went wrong.",
       "file": "file",

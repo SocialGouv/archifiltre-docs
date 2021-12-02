@@ -1,5 +1,5 @@
 import { getCurrentState } from "./undoable-selectors";
-import { UndoableState } from "./undoable-types";
+import type { UndoableState } from "./undoable-types";
 
 describe("undoable-selectors", () => {
     describe("getCurrentState", () => {

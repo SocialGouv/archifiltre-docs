@@ -1,52 +1,46 @@
-import { mapToNewVersionNumbers } from "components/header/new-version-checker";
-import type { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
-import { firstHashesComputingThunk } from "hash-computer/hash-computer-thunk";
-import _ from "lodash";
+import _, { noop } from "lodash";
 import { compose } from "lodash/fp";
-import { reportError } from "logging/reporter";
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
 import path from "path";
-import {
-    getErroredFilesAndFolders,
-    getFilesAndFoldersFromStore,
-    ROOT_FF_ID,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import type { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import { tap } from "rxjs/operators";
-import translations from "translations/translations";
-import { filterResults } from "util/batch-process/batch-process-util";
-import type { ErrorMessage } from "util/batch-process/batch-process-util-types";
-import { copyToClipboard } from "util/clipboard/clipboard";
-import { ArchifiltreStoreThunkErrorCode } from "util/error/error-codes";
-import type { ArchifiltreError } from "util/error/error-util";
-import { ArchifiltreErrorType, makeErrorHandler } from "util/error/error-util";
+
+import { mapToNewVersionNumbers } from "../components/header/new-version-checker";
+import type { VirtualFileSystem } from "../files-and-folders-loader/files-and-folders-loader-types";
+import { firstHashesComputingThunk } from "../hash-computer/hash-computer-thunk";
+import { reportError } from "../logging/reporter";
+import { addTracker } from "../logging/tracker";
+import { ActionTitle, ActionType } from "../logging/tracker-types";
+import translations from "../translations/translations";
+import { filterResults } from "../util/batch-process/batch-process-util";
+import type { ErrorMessage } from "../util/batch-process/batch-process-util-types";
+import { copyToClipboard } from "../util/clipboard/clipboard";
+import { ArchifiltreStoreThunkErrorCode } from "../util/error/error-codes";
+import type { ArchifiltreError } from "../util/error/error-util";
+import {
+    ArchifiltreErrorType,
+    makeErrorHandler,
+} from "../util/error/error-util";
 import {
     countZipFiles,
     isJsonFile,
     isRootPath,
     isValidFolderPath,
     octet2HumanReadableFormat,
-} from "util/file-system/file-sys-util";
-import type { HookParam } from "util/file-tree-loader/file-tree-loader";
-import { loadFileTree } from "util/file-tree-loader/file-tree-loader";
+} from "../util/file-system/file-sys-util";
+import type { HookParam } from "../util/file-tree-loader/file-tree-loader";
+import { loadFileTree } from "../util/file-tree-loader/file-tree-loader";
 import {
     filesAndFoldersMapToArray,
     getFiles,
     getFirstLevelName,
-} from "util/files-and-folders/file-and-folders-utils";
-import { empty } from "util/function/function-util";
+} from "../util/files-and-folders/file-and-folders-utils";
 import {
     NotificationDuration,
     notifyError,
     notifyInfo,
-} from "util/notification/notifications-util";
-import { operateOnDataProcessingStream } from "util/observable/observable-util";
-import workerManager from "util/worker-manager/worker-manager";
-
-import version, { versionComparator } from "../version";
+} from "../util/notification/notifications-util";
+import { operateOnDataProcessingStream } from "../util/observable/observable-util";
+import workerManager from "../util/worker-manager/worker-manager";
+import { version, versionComparator } from "../version";
 import type {
     ArchifiltreDispatch,
     ArchifiltreThunkAction,
@@ -63,7 +57,14 @@ import {
     resetOverrideLastModified,
     setFilesAndFoldersAliases,
 } from "./files-and-folders/files-and-folders-actions";
+import {
+    getErroredFilesAndFolders,
+    getFilesAndFoldersFromStore,
+    ROOT_FF_ID,
+} from "./files-and-folders/files-and-folders-selectors";
+import type { FilesAndFoldersMap } from "./files-and-folders/files-and-folders-types";
 import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata/files-and-folders-metadata-actions";
+import { getFilesAndFoldersMetadataFromStore } from "./files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { setFilesAndFoldersHashes } from "./hashes/hashes-actions";
 import {
     registerErrorAction,
@@ -90,12 +91,13 @@ import {
     setOriginalPath,
     setSessionName,
 } from "./workspace-metadata/workspace-metadata-actions";
+import { getWorkspaceMetadataFromStore } from "./workspace-metadata/workspace-metadata-selectors";
 
 /**
  * Notifies the user that there is a Zip in the loaded files
  * @param zipCount - The number of zip files detected
  */
-const displayZipNotification = (zipCount) => {
+const displayZipNotification = (zipCount: number) => {
     notifyInfo(
         translations.t("folderDropzone.zipNotificationMessage"),
         `${zipCount} ${translations.t("folderDropzone.zipNotificationTitle")}`,
@@ -117,7 +119,7 @@ const displayJsonNotification = () => {
 /**
  * Notifies the user that errors occurred while loading the folder
  */
-const displayErrorNotification = () => (dispatch) => {
+const displayErrorNotification = (): ArchifiltreThunkAction => (dispatch) => {
     notifyError(
         translations.t("folderDropzone.errorsWhileLoading"),
         translations.t("folderDropzone.error"),
@@ -127,7 +129,7 @@ const displayErrorNotification = () => (dispatch) => {
 };
 
 const makeErrorResponse = () => ({
-    terminate: empty,
+    terminate: noop,
     virtualFileSystem: Promise.reject(),
 });
 
@@ -149,11 +151,13 @@ const displayUnexpectedError = (errorReason: string) => {
         "folderDropzone.unexpectedErrorMessage"
     );
     reportError(errorReason);
-    return notifyError(
+    notifyError(
         errorMessage,
         errorTitle,
         NotificationDuration.PERMANENT,
-        () => copyToClipboard(errorReason)
+        () => {
+            copyToClipboard(errorReason);
+        }
     );
 };
 
@@ -168,20 +172,24 @@ const displayError = (errorMessage: string, errorTitle: string) => {
  * @param filesAndFoldersMap
  */
 const handleTracking =
-    (paths, filesAndFoldersMap): ArchifiltreThunkAction =>
+    (
+        paths: string[],
+        filesAndFoldersMap: FilesAndFoldersMap
+    ): ArchifiltreThunkAction =>
     (dispatch, getState) => {
         const filesAndFoldersMetadataMap = getFilesAndFoldersMetadataFromStore(
             getState()
         );
 
         const treeVolume =
-            filesAndFoldersMetadataMap[ROOT_FF_ID].childrenTotalSize;
+            filesAndFoldersMetadataMap[ROOT_FF_ID].childrenTotalSize ?? 0;
 
         const fileCount = paths.length;
         const foldersCount = Object.keys(filesAndFoldersMap).length - fileCount;
 
         const elementsByExtension = _(paths)
-            .map(path.extname)
+            .map((p) => path.extname(p))
+            // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
             .countBy(_.identity())
             .map(
                 (count, extension) =>
@@ -221,7 +229,7 @@ const handleZipNotificationDisplay = (paths: string[]) => {
 };
 
 const handleErrorNotificationDisplay =
-    (): ArchifiltreThunkAction => async (dispatch, getState) => {
+    (): ArchifiltreThunkAction => (dispatch, getState) => {
         const errors = getErroredFilesAndFolders(getState());
 
         if (errors.length > 0) {
@@ -231,7 +239,7 @@ const handleErrorNotificationDisplay =
 
 const handleHashComputing =
     (virtualFileSystem: VirtualFileSystem): ArchifiltreThunkAction =>
-    async (dispatch) => {
+    (dispatch) => {
         dispatch(
             firstHashesComputingThunk(virtualFileSystem.originalPath, {
                 ignoreFileHashes: !virtualFileSystem.isOnFileSystem,
@@ -276,7 +284,7 @@ const handleVirtualFileSystemThunk =
         fileOrFolderPath: string,
         virtualFileSystem: VirtualFileSystem
     ): ArchifiltreThunkAction =>
-    async (dispatch) => {
+    (dispatch) => {
         handleJsonNotificationDisplay(fileOrFolderPath, virtualFileSystem);
         dispatch(initStore(virtualFileSystem));
         dispatch(setLoadingStep(LoadingStep.FINISHED));
@@ -286,7 +294,7 @@ const handleVirtualFileSystemThunk =
 
 const makeLoadFilesAndFoldersErrorHandler = (dispatch: ArchifiltreDispatch) =>
     tap<ErrorMessage>(({ error }) => {
-        dispatch(registerErrorAction(error));
+        dispatch(registerErrorAction(error as ArchifiltreError));
         dispatch(registerErroredElements([error]));
     });
 
@@ -309,6 +317,9 @@ const makeLoadFilesAndFoldersResultHandler = (dispatch: ArchifiltreDispatch) =>
                 dispatch(
                     setFileSystemLoadingStep(FileSystemLoadingStep.COMPLETE)
                 );
+                break;
+            default:
+                break;
         }
     });
 
@@ -335,7 +346,7 @@ const loadFilesAndFoldersAfterInitThunk =
             error: makeLoadFilesAndFoldersErrorHandler(dispatch),
             result: makeLoadFilesAndFoldersResultHandler(dispatch),
         })
-            .pipe(filterResults())
+            .pipe(filterResults<{ result: VirtualFileSystem }>())
             .toPromise()
             .then(({ result: { result } }) => {
                 dispatch(
@@ -381,11 +392,11 @@ const tryLoadFilesAndFoldersAfterInitThunk =
             return dispatch(
                 loadFilesAndFoldersAfterInitThunk(fileOrFolderPath)
             );
-        } catch (error) {
+        } catch (error: unknown) {
             reportError(error);
             dispatch(setLoadingStep(LoadingStep.ERROR));
             return {
-                terminate: empty,
+                terminate: noop,
                 virtualFileSystem: Promise.reject(),
             };
         }
@@ -401,7 +412,7 @@ const loadFilesAndFoldersFromValidPathThunk =
         const { virtualFileSystem, terminate } = dispatch(
             tryLoadFilesAndFoldersAfterInitThunk(fileOrFolderPath)
         );
-        virtualFileSystem.then(() => {
+        void virtualFileSystem.then(() => {
             handleLoadingTimeTracking(loadingStart);
         });
         return { terminate, virtualFileSystem };
@@ -409,7 +420,7 @@ const loadFilesAndFoldersFromValidPathThunk =
 
 const createArchifiltreStoreThunkError = (
     code: ArchifiltreStoreThunkErrorCode,
-    reason?: string
+    _reason?: string
 ): ArchifiltreError => ({
     code,
     filePath: "",
@@ -417,22 +428,24 @@ const createArchifiltreStoreThunkError = (
     type: ArchifiltreErrorType.STORE_THUNK,
 });
 
-const failIfRootPath = (path: string) => {
-    if (isRootPath(path)) {
+const failIfRootPath = (rootPath: string) => {
+    if (isRootPath(rootPath)) {
+        // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw createArchifiltreStoreThunkError(
             ArchifiltreStoreThunkErrorCode.ROOT_PATH
         );
     }
-    return path;
+    return rootPath;
 };
 
-const failIfInvalidPath = (path: string) => {
-    if (!isValidFolderPath(path)) {
+const failIfInvalidPath = (invalidPath: string) => {
+    if (!isValidFolderPath(invalidPath)) {
+        // eslint-disable-next-line @typescript-eslint/no-throw-literal
         throw createArchifiltreStoreThunkError(
             ArchifiltreStoreThunkErrorCode.INVALID_PATH
         );
     }
-    return path;
+    return invalidPath;
 };
 
 const displayUnknownError = () => makeErrorResponse();
@@ -444,8 +457,8 @@ export const loadFilesAndFoldersFromPathThunk =
     async (dispatch) => {
         try {
             const { virtualFileSystem, terminate } = await compose(
-                async (path) =>
-                    dispatch(loadFilesAndFoldersFromValidPathThunk(path)),
+                async (pathToLoad) =>
+                    dispatch(loadFilesAndFoldersFromValidPathThunk(pathToLoad)),
                 failIfInvalidPath,
                 failIfRootPath
             )(fileOrFolderPath);
@@ -455,14 +468,14 @@ export const loadFilesAndFoldersFromPathThunk =
             });
 
             return { terminate, virtualFileSystem };
-        } catch (err) {
+        } catch (err: unknown) {
             return await makeErrorHandler({
                 [ArchifiltreStoreThunkErrorCode.ROOT_PATH]:
                     displayRootPathError,
                 [ArchifiltreStoreThunkErrorCode.INVALID_PATH]:
                     displayInvalidPathError,
                 default: displayUnknownError,
-            })(err);
+            })(err as ArchifiltreError);
         }
     };
 
@@ -497,6 +510,7 @@ const initStore =
 
         dispatch(initVirtualPathToIdMap(virtualPathToIdMap));
         dispatch(initOverrideLastModified(overrideLastModified));
+        /* eslint-disable @typescript-eslint/no-unnecessary-condition */
         if (hashes) {
             dispatch(setFilesAndFoldersHashes(hashes));
         }
@@ -516,6 +530,7 @@ const initStore =
         if (elementsToDelete) {
             dispatch(markElementsToDelete(elementsToDelete));
         }
+        /* eslint-enable @typescript-eslint/no-unnecessary-condition */
     };
 
 export const resetStoreThunk = (): ArchifiltreThunkAction => (dispatch) => {

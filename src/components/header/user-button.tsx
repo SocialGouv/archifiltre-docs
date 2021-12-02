@@ -1,18 +1,20 @@
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import SettingsModal from "components/modals/settings-modal/settings-modal";
-import { useModal } from "hooks/use-modal";
-import { useStyles } from "hooks/use-styles";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCog, FaSignOutAlt, FaUser } from "react-icons/fa";
 
+import { useModal } from "../../hooks/use-modal";
+import { useStyles } from "../../hooks/use-styles";
+import type { VoidFunction } from "../../util/function/function-util";
+import SettingsModal from "../modals/settings-modal/settings-modal";
+
 interface UserButtonProps {
-    resetWorkspace: any;
+    resetWorkspace: VoidFunction;
 }
 
-const UserButton: React.FC<UserButtonProps> = ({ resetWorkspace }) => {
+export const UserButton: React.FC<UserButtonProps> = ({ resetWorkspace }) => {
     const { t } = useTranslation();
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -32,12 +34,12 @@ const UserButton: React.FC<UserButtonProps> = ({ resetWorkspace }) => {
     const onSettingsClick = useCallback(() => {
         handleClose();
         openModal();
-    }, [handleClose]);
+    }, [handleClose, openModal]);
 
     const onCloseClick = useCallback(() => {
         handleClose();
         resetWorkspace();
-    }, [handleClose]);
+    }, [handleClose, resetWorkspace]);
 
     const settingsModalTitle = t("settingsModal.title");
 
@@ -81,5 +83,3 @@ const UserButton: React.FC<UserButtonProps> = ({ resetWorkspace }) => {
         </div>
     );
 };
-
-export default UserButton;

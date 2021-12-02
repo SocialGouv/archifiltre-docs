@@ -4,7 +4,7 @@ import type {
     HorizontalStackedBarOption,
     RenderTooltipContent,
 } from "components/common/horizontal-stacked-bar";
-import HorizontalStackedBar from "components/common/horizontal-stacked-bar";
+import { HorizontalStackedBar } from "components/common/horizontal-stacked-bar";
 import type { FileTypeMap } from "exporters/audit/audit-report-values-computer";
 import type { TFunction } from "i18next";
 import React, { useMemo } from "react";

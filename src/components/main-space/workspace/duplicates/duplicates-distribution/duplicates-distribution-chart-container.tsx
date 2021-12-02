@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
@@ -11,7 +10,7 @@ import {
 
 import DuplicatesDistributionChart from "./duplicates-distribution-chart";
 
-const DuplicatesDistributionChartContainer: FC = () => {
+const DuplicatesDistributionChartContainer: React.FC = () => {
     const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
     const hashesMap = useSelector(getHashesFromStore);
 

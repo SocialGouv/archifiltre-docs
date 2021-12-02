@@ -3,24 +3,27 @@ import fs from "fs";
 import MD5 from "js-md5";
 import JSZip from "jszip";
 import path from "path";
-import { isFile } from "reducers/files-and-folders/files-and-folders-selectors";
+import { v4 as uuidv4 } from "uuid";
+import XML from "xml";
+
+import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import type {
     AliasMap,
     CommentsMap,
+    FilesAndFolders,
     FilesAndFoldersMap,
-} from "reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { getAllTagsForFile } from "reducers/tags/tags-selectors";
-import type { TagMap } from "reducers/tags/tags-types";
-import translations from "translations/translations";
-import { handleError } from "util/error/error-util";
-import { getDisplayName } from "util/files-and-folders/file-and-folders-utils";
-import { notifySuccess } from "util/notification/notifications-util";
-import { generateRandomString } from "util/random-gen-util";
-import { v4 as uuidv4 } from "uuid";
-import version from "version";
-import XML from "xml";
-
+} from "../../reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { HashesMap } from "../../reducers/hashes/hashes-types";
+import { getAllTagsForFile } from "../../reducers/tags/tags-selectors";
+import type { TagMap } from "../../reducers/tags/tags-types";
+import translations from "../../translations/translations";
+import { handleError } from "../../util/error/error-util";
+import { getDisplayName } from "../../util/files-and-folders/file-and-folders-utils";
+import { notifySuccess } from "../../util/notification/notifications-util";
+import type { SimpleObject } from "../../util/object/object-util";
+import { generateRandomString } from "../../util/random-gen-util";
+import { version } from "../../version";
 import {
     METS_EXPORT_ERROR_TITLE,
     METS_EXPORT_UNHANDLED_ERROR,
@@ -30,7 +33,7 @@ import {
 // =================================
 // AUXILIARY FUNCTIONS AND VARIABLES
 // =================================
-const makeObj = (key: string, value: any) => ({
+const makeObj = (key: string, value: unknown) => ({
     [key]: value,
 });
 
@@ -58,6 +61,7 @@ const METS_SOURCE =
     "http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd";
 
 const makeManifestRootAttributes = () => {
+    /* eslint-disable @typescript-eslint/naming-convention */
     return {
         xmlns: "http://www.loc.gov/METS/",
         "xmlns:dc": "http://purl.org/dc/elements/1.1/",
@@ -69,13 +73,14 @@ const makeManifestRootAttributes = () => {
         "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
         "xsi:schemaLocation": METS_SOURCE,
     };
+    /* eslint-enable @typescript-eslint/naming-convention */
 };
 
 /**
  * Returns a formatted METS header (metsHdr)
  * @param {string} pid productionIdentifier
  */
-export const makeHeader = (pid: string) => ({
+export const makeHeader = (pid: string): SimpleObject => ({
     "mets:metsHdr": [
         {
             _attr: {
@@ -100,7 +105,10 @@ export const makeHeader = (pid: string) => ({
  * @param {string} id identifier of the section
  * @param {Array} content a block of descriptive information in Dublin Core
  */
-export const makeDmdSec = (id: string, content: object[]) => {
+export const makeDmdSec = (
+    id: string,
+    content: SimpleObject[]
+): SimpleObject => {
     return {
         "mets:dmdSec": [
             { _attr: makeObj("ID", id) },
@@ -143,7 +151,7 @@ const makePremisObject = (
     objectValue: string,
     objectRole: string | undefined
 ) => {
-    const loiContent = [] as object[];
+    const loiContent = [] as SimpleObject[];
     loiContent.push(makeObj("premis:linkingObjectIdentifierType", objectType));
     loiContent.push(
         makeObj("premis:linkingObjectIdentifierValue", objectValue)
@@ -167,12 +175,12 @@ const makePremisObject = (
 export const makePremisEvent = (
     id: string,
     type: string,
-    date: any,
+    date: unknown,
     detail: string | undefined,
-    agents: object[] | undefined,
-    object: object | undefined
-) => {
-    const premisEvent = [] as object[];
+    agents: SimpleObject[] | undefined,
+    object: SimpleObject | undefined
+): SimpleObject => {
+    const premisEvent = [] as SimpleObject[];
     premisEvent.push(
         makeObj("premis:eventIdentifier", [
             makeObj("premis:eventIdentifierType", "UUID"),
@@ -225,17 +233,17 @@ export const makePremisEvent = (
  * @param {string} alias of the file
  */
 export const makeFileElement = (
-    item: any,
+    item: FilesAndFolders,
     ID: string,
     DMDID: string,
     hash: string,
     alias: string
-) => {
+): SimpleObject => {
     const originalName = item.name;
     const aliasName = getDisplayName(originalName, alias);
     const internalURI = `master/${aliasName}`;
 
-    const fileContent = [] as object[];
+    const fileContent = [] as SimpleObject[];
 
     fileContent.push({
         _attr: {
@@ -273,12 +281,12 @@ export const makeFileElement = (
  * @param {string} FILEID identifier of the associated file element in the fileSec
  */
 export const makeObjectDiv = (
-    item: any,
-    itemTags: any,
+    _item: FilesAndFolders,
+    _itemTags: string[],
     ID: string,
     order: number,
     FILEID: string
-) =>
+): SimpleObject =>
     makeObj("mets:div", [
         { _attr: { ID, ORDER: order, TYPE: "object" } },
         makeObj("mets:fptr", [
@@ -286,6 +294,12 @@ export const makeObjectDiv = (
             undefined, // self-closed tag
         ]),
     ]);
+
+interface Counters {
+    fileCount: number;
+    dmdCount: number;
+    objCount: number;
+}
 
 /**
  * Recursive function to traverse the FF and gather METS sections
@@ -301,26 +315,29 @@ export const makeObjectDiv = (
  * @param {function} addToDmd function to add a descriptive section
  * @param {function} addToMASTER function to add a file section to the fileSec
  * @param {function} addToDIV function to add a div section to the structMap
- * @param {function} HMRead function to read from the hashmap of the items
- * @param {function} HMUpdate function to update the hashmap of the items
+ * @param {function} hashMapReader function to read from the hashmap of the items
+ * @param {function} hashMapUpdater function to update the hashmap of the items
  * @param {function} contentWriter function to gather payload to be added to the package
  */
 const recTraverseDB = (
     filesAndFoldersId: string,
     rootPath: string,
     absolutePath: string,
-    counters: any,
-    readFromFF: (filesAndFoldersId: string) => any,
-    readTags: (filesAndFoldersId: string) => any,
+    counters: Counters,
+    readFromFF: (filesAndFoldersId: string) => FilesAndFolders,
+    readTags: (filesAndFoldersId: string) => string[],
     aliases: AliasMap,
     comments: CommentsMap,
     elementsToDelete: string[],
-    addToDmd: (object: any) => void,
-    addToMASTER: (object: any) => void,
-    addToDIV: (object: any) => void,
-    HMRead: () => any,
-    HMUpdate: (hash: string, id: any) => void,
-    contentWriter: (hash: string, data: object) => void
+    addToDmd: (object: SimpleObject) => void,
+    addToMASTER: (object: SimpleObject) => void,
+    addToDIV: (object: SimpleObject) => void,
+    hashMapReader: () => HashesMap,
+    hashMapUpdater: (
+        hash: string,
+        updater: (h1: string, h2: string) => string
+    ) => void,
+    contentWriter: (hash: string, data: Buffer) => void
 ) => {
     const item = readFromFF(filesAndFoldersId);
     const tags = readTags(filesAndFoldersId);
@@ -341,24 +358,27 @@ const recTraverseDB = (
             ? rootPath.substring(1)
             : rootPath;
         const URI = path.join(absolutePath, cleanRootpath, item.name);
-        let data;
+        let data = Buffer.from([]);
         try {
             data = fs.readFileSync(URI);
-        } catch (error) {
-            handleError(
-                error.code,
-                {
-                    EACCES: metsExportErrorCannotAccessFile(URI),
-                    ENOENT: metsExportErrorFileDoesNotExist(URI),
-                    default: METS_EXPORT_UNHANDLED_ERROR,
-                },
-                METS_EXPORT_ERROR_TITLE
-            );
+        } catch (error: unknown) {
+            const err = error as { code?: string };
+            if (err.code) {
+                handleError(
+                    err.code,
+                    {
+                        EACCES: metsExportErrorCannotAccessFile(URI),
+                        ENOENT: metsExportErrorFileDoesNotExist(URI),
+                        default: METS_EXPORT_UNHANDLED_ERROR,
+                    },
+                    METS_EXPORT_ERROR_TITLE
+                );
+            }
             return;
         }
         const hash = MD5(data);
 
-        if (HMRead()[hash]) {
+        if (hashMapReader()[hash]) {
             // duplicate!
             return;
         }
@@ -368,7 +388,7 @@ const recTraverseDB = (
 
         const idDmd = counters.dmdCount;
         counters.dmdCount = idDmd + 1;
-        const dmdContent = [] as object[];
+        const dmdContent: SimpleObject[] = [];
         // make sure we use / in uri even on Windows
         const relativeURI = path
             .join(cleanRootpath, item.name)
@@ -412,7 +432,7 @@ const recTraverseDB = (
         );
         addToDIV(itemDIV);
 
-        HMUpdate(hash, () => ID);
+        hashMapUpdater(hash, () => ID);
 
         contentWriter(hash, data);
     } else {
@@ -431,8 +451,8 @@ const recTraverseDB = (
                 addToDmd,
                 addToMASTER,
                 addToDIV,
-                HMRead,
-                HMUpdate,
+                hashMapReader,
+                hashMapUpdater,
                 contentWriter
             );
         });
@@ -466,11 +486,10 @@ const makeMetsContent = (
         filesAndFoldersMetadata,
         tags,
         originalPath,
-        exportPath,
         sessionName,
     }: GlobalState,
-    contentWriter: (hash: string, data: object) => void,
-    metsContent: object[]
+    contentWriter: (hash: string, data: Buffer) => void,
+    metsContent: SimpleObject[]
 ) => {
     const folderpath = path.join(originalPath, "/../");
 
@@ -483,14 +502,14 @@ const makeMetsContent = (
     };
 
     // Arrays to store the sections while traversing the FF
-    const DMDChildren = [] as object[];
-    const MASTERChildren = [] as object[];
-    const DIVChildren = [] as object[];
+    const DMDChildren: SimpleObject[] = [];
+    const MASTERChildren: SimpleObject[] = [];
+    const DIVChildren: SimpleObject[] = [];
 
     MASTERChildren.push({ _attr: { ID: "GRP.1", USE: "master" } });
 
     // Make first dmd for the group
-    const dmdContent = [] as object[];
+    const dmdContent: SimpleObject[] = [];
     // Need to get the item of the first folder to retrieve the title (in the comment ?)
     dmdContent.push(
         makeObj("dc:title", "DUMMMY_TITLE"),
@@ -503,7 +522,7 @@ const makeMetsContent = (
     DMDChildren.push(makeDmdSec("DMD.1", dmdContent));
 
     // Create the digiprovMD sections
-    const digiprovsContent = [] as object[];
+    const digiprovsContent: SimpleObject[] = [];
     const amdIds = [] as string[];
 
     // Define the event for the whole group
@@ -552,22 +571,26 @@ const makeMetsContent = (
     );
 
     // Traversing database
-    const hashmap = {};
+    const hashmap: HashesMap = {};
     const HMread = () => hashmap;
-    const HMupdate = (hash, updater) => {
-        hashmap[hash] = updater(hashmap[hash], hash);
+    const HMupdate = (
+        hash: string,
+        updater: (h1: string, h2: string) => string
+    ) => {
+        hashmap[hash] = updater(hashmap[hash] ?? "", hash);
     };
 
-    const FFreader = (ffId) => ({
-        ...filesAndFolders[ffId],
-        ...filesAndFoldersMetadata[ffId],
-    });
-    const tagReader = (ffId) =>
+    const FFreader = (ffId: string) =>
+        ({
+            ...filesAndFolders[ffId],
+            ...filesAndFoldersMetadata[ffId],
+        } as FilesAndFolders);
+    const tagReader = (ffId: string) =>
         getAllTagsForFile(tags, ffId).map((tag) => tag.name);
 
-    const DMDwriter = (item) => DMDChildren.push(item);
-    const MASTERwriter = (item) => MASTERChildren.push(item);
-    const DIVwriter = (item) => DIVChildren.push(item);
+    const DMDwriter = (item: SimpleObject) => DMDChildren.push(item);
+    const MASTERwriter = (item: SimpleObject) => MASTERChildren.push(item);
+    const DIVwriter = (item: SimpleObject) => DIVChildren.push(item);
 
     const ROOT_ID = "";
 
@@ -592,7 +615,7 @@ const makeMetsContent = (
     });
 
     // Composition of StructMap
-    const groupContent = [] as object[];
+    const groupContent: SimpleObject[] = [];
     groupContent.push({
         _attr: {
             ADMID: amdIds.join(" "),
@@ -644,14 +667,14 @@ export const makeSIP = async ({
     originalPath,
     sessionName,
     exportPath,
-}: GlobalState) => {
+}: GlobalState): Promise<void> => {
     const sip = new JSZip();
     const content = sip.folder("master");
-    const addToContent = (filename, data) => {
+    const addToContent = (filename: string, data: Buffer) => {
         content?.file(filename.replace(/[^a-zA-Z0-9.\\/+=@_]+/g, "_"), data);
     };
 
-    const metsContent = [] as object[];
+    const metsContent: SimpleObject[] = [];
     metsContent.push({ _attr: makeManifestRootAttributes() });
     metsContent.push(makeHeader(sessionName));
 

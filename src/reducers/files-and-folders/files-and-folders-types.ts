@@ -1,5 +1,6 @@
 import type { Action } from "redux";
-import type { ArchifiltreError } from "util/error/error-util";
+
+import type { ArchifiltreError } from "../../util/error/error-util";
 
 export const INITIALIZE_FILES_AND_FOLDERS = "FILES_AND_FOLDERS/INITIALIZE";
 export const REMOVE_CHILD = "FILES_AND_FOLDERS/REMOVE_CHILD";
@@ -30,9 +31,13 @@ export interface FilesAndFolders {
     id: string;
     name: string;
     children: string[];
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     file_size: number;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     file_last_modified: number;
     virtualPath: string;
+    depth: number;
+    maxLastModified: number;
 }
 
 export interface ElementWithToDelete extends FilesAndFolders {

@@ -1,9 +1,10 @@
 import dateFormat from "dateformat";
-import FileSaver from "file-saver";
+import { saveAs } from "file-saver";
 import fs from "fs";
 import path, { dirname } from "path";
-import translations from "translations/translations";
-import { countItems } from "util/array//array-util";
+
+import translations from "../../translations/translations";
+import { countItems } from "../array//array-util";
 
 const utf8ByteOrderMark = "\ufeff";
 
@@ -15,7 +16,11 @@ export const UTF8 = "utf-8";
  * @param content - The string content to save
  * @param format - The specific format (ex: UTF8)
  */
-export const save = (name, content, { format = "" } = {}) => {
+export const save = (
+    name: string,
+    content: string,
+    { format = "" } = {}
+): void => {
     let fileHead = "";
 
     if (format === UTF8) {
@@ -32,14 +37,14 @@ export const save = (name, content, { format = "" } = {}) => {
  * @param name - The default file name
  * @param blob - The blob to save into a file
  */
-export const saveBlob = (name, blob) => {
-    FileSaver.saveAs(blob, name);
+export const saveBlob = (name: string, blob: Blob): void => {
+    saveAs(blob, name);
 };
 
-export const getNameWithExtension = (name, extension) =>
+export const getNameWithExtension = (name: string, extension: string): string =>
     `${name}_${dateFormat(new Date(), "yyyy_mm_dd_HH_MM")}.${extension}`;
 
-export const mkdir = (dirPath) => {
+export const mkdir = (dirPath: string): void => {
     if (!fs.existsSync(dirPath)) {
         mkdir(path.dirname(dirPath));
         fs.mkdirSync(dirPath);
@@ -65,7 +70,7 @@ interface ConvertToPosixAbsolutePathOptions {
 export const convertToPosixAbsolutePath = (
     filePath: string,
     { separator = path.sep }: ConvertToPosixAbsolutePathOptions = {}
-) => {
+): string => {
     const array = filePath.split(separator);
     if (array[0] !== "") {
         array.unshift("");
@@ -82,7 +87,7 @@ export const isJsonFile = (filePath: string): boolean => {
     try {
         const stats = fs.statSync(filePath);
         return stats.isFile() && path.extname(filePath) === ".json";
-    } catch (error) {
+    } catch (error: unknown) {
         return false;
     }
 };
@@ -93,8 +98,10 @@ export const readFileSync = fs.readFileSync;
  * Get the number of files with .zip extension
  * @param filePaths - list of strings representing file paths
  */
-export const countZipFiles = (filePaths) =>
-    countItems((filePath) => path.extname(filePath) === ".zip")(filePaths);
+export const countZipFiles = (filePaths: string[]): number =>
+    countItems<string>((filePath) => path.extname(filePath) === ".zip")(
+        filePaths
+    );
 
 /**
  * Formats a path for the user file system
@@ -105,7 +112,7 @@ export const countZipFiles = (filePaths) =>
  * console.log(formatPathForUserSystem("/folder/file"))
  * // => \folder\file
  */
-export const formatPathForUserSystem = (formattedPath) =>
+export const formatPathForUserSystem = (formattedPath: string): string =>
     path.normalize(formattedPath);
 
 export const octet2HumanReadableFormat = (size: number): string => {
@@ -146,24 +153,25 @@ export const getAbsolutePath = (
 export const isRootPath = (testPath: string): boolean =>
     path.dirname(testPath) === testPath;
 
-export const isValidFilePath = async (path: string) => {
-    const folderPath = dirname(path);
+export const isValidFilePath = async (filePath: string): Promise<boolean> => {
+    const folderPath = dirname(filePath);
 
     return folderExists(folderPath);
 };
 
-const folderExists = async (path: string): Promise<boolean> => {
+const folderExists = async (folderPath: string): Promise<boolean> => {
     try {
-        const stats = await fs.promises.stat(path);
+        const stats = await fs.promises.stat(folderPath);
         return stats.isDirectory();
-    } catch (err) {
+    } catch (error: unknown) {
         return false;
     }
 };
 
-export const isValidFolderPath = (path: string): boolean => fs.existsSync(path);
+export const isValidFolderPath = (folderPath: string): boolean =>
+    fs.existsSync(folderPath);
 
-export const startPathFromOneLevelAbove = (elementPath: string) =>
+export const startPathFromOneLevelAbove = (elementPath: string): string =>
     (elementPath.startsWith("/") ? elementPath.slice(1) : elementPath)
         .split("/")
         .slice(1)

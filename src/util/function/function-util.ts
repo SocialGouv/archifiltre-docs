@@ -1,6 +1,9 @@
 export const identity = <T>(param: T): T => param;
 
 export type AnyFunction = (...args: unknown[]) => unknown;
+export type Awaitable<T> = T extends (...args: infer A) => infer R
+    ? (...args: A) => Promise<R>
+    : Promise<T>;
 export type VoidFunction = (...args: unknown[]) => void;
 
 /**
@@ -19,8 +22,7 @@ export function compose(...funcs: AnyFunction[]): AnyFunction {
     }
 
     if (funcs.length === 1) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return funcs[0]!;
+        return funcs[0];
     }
 
     return funcs.reduce(

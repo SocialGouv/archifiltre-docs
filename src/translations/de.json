@@ -101,6 +101,7 @@
     },
     "common": {
       "error": "Ups! Ein Fehler ist aufgetreten.",
+      "errorBack": "Zurück zum Startbildschirm.",
       "contactUs": "Hier klicken, um uns zu kontaktieren",
       "somethingWentWrong": "Da ist etwas schiefgegangen.",
       "file": "Datei",

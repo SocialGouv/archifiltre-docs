@@ -2,7 +2,6 @@ import ErrorsModal from "components/modals/errors-modal/errors-modal";
 import { useErrorsModalConfig } from "components/modals/errors-modal/use-errors-modal-config";
 import { retryHashesComputingThunk } from "hash-computer/hash-computer-thunk";
 import path from "path";
-import type { FC } from "react";
 import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
@@ -13,7 +12,7 @@ import { Modal } from "reducers/modal/modal-types";
 import { useWorkspaceMetadata } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import { exportTableToCsvFile } from "util/table/table-util";
 
-const HashesErrorsModalContainer: FC = () => {
+const HashesErrorsModalContainer: React.FC = () => {
     const errors = useHashesErrors();
     const openModal = useOpenModal();
     const dispatch = useDispatch();

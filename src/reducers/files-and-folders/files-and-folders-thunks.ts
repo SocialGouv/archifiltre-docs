@@ -1,10 +1,9 @@
-import { createFilesAndFoldersMetadataDataStructure } from "files-and-folders-loader/file-system-loading-process-utils";
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
-import translations from "translations/translations";
-import { isExactFileOrAncestor } from "util/files-and-folders/file-and-folders-utils";
-import { notifyInfo } from "util/notification/notifications-util";
-
+import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/file-system-loading-process-utils";
+import { addTracker } from "../../logging/tracker";
+import { ActionTitle, ActionType } from "../../logging/tracker-types";
+import translations from "../../translations/translations";
+import { isExactFileOrAncestor } from "../../util/files-and-folders/file-and-folders-utils";
+import { notifyInfo } from "../../util/notification/notifications-util";
 import type { ArchifiltreThunkAction } from "../archifiltre-types";
 import { commitAction } from "../enhancers/undoable/undoable-actions";
 import { initFilesAndFoldersMetatada } from "../files-and-folders-metadata/files-and-folders-metadata-actions";
@@ -47,7 +46,7 @@ export const updateAliasThunk =
  * @param comments
  */
 export const updateCommentThunk =
-    (filesAndFoldersId, comments): ArchifiltreThunkAction =>
+    (filesAndFoldersId: string, comments: string): ArchifiltreThunkAction =>
     (dispatch) => {
         dispatch(
             addCommentsOnFilesAndFolders({ [filesAndFoldersId]: comments })
@@ -58,6 +57,7 @@ export enum IsMoveValidError {
     nameConflict = "nameConflict",
     cannotMoveToChild = "cannotMoveToChild",
     cannotMoveToFile = "cannotMoveToFile",
+    impossibleMove = "impossibleMove",
 }
 
 /**
@@ -71,18 +71,18 @@ const isMoveValid = (
     newParentId: string,
     elementId: string
 ): IsMoveValidError | null => {
-    const newParentVirtualPath = filesAndFolders[newParentId].virtualPath;
-    const elementVirtualPath = filesAndFolders[elementId].virtualPath;
-    const newSiblingsNames = filesAndFolders[newParentId].children
-        .map((id) => filesAndFolders[id])
-        .map(({ name }) => name);
-    const isNameConflict = newSiblingsNames.includes(
-        filesAndFolders[elementId].name
+    const newParent = filesAndFolders[newParentId];
+    const element = filesAndFolders[elementId];
+    const newParentVirtualPath = newParent.virtualPath;
+    const elementVirtualPath = element.virtualPath;
+    const newSiblingsNames = newParent.children.map(
+        (id) => filesAndFolders[id].name
     );
+    const isNameConflict = newSiblingsNames.includes(element.name);
     if (isExactFileOrAncestor(newParentVirtualPath, elementVirtualPath)) {
         return IsMoveValidError.cannotMoveToChild;
     }
-    if (isFile(filesAndFolders[newParentId])) {
+    if (isFile(newParent)) {
         return IsMoveValidError.cannotMoveToFile;
     }
     if (isNameConflict) {
@@ -98,10 +98,10 @@ const isMoveValid = (
  * @param newParentId
  */
 export const moveElement =
-    (elementId, newParentId): ArchifiltreThunkAction =>
+    (elementId: string, newParentId: string): ArchifiltreThunkAction =>
     (dispatch, getState) => {
         const filesAndFolders = getFilesAndFoldersFromStore(getState());
-        const parent = findElementParent(elementId, filesAndFolders);
+        const parent = findElementParent(elementId, filesAndFolders)!;
         const error = isMoveValid(filesAndFolders, newParentId, elementId);
         if (error) {
             const errorMessage = translations.t(`workspace.${error}`);

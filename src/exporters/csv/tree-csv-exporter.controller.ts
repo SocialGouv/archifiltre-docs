@@ -1,13 +1,28 @@
-import { stringifyTreeCsvExporterOptionsToStream } from "exporters/csv/tree-csv-exporter-serializer";
-import type { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
-import translations from "translations/translations";
-import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
-import { backgroundWorkerProcess$ } from "util/batch-process/batch-process-util";
-import type { InitializeMessage } from "util/batch-process/batch-process-util-types";
-import { MessageTypes } from "util/batch-process/batch-process-util-types";
+import type { Observable } from "rxjs";
+import type { Writable } from "stream";
 
-const initMessageSerializer = (stream, { data }: InitializeMessage) =>
-    stringifyTreeCsvExporterOptionsToStream(stream, data);
+import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import translations from "../../translations/translations";
+import { createAsyncWorkerForChildProcessControllerFactory } from "../../util/async-worker/child-process";
+import { backgroundWorkerProcess$ } from "../../util/batch-process/batch-process-util";
+import type {
+    ErrorMessage,
+    InitializeMessage,
+    ResultMessage,
+} from "../../util/batch-process/batch-process-util-types";
+import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
+import type { TreeCsvExporterParams } from "./tree-csv-exporter-serializer";
+import { stringifyTreeCsvExporterOptionsToStream } from "./tree-csv-exporter-serializer";
+
+const initMessageSerializer = (
+    stream: Writable,
+    { data }: InitializeMessage
+) => {
+    stringifyTreeCsvExporterOptionsToStream(
+        stream,
+        data as TreeCsvExporterParams
+    );
+};
 
 const messageSerializers = {
     [MessageTypes.INITIALIZE]: initMessageSerializer,
@@ -18,7 +33,9 @@ const messageSerializers = {
  * @returns an observable that emits each time a file is computed and emits the export string as the last value
  * @param filesAndFolders
  */
-export const generateTreeCsvExport$ = (filesAndFolders: FilesAndFoldersMap) => {
+export const generateTreeCsvExport$ = (
+    filesAndFolders: FilesAndFoldersMap
+): Observable<ErrorMessage | ResultMessage> => {
     const { language } = translations;
     return backgroundWorkerProcess$(
         { filesAndFolders, language },

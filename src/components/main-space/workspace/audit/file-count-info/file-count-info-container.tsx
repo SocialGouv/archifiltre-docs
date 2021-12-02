@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -8,7 +7,7 @@ import {
 
 import FileCountInfo from "./file-count-info";
 
-const FileCountInfoContainer: FC = () => {
+const FileCountInfoContainer: React.FC = () => {
     const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
 
     const fileCount = useMemo(

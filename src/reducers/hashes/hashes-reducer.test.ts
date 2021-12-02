@@ -1,6 +1,6 @@
 import { setFilesAndFoldersHashes } from "./hashes-actions";
 import { hashesReducer, initialState } from "./hashes-reducer";
-import { HashesState } from "./hashes-types";
+import type { HashesState } from "./hashes-types";
 
 describe("hashesReducer", () => {
     describe("SET_FILES_AND_FOLDERS_HASHES", () => {

@@ -1,4 +1,4 @@
-import DateField from "components/common/date-field";
+import { DateField } from "components/common/date-field";
 import React from "react";
 
 export interface FileLastModifiedDateProps {

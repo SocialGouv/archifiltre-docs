@@ -1,8 +1,8 @@
-import { DispatchExts } from "reducers/archifiltre-types";
+import type { DispatchExts } from "reducers/archifiltre-types";
 import { initialState as filesAndFoldersInitialState } from "reducers/files-and-folders/files-and-folders-reducer";
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
 import { initialState as hashesReducerInitialState } from "reducers/hashes/hashes-reducer";
-import { StoreState } from "reducers/store";
+import type { StoreState } from "reducers/store";
 import {
     createEmptyStore,
     wrapStoreWithUndoable,

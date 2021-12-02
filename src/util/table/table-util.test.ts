@@ -1,4 +1,4 @@
-import { Column } from "components/common/table/table-types";
+import type { Column } from "components/common/table/table-types";
 import {
     accessorToFunction,
     applyAccessorToTableValue,
@@ -51,9 +51,9 @@ describe("table-util", () => {
     });
 
     describe("applyAccessorToTableValue", () => {
-        type TestData = {
+        interface TestData {
             name: string;
-        };
+        }
 
         it("should work with a function accessor", () => {
             const data: TestData = {
@@ -76,10 +76,10 @@ describe("table-util", () => {
     });
 
     describe("tableContentToArray", () => {
-        type TestData = {
+        interface TestData {
             name: string;
             value: string;
-        };
+        }
 
         it("should generate a string[][] from table data and config", () => {
             const data: TestData[] = [

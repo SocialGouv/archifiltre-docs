@@ -50,11 +50,11 @@ describe("file-sys-util", () => {
     describe("isRootPath", () => {
         describe("onWindows", () => {
             beforeEach(() => {
-                // @ts-ignore
+                // @ts-expect-error
                 path.setOs("win32");
             });
             afterEach(() => {
-                // @ts-ignore
+                // @ts-expect-error
                 path.setOs(null);
             });
             it("should detect a drive as the rootPath", () => {
@@ -68,11 +68,11 @@ describe("file-sys-util", () => {
 
         describe("onPosix", () => {
             beforeEach(() => {
-                // @ts-ignore
+                // @ts-expect-error
                 path.setOs("posix");
             });
             afterEach(() => {
-                // @ts-ignore
+                // @ts-expect-error
                 path.setOs(null);
             });
             it("should detect the root folder as the rootPath", () => {

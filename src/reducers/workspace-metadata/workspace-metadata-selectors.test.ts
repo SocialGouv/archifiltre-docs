@@ -6,7 +6,7 @@ import {
     getSessionNameFromStore,
     getWorkspaceMetadataFromStore,
 } from "./workspace-metadata-selectors";
-import { WorkspaceMetadataState } from "./workspace-metadata-types";
+import type { WorkspaceMetadataState } from "./workspace-metadata-types";
 
 const workspaceMetadata: WorkspaceMetadataState = {
     hoveredElementId: "hover",

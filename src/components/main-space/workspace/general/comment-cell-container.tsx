@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { commitAction } from "reducers/enhancers/undoable/undoable-actions";
@@ -11,7 +10,7 @@ import {
 
 import CommentCell from "./comment-cell";
 
-const CommentCellContainer: FC = () => {
+const CommentCellContainer: React.FC = () => {
     const dispatch = useDispatch();
 
     const hoveredElementId = useSelector(getHoveredElementIdFromStore);

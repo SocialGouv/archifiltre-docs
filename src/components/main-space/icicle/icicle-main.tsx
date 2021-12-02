@@ -1,30 +1,29 @@
 import Paper from "@material-ui/core/Paper";
-import type { MoveElement } from "hooks/use-movable-elements";
-import { useMovableElements } from "hooks/use-movable-elements";
-import { sum } from "lodash";
+import { noop, sum } from "lodash";
 import type { MouseEvent } from "react";
 import React, { memo, useCallback, useMemo, useRef, useState } from "react";
+import styled from "styled-components";
+
+import type { MoveElement } from "../../../hooks/use-movable-elements";
+import { useMovableElements } from "../../../hooks/use-movable-elements";
 import type {
     AliasMap,
     CommentsMap,
     FilesAndFolders,
-} from "reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { ElementWeightMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
-import type { TagMap } from "reducers/tags/tags-types";
-import styled from "styled-components";
-import * as ArrayUtil from "util/array/array-util";
-import { empty } from "util/function/function-util";
-
+} from "../../../reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { ElementWeightMethod } from "../../../reducers/icicle-sort-method/icicle-sort-method-types";
+import type { TagMap } from "../../../reducers/tags/tags-types";
 import BreadcrumbsNew from "../breadcrumb/breadcrumbs";
-import MinimapBracket from "../minimap-bracket";
-import Ruler from "../ruler";
+import { MinimapBracket } from "../minimap-bracket";
+import { Ruler } from "../ruler";
 import { useFileMoveActiveState } from "../workspace/file-move-provider";
 import { useZoomContext } from "../workspace/zoom-provider";
 import AnimatedIcicle from "./animated-icicle";
+import type { IcicleProps } from "./icicle";
 import Icicle from "./icicle";
 import type { Dims, DimsAndId } from "./icicle-rect";
-import type { FillColor } from "./icicle-types";
+import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 
 export type IcicleMouseHandler = (
     dimsAndId: DimsAndId,
@@ -96,7 +95,7 @@ export const ZOOM_SPEED = 1.1;
 const viewBoxWidth = 1000;
 const viewBoxHeight = 300;
 
-interface IcicleMainProps {
+export interface IcicleMainProps {
     aliases: AliasMap;
     comments: CommentsMap;
     tags: TagMap;
@@ -121,7 +120,7 @@ interface IcicleMainProps {
     setNoHover: () => void;
 }
 
-const IcicleMain: React.FC<IcicleMainProps> = ({
+const _IcicleMain: React.FC<IcicleMainProps> = ({
     aliases,
     comments,
     tags,
@@ -167,7 +166,7 @@ const IcicleMain: React.FC<IcicleMainProps> = ({
      * Returns the total size of the child elements based on its id
      */
     const getElementTotalSize = useCallback(
-        (id) => getFfByFfId(id).childrenTotalSize,
+        (id: string) => getFfByFfId(id).childrenTotalSize,
         [getFfByFfId]
     );
 
@@ -175,7 +174,7 @@ const IcicleMain: React.FC<IcicleMainProps> = ({
      * Returns the total number of children files of an element based on its id
      */
     const getElementChildrenFilesCount = useCallback(
-        (id) => getFfByFfId(id).nbChildrenFiles,
+        (id: string) => getFfByFfId(id).nbChildrenFiles,
         [getFfByFfId]
     );
 
@@ -194,34 +193,35 @@ const IcicleMain: React.FC<IcicleMainProps> = ({
     /**
      * Pretty obscure behaviour for now.
      */
-    const computeWidthRec = useCallback(
-        (ids, x, dx) => {
-            const ans = [[x, dx]];
-            if (ids.length < 2) {
-                return ans;
-            } else {
-                const [parentId, childId] = ids;
-                const childrenIds = getChildrenIdFromId(parentId);
-                const widths = normalizeWidth(
-                    childrenIds.map(computeWidth)
-                ).map((a) => a * dx);
-                const cumulatedWidths = ArrayUtil.computeCumulative(widths);
-                const childIndex = childrenIds.indexOf(childId);
-                const childX = cumulatedWidths[childIndex] + x;
-                const childDx = widths[childIndex];
+    // -- never called...?
+    // const computeWidthRec = useCallback(
+    //     (ids: string[], x: number, dx: number): number[][] => {
+    //         const ans = [[x, dx]];
+    //         if (ids.length < 2) {
+    //             return ans;
+    //         } else {
+    //             const [parentId, childId] = ids;
+    //             const childrenIds = getChildrenIdFromId(parentId);
+    //             const widths = normalizeWidth(
+    //                 childrenIds.map(computeWidth)
+    //             ).map((a) => a * dx);
+    //             const cumulatedWidths = ArrayUtil.computeCumulative(widths);
+    //             const childIndex = childrenIds.indexOf(childId);
+    //             const childX = cumulatedWidths[childIndex] + x;
+    //             const childDx = widths[childIndex];
 
-                return ans.concat(
-                    computeWidthRec(ids.slice(1), childX, childDx)
-                );
-            }
-        },
-        [getChildrenIdFromId, computeWidth]
-    );
+    //             return ans.concat(
+    //                 computeWidthRec(ids.slice(1), childX, childDx)
+    //             );
+    //         }
+    //     },
+    //     [getChildrenIdFromId, computeWidth]
+    // );
 
     /**
      * Normalizes the height based on the maxDepth of the file tree
      */
-    const normalizeHeight = useCallback(
+    const normalizeHeight: IcicleProps["trueFHeight"] = useCallback(
         () => icicleHeight / maxDepth,
         [icicleHeight, maxDepth]
     );
@@ -230,7 +230,7 @@ const IcicleMain: React.FC<IcicleMainProps> = ({
      * Determines if an icicle is in the viewport. It allows icicles not to be rendered if they are too far left
      * or too far right.
      */
-    const isIcicleInViewport = useCallback(
+    const isIcicleInViewport: IcicleProps["shouldRenderChild"] = useCallback(
         (x, elementWidth) => {
             const minimumDisplayedWidth = 1;
             const elementIsTooFarLeft = x + elementWidth < 0;
@@ -240,7 +240,7 @@ const IcicleMain: React.FC<IcicleMainProps> = ({
             }
             return elementWidth > minimumDisplayedWidth;
         },
-        [icicleWidth]
+        []
     );
 
     /**
@@ -249,7 +249,7 @@ const IcicleMain: React.FC<IcicleMainProps> = ({
     const onClickHandler = useCallback(() => {
         unlock();
         setDefaultMousePosition(null);
-    }, [unlock, setNoFocus, setDefaultMousePosition]);
+    }, [unlock, setDefaultMousePosition]);
 
     /**
      * Handle viewport mouse leave.
@@ -261,7 +261,7 @@ const IcicleMain: React.FC<IcicleMainProps> = ({
     /**
      * Handles click on icicle rectangle
      */
-    const onIcicleRectClickHandler = useCallback(
+    const onIcicleRectClickHandler: IcicleMouseActionHandler = useCallback(
         ({ id, dims }, event) => {
             event.stopPropagation();
             lock(id);
@@ -277,20 +277,22 @@ const IcicleMain: React.FC<IcicleMainProps> = ({
     /**
      * Handles double click on icicle rectangle
      */
-    const onIcicleRectDoubleClickHandler = useCallback(
-        ({ dims }) => {
-            const { x, dx } = dims();
-            const newZoomOffset = zoomOffset + x / (viewBoxWidth * zoomRatio);
-            const newZoomRatio = (zoomRatio * viewBoxWidth) / dx;
-            setZoom(newZoomOffset, newZoomRatio);
-        },
-        [setZoom, zoomRatio, zoomOffset]
-    );
+    const onIcicleRectDoubleClickHandler: IcicleMouseActionHandler =
+        useCallback(
+            ({ dims }) => {
+                const { x, dx } = dims();
+                const newZoomOffset =
+                    zoomOffset + x / (viewBoxWidth * zoomRatio);
+                const newZoomRatio = (zoomRatio * viewBoxWidth) / dx;
+                setZoom(newZoomOffset, newZoomRatio);
+            },
+            [setZoom, zoomRatio, zoomOffset]
+        );
 
     /**
      * Handles mouse over icicle rectangle
      */
-    const onIcicleRectMouseOverHandler = useCallback(
+    const onIcicleRectMouseOverHandler: IcicleMouseActionHandler = useCallback(
         ({ id, dims }) => {
             setHoveredDims(dims());
             setFocus(id);
@@ -303,7 +305,7 @@ const IcicleMain: React.FC<IcicleMainProps> = ({
      */
     const onIcicleMouseLeave = useCallback(() => {
         setNoHover();
-    }, []);
+    }, [setNoHover]);
 
     const { isFileMoveActive } = useFileMoveActiveState();
 
@@ -319,8 +321,14 @@ const IcicleMain: React.FC<IcicleMainProps> = ({
     const { onIcicleMouseUp, onIcicleMouseDown } =
         useMovableElements(moveElementHandler);
 
-    const onIcicleMouseWheel = useCallback(
-        ({ wheelDirection, mousePosition }) => {
+    const onIcicleMouseWheel: IcicleProps["onIcicleMouseWheel"] = useCallback(
+        ({
+            wheelDirection,
+            mousePosition,
+        }: {
+            wheelDirection: number;
+            mousePosition: number;
+        }) => {
             const zoomMethod = wheelDirection < 0 ? zoomIn : zoomOut;
             zoomMethod(mousePosition, ZOOM_SPEED);
         },
@@ -340,9 +348,9 @@ const IcicleMain: React.FC<IcicleMainProps> = ({
                         ref={svgRef}
                         onClick={onClickHandler}
                         onMouseLeave={onMouseLeaveHandler}
-                        onMouseUp={isFileMoveActive ? onIcicleMouseUp : empty}
+                        onMouseUp={isFileMoveActive ? onIcicleMouseUp : noop}
                         onMouseDown={
-                            isFileMoveActive ? onIcicleMouseDown : empty
+                            isFileMoveActive ? onIcicleMouseDown : noop
                         }
                     >
                         <AnimatedIcicle
@@ -431,9 +439,9 @@ const IcicleMain: React.FC<IcicleMainProps> = ({
                             hoverSequence={hoverSequence}
                             lockedSequence={lockedSequence}
                             shouldRenderChild={shouldRenderChildMinimap}
-                            onIcicleRectClickHandler={empty}
-                            onIcicleRectDoubleClickHandler={empty}
-                            onIcicleRectMouseOverHandler={empty}
+                            onIcicleRectClickHandler={noop}
+                            onIcicleRectDoubleClickHandler={noop}
+                            onIcicleRectMouseOverHandler={noop}
                             tags={tags}
                             zoomOffset={0}
                             zoomRatio={1}
@@ -451,4 +459,6 @@ const IcicleMain: React.FC<IcicleMainProps> = ({
     );
 };
 
-export default memo(IcicleMain);
+_IcicleMain.displayName = "IcicleMain";
+
+export const IcicleMain = memo(_IcicleMain);

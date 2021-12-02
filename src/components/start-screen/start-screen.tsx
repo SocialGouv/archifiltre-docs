@@ -2,20 +2,20 @@ import { Typography } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import SettingsModal from "components/modals/settings-modal/settings-modal";
-import Dropzone from "components/start-screen/dropzone";
-import LoadingBlock from "components/start-screen/loading-block";
-import StartScreenSidebar from "components/start-screen/start-screen-sidebar";
-import { useModal } from "hooks/use-modal";
 import path from "path";
-import { savePreviousSession } from "persistence/previous-sessions";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaLock } from "react-icons/fa";
-import type { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
 import styled from "styled-components";
 
 import logo from "../../../static/imgs/logo.png";
+import { useModal } from "../../hooks/use-modal";
+import { savePreviousSession } from "../../persistence/previous-sessions";
+import type { FileSystemLoadingStep } from "../../reducers/loading-state/loading-state-types";
+import SettingsModal from "../modals/settings-modal/settings-modal";
+import Dropzone from "./dropzone";
+import LoadingBlock from "./loading-block";
+import StartScreenSidebar from "./start-screen-sidebar";
 
 declare global {
     const AUTOLOAD: string;
@@ -48,7 +48,7 @@ const FullHeightGrid = styled(Grid)`
     height: 100%;
 `;
 
-const StartScreen: React.FC<StartScreenProps> = ({
+export const StartScreen: React.FC<StartScreenProps> = ({
     loadFromPath,
     hasPreviousSession,
     reloadPreviousSession,
@@ -62,24 +62,25 @@ const StartScreen: React.FC<StartScreenProps> = ({
     const [loadedPath, setLoadedPath] = useState("");
 
     const loadPath = useCallback(
-        (loadedPath) => {
-            loadFromPath(loadedPath);
-            savePreviousSession(loadedPath);
+        (pathToLoad: string) => {
+            loadFromPath(pathToLoad);
+            void savePreviousSession(pathToLoad);
         },
         [loadFromPath]
     );
 
     useEffect(() => {
         if (AUTOLOAD !== "") {
-            const loadedPath = path.resolve(AUTOLOAD);
-            loadPath(loadedPath);
+            const pathToLoad = path.resolve(AUTOLOAD);
+            loadPath(pathToLoad);
             return;
         }
 
+        // eslint-disable-next-line no-undef -- it's def...
         if (AUTORELOAD !== "") {
             reloadPreviousSession();
         }
-    }, []);
+    }, [loadPath, reloadPreviousSession]);
 
     return (
         <Wrapper>
@@ -158,5 +159,3 @@ const StartScreen: React.FC<StartScreenProps> = ({
         </Wrapper>
     );
 };
-
-export default StartScreen;

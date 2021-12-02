@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -8,7 +7,7 @@ import {
 
 import FileTreeDepth from "./file-tree-depth";
 
-const FileTreeDepthContainer: FC = () => {
+const FileTreeDepthContainer: React.FC = () => {
     const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
 
     const depth = useMemo(

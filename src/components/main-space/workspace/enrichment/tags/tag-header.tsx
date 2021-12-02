@@ -5,13 +5,12 @@ import {
     ENRICHMENT_COLORS,
     EnrichmentTypes,
 } from "components/main-space/icicle/icicle-enrichment";
-import type { FC } from "react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
 import AllTagsButton from "./all-tags-button";
 
-const TagHeader: FC = () => {
+const TagHeader: React.FC = () => {
     const { t } = useTranslation();
 
     return (

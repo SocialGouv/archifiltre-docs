@@ -1,5 +1,5 @@
 import { makeTableActionRow } from "components/common/table/action-row";
-import Table from "components/common/table/table";
+import { Table } from "components/common/table/table";
 import type { Column } from "components/common/table/table-types";
 import { isEmpty } from "lodash";
 import React, { useMemo } from "react";

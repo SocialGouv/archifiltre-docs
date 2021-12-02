@@ -2,7 +2,7 @@ import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metada
 
 import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata-actions";
 import { filesAndFoldersMetadataReducer } from "./files-and-folders-metadata-reducer";
-import { FilesAndFoldersMetadataState } from "./files-and-folders-metadata-types";
+import type { FilesAndFoldersMetadataState } from "./files-and-folders-metadata-types";
 
 const initialState: FilesAndFoldersMetadataState = {
     filesAndFoldersMetadata: {},

@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
+
 import {
     isFolder,
     ROOT_FF_ID,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import type { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import styled from "styled-components";
-import translations from "translations/translations";
-import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
-import { percent } from "util/numbers/numbers-util";
-
+} from "../../reducers/files-and-folders/files-and-folders-selectors";
+import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import translations from "../../translations/translations";
+import { octet2HumanReadableFormat } from "../../util/file-system/file-sys-util";
+import { percent } from "../../util/numbers/numbers-util";
 import type { Dims } from "./icicle/icicle-rect";
 import type { FillColor } from "./icicle/icicle-types";
 
@@ -108,7 +108,7 @@ interface RulerProps {
     fillColor: FillColor;
 }
 
-const Ruler: React.FC<RulerProps> = ({
+export const Ruler: React.FC<RulerProps> = ({
     widthUnit,
     totalSize,
     hoveredDims = EmptyDims,
@@ -120,7 +120,7 @@ const Ruler: React.FC<RulerProps> = ({
     fillColor,
 }) => {
     const elementDims =
-        (hoveredElementId ? hoveredDims : lockedDims) || EmptyDims;
+        (hoveredElementId ? hoveredDims : lockedDims) ?? EmptyDims;
     const elementId = hoveredElementId || lockedElementId;
 
     const rulerText = elementId
@@ -183,5 +183,3 @@ const Ruler: React.FC<RulerProps> = ({
         </RulerWrapper>
     );
 };
-
-export default Ruler;

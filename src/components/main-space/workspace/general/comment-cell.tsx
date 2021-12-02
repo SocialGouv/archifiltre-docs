@@ -1,4 +1,4 @@
-import EditableField from "components/common/editable-field";
+import { EditableField } from "components/common/editable-field";
 import NoElementSelectedPlaceholder from "components/main-space/workspace/enrichment/element-characteristics/no-element-selected-placeholder";
 import { addTracker } from "logging/tracker";
 import { ActionTitle, ActionType } from "logging/tracker-types";

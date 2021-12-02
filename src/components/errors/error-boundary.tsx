@@ -4,8 +4,8 @@ import React, { Component } from "react";
 import { withTranslation } from "react-i18next";
 import styled from "styled-components";
 
-import SaveButton from "../../components/header/save-button";
-import type { jsonExporterThunk } from "../../exporters/json/json-exporter";
+import { SaveButton } from "../../components/header/save-button";
+import type { ExportToJson } from "../../exporters/json/json-exporter";
 import { reportError } from "../../logging/reporter";
 import { ContactUs } from "./contact-us";
 
@@ -13,7 +13,7 @@ interface ErrorBoundaryProps {
     t: TFunction;
     originalPath: string;
     sessionName: string;
-    exportToJson: typeof jsonExporterThunk;
+    exportToJson: ExportToJson;
 }
 
 interface ErrorBoundaryState {

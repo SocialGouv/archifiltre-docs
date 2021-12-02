@@ -1,9 +1,8 @@
-import type { ArchifiltreThunkAction } from "reducers/archifiltre-types";
-import translations from "translations/translations";
-import { getCsvExportParamsFromStore } from "util/array-export/array-export-utils";
-import { handleFileExportThunk } from "util/export/export-util";
-import { notifyInfo } from "util/notification/notifications-util";
-
+import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
+import translations from "../../translations/translations";
+import { getCsvExportParamsFromStore } from "../../util/array-export/array-export-utils";
+import { handleFileExportThunk } from "../../util/export/export-util";
+import { notifyInfo } from "../../util/notification/notifications-util";
 import type { GenerateCsvExportOptions } from "./csv-exporter.controller";
 import { generateCsvExport$ } from "./csv-exporter.controller";
 
@@ -14,7 +13,7 @@ import { generateCsvExport$ } from "./csv-exporter.controller";
  */
 export const csvExporterThunk =
     (name: string, { withHashes = false } = {}): ArchifiltreThunkAction =>
-    async (dispatch, getState) => {
+    (dispatch, getState) => {
         const csvExportStartedMessage = translations.t(
             "export.csvExportStartedMessage"
         );
@@ -46,6 +45,7 @@ export const csvExporterThunk =
 
         const csvExportData$ = generateCsvExport$(data);
 
+        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
         return dispatch(
             handleFileExportThunk(csvExportData$, {
                 exportFileName: name,

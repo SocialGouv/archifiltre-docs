@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import React, { useContext, useState } from "react";
 
 interface DuplicatePageContextValues {
@@ -25,7 +24,7 @@ export const useDuplicatePageState = (): DuplicatePageContextValues => {
     return { pageIndex, rowsPerPage, setPageIndex, setRowsPerPage };
 };
 
-const DuplicatePageProvider: FC = ({ children }) => {
+const DuplicatePageProvider: React.FC = ({ children }) => {
     const [pageIndex, setPageIndex] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 

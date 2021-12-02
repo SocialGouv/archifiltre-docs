@@ -7,7 +7,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import type { ArchifiltreError } from "util/error/error-util";
 
-import ModalHeader from "../../modals/modal-header";
+import { ModalHeader } from "../../modals/modal-header";
 import ErrorsTable from "./errors-table";
 
 interface ModalAction {

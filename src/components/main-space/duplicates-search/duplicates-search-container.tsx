@@ -1,5 +1,4 @@
 import _ from "lodash";
-import type { FC } from "react";
 import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,7 +15,7 @@ import { getFilesDuplicatesMap } from "util/duplicates/duplicates-util";
 
 import DuplicatesSearch from "./duplicates-search";
 
-const DuplicatesSearchContainer: FC = () => {
+const DuplicatesSearchContainer: React.FC = () => {
     const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
     const hashesMap = useSelector(getHashesFromStore);
     const dispatch = useDispatch();

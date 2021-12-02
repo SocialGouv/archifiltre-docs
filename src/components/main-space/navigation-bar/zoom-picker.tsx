@@ -3,7 +3,6 @@ import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import { round } from "lodash";
-import type { FC } from "react";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSearch, FaSearchMinus, FaSearchPlus } from "react-icons/fa";
@@ -12,7 +11,7 @@ import { ZOOM_SPEED } from "../icicle/icicle-main";
 import { useZoomContext } from "../workspace/zoom-provider";
 import ZoomPickerOptionItem from "./zoom-picker-option-item";
 
-const ZoomPicker: FC = () => {
+const ZoomPicker: React.FC = () => {
     const { zoomIn, zoomOut, resetZoom, ratio } = useZoomContext();
     const { t } = useTranslation();
     const [anchorEl, setAnchorEl] = useState(null);

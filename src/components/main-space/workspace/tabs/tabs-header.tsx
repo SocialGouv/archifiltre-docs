@@ -3,12 +3,14 @@ import createStyles from "@material-ui/core/styles/createStyles";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
 import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import { getAreHashesReady } from "reducers/files-and-folders/files-and-folders-selectors";
+
+import { addTracker } from "../../../../logging/tracker";
+import { ActionTitle, ActionType } from "../../../../logging/tracker-types";
+import { getAreHashesReady } from "../../../../reducers/files-and-folders/files-and-folders-selectors";
+import type { SimpleObject } from "../../../../util/object/object-util";
 
 const useLocalStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -35,7 +37,10 @@ interface TabsHeaderProps {
     tabIndex: number;
 }
 
-const TabsHeader: React.FC<TabsHeaderProps> = ({ setTabIndex, tabIndex }) => {
+export const TabsHeader: React.FC<TabsHeaderProps> = ({
+    setTabIndex,
+    tabIndex,
+}) => {
     const { t } = useTranslation();
     const classes = useLocalStyles();
     const areHashesReady = useSelector(getAreHashesReady);
@@ -50,20 +55,19 @@ const TabsHeader: React.FC<TabsHeaderProps> = ({ setTabIndex, tabIndex }) => {
         [t, areHashesReady]
     );
 
-    const handleTracking = (tabIndex) => {
-        addTracker({
-            title: ActionTitle.CLICK_ON_TAB,
-            type: ActionType.TRACK_EVENT,
-            value: `Click on ${t(tabData[tabIndex].label)}`,
-        });
-    };
-
     const handleChange = useCallback(
-        (event: React.ChangeEvent<{}>, newValue: number) => {
+        (event: React.ChangeEvent<SimpleObject>, newValue: number) => {
+            const handleTracking = (trackingTabIndex: number) => {
+                addTracker({
+                    title: ActionTitle.CLICK_ON_TAB,
+                    type: ActionType.TRACK_EVENT,
+                    value: `Click on ${t(tabData[trackingTabIndex].label)}`,
+                });
+            };
             handleTracking(newValue);
             setTabIndex(newValue);
         },
-        [setTabIndex]
+        [setTabIndex, t, tabData]
     );
 
     return (
@@ -85,5 +89,3 @@ const TabsHeader: React.FC<TabsHeaderProps> = ({ setTabIndex, tabIndex }) => {
         </Tabs>
     );
 };
-
-export default TabsHeader;

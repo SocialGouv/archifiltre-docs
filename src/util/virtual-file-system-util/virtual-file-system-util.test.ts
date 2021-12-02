@@ -1,5 +1,5 @@
 import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
-import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
 import { createTag } from "reducers/tags/tags-test-util";
 import {
     removeIgnoredFilesAndFoldersFromVirtualFileSystem,

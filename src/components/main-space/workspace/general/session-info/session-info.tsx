@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import WorkspaceBoundaryDates from "components/main-space/workspace/general/session-info/workspace-boundary-dates";
 import React from "react";
 
-import EditableField from "../../../../common/editable-field";
+import { EditableField } from "../../../../common/editable-field";
 import SessionElementsDetails from "./session-elements-details";
 
 interface SessionInfoProps {

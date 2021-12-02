@@ -1,5 +1,4 @@
 import useTheme from "@material-ui/core/styles/useTheme";
-import type { FC } from "react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
@@ -17,7 +16,7 @@ const ContactLink = styled.a<ThemedProps>`
     color: ${({ theme }) => theme.palette.primary.main};
 `;
 
-export const ContactUs: FC = () => {
+export const ContactUs: React.FC = () => {
     const { t } = useTranslation();
     const theme = useTheme();
     return (

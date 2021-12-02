@@ -2,7 +2,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Paper from "@material-ui/core/Paper";
 import AllTagsContainer from "components/main-space/workspace/enrichment/tags/all-tags-container";
-import ModalHeader from "components/modals/modal-header";
+import { ModalHeader } from "components/modals/modal-header";
 import { useStyles } from "hooks/use-styles";
 import React from "react";
 import { useTranslation } from "react-i18next";

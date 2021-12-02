@@ -15,10 +15,12 @@ import {
     save,
 } from "../../util/file-system/file-sys-util";
 
+export type ExportToJson = typeof jsonExporterThunk;
+
 export interface JsonExporterThunkArgs {
     sessionName: string;
     originalPath: string;
-    version: number;
+    version: string;
 }
 
 /**

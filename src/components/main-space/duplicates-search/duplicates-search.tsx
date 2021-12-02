@@ -1,6 +1,6 @@
 import Box from "@material-ui/core/Box";
 import { CategoryTitle } from "components/common/category-title";
-import Table from "components/common/table/table";
+import { Table } from "components/common/table/table";
 import { makeTableExpandableRow } from "components/common/table/table-expandable-row";
 import type { Column, HeaderColumn } from "components/common/table/table-types";
 import { WordBreak } from "components/common/table/table-types";

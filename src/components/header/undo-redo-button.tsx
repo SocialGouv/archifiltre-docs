@@ -1,9 +1,10 @@
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
-import { useStyles } from "hooks/use-styles";
 import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { FaRedo, FaUndo } from "react-icons/fa";
+
+import { useStyles } from "../../hooks/use-styles";
 
 interface UndoRedoButtonProps {
     isVisible: boolean;
@@ -13,7 +14,7 @@ interface UndoRedoButtonProps {
     isActive: boolean;
 }
 
-const UndoRedoButton: React.FC<UndoRedoButtonProps> = ({
+export const UndoRedoButton: React.FC<UndoRedoButtonProps> = ({
     isVisible,
     isUndo = true,
     undo,
@@ -67,5 +68,3 @@ const UndoRedoButton: React.FC<UndoRedoButtonProps> = ({
         </Tooltip>
     );
 };
-
-export default UndoRedoButton;

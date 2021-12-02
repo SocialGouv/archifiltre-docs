@@ -1,13 +1,13 @@
 import _ from "lodash";
 import fp from "lodash/fp";
 import { useSelector } from "react-redux";
-import type { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { medianOnSortedArray } from "util/array/array-util";
-import type { ArchifiltreError } from "util/error/error-util";
-import type { Mapper } from "util/functionnal-programming-utils";
-import { not, size } from "util/functionnal-programming-utils";
 
+import { medianOnSortedArray } from "../../util/array/array-util";
+import type { ArchifiltreError } from "../../util/error/error-util";
+import type { Mapper } from "../../util/functionnal-programming-utils";
+import { not, size } from "../../util/functionnal-programming-utils";
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
+import type { FilesAndFoldersMetadataMap } from "../files-and-folders-metadata/files-and-folders-metadata-types";
 import { getHashesFromStore } from "../hashes/hashes-selectors";
 import type { StoreState } from "../store";
 import type {
@@ -54,7 +54,7 @@ export const getRealLastModified = (
     id: string,
     filesAndFolders: FilesAndFoldersMap,
     lastModifiedMap: LastModifiedMap
-): number => lastModifiedMap[id] || filesAndFolders[id].file_last_modified;
+): number => lastModifiedMap[id] ?? filesAndFolders[id]!.file_last_modified;
 
 /**
  * Get the number of children files in a list
@@ -62,10 +62,10 @@ export const getRealLastModified = (
 export const getFilesTotalCount = (
     elementsIds: string[],
     filesAndFoldersMetadata: FilesAndFoldersMetadataMap
-) => {
+): number => {
     return elementsIds.reduce(
         (count, elementId) =>
-            count + filesAndFoldersMetadata[elementId]?.nbChildrenFiles,
+            count + (filesAndFoldersMetadata[elementId].nbChildrenFiles ?? 0),
         0
     );
 };
@@ -77,14 +77,14 @@ export const getFilesTotalSize = (
     elementsIds: string[],
     filesAndFoldersMap: FilesAndFoldersMap,
     filesAndFoldersMetadata: FilesAndFoldersMetadataMap
-) => {
+): number => {
     const filteredElementsIds = excludeChildNodes(
         elementsIds,
         filesAndFoldersMap
     );
     return filteredElementsIds.reduce(
         (count, elementId) =>
-            count + filesAndFoldersMetadata[elementId]?.childrenTotalSize,
+            count + (filesAndFoldersMetadata[elementId].childrenTotalSize ?? 0),
         0
     );
 };
@@ -98,21 +98,23 @@ export const getFilesTotalSize = (
 const excludeChildrenNodesRec = (
     elementIds: string[],
     filesAndFoldersMap: FilesAndFoldersMap,
-    elementId
-) => {
+    elementId: string
+): string[] => {
     const nextElementIds = elementIds.includes(elementId)
         ? elementIds.filter((currentElement) => currentElement !== elementId)
         : elementIds;
-    const { children } = filesAndFoldersMap[elementId];
+    const { children } = filesAndFoldersMap[elementId] ?? {};
 
-    return children.reduce(
-        (nextElementIds, childId) =>
-            excludeChildrenNodesRec(
-                nextElementIds,
-                filesAndFoldersMap,
-                childId
-            ),
-        nextElementIds
+    return (
+        children.reduce(
+            (previousChildId, childId) =>
+                excludeChildrenNodesRec(
+                    previousChildId,
+                    filesAndFoldersMap,
+                    childId
+                ),
+            nextElementIds
+        ) ?? []
     );
 };
 
@@ -131,7 +133,7 @@ export const excludeChildNodes = (
                 (acc, childId) =>
                     excludeChildrenNodesRec(acc, filesAndFolders, childId),
                 nextElementIds
-            ),
+            ) ?? [],
         elementIds
     );
 
@@ -160,15 +162,18 @@ export const getVirtualPathToIdFromStore = (
  *        _.max([currentFilesAndFolders.file_last_modified, ...childrenValues])
  *    );
  */
-export const reduceFilesAndFolders = <ReduceResultType>(
+export const reduceFilesAndFolders = <TReduceResult>(
     filesAndFoldersMap: FilesAndFoldersMap,
     rootId: string,
     reducer: (
-        childrenValues: ReduceResultType[],
+        childrenValues: TReduceResult[],
         currentFilesAndFolders: FilesAndFolders
-    ) => ReduceResultType
-) => {
+    ) => TReduceResult
+): TReduceResult => {
     const currentFilesAndFolders = filesAndFoldersMap[rootId];
+    if (!currentFilesAndFolders) {
+        return {} as TReduceResult;
+    }
     const childrenValues = currentFilesAndFolders.children.map((childId) =>
         reduceFilesAndFolders(filesAndFoldersMap, childId, reducer)
     );
@@ -192,7 +197,7 @@ export const getFilesAndFoldersMaxLastModified = (
             _.max([
                 currentFilesAndFolders.file_last_modified,
                 ...childrenValues,
-            ])
+            ]) ?? 0
     );
 
 /**
@@ -213,7 +218,7 @@ export const getFilesAndFoldersMinLastModified = (
                     currentFilesAndFolders.file_last_modified,
                     ...childrenValues,
                 ].filter((lastModifiedDate) => lastModifiedDate !== 0)
-            )
+            ) ?? 0
     );
 
 /**
@@ -398,7 +403,10 @@ export const decomposePathToElement = (id: string): string[] =>
             .join("/")
     );
 
-export const findElementParent = (childId: string, filesAndFolders) =>
+export const findElementParent = (
+    childId: string,
+    filesAndFolders: FilesAndFoldersMap
+): FilesAndFolders | undefined =>
     _.find(filesAndFolders, ({ children }) => children.includes(childId));
 
 /**
@@ -426,5 +434,5 @@ export const getErroredFilesAndFolders = (
 ): ArchifiltreError[] =>
     getCurrentState(store.filesAndFolders).erroredFilesAndFolders;
 
-export const useFilesAndFoldersErrors = () =>
+export const useFilesAndFoldersErrors = (): ArchifiltreError[] =>
     useSelector(getErroredFilesAndFolders);

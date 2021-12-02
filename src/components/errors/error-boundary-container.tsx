@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -7,7 +6,7 @@ import { jsonExporterThunk } from "../../exporters/json/json-exporter";
 import { getWorkspaceMetadataFromStore } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { ErrorBoundary } from "./error-boundary";
 
-export const ErrorBoundaryContainer: FC = ({ children }) => {
+export const ErrorBoundaryContainer: React.FC = ({ children }) => {
     const {
         sessionName: currentSessionName,
         originalPath: currentOriginalPath,

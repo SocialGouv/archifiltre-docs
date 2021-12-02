@@ -25,4 +25,4 @@ export const versionComparator = (
 
 export const versionName = "Romantic Raccoon";
 
-export const version = Number(ARCHIFILTE_VERSION);
+export const version = ARCHIFILTE_VERSION;

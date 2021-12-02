@@ -1,6 +1,6 @@
 import { accessDenied, fileNotFound, unhandledFileError } from "./hash-errors";
+import type { HashComputingResult } from "./hash-util";
 import {
-    HashComputingResult,
     hashErrorToArchifiltreError,
     hashResult,
     hashResultsToMap,

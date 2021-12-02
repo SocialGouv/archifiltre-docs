@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { StoreState } from "reducers/store";
+import type { StoreState } from "reducers/store";
 
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import { initialState as filesAndFoldersInitialState } from "./files-and-folders-reducer";

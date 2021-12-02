@@ -31,7 +31,7 @@ interface LoadingInfoProps {
     isLoaded: boolean;
 }
 
-const LoadingInfoDisplay: React.FC<LoadingInfoProps> = ({
+export const LoadingInfoDisplay: React.FC<LoadingInfoProps> = ({
     loadingInfo,
     color = "black",
     label,
@@ -54,5 +54,3 @@ const LoadingInfoDisplay: React.FC<LoadingInfoProps> = ({
         </Box>
     </LoadingBarContainer>
 );
-
-export default LoadingInfoDisplay;

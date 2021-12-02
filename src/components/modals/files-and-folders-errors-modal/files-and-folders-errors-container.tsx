@@ -1,7 +1,6 @@
 import ErrorsModal from "components/modals/errors-modal/errors-modal";
 import { useErrorsModalConfig } from "components/modals/errors-modal/use-errors-modal-config";
 import path from "path";
-import type { FC } from "react";
 import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
@@ -13,7 +12,7 @@ import { reloadFilesAndFoldersThunk } from "reducers/store-thunks";
 import { useWorkspaceMetadata } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import { exportTableToCsvFile } from "util/table/table-util";
 
-const FilesAndFoldersErrorsModalContainer: FC = () => {
+const FilesAndFoldersErrorsModalContainer: React.FC = () => {
     const errors = useFilesAndFoldersErrors();
     const openModal = useOpenModal();
     const dispatch = useDispatch();

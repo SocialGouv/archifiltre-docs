@@ -21,7 +21,7 @@ import {
 } from "./files-and-folders-reducer";
 import { ROOT_FF_ID } from "./files-and-folders-selectors";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
-import { FilesAndFoldersState } from "./files-and-folders-types";
+import type { FilesAndFoldersState } from "./files-and-folders-types";
 
 const baseState: FilesAndFoldersState = initialState;
 

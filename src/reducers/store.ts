@@ -1,5 +1,3 @@
-import icicleSortMethodReducer from "reducers/icicle-sort-method/icicle-sort-method-reducer";
-import type { IcicleSortMethodState } from "reducers/icicle-sort-method/icicle-sort-method-types";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import thunk from "redux-thunk";
 
@@ -10,6 +8,8 @@ import filesAndFoldersMetadataReducer from "./files-and-folders-metadata/files-a
 import type { FilesAndFoldersMetadataState } from "./files-and-folders-metadata/files-and-folders-metadata-types";
 import { hashesReducer } from "./hashes/hashes-reducer";
 import type { HashesState } from "./hashes/hashes-types";
+import icicleSortMethodReducer from "./icicle-sort-method/icicle-sort-method-reducer";
+import type { IcicleSortMethodState } from "./icicle-sort-method/icicle-sort-method-types";
 import loadingInfoReducer from "./loading-info/loading-info-reducer";
 import type { LoadingInfoState } from "./loading-info/loading-info-types";
 import loadingStateReducer from "./loading-state/loading-state-reducer";
@@ -46,5 +46,6 @@ export default createStore(
         tags: tagsReducer,
         workspaceMetadata: workspaceMetadataReducer,
     }),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     applyMiddleware(thunk, persistActions)
 );

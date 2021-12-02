@@ -10,7 +10,7 @@ import {
 import loadingInfoReducer, { initialState } from "./loading-info-reducer";
 import { createArchifiltreError } from "./loading-info-selectors";
 import { createLoadingInfo } from "./loading-info-test-utils";
-import { LoadingInfoState } from "./loading-info-types";
+import type { LoadingInfoState } from "./loading-info-types";
 
 const previouslyLoadingId = "prev-loading-id";
 const previouslyLoading = createLoadingInfo({

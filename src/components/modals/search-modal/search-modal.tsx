@@ -19,7 +19,7 @@ import type { TagMap } from "reducers/tags/tags-types";
 import styled from "styled-components";
 import type { FilterMethod } from "typings/filter-types";
 
-import ModalHeader from "../modal-header";
+import { ModalHeader } from "../modal-header";
 import { FilesAndFoldersTable } from "./files-and-folders-table";
 import Filters from "./filters/filters";
 import { SearchBar } from "./search-bar";

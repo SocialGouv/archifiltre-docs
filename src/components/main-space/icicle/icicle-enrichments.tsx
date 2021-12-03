@@ -7,8 +7,9 @@ import type {
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { tagMapToArray } from "../../../reducers/tags/tags-selectors";
 import type { TagMap } from "../../../reducers/tags/tags-types";
+import type { SimpleObject } from "../../../util/object/object-util";
 import type { DimsMap } from "./icicle";
-import IcicleEnrichment, { OPACITY } from "./icicle-enrichment";
+import { IcicleEnrichment, OPACITY } from "./icicle-enrichment";
 import type { IcicleMouseHandler } from "./icicle-main";
 
 interface IcicleEnrichmentsProps {
@@ -29,17 +30,18 @@ interface IcicleEnrichmentsProps {
  * @param tags
  * @param higlightedTagId
  */
-const isHighlighted = (ffId, tags, higlightedTagId) => {
+const isHighlighted = (ffId: string, tags: TagMap, higlightedTagId: string) => {
     if (higlightedTagId === "") {
         return true;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return tags[higlightedTagId]?.ffIds.includes(ffId);
 };
 
-const removeEmptyValues = (elementMap) => _.pickBy(elementMap);
+const removeEmptyValues = (elementMap: SimpleObject) => _.pickBy(elementMap);
 
-const IcicleEnrichments: React.FC<IcicleEnrichmentsProps> = ({
+export const IcicleEnrichments: React.FC<IcicleEnrichmentsProps> = ({
     aliases,
     comments,
     tags,
@@ -50,7 +52,8 @@ const IcicleEnrichments: React.FC<IcicleEnrichmentsProps> = ({
     onDoubleClick,
     onMouseOver,
 }) => {
-    const isElementDisplayed = (ffId) => dims[ffId] !== undefined;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    const isElementDisplayed = (ffId: string) => dims[ffId] !== undefined;
     const tagArray = tagMapToArray(tags);
     const taggedFiles = _(tagArray)
         .flatMap(({ ffIds }) => ffIds)
@@ -93,5 +96,3 @@ const IcicleEnrichments: React.FC<IcicleEnrichmentsProps> = ({
         </g>
     );
 };
-
-export default IcicleEnrichments;

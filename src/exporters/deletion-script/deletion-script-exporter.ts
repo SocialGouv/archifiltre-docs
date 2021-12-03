@@ -7,7 +7,7 @@ import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import { getElementsToDeleteFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import type { StoreState } from "../../reducers/store";
 import { getWorkspaceMetadataFromStore } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
-import translations from "../../translations/translations";
+import { translations } from "../../translations/translations";
 import { generateDeletionScript } from "../../util/deletion-script/deletion-script-util";
 import { startPathFromOneLevelAbove } from "../../util/file-system/file-sys-util";
 import { showInFolder } from "../../util/file-system/file-system-util";

@@ -1,11 +1,11 @@
-import i18n from "i18next";
+import { default as translations } from "i18next";
 import { initReactI18next } from "react-i18next";
 
 import de from "./de.json";
 import en from "./en.json";
 import fr from "./fr.json";
 
-i18n.use(initReactI18next).init({
+void translations.use(initReactI18next).init({
     fallbackLng: "en",
     interpolation: {
         escapeValue: false,
@@ -19,4 +19,4 @@ i18n.use(initReactI18next).init({
     },
 });
 
-export default i18n;
+export { translations };

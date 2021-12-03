@@ -9,7 +9,7 @@ import type {
 import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import type { TagMap } from "../../reducers/tags/tags-types";
-import translations from "../../translations/translations";
+import { translations } from "../../translations/translations";
 import { exportToCsv } from "../../util/array-export/array-export";
 import type { WorkerMessageHandler } from "../../util/async-worker/async-worker-util";
 import { MessageTypes } from "../../util/batch-process/batch-process-util-types";

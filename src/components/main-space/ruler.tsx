@@ -7,7 +7,7 @@ import {
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import translations from "../../translations/translations";
+import { translations } from "../../translations/translations";
 import { octet2HumanReadableFormat } from "../../util/file-system/file-sys-util";
 import { percent } from "../../util/numbers/numbers-util";
 import type { Dims } from "./icicle/icicle-rect";
@@ -96,7 +96,7 @@ const makeRulerText = (
     return rulerInfo.join(" | ");
 };
 
-interface RulerProps {
+export interface RulerProps {
     widthUnit: number;
     totalSize: number;
     hoveredDims: Dims | null;

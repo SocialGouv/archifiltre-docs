@@ -27,7 +27,7 @@ import { EnhancedTableHead } from "./enhanced-table-head";
 import { TableDefaultRow } from "./table-default-row";
 import type { Column, RowIdAccessor, RowRenderer } from "./table-types";
 
-interface TableProps<T> {
+export interface TableProps<T> {
     data: T[];
     columns: Column<T>[];
     rowId?: RowIdAccessor<T>;

@@ -1,7 +1,7 @@
 import type { Observable } from "rxjs";
 import type { Writable } from "stream";
 
-import translations from "../../translations/translations";
+import { translations } from "../../translations/translations";
 import { createAsyncWorkerForChildProcessControllerFactory } from "../../util/async-worker/child-process";
 import { backgroundWorkerProcess$ } from "../../util/batch-process/batch-process-util";
 import type {

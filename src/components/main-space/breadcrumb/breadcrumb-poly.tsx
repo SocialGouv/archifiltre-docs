@@ -43,7 +43,19 @@ const lastPolygonPath = [
     "0 0",
 ].join(" ");
 
-const BreadcrumbPoly = ({ isFirst, isLast, color, opacity }) => (
+export interface BreadcrumbPolyProps {
+    isFirst: boolean;
+    isLast: boolean;
+    color: NonNullable<React.SVGProps<SVGPolygonElement>["fill"]>;
+    opacity: NonNullable<React.CSSProperties["opacity"]>;
+}
+
+export const BreadcrumbPoly: React.FC<BreadcrumbPolyProps> = ({
+    isFirst,
+    isLast,
+    color,
+    opacity,
+}) => (
     <svg
         viewBox={`0 0 ${viewportWidth} ${viewportHeight}`}
         preserveAspectRatio="none"
@@ -72,5 +84,3 @@ const BreadcrumbPoly = ({ isFirst, isLast, color, opacity }) => (
         />
     </svg>
 );
-
-export default BreadcrumbPoly;

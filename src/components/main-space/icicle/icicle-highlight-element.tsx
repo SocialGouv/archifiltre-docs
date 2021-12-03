@@ -1,7 +1,7 @@
 import React from "react";
 
 import type { DimsMap } from "./icicle";
-import IcicleHightlightElementRectangle from "./icicle-highlight-element-rectangle";
+import { IcicleHightlightElementRectangle } from "./icicle-highlight-element-rectangle";
 import type { IcicleMouseActionHandler } from "./icicle-types";
 
 interface IcicleHightlightElementProps {
@@ -13,7 +13,9 @@ interface IcicleHightlightElementProps {
     onMouseOverHandler: IcicleMouseActionHandler;
 }
 
-const IcicleHightlightElement: React.FC<IcicleHightlightElementProps> = ({
+export const IcicleHightlightElement: React.FC<
+    IcicleHightlightElementProps
+> = ({
     dimsMap,
     highlightedElementId,
     highlightedElementTime,
@@ -23,6 +25,7 @@ const IcicleHightlightElement: React.FC<IcicleHightlightElementProps> = ({
 }) => {
     const dims = dimsMap[highlightedElementId];
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return !dims || !highlightedElementId ? null : (
         <IcicleHightlightElementRectangle
             dims={dims}
@@ -34,5 +37,3 @@ const IcicleHightlightElement: React.FC<IcicleHightlightElementProps> = ({
         />
     );
 };
-
-export default IcicleHightlightElement;

@@ -25,7 +25,7 @@ import {
 import type { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import type { HashesMap } from "reducers/hashes/hashes-types";
-import translations from "translations/translations";
+import { translations } from "translations/translations";
 import {
     countDuplicateFilesTotalSize,
     countDuplicatesPercentForFiles,

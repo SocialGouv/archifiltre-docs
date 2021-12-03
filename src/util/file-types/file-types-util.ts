@@ -21,116 +21,110 @@ export const fileTypesByExtensions = {
 
     ".docm": FileType.DOCUMENT,
 
-    ".eml": FileType.EMAIL,
-
-    
     // formats Microsoft Word
-".docx": FileType.DOCUMENT,
+    ".docx": FileType.DOCUMENT,
 
-    
-// les PDF
-".epub": FileType.PUBLICATION,
-
-    ".mobi": FileType.PUBLICATION,
-
-    
     ".dot": FileType.DOCUMENT,
-
-    // formats d'email et d'archive email
-".msg": FileType.EMAIL,
 
     ".dotm": FileType.DOCUMENT,
 
-    
+    ".dotx": FileType.DOCUMENT,
+
+    ".eml": FileType.EMAIL,
+
+    // les PDF
+    ".epub": FileType.PUBLICATION,
+
+    ".bmp": FileType.IMAGE,
+
+    ".gif": FileType.IMAGE,
+
+    ".jp2": FileType.IMAGE,
+
+    ".jpeg": FileType.IMAGE,
+
+    ".avi": FileType.VIDEO,
+
+    ".mobi": FileType.PUBLICATION,
+
+    // formats d'image
+    ".jpg": FileType.IMAGE,
+
+    // formats d'email et d'archive email
+    ".msg": FileType.EMAIL,
+
+    ".mp4": FileType.VIDEO,
+
     ".odp": FileType.PRESENTATION,
 
+    ".mkv": FileType.VIDEO,
+
     
-".dotx": FileType.DOCUMENT,
+".mov": FileType.VIDEO,
 
     // formats OOo/LO Impress
 ".otp": FileType.PRESENTATION,
 
-    ".jp2": FileType.IMAGE,
+    ".mp3": FileType.AUDIO,
 
     ".pdf": FileType.PUBLICATION,
 
-    ".gif": FileType.IMAGE,
+    ".flac": FileType.AUDIO,
 
     ".pot": FileType.PRESENTATION,
 
-    ".bmp": FileType.IMAGE,
+    ".mpeg": FileType.VIDEO,
 
     ".pps": FileType.PRESENTATION,
 
-    ".jpeg": FileType.IMAGE,
+    ".arc": FileType.OTHER,
 
     ".ppsx": FileType.PRESENTATION,
-
-    ".avi": FileType.VIDEO,
-
-    ".ppt": FileType.PRESENTATION,
-
-    // formats d'image
-".jpg": FileType.IMAGE,
-
-    
-    ".pptm": FileType.PRESENTATION,
-
-    
-    ".mp4": FileType.VIDEO,
-
-    // formats Microsoft PowerPoint
-".pptx": FileType.PRESENTATION,
-
-    ".mkv": FileType.VIDEO,
-
-    ".xls": FileType.SPREADSHEET,
-
-    ".mov": FileType.VIDEO,
-
-    ".xlsm": FileType.SPREADSHEET,
-
-    ".mp3": FileType.AUDIO,
-
-    
-".flac": FileType.AUDIO,
-
-    // formats Microsoft Excel
-".xlsx": FileType.SPREADSHEET,
-
-    ".mpeg": FileType.VIDEO,
-
-    
-".arc": FileType.OTHER,
-
-    // dont les vieux
-".xlt": FileType.SPREADSHEET,
 
     // format Csv
 ".ods": FileType.SPREADSHEET,
 
     
-".xltm": FileType.SPREADSHEET,
-
-    ".xlw": FileType.SPREADSHEET,
+".ppt": FileType.PRESENTATION,
 
     ".odt": FileType.DOCUMENT,
 
-    ".ogg": FileType.AUDIO,
+    
+    ".pptm": FileType.PRESENTATION,
 
-    ".xltx": FileType.SPREADSHEET,
+    
+".ogg": FileType.AUDIO,
+
+    // formats Microsoft PowerPoint
+".pptx": FileType.PRESENTATION,
 
     // formats OOo/LO Calc
-    ".ots": FileType.SPREADSHEET,
+".ots": FileType.SPREADSHEET,
+
+    
+".xls": FileType.SPREADSHEET,
 
     // formats OOo/LO Writer
-    ".ott": FileType.DOCUMENT,
+".ott": FileType.DOCUMENT,
+
+    
+    
+".xlsm": FileType.SPREADSHEET,
+
+    // formats Microsoft Excel
+    ".xlsx": FileType.SPREADSHEET,
 
     ".png": FileType.IMAGE,
 
-    ".pst": FileType.EMAIL,
+    
+".pst": FileType.EMAIL,
+
+    // dont les vieux
+".xlt": FileType.SPREADSHEET,
 
     ".rf64": FileType.AUDIO,
+
+    ".xltm": FileType.SPREADSHEET,
 
     // formats texte standard
     ".rtf": FileType.DOCUMENT,
@@ -138,11 +132,16 @@ export const fileTypesByExtensions = {
     ".svg": FileType.IMAGE,
 
     // archive : type autre en attendant
-    ".tar": FileType.OTHER,
+".tar": FileType.OTHER,
+
+    
+    ".xlw": FileType.SPREADSHEET,
 
     ".tgz": FileType.OTHER,
 
     ".tif": FileType.IMAGE,
+
+    ".xltx": FileType.SPREADSHEET,
 
     ".tiff": FileType.IMAGE,
 

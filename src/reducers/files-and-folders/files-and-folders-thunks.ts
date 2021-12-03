@@ -1,7 +1,7 @@
 import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/file-system-loading-process-utils";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
-import translations from "../../translations/translations";
+import { translations } from "../../translations/translations";
 import { isExactFileOrAncestor } from "../../util/files-and-folders/file-and-folders-utils";
 import { notifyInfo } from "../../util/notification/notifications-util";
 import type { ArchifiltreThunkAction } from "../archifiltre-types";

@@ -1,25 +1,27 @@
 import Box from "@material-ui/core/Box";
-import { CategoryTitle } from "components/common/category-title";
-import { Table } from "components/common/table/table";
-import { makeTableExpandableRow } from "components/common/table/table-expandable-row";
-import type { Column, HeaderColumn } from "components/common/table/table-types";
-import { WordBreak } from "components/common/table/table-types";
-import { ToDeleteChip } from "components/common/to-delete-chip";
-import { SearchBar } from "components/modals/search-modal/search-bar";
-import { useDuplicatePageState } from "context/duplicates-page-context";
 import dateFormat from "dateformat";
-import { useDebouncedValue } from "hooks/use-debounced-value";
-import { useSearchAndFilters } from "hooks/use-search-and-filters";
 import { isEmpty, maxBy } from "lodash";
 import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import styled from "styled-components";
+
+import { useDuplicatePageState } from "../../../context/duplicates-page-context";
+import { useDebouncedValue } from "../../../hooks/use-debounced-value";
+import { useSearchAndFilters } from "../../../hooks/use-search-and-filters";
 import type {
     ElementWithToDelete,
     FilesAndFolders,
-} from "reducers/files-and-folders/files-and-folders-types";
-import styled from "styled-components";
-import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
-import { getType } from "util/files-and-folders/file-and-folders-utils";
+} from "../../../reducers/files-and-folders/files-and-folders-types";
+import { octet2HumanReadableFormat } from "../../../util/file-system/file-sys-util";
+import { getType } from "../../../util/files-and-folders/file-and-folders-utils";
+import { CategoryTitle } from "../../common/category-title";
+import { Table } from "../../common/table/table";
+import { makeTableExpandableRow } from "../../common/table/table-expandable-row";
+import type { Column, HeaderColumn } from "../../common/table/table-types";
+import { WordBreak } from "../../common/table/table-types";
+import { ToDeleteChip } from "../../common/to-delete-chip";
+import type { SearchBarProps } from "../../modals/search-modal/search-bar";
+import { SearchBar } from "../../modals/search-modal/search-bar";
 
 const SEARCH_INPUT_DEBOUNCE = 300;
 
@@ -36,7 +38,7 @@ interface DuplicatesSearchProps {
     untagAsToDelete: (ids: string[]) => void;
 }
 
-const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
+export const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
     duplicatesList,
     elementsToDelete,
     tagAsToDelete,
@@ -64,7 +66,7 @@ const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
         filterName,
     ]);
 
-    const performSearch = useCallback(
+    const performSearch: SearchBarProps["setSearchTerm"] = useCallback(
         (searchValue) => {
             setSearchTerm(searchValue);
             setPageIndex(0);
@@ -73,7 +75,7 @@ const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
     );
 
     const data = useMemo(
-        () =>
+        (): ElementWithToDelete[][] =>
             filteredFilesAndFolders.map((filesAndFoldersList) =>
                 filesAndFoldersList.map((filesAndFolders) => ({
                     ...filesAndFolders,
@@ -127,9 +129,8 @@ const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
                         <ToDeleteChip
                             checked={checked}
                             onClick={() => {
-                                checked
-                                    ? untagAsToDelete(ids)
-                                    : tagAsToDelete(ids);
+                                if (checked) untagAsToDelete(ids);
+                                else tagAsToDelete(ids);
                             }}
                         />
                     );
@@ -211,9 +212,8 @@ const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
                         <ToDeleteChip
                             checked={toDelete}
                             onClick={() => {
-                                toDelete
-                                    ? untagAsToDelete([id])
-                                    : tagAsToDelete([id]);
+                                if (toDelete) untagAsToDelete([id]);
+                                else tagAsToDelete([id]);
                             }}
                         />
                     );
@@ -262,5 +262,3 @@ const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
         </Box>
     );
 };
-
-export default DuplicatesSearch;

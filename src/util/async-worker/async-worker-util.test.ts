@@ -1,5 +1,5 @@
 import { mapValues } from "lodash";
-import translations from "translations/translations";
+import { translations } from "translations/translations";
 import { createAsyncWorkerMock } from "util/async-worker/async-worker-test-utils";
 import { makeChildWorkerMessageCallback } from "util/async-worker/async-worker-util";
 import { MessageTypes } from "util/batch-process/batch-process-util-types";

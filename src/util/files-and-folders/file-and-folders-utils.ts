@@ -12,7 +12,7 @@ import type {
     VirtualPathToIdMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { HashesMap } from "../../reducers/hashes/hashes-types";
-import translations from "../../translations/translations";
+import { translations } from "../../translations/translations";
 import { countItems } from "../array/array-util";
 
 /**

@@ -1,21 +1,21 @@
-import { animateSvgDomElement } from "animation-daemon";
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
 import type { MouseEventHandler } from "react";
 import React, { memo, useCallback, useRef, useState } from "react";
-import { generateRandomString } from "util/random-gen-util";
 
+import { animateSvgDomElement } from "../../../animation-daemon";
+import { addTracker } from "../../../logging/tracker";
+import { ActionTitle, ActionType } from "../../../logging/tracker-types";
+import { generateRandomString } from "../../../util/random-gen-util";
 import type { IcicleProps } from "./icicle";
-import Icicle from "./icicle";
+import { Icicle } from "./icicle";
 import type { IcicleMouseActionHandler } from "./icicle-types";
 
-type AnimatedIcicleProps = IcicleProps & {
+export type AnimatedIcicleProps = IcicleProps & {
     onIcicleMouseLeave: MouseEventHandler<SVGGElement>;
 };
 
 const ANIMATION_DURATION = 1000;
 
-const AnimatedIcicle: React.FC<AnimatedIcicleProps> = (props) => {
+const _AnimatedIcicle: React.FC<AnimatedIcicleProps> = (props) => {
     const { onIcicleRectDoubleClickHandler, x, y, dx, dy } = props;
     const [previousDisplayMode, setPreviousDisplayMode] = useState("none");
     const [previousProps, setPreviousProps] = useState(props);
@@ -45,7 +45,7 @@ const AnimatedIcicle: React.FC<AnimatedIcicleProps> = (props) => {
                 return;
             }
 
-            Promise.all([
+            void Promise.all([
                 animateSvgDomElement(
                     animatedPreviousElementRef.current,
                     false,
@@ -71,7 +71,6 @@ const AnimatedIcicle: React.FC<AnimatedIcicleProps> = (props) => {
         [
             onIcicleRectDoubleClickHandler,
             props,
-            previousDisplayMode,
             setPreviousDisplayMode,
             setPreviousProps,
             animatedPreviousElementRef,
@@ -112,4 +111,6 @@ const AnimatedIcicle: React.FC<AnimatedIcicleProps> = (props) => {
     );
 };
 
-export default memo(AnimatedIcicle);
+_AnimatedIcicle.displayName = "AnimatedIcicle";
+
+export const AnimatedIcicle = memo(_AnimatedIcicle);

@@ -30,7 +30,7 @@ import { Modal } from "reducers/modal/modal-types";
 import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import { pipe } from "rxjs";
 import { map, tap } from "rxjs/operators";
-import translations from "translations/translations";
+import { translations } from "translations/translations";
 import { ArchifiltreErrorType } from "util/error/error-util";
 import {
     NotificationDuration,

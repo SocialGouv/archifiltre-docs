@@ -2,7 +2,7 @@ import type { CsvExporterData } from "exporters/csv/csv-exporter.impl";
 import type { TFunction } from "i18next";
 import { flatten } from "lodash";
 import { tap, toArray } from "rxjs/operators";
-import translations from "translations/translations";
+import { translations } from "translations/translations";
 import { exportToCsv } from "util/array-export/array-export";
 import type { AsyncWorker } from "util/async-worker/async-worker-util";
 import { MessageTypes } from "util/batch-process/batch-process-util-types";

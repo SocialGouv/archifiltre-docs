@@ -1,10 +1,10 @@
-import type { MouseEvent } from "react";
+import { noop } from "lodash";
 import React, { useCallback, useEffect } from "react";
-import * as FunctionUtil from "util/function/function-util";
 
 import { useFileMoveActiveState } from "../workspace/file-move-provider";
 import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
-import SvgRectangle from "./svg-rectangle";
+import type { SvgRectangleProps } from "./svg-rectangle";
+import { SvgRectangle } from "./svg-rectangle";
 
 export interface Dims {
     x: number;
@@ -18,11 +18,13 @@ export interface DimsAndId {
     dims: () => Dims;
 }
 
+/* eslint-disable @typescript-eslint/naming-convention */
 enum CursorState {
     ACTIVE_ELEMENT_CURSOR = "pointer",
     INACTIVE_ELEMENT_CURSOR = "initial",
     MOVE_CURSOR = "move",
 }
+/* eslint-enable @typescript-eslint/naming-convention */
 
 interface IcicleRectProps {
     opacity: number;
@@ -44,7 +46,7 @@ interface IcicleRectProps {
     onMouseOverHandler: IcicleMouseActionHandler;
 }
 
-const IcicleRect: React.FC<IcicleRectProps> = ({
+export const IcicleRect: React.FC<IcicleRectProps> = ({
     x,
     dx,
     y,
@@ -62,25 +64,29 @@ const IcicleRect: React.FC<IcicleRectProps> = ({
      */
     const getDims = useCallback(() => {
         return { dx, dy, x, y };
-    }, [x, dy, y, dy]);
+    }, [x, dx, y, dy]);
 
-    const onClick = useCallback(
-        (event: MouseEvent) => {
+    const onClick: SvgRectangleProps["onClickHandler"] = useCallback(
+        (event) => {
             onClickHandler({ dims: getDims, id }, event);
         },
         [onClickHandler, getDims, id]
     );
 
-    const onDoubleClick = useCallback(
-        (event: MouseEvent) => {
-            onDoubleClickHandler({ dims: getDims, id }, event);
-        },
-        [onDoubleClickHandler, getDims, id]
-    );
+    const onDoubleClick: SvgRectangleProps["onDoubleClickHandler"] =
+        useCallback(
+            (event) => {
+                onDoubleClickHandler({ dims: getDims, id }, event);
+            },
+            [onDoubleClickHandler, getDims, id]
+        );
 
-    const onMouseOver = useCallback(
-        (event: MouseEvent) => {
-            onMouseOverHandler({ dims: getDims, id }, event);
+    const onMouseOver: SvgRectangleProps["onMouseOverHandler"] = useCallback(
+        (event) => {
+            onMouseOverHandler(
+                { dims: getDims, id },
+                event as React.MouseEvent
+            );
         },
         [onMouseOverHandler, getDims, id]
     );
@@ -93,7 +99,8 @@ const IcicleRect: React.FC<IcicleRectProps> = ({
 
     let cursor = CursorState.INACTIVE_ELEMENT_CURSOR;
 
-    if (onClickHandler !== FunctionUtil.empty) {
+    // TODO: not safe
+    if (onClickHandler !== noop) {
         cursor = CursorState.ACTIVE_ELEMENT_CURSOR;
     }
     if (isFileMoveActive) {
@@ -120,5 +127,3 @@ const IcicleRect: React.FC<IcicleRectProps> = ({
         </g>
     );
 };
-
-export default IcicleRect;

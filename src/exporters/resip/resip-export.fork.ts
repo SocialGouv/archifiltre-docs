@@ -1,4 +1,4 @@
-import translations from "translations/translations";
+import { translations } from "translations/translations";
 import { WorkerEventType } from "util/async-worker/async-worker-util";
 import { createAsyncWorkerForChildProcess } from "util/async-worker/child-process";
 import { MessageTypes } from "util/batch-process/batch-process-util-types";

@@ -6,12 +6,12 @@ const ItalicText = styled.span`
     font-style: italic;
 `;
 
-interface BreadcrumbTextTooltipContentProps {
+export interface BreadcrumbTextTooltipContentProps {
     alias: string | null;
     name: string;
 }
 
-const BreadcrumbTextTooltipContent: React.FC<
+export const BreadcrumbTextTooltipContent: React.FC<
     BreadcrumbTextTooltipContentProps
 > = ({ alias, name }) =>
     alias ? (
@@ -24,5 +24,3 @@ const BreadcrumbTextTooltipContent: React.FC<
             <span>{name}</span>
         </Box>
     );
-
-export default BreadcrumbTextTooltipContent;

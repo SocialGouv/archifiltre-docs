@@ -14,14 +14,14 @@ import type {
 import type { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { ElementWeightMethod } from "../../../reducers/icicle-sort-method/icicle-sort-method-types";
 import type { TagMap } from "../../../reducers/tags/tags-types";
-import BreadcrumbsNew from "../breadcrumb/breadcrumbs";
+import { Breadcrumbs as BreadcrumbsNew } from "../breadcrumb/breadcrumbs";
 import { MinimapBracket } from "../minimap-bracket";
 import { Ruler } from "../ruler";
 import { useFileMoveActiveState } from "../workspace/file-move-provider";
 import { useZoomContext } from "../workspace/zoom-provider";
-import AnimatedIcicle from "./animated-icicle";
+import { AnimatedIcicle } from "./animated-icicle";
 import type { IcicleProps } from "./icicle";
-import Icicle from "./icicle";
+import { Icicle } from "./icicle";
 import type { Dims, DimsAndId } from "./icicle-rect";
 import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 
@@ -309,7 +309,7 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
 
     const { isFileMoveActive } = useFileMoveActiveState();
 
-    const moveElementHandler = useCallback<MoveElement>(
+    const moveElementHandler: MoveElement = useCallback(
         (newMovedElementId, targetFolderId) => {
             setMovedElementId(newMovedElementId);
             setMovedElementTime(Date.now());
@@ -321,19 +321,14 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
     const { onIcicleMouseUp, onIcicleMouseDown } =
         useMovableElements(moveElementHandler);
 
-    const onIcicleMouseWheel: IcicleProps["onIcicleMouseWheel"] = useCallback(
-        ({
-            wheelDirection,
-            mousePosition,
-        }: {
-            wheelDirection: number;
-            mousePosition: number;
-        }) => {
-            const zoomMethod = wheelDirection < 0 ? zoomIn : zoomOut;
-            zoomMethod(mousePosition, ZOOM_SPEED);
-        },
-        [zoomIn, zoomOut]
-    );
+    const onIcicleMouseWheel: NonNullable<IcicleProps["onIcicleMouseWheel"]> =
+        useCallback(
+            ({ wheelDirection, mousePosition }) => {
+                const zoomMethod = wheelDirection < 0 ? zoomIn : zoomOut;
+                zoomMethod(mousePosition, ZOOM_SPEED);
+            },
+            [zoomIn, zoomOut]
+        );
 
     return (
         <Viewport>

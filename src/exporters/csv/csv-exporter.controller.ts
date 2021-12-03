@@ -9,7 +9,7 @@ import type {
 import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import type { TagMap } from "../../reducers/tags/tags-types";
-import translations from "../../translations/translations";
+import { translations } from "../../translations/translations";
 import { createAsyncWorkerForChildProcessControllerFactory } from "../../util/async-worker/child-process";
 import { backgroundWorkerProcess$ } from "../../util/batch-process/batch-process-util";
 import type {

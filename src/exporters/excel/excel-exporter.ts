@@ -8,7 +8,7 @@ import {
 } from "../../reducers/loading-info/loading-info-actions";
 import { startLoading } from "../../reducers/loading-info/loading-info-operations";
 import { LoadingInfoTypes } from "../../reducers/loading-info/loading-info-types";
-import translations from "../../translations/translations";
+import { translations } from "../../translations/translations";
 import { getCsvExportParamsFromStore } from "../../util/array-export/array-export-utils";
 import { filterResults } from "../../util/batch-process/batch-process-util";
 import type { ResultMessage } from "../../util/batch-process/batch-process-util-types";

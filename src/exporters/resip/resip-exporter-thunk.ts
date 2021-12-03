@@ -17,7 +17,7 @@ import {
 } from "../../reducers/loading-info/loading-info-actions";
 import { LoadingInfoTypes } from "../../reducers/loading-info/loading-info-types";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
-import translations from "../../translations/translations";
+import { translations } from "../../translations/translations";
 import { arrayToCsv } from "../../util/csv/csv-util";
 import {
     notifyInfo,

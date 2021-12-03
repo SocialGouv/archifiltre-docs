@@ -9,7 +9,7 @@ import { firstHashesComputingThunk } from "../hash-computer/hash-computer-thunk"
 import { reportError } from "../logging/reporter";
 import { addTracker } from "../logging/tracker";
 import { ActionTitle, ActionType } from "../logging/tracker-types";
-import translations from "../translations/translations";
+import { translations } from "../translations/translations";
 import { filterResults } from "../util/batch-process/batch-process-util";
 import type { ErrorMessage } from "../util/batch-process/batch-process-util-types";
 import { copyToClipboard } from "../util/clipboard/clipboard";

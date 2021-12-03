@@ -1,6 +1,6 @@
 import type { ChildProcess } from "child_process";
 
-import translations from "../../translations/translations";
+import { translations } from "../../translations/translations";
 import type { WorkerMessage } from "../batch-process/batch-process-util-types";
 import { MessageTypes } from "../batch-process/batch-process-util-types";
 import type { WithLanguage } from "../language/language-types";

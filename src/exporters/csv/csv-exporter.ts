@@ -1,5 +1,5 @@
 import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
-import translations from "../../translations/translations";
+import { translations } from "../../translations/translations";
 import { getCsvExportParamsFromStore } from "../../util/array-export/array-export-utils";
 import { handleFileExportThunk } from "../../util/export/export-util";
 import { notifyInfo } from "../../util/notification/notifications-util";

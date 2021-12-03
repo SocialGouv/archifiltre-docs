@@ -2,7 +2,7 @@ import { createFilesAndFoldersMetadataDataStructure } from "files-and-folders-lo
 import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import translations from "translations/translations";
+import { translations } from "translations/translations";
 import { notifyInfo } from "util/notification/notifications-util";
 
 import type { DispatchExts } from "../archifiltre-types";

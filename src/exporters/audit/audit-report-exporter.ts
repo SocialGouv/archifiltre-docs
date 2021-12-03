@@ -13,7 +13,7 @@ import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-fo
 import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { getHashesFromStore } from "../../reducers/hashes/hashes-selectors";
 import type { HashesMap } from "../../reducers/hashes/hashes-types";
-import translations from "../../translations/translations";
+import { translations } from "../../translations/translations";
 import {
     countDuplicateFiles,
     countDuplicateFolders,

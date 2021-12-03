@@ -1,8 +1,8 @@
-import noop from "lodash/noop";
+import { noop } from "lodash";
 import React, { memo } from "react";
 
 import type { DimsMap } from "./icicle";
-import IcicleRect from "./icicle-rect";
+import { IcicleRect } from "./icicle-rect";
 import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 
 interface IciclesOverlayProps {
@@ -15,7 +15,7 @@ interface IciclesOverlayProps {
     onIcicleRectMouseOverHandler: IcicleMouseActionHandler;
 }
 
-const IciclesOverlay: React.FC<IciclesOverlayProps> = ({
+const _IciclesOverlay: React.FC<IciclesOverlayProps> = ({
     opacity,
     dimsMap,
     ids,
@@ -28,6 +28,7 @@ const IciclesOverlay: React.FC<IciclesOverlayProps> = ({
         <>
             {ids.map((id) => {
                 const dims = dimsMap[id];
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 if (!dims) {
                     return <g key={id} />;
                 }
@@ -55,4 +56,6 @@ const IciclesOverlay: React.FC<IciclesOverlayProps> = ({
     );
 };
 
-export default memo(IciclesOverlay);
+_IciclesOverlay.displayName = "IciclesOverlay";
+
+export const IciclesOverlay = memo(_IciclesOverlay);

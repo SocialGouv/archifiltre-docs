@@ -10,7 +10,7 @@ import type {
 import type { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { tagHasFfId } from "reducers/tags/tags-selectors";
 import type { TagMap } from "reducers/tags/tags-types";
-import translations from "translations/translations";
+import { translations } from "translations/translations";
 import { makeEmptyArray, replaceValue } from "util/array/array-util";
 import {
     getDisplayName,

@@ -4,7 +4,7 @@ import { createContext } from "vm";
 
 import { useTabsState } from "../..//header/tabs-context";
 import { HeaderContainer as Header } from "../../header/header-container";
-import DuplicatesSearch from "../duplicates-search/duplicates-search-container";
+import { DuplicatesSearchContainer as DuplicatesSearch } from "../duplicates-search/duplicates-search-container";
 import { HelpButton } from "../help-button";
 import { IcicleApiToProps as Icicle } from "../icicle/icicle-container";
 import NavigationBar from "../navigation-bar/navigation-bar-container";

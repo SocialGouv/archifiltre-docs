@@ -15,7 +15,7 @@ import type {
     FillColor,
     IcicleMouseActionHandler,
 } from "../icicle/icicle-types";
-import Breadcrumb, { BreadcrumbOpacity } from "./breadcrumb";
+import { Breadcrumb, BreadcrumbOpacity } from "./breadcrumb";
 
 const BreadcrumbsWrapper = styled.div`
     display: flex;
@@ -160,7 +160,7 @@ const getPathToCopy = (originalPath: string, nodeId: string) => {
     return formatPathForUserSystem(`${basePath}/${nodeId}`);
 };
 
-const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
+const _Breadcrumbs: React.FC<BreadcrumbsProps> = ({
     depth,
     lockedSequence,
     hoveredSequence,
@@ -250,4 +250,6 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
     );
 };
 
-export default memo(Breadcrumbs);
+_Breadcrumbs.displayName = "Breadcrumbs";
+
+export const Breadcrumbs = memo(_Breadcrumbs);

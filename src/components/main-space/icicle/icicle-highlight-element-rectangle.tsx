@@ -1,11 +1,11 @@
-import { useAnimatedValue } from "hooks/use-animation";
-import type { MouseEventHandler } from "react";
 import React from "react";
 
+import { useAnimatedValue } from "../../../hooks/use-animation";
 import { useFileMoveActiveState } from "../workspace/file-move-provider";
 import type { Dims } from "./icicle-rect";
 import type { IcicleMouseActionHandler } from "./icicle-types";
-import SvgRectangle from "./svg-rectangle";
+import type { SvgRectangleProps } from "./svg-rectangle";
+import { SvgRectangle } from "./svg-rectangle";
 
 interface IcicleHightlightElementRectangleProps {
     dims: Dims;
@@ -18,7 +18,7 @@ interface IcicleHightlightElementRectangleProps {
 
 const ICICLE_HIGHLIGHT_DURATION = 3000;
 
-const IcicleHightlightElementRectangle: React.FC<
+export const IcicleHightlightElementRectangle: React.FC<
     IcicleHightlightElementRectangleProps
 > = ({
     dims,
@@ -41,16 +41,18 @@ const IcicleHightlightElementRectangle: React.FC<
 
     const dimsAndId = { dims: () => dims, id: highlightedElementId };
 
-    const onClick: MouseEventHandler = (event) => {
+    const onClick: SvgRectangleProps["onClickHandler"] = (event) => {
         onClickHandler(dimsAndId, event);
     };
 
-    const ouDoubleClick: MouseEventHandler = (event) => {
+    const ouDoubleClick: SvgRectangleProps["onDoubleClickHandler"] = (
+        event
+    ) => {
         onDoubleClickHandler(dimsAndId, event);
     };
 
-    const onMouseOver: MouseEventHandler = (event) => {
-        onMouseOverHandler(dimsAndId, event);
+    const onMouseOver: SvgRectangleProps["onMouseOverHandler"] = (event) => {
+        onMouseOverHandler(dimsAndId, event as React.MouseEvent);
     };
 
     return (
@@ -73,5 +75,3 @@ const IcicleHightlightElementRectangle: React.FC<
         </g>
     );
 };
-
-export default IcicleHightlightElementRectangle;

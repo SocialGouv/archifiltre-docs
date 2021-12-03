@@ -1,10 +1,10 @@
 import React, { memo } from "react";
-import * as ArrayUtil from "util/array/array-util";
 
-import IcicleRect from "./icicle-rect";
+import { computeCumulative } from "../../../util/array/array-util";
+import { IcicleRect } from "./icicle-rect";
 import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 
-interface IcicleRecursiveProps {
+export interface IcicleRecursiveProps {
     id: string;
     x: number;
     width: number;
@@ -28,7 +28,7 @@ interface IcicleRecursiveProps {
     ) => void;
 }
 
-const IcicleRecursive: React.FC<IcicleRecursiveProps> = ({
+const _IcicleRecursive: React.FC<IcicleRecursiveProps> = ({
     id,
     x,
     width,
@@ -49,7 +49,7 @@ const IcicleRecursive: React.FC<IcicleRecursiveProps> = ({
     const childrenWidth = normalizeWidth(children.map(getWidthFromId)).map(
         (a) => a * width
     );
-    const cumulatedChildrenWidth = ArrayUtil.computeCumulative(childrenWidth);
+    const cumulatedChildrenWidth = computeCumulative(childrenWidth);
 
     const childrenHeight = children.map(trueFHeight);
 
@@ -110,4 +110,6 @@ const IcicleRecursive: React.FC<IcicleRecursiveProps> = ({
     return <g>{childrenComponents}</g>;
 };
 
-export default memo(IcicleRecursive);
+_IcicleRecursive.displayName = "IcicleRecursive";
+
+export const IcicleRecursive = memo(_IcicleRecursive);

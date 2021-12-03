@@ -1,5 +1,5 @@
 import { dialog, shell } from "electron";
-import translations from "translations/translations";
+import { translations } from "translations/translations";
 import { notifyError } from "util/notification/notifications-util";
 
 /**

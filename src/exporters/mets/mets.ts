@@ -17,7 +17,7 @@ import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folder
 import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import { getAllTagsForFile } from "../../reducers/tags/tags-selectors";
 import type { TagMap } from "../../reducers/tags/tags-types";
-import translations from "../../translations/translations";
+import { translations } from "../../translations/translations";
 import { handleError } from "../../util/error/error-util";
 import { getDisplayName } from "../../util/files-and-folders/file-and-folders-utils";
 import { notifySuccess } from "../../util/notification/notifications-util";

@@ -1,4 +1,4 @@
-import { ipcRenderer } from "electron";
+import { ipcRenderer } from "../../common/ipc";
 import md5File from "md5-file";
 import {
   ACCESS_DENIED,
@@ -25,8 +25,8 @@ export type HashComputingResult = {
 };
 
 export const isResult = (
-  value: HashComputingResult | HashComputingError
-): value is HashComputingResult => value.type === "result";
+  values: HashComputingResult | HashComputingError
+): values is HashComputingResult => values.type === "result";
 
 export const hashResult = (
   path: string,
@@ -57,7 +57,9 @@ export const computeHash = async (
 
 export const computeHashes = (files: string[], basePath: string) => {
   const computeFn = computeQueue(
-    (filePath: string) => ipcRenderer.invoke("computeHash", filePath),
+    (filePaths: string[]) => { 
+      return ipcRenderer.invoke("hash.computeHash", filePaths);
+    },
     isResult
   );
 

@@ -12,13 +12,26 @@
     "moduleResolution": "node",
     "baseUrl": "src",
     "esModuleInterop": true,
-    "lib": ["es6", "scripthost", "dom"],
+    "lib": [
+      "es6",
+      "scripthost",
+      "dom"
+    ],
     "resolveJsonModule": true,
     "noUnusedLocals": true,
-    "types": ["react", "jest", "node"] // This is a dirty-fix to ignore @types/react-native that is added
+    "types": [
+      "react",
+      "jest",
+      "node"
+    ] // This is a dirty-fix to ignore @types/react-native that is added
     // by @types/styled-components and collides with @types/react.
     // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/33311#issuecomment-466731156
   },
-  "include": ["./src/", "./src/typings/custom.d.ts"],
-  "exclude": ["**/*.test.*"]
+  "include": [
+    "./src/",
+    "./src/typings/custom.d.ts"
+  ],
+  "exclude": [
+    "**/*.test.*"
+  ]
 }

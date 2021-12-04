@@ -1,6 +1,6 @@
 import React from "react";
 import WindowResize from "./window-resize";
-import { ipcRenderer } from "electron";
+import { ipcRenderer } from "../../common/ipc";
 
 type WindowResizeErrorHandlerState = {
   hasError: boolean;
@@ -27,7 +27,8 @@ export default class WindowResizeErrorHandler extends React.Component<
     const { hasError } = this.state;
 
     if (hasError) {
-      ipcRenderer.invoke("showWindow");
+      // TODO async in render?
+      ipcRenderer.invoke("window.showWindow");
       return null;
     } else {
       return <WindowResize />;

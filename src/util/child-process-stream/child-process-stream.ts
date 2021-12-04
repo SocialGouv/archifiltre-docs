@@ -45,13 +45,10 @@ export const stringifyObjectToStream = <Data, SerializedData>(
     dataSerializer,
   }: StringifyObjectToStreamOptions<Data, SerializedData>
 ) => {
-  let sentSize = 0;
   keyExtractor(data).forEach((elementKey) => {
     const serializedData = dataSerializer(dataExtractor(data, elementKey));
     sendBufferToStream(stream, serializedData);
-    sentSize += serializedData.length;
   });
-  console.log(sentSize);
 };
 
 export type MessageSerializer<Data> = (stream: Writable, data: Data) => void;

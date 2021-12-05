@@ -4,19 +4,17 @@ declare module "../common/ipc/event" {
   interface SyncIpcMapping {
     "window.getSize": IpcConfig<[], number[]>;
     "window.setSize": IpcConfig<[width: number, heigth: number], void>;
-  }
-  interface AsyncIpcMapping {
-    "window.showWindow": IpcConfig<[], void>;
-    "window.resizeWindow": IpcConfig<[], void>;
+    "window.show": IpcConfig<[], void>;
+    "window.reload": IpcConfig<[], void>;
   }
 }
 
 export const loadWindow = (window: BrowserWindow) => {
-  ipcMain.handle("window.showWindow", () => {
+  ipcMain.on("window.show", () => {
     window.show();
   });
-  ipcMain.handle("window.resizeWindow", () => {
-    console.log("SORRY NO RESIZE");
+  ipcMain.on("window.reload", () => {
+    window.reload();
   });
   ipcMain.on("window.getSize", (event) => {
     event.returnValue = window.getSize();

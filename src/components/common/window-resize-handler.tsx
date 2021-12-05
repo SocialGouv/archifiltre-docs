@@ -27,8 +27,7 @@ export default class WindowResizeErrorHandler extends React.Component<
     const { hasError } = this.state;
 
     if (hasError) {
-      // TODO async in render?
-      ipcRenderer.invoke("window.showWindow");
+      ipcRenderer.sendSync("window.show");
       return null;
     } else {
       return <WindowResize />;

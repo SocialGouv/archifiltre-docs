@@ -4,7 +4,6 @@ import * as UserData from "user-data";
 import { ipcRenderer } from "../../common/ipc";
 
 type WindowResizeState = {
-  win;
   reader;
   writer;
 };
@@ -22,7 +21,6 @@ export default class WindowResize extends React.PureComponent<
     });
 
     this.state = {
-      win: ipcRenderer.invoke("window.showWindow"), // TODO: async in constructor? Also show window does not return anything. Also², "win" is never used.
       reader,
       writer,
     };
@@ -46,7 +44,7 @@ export default class WindowResize extends React.PureComponent<
 
     ipcRenderer.sendSync("window.setSize", width, height);
 
-    ipcRenderer.invoke("window.showWindow");
+    ipcRenderer.sendSync("window.show");
 
     const onResize = this.onResize;
     window.addEventListener("resize", onResize);

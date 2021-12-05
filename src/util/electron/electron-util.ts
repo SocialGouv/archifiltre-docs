@@ -5,7 +5,7 @@ import type { App } from "electron";
 /**
  * Reloads the app. Acts like F5 or CTRL+R
  */
-export const reloadApp = () => ipcRenderer.invoke("window.resizeWindow"); // TODO: Resize is not working. Did you mean reload?
+export const reloadApp = () => ipcRenderer.sendSync("window.reload");
 
 /**
  * Opens a link in the user's browser

@@ -3,7 +3,7 @@ import { IpcMainEvent }  from "electron";
 /**
  * Define an IPC config with arguments types and a return value type.
  * 
- * Arguments should be considerer as a spreadable array of args.
+ * Arguments should be considered as a spreadable array of args.
  */
 export type IpcConfig<TArgs extends unknown[], TReturnValue> = {
     args: TArgs;
@@ -53,35 +53,3 @@ export type UnknownMapping = string & { _?: never };
 export interface CustomIpcMainEvent<T> extends IpcMainEvent {
     returnValue: GetSyncIpcConfig<T>["returnValue"];
 }
-
-
-// -- Electron type are strongly locked, keep this comment when typescript allow const/type overload
-// declare module "electron" {
-//     export namespace Electron {
-//         interface IpcMain extends ElectronMain.IpcMain {
-//             on<T extends SyncIpcKeys | UnknownMapping>(
-//                 channel: SyncIpcChannel<T>,
-//                 listener: (event: CustomIpcMainEvent<T>, ...args: GetSyncIpcConfig<T>["args"]) => void
-//             ): this;
-
-//             handle<T extends AsyncIpcKeys | UnknownMapping>(
-//                 channel: AsyncIpcChannel<T>,
-//                 listener: (
-//                     event: ElectronMain.IpcMainInvokeEvent,
-//                     ...args: GetAsyncIpcConfig<T>["args"],
-//                 ) => Promise<GetAsyncIpcConfig<T>["returnValue"]> | GetAsyncIpcConfig<T>["returnValue"],
-//             ): void
-//         }
-//         interface IpcRenderer extends ElectronRenderer.IpcRenderer {
-//             sendSync<T extends SyncIpcKeys | UnknownMapping>(
-//                 channel: SyncIpcChannel<T>,
-//                 ...args: GetSyncIpcConfig<T>["args"],
-//             ): GetSyncIpcConfig<T>["returnValue"];
-
-//             invoke<T extends AsyncIpcKeys | UnknownMapping>(
-//                 channel: AsyncIpcChannel<T>,
-//                 ...args: GetAsyncIpcConfig<T>["args"],
-//             ): Promise<GetAsyncIpcConfig<T>["returnValue"]>;
-//         }
-//     }
-// }

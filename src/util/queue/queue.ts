@@ -23,8 +23,8 @@ export const computeQueue = <Input, Result, Error = never>(computingFn: (param: 
                     const computed = remaining[0];
                     remaining = remaining.slice(1);
                     const values = await computingFn(computed);
-                    const newResults = values.filter((v): v is Result => isResult(v));
-                    const newErrors = values.filter((v): v is Error => !isResult(v));
+                    const newResults = values.filter((value): value is Result => isResult(value));
+                    const newErrors = values.filter((value): value is Error => !isResult(value));
 
                     results = [...results, ...newResults];
                     errors = [...errors, ...newErrors];

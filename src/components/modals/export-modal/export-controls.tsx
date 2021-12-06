@@ -5,10 +5,10 @@ import { FaFolderOpen } from "react-icons/fa";
 import { exportConfig, ExportType } from "./export-config";
 import { useTranslation } from "react-i18next";
 import { ExportTypesMap } from "./export-options";
-import { dialog } from "@electron/remote";
 import path from "path";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { ipcRenderer } from "../../../common/ipc";
 
 type ExportControlsProps = {
   setActiveExportValue: (exportType: ExportType, value: boolean) => void;
@@ -44,7 +44,7 @@ const ExportControls: FC<ExportControlsProps> = ({
   };
 
   const browseForAll = async () => {
-    const filePath = await dialog.showOpenDialog({
+    const filePath = await ipcRenderer.invoke("dialog.showOpenDialog", {
       properties: ["openDirectory"],
     });
 

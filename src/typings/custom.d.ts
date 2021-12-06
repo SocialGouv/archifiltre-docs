@@ -11,3 +11,4 @@ declare const SENTRY_MINIDUMP_URL: string;
 declare const ARCHIFILTRE_SITE_URL: string;
 declare const WRITE_DEBUG: string;
 declare const WORKER_ROOT_FOLDER: string;
+declare const REACT_DEV_TOOLS_PATH: string;

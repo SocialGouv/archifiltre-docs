@@ -1,30 +1,33 @@
+import { chunk } from "lodash";
 import { Observable } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 
+
+const CHUNK_SIZE = 1500;
+
 type IsResult<T> = (value: any) => value is T;
 
-export const computeQueue = <Input, Result, Error = never>(computingFn: (param: Input) => Promise<Result | Error>, isResult: IsResult<Result>) => (input: Input[]) =>
+export const computeQueue = <Input, Result, Error = never>(computingFn: (param: Input[]) => Promise<(Result | Error)[]>, isResult: IsResult<Result>) => (input: Input[]) =>
     new Observable<{
         results: Result[];
         errors: Error[];
-        remaining: Input[];
+        remaining: Input[][];
     }>(
         (observer) => {
             let results: Result[] = [];
             let errors: Error[] = [];
-            let remaining: Input[] = input;
+            let remaining: Input[][] = chunk(input, CHUNK_SIZE);
 
             const run = async () => {
                 while (remaining.length > 0) {
                     const computed = remaining[0];
                     remaining = remaining.slice(1);
-                    const value = await computingFn(computed);
+                    const values = await computingFn(computed);
+                    const newResults = values.filter((value): value is Result => isResult(value));
+                    const newErrors = values.filter((value): value is Error => !isResult(value));
 
-                    if (isResult(value)) {
-                        results = [...results, value];
-                    } else {
-                        errors = [...errors, value];
-                    }
+                    results = [...results, ...newResults];
+                    errors = [...errors, ...newErrors];
 
                     observer.next({
                         results,

@@ -16,8 +16,8 @@ describe("queue", () => {
             const error = (): Error => ({ type: "error" });
             const result = (value: string): Result => ({ type: "result", value });
 
-            const valueComputer = (value: string): Promise<Result | Error> =>
-                Promise.resolve(value === "error" ? error() : result(value));
+            const valueComputer = (values: string[]): Promise<(Result | Error)[]> =>
+                Promise.all(values.map(value => Promise.resolve(value === "error" ? error() : result(value))));
 
             const isResult = (value: Error | Result): value is Result => value.type === "result";
 
@@ -30,26 +30,6 @@ describe("queue", () => {
                 .toPromise();
 
             expect(emitted).toEqual([
-                {
-                    remaining: [
-                        "result2",
-                        "error"
-                    ],
-                    errors: [],
-                    results: [
-                        result("result1"),
-                    ]
-                },
-                {
-                    remaining: [
-                        "error"
-                    ],
-                    errors: [],
-                    results: [
-                        result("result1"),
-                        result("result2")
-                    ]
-                },
                 {
                     remaining: [],
                     errors: [

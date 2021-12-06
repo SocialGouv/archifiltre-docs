@@ -8,7 +8,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Tooltip from "@material-ui/core/Tooltip";
 import EllipsisText from "components/main-space/workspace/enrichment/tags/ellipsis-text";
-import { dialog } from "electron";
 import path from "path";
 import {
     clearSession,
@@ -30,6 +29,7 @@ import {
 } from "react-icons/fa";
 import { openLink } from "util/electron/electron-util";
 
+import { ipcRenderer } from "../../common/ipc";
 import {
     CONTACT_LINK,
     DOCUMENTATION_LINK,
@@ -83,7 +83,7 @@ const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
     };
 
     const onNewDirectoryClick = useCallback(async () => {
-        const path = await dialog.showOpenDialog({
+        const path = await ipcRenderer.invoke("dialog.showOpenDialog", {
             properties: ["openDirectory"],
         });
         if (path.filePaths.length > 0) {

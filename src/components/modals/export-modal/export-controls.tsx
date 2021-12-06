@@ -2,12 +2,12 @@ import { Button } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { dialog } from "electron";
 import path from "path";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaFolderOpen } from "react-icons/fa";
 
+import { ipcRenderer } from "../../../common/ipc";
 import { exportConfig, ExportType } from "./export-config";
 import type { ExportTypesMap } from "./export-options";
 
@@ -45,7 +45,7 @@ const ExportControls: React.FC<ExportControlsProps> = ({
     };
 
     const browseForAll = async () => {
-        const filePath = await dialog.showOpenDialog({
+        const filePath = await ipcRenderer.invoke("dialog.showOpenDialog", {
             properties: ["openDirectory"],
         });
 

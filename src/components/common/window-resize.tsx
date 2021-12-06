@@ -1,6 +1,7 @@
 import { ipcRenderer } from "electron";
 import { PureComponent } from "react";
 
+import { ipcRenderer } from "../../common/ipc";
 import * as UserData from "../../user-data";
 
 type WindowResizeState = UserData.UserData;
@@ -14,7 +15,6 @@ export class WindowResize extends PureComponent<unknown, WindowResizeState> {
             width: 620,
         });
 
-        void ipcRenderer.invoke("showWindow");
         this.state = {
             reader,
             writer,
@@ -23,9 +23,9 @@ export class WindowResize extends PureComponent<unknown, WindowResizeState> {
         this.onResize = this.onResize.bind(this);
     }
 
-    onResize(): void {
+    onResize() {
         const { writer } = this.state;
-        const [width, height] = ipcRenderer.sendSync("getSize");
+        const [width, height] = ipcRenderer.sendSync("window.getSize");
 
         writer({
             height,
@@ -33,13 +33,13 @@ export class WindowResize extends PureComponent<unknown, WindowResizeState> {
         });
     }
 
-    componentDidMount(): void {
+    componentDidMount() {
         const { reader } = this.state;
         const { width, height } = reader();
 
-        ipcRenderer.sendSync("setSize", width, height);
+        ipcRenderer.sendSync("window.setSize", width, height);
 
-        void ipcRenderer.invoke("showWindow");
+        ipcRenderer.sendSync("window.show");
 
         const onResize = this.onResize.bind(this);
         window.addEventListener("resize", onResize);

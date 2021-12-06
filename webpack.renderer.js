@@ -17,9 +17,9 @@ const isDev = (mode) => mode === "development";
  * @returns {string}
  */
 const workerRootFolder = (mode) =>
-    isDev(mode)
-        ? JSON.stringify(path.join(__dirname, "electron/dist/"))
-        : "require('path').join(require('electron').app.getAppPath(),'/electron/dist/')";
+  isDev(mode)
+    ? JSON.stringify(path.join(__dirname, "electron/dist/"))
+    : "require('path').join(require('electron').ipcRenderer.sendSync('getAppPath'),'/electron/dist/')";
 
 const workers = glob
     .sync("./**/*.fork.ts")

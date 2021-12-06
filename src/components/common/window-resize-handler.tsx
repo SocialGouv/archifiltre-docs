@@ -1,5 +1,5 @@
-import { ipcRenderer } from "electron";
 import React, { Component } from "react";
+import { ipcRenderer } from "../../common/ipc";
 
 import { WindowResize } from "./window-resize";
 
@@ -27,11 +27,10 @@ export class WindowResizeErrorHandler extends Component<
     render(): React.ReactNode {
         const { hasError } = this.state;
 
-        if (hasError) {
-            void ipcRenderer.invoke("showWindow");
-            return null;
-        } else {
-            return <WindowResize />;
-        }
+    if (hasError) {
+      ipcRenderer.sendSync("window.show");
+      return null;
+    } else {
+      return <WindowResize />;
     }
 }

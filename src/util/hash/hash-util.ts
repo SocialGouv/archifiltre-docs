@@ -1,17 +1,22 @@
-import { ipcRenderer } from "electron";
 import md5File from "md5-file";
 import path from "path";
-import { throttleTime } from "rxjs/operators";
+import { throttleTime, throttleTime } from "rxjs/operators";
 
-import type { HashesMap } from "../../reducers/hashes/hashes-types";
+import { ipcRenderer } from "../../common/ipc";
+import type { HashesMap, HashesMap } from "../../reducers/hashes/hashes-types";
 import {
     ArchifiltreFileSystemErrorCode,
+    ArchifiltreFileSystemErrorCode,
+    UnknownError,
     UnknownError,
 } from "../error/error-codes";
-import type { ArchifiltreError } from "../error/error-util";
-import { ArchifiltreErrorType } from "../error/error-util";
-import { computeQueue } from "../queue/queue";
-import type { HashComputingError } from "./hash-errors";
+import type { ArchifiltreError, ArchifiltreError } from "../error/error-util";
+import {
+    ArchifiltreErrorType,
+    ArchifiltreErrorType,
+} from "../error/error-util";
+import { computeQueue, computeQueue } from "../queue/queue";
+import type { HashComputingError, HashComputingError } from "./hash-errors";
 import {
     ACCESS_DENIED,
     accessDenied,
@@ -27,8 +32,8 @@ export interface HashComputingResult {
 }
 
 export const isResult = (
-    value: HashComputingError | HashComputingResult
-): value is HashComputingResult => value.type === "result";
+    values: HashComputingError | HashComputingResult
+): values is HashComputingResult => values.type === "result";
 
 export const hashResult = (
     path: string,
@@ -58,10 +63,9 @@ export const computeHash = async (
 };
 
 export const computeHashes = (files: string[], basePath: string) => {
-    const computeFn = computeQueue(
-        async (filePath: string) => ipcRenderer.invoke("computeHash", filePath),
-        isResult
-    );
+    const computeFn = computeQueue(async (filePaths: string[]) => {
+        return ipcRenderer.invoke("hash.computeHash", filePaths);
+    }, isResult);
 
     const paths = files.map((file) => path.join(basePath, file));
 

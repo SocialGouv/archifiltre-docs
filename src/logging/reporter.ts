@@ -3,11 +3,11 @@ import * as Sentry from "@sentry/browser";
 import dateFormat from "dateformat";
 import { merge } from "lodash";
 import path from "path";
-import { getPath } from "util/electron/electron-util";
 import { createLogger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 import WinstonSentry from "winston-transport-sentry-node";
 
+import { getPath } from "../util/electron/electron-util";
 import WinstonConsoleLogger from "./winston-console-logger";
 
 const isProd = () => MODE === "production";

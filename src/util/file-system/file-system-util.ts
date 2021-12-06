@@ -1,6 +1,6 @@
-import { dialog, shell } from "electron";
-import { translations } from "translations/translations";
-import { notifyError } from "util/notification/notifications-util";
+import { ipcRenderer } from "../../common/ipc";
+import { translations } from "../../translations/translations";
+import { notifyError } from "../notification/notifications-util";
 
 /**
  * Prompts the user to save a file. Returns the file path if the user confirmed
@@ -10,7 +10,7 @@ import { notifyError } from "util/notification/notifications-util";
 export const promptUserForSave = async (
     filename: string
 ): Promise<string | undefined> => {
-    const { filePath } = await dialog.showSaveDialog({
+    const { filePath } = await ipcRenderer.invoke("dialog.showSaveDialog", {
         defaultPath: filename,
     });
     return filePath;
@@ -23,7 +23,7 @@ export const promptUserForSave = async (
 export const openExternalElement = async (
     elementPath: string
 ): Promise<void> => {
-    const error = await shell.openPath(elementPath);
+    const error = await ipcRenderer.invoke("shell.openPath", elementPath);
 
     if (error) {
         notifyError(
@@ -33,6 +33,5 @@ export const openExternalElement = async (
     }
 };
 
-export const showInFolder = async (elementPath: string) => {
-    shell.showItemInFolder(elementPath);
-};
+export const showInFolder: Promise<void> = async (elementPath: string) =>
+    ipcRenderer.invoke("shell.showItemInFolder", elementPath);

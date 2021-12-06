@@ -38,22 +38,19 @@ interface StringifyObjectToStreamOptions<TData, TSerializedData> {
  * @param dataExtractor - builds the object to serialize based on the provided key
  * @param dataSerializer - serialize the extracted object to an Uint8 array
  */
-export const stringifyObjectToStream = <TData, TSerializedData>(
+export const stringifyObjectToStream = <Data, SerializedData>(
     stream: Writable,
-    data: TData,
+    data: Data,
     {
         keyExtractor,
         dataExtractor,
         dataSerializer,
-    }: StringifyObjectToStreamOptions<TData, TSerializedData>
+    }: StringifyObjectToStreamOptions<Data, SerializedData>
 ): void => {
-    let sentSize = 0;
     keyExtractor(data).forEach((elementKey) => {
         const serializedData = dataSerializer(dataExtractor(data, elementKey));
         sendBufferToStream(stream, serializedData);
-        sentSize += serializedData.length;
     });
-    console.log(sentSize);
 };
 
 export type MessageSerializer<TData> = (stream: Writable, data: TData) => void;

@@ -49,10 +49,7 @@ export const HorizontalStackedBar: React.FC<HorizontalStackedBarProps> = ({
         <Box display="flex" flexWrap="nowrap" width="100%">
             {bars.map(({ key, color }) => (
                 <Tooltip key={key} title={renderTooltipContent(key)}>
-                    <Bar
-                        color={color}
-                        widthratio={(data[key] ?? 0 / total) * 100}
-                    />
+                    <Bar color={color} widthratio={(data[key] / total) * 100} />
                 </Tooltip>
             ))}
         </Box>

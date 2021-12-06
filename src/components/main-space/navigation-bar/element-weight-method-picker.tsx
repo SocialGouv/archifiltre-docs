@@ -1,19 +1,18 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaWeightHanging } from "react-icons/fa";
-import { ElementWeightMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
 
-import OptionsPicker from "./options-picker";
+import { ElementWeightMethod } from "../../../reducers/icicle-sort-method/icicle-sort-method-types";
+import { OptionsPicker } from "./options-picker";
 
-interface ElementWeightMethodPickerProps {
+export interface ElementWeightMethodPickerProps {
     setElementWeightMethod: (method: ElementWeightMethod) => void;
     elementWeightMethod: ElementWeightMethod;
 }
 
-const ElementWeightMethodPicker: React.FC<ElementWeightMethodPickerProps> = ({
-    setElementWeightMethod,
-    elementWeightMethod,
-}) => {
+export const ElementWeightMethodPicker: React.FC<
+    ElementWeightMethodPickerProps
+> = ({ setElementWeightMethod, elementWeightMethod }) => {
     const { t } = useTranslation();
 
     const options = [
@@ -36,5 +35,3 @@ const ElementWeightMethodPicker: React.FC<ElementWeightMethodPickerProps> = ({
         />
     );
 };
-
-export default ElementWeightMethodPicker;

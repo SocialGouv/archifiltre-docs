@@ -1,16 +1,16 @@
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
-import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
+
+import { getFilesAndFoldersFromStore } from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
+import { getHashesFromStore } from "../../../../../reducers/hashes/hashes-selectors";
 import {
     countDuplicateFileSizes,
     countDuplicateFileTypes,
     getFilesDuplicatesMap,
-} from "util/duplicates/duplicates-util";
+} from "../../../../../util/duplicates/duplicates-util";
+import { DuplicatesDistributionChart } from "./duplicates-distribution-chart";
 
-import DuplicatesDistributionChart from "./duplicates-distribution-chart";
-
-const DuplicatesDistributionChartContainer: React.FC = () => {
+export const DuplicatesDistributionChartContainer: React.FC = () => {
     const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
     const hashesMap = useSelector(getHashesFromStore);
 
@@ -36,5 +36,3 @@ const DuplicatesDistributionChartContainer: React.FC = () => {
         />
     );
 };
-
-export default DuplicatesDistributionChartContainer;

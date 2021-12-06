@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { FaPen, FaTrash } from "react-icons/fa";
 import { percent } from "util/numbers/numbers-util";
 
-import EllipsisText from "./ellipsis-text";
+import { EllipsisText } from "./ellipsis-text";
 
 interface AllTagsItemProps {
     tag;

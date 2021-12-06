@@ -1,13 +1,11 @@
-import DuplicatesTable from "components/main-space/workspace/duplicates/duplicates-table/duplicates-table-container";
-import TabContentHeader from "components/main-space/workspace/tabs/tab-content-header";
-import TabsLayout, {
-    makeTabComponent,
-} from "components/main-space/workspace/tabs/tabs-layout";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import TranslatedCategoryTitle from "../tabs/translated-category-title";
-import DuplicatesDistribution from "./duplicates-distribution/duplicates-distribution";
+import { TabContentHeader } from "../tabs/tab-content-header";
+import { makeTabComponent, TabsLayout } from "../tabs/tabs-layout";
+import { TranslatedCategoryTitle } from "../tabs/translated-category-title";
+import { DuplicatesDistribution } from "./duplicates-distribution/duplicates-distribution";
+import { DuplicatesTableContainer as DuplicatesTable } from "./duplicates-table/duplicates-table-container";
 
 const DuplicatesDistributionTab = makeTabComponent({
     content: <DuplicatesDistribution />,
@@ -22,7 +20,7 @@ const DuplicatesTableTab = makeTabComponent({
     title: <TranslatedCategoryTitle title="duplicates.duplicatesByType" />,
 });
 
-const Duplicates: React.FC = () => {
+export const Duplicates: React.FC = () => {
     const { t } = useTranslation();
 
     return (
@@ -34,5 +32,3 @@ const Duplicates: React.FC = () => {
         </TabContentHeader>
     );
 };
-
-export default Duplicates;

@@ -1,11 +1,12 @@
+import type { ChipProps } from "@material-ui/core/Chip";
 import Chip from "@material-ui/core/Chip";
-import { ToDeleteChip } from "components/common/to-delete-chip";
 import React, { useCallback } from "react";
-import type { Tag } from "reducers/tags/tags-types";
 
-import EllipsisText from "./ellipsis-text";
+import type { Tag } from "../../../../../reducers/tags/tags-types";
+import { ToDeleteChip } from "../../../../common/to-delete-chip";
+import { EllipsisText } from "./ellipsis-text";
 
-interface TagCellChipsProps {
+export interface TagCellChipsProps {
     tagsForCurrentFile: Tag[];
     untag: (tagId: string, nodeId: string) => void;
     nodeId: string;
@@ -13,19 +14,20 @@ interface TagCellChipsProps {
     toggleCurrentFileDeleteState: () => void;
 }
 
-const TagCellChips: React.FC<TagCellChipsProps> = ({
+export const TagCellChips: React.FC<TagCellChipsProps> = ({
     tagsForCurrentFile,
     untag,
     nodeId,
     isCurrentFileMarkedToDelete,
     toggleCurrentFileDeleteState,
 }) => {
-    const handleDelete = useCallback(
-        (id) => () => {
-            untag(id, nodeId);
-        },
-        [untag, nodeId]
-    );
+    const handleDelete: (id: string) => NonNullable<ChipProps["onDelete"]> =
+        useCallback(
+            (id) => () => {
+                untag(id, nodeId);
+            },
+            [untag, nodeId]
+        );
 
     return (
         <>
@@ -44,5 +46,3 @@ const TagCellChips: React.FC<TagCellChipsProps> = ({
         </>
     );
 };
-
-export default TagCellChips;

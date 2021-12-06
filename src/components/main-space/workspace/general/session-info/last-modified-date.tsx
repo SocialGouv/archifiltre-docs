@@ -1,18 +1,16 @@
-import type { FileLastModifiedDateProps } from "components/main-space/workspace/general/session-info/file-last-modified-date";
-import FileLastModifiedDate from "components/main-space/workspace/general/session-info/file-last-modified-date";
-import type { FolderBoundaryDatesProps } from "components/main-space/workspace/general/session-info/folder-boundary-dates";
-import FolderBoundaryDates from "components/main-space/workspace/general/session-info/folder-boundary-dates";
-import { branch } from "hoc/branch";
+import { branch } from "../../../../../hoc/branch";
+import type { FileLastModifiedDateProps } from "./file-last-modified-date";
+import { FileLastModifiedDate } from "./file-last-modified-date";
+import type { FolderBoundaryDatesProps } from "./folder-boundary-dates";
+import { FolderBoundaryDates } from "./folder-boundary-dates";
 
-type LastModifiedDateProps = FileLastModifiedDateProps &
+export type LastModifiedDateProps = FileLastModifiedDateProps &
     FolderBoundaryDatesProps & {
         isFile: boolean;
     };
 
-const LastModifiedDate = branch<LastModifiedDateProps>(
+export const LastModifiedDate = branch<LastModifiedDateProps>(
     ({ isFile }) => isFile,
     FileLastModifiedDate,
     FolderBoundaryDates
 );
-
-export default LastModifiedDate;

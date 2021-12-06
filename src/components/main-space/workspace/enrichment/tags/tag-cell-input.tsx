@@ -2,7 +2,8 @@ import TextField from "@material-ui/core/TextField";
 import { Autocomplete } from "@material-ui/lab";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { Tag } from "reducers/tags/tags-types";
+
+import type { Tag } from "../../../../../reducers/tags/tags-types";
 
 interface TagCellInputProps {
     availableTags: Tag[];
@@ -10,7 +11,9 @@ interface TagCellInputProps {
     nodeId: string;
 }
 
-const TagCellInput: React.FC<TagCellInputProps> = ({
+type AutocompleteSimpleProps = Parameters<typeof Autocomplete>[0];
+
+export const TagCellInput: React.FC<TagCellInputProps> = ({
     availableTags,
     createTag,
     nodeId,
@@ -18,19 +21,20 @@ const TagCellInput: React.FC<TagCellInputProps> = ({
     const { t } = useTranslation();
     const [newTagName, setNewTagName] = useState("");
 
-    const onInputChange = useCallback(
-        (event, value, reason) => {
-            // We do not update the state when the input value changes programmatically as
-            // the inputChange event occurs after the autocomplete change event, preventing us from
-            // resetting the input value
-            if (reason !== "reset") {
-                setNewTagName(value);
-            }
-        },
-        [setNewTagName]
-    );
+    const onInputChange: NonNullable<AutocompleteSimpleProps["onInputChange"]> =
+        useCallback(
+            (event, value, reason) => {
+                // We do not update the state when the input value changes programmatically as
+                // the inputChange event occurs after the autocomplete change event, preventing us from
+                // resetting the input value
+                if (reason !== "reset") {
+                    setNewTagName(value);
+                }
+            },
+            [setNewTagName]
+        );
 
-    const addTag = useCallback(
+    const addTag: (newName: string) => void = useCallback(
         (newName) => {
             if (!newName || newName.length === 0) {
                 return;
@@ -41,12 +45,13 @@ const TagCellInput: React.FC<TagCellInputProps> = ({
         [createTag, nodeId, setNewTagName]
     );
 
-    const handleChange = useCallback(
-        (event, newValue) => {
-            addTag(newValue.name);
-        },
-        [addTag]
-    );
+    const handleChange: NonNullable<AutocompleteSimpleProps["onChange"]> =
+        useCallback(
+            (event, newValue: { name: string }) => {
+                addTag(newValue.name);
+            },
+            [addTag]
+        ) as NonNullable<AutocompleteSimpleProps["onChange"]>;
 
     const onKeyDown = useCallback(
         ({ key }) => {
@@ -60,7 +65,7 @@ const TagCellInput: React.FC<TagCellInputProps> = ({
     return (
         <Autocomplete
             options={availableTags}
-            getOptionLabel={({ name }) => name || ""}
+            getOptionLabel={({ name }: { name?: string }) => name ?? ""}
             onChange={handleChange}
             blurOnSelect={true}
             disableClearable={true}
@@ -82,5 +87,3 @@ const TagCellInput: React.FC<TagCellInputProps> = ({
         />
     );
 };
-
-export default TagCellInput;

@@ -1,4 +1,3 @@
-import { ipcRenderer } from "electron";
 import { PureComponent } from "react";
 
 import { ipcRenderer } from "../../common/ipc";
@@ -23,7 +22,7 @@ export class WindowResize extends PureComponent<unknown, WindowResizeState> {
         this.onResize = this.onResize.bind(this);
     }
 
-    onResize() {
+    onResize(): void {
         const { writer } = this.state;
         const [width, height] = ipcRenderer.sendSync("window.getSize");
 
@@ -33,7 +32,7 @@ export class WindowResize extends PureComponent<unknown, WindowResizeState> {
         });
     }
 
-    componentDidMount() {
+    componentDidMount(): void {
         const { reader } = this.state;
         const { width, height } = reader();
 

@@ -1,5 +1,6 @@
 import { Menu, MenuItem } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
+import type { ButtonProps } from "@material-ui/core/Button";
 import Button from "@material-ui/core/Button";
 import type { ReactNode } from "react";
 import React, { useState } from "react";
@@ -7,29 +8,31 @@ import { FaCheck } from "react-icons/fa";
 
 type OptionValue = number | string;
 
-interface Option<ValueType extends OptionValue> {
-    value: ValueType;
+interface Option<TValueType extends OptionValue> {
+    value: TValueType;
     label: string;
 }
 
-interface OptionsPickerProps<ValueType extends OptionValue> {
+interface OptionsPickerProps<TValueType extends OptionValue> {
     title?: string;
-    value: ValueType;
-    setValue: (value: ValueType) => void;
-    options: Option<ValueType>[];
+    value: TValueType;
+    setValue: (value: TValueType) => void;
+    options: Option<TValueType>[];
     icon?: ReactNode;
 }
 
-export default function OptionsPicker<ValueType extends OptionValue>({
+export const OptionsPicker = <TValueType extends OptionValue>({
     title,
     value,
     setValue,
     options,
     icon = null,
-}: OptionsPickerProps<ValueType>) {
-    const [anchorEl, setAnchorEl] = useState(null);
+}: OptionsPickerProps<TValueType>): React.ReactElement<
+    OptionsPickerProps<TValueType>
+> => {
+    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-    const handleClick = (event) => {
+    const handleClick: ButtonProps["onClick"] = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
@@ -37,7 +40,7 @@ export default function OptionsPicker<ValueType extends OptionValue>({
         setAnchorEl(null);
     };
 
-    const onItemClick = (index) => {
+    const onItemClick = (index: number) => {
         const selectedOption = options[index];
         setValue(selectedOption.value);
         handleClose();
@@ -91,4 +94,4 @@ export default function OptionsPicker<ValueType extends OptionValue>({
             </Menu>
         </Box>
     );
-}
+};

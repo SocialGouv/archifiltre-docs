@@ -1,5 +1,6 @@
 import { MenuItem } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
+import type { ButtonProps } from "@material-ui/core/Button";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import { round } from "lodash";
@@ -7,16 +8,17 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSearch, FaSearchMinus, FaSearchPlus } from "react-icons/fa";
 
+import type { AnyFunction } from "../../../util/function/function-util";
 import { ZOOM_SPEED } from "../icicle/icicle-main";
 import { useZoomContext } from "../workspace/zoom-provider";
 import ZoomPickerOptionItem from "./zoom-picker-option-item";
 
-const ZoomPicker: React.FC = () => {
+export const ZoomPicker: React.FC = () => {
     const { zoomIn, zoomOut, resetZoom, ratio } = useZoomContext();
     const { t } = useTranslation();
-    const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-    const handleClick = (event) => {
+    const handleClick: ButtonProps["onClick"] = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
@@ -25,8 +27,8 @@ const ZoomPicker: React.FC = () => {
     };
 
     const withHandleClose =
-        (callback) =>
-        (...args) => {
+        (callback: AnyFunction) =>
+        (...args: unknown[]) => {
             handleClose();
             callback(...args);
         };
@@ -94,5 +96,3 @@ const ZoomPicker: React.FC = () => {
         </Box>
     );
 };
-
-export default ZoomPicker;

@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 
+import type { RgbFunc } from "../../../util/color/color-util";
 import type { IcicleMouseHandler } from "./icicle-main";
 import type { Dims } from "./icicle-rect";
 
@@ -17,7 +18,7 @@ export enum OPACITY {
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 
-export const ENRICHMENT_COLORS = {
+export const ENRICHMENT_COLORS: Record<EnrichmentTypes, RgbFunc> = {
     [EnrichmentTypes.TAG]: "rgb(10, 50, 100)",
     [EnrichmentTypes.TO_DELETE]: "rgb(250,0,0)",
     [EnrichmentTypes.ALIAS]: "rgb(145,218,242)",

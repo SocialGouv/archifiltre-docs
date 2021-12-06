@@ -1,17 +1,18 @@
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import type {
-    HorizontalStackedBarOption,
-    RenderTooltipContent,
-} from "components/common/horizontal-stacked-bar";
-import { HorizontalStackedBar } from "components/common/horizontal-stacked-bar";
-import type { FileTypeMap } from "exporters/audit/audit-report-values-computer";
 import type { TFunction } from "i18next";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { colors } from "util/color/color-util";
-import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
-import { FileType } from "util/file-types/file-types-util";
+
+import type { FileTypeMap } from "../../../../../exporters/audit/audit-report-values-computer";
+import { colors } from "../../../../../util/color/color-util";
+import { octet2HumanReadableFormat } from "../../../../../util/file-system/file-sys-util";
+import { FileType } from "../../../../../util/file-types/file-types-util";
+import type {
+    HorizontalStackedBarOption,
+    RenderTooltipContent,
+} from "../../../../common/horizontal-stacked-bar";
+import { HorizontalStackedBar } from "../../../../common/horizontal-stacked-bar";
 
 interface FileTypesDetailsProps {
     elementsCountsByType: FileTypeMap<number>;
@@ -29,6 +30,7 @@ const makeRenderTooltipContent =
         elementSizesByType: FileTypeMap<number>,
         t: TFunction
     ): RenderTooltipContent =>
+    // eslint-disable-next-line react/display-name
     (key) =>
         (
             <Box>
@@ -63,7 +65,7 @@ const bars = [
     makeBarConfig(FileType.OTHER),
 ];
 
-const FileTypesDetails: React.FC<FileTypesDetailsProps> = ({
+export const FileTypesDetails: React.FC<FileTypesDetailsProps> = ({
     elementsCountsByType,
     elementsSizesByType,
 }) => {
@@ -87,5 +89,3 @@ const FileTypesDetails: React.FC<FileTypesDetailsProps> = ({
         />
     );
 };
-
-export default FileTypesDetails;

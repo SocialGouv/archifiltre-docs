@@ -7,9 +7,9 @@ import { HeaderContainer as Header } from "../../header/header-container";
 import { DuplicatesSearchContainer as DuplicatesSearch } from "../duplicates-search/duplicates-search-container";
 import { HelpButton } from "../help-button";
 import { IcicleApiToProps as Icicle } from "../icicle/icicle-container";
-import NavigationBar from "../navigation-bar/navigation-bar-container";
-import TabsContent from "./tabs/tabs-content";
-import WorkspaceProviders from "./workspace-providers";
+import { NavigationBarContainer as NavigationBar } from "../navigation-bar/navigation-bar-container";
+import { TabsContent } from "./tabs/tabs-content";
+import { WorkspaceProviders } from "./workspace-providers";
 
 const workspaceState = {
     areTabsHidden: false,

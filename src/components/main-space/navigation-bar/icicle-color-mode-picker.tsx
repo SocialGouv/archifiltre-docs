@@ -1,16 +1,16 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaPalette } from "react-icons/fa";
-import { IcicleColorMode } from "reducers/icicle-sort-method/icicle-sort-method-types";
 
-import OptionsPicker from "./options-picker";
+import { IcicleColorMode } from "../../../reducers/icicle-sort-method/icicle-sort-method-types";
+import { OptionsPicker } from "./options-picker";
 
-interface IcicleColorModePickerProps {
+export interface IcicleColorModePickerProps {
     icicleColorMode: IcicleColorMode;
     setIcicleColorMode: (mode: IcicleColorMode) => void;
 }
 
-const IcicleColorModePicker: React.FC<IcicleColorModePickerProps> = ({
+export const IcicleColorModePicker: React.FC<IcicleColorModePickerProps> = ({
     icicleColorMode,
     setIcicleColorMode,
 }) => {
@@ -37,5 +37,3 @@ const IcicleColorModePicker: React.FC<IcicleColorModePickerProps> = ({
         />
     );
 };
-
-export default IcicleColorModePicker;

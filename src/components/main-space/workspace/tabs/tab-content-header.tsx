@@ -1,16 +1,17 @@
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { InfoBoxPaper } from "components/common/info-box-paper";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-interface TabContentHeaderProps {
+import { InfoBoxPaper } from "../../../common/info-box-paper";
+
+export interface TabContentHeaderProps {
     title: string;
 }
 
-const TabContentHeader: React.FC<TabContentHeaderProps> = ({
+export const TabContentHeader: React.FC<TabContentHeaderProps> = ({
     children,
     title,
 }) => {
@@ -57,5 +58,3 @@ const TabContentHeader: React.FC<TabContentHeaderProps> = ({
         </InfoBoxPaper>
     );
 };
-
-export default TabContentHeader;

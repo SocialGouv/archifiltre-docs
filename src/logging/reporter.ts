@@ -5,7 +5,7 @@ import { merge } from "lodash";
 import path from "path";
 import { createLogger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
-import WinstonSentry from "winston-transport-sentry-node";
+import WinstonSentry, { SentryTransportOptions } from "winston-transport-sentry-node";
 
 import { getPath } from "../util/electron/electron-util";
 import WinstonConsoleLogger from "./winston-console-logger";
@@ -38,7 +38,7 @@ export const initReporter = (isActive: boolean): void => {
         return;
     }
 
-    const sentryOptions = {
+    const sentryOptions: SentryTransportOptions["sentry"] = {
         beforeSend(event) {
             return anonymizeEvent(event);
         },
@@ -84,7 +84,7 @@ const handleLog = (message: any, level: Level) => {
  * Reports an error to the log server.
  * @param err
  */
-export const reportError = (err) => {
+export const reportError = (err: unknown) => {
     handleLog(err, Level.ERROR);
 };
 
@@ -92,7 +92,7 @@ export const reportError = (err) => {
  * Reports a warning
  * @param message
  */
-export const reportWarning = (message) => {
+export const reportWarning = (message: string) => {
     handleLog(message, Level.WARN);
 };
 
@@ -100,7 +100,7 @@ export const reportWarning = (message) => {
  * Reports an info
  * @param message
  */
-export const reportInfo = (message) => {
+export const reportInfo = (message: string) => {
     handleLog(message, Level.INFO);
 };
 

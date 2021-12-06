@@ -3,11 +3,11 @@ import { Tooltip } from "@material-ui/core";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-interface HashInfoProps {
+export interface HashInfoProps {
     hash: string;
 }
 
-const HashInfo: React.FC<HashInfoProps> = ({ hash }) => {
+export const HashInfo: React.FC<HashInfoProps> = ({ hash }) => {
     const { t } = useTranslation();
     const hashIconExplanation = t("report.hashIconExplanation");
 
@@ -22,5 +22,3 @@ const HashInfo: React.FC<HashInfoProps> = ({ hash }) => {
         </span>
     );
 };
-
-export default HashInfo;

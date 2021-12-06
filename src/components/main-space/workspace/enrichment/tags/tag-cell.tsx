@@ -1,13 +1,13 @@
 import Box from "@material-ui/core/Box";
-import NoElementSelectedPlaceholder from "components/main-space/workspace/enrichment/element-characteristics/no-element-selected-placeholder";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import type { Tag } from "reducers/tags/tags-types";
 
-import TagCellChips from "./tag-cell-chips";
-import TagCellInput from "./tag-cell-input";
+import type { Tag } from "../../../../../reducers/tags/tags-types";
+import { NoElementSelectedPlaceholder } from "../element-characteristics/no-element-selected-placeholder";
+import { TagCellChips } from "./tag-cell-chips";
+import { TagCellInput } from "./tag-cell-input";
 
-interface TagCellProps {
+export interface TagCellProps {
     isActive: boolean;
     isCurrentFileMarkedToDelete: boolean;
     nodeId: string;
@@ -18,7 +18,7 @@ interface TagCellProps {
     availableTags: Tag[];
 }
 
-const TagCell: React.FC<TagCellProps> = ({
+export const TagCell: React.FC<TagCellProps> = ({
     isActive,
     isCurrentFileMarkedToDelete,
     nodeId,
@@ -49,5 +49,3 @@ const TagCell: React.FC<TagCellProps> = ({
         <NoElementSelectedPlaceholder title={t("workspace.yourTagsHere")} />
     );
 };
-
-export default TagCell;

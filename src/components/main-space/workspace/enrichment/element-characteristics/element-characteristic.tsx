@@ -3,12 +3,12 @@ import Typography from "@material-ui/core/Typography";
 import type { ReactNode } from "react";
 import React from "react";
 
-interface ElementCharacteristicProps {
+export interface ElementCharacteristicProps {
     name: ReactNode;
     value: ReactNode;
 }
 
-const ElementCharacteristic: React.FC<ElementCharacteristicProps> = ({
+export const ElementCharacteristic: React.FC<ElementCharacteristicProps> = ({
     name,
     value,
 }) => (
@@ -21,5 +21,3 @@ const ElementCharacteristic: React.FC<ElementCharacteristicProps> = ({
         </Box>
     </Box>
 );
-
-export default ElementCharacteristic;

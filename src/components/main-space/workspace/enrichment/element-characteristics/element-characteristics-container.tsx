@@ -1,25 +1,26 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
     getAliasesFromStore,
     getFilesAndFoldersFromStore,
     getRealLastModified,
     isFile,
     useLastModifiedDateOverrides,
-} from "reducers/files-and-folders/files-and-folders-selectors";
+} from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
 import {
     overrideLastModifiedDateThunk,
     updateAliasThunk,
-} from "reducers/files-and-folders/files-and-folders-thunks";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
-import { useWorkspaceMetadata } from "reducers/workspace-metadata/workspace-metadata-selectors";
-import { getAbsolutePath } from "util/file-system/file-sys-util";
-import { getType } from "util/files-and-folders/file-and-folders-utils";
+} from "../../../../../reducers/files-and-folders/files-and-folders-thunks";
+import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { getHashesFromStore } from "../../../../../reducers/hashes/hashes-selectors";
+import { useWorkspaceMetadata } from "../../../../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { getAbsolutePath } from "../../../../../util/file-system/file-sys-util";
+import { getType } from "../../../../../util/files-and-folders/file-and-folders-utils";
+import { ElementCharacteristics } from "./element-characteristics";
+import type { ElementCharacteristicsContentProps } from "./element-characteristics-content";
 
-import ElementCharacteristics from "./element-characteristics";
-
-const ElementCharacteristicsContainer: React.FC = () => {
+export const ElementCharacteristicsContainer: React.FC = () => {
     const { hoveredElementId, lockedElementId, originalPath } =
         useWorkspaceMetadata();
     const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
@@ -34,21 +35,25 @@ const ElementCharacteristicsContainer: React.FC = () => {
 
     const currentElementId = lockedElementId || hoveredElementId;
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const currentElement = filesAndFolders[currentElementId] || null;
     const currentElementMetadata =
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         filesAndFoldersMetadata[currentElementId] || null;
 
-    const currentElementName = currentElement?.name || "";
+    const currentElementName = currentElement.name || "";
     const currentElementAlias = aliases[currentElementId] || "";
-    const elementSize = currentElementMetadata?.childrenTotalSize || 0;
+    const elementSize = currentElementMetadata.childrenTotalSize || 0;
     const minLastModifiedTimestamp =
-        currentElementMetadata?.minLastModified || 0;
+        currentElementMetadata.minLastModified || 0;
     const maxLastModifiedTimestamp =
-        currentElementMetadata?.maxLastModified || 0;
+        currentElementMetadata.maxLastModified || 0;
     const medianLastModifiedTimestamp =
-        currentElementMetadata?.medianLastModified || 0;
-    const currentElementHash = hashes[currentElementId] || "";
+        currentElementMetadata.medianLastModified || 0;
+    const currentElementHash = hashes[currentElementId] ?? "";
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const isFolder = currentElement && !isFile(currentElement);
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const type = (currentElement && getType(currentElement)) || "";
     const currentElementPath = getAbsolutePath(originalPath, currentElementId);
     const lastModified = getRealLastModified(
@@ -57,12 +62,13 @@ const ElementCharacteristicsContainer: React.FC = () => {
         lastModifiedOverrides
     );
 
-    const updateAlias = useCallback(
-        (alias) => {
-            dispatch(updateAliasThunk(currentElementId, alias));
-        },
-        [dispatch, currentElementId]
-    );
+    const updateAlias: ElementCharacteristicsContentProps["onElementNameChange"] =
+        useCallback(
+            (alias) => {
+                dispatch(updateAliasThunk(currentElementId, alias));
+            },
+            [dispatch, currentElementId]
+        );
 
     const updateLastModifiedDate = useCallback(
         (timestamp: number) => {
@@ -91,5 +97,3 @@ const ElementCharacteristicsContainer: React.FC = () => {
         />
     );
 };
-
-export default ElementCharacteristicsContainer;

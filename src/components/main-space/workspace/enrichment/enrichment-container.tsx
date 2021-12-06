@@ -1,33 +1,33 @@
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { commitAction } from "reducers/enhancers/undoable/undoable-actions";
+
+import { addTracker } from "../../../../logging/tracker";
+import { ActionTitle, ActionType } from "../../../../logging/tracker-types";
+import { commitAction } from "../../../../reducers/enhancers/undoable/undoable-actions";
 import {
     markAsToDelete,
     unmarkAsToDelete,
-} from "reducers/files-and-folders/files-and-folders-actions";
+} from "../../../../reducers/files-and-folders/files-and-folders-actions";
 import {
     getCommentsFromStore,
     getElementsToDeleteFromStore,
     getFilesAndFoldersFromStore,
     isFolder,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import { updateCommentThunk } from "reducers/files-and-folders/files-and-folders-thunks";
-import type { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import type { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { StoreState } from "reducers/store";
-import { addTag, untagFile } from "reducers/tags/tags-actions";
+} from "../../../../reducers/files-and-folders/files-and-folders-selectors";
+import { updateCommentThunk } from "../../../../reducers/files-and-folders/files-and-folders-thunks";
+import type { FilesAndFoldersMap } from "../../../../reducers/files-and-folders/files-and-folders-types";
+import { getFilesAndFoldersMetadataFromStore } from "../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import type { FilesAndFoldersMetadataMap } from "../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { StoreState } from "../../../../reducers/store";
+import { addTag, untagFile } from "../../../../reducers/tags/tags-actions";
 import {
     getAllTagIdsForFile,
     getTagsByIds,
     getTagsFromStore,
-} from "reducers/tags/tags-selectors";
-import { useWorkspaceMetadata } from "reducers/workspace-metadata/workspace-metadata-selectors";
-
+} from "../../../../reducers/tags/tags-selectors";
+import { useWorkspaceMetadata } from "../../../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { getAllChildren } from "../../../../util/files-and-folders/file-and-folders-utils";
-import Enrichment from "./enrichment";
+import { Enrichment } from "./enrichment";
 
 const computeTreeSize = (
     filesAndFoldersMetadataMap: FilesAndFoldersMetadataMap,
@@ -65,7 +65,7 @@ const handleTracking = (
     }
 };
 
-const EnrichmentContainer: React.FC = () => {
+export const EnrichmentContainer: React.FC = () => {
     const dispatch = useDispatch();
     const { hoveredElementId, lockedElementId } = useWorkspaceMetadata();
 
@@ -77,7 +77,7 @@ const EnrichmentContainer: React.FC = () => {
     );
 
     const createTag = useCallback(
-        (tagName, ffId) => {
+        (tagName: string, ffId: string) => {
             dispatch(addTag(tagName, ffId));
             dispatch(commitAction());
         },
@@ -85,7 +85,7 @@ const EnrichmentContainer: React.FC = () => {
     );
 
     const untag = useCallback(
-        (tagName, ffId) => {
+        (tagName: string, ffId: string) => {
             dispatch(untagFile(tagName, ffId));
             dispatch(commitAction());
         },
@@ -93,7 +93,7 @@ const EnrichmentContainer: React.FC = () => {
     );
 
     const updateComment = useCallback(
-        (comments) => {
+        (comments: string) => {
             dispatch(updateCommentThunk(filesAndFoldersId, comments));
             dispatch(commitAction());
         },
@@ -122,10 +122,16 @@ const EnrichmentContainer: React.FC = () => {
             filesAndFoldersMap,
             filesAndFoldersId
         );
-        isCurrentFileMarkedToDelete
-            ? dispatch(unmarkAsToDelete(filesAndFoldersId))
-            : dispatch(markAsToDelete(filesAndFoldersId));
-    }, [dispatch, isCurrentFileMarkedToDelete, filesAndFoldersId]);
+        if (isCurrentFileMarkedToDelete)
+            dispatch(unmarkAsToDelete(filesAndFoldersId));
+        else dispatch(markAsToDelete(filesAndFoldersId));
+    }, [
+        dispatch,
+        isCurrentFileMarkedToDelete,
+        filesAndFoldersId,
+        filesAndFoldersMap,
+        filesAndFoldersMetadataMap,
+    ]);
 
     const isFocused = filesAndFoldersId !== "";
     const isLocked = lockedElementId !== "";
@@ -147,5 +153,3 @@ const EnrichmentContainer: React.FC = () => {
         />
     );
 };
-
-export default EnrichmentContainer;

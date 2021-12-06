@@ -1,16 +1,16 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaSortAmountDown } from "react-icons/fa";
-import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
 
-import OptionsPicker from "./options-picker";
+import { IcicleSortMethod } from "../../../reducers/icicle-sort-method/icicle-sort-method-types";
+import { OptionsPicker } from "./options-picker";
 
-interface IciclesSortOrderPickerProps {
+export interface IciclesSortOrderPickerProps {
     icicleSortMethod: IcicleSortMethod;
     setIcicleSortMethod: (sortMethod: IcicleSortMethod) => void;
 }
 
-const IciclesSortOrderPicker: React.FC<IciclesSortOrderPickerProps> = ({
+export const IciclesSortOrderPicker: React.FC<IciclesSortOrderPickerProps> = ({
     icicleSortMethod,
     setIcicleSortMethod,
 }) => {
@@ -40,5 +40,3 @@ const IciclesSortOrderPicker: React.FC<IciclesSortOrderPickerProps> = ({
         />
     );
 };
-
-export default IciclesSortOrderPicker;

@@ -1,23 +1,23 @@
 import _ from "lodash";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
+
+import { getFilesAndFoldersFromStore } from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
+import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { getHashesFromStore } from "../../../../../reducers/hashes/hashes-selectors";
 import {
     countDuplicateFileSizes,
     countDuplicateFileTypes,
     getFilesDuplicatesMap,
-} from "util/duplicates/duplicates-util";
-import { percent } from "util/numbers/numbers-util";
-
+} from "../../../../../util/duplicates/duplicates-util";
+import { percent } from "../../../../../util/numbers/numbers-util";
 import DuplicatesTable from "./duplicates-table";
 
-const removeZeroValues = <Key extends number | string, Value>(obj: {
-    [key in Key]: Value;
-}): _.Dictionary<Value> => _.pickBy<Value>(obj);
+const removeZeroValues = <TKey extends number | string, TValue>(obj: {
+    [key in TKey]: TValue;
+}): _.Dictionary<TValue> => _.pickBy<TValue>(obj);
 
-const DuplicatesTableContainer: React.FC = () => {
+export const DuplicatesTableContainer: React.FC = () => {
     const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
     const filesAndFoldersMetadataMap = useSelector(
         getFilesAndFoldersMetadataFromStore
@@ -52,7 +52,7 @@ const DuplicatesTableContainer: React.FC = () => {
                     )
                 )
             ),
-        [fileSizesCount]
+        [fileSizesCount, filesAndFoldersMetadataMap]
     );
 
     return (
@@ -63,5 +63,3 @@ const DuplicatesTableContainer: React.FC = () => {
         />
     );
 };
-
-export default DuplicatesTableContainer;

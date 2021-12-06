@@ -13,22 +13,20 @@ const Container = styled.div<ContainerProps>`
     max-width: ${({ maxWidth }) => maxWidth}px;
 `;
 
-interface EllipsisTextProps {
+export interface EllipsisTextProps {
     maxWidth?: number;
     displayTooltip?: boolean;
 }
 
-const EllipsisText: React.FC<EllipsisTextProps> = ({
+export const EllipsisText: React.FC<EllipsisTextProps> = ({
     children,
     maxWidth = 70,
     displayTooltip = true,
 }) =>
     displayTooltip ? (
-        <Tooltip title={children?.toString() || ""}>
+        <Tooltip title={children?.toString() ?? ""}>
             <Container maxWidth={maxWidth}>{children}</Container>
         </Tooltip>
     ) : (
         <Container maxWidth={maxWidth}>{children}</Container>
     );
-
-export default EllipsisText;

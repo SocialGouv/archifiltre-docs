@@ -1,14 +1,13 @@
-import { DateField } from "components/common/date-field";
 import React from "react";
+
+import { DateField } from "../../../../common/date-field";
 
 export interface FileLastModifiedDateProps {
     lastModified: number;
     onDateChange: (date: number) => void;
 }
 
-const FileLastModifiedDate: React.FC<FileLastModifiedDateProps> = ({
+export const FileLastModifiedDate: React.FC<FileLastModifiedDateProps> = ({
     lastModified,
     onDateChange,
 }) => <DateField date={lastModified} onDateChange={onDateChange} />;
-
-export default FileLastModifiedDate;

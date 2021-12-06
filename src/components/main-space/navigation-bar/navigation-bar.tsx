@@ -1,23 +1,23 @@
 import Box from "@material-ui/core/Box";
 import React from "react";
+import styled from "styled-components";
+
 import type {
     ElementWeightMethod,
     IcicleColorMode,
     IcicleSortMethod,
-} from "reducers/icicle-sort-method/icicle-sort-method-types";
-import styled from "styled-components";
-
-import ElementWeightMethodPicker from "./element-weight-method-picker";
-import IcicleColorModePicker from "./icicle-color-mode-picker";
-import IciclesSortOrderPicker from "./icicle-sort-order-picker";
-import MoveFilesButton from "./move-files-button";
-import ZoomPicker from "./zoom-picker";
+} from "../../../reducers/icicle-sort-method/icicle-sort-method-types";
+import { ElementWeightMethodPicker } from "./element-weight-method-picker";
+import { IcicleColorModePicker } from "./icicle-color-mode-picker";
+import { IciclesSortOrderPicker } from "./icicle-sort-order-picker";
+import { MoveFilesButton } from "./move-files-button";
+import { ZoomPicker } from "./zoom-picker";
 
 const Wrapper = styled.div`
     width: 100%;
 `;
 
-interface NavigationBarProps {
+export interface NavigationBarProps {
     elementWeightMethod: ElementWeightMethod;
     icicleColorMode: IcicleColorMode;
     icicleSortMethod: IcicleSortMethod;

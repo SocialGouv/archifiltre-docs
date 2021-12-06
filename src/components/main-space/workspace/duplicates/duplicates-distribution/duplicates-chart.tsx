@@ -1,4 +1,6 @@
+import type { SeriesRef } from "@devexpress/dx-react-chart";
 import { EventTracker, Palette } from "@devexpress/dx-react-chart";
+import type { TooltipProps } from "@devexpress/dx-react-chart-material-ui";
 import {
     Chart,
     PieSeries,
@@ -9,7 +11,8 @@ import orange from "@material-ui/core/colors/orange";
 import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
+
+import { octet2HumanReadableFormat } from "../../../../../util/file-system/file-sys-util";
 
 const ColoredText = styled.span<{ color: string }>`
     display: block;
@@ -18,21 +21,21 @@ const ColoredText = styled.span<{ color: string }>`
 
 const scheme = [orange["500"], grey["500"]];
 
-interface DuplicatesChartProps {
+export interface DuplicatesChartProps {
     duplicatesNumber: number;
     nonDuplicatesNumber: number;
     duplicatesSize: number;
     nonDuplicatesSize: number;
 }
 
-const DuplicatesChart: React.FC<DuplicatesChartProps> = ({
+export const DuplicatesChart: React.FC<DuplicatesChartProps> = ({
     duplicatesNumber,
     nonDuplicatesNumber,
     duplicatesSize,
     nonDuplicatesSize,
 }) => {
     const { t } = useTranslation();
-    const [targetItem, setTargetItem] = useState();
+    const [targetItem, setTargetItem] = useState<SeriesRef>();
 
     const chartData = useMemo(
         () => [
@@ -54,17 +57,19 @@ const DuplicatesChart: React.FC<DuplicatesChartProps> = ({
             duplicatesSize,
             nonDuplicatesNumber,
             nonDuplicatesSize,
+            t,
         ]
     );
 
-    const onTargetItemChange = useCallback(
-        (newTargetItem) => {
-            setTargetItem(newTargetItem);
-        },
-        [setTargetItem]
-    );
+    const onTargetItemChange: NonNullable<TooltipProps["onTargetItemChange"]> =
+        useCallback(
+            (newTargetItem) => {
+                setTargetItem(newTargetItem);
+            },
+            [setTargetItem]
+        );
 
-    const getTooltipContent = useCallback(
+    const getTooltipContent: TooltipProps["contentComponent"] = useCallback(
         ({ targetItem: { point } }) => {
             const { label, value, size } = chartData[point];
             return (
@@ -79,7 +84,7 @@ const DuplicatesChart: React.FC<DuplicatesChartProps> = ({
                 </div>
             );
         },
-        [chartData]
+        [chartData, t]
     );
 
     return (
@@ -99,5 +104,3 @@ const DuplicatesChart: React.FC<DuplicatesChartProps> = ({
         </Chart>
     );
 };
-
-export default DuplicatesChart;

@@ -1,13 +1,11 @@
-import TabContentHeader from "components/main-space/workspace/tabs/tab-content-header";
-import TabsLayout, {
-    makeTabComponent,
-} from "components/main-space/workspace/tabs/tabs-layout";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import TranslatedCategoryTitle from "../tabs/translated-category-title";
-import AuditInfo from "./audit-info";
-import FileTypesDetailsContainer from "./file-types-details/files-types-details-container";
+import { TabContentHeader } from "../tabs/tab-content-header";
+import { makeTabComponent, TabsLayout } from "../tabs/tabs-layout";
+import { TranslatedCategoryTitle } from "../tabs/translated-category-title";
+import { AuditInfo } from "./audit-info";
+import { FileTypesDetailsContainer } from "./file-types-details/files-types-details-container";
 
 const AuditInfoTab = makeTabComponent({
     content: <AuditInfo />,
@@ -21,7 +19,7 @@ const FilesTypesDetails = makeTabComponent({
     widthRatio: 2,
 });
 
-const Audit: React.FC = () => {
+export const Audit: React.FC = () => {
     const { t } = useTranslation();
 
     return (
@@ -33,5 +31,3 @@ const Audit: React.FC = () => {
         </TabContentHeader>
     );
 };
-
-export default Audit;

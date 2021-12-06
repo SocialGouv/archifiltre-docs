@@ -4,12 +4,14 @@ import {
     PieSeries,
     Tooltip,
 } from "@devexpress/dx-react-chart-material-ui";
-import type { FileTypeMap } from "exporters/audit/audit-report-values-computer";
 import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { colors } from "util/color/color-util";
-import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
+
+import type { FileTypeMap } from "../../../../../exporters/audit/audit-report-values-computer";
+import { colors } from "../../../../../util/color/color-util";
+import { octet2HumanReadableFormat } from "../../../../../util/file-system/file-sys-util";
+import type { FileType } from "../../../../../util/file-types/file-types-util";
 
 const ColoredText = styled.span<{ color: string }>`
     display: block;
@@ -18,10 +20,10 @@ const ColoredText = styled.span<{ color: string }>`
 
 interface DuplicatesDistributionChartProps {
     fileTypesCount: FileTypeMap<number>;
-    fileSizesCount: any;
+    fileSizesCount: Record<FileType, number>;
 }
 
-const DuplicatesDistributionChart: React.FC<
+export const DuplicatesDistributionChart: React.FC<
     DuplicatesDistributionChartProps
 > = ({ fileTypesCount, fileSizesCount }) => {
     const { t } = useTranslation();
@@ -29,12 +31,12 @@ const DuplicatesDistributionChart: React.FC<
     const chartData = useMemo(
         () =>
             Object.entries(fileTypesCount).map(([fileType, fileTypeValue]) => ({
-                key: fileType,
+                key: fileType as FileType,
                 label: t(`common.fileTypes.${fileType}`),
-                size: fileSizesCount[fileType],
+                size: fileSizesCount[fileType as FileType],
                 value: fileTypeValue,
             })),
-        [fileTypesCount, fileSizesCount]
+        [fileTypesCount, fileSizesCount, t]
     );
 
     const scheme = useMemo(
@@ -57,7 +59,7 @@ const DuplicatesDistributionChart: React.FC<
                 </div>
             );
         },
-        [chartData]
+        [chartData, t]
     );
 
     return (
@@ -73,5 +75,3 @@ const DuplicatesDistributionChart: React.FC<
         </Chart>
     );
 };
-
-export default DuplicatesDistributionChart;

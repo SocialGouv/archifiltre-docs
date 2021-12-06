@@ -1,13 +1,13 @@
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
+
 import {
     getFilesAndFoldersFromStore,
     getMaxDepth,
-} from "reducers/files-and-folders/files-and-folders-selectors";
+} from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
+import { FileTreeDepth } from "./file-tree-depth";
 
-import FileTreeDepth from "./file-tree-depth";
-
-const FileTreeDepthContainer: React.FC = () => {
+export const FileTreeDepthContainer: React.FC = () => {
     const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
 
     const depth = useMemo(
@@ -17,5 +17,3 @@ const FileTreeDepthContainer: React.FC = () => {
 
     return <FileTreeDepth fileTreeDepth={depth} />;
 };
-
-export default FileTreeDepthContainer;

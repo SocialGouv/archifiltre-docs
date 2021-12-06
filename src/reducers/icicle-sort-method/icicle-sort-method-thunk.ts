@@ -1,16 +1,16 @@
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
-import type { ArchifiltreThunkAction } from "reducers/archifiltre-types";
+import { addTracker } from "../../logging/tracker";
+import { ActionTitle, ActionType } from "../../logging/tracker-types";
+import type { ArchifiltreThunkAction } from "../archifiltre-types";
 import {
     setElementWeightMethod,
     setIcicleColorMode,
     setIcicleSortMethod,
-} from "reducers/icicle-sort-method/icicle-sort-method-actions";
+} from "./icicle-sort-method-actions";
 import type {
     ElementWeightMethod,
     IcicleColorMode,
     IcicleSortMethod,
-} from "reducers/icicle-sort-method/icicle-sort-method-types";
+} from "./icicle-sort-method-types";
 
 /**
  * Defines the sort method of the icicles

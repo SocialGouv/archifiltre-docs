@@ -15,9 +15,9 @@ export const makeTabComponent = ({
     content,
     widthRatio = 1,
     isLast,
-}: ComponentElement) => {
+}: ComponentElement): React.FC => {
     const Component: React.FC = () => (
-        <React.Fragment>
+        <>
             <Box flex={widthRatio}>
                 <Box
                     display="flex"
@@ -36,18 +36,16 @@ export const makeTabComponent = ({
                     <Divider orientation="vertical" />
                 </Box>
             )}
-        </React.Fragment>
+        </>
     );
 
     return Component;
 };
 
-const TabsLayout: React.FC = ({ children }) => {
+export const TabsLayout: React.FC = ({ children }) => {
     return (
         <Box display="flex" height="100%">
             {children}
         </Box>
     );
 };
-
-export default TabsLayout;

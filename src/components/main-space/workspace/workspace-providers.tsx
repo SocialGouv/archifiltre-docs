@@ -1,10 +1,10 @@
-import DuplicatePageProvider from "context/duplicates-page-context";
 import React from "react";
 
-import FileMoveProvider from "./file-move-provider";
-import ZoomProvider from "./zoom-provider";
+import { DuplicatePageProvider } from "../../../context/duplicates-page-context";
+import { FileMoveProvider } from "./file-move-provider";
+import { ZoomProvider } from "./zoom-provider";
 
-const WorkspaceProviders: React.FC = ({ children }) => {
+export const WorkspaceProviders: React.FC = ({ children }) => {
     return (
         <FileMoveProvider>
             <DuplicatePageProvider>
@@ -13,5 +13,3 @@ const WorkspaceProviders: React.FC = ({ children }) => {
         </FileMoveProvider>
     );
 };
-
-export default WorkspaceProviders;

@@ -1,25 +1,34 @@
-import React, { useCallback, useContext, useState } from "react";
+import { noop } from "lodash";
+import React, { createContext, useCallback, useContext, useState } from "react";
 
-const fileMoveState = {
+interface FileMoveState {
+    isFileMoveActive: boolean;
+    setIsFileMoveActive: (isMoveActive: boolean) => void;
+}
+const fileMoveState: FileMoveState = {
     isFileMoveActive: false,
-    setIsFileMoveActive: (isMoveActive) => {},
+    setIsFileMoveActive: noop,
 };
 
-const FileMoveContext = React.createContext(fileMoveState);
+const FileMoveContext = createContext(fileMoveState);
 
-export const useFileMoveActiveState = () => {
+export const useFileMoveActiveState = (): FileMoveState => {
     const { isFileMoveActive, setIsFileMoveActive } =
         useContext(FileMoveContext);
-    const setFileMoveActive = useCallback(
-        (isMoveActive) => {
-            setIsFileMoveActive(isMoveActive);
-        },
-        [setIsFileMoveActive]
-    );
-    return { isFileMoveActive, setFileMoveActive };
+    const setIsFileMoveActiveCallback: FileMoveState["setIsFileMoveActive"] =
+        useCallback(
+            (isMoveActive) => {
+                setIsFileMoveActive(isMoveActive);
+            },
+            [setIsFileMoveActive]
+        );
+    return {
+        isFileMoveActive,
+        setIsFileMoveActive: setIsFileMoveActiveCallback,
+    };
 };
 
-const FileMoveProvider: React.FC = ({ children }) => {
+export const FileMoveProvider: React.FC = ({ children }) => {
     const [isFileMoveActive, setIsFileMoveActive] = useState(false);
 
     return (
@@ -33,5 +42,3 @@ const FileMoveProvider: React.FC = ({ children }) => {
         </FileMoveContext.Provider>
     );
 };
-
-export default FileMoveProvider;

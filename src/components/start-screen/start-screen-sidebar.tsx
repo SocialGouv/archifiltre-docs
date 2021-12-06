@@ -7,7 +7,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Tooltip from "@material-ui/core/Tooltip";
-import EllipsisText from "components/main-space/workspace/enrichment/tags/ellipsis-text";
+import { EllipsisText } from "components/main-space/workspace/enrichment/tags/ellipsis-text";
 import path from "path";
 import {
     clearSession,

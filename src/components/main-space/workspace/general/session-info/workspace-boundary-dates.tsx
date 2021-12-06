@@ -6,7 +6,7 @@ import dateFormat from "dateformat";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import BoundaryDate from "./boundary-date";
+import { BoundaryDate } from "./boundary-date";
 
 export interface WorkspaceBoundaryDatesProps {
     oldestFileTimestamp: number;

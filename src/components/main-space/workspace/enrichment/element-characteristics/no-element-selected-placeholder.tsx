@@ -6,7 +6,7 @@ interface NoElementSelectedPlaceholderProps {
     title: string;
 }
 
-const NoElementSelectedPlaceholder: React.FC<
+export const NoElementSelectedPlaceholder: React.FC<
     NoElementSelectedPlaceholderProps
 > = ({ title }) => (
     <Box
@@ -21,5 +21,3 @@ const NoElementSelectedPlaceholder: React.FC<
         {title}
     </Box>
 );
-
-export default NoElementSelectedPlaceholder;

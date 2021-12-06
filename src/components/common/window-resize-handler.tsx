@@ -1,6 +1,6 @@
-import { getCurrentWindow } from "@electron/remote";
 import React from "react";
 import WindowResize from "./window-resize";
+import { ipcRenderer } from "../../common/ipc";
 
 type WindowResizeErrorHandlerState = {
   hasError: boolean;
@@ -27,7 +27,7 @@ export default class WindowResizeErrorHandler extends React.Component<
     const { hasError } = this.state;
 
     if (hasError) {
-      getCurrentWindow().show();
+      ipcRenderer.sendSync("window.show");
       return null;
     } else {
       return <WindowResize />;

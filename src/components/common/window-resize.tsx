@@ -1,10 +1,9 @@
 import React from "react";
 
 import * as UserData from "user-data";
-import { getCurrentWindow } from "@electron/remote";
+import { ipcRenderer } from "../../common/ipc";
 
 type WindowResizeState = {
-  win;
   reader;
   writer;
 };
@@ -22,7 +21,6 @@ export default class WindowResize extends React.PureComponent<
     });
 
     this.state = {
-      win: getCurrentWindow(),
       reader,
       writer,
     };
@@ -31,8 +29,8 @@ export default class WindowResize extends React.PureComponent<
   }
 
   onResize() {
-    const { win, writer } = this.state;
-    const [width, height] = win.getSize();
+    const { writer } = this.state;
+    const [width, height] = ipcRenderer.sendSync("window.getSize");
 
     writer({
       width,
@@ -41,12 +39,12 @@ export default class WindowResize extends React.PureComponent<
   }
 
   componentDidMount() {
-    const { win, reader } = this.state;
+    const { reader } = this.state;
     const { width, height } = reader();
 
-    win.setSize(width, height);
+    ipcRenderer.sendSync("window.setSize", width, height);
 
-    win.show();
+    ipcRenderer.sendSync("window.show");
 
     const onResize = this.onResize;
     window.addEventListener("resize", onResize);

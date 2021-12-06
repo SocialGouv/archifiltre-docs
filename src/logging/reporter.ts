@@ -1,6 +1,5 @@
 import * as Sentry from "@sentry/browser";
 import dateFormat from "dateformat";
-import { app } from "@electron/remote";
 import path from "path";
 import { createLogger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
@@ -8,6 +7,7 @@ import WinstonSentry from "winston-transport-sentry-node";
 import WinstonConsoleLogger from "./winston-console-logger";
 import { Event as SentryEvent } from "@sentry/browser";
 import { merge } from "lodash";
+import { getPath } from "util/electron/electron-util";
 
 const isProd = () => MODE === "production";
 
@@ -52,7 +52,7 @@ export const initReporter = (isActive: boolean): void => {
     })
   );
 
-  const logsDirectory = path.join(app.getPath("userData"));
+  const logsDirectory = path.join(getPath("userData"));
 
   logger.add(
     new DailyRotateFile({

@@ -1,15 +1,16 @@
-const Raven = require("raven");
-
-require("@electron/remote/main").initialize();
-
-const {
-  BrowserWindow,
+import {
   app,
   crashReporter,
   Menu,
   session,
   dialog,
-} = require("electron");
+  Extension,
+  BrowserWindow,
+} from "electron";
+import { loadApp } from "./main/app";
+import { loadHash } from "./main/hash";
+import { loadWindow } from "./main/window";
+const Raven = require("raven");
 
 const path = require("path");
 
@@ -47,21 +48,19 @@ if (!app.isPackaged) {
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win;
+let win: BrowserWindow | null;
 
 const getLanguage = () => app.getLocale().slice(0, 2);
 
 const preventNavigation = () => {
-  win.on("will-navigate", (event) => {
-    event.preventDefault();
-  });
-
+  if (!win) return;
   win.webContents.on("will-navigate", (event) => {
     event.preventDefault();
   });
 };
 
 const askBeforeLeaving = () => {
+  if (!win) return;
   win.on("close", (event) => {
     event.preventDefault();
     const language = getLanguage();
@@ -93,10 +92,13 @@ const askBeforeLeaving = () => {
       title: title,
       type: "warning",
     };
-    const promiseResponse = dialog.showMessageBox(win, options);
+    const promiseResponse = dialog.showMessageBox(
+      win as BrowserWindow,
+      options
+    );
     promiseResponse.then((obj) => {
       if (obj.response === 1) {
-        win.destroy();
+        win?.destroy();
       }
     });
   });
@@ -109,10 +111,12 @@ function createWindow() {
     show: !app.isPackaged,
     webPreferences: {
       contextIsolation: false,
-      enableRemoteModule: true,
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
       webSecurity: app.isPackaged,
+      ...({
+        enableRemoteModule: true,
+      } as any),
     },
     width: 1500,
   });
@@ -139,13 +143,14 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  let devToolsLoaded = Promise.resolve();
+  let devToolsLoaded = Promise.resolve<Extension | null>(null);
   if (REACT_DEV_TOOLS_PATH !== "") {
     try {
       devToolsLoaded = session.defaultSession
         .loadExtension(REACT_DEV_TOOLS_PATH)
         .catch((err) => {
           console.error("Cannot load react dev tools.", err);
+          return null;
         });
     } catch (err) {
       console.error("Error loading React dev tools", err);
@@ -153,14 +158,21 @@ app.whenReady().then(() => {
   }
 
   if (!app.isPackaged && process.env.NODE_ENV !== "test") {
-    devToolsLoaded.then(() => win.webContents.openDevTools());
+    devToolsLoaded.then(() => win?.webContents.openDevTools());
   }
 });
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+app.on("ready", () => {
+  createWindow();
+  loadHash();
+  loadApp();
+  if (win) {
+    loadWindow(win);
+  }
+});
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
@@ -189,5 +201,5 @@ process.on("uncaughtException", () => {
 const { ipcMain } = require("electron");
 // Needed for secret devtools
 ipcMain.on("open-devtools", () => {
-  win.webContents.openDevTools();
+  win?.webContents.openDevTools();
 });

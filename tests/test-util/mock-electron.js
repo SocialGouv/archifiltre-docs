@@ -1,4 +1,4 @@
-jest.mock("@electron/remote", () => ({
+jest.mock("electron", () => ({
   app: {
     getPath: (name) => `path(${name})`,
   },

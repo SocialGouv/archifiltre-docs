@@ -8,7 +8,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Tooltip from "@material-ui/core/Tooltip";
 import EllipsisText from "components/main-space/workspace/enrichment/tags/ellipsis-text";
-import { dialog } from "@electron/remote";
 import path from "path";
 import {
   clearSession,
@@ -36,6 +35,7 @@ import {
 } from "../../constants";
 import { openLink } from "util/electron/electron-util";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import { ipcRenderer } from "../../common/ipc";
 
 const onFeedbackClick = () => {
   openLink(FEEDBACK_LINK);
@@ -82,7 +82,7 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
   const toggleDisplayClearElement = (index) => setHoveredSessions(index);
 
   const onNewDirectoryClick = useCallback(async () => {
-    const path = await dialog.showOpenDialog({
+    const path = await ipcRenderer.invoke("dialog.showOpenDialog", {
       properties: ["openDirectory"],
     });
     if (path.filePaths.length > 0) {

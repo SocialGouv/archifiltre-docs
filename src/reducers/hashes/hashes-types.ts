@@ -1,4 +1,4 @@
-import type { ArchifiltreError } from "util/error/error-util";
+import type { ArchifiltreError } from "../../util/error/error-util";
 
 export const SET_FILES_AND_FOLDERS_HASHES = "FILES_AND_FOLDERS/SET_HASHES";
 export const RESET_ERRORED_HASHES = "HASHES/RESET_ERRORED_HASHES";

@@ -11,7 +11,7 @@ import {
     getFilesDuplicatesMap,
 } from "../../../../../util/duplicates/duplicates-util";
 import { percent } from "../../../../../util/numbers/numbers-util";
-import DuplicatesTable from "./duplicates-table";
+import { DuplicatesTable } from "./duplicates-table";
 
 const removeZeroValues = <TKey extends number | string, TValue>(obj: {
     [key in TKey]: TValue;

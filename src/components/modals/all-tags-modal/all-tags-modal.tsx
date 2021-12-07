@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
 import { useStyles } from "../../../hooks/use-styles";
-import AllTagsContainer from "../../main-space/workspace/enrichment/tags/all-tags-container";
+import { AllTagsContainer } from "../../main-space/workspace/enrichment/tags/all-tags-container";
 import { ModalHeader } from "../modal-header";
 
 const StyledPaper = styled(Paper)`

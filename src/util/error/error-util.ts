@@ -18,6 +18,12 @@ export interface ArchifiltreError {
     code: ArchifiltreErrorCode;
 }
 
+export const isArchifiltreError = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Guard hack
+    err: any | unknown
+): err is ArchifiltreError =>
+    "type" in err && "filePath" in err && "reason" in err && "code" in err;
+
 interface ErrorMessageMap {
     [errorCode: string]: string;
     default: string;
@@ -34,6 +40,7 @@ const fsErrorToArchifiltreError: FsErrorToArchifiltreError = {
 export const convertFsErrorToArchifiltreError = (
     errorCode: string
 ): ArchifiltreFileSystemErrorCode | UnknownError =>
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     fsErrorToArchifiltreError[errorCode] ?? UnknownError.UNKNOWN;
 
 /**

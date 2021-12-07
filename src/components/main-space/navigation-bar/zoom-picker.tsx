@@ -11,7 +11,7 @@ import { FaSearch, FaSearchMinus, FaSearchPlus } from "react-icons/fa";
 import type { AnyFunction } from "../../../util/function/function-util";
 import { ZOOM_SPEED } from "../icicle/icicle-main";
 import { useZoomContext } from "../workspace/zoom-provider";
-import ZoomPickerOptionItem from "./zoom-picker-option-item";
+import { ZoomPickerOptionItem } from "./zoom-picker-option-item";
 
 export const ZoomPicker: React.FC = () => {
     const { zoomIn, zoomOut, resetZoom, ratio } = useZoomContext();

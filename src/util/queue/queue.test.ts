@@ -20,8 +20,16 @@ describe("queue", () => {
                 value,
             });
 
-            const valueComputer = (values: string[]): Promise<(Result | Error)[]> =>
-                Promise.all(values.map(value => Promise.resolve(value === "error" ? error() : result(value))));
+            const valueComputer = async (
+                values: string[]
+            ): Promise<(Error | Result)[]> =>
+                Promise.all(
+                    values.map(async (value) =>
+                        Promise.resolve(
+                            value === "error" ? error() : result(value)
+                        )
+                    )
+                );
 
             const isResult = (value: Error | Result): value is Result =>
                 value.type === "result";

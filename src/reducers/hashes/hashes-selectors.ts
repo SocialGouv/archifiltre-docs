@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import type { ArchifiltreError } from "util/error/error-util";
 
+import type { ArchifiltreError } from "../../util/error/error-util";
 import type { StoreState } from "../store";
 import type { HashesMap } from "./hashes-types";
 

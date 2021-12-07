@@ -5,7 +5,7 @@ import { ElementCharacteristicsContainer } from "../enrichment/element-character
 import { TabContentHeader } from "../tabs/tab-content-header";
 import { makeTabComponent, TabsLayout } from "../tabs/tabs-layout";
 import { TranslatedCategoryTitle } from "../tabs/translated-category-title";
-import SessionInfoContainer from "./session-info/session-info-container";
+import { SessionInfoContainer } from "./session-info/session-info-container";
 
 const SessionInfo = makeTabComponent({
     content: <SessionInfoContainer />,

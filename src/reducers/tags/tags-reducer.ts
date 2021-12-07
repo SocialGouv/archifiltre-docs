@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
-import undoable from "../enhancers/undoable/undoable";
+import { undoable } from "../enhancers/undoable/undoable";
 import { getTagByName } from "./tags-selectors";
 import type { TagsActionTypes, TagsState } from "./tags-types";
 import {
@@ -83,17 +83,19 @@ const createTag = (
  */
 const tagsReducer = (
     state = initialState,
-    action: TagsActionTypes
+    action?: TagsActionTypes
 ): TagsState => {
-    switch (action.type) {
+    switch (action?.type) {
         case RESET_TAGS:
             return initialState;
         case INITIALIZE_TAGS:
             return { tags: action.tags };
         case ADD_TAG:
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (action.ffId === undefined) {
                 return state;
             }
+            // eslint-disable-next-line no-case-declarations
             const tagWithTheSameName = getTagByName(state.tags, action.tagName);
             if (tagWithTheSameName === undefined) {
                 return createTag(
@@ -138,4 +140,4 @@ const tagsReducer = (
 
 export { tagsReducer };
 
-export default undoable(tagsReducer, initialState);
+export const undoableTagsReducer = undoable(tagsReducer, initialState);

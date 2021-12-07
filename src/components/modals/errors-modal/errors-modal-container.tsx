@@ -5,9 +5,9 @@ import { useArchifiltreErrors } from "../../../reducers/loading-info/loading-inf
 import { closeModalAction } from "../../../reducers/modal/modal-actions";
 import { useOpenModal } from "../../../reducers/modal/modal-selectors";
 import { Modal } from "../../../reducers/modal/modal-types";
-import ErrorsModal from "./errors-modal";
+import { ErrorsModal } from "./errors-modal";
 
-const ErrorsModalContainer: React.FC = () => {
+export const ErrorsModalContainer: React.FC = () => {
     const errors = useArchifiltreErrors();
     const openModal = useOpenModal();
     const dispatch = useDispatch();
@@ -27,5 +27,3 @@ const ErrorsModalContainer: React.FC = () => {
         />
     );
 };
-
-export default ErrorsModalContainer;

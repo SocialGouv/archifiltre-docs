@@ -1,49 +1,50 @@
-import { computeFolderHashes$ } from "hash-computer/hash-computer.controller";
 import { map as lodashMap } from "lodash/fp";
-import { reportError } from "logging/reporter";
 import path from "path";
-import type { ArchifiltreThunkAction } from "reducers/archifiltre-types";
+import { pipe } from "rxjs";
+import { map, tap } from "rxjs/operators";
+
+import { reportError } from "../logging/reporter";
+import type { ArchifiltreThunkAction } from "../reducers/archifiltre-types";
 import {
     getFilesAndFoldersFromStore,
     getFilesMap,
     getFoldersCount,
-} from "reducers/files-and-folders/files-and-folders-selectors";
+} from "../reducers/files-and-folders/files-and-folders-selectors";
 import {
     addErroredHashes,
     resetErroredHashes,
     setFilesAndFoldersHashes,
-} from "reducers/hashes/hashes-actions";
+} from "../reducers/hashes/hashes-actions";
 import {
     getErroredHashesFromStore,
     getHashesFromStore,
-} from "reducers/hashes/hashes-selectors";
+} from "../reducers/hashes/hashes-selectors";
+import type { HashesMap } from "../reducers/hashes/hashes-types";
 import {
     completeLoadingAction,
     progressLoadingAction,
     replaceErrorsAction,
     updateLoadingAction,
-} from "reducers/loading-info/loading-info-actions";
-import { startLoading } from "reducers/loading-info/loading-info-operations";
-import { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
-import { openModalAction } from "reducers/modal/modal-actions";
-import { Modal } from "reducers/modal/modal-types";
-import { getWorkspaceMetadataFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
-import { pipe } from "rxjs";
-import { map, tap } from "rxjs/operators";
-import { translations } from "translations/translations";
-import { ArchifiltreErrorType } from "util/error/error-util";
-import {
-    NotificationDuration,
-    notifyError,
-    notifySuccess,
-} from "util/notification/notifications-util";
-
+} from "../reducers/loading-info/loading-info-actions";
+import { startLoading } from "../reducers/loading-info/loading-info-operations";
+import { LoadingInfoTypes } from "../reducers/loading-info/loading-info-types";
+import { openModalAction } from "../reducers/modal/modal-actions";
+import { Modal } from "../reducers/modal/modal-types";
+import { getWorkspaceMetadataFromStore } from "../reducers/workspace-metadata/workspace-metadata-selectors";
+import { translations } from "../translations/translations";
+import { ArchifiltreErrorType } from "../util/error/error-util";
 import type { HashComputingResult } from "../util/hash/hash-util";
 import {
     computeHashes,
     hashErrorToArchifiltreError,
     hashResultsToMap,
 } from "../util/hash/hash-util";
+import {
+    NotificationDuration,
+    notifyError,
+    notifySuccess,
+} from "../util/notification/notifications-util";
+import { computeFolderHashes$ } from "./hash-computer.controller";
 
 const computeFileHashesIgnoredThunk =
     (
@@ -72,11 +73,11 @@ const computeFileHashesImplThunk =
         const formatResult = pipe(
             lodashMap(
                 ({
-                    path,
+                    path: pathToFormat,
                     ...rest
                 }: HashComputingResult): HashComputingResult => ({
                     ...rest,
-                    path: getRelativePath(path),
+                    path: getRelativePath(pathToFormat),
                 })
             ),
             hashResultsToMap
@@ -160,7 +161,7 @@ const computeFolderHashesThunk =
             const state = getState();
             const hashes = getHashesFromStore(state);
             const filesAndFolders = getFilesAndFoldersFromStore(state);
-            const onNewHashesComputed = (newHashes) => {
+            const onNewHashesComputed = (newHashes: HashesMap) => {
                 dispatch(
                     progressLoadingAction(
                         loadingActionId,

@@ -5,7 +5,8 @@ import { merge } from "lodash";
 import path from "path";
 import { createLogger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
-import WinstonSentry, { SentryTransportOptions } from "winston-transport-sentry-node";
+import type { SentryTransportOptions } from "winston-transport-sentry-node";
+import WinstonSentry from "winston-transport-sentry-node";
 
 import { getPath } from "../util/electron/electron-util";
 import WinstonConsoleLogger from "./winston-console-logger";

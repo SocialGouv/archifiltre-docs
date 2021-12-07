@@ -1,12 +1,12 @@
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import WorkspaceBoundaryDates from "components/main-space/workspace/general/session-info/workspace-boundary-dates";
 import React from "react";
 
 import { EditableField } from "../../../../common/editable-field";
-import SessionElementsDetails from "./session-elements-details";
+import { SessionElementsDetails } from "./session-elements-details";
+import { WorkspaceBoundaryDates } from "./workspace-boundary-dates";
 
-interface SessionInfoProps {
+export interface SessionInfoProps {
     sessionName: string;
     onChangeSessionName: (name: string) => void;
     nbFolders: number;
@@ -17,7 +17,7 @@ interface SessionInfoProps {
     firstLevelName: string;
 }
 
-const SessionInfo: React.FC<SessionInfoProps> = ({
+export const SessionInfo: React.FC<SessionInfoProps> = ({
     sessionName,
     onChangeSessionName,
     nbFolders,
@@ -64,5 +64,3 @@ const SessionInfo: React.FC<SessionInfoProps> = ({
         </Box>
     </Box>
 );
-
-export default SessionInfo;

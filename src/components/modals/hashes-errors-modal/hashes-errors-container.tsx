@@ -1,18 +1,20 @@
-import ErrorsModal from "components/modals/errors-modal/errors-modal";
-import { useErrorsModalConfig } from "components/modals/errors-modal/use-errors-modal-config";
-import { retryHashesComputingThunk } from "hash-computer/hash-computer-thunk";
 import path from "path";
 import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { useHashesErrors } from "reducers/hashes/hashes-selectors";
-import { closeModalAction } from "reducers/modal/modal-actions";
-import { useOpenModal } from "reducers/modal/modal-selectors";
-import { Modal } from "reducers/modal/modal-types";
-import { useWorkspaceMetadata } from "reducers/workspace-metadata/workspace-metadata-selectors";
-import { exportTableToCsvFile } from "util/table/table-util";
 
-const HashesErrorsModalContainer: React.FC = () => {
+import { retryHashesComputingThunk } from "../../../hash-computer/hash-computer-thunk";
+import { useHashesErrors } from "../../../reducers/hashes/hashes-selectors";
+import { closeModalAction } from "../../../reducers/modal/modal-actions";
+import { useOpenModal } from "../../../reducers/modal/modal-selectors";
+import { Modal } from "../../../reducers/modal/modal-types";
+import { useWorkspaceMetadata } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { exportTableToCsvFile } from "../../../util/table/table-util";
+import type { ErrorsModalProps } from "../errors-modal/errors-modal";
+import { ErrorsModal } from "../errors-modal/errors-modal";
+import { useErrorsModalConfig } from "../errors-modal/use-errors-modal-config";
+
+export const HashesErrorsModalContainer: React.FC = () => {
     const errors = useHashesErrors();
     const openModal = useOpenModal();
     const dispatch = useDispatch();
@@ -33,9 +35,12 @@ const HashesErrorsModalContainer: React.FC = () => {
 
     const config = useErrorsModalConfig(t);
 
-    const exportErrors = useCallback(
-        async (errors) => {
-            await exportTableToCsvFile(errors, config, {
+    type ErrorModaleAction = NonNullable<
+        ErrorsModalProps["actions"]
+    >[number]["action"];
+    const exportErrors: ErrorModaleAction = useCallback(
+        async (errorsToExport) => {
+            await exportTableToCsvFile(errorsToExport, config, {
                 defaultFilePath: path.join(
                     originalPath,
                     "..",
@@ -73,5 +78,3 @@ const HashesErrorsModalContainer: React.FC = () => {
         />
     );
 };
-
-export default HashesErrorsModalContainer;

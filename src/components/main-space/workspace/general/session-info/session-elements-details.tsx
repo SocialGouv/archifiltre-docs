@@ -1,17 +1,17 @@
 import Grid from "@material-ui/core/Grid";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 
-import SessionElementsDetail from "./session-elements-detail";
+import { octet2HumanReadableFormat } from "../../../../../util/file-system/file-sys-util";
+import { SessionElementsDetail } from "./session-elements-detail";
 
-interface SessionElementsDetailsProps {
+export interface SessionElementsDetailsProps {
     nbFiles: number;
     nbFolders: number;
     volume: number;
 }
 
-const SessionElementsDetails: React.FC<SessionElementsDetailsProps> = ({
+export const SessionElementsDetails: React.FC<SessionElementsDetailsProps> = ({
     nbFolders,
     nbFiles,
     volume,
@@ -41,5 +41,3 @@ const SessionElementsDetails: React.FC<SessionElementsDetailsProps> = ({
         </Grid>
     );
 };
-
-export default SessionElementsDetails;

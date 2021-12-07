@@ -2,16 +2,17 @@ import Box from "@material-ui/core/Box";
 import Chip from "@material-ui/core/Chip";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import { EditableField } from "components/common/editable-field";
 import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaPen, FaTrash } from "react-icons/fa";
-import { percent } from "util/numbers/numbers-util";
 
+import { percent } from "../../../../../util/numbers/numbers-util";
+import type { EditableFieldProps } from "../../../../common/editable-field";
+import { EditableField } from "../../../../common/editable-field";
 import { EllipsisText } from "./ellipsis-text";
 
-interface AllTagsItemProps {
-    tag;
+export interface AllTagsItemProps {
+    tag: string;
     size: number;
     totalVolume: number;
     deleteTag?: () => void;
@@ -19,7 +20,7 @@ interface AllTagsItemProps {
     renameTag?: (newName: string) => void;
 }
 
-const AllTagsItem: React.FC<AllTagsItemProps> = ({
+export const AllTagsItem: React.FC<AllTagsItemProps> = ({
     tag,
     size,
     totalVolume,
@@ -35,12 +36,12 @@ const AllTagsItem: React.FC<AllTagsItemProps> = ({
         setIsEditing(true);
     }, [setIsEditing]);
 
-    const onInputChange = useCallback(
+    const onInputChange: EditableFieldProps["onChange"] = useCallback(
         (newValue) => {
-            renameTag && renameTag(newValue);
+            renameTag?.(newValue);
             setIsEditing(false);
         },
-        [setIsEditing]
+        [setIsEditing, renameTag]
     );
 
     return (
@@ -102,5 +103,3 @@ const AllTagsItem: React.FC<AllTagsItemProps> = ({
         </Box>
     );
 };
-
-export default AllTagsItem;

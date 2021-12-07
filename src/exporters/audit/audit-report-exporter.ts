@@ -110,7 +110,7 @@ export const computeAuditReportData = (
         imageFileTypes: extensionsList[FileType.IMAGE],
         imagePercent: fileTypesPercents[FileType.IMAGE],
         longestPathFileName: longestPathFile?.name || "",
-        longestPathLength: longestPathFile?.id?.length || 0,
+        longestPathLength: longestPathFile?.id.length || 0,
         longestPathPath: formatPathForUserSystem(longestPathFile?.id) || "",
         newestDate: formatAuditReportDate(
             filesAndFoldersMetadata[ROOT_ID].maxLastModified ?? 0

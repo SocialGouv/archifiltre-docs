@@ -1,8 +1,8 @@
 const { notarize } = require("electron-notarize");
 
 module.exports = async function notarizing(context) {
-  if (!process.env.APPLE_ID) return;
-  const { appOutDir } = context;
+    if (!process.env.APPLE_ID) return;
+    const { appOutDir } = context;
 
     const appName = context.packager.appInfo.productFilename;
 

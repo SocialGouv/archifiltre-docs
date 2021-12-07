@@ -1,21 +1,25 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteTag, renameTag } from "reducers/tags/tags-actions";
-import { getTagsFromStore } from "reducers/tags/tags-selectors";
 
-import AllTags from "./all-tags";
+import {
+    deleteTag,
+    renameTag,
+} from "../../../../../reducers/tags/tags-actions";
+import { getTagsFromStore } from "../../../../../reducers/tags/tags-selectors";
+import type { AllTagsApiToPropsProps } from "./all-tags";
+import { AllTagsApiToProps as AllTags } from "./all-tags";
 
-const AllTagsContainer: React.FC = () => {
+export const AllTagsContainer: React.FC = () => {
     const tags = useSelector(getTagsFromStore);
 
     const dispatch = useDispatch();
 
-    const renameTagCallback = useCallback(
+    const renameTagCallback: AllTagsApiToPropsProps["renameTag"] = useCallback(
         (tagId, newName) => dispatch(renameTag(tagId, newName)),
         [dispatch]
     );
 
-    const deleteTagCallback = useCallback(
+    const deleteTagCallback: AllTagsApiToPropsProps["deleteTag"] = useCallback(
         (tagId) => dispatch(deleteTag(tagId)),
         [dispatch]
     );
@@ -28,5 +32,3 @@ const AllTagsContainer: React.FC = () => {
         />
     );
 };
-
-export default AllTagsContainer;

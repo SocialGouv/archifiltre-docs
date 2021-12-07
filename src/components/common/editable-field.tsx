@@ -6,7 +6,7 @@ import { FaPen } from "react-icons/fa";
 
 import { useStyles } from "../../hooks/use-styles";
 
-interface EditableFieldProps {
+export interface EditableFieldProps {
     multiline?: boolean;
     trimValue: boolean;
     selectTextOnFocus: boolean;

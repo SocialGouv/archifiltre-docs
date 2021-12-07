@@ -1,28 +1,29 @@
 import Box from "@material-ui/core/Box";
-import { Table } from "components/common/table/table";
-import type { Column } from "components/common/table/table-types";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 
-import DuplicatesTableType from "./duplicates-table-type";
+import { octet2HumanReadableFormat } from "../../../../../util/file-system/file-sys-util";
+import type { FileType } from "../../../../../util/file-types/file-types-util";
+import { Table } from "../../../../common/table/table";
+import type { Column } from "../../../../common/table/table-types";
+import { DuplicatesTableType } from "./duplicates-table-type";
 
-type NumberMap = Record<string, number>;
+type NumberMap<T extends string = string> = Record<T, number>;
 
 interface TableData {
-    fileType: string;
+    fileType: FileType;
     nbFiles: number;
     size: number;
     percentage: number;
 }
 
-interface DuplicatesTableProps {
-    fileTypesCount: NumberMap;
+export interface DuplicatesTableProps {
+    fileTypesCount: NumberMap<FileType>;
     fileSizesCount: NumberMap;
     filePercentagesCount: NumberMap;
 }
 
-const DuplicatesTable: React.FC<DuplicatesTableProps> = ({
+export const DuplicatesTable: React.FC<DuplicatesTableProps> = ({
     fileTypesCount,
     fileSizesCount,
     filePercentagesCount,
@@ -65,12 +66,10 @@ const DuplicatesTable: React.FC<DuplicatesTableProps> = ({
 
     const data = useMemo<TableData[]>(
         () =>
-            Object.entries(fileTypesCount)
+            (Object.entries(fileTypesCount) as [FileType, number][])
                 .sort(
-                    (
-                        [, firstValue]: [any, number],
-                        [, secondValue]: [any, number]
-                    ) => secondValue - firstValue
+                    ([, firstValue], [, secondValue]) =>
+                        secondValue - firstValue
                 )
                 .map(([fileType, fileTypeValue]) => {
                     return {
@@ -95,5 +94,3 @@ const DuplicatesTable: React.FC<DuplicatesTableProps> = ({
         </Box>
     );
 };
-
-export default DuplicatesTable;

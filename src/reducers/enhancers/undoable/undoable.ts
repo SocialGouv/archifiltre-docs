@@ -4,21 +4,21 @@ import type redux from "redux";
 import type { UndoableActionTypes, UndoableState } from "./undoable-types";
 import { COMMIT, REDO, UNDO } from "./undoable-types";
 
-const undoable = <WrappedState, Action extends redux.Action>(
-    reducer: Reducer<WrappedState, Action>,
-    initialState: WrappedState
-): Reducer<UndoableState<WrappedState>, Action | UndoableActionTypes> => {
-    const wrappedInitialState: UndoableState<WrappedState> = {
+export const undoable = <TWrappedState, TAction extends redux.Action>(
+    reducer: Reducer<TWrappedState, TAction>,
+    initialState: TWrappedState
+): Reducer<UndoableState<TWrappedState>, TAction | UndoableActionTypes> => {
+    const wrappedInitialState: UndoableState<TWrappedState> = {
         current: initialState,
         future: [],
         past: [],
         present: initialState,
     };
 
-    return (state = wrappedInitialState, action) => {
-        let present: WrappedState;
-        let past: WrappedState[];
-        let future: WrappedState[];
+    return (state = wrappedInitialState, action?) => {
+        let present = {} as TWrappedState;
+        let past: TWrappedState[] = [];
+        let future: TWrappedState[] = [];
 
         switch (action.type) {
             case UNDO:
@@ -46,13 +46,13 @@ const undoable = <WrappedState, Action extends redux.Action>(
                 };
             default:
                 return {
-                    current: reducer(state.current, action as Action),
-                    future: state ? state.future : [],
-                    past: state ? state.past : [],
+                    current: reducer(state.current, action as TAction),
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                    future: state?.future ?? [],
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                    past: state?.past ?? [],
                     present: state.present,
                 };
         }
     };
 };
-
-export default undoable;

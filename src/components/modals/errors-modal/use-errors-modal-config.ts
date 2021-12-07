@@ -1,7 +1,8 @@
-import type { Column } from "components/common/table/table-types";
 import type { TFunction } from "i18next";
 import { useMemo } from "react";
-import type { ArchifiltreError } from "util/error/error-util";
+
+import type { ArchifiltreError } from "../../../util/error/error-util";
+import type { Column } from "../../common/table/table-types";
 
 export const useErrorsModalConfig = (
     t: TFunction
@@ -21,7 +22,7 @@ export const useErrorsModalConfig = (
                 sortable: true,
             },
             {
-                accessor: ({ code }) =>
+                accessor: ({ code }): string =>
                     t(`errorsModal.errorDescriptions.${code}`),
                 id: "description",
                 name: t("errorsModal.errorDescription"),

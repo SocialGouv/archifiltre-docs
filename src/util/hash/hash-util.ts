@@ -1,22 +1,20 @@
 import md5File from "md5-file";
-import path from "path";
-import { throttleTime, throttleTime } from "rxjs/operators";
+import { join } from "path";
+import type { Observable } from "rxjs";
+import { throttleTime } from "rxjs/operators";
 
 import { ipcRenderer } from "../../common/ipc";
-import type { HashesMap, HashesMap } from "../../reducers/hashes/hashes-types";
+import type { WorkerError } from "../../files-and-folders-loader/files-and-folders-loader-types";
+import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import {
     ArchifiltreFileSystemErrorCode,
-    ArchifiltreFileSystemErrorCode,
-    UnknownError,
     UnknownError,
 } from "../error/error-codes";
-import type { ArchifiltreError, ArchifiltreError } from "../error/error-util";
-import {
-    ArchifiltreErrorType,
-    ArchifiltreErrorType,
-} from "../error/error-util";
-import { computeQueue, computeQueue } from "../queue/queue";
-import type { HashComputingError, HashComputingError } from "./hash-errors";
+import type { ArchifiltreError } from "../error/error-util";
+import { ArchifiltreErrorType } from "../error/error-util";
+import type { Queue } from "../queue/queue";
+import { computeQueue } from "../queue/queue";
+import type { HashComputingError } from "./hash-errors";
 import {
     ACCESS_DENIED,
     accessDenied,
@@ -50,27 +48,37 @@ export const computeHash = async (
     try {
         const hash = await md5File(filePath);
         return hashResult(filePath, hash);
-    } catch (err) {
-        if (err.code === "ENOENT") {
+    } catch (err: unknown) {
+        if ((err as WorkerError).code === "ENOENT") {
             return fileNotFound(filePath);
         }
-        if (err.code === "EACCES") {
+        if ((err as WorkerError).code === "EACCES") {
             return accessDenied(filePath);
         }
 
-        return unhandledFileError(filePath, err.message);
+        return unhandledFileError(filePath, (err as WorkerError).message);
     }
 };
 
-export const computeHashes = (files: string[], basePath: string) => {
-    const computeFn = computeQueue(async (filePaths: string[]) => {
+export const computeHashes = (
+    files: string[],
+    basePath: string
+): Observable<Queue<string, HashComputingResult, HashComputingError>> => {
+    const computeFn = computeQueue<
+        string,
+        HashComputingResult,
+        HashComputingError
+    >(async (filePaths: string[]) => {
         return ipcRenderer.invoke("hash.computeHash", filePaths);
     }, isResult);
 
-    const paths = files.map((file) => path.join(basePath, file));
+    const paths = files.map((file) => join(basePath, file));
 
     return computeFn(paths).pipe(
-        throttleTime(1000, undefined, { leading: true, trailing: true })
+        throttleTime(1000, void 0, {
+            leading: true,
+            trailing: true,
+        })
     );
 };
 

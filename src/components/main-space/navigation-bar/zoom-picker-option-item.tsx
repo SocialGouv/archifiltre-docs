@@ -2,12 +2,12 @@ import Box from "@material-ui/core/Box";
 import type { ReactNode } from "react";
 import React from "react";
 
-interface ZoomPickerOptionItemProps {
+export interface ZoomPickerOptionItemProps {
     icon: ReactNode;
     label: string;
 }
 
-const ZoomPickerOptionItem: React.FC<ZoomPickerOptionItemProps> = ({
+export const ZoomPickerOptionItem: React.FC<ZoomPickerOptionItemProps> = ({
     icon,
     label,
 }) => (
@@ -16,5 +16,3 @@ const ZoomPickerOptionItem: React.FC<ZoomPickerOptionItemProps> = ({
         {label}
     </Box>
 );
-
-export default ZoomPickerOptionItem;

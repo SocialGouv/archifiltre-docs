@@ -1,10 +1,12 @@
 import _, { without } from "lodash";
 import path from "path";
 
-import undoable from "../enhancers/undoable/undoable";
+import { undoable } from "../enhancers/undoable/undoable";
 import type {
     FilesAndFoldersActionTypes,
+    FilesAndFoldersMap,
     FilesAndFoldersState,
+    VirtualPathToIdMap,
 } from "./files-and-folders-types";
 import {
     ADD_CHILD,
@@ -36,16 +38,12 @@ export const initialState: FilesAndFoldersState = {
 
 /**
  * Generates updated filesAndFolders map and virtualPathToId map for the moved filesAndFolders
- * @param filesAndFolders
- * @param virtualPathToId
- * @param movedElementId
- * @param newParentVirtualPath
  */
 const updateChildVirtualPath = (
-    filesAndFolders,
-    virtualPathToId,
-    movedElementId,
-    newParentVirtualPath
+    filesAndFolders: FilesAndFoldersMap,
+    virtualPathToId: VirtualPathToIdMap,
+    movedElementId: string,
+    newParentVirtualPath: string
 ) => {
     const updatedFilesAndFolders = {
         ...filesAndFolders,
@@ -55,7 +53,10 @@ const updateChildVirtualPath = (
         ...virtualPathToId,
     };
 
-    const updateChildVirtualPathRec = (currentId, currentParentVirtualPath) => {
+    const updateChildVirtualPathRec = (
+        currentId: string,
+        currentParentVirtualPath: string
+    ) => {
         const filesAndFolder = updatedFilesAndFolders[currentId];
 
         const virtualPath = path.posix.join(
@@ -89,13 +90,15 @@ const updateChildVirtualPath = (
  */
 const filesAndFoldersReducer = (
     state = initialState,
-    action: FilesAndFoldersActionTypes
+    action?: FilesAndFoldersActionTypes
 ): FilesAndFoldersState => {
-    switch (action.type) {
+    switch (action?.type) {
         case INITIALIZE_FILES_AND_FOLDERS:
             return { ...state, filesAndFolders: action.filesAndFolders };
         case ADD_CHILD:
+            // eslint-disable-next-line no-case-declarations
             const parent = state.filesAndFolders[action.parentId];
+            // eslint-disable-next-line no-case-declarations
             const { filesAndFolders, virtualPathToId } = updateChildVirtualPath(
                 state.filesAndFolders,
                 state.virtualPathToId,
@@ -222,6 +225,9 @@ const filesAndFoldersReducer = (
     }
 };
 
-export { filesAndFoldersReducer };
+const undoableFilesAndFoldersReducer = undoable(
+    filesAndFoldersReducer,
+    initialState
+);
 
-export default undoable(filesAndFoldersReducer, initialState);
+export { filesAndFoldersReducer, undoableFilesAndFoldersReducer };

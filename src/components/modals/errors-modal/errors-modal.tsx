@@ -2,13 +2,13 @@ import { DialogActions } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import { useStyles } from "hooks/use-styles";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import type { ArchifiltreError } from "util/error/error-util";
 
-import { ModalHeader } from "../../modals/modal-header";
-import ErrorsTable from "./errors-table";
+import { useStyles } from "../../../hooks/use-styles";
+import type { ArchifiltreError } from "../../../util/error/error-util";
+import { ModalHeader } from "../modal-header";
+import { ErrorsTable } from "./errors-table";
 
 interface ModalAction {
     id: string;
@@ -16,14 +16,14 @@ interface ModalAction {
     action: (errors: ArchifiltreError[]) => void;
 }
 
-interface ErrorsModalProps {
+export interface ErrorsModalProps {
     isModalOpen: boolean;
     closeModal: () => void;
     errors: ArchifiltreError[];
     actions?: ModalAction[];
 }
 
-const ErrorsModal: React.FC<ErrorsModalProps> = ({
+export const ErrorsModal: React.FC<ErrorsModalProps> = ({
     isModalOpen,
     closeModal,
     errors,
@@ -56,5 +56,3 @@ const ErrorsModal: React.FC<ErrorsModalProps> = ({
         </Dialog>
     );
 };
-
-export default ErrorsModal;

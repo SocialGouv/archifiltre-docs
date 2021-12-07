@@ -4,11 +4,11 @@ const openDevtools = () => {
     ipcRenderer.send("open-devtools");
 };
 
-const prevKey = [] as string[];
+const prevKey: string[] = [];
 const password = "devtools";
 const passwordLength = password.length;
 
-const keyUpCallback = (event) => {
+const keyUpCallback = (event: KeyboardEvent) => {
     prevKey.push(event.key);
     if (passwordLength < prevKey.length) {
         prevKey.shift();
@@ -19,11 +19,11 @@ const keyUpCallback = (event) => {
     }
 };
 
-const enable = () => {
+const enable = (): void => {
     document.addEventListener("keyup", keyUpCallback);
 };
 
-const disable = () => {
+const disable = (): void => {
     document.removeEventListener("keyup", keyUpCallback);
 };
 

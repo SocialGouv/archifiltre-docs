@@ -1,5 +1,5 @@
 import Box from "@material-ui/core/Box";
-import ExportCategoryOptions from "components/modals/export-modal/export-category-options";
+import { ExportCategoryOptions } from "components/modals/export-modal/export-category-options";
 import React from "react";
 
 import type { ExportType } from "./export-config";

@@ -2,25 +2,25 @@ import Box from "@material-ui/core/Box";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { commitAction } from "reducers/enhancers/undoable/undoable-actions";
+
+import { commitAction } from "../../../../../reducers/enhancers/undoable/undoable-actions";
 import {
     getElementsToDeleteFromStore,
     getFilesAndFoldersFromStore,
     getFilesTotalSize,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import type { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import type { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+} from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
+import type { FilesAndFoldersMap } from "../../../../../reducers/files-and-folders/files-and-folders-types";
+import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import type { FilesAndFoldersMetadataMap } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import {
     getTagSize,
     sortTags,
     tagMapToArray,
-} from "reducers/tags/tags-selectors";
-import type { TagMap } from "reducers/tags/tags-types";
+} from "../../../../../reducers/tags/tags-selectors";
+import type { TagMap } from "../../../../../reducers/tags/tags-types";
+import { AllTagsItem as TagListItem } from "./all-tags-item";
 
-import TagListItem from "./all-tags-item";
-
-interface AllTagsProps {
+export interface AllTagsProps {
     tags: TagMap;
     filesAndFolders: FilesAndFoldersMap;
     filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
@@ -99,13 +99,13 @@ const AllTags: React.FC<AllTagsProps> = ({
     );
 };
 
-interface AllTagsApiToPropsProps {
+export interface AllTagsApiToPropsProps {
     tags: TagMap;
     renameTag: (tagId: string, name: string) => void;
     deleteTag: (tagId: string) => void;
 }
 
-const AllTagsApiToProps: React.FC<AllTagsApiToPropsProps> = ({
+export const AllTagsApiToProps: React.FC<AllTagsApiToPropsProps> = ({
     tags,
     renameTag,
     deleteTag,
@@ -133,12 +133,12 @@ const AllTagsApiToProps: React.FC<AllTagsApiToPropsProps> = ({
         [elementsToDelete, filesAndFolders, filesAndFoldersMetadata]
     );
 
-    const onRenameTag = (tagId) => (name) => {
+    const onRenameTag: AllTagsProps["onRenameTag"] = (tagId) => (name) => {
         renameTag(tagId, name);
         dispatch(commitAction());
     };
 
-    const onDeleteTag = (tagId) => () => {
+    const onDeleteTag: AllTagsProps["onDeleteTag"] = (tagId) => () => {
         deleteTag(tagId);
         dispatch(commitAction());
     };
@@ -156,5 +156,3 @@ const AllTagsApiToProps: React.FC<AllTagsApiToPropsProps> = ({
         />
     );
 };
-
-export default AllTagsApiToProps;

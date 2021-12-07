@@ -1,4 +1,4 @@
-import undoable from "../enhancers/undoable/undoable";
+import { undoable } from "../enhancers/undoable/undoable";
 import type {
     WorkspaceMetadataAction,
     WorkspaceMetadataState,
@@ -19,9 +19,9 @@ export const initialState: WorkspaceMetadataState = {
 
 const workspaceMetadataReducer = (
     state = initialState,
-    action: WorkspaceMetadataAction
-) => {
-    switch (action.type) {
+    action?: WorkspaceMetadataAction
+): WorkspaceMetadataState => {
+    switch (action?.type) {
         case SET_SESSION_NAME:
             return { ...state, sessionName: action.sessionName };
         case SET_ORIGINAL_PATH:
@@ -37,4 +37,7 @@ const workspaceMetadataReducer = (
 
 export { workspaceMetadataReducer };
 
-export default undoable(workspaceMetadataReducer, initialState);
+export const undoableWorkspaceMetadataReducer = undoable<
+    WorkspaceMetadataState,
+    WorkspaceMetadataAction
+>(workspaceMetadataReducer, initialState);

@@ -1,4 +1,4 @@
-import undoable from "./undoable";
+import { undoable } from "./undoable";
 import { commitAction, redoAction, undoAction } from "./undoable-actions";
 
 const state0 = {

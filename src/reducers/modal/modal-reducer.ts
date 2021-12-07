@@ -5,11 +5,11 @@ export const initialState: ModalState = {
     openModal: null,
 };
 
-const modalReducer = (
+export const modalReducer = (
     state = initialState,
-    action: ModalAction
+    action?: ModalAction
 ): ModalState => {
-    switch (action.type) {
+    switch (action?.type) {
         case OPEN_MODAL:
             return {
                 openModal: action.modal,
@@ -18,9 +18,7 @@ const modalReducer = (
             return {
                 openModal: null,
             };
+        default:
+            return state;
     }
-
-    return state;
 };
-
-export default modalReducer;

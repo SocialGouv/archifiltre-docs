@@ -13,7 +13,7 @@ import { Providers } from "./components/common/providers";
 import { WindowResizeErrorHandler as WindowResize } from "./components/common/window-resize-handler";
 import { NewVersionChecker } from "./components/header/new-version-checker";
 import { MainSpace } from "./components/main-space/main-space";
-import Modals from "./components/modals/modals";
+import { Modals } from "./components/modals/modals";
 import { initReporter, reportInfo } from "./logging/reporter";
 import { initTracker } from "./logging/tracker";
 import {

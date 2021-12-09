@@ -1,8 +1,10 @@
 import { boundNumber } from "../numbers/numbers-util";
 
 export enum ZoomDirection {
-    IN,
-    OUT,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    IN = 0,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    OUT = 1,
 }
 
 interface ZoomState {
@@ -23,14 +25,14 @@ export const computeZoomRatio = (
     zoomRatio: number,
     zoomSpeed: number,
     zoomDirection: ZoomDirection
-) => Math.max(zoomRatio * zoomSpeed ** getZoomPower(zoomDirection), 1);
+): number => Math.max(zoomRatio * zoomSpeed ** getZoomPower(zoomDirection), 1);
 
 export const computeOffset = (
     mousePosition: number,
     zoomRatio: number,
     newZoomRatio: number,
     zoomOffset: number
-) => {
+): number => {
     const offset =
         mousePosition -
         (zoomRatio / newZoomRatio) * (mousePosition - zoomOffset);

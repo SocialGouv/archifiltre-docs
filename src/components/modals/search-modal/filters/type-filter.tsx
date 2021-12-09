@@ -1,15 +1,18 @@
-import { useDeferredMemo } from "hooks/use-deferred-memo";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
-import type { FilterMethod } from "typings/filter-types";
-import { BooleanOperator, joinFilters } from "util/array/array-util";
-import { getType } from "util/files-and-folders/file-and-folders-utils";
 
-import Filter from "./filter";
+import { useDeferredMemo } from "../../../../hooks/use-deferred-memo";
+import type { FilesAndFolders } from "../../../../reducers/files-and-folders/files-and-folders-types";
+import type { FilterMethod } from "../../../../typings/filter-types";
+import {
+    BooleanOperator,
+    joinFilters,
+} from "../../../../util/array/array-util";
+import { getType } from "../../../../util/files-and-folders/file-and-folders-utils";
+import { Filter } from "./filter";
 
-interface TypeFilterProps {
+export interface TypeFilterProps {
     filesAndFolders: FilesAndFolders[];
     setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
 }
@@ -30,7 +33,7 @@ const computeOptions = (
         .uniq()
         .value();
 
-const TypeFilter: React.FC<TypeFilterProps> = ({
+export const TypeFilter: React.FC<TypeFilterProps> = ({
     filesAndFolders,
     setFilters,
 }) => {
@@ -48,7 +51,7 @@ const TypeFilter: React.FC<TypeFilterProps> = ({
 
     useEffect(() => {
         const selectedFilters = selectedOptions.map(
-            (selectedOption) => (fileOrFolder) =>
+            (selectedOption) => (fileOrFolder: FilesAndFolders) =>
                 getType(fileOrFolder) === selectedOption
         );
         const joinedFilters = joinFilters(selectedFilters, BooleanOperator.OR);
@@ -58,11 +61,9 @@ const TypeFilter: React.FC<TypeFilterProps> = ({
     return (
         <Filter
             name={t("search.type")}
-            availableOptions={availableOptions || []}
+            availableOptions={availableOptions ?? []}
             selectedOptions={selectedOptions}
             setSelectedOptions={setSelectedOptions}
         />
     );
 };
-
-export default TypeFilter;

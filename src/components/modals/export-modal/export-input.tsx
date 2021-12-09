@@ -10,13 +10,13 @@ import styled from "styled-components";
 import type { ThemedProps } from "../../../theme/default-theme";
 import { promptUserForSave } from "../../../util/file-system/file-system-util";
 
-const FilePath = withTheme(styled.span<ThemedProps & { hasError: boolean }>`
+const FilePath = withTheme(styled.span`
     white-space: nowrap;
     overflow: hidden;
     width: 300px;
     direction: rtl;
     text-overflow: ellipsis;
-    color: ${({ hasError, theme }) =>
+    color: ${({ hasError, theme }: ThemedProps & { hasError: boolean }) =>
         hasError ? theme.palette.error.main : "inherit"};
 `);
 
@@ -32,7 +32,7 @@ interface ExportInputProps {
     isFilePickerDisabled?: boolean;
 }
 
-const ExportInput: React.FC<ExportInputProps> = ({
+export const ExportInput: React.FC<ExportInputProps> = ({
     exportFilePath,
     isValid,
     setExportsPathsValue,
@@ -44,7 +44,7 @@ const ExportInput: React.FC<ExportInputProps> = ({
         if (filePath) {
             setExportsPathsValue(filePath);
         }
-    }, [setExportsPathsValue]);
+    }, [setExportsPathsValue, exportFilePath]);
 
     const browseTitle = t("common.browse");
 
@@ -71,5 +71,3 @@ const ExportInput: React.FC<ExportInputProps> = ({
         </Box>
     );
 };
-
-export default ExportInput;

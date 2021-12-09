@@ -1,5 +1,7 @@
 import type { IpcMainEvent } from "electron";
 
+import type { UnknownMapping } from "../types";
+
 /**
  * Define an IPC config with arguments types and a return value type.
  *
@@ -22,6 +24,7 @@ export type DefaultIpcConfig = IpcConfig<unknown[], unknown>;
  *
  * @see IpcConfig
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface SyncIpcMapping {}
 /**
  * A map of IPC channels associated to their associated config.
@@ -30,6 +33,7 @@ export interface SyncIpcMapping {}
  *
  * @see IpcConfig
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface AsyncIpcMapping {}
 export type SyncIpcKeys = keyof SyncIpcMapping;
 export type AsyncIpcKeys = keyof AsyncIpcMapping;
@@ -47,11 +51,6 @@ export type SyncIpcChannel<T extends SyncIpcKeys | UnknownMapping> =
 export type AsyncIpcChannel<T extends AsyncIpcKeys | UnknownMapping> =
     | AsyncIpcKeys
     | T;
-
-/**
- * Hack for union string litteral with string to keep autocomplete.
- */
-export type UnknownMapping = string & { _?: never };
 
 export interface CustomIpcMainEvent<T> extends IpcMainEvent {
     returnValue: GetSyncIpcConfig<T>["returnValue"];

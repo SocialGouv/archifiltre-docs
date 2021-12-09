@@ -60,7 +60,7 @@ const aboutItems = [
     },
 ];
 
-const About: React.FC = () => {
+export const About: React.FC = () => {
     const { t } = useTranslation();
     const classes = useLocalStyles();
 
@@ -94,5 +94,3 @@ const About: React.FC = () => {
         </Box>
     );
 };
-
-export default About;

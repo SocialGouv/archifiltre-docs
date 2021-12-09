@@ -11,7 +11,7 @@ import { ipcRenderer } from "../../../common/ipc";
 import { exportConfig, ExportType } from "./export-config";
 import type { ExportTypesMap } from "./export-options";
 
-interface ExportControlsProps {
+export interface ExportControlsProps {
     setActiveExportValue: (exportType: ExportType, value: boolean) => void;
     setExportsPathsValue: (exportType: ExportType, value: string) => void;
     activeExports: ExportTypesMap<boolean>;
@@ -19,7 +19,7 @@ interface ExportControlsProps {
     enabledExports: ExportTypesMap<boolean>;
 }
 
-const ExportControls: React.FC<ExportControlsProps> = ({
+export const ExportControls: React.FC<ExportControlsProps> = ({
     setActiveExportValue,
     setExportsPathsValue,
     activeExports,
@@ -90,5 +90,3 @@ const ExportControls: React.FC<ExportControlsProps> = ({
         </Box>
     );
 };
-
-export default ExportControls;

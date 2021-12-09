@@ -21,7 +21,7 @@ import type { FilterMethod } from "typings/filter-types";
 
 import { ModalHeader } from "../modal-header";
 import { FilesAndFoldersTable } from "./files-and-folders-table";
-import Filters from "./filters/filters";
+import { Filters } from "./filters/filters";
 import { SearchBar } from "./search-bar";
 
 const StyledPaper = styled(Paper)`

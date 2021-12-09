@@ -6,12 +6,12 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaFlag, FaInfoCircle, FaLock } from "react-icons/fa";
 
-interface ModalMenuProps {
+export interface ModalMenuProps {
     selectedItem: number;
     setSelectedItem: (selectedItem: number) => void;
 }
 
-const ModalMenu: React.FC<ModalMenuProps> = ({
+export const ModalMenu: React.FC<ModalMenuProps> = ({
     selectedItem,
     setSelectedItem,
 }) => {
@@ -49,5 +49,3 @@ const ModalMenu: React.FC<ModalMenuProps> = ({
         </List>
     );
 };
-
-export default ModalMenu;

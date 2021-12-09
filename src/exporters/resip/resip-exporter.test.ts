@@ -5,7 +5,7 @@ import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metada
 import { createTag } from "reducers/tags/tags-test-util";
 import { formatPathForUserSystem } from "util/file-system/file-sys-util";
 
-import resipExporter from "./resip-exporter";
+import { resipExporter } from "./resip-exporter";
 
 // We advance to a specific date for TransactedDate to be setup correctly
 advanceTo("2019-08-05");

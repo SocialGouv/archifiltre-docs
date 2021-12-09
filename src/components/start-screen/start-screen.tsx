@@ -12,10 +12,10 @@ import logo from "../../../static/imgs/logo.png";
 import { useModal } from "../../hooks/use-modal";
 import { savePreviousSession } from "../../persistence/previous-sessions";
 import type { FileSystemLoadingStep } from "../../reducers/loading-state/loading-state-types";
-import SettingsModal from "../modals/settings-modal/settings-modal";
-import Dropzone from "./dropzone";
-import LoadingBlock from "./loading-block";
-import StartScreenSidebar from "./start-screen-sidebar";
+import { SettingsModal } from "../modals/settings-modal/settings-modal";
+import { Dropzone } from "./dropzone";
+import { LoadingBlock } from "./loading-block";
+import { StartScreenSidebar } from "./start-screen-sidebar";
 
 declare global {
     const AUTOLOAD: string;

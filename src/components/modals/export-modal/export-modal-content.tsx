@@ -15,7 +15,7 @@ import {
     mapValuesFromExportType,
 } from "./export-config";
 import type { ExportTypesMap } from "./export-options";
-import ExportOptions from "./export-options";
+import { ExportOptions } from "./export-options";
 
 const getInitialExportPaths = (originalPath: string, sessionName: string) =>
     mapValuesFromExportType((exportType) =>

@@ -21,6 +21,7 @@ const secondaryColor = grey;
 
 export const themeOptions: ThemeOptions = {
     overrides: {
+        /* eslint-disable @typescript-eslint/naming-convention */
         MuiButton: {
             outlinedSecondary: {
                 borderColor: secondaryColor.A400,
@@ -100,6 +101,7 @@ export const themeOptions: ThemeOptions = {
                 fontSize: "0.625rem",
             },
         },
+        /* eslint-enable @typescript-eslint/naming-convention */
     },
     palette: {
         primary: primaryColor,
@@ -107,6 +109,4 @@ export const themeOptions: ThemeOptions = {
     },
 };
 
-const defaultTheme = createMuiTheme(themeOptions);
-
-export default defaultTheme;
+export const defaultTheme = createMuiTheme(themeOptions);

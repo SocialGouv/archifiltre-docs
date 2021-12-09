@@ -2,8 +2,8 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import React, { useState } from "react";
 import { Provider } from "react-redux";
 
-import store from "../../reducers/store";
-import defaultTheme from "../../theme/default-theme";
+import { store } from "../../reducers/store";
+import { defaultTheme } from "../../theme/default-theme";
 import { ErrorBoundaryContainer } from "../errors/error-boundary-container";
 import { TabsContext } from "../header/tabs-context";
 

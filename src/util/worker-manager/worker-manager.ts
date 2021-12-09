@@ -31,4 +31,4 @@ class WorkerManager {
     }
 }
 
-export default new WorkerManager();
+export const workerManager = new WorkerManager();

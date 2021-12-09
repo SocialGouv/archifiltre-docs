@@ -39,7 +39,7 @@ import {
     notifyInfo,
 } from "../util/notification/notifications-util";
 import { operateOnDataProcessingStream } from "../util/observable/observable-util";
-import workerManager from "../util/worker-manager/worker-manager";
+import { workerManager } from "../util/worker-manager/worker-manager";
 import { version, versionComparator } from "../version";
 import type {
     ArchifiltreDispatch,

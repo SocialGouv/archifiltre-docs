@@ -1,16 +1,16 @@
 import Box from "@material-ui/core/Box";
-import { ExportCategoryOptions } from "components/modals/export-modal/export-category-options";
 import React from "react";
 
+import { ExportCategoryOptions } from "./export-category-options";
 import type { ExportType } from "./export-config";
 import { ExportCategory } from "./export-config";
-import ExportControls from "./export-controls";
+import { ExportControls } from "./export-controls";
 
-export type ExportTypesMap<ValueType> = {
-    [exportType in ExportType]: ValueType;
+export type ExportTypesMap<TValue> = {
+    [exportType in ExportType]: TValue;
 };
 
-interface ExportOptionsProps {
+export interface ExportOptionsProps {
     enabledExports: ExportTypesMap<boolean>;
     exportPaths: ExportTypesMap<string>;
     isValidPaths: ExportTypesMap<boolean>;
@@ -19,7 +19,7 @@ interface ExportOptionsProps {
     setExportsPathsValue: (exportType: ExportType, value: string) => void;
 }
 
-const ExportOptions: React.FC<ExportOptionsProps> = ({
+export const ExportOptions: React.FC<ExportOptionsProps> = ({
     enabledExports,
     exportPaths,
     isValidPaths,
@@ -51,5 +51,3 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({
         </Box>
     );
 };
-
-export default ExportOptions;

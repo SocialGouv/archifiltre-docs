@@ -34,7 +34,7 @@ export interface StoreState {
     workspaceMetadata: UndoableState<WorkspaceMetadataState>;
 }
 
-export default createStore(
+export const store = createStore(
     combineReducers({
         filesAndFolders: filesAndFoldersReducer,
         filesAndFoldersMetadata: filesAndFoldersMetadataReducer,

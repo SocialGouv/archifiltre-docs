@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import { isWindows } from "./os/os-util";
 
 /**
@@ -5,7 +8,7 @@ import { isWindows } from "./os/os-util";
  * we use webpack to build our app so importing native modules is not that simple.
  * We could probably replace this with a proper webpack loader.
  */
-const loadFsWin = (): any => {
+export const fswin: FsWin = (() => {
     if (!isWindows()) {
         return {};
     }
@@ -14,10 +17,22 @@ const loadFsWin = (): any => {
         return __non_webpack_require__(
             `./electron/dist/electron/${process.arch}/fswin.node`
         );
-    } catch (err) {
+    } catch (err: unknown) {
         // @ts-expect-error
         return __non_webpack_require__(`./electron/${process.arch}/fswin.node`);
     }
-};
+})();
 
-export default loadFsWin();
+// eslint-disable-next-line @typescript-eslint/no-namespace
+namespace FsWin {
+    export interface Attributes {
+        readonly IS_HIDDEN: boolean;
+    }
+}
+interface FsWin {
+    getAttributesSync: (path: string) => FsWin.Attributes;
+    getAttributes: (
+        path: string,
+        cb: (attributes?: FsWin.Attributes) => void
+    ) => void;
+}

@@ -1,12 +1,13 @@
 import { CircularProgress, Grid } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import LoadingSpinner from "components/start-screen/loading-spinner";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
 import styled from "styled-components";
-import { isJsonFile } from "util/file-system/file-sys-util";
+
+import { FileSystemLoadingStep } from "../../reducers/loading-state/loading-state-types";
+import { isJsonFile } from "../../util/file-system/file-sys-util";
+import { LoadingSpinner } from "./loading-spinner";
 
 const StyledGrid = styled(Grid)`
     display: flex;
@@ -15,14 +16,14 @@ const StyledGrid = styled(Grid)`
     align-items: center;
 `;
 
-interface LoadingBlockProps {
+export interface LoadingBlockProps {
     fileSystemLoadingStep: FileSystemLoadingStep;
     indexedFilesCount: number;
     loadedPath: string;
     cancelLoading: () => void;
 }
 
-const LoadingBlock: React.FC<LoadingBlockProps> = ({
+export const LoadingBlock: React.FC<LoadingBlockProps> = ({
     fileSystemLoadingStep,
     indexedFilesCount,
     loadedPath,
@@ -69,5 +70,3 @@ const LoadingBlock: React.FC<LoadingBlockProps> = ({
         </Grid>
     );
 };
-
-export default LoadingBlock;

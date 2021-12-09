@@ -5,10 +5,11 @@ import React from "react";
 import { FaTimes } from "react-icons/fa";
 
 import { useStyles } from "../../hooks/use-styles";
+import type { VoidFunction } from "../../util/function/function-util";
 
-interface ModalHeaderProps {
+export interface ModalHeaderProps {
     title: string;
-    onClose?: () => void;
+    onClose?: VoidFunction;
 }
 
 export const ModalHeader: React.FC<ModalHeaderProps> = ({ title, onClose }) => {

@@ -1,7 +1,11 @@
 import React from "react";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 
-const SortIndicator = ({ column }) => (
+export interface SortIndicatorProps {
+    column: { isSorted: boolean; isSortedDesc: boolean };
+}
+// TODO: is this still used ?
+export const SortIndicator: React.FC<SortIndicatorProps> = ({ column }) => (
     <span>
         {column.isSorted ? (
             column.isSortedDesc ? (
@@ -14,5 +18,3 @@ const SortIndicator = ({ column }) => (
         )}
     </span>
 );
-
-export default SortIndicator;

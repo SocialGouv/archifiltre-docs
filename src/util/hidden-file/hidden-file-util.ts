@@ -1,8 +1,8 @@
-import hidefile from "hidefile";
+import { isHidden as origIsHidden, isHiddenSync } from "hidefile";
 import path from "path";
 import { promisify } from "util";
-import fswin from "util/fs-win-loader";
 
+import { fswin } from "../fs-win-loader";
 import { isWindows } from "../os/os-util";
 
 /**
@@ -26,7 +26,7 @@ export const asyncIsFileHiddenOnWindows = async (
             return;
         }
         fswin.getAttributes(elementPath, (attr) => {
-            resolve(attr ? attr.IS_HIDDEN : false);
+            resolve(attr?.IS_HIDDEN ?? false);
         });
     });
 
@@ -39,9 +39,9 @@ export const asyncIsFileHiddenOnWindows = async (
 const isHidden = (elementPath: string): boolean =>
     isWindows()
         ? isFileHiddenOnWindows(elementPath)
-        : hidefile.isHiddenSync(elementPath);
+        : isHiddenSync(elementPath);
 
-const promiseIsHidden = promisify(hidefile.isHidden);
+const promiseIsHidden = promisify(origIsHidden);
 
 const asyncIsHidden = async (elementPath: string): Promise<boolean> =>
     isWindows()
@@ -78,6 +78,7 @@ export const shouldIgnoreElement = (elementPath: string): boolean =>
 export const asyncShouldIgnoreElement = async (
     elementPath: string
 ): Promise<boolean> => {
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     if (await isIgnored(elementPath)) {
         return true;
     }

@@ -5,11 +5,12 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Switch from "@material-ui/core/Switch";
 import Tooltip from "@material-ui/core/Tooltip";
-import { useUserSettings } from "hooks/use-user-settings";
-import { getInitialUserSettings } from "persistence/persistent-settings";
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { reloadApp } from "util/electron/electron-util";
+
+import { useUserSettings } from "../../../hooks/use-user-settings";
+import { getInitialUserSettings } from "../../../persistence/persistent-settings";
+import { reloadApp } from "../../../util/electron/electron-util";
 
 const useStyles = makeStyles((theme: Theme) => ({
     disabled: {
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-const PrivacySettings = () => {
+export const PrivacySettings: React.FC = () => {
     const { t } = useTranslation();
     const classes = useStyles();
 
@@ -104,5 +105,3 @@ const PrivacySettings = () => {
         </Box>
     );
 };
-
-export default PrivacySettings;

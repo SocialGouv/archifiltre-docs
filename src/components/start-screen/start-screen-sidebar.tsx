@@ -7,13 +7,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Tooltip from "@material-ui/core/Tooltip";
-import { EllipsisText } from "components/main-space/workspace/enrichment/tags/ellipsis-text";
 import path from "path";
-import {
-    clearSession,
-    getPreviousSessions,
-    removeOneSessionElement,
-} from "persistence/previous-sessions";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -27,7 +21,6 @@ import {
     FaTimesCircle,
     FaTrash,
 } from "react-icons/fa";
-import { openLink } from "util/electron/electron-util";
 
 import { ipcRenderer } from "../../common/ipc";
 import {
@@ -35,6 +28,13 @@ import {
     DOCUMENTATION_LINK,
     FEEDBACK_LINK,
 } from "../../constants";
+import {
+    clearSession,
+    getPreviousSessions,
+    removeOneSessionElement,
+} from "../../persistence/previous-sessions";
+import { openLink } from "../../util/electron/electron-util";
+import { EllipsisText } from "../main-space/workspace/enrichment/tags/ellipsis-text";
 
 const onFeedbackClick = () => {
     openLink(FEEDBACK_LINK);
@@ -57,7 +57,7 @@ interface StartScreenSidebarProps {
 }
 
 const useStyles = makeStyles({
-    cross: (props) => ({
+    cross: () => ({
         "&:hover": {
             backgroundColor: "transparent",
             color: "#777",
@@ -67,7 +67,7 @@ const useStyles = makeStyles({
     }),
 });
 
-const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
+export const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
     hasPreviousSession,
     reloadPreviousSession,
     openModal,
@@ -78,16 +78,16 @@ const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
     const [previousSessions, setPreviousSessions] = useState<string[]>([]);
     const [hoveredPreviousSession, setHoveredSessions] = useState<number>(-1);
 
-    const toggleDisplayClearElement = (index) => {
+    const toggleDisplayClearElement = (index: number) => {
         setHoveredSessions(index);
     };
 
     const onNewDirectoryClick = useCallback(async () => {
-        const path = await ipcRenderer.invoke("dialog.showOpenDialog", {
+        const chosenPath = await ipcRenderer.invoke("dialog.showOpenDialog", {
             properties: ["openDirectory"],
         });
-        if (path.filePaths.length > 0) {
-            loadPath(path.filePaths[0]);
+        if (chosenPath.filePaths.length > 0) {
+            loadPath(chosenPath.filePaths[0]);
         }
     }, [loadPath]);
 
@@ -140,7 +140,7 @@ const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
                     <ListItem
                         button
                         onClick={() => {
-                            clearSession();
+                            void clearSession();
                             setPreviousSessions([]);
                         }}
                         disabled={isLoading}
@@ -201,7 +201,7 @@ const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
                                             disableFocusRipple
                                             onClick={(event) => {
                                                 event.stopPropagation();
-                                                removeOneSessionElement(
+                                                void removeOneSessionElement(
                                                     previousDirectory
                                                 );
                                                 deleteClickedElement(
@@ -252,5 +252,3 @@ const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
         </Box>
     );
 };
-
-export default StartScreenSidebar;

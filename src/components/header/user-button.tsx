@@ -8,7 +8,7 @@ import { FaCog, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { useModal } from "../../hooks/use-modal";
 import { useStyles } from "../../hooks/use-styles";
 import type { VoidFunction } from "../../util/function/function-util";
-import SettingsModal from "../modals/settings-modal/settings-modal";
+import { SettingsModal } from "../modals/settings-modal/settings-modal";
 
 interface UserButtonProps {
     resetWorkspace: VoidFunction;

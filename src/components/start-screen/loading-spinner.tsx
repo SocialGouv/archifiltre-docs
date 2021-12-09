@@ -4,12 +4,12 @@ import IconButton from "@material-ui/core/IconButton";
 import React from "react";
 import { FaCheckCircle } from "react-icons/fa";
 
-interface LoadingSpinnerProps {
+export interface LoadingSpinnerProps {
     loaderText: string;
     isLoading?: boolean;
 }
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     loaderText,
     isLoading,
 }) => (
@@ -29,5 +29,3 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
         <div>{loaderText}</div>
     </Box>
 );
-
-export default LoadingSpinner;

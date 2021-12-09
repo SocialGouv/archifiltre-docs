@@ -30,6 +30,7 @@ export const getAllTagsForFile = (tagMap: TagMap, ffId: string): Tag[] =>
  * @param tagIds - the tags ids
  */
 export const getTagsByIds = (tagMap: TagMap, tagIds: string[]): Tag[] =>
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     tagIds.map((tagId) => tagMap[tagId] || null).filter((tag) => tag !== null);
 
 /**
@@ -44,32 +45,34 @@ export const getTagByName = (tagMap: TagMap, name: string): Tag | undefined =>
  * Order for sorting functions
  */
 export enum Order {
-    ASC,
-    DESC,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    ASC = 0,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    DESC = 1,
 }
 
 export interface SortTagOptions {
     order?: Order;
-    sortParam?: string;
+    sortParam?: keyof Tag;
 }
 
 const defaultSortTagOptions: SortTagOptions = {};
 
 /**
  * Sort tags
- * @param tagList - The tag list to sort
- * @param options - The sort options
- * @param {Order} [options.order=Order.ASC]  - The sort order. Defaults to Ascending.
- * @param {string} [options.sortParam="name"] - The param to sort on. Defaults to name.
+ * @param tagList The tag list to sort
+ * @param options The sort options
+ * @param {Order} [options.order=Order.ASC] The sort order. Defaults to Ascending.
+ * @param {string} [options.sortParam="name"] The param to sort on. Defaults to name.
  */
 export const sortTags = (
     tagList: Tag[],
     options = defaultSortTagOptions
 ): Tag[] => {
-    const order = options.order || Order.ASC;
-    const sortParam = options.sortParam || "name";
+    const order = options.order ?? Order.ASC;
+    const sortParam = options.sortParam ?? "name";
 
-    const sortFunction = (tag1, tag2) => {
+    const sortFunction = (tag1: Tag, tag2: Tag) => {
         if (tag1[sortParam] < tag2[sortParam]) {
             return order === Order.ASC ? -1 : 1;
         }
@@ -94,10 +97,13 @@ export const getTagSize = (
     filesAndFolders: FilesAndFoldersMap,
     filesAndFoldersMetadata: FilesAndFoldersMetadataMap
 ): number => {
-    const parentIsTagged = (taggedFfidsList, potentialChildId) =>
+    const parentIsTagged = (
+        taggedFfidsList: string[],
+        potentialChildId: string
+    ) =>
         taggedFfidsList.some(
             (potentialParentId) =>
-                potentialChildId.indexOf(potentialParentId) === 0 &&
+                potentialChildId.startsWith(potentialParentId) &&
                 potentialChildId[potentialParentId.length] === "/"
         );
 
@@ -112,22 +118,14 @@ export const getTagSize = (
     );
 };
 
-/**
- * Transforms a tagMap to a tag Array
- * @param tagMap
- */
 export const tagMapToArray = (tagMap: TagMap): Tag[] => Object.values(tagMap);
 
-/**
- *
- * @param tag
- * @param ffId
- */
-export const tagHasFfId = (tag: Tag, ffId: string) => tag.ffIds.includes(ffId);
+export const tagHasFfId = (tag: Tag, ffId: string): boolean =>
+    tag.ffIds.includes(ffId);
 
 /**
  * Gets the tags map from the redux store.
- * @param store - The redux store
+ * @param store The redux store
  */
 export const getTagsFromStore = (store: StoreState): TagMap =>
     getCurrentState(store.tags).tags;

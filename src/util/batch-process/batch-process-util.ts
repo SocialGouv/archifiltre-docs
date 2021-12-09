@@ -9,7 +9,7 @@ import type { ProcessControllerAsyncWorker } from "../async-worker/async-worker-
 import { WorkerEventType } from "../async-worker/async-worker-util";
 import { ArchifiltreErrorType } from "../error/error-util";
 import type { ProcessControllerAsyncWorkerFactory } from "../worker-manager/worker-manager";
-import workerManager from "../worker-manager/worker-manager";
+import { workerManager } from "../worker-manager/worker-manager";
 import type {
     ErrorMessage,
     ReadyMessage,

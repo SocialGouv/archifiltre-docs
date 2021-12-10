@@ -26,7 +26,7 @@ enum CursorState {
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 
-interface IcicleRectProps {
+export interface IcicleRectProps {
     opacity: number;
     x: number;
     dx: number;

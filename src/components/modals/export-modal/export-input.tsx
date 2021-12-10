@@ -25,7 +25,7 @@ const HideableTooltip = styled(Tooltip)<{ isvisible: string }>`
         isvisible === "true" ? "visible" : "hidden"};
 `;
 
-interface ExportInputProps {
+export interface ExportInputProps {
     exportFilePath: string;
     isValid: boolean;
     setExportsPathsValue: (value: string) => void;

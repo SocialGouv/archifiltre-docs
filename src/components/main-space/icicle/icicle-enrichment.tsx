@@ -25,7 +25,7 @@ export const ENRICHMENT_COLORS: Record<EnrichmentTypes, RgbFunc> = {
     [EnrichmentTypes.COMMENT]: "rgb(3,161,214)",
 };
 
-interface IcicleEnrichmentProps {
+export interface IcicleEnrichmentProps {
     ffId: string;
     dims: Dims;
     hasTag: boolean;

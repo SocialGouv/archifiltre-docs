@@ -7,7 +7,7 @@ import type { IcicleMouseActionHandler } from "./icicle-types";
 import type { SvgRectangleProps } from "./svg-rectangle";
 import { SvgRectangle } from "./svg-rectangle";
 
-interface IcicleHightlightElementRectangleProps {
+export interface IcicleHightlightElementRectangleProps {
     dims: Dims;
     highlightedElementId: string;
     highlightedElementTime: number;

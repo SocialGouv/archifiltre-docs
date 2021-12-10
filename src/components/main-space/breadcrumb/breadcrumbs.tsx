@@ -50,7 +50,7 @@ interface MakeFillerArgs {
     isLast: boolean;
 }
 
-interface BreadcrumbProps {
+export interface BreadcrumbProps {
     id: string;
     name: string;
     alias?: string | null;

@@ -32,7 +32,7 @@ const a11yProps = (index: number) => ({
     id: `tab-${index}`,
 });
 
-interface TabsHeaderProps {
+export interface TabsHeaderProps {
     setTabIndex: (tabIndex: number) => void;
     tabIndex: number;
 }

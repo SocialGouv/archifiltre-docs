@@ -1,19 +1,20 @@
 import { chunk } from "lodash";
-import { getDepthFromPath } from "reducers/files-and-folders/files-and-folders-selectors";
-import type {
-    FilesAndFolders,
-    FilesAndFoldersMap,
-} from "reducers/files-and-folders/files-and-folders-types";
 import type { Observable } from "rxjs";
 import { interval } from "rxjs";
 import { map, take } from "rxjs/operators";
-import { makeObjectKeyComparator } from "util/sort-utils/sort-utils";
+
+import { getDepthFromPath } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import type {
+    FilesAndFolders,
+    FilesAndFoldersMap,
+} from "../../reducers/files-and-folders/files-and-folders-types";
+import { makeObjectKeyComparator } from "../sort-utils/sort-utils";
 
 const computeTreeSection = (filesAndFolders: FilesAndFolders[]): string[][] =>
-    filesAndFolders.map((filesAndFolders) => {
-        const { virtualPath, name } = filesAndFolders;
+    filesAndFolders.map((ff) => {
+        const { virtualPath, name } = ff;
         const depth = getDepthFromPath(virtualPath);
-        const shiftArray = depth <= 0 ? [] : new Array(depth).fill("");
+        const shiftArray = depth <= 0 ? [] : new Array<string>(depth).fill("");
         return [...shiftArray, name];
     });
 

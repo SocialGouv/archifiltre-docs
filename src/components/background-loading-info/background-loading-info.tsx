@@ -33,7 +33,7 @@ const ToggleArrow = styled(IconButton)<ToggleArrowProps>(({ collapsed }) => ({
     transform: collapsed === "true" ? "rotate(0.5turn)" : undefined,
 }));
 
-interface BackgroundLoadingInfoProps {
+export interface BackgroundLoadingInfoProps {
     loadingItems: LoadingInfo[];
     isLoading: boolean;
     dismissAll: () => void;

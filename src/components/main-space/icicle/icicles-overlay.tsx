@@ -5,7 +5,7 @@ import type { DimsMap } from "./icicle";
 import { IcicleRect } from "./icicle-rect";
 import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 
-interface IciclesOverlayProps {
+export interface IciclesOverlayProps {
     dimsMap: DimsMap;
     opacity: number;
     ids: string[];

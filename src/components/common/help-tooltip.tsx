@@ -7,7 +7,7 @@ const CenteredIcon = styled.span`
     vertical-align: middle;
 `;
 
-interface HelpTooltipProps {
+export interface HelpTooltipProps {
     tooltipText: string;
 }
 

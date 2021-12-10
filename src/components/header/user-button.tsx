@@ -10,7 +10,7 @@ import { useStyles } from "../../hooks/use-styles";
 import type { VoidFunction } from "../../util/function/function-util";
 import { SettingsModal } from "../modals/settings-modal/settings-modal";
 
-interface UserButtonProps {
+export interface UserButtonProps {
     resetWorkspace: VoidFunction;
 }
 

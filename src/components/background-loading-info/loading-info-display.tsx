@@ -24,7 +24,7 @@ const RoundedLinearProgress = styled(LinearProgress)`
     border-radius: 5px;
 `;
 
-interface LoadingInfoProps {
+export interface LoadingInfoProps {
     loadingInfo: LoadingInfo;
     color: string;
     label: string;

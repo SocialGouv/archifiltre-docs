@@ -18,7 +18,7 @@ import { TabsContext } from "../../header/tabs-context";
 import type { Column } from "./table-types";
 import { TableValue } from "./table-value";
 
-interface ActionRowProps {
+export interface ActionRowProps {
     columns: Column<ElementWithToDelete>[];
     row: ElementWithToDelete;
 }

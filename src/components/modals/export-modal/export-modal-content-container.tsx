@@ -9,7 +9,7 @@ import type { ExportType } from "./export-config";
 import { exportConfig } from "./export-config";
 import { ExportModalContent } from "./export-modal-content";
 
-interface ExportModalContentContainerProps {
+export interface ExportModalContentContainerProps {
     closeModal: () => void;
 }
 

@@ -53,7 +53,7 @@ const computeExportPathsValidityMap = async (
     );
 };
 
-interface ExportModalContentProps {
+export interface ExportModalContentProps {
     areHashesReady: boolean;
     originalPath: string;
     sessionName: string;

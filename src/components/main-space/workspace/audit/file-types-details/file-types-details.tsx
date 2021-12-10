@@ -14,7 +14,7 @@ import type {
 } from "../../../../common/horizontal-stacked-bar";
 import { HorizontalStackedBar } from "../../../../common/horizontal-stacked-bar";
 
-interface FileTypesDetailsProps {
+export interface FileTypesDetailsProps {
     elementsCountsByType: FileTypeMap<number>;
     elementsSizesByType: FileTypeMap<number>;
 }

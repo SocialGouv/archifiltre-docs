@@ -3,7 +3,7 @@ import { PureComponent } from "react";
 import { ipcRenderer } from "../../common/ipc";
 import * as UserData from "../../user-data";
 
-type WindowResizeState = UserData.UserData;
+export type WindowResizeState = UserData.UserData;
 
 export class WindowResize extends PureComponent<unknown, WindowResizeState> {
     constructor(props: unknown) {

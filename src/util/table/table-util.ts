@@ -1,5 +1,8 @@
+import fs from "fs/promises";
+
 import type {
     Column,
+    FunctionAccessor,
     TableAccessor,
 } from "../../components/common/table/table-types";
 import { arrayToCsv } from "../csv/csv-util";
@@ -65,11 +68,14 @@ export const stableSort = <T>(
     return stabilizedThis.map((element) => element[0]);
 };
 
-export const accessorToFunction = <T>(tableAccessor: TableAccessor<T>) =>
+export const accessorToFunction = <T>(
+    tableAccessor: TableAccessor<T>
+): FunctionAccessor<T> | ((row: T) => T[keyof T]) =>
     typeof tableAccessor === "function"
         ? tableAccessor
         : (row: T) => row[tableAccessor];
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const applyAccessorToTableValue = <T>(
     data: T,
     accessor: TableAccessor<T>,
@@ -86,9 +92,10 @@ const getTableRow = <
     columns: Column<T>[]
 ): string[] =>
     columns.map(({ accessor, textValueAccessor }) =>
-        applyAccessorToTableValue(
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
+        applyAccessorToTableValue<T>(
             data,
-            textValueAccessor || accessor
+            (textValueAccessor ?? accessor) as TableAccessor<T>
         ).toString()
     );
 
@@ -125,7 +132,7 @@ export const exportTableToCsvFile = async <
         notificationMessage,
         notificationTitle,
     }: ExportTableToCsvOptions
-) => {
+): Promise<void> => {
     const filePath = await promptUserForSave(defaultFilePath);
 
     if (!filePath) {
@@ -142,16 +149,16 @@ export const exportTableToCsvFile = async <
         notificationTitle,
         NotificationDuration.NORMAL,
         () => {
-            openExternalElement(filePath);
+            void openExternalElement(filePath);
         }
     );
 };
 
-export const maxPage = (pageSize: number, dataSize: number) =>
+export const maxPage = (pageSize: number, dataSize: number): number =>
     Math.max(0, Math.floor((dataSize - 1) / pageSize));
 
 export const limitPageIndex = (
     pageSize: number,
     dataSize: number,
     currentPage: number
-) => Math.min(currentPage, maxPage(pageSize, dataSize));
+): number => Math.min(currentPage, maxPage(pageSize, dataSize));

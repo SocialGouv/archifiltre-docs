@@ -11,9 +11,9 @@ const sendMailToArchifiltre = () => {
     openLink(CONTACT_LINK);
 };
 
-const ContactLink = styled.a<ThemedProps>`
+const ContactLink = styled.a`
     cursor: pointer;
-    color: ${({ theme }) => theme.palette.primary.main};
+    color: ${({ theme }: ThemedProps) => theme.palette.primary.main};
 `;
 
 export const ContactUs: React.FC = () => {

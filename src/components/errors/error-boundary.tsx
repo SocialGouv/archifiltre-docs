@@ -9,14 +9,14 @@ import type { ExportToJson } from "../../exporters/json/json-exporter";
 import { reportError } from "../../logging/reporter";
 import { ContactUs } from "./contact-us";
 
-interface ErrorBoundaryProps {
+export interface ErrorBoundaryProps {
     t: TFunction;
     originalPath: string;
     sessionName: string;
     exportToJson: ExportToJson;
 }
 
-interface ErrorBoundaryState {
+export interface ErrorBoundaryState {
     hasError: boolean;
 }
 

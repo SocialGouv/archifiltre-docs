@@ -24,7 +24,7 @@ const languagesMap = {
 const getLanguageLocale = (language: Language): Locale =>
     languagesMap[language];
 
-interface DateFieldProps {
+export interface DateFieldProps {
     date: number;
     onDateChange: (timestamp: number) => void;
 }

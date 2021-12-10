@@ -48,7 +48,7 @@ const onDocumentationClick = () => {
     openLink(DOCUMENTATION_LINK);
 };
 
-interface StartScreenSidebarProps {
+export interface StartScreenSidebarProps {
     hasPreviousSession: boolean;
     reloadPreviousSession: () => void;
     openModal: () => void;

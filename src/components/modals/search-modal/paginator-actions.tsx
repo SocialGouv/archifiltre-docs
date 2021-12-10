@@ -9,7 +9,7 @@ import {
     FaAngleRight,
 } from "react-icons/fa";
 
-interface TablePaginationActionsProps {
+export interface TablePaginationActionsProps {
     count: number;
     page: number;
     rowsPerPage: number;
@@ -29,9 +29,12 @@ const useStyles = makeStyles({
     },
 });
 
-export const PaginatorActions = (props: TablePaginationActionsProps) => {
-    const { count, page, rowsPerPage, onChangePage } = props;
-
+export const PaginatorActions: React.FC<TablePaginationActionsProps> = ({
+    count,
+    page,
+    rowsPerPage,
+    onChangePage,
+}) => {
     const { t } = useTranslation();
 
     const classes = useStyles();

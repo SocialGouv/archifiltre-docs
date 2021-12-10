@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 
-interface MinimapBracketProps {
+export interface MinimapBracketProps {
     zoomOffset: number;
     zoomRatio: number;
     viewportWidth: number;

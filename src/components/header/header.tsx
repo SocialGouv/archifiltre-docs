@@ -17,7 +17,7 @@ const HeaderLine = styled.div`
     width: 100%;
 `;
 
-interface HeaderActionsProps {
+export interface HeaderActionsProps {
     originalPath: string;
     sessionName: string;
     exportToJson: ExportToJson;

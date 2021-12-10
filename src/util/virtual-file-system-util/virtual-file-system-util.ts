@@ -34,7 +34,7 @@ const removeHiddenFilesRec = (
         return isIgnored(elementId) ? {} : { [elementId]: element };
     }
 
-    const nextFilesAndFolders = Object.assign(
+    const nextFilesAndFolders: FilesAndFoldersMap = Object.assign(
         {},
         ...element.children.map((childId) =>
             removeHiddenFilesRec(filesAndFolders, childId)
@@ -152,4 +152,4 @@ export const removeIgnoredElementsFromVirtualFileSystem = (
         removeUnusedCommentsFromVirtualFileSystem,
         recomputeVirtualFileSystemMetadata,
         removeIgnoredFilesAndFoldersFromVirtualFileSystem
-    )(virtualFileSystem);
+    )(virtualFileSystem) as VirtualFileSystem;

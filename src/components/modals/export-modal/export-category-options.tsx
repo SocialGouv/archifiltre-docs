@@ -7,7 +7,7 @@ import { exportConfig, ExportType } from "./export-config";
 import type { ExportTypesMap } from "./export-options";
 import { ExportTypeOption } from "./export-type-option";
 
-interface ExportCategoryOptionsProps {
+export interface ExportCategoryOptionsProps {
     exportCategory: string;
     enabledExports: ExportTypesMap<boolean>;
     exportPaths: ExportTypesMap<string>;

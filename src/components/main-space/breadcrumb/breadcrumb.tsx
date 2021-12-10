@@ -73,7 +73,7 @@ const emptyDims: Dims = {
  */
 const dimsGetter = (): Dims => emptyDims;
 
-interface BreadcrumbProps {
+export interface BreadcrumbProps {
     active: boolean;
     opacity: BreadcrumbOpacity;
     color: string;

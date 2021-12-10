@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import type { Tag } from "../../../../../reducers/tags/tags-types";
 
-interface TagCellInputProps {
+export interface TagCellInputProps {
     availableTags: Tag[];
     createTag: (value: string, filesAndFoldersId: string) => void;
     nodeId: string;

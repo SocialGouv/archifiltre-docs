@@ -2,7 +2,7 @@ import Box from "@material-ui/core/Box";
 import React from "react";
 import { FaHandPointer } from "react-icons/fa";
 
-interface NoElementSelectedPlaceholderProps {
+export interface NoElementSelectedPlaceholderProps {
     title: string;
 }
 

@@ -31,7 +31,7 @@ const HiddenSpan = styled.span`
 
 const rowIdAccessor = (row: ElementWithToDelete[]) => row[0].id;
 
-interface DuplicatesSearchProps {
+export interface DuplicatesSearchProps {
     duplicatesList: FilesAndFolders[][];
     elementsToDelete: string[];
     tagAsToDelete: (ids: string[]) => void;

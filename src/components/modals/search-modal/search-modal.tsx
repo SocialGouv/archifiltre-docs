@@ -4,31 +4,32 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Paper from "@material-ui/core/Paper";
-import type { Column } from "components/common/table/table-types";
-import { useDebouncedSearchFilter } from "hooks/use-debounced-search-filter";
-import { useSearchAndFilters } from "hooks/use-search-and-filters";
-import { useStyles } from "hooks/use-styles";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
+import styled from "styled-components";
+
+import { useDebouncedSearchFilter } from "../../../hooks/use-debounced-search-filter";
+import { useSearchAndFilters } from "../../../hooks/use-search-and-filters";
+import { useStyles } from "../../../hooks/use-styles";
+import { ROOT_FF_ID } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import type {
     ElementWithToDelete,
     FilesAndFolders,
-} from "reducers/files-and-folders/files-and-folders-types";
-import type { TagMap } from "reducers/tags/tags-types";
-import styled from "styled-components";
-import type { FilterMethod } from "typings/filter-types";
-
+} from "../../../reducers/files-and-folders/files-and-folders-types";
+import type { TagMap } from "../../../reducers/tags/tags-types";
+import type { FilterMethod } from "../../../typings/filter-types";
+import type { Column } from "../../common/table/table-types";
 import { ModalHeader } from "../modal-header";
 import { FilesAndFoldersTable } from "./files-and-folders-table";
 import { Filters } from "./filters/filters";
+import type { SearchBarProps } from "./search-bar";
 import { SearchBar } from "./search-bar";
 
 const StyledPaper = styled(Paper)`
     height: 90%;
 `;
 
-interface SearchModalProps {
+export interface SearchModalProps {
     exportToCsv: (data: FilesAndFolders[]) => void;
     isModalOpen: boolean;
     closeModal: () => void;
@@ -84,7 +85,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         searchFilters
     );
 
-    const performSearch = useCallback(
+    const performSearch: SearchBarProps["setSearchTerm"] = useCallback(
         (searchValue) => {
             setSearchTerm(searchValue);
             setPage(0);

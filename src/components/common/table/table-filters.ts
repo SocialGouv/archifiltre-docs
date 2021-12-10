@@ -1,11 +1,9 @@
-import type { SimpleObject } from "../../../util/object/object-util";
-
-type Filter<T> = (value: T) => boolean;
+export type Filter<T> = (value: T) => boolean;
 
 /**
  * Generate a filter function that check if the property propName contains propValue
  */
-export const makeFilterByProp = <T extends SimpleObject>(
+export const makeFilterByProp = <T>(
     propName: keyof T,
     propValue: string
 ): Filter<T> => {

@@ -7,7 +7,7 @@ import { theme } from "../../../theme/theme";
 import { ModalHeader } from "../../modals/modal-header";
 import { ExportModalContentContainer as ExportModalContent } from "./export-modal-content-container";
 
-interface ExportModalProps {
+export interface ExportModalProps {
     isModalOpen: boolean;
     closeModal: () => void;
 }

@@ -24,7 +24,7 @@ const useStyles = makeStyles(
     })
 );
 
-interface EnhancedTableHeadProps<T> {
+export interface EnhancedTableHeadProps<T> {
     onRequestSort: (
         event: React.MouseEvent<unknown>,
         columnIndex: number

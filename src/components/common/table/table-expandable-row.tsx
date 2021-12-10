@@ -2,7 +2,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import React, { useState } from "react";
 
-import Icon, { COLLAPSE_ICON, EXPAND_ICON } from "../icon";
+import { COLLAPSE_ICON, EXPAND_ICON, Icon } from "../icon";
 import type { RowRendererProps, TableAccessor } from "./table-types";
 import { TableValue } from "./table-value";
 

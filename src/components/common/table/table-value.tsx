@@ -5,7 +5,7 @@ import { applyAccessorToTableValue } from "../../../util/table/table-util";
 import type { CellStyle, TableAccessor } from "./table-types";
 import { WordBreak } from "./table-types";
 
-interface TableValueProps<T> {
+export interface TableValueProps<T> {
     row: T;
     accessor: TableAccessor<T>;
     index?: number;

@@ -13,7 +13,7 @@ export interface HorizontalStackedBarOption {
 
 export type RenderTooltipContent = (key: string) => React.ReactElement;
 
-interface HorizontalStackedBarProps {
+export interface HorizontalStackedBarProps {
     data: HorizontalStackedBarData;
     bars: HorizontalStackedBarOption[];
     renderTooltipContent?: RenderTooltipContent;

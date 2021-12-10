@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import type { IconProps } from "./icon";
-import Icon, { SEARCH_ICON } from "./icon";
+import { Icon, SEARCH_ICON } from "./icon";
 
 const Wrapper = styled.div`
     position: relative;

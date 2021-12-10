@@ -22,7 +22,7 @@ declare global {
     const AUTORELOAD: string;
 }
 
-interface StartScreenProps {
+export interface StartScreenProps {
     loadFromPath: (path: string) => void;
     hasPreviousSession: boolean;
     reloadPreviousSession: () => void;

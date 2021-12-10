@@ -7,7 +7,7 @@ import { ErrorScreen } from "../errors/error-screen";
 import { StartScreenContainer as StartScreen } from "../start-screen/start-screen-container";
 import { Workspace } from "./workspace/workspace";
 
-interface MainSpaceRouterProps {
+export interface MainSpaceRouterProps {
     step: LoadingStep;
 }
 

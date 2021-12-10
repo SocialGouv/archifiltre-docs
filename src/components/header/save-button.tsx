@@ -8,7 +8,7 @@ import type { ExportToJson } from "../../exporters/json/json-exporter";
 import { useStyles } from "../../hooks/use-styles";
 import { version } from "../../version";
 
-interface SaveButtonProps {
+export interface SaveButtonProps {
     originalPath: string;
     sessionName: string;
     exportToJson: ExportToJson;

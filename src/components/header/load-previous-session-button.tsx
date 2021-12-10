@@ -6,7 +6,7 @@ import { FaSyncAlt } from "react-icons/fa";
 
 import { useStyles } from "../../hooks/use-styles";
 
-interface LoadPreviousSessionButtonProps {
+export interface LoadPreviousSessionButtonProps {
     reloadPreviousSession: () => void;
 }
 

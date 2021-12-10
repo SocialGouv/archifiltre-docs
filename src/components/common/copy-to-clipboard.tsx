@@ -10,7 +10,7 @@ import {
 
 const COPIED_ICON_DISPLAY_DURATION = 3000;
 
-interface CopyToClipboardProps {
+export interface CopyToClipboardProps {
     stringToCopy: string;
 }
 export const CopyToClipboard: React.FC<CopyToClipboardProps> = ({

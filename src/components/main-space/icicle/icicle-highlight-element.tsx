@@ -4,7 +4,7 @@ import type { DimsMap } from "./icicle";
 import { IcicleHightlightElementRectangle } from "./icicle-highlight-element-rectangle";
 import type { IcicleMouseActionHandler } from "./icicle-types";
 
-interface IcicleHightlightElementProps {
+export interface IcicleHightlightElementProps {
     dimsMap: DimsMap;
     highlightedElementId: string;
     highlightedElementTime: number;

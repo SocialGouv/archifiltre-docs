@@ -13,7 +13,7 @@ const StyledPaper = styled(Paper)`
     min-height: 50%;
 `;
 
-interface SettingsModalProps {
+export interface SettingsModalProps {
     isModalOpen: boolean;
     closeModal: () => void;
 }

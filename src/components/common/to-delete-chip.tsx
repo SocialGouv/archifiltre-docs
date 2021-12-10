@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-interface ToDeleteChipProps {
+export interface ToDeleteChipProps {
     checked: boolean;
     onClick: () => void;
 }

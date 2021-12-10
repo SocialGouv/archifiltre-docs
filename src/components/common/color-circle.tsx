@@ -1,7 +1,7 @@
 import React from "react";
 import { FaCircle } from "react-icons/fa";
 
-interface ColorCircleProps {
+export interface ColorCircleProps {
     color: string;
 }
 

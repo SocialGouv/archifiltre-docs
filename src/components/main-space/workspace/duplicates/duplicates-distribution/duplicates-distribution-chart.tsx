@@ -18,7 +18,7 @@ const ColoredText = styled.span<{ color: string }>`
     color: ${({ color }) => color};
 `;
 
-interface DuplicatesDistributionChartProps {
+export interface DuplicatesDistributionChartProps {
     fileTypesCount: FileTypeMap<number>;
     fileSizesCount: Record<FileType, number>;
 }

@@ -5,7 +5,7 @@ import noop from "lodash/noop";
 import React from "react";
 import { FaTimes } from "react-icons/fa";
 
-interface LoadingSpinnerOrCloseCrossProps {
+export interface LoadingSpinnerOrCloseCrossProps {
     isLoading: boolean;
     onClose: () => void;
 }

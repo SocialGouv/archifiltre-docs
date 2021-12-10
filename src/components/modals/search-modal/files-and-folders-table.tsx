@@ -6,7 +6,7 @@ import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { ElementWithToDelete } from "reducers/files-and-folders/files-and-folders-types";
 
-interface FilesAndFoldersTableProps {
+export interface FilesAndFoldersTableProps {
     columns: Column<ElementWithToDelete>[];
     filesAndFolders: ElementWithToDelete[];
     closeModal: () => void;

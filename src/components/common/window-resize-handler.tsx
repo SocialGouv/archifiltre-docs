@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { ipcRenderer } from "../../common/ipc";
 import { WindowResize } from "./window-resize";
 
-interface WindowResizeErrorHandlerState {
+export interface WindowResizeErrorHandlerState {
     hasError: boolean;
 }
 

@@ -4,7 +4,7 @@ import React, { forwardRef } from "react";
 
 import { PaginatorActions } from "./paginator-actions";
 
-interface PaginatorProps {
+export interface PaginatorProps {
     pageCount: TablePaginationProps["count"];
     rowsPerPage: TablePaginationProps["rowsPerPage"];
     page: TablePaginationProps["page"];

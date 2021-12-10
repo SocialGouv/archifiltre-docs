@@ -12,7 +12,7 @@ import type { DimsMap } from "./icicle";
 import { IcicleEnrichment, OPACITY } from "./icicle-enrichment";
 import type { IcicleMouseHandler } from "./icicle-main";
 
-interface IcicleEnrichmentsProps {
+export interface IcicleEnrichmentsProps {
     aliases: AliasMap;
     comments: CommentsMap;
     tags: TagMap;

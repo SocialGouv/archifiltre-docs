@@ -31,8 +31,9 @@ const makeRenderTooltipContent =
         t: TFunction
     ): RenderTooltipContent =>
     // eslint-disable-next-line react/display-name
-    (key) =>
-        (
+    (key) => {
+        const typedKey = key as keyof typeof elementCountsByType;
+        return (
             <Box>
                 <Box>
                     <Typography variant="body1">
@@ -41,17 +42,22 @@ const makeRenderTooltipContent =
                 </Box>
                 <Box>
                     <Typography variant="body1">
-                        {elementCountsByType[key]}{" "}
-                        {t(`common.file`, { count: elementCountsByType[key] })}
+                        {elementCountsByType[typedKey]}{" "}
+                        {t(`common.file`, {
+                            count: elementCountsByType[typedKey],
+                        })}
                     </Typography>
                 </Box>
                 <Box>
                     <Typography variant="body1">
-                        {octet2HumanReadableFormat(elementSizesByType[key])}
+                        {octet2HumanReadableFormat(
+                            elementSizesByType[typedKey]
+                        )}
                     </Typography>
                 </Box>
             </Box>
         );
+    };
 
 const bars = [
     makeBarConfig(FileType.PUBLICATION),

@@ -182,6 +182,7 @@ const handleTracking =
         );
 
         const treeVolume =
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             filesAndFoldersMetadataMap[ROOT_FF_ID].childrenTotalSize ?? 0;
 
         const fileCount = paths.length;
@@ -233,14 +234,14 @@ const handleErrorNotificationDisplay =
         const errors = getErroredFilesAndFolders(getState());
 
         if (errors.length > 0) {
-            dispatch(displayErrorNotification());
+            void dispatch(displayErrorNotification());
         }
     };
 
 const handleHashComputing =
     (virtualFileSystem: VirtualFileSystem): ArchifiltreThunkAction =>
     (dispatch) => {
-        dispatch(
+        void dispatch(
             firstHashesComputingThunk(virtualFileSystem.originalPath, {
                 ignoreFileHashes: !virtualFileSystem.isOnFileSystem,
             })
@@ -257,10 +258,12 @@ const handleNonJsonFileThunk =
             const paths = getFiles(
                 filesAndFoldersMapToArray(virtualFileSystem.filesAndFolders)
             ).map((file) => file.id);
-            dispatch(handleTracking(paths, virtualFileSystem.filesAndFolders));
+            void dispatch(
+                handleTracking(paths, virtualFileSystem.filesAndFolders)
+            );
             handleZipNotificationDisplay(paths);
-            dispatch(handleErrorNotificationDisplay());
-            dispatch(handleHashComputing(virtualFileSystem));
+            void dispatch(handleErrorNotificationDisplay());
+            void dispatch(handleHashComputing(virtualFileSystem));
         }
     };
 
@@ -286,10 +289,12 @@ const handleVirtualFileSystemThunk =
     ): ArchifiltreThunkAction =>
     (dispatch) => {
         handleJsonNotificationDisplay(fileOrFolderPath, virtualFileSystem);
-        dispatch(initStore(virtualFileSystem));
+        void dispatch(initStore(virtualFileSystem));
         dispatch(setLoadingStep(LoadingStep.FINISHED));
         dispatch(commitAction());
-        dispatch(handleNonJsonFileThunk(fileOrFolderPath, virtualFileSystem));
+        void dispatch(
+            handleNonJsonFileThunk(fileOrFolderPath, virtualFileSystem)
+        );
     };
 
 const makeLoadFilesAndFoldersErrorHandler = (dispatch: ArchifiltreDispatch) =>
@@ -349,7 +354,7 @@ const loadFilesAndFoldersAfterInitThunk =
             .pipe(filterResults<{ result: VirtualFileSystem }>())
             .toPromise()
             .then(({ result: { result } }) => {
-                dispatch(
+                void dispatch(
                     handleVirtualFileSystemThunk(fileOrFolderPath, result)
                 );
                 return result;

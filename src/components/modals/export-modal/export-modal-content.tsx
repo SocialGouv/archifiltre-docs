@@ -5,6 +5,7 @@ import { find, negate } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Object } from "../../../common/utils";
 import { useStyles } from "../../../hooks/use-styles";
 import { isValidFilePath } from "../../../util/file-system/file-sys-util";
 import { identity } from "../../../util/function/function-util";
@@ -14,7 +15,7 @@ import {
     ExportType,
     mapValuesFromExportType,
 } from "./export-config";
-import type { ExportTypesMap } from "./export-options";
+import type { ExportOptionsProps, ExportTypesMap } from "./export-options";
 import { ExportOptions } from "./export-options";
 
 const getInitialExportPaths = (originalPath: string, sessionName: string) =>
@@ -49,7 +50,7 @@ const computeExportPathsValidityMap = async (
     );
 
     return mapValuesFromExportType(
-        (key) => find(resultsArray, { key })?.isValid || false
+        (key) => find(resultsArray, { key })?.isValid ?? false
     );
 };
 
@@ -90,22 +91,28 @@ export const ExportModalContent: React.FC<ExportModalContentProps> = ({
             .forEach((exportId: ExportType) => {
                 startExport(exportId, exportPaths[exportId]);
             });
-    }, [startExport, activeExports, exportPaths]);
+    }, [startExport, activeExports, exportPaths, closeModal]);
 
     useEffect(() => {
-        computeExportPathsValidityMap(exportPaths).then(setValidPaths);
+        void computeExportPathsValidityMap(exportPaths).then(setValidPaths);
     }, [exportPaths, setValidPaths]);
 
-    const setActiveExportValue = (exportType: ExportType, value: boolean) => {
-        setActiveExports((activeExports) => ({
-            ...activeExports,
+    const setActiveExportValue: ExportOptionsProps["setActiveExportValue"] = (
+        exportType,
+        value
+    ) => {
+        setActiveExports((activeExportsToSet) => ({
+            ...activeExportsToSet,
             [exportType]: value,
         }));
     };
 
-    const setExportsPathsValue = (exportType: ExportType, value: string) => {
-        setExportsPaths((exportPaths) => ({
-            ...exportPaths,
+    const setExportsPathsValue: ExportOptionsProps["setExportsPathsValue"] = (
+        exportType,
+        value
+    ) => {
+        setExportsPaths((exportPathsToSet) => ({
+            ...exportPathsToSet,
             [exportType]: value,
         }));
     };

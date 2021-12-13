@@ -6,6 +6,7 @@ import {
     loadFileSystemFromFilesAndFoldersLoader,
     makeFileLoadingHooksCreator,
 } from "../../files-and-folders-loader/file-system-loading-process-utils";
+import type { VirtualFileSystem } from "../../files-and-folders-loader/files-and-folders-loader-types";
 import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { AsyncWorker } from "../async-worker/async-worker-util";
 import { WorkerEventType } from "../async-worker/async-worker-util";
@@ -42,7 +43,7 @@ const createReporters = (asyncWorker: AsyncWorker): Reporters => ({
     },
 });
 
-const reportResultStream = (result: unknown) => {
+const reportResultStream = (result: VirtualFileSystem) => {
     // @ts-expect-error Create a stream is touchy (?)
     const stream = fs.createWriteStream(null, {
         fd: RESULT_STREAM_FILE_DESCRIPTOR,

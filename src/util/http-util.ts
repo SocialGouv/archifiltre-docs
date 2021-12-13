@@ -7,12 +7,12 @@ interface RequestInput {
     body?: BodyInit | Document;
 }
 
-export const request = async ({
+export const request = async <T>({
     method = "GET",
     url,
     headers = {},
     body = "",
-}: RequestInput): Promise<unknown> => {
+}: RequestInput): Promise<T> => {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.open(method, url);
@@ -21,7 +21,7 @@ export const request = async ({
         });
         xhr.onload = () => {
             if (xhr.status >= 200 && xhr.status < 300) {
-                resolve(xhr.response);
+                resolve(xhr.response as T);
             } else {
                 reject(xhr.statusText);
             }

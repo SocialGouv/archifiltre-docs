@@ -23,11 +23,11 @@ const BetaText = styled.span`
 
 export const MoveFilesButton: React.FC = () => {
     const { t } = useTranslation();
-    const { isFileMoveActive, setFileMoveActive } = useFileMoveActiveState();
+    const { isFileMoveActive, setIsFileMoveActive } = useFileMoveActiveState();
     const toggleMoveElements = useCallback(() => {
         handleTracking(isFileMoveActive);
-        setFileMoveActive(!isFileMoveActive);
-    }, [setFileMoveActive, isFileMoveActive]);
+        setIsFileMoveActive(!isFileMoveActive);
+    }, [setIsFileMoveActive, isFileMoveActive]);
 
     return (
         <Button

@@ -1,6 +1,7 @@
 import _, { noop } from "lodash";
 import { compose } from "lodash/fp";
 import path from "path";
+import type { Observable, OperatorFunction } from "rxjs";
 import { tap } from "rxjs/operators";
 
 import { mapToNewVersionNumbers } from "../components/header/new-version-checker";
@@ -11,7 +12,10 @@ import { addTracker } from "../logging/tracker";
 import { ActionTitle, ActionType } from "../logging/tracker-types";
 import { translations } from "../translations/translations";
 import { filterResults } from "../util/batch-process/batch-process-util";
-import type { ErrorMessage } from "../util/batch-process/batch-process-util-types";
+import type {
+    ErrorMessage,
+    ResultMessage,
+} from "../util/batch-process/batch-process-util-types";
 import { copyToClipboard } from "../util/clipboard/clipboard";
 import { ArchifiltreStoreThunkErrorCode } from "../util/error/error-codes";
 import type { ArchifiltreError } from "../util/error/error-util";
@@ -297,7 +301,7 @@ const handleVirtualFileSystemThunk =
 const makeLoadFilesAndFoldersErrorHandler = (dispatch: ArchifiltreDispatch) =>
     tap<ErrorMessage>(({ error }) => {
         dispatch(registerErrorAction(error as ArchifiltreError));
-        dispatch(registerErroredElements([error]));
+        dispatch(registerErroredElements([error as ArchifiltreError]));
     });
 
 const makeLoadFilesAndFoldersResultHandler = (dispatch: ArchifiltreDispatch) =>
@@ -341,13 +345,15 @@ const loadFilesAndFoldersAfterInitThunk =
             erroredPaths,
             filesAndFolders,
         });
-        const virtualFileSystem = operateOnDataProcessingStream<
-            HookParam,
-            HookParam
-        >(result$, {
-            error: makeLoadFilesAndFoldersErrorHandler(dispatch),
-            result: makeLoadFilesAndFoldersResultHandler(dispatch),
-        })
+        const virtualFileSystem = operateOnDataProcessingStream(
+            result$ as Observable<ErrorMessage | ResultMessage<HookParam>>,
+            {
+                error: makeLoadFilesAndFoldersErrorHandler(
+                    dispatch
+                ) as OperatorFunction<unknown, unknown>,
+                result: makeLoadFilesAndFoldersResultHandler(dispatch),
+            }
+        )
             .pipe(filterResults<{ result: VirtualFileSystem }>())
             .toPromise()
             .then(({ result: { result } }) => {

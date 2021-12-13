@@ -11,7 +11,7 @@ import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import type { TagMap } from "../../reducers/tags/tags-types";
 import { translations } from "../../translations/translations";
 import { exportToCsv } from "../../util/array-export/array-export";
-import type { WorkerMessageHandler } from "../../util/async-worker/async-worker-util";
+import type { AsyncWorker } from "../../util/async-worker/async-worker-util";
 import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
 import { arrayToCsv } from "../../util/csv/csv-util";
 
@@ -27,18 +27,9 @@ export interface CsvExporterData {
 
 /**
  * Handles the initialize message for the CSV exporter fork
- * @param asyncWorker - The async worker instance
- * @param aliases
- * @param comments
- * @param elementsToDelete
- * @param filesAndFolders
- * @param filesAndFoldersMetadata
- * @param hashes
- * @param language
- * @param tags
  */
-export const onInitialize: WorkerMessageHandler<CsvExporterData> = async (
-    asyncWorker,
+export const onInitialize = async (
+    asyncWorker: AsyncWorker,
     {
         aliases,
         comments,
@@ -47,8 +38,8 @@ export const onInitialize: WorkerMessageHandler<CsvExporterData> = async (
         filesAndFoldersMetadata,
         hashes,
         tags,
-    }
-) => {
+    }: CsvExporterData
+): Promise<void> => {
     const array = await exportToCsv({
         aliases,
         comments,

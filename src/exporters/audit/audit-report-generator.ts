@@ -1,6 +1,7 @@
 import path from "path";
 
 import { createChartReplacer, exportToDocX } from "../../util/docx/docx-util";
+import type { SimpleObject } from "../../util/object/object-util";
 
 interface AuditReportFile {
     name: string;
@@ -91,13 +92,12 @@ const CHART_TEMPLATE_PATH = path.resolve(
 
 /**
  * Generates the docx Blob
- * @param auditReportData
  */
 export const generateAuditReportDocx = (
     auditReportData: AuditReportData
 ): Buffer =>
     exportToDocX(
         TEMPLATE_PATH,
-        auditReportData,
+        auditReportData as unknown as SimpleObject,
         createChartReplacer("chart1", CHART_TEMPLATE_PATH)
     );

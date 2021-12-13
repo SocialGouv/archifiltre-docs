@@ -4,7 +4,7 @@
 module.exports = {
     coverageDirectory: "coverage",
     globals: {
-        ARCHIFILTRE_VERSION: "",
+        ARCHIFILTRE_VERSION: JSON.stringify(require("./package.json").version),
         FORCE_TRACKING: false,
         MODE: "test",
         SENTRY_DSN: "https://sentry-mock-url.io",

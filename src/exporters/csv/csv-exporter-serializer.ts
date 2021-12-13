@@ -62,12 +62,14 @@ export const stringifyCsvExporterOptionsToStream = (
         WithLanguage<GenerateCsvExportOptions>,
         OmitProtobuf<CsvExporterSerializerMessage>
     >(stream, options, {
+        /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument */
         dataExtractor: makeDataExtractor(
             extractKey,
-            extractFilesAndFolders,
-            extractFilesAndFoldersMetadata,
-            extractHashes
-        ),
+            extractFilesAndFolders as any,
+            extractFilesAndFoldersMetadata as any,
+            extractHashes as any
+        ) as any,
+        /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument */
         dataSerializer,
         keyExtractor: extractKeysFromFilesAndFolders,
     });

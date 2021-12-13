@@ -1,5 +1,4 @@
-import type { ArchifiltreError } from "util/error/error-util";
-
+import type { ArchifiltreError } from "../../util/error/error-util";
 import type { HashesActionTypes, HashesMap } from "./hashes-types";
 import {
     ADD_ERRORED_HASHES,

@@ -1,3 +1,4 @@
+import type { WorkerMessageHandler } from "../../util/async-worker/async-worker-util";
 import { setupChildWorkerListeners } from "../../util/async-worker/async-worker-util";
 import { createAsyncWorkerForChildProcess } from "../../util/async-worker/child-process";
 import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
@@ -10,5 +11,5 @@ const asyncWorker = createAsyncWorkerForChildProcess(async (stream) => ({
 }));
 
 setupChildWorkerListeners(asyncWorker, {
-    onInitialize: exportToExcel,
+    onInitialize: exportToExcel as WorkerMessageHandler,
 });

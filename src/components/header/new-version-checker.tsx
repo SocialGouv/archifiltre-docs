@@ -34,11 +34,11 @@ export const NewVersionChecker: React.FC = () => {
     const classes = useStyles();
 
     useEffect(() => {
-        request({
+        request<string>({
             method: "GET",
             url: `${ARCHIFILTRE_SITE_URL}/api-version.json`,
         })
-            .then((result: string) => {
+            .then((result) => {
                 const previousVersion = mapToNewVersionNumbers(
                     JSON.parse(result).lastVersion as string
                 );

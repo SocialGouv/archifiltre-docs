@@ -11,6 +11,7 @@ import {
     getFilesDuplicatesMap,
 } from "../../../../../util/duplicates/duplicates-util";
 import { percent } from "../../../../../util/numbers/numbers-util";
+import type { DuplicatesTableProps } from "./duplicates-table";
 import { DuplicatesTable } from "./duplicates-table";
 
 const removeZeroValues = <TKey extends number | string, TValue>(obj: {
@@ -30,7 +31,10 @@ export const DuplicatesTableContainer: React.FC = () => {
     );
 
     const fileTypesCount = useMemo(
-        () => removeZeroValues(countDuplicateFileTypes(duplicatesMap)),
+        () =>
+            removeZeroValues(
+                countDuplicateFileTypes(duplicatesMap)
+            ) as DuplicatesTableProps["fileTypesCount"],
         [duplicatesMap]
     );
 

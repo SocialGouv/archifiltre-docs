@@ -1,5 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
+import type { TablePaginationActionsProps } from "@material-ui/core/TablePagination/TablePaginationActions";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -8,16 +9,6 @@ import {
     FaAngleLeft,
     FaAngleRight,
 } from "react-icons/fa";
-
-export interface TablePaginationActionsProps {
-    count: number;
-    page: number;
-    rowsPerPage: number;
-    onChangePage: (
-        event: React.MouseEvent<HTMLButtonElement>,
-        newPage: number
-    ) => void;
-}
 
 const useStyles = makeStyles({
     div: {

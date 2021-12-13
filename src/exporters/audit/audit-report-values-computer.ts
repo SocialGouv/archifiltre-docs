@@ -296,7 +296,7 @@ export const getDuplicatesWithTheMostCopy: Merger<
         name: filesAndFolders[0].name,
         path: formatPathForUserSystem(filesAndFolders[0].id),
     })),
-    getMostDuplicatedFiles(5) as Merger<
+    getMostDuplicatedFiles(5) as unknown as Merger<
         FilesAndFoldersCollection,
         HashesMap,
         number

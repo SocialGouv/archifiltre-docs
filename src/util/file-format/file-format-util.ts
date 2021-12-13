@@ -13,7 +13,7 @@ export const identifyFileFormat = async (
 ): Promise<FileFormats> => {
     const fileStream = fs.createReadStream(filePath);
     await once(fileStream, "readable");
-    const fileFirstTwoBytes = fileStream.read(2);
+    const fileFirstTwoBytes: Uint8Array = fileStream.read(2);
 
     const ucs2FileStart = Buffer.from([0xff, 0xfe]);
     if (Buffer.compare(fileFirstTwoBytes, ucs2FileStart) === 0) {

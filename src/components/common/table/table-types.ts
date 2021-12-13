@@ -26,7 +26,7 @@ export interface Column<T> {
     accessor: TableAccessor<T>;
     cellStyle?: CellStyle;
     sortAccessor?: TableAccessor<T>;
-    textValueAccessor?: FunctionAccessor<string>;
+    textValueAccessor?: FunctionAccessor<unknown>;
     sortable?: boolean;
 }
 

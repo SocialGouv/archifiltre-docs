@@ -33,5 +33,5 @@ export const openExternalElement = async (
     }
 };
 
-export const showInFolder: Promise<void> = async (elementPath: string) =>
+export const showInFolder = async (elementPath: string): Promise<void> =>
     ipcRenderer.invoke("shell.showItemInFolder", elementPath);

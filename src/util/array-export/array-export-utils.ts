@@ -26,7 +26,9 @@ interface CsvExportParams {
     hashes: HashesMap;
     tags: TagMap;
 }
-export const getCsvExportParamsFromStore = (state: StoreState) => ({
+export const getCsvExportParamsFromStore = (
+    state: StoreState
+): CsvExportParams => ({
     aliases: getAliasesFromStore(state),
     comments: getCommentsFromStore(state),
     elementsToDelete: getElementsToDeleteFromStore(state),

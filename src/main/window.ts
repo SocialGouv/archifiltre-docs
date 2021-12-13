@@ -11,7 +11,7 @@ declare module "../common/ipc/event" {
     }
 }
 
-export const loadWindow = (window: BrowserWindow) => {
+export const loadWindow = (window: BrowserWindow): void => {
     ipcMain.on("window.show", () => {
         window.show();
     });

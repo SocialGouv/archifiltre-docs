@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import type { FilesAndFolders } from "./files-and-folders-types";
 
 interface CreateFilesAndFoldersOptions {
@@ -11,12 +12,6 @@ interface CreateFilesAndFoldersOptions {
 
 /**
  * Utility function to create a prefilled filesAndFolders.
- * @param id
- * @param hash
- * @param file_last_modified
- * @param children
- * @param file_size
- * @param name
  */
 export const createFilesAndFolders = ({
     id,
@@ -25,11 +20,11 @@ export const createFilesAndFolders = ({
     file_size = 0,
     name = "base-name",
     virtualPath,
-}: CreateFilesAndFoldersOptions): FilesAndFolders => ({
+}: CreateFilesAndFoldersOptions): Partial<FilesAndFolders> => ({
     children,
     file_last_modified,
     file_size,
     id,
     name,
-    virtualPath: virtualPath || id,
+    virtualPath: virtualPath ?? id,
 });

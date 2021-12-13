@@ -3,12 +3,12 @@ import type {
     IcicleColorMode,
     IcicleSortMethod,
     IcicleSortMethodAction,
-} from "reducers/icicle-sort-method/icicle-sort-method-types";
+} from "./icicle-sort-method-types";
 import {
     SET_ELEMENT_WEIGHT_METHOD,
     SET_ICICLE_COLOR_MODE,
     SET_ICICLE_SORT_METHOD,
-} from "reducers/icicle-sort-method/icicle-sort-method-types";
+} from "./icicle-sort-method-types";
 
 /**
  * Sets the sorting method of the icicles

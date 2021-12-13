@@ -32,7 +32,7 @@ declare module "../common/ipc/event" {
     }
 }
 
-export const loadApp = () => {
+export const loadApp = (): void => {
     ipcMain.on("app.getPath", (event, pathId = "userData") => {
         event.returnValue = app.getPath(pathId);
     });

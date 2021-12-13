@@ -54,7 +54,7 @@ export const handleError = (
     errorMessages: ErrorMessageMap,
     errorMessageTitle: string
 ): void => {
-    const message = errorMessages[errorCode] || errorMessages.default; // eslint-disable-line @typescript-eslint/prefer-nullish-coalescing -- Handle empty string
+    const message = errorMessages[errorCode] || errorMessages.default;
 
     notifyError(message, errorMessageTitle);
 };

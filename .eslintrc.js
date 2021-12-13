@@ -10,8 +10,8 @@ const typescriptConfig = {
     },
     extends: "@socialgouv/eslint-config-typescript",
     globals: {
-        ARCHIFILTE_VERSION: true,
         ARCHIFILTRE_SITE_URL: true,
+        ARCHIFILTRE_VERSION: true,
         AUTOLOAD: true,
         FORCE_TRACKING: true,
         MODE: true,

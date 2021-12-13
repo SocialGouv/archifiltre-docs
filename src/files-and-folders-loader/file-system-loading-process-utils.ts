@@ -43,8 +43,6 @@ interface Overrides {
 
 /**
  * Compute the metadata from the filesAndFoldersMap
- * @param filesAndFoldersMap
- * @param onResult - Hook called after a new metadata is computed
  */
 export const createFilesAndFoldersMetadataDataStructure = (
     filesAndFoldersMap: FilesAndFoldersMap,
@@ -160,7 +158,6 @@ export const createFilesAndFoldersMetadataDataStructure = (
 
 /**
  * Handles hook generation when hooksCreator is undefined
- * @param hooksCreator
  */
 export const sanitizeHooks =
     (hooksCreator?: FileSystemLoadingHooksCreator) =>
@@ -176,9 +173,6 @@ export const sanitizeHooks =
 
 /**
  * Generic function to load the app based on a loader for a specific file type.
- * @param loadFromSource
- * @param hooksCreator
- * @param overrides
  */
 export const loadFileSystemFromFilesAndFoldersLoader = async (
     loadFromSource: FilesAndFoldersLoader,
@@ -232,14 +226,12 @@ export const loadFileSystemFromFilesAndFoldersLoader = async (
 
 /**
  * Check if the element needs to be loaded with the file system loader
- * @param loadPath
  */
 export const isFileSystemLoad = (loadPath: string): boolean =>
     fs.statSync(loadPath).isDirectory();
 
 /**
  * Check if the element needs to be loaded with the JsonLoader
- * @param loadPath
  */
 const isJsonLoad = (loadPath: string) => isJsonFile(loadPath);
 
@@ -250,7 +242,6 @@ interface GetLoadTypeOptions {
 
 /**
  * Return the load type required to load the element located at loadPath
- * @param loadPath
  */
 export const getLoader = (
     loadPath: string,
@@ -278,8 +269,6 @@ export const getLoader = (
 
 /**
  * Generate a function that creates the hooks for a specific laoding step.
- * @param reportResult
- * @param reportError
  */
 export const makeFileLoadingHooksCreator =
     ({ reportResult, reportError }: FileSystemReporters) =>

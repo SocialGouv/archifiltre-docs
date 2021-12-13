@@ -95,7 +95,7 @@ const getTableRow = <
         // eslint-disable-next-line @typescript-eslint/no-base-to-string
         applyAccessorToTableValue<T>(
             data,
-            (textValueAccessor ?? accessor) as TableAccessor<T>
+            textValueAccessor ?? accessor
         ).toString()
     );
 

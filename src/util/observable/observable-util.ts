@@ -1,15 +1,16 @@
 import type { Observable, OperatorFunction } from "rxjs";
 import { identity, merge, partition } from "rxjs";
 import { map } from "rxjs/operators";
+
 import type {
     ErrorMessage,
     ResultMessage,
-} from "util/batch-process/batch-process-util-types";
-import { MessageTypes } from "util/batch-process/batch-process-util-types";
+} from "../batch-process/batch-process-util-types";
+import { MessageTypes } from "../batch-process/batch-process-util-types";
 
 interface DataProcessingError {
     type: MessageTypes;
-    error: any;
+    error: unknown;
 }
 
 export interface DataProcessingResult<T> {
@@ -21,9 +22,9 @@ export type DataProcessingElement<T> = ErrorMessage | ResultMessage<T>;
 
 export type DataProcessingStream<T> = Observable<DataProcessingElement<T>>;
 
-interface DataProcessingStreamOperators<Input, Output> {
-    error?: OperatorFunction<any, any>;
-    result: OperatorFunction<Input, Output>;
+interface DataProcessingStreamOperators<TInput, TOutput> {
+    error?: OperatorFunction<unknown, unknown>;
+    result: OperatorFunction<TInput, TOutput>;
 }
 
 /**
@@ -40,19 +41,19 @@ interface DataProcessingStreamOperators<Input, Output> {
  *   )
  * });
  */
-export const operateOnDataProcessingStream = <Input, Output>(
-    status$: DataProcessingStream<Input>,
+export const operateOnDataProcessingStream = <TInput, TOutput>(
+    status$: DataProcessingStream<TInput>,
     {
         error: errorOperator = identity,
         result: resultOperator,
-    }: DataProcessingStreamOperators<Input, Output>
-): DataProcessingStream<Output> => {
+    }: DataProcessingStreamOperators<TInput, TOutput>
+): DataProcessingStream<TOutput> => {
     const [results$, errors$] = partition(
         status$,
-        (message): message is ResultMessage<Input> =>
+        (message): message is ResultMessage<TInput> =>
             message.type === MessageTypes.RESULT
     ) as [
-        Observable<DataProcessingResult<Input>>,
+        Observable<DataProcessingResult<TInput>>,
         Observable<DataProcessingError>
     ];
 

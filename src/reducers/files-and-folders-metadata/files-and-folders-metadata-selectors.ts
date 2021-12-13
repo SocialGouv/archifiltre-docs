@@ -1,5 +1,4 @@
-import { getCurrentState } from "reducers/enhancers/undoable/undoable-selectors";
-
+import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
 import type { StoreState } from "../store";
 import type {
     FilesAndFoldersMetadata,
@@ -53,22 +52,22 @@ export const createFilesAndFoldersMetadata = ({
     sortByDateIndex,
     sortAlphaNumericallyIndex,
 }: OptionalMetadata): FilesAndFoldersMetadata => ({
-    averageLastModified: averageLastModified || DEFAULT_AVERAGE_LAST_MODIFIED,
-    childrenTotalSize: childrenTotalSize || DEFAULT_CHILDREN_TOTAL_SIZE,
+    averageLastModified: averageLastModified ?? DEFAULT_AVERAGE_LAST_MODIFIED,
+    childrenTotalSize: childrenTotalSize ?? DEFAULT_CHILDREN_TOTAL_SIZE,
     initialMaxLastModified:
-        initialMaxLastModified || maxLastModified || DEFAULT_MAX_LAST_MODIFIED,
+        initialMaxLastModified ?? maxLastModified ?? DEFAULT_MAX_LAST_MODIFIED,
     initialMedianLastModified:
-        initialMedianLastModified ||
-        medianLastModified ||
+        initialMedianLastModified ??
+        medianLastModified ??
         DEFAULT_MEDIAN_LAST_MODIFIED,
     initialMinLastModified:
-        initialMinLastModified || minLastModified || DEFAULT_MIN_LAST_MODIFIED,
-    maxLastModified: maxLastModified || DEFAULT_MAX_LAST_MODIFIED,
-    medianLastModified: medianLastModified || DEFAULT_MEDIAN_LAST_MODIFIED,
-    minLastModified: minLastModified || DEFAULT_MIN_LAST_MODIFIED,
-    nbChildrenFiles: nbChildrenFiles || DEFAULT_NB_CHILDREN_FILE,
+        initialMinLastModified ?? minLastModified ?? DEFAULT_MIN_LAST_MODIFIED,
+    maxLastModified: maxLastModified ?? DEFAULT_MAX_LAST_MODIFIED,
+    medianLastModified: medianLastModified ?? DEFAULT_MEDIAN_LAST_MODIFIED,
+    minLastModified: minLastModified ?? DEFAULT_MIN_LAST_MODIFIED,
+    nbChildrenFiles: nbChildrenFiles ?? DEFAULT_NB_CHILDREN_FILE,
     sortAlphaNumericallyIndex:
-        sortAlphaNumericallyIndex || DEFAULT_SORT_ALPHA_NUMERICALLY_INDEX,
-    sortByDateIndex: sortByDateIndex || DEFAULT_SORT_BY_DATE_INDEX,
-    sortBySizeIndex: sortBySizeIndex || DEFAULT_SORT_BY_SIZE_INDEX,
+        sortAlphaNumericallyIndex ?? DEFAULT_SORT_ALPHA_NUMERICALLY_INDEX,
+    sortByDateIndex: sortByDateIndex ?? DEFAULT_SORT_BY_DATE_INDEX,
+    sortBySizeIndex: sortBySizeIndex ?? DEFAULT_SORT_BY_SIZE_INDEX,
 });

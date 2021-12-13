@@ -1,11 +1,13 @@
 import type { ThemeOptions } from "@material-ui/core/styles/createMuiTheme";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
-import { themeOptions as defaultThemeOptions } from "theme/default-theme";
+
+import { themeOptions as defaultThemeOptions } from "./default-theme";
 
 const themeOptions: ThemeOptions = {
     ...defaultThemeOptions,
     overrides: {
         ...defaultThemeOptions.overrides,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         MuiTypography: {
             ...defaultThemeOptions.overrides?.MuiTypography,
             body1: {

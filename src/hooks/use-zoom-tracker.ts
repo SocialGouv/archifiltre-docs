@@ -2,8 +2,9 @@ import { useState } from "react";
 
 import { addTracker } from "../logging/tracker";
 import { ActionTitle, ActionType } from "../logging/tracker-types";
+import type { VoidFunction } from "../util/function/function-util";
 
-export const useZoomTracker = () => {
+export const useZoomTracker = (): VoidFunction => {
     const [hasZoomBeenPerformed, setHasZoomBeenPerformed] = useState(false);
     return () => {
         if (!hasZoomBeenPerformed) {

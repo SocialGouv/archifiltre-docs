@@ -3,11 +3,12 @@ import fs from "fs";
 import path from "path";
 import PizZip from "pizzip";
 
+import type { SimpleObject } from "../object/object-util";
 import { angularParser } from "./angular-parser";
 
 export type FileReplacer = (zip: PizZip, values: DocXValuesMap) => PizZip;
 
-export type DocXValuesMap = Record<string, any>;
+export type DocXValuesMap = SimpleObject;
 
 /**
  * Loads a docx template, replaces the templated values and returns a Blob
@@ -32,7 +33,7 @@ export const exportToDocX = (
         .setOptions({ parser: angularParser })
         .setData(values)
         .render()
-        .getZip();
+        .getZip() as PizZip;
 
     const replacedZip = replacers.reduce(
         (zip, replacer) => replacer(zip, values),
@@ -51,7 +52,7 @@ export const exportToDocX = (
  */
 export const createChartReplacer =
     (chartName: string, chartTemplate: string): FileReplacer =>
-    (zip: PizZip, values) => {
+    (zip, values) => {
         const chartFile = fs.readFileSync(chartTemplate, "utf-8");
         // regex that matches {myKey} or { myKey } patterns and captures myKey
         const matchInferredValuesRegex = /{\s*(\w+?)\s*}/gm;
@@ -59,7 +60,7 @@ export const createChartReplacer =
         const replacedChartFile = chartFile.replace(
             matchInferredValuesRegex,
             (_, token) => {
-                return values[token] || "";
+                return (values[token] as string) || "";
             }
         );
         zip.file(`word/charts/${chartName}.xml`, replacedChartFile);

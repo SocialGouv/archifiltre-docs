@@ -95,7 +95,6 @@ import { getWorkspaceMetadataFromStore } from "./workspace-metadata/workspace-me
 
 /**
  * Notifies the user that there is a Zip in the loaded files
- * @param zipCount - The number of zip files detected
  */
 const displayZipNotification = (zipCount: number) => {
     notifyInfo(
@@ -168,8 +167,6 @@ const displayError = (errorMessage: string, errorTitle: string) => {
 
 /**
  * Handles tracking events sent to Matomo
- * @param paths of files that need to be tracked
- * @param filesAndFoldersMap
  */
 const handleTracking =
     (
@@ -367,7 +364,8 @@ const loadFilesAndFoldersAfterInitThunk =
     };
 
 export const reloadFilesAndFoldersThunk =
-    (): ArchifiltreThunkAction => (dispatch, getState) => {
+    (): ArchifiltreThunkAction<VirtualFileSystemLoader> =>
+    (dispatch, getState) => {
         const state = getState();
         const { originalPath } = getWorkspaceMetadataFromStore(state);
         const filesAndFolders = getFilesAndFoldersFromStore(state);
@@ -486,10 +484,6 @@ export const loadFilesAndFoldersFromPathThunk =
 
 /**
  * Initializes the store with the data extracted from the JSON object
- * @param filesAndFolders
- * @param filesAndFoldersMetadata
- * @param hashesMap
- * @param tags
  */
 const initStore =
     ({

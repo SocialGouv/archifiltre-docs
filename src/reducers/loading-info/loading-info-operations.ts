@@ -1,7 +1,8 @@
-import type { LoadingInfoTypes } from "reducers/loading-info/loading-info-types";
 import { v4 as uuid } from "uuid";
 
+import type { VoidFunction } from "../../util/function/function-util";
 import { startLoadingAction } from "./loading-info-actions";
+import type { LoadingInfoTypes } from "./loading-info-types";
 
 /**
  * Starts a loading
@@ -16,7 +17,7 @@ export const startLoading =
         label: string,
         loadedLabel: string
     ) =>
-    (dispatch) => {
+    (dispatch: VoidFunction): string => {
         const id = uuid();
         dispatch(startLoadingAction(id, type, goal, label, loadedLabel));
         return id;

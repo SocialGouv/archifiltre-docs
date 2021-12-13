@@ -4,22 +4,21 @@ import {
     BrowserWindow,
     crashReporter,
     dialog,
+    ipcMain,
     Menu,
     session,
 } from "electron";
+import path from "path";
+import { captureException, config as ravenConfig } from "raven";
 
 import { loadApp } from "./main/app";
 import { loadHash } from "./main/hash";
 import { loadWindow } from "./main/window";
 
-const Raven = require("raven");
-
-const path = require("path");
-
 // Initializes sentry logging for production build
 if (app.isPackaged) {
     // Initialize sentry error reporter
-    Raven.config(SENTRY_DSN).install();
+    ravenConfig(SENTRY_DSN).install();
 
     // Enable electron crash reporter to get logs in case of low level crash
     crashReporter.start({
@@ -50,7 +49,7 @@ if (!app.isPackaged) {
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win: BrowserWindow | null;
+let win: BrowserWindow | null = null;
 
 const getLanguage = () => app.getLocale().slice(0, 2);
 
@@ -66,11 +65,11 @@ const askBeforeLeaving = () => {
     win.on("close", (event) => {
         event.preventDefault();
         const language = getLanguage();
-        let title;
-        let message;
-        let detail;
-        let no;
-        let yes;
+        let title = "";
+        let message = "";
+        let detail = "";
+        let no = "";
+        let yes = "";
         if (language === "fr") {
             title = "Bye bye !";
             message = "Êtes-vous sûr•e de vouloir quitter ?";
@@ -96,7 +95,7 @@ const askBeforeLeaving = () => {
             type: "warning",
         };
         const promiseResponse = dialog.showMessageBox(win!, options);
-        promiseResponse.then((obj) => {
+        void promiseResponse.then((obj) => {
             if (obj.response === 1) {
                 win?.destroy();
             }
@@ -114,18 +113,15 @@ function createWindow() {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
             webSecurity: app.isPackaged,
-            ...({
-                enableRemoteModule: true,
-            } as any),
         },
         width: 1500,
     });
 
     // and load the index.html of the app.
     if (process.env.DEV_SERVER !== "true" && process.env.NODE_ENV !== "test") {
-        win.loadFile(path.join(__dirname, "./index.html"));
+        void win.loadFile(path.join(__dirname, "./index.html"));
     } else {
-        win.loadURL("http://localhost:8000");
+        void win.loadURL("http://localhost:8000");
     }
 
     preventNavigation();
@@ -142,7 +138,7 @@ function createWindow() {
     });
 }
 
-app.whenReady().then(() => {
+void app.whenReady().then(() => {
     let devToolsLoaded = Promise.resolve<Extension | null>(null);
     if (REACT_DEV_TOOLS_PATH !== "") {
         try {
@@ -152,13 +148,13 @@ app.whenReady().then(() => {
                     console.error("Cannot load react dev tools.", err);
                     return null;
                 });
-        } catch (err) {
+        } catch (err: unknown) {
             console.error("Error loading React dev tools", err);
         }
     }
 
     if (!app.isPackaged && process.env.NODE_ENV !== "test") {
-        devToolsLoaded.then(() => win?.webContents.openDevTools());
+        void devToolsLoaded.then(() => win?.webContents.openDevTools());
     }
 });
 
@@ -191,14 +187,12 @@ app.on("activate", () => {
 // code. You can also put them in separate files and require them here.
 
 app.on("renderer-process-crashed", () => {
-    Raven.captureException("Renderer process crashed");
+    captureException(new Error("Renderer process crashed"));
 });
 
 process.on("uncaughtException", () => {
-    Raven.captureException("Uncaught exception");
+    captureException(new Error("Uncaught exception"));
 });
-
-const { ipcMain } = require("electron");
 // Needed for secret devtools
 ipcMain.on("open-devtools", () => {
     win?.webContents.openDevTools();

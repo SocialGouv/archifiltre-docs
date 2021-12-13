@@ -17,18 +17,20 @@ export const loadingStateActionTypes = [
     RESET_LOADING_STATE,
 ];
 
+/* eslint-disable @typescript-eslint/naming-convention */
 export enum LoadingStep {
-    WAITING,
-    FINISHED,
-    ERROR,
+    WAITING = 0,
+    FINISHED = 1,
+    ERROR = 2,
 }
 
 export enum FileSystemLoadingStep {
-    INDEXING,
-    FILES_AND_FOLDERS,
-    METADATA,
-    COMPLETE,
+    INDEXING = 0,
+    FILES_AND_FOLDERS = 1,
+    METADATA = 2,
+    COMPLETE = 3,
 }
+/* eslint-enable @typescript-eslint/naming-convention */
 
 export interface LoadingState {
     step: LoadingStep;

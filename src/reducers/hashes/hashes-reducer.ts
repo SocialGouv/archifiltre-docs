@@ -12,9 +12,9 @@ export const initialState: HashesState = {
 
 export const hashesReducer = (
     state = initialState,
-    action: HashesActionTypes
+    action?: HashesActionTypes
 ): HashesState => {
-    switch (action.type) {
+    switch (action?.type) {
         case SET_FILES_AND_FOLDERS_HASHES:
             return {
                 ...state,
@@ -34,6 +34,8 @@ export const hashesReducer = (
                 ...state,
                 erroredHashes: action.hashErrors,
             };
+
+        default:
+            return state;
     }
-    return state;
 };

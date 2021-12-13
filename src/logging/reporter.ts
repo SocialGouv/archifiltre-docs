@@ -13,6 +13,7 @@ import { WinstonConsoleLogger } from "./winston-console-logger";
 
 const isProd = () => MODE === "production";
 
+/* eslint-disable @typescript-eslint/naming-convention */
 enum Level {
     ERROR = "error",
     WARN = "warn",
@@ -22,6 +23,7 @@ enum Level {
     DEBUG = "debug",
     SILLY = "silly",
 }
+/* eslint-enable @typescript-eslint/naming-convention */
 
 const logger = createLogger({
     transports: [
@@ -72,7 +74,7 @@ export const initReporter = (isActive: boolean): void => {
  * @param message
  * @param level
  */
-const handleLog = (message: any, level: Level) => {
+const handleLog = (message: unknown, level: Level) => {
     const logData = {
         message,
         time: dateFormat("isoDateTime"),
@@ -85,7 +87,7 @@ const handleLog = (message: any, level: Level) => {
  * Reports an error to the log server.
  * @param err
  */
-export const reportError = (err: unknown) => {
+export const reportError = (err: unknown): void => {
     handleLog(err, Level.ERROR);
 };
 
@@ -93,7 +95,7 @@ export const reportError = (err: unknown) => {
  * Reports a warning
  * @param message
  */
-export const reportWarning = (message: string) => {
+export const reportWarning = (message: string): void => {
     handleLog(message, Level.WARN);
 };
 
@@ -101,7 +103,7 @@ export const reportWarning = (message: string) => {
  * Reports an info
  * @param message
  */
-export const reportInfo = (message: string) => {
+export const reportInfo = (message: string): void => {
     handleLog(message, Level.INFO);
 };
 
@@ -112,7 +114,7 @@ export const reportInfo = (message: string) => {
 const anonymizeEvent = (event: SentryEvent) => {
     const values = event.exception?.values?.map((value) => {
         const frames = value.stacktrace?.frames?.map((frame) => {
-            const filename = path.basename(frame.filename || "");
+            const filename = path.basename(frame.filename ?? "");
             return merge(frame, { filename });
         });
         return merge(value, { stacktrace: { frames } });

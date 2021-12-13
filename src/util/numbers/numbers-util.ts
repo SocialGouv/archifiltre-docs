@@ -26,7 +26,7 @@ export const percent = (
 export const formatPercent = (
     value: number,
     { numbersOfDecimals = 0 }: NumberUtilOptions = {}
-) => {
+): number => {
     const exponent = 10 ** numbersOfDecimals;
     return Math.round(value * 100 * exponent) / exponent;
 };
@@ -35,7 +35,8 @@ export const formatPercent = (
  * Curried version of format percent, where first arg is the options.
  */
 export const curriedFormatPercent =
-    (options: NumberUtilOptions) => (value: number) =>
+    (options: NumberUtilOptions) =>
+    (value: number): number =>
         formatPercent(value, options);
 
 interface RatioOptions {
@@ -43,8 +44,8 @@ interface RatioOptions {
     max: number;
 }
 
-export const ratio = (value: number, { min = 0, max }: RatioOptions) =>
+export const ratio = (value: number, { min = 0, max }: RatioOptions): number =>
     (value - min) / (max - min);
 
-export const boundNumber = (low: number, high: number, value: number) =>
+export const boundNumber = (low: number, high: number, value: number): number =>
     Math.max(Math.min(value, high), low);

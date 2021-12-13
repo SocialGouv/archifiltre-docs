@@ -1,6 +1,6 @@
 export const liftPromise =
-    <Input, Output>(
-        fun: (input: Input) => Output
-    ): ((input: Promise<Input>) => Promise<Output>) =>
-    async (promise: Promise<Input>) =>
+    <TInput, TOutput>(
+        fun: (input: TInput) => TOutput
+    ): ((input: Promise<TInput>) => Promise<TOutput>) =>
+    async (promise: Promise<TInput>) =>
         promise.then(fun);

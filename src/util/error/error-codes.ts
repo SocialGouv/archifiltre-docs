@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 export enum ArchifiltreFileSystemErrorCode {
     ENOENT = "ENOENT",
     EBUSY = "EBUSY",

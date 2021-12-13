@@ -12,7 +12,7 @@ declare module "../common/ipc/event" {
     }
 }
 
-export const loadHash = () => {
+export const loadHash = (): void => {
     ipcMain.handle("hash.computeHash", async (_event, filePaths) => {
         return Promise.all(filePaths.map(computeHash));
     });

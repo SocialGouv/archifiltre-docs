@@ -1,7 +1,8 @@
 import { compose, join, map } from "lodash/fp";
 import path from "path";
-import { formatPathForUserSystem } from "util/file-system/file-sys-util";
-import { isWindows } from "util/os/os-util";
+
+import { formatPathForUserSystem } from "../file-system/file-sys-util";
+import { isWindows } from "../os/os-util";
 
 const formatUnixPath = compose(
     join(" "),
@@ -11,7 +12,7 @@ const formatUnixPath = compose(
 export const generateUnixDeletionScript = (
     rootPath: string,
     pathsToDelete: string[]
-) => `#!/bin/bash
+): string => `#!/bin/bash
 cd ${rootPath}
 ELEMENTS_TO_DELETE=(${formatUnixPath(pathsToDelete)})
 for file in "\${ELEMENTS_TO_DELETE[@]}"
@@ -22,13 +23,13 @@ done`;
 const formatWindowsPaths = compose(
     join(","),
     map((normalizedPath) => `"${normalizedPath}"`),
-    map((path) => formatPathForUserSystem(path))
+    map((pathToFormat: string) => formatPathForUserSystem(pathToFormat))
 );
 
 export const generateWindowDeletionScript = (
     rootPath: string,
     pathsToDelete: string[]
-) => `cd "${rootPath}"
+): string => `cd "${rootPath}"
 $folders = @(${formatWindowsPaths(pathsToDelete)})
 $folders | Remove-Item -Recurse -Force
 `;

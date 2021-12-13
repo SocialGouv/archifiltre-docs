@@ -18,14 +18,14 @@ export const useAnimatedValue = (
     initialValue: number,
     targetValue: number,
     duration: number,
-    animationDependency: any
-) => {
+    animationDependency: unknown
+): number => {
     const [value, setValue] = useState(initialValue);
 
     useEffect(() => {
         const startTime = Date.now();
         setValue(initialValue);
-        let animationFrame;
+        let animationFrame = Infinity;
 
         const handleNextFrame = () => {
             const progress = linearProgress(startTime, duration, Date.now());

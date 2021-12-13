@@ -1,14 +1,19 @@
-type InternalHook<HookArgs extends any[]> = (...args: HookArgs) => boolean;
-type Hook<HookArgs extends any[]> = (count?: number, ...args: HookArgs) => void;
-type ResultHook<HookArgs extends any[]> = (...args: HookArgs) => void;
+type InternalHook<THookArgs extends unknown[]> = (
+    ...args: THookArgs
+) => boolean;
+type Hook<THookArgs extends unknown[]> = (
+    count?: number,
+    ...args: THookArgs
+) => void;
+type ResultHook<THookArgs extends unknown[]> = (...args: THookArgs) => void;
 
-export interface HookCounterOptions<HookArgs extends any[]> {
+export interface HookCounterOptions<THookArgs extends unknown[]> {
     interval?: number;
-    internalHook: InternalHook<[]> | InternalHook<HookArgs>;
+    internalHook: InternalHook<[]> | InternalHook<THookArgs>;
 }
 
-interface HookCounterResult<HookArgs extends any[]> {
-    hook: ResultHook<HookArgs>;
+interface HookCounterResult<THookArgs extends unknown[]> {
+    hook: ResultHook<THookArgs>;
     getCount: () => number;
 }
 
@@ -20,17 +25,20 @@ interface HookCounterResult<HookArgs extends any[]> {
  * @returns {{hook: hook, getCount: (function(): number)}} - The hook to count calls and a function that return the
  * current number of times the hook has been called
  */
-export const hookCounter = <HookArgs extends []>(
-    throttledHook: Hook<HookArgs>,
-    { interval = 500, internalHook = () => true }: HookCounterOptions<any> = {
+export const hookCounter = <THookArgs extends unknown[]>(
+    throttledHook: Hook<THookArgs>,
+    {
+        interval = 500,
+        internalHook = () => true,
+    }: HookCounterOptions<unknown[]> = {
         internalHook: () => true,
         interval: 500,
     }
-): HookCounterResult<HookArgs> => {
+): HookCounterResult<THookArgs> => {
     let count = 0;
     let lastCall = Date.now();
 
-    const hook = (...args: HookArgs) => {
+    const hook = (...args: THookArgs) => {
         if (internalHook(...args)) {
             count++;
         }

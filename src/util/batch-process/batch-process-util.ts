@@ -75,6 +75,7 @@ export const setupWorkers$ = (
                         }),
                         tap((message) => {
                             if (message.type === MessageTypes.FATAL) {
+                                // eslint-disable-next-line @typescript-eslint/no-throw-literal
                                 throw createArchifiltreError({
                                     reason: message.error as string,
                                     type: ArchifiltreErrorType.BATCH_PROCESS_ERROR,

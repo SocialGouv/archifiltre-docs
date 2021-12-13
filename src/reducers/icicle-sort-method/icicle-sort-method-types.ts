@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 export const SET_ICICLE_SORT_METHOD =
     "WORKSPACE_METADATA/SET_ICICLE_SORT_METHOD";
 export const SET_ELEMENT_WEIGHT_METHOD =
@@ -17,13 +18,13 @@ export enum IcicleSortMethod {
 }
 
 export enum ElementWeightMethod {
-    BY_VOLUME,
-    BY_FILE_COUNT,
+    BY_VOLUME = 0,
+    BY_FILE_COUNT = 1,
 }
 
 export enum IcicleColorMode {
-    BY_TYPE,
-    BY_DATE,
+    BY_TYPE = 0,
+    BY_DATE = 1,
 }
 
 interface SetIciclesSortMethod {

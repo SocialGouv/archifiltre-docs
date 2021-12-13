@@ -109,13 +109,17 @@ export const computeAuditReportData = (
         imageCount: fileTypesCounts[FileType.IMAGE],
         imageFileTypes: extensionsList[FileType.IMAGE],
         imagePercent: fileTypesPercents[FileType.IMAGE],
-        longestPathFileName: longestPathFile?.name || "",
-        longestPathLength: longestPathFile?.id.length || 0,
-        longestPathPath: formatPathForUserSystem(longestPathFile?.id) || "",
+        longestPathFileName: longestPathFile?.name ?? "",
+        longestPathLength: longestPathFile?.id.length ?? 0,
+        longestPathPath: longestPathFile?.id
+            ? formatPathForUserSystem(longestPathFile.id)
+            : "",
         newestDate: formatAuditReportDate(
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             filesAndFoldersMetadata[ROOT_ID].maxLastModified ?? 0
         ),
         oldestDate: formatAuditReportDate(
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             filesAndFoldersMetadata[ROOT_ID].minLastModified ?? 0
         ),
         oldestFiles: getOldestFiles(filesAndFolders),
@@ -134,6 +138,7 @@ export const computeAuditReportData = (
         totalFilesCount: getFileCount(filesAndFolders),
         totalFoldersCount: getFoldersCount(filesAndFolders),
         totalSize: octet2HumanReadableFormat(
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             filesAndFoldersMetadata[ROOT_ID].childrenTotalSize ?? 0
         ),
         videoCount: fileTypesCounts[FileType.VIDEO],

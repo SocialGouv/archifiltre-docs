@@ -1,19 +1,20 @@
-import type { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
 import { omit } from "lodash";
 import { Field, Message, Type } from "protobufjs";
-import type { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import type { Readable, Writable } from "stream";
+
+import type { VirtualFileSystem } from "../../files-and-folders-loader/files-and-folders-loader-types";
+import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import {
     parseSerializedDataFromStream,
     sendStringToStream,
     stringifyObjectToStream,
-} from "util/child-process-stream/child-process-stream";
+} from "../child-process-stream/child-process-stream";
 import {
     FilesAndFoldersMessage,
     FilesAndFoldersMetadataMessage,
-} from "util/child-process-stream/child-process-stream-messages";
-import type { OmitProtobuf } from "util/child-process-stream/common-serializer";
+} from "../child-process-stream/child-process-stream-messages";
+import type { OmitProtobuf } from "../child-process-stream/common-serializer";
 import {
     extractFilesAndFolders,
     extractFilesAndFoldersMetadata,
@@ -21,7 +22,7 @@ import {
     extractKey,
     extractKeysFromFilesAndFolders,
     makeDataExtractor,
-} from "util/child-process-stream/common-serializer";
+} from "../child-process-stream/common-serializer";
 
 const sections: (keyof VirtualFileSystem)[] = [
     "filesAndFolders",
@@ -29,20 +30,26 @@ const sections: (keyof VirtualFileSystem)[] = [
     "hashes",
 ];
 
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 @Type.d("VFSElement")
 class VFSElementMessage extends Message<VFSElementMessage> {
     @Field.d(1, "string")
+    // @ts-expect-error
     public key: string;
 
     @Field.d(2, FilesAndFoldersMessage)
+    // @ts-expect-error
     public filesAndFolders: FilesAndFolders;
 
     @Field.d(3, FilesAndFoldersMetadataMessage)
+    // @ts-expect-error
     public filesAndFoldersMetadata: FilesAndFoldersMetadata;
 
     @Field.d(4, "string")
+    // @ts-expect-error
     public hash: string | null;
 }
+/* eslint-enable @typescript-eslint/ban-ts-comment */
 
 /**
  * Serialize extracted data to binary using protobuf
@@ -61,7 +68,7 @@ export const serializeField = (element: {
 export const stringifyVFSToStream = (
     stream: Writable,
     vfs: VirtualFileSystem
-) => {
+): void => {
     const base = omit(vfs, sections);
     sendStringToStream(stream, JSON.stringify(base));
     stringifyObjectToStream<VirtualFileSystem, OmitProtobuf<VFSElementMessage>>(
@@ -105,13 +112,13 @@ export const parseVFSFromStream = async (
             VFSElementMessage.toObject(VFSElementMessage.decode(data), {
                 arrays: true,
             }),
-        merger: (vfs, deserializedData) => {
+        merger: (vfsToMerge, deserializedData) => {
             const { filesAndFolders, filesAndFoldersMetadata, hash, key } =
                 deserializedData;
-            vfs.filesAndFolders[key] = filesAndFolders;
-            vfs.filesAndFoldersMetadata[key] = filesAndFoldersMetadata;
+            vfsToMerge.filesAndFolders[key] = filesAndFolders;
+            vfsToMerge.filesAndFoldersMetadata[key] = filesAndFoldersMetadata;
             if (hash !== "") {
-                vfs.hashes[key] = hash;
+                vfsToMerge.hashes[key] = hash;
             }
         },
         withJsonInitializing: true,

@@ -1,9 +1,18 @@
-/* eslint-disable no-fallthrough */
-import { createFilesAndFoldersMetadataDataStructure } from "files-and-folders-loader/file-system-loading-process-utils";
-import type { JsonFileInfo } from "files-and-folders-loader/files-and-folders-loader-types";
+/*
+    eslint-disable
+    no-fallthrough,
+    @typescript-eslint/no-explicit-any,
+    @typescript-eslint/naming-convention,
+    @typescript-eslint/no-unsafe-argument,
+    @typescript-eslint/no-unsafe-return
+*/
 import _, { mapValues, pick } from "lodash";
 import fp from "lodash/fp";
-import { generateRandomString } from "util/random-gen-util";
+
+import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/file-system-loading-process-utils";
+import type { JsonFileInfo } from "../../files-and-folders-loader/files-and-folders-loader-types";
+import type { SimpleObject } from "../object/object-util";
+import { generateRandomString } from "../random-gen-util";
 
 interface V8 {
     version: number;
@@ -52,10 +61,10 @@ export const convertJsonToCurrentVersion = (json: string): JsonFileInfo => {
         case "2.1.0":
             js = v21ToV22Js(js);
     }
-    return js;
+    return js as JsonFileInfo;
 };
 
-const v8JsToV9Js = (v8: V8 & V9To12): object => {
+const v8JsToV9Js = (v8: V8 & V9To12): SimpleObject => {
     const v9 = { ...v8 };
     v9.version = 9;
 
@@ -65,12 +74,12 @@ const v8JsToV9Js = (v8: V8 & V9To12): object => {
     delete v9.tags_sizes;
     delete v9.parent_path;
 
-    const mapOldToNewId = {};
+    const mapOldToNewId = {} as any;
 
-    const v8TreeToV9Ffs = (tree) => {
+    const v8TreeToV9Ffs = (tree: any) => {
         const treeTable = tree.table;
 
-        const remakePath = (key, table) => {
+        const remakePath = (key: string, table: any): any => {
             const node = table[key];
             const parent = node.parent;
             if (parent === null) {
@@ -81,9 +90,9 @@ const v8JsToV9Js = (v8: V8 & V9To12): object => {
             }
         };
 
-        const ans = {};
+        const ans = {} as any;
         for (const key in treeTable) {
-            if (treeTable.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(treeTable, key)) {
                 const path = remakePath(key, treeTable);
                 mapOldToNewId[key] = path;
                 const node = treeTable[key];
@@ -123,12 +132,12 @@ const v8JsToV9Js = (v8: V8 & V9To12): object => {
             }
         }
 
-        const computeChildren = (key) => {
+        const computeChildren = (key: string) => {
             const node = treeTable[key];
             const children = node.children;
             if (children.length) {
                 ans[mapOldToNewId[key]].children = children.map(
-                    (a) => mapOldToNewId[a]
+                    (a: any) => mapOldToNewId[a]
                 );
                 children.map(computeChildren);
             }
@@ -141,12 +150,12 @@ const v8JsToV9Js = (v8: V8 & V9To12): object => {
 
     v9.files_and_folders = v8TreeToV9Ffs(v8.tree);
 
-    const v8TagsToV9Tags = (tags) => {
-        const ans = {};
+    const v8TagsToV9Tags = (tags: any) => {
+        const ans = {} as any;
         for (const key in tags) {
-            if (tags.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(tags, key)) {
                 ans[generateRandomString(40)] = {
-                    ff_ids: tags[key].map((a) => mapOldToNewId[a]),
+                    ff_ids: tags[key].map((a: any) => mapOldToNewId[a]),
                     name: key,
                 };
             }
@@ -159,22 +168,22 @@ const v8JsToV9Js = (v8: V8 & V9To12): object => {
     return v9;
 };
 
-export const v9JsToV10Js = (v9: V8 & V9To12): object => {
+export const v9JsToV10Js = (v9: V8 & V9To12): SimpleObject => {
     const v10 = { ...v9 };
     v10.version = 10;
 
     return v10;
 };
 
-export const v10JsToV11Js = (v10: V8 & V9To12): object => {
+export const v10JsToV11Js = (v10: V8 & V9To12): SimpleObject => {
     const v11 = { ...v10 };
     v11.version = 11;
 
     return v11;
 };
 
-export const v12JsToV13Js = (v12: V8 & V9To12): object => {
-    const reformatTag = (id, { ff_ids, name }) => ({
+export const v12JsToV13Js = (v12: V8 & V9To12): SimpleObject => {
+    const reformatTag = (id: string, { ff_ids, name }: any) => ({
         ffIds: ff_ids,
         id,
         name,
@@ -192,7 +201,7 @@ export const v12JsToV13Js = (v12: V8 & V9To12): object => {
     };
 };
 
-export const v13JsToV14Js = (v13: V9To12 & V13): object => {
+export const v13JsToV14Js = (v13: V9To12 & V13): SimpleObject => {
     const filesAndFolders = mapValues(
         v13.files_and_folders,
         (fileAndFolders, id) => ({
@@ -210,7 +219,7 @@ export const v13JsToV14Js = (v13: V9To12 & V13): object => {
     );
 
     const filesAndFoldersMetadata = _.mapValues(
-        createFilesAndFoldersMetadataDataStructure(filesAndFolders),
+        createFilesAndFoldersMetadataDataStructure(filesAndFolders as any),
         fp.omit("sortAlphaNumericallyIndex")
     );
 
@@ -224,7 +233,7 @@ export const v13JsToV14Js = (v13: V9To12 & V13): object => {
     };
 };
 
-export const v2ToV21Js = (v2: V21): object => {
+export const v2ToV21Js = (v2: V21): SimpleObject => {
     const filesAndFolders = _.mapValues(
         v2.filesAndFolders,
         fp.pick(["name", "children", "file_size", "file_last_modified"])
@@ -249,7 +258,7 @@ export const v2ToV21Js = (v2: V21): object => {
     };
 };
 
-export const v21ToV22Js = (v21: V21): object => {
+export const v21ToV22Js = (v21: V21): SimpleObject => {
     const filesAndFolders = _.mapValues(
         v21.filesAndFolders,
         (fileAndFolder, id) => ({

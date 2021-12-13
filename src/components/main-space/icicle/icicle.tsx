@@ -105,6 +105,7 @@ const _Icicle: React.FC<IcicleProps> = ({
     // TODO: missing deps?
     // If the dims reference was updated during the render cycle, we update the
     // state accordingly to rerender the overlays
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (dimsUpdated.current) {
             setDims(dimsRef.current);

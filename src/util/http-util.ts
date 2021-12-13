@@ -12,7 +12,7 @@ export const request = async ({
     url,
     headers = {},
     body = "",
-}: RequestInput): Promise<any> => {
+}: RequestInput): Promise<unknown> => {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.open(method, url);
@@ -29,6 +29,6 @@ export const request = async ({
         xhr.onerror = () => {
             reject(xhr.statusText);
         };
-        xhr.send(body);
+        xhr.send(body as Document);
     });
 };

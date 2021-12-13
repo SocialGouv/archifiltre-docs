@@ -1,5 +1,4 @@
-import type { ArchifiltreError } from "util/error/error-util";
-
+import type { ArchifiltreError } from "../../util/error/error-util";
 import type {
     AliasMap,
     CommentsMap,
@@ -108,7 +107,10 @@ export const unmarkElementsToDelete = (
  * @param parentId
  * @param childId
  */
-export const removeChild = (parentId, childId): FilesAndFoldersActionTypes => ({
+export const removeChild = (
+    parentId: string,
+    childId: string
+): FilesAndFoldersActionTypes => ({
     childId,
     parentId,
     type: REMOVE_CHILD,
@@ -119,7 +121,10 @@ export const removeChild = (parentId, childId): FilesAndFoldersActionTypes => ({
  * @param parentId
  * @param childId
  */
-export const addChild = (parentId, childId): FilesAndFoldersActionTypes => ({
+export const addChild = (
+    parentId: string,
+    childId: string
+): FilesAndFoldersActionTypes => ({
     childId,
     parentId,
     type: ADD_CHILD,
@@ -153,9 +158,9 @@ export const overrideLastModified = (
 });
 
 export const initOverrideLastModified = (
-    overrideLastModified: LastModifiedMap
+    overrideLastModifiedToInit: LastModifiedMap
 ): FilesAndFoldersActionTypes => ({
-    overrideLastModified,
+    overrideLastModified: overrideLastModifiedToInit,
     type: INIT_OVERRIDE_LAST_MODIFIED,
 });
 

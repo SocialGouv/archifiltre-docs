@@ -45,7 +45,6 @@ export const csvExporterThunk =
 
         const csvExportData$ = generateCsvExport$(data);
 
-        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
         return dispatch(
             handleFileExportThunk(csvExportData$, {
                 exportFileName: name,

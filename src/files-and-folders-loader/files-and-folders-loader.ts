@@ -1,5 +1,33 @@
 import parse from "csv-parse/lib/sync";
-import { sanitizeHooks } from "files-and-folders-loader/file-system-loading-process-utils";
+import fs from "fs";
+import { noop } from "lodash";
+import { compose, defaults } from "lodash/fp";
+import path from "path";
+import readline from "readline";
+import type { Readable } from "stream";
+
+import {
+    isFile,
+    reduceFilesAndFolders,
+    ROOT_FF_ID,
+} from "../reducers/files-and-folders/files-and-folders-selectors";
+import type {
+    FilesAndFolders,
+    FilesAndFoldersMap,
+    VirtualPathToIdMap,
+} from "../reducers/files-and-folders/files-and-folders-types";
+import type { HashesMap } from "../reducers/hashes/hashes-types";
+import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
+import { convertJsonToCurrentVersion } from "../util/compatibility/compatibility";
+import {
+    ArchifiltreErrorType,
+    convertFsErrorToArchifiltreError,
+} from "../util/error/error-util";
+import { identifyFileFormat } from "../util/file-format/file-format-util";
+import { convertToPosixAbsolutePath } from "../util/file-system/file-sys-util";
+import { asyncShouldIgnoreElement } from "../util/hidden-file/hidden-file-util";
+import { removeIgnoredElementsFromVirtualFileSystem } from "../util/virtual-file-system-util/virtual-file-system-util";
+import { sanitizeHooks } from "./file-system-loading-process-utils";
 import type {
     FilesAndFoldersLoader,
     FileSystemLoadingHooks,
@@ -10,33 +38,8 @@ import type {
     WithHashes,
     WithResultHook,
     WithVirtualPathToIdMap,
-} from "files-and-folders-loader/files-and-folders-loader-types";
-import fs from "fs";
-import { compose, defaults } from "lodash/fp";
-import path from "path";
-import readline from "readline";
-import {
-    isFile,
-    reduceFilesAndFolders,
-    ROOT_FF_ID,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import type {
-    FilesAndFolders,
-    FilesAndFoldersMap,
-} from "reducers/files-and-folders/files-and-folders-types";
-import type { HashesMap } from "reducers/hashes/hashes-types";
-import { FileSystemLoadingStep } from "reducers/loading-state/loading-state-types";
-import type { Readable } from "stream";
-import { convertJsonToCurrentVersion } from "util/compatibility/compatibility";
-import {
-    ArchifiltreErrorType,
-    convertFsErrorToArchifiltreError,
-} from "util/error/error-util";
-import { identifyFileFormat } from "util/file-format/file-format-util";
-import { convertToPosixAbsolutePath } from "util/file-system/file-sys-util";
-import { empty } from "util/function/function-util";
-import { asyncShouldIgnoreElement } from "util/hidden-file/hidden-file-util";
-import { removeIgnoredElementsFromVirtualFileSystem } from "util/virtual-file-system-util/virtual-file-system-util";
+    WorkerError,
+} from "./files-and-folders-loader-types";
 
 interface FilesAndFoldersInfo {
     lastModified: number;
@@ -50,6 +53,7 @@ export const getFilesElementInfosFromFilesAndFolders = (
 ): FilesElementInfo[] =>
     Object.values(filesAndFolders)
         .filter(isFile)
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         .map(({ id, file_last_modified, file_size }) => [
             {
                 lastModified: file_last_modified,
@@ -65,8 +69,8 @@ const loadFilesAndFoldersFromFileSystemImpl = async (
         fileInfos = [],
     }: { fileInfos?: FilesElementInfo[]; rootPaths: string[] },
     { onResult, onError }: WithErrorHook & WithResultHook = {
-        onError: empty,
-        onResult: empty,
+        onError: noop,
+        onResult: noop,
     }
 ) => {
     const files = [...fileInfos];
@@ -103,11 +107,13 @@ const loadFilesAndFoldersFromFileSystemImpl = async (
                     path.relative(rootPath, currentPath)
                 ),
             ]);
-        } catch (error) {
+        } catch (error: unknown) {
             onError({
-                code: convertFsErrorToArchifiltreError(error.code),
+                code: convertFsErrorToArchifiltreError(
+                    (error as WorkerError).code
+                ),
                 filePath: currentPath,
-                reason: error.message,
+                reason: (error as WorkerError).message,
                 type: ArchifiltreErrorType.LOADING_FILE_SYSTEM,
             });
         }
@@ -130,10 +136,10 @@ export const retryLoadFromFileSystem =
     async (
         folderPath: string,
         { onResult, onError }: WithErrorHook & WithResultHook = {
-            onError: empty,
-            onResult: empty,
+            onError: noop,
+            onResult: noop,
         }
-    ) => {
+    ): Promise<FilesElementInfo[]> => {
         const fileInfos =
             getFilesElementInfosFromFilesAndFolders(filesAndFolders);
 
@@ -147,10 +153,10 @@ export const retryLoadFromFileSystem =
 export const asyncLoadFilesAndFoldersFromFileSystem = async (
     folderPath: string,
     { onResult, onError }: WithErrorHook & WithResultHook = {
-        onError: empty,
-        onResult: empty,
+        onError: noop,
+        onResult: noop,
     }
-) =>
+): Promise<FilesElementInfo[]> =>
     loadFilesAndFoldersFromFileSystemImpl(
         folderPath,
         { rootPaths: [folderPath] },
@@ -188,7 +194,7 @@ interface LoadedLine {
 }
 type LineLoader = (parsedLine: string[]) => LoadedLine;
 
-const LINE_LOADERS = {
+const LINE_LOADERS: Record<string, LineLoader> = {
     [latestVersion]: ([[filePath, fileSize, fileLastModified, fileHash]]) => ({
         fileHash,
         fileLastModified,
@@ -214,7 +220,8 @@ const LINE_LOADERS = {
 };
 
 const getLineLoader = (version: string): LineLoader =>
-    LINE_LOADERS[version] || LINE_LOADERS[latestVersion];
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    LINE_LOADERS[version] ?? LINE_LOADERS[latestVersion];
 
 /**
  * Creates an origin structure from an archifiltre export file content
@@ -223,7 +230,7 @@ const getLineLoader = (version: string): LineLoader =>
  */
 export const loadFilesAndFoldersFromExportFileContent = async (
     exportFileContent: Readable,
-    { onResult }: WithResultHook = { onResult: empty }
+    { onResult }: WithResultHook = { onResult: noop }
 ): Promise<LoadFilesAndFoldersFromExportFileContentResult> => {
     const lineReader = readline.createInterface({
         crlfDelay: Infinity,
@@ -239,6 +246,7 @@ export const loadFilesAndFoldersFromExportFileContent = async (
     let version = latestVersion;
     let os = "windows";
     for await (const line of lineReader) {
+        /* eslint-disable no-case-declarations */
         switch (lineCount) {
             case 0:
                 version = line.trim();
@@ -254,7 +262,7 @@ export const loadFilesAndFoldersFromExportFileContent = async (
             default:
                 const loader = getLineLoader(`${os}-${version}`);
                 const { filePath, fileSize, fileLastModified, fileHash } =
-                    loader(parse(line.trim()));
+                    loader(parse(line.trim()) as string[]);
                 const id = convertToPosixAbsolutePath(
                     pathImpl.relative(rootPath, filePath),
                     { separator: pathImpl.sep }
@@ -272,6 +280,8 @@ export const loadFilesAndFoldersFromExportFileContent = async (
                     id,
                 ]);
                 onResult();
+
+            /* eslint-enable no-case-declarations */
         }
 
         lineCount++;
@@ -287,7 +297,9 @@ export const loadFilesAndFoldersFromExportFileContent = async (
 interface CreateFilesAndFoldersOptions {
     alias?: string;
     children?: string[];
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     file_last_modified?: number;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     file_size?: number;
     id: string;
     virtualPath?: string;
@@ -295,46 +307,44 @@ interface CreateFilesAndFoldersOptions {
 
 /**
  * Utility to create a filesAndFolders
- * @param children
- * @param file_last_modified
- * @param file_size
- * @param id
- * @param virtualPath
  */
 export const createFilesAndFolders = ({
     children = [],
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     file_last_modified = 0,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     file_size = 0,
     id,
     virtualPath,
-}: CreateFilesAndFoldersOptions): FilesAndFolders => ({
+}: CreateFilesAndFoldersOptions): Partial<FilesAndFolders> => ({
     children,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     file_last_modified,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     file_size,
     id,
     name: path.basename(id),
-    virtualPath: virtualPath || id,
+    virtualPath: virtualPath ?? id,
 });
 
 /**
  * Computes the filesAndFolders structure for the store
- * @param ffInfo
- * @param hook
  */
 export const createFilesAndFoldersDataStructure = (
     ffInfo: FilesElementInfo[],
-    { onResult }: WithResultHook = { onResult: empty }
+    { onResult }: WithResultHook = { onResult: noop }
 ): FilesAndFoldersMap => {
     const filesAndFolders: FilesAndFoldersMap = {};
 
-    const recursivelyAddParentFolders = (elementPath) => {
+    const recursivelyAddParentFolders = (elementPath: string) => {
         const parentPath = path.dirname(elementPath);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (!filesAndFolders[parentPath]) {
             const normalizedParentPath = parentPath !== "/" ? parentPath : "";
             filesAndFolders[normalizedParentPath] = createFilesAndFolders({
                 children: [elementPath],
                 id: normalizedParentPath,
-            });
+            }) as FilesAndFolders;
 
             if (normalizedParentPath !== "") {
                 recursivelyAddParentFolders(parentPath);
@@ -348,10 +358,12 @@ export const createFilesAndFoldersDataStructure = (
     ffInfo.forEach(([{ lastModified, size }, currentPath]) => {
         filesAndFolders[currentPath] = createFilesAndFolders({
             children: [],
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             file_last_modified: lastModified,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             file_size: size,
             id: currentPath,
-        });
+        }) as FilesAndFolders;
         recursivelyAddParentFolders(currentPath);
         onResult();
     });
@@ -366,10 +378,11 @@ type LoadFunction = (
 
 /**
  * Create the loader to load from archifiltre data from the file system folder
- * @param folderPath
  */
 export const makeFileSystemLoader =
-    (loadFunction: LoadFunction) =>
+    (
+        _loadFunction: LoadFunction
+    ): ((folderPath: string) => FilesAndFoldersLoader) =>
     (folderPath: string): FilesAndFoldersLoader =>
     async (makeHooks) => {
         const sanitizedHooks = sanitizeHooks(makeHooks);
@@ -405,24 +418,22 @@ export const makeFileSystemLoader =
  * byte order mark at their start
  * We upgrade file-saver from 1.3.3 to 2.0.2,
  * they are not anymore generated with a byte order mark
- * @param content
  */
-const removeByteOrderMark = (content) =>
-    content[0] !== "{" ? content.slice(1) : content;
+const removeByteOrderMark = (content: string) =>
+    !content.startsWith("{") ? content.slice(1) : content;
 
 /**
  * Initialize the reference map between virtualPath and id
- * @param fileSystem
  */
 const computeVirtualPathToIdMap = <T extends WithFilesAndFolders>(
     fileSystem: T
 ): T & WithVirtualPathToIdMap => {
-    const virtualPathToIdMap = {};
+    const virtualPathToIdMap: VirtualPathToIdMap = {};
 
     reduceFilesAndFolders(
         fileSystem.filesAndFolders,
         ROOT_FF_ID,
-        (childrenValues, { id, virtualPath }) => {
+        (_, { id, virtualPath }) => {
             if (virtualPath !== id) {
                 virtualPathToIdMap[virtualPath] = id;
             }
@@ -437,7 +448,6 @@ const computeVirtualPathToIdMap = <T extends WithFilesAndFolders>(
 
 /**
  * Create the loader to load archifiltre data from a JSON file
- * @param jsonFilePath
  */
 export const makeJsonFileLoader =
     (jsonFilePath: string): FilesAndFoldersLoader =>
@@ -452,12 +462,11 @@ export const makeJsonFileLoader =
             computeVirtualPathToIdMap,
             removeIgnoredElementsFromVirtualFileSystem,
             convertJsonToCurrentVersion
-        )(sanitizedContent);
+        )(sanitizedContent) as JsonFileInfo;
     };
 
 /**
  * Create the loader for command line generated export files
- * @param exportFilePath
  */
 export const makeExportFileLoader =
     (exportFilePath: string): FilesAndFoldersLoader =>

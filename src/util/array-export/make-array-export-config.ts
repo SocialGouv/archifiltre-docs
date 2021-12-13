@@ -1,24 +1,25 @@
 import type { TFunction } from "i18next";
 import { compose, constant, property, sortBy, toString } from "lodash/fp";
 import { extname } from "path";
+
 import {
     getDepthFromPath,
     isFile,
-} from "reducers/files-and-folders/files-and-folders-selectors";
+} from "../../reducers/files-and-folders/files-and-folders-selectors";
 import type {
     AliasMap,
     CommentsMap,
     FilesAndFolders,
-} from "reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { HashesMap } from "reducers/hashes/hashes-types";
-import type { Tag, TagMap } from "reducers/tags/tags-types";
-import { hasDuplicate } from "util/duplicates/duplicates-util";
-import { formatPathForUserSystem } from "util/file-system/file-sys-util";
+} from "../../reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { HashesMap } from "../../reducers/hashes/hashes-types";
+import type { Tag, TagMap } from "../../reducers/tags/tags-types";
+import { hasDuplicate } from "../duplicates/duplicates-util";
+import { formatPathForUserSystem } from "../file-system/file-sys-util";
 import {
     getType,
     isExactFileOrAncestor,
-} from "util/files-and-folders/file-and-folders-utils";
+} from "../files-and-folders/file-and-folders-utils";
 
 /**
  * Simple date formatting function for performance matters.
@@ -82,11 +83,16 @@ const getNewFirstModifiedDateForFolder = ({
 const getNewPath = ({ virtualPath, id }: { virtualPath: string; id: string }) =>
     virtualPath !== id ? formatPathForUserSystem(virtualPath) : "";
 
-const getAlias = ({ aliases, id }: { aliases: AliasMap; id }) =>
+const getAlias = ({ aliases, id }: { aliases: AliasMap; id: keyof AliasMap }) =>
     aliases[id] || "";
 
-const getComments = ({ comments, id }: { comments: CommentsMap; id: string }) =>
-    comments[id] || "";
+const getComments = ({
+    comments,
+    id,
+}: {
+    comments: CommentsMap;
+    id: keyof CommentsMap;
+}) => comments[id] || "";
 
 const getFileOrFolderText = ({
     file,
@@ -104,7 +110,7 @@ const getFileCount = compose(
 );
 
 const getFileHash = ({ id, hashes }: { id: string; hashes: HashesMap }) =>
-    hashes[id] || "";
+    hashes[id] ?? "";
 
 const getHasDuplicateText =
     ({ yes, no }: { yes: string; no: string }) =>

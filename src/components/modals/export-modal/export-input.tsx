@@ -11,63 +11,63 @@ import type { ThemedProps } from "../../../theme/default-theme";
 import { promptUserForSave } from "../../../util/file-system/file-system-util";
 
 const FilePath = withTheme(styled.span`
-    white-space: nowrap;
-    overflow: hidden;
-    width: 300px;
-    direction: rtl;
-    text-overflow: ellipsis;
-    color: ${({ hasError, theme }: ThemedProps & { hasError: boolean }) =>
-        hasError ? theme.palette.error.main : "inherit"};
+  white-space: nowrap;
+  overflow: hidden;
+  width: 300px;
+  direction: rtl;
+  text-overflow: ellipsis;
+  color: ${({ hasError, theme }: ThemedProps & { hasError: boolean }) =>
+    hasError ? theme.palette.error.main : "inherit"};
 `);
 
 const HideableTooltip = styled(Tooltip)<{ isvisible: string }>`
-    visibility: ${({ isvisible }) =>
-        isvisible === "true" ? "visible" : "hidden"};
+  visibility: ${({ isvisible }) =>
+    isvisible === "true" ? "visible" : "hidden"};
 `;
 
 export interface ExportInputProps {
-    exportFilePath: string;
-    isValid: boolean;
-    setExportsPathsValue: (value: string) => void;
-    isFilePickerDisabled?: boolean;
+  exportFilePath: string;
+  isValid: boolean;
+  setExportsPathsValue: (value: string) => void;
+  isFilePickerDisabled?: boolean;
 }
 
 export const ExportInput: React.FC<ExportInputProps> = ({
-    exportFilePath,
-    isValid,
-    setExportsPathsValue,
-    isFilePickerDisabled = false,
+  exportFilePath,
+  isValid,
+  setExportsPathsValue,
+  isFilePickerDisabled = false,
 }) => {
-    const { t } = useTranslation();
-    const onClick = useCallback(async () => {
-        const filePath = await promptUserForSave(exportFilePath);
-        if (filePath) {
-            setExportsPathsValue(filePath);
-        }
-    }, [setExportsPathsValue, exportFilePath]);
+  const { t } = useTranslation();
+  const onClick = useCallback(async () => {
+    const filePath = await promptUserForSave(exportFilePath);
+    if (filePath) {
+      setExportsPathsValue(filePath);
+    }
+  }, [setExportsPathsValue, exportFilePath]);
 
-    const browseTitle = t("common.browse");
+  const browseTitle = t("common.browse");
 
-    return (
-        <Box display="flex" alignItems="center">
-            <Tooltip title={exportFilePath}>
-                <FilePath hasError={!isValid}>{exportFilePath}</FilePath>
-            </Tooltip>
-            <HideableTooltip
-                title={browseTitle}
-                isvisible={(!isFilePickerDisabled).toString()}
-            >
-                <Box paddingLeft={1}>
-                    <IconButton
-                        size="small"
-                        color="secondary"
-                        onClick={onClick}
-                        disabled={isFilePickerDisabled}
-                    >
-                        <FaFolderOpen />
-                    </IconButton>
-                </Box>
-            </HideableTooltip>
+  return (
+    <Box display="flex" alignItems="center">
+      <Tooltip title={exportFilePath}>
+        <FilePath hasError={!isValid}>{exportFilePath}</FilePath>
+      </Tooltip>
+      <HideableTooltip
+        title={browseTitle}
+        isvisible={(!isFilePickerDisabled).toString()}
+      >
+        <Box paddingLeft={1}>
+          <IconButton
+            size="small"
+            color="secondary"
+            onClick={onClick}
+            disabled={isFilePickerDisabled}
+          >
+            <FaFolderOpen />
+          </IconButton>
         </Box>
-    );
+      </HideableTooltip>
+    </Box>
+  );
 };

@@ -3,14 +3,14 @@
  * @param key
  */
 export const makeObjectKeyComparator =
-    <T>(key: keyof T) =>
-    (firstElement: T, secondElement: T): number => {
-        const firstCompared = firstElement[key];
-        const secondCompared = secondElement[key];
+  <T>(key: keyof T) =>
+  (firstElement: T, secondElement: T): number => {
+    const firstCompared = firstElement[key];
+    const secondCompared = secondElement[key];
 
-        if (firstCompared === secondCompared) {
-            return 0;
-        }
+    if (firstCompared === secondCompared) {
+      return 0;
+    }
 
-        return firstCompared > secondCompared ? 1 : -1;
-    };
+    return firstCompared > secondCompared ? 1 : -1;
+  };

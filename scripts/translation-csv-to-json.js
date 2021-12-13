@@ -10,7 +10,7 @@ const outputLanguages = argv._.slice(1);
 const translationsDir = path.join(__dirname, "../src/translations");
 
 const outputFiles = outputLanguages.map((lang) =>
-    path.join(translationsDir, `${lang}.json`)
+  path.join(translationsDir, `${lang}.json`)
 );
 
 const inputCsv = fs.readFileSync(inputFile, "utf8");
@@ -24,18 +24,18 @@ const translationsArray = parseCsv(inputCsv);
  * @param value
  */
 const insertInObject = (object, pathArray, value) => {
-    const [key, ...pathRest] = pathArray;
+  const [key, ...pathRest] = pathArray;
 
-    if (pathRest.length === 0) {
-        object[key] = value;
-        return;
-    }
+  if (pathRest.length === 0) {
+    object[key] = value;
+    return;
+  }
 
-    if (object[key] === undefined) {
-        object[key] = {};
-    }
+  if (object[key] === undefined) {
+    object[key] = {};
+  }
 
-    insertInObject(object[key], pathRest, value);
+  insertInObject(object[key], pathRest, value);
 };
 
 const FIRST_TRANSLATION_INDEX = 2;
@@ -45,15 +45,15 @@ const FIRST_TRANSLATION_INDEX = 2;
  * @param outputObjects
  */
 const insertTranslationsToObjects = (outputObjects) => {
-    translationsArray.slice(1).forEach((translationArray) => {
-        outputObjects.forEach((outputObject, index) =>
-            insertInObject(
-                outputObject,
-                _.toPath(translationArray[0]),
-                translationArray[FIRST_TRANSLATION_INDEX + index]
-            )
-        );
-    });
+  translationsArray.slice(1).forEach((translationArray) => {
+    outputObjects.forEach((outputObject, index) =>
+      insertInObject(
+        outputObject,
+        _.toPath(translationArray[0]),
+        translationArray[FIRST_TRANSLATION_INDEX + index]
+      )
+    );
+  });
 };
 
 const translationsObjects = outputFiles.map(() => ({}));
@@ -61,5 +61,5 @@ const translationsObjects = outputFiles.map(() => ({}));
 insertTranslationsToObjects(translationsObjects);
 
 translationsObjects.map((obj, index) =>
-    fs.writeFileSync(outputFiles[index], JSON.stringify(obj, null, 2), "utf8")
+  fs.writeFileSync(outputFiles[index], JSON.stringify(obj, null, 2), "utf8")
 );

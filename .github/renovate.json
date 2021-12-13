@@ -33,6 +33,12 @@
         "eslint"
       ],
       "allowedVersions": "<8"
+    },
+    {
+      "matchPackageNames": [
+        "fswin"
+      ],
+      "allowedVersions": "3.21.107"
     }
   ]
 }

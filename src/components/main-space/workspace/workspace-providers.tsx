@@ -5,11 +5,11 @@ import { FileMoveProvider } from "./file-move-provider";
 import { ZoomProvider } from "./zoom-provider";
 
 export const WorkspaceProviders: React.FC = ({ children }) => {
-    return (
-        <FileMoveProvider>
-            <DuplicatePageProvider>
-                <ZoomProvider>{children}</ZoomProvider>
-            </DuplicatePageProvider>
-        </FileMoveProvider>
-    );
+  return (
+    <FileMoveProvider>
+      <DuplicatePageProvider>
+        <ZoomProvider>{children}</ZoomProvider>
+      </DuplicatePageProvider>
+    </FileMoveProvider>
+  );
 };

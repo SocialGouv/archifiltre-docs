@@ -6,10 +6,10 @@ import { parseCsvExporterOptionsFromStream } from "../csv/csv-exporter-serialize
 import { exportToExcel } from "./excel-exporter.impl";
 
 const asyncWorker = createAsyncWorkerForChildProcess(async (stream) => ({
-    data: await parseCsvExporterOptionsFromStream(stream),
-    type: MessageTypes.INITIALIZE,
+  data: await parseCsvExporterOptionsFromStream(stream),
+  type: MessageTypes.INITIALIZE,
 }));
 
 setupChildWorkerListeners(asyncWorker, {
-    onInitialize: exportToExcel as WorkerMessageHandler,
+  onInitialize: exportToExcel as WorkerMessageHandler,
 });

@@ -6,10 +6,10 @@ import { onInitialize } from "./csv-exporter.impl";
 import { parseCsvExporterOptionsFromStream } from "./csv-exporter-serializer";
 
 const asyncWorker = createAsyncWorkerForChildProcess(async (stream) => ({
-    data: await parseCsvExporterOptionsFromStream(stream),
-    type: MessageTypes.INITIALIZE,
+  data: await parseCsvExporterOptionsFromStream(stream),
+  type: MessageTypes.INITIALIZE,
 }));
 
 setupChildWorkerListeners(asyncWorker, {
-    onInitialize: onInitialize as WorkerMessageHandler,
+  onInitialize: onInitialize as WorkerMessageHandler,
 });

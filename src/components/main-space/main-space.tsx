@@ -4,7 +4,7 @@ import { useLoadingStep } from "../../reducers/loading-state/loading-state-selec
 import { MainSpaceRouter } from "./main-space-router";
 
 export const MainSpace: React.FC = () => {
-    const step = useLoadingStep();
+  const step = useLoadingStep();
 
-    return <MainSpaceRouter step={step} />;
+  return <MainSpaceRouter step={step} />;
 };

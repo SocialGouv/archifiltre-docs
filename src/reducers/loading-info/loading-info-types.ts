@@ -1,6 +1,6 @@
 import type {
-    ArchifiltreError,
-    ArchifiltreErrorType,
+  ArchifiltreError,
+  ArchifiltreErrorType,
 } from "../../util/error/error-util";
 
 export const START_LOADING = "LOADING_INFO/START_LOADING";
@@ -14,92 +14,92 @@ export const RESET_LOADING = "LOADING_INFO/RESET_LOADING";
 export const DISMISS_ALL_COMPLETE = "LOADING_INFO/DISMISS_ALL_COMPLETE";
 
 export enum LoadingInfoTypes {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    HASH_COMPUTING = "hash-computing",
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    EXPORT = "export",
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  HASH_COMPUTING = "hash-computing",
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  EXPORT = "export",
 }
 
 export interface LoadingInfo {
-    id: string;
-    type: LoadingInfoTypes;
-    progress: number;
-    goal: number;
-    label: string;
-    loadedLabel: string;
-    exportedPath?: string;
+  id: string;
+  type: LoadingInfoTypes;
+  progress: number;
+  goal: number;
+  label: string;
+  loadedLabel: string;
+  exportedPath?: string;
 }
 
 export type LoadingInfoMap = Record<string, LoadingInfo>;
 
 export interface LoadingInfoState {
-    loadingInfo: LoadingInfoMap;
-    loading: string[];
-    complete: string[];
-    dismissed: string[];
-    errors: ArchifiltreError[];
+  loadingInfo: LoadingInfoMap;
+  loading: string[];
+  complete: string[];
+  dismissed: string[];
+  errors: ArchifiltreError[];
 }
 
 interface StartLoadingAction {
-    type: typeof START_LOADING;
-    id: string;
-    loadingType: LoadingInfoTypes;
-    goal: number;
-    label: string;
-    loadedLabel: string;
-    exportedPath?: string;
+  type: typeof START_LOADING;
+  id: string;
+  loadingType: LoadingInfoTypes;
+  goal: number;
+  label: string;
+  loadedLabel: string;
+  exportedPath?: string;
 }
 
 interface UpdateLoadingAction {
-    type: typeof UPDATE_LOADING;
-    id: string;
-    progress?: number;
-    goal?: number;
+  type: typeof UPDATE_LOADING;
+  id: string;
+  progress?: number;
+  goal?: number;
 }
 
 interface ProgressLoadingAction {
-    type: typeof PROGRESS_LOADING;
-    id: string;
-    progress: number;
+  type: typeof PROGRESS_LOADING;
+  id: string;
+  progress: number;
 }
 
 interface CompleteLoadingAction {
-    type: typeof COMPLETE_LOADING;
-    id: string;
+  type: typeof COMPLETE_LOADING;
+  id: string;
 }
 
 interface AddExportedPathAction {
-    type: typeof ADD_EXPORTED_PATH;
-    id: string;
-    exportedPath: string;
+  type: typeof ADD_EXPORTED_PATH;
+  id: string;
+  exportedPath: string;
 }
 
 interface RegisterErrorAction {
-    type: typeof REGISTER_ERROR;
-    error: ArchifiltreError;
+  type: typeof REGISTER_ERROR;
+  error: ArchifiltreError;
 }
 
 interface ReplaceErrorsAction {
-    type: typeof REPLACE_ERRORS;
-    errors: ArchifiltreError[];
-    errorType: ArchifiltreErrorType;
+  type: typeof REPLACE_ERRORS;
+  errors: ArchifiltreError[];
+  errorType: ArchifiltreErrorType;
 }
 
 interface ResetLoadingAction {
-    type: typeof RESET_LOADING;
+  type: typeof RESET_LOADING;
 }
 
 interface DismissAllComplete {
-    type: typeof DISMISS_ALL_COMPLETE;
+  type: typeof DISMISS_ALL_COMPLETE;
 }
 
 export type LoadingInfoAction =
-    | AddExportedPathAction
-    | CompleteLoadingAction
-    | DismissAllComplete
-    | ProgressLoadingAction
-    | RegisterErrorAction
-    | ReplaceErrorsAction
-    | ResetLoadingAction
-    | StartLoadingAction
-    | UpdateLoadingAction;
+  | AddExportedPathAction
+  | CompleteLoadingAction
+  | DismissAllComplete
+  | ProgressLoadingAction
+  | RegisterErrorAction
+  | ReplaceErrorsAction
+  | ResetLoadingAction
+  | StartLoadingAction
+  | UpdateLoadingAction;

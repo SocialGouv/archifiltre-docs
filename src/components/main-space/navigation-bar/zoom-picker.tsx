@@ -14,85 +14,85 @@ import { useZoomContext } from "../workspace/zoom-provider";
 import { ZoomPickerOptionItem } from "./zoom-picker-option-item";
 
 export const ZoomPicker: React.FC = () => {
-    const { zoomIn, zoomOut, resetZoom, ratio } = useZoomContext();
-    const { t } = useTranslation();
-    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const { zoomIn, zoomOut, resetZoom, ratio } = useZoomContext();
+  const { t } = useTranslation();
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-    const handleClick: ButtonProps["onClick"] = (event) => {
-        setAnchorEl(event.currentTarget);
+  const handleClick: ButtonProps["onClick"] = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const withHandleClose =
+    (callback: AnyFunction) =>
+    (...args: unknown[]) => {
+      handleClose();
+      callback(...args);
     };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+  const onZoomIn = () => {
+    zoomIn(null, ZOOM_SPEED);
+  };
+  const onZoomOut = () => {
+    zoomOut(null, ZOOM_SPEED);
+  };
 
-    const withHandleClose =
-        (callback: AnyFunction) =>
-        (...args: unknown[]) => {
-            handleClose();
-            callback(...args);
-        };
+  const options = [
+    {
+      icon: <FaSearchPlus />,
+      label: t("workspace.zoomIn"),
+      onClick: withHandleClose(onZoomIn),
+    },
+    {
+      icon: <FaSearchMinus />,
+      label: t("workspace.zoomOut"),
+      onClick: withHandleClose(onZoomOut),
+    },
+    {
+      icon: <FaSearch />,
+      label: t("workspace.resetZoom"),
+      onClick: withHandleClose(resetZoom),
+    },
+  ];
 
-    const onZoomIn = () => {
-        zoomIn(null, ZOOM_SPEED);
-    };
-    const onZoomOut = () => {
-        zoomOut(null, ZOOM_SPEED);
-    };
+  const title = `${t("workspace.currentZoom")} : x${round(ratio, 2)}`;
 
-    const options = [
-        {
-            icon: <FaSearchPlus />,
-            label: t("workspace.zoomIn"),
-            onClick: withHandleClose(onZoomIn),
-        },
-        {
-            icon: <FaSearchMinus />,
-            label: t("workspace.zoomOut"),
-            onClick: withHandleClose(onZoomOut),
-        },
-        {
-            icon: <FaSearch />,
-            label: t("workspace.resetZoom"),
-            onClick: withHandleClose(resetZoom),
-        },
-    ];
-
-    const title = `${t("workspace.currentZoom")} : x${round(ratio, 2)}`;
-
-    return (
-        <Box>
-            <Button
-                variant="outlined"
-                disableElevation={true}
-                color="secondary"
-                size="small"
-                onClick={handleClick}
-                startIcon={<FaSearchPlus />}
-            >
-                {title}
-            </Button>
-            <Menu
-                getContentAnchorEl={null}
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-                anchorOrigin={{
-                    horizontal: "right",
-                    vertical: "bottom",
-                }}
-                transformOrigin={{
-                    horizontal: "right",
-                    vertical: "top",
-                }}
-            >
-                {options.map(({ icon, label, onClick }) => (
-                    <MenuItem key={`displayed-${label}`} onClick={onClick}>
-                        <ZoomPickerOptionItem icon={icon} label={label} />
-                    </MenuItem>
-                ))}
-            </Menu>
-        </Box>
-    );
+  return (
+    <Box>
+      <Button
+        variant="outlined"
+        disableElevation={true}
+        color="secondary"
+        size="small"
+        onClick={handleClick}
+        startIcon={<FaSearchPlus />}
+      >
+        {title}
+      </Button>
+      <Menu
+        getContentAnchorEl={null}
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        anchorOrigin={{
+          horizontal: "right",
+          vertical: "bottom",
+        }}
+        transformOrigin={{
+          horizontal: "right",
+          vertical: "top",
+        }}
+      >
+        {options.map(({ icon, label, onClick }) => (
+          <MenuItem key={`displayed-${label}`} onClick={onClick}>
+            <ZoomPickerOptionItem icon={icon} label={label} />
+          </MenuItem>
+        ))}
+      </Menu>
+    </Box>
+  );
 };

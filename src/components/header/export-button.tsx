@@ -12,41 +12,41 @@ import { getAreHashesReady } from "../../reducers/files-and-folders/files-and-fo
 import { ExportModal } from "../modals/export-modal/export-modal";
 
 export const ExportButton: React.FC = () => {
-    const { t } = useTranslation();
-    const { isModalOpen, openModal, closeModal } = useModal();
-    const classes = useStyles();
-    const title = t("header.export");
-    const [isBadgeShown, setIsBadgeShown] = useState(false);
-    const areHashesReady = useSelector(getAreHashesReady);
+  const { t } = useTranslation();
+  const { isModalOpen, openModal, closeModal } = useModal();
+  const classes = useStyles();
+  const title = t("header.export");
+  const [isBadgeShown, setIsBadgeShown] = useState(false);
+  const areHashesReady = useSelector(getAreHashesReady);
 
-    useEffect(() => {
-        if (areHashesReady) {
-            setIsBadgeShown(true);
-        }
-    }, [areHashesReady]);
+  useEffect(() => {
+    if (areHashesReady) {
+      setIsBadgeShown(true);
+    }
+  }, [areHashesReady]);
 
-    const onClick = useCallback(() => {
-        openModal();
-        setIsBadgeShown(false);
-    }, [openModal, setIsBadgeShown]);
+  const onClick = useCallback(() => {
+    openModal();
+    setIsBadgeShown(false);
+  }, [openModal, setIsBadgeShown]);
 
-    return (
-        <>
-            <Tooltip title={title}>
-                <Badge color="error" variant="dot" invisible={!isBadgeShown}>
-                    <Button
-                        id="export-button"
-                        color="primary"
-                        variant="contained"
-                        className={classes.headerButton}
-                        onClick={onClick}
-                        disableElevation
-                    >
-                        <FaDownload />
-                    </Button>
-                </Badge>
-            </Tooltip>
-            <ExportModal isModalOpen={isModalOpen} closeModal={closeModal} />
-        </>
-    );
+  return (
+    <>
+      <Tooltip title={title}>
+        <Badge color="error" variant="dot" invisible={!isBadgeShown}>
+          <Button
+            id="export-button"
+            color="primary"
+            variant="contained"
+            className={classes.headerButton}
+            onClick={onClick}
+            disableElevation
+          >
+            <FaDownload />
+          </Button>
+        </Badge>
+      </Tooltip>
+      <ExportModal isModalOpen={isModalOpen} closeModal={closeModal} />
+    </>
+  );
 };

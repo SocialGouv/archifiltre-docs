@@ -23,29 +23,29 @@ import { undoableWorkspaceMetadataReducer as workspaceMetadataReducer } from "./
 import type { WorkspaceMetadataState } from "./workspace-metadata/workspace-metadata-types";
 
 export interface StoreState {
-    tags: UndoableState<TagsState>;
-    filesAndFolders: UndoableState<FilesAndFoldersState>;
-    filesAndFoldersMetadata: UndoableState<FilesAndFoldersMetadataState>;
-    hashes: HashesState;
-    icicleSortMethod: IcicleSortMethodState;
-    loadingInfo: LoadingInfoState;
-    loadingState: UndoableState<LoadingState>;
-    modal: ModalState;
-    workspaceMetadata: UndoableState<WorkspaceMetadataState>;
+  tags: UndoableState<TagsState>;
+  filesAndFolders: UndoableState<FilesAndFoldersState>;
+  filesAndFoldersMetadata: UndoableState<FilesAndFoldersMetadataState>;
+  hashes: HashesState;
+  icicleSortMethod: IcicleSortMethodState;
+  loadingInfo: LoadingInfoState;
+  loadingState: UndoableState<LoadingState>;
+  modal: ModalState;
+  workspaceMetadata: UndoableState<WorkspaceMetadataState>;
 }
 
 export const store = createStore(
-    combineReducers({
-        filesAndFolders: filesAndFoldersReducer,
-        filesAndFoldersMetadata: filesAndFoldersMetadataReducer,
-        hashes: hashesReducer,
-        icicleSortMethod: icicleSortMethodReducer,
-        loadingInfo: loadingInfoReducer,
-        loadingState: loadingStateReducer,
-        modal: modalReducer,
-        tags: tagsReducer,
-        workspaceMetadata: workspaceMetadataReducer,
-    }),
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    applyMiddleware(thunk, persistActions)
+  combineReducers({
+    filesAndFolders: filesAndFoldersReducer,
+    filesAndFoldersMetadata: filesAndFoldersMetadataReducer,
+    hashes: hashesReducer,
+    icicleSortMethod: icicleSortMethodReducer,
+    loadingInfo: loadingInfoReducer,
+    loadingState: loadingStateReducer,
+    modal: modalReducer,
+    tags: tagsReducer,
+    workspaceMetadata: workspaceMetadataReducer,
+  }),
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  applyMiddleware(thunk, persistActions)
 );

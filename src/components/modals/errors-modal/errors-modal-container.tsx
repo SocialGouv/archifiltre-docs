@@ -8,22 +8,22 @@ import { Modal } from "../../../reducers/modal/modal-types";
 import { ErrorsModal } from "./errors-modal";
 
 export const ErrorsModalContainer: React.FC = () => {
-    const errors = useArchifiltreErrors();
-    const openModal = useOpenModal();
-    const dispatch = useDispatch();
+  const errors = useArchifiltreErrors();
+  const openModal = useOpenModal();
+  const dispatch = useDispatch();
 
-    const closeModal = useCallback(
-        () => dispatch(closeModalAction()),
-        [dispatch]
-    );
+  const closeModal = useCallback(
+    () => dispatch(closeModalAction()),
+    [dispatch]
+  );
 
-    const isModalOpen = openModal === Modal.ERROR_MODAL;
+  const isModalOpen = openModal === Modal.ERROR_MODAL;
 
-    return (
-        <ErrorsModal
-            isModalOpen={isModalOpen}
-            closeModal={closeModal}
-            errors={errors}
-        />
-    );
+  return (
+    <ErrorsModal
+      isModalOpen={isModalOpen}
+      closeModal={closeModal}
+      errors={errors}
+    />
+  );
 };

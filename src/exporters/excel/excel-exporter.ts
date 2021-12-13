@@ -3,8 +3,8 @@ import { tap } from "rxjs/operators";
 
 import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import {
-    completeLoadingAction,
-    progressLoadingAction,
+  completeLoadingAction,
+  progressLoadingAction,
 } from "../../reducers/loading-info/loading-info-actions";
 import { startLoading } from "../../reducers/loading-info/loading-info-operations";
 import { LoadingInfoTypes } from "../../reducers/loading-info/loading-info-types";
@@ -15,58 +15,56 @@ import type { ResultMessage } from "../../util/batch-process/batch-process-util-
 import { isProgressResult } from "../../util/export/export-util";
 import { openExternalElement } from "../../util/file-system/file-system-util";
 import {
-    NotificationDuration,
-    notifyInfo,
-    notifySuccess,
+  NotificationDuration,
+  notifyInfo,
+  notifySuccess,
 } from "../../util/notification/notifications-util";
 import { getExcelExportProgressGoal } from "./excel-exporter.impl";
 import { generateExcelExport$ } from "./excel-exporter-controller";
 
 export const excelExporterThunk =
-    (name: string): ArchifiltreThunkAction =>
-    async (dispatch, getState) => {
-        const exportData = getCsvExportParamsFromStore(getState());
+  (name: string): ArchifiltreThunkAction =>
+  async (dispatch, getState) => {
+    const exportData = getCsvExportParamsFromStore(getState());
 
-        const loadingLabel = translations.t("export.excelExportProgressLabel");
-        const loadedLabel = translations.t("export.excelExportSuccessMessage");
+    const loadingLabel = translations.t("export.excelExportProgressLabel");
+    const loadedLabel = translations.t("export.excelExportSuccessMessage");
 
-        const elementsCount = Object.keys(exportData.filesAndFolders).length;
+    const elementsCount = Object.keys(exportData.filesAndFolders).length;
 
-        notifyInfo(
-            translations.t("export.excelExportStartedMessage"),
-            translations.t("export.excelExportTitle")
-        );
+    notifyInfo(
+      translations.t("export.excelExportStartedMessage"),
+      translations.t("export.excelExportTitle")
+    );
 
-        const loadingId = dispatch(
-            startLoading(
-                LoadingInfoTypes.EXPORT,
-                getExcelExportProgressGoal(elementsCount),
-                loadingLabel,
-                loadedLabel
-            )
-        );
+    const loadingId = dispatch(
+      startLoading(
+        LoadingInfoTypes.EXPORT,
+        getExcelExportProgressGoal(elementsCount),
+        loadingLabel,
+        loadedLabel
+      )
+    );
 
-        const { result } = await generateExcelExport$(exportData)
-            .pipe(
-                filterResults<number>(),
-                tap((message: ResultMessage<number>) => {
-                    if (isProgressResult(message)) {
-                        dispatch(
-                            progressLoadingAction(loadingId, message.result)
-                        );
-                    }
-                })
-            )
-            .toPromise();
+    const { result } = await generateExcelExport$(exportData)
+      .pipe(
+        filterResults<number>(),
+        tap((message: ResultMessage<number>) => {
+          if (isProgressResult(message)) {
+            dispatch(progressLoadingAction(loadingId, message.result));
+          }
+        })
+      )
+      .toPromise();
 
-        await fs.writeFile(name, String(result), "binary");
+    await fs.writeFile(name, String(result), "binary");
 
-        dispatch(completeLoadingAction(loadingId));
+    dispatch(completeLoadingAction(loadingId));
 
-        notifySuccess(
-            translations.t("export.excelExportSuccessMessage"),
-            translations.t("export.excelExportTitle"),
-            NotificationDuration.NORMAL,
-            async () => openExternalElement(name)
-        );
-    };
+    notifySuccess(
+      translations.t("export.excelExportSuccessMessage"),
+      translations.t("export.excelExportTitle"),
+      NotificationDuration.NORMAL,
+      async () => openExternalElement(name)
+    );
+  };

@@ -9,18 +9,18 @@ import type { HashesMap } from "./hashes-types";
  * @param store - The current redux state
  */
 export const getHashesFromStore = (store: StoreState): HashesMap =>
-    store.hashes.hashes;
+  store.hashes.hashes;
 
 /**
  * Gets the errored hashes paths from the store
  * @param store
  */
 export const getErroredHashesFromStore = (
-    store: StoreState
+  store: StoreState
 ): ArchifiltreError[] => store.hashes.erroredHashes;
 
 /**
  * Hook to get the hash computation errors
  */
 export const useHashesErrors = (): ArchifiltreError[] =>
-    useSelector(getErroredHashesFromStore);
+  useSelector(getErroredHashesFromStore);

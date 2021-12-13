@@ -1,10 +1,10 @@
 import * as fs from "fs";
 
 import {
-    getLoader,
-    isFileSystemLoad,
-    loadFileSystemFromFilesAndFoldersLoader,
-    makeFileLoadingHooksCreator,
+  getLoader,
+  isFileSystemLoad,
+  loadFileSystemFromFilesAndFoldersLoader,
+  makeFileLoadingHooksCreator,
 } from "../../files-and-folders-loader/file-system-loading-process-utils";
 import type { VirtualFileSystem } from "../../files-and-folders-loader/files-and-folders-loader-types";
 import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
@@ -18,43 +18,43 @@ import { stringifyVFSToStream } from "./load-from-filesystem-serializer";
 type Reporter = (message: unknown) => void;
 
 interface Reporters {
-    reportError: Reporter;
-    reportWarning: Reporter;
-    reportFatal: Reporter;
-    reportResult: Reporter;
-    reportComplete: Reporter;
+  reportError: Reporter;
+  reportWarning: Reporter;
+  reportFatal: Reporter;
+  reportResult: Reporter;
+  reportComplete: Reporter;
 }
 
 const createReporters = (asyncWorker: AsyncWorker): Reporters => ({
-    reportComplete: () => {
-        asyncWorker.postMessage({ type: MessageTypes.COMPLETE });
-    },
-    reportError: (error: unknown) => {
-        asyncWorker.postMessage({ error, type: MessageTypes.ERROR });
-    },
-    reportFatal: (error: unknown) => {
-        asyncWorker.postMessage({ error, type: MessageTypes.FATAL });
-    },
-    reportResult: (result: unknown) => {
-        asyncWorker.postMessage({ result, type: MessageTypes.RESULT });
-    },
-    reportWarning: (warning: unknown) => {
-        asyncWorker.postMessage({ type: MessageTypes.WARNING, warning });
-    },
+  reportComplete: () => {
+    asyncWorker.postMessage({ type: MessageTypes.COMPLETE });
+  },
+  reportError: (error: unknown) => {
+    asyncWorker.postMessage({ error, type: MessageTypes.ERROR });
+  },
+  reportFatal: (error: unknown) => {
+    asyncWorker.postMessage({ error, type: MessageTypes.FATAL });
+  },
+  reportResult: (result: unknown) => {
+    asyncWorker.postMessage({ result, type: MessageTypes.RESULT });
+  },
+  reportWarning: (warning: unknown) => {
+    asyncWorker.postMessage({ type: MessageTypes.WARNING, warning });
+  },
 });
 
 const reportResultStream = (result: VirtualFileSystem) => {
-    // @ts-expect-error Create a stream is touchy (?)
-    const stream = fs.createWriteStream(null, {
-        fd: RESULT_STREAM_FILE_DESCRIPTOR,
-    });
-    stringifyVFSToStream(stream, result);
+  // @ts-expect-error Create a stream is touchy (?)
+  const stream = fs.createWriteStream(null, {
+    fd: RESULT_STREAM_FILE_DESCRIPTOR,
+  });
+  stringifyVFSToStream(stream, result);
 };
 
 interface LoadVirtualFileSystemParams {
-    path: string;
-    filesAndFolders?: FilesAndFoldersMap;
-    erroredPaths?: ArchifiltreError[];
+  path: string;
+  filesAndFolders?: FilesAndFoldersMap;
+  erroredPaths?: ArchifiltreError[];
 }
 
 /**
@@ -63,46 +63,46 @@ interface LoadVirtualFileSystemParams {
  * @param loadPath
  */
 export const loadVirtualFileSystem = async (
-    asyncWorker: AsyncWorker,
-    { path, filesAndFolders, erroredPaths }: LoadVirtualFileSystemParams
+  asyncWorker: AsyncWorker,
+  { path, filesAndFolders, erroredPaths }: LoadVirtualFileSystemParams
 ): Promise<void> => {
-    const { reportResult, reportError, reportFatal, reportComplete } =
-        createReporters(asyncWorker);
+  const { reportResult, reportError, reportFatal, reportComplete } =
+    createReporters(asyncWorker);
 
-    const isOnFileSystem = isFileSystemLoad(path);
+  const isOnFileSystem = isFileSystemLoad(path);
 
-    const filesAndFoldersLoaderCreator = getLoader(path, {
-        erroredPaths,
-        filesAndFolders,
+  const filesAndFoldersLoaderCreator = getLoader(path, {
+    erroredPaths,
+    filesAndFolders,
+  });
+
+  const filesAndFoldersLoader = filesAndFoldersLoaderCreator(path);
+
+  const hooksCreator = makeFileLoadingHooksCreator({
+    reportError,
+    reportFatal,
+    reportResult,
+  });
+
+  const fileSystem = await loadFileSystemFromFilesAndFoldersLoader(
+    filesAndFoldersLoader,
+    hooksCreator,
+    {
+      isOnFileSystem,
+    }
+  );
+
+  reportResultStream(fileSystem);
+
+  await new Promise<void>((resolve) => {
+    asyncWorker.addEventListener(WorkerEventType.MESSAGE, ({ type }) => {
+      if (type === MessageTypes.STREAM_READ) {
+        resolve();
+      }
     });
+  });
 
-    const filesAndFoldersLoader = filesAndFoldersLoaderCreator(path);
-
-    const hooksCreator = makeFileLoadingHooksCreator({
-        reportError,
-        reportFatal,
-        reportResult,
-    });
-
-    const fileSystem = await loadFileSystemFromFilesAndFoldersLoader(
-        filesAndFoldersLoader,
-        hooksCreator,
-        {
-            isOnFileSystem,
-        }
-    );
-
-    reportResultStream(fileSystem);
-
-    await new Promise<void>((resolve) => {
-        asyncWorker.addEventListener(WorkerEventType.MESSAGE, ({ type }) => {
-            if (type === MessageTypes.STREAM_READ) {
-                resolve();
-            }
-        });
-    });
-
-    reportComplete({
-        status: MessageTypes.COMPLETE,
-    });
+  reportComplete({
+    status: MessageTypes.COMPLETE,
+  });
 };

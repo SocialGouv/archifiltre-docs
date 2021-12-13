@@ -13,95 +13,85 @@ import { getInitialUserSettings } from "../../../persistence/persistent-settings
 import { reloadApp } from "../../../util/electron/electron-util";
 
 const useStyles = makeStyles((theme: Theme) => ({
-    disabled: {
-        color: theme.palette.grey["500"],
-    },
-    enabled: {
-        color: theme.palette.secondary.main,
-    },
+  disabled: {
+    color: theme.palette.grey["500"],
+  },
+  enabled: {
+    color: theme.palette.secondary.main,
+  },
 }));
 
 export const PrivacySettings: React.FC = () => {
-    const { t } = useTranslation();
-    const classes = useStyles();
+  const { t } = useTranslation();
+  const classes = useStyles();
 
-    const {
-        isTrackingEnabled: defaultIsTrackingEnabled,
-        isMonitoringEnabled: defaultIsMonitoringEnabled,
-    } = getInitialUserSettings();
-    const {
-        userSettings: { isTrackingEnabled, isMonitoringEnabled },
-        setUserSettings,
-    } = useUserSettings();
-    const hasSettingChanged =
-        defaultIsTrackingEnabled !== isTrackingEnabled ||
-        defaultIsMonitoringEnabled !== isMonitoringEnabled;
+  const {
+    isTrackingEnabled: defaultIsTrackingEnabled,
+    isMonitoringEnabled: defaultIsMonitoringEnabled,
+  } = getInitialUserSettings();
+  const {
+    userSettings: { isTrackingEnabled, isMonitoringEnabled },
+    setUserSettings,
+  } = useUserSettings();
+  const hasSettingChanged =
+    defaultIsTrackingEnabled !== isTrackingEnabled ||
+    defaultIsMonitoringEnabled !== isMonitoringEnabled;
 
-    const toggleTracking = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
-            setUserSettings({ isTrackingEnabled: event.target.checked });
-        },
-        [setUserSettings]
-    );
+  const toggleTracking = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setUserSettings({ isTrackingEnabled: event.target.checked });
+    },
+    [setUserSettings]
+  );
 
-    const toggleMonitoring = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
-            setUserSettings({ isMonitoringEnabled: event.target.checked });
-        },
-        [setUserSettings]
-    );
+  const toggleMonitoring = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setUserSettings({ isMonitoringEnabled: event.target.checked });
+    },
+    [setUserSettings]
+  );
 
-    const reloadExplanation = t("settingsModal.reloadExplanation");
+  const reloadExplanation = t("settingsModal.reloadExplanation");
 
-    return (
-        <Box>
-            <Box>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={isTrackingEnabled}
-                            onChange={toggleTracking}
-                        />
-                    }
-                    label={t("settingsModal.trackingData")}
-                    classes={{
-                        label: isTrackingEnabled
-                            ? classes.enabled
-                            : classes.disabled,
-                    }}
-                />
-            </Box>
-            <Box>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={isMonitoringEnabled}
-                            onChange={toggleMonitoring}
-                        />
-                    }
-                    label={t("settingsModal.monitoringData")}
-                    classes={{
-                        label: isMonitoringEnabled
-                            ? classes.enabled
-                            : classes.disabled,
-                    }}
-                />
-            </Box>
-            <Box pt={1}>
-                <Tooltip title={reloadExplanation}>
-                    <span>
-                        <Button
-                            color="primary"
-                            variant="contained"
-                            disableElevation
-                            disabled={!hasSettingChanged}
-                            onClick={reloadApp}
-                        >
-                            {t("common.reload")}
-                        </Button>
-                    </span>
-                </Tooltip>
-            </Box>
-        </Box>
-    );
+  return (
+    <Box>
+      <Box>
+        <FormControlLabel
+          control={
+            <Switch checked={isTrackingEnabled} onChange={toggleTracking} />
+          }
+          label={t("settingsModal.trackingData")}
+          classes={{
+            label: isTrackingEnabled ? classes.enabled : classes.disabled,
+          }}
+        />
+      </Box>
+      <Box>
+        <FormControlLabel
+          control={
+            <Switch checked={isMonitoringEnabled} onChange={toggleMonitoring} />
+          }
+          label={t("settingsModal.monitoringData")}
+          classes={{
+            label: isMonitoringEnabled ? classes.enabled : classes.disabled,
+          }}
+        />
+      </Box>
+      <Box pt={1}>
+        <Tooltip title={reloadExplanation}>
+          <span>
+            <Button
+              color="primary"
+              variant="contained"
+              disableElevation
+              disabled={!hasSettingChanged}
+              onClick={reloadApp}
+            >
+              {t("common.reload")}
+            </Button>
+          </span>
+        </Tooltip>
+      </Box>
+    </Box>
+  );
 };

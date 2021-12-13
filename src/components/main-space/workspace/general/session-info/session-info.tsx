@@ -7,60 +7,54 @@ import { SessionElementsDetails } from "./session-elements-details";
 import { WorkspaceBoundaryDates } from "./workspace-boundary-dates";
 
 export interface SessionInfoProps {
-    sessionName: string;
-    onChangeSessionName: (name: string) => void;
-    nbFolders: number;
-    nbFiles: number;
-    volume: number;
-    newestFileTimestamp: number;
-    oldestFileTimestamp: number;
-    firstLevelName: string;
+  sessionName: string;
+  onChangeSessionName: (name: string) => void;
+  nbFolders: number;
+  nbFiles: number;
+  volume: number;
+  newestFileTimestamp: number;
+  oldestFileTimestamp: number;
+  firstLevelName: string;
 }
 
 export const SessionInfo: React.FC<SessionInfoProps> = ({
-    sessionName,
-    onChangeSessionName,
-    nbFolders,
-    nbFiles,
-    volume,
-    newestFileTimestamp,
-    oldestFileTimestamp,
-    firstLevelName,
+  sessionName,
+  onChangeSessionName,
+  nbFolders,
+  nbFiles,
+  volume,
+  newestFileTimestamp,
+  oldestFileTimestamp,
+  firstLevelName,
 }) => (
-    <Box display="flex" flexDirection="column" justifyContent="space-between">
-        <Box marginY={0.5}>
-            <Box>
-                <EditableField
-                    trimValue={true}
-                    value={
-                        firstLevelName === sessionName
-                            ? firstLevelName
-                            : sessionName
-                    }
-                    onChange={onChangeSessionName}
-                    selectTextOnFocus={true}
-                />
-            </Box>
-            {firstLevelName !== sessionName && (
-                <Box>
-                    <Typography variant="subtitle2">
-                        ({firstLevelName})
-                    </Typography>
-                </Box>
-            )}
+  <Box display="flex" flexDirection="column" justifyContent="space-between">
+    <Box marginY={0.5}>
+      <Box>
+        <EditableField
+          trimValue={true}
+          value={firstLevelName === sessionName ? firstLevelName : sessionName}
+          onChange={onChangeSessionName}
+          selectTextOnFocus={true}
+        />
+      </Box>
+      {firstLevelName !== sessionName && (
+        <Box>
+          <Typography variant="subtitle2">({firstLevelName})</Typography>
         </Box>
-        <Box marginY={0.5}>
-            <SessionElementsDetails
-                nbFiles={nbFiles}
-                nbFolders={nbFolders}
-                volume={volume}
-            />
-        </Box>
-        <Box marginY={0.5}>
-            <WorkspaceBoundaryDates
-                oldestFileTimestamp={oldestFileTimestamp}
-                newestFileTimestamp={newestFileTimestamp}
-            />
-        </Box>
+      )}
     </Box>
+    <Box marginY={0.5}>
+      <SessionElementsDetails
+        nbFiles={nbFiles}
+        nbFolders={nbFolders}
+        volume={volume}
+      />
+    </Box>
+    <Box marginY={0.5}>
+      <WorkspaceBoundaryDates
+        oldestFileTimestamp={oldestFileTimestamp}
+        newestFileTimestamp={newestFileTimestamp}
+      />
+    </Box>
+  </Box>
 );

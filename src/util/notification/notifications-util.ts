@@ -2,11 +2,11 @@ import { noop } from "lodash";
 import { NotificationManager } from "react-notifications";
 
 export enum NotificationDuration {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    NORMAL = 10000,
-    // aproximatively equals 3 years as Number.MAX_SAFE_INTEGER is not working
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    PERMANENT = 100000000000,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  NORMAL = 10000,
+  // aproximatively equals 3 years as Number.MAX_SAFE_INTEGER is not working
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  PERMANENT = 100000000000,
 }
 
 /**
@@ -17,12 +17,12 @@ export enum NotificationDuration {
  * @param callback - The function called on notification click
  */
 export const notifySuccess = (
-    message: string,
-    title: string,
-    notificationDuration = NotificationDuration.NORMAL,
-    callback = noop
+  message: string,
+  title: string,
+  notificationDuration = NotificationDuration.NORMAL,
+  callback = noop
 ): void => {
-    NotificationManager.success(message, title, notificationDuration, callback);
+  NotificationManager.success(message, title, notificationDuration, callback);
 };
 
 /**
@@ -33,12 +33,12 @@ export const notifySuccess = (
  * @param callback - The function called on notification click
  */
 export const notifyError = (
-    message: string,
-    title: string,
-    notificationDuration = NotificationDuration.NORMAL,
-    callback = noop
+  message: string,
+  title: string,
+  notificationDuration = NotificationDuration.NORMAL,
+  callback = noop
 ): void => {
-    NotificationManager.error(message, title, notificationDuration, callback);
+  NotificationManager.error(message, title, notificationDuration, callback);
 };
 
 /**
@@ -49,10 +49,10 @@ export const notifyError = (
  * @param callback - The function called on notification click
  */
 export const notifyInfo = (
-    message: string,
-    title: string,
-    notificationDuration = NotificationDuration.NORMAL,
-    callback = noop
+  message: string,
+  title: string,
+  notificationDuration = NotificationDuration.NORMAL,
+  callback = noop
 ): void => {
-    NotificationManager.info(message, title, notificationDuration, callback);
+  NotificationManager.info(message, title, notificationDuration, callback);
 };

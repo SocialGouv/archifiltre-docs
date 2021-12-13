@@ -5,14 +5,14 @@ import { DuplicatesChartContainer as DuplicatesChart } from "./duplicates-chart-
 import { DuplicatesDistributionChartContainer as DuplicatesDistributionChart } from "./duplicates-distribution-chart-container";
 
 export const DuplicatesDistribution: React.FC = () => {
-    return (
-        <Grid container>
-            <Grid item xs={6}>
-                <DuplicatesChart />
-            </Grid>
-            <Grid item xs={6}>
-                <DuplicatesDistributionChart />
-            </Grid>
-        </Grid>
-    );
+  return (
+    <Grid container>
+      <Grid item xs={6}>
+        <DuplicatesChart />
+      </Grid>
+      <Grid item xs={6}>
+        <DuplicatesDistributionChart />
+      </Grid>
+    </Grid>
+  );
 };

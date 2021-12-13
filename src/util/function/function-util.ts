@@ -2,8 +2,8 @@ export const identity = <T>(param: T): T => param;
 
 export type AnyFunction = (...args: unknown[]) => unknown;
 export type Awaitable<T> = T extends (...args: infer A) => infer R
-    ? (...args: A) => Promise<R>
-    : Promise<T>;
+  ? (...args: A) => Promise<R>
+  : Promise<T>;
 export type VoidFunction = (...args: unknown[]) => void;
 
 /**
@@ -17,17 +17,17 @@ export type VoidFunction = (...args: unknown[]) => void;
  * (...args) => f(g(h(...args))).
  */
 export function compose(...funcs: AnyFunction[]): AnyFunction {
-    if (funcs.length === 0) {
-        return (arg) => arg;
-    }
+  if (funcs.length === 0) {
+    return (arg) => arg;
+  }
 
-    if (funcs.length === 1) {
-        return funcs[0];
-    }
+  if (funcs.length === 1) {
+    return funcs[0];
+  }
 
-    return funcs.reduce(
-        (a, b) =>
-            (...args) =>
-                a(b(...args))
-    );
+  return funcs.reduce(
+    (a, b) =>
+      (...args) =>
+        a(b(...args))
+  );
 }

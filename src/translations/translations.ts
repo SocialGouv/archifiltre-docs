@@ -6,17 +6,17 @@ import en from "./en.json";
 import fr from "./fr.json";
 
 void translations.use(initReactI18next).init({
-    fallbackLng: "en",
-    interpolation: {
-        escapeValue: false,
-    },
-    lng: "en",
+  fallbackLng: "en",
+  interpolation: {
+    escapeValue: false,
+  },
+  lng: "en",
 
-    resources: {
-        de,
-        en,
-        fr,
-    },
+  resources: {
+    de,
+    en,
+    fr,
+  },
 });
 
 export { translations };

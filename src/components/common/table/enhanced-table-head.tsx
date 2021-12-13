@@ -9,75 +9,69 @@ import type { Order } from "../../../util/table/table-util";
 import type { Column } from "./table-types";
 
 const useStyles = makeStyles(
-    createStyles({
-        visuallyHidden: {
-            border: 0,
-            clip: "rect(0 0 0 0)",
-            height: 1,
-            margin: -1,
-            overflow: "hidden",
-            padding: 0,
-            position: "absolute",
-            top: 20,
-            width: 1,
-        },
-    })
+  createStyles({
+    visuallyHidden: {
+      border: 0,
+      clip: "rect(0 0 0 0)",
+      height: 1,
+      margin: -1,
+      overflow: "hidden",
+      padding: 0,
+      position: "absolute",
+      top: 20,
+      width: 1,
+    },
+  })
 );
 
 export interface EnhancedTableHeadProps<T> {
-    onRequestSort: (
-        event: React.MouseEvent<unknown>,
-        columnIndex: number
-    ) => void;
-    order: Order;
-    orderBy: number;
-    columns: Column<T>[];
+  onRequestSort: (
+    event: React.MouseEvent<unknown>,
+    columnIndex: number
+  ) => void;
+  order: Order;
+  orderBy: number;
+  columns: Column<T>[];
 }
 
 export const EnhancedTableHead = <T,>({
-    columns,
-    order,
-    orderBy,
-    onRequestSort,
+  columns,
+  order,
+  orderBy,
+  onRequestSort,
 }: EnhancedTableHeadProps<T>): React.ReactElement<
-    EnhancedTableHeadProps<T>
+  EnhancedTableHeadProps<T>
 > => {
-    const classes = useStyles();
-    const createSortHandler =
-        (columnIndex: number) => (event: React.MouseEvent) => {
-            onRequestSort(event, columnIndex);
-        };
+  const classes = useStyles();
+  const createSortHandler =
+    (columnIndex: number) => (event: React.MouseEvent) => {
+      onRequestSort(event, columnIndex);
+    };
 
-    return (
-        <TableHead>
-            <TableRow>
-                {columns.map((column, index) => (
-                    <TableCell
-                        key={column.id}
-                        sortDirection={orderBy === index ? order : false}
-                    >
-                        <TableSortLabel
-                            active={orderBy === index}
-                            direction={orderBy === index ? order : "asc"}
-                            onClick={
-                                column.sortable
-                                    ? createSortHandler(index)
-                                    : undefined
-                            }
-                            hideSortIcon={!column.sortable}
-                        >
-                            {column.name}
-                            {orderBy === index ? (
-                                <span className={classes.visuallyHidden}>
-                                    {order === "desc"
-                                        ? "sorted descending"
-                                        : "sorted ascending"}
-                                </span>
-                            ) : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
-            </TableRow>
-        </TableHead>
-    );
+  return (
+    <TableHead>
+      <TableRow>
+        {columns.map((column, index) => (
+          <TableCell
+            key={column.id}
+            sortDirection={orderBy === index ? order : false}
+          >
+            <TableSortLabel
+              active={orderBy === index}
+              direction={orderBy === index ? order : "asc"}
+              onClick={column.sortable ? createSortHandler(index) : undefined}
+              hideSortIcon={!column.sortable}
+            >
+              {column.name}
+              {orderBy === index ? (
+                <span className={classes.visuallyHidden}>
+                  {order === "desc" ? "sorted descending" : "sorted ascending"}
+                </span>
+              ) : null}
+            </TableSortLabel>
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
 };

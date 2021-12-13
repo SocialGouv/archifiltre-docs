@@ -17,8 +17,8 @@ import { Modals } from "./components/modals/modals";
 import { initReporter, reportInfo } from "./logging/reporter";
 import { initTracker } from "./logging/tracker";
 import {
-    getInitialUserSettings,
-    initUserSettings,
+  getInitialUserSettings,
+  initUserSettings,
 } from "./persistence/persistent-settings";
 import { initPreviousSessions } from "./persistence/previous-sessions";
 import { SecretDevtools } from "./secret-devtools";
@@ -38,42 +38,37 @@ initTracker(isTrackingEnabled);
 initReporter(isMonitoringEnabled);
 
 const App = styled.div`
-    padding: 0.975em;
-    height: 100vh;
-    box-sizing: border-box;
-    overflow: hidden;
+  padding: 0.975em;
+  height: 100vh;
+  box-sizing: border-box;
+  overflow: hidden;
 `;
 
 /** This is the entrypoint for the app. */
 render(
-    <Providers>
-        <WindowResize />
-        <App>
-            <Box
-                display="flex"
-                flexDirection="column"
-                height="100%"
-                width="100%"
-            >
-                <Box height="100%">
-                    <MainSpace />
-                </Box>
-                <BackgroundLoadingInfoContainer />
-            </Box>
-            <NewVersionChecker />
-        </App>
-        <NotificationContainer />
-        <Modals />
-    </Providers>,
-    document.querySelector("#root")
+  <Providers>
+    <WindowResize />
+    <App>
+      <Box display="flex" flexDirection="column" height="100%" width="100%">
+        <Box height="100%">
+          <MainSpace />
+        </Box>
+        <BackgroundLoadingInfoContainer />
+      </Box>
+      <NewVersionChecker />
+    </App>
+    <NotificationContainer />
+    <Modals />
+  </Providers>,
+  document.querySelector("#root")
 );
 
 document.ondragover = document.ondrop = (event) => {
-    event.preventDefault();
-    return false;
+  event.preventDefault();
+  return false;
 };
 
 window.ondragover = window.ondrop = (event) => {
-    event.preventDefault();
-    return false;
+  event.preventDefault();
+  return false;
 };

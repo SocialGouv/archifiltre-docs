@@ -7,10 +7,10 @@ import { setSessionName } from "./workspace-metadata-actions";
  * @param sessionName
  */
 export const setSessionNameThunk =
-    (sessionName: string): ArchifiltreThunkAction =>
-    (dispatch) => {
-        if (sessionName.length > 0) {
-            dispatch(setSessionName(sessionName));
-            dispatch(commitAction());
-        }
-    };
+  (sessionName: string): ArchifiltreThunkAction =>
+  (dispatch) => {
+    if (sessionName.length > 0) {
+      dispatch(setSessionName(sessionName));
+      dispatch(commitAction());
+    }
+  };

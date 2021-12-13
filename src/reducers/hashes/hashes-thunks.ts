@@ -7,7 +7,7 @@ import type { HashesMap } from "./hashes-types";
  * @param hashes
  */
 export const updateFilesAndFoldersHashes =
-    (hashes: HashesMap): ArchifiltreThunkAction =>
-    (dispatch) => {
-        dispatch(setFilesAndFoldersHashes(hashes));
-    };
+  (hashes: HashesMap): ArchifiltreThunkAction =>
+  (dispatch) => {
+    dispatch(setFilesAndFoldersHashes(hashes));
+  };

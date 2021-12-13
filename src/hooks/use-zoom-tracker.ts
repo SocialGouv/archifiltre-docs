@@ -5,14 +5,14 @@ import { ActionTitle, ActionType } from "../logging/tracker-types";
 import type { VoidFunction } from "../util/function/function-util";
 
 export const useZoomTracker = (): VoidFunction => {
-    const [hasZoomBeenPerformed, setHasZoomBeenPerformed] = useState(false);
-    return () => {
-        if (!hasZoomBeenPerformed) {
-            addTracker({
-                title: ActionTitle.ZOOM_PERFORMED,
-                type: ActionType.TRACK_EVENT,
-            });
-            setHasZoomBeenPerformed(true);
-        }
-    };
+  const [hasZoomBeenPerformed, setHasZoomBeenPerformed] = useState(false);
+  return () => {
+    if (!hasZoomBeenPerformed) {
+      addTracker({
+        title: ActionTitle.ZOOM_PERFORMED,
+        type: ActionType.TRACK_EVENT,
+      });
+      setHasZoomBeenPerformed(true);
+    }
+  };
 };

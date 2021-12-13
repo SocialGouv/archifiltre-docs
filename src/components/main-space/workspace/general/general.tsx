@@ -8,25 +8,25 @@ import { TranslatedCategoryTitle } from "../tabs/translated-category-title";
 import { SessionInfoContainer } from "./session-info/session-info-container";
 
 const SessionInfo = makeTabComponent({
-    content: <SessionInfoContainer />,
-    title: <TranslatedCategoryTitle title="report.fileTree" />,
+  content: <SessionInfoContainer />,
+  title: <TranslatedCategoryTitle title="report.fileTree" />,
 });
 
 const ElementCharacteristics = makeTabComponent({
-    content: <ElementCharacteristicsContainer />,
-    isLast: true,
-    title: <TranslatedCategoryTitle title="report.element" />,
+  content: <ElementCharacteristicsContainer />,
+  isLast: true,
+  title: <TranslatedCategoryTitle title="report.element" />,
 });
 
 export const General: React.FC = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    return (
-        <TabContentHeader title={t("report.info")}>
-            <TabsLayout>
-                <SessionInfo />
-                <ElementCharacteristics />
-            </TabsLayout>
-        </TabContentHeader>
-    );
+  return (
+    <TabContentHeader title={t("report.info")}>
+      <TabsLayout>
+        <SessionInfo />
+        <ElementCharacteristics />
+      </TabsLayout>
+    </TabContentHeader>
+  );
 };

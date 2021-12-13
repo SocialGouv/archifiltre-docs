@@ -6,34 +6,34 @@ import { IcicleColorMode } from "../../../reducers/icicle-sort-method/icicle-sor
 import { OptionsPicker } from "./options-picker";
 
 export interface IcicleColorModePickerProps {
-    icicleColorMode: IcicleColorMode;
-    setIcicleColorMode: (mode: IcicleColorMode) => void;
+  icicleColorMode: IcicleColorMode;
+  setIcicleColorMode: (mode: IcicleColorMode) => void;
 }
 
 export const IcicleColorModePicker: React.FC<IcicleColorModePickerProps> = ({
-    icicleColorMode,
-    setIcicleColorMode,
+  icicleColorMode,
+  setIcicleColorMode,
 }) => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    const options = [
-        {
-            label: t("workspace.type"),
-            value: IcicleColorMode.BY_TYPE,
-        },
-        {
-            label: t("workspace.dates"),
-            value: IcicleColorMode.BY_DATE,
-        },
-    ];
+  const options = [
+    {
+      label: t("workspace.type"),
+      value: IcicleColorMode.BY_TYPE,
+    },
+    {
+      label: t("workspace.dates"),
+      value: IcicleColorMode.BY_DATE,
+    },
+  ];
 
-    return (
-        <OptionsPicker
-            title={t("workspace.coloring")}
-            value={icicleColorMode}
-            setValue={setIcicleColorMode}
-            options={options}
-            icon={<FaPalette />}
-        />
-    );
+  return (
+    <OptionsPicker
+      title={t("workspace.coloring")}
+      value={icicleColorMode}
+      setValue={setIcicleColorMode}
+      options={options}
+      icon={<FaPalette />}
+    />
+  );
 };

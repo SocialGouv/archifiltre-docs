@@ -12,47 +12,46 @@ import { generateCsvExport$ } from "./csv-exporter.controller";
  * Each line represents one file or folder.
  */
 export const csvExporterThunk =
-    (name: string, { withHashes = false } = {}): ArchifiltreThunkAction =>
-    (dispatch, getState) => {
-        const csvExportStartedMessage = translations.t(
-            "export.csvExportStartedMessage"
-        );
-        const exportNotificationTitle = translations.t("export.csvExportTitle");
-        notifyInfo(csvExportStartedMessage, exportNotificationTitle);
+  (name: string, { withHashes = false } = {}): ArchifiltreThunkAction =>
+  (dispatch, getState) => {
+    const csvExportStartedMessage = translations.t(
+      "export.csvExportStartedMessage"
+    );
+    const exportNotificationTitle = translations.t("export.csvExportTitle");
+    notifyInfo(csvExportStartedMessage, exportNotificationTitle);
 
-        const exportData = getCsvExportParamsFromStore(getState());
+    const exportData = getCsvExportParamsFromStore(getState());
 
-        const data: GenerateCsvExportOptions = {
-            ...exportData,
-        };
-
-        if (!withHashes) {
-            delete data.hashes;
-        }
-
-        const totalProgress =
-            Object.keys(exportData.filesAndFolders).length + 1;
-        const loaderMessage = withHashes
-            ? translations.t("export.creatingCsvExportWithHashes")
-            : translations.t("export.creatingCsvExport");
-        const loadedMessage = withHashes
-            ? translations.t("export.createdCsvExportWithHashes")
-            : translations.t("export.createdCsvExport");
-
-        const exportSuccessMessage = translations.t(
-            "export.csvExportSuccessMessage"
-        );
-
-        const csvExportData$ = generateCsvExport$(data);
-
-        return dispatch(
-            handleFileExportThunk(csvExportData$, {
-                exportFileName: name,
-                exportNotificationTitle,
-                exportSuccessMessage,
-                loadedMessage,
-                loaderMessage,
-                totalProgress,
-            })
-        );
+    const data: GenerateCsvExportOptions = {
+      ...exportData,
     };
+
+    if (!withHashes) {
+      delete data.hashes;
+    }
+
+    const totalProgress = Object.keys(exportData.filesAndFolders).length + 1;
+    const loaderMessage = withHashes
+      ? translations.t("export.creatingCsvExportWithHashes")
+      : translations.t("export.creatingCsvExport");
+    const loadedMessage = withHashes
+      ? translations.t("export.createdCsvExportWithHashes")
+      : translations.t("export.createdCsvExport");
+
+    const exportSuccessMessage = translations.t(
+      "export.csvExportSuccessMessage"
+    );
+
+    const csvExportData$ = generateCsvExport$(data);
+
+    return dispatch(
+      handleFileExportThunk(csvExportData$, {
+        exportFileName: name,
+        exportNotificationTitle,
+        exportSuccessMessage,
+        loadedMessage,
+        loaderMessage,
+        totalProgress,
+      })
+    );
+  };

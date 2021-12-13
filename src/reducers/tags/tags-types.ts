@@ -9,61 +9,61 @@ export const TAG_FILE = "TAGS/TAG_FILE";
 export const UNTAG_FILE = "TAGS/UNTAG_FILE";
 
 export interface Tag {
-    id: string;
-    name: string;
-    ffIds: string[];
+  id: string;
+  name: string;
+  ffIds: string[];
 }
 
 export type TagMap = Record<string, Tag>;
 
 export interface TagsState {
-    tags: TagMap;
+  tags: TagMap;
 }
 
 interface ResetTagsAction extends Action {
-    type: typeof RESET_TAGS;
+  type: typeof RESET_TAGS;
 }
 
 interface InitializeTagsAction extends Action {
-    type: typeof INITIALIZE_TAGS;
-    tags: TagMap;
+  type: typeof INITIALIZE_TAGS;
+  tags: TagMap;
 }
 
 interface AddTagAction extends Action {
-    type: typeof ADD_TAG;
-    tagName: string;
-    tagId: string;
-    ffId: string;
+  type: typeof ADD_TAG;
+  tagName: string;
+  tagId: string;
+  ffId: string;
 }
 
 interface RenameTagAction extends Action {
-    type: typeof RENAME_TAG;
-    tagId: string;
-    tagName: string;
+  type: typeof RENAME_TAG;
+  tagId: string;
+  tagName: string;
 }
 
 interface DeleteTagAction extends Action {
-    type: typeof DELETE_TAG;
-    tagId: string;
+  type: typeof DELETE_TAG;
+  tagId: string;
 }
 
 interface TagFileAction extends Action {
-    type: typeof TAG_FILE;
-    tagId: string;
-    ffId: string;
+  type: typeof TAG_FILE;
+  tagId: string;
+  ffId: string;
 }
 
 interface UntagFileAction extends Action {
-    type: typeof UNTAG_FILE;
-    tagId: string;
-    ffId: string;
+  type: typeof UNTAG_FILE;
+  tagId: string;
+  ffId: string;
 }
 
 export type TagsActionTypes =
-    | AddTagAction
-    | DeleteTagAction
-    | InitializeTagsAction
-    | RenameTagAction
-    | ResetTagsAction
-    | TagFileAction
-    | UntagFileAction;
+  | AddTagAction
+  | DeleteTagAction
+  | InitializeTagsAction
+  | RenameTagAction
+  | ResetTagsAction
+  | TagFileAction
+  | UntagFileAction;

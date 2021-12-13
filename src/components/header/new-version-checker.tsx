@@ -18,66 +18,66 @@ import { ModalHeader } from "../modals/modal-header";
  * @returns {string|*}
  */
 export const mapToNewVersionNumbers = (lastVersion: string): string => {
-    if (lastVersion.split(".").length === 1) {
-        return `1.${lastVersion}.0`;
-    }
-    if (lastVersion.split(".").length === 2) {
-        return `1.${lastVersion}`;
-    }
-    return lastVersion;
+  if (lastVersion.split(".").length === 1) {
+    return `1.${lastVersion}.0`;
+  }
+  if (lastVersion.split(".").length === 2) {
+    return `1.${lastVersion}`;
+  }
+  return lastVersion;
 };
 
 export const NewVersionChecker: React.FC = () => {
-    const [isDisplayed, setIsDisplayed] = useState(false);
-    const [lastVersion, setLastVersion] = useState("");
-    const { t } = useTranslation();
-    const classes = useStyles();
+  const [isDisplayed, setIsDisplayed] = useState(false);
+  const [lastVersion, setLastVersion] = useState("");
+  const { t } = useTranslation();
+  const classes = useStyles();
 
-    useEffect(() => {
-        request<string>({
-            method: "GET",
-            url: `${ARCHIFILTRE_SITE_URL}/api-version.json`,
-        })
-            .then((result) => {
-                const previousVersion = mapToNewVersionNumbers(
-                    JSON.parse(result).lastVersion as string
-                );
-                const currentVersion = version;
-                if (versionComparator(currentVersion, previousVersion) === -1) {
-                    setIsDisplayed(true);
-                    setLastVersion(previousVersion);
-                }
-            })
-            .catch((error) => {
-                reportError(error);
-            });
-    }, []);
+  useEffect(() => {
+    request<string>({
+      method: "GET",
+      url: `${ARCHIFILTRE_SITE_URL}/api-version.json`,
+    })
+      .then((result) => {
+        const previousVersion = mapToNewVersionNumbers(
+          JSON.parse(result).lastVersion as string
+        );
+        const currentVersion = version;
+        if (versionComparator(currentVersion, previousVersion) === -1) {
+          setIsDisplayed(true);
+          setLastVersion(previousVersion);
+        }
+      })
+      .catch((error) => {
+        reportError(error);
+      });
+  }, []);
 
-    const download = useCallback(() => {
-        openLink(ARCHIFILTRE_SITE_URL);
-    }, []);
+  const download = useCallback(() => {
+    openLink(ARCHIFILTRE_SITE_URL);
+  }, []);
 
-    const onClose = useCallback(() => {
-        setIsDisplayed(false);
-    }, [setIsDisplayed]);
+  const onClose = useCallback(() => {
+    setIsDisplayed(false);
+  }, [setIsDisplayed]);
 
-    if (!isDisplayed) return null;
-    return (
-        <Dialog open={isDisplayed} onClose={onClose}>
-            <ModalHeader title={t("header.newVersion")} onClose={onClose} />
-            <DialogContent className={classes.dialogContent}>
-                {t("header.aNewVersionIsOut", {
-                    version: lastVersion,
-                })}
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={download} color="primary">
-                    {t("header.download")}
-                </Button>
-                <Button onClick={onClose} color="primary">
-                    {t("header.cancel")}
-                </Button>
-            </DialogActions>
-        </Dialog>
-    );
+  if (!isDisplayed) return null;
+  return (
+    <Dialog open={isDisplayed} onClose={onClose}>
+      <ModalHeader title={t("header.newVersion")} onClose={onClose} />
+      <DialogContent className={classes.dialogContent}>
+        {t("header.aNewVersionIsOut", {
+          version: lastVersion,
+        })}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={download} color="primary">
+          {t("header.download")}
+        </Button>
+        <Button onClick={onClose} color="primary">
+          {t("header.cancel")}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 };

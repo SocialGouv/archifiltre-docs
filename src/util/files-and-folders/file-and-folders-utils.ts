@@ -3,13 +3,13 @@ import md5 from "js-md5";
 import { lookup } from "mime-types";
 
 import {
-    decomposePathToElement,
-    isFile,
+  decomposePathToElement,
+  isFile,
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import type {
-    FilesAndFolders,
-    FilesAndFoldersMap,
-    VirtualPathToIdMap,
+  FilesAndFolders,
+  FilesAndFoldersMap,
+  VirtualPathToIdMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import { translations } from "../../translations/translations";
@@ -22,11 +22,11 @@ import { countItems } from "../array/array-util";
  * @returns {function(*=): *}
  */
 export const countFoldersWithMoreThanNChildren =
-    (nbChildren: number) =>
-    (folders: FilesAndFolders[]): number =>
-        countItems<FilesAndFolders>(
-            (folder) => folder.children.length > nbChildren
-        )(folders);
+  (nbChildren: number) =>
+  (folders: FilesAndFolders[]): number =>
+    countItems<FilesAndFolders>(
+      (folder) => folder.children.length > nbChildren
+    )(folders);
 
 /**
  * Counts folder that are deeper than maxDepth
@@ -35,11 +35,9 @@ export const countFoldersWithMoreThanNChildren =
  * @returns {function(*=): *}
  */
 export const countDeeperFolders =
-    (maxDepth: number) =>
-    (folders: FilesAndFolders[]): number =>
-        countItems<FilesAndFolders>((folder) => folder.depth > maxDepth)(
-            folders
-        );
+  (maxDepth: number) =>
+  (folders: FilesAndFolders[]): number =>
+    countItems<FilesAndFolders>((folder) => folder.depth > maxDepth)(folders);
 
 /**
  * Counts the number of path longer than maxLength
@@ -48,9 +46,9 @@ export const countDeeperFolders =
  * @returns {function(*=): *}
  */
 export const countLongerPath =
-    (maxLength: number) =>
-    (paths: string[]): number =>
-        countItems<string>((path) => path.length > maxLength)(paths);
+  (maxLength: number) =>
+  (paths: string[]): number =>
+    countItems<string>((path) => path.length > maxLength)(paths);
 
 /**
  * Sorts folders by number of childrens in a decreasing order
@@ -58,11 +56,11 @@ export const countLongerPath =
  * @returns {Array}
  */
 export const sortFoldersByChildrenCount = (
-    folders: FilesAndFolders[]
+  folders: FilesAndFolders[]
 ): FilesAndFolders[] =>
-    folders.sort(
-        (folder1, folder2) => folder2.children.length - folder1.children.length
-    );
+  folders.sort(
+    (folder1, folder2) => folder2.children.length - folder1.children.length
+  );
 
 /**
  * Sort folders by depth in a decreasing order
@@ -70,9 +68,9 @@ export const sortFoldersByChildrenCount = (
  * @returns {Array}
  */
 export const sortFoldersByDepth = (
-    folders: FilesAndFolders[]
+  folders: FilesAndFolders[]
 ): FilesAndFolders[] =>
-    folders.sort((folder1, folder2) => folder2.depth - folder1.depth);
+  folders.sort((folder1, folder2) => folder2.depth - folder1.depth);
 
 /**
  * Returns all the folders with no child folders
@@ -80,36 +78,34 @@ export const sortFoldersByDepth = (
  * @returns {Array}
  */
 export const findAllFoldersWithNoSubfolder = (
-    fileAndFoldersMap: FilesAndFoldersMap
+  fileAndFoldersMap: FilesAndFoldersMap
 ): string[] => {
-    const baseNodeId = "";
+  const baseNodeId = "";
 
-    const findFoldersWithNoSubfolderRec = (nodeId: string): string[] => {
-        const currentNode = fileAndFoldersMap[nodeId];
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (!currentNode) {
-            throw new Error(`${nodeId} is undefined`);
-        }
-        if (!currentNode.children.length) {
-            return [];
-        }
+  const findFoldersWithNoSubfolderRec = (nodeId: string): string[] => {
+    const currentNode = fileAndFoldersMap[nodeId];
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (!currentNode) {
+      throw new Error(`${nodeId} is undefined`);
+    }
+    if (!currentNode.children.length) {
+      return [];
+    }
 
-        const subFoldersWithNoSubfolders = currentNode.children.reduce<
-            string[]
-        >(
-            (acc, childNodeId) =>
-                acc.concat(findFoldersWithNoSubfolderRec(childNodeId)),
-            []
-        );
+    const subFoldersWithNoSubfolders = currentNode.children.reduce<string[]>(
+      (acc, childNodeId) =>
+        acc.concat(findFoldersWithNoSubfolderRec(childNodeId)),
+      []
+    );
 
-        if (!subFoldersWithNoSubfolders.length) {
-            return [nodeId];
-        }
+    if (!subFoldersWithNoSubfolders.length) {
+      return [nodeId];
+    }
 
-        return subFoldersWithNoSubfolders;
-    };
+    return subFoldersWithNoSubfolders;
+  };
 
-    return findFoldersWithNoSubfolderRec(baseNodeId);
+  return findFoldersWithNoSubfolderRec(baseNodeId);
 };
 
 /**
@@ -118,14 +114,14 @@ export const findAllFoldersWithNoSubfolder = (
  * @returns {{Object}[]}
  */
 export const filesAndFoldersMapToArray = (
-    filesAndFolders: FilesAndFoldersMap
+  filesAndFolders: FilesAndFoldersMap
 ): FilesAndFolders[] =>
-    Object.keys(filesAndFolders)
-        .filter((id) => id)
-        .map((id) => ({
-            ...filesAndFolders[id],
-            id,
-        })) as FilesAndFolders[];
+  Object.keys(filesAndFolders)
+    .filter((id) => id)
+    .map((id) => ({
+      ...filesAndFolders[id],
+      id,
+    })) as FilesAndFolders[];
 
 /**
  * Returns all the files from a filesAndFolders list
@@ -133,9 +129,9 @@ export const filesAndFoldersMapToArray = (
  * @returns {*}
  */
 export const getFiles = (
-    filesAndFoldersArray: FilesAndFolders[]
+  filesAndFoldersArray: FilesAndFolders[]
 ): FilesAndFolders[] =>
-    filesAndFoldersArray.filter(({ children }) => !children.length);
+  filesAndFoldersArray.filter(({ children }) => !children.length);
 
 /**
  * Filters files and folders to only get folders
@@ -143,9 +139,9 @@ export const getFiles = (
  * @returns {*}
  */
 export const getFolders = (
-    filesAndFolders: FilesAndFolders[]
+  filesAndFolders: FilesAndFolders[]
 ): FilesAndFolders[] =>
-    filesAndFolders.filter(({ children }) => children.length);
+  filesAndFolders.filter(({ children }) => children.length);
 
 type HookCompute = (hashes: HashesMap) => void;
 
@@ -159,43 +155,43 @@ type HookCompute = (hashes: HashesMap) => void;
  * @returns {Object} - The map of all hashes for each id
  */
 const recComputeFolderHash = async (
-    filesAndFolders: FilesAndFoldersMap,
-    hashes: HashesMap,
-    id: string,
-    hook: HookCompute
+  filesAndFolders: FilesAndFoldersMap,
+  hashes: HashesMap,
+  id: string,
+  hook: HookCompute
 ): Promise<HashesMap> => {
-    const { children } = filesAndFolders[id];
-    const hash = hashes[id];
-    if (hash) {
-        return { [id]: hash };
-    }
+  const { children } = filesAndFolders[id];
+  const hash = hashes[id];
+  if (hash) {
+    return { [id]: hash };
+  }
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (!children?.length) {
-        return { [id]: null };
-    }
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (!children?.length) {
+    return { [id]: null };
+  }
 
-    const childResults = await Promise.all(
-        children.map(async (childId) =>
-            recComputeFolderHash(filesAndFolders, hashes, childId, hook)
-        )
-    );
+  const childResults = await Promise.all(
+    children.map(async (childId) =>
+      recComputeFolderHash(filesAndFolders, hashes, childId, hook)
+    )
+  );
 
-    const childrenResults: HashesMap = Object.assign({}, ...childResults);
+  const childrenResults: HashesMap = Object.assign({}, ...childResults);
 
-    const currentFolderHash = md5(
-        // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
-        children
-            .map((childId) => childrenResults[childId])
-            .sort()
-            .join("")
-    );
+  const currentFolderHash = md5(
+    // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
+    children
+      .map((childId) => childrenResults[childId])
+      .sort()
+      .join("")
+  );
 
-    const currentHashObject: HashesMap = { [id]: currentFolderHash };
+  const currentHashObject: HashesMap = { [id]: currentFolderHash };
 
-    hook(currentHashObject);
+  hook(currentHashObject);
 
-    return { ...currentHashObject, ...childrenResults };
+  return { ...currentHashObject, ...childrenResults };
 };
 
 /**
@@ -206,12 +202,12 @@ const recComputeFolderHash = async (
  * @returns {Object} - A map containing all the filesAndFolders hashes
  */
 export const computeFolderHashes = async (
-    filesAndFolders: FilesAndFoldersMap,
-    hashes: HashesMap,
-    hook: HookCompute
+  filesAndFolders: FilesAndFoldersMap,
+  hashes: HashesMap,
+  hook: HookCompute
 ): Promise<HashesMap> => {
-    const baseFolder = "";
-    return recComputeFolderHash(filesAndFolders, hashes, baseFolder, hook);
+  const baseFolder = "";
+  return recComputeFolderHash(filesAndFolders, hashes, baseFolder, hook);
 };
 
 /**
@@ -220,13 +216,13 @@ export const computeFolderHashes = async (
  * @param suspectedAncestorId
  */
 export const isExactFileOrAncestor = (
-    baseElementId: string,
-    suspectedAncestorId: string
+  baseElementId: string,
+  suspectedAncestorId: string
 ): boolean => {
-    const index = baseElementId.indexOf(suspectedAncestorId);
-    const trailingChar = baseElementId[suspectedAncestorId.length];
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    return !index && (trailingChar === void 0 || trailingChar === "/");
+  const index = baseElementId.indexOf(suspectedAncestorId);
+  const trailingChar = baseElementId[suspectedAncestorId.length];
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  return !index && (trailingChar === void 0 || trailingChar === "/");
 };
 
 /**
@@ -235,8 +231,8 @@ export const isExactFileOrAncestor = (
  * @param elementAlias - element optional alias
  */
 export const getDisplayName = (
-    elementName: string,
-    elementAlias?: string
+  elementName: string,
+  elementAlias?: string
 ): string => elementAlias || elementName; // eslint-disable-line @typescript-eslint/prefer-nullish-coalescing -- Handle empty string
 
 /**
@@ -246,21 +242,21 @@ export const getDisplayName = (
  * @param virtualPathToIdMap
  */
 export const createFilePathSequence = (
-    targetElementId: string,
-    filesAndFolders: FilesAndFoldersMap,
-    virtualPathToIdMap: VirtualPathToIdMap
+  targetElementId: string,
+  filesAndFolders: FilesAndFoldersMap,
+  virtualPathToIdMap: VirtualPathToIdMap
 ): string[] => {
-    const { virtualPath: targetElementVirtualPath } =
-        filesAndFolders[targetElementId];
+  const { virtualPath: targetElementVirtualPath } =
+    filesAndFolders[targetElementId];
 
-    return decomposePathToElement(targetElementVirtualPath || targetElementId)
-        .slice(1)
-        .map((virtualPath) => virtualPathToIdMap[virtualPath] || virtualPath);
+  return decomposePathToElement(targetElementVirtualPath || targetElementId)
+    .slice(1)
+    .map((virtualPath) => virtualPathToIdMap[virtualPath] || virtualPath);
 };
 
 interface GetTypeOptions {
-    folderLabel?: string;
-    unknownLabel?: string;
+  folderLabel?: string;
+  unknownLabel?: string;
 }
 
 /**
@@ -271,17 +267,17 @@ interface GetTypeOptions {
  * @param options.unknownLabel
  */
 export const getType = (
-    filesAndFolders: FilesAndFolders,
-    {
-        folderLabel = translations.t("common.folder"),
-        unknownLabel = translations.t("common.unknown"),
-    }: GetTypeOptions = {}
+  filesAndFolders: FilesAndFolders,
+  {
+    folderLabel = translations.t("common.folder"),
+    unknownLabel = translations.t("common.unknown"),
+  }: GetTypeOptions = {}
 ): string => {
-    if (!isFile(filesAndFolders)) {
-        return folderLabel ?? "";
-    }
-    const mimeType = lookup(filesAndFolders.id);
-    return (mimeType ? mimeType.split("/").pop()! : unknownLabel) ?? "";
+  if (!isFile(filesAndFolders)) {
+    return folderLabel ?? "";
+  }
+  const mimeType = lookup(filesAndFolders.id);
+  return (mimeType ? mimeType.split("/").pop()! : unknownLabel) ?? "";
 };
 
 /**
@@ -290,21 +286,21 @@ export const getType = (
  * @param filesAndFoldersId - filesAndFoldersId of the node to get children from
  */
 export const getAllChildren = (
-    filesAndFoldersMap: FilesAndFoldersMap,
-    filesAndFoldersId: string
+  filesAndFoldersMap: FilesAndFoldersMap,
+  filesAndFoldersId: string
 ): string[] => {
-    const allChildren: string[] = [];
+  const allChildren: string[] = [];
 
-    const getAllChildrenRec = (currentId: string) => {
-        const { children } = filesAndFoldersMap[currentId];
-        allChildren.push(currentId);
-        children.forEach((childId) => {
-            getAllChildrenRec(childId);
-        });
-    };
+  const getAllChildrenRec = (currentId: string) => {
+    const { children } = filesAndFoldersMap[currentId];
+    allChildren.push(currentId);
+    children.forEach((childId) => {
+      getAllChildrenRec(childId);
+    });
+  };
 
-    getAllChildrenRec(filesAndFoldersId);
-    return allChildren;
+  getAllChildrenRec(filesAndFoldersId);
+  return allChildren;
 };
 
 /**
@@ -312,7 +308,7 @@ export const getAllChildren = (
  * @param filesAndFoldersMap - list of all files and folders
  */
 export const getFirstLevelName = (
-    filesAndFoldersMap: FilesAndFoldersMap
+  filesAndFoldersMap: FilesAndFoldersMap
 ): string => filesAndFoldersMap[""].children[0].slice(1);
 
 /**
@@ -320,19 +316,18 @@ export const getFirstLevelName = (
  * @param filesAndFolders
  */
 export const removeChildrenPath = (filesAndFolders: string[]): string[] =>
-    filesAndFolders.reduce<string[]>(
-        (acc, element) =>
-            acc
-                .filter(
-                    (includedElement) =>
-                        !isExactFileOrAncestor(includedElement, element)
-                )
-                .concat(
-                    acc.some((includedElement) =>
-                        isExactFileOrAncestor(element, includedElement)
-                    )
-                        ? []
-                        : [element]
-                ),
-        []
-    );
+  filesAndFolders.reduce<string[]>(
+    (acc, element) =>
+      acc
+        .filter(
+          (includedElement) => !isExactFileOrAncestor(includedElement, element)
+        )
+        .concat(
+          acc.some((includedElement) =>
+            isExactFileOrAncestor(element, includedElement)
+          )
+            ? []
+            : [element]
+        ),
+    []
+  );

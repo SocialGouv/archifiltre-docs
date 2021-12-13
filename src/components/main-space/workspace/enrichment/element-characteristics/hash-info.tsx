@@ -4,21 +4,21 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 export interface HashInfoProps {
-    hash: string;
+  hash: string;
 }
 
 export const HashInfo: React.FC<HashInfoProps> = ({ hash }) => {
-    const { t } = useTranslation();
-    const hashIconExplanation = t("report.hashIconExplanation");
+  const { t } = useTranslation();
+  const hashIconExplanation = t("report.hashIconExplanation");
 
-    return (
+  return (
+    <span>
+      <span>{hash}</span>&nbsp;
+      <Tooltip title={hashIconExplanation}>
         <span>
-            <span>{hash}</span>&nbsp;
-            <Tooltip title={hashIconExplanation}>
-                <span>
-                    <HashIcon value={hash} size={12} />
-                </span>
-            </Tooltip>
+          <HashIcon value={hash} size={12} />
         </span>
-    );
+      </Tooltip>
+    </span>
+  );
 };

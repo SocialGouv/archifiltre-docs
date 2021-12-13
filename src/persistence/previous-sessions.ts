@@ -7,61 +7,60 @@ import { getPath } from "../util/electron/electron-util";
 const MAX_SHORTCUTS_LENGTH = 10;
 
 const getPreviousSessionsPath = (): string => {
-    const userFolderPath = getPath("userData");
-    return path.join(userFolderPath, "previous-sessions");
+  const userFolderPath = getPath("userData");
+  return path.join(userFolderPath, "previous-sessions");
 };
 
 /**
  * Remove duplicates and incorrect data from previous sessions array
  */
 const sanitizePreviousSessions = (previousSessions: string[]) => {
-    const sanitizedPreviousSessions = previousSessions.map((session) =>
-        session.replace(/\r/g, "")
-    );
+  const sanitizedPreviousSessions = previousSessions.map((session) =>
+    session.replace(/\r/g, "")
+  );
 
-    return sanitizedPreviousSessions
-        .map((session) => session.replace(/\r/g, ""))
-        .filter(
-            (session, index) =>
-                sanitizedPreviousSessions.indexOf(session) === index
-        )
-        .filter((session) => !session.includes("\0"));
+  return sanitizedPreviousSessions
+    .map((session) => session.replace(/\r/g, ""))
+    .filter(
+      (session, index) => sanitizedPreviousSessions.indexOf(session) === index
+    )
+    .filter((session) => !session.includes("\0"));
 };
 
 /**
  * If no file exists, create an empty file with the previous sessions path
  */
 export const initPreviousSessions = (): void => {
-    try {
-        const previousSessionsPath = getPreviousSessionsPath();
-        if (!fs.existsSync(previousSessionsPath)) {
-            fs.writeFileSync(previousSessionsPath, "");
-        }
-    } catch (error: unknown) {
-        reportError(error);
+  try {
+    const previousSessionsPath = getPreviousSessionsPath();
+    if (!fs.existsSync(previousSessionsPath)) {
+      fs.writeFileSync(previousSessionsPath, "");
     }
+  } catch (error: unknown) {
+    reportError(error);
+  }
 };
 
 /**
  * Read previous sessions paths, an empty array if there are none.
  */
 export const getPreviousSessions = (): string[] => {
-    try {
-        const previousSessionsPath = getPreviousSessionsPath();
-        const previousSessions = fs.readFileSync(previousSessionsPath, "utf8");
-        if (previousSessions === "") {
-            return [];
-        }
-        const previousSessionsList = previousSessions.trim().split("\n");
-        return sanitizePreviousSessions(previousSessionsList);
-    } catch (error: unknown) {
-        reportError(error);
-        return [];
+  try {
+    const previousSessionsPath = getPreviousSessionsPath();
+    const previousSessions = fs.readFileSync(previousSessionsPath, "utf8");
+    if (previousSessions === "") {
+      return [];
     }
+    const previousSessionsList = previousSessions.trim().split("\n");
+    return sanitizePreviousSessions(previousSessionsList);
+  } catch (error: unknown) {
+    reportError(error);
+    return [];
+  }
 };
 
 const removeDuplicateLines = (lines: string): string[] => [
-    ...new Set(lines.trim().split("\n")),
+  ...new Set(lines.trim().split("\n")),
 ];
 
 /**
@@ -69,57 +68,57 @@ const removeDuplicateLines = (lines: string): string[] => [
  * @param newSessionPath - new value for user settings
  */
 export const savePreviousSession = async (
-    newSessionPath: string
+  newSessionPath: string
 ): Promise<void> => {
-    try {
-        const previousSessionsPath = getPreviousSessionsPath();
-        const previousSessions = fs.readFileSync(previousSessionsPath, "utf8");
-        const previousSessionsList = [
-            ...removeDuplicateLines(previousSessions),
-            `\r\n${newSessionPath}`,
-        ]
-            .reverse()
-            .slice(0, MAX_SHORTCUTS_LENGTH)
-            .join("\n")
-            .concat("\n");
+  try {
+    const previousSessionsPath = getPreviousSessionsPath();
+    const previousSessions = fs.readFileSync(previousSessionsPath, "utf8");
+    const previousSessionsList = [
+      ...removeDuplicateLines(previousSessions),
+      `\r\n${newSessionPath}`,
+    ]
+      .reverse()
+      .slice(0, MAX_SHORTCUTS_LENGTH)
+      .join("\n")
+      .concat("\n");
 
-        await fs.promises.writeFile(previousSessionsPath, previousSessionsList);
-    } catch (error: unknown) {
-        reportError(error);
-    }
+    await fs.promises.writeFile(previousSessionsPath, previousSessionsList);
+  } catch (error: unknown) {
+    reportError(error);
+  }
 };
 
 const removeClickedElement = (
-    previousSession: string,
-    elementToDelete: string
+  previousSession: string,
+  elementToDelete: string
 ) => previousSession.replace(`${elementToDelete}\n`, "");
 
 export const removeOneSessionElement = async (
-    elementToDelete: string
+  elementToDelete: string
 ): Promise<void> => {
-    try {
-        const previousSessionsPath = getPreviousSessionsPath();
-        const previousSessions = fs.readFileSync(previousSessionsPath, "utf8");
-        const previousSessionsSanitized = removeClickedElement(
-            previousSessions,
-            elementToDelete
-        );
+  try {
+    const previousSessionsPath = getPreviousSessionsPath();
+    const previousSessions = fs.readFileSync(previousSessionsPath, "utf8");
+    const previousSessionsSanitized = removeClickedElement(
+      previousSessions,
+      elementToDelete
+    );
 
-        await fs.promises.writeFile(
-            previousSessionsPath,
-            previousSessionsSanitized
-        );
-    } catch (error: unknown) {
-        reportError(error);
-    }
+    await fs.promises.writeFile(
+      previousSessionsPath,
+      previousSessionsSanitized
+    );
+  } catch (error: unknown) {
+    reportError(error);
+  }
 };
 
 export const clearSession = async (): Promise<void> => {
-    try {
-        const previousSessionPath = getPreviousSessionsPath();
-        fs.writeFileSync(previousSessionPath, "");
-        await Promise.resolve();
-    } catch (error: unknown) {
-        reportError(error);
-    }
+  try {
+    const previousSessionPath = getPreviousSessionsPath();
+    fs.writeFileSync(previousSessionPath, "");
+    await Promise.resolve();
+  } catch (error: unknown) {
+    reportError(error);
+  }
 };

@@ -8,24 +8,24 @@ import { useStyles } from "../../hooks/use-styles";
 import type { VoidFunction } from "../../util/function/function-util";
 
 export interface ModalHeaderProps {
-    title: string;
-    onClose?: VoidFunction;
+  title: string;
+  onClose?: VoidFunction;
 }
 
 export const ModalHeader: React.FC<ModalHeaderProps> = ({ title, onClose }) => {
-    const classes = useStyles();
-    return (
-        <MuiDialogTitle disableTypography>
-            <Typography variant="h5">{title}</Typography>
-            {onClose ? (
-                <IconButton
-                    size="small"
-                    className={classes.closeButton}
-                    onClick={onClose}
-                >
-                    <FaTimes />
-                </IconButton>
-            ) : null}
-        </MuiDialogTitle>
-    );
+  const classes = useStyles();
+  return (
+    <MuiDialogTitle disableTypography>
+      <Typography variant="h5">{title}</Typography>
+      {onClose ? (
+        <IconButton
+          size="small"
+          className={classes.closeButton}
+          onClick={onClose}
+        >
+          <FaTimes />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
 };

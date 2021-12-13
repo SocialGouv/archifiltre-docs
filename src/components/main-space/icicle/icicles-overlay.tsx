@@ -6,54 +6,54 @@ import { IcicleRect } from "./icicle-rect";
 import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 
 export interface IciclesOverlayProps {
-    dimsMap: DimsMap;
-    opacity: number;
-    ids: string[];
-    fillColor: FillColor;
-    onIcicleRectClickHandler: IcicleMouseActionHandler;
-    onIcicleRectDoubleClickHandler: IcicleMouseActionHandler;
-    onIcicleRectMouseOverHandler: IcicleMouseActionHandler;
+  dimsMap: DimsMap;
+  opacity: number;
+  ids: string[];
+  fillColor: FillColor;
+  onIcicleRectClickHandler: IcicleMouseActionHandler;
+  onIcicleRectDoubleClickHandler: IcicleMouseActionHandler;
+  onIcicleRectMouseOverHandler: IcicleMouseActionHandler;
 }
 
 const _IciclesOverlay: React.FC<IciclesOverlayProps> = ({
-    opacity,
-    dimsMap,
-    ids,
-    fillColor,
-    onIcicleRectClickHandler,
-    onIcicleRectDoubleClickHandler,
-    onIcicleRectMouseOverHandler,
+  opacity,
+  dimsMap,
+  ids,
+  fillColor,
+  onIcicleRectClickHandler,
+  onIcicleRectDoubleClickHandler,
+  onIcicleRectMouseOverHandler,
 }) => {
-    return (
-        <>
-            {ids.map((id) => {
-                const dims = dimsMap[id];
-                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                if (!dims) {
-                    return <g key={id} />;
-                }
+  return (
+    <>
+      {ids.map((id) => {
+        const dims = dimsMap[id];
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (!dims) {
+          return <g key={id} />;
+        }
 
-                const { x, y, dx, dy } = dims;
+        const { x, y, dx, dy } = dims;
 
-                return (
-                    <IcicleRect
-                        key={id}
-                        id={id}
-                        x={x}
-                        y={y}
-                        dx={dx}
-                        dy={dy}
-                        opacity={opacity}
-                        fillColor={fillColor}
-                        onClickHandler={onIcicleRectClickHandler}
-                        onDoubleClickHandler={onIcicleRectDoubleClickHandler}
-                        onMouseOverHandler={onIcicleRectMouseOverHandler}
-                        registerDims={noop}
-                    />
-                );
-            })}
-        </>
-    );
+        return (
+          <IcicleRect
+            key={id}
+            id={id}
+            x={x}
+            y={y}
+            dx={dx}
+            dy={dy}
+            opacity={opacity}
+            fillColor={fillColor}
+            onClickHandler={onIcicleRectClickHandler}
+            onDoubleClickHandler={onIcicleRectDoubleClickHandler}
+            onMouseOverHandler={onIcicleRectMouseOverHandler}
+            registerDims={noop}
+          />
+        );
+      })}
+    </>
+  );
 };
 
 _IciclesOverlay.displayName = "IciclesOverlay";

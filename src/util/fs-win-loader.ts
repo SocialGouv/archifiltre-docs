@@ -9,30 +9,30 @@ import { isWindows } from "./os/os-util";
  * We could probably replace this with a proper webpack loader.
  */
 export const fswin: FsWin = (() => {
-    if (!isWindows()) {
-        return {};
-    }
-    try {
-        // @ts-expect-error
-        return __non_webpack_require__(
-            `./electron/dist/electron/${process.arch}/fswin.node`
-        );
-    } catch (err: unknown) {
-        // @ts-expect-error
-        return __non_webpack_require__(`./electron/${process.arch}/fswin.node`);
-    }
+  if (!isWindows()) {
+    return {};
+  }
+  try {
+    // @ts-expect-error
+    return __non_webpack_require__(
+      `./electron/dist/electron/${process.arch}/fswin.node`
+    );
+  } catch (err: unknown) {
+    // @ts-expect-error
+    return __non_webpack_require__(`./electron/${process.arch}/fswin.node`);
+  }
 })();
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 namespace FsWin {
-    export interface Attributes {
-        readonly IS_HIDDEN: boolean;
-    }
+  export interface Attributes {
+    readonly IS_HIDDEN: boolean;
+  }
 }
 interface FsWin {
-    getAttributesSync: (path: string) => FsWin.Attributes;
-    getAttributes: (
-        path: string,
-        cb: (attributes?: FsWin.Attributes) => void
-    ) => void;
+  getAttributesSync: (path: string) => FsWin.Attributes;
+  getAttributes: (
+    path: string,
+    cb: (attributes?: FsWin.Attributes) => void
+  ) => void;
 }

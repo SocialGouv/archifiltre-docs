@@ -15,66 +15,62 @@ import { ErrorsModal } from "../errors-modal/errors-modal";
 import { useErrorsModalConfig } from "../errors-modal/use-errors-modal-config";
 
 export const HashesErrorsModalContainer: React.FC = () => {
-    const errors = useHashesErrors();
-    const openModal = useOpenModal();
-    const dispatch = useDispatch();
-    const { t } = useTranslation();
-    const { originalPath } = useWorkspaceMetadata();
+  const errors = useHashesErrors();
+  const openModal = useOpenModal();
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const { originalPath } = useWorkspaceMetadata();
 
-    const closeModal = useCallback(
-        () => dispatch(closeModalAction()),
-        [dispatch]
-    );
+  const closeModal = useCallback(
+    () => dispatch(closeModalAction()),
+    [dispatch]
+  );
 
-    const retry = useCallback(
-        () => dispatch(retryHashesComputingThunk()),
-        [dispatch]
-    );
+  const retry = useCallback(
+    () => dispatch(retryHashesComputingThunk()),
+    [dispatch]
+  );
 
-    const isModalOpen = openModal === Modal.HASHES_ERROR_MODAL;
+  const isModalOpen = openModal === Modal.HASHES_ERROR_MODAL;
 
-    const config = useErrorsModalConfig(t);
+  const config = useErrorsModalConfig(t);
 
-    type ErrorModaleAction = NonNullable<
-        ErrorsModalProps["actions"]
-    >[number]["action"];
-    const exportErrors: ErrorModaleAction = useCallback(
-        async (errorsToExport) => {
-            await exportTableToCsvFile(errorsToExport, config, {
-                defaultFilePath: path.join(
-                    originalPath,
-                    "..",
-                    "load-errors.csv"
-                ),
-                notificationMessage: t("errorsModal.exportNotificationMessage"),
-                notificationTitle: t("errorsModal.exportNotificationTitle"),
-            });
-        },
-        [config, originalPath, t]
-    );
+  type ErrorModaleAction = NonNullable<
+    ErrorsModalProps["actions"]
+  >[number]["action"];
+  const exportErrors: ErrorModaleAction = useCallback(
+    async (errorsToExport) => {
+      await exportTableToCsvFile(errorsToExport, config, {
+        defaultFilePath: path.join(originalPath, "..", "load-errors.csv"),
+        notificationMessage: t("errorsModal.exportNotificationMessage"),
+        notificationTitle: t("errorsModal.exportNotificationTitle"),
+      });
+    },
+    [config, originalPath, t]
+  );
 
-    const actions = useMemo(
-        () => [
-            {
-                action: retry,
-                id: "retry",
-                title: t("common.retry"),
-            },
-            {
-                action: exportErrors,
-                id: "export",
-                title: t("common.exportActionTitle"),
-            },
-        ],
-        [t, retry, exportErrors]
-    );
+  const actions = useMemo(
+    () => [
+      {
+        action: retry,
+        id: "retry",
+        title: t("common.retry"),
+      },
+      {
+        action: exportErrors,
+        id: "export",
+        title: t("common.exportActionTitle"),
+      },
+    ],
+    [t, retry, exportErrors]
+  );
 
-    return (
-        <ErrorsModal
-            isModalOpen={isModalOpen}
-            closeModal={closeModal}
-            errors={errors}
-            actions={actions}
-        />
-    );
+  return (
+    <ErrorsModal
+      isModalOpen={isModalOpen}
+      closeModal={closeModal}
+      errors={errors}
+      actions={actions}
+    />
+  );
 };

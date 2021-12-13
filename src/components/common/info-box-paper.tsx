@@ -3,11 +3,11 @@ import Paper from "@material-ui/core/Paper";
 import styled from "styled-components";
 
 export type InfoBoxPaperProps = PaperProps & {
-    padding?: string;
+  padding?: string;
 };
 
 export const InfoBoxPaper = styled(Paper)<InfoBoxPaperProps>`
-    padding: ${({ padding }) => (padding ? padding : "10px")};
-    height: 100%;
-    box-sizing: border-box;
+  padding: ${({ padding }) => (padding ? padding : "10px")};
+  height: 100%;
+  box-sizing: border-box;
 `;

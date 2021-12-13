@@ -6,26 +6,26 @@ import { translations } from "../../translations/translations";
 import { createAsyncWorkerForChildProcessControllerFactory } from "../../util/async-worker/child-process";
 import { backgroundWorkerProcess$ } from "../../util/batch-process/batch-process-util";
 import type {
-    ErrorMessage,
-    InitializeMessage,
-    ResultMessage,
+  ErrorMessage,
+  InitializeMessage,
+  ResultMessage,
 } from "../../util/batch-process/batch-process-util-types";
 import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
 import type { TreeCsvExporterParams } from "./tree-csv-exporter-serializer";
 import { stringifyTreeCsvExporterOptionsToStream } from "./tree-csv-exporter-serializer";
 
 const initMessageSerializer = (
-    stream: Writable,
-    { data }: InitializeMessage
+  stream: Writable,
+  { data }: InitializeMessage
 ) => {
-    stringifyTreeCsvExporterOptionsToStream(
-        stream,
-        data as TreeCsvExporterParams
-    );
+  stringifyTreeCsvExporterOptionsToStream(
+    stream,
+    data as TreeCsvExporterParams
+  );
 };
 
 const messageSerializers = {
-    [MessageTypes.INITIALIZE]: initMessageSerializer,
+  [MessageTypes.INITIALIZE]: initMessageSerializer,
 };
 
 /**
@@ -34,16 +34,16 @@ const messageSerializers = {
  * @param filesAndFolders
  */
 export const generateTreeCsvExport$ = (
-    filesAndFolders: FilesAndFoldersMap
+  filesAndFolders: FilesAndFoldersMap
 ): Observable<ErrorMessage | ResultMessage> => {
-    const { language } = translations;
-    return backgroundWorkerProcess$(
-        { filesAndFolders, language },
-        createAsyncWorkerForChildProcessControllerFactory(
-            "tree-csv-exporter.fork",
-            {
-                messageSerializers,
-            }
-        )
-    );
+  const { language } = translations;
+  return backgroundWorkerProcess$(
+    { filesAndFolders, language },
+    createAsyncWorkerForChildProcessControllerFactory(
+      "tree-csv-exporter.fork",
+      {
+        messageSerializers,
+      }
+    )
+  );
 };

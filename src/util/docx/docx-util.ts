@@ -18,29 +18,29 @@ export type DocXValuesMap = SimpleObject;
  * @param replacers
  */
 export const exportToDocX = (
-    templatePath: string,
-    values: DocXValuesMap,
-    ...replacers: FileReplacer[]
+  templatePath: string,
+  values: DocXValuesMap,
+  ...replacers: FileReplacer[]
 ): Buffer => {
-    const templateContent = fs.readFileSync(
-        path.resolve("./static", templatePath),
-        "binary"
-    );
+  const templateContent = fs.readFileSync(
+    path.resolve("./static", templatePath),
+    "binary"
+  );
 
-    const docxZip = new PizZip(templateContent);
-    const modifiedZip = new Docxtemplater()
-        .loadZip(docxZip)
-        .setOptions({ parser: angularParser })
-        .setData(values)
-        .render()
-        .getZip() as PizZip;
+  const docxZip = new PizZip(templateContent);
+  const modifiedZip = new Docxtemplater()
+    .loadZip(docxZip)
+    .setOptions({ parser: angularParser })
+    .setData(values)
+    .render()
+    .getZip() as PizZip;
 
-    const replacedZip = replacers.reduce(
-        (zip, replacer) => replacer(zip, values),
-        modifiedZip
-    );
+  const replacedZip = replacers.reduce(
+    (zip, replacer) => replacer(zip, values),
+    modifiedZip
+  );
 
-    return replacedZip.generate({ type: "nodebuffer" });
+  return replacedZip.generate({ type: "nodebuffer" });
 };
 
 /**
@@ -51,18 +51,18 @@ export const exportToDocX = (
  * @param chartTemplate - The template used to replace to replace the chart
  */
 export const createChartReplacer =
-    (chartName: string, chartTemplate: string): FileReplacer =>
-    (zip, values) => {
-        const chartFile = fs.readFileSync(chartTemplate, "utf-8");
-        // regex that matches {myKey} or { myKey } patterns and captures myKey
-        const matchInferredValuesRegex = /{\s*(\w+?)\s*}/gm;
+  (chartName: string, chartTemplate: string): FileReplacer =>
+  (zip, values) => {
+    const chartFile = fs.readFileSync(chartTemplate, "utf-8");
+    // regex that matches {myKey} or { myKey } patterns and captures myKey
+    const matchInferredValuesRegex = /{\s*(\w+?)\s*}/gm;
 
-        const replacedChartFile = chartFile.replace(
-            matchInferredValuesRegex,
-            (_, token) => {
-                return (values[token] as string) || "";
-            }
-        );
-        zip.file(`word/charts/${chartName}.xml`, replacedChartFile);
-        return zip;
-    };
+    const replacedChartFile = chartFile.replace(
+      matchInferredValuesRegex,
+      (_, token) => {
+        return (values[token] as string) || "";
+      }
+    );
+    zip.file(`word/charts/${chartName}.xml`, replacedChartFile);
+    return zip;
+  };

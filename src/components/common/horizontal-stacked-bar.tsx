@@ -7,21 +7,21 @@ import styled from "styled-components";
 type HorizontalStackedBarData = Record<string, number>;
 
 export interface HorizontalStackedBarOption {
-    key: string;
-    color: string;
+  key: string;
+  color: string;
 }
 
 export type RenderTooltipContent = (key: string) => React.ReactElement;
 
 export interface HorizontalStackedBarProps {
-    data: HorizontalStackedBarData;
-    bars: HorizontalStackedBarOption[];
-    renderTooltipContent?: RenderTooltipContent;
+  data: HorizontalStackedBarData;
+  bars: HorizontalStackedBarOption[];
+  renderTooltipContent?: RenderTooltipContent;
 }
 
 interface BarProps {
-    color: string;
-    widthratio: number;
+  color: string;
+  widthratio: number;
 }
 
 /**
@@ -31,27 +31,27 @@ interface BarProps {
  * (even if the ref works with type checking disabled).
  */
 const Bar = styled(Box)<BarProps & BoxProps>`
-    background-color: ${({ color }: { color: string }) => color};
-    width: ${({ widthratio }) => `${widthratio}%`};
-    height: 100px;
+  background-color: ${({ color }: { color: string }) => color};
+  width: ${({ widthratio }) => `${widthratio}%`};
+  height: 100px;
 `;
 
 export const HorizontalStackedBar: React.FC<HorizontalStackedBarProps> = ({
-    data,
-    bars,
-    renderTooltipContent = () => "",
+  data,
+  bars,
+  renderTooltipContent = () => "",
 }) => {
-    const total = useMemo(
-        () => Object.values(data).reduce((sum, value) => sum + value, 0),
-        [data]
-    );
-    return (
-        <Box display="flex" flexWrap="nowrap" width="100%">
-            {bars.map(({ key, color }) => (
-                <Tooltip key={key} title={renderTooltipContent(key)}>
-                    <Bar color={color} widthratio={(data[key] / total) * 100} />
-                </Tooltip>
-            ))}
-        </Box>
-    );
+  const total = useMemo(
+    () => Object.values(data).reduce((sum, value) => sum + value, 0),
+    [data]
+  );
+  return (
+    <Box display="flex" flexWrap="nowrap" width="100%">
+      {bars.map(({ key, color }) => (
+        <Tooltip key={key} title={renderTooltipContent(key)}>
+          <Bar color={color} widthratio={(data[key] / total) * 100} />
+        </Tooltip>
+      ))}
+    </Box>
+  );
 };

@@ -15,66 +15,62 @@ import { ErrorsModal } from "../errors-modal/errors-modal";
 import { useErrorsModalConfig } from "../errors-modal/use-errors-modal-config";
 
 export const FilesAndFoldersErrorsModalContainer: React.FC = () => {
-    const errors = useFilesAndFoldersErrors();
-    const openModal = useOpenModal();
-    const dispatch = useDispatch();
-    const { t } = useTranslation();
-    const { originalPath } = useWorkspaceMetadata();
+  const errors = useFilesAndFoldersErrors();
+  const openModal = useOpenModal();
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const { originalPath } = useWorkspaceMetadata();
 
-    const closeModal = useCallback(
-        () => dispatch(closeModalAction()),
-        [dispatch]
-    );
+  const closeModal = useCallback(
+    () => dispatch(closeModalAction()),
+    [dispatch]
+  );
 
-    const retry = useCallback(
-        () => dispatch(reloadFilesAndFoldersThunk()),
-        [dispatch]
-    );
+  const retry = useCallback(
+    () => dispatch(reloadFilesAndFoldersThunk()),
+    [dispatch]
+  );
 
-    const config = useErrorsModalConfig(t);
+  const config = useErrorsModalConfig(t);
 
-    type ExportErrors = NonNullable<
-        ErrorsModalProps["actions"]
-    >[number]["action"];
-    const exportErrors: ExportErrors = useCallback(
-        async (errorsToExport) => {
-            await exportTableToCsvFile(errorsToExport, config, {
-                defaultFilePath: path.join(
-                    originalPath,
-                    "..",
-                    "load-errors.csv"
-                ),
-                notificationMessage: t("errorsModal.exportNotificationMessage"),
-                notificationTitle: t("errorsModal.exportNotificationTitle"),
-            });
-        },
-        [config, originalPath, t]
-    );
+  type ExportErrors = NonNullable<
+    ErrorsModalProps["actions"]
+  >[number]["action"];
+  const exportErrors: ExportErrors = useCallback(
+    async (errorsToExport) => {
+      await exportTableToCsvFile(errorsToExport, config, {
+        defaultFilePath: path.join(originalPath, "..", "load-errors.csv"),
+        notificationMessage: t("errorsModal.exportNotificationMessage"),
+        notificationTitle: t("errorsModal.exportNotificationTitle"),
+      });
+    },
+    [config, originalPath, t]
+  );
 
-    const isModalOpen = openModal === Modal.FIlES_AND_FOLDERS_ERRORS_MODAL;
+  const isModalOpen = openModal === Modal.FIlES_AND_FOLDERS_ERRORS_MODAL;
 
-    const actions: ErrorsModalProps["actions"] = useMemo(
-        () => [
-            {
-                action: retry,
-                id: "retry",
-                title: t("common.retry"),
-            },
-            {
-                action: exportErrors,
-                id: "export",
-                title: t("common.exportActionTitle"),
-            },
-        ],
-        [t, retry, exportErrors]
-    );
+  const actions: ErrorsModalProps["actions"] = useMemo(
+    () => [
+      {
+        action: retry,
+        id: "retry",
+        title: t("common.retry"),
+      },
+      {
+        action: exportErrors,
+        id: "export",
+        title: t("common.exportActionTitle"),
+      },
+    ],
+    [t, retry, exportErrors]
+  );
 
-    return (
-        <ErrorsModal
-            isModalOpen={isModalOpen}
-            closeModal={closeModal}
-            errors={errors}
-            actions={actions}
-        />
-    );
+  return (
+    <ErrorsModal
+      isModalOpen={isModalOpen}
+      closeModal={closeModal}
+      errors={errors}
+      actions={actions}
+    />
+  );
 };

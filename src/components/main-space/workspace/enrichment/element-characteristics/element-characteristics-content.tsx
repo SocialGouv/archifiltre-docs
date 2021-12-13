@@ -15,135 +15,122 @@ import { ElementCharacteristic } from "./element-characteristic";
 import { HashInfo } from "./hash-info";
 
 export interface ElementCharacteristicsContentProps {
-    elementName: string;
-    elementAlias: string;
-    elementSize: number;
-    elementPath: string;
-    minLastModifiedTimestamp: number;
-    maxLastModifiedTimestamp: number;
-    medianLastModifiedTimestamp: number;
-    lastModified: number;
-    hash: string;
-    isFolder: boolean;
-    onElementNameChange: (name: string) => void;
-    onLastModifiedChange: (timestamp: number) => void;
-    type: string;
+  elementName: string;
+  elementAlias: string;
+  elementSize: number;
+  elementPath: string;
+  minLastModifiedTimestamp: number;
+  maxLastModifiedTimestamp: number;
+  medianLastModifiedTimestamp: number;
+  lastModified: number;
+  hash: string;
+  isFolder: boolean;
+  onElementNameChange: (name: string) => void;
+  onLastModifiedChange: (timestamp: number) => void;
+  type: string;
 }
 
 export const ElementCharacteristicsContent: React.FC<
-    ElementCharacteristicsContentProps
+  ElementCharacteristicsContentProps
 > = ({
-    elementName,
-    elementAlias,
-    elementSize,
-    elementPath,
-    hash,
-    isFolder,
-    minLastModifiedTimestamp,
-    maxLastModifiedTimestamp,
-    medianLastModifiedTimestamp,
-    lastModified,
-    onLastModifiedChange,
-    onElementNameChange,
-    type,
+  elementName,
+  elementAlias,
+  elementSize,
+  elementPath,
+  hash,
+  isFolder,
+  minLastModifiedTimestamp,
+  maxLastModifiedTimestamp,
+  medianLastModifiedTimestamp,
+  lastModified,
+  onLastModifiedChange,
+  onElementNameChange,
+  type,
 }) => {
-    const { t } = useTranslation();
-    const { body2Box } = useStyles();
+  const { t } = useTranslation();
+  const { body2Box } = useStyles();
 
-    const openElement = async () => openExternalElement(elementPath);
+  const openElement = async () => openExternalElement(elementPath);
 
-    return (
-        <Box
-            display="flex"
-            flexDirection="column"
-            justifyContent="space-between"
-        >
-            <Box marginY={0.5}>
-                <Box display="flex">
-                    <Box marginRight={2}>
-                        <Box className={body2Box}>
-                            {isFolder ? (
-                                <ClickableIcon
-                                    onClick={openElement}
-                                    icon={FOLDER_ICON}
-                                    color="black"
-                                />
-                            ) : (
-                                <ClickableIcon
-                                    onClick={openElement}
-                                    icon={PAGE_ICON}
-                                    color="black"
-                                />
-                            )}
-                        </Box>
-                    </Box>
-                    {elementName !== "" && (
-                        <Box width="100%">
-                            <Box>
-                                <EditableField
-                                    trimValue={true}
-                                    selectTextOnFocus={true}
-                                    value={elementAlias || elementName}
-                                    onChange={onElementNameChange}
-                                />
-                            </Box>
-                            <Box>
-                                <Typography variant="subtitle2">
-                                    (
-                                    {elementAlias
-                                        ? elementName
-                                        : t("report.initialName")}
-                                    )
-                                </Typography>
-                            </Box>
-                        </Box>
-                    )}
-                </Box>
-            </Box>
-            <Box display="flex">
-                <Box marginY={0.5} flex={1}>
-                    <ElementCharacteristic
-                        name={t("report.size")}
-                        value={octet2HumanReadableFormat(elementSize)}
-                    />
-                    <ElementCharacteristic
-                        name={
-                            <>
-                                {t("report.hash")}&nbsp;
-                                <HelpTooltip
-                                    tooltipText={
-                                        isFolder
-                                            ? t("report.folderHashExplanation")
-                                            : t("report.fileHashExplanation")
-                                    }
-                                />
-                            </>
-                        }
-                        value={<HashInfo hash={hash} />}
-                    />
-                </Box>
-                <Box marginY={0.5} flex={1}>
-                    <ElementCharacteristic
-                        name={t("report.type")}
-                        value={type}
-                    />
-                </Box>
-            </Box>
-            <Box marginY={0.5}>
-                <Box>
-                    <Typography variant="h5">
-                        {t("report.lastModifications")}
-                    </Typography>
-                </Box>
-                <LastModifiedDate
-                    isFile={!isFolder}
-                    lastModified={lastModified}
-                    onDateChange={onLastModifiedChange}
-                    minLastModifiedTimestamp={minLastModifiedTimestamp}
-                    medianLastModifiedTimestamp={medianLastModifiedTimestamp}
-                    maxLastModifiedTimestamp={maxLastModifiedTimestamp}
+  return (
+    <Box display="flex" flexDirection="column" justifyContent="space-between">
+      <Box marginY={0.5}>
+        <Box display="flex">
+          <Box marginRight={2}>
+            <Box className={body2Box}>
+              {isFolder ? (
+                <ClickableIcon
+                  onClick={openElement}
+                  icon={FOLDER_ICON}
+                  color="black"
                 />
+              ) : (
+                <ClickableIcon
+                  onClick={openElement}
+                  icon={PAGE_ICON}
+                  color="black"
+                />
+              )}
             </Box>
+          </Box>
+          {elementName !== "" && (
+            <Box width="100%">
+              <Box>
+                <EditableField
+                  trimValue={true}
+                  selectTextOnFocus={true}
+                  value={elementAlias || elementName}
+                  onChange={onElementNameChange}
+                />
+              </Box>
+              <Box>
+                <Typography variant="subtitle2">
+                  ({elementAlias ? elementName : t("report.initialName")})
+                </Typography>
+              </Box>
+            </Box>
+          )}
         </Box>
-    );
+      </Box>
+      <Box display="flex">
+        <Box marginY={0.5} flex={1}>
+          <ElementCharacteristic
+            name={t("report.size")}
+            value={octet2HumanReadableFormat(elementSize)}
+          />
+          <ElementCharacteristic
+            name={
+              <>
+                {t("report.hash")}&nbsp;
+                <HelpTooltip
+                  tooltipText={
+                    isFolder
+                      ? t("report.folderHashExplanation")
+                      : t("report.fileHashExplanation")
+                  }
+                />
+              </>
+            }
+            value={<HashInfo hash={hash} />}
+          />
+        </Box>
+        <Box marginY={0.5} flex={1}>
+          <ElementCharacteristic name={t("report.type")} value={type} />
+        </Box>
+      </Box>
+      <Box marginY={0.5}>
+        <Box>
+          <Typography variant="h5">{t("report.lastModifications")}</Typography>
+        </Box>
+        <LastModifiedDate
+          isFile={!isFolder}
+          lastModified={lastModified}
+          onDateChange={onLastModifiedChange}
+          minLastModifiedTimestamp={minLastModifiedTimestamp}
+          medianLastModifiedTimestamp={medianLastModifiedTimestamp}
+          maxLastModifiedTimestamp={maxLastModifiedTimestamp}
+        />
+      </Box>
+    </Box>
+  );
 };

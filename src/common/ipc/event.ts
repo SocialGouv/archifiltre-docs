@@ -8,8 +8,8 @@ import type { UnknownMapping } from "../types";
  * Arguments should be considered as a spreadable array of args.
  */
 export interface IpcConfig<TArgs extends unknown[], TReturnValue> {
-    args: TArgs;
-    returnValue: TReturnValue;
+  args: TArgs;
+  returnValue: TReturnValue;
 }
 
 /**
@@ -39,19 +39,19 @@ export type SyncIpcKeys = keyof SyncIpcMapping;
 export type AsyncIpcKeys = keyof AsyncIpcMapping;
 
 export type GetSyncIpcConfig<T> = T extends SyncIpcKeys
-    ? SyncIpcMapping[T]
-    : DefaultIpcConfig;
+  ? SyncIpcMapping[T]
+  : DefaultIpcConfig;
 export type GetAsyncIpcConfig<T> = T extends AsyncIpcKeys
-    ? AsyncIpcMapping[T]
-    : DefaultIpcConfig;
+  ? AsyncIpcMapping[T]
+  : DefaultIpcConfig;
 
 export type SyncIpcChannel<T extends SyncIpcKeys | UnknownMapping> =
-    | SyncIpcKeys
-    | T;
+  | SyncIpcKeys
+  | T;
 export type AsyncIpcChannel<T extends AsyncIpcKeys | UnknownMapping> =
-    | AsyncIpcKeys
-    | T;
+  | AsyncIpcKeys
+  | T;
 
 export interface CustomIpcMainEvent<T> extends IpcMainEvent {
-    returnValue: GetSyncIpcConfig<T>["returnValue"];
+  returnValue: GetSyncIpcConfig<T>["returnValue"];
 }

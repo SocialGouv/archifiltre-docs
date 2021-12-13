@@ -3,19 +3,19 @@ import { identity, merge, partition } from "rxjs";
 import { map } from "rxjs/operators";
 
 import type {
-    ErrorMessage,
-    ResultMessage,
+  ErrorMessage,
+  ResultMessage,
 } from "../batch-process/batch-process-util-types";
 import { MessageTypes } from "../batch-process/batch-process-util-types";
 
 interface DataProcessingError {
-    type: MessageTypes;
-    error: unknown;
+  type: MessageTypes;
+  error: unknown;
 }
 
 export interface DataProcessingResult<T> {
-    type: MessageTypes;
-    result: T;
+  type: MessageTypes;
+  result: T;
 }
 
 export type DataProcessingElement<T> = ErrorMessage | ResultMessage<T>;
@@ -23,8 +23,8 @@ export type DataProcessingElement<T> = ErrorMessage | ResultMessage<T>;
 export type DataProcessingStream<T> = Observable<DataProcessingElement<T>>;
 
 interface DataProcessingStreamOperators<TInput, TOutput> {
-    error?: OperatorFunction<unknown, unknown>;
-    result: OperatorFunction<TInput, TOutput>;
+  error?: OperatorFunction<unknown, unknown>;
+  result: OperatorFunction<TInput, TOutput>;
 }
 
 /**
@@ -42,32 +42,32 @@ interface DataProcessingStreamOperators<TInput, TOutput> {
  * });
  */
 export const operateOnDataProcessingStream = <TInput, TOutput>(
-    status$: DataProcessingStream<TInput>,
-    {
-        error: errorOperator = identity,
-        result: resultOperator,
-    }: DataProcessingStreamOperators<TInput, TOutput>
+  status$: DataProcessingStream<TInput>,
+  {
+    error: errorOperator = identity,
+    result: resultOperator,
+  }: DataProcessingStreamOperators<TInput, TOutput>
 ): DataProcessingStream<TOutput> => {
-    const [results$, errors$] = partition(
-        status$,
-        (message): message is ResultMessage<TInput> =>
-            message.type === MessageTypes.RESULT
-    ) as [
-        Observable<DataProcessingResult<TInput>>,
-        Observable<DataProcessingError>
-    ];
+  const [results$, errors$] = partition(
+    status$,
+    (message): message is ResultMessage<TInput> =>
+      message.type === MessageTypes.RESULT
+  ) as [
+    Observable<DataProcessingResult<TInput>>,
+    Observable<DataProcessingError>
+  ];
 
-    const processedResults$ = results$.pipe(
-        map(({ result }) => result),
-        resultOperator,
-        map((result) => ({ result, type: MessageTypes.RESULT as const }))
-    );
+  const processedResults$ = results$.pipe(
+    map(({ result }) => result),
+    resultOperator,
+    map((result) => ({ result, type: MessageTypes.RESULT as const }))
+  );
 
-    const processedErrors$ = errors$.pipe(
-        map(({ error }) => error),
-        errorOperator,
-        map((error) => ({ error, type: MessageTypes.ERROR as const }))
-    );
+  const processedErrors$ = errors$.pipe(
+    map(({ error }) => error),
+    errorOperator,
+    map((error) => ({ error, type: MessageTypes.ERROR as const }))
+  );
 
-    return merge(processedResults$, processedErrors$);
+  return merge(processedResults$, processedErrors$);
 };

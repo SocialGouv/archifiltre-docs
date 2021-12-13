@@ -4,8 +4,8 @@
  * @param baseObject - Base object
  */
 export const compose = <T1, T2>(mergedObject: T1, baseObject: T2): T1 & T2 => ({
-    ...baseObject,
-    ...mergedObject,
+  ...baseObject,
+  ...mergedObject,
 });
 
 /**
@@ -23,16 +23,16 @@ export const compose = <T1, T2>(mergedObject: T1, baseObject: T2): T1 & T2 => ({
  * // { inObj: "value1", inObj2: "value2" }
  */
 export const extractKeys = <T extends SimpleObject, TKeys extends keyof T>(
-    keys: TKeys[],
-    obj: T
+  keys: TKeys[],
+  obj: T
 ): Pick<T, TKeys> => {
-    return keys.reduce((ans, key) => {
-        // eslint-disable-next-line no-prototype-builtins
-        if (obj.hasOwnProperty(key)) {
-            return { ...ans, [key]: obj[key] };
-        }
-        return ans;
-    }, {}) as Pick<T, TKeys>;
+  return keys.reduce((ans, key) => {
+    // eslint-disable-next-line no-prototype-builtins
+    if (obj.hasOwnProperty(key)) {
+      return { ...ans, [key]: obj[key] };
+    }
+    return ans;
+  }, {}) as Pick<T, TKeys>;
 };
 
 /**

@@ -1,8 +1,8 @@
 import { EventTracker, Palette } from "@devexpress/dx-react-chart";
 import {
-    Chart,
-    PieSeries,
-    Tooltip,
+  Chart,
+  PieSeries,
+  Tooltip,
 } from "@devexpress/dx-react-chart-material-ui";
 import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,64 +14,60 @@ import { octet2HumanReadableFormat } from "../../../../../util/file-system/file-
 import type { FileType } from "../../../../../util/file-types/file-types-util";
 
 const ColoredText = styled.span<{ color: string }>`
-    display: block;
-    color: ${({ color }) => color};
+  display: block;
+  color: ${({ color }) => color};
 `;
 
 export interface DuplicatesDistributionChartProps {
-    fileTypesCount: FileTypeMap<number>;
-    fileSizesCount: Record<FileType, number>;
+  fileTypesCount: FileTypeMap<number>;
+  fileSizesCount: Record<FileType, number>;
 }
 
 export const DuplicatesDistributionChart: React.FC<
-    DuplicatesDistributionChartProps
+  DuplicatesDistributionChartProps
 > = ({ fileTypesCount, fileSizesCount }) => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    const chartData = useMemo(
-        () =>
-            Object.entries(fileTypesCount).map(([fileType, fileTypeValue]) => ({
-                key: fileType as FileType,
-                label: t(`common.fileTypes.${fileType}`),
-                size: fileSizesCount[fileType as FileType],
-                value: fileTypeValue,
-            })),
-        [fileTypesCount, fileSizesCount, t]
-    );
+  const chartData = useMemo(
+    () =>
+      Object.entries(fileTypesCount).map(([fileType, fileTypeValue]) => ({
+        key: fileType as FileType,
+        label: t(`common.fileTypes.${fileType}`),
+        size: fileSizesCount[fileType as FileType],
+        value: fileTypeValue,
+      })),
+    [fileTypesCount, fileSizesCount, t]
+  );
 
-    const scheme = useMemo(
-        () => chartData.map(({ key }) => colors[key]),
-        [chartData]
-    );
+  const scheme = useMemo(
+    () => chartData.map(({ key }) => colors[key]),
+    [chartData]
+  );
 
-    const getTooltipContent = useCallback(
-        ({ targetItem: { point } }) => {
-            const { key, label, value, size } = chartData[point];
-            return (
-                <div>
-                    <div>{label}</div>
-                    <ColoredText color={colors[key]}>{`${value} ${t(
-                        "duplicates.duplicates"
-                    )}`}</ColoredText>
-                    <ColoredText color={colors[key]}>
-                        {octet2HumanReadableFormat(size)}
-                    </ColoredText>
-                </div>
-            );
-        },
-        [chartData, t]
-    );
+  const getTooltipContent = useCallback(
+    ({ targetItem: { point } }) => {
+      const { key, label, value, size } = chartData[point];
+      return (
+        <div>
+          <div>{label}</div>
+          <ColoredText color={colors[key]}>{`${value} ${t(
+            "duplicates.duplicates"
+          )}`}</ColoredText>
+          <ColoredText color={colors[key]}>
+            {octet2HumanReadableFormat(size)}
+          </ColoredText>
+        </div>
+      );
+    },
+    [chartData, t]
+  );
 
-    return (
-        <Chart data={chartData} height={140}>
-            <Palette scheme={scheme} />
-            <PieSeries
-                valueField="value"
-                argumentField="key"
-                innerRadius={0.6}
-            />
-            <EventTracker />
-            <Tooltip contentComponent={getTooltipContent} />
-        </Chart>
-    );
+  return (
+    <Chart data={chartData} height={140}>
+      <Palette scheme={scheme} />
+      <PieSeries valueField="value" argumentField="key" innerRadius={0.6} />
+      <EventTracker />
+      <Tooltip contentComponent={getTooltipContent} />
+    </Chart>
+  );
 };

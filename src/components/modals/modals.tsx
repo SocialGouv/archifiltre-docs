@@ -5,9 +5,9 @@ import { FilesAndFoldersErrorsModalContainer as FilesAndFoldersErrorsModal } fro
 import { HashesErrorsModalContainer as HashesErrorsModal } from "./hashes-errors-modal/hashes-errors-container";
 
 export const Modals: React.FC = () => (
-    <>
-        <ErrorsModal />
-        <HashesErrorsModal />
-        <FilesAndFoldersErrorsModal />
-    </>
+  <>
+    <ErrorsModal />
+    <HashesErrorsModal />
+    <FilesAndFoldersErrorsModal />
+  </>
 );

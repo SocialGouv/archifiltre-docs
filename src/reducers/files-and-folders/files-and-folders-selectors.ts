@@ -11,12 +11,12 @@ import type { FilesAndFoldersMetadataMap } from "../files-and-folders-metadata/f
 import { getHashesFromStore } from "../hashes/hashes-selectors";
 import type { StoreState } from "../store";
 import type {
-    AliasMap,
-    CommentsMap,
-    FilesAndFolders,
-    FilesAndFoldersMap,
-    LastModifiedMap,
-    VirtualPathToIdMap,
+  AliasMap,
+  CommentsMap,
+  FilesAndFolders,
+  FilesAndFoldersMap,
+  LastModifiedMap,
+  VirtualPathToIdMap,
 } from "./files-and-folders-types";
 
 export const ROOT_FF_ID = "";
@@ -28,7 +28,7 @@ export type FilesAndFoldersCollection = FilesAndFolders[] | FilesAndFoldersMap;
  * @param store - The current redux state
  */
 export const getFilesAndFoldersFromStore = (
-    store: StoreState
+  store: StoreState
 ): FilesAndFoldersMap => getCurrentState(store.filesAndFolders).filesAndFolders;
 
 /**
@@ -36,60 +36,60 @@ export const getFilesAndFoldersFromStore = (
  * @param store
  */
 export const getElementsToDeleteFromStore = (store: StoreState): string[] =>
-    getCurrentState(store.filesAndFolders).elementsToDelete;
+  getCurrentState(store.filesAndFolders).elementsToDelete;
 
 /**
  * Get the last modification date overrides from the store
  * @param store
  */
 export const getLastModifiedDateOverrides = (
-    store: StoreState
+  store: StoreState
 ): LastModifiedMap =>
-    getCurrentState(store.filesAndFolders).overrideLastModified;
+  getCurrentState(store.filesAndFolders).overrideLastModified;
 
 export const useLastModifiedDateOverrides = (): LastModifiedMap =>
-    useSelector(getLastModifiedDateOverrides);
+  useSelector(getLastModifiedDateOverrides);
 
 export const getRealLastModified = (
-    id: string,
-    filesAndFolders: FilesAndFoldersMap,
-    lastModifiedMap: LastModifiedMap
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  id: string,
+  filesAndFolders: FilesAndFoldersMap,
+  lastModifiedMap: LastModifiedMap
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 ): number => lastModifiedMap[id] ?? filesAndFolders[id].file_last_modified;
 
 /**
  * Get the number of children files in a list
  */
 export const getFilesTotalCount = (
-    elementsIds: string[],
-    filesAndFoldersMetadata: FilesAndFoldersMetadataMap
+  elementsIds: string[],
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap
 ): number => {
-    return elementsIds.reduce(
-        (count, elementId) =>
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            count + filesAndFoldersMetadata[elementId]?.nbChildrenFiles,
-        0
-    );
+  return elementsIds.reduce(
+    (count, elementId) =>
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      count + filesAndFoldersMetadata[elementId]?.nbChildrenFiles,
+    0
+  );
 };
 
 /**
  * Get the size of children files in a list
  */
 export const getFilesTotalSize = (
-    elementsIds: string[],
-    filesAndFoldersMap: FilesAndFoldersMap,
-    filesAndFoldersMetadata: FilesAndFoldersMetadataMap
+  elementsIds: string[],
+  filesAndFoldersMap: FilesAndFoldersMap,
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap
 ): number => {
-    const filteredElementsIds = excludeChildNodes(
-        elementsIds,
-        filesAndFoldersMap
-    );
-    return filteredElementsIds.reduce(
-        (count, elementId) =>
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            count + filesAndFoldersMetadata[elementId]?.childrenTotalSize,
-        0
-    );
+  const filteredElementsIds = excludeChildNodes(
+    elementsIds,
+    filesAndFoldersMap
+  );
+  return filteredElementsIds.reduce(
+    (count, elementId) =>
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      count + filesAndFoldersMetadata[elementId]?.childrenTotalSize,
+    0
+  );
 };
 
 /**
@@ -99,24 +99,20 @@ export const getFilesTotalSize = (
  * @param elementId
  */
 const excludeChildrenNodesRec = (
-    elementIds: string[],
-    filesAndFoldersMap: FilesAndFoldersMap,
-    elementId: string
+  elementIds: string[],
+  filesAndFoldersMap: FilesAndFoldersMap,
+  elementId: string
 ): string[] => {
-    const nextElementIds = elementIds.includes(elementId)
-        ? elementIds.filter((currentElement) => currentElement !== elementId)
-        : elementIds;
-    const { children } = filesAndFoldersMap[elementId];
+  const nextElementIds = elementIds.includes(elementId)
+    ? elementIds.filter((currentElement) => currentElement !== elementId)
+    : elementIds;
+  const { children } = filesAndFoldersMap[elementId];
 
-    return children.reduce(
-        (previousChildId, childId) =>
-            excludeChildrenNodesRec(
-                previousChildId,
-                filesAndFoldersMap,
-                childId
-            ),
-        nextElementIds
-    );
+  return children.reduce(
+    (previousChildId, childId) =>
+      excludeChildrenNodesRec(previousChildId, filesAndFoldersMap, childId),
+    nextElementIds
+  );
 };
 
 /**
@@ -125,25 +121,25 @@ const excludeChildrenNodesRec = (
  * @param filesAndFolders
  */
 export const excludeChildNodes = (
-    elementIds: string[],
-    filesAndFolders: FilesAndFoldersMap
+  elementIds: string[],
+  filesAndFolders: FilesAndFoldersMap
 ): string[] =>
-    elementIds.reduce(
-        (nextElementIds, elementId) =>
-            filesAndFolders[elementId].children.reduce(
-                (acc, childId) =>
-                    excludeChildrenNodesRec(acc, filesAndFolders, childId),
-                nextElementIds
-            ),
-        elementIds
-    );
+  elementIds.reduce(
+    (nextElementIds, elementId) =>
+      filesAndFolders[elementId].children.reduce(
+        (acc, childId) =>
+          excludeChildrenNodesRec(acc, filesAndFolders, childId),
+        nextElementIds
+      ),
+    elementIds
+  );
 
 /**
  * Gets the map from virtual path to id
  * @param store
  */
 export const getVirtualPathToIdFromStore = (
-    store: StoreState
+  store: StoreState
 ): VirtualPathToIdMap => getCurrentState(store.filesAndFolders).virtualPathToId;
 
 /**
@@ -164,248 +160,244 @@ export const getVirtualPathToIdFromStore = (
  *    );
  */
 export const reduceFilesAndFolders = <TReduceResult>(
-    filesAndFoldersMap: FilesAndFoldersMap,
-    rootId: string,
-    reducer: (
-        childrenValues: TReduceResult[],
-        currentFilesAndFolders: FilesAndFolders
-    ) => TReduceResult
+  filesAndFoldersMap: FilesAndFoldersMap,
+  rootId: string,
+  reducer: (
+    childrenValues: TReduceResult[],
+    currentFilesAndFolders: FilesAndFolders
+  ) => TReduceResult
 ): TReduceResult => {
-    const currentFilesAndFolders = filesAndFoldersMap[rootId];
-    const childrenValues = currentFilesAndFolders.children.map((childId) =>
-        reduceFilesAndFolders(filesAndFoldersMap, childId, reducer)
-    );
+  const currentFilesAndFolders = filesAndFoldersMap[rootId];
+  const childrenValues = currentFilesAndFolders.children.map((childId) =>
+    reduceFilesAndFolders(filesAndFoldersMap, childId, reducer)
+  );
 
-    return reducer(childrenValues, currentFilesAndFolders);
+  return reducer(childrenValues, currentFilesAndFolders);
 };
 
 /**
  * Returns the maximum value of file_last_modified for this element and his subElements
  */
 export const getFilesAndFoldersMaxLastModified = (
-    filesAndFoldersMap: FilesAndFoldersMap,
-    filesAndFoldersId: string
+  filesAndFoldersMap: FilesAndFoldersMap,
+  filesAndFoldersId: string
 ): number =>
-    reduceFilesAndFolders(
-        filesAndFoldersMap,
-        filesAndFoldersId,
-        (childrenValues, currentFilesAndFolders) =>
-            _.max([
-                currentFilesAndFolders.file_last_modified,
-                ...childrenValues,
-            ]) ?? 0
-    );
+  reduceFilesAndFolders(
+    filesAndFoldersMap,
+    filesAndFoldersId,
+    (childrenValues, currentFilesAndFolders) =>
+      _.max([currentFilesAndFolders.file_last_modified, ...childrenValues]) ?? 0
+  );
 
 /**
  * Returns the minimum value of file_last_modified for this element and his subElements
  */
 export const getFilesAndFoldersMinLastModified = (
-    filesAndFoldersMap: FilesAndFoldersMap,
-    filesAndFoldersId: string
+  filesAndFoldersMap: FilesAndFoldersMap,
+  filesAndFoldersId: string
 ): number =>
-    reduceFilesAndFolders(
-        filesAndFoldersMap,
-        filesAndFoldersId,
-        (childrenValues, currentFilesAndFolders) =>
-            _.min(
-                [
-                    currentFilesAndFolders.file_last_modified,
-                    ...childrenValues,
-                ].filter((lastModifiedDate) => lastModifiedDate !== 0)
-            ) ?? 0
-    );
+  reduceFilesAndFolders(
+    filesAndFoldersMap,
+    filesAndFoldersId,
+    (childrenValues, currentFilesAndFolders) =>
+      _.min(
+        [currentFilesAndFolders.file_last_modified, ...childrenValues].filter(
+          (lastModifiedDate) => lastModifiedDate !== 0
+        )
+      ) ?? 0
+  );
 
 /**
  * Returns all the last_modified_date values for this element and his subElements
  */
 const getAllLastModified = (
-    filesAndFoldersMap: FilesAndFoldersMap,
-    filesAndFoldersId: string
+  filesAndFoldersMap: FilesAndFoldersMap,
+  filesAndFoldersId: string
 ): number[] =>
-    reduceFilesAndFolders(
-        filesAndFoldersMap,
-        filesAndFoldersId,
-        (childrenValues, currentFilesAndFolders) => {
-            if (currentFilesAndFolders.file_last_modified === 0) {
-                return _.flatten(childrenValues);
-            } else {
-                return [
-                    ..._.flatten(childrenValues),
-                    currentFilesAndFolders.file_last_modified,
-                ];
-            }
-        }
-    );
+  reduceFilesAndFolders(
+    filesAndFoldersMap,
+    filesAndFoldersId,
+    (childrenValues, currentFilesAndFolders) => {
+      if (currentFilesAndFolders.file_last_modified === 0) {
+        return _.flatten(childrenValues);
+      } else {
+        return [
+          ..._.flatten(childrenValues),
+          currentFilesAndFolders.file_last_modified,
+        ];
+      }
+    }
+  );
 
 /**
  * Returns the average value of file_last_modified for this element and his subElements
  */
 export const getFilesAndFoldersAverageLastModified = (
-    filesAndFoldersMap: FilesAndFoldersMap,
-    filesAndFoldersId: string
+  filesAndFoldersMap: FilesAndFoldersMap,
+  filesAndFoldersId: string
 ): number => _.mean(getAllLastModified(filesAndFoldersMap, filesAndFoldersId));
 
 /**
  * Returns the median value of file_last_modified for this element and his subElements
  */
 export const getFilesAndFoldersMedianLastModified = (
-    filesAndFoldersMap: FilesAndFoldersMap,
-    filesAndFoldersId: string
+  filesAndFoldersMap: FilesAndFoldersMap,
+  filesAndFoldersId: string
 ): number =>
-    medianOnSortedArray(
-        getAllLastModified(filesAndFoldersMap, filesAndFoldersId).sort(
-            (value1, value2) => value1 - value2
-        )
-    );
+  medianOnSortedArray(
+    getAllLastModified(filesAndFoldersMap, filesAndFoldersId).sort(
+      (value1, value2) => value1 - value2
+    )
+  );
 
 /**
  * Get the total size of the selected filesAndFolders
  */
 export const getFilesAndFoldersTotalSize = (
-    filesAndFoldersMap: FilesAndFoldersMap,
-    filesAndFoldersId: string
+  filesAndFoldersMap: FilesAndFoldersMap,
+  filesAndFoldersId: string
 ): number =>
-    reduceFilesAndFolders(
-        filesAndFoldersMap,
-        filesAndFoldersId,
-        (childrenValues, currentFilesAndFolders) =>
-            _.sum([...childrenValues, currentFilesAndFolders.file_size])
-    );
+  reduceFilesAndFolders(
+    filesAndFoldersMap,
+    filesAndFoldersId,
+    (childrenValues, currentFilesAndFolders) =>
+      _.sum([...childrenValues, currentFilesAndFolders.file_size])
+  );
 
 /**
  * Get the depth of the selected filesAndFolders
  */
 export const getDepthFromPath = (filesAndFoldersId: string): number =>
-    filesAndFoldersId.split("/").length - 2;
+  filesAndFoldersId.split("/").length - 2;
 
 /**
  * Gets the comments map from the redux state
  */
 export const getCommentsFromStore = (store: StoreState): CommentsMap =>
-    getCurrentState(store.filesAndFolders).comments;
+  getCurrentState(store.filesAndFolders).comments;
 
 /**
  * Gets the aliases map from the redux state
  */
 export const getAliasesFromStore = (store: StoreState): AliasMap =>
-    getCurrentState(store.filesAndFolders).aliases;
+  getCurrentState(store.filesAndFolders).aliases;
 
 /**
  * Returns true if the filesAndFolders is a file
  */
 export const isFile = (filesAndFolders: FilesAndFolders): boolean =>
-    filesAndFolders.children.length === 0;
+  filesAndFolders.children.length === 0;
 
 /**
  * Returns true if the filesAndFolders is a folder
  */
 export const isFolder = (filesAndFolders: FilesAndFolders): boolean =>
-    !isFile(filesAndFolders);
+  !isFile(filesAndFolders);
 
 /**
  * Removes the root folder from a filesAndFolders collection
  */
 const removeRootFolder: Mapper<
-    FilesAndFoldersCollection,
-    FilesAndFoldersCollection
+  FilesAndFoldersCollection,
+  FilesAndFoldersCollection
 > = fp.filter(({ id }) => id !== "");
 
 /**
  * Get the files only from files and folders
  */
 export const getFiles: Mapper<FilesAndFoldersCollection, FilesAndFolders[]> =
-    fp.filter(isFile);
+  fp.filter(isFile);
 
 /**
  * Get only files from files and folders
  */
 export const getFilesMap: Mapper<FilesAndFoldersMap, FilesAndFoldersMap> =
-    fp.pickBy(isFile);
+  fp.pickBy(isFile);
 
 /**
  * Get only folders from files and folders
  */
 export const getFoldersMap: Mapper<FilesAndFoldersMap, FilesAndFoldersMap> =
-    fp.pickBy(fp.compose([not, isFile]));
+  fp.pickBy(fp.compose([not, isFile]));
 
 /**
  * Get folders only from files and folders
  */
 export const getFolders: Mapper<FilesAndFoldersCollection, FilesAndFolders[]> =
-    fp.filter(fp.compose([not, isFile]));
+  fp.filter(fp.compose([not, isFile]));
 
 /**
  * Returns the number of files in a FilesAndFoldersMap
  */
 export const getFileCount: Mapper<FilesAndFoldersMap, number> = fp.compose(
-    size,
-    getFiles,
-    removeRootFolder
+  size,
+  getFiles,
+  removeRootFolder
 );
 
 /**
  * Returns the number of folders in a FilesAndFoldersMap
  */
 export const getFoldersCount: Mapper<FilesAndFoldersMap, number> = fp.compose(
-    size,
-    getFolders,
-    removeRootFolder
+  size,
+  getFolders,
+  removeRootFolder
 );
 
 /**
  * Returns the depth of the deepest element of a filesAndFoldersMap
  */
 export const getMaxDepth = (filesAndFoldersMap: FilesAndFoldersMap): number =>
-    reduceFilesAndFolders(
-        filesAndFoldersMap,
-        "",
-        (childrenDepth: number[], currentFilesAndFolders) => {
-            if (currentFilesAndFolders.children.length === 0) {
-                return 0;
-            }
-            return Math.max(...childrenDepth) + 1;
-        }
-    );
+  reduceFilesAndFolders(
+    filesAndFoldersMap,
+    "",
+    (childrenDepth: number[], currentFilesAndFolders) => {
+      if (currentFilesAndFolders.children.length === 0) {
+        return 0;
+      }
+      return Math.max(...childrenDepth) + 1;
+    }
+  );
 
 /**
  * Memoized function that decomposes the path to an element into each of the parent elements.
  */
 export const decomposePathToElement = (id: string): string[] =>
-    id.split("/").map(($, i) =>
-        id
-            .split("/")
-            .slice(0, i + 1)
-            .join("/")
-    );
+  id.split("/").map(($, i) =>
+    id
+      .split("/")
+      .slice(0, i + 1)
+      .join("/")
+  );
 
 export const findElementParent = (
-    childId: string,
-    filesAndFolders: FilesAndFoldersMap
+  childId: string,
+  filesAndFolders: FilesAndFoldersMap
 ): FilesAndFolders | undefined =>
-    _.find(filesAndFolders, ({ children }) => children.includes(childId));
+  _.find(filesAndFolders, ({ children }) => children.includes(childId));
 
 /**
  * Retrieve an element based on its virtual path
  */
 export const getElementByVirtualPath = (
-    filesAndFolders: FilesAndFoldersMap,
-    virtualPath: string
+  filesAndFolders: FilesAndFoldersMap,
+  virtualPath: string
 ): FilesAndFolders | undefined => _.find(filesAndFolders, { virtualPath });
 
 /**
  * Returns true when all hashes are computed, false otherwise
  */
 export const getAreHashesReady = (store: StoreState): boolean =>
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    getHashesFromStore(store)[ROOT_FF_ID] !== undefined;
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  getHashesFromStore(store)[ROOT_FF_ID] !== undefined;
 
 /**
  * Get the registered errored files and folders
  */
 export const getErroredFilesAndFolders = (
-    store: StoreState
+  store: StoreState
 ): ArchifiltreError[] =>
-    getCurrentState(store.filesAndFolders).erroredFilesAndFolders;
+  getCurrentState(store.filesAndFolders).erroredFilesAndFolders;
 
 export const useFilesAndFoldersErrors = (): ArchifiltreError[] =>
-    useSelector(getErroredFilesAndFolders);
+  useSelector(getErroredFilesAndFolders);

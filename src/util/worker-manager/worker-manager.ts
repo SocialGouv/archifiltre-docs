@@ -7,28 +7,28 @@ import { WorkerEventType } from "../async-worker/async-worker-util";
 export type ChildProcessConstructor = ChildProcess & (new () => ChildProcess);
 
 export type ProcessControllerAsyncWorkerFactory =
-    () => ProcessControllerAsyncWorker;
+  () => ProcessControllerAsyncWorker;
 
 class WorkerManager {
-    workerControllers: ProcessControllerAsyncWorker[] = [];
+  workerControllers: ProcessControllerAsyncWorker[] = [];
 
-    spawn(
-        asyncWorkerFactory: ProcessControllerAsyncWorkerFactory
-    ): ProcessControllerAsyncWorker {
-        const worker = asyncWorkerFactory();
-        this.workerControllers = [...this.workerControllers, worker];
-        worker.addEventListener(WorkerEventType.EXIT, () => {
-            this.workerControllers = without(this.workerControllers, worker);
-        });
-        return worker;
-    }
+  spawn(
+    asyncWorkerFactory: ProcessControllerAsyncWorkerFactory
+  ): ProcessControllerAsyncWorker {
+    const worker = asyncWorkerFactory();
+    this.workerControllers = [...this.workerControllers, worker];
+    worker.addEventListener(WorkerEventType.EXIT, () => {
+      this.workerControllers = without(this.workerControllers, worker);
+    });
+    return worker;
+  }
 
-    clear() {
-        this.workerControllers.forEach((worker) => {
-            worker.terminate();
-        });
-        this.workerControllers = [];
-    }
+  clear() {
+    this.workerControllers.forEach((worker) => {
+      worker.terminate();
+    });
+    this.workerControllers = [];
+  }
 }
 
 export const workerManager = new WorkerManager();

@@ -1,13 +1,13 @@
 import type {
-    ElementWeightMethod,
-    IcicleColorMode,
-    IcicleSortMethod,
-    IcicleSortMethodAction,
+  ElementWeightMethod,
+  IcicleColorMode,
+  IcicleSortMethod,
+  IcicleSortMethodAction,
 } from "./icicle-sort-method-types";
 import {
-    SET_ELEMENT_WEIGHT_METHOD,
-    SET_ICICLE_COLOR_MODE,
-    SET_ICICLE_SORT_METHOD,
+  SET_ELEMENT_WEIGHT_METHOD,
+  SET_ICICLE_COLOR_MODE,
+  SET_ICICLE_SORT_METHOD,
 } from "./icicle-sort-method-types";
 
 /**
@@ -15,10 +15,10 @@ import {
  * @param sortMethod
  */
 export const setIcicleSortMethod = (
-    sortMethod: IcicleSortMethod
+  sortMethod: IcicleSortMethod
 ): IcicleSortMethodAction => ({
-    sortMethod,
-    type: SET_ICICLE_SORT_METHOD,
+  sortMethod,
+  type: SET_ICICLE_SORT_METHOD,
 });
 
 /**
@@ -26,10 +26,10 @@ export const setIcicleSortMethod = (
  * @param weightMethod
  */
 export const setElementWeightMethod = (
-    weightMethod: ElementWeightMethod
+  weightMethod: ElementWeightMethod
 ): IcicleSortMethodAction => ({
-    type: SET_ELEMENT_WEIGHT_METHOD,
-    weightMethod,
+  type: SET_ELEMENT_WEIGHT_METHOD,
+  weightMethod,
 });
 
 /**
@@ -37,8 +37,8 @@ export const setElementWeightMethod = (
  * @param colorMode
  */
 export const setIcicleColorMode = (
-    colorMode: IcicleColorMode
+  colorMode: IcicleColorMode
 ): IcicleSortMethodAction => ({
-    colorMode,
-    type: SET_ICICLE_COLOR_MODE,
+  colorMode,
+  type: SET_ICICLE_COLOR_MODE,
 });

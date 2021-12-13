@@ -1,10 +1,10 @@
 interface ExportToCsvOptions {
-    withHashes: boolean;
+  withHashes: boolean;
 }
 
 interface ExportToMetsOptions {
-    originalPath: string;
-    sessionName: string;
+  originalPath: string;
+  sessionName: string;
 }
 
 export type ExportToAuditReport = (name: string) => void;

@@ -13,40 +13,37 @@ import { ModalMenu } from "./modal-menu";
 import { PrivacySettings } from "./privacy-settings";
 
 const availableSettings = [
-    <LanguagePicker key="availableSettings-0" />,
-    <PrivacySettings key="availableSettings-1" />,
-    <About key="availableSettings-2" />,
+  <LanguagePicker key="availableSettings-0" />,
+  <PrivacySettings key="availableSettings-1" />,
+  <About key="availableSettings-2" />,
 ];
 
 export interface SettingModalProps {
-    isModalOpen: DialogProps["open"];
-    closeModal: VoidFunction;
+  isModalOpen: DialogProps["open"];
+  closeModal: VoidFunction;
 }
 
 export const SettingsModal: React.FC<SettingModalProps> = ({
-    isModalOpen,
-    closeModal,
+  isModalOpen,
+  closeModal,
 }) => {
-    const { t } = useTranslation();
-    const [selectedItem, setSelectedItem] = useState(0);
+  const { t } = useTranslation();
+  const [selectedItem, setSelectedItem] = useState(0);
 
-    return (
-        <Dialog open={isModalOpen} onClose={closeModal} maxWidth="sm" fullWidth>
-            <ModalHeader
-                title={t("settingsModal.title")}
-                onClose={closeModal}
+  return (
+    <Dialog open={isModalOpen} onClose={closeModal} maxWidth="sm" fullWidth>
+      <ModalHeader title={t("settingsModal.title")} onClose={closeModal} />
+      <DialogContent dividers>
+        <Box display="flex">
+          <Box>
+            <ModalMenu
+              selectedItem={selectedItem}
+              setSelectedItem={setSelectedItem}
             />
-            <DialogContent dividers>
-                <Box display="flex">
-                    <Box>
-                        <ModalMenu
-                            selectedItem={selectedItem}
-                            setSelectedItem={setSelectedItem}
-                        />
-                    </Box>
-                    <Box paddingLeft={2}>{availableSettings[selectedItem]}</Box>
-                </Box>
-            </DialogContent>
-        </Dialog>
-    );
+          </Box>
+          <Box paddingLeft={2}>{availableSettings[selectedItem]}</Box>
+        </Box>
+      </DialogContent>
+    </Dialog>
+  );
 };

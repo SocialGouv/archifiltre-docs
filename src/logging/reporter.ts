@@ -15,58 +15,58 @@ const isProd = () => MODE === "production";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 enum Level {
-    ERROR = "error",
-    WARN = "warn",
-    INFO = "info",
-    HTTP = "http",
-    VERBOSE = "verbose",
-    DEBUG = "debug",
-    SILLY = "silly",
+  ERROR = "error",
+  WARN = "warn",
+  INFO = "info",
+  HTTP = "http",
+  VERBOSE = "verbose",
+  DEBUG = "debug",
+  SILLY = "silly",
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 
 const logger = createLogger({
-    transports: [
-        new WinstonConsoleLogger({
-            level: Level.SILLY,
-        }),
-    ],
+  transports: [
+    new WinstonConsoleLogger({
+      level: Level.SILLY,
+    }),
+  ],
 });
 
 /**
  * Inits the reporter here Sentry
  */
 export const initReporter = (isActive: boolean): void => {
-    if (!isProd() || !isActive) {
-        return;
-    }
+  if (!isProd() || !isActive) {
+    return;
+  }
 
-    const sentryOptions: SentryTransportOptions["sentry"] = {
-        beforeSend(event) {
-            return anonymizeEvent(event);
-        },
-        dsn: SENTRY_DSN,
-    };
+  const sentryOptions: SentryTransportOptions["sentry"] = {
+    beforeSend(event) {
+      return anonymizeEvent(event);
+    },
+    dsn: SENTRY_DSN,
+  };
 
-    Sentry.init(sentryOptions);
-    logger.add(
-        new WinstonSentry({
-            level: Level.WARN,
-            sentry: sentryOptions,
-        })
-    );
+  Sentry.init(sentryOptions);
+  logger.add(
+    new WinstonSentry({
+      level: Level.WARN,
+      sentry: sentryOptions,
+    })
+  );
 
-    const logsDirectory = path.join(getPath("userData"));
+  const logsDirectory = path.join(getPath("userData"));
 
-    logger.add(
-        new DailyRotateFile({
-            createSymlink: true,
-            dirname: logsDirectory,
-            filename: "archifiltre-logs-%DATE%",
-            level: Level.INFO,
-            maxFiles: "7d",
-        })
-    );
+  logger.add(
+    new DailyRotateFile({
+      createSymlink: true,
+      dirname: logsDirectory,
+      filename: "archifiltre-logs-%DATE%",
+      level: Level.INFO,
+      maxFiles: "7d",
+    })
+  );
 };
 
 /**
@@ -75,12 +75,12 @@ export const initReporter = (isActive: boolean): void => {
  * @param level
  */
 const handleLog = (message: unknown, level: Level) => {
-    const logData = {
-        message,
-        time: dateFormat("isoDateTime"),
-    };
+  const logData = {
+    message,
+    time: dateFormat("isoDateTime"),
+  };
 
-    logger[level](logData);
+  logger[level](logData);
 };
 
 /**
@@ -88,7 +88,7 @@ const handleLog = (message: unknown, level: Level) => {
  * @param err
  */
 export const reportError = (err: unknown): void => {
-    handleLog(err, Level.ERROR);
+  handleLog(err, Level.ERROR);
 };
 
 /**
@@ -96,7 +96,7 @@ export const reportError = (err: unknown): void => {
  * @param message
  */
 export const reportWarning = (message: string): void => {
-    handleLog(message, Level.WARN);
+  handleLog(message, Level.WARN);
 };
 
 /**
@@ -104,7 +104,7 @@ export const reportWarning = (message: string): void => {
  * @param message
  */
 export const reportInfo = (message: string): void => {
-    handleLog(message, Level.INFO);
+  handleLog(message, Level.INFO);
 };
 
 /**
@@ -112,12 +112,12 @@ export const reportInfo = (message: string): void => {
  * @param event
  */
 const anonymizeEvent = (event: SentryEvent) => {
-    const values = event.exception?.values?.map((value) => {
-        const frames = value.stacktrace?.frames?.map((frame) => {
-            const filename = path.basename(frame.filename ?? "");
-            return merge(frame, { filename });
-        });
-        return merge(value, { stacktrace: { frames } });
+  const values = event.exception?.values?.map((value) => {
+    const frames = value.stacktrace?.frames?.map((frame) => {
+      const filename = path.basename(frame.filename ?? "");
+      return merge(frame, { filename });
     });
-    return merge(event, { exception: { values } });
+    return merge(value, { stacktrace: { frames } });
+  });
+  return merge(event, { exception: { values } });
 };

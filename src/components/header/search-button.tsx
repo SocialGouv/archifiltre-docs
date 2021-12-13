@@ -9,29 +9,26 @@ import { useStyles } from "../../hooks/use-styles";
 import { SearchModalContainer } from "../modals/search-modal/search-modal-container";
 
 export const SearchButton: React.FC = () => {
-    const { isModalOpen, openModal, closeModal } = useModal();
-    const classes = useStyles();
-    const { t } = useTranslation();
-    const title = t("search.title");
+  const { isModalOpen, openModal, closeModal } = useModal();
+  const classes = useStyles();
+  const { t } = useTranslation();
+  const title = t("search.title");
 
-    return (
-        <>
-            <Tooltip title={title}>
-                <Button
-                    id="search-button"
-                    color="primary"
-                    variant="outlined"
-                    className={classes.headerButton}
-                    onClick={openModal}
-                    disableElevation
-                >
-                    <FaSearch />
-                </Button>
-            </Tooltip>
-            <SearchModalContainer
-                isModalOpen={isModalOpen}
-                closeModal={closeModal}
-            />
-        </>
-    );
+  return (
+    <>
+      <Tooltip title={title}>
+        <Button
+          id="search-button"
+          color="primary"
+          variant="outlined"
+          className={classes.headerButton}
+          onClick={openModal}
+          disableElevation
+        >
+          <FaSearch />
+        </Button>
+      </Tooltip>
+      <SearchModalContainer isModalOpen={isModalOpen} closeModal={closeModal} />
+    </>
+  );
 };

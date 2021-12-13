@@ -13,8 +13,8 @@ export const arbitraryByte = fc.integer(0, 255);
  * @type {Arbitrary<[number, number, number, number]>}
  */
 export const arbitraryRgba = fc.tuple(
-    arbitraryByte,
-    arbitraryByte,
-    arbitraryByte,
-    fc.float(0, 1)
+  arbitraryByte,
+  arbitraryByte,
+  arbitraryByte,
+  fc.float(0, 1)
 );

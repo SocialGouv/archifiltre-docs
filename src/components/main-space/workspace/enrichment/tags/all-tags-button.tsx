@@ -8,22 +8,18 @@ import { useModal } from "../../../../../hooks/use-modal";
 import { AllTagsModal } from "../../../../modals/all-tags-modal/all-tags-modal";
 
 export const AllTagsButton: React.FC = () => {
-    const { isModalOpen, openModal, closeModal } = useModal();
-    const { t } = useTranslation();
-    const title = t("workspace.allTags");
+  const { isModalOpen, openModal, closeModal } = useModal();
+  const { t } = useTranslation();
+  const title = t("workspace.allTags");
 
-    return (
-        <>
-            <Tooltip title={title}>
-                <IconButton
-                    id="all-tags-button"
-                    size="small"
-                    onClick={openModal}
-                >
-                    <FaTags />
-                </IconButton>
-            </Tooltip>
-            <AllTagsModal isModalOpen={isModalOpen} closeModal={closeModal} />
-        </>
-    );
+  return (
+    <>
+      <Tooltip title={title}>
+        <IconButton id="all-tags-button" size="small" onClick={openModal}>
+          <FaTags />
+        </IconButton>
+      </Tooltip>
+      <AllTagsModal isModalOpen={isModalOpen} closeModal={closeModal} />
+    </>
+  );
 };

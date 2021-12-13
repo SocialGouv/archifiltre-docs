@@ -6,8 +6,8 @@ import type { HashesMap } from "../reducers/hashes/hashes-types";
 import { computeFolderHashes } from "../util/files-and-folders/file-and-folders-utils";
 
 interface ComputeFolderHashesOptions {
-    filesAndFolders: FilesAndFoldersMap;
-    hashes: HashesMap;
+  filesAndFolders: FilesAndFoldersMap;
+  hashes: HashesMap;
 }
 
 /**
@@ -17,17 +17,17 @@ interface ComputeFolderHashesOptions {
  * @returns {Observable<{}>}
  */
 export const computeFolderHashes$ = ({
-    filesAndFolders,
-    hashes,
+  filesAndFolders,
+  hashes,
 }: ComputeFolderHashesOptions): Observable<HashesMap> => {
-    return new Observable<HashesMap>((subscriber) => {
-        void computeFolderHashes(filesAndFolders, hashes, (hashesMap) => {
-            subscriber.next(hashesMap);
-        }).then(() => {
-            subscriber.complete();
-        });
-    }).pipe(
-        bufferCount(2000),
-        map((values) => Object.assign({}, ...values) as HashesMap)
-    );
+  return new Observable<HashesMap>((subscriber) => {
+    void computeFolderHashes(filesAndFolders, hashes, (hashesMap) => {
+      subscriber.next(hashesMap);
+    }).then(() => {
+      subscriber.complete();
+    });
+  }).pipe(
+    bufferCount(2000),
+    map((values) => Object.assign({}, ...values) as HashesMap)
+  );
 };

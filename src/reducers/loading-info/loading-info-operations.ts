@@ -11,14 +11,9 @@ import type { LoadingInfoTypes } from "./loading-info-types";
  * @param label - The loading label
  */
 export const startLoading =
-    (
-        type: LoadingInfoTypes,
-        goal: number,
-        label: string,
-        loadedLabel: string
-    ) =>
-    (dispatch: VoidFunction): string => {
-        const id = uuid();
-        dispatch(startLoadingAction(id, type, goal, label, loadedLabel));
-        return id;
-    };
+  (type: LoadingInfoTypes, goal: number, label: string, loadedLabel: string) =>
+  (dispatch: VoidFunction): string => {
+    const id = uuid();
+    dispatch(startLoadingAction(id, type, goal, label, loadedLabel));
+    return id;
+  };

@@ -4,14 +4,14 @@ import { useTranslation } from "react-i18next";
 import { LargeIndicatorText } from "../../../../common/large-indicator-text";
 
 export interface FileCountInfoProps {
-    fileCount: number;
+  fileCount: number;
 }
 
 export const FileCountInfo: React.FC<FileCountInfoProps> = ({ fileCount }) => {
-    const { t } = useTranslation();
-    return (
-        <LargeIndicatorText>{`${fileCount} ${t(
-            "common.file_plural"
-        )}`}</LargeIndicatorText>
-    );
+  const { t } = useTranslation();
+  return (
+    <LargeIndicatorText>{`${fileCount} ${t(
+      "common.file_plural"
+    )}`}</LargeIndicatorText>
+  );
 };

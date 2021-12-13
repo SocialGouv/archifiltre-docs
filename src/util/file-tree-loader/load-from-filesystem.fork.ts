@@ -6,5 +6,5 @@ import { loadVirtualFileSystem } from "./load-from-filesystem.impl";
 const asyncWorker = createAsyncWorkerForChildProcess();
 
 setupChildWorkerListeners(asyncWorker, {
-    onInitialize: loadVirtualFileSystem as WorkerMessageHandler,
+  onInitialize: loadVirtualFileSystem as WorkerMessageHandler,
 });

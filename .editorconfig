@@ -44,7 +44,8 @@ insert_final_newline = false
 indent_size = 2
 insert_final_newline = false
 
-[**/*.{t,j}s?]
+[**/*.{t,j}s*]
+indent_size = 2 # to stay consistant with existant
 trim_trailing_whitespace = false
 
 [**/*.{?c,le}ss]

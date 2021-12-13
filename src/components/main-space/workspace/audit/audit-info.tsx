@@ -7,18 +7,18 @@ import { FileCountInfoContainer } from "./file-count-info/file-count-info-contai
 import { FileTreeDepthContainer } from "./file-tree-depth/file-tree-depth-container";
 
 export const AuditInfo: React.FC = () => {
-    const { t } = useTranslation();
-    return (
-        <Box>
-            <Box>
-                <FileCountInfoContainer />
-            </Box>
-            <Box paddingTop={3}>
-                <CategoryTitle>{t("audit.fileTreeDepthTitle")}</CategoryTitle>
-            </Box>
-            <Box>
-                <FileTreeDepthContainer />
-            </Box>
-        </Box>
-    );
+  const { t } = useTranslation();
+  return (
+    <Box>
+      <Box>
+        <FileCountInfoContainer />
+      </Box>
+      <Box paddingTop={3}>
+        <CategoryTitle>{t("audit.fileTreeDepthTitle")}</CategoryTitle>
+      </Box>
+      <Box>
+        <FileTreeDepthContainer />
+      </Box>
+    </Box>
+  );
 };

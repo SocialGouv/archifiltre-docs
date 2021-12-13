@@ -8,12 +8,12 @@ import { notifyError } from "../notification/notifications-util";
  * @param filename - Either the default name of the file or the full path to the default file
  */
 export const promptUserForSave = async (
-    filename: string
+  filename: string
 ): Promise<string | undefined> => {
-    const { filePath } = await ipcRenderer.invoke("dialog.showSaveDialog", {
-        defaultPath: filename,
-    });
-    return filePath;
+  const { filePath } = await ipcRenderer.invoke("dialog.showSaveDialog", {
+    defaultPath: filename,
+  });
+  return filePath;
 };
 
 /**
@@ -21,17 +21,17 @@ export const promptUserForSave = async (
  * @param elementPath
  */
 export const openExternalElement = async (
-    elementPath: string
+  elementPath: string
 ): Promise<void> => {
-    const error = await ipcRenderer.invoke("shell.openPath", elementPath);
+  const error = await ipcRenderer.invoke("shell.openPath", elementPath);
 
-    if (error) {
-        notifyError(
-            translations.t("report.openElementErrorMessage"),
-            translations.t("report.openElementErrorTitle")
-        );
-    }
+  if (error) {
+    notifyError(
+      translations.t("report.openElementErrorMessage"),
+      translations.t("report.openElementErrorTitle")
+    );
+  }
 };
 
 export const showInFolder = async (elementPath: string): Promise<void> =>
-    ipcRenderer.invoke("shell.showItemInFolder", elementPath);
+  ipcRenderer.invoke("shell.showItemInFolder", elementPath);

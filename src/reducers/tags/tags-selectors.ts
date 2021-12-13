@@ -13,7 +13,7 @@ import type { Tag, TagMap } from "./tags-types";
  * @returns The list of tagIds for the file
  */
 export const getAllTagIdsForFile = (tagMap: TagMap, ffId: string): string[] =>
-    Object.keys(tagMap).filter((key) => tagHasFfId(tagMap[key], ffId));
+  Object.keys(tagMap).filter((key) => tagHasFfId(tagMap[key], ffId));
 
 /**
  * Returns all the tags that are associated to the provided ffId
@@ -22,7 +22,7 @@ export const getAllTagIdsForFile = (tagMap: TagMap, ffId: string): string[] =>
  * @returns The list of tags for the file
  */
 export const getAllTagsForFile = (tagMap: TagMap, ffId: string): Tag[] =>
-    tagMapToArray(tagMap).filter((tag) => tagHasFfId(tag, ffId));
+  tagMapToArray(tagMap).filter((tag) => tagHasFfId(tag, ffId));
 
 /**
  * Returns the tags corresponding to the ids in tagIds
@@ -30,8 +30,8 @@ export const getAllTagsForFile = (tagMap: TagMap, ffId: string): Tag[] =>
  * @param tagIds - the tags ids
  */
 export const getTagsByIds = (tagMap: TagMap, tagIds: string[]): Tag[] =>
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    tagIds.map((tagId) => tagMap[tagId] || null).filter((tag) => tag !== null);
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  tagIds.map((tagId) => tagMap[tagId] || null).filter((tag) => tag !== null);
 
 /**
  * Checks if the tag name already exist
@@ -39,21 +39,21 @@ export const getTagsByIds = (tagMap: TagMap, tagIds: string[]): Tag[] =>
  * @param name
  */
 export const getTagByName = (tagMap: TagMap, name: string): Tag | undefined =>
-    _.find(tagMapToArray(tagMap), (tag) => tag.name === name);
+  _.find(tagMapToArray(tagMap), (tag) => tag.name === name);
 
 /**
  * Order for sorting functions
  */
 export enum Order {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    ASC = 0,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    DESC = 1,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  ASC = 0,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  DESC = 1,
 }
 
 export interface SortTagOptions {
-    order?: Order;
-    sortParam?: keyof Tag;
+  order?: Order;
+  sortParam?: keyof Tag;
 }
 
 const defaultSortTagOptions: SortTagOptions = {};
@@ -66,23 +66,23 @@ const defaultSortTagOptions: SortTagOptions = {};
  * @param {string} [options.sortParam="name"] The param to sort on. Defaults to name.
  */
 export const sortTags = (
-    tagList: Tag[],
-    options = defaultSortTagOptions
+  tagList: Tag[],
+  options = defaultSortTagOptions
 ): Tag[] => {
-    const order = options.order ?? Order.ASC;
-    const sortParam = options.sortParam ?? "name";
+  const order = options.order ?? Order.ASC;
+  const sortParam = options.sortParam ?? "name";
 
-    const sortFunction = (tag1: Tag, tag2: Tag) => {
-        if (tag1[sortParam] < tag2[sortParam]) {
-            return order === Order.ASC ? -1 : 1;
-        }
-        if (tag1[sortParam] === tag2[sortParam]) {
-            return 0;
-        }
-        return order === Order.ASC ? 1 : -1;
-    };
+  const sortFunction = (tag1: Tag, tag2: Tag) => {
+    if (tag1[sortParam] < tag2[sortParam]) {
+      return order === Order.ASC ? -1 : 1;
+    }
+    if (tag1[sortParam] === tag2[sortParam]) {
+      return 0;
+    }
+    return order === Order.ASC ? 1 : -1;
+  };
 
-    return tagList.sort(sortFunction);
+  return tagList.sort(sortFunction);
 };
 
 /**
@@ -93,39 +93,37 @@ export const sortTags = (
  * @returns the total size of the tagged files and folders
  */
 export const getTagSize = (
-    tag: Tag,
-    filesAndFolders: FilesAndFoldersMap,
-    filesAndFoldersMetadata: FilesAndFoldersMetadataMap
+  tag: Tag,
+  filesAndFolders: FilesAndFoldersMap,
+  filesAndFoldersMetadata: FilesAndFoldersMetadataMap
 ): number => {
-    const parentIsTagged = (
-        taggedFfidsList: string[],
-        potentialChildId: string
-    ) =>
-        taggedFfidsList.some(
-            (potentialParentId) =>
-                potentialChildId.startsWith(potentialParentId) &&
-                potentialChildId[potentialParentId.length] === "/"
-        );
-
-    const taggedFfIds = tag.ffIds.filter(
-        (id) => !parentIsTagged(tag.ffIds, id)
+  const parentIsTagged = (
+    taggedFfidsList: string[],
+    potentialChildId: string
+  ) =>
+    taggedFfidsList.some(
+      (potentialParentId) =>
+        potentialChildId.startsWith(potentialParentId) &&
+        potentialChildId[potentialParentId.length] === "/"
     );
 
-    return taggedFfIds.reduce(
-        (totalSize, id) =>
-            totalSize + filesAndFoldersMetadata[id].childrenTotalSize,
-        0
-    );
+  const taggedFfIds = tag.ffIds.filter((id) => !parentIsTagged(tag.ffIds, id));
+
+  return taggedFfIds.reduce(
+    (totalSize, id) =>
+      totalSize + filesAndFoldersMetadata[id].childrenTotalSize,
+    0
+  );
 };
 
 export const tagMapToArray = (tagMap: TagMap): Tag[] => Object.values(tagMap);
 
 export const tagHasFfId = (tag: Tag, ffId: string): boolean =>
-    tag.ffIds.includes(ffId);
+  tag.ffIds.includes(ffId);
 
 /**
  * Gets the tags map from the redux store.
  * @param store The redux store
  */
 export const getTagsFromStore = (store: StoreState): TagMap =>
-    getCurrentState(store.tags).tags;
+  getCurrentState(store.tags).tags;

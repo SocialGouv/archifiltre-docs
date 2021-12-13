@@ -6,23 +6,23 @@ import { colors } from "../../../../../util/color/color-util";
 import type { FileType } from "../../../../../util/file-types/file-types-util";
 
 export interface DuplicatesTableTypeProps {
-    fileType: FileType;
+  fileType: FileType;
 }
 
 export const DuplicatesTableType: React.FC<DuplicatesTableTypeProps> = ({
-    fileType,
+  fileType,
 }) => {
-    const { t } = useTranslation();
-    return (
-        <div>
-            <FaCircle
-                style={{
-                    color: colors[fileType],
-                    verticalAlign: "middle",
-                }}
-            />
-            &nbsp;
-            {t(`common.fileTypes.${fileType}`)}
-        </div>
-    );
+  const { t } = useTranslation();
+  return (
+    <div>
+      <FaCircle
+        style={{
+          color: colors[fileType],
+          verticalAlign: "middle",
+        }}
+      />
+      &nbsp;
+      {t(`common.fileTypes.${fileType}`)}
+    </div>
+  );
 };

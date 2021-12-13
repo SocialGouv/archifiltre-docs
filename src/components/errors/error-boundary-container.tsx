@@ -7,26 +7,24 @@ import { getWorkspaceMetadataFromStore } from "../../reducers/workspace-metadata
 import { ErrorBoundary } from "./error-boundary";
 
 export const ErrorBoundaryContainer: React.FC = ({ children }) => {
-    const {
-        sessionName: currentSessionName,
-        originalPath: currentOriginalPath,
-    } = useSelector(getWorkspaceMetadataFromStore);
+  const { sessionName: currentSessionName, originalPath: currentOriginalPath } =
+    useSelector(getWorkspaceMetadataFromStore);
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const exportToJson = useCallback(
-        ({ sessionName, originalPath, version }: JsonExporterThunkArgs) =>
-            dispatch(jsonExporterThunk({ originalPath, sessionName, version })),
-        [dispatch]
-    );
+  const exportToJson = useCallback(
+    ({ sessionName, originalPath, version }: JsonExporterThunkArgs) =>
+      dispatch(jsonExporterThunk({ originalPath, sessionName, version })),
+    [dispatch]
+  );
 
-    return (
-        <ErrorBoundary
-            originalPath={currentOriginalPath}
-            sessionName={currentSessionName}
-            exportToJson={exportToJson}
-        >
-            {children}
-        </ErrorBoundary>
-    );
+  return (
+    <ErrorBoundary
+      originalPath={currentOriginalPath}
+      sessionName={currentSessionName}
+      exportToJson={exportToJson}
+    >
+      {children}
+    </ErrorBoundary>
+  );
 };

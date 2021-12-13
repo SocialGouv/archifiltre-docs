@@ -5,17 +5,17 @@ import { reportWarning } from "../../logging/reporter";
  * This is a debug tool to help qualify data inconsistencies and should only be used as such.
  */
 export const expectToBeDefined = <T>(actual: T, message: string): boolean => {
-    const isDefined = actual !== undefined && actual !== null;
+  const isDefined = actual !== undefined && actual !== null;
 
-    if (!isDefined) {
-        reportWarning(
-            JSON.stringify({
-                actual,
-                message,
-                type: "expectToBeDefined",
-            })
-        );
-    }
+  if (!isDefined) {
+    reportWarning(
+      JSON.stringify({
+        actual,
+        message,
+        type: "expectToBeDefined",
+      })
+    );
+  }
 
-    return isDefined;
+  return isDefined;
 };

@@ -10,70 +10,69 @@ import { reportError } from "../../logging/reporter";
 import { ContactUs } from "./contact-us";
 
 export interface ErrorBoundaryProps {
-    t: TFunction;
-    originalPath: string;
-    sessionName: string;
-    exportToJson: ExportToJson;
+  t: TFunction;
+  originalPath: string;
+  sessionName: string;
+  exportToJson: ExportToJson;
 }
 
 export interface ErrorBoundaryState {
-    hasError: boolean;
+  hasError: boolean;
 }
 
 const Wrapper = styled(Grid)`
-    height: 100vh;
+  height: 100vh;
 `;
 
 class ErrorBoundaryComponent extends Component<
-    ErrorBoundaryProps,
-    ErrorBoundaryState
+  ErrorBoundaryProps,
+  ErrorBoundaryState
 > {
-    constructor(props: ErrorBoundaryProps) {
-        super(props);
-        this.state = {
-            hasError: false,
-        };
-    }
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = {
+      hasError: false,
+    };
+  }
 
-    componentDidCatch(error: unknown, info: unknown) {
-        reportError({ error, info });
-        this.setState({
-            hasError: true,
-        });
-    }
+  componentDidCatch(error: unknown, info: unknown) {
+    reportError({ error, info });
+    this.setState({
+      hasError: true,
+    });
+  }
 
-    render() {
-        const { t, originalPath, sessionName, exportToJson, children } =
-            this.props;
+  render() {
+    const { t, originalPath, sessionName, exportToJson, children } = this.props;
 
-        if (this.state.hasError) {
-            return (
-                <Wrapper
-                    container
-                    direction="column"
-                    justify="center"
-                    alignItems="center"
-                >
-                    <Grid item>
-                        <h1>{t("common.somethingWentWrong")}</h1>
-                    </Grid>
-                    <Grid item>
-                        <h4>
-                            <ContactUs />
-                        </h4>
-                    </Grid>
-                    <Grid item>
-                        <SaveButton
-                            originalPath={originalPath}
-                            sessionName={sessionName}
-                            exportToJson={exportToJson}
-                        />
-                    </Grid>
-                </Wrapper>
-            );
-        }
-        return children;
+    if (this.state.hasError) {
+      return (
+        <Wrapper
+          container
+          direction="column"
+          justify="center"
+          alignItems="center"
+        >
+          <Grid item>
+            <h1>{t("common.somethingWentWrong")}</h1>
+          </Grid>
+          <Grid item>
+            <h4>
+              <ContactUs />
+            </h4>
+          </Grid>
+          <Grid item>
+            <SaveButton
+              originalPath={originalPath}
+              sessionName={sessionName}
+              exportToJson={exportToJson}
+            />
+          </Grid>
+        </Wrapper>
+      );
     }
+    return children;
+  }
 }
 
 export const ErrorBoundary = withTranslation()(ErrorBoundaryComponent);

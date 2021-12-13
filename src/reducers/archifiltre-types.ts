@@ -5,16 +5,16 @@ import type { SimpleObject } from "../util/object/object-util";
 import type { StoreState } from "./store";
 
 export type ArchifiltreThunk = <TArgs>(
-    ...args: TArgs[]
+  ...args: TArgs[]
 ) => ArchifiltreThunkAction;
 
 export type ArchifiltreDispatch = ThunkDispatch<
-    StoreState,
-    SimpleObject,
-    AnyAction
+  StoreState,
+  SimpleObject,
+  AnyAction
 >;
 
 export type ArchifiltreThunkAction<TReturnType = Promise<void> | void> =
-    ThunkAction<TReturnType, StoreState, SimpleObject, AnyAction>;
+  ThunkAction<TReturnType, StoreState, SimpleObject, AnyAction>;
 
 export type DispatchExts = ThunkDispatch<StoreState, SimpleObject, AnyAction>;

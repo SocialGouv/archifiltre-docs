@@ -14,54 +14,54 @@ import { showInFolder } from "../../util/file-system/file-system-util";
 import { removeChildrenPath } from "../../util/files-and-folders/file-and-folders-utils";
 import type { AnyFunction, Awaitable } from "../../util/function/function-util";
 import {
-    NotificationDuration,
-    notifySuccess,
+  NotificationDuration,
+  notifySuccess,
 } from "../../util/notification/notifications-util";
 import { isWindows } from "../../util/os/os-util";
 import { liftPromise } from "../../util/promise/promise-util";
 
 const prepareElementsToDelete = compose(
-    map(startPathFromOneLevelAbove),
-    removeChildrenPath,
-    getElementsToDeleteFromStore
+  map(startPathFromOneLevelAbove),
+  removeChildrenPath,
+  getElementsToDeleteFromStore
 );
 
 const windowsFileWriter = (path: string): Awaitable<AnyFunction> =>
-    compose(
-        async (binaryString: string) =>
-            fs.promises.writeFile(path, binaryString, "binary"),
-        encode as Awaitable<AnyFunction>
-    );
+  compose(
+    async (binaryString: string) =>
+      fs.promises.writeFile(path, binaryString, "binary"),
+    encode as Awaitable<AnyFunction>
+  );
 
 const unixFileWriter = (path: string) => async (data: string) =>
-    fs.promises.writeFile(path, data);
+  fs.promises.writeFile(path, data);
 
 const getFileWriter = () => (isWindows() ? windowsFileWriter : unixFileWriter);
 
 const curriedWriteFile = getFileWriter();
 
 const extractParamsFromState = (state: StoreState) => ({
-    elementsToDelete: prepareElementsToDelete(state),
-    originalPath: getWorkspaceMetadataFromStore(state).originalPath,
+  elementsToDelete: prepareElementsToDelete(state),
+  originalPath: getWorkspaceMetadataFromStore(state).originalPath,
 });
 
 const success = (t: TFunction, filePath: string) => () => {
-    notifySuccess(
-        t("export.deletionScriptSuccessMessage"),
-        t("export.deletionScript"),
-        NotificationDuration.NORMAL,
-        async () => showInFolder(filePath)
-    );
+  notifySuccess(
+    t("export.deletionScriptSuccessMessage"),
+    t("export.deletionScript"),
+    NotificationDuration.NORMAL,
+    async () => showInFolder(filePath)
+  );
 };
 
 export const deletionScriptExporterThunk =
-    (filePath: string): ArchifiltreThunkAction =>
-    async (dispatch, getState) => {
-        return compose(
-            liftPromise(success(translations.t.bind(translations), filePath)),
-            curriedWriteFile(filePath),
-            ({ originalPath, elementsToDelete }) =>
-                generateDeletionScript(originalPath, elementsToDelete),
-            extractParamsFromState
-        )(getState());
-    };
+  (filePath: string): ArchifiltreThunkAction =>
+  async (dispatch, getState) => {
+    return compose(
+      liftPromise(success(translations.t.bind(translations), filePath)),
+      curriedWriteFile(filePath),
+      ({ originalPath, elementsToDelete }) =>
+        generateDeletionScript(originalPath, elementsToDelete),
+      extractParamsFromState
+    )(getState());
+  };

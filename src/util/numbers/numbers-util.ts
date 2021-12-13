@@ -1,5 +1,5 @@
 export interface NumberUtilOptions {
-    numbersOfDecimals?: number;
+  numbersOfDecimals?: number;
 }
 
 /**
@@ -10,9 +10,9 @@ export interface NumberUtilOptions {
  * @returns {string}
  */
 export const percent = (
-    value: number,
-    total: number,
-    { numbersOfDecimals = 0 }: NumberUtilOptions = {}
+  value: number,
+  total: number,
+  { numbersOfDecimals = 0 }: NumberUtilOptions = {}
 ): number => formatPercent(value / total, { numbersOfDecimals });
 
 /**
@@ -24,28 +24,28 @@ export const percent = (
  * // 33.33
  */
 export const formatPercent = (
-    value: number,
-    { numbersOfDecimals = 0 }: NumberUtilOptions = {}
+  value: number,
+  { numbersOfDecimals = 0 }: NumberUtilOptions = {}
 ): number => {
-    const exponent = 10 ** numbersOfDecimals;
-    return Math.round(value * 100 * exponent) / exponent;
+  const exponent = 10 ** numbersOfDecimals;
+  return Math.round(value * 100 * exponent) / exponent;
 };
 
 /**
  * Curried version of format percent, where first arg is the options.
  */
 export const curriedFormatPercent =
-    (options: NumberUtilOptions) =>
-    (value: number): number =>
-        formatPercent(value, options);
+  (options: NumberUtilOptions) =>
+  (value: number): number =>
+    formatPercent(value, options);
 
 interface RatioOptions {
-    min?: number;
-    max: number;
+  min?: number;
+  max: number;
 }
 
 export const ratio = (value: number, { min = 0, max }: RatioOptions): number =>
-    (value - min) / (max - min);
+  (value - min) / (max - min);
 
 export const boundNumber = (low: number, high: number, value: number): number =>
-    Math.max(Math.min(value, high), low);
+  Math.max(Math.min(value, high), low);

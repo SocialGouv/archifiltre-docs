@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 
 interface UseModalResponse {
-    isModalOpen: boolean;
-    openModal: () => void;
-    closeModal: () => void;
+  isModalOpen: boolean;
+  openModal: () => void;
+  closeModal: () => void;
 }
 
 /**
@@ -11,13 +11,13 @@ interface UseModalResponse {
  * @returns [isModalOpen, openModal, closeModal]
  */
 export const useModal = (): UseModalResponse => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = useCallback(() => {
-        setIsModalOpen(true);
-    }, [setIsModalOpen]);
-    const closeModal = useCallback(() => {
-        setIsModalOpen(false);
-    }, [setIsModalOpen]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = useCallback(() => {
+    setIsModalOpen(true);
+  }, [setIsModalOpen]);
+  const closeModal = useCallback(() => {
+    setIsModalOpen(false);
+  }, [setIsModalOpen]);
 
-    return { closeModal, isModalOpen, openModal };
+  return { closeModal, isModalOpen, openModal };
 };

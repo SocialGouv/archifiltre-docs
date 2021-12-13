@@ -1,20 +1,20 @@
 type InternalHook<THookArgs extends unknown[]> = (
-    ...args: THookArgs
+  ...args: THookArgs
 ) => boolean;
 type Hook<THookArgs extends unknown[]> = (
-    count?: number,
-    ...args: THookArgs
+  count?: number,
+  ...args: THookArgs
 ) => void;
 type ResultHook<THookArgs extends unknown[]> = (...args: THookArgs) => void;
 
 export interface HookCounterOptions<THookArgs extends unknown[]> {
-    interval?: number;
-    internalHook: InternalHook<[]> | InternalHook<THookArgs>;
+  interval?: number;
+  internalHook: InternalHook<[]> | InternalHook<THookArgs>;
 }
 
 interface HookCounterResult<THookArgs extends unknown[]> {
-    hook: ResultHook<THookArgs>;
-    getCount: () => number;
+  hook: ResultHook<THookArgs>;
+  getCount: () => number;
 }
 
 /**
@@ -26,32 +26,32 @@ interface HookCounterResult<THookArgs extends unknown[]> {
  * current number of times the hook has been called
  */
 export const hookCounter = <THookArgs extends unknown[]>(
-    throttledHook: Hook<THookArgs>,
-    {
-        interval = 500,
-        internalHook = () => true,
-    }: HookCounterOptions<unknown[]> = {
-        internalHook: () => true,
-        interval: 500,
-    }
+  throttledHook: Hook<THookArgs>,
+  {
+    interval = 500,
+    internalHook = () => true,
+  }: HookCounterOptions<unknown[]> = {
+    internalHook: () => true,
+    interval: 500,
+  }
 ): HookCounterResult<THookArgs> => {
-    let count = 0;
-    let lastCall = Date.now();
+  let count = 0;
+  let lastCall = Date.now();
 
-    const hook = (...args: THookArgs) => {
-        if (internalHook(...args)) {
-            count++;
-        }
+  const hook = (...args: THookArgs) => {
+    if (internalHook(...args)) {
+      count++;
+    }
 
-        if (Date.now() - lastCall < interval) {
-            return;
-        }
-        lastCall = Date.now();
-        throttledHook(count, ...args);
-    };
+    if (Date.now() - lastCall < interval) {
+      return;
+    }
+    lastCall = Date.now();
+    throttledHook(count, ...args);
+  };
 
-    return {
-        getCount: () => count,
-        hook,
-    };
+  return {
+    getCount: () => count,
+    hook,
+  };
 };

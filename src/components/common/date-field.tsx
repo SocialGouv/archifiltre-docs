@@ -16,63 +16,63 @@ import { tap } from "../../util/functionnal-programming-utils";
 import { Language } from "../../util/language/language-types";
 
 const languagesMap = {
-    [Language.FR]: fr,
-    [Language.DE]: de,
-    [Language.EN]: enUS,
+  [Language.FR]: fr,
+  [Language.DE]: de,
+  [Language.EN]: enUS,
 };
 
 const getLanguageLocale = (language: Language): Locale =>
-    languagesMap[language];
+  languagesMap[language];
 
 export interface DateFieldProps {
-    date: number;
-    onDateChange: (timestamp: number) => void;
+  date: number;
+  onDateChange: (timestamp: number) => void;
 }
 
 // We assume that we cannot enter dates before 1970
 const MIN_DATE_YEAR = 1970;
 
 export const DateField: React.FC<DateFieldProps> = ({ date, onDateChange }) => {
-    const [isFocused, setFocus] = useState(false);
-    const [language] = useLanguage();
+  const [isFocused, setFocus] = useState(false);
+  const [language] = useLanguage();
 
-    const dateChangeHandler = compose(onDateChange, getTime);
+  const dateChangeHandler = compose(onDateChange, getTime);
 
-    const inputProps: { onFocus: AnyFunction; onBlur: AnyFunction } =
-        useDateInput({
-            date: fromUnixTime(date / 1000),
-            locale: getLanguageLocale(language),
-            onDateChange: dateChangeHandler,
-            validate: (dateToValidate) =>
-                getYear(dateToValidate) > MIN_DATE_YEAR &&
-                isBefore(dateToValidate, new Date()),
-        });
+  const inputProps: { onFocus: AnyFunction; onBlur: AnyFunction } =
+    useDateInput({
+      date: fromUnixTime(date / 1000),
+      locale: getLanguageLocale(language),
+      onDateChange: dateChangeHandler,
+      validate: (dateToValidate) =>
+        getYear(dateToValidate) > MIN_DATE_YEAR &&
+        isBefore(dateToValidate, new Date()),
+    });
 
-    const onFocus = compose(
-        tap(() => {
-            setFocus(true);
-        }),
-        inputProps.onFocus
-    );
+  const onFocus = compose(
+    tap(() => {
+      setFocus(true);
+    }),
+    inputProps.onFocus
+  );
 
-    const onBlur = compose(
-        tap(() => {
-            setFocus(false);
-        }),
-        inputProps.onBlur
-    );
+  const onBlur = compose(
+    tap(() => {
+      setFocus(false);
+    }),
+    inputProps.onBlur
+  );
 
-    return (
-        <Input
-            {...inputProps}
-            startAdornment={
-                <InputAdornment position="start">
-                    <FaPen />
-                </InputAdornment>
-            }
-            disableUnderline={!isFocused}
-            onFocus={onFocus}
-            onBlur={onBlur}
-        />
-    );
+  return (
+    <Input
+      {...inputProps}
+      startAdornment={
+        <InputAdornment position="start">
+          <FaPen />
+        </InputAdornment>
+      }
+      disableUnderline={!isFocused}
+      onFocus={onFocus}
+      onBlur={onBlur}
+    />
+  );
 };

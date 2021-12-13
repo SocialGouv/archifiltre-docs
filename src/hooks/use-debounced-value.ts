@@ -6,16 +6,16 @@ import { useEffect, useState } from "react";
  * @param debounceDelay
  */
 export const useDebouncedValue = <T>(value: T, debounceDelay: number): T => {
-    const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedValue(value);
-        }, debounceDelay);
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [value, debounceDelay, setDebouncedValue]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(value);
+    }, debounceDelay);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [value, debounceDelay, setDebouncedValue]);
 
-    return debouncedValue;
+  return debouncedValue;
 };

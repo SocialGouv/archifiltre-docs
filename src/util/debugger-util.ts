@@ -7,13 +7,13 @@ import type { SimpleObject } from "./object/object-util";
  * @param props - The props to monitor
  */
 export const useLogPropChange = (props: SimpleObject): void => {
-    const testRef = useRef({} as SimpleObject);
-    useEffect(() => {
-        const changedElements = Object.keys(testRef.current).filter(
-            (key) => props[key] !== testRef.current[key]
-        );
+  const testRef = useRef({} as SimpleObject);
+  useEffect(() => {
+    const changedElements = Object.keys(testRef.current).filter(
+      (key) => props[key] !== testRef.current[key]
+    );
 
-        console.log(changedElements);
-        testRef.current = props;
-    }, Object.entries(props));
+    console.log(changedElements);
+    testRef.current = props;
+  }, Object.entries(props));
 };

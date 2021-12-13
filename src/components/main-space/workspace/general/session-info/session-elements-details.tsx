@@ -6,38 +6,35 @@ import { octet2HumanReadableFormat } from "../../../../../util/file-system/file-
 import { SessionElementsDetail } from "./session-elements-detail";
 
 export interface SessionElementsDetailsProps {
-    nbFiles: number;
-    nbFolders: number;
-    volume: number;
+  nbFiles: number;
+  nbFolders: number;
+  volume: number;
 }
 
 export const SessionElementsDetails: React.FC<SessionElementsDetailsProps> = ({
-    nbFolders,
-    nbFiles,
-    volume,
+  nbFolders,
+  nbFiles,
+  volume,
 }) => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    return (
-        <Grid container spacing={2}>
-            <Grid item>
-                <SessionElementsDetail
-                    title={t("report.folders")}
-                    content={nbFolders}
-                />
-            </Grid>
-            <Grid item>
-                <SessionElementsDetail
-                    title={t("report.files")}
-                    content={nbFiles}
-                />
-            </Grid>
-            <Grid item>
-                <SessionElementsDetail
-                    title={t("report.size")}
-                    content={octet2HumanReadableFormat(volume)}
-                />
-            </Grid>
-        </Grid>
-    );
+  return (
+    <Grid container spacing={2}>
+      <Grid item>
+        <SessionElementsDetail
+          title={t("report.folders")}
+          content={nbFolders}
+        />
+      </Grid>
+      <Grid item>
+        <SessionElementsDetail title={t("report.files")} content={nbFiles} />
+      </Grid>
+      <Grid item>
+        <SessionElementsDetail
+          title={t("report.size")}
+          content={octet2HumanReadableFormat(volume)}
+        />
+      </Grid>
+    </Grid>
+  );
 };

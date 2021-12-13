@@ -14,83 +14,80 @@ import { UndoRedoButton } from "./undo-redo-button";
 import { UserButton } from "./user-button";
 
 const HeaderLine = styled.div`
-    width: 100%;
+  width: 100%;
 `;
 
 export interface HeaderActionsProps {
-    originalPath: string;
-    sessionName: string;
-    exportToJson: ExportToJson;
-    resetWorkspace: VoidFunction;
-    undo: () => void;
-    redo: () => void;
-    canUndo: boolean;
-    canRedo: boolean;
+  originalPath: string;
+  sessionName: string;
+  exportToJson: ExportToJson;
+  resetWorkspace: VoidFunction;
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
 }
 
 export const Header: React.FC<HeaderActionsProps> = ({
-    originalPath,
-    sessionName,
-    exportToJson,
-    resetWorkspace,
-    undo,
-    redo,
-    canUndo,
-    canRedo,
+  originalPath,
+  sessionName,
+  exportToJson,
+  resetWorkspace,
+  undo,
+  redo,
+  canUndo,
+  canRedo,
 }) => {
-    const { tabIndex, setTabIndex } = useTabsState();
+  const { tabIndex, setTabIndex } = useTabsState();
 
-    return (
-        <HeaderLine>
-            <Box display="flex">
-                <Box display="flex" alignItems="center">
-                    <img src={logo} alt="Logo archifiltre" height={30} />
-                </Box>
-                <Box flexGrow={1} />
-                <>
-                    <Box>
-                        <TabsHeader
-                            tabIndex={tabIndex}
-                            setTabIndex={setTabIndex}
-                        />
-                    </Box>
-                    <Box flexGrow={1} />
-                </>
-                <Box>
-                    <SearchButton />
-                </Box>
-                <Box pl={1}>
-                    <UndoRedoButton
-                        isVisible={true}
-                        undo={undo}
-                        redo={redo}
-                        isUndo={true}
-                        isActive={canUndo}
-                    />
-                </Box>
-                <Box pl={1}>
-                    <UndoRedoButton
-                        isVisible={true}
-                        undo={undo}
-                        redo={redo}
-                        isUndo={false}
-                        isActive={canRedo}
-                    />
-                </Box>
-                <Box pl={1}>
-                    <SaveButton
-                        originalPath={originalPath}
-                        sessionName={sessionName}
-                        exportToJson={exportToJson}
-                    />
-                </Box>
-                <Box pl={1}>
-                    <ExportButton />
-                </Box>
-                <Box pl={1}>
-                    <UserButton resetWorkspace={resetWorkspace} />
-                </Box>
-            </Box>
-        </HeaderLine>
-    );
+  return (
+    <HeaderLine>
+      <Box display="flex">
+        <Box display="flex" alignItems="center">
+          <img src={logo} alt="Logo archifiltre" height={30} />
+        </Box>
+        <Box flexGrow={1} />
+        <>
+          <Box>
+            <TabsHeader tabIndex={tabIndex} setTabIndex={setTabIndex} />
+          </Box>
+          <Box flexGrow={1} />
+        </>
+        <Box>
+          <SearchButton />
+        </Box>
+        <Box pl={1}>
+          <UndoRedoButton
+            isVisible={true}
+            undo={undo}
+            redo={redo}
+            isUndo={true}
+            isActive={canUndo}
+          />
+        </Box>
+        <Box pl={1}>
+          <UndoRedoButton
+            isVisible={true}
+            undo={undo}
+            redo={redo}
+            isUndo={false}
+            isActive={canRedo}
+          />
+        </Box>
+        <Box pl={1}>
+          <SaveButton
+            originalPath={originalPath}
+            sessionName={sessionName}
+            exportToJson={exportToJson}
+          />
+        </Box>
+        <Box pl={1}>
+          <ExportButton />
+        </Box>
+        <Box pl={1}>
+          <UserButton resetWorkspace={resetWorkspace} />
+        </Box>
+      </Box>
+    </HeaderLine>
+  );
 };

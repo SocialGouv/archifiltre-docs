@@ -10,33 +10,33 @@ import { AllTagsContainer } from "../../main-space/workspace/enrichment/tags/all
 import { ModalHeader } from "../modal-header";
 
 const StyledPaper = styled(Paper)`
-    min-height: 50%;
+  min-height: 50%;
 `;
 
 export interface SettingsModalProps {
-    isModalOpen: boolean;
-    closeModal: () => void;
+  isModalOpen: boolean;
+  closeModal: () => void;
 }
 
 export const AllTagsModal: React.FC<SettingsModalProps> = ({
-    isModalOpen,
-    closeModal,
+  isModalOpen,
+  closeModal,
 }) => {
-    const { t } = useTranslation();
-    const classes = useStyles();
+  const { t } = useTranslation();
+  const classes = useStyles();
 
-    return (
-        <Dialog
-            open={isModalOpen}
-            onClose={closeModal}
-            maxWidth="xs"
-            fullWidth
-            PaperComponent={StyledPaper}
-        >
-            <ModalHeader title={t("workspace.allTags")} onClose={closeModal} />
-            <DialogContent className={classes.allTagsDialogContent} dividers>
-                <AllTagsContainer />
-            </DialogContent>
-        </Dialog>
-    );
+  return (
+    <Dialog
+      open={isModalOpen}
+      onClose={closeModal}
+      maxWidth="xs"
+      fullWidth
+      PaperComponent={StyledPaper}
+    >
+      <ModalHeader title={t("workspace.allTags")} onClose={closeModal} />
+      <DialogContent className={classes.allTagsDialogContent} dividers>
+        <AllTagsContainer />
+      </DialogContent>
+    </Dialog>
+  );
 };

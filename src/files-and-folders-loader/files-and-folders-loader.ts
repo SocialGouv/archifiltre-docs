@@ -7,21 +7,21 @@ import readline from "readline";
 import type { Readable } from "stream";
 
 import {
-    isFile,
-    reduceFilesAndFolders,
-    ROOT_FF_ID,
+  isFile,
+  reduceFilesAndFolders,
+  ROOT_FF_ID,
 } from "../reducers/files-and-folders/files-and-folders-selectors";
 import type {
-    FilesAndFolders,
-    FilesAndFoldersMap,
-    VirtualPathToIdMap,
+  FilesAndFolders,
+  FilesAndFoldersMap,
+  VirtualPathToIdMap,
 } from "../reducers/files-and-folders/files-and-folders-types";
 import type { HashesMap } from "../reducers/hashes/hashes-types";
 import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
 import { convertJsonToCurrentVersion } from "../util/compatibility/compatibility";
 import {
-    ArchifiltreErrorType,
-    convertFsErrorToArchifiltreError,
+  ArchifiltreErrorType,
+  convertFsErrorToArchifiltreError,
 } from "../util/error/error-util";
 import { identifyFileFormat } from "../util/file-format/file-format-util";
 import { convertToPosixAbsolutePath } from "../util/file-system/file-sys-util";
@@ -29,144 +29,137 @@ import { asyncShouldIgnoreElement } from "../util/hidden-file/hidden-file-util";
 import { removeIgnoredElementsFromVirtualFileSystem } from "../util/virtual-file-system-util/virtual-file-system-util";
 import { sanitizeHooks } from "./file-system-loading-process-utils";
 import type {
-    FilesAndFoldersLoader,
-    FileSystemLoadingHooks,
-    JsonFileInfo,
-    PartialFileSystem,
-    WithErrorHook,
-    WithFilesAndFolders,
-    WithHashes,
-    WithResultHook,
-    WithVirtualPathToIdMap,
-    WorkerError,
+  FilesAndFoldersLoader,
+  FileSystemLoadingHooks,
+  JsonFileInfo,
+  PartialFileSystem,
+  WithErrorHook,
+  WithFilesAndFolders,
+  WithHashes,
+  WithResultHook,
+  WithVirtualPathToIdMap,
+  WorkerError,
 } from "./files-and-folders-loader-types";
 
 interface FilesAndFoldersInfo {
-    lastModified: number;
-    size: number;
+  lastModified: number;
+  size: number;
 }
 
 export type FilesElementInfo = [FilesAndFoldersInfo, string];
 
 export const getFilesElementInfosFromFilesAndFolders = (
-    filesAndFolders: FilesAndFoldersMap
+  filesAndFolders: FilesAndFoldersMap
 ): FilesElementInfo[] =>
-    Object.values(filesAndFolders)
-        .filter(isFile)
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        .map(({ id, file_last_modified, file_size }) => [
-            {
-                lastModified: file_last_modified,
-                size: file_size,
-            },
-            id,
-        ]);
+  Object.values(filesAndFolders)
+    .filter(isFile)
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    .map(({ id, file_last_modified, file_size }) => [
+      {
+        lastModified: file_last_modified,
+        size: file_size,
+      },
+      id,
+    ]);
 
 const loadFilesAndFoldersFromFileSystemImpl = async (
-    folderPath: string,
-    {
-        rootPaths,
-        fileInfos = [],
-    }: { fileInfos?: FilesElementInfo[]; rootPaths: string[] },
-    { onResult, onError }: WithErrorHook & WithResultHook = {
-        onError: noop,
-        onResult: noop,
-    }
+  folderPath: string,
+  {
+    rootPaths,
+    fileInfos = [],
+  }: { fileInfos?: FilesElementInfo[]; rootPaths: string[] },
+  { onResult, onError }: WithErrorHook & WithResultHook = {
+    onError: noop,
+    onResult: noop,
+  }
 ) => {
-    const files = [...fileInfos];
-    const rootPath = path.dirname(folderPath);
+  const files = [...fileInfos];
+  const rootPath = path.dirname(folderPath);
 
-    const loadFilesAndFoldersFromFileSystemRec = async (
-        currentPath: string
-    ) => {
-        try {
-            if (await asyncShouldIgnoreElement(currentPath)) {
-                return;
-            }
-            const stats = await fs.promises.stat(currentPath);
+  const loadFilesAndFoldersFromFileSystemRec = async (currentPath: string) => {
+    try {
+      if (await asyncShouldIgnoreElement(currentPath)) {
+        return;
+      }
+      const stats = await fs.promises.stat(currentPath);
 
-            if (stats.isDirectory()) {
-                const children = await fs.promises.readdir(currentPath);
-                await Promise.all(
-                    children.map(async (childPath) =>
-                        loadFilesAndFoldersFromFileSystemRec(
-                            path.join(currentPath, childPath)
-                        )
-                    )
-                );
-                return;
-            }
+      if (stats.isDirectory()) {
+        const children = await fs.promises.readdir(currentPath);
+        await Promise.all(
+          children.map(async (childPath) =>
+            loadFilesAndFoldersFromFileSystemRec(
+              path.join(currentPath, childPath)
+            )
+          )
+        );
+        return;
+      }
 
-            onResult();
-            files.push([
-                {
-                    lastModified: stats.mtimeMs,
-                    size: stats.size,
-                },
-                convertToPosixAbsolutePath(
-                    path.relative(rootPath, currentPath)
-                ),
-            ]);
-        } catch (error: unknown) {
-            onError({
-                code: convertFsErrorToArchifiltreError(
-                    (error as WorkerError).code
-                ),
-                filePath: currentPath,
-                reason: (error as WorkerError).message,
-                type: ArchifiltreErrorType.LOADING_FILE_SYSTEM,
-            });
-        }
-    };
+      onResult();
+      files.push([
+        {
+          lastModified: stats.mtimeMs,
+          size: stats.size,
+        },
+        convertToPosixAbsolutePath(path.relative(rootPath, currentPath)),
+      ]);
+    } catch (error: unknown) {
+      onError({
+        code: convertFsErrorToArchifiltreError((error as WorkerError).code),
+        filePath: currentPath,
+        reason: (error as WorkerError).message,
+        type: ArchifiltreErrorType.LOADING_FILE_SYSTEM,
+      });
+    }
+  };
 
-    await Promise.all(
-        rootPaths.map(async (elementPath) =>
-            loadFilesAndFoldersFromFileSystemRec(elementPath)
-        )
-    );
+  await Promise.all(
+    rootPaths.map(async (elementPath) =>
+      loadFilesAndFoldersFromFileSystemRec(elementPath)
+    )
+  );
 
-    return files;
+  return files;
 };
 
 export const retryLoadFromFileSystem =
-    ({
-        filesAndFolders,
-        erroredPaths,
-    }: WithFilesAndFolders & { erroredPaths: string[] }) =>
-    async (
-        folderPath: string,
-        { onResult, onError }: WithErrorHook & WithResultHook = {
-            onError: noop,
-            onResult: noop,
-        }
-    ): Promise<FilesElementInfo[]> => {
-        const fileInfos =
-            getFilesElementInfosFromFilesAndFolders(filesAndFolders);
-
-        return loadFilesAndFoldersFromFileSystemImpl(
-            folderPath,
-            { fileInfos, rootPaths: erroredPaths },
-            { onError, onResult }
-        );
-    };
-
-export const asyncLoadFilesAndFoldersFromFileSystem = async (
+  ({
+    filesAndFolders,
+    erroredPaths,
+  }: WithFilesAndFolders & { erroredPaths: string[] }) =>
+  async (
     folderPath: string,
     { onResult, onError }: WithErrorHook & WithResultHook = {
-        onError: noop,
-        onResult: noop,
+      onError: noop,
+      onResult: noop,
     }
-): Promise<FilesElementInfo[]> =>
-    loadFilesAndFoldersFromFileSystemImpl(
-        folderPath,
-        { rootPaths: [folderPath] },
-        { onError, onResult }
+  ): Promise<FilesElementInfo[]> => {
+    const fileInfos = getFilesElementInfosFromFilesAndFolders(filesAndFolders);
+
+    return loadFilesAndFoldersFromFileSystemImpl(
+      folderPath,
+      { fileInfos, rootPaths: erroredPaths },
+      { onError, onResult }
     );
+  };
+
+export const asyncLoadFilesAndFoldersFromFileSystem = async (
+  folderPath: string,
+  { onResult, onError }: WithErrorHook & WithResultHook = {
+    onError: noop,
+    onResult: noop,
+  }
+): Promise<FilesElementInfo[]> =>
+  loadFilesAndFoldersFromFileSystemImpl(
+    folderPath,
+    { rootPaths: [folderPath] },
+    { onError, onResult }
+  );
 
 interface LoadFilesAndFoldersFromExportFileContentResult {
-    hashes: HashesMap;
-    files: FilesElementInfo[];
-    rootPath: string;
+  hashes: HashesMap;
+  files: FilesElementInfo[];
+  rootPath: string;
 }
 
 /**
@@ -175,53 +168,53 @@ interface LoadFilesAndFoldersFromExportFileContentResult {
  * @param hooks
  */
 export const loadFilesAndFoldersFromExportFile = async (
-    exportFilePath: string,
-    hooks?: WithResultHook
+  exportFilePath: string,
+  hooks?: WithResultHook
 ): Promise<LoadFilesAndFoldersFromExportFileContentResult> => {
-    const fileFormat = await identifyFileFormat(exportFilePath);
-    const fileStream = fs.createReadStream(exportFilePath, fileFormat);
+  const fileFormat = await identifyFileFormat(exportFilePath);
+  const fileStream = fs.createReadStream(exportFilePath, fileFormat);
 
-    return loadFilesAndFoldersFromExportFileContent(fileStream, hooks);
+  return loadFilesAndFoldersFromExportFileContent(fileStream, hooks);
 };
 
 const latestVersion = "windows-1.0.1";
 
 interface LoadedLine {
-    filePath: string;
-    fileSize: string;
-    fileLastModified: string;
-    fileHash: string;
+  filePath: string;
+  fileSize: string;
+  fileLastModified: string;
+  fileHash: string;
 }
 type LineLoader = (parsedLine: string[]) => LoadedLine;
 
 const LINE_LOADERS: Record<string, LineLoader> = {
-    [latestVersion]: ([[filePath, fileSize, fileLastModified, fileHash]]) => ({
-        fileHash,
-        fileLastModified,
-        filePath,
-        fileSize,
-    }),
-    "unix-1.0.0": ([[filePath, fileLastModified, fileSize, fileHash]]) => ({
-        fileHash,
-        fileLastModified,
-        filePath,
-        fileSize,
-    }),
-    "windows-1.0.0": ([[filePath, fileSize, fileLastModified, ...rest]]) => ({
-        // Whe take the last element as the rest, as the last modified date may be an integer or a float (randomly)
-        fileHash: rest[rest.length - 1],
+  [latestVersion]: ([[filePath, fileSize, fileLastModified, fileHash]]) => ({
+    fileHash,
+    fileLastModified,
+    filePath,
+    fileSize,
+  }),
+  "unix-1.0.0": ([[filePath, fileLastModified, fileSize, fileHash]]) => ({
+    fileHash,
+    fileLastModified,
+    filePath,
+    fileSize,
+  }),
+  "windows-1.0.0": ([[filePath, fileSize, fileLastModified, ...rest]]) => ({
+    // Whe take the last element as the rest, as the last modified date may be an integer or a float (randomly)
+    fileHash: rest[rest.length - 1],
 
-        fileLastModified,
+    fileLastModified,
 
-        filePath,
+    filePath,
 
-        fileSize,
-    }),
+    fileSize,
+  }),
 };
 
 const getLineLoader = (version: string): LineLoader =>
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    LINE_LOADERS[version] ?? LINE_LOADERS[latestVersion];
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  LINE_LOADERS[version] ?? LINE_LOADERS[latestVersion];
 
 /**
  * Creates an origin structure from an archifiltre export file content
@@ -229,188 +222,186 @@ const getLineLoader = (version: string): LineLoader =>
  * @param hook - A hook called after each file is processed.
  */
 export const loadFilesAndFoldersFromExportFileContent = async (
-    exportFileContent: Readable,
-    { onResult }: WithResultHook = { onResult: noop }
+  exportFileContent: Readable,
+  { onResult }: WithResultHook = { onResult: noop }
 ): Promise<LoadFilesAndFoldersFromExportFileContentResult> => {
-    const lineReader = readline.createInterface({
-        crlfDelay: Infinity,
-        input: exportFileContent,
-    });
+  const lineReader = readline.createInterface({
+    crlfDelay: Infinity,
+    input: exportFileContent,
+  });
 
-    let lineCount = 0;
-    let basePath = "";
-    let rootPath = "";
-    let pathImpl: typeof path.posix | typeof path.win32 = path;
-    const hashes: HashesMap = {};
-    const files: FilesElementInfo[] = [];
-    let version = latestVersion;
-    let os = "windows";
-    for await (const line of lineReader) {
-        /* eslint-disable no-case-declarations */
-        switch (lineCount) {
-            case 0:
-                version = line.trim();
-                break;
-            case 1:
-                os = line.trim();
-                pathImpl = os === "windows" ? path.win32 : path.posix;
-                break;
-            case 2:
-                basePath = line.trim();
-                rootPath = pathImpl.dirname(basePath);
-                break;
-            default:
-                const loader = getLineLoader(`${os}-${version}`);
-                const { filePath, fileSize, fileLastModified, fileHash } =
-                    loader(parse(line.trim()) as string[]);
-                const id = convertToPosixAbsolutePath(
-                    pathImpl.relative(rootPath, filePath),
-                    { separator: pathImpl.sep }
-                );
-                hashes[id] = fileHash.toLowerCase();
-                const lastModifiedWithoutComma = fileLastModified.replace(
-                    ",",
-                    "."
-                );
-                files.push([
-                    {
-                        lastModified: +lastModifiedWithoutComma * 1000,
-                        size: +fileSize,
-                    },
-                    id,
-                ]);
-                onResult();
+  let lineCount = 0;
+  let basePath = "";
+  let rootPath = "";
+  let pathImpl: typeof path.posix | typeof path.win32 = path;
+  const hashes: HashesMap = {};
+  const files: FilesElementInfo[] = [];
+  let version = latestVersion;
+  let os = "windows";
+  for await (const line of lineReader) {
+    /* eslint-disable no-case-declarations */
+    switch (lineCount) {
+      case 0:
+        version = line.trim();
+        break;
+      case 1:
+        os = line.trim();
+        pathImpl = os === "windows" ? path.win32 : path.posix;
+        break;
+      case 2:
+        basePath = line.trim();
+        rootPath = pathImpl.dirname(basePath);
+        break;
+      default:
+        const loader = getLineLoader(`${os}-${version}`);
+        const { filePath, fileSize, fileLastModified, fileHash } = loader(
+          parse(line.trim()) as string[]
+        );
+        const id = convertToPosixAbsolutePath(
+          pathImpl.relative(rootPath, filePath),
+          { separator: pathImpl.sep }
+        );
+        hashes[id] = fileHash.toLowerCase();
+        const lastModifiedWithoutComma = fileLastModified.replace(",", ".");
+        files.push([
+          {
+            lastModified: +lastModifiedWithoutComma * 1000,
+            size: +fileSize,
+          },
+          id,
+        ]);
+        onResult();
 
-            /* eslint-enable no-case-declarations */
-        }
-
-        lineCount++;
+      /* eslint-enable no-case-declarations */
     }
 
-    return {
-        files,
-        hashes,
-        rootPath: basePath,
-    };
+    lineCount++;
+  }
+
+  return {
+    files,
+    hashes,
+    rootPath: basePath,
+  };
 };
 
 interface CreateFilesAndFoldersOptions {
-    alias?: string;
-    children?: string[];
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    file_last_modified?: number;
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    file_size?: number;
-    id: string;
-    virtualPath?: string;
+  alias?: string;
+  children?: string[];
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  file_last_modified?: number;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  file_size?: number;
+  id: string;
+  virtualPath?: string;
 }
 
 /**
  * Utility to create a filesAndFolders
  */
 export const createFilesAndFolders = ({
-    children = [],
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    file_last_modified = 0,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    file_size = 0,
-    id,
-    virtualPath,
+  children = [],
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  file_last_modified = 0,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  file_size = 0,
+  id,
+  virtualPath,
 }: CreateFilesAndFoldersOptions): Partial<FilesAndFolders> => ({
-    children,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    file_last_modified,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    file_size,
-    id,
-    name: path.basename(id),
-    virtualPath: virtualPath ?? id,
+  children,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  file_last_modified,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  file_size,
+  id,
+  name: path.basename(id),
+  virtualPath: virtualPath ?? id,
 });
 
 /**
  * Computes the filesAndFolders structure for the store
  */
 export const createFilesAndFoldersDataStructure = (
-    ffInfo: FilesElementInfo[],
-    { onResult }: WithResultHook = { onResult: noop }
+  ffInfo: FilesElementInfo[],
+  { onResult }: WithResultHook = { onResult: noop }
 ): FilesAndFoldersMap => {
-    const filesAndFolders: FilesAndFoldersMap = {};
+  const filesAndFolders: FilesAndFoldersMap = {};
 
-    const recursivelyAddParentFolders = (elementPath: string) => {
-        const parentPath = path.dirname(elementPath);
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (!filesAndFolders[parentPath]) {
-            const normalizedParentPath = parentPath !== "/" ? parentPath : "";
-            filesAndFolders[normalizedParentPath] = createFilesAndFolders({
-                children: [elementPath],
-                id: normalizedParentPath,
-            }) as FilesAndFolders;
+  const recursivelyAddParentFolders = (elementPath: string) => {
+    const parentPath = path.dirname(elementPath);
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (!filesAndFolders[parentPath]) {
+      const normalizedParentPath = parentPath !== "/" ? parentPath : "";
+      filesAndFolders[normalizedParentPath] = createFilesAndFolders({
+        children: [elementPath],
+        id: normalizedParentPath,
+      }) as FilesAndFolders;
 
-            if (normalizedParentPath !== "") {
-                recursivelyAddParentFolders(parentPath);
-            }
-            return;
-        }
+      if (normalizedParentPath !== "") {
+        recursivelyAddParentFolders(parentPath);
+      }
+      return;
+    }
 
-        filesAndFolders[parentPath].children.push(elementPath);
-    };
+    filesAndFolders[parentPath].children.push(elementPath);
+  };
 
-    ffInfo.forEach(([{ lastModified, size }, currentPath]) => {
-        filesAndFolders[currentPath] = createFilesAndFolders({
-            children: [],
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            file_last_modified: lastModified,
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            file_size: size,
-            id: currentPath,
-        }) as FilesAndFolders;
-        recursivelyAddParentFolders(currentPath);
-        onResult();
-    });
+  ffInfo.forEach(([{ lastModified, size }, currentPath]) => {
+    filesAndFolders[currentPath] = createFilesAndFolders({
+      children: [],
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      file_last_modified: lastModified,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      file_size: size,
+      id: currentPath,
+    }) as FilesAndFolders;
+    recursivelyAddParentFolders(currentPath);
+    onResult();
+  });
 
-    return filesAndFolders;
+  return filesAndFolders;
 };
 
 type LoadFunction = (
-    folderPath: string,
-    hooks: FileSystemLoadingHooks
+  folderPath: string,
+  hooks: FileSystemLoadingHooks
 ) => Promise<FilesElementInfo[]>;
 
 /**
  * Create the loader to load from archifiltre data from the file system folder
  */
 export const makeFileSystemLoader =
-    (
-        _loadFunction: LoadFunction
-    ): ((folderPath: string) => FilesAndFoldersLoader) =>
-    (folderPath: string): FilesAndFoldersLoader =>
-    async (makeHooks) => {
-        const sanitizedHooks = sanitizeHooks(makeHooks);
+  (
+    _loadFunction: LoadFunction
+  ): ((folderPath: string) => FilesAndFoldersLoader) =>
+  (folderPath: string): FilesAndFoldersLoader =>
+  async (makeHooks) => {
+    const sanitizedHooks = sanitizeHooks(makeHooks);
 
-        const indexingHooks = sanitizedHooks(FileSystemLoadingStep.INDEXING);
+    const indexingHooks = sanitizedHooks(FileSystemLoadingStep.INDEXING);
 
-        indexingHooks.onStart();
-        const fileSystemInfo = await asyncLoadFilesAndFoldersFromFileSystem(
-            folderPath,
-            indexingHooks
-        );
-        indexingHooks.onComplete();
+    indexingHooks.onStart();
+    const fileSystemInfo = await asyncLoadFilesAndFoldersFromFileSystem(
+      folderPath,
+      indexingHooks
+    );
+    indexingHooks.onComplete();
 
-        const filesAndFoldersHooks = sanitizedHooks(
-            FileSystemLoadingStep.FILES_AND_FOLDERS
-        );
-        filesAndFoldersHooks.onStart();
-        const filesAndFolders = createFilesAndFoldersDataStructure(
-            fileSystemInfo,
-            filesAndFoldersHooks
-        );
-        filesAndFoldersHooks.onComplete();
+    const filesAndFoldersHooks = sanitizedHooks(
+      FileSystemLoadingStep.FILES_AND_FOLDERS
+    );
+    filesAndFoldersHooks.onStart();
+    const filesAndFolders = createFilesAndFoldersDataStructure(
+      fileSystemInfo,
+      filesAndFoldersHooks
+    );
+    filesAndFoldersHooks.onComplete();
 
-        return {
-            filesAndFolders,
-            originalPath: folderPath,
-        };
+    return {
+      filesAndFolders,
+      originalPath: folderPath,
     };
+  };
 
 /**
  * Remove the byte order mark
@@ -420,72 +411,68 @@ export const makeFileSystemLoader =
  * they are not anymore generated with a byte order mark
  */
 const removeByteOrderMark = (content: string) =>
-    !content.startsWith("{") ? content.slice(1) : content;
+  !content.startsWith("{") ? content.slice(1) : content;
 
 /**
  * Initialize the reference map between virtualPath and id
  */
 const computeVirtualPathToIdMap = <T extends WithFilesAndFolders>(
-    fileSystem: T
+  fileSystem: T
 ): T & WithVirtualPathToIdMap => {
-    const virtualPathToIdMap: VirtualPathToIdMap = {};
+  const virtualPathToIdMap: VirtualPathToIdMap = {};
 
-    reduceFilesAndFolders(
-        fileSystem.filesAndFolders,
-        ROOT_FF_ID,
-        (_, { id, virtualPath }) => {
-            if (virtualPath !== id) {
-                virtualPathToIdMap[virtualPath] = id;
-            }
-        }
-    );
+  reduceFilesAndFolders(
+    fileSystem.filesAndFolders,
+    ROOT_FF_ID,
+    (_, { id, virtualPath }) => {
+      if (virtualPath !== id) {
+        virtualPathToIdMap[virtualPath] = id;
+      }
+    }
+  );
 
-    return {
-        ...fileSystem,
-        virtualPathToIdMap,
-    };
+  return {
+    ...fileSystem,
+    virtualPathToIdMap,
+  };
 };
 
 /**
  * Create the loader to load archifiltre data from a JSON file
  */
 export const makeJsonFileLoader =
-    (jsonFilePath: string): FilesAndFoldersLoader =>
-    (): JsonFileInfo => {
-        const jsonContent = fs.readFileSync(jsonFilePath, "utf8");
-        const sanitizedContent = removeByteOrderMark(jsonContent);
+  (jsonFilePath: string): FilesAndFoldersLoader =>
+  (): JsonFileInfo => {
+    const jsonContent = fs.readFileSync(jsonFilePath, "utf8");
+    const sanitizedContent = removeByteOrderMark(jsonContent);
 
-        return compose(
-            defaults({
-                overrideLastModified: {},
-            }),
-            computeVirtualPathToIdMap,
-            removeIgnoredElementsFromVirtualFileSystem,
-            convertJsonToCurrentVersion
-        )(sanitizedContent) as JsonFileInfo;
-    };
+    return compose(
+      defaults({
+        overrideLastModified: {},
+      }),
+      computeVirtualPathToIdMap,
+      removeIgnoredElementsFromVirtualFileSystem,
+      convertJsonToCurrentVersion
+    )(sanitizedContent) as JsonFileInfo;
+  };
 
 /**
  * Create the loader for command line generated export files
  */
 export const makeExportFileLoader =
-    (exportFilePath: string): FilesAndFoldersLoader =>
-    async (hooksCreator): Promise<PartialFileSystem & WithHashes> => {
-        const hooks = sanitizeHooks(hooksCreator)(
-            FileSystemLoadingStep.INDEXING
-        );
-        hooks.onStart();
-        const exportFileData = await loadFilesAndFoldersFromExportFile(
-            exportFilePath,
-            hooks
-        );
-        hooks.onComplete();
+  (exportFilePath: string): FilesAndFoldersLoader =>
+  async (hooksCreator): Promise<PartialFileSystem & WithHashes> => {
+    const hooks = sanitizeHooks(hooksCreator)(FileSystemLoadingStep.INDEXING);
+    hooks.onStart();
+    const exportFileData = await loadFilesAndFoldersFromExportFile(
+      exportFilePath,
+      hooks
+    );
+    hooks.onComplete();
 
-        return {
-            filesAndFolders: createFilesAndFoldersDataStructure(
-                exportFileData.files
-            ),
-            hashes: exportFileData.hashes,
-            originalPath: exportFileData.rootPath,
-        };
+    return {
+      filesAndFolders: createFilesAndFoldersDataStructure(exportFileData.files),
+      hashes: exportFileData.hashes,
+      originalPath: exportFileData.rootPath,
     };
+  };

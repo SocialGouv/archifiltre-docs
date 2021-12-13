@@ -6,37 +6,37 @@ import { IcicleSortMethod } from "../../../reducers/icicle-sort-method/icicle-so
 import { OptionsPicker } from "./options-picker";
 
 export interface IciclesSortOrderPickerProps {
-    icicleSortMethod: IcicleSortMethod;
-    setIcicleSortMethod: (sortMethod: IcicleSortMethod) => void;
+  icicleSortMethod: IcicleSortMethod;
+  setIcicleSortMethod: (sortMethod: IcicleSortMethod) => void;
 }
 
 export const IciclesSortOrderPicker: React.FC<IciclesSortOrderPickerProps> = ({
-    icicleSortMethod,
-    setIcicleSortMethod,
+  icicleSortMethod,
+  setIcicleSortMethod,
 }) => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    const options = [
-        {
-            label: t("workspace.bySize"),
-            value: IcicleSortMethod.SORT_BY_SIZE,
-        },
-        {
-            label: t("workspace.dates"),
-            value: IcicleSortMethod.SORT_BY_DATE,
-        },
-        {
-            label: t("workspace.alphanumeric"),
-            value: IcicleSortMethod.SORT_ALPHA_NUMERICALLY,
-        },
-    ];
-    return (
-        <OptionsPicker
-            title={t("workspace.ordering")}
-            value={icicleSortMethod}
-            setValue={setIcicleSortMethod}
-            options={options}
-            icon={<FaSortAmountDown />}
-        />
-    );
+  const options = [
+    {
+      label: t("workspace.bySize"),
+      value: IcicleSortMethod.SORT_BY_SIZE,
+    },
+    {
+      label: t("workspace.dates"),
+      value: IcicleSortMethod.SORT_BY_DATE,
+    },
+    {
+      label: t("workspace.alphanumeric"),
+      value: IcicleSortMethod.SORT_ALPHA_NUMERICALLY,
+    },
+  ];
+  return (
+    <OptionsPicker
+      title={t("workspace.ordering")}
+      value={icicleSortMethod}
+      setValue={setIcicleSortMethod}
+      options={options}
+      icon={<FaSortAmountDown />}
+    />
+  );
 };

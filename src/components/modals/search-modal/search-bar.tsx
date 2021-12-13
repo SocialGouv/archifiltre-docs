@@ -10,47 +10,47 @@ import { addTracker } from "../../../logging/tracker";
 import { ActionTitle, ActionType } from "../../../logging/tracker-types";
 
 const handleTracking = (searchTerm: string) => {
-    if (searchTerm.length) {
-        addTracker({
-            title: ActionTitle.SEARCH_PERFORMED,
-            type: ActionType.TRACK_EVENT,
-        });
-    }
+  if (searchTerm.length) {
+    addTracker({
+      title: ActionTitle.SEARCH_PERFORMED,
+      type: ActionType.TRACK_EVENT,
+    });
+  }
 };
 
 export interface SearchBarProps {
-    value: string;
-    setSearchTerm: (searchTerm: string) => void;
+  value: string;
+  setSearchTerm: (searchTerm: string) => void;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
-    setSearchTerm,
-    value,
+  setSearchTerm,
+  value,
 }) => {
-    const { t } = useTranslation();
-    const classes = useStyles();
-    const onChange: NonNullable<InputBaseProps["onChange"]> = useCallback(
-        (event) => {
-            setSearchTerm(event.target.value);
-            handleTracking(event.target.value);
-        },
-        [setSearchTerm]
-    );
+  const { t } = useTranslation();
+  const classes = useStyles();
+  const onChange: NonNullable<InputBaseProps["onChange"]> = useCallback(
+    (event) => {
+      setSearchTerm(event.target.value);
+      handleTracking(event.target.value);
+    },
+    [setSearchTerm]
+  );
 
-    return (
-        <InputBase
-            fullWidth
-            margin="dense"
-            className={classes.searchInput}
-            type="search"
-            placeholder={t("search.searchPlaceholder")}
-            onChange={onChange}
-            value={value}
-            startAdornment={
-                <InputAdornment position="start">
-                    <FaSearch />
-                </InputAdornment>
-            }
-        />
-    );
+  return (
+    <InputBase
+      fullWidth
+      margin="dense"
+      className={classes.searchInput}
+      type="search"
+      placeholder={t("search.searchPlaceholder")}
+      onChange={onChange}
+      value={value}
+      startAdornment={
+        <InputAdornment position="start">
+          <FaSearch />
+        </InputAdornment>
+      }
+    />
+  );
 };

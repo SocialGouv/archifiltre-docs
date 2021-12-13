@@ -5,27 +5,27 @@ import React from "react";
 import { FaCheckCircle } from "react-icons/fa";
 
 export interface LoadingSpinnerProps {
-    loaderText: string;
-    isLoading?: boolean;
+  loaderText: string;
+  isLoading?: boolean;
 }
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-    loaderText,
-    isLoading,
+  loaderText,
+  isLoading,
 }) => (
-    <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        flexDirection="column"
-    >
-        {isLoading ? (
-            <CircularProgress />
-        ) : (
-            <IconButton color="primary">
-                <FaCheckCircle />
-            </IconButton>
-        )}
-        <div>{loaderText}</div>
-    </Box>
+  <Box
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+    flexDirection="column"
+  >
+    {isLoading ? (
+      <CircularProgress />
+    ) : (
+      <IconButton color="primary">
+        <FaCheckCircle />
+      </IconButton>
+    )}
+    <div>{loaderText}</div>
+  </Box>
 );

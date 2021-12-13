@@ -8,27 +8,25 @@ import { DuplicatesDistribution } from "./duplicates-distribution/duplicates-dis
 import { DuplicatesTableContainer as DuplicatesTable } from "./duplicates-table/duplicates-table-container";
 
 const DuplicatesDistributionTab = makeTabComponent({
-    content: <DuplicatesDistribution />,
-    title: (
-        <TranslatedCategoryTitle title="duplicates.duplicatesDistribution" />
-    ),
+  content: <DuplicatesDistribution />,
+  title: <TranslatedCategoryTitle title="duplicates.duplicatesDistribution" />,
 });
 
 const DuplicatesTableTab = makeTabComponent({
-    content: <DuplicatesTable />,
-    isLast: true,
-    title: <TranslatedCategoryTitle title="duplicates.duplicatesByType" />,
+  content: <DuplicatesTable />,
+  isLast: true,
+  title: <TranslatedCategoryTitle title="duplicates.duplicatesByType" />,
 });
 
 export const Duplicates: React.FC = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    return (
-        <TabContentHeader title={t("workspace.duplicates")}>
-            <TabsLayout>
-                <DuplicatesDistributionTab />
-                <DuplicatesTableTab />
-            </TabsLayout>
-        </TabContentHeader>
-    );
+  return (
+    <TabContentHeader title={t("workspace.duplicates")}>
+      <TabsLayout>
+        <DuplicatesDistributionTab />
+        <DuplicatesTableTab />
+      </TabsLayout>
+    </TabContentHeader>
+  );
 };

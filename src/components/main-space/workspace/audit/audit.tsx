@@ -8,26 +8,26 @@ import { AuditInfo } from "./audit-info";
 import { FileTypesDetailsContainer } from "./file-types-details/files-types-details-container";
 
 const AuditInfoTab = makeTabComponent({
-    content: <AuditInfo />,
-    title: <TranslatedCategoryTitle title="audit.fileCountInfoTitle" />,
+  content: <AuditInfo />,
+  title: <TranslatedCategoryTitle title="audit.fileCountInfoTitle" />,
 });
 
 const FilesTypesDetails = makeTabComponent({
-    content: <FileTypesDetailsContainer />,
-    isLast: true,
-    title: <TranslatedCategoryTitle title="audit.fileTypeRepartitionTitle" />,
-    widthRatio: 2,
+  content: <FileTypesDetailsContainer />,
+  isLast: true,
+  title: <TranslatedCategoryTitle title="audit.fileTypeRepartitionTitle" />,
+  widthRatio: 2,
 });
 
 export const Audit: React.FC = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    return (
-        <TabContentHeader title={t("audit.fileTreeAudit")}>
-            <TabsLayout>
-                <AuditInfoTab />
-                <FilesTypesDetails />
-            </TabsLayout>
-        </TabContentHeader>
-    );
+  return (
+    <TabContentHeader title={t("audit.fileTreeAudit")}>
+      <TabsLayout>
+        <AuditInfoTab />
+        <FilesTypesDetails />
+      </TabsLayout>
+    </TabContentHeader>
+  );
 };

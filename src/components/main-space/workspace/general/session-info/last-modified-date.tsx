@@ -5,12 +5,12 @@ import type { FolderBoundaryDatesProps } from "./folder-boundary-dates";
 import { FolderBoundaryDates } from "./folder-boundary-dates";
 
 export type LastModifiedDateProps = FileLastModifiedDateProps &
-    FolderBoundaryDatesProps & {
-        isFile: boolean;
-    };
+  FolderBoundaryDatesProps & {
+    isFile: boolean;
+  };
 
 export const LastModifiedDate = branch<LastModifiedDateProps>(
-    ({ isFile }) => isFile,
-    FileLastModifiedDate,
-    FolderBoundaryDates
+  ({ isFile }) => isFile,
+  FileLastModifiedDate,
+  FolderBoundaryDates
 );

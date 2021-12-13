@@ -9,35 +9,35 @@ import { useStyles } from "../../hooks/use-styles";
 import { version } from "../../version";
 
 export interface SaveButtonProps {
-    originalPath: string;
-    sessionName: string;
-    exportToJson: ExportToJson;
+  originalPath: string;
+  sessionName: string;
+  exportToJson: ExportToJson;
 }
 
 export const SaveButton: React.FC<SaveButtonProps> = ({
-    originalPath,
-    sessionName,
-    exportToJson,
+  originalPath,
+  sessionName,
+  exportToJson,
 }) => {
-    const { t } = useTranslation();
-    const classes = useStyles();
+  const { t } = useTranslation();
+  const classes = useStyles();
 
-    const onClick = useCallback(() => {
-        exportToJson({ originalPath, sessionName, version });
-    }, [exportToJson, originalPath, sessionName]);
-    const title = t("header.save");
-    return (
-        <Tooltip title={title}>
-            <Button
-                id="json-export-button"
-                color="primary"
-                variant="contained"
-                className={classes.headerButton}
-                onClick={onClick}
-                disableElevation
-            >
-                <FaSave />
-            </Button>
-        </Tooltip>
-    );
+  const onClick = useCallback(() => {
+    exportToJson({ originalPath, sessionName, version });
+  }, [exportToJson, originalPath, sessionName]);
+  const title = t("header.save");
+  return (
+    <Tooltip title={title}>
+      <Button
+        id="json-export-button"
+        color="primary"
+        variant="contained"
+        className={classes.headerButton}
+        onClick={onClick}
+        disableElevation
+      >
+        <FaSave />
+      </Button>
+    </Tooltip>
+  );
 };

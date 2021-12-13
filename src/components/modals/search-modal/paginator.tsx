@@ -5,44 +5,42 @@ import React, { forwardRef } from "react";
 import { PaginatorActions } from "./paginator-actions";
 
 export interface PaginatorProps {
-    pageCount: TablePaginationProps["count"];
-    rowsPerPage: TablePaginationProps["rowsPerPage"];
-    page: TablePaginationProps["page"];
-    handleChangePage: TablePaginationProps["onChangePage"];
-    handleChangeRowsPerPage: TablePaginationProps["onChangeRowsPerPage"];
-    labelRowsPerPage: TablePaginationProps["labelRowsPerPage"];
+  pageCount: TablePaginationProps["count"];
+  rowsPerPage: TablePaginationProps["rowsPerPage"];
+  page: TablePaginationProps["page"];
+  handleChangePage: TablePaginationProps["onChangePage"];
+  handleChangeRowsPerPage: TablePaginationProps["onChangeRowsPerPage"];
+  labelRowsPerPage: TablePaginationProps["labelRowsPerPage"];
 }
 const _Paginator: React.ForwardRefRenderFunction<
-    HTMLDivElement,
-    PaginatorProps
+  HTMLDivElement,
+  PaginatorProps
 > = (
-    {
-        pageCount,
-        rowsPerPage,
-        page,
-        handleChangePage,
-        handleChangeRowsPerPage,
-        labelRowsPerPage,
-    },
-    ref: React.ForwardedRef<HTMLDivElement | null>
+  {
+    pageCount,
+    rowsPerPage,
+    page,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    labelRowsPerPage,
+  },
+  ref: React.ForwardedRef<HTMLDivElement | null>
 ) => (
-    <TablePagination
-        ref={ref}
-        rowsPerPageOptions={[10, 25, 50, 100]}
-        component="div"
-        count={pageCount}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-        labelRowsPerPage={labelRowsPerPage}
-        labelDisplayedRows={({ from, to, count }) =>
-            `${from}-${to === -1 ? count : to}/${
-                count !== -1 ? count : `>${to}`
-            }`
-        }
-        ActionsComponent={PaginatorActions}
-    />
+  <TablePagination
+    ref={ref}
+    rowsPerPageOptions={[10, 25, 50, 100]}
+    component="div"
+    count={pageCount}
+    rowsPerPage={rowsPerPage}
+    page={page}
+    onChangePage={handleChangePage}
+    onChangeRowsPerPage={handleChangeRowsPerPage}
+    labelRowsPerPage={labelRowsPerPage}
+    labelDisplayedRows={({ from, to, count }) =>
+      `${from}-${to === -1 ? count : to}/${count !== -1 ? count : `>${to}`}`
+    }
+    ActionsComponent={PaginatorActions}
+  />
 );
 
 _Paginator.displayName = "Paginator";

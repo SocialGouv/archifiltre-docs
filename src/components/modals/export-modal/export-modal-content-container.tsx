@@ -10,35 +10,35 @@ import { exportConfig } from "./export-config";
 import { ExportModalContent } from "./export-modal-content";
 
 export interface ExportModalContentContainerProps {
-    closeModal: () => void;
+  closeModal: () => void;
 }
 
 export const ExportModalContentContainer: React.FC<
-    ExportModalContentContainerProps
+  ExportModalContentContainerProps
 > = ({ closeModal }) => {
-    const { originalPath, sessionName } = useSelector(
-        getWorkspaceMetadataFromStore
-    );
-    const areHashesReady = useSelector(getAreHashesReady);
+  const { originalPath, sessionName } = useSelector(
+    getWorkspaceMetadataFromStore
+  );
+  const areHashesReady = useSelector(getAreHashesReady);
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const startExport = (exportId: ExportType, exportPath: string) => {
-        const { exportFunction, trackingTitle } = exportConfig[exportId];
-        addTracker({
-            title: trackingTitle,
-            type: ActionType.TRACK_EVENT,
-        });
-        dispatch(exportFunction(exportPath));
-    };
+  const startExport = (exportId: ExportType, exportPath: string) => {
+    const { exportFunction, trackingTitle } = exportConfig[exportId];
+    addTracker({
+      title: trackingTitle,
+      type: ActionType.TRACK_EVENT,
+    });
+    dispatch(exportFunction(exportPath));
+  };
 
-    return (
-        <ExportModalContent
-            areHashesReady={areHashesReady}
-            originalPath={originalPath}
-            sessionName={sessionName}
-            startExport={startExport}
-            closeModal={closeModal}
-        />
-    );
+  return (
+    <ExportModalContent
+      areHashesReady={areHashesReady}
+      originalPath={originalPath}
+      sessionName={sessionName}
+      startExport={startExport}
+      closeModal={closeModal}
+    />
+  );
 };

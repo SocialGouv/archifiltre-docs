@@ -7,19 +7,19 @@ import { useEffect, useState } from "react";
  * @param dependencies - The factory dependencies
  */
 export const useDeferredMemo = <T>(
-    factory: () => T,
-    dependencies: DependencyList
+  factory: () => T,
+  dependencies: DependencyList
 ): T | null => {
-    const [value, setValue] = useState<T | null>(null);
+  const [value, setValue] = useState<T | null>(null);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setValue(factory());
-        });
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [...dependencies, setValue]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setValue(factory());
+    });
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [...dependencies, setValue]);
 
-    return value;
+  return value;
 };

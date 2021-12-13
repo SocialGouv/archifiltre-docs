@@ -7,39 +7,39 @@ import { useTranslation } from "react-i18next";
 import { FaTrash } from "react-icons/fa";
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        toDeleteChip: {
-            "& > svg": {
-                color: "white",
-            },
-            "&:hover, &:focus": {
-                backgroundColor: theme.palette.error.main,
-            },
-            backgroundColor: theme.palette.error.main,
-            color: "white",
-        },
-    })
+  createStyles({
+    toDeleteChip: {
+      "& > svg": {
+        color: "white",
+      },
+      "&:hover, &:focus": {
+        backgroundColor: theme.palette.error.main,
+      },
+      backgroundColor: theme.palette.error.main,
+      color: "white",
+    },
+  })
 );
 
 export interface ToDeleteChipProps {
-    checked: boolean;
-    onClick: () => void;
+  checked: boolean;
+  onClick: () => void;
 }
 
 export const ToDeleteChip: React.FC<ToDeleteChipProps> = ({
-    checked,
-    onClick,
+  checked,
+  onClick,
 }) => {
-    const classes = useStyles();
-    const { t } = useTranslation();
+  const classes = useStyles();
+  const { t } = useTranslation();
 
-    return (
-        <Chip
-            size="small"
-            label={t("common.toDelete")}
-            className={checked ? classes.toDeleteChip : ""}
-            onClick={onClick}
-            icon={<FaTrash style={{ height: "50%" }} />}
-        />
-    );
+  return (
+    <Chip
+      size="small"
+      label={t("common.toDelete")}
+      className={checked ? classes.toDeleteChip : ""}
+      onClick={onClick}
+      icon={<FaTrash style={{ height: "50%" }} />}
+    />
+  );
 };

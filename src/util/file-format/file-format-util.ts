@@ -9,15 +9,15 @@ type FileFormats = "ucs2" | "utf8";
  * @returns {string}
  */
 export const identifyFileFormat = async (
-    filePath: string
+  filePath: string
 ): Promise<FileFormats> => {
-    const fileStream = fs.createReadStream(filePath);
-    await once(fileStream, "readable");
-    const fileFirstTwoBytes: Uint8Array = fileStream.read(2);
+  const fileStream = fs.createReadStream(filePath);
+  await once(fileStream, "readable");
+  const fileFirstTwoBytes: Uint8Array = fileStream.read(2);
 
-    const ucs2FileStart = Buffer.from([0xff, 0xfe]);
-    if (Buffer.compare(fileFirstTwoBytes, ucs2FileStart) === 0) {
-        return "ucs2";
-    }
-    return "utf8";
+  const ucs2FileStart = Buffer.from([0xff, 0xfe]);
+  if (Buffer.compare(fileFirstTwoBytes, ucs2FileStart) === 0) {
+    return "ucs2";
+  }
+  return "utf8";
 };

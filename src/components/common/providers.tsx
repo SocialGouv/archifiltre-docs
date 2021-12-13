@@ -8,22 +8,22 @@ import { ErrorBoundaryContainer } from "../errors/error-boundary-container";
 import { TabsContext } from "../header/tabs-context";
 
 export const Providers: React.FC = ({ children }) => {
-    const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
 
-    return (
-        <Provider store={store}>
-            <ThemeProvider theme={defaultTheme}>
-                <ErrorBoundaryContainer>
-                    <TabsContext.Provider
-                        value={{
-                            setTabIndex,
-                            tabIndex,
-                        }}
-                    >
-                        {children}
-                    </TabsContext.Provider>
-                </ErrorBoundaryContainer>
-            </ThemeProvider>
-        </Provider>
-    );
+  return (
+    <Provider store={store}>
+      <ThemeProvider theme={defaultTheme}>
+        <ErrorBoundaryContainer>
+          <TabsContext.Provider
+            value={{
+              setTabIndex,
+              tabIndex,
+            }}
+          >
+            {children}
+          </TabsContext.Provider>
+        </ErrorBoundaryContainer>
+      </ThemeProvider>
+    </Provider>
+  );
 };

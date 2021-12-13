@@ -9,89 +9,83 @@ import { colors } from "../../../../../util/color/color-util";
 import { octet2HumanReadableFormat } from "../../../../../util/file-system/file-sys-util";
 import { FileType } from "../../../../../util/file-types/file-types-util";
 import type {
-    HorizontalStackedBarOption,
-    RenderTooltipContent,
+  HorizontalStackedBarOption,
+  RenderTooltipContent,
 } from "../../../../common/horizontal-stacked-bar";
 import { HorizontalStackedBar } from "../../../../common/horizontal-stacked-bar";
 
 export interface FileTypesDetailsProps {
-    elementsCountsByType: FileTypeMap<number>;
-    elementsSizesByType: FileTypeMap<number>;
+  elementsCountsByType: FileTypeMap<number>;
+  elementsSizesByType: FileTypeMap<number>;
 }
 
 const makeBarConfig = (type: FileType): HorizontalStackedBarOption => ({
-    color: colors[type],
-    key: type,
+  color: colors[type],
+  key: type,
 });
 
 const makeRenderTooltipContent =
-    (
-        elementCountsByType: FileTypeMap<number>,
-        elementSizesByType: FileTypeMap<number>,
-        t: TFunction
-    ): RenderTooltipContent =>
-    // eslint-disable-next-line react/display-name
-    (key) => {
-        const typedKey = key as keyof typeof elementCountsByType;
-        return (
-            <Box>
-                <Box>
-                    <Typography variant="body1">
-                        {t(`common.fileTypes.${key}`)}
-                    </Typography>
-                </Box>
-                <Box>
-                    <Typography variant="body1">
-                        {elementCountsByType[typedKey]}{" "}
-                        {t(`common.file`, {
-                            count: elementCountsByType[typedKey],
-                        })}
-                    </Typography>
-                </Box>
-                <Box>
-                    <Typography variant="body1">
-                        {octet2HumanReadableFormat(
-                            elementSizesByType[typedKey]
-                        )}
-                    </Typography>
-                </Box>
-            </Box>
-        );
-    };
+  (
+    elementCountsByType: FileTypeMap<number>,
+    elementSizesByType: FileTypeMap<number>,
+    t: TFunction
+  ): RenderTooltipContent =>
+  // eslint-disable-next-line react/display-name
+  (key) => {
+    const typedKey = key as keyof typeof elementCountsByType;
+    return (
+      <Box>
+        <Box>
+          <Typography variant="body1">
+            {t(`common.fileTypes.${key}`)}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant="body1">
+            {elementCountsByType[typedKey]}{" "}
+            {t(`common.file`, {
+              count: elementCountsByType[typedKey],
+            })}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant="body1">
+            {octet2HumanReadableFormat(elementSizesByType[typedKey])}
+          </Typography>
+        </Box>
+      </Box>
+    );
+  };
 
 const bars = [
-    makeBarConfig(FileType.PUBLICATION),
-    makeBarConfig(FileType.PRESENTATION),
-    makeBarConfig(FileType.SPREADSHEET),
-    makeBarConfig(FileType.EMAIL),
-    makeBarConfig(FileType.DOCUMENT),
-    makeBarConfig(FileType.IMAGE),
-    makeBarConfig(FileType.VIDEO),
-    makeBarConfig(FileType.AUDIO),
-    makeBarConfig(FileType.OTHER),
+  makeBarConfig(FileType.PUBLICATION),
+  makeBarConfig(FileType.PRESENTATION),
+  makeBarConfig(FileType.SPREADSHEET),
+  makeBarConfig(FileType.EMAIL),
+  makeBarConfig(FileType.DOCUMENT),
+  makeBarConfig(FileType.IMAGE),
+  makeBarConfig(FileType.VIDEO),
+  makeBarConfig(FileType.AUDIO),
+  makeBarConfig(FileType.OTHER),
 ];
 
 export const FileTypesDetails: React.FC<FileTypesDetailsProps> = ({
-    elementsCountsByType,
-    elementsSizesByType,
+  elementsCountsByType,
+  elementsSizesByType,
 }) => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    const renderTooltipContent = useMemo(
-        () =>
-            makeRenderTooltipContent(
-                elementsCountsByType,
-                elementsSizesByType,
-                t
-            ),
-        [elementsCountsByType, elementsSizesByType, t]
-    );
+  const renderTooltipContent = useMemo(
+    () =>
+      makeRenderTooltipContent(elementsCountsByType, elementsSizesByType, t),
+    [elementsCountsByType, elementsSizesByType, t]
+  );
 
-    return (
-        <HorizontalStackedBar
-            data={elementsCountsByType}
-            bars={bars}
-            renderTooltipContent={renderTooltipContent}
-        />
-    );
+  return (
+    <HorizontalStackedBar
+      data={elementsCountsByType}
+      bars={bars}
+      renderTooltipContent={renderTooltipContent}
+    />
+  );
 };

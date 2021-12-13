@@ -8,11 +8,11 @@ import type { IcicleSortMethodState } from "./icicle-sort-method-types";
  * @param store
  */
 export const getIcicleSortMethodFromStore = (
-    store: StoreState
+  store: StoreState
 ): IcicleSortMethodState => store.icicleSortMethod;
 
 /**
  * Hook that return the current IcicleSortMethod
  */
 export const useIcicleSortMethod = (): IcicleSortMethodState =>
-    useSelector(getIcicleSortMethodFromStore);
+  useSelector(getIcicleSortMethodFromStore);

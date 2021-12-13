@@ -4,19 +4,19 @@ import { FaInfoCircle } from "react-icons/fa";
 import styled from "styled-components";
 
 const CenteredIcon = styled.span`
-    vertical-align: middle;
+  vertical-align: middle;
 `;
 
 export interface HelpTooltipProps {
-    tooltipText: string;
+  tooltipText: string;
 }
 
 const _HelpTooltip: React.FC<HelpTooltipProps> = ({ tooltipText }) => (
-    <Tooltip title={tooltipText}>
-        <CenteredIcon>
-            <FaInfoCircle />
-        </CenteredIcon>
-    </Tooltip>
+  <Tooltip title={tooltipText}>
+    <CenteredIcon>
+      <FaInfoCircle />
+    </CenteredIcon>
+  </Tooltip>
 );
 
 _HelpTooltip.displayName = "HelpTooltip";

@@ -8,16 +8,16 @@ import { StartScreenContainer as StartScreen } from "../start-screen/start-scree
 import { Workspace } from "./workspace/workspace";
 
 export interface MainSpaceRouterProps {
-    step: LoadingStep;
+  step: LoadingStep;
 }
 
 const mainspaceRoutingMap: ComponentMap<MainSpaceRouterProps, LoadingStep> = {
-    [LoadingStep.ERROR]: () => <ErrorScreen />,
-    [LoadingStep.WAITING]: () => <StartScreen />,
-    [LoadingStep.FINISHED]: () => <Workspace />,
+  [LoadingStep.ERROR]: () => <ErrorScreen />,
+  [LoadingStep.WAITING]: () => <StartScreen />,
+  [LoadingStep.FINISHED]: () => <Workspace />,
 };
 
 export const MainSpaceRouter = switchComponent(
-    mainspaceRoutingMap,
-    ({ step }) => step
+  mainspaceRoutingMap,
+  ({ step }) => step
 );

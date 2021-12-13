@@ -13,25 +13,25 @@ import type { StoreState } from "./store";
  * Create an empty store state for testing purposes
  */
 export const createEmptyStore = (): StoreState => ({
-    filesAndFolders: wrapStoreWithUndoable(filesAndFoldersInitialState),
-    filesAndFoldersMetadata: wrapStoreWithUndoable(
-        filesAndFoldersMetadataInitialState
-    ),
-    hashes: hashesInitialState,
-    icicleSortMethod: icicleSortMethodInitialState,
-    loadingInfo: loadingInfoInitialState,
-    loadingState: wrapStoreWithUndoable(loadingStateInitialState),
-    modal: modalInitialState,
-    tags: wrapStoreWithUndoable({
-        tags: {},
-    }),
-    workspaceMetadata: wrapStoreWithUndoable({
-        hoveredElementId: "",
-        iciclesSortMethod: IcicleSortMethod.SORT_BY_SIZE,
-        lockedElementId: "",
-        originalPath: "",
-        sessionName: "",
-    }),
+  filesAndFolders: wrapStoreWithUndoable(filesAndFoldersInitialState),
+  filesAndFoldersMetadata: wrapStoreWithUndoable(
+    filesAndFoldersMetadataInitialState
+  ),
+  hashes: hashesInitialState,
+  icicleSortMethod: icicleSortMethodInitialState,
+  loadingInfo: loadingInfoInitialState,
+  loadingState: wrapStoreWithUndoable(loadingStateInitialState),
+  modal: modalInitialState,
+  tags: wrapStoreWithUndoable({
+    tags: {},
+  }),
+  workspaceMetadata: wrapStoreWithUndoable({
+    hoveredElementId: "",
+    iciclesSortMethod: IcicleSortMethod.SORT_BY_SIZE,
+    lockedElementId: "",
+    originalPath: "",
+    sessionName: "",
+  }),
 });
 
 /**
@@ -39,10 +39,10 @@ export const createEmptyStore = (): StoreState => ({
  * @param store - the store to wrap with undoable
  */
 export const wrapStoreWithUndoable = <TState>(
-    store: TState
+  store: TState
 ): UndoableState<TState> => ({
-    current: store,
-    future: [],
-    past: [],
-    present: store,
+  current: store,
+  future: [],
+  past: [],
+  present: store,
 });

@@ -8,25 +8,25 @@ import type { ThemedProps } from "../../theme/default-theme";
 import { openLink } from "../../util/electron/electron-util";
 
 const sendMailToArchifiltre = () => {
-    openLink(CONTACT_LINK);
+  openLink(CONTACT_LINK);
 };
 
 const ContactLink = styled.a`
-    cursor: pointer;
-    color: ${({ theme }: ThemedProps) => theme.palette.primary.main};
+  cursor: pointer;
+  color: ${({ theme }: ThemedProps) => theme.palette.primary.main};
 `;
 
 export const ContactUs: React.FC = () => {
-    const { t } = useTranslation();
-    const theme = useTheme();
-    return (
-        <ContactLink
-            onClick={() => {
-                sendMailToArchifiltre();
-            }}
-            theme={theme}
-        >
-            {t("common.contactUs")}
-        </ContactLink>
-    );
+  const { t } = useTranslation();
+  const theme = useTheme();
+  return (
+    <ContactLink
+      onClick={() => {
+        sendMailToArchifiltre();
+      }}
+      theme={theme}
+    >
+      {t("common.contactUs")}
+    </ContactLink>
+  );
 };

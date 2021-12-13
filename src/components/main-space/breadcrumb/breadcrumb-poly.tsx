@@ -10,77 +10,73 @@ const arrowHeight = viewportHeight / 10;
  * The path of points to draw the top polygon
  */
 const firstPolygonPath = [
-    "0 0",
-    `${viewportWidth} 0`,
-    `${viewportWidth} ${viewportHeight - arrowHeight}`,
-    `${viewportWidth / 2} ${viewportHeight}`,
-    `0 ${viewportHeight - arrowHeight}`,
-    "0 0",
+  "0 0",
+  `${viewportWidth} 0`,
+  `${viewportWidth} ${viewportHeight - arrowHeight}`,
+  `${viewportWidth / 2} ${viewportHeight}`,
+  `0 ${viewportHeight - arrowHeight}`,
+  "0 0",
 ].join(" ");
 
 /**
  * The path of points to draw the middle polygons
  */
 const middlePolygonPath = [
-    "0 0",
-    `${viewportWidth / 2} ${arrowHeight}`,
-    `${viewportWidth} 0`,
-    `${viewportWidth} ${viewportHeight - arrowHeight}`,
-    `${viewportWidth / 2} ${viewportHeight}`,
-    `0 ${viewportHeight - arrowHeight}`,
-    "0 0",
+  "0 0",
+  `${viewportWidth / 2} ${arrowHeight}`,
+  `${viewportWidth} 0`,
+  `${viewportWidth} ${viewportHeight - arrowHeight}`,
+  `${viewportWidth / 2} ${viewportHeight}`,
+  `0 ${viewportHeight - arrowHeight}`,
+  "0 0",
 ].join(" ");
 
 /**
  * The path of points to draw the last polygon
  */
 const lastPolygonPath = [
-    "0 0",
-    `${viewportWidth / 2} ${arrowHeight}`,
-    `${viewportWidth} 0`,
-    `${viewportWidth} ${viewportHeight}`,
-    `0 ${viewportHeight}`,
-    "0 0",
+  "0 0",
+  `${viewportWidth / 2} ${arrowHeight}`,
+  `${viewportWidth} 0`,
+  `${viewportWidth} ${viewportHeight}`,
+  `0 ${viewportHeight}`,
+  "0 0",
 ].join(" ");
 
 export interface BreadcrumbPolyProps {
-    isFirst: boolean;
-    isLast: boolean;
-    color: NonNullable<React.SVGProps<SVGPolygonElement>["fill"]>;
-    opacity: NonNullable<React.CSSProperties["opacity"]>;
+  isFirst: boolean;
+  isLast: boolean;
+  color: NonNullable<React.SVGProps<SVGPolygonElement>["fill"]>;
+  opacity: NonNullable<React.CSSProperties["opacity"]>;
 }
 
 export const BreadcrumbPoly: React.FC<BreadcrumbPolyProps> = ({
-    isFirst,
-    isLast,
-    color,
-    opacity,
+  isFirst,
+  isLast,
+  color,
+  opacity,
 }) => (
-    <svg
-        viewBox={`0 0 ${viewportWidth} ${viewportHeight}`}
-        preserveAspectRatio="none"
-        height={`${
-            100 + (!isLast ? (arrowHeight / viewportHeight) * 100 : 0)
-        }%`}
-        width="100%"
-        style={{
-            marginBottom: !isLast
-                ? `${(arrowHeight / viewportHeight) * 100}%`
-                : 0,
-        }}
-    >
-        <polygon
-            points={
-                isFirst
-                    ? firstPolygonPath
-                    : isLast
-                    ? lastPolygonPath
-                    : middlePolygonPath
-            }
-            fill={color}
-            style={{ opacity }}
-            stroke="white"
-            strokeWidth={viewportWidth / 20}
-        />
-    </svg>
+  <svg
+    viewBox={`0 0 ${viewportWidth} ${viewportHeight}`}
+    preserveAspectRatio="none"
+    height={`${100 + (!isLast ? (arrowHeight / viewportHeight) * 100 : 0)}%`}
+    width="100%"
+    style={{
+      marginBottom: !isLast ? `${(arrowHeight / viewportHeight) * 100}%` : 0,
+    }}
+  >
+    <polygon
+      points={
+        isFirst
+          ? firstPolygonPath
+          : isLast
+          ? lastPolygonPath
+          : middlePolygonPath
+      }
+      fill={color}
+      style={{ opacity }}
+      stroke="white"
+      strokeWidth={viewportWidth / 20}
+    />
+  </svg>
 );

@@ -163,7 +163,7 @@
     "dateformat": "3.0.3",
     "docxtemplater": "3.21.2",
     "file-saver": "2.0.5",
-    "fswin": "^3.21.107",
+    "fswin": "3.21.107",
     "hidefile": "^3.0.0",
     "i18next": "^21.2.4",
     "js-md5": "0.7.3",

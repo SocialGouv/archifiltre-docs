@@ -8,49 +8,49 @@ import { resipExporter } from "./resip-exporter";
 const asyncWorker = createAsyncWorkerForChildProcess();
 
 asyncWorker.addEventListener(
-    WorkerEventType.MESSAGE,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async ({ type, data }: any) => {
-        if (type === "initialize") {
-            const messageHook = (count: number | undefined) => {
-                asyncWorker.postMessage({
-                    result: { count, resipCsv: [] },
-                    type: MessageTypes.RESULT,
-                });
-            };
-            const { hook, getCount } = hookCounter(messageHook);
+  WorkerEventType.MESSAGE,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async ({ type, data }: any) => {
+    if (type === "initialize") {
+      const messageHook = (count: number | undefined) => {
+        asyncWorker.postMessage({
+          result: { count, resipCsv: [] },
+          type: MessageTypes.RESULT,
+        });
+      };
+      const { hook, getCount } = hookCounter(messageHook);
 
-            const {
-                aliases,
-                comments,
-                elementsToDelete,
-                filesAndFolders,
-                filesAndFoldersMetadata,
-                tags,
-                language,
-            } = data;
-            await translations.changeLanguage(language as string);
+      const {
+        aliases,
+        comments,
+        elementsToDelete,
+        filesAndFolders,
+        filesAndFoldersMetadata,
+        tags,
+        language,
+      } = data;
+      await translations.changeLanguage(language as string);
 
-            const resipExportData = resipExporter(
-                {
-                    aliases,
-                    comments,
-                    elementsToDelete,
-                    filesAndFolders,
-                    filesAndFoldersMetadata,
-                    tags,
-                },
-                hook
-            );
+      const resipExportData = resipExporter(
+        {
+          aliases,
+          comments,
+          elementsToDelete,
+          filesAndFolders,
+          filesAndFoldersMetadata,
+          tags,
+        },
+        hook
+      );
 
-            asyncWorker.postMessage({
-                result: { count: getCount(), resipCsv: resipExportData },
-                type: MessageTypes.RESULT,
-            });
+      asyncWorker.postMessage({
+        result: { count: getCount(), resipCsv: resipExportData },
+        type: MessageTypes.RESULT,
+      });
 
-            asyncWorker.postMessage({
-                type: MessageTypes.COMPLETE,
-            });
-        }
+      asyncWorker.postMessage({
+        type: MessageTypes.COMPLETE,
+      });
     }
+  }
 );

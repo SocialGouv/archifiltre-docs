@@ -6,32 +6,32 @@ import { ElementWeightMethod } from "../../../reducers/icicle-sort-method/icicle
 import { OptionsPicker } from "./options-picker";
 
 export interface ElementWeightMethodPickerProps {
-    setElementWeightMethod: (method: ElementWeightMethod) => void;
-    elementWeightMethod: ElementWeightMethod;
+  setElementWeightMethod: (method: ElementWeightMethod) => void;
+  elementWeightMethod: ElementWeightMethod;
 }
 
 export const ElementWeightMethodPicker: React.FC<
-    ElementWeightMethodPickerProps
+  ElementWeightMethodPickerProps
 > = ({ setElementWeightMethod, elementWeightMethod }) => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    const options = [
-        {
-            label: t("workspace.bySize"),
-            value: ElementWeightMethod.BY_VOLUME,
-        },
-        {
-            label: t("workspace.byNumber"),
-            value: ElementWeightMethod.BY_FILE_COUNT,
-        },
-    ];
-    return (
-        <OptionsPicker
-            title={t("workspace.weight")}
-            value={elementWeightMethod}
-            setValue={setElementWeightMethod}
-            options={options}
-            icon={<FaWeightHanging />}
-        />
-    );
+  const options = [
+    {
+      label: t("workspace.bySize"),
+      value: ElementWeightMethod.BY_VOLUME,
+    },
+    {
+      label: t("workspace.byNumber"),
+      value: ElementWeightMethod.BY_FILE_COUNT,
+    },
+  ];
+  return (
+    <OptionsPicker
+      title={t("workspace.weight")}
+      value={elementWeightMethod}
+      setValue={setElementWeightMethod}
+      options={options}
+      icon={<FaWeightHanging />}
+    />
+  );
 };

@@ -7,28 +7,28 @@ import { FaSyncAlt } from "react-icons/fa";
 import { useStyles } from "../../hooks/use-styles";
 
 export interface LoadPreviousSessionButtonProps {
-    reloadPreviousSession: () => void;
+  reloadPreviousSession: () => void;
 }
 
 export const LoadPreviousSessionButton: React.FC<
-    LoadPreviousSessionButtonProps
+  LoadPreviousSessionButtonProps
 > = ({ reloadPreviousSession }) => {
-    const { t } = useTranslation();
-    const classes = useStyles();
-    const title = t("header.loadPreviousSessionButtonLabel");
+  const { t } = useTranslation();
+  const classes = useStyles();
+  const title = t("header.loadPreviousSessionButtonLabel");
 
-    return (
-        <Tooltip title={title}>
-            <Button
-                id="loadPreviousSession"
-                color="primary"
-                variant="contained"
-                className={classes.headerButton}
-                onClick={reloadPreviousSession}
-                disableElevation
-            >
-                <FaSyncAlt />
-            </Button>
-        </Tooltip>
-    );
+  return (
+    <Tooltip title={title}>
+      <Button
+        id="loadPreviousSession"
+        color="primary"
+        variant="contained"
+        className={classes.headerButton}
+        onClick={reloadPreviousSession}
+        disableElevation
+      >
+        <FaSyncAlt />
+      </Button>
+    </Tooltip>
+  );
 };

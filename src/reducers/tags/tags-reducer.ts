@@ -7,23 +7,23 @@ import { undoable } from "../enhancers/undoable/undoable";
 import { getTagByName } from "./tags-selectors";
 import type { TagsActionTypes, TagsState } from "./tags-types";
 import {
-    ADD_TAG,
-    DELETE_TAG,
-    INITIALIZE_TAGS,
-    RENAME_TAG,
-    RESET_TAGS,
-    TAG_FILE,
-    UNTAG_FILE,
+  ADD_TAG,
+  DELETE_TAG,
+  INITIALIZE_TAGS,
+  RENAME_TAG,
+  RESET_TAGS,
+  TAG_FILE,
+  UNTAG_FILE,
 } from "./tags-types";
 
 const initialState: TagsState = {
-    tags: {
-        "to-delete": {
-            ffIds: [""],
-            id: "",
-            name: "",
-        },
+  tags: {
+    "to-delete": {
+      ffIds: [""],
+      id: "",
+      name: "",
     },
+  },
 };
 
 /**
@@ -34,13 +34,13 @@ const initialState: TagsState = {
  * @returns - The new state
  */
 const tagFile = (state: TagsState, tagId: string, ffId: string): TagsState => ({
-    tags: {
-        ...state.tags,
-        [tagId]: {
-            ...state.tags[tagId],
-            ffIds: [...new Set([...state.tags[tagId].ffIds, ffId])],
-        },
+  tags: {
+    ...state.tags,
+    [tagId]: {
+      ...state.tags[tagId],
+      ffIds: [...new Set([...state.tags[tagId].ffIds, ffId])],
     },
+  },
 });
 
 /**
@@ -52,28 +52,28 @@ const tagFile = (state: TagsState, tagId: string, ffId: string): TagsState => ({
  * @returns - The new state
  */
 const createTag = (
-    state: TagsState,
-    tagName: string,
-    ffId: string,
-    tagId: string
+  state: TagsState,
+  tagName: string,
+  ffId: string,
+  tagId: string
 ): TagsState => {
-    const completeTagId = tagId === "" ? uuid() : tagId;
-    addTracker({
-        eventValue: tagName,
-        title: ActionTitle.TAG_ADDED,
-        type: ActionType.TRACK_EVENT,
-        value: `Created tag: "${tagName}"`,
-    });
-    return {
-        tags: {
-            ...state.tags,
-            [completeTagId]: {
-                ffIds: [ffId],
-                id: completeTagId,
-                name: tagName,
-            },
-        },
-    };
+  const completeTagId = tagId === "" ? uuid() : tagId;
+  addTracker({
+    eventValue: tagName,
+    title: ActionTitle.TAG_ADDED,
+    type: ActionType.TRACK_EVENT,
+    value: `Created tag: "${tagName}"`,
+  });
+  return {
+    tags: {
+      ...state.tags,
+      [completeTagId]: {
+        ffIds: [ffId],
+        id: completeTagId,
+        name: tagName,
+      },
+    },
+  };
 };
 
 /**
@@ -82,60 +82,52 @@ const createTag = (
  * @param action
  */
 const tagsReducer = (
-    state = initialState,
-    action?: TagsActionTypes
+  state = initialState,
+  action?: TagsActionTypes
 ): TagsState => {
-    switch (action?.type) {
-        case RESET_TAGS:
-            return initialState;
-        case INITIALIZE_TAGS:
-            return { tags: action.tags };
-        case ADD_TAG:
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            if (action.ffId === undefined) {
-                return state;
-            }
-            // eslint-disable-next-line no-case-declarations
-            const tagWithTheSameName = getTagByName(state.tags, action.tagName);
-            if (tagWithTheSameName === undefined) {
-                return createTag(
-                    state,
-                    action.tagName,
-                    action.ffId,
-                    action.tagId
-                );
-            }
-            return tagFile(state, tagWithTheSameName.id, action.ffId);
-        case RENAME_TAG:
-            return {
-                tags: {
-                    ...state.tags,
-                    [action.tagId]: {
-                        ...state.tags[action.tagId],
-                        name: action.tagName,
-                    },
-                },
-            };
-        case DELETE_TAG:
-            return { tags: _.omit(state.tags, action.tagId) };
-        case TAG_FILE:
-            return tagFile(state, action.tagId, action.ffId);
-        case UNTAG_FILE:
-            return {
-                tags: {
-                    ...state.tags,
-                    [action.tagId]: {
-                        ...state.tags[action.tagId],
-                        ffIds: _.without(
-                            [...state.tags[action.tagId].ffIds],
-                            action.ffId
-                        ),
-                    },
-                },
-            };
-        default:
-            return state;
-    }
+  switch (action?.type) {
+    case RESET_TAGS:
+      return initialState;
+    case INITIALIZE_TAGS:
+      return { tags: action.tags };
+    case ADD_TAG:
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (action.ffId === undefined) {
+        return state;
+      }
+      // eslint-disable-next-line no-case-declarations
+      const tagWithTheSameName = getTagByName(state.tags, action.tagName);
+      if (tagWithTheSameName === undefined) {
+        return createTag(state, action.tagName, action.ffId, action.tagId);
+      }
+      return tagFile(state, tagWithTheSameName.id, action.ffId);
+    case RENAME_TAG:
+      return {
+        tags: {
+          ...state.tags,
+          [action.tagId]: {
+            ...state.tags[action.tagId],
+            name: action.tagName,
+          },
+        },
+      };
+    case DELETE_TAG:
+      return { tags: _.omit(state.tags, action.tagId) };
+    case TAG_FILE:
+      return tagFile(state, action.tagId, action.ffId);
+    case UNTAG_FILE:
+      return {
+        tags: {
+          ...state.tags,
+          [action.tagId]: {
+            ...state.tags[action.tagId],
+            ffIds: _.without([...state.tags[action.tagId].ffIds], action.ffId),
+          },
+        },
+      };
+    default:
+      return state;
+  }
 };
 
 export { tagsReducer };

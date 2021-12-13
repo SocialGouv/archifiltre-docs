@@ -3,20 +3,20 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 
 export interface SessionElementsDetailProps {
-    title: string;
-    content: number | string;
+  title: string;
+  content: number | string;
 }
 
 export const SessionElementsDetail: React.FC<SessionElementsDetailProps> = ({
-    title,
-    content,
+  title,
+  content,
 }) => (
+  <Box>
     <Box>
-        <Box>
-            <Typography variant="h5">{title}</Typography>
-        </Box>
-        <Box>
-            <Typography variant="body1">{content}</Typography>
-        </Box>
+      <Typography variant="h5">{title}</Typography>
     </Box>
+    <Box>
+      <Typography variant="body1">{content}</Typography>
+    </Box>
+  </Box>
 );

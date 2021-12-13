@@ -8,17 +8,17 @@ import type { ArchifiltreThunkAction } from "../archifiltre-types";
 import { commitAction } from "../enhancers/undoable/undoable-actions";
 import { initFilesAndFoldersMetatada } from "../files-and-folders-metadata/files-and-folders-metadata-actions";
 import {
-    addChild,
-    addCommentsOnFilesAndFolders,
-    overrideLastModified,
-    removeChild,
-    setFilesAndFoldersAliases,
+  addChild,
+  addCommentsOnFilesAndFolders,
+  overrideLastModified,
+  removeChild,
+  setFilesAndFoldersAliases,
 } from "./files-and-folders-actions";
 import {
-    findElementParent,
-    getFilesAndFoldersFromStore,
-    getLastModifiedDateOverrides,
-    isFile,
+  findElementParent,
+  getFilesAndFoldersFromStore,
+  getLastModifiedDateOverrides,
+  isFile,
 } from "./files-and-folders-selectors";
 import type { FilesAndFoldersMap } from "./files-and-folders-types";
 
@@ -28,17 +28,17 @@ import type { FilesAndFoldersMap } from "./files-and-folders-types";
  * @param newAlias
  */
 export const updateAliasThunk =
-    (filesAndFoldersId: string, newAlias: string): ArchifiltreThunkAction =>
-    (dispatch) => {
-        addTracker({
-            title: ActionTitle.ALIAS_ADDED,
-            type: ActionType.TRACK_EVENT,
-            value: "Alias created",
-        });
+  (filesAndFoldersId: string, newAlias: string): ArchifiltreThunkAction =>
+  (dispatch) => {
+    addTracker({
+      title: ActionTitle.ALIAS_ADDED,
+      type: ActionType.TRACK_EVENT,
+      value: "Alias created",
+    });
 
-        dispatch(setFilesAndFoldersAliases({ [filesAndFoldersId]: newAlias }));
-        dispatch(commitAction());
-    };
+    dispatch(setFilesAndFoldersAliases({ [filesAndFoldersId]: newAlias }));
+    dispatch(commitAction());
+  };
 
 /**
  * Updates the filesAndFolderComment
@@ -46,18 +46,16 @@ export const updateAliasThunk =
  * @param comments
  */
 export const updateCommentThunk =
-    (filesAndFoldersId: string, comments: string): ArchifiltreThunkAction =>
-    (dispatch) => {
-        dispatch(
-            addCommentsOnFilesAndFolders({ [filesAndFoldersId]: comments })
-        );
-    };
+  (filesAndFoldersId: string, comments: string): ArchifiltreThunkAction =>
+  (dispatch) => {
+    dispatch(addCommentsOnFilesAndFolders({ [filesAndFoldersId]: comments }));
+  };
 
 export enum IsMoveValidError {
-    nameConflict = "nameConflict",
-    cannotMoveToChild = "cannotMoveToChild",
-    cannotMoveToFile = "cannotMoveToFile",
-    impossibleMove = "impossibleMove",
+  nameConflict = "nameConflict",
+  cannotMoveToChild = "cannotMoveToChild",
+  cannotMoveToFile = "cannotMoveToFile",
+  impossibleMove = "impossibleMove",
 }
 
 /**
@@ -67,29 +65,29 @@ export enum IsMoveValidError {
  * @param elementId - id of moved element
  */
 const isMoveValid = (
-    filesAndFolders: FilesAndFoldersMap,
-    newParentId: string,
-    elementId: string
+  filesAndFolders: FilesAndFoldersMap,
+  newParentId: string,
+  elementId: string
 ): IsMoveValidError | null => {
-    const newParent = filesAndFolders[newParentId];
-    const element = filesAndFolders[elementId];
-    const newParentVirtualPath = newParent.virtualPath;
-    const elementVirtualPath = element.virtualPath;
-    const newSiblingsNames = newParent.children.map(
-        (id) => filesAndFolders[id].name
-    );
-    const isNameConflict = newSiblingsNames.includes(element.name);
-    if (isExactFileOrAncestor(newParentVirtualPath, elementVirtualPath)) {
-        return IsMoveValidError.cannotMoveToChild;
-    }
-    if (isFile(newParent)) {
-        return IsMoveValidError.cannotMoveToFile;
-    }
-    if (isNameConflict) {
-        return IsMoveValidError.nameConflict;
-    }
+  const newParent = filesAndFolders[newParentId];
+  const element = filesAndFolders[elementId];
+  const newParentVirtualPath = newParent.virtualPath;
+  const elementVirtualPath = element.virtualPath;
+  const newSiblingsNames = newParent.children.map(
+    (id) => filesAndFolders[id].name
+  );
+  const isNameConflict = newSiblingsNames.includes(element.name);
+  if (isExactFileOrAncestor(newParentVirtualPath, elementVirtualPath)) {
+    return IsMoveValidError.cannotMoveToChild;
+  }
+  if (isFile(newParent)) {
+    return IsMoveValidError.cannotMoveToFile;
+  }
+  if (isNameConflict) {
+    return IsMoveValidError.nameConflict;
+  }
 
-    return null;
+  return null;
 };
 
 /**
@@ -98,44 +96,41 @@ const isMoveValid = (
  * @param newParentId
  */
 export const moveElement =
-    (elementId: string, newParentId: string): ArchifiltreThunkAction =>
-    (dispatch, getState) => {
-        const filesAndFolders = getFilesAndFoldersFromStore(getState());
-        const parent = findElementParent(elementId, filesAndFolders)!;
-        const error = isMoveValid(filesAndFolders, newParentId, elementId);
-        if (error) {
-            const errorMessage = translations.t(`workspace.${error}`);
-            notifyInfo(
-                errorMessage,
-                translations.t("workspace.impossibleMove")
-            );
-            return;
-        }
+  (elementId: string, newParentId: string): ArchifiltreThunkAction =>
+  (dispatch, getState) => {
+    const filesAndFolders = getFilesAndFoldersFromStore(getState());
+    const parent = findElementParent(elementId, filesAndFolders)!;
+    const error = isMoveValid(filesAndFolders, newParentId, elementId);
+    if (error) {
+      const errorMessage = translations.t(`workspace.${error}`);
+      notifyInfo(errorMessage, translations.t("workspace.impossibleMove"));
+      return;
+    }
 
-        dispatch(removeChild(parent.id, elementId));
-        dispatch(addChild(newParentId, elementId));
+    dispatch(removeChild(parent.id, elementId));
+    dispatch(addChild(newParentId, elementId));
 
-        const updatedFilesAndFolders = getFilesAndFoldersFromStore(getState());
-        const newMetadata = createFilesAndFoldersMetadataDataStructure(
-            updatedFilesAndFolders
-        );
+    const updatedFilesAndFolders = getFilesAndFoldersFromStore(getState());
+    const newMetadata = createFilesAndFoldersMetadataDataStructure(
+      updatedFilesAndFolders
+    );
 
-        dispatch(initFilesAndFoldersMetatada(newMetadata));
-        dispatch(commitAction());
-    };
+    dispatch(initFilesAndFoldersMetatada(newMetadata));
+    dispatch(commitAction());
+  };
 
 export const overrideLastModifiedDateThunk =
-    (elementId: string, lastModified: number): ArchifiltreThunkAction =>
-    (dispatch, getState) => {
-        dispatch(overrideLastModified(elementId, lastModified));
+  (elementId: string, lastModified: number): ArchifiltreThunkAction =>
+  (dispatch, getState) => {
+    dispatch(overrideLastModified(elementId, lastModified));
 
-        const store = getState();
-        const filesAndFolders = getFilesAndFoldersFromStore(store);
-        const lastModifiedOverrides = getLastModifiedDateOverrides(store);
-        const metadata = createFilesAndFoldersMetadataDataStructure(
-            filesAndFolders,
-            {},
-            { lastModified: lastModifiedOverrides }
-        );
-        dispatch(initFilesAndFoldersMetatada(metadata));
-    };
+    const store = getState();
+    const filesAndFolders = getFilesAndFoldersFromStore(store);
+    const lastModifiedOverrides = getLastModifiedDateOverrides(store);
+    const metadata = createFilesAndFoldersMetadataDataStructure(
+      filesAndFolders,
+      {},
+      { lastModified: lastModifiedOverrides }
+    );
+    dispatch(initFilesAndFoldersMetatada(metadata));
+  };

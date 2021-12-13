@@ -9,23 +9,23 @@ import type { WorkspaceMetadataState } from "./workspace-metadata-types";
  * @param store
  */
 export const getWorkspaceMetadataFromStore = (
-    store: StoreState
+  store: StoreState
 ): WorkspaceMetadataState => getCurrentState(store.workspaceMetadata);
 
 export const getSessionNameFromStore = (store: StoreState): string =>
-    getWorkspaceMetadataFromStore(store).sessionName;
+  getWorkspaceMetadataFromStore(store).sessionName;
 
 export const getLockedElementIdFromStore = (store: StoreState): string =>
-    getWorkspaceMetadataFromStore(store).lockedElementId;
+  getWorkspaceMetadataFromStore(store).lockedElementId;
 
 export const getHoveredElementIdFromStore = (store: StoreState): string =>
-    getWorkspaceMetadataFromStore(store).hoveredElementId;
+  getWorkspaceMetadataFromStore(store).hoveredElementId;
 
 export const getOriginalPathFromStore = (store: StoreState): string =>
-    getWorkspaceMetadataFromStore(store).originalPath;
+  getWorkspaceMetadataFromStore(store).originalPath;
 
 /**
  * Hook to retrieve workspace metadata from the redux store
  */
 export const useWorkspaceMetadata = (): WorkspaceMetadataState =>
-    useSelector(getWorkspaceMetadataFromStore);
+  useSelector(getWorkspaceMetadataFromStore);

@@ -143,7 +143,7 @@
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@sentry/browser": "^5.30.0",
     "angular-expressions": "^1.1.4",
-    "csv-parse": "^4.15.4",
+    "csv-parse": "^5.0.0",
     "date-fns": "^2.19.0",
     "dateformat": "3.0.3",
     "docxtemplater": "3.21.2",

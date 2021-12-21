@@ -41,12 +41,12 @@ module.exports = (env, argv = {}) => ({
     port: 8000,
     writeToDisk: (name) => /(\.(fork)\.[jt]s|main\.js|\.node)$/.test(name),
   },
-  devtool: isDev(argv.mode) ? "eval-cheap-module-source-map" : false,
-
+  devtool: isDev(argv.mode) ? "eval-cheap-module-source-map" : "source-map",
   entry: {
     app: "./src/app.tsx",
     ...workers,
   },
+
   externals: {
     "iconv-lite": "require('iconv-lite')",
   },

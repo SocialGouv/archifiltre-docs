@@ -1,6 +1,5 @@
 dist
 node_modules
 electron
-*.d.ts
 **/*.test.ts
 tests/**/*

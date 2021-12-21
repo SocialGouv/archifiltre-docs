@@ -2,7 +2,6 @@
 import _ from "lodash";
 import { compose } from "lodash/fp";
 
-import { Object } from "../common/utils";
 import { mapValueBetweenEnums } from "../util/enum/enum-util";
 import type { TrackerAction } from "./tracker-types";
 import { ActionTitle, ActionType } from "./tracker-types";
@@ -49,21 +48,21 @@ export const initTracker = (isActive: boolean): void => {
 
 /**
  * Removes the null and undefined values from a trackerAction object
- * @param trackerAction
  */
-const sanitizeTrackerData = (trackerAction: TrackerAction) =>
-  Object.values(trackerAction).filter(
-    (actionProperty) =>
-      !_.isUndefined(actionProperty) && !_.isNull(actionProperty)
-  );
+const sanitizeTrackerData = (trackerAction: MatomoTrackerAction) =>
+  sanitizedMatomoActionOrderedKeys
+    .map((key) => trackerAction[key])
+    .filter(
+      (actionProperty) =>
+        !_.isUndefined(actionProperty) && !_.isNull(actionProperty)
+    );
 
 /**
  * Transforms an application action to a Matomo Action
- * @param trackerAction
  */
 const mapActionToMatomoAction = (
-  trackerAction: MatomoTrackerAction
-): TrackerAction => {
+  trackerAction: TrackerAction
+): MatomoTrackerAction => {
   return {
     eventValue: trackerAction.eventValue,
     title: mapValueBetweenEnums(
@@ -84,7 +83,7 @@ const mapActionToMatomoAction = (
  * Matomo requires a non null non empty string value for any event,
  * so an "_" is added to events with no value
  */
-const handleMatomoValue = (matomoAction: TrackerAction) => {
+const handleMatomoValue = (matomoAction: MatomoTrackerAction) => {
   if (!matomoAction.value) {
     matomoAction.value = "_";
   }
@@ -94,16 +93,24 @@ const handleMatomoValue = (matomoAction: TrackerAction) => {
 /**
  * Adds a Matomo tracker using an action
  */
-const addMatomoTracker = (trackerAction: MatomoTrackerAction) => {
+const addMatomoTracker = (
+  trackerAction: MatomoTrackerAction | TrackerAction
+) => {
   if (!FORCE_TRACKING && MODE !== "production") {
     return;
   }
 
   if (window._paq) {
-    const matomoAction = mapActionToMatomoAction(trackerAction);
+    const matomoAction = mapActionToMatomoAction(
+      trackerAction as TrackerAction
+    );
     const matomoActionWithValue = handleMatomoValue(matomoAction);
     const sanitizedData = sanitizeTrackerData(matomoActionWithValue);
-    window._paq.push(sanitizedData);
+    try {
+      window._paq.push(sanitizedData);
+    } catch {
+      return;
+    }
   }
 };
 /**
@@ -117,6 +124,13 @@ interface MatomoTrackerAction {
   value?: unknown;
   eventValue?: unknown;
 }
+
+const sanitizedMatomoActionOrderedKeys: (keyof MatomoTrackerAction)[] = [
+  "type",
+  "title",
+  "value",
+  "eventValue",
+];
 
 enum MatomoActionType {
   SET_SITE_ID = "setSiteId",

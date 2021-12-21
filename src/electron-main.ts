@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default-member */
 import type { Extension } from "electron";
 import {
   app,
@@ -9,7 +10,7 @@ import {
   session,
 } from "electron";
 import path from "path";
-import { captureException, config as ravenConfig } from "raven";
+import Raven from "raven"; // TODO: switch to @sentry/node (https://docs.sentry.io/platforms/node/)
 
 import { loadApp } from "./main/app";
 import { loadHash } from "./main/hash";
@@ -18,7 +19,7 @@ import { loadWindow } from "./main/window";
 // Initializes sentry logging for production build
 if (app.isPackaged) {
   // Initialize sentry error reporter
-  ravenConfig(SENTRY_DSN).install();
+  Raven.config(SENTRY_DSN).install();
 
   // Enable electron crash reporter to get logs in case of low level crash
   crashReporter.start({
@@ -80,9 +81,9 @@ const askBeforeLeaving = () => {
     } else {
       title = "Bye bye !";
       message = "Are you sure you want to leave?";
-      detail = "All data that has not been saved will be permanently lost !";
-      no = "no";
-      yes = "yes";
+      detail = "All data that has not been saved will be permanently lost!";
+      no = "No";
+      yes = "Yes";
     }
     const options = {
       buttons: [no, yes],
@@ -186,11 +187,11 @@ app.on("activate", () => {
 // code. You can also put them in separate files and require them here.
 
 app.on("renderer-process-crashed", () => {
-  captureException(new Error("Renderer process crashed"));
+  Raven.captureException(new Error("Renderer process crashed"));
 });
 
 process.on("uncaughtException", () => {
-  captureException(new Error("Uncaught exception"));
+  Raven.captureException(new Error("Uncaught exception"));
 });
 // Needed for secret devtools
 ipcMain.on("open-devtools", () => {

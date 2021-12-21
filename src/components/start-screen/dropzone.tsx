@@ -75,7 +75,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
       setLoadedPath(pathToLoad);
       loadPath(pathToLoad);
     },
-    [loadPath, setLoadedPath, t]
+    [loadPath, setLoadedPath]
   );
 
   return (

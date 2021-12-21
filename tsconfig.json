@@ -8,7 +8,7 @@
     "sourceMap": true, // allow sourcemap support
     "module": "CommonJS", // specify module code generation
     "jsx": "react", // use typescript to transpile jsx to js
-    "target": "ES2016", // specify ECMAScript target version
+    "target": "ES2015", // TODO: >=ES2016 (Raven only working in es2015 for whatever reasons)
     "allowJs": true, // allow a partial TypeScript and JavaScript codebase
     "resolveJsonModule": true,
     "lib": [

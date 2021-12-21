@@ -36,7 +36,7 @@ export const DuplicatesDistributionChart: React.FC<
         size: fileSizesCount[fileType as FileType],
         value: fileTypeValue,
       })),
-    [fileTypesCount, fileSizesCount, t]
+    [fileTypesCount, fileSizesCount]
   );
 
   const scheme = useMemo(
@@ -59,7 +59,7 @@ export const DuplicatesDistributionChart: React.FC<
         </div>
       );
     },
-    [chartData, t]
+    [chartData]
   );
 
   return (

@@ -3,10 +3,13 @@ const webpack = require("webpack");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 require("dotenv").config();
 
-module.exports = {
+const isDev = (mode) => mode === "development";
+
+module.exports = (env, argv = {}) => ({
   devServer: {
     writeToDisk: true,
   },
+  devtool: isDev(argv.mode) ? "eval-cheap-module-source-map" : "source-map",
   entry: {
     main: "./src/electron-main.ts",
   },
@@ -45,4 +48,4 @@ module.exports = {
     modules: ["node_modules"],
   },
   target: "electron-main",
-};
+});

@@ -448,8 +448,11 @@ export const loadFilesAndFoldersFromPathThunk =
         failIfRootPath
       )(fileOrFolderPath);
 
-      virtualFileSystem.catch((err: ArchifiltreError) => {
-        displayUnexpectedError(err.reason);
+      virtualFileSystem.catch((err?: ArchifiltreError) => {
+        displayUnexpectedError(
+          err?.reason ??
+            `Unexpected error on loadFilesAndFoldersFromPathThunk (err=${err})`
+        );
       });
 
       return { terminate, virtualFileSystem };

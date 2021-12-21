@@ -78,7 +78,7 @@ export const FileTypesDetails: React.FC<FileTypesDetailsProps> = ({
   const renderTooltipContent = useMemo(
     () =>
       makeRenderTooltipContent(elementsCountsByType, elementsSizesByType, t),
-    [elementsCountsByType, elementsSizesByType, t]
+    [elementsCountsByType, elementsSizesByType]
   );
 
   return (

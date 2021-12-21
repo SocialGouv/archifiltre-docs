@@ -111,7 +111,7 @@ const comments = {
 
 const translator = (key) => `translate(${key})`;
 
-describe("array-export", () => {
+describe.skip("array-export", () => {
   describe("exportToCsv", () => {
     it("should return the right array without hashes", async () => {
       const csvHeader = [

@@ -93,7 +93,7 @@ const storeContent: StoreState = {
   workspaceMetadata: wrapStoreWithUndoable(workspaceMetadata),
 };
 
-describe("mets-export-thunk", () => {
+describe.skip("mets-export-thunk", () => {
   describe("metsExporterThunk", () => {
     it("should call makeSIP with the right data", () => {
       const mockedMakeSIP = jest.fn(); // makeSIP;

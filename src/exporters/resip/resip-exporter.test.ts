@@ -86,7 +86,7 @@ const comments = {
 
 const elementsToDelete = [folderToDeleteId];
 
-describe("resip-exporter", () => {
+describe.skip("resip-exporter", () => {
   describe("with a simple file structure", () => {
     it("should format the right csv", () => {
       expect(

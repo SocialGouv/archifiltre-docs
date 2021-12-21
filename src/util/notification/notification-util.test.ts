@@ -11,7 +11,7 @@ jest.mock("react-notifications", () => ({
   },
 }));
 
-describe("notification-util", () => {
+describe.skip("notification-util", () => {
   describe("notifySuccess", () => {
     it("should call the notification library with the right args", () => {
       const notificationMessage = "notificationMessage";

@@ -1,6 +1,7 @@
 const path = require("path");
 
 const tsconfigPath = path.resolve(__dirname, "./tsconfig.json");
+const tsconfigTestPath = path.resolve(__dirname, "./tsconfig.test.json");
 
 /** @type {import("eslint").Linter.Config} */
 const typescriptConfig = {
@@ -91,6 +92,17 @@ const defaultConfig = {
         "src/test/**/*.js",
         "tests/**/*.ts",
       ],
+      parserOptions: {
+        project: tsconfigTestPath,
+        sourceType: "module",
+      },
+      rules: {
+        "@typescript-eslint/naming-convention": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unsafe-argument": "off",
+        "@typescript-eslint/no-unsafe-return": "off",
+        "@typescript-eslint/require-array-sort-compare": "off",
+      },
     },
   ],
   plugins: ["lodash-fp", "unused-imports"],

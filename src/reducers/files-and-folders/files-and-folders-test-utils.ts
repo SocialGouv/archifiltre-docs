@@ -20,7 +20,7 @@ export const createFilesAndFolders = ({
   file_size = 0,
   name = "base-name",
   virtualPath,
-}: CreateFilesAndFoldersOptions): Partial<FilesAndFolders> => ({
+}: CreateFilesAndFoldersOptions): FilesAndFolders => ({
   children,
   file_last_modified,
   file_size,

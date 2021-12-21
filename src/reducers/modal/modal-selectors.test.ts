@@ -5,15 +5,15 @@ import { getOpenModalFromStore } from "./modal-selectors";
 import { Modal } from "./modal-types";
 
 const store: StoreState = {
-    ...createEmptyStore(),
-    modal: {
-        ...initialState,
-        openModal: Modal.ERROR_MODAL,
-    },
+  ...createEmptyStore(),
+  modal: {
+    ...initialState,
+    openModal: Modal.ERROR_MODAL,
+  },
 };
 
 describe("getOpenModalFromStore", () => {
-    it("should return the currently open modal", () => {
-        expect(getOpenModalFromStore(store)).toBe(Modal.ERROR_MODAL);
-    });
+  it("should return the currently open modal", () => {
+    expect(getOpenModalFromStore(store)).toBe(Modal.ERROR_MODAL);
+  });
 });

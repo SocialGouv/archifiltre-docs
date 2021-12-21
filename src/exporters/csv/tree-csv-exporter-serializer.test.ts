@@ -1,42 +1,43 @@
-import type { TreeCsvExporterParams } from "exporters/csv/tree-csv-exporter-serializer";
-import {
-    parseTreeCsvExporterOptionsFromStream,
-    stringifyTreeCsvExporterOptionsToStream,
-} from "exporters/csv/tree-csv-exporter-serializer";
-import { createFilesAndFolders } from "files-and-folders-loader/files-and-folders-loader";
 import { MockWritable } from "stdio-mock";
 import Stream from "stream";
-import { Language } from "util/language/language-types";
+
+import { createFilesAndFolders } from "../../files-and-folders-loader/files-and-folders-loader";
+import { Language } from "../../util/language/language-types";
+import type { TreeCsvExporterParams } from "./tree-csv-exporter-serializer";
+import {
+  parseTreeCsvExporterOptionsFromStream,
+  stringifyTreeCsvExporterOptionsToStream,
+} from "./tree-csv-exporter-serializer";
 
 const extractDataFromMock = async (
-    writeable: MockWritable
+  writeable: MockWritable
 ): Promise<Buffer[]> =>
-    new Promise((resolve) => {
-        writeable.on("finish", () => {
-            resolve(writeable.data());
-        });
+  new Promise((resolve) => {
+    writeable.on("finish", () => {
+      resolve(writeable.data());
     });
+  });
 
 describe("tree-csv-exporter-serializer", () => {
-    it("should send and parse a TreeCsvExporterOptions", async () => {
-        const exporterOptions: TreeCsvExporterParams = {
-            filesAndFolders: {
-                ff: createFilesAndFolders({ id: "ff" }),
-            },
-            language: Language.FR,
-        };
+  it("should send and parse a TreeCsvExporterOptions", async () => {
+    const exporterOptions: TreeCsvExporterParams = {
+      filesAndFolders: {
+        ff: createFilesAndFolders({ id: "ff" }),
+      },
+      language: Language.FR,
+    };
 
-        const writeable = new MockWritable();
+    const writeable = new MockWritable();
 
-        // @ts-expect-error
-        stringifyTreeCsvExporterOptionsToStream(writeable, exporterOptions);
+    // @ts-expect-error Mock
+    stringifyTreeCsvExporterOptionsToStream(writeable, exporterOptions);
 
-        const sentData: Buffer[] = await extractDataFromMock(writeable);
+    const sentData: Buffer[] = await extractDataFromMock(writeable);
 
-        const parsedOptions = await parseTreeCsvExporterOptionsFromStream(
-            Stream.Readable.from(sentData)
-        );
+    const parsedOptions = await parseTreeCsvExporterOptionsFromStream(
+      Stream.Readable.from(sentData)
+    );
 
-        expect(parsedOptions).toEqual(exporterOptions);
-    });
+    expect(parsedOptions).toEqual(exporterOptions);
+  });
 });

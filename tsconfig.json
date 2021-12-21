@@ -16,12 +16,12 @@
       "DOM"
     ],
   },
-  "exclude": [
-    "tests/**/*",
-    "**/*.test.ts*"
-  ],
   "include": [
     "src/**/*",
     "globals.d.ts"
+  ],
+  "exclude": [
+    "tests/**/*",
+    "**/*.test.*"
   ]
 }

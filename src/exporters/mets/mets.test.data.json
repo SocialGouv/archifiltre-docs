@@ -10,13 +10,21 @@
       },
       {
         "mets:altRecordID": [
-          { "_attr": { "TYPE": "producerIdentifier" } },
+          {
+            "_attr": {
+              "TYPE": "producerIdentifier"
+            }
+          },
           "ADNUM"
         ]
       },
       {
         "mets:altRecordID": [
-          { "_attr": { "TYPE": "productionIdentifier" } },
+          {
+            "_attr": {
+              "TYPE": "productionIdentifier"
+            }
+          },
           "TEST_PRODUCTION_IDENTIFIER"
         ]
       }
@@ -24,35 +32,69 @@
   },
   "outputDmdSec": {
     "mets:dmdSec": [
-      { "_attr": { "ID": "TEST_ID" } },
+      {
+        "_attr": {
+          "ID": "TEST_ID"
+        }
+      },
       {
         "mets:mdWrap": [
-          { "_attr": { "MIMETYPE": "text/xml", "MDTYPE": "DC" } },
-          { "mets:xmlData": [{ "spar_dc:spar_dc": [{ "dc:title": "TEST" }] }] }
+          {
+            "_attr": {
+              "MIMETYPE": "text/xml",
+              "MDTYPE": "DC"
+            }
+          },
+          {
+            "mets:xmlData": [
+              {
+                "spar_dc:spar_dc": [
+                  {
+                    "dc:title": "TEST"
+                  }
+                ]
+              }
+            ]
+          }
         ]
       }
     ]
   },
   "outputProvMd": {
     "mets:digiprovMD": [
-      { "_attr": { "ID": "TEST_ID" } },
+      {
+        "_attr": {
+          "ID": "TEST_ID"
+        }
+      },
       {
         "mets:mdWrap": [
-          { "_attr": { "MIMETYPE": "text/xml", "MDTYPE": "PREMIS:EVENT" } },
+          {
+            "_attr": {
+              "MIMETYPE": "text/xml",
+              "MDTYPE": "PREMIS:EVENT"
+            }
+          },
           {
             "mets:xmlData": [
               {
                 "premis:event": [
                   {
                     "premis:eventIdentifier": [
-                      { "premis:eventIdentifierType": "UUID" },
+                      {
+                        "premis:eventIdentifierType": "UUID"
+                      },
                       {
                         "premis:eventIdentifierValue": "12345678-1234-1234-abcd-123456789abc"
                       }
                     ]
                   },
-                  { "premis:eventType": "testEvent" },
-                  { "premis:eventDateTime": "2019-08-05T01:00:00" }
+                  {
+                    "premis:eventType": "testEvent"
+                  },
+                  {
+                    "premis:eventDateTime": "2019-08-05T01:00:00"
+                  }
                 ]
               }
             ]
@@ -88,8 +130,23 @@
   },
   "outputDivTag": {
     "mets:div": [
-      { "_attr": { "ID": "TEST_ID", "TYPE": "object", "ORDER": 10 } },
-      { "mets:fptr": [{ "_attr": { "FILEID": "master.10" } }, null] }
+      {
+        "_attr": {
+          "ID": "TEST_ID",
+          "TYPE": "object",
+          "ORDER": 10
+        }
+      },
+      {
+        "mets:fptr": [
+          {
+            "_attr": {
+              "FILEID": "master.10"
+            }
+          },
+          null
+        ]
+      }
     ]
   }
 }

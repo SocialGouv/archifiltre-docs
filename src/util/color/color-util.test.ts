@@ -5,11 +5,12 @@ import { arbitraryRgba } from "../../test/custom-arbitraries";
 import { fromRgba, toRgba } from "./color-util";
 
 describe("color", () => {
-    it("(fromRgba . toRgba) a", () => {
-        fc.assert(
-            fc.property(arbitraryRgba, (color: number[]) =>
-                equal(color, fromRgba(toRgba(color)))
-            )
-        );
-    });
+  // eslint-disable-next-line jest/expect-expect -- fc assert
+  it("(fromRgba . toRgba) a", () => {
+    fc.assert(
+      fc.property(arbitraryRgba, (color) =>
+        equal(color, fromRgba(toRgba(color)))
+      )
+    );
+  });
 });

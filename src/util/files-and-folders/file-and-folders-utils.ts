@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-named-as-default
-import md5 from "js-md5";
+import MD5 from "js-md5";
 import { lookup } from "mime-types";
 
 import {
@@ -37,7 +36,9 @@ export const countFoldersWithMoreThanNChildren =
 export const countDeeperFolders =
   (maxDepth: number) =>
   (folders: FilesAndFolders[]): number =>
-    countItems<FilesAndFolders>((folder) => folder.depth > maxDepth)(folders);
+    countItems<FilesAndFolders>(
+      (folder) => folder.depth ?? -Infinity > maxDepth
+    )(folders);
 
 /**
  * Counts the number of path longer than maxLength
@@ -52,8 +53,6 @@ export const countLongerPath =
 
 /**
  * Sorts folders by number of childrens in a decreasing order
- * @param folders
- * @returns {Array}
  */
 export const sortFoldersByChildrenCount = (
   folders: FilesAndFolders[]
@@ -64,18 +63,17 @@ export const sortFoldersByChildrenCount = (
 
 /**
  * Sort folders by depth in a decreasing order
- * @param folders
- * @returns {Array}
  */
 export const sortFoldersByDepth = (
   folders: FilesAndFolders[]
 ): FilesAndFolders[] =>
-  folders.sort((folder1, folder2) => folder2.depth - folder1.depth);
+  folders.sort(
+    (folder1, folder2) =>
+      (folder2.depth ?? -Infinity) - (folder1.depth ?? -Infinity)
+  );
 
 /**
  * Returns all the folders with no child folders
- * @param fileAndFoldersMap - A map of filesAndFolders
- * @returns {Array}
  */
 export const findAllFoldersWithNoSubfolder = (
   fileAndFoldersMap: FilesAndFoldersMap
@@ -179,7 +177,7 @@ const recComputeFolderHash = async (
 
   const childrenResults: HashesMap = Object.assign({}, ...childResults);
 
-  const currentFolderHash = md5(
+  const currentFolderHash = MD5(
     // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
     children
       .map((childId) => childrenResults[childId])

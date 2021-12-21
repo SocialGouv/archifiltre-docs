@@ -307,7 +307,7 @@ export const createFilesAndFolders = ({
   file_size = 0,
   id,
   virtualPath,
-}: CreateFilesAndFoldersOptions): Partial<FilesAndFolders> => ({
+}: CreateFilesAndFoldersOptions): FilesAndFolders => ({
   children,
   // eslint-disable-next-line @typescript-eslint/naming-convention
   file_last_modified,
@@ -335,7 +335,7 @@ export const createFilesAndFoldersDataStructure = (
       filesAndFolders[normalizedParentPath] = createFilesAndFolders({
         children: [elementPath],
         id: normalizedParentPath,
-      }) as FilesAndFolders;
+      });
 
       if (normalizedParentPath !== "") {
         recursivelyAddParentFolders(parentPath);
@@ -354,7 +354,7 @@ export const createFilesAndFoldersDataStructure = (
       // eslint-disable-next-line @typescript-eslint/naming-convention
       file_size: size,
       id: currentPath,
-    }) as FilesAndFolders;
+    });
     recursivelyAddParentFolders(currentPath);
     onResult();
   });

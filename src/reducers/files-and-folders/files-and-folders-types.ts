@@ -36,8 +36,8 @@ export interface FilesAndFolders {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   file_last_modified: number;
   virtualPath: string;
-  depth: number;
-  maxLastModified: number;
+  depth?: number;
+  maxLastModified?: number;
 }
 
 export interface ElementWithToDelete extends FilesAndFolders {

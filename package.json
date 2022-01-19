@@ -60,19 +60,6 @@
       "icon": "./electron/build/icon.png"
     }
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "yarn test",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "lint-staged": {
-    "*.[t|j]s?(x)": [
-      "eslint --fix",
-      "prettier --list-different"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/SocialGouv/archifiltre"
@@ -82,8 +69,6 @@
   },
   "homepage": "https://github.com/SocialGouv/archifiltre#readme",
   "devDependencies": {
-    "@commitlint/cli": "13.1.0",
-    "@commitlint/config-conventional": "13.1.0",
     "@socialgouv/eslint-config-react": "1.63.0",
     "@types/jest": "27.0.1",
     "@types/lodash": "4.14.172",
@@ -113,10 +98,8 @@
     "fork-ts-checker-webpack-plugin": "^6.3.3",
     "glob": "^7.2.0",
     "html-webpack-plugin": "5.3.2",
-    "husky": "7.0.2",
     "jest": "27.0.6",
     "jest-date-mock": "1.0.8",
-    "lint-staged": "11.0.1",
     "node-loader": "^2.0.0",
     "node-sass": "^5.0.0",
     "prettier": "2.2.1",

@@ -1,0 +1,113 @@
+name: Manual branch test setup
+on:
+  workflow_dispatch:
+    inputs:
+      bin_type:
+        type: choice
+        options: [win, mac, linux]
+        default: win
+        required: true
+        description: The produced binary type
+
+env:
+  GIT_AUTHOR_EMAIL: socialgroovybot@fabrique.social.gouv.fr
+  GIT_AUTHOR_NAME: SocialGroovyBot
+  GIT_COMMITTER_EMAIL: socialgroovybot@fabrique.social.gouv.fr
+  GIT_COMMITTER_NAME: SocialGroovyBot
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  compile:
+    name: Compile
+    runs-on: ubuntu-latest
+    if: "!contains('refs/heads/main,refs/heads/beta,refs/heads/dev', github.ref)"
+    outputs:
+      current-version: ${{ steps.compile.outputs.current-version }}
+      next-version: ${{ steps.compile.outputs.next-version }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+      - name: Set .env to production
+        run: cp .env.prod .env
+      - id: compile
+        name: Compile
+        run: |
+          TMP_CURRENT_VERSION=$(node -e "console.log(require('./package.json').version)")
+          echo ::set-output name=current-version::$TMP_CURRENT_VERSION
+          TMP_NEXT_VERSION=$(echo '${{ github.ref }}' | iconv -t ascii//TRANSLIT | sed -r "s/[^a-zA-Z0-9]+/-/g" | sed -r "s/^-+\|-+$//g" | tr A-Z a-z)
+          yarn global add replace
+          $(yarn global bin)/replace '"version": "$(node -e "console.log(require('./package.json').version)"' '"version": "$TMP_VERSION"' package.json
+          echo ::set-output name=next-version::$TMP_NEXT_VERSION
+          yarn compile
+      - name: Archive dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: compile-dist
+          path: dist/
+
+  build:
+    if: ${{ success() }}
+    needs: compile
+    strategy:
+      matrix:
+        target:
+          - ${{ github.event.inputs.bin_type }}
+        include:
+          - target: linux
+            os: ubuntu-latest
+            command-args: --linux AppImage
+          - target: mac
+            os: macos-latest
+            command-args: --mac dmg
+          - target: win
+            os: windows-latest
+            command-args: --win portable
+
+    name: Build binary for ${{ matrix.target }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+      - name: Replace version in package.json
+        shell: bash
+        run: |
+          yarn global add replace
+          $(yarn global bin)/replace '"version": "${{ needs.compile.outputs.current-version }}"' '"version": "${{ needs.compile.outputs.next-version }}"' package.json
+      - name: Download dist
+        uses: actions/download-artifact@v2
+        with:
+          name: compile-dist
+          path: dist/
+      - name: Build bin
+        run: yarn electron-builder --x64 ${{ matrix.command-args }}
+      - name: Archive bin
+        uses: actions/upload-artifact@v2
+        with:
+          name: bin
+          path: electron/dist/*/archifiltre-*
+
+  release:
+    if: ${{ success() }}
+    needs: build
+    name: Release branch bin
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Downloads bin
+        uses: actions/download-artifact@v2
+
+      - name: Release tip tag for branch
+        uses: pyTooling/Actions/releaser@r0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: bin/*/archifiltre-*.*
+          tag: ${{ needs.compile.outputs.next-version }}
+          rm: true

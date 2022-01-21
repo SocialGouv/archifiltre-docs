@@ -1,0 +1,44 @@
+name: Manual branch test teardown
+on:
+  pull_request:
+    types: [closed]
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  teardown:
+    name: Seek & Destroy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: dev
+      - name: Seek
+        id: seek
+        run: |
+          TAG_NAME=$(echo '${{ github.head_ref }}' | iconv -t ascii//TRANSLIT | sed -r "s/[^a-zA-Z0-9]+/-/g" | sed -r "s/^-+\|-+$//g" | tr A-Z a-z)
+          echo ::set-output name=tag-name::$TAG_NAME
+      - name: Destroy local
+        id: destroy-local
+        run: |
+          git fetch --tags -p
+          set -e
+          TAG_NOT_FOUND=0
+          git tag -d '${{ steps.seek.outputs.tag-name }}' || TAG_NOT_FOUND=1
+          echo ::set-output name=tag-not-found::$TAG_NOT_FOUND
+      - name: Destroy remote
+        if: ${{ steps.destroy-local.outputs.tag-not-found == 0 }}
+        run: |
+          (
+            gh release delete "$TAG_NAME" --yes --repo $REPO &&
+            git push --delete origin "$TAG_NAME" &&
+            gh pr comment $PR_NUMBER --body "$TAG_NAME successfully destroyed! ($RUN_URL)" --repo $REPO
+          ) || gh pr comment $PR_NUMBER --body "$TAG_NAME deletion failed ($RUN_URL)" --repo $REPO
+        env:
+          REPO: ${{ github.event.repository.name }}
+          PR_NUMBER: ${{ github.event.number }}
+          TAG_NAME: ${{ steps.seek.outputs.tag-name }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}

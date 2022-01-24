@@ -35,7 +35,7 @@ jobs:
           echo "${{ toJson(github) }}"
           TMP_CURRENT_VERSION="$(node -e "console.log(require('./package.json').version)")"
           echo ::set-output name=current-version::$TMP_CURRENT_VERSION
-          TMP_NEXT_VERSION="$(node -e "console.log('${{ github.ref }}'.replace('refs/heads/', ''))" | iconv -t ascii//TRANSLIT | sed -r "s/[^a-zA-Z0-9]+/-/g" | sed -r "s/^-+\|-+$//g" | tr A-Z a-z)"
+          TMP_NEXT_VERSION="$TMP_CURRENT_VERSION-$(node -e "console.log('${{ github.ref }}'.replace('refs/heads/', ''))" | iconv -t ascii//TRANSLIT | sed -r "s/[^a-zA-Z0-9]+/-/g" | sed -r "s/^-+\|-+$//g" | tr A-Z a-z).0"
           yarn global add replace
           $(yarn global bin)/replace "\"version": \"$TMP_CURRENT_VERSION\"" "\"version": \"$TMP_NEXT_VERSION\"" package.json
           echo ::set-output name=next-version::$TMP_NEXT_VERSION
@@ -48,22 +48,15 @@ jobs:
           path: dist/
 
   build:
-    if: ${{ success() }}
     needs: compile
     strategy:
       matrix:
         target:
           - ${{ github.event.inputs.bin_type }}
-        include:
-          - target: linux
-            os: ubuntu-latest
-            command-args: --linux AppImage
-          - target: mac
-            os: macos-latest
-            command-args: --mac dmg
-          - target: win
-            os: windows-latest
-            command-args: --win portable
+        os:
+          - ${{ github.event.inputs.bin_type == 'linux' && 'ubuntu-latest' || github.event.inputs.bin_type == 'mac' && 'macos-latest' || 'windows-2019' }}
+        bin-output:
+          - ${{ (github.event.inputs.bin_type == 'linux' && 'AppImage') || github.event.inputs.bin_type == 'mac' && 'dmg' || 'portable' }}
 
     name: Build binary for ${{ matrix.target }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -85,7 +78,7 @@ jobs:
           name: compile-dist
           path: dist/
       - name: Build bin
-        run: yarn electron-builder --x64 ${{ matrix.command-args }}
+        run: yarn electron-builder --x64 --${{ matrix.target}} ${{ matrix.bin-output }}
       - name: Archive bin
         uses: actions/upload-artifact@v2
         with:
@@ -94,11 +87,34 @@ jobs:
 
   release:
     if: ${{ success() }}
-    needs: build
+    needs:
+      - build
+      - compile
     name: Release branch bin
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.SOCIALGROOVYBOT_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SOCIALGROOVYBOT_GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_push_gpgsign: false
+          git_tag_gpgsign: true
+      - name: Create tag if needed
+        run: |
+          git fetch --tags -p
+          (
+            git tag -s "$TAG_VERSION" -m "Temp tag [skip ci]" &&
+            git push --tags
+          ) || true
+        env:
+          TAG_VERSION: v${{ needs.compile.outputs.next-version }}
       - name: Downloads bin
         uses: actions/download-artifact@v2
 
@@ -107,5 +123,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           files: bin/*/archifiltre-*.*
-          tag: ${{ needs.compile.outputs.next-version }}
+          tag: v${{ needs.compile.outputs.next-version }}
           rm: true

@@ -34,6 +34,8 @@ jobs:
           fetch-depth: 0
       - name: Setup Node
         uses: ./.github/actions/setup-node
+      - name: Yarn install
+        run: yarn --frozen-lockfile --perfer-offline
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v4
         with:
@@ -67,16 +69,20 @@ jobs:
     strategy:
       matrix:
         target:
-          - linux
-          - mac
+          # - linux
+          # - mac
           - win
         include:
-          - target: linux
-            os: ubuntu-latest
-          - target: mac
-            os: macos-latest
+          # - target: linux
+          #   os: ubuntu-latest
+          # - target: mac
+          #   os: macos-latest
           - target: win
             os: windows-latest
+          - target: win-msi
+            os: windows-latest
+          # - target: win32-msi
+          #   os: windows-latest
 
     name: Build binary for ${{ matrix.target }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -94,6 +100,14 @@ jobs:
           fetch-depth: 0
       - name: Setup Node
         uses: ./.github/actions/setup-node
+      - name: Yarn install
+        run: |
+          yarn config set network-timeout 300000
+          yarn --frozen-lockfile --perfer-offline
+          yarn electron-builder install-app-deps
+        env:
+          ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
+          ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
       - name: Replace version in package.json
         shell: bash
         run: |
@@ -106,10 +120,6 @@ jobs:
           path: dist/
       - name: Build bin
         run: yarn dist:${{ matrix.target }}
-        # Test mode
-        # run: |
-        #   mkdir -p "electron/dist/${{ matrix.target }}/"
-        #   echo "${{ matrix.target }}.${{ matrix.os }}" > "electron/dist/${{ matrix.target }}/archifiltre.${{ matrix.ext }}"
       - name: Archive bin
         uses: actions/upload-artifact@v2
         with:
@@ -138,6 +148,8 @@ jobs:
           -exec bash -c "openssl dgst -sha512 {} > {}.sha512" \;
       - name: Setup Node
         uses: ./.github/actions/setup-node
+      - name: Yarn install
+        run: yarn --frozen-lockfile --perfer-offline
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v4
         with:

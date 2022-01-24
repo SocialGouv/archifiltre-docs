@@ -31,4 +31,4 @@ updates:
           - ">=6"
       - dependency-name: "@types/node"
         versions:
-          - ">=15"
+          - ">=17"

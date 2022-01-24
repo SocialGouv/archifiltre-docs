@@ -10,3 +10,7 @@ dist/
 .env
 yarn-error.log
 *.p12
+.secrets
+# act workflow folder
+workflow/
+pr_event.json

@@ -10,10 +10,6 @@ on:
         description: The produced binary type
 
 env:
-  GIT_AUTHOR_EMAIL: socialgroovybot@fabrique.social.gouv.fr
-  GIT_AUTHOR_NAME: SocialGroovyBot
-  GIT_COMMITTER_EMAIL: socialgroovybot@fabrique.social.gouv.fr
-  GIT_COMMITTER_NAME: SocialGroovyBot
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
@@ -36,13 +32,15 @@ jobs:
       - id: compile
         name: Compile
         run: |
-          TMP_CURRENT_VERSION=$(node -e "console.log(require('./package.json').version)")
+          echo "${{ toJson(github) }}"
+          TMP_CURRENT_VERSION="$(node -e "console.log(require('./package.json').version)")"
           echo ::set-output name=current-version::$TMP_CURRENT_VERSION
-          TMP_NEXT_VERSION=$(echo '${{ github.ref }}' | iconv -t ascii//TRANSLIT | sed -r "s/[^a-zA-Z0-9]+/-/g" | sed -r "s/^-+\|-+$//g" | tr A-Z a-z)
+          TMP_NEXT_VERSION="$(node -e "console.log('${{ github.ref }}'.replace('refs/heads/', ''))" | iconv -t ascii//TRANSLIT | sed -r "s/[^a-zA-Z0-9]+/-/g" | sed -r "s/^-+\|-+$//g" | tr A-Z a-z)"
           yarn global add replace
-          $(yarn global bin)/replace '"version": "$(node -e "console.log(require('./package.json').version)"' '"version": "$TMP_VERSION"' package.json
+          $(yarn global bin)/replace "\"version": \"$TMP_CURRENT_VERSION\"" "\"version": \"$TMP_NEXT_VERSION\"" package.json
           echo ::set-output name=next-version::$TMP_NEXT_VERSION
-          yarn compile
+          yarn webpack --mode production
+          yarn webpack --mode production --config webpack.electron-main.js
       - name: Archive dist
         uses: actions/upload-artifact@v2
         with:

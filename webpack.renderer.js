@@ -10,16 +10,16 @@ const isDev = (mode) => mode === "development";
 
 /**
  * Return code that will compute the path of the folder containing worker file,
- * which is the electron/dist folder in development mode, and the app.asar/electron/dist
+ * which is the dist folder in development mode, and the app.asar/dist
  * folder in production mode
- * Note : the prod mode method gives archifiltre/electron/electron/dist folder in dev mode
+ * Note : the prod mode method gives archifiltre/electron/dist folder in dev mode
  * @param mode - the build mode. "development" or "production".
  * @returns {string}
  */
 const workerRootFolder = (mode) =>
   isDev(mode)
-    ? JSON.stringify(path.join(__dirname, "electron/dist/"))
-    : "require('path').join(require('electron').ipcRenderer.sendSync('app.getAppPath'),'/electron/dist/')";
+    ? JSON.stringify(path.join(__dirname, "dist/"))
+    : "require('path').join(require('electron').ipcRenderer.sendSync('app.getAppPath'),'/dist/')";
 
 const workers = glob
   .sync("./**/*.fork.ts")
@@ -35,7 +35,7 @@ const workers = glob
 module.exports = (env, argv = {}) => ({
   devServer: {
     compress: true,
-    contentBase: path.resolve(__dirname, "electron/dist"),
+    contentBase: path.resolve(__dirname, "dist"),
     hot: true,
     inline: false,
     port: 8000,

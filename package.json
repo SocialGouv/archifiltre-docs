@@ -5,44 +5,40 @@
   "description": "Visualisez et améliorez vos arborescences de fichiers !",
   "author": "Fabrique des ministère sociaux",
   "license": "Apache-2.0",
-  "main": "electron/dist/main.js",
+  "main": "dist/main.js",
   "scripts": {
     "dev": "concurrently -k \"yarn dev-main\" \"yarn dev-renderer\"",
     "dev-main": "webpack --mode development --config webpack.electron-main.js --watch",
     "dev-renderer": "webpack serve --mode development",
     "dev-test": "concurrently -k \"yarn dev-main\" \"yarn dev-renderer --autoload ./tests/test-folder\"",
-    "dev-app": "cross-env DEV_SERVER=true electron ./electron/dist/main",
+    "dev-app": "cross-env DEV_SERVER=true electron ./dist/main",
     "test": "jest \"src/.*\\.test\\.[jt]s\"",
     "test-coverage": "jest \"src/.*\\.test\\.[jt]s\" --coverage",
     "e2e": "jest \"tests/e2e/.*\\\\.test\\\\.[jt]s\"",
-    "prepare-prod": "webpack --progress --mode production --config webpack.electron-main.js && webpack --progress --mode production",
-    "env-linux": "cross-env-shell $(cat .env | xargs)",
-    "env-windows": "(for /F \"tokens=*\" %i in (.env) do set %i)",
-    "win32": "electron-builder --windows portable --ia32",
-    "win64": "electron-builder --windows portable --x64",
-    "win32-msi": "electron-builder --windows portable --ia32 --windows=msi",
-    "win64-msi": "electron-builder --windows portable --x64 --windows=msi",
-    "mac": "electron-builder --mac dmg",
-    "mac-local": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dmg",
-    "linux": "electron-builder --linux AppImage",
+    "compile": "webpack --mode production --config webpack.electron-main.js && webpack --mode production",
+    "dist:win": "electron-builder --x64 --win portable msi nsis",
+    "dist:mac": "electron-builder --mac dmg zip",
+    "dist:mac-local": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dmg",
+    "dist:linux": "electron-builder --linux AppImage",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
-    "postinstall": "electron-builder install-app-deps",
     "analyze-bundle": "webpack --profile --json > stats.json && sed -i -e 1,4d stats.json && webpack-bundle-analyzer ./stats.json",
     "generate-translation-csv": "node ./scripts/diff-translations.js",
     "import-translation-csv": "node ./scripts/translation-csv-to-json"
   },
   "build": {
-    "appId": "io.github.archifiltre",
+    "generateUpdatesFilesForAllChannels": true,
+    "appId": "com.fabrique.archifiltre",
     "artifactName": "archifiltre-${version}.${ext}",
-    "afterSign": "./scripts/afterSign",
+    "productName": "Docs par Archifiltre",
+    "afterSign": "scripts/notarize.js",
     "files": [
-      "electron/dist",
+      "dist",
       "electron/build/icon.*",
       "package.json"
     ],
     "directories": {
-      "output": "dist/${os}-${arch}"
+      "output": "dist/${os}"
     },
     "mac": {
       "category": "public.app-category.productivity",
@@ -53,25 +49,19 @@
       "entitlementsInherit": "./electron/build/entitlements.mac.plist"
     },
     "win": {
-      "icon": "./electron/build/icon.png"
+      "icon": "./electron/build/icon.png",
+      "artifactName": "archifiltre-${os}-standalone.${ext}"
+    },
+    "msi": {
+      "artifactName": "archifiltre-${os}.${ext}"
+    },
+    "nsis": {
+      "artifactName": "archifiltre-${os}-setup.${ext}"
     },
     "linux": {
       "category": "Office",
       "icon": "./electron/build/icon.png"
     }
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "yarn test",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "lint-staged": {
-    "*.[t|j]s?(x)": [
-      "eslint --fix",
-      "prettier --list-different"
-    ]
   },
   "repository": {
     "type": "git",
@@ -82,12 +72,13 @@
   },
   "homepage": "https://github.com/SocialGouv/archifiltre#readme",
   "devDependencies": {
-    "@commitlint/cli": "13.1.0",
-    "@commitlint/config-conventional": "13.1.0",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@socialgouv/eslint-config-react": "1.63.0",
     "@types/jest": "27.0.1",
     "@types/lodash": "4.14.172",
-    "@types/node": "12",
+    "@types/node": "^16",
     "@types/pizzip": "^3.0.2",
     "@types/react": "17.0.19",
     "@types/react-dom": "17.0.9",
@@ -101,8 +92,9 @@
     "css-loader": "5.2.7",
     "csv-stringify": "^5.6.4",
     "deep-equal": "2.0.5",
-    "electron": "^15",
-    "electron-builder": "22.10.5",
+    "dotenv": "^14.2.0",
+    "electron": "^16",
+    "electron-builder": "22.10.4",
     "electron-notarize": "^1.1.1",
     "electron-react-devtools": "0.5.3",
     "eslint": "7.23.0",
@@ -113,15 +105,14 @@
     "fork-ts-checker-webpack-plugin": "^6.3.3",
     "glob": "^7.2.0",
     "html-webpack-plugin": "5.3.2",
-    "husky": "7.0.2",
     "jest": "27.0.6",
     "jest-date-mock": "1.0.8",
-    "lint-staged": "11.0.1",
     "node-loader": "^2.0.0",
-    "node-sass": "^5.0.0",
     "prettier": "2.2.1",
     "rmfr": "2.0.0",
+    "sass": "^1.49.0",
     "sass-loader": "11.0.1",
+    "semantic-release": "^19.0.2",
     "source-map-loader": "3.0.0",
     "style-loader": "3.2.1",
     "svg-url-loader": "7.1.1",
@@ -148,7 +139,7 @@
     "dateformat": "3.0.3",
     "docxtemplater": "3.21.2",
     "file-saver": "2.0.5",
-    "fswin": "^3.21.107",
+    "fswin": "3.21.107",
     "hidefile": "^3.0.0",
     "i18next": "^21.2.4",
     "js-md5": "0.7.3",

@@ -1,0 +1,31 @@
+#!/bin/bash
+# if "commit" or "tag" are called, force sign
+if [[ "$1" == "commit" && "$@" != *" -S"* ]]; then
+    shift 1
+    command /usr/bin/git commit -S "$@"
+elif [[ "$1" == "tag" && "$@" != *" -s"* ]]; then
+    # avoid tag listing options
+    if [[
+        "$@" != *"--column"* &&
+        "$@" != *"--contains"* &&
+        "$@" != *"--merged"* &&
+        "$@" != *"--no-merged"* &&
+        "$@" != *"--sort"* &&
+        "$@" != *"--points-at"* &&
+        "$@" != *"--format"* &&
+        "$@" != *"--color"* &&
+        "$@" != *"--ignore-case"* &&
+        "$@" != *"--i "*
+    ]]; then
+        shift 1
+        if [[ "$@" != *" -m"* ]]; then
+            command /usr/bin/git tag -s -m "Signed tag" "$@"
+        else
+            command /usr/bin/git tag -s "$@"
+        fi
+    else
+        command /usr/bin/git "$@"
+    fi
+else
+    command /usr/bin/git "$@"
+fi

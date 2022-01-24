@@ -1,7 +1,8 @@
 name: Manual branch test teardown
 on:
-  pull_request:
+  pull_request_target:
     types: [closed]
+    branches-ignore: [dev, main, beta]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -17,4 +17,6 @@ runs:
 
     - name: Installing
       shell: bash
-      run: yarn --frozen-lockfile --perfer-offline
+      run: |
+        yarn config set network-timeout 300000
+        yarn --frozen-lockfile --perfer-offline

@@ -29,7 +29,7 @@
   "build": {
     "generateUpdatesFilesForAllChannels": true,
     "appId": "com.fabrique.archifiltre",
-    "artifactName": "archifiltre-${version}.${ext}",
+    "artifactName": "archifiltre-${os}.${ext}",
     "productName": "Docs par Archifiltre",
     "afterSign": "scripts/notarize.js",
     "files": [
@@ -38,7 +38,7 @@
       "package.json"
     ],
     "directories": {
-      "output": "dist/${os}"
+      "output": "electron/dist/${os}"
     },
     "mac": {
       "category": "public.app-category.productivity",
@@ -50,7 +50,7 @@
     },
     "win": {
       "icon": "./electron/build/icon.png",
-      "artifactName": "archifiltre-${os}-standalone.${ext}"
+      "artifactName": "archifiltre-${os}-portable.${ext}"
     },
     "msi": {
       "artifactName": "archifiltre-${os}.${ext}"

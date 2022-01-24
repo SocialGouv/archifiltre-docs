@@ -1,0 +1,34 @@
+version: 2
+updates:
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+  - package-ecosystem: npm
+    target-branch: dev
+    labels:
+      - bot
+      - dependencies
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "01:00"
+      timezone: Europe/Paris
+    versioning-strategy: increase-if-necessary
+    allow:
+      - dependency-type: direct
+    ignore:
+      - dependency-name: "node-sass"
+        versions:
+          - ">=6"
+      - dependency-name: "sass-loader"
+        versions:
+          - ">=10"
+      - dependency-name: "css-loader"
+        versions:
+          - ">=6"
+      - dependency-name: "@types/node"
+        versions:
+          - ">=17"

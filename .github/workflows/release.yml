@@ -1,0 +1,153 @@
+name: CD
+on:
+  workflow_run:
+    workflows:
+      - CI
+    branches: [main, beta]
+    types:
+      - completed
+  schedule:
+    - cron: 0 1 * * * # every night at 1am on dev
+  workflow_dispatch:
+
+env:
+  GIT_AUTHOR_EMAIL: socialgroovybot@fabrique.social.gouv.fr
+  GIT_AUTHOR_NAME: SocialGroovyBot
+  GIT_COMMITTER_EMAIL: socialgroovybot@fabrique.social.gouv.fr
+  GIT_COMMITTER_NAME: SocialGroovyBot
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  compile:
+    name: Compile
+    runs-on: ubuntu-latest
+    if: "${{ github.event.workflow_run.conclusion == 'success' }}
+      || ${{ github.event_name == 'schedule'}}
+      || (${{ github.event_name == 'workflow_dispatch' }} && contains('refs/heads/main,refs/heads/beta,refs/heads/dev', github.ref))"
+    outputs:
+      current-version: ${{ steps.compile.outputs.current-version }}
+      next-version: ${{ steps.compile.outputs.next-version }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.SOCIALGROOVYBOT_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SOCIALGROOVYBOT_GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_push_gpgsign: false
+          git_tag_gpgsign: true
+      - name: Set .env to production
+        run: cp .env.prod .env
+      - id: compile
+        name: Compile
+        run: |
+          export PATH="$(pwd)/.github/bin/:$PATH"
+          echo ::set-output name=current-version::$(node -e "console.log(require('./package.json').version)")
+          yarn semantic-release
+          echo ::set-output name=next-version::$(node -e "console.log(require('./package.json').version)")
+          yarn compile
+        env:
+          ARCHIFILTRE_RELEASE_MODE: version
+      - name: Archive dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: compile-dist
+          path: dist/
+
+  build:
+    if: ${{ success() }}
+    needs: compile
+    strategy:
+      matrix:
+        target:
+          - linux
+          - mac
+          - win
+        include:
+          - target: linux
+            os: ubuntu-latest
+          - target: mac
+            os: macos-latest
+          - target: win
+            os: windows-latest
+
+    name: Build binary for ${{ matrix.target }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    env:
+      WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+      WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+      CSC_LINK: ${{ secrets.CSC_LINK }}
+      CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+      APPLE_ID: ${{ secrets.APPLE_ID }}
+      APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+      - name: Replace version in package.json
+        shell: bash
+        run: |
+          yarn global add replace
+          $(yarn global bin)/replace '"version": "${{ needs.compile.outputs.current-version }}"' '"version": "${{ needs.compile.outputs.next-version }}"' package.json
+      - name: Download dist
+        uses: actions/download-artifact@v2
+        with:
+          name: compile-dist
+          path: dist/
+      - name: Build bin
+        run: yarn dist:${{ matrix.target }}
+        # Test mode
+        # run: |
+        #   mkdir -p "electron/dist/${{ matrix.target }}/"
+        #   echo "${{ matrix.target }}.${{ matrix.os }}" > "electron/dist/${{ matrix.target }}/archifiltre.${{ matrix.ext }}"
+      - name: Archive bin
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.target }}-bin
+          path: |
+            electron/dist/*/archifiltre*.*
+            electron/dist/*/latest*.yml
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Download all dist form build jobs
+        uses: actions/download-artifact@v2
+        with:
+          path: bin
+      - name: Generate hashes
+        run: >-
+          find . -regextype posix-extended
+          -regex ".*/bin/.*/archifiltre.*\.(exe|AppImage|dmg|msi|zip)$"
+          -type f
+          -exec bash -c "openssl dgst -sha512 {} > {}.sha512" \;
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.SOCIALGROOVYBOT_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SOCIALGROOVYBOT_GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_push_gpgsign: false
+          git_tag_gpgsign: true
+      - name: Semantic Release
+        run: |
+          export PATH="$(pwd)/.github/bin/:$PATH"
+          yarn semantic-release

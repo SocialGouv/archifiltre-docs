@@ -29,7 +29,7 @@ jobs:
           git fetch --tags -p
           set -e
           TAG_NOT_FOUND=0
-          git tag -d 'v${{ steps.seek.outputs.tag-version }}' || TAG_NOT_FOUND=1
+          git tag -d '${{ steps.seek.outputs.tag-version }}' || TAG_NOT_FOUND=1
           echo ::set-output name=tag-not-found::$TAG_NOT_FOUND
       - name: Destroy remote
         if: ${{ steps.destroy-local.outputs.tag-not-found == 0 }}

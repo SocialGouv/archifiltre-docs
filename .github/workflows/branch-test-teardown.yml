@@ -40,7 +40,7 @@ jobs:
             gh pr comment $PR_NUMBER --body "$TAG_VERSION successfully destroyed! ($RUN_URL)" --repo $REPO
           ) || gh pr comment $PR_NUMBER --body "$TAG_VERSION deletion failed ($RUN_URL)" --repo $REPO
         env:
-          REPO: ${{ github.event.repository.name }}
+          REPO: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.number }}
           TAG_VERSION: ${{ steps.seek.outputs.tag-version }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}

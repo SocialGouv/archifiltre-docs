@@ -123,5 +123,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           files: bin/*/archifiltre-*.*
-          tag: ${{ needs.compile.outputs.next-version }}
+          tag: v${{ needs.compile.outputs.next-version }}
           rm: true

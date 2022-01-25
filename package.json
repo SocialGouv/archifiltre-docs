@@ -29,7 +29,7 @@
   "build": {
     "generateUpdatesFilesForAllChannels": true,
     "appId": "com.fabrique.archifiltre",
-    "artifactName": "archifiltre-${version}.${ext}",
+    "artifactName": "archifiltre-${os}.${ext}",
     "productName": "Docs par Archifiltre",
     "afterSign": "scripts/notarize.js",
     "files": [

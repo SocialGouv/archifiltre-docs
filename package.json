@@ -16,7 +16,9 @@
     "test-coverage": "jest \"src/.*\\.test\\.[jt]s\" --coverage",
     "e2e": "jest \"tests/e2e/.*\\\\.test\\\\.[jt]s\"",
     "compile": "webpack --mode production --config webpack.electron-main.js && webpack --mode production",
-    "dist:win": "electron-builder --x64 --win portable msi nsis",
+    "dist:win": "electron-builder --x64 --ia32 --win portable nsis",
+    "dist:win-msi": "electron-builder --x64 --win msi",
+    "dist:win32-msi": "electron-builder --ia32 --win msi",
     "dist:mac": "electron-builder --mac dmg zip",
     "dist:mac-local": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dmg",
     "dist:linux": "electron-builder --linux AppImage",
@@ -29,9 +31,10 @@
   "build": {
     "generateUpdatesFilesForAllChannels": true,
     "appId": "com.fabrique.archifiltre",
-    "artifactName": "archifiltre-${os}.${ext}",
+    "artifactName": "archifiltre-${os}-${arch}.${ext}",
     "productName": "Docs par Archifiltre",
     "afterSign": "scripts/notarize.js",
+    "publish": null,
     "files": [
       "dist",
       "electron/build/icon.*",
@@ -50,10 +53,14 @@
     },
     "win": {
       "icon": "./electron/build/icon.png",
+<<<<<<< HEAD
       "artifactName": "archifiltre-${os}-portable.${ext}"
+=======
+      "artifactName": "archifiltre-${os}-${arch}-portable.${ext}"
+>>>>>>> 28d41beb15e801da88c01aadb3c00d4f6716f618
     },
     "msi": {
-      "artifactName": "archifiltre-${os}.${ext}"
+      "artifactName": "archifiltre-${os}-${arch}.${ext}"
     },
     "nsis": {
       "artifactName": "archifiltre-${os}-setup.${ext}"
@@ -94,7 +101,7 @@
     "deep-equal": "2.0.5",
     "dotenv": "^14.2.0",
     "electron": "^16",
-    "electron-builder": "22.10.4",
+    "electron-builder": "^22.14.5",
     "electron-notarize": "^1.1.1",
     "electron-react-devtools": "0.5.3",
     "eslint": "7.23.0",

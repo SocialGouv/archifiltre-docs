@@ -11,6 +11,7 @@ jobs:
   teardown:
     name: Seek & Destroy
     runs-on: ubuntu-latest
+    # TODO: if pr contains label "has-test-bin"
 
     steps:
       - uses: actions/checkout@v2

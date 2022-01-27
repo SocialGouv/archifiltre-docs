@@ -1,5 +1,5 @@
 name: Setup Node
-description: Setup Node from .nvmrc and yarn install
+description: Setup Node from .nvmrc
 
 runs:
   using: composite
@@ -14,9 +14,3 @@ runs:
       with:
         node-version: ${{ steps.nvm.outputs.NVMRC }}
         cache: yarn
-
-    - name: Installing
-      shell: bash
-      run: |
-        yarn config set network-timeout 300000
-        yarn --frozen-lockfile --perfer-offline

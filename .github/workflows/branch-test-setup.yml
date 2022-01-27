@@ -1,5 +1,6 @@
 name: Manual branch test setup
 on:
+  # TODO: if pr comment or contains label "has-test-bin"
   workflow_dispatch:
     inputs:
       bin_type:
@@ -27,6 +28,14 @@ jobs:
           fetch-depth: 0
       - name: Setup Node
         uses: ./.github/actions/setup-node
+      - name: Yarn install
+        run: |
+          yarn config set network-timeout 300000
+          yarn --frozen-lockfile --perfer-offline
+          yarn electron-builder install-app-deps
+        env:
+          ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
+          ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
       - name: Set .env to production
         run: cp .env.prod .env
       - id: compile
@@ -60,6 +69,10 @@ jobs:
 
     name: Build binary for ${{ matrix.target }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    env:
+      ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
+      ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
+      # no signing env because we don't care for test bin
 
     steps:
       - uses: actions/checkout@v2
@@ -67,6 +80,10 @@ jobs:
           fetch-depth: 0
       - name: Setup Node
         uses: ./.github/actions/setup-node
+      - name: Yarn install
+        run: |
+          yarn config set network-timeout 300000
+          yarn --frozen-lockfile --perfer-offline
       - name: Replace version in package.json
         shell: bash
         run: |

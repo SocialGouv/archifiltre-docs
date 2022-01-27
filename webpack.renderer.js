@@ -136,7 +136,7 @@ module.exports = (env, argv = {}) => ({
 
   output: {
     filename: "[name].js",
-    path: path.resolve(__dirname, "electron/dist"),
+    path: path.resolve(__dirname, "dist"),
     pathinfo: false,
     publicPath: isDev(argv.mode) ? "/" : "./",
   },

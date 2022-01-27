@@ -53,11 +53,7 @@
     },
     "win": {
       "icon": "./electron/build/icon.png",
-<<<<<<< HEAD
-      "artifactName": "archifiltre-${os}-portable.${ext}"
-=======
       "artifactName": "archifiltre-${os}-${arch}-portable.${ext}"
->>>>>>> 28d41beb15e801da88c01aadb3c00d4f6716f618
     },
     "msi": {
       "artifactName": "archifiltre-${os}-${arch}.${ext}"

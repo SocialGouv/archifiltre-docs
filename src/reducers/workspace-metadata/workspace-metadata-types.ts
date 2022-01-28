@@ -32,7 +32,7 @@ interface SetLockedElementId {
 }
 
 export type WorkspaceMetadataAction =
-  | SetSessionNameAction
-  | SetOriginalPathAction
   | SetHoveredElementId
-  | SetLockedElementId;
+  | SetLockedElementId
+  | SetOriginalPathAction
+  | SetSessionNameAction;

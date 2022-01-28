@@ -1,8 +1,10 @@
 import fc from "fast-check";
+
 import { epochToFormattedUtcDateString } from "./date-util";
 
 describe("csv", () => {
   describe("epochToFormattedUtcDateString", () => {
+    // eslint-disable-next-line jest/expect-expect -- fc assert
     it("should correctly format dates", () => {
       fc.assert(
         fc.property(

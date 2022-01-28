@@ -1,14 +1,19 @@
-import { Column, TableAccessor } from "components/common/table/table-types";
-import { arrayToCsv } from "util/csv/csv-util";
-import { promises as fs } from "fs";
-import {
-  NotificationDuration,
-  notifySuccess,
-} from "util/notification/notifications-util";
+import fs from "fs/promises";
+
+import type {
+  Column,
+  FunctionAccessor,
+  TableAccessor,
+} from "../../components/common/table/table-types";
+import { arrayToCsv } from "../csv/csv-util";
 import {
   openExternalElement,
   promptUserForSave,
-} from "util/file-system/file-system-util";
+} from "../file-system/file-system-util";
+import {
+  NotificationDuration,
+  notifySuccess,
+} from "../notification/notifications-util";
 
 export type Order = "asc" | "desc";
 
@@ -31,7 +36,7 @@ const descendingComparator = <T>(firstElement: T, secondElement: T) => {
 
 export const getComparator = <T>(
   order: Order,
-  orderBy: (element: T) => any
+  orderBy: (element: T) => unknown
 ): ((firstElement: T, secondElement: T) => number) => {
   return order === "desc"
     ? (firstElement, secondElement) =>
@@ -43,7 +48,7 @@ export const getComparator = <T>(
 export const stableSort = <T>(
   array: T[],
   comparator: (firstElement: T, secondElement: T) => number
-) => {
+): T[] => {
   const stabilizedThis = array.map(
     (element, index) => [element, index] as [T, number]
   );
@@ -57,11 +62,14 @@ export const stableSort = <T>(
   return stabilizedThis.map((element) => element[0]);
 };
 
-export const accessorToFunction = <T>(tableAccessor: TableAccessor<T>) =>
+export const accessorToFunction = <T>(
+  tableAccessor: TableAccessor<T>
+): FunctionAccessor<T> | ((row: T) => T[keyof T]) =>
   typeof tableAccessor === "function"
     ? tableAccessor
     : (row: T) => row[tableAccessor];
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const applyAccessorToTableValue = <T>(
   data: T,
   accessor: TableAccessor<T>,
@@ -78,7 +86,8 @@ const getTableRow = <
   columns: Column<T>[]
 ): string[] =>
   columns.map(({ accessor, textValueAccessor }) =>
-    applyAccessorToTableValue(data, textValueAccessor || accessor).toString()
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    applyAccessorToTableValue<T>(data, textValueAccessor ?? accessor).toString()
   );
 
 const getTableContent = <
@@ -98,11 +107,11 @@ export const tableContentToArray = <
   ...getTableContent(data, columns),
 ];
 
-type ExportTableToCsvOptions = {
+interface ExportTableToCsvOptions {
   defaultFilePath: string;
   notificationTitle: string;
   notificationMessage: string;
-};
+}
 
 export const exportTableToCsvFile = async <
   T extends { [key in keyof T]: { toString: () => string } }
@@ -114,7 +123,7 @@ export const exportTableToCsvFile = async <
     notificationMessage,
     notificationTitle,
   }: ExportTableToCsvOptions
-) => {
+): Promise<void> => {
   const filePath = await promptUserForSave(defaultFilePath);
 
   if (!filePath) {
@@ -131,16 +140,16 @@ export const exportTableToCsvFile = async <
     notificationTitle,
     NotificationDuration.NORMAL,
     () => {
-      openExternalElement(filePath);
+      void openExternalElement(filePath);
     }
   );
 };
 
-export const maxPage = (pageSize: number, dataSize: number) =>
+export const maxPage = (pageSize: number, dataSize: number): number =>
   Math.max(0, Math.floor((dataSize - 1) / pageSize));
 
 export const limitPageIndex = (
   pageSize: number,
   dataSize: number,
   currentPage: number
-) => Math.min(currentPage, maxPage(pageSize, dataSize));
+): number => Math.min(currentPage, maxPage(pageSize, dataSize));

@@ -1,15 +1,18 @@
-import grey from "@material-ui/core/colors/grey";
-import orange from "@material-ui/core/colors/orange";
-import React, { FC, useCallback, useMemo, useState } from "react";
+import type { SeriesRef } from "@devexpress/dx-react-chart";
 import { EventTracker, Palette } from "@devexpress/dx-react-chart";
+import type { TooltipProps } from "@devexpress/dx-react-chart-material-ui";
 import {
   Chart,
   PieSeries,
   Tooltip,
 } from "@devexpress/dx-react-chart-material-ui";
+import grey from "@material-ui/core/colors/grey";
+import orange from "@material-ui/core/colors/orange";
+import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import styled from "styled-components";
+
+import { octet2HumanReadableFormat } from "../../../../../util/file-system/file-sys-util";
 
 const ColoredText = styled.span<{ color: string }>`
   display: block;
@@ -18,46 +21,55 @@ const ColoredText = styled.span<{ color: string }>`
 
 const scheme = [orange["500"], grey["500"]];
 
-type DuplicatesChartProps = {
+export interface DuplicatesChartProps {
   duplicatesNumber: number;
   nonDuplicatesNumber: number;
   duplicatesSize: number;
   nonDuplicatesSize: number;
-};
+}
 
-const DuplicatesChart: FC<DuplicatesChartProps> = ({
+export const DuplicatesChart: React.FC<DuplicatesChartProps> = ({
   duplicatesNumber,
   nonDuplicatesNumber,
   duplicatesSize,
   nonDuplicatesSize,
 }) => {
   const { t } = useTranslation();
-  const [targetItem, setTargetItem] = useState();
+  const [targetItem, setTargetItem] = useState<SeriesRef>();
 
   const chartData = useMemo(
     () => [
       {
         key: "duplicates",
         label: t("duplicates.duplicateElements"),
-        value: duplicatesNumber,
         size: duplicatesSize,
+        value: duplicatesNumber,
       },
       {
         key: "nonDuplicates",
         label: t("duplicates.nonDuplicateElements"),
-        value: nonDuplicatesNumber,
         size: nonDuplicatesSize,
+        value: nonDuplicatesNumber,
       },
     ],
-    [duplicatesNumber, duplicatesSize, nonDuplicatesNumber, nonDuplicatesSize]
+    [
+      duplicatesNumber,
+      duplicatesSize,
+      nonDuplicatesNumber,
+      nonDuplicatesSize,
+      t,
+    ]
   );
 
-  const onTargetItemChange = useCallback(
-    (newTargetItem) => setTargetItem(newTargetItem),
-    [setTargetItem]
-  );
+  const onTargetItemChange: NonNullable<TooltipProps["onTargetItemChange"]> =
+    useCallback(
+      (newTargetItem) => {
+        setTargetItem(newTargetItem);
+      },
+      [setTargetItem]
+    );
 
-  const getTooltipContent = useCallback(
+  const getTooltipContent: TooltipProps["contentComponent"] = useCallback(
     ({ targetItem: { point } }) => {
       const { label, value, size } = chartData[point];
       return (
@@ -72,7 +84,7 @@ const DuplicatesChart: FC<DuplicatesChartProps> = ({
         </div>
       );
     },
-    [chartData]
+    [chartData, t]
   );
 
   return (
@@ -88,5 +100,3 @@ const DuplicatesChart: FC<DuplicatesChartProps> = ({
     </Chart>
   );
 };
-
-export default DuplicatesChart;

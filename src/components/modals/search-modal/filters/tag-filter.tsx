@@ -1,26 +1,32 @@
-import React, { FC, useEffect, useState } from "react";
+import type { TFunction } from "i18next";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
+
+import type {
   ElementWithToDelete,
   FilesAndFolders,
-} from "reducers/files-and-folders/files-and-folders-types";
-import { TagMap } from "reducers/tags/tags-types";
-import Filter from "./filter";
-import { FilterMethod } from "typings/filter-types";
+} from "../../../../reducers/files-and-folders/files-and-folders-types";
+import type { TagMap } from "../../../../reducers/tags/tags-types";
+import type { FilterMethod } from "../../../../typings/filter-types";
+import { Filter } from "./filter";
 
-type TagFilterProps = {
+export interface TagFilterProps {
   tags: TagMap;
   setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
   toDelete: string[];
-};
+}
 
-const computeAvailableOptions = (tags, toDelete, t) => {
+const computeAvailableOptions = (
+  tags: TagMap,
+  toDelete: string[],
+  t: TFunction
+): string[] => {
   const availableOptions = Object.values(tags).map(({ name }) => name);
   const availableOptionsWithToDelete = [
     ...availableOptions,
     t("common.toDelete"),
   ];
-  return toDelete.length > 0 ? availableOptionsWithToDelete : availableOptions;
+  return toDelete.length ? availableOptionsWithToDelete : availableOptions;
 };
 
 const makeTagFilter = (
@@ -28,7 +34,7 @@ const makeTagFilter = (
   selectedOption: string
 ): FilterMethod<FilesAndFolders> => {
   const option =
-    Object.values(tags).find(({ name }) => name === selectedOption) ||
+    Object.values(tags).find(({ name }) => name === selectedOption) ??
     Object.values(tags)[0];
 
   return (filesAndFolders: FilesAndFolders) =>
@@ -36,12 +42,16 @@ const makeTagFilter = (
 };
 
 const toDeleteFilter: FilterMethod<FilesAndFolders> = (
-  filesAndFolders: ElementWithToDelete
+  filesAndFolders
 ): boolean => {
-  return filesAndFolders.toDelete;
+  return (filesAndFolders as ElementWithToDelete).toDelete;
 };
 
-const TagFilter: FC<TagFilterProps> = ({ tags, toDelete, setFilters }) => {
+export const TagFilter: React.FC<TagFilterProps> = ({
+  tags,
+  toDelete,
+  setFilters,
+}) => {
   const { t } = useTranslation();
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
@@ -54,7 +64,7 @@ const TagFilter: FC<TagFilterProps> = ({ tags, toDelete, setFilters }) => {
       : [];
 
     setFilters([...selectedFilters, ...toDeleteFilters]);
-  }, [tags, setFilters, selectedOptions]);
+  }, [tags, setFilters, selectedOptions, t]);
 
   return (
     <Filter
@@ -65,5 +75,3 @@ const TagFilter: FC<TagFilterProps> = ({ tags, toDelete, setFilters }) => {
     />
   );
 };
-
-export default TagFilter;

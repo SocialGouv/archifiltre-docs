@@ -1,25 +1,24 @@
-import TabContentHeader from "components/main-space/workspace/tabs/tab-content-header";
-import TabsLayout, {
-  makeTabComponent,
-} from "components/main-space/workspace/tabs/tabs-layout";
-import React, { FC } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import ElementCharacteristicsContainer from "components/main-space/workspace/enrichment/element-characteristics/element-characteristics-container";
-import SessionInfoContainer from "./session-info/session-info-container";
-import TranslatedCategoryTitle from "../tabs/translated-category-title";
+
+import { ElementCharacteristicsContainer } from "../enrichment/element-characteristics/element-characteristics-container";
+import { TabContentHeader } from "../tabs/tab-content-header";
+import { makeTabComponent, TabsLayout } from "../tabs/tabs-layout";
+import { TranslatedCategoryTitle } from "../tabs/translated-category-title";
+import { SessionInfoContainer } from "./session-info/session-info-container";
 
 const SessionInfo = makeTabComponent({
-  title: <TranslatedCategoryTitle title="report.fileTree" />,
   content: <SessionInfoContainer />,
+  title: <TranslatedCategoryTitle title="report.fileTree" />,
 });
 
 const ElementCharacteristics = makeTabComponent({
-  title: <TranslatedCategoryTitle title="report.element" />,
   content: <ElementCharacteristicsContainer />,
   isLast: true,
+  title: <TranslatedCategoryTitle title="report.element" />,
 });
 
-const General: FC = () => {
+export const General: React.FC = () => {
   const { t } = useTranslation();
 
   return (
@@ -31,5 +30,3 @@ const General: FC = () => {
     </TabContentHeader>
   );
 };
-
-export default General;

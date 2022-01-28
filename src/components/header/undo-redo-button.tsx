@@ -1,20 +1,20 @@
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
-import React, { FC, useCallback, useEffect } from "react";
-
+import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { FaUndo, FaRedo } from "react-icons/fa";
-import { useStyles } from "hooks/use-styles";
+import { FaRedo, FaUndo } from "react-icons/fa";
 
-type UndoRedoButtonProps = {
+import { useStyles } from "../../hooks/use-styles";
+
+export interface UndoRedoButtonProps {
   isVisible: boolean;
   isUndo?: boolean;
   undo: () => void;
   redo: () => void;
   isActive: boolean;
-};
+}
 
-const UndoRedoButton: FC<UndoRedoButtonProps> = ({
+export const UndoRedoButton: React.FC<UndoRedoButtonProps> = ({
   isVisible,
   isUndo = true,
   undo,
@@ -39,8 +39,9 @@ const UndoRedoButton: FC<UndoRedoButtonProps> = ({
 
   useEffect(() => {
     document.body.addEventListener("keydown", onKeyDownHandler, false);
-    return () =>
+    return () => {
       document.body.removeEventListener("keydown", onKeyDownHandler, false);
+    };
   });
 
   if (!isVisible) return null;
@@ -63,5 +64,3 @@ const UndoRedoButton: FC<UndoRedoButtonProps> = ({
     </Tooltip>
   );
 };
-
-export default UndoRedoButton;

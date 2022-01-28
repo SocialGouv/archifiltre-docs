@@ -1,22 +1,26 @@
 import _ from "lodash";
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
-import { getType } from "util/files-and-folders/file-and-folders-utils";
-import { BooleanOperator, joinFilters } from "util/array/array-util";
-import Filter from "./filter";
-import { FilterMethod } from "typings/filter-types";
-import { useDeferredMemo } from "hooks/use-deferred-memo";
 
-type TypeFilterProps = {
+import { useDeferredMemo } from "../../../../hooks/use-deferred-memo";
+import type { FilesAndFolders } from "../../../../reducers/files-and-folders/files-and-folders-types";
+import type { FilterMethod } from "../../../../typings/filter-types";
+import {
+  BooleanOperator,
+  joinFilters,
+} from "../../../../util/array/array-util";
+import { getType } from "../../../../util/files-and-folders/file-and-folders-utils";
+import { Filter } from "./filter";
+
+export interface TypeFilterProps {
   filesAndFolders: FilesAndFolders[];
   setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
-};
+}
 
-type ComputeOptionsOptions = {
+interface ComputeOptionsOptions {
   folderLabel: string;
   unknownLabel: string;
-};
+}
 
 const computeOptions = (
   filesAndFolders: FilesAndFolders[],
@@ -27,7 +31,10 @@ const computeOptions = (
     .uniq()
     .value();
 
-const TypeFilter: FC<TypeFilterProps> = ({ filesAndFolders, setFilters }) => {
+export const TypeFilter: React.FC<TypeFilterProps> = ({
+  filesAndFolders,
+  setFilters,
+}) => {
   const { t } = useTranslation();
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
@@ -42,7 +49,7 @@ const TypeFilter: FC<TypeFilterProps> = ({ filesAndFolders, setFilters }) => {
 
   useEffect(() => {
     const selectedFilters = selectedOptions.map(
-      (selectedOption) => (fileOrFolder) =>
+      (selectedOption) => (fileOrFolder: FilesAndFolders) =>
         getType(fileOrFolder) === selectedOption
     );
     const joinedFilters = joinFilters(selectedFilters, BooleanOperator.OR);
@@ -52,11 +59,9 @@ const TypeFilter: FC<TypeFilterProps> = ({ filesAndFolders, setFilters }) => {
   return (
     <Filter
       name={t("search.type")}
-      availableOptions={availableOptions || []}
+      availableOptions={availableOptions ?? []}
       selectedOptions={selectedOptions}
       setSelectedOptions={setSelectedOptions}
     />
   );
 };
-
-export default TypeFilter;

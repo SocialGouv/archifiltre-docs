@@ -1,21 +1,22 @@
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
 import Box from "@material-ui/core/Box";
-import React, { FC, useCallback } from "react";
+import IconButton from "@material-ui/core/IconButton";
+import withTheme from "@material-ui/core/styles/withTheme";
+import Tooltip from "@material-ui/core/Tooltip";
+import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaFolderOpen } from "react-icons/fa";
-import { promptUserForSave } from "util/file-system/file-system-util";
 import styled from "styled-components";
-import withTheme from "@material-ui/core/styles/withTheme";
-import { ThemedProps } from "theme/default-theme";
 
-const FilePath = withTheme(styled.span<{ hasError: boolean } & ThemedProps>`
+import type { ThemedProps } from "../../../theme/default-theme";
+import { promptUserForSave } from "../../../util/file-system/file-system-util";
+
+const FilePath = withTheme(styled.span`
   white-space: nowrap;
   overflow: hidden;
   width: 300px;
   direction: rtl;
   text-overflow: ellipsis;
-  color: ${({ hasError, theme }) =>
+  color: ${({ hasError, theme }: ThemedProps & { hasError: boolean }) =>
     hasError ? theme.palette.error.main : "inherit"};
 `);
 
@@ -24,14 +25,14 @@ const HideableTooltip = styled(Tooltip)<{ isvisible: string }>`
     isvisible === "true" ? "visible" : "hidden"};
 `;
 
-type ExportInputProps = {
+export interface ExportInputProps {
   exportFilePath: string;
   isValid: boolean;
   setExportsPathsValue: (value: string) => void;
   isFilePickerDisabled?: boolean;
-};
+}
 
-const ExportInput: FC<ExportInputProps> = ({
+export const ExportInput: React.FC<ExportInputProps> = ({
   exportFilePath,
   isValid,
   setExportsPathsValue,
@@ -43,7 +44,7 @@ const ExportInput: FC<ExportInputProps> = ({
     if (filePath) {
       setExportsPathsValue(filePath);
     }
-  }, [setExportsPathsValue]);
+  }, [setExportsPathsValue, exportFilePath]);
 
   const browseTitle = t("common.browse");
 
@@ -70,5 +71,3 @@ const ExportInput: FC<ExportInputProps> = ({
     </Box>
   );
 };
-
-export default ExportInput;

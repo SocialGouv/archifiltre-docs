@@ -1,10 +1,16 @@
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import translations from "translations/translations";
-import { notifyInfo } from "util/notification/notifications-util";
-import { DispatchExts } from "../archifiltre-types";
+
+import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/file-system-loading-process-utils";
+import { translations } from "../../translations/translations";
+import { notifyInfo } from "../../util/notification/notifications-util";
+import type { DispatchExts } from "../archifiltre-types";
+import { commitAction } from "../enhancers/undoable/undoable-actions";
 import { initFilesAndFoldersMetatada } from "../files-and-folders-metadata/files-and-folders-metadata-actions";
-import { StoreState } from "../store";
+import { createFilesAndFoldersMetadata } from "../files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { setFilesAndFoldersHashes } from "../hashes/hashes-actions";
+import { updateFilesAndFoldersHashes } from "../hashes/hashes-thunks";
+import type { StoreState } from "../store";
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
   addChild,
@@ -14,8 +20,8 @@ import {
   setFilesAndFoldersAliases,
 } from "./files-and-folders-actions";
 import {
-  initialState,
   initialState as filesAndFoldersInitialState,
+  initialState,
 } from "./files-and-folders-reducer";
 import { ROOT_FF_ID } from "./files-and-folders-selectors";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
@@ -26,11 +32,6 @@ import {
   updateCommentThunk,
 } from "./files-and-folders-thunks";
 import { ADD_CHILD } from "./files-and-folders-types";
-import { commitAction } from "../enhancers/undoable/undoable-actions";
-import { setFilesAndFoldersHashes } from "../hashes/hashes-actions";
-import { updateFilesAndFoldersHashes } from "../hashes/hashes-thunks";
-import { createFilesAndFoldersMetadataDataStructure } from "files-and-folders-loader/file-system-loading-process-utils";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 
 jest.mock("util/notification/notifications-util", () => ({
   notifyInfo: jest.fn(),
@@ -54,15 +55,15 @@ const unupdatedId = "no-update";
 const newHash1 = "new-hash-1";
 const newHash2 = "new-hash-2";
 
-const filesAndFolders = {
+const filesAndFoldersSample = {
+  [unupdatedId]: createFilesAndFolders({
+    id: unupdatedId,
+  }),
   [updateId1]: createFilesAndFolders({
     id: updateId1,
   }),
   [updateId2]: createFilesAndFolders({
     id: updateId2,
-  }),
-  [unupdatedId]: createFilesAndFolders({
-    id: unupdatedId,
   }),
 };
 
@@ -70,7 +71,7 @@ const testState = {
   ...emptyStoreState,
   filesAndFolders: wrapStoreWithUndoable({
     ...filesAndFoldersInitialState,
-    filesAndFolders,
+    filesAndFolders: filesAndFoldersSample,
   }),
 };
 
@@ -85,16 +86,16 @@ describe("file-and-folders-thunks.test.ts", () => {
         children: [rootFolderId],
         id: "",
       }),
-      [rootFolderId]: createFilesAndFolders({
-        children: [file1Id, folderId],
-        id: rootFolderId,
-      }),
       [file1Id]: createFilesAndFolders({ id: file1Id, name: "test" }),
+      [file2Id]: createFilesAndFolders({ id: file2Id }),
       [folderId]: createFilesAndFolders({
         children: [file2Id],
         id: folderId,
       }),
-      [file2Id]: createFilesAndFolders({ id: file2Id }),
+      [rootFolderId]: createFilesAndFolders({
+        children: [file1Id, folderId],
+        id: rootFolderId,
+      }),
     };
 
     const filesAndFolders2 = {
@@ -128,7 +129,8 @@ describe("file-and-folders-thunks.test.ts", () => {
       }),
     };
 
-    const createFilesAndFoldersMetadataDataStructureMock = createFilesAndFoldersMetadataDataStructure as jest.Mock;
+    const createFilesAndFoldersMetadataDataStructureMock =
+      createFilesAndFoldersMetadataDataStructure as jest.Mock;
     const newMetadata = {
       [file1Id]: createFilesAndFoldersMetadata({}),
     };
@@ -151,7 +153,7 @@ describe("file-and-folders-thunks.test.ts", () => {
         }
       });
 
-      store.dispatch(moveElement(file1Id, folderId));
+      void store.dispatch(moveElement(file1Id, folderId));
 
       expect(
         createFilesAndFoldersMetadataDataStructureMock
@@ -167,7 +169,7 @@ describe("file-and-folders-thunks.test.ts", () => {
     it("should block an element move from a parent to its child", () => {
       const store = mockStore(() => state1);
 
-      store.dispatch(moveElement(rootFolderId, folderId));
+      void store.dispatch(moveElement(rootFolderId, folderId));
 
       expect(
         createFilesAndFoldersMetadataDataStructureMock
@@ -181,7 +183,7 @@ describe("file-and-folders-thunks.test.ts", () => {
     it("should block an element move to a file element", () => {
       const store = mockStore(() => state2);
 
-      store.dispatch(moveElement(file1Id, file2Id));
+      void store.dispatch(moveElement(file1Id, file2Id));
 
       expect(
         createFilesAndFoldersMetadataDataStructureMock
@@ -195,7 +197,7 @@ describe("file-and-folders-thunks.test.ts", () => {
     it("should block an element move if name conflict in target folder", () => {
       const store = mockStore(() => state1);
 
-      store.dispatch(moveElement(file2Id, rootFolderId));
+      void store.dispatch(moveElement(file2Id, rootFolderId));
 
       expect(
         createFilesAndFoldersMetadataDataStructureMock
@@ -216,7 +218,7 @@ describe("file-and-folders-thunks.test.ts", () => {
 
       const store = mockStore(testState);
 
-      store.dispatch(updateFilesAndFoldersHashes(hashes));
+      void store.dispatch(updateFilesAndFoldersHashes(hashes));
 
       const actions = store.getActions();
 
@@ -229,7 +231,7 @@ describe("file-and-folders-thunks.test.ts", () => {
       const store = mockStore(testState);
       const ffId = "ff-id";
       const alias = "new-alias";
-      store.dispatch(updateAliasThunk(ffId, alias));
+      void store.dispatch(updateAliasThunk(ffId, alias));
 
       expect(store.getActions()).toEqual([
         setFilesAndFoldersAliases({ [ffId]: alias }),
@@ -243,7 +245,7 @@ describe("file-and-folders-thunks.test.ts", () => {
       const store = mockStore(testState);
       const ffId = "ff-id";
       const comment = "new-comment";
-      store.dispatch(updateCommentThunk(ffId, comment));
+      void store.dispatch(updateCommentThunk(ffId, comment));
 
       expect(store.getActions()).toEqual([
         addCommentsOnFilesAndFolders({ [ffId]: comment }),
@@ -255,10 +257,12 @@ describe("file-and-folders-thunks.test.ts", () => {
     it("should dispatch the right actions", () => {
       const store = mockStore(testState);
       const overrideDate = 20;
-      store.dispatch(overrideLastModifiedDateThunk(updateId1, overrideDate));
+      void store.dispatch(
+        overrideLastModifiedDateThunk(updateId1, overrideDate)
+      );
 
       const newMetadata = createFilesAndFoldersMetadataDataStructure(
-        filesAndFolders,
+        filesAndFoldersSample,
         {},
         {}
       );

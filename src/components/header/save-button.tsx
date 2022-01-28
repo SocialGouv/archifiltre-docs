@@ -1,26 +1,20 @@
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
-import React, { FC, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSave } from "react-icons/fa";
-import { useStyles } from "hooks/use-styles";
-import version from "../../version";
 
-type ExportToJsonOptions = {
-  sessionName: string;
-  originalPath: string;
-  version: string;
-};
+import type { ExportToJson } from "../../exporters/json/json-exporter";
+import { useStyles } from "../../hooks/use-styles";
+import { version } from "../../version";
 
-export type ExportToJson = (options: ExportToJsonOptions) => void;
-
-type SaveButtonProps = {
+export interface SaveButtonProps {
   originalPath: string;
   sessionName: string;
   exportToJson: ExportToJson;
-};
+}
 
-const SaveButton: FC<SaveButtonProps> = ({
+export const SaveButton: React.FC<SaveButtonProps> = ({
   originalPath,
   sessionName,
   exportToJson,
@@ -28,10 +22,9 @@ const SaveButton: FC<SaveButtonProps> = ({
   const { t } = useTranslation();
   const classes = useStyles();
 
-  const onClick = useCallback(
-    () => exportToJson({ originalPath, sessionName, version }),
-    [exportToJson, originalPath, sessionName]
-  );
+  const onClick = useCallback(() => {
+    exportToJson({ originalPath, sessionName, version });
+  }, [exportToJson, originalPath, sessionName]);
   const title = t("header.save");
   return (
     <Tooltip title={title}>
@@ -48,5 +41,3 @@ const SaveButton: FC<SaveButtonProps> = ({
     </Tooltip>
   );
 };
-
-export default SaveButton;

@@ -1,13 +1,12 @@
-import ExportCheckbox from "components/modals/export-modal/export-checkbox";
-import {
-  exportConfig,
-  ExportType,
-} from "components/modals/export-modal/export-config";
-import ExportInput from "components/modals/export-modal/export-input";
-import React, { FC } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { ExportTypesMap } from "./export-options";
+
+import { ExportCheckbox } from "./export-checkbox";
+import type { ExportType } from "./export-config";
+import { exportConfig } from "./export-config";
+import { ExportInput } from "./export-input";
+import type { ExportTypesMap } from "./export-options";
 
 const ExportContainer = styled.div`
   display: flex;
@@ -15,7 +14,7 @@ const ExportContainer = styled.div`
   padding-bottom: 10px;
 `;
 
-type ExportTypeOptionProps = {
+export interface ExportTypeOptionProps {
   exportType: ExportType;
   enabledExports: ExportTypesMap<boolean>;
   isPathValid: boolean;
@@ -23,9 +22,9 @@ type ExportTypeOptionProps = {
   setActiveExportValue: (exportType: ExportType, value: boolean) => void;
   setExportsPathsValue: (exportType: ExportType, value: string) => void;
   activeExports: ExportTypesMap<boolean>;
-};
+}
 
-const ExportTypeOption: FC<ExportTypeOptionProps> = ({
+export const ExportTypeOption: React.FC<ExportTypeOptionProps> = ({
   exportType,
   enabledExports,
   isPathValid,
@@ -40,25 +39,23 @@ const ExportTypeOption: FC<ExportTypeOptionProps> = ({
     <ExportContainer key={exportType}>
       <ExportCheckbox
         isActive={enabledExports[exportType] && isPathValid}
-        setActiveExportValue={(value) =>
-          setActiveExportValue(exportType, value)
-        }
+        setActiveExportValue={(value) => {
+          setActiveExportValue(exportType, value);
+        }}
         label={t(exportConfig[exportType].label)}
         disabledExplanation={t(
-          exportConfig[exportType].disabledExplanation || ""
+          exportConfig[exportType].disabledExplanation ?? ""
         )}
         checked={activeExports[exportType]}
       />
       <ExportInput
         exportFilePath={exportPaths[exportType]}
         isValid={isPathValid}
-        setExportsPathsValue={(value) =>
-          setExportsPathsValue(exportType, value)
-        }
+        setExportsPathsValue={(value) => {
+          setExportsPathsValue(exportType, value);
+        }}
         isFilePickerDisabled={exportConfig[exportType].isFilePickerDisabled}
       />
     </ExportContainer>
   );
 };
-
-export default ExportTypeOption;

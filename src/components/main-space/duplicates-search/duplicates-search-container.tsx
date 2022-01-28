@@ -1,20 +1,21 @@
-import React, { FC, useCallback, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getElementsToDeleteFromStore,
-  getFilesAndFoldersFromStore,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import { getFilesDuplicatesMap } from "util/duplicates/duplicates-util";
-import DuplicatesSearch from "./duplicates-search";
 import _ from "lodash";
-import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
-import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
+import React, { useCallback, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   markElementsToDelete,
   unmarkElementsToDelete,
-} from "reducers/files-and-folders/files-and-folders-actions";
+} from "../../../reducers/files-and-folders/files-and-folders-actions";
+import {
+  getElementsToDeleteFromStore,
+  getFilesAndFoldersFromStore,
+} from "../../../reducers/files-and-folders/files-and-folders-selectors";
+import type { FilesAndFolders } from "../../../reducers/files-and-folders/files-and-folders-types";
+import { getHashesFromStore } from "../../../reducers/hashes/hashes-selectors";
+import { getFilesDuplicatesMap } from "../../../util/duplicates/duplicates-util";
+import { DuplicatesSearch } from "./duplicates-search";
 
-const DuplicatesSearchContainer: FC = () => {
+export const DuplicatesSearchContainer: React.FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
   const hashesMap = useSelector(getHashesFromStore);
   const dispatch = useDispatch();
@@ -55,5 +56,3 @@ const DuplicatesSearchContainer: FC = () => {
     />
   );
 };
-
-export default DuplicatesSearchContainer;

@@ -1,11 +1,12 @@
+import cp from "child_process";
 import fs from "fs";
 import path from "path";
-import cp from "child_process";
-import { isUnixLike, isWindows } from "util/os/os-util";
+
+import { isUnixLike, isWindows } from "../os/os-util";
 import {
   generateUnixDeletionScript,
   generateWindowDeletionScript,
-} from "util/deletion-script/deletion-script-util";
+} from "./deletion-script-util";
 
 const onWindows = isWindows() ? it : it.skip;
 const onLinux = isUnixLike() ? it : it.skip;
@@ -29,9 +30,8 @@ describe("deletion-script-util", () => {
   afterEach(() => {
     fs.rmdirSync(workingDir, { recursive: true });
 
-    isWindows()
-      ? fs.unlinkSync(windowsScriptPath)
-      : fs.unlinkSync(unixScriptPath);
+    if (isWindows()) fs.unlinkSync(windowsScriptPath);
+    else fs.unlinkSync(unixScriptPath);
   });
   describe("generate-deletion-script-for-windows", () => {
     onWindows("the script should delete the specified elements", () => {
@@ -39,6 +39,7 @@ describe("deletion-script-util", () => {
       fs.writeFileSync(windowsScriptPath, script);
       cp.spawnSync("powershell.exe", [windowsScriptPath]);
       const remainingElements = fs.readdirSync(workingDir);
+      // eslint-disable-next-line jest/no-standalone-expect
       expect(remainingElements).toEqual(["non-deleted-element"]);
     });
   });
@@ -50,6 +51,7 @@ describe("deletion-script-util", () => {
       fs.chmodSync(unixScriptPath, "755");
       cp.execFileSync(unixScriptPath);
       const remainingElements = fs.readdirSync(workingDir);
+      // eslint-disable-next-line jest/no-standalone-expect
       expect(remainingElements).toEqual(["non-deleted-element"]);
     });
   });

@@ -1,14 +1,16 @@
-import { hookCounter, HookCounterOptions } from "./hook-utils";
 import { advanceBy, advanceTo } from "jest-date-mock";
 
-const setup = (options: HookCounterOptions<any>) => {
+import type { HookCounterOptions } from "./hook-utils";
+import { hookCounter } from "./hook-utils";
+
+const setup = (options: HookCounterOptions<unknown[]>) => {
   const throttledHook = jest.fn();
   const { hook, getCount } = hookCounter(throttledHook, options);
   advanceTo(new Date());
   return {
-    throttledHook,
-    hook,
     getCount,
+    hook,
+    throttledHook,
   };
 };
 
@@ -16,7 +18,9 @@ describe("hookUtils", () => {
   describe("hookCounter", () => {
     describe("with default interval", () => {
       it("should debounce correctly", () => {
-        const { hook, throttledHook } = setup({ internalHook: () => true });
+        const { hook, throttledHook } = setup({
+          internalHook: () => true,
+        });
         hook();
         advanceBy(200);
         hook();
@@ -31,8 +35,8 @@ describe("hookUtils", () => {
     describe("with custom interval", () => {
       it("should debounce correctly", () => {
         const { hook, throttledHook } = setup({
-          interval: 300,
           internalHook: () => true,
+          interval: 300,
         });
         hook();
         advanceBy(200);

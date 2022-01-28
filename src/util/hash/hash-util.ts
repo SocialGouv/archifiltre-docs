@@ -1,72 +1,84 @@
-import { ipcRenderer } from "../../common/ipc";
 import md5File from "md5-file";
+import { join } from "path";
+import type { Observable } from "rxjs";
+import { throttleTime } from "rxjs/operators";
+
+import { ipcRenderer } from "../../common/ipc";
+import type { WorkerError } from "../../files-and-folders-loader/files-and-folders-loader-types";
+import type { HashesMap } from "../../reducers/hashes/hashes-types";
+import {
+  ArchifiltreFileSystemErrorCode,
+  UnknownError,
+} from "../error/error-codes";
+import type { ArchifiltreError } from "../error/error-util";
+import { ArchifiltreErrorType } from "../error/error-util";
+import type { Queue } from "../queue/queue";
+import { computeQueue } from "../queue/queue";
+import type { HashComputingError } from "./hash-errors";
 import {
   ACCESS_DENIED,
   accessDenied,
   FILE_NOT_FOUND,
   fileNotFound,
-  HashComputingError,
   unhandledFileError,
 } from "./hash-errors";
-import path from "path";
-import { computeQueue } from "../queue/queue";
-import { throttleTime } from "rxjs/operators";
-import { HashesMap } from "../../reducers/hashes/hashes-types";
-import { ArchifiltreError, ArchifiltreErrorType } from "../error/error-util";
-import {
-  ArchifiltreFileSystemErrorCode,
-  UnknownError,
-} from "../error/error-codes";
 
-export type HashComputingResult = {
+export interface HashComputingResult {
   type: "result";
   path: string;
   hash: string;
-};
+}
 
 export const isResult = (
-  values: HashComputingResult | HashComputingError
+  values: HashComputingError | HashComputingResult
 ): values is HashComputingResult => values.type === "result";
 
 export const hashResult = (
   path: string,
   hash: string
 ): HashComputingResult => ({
-  type: "result",
-  path,
   hash,
+  path,
+  type: "result",
 });
 
 export const computeHash = async (
   filePath: string
-): Promise<HashComputingResult | HashComputingError> => {
+): Promise<HashComputingError | HashComputingResult> => {
   try {
     const hash = await md5File(filePath);
     return hashResult(filePath, hash);
-  } catch (err) {
-    if (err.code === "ENOENT") {
+  } catch (err: unknown) {
+    if ((err as WorkerError).code === "ENOENT") {
       return fileNotFound(filePath);
     }
-    if (err.code === "EACCES") {
+    if ((err as WorkerError).code === "EACCES") {
       return accessDenied(filePath);
     }
 
-    return unhandledFileError(filePath, err.message);
+    return unhandledFileError(filePath, (err as WorkerError).message);
   }
 };
 
-export const computeHashes = (files: string[], basePath: string) => {
-  const computeFn = computeQueue(
-    (filePaths: string[]) => { 
-      return ipcRenderer.invoke("hash.computeHash", filePaths);
-    },
-    isResult
-  );
+export const computeHashes = (
+  files: string[],
+  basePath: string
+): Observable<Queue<string, HashComputingResult, HashComputingError>> => {
+  const computeFn = computeQueue<
+    string,
+    HashComputingResult,
+    HashComputingError
+  >(async (filePaths: string[]) => {
+    return ipcRenderer.invoke("hash.computeHash", filePaths);
+  }, isResult);
 
-  const paths = files.map((file) => path.join(basePath, file));
+  const paths = files.map((file) => join(basePath, file));
 
   return computeFn(paths).pipe(
-    throttleTime(1000, undefined, { leading: true, trailing: true })
+    throttleTime(1000, void 0, {
+      leading: true,
+      trailing: true,
+    })
   );
 };
 
@@ -84,14 +96,14 @@ const hashErrorCodeToArchifiltreErrorCode = (hashErrorCode: string) => {
 export const hashErrorToArchifiltreError = (
   hashError: HashComputingError
 ): ArchifiltreError => ({
-  type: ArchifiltreErrorType.COMPUTING_HASHES,
-  filePath: hashError.path,
   code: hashErrorCodeToArchifiltreErrorCode(hashError.type),
+  filePath: hashError.path,
   reason: hashError.type,
+  type: ArchifiltreErrorType.COMPUTING_HASHES,
 });
 
 export const hashResultsToMap = (results: HashComputingResult[]): HashesMap =>
-  results.reduce((acc, result) => {
+  results.reduce<HashesMap>((acc, result) => {
     acc[result.path] = result.hash;
     return acc;
-  }, {} as HashesMap);
+  }, {});

@@ -1,41 +1,40 @@
-import Divider from "@material-ui/core/Divider";
-
-import IconButton from "@material-ui/core/IconButton";
 import Box from "@material-ui/core/Box";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 import Tooltip from "@material-ui/core/Tooltip";
-import EllipsisText from "components/main-space/workspace/enrichment/tags/ellipsis-text";
 import path from "path";
-import {
-  clearSession,
-  removeOneSessionElement,
-  getPreviousSessions,
-} from "persistence/previous-sessions";
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   FaBook,
   FaCog,
   FaEnvelope,
   FaFolderOpen,
-  FaPlus,
   FaGrinStars,
+  FaPlus,
   FaSyncAlt,
-  FaTrash,
   FaTimesCircle,
+  FaTrash,
 } from "react-icons/fa";
 
+import { ipcRenderer } from "../../common/ipc";
 import {
   CONTACT_LINK,
   DOCUMENTATION_LINK,
   FEEDBACK_LINK,
 } from "../../constants";
-import { openLink } from "util/electron/electron-util";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import { ipcRenderer } from "../../common/ipc";
+import {
+  clearSession,
+  getPreviousSessions,
+  removeOneSessionElement,
+} from "../../persistence/previous-sessions";
+import { openLink } from "../../util/electron/electron-util";
+import { EllipsisText } from "../main-space/workspace/enrichment/tags/ellipsis-text";
 
 const onFeedbackClick = () => {
   openLink(FEEDBACK_LINK);
@@ -49,26 +48,26 @@ const onDocumentationClick = () => {
   openLink(DOCUMENTATION_LINK);
 };
 
-type StartScreenSidebarProps = {
+export interface StartScreenSidebarProps {
   hasPreviousSession: boolean;
   reloadPreviousSession: () => void;
   openModal: () => void;
   loadPath: (path: string) => void;
   isLoading: boolean;
-};
+}
 
 const useStyles = makeStyles({
-  cross: (props) => ({
-    backgroundColor: "transparent",
+  cross: () => ({
     "&:hover": {
       backgroundColor: "transparent",
       color: "#777",
     },
+    backgroundColor: "transparent",
     color: "#999",
   }),
 });
 
-const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
+export const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
   hasPreviousSession,
   reloadPreviousSession,
   openModal,
@@ -79,14 +78,16 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
   const [previousSessions, setPreviousSessions] = useState<string[]>([]);
   const [hoveredPreviousSession, setHoveredSessions] = useState<number>(-1);
 
-  const toggleDisplayClearElement = (index) => setHoveredSessions(index);
+  const toggleDisplayClearElement = (index: number) => {
+    setHoveredSessions(index);
+  };
 
   const onNewDirectoryClick = useCallback(async () => {
-    const path = await ipcRenderer.invoke("dialog.showOpenDialog", {
+    const chosenPath = await ipcRenderer.invoke("dialog.showOpenDialog", {
       properties: ["openDirectory"],
     });
-    if (path.filePaths.length > 0) {
-      loadPath(path.filePaths[0]);
+    if (chosenPath.filePaths.length > 0) {
+      loadPath(chosenPath.filePaths[0]);
     }
   }, [loadPath]);
 
@@ -131,7 +132,7 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
           <ListItem
             button
             onClick={() => {
-              clearSession();
+              void clearSession();
               setPreviousSessions([]);
             }}
             disabled={isLoading}
@@ -152,10 +153,16 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
               <Tooltip title={previousDirectory} key={previousDirectory}>
                 <ListItem
                   button
-                  onClick={() => loadPath(previousDirectory)}
+                  onClick={() => {
+                    loadPath(previousDirectory);
+                  }}
                   disabled={isLoading}
-                  onMouseOver={() => toggleDisplayClearElement(index)}
-                  onMouseLeave={() => toggleDisplayClearElement(-1)}
+                  onMouseOver={() => {
+                    toggleDisplayClearElement(index);
+                  }}
+                  onMouseLeave={() => {
+                    toggleDisplayClearElement(-1);
+                  }}
                 >
                   <ListItemIcon>
                     <FaFolderOpen />
@@ -176,7 +183,7 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
                       disableFocusRipple
                       onClick={(event) => {
                         event.stopPropagation();
-                        removeOneSessionElement(previousDirectory);
+                        void removeOneSessionElement(previousDirectory);
                         deleteClickedElement(previousDirectory);
                       }}
                     >
@@ -221,5 +228,3 @@ const StartScreenSidebar: FC<StartScreenSidebarProps> = ({
     </Box>
   );
 };
-
-export default StartScreenSidebar;

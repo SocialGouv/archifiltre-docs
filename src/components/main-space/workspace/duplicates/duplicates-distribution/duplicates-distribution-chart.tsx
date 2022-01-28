@@ -1,46 +1,48 @@
-import React, { FC, useCallback, useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import { EventTracker, Palette } from "@devexpress/dx-react-chart";
 import {
   Chart,
   PieSeries,
   Tooltip,
 } from "@devexpress/dx-react-chart-material-ui";
-import { FileTypeMap } from "exporters/audit/audit-report-values-computer";
-import { colors } from "util/color/color-util";
+import React, { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
+
+import type { FileTypeMap } from "../../../../../exporters/audit/audit-report-values-computer";
+import { colors } from "../../../../../util/color/color-util";
+import { octet2HumanReadableFormat } from "../../../../../util/file-system/file-sys-util";
+import type { FileType } from "../../../../../util/file-types/file-types-util";
 
 const ColoredText = styled.span<{ color: string }>`
   display: block;
   color: ${({ color }) => color};
 `;
 
-type DuplicatesDistributionChartProps = {
+export interface DuplicatesDistributionChartProps {
   fileTypesCount: FileTypeMap<number>;
-  fileSizesCount: any;
-};
+  fileSizesCount: Record<FileType, number>;
+}
 
-const DuplicatesDistributionChart: FC<DuplicatesDistributionChartProps> = ({
-  fileTypesCount,
-  fileSizesCount,
-}) => {
+export const DuplicatesDistributionChart: React.FC<
+  DuplicatesDistributionChartProps
+> = ({ fileTypesCount, fileSizesCount }) => {
   const { t } = useTranslation();
 
   const chartData = useMemo(
     () =>
       Object.entries(fileTypesCount).map(([fileType, fileTypeValue]) => ({
-        key: fileType,
+        key: fileType as FileType,
         label: t(`common.fileTypes.${fileType}`),
+        size: fileSizesCount[fileType as FileType],
         value: fileTypeValue,
-        size: fileSizesCount[fileType],
       })),
     [fileTypesCount, fileSizesCount]
   );
 
-  const scheme = useMemo(() => chartData.map(({ key }) => colors[key]), [
-    chartData,
-  ]);
+  const scheme = useMemo(
+    () => chartData.map(({ key }) => colors[key]),
+    [chartData]
+  );
 
   const getTooltipContent = useCallback(
     ({ targetItem: { point } }) => {
@@ -69,5 +71,3 @@ const DuplicatesDistributionChart: FC<DuplicatesDistributionChartProps> = ({
     </Chart>
   );
 };
-
-export default DuplicatesDistributionChart;

@@ -1,21 +1,26 @@
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
-import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
+import { addTracker } from "../../logging/tracker";
+import { ActionTitle, ActionType } from "../../logging/tracker-types";
+import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import {
   getAliasesFromStore,
   getCommentsFromStore,
-  getFilesAndFoldersFromStore,
   getElementsToDeleteFromStore,
+  getFilesAndFoldersFromStore,
   getLastModifiedDateOverrides,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import { getTagsFromStore } from "reducers/tags/tags-selectors";
-import { getNameWithExtension, save } from "util/file-system/file-sys-util";
-import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
+} from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { getHashesFromStore } from "../../reducers/hashes/hashes-selectors";
+import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
+import {
+  getNameWithExtension,
+  save,
+} from "../../util/file-system/file-sys-util";
 
-interface JsonExporterThunkArgs {
+export type ExportToJson = typeof jsonExporterThunk;
+
+export interface JsonExporterThunkArgs {
   sessionName: string;
   originalPath: string;
-  version: number;
+  version: string;
 }
 
 /**
@@ -24,30 +29,32 @@ interface JsonExporterThunkArgs {
  * @param originalPath - The originalPath from real estate
  * @param version - The version from real estate
  */
-export const jsonExporterThunk = ({
-  sessionName,
-  originalPath,
-  version,
-}: JsonExporterThunkArgs): ArchifiltreThunkAction => (dispatch, getState) => {
-  addTracker({
-    title: ActionTitle.JSON_EXPORT,
-    type: ActionType.TRACK_EVENT,
-  });
-  const state = getState();
-  const fileName = getNameWithExtension(sessionName, "json");
-
-  const exportedData = {
-    aliases: getAliasesFromStore(state),
-    comments: getCommentsFromStore(state),
-    elementsToDelete: getElementsToDeleteFromStore(state),
-    filesAndFolders: getFilesAndFoldersFromStore(state),
-    hashes: getHashesFromStore(state),
-    originalPath,
-    overrideLastModified: getLastModifiedDateOverrides(state),
+export const jsonExporterThunk =
+  ({
     sessionName,
-    tags: getTagsFromStore(state),
+    originalPath,
     version,
-  };
+  }: JsonExporterThunkArgs): ArchifiltreThunkAction =>
+  (dispatch, getState) => {
+    addTracker({
+      title: ActionTitle.JSON_EXPORT,
+      type: ActionType.TRACK_EVENT,
+    });
+    const state = getState();
+    const fileName = getNameWithExtension(sessionName, "json");
 
-  save(fileName, JSON.stringify(exportedData));
-};
+    const exportedData = {
+      aliases: getAliasesFromStore(state),
+      comments: getCommentsFromStore(state),
+      elementsToDelete: getElementsToDeleteFromStore(state),
+      filesAndFolders: getFilesAndFoldersFromStore(state),
+      hashes: getHashesFromStore(state),
+      originalPath,
+      overrideLastModified: getLastModifiedDateOverrides(state),
+      sessionName,
+      tags: getTagsFromStore(state),
+      version,
+    };
+
+    save(fileName, JSON.stringify(exportedData));
+  };

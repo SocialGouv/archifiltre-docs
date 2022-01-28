@@ -1,4 +1,5 @@
-import { LoadingInfo, LoadingInfoTypes } from "./loading-info-types";
+import type { LoadingInfo } from "./loading-info-types";
+import { LoadingInfoTypes } from "./loading-info-types";
 
 interface CreateLoadingInfoParams {
   id: string;
@@ -25,7 +26,7 @@ export const createLoadingInfo = ({
   goal,
   id,
   label,
+  loadedLabel,
   progress,
   type,
-  loadedLabel,
 });

@@ -1,16 +1,17 @@
 import Badge from "@material-ui/core/Badge";
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaDownload } from "react-icons/fa";
-import { useModal } from "hooks/use-modal";
-import { useStyles } from "hooks/use-styles";
 import { useSelector } from "react-redux";
-import { getAreHashesReady } from "reducers/files-and-folders/files-and-folders-selectors";
-import ExportModal from "components/modals/export-modal/export-modal";
 
-const ExportButton: FC = () => {
+import { useModal } from "../../hooks/use-modal";
+import { useStyles } from "../../hooks/use-styles";
+import { getAreHashesReady } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { ExportModal } from "../modals/export-modal/export-modal";
+
+export const ExportButton: React.FC = () => {
   const { t } = useTranslation();
   const { isModalOpen, openModal, closeModal } = useModal();
   const classes = useStyles();
@@ -49,5 +50,3 @@ const ExportButton: FC = () => {
     </>
   );
 };
-
-export default ExportButton;

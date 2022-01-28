@@ -1,20 +1,22 @@
 import { boundNumber } from "../numbers/numbers-util";
 
 export enum ZoomDirection {
-  IN,
-  OUT,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  IN = 0,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  OUT = 1,
 }
 
-type ZoomState = {
+interface ZoomState {
   ratio: number;
   offset: number;
-};
+}
 
-type ZoomAction = {
+interface ZoomAction {
   mousePosition: number;
   zoomDirection: ZoomDirection;
   zoomSpeed: number;
-};
+}
 
 const getZoomPower = (zoomDirection: ZoomDirection) =>
   zoomDirection === ZoomDirection.IN ? 1 : -1;
@@ -23,14 +25,14 @@ export const computeZoomRatio = (
   zoomRatio: number,
   zoomSpeed: number,
   zoomDirection: ZoomDirection
-) => Math.max(zoomRatio * zoomSpeed ** getZoomPower(zoomDirection), 1);
+): number => Math.max(zoomRatio * zoomSpeed ** getZoomPower(zoomDirection), 1);
 
 export const computeOffset = (
   mousePosition: number,
   zoomRatio: number,
   newZoomRatio: number,
   zoomOffset: number
-) => {
+): number => {
   const offset =
     mousePosition - (zoomRatio / newZoomRatio) * (mousePosition - zoomOffset);
 
@@ -44,7 +46,7 @@ export const zoomReducer = (
   const nextRatio = computeZoomRatio(ratio, zoomSpeed, zoomDirection);
   const nextOffset = computeOffset(mousePosition, ratio, nextRatio, offset);
   return {
-    ratio: nextRatio,
     offset: nextOffset,
+    ratio: nextRatio,
   };
 };

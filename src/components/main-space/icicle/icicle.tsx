@@ -1,29 +1,22 @@
-import React, {
-  FC,
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { Dims } from "./icicle-rect";
-import IcicleRecursive from "./icicle-recursive";
-import IcicleEnrichments from "./icicle-enrichments";
-import { FillColor, IcicleMouseActionHandler } from "./icicle-types";
-import IciclesOverlay from "./icicles-overlay";
-import {
+import { noop } from "lodash";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+
+import type {
   AliasMap,
   CommentsMap,
-} from "reducers/files-and-folders/files-and-folders-types";
-import { TagMap } from "reducers/tags/tags-types";
-import IcicleHightlightElement from "./icicle-highlight-element";
-import { empty } from "util/function/function-util";
+} from "../../../reducers/files-and-folders/files-and-folders-types";
+import type { TagMap } from "../../../reducers/tags/tags-types";
+import { IcicleEnrichments } from "./icicle-enrichments";
+import { IcicleHightlightElement } from "./icicle-highlight-element";
+import type { Dims } from "./icicle-rect";
+import type { IcicleRecursiveProps } from "./icicle-recursive";
+import { IcicleRecursive } from "./icicle-recursive";
+import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
+import { IciclesOverlay } from "./icicles-overlay";
 
-export type DimsMap = {
-  [id: string]: Dims;
-};
+export type DimsMap = Record<string, Dims>;
 
-export type IcicleProps = {
+export interface IcicleProps {
   trueFHeight: () => number;
   x: number;
   y: number;
@@ -48,10 +41,13 @@ export type IcicleProps = {
   movedElementTime?: number;
   zoomOffset: number;
   zoomRatio: number;
-  onIcicleMouseWheel?: (event: any) => void;
-};
+  onIcicleMouseWheel?: (event: {
+    wheelDirection: number;
+    mousePosition: number;
+  }) => void;
+}
 
-const Icicle: FC<IcicleProps> = ({
+const _Icicle: React.FC<IcicleProps> = ({
   getWidthFromId,
   x,
   y,
@@ -76,7 +72,7 @@ const Icicle: FC<IcicleProps> = ({
   movedElementTime = 0,
   zoomOffset,
   zoomRatio,
-  onIcicleMouseWheel = empty,
+  onIcicleMouseWheel = noop,
 }) => {
   const [dims, setDims] = useState<DimsMap>({});
   const dimsRef = useRef<DimsMap>({});
@@ -88,8 +84,8 @@ const Icicle: FC<IcicleProps> = ({
   /**
    * Register the icicle dimensions to a reference
    */
-  const registerDims = useCallback(
-    (dimX: number, dimDx: number, dimY: number, dimDy: number, id: string) => {
+  const registerDims: IcicleRecursiveProps["registerDims"] = useCallback(
+    (dimX, dimDx, dimY, dimDy, id) => {
       if (!dimsUpdated.current) {
         dimsRef.current = {};
       }
@@ -97,26 +93,33 @@ const Icicle: FC<IcicleProps> = ({
       dimsUpdated.current = true;
 
       dimsRef.current[id] = {
-        x: dimX,
         dx: dimDx,
-        y: dimY,
         dy: dimDy,
+        x: dimX,
+        y: dimY,
       };
     },
     [dimsRef, dimsUpdated]
   );
 
+  // TODO: missing deps?
   // If the dims reference was updated during the render cycle, we update the
   // state accordingly to rerender the overlays
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (dimsUpdated.current) {
       setDims(dimsRef.current);
     }
   });
 
-  const onMouseWheel = ({ clientX, deltaY }: any) => {
-    const { x, width } = icicleRef?.current?.getBoundingClientRect() || clientX;
-    const mousePosition = (clientX - x) / width;
+  const onMouseWheel: React.SVGProps<SVGGElement>["onWheel"] = ({
+    clientX,
+    deltaY,
+  }) => {
+    const { x: rectX, width } =
+      icicleRef.current?.getBoundingClientRect() ??
+      (clientX as unknown as DOMRect); // TODO: why is Rect instead of number given by onWheelEvent?
+    const mousePosition = (clientX - rectX) / width;
     const wheelDirection = deltaY > 1 ? 1 : -1;
     onIcicleMouseWheel({ mousePosition, wheelDirection });
   };
@@ -222,6 +225,6 @@ const Icicle: FC<IcicleProps> = ({
   );
 };
 
-const MemoIcicle = memo(Icicle);
+_Icicle.displayName = "Icicle";
 
-export default MemoIcicle;
+export const Icicle = memo(_Icicle);

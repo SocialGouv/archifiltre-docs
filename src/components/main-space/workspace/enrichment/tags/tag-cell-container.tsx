@@ -1,33 +1,35 @@
-import React, { FC, useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+import { addTracker } from "../../../../../logging/tracker";
+import { ActionTitle, ActionType } from "../../../../../logging/tracker-types";
+import { commitAction } from "../../../../../reducers/enhancers/undoable/undoable-actions";
 import {
-  getAllTagIdsForFile,
-  getTagsByIds,
-  getTagsFromStore,
-} from "reducers/tags/tags-selectors";
-import TagCell from "./tag-cell";
-import {
-  getHoveredElementIdFromStore,
-  getLockedElementIdFromStore,
-} from "reducers/workspace-metadata/workspace-metadata-selectors";
+  markAsToDelete,
+  unmarkAsToDelete,
+} from "../../../../../reducers/files-and-folders/files-and-folders-actions";
 import {
   getElementsToDeleteFromStore,
   getFilesAndFoldersFromStore,
   isFolder,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import { StoreState } from "reducers/store";
-import { addTag, untagFile } from "reducers/tags/tags-actions";
-import { commitAction } from "reducers/enhancers/undoable/undoable-actions";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
-import { getAllChildren } from "util/files-and-folders/file-and-folders-utils";
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
+} from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
+import type { FilesAndFoldersMap } from "../../../../../reducers/files-and-folders/files-and-folders-types";
+import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import type { FilesAndFoldersMetadataMap } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { StoreState } from "../../../../../reducers/store";
+import { addTag, untagFile } from "../../../../../reducers/tags/tags-actions";
 import {
-  markAsToDelete,
-  unmarkAsToDelete,
-} from "reducers/files-and-folders/files-and-folders-actions";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+  getAllTagIdsForFile,
+  getTagsByIds,
+  getTagsFromStore,
+} from "../../../../../reducers/tags/tags-selectors";
+import {
+  getHoveredElementIdFromStore,
+  getLockedElementIdFromStore,
+} from "../../../../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { getAllChildren } from "../../../../../util/files-and-folders/file-and-folders-utils";
+import type { TagCellProps } from "./tag-cell";
+import { TagCell } from "./tag-cell";
 
 const computeTreeSize = (
   filesAndFoldersMetadataMap: FilesAndFoldersMetadataMap,
@@ -65,7 +67,7 @@ const handleTracking = (
   }
 };
 
-const TagCellContainer: FC = () => {
+export const TagCellContainer: React.FC = () => {
   const dispatch = useDispatch();
 
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
@@ -97,7 +99,7 @@ const TagCellContainer: FC = () => {
     getTagsByIds(getTagsFromStore(state), tagIdsForCurrentFile)
   );
 
-  const createTag = useCallback(
+  const createTag: TagCellProps["createTag"] = useCallback(
     (tagName, ffId) => {
       dispatch(addTag(tagName, ffId));
       dispatch(commitAction());
@@ -105,7 +107,7 @@ const TagCellContainer: FC = () => {
     [dispatch]
   );
 
-  const untag = useCallback(
+  const untag: TagCellProps["untag"] = useCallback(
     (tagName, ffId) => {
       dispatch(untagFile(tagName, ffId));
       dispatch(commitAction());
@@ -120,9 +122,9 @@ const TagCellContainer: FC = () => {
       filesAndFoldersMap,
       filesAndFoldersId
     );
-    isCurrentFileMarkedToDelete
-      ? dispatch(unmarkAsToDelete(filesAndFoldersId))
-      : dispatch(markAsToDelete(filesAndFoldersId));
+    if (isCurrentFileMarkedToDelete)
+      dispatch(unmarkAsToDelete(filesAndFoldersId));
+    else dispatch(markAsToDelete(filesAndFoldersId));
   }, [
     dispatch,
     isCurrentFileMarkedToDelete,
@@ -155,5 +157,3 @@ const TagCellContainer: FC = () => {
     />
   );
 };
-
-export default TagCellContainer;

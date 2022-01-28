@@ -1,15 +1,18 @@
 import { times } from "lodash";
-import { createFilesAndFolders } from "files-and-folders-loader/files-and-folders-loader";
-import { VirtualFileSystem } from "files-and-folders-loader/files-and-folders-loader-types";
 import { MockWritable } from "stdio-mock";
 import Stream from "stream";
+
+import { createFilesAndFolders } from "../../files-and-folders-loader/files-and-folders-loader";
+import type { VirtualFileSystem } from "../../files-and-folders-loader/files-and-folders-loader-types";
+import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   parseVFSFromStream,
   stringifyVFSToStream,
-} from "util/file-tree-loader/load-from-filesystem-serializer";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+} from "./load-from-filesystem-serializer";
 
-const extractDataFromMock = (writeable: MockWritable): Promise<Buffer[]> =>
+const extractDataFromMock = async (
+  writeable: MockWritable
+): Promise<Buffer[]> =>
   new Promise((resolve) => {
     writeable.on("finish", () => {
       resolve(writeable.data());
@@ -20,8 +23,8 @@ describe("load-from-filesystem-serializer", () => {
   it("should send and parse a VirtualFileSystem", async () => {
     const filesAndFolders = times(10, (index) =>
       createFilesAndFolders({
-        id: `${index}`,
         children: index % 2 === 0 ? ["hello"] : [],
+        id: `${index}`,
       })
     ).reduce((acc, element) => {
       acc[element.id] = element;
@@ -61,7 +64,7 @@ describe("load-from-filesystem-serializer", () => {
 
     const writeable = new MockWritable();
 
-    // @ts-ignore
+    // @ts-expect-error Mock
     stringifyVFSToStream(writeable, vfs);
 
     const data: Buffer[] = await extractDataFromMock(writeable);

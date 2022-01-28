@@ -1,15 +1,16 @@
 import Box from "@material-ui/core/Box";
-import CategoryTitle from "components/common/category-title";
-import ColorCircle from "components/common/color-circle";
+import React from "react";
+import { useTranslation } from "react-i18next";
+
+import { CategoryTitle } from "../../../../common/category-title";
+import { ColorCircle } from "../../../../common/color-circle";
 import {
   ENRICHMENT_COLORS,
   EnrichmentTypes,
-} from "components/main-space/icicle/icicle-enrichment";
-import AllTagsButton from "./all-tags-button";
-import React, { FC } from "react";
-import { useTranslation } from "react-i18next";
+} from "../../../icicle/icicle-enrichment";
+import { AllTagsButton } from "./all-tags-button";
 
-const TagHeader: FC = () => {
+export const TagHeader: React.FC = () => {
   const { t } = useTranslation();
 
   return (
@@ -22,5 +23,3 @@ const TagHeader: FC = () => {
     </Box>
   );
 };
-
-export default TagHeader;

@@ -1,6 +1,8 @@
-import React, { FC } from "react";
+import React from "react";
 import styled from "styled-components";
-import Icon, { IconProps, SEARCH_ICON } from "./icon";
+
+import type { IconProps } from "./icon";
+import { Icon, SEARCH_ICON } from "./icon";
 
 const Wrapper = styled.div`
   position: relative;
@@ -26,7 +28,7 @@ const Overlay = styled.div`
   }
 `;
 
-const ClickableIcon: FC<IconProps> = (props) => (
+export const ClickableIcon: React.FC<IconProps> = (props) => (
   <Wrapper onClick={props.onClick}>
     <Icon {...props} />
     <Overlay>
@@ -34,5 +36,3 @@ const ClickableIcon: FC<IconProps> = (props) => (
     </Overlay>
   </Wrapper>
 );
-
-export default ClickableIcon;

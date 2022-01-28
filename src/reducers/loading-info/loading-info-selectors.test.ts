@@ -1,4 +1,4 @@
-import { StoreState } from "../store";
+import type { StoreState } from "../store";
 import { createEmptyStore } from "../store-test-utils";
 import {
   createArchifiltreError,
@@ -24,8 +24,8 @@ const loadingInfoState = {
   errors: [error],
   loading: [loadingLoadingInfoId],
   loadingInfo: {
-    [loadingLoadingInfoId]: loadingLoadingInfo,
     [completeLoadingInfoId]: completeLoadingInfo,
+    [loadingLoadingInfoId]: loadingLoadingInfo,
   },
 };
 

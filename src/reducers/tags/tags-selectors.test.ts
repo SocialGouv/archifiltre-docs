@@ -1,5 +1,6 @@
 import { createFilesAndFolders } from "../files-and-folders/files-and-folders-test-utils";
-import { StoreState } from "../store";
+import { createFilesAndFoldersMetadata } from "../files-and-folders-metadata/files-and-folders-metadata-selectors";
+import type { StoreState } from "../store";
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
   getAllTagIdsForFile,
@@ -12,8 +13,7 @@ import {
   sortTags,
   tagMapToArray,
 } from "./tags-selectors";
-import { Tag } from "./tags-types";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import type { Tag } from "./tags-types";
 
 describe("tags-selectors", () => {
   describe("getAllTagIdsForFile", () => {
@@ -27,15 +27,15 @@ describe("tags-selectors", () => {
           id: foundTagID,
           name: "found",
         },
-        unfound: {
-          ffIds: ["unwanted", "unwanted2"],
-          id: "unfound",
-          name: "unfound",
-        },
         [secondFoundTagID]: {
           ffIds: [ffId, "fakeFFid2"],
           id: secondFoundTagID,
           name: "found2",
+        },
+        unfound: {
+          ffIds: ["unwanted", "unwanted2"],
+          id: "unfound",
+          name: "unfound",
         },
       };
 
@@ -62,12 +62,12 @@ describe("tags-selectors", () => {
       };
       const tags = {
         [foundTagID]: foundTag,
+        [secondFoundTagID]: secondFoundTag,
         unfound: {
           ffIds: ["unwanted", "unwanted2"],
           id: "2",
           name: "unfound",
         },
-        [secondFoundTagID]: secondFoundTag,
       };
 
       expect(sortTags(getAllTagsForFile(tags, ffId))).toEqual(
@@ -93,12 +93,12 @@ describe("tags-selectors", () => {
 
       const tags = {
         [foundTagID]: foundTag,
+        [secondFoungTagID]: secondFoundTag,
         unfound: {
           ffIds: ["unwanted", "unwanted2"],
           id: "unfound",
           name: "unfound",
         },
-        [secondFoungTagID]: secondFoundTag,
       };
 
       const tagComparator = (tag1: Tag, tag2: Tag): number =>
@@ -179,7 +179,9 @@ describe("tags-selectors", () => {
     describe("with descending order", () => {
       it("should order the tags in desc order based on name field", () => {
         expect(
-          sortTags([secondTag, firstTag, thirdTag], { order: Order.DESC })
+          sortTags([secondTag, firstTag, thirdTag], {
+            order: Order.DESC,
+          })
         ).toEqual([thirdTag, secondTag, firstTag]);
       });
     });
@@ -187,7 +189,9 @@ describe("tags-selectors", () => {
     describe("based on ID", () => {
       it("should order the tags in asc order based on id field", () => {
         expect(
-          sortTags([secondTag, firstTag, thirdTag], { sortParam: "id" })
+          sortTags([secondTag, firstTag, thirdTag], {
+            sortParam: "id",
+          })
         ).toEqual([thirdTag, secondTag, firstTag]);
       });
     });
@@ -212,24 +216,26 @@ describe("tags-selectors", () => {
           children: [taggedFfId],
           id: "",
         }),
+        [taggedChildrenFfId]: createFilesAndFolders({
+          id: taggedChildrenFfId,
+        }),
         [taggedFfId]: createFilesAndFolders({
           children: [taggedChildrenFfId],
           id: taggedFfId,
         }),
-        [taggedChildrenFfId]: createFilesAndFolders({ id: taggedChildrenFfId }),
       };
 
       const filesAndFoldersMetadata = {
-        [taggedFfId]: createFilesAndFoldersMetadata({
+        [taggedChildrenFfId]: createFilesAndFoldersMetadata({
           averageLastModified: 3000,
-          childrenTotalSize: taggedParentSize,
+          childrenTotalSize: 1000,
           maxLastModified: 10000,
           medianLastModified: 4000,
           minLastModified: 1000,
         }),
-        [taggedChildrenFfId]: createFilesAndFoldersMetadata({
+        [taggedFfId]: createFilesAndFoldersMetadata({
           averageLastModified: 3000,
-          childrenTotalSize: 1000,
+          childrenTotalSize: taggedParentSize,
           maxLastModified: 10000,
           medianLastModified: 4000,
           minLastModified: 1000,

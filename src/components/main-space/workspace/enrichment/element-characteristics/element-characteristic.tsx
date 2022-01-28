@@ -1,13 +1,14 @@
-import React, { FC, ReactNode } from "react";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
+import type { ReactNode } from "react";
+import React from "react";
 
-type ElementCharacteristicProps = {
+export interface ElementCharacteristicProps {
   name: ReactNode;
   value: ReactNode;
-};
+}
 
-const ElementCharacteristic: FC<ElementCharacteristicProps> = ({
+export const ElementCharacteristic: React.FC<ElementCharacteristicProps> = ({
   name,
   value,
 }) => (
@@ -20,5 +21,3 @@ const ElementCharacteristic: FC<ElementCharacteristicProps> = ({
     </Box>
   </Box>
 );
-
-export default ElementCharacteristic;

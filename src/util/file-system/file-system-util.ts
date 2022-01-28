@@ -1,6 +1,6 @@
 import { ipcRenderer } from "../../common/ipc";
-import translations from "translations/translations";
-import { notifyError } from "util/notification/notifications-util";
+import { translations } from "../../translations/translations";
+import { notifyError } from "../notification/notifications-util";
 
 /**
  * Prompts the user to save a file. Returns the file path if the user confirmed
@@ -33,5 +33,5 @@ export const openExternalElement = async (
   }
 };
 
-export const showInFolder = async (elementPath: string) =>
+export const showInFolder = async (elementPath: string): Promise<void> =>
   ipcRenderer.invoke("shell.showItemInFolder", elementPath);

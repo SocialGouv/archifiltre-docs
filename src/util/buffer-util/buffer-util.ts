@@ -5,7 +5,6 @@ export const MESSAGE_SIZE_CHUNK_LENGTH = UINT_32_BYTE_SIZE;
 
 /**
  * Transforms a javascript Unsigned int to a Uint8array
- * @param num
  */
 const numberToUint8Array = (num: number) => {
   const buffer = new ArrayBuffer(UINT_32_BYTE_SIZE);
@@ -15,10 +14,9 @@ const numberToUint8Array = (num: number) => {
 
 /**
  * Utility to concatenate Uint8Array
- * @param buffers
  */
-export const joinBuffers = (...buffers: Uint8Array[]) => {
-  const positions = buffers.reduce(
+export const joinBuffers = (...buffers: Uint8Array[]): Uint8Array => {
+  const positions = buffers.reduce<number[]>(
     (acc, buffer, index) => [...acc, (acc[index - 1] || 0) + buffer.length],
     []
   );
@@ -35,29 +33,28 @@ export const joinBuffers = (...buffers: Uint8Array[]) => {
 
 /**
  * Prepend the buffer size as an Uint32 to a buffer
- * @param message
  */
-export const bufferMessageWithLength = (message: Uint8Array) => {
+export const bufferMessageWithLength = (message: Uint8Array): Uint8Array => {
   const bufferLengthArrayBuffer = numberToUint8Array(message.length);
   return joinBuffers(bufferLengthArrayBuffer, message);
 };
 
 /**
  * Transform an Uint8 array into a string
- * @param message
  */
-export const uint8ArrayToString = (message: Uint8Array) =>
+export const uint8ArrayToString = (message: Uint8Array): string =>
   Buffer.from(message.buffer).toString();
 
 /**
  * Reads the message with length starting at offset from the buffer
- * @param message
- * @param offset
  */
 export const readBufferMessageWithLength = (
   message: Uint8Array,
   offset = 0
-) => {
+): {
+  content: Uint8Array;
+  endIndex: number;
+} => {
   const messageSize = new DataView(message.buffer).getUint32(offset);
   const endIndex = offset + MESSAGE_SIZE_CHUNK_LENGTH + messageSize;
   const content = message.slice(offset + 4, offset + 4 + messageSize);

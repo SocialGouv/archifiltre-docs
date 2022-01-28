@@ -1,33 +1,34 @@
 import Box from "@material-ui/core/Box";
-import UserButton from "components/header/user-button";
-import { useTabsState } from "./tabs-context";
-import React, { FC } from "react";
-import TabsHeader from "components/main-space/workspace/tabs/tabs-header";
-import SaveButton, { ExportToJson } from "./save-button";
-import UndoRedo from "./undo-redo-button";
-import { SearchButton } from "./search-button";
-import ExportButton from "./export-button";
+import React from "react";
 import styled from "styled-components";
+
 import logo from "../../../static/imgs/logo.png";
+import type { ExportToJson } from "../../exporters/json/json-exporter";
+import type { VoidFunction } from "../../util/function/function-util";
+import { TabsHeader } from "../main-space/workspace/tabs/tabs-header";
+import { ExportButton } from "./export-button";
+import { SaveButton } from "./save-button";
+import { SearchButton } from "./search-button";
+import { useTabsState } from "./tabs-context";
+import { UndoRedoButton } from "./undo-redo-button";
+import { UserButton } from "./user-button";
 
 const HeaderLine = styled.div`
   width: 100%;
 `;
 
-export type ResetWorkspace = () => void;
-
-type HeaderActionsProps = {
+export interface HeaderActionsProps {
   originalPath: string;
   sessionName: string;
   exportToJson: ExportToJson;
-  resetWorkspace: ResetWorkspace;
+  resetWorkspace: VoidFunction;
   undo: () => void;
   redo: () => void;
   canUndo: boolean;
   canRedo: boolean;
-};
+}
 
-const Header: FC<HeaderActionsProps> = ({
+export const Header: React.FC<HeaderActionsProps> = ({
   originalPath,
   sessionName,
   exportToJson,
@@ -56,7 +57,7 @@ const Header: FC<HeaderActionsProps> = ({
           <SearchButton />
         </Box>
         <Box pl={1}>
-          <UndoRedo
+          <UndoRedoButton
             isVisible={true}
             undo={undo}
             redo={redo}
@@ -65,7 +66,7 @@ const Header: FC<HeaderActionsProps> = ({
           />
         </Box>
         <Box pl={1}>
-          <UndoRedo
+          <UndoRedoButton
             isVisible={true}
             undo={undo}
             redo={redo}
@@ -90,5 +91,3 @@ const Header: FC<HeaderActionsProps> = ({
     </HeaderLine>
   );
 };
-
-export default Header;

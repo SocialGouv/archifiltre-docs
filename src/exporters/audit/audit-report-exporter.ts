@@ -1,27 +1,37 @@
-import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import fs from "fs";
+
+import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
 import {
+  getElementsToDeleteFromStore,
   getFileCount,
   getFilesAndFoldersFromStore,
-  getElementsToDeleteFromStore,
   getFoldersCount,
   getMaxDepth,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
+} from "../../reducers/files-and-folders/files-and-folders-selectors";
+import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { getHashesFromStore } from "../../reducers/hashes/hashes-selectors";
+import type { HashesMap } from "../../reducers/hashes/hashes-types";
+import { translations } from "../../translations/translations";
 import {
   countDuplicateFiles,
   countDuplicateFolders,
-} from "util/duplicates/duplicates-util";
+} from "../../util/duplicates/duplicates-util";
 import {
   formatPathForUserSystem,
   octet2HumanReadableFormat,
-} from "util/file-system/file-sys-util";
-import { FileType } from "util/file-types/file-types-util";
+} from "../../util/file-system/file-sys-util";
+import { openExternalElement } from "../../util/file-system/file-system-util";
+import { FileType } from "../../util/file-types/file-types-util";
+import type { AnyFunction } from "../../util/function/function-util";
 import {
-  AuditReportData,
-  generateAuditReportDocx,
-} from "./audit-report-generator";
+  NotificationDuration,
+  notifyInfo,
+  notifySuccess,
+} from "../../util/notification/notifications-util";
+import type { AuditReportData } from "./audit-report-generator";
+import { generateAuditReportDocx } from "./audit-report-generator";
 import {
   countFileTypes,
   formatAuditReportDate,
@@ -37,16 +47,6 @@ import {
   getOldestFiles,
   percentFileTypes,
 } from "./audit-report-values-computer";
-import { HashesMap } from "reducers/hashes/hashes-types";
-import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
-import fs from "fs";
-import {
-  NotificationDuration,
-  notifyInfo,
-  notifySuccess,
-} from "util/notification/notifications-util";
-import translations from "translations/translations";
-import { openExternalElement } from "util/file-system/file-system-util";
 
 const ROOT_ID = "";
 
@@ -61,63 +61,32 @@ export const computeAuditReportData = (
   const fileTypesCounts = countFileTypes(filesAndFolders);
   const extensionsList = getExtensionsList();
   return {
-    totalFoldersCount: getFoldersCount(filesAndFolders),
-    totalFilesCount: getFileCount(filesAndFolders),
-    totalSize: octet2HumanReadableFormat(
-      filesAndFoldersMetadata[ROOT_ID].childrenTotalSize
-    ),
-    oldestDate: formatAuditReportDate(
-      filesAndFoldersMetadata[ROOT_ID].minLastModified
-    ),
-    newestDate: formatAuditReportDate(
-      filesAndFoldersMetadata[ROOT_ID].maxLastModified
-    ),
-    longestPathLength: longestPathFile?.id?.length || 0,
-    longestPathFileName: longestPathFile?.name || "",
-    longestPathPath: formatPathForUserSystem(longestPathFile?.id) || "",
-    depth: getMaxDepth(filesAndFolders),
-    publicationPercent: fileTypesPercents[FileType.PUBLICATION],
-    publicationCount: fileTypesCounts[FileType.PUBLICATION],
-    publicationFileTypes: extensionsList[FileType.PUBLICATION],
-    presentationPercent: fileTypesPercents[FileType.PRESENTATION],
-    presentationCount: fileTypesCounts[FileType.PRESENTATION],
-    presentationFileTypes: extensionsList[FileType.PRESENTATION],
-    spreadsheetPercent: fileTypesPercents[FileType.SPREADSHEET],
-    spreadsheetCount: fileTypesCounts[FileType.SPREADSHEET],
-    spreadsheetFileTypes: extensionsList[FileType.SPREADSHEET],
-    emailPercent: fileTypesPercents[FileType.EMAIL],
-    emailCount: fileTypesCounts[FileType.EMAIL],
-    emailFileTypes: extensionsList[FileType.EMAIL],
-    documentPercent: fileTypesPercents[FileType.DOCUMENT],
-    documentCount: fileTypesCounts[FileType.DOCUMENT],
-    documentFileTypes: extensionsList[FileType.DOCUMENT],
-    imagePercent: fileTypesPercents[FileType.IMAGE],
-    imageCount: fileTypesCounts[FileType.IMAGE],
-    imageFileTypes: extensionsList[FileType.IMAGE],
-    videoPercent: fileTypesPercents[FileType.VIDEO],
-    videoCount: fileTypesCounts[FileType.VIDEO],
-    videoFileTypes: extensionsList[FileType.VIDEO],
-    audioPercent: fileTypesPercents[FileType.AUDIO],
     audioCount: fileTypesCounts[FileType.AUDIO],
     audioFileTypes: extensionsList[FileType.AUDIO],
-    otherPercent: fileTypesPercents[FileType.OTHER],
-    otherCount: fileTypesCounts[FileType.OTHER],
-    otherFileTypes: "les types restants",
-    oldestFiles: getOldestFiles(filesAndFolders),
+    audioPercent: fileTypesPercents[FileType.AUDIO],
+    biggestDuplicateFolders: getDuplicatesWithTheBiggestSize(
+      filesAndFolders,
+      filesAndFoldersMetadata,
+      filesAndFoldersHashes
+    ),
     biggestFiles: getBiggestFiles(filesAndFolders),
-    duplicateFolderCount: countDuplicateFolders(
-      filesAndFolders,
-      filesAndFoldersHashes
-    ),
-    duplicateFolderPercent: getDuplicateFoldersPercent(
-      filesAndFolders,
-      filesAndFoldersHashes
-    ),
+    depth: getMaxDepth(filesAndFolders),
+    documentCount: fileTypesCounts[FileType.DOCUMENT],
+    documentFileTypes: extensionsList[FileType.DOCUMENT],
+    documentPercent: fileTypesPercents[FileType.DOCUMENT],
     duplicateFileCount: countDuplicateFiles(
       filesAndFolders,
       filesAndFoldersHashes
     ),
     duplicateFilePercent: getDuplicateFilesPercent(
+      filesAndFolders,
+      filesAndFoldersHashes
+    ),
+    duplicateFolderCount: countDuplicateFolders(
+      filesAndFolders,
+      filesAndFoldersHashes
+    ),
+    duplicateFolderPercent: getDuplicateFoldersPercent(
       filesAndFolders,
       filesAndFoldersHashes
     ),
@@ -129,16 +98,52 @@ export const computeAuditReportData = (
       filesAndFolders,
       filesAndFoldersHashes
     ),
-    biggestDuplicateFolders: getDuplicatesWithTheBiggestSize(
-      filesAndFolders,
-      filesAndFoldersMetadata,
-      filesAndFoldersHashes
-    ),
     elementsToDelete: getElementsToDelete(
       filesAndFolders,
       filesAndFoldersMetadata,
       elementsToDelete
     ),
+    emailCount: fileTypesCounts[FileType.EMAIL],
+    emailFileTypes: extensionsList[FileType.EMAIL],
+    emailPercent: fileTypesPercents[FileType.EMAIL],
+    imageCount: fileTypesCounts[FileType.IMAGE],
+    imageFileTypes: extensionsList[FileType.IMAGE],
+    imagePercent: fileTypesPercents[FileType.IMAGE],
+    longestPathFileName: longestPathFile?.name ?? "",
+    longestPathLength: longestPathFile?.id.length ?? 0,
+    longestPathPath: longestPathFile?.id
+      ? formatPathForUserSystem(longestPathFile.id)
+      : "",
+    newestDate: formatAuditReportDate(
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      filesAndFoldersMetadata[ROOT_ID].maxLastModified ?? 0
+    ),
+    oldestDate: formatAuditReportDate(
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      filesAndFoldersMetadata[ROOT_ID].minLastModified ?? 0
+    ),
+    oldestFiles: getOldestFiles(filesAndFolders),
+    otherCount: fileTypesCounts[FileType.OTHER],
+    otherFileTypes: "les types restants",
+    otherPercent: fileTypesPercents[FileType.OTHER],
+    presentationCount: fileTypesCounts[FileType.PRESENTATION],
+    presentationFileTypes: extensionsList[FileType.PRESENTATION],
+    presentationPercent: fileTypesPercents[FileType.PRESENTATION],
+    publicationCount: fileTypesCounts[FileType.PUBLICATION],
+    publicationFileTypes: extensionsList[FileType.PUBLICATION],
+    publicationPercent: fileTypesPercents[FileType.PUBLICATION],
+    spreadsheetCount: fileTypesCounts[FileType.SPREADSHEET],
+    spreadsheetFileTypes: extensionsList[FileType.SPREADSHEET],
+    spreadsheetPercent: fileTypesPercents[FileType.SPREADSHEET],
+    totalFilesCount: getFileCount(filesAndFolders),
+    totalFoldersCount: getFoldersCount(filesAndFolders),
+    totalSize: octet2HumanReadableFormat(
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      filesAndFoldersMetadata[ROOT_ID].childrenTotalSize ?? 0
+    ),
+    videoCount: fileTypesCounts[FileType.VIDEO],
+    videoFileTypes: extensionsList[FileType.VIDEO],
+    videoPercent: fileTypesPercents[FileType.VIDEO],
   };
 };
 
@@ -146,38 +151,38 @@ export const computeAuditReportData = (
  * Thunk to export an audit
  * @param name - name of the output file
  */
-export const auditReportExporterThunk = (
-  name: string
-): ArchifiltreThunkAction => async (dispatch, getState): Promise<void> => {
-  notifyInfo(
-    translations.t("export.auditReportStarted"),
-    translations.t("export.auditReportTitle")
-  );
-  await new Promise((resolve) => setTimeout(resolve, 500));
+export const auditReportExporterThunk =
+  (name: string): ArchifiltreThunkAction =>
+  async (_dispatch: AnyFunction, getState): Promise<void> => {
+    notifyInfo(
+      translations.t("export.auditReportStarted"),
+      translations.t("export.auditReportTitle")
+    );
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
-  const filesAndFolders = getFilesAndFoldersFromStore(getState());
-  const filesAndFoldersMetadata = getFilesAndFoldersMetadataFromStore(
-    getState()
-  );
-  const hashes = getHashesFromStore(getState());
-  const elementsToDelete = getElementsToDeleteFromStore(getState());
+    const filesAndFolders = getFilesAndFoldersFromStore(getState());
+    const filesAndFoldersMetadata = getFilesAndFoldersMetadataFromStore(
+      getState()
+    );
+    const hashes = getHashesFromStore(getState());
+    const elementsToDelete = getElementsToDeleteFromStore(getState());
 
-  await fs.promises.writeFile(
-    name,
-    generateAuditReportDocx(
-      computeAuditReportData(
-        filesAndFolders,
-        filesAndFoldersMetadata,
-        hashes,
-        elementsToDelete
+    await fs.promises.writeFile(
+      name,
+      generateAuditReportDocx(
+        computeAuditReportData(
+          filesAndFolders,
+          filesAndFoldersMetadata,
+          hashes,
+          elementsToDelete
+        )
       )
-    )
-  );
+    );
 
-  notifySuccess(
-    translations.t("export.auditReportSuccess"),
-    translations.t("export.auditReportTitle"),
-    NotificationDuration.NORMAL,
-    () => openExternalElement(name)
-  );
-};
+    notifySuccess(
+      translations.t("export.auditReportSuccess"),
+      translations.t("export.auditReportTitle"),
+      NotificationDuration.NORMAL,
+      async () => openExternalElement(name)
+    );
+  };

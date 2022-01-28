@@ -1,14 +1,19 @@
-import React, { FC, useState } from "react";
-import { useDateInput } from "react-nice-dates";
-import { useLanguage } from "hooks/use-language";
-import { de, enUS, fr } from "date-fns/locale";
-import { fromUnixTime, getTime, getYear, isBefore, Locale } from "date-fns";
 import { Input } from "@material-ui/core";
-import { FaPen } from "react-icons/fa";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import { compose } from "lodash/fp";
-import { tap } from "util/functionnal-programming-utils";
-import { Language } from "util/language/language-types";
+import type { Locale } from "date-fns";
+// eslint-disable-next-line import/no-duplicates
+import { fromUnixTime, getTime, getYear, isBefore } from "date-fns";
+// eslint-disable-next-line import/no-duplicates
+import { de, enUS, fr } from "date-fns/locale";
+import compose from "lodash/fp/compose";
+import React, { useState } from "react";
+import { FaPen } from "react-icons/fa";
+import { useDateInput } from "react-nice-dates";
+
+import { useLanguage } from "../../hooks/use-language";
+import type { AnyFunction } from "../../util/function/function-util";
+import { tap } from "../../util/functionnal-programming-utils";
+import { Language } from "../../util/language/language-types";
 
 const languagesMap = {
   [Language.FR]: fr,
@@ -19,35 +24,41 @@ const languagesMap = {
 const getLanguageLocale = (language: Language): Locale =>
   languagesMap[language];
 
-type DateFieldProps = {
+export interface DateFieldProps {
   date: number;
   onDateChange: (timestamp: number) => void;
-};
+}
 
 // We assume that we cannot enter dates before 1970
 const MIN_DATE_YEAR = 1970;
 
-const DateField: FC<DateFieldProps> = ({ date, onDateChange }) => {
+export const DateField: React.FC<DateFieldProps> = ({ date, onDateChange }) => {
   const [isFocused, setFocus] = useState(false);
   const [language] = useLanguage();
 
   const dateChangeHandler = compose(onDateChange, getTime);
 
-  const inputProps = useDateInput({
-    date: fromUnixTime(date / 1000),
-    locale: getLanguageLocale(language),
-    onDateChange: dateChangeHandler,
-    validate: (date) =>
-      getYear(date) > MIN_DATE_YEAR && isBefore(date, new Date()),
-  });
+  const inputProps: { onFocus: AnyFunction; onBlur: AnyFunction } =
+    useDateInput({
+      date: fromUnixTime(date / 1000),
+      locale: getLanguageLocale(language),
+      onDateChange: dateChangeHandler,
+      validate: (dateToValidate) =>
+        getYear(dateToValidate) > MIN_DATE_YEAR &&
+        isBefore(dateToValidate, new Date()),
+    });
 
   const onFocus = compose(
-    tap(() => setFocus(true)),
+    tap(() => {
+      setFocus(true);
+    }),
     inputProps.onFocus
   );
 
   const onBlur = compose(
-    tap(() => setFocus(false)),
+    tap(() => {
+      setFocus(false);
+    }),
     inputProps.onBlur
   );
 
@@ -65,5 +76,3 @@ const DateField: FC<DateFieldProps> = ({ date, onDateChange }) => {
     />
   );
 };
-
-export default DateField;

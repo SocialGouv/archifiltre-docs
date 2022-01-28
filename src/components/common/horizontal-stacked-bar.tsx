@@ -1,29 +1,28 @@
-import React, { FC, useMemo } from "react";
-import Box, { BoxProps } from "@material-ui/core/Box";
+import type { BoxProps } from "@material-ui/core/Box";
+import Box from "@material-ui/core/Box";
 import Tooltip from "@material-ui/core/Tooltip";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 
-type HorizontalStackedBarData = {
-  [key: string]: number;
-};
+type HorizontalStackedBarData = Record<string, number>;
 
-export type HorizontalStackedBarOption = {
+export interface HorizontalStackedBarOption {
   key: string;
   color: string;
-};
+}
 
-export type RenderTooltipContent = (key: string) => JSX.Element;
+export type RenderTooltipContent = (key: string) => React.ReactElement;
 
-type HorizontalStackedBarProps = {
+export interface HorizontalStackedBarProps {
   data: HorizontalStackedBarData;
   bars: HorizontalStackedBarOption[];
   renderTooltipContent?: RenderTooltipContent;
-};
+}
 
-type BarProps = {
+interface BarProps {
   color: string;
   widthratio: number;
-};
+}
 
 /**
  * We cannot use Material-ui "styled" method here as it does not forward a ref, which is mandatory
@@ -31,13 +30,13 @@ type BarProps = {
  * Manually creating a Box component is also out of question because it does not have types for ref
  * (even if the ref works with type checking disabled).
  */
-const Bar = styled(Box)<BoxProps & BarProps>`
-  background-color: ${({ color }) => color};
+const Bar = styled(Box)<BarProps & BoxProps>`
+  background-color: ${({ color }: { color: string }) => color};
   width: ${({ widthratio }) => `${widthratio}%`};
   height: 100px;
 `;
 
-const HorizontalStackedBar: FC<HorizontalStackedBarProps> = ({
+export const HorizontalStackedBar: React.FC<HorizontalStackedBarProps> = ({
   data,
   bars,
   renderTooltipContent = () => "",
@@ -56,5 +55,3 @@ const HorizontalStackedBar: FC<HorizontalStackedBarProps> = ({
     </Box>
   );
 };
-
-export default HorizontalStackedBar;

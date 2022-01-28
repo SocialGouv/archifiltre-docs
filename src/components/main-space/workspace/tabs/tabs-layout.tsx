@@ -1,22 +1,23 @@
 import { Divider } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import React, { FC, ReactNode } from "react";
+import type { ReactNode } from "react";
+import React from "react";
 
-type ComponentElement = {
+interface ComponentElement {
   title: ReactNode;
   content: ReactNode;
   widthRatio?: number;
   isLast?: boolean;
-};
+}
 
 export const makeTabComponent = ({
   title,
   content,
   widthRatio = 1,
   isLast,
-}: ComponentElement) => {
-  const Component: FC = () => (
-    <React.Fragment>
+}: ComponentElement): React.FC => {
+  const Component: React.FC = () => (
+    <>
       <Box flex={widthRatio}>
         <Box display="flex" flexDirection="column" height="100%" paddingTop={1}>
           <Box>{title}</Box>
@@ -30,18 +31,16 @@ export const makeTabComponent = ({
           <Divider orientation="vertical" />
         </Box>
       )}
-    </React.Fragment>
+    </>
   );
 
   return Component;
 };
 
-const TabsLayout: FC = ({ children }) => {
+export const TabsLayout: React.FC = ({ children }) => {
   return (
     <Box display="flex" height="100%">
       {children}
     </Box>
   );
 };
-
-export default TabsLayout;

@@ -1,15 +1,18 @@
 import Box from "@material-ui/core/Box";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import IconButton from "@material-ui/core/IconButton";
-import React, { FC } from "react";
+import React from "react";
 import { FaCheckCircle } from "react-icons/fa";
 
-type LoadingSpinnerProps = {
+export interface LoadingSpinnerProps {
   loaderText: string;
   isLoading?: boolean;
-};
+}
 
-const LoadingSpinner: FC<LoadingSpinnerProps> = ({ loaderText, isLoading }) => (
+export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+  loaderText,
+  isLoading,
+}) => (
   <Box
     display="flex"
     alignItems="center"
@@ -26,5 +29,3 @@ const LoadingSpinner: FC<LoadingSpinnerProps> = ({ loaderText, isLoading }) => (
     <div>{loaderText}</div>
   </Box>
 );
-
-export default LoadingSpinner;

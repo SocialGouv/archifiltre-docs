@@ -1,8 +1,9 @@
+import { noop } from "lodash";
+
+import { createArchifiltreError } from "../../reducers/loading-info/loading-info-selectors";
+import { notifyError } from "../notification/notifications-util";
+import { ArchifiltreFileSystemErrorCode } from "./error-codes";
 import { handleError, makeErrorHandler } from "./error-util";
-import { notifyError } from "util/notification/notifications-util";
-import { createArchifiltreError } from "reducers/loading-info/loading-info-selectors";
-import { ArchifiltreFileSystemErrorCode } from "util/error/error-codes";
-import { empty } from "util/function/function-util";
 
 jest.mock("util/notification/notifications-util", () => ({
   notifyError: jest.fn(),
@@ -11,8 +12,8 @@ jest.mock("util/notification/notifications-util", () => ({
 const HANDLED_CODE = "handled-code";
 
 const ERROR_MAP = {
-  default: "default-error",
   [HANDLED_CODE]: "handled-error",
+  default: "default-error",
 };
 
 const ERROR_TITLE = "error-title";
@@ -48,7 +49,7 @@ describe("error-util", () => {
         const errorCallback = jest.fn();
         const errorConfig = {
           [ArchifiltreFileSystemErrorCode.EACCES]: errorCallback,
-          default: empty,
+          default: noop,
         };
 
         const error = createArchifiltreError({

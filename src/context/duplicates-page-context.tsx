@@ -1,32 +1,31 @@
-import React, { FC, useContext, useState } from "react";
+import { noop } from "lodash";
+import React, { createContext, useContext, useState } from "react";
 
-type DuplicatePageContextValues = {
+interface DuplicatePageContextValues {
   pageIndex: number;
   rowsPerPage: number;
   setPageIndex: (pageIndex: number) => void;
   setRowsPerPage: (rowsPerPage: number) => void;
-};
+}
 
 const duplicatePageState: DuplicatePageContextValues = {
   pageIndex: 0,
   rowsPerPage: 10,
-  setPageIndex: (pageIndex) => {},
-  setRowsPerPage: (rowsPerPage) => {},
+  setPageIndex: noop,
+  setRowsPerPage: noop,
 };
 
-export const DuplicateContext = React.createContext<DuplicatePageContextValues>(
-  duplicatePageState
-);
+export const DuplicateContext =
+  createContext<DuplicatePageContextValues>(duplicatePageState);
 
 export const useDuplicatePageState = (): DuplicatePageContextValues => {
-  const { pageIndex, rowsPerPage, setPageIndex, setRowsPerPage } = useContext(
-    DuplicateContext
-  );
+  const { pageIndex, rowsPerPage, setPageIndex, setRowsPerPage } =
+    useContext(DuplicateContext);
 
   return { pageIndex, rowsPerPage, setPageIndex, setRowsPerPage };
 };
 
-const DuplicatePageProvider: FC = ({ children }) => {
+export const DuplicatePageProvider: React.FC = ({ children }) => {
   const [pageIndex, setPageIndex] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -43,5 +42,3 @@ const DuplicatePageProvider: FC = ({ children }) => {
     </DuplicateContext.Provider>
   );
 };
-
-export default DuplicatePageProvider;

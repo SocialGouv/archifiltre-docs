@@ -1,12 +1,14 @@
-import { StoreState } from "../store";
-import { LoadingInfo, LoadingInfoState } from "./loading-info-types";
-import { ArchifiltreError, ArchifiltreErrorType } from "util/error/error-util";
 import { useSelector } from "react-redux";
-import { ArchifiltreErrorCode, UnknownError } from "util/error/error-codes";
+
+import type { ArchifiltreErrorCode } from "../../util/error/error-codes";
+import { UnknownError } from "../../util/error/error-codes";
+import type { ArchifiltreError } from "../../util/error/error-util";
+import { ArchifiltreErrorType } from "../../util/error/error-util";
+import type { StoreState } from "../store";
+import type { LoadingInfo, LoadingInfoState } from "./loading-info-types";
 
 /**
  * Returns the loadingInfo from the store
- * @param store
  */
 export const getLoadingInfoFromStore = (store: StoreState): LoadingInfoState =>
   store.loadingInfo;
@@ -33,7 +35,6 @@ export const getCompleteLoadingInfo = ({
 
 /**
  * Selector for the errors list
- * @param store
  */
 export const getArchifiltreErrors = (store: StoreState): ArchifiltreError[] =>
   getLoadingInfoFromStore(store).errors;
@@ -50,10 +51,6 @@ interface CreateArchifiltreErrorParams {
 
 /**
  * Factory for archifiltre error object
- * @param type
- * @param filePath
- * @param reason
- * @param code
  */
 export const createArchifiltreError = ({
   type = ArchifiltreErrorType.LOADING_FILE_SYSTEM,

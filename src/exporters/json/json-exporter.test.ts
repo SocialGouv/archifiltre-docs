@@ -1,17 +1,18 @@
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import { DispatchExts } from "reducers/archifiltre-types";
-import { initialState as filesAndFoldersInitialState } from "reducers/files-and-folders/files-and-folders-reducer";
-import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
-import { StoreState } from "reducers/store";
+
+import type { DispatchExts } from "../../reducers/archifiltre-types";
+import { initialState as filesAndFoldersInitialState } from "../../reducers/files-and-folders/files-and-folders-reducer";
+import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
+import { initialState as hashesReducerInitialState } from "../../reducers/hashes/hashes-reducer";
+import type { StoreState } from "../../reducers/store";
 import {
   createEmptyStore,
   wrapStoreWithUndoable,
-} from "reducers/store-test-utils";
-import { createTag } from "reducers/tags/tags-test-util";
-import { save } from "util/file-system/file-sys-util";
+} from "../../reducers/store-test-utils";
+import { createTag } from "../../reducers/tags/tags-test-util";
+import { save } from "../../util/file-system/file-sys-util";
 import { jsonExporterThunk } from "./json-exporter";
-import { initialState as hashesReducerInitialState } from "reducers/hashes/hashes-reducer";
 
 jest.mock("util/file-system/file-sys-util", () => ({
   getNameWithExtension: (name, ext) => `${name}.${ext}`,
@@ -65,8 +66,8 @@ describe("json-exporter", () => {
           ...filesAndFoldersInitialState,
           aliases,
           comments,
-          filesAndFolders,
           elementsToDelete,
+          filesAndFolders,
           overrideLastModified,
         }),
         hashes: {
@@ -78,11 +79,11 @@ describe("json-exporter", () => {
         }),
       });
 
-      store.dispatch(
+      void store.dispatch(
         jsonExporterThunk({
           originalPath,
           sessionName,
-          version,
+          version: version as any,
         })
       );
 

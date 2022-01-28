@@ -1,11 +1,12 @@
 import Box from "@material-ui/core/Box";
-import CategoryTitle from "components/common/category-title";
-import FileCountInfoContainer from "./file-count-info/file-count-info-container";
-import FileTreeDepthContainer from "./file-tree-depth/file-tree-depth-container";
-import React, { FC } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 
-const AuditInfo: FC = () => {
+import { CategoryTitle } from "../../../common/category-title";
+import { FileCountInfoContainer } from "./file-count-info/file-count-info-container";
+import { FileTreeDepthContainer } from "./file-tree-depth/file-tree-depth-container";
+
+export const AuditInfo: React.FC = () => {
   const { t } = useTranslation();
   return (
     <Box>
@@ -21,5 +22,3 @@ const AuditInfo: FC = () => {
     </Box>
   );
 };
-
-export default AuditInfo;

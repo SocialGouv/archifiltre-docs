@@ -1,14 +1,15 @@
-import useTheme from "@material-ui/core/styles/useTheme";
-import React, { FC, memo, useCallback, useState } from "react";
-import { FaChevronLeft } from "react-icons/fa";
-import styled from "styled-components";
-import { LoadingInfo } from "reducers/loading-info/loading-info-types";
-import LoadingInfoDisplay from "./loading-info-display";
-import LoadingSpinnerOrCloseCross from "./loading-spinner-or-close-cross";
-import Grid from "@material-ui/core/Grid";
 import { IconButton } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
+import Grid from "@material-ui/core/Grid";
+import useTheme from "@material-ui/core/styles/useTheme";
+import React, { memo, useCallback, useState } from "react";
+import { FaChevronLeft } from "react-icons/fa";
+import styled from "styled-components";
+
+import type { LoadingInfo } from "../../reducers/loading-info/loading-info-types";
+import { LoadingInfoDisplay } from "./loading-info-display";
+import { LoadingSpinnerOrCloseCross } from "./loading-spinner-or-close-cross";
 
 const BottomLeftArea = styled(Card)`
   position: fixed;
@@ -24,31 +25,30 @@ const LoadingBarArea = memo(styled.div`
   padding-bottom: 12px;
 `);
 
-type ToggleArrowProps = {
+interface ToggleArrowProps {
   collapsed: string;
-};
+}
 
 const ToggleArrow = styled(IconButton)<ToggleArrowProps>(({ collapsed }) => ({
   transform: collapsed === "true" ? "rotate(0.5turn)" : undefined,
 }));
 
-type BackgroundLoadingInfoProps = {
+export interface BackgroundLoadingInfoProps {
   loadingItems: LoadingInfo[];
   isLoading: boolean;
   dismissAll: () => void;
-};
+}
 
-const BackgroundLoadingInfo: FC<BackgroundLoadingInfoProps> = ({
+const _BackgroundLoadingInfo: React.FC<BackgroundLoadingInfoProps> = ({
   loadingItems,
   isLoading,
   dismissAll,
 }) => {
   const [collapsed, setCollapsed] = useState(true);
   const theme = useTheme();
-  const toggleCollapsed = useCallback(() => setCollapsed(!collapsed), [
-    collapsed,
-    setCollapsed,
-  ]);
+  const toggleCollapsed = useCallback(() => {
+    setCollapsed(!collapsed);
+  }, [collapsed, setCollapsed]);
   const isActive = loadingItems.length > 0;
 
   const isLoaded = useCallback(
@@ -61,7 +61,7 @@ const BackgroundLoadingInfo: FC<BackgroundLoadingInfoProps> = ({
   const selectLabel = useCallback(
     (loadingInfo: LoadingInfo) =>
       isLoaded(loadingInfo) ? loadingInfo.loadedLabel : loadingInfo.label,
-    []
+    [isLoaded]
   );
   if (!isActive) {
     return null;
@@ -80,7 +80,9 @@ const BackgroundLoadingInfo: FC<BackgroundLoadingInfoProps> = ({
                   onClick={toggleCollapsed}
                 >
                   <FaChevronLeft
-                    style={{ color: theme.palette.secondary.main }}
+                    style={{
+                      color: theme.palette.secondary.main,
+                    }}
                   />
                 </ToggleArrow>
               </Box>
@@ -117,4 +119,6 @@ const BackgroundLoadingInfo: FC<BackgroundLoadingInfoProps> = ({
   );
 };
 
-export default memo(BackgroundLoadingInfo);
+_BackgroundLoadingInfo.displayName = "BackgroundLoadingInfo";
+
+export const BackgroundLoadingInfo = memo(_BackgroundLoadingInfo);

@@ -1,33 +1,35 @@
 import { Box } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
 import Paper from "@material-ui/core/Paper";
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
+import styled from "styled-components";
+
+import { useDebouncedSearchFilter } from "../../../hooks/use-debounced-search-filter";
+import { useSearchAndFilters } from "../../../hooks/use-search-and-filters";
+import { useStyles } from "../../../hooks/use-styles";
+import { ROOT_FF_ID } from "../../../reducers/files-and-folders/files-and-folders-selectors";
+import type {
   ElementWithToDelete,
   FilesAndFolders,
-} from "reducers/files-and-folders/files-and-folders-types";
-import { useSearchAndFilters } from "hooks/use-search-and-filters";
-import { TagMap } from "reducers/tags/tags-types";
-import { useStyles } from "hooks/use-styles";
-import styled from "styled-components";
+} from "../../../reducers/files-and-folders/files-and-folders-types";
+import type { TagMap } from "../../../reducers/tags/tags-types";
+import type { FilterMethod } from "../../../typings/filter-types";
+import type { Column } from "../../common/table/table-types";
+import { ModalHeader } from "../modal-header";
 import { FilesAndFoldersTable } from "./files-and-folders-table";
-import ModalHeader from "../modal-header";
-import { FilterMethod } from "typings/filter-types";
-import Filters from "./filters/filters";
+import { Filters } from "./filters/filters";
+import type { SearchBarProps } from "./search-bar";
 import { SearchBar } from "./search-bar";
-import DialogContent from "@material-ui/core/DialogContent";
-import { useDebouncedSearchFilter } from "hooks/use-debounced-search-filter";
-import { Column } from "components/common/table/table-types";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
-import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
 
 const StyledPaper = styled(Paper)`
   height: 90%;
 `;
 
-type SearchModalProps = {
+export interface SearchModalProps {
   exportToCsv: (data: FilesAndFolders[]) => void;
   isModalOpen: boolean;
   closeModal: () => void;
@@ -35,9 +37,9 @@ type SearchModalProps = {
   filesAndFolders: ElementWithToDelete[];
   tags: TagMap;
   toDelete: string[];
-};
+}
 
-export const SearchModal: FC<SearchModalProps> = ({
+export const SearchModal: React.FC<SearchModalProps> = ({
   exportToCsv,
   isModalOpen,
   columns,
@@ -63,10 +65,10 @@ export const SearchModal: FC<SearchModalProps> = ({
     searchTerm
   );
 
-  const searchFilters = useMemo(() => [nameFilter].concat(filters), [
-    nameFilter,
-    filters,
-  ]);
+  const searchFilters = useMemo(
+    () => [nameFilter].concat(filters),
+    [nameFilter, filters]
+  );
 
   /**
    * Resets the filters when the modal closes
@@ -83,7 +85,7 @@ export const SearchModal: FC<SearchModalProps> = ({
     searchFilters
   );
 
-  const performSearch = useCallback(
+  const performSearch: SearchBarProps["setSearchTerm"] = useCallback(
     (searchValue) => {
       setSearchTerm(searchValue);
       setPage(0);
@@ -139,7 +141,9 @@ export const SearchModal: FC<SearchModalProps> = ({
           color="primary"
           variant="contained"
           disableElevation
-          onClick={() => exportToCsv(filteredFilesAndFolders)}
+          onClick={() => {
+            exportToCsv(filteredFilesAndFolders);
+          }}
         >
           {t("exportModal.buttonTitle")}
         </Button>

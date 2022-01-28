@@ -1,5 +1,6 @@
-import { MouseEvent } from "react";
-import { DimsAndId } from "./icicle-rect";
+import type { MouseEvent } from "react";
+
+import type { DimsAndId } from "./icicle-rect";
 
 export type FillColor = (id: string) => string;
 

@@ -1,5 +1,6 @@
-import { Action } from "redux";
-import { ArchifiltreError } from "util/error/error-util";
+import type { Action } from "redux";
+
+import type { ArchifiltreError } from "../../util/error/error-util";
 
 export const INITIALIZE_FILES_AND_FOLDERS = "FILES_AND_FOLDERS/INITIALIZE";
 export const REMOVE_CHILD = "FILES_AND_FOLDERS/REMOVE_CHILD";
@@ -30,34 +31,28 @@ export interface FilesAndFolders {
   id: string;
   name: string;
   children: string[];
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   file_size: number;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   file_last_modified: number;
   virtualPath: string;
+  depth?: number;
+  maxLastModified?: number;
 }
 
 export interface ElementWithToDelete extends FilesAndFolders {
   toDelete: boolean;
 }
 
-export interface FilesAndFoldersMap {
-  [id: string]: FilesAndFolders;
-}
+export type FilesAndFoldersMap = Record<string, FilesAndFolders>;
 
-export interface CommentsMap {
-  [id: string]: string;
-}
+export type CommentsMap = Record<string, string>;
 
-export interface AliasMap {
-  [id: string]: string;
-}
+export type AliasMap = Record<string, string>;
 
-export interface VirtualPathToIdMap {
-  [id: string]: string;
-}
+export type VirtualPathToIdMap = Record<string, string>;
 
-export interface LastModifiedMap {
-  [id: string]: number;
-}
+export type LastModifiedMap = Record<string, number>;
 
 export interface FilesAndFoldersState {
   filesAndFolders: FilesAndFoldersMap;
@@ -146,18 +141,18 @@ interface ResetOverrideLastModified extends Action {
 }
 
 export type FilesAndFoldersActionTypes =
-  | InitializeFilesAndFoldersAction
   | AddChildAction
-  | RemoveChildAction
-  | SetFilesAndFoldersAliasAction
   | AddCommentsOnFilesAndFoldersAction
-  | MarkAsToDelete
-  | UnmarkAsToDelete
-  | MarkElementsToDelete
-  | UnmarkElementsToDelete
-  | InitVirtualPathToIdMap
-  | RegisterErroredElements
-  | ResetErroredElements
-  | OverrideLastModified
+  | InitializeFilesAndFoldersAction
   | InitOverrideLastModified
-  | ResetOverrideLastModified;
+  | InitVirtualPathToIdMap
+  | MarkAsToDelete
+  | MarkElementsToDelete
+  | OverrideLastModified
+  | RegisterErroredElements
+  | RemoveChildAction
+  | ResetErroredElements
+  | ResetOverrideLastModified
+  | SetFilesAndFoldersAliasAction
+  | UnmarkAsToDelete
+  | UnmarkElementsToDelete;

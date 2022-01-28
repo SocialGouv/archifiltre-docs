@@ -1,13 +1,14 @@
-import React, { FC } from "react";
-import { useTranslation } from "react-i18next";
-import { ContactUs } from "./contact-us";
 import { Box } from "@material-ui/core";
-import logo from "../../../static/imgs/logo.png";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import { reloadApp } from "util/electron/electron-util";
+import Typography from "@material-ui/core/Typography";
+import React from "react";
+import { useTranslation } from "react-i18next";
 
-const ErrorScreen: FC = () => {
+import logo from "../../../static/imgs/logo.png";
+import { reloadApp } from "../../util/electron/electron-util";
+import { ContactUs } from "./contact-us";
+
+export const ErrorScreen: React.FC = () => {
   const { t } = useTranslation();
 
   return (
@@ -29,11 +30,9 @@ const ErrorScreen: FC = () => {
       </Box>
       <Box p={2}>
         <Button variant="outlined" color="primary" onClick={reloadApp}>
-          Revenir à l'écran d'accueil
+          {t("common.errorBack")}
         </Button>
       </Box>
     </Box>
   );
 };
-
-export default ErrorScreen;

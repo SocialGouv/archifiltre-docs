@@ -123,6 +123,7 @@
     "common": {
       "exportActionTitle": "Exporter",
       "error": "Oups ! Une erreur s'est produite.",
+      "errorBack": "Revenir à l'écran d'accueil",
       "contactUs": "Cliquez ici pour nous contacter",
       "somethingWentWrong": "Une erreur s'est produite.",
       "file": "fichier",

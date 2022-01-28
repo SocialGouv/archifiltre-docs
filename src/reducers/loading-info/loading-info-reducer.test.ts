@@ -7,10 +7,10 @@ import {
   startLoadingAction,
   updateLoadingAction,
 } from "./loading-info-actions";
-import loadingInfoReducer, { initialState } from "./loading-info-reducer";
+import { initialState, loadingInfoReducer } from "./loading-info-reducer";
 import { createArchifiltreError } from "./loading-info-selectors";
 import { createLoadingInfo } from "./loading-info-test-utils";
-import { LoadingInfoState } from "./loading-info-types";
+import type { LoadingInfoState } from "./loading-info-types";
 
 const previouslyLoadingId = "prev-loading-id";
 const previouslyLoading = createLoadingInfo({
@@ -29,9 +29,9 @@ const baseState: LoadingInfoState = {
   errors: [],
   loading: [previouslyLoadingId, otherPreviouslyLoadingId],
   loadingInfo: {
-    [previouslyLoadingId]: previouslyLoading,
-    [otherPreviouslyLoadingId]: otherPreviouslyLoading,
     [completeLoadingId]: completeLoading,
+    [otherPreviouslyLoadingId]: otherPreviouslyLoading,
+    [previouslyLoadingId]: previouslyLoading,
   },
 };
 
@@ -39,7 +39,10 @@ describe("loading-info-reducer", () => {
   describe("START_LOADING", () => {
     it("should add the new loading to the state", () => {
       const newLoadingId = "new-loading-id";
-      const newLoading = createLoadingInfo({ id: newLoadingId, progress: 0 });
+      const newLoading = createLoadingInfo({
+        id: newLoadingId,
+        progress: 0,
+      });
 
       expect(
         loadingInfoReducer(
@@ -56,10 +59,10 @@ describe("loading-info-reducer", () => {
         ...baseState,
         loading: [previouslyLoadingId, otherPreviouslyLoadingId, newLoadingId],
         loadingInfo: {
-          [previouslyLoadingId]: previouslyLoading,
-          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
-          [newLoadingId]: newLoading,
           [completeLoadingId]: completeLoading,
+          [newLoadingId]: newLoading,
+          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
+          [previouslyLoadingId]: previouslyLoading,
         },
       });
     });
@@ -79,20 +82,18 @@ describe("loading-info-reducer", () => {
         ...baseState,
         loading: [previouslyLoadingId, otherPreviouslyLoadingId],
         loadingInfo: {
+          [completeLoadingId]: completeLoading,
+          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
           [previouslyLoadingId]: {
             ...previouslyLoading,
             goal: newGoal,
             progress: newProgress,
           },
-          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
-          [completeLoadingId]: completeLoading,
         },
       });
     });
-  });
 
-  describe("UPDATE_LOADING", () => {
-    it("should update the existing loading element", () => {
+    it("should update the existing loading element 2", () => {
       const progress = 50;
 
       expect(
@@ -104,12 +105,12 @@ describe("loading-info-reducer", () => {
         ...baseState,
         loading: [previouslyLoadingId, otherPreviouslyLoadingId],
         loadingInfo: {
+          [completeLoadingId]: completeLoading,
+          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
           [previouslyLoadingId]: {
             ...previouslyLoading,
             progress: previouslyLoading.progress + progress,
           },
-          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
-          [completeLoadingId]: completeLoading,
         },
       });
     });
@@ -127,9 +128,9 @@ describe("loading-info-reducer", () => {
         complete: [completeLoadingId, previouslyLoadingId],
         loading: [otherPreviouslyLoadingId],
         loadingInfo: {
-          [previouslyLoadingId]: previouslyLoading,
-          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
           [completeLoadingId]: completeLoading,
+          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
+          [previouslyLoadingId]: previouslyLoading,
         },
       });
     });
@@ -170,9 +171,9 @@ describe("loading-info-reducer", () => {
         dismissed: [completeLoadingId],
         loading: [previouslyLoadingId, otherPreviouslyLoadingId],
         loadingInfo: {
-          [previouslyLoadingId]: previouslyLoading,
-          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
           [completeLoadingId]: completeLoading,
+          [otherPreviouslyLoadingId]: otherPreviouslyLoading,
+          [previouslyLoadingId]: previouslyLoading,
         },
       });
     });

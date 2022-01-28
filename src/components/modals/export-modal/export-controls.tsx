@@ -1,24 +1,25 @@
-import React, { FC } from "react";
-import Box from "@material-ui/core/Box";
 import { Button } from "@material-ui/core";
-import { FaFolderOpen } from "react-icons/fa";
-import { exportConfig, ExportType } from "./export-config";
-import { useTranslation } from "react-i18next";
-import { ExportTypesMap } from "./export-options";
-import path from "path";
+import Box from "@material-ui/core/Box";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { ipcRenderer } from "../../../common/ipc";
+import path from "path";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { FaFolderOpen } from "react-icons/fa";
 
-type ExportControlsProps = {
+import { ipcRenderer } from "../../../common/ipc";
+import { exportConfig, ExportType } from "./export-config";
+import type { ExportTypesMap } from "./export-options";
+
+export interface ExportControlsProps {
   setActiveExportValue: (exportType: ExportType, value: boolean) => void;
   setExportsPathsValue: (exportType: ExportType, value: string) => void;
   activeExports: ExportTypesMap<boolean>;
   exportPaths: ExportTypesMap<string>;
   enabledExports: ExportTypesMap<boolean>;
-};
+}
 
-const ExportControls: FC<ExportControlsProps> = ({
+export const ExportControls: React.FC<ExportControlsProps> = ({
   setActiveExportValue,
   setExportsPathsValue,
   activeExports,
@@ -77,5 +78,3 @@ const ExportControls: FC<ExportControlsProps> = ({
     </Box>
   );
 };
-
-export default ExportControls;

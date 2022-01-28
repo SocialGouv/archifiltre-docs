@@ -2,13 +2,13 @@ import Docxtemplater from "docxtemplater";
 import fs from "fs";
 import path from "path";
 import PizZip from "pizzip";
+
+import type { SimpleObject } from "../object/object-util";
 import { angularParser } from "./angular-parser";
 
 export type FileReplacer = (zip: PizZip, values: DocXValuesMap) => PizZip;
 
-export interface DocXValuesMap {
-  [key: string]: any;
-}
+export type DocXValuesMap = SimpleObject;
 
 /**
  * Loads a docx template, replaces the templated values and returns a Blob
@@ -33,7 +33,7 @@ export const exportToDocX = (
     .setOptions({ parser: angularParser })
     .setData(values)
     .render()
-    .getZip();
+    .getZip() as PizZip;
 
   const replacedZip = replacers.reduce(
     (zip, replacer) => replacer(zip, values),
@@ -50,20 +50,19 @@ export const exportToDocX = (
  * @param chartName - The name of the chart in the docx
  * @param chartTemplate - The template used to replace to replace the chart
  */
-export const createChartReplacer = (
-  chartName: string,
-  chartTemplate: string
-): FileReplacer => (zip: PizZip, values) => {
-  const chartFile = fs.readFileSync(chartTemplate, "utf-8");
-  // regex that matches {myKey} or { myKey } patterns and captures myKey
-  const matchInferredValuesRegex = /{\s*(\w+?)\s*}/gm;
+export const createChartReplacer =
+  (chartName: string, chartTemplate: string): FileReplacer =>
+  (zip, values) => {
+    const chartFile = fs.readFileSync(chartTemplate, "utf-8");
+    // regex that matches {myKey} or { myKey } patterns and captures myKey
+    const matchInferredValuesRegex = /{\s*(\w+?)\s*}/gm;
 
-  const replacedChartFile = chartFile.replace(
-    matchInferredValuesRegex,
-    (_, token) => {
-      return values[token] || "";
-    }
-  );
-  zip.file(`word/charts/${chartName}.xml`, replacedChartFile);
-  return zip;
-};
+    const replacedChartFile = chartFile.replace(
+      matchInferredValuesRegex,
+      (_, token) => {
+        return (values[token] as string) || "";
+      }
+    );
+    zip.file(`word/charts/${chartName}.xml`, replacedChartFile);
+    return zip;
+  };

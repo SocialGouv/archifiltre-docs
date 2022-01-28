@@ -2,14 +2,20 @@ import { clipboard } from "electron";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaClipboardCheck, FaRegClipboard } from "react-icons/fa";
+
 import {
   NotificationDuration,
   notifyInfo,
-} from "util/notification/notifications-util";
+} from "../../util/notification/notifications-util";
 
 const COPIED_ICON_DISPLAY_DURATION = 3000;
 
-export const CopyToClipboard = ({ stringToCopy }) => {
+export interface CopyToClipboardProps {
+  stringToCopy: string;
+}
+export const CopyToClipboard: React.FC<CopyToClipboardProps> = ({
+  stringToCopy,
+}) => {
   const { t } = useTranslation();
 
   const [isCopied, setIsCopied] = useState(false);
@@ -21,19 +27,22 @@ export const CopyToClipboard = ({ stringToCopy }) => {
       setIsCopied(true);
       notifyInfo(t("report.copied"), "", NotificationDuration.NORMAL);
     },
-    [stringToCopy]
+    [stringToCopy, t]
   );
 
-  useEffect(() => setIsCopied(false), [setIsCopied, stringToCopy]);
+  useEffect(() => {
+    setIsCopied(false);
+  }, [setIsCopied, stringToCopy]);
 
   useEffect(() => {
     if (isCopied) {
-      const timeout = setTimeout(
-        () => setIsCopied(false),
-        COPIED_ICON_DISPLAY_DURATION
-      );
+      const timeout = setTimeout(() => {
+        setIsCopied(false);
+      }, COPIED_ICON_DISPLAY_DURATION);
 
-      return () => clearTimeout(timeout);
+      return () => {
+        clearTimeout(timeout);
+      };
     }
   }, [isCopied, setIsCopied]);
 

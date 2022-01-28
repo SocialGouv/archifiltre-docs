@@ -1,3 +1,4 @@
+import { createArchifiltreError } from "../loading-info/loading-info-selectors";
 import {
   addChild,
   addCommentsOnFilesAndFolders,
@@ -15,14 +16,13 @@ import {
 } from "./files-and-folders-actions";
 import {
   filesAndFoldersReducer,
-  initialState,
+  initialState as initialStateSample,
 } from "./files-and-folders-reducer";
 import { ROOT_FF_ID } from "./files-and-folders-selectors";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
-import { FilesAndFoldersState } from "./files-and-folders-types";
-import { createArchifiltreError } from "reducers/loading-info/loading-info-selectors";
+import type { FilesAndFoldersState } from "./files-and-folders-types";
 
-const baseState: FilesAndFoldersState = initialState;
+const baseState: FilesAndFoldersState = initialStateSample;
 
 describe("files-and-folders-reducer", () => {
   describe("INITIALIZE_FILES_AND_FOLDERS", () => {
@@ -61,8 +61,8 @@ describe("files-and-folders-reducer", () => {
       });
       const child = createFilesAndFolders({ id: childId });
       const filesAndFolders = {
-        [parentId]: parent,
         [childId]: child,
+        [parentId]: parent,
       };
 
       const state = { ...baseState, filesAndFolders };
@@ -71,13 +71,13 @@ describe("files-and-folders-reducer", () => {
       ).toEqual({
         ...baseState,
         filesAndFolders: {
-          [parentId]: {
-            ...parent,
-            children: [existingChildID, childId],
-          },
           [childId]: {
             ...child,
             virtualPath: "/1/base-name",
+          },
+          [parentId]: {
+            ...parent,
+            children: [existingChildID, childId],
           },
         },
         virtualPathToId: {
@@ -115,11 +115,11 @@ describe("files-and-folders-reducer", () => {
       const file2 = createFilesAndFolders({ id: file2Id, name: "file2" });
       const filesAndFolders = {
         [ROOT_FF_ID]: rootFf,
-        [rootFolderId]: rootFolder,
-        [folder1Id]: folder1,
-        [folder2Id]: folder2,
         [file1Id]: file1,
         [file2Id]: file2,
+        [folder1Id]: folder1,
+        [folder2Id]: folder2,
+        [rootFolderId]: rootFolder,
       };
 
       const folder2NextVirtualPath = "/root-folder/folder1/folder2";
@@ -136,19 +136,19 @@ describe("files-and-folders-reducer", () => {
         ...baseState,
         filesAndFolders: {
           ...filesAndFolders,
+          [file2Id]: {
+            ...file2,
+            virtualPath: file2NextVirtualPath,
+          },
           [folder1Id]: { ...folder1, children: [file1Id, folder2Id] },
           [folder2Id]: {
             ...folder2,
             virtualPath: folder2NextVirtualPath,
           },
-          [file2Id]: {
-            ...file2,
-            virtualPath: file2NextVirtualPath,
-          },
         },
         virtualPathToId: {
-          [folder2NextVirtualPath]: folder2Id,
           [file2NextVirtualPath]: file2Id,
+          [folder2NextVirtualPath]: folder2Id,
         },
       });
     });
@@ -165,8 +165,8 @@ describe("files-and-folders-reducer", () => {
       });
       const child = createFilesAndFolders({ id: childId });
       const filesAndFolders = {
-        [parentId]: parent,
         [childId]: child,
+        [parentId]: parent,
       };
 
       const state = { ...baseState, filesAndFolders };

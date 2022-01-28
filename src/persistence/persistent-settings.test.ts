@@ -5,8 +5,8 @@ describe("persistent-settings", () => {
     describe("with an empty object", () => {
       it("should return default user settings", () => {
         expect(sanitizeUserSettings({})).toEqual({
-          isTrackingEnabled: true,
           isMonitoringEnabled: true,
+          isTrackingEnabled: true,
           language: "en",
         });
       });
@@ -14,8 +14,8 @@ describe("persistent-settings", () => {
     describe("with an empty string", () => {
       it("should return default user settings", () => {
         expect(sanitizeUserSettings("")).toEqual({
-          isTrackingEnabled: true,
           isMonitoringEnabled: true,
+          isTrackingEnabled: true,
           language: "en",
         });
       });
@@ -23,8 +23,8 @@ describe("persistent-settings", () => {
     describe("with undefined", () => {
       it("should return default user settings", () => {
         expect(sanitizeUserSettings(undefined)).toEqual({
-          isTrackingEnabled: true,
           isMonitoringEnabled: true,
+          isTrackingEnabled: true,
           language: "en",
         });
       });
@@ -33,13 +33,13 @@ describe("persistent-settings", () => {
       it("should return default user settings", () => {
         expect(
           sanitizeUserSettings({
-            isTrackingEnabled: false,
             isMonitoringEnabled: true,
+            isTrackingEnabled: false,
             language: "fr",
           })
         ).toEqual({
-          isTrackingEnabled: false,
           isMonitoringEnabled: true,
+          isTrackingEnabled: false,
           language: "fr",
         });
       });
@@ -51,8 +51,8 @@ describe("persistent-settings", () => {
             isMonitoringEnabled: false,
           })
         ).toEqual({
-          isTrackingEnabled: true,
           isMonitoringEnabled: false,
+          isTrackingEnabled: true,
           language: "en",
         });
       });

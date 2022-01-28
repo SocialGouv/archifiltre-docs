@@ -1,6 +1,27 @@
 import React, { memo } from "react";
 
-const SvgRectangle = ({
+export interface SvgRectangleProps {
+  x: NonNullable<React.SVGAttributes<SVGRectElement>["x"]>;
+  y: NonNullable<React.SVGAttributes<SVGRectElement>["y"]>;
+  dx: NonNullable<React.SVGAttributes<SVGRectElement>["width"]>;
+  dy: NonNullable<React.SVGAttributes<SVGRectElement>["height"]>;
+  onClickHandler: NonNullable<React.SVGAttributes<SVGRectElement>["onClick"]>;
+  onDoubleClickHandler: NonNullable<
+    React.SVGAttributes<SVGRectElement>["onDoubleClick"]
+  >;
+  onMouseOverHandler: NonNullable<
+    React.SVGAttributes<SVGRectElement>["onFocus"] &
+      React.SVGAttributes<SVGRectElement>["onMouseOver"]
+  >;
+  fill: NonNullable<React.CSSProperties["fill"]>;
+  opacity: NonNullable<React.CSSProperties["opacity"]>;
+  stroke: NonNullable<React.CSSProperties["stroke"]>;
+  cursor: NonNullable<React.CSSProperties["cursor"]>;
+  elementId: string;
+  ignorePointerEvents?: boolean;
+  strokeWidth?: React.CSSProperties["strokeWidth"];
+}
+const _SvgRectangle: React.FC<SvgRectangleProps> = ({
   x,
   y,
   dx,
@@ -29,14 +50,16 @@ const SvgRectangle = ({
     onMouseOver={onMouseOverHandler}
     onFocus={onMouseOverHandler}
     style={{
+      cursor,
       fill,
       opacity,
-      stroke,
-      cursor,
       pointerEvents: ignorePointerEvents ? "none" : "inherit",
+      stroke,
       strokeWidth,
     }}
   />
 );
 
-export default memo(SvgRectangle);
+_SvgRectangle.displayName = "SvgRectangle";
+
+export const SvgRectangle = memo(_SvgRectangle);

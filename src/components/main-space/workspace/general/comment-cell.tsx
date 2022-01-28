@@ -1,17 +1,18 @@
-import NoElementSelectedPlaceholder from "components/main-space/workspace/enrichment/element-characteristics/no-element-selected-placeholder";
-import React, { FC, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
-import EditableField from "components/common/editable-field";
 
-type CommentCellProps = {
+import { addTracker } from "../../../../logging/tracker";
+import { ActionTitle, ActionType } from "../../../../logging/tracker-types";
+import { EditableField } from "../../../common/editable-field";
+import { NoElementSelectedPlaceholder } from "../enrichment/element-characteristics/no-element-selected-placeholder";
+
+export interface CommentCellProps {
   isActive: boolean;
   comment: string;
   updateComment: (newComment: string) => void;
-};
+}
 
-const CommentCell: FC<CommentCellProps> = ({
+export const CommentCell: React.FC<CommentCellProps> = ({
   isActive,
   comment,
   updateComment,
@@ -44,5 +45,3 @@ const CommentCell: FC<CommentCellProps> = ({
     <NoElementSelectedPlaceholder title={t("report.yourCommentsHere")} />
   );
 };
-
-export default CommentCell;

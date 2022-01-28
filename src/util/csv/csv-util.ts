@@ -2,13 +2,12 @@
  * Escape doubleQuotes with the specified character (usually " or \)
  * @param doubleQuoteEscapeCharacter
  */
-const escapeDoubleQuotes = (doubleQuoteEscapeCharacter: string) => (
-  stringToEscape: string
-) =>
-  stringToEscape.replace(
-    new RegExp(`"`, "gm"),
-    `${doubleQuoteEscapeCharacter}"`
-  );
+const escapeDoubleQuotes =
+  (doubleQuoteEscapeCharacter: string) => (stringToEscape: string) =>
+    stringToEscape.replace(
+      new RegExp(`"`, "gm"),
+      `${doubleQuoteEscapeCharacter}"`
+    );
 
 /**
  * Wraps a string with double quotes
@@ -26,14 +25,13 @@ interface FlattenLineOptions {
  * @param separator - The cell separator
  * @param doubleQuoteEscapeCharacter - The character used to escape double quote. Is usually another " or a \
  */
-const flattenLine = ({
-  cellSeparator,
-  doubleQuoteEscapeCharacter,
-}: FlattenLineOptions) => (lineArray: string[]): string =>
-  lineArray
-    .map(escapeDoubleQuotes(doubleQuoteEscapeCharacter))
-    .map(wrapWithQuotes)
-    .join(cellSeparator);
+const flattenLine =
+  ({ cellSeparator, doubleQuoteEscapeCharacter }: FlattenLineOptions) =>
+  (lineArray: string[]): string =>
+    lineArray
+      .map(escapeDoubleQuotes(doubleQuoteEscapeCharacter))
+      .map(wrapWithQuotes)
+      .join(cellSeparator);
 
 /**
  * Converts an matrix of strings to CSV.

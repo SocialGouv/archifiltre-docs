@@ -1,17 +1,18 @@
-import translations from "translations/translations";
-import { WorkerEventType } from "util/async-worker/async-worker-util";
-import { MessageTypes } from "util/batch-process/batch-process-util-types";
-import { hookCounter } from "util/hook/hook-utils";
-import resipExporter from "./resip-exporter";
-import { createAsyncWorkerForChildProcess } from "util/async-worker/child-process";
+import { translations } from "../../translations/translations";
+import { WorkerEventType } from "../../util/async-worker/async-worker-util";
+import { createAsyncWorkerForChildProcess } from "../../util/async-worker/child-process";
+import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
+import { hookCounter } from "../../util/hook/hook-utils";
+import { resipExporter } from "./resip-exporter";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
 
 asyncWorker.addEventListener(
   WorkerEventType.MESSAGE,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async ({ type, data }: any) => {
     if (type === "initialize") {
-      const messageHook = (count) => {
+      const messageHook = (count: number | undefined) => {
         asyncWorker.postMessage({
           result: { count, resipCsv: [] },
           type: MessageTypes.RESULT,
@@ -28,7 +29,7 @@ asyncWorker.addEventListener(
         tags,
         language,
       } = data;
-      await translations.changeLanguage(language);
+      await translations.changeLanguage(language as string);
 
       const resipExportData = resipExporter(
         {

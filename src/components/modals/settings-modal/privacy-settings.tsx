@@ -1,26 +1,27 @@
-import { Theme } from "@material-ui/core";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Tooltip from "@material-ui/core/Tooltip";
+import type { Theme } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 import Switch from "@material-ui/core/Switch";
-import { useUserSettings } from "hooks/use-user-settings";
-import { getInitialUserSettings } from "persistence/persistent-settings";
+import Tooltip from "@material-ui/core/Tooltip";
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { reloadApp } from "util/electron/electron-util";
+
+import { useUserSettings } from "../../../hooks/use-user-settings";
+import { getInitialUserSettings } from "../../../persistence/persistent-settings";
+import { reloadApp } from "../../../util/electron/electron-util";
 
 const useStyles = makeStyles((theme: Theme) => ({
-  enabled: {
-    color: theme.palette.secondary.main,
-  },
   disabled: {
     color: theme.palette.grey["500"],
   },
+  enabled: {
+    color: theme.palette.secondary.main,
+  },
 }));
 
-const PrivacySettings = () => {
+export const PrivacySettings: React.FC = () => {
   const { t } = useTranslation();
   const classes = useStyles();
 
@@ -94,5 +95,3 @@ const PrivacySettings = () => {
     </Box>
   );
 };
-
-export default PrivacySettings;

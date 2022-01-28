@@ -1,5 +1,7 @@
+import type { BrowserWindow } from "electron";
+
 import { ipcMain } from "../common/ipc";
-import { BrowserWindow } from "electron";
+
 declare module "../common/ipc/event" {
   interface SyncIpcMapping {
     "window.getSize": IpcConfig<[], number[]>;
@@ -9,7 +11,7 @@ declare module "../common/ipc/event" {
   }
 }
 
-export const loadWindow = (window: BrowserWindow) => {
+export const loadWindow = (window: BrowserWindow): void => {
   ipcMain.on("window.show", () => {
     window.show();
   });
@@ -20,6 +22,7 @@ export const loadWindow = (window: BrowserWindow) => {
     event.returnValue = window.getSize();
   });
   ipcMain.on("window.setSize", (event, width, heigth) => {
+    // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
     event.returnValue = window.setSize(width, heigth);
   });
 };

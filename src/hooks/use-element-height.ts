@@ -1,4 +1,5 @@
-import { MutableRefObject, useCallback, useEffect, useState } from "react";
+import type { MutableRefObject } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export const useElementHeight = (
   ref: MutableRefObject<HTMLElement | null>
@@ -27,7 +28,9 @@ export const useElementHeight = (
     };
     window.addEventListener("resize", onResize);
 
-    return () => window.removeEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
   }, [ref, setElementHeightFromRef]);
 
   return height;

@@ -1,8 +1,8 @@
-import {
+import type {
   FilesAndFoldersMetadataAction,
   FilesAndFoldersMetadataMap,
-  INIT_FILES_AND_FOLDERS_METADATA,
 } from "./files-and-folders-metadata-types";
+import { INIT_FILES_AND_FOLDERS_METADATA } from "./files-and-folders-metadata-types";
 
 /**
  * Sets files and folders prcomputed metadata into the store

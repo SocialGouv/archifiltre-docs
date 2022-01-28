@@ -1,4 +1,7 @@
-import { ArchifiltreError, ArchifiltreErrorType } from "util/error/error-util";
+import type {
+  ArchifiltreError,
+  ArchifiltreErrorType,
+} from "../../util/error/error-util";
 
 export const START_LOADING = "LOADING_INFO/START_LOADING";
 export const UPDATE_LOADING = "LOADING_INFO/UPDATE_LOADING";
@@ -11,7 +14,9 @@ export const RESET_LOADING = "LOADING_INFO/RESET_LOADING";
 export const DISMISS_ALL_COMPLETE = "LOADING_INFO/DISMISS_ALL_COMPLETE";
 
 export enum LoadingInfoTypes {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   HASH_COMPUTING = "hash-computing",
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   EXPORT = "export",
 }
 
@@ -25,9 +30,7 @@ export interface LoadingInfo {
   exportedPath?: string;
 }
 
-export interface LoadingInfoMap {
-  [id: string]: LoadingInfo;
-}
+export type LoadingInfoMap = Record<string, LoadingInfo>;
 
 export interface LoadingInfoState {
   loadingInfo: LoadingInfoMap;
@@ -79,8 +82,8 @@ interface RegisterErrorAction {
 interface ReplaceErrorsAction {
   type: typeof REPLACE_ERRORS;
   errors: ArchifiltreError[];
-  errorType: ArchifiltreErrorType
-};
+  errorType: ArchifiltreErrorType;
+}
 
 interface ResetLoadingAction {
   type: typeof RESET_LOADING;
@@ -91,12 +94,12 @@ interface DismissAllComplete {
 }
 
 export type LoadingInfoAction =
-  | StartLoadingAction
-  | UpdateLoadingAction
-  | ProgressLoadingAction
+  | AddExportedPathAction
   | CompleteLoadingAction
+  | DismissAllComplete
+  | ProgressLoadingAction
   | RegisterErrorAction
   | ReplaceErrorsAction
   | ResetLoadingAction
-  | DismissAllComplete
-  | AddExportedPathAction;
+  | StartLoadingAction
+  | UpdateLoadingAction;

@@ -1,13 +1,13 @@
+import type { Column } from "../../components/common/table/table-types";
 import {
   accessorToFunction,
   applyAccessorToTableValue,
-  limitPageIndex,
   getComparator,
+  limitPageIndex,
   maxPage,
   stableSort,
   tableContentToArray,
-} from "util/table/table-util";
-import { Column } from "components/common/table/table-types";
+} from "./table-util";
 
 describe("table-util", () => {
   describe("stableSort", () => {
@@ -27,8 +27,6 @@ describe("table-util", () => {
         { id: "id4", name: "name4" },
       ]);
     });
-  });
-  describe("stableSort", () => {
     it("should sort an array in descending order by name", () => {
       const arrayToSort = [
         { id: "id2", name: "name2" },
@@ -48,9 +46,9 @@ describe("table-util", () => {
   });
 
   describe("applyAccessorToTableValue", () => {
-    type TestData = {
+    interface TestData {
       name: string;
-    };
+    }
 
     it("should work with a function accessor", () => {
       const data: TestData = {
@@ -71,10 +69,10 @@ describe("table-util", () => {
   });
 
   describe("tableContentToArray", () => {
-    type TestData = {
+    interface TestData {
       name: string;
       value: string;
-    };
+    }
 
     it("should generate a string[][] from table data and config", () => {
       const data: TestData[] = [
@@ -90,14 +88,14 @@ describe("table-util", () => {
 
       const columns: Column<TestData>[] = [
         {
+          accessor: "name",
           id: "name",
           name: "name",
-          accessor: "name",
         },
         {
+          accessor: ({ value }) => `accessor(${value})`,
           id: "value",
           name: "value",
-          accessor: ({ value }) => `accessor(${value})`,
         },
       ];
 

@@ -1,10 +1,11 @@
 import _ from "lodash";
 import { v4 as uuid } from "uuid";
+
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
-
-import undoable from "../enhancers/undoable/undoable";
+import { undoable } from "../enhancers/undoable/undoable";
 import { getTagByName } from "./tags-selectors";
+import type { TagsActionTypes, TagsState } from "./tags-types";
 import {
   ADD_TAG,
   DELETE_TAG,
@@ -12,17 +13,15 @@ import {
   RENAME_TAG,
   RESET_TAGS,
   TAG_FILE,
-  TagsActionTypes,
-  TagsState,
   UNTAG_FILE,
 } from "./tags-types";
 
 const initialState: TagsState = {
   tags: {
     "to-delete": {
+      ffIds: [""],
       id: "",
       name: "",
-      ffIds: [""],
     },
   },
 };
@@ -60,10 +59,10 @@ const createTag = (
 ): TagsState => {
   const completeTagId = tagId === "" ? uuid() : tagId;
   addTracker({
+    eventValue: tagName,
     title: ActionTitle.TAG_ADDED,
     type: ActionType.TRACK_EVENT,
     value: `Created tag: "${tagName}"`,
-    eventValue: tagName,
   });
   return {
     tags: {
@@ -84,17 +83,19 @@ const createTag = (
  */
 const tagsReducer = (
   state = initialState,
-  action: TagsActionTypes
+  action?: TagsActionTypes
 ): TagsState => {
-  switch (action.type) {
+  switch (action?.type) {
     case RESET_TAGS:
       return initialState;
     case INITIALIZE_TAGS:
       return { tags: action.tags };
     case ADD_TAG:
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (action.ffId === undefined) {
         return state;
       }
+      // eslint-disable-next-line no-case-declarations
       const tagWithTheSameName = getTagByName(state.tags, action.tagName);
       if (tagWithTheSameName === undefined) {
         return createTag(state, action.tagName, action.ffId, action.tagId);
@@ -104,7 +105,10 @@ const tagsReducer = (
       return {
         tags: {
           ...state.tags,
-          [action.tagId]: { ...state.tags[action.tagId], name: action.tagName },
+          [action.tagId]: {
+            ...state.tags[action.tagId],
+            name: action.tagName,
+          },
         },
       };
     case DELETE_TAG:
@@ -128,4 +132,4 @@ const tagsReducer = (
 
 export { tagsReducer };
 
-export default undoable(tagsReducer, initialState);
+export const undoableTagsReducer = undoable(tagsReducer, initialState);

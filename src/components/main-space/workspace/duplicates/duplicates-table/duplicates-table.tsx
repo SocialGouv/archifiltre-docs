@@ -1,29 +1,29 @@
 import Box from "@material-ui/core/Box";
-import { Column } from "components/common/table/table-types";
-import React, { FC, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
-import Table from "components/common/table/table";
-import DuplicatesTableType from "./duplicates-table-type";
 
-type NumberMap = {
-  [id: string]: number;
-};
+import { octet2HumanReadableFormat } from "../../../../../util/file-system/file-sys-util";
+import type { FileType } from "../../../../../util/file-types/file-types-util";
+import { Table } from "../../../../common/table/table";
+import type { Column } from "../../../../common/table/table-types";
+import { DuplicatesTableType } from "./duplicates-table-type";
 
-type TableData = {
-  fileType: string;
+type NumberMap<T extends string = string> = Record<T, number>;
+
+interface TableData {
+  fileType: FileType;
   nbFiles: number;
   size: number;
   percentage: number;
-};
+}
 
-type DuplicatesTableProps = {
-  fileTypesCount: NumberMap;
+export interface DuplicatesTableProps {
+  fileTypesCount: NumberMap<FileType>;
   fileSizesCount: NumberMap;
   filePercentagesCount: NumberMap;
-};
+}
 
-const DuplicatesTable: FC<DuplicatesTableProps> = ({
+export const DuplicatesTable: React.FC<DuplicatesTableProps> = ({
   fileTypesCount,
   fileSizesCount,
   filePercentagesCount,
@@ -33,30 +33,30 @@ const DuplicatesTable: FC<DuplicatesTableProps> = ({
   const columns: Column<TableData>[] = useMemo(
     () => [
       {
+        accessor: ({ fileType }) => <DuplicatesTableType fileType={fileType} />,
         id: "type",
         name: t("search.type"),
-        accessor: ({ fileType }) => <DuplicatesTableType fileType={fileType} />,
         sortable: true,
       },
       {
+        accessor: "nbFiles",
         id: "nbFiles",
         name: t("duplicates.filesNumber"),
-        accessor: "nbFiles",
         sortable: true,
       },
       {
+        accessor: ({ size }) => octet2HumanReadableFormat(size),
         id: "size",
         name: t("duplicates.spaceUsed"),
-        accessor: ({ size }) => octet2HumanReadableFormat(size),
-        sortable: true,
         sortAccessor: "size",
+        sortable: true,
       },
       {
+        accessor: ({ percentage }) => `${percentage || "<0.01"} %`,
         id: "percentage",
         name: t("duplicates.percentage"),
-        accessor: ({ percentage }) => `${percentage || "<0.01"} %`,
-        sortable: true,
         sortAccessor: "percentage",
+        sortable: true,
       },
     ],
     [t]
@@ -64,17 +64,14 @@ const DuplicatesTable: FC<DuplicatesTableProps> = ({
 
   const data = useMemo<TableData[]>(
     () =>
-      Object.entries(fileTypesCount)
-        .sort(
-          ([, firstValue]: [any, number], [, secondValue]: [any, number]) =>
-            secondValue - firstValue
-        )
+      (Object.entries(fileTypesCount) as [FileType, number][])
+        .sort(([, firstValue], [, secondValue]) => secondValue - firstValue)
         .map(([fileType, fileTypeValue]) => {
           return {
             fileType: fileType,
             nbFiles: fileTypeValue,
-            size: fileSizesCount[fileType],
             percentage: filePercentagesCount[fileType],
+            size: fileSizesCount[fileType],
           };
         }),
     [fileTypesCount, fileSizesCount, filePercentagesCount]
@@ -92,5 +89,3 @@ const DuplicatesTable: FC<DuplicatesTableProps> = ({
     </Box>
   );
 };
-
-export default DuplicatesTable;

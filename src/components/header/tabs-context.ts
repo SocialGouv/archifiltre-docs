@@ -1,19 +1,20 @@
-import React, { useContext } from "react";
+import { noop } from "lodash";
+import { createContext, useContext } from "react";
 
-type TabsContextValues = {
+export interface TabsContextValues {
   tabIndex: number;
   setTabIndex: (tabIndex: number) => void;
-};
+}
 
 const tabsState: TabsContextValues = {
+  setTabIndex: noop,
   tabIndex: 0,
-  setTabIndex: (tabIndex) => {},
 };
 
-export const TabsContext = React.createContext<TabsContextValues>(tabsState);
+export const TabsContext = createContext<TabsContextValues>(tabsState);
 
 export const useTabsState = (): TabsContextValues => {
   const { tabIndex, setTabIndex } = useContext(TabsContext);
 
-  return { tabIndex, setTabIndex };
+  return { setTabIndex, tabIndex };
 };

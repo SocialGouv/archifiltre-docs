@@ -1,30 +1,33 @@
-import React, { FC } from "react";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaFlag, FaInfoCircle, FaLock } from "react-icons/fa";
 
-type ModalMenuProps = {
+export interface ModalMenuProps {
   selectedItem: number;
   setSelectedItem: (selectedItem: number) => void;
-};
+}
 
-const ModalMenu: FC<ModalMenuProps> = ({ selectedItem, setSelectedItem }) => {
+export const ModalMenu: React.FC<ModalMenuProps> = ({
+  selectedItem,
+  setSelectedItem,
+}) => {
   const { t } = useTranslation();
   const menuOptions = [
     {
-      label: t("settingsModal.language"),
       icon: <FaFlag />,
+      label: t("settingsModal.language"),
     },
     {
-      label: t("settingsModal.privacy"),
       icon: <FaLock />,
+      label: t("settingsModal.privacy"),
     },
     {
-      label: t("settingsModal.about"),
       icon: <FaInfoCircle />,
+      label: t("settingsModal.about"),
     },
   ];
 
@@ -34,7 +37,9 @@ const ModalMenu: FC<ModalMenuProps> = ({ selectedItem, setSelectedItem }) => {
         <ListItem
           button
           key={index}
-          onClick={() => setSelectedItem(index)}
+          onClick={() => {
+            setSelectedItem(index);
+          }}
           selected={index === selectedItem}
         >
           <ListItemIcon>{icon}</ListItemIcon>
@@ -44,5 +49,3 @@ const ModalMenu: FC<ModalMenuProps> = ({ selectedItem, setSelectedItem }) => {
     </List>
   );
 };
-
-export default ModalMenu;

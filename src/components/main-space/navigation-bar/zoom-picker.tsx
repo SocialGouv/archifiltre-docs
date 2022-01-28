@@ -1,21 +1,24 @@
-import React, { FC, useState } from "react";
-import { FaSearchMinus, FaSearchPlus, FaSearch } from "react-icons/fa";
-import { useZoomContext } from "../workspace/zoom-provider";
-import { useTranslation } from "react-i18next";
 import { MenuItem } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import { ZOOM_SPEED } from "../icicle/icicle-main";
+import type { ButtonProps } from "@material-ui/core/Button";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
-import ZoomPickerOptionItem from "./zoom-picker-option-item";
 import { round } from "lodash";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { FaSearch, FaSearchMinus, FaSearchPlus } from "react-icons/fa";
 
-const ZoomPicker: FC = () => {
+import type { AnyFunction } from "../../../util/function/function-util";
+import { ZOOM_SPEED } from "../icicle/icicle-main";
+import { useZoomContext } from "../workspace/zoom-provider";
+import { ZoomPickerOptionItem } from "./zoom-picker-option-item";
+
+export const ZoomPicker: React.FC = () => {
   const { zoomIn, zoomOut, resetZoom, ratio } = useZoomContext();
   const { t } = useTranslation();
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-  const handleClick = (event) => {
+  const handleClick: ButtonProps["onClick"] = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -23,13 +26,19 @@ const ZoomPicker: FC = () => {
     setAnchorEl(null);
   };
 
-  const withHandleClose = (callback) => (...args) => {
-    handleClose();
-    callback(...args);
-  };
+  const withHandleClose =
+    (callback: AnyFunction) =>
+    (...args: unknown[]) => {
+      handleClose();
+      callback(...args);
+    };
 
-  const onZoomIn = () => zoomIn(null, ZOOM_SPEED);
-  const onZoomOut = () => zoomOut(null, ZOOM_SPEED);
+  const onZoomIn = () => {
+    zoomIn(null, ZOOM_SPEED);
+  };
+  const onZoomOut = () => {
+    zoomOut(null, ZOOM_SPEED);
+  };
 
   const options = [
     {
@@ -70,12 +79,12 @@ const ZoomPicker: FC = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "bottom",
           horizontal: "right",
+          vertical: "bottom",
         }}
         transformOrigin={{
-          vertical: "top",
           horizontal: "right",
+          vertical: "top",
         }}
       >
         {options.map(({ icon, label, onClick }) => (
@@ -87,5 +96,3 @@ const ZoomPicker: FC = () => {
     </Box>
   );
 };
-
-export default ZoomPicker;

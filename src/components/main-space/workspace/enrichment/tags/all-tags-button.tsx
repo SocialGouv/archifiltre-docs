@@ -1,12 +1,13 @@
-import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-import React, { FC } from "react";
+import Tooltip from "@material-ui/core/Tooltip";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaTags } from "react-icons/fa";
-import AllTagsModal from "components/modals/all-tags-modal/all-tags-modal";
-import { useModal } from "hooks/use-modal";
 
-const AllTagsButton: FC = () => {
+import { useModal } from "../../../../../hooks/use-modal";
+import { AllTagsModal } from "../../../../modals/all-tags-modal/all-tags-modal";
+
+export const AllTagsButton: React.FC = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const { t } = useTranslation();
   const title = t("workspace.allTags");
@@ -22,5 +23,3 @@ const AllTagsButton: FC = () => {
     </>
   );
 };
-
-export default AllTagsButton;

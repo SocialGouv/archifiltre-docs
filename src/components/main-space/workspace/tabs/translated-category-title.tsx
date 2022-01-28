@@ -1,10 +1,11 @@
 import React from "react";
-import CategoryTitle from "components/common/category-title";
 import { useTranslation } from "react-i18next";
 
-const TranslatedCategoryTitle = ({ title }) => {
+import { CategoryTitle } from "../../../common/category-title";
+
+export const TranslatedCategoryTitle: React.FC<{ title: string }> = ({
+  title,
+}) => {
   const { t } = useTranslation();
   return <CategoryTitle>{t(title)}</CategoryTitle>;
 };
-
-export default TranslatedCategoryTitle;

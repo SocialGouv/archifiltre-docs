@@ -1,12 +1,10 @@
-import React, { FC } from "react";
+import React from "react";
 
-import { useLoadingStep } from "reducers/loading-state/loading-state-selectors";
-import MainSpaceRouter from "./main-space-router";
+import { useLoadingStep } from "../../reducers/loading-state/loading-state-selectors";
+import { MainSpaceRouter } from "./main-space-router";
 
-const MainSpace: FC = () => {
+export const MainSpace: React.FC = () => {
   const step = useLoadingStep();
 
   return <MainSpaceRouter step={step} />;
 };
-
-export default MainSpace;

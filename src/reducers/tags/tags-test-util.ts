@@ -1,4 +1,4 @@
-import { Tag } from "./tags-types";
+import type { Tag } from "./tags-types";
 
 interface TagOptions {
   id: string;
@@ -15,7 +15,7 @@ const DEFAULT_NAME = "base-tag-name";
  * @param ffIds
  */
 export const createTag = ({ id, name, ffIds }: TagOptions): Tag => ({
-  ffIds: ffIds || [],
+  ffIds: ffIds ?? [],
   id,
-  name: name || DEFAULT_NAME,
+  name: name ?? DEFAULT_NAME,
 });

@@ -1,69 +1,73 @@
-import { Theme } from "@material-ui/core/styles/createMuiTheme";
+import type { Theme } from "@material-ui/core/styles/createMuiTheme";
 import createStyles from "@material-ui/core/styles/createStyles";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
-import React, { FC, useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import { getAreHashesReady } from "reducers/files-and-folders/files-and-folders-selectors";
+
+import { addTracker } from "../../../../logging/tracker";
+import { ActionTitle, ActionType } from "../../../../logging/tracker-types";
+import { getAreHashesReady } from "../../../../reducers/files-and-folders/files-and-folders-selectors";
+import type { SimpleObject } from "../../../../util/object/object-util";
 
 const useLocalStyles = makeStyles((theme: Theme) =>
   createStyles({
     tab: {
-      minWidth: 0,
-      paddingLeft: theme.spacing(1),
-      paddingRight: theme.spacing(1),
-      paddingTop: theme.spacing(1),
-      paddingBottom: 0,
       "&.MuiTab-textColorPrimary.Mui-selected > span": {
         fontFamily: "QuicksandBold",
       },
+      minWidth: 0,
+      paddingBottom: 0,
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+      paddingTop: theme.spacing(1),
     },
   })
 );
 
 const a11yProps = (index: number) => ({
-  id: `tab-${index}`,
   "aria-controls": `tabpanel-${index}`,
+  id: `tab-${index}`,
 });
 
-type TabsHeaderProps = {
+export interface TabsHeaderProps {
   setTabIndex: (tabIndex: number) => void;
   tabIndex: number;
-};
+}
 
-const TabsHeader: FC<TabsHeaderProps> = ({ setTabIndex, tabIndex }) => {
+export const TabsHeader: React.FC<TabsHeaderProps> = ({
+  setTabIndex,
+  tabIndex,
+}) => {
   const { t } = useTranslation();
   const classes = useLocalStyles();
   const areHashesReady = useSelector(getAreHashesReady);
 
   const tabData = useMemo(
     () => [
-      { label: t("workspace.general"), disabled: false },
-      { label: t("workspace.enrichment"), disabled: false },
-      { label: t("workspace.audit"), disabled: false },
-      { label: t("workspace.duplicates"), disabled: !areHashesReady },
+      { disabled: false, label: t("workspace.general") },
+      { disabled: false, label: t("workspace.enrichment") },
+      { disabled: false, label: t("workspace.audit") },
+      { disabled: !areHashesReady, label: t("workspace.duplicates") },
     ],
     [t, areHashesReady]
   );
 
-  const handleTracking = (tabIndex) => {
-    addTracker({
-      title: ActionTitle.CLICK_ON_TAB,
-      value: `Click on ${t(tabData[tabIndex].label)}`,
-      type: ActionType.TRACK_EVENT,
-    });
-  };
-
   const handleChange = useCallback(
-    (event: React.ChangeEvent<{}>, newValue: number) => {
+    (event: React.ChangeEvent<SimpleObject>, newValue: number) => {
+      const handleTracking = (trackingTabIndex: number) => {
+        addTracker({
+          title: ActionTitle.CLICK_ON_TAB,
+          type: ActionType.TRACK_EVENT,
+          value: `Click on ${t(tabData[trackingTabIndex].label)}`,
+        });
+      };
       handleTracking(newValue);
       setTabIndex(newValue);
     },
-    [setTabIndex]
+    [setTabIndex, t, tabData]
   );
 
   return (
@@ -85,5 +89,3 @@ const TabsHeader: FC<TabsHeaderProps> = ({ setTabIndex, tabIndex }) => {
     </Tabs>
   );
 };
-
-export default TabsHeader;

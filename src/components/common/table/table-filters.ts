@@ -1,11 +1,9 @@
-type Filter<T> = (value: T) => boolean;
+export type Filter<T> = (value: T) => boolean;
 
 /**
  * Generate a filter function that check if the property propName contains propValue
- * @param propName
- * @param propValue
  */
-export const makeFilterByProp = <T extends object>(
+export const makeFilterByProp = <T>(
   propName: keyof T,
   propValue: string
 ): Filter<T> => {

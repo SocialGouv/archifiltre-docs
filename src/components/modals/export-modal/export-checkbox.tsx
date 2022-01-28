@@ -1,23 +1,24 @@
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import type { CheckboxProps } from "@material-ui/core/Checkbox";
 import Checkbox from "@material-ui/core/Checkbox";
-import React, { FC, useCallback } from "react";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import React, { useCallback } from "react";
 
-type ExportOptionProps = {
+export interface ExportCheckboxProps {
   setActiveExportValue: (value: boolean) => void;
   label: string;
   isActive: boolean;
   disabledExplanation: string;
   checked: boolean;
-};
+}
 
-const ExportCheckbox: FC<ExportOptionProps> = ({
+export const ExportCheckbox: React.FC<ExportCheckboxProps> = ({
   setActiveExportValue,
   label,
   isActive,
   disabledExplanation,
   checked,
 }) => {
-  const onChange = useCallback(
+  const onChange: NonNullable<CheckboxProps["onChange"]> = useCallback(
     (event) => {
       setActiveExportValue(event.target.checked);
     },
@@ -34,5 +35,3 @@ const ExportCheckbox: FC<ExportOptionProps> = ({
     />
   );
 };
-
-export default ExportCheckbox;

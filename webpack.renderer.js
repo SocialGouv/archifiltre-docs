@@ -41,12 +41,12 @@ module.exports = (env, argv = {}) => ({
     port: 8000,
     writeToDisk: (name) => /(\.(fork)\.[jt]s|main\.js|\.node)$/.test(name),
   },
-  devtool: isDev(argv.mode) ? "eval-cheap-module-source-map" : false,
-
+  devtool: isDev(argv.mode) ? "eval-cheap-module-source-map" : "source-map",
   entry: {
     app: "./src/app.tsx",
     ...workers,
   },
+
   externals: {
     "iconv-lite": "require('iconv-lite')",
   },
@@ -166,6 +166,7 @@ module.exports = (env, argv = {}) => ({
     }),
     new webpack.DefinePlugin({
       ARCHIFILTRE_SITE_URL: JSON.stringify(process.env.ARCHIFILTRE_SITE_URL),
+      ARCHIFILTRE_VERSION: JSON.stringify(require("./package.json").version),
       AUTOLOAD: process.env.AUTOLOAD
         ? JSON.stringify(process.env.AUTOLOAD)
         : JSON.stringify(""),
@@ -188,8 +189,6 @@ module.exports = (env, argv = {}) => ({
   resolve: {
     cacheWithContext: false,
     extensions: [".mjs", ".ts", ".tsx", ".js", ".json"],
-    modules: [path.resolve(__dirname, "src"), "node_modules"],
-    symlinks: false,
   },
 
   target: "electron-renderer",

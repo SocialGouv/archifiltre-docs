@@ -4,13 +4,23 @@
 module.exports = {
   coverageDirectory: "coverage",
   globals: {
+    ARCHIFILTRE_VERSION: JSON.stringify(require("./package.json").version),
     FORCE_TRACKING: false,
     MODE: "test",
     SENTRY_DSN: "https://sentry-mock-url.io",
     STATIC_ASSETS_PATH: ".",
+    "ts-jest": {
+      diagnostics: false,
+      isolatedModules: true,
+      tsconfig: "tsconfig.test.json",
+    },
   },
   moduleDirectories: ["src", "node_modules"],
   moduleFileExtensions: ["js", "jsx", "ts", "tsx"],
   preset: "ts-jest/presets/js-with-ts",
-  setupFiles: ["jest-date-mock", "<rootDir>/tests/test-util/mock-electron.js"],
+  setupFiles: [
+    "jest-date-mock",
+    "<rootDir>/tests/test-util/mock-electron.js",
+    "<rootDir>/tests/test-util/mock-i18next.js",
+  ],
 };

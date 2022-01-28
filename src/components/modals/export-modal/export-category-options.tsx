@@ -1,15 +1,13 @@
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import {
-  exportConfig,
-  ExportType,
-} from "components/modals/export-modal/export-config";
-import { ExportTypesMap } from "components/modals/export-modal/export-options";
-import ExportTypeOption from "components/modals/export-modal/export-type-option";
-import React, { FC } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 
-type ExportCategoryOptionsProps = {
+import { exportConfig, ExportType } from "./export-config";
+import type { ExportTypesMap } from "./export-options";
+import { ExportTypeOption } from "./export-type-option";
+
+export interface ExportCategoryOptionsProps {
   exportCategory: string;
   enabledExports: ExportTypesMap<boolean>;
   exportPaths: ExportTypesMap<string>;
@@ -17,9 +15,9 @@ type ExportCategoryOptionsProps = {
   activeExports: ExportTypesMap<boolean>;
   setActiveExportValue: (exportType: ExportType, value: boolean) => void;
   setExportsPathsValue: (exportType: ExportType, value: string) => void;
-};
+}
 
-const ExportCategoryOptions: FC<ExportCategoryOptionsProps> = ({
+export const ExportCategoryOptions: React.FC<ExportCategoryOptionsProps> = ({
   exportCategory,
   enabledExports,
   exportPaths,
@@ -54,5 +52,3 @@ const ExportCategoryOptions: FC<ExportCategoryOptionsProps> = ({
     </Box>
   );
 };
-
-export default ExportCategoryOptions;

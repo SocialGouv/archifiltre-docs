@@ -1,32 +1,35 @@
-import ColorCircle from "components/common/color-circle";
-import TabContentHeader from "components/main-space/workspace/tabs/tab-content-header";
-import TabsLayout, {
-  makeTabComponent,
-} from "components/main-space/workspace/tabs/tabs-layout";
-import TagHeader from "components/main-space/workspace/enrichment/tags/tag-header";
-import React, { FC } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
+
+import { ColorCircle } from "../../../common/color-circle";
 import {
   ENRICHMENT_COLORS,
   EnrichmentTypes,
-} from "components/main-space/icicle/icicle-enrichment";
-import ElementCharacteristicsContainer from "./element-characteristics/element-characteristics-container";
-import CommentCellContainer from "../general/comment-cell-container";
-import TagCellContainer from "components/main-space/workspace/enrichment/tags/tag-cell-container";
+} from "../../icicle/icicle-enrichment";
+import { CommentCellContainer } from "../general/comment-cell-container";
+import { TabContentHeader } from "../tabs/tab-content-header";
+import { makeTabComponent, TabsLayout } from "../tabs/tabs-layout";
+import { ElementCharacteristicsContainer } from "./element-characteristics/element-characteristics-container";
+import { TagCellContainer } from "./tags/tag-cell-container";
+import { TagHeader } from "./tags/tag-header";
 
-type EnrichmentProps = {
-  createTag;
-  untag;
-  updateComment;
+export interface EnrichmentProps {
+  createTag?: unknown; // -- unused?
+  untag?: unknown; // -- unused?
+  updateComment?: unknown; // -- unused?
   currentFileComment: string;
-  tagsForCurrentFile;
+  tagsForCurrentFile?: unknown; // -- unused?
   isCurrentFileMarkedToDelete: boolean;
-  toggleCurrentFileDeleteState;
+  toggleCurrentFileDeleteState?: unknown; // -- unused?
   nodeId: string;
   isActive: boolean;
-};
+}
 
-const EnrichmentTitle = ({ title, type }) => {
+interface EnrichmentTitleProps {
+  title: string;
+  type: EnrichmentTypes;
+}
+const EnrichmentTitle: React.FC<EnrichmentTitleProps> = ({ title, type }) => {
   const { t } = useTranslation();
   return (
     <>
@@ -37,26 +40,26 @@ const EnrichmentTitle = ({ title, type }) => {
 };
 
 const ElementCharacteristicsContainerTab = makeTabComponent({
+  content: <ElementCharacteristicsContainer />,
   title: (
     <EnrichmentTitle title="report.element" type={EnrichmentTypes.ALIAS} />
   ),
-  content: <ElementCharacteristicsContainer />,
 });
 
 const CommentCellContainerTab = makeTabComponent({
+  content: <CommentCellContainer />,
   title: (
     <EnrichmentTitle title="report.comments" type={EnrichmentTypes.COMMENT} />
   ),
-  content: <CommentCellContainer />,
 });
 
 const TagCellContainerTab = makeTabComponent({
-  title: <TagHeader />,
   content: <TagCellContainer />,
   isLast: true,
+  title: <TagHeader />,
 });
 
-const Enrichment: FC<EnrichmentProps> = () => {
+export const Enrichment: React.FC<EnrichmentProps> = () => {
   const { t } = useTranslation();
 
   return (
@@ -69,5 +72,3 @@ const Enrichment: FC<EnrichmentProps> = () => {
     </TabContentHeader>
   );
 };
-
-export default Enrichment;

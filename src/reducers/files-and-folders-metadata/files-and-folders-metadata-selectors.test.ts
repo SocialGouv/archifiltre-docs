@@ -3,7 +3,7 @@ import {
   createFilesAndFoldersMetadata,
   getFilesAndFoldersMetadataFromStore,
 } from "./files-and-folders-metadata-selectors";
-import { FilesAndFoldersMetadataMap } from "./files-and-folders-metadata-types";
+import type { FilesAndFoldersMetadataMap } from "./files-and-folders-metadata-types";
 
 describe("files-and-folders-metadata-selectors", () => {
   describe("getFilesAndFoldersMetadataFromStore", () => {

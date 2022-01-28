@@ -1,8 +1,11 @@
+import type {
+  ArchifiltreError,
+  ArchifiltreErrorType,
+} from "../../util/error/error-util";
+import type { LoadingInfoAction, LoadingInfoTypes } from "./loading-info-types";
 import {
   COMPLETE_LOADING,
   DISMISS_ALL_COMPLETE,
-  LoadingInfoAction,
-  LoadingInfoTypes,
   PROGRESS_LOADING,
   REGISTER_ERROR,
   REPLACE_ERRORS,
@@ -10,7 +13,6 @@ import {
   START_LOADING,
   UPDATE_LOADING,
 } from "./loading-info-types";
-import { ArchifiltreError, ArchifiltreErrorType } from "util/error/error-util";
 
 /**
  * Action to start a loading display
@@ -29,8 +31,8 @@ export const startLoadingAction = (
   goal,
   id,
   label,
-  loadingType: type,
   loadedLabel,
+  loadingType: type,
   type: START_LOADING,
 });
 
@@ -89,8 +91,8 @@ export const replaceErrorsAction = (
   errors: ArchifiltreError[],
   errorType: ArchifiltreErrorType
 ): LoadingInfoAction => ({
-  errors,
   errorType,
+  errors,
   type: REPLACE_ERRORS,
 });
 

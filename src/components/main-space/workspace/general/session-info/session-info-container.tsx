@@ -1,36 +1,41 @@
-import React, { FC, useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+
 import {
   getFileCount,
   getFilesAndFoldersFromStore,
   getFoldersCount,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import { getSessionNameFromStore } from "reducers/workspace-metadata/workspace-metadata-selectors";
-import { setSessionNameThunk } from "reducers/workspace-metadata/workspace-metadata-thunk";
-import SessionInfo from "./session-info";
-import { getFirstLevelName } from "util/files-and-folders/file-and-folders-utils";
+} from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
+import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { getSessionNameFromStore } from "../../../../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { setSessionNameThunk } from "../../../../../reducers/workspace-metadata/workspace-metadata-thunk";
+import { getFirstLevelName } from "../../../../../util/files-and-folders/file-and-folders-utils";
+import type { SessionInfoProps } from "./session-info";
+import { SessionInfo } from "./session-info";
 
-const SessionInfoContainer: FC = () => {
+export const SessionInfoContainer: React.FC = () => {
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
 
   const dispatch = useDispatch();
 
   const sessionName = useSelector(getSessionNameFromStore);
 
-  const setSessionName = useCallback(
+  const setSessionName: SessionInfoProps["onChangeSessionName"] = useCallback(
     (newSessionName) => dispatch(setSessionNameThunk(newSessionName)),
     [dispatch]
   );
 
-  const nbFiles = useMemo(() => getFileCount(filesAndFolders), [
-    filesAndFolders,
-  ]);
-  const nbFolders = useMemo(() => getFoldersCount(filesAndFolders), [
-    filesAndFolders,
-  ]);
+  const nbFiles = useMemo(
+    () => getFileCount(filesAndFolders),
+    [filesAndFolders]
+  );
+  const nbFolders = useMemo(
+    () => getFoldersCount(filesAndFolders),
+    [filesAndFolders]
+  );
   const metadata = useSelector(getFilesAndFoldersMetadataFromStore);
-  const rootFilesAndFoldersMetadata = metadata[""] || {};
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  const rootFilesAndFoldersMetadata = metadata[""] ?? {};
 
   const volume = rootFilesAndFoldersMetadata.childrenTotalSize;
   const oldestFileTimestamp = rootFilesAndFoldersMetadata.minLastModified;
@@ -51,5 +56,3 @@ const SessionInfoContainer: FC = () => {
     />
   );
 };
-
-export default SessionInfoContainer;

@@ -1,6 +1,8 @@
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
-import { MouseEvent, useCallback, useRef } from "react";
+import type { MouseEvent } from "react";
+import { useCallback, useRef } from "react";
+
+import { addTracker } from "../logging/tracker";
+import { ActionTitle, ActionType } from "../logging/tracker-types";
 
 export type MoveElement = (
   movedElementId: string,
@@ -14,12 +16,19 @@ const handleTracking = () => {
   });
 };
 
+interface MovableElement {
+  onIcicleMouseDown: (event: MouseEvent) => void;
+  onIcicleMouseUp: (event: MouseEvent) => void;
+}
+
 /**
  * Hook to handle drag and drop of icicle elements
  * Elements with a data-draggable-id attribute will be considered draggable
  * @param onElementMoved - The callback called when an element is moved
  */
-export const useMovableElements = (onElementMoved: MoveElement) => {
+export const useMovableElements = (
+  onElementMoved: MoveElement
+): MovableElement => {
   const draggedElementRef = useRef("");
 
   const onIcicleMouseDown = useCallback(
@@ -27,7 +36,7 @@ export const useMovableElements = (onElementMoved: MoveElement) => {
       handleTracking();
       const target = event.target as HTMLElement;
       draggedElementRef.current =
-        target.attributes["data-draggable-id"]?.value || "";
+        target.attributes.getNamedItem("data-draggable-id")?.value ?? "";
     },
     [draggedElementRef]
   );
@@ -35,7 +44,8 @@ export const useMovableElements = (onElementMoved: MoveElement) => {
   const onIcicleMouseUp = useCallback(
     (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      const releasedOnId = target.attributes["data-draggable-id"]?.value || "";
+      const releasedOnId =
+        target.attributes.getNamedItem("data-draggable-id")?.value ?? "";
       const movedElement = draggedElementRef.current;
       if (
         releasedOnId !== "" &&
@@ -49,5 +59,5 @@ export const useMovableElements = (onElementMoved: MoveElement) => {
     [draggedElementRef, onElementMoved]
   );
 
-  return { onIcicleMouseUp, onIcicleMouseDown };
+  return { onIcicleMouseDown, onIcicleMouseUp };
 };

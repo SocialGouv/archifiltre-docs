@@ -1,31 +1,32 @@
-import React, { FC } from "react";
 import Box from "@material-ui/core/Box";
-import ElementWeightMethodPicker from "./element-weight-method-picker";
-import MoveFilesButton from "./move-files-button";
-import IciclesSortOrderPicker from "./icicle-sort-order-picker";
+import React from "react";
 import styled from "styled-components";
-import {
+
+import type {
   ElementWeightMethod,
   IcicleColorMode,
   IcicleSortMethod,
-} from "reducers/icicle-sort-method/icicle-sort-method-types";
-import IcicleColorModePicker from "./icicle-color-mode-picker";
-import ZoomPicker from "./zoom-picker";
+} from "../../../reducers/icicle-sort-method/icicle-sort-method-types";
+import { ElementWeightMethodPicker } from "./element-weight-method-picker";
+import { IcicleColorModePicker } from "./icicle-color-mode-picker";
+import { IciclesSortOrderPicker } from "./icicle-sort-order-picker";
+import { MoveFilesButton } from "./move-files-button";
+import { ZoomPicker } from "./zoom-picker";
 
 const Wrapper = styled.div`
   width: 100%;
 `;
 
-type NavigationBarProps = {
+export interface NavigationBarProps {
   elementWeightMethod: ElementWeightMethod;
   icicleColorMode: IcicleColorMode;
   icicleSortMethod: IcicleSortMethod;
   setIcicleSortMethod: (sortMethod: IcicleSortMethod) => void;
   setElementWeightMethod: (method: ElementWeightMethod) => void;
   setIcicleColorMode: (method: IcicleColorMode) => void;
-};
+}
 
-export const NavigationBar: FC<NavigationBarProps> = ({
+export const NavigationBar: React.FC<NavigationBarProps> = ({
   elementWeightMethod,
   icicleColorMode,
   icicleSortMethod,

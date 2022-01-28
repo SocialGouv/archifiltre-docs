@@ -1,20 +1,30 @@
 import expressions from "angular-expressions";
-import { identity } from "util/function/function-util";
+
+import type { AnyFunction } from "../function/function-util";
+import { identity } from "../function/function-util";
+import type { SimpleObject } from "../object/object-util";
 
 // All the code comes from the docx-templater doc.
 // To add custom filters, check the documentation page : https://docxtemplater.readthedocs.io/en/latest/angular_parse.html#angular-parser
 
+interface ParserContext {
+  scopeList: SimpleObject[];
+  num: number;
+}
+interface Parser {
+  get: (scope: string, context: ParserContext) => unknown;
+}
+
 /**
  * This parser allows to add conditions or filters to the template
- * @param tag
  */
-export function angularParser(tag) {
+export function angularParser(tag: string): Parser {
   if (tag === ".") {
     return {
       get: identity,
     };
   }
-  const expr = expressions.compile(tag.replace(/(’|“|”|‘)/g, "'"));
+  const expr: AnyFunction = expressions.compile(tag.replace(/(’|“|”|‘)/g, "'"));
   return {
     get: (scope, context) => {
       let obj = {};

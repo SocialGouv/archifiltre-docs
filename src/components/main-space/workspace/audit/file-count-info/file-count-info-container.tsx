@@ -1,19 +1,19 @@
-import React, { FC, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
+
 import {
   getFileCount,
   getFilesAndFoldersFromStore,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import FileCountInfo from "./file-count-info";
+} from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
+import { FileCountInfo } from "./file-count-info";
 
-const FileCountInfoContainer: FC = () => {
+export const FileCountInfoContainer: React.FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
 
-  const fileCount = useMemo(() => getFileCount(filesAndFoldersMap), [
-    filesAndFoldersMap,
-  ]);
+  const fileCount = useMemo(
+    () => getFileCount(filesAndFoldersMap),
+    [filesAndFoldersMap]
+  );
 
   return <FileCountInfo fileCount={fileCount} />;
 };
-
-export default FileCountInfoContainer;

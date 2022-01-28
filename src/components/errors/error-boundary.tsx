@@ -1,40 +1,41 @@
-import { TFunction } from "i18next";
-import React from "react";
-
-import SaveButton, { ExportToJson } from "components/header/save-button";
-import { reportError } from "logging/reporter";
-import { ContactUs } from "./contact-us";
 import Grid from "@material-ui/core/Grid";
+import type { TFunction } from "i18next";
+import React, { Component } from "react";
 import { withTranslation } from "react-i18next";
 import styled from "styled-components";
 
-type ErrorBoundaryProps = {
+import { SaveButton } from "../../components/header/save-button";
+import type { ExportToJson } from "../../exporters/json/json-exporter";
+import { reportError } from "../../logging/reporter";
+import { ContactUs } from "./contact-us";
+
+export interface ErrorBoundaryProps {
   t: TFunction;
   originalPath: string;
   sessionName: string;
   exportToJson: ExportToJson;
-};
+}
 
-type ErrorBoundaryState = {
+export interface ErrorBoundaryState {
   hasError: boolean;
-};
+}
 
 const Wrapper = styled(Grid)`
   height: 100vh;
 `;
 
-class ErrorBoundary extends React.Component<
+class ErrorBoundaryComponent extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
-  constructor(props) {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = {
       hasError: false,
     };
   }
 
-  componentDidCatch(error, info) {
+  componentDidCatch(error: unknown, info: unknown) {
     reportError({ error, info });
     this.setState({
       hasError: true,
@@ -74,4 +75,4 @@ class ErrorBoundary extends React.Component<
   }
 }
 
-export default withTranslation()(ErrorBoundary);
+export const ErrorBoundary = withTranslation()(ErrorBoundaryComponent);

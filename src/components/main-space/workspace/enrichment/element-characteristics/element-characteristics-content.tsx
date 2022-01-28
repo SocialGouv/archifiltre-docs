@@ -1,19 +1,20 @@
-import HashInfo from "components/main-space/workspace/enrichment/element-characteristics/hash-info";
-import React, { FC } from "react";
 import Box from "@material-ui/core/Box";
-import HelpTooltip from "components/common/help-tooltip";
-import EditableField from "components/common/editable-field";
-import { useTranslation } from "react-i18next";
-import { FOLDER_ICON, PAGE_ICON } from "components/common/icon";
-import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
 import Typography from "@material-ui/core/Typography";
-import ElementCharacteristic from "./element-characteristic";
-import { openExternalElement } from "util/file-system/file-system-util";
-import ClickableIcon from "components/common/clickable-icon";
-import { useStyles } from "hooks/use-styles";
-import LastModifiedDate from "components/main-space/workspace/general/session-info/last-modified-date";
+import React from "react";
+import { useTranslation } from "react-i18next";
 
-export type ElementCharacteristicsContentProps = {
+import { useStyles } from "../../../../../hooks/use-styles";
+import { octet2HumanReadableFormat } from "../../../../../util/file-system/file-sys-util";
+import { openExternalElement } from "../../../../../util/file-system/file-system-util";
+import { ClickableIcon } from "../../../../common/clickable-icon";
+import { EditableField } from "../../../../common/editable-field";
+import { HelpTooltip } from "../../../../common/help-tooltip";
+import { FOLDER_ICON, PAGE_ICON } from "../../../../common/icon";
+import { LastModifiedDate } from "../../general/session-info/last-modified-date";
+import { ElementCharacteristic } from "./element-characteristic";
+import { HashInfo } from "./hash-info";
+
+export interface ElementCharacteristicsContentProps {
   elementName: string;
   elementAlias: string;
   elementSize: number;
@@ -27,9 +28,11 @@ export type ElementCharacteristicsContentProps = {
   onElementNameChange: (name: string) => void;
   onLastModifiedChange: (timestamp: number) => void;
   type: string;
-};
+}
 
-const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
+export const ElementCharacteristicsContent: React.FC<
+  ElementCharacteristicsContentProps
+> = ({
   elementName,
   elementAlias,
   elementSize,
@@ -47,7 +50,7 @@ const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
   const { t } = useTranslation();
   const { body2Box } = useStyles();
 
-  const openElement = () => openExternalElement(elementPath);
+  const openElement = async () => openExternalElement(elementPath);
 
   return (
     <Box display="flex" flexDirection="column" justifyContent="space-between">
@@ -131,5 +134,3 @@ const ElementCharacteristicsContent: FC<ElementCharacteristicsContentProps> = ({
     </Box>
   );
 };
-
-export default ElementCharacteristicsContent;

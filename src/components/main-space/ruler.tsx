@@ -1,16 +1,17 @@
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
-import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import React, { FC, useEffect, useRef, useState } from "react";
-import { Dims } from "./icicle/icicle-rect";
+
 import {
   isFolder,
   ROOT_FF_ID,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import translations from "translations/translations";
-import { percent } from "util/numbers/numbers-util";
-import { FillColor } from "./icicle/icicle-types";
-import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
+} from "../../reducers/files-and-folders/files-and-folders-selectors";
+import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { translations } from "../../translations/translations";
+import { octet2HumanReadableFormat } from "../../util/file-system/file-sys-util";
+import { percent } from "../../util/numbers/numbers-util";
+import type { Dims } from "./icicle/icicle-rect";
+import type { FillColor } from "./icicle/icicle-types";
 
 const RulerWrapper = styled.div`
   width: 100%;
@@ -31,10 +32,10 @@ const RulerTextWrapper = styled.div`
  * Dummy dims
  */
 const EmptyDims: Dims = {
-  x: 0,
   dx: 0,
-  y: 0,
   dy: 0,
+  x: 0,
+  y: 0,
 };
 
 /**
@@ -95,7 +96,7 @@ const makeRulerText = (
   return rulerInfo.join(" | ");
 };
 
-type RulerProps = {
+export interface RulerProps {
   widthUnit: number;
   totalSize: number;
   hoveredDims: Dims | null;
@@ -105,9 +106,9 @@ type RulerProps = {
   getAllChildrenFolderCount: (id: string) => number;
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
   fillColor: FillColor;
-};
+}
 
-const Ruler: FC<RulerProps> = ({
+export const Ruler: React.FC<RulerProps> = ({
   widthUnit,
   totalSize,
   hoveredDims = EmptyDims,
@@ -119,7 +120,7 @@ const Ruler: FC<RulerProps> = ({
   fillColor,
 }) => {
   const elementDims =
-    (hoveredElementId ? hoveredDims : lockedDims) || EmptyDims;
+    (hoveredElementId ? hoveredDims : lockedDims) ?? EmptyDims;
   const elementId = hoveredElementId || lockedElementId;
 
   const rulerText = elementId
@@ -135,8 +136,8 @@ const Ruler: FC<RulerProps> = ({
   const [textMargin, setTextMargin] = useState(0);
 
   useEffect(() => {
-    const wrapper = wrapperRef?.current;
-    const text = textRef?.current;
+    const wrapper = wrapperRef.current;
+    const text = textRef.current;
     if (wrapper && text) {
       const { width: wrapperWidth } = wrapper.getBoundingClientRect();
       const { width: textWidth } = text.getBoundingClientRect();
@@ -165,8 +166,8 @@ const Ruler: FC<RulerProps> = ({
     <RulerWrapper ref={wrapperRef}>
       <RulerMarker
         style={{
-          marginLeft: `${Math.max(0, (elementDims.x / widthUnit) * 100)}%`,
           backgroundColor: fillColor(elementId),
+          marginLeft: `${Math.max(0, (elementDims.x / widthUnit) * 100)}%`,
           width: `${Math.min(100, (elementDims.dx / totalSize) * 100)}%`,
         }}
       />
@@ -176,5 +177,3 @@ const Ruler: FC<RulerProps> = ({
     </RulerWrapper>
   );
 };
-
-export default Ruler;

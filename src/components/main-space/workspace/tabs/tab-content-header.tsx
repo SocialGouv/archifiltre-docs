@@ -1,22 +1,25 @@
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
-import InfoBoxPaper from "components/common/info-box-paper";
-import React, { FC, useCallback, useState } from "react";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-type TabContentHeaderProps = {
-  title: string;
-};
+import { InfoBoxPaper } from "../../../common/info-box-paper";
 
-const TabContentHeader: FC<TabContentHeaderProps> = ({ children, title }) => {
+export interface TabContentHeaderProps {
+  title: string;
+}
+
+export const TabContentHeader: React.FC<TabContentHeaderProps> = ({
+  children,
+  title,
+}) => {
   const { t } = useTranslation();
   const [isContentHidden, setIsContentHidden] = useState(false);
-  const toggleIsContentHidden = useCallback(
-    () => setIsContentHidden(!isContentHidden),
-    [setIsContentHidden, isContentHidden]
-  );
+  const toggleIsContentHidden = useCallback(() => {
+    setIsContentHidden(!isContentHidden);
+  }, [setIsContentHidden, isContentHidden]);
 
   return (
     <InfoBoxPaper>
@@ -48,5 +51,3 @@ const TabContentHeader: FC<TabContentHeaderProps> = ({ children, title }) => {
     </InfoBoxPaper>
   );
 };
-
-export default TabContentHeader;

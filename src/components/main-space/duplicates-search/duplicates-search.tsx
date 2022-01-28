@@ -1,28 +1,27 @@
 import Box from "@material-ui/core/Box";
+import dateFormat from "dateformat";
 import { isEmpty, maxBy } from "lodash";
-import React, { FC, useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import {
+
+import { useDuplicatePageState } from "../../../context/duplicates-page-context";
+import { useDebouncedValue } from "../../../hooks/use-debounced-value";
+import { useSearchAndFilters } from "../../../hooks/use-search-and-filters";
+import type {
   ElementWithToDelete,
   FilesAndFolders,
-} from "reducers/files-and-folders/files-and-folders-types";
-import { useSearchAndFilters } from "hooks/use-search-and-filters";
-import { octet2HumanReadableFormat } from "util/file-system/file-sys-util";
-import { getType } from "util/files-and-folders/file-and-folders-utils";
-import CategoryTitle from "components/common/category-title";
-import Table from "components/common/table/table";
-import dateFormat from "dateformat";
-import { SearchBar } from "components/modals/search-modal/search-bar";
-import {
-  Column,
-  HeaderColumn,
-  WordBreak,
-} from "components/common/table/table-types";
-import { makeTableExpandableRow } from "components/common/table/table-expandable-row";
-import { useDebouncedValue } from "hooks/use-debounced-value";
-import ToDeleteChip from "components/common/to-delete-chip";
-import { useDuplicatePageState } from "context/duplicates-page-context";
+} from "../../../reducers/files-and-folders/files-and-folders-types";
+import { octet2HumanReadableFormat } from "../../../util/file-system/file-sys-util";
+import { getType } from "../../../util/files-and-folders/file-and-folders-utils";
+import { CategoryTitle } from "../../common/category-title";
+import { Table } from "../../common/table/table";
+import { makeTableExpandableRow } from "../../common/table/table-expandable-row";
+import type { Column, HeaderColumn } from "../../common/table/table-types";
+import { WordBreak } from "../../common/table/table-types";
+import { ToDeleteChip } from "../../common/to-delete-chip";
+import type { SearchBarProps } from "../../modals/search-modal/search-bar";
+import { SearchBar } from "../../modals/search-modal/search-bar";
 
 const SEARCH_INPUT_DEBOUNCE = 300;
 
@@ -32,14 +31,14 @@ const HiddenSpan = styled.span`
 
 const rowIdAccessor = (row: ElementWithToDelete[]) => row[0].id;
 
-type DuplicatesSearchProps = {
+export interface DuplicatesSearchProps {
   duplicatesList: FilesAndFolders[][];
   elementsToDelete: string[];
   tagAsToDelete: (ids: string[]) => void;
   untagAsToDelete: (ids: string[]) => void;
-};
+}
 
-const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
+export const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
   duplicatesList,
   elementsToDelete,
   tagAsToDelete,
@@ -67,7 +66,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
     filterName,
   ]);
 
-  const performSearch = useCallback(
+  const performSearch: SearchBarProps["setSearchTerm"] = useCallback(
     (searchValue) => {
       setSearchTerm(searchValue);
       setPageIndex(0);
@@ -76,7 +75,7 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
   );
 
   const data = useMemo(
-    () =>
+    (): ElementWithToDelete[][] =>
       filteredFilesAndFolders.map((filesAndFoldersList) =>
         filesAndFoldersList.map((filesAndFolders) => ({
           ...filesAndFolders,
@@ -89,41 +88,40 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
   const headerProps: HeaderColumn<ElementWithToDelete[]>[] = useMemo(
     () => [
       {
-        id: "name",
         accessor: (row, index = 0) => row[index].name,
+        id: "name",
       },
       {
-        id: "fileOrFolder",
         accessor: (row, index = 0) =>
           getType(row[index], {
             folderLabel: t("common.folder"),
             unknownLabel: t("common.unknown"),
           }),
+        id: "fileOrFolder",
       },
       {
-        id: "fileSize",
         accessor: (row, index = 0) =>
           octet2HumanReadableFormat(row[index].file_size),
+        id: "fileSize",
       },
       {
-        id: "elementsCount",
         accessor: (row) => row.length,
+        id: "elementsCount",
       },
       {
-        id: "lastModified",
         accessor: (row, index = 0) =>
           dateFormat(row[index].file_last_modified, "dd/mm/yyyy"),
+        id: "lastModified",
       },
       {
-        id: "path",
         accessor: (row) => (
           <HiddenSpan>
             {maxBy(row, (element) => element.id.length)?.id}
           </HiddenSpan>
         ),
+        id: "path",
       },
       {
-        id: "toDelete",
         accessor: (row) => {
           const ids = row.map(({ id }) => id);
           const checked = row.every(({ toDelete }) => toDelete);
@@ -131,11 +129,13 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
             <ToDeleteChip
               checked={checked}
               onClick={() => {
-                checked ? untagAsToDelete(ids) : tagAsToDelete(ids);
+                if (checked) untagAsToDelete(ids);
+                else tagAsToDelete(ids);
               }}
             />
           );
         },
+        id: "toDelete",
       },
     ],
     [t, untagAsToDelete, tagAsToDelete]
@@ -149,76 +149,77 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
   const columns: Column<ElementWithToDelete[]>[] = useMemo(
     () => [
       {
+        accessor: () => "",
         id: "emptyColumn",
         name: "",
-        accessor: () => "",
         sortable: false,
       },
       {
+        accessor: (row: FilesAndFolders[], index = 0) => row[index].name,
         id: "name",
         name: t("search.name"),
-        accessor: (row: FilesAndFolders[], index = 0) => row[index].name,
         sortable: true,
       },
       {
-        id: "type",
-        name: t("search.type"),
         accessor: (row: FilesAndFolders[], index = 0) =>
           getType(row[index], {
             folderLabel: t("common.folder"),
             unknownLabel: t("common.unknown"),
           }),
+        id: "type",
+        name: t("search.type"),
         sortable: true,
       },
       {
-        id: "size",
-        name: t("search.size"),
         accessor: (row: FilesAndFolders[], index = 0) =>
           octet2HumanReadableFormat(row[index].file_size),
-        sortable: true,
+        id: "size",
+        name: t("search.size"),
         sortAccessor: (row: FilesAndFolders[], index = 0) =>
           row[index].file_size,
+        sortable: true,
       },
       {
+        accessor: () => "",
         id: "elementsCount",
         name: t("duplicates.filesNumber"),
-        accessor: () => "",
-        sortable: true,
         sortAccessor: (row: FilesAndFolders[]) => row.length,
+        sortable: true,
       },
       {
-        id: "fileLastModified",
-        name: t("search.fileLastModified"),
         accessor: (row: FilesAndFolders[], index = 0) =>
           dateFormat(row[index].file_last_modified, "dd/mm/yyyy"),
-        sortable: true,
+        id: "fileLastModified",
+        name: t("search.fileLastModified"),
         sortAccessor: (row: FilesAndFolders[], index = 0) =>
           row[index].file_last_modified,
+        sortable: true,
       },
       {
-        id: "id",
-        name: t("search.path"),
         accessor: (row: FilesAndFolders[], index = 0) => row[index].id,
         cellStyle: {
           wordBreak: WordBreak.BREAK_ALL,
         },
+        id: "id",
+        name: t("search.path"),
         sortable: true,
       },
       {
-        id: "toDelete",
-        name: t("common.toDelete"),
-        sortable: false,
         accessor: (row, index = 0) => {
           const { id, toDelete } = row[index];
           return (
             <ToDeleteChip
               checked={toDelete}
               onClick={() => {
-                toDelete ? untagAsToDelete([id]) : tagAsToDelete([id]);
+                if (toDelete) untagAsToDelete([id]);
+                else tagAsToDelete([id]);
               }}
             />
           );
         },
+        id: "toDelete",
+        name: t("common.toDelete"),
+        sortable: false,
       },
     ],
     [t, tagAsToDelete, untagAsToDelete]
@@ -255,5 +256,3 @@ const DuplicatesSearch: FC<DuplicatesSearchProps> = ({
     </Box>
   );
 };
-
-export default DuplicatesSearch;

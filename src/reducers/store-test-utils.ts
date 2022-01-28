@@ -1,13 +1,13 @@
-import { UndoableState } from "./enhancers/undoable/undoable-types";
-import { initialState as loadingInfoInitialState } from "./loading-info/loading-info-reducer";
-import { initialState as modalInitialState } from "./modal/modal-reducer";
-import { StoreState } from "./store";
-import { initialState as loadingStateInitialState } from "./loading-state/loading-state-reducer";
+import type { UndoableState } from "./enhancers/undoable/undoable-types";
+import { initialState as filesAndFoldersInitialState } from "./files-and-folders/files-and-folders-reducer";
+import { initialState as filesAndFoldersMetadataInitialState } from "./files-and-folders-metadata/files-and-folders-metadata-reducer";
 import { initialState as hashesInitialState } from "./hashes/hashes-reducer";
-import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
-import { initialState as icicleSortMethodInitialState } from "reducers/icicle-sort-method/icicle-sort-method-reducer";
-import { initialState as filesAndFoldersMetadataInitialState } from "reducers/files-and-folders-metadata/files-and-folders-metadata-reducer";
-import { initialState as filesAndFoldersInitialState } from "reducers/files-and-folders/files-and-folders-reducer";
+import { initialState as icicleSortMethodInitialState } from "./icicle-sort-method/icicle-sort-method-reducer";
+import { IcicleSortMethod } from "./icicle-sort-method/icicle-sort-method-types";
+import { initialState as loadingInfoInitialState } from "./loading-info/loading-info-reducer";
+import { initialState as loadingStateInitialState } from "./loading-state/loading-state-reducer";
+import { initialState as modalInitialState } from "./modal/modal-reducer";
+import type { StoreState } from "./store";
 
 /**
  * Create an empty store state for testing purposes
@@ -38,9 +38,9 @@ export const createEmptyStore = (): StoreState => ({
  * Test utility to create states wrapped with undoable
  * @param store - the store to wrap with undoable
  */
-export const wrapStoreWithUndoable = <State>(
-  store: State
-): UndoableState<State> => ({
+export const wrapStoreWithUndoable = <TState>(
+  store: TState
+): UndoableState<TState> => ({
   current: store,
   future: [],
   past: [],

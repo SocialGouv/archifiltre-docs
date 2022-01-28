@@ -1,17 +1,18 @@
 import Grid from "@material-ui/core/Grid";
-import BoundaryDate from "components/main-space/workspace/general/session-info/boundary-date";
-import HelpTooltip from "components/common/help-tooltip";
-import React, { FC } from "react";
 import dateFormat from "dateformat";
+import React from "react";
 import { useTranslation } from "react-i18next";
 
-export type FolderBoundaryDatesProps = {
+import { HelpTooltip } from "../../../../common/help-tooltip";
+import { BoundaryDate } from "./boundary-date";
+
+export interface FolderBoundaryDatesProps {
   minLastModifiedTimestamp: number;
   medianLastModifiedTimestamp: number;
   maxLastModifiedTimestamp: number;
-};
+}
 
-const FolderBoundaryDates: FC<FolderBoundaryDatesProps> = ({
+export const FolderBoundaryDates: React.FC<FolderBoundaryDatesProps> = ({
   minLastModifiedTimestamp,
   medianLastModifiedTimestamp,
   maxLastModifiedTimestamp,
@@ -46,5 +47,3 @@ const FolderBoundaryDates: FC<FolderBoundaryDatesProps> = ({
     </Grid>
   );
 };
-
-export default FolderBoundaryDates;

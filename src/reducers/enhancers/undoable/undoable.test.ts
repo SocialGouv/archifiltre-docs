@@ -1,4 +1,4 @@
-import undoable from "./undoable";
+import { undoable } from "./undoable";
 import { commitAction, redoAction, undoAction } from "./undoable-actions";
 
 const state0 = {
@@ -20,7 +20,7 @@ const state4 = {
   count: 4,
 };
 
-const testReducer = (state, action) => {
+const testReducer = (state: { count: number }, action) => {
   if (action.type === "INCREMENT") {
     return {
       count: state.count + 1,

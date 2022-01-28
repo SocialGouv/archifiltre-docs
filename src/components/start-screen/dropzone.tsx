@@ -1,10 +1,12 @@
+import type { GridProps } from "@material-ui/core/Grid";
 import Grid from "@material-ui/core/Grid";
-import React, { FC, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaPlus } from "react-icons/fa";
 import styled from "styled-components";
-import { expectToBeDefined } from "util/expect-behaviour/expect-behaviour";
-import { notifyError } from "util/notification/notifications-util";
+
+import { expectToBeDefined } from "../../util/expect-behaviour/expect-behaviour";
+import { notifyError } from "../../util/notification/notifications-util";
 
 const Icon = styled(FaPlus)`
   width: 30px;
@@ -31,19 +33,22 @@ const Placeholder = styled.div`
   text-align: center;
 `;
 
-const handleDragover = (event) => {
+const handleDragover: GridProps["onDragOver"] = (event) => {
   event.preventDefault();
 };
 
-type DropzoneProps = {
+export interface DropzoneProps {
   loadPath: (path: string) => void;
   setLoadedPath: (loadedPath: string) => void;
-};
+}
 
-const Dropzone: FC<DropzoneProps> = ({ loadPath, setLoadedPath }) => {
+export const Dropzone: React.FC<DropzoneProps> = ({
+  loadPath,
+  setLoadedPath,
+}) => {
   const { t } = useTranslation();
 
-  const handleDrop = useCallback(
+  const handleDrop: NonNullable<GridProps["onDrop"]> = useCallback(
     (event) => {
       event.preventDefault();
 
@@ -89,5 +94,3 @@ const Dropzone: FC<DropzoneProps> = ({ loadPath, setLoadedPath }) => {
     </DropzoneContainer>
   );
 };
-
-export default Dropzone;

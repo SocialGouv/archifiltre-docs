@@ -1,23 +1,27 @@
-import Paper from "@material-ui/core/Paper";
-import DialogContent from "@material-ui/core/DialogContent";
 import Dialog from "@material-ui/core/Dialog";
-import React, { FC } from "react";
+import DialogContent from "@material-ui/core/DialogContent";
+import Paper from "@material-ui/core/Paper";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { useStyles } from "hooks/use-styles";
-import ModalHeader from "components/modals/modal-header";
-import AllTagsContainer from "components/main-space/workspace/enrichment/tags/all-tags-container";
 import styled from "styled-components";
+
+import { useStyles } from "../../../hooks/use-styles";
+import { AllTagsContainer } from "../../main-space/workspace/enrichment/tags/all-tags-container";
+import { ModalHeader } from "../modal-header";
 
 const StyledPaper = styled(Paper)`
   min-height: 50%;
 `;
 
-type SettingsModalProps = {
+export interface SettingsModalProps {
   isModalOpen: boolean;
   closeModal: () => void;
-};
+}
 
-const AllTagsModal: FC<SettingsModalProps> = ({ isModalOpen, closeModal }) => {
+export const AllTagsModal: React.FC<SettingsModalProps> = ({
+  isModalOpen,
+  closeModal,
+}) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
@@ -36,5 +40,3 @@ const AllTagsModal: FC<SettingsModalProps> = ({ isModalOpen, closeModal }) => {
     </Dialog>
   );
 };
-
-export default AllTagsModal;

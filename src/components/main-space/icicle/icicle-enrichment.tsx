@@ -1,27 +1,31 @@
-import React, { FC, useCallback, useMemo } from "react";
-import { IcicleMouseHandler } from "./icicle-main";
-import { Dims } from "./icicle-rect";
+import React, { useCallback, useMemo } from "react";
 
+import type { RgbFunc } from "../../../util/color/color-util";
+import type { IcicleMouseHandler } from "./icicle-main";
+import type { Dims } from "./icicle-rect";
+
+/* eslint-disable @typescript-eslint/naming-convention */
 export enum EnrichmentTypes {
-  TAG,
-  TO_DELETE,
-  ALIAS,
-  COMMENT,
+  TAG = 0,
+  TO_DELETE = 1,
+  ALIAS = 2,
+  COMMENT = 3,
 }
 
 export enum OPACITY {
   HIGHLIGHTED = 1,
   NOT_HIGHLIGHTED = 0.2,
 }
+/* eslint-enable @typescript-eslint/naming-convention */
 
-export const ENRICHMENT_COLORS = {
+export const ENRICHMENT_COLORS: Record<EnrichmentTypes, RgbFunc> = {
   [EnrichmentTypes.TAG]: "rgb(10, 50, 100)",
   [EnrichmentTypes.TO_DELETE]: "rgb(250,0,0)",
   [EnrichmentTypes.ALIAS]: "rgb(145,218,242)",
   [EnrichmentTypes.COMMENT]: "rgb(3,161,214)",
 };
 
-type IcicleEnrichmentProps = {
+export interface IcicleEnrichmentProps {
   ffId: string;
   dims: Dims;
   hasTag: boolean;
@@ -32,9 +36,9 @@ type IcicleEnrichmentProps = {
   onClick: IcicleMouseHandler;
   onDoubleClick: IcicleMouseHandler;
   onMouseOver: IcicleMouseHandler;
-};
+}
 
-const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
+export const IcicleEnrichment: React.FC<IcicleEnrichmentProps> = ({
   ffId,
   dims,
   hasTag,
@@ -46,16 +50,6 @@ const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
   onDoubleClick,
   onMouseOver,
 }) => {
-  if (!dims || !dims.dx) {
-    return null;
-  }
-
-  const width = dims.dx - 2;
-
-  if (width <= 0) {
-    return null;
-  }
-
   const getDims = useCallback(() => dims, [dims]);
   const callbackParameter = useMemo(
     () => ({
@@ -64,20 +58,42 @@ const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
     }),
     [ffId, getDims]
   );
-  const handleClick = useCallback(
-    (event) => onClick(callbackParameter, event),
-    [onClick, callbackParameter]
-  );
+  const handleClick: NonNullable<React.SVGProps<SVGRectElement>["onClick"]> =
+    useCallback(
+      (event) => {
+        onClick(callbackParameter, event);
+      },
+      [onClick, callbackParameter]
+    );
 
-  const handleDoubleClick = useCallback(
-    (event) => onDoubleClick(callbackParameter, event),
+  const handleDoubleClick: NonNullable<
+    React.SVGProps<SVGRectElement>["onDoubleClick"]
+  > = useCallback(
+    (event) => {
+      onDoubleClick(callbackParameter, event);
+    },
     [onDoubleClick, callbackParameter]
   );
 
-  const handleMouseOver = useCallback(
-    (event) => onMouseOver(callbackParameter, event),
+  const handleMouseOver: NonNullable<
+    React.SVGProps<SVGRectElement>["onMouseOver"]
+  > = useCallback(
+    (event) => {
+      onMouseOver(callbackParameter, event);
+    },
     [onMouseOver, callbackParameter]
   );
+
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (!dims?.dx) {
+    return null;
+  }
+
+  const width = dims.dx - 2;
+
+  if (width <= 0) {
+    return null;
+  }
 
   const enrichments = [
     ...(isToDelete ? [EnrichmentTypes.TO_DELETE] : []),
@@ -89,7 +105,7 @@ const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
 
   return (
     <>
-      {dims &&
+      {dims && // eslint-disable-line @typescript-eslint/no-unnecessary-condition
         enrichments.map((enrichmentType, index) => (
           <rect
             key={`enrichment-${ffId}-${enrichmentType}`}
@@ -110,5 +126,3 @@ const IcicleEnrichment: FC<IcicleEnrichmentProps> = ({
     </>
   );
 };
-
-export default IcicleEnrichment;

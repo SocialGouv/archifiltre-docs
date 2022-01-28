@@ -1,13 +1,13 @@
-import React, { FC } from "react";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
+import React from "react";
 
-type SessionElementsDetailProps = {
+export interface SessionElementsDetailProps {
   title: string;
-  content: string | number;
-};
+  content: number | string;
+}
 
-const SessionElementsDetail: FC<SessionElementsDetailProps> = ({
+export const SessionElementsDetail: React.FC<SessionElementsDetailProps> = ({
   title,
   content,
 }) => (
@@ -20,5 +20,3 @@ const SessionElementsDetail: FC<SessionElementsDetailProps> = ({
     </Box>
   </Box>
 );
-
-export default SessionElementsDetail;

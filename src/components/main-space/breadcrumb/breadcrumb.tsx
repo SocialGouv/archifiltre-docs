@@ -1,13 +1,15 @@
-import React, { FC, useCallback } from "react";
+import type { MouseEventHandler } from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
-import BreadcrumbPoly from "./breadcrumb-poly";
-import { CopyToClipboard } from "../../common/copy-to-clipboard";
-import { Dims, DimsAndId } from "../icicle/icicle-rect";
-import BreadcrumbText from "components/main-space/breadcrumb/breadcrumb-text";
 
-type BreadcrumbWrapperProps = {
+import { CopyToClipboard } from "../../common/copy-to-clipboard";
+import type { Dims, DimsAndId } from "../icicle/icicle-rect";
+import { BreadcrumbPoly } from "./breadcrumb-poly";
+import { BreadcrumbText } from "./breadcrumb-text";
+
+interface BreadcrumbWrapperProps {
   active: boolean;
-};
+}
 
 const BreadcrumbWrapper = styled.div<BreadcrumbWrapperProps>`
   width: 100%;
@@ -17,9 +19,9 @@ const BreadcrumbWrapper = styled.div<BreadcrumbWrapperProps>`
   opacity: ${({ active }) => (active ? 1 : 0.3)};
 `;
 
-type CopyToClipboardProps = {
+interface CopyToClipboardProps {
   active: boolean;
-};
+}
 
 const CopyToClipboardWrapper = styled.div<CopyToClipboardProps>`
   visibility: hidden;
@@ -53,15 +55,17 @@ const SmallSpacer = styled.div`
 `;
 
 export enum BreadcrumbOpacity {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   LOCKED = 1,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   HOVERED = 0.4,
 }
 
 const emptyDims: Dims = {
-  x: 0,
   dx: 0,
-  y: 0,
   dy: 0,
+  x: 0,
+  y: 0,
 };
 
 /**
@@ -69,7 +73,7 @@ const emptyDims: Dims = {
  */
 const dimsGetter = (): Dims => emptyDims;
 
-type BreadcrumbProps = {
+export interface BreadcrumbProps {
   active: boolean;
   opacity: BreadcrumbOpacity;
   color: string;
@@ -79,10 +83,10 @@ type BreadcrumbProps = {
   alias: string | null;
   path: string;
   id: string;
-  onBreadcrumbClick: (dimsAndId: DimsAndId, event) => void;
-};
+  onBreadcrumbClick: (dimsAndId: DimsAndId, event: React.MouseEvent) => void;
+}
 
-const Breadcrumb: FC<BreadcrumbProps> = ({
+export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   active,
   isFirst,
   isLast,
@@ -94,12 +98,12 @@ const Breadcrumb: FC<BreadcrumbProps> = ({
   id,
   onBreadcrumbClick,
 }) => {
-  const onClick = useCallback(
+  const onClick: MouseEventHandler = useCallback(
     (event) => {
       if (!active) {
         return;
       }
-      onBreadcrumbClick({ id, dims: dimsGetter }, event);
+      onBreadcrumbClick({ dims: dimsGetter, id }, event);
     },
     [onBreadcrumbClick, id, active]
   );
@@ -124,5 +128,3 @@ const Breadcrumb: FC<BreadcrumbProps> = ({
     </BreadcrumbWrapper>
   );
 };
-
-export default Breadcrumb;

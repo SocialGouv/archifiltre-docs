@@ -1,15 +1,19 @@
-import { computeHash, HashComputingResult } from "../util/hash/hash-util";
 import { ipcMain } from "../common/ipc";
-import { HashComputingError } from "../util/hash/hash-errors";
+import type { HashComputingError } from "../util/hash/hash-errors";
+import type { HashComputingResult } from "../util/hash/hash-util";
+import { computeHash } from "../util/hash/hash-util";
 
 declare module "../common/ipc/event" {
   interface AsyncIpcMapping {
-    "hash.computeHash": IpcConfig<[filePaths: string[]], (HashComputingResult | HashComputingError)[]>
+    "hash.computeHash": IpcConfig<
+      [filePaths: string[]],
+      (HashComputingError | HashComputingResult)[]
+    >;
   }
 }
 
-export const loadHash = () => {
-  ipcMain.handle("hash.computeHash", (_event, filePaths) => {
+export const loadHash = (): void => {
+  ipcMain.handle("hash.computeHash", async (_event, filePaths) => {
     return Promise.all(filePaths.map(computeHash));
   });
 };

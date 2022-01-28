@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 export enum MessageTypes {
   READY = "ready",
   COMPLETE = "complete",
@@ -10,63 +11,66 @@ export enum MessageTypes {
   RESULT = "result",
   STREAM_READ = "streamRead",
 }
+/* eslint-enable @typescript-eslint/naming-convention */
 
-export type ReadyMessage = {
+export interface ReadyMessage {
   type: typeof MessageTypes.READY;
-};
+}
 
-export type ErrorMessage = {
+export interface ErrorMessage {
   type: typeof MessageTypes.ERROR;
-  error: any;
-};
+  error: unknown;
+}
 
-export type ResultMessage<T = any> = {
+export interface ResultMessage<T = unknown> {
   type: typeof MessageTypes.RESULT;
   result: T;
-};
+}
 
-export type StreamReadMessage = {
+export interface StreamReadMessage {
   type: typeof MessageTypes.STREAM_READ;
-};
+}
 
-export type InitializeMessage = {
+export interface InitializeMessage<T = unknown> {
   type: typeof MessageTypes.INITIALIZE;
-  data: any;
-};
+  data: T;
+}
 
-type DataMessage = {
+export interface DataMessage {
   type: typeof MessageTypes.DATA;
-  data: any;
-};
+  data: unknown;
+}
 
-type CompleteMessage = {
+interface CompleteMessage {
   type: typeof MessageTypes.COMPLETE;
-  result?: any;
-};
+  result?: unknown;
+}
 
-type WarningMessage = {
+interface WarningMessage {
   type: typeof MessageTypes.WARNING;
-  warning: any;
-};
+  warning: unknown;
+}
 
-type FatalMessage = {
+interface FatalMessage {
   type: typeof MessageTypes.FATAL;
-  error: any;
-};
+  error: unknown;
+}
 
-type LogMessage = {
+interface LogMessage {
   type: typeof MessageTypes.LOG;
-  data: any;
-};
+  data: unknown;
+}
 
 export type WorkerMessage =
-  | ReadyMessage
+  | CompleteMessage
+  | DataMessage
   | ErrorMessage
+  | FatalMessage
+  | InitializeMessage
+  | LogMessage
+  | ReadyMessage
   | ResultMessage
   | StreamReadMessage
-  | InitializeMessage
-  | CompleteMessage
-  | WarningMessage
-  | FatalMessage
-  | LogMessage
-  | DataMessage;
+  | WarningMessage;
+
+export type WorkerMessageWithData = Extract<WorkerMessage, { data: unknown }>;

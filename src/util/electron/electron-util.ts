@@ -15,5 +15,5 @@ export const openLink = (link: string): void => {
   shell.openExternal(link);
 };
 
-export const getPath = (pathId: Parameters<App["getPath"]>[0]): string => 
+export const getPath = (pathId: Parameters<App["getPath"]>[0]): string =>
    ipcRenderer.sendSync("app.getPath", pathId);

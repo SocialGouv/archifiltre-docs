@@ -1,15 +1,16 @@
-import React, { FC, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
+
+import { getFilesAndFoldersFromStore } from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
+import { getHashesFromStore } from "../../../../../reducers/hashes/hashes-selectors";
 import {
   countDuplicateFileSizes,
   countDuplicateFileTypes,
   getFilesDuplicatesMap,
-} from "util/duplicates/duplicates-util";
-import DuplicatesDistributionChart from "./duplicates-distribution-chart";
-import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
+} from "../../../../../util/duplicates/duplicates-util";
+import { DuplicatesDistributionChart } from "./duplicates-distribution-chart";
 
-const DuplicatesDistributionChartContainer: FC = () => {
+export const DuplicatesDistributionChartContainer: React.FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
   const hashesMap = useSelector(getHashesFromStore);
 
@@ -18,13 +19,15 @@ const DuplicatesDistributionChartContainer: FC = () => {
     [filesAndFoldersMap, hashesMap]
   );
 
-  const fileTypesCount = useMemo(() => countDuplicateFileTypes(duplicatesMap), [
-    duplicatesMap,
-  ]);
+  const fileTypesCount = useMemo(
+    () => countDuplicateFileTypes(duplicatesMap),
+    [duplicatesMap]
+  );
 
-  const fileSizesCount = useMemo(() => countDuplicateFileSizes(duplicatesMap), [
-    duplicatesMap,
-  ]);
+  const fileSizesCount = useMemo(
+    () => countDuplicateFileSizes(duplicatesMap),
+    [duplicatesMap]
+  );
 
   return (
     <DuplicatesDistributionChart
@@ -33,5 +36,3 @@ const DuplicatesDistributionChartContainer: FC = () => {
     />
   );
 };
-
-export default DuplicatesDistributionChartContainer;

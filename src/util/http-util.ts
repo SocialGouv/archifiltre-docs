@@ -1,6 +1,4 @@
-interface Headers {
-  [headerKey: string]: string;
-}
+type Headers = Record<string, string>;
 
 interface RequestInput {
   method?: string;
@@ -9,12 +7,12 @@ interface RequestInput {
   body?: BodyInit | Document;
 }
 
-export const request = ({
+export const request = async <T>({
   method = "GET",
   url,
   headers = {},
   body = "",
-}: RequestInput): Promise<any> => {
+}: RequestInput): Promise<T> => {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open(method, url);
@@ -23,12 +21,14 @@ export const request = ({
     });
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
-        resolve(xhr.response);
+        resolve(xhr.response as T);
       } else {
         reject(xhr.statusText);
       }
     };
-    xhr.onerror = () => reject(xhr.statusText);
-    xhr.send(body);
+    xhr.onerror = () => {
+      reject(xhr.statusText);
+    };
+    xhr.send(body as Document);
   });
 };

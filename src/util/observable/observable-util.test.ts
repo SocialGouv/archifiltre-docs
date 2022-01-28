@@ -1,6 +1,10 @@
+import type { OperatorFunction } from "rxjs";
 import { identity, of } from "rxjs";
 import { map, toArray } from "rxjs/operators";
-import { MessageTypes } from "util/batch-process/batch-process-util-types";
+
+import { MessageTypes } from "../batch-process/batch-process-util-types";
+import type { VoidFunction } from "../function/function-util";
+import type { DataProcessingStream } from "./observable-util";
 import { operateOnDataProcessingStream } from "./observable-util";
 
 const resultElement = {
@@ -20,13 +24,16 @@ const errorElement = {
 
 const streamData = [resultElement, errorElement, resultElement2];
 
-const testStream = (stream, test) => {
+const testStream = (
+  stream: DataProcessingStream<unknown>,
+  test: VoidFunction
+) => {
   return stream.pipe(toArray()).subscribe(test);
 };
 
 describe("observable-utl", () => {
   describe("operateOnDataProcessingStream", () => {
-    it("should return the same stream with no operators", (done) => {
+    it("should return the same stream with no operators", async () => {
       const resultMapper = jest.fn(identity);
       const baseStream = of(...streamData);
 
@@ -34,10 +41,12 @@ describe("observable-utl", () => {
         result: map(resultMapper),
       });
 
-      testStream(testedStream, (result) => {
-        expect(result).toEqual(expect.arrayContaining(streamData));
-        expect(resultMapper).toHaveBeenCalledTimes(2);
-        done();
+      return new Promise<void>((done) => {
+        testStream(testedStream, (result) => {
+          expect(result).toEqual(expect.arrayContaining(streamData));
+          expect(resultMapper).toHaveBeenCalledTimes(2);
+          done();
+        });
       });
     });
 
@@ -69,13 +78,15 @@ describe("observable-utl", () => {
     it("should process the success stream with error stream operator", () => {
       const baseStream = of(...streamData);
 
-      const error = map((errorValue: string) => `processed-${errorValue}`);
+      const error = map(
+        (errorValue: string) => `processed-${errorValue}`
+      ) as OperatorFunction<unknown, unknown>;
 
       const testedStream = operateOnDataProcessingStream<string, string>(
         baseStream,
         {
-          result: identity,
           error,
+          result: identity,
         }
       );
 

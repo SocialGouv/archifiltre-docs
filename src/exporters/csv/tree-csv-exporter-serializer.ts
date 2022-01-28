@@ -1,39 +1,41 @@
+import { omit } from "lodash";
 import { Field, Message, Type } from "protobufjs";
-import {
+import type { Readable, Writable } from "stream";
+
+import type { WithFilesAndFolders } from "../../files-and-folders-loader/files-and-folders-loader-types";
+import type {
   FilesAndFolders,
   FilesAndFoldersMap,
-} from "reducers/files-and-folders/files-and-folders-types";
-import { FilesAndFoldersMessage } from "util/child-process-stream/child-process-stream-messages";
-import { Readable, Writable } from "stream";
-import { omit } from "lodash";
+} from "../../reducers/files-and-folders/files-and-folders-types";
 import {
   parseSerializedDataFromStream,
   sendStringToStream,
   stringifyObjectToStream,
-} from "util/child-process-stream/child-process-stream";
+} from "../../util/child-process-stream/child-process-stream";
+import { FilesAndFoldersMessage } from "../../util/child-process-stream/child-process-stream-messages";
+import type { OmitProtobuf } from "../../util/child-process-stream/common-serializer";
 import {
   extractFilesAndFolders,
   extractKey,
   extractKeysFromFilesAndFolders,
   makeDataExtractor,
-  OmitProtobuf,
-} from "util/child-process-stream/common-serializer";
-import { WithFilesAndFolders } from "files-and-folders-loader/files-and-folders-loader-types";
-import { Language, WithLanguage } from "util/language/language-types";
+} from "../../util/child-process-stream/common-serializer";
+import type { WithLanguage } from "../../util/language/language-types";
+import { Language } from "../../util/language/language-types";
 
 export type TreeCsvExporterParams = WithLanguage<WithFilesAndFolders>;
 
 @Type.d("TreeCsvExporterSerializerMessage")
 class TreeCsvExporterSerializerMessage extends Message<TreeCsvExporterSerializerMessage> {
   @Field.d(0, "string")
-  key: string;
+  key!: string;
 
   @Field.d(1, FilesAndFoldersMessage)
-  filesAndFolders: FilesAndFolders;
+  filesAndFolders!: FilesAndFolders;
 }
 
 const dataSerializer = (
-  element: TreeCsvExporterSerializerMessage
+  element: OmitProtobuf<TreeCsvExporterSerializerMessage>
 ): Uint8Array => {
   const message = TreeCsvExporterSerializerMessage.create(element);
   return TreeCsvExporterSerializerMessage.encode(message).finish();
@@ -42,16 +44,16 @@ const dataSerializer = (
 export const stringifyTreeCsvExporterOptionsToStream = (
   stream: Writable,
   options: TreeCsvExporterParams
-) => {
+): void => {
   const base = omit(options, ["filesAndFolders"]);
   sendStringToStream(stream, JSON.stringify(base));
   stringifyObjectToStream<
     { filesAndFolders: FilesAndFoldersMap },
     OmitProtobuf<TreeCsvExporterSerializerMessage>
   >(stream, options, {
-    keyExtractor: extractKeysFromFilesAndFolders,
     dataExtractor: makeDataExtractor(extractKey, extractFilesAndFolders),
     dataSerializer,
+    keyExtractor: extractKeysFromFilesAndFolders,
   });
   stream.end();
 };
@@ -60,7 +62,7 @@ const deserializer = (data: Uint8Array) =>
   TreeCsvExporterSerializerMessage.toObject(
     TreeCsvExporterSerializerMessage.decode(data),
     { arrays: true }
-  );
+  ) as { key: string; filesAndFolders: FilesAndFolders };
 
 const merger = (
   base: TreeCsvExporterParams,
@@ -70,7 +72,7 @@ const merger = (
   base.filesAndFolders[key] = filesAndFolders;
 };
 
-export const parseTreeCsvExporterOptionsFromStream = (
+export const parseTreeCsvExporterOptionsFromStream = async (
   stream: Readable
 ): Promise<TreeCsvExporterParams> => {
   const options: TreeCsvExporterParams = {
@@ -79,8 +81,8 @@ export const parseTreeCsvExporterOptionsFromStream = (
   };
 
   return parseSerializedDataFromStream(stream, options, {
-    withJsonInitializing: true,
     deserializer,
     merger,
+    withJsonInitializing: true,
   });
 };

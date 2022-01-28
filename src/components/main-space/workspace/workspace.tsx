@@ -1,28 +1,28 @@
-import { useTabsState } from "components/header/tabs-context";
-import React, { FC } from "react";
-
-import Icicle from "components/main-space/icicle/icicle-container";
-import NavigationBar from "components/main-space/navigation-bar/navigation-bar-container";
 import Box from "@material-ui/core/Box";
-import DuplicatesSearch from "components/main-space/duplicates-search/duplicates-search-container";
-import TabsContent from "./tabs/tabs-content";
+import React from "react";
+import { createContext } from "vm";
 
-import Header from "components/header/header-container";
-import WorkspaceProviders from "./workspace-providers";
-import HelpButton from "../help-button";
+import { useTabsState } from "../..//header/tabs-context";
+import { HeaderContainer as Header } from "../../header/header-container";
+import { DuplicatesSearchContainer as DuplicatesSearch } from "../duplicates-search/duplicates-search-container";
+import { HelpButton } from "../help-button";
+import { IcicleApiToProps as Icicle } from "../icicle/icicle-container";
+import { NavigationBarContainer as NavigationBar } from "../navigation-bar/navigation-bar-container";
+import { TabsContent } from "./tabs/tabs-content";
+import { WorkspaceProviders } from "./workspace-providers";
 
 const workspaceState = {
-  isFileMoveActive: false,
   areTabsHidden: false,
-  setIsFileMoveActive: (isMoveActive) => {},
-  setAreTabsHidden: (areTabsHidden) => {},
+  isFileMoveActive: false,
+  setAreTabsHidden: (_areTabsHidden: boolean) => void 0,
+  setIsFileMoveActive: (_isMoveActive: boolean) => void 0,
 };
 
-export const WorkspaceContext = React.createContext(workspaceState);
+export const WorkspaceContext = createContext(workspaceState);
 
 const areIciclesDisplayed = (tabIndex: number) => tabIndex !== 3;
 
-const Workspace: FC = () => {
+export const Workspace: React.FC = () => {
   const { tabIndex } = useTabsState();
 
   return (
@@ -60,5 +60,3 @@ const Workspace: FC = () => {
     </WorkspaceProviders>
   );
 };
-
-export default Workspace;

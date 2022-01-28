@@ -1,4 +1,5 @@
 import fc from "fast-check";
+
 import { compose, copy, extractKeys } from "./object-util";
 
 describe("object-util", () => {
@@ -22,7 +23,7 @@ describe("object-util", () => {
 
     it("should always contain first object values", () => {
       fc.assert(
-        fc.property(fc.object(), fc.object(), (a: any, b: any) => {
+        fc.property(fc.object(), fc.object(), (a, b) => {
           expect(compose(a, b)).toMatchObject(a);
         })
       );
@@ -30,7 +31,7 @@ describe("object-util", () => {
 
     it("should always contain all the keys of the first object", () => {
       fc.assert(
-        fc.property(fc.object(), fc.object(), (a: any, b: any) => {
+        fc.property(fc.object(), fc.object(), (a, b) => {
           expect(Object.keys(compose(a, b))).toEqual(
             expect.arrayContaining(Object.keys(a))
           );
@@ -40,7 +41,7 @@ describe("object-util", () => {
 
     it("should always contain all the keys of the second object", () => {
       fc.assert(
-        fc.property(fc.object(), fc.object(), (a: any, b: any) => {
+        fc.property(fc.object(), fc.object(), (a, b) => {
           expect(Object.keys(compose(a, b))).toEqual(
             expect.arrayContaining(Object.keys(b))
           );
@@ -59,7 +60,9 @@ describe("object-util", () => {
 
       const keys = ["keyInList1", "keyInList2", "keyNotInObject"];
 
-      expect(extractKeys(keys, baseObject)).toEqual({
+      expect(
+        extractKeys(keys as (keyof typeof baseObject)[], baseObject)
+      ).toEqual({
         keyInList1: "value1",
         keyInList2: "value2",
       });
@@ -69,7 +72,7 @@ describe("object-util", () => {
   describe("copy", () => {
     it("should create a new object", () => {
       fc.assert(
-        fc.property(fc.object(), (obj: any) => {
+        fc.property(fc.object(), (obj) => {
           expect(copy(obj)).not.toBe(obj);
         })
       );
@@ -77,7 +80,7 @@ describe("object-util", () => {
 
     it("should create the same object", () => {
       fc.assert(
-        fc.property(fc.object(), (obj: any) => {
+        fc.property(fc.object(), (obj) => {
           expect(copy(obj)).toEqual(obj);
         })
       );

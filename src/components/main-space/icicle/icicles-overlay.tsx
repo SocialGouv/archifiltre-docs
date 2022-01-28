@@ -1,10 +1,11 @@
-import React, { FC, memo } from "react";
-import { DimsMap } from "./icicle";
-import IcicleRect from "./icicle-rect";
-import * as FunctionUtil from "../../../util/function/function-util";
-import { FillColor, IcicleMouseActionHandler } from "./icicle-types";
+import { noop } from "lodash";
+import React, { memo } from "react";
 
-type IciclesOverlayProps = {
+import type { DimsMap } from "./icicle";
+import { IcicleRect } from "./icicle-rect";
+import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
+
+export interface IciclesOverlayProps {
   dimsMap: DimsMap;
   opacity: number;
   ids: string[];
@@ -12,9 +13,9 @@ type IciclesOverlayProps = {
   onIcicleRectClickHandler: IcicleMouseActionHandler;
   onIcicleRectDoubleClickHandler: IcicleMouseActionHandler;
   onIcicleRectMouseOverHandler: IcicleMouseActionHandler;
-};
+}
 
-const IciclesOverlay: FC<IciclesOverlayProps> = ({
+const _IciclesOverlay: React.FC<IciclesOverlayProps> = ({
   opacity,
   dimsMap,
   ids,
@@ -27,6 +28,7 @@ const IciclesOverlay: FC<IciclesOverlayProps> = ({
     <>
       {ids.map((id) => {
         const dims = dimsMap[id];
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (!dims) {
           return <g key={id} />;
         }
@@ -46,7 +48,7 @@ const IciclesOverlay: FC<IciclesOverlayProps> = ({
             onClickHandler={onIcicleRectClickHandler}
             onDoubleClickHandler={onIcicleRectDoubleClickHandler}
             onMouseOverHandler={onIcicleRectMouseOverHandler}
-            registerDims={FunctionUtil.empty}
+            registerDims={noop}
           />
         );
       })}
@@ -54,4 +56,6 @@ const IciclesOverlay: FC<IciclesOverlayProps> = ({
   );
 };
 
-export default memo(IciclesOverlay);
+_IciclesOverlay.displayName = "IciclesOverlay";
+
+export const IciclesOverlay = memo(_IciclesOverlay);

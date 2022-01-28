@@ -1,40 +1,47 @@
-import React, { FC, useCallback, useMemo } from "react";
-import { useOpenModal } from "reducers/modal/modal-selectors";
-import { useDispatch } from "react-redux";
-import { closeModalAction } from "reducers/modal/modal-actions";
-import { Modal } from "reducers/modal/modal-types";
-import ErrorsModal from "components/modals/errors-modal/errors-modal";
-import { useFilesAndFoldersErrors } from "reducers/files-and-folders/files-and-folders-selectors";
-import { reloadFilesAndFoldersThunk } from "reducers/store-thunks";
-import { useTranslation } from "react-i18next";
-import { useErrorsModalConfig } from "components/modals/errors-modal/use-errors-modal-config";
-import { exportTableToCsvFile } from "util/table/table-util";
-import { useWorkspaceMetadata } from "reducers/workspace-metadata/workspace-metadata-selectors";
 import path from "path";
+import React, { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
 
-const FilesAndFoldersErrorsModalContainer: FC = () => {
+import { useFilesAndFoldersErrors } from "../../../reducers/files-and-folders/files-and-folders-selectors";
+import { closeModalAction } from "../../../reducers/modal/modal-actions";
+import { useOpenModal } from "../../../reducers/modal/modal-selectors";
+import { Modal } from "../../../reducers/modal/modal-types";
+import { reloadFilesAndFoldersThunk } from "../../../reducers/store-thunks";
+import { useWorkspaceMetadata } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { exportTableToCsvFile } from "../../../util/table/table-util";
+import type { ErrorsModalProps } from "../errors-modal/errors-modal";
+import { ErrorsModal } from "../errors-modal/errors-modal";
+import { useErrorsModalConfig } from "../errors-modal/use-errors-modal-config";
+
+export const FilesAndFoldersErrorsModalContainer: React.FC = () => {
   const errors = useFilesAndFoldersErrors();
   const openModal = useOpenModal();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { originalPath } = useWorkspaceMetadata();
 
-  const closeModal = useCallback(() => dispatch(closeModalAction()), [
-    dispatch,
-  ]);
+  const closeModal = useCallback(
+    () => dispatch(closeModalAction()),
+    [dispatch]
+  );
 
-  const retry = useCallback(() => dispatch(reloadFilesAndFoldersThunk()), [
-    dispatch,
-  ]);
+  const retry = useCallback(
+    () => dispatch(reloadFilesAndFoldersThunk()),
+    [dispatch]
+  );
 
   const config = useErrorsModalConfig(t);
 
-  const exportErrors = useCallback(
-    async (errors) => {
-      await exportTableToCsvFile(errors, config, {
+  type ExportErrors = NonNullable<
+    ErrorsModalProps["actions"]
+  >[number]["action"];
+  const exportErrors: ExportErrors = useCallback(
+    async (errorsToExport) => {
+      await exportTableToCsvFile(errorsToExport, config, {
         defaultFilePath: path.join(originalPath, "..", "load-errors.csv"),
-        notificationTitle: t("errorsModal.exportNotificationTitle"),
         notificationMessage: t("errorsModal.exportNotificationMessage"),
+        notificationTitle: t("errorsModal.exportNotificationTitle"),
       });
     },
     [config, originalPath, t]
@@ -42,17 +49,17 @@ const FilesAndFoldersErrorsModalContainer: FC = () => {
 
   const isModalOpen = openModal === Modal.FIlES_AND_FOLDERS_ERRORS_MODAL;
 
-  const actions = useMemo(
+  const actions: ErrorsModalProps["actions"] = useMemo(
     () => [
       {
+        action: retry,
         id: "retry",
         title: t("common.retry"),
-        action: retry,
       },
       {
+        action: exportErrors,
         id: "export",
         title: t("common.exportActionTitle"),
-        action: exportErrors,
       },
     ],
     [t, retry, exportErrors]
@@ -67,5 +74,3 @@ const FilesAndFoldersErrorsModalContainer: FC = () => {
     />
   );
 };
-
-export default FilesAndFoldersErrorsModalContainer;

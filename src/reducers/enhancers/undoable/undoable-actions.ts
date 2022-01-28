@@ -1,4 +1,5 @@
-import { COMMIT, REDO, UNDO, UndoableActionTypes } from "./undoable-types";
+import type { UndoableActionTypes } from "./undoable-types";
+import { COMMIT, REDO, UNDO } from "./undoable-types";
 
 /**
  * Action to undo the last action in all the reducers wrapped by undoable

@@ -1,12 +1,13 @@
-import React, { FC } from "react";
-import styled from "styled-components";
-import { LoadingInfo } from "reducers/loading-info/loading-info-types";
-import { percent } from "util/numbers/numbers-util";
 import { LinearProgress } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
+import React from "react";
+import styled from "styled-components";
 
-const getColor = ({ color }) => color;
+import type { LoadingInfo } from "../../reducers/loading-info/loading-info-types";
+import { percent } from "../../util/numbers/numbers-util";
+
+const getColor = ({ color }: { color: string }) => color;
 
 const LoadingBarContainer = styled.div`
   color: ${getColor};
@@ -23,18 +24,17 @@ const RoundedLinearProgress = styled(LinearProgress)`
   border-radius: 5px;
 `;
 
-type LoadingInfoProps = {
+export interface LoadingInfoProps {
   loadingInfo: LoadingInfo;
   color: string;
   label: string;
   isLoaded: boolean;
-};
+}
 
-const LoadingInfoDisplay: FC<LoadingInfoProps> = ({
+export const LoadingInfoDisplay: React.FC<LoadingInfoProps> = ({
   loadingInfo,
   color = "black",
   label,
-  isLoaded,
 }) => (
   <LoadingBarContainer color={color}>
     <LoadingBarName>{label || loadingInfo.label}</LoadingBarName>
@@ -54,5 +54,3 @@ const LoadingInfoDisplay: FC<LoadingInfoProps> = ({
     </Box>
   </LoadingBarContainer>
 );
-
-export default LoadingInfoDisplay;

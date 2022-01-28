@@ -1,16 +1,20 @@
-import { createFilesAndFolders } from "files-and-folders-loader/files-and-folders-loader";
 import { MockWritable } from "stdio-mock";
 import Stream from "stream";
-import { GenerateCsvExportOptions } from "exporters/csv/csv-exporter.controller";
-import { createTag } from "reducers/tags/tags-test-util";
+
+import { createFilesAndFolders } from "../../files-and-folders-loader/files-and-folders-loader";
+import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { createTag } from "../../reducers/tags/tags-test-util";
+import type { WithLanguage } from "../../util/language/language-types";
+import { Language } from "../../util/language/language-types";
+import type { GenerateCsvExportOptions } from "./csv-exporter.controller";
 import {
   parseCsvExporterOptionsFromStream,
   stringifyCsvExporterOptionsToStream,
-} from "exporters/csv/csv-exporter-serializer";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { Language, WithLanguage } from "util/language/language-types";
+} from "./csv-exporter-serializer";
 
-const extractDataFromMock = (writeable: MockWritable): Promise<Buffer[]> =>
+const extractDataFromMock = async (
+  writeable: MockWritable
+): Promise<Buffer[]> =>
   new Promise((resolve) => {
     writeable.on("finish", () => {
       resolve(writeable.data());
@@ -40,7 +44,7 @@ describe("csv-exporter-serializer", () => {
 
     const writeable = new MockWritable();
 
-    // @ts-ignore
+    // @ts-expect-error Mock
     stringifyCsvExporterOptionsToStream(writeable, exporterOptions);
 
     const sentData: Buffer[] = await extractDataFromMock(writeable);

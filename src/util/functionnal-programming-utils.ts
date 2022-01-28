@@ -1,22 +1,21 @@
-export type Mapper<Input, Output> = (input: Input) => Output;
-export type Merger<Input1, Input2, Output> = (
-  input1: Input1,
-  input2: Input2
-) => Output;
+export type Mapper<TInput, TOutput> = (input: TInput) => TOutput;
+export type Merger<TInput1, TInput2, TOutput> = (
+  input1: TInput1,
+  input2: TInput2
+) => TOutput;
 
 export type Accessor<T> = () => T;
 
 /**
  * Applies the ! operator to the value
- * @param value
  */
 export const not = (value: boolean): boolean => !value;
 
 /**
  * Returns the size of an array. Basically, array.length wrapped in a function.
- * @param array
  */
-export const size = (array: any[] | string): number => array.length;
+export const size = (arrayOrString: unknown[] | string): number =>
+  arrayOrString.length;
 
 /**
  * Function that applies a side effect and returns the value. It can be pretty useful to add logs.
@@ -28,9 +27,9 @@ export const size = (array: any[] | string): number => array.length;
  *   filter(({ id }) => id !== "")
  * ]);
  */
-export const tap = <T>(sideEffect: Mapper<T, void>): Mapper<T, T> => (
-  value: T
-) => {
-  sideEffect(value);
-  return value;
-};
+export const tap =
+  <T>(sideEffect: Mapper<T, void>): Mapper<T, T> =>
+  (value: T) => {
+    sideEffect(value);
+    return value;
+  };

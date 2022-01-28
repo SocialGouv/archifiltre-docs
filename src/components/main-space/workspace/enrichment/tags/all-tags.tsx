@@ -1,28 +1,26 @@
 import Box from "@material-ui/core/Box";
-import React, { FC, useMemo } from "react";
-
-import TagListItem from "./all-tags-item";
-
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { FilesAndFoldersMap } from "reducers/files-and-folders/files-and-folders-types";
-
-import {
-  getTagSize,
-  sortTags,
-  tagMapToArray,
-} from "reducers/tags/tags-selectors";
+import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
+
+import { commitAction } from "../../../../../reducers/enhancers/undoable/undoable-actions";
 import {
   getElementsToDeleteFromStore,
   getFilesAndFoldersFromStore,
   getFilesTotalSize,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { useTranslation } from "react-i18next";
-import { TagMap } from "reducers/tags/tags-types";
-import { commitAction } from "reducers/enhancers/undoable/undoable-actions";
+} from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
+import type { FilesAndFoldersMap } from "../../../../../reducers/files-and-folders/files-and-folders-types";
+import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import type { FilesAndFoldersMetadataMap } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import {
+  getTagSize,
+  sortTags,
+  tagMapToArray,
+} from "../../../../../reducers/tags/tags-selectors";
+import type { TagMap } from "../../../../../reducers/tags/tags-types";
+import { AllTagsItem as TagListItem } from "./all-tags-item";
 
-type AllTagsProps = {
+export interface AllTagsProps {
   tags: TagMap;
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
@@ -31,9 +29,9 @@ type AllTagsProps = {
   filesToDeleteCount: number;
   onDeleteTag: (tagId: string) => () => void;
   onRenameTag: (tagId: string) => (newName: string) => void;
-};
+}
 
-const AllTags: FC<AllTagsProps> = ({
+const AllTags: React.FC<AllTagsProps> = ({
   tags,
   filesAndFolders,
   filesAndFoldersMetadata,
@@ -61,15 +59,18 @@ const AllTags: FC<AllTagsProps> = ({
         />
       );
     })
-    .reduce((accumulator, value) => [...accumulator, value], [
-      <TagListItem
-        key="to-delete"
-        tag={t("common.toDelete")}
-        size={filesToDeleteSize}
-        totalVolume={totalVolume}
-        tagNumber={filesToDeleteCount}
-      />,
-    ]);
+    .reduce(
+      (accumulator, value) => [...accumulator, value],
+      [
+        <TagListItem
+          key="to-delete"
+          tag={t("common.toDelete")}
+          size={filesToDeleteSize}
+          totalVolume={totalVolume}
+          tagNumber={filesToDeleteCount}
+        />,
+      ]
+    );
 
   return (
     <Box display="flex" flexDirection="column" flexWrap="nowrap" height="100%">
@@ -89,13 +90,13 @@ const AllTags: FC<AllTagsProps> = ({
   );
 };
 
-type AllTagsApiToPropsProps = {
+export interface AllTagsApiToPropsProps {
   tags: TagMap;
   renameTag: (tagId: string, name: string) => void;
   deleteTag: (tagId: string) => void;
-};
+}
 
-const AllTagsApiToProps: FC<AllTagsApiToPropsProps> = ({
+export const AllTagsApiToProps: React.FC<AllTagsApiToPropsProps> = ({
   tags,
   renameTag,
   deleteTag,
@@ -122,12 +123,12 @@ const AllTagsApiToProps: FC<AllTagsApiToPropsProps> = ({
     [elementsToDelete, filesAndFolders, filesAndFoldersMetadata]
   );
 
-  const onRenameTag = (tagId) => (name) => {
+  const onRenameTag: AllTagsProps["onRenameTag"] = (tagId) => (name) => {
     renameTag(tagId, name);
     dispatch(commitAction());
   };
 
-  const onDeleteTag = (tagId) => () => {
+  const onDeleteTag: AllTagsProps["onDeleteTag"] = (tagId) => () => {
     deleteTag(tagId);
     dispatch(commitAction());
   };
@@ -145,5 +146,3 @@ const AllTagsApiToProps: FC<AllTagsApiToPropsProps> = ({
     />
   );
 };
-
-export default AllTagsApiToProps;

@@ -1,4 +1,6 @@
-import React, { FC, MouseEventHandler } from "react";
+import noop from "lodash/noop";
+import type { MouseEventHandler } from "react";
+import React from "react";
 import {
   FaChevronDown,
   FaChevronRight,
@@ -8,7 +10,6 @@ import {
   FaSearch,
 } from "react-icons/fa";
 import styled from "styled-components";
-import { empty } from "util/function/function-util";
 
 export const FOLDER_ICON = FaFolder;
 export const PAGE_ICON = FaFile;
@@ -24,34 +25,34 @@ const IconWrapper = styled.span<{
 `;
 
 type IconComponent =
+  | typeof COLLAPSE_ICON
+  | typeof EXPAND_ICON
   | typeof FOLDER_ICON
   | typeof PAGE_ICON
   | typeof PAGE_MULTIPLE_ICON
-  | typeof SEARCH_ICON
-  | typeof EXPAND_ICON
-  | typeof COLLAPSE_ICON;
+  | typeof SEARCH_ICON;
 
-type IconSize = "small" | "normal" | "big";
+type IconSize = "big" | "normal" | "small";
 
 const iconSizes: { [size in IconSize]: string } = {
-  small: "1em",
-  normal: "2em",
   big: "3em",
+  normal: "2em",
+  small: "1em",
 };
 
-export type IconProps = {
+export interface IconProps {
   icon: IconComponent;
   color: string;
   size?: IconSize;
   onClick?: () => void;
-};
+}
 
 /** Displays an icon */
-const Icon: FC<IconProps> = ({
+export const Icon: React.FC<IconProps> = ({
   icon,
   size = "big",
   color,
-  onClick = empty,
+  onClick = noop,
 }) => {
   const InnerIcon = icon;
   return (
@@ -60,5 +61,3 @@ const Icon: FC<IconProps> = ({
     </IconWrapper>
   );
 };
-
-export default Icon;

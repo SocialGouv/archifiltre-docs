@@ -1,14 +1,15 @@
+import { useCallback, useEffect, useState } from "react";
+
+import type { UserSettings } from "../persistence/persistent-settings";
 import {
   getInitialUserSettings,
   saveUserSettings,
-  UserSettings,
-} from "persistence/persistent-settings";
-import { useCallback, useEffect, useState } from "react";
+} from "../persistence/persistent-settings";
 
-type UseUserSettingsResult = {
+interface UseUserSettingsResult {
   userSettings: UserSettings;
   setUserSettings: (userSettings: Partial<UserSettings>) => void;
-};
+}
 
 export const useUserSettings = (): UseUserSettingsResult => {
   const [internalUserSettings, setInternalUserSettings] = useState(
@@ -17,17 +18,20 @@ export const useUserSettings = (): UseUserSettingsResult => {
 
   const setUserSettings = useCallback(
     (userSettings: Partial<UserSettings>) => {
-      setInternalUserSettings({ ...internalUserSettings, ...userSettings });
+      setInternalUserSettings({
+        ...internalUserSettings,
+        ...userSettings,
+      });
     },
     [setInternalUserSettings, internalUserSettings]
   );
 
   useEffect(() => {
-    saveUserSettings(internalUserSettings);
+    void saveUserSettings(internalUserSettings);
   }, [internalUserSettings, setInternalUserSettings]);
 
   return {
-    userSettings: internalUserSettings,
     setUserSettings,
+    userSettings: internalUserSettings,
   };
 };

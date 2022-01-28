@@ -1,23 +1,17 @@
-import React from "react";
+import { PureComponent } from "react";
 
-import * as UserData from "user-data";
 import { ipcRenderer } from "../../common/ipc";
+import * as UserData from "../../user-data";
 
-type WindowResizeState = {
-  reader;
-  writer;
-};
+export type WindowResizeState = UserData.UserData;
 
-export default class WindowResize extends React.PureComponent<
-  {},
-  WindowResizeState
-> {
-  constructor(props) {
+export class WindowResize extends PureComponent<unknown, WindowResizeState> {
+  constructor(props: unknown) {
     super(props);
 
     const { reader, writer } = UserData.create({
-      width: 620,
       height: 600,
+      width: 620,
     });
 
     this.state = {
@@ -28,17 +22,17 @@ export default class WindowResize extends React.PureComponent<
     this.onResize = this.onResize.bind(this);
   }
 
-  onResize() {
+  onResize(): void {
     const { writer } = this.state;
     const [width, height] = ipcRenderer.sendSync("window.getSize");
 
     writer({
-      width,
       height,
+      width,
     });
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     const { reader } = this.state;
     const { width, height } = reader();
 
@@ -46,20 +40,20 @@ export default class WindowResize extends React.PureComponent<
 
     ipcRenderer.sendSync("window.show");
 
-    const onResize = this.onResize;
+    const onResize = this.onResize.bind(this);
     window.addEventListener("resize", onResize);
   }
 
-  componentWillUnmount() {
-    const onResize = this.onResize;
+  componentWillUnmount(): void {
+    const onResize = this.onResize.bind(this);
     window.removeEventListener("resize", onResize);
   }
 
-  componentDidCatch(error, info) {
+  componentDidCatch(error: unknown, info: unknown): void {
     console.log(error, info);
   }
 
-  render() {
+  render(): null {
     return null;
   }
 }

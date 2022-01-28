@@ -1,10 +1,11 @@
-import { createFilesAndFolders } from "files-and-folders-loader/files-and-folders-loader";
+import { range } from "lodash";
+import { pick } from "lodash/fp";
+
+import { createFilesAndFolders } from "../../files-and-folders-loader/files-and-folders-loader";
 import {
   extractKeysFromFilesAndFolders,
   makeDataExtractor,
-} from "util/child-process-stream/common-serializer";
-import { pick } from "lodash/fp";
-import { range } from "lodash";
+} from "./common-serializer";
 
 describe("common-serializer", () => {
   describe("extractKeysFromFilesAndFolders", () => {
@@ -24,9 +25,9 @@ describe("common-serializer", () => {
   describe("makeDataExtractor", () => {
     it("should merge extractors", () => {
       const base = {
+        excluded: "excluded",
         hello: "hello",
         world: "world",
-        excluded: "excluded",
       };
 
       const helloExtractor = pick("hello");

@@ -1,26 +1,25 @@
-import AuditInfo from "./audit-info";
-import TabContentHeader from "components/main-space/workspace/tabs/tab-content-header";
-import TabsLayout, {
-  makeTabComponent,
-} from "components/main-space/workspace/tabs/tabs-layout";
-import React, { FC } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import FileTypesDetailsContainer from "./file-types-details/files-types-details-container";
-import TranslatedCategoryTitle from "../tabs/translated-category-title";
+
+import { TabContentHeader } from "../tabs/tab-content-header";
+import { makeTabComponent, TabsLayout } from "../tabs/tabs-layout";
+import { TranslatedCategoryTitle } from "../tabs/translated-category-title";
+import { AuditInfo } from "./audit-info";
+import { FileTypesDetailsContainer } from "./file-types-details/files-types-details-container";
 
 const AuditInfoTab = makeTabComponent({
-  title: <TranslatedCategoryTitle title="audit.fileCountInfoTitle" />,
   content: <AuditInfo />,
+  title: <TranslatedCategoryTitle title="audit.fileCountInfoTitle" />,
 });
 
 const FilesTypesDetails = makeTabComponent({
-  title: <TranslatedCategoryTitle title="audit.fileTypeRepartitionTitle" />,
   content: <FileTypesDetailsContainer />,
   isLast: true,
+  title: <TranslatedCategoryTitle title="audit.fileTypeRepartitionTitle" />,
   widthRatio: 2,
 });
 
-const Audit: FC = () => {
+export const Audit: React.FC = () => {
   const { t } = useTranslation();
 
   return (
@@ -32,5 +31,3 @@ const Audit: FC = () => {
     </TabContentHeader>
   );
 };
-
-export default Audit;

@@ -1,3 +1,4 @@
+import _ from "lodash";
 import {
   compose,
   constant,
@@ -23,31 +24,27 @@ import {
   values,
 } from "lodash/fp";
 
-import _ from "lodash";
-
+import type { FileTypeMap } from "../../exporters/audit/audit-report-values-computer";
+import type { FilesAndFoldersCollection } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import {
-  FilesAndFoldersMetadata,
-  FilesAndFoldersMetadataMap,
-} from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import {
-  FilesAndFoldersCollection,
   getFiles,
   getFilesMap,
   getFolders,
   getFoldersMap,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import {
+} from "../../reducers/files-and-folders/files-and-folders-selectors";
+import type {
   FilesAndFolders,
   FilesAndFoldersMap,
-} from "reducers/files-and-folders/files-and-folders-types";
-import { Mapper, Merger } from "util/functionnal-programming-utils";
-import { FileTypeMap } from "exporters/audit/audit-report-values-computer";
+} from "../../reducers/files-and-folders/files-and-folders-types";
+import type {
+  FilesAndFoldersMetadata,
+  FilesAndFoldersMetadataMap,
+} from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { HashesMap } from "../../reducers/hashes/hashes-types";
+import type { Mapper, Merger } from "../../util/functionnal-programming-utils";
 import { FileType, getFileType } from "../file-types/file-types-util";
-import { HashesMap } from "reducers/hashes/hashes-types";
 
-export interface DuplicatesMap {
-  [hash: string]: FilesAndFolders[];
-}
+export type DuplicatesMap = Record<string, FilesAndFolders[]>;
 
 /**
  * Utility function to transform function args into an array of args
@@ -65,6 +62,7 @@ const removeIncompleteFilesAndFolders: Mapper<
   FilesAndFoldersMap
 > = omitBy<FilesAndFolders & { hash: string }>(
   (filesAndFolders) =>
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     filesAndFolders.name === undefined && filesAndFolders.hash === ""
 );
 
@@ -118,15 +116,10 @@ export const getFilteredDuplicatesMap = (
   filesAndFoldersFilter: Mapper<FilesAndFoldersCollection, FilesAndFoldersMap>
 ): Merger<FilesAndFoldersCollection, HashesMap, DuplicatesMap> =>
   compose(
-    omit<
-      {
-        [hash: string]: FilesAndFolders & { hash: string };
-      },
-      string
-    >(""),
+    omit<Record<string, FilesAndFolders & { hash: string }>, string>(""),
     groupBy(
       ({ hash }: FilesAndFolders & { hash: string | null }): string =>
-        hash || ""
+        hash ?? ""
     ),
     filterFilesAndFoldersAndMerge(filesAndFoldersFilter)
   );
@@ -158,12 +151,18 @@ export const getMostDuplicatedFiles = (
 ): Merger<FilesAndFoldersMap, HashesMap, FilesAndFolders[][]> =>
   compose(
     getMostDuplicatedItems(nbDuplicatedItems),
-    getFilteredDuplicatesMap(getFilesMap)
+    getFilteredDuplicatesMap(
+      getFilesMap as Mapper<FilesAndFoldersCollection, FilesAndFoldersMap>
+    )
   );
 
-const getFoldersDuplicatesMap = getFilteredDuplicatesMap(getFoldersMap);
+const getFoldersDuplicatesMap = getFilteredDuplicatesMap(
+  getFoldersMap as Mapper<FilesAndFoldersCollection, FilesAndFoldersMap>
+);
 
-export const getFilesDuplicatesMap = getFilteredDuplicatesMap(getFilesMap);
+export const getFilesDuplicatesMap = getFilteredDuplicatesMap(
+  getFilesMap as Mapper<FilesAndFoldersCollection, FilesAndFoldersMap>
+);
 
 /**
  * Sums the number of duplicates in a duplicates map based on the count method for element values
@@ -194,6 +193,7 @@ export const countDuplicateFilesTotalSize: Merger<
   HashesMap,
   number
 > = compose(
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   countDuplicatesInDuplicatesMap(({ file_size }) => file_size),
   getFilesDuplicatesMap
 );
@@ -202,29 +202,35 @@ export const countDuplicateFilesTotalSize: Merger<
  * Get the duplicated files where the duplicates take the most space
  * @param nbDuplicatedItems
  */
-export const getBiggestDuplicatedFolders = (nbDuplicatedItems: number) => (
-  filesAndFoldersMap: FilesAndFoldersMap,
-  filesAndFoldersMetadataMap: FilesAndFoldersMetadataMap,
-  hashesMap: HashesMap
-): (FilesAndFolders & FilesAndFoldersMetadata & { count: number })[] => {
-  const duplicatesMap = getFoldersDuplicatesMap(filesAndFoldersMap, hashesMap);
+export const getBiggestDuplicatedFolders =
+  (nbDuplicatedItems: number) =>
+  (
+    filesAndFoldersMap: FilesAndFoldersMap,
+    filesAndFoldersMetadataMap: FilesAndFoldersMetadataMap,
+    hashesMap: HashesMap
+  ): (FilesAndFolders & FilesAndFoldersMetadata & { count: number })[] => {
+    const duplicatesMap = getFoldersDuplicatesMap(
+      filesAndFoldersMap,
+      hashesMap
+    );
 
-  return _(duplicatesMap)
-    .sortBy(
-      (filesAndFoldersList) =>
-        (filesAndFoldersList.length - 1) *
-        filesAndFoldersMetadataMap[filesAndFoldersList[0].id].childrenTotalSize
-    )
-    .takeRight(nbDuplicatedItems)
-    .filter((filesAndFoldersList) => filesAndFoldersList.length > 1)
-    .reverse()
-    .map((duplicatedItemsList) => ({
-      ...duplicatedItemsList[0],
-      ...filesAndFoldersMetadataMap[duplicatedItemsList[0].id],
-      count: duplicatedItemsList.length,
-    }))
-    .value();
-};
+    return _(duplicatesMap)
+      .sortBy(
+        (filesAndFoldersList) =>
+          (filesAndFoldersList.length - 1) *
+          filesAndFoldersMetadataMap[filesAndFoldersList[0].id]
+            .childrenTotalSize
+      )
+      .takeRight(nbDuplicatedItems)
+      .filter((filesAndFoldersList) => filesAndFoldersList.length > 1)
+      .reverse()
+      .map((duplicatedItemsList) => ({
+        ...duplicatedItemsList[0],
+        ...filesAndFoldersMetadataMap[duplicatedItemsList[0].id],
+        count: duplicatedItemsList.length,
+      }))
+      .value();
+  };
 
 /**
  * Returns true if a file and folder element has at least one duplicate, false otherwise
@@ -232,18 +238,19 @@ export const getBiggestDuplicatedFolders = (nbDuplicatedItems: number) => (
  * @param fileOrFolder - file or folder to check
  */
 export const hasDuplicate = (
-  hashes: HashesMap = {},
+  hashes: HashesMap,
   fileOrFolder: FilesAndFolders
-) =>
+): boolean =>
   _(hashes)
     .omit(fileOrFolder.id)
     .values()
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     .filter((hash) => hash !== null)
     .some((hash) => hash === hashes[fileOrFolder.id]);
 
-type Size = {
+interface Size {
   size: number;
-};
+}
 
 const sumSizes = (sizes: Size[]) =>
   sizes.reduce((sizesSum, { size }) => sizesSum + size, 0);
@@ -271,10 +278,10 @@ const createCountDuplicateFiles = (
     mapValues((filesAndFoldersArray: FilesAndFolders[]) =>
       filesAndFoldersArray.slice(1).reduce(
         (accumulator, element) => ({
-          type: getFileType(element),
           size: accumulator.size + mapFilesAndFoldersToNumber(element),
+          type: getFileType(element),
         }),
-        { type: FileType.OTHER, size: 0 }
+        { size: 0, type: FileType.OTHER }
       )
     ),
     pickBy(

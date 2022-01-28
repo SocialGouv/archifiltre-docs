@@ -1,4 +1,4 @@
-import { reportWarning } from "logging/reporter";
+import { reportWarning } from "../../logging/reporter";
 import { expectToBeDefined } from "./expect-behaviour";
 
 jest.mock("logging/reporter", () => ({

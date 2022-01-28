@@ -1,37 +1,27 @@
 {
+  "extends": "@tsconfig/node14/tsconfig.json",
   "compilerOptions": {
     "incremental": true,
     "experimentalDecorators": true,
+    "strictNullChecks": true,
     "outDir": "./dist/", // path to output directory
     "sourceMap": true, // allow sourcemap support
-    "strictNullChecks": true, // enable strict null checks as a best practice
-    "module": "es6", // specify module code generation
+    "module": "CommonJS", // specify module code generation
     "jsx": "react", // use typescript to transpile jsx to js
-    "target": "es2015", // specify ECMAScript target version
+    "target": "ES2015", // TODO: >=ES2016 (Raven only working in es2015 for whatever reasons)
     "allowJs": true, // allow a partial TypeScript and JavaScript codebase
-    "moduleResolution": "node",
-    "baseUrl": "src",
-    "esModuleInterop": true,
-    "lib": [
-      "es6",
-      "scripthost",
-      "dom"
-    ],
     "resolveJsonModule": true,
-    "noUnusedLocals": true,
-    "types": [
-      "react",
-      "jest",
-      "node"
-    ] // This is a dirty-fix to ignore @types/react-native that is added
-    // by @types/styled-components and collides with @types/react.
-    // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/33311#issuecomment-466731156
+    "lib": [
+      "ES2021",
+      "DOM"
+    ],
   },
   "include": [
-    "./src/",
-    "./src/typings/custom.d.ts"
+    "src/**/*",
+    "globals.d.ts"
   ],
   "exclude": [
+    "tests/**/*",
     "**/*.test.*"
   ]
 }

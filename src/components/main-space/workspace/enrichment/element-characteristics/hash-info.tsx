@@ -1,13 +1,13 @@
 import { Hashicon as HashIcon } from "@emeraldpay/hashicon-react/lib/component";
 import { Tooltip } from "@material-ui/core";
-import React, { FC } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 
-type HashInfoProps = {
+export interface HashInfoProps {
   hash: string;
-};
+}
 
-const HashInfo: FC<HashInfoProps> = ({ hash }) => {
+export const HashInfo: React.FC<HashInfoProps> = ({ hash }) => {
   const { t } = useTranslation();
   const hashIconExplanation = t("report.hashIconExplanation");
 
@@ -22,5 +22,3 @@ const HashInfo: FC<HashInfoProps> = ({ hash }) => {
     </span>
   );
 };
-
-export default HashInfo;

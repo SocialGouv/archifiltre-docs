@@ -1,13 +1,13 @@
-import { ChildProcess } from "child_process";
+import type { ChildProcess } from "child_process";
 import { without } from "lodash";
-import {
-  ProcessControllerAsyncWorker,
-  WorkerEventType,
-} from "util/async-worker/async-worker-util";
 
-export type ChildProcessConstructor = ChildProcess & { new (): ChildProcess };
+import type { ProcessControllerAsyncWorker } from "../async-worker/async-worker-util";
+import { WorkerEventType } from "../async-worker/async-worker-util";
 
-export type ProcessControllerAsyncWorkerFactory = () => ProcessControllerAsyncWorker;
+export type ChildProcessConstructor = ChildProcess & (new () => ChildProcess);
+
+export type ProcessControllerAsyncWorkerFactory =
+  () => ProcessControllerAsyncWorker;
 
 class WorkerManager {
   workerControllers: ProcessControllerAsyncWorker[] = [];
@@ -24,9 +24,11 @@ class WorkerManager {
   }
 
   clear() {
-    this.workerControllers.forEach((worker) => worker.terminate());
+    this.workerControllers.forEach((worker) => {
+      worker.terminate();
+    });
     this.workerControllers = [];
   }
 }
 
-export default new WorkerManager();
+export const workerManager = new WorkerManager();

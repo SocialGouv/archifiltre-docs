@@ -1,8 +1,9 @@
-import { createTag } from "reducers/tags/tags-test-util";
-import { makeRowConfig } from "util/array-export/make-array-export-config";
-import { createFilesAndFolders } from "reducers/files-and-folders/files-and-folders-test-utils";
-import { formatPathForUserSystem } from "util/file-system/file-sys-util";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+/* eslint-disable jest/expect-expect */
+import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
+import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { createTag } from "../../reducers/tags/tags-test-util";
+import { formatPathForUserSystem } from "../file-system/file-sys-util";
+import { makeRowConfig } from "./make-array-export-config";
 
 const rowId = "/filesAndFolders/file-1";
 const fileName = "file-name.csv";
@@ -13,16 +14,16 @@ const lastModification = 1531670400000;
 
 const tags = {
   taggy: createTag({
+    ffIds: [rowId],
     id: "taggy ",
     name: "Taggy",
-    ffIds: [rowId],
   }),
 };
 
 const hashes = {
-  [rowId]: "row-hash",
   "another-hash": "row-hash",
   "non-duplicate": "other-hash",
+  [rowId]: "row-hash",
 };
 
 const aliases = {
@@ -35,7 +36,7 @@ const comments = {
 
 const idsToDelete = [rowId];
 
-const rowData = {
+const rowDataSample = {
   ...createFilesAndFolders({
     id: rowId,
     name: fileName,
@@ -43,16 +44,16 @@ const rowData = {
   }),
   ...createFilesAndFoldersMetadata({
     childrenTotalSize: fileSize,
-    minLastModified: firstModification,
     maxLastModified: lastModification,
+    minLastModified: firstModification,
     nbChildrenFiles: 1,
   }),
-  tags,
-  hashes,
   aliases,
   comments,
+  hashes,
   idsToDelete,
   overrideLastModified: {},
+  tags,
 };
 
 describe("make-array-export-config", () => {
@@ -60,20 +61,19 @@ describe("make-array-export-config", () => {
     const translator = (translationKey: string) =>
       `translate(${translationKey})`;
 
-    const config = makeRowConfig(translator, tags);
+    const rowConfig = makeRowConfig(translator, tags);
 
-    const makeTestRow = ({ rowData, config }) => ({
-      columnLabel,
-      expectedValue,
-    }) => {
-      const title = translator(columnLabel);
-      const columnConfig = config.find((config) => config.title === title);
-      expect(columnConfig?.accessor(rowData)).toEqual(expectedValue);
-    };
+    const makeTestRow =
+      ({ rowData, config }) =>
+      ({ columnLabel, expectedValue }) => {
+        const title = translator(columnLabel);
+        const columnConfig = config.find((c) => c.title === title);
+        expect(columnConfig?.accessor(rowData)).toEqual(expectedValue);
+      };
 
     const testRow = makeTestRow({
-      config,
-      rowData,
+      config: rowConfig,
+      rowData: rowDataSample,
     });
 
     it("should return the file path", () => {
@@ -156,8 +156,8 @@ describe("make-array-export-config", () => {
 
       it("for a folder", () => {
         const customTestRow = makeTestRow({
-          rowData: { ...rowData, children: ["child"] },
-          config,
+          config: rowConfig,
+          rowData: { ...rowDataSample, children: ["child"] },
         });
         customTestRow({
           columnLabel: "csvHeader.fileOrFolder",
@@ -183,8 +183,8 @@ describe("make-array-export-config", () => {
     describe("type", () => {
       it("should detect folders", () => {
         const customTester = makeTestRow({
-          rowData: { ...rowData, children: ["child"] },
-          config,
+          config: rowConfig,
+          rowData: { ...rowDataSample, children: ["child"] },
         });
         customTester({
           columnLabel: "csvHeader.type",
@@ -194,8 +194,8 @@ describe("make-array-export-config", () => {
 
       it("should detect csv", () => {
         const customTester = makeTestRow({
-          rowData: { ...rowData, id: "/parent/file.csv" },
-          config,
+          config: rowConfig,
+          rowData: { ...rowDataSample, id: "/parent/file.csv" },
         });
         customTester({
           columnLabel: "csvHeader.type",
@@ -228,8 +228,8 @@ describe("make-array-export-config", () => {
 
       it("should find non-duplicates", () => {
         const customTestRow = makeTestRow({
-          rowData: { ...rowData, id: "non-duplicate" },
-          config,
+          config: rowConfig,
+          rowData: { ...rowDataSample, id: "non-duplicate" },
         });
         customTestRow({
           columnLabel: "csvHeader.duplicate",
@@ -254,12 +254,12 @@ describe("make-array-export-config", () => {
       });
 
       it("should be displayed if different from first modified", () => {
-        const columnConfig = config.find(
+        const columnConfig = rowConfig.find(
           (config) => config.title === translator("csvHeader.newFirstModified")
         );
         expect(
           columnConfig?.accessor({
-            ...rowData,
+            ...rowDataSample,
             minLastModified: newModification,
           })
         ).toEqual("02/07/2000");
@@ -275,12 +275,12 @@ describe("make-array-export-config", () => {
       });
 
       it("should be displayed if different from last modified", () => {
-        const columnConfig = config.find(
+        const columnConfig = rowConfig.find(
           (config) => config.title === translator("csvHeader.newLastModified")
         );
         expect(
           columnConfig?.accessor({
-            ...rowData,
+            ...rowDataSample,
             maxLastModified: newModification,
           })
         ).toEqual("02/07/2000");
@@ -288,10 +288,10 @@ describe("make-array-export-config", () => {
     });
 
     it("should fill tags", () => {
-      const columnConfig = config.find(
+      const columnConfig = rowConfig.find(
         (config) => config.title === "tag0 : Taggy"
       );
-      expect(columnConfig?.accessor(rowData)).toEqual("Taggy");
+      expect(columnConfig?.accessor(rowDataSample)).toEqual("Taggy");
     });
   });
 });

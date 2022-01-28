@@ -1,3 +1,4 @@
+import { IcicleSortMethod } from "../../reducers/icicle-sort-method/icicle-sort-method-types";
 import {
   setHoveredElementId,
   setLockedElementId,
@@ -5,7 +6,6 @@ import {
   setSessionName,
 } from "./workspace-metadata-actions";
 import { workspaceMetadataReducer } from "./workspace-metadata-reducer";
-import { IcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-types";
 
 const baseState = {
   hoveredElementId: "",

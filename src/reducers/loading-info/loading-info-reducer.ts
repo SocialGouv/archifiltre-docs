@@ -1,8 +1,7 @@
+import type { LoadingInfoAction, LoadingInfoState } from "./loading-info-types";
 import {
   COMPLETE_LOADING,
   DISMISS_ALL_COMPLETE,
-  LoadingInfoAction,
-  LoadingInfoState,
   PROGRESS_LOADING,
   REGISTER_ERROR,
   RESET_LOADING,
@@ -18,11 +17,12 @@ export const initialState: LoadingInfoState = {
   loadingInfo: {},
 };
 
-const loadingInfoReducer = (
+export const loadingInfoReducer = (
   state = initialState,
-  action: LoadingInfoAction
+  action?: LoadingInfoAction
 ): LoadingInfoState => {
-  switch (action.type) {
+  /* eslint-disable no-case-declarations */
+  switch (action?.type) {
     case START_LOADING:
       return {
         ...state,
@@ -41,6 +41,7 @@ const loadingInfoReducer = (
       };
     case UPDATE_LOADING:
       const loadingInfo = state.loadingInfo[action.id];
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (!loadingInfo) {
         return state;
       }
@@ -50,13 +51,16 @@ const loadingInfoReducer = (
           ...state.loadingInfo,
           [action.id]: {
             ...loadingInfo,
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- Handle zero
             goal: action.goal || loadingInfo.goal,
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- Handle zero
             progress: action.progress || loadingInfo.progress,
           },
         },
       };
 
     case PROGRESS_LOADING:
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (!state.loadingInfo[action.id]) {
         return state;
       }
@@ -73,6 +77,7 @@ const loadingInfoReducer = (
       };
 
     case COMPLETE_LOADING:
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (!state.loadingInfo[action.id]) {
         return state;
       }
@@ -97,8 +102,7 @@ const loadingInfoReducer = (
         complete: [],
         dismissed: [...state.dismissed, ...state.complete],
       };
+    default:
+      return state;
   }
-  return state;
 };
-
-export default loadingInfoReducer;

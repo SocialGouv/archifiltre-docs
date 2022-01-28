@@ -1,65 +1,63 @@
-import MuiTable from "@material-ui/core/Table";
-import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
+import MuiTable from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import EnhancedTableHead from "components/common/table/enhanced-table-head";
+import TableContainer from "@material-ui/core/TableContainer";
 import React, {
   memo,
-  ReactElement,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import Paginator from "components/modals/search-modal/paginator";
-import {
-  Column,
-  RowIdAccessor,
-  RowRenderer,
-} from "components/common/table/table-types";
-import TableDefaultRow from "components/common/table/table-default-row";
+import { useTranslation } from "react-i18next";
+
+import { useDuplicatePageState } from "../../../context/duplicates-page-context";
+import { useControllableValue } from "../../../hooks/use-controllable-value";
+import { useElementHeight } from "../../../hooks/use-element-height";
+import type { Order } from "../../../util/table/table-util";
 import {
   accessorToFunction,
-  limitPageIndex,
   getComparator,
-  Order,
+  limitPageIndex,
   stableSort,
-} from "util/table/table-util";
-import { useElementHeight } from "hooks/use-element-height";
-import { useControllableValue } from "../../../hooks/use-controllable-value";
-import { useTranslation } from "react-i18next";
-import { useDuplicatePageState } from "context/duplicates-page-context";
+} from "../../../util/table/table-util";
+import { Paginator } from "../../modals/search-modal/paginator";
+import { EnhancedTableHead } from "./enhanced-table-head";
+import { TableDefaultRow } from "./table-default-row";
+import type { Column, RowIdAccessor, RowRenderer } from "./table-types";
 
-type TableProps<T> = {
+export interface TableProps<T> {
   data: T[];
   columns: Column<T>[];
   rowId?: RowIdAccessor<T>;
   isPaginatorDisplayed?: boolean;
   isDense?: boolean;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   RowRendererComp?: RowRenderer<T>;
   stickyHeader?: boolean;
   page?: number;
   onPageChange?: (page: number) => void;
-};
+}
 
-function Table<T>({
+const _Table = <T,>({
   columns,
   data,
   rowId,
   isPaginatorDisplayed = true,
   isDense = false,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   RowRendererComp = TableDefaultRow,
   stickyHeader = false,
   page,
   onPageChange,
-}: TableProps<T>): ReactElement<any, any> | null {
+}: TableProps<T>): React.ReactElement<TableProps<T>> => {
   const { t } = useTranslation();
 
   const { rowsPerPage, setRowsPerPage } = useDuplicatePageState();
   const [innerPage, setInnerPage] = useControllableValue(0, page, onPageChange);
   const handleChangePage = useCallback(
-    (event: any, newPage: number) => {
+    (_event: unknown, newPage: number) => {
       setInnerPage(newPage);
     },
     [setInnerPage]
@@ -84,13 +82,12 @@ function Table<T>({
 
   const sortedColumnAccessor = useMemo(() => {
     const sortAccessor =
-      columns[orderBy]?.sortAccessor ||
-      columns[orderBy]?.accessor ||
-      (() => "");
+      columns[orderBy]?.sortAccessor ??
+      (columns[orderBy]?.accessor || (() => ""));
     return accessorToFunction(sortAccessor);
   }, [columns, orderBy]);
 
-  const handleRequestSort = (event: React.MouseEvent, property: number) => {
+  const handleRequestSort = (_event: unknown, property: number) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
@@ -120,7 +117,7 @@ function Table<T>({
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    tableContainerRef?.current?.scrollTo(0, 0);
+    tableContainerRef.current?.scrollTo(0, 0);
   }, [innerPage]);
 
   return (
@@ -148,7 +145,7 @@ function Table<T>({
               )
               .map((row, rowIndex) => (
                 <RowRendererComp
-                  key={`${rowIdAccessor(row) || rowIndex}`}
+                  key={`${rowIdAccessor(row) ?? rowIndex}`}
                   row={row}
                   columns={columns}
                 />
@@ -169,6 +166,6 @@ function Table<T>({
       )}
     </div>
   );
-}
+};
 
-export default memo(Table) as typeof Table;
+export const Table = memo(_Table) as typeof _Table;

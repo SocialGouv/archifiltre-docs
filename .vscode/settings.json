@@ -1,10 +1,26 @@
 {
-    "json.schemas": [
-        {
-            "fileMatch": [
-                "renovate.json"
-            ],
-            "url": "https://docs.renovatebot.com/renovate-schema.json"
-        }
-    ]
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "eslint.format.enable": true,
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "renovate.json"
+      ],
+      "url": "https://docs.renovatebot.com/renovate-schema.json"
+    }
+  ],
+  "jest.jestCommandLine": "yarn jest",
+  "jest.autoRun": "off"
 }

@@ -1,22 +1,23 @@
 import Box from "@material-ui/core/Box";
-import React, { FC } from "react";
+import React from "react";
 import styled from "styled-components";
-import Duplicates from "components/main-space/workspace/duplicates/duplicates";
-import Audit from "components/main-space/workspace/audit/audit";
-import General from "../general/general";
-import EnrichmentContainer from "../enrichment/enrichment-container";
+
+import { Audit } from "../audit/audit";
+import { Duplicates } from "../duplicates/duplicates";
+import { EnrichmentContainer } from "../enrichment/enrichment-container";
+import { General } from "../general/general";
 
 const StyledPanel = styled.div`
   width: 100%;
 `;
 
-type TabPanelProps = {
+interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
-};
+}
 
-const TabPanel: FC<TabPanelProps> = ({ children, value, index }) => (
+const TabPanel: React.FC<TabPanelProps> = ({ children, value, index }) => (
   <StyledPanel
     role="tabpanel"
     hidden={value !== index}
@@ -31,11 +32,11 @@ const TabPanel: FC<TabPanelProps> = ({ children, value, index }) => (
   </StyledPanel>
 );
 
-type TabsContentProps = {
+export interface TabsContentProps {
   tabIndex: number;
-};
+}
 
-const TabsContent: FC<TabsContentProps> = ({ tabIndex }) => (
+export const TabsContent: React.FC<TabsContentProps> = ({ tabIndex }) => (
   <Box width="100%">
     <TabPanel value={tabIndex} index={0}>
       <General />
@@ -51,4 +52,3 @@ const TabsContent: FC<TabsContentProps> = ({ tabIndex }) => (
     </TabPanel>
   </Box>
 );
-export default TabsContent;

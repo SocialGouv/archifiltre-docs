@@ -1,3 +1,4 @@
+import type { TagMap, TagsActionTypes } from "./tags-types";
 import {
   ADD_TAG,
   DELETE_TAG,
@@ -5,8 +6,6 @@ import {
   RENAME_TAG,
   RESET_TAGS,
   TAG_FILE,
-  TagMap,
-  TagsActionTypes,
   UNTAG_FILE,
 } from "./tags-types";
 

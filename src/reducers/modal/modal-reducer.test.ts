@@ -1,5 +1,5 @@
-import modalReducer, { initialState } from "./modal-reducer";
 import { closeModalAction, openModalAction } from "./modal-actions";
+import { initialState, modalReducer } from "./modal-reducer";
 import { Modal } from "./modal-types";
 
 describe("modal-reducer", () => {

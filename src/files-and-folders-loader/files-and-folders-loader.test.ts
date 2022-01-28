@@ -1,35 +1,32 @@
 import fs from "fs";
 import { sortBy } from "lodash";
-import version from "version";
+import { Readable } from "stream";
+
+import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+// @ts-expect-error wut?
+import { setMockFs as hiddenFileSetMockFs } from "../util/hidden-file/hidden-file-util";
+import { version } from "../version";
+import {
+  createFilesAndFoldersMetadataDataStructure,
+  loadFileSystemFromFilesAndFoldersLoader,
+} from "./file-system-loading-process-utils";
+import type { FilesElementInfo } from "./files-and-folders-loader";
 import {
   asyncLoadFilesAndFoldersFromFileSystem,
   createFilesAndFolders,
   createFilesAndFoldersDataStructure,
-  FilesElementInfo,
   loadFilesAndFoldersFromExportFileContent,
 } from "./files-and-folders-loader";
 
-import { Readable } from "stream";
-
-// @ts-ignore
-import { setMockFs as hiddenFileSetMockFs } from "util/hidden-file/hidden-file-util";
-import {
-  createFilesAndFoldersMetadataDataStructure,
-  loadFileSystemFromFilesAndFoldersLoader,
-} from "files-and-folders-loader/file-system-loading-process-utils";
-import { createFilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-
-type FsMockElement = {
+interface FsMockElement {
   isDirectory: boolean;
   children: string[];
   mtimeMs: number;
   size: number;
   isHidden: boolean;
-};
+}
 
-type FsMockElementMap = {
-  [id: string]: FsMockElement;
-};
+type FsMockElementMap = Record<string, FsMockElement>;
 
 jest.mock("fs", () => {
   let underlyingFs: FsMockElementMap = {};
@@ -46,22 +43,25 @@ jest.mock("fs", () => {
 
   const module = {
     promises: {
-      stat: (path: string) =>
+      readdir: async (path: string) =>
+        Promise.resolve(underlyingFs[path].children),
+      stat: async (path: string) =>
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         underlyingFs[path]
-          ? Promise.resolve(makeStatObject(underlyingFs[path]))
+          ? Promise.resolve(makeStatObject(underlyingFs[path]!))
           : Promise.reject(),
-      readdir: (path: string) => Promise.resolve(underlyingFs[path].children),
-    },
-    statSync: (path: string) => {
-      if (!underlyingFs[path]) {
-        throw new Error();
-      }
-      return makeStatObject(underlyingFs[path]);
     },
     readdirSync: (path: string) => {
       return underlyingFs[path].children;
     },
     setMockFs,
+    statSync: (path: string) => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (!underlyingFs[path]) {
+        throw new Error();
+      }
+      return makeStatObject(underlyingFs[path]!);
+    },
   };
 
   return {
@@ -78,10 +78,11 @@ jest.mock("util/hidden-file/hidden-file-util", () => {
   };
 
   const module = {
-    shouldIgnoreElement: (path) => underlyingFs[path].isHidden,
-    asyncShouldIgnoreElement: (path) =>
-      Promise.resolve(underlyingFs[path].isHidden),
+    asyncShouldIgnoreElement: async (elementPath: string) =>
+      Promise.resolve(!!underlyingFs[elementPath].isHidden),
     setMockFs,
+    shouldIgnoreElement: (elementPath: string) =>
+      !!underlyingFs[elementPath].isHidden,
   };
 
   return {
@@ -156,9 +157,9 @@ const expectedMetadata = {
     medianLastModified: 30000,
     minLastModified: 2000,
     nbChildrenFiles: 3,
+    sortAlphaNumericallyIndex: [0],
     sortByDateIndex: [0],
     sortBySizeIndex: [0],
-    sortAlphaNumericallyIndex: [0],
   }),
   "/root": createFilesAndFoldersMetadata({
     averageLastModified: 44000,
@@ -167,9 +168,9 @@ const expectedMetadata = {
     medianLastModified: 30000,
     minLastModified: 2000,
     nbChildrenFiles: 3,
+    sortAlphaNumericallyIndex: [0, 1],
     sortByDateIndex: [1, 0],
     sortBySizeIndex: [0, 1],
-    sortAlphaNumericallyIndex: [0, 1],
   }),
   "/root/folder": createFilesAndFoldersMetadata({
     averageLastModified: 51000,
@@ -178,9 +179,9 @@ const expectedMetadata = {
     medianLastModified: 51000,
     minLastModified: 2000,
     nbChildrenFiles: 2,
+    sortAlphaNumericallyIndex: [0, 1],
     sortByDateIndex: [1, 0],
     sortBySizeIndex: [0, 1],
-    sortAlphaNumericallyIndex: [0, 1],
   }),
   "/root/folder/bob": createFilesAndFoldersMetadata({
     averageLastModified: 100000,
@@ -189,9 +190,9 @@ const expectedMetadata = {
     medianLastModified: 100000,
     minLastModified: 100000,
     nbChildrenFiles: 1,
+    sortAlphaNumericallyIndex: [],
     sortByDateIndex: [],
     sortBySizeIndex: [],
-    sortAlphaNumericallyIndex: [],
   }),
   "/root/folder/michael": createFilesAndFoldersMetadata({
     averageLastModified: 2000,
@@ -200,9 +201,9 @@ const expectedMetadata = {
     medianLastModified: 2000,
     minLastModified: 2000,
     nbChildrenFiles: 1,
+    sortAlphaNumericallyIndex: [],
     sortByDateIndex: [],
     sortBySizeIndex: [],
-    sortAlphaNumericallyIndex: [],
   }),
   "/root/johnny": createFilesAndFoldersMetadata({
     averageLastModified: 30000,
@@ -211,9 +212,9 @@ const expectedMetadata = {
     medianLastModified: 30000,
     minLastModified: 30000,
     nbChildrenFiles: 1,
+    sortAlphaNumericallyIndex: [],
     sortByDateIndex: [],
     sortBySizeIndex: [],
-    sortAlphaNumericallyIndex: [],
   }),
 };
 
@@ -221,50 +222,55 @@ const rootPath = "/root-path";
 
 const mockFs: FsMockElementMap = {
   "/root-path": {
-    isHidden: false,
-    isDirectory: true,
     children: ["folder1", "file1"],
-    size: 0,
+    isDirectory: true,
+    isHidden: false,
     mtimeMs: 0,
+    size: 0,
   },
   "/root-path/file1": {
-    isHidden: false,
-    isDirectory: false,
     children: [],
-    size: 10,
+    isDirectory: false,
+    isHidden: false,
     mtimeMs: 10,
+    size: 10,
   },
   "/root-path/folder1": {
-    isHidden: false,
-    isDirectory: true,
     children: ["file1", "file2"],
-    size: 0,
+    isDirectory: true,
+    isHidden: false,
     mtimeMs: 0,
+    size: 0,
   },
   "/root-path/folder1/file1": {
-    isHidden: false,
-    isDirectory: false,
     children: [],
-    size: 20,
+    isDirectory: false,
+    isHidden: false,
     mtimeMs: 20,
+    size: 20,
   },
   "/root-path/folder1/file2": {
-    isHidden: false,
-    isDirectory: false,
     children: [],
-    size: 30,
+    isDirectory: false,
+    isHidden: false,
     mtimeMs: 30,
+    size: 30,
   },
 };
 
 describe("files-and-folders-loader", () => {
   describe("loadFromFilesystem", () => {
     beforeEach(() => {
-      // @ts-ignore
+      // @ts-expect-error Mock
       fs.setMockFs(mockFs);
       hiddenFileSetMockFs(mockFs);
     });
-    const sortMethod = (element) => element[1];
+    const sortMethod = (
+      element: {
+        lastModified: number;
+        size: number;
+      }[]
+    ) => element[1];
     const expectedOrigin = sortBy(
       [
         [
@@ -349,8 +355,8 @@ unix
           ],
         ],
         hashes: {
-          "/files/file.txt": "d8e8fca2dc0f896fd7cb4cb0031ba249",
           "/files/file": "0052aa96e1e52f1a0d6489731155dce3",
+          "/files/file.txt": "d8e8fca2dc0f896fd7cb4cb0031ba249",
           "/files/file2": "87706eb5706972ee4134891ca9cb6708",
           "/files/folder/file with space": "0052aa96e1e52f1a0d6489731155dce3",
         },
@@ -404,8 +410,8 @@ C:\\basePath\\files\r
           ],
         ],
         hashes: {
-          "/files/file.txt": "d8e8fca2dc0f896fd7cb4cb0031ba249",
           "/files/file": "0052aa96e1e52f1a0d6489731155dce3",
+          "/files/file.txt": "d8e8fca2dc0f896fd7cb4cb0031ba249",
           "/files/file2": "87706eb5706972ee4134891ca9cb6708",
           "/files/folder/file with space": "0052aa96e1e52f1a0d6489731155dce3",
         },
@@ -459,8 +465,8 @@ C:\\basePath\\files\r
           ],
         ],
         hashes: {
-          "/files/file.txt": "d8e8fca2dc0f896fd7cb4cb0031ba249",
           "/files/file": "0052aa96e1e52f1a0d6489731155dce3",
+          "/files/file.txt": "d8e8fca2dc0f896fd7cb4cb0031ba249",
           "/files/file2": "87706eb5706972ee4134891ca9cb6708",
           "/files/folder/file with space": "0052aa96e1e52f1a0d6489731155dce3",
         },
@@ -529,7 +535,7 @@ C:\\basePath\\files\r
 
   describe("loadFileSystemFromFilesAndFoldersLoader", () => {
     it("should prefill unset fields", async () => {
-      const loadFilesAndFolders = async () => ({
+      const loadFilesAndFolders = () => ({
         filesAndFolders: expectedFilesAndFolders,
         originalPath: "/basePath",
       });

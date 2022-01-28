@@ -12,8 +12,12 @@ interface UseModalResponse {
  */
 export const useModal = (): UseModalResponse => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = useCallback(() => setIsModalOpen(true), [setIsModalOpen]);
-  const closeModal = useCallback(() => setIsModalOpen(false), [setIsModalOpen]);
+  const openModal = useCallback(() => {
+    setIsModalOpen(true);
+  }, [setIsModalOpen]);
+  const closeModal = useCallback(() => {
+    setIsModalOpen(false);
+  }, [setIsModalOpen]);
 
-  return { isModalOpen, openModal, closeModal };
+  return { closeModal, isModalOpen, openModal };
 };

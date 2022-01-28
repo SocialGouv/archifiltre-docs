@@ -1,3 +1,4 @@
+import type { DependencyList } from "react";
 import { useEffect, useState } from "react";
 
 /**
@@ -5,12 +6,19 @@ import { useEffect, useState } from "react";
  * @param factory - The value factory
  * @param dependencies - The factory dependencies
  */
-export const useDeferredMemo = <T>(factory: () => T, dependencies) => {
+export const useDeferredMemo = <T>(
+  factory: () => T,
+  dependencies: DependencyList
+): T | null => {
   const [value, setValue] = useState<T | null>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setValue(factory()));
-    return () => clearTimeout(timer);
+    const timer = setTimeout(() => {
+      setValue(factory());
+    });
+    return () => {
+      clearTimeout(timer);
+    };
   }, [...dependencies, setValue]);
 
   return value;

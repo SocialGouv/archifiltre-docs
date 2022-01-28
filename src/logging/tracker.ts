@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import _ from "lodash";
 import { compose } from "lodash/fp";
-import { mapValueBetweenEnums } from "util/enum/enum-util";
-import { ActionTitle, ActionType, TrackerAction } from "./tracker-types";
+
+import { mapValueBetweenEnums } from "../util/enum/enum-util";
+import type { TrackerAction } from "./tracker-types";
+import { ActionTitle, ActionType } from "./tracker-types";
 
 declare global {
   interface Window {
-    _paq: any[];
+    _paq?: unknown[];
   }
   const FORCE_TRACKING: boolean;
   const MODE: string;
@@ -19,7 +22,7 @@ export const initTracker = (isActive: boolean): void => {
   if ((!FORCE_TRACKING && MODE !== "production") || !isActive) {
     return;
   }
-  window._paq = window._paq || [];
+  window._paq = window._paq ?? [];
   addMatomoTracker({
     type: MatomoActionType.SET_SITE_ID,
     value: MATOMO_APPLICATION_ID,
@@ -40,39 +43,39 @@ export const initTracker = (isActive: boolean): void => {
   scriptElement.async = true;
   scriptElement.defer = true;
   scriptElement.src = `${MATOMO_URL}/piwik.js`;
-  refElement?.parentNode?.insertBefore(scriptElement, refElement);
+  refElement.parentNode?.insertBefore(scriptElement, refElement);
 };
 
 /**
  * Removes the null and undefined values from a trackerAction object
- * @param trackerAction
  */
-const sanitizeTrackerData = (trackerAction) =>
-  Object.values(trackerAction).filter(
-    (actionProperty) =>
-      !_.isUndefined(actionProperty) && !_.isNull(actionProperty)
-  );
+const sanitizeTrackerData = (trackerAction: MatomoTrackerAction) =>
+  sanitizedMatomoActionOrderedKeys
+    .map((key) => trackerAction[key])
+    .filter(
+      (actionProperty) =>
+        !_.isUndefined(actionProperty) && !_.isNull(actionProperty)
+    );
 
 /**
  * Transforms an application action to a Matomo Action
- * @param trackerAction
  */
 const mapActionToMatomoAction = (
-  trackerAction: MatomoTrackerAction
-): TrackerAction => {
+  trackerAction: TrackerAction
+): MatomoTrackerAction => {
   return {
-    type: mapValueBetweenEnums(
-      trackerAction.type,
-      ActionType,
-      MatomoActionType
-    ),
+    eventValue: trackerAction.eventValue,
     title: mapValueBetweenEnums(
       trackerAction.title,
       ActionTitle,
       MatomoActionTitle
     ),
+    type: mapValueBetweenEnums(
+      trackerAction.type,
+      ActionType,
+      MatomoActionType
+    ),
     value: trackerAction.value,
-    eventValue: trackerAction.eventValue,
   };
 };
 
@@ -80,7 +83,7 @@ const mapActionToMatomoAction = (
  * Matomo requires a non null non empty string value for any event,
  * so an "_" is added to events with no value
  */
-const handleMatomoValue = (matomoAction) => {
+const handleMatomoValue = (matomoAction: MatomoTrackerAction) => {
   if (!matomoAction.value) {
     matomoAction.value = "_";
   }
@@ -89,18 +92,25 @@ const handleMatomoValue = (matomoAction) => {
 
 /**
  * Adds a Matomo tracker using an action
- * @param trackerAction
  */
-const addMatomoTracker = (trackerAction: MatomoTrackerAction) => {
+const addMatomoTracker = (
+  trackerAction: MatomoTrackerAction | TrackerAction
+) => {
   if (!FORCE_TRACKING && MODE !== "production") {
     return;
   }
 
   if (window._paq) {
-    const matomoAction = mapActionToMatomoAction(trackerAction);
+    const matomoAction = mapActionToMatomoAction(
+      trackerAction as TrackerAction
+    );
     const matomoActionWithValue = handleMatomoValue(matomoAction);
     const sanitizedData = sanitizeTrackerData(matomoActionWithValue);
-    window._paq.push(sanitizedData);
+    try {
+      window._paq.push(sanitizedData);
+    } catch {
+      return;
+    }
   }
 };
 /**
@@ -111,9 +121,16 @@ export const addTracker = compose(addMatomoTracker, mapActionToMatomoAction);
 interface MatomoTrackerAction {
   type: MatomoActionType;
   title?: MatomoActionTitle;
-  value?: any;
-  eventValue?: any;
+  value?: unknown;
+  eventValue?: unknown;
 }
+
+const sanitizedMatomoActionOrderedKeys: (keyof MatomoTrackerAction)[] = [
+  "type",
+  "title",
+  "value",
+  "eventValue",
+];
 
 enum MatomoActionType {
   SET_SITE_ID = "setSiteId",

@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid";
+
 import {
   addTag,
   deleteTag,
@@ -9,7 +10,7 @@ import {
   untagFile,
 } from "./tags-actions";
 import { tagsReducer } from "./tags-reducer";
-import { TagsState } from "./tags-types";
+import type { TagsState } from "./tags-types";
 
 jest.mock("uuid", () => ({
   v4: jest.fn(),
@@ -42,9 +43,9 @@ describe("tags-reducer", () => {
       expect(nextState).toEqual({
         tags: {
           "to-delete": {
+            ffIds: [""],
             id: "",
             name: "",
-            ffIds: [""],
           },
         },
       });

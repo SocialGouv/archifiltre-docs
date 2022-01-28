@@ -1,14 +1,18 @@
-import {
-  ADD_CHILD,
-  ADD_COMMENTS_ON_FILES_AND_FOLDERS,
+import type { ArchifiltreError } from "../../util/error/error-util";
+import type {
   AliasMap,
   CommentsMap,
   FilesAndFoldersActionTypes,
   FilesAndFoldersMap,
+  LastModifiedMap,
+  VirtualPathToIdMap,
+} from "./files-and-folders-types";
+import {
+  ADD_CHILD,
+  ADD_COMMENTS_ON_FILES_AND_FOLDERS,
   INIT_OVERRIDE_LAST_MODIFIED,
   INIT_VIRTUAL_PATH_TO_ID_MAP,
   INITIALIZE_FILES_AND_FOLDERS,
-  LastModifiedMap,
   MARK_AS_TO_DELETE,
   MARK_ELEMENTS_TO_DELETE,
   OVERRIDE_LAST_MODIFIED,
@@ -19,9 +23,7 @@ import {
   SET_FILES_AND_FOLDERS_ALIAS,
   UNMARK_AS_TO_DELETE,
   UNMARK_ELEMENTS_TO_DELETE,
-  VirtualPathToIdMap,
 } from "./files-and-folders-types";
-import { ArchifiltreError } from "util/error/error-util";
 
 /**
  * Action to set the initial state of the files and folders store
@@ -105,7 +107,10 @@ export const unmarkElementsToDelete = (
  * @param parentId
  * @param childId
  */
-export const removeChild = (parentId, childId): FilesAndFoldersActionTypes => ({
+export const removeChild = (
+  parentId: string,
+  childId: string
+): FilesAndFoldersActionTypes => ({
   childId,
   parentId,
   type: REMOVE_CHILD,
@@ -116,7 +121,10 @@ export const removeChild = (parentId, childId): FilesAndFoldersActionTypes => ({
  * @param parentId
  * @param childId
  */
-export const addChild = (parentId, childId): FilesAndFoldersActionTypes => ({
+export const addChild = (
+  parentId: string,
+  childId: string
+): FilesAndFoldersActionTypes => ({
   childId,
   parentId,
   type: ADD_CHILD,
@@ -132,8 +140,8 @@ export const initVirtualPathToIdMap = (
 export const registerErroredElements = (
   elements: ArchifiltreError[]
 ): FilesAndFoldersActionTypes => ({
-  type: REGISTER_ERRORED_ELEMENTS,
   elements,
+  type: REGISTER_ERRORED_ELEMENTS,
 });
 
 export const resetErroredElements = (): FilesAndFoldersActionTypes => ({
@@ -144,16 +152,16 @@ export const overrideLastModified = (
   elementId: string,
   lastModified: number
 ): FilesAndFoldersActionTypes => ({
-  type: OVERRIDE_LAST_MODIFIED,
   elementId,
   lastModified,
+  type: OVERRIDE_LAST_MODIFIED,
 });
 
 export const initOverrideLastModified = (
-  overrideLastModified: LastModifiedMap
+  overrideLastModifiedToInit: LastModifiedMap
 ): FilesAndFoldersActionTypes => ({
+  overrideLastModified: overrideLastModifiedToInit,
   type: INIT_OVERRIDE_LAST_MODIFIED,
-  overrideLastModified,
 });
 
 export const resetOverrideLastModified = (): FilesAndFoldersActionTypes => ({

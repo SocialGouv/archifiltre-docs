@@ -1,4 +1,4 @@
-import { AsyncWorker } from "./async-worker-util";
+import type { AsyncWorker } from "./async-worker-util";
 
 interface AsyncWorkerMock {
   addEventListener: jest.Mock;
@@ -9,7 +9,7 @@ interface AsyncWorkerMock {
 
 export const createAsyncWorkerMock = (): AsyncWorker & AsyncWorkerMock => ({
   addEventListener: jest.fn(),
-  removeEventListener: jest.fn(),
   postMessage: jest.fn(),
+  removeEventListener: jest.fn(),
   terminate: jest.fn(),
 });

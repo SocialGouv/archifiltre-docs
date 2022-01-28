@@ -1,32 +1,35 @@
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import { Theme } from "@material-ui/core/styles/createMuiTheme";
-import createStyles from "@material-ui/core/styles/createStyles";
-import React, { FC } from "react";
-import { FaTrash } from "react-icons/fa";
 import Chip from "@material-ui/core/Chip";
+import type { Theme } from "@material-ui/core/styles/createMuiTheme";
+import createStyles from "@material-ui/core/styles/createStyles";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import React from "react";
 import { useTranslation } from "react-i18next";
+import { FaTrash } from "react-icons/fa";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     toDeleteChip: {
-      backgroundColor: theme.palette.error.main,
-      "&:hover, &:focus": {
-        backgroundColor: theme.palette.error.main,
-      },
-      color: "white",
       "& > svg": {
         color: "white",
       },
+      "&:hover, &:focus": {
+        backgroundColor: theme.palette.error.main,
+      },
+      backgroundColor: theme.palette.error.main,
+      color: "white",
     },
   })
 );
 
-type ToDeleteChipProps = {
+export interface ToDeleteChipProps {
   checked: boolean;
   onClick: () => void;
-};
+}
 
-const ToDeleteChip: FC<ToDeleteChipProps> = ({ checked, onClick }) => {
+export const ToDeleteChip: React.FC<ToDeleteChipProps> = ({
+  checked,
+  onClick,
+}) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -40,5 +43,3 @@ const ToDeleteChip: FC<ToDeleteChipProps> = ({ checked, onClick }) => {
     />
   );
 };
-
-export default ToDeleteChip;

@@ -1,5 +1,5 @@
-import { initialState } from "./loading-state-reducer";
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
+import { initialState } from "./loading-state-reducer";
 import {
   getLoadingStateFromStore,
   getLoadingStepFromStore,

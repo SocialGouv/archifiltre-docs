@@ -1,24 +1,24 @@
+import type { TFunction } from "i18next";
+import _ from "lodash";
 import { compose } from "lodash/fp";
-import { HashesMap } from "reducers/hashes/hashes-types";
-import {
+import type { Observable } from "rxjs";
+import { concat, from, interval } from "rxjs";
+import { map, take } from "rxjs/operators";
+
+import { ROOT_FF_ID } from "../../reducers/files-and-folders/files-and-folders-selectors";
+import type {
   AliasMap,
   CommentsMap,
   FilesAndFoldersMap,
-} from "reducers/files-and-folders/files-and-folders-types";
-import { TFunction } from "i18next";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { TagMap } from "reducers/tags/tags-types";
-import { concat, from, interval, Observable } from "rxjs";
-import { map, take } from "rxjs/operators";
-import {
-  CellConfig,
-  makeRowConfig,
-} from "util/array-export/make-array-export-config";
-import _ from "lodash";
-import { getAllChildren } from "util/files-and-folders/file-and-folders-utils";
-import { ROOT_FF_ID } from "reducers/files-and-folders/files-and-folders-selectors";
+} from "../../reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { HashesMap } from "../../reducers/hashes/hashes-types";
+import type { TagMap } from "../../reducers/tags/tags-types";
+import { getAllChildren } from "../files-and-folders/file-and-folders-utils";
+import type { CellConfig } from "./make-array-export-config";
+import { makeRowConfig } from "./make-array-export-config";
 
-type CsvExporterData = {
+interface CsvExporterData {
   aliases: AliasMap;
   comments: CommentsMap;
   filesAndFolders: FilesAndFoldersMap;
@@ -27,11 +27,17 @@ type CsvExporterData = {
   hashes?: HashesMap;
   tags: TagMap;
   translator: TFunction;
-};
+}
 
-type WithRowConfig = { rowConfig: CellConfig[] };
-type WithHashes = { hashes: HashesMap };
-type WithIdsToDelete = { idsToDelete: string[] };
+interface WithRowConfig {
+  rowConfig: CellConfig[];
+}
+interface WithHashes {
+  hashes: HashesMap;
+}
+interface WithIdsToDelete {
+  idsToDelete: string[];
+}
 
 const CHUNK_SIZE = 1000;
 
@@ -40,7 +46,7 @@ const makeExportBody = ({
   filesAndFolders,
   filesAndFoldersMetadata,
   ...rest
-}: CsvExporterData & WithRowConfig & WithHashes & WithIdsToDelete) => {
+}: CsvExporterData & WithHashes & WithIdsToDelete & WithRowConfig) => {
   const filesAndFoldersChunks = _.chunk(
     Object.values(filesAndFolders).filter(({ id }) => id !== ROOT_FF_ID),
     CHUNK_SIZE
@@ -48,7 +54,7 @@ const makeExportBody = ({
 
   return interval().pipe(
     take(filesAndFoldersChunks.length),
-    map((index) => filesAndFoldersChunks[index]),
+    map((index) => filesAndFoldersChunks[index]!),
     map((chunk) =>
       chunk.map((element) =>
         rowConfig.map((cellConfig) =>
@@ -68,7 +74,10 @@ const makeExportBody = ({
  * @param filesAndFolders
  * @param elementsToDelete
  */
-const getChildrenToDelete = (filesAndFolders, elementsToDelete) => {
+const getChildrenToDelete = (
+  filesAndFolders: FilesAndFoldersMap,
+  elementsToDelete: string[]
+) => {
   return _(elementsToDelete)
     .flatMap((elementToDelete) =>
       getAllChildren(filesAndFolders, elementToDelete)
@@ -78,7 +87,10 @@ const getChildrenToDelete = (filesAndFolders, elementsToDelete) => {
 };
 
 const prepareIdsToDelete = <
-  T extends { filesAndFolders: FilesAndFoldersMap; elementsToDelete: string[] }
+  T extends {
+    filesAndFolders: FilesAndFoldersMap;
+    elementsToDelete: string[];
+  }
 >(
   params: T
 ): T & WithIdsToDelete => ({
@@ -93,7 +105,7 @@ const normalizeHashes = <T extends { hashes?: HashesMap }>(
   data: T
 ): T & WithHashes => ({
   ...data,
-  hashes: data.hashes || {},
+  hashes: data.hashes ?? {},
 });
 
 const shouldDisplayDuplicates = (hashes?: HashesMap) =>
@@ -118,17 +130,18 @@ const removeToDeleteCells = (
 export const exportToCsv = compose(
   (
     params: CsvExporterData &
+      WithHashes &
+      WithIdsToDelete &
       WithRowConfig & {
         output: string[][];
-      } & WithHashes &
-      WithIdsToDelete
+      }
   ): Observable<string[][]> =>
     concat(from([params.output]), makeExportBody(params)),
   (params) => ({
     ...params,
     output: [params.rowConfig.map(({ title }) => title)],
   }),
-  (params: CsvExporterData & WithRowConfig & WithHashes) =>
+  (params: CsvExporterData & WithHashes & WithRowConfig) =>
     prepareIdsToDelete(params),
   (params: CsvExporterData & WithRowConfig) => normalizeHashes(params),
   (params: CsvExporterData & WithRowConfig) =>

@@ -1,42 +1,49 @@
-import React, { FC, useCallback, useMemo } from "react";
-import { useOpenModal } from "reducers/modal/modal-selectors";
-import { useDispatch } from "react-redux";
-import { closeModalAction } from "reducers/modal/modal-actions";
-import { Modal } from "reducers/modal/modal-types";
-import ErrorsModal from "components/modals/errors-modal/errors-modal";
-import { useHashesErrors } from "reducers/hashes/hashes-selectors";
-import { retryHashesComputingThunk } from "hash-computer/hash-computer-thunk";
-import { useTranslation } from "react-i18next";
-import { exportTableToCsvFile } from "util/table/table-util";
 import path from "path";
-import { useErrorsModalConfig } from "components/modals/errors-modal/use-errors-modal-config";
-import { useWorkspaceMetadata } from "reducers/workspace-metadata/workspace-metadata-selectors";
+import React, { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
 
-const HashesErrorsModalContainer: FC = () => {
+import { retryHashesComputingThunk } from "../../../hash-computer/hash-computer-thunk";
+import { useHashesErrors } from "../../../reducers/hashes/hashes-selectors";
+import { closeModalAction } from "../../../reducers/modal/modal-actions";
+import { useOpenModal } from "../../../reducers/modal/modal-selectors";
+import { Modal } from "../../../reducers/modal/modal-types";
+import { useWorkspaceMetadata } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { exportTableToCsvFile } from "../../../util/table/table-util";
+import type { ErrorsModalProps } from "../errors-modal/errors-modal";
+import { ErrorsModal } from "../errors-modal/errors-modal";
+import { useErrorsModalConfig } from "../errors-modal/use-errors-modal-config";
+
+export const HashesErrorsModalContainer: React.FC = () => {
   const errors = useHashesErrors();
   const openModal = useOpenModal();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { originalPath } = useWorkspaceMetadata();
 
-  const closeModal = useCallback(() => dispatch(closeModalAction()), [
-    dispatch,
-  ]);
+  const closeModal = useCallback(
+    () => dispatch(closeModalAction()),
+    [dispatch]
+  );
 
-  const retry = useCallback(() => dispatch(retryHashesComputingThunk()), [
-    dispatch,
-  ]);
+  const retry = useCallback(
+    () => dispatch(retryHashesComputingThunk()),
+    [dispatch]
+  );
 
   const isModalOpen = openModal === Modal.HASHES_ERROR_MODAL;
 
   const config = useErrorsModalConfig(t);
 
-  const exportErrors = useCallback(
-    async (errors) => {
-      await exportTableToCsvFile(errors, config, {
+  type ErrorModaleAction = NonNullable<
+    ErrorsModalProps["actions"]
+  >[number]["action"];
+  const exportErrors: ErrorModaleAction = useCallback(
+    async (errorsToExport) => {
+      await exportTableToCsvFile(errorsToExport, config, {
         defaultFilePath: path.join(originalPath, "..", "load-errors.csv"),
-        notificationTitle: t("errorsModal.exportNotificationTitle"),
         notificationMessage: t("errorsModal.exportNotificationMessage"),
+        notificationTitle: t("errorsModal.exportNotificationTitle"),
       });
     },
     [config, originalPath, t]
@@ -45,14 +52,14 @@ const HashesErrorsModalContainer: FC = () => {
   const actions = useMemo(
     () => [
       {
+        action: retry,
         id: "retry",
         title: t("common.retry"),
-        action: retry,
       },
       {
+        action: exportErrors,
         id: "export",
         title: t("common.exportActionTitle"),
-        action: exportErrors,
       },
     ],
     [t, retry, exportErrors]
@@ -67,5 +74,3 @@ const HashesErrorsModalContainer: FC = () => {
     />
   );
 };
-
-export default HashesErrorsModalContainer;

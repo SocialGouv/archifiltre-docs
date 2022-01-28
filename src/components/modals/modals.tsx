@@ -1,14 +1,13 @@
-import React, { FC } from "react";
-import ErrorsModal from "./errors-modal/errors-modal-container";
-import HashesErrorsModal from "components/modals/hashes-errors-modal/hashes-errors-container";
-import FilesAndFoldersErrorsModal from "components/modals/files-and-folders-errors-modal/files-and-folders-errors-container";
+import React from "react";
 
-const Modals: FC = () => (
+import { ErrorsModalContainer as ErrorsModal } from "./errors-modal/errors-modal-container";
+import { FilesAndFoldersErrorsModalContainer as FilesAndFoldersErrorsModal } from "./files-and-folders-errors-modal/files-and-folders-errors-container";
+import { HashesErrorsModalContainer as HashesErrorsModal } from "./hashes-errors-modal/hashes-errors-container";
+
+export const Modals: React.FC = () => (
   <>
     <ErrorsModal />
     <HashesErrorsModal />
     <FilesAndFoldersErrorsModal />
   </>
 );
-
-export default Modals;

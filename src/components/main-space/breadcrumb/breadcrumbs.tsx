@@ -1,18 +1,21 @@
-import { TFunction } from "i18next";
-import React, { FC, memo, useMemo } from "react";
+import type { TFunction } from "i18next";
+import React, { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import {
+
+import type {
   AliasMap,
   FilesAndFolders,
-} from "reducers/files-and-folders/files-and-folders-types";
-import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import Breadcrumb, { BreadcrumbOpacity } from "./breadcrumb";
-import { makeEmptyArray } from "util/array/array-util";
-import { FillColor } from "../icicle/icicle-types";
-import { formatPathForUserSystem } from "util/file-system/file-sys-util";
-import { DimsAndId } from "../icicle/icicle-rect";
-import { placeholder } from "util/color/color-util";
+} from "../../../reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { makeEmptyArray } from "../../../util/array/array-util";
+import { placeholder } from "../../../util/color/color-util";
+import { formatPathForUserSystem } from "../../../util/file-system/file-sys-util";
+import type {
+  FillColor,
+  IcicleMouseActionHandler,
+} from "../icicle/icicle-types";
+import { Breadcrumb, BreadcrumbOpacity } from "./breadcrumb";
 
 const BreadcrumbsWrapper = styled.div`
   display: flex;
@@ -20,15 +23,15 @@ const BreadcrumbsWrapper = styled.div`
   height: 100%;
 `;
 
-type BreadcrumbWrapperProps = {
+interface BreadcrumbWrapperProps {
   depth: number;
-};
+}
 
 const BreadcrumbWrapper = styled.div<BreadcrumbWrapperProps>`
   height: ${({ depth }) => `${100 / depth}%`};
 `;
 
-type BreadcrumbsProps = {
+export interface BreadcrumbsProps {
   depth: number;
   lockedSequence: string[];
   hoveredSequence: string[];
@@ -36,28 +39,28 @@ type BreadcrumbsProps = {
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
   aliases: AliasMap;
   originalPath: string;
-  onBreadcrumbClick: (dimsAndId: DimsAndId, event) => void;
-};
+  onBreadcrumbClick: IcicleMouseActionHandler;
+}
 
-type MakeFillerArgs = {
+interface MakeFillerArgs {
   id: string;
   name: string;
   alias: string | null;
   isFirst: boolean;
   isLast: boolean;
-};
+}
 
-type BreadcrumbProps = {
+export interface BreadcrumbProps {
   id: string;
   name: string;
-  alias: string | null;
+  alias?: string | null;
   opacity: BreadcrumbOpacity;
   color: string;
   isFirst: boolean;
   isLast: boolean;
   path: string;
   isActive: boolean;
-};
+}
 
 /**
  * Create a filler Breadcrumb, used when nothing is locked or focused
@@ -74,15 +77,15 @@ const makeFiller = ({
   isFirst,
   isLast,
 }: MakeFillerArgs): BreadcrumbProps => ({
-  id,
-  name,
   alias,
+  color: placeholder(),
+  id,
+  isActive: false,
   isFirst,
   isLast,
+  name,
   opacity: BreadcrumbOpacity.LOCKED,
-  color: placeholder(),
   path: "",
-  isActive: false,
 });
 
 /**
@@ -94,58 +97,58 @@ const makeBreadcrumbsFillers = (
   depth: number,
   t: TFunction
 ): BreadcrumbProps[] => [
-    makeFiller({
-      id: "filler1",
-      name: "1",
-      alias: null,
-      isFirst: true,
-      isLast: depth === 1,
-    }),
-    ...(depth > 2
-      ? [
+  makeFiller({
+    alias: null,
+    id: "filler1",
+    isFirst: true,
+    isLast: depth === 1,
+    name: "1",
+  }),
+  ...(depth > 2
+    ? [
         makeFiller({
+          alias: null,
           id: "filler2",
+          isFirst: false,
+          isLast: false,
           name: "2",
-          alias: null,
-          isFirst: false,
-          isLast: false,
         }),
       ]
-      : []),
-    ...(depth > 3
-      ? [
+    : []),
+  ...(depth > 3
+    ? [
         makeFiller({
+          alias: null,
           id: "filler3",
-          name: "...",
-          alias: null,
           isFirst: false,
           isLast: false,
+          name: "...",
         }),
       ]
-      : []),
-    ...(depth > 4
-      ? [
+    : []),
+  ...(depth > 4
+    ? [
         makeFiller({
+          alias: null,
           id: "filler4",
-          name: "...",
-          alias: null,
           isFirst: false,
           isLast: false,
+          name: "...",
         }),
       ]
-      : []),
-    ...(depth > 1
-      ? [
+    : []),
+  ...(depth > 1
+    ? [
         makeFiller({
-          id: "filler-file",
-          name: t("workspace.file"),
           alias: null,
+          id: "filler-file",
           isFirst: false,
           isLast: true,
+          name: t("workspace.file"),
         }),
       ]
-      : []),
-  ];
+    : []),
+];
 
 /**
  * Returns the absolute path of the corresponding file
@@ -157,7 +160,7 @@ const getPathToCopy = (originalPath: string, nodeId: string) => {
   return formatPathForUserSystem(`${basePath}/${nodeId}`);
 };
 
-const Breadcrumbs: FC<BreadcrumbsProps> = ({
+const _Breadcrumbs: React.FC<BreadcrumbsProps> = ({
   depth,
   lockedSequence,
   hoveredSequence,
@@ -168,7 +171,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({
   onBreadcrumbClick,
 }) => {
   const { t } = useTranslation();
-  const fillers = useMemo(() => makeBreadcrumbsFillers(depth, t), [depth]);
+  const fillers = useMemo(() => makeBreadcrumbsFillers(depth, t), [depth, t]);
   const filesAndFolders: BreadcrumbProps[] = useMemo(() => {
     if (hoveredSequence.length === 0 && lockedSequence.length === 0) {
       return fillers;
@@ -176,18 +179,18 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({
     const sequence =
       hoveredSequence.length > 0 ? hoveredSequence : lockedSequence;
     return sequence.map(getFfByFfId).map((node, index) => ({
-      id: node.id,
+      alias: aliases[node.id],
       color: fillColor(node.id),
+      id: node.id,
+      isActive: true,
       isFirst: index === 0,
       isLast: index === depth - 1,
-      isActive: true,
       name: node.name,
-      alias: aliases[node.id],
-      path: getPathToCopy(originalPath, node.id),
       opacity:
         lockedSequence[index] === node.id
           ? BreadcrumbOpacity.LOCKED
           : BreadcrumbOpacity.HOVERED,
+      path: getPathToCopy(originalPath, node.id),
     }));
   }, [
     getFfByFfId,
@@ -221,7 +224,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({
                 id={id}
                 key={`breadcrumb-${id}`}
                 name={name}
-                alias={alias}
+                alias={alias ?? null}
                 path={path}
                 active={isActive}
                 opacity={opacity}
@@ -241,4 +244,6 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({
   );
 };
 
-export default memo(Breadcrumbs);
+_Breadcrumbs.displayName = "Breadcrumbs";
+
+export const Breadcrumbs = memo(_Breadcrumbs);

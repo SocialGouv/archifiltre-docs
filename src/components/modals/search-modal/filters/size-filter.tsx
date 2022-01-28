@@ -1,40 +1,48 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
-import Filter from "./filter";
-import { FilterMethod } from "typings/filter-types";
 
-type SizeFilterProps = {
+import type { FilesAndFolders } from "../../../../reducers/files-and-folders/files-and-folders-types";
+import type { FilterMethod } from "../../../../typings/filter-types";
+import { Filter } from "./filter";
+
+export interface SizeFilterProps {
   setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
-};
+}
 
 const kBToB = 1000;
 const MBToB = 1000 * 1000;
 const GBToB = 1000 * 1000 * 1000;
 
-const availableOptions = [
-  { label: "< 1ko", method: ({ file_size }) => file_size < kBToB },
+interface SizeFilterOption {
+  label: string;
+  method: FilterMethod<FilesAndFolders>;
+}
+const availableOptions: SizeFilterOption[] = [
+  { label: "< 1ko", method: ({ file_size: fileSize }) => fileSize < kBToB },
   {
     label: ">= 1ko < 1Mo",
-    method: ({ file_size }) => file_size >= kBToB && file_size < MBToB,
+    method: ({ file_size: fileSize }) => fileSize >= kBToB && fileSize < MBToB,
   },
   {
     label: ">= 1 Mo < 1Go",
-    method: ({ file_size }) => file_size >= MBToB && file_size < GBToB,
+    method: ({ file_size: fileSize }) => fileSize >= MBToB && fileSize < GBToB,
   },
-  { label: " >= 1Go", method: ({ file_size }) => file_size >= GBToB },
+  {
+    label: " >= 1Go",
+    method: ({ file_size: fileSize }) => fileSize >= GBToB,
+  },
 ];
 
 const makeSizeFilter = (
   selectedOption: string
 ): FilterMethod<FilesAndFolders> => {
   const option =
-    availableOptions.find(({ label }) => label === selectedOption) ||
+    availableOptions.find(({ label }) => label === selectedOption) ??
     availableOptions[0];
   return option.method;
 };
 
-const SizeFilter: FC<SizeFilterProps> = ({ setFilters }) => {
+export const SizeFilter: React.FC<SizeFilterProps> = ({ setFilters }) => {
   const { t } = useTranslation();
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
@@ -52,5 +60,3 @@ const SizeFilter: FC<SizeFilterProps> = ({ setFilters }) => {
     />
   );
 };
-
-export default SizeFilter;

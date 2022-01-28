@@ -1,7 +1,8 @@
 import fs from "fs";
-import { reportError } from "logging/reporter";
 import path from "path";
-import { getPath } from "util/electron/electron-util";
+
+import { reportError } from "../logging/reporter";
+import { getPath } from "../util/electron/electron-util";
 
 const MAX_SHORTCUTS_LENGTH = 10;
 
@@ -12,7 +13,6 @@ const getPreviousSessionsPath = (): string => {
 
 /**
  * Remove duplicates and incorrect data from previous sessions array
- * @param previousSessions
  */
 const sanitizePreviousSessions = (previousSessions: string[]) => {
   const sanitizedPreviousSessions = previousSessions.map((session) =>
@@ -36,7 +36,7 @@ export const initPreviousSessions = (): void => {
     if (!fs.existsSync(previousSessionsPath)) {
       fs.writeFileSync(previousSessionsPath, "");
     }
-  } catch (error) {
+  } catch (error: unknown) {
     reportError(error);
   }
 };
@@ -53,7 +53,7 @@ export const getPreviousSessions = (): string[] => {
     }
     const previousSessionsList = previousSessions.trim().split("\n");
     return sanitizePreviousSessions(previousSessionsList);
-  } catch (error) {
+  } catch (error: unknown) {
     reportError(error);
     return [];
   }
@@ -67,7 +67,9 @@ const removeDuplicateLines = (lines: string): string[] => [
  * Save a new user session in previous-sessions
  * @param newSessionPath - new value for user settings
  */
-export const savePreviousSession = async (newSessionPath: string) => {
+export const savePreviousSession = async (
+  newSessionPath: string
+): Promise<void> => {
   try {
     const previousSessionsPath = getPreviousSessionsPath();
     const previousSessions = fs.readFileSync(previousSessionsPath, "utf8");
@@ -81,7 +83,7 @@ export const savePreviousSession = async (newSessionPath: string) => {
       .concat("\n");
 
     await fs.promises.writeFile(previousSessionsPath, previousSessionsList);
-  } catch (error) {
+  } catch (error: unknown) {
     reportError(error);
   }
 };
@@ -91,7 +93,9 @@ const removeClickedElement = (
   elementToDelete: string
 ) => previousSession.replace(`${elementToDelete}\n`, "");
 
-export const removeOneSessionElement = async (elementToDelete) => {
+export const removeOneSessionElement = async (
+  elementToDelete: string
+): Promise<void> => {
   try {
     const previousSessionsPath = getPreviousSessionsPath();
     const previousSessions = fs.readFileSync(previousSessionsPath, "utf8");
@@ -104,16 +108,17 @@ export const removeOneSessionElement = async (elementToDelete) => {
       previousSessionsPath,
       previousSessionsSanitized
     );
-  } catch (error) {
+  } catch (error: unknown) {
     reportError(error);
   }
 };
 
-export const clearSession = async () => {
+export const clearSession = async (): Promise<void> => {
   try {
     const previousSessionPath = getPreviousSessionsPath();
-    await fs.writeFileSync(previousSessionPath, "");
-  } catch (error) {
+    fs.writeFileSync(previousSessionPath, "");
+    await Promise.resolve();
+  } catch (error: unknown) {
     reportError(error);
   }
 };

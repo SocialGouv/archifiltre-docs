@@ -1,11 +1,16 @@
 import _, { without } from "lodash";
 import path from "path";
-import undoable from "../enhancers/undoable/undoable";
+
+import { undoable } from "../enhancers/undoable/undoable";
+import type {
+  FilesAndFoldersActionTypes,
+  FilesAndFoldersMap,
+  FilesAndFoldersState,
+  VirtualPathToIdMap,
+} from "./files-and-folders-types";
 import {
   ADD_CHILD,
   ADD_COMMENTS_ON_FILES_AND_FOLDERS,
-  FilesAndFoldersActionTypes,
-  FilesAndFoldersState,
   INIT_OVERRIDE_LAST_MODIFIED,
   INIT_VIRTUAL_PATH_TO_ID_MAP,
   INITIALIZE_FILES_AND_FOLDERS,
@@ -27,22 +32,18 @@ export const initialState: FilesAndFoldersState = {
   elementsToDelete: [],
   erroredFilesAndFolders: [],
   filesAndFolders: {},
-  virtualPathToId: {},
   overrideLastModified: {},
+  virtualPathToId: {},
 };
 
 /**
  * Generates updated filesAndFolders map and virtualPathToId map for the moved filesAndFolders
- * @param filesAndFolders
- * @param virtualPathToId
- * @param movedElementId
- * @param newParentVirtualPath
  */
 const updateChildVirtualPath = (
-  filesAndFolders,
-  virtualPathToId,
-  movedElementId,
-  newParentVirtualPath
+  filesAndFolders: FilesAndFoldersMap,
+  virtualPathToId: VirtualPathToIdMap,
+  movedElementId: string,
+  newParentVirtualPath: string
 ) => {
   const updatedFilesAndFolders = {
     ...filesAndFolders,
@@ -52,7 +53,10 @@ const updateChildVirtualPath = (
     ...virtualPathToId,
   };
 
-  const updateChildVirtualPathRec = (currentId, currentParentVirtualPath) => {
+  const updateChildVirtualPathRec = (
+    currentId: string,
+    currentParentVirtualPath: string
+  ) => {
     const filesAndFolder = updatedFilesAndFolders[currentId];
 
     const virtualPath = path.posix.join(
@@ -66,9 +70,9 @@ const updateChildVirtualPath = (
       virtualPath,
     };
 
-    filesAndFolder.children.map((childId) =>
-      updateChildVirtualPathRec(childId, virtualPath)
-    );
+    filesAndFolder.children.map((childId) => {
+      updateChildVirtualPathRec(childId, virtualPath);
+    });
   };
 
   updateChildVirtualPathRec(movedElementId, newParentVirtualPath);
@@ -86,13 +90,15 @@ const updateChildVirtualPath = (
  */
 const filesAndFoldersReducer = (
   state = initialState,
-  action: FilesAndFoldersActionTypes
+  action?: FilesAndFoldersActionTypes
 ): FilesAndFoldersState => {
-  switch (action.type) {
+  switch (action?.type) {
     case INITIALIZE_FILES_AND_FOLDERS:
       return { ...state, filesAndFolders: action.filesAndFolders };
     case ADD_CHILD:
+      // eslint-disable-next-line no-case-declarations
       const parent = state.filesAndFolders[action.parentId];
+      // eslint-disable-next-line no-case-declarations
       const { filesAndFolders, virtualPathToId } = updateChildVirtualPath(
         state.filesAndFolders,
         state.virtualPathToId,
@@ -208,6 +214,9 @@ const filesAndFoldersReducer = (
   }
 };
 
-export { filesAndFoldersReducer };
+const undoableFilesAndFoldersReducer = undoable(
+  filesAndFoldersReducer,
+  initialState
+);
 
-export default undoable(filesAndFoldersReducer, initialState);
+export { filesAndFoldersReducer, undoableFilesAndFoldersReducer };

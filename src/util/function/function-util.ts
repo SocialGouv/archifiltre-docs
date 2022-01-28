@@ -1,6 +1,10 @@
-export const empty = () => {};
+export const identity = <T>(param: T): T => param;
 
-export const identity = (param: any) => param;
+export type AnyFunction = (...args: unknown[]) => unknown;
+export type Awaitable<T> = T extends (...args: infer A) => infer R
+  ? (...args: A) => Promise<R>
+  : Promise<T>;
+export type VoidFunction = (...args: unknown[]) => void;
 
 /**
  * Composes single-argument functions from right to left. The rightmost
@@ -12,7 +16,7 @@ export const identity = (param: any) => param;
  * from right to left. For example, compose(f, g, h) is identical to doing
  * (...args) => f(g(h(...args))).
  */
-export function compose(...funcs): any {
+export function compose(...funcs: AnyFunction[]): AnyFunction {
   if (funcs.length === 0) {
     return (arg) => arg;
   }
@@ -21,5 +25,9 @@ export function compose(...funcs): any {
     return funcs[0];
   }
 
-  return funcs.reduce((a, b) => (...args) => a(b(...args)));
+  return funcs.reduce(
+    (a, b) =>
+      (...args) =>
+        a(b(...args))
+  );
 }

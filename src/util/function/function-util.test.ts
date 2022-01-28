@@ -1,10 +1,11 @@
+import type { AnyFunction } from "./function-util";
 import { compose } from "./function-util";
 
 describe("function-util", () => {
   describe("compose", () => {
     it("should compose functions", () => {
-      const firstFunction = (value) => value + ":first";
-      const secondFunction = (value) => value + ":second";
+      const firstFunction: AnyFunction = (value) => `${value}:first`;
+      const secondFunction: AnyFunction = (value) => `${value}:second`;
 
       const composed = compose(secondFunction, firstFunction);
 

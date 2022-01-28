@@ -1,27 +1,33 @@
 import Select from "@material-ui/core/Select";
-import React, { FC, useCallback } from "react";
-import { useLanguage } from "hooks/use-language";
-import { Language } from "util/language/language-types";
+import React, { useCallback } from "react";
+
+import { useLanguage } from "../../hooks/use-language";
+import { Language } from "../../util/language/language-types";
 
 const availableLanguages = [
   {
-    value: Language.FR,
     label: "🇫🇷 Français",
+    value: Language.FR,
   },
   {
-    value: Language.EN,
     label: "🇬🇧 English",
+    value: Language.EN,
   },
   {
-    value: Language.DE,
     label: "🇩🇪 Deutsch",
+    value: Language.DE,
   },
 ];
 
-const LanguagePicker: FC = () => {
+export const LanguagePicker: React.FC = () => {
   const [language, setLanguage] = useLanguage();
 
-  const onChange = useCallback((event) => setLanguage(event.target.value), []);
+  const onChange = useCallback(
+    (event) => {
+      setLanguage(event.target.value as Language);
+    },
+    [setLanguage]
+  );
 
   return (
     <Select onChange={onChange} value={language} variant="outlined" native>
@@ -33,5 +39,3 @@ const LanguagePicker: FC = () => {
     </Select>
   );
 };
-
-export default LanguagePicker;

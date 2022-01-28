@@ -1,9 +1,10 @@
-import React, { FC, useCallback, useContext, useState } from "react";
-import { empty } from "util/function/function-util";
-import { ZoomDirection, zoomReducer } from "util/zoom/zoom-util";
-import { useZoomTracker } from "hooks/use-zoom-tracker";
+import { noop } from "lodash";
+import React, { createContext, useCallback, useContext, useState } from "react";
 
-type ZoomState = {
+import { useZoomTracker } from "../../../hooks/use-zoom-tracker";
+import { ZoomDirection, zoomReducer } from "../../../util/zoom/zoom-util";
+
+interface ZoomState {
   zoomIn: (mousePosition: number | null, zoomSpeed: number) => void;
   zoomOut: (mousePosition: number | null, zoomSpeed: number) => void;
   setZoom: (offset: number, ratio: number) => void;
@@ -11,23 +12,23 @@ type ZoomState = {
   resetZoom: () => void;
   ratio: number;
   offset: number;
-};
+}
 
 const zoomState: ZoomState = {
-  zoomIn: (mousePosition, zoomSpeed) => {},
-  zoomOut: (mousePosition, zoomSpeed) => {},
-  setZoom: (offset, ratio) => {},
-  setDefaultMousePosition: (mousePosition) => {},
-  resetZoom: empty,
-  ratio: 1,
   offset: 0,
+  ratio: 1,
+  resetZoom: noop,
+  setDefaultMousePosition: noop,
+  setZoom: noop,
+  zoomIn: noop,
+  zoomOut: noop,
 };
 
-const ZoomContext = React.createContext(zoomState);
+const ZoomContext = createContext(zoomState);
 
-export const useZoomContext = () => useContext(ZoomContext);
+export const useZoomContext = (): ZoomState => useContext(ZoomContext);
 
-const ZoomProvider: FC = ({ children }) => {
+export const ZoomProvider: React.FC = ({ children }) => {
   const [ratio, setRatio] = useState(1);
   const [offset, setOffset] = useState(0);
   const [defaultMousePosition, setDefaultMousePosition] = useState<
@@ -39,7 +40,7 @@ const ZoomProvider: FC = ({ children }) => {
   const applyZoom = useCallback(
     (zoomDirection, mousePosition, zoomSpeed) => {
       trackZoom();
-      const zoomState = {
+      const zoomStateToApply = {
         offset,
         ratio,
       };
@@ -49,19 +50,19 @@ const ZoomProvider: FC = ({ children }) => {
         zoomSpeed,
       };
       const { offset: nextOffset, ratio: nextRatio } = zoomReducer(
-        zoomState,
+        zoomStateToApply,
         zoomAction
       );
       setOffset(nextOffset);
       setRatio(nextRatio);
     },
-    [ratio, offset, setRatio, setOffset]
+    [ratio, offset, setRatio, setOffset, trackZoom]
   );
 
-  const setZoom = useCallback(
-    (offset, ratio) => {
-      setOffset(offset);
-      setRatio(ratio);
+  const setZoom: ZoomState["setZoom"] = useCallback(
+    (toSetOffset, toSetRatio) => {
+      setOffset(toSetOffset);
+      setRatio(toSetRatio);
     },
     [setOffset, setRatio]
   );
@@ -95,18 +96,16 @@ const ZoomProvider: FC = ({ children }) => {
   return (
     <ZoomContext.Provider
       value={{
-        zoomIn,
-        zoomOut,
+        offset,
+        ratio,
         resetZoom,
         setDefaultMousePosition,
         setZoom,
-        ratio,
-        offset,
+        zoomIn,
+        zoomOut,
       }}
     >
       {children}
     </ZoomContext.Provider>
   );
 };
-
-export default ZoomProvider;

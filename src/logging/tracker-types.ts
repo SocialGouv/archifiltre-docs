@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 export interface TrackerAction {
   type: ActionType;
   title?: ActionTitle;
-  value?: any;
-  eventValue?: any;
+  value?: unknown;
+  eventValue?: unknown;
 }
 
 export enum ActionType {

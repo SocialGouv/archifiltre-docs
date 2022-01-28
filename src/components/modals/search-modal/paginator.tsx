@@ -1,8 +1,21 @@
+import type { TablePaginationProps } from "@material-ui/core/TablePagination";
 import TablePagination from "@material-ui/core/TablePagination";
-import React, { forwardRef, MutableRefObject } from "react";
+import React, { forwardRef } from "react";
+
 import { PaginatorActions } from "./paginator-actions";
 
-const Paginator = (
+export interface PaginatorProps {
+  pageCount: TablePaginationProps["count"];
+  rowsPerPage: TablePaginationProps["rowsPerPage"];
+  page: TablePaginationProps["page"];
+  handleChangePage: TablePaginationProps["onChangePage"];
+  handleChangeRowsPerPage: TablePaginationProps["onChangeRowsPerPage"];
+  labelRowsPerPage: TablePaginationProps["labelRowsPerPage"];
+}
+const _Paginator: React.ForwardRefRenderFunction<
+  HTMLDivElement,
+  PaginatorProps
+> = (
   {
     pageCount,
     rowsPerPage,
@@ -11,7 +24,7 @@ const Paginator = (
     handleChangeRowsPerPage,
     labelRowsPerPage,
   },
-  ref: MutableRefObject<HTMLDivElement | null>
+  ref: React.ForwardedRef<HTMLDivElement | null>
 ) => (
   <TablePagination
     ref={ref}
@@ -24,10 +37,12 @@ const Paginator = (
     onChangeRowsPerPage={handleChangeRowsPerPage}
     labelRowsPerPage={labelRowsPerPage}
     labelDisplayedRows={({ from, to, count }) =>
-      `${from}-${to === -1 ? count : to}/${count !== -1 ? count : ">" + to}`
+      `${from}-${to === -1 ? count : to}/${count !== -1 ? count : `>${to}`}`
     }
     ActionsComponent={PaginatorActions}
   />
 );
 
-export default forwardRef(Paginator);
+_Paginator.displayName = "Paginator";
+
+export const Paginator = forwardRef(_Paginator);

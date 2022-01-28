@@ -1,8 +1,8 @@
-import { v13JsToV14Js, v21ToV22Js, v2ToV21Js } from "./compatibility";
-import v13 from "./v13file.json";
-import v14 from "./v14file.json";
+import { v2ToV21Js, v13JsToV14Js, v21ToV22Js } from "./compatibility";
 import v21 from "./v2.1file.json";
 import v2 from "./v2file.json";
+import v13 from "./v13file.json";
+import v14 from "./v14file.json";
 import v22 from "./v22file.json";
 
 describe("compatibility", () => {

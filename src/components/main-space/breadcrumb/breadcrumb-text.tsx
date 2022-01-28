@@ -1,14 +1,18 @@
-import React, { FC } from "react";
 import { Box } from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
-import BreadcrumbTextTooltipContent from "components/main-space/breadcrumb/breadcrumb-text-tooltip-content";
+import React from "react";
 
-type BreadcrumbTextProps = {
+import { BreadcrumbTextTooltipContent } from "./breadcrumb-text-tooltip-content";
+
+export interface BreadcrumbTextProps {
   name: string;
   alias: string | null;
-};
+}
 
-const BreadcrumbText: FC<BreadcrumbTextProps> = ({ name, alias }) => (
+export const BreadcrumbText: React.FC<BreadcrumbTextProps> = ({
+  name,
+  alias,
+}) => (
   <Box height="100%" display="flex" maxHeight="1.25rem">
     <Tooltip title={<BreadcrumbTextTooltipContent alias={alias} name={name} />}>
       <svg
@@ -33,5 +37,3 @@ const BreadcrumbText: FC<BreadcrumbTextProps> = ({ name, alias }) => (
     </Tooltip>
   </Box>
 );
-
-export default BreadcrumbText;

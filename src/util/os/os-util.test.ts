@@ -1,4 +1,5 @@
 import os from "os";
+
 import { isWindows } from "./os-util";
 
 jest.mock("os", () => ({

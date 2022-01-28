@@ -1,5 +1,3 @@
-import packageJson from "../package.json";
-
 /**
  * Compares two versions with the format MAJOR.MINOR.PATCH
  * @param firstVersion is the first version number to compare
@@ -13,8 +11,8 @@ export const versionComparator = (
   const firstVersionDigits = firstVersion.split(".");
   const secondVersionDigits = secondVersion.split(".");
   for (let i = 0; i <= 2; i++) {
-    const firstVersionDigit = +firstVersionDigits[i] || 0;
-    const secondVersionDigit = +secondVersionDigits[i] || 0;
+    const firstVersionDigit = +(firstVersionDigits[i] ?? 0);
+    const secondVersionDigit = +(secondVersionDigits[i] ?? 0);
     if (firstVersionDigit > secondVersionDigit) {
       return 1;
     }
@@ -27,4 +25,4 @@ export const versionComparator = (
 
 export const versionName = "Romantic Raccoon";
 
-export default packageJson.version;
+export const version = ARCHIFILTRE_VERSION;

@@ -1,19 +1,22 @@
 import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import { useStyles } from "hooks/use-styles";
-import _, { find, negate } from "lodash";
-import React, { FC, useCallback, useEffect, useState } from "react";
+import { find, negate } from "lodash";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { identity } from "util/function/function-util";
+
+import { Object } from "../../../common/utils";
+import { useStyles } from "../../../hooks/use-styles";
+import { isValidFilePath } from "../../../util/file-system/file-sys-util";
+import { identity } from "../../../util/function/function-util";
+import type { IsActiveOptions } from "./export-config";
 import {
   exportConfig,
   ExportType,
-  IsActiveOptions,
   mapValuesFromExportType,
 } from "./export-config";
-import ExportOptions, { ExportTypesMap } from "./export-options";
-import { isValidFilePath } from "util/file-system/file-sys-util";
+import type { ExportOptionsProps, ExportTypesMap } from "./export-options";
+import { ExportOptions } from "./export-options";
 
 const getInitialExportPaths = (originalPath: string, sessionName: string) =>
   mapValuesFromExportType((exportType) =>
@@ -38,28 +41,28 @@ const computeExportPathsValidityMap = async (
   exportPathsMap: ExportTypesMap<string>
 ): Promise<ExportTypesMap<boolean>> => {
   const resultsArray = await Promise.all(
-    Object.keys(exportPathsMap).map((key: ExportType) =>
+    Object.keys(exportPathsMap).map(async (key: ExportType) =>
       isValidFilePath(exportPathsMap[key]).then((isValid) => ({
-        key,
         isValid,
+        key,
       }))
     )
   );
 
   return mapValuesFromExportType(
-    (key) => find(resultsArray, { key })?.isValid || false
+    (key) => find(resultsArray, { key })?.isValid ?? false
   );
 };
 
-type ExportModalContentProps = {
+export interface ExportModalContentProps {
   areHashesReady: boolean;
   originalPath: string;
   sessionName: string;
   startExport: (exportId: ExportType, exportPath: string) => void;
   closeModal: () => void;
-};
+}
 
-const ExportModalContent: FC<ExportModalContentProps> = ({
+export const ExportModalContent: React.FC<ExportModalContentProps> = ({
   areHashesReady,
   originalPath,
   sessionName,
@@ -77,32 +80,42 @@ const ExportModalContent: FC<ExportModalContentProps> = ({
   );
   const [validPaths, setValidPaths] = useState(initialExportCheckMap);
 
-  useEffect(
-    () => setEnabledExports(computeEnabledExports({ areHashesReady })),
-    [areHashesReady]
-  );
+  useEffect(() => {
+    setEnabledExports(computeEnabledExports({ areHashesReady }));
+  }, [areHashesReady]);
 
   const onExport = useCallback(() => {
     closeModal();
-    return Object.values(ExportType)
+    Object.values(ExportType)
       .filter((exportId) => activeExports[exportId])
-      .forEach((exportId: ExportType) =>
-        startExport(exportId, exportPaths[exportId])
-      );
-  }, [startExport, activeExports, exportPaths]);
+      .forEach((exportId: ExportType) => {
+        startExport(exportId, exportPaths[exportId]);
+      });
+  }, [startExport, activeExports, exportPaths, closeModal]);
 
   useEffect(() => {
-    computeExportPathsValidityMap(exportPaths).then(setValidPaths);
+    void computeExportPathsValidityMap(exportPaths).then(setValidPaths);
   }, [exportPaths, setValidPaths]);
 
-  const setActiveExportValue = (exportType: ExportType, value: boolean) =>
-    setActiveExports((activeExports) => ({
-      ...activeExports,
+  const setActiveExportValue: ExportOptionsProps["setActiveExportValue"] = (
+    exportType,
+    value
+  ) => {
+    setActiveExports((activeExportsToSet) => ({
+      ...activeExportsToSet,
       [exportType]: value,
     }));
+  };
 
-  const setExportsPathsValue = (exportType: ExportType, value: string) =>
-    setExportsPaths((exportPaths) => ({ ...exportPaths, [exportType]: value }));
+  const setExportsPathsValue: ExportOptionsProps["setExportsPathsValue"] = (
+    exportType,
+    value
+  ) => {
+    setExportsPaths((exportPathsToSet) => ({
+      ...exportPathsToSet,
+      [exportType]: value,
+    }));
+  };
 
   return (
     <>
@@ -130,5 +143,3 @@ const ExportModalContent: FC<ExportModalContentProps> = ({
     </>
   );
 };
-
-export default ExportModalContent;

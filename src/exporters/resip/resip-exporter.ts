@@ -1,31 +1,39 @@
 import dateFormat from "dateformat";
-import _ from "lodash";
+import _, { noop } from "lodash";
 import path from "path";
-import { FilesAndFoldersMetadataMap } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import {
+
+import type {
   AliasMap,
   CommentsMap,
   FilesAndFolders,
   FilesAndFoldersMap,
-} from "reducers/files-and-folders/files-and-folders-types";
-import { tagHasFfId } from "reducers/tags/tags-selectors";
-import { TagMap } from "reducers/tags/tags-types";
-import translations from "translations/translations";
-import { makeEmptyArray, replaceValue } from "util/array/array-util";
+} from "../../reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { tagHasFfId } from "../../reducers/tags/tags-selectors";
+import type { Tag, TagMap } from "../../reducers/tags/tags-types";
+import { translations } from "../../translations/translations";
+import { makeEmptyArray, replaceValue } from "../../util/array/array-util";
 import {
   getDisplayName,
   isExactFileOrAncestor,
-} from "util/files-and-folders/file-and-folders-utils";
-import { empty } from "util/function/function-util";
+} from "../../util/files-and-folders/file-and-folders-utils";
 
-const nameChangedText = (oldName) =>
+interface TagWithID extends Tag {
+  ID: number;
+}
+
+interface FilesAndFoldersWithID extends FilesAndFolders {
+  ID: number;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  ParentID?: number;
+  tags: TagWithID[];
+}
+
+const nameChangedText = (oldName: string) =>
   translations.t("common.originalName", { oldName });
 
-const formatFile = (ff) => {
-  const removeStartingSlash = (str) =>
-    str.indexOf("/") === 0 ? str.substring(1) : str;
-
-  const resipFilePath = removeStartingSlash(ff.id)
+const formatFile = (ff: FilesAndFolders) => {
+  const resipFilePath = (ff.id.startsWith("/") ? ff.id.substring(1) : ff.id)
     .split("/")
     .slice(1)
     .join("/");
@@ -36,10 +44,8 @@ const formatFile = (ff) => {
 
 /**
  * Returns the SEDA description level corresponding to the FF item
- * @param ff
- * @returns {string}
  */
-const formatDescriptionLevel = (ff) => {
+const formatDescriptionLevel = (ff: FilesAndFolders) => {
   if (ff.children.length === 0) {
     return "Item";
   }
@@ -49,18 +55,14 @@ const formatDescriptionLevel = (ff) => {
 
 /**
  * Gets the title of a file or folder
- * @param ff - a file or folder data object
- * @param aliases - the map containing all aliases
- * @returns {string} The file title
  */
 const formatTitle = (ff: FilesAndFolders, aliases: AliasMap) =>
   getDisplayName(path.basename(ff.id), aliases[ff.id]);
 
 /**
  * Formats the date to "yyyy-mm-dd"
- * @param date
  */
-const formatDate = (date) => dateFormat(date, "yyyy-mm-dd");
+const formatDate = (date: number) => dateFormat(date, "yyyy-mm-dd");
 
 /**
  * Mapper to enrich fileOrFolder with parentId.
@@ -69,70 +71,90 @@ const formatDate = (date) => dateFormat(date, "yyyy-mm-dd");
  * @param fileAndFolders
  * @returns {{ParentID: *}} - fileOrFolder with ParentID
  */
-const addParentId = (fileOrFolder, index, fileAndFolders) => {
+const addParentId = (
+  fileOrFolder: FilesAndFolders,
+  _index: number | string,
+  fileAndFolders: FilesAndFoldersWithID[]
+) => {
   const parent = fileAndFolders.find(({ children }) =>
     children.includes(fileOrFolder.id)
   );
 
   return {
     ...fileOrFolder,
-    ParentID: parent && parent.ID,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    ParentID: parent?.ID,
   };
 };
 
-const formatCustodialHistory = (fileAndFolder, aliases) =>
-  aliases[fileAndFolder.id] ? nameChangedText(fileAndFolder.name) : "";
+const formatCustodialHistory = (
+  fileAndFolder: FilesAndFolders,
+  aliases: AliasMap
+) => (aliases[fileAndFolder.id] ? nameChangedText(fileAndFolder.name) : "");
+
+interface ResipFormat {
+  /* eslint-disable @typescript-eslint/naming-convention */
+  "CustodialHistory.CustodialHistoryItem": string;
+  Description: string;
+  DescriptionLevel: "Item" | "RecordGrp";
+  EndDate: string;
+  File: string;
+  ID: number;
+  ParentID?: number;
+  StartDate: string;
+  Tags: TagWithID[];
+  Title: string;
+  TransactedDate: string;
+  /* eslint-enable @typescript-eslint/naming-convention */
+}
 
 /**
  * Mapper that transform enriched archifiltre data to Resip compatible data
- * @param aliases
- * @param comments
- * @param filesAndFoldersMetadata
- * @returns {Object} - Resip compatible data
  */
-const transformDefaultFormatToResip = (
-  aliases: AliasMap,
-  comments: CommentsMap,
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap
-) => (enrichedFilesAndFolders) => ({
-  ID: enrichedFilesAndFolders.ID,
-  ParentID: enrichedFilesAndFolders.ParentID,
-  File: formatFile(enrichedFilesAndFolders),
-  DescriptionLevel: formatDescriptionLevel(enrichedFilesAndFolders),
-  Title: formatTitle(enrichedFilesAndFolders, aliases),
-  StartDate: formatDate(
-    filesAndFoldersMetadata[enrichedFilesAndFolders.id].minLastModified
-  ),
-  EndDate: formatDate(
-    filesAndFoldersMetadata[enrichedFilesAndFolders.id].maxLastModified
-  ),
-  TransactedDate: formatDate(Date.now()),
-  "CustodialHistory.CustodialHistoryItem": formatCustodialHistory(
-    enrichedFilesAndFolders,
-    aliases
-  ),
-  Description: comments[enrichedFilesAndFolders.id] || "",
-  Tags: enrichedFilesAndFolders.tags,
-});
+const transformDefaultFormatToResip =
+  (
+    aliases: AliasMap,
+    comments: CommentsMap,
+    filesAndFoldersMetadata: FilesAndFoldersMetadataMap
+  ) =>
+  (enrichedFilesAndFolders: FilesAndFoldersWithID): ResipFormat => ({
+    /* eslint-disable @typescript-eslint/naming-convention */
+    "CustodialHistory.CustodialHistoryItem": formatCustodialHistory(
+      enrichedFilesAndFolders,
+      aliases
+    ),
+    Description: comments[enrichedFilesAndFolders.id] || "",
+    DescriptionLevel: formatDescriptionLevel(enrichedFilesAndFolders),
+    EndDate: formatDate(
+      filesAndFoldersMetadata[enrichedFilesAndFolders.id].maxLastModified
+    ),
+    File: formatFile(enrichedFilesAndFolders),
+    ID: enrichedFilesAndFolders.ID,
+    ParentID: enrichedFilesAndFolders.ParentID,
+    StartDate: formatDate(
+      filesAndFoldersMetadata[enrichedFilesAndFolders.id].minLastModified
+    ),
+    Tags: enrichedFilesAndFolders.tags,
+    Title: formatTitle(enrichedFilesAndFolders, aliases),
+    TransactedDate: formatDate(Date.now()),
+    /* eslint-enable @typescript-eslint/naming-convention */
+  });
 
 /**
  * Returns all tags for the provided fileAndFolder id
- * @param tags
- * @param ffId
- * @returns {*}
  */
-const getAllTagsByFfId = (tags, ffId) =>
-  tags.reduce(
+const getAllTagsByFfId = (tags: Tag[], ffId: string) =>
+  tags.reduce<Tag[]>(
     (tagList, tag) => (tagHasFfId(tag, ffId) ? [...tagList, tag] : tagList),
     []
   );
 
-const addTagsToFf = (tags) => (ff) => ({
+const addTagsToFf = (tags: Tag[]) => (ff: FilesAndFoldersWithID) => ({
   ...ff,
   tags: getAllTagsByFfId(tags, ff.id),
 });
 
-const formatToCsv = (sipFilesAndFolders, tags) => {
+const formatToCsv = (sipFilesAndFolders: ResipFormat[], tags: Tag[]) => {
   const fieldsOrder = [
     "ID",
     "ParentID",
@@ -144,14 +166,16 @@ const formatToCsv = (sipFilesAndFolders, tags) => {
     "TransactedDate",
     "CustodialHistory.CustodialHistoryItem",
     "Description",
-  ];
-  const tagsFields = tags.map((tag, index) => `Content.Tag.${index}`);
+  ] as (keyof ResipFormat)[];
+  const tagsFields = tags.map(
+    (_tag, index) => `Content.Tag.${index}`
+  ) as (keyof ResipFormat)[];
 
-  const firstRow = fieldsOrder.concat(tagsFields);
+  const firstRow: unknown[] = fieldsOrder.concat(tagsFields);
 
   const dataRows = sipFilesAndFolders.map((sipFileAndFolder) => {
     const baseFileAndFolder = fieldsOrder.map(
-      (field) => sipFileAndFolder[field] || ""
+      (field) => sipFileAndFolder[field] ?? ""
     );
     const tagsCells = sipFileAndFolder.Tags.reduce(
       (acc, { ID, name }) => replaceValue(acc, ID, name),
@@ -170,14 +194,12 @@ const formatToCsv = (sipFilesAndFolders, tags) => {
  * @param sideEffect - the side effect called with the mapper parameters
  * @returns {function} - The mapper that will call the hook every time the mapper called.
  */
-const wrapWithHook = (mapper, sideEffect) => (
-  mappedElement,
-  mappedIndex,
-  mappedArray
-) => {
-  sideEffect(mappedElement, mappedIndex, mappedArray);
-  return mapper(mappedElement, mappedIndex, mappedArray);
-};
+const wrapWithHook =
+  <T>(mapper = noop, sideEffect = noop): Parameters<T[]["map"]>[0] =>
+  (mappedElement, mappedIndex, mappedArray) => {
+    sideEffect(mappedElement, mappedIndex, mappedArray);
+    mapper(mappedElement, mappedIndex, mappedArray);
+  };
 
 interface ResipExporterOptions {
   aliases: AliasMap;
@@ -202,15 +224,8 @@ export const RESIP_HOOK_CALL_PER_ELEMENT = 4;
 
 /**
  * Formats the fileStructure and tag into a csv that can be imported in RESIP
- * @param aliases - the aliases map
- * @param comments - the comments map
- * @param filesAndFolders - The files and folder structure
- * @param filesAndFoldersMetadata
- * @param tags - The tags structure
- * @param elementsToDelete
- * @param [hook]
  */
-const resipExporter = (
+export const resipExporter = (
   {
     aliases,
     comments,
@@ -219,11 +234,11 @@ const resipExporter = (
     filesAndFoldersMetadata,
     tags,
   }: ResipExporterOptions,
-  hook = empty
-) => {
+  hook = noop
+): unknown[][] => {
   let sipId = 0;
 
-  const addSipId = (ff) => {
+  const addSipId = (ff: FilesAndFolders) => {
     sipId = sipId + 1;
     return { ...ff, ID: `${sipId}` };
   };
@@ -238,10 +253,10 @@ const resipExporter = (
 
   const dataWithSipId = Object.keys(filesAndFolders)
     .filter((id) => !isAncestorDeleted(id, elementsToDelete))
-    .filter((id) => id !== "")
+    .filter((id) => id)
     .map(
       wrapWithHook(
-        (ffId) => ({
+        (ffId: string) => ({
           ...filesAndFolders[ffId],
           ...filesAndFoldersMetadata[ffId],
         }),
@@ -250,7 +265,9 @@ const resipExporter = (
     )
     .map(wrapWithHook(addSipId, hook))
     .map(wrapWithHook(addParentId, hook))
-    .map(wrapWithHook(addTagsToFf(tagsWithIndex), hook));
+    .map(
+      wrapWithHook(addTagsToFf(tagsWithIndex), hook)
+    ) as FilesAndFoldersWithID[];
 
   const formattedData = dataWithSipId.map(
     transformDefaultFormatToResip(aliases, comments, filesAndFoldersMetadata)
@@ -258,5 +275,3 @@ const resipExporter = (
 
   return formatToCsv(formattedData, tagsWithIndex);
 };
-
-export default resipExporter;

@@ -1,38 +1,37 @@
-import Table from "components/common/table/table";
-import { Column } from "components/common/table/table-types";
-import React, { FC, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { ArchifiltreError } from "util/error/error-util";
 
-type ErrorsTableProps = {
+import type { ArchifiltreError } from "../../../util/error/error-util";
+import { Table } from "../../common/table/table";
+import type { Column } from "../../common/table/table-types";
+
+export interface ErrorsTableProps {
   errors: ArchifiltreError[];
-};
+}
 
-const ErrorsTable: FC<ErrorsTableProps> = ({ errors }) => {
+export const ErrorsTable: React.FC<ErrorsTableProps> = ({ errors }) => {
   const { t } = useTranslation();
 
   const columns: Column<ArchifiltreError>[] = useMemo(
     () => [
       {
+        accessor: "filePath",
         id: "filePath",
         name: t("errorsModal.element"),
-        accessor: "filePath",
       },
       {
+        accessor: "code",
         id: "code",
         name: t("errorsModal.errorCode"),
-        accessor: "code",
       },
       {
+        accessor: ({ code }): string =>
+          t(`errorsModal.errorDescriptions.${code}`),
         id: "description",
         name: t("errorsModal.errorDescription"),
-        accessor: ({ code }) =>
-          t(`errorsModal.errorDescriptions.${code}`) as string,
       },
     ],
     [t]
   );
   return <Table rowId="filePath" data={errors} columns={columns} />;
 };
-
-export default ErrorsTable;

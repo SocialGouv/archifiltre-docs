@@ -1,25 +1,26 @@
+import { range, remove } from "lodash";
+import { Subject } from "rxjs";
+import { take, toArray } from "rxjs/operators";
+
+import { makeEmptyArray } from "../array/array-util";
+import type {
+  AsyncWorkerControllerEvent,
+  ProcessControllerAsyncWorker,
+} from "../async-worker/async-worker-util";
+import { WorkerEventType } from "../async-worker/async-worker-util";
 import {
   aggregateErrorsToMap,
   aggregateResultsToMap,
   processQueueWithWorkers,
   setupWorkers$,
 } from "./batch-process-util";
-import {
+import type {
   InitializeMessage,
-  MessageTypes,
   ReadyMessage,
   ResultMessage,
   WorkerMessage,
-} from "util/batch-process/batch-process-util-types";
-import { take, toArray } from "rxjs/operators";
-import {
-  AsyncWorkerControllerEvent,
-  ProcessControllerAsyncWorker,
-  WorkerEventType,
-} from "util/async-worker/async-worker-util";
-import { makeEmptyArray } from "util/array/array-util";
-import { range, remove } from "lodash";
-import { Subject } from "rxjs";
+} from "./batch-process-util-types";
+import { MessageTypes } from "./batch-process-util-types";
 
 jest.mock("os", () => ({
   cpus: () => [1, 2, 3, 4],
@@ -32,112 +33,127 @@ jest.mock("../../logging/reporter", () => ({
 class TestWorker implements ProcessControllerAsyncWorker {
   listenersPool = {
     [WorkerEventType.EXIT]: [] as (() => void)[],
-    [WorkerEventType.MESSAGE]: [] as ((data: any) => void)[],
-    [WorkerEventType.ERROR]: [] as ((data: any) => void)[],
+    [WorkerEventType.MESSAGE]: [] as ((data: unknown) => void)[],
+    [WorkerEventType.ERROR]: [] as ((data: unknown) => void)[],
   };
+
+  postMessage = jest.fn();
+
+  terminate = jest.fn();
+
   addEventListener(type, callback) {
     this.listenersPool[type].push(callback);
   }
+
   removeEventListener(type, callback) {
     remove(this.listenersPool[type], callback);
   }
-  postMessage = jest.fn();
-  trigger(event: AsyncWorkerControllerEvent, data?: any) {
-    this.listenersPool[event].forEach((callback) => callback(data));
+
+  trigger(event: AsyncWorkerControllerEvent, data?: unknown) {
+    this.listenersPool[event].forEach((callback) => {
+      callback(data);
+    });
   }
-  terminate = jest.fn();
 }
 
 describe("batch-process-util", () => {
   describe("setupWorkers$", () => {
-    it("should create a correct observable with complete message", (done) => {
+    it("should create a correct observable with complete message", async () => {
       const workers = makeEmptyArray(4, null).map(() => new TestWorker());
       const initialValues = "initValues";
       const { result$ } = setupWorkers$(workers, initialValues);
       const makeResult = <T>(result: T): ResultMessage<T> => ({
-        type: MessageTypes.RESULT,
         result,
+        type: MessageTypes.RESULT,
       });
 
-      const makeInitialize = (data: any): InitializeMessage => ({
-        type: MessageTypes.INITIALIZE,
+      const makeInitialize = (data: unknown): InitializeMessage => ({
         data,
+        type: MessageTypes.INITIALIZE,
       });
 
-      result$
-        .pipe(toArray())
-        .toPromise()
-        .then((result) => {
-          expect(result).toEqual(
-            workers.map((worker, index) => ({
-              worker,
-              message: makeResult(`test${index}`),
-            }))
-          );
-          workers.forEach((worker) => {
-            expect(worker.postMessage).toHaveBeenCalledTimes(1);
-            expect(worker.postMessage).toHaveBeenCalledWith(
-              makeInitialize(initialValues)
+      const ret = new Promise<void>((done) => {
+        void result$
+          .pipe(toArray())
+          .toPromise()
+          .then((result) => {
+            expect(result).toEqual(
+              workers.map((worker, index) => ({
+                message: makeResult(`test${index}`),
+                worker,
+              }))
             );
+            workers.forEach((worker) => {
+              expect(worker.postMessage).toHaveBeenCalledTimes(1);
+              expect(worker.postMessage).toHaveBeenCalledWith(
+                makeInitialize(initialValues)
+              );
+            });
+            done();
           });
-          done();
-        });
+      });
 
       const complete = { type: MessageTypes.COMPLETE };
 
-      workers.forEach((worker, index) =>
-        worker.trigger(WorkerEventType.MESSAGE, makeResult(`test${index}`))
-      );
+      workers.forEach((worker, index) => {
+        worker.trigger(WorkerEventType.MESSAGE, makeResult(`test${index}`));
+      });
 
-      workers.forEach((worker, index) =>
-        worker.trigger(WorkerEventType.MESSAGE, complete)
-      );
+      workers.forEach((worker) => {
+        worker.trigger(WorkerEventType.MESSAGE, complete);
+      });
+
+      return ret;
     });
 
-    it("should create a correct observable without complete message", (done) => {
+    it("should create a correct observable without complete message", async () => {
       const workers = makeEmptyArray(4, null).map(() => new TestWorker());
       const initialValues = "initValues";
       const { result$ } = setupWorkers$(workers, initialValues);
       const makeResult = <T>(result: T): ResultMessage<T> => ({
-        type: MessageTypes.RESULT,
         result,
+        type: MessageTypes.RESULT,
       });
 
-      const makeInitialize = (data: any): InitializeMessage => ({
-        type: MessageTypes.INITIALIZE,
+      const makeInitialize = (data: unknown): InitializeMessage => ({
         data,
+        type: MessageTypes.INITIALIZE,
       });
 
-      result$
-        .pipe(take(4), toArray())
-        .toPromise()
-        .then((result) => {
-          expect(result).toEqual(
-            workers.map((worker, index) => ({
-              worker,
-              message: makeResult(`test${index}`),
-            }))
-          );
-          workers.forEach((worker) => {
-            expect(worker.postMessage).toHaveBeenCalledTimes(1);
-            expect(worker.postMessage).toHaveBeenCalledWith(
-              makeInitialize(initialValues)
+      const ret = new Promise<void>((done) => {
+        void result$
+          .pipe(take(4), toArray())
+          .toPromise()
+          .then((result) => {
+            expect(result).toEqual(
+              workers.map((worker, index) => ({
+                message: makeResult(`test${index}`),
+                worker,
+              }))
             );
+            workers.forEach((worker) => {
+              expect(worker.postMessage).toHaveBeenCalledTimes(1);
+              expect(worker.postMessage).toHaveBeenCalledWith(
+                makeInitialize(initialValues)
+              );
+            });
+            done();
           });
-          done();
-        });
+      });
 
-      workers.forEach((worker, index) =>
-        worker.trigger(WorkerEventType.MESSAGE, makeResult(`test${index}`))
-      );
+      workers.forEach((worker, index) => {
+        worker.trigger(WorkerEventType.MESSAGE, makeResult(`test${index}`));
+      });
+
+      return ret;
     });
   });
 
   describe("processQueueWithWorkers", () => {
     it("should handle queue processing", async () => {
       const makeResult = (result: string): ResultMessage => ({
-        type: MessageTypes.RESULT,
         result,
+        type: MessageTypes.RESULT,
       });
       const makeReady = (): ReadyMessage => ({
         type: MessageTypes.READY,
@@ -153,20 +169,20 @@ describe("batch-process-util", () => {
       const results$ = processQueueWithWorkers(workers$, data, 4);
 
       workers.forEach((worker) =>
-        setTimeout(() =>
+        setTimeout(() => {
           workers$.next({
-            worker,
             message: makeReady(),
-          })
-        )
+            worker,
+          });
+        })
       );
 
       const triggerResult = (index) =>
         setTimeout(() => {
           const worker = workers[index % 4];
           workers$.next({
-            worker,
             message: makeResult(`${index}`),
+            worker,
           });
         });
 
@@ -206,9 +222,9 @@ describe("batch-process-util", () => {
   describe("aggregateErrorsToMap", () => {
     it("should merge results array into a map", () => {
       const errorsArray = [
-        { param: "1", error: "error1" },
-        { param: "2", error: "error2" },
-        { param: "3", error: "error3" },
+        { error: "error1", param: "1" },
+        { error: "error2", param: "2" },
+        { error: "error3", param: "3" },
       ];
 
       expect(aggregateErrorsToMap(errorsArray)).toEqual({

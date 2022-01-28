@@ -1,19 +1,15 @@
-import {
-  CLOSE_MODAL,
-  ModalAction,
-  ModalState,
-  OPEN_MODAL,
-} from "./modal-types";
+import type { ModalAction, ModalState } from "./modal-types";
+import { CLOSE_MODAL, OPEN_MODAL } from "./modal-types";
 
 export const initialState: ModalState = {
   openModal: null,
 };
 
-const modalReducer = (
+export const modalReducer = (
   state = initialState,
-  action: ModalAction
+  action?: ModalAction
 ): ModalState => {
-  switch (action.type) {
+  switch (action?.type) {
     case OPEN_MODAL:
       return {
         openModal: action.modal,
@@ -22,9 +18,7 @@ const modalReducer = (
       return {
         openModal: null,
       };
+    default:
+      return state;
   }
-
-  return state;
 };
-
-export default modalReducer;

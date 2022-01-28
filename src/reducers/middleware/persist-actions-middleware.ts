@@ -1,16 +1,19 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { useEffect, useState } from "react";
-import { Action, Middleware } from "redux";
-import { reportError, reportInfo } from "logging/reporter";
-import translations from "translations/translations";
-import { notifyError } from "util/notification/notifications-util";
+import type { Action, Middleware } from "redux";
+
+import { reportError, reportInfo } from "../../logging/reporter";
+import { translations } from "../../translations/translations";
+import { getPath } from "../../util/electron/electron-util";
+import type { VoidFunction } from "../../util/function/function-util";
+import { notifyError } from "../../util/notification/notifications-util";
+import type { SimpleObject } from "../../util/object/object-util";
+import { setLoadingStep } from "../loading-state/loading-state-actions";
 import {
   loadingStateActionTypes,
   LoadingStep,
-} from "reducers/loading-state/loading-state-types";
-import { setLoadingStep } from "reducers/loading-state/loading-state-actions";
-import { getPath } from "util/electron/electron-util";
+} from "../loading-state/loading-state-types";
 
 const IGNORED_ACTIONS = [...loadingStateActionTypes];
 
@@ -20,7 +23,7 @@ export const previousSessionFilePath = path.join(
   "last-session-actions"
 );
 
-const actionStack: object[] = [];
+const actionStack: Action<string>[] = [];
 let saving = false;
 
 /**
@@ -39,8 +42,8 @@ const saveActionsFromStack = async () => {
   try {
     await fs.appendFile(previousSessionFilePath, actionsToSaveText);
     saving = false;
-    saveActionsFromStack();
-  } catch (err) {
+    void saveActionsFromStack();
+  } catch (err: unknown) {
     reportError(err);
   }
 };
@@ -49,45 +52,55 @@ const saveActionsFromStack = async () => {
  * Replays to store all the actions present in the previous session file.
  * @param api
  */
-export const replayActionsThunk = () => async (dispatch) => {
-  try {
-    const previousActions = await fs.readFile(previousSessionFilePath, "utf8");
-    const previousActionsArray = previousActions
-      .trim()
-      .split("\n")
-      .map((actionString) => JSON.parse(actionString));
-    await clearActionReplayFile();
-    previousActionsArray.forEach((action) => dispatch(action));
-    dispatch(setLoadingStep(LoadingStep.FINISHED));
-  } catch (err) {
-    reportError(err.message);
-    notifyError(translations.t("replay.error"), translations.t("replay.title"));
-  }
-};
+export const replayActionsThunk =
+  () =>
+  async (dispatch: VoidFunction): Promise<void> => {
+    try {
+      const previousActions = await fs.readFile(
+        previousSessionFilePath,
+        "utf8"
+      );
+      const previousActionsArray = previousActions
+        .trim()
+        .split("\n")
+        .map((actionString) => JSON.parse(actionString) as SimpleObject);
+      await clearActionReplayFile();
+      previousActionsArray.forEach((action) => {
+        dispatch(action);
+      });
+      dispatch(setLoadingStep(LoadingStep.FINISHED));
+    } catch (err: unknown) {
+      reportError((err as Error).message);
+      notifyError(
+        translations.t("replay.error"),
+        translations.t("replay.title")
+      );
+    }
+  };
 
 /**
  * Clears the previous session history file
  */
-export const clearActionReplayFile = async () => {
+export const clearActionReplayFile = async (): Promise<void> => {
   try {
     await fs.unlink(previousSessionFilePath);
-  } catch (err) {
+  } catch {
     reportInfo("Cannot unlink action replay file");
   }
 };
 
-const saveAction = (action: Action) => {
+const saveAction = (action: Action<string>) => {
   if (IGNORED_ACTIONS.includes(action.type)) {
     return;
   }
   actionStack.push(action);
-  saveActionsFromStack();
+  void saveActionsFromStack();
 };
 
 /**
  * Returns a value to verify if there is a previous session stored
  */
-export const usePreviousSession = () => {
+export const usePreviousSession = (): boolean => {
   const [hasPreviousSession, setPreviousSession] = useState(false);
 
   useEffect(() => {
@@ -106,7 +119,8 @@ export const usePreviousSession = () => {
 /**
  * Middleware to persist into a file all the dispatched actions
  */
-export const persistActions: Middleware = () => (next) => (action: Action) => {
-  saveAction(action);
-  return next(action);
-};
+export const persistActions: Middleware =
+  () => (next) => (action: Action<string>) => {
+    saveAction(action);
+    return next(action);
+  };

@@ -1,31 +1,29 @@
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { NavigationBar } from "./navigation-bar";
-import {
-  ElementWeightMethod,
-  IcicleColorMode,
-  IcicleSortMethod,
-} from "reducers/icicle-sort-method/icicle-sort-method-types";
+
+import { useIcicleSortMethod } from "../../../reducers/icicle-sort-method/icicle-sort-method-selectors";
 import {
   setElementWeightMethodThunk,
   setIcicleColorModeThunk,
   setIcicleSortMethodThunk,
-} from "reducers/icicle-sort-method/icicle-sort-method-thunk";
-import { useIcicleSortMethod } from "reducers/icicle-sort-method/icicle-sort-method-selectors";
+} from "../../../reducers/icicle-sort-method/icicle-sort-method-thunk";
+import type {
+  ElementWeightMethod,
+  IcicleColorMode,
+} from "../../../reducers/icicle-sort-method/icicle-sort-method-types";
+import type { NavigationBarProps } from "./navigation-bar";
+import { NavigationBar } from "./navigation-bar";
 
-const NavigationBarContainer = () => {
-  const {
-    icicleSortMethod,
-    elementWeightMethod,
-    icicleColorMode,
-  } = useIcicleSortMethod();
+export const NavigationBarContainer: React.FC = () => {
+  const { icicleSortMethod, elementWeightMethod, icicleColorMode } =
+    useIcicleSortMethod();
   const dispatch = useDispatch();
 
-  const setIcicleSortMethodCallback = useCallback(
-    (sortMethod: IcicleSortMethod) =>
-      dispatch(setIcicleSortMethodThunk(sortMethod)),
-    [dispatch]
-  );
+  const setIcicleSortMethodCallback: NavigationBarProps["setIcicleSortMethod"] =
+    useCallback(
+      (sortMethod) => dispatch(setIcicleSortMethodThunk(sortMethod)),
+      [dispatch]
+    );
 
   const setElementWeightMethodCallback = useCallback(
     (method: ElementWeightMethod) =>
@@ -49,5 +47,3 @@ const NavigationBarContainer = () => {
     />
   );
 };
-
-export default NavigationBarContainer;

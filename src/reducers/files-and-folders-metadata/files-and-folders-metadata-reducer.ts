@@ -1,9 +1,9 @@
-import {
+import { undoable } from "../enhancers/undoable/undoable";
+import type {
   FilesAndFoldersMetadataAction,
   FilesAndFoldersMetadataState,
-  INIT_FILES_AND_FOLDERS_METADATA,
 } from "./files-and-folders-metadata-types";
-import undoable from "reducers/enhancers/undoable/undoable";
+import { INIT_FILES_AND_FOLDERS_METADATA } from "./files-and-folders-metadata-types";
 
 export const initialState: FilesAndFoldersMetadataState = {
   filesAndFoldersMetadata: {},
@@ -11,14 +11,12 @@ export const initialState: FilesAndFoldersMetadataState = {
 
 /**
  * Reducer that handles files and folders metadata structure
- * @param state
- * @param action
  */
 export const filesAndFoldersMetadataReducer = (
   state = initialState,
-  action: FilesAndFoldersMetadataAction
+  action?: FilesAndFoldersMetadataAction
 ): FilesAndFoldersMetadataState => {
-  switch (action.type) {
+  switch (action?.type) {
     case INIT_FILES_AND_FOLDERS_METADATA:
       return {
         filesAndFoldersMetadata: action.metadata,
@@ -28,4 +26,7 @@ export const filesAndFoldersMetadataReducer = (
   }
 };
 
-export default undoable(filesAndFoldersMetadataReducer, initialState);
+export const undoableFilesAndFoldersMetadataReducer = undoable<
+  FilesAndFoldersMetadataState,
+  FilesAndFoldersMetadataAction
+>(filesAndFoldersMetadataReducer, initialState);

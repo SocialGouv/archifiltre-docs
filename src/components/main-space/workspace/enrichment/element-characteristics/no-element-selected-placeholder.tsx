@@ -1,14 +1,14 @@
-import React, { FC } from "react";
 import Box from "@material-ui/core/Box";
+import React from "react";
 import { FaHandPointer } from "react-icons/fa";
 
-type NoElementSelectedPlaceholderProps = {
+export interface NoElementSelectedPlaceholderProps {
   title: string;
-};
+}
 
-const NoElementSelectedPlaceholder: FC<NoElementSelectedPlaceholderProps> = ({
-  title,
-}) => (
+export const NoElementSelectedPlaceholder: React.FC<
+  NoElementSelectedPlaceholderProps
+> = ({ title }) => (
   <Box
     display="flex"
     flexDirection="column"
@@ -21,5 +21,3 @@ const NoElementSelectedPlaceholder: FC<NoElementSelectedPlaceholderProps> = ({
     {title}
   </Box>
 );
-
-export default NoElementSelectedPlaceholder;

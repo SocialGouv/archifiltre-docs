@@ -1,20 +1,12 @@
-import InputAdornment from "@material-ui/core/InputAdornment";
 import Input from "@material-ui/core/Input";
-import React, {
-  ChangeEvent,
-  KeyboardEvent,
-  FC,
-  useCallback,
-  useState,
-  useRef,
-  useEffect,
-  FormEvent,
-  ReactNode,
-} from "react";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import type { ChangeEvent, FormEvent, KeyboardEvent, ReactNode } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FaPen } from "react-icons/fa";
-import { useStyles } from "hooks/use-styles";
 
-type EditableFieldProps = {
+import { useStyles } from "../../hooks/use-styles";
+
+export interface EditableFieldProps {
   multiline?: boolean;
   trimValue: boolean;
   selectTextOnFocus: boolean;
@@ -25,9 +17,9 @@ type EditableFieldProps = {
   rowsMax?: number;
   startAdornment?: ReactNode;
   endAdornment?: ReactNode;
-};
+}
 
-const EditableField: FC<EditableFieldProps> = ({
+export const EditableField: React.FC<EditableFieldProps> = ({
   multiline = false,
   trimValue,
   selectTextOnFocus,
@@ -49,7 +41,7 @@ const EditableField: FC<EditableFieldProps> = ({
   const formRef = useRef<HTMLFormElement | null>(null);
 
   useEffect(() => {
-    if (inputRef?.current && isFocused && selectTextOnFocus) {
+    if (inputRef.current && isFocused && selectTextOnFocus) {
       inputRef.current.setSelectionRange(0, inputRef.current.value.length);
     }
   }, [isFocused, selectTextOnFocus]);
@@ -59,7 +51,7 @@ const EditableField: FC<EditableFieldProps> = ({
   }, [value, setLocalValue]);
 
   const blurInput = useCallback(() => {
-    inputRef?.current?.blur();
+    inputRef.current?.blur();
   }, [inputRef]);
 
   const handleChange = useCallback(
@@ -75,7 +67,7 @@ const EditableField: FC<EditableFieldProps> = ({
     if (submittedValue !== value) {
       onChange(submittedValue);
     }
-  }, [localValue, onChange]);
+  }, [localValue, onChange, trimValue, value]);
 
   const handleSubmit = useCallback(
     (event?: FormEvent<HTMLFormElement>) => {
@@ -85,7 +77,7 @@ const EditableField: FC<EditableFieldProps> = ({
         submitValueChange();
       }
     },
-    [submitValueChange, blurInput]
+    [submitValueChange, blurInput, submitOnBlur]
   );
 
   const handleFocus = useCallback(() => {
@@ -97,7 +89,7 @@ const EditableField: FC<EditableFieldProps> = ({
       submitValueChange();
     }
     setFocus(false);
-  }, [setFocus, formRef, submitOnBlur, handleSubmit]);
+  }, [setFocus, submitOnBlur, submitValueChange]);
 
   const handleKeyPress = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
@@ -134,5 +126,3 @@ const EditableField: FC<EditableFieldProps> = ({
     </form>
   );
 };
-
-export default EditableField;

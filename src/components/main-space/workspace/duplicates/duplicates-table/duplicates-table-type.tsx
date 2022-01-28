@@ -1,13 +1,17 @@
-import React, { FC } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaCircle } from "react-icons/fa";
-import { colors } from "util/color/color-util";
 
-type DuplicatesTableTypeProps = {
-  fileType: string;
-};
+import { colors } from "../../../../../util/color/color-util";
+import type { FileType } from "../../../../../util/file-types/file-types-util";
 
-const DuplicatesTableType: FC<DuplicatesTableTypeProps> = ({ fileType }) => {
+export interface DuplicatesTableTypeProps {
+  fileType: FileType;
+}
+
+export const DuplicatesTableType: React.FC<DuplicatesTableTypeProps> = ({
+  fileType,
+}) => {
   const { t } = useTranslation();
   return (
     <div>
@@ -22,5 +26,3 @@ const DuplicatesTableType: FC<DuplicatesTableTypeProps> = ({ fileType }) => {
     </div>
   );
 };
-
-export default DuplicatesTableType;

@@ -1,12 +1,14 @@
+import type { ComponentType } from "react";
 import React from "react";
-import { ComponentType, FC } from "react";
 
-export function branch<Props>(
-  condition: (props: Props) => boolean,
-  TrueComponent: ComponentType<Props>,
-  FalseComponent: ComponentType<Props>
-): FC<Props> {
-  const Component = (props) =>
+export function branch<TProps>(
+  condition: (props: TProps) => boolean,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  TrueComponent: ComponentType<TProps>,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  FalseComponent: ComponentType<TProps>
+): React.FC<TProps> {
+  const Component: React.FC<TProps> = (props) =>
     condition(props) ? (
       <TrueComponent {...props} />
     ) : (

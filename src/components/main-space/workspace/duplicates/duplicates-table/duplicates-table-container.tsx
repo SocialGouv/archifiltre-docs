@@ -1,24 +1,24 @@
-import React, { FC, useMemo } from "react";
+import _ from "lodash";
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { getFilesAndFoldersFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
+
+import { getFilesAndFoldersFromStore } from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
+import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { getHashesFromStore } from "../../../../../reducers/hashes/hashes-selectors";
 import {
   countDuplicateFileSizes,
   countDuplicateFileTypes,
   getFilesDuplicatesMap,
-} from "util/duplicates/duplicates-util";
-import { getFilesAndFoldersMetadataFromStore } from "reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { percent } from "util/numbers/numbers-util";
-import DuplicatesTable from "./duplicates-table";
-import _ from "lodash";
-import { getHashesFromStore } from "reducers/hashes/hashes-selectors";
+} from "../../../../../util/duplicates/duplicates-util";
+import { percent } from "../../../../../util/numbers/numbers-util";
+import type { DuplicatesTableProps } from "./duplicates-table";
+import { DuplicatesTable } from "./duplicates-table";
 
-const removeZeroValues = <Key extends string | number, Value>(
-  obj: {
-    [key in Key]: Value;
-  }
-): _.Dictionary<Value> => _.pickBy<Value>(obj);
+const removeZeroValues = <TKey extends number | string, TValue>(obj: {
+  [key in TKey]: TValue;
+}): _.Dictionary<TValue> => _.pickBy<TValue>(obj);
 
-const DuplicatesTableContainer: FC = () => {
+export const DuplicatesTableContainer: React.FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
   const filesAndFoldersMetadataMap = useSelector(
     getFilesAndFoldersMetadataFromStore
@@ -31,7 +31,10 @@ const DuplicatesTableContainer: FC = () => {
   );
 
   const fileTypesCount = useMemo(
-    () => removeZeroValues(countDuplicateFileTypes(duplicatesMap)),
+    () =>
+      removeZeroValues(
+        countDuplicateFileTypes(duplicatesMap)
+      ) as DuplicatesTableProps["fileTypesCount"],
     [duplicatesMap]
   );
 
@@ -53,7 +56,7 @@ const DuplicatesTableContainer: FC = () => {
           )
         )
       ),
-    [fileSizesCount]
+    [fileSizesCount, filesAndFoldersMetadataMap]
   );
 
   return (
@@ -64,5 +67,3 @@ const DuplicatesTableContainer: FC = () => {
     />
   );
 };
-
-export default DuplicatesTableContainer;

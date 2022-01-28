@@ -1,19 +1,17 @@
-import React, { FC } from "react";
+import React from "react";
 import { FaCircle } from "react-icons/fa";
 
-type ColorCircleProps = {
+export interface ColorCircleProps {
   color: string;
-};
+}
 
-const ColorCircle: FC<ColorCircleProps> = ({ color }) => (
+export const ColorCircle: React.FC<ColorCircleProps> = ({ color }) => (
   <FaCircle
     style={{
       color,
-      verticalAlign: "middle",
       height: "10px",
       paddingLeft: "8px",
+      verticalAlign: "middle",
     }}
   />
 );
-
-export default ColorCircle;

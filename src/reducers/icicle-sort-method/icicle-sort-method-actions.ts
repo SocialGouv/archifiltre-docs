@@ -1,12 +1,14 @@
-import {
-  IcicleSortMethodAction,
-  SET_ICICLE_SORT_METHOD,
-  IcicleSortMethod,
+import type {
   ElementWeightMethod,
-  SET_ELEMENT_WEIGHT_METHOD,
   IcicleColorMode,
+  IcicleSortMethod,
+  IcicleSortMethodAction,
+} from "./icicle-sort-method-types";
+import {
+  SET_ELEMENT_WEIGHT_METHOD,
   SET_ICICLE_COLOR_MODE,
-} from "reducers/icicle-sort-method/icicle-sort-method-types";
+  SET_ICICLE_SORT_METHOD,
+} from "./icicle-sort-method-types";
 
 /**
  * Sets the sorting method of the icicles

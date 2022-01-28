@@ -1,9 +1,9 @@
+import type { WorkspaceMetadataAction } from "./workspace-metadata-types";
 import {
   SET_HOVERED_ELEMENT_ID,
   SET_LOCKED_ELEMENT_ID,
   SET_ORIGINAL_PATH,
   SET_SESSION_NAME,
-  WorkspaceMetadataAction,
 } from "./workspace-metadata-types";
 
 export const setSessionName = (

@@ -1,18 +1,19 @@
-import React, { FC } from "react";
-import dateFormat from "dateformat";
-import { useTranslation } from "react-i18next";
 import Box from "@material-ui/core/Box";
-import HelpTooltip from "components/common/help-tooltip";
-import BoundaryDate from "./boundary-date";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import dateFormat from "dateformat";
+import React from "react";
+import { useTranslation } from "react-i18next";
 
-export type WorkspaceBoundaryDatesProps = {
+import { HelpTooltip } from "../../../../common/help-tooltip";
+import { BoundaryDate } from "./boundary-date";
+
+export interface WorkspaceBoundaryDatesProps {
   oldestFileTimestamp: number;
   newestFileTimestamp: number;
-};
+}
 
-const WorkspaceBoundaryDates: FC<WorkspaceBoundaryDatesProps> = ({
+export const WorkspaceBoundaryDates: React.FC<WorkspaceBoundaryDatesProps> = ({
   oldestFileTimestamp,
   newestFileTimestamp,
 }) => {
@@ -44,5 +45,3 @@ const WorkspaceBoundaryDates: FC<WorkspaceBoundaryDatesProps> = ({
     </Box>
   );
 };
-
-export default WorkspaceBoundaryDates;

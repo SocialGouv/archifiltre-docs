@@ -1,47 +1,55 @@
-import {
+import type { Message } from "protobufjs";
+
+import type { WithHashes } from "../../files-and-folders-loader/files-and-folders-loader-types";
+import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type {
   WithFilesAndFolders,
   WithFilesAndFoldersMetadata,
-} from "util/virtual-file-system-util/virtual-file-system-util";
-import { WithHashes } from "files-and-folders-loader/files-and-folders-loader-types";
-import { Message } from "protobufjs";
+} from "../virtual-file-system-util/virtual-file-system-util";
 
 export const extractKeysFromFilesAndFolders = ({
   filesAndFolders,
 }: WithFilesAndFolders): string[] => Object.keys(filesAndFolders);
 
-type Extractor<Input, Output> = (input: Input, key: string) => Output;
+type Extractor<TInput, TOutput> = (input: TInput, key: string) => TOutput;
 
-export function makeDataExtractor<Input, Output>(
-  extractor: Extractor<Input, Output>
-): Extractor<Input, Output>;
-export function makeDataExtractor<In, Out1, Out2>(
-  extractor: Extractor<In, Out1>,
-  extractor2: Extractor<In, Out2>
-): Extractor<In, Out1 & Out2>;
-export function makeDataExtractor<In, Out1, Out2, Out3>(
-  extractor: Extractor<In, Out1>,
-  extractor2: Extractor<In, Out2>,
-  extractor3: Extractor<In, Out3>
-): Extractor<In, Out1 & Out2 & Out3>;
-export function makeDataExtractor<In, Out1, Out2, Out3, Out4>(
-  extractor: Extractor<In, Out1>,
-  extractor2: Extractor<In, Out2>,
-  extractor3: Extractor<In, Out3>,
-  extractor4: Extractor<In, Out4>
-): Extractor<In, Out1 & Out2 & Out3 & Out4>;
-export function makeDataExtractor(...extractors) {
+export function makeDataExtractor<TInput, TOutput>(
+  extractor: Extractor<TInput, TOutput>
+): Extractor<TInput, TOutput>;
+export function makeDataExtractor<TIn, TOut1, TOut2>(
+  extractor: Extractor<TIn, TOut1>,
+  extractor2: Extractor<TIn, TOut2>
+): Extractor<TIn, TOut1 & TOut2>;
+export function makeDataExtractor<TIn, TOut1, TOut2, TOut3>(
+  extractor: Extractor<TIn, TOut1>,
+  extractor2: Extractor<TIn, TOut2>,
+  extractor3: Extractor<TIn, TOut3>
+): Extractor<TIn, TOut1 & TOut2 & TOut3>;
+export function makeDataExtractor<TIn, TOut1, TOut2, TOut3, TOut4>(
+  extractor: Extractor<TIn, TOut1>,
+  extractor2: Extractor<TIn, TOut2>,
+  extractor3: Extractor<TIn, TOut3>,
+  extractor4: Extractor<TIn, TOut4>
+): Extractor<TIn, TOut1 & TOut2 & TOut3 & TOut4>;
+export function makeDataExtractor<TIn>(
+  ...extractors: Extractor<TIn, unknown>[]
+): Extractor<TIn, unknown> {
   return (data, key) =>
-    Object.assign({}, ...extractors.map((extractor) => extractor(data, key)));
+    Object.assign(
+      {},
+      ...extractors.map((extractor) => extractor(data, key))
+    ) as Extractor<TIn, unknown>;
 }
 
-export const extractKey = <T extends any>(input: T, key: string) => ({
+export const extractKey = <T>(_input: T, key: string): { key: string } => ({
   key,
 });
 
 export const extractFilesAndFolders = <T extends WithFilesAndFolders>(
   input: T,
   key: string
-) => ({
+): { filesAndFolders: FilesAndFolders } => ({
   filesAndFolders: input.filesAndFolders[key],
 });
 
@@ -50,14 +58,18 @@ export const extractFilesAndFoldersMetadata = <
 >(
   input: T,
   key: string
-) => ({
+): {
+  filesAndFoldersMetadata: FilesAndFoldersMetadata;
+} => ({
   filesAndFoldersMetadata: input.filesAndFoldersMetadata[key],
 });
 
 export const extractHashes = <T extends Partial<WithHashes>>(
   input: T,
   key: string
-) => ({
+): {
+  hash: string | null;
+} => ({
   hash: input.hashes ? input.hashes[key] : null,
 });
 

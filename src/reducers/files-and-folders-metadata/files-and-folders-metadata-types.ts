@@ -16,9 +16,10 @@ export interface FilesAndFoldersMetadata {
   sortAlphaNumericallyIndex: number[];
 }
 
-export interface FilesAndFoldersMetadataMap {
-  [filesAndFoldersId: string]: FilesAndFoldersMetadata;
-}
+export type FilesAndFoldersMetadataMap = Record<
+  string,
+  FilesAndFoldersMetadata
+>;
 
 export interface FilesAndFoldersMetadataState {
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;

@@ -1,7 +1,9 @@
-import {
+import type {
   FileSystemLoadingStep,
   LoadingStateAction,
   LoadingStep,
+} from "./loading-state-types";
+import {
   RESET_LOADING_STATE,
   SET_DATA_MODEL_ELEMENTS_COUNT,
   SET_DERIVED_ELEMENTS_COUNT,

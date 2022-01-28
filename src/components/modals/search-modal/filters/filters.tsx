@@ -1,20 +1,21 @@
 import { Box } from "@material-ui/core";
-import React, { FC, useEffect, useState } from "react";
-import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
-import { TagMap } from "reducers/tags/tags-types";
-import { FilterMethod } from "typings/filter-types";
-import SizeFilter from "./size-filter";
-import TagFilter from "./tag-filter";
-import TypeFilter from "./type-filter";
+import React, { useEffect, useState } from "react";
 
-type FiltersProps = {
+import type { FilesAndFolders } from "../../../../reducers/files-and-folders/files-and-folders-types";
+import type { TagMap } from "../../../../reducers/tags/tags-types";
+import type { FilterMethod } from "../../../../typings/filter-types";
+import { SizeFilter } from "./size-filter";
+import { TagFilter } from "./tag-filter";
+import { TypeFilter } from "./type-filter";
+
+export interface FiltersProps {
   filesAndFolders: FilesAndFolders[];
   tags: TagMap;
   setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
   toDelete: string[];
-};
+}
 
-const Filters: FC<FiltersProps> = ({
+export const Filters: React.FC<FiltersProps> = ({
   filesAndFolders,
   tags,
   toDelete,
@@ -51,5 +52,3 @@ const Filters: FC<FiltersProps> = ({
     </Box>
   );
 };
-
-export default Filters;

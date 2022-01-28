@@ -17,60 +17,62 @@ export const loadingStateActionTypes = [
   RESET_LOADING_STATE,
 ];
 
+/* eslint-disable @typescript-eslint/naming-convention */
 export enum LoadingStep {
-  WAITING,
-  FINISHED,
-  ERROR,
+  WAITING = 0,
+  FINISHED = 1,
+  ERROR = 2,
 }
 
 export enum FileSystemLoadingStep {
-  INDEXING,
-  FILES_AND_FOLDERS,
-  METADATA,
-  COMPLETE,
+  INDEXING = 0,
+  FILES_AND_FOLDERS = 1,
+  METADATA = 2,
+  COMPLETE = 3,
 }
+/* eslint-enable @typescript-eslint/naming-convention */
 
-export type LoadingState = {
+export interface LoadingState {
   step: LoadingStep;
   fileSystemLoadingStep: FileSystemLoadingStep;
   indexedFilesCount: number;
   constructedDataModelElementsCount: number;
   derivedElementsCount: number;
-};
+}
 
-type SetLoadingStep = {
+interface SetLoadingStep {
   type: typeof SET_LOADING_STEP;
   step: LoadingStep;
-};
+}
 
-type SetFileSystemLoadingStep = {
+interface SetFileSystemLoadingStep {
   type: typeof SET_FILE_SYSTEM_LOADING_STEP;
   step: FileSystemLoadingStep;
-};
+}
 
-type SetIndexedFilesCount = {
+interface SetIndexedFilesCount {
   type: typeof SET_INDEXED_FILES_COUNT;
   count: number;
-};
+}
 
-type SetConstructedDataModelElementsCount = {
+interface SetConstructedDataModelElementsCount {
   type: typeof SET_DATA_MODEL_ELEMENTS_COUNT;
   count: number;
-};
+}
 
-type SetDerivedElementsCount = {
+interface SetDerivedElementsCount {
   type: typeof SET_DERIVED_ELEMENTS_COUNT;
   count: number;
-};
+}
 
-type ResetLoadingState = {
+interface ResetLoadingState {
   type: typeof RESET_LOADING_STATE;
-};
+}
 
 export type LoadingStateAction =
-  | SetLoadingStep
-  | SetFileSystemLoadingStep
-  | SetIndexedFilesCount
+  | ResetLoadingState
   | SetConstructedDataModelElementsCount
   | SetDerivedElementsCount
-  | ResetLoadingState;
+  | SetFileSystemLoadingStep
+  | SetIndexedFilesCount
+  | SetLoadingStep;

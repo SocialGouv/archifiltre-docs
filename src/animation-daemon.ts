@@ -1,5 +1,6 @@
-import { generateRandomString } from "util/random-gen-util";
-import { empty } from "./util/function/function-util";
+import noop from "lodash/noop";
+
+import { generateRandomString } from "./util/random-gen-util";
 
 type Visible = (animationId: string) => boolean;
 type Measure = (animationId: string) => void;
@@ -11,9 +12,7 @@ interface Animation {
   mutate: Mutate;
 }
 
-interface AnimationQueue {
-  [id: string]: Animation;
-}
+type AnimationQueue = Record<string, Animation>;
 
 const genId = () => generateRandomString(40);
 
@@ -49,31 +48,29 @@ const animationLoop = () => {
 
 animationLoop();
 
-export const animate = (visible: Visible, measure: Measure, mutate: Mutate) => {
+export const animate = (
+  visible: Visible,
+  measure: Measure,
+  mutate: Mutate
+): string => {
   const animationId = genId();
   queue[animationId] = {
-    visible,
     measure,
     mutate,
+    visible,
   };
   return animationId;
 };
 
-export const clear = (animationId) => {
+export const clear = (animationId: string): void => {
+  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   delete queue[animationId];
 };
 
 /**
  * Animate a SVG dom element in horizontalPosition, horizontalGrowth and opacity
- * @param domElement
- * @param inv
- * @param targetX
- * @param targetDx
- * @param x
- * @param dx
- * @param animationDuration
  */
-export const animateSvgDomElement = (
+export const animateSvgDomElement = async (
   domElement: SVGGElement,
   inv: boolean,
   targetX: number,
@@ -98,12 +95,16 @@ export const animateSvgDomElement = (
     const target = [normalizedHorizontalMove, widthGrowth, 0];
 
     const vector = inv
-      ? target.map((val, i) => (progress) => val + (init[i] - val) * progress)
-      : init.map((val, i) => (progress) => val + (target[i] - val) * progress);
+      ? target.map(
+          (val, i) => (progress: number) => val + (init[i] - val) * progress
+        )
+      : init.map(
+          (val, i) => (progress: number) => val + (target[i] - val) * progress
+        );
 
     const visible = () => true;
-    const measure = empty;
-    const mutate = (animationId) => {
+    const measure = noop;
+    const mutate = (animationId: string) => {
       const progress = getAnimationProgress();
       const translateX = vector[0](progress);
       const scaleX = vector[1](progress);

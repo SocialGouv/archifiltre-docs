@@ -1,29 +1,30 @@
-import React from "react";
-import WindowResize from "./window-resize";
+import React, { Component } from "react";
+
 import { ipcRenderer } from "../../common/ipc";
+import { WindowResize } from "./window-resize";
 
-type WindowResizeErrorHandlerState = {
+export interface WindowResizeErrorHandlerState {
   hasError: boolean;
-};
+}
 
-export default class WindowResizeErrorHandler extends React.Component<
-  {},
+export class WindowResizeErrorHandler extends Component<
+  unknown,
   WindowResizeErrorHandlerState
 > {
-  constructor(props) {
+  constructor(props: unknown) {
     super(props);
     this.state = {
       hasError: false,
     };
   }
 
-  componentDidCatch() {
+  componentDidCatch(): void {
     this.setState({
       hasError: true,
     });
   }
 
-  render() {
+  render(): React.ReactNode {
     const { hasError } = this.state;
 
     if (hasError) {

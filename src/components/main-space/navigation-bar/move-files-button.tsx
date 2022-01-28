@@ -1,13 +1,14 @@
 import Button from "@material-ui/core/Button";
-import { addTracker } from "logging/tracker";
-import { ActionTitle, ActionType } from "logging/tracker-types";
-import React, { FC, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaArrowsAlt } from "react-icons/fa";
 import styled from "styled-components";
+
+import { addTracker } from "../../../logging/tracker";
+import { ActionTitle, ActionType } from "../../../logging/tracker-types";
 import { useFileMoveActiveState } from "../workspace/file-move-provider";
 
-const handleTracking = (isFileMoveActive) => {
+const handleTracking = (isFileMoveActive: boolean) => {
   if (!isFileMoveActive) {
     addTracker({
       title: ActionTitle.MOVE_MODE_ENABLED,
@@ -20,13 +21,13 @@ const BetaText = styled.span`
   font-size: 0.5rem !important;
 `;
 
-const MoveFilesButton: FC = () => {
+export const MoveFilesButton: React.FC = () => {
   const { t } = useTranslation();
-  const { isFileMoveActive, setFileMoveActive } = useFileMoveActiveState();
+  const { isFileMoveActive, setIsFileMoveActive } = useFileMoveActiveState();
   const toggleMoveElements = useCallback(() => {
     handleTracking(isFileMoveActive);
-    setFileMoveActive(!isFileMoveActive);
-  }, [setFileMoveActive, isFileMoveActive]);
+    setIsFileMoveActive(!isFileMoveActive);
+  }, [setIsFileMoveActive, isFileMoveActive]);
 
   return (
     <Button
@@ -42,5 +43,3 @@ const MoveFilesButton: FC = () => {
     </Button>
   );
 };
-
-export default MoveFilesButton;

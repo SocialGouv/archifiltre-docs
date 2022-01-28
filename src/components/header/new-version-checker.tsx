@@ -2,21 +2,22 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { request } from "util/http-util";
-import { useStyles } from "hooks/use-styles";
-import { reportError } from "logging/reporter";
-import version, { versionComparator } from "../../version";
-import ModalHeader from "../modals/modal-header";
-import { openLink } from "util/electron/electron-util";
+
+import { useStyles } from "../../hooks/use-styles";
+import { reportError } from "../../logging/reporter";
+import { openLink } from "../../util/electron/electron-util";
+import { request } from "../../util/http-util";
+import { version, versionComparator } from "../../version";
+import { ModalHeader } from "../modals/modal-header";
 
 /**
  * Maps a version number to this format: MAJOR.MINOR.PATCH
  * @param lastVersion number to map
  * @returns {string|*}
  */
-export const mapToNewVersionNumbers = (lastVersion) => {
+export const mapToNewVersionNumbers = (lastVersion: string): string => {
   if (lastVersion.split(".").length === 1) {
     return `1.${lastVersion}.0`;
   }
@@ -26,20 +27,20 @@ export const mapToNewVersionNumbers = (lastVersion) => {
   return lastVersion;
 };
 
-export const NewVersionChecker: FC = () => {
+export const NewVersionChecker: React.FC = () => {
   const [isDisplayed, setIsDisplayed] = useState(false);
-  const [lastVersion, setLastVersion] = useState(-1);
+  const [lastVersion, setLastVersion] = useState("");
   const { t } = useTranslation();
   const classes = useStyles();
 
   useEffect(() => {
-    request({
+    request<string>({
       method: "GET",
       url: `${ARCHIFILTRE_SITE_URL}/api-version.json`,
     })
       .then((result) => {
         const previousVersion = mapToNewVersionNumbers(
-          JSON.parse(result).lastVersion
+          JSON.parse(result).lastVersion as string
         );
         const currentVersion = version;
         if (versionComparator(currentVersion, previousVersion) === -1) {
@@ -52,9 +53,13 @@ export const NewVersionChecker: FC = () => {
       });
   }, []);
 
-  const download = useCallback(() => openLink(ARCHIFILTRE_SITE_URL), []);
+  const download = useCallback(() => {
+    openLink(ARCHIFILTRE_SITE_URL);
+  }, []);
 
-  const onClose = useCallback(() => setIsDisplayed(false), [setIsDisplayed]);
+  const onClose = useCallback(() => {
+    setIsDisplayed(false);
+  }, [setIsDisplayed]);
 
   if (!isDisplayed) return null;
   return (

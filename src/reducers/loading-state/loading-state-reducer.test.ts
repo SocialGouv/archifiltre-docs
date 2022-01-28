@@ -1,4 +1,3 @@
-import { initialState, loadingStateReducer } from "./loading-state-reducer";
 import {
   resetLoadingState,
   setConstructedDataModelElementsCount,
@@ -7,6 +6,7 @@ import {
   setIndexedFilesCount,
   setLoadingStep,
 } from "./loading-state-actions";
+import { initialState, loadingStateReducer } from "./loading-state-reducer";
 import { FileSystemLoadingStep, LoadingStep } from "./loading-state-types";
 
 describe("loading-state-reducer", () => {
@@ -14,8 +14,8 @@ describe("loading-state-reducer", () => {
     it("should reset the state", () => {
       const prevState = {
         ...initialState,
-        step: LoadingStep.FINISHED,
         indexedFilesCount: 20,
+        step: LoadingStep.FINISHED,
       };
 
       expect(loadingStateReducer(prevState, resetLoadingState())).toEqual(

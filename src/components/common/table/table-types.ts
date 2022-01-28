@@ -1,48 +1,51 @@
-import { ComponentType, ReactElement } from "react";
+import type { ComponentType, ReactElement } from "react";
 
+/* eslint-disable @typescript-eslint/naming-convention -- enum */
 export enum WordBreak {
   NORMAL = "normal",
   BREAK_ALL = "break-all",
   BREAK_WORD = "break-word",
   KEEP_ALL = "keep-all",
 }
+/* eslint-enable @typescript-eslint/naming-convention */
 
 export type FunctionAccessor<T> = (
   value: T,
   index?: number
-) => string | number | ReactElement;
+) => ReactElement | number | string;
 
-export type TableAccessor<T> = keyof T | FunctionAccessor<T>;
+export type TableAccessor<T> = FunctionAccessor<T> | keyof T;
 
-export type CellStyle = {
+export interface CellStyle {
   wordBreak?: WordBreak;
-};
+}
 
-export type Column<T> = {
+export interface Column<T> {
   id: string;
   name: string;
   accessor: TableAccessor<T>;
   cellStyle?: CellStyle;
   sortAccessor?: TableAccessor<T>;
-  textValueAccessor?: any;
-};
+  textValueAccessor?: FunctionAccessor<unknown>;
+  sortable?: boolean;
+}
 
 export type HeaderColumn<T> =
   | {
-      id: string;
-      accessor: FunctionAccessor<T>;
+      accessor: keyof T;
     }
   | {
-      accessor: keyof T;
+      id: string;
+      accessor: FunctionAccessor<T>;
     };
 
-export type RowRendererProps<T> = {
+export interface RowRendererProps<T> {
   columns: Column<T>[];
   row: T;
-};
+}
 
 export type RowRenderer<T> = ComponentType<RowRendererProps<T>>;
 
 type RowIdAccessorFunction<T> = (row: T) => string;
 
-export type RowIdAccessor<T> = keyof T | RowIdAccessorFunction<T>;
+export type RowIdAccessor<T> = RowIdAccessorFunction<T> | keyof T;

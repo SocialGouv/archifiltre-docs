@@ -1,6 +1,7 @@
-import { StoreState } from "../store";
-import { Modal } from "./modal-types";
 import { useSelector } from "react-redux";
+
+import type { StoreState } from "../store";
+import type { Modal } from "./modal-types";
 
 /**
  * Returns the currently open modal from the store

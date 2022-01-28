@@ -32,3 +32,6 @@ updates:
       - dependency-name: "@types/node"
         versions:
           - ">=17"
+      - dependency-name: "eslint"
+        versions:
+          - ">=8"

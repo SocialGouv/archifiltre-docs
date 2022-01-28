@@ -1,15 +1,17 @@
-import React, { FC, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { commitAction } from "reducers/enhancers/undoable/undoable-actions";
-import { getCommentsFromStore } from "reducers/files-and-folders/files-and-folders-selectors";
-import { updateCommentThunk } from "reducers/files-and-folders/files-and-folders-thunks";
+
+import { commitAction } from "../../../../reducers/enhancers/undoable/undoable-actions";
+import { getCommentsFromStore } from "../../../../reducers/files-and-folders/files-and-folders-selectors";
+import { updateCommentThunk } from "../../../../reducers/files-and-folders/files-and-folders-thunks";
 import {
   getHoveredElementIdFromStore,
   getLockedElementIdFromStore,
-} from "reducers/workspace-metadata/workspace-metadata-selectors";
-import CommentCell from "./comment-cell";
+} from "../../../../reducers/workspace-metadata/workspace-metadata-selectors";
+import type { CommentCellProps } from "./comment-cell";
+import { CommentCell } from "./comment-cell";
 
-const CommentCellContainer: FC = () => {
+export const CommentCellContainer: React.FC = () => {
   const dispatch = useDispatch();
 
   const hoveredElementId = useSelector(getHoveredElementIdFromStore);
@@ -24,7 +26,7 @@ const CommentCellContainer: FC = () => {
   const currentFileComment =
     useSelector(getCommentsFromStore)[filesAndFoldersId] || "";
 
-  const updateComment = useCallback(
+  const updateComment: CommentCellProps["updateComment"] = useCallback(
     (comments) => {
       dispatch(updateCommentThunk(filesAndFoldersId, comments));
       dispatch(commitAction());
@@ -40,5 +42,3 @@ const CommentCellContainer: FC = () => {
     />
   );
 };
-
-export default CommentCellContainer;

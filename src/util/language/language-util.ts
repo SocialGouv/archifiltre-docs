@@ -1,10 +1,10 @@
 import {
   getInitialUserSettings,
   initUserSettings,
-} from "persistence/persistent-settings";
-import translations from "translations/translations";
+} from "../../persistence/persistent-settings";
+import { translations } from "../../translations/translations";
 
-export const setupLanguage = () => {
+export const setupLanguage = (): void => {
   initUserSettings();
-  translations.changeLanguage(getInitialUserSettings().language);
+  void translations.changeLanguage(getInitialUserSettings().language);
 };

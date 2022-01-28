@@ -1,16 +1,19 @@
+import type { Event as SentryEvent } from "@sentry/browser";
 import * as Sentry from "@sentry/browser";
 import dateFormat from "dateformat";
+import { merge } from "lodash";
 import path from "path";
 import { createLogger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
+import type { SentryTransportOptions } from "winston-transport-sentry-node";
 import WinstonSentry from "winston-transport-sentry-node";
-import WinstonConsoleLogger from "./winston-console-logger";
-import { Event as SentryEvent } from "@sentry/browser";
-import { merge } from "lodash";
-import { getPath } from "util/electron/electron-util";
+
+import { getPath } from "../util/electron/electron-util";
+import { WinstonConsoleLogger } from "./winston-console-logger";
 
 const isProd = () => MODE === "production";
 
+/* eslint-disable @typescript-eslint/naming-convention */
 enum Level {
   ERROR = "error",
   WARN = "warn",
@@ -20,6 +23,7 @@ enum Level {
   DEBUG = "debug",
   SILLY = "silly",
 }
+/* eslint-enable @typescript-eslint/naming-convention */
 
 const logger = createLogger({
   transports: [
@@ -37,18 +41,18 @@ export const initReporter = (isActive: boolean): void => {
     return;
   }
 
-  const sentryOptions = {
-    dsn: SENTRY_DSN,
+  const sentryOptions: SentryTransportOptions["sentry"] = {
     beforeSend(event) {
       return anonymizeEvent(event);
     },
+    dsn: SENTRY_DSN,
   };
 
   Sentry.init(sentryOptions);
   logger.add(
     new WinstonSentry({
-      sentry: sentryOptions,
       level: Level.WARN,
+      sentry: sentryOptions,
     })
   );
 
@@ -70,7 +74,7 @@ export const initReporter = (isActive: boolean): void => {
  * @param message
  * @param level
  */
-const handleLog = (message: any, level: Level) => {
+const handleLog = (message: unknown, level: Level) => {
   const logData = {
     message,
     time: dateFormat("isoDateTime"),
@@ -83,7 +87,7 @@ const handleLog = (message: any, level: Level) => {
  * Reports an error to the log server.
  * @param err
  */
-export const reportError = (err) => {
+export const reportError = (err: unknown): void => {
   handleLog(err, Level.ERROR);
 };
 
@@ -91,7 +95,7 @@ export const reportError = (err) => {
  * Reports a warning
  * @param message
  */
-export const reportWarning = (message) => {
+export const reportWarning = (message: string): void => {
   handleLog(message, Level.WARN);
 };
 
@@ -99,7 +103,7 @@ export const reportWarning = (message) => {
  * Reports an info
  * @param message
  */
-export const reportInfo = (message) => {
+export const reportInfo = (message: string): void => {
   handleLog(message, Level.INFO);
 };
 
@@ -108,9 +112,9 @@ export const reportInfo = (message) => {
  * @param event
  */
 const anonymizeEvent = (event: SentryEvent) => {
-  const values = event?.exception?.values?.map((value) => {
-    const frames = value?.stacktrace?.frames?.map((frame) => {
-      const filename = path.basename(frame?.filename || "");
+  const values = event.exception?.values?.map((value) => {
+    const frames = value.stacktrace?.frames?.map((frame) => {
+      const filename = path.basename(frame.filename ?? "");
       return merge(frame, { filename });
     });
     return merge(value, { stacktrace: { frames } });

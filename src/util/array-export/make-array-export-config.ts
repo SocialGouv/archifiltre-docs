@@ -1,24 +1,25 @@
+import type { TFunction } from "i18next";
 import { compose, constant, property, sortBy, toString } from "lodash/fp";
-import { formatPathForUserSystem } from "util/file-system/file-sys-util";
 import { extname } from "path";
-import {
-  AliasMap,
-  CommentsMap,
-  FilesAndFolders,
-} from "reducers/files-and-folders/files-and-folders-types";
+
 import {
   getDepthFromPath,
   isFile,
-} from "reducers/files-and-folders/files-and-folders-selectors";
-import { HashesMap } from "reducers/hashes/hashes-types";
-import { hasDuplicate } from "util/duplicates/duplicates-util";
+} from "../../reducers/files-and-folders/files-and-folders-selectors";
+import type {
+  AliasMap,
+  CommentsMap,
+  FilesAndFolders,
+} from "../../reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { HashesMap } from "../../reducers/hashes/hashes-types";
+import type { Tag, TagMap } from "../../reducers/tags/tags-types";
+import { hasDuplicate } from "../duplicates/duplicates-util";
+import { formatPathForUserSystem } from "../file-system/file-sys-util";
 import {
   getType,
   isExactFileOrAncestor,
-} from "util/files-and-folders/file-and-folders-utils";
-import { FilesAndFoldersMetadata } from "reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { TFunction } from "i18next";
-import { Tag, TagMap } from "reducers/tags/tags-types";
+} from "../files-and-folders/file-and-folders-utils";
 
 /**
  * Simple date formatting function for performance matters.
@@ -82,11 +83,16 @@ const getNewFirstModifiedDateForFolder = ({
 const getNewPath = ({ virtualPath, id }: { virtualPath: string; id: string }) =>
   virtualPath !== id ? formatPathForUserSystem(virtualPath) : "";
 
-const getAlias = ({ aliases, id }: { aliases: AliasMap; id }) =>
+const getAlias = ({ aliases, id }: { aliases: AliasMap; id: keyof AliasMap }) =>
   aliases[id] || "";
 
-const getComments = ({ comments, id }: { comments: CommentsMap; id: string }) =>
-  comments[id] || "";
+const getComments = ({
+  comments,
+  id,
+}: {
+  comments: CommentsMap;
+  id: keyof CommentsMap;
+}) => comments[id] || "";
 
 const getFileOrFolderText = ({
   file,
@@ -104,22 +110,23 @@ const getFileCount = compose(
 );
 
 const getFileHash = ({ id, hashes }: { id: string; hashes: HashesMap }) =>
-  hashes[id] || "";
+  hashes[id] ?? "";
 
-const getHasDuplicateText = ({ yes, no }: { yes: string; no: string }) => ({
-  hashes,
-  ...currentFf
-}: { hashes: HashesMap } & FilesAndFolders) =>
-  hasDuplicate(hashes, currentFf) ? yes : no;
+const getHasDuplicateText =
+  ({ yes, no }: { yes: string; no: string }) =>
+  ({ hashes, ...currentFf }: FilesAndFolders & { hashes: HashesMap }) =>
+    hasDuplicate(hashes, currentFf) ? yes : no;
 
-const getTypeText = ({
-  folder: folderLabel,
-  unknown: unknownLabel,
-}: {
-  folder: string;
-  unknown: string;
-}) => (filesAndFolders: FilesAndFolders) =>
-  getType(filesAndFolders, { folderLabel, unknownLabel });
+const getTypeText =
+  ({
+    folder: folderLabel,
+    unknown: unknownLabel,
+  }: {
+    folder: string;
+    unknown: string;
+  }) =>
+  (filesAndFolders: FilesAndFolders) =>
+    getType(filesAndFolders, { folderLabel, unknownLabel });
 
 const getToDeleteText = (toDeleteText: string) =>
   compose(
@@ -136,35 +143,34 @@ const getTagText = ({ name, ffIds }: { name: string; ffIds: string[] }) =>
   );
 
 type AccessorParams = FilesAndFolders &
-  FilesAndFoldersMetadata & { hashes: HashesMap } & { aliases: AliasMap } & {
+  FilesAndFoldersMetadata & {
     comments: CommentsMap;
   } & {
     idsToDelete: string[];
-  };
+  } & { aliases: AliasMap } & { hashes: HashesMap };
 
 type Accessor = (params: AccessorParams) => string;
-export type CellConfig = {
+export interface CellConfig {
   id: string;
   title: string;
   accessor: Accessor;
-};
+}
 
-const makeCellConfigCreator = (translate: TFunction) => (
-  id: string,
-  accessor: Accessor
-): CellConfig => ({
-  id,
-  title: id ? translate(`csvHeader.${id}`) : "",
-  accessor,
-});
+const makeCellConfigCreator =
+  (translate: TFunction) =>
+  (id: string, accessor: Accessor): CellConfig => ({
+    accessor,
+    id,
+    title: id ? translate(`csvHeader.${id}`) : "",
+  });
 
 const makeTagsConfig = compose(
   (tags) =>
     tags.map(
       ({ id, name, ffIds }: Tag, index): CellConfig => ({
+        accessor: getTagText({ ffIds, name }),
         id,
         title: `tag${index} : ${name}`,
-        accessor: getTagText({ name, ffIds }),
       })
     ),
   sortBy<Tag>("name")
@@ -209,8 +215,8 @@ export const makeRowConfig = (
     createCellConfig(
       "duplicate",
       getHasDuplicateText({
-        yes: translate("common.yes"),
         no: translate("common.no"),
+        yes: translate("common.yes"),
       })
     ),
     createCellConfig("toDelete", getToDeleteText(translate("common.toDelete"))),

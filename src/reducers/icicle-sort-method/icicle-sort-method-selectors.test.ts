@@ -1,15 +1,15 @@
-import { createEmptyStore } from "reducers/store-test-utils";
+import { createEmptyStore } from "../store-test-utils";
+import { getIcicleSortMethodFromStore } from "./icicle-sort-method-selectors";
 import {
   ElementWeightMethod,
   IcicleColorMode,
   IcicleSortMethod,
-} from "reducers/icicle-sort-method/icicle-sort-method-types";
-import { getIcicleSortMethodFromStore } from "reducers/icicle-sort-method/icicle-sort-method-selectors";
+} from "./icicle-sort-method-types";
 
 const icicleSortMethod = {
-  icicleSortMethod: IcicleSortMethod.SORT_ALPHA_NUMERICALLY,
-  icicleColorMode: IcicleColorMode.BY_TYPE,
   elementWeightMethod: ElementWeightMethod.BY_FILE_COUNT,
+  icicleColorMode: IcicleColorMode.BY_TYPE,
+  icicleSortMethod: IcicleSortMethod.SORT_ALPHA_NUMERICALLY,
 };
 
 const store = {

@@ -1,7 +1,9 @@
 import { invertBy } from "lodash";
 import path from "path";
-import { FilesAndFolders } from "reducers/files-and-folders/files-and-folders-types";
 
+import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
+
+/* eslint-disable @typescript-eslint/naming-convention */
 export enum FileType {
   PUBLICATION = "publication",
   PRESENTATION = "presentation",
@@ -13,69 +15,72 @@ export enum FileType {
   AUDIO = "audio",
   OTHER = "other",
 }
+/* eslint-enable @typescript-eslint/naming-convention */
 
-export const fileTypesByExtensions = {
-  ".pdf": FileType.PUBLICATION, // les PDF
+export const fileTypesByExtensions: Record<string, FileType | undefined> = {
+  ".arc": FileType.OTHER,
+  ".avi": FileType.VIDEO,
+  ".bmp": FileType.IMAGE,
+  ".csv": FileType.SPREADSHEET,
+  ".doc": FileType.DOCUMENT,
+  ".docm": FileType.DOCUMENT,
+  ".docx": FileType.DOCUMENT,
+  ".dot": FileType.DOCUMENT,
+  ".dotm": FileType.DOCUMENT,
+  ".dotx": FileType.DOCUMENT,
+  ".eml": FileType.EMAIL,
   ".epub": FileType.PUBLICATION,
+  ".flac": FileType.AUDIO,
+  ".gif": FileType.IMAGE,
+  ".jp2": FileType.IMAGE,
+  ".jpeg": FileType.IMAGE,
+  ".jpg": FileType.IMAGE,
+  ".mkv": FileType.VIDEO,
   ".mobi": FileType.PUBLICATION,
-  ".ppt": FileType.PRESENTATION, // formats Microsoft PowerPoint
-  ".pptx": FileType.PRESENTATION,
-  ".pptm": FileType.PRESENTATION,
+  ".mov": FileType.VIDEO,
+  ".mp3": FileType.AUDIO,
+  ".mp4": FileType.VIDEO,
+  ".mpeg": FileType.VIDEO,
+  ".msg": FileType.EMAIL,
+  ".odp": FileType.PRESENTATION,
+  ".ods": FileType.SPREADSHEET,
+  ".odt": FileType.DOCUMENT,
+  ".ogg": FileType.AUDIO,
+  ".otp": FileType.PRESENTATION,
+  ".ots": FileType.SPREADSHEET,
+  ".ott": FileType.DOCUMENT,
+  ".pdf": FileType.PUBLICATION,
+  ".png": FileType.IMAGE,
+  ".pot": FileType.PRESENTATION,
   ".pps": FileType.PRESENTATION,
   ".ppsx": FileType.PRESENTATION,
-  ".pot": FileType.PRESENTATION,
-  ".odp": FileType.PRESENTATION, // formats OOo/LO Impress
-  ".otp": FileType.PRESENTATION,
-  ".xls": FileType.SPREADSHEET, // formats Microsoft Excel
-  ".xlsx": FileType.SPREADSHEET,
-  ".xlsm": FileType.SPREADSHEET,
-  ".xlw": FileType.SPREADSHEET, // dont les vieux
-  ".xlt": FileType.SPREADSHEET,
-  ".xltx": FileType.SPREADSHEET,
-  ".xltm": FileType.SPREADSHEET,
-  ".csv": FileType.SPREADSHEET, // format Csv
-  ".ods": FileType.SPREADSHEET, // formats OOo/LO Calc
-  ".ots": FileType.SPREADSHEET,
-  ".eml": FileType.EMAIL, // formats d'email et d'archive email
-  ".msg": FileType.EMAIL,
+  ".ppt": FileType.PRESENTATION,
+  ".pptm": FileType.PRESENTATION,
+  ".pptx": FileType.PRESENTATION,
   ".pst": FileType.EMAIL,
-  ".doc": FileType.DOCUMENT, // formats Microsoft Word
-  ".docx": FileType.DOCUMENT,
-  ".docm": FileType.DOCUMENT,
-  ".dot": FileType.DOCUMENT,
-  ".dotx": FileType.DOCUMENT,
-  ".dotm": FileType.DOCUMENT,
-  ".odt": FileType.DOCUMENT, // formats OOo/LO Writer
-  ".ott": FileType.DOCUMENT,
-  ".txt": FileType.DOCUMENT, // formats texte standard
-  ".rtf": FileType.DOCUMENT,
-  ".jpeg": FileType.IMAGE, // formats d'image
-  ".jpg": FileType.IMAGE,
-  ".jp2": FileType.IMAGE,
-  ".gif": FileType.IMAGE,
-  ".png": FileType.IMAGE,
-  ".bmp": FileType.IMAGE,
-  ".tif": FileType.IMAGE,
-  ".tiff": FileType.IMAGE,
-  ".svg": FileType.IMAGE,
-  ".avi": FileType.VIDEO, // formats vidéo
-  ".wmv": FileType.VIDEO,
-  ".mp4": FileType.VIDEO,
-  ".mov": FileType.VIDEO,
-  ".mkv": FileType.VIDEO,
-  ".mpeg": FileType.VIDEO,
-  ".mp3": FileType.AUDIO, // formats audio
-  ".wav": FileType.AUDIO,
   ".rf64": FileType.AUDIO,
-  ".flac": FileType.AUDIO,
-  ".ogg": FileType.AUDIO,
-  ".wma": FileType.AUDIO,
-  ".zip": FileType.OTHER, // archive : type autre en attendant
+  ".rtf": FileType.DOCUMENT,
+  ".svg": FileType.IMAGE,
   ".tar": FileType.OTHER,
   ".tgz": FileType.OTHER,
-  ".arc": FileType.OTHER,
+  ".tif": FileType.IMAGE,
+  ".tiff": FileType.IMAGE,
+  ".txt": FileType.DOCUMENT,
   ".warc": FileType.OTHER,
+  ".wav": FileType.AUDIO,
+  ".wma": FileType.AUDIO,
+  ".wmv": FileType.VIDEO,
+  ".xls": FileType.SPREADSHEET,
+  ".xlsm": FileType.SPREADSHEET,
+  ".xlsx": FileType.SPREADSHEET,
+  ".xlt": FileType.SPREADSHEET,
+  ".xltm": FileType.SPREADSHEET,
+  ".xltx": FileType.SPREADSHEET,
+  ".xlw": FileType.SPREADSHEET,
+  ".zip": FileType.OTHER,
 };
+
+type ExtensionsByFileTypes = Record<FileType, string[]>;
 
 /**
  * Returns the file type of a file
@@ -90,11 +95,11 @@ export const getFileType = (fileAndFolders: FilesAndFolders): FileType =>
  */
 export const getFileTypeFromFileName = (fileName: string): FileType => {
   const extName = path.extname(fileName.toLowerCase());
-  return fileTypesByExtensions[extName] || FileType.OTHER;
+  return fileTypesByExtensions[extName] ?? FileType.OTHER;
 };
 
 /**
  * Returns the extensions associated to each file type
  */
-export const getExtensionsForEachFileType = () =>
-  invertBy(fileTypesByExtensions);
+export const getExtensionsForEachFileType = (): ExtensionsByFileTypes =>
+  invertBy(fileTypesByExtensions) as ExtensionsByFileTypes;

@@ -1,4 +1,4 @@
-import { liftPromise } from "util/promise/promise-util";
+import { liftPromise } from "./promise-util";
 
 describe("promise-util", () => {
   describe("liftPromise", () => {

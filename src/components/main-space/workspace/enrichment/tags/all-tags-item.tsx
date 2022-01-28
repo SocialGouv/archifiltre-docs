@@ -1,24 +1,26 @@
+import Box from "@material-ui/core/Box";
 import Chip from "@material-ui/core/Chip";
 import IconButton from "@material-ui/core/IconButton";
-import Box from "@material-ui/core/Box";
 import Tooltip from "@material-ui/core/Tooltip";
-import EllipsisText from "./ellipsis-text";
-import React, { FC, useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaTrash, FaPen } from "react-icons/fa";
-import { percent } from "util/numbers/numbers-util";
-import EditableField from "components/common/editable-field";
+import { FaPen, FaTrash } from "react-icons/fa";
 
-type AllTagsItemProps = {
-  tag;
+import { percent } from "../../../../../util/numbers/numbers-util";
+import type { EditableFieldProps } from "../../../../common/editable-field";
+import { EditableField } from "../../../../common/editable-field";
+import { EllipsisText } from "./ellipsis-text";
+
+export interface AllTagsItemProps {
+  tag: string;
   size: number;
   totalVolume: number;
   deleteTag?: () => void;
   tagNumber: number;
   renameTag?: (newName: string) => void;
-};
+}
 
-const AllTagsItem: FC<AllTagsItemProps> = ({
+export const AllTagsItem: React.FC<AllTagsItemProps> = ({
   tag,
   size,
   totalVolume,
@@ -30,14 +32,16 @@ const AllTagsItem: FC<AllTagsItemProps> = ({
   const tooltipText = useMemo(() => t("workspace.tagItemTooltip"), [t]);
   const [isEditing, setIsEditing] = useState(false);
 
-  const startEditing = useCallback(() => setIsEditing(true), [setIsEditing]);
+  const startEditing = useCallback(() => {
+    setIsEditing(true);
+  }, [setIsEditing]);
 
-  const onInputChange = useCallback(
+  const onInputChange: EditableFieldProps["onChange"] = useCallback(
     (newValue) => {
-      renameTag && renameTag(newValue);
+      renameTag?.(newValue);
       setIsEditing(false);
     },
-    [setIsEditing]
+    [setIsEditing, renameTag]
   );
 
   return (
@@ -82,5 +86,3 @@ const AllTagsItem: FC<AllTagsItemProps> = ({
     </Box>
   );
 };
-
-export default AllTagsItem;

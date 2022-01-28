@@ -1,23 +1,24 @@
-import React, { FC, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { jsonExporterThunk } from "exporters/json/json-exporter";
-import { resetStoreThunk } from "reducers/store-thunks";
-import {
-  getSessionNameFromStore,
-  getOriginalPathFromStore,
-} from "reducers/workspace-metadata/workspace-metadata-selectors";
-import Header from "components/header/header";
+
+import { jsonExporterThunk } from "../../exporters/json/json-exporter";
 import {
   redoAction,
   undoAction,
-} from "reducers/enhancers/undoable/undoable-actions";
-import { StoreState } from "reducers/store";
+} from "../../reducers/enhancers/undoable/undoable-actions";
 import {
   canStateRedo,
   canStateUndo,
-} from "reducers/enhancers/undoable/undoable-selectors";
+} from "../../reducers/enhancers/undoable/undoable-selectors";
+import type { StoreState } from "../../reducers/store";
+import { resetStoreThunk } from "../../reducers/store-thunks";
+import {
+  getOriginalPathFromStore,
+  getSessionNameFromStore,
+} from "../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { Header } from "./header";
 
-const HeaderContainer: FC = () => {
+export const HeaderContainer: React.FC = () => {
   const dispatch = useDispatch();
 
   const undo = useCallback(() => {
@@ -47,9 +48,10 @@ const HeaderContainer: FC = () => {
     [dispatch]
   );
 
-  const resetWorkspace = useCallback(() => dispatch(resetStoreThunk()), [
-    dispatch,
-  ]);
+  const resetWorkspace = useCallback(
+    () => dispatch(resetStoreThunk()),
+    [dispatch]
+  );
 
   const sessionName = useSelector(getSessionNameFromStore);
   const originalPath = useSelector(getOriginalPathFromStore);
@@ -67,5 +69,3 @@ const HeaderContainer: FC = () => {
     />
   );
 };
-
-export default HeaderContainer;

@@ -1,21 +1,20 @@
+import type { HashesActionTypes, HashesState } from "./hashes-types";
 import {
-  HashesActionTypes,
-  HashesState,
-  RESET_ERRORED_HASHES,
   ADD_ERRORED_HASHES,
+  RESET_ERRORED_HASHES,
   SET_FILES_AND_FOLDERS_HASHES,
 } from "./hashes-types";
 
 export const initialState: HashesState = {
-  hashes: {},
   erroredHashes: [],
+  hashes: {},
 };
 
 export const hashesReducer = (
   state = initialState,
-  action: HashesActionTypes
+  action?: HashesActionTypes
 ): HashesState => {
-  switch (action.type) {
+  switch (action?.type) {
     case SET_FILES_AND_FOLDERS_HASHES:
       return {
         ...state,
@@ -35,6 +34,8 @@ export const hashesReducer = (
         ...state,
         erroredHashes: action.hashErrors,
       };
+
+    default:
+      return state;
   }
-  return state;
 };

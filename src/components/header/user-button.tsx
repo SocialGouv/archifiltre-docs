@@ -1,21 +1,23 @@
-import Menu from "@material-ui/core/Menu";
 import Button from "@material-ui/core/Button";
+import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import SettingsModal from "components/modals/settings-modal/settings-modal";
-import { useModal } from "hooks/use-modal";
-import { useStyles } from "hooks/use-styles";
-import React, { FC, useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCog, FaSignOutAlt, FaUser } from "react-icons/fa";
 
-type UserButtonProps = {
-  resetWorkspace: any;
-};
+import { useModal } from "../../hooks/use-modal";
+import { useStyles } from "../../hooks/use-styles";
+import type { VoidFunction } from "../../util/function/function-util";
+import { SettingsModal } from "../modals/settings-modal/settings-modal";
 
-const UserButton: FC<UserButtonProps> = ({ resetWorkspace }) => {
+export interface UserButtonProps {
+  resetWorkspace: VoidFunction;
+}
+
+export const UserButton: React.FC<UserButtonProps> = ({ resetWorkspace }) => {
   const { t } = useTranslation();
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const { isModalOpen, openModal, closeModal } = useModal();
 
   const handleClick = useCallback(
@@ -32,12 +34,12 @@ const UserButton: FC<UserButtonProps> = ({ resetWorkspace }) => {
   const onSettingsClick = useCallback(() => {
     handleClose();
     openModal();
-  }, [handleClose]);
+  }, [handleClose, openModal]);
 
   const onCloseClick = useCallback(() => {
     handleClose();
     resetWorkspace();
-  }, [handleClose]);
+  }, [handleClose, resetWorkspace]);
 
   const settingsModalTitle = t("settingsModal.title");
 
@@ -60,12 +62,12 @@ const UserButton: FC<UserButtonProps> = ({ resetWorkspace }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "bottom",
           horizontal: "right",
+          vertical: "bottom",
         }}
         transformOrigin={{
-          vertical: "top",
           horizontal: "right",
+          vertical: "top",
         }}
       >
         <MenuItem onClick={onSettingsClick}>
@@ -81,5 +83,3 @@ const UserButton: FC<UserButtonProps> = ({ resetWorkspace }) => {
     </div>
   );
 };
-
-export default UserButton;

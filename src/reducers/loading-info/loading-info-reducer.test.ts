@@ -8,7 +8,7 @@ import {
   updateLoadingAction,
 } from "./loading-info-actions";
 import { initialState, loadingInfoReducer } from "./loading-info-reducer";
-import { createArchifiltreError } from "./loading-info-selectors";
+import { createArchifiltreDocsError } from "./loading-info-selectors";
 import { createLoadingInfo } from "./loading-info-test-utils";
 import type { LoadingInfoState } from "./loading-info-types";
 
@@ -138,10 +138,10 @@ describe("loading-info-reducer", () => {
 
   describe("REGISTER_ERROR", () => {
     it("should add the error to the list", () => {
-      const baseError = createArchifiltreError({
+      const baseError = createArchifiltreDocsError({
         filePath: "/base",
       });
-      const error = createArchifiltreError({});
+      const error = createArchifiltreDocsError({});
       const previousState = {
         ...baseState,
         errors: [baseError],

@@ -3,7 +3,7 @@ import fp from "lodash/fp";
 import { useSelector } from "react-redux";
 
 import { medianOnSortedArray } from "../../util/array/array-util";
-import type { ArchifiltreError } from "../../util/error/error-util";
+import type { ArchifiltreDocsError } from "../../util/error/error-util";
 import type { Mapper } from "../../util/functionnal-programming-utils";
 import { not, size } from "../../util/functionnal-programming-utils";
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
@@ -396,8 +396,8 @@ export const getAreHashesReady = (store: StoreState): boolean =>
  */
 export const getErroredFilesAndFolders = (
   store: StoreState
-): ArchifiltreError[] =>
+): ArchifiltreDocsError[] =>
   getCurrentState(store.filesAndFolders).erroredFilesAndFolders;
 
-export const useFilesAndFoldersErrors = (): ArchifiltreError[] =>
+export const useFilesAndFoldersErrors = (): ArchifiltreDocsError[] =>
   useSelector(getErroredFilesAndFolders);

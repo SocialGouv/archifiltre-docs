@@ -1,5 +1,5 @@
 {
-  "name": "archifiltre",
+  "name": "archifiltre-docs",
   "version": "3.2.2",
   "private": true,
   "description": "Visualisez et améliorez vos arborescences de fichiers !",
@@ -30,8 +30,8 @@
   },
   "build": {
     "generateUpdatesFilesForAllChannels": true,
-    "appId": "com.fabrique.archifiltre",
-    "artifactName": "archifiltre-${os}-${arch}.${ext}",
+    "appId": "fr.gouv.social.fabrique.archifiltre.docs",
+    "artifactName": "${name}-${os}-${arch}.${ext}",
     "productName": "Docs par Archifiltre",
     "afterSign": "scripts/notarize.js",
     "publish": null,
@@ -53,13 +53,13 @@
     },
     "win": {
       "icon": "./electron/build/icon.png",
-      "artifactName": "archifiltre-${os}-${arch}-portable.${ext}"
+      "artifactName": "${name}-${os}-${arch}-portable.${ext}"
     },
     "msi": {
-      "artifactName": "archifiltre-${os}-${arch}.${ext}"
+      "artifactName": "${name}-${os}-${arch}.${ext}"
     },
     "nsis": {
-      "artifactName": "archifiltre-${os}-setup.${ext}"
+      "artifactName": "${name}-${os}-setup.${ext}"
     },
     "linux": {
       "category": "Office",
@@ -68,12 +68,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SocialGouv/archifiltre"
+    "url": "https://github.com/SocialGouv/archifiltre-docs/"
   },
   "bugs": {
-    "url": "https://github.com/SocialGouv/archifiltre/issues"
+    "url": "https://github.com/SocialGouv/archifiltre-docs/issues"
   },
-  "homepage": "https://github.com/SocialGouv/archifiltre#readme",
+  "homepage": "https://github.com/SocialGouv/archifiltre-docs/#readme",
   "engines": {
     "node": "^16"
   },

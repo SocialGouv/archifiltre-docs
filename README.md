@@ -1,17 +1,17 @@
 <h1 align="center">
-  <p align="center">Archifiltre</p>
+  <p align="center">Docs par Archifiltre</p>
 </h1>
 
 <p align="center">
-  <a href="https://github.com/SocialGouv/archifiltre/actions/"><img src="https://github.com/SocialGouv/archifiltre/workflows/CI/badge.svg" alt="Github Master CI Status"></a>
+  <a href="https://github.com/SocialGouv/archifiltre-docs/actions/"><img src="https://github.com/SocialGouv/archifiltre-docs/workflows/CI/badge.svg" alt="Github Master CI Status"></a>
   <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache--2.0-yellow.svg" alt="License: Apache-2.0"></a>
-  <a href="https://img.shields.io/github/v/release/SocialGouv/archifiltre"><img src="https://img.shields.io/github/v/release/SocialGouv/archifiltre" alt="Npm version"></a>
-  <a href="https://codecov.io/gh/SocialGouv/archifiltre"><img src="https://codecov.io/gh/SocialGouv/archifiltre/branch/master/graph/badge.svg" alt="codecov"></a>
+  <a href="https://img.shields.io/github/v/release/SocialGouv/archifiltre-docs"><img src="https://img.shields.io/github/v/release/SocialGouv/archifiltre-docs" alt="Npm version"></a>
+  <a href="https://codecov.io/gh/SocialGouv/archifiltre-docs"><img src="https://codecov.io/gh/SocialGouv/archifiltre-docs/branch/main/graph/badge.svg" alt="codecov"></a>
 </p>
 
 <br>
 
-Archifiltre allows you to visualize and improve your file trees. Learn more about it [here](https://archifiltre.fabrique.social.gouv.fr/).
+Docs by Archifiltre allows you to visualize and improve your file trees. Learn more about it [here](https://archifiltre.fabrique.social.gouv.fr/).
 
 ![Presentation](docs/presentation.png)
 
@@ -71,15 +71,15 @@ yarn prepare-prod
 #### 🪟 Windows
 
 To sign the app manually and locally, you can use the command `yarn env-linux` or `yarn env-windows` depending on your platform.
-Otherwise, running a GitHub pipeline through a pull request will automatically sign Archifiltre for Windows.
+Otherwise, running a GitHub pipeline through a pull request will automatically sign `Docs` for Windows.
 
 #### 🍎 Mac
 
 To build the app locally without signing, you can run `yarn mac-local`.
-Otherwise, running a GitHub pipeline through a pull request will automatically sign Archifiltre for Mac.
+Otherwise, running a GitHub pipeline through a pull request will automatically sign `Docs` for Mac.
 
 Note: the file `electron/build/entitlments.mac.plist` contains the following flag: `com.apple.security.cs.allow-unsigned-executable-memory`. 
-To notarize the app, this flag needs to be set to `true` to activate the "Hardened Runtime", a security mecanism by Apple.
+To notarize the app, this flag needs to be set to `true` to activate the "Hardened Runtime", a security mechanism by Apple.
 
 #### 🐧 Linux
 
@@ -92,32 +92,31 @@ There is no code signing on Linux, but every release has a SHA512 file correspon
 Then you can package the app for the right platform:
 
 ```bash
-yarn win32
-yarn win64
+yarn win
 yarn mac
 yarn linux
+yarn win-msi
 yarn win32-msi
-yarn win64-msi
 ```
 
-Once built, production binaries are found in the dist folder, each in their corresponding platform's subfolder.
+Once built, production binaries are found in the `electron/dist` folder, each in their corresponding platform's subfolder.
 
 #### 🪄 Automatically
 
 To release all the binaries and sign them:
-- Go [here](https://github.com/SocialGouv/archifiltre/actions/workflows/ci.yml) 
+- Go [here](https://github.com/SocialGouv/archifiltre-docs/actions/workflows/ci.yml) 
 - Click the `Run workflow` menu
-- Select the `master` branch
+- Select the `main` branch
 - Click `Run workflow`
 
-This will trigger a pipeline and make all binaries and hashes available [here](https://github.com/SocialGouv/archifiltre/releases)
+This will trigger a pipeline and make all binaries and hashes available [here](https://github.com/SocialGouv/archifiltre-docs/releases)
 
 ## ✨ Contributing
 
-To contribute, see more [here](https://github.com/SocialGouv/archifiltre/blob/master/CONTRIBUTING.md)
+To contribute, see more [here](https://github.com/SocialGouv/archifiltre-docs/blob/main/CONTRIBUTING.md)
 
-To know more about the project architecture, go [here](https://github.com/SocialGouv/archifiltre/blob/master/docs/README.md)
+To know more about the project architecture, go [here](https://github.com/SocialGouv/archifiltre-docs/blob/main/docs/README.md)
 
 ## 📝 Import script
 
-Archifiltre provides you with an export script that you can run directly on your file server. To know more about it, go [here](https://github.com/SocialGouv/archifiltre/blob/master/scripts/README.md)
+Docs provides you with an export script that you can run directly on your file server. To know more about it, go [here](https://github.com/SocialGouv/archifiltre-docs/blob/main/scripts/README.md)

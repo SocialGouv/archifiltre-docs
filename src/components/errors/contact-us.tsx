@@ -7,7 +7,7 @@ import { CONTACT_LINK } from "../../constants";
 import type { ThemedProps } from "../../theme/default-theme";
 import { openLink } from "../../util/electron/electron-util";
 
-const sendMailToArchifiltre = () => {
+const sendMailToArchifiltreTeam = () => {
   openLink(CONTACT_LINK);
 };
 
@@ -22,7 +22,7 @@ export const ContactUs: React.FC = () => {
   return (
     <ContactLink
       onClick={() => {
-        sendMailToArchifiltre();
+        sendMailToArchifiltreTeam();
       }}
       theme={theme}
     >

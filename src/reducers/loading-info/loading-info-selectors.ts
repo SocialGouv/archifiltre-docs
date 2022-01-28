@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
 
-import type { ArchifiltreErrorCode } from "../../util/error/error-codes";
+import type { ArchifiltreDocsErrorCode } from "../../util/error/error-codes";
 import { UnknownError } from "../../util/error/error-codes";
-import type { ArchifiltreError } from "../../util/error/error-util";
-import { ArchifiltreErrorType } from "../../util/error/error-util";
+import type { ArchifiltreDocsError } from "../../util/error/error-util";
+import { ArchifiltreDocsErrorType } from "../../util/error/error-util";
 import type { StoreState } from "../store";
 import type { LoadingInfo, LoadingInfoState } from "./loading-info-types";
 
@@ -36,28 +36,29 @@ export const getCompleteLoadingInfo = ({
 /**
  * Selector for the errors list
  */
-export const getArchifiltreErrors = (store: StoreState): ArchifiltreError[] =>
-  getLoadingInfoFromStore(store).errors;
+export const getArchifiltreDocsErrors = (
+  store: StoreState
+): ArchifiltreDocsError[] => getLoadingInfoFromStore(store).errors;
 
-export const useArchifiltreErrors = (): ArchifiltreError[] =>
-  useSelector(getArchifiltreErrors);
+export const useArchifiltreDocsErrors = (): ArchifiltreDocsError[] =>
+  useSelector(getArchifiltreDocsErrors);
 
-interface CreateArchifiltreErrorParams {
-  type?: ArchifiltreErrorType;
+interface CreateArchifiltreDocsErrorParams {
+  type?: ArchifiltreDocsErrorType;
   filePath?: string;
   reason?: string;
-  code?: ArchifiltreErrorCode;
+  code?: ArchifiltreDocsErrorCode;
 }
 
 /**
  * Factory for archifiltre error object
  */
-export const createArchifiltreError = ({
-  type = ArchifiltreErrorType.LOADING_FILE_SYSTEM,
+export const createArchifiltreDocsError = ({
+  type = ArchifiltreDocsErrorType.LOADING_FILE_SYSTEM,
   filePath = "/root",
   reason = "NOT_FOUND",
   code = UnknownError.UNKNOWN,
-}: CreateArchifiltreErrorParams): ArchifiltreError => ({
+}: CreateArchifiltreDocsErrorParams): ArchifiltreDocsError => ({
   code,
   filePath,
   reason,

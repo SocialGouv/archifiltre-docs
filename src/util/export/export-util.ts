@@ -2,7 +2,7 @@ import { promises as fs } from "fs";
 import type { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 
-import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
+import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import {
   completeLoadingAction,
   progressLoadingAction,
@@ -43,7 +43,7 @@ export const handleFileExportThunk =
       exportFileName,
       exportSuccessMessage,
     }: ExportOptions
-  ): ArchifiltreThunkAction =>
+  ): ArchifiltreDocsThunkAction =>
   async (dispatch) => {
     const loadingId: string = dispatch(
       startLoading(

@@ -2,7 +2,7 @@ import { noop } from "lodash";
 import React, { useCallback, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import type { ArchifiltreDispatch } from "../../reducers/archifiltre-types";
+import type { ArchifiltreDocsDispatch } from "../../reducers/archifiltre-types";
 import {
   resetLoadingState,
   setLoadingStep,
@@ -17,7 +17,7 @@ import { loadFilesAndFoldersFromPathThunk } from "../../reducers/store-thunks";
 import { StartScreen } from "./start-screen";
 
 export const StartScreenContainer: React.FC = () => {
-  const dispatch = useDispatch<ArchifiltreDispatch>();
+  const dispatch = useDispatch<ArchifiltreDocsDispatch>();
   const [isLoading, setIsLoading] = useState(false);
 
   const terminateRef = useRef(noop);

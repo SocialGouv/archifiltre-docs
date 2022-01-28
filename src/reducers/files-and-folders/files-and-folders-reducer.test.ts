@@ -1,4 +1,4 @@
-import { createArchifiltreError } from "../loading-info/loading-info-selectors";
+import { createArchifiltreDocsError } from "../loading-info/loading-info-selectors";
 import {
   addChild,
   addCommentsOnFilesAndFolders,
@@ -397,12 +397,12 @@ describe("files-and-folders-reducer", () => {
     it("should register errored elements", () => {
       const nextState = filesAndFoldersReducer(
         baseState,
-        registerErroredElements([createArchifiltreError({})])
+        registerErroredElements([createArchifiltreDocsError({})])
       );
 
       expect(nextState).toEqual({
         ...nextState,
-        erroredFilesAndFolders: [createArchifiltreError({})],
+        erroredFilesAndFolders: [createArchifiltreDocsError({})],
       });
     });
   });

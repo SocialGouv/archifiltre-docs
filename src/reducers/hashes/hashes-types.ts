@@ -1,4 +1,4 @@
-import type { ArchifiltreError } from "../../util/error/error-util";
+import type { ArchifiltreDocsError } from "../../util/error/error-util";
 
 export const SET_FILES_AND_FOLDERS_HASHES = "FILES_AND_FOLDERS/SET_HASHES";
 export const RESET_ERRORED_HASHES = "HASHES/RESET_ERRORED_HASHES";
@@ -8,7 +8,7 @@ export type HashesMap = Record<string, string | null>;
 
 export interface HashesState {
   hashes: HashesMap;
-  erroredHashes: ArchifiltreError[];
+  erroredHashes: ArchifiltreDocsError[];
 }
 
 interface SetFilesAndFoldersHashesAction {
@@ -21,7 +21,7 @@ interface ResetErroredHashesAction {
 }
 
 interface AddErroredHashesAction {
-  hashErrors: ArchifiltreError[];
+  hashErrors: ArchifiltreDocsError[];
   type: typeof ADD_ERRORED_HASHES;
 }
 

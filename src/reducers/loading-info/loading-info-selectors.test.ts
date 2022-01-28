@@ -1,8 +1,8 @@
 import type { StoreState } from "../store";
 import { createEmptyStore } from "../store-test-utils";
 import {
-  createArchifiltreError,
-  getArchifiltreErrors,
+  createArchifiltreDocsError,
+  getArchifiltreDocsErrors,
   getCompleteLoadingInfo,
   getLoadingInfoFromStore,
   getRunningLoadingInfo,
@@ -14,7 +14,7 @@ const loadingLoadingInfo = createLoadingInfo({ id: loadingLoadingInfoId });
 const completeLoadingInfoId = "completeLoadingInfo";
 const completeLoadingInfo = createLoadingInfo({ id: completeLoadingInfoId });
 
-const error = createArchifiltreError({
+const error = createArchifiltreDocsError({
   reason: "test-error",
 });
 
@@ -57,9 +57,9 @@ describe("loading-info-selectors", () => {
     });
   });
 
-  describe("getArchifiltreErrors", () => {
+  describe("getArchifiltreDocsErrors", () => {
     it("should return the list of logged errors", () => {
-      expect(getArchifiltreErrors(testStore)).toEqual([error]);
+      expect(getArchifiltreDocsErrors(testStore)).toEqual([error]);
     });
   });
 });

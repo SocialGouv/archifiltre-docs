@@ -1,4 +1,4 @@
-import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
+import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { translations } from "../../translations/translations";
 import { handleFileExportThunk } from "../../util/export/export-util";
@@ -11,7 +11,7 @@ import { generateTreeCsvExport$ } from "./tree-csv-exporter.controller";
  * Each line represents one file or folder.
  */
 export const treeCsvExporterThunk =
-  (name: string): ArchifiltreThunkAction =>
+  (name: string): ArchifiltreDocsThunkAction =>
   async (dispatch, getState) => {
     const csvExportStartedMessage = translations.t(
       "export.csvExportStartedMessage"

@@ -1,6 +1,6 @@
 import type {
-  ArchifiltreError,
-  ArchifiltreErrorType,
+  ArchifiltreDocsError,
+  ArchifiltreDocsErrorType,
 } from "../../util/error/error-util";
 import type { LoadingInfoAction, LoadingInfoTypes } from "./loading-info-types";
 import {
@@ -81,15 +81,15 @@ export const completeLoadingAction = (id: string): LoadingInfoAction => ({
  * @param error
  */
 export const registerErrorAction = (
-  error: ArchifiltreError
+  error: ArchifiltreDocsError
 ): LoadingInfoAction => ({
   error,
   type: REGISTER_ERROR,
 });
 
 export const replaceErrorsAction = (
-  errors: ArchifiltreError[],
-  errorType: ArchifiltreErrorType
+  errors: ArchifiltreDocsError[],
+  errorType: ArchifiltreDocsErrorType
 ): LoadingInfoAction => ({
   errorType,
   errors,

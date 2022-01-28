@@ -2,7 +2,7 @@
 
 ![Architecture](./architecture.png)
 
-Archifiltre uses :
+`Docs` uses :
 - Electron to package Javascript code and make binaries for desktop applications
 - React.js for the UI 
 - Redux for internal data management
@@ -10,7 +10,7 @@ Archifiltre uses :
 We use GitHub services to handle :
 - Continuous integration/Continuous deployment
 - Builds and releases
-- Issues and pull requests for external contrubutions
+- Issues and pull requests for external contributions
 - A wiki for documentation
 - The "Project" feature for a roadmap
 - Security features like CodeQL and dependabot

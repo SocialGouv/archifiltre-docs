@@ -1,4 +1,4 @@
-import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
+import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import { translations } from "../../translations/translations";
 import { getCsvExportParamsFromStore } from "../../util/array-export/array-export-utils";
 import { handleFileExportThunk } from "../../util/export/export-util";
@@ -12,7 +12,7 @@ import { generateCsvExport$ } from "./csv-exporter.controller";
  * Each line represents one file or folder.
  */
 export const csvExporterThunk =
-  (name: string, { withHashes = false } = {}): ArchifiltreThunkAction =>
+  (name: string, { withHashes = false } = {}): ArchifiltreDocsThunkAction =>
   (dispatch, getState) => {
     const csvExportStartedMessage = translations.t(
       "export.csvExportStartedMessage"

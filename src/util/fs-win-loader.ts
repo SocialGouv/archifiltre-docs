@@ -15,7 +15,7 @@ export const fswin: FsWin = (() => {
   try {
     // @ts-expect-error
     return __non_webpack_require__(
-      `./electron/dist/electron/${process.arch}/fswin.node`
+      `./dist/electron/${process.arch}/fswin.node`
     );
   } catch (err: unknown) {
     // @ts-expect-error

@@ -1,0 +1,144 @@
+name: Manual branch test setup
+on:
+  # TODO: if pr comment or contains label "has-test-bin"
+  workflow_dispatch:
+    inputs:
+      bin_type:
+        type: choice
+        options: [win, mac, linux]
+        default: win
+        required: true
+        description: The produced binary type
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  compile:
+    name: Compile
+    runs-on: ubuntu-latest
+    if: "!contains('refs/heads/main,refs/heads/beta,refs/heads/dev', github.ref)"
+    outputs:
+      current-version: ${{ steps.compile.outputs.current-version }}
+      next-version: ${{ steps.compile.outputs.next-version }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+      - name: Yarn install
+        run: |
+          yarn config set network-timeout 300000
+          yarn --frozen-lockfile --perfer-offline
+          yarn electron-builder install-app-deps
+        env:
+          ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
+          ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
+      - name: Set .env to production
+        run: cp .env.prod .env
+      - id: compile
+        name: Compile
+        run: |
+          echo "${{ toJson(github) }}"
+          TMP_CURRENT_VERSION="$(node -e "console.log(require('./package.json').version)")"
+          echo ::set-output name=current-version::$TMP_CURRENT_VERSION
+          TMP_NEXT_VERSION="$TMP_CURRENT_VERSION-$(node -e "console.log('${{ github.ref }}'.replace('refs/heads/', ''))" | iconv -t ascii//TRANSLIT | sed -r "s/[^a-zA-Z0-9]+/-/g" | sed -r "s/^-+\|-+$//g" | tr A-Z a-z).0"
+          yarn global add replace
+          $(yarn global bin)/replace "\"version": \"$TMP_CURRENT_VERSION\"" "\"version": \"$TMP_NEXT_VERSION\"" package.json
+          echo ::set-output name=next-version::$TMP_NEXT_VERSION
+          yarn webpack --mode production
+          yarn webpack --mode production --config webpack.electron-main.js
+      - name: Archive dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: compile-dist
+          path: dist/
+
+  build:
+    needs: compile
+    strategy:
+      matrix:
+        target:
+          - ${{ github.event.inputs.bin_type }}
+        os:
+          - ${{ github.event.inputs.bin_type == 'linux' && 'ubuntu' || github.event.inputs.bin_type == 'mac' && 'macos' || 'windows' }}-latest
+        bin-output:
+          - ${{ (github.event.inputs.bin_type == 'linux' && 'AppImage') || github.event.inputs.bin_type == 'mac' && 'dmg' || 'portable' }}
+
+    name: Build binary for ${{ matrix.target }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    env:
+      ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
+      ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
+      # no signing env because we don't care for test bin
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+      - name: Yarn install
+        run: |
+          yarn config set network-timeout 300000
+          yarn --frozen-lockfile --perfer-offline
+      - name: Replace version in package.json
+        shell: bash
+        run: |
+          yarn global add replace
+          $(yarn global bin)/replace '"version": "${{ needs.compile.outputs.current-version }}"' '"version": "${{ needs.compile.outputs.next-version }}"' package.json
+      - name: Download dist
+        uses: actions/download-artifact@v2
+        with:
+          name: compile-dist
+          path: dist/
+      - name: Build bin
+        run: yarn electron-builder --x64 --${{ matrix.target}} ${{ matrix.bin-output }}
+      - name: Archive bin
+        uses: actions/upload-artifact@v2
+        with:
+          name: bin
+          path: electron/dist/*/archifiltre-*
+
+  release:
+    if: ${{ success() }}
+    needs:
+      - build
+      - compile
+    name: Release branch bin
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.SOCIALGROOVYBOT_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SOCIALGROOVYBOT_GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_push_gpgsign: false
+          git_tag_gpgsign: true
+      - name: Create tag if needed
+        run: |
+          git fetch --tags -p
+          (
+            git tag -s "$TAG_VERSION" -m "Temp tag [skip ci]" &&
+            git push --tags
+          ) || true
+        env:
+          TAG_VERSION: v${{ needs.compile.outputs.next-version }}
+      - name: Downloads bin
+        uses: actions/download-artifact@v2
+
+      - name: Release tip tag for branch
+        uses: pyTooling/Actions/releaser@r0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: bin/*/archifiltre-*.*
+          tag: v${{ needs.compile.outputs.next-version }}
+          rm: true

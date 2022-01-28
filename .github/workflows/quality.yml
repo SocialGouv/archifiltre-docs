@@ -1,0 +1,30 @@
+name: CI
+on:
+  push:
+    branches: [main, dev, beta]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  quality:
+    name: Quality Control on Node (ubuntu-latest)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node
+        uses: ./.github/actions/setup-node
+      - name: Yarn install
+        run: yarn --frozen-lockfile --perfer-offline
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Unit tests
+        run: yarn test --ci --coverage
+
+      - name: Send test coverage to codecov
+        continue-on-error: true
+        uses: codecov/codecov-action@v2
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

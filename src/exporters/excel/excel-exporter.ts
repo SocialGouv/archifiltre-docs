@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import { tap } from "rxjs/operators";
 
-import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
+import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import {
   completeLoadingAction,
   progressLoadingAction,
@@ -23,7 +23,7 @@ import { getExcelExportProgressGoal } from "./excel-exporter.impl";
 import { generateExcelExport$ } from "./excel-exporter-controller";
 
 export const excelExporterThunk =
-  (name: string): ArchifiltreThunkAction =>
+  (name: string): ArchifiltreDocsThunkAction =>
   async (dispatch, getState) => {
     const exportData = getCsvExportParamsFromStore(getState());
 

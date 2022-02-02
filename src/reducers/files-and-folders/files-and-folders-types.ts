@@ -1,6 +1,6 @@
 import type { Action } from "redux";
 
-import type { ArchifiltreError } from "../../util/error/error-util";
+import type { ArchifiltreDocsError } from "../../util/error/error-util";
 
 export const INITIALIZE_FILES_AND_FOLDERS = "FILES_AND_FOLDERS/INITIALIZE";
 export const REMOVE_CHILD = "FILES_AND_FOLDERS/REMOVE_CHILD";
@@ -59,7 +59,7 @@ export interface FilesAndFoldersState {
   aliases: AliasMap;
   comments: CommentsMap;
   elementsToDelete: string[];
-  erroredFilesAndFolders: ArchifiltreError[];
+  erroredFilesAndFolders: ArchifiltreDocsError[];
   virtualPathToId: VirtualPathToIdMap;
   overrideLastModified: LastModifiedMap;
 }
@@ -118,7 +118,7 @@ interface InitVirtualPathToIdMap extends Action {
 
 interface RegisterErroredElements extends Action {
   type: typeof REGISTER_ERRORED_ELEMENTS;
-  elements: ArchifiltreError[];
+  elements: ArchifiltreDocsError[];
 }
 
 interface ResetErroredElements extends Action {

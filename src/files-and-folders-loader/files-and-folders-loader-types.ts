@@ -9,8 +9,8 @@ import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-m
 import type { HashesMap } from "../reducers/hashes/hashes-types";
 import type { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
 import type { TagMap } from "../reducers/tags/tags-types";
-import type { ArchifiltreErrorCode } from "../util/error/error-codes";
-import type { ArchifiltreError } from "../util/error/error-util";
+import type { ArchifiltreDocsErrorCode } from "../util/error/error-codes";
+import type { ArchifiltreDocsError } from "../util/error/error-util";
 import type { SimpleObject } from "../util/object/object-util";
 
 export type VirtualFileSystem = WithAliases &
@@ -99,7 +99,7 @@ interface ResultData {
 }
 
 export interface WorkerError {
-  code: ArchifiltreErrorCode;
+  code: ArchifiltreDocsErrorCode;
   message: string;
   path: string;
 }
@@ -124,7 +124,7 @@ export type WithResultHook<T = SimpleObject> = T & {
 };
 
 export type WithErrorHook<T = SimpleObject> = T & {
-  onError: (error: ArchifiltreError) => void;
+  onError: (error: ArchifiltreDocsError) => void;
 };
 
 export type FileSystemLoadingHooks = WithErrorHook &

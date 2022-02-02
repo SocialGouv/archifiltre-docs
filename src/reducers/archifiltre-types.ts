@@ -4,17 +4,17 @@ import type { ThunkAction, ThunkDispatch } from "redux-thunk";
 import type { SimpleObject } from "../util/object/object-util";
 import type { StoreState } from "./store";
 
-export type ArchifiltreThunk = <TArgs>(
+export type ArchifiltreDocsThunk = <TArgs>(
   ...args: TArgs[]
-) => ArchifiltreThunkAction;
+) => ArchifiltreDocsThunkAction;
 
-export type ArchifiltreDispatch = ThunkDispatch<
+export type ArchifiltreDocsDispatch = ThunkDispatch<
   StoreState,
   SimpleObject,
   AnyAction
 >;
 
-export type ArchifiltreThunkAction<TReturnType = Promise<void> | void> =
+export type ArchifiltreDocsThunkAction<TReturnType = Promise<void> | void> =
   ThunkAction<TReturnType, StoreState, SimpleObject, AnyAction>;
 
 export type DispatchExts = ThunkDispatch<StoreState, SimpleObject, AnyAction>;

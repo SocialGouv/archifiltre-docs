@@ -1,0 +1,29 @@
+name: Update LICENSE date
+on:
+  schedule:
+    - cron: 0 0 1 1 * # every 1rst January on dev
+
+jobs:
+  update-date:
+    name: Update LICENSE date
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.SOCIALGROOVYBOT_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SOCIALGROOVYBOT_GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_push_gpgsign: false
+
+      - name: Found last year date, replace, and push
+        shell: bash
+        run: |
+          sed -i "s/Copyright $(date -d 'last year' +%Y)/Copyright $(date +%Y)/g" LICENSE
+          git add LICENSE
+          git commit -S -m "chore(license): update license (Happy New Year! 🎉)"
+          git push origin

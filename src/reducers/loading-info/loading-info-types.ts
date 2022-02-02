@@ -1,6 +1,6 @@
 import type {
-  ArchifiltreError,
-  ArchifiltreErrorType,
+  ArchifiltreDocsError,
+  ArchifiltreDocsErrorType,
 } from "../../util/error/error-util";
 
 export const START_LOADING = "LOADING_INFO/START_LOADING";
@@ -37,7 +37,7 @@ export interface LoadingInfoState {
   loading: string[];
   complete: string[];
   dismissed: string[];
-  errors: ArchifiltreError[];
+  errors: ArchifiltreDocsError[];
 }
 
 interface StartLoadingAction {
@@ -76,13 +76,13 @@ interface AddExportedPathAction {
 
 interface RegisterErrorAction {
   type: typeof REGISTER_ERROR;
-  error: ArchifiltreError;
+  error: ArchifiltreDocsError;
 }
 
 interface ReplaceErrorsAction {
   type: typeof REPLACE_ERRORS;
-  errors: ArchifiltreError[];
-  errorType: ArchifiltreErrorType;
+  errors: ArchifiltreDocsError[];
+  errorType: ArchifiltreDocsErrorType;
 }
 
 interface ResetLoadingAction {

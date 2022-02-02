@@ -1,4 +1,4 @@
-import type { ArchifiltreError } from "../../util/error/error-util";
+import type { ArchifiltreDocsError } from "../../util/error/error-util";
 import type { HashesActionTypes, HashesMap } from "./hashes-types";
 import {
   ADD_ERRORED_HASHES,
@@ -30,7 +30,7 @@ export const resetErroredHashes = (): HashesActionTypes => ({
  * @param hashPaths
  */
 export const addErroredHashes = (
-  hashErrors: ArchifiltreError[]
+  hashErrors: ArchifiltreDocsError[]
 ): HashesActionTypes => ({
   hashErrors,
   type: ADD_ERRORED_HASHES,

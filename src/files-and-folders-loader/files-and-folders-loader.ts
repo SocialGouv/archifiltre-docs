@@ -20,8 +20,8 @@ import type { HashesMap } from "../reducers/hashes/hashes-types";
 import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
 import { convertJsonToCurrentVersion } from "../util/compatibility/compatibility";
 import {
-  ArchifiltreErrorType,
-  convertFsErrorToArchifiltreError,
+  ArchifiltreDocsErrorType,
+  convertFsErrorToArchifiltreDocsError,
 } from "../util/error/error-util";
 import { identifyFileFormat } from "../util/file-format/file-format-util";
 import { convertToPosixAbsolutePath } from "../util/file-system/file-sys-util";
@@ -105,10 +105,10 @@ const loadFilesAndFoldersFromFileSystemImpl = async (
       ]);
     } catch (error: unknown) {
       onError({
-        code: convertFsErrorToArchifiltreError((error as WorkerError).code),
+        code: convertFsErrorToArchifiltreDocsError((error as WorkerError).code),
         filePath: currentPath,
         reason: (error as WorkerError).message,
-        type: ArchifiltreErrorType.LOADING_FILE_SYSTEM,
+        type: ArchifiltreDocsErrorType.LOADING_FILE_SYSTEM,
       });
     }
   };

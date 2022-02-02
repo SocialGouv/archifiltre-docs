@@ -1,9 +1,12 @@
 import { notifyError } from "../notification/notifications-util";
-import type { ArchifiltreErrorCode } from "./error-codes";
-import { ArchifiltreFileSystemErrorCode, UnknownError } from "./error-codes";
+import type { ArchifiltreDocsErrorCode } from "./error-codes";
+import {
+  ArchifiltreDocsFileSystemErrorCode,
+  UnknownError,
+} from "./error-codes";
 
 /* eslint-disable @typescript-eslint/naming-convention */
-export enum ArchifiltreErrorType {
+export enum ArchifiltreDocsErrorType {
   STORE_THUNK = "storeThunk",
   LOADING_FILE_SYSTEM = "loadingFromFileSystem",
   COMPUTING_HASHES = "computingHashes",
@@ -11,17 +14,17 @@ export enum ArchifiltreErrorType {
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 
-export interface ArchifiltreError {
-  type: ArchifiltreErrorType;
+export interface ArchifiltreDocsError {
+  type: ArchifiltreDocsErrorType;
   filePath: string;
   reason: string;
-  code: ArchifiltreErrorCode;
+  code: ArchifiltreDocsErrorCode;
 }
 
-export const isArchifiltreError = (
+export const isArchifiltreDocsError = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Guard hack
   err: any | unknown
-): err is ArchifiltreError =>
+): err is ArchifiltreDocsError =>
   "type" in err && "filePath" in err && "reason" in err && "code" in err;
 
 interface ErrorMessageMap {
@@ -29,19 +32,22 @@ interface ErrorMessageMap {
   default: string;
 }
 
-type FsErrorToArchifiltreError = Record<string, ArchifiltreFileSystemErrorCode>;
+type FsErrorToArchifiltreDocsError = Record<
+  string,
+  ArchifiltreDocsFileSystemErrorCode
+>;
 
-const fsErrorToArchifiltreError: FsErrorToArchifiltreError = {
-  EACCES: ArchifiltreFileSystemErrorCode.EACCES,
-  EBUSY: ArchifiltreFileSystemErrorCode.EBUSY,
-  ENOENT: ArchifiltreFileSystemErrorCode.ENOENT,
+const fsErrorToArchifiltreDocsError: FsErrorToArchifiltreDocsError = {
+  EACCES: ArchifiltreDocsFileSystemErrorCode.EACCES,
+  EBUSY: ArchifiltreDocsFileSystemErrorCode.EBUSY,
+  ENOENT: ArchifiltreDocsFileSystemErrorCode.ENOENT,
 };
 
-export const convertFsErrorToArchifiltreError = (
+export const convertFsErrorToArchifiltreDocsError = (
   errorCode: string
-): ArchifiltreFileSystemErrorCode | UnknownError =>
+): ArchifiltreDocsFileSystemErrorCode | UnknownError =>
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  fsErrorToArchifiltreError[errorCode] ?? UnknownError.UNKNOWN;
+  fsErrorToArchifiltreDocsError[errorCode] ?? UnknownError.UNKNOWN;
 
 /**
  * Reports an error based on the error code
@@ -59,15 +65,15 @@ export const handleError = (
   notifyError(message, errorMessageTitle);
 };
 
-type ErrorHandler<T> = (error: ArchifiltreError) => Promise<T> | T;
+type ErrorHandler<T> = (error: ArchifiltreDocsError) => Promise<T> | T;
 
 type ErrorHandlerConfig<T> = {
-  [errorType in ArchifiltreErrorCode]?: ErrorHandler<T>;
+  [errorType in ArchifiltreDocsErrorCode]?: ErrorHandler<T>;
 } & {
   default: ErrorHandler<T>;
 };
 
 export const makeErrorHandler =
   <T>(errorHandlerConfig: ErrorHandlerConfig<T>) =>
-  async (error: ArchifiltreError): Promise<T> =>
+  async (error: ArchifiltreDocsError): Promise<T> =>
     (errorHandlerConfig[error.code] ?? errorHandlerConfig.default)(error);

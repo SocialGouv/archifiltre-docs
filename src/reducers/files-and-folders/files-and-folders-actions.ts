@@ -1,4 +1,4 @@
-import type { ArchifiltreError } from "../../util/error/error-util";
+import type { ArchifiltreDocsError } from "../../util/error/error-util";
 import type {
   AliasMap,
   CommentsMap,
@@ -138,7 +138,7 @@ export const initVirtualPathToIdMap = (
 });
 
 export const registerErroredElements = (
-  elements: ArchifiltreError[]
+  elements: ArchifiltreDocsError[]
 ): FilesAndFoldersActionTypes => ({
   elements,
   type: REGISTER_ERRORED_ELEMENTS,

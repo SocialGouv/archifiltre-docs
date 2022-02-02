@@ -1,6 +1,6 @@
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
-import type { ArchifiltreThunkAction } from "../archifiltre-types";
+import type { ArchifiltreDocsThunkAction } from "../archifiltre-types";
 import {
   setElementWeightMethod,
   setIcicleColorMode,
@@ -17,7 +17,7 @@ import type {
  * @param iciclesSortMethod
  */
 export const setIcicleSortMethodThunk =
-  (iciclesSortMethod: IcicleSortMethod): ArchifiltreThunkAction =>
+  (iciclesSortMethod: IcicleSortMethod): ArchifiltreDocsThunkAction =>
   (dispatch) => {
     addTracker({
       title: ActionTitle.TOGGLE_ICICLES_SORT,
@@ -33,7 +33,7 @@ export const setIcicleSortMethodThunk =
  * @param elementWeightMethod
  */
 export const setElementWeightMethodThunk =
-  (elementWeightMethod: ElementWeightMethod): ArchifiltreThunkAction =>
+  (elementWeightMethod: ElementWeightMethod): ArchifiltreDocsThunkAction =>
   (dispatch) => {
     addTracker({
       title: ActionTitle.TOGGLE_ICICLES_WEIGHT,
@@ -49,7 +49,7 @@ export const setElementWeightMethodThunk =
  * @param icicleColorMode
  */
 export const setIcicleColorModeThunk =
-  (icicleColorMode: IcicleColorMode): ArchifiltreThunkAction =>
+  (icicleColorMode: IcicleColorMode): ArchifiltreDocsThunkAction =>
   (dispatch) => {
     addTracker({
       title: ActionTitle.TOGGLE_ICICLES_COLOR,

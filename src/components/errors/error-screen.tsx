@@ -20,7 +20,7 @@ export const ErrorScreen: React.FC = () => {
       flexDirection="column"
     >
       <Box p={2}>
-        <img alt="logo-archifiltre" src={logo} width={222} height={33} />
+        <img alt="logo-archifiltre" src={logo} height={33} />
       </Box>
       <Box p={2}>
         <Typography variant="h4">{t("common.error")}</Typography>

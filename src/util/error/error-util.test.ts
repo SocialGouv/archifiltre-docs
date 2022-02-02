@@ -1,8 +1,8 @@
 import { noop } from "lodash";
 
-import { createArchifiltreError } from "../../reducers/loading-info/loading-info-selectors";
+import { createArchifiltreDocsError } from "../../reducers/loading-info/loading-info-selectors";
 import { notifyError } from "../notification/notifications-util";
-import { ArchifiltreFileSystemErrorCode } from "./error-codes";
+import { ArchifiltreDocsFileSystemErrorCode } from "./error-codes";
 import { handleError, makeErrorHandler } from "./error-util";
 
 jest.mock("util/notification/notifications-util", () => ({
@@ -48,12 +48,12 @@ describe("error-util", () => {
       it("should call the right error handler", async () => {
         const errorCallback = jest.fn();
         const errorConfig = {
-          [ArchifiltreFileSystemErrorCode.EACCES]: errorCallback,
+          [ArchifiltreDocsFileSystemErrorCode.EACCES]: errorCallback,
           default: noop,
         };
 
-        const error = createArchifiltreError({
-          code: ArchifiltreFileSystemErrorCode.EACCES,
+        const error = createArchifiltreDocsError({
+          code: ArchifiltreDocsFileSystemErrorCode.EACCES,
         });
 
         await makeErrorHandler(errorConfig)(error);
@@ -69,8 +69,8 @@ describe("error-util", () => {
           default: errorCallback,
         };
 
-        const error = createArchifiltreError({
-          code: ArchifiltreFileSystemErrorCode.EACCES,
+        const error = createArchifiltreDocsError({
+          code: ArchifiltreDocsFileSystemErrorCode.EACCES,
         });
 
         await makeErrorHandler(errorConfig)(error);

@@ -1,6 +1,6 @@
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
-import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
+import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import {
   getAliasesFromStore,
   getCommentsFromStore,
@@ -34,7 +34,7 @@ export const jsonExporterThunk =
     sessionName,
     originalPath,
     version,
-  }: JsonExporterThunkArgs): ArchifiltreThunkAction =>
+  }: JsonExporterThunkArgs): ArchifiltreDocsThunkAction =>
   (dispatch, getState) => {
     addTracker({
       title: ActionTitle.JSON_EXPORT,

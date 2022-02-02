@@ -25,9 +25,9 @@ import { SecretDevtools } from "./secret-devtools";
 import { setupLanguage } from "./util/language/language-util";
 import { version } from "./version";
 
-reportInfo("Archifiltre started");
+reportInfo("Docs started");
 
-document.title = `Archifiltre v${version}`;
+document.title = `Docs v${version}`;
 
 SecretDevtools.enable();
 initUserSettings();

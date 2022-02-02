@@ -25,7 +25,7 @@ if (app.isPackaged) {
   crashReporter.start({
     companyName: "SocialGouv",
     ignoreSystemCrashHandler: true,
-    productName: "Archifiltre",
+    productName: "Docs par Archifiltre",
     submitURL: SENTRY_MINIDUMP_URL,
   });
 }

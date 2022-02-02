@@ -1,16 +1,16 @@
 import { accessDenied, fileNotFound, unhandledFileError } from "./hash-errors";
 import type { HashComputingResult } from "./hash-util";
 import {
-  hashErrorToArchifiltreError,
+  hashErrorToArchifiltreDocsError,
   hashResult,
   hashResultsToMap,
 } from "./hash-util";
 
 describe("hash-util", () => {
-  describe("hashErrorToArchifiltreError", () => {
+  describe("hashErrorToArchifiltreDocsError", () => {
     it("should handle fileNotFound error", () => {
       const filePath = "path1";
-      expect(hashErrorToArchifiltreError(fileNotFound(filePath))).toEqual({
+      expect(hashErrorToArchifiltreDocsError(fileNotFound(filePath))).toEqual({
         code: "ENOENT",
         filePath: "path1",
         reason: "FILE_NOT_FOUND",
@@ -20,7 +20,7 @@ describe("hash-util", () => {
 
     it("should handle accessDenied error", () => {
       const filePath = "path1";
-      expect(hashErrorToArchifiltreError(accessDenied(filePath))).toEqual({
+      expect(hashErrorToArchifiltreDocsError(accessDenied(filePath))).toEqual({
         code: "EACCES",
         filePath: "path1",
         reason: "ACCESS_DENIED",
@@ -31,7 +31,7 @@ describe("hash-util", () => {
     it("should handle unknown error", () => {
       const filePath = "path1";
       expect(
-        hashErrorToArchifiltreError(unhandledFileError(filePath, "message"))
+        hashErrorToArchifiltreDocsError(unhandledFileError(filePath, "message"))
       ).toEqual({
         code: "UNKNOWN",
         filePath: "path1",

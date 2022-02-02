@@ -528,7 +528,13 @@ const makeMetsContent = (
       "preconditioning",
       dateFormat(new Date(), DATE_FORMAT),
       undefined,
-      [makePremisAgent("application", `Archifiltre v${version}`, "performer")],
+      [
+        makePremisAgent(
+          "application",
+          `Docs par Archifiltre v${version}`,
+          "performer"
+        ),
+      ],
       undefined
     )
   );
@@ -542,7 +548,11 @@ const makeMetsContent = (
       dateFormat(new Date(), DATE_FORMAT),
       "Création d'un paquet compatible avec SPAR",
       [
-        makePremisAgent("application", `Archifiltre v${version}`, "performer"),
+        makePremisAgent(
+          "application",
+          `Docs par Archifiltre v${version}`,
+          "performer"
+        ),
         makePremisAgent("producerIdentifier", "ADNUM", "issuer"),
         makePremisAgent(
           "channelIdentifier",

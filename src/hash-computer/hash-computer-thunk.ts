@@ -4,7 +4,7 @@ import { pipe } from "rxjs";
 import { map, tap } from "rxjs/operators";
 
 import { reportError } from "../logging/reporter";
-import type { ArchifiltreThunkAction } from "../reducers/archifiltre-types";
+import type { ArchifiltreDocsThunkAction } from "../reducers/archifiltre-types";
 import {
   getFilesAndFoldersFromStore,
   getFilesMap,
@@ -32,11 +32,11 @@ import { openModalAction } from "../reducers/modal/modal-actions";
 import { Modal } from "../reducers/modal/modal-types";
 import { getWorkspaceMetadataFromStore } from "../reducers/workspace-metadata/workspace-metadata-selectors";
 import { translations } from "../translations/translations";
-import { ArchifiltreErrorType } from "../util/error/error-util";
+import { ArchifiltreDocsErrorType } from "../util/error/error-util";
 import type { HashComputingResult } from "../util/hash/hash-util";
 import {
   computeHashes,
-  hashErrorToArchifiltreError,
+  hashErrorToArchifiltreDocsError,
   hashResultsToMap,
 } from "../util/hash/hash-util";
 import {
@@ -50,7 +50,7 @@ const computeFileHashesIgnoredThunk =
   (
     loadingActionId: string,
     filesCount: number
-  ): ArchifiltreThunkAction<number> =>
+  ): ArchifiltreDocsThunkAction<number> =>
   (dispatch): number => {
     dispatch(progressLoadingAction(loadingActionId, filesCount));
     return 0;
@@ -61,7 +61,7 @@ const computeFileHashesImplThunk =
     originalPath: string,
     fileIds: string[],
     loadingActionId: string
-  ): ArchifiltreThunkAction<Promise<number>> =>
+  ): ArchifiltreDocsThunkAction<Promise<number>> =>
   async (dispatch): Promise<number> => {
     dispatch(resetErroredHashes());
     const basePath = path.dirname(originalPath);
@@ -87,7 +87,7 @@ const computeFileHashesImplThunk =
       .pipe(
         map(({ errors, results, ...rest }) => ({
           ...rest,
-          errors: errors.map(hashErrorToArchifiltreError),
+          errors: errors.map(hashErrorToArchifiltreDocsError),
           results: formatResult(results),
         })),
         tap(({ results, errors }) => {
@@ -99,7 +99,10 @@ const computeFileHashesImplThunk =
           );
           dispatch(setFilesAndFoldersHashes(results));
           dispatch(
-            replaceErrorsAction(errors, ArchifiltreErrorType.COMPUTING_HASHES)
+            replaceErrorsAction(
+              errors,
+              ArchifiltreDocsErrorType.COMPUTING_HASHES
+            )
           );
         })
       )
@@ -134,7 +137,7 @@ const computeFileHashesThunk =
       ignoreFileHashes,
       originalPath,
     }: ComputeFileHashesThunkOptions
-  ): ArchifiltreThunkAction<Promise<number>> =>
+  ): ArchifiltreDocsThunkAction<Promise<number>> =>
   async (dispatch): Promise<number> => {
     const filesCount = filePaths.length;
 
@@ -146,7 +149,7 @@ const computeFileHashesThunk =
   };
 
 const computeFolderHashesThunk =
-  (loadingActionId: string): ArchifiltreThunkAction<Promise<void>> =>
+  (loadingActionId: string): ArchifiltreDocsThunkAction<Promise<void>> =>
   async (dispatch, getState) => {
     return new Promise((resolve) => {
       const state = getState();
@@ -191,7 +194,7 @@ export const computeHashesThunk =
       hashesLoadingLabel,
       hashesLoadedLabel,
     }: ComputeHashesThunkOptions
-  ): ArchifiltreThunkAction =>
+  ): ArchifiltreDocsThunkAction =>
   async (dispatch, getState) => {
     const state = getState();
     const filesAndFolders = getFilesAndFoldersFromStore(state);
@@ -247,7 +250,7 @@ export const firstHashesComputingThunk =
     { ignoreFileHashes = false }: FirstHashesComputingThunkOptions = {
       ignoreFileHashes: false,
     }
-  ): ArchifiltreThunkAction =>
+  ): ArchifiltreDocsThunkAction =>
   async (dispatch, getState) => {
     const state = getState();
 
@@ -268,7 +271,7 @@ export const firstHashesComputingThunk =
   };
 
 export const retryHashesComputingThunk =
-  (): ArchifiltreThunkAction => async (dispatch, getState) => {
+  (): ArchifiltreDocsThunkAction => async (dispatch, getState) => {
     const state = getState();
 
     const hashErrors = getErroredHashesFromStore(state);

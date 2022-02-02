@@ -108,7 +108,7 @@ export const reportInfo = (message: string): void => {
 };
 
 /**
- * Anonymizes the event of Archifiltre to send an obfuscated string to Matomo
+ * Anonymizes the event of Docs to send an obfuscated string to Matomo
  * @param event
  */
 const anonymizeEvent = (event: SentryEvent) => {

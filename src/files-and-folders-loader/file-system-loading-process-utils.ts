@@ -11,7 +11,7 @@ import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-met
 import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
 import { medianOnSortedArray } from "../util/array/array-util";
-import type { ArchifiltreError } from "../util/error/error-util";
+import type { ArchifiltreDocsError } from "../util/error/error-util";
 import { isJsonFile } from "../util/file-system/file-sys-util";
 import { tap } from "../util/functionnal-programming-utils";
 import { hookCounter } from "../util/hook/hook-utils";
@@ -233,7 +233,7 @@ const isJsonLoad = (loadPath: string) => isJsonFile(loadPath);
 
 interface GetLoadTypeOptions {
   filesAndFolders?: FilesAndFoldersMap;
-  erroredPaths?: ArchifiltreError[];
+  erroredPaths?: ArchifiltreDocsError[];
 }
 
 /**

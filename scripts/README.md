@@ -1,9 +1,9 @@
-## Archifiltre import script
+## Docs by Archifiltre import script
 
 ### Description
 
-Archifiltre provides you with an export script that you can run directly on your file server. It allows you to generate
-a file that can be directly sent to an archivist. He will then be able to drop it into Archifiltre to analyze the file
+`Docs` provides you with an export script that you can run directly on your file server. It allows you to generate
+a file that can be directly sent to an archivist. He will then be able to drop it into `Docs` to analyze the file
 tree.
 
 The generated file will contain the following information :

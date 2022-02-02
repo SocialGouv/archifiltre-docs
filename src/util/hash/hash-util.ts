@@ -7,11 +7,11 @@ import { ipcRenderer } from "../../common/ipc";
 import type { WorkerError } from "../../files-and-folders-loader/files-and-folders-loader-types";
 import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import {
-  ArchifiltreFileSystemErrorCode,
+  ArchifiltreDocsFileSystemErrorCode,
   UnknownError,
 } from "../error/error-codes";
-import type { ArchifiltreError } from "../error/error-util";
-import { ArchifiltreErrorType } from "../error/error-util";
+import type { ArchifiltreDocsError } from "../error/error-util";
+import { ArchifiltreDocsErrorType } from "../error/error-util";
 import type { Queue } from "../queue/queue";
 import { computeQueue } from "../queue/queue";
 import type { HashComputingError } from "./hash-errors";
@@ -82,24 +82,24 @@ export const computeHashes = (
   );
 };
 
-const hashErrorCodeToArchifiltreErrorCode = (hashErrorCode: string) => {
+const hashErrorCodeToArchifiltreDocsErrorCode = (hashErrorCode: string) => {
   switch (hashErrorCode) {
     case FILE_NOT_FOUND:
-      return ArchifiltreFileSystemErrorCode.ENOENT;
+      return ArchifiltreDocsFileSystemErrorCode.ENOENT;
     case ACCESS_DENIED:
-      return ArchifiltreFileSystemErrorCode.EACCES;
+      return ArchifiltreDocsFileSystemErrorCode.EACCES;
     default:
       return UnknownError.UNKNOWN;
   }
 };
 
-export const hashErrorToArchifiltreError = (
+export const hashErrorToArchifiltreDocsError = (
   hashError: HashComputingError
-): ArchifiltreError => ({
-  code: hashErrorCodeToArchifiltreErrorCode(hashError.type),
+): ArchifiltreDocsError => ({
+  code: hashErrorCodeToArchifiltreDocsErrorCode(hashError.type),
   filePath: hashError.path,
   reason: hashError.type,
-  type: ArchifiltreErrorType.COMPUTING_HASHES,
+  type: ArchifiltreDocsErrorType.COMPUTING_HASHES,
 });
 
 export const hashResultsToMap = (results: HashComputingResult[]): HashesMap =>

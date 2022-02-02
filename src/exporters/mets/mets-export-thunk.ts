@@ -1,4 +1,4 @@
-import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
+import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import {
   getAliasesFromStore,
   getCommentsFromStore,
@@ -15,7 +15,7 @@ import { makeSIP } from "./mets";
  * @param exportPath
  */
 export const metsExporterThunk =
-  (exportPath: string): ArchifiltreThunkAction =>
+  (exportPath: string): ArchifiltreDocsThunkAction =>
   (dispatch, getState): void => {
     const state = getState();
     const filesAndFolders = getFilesAndFoldersFromStore(state);

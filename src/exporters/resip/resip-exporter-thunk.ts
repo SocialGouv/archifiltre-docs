@@ -2,7 +2,7 @@ import { promises as fs } from "fs";
 import { takeLast, tap } from "rxjs/operators";
 import { v4 as uuid } from "uuid";
 
-import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
+import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import {
   getAliasesFromStore,
   getCommentsFromStore,
@@ -31,7 +31,7 @@ import { RESIP_HOOK_CALL_PER_ELEMENT } from "./resip-exporter";
  * @param filePath - name of the output file
  */
 export const resipExporterThunk =
-  (filePath: string): ArchifiltreThunkAction =>
+  (filePath: string): ArchifiltreDocsThunkAction =>
   async (dispatch, getState) => {
     const state = getState();
     const tags = getTagsFromStore(state);

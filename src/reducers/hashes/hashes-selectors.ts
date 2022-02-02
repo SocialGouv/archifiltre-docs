@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import type { ArchifiltreError } from "../../util/error/error-util";
+import type { ArchifiltreDocsError } from "../../util/error/error-util";
 import type { StoreState } from "../store";
 import type { HashesMap } from "./hashes-types";
 
@@ -17,10 +17,10 @@ export const getHashesFromStore = (store: StoreState): HashesMap =>
  */
 export const getErroredHashesFromStore = (
   store: StoreState
-): ArchifiltreError[] => store.hashes.erroredHashes;
+): ArchifiltreDocsError[] => store.hashes.erroredHashes;
 
 /**
  * Hook to get the hash computation errors
  */
-export const useHashesErrors = (): ArchifiltreError[] =>
+export const useHashesErrors = (): ArchifiltreDocsError[] =>
   useSelector(getErroredHashesFromStore);

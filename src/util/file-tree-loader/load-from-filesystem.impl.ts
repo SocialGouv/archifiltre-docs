@@ -12,7 +12,7 @@ import type { AsyncWorker } from "../async-worker/async-worker-util";
 import { WorkerEventType } from "../async-worker/async-worker-util";
 import { RESULT_STREAM_FILE_DESCRIPTOR } from "../async-worker/child-process";
 import { MessageTypes } from "../batch-process/batch-process-util-types";
-import type { ArchifiltreError } from "../error/error-util";
+import type { ArchifiltreDocsError } from "../error/error-util";
 import { stringifyVFSToStream } from "./load-from-filesystem-serializer";
 
 type Reporter = (message: unknown) => void;
@@ -54,7 +54,7 @@ const reportResultStream = (result: VirtualFileSystem) => {
 interface LoadVirtualFileSystemParams {
   path: string;
   filesAndFolders?: FilesAndFoldersMap;
-  erroredPaths?: ArchifiltreError[];
+  erroredPaths?: ArchifiltreDocsError[];
 }
 
 /**

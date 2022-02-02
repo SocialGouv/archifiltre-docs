@@ -4,7 +4,7 @@ import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { translations } from "../../translations/translations";
 import { isExactFileOrAncestor } from "../../util/files-and-folders/file-and-folders-utils";
 import { notifyInfo } from "../../util/notification/notifications-util";
-import type { ArchifiltreThunkAction } from "../archifiltre-types";
+import type { ArchifiltreDocsThunkAction } from "../archifiltre-types";
 import { commitAction } from "../enhancers/undoable/undoable-actions";
 import { initFilesAndFoldersMetatada } from "../files-and-folders-metadata/files-and-folders-metadata-actions";
 import {
@@ -28,7 +28,7 @@ import type { FilesAndFoldersMap } from "./files-and-folders-types";
  * @param newAlias
  */
 export const updateAliasThunk =
-  (filesAndFoldersId: string, newAlias: string): ArchifiltreThunkAction =>
+  (filesAndFoldersId: string, newAlias: string): ArchifiltreDocsThunkAction =>
   (dispatch) => {
     addTracker({
       title: ActionTitle.ALIAS_ADDED,
@@ -46,7 +46,7 @@ export const updateAliasThunk =
  * @param comments
  */
 export const updateCommentThunk =
-  (filesAndFoldersId: string, comments: string): ArchifiltreThunkAction =>
+  (filesAndFoldersId: string, comments: string): ArchifiltreDocsThunkAction =>
   (dispatch) => {
     dispatch(addCommentsOnFilesAndFolders({ [filesAndFoldersId]: comments }));
   };
@@ -96,7 +96,7 @@ const isMoveValid = (
  * @param newParentId
  */
 export const moveElement =
-  (elementId: string, newParentId: string): ArchifiltreThunkAction =>
+  (elementId: string, newParentId: string): ArchifiltreDocsThunkAction =>
   (dispatch, getState) => {
     const filesAndFolders = getFilesAndFoldersFromStore(getState());
     const parent = findElementParent(elementId, filesAndFolders)!;
@@ -120,7 +120,7 @@ export const moveElement =
   };
 
 export const overrideLastModifiedDateThunk =
-  (elementId: string, lastModified: number): ArchifiltreThunkAction =>
+  (elementId: string, lastModified: number): ArchifiltreDocsThunkAction =>
   (dispatch, getState) => {
     dispatch(overrideLastModified(elementId, lastModified));
 

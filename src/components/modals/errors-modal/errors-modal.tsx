@@ -6,20 +6,20 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { useStyles } from "../../../hooks/use-styles";
-import type { ArchifiltreError } from "../../../util/error/error-util";
+import type { ArchifiltreDocsError } from "../../../util/error/error-util";
 import { ModalHeader } from "../modal-header";
 import { ErrorsTable } from "./errors-table";
 
 interface ModalAction {
   id: string;
   title: string;
-  action: (errors: ArchifiltreError[]) => void;
+  action: (errors: ArchifiltreDocsError[]) => void;
 }
 
 export interface ErrorsModalProps {
   isModalOpen: boolean;
   closeModal: () => void;
-  errors: ArchifiltreError[];
+  errors: ArchifiltreDocsError[];
   actions?: ModalAction[];
 }
 

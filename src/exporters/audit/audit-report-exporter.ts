@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
+import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import {
   getElementsToDeleteFromStore,
   getFileCount,
@@ -152,7 +152,7 @@ export const computeAuditReportData = (
  * @param name - name of the output file
  */
 export const auditReportExporterThunk =
-  (name: string): ArchifiltreThunkAction =>
+  (name: string): ArchifiltreDocsThunkAction =>
   async (_dispatch: AnyFunction, getState): Promise<void> => {
     notifyInfo(
       translations.t("export.auditReportStarted"),

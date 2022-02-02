@@ -9,7 +9,7 @@ import { excelExporterThunk } from "../../../exporters/excel/excel-exporter";
 import { metsExporterThunk } from "../../../exporters/mets/mets-export-thunk";
 import { resipExporterThunk } from "../../../exporters/resip/resip-exporter-thunk";
 import { ActionTitle } from "../../../logging/tracker-types";
-import type { ArchifiltreThunkAction } from "../../../reducers/archifiltre-types";
+import type { ArchifiltreDocsThunkAction } from "../../../reducers/archifiltre-types";
 import { getNameWithExtension } from "../../../util/file-system/file-sys-util";
 import { isWindows } from "../../../util/os/os-util";
 import type { ExportTypesMap } from "../export-modal/export-options";
@@ -41,7 +41,7 @@ export interface IsActiveOptions {
 interface ExportConfig {
   isActive: boolean | ((options: IsActiveOptions) => boolean);
   label: string;
-  exportFunction: (exportPath: string) => ArchifiltreThunkAction;
+  exportFunction: (exportPath: string) => ArchifiltreDocsThunkAction;
   disabledExplanation?: string;
   exportPath: (originalPath: string, sessionName: string) => string;
   isFilePickerDisabled?: boolean;

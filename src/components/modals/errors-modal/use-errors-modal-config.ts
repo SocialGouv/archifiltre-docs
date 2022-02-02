@@ -1,12 +1,12 @@
 import type { TFunction } from "i18next";
 import { useMemo } from "react";
 
-import type { ArchifiltreError } from "../../../util/error/error-util";
+import type { ArchifiltreDocsError } from "../../../util/error/error-util";
 import type { Column } from "../../common/table/table-types";
 
 export const useErrorsModalConfig = (
   t: TFunction
-): Column<ArchifiltreError>[] =>
+): Column<ArchifiltreDocsError>[] =>
   useMemo(
     () => [
       {

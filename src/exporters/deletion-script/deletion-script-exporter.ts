@@ -3,7 +3,7 @@ import { compose, map } from "lodash/fp";
 import type { TFunction } from "react-i18next";
 import { encode } from "windows-1252";
 
-import type { ArchifiltreThunkAction } from "../../reducers/archifiltre-types";
+import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import { getElementsToDeleteFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import type { StoreState } from "../../reducers/store";
 import { getWorkspaceMetadataFromStore } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
@@ -55,7 +55,7 @@ const success = (t: TFunction, filePath: string) => () => {
 };
 
 export const deletionScriptExporterThunk =
-  (filePath: string): ArchifiltreThunkAction =>
+  (filePath: string): ArchifiltreDocsThunkAction =>
   async (dispatch, getState) => {
     return compose(
       liftPromise(success(translations.t.bind(translations), filePath)),

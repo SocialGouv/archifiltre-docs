@@ -1,18 +1,18 @@
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { ArchifiltreError } from "../../../util/error/error-util";
+import type { ArchifiltreDocsError } from "../../../util/error/error-util";
 import { Table } from "../../common/table/table";
 import type { Column } from "../../common/table/table-types";
 
 export interface ErrorsTableProps {
-  errors: ArchifiltreError[];
+  errors: ArchifiltreDocsError[];
 }
 
 export const ErrorsTable: React.FC<ErrorsTableProps> = ({ errors }) => {
   const { t } = useTranslation();
 
-  const columns: Column<ArchifiltreError>[] = useMemo(
+  const columns: Column<ArchifiltreDocsError>[] = useMemo(
     () => [
       {
         accessor: "filePath",

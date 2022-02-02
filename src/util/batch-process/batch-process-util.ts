@@ -4,10 +4,10 @@ import { fromEvent, merge, Subject } from "rxjs";
 import { filter, map, take, takeWhile, tap } from "rxjs/operators";
 
 import { reportError } from "../../logging/reporter";
-import { createArchifiltreError } from "../../reducers/loading-info/loading-info-selectors";
+import { createArchifiltreDocsError } from "../../reducers/loading-info/loading-info-selectors";
 import type { ProcessControllerAsyncWorker } from "../async-worker/async-worker-util";
 import { WorkerEventType } from "../async-worker/async-worker-util";
-import { ArchifiltreErrorType } from "../error/error-util";
+import { ArchifiltreDocsErrorType } from "../error/error-util";
 import type { ProcessControllerAsyncWorkerFactory } from "../worker-manager/worker-manager";
 import { workerManager } from "../worker-manager/worker-manager";
 import type {
@@ -76,9 +76,9 @@ export const setupWorkers$ = (
             tap((message) => {
               if (message.type === MessageTypes.FATAL) {
                 // eslint-disable-next-line @typescript-eslint/no-throw-literal
-                throw createArchifiltreError({
+                throw createArchifiltreDocsError({
                   reason: message.error as string,
-                  type: ArchifiltreErrorType.BATCH_PROCESS_ERROR,
+                  type: ArchifiltreDocsErrorType.BATCH_PROCESS_ERROR,
                 });
               }
             }),

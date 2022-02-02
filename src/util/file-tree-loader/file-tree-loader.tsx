@@ -11,7 +11,7 @@ import type {
   ResultMessage,
 } from "../batch-process/batch-process-util-types";
 import { MessageTypes } from "../batch-process/batch-process-util-types";
-import type { ArchifiltreError } from "../error/error-util";
+import type { ArchifiltreDocsError } from "../error/error-util";
 import { parseVFSFromStream } from "./load-from-filesystem-serializer";
 
 interface LoadFileTreeResponse {
@@ -28,7 +28,7 @@ export interface HookParam {
 
 interface LoadFileTreeParams {
   filesAndFolders?: FilesAndFoldersMap;
-  erroredPaths?: ArchifiltreError[];
+  erroredPaths?: ArchifiltreDocsError[];
 }
 
 interface StreamParserResult {

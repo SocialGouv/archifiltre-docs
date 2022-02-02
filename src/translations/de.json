@@ -4,7 +4,7 @@
       "placeholder": "Legen Sie hier ein Verzeichnis ab!",
       "placeholderSubtitle": "Sie können auch eine zuvor aus $t(common:productName) exportierte JSON-Datei ablegen.",
       "zipNotificationTitle": "ZIP-Datei(en) entdeckt",
-      "zipNotificationMessage": "Docs kann ZIP-Dateien nicht verarbeiten, bitte entpacken Sie diese, um sie einzulesen",
+      "zipNotificationMessage": "$t(common:productNameShort) kann ZIP-Dateien nicht verarbeiten, bitte entpacken Sie diese, um sie einzulesen",
       "disclaimerSubtitle": "Ihre Daten werden Ihren Rechner nicht verlassen. Nur Sie können sehen, was in dieser Anwendung geschieht.",
       "loadingErrorTitle": "Fehler beim Laden",
       "loadingErrorMessage": "Wahrscheinlich haben Sie weder einen Ordner noch eine Datei abgelegt.",

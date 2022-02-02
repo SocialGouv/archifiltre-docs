@@ -3,7 +3,8 @@
 </h1>
 
 <p align="center">
-  <a href="https://github.com/SocialGouv/archifiltre-docs/actions/"><img src="https://github.com/SocialGouv/archifiltre-docs/workflows/CI/badge.svg" alt="Github Master CI Status"></a>
+  <a href="https://github.com/SocialGouv/archifiltre-docs/actions/"><img src="https://github.com/SocialGouv/archifiltre-docs/workflows/CI/badge.svg" alt="Github Main CI Status"></a>
+  <a href="https://github.com/SocialGouv/archifiltre-docs/actions/"><img src="https://github.com/SocialGouv/archifiltre-docs/workflows/CodeQL/badge.svg" alt="CodeQL Status"></a>
   <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache--2.0-yellow.svg" alt="License: Apache-2.0"></a>
   <a href="https://img.shields.io/github/v/release/SocialGouv/archifiltre-docs"><img src="https://img.shields.io/github/v/release/SocialGouv/archifiltre-docs" alt="Npm version"></a>
   <a href="https://codecov.io/gh/SocialGouv/archifiltre-docs"><img src="https://codecov.io/gh/SocialGouv/archifiltre-docs/branch/main/graph/badge.svg" alt="codecov"></a>

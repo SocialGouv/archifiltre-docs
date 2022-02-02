@@ -4,7 +4,7 @@
       "placeholder": "Glissez-déposez un répertoire ou un JSON $t(common:productName) ici",
       "placeholderSubtitle": "Pas de modification du répertoire original",
       "zipNotificationTitle": "fichier(s) zip détecté(s)",
-      "zipNotificationMessage": "Docs ne lit pas les zips, veuillez les décompresser pour les lire",
+      "zipNotificationMessage": "$t(common:productNameShort) ne lit pas les zips, veuillez les décompresser pour les lire",
       "disclaimerSubtitle": "Vos données ne quittent pas votre ordinateur. Seul•e vous pouvez voir ce qui se passe dans cette application.",
       "loadingErrorTitle": "Erreur de chargement",
       "loadingErrorMessage": "Vous n'avez probablement pas déposé un dossier ou un fichier.",

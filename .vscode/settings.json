@@ -22,5 +22,7 @@
     }
   ],
   "jest.jestCommandLine": "yarn jest",
-  "jest.autoRun": "off"
+  "jest.autoRun": "off",
+  "typescript.preferences.importModuleSpecifier": "project-relative",
+  "javascript.preferences.importModuleSpecifier": "project-relative"
 }

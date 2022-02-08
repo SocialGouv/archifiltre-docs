@@ -3,7 +3,7 @@ import type { HashComputingError } from "../util/hash/hash-errors";
 import type { HashComputingResult } from "../util/hash/hash-util";
 import { computeHash } from "../util/hash/hash-util";
 
-declare module "../common/ipc/event" {
+declare module "@common/ipc/event" {
   interface AsyncIpcMapping {
     "hash.computeHash": IpcConfig<
       [filePaths: string[]],

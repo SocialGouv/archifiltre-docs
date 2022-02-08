@@ -1,0 +1,28 @@
+{
+  "extends": "@tsconfig/node16/tsconfig.json",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "lib": [
+      "ES2021",
+      "DOM"
+    ],
+    "jsx": "react",
+    "baseUrl": "../",
+    "paths": {
+      "@renderer/*": [
+        "src/renderer/*"
+      ],
+      "@main/*": [
+        "src/main/*"
+      ],
+      "@common/*": [
+        "src/common/*"
+      ]
+    }
+  },
+  "include": [
+    "../src/**/*.ts*",
+    "./",
+    "../global.d.ts"
+  ]
+}

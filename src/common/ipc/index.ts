@@ -8,7 +8,7 @@ import {
   ipcRenderer as baseIpcRenderer,
 } from "electron";
 
-import type { UnknownMapping } from "../types";
+import type { UnknownMapping } from "../utils/types";
 import type {
   AsyncIpcChannel,
   AsyncIpcKeys,

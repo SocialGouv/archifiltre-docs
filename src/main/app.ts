@@ -1,9 +1,8 @@
+import { ipcMain } from "@common/ipc";
 import type { Dialog, Shell } from "electron";
 import { app, dialog, shell } from "electron";
 
-import { ipcMain } from "../common/ipc";
-
-declare module "../common/ipc/event" {
+declare module "@common/ipc/event" {
   interface SyncIpcMapping {
     "app.getPath": IpcConfig<
       [pathId: Parameters<typeof app["getPath"]>[0]],

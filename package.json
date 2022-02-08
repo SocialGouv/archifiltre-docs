@@ -90,6 +90,7 @@
     "@socialgouv/eslint-config-react": "^1.90.4",
     "@socialgouv/eslint-config-typescript": "^1.90.4",
     "@tsconfig/node14": "^1.0.1",
+    "@tsconfig/node16": "^1.0.2",
     "@types/dateformat": "^5.0.0",
     "@types/deep-equal": "^1.0.1",
     "@types/file-saver": "^2.0.4",

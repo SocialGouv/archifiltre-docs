@@ -1,12 +1,13 @@
-import type { StoreState } from "../store";
-import { createEmptyStore } from "../store-test-utils";
 import {
   createArchifiltreDocsError,
   getArchifiltreDocsErrors,
   getCompleteLoadingInfo,
   getLoadingInfoFromStore,
   getRunningLoadingInfo,
-} from "./loading-info-selectors";
+} from "@renderer/reducers/loading-info/loading-info-selectors";
+import type { StoreState } from "@renderer/reducers/store";
+
+import { createEmptyStore } from "../store-test-utils";
 import { createLoadingInfo } from "./loading-info-test-utils";
 
 const loadingLoadingInfoId = "loading-info-id";

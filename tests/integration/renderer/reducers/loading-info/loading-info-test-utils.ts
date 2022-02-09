@@ -1,5 +1,5 @@
-import type { LoadingInfo } from "./loading-info-types";
-import { LoadingInfoTypes } from "./loading-info-types";
+import type { LoadingInfo } from "@renderer/reducers/loading-info/loading-info-types";
+import { LoadingInfoTypes } from "@renderer/reducers/loading-info/loading-info-types";
 
 interface CreateLoadingInfoParams {
   id: string;

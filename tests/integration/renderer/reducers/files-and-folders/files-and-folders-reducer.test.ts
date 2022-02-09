@@ -1,4 +1,3 @@
-import { createArchifiltreDocsError } from "../loading-info/loading-info-selectors";
 import {
   addChild,
   addCommentsOnFilesAndFolders,
@@ -13,14 +12,16 @@ import {
   setFilesAndFoldersAliases,
   unmarkAsToDelete,
   unmarkElementsToDelete,
-} from "./files-and-folders-actions";
+} from "@renderer/reducers/files-and-folders/files-and-folders-actions";
 import {
   filesAndFoldersReducer,
   initialState as initialStateSample,
-} from "./files-and-folders-reducer";
-import { ROOT_FF_ID } from "./files-and-folders-selectors";
+} from "@renderer/reducers/files-and-folders/files-and-folders-reducer";
+import { ROOT_FF_ID } from "@renderer/reducers/files-and-folders/files-and-folders-selectors";
+import type { FilesAndFoldersState } from "@renderer/reducers/files-and-folders/files-and-folders-types";
+import { createArchifiltreDocsError } from "@renderer/reducers/loading-info/loading-info-selectors";
+
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
-import type { FilesAndFoldersState } from "./files-and-folders-types";
 
 const baseState: FilesAndFoldersState = initialStateSample;
 

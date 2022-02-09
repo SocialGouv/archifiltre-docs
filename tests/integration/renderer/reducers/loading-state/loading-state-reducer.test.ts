@@ -5,9 +5,15 @@ import {
   setFileSystemLoadingStep,
   setIndexedFilesCount,
   setLoadingStep,
-} from "./loading-state-actions";
-import { initialState, loadingStateReducer } from "./loading-state-reducer";
-import { FileSystemLoadingStep, LoadingStep } from "./loading-state-types";
+} from "@renderer/reducers/loading-state/loading-state-actions";
+import {
+  initialState,
+  loadingStateReducer,
+} from "@renderer/reducers/loading-state/loading-state-reducer";
+import {
+  FileSystemLoadingStep,
+  LoadingStep,
+} from "@renderer/reducers/loading-state/loading-state-types";
 
 describe("loading-state-reducer", () => {
   describe("RESET_LOADING_STATE", () => {

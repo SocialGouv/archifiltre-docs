@@ -1,49 +1,52 @@
-import configureMockStore from "redux-mock-store";
-import thunk from "redux-thunk";
-
-import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/file-system-loading-process-utils";
-import { translations } from "../../translations/translations";
-import { notifyInfo } from "../../util/notification/notifications-util";
-import type { DispatchExts } from "../archifiltre-types";
-import { commitAction } from "../enhancers/undoable/undoable-actions";
-import { initFilesAndFoldersMetatada } from "../files-and-folders-metadata/files-and-folders-metadata-actions";
-import { createFilesAndFoldersMetadata } from "../files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { setFilesAndFoldersHashes } from "../hashes/hashes-actions";
-import { updateFilesAndFoldersHashes } from "../hashes/hashes-thunks";
-import type { StoreState } from "../store";
-import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
+import { createFilesAndFoldersMetadataDataStructure } from "@renderer/files-and-folders-loader/file-system-loading-process-utils";
+import type { DispatchExts } from "@renderer/reducers/archifiltre-types";
+import { commitAction } from "@renderer/reducers/enhancers/undoable/undoable-actions";
 import {
   addChild,
   addCommentsOnFilesAndFolders,
   overrideLastModified,
   removeChild,
   setFilesAndFoldersAliases,
-} from "./files-and-folders-actions";
+} from "@renderer/reducers/files-and-folders/files-and-folders-actions";
 import {
   initialState as filesAndFoldersInitialState,
   initialState,
-} from "./files-and-folders-reducer";
-import { ROOT_FF_ID } from "./files-and-folders-selectors";
-import { createFilesAndFolders } from "./files-and-folders-test-utils";
+} from "@renderer/reducers/files-and-folders/files-and-folders-reducer";
+import { ROOT_FF_ID } from "@renderer/reducers/files-and-folders/files-and-folders-selectors";
 import {
   moveElement,
   overrideLastModifiedDateThunk,
   updateAliasThunk,
   updateCommentThunk,
-} from "./files-and-folders-thunks";
-import { ADD_CHILD } from "./files-and-folders-types";
+} from "@renderer/reducers/files-and-folders/files-and-folders-thunks";
+import { ADD_CHILD } from "@renderer/reducers/files-and-folders/files-and-folders-types";
+import { initFilesAndFoldersMetatada } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-actions";
+import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { setFilesAndFoldersHashes } from "@renderer/reducers/hashes/hashes-actions";
+import { updateFilesAndFoldersHashes } from "@renderer/reducers/hashes/hashes-thunks";
+import type { StoreState } from "@renderer/reducers/store";
+import { translations } from "@renderer/translations/translations";
+import { notifyInfo } from "@renderer/util/notification/notifications-util";
+import configureMockStore from "redux-mock-store";
+import thunk from "redux-thunk";
 
-jest.mock("util/notification/notifications-util", () => ({
+import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
+import { createFilesAndFolders } from "./files-and-folders-test-utils";
+
+jest.mock("@renderer/util/notification/notifications-util", () => ({
   notifyInfo: jest.fn(),
 }));
 
-jest.mock("../../logging/tracker", () => ({
+jest.mock("@renderer/logging/tracker", () => ({
   addTracker: jest.fn(),
 }));
 
-jest.mock("files-and-folders-loader/file-system-loading-process-utils", () => ({
-  createFilesAndFoldersMetadataDataStructure: jest.fn(),
-}));
+jest.mock(
+  "@renderer/files-and-folders-loader/file-system-loading-process-utils",
+  () => ({
+    createFilesAndFoldersMetadataDataStructure: jest.fn(),
+  })
+);
 
 const notifyInfoMock = notifyInfo as jest.Mock;
 const mockStore = configureMockStore<StoreState, DispatchExts>([thunk]);

@@ -1,9 +1,10 @@
-import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
   createFilesAndFoldersMetadata,
   getFilesAndFoldersMetadataFromStore,
-} from "./files-and-folders-metadata-selectors";
-import type { FilesAndFoldersMetadataMap } from "./files-and-folders-metadata-types";
+} from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import type { FilesAndFoldersMetadataMap } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+
+import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 
 describe("files-and-folders-metadata-selectors", () => {
   describe("getFilesAndFoldersMetadataFromStore", () => {

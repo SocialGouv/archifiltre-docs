@@ -1,10 +1,11 @@
-import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
-import { initialState } from "./loading-state-reducer";
+import { initialState } from "@renderer/reducers/loading-state/loading-state-reducer";
 import {
   getLoadingStateFromStore,
   getLoadingStepFromStore,
-} from "./loading-state-selectors";
-import { LoadingStep } from "./loading-state-types";
+} from "@renderer/reducers/loading-state/loading-state-selectors";
+import { LoadingStep } from "@renderer/reducers/loading-state/loading-state-types";
+
+import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 
 describe("loading-state-selectors", () => {
   describe("getLoadingStateFromStore", () => {

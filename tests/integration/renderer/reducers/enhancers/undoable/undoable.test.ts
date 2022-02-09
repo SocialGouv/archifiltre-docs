@@ -6,32 +6,36 @@ import {
 } from "@renderer/reducers/enhancers/undoable/undoable-actions";
 import type redux from "redux";
 
-const state0: redux.Action = {
+interface TestState {
+  count: number;
+}
+
+const state0: TestState = {
   count: 0,
 };
-const state1 = {
+const state1: TestState = {
   count: 1,
 };
 
-const state2 = {
+const state2: TestState = {
   count: 2,
 };
 
-const state3 = {
+const state3: TestState = {
   count: 3,
 };
 
-const state4 = {
+const state4: TestState = {
   count: 4,
 };
 
-const testReducer = (state: { count: number }, action) => {
+const testReducer: redux.Reducer<TestState, redux.Action> = (state, action) => {
   if (action.type === "INCREMENT") {
     return {
-      count: state.count + 1,
+      count: (state?.count ?? 0) + 1,
     };
   }
-  return state;
+  return state!;
 };
 const reducer = undoable(testReducer, state0);
 
@@ -45,7 +49,7 @@ const baseTestState = {
 describe("undoable", () => {
   describe("defaultState", () => {
     it("should be initialize to the default state", () => {
-      const nextState = reducer(undefined, {});
+      const nextState = reducer(undefined, {} as any);
 
       expect(nextState).toEqual({
         current: state0,

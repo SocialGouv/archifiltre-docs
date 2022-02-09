@@ -1,12 +1,13 @@
-import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import {
   getHoveredElementIdFromStore,
   getLockedElementIdFromStore,
   getOriginalPathFromStore,
   getSessionNameFromStore,
   getWorkspaceMetadataFromStore,
-} from "./workspace-metadata-selectors";
-import type { WorkspaceMetadataState } from "./workspace-metadata-types";
+} from "@renderer/reducers/workspace-metadata/workspace-metadata-selectors";
+import type { WorkspaceMetadataState } from "@renderer/reducers/workspace-metadata/workspace-metadata-types";
+
+import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 
 const workspaceMetadata: WorkspaceMetadataState = {
   hoveredElementId: "hover",

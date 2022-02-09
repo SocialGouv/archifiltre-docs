@@ -1,10 +1,11 @@
-import { createEmptyStore } from "../store-test-utils";
-import { getIcicleSortMethodFromStore } from "./icicle-sort-method-selectors";
+import { getIcicleSortMethodFromStore } from "@renderer/reducers/icicle-sort-method/icicle-sort-method-selectors";
 import {
   ElementWeightMethod,
   IcicleColorMode,
   IcicleSortMethod,
-} from "./icicle-sort-method-types";
+} from "@renderer/reducers/icicle-sort-method/icicle-sort-method-types";
+
+import { createEmptyStore } from "../store-test-utils";
 
 const icicleSortMethod = {
   elementWeightMethod: ElementWeightMethod.BY_FILE_COUNT,

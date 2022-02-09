@@ -2,16 +2,16 @@ import {
   setElementWeightMethod,
   setIcicleColorMode,
   setIcicleSortMethod,
-} from "./icicle-sort-method-actions";
+} from "@renderer/reducers/icicle-sort-method/icicle-sort-method-actions";
 import {
   icicleSortMethodReducer,
   initialState,
-} from "./icicle-sort-method-reducer";
+} from "@renderer/reducers/icicle-sort-method/icicle-sort-method-reducer";
 import {
   ElementWeightMethod,
   IcicleColorMode,
   IcicleSortMethod,
-} from "./icicle-sort-method-types";
+} from "@renderer/reducers/icicle-sort-method/icicle-sort-method-types";
 
 describe("icicleSortMethodReducer", () => {
   describe("SET_ICICLE_SORT_METHOD", () => {

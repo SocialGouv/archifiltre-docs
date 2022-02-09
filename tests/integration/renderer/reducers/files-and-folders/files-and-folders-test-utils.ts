@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { FilesAndFolders } from "@renderer/reducers/files-and-folders/files-and-folders-types";
+import type { FilesAndFolders } from "@renderer/reducers/files-and-folders/files-and-folders-types";
 
 interface CreateFilesAndFoldersOptions {
   id: string;

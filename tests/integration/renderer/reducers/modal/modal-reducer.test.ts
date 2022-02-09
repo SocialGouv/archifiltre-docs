@@ -1,6 +1,12 @@
-import { closeModalAction, openModalAction } from "./modal-actions";
-import { initialState, modalReducer } from "./modal-reducer";
-import { Modal } from "./modal-types";
+import {
+  closeModalAction,
+  openModalAction,
+} from "@renderer/reducers/modal/modal-actions";
+import {
+  initialState,
+  modalReducer,
+} from "@renderer/reducers/modal/modal-reducer";
+import { Modal } from "@renderer/reducers/modal/modal-types";
 
 describe("modal-reducer", () => {
   describe("OPEN_MODAL", () => {

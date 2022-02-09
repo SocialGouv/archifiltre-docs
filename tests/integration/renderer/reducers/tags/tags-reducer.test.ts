@@ -1,5 +1,3 @@
-import { v4 as uuid } from "uuid";
-
 import {
   addTag,
   deleteTag,
@@ -8,9 +6,10 @@ import {
   resetTags,
   tagFile,
   untagFile,
-} from "./tags-actions";
-import { tagsReducer } from "./tags-reducer";
-import type { TagsState } from "./tags-types";
+} from "@renderer/reducers/tags/tags-actions";
+import { tagsReducer } from "@renderer/reducers/tags/tags-reducer";
+import type { TagsState } from "@renderer/reducers/tags/tags-types";
+import { v4 as uuid } from "uuid";
 
 jest.mock("uuid", () => ({
   v4: jest.fn(),

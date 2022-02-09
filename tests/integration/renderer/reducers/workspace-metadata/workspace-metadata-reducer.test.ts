@@ -1,11 +1,11 @@
-import { IcicleSortMethod } from "../../reducers/icicle-sort-method/icicle-sort-method-types";
+import { IcicleSortMethod } from "@renderer/reducers/icicle-sort-method/icicle-sort-method-types";
 import {
   setHoveredElementId,
   setLockedElementId,
   setOriginalPath,
   setSessionName,
-} from "./workspace-metadata-actions";
-import { workspaceMetadataReducer } from "./workspace-metadata-reducer";
+} from "@renderer/reducers/workspace-metadata/workspace-metadata-actions";
+import { workspaceMetadataReducer } from "@renderer/reducers/workspace-metadata/workspace-metadata-reducer";
 
 const baseState = {
   hoveredElementId: "",

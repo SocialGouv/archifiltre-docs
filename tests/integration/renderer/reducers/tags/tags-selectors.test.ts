@@ -1,7 +1,5 @@
-import { createFilesAndFolders } from "../files-and-folders/files-and-folders-test-utils";
-import { createFilesAndFoldersMetadata } from "../files-and-folders-metadata/files-and-folders-metadata-selectors";
-import type { StoreState } from "../store";
-import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
+import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import type { StoreState } from "@renderer/reducers/store";
 import {
   getAllTagIdsForFile,
   getAllTagsForFile,
@@ -12,8 +10,11 @@ import {
   Order,
   sortTags,
   tagMapToArray,
-} from "./tags-selectors";
-import type { Tag } from "./tags-types";
+} from "@renderer/reducers/tags/tags-selectors";
+import type { Tag } from "@renderer/reducers/tags/tags-types";
+
+import { createFilesAndFolders } from "../files-and-folders/files-and-folders-test-utils";
+import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 
 describe("tags-selectors", () => {
   describe("getAllTagIdsForFile", () => {

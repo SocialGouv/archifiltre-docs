@@ -6,11 +6,15 @@ import {
   resetLoadingAction,
   startLoadingAction,
   updateLoadingAction,
-} from "./loading-info-actions";
-import { initialState, loadingInfoReducer } from "./loading-info-reducer";
-import { createArchifiltreDocsError } from "./loading-info-selectors";
+} from "@renderer/reducers/loading-info/loading-info-actions";
+import {
+  initialState,
+  loadingInfoReducer,
+} from "@renderer/reducers/loading-info/loading-info-reducer";
+import { createArchifiltreDocsError } from "@renderer/reducers/loading-info/loading-info-selectors";
+import type { LoadingInfoState } from "@renderer/reducers/loading-info/loading-info-types";
+
 import { createLoadingInfo } from "./loading-info-test-utils";
-import type { LoadingInfoState } from "./loading-info-types";
 
 const previouslyLoadingId = "prev-loading-id";
 const previouslyLoading = createLoadingInfo({

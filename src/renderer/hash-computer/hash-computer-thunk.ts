@@ -43,7 +43,7 @@ import {
   NotificationDuration,
   notifyError,
   notifySuccess,
-} from "../util/notification/notifications-util";
+} from "../utils/notification/notifications-util";
 import { computeFolderHashes$ } from "./hash-computer.controller";
 
 const computeFileHashesIgnoredThunk =

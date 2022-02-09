@@ -1,3 +1,4 @@
+import { isJsonFile } from "@common/utils/file-system/file-sys-util";
 import { CircularProgress, Grid } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -6,7 +7,6 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
 import { FileSystemLoadingStep } from "../../reducers/loading-state/loading-state-types";
-import { isJsonFile } from "../../util/file-system/file-sys-util";
 import { LoadingSpinner } from "./loading-spinner";
 
 const StyledGrid = styled(Grid)`

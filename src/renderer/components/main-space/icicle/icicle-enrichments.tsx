@@ -7,7 +7,7 @@ import type {
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { tagMapToArray } from "../../../reducers/tags/tags-selectors";
 import type { TagMap } from "../../../reducers/tags/tags-types";
-import type { SimpleObject } from "../../../util/object/object-util";
+import type { SimpleObject } from "../../../utils/object/object-util";
 import type { DimsMap } from "./icicle";
 import { IcicleEnrichment, OPACITY } from "./icicle-enrichment";
 import type { IcicleMouseHandler } from "./icicle-main";

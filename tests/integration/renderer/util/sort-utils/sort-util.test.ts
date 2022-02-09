@@ -1,4 +1,4 @@
-import { makeObjectKeyComparator } from "@renderer/util/sort-utils/sort-utils";
+import { makeObjectKeyComparator } from "@renderer/utils/sort-utils/sort-utils";
 
 describe("sort-util", () => {
   describe("makeObjectKeyComparator", () => {

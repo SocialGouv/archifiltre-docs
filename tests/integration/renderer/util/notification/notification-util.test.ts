@@ -2,7 +2,7 @@ import {
   notifyError,
   notifyInfo,
   notifySuccess,
-} from "@renderer/util/notification/notifications-util";
+} from "@renderer/utils/notification/notifications-util";
 import noop from "lodash/noop";
 import { NotificationManager } from "react-notifications";
 

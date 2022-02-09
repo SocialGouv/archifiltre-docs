@@ -14,8 +14,8 @@ import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-fold
 import {
   formatPathForUserSystem,
   octet2HumanReadableFormat,
-} from "@renderer/util/file-system/file-sys-util";
-import { FileType } from "@renderer/util/file-types/file-types-util";
+} from "@renderer/utils/file-system/file-sys-util";
+import { FileType } from "@renderer/utils/file-types/file-types-util";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 

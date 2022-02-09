@@ -1,23 +1,23 @@
-import { makeEmptyArray } from "@renderer/util/array/array-util";
+import { makeEmptyArray } from "@renderer/utils/array/array-util";
 import type {
   AsyncWorkerControllerEvent,
   ProcessControllerAsyncWorker,
   TypedEventListener,
-} from "@renderer/util/async-worker/async-worker-util";
-import { WorkerEventType } from "@renderer/util/async-worker/async-worker-util";
+} from "@renderer/utils/async-worker/async-worker-util";
+import { WorkerEventType } from "@renderer/utils/async-worker/async-worker-util";
 import {
   aggregateErrorsToMap,
   aggregateResultsToMap,
   processQueueWithWorkers,
   setupWorkers$,
-} from "@renderer/util/batch-process/batch-process-util";
+} from "@renderer/utils/batch-process/batch-process-util";
 import type {
   InitializeMessage,
   ReadyMessage,
   ResultMessage,
   WorkerMessage,
-} from "@renderer/util/batch-process/batch-process-util-types";
-import { MessageTypes } from "@renderer/util/batch-process/batch-process-util-types";
+} from "@renderer/utils/batch-process/batch-process-util-types";
+import { MessageTypes } from "@renderer/utils/batch-process/batch-process-util-types";
 import { range, remove } from "lodash";
 import { Subject } from "rxjs";
 import { take, toArray } from "rxjs/operators";

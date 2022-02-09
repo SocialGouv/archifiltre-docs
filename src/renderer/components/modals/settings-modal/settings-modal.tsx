@@ -5,7 +5,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { VoidFunction } from "../../../util/function/function-util";
+import type { VoidFunction } from "../../../utils/function/function-util";
 import { LanguagePicker } from "../../header/language";
 import { ModalHeader } from "../../modals/modal-header";
 import { About } from "./about";

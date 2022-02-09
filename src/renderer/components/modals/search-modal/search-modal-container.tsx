@@ -18,8 +18,8 @@ import { useWorkspaceMetadata } from "../../../reducers/workspace-metadata/works
 import type {
   Awaitable,
   VoidFunction,
-} from "../../../util/function/function-util";
-import { exportTableToCsvFile } from "../../../util/table/table-util";
+} from "../../../utils/function/function-util";
+import { exportTableToCsvFile } from "../../../utils/table/table-util";
 import type { SearchModalProps } from "./search-modal";
 import { SearchModal } from "./search-modal";
 import { useSearchModalTableColumns } from "./use-search-modal-table-columns";

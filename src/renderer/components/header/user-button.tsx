@@ -1,3 +1,4 @@
+import type { VoidFunction } from "@common/utils/function/function-util";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -7,7 +8,6 @@ import { FaCog, FaSignOutAlt, FaUser } from "react-icons/fa";
 
 import { useModal } from "../../hooks/use-modal";
 import { useStyles } from "../../hooks/use-styles";
-import type { VoidFunction } from "../../util/function/function-util";
 import { SettingsModal } from "../modals/settings-modal/settings-modal";
 
 export interface UserButtonProps {

@@ -1,4 +1,4 @@
-import { ipcRenderer } from "../../../common/ipc";
+import { ipcRenderer } from "../../ipc";
 import { shell } from "electron";
 import type { App } from "electron";
 

@@ -12,7 +12,7 @@ import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-m
 import type { HashesMap } from "../reducers/hashes/hashes-types";
 import type { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
 import type { TagMap } from "../reducers/tags/tags-types";
-import type { SimpleObject } from "../util/object/object-util";
+import type { SimpleObject } from "../utils/object/object-util";
 
 export type VirtualFileSystem = WithAliases &
   WithComments &

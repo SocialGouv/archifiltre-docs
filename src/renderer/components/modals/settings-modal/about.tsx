@@ -12,13 +12,13 @@ import {
   FaInfo,
 } from "react-icons/fa";
 
+import { openLink } from "../../../../common/utils/electron/electron-util";
 import {
   ARCHIFILTRE_CONTACT_EMAIL,
   CONTACT_LINK,
   DOCUMENTATION_LINK,
   FEEDBACK_LINK,
 } from "../../../constants";
-import { openLink } from "../../../util/electron/electron-util";
 import { version, versionName } from "../../../version";
 
 const useLocalStyles = makeStyles((theme: Theme) =>

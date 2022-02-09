@@ -1,9 +1,10 @@
+import { isExactFileOrAncestor } from "@common/utils/files-and-folders/file-and-folders-utils";
+import { notifyInfo } from "@common/utils/notification/notifications-util";
+
 import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/file-system-loading-process-utils";
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { translations } from "../../translations/translations";
-import { isExactFileOrAncestor } from "../../util/files-and-folders/file-and-folders-utils";
-import { notifyInfo } from "../../util/notification/notifications-util";
 import type { ArchifiltreDocsThunkAction } from "../archifiltre-types";
 import { commitAction } from "../enhancers/undoable/undoable-actions";
 import { initFilesAndFoldersMetatada } from "../files-and-folders-metadata/files-and-folders-metadata-actions";

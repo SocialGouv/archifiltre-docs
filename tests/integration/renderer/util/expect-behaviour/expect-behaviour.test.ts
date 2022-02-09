@@ -1,5 +1,5 @@
 import { reportWarning } from "@renderer/logging/reporter";
-import { expectToBeDefined } from "@renderer/util/expect-behaviour/expect-behaviour";
+import { expectToBeDefined } from "@renderer/utils/expect-behaviour/expect-behaviour";
 
 jest.mock("@renderer/logging/reporter", () => ({
   reportWarning: jest.fn(),

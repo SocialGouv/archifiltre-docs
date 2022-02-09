@@ -13,7 +13,7 @@ import {
   setHoveredElementId,
   setLockedElementId,
 } from "../../../reducers/workspace-metadata/workspace-metadata-actions";
-import type { VoidFunction } from "../../../util/function/function-util";
+import type { VoidFunction } from "../../../utils/function/function-util";
 import { TabsContext } from "../../header/tabs-context";
 import type { Column } from "./table-types";
 import { TableValue } from "./table-value";

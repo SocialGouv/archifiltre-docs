@@ -9,9 +9,9 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
 import type { FileTypeMap } from "../../../../../exporters/audit/audit-report-values-computer";
-import { colors } from "../../../../../util/color/color-util";
-import { octet2HumanReadableFormat } from "../../../../../util/file-system/file-sys-util";
-import type { FileType } from "../../../../../util/file-types/file-types-util";
+import { colors } from "../../../../../utils/color/color-util";
+import { octet2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
+import type { FileType } from "../../../../../utils/file-types/file-types-util";
 
 const ColoredText = styled.span<{ color: string }>`
   display: block;

@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSearch, FaSearchMinus, FaSearchPlus } from "react-icons/fa";
 
-import type { AnyFunction } from "../../../util/function/function-util";
+import type { AnyFunction } from "../../../utils/function/function-util";
 import { ZOOM_SPEED } from "../icicle/icicle-main";
 import { useZoomContext } from "../workspace/zoom-provider";
 import { ZoomPickerOptionItem } from "./zoom-picker-option-item";

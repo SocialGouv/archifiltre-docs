@@ -1,3 +1,4 @@
+import { openLink } from "@common/utils/electron/electron-util";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
@@ -33,7 +34,6 @@ import {
   getPreviousSessions,
   removeOneSessionElement,
 } from "../../persistence/previous-sessions";
-import { openLink } from "../../util/electron/electron-util";
 import { EllipsisText } from "../main-space/workspace/enrichment/tags/ellipsis-text";
 
 const onFeedbackClick = () => {

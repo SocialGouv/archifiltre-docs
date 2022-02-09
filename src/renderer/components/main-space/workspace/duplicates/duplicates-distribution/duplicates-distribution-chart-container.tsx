@@ -7,7 +7,7 @@ import {
   countDuplicateFileSizes,
   countDuplicateFileTypes,
   getFilesDuplicatesMap,
-} from "../../../../../util/duplicates/duplicates-util";
+} from "../../../../../utils/duplicates/duplicates-util";
 import { DuplicatesDistributionChart } from "./duplicates-distribution-chart";
 
 export const DuplicatesDistributionChartContainer: React.FC = () => {

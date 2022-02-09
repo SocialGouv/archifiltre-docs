@@ -1,7 +1,7 @@
 import { ArchifiltreDocsFileSystemErrorCode } from "@common/utils/error/error-codes";
 import { handleError, makeErrorHandler } from "@common/utils/error/error-util";
 import { createArchifiltreDocsError } from "@renderer/reducers/loading-info/loading-info-selectors";
-import { notifyError } from "@renderer/util/notification/notifications-util";
+import { notifyError } from "@renderer/utils/notification/notifications-util";
 import { noop } from "lodash";
 
 jest.mock("@renderer/util/notification/notifications-util", () => ({

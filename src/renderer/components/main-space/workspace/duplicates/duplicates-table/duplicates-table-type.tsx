@@ -2,8 +2,8 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaCircle } from "react-icons/fa";
 
-import { colors } from "../../../../../util/color/color-util";
-import type { FileType } from "../../../../../util/file-types/file-types-util";
+import { colors } from "../../../../../utils/color/color-util";
+import type { FileType } from "../../../../../utils/file-types/file-types-util";
 
 export interface DuplicatesTableTypeProps {
   fileType: FileType;

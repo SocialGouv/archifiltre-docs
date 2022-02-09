@@ -18,7 +18,7 @@ import {
   removeChildrenPath,
   sortFoldersByChildrenCount,
   sortFoldersByDepth,
-} from "@renderer/util/files-and-folders/file-and-folders-utils";
+} from "@renderer/utils/files-and-folders/file-and-folders-utils";
 import MD5 from "js-md5";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";

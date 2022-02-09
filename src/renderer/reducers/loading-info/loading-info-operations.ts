@@ -1,6 +1,6 @@
+import type { VoidFunction } from "@common/utils/function/function-util";
 import { v4 as uuid } from "uuid";
 
-import type { VoidFunction } from "../../util/function/function-util";
 import { startLoadingAction } from "./loading-info-actions";
 import type { LoadingInfoTypes } from "./loading-info-types";
 

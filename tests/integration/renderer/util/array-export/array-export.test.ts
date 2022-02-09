@@ -1,6 +1,6 @@
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { exportToCsv } from "@renderer/util/array-export/array-export";
-import { formatPathForUserSystem } from "@renderer/util/file-system/file-sys-util";
+import { exportToCsv } from "@renderer/utils/array-export/array-export";
+import { formatPathForUserSystem } from "@renderer/utils/file-system/file-sys-util";
 import { flatten } from "lodash";
 import { toArray } from "rxjs/operators";
 

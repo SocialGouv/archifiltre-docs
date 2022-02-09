@@ -10,7 +10,7 @@ import { getHashesFromStore } from "../../../../../reducers/hashes/hashes-select
 import {
   countDuplicateFiles,
   countDuplicateFilesTotalSize,
-} from "../../../../../util/duplicates/duplicates-util";
+} from "../../../../../utils/duplicates/duplicates-util";
 import type { DuplicatesChartProps } from "./duplicates-chart";
 import { DuplicatesChart } from "./duplicates-chart";
 

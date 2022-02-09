@@ -2,7 +2,7 @@
 import _ from "lodash";
 import { compose } from "lodash/fp";
 
-import { mapValueBetweenEnums } from "../util/enum/enum-util";
+import { mapValueBetweenEnums } from "../utils/enum/enum-util";
 import type { TrackerAction } from "./tracker-types";
 import { ActionTitle, ActionType } from "./tracker-types";
 

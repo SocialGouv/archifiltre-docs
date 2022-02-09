@@ -7,8 +7,8 @@ import { useTranslation } from "react-i18next";
 
 import { Object } from "../../../../common/utils";
 import { useStyles } from "../../../hooks/use-styles";
-import { isValidFilePath } from "../../../util/file-system/file-sys-util";
-import { identity } from "../../../util/function/function-util";
+import { isValidFilePath } from "../../../utils/file-system/file-sys-util";
+import { identity } from "../../../utils/function/function-util";
 import type { IsActiveOptions } from "./export-config";
 import {
   exportConfig,

@@ -3,7 +3,7 @@ import type { DispatchExts } from "@renderer/reducers/archifiltre-types";
 import { initialState as filesAndFoldersInitialState } from "@renderer/reducers/files-and-folders/files-and-folders-reducer";
 import { initialState as hashesReducerInitialState } from "@renderer/reducers/hashes/hashes-reducer";
 import type { StoreState } from "@renderer/reducers/store";
-import { save } from "@renderer/util/file-system/file-sys-util";
+import { save } from "@renderer/utils/file-system/file-sys-util";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 

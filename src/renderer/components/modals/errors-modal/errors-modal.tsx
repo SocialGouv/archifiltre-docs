@@ -6,7 +6,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { useStyles } from "../../../hooks/use-styles";
-import type { ArchifiltreDocsError } from "../../../util/error/error-util";
+import type { ArchifiltreDocsError } from "../../../utils/error/error-util";
 import { ModalHeader } from "../modal-header";
 import { ErrorsTable } from "./errors-table";
 

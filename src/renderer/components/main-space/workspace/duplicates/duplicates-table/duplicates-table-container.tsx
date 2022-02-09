@@ -9,8 +9,8 @@ import {
   countDuplicateFileSizes,
   countDuplicateFileTypes,
   getFilesDuplicatesMap,
-} from "../../../../../util/duplicates/duplicates-util";
-import { percent } from "../../../../../util/numbers/numbers-util";
+} from "../../../../../utils/duplicates/duplicates-util";
+import { percent } from "../../../../../utils/numbers/numbers-util";
 import type { DuplicatesTableProps } from "./duplicates-table";
 import { DuplicatesTable } from "./duplicates-table";
 

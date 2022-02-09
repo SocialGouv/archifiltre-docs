@@ -8,8 +8,8 @@ import type { FilterMethod } from "../../../../typings/filter-types";
 import {
   BooleanOperator,
   joinFilters,
-} from "../../../../util/array/array-util";
-import { getType } from "../../../../util/files-and-folders/file-and-folders-utils";
+} from "../../../../utils/array/array-util";
+import { getType } from "../../../../utils/files-and-folders/file-and-folders-utils";
 import { Filter } from "./filter";
 
 export interface TypeFilterProps {

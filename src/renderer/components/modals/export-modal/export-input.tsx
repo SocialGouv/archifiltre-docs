@@ -8,7 +8,7 @@ import { FaFolderOpen } from "react-icons/fa";
 import styled from "styled-components";
 
 import type { ThemedProps } from "../../../theme/default-theme";
-import { promptUserForSave } from "../../../util/file-system/file-system-util";
+import { promptUserForSave } from "../../../utils/file-system/file-system-util";
 
 const FilePath = withTheme(styled.span`
   white-space: nowrap;

@@ -1,7 +1,7 @@
 import { resipExporter } from "@renderer/exporters/resip/resip-exporter";
 import { ROOT_FF_ID } from "@renderer/reducers/files-and-folders/files-and-folders-selectors";
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { formatPathForUserSystem } from "@renderer/util/file-system/file-sys-util";
+import { formatPathForUserSystem } from "@renderer/utils/file-system/file-sys-util";
 import { advanceTo } from "jest-date-mock";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";

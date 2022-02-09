@@ -1,4 +1,4 @@
-import { arrayToCsv } from "@renderer/util/csv/csv-util";
+import { arrayToCsv } from "@renderer/utils/csv/csv-util";
 
 const testSample = [
   ["00", "01"],

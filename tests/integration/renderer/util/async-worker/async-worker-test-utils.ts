@@ -1,4 +1,4 @@
-import type { AsyncWorker } from "@renderer/util/async-worker/async-worker-util";
+import type { AsyncWorker } from "@renderer/utils/async-worker/async-worker-util";
 
 interface AsyncWorkerMock {
   addEventListener: jest.Mock;

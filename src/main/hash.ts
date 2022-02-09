@@ -1,7 +1,8 @@
+import type { HashComputingError } from "@common/utils/hash/hash-errors";
+import type { HashComputingResult } from "@common/utils/hash/hash-util";
+import { computeHash } from "@common/utils/hash/hash-util";
+
 import { ipcMain } from "../common/ipc";
-import type { HashComputingError } from "../util/hash/hash-errors";
-import type { HashComputingResult } from "../util/hash/hash-util";
-import { computeHash } from "../util/hash/hash-util";
 
 declare module "@common/ipc/event" {
   interface AsyncIpcMapping {

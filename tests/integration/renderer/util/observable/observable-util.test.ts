@@ -1,7 +1,7 @@
-import { MessageTypes } from "@renderer/util/batch-process/batch-process-util-types";
-import type { AnyFunction } from "@renderer/util/function/function-util";
-import type { DataProcessingStream } from "@renderer/util/observable/observable-util";
-import { operateOnDataProcessingStream } from "@renderer/util/observable/observable-util";
+import { MessageTypes } from "@renderer/utils/batch-process/batch-process-util-types";
+import type { AnyFunction } from "@renderer/utils/function/function-util";
+import type { DataProcessingStream } from "@renderer/utils/observable/observable-util";
+import { operateOnDataProcessingStream } from "@renderer/utils/observable/observable-util";
 import type { OperatorFunction } from "rxjs";
 import { identity, of } from "rxjs";
 import { map, toArray } from "rxjs/operators";

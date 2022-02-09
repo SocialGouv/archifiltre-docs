@@ -8,7 +8,7 @@ import DailyRotateFile from "winston-daily-rotate-file";
 import type { SentryTransportOptions } from "winston-transport-sentry-node";
 import WinstonSentry from "winston-transport-sentry-node";
 
-import { getPath } from "../util/electron/electron-util";
+import { getPath } from "../../common/utils/electron/electron-util";
 import { WinstonConsoleLogger } from "./winston-console-logger";
 
 const isProd = () => MODE === "production";

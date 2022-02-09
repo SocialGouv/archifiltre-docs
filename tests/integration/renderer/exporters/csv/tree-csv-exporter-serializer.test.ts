@@ -1,7 +1,7 @@
 import type { TreeCsvExporterParams } from "@renderer/exporters/csv/tree-csv-exporter-serializer";
 import { parseTreeCsvExporterOptionsFromStream } from "@renderer/exporters/csv/tree-csv-exporter-serializer";
 import { createFilesAndFolders } from "@renderer/files-and-folders-loader/files-and-folders-loader";
-import { Language } from "@renderer/util/language/language-types";
+import { Language } from "@renderer/utils/language/language-types";
 import { MockWritable } from "stdio-mock";
 import Stream from "stream";
 

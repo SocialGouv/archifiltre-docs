@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
 
+import { getPath } from "../../common/utils/electron/electron-util";
 import { reportError } from "../logging/reporter";
-import { getPath } from "../util/electron/electron-util";
 
 const MAX_SHORTCUTS_LENGTH = 10;
 

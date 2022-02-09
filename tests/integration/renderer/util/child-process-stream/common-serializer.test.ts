@@ -1,7 +1,7 @@
 import {
   extractKeysFromFilesAndFolders,
   makeDataExtractor,
-} from "@renderer/util/child-process-stream/common-serializer";
+} from "@renderer/utils/child-process-stream/common-serializer";
 import { range } from "lodash";
 import { pick } from "lodash/fp";
 

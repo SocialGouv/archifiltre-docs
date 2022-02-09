@@ -9,7 +9,7 @@ import {
 import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getSessionNameFromStore } from "../../../../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { setSessionNameThunk } from "../../../../../reducers/workspace-metadata/workspace-metadata-thunk";
-import { getFirstLevelName } from "../../../../../util/files-and-folders/file-and-folders-utils";
+import { getFirstLevelName } from "../../../../../utils/files-and-folders/file-and-folders-utils";
 import type { SessionInfoProps } from "./session-info";
 import { SessionInfo } from "./session-info";
 

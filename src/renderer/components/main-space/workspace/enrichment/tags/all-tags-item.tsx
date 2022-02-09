@@ -6,7 +6,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaPen, FaTrash } from "react-icons/fa";
 
-import { percent } from "../../../../../util/numbers/numbers-util";
+import { percent } from "../../../../../utils/numbers/numbers-util";
 import type { EditableFieldProps } from "../../../../common/editable-field";
 import { EditableField } from "../../../../common/editable-field";
 import { EllipsisText } from "./ellipsis-text";

@@ -1,4 +1,4 @@
-import type { AnyFunction } from "@renderer/util/function/function-util";
+import type { AnyFunction } from "@renderer/utils/function/function-util";
 import { compose } from "redux";
 
 describe("function-util", () => {

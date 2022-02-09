@@ -1,3 +1,6 @@
+import type { AnyFunction } from "@common/utils/function/function-util";
+import { tap } from "@common/utils/functionnal-programming-utils";
+import { Language } from "@common/utils/language/language-types";
 import { Input } from "@material-ui/core";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import type { Locale } from "date-fns";
@@ -11,9 +14,6 @@ import { FaPen } from "react-icons/fa";
 import { useDateInput } from "react-nice-dates";
 
 import { useLanguage } from "../../hooks/use-language";
-import type { AnyFunction } from "../../util/function/function-util";
-import { tap } from "../../util/functionnal-programming-utils";
-import { Language } from "../../util/language/language-types";
 
 const languagesMap = {
   [Language.FR]: fr,

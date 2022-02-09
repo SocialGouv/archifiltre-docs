@@ -4,8 +4,8 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { useStyles } from "../../../../../hooks/use-styles";
-import { octet2HumanReadableFormat } from "../../../../../util/file-system/file-sys-util";
-import { openExternalElement } from "../../../../../util/file-system/file-system-util";
+import { octet2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
+import { openExternalElement } from "../../../../../utils/file-system/file-system-util";
 import { ClickableIcon } from "../../../../common/clickable-icon";
 import { EditableField } from "../../../../common/editable-field";
 import { HelpTooltip } from "../../../../common/help-tooltip";

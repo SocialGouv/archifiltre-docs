@@ -1,4 +1,4 @@
-const en = require("../../src/translations/en.json");
+const en = require("../../src/renderer/translations/en.json");
 const { at } = require("lodash");
 
 class I18nextMock {

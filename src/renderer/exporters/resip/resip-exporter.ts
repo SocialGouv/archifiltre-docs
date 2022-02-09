@@ -1,3 +1,8 @@
+import { makeEmptyArray, replaceValue } from "@common/utils/array/array-util";
+import {
+  getDisplayName,
+  isExactFileOrAncestor,
+} from "@common/utils/files-and-folders/file-and-folders-utils";
 import dateFormat from "dateformat";
 import _, { noop } from "lodash";
 import path from "path";
@@ -12,11 +17,6 @@ import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folder
 import { tagHasFfId } from "../../reducers/tags/tags-selectors";
 import type { Tag, TagMap } from "../../reducers/tags/tags-types";
 import { translations } from "../../translations/translations";
-import { makeEmptyArray, replaceValue } from "../../util/array/array-util";
-import {
-  getDisplayName,
-  isExactFileOrAncestor,
-} from "../../util/files-and-folders/file-and-folders-utils";
 
 interface TagWithID extends Tag {
   ID: number;

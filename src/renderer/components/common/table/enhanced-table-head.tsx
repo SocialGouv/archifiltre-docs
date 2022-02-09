@@ -5,7 +5,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 
-import type { Order } from "../../../util/table/table-util";
+import type { Order } from "../../../utils/table/table-util";
 import type { Column } from "./table-types";
 
 const useStyles = makeStyles(

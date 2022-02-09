@@ -1,7 +1,9 @@
+import {
+  createChartReplacer,
+  exportToDocX,
+} from "@common/utils/docx/docx-util";
+import type { SimpleObject } from "@common/utils/object/object-util";
 import path from "path";
-
-import { createChartReplacer, exportToDocX } from "../../util/docx/docx-util";
-import type { SimpleObject } from "../../util/object/object-util";
 
 interface AuditReportFile {
   name: string;

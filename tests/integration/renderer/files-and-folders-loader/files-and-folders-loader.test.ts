@@ -10,7 +10,7 @@ import {
 } from "@renderer/files-and-folders-loader/files-and-folders-loader";
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 // @ts-expect-error Mock
-import { setMockFs as hiddenFileSetMockFs } from "@renderer/util/hidden-file/hidden-file-util";
+import { setMockFs as hiddenFileSetMockFs } from "@renderer/utils/hidden-file/hidden-file-util";
 import { version } from "@renderer/version";
 import fs from "fs";
 import { sortBy } from "lodash";

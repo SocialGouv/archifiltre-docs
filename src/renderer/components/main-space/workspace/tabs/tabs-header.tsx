@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { addTracker } from "../../../../logging/tracker";
 import { ActionTitle, ActionType } from "../../../../logging/tracker-types";
 import { getAreHashesReady } from "../../../../reducers/files-and-folders/files-and-folders-selectors";
-import type { SimpleObject } from "../../../../util/object/object-util";
+import type { SimpleObject } from "../../../../utils/object/object-util";
 
 const useLocalStyles = makeStyles((theme: Theme) =>
   createStyles({

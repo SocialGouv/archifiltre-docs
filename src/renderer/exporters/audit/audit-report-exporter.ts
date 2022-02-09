@@ -1,3 +1,19 @@
+import {
+  countDuplicateFiles,
+  countDuplicateFolders,
+} from "@common/utils/duplicates/duplicates-util";
+import {
+  formatPathForUserSystem,
+  octet2HumanReadableFormat,
+} from "@common/utils/file-system/file-sys-util";
+import { openExternalElement } from "@common/utils/file-system/file-system-util";
+import { FileType } from "@common/utils/file-types/file-types-util";
+import type { AnyFunction } from "@common/utils/function/function-util";
+import {
+  NotificationDuration,
+  notifyInfo,
+  notifySuccess,
+} from "@common/utils/notification/notifications-util";
 import fs from "fs";
 
 import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
@@ -14,22 +30,6 @@ import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folder
 import { getHashesFromStore } from "../../reducers/hashes/hashes-selectors";
 import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import { translations } from "../../translations/translations";
-import {
-  countDuplicateFiles,
-  countDuplicateFolders,
-} from "../../util/duplicates/duplicates-util";
-import {
-  formatPathForUserSystem,
-  octet2HumanReadableFormat,
-} from "../../util/file-system/file-sys-util";
-import { openExternalElement } from "../../util/file-system/file-system-util";
-import { FileType } from "../../util/file-types/file-types-util";
-import type { AnyFunction } from "../../util/function/function-util";
-import {
-  NotificationDuration,
-  notifyInfo,
-  notifySuccess,
-} from "../../util/notification/notifications-util";
 import type { AuditReportData } from "./audit-report-generator";
 import { generateAuditReportDocx } from "./audit-report-generator";
 import {

@@ -11,39 +11,39 @@ import { reportError } from "../logging/reporter";
 import { addTracker } from "../logging/tracker";
 import { ActionTitle, ActionType } from "../logging/tracker-types";
 import { translations } from "../translations/translations";
-import { filterResults } from "../util/batch-process/batch-process-util";
+import { filterResults } from "../utils/batch-process/batch-process-util";
 import type {
   ErrorMessage,
   ResultMessage,
-} from "../util/batch-process/batch-process-util-types";
-import { copyToClipboard } from "../util/clipboard/clipboard";
-import { ArchifiltreDocsStoreThunkErrorCode } from "../util/error/error-codes";
-import type { ArchifiltreDocsError } from "../util/error/error-util";
+} from "../utils/batch-process/batch-process-util-types";
+import { copyToClipboard } from "../utils/clipboard/clipboard";
+import { ArchifiltreDocsStoreThunkErrorCode } from "../utils/error/error-codes";
+import type { ArchifiltreDocsError } from "../utils/error/error-util";
 import {
   ArchifiltreDocsErrorType,
   makeErrorHandler,
-} from "../util/error/error-util";
+} from "../utils/error/error-util";
 import {
   countZipFiles,
   isJsonFile,
   isRootPath,
   isValidFolderPath,
   octet2HumanReadableFormat,
-} from "../util/file-system/file-sys-util";
-import type { HookParam } from "../util/file-tree-loader/file-tree-loader";
-import { loadFileTree } from "../util/file-tree-loader/file-tree-loader";
+} from "../utils/file-system/file-sys-util";
+import type { HookParam } from "../utils/file-tree-loader/file-tree-loader";
+import { loadFileTree } from "../utils/file-tree-loader/file-tree-loader";
 import {
   filesAndFoldersMapToArray,
   getFiles,
   getFirstLevelName,
-} from "../util/files-and-folders/file-and-folders-utils";
+} from "../utils/files-and-folders/file-and-folders-utils";
 import {
   NotificationDuration,
   notifyError,
   notifyInfo,
-} from "../util/notification/notifications-util";
-import { operateOnDataProcessingStream } from "../util/observable/observable-util";
-import { workerManager } from "../util/worker-manager/worker-manager";
+} from "../utils/notification/notifications-util";
+import { operateOnDataProcessingStream } from "../utils/observable/observable-util";
+import { workerManager } from "../utils/worker-manager/worker-manager";
 import { version, versionComparator } from "../version";
 import type {
   ArchifiltreDocsDispatch,

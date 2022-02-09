@@ -1,3 +1,17 @@
+import { generateDeletionScript } from "@common/utils/deletion-script/deletion-script-util";
+import { startPathFromOneLevelAbove } from "@common/utils/file-system/file-sys-util";
+import { showInFolder } from "@common/utils/file-system/file-system-util";
+import { removeChildrenPath } from "@common/utils/files-and-folders/file-and-folders-utils";
+import type {
+  AnyFunction,
+  Awaitable,
+} from "@common/utils/function/function-util";
+import {
+  NotificationDuration,
+  notifySuccess,
+} from "@common/utils/notification/notifications-util";
+import { isWindows } from "@common/utils/os/os-util";
+import { liftPromise } from "@common/utils/promise/promise-util";
 import * as fs from "fs";
 import { compose, map } from "lodash/fp";
 import type { TFunction } from "react-i18next";
@@ -8,17 +22,6 @@ import { getElementsToDeleteFromStore } from "../../reducers/files-and-folders/f
 import type { StoreState } from "../../reducers/store";
 import { getWorkspaceMetadataFromStore } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { translations } from "../../translations/translations";
-import { generateDeletionScript } from "../../util/deletion-script/deletion-script-util";
-import { startPathFromOneLevelAbove } from "../../util/file-system/file-sys-util";
-import { showInFolder } from "../../util/file-system/file-system-util";
-import { removeChildrenPath } from "../../util/files-and-folders/file-and-folders-utils";
-import type { AnyFunction, Awaitable } from "../../util/function/function-util";
-import {
-  NotificationDuration,
-  notifySuccess,
-} from "../../util/notification/notifications-util";
-import { isWindows } from "../../util/os/os-util";
-import { liftPromise } from "../../util/promise/promise-util";
 
 const prepareElementsToDelete = compose(
   map(startPathFromOneLevelAbove),

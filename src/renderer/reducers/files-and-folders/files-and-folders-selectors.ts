@@ -1,11 +1,11 @@
+import { medianOnSortedArray } from "@common/utils/array/array-util";
+import type { ArchifiltreDocsError } from "@common/utils/error/error-util";
+import type { Mapper } from "@common/utils/functionnal-programming-utils";
+import { not, size } from "@common/utils/functionnal-programming-utils";
 import _ from "lodash";
 import fp from "lodash/fp";
 import { useSelector } from "react-redux";
 
-import { medianOnSortedArray } from "../../util/array/array-util";
-import type { ArchifiltreDocsError } from "../../util/error/error-util";
-import type { Mapper } from "../../util/functionnal-programming-utils";
-import { not, size } from "../../util/functionnal-programming-utils";
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
 import type { FilesAndFoldersMetadataMap } from "../files-and-folders-metadata/files-and-folders-metadata-types";
 import { getHashesFromStore } from "../hashes/hashes-selectors";

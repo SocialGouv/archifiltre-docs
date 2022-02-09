@@ -1,7 +1,7 @@
 /* eslint-disable jest/expect-expect */
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { makeRowConfig } from "@renderer/util/array-export/make-array-export-config";
-import { formatPathForUserSystem } from "@renderer/util/file-system/file-sys-util";
+import { makeRowConfig } from "@renderer/utils/array-export/make-array-export-config";
+import { formatPathForUserSystem } from "@renderer/utils/file-system/file-sys-util";
 import { createTag } from "tests/integration/renderer/reducers/tags/tags-test-utils";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";

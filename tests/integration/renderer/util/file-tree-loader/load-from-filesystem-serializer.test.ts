@@ -3,7 +3,7 @@ import type { FilesAndFoldersMap } from "@renderer/reducers/files-and-folders/fi
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import type { FilesAndFoldersMetadataMap } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import type { HashesMap } from "@renderer/reducers/hashes/hashes-types";
-import { parseVFSFromStream } from "@renderer/util/file-tree-loader/load-from-filesystem-serializer";
+import { parseVFSFromStream } from "@renderer/utils/file-tree-loader/load-from-filesystem-serializer";
 import { times } from "lodash";
 import { MockWritable } from "stdio-mock";
 import Stream from "stream";

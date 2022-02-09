@@ -18,15 +18,15 @@ import type {
 } from "../reducers/files-and-folders/files-and-folders-types";
 import type { HashesMap } from "../reducers/hashes/hashes-types";
 import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
-import { convertJsonToCurrentVersion } from "../util/compatibility/compatibility";
+import { convertJsonToCurrentVersion } from "../utils/compatibility/compatibility";
 import {
   ArchifiltreDocsErrorType,
   convertFsErrorToArchifiltreDocsError,
-} from "../util/error/error-util";
-import { identifyFileFormat } from "../util/file-format/file-format-util";
-import { convertToPosixAbsolutePath } from "../util/file-system/file-sys-util";
-import { asyncShouldIgnoreElement } from "../util/hidden-file/hidden-file-util";
-import { removeIgnoredElementsFromVirtualFileSystem } from "../util/virtual-file-system-util/virtual-file-system-util";
+} from "../utils/error/error-util";
+import { identifyFileFormat } from "../utils/file-format/file-format-util";
+import { convertToPosixAbsolutePath } from "../utils/file-system/file-sys-util";
+import { asyncShouldIgnoreElement } from "../utils/hidden-file/hidden-file-util";
+import { removeIgnoredElementsFromVirtualFileSystem } from "../utils/virtual-file-system-util/virtual-file-system-util";
 import { sanitizeHooks } from "./file-system-loading-process-utils";
 import type {
   FilesAndFoldersLoader,

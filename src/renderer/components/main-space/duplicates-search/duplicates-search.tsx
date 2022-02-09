@@ -12,8 +12,8 @@ import type {
   ElementWithToDelete,
   FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
-import { octet2HumanReadableFormat } from "../../../util/file-system/file-sys-util";
-import { getType } from "../../../util/files-and-folders/file-and-folders-utils";
+import { octet2HumanReadableFormat } from "../../../utils/file-system/file-sys-util";
+import { getType } from "../../../utils/files-and-folders/file-and-folders-utils";
 import { CategoryTitle } from "../../common/category-title";
 import { Table } from "../../common/table/table";
 import { makeTableExpandableRow } from "../../common/table/table-expandable-row";

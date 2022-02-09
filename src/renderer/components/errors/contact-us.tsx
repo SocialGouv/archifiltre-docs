@@ -1,3 +1,4 @@
+import { openLink } from "@common/utils/electron/electron-util";
 import useTheme from "@material-ui/core/styles/useTheme";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -5,7 +6,6 @@ import styled from "styled-components";
 
 import { CONTACT_LINK } from "../../constants";
 import type { ThemedProps } from "../../theme/default-theme";
-import { openLink } from "../../util/electron/electron-util";
 
 const sendMailToArchifiltreTeam = () => {
   openLink(CONTACT_LINK);

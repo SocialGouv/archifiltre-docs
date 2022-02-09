@@ -10,7 +10,7 @@ import {
   maxPage,
   stableSort,
   tableContentToArray,
-} from "@renderer/util/table/table-util";
+} from "@renderer/utils/table/table-util";
 
 describe("table-util", () => {
   describe("stableSort", () => {

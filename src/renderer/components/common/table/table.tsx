@@ -15,13 +15,13 @@ import { useTranslation } from "react-i18next";
 import { useDuplicatePageState } from "../../../context/duplicates-page-context";
 import { useControllableValue } from "../../../hooks/use-controllable-value";
 import { useElementHeight } from "../../../hooks/use-element-height";
-import type { Order } from "../../../util/table/table-util";
+import type { Order } from "../../../utils/table/table-util";
 import {
   accessorToFunction,
   getComparator,
   limitPageIndex,
   stableSort,
-} from "../../../util/table/table-util";
+} from "../../../utils/table/table-util";
 import { Paginator } from "../../modals/search-modal/paginator";
 import { EnhancedTableHead } from "./enhanced-table-head";
 import { TableDefaultRow } from "./table-default-row";

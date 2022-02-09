@@ -10,12 +10,12 @@ import type {
 import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
-import { medianOnSortedArray } from "../util/array/array-util";
-import type { ArchifiltreDocsError } from "../util/error/error-util";
-import { isJsonFile } from "../util/file-system/file-sys-util";
-import { tap } from "../util/functionnal-programming-utils";
-import { hookCounter } from "../util/hook/hook-utils";
-import { indexSort, indexSortReverse } from "../util/list-util";
+import { medianOnSortedArray } from "../utils/array/array-util";
+import type { ArchifiltreDocsError } from "../utils/error/error-util";
+import { isJsonFile } from "../utils/file-system/file-sys-util";
+import { tap } from "../utils/functionnal-programming-utils";
+import { hookCounter } from "../utils/hook/hook-utils";
+import { indexSort, indexSortReverse } from "../utils/list-util";
 import { version } from "../version";
 import {
   asyncLoadFilesAndFoldersFromFileSystem,

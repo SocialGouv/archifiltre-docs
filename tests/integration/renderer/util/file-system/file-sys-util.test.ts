@@ -2,7 +2,7 @@ import {
   isRootPath,
   isValidFolderPath,
   startPathFromOneLevelAbove,
-} from "@renderer/util/file-system/file-sys-util";
+} from "@renderer/utils/file-system/file-sys-util";
 import path from "path";
 
 jest.mock("path", () => {

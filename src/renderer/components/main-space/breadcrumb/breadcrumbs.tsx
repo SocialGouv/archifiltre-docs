@@ -8,9 +8,9 @@ import type {
   FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { makeEmptyArray } from "../../../util/array/array-util";
-import { placeholder } from "../../../util/color/color-util";
-import { formatPathForUserSystem } from "../../../util/file-system/file-sys-util";
+import { makeEmptyArray } from "../../../utils/array/array-util";
+import { placeholder } from "../../../utils/color/color-util";
+import { formatPathForUserSystem } from "../../../utils/file-system/file-sys-util";
 import type {
   FillColor,
   IcicleMouseActionHandler,

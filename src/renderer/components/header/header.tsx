@@ -1,10 +1,10 @@
+import type { VoidFunction } from "@common/utils/function/function-util";
 import Box from "@material-ui/core/Box";
 import React from "react";
 import styled from "styled-components";
 
 import logo from "../../../static/imgs/logo.png";
 import type { ExportToJson } from "../../exporters/json/json-exporter";
-import type { VoidFunction } from "../../util/function/function-util";
 import { TabsHeader } from "../main-space/workspace/tabs/tabs-header";
 import { ExportButton } from "./export-button";
 import { SaveButton } from "./save-button";

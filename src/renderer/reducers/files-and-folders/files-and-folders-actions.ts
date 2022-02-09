@@ -1,4 +1,5 @@
-import type { ArchifiltreDocsError } from "../../util/error/error-util";
+import type { ArchifiltreDocsError } from "@common/utils/error/error-util";
+
 import type {
   AliasMap,
   CommentsMap,

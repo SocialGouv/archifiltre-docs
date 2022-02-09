@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 
-import { computeCumulative } from "../../../util/array/array-util";
+import { computeCumulative } from "../../../utils/array/array-util";
 import { IcicleRect } from "./icicle-rect";
 import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 

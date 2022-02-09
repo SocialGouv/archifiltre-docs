@@ -2,7 +2,7 @@ import { noop } from "lodash";
 import React, { createContext, useCallback, useContext, useState } from "react";
 
 import { useZoomTracker } from "../../../hooks/use-zoom-tracker";
-import { ZoomDirection, zoomReducer } from "../../../util/zoom/zoom-util";
+import { ZoomDirection, zoomReducer } from "../../../utils/zoom/zoom-util";
 
 interface ZoomState {
   zoomIn: (mousePosition: number | null, zoomSpeed: number) => void;

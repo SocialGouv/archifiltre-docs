@@ -1,13 +1,13 @@
+import { exportToCsv } from "@common/utils/array-export/array-export";
+import type { AsyncWorker } from "@common/utils/async-worker/async-worker-util";
+import { MessageTypes } from "@common/utils/batch-process/batch-process-util-types";
+import { computeTreeStructureArray } from "@common/utils/tree-representation/tree-representation";
 import type { TFunction } from "i18next";
 import { flatten } from "lodash";
 import { tap, toArray } from "rxjs/operators";
 import { utils, write } from "xlsx";
 
 import { translations } from "../../translations/translations";
-import { exportToCsv } from "../../util/array-export/array-export";
-import type { AsyncWorker } from "../../util/async-worker/async-worker-util";
-import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
-import { computeTreeStructureArray } from "../../util/tree-representation/tree-representation";
 import type { CsvExporterData } from "../csv/csv-exporter.impl";
 
 const TREE_CSV_PROGRESS_WEIGHT = 1;

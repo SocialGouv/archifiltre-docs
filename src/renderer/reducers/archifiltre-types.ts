@@ -1,7 +1,7 @@
 import type { AnyAction } from "redux";
 import type { ThunkAction, ThunkDispatch } from "redux-thunk";
 
-import type { SimpleObject } from "../util/object/object-util";
+import type { SimpleObject } from "../utils/object/object-util";
 import type { StoreState } from "./store";
 
 export type ArchifiltreDocsThunk = <TArgs>(

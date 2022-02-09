@@ -7,7 +7,7 @@ import type { StoreState } from "@renderer/reducers/store";
 import {
   notifyInfo,
   notifySuccess,
-} from "@renderer/util/notification/notifications-util";
+} from "@renderer/utils/notification/notifications-util";
 import { promises as fs } from "fs";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";

@@ -10,8 +10,8 @@ import { metsExporterThunk } from "../../../exporters/mets/mets-export-thunk";
 import { resipExporterThunk } from "../../../exporters/resip/resip-exporter-thunk";
 import { ActionTitle } from "../../../logging/tracker-types";
 import type { ArchifiltreDocsThunkAction } from "../../../reducers/archifiltre-types";
-import { getNameWithExtension } from "../../../util/file-system/file-sys-util";
-import { isWindows } from "../../../util/os/os-util";
+import { getNameWithExtension } from "../../../utils/file-system/file-sys-util";
+import { isWindows } from "../../../utils/os/os-util";
 import type { ExportTypesMap } from "../export-modal/export-options";
 
 /* eslint-disable @typescript-eslint/naming-convention */

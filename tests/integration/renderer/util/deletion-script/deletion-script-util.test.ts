@@ -1,8 +1,8 @@
 import {
   generateUnixDeletionScript,
   generateWindowDeletionScript,
-} from "@renderer/util/deletion-script/deletion-script-util";
-import { isUnixLike, isWindows } from "@renderer/util/os/os-util";
+} from "@renderer/utils/deletion-script/deletion-script-util";
+import { isUnixLike, isWindows } from "@renderer/utils/os/os-util";
 import cp from "child_process";
 import fs from "fs";
 import path from "path";

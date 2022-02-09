@@ -1,3 +1,4 @@
+import { openLink } from "@common/utils/electron/electron-util";
 import { ListItemIcon, ListItemText, Menu, MenuItem } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -18,7 +19,6 @@ import {
   SUGGEST_FEATURE_LINK,
 } from "../../constants";
 import { useStyles } from "../../hooks/use-styles";
-import { openLink } from "../../util/electron/electron-util";
 
 export const HelpButton: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);

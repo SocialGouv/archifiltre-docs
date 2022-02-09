@@ -26,7 +26,7 @@ import { setFilesAndFoldersHashes } from "@renderer/reducers/hashes/hashes-actio
 import { updateFilesAndFoldersHashes } from "@renderer/reducers/hashes/hashes-thunks";
 import type { StoreState } from "@renderer/reducers/store";
 import { translations } from "@renderer/translations/translations";
-import { notifyInfo } from "@renderer/util/notification/notifications-util";
+import { notifyInfo } from "@renderer/utils/notification/notifications-util";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 

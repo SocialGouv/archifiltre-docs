@@ -2,9 +2,9 @@ import { createHash } from "crypto";
 import fs from "fs";
 import { join } from "path";
 
-import { getPath } from "./util/electron/electron-util";
-import { mkdir } from "./util/file-system/file-sys-util";
-import { compose, extractKeys } from "./util/object/object-util";
+import { getPath } from "../common/utils/electron/electron-util";
+import { mkdir } from "./utils/file-system/file-sys-util";
+import { compose, extractKeys } from "./utils/object/object-util";
 
 const randomString = "WbXDHMMHojJEQHzY6TLFBq2LSOQjVktGRSp9HT07";
 const basePath = join(getPath("userData"), randomString);

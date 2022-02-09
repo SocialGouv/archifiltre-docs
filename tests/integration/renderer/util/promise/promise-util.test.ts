@@ -1,4 +1,4 @@
-import { liftPromise } from "@renderer/util/promise/promise-util";
+import { liftPromise } from "@renderer/utils/promise/promise-util";
 
 describe("promise-util", () => {
   describe("liftPromise", () => {

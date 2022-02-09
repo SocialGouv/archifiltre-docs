@@ -1,3 +1,8 @@
+import {
+  FileType,
+  getFileTypeFromFileName,
+} from "@common/utils/file-types/file-types-util";
+import { ratio } from "@common/utils/numbers/numbers-util";
 import { useCallback, useMemo } from "react";
 
 import {
@@ -7,11 +12,6 @@ import {
 import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { IcicleColorMode } from "../../reducers/icicle-sort-method/icicle-sort-method-types";
-import {
-  FileType,
-  getFileTypeFromFileName,
-} from "../../util/file-types/file-types-util";
-import { ratio } from "../../util/numbers/numbers-util";
 
 type RgbaTuple = [
   red: number,

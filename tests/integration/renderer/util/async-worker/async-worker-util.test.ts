@@ -1,5 +1,5 @@
-import { makeChildWorkerMessageCallback } from "@renderer/util/async-worker/async-worker-util";
-import { MessageTypes } from "@renderer/util/batch-process/batch-process-util-types";
+import { makeChildWorkerMessageCallback } from "@renderer/utils/async-worker/async-worker-util";
+import { MessageTypes } from "@renderer/utils/batch-process/batch-process-util-types";
 import { mapValues } from "lodash";
 
 import { createAsyncWorkerMock } from "./async-worker-test-utils";

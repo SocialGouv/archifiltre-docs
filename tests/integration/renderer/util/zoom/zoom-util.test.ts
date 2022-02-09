@@ -1,7 +1,10 @@
+import {
+  computeZoomRatio,
+  ZoomDirection,
+  zoomReducer,
+} from "@renderer/util/zoom/zoom-util";
 import fc from "fast-check";
 import _ from "lodash";
-
-import { computeZoomRatio, ZoomDirection, zoomReducer } from "./zoom-util";
 
 describe("zoom-util", () => {
   describe("computeZoomRatio", () => {

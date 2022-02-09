@@ -1,7 +1,6 @@
+import type { HookCounterOptions } from "@renderer/util/hook/hook-utils";
+import { hookCounter } from "@renderer/util/hook/hook-utils";
 import { advanceBy, advanceTo } from "jest-date-mock";
-
-import type { HookCounterOptions } from "./hook-utils";
-import { hookCounter } from "./hook-utils";
 
 const setup = (options: HookCounterOptions<unknown[]>) => {
   const throttledHook = jest.fn();

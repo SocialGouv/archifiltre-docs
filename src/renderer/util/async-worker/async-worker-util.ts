@@ -21,7 +21,7 @@ export type AsyncWorkerControllerEvent =
   | WorkerEventType.EXIT;
 
 type AsyncWorkerEvent = Omit<Event, "type"> & WorkerMessage;
-type TypedEventListener = (evt: AsyncWorkerEvent) => void;
+export type TypedEventListener = (evt: AsyncWorkerEvent) => void;
 
 export interface AsyncWorker<TEventType = AsyncWorkerEventType> {
   addEventListener: (

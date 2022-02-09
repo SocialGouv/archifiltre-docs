@@ -7,7 +7,7 @@ import {
   makeEmptyArray,
   medianOnSortedArray,
   replaceValue,
-} from "./array-util";
+} from "@renderer/util/array/array-util";
 
 describe("array-util", () => {
   describe("computeCumulative", () => {
@@ -92,7 +92,7 @@ describe("array-util", () => {
   });
 
   describe("countItems", () => {
-    const predicate = (value) => value;
+    const predicate = (value: any) => value;
 
     describe("with an empty array", () => {
       it("should return 0", () => {

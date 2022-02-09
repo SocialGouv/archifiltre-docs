@@ -1,6 +1,5 @@
+import { identifyFileFormat } from "@renderer/util/file-format/file-format-util";
 import path from "path";
-
-import { identifyFileFormat } from "./file-format-util";
 
 describe("file-format-util", () => {
   describe("identifyFileFormat", () => {

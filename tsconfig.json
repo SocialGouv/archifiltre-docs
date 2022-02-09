@@ -20,8 +20,8 @@
   },
   "include": [
     "globals.d.ts",
-    "src/**/*",
-    "tests/integration/common/utils/error/error-util.test.ts",
+    "typings/*.d.ts",
+    "src/**/*"
   ],
   "exclude": [
     "tests/**/*",

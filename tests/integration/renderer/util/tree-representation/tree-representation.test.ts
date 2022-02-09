@@ -1,9 +1,9 @@
+import type { FilesAndFoldersMap } from "@renderer/reducers/files-and-folders/files-and-folders-types";
+import { computeTreeStructureArray } from "@renderer/util/tree-representation/tree-representation";
 import { flatten } from "lodash";
 import { toArray } from "rxjs/operators";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
-import { computeTreeStructureArray } from "./tree-representation";
 
 describe("tree-representation", () => {
   describe("computeTreeStructureArray", () => {

@@ -4,7 +4,7 @@ import {
   formatPercent,
   percent,
   ratio,
-} from "./numbers-util";
+} from "@renderer/util/numbers/numbers-util";
 
 describe("numbers-util", () => {
   describe("percent", () => {

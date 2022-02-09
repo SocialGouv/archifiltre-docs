@@ -1,12 +1,11 @@
-import cp from "child_process";
-import fs from "fs";
-import path from "path";
-
-import { isUnixLike, isWindows } from "../os/os-util";
 import {
   generateUnixDeletionScript,
   generateWindowDeletionScript,
-} from "./deletion-script-util";
+} from "@renderer/util/deletion-script/deletion-script-util";
+import { isUnixLike, isWindows } from "@renderer/util/os/os-util";
+import cp from "child_process";
+import fs from "fs";
+import path from "path";
 
 const onWindows = isWindows() ? it : it.skip;
 const onLinux = isUnixLike() ? it : it.skip;

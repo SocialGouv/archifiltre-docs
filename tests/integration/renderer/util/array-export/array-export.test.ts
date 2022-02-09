@@ -1,10 +1,10 @@
+import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { exportToCsv } from "@renderer/util/array-export/array-export";
+import { formatPathForUserSystem } from "@renderer/util/file-system/file-sys-util";
 import { flatten } from "lodash";
 import { toArray } from "rxjs/operators";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { formatPathForUserSystem } from "../file-system/file-sys-util";
-import { exportToCsv } from "./array-export";
 
 const tagName = "test-tag-1";
 const rootFolderId = "/root";
@@ -109,7 +109,7 @@ const comments = {
   [rootId]: rootComment,
 };
 
-const translator = (key) => `translate(${key})`;
+const translator = (key: string) => `translate(${key})`;
 
 describe.skip("array-export", () => {
   describe("exportToCsv", () => {

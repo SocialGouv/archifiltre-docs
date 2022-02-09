@@ -1,7 +1,10 @@
+import {
+  notifyError,
+  notifyInfo,
+  notifySuccess,
+} from "@renderer/util/notification/notifications-util";
 import noop from "lodash/noop";
 import { NotificationManager } from "react-notifications";
-
-import { notifyError, notifyInfo, notifySuccess } from "./notifications-util";
 
 jest.mock("react-notifications", () => ({
   NotificationManager: {

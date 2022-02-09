@@ -1,6 +1,4 @@
-import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { FileType } from "../file-types/file-types-util";
+import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
   countDuplicateFiles,
   countDuplicateFileSizes,
@@ -13,7 +11,10 @@ import {
   getFilesDuplicatesMap,
   getMostDuplicatedFiles,
   hasDuplicate,
-} from "./duplicates-util";
+} from "@renderer/util/duplicates/duplicates-util";
+import { FileType } from "@renderer/util/file-types/file-types-util";
+
+import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 
 const folder1Id = "folder-1-id";
 const folder2Id = "folder-2-id";

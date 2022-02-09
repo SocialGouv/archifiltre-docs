@@ -1,10 +1,9 @@
-import path from "path";
-
 import {
   isRootPath,
   isValidFolderPath,
   startPathFromOneLevelAbove,
-} from "./file-sys-util";
+} from "@renderer/util/file-system/file-sys-util";
+import path from "path";
 
 jest.mock("path", () => {
   const actualPath = jest.requireActual("path");

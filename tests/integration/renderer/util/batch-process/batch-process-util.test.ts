@@ -1,55 +1,55 @@
-import { range, remove } from "lodash";
-import { Subject } from "rxjs";
-import { take, toArray } from "rxjs/operators";
-
-import { makeEmptyArray } from "../array/array-util";
+import { makeEmptyArray } from "@renderer/util/array/array-util";
 import type {
   AsyncWorkerControllerEvent,
   ProcessControllerAsyncWorker,
-} from "../async-worker/async-worker-util";
-import { WorkerEventType } from "../async-worker/async-worker-util";
+  TypedEventListener,
+} from "@renderer/util/async-worker/async-worker-util";
+import { WorkerEventType } from "@renderer/util/async-worker/async-worker-util";
 import {
   aggregateErrorsToMap,
   aggregateResultsToMap,
   processQueueWithWorkers,
   setupWorkers$,
-} from "./batch-process-util";
+} from "@renderer/util/batch-process/batch-process-util";
 import type {
   InitializeMessage,
   ReadyMessage,
   ResultMessage,
   WorkerMessage,
-} from "./batch-process-util-types";
-import { MessageTypes } from "./batch-process-util-types";
+} from "@renderer/util/batch-process/batch-process-util-types";
+import { MessageTypes } from "@renderer/util/batch-process/batch-process-util-types";
+import { range, remove } from "lodash";
+import { Subject } from "rxjs";
+import { take, toArray } from "rxjs/operators";
 
 jest.mock("os", () => ({
   cpus: () => [1, 2, 3, 4],
 }));
 
-jest.mock("../../logging/reporter", () => ({
+jest.mock("@renderer/logging/reporter", () => ({
   reportError: jest.fn(),
 }));
 
 class TestWorker implements ProcessControllerAsyncWorker {
   listenersPool = {
-    [WorkerEventType.EXIT]: [] as (() => void)[],
-    [WorkerEventType.MESSAGE]: [] as ((data: unknown) => void)[],
-    [WorkerEventType.ERROR]: [] as ((data: unknown) => void)[],
+    [WorkerEventType.EXIT]: [] as TypedEventListener[],
+    [WorkerEventType.MESSAGE]: [] as TypedEventListener[],
+    [WorkerEventType.ERROR]: [] as TypedEventListener[],
   };
 
   postMessage = jest.fn();
 
   terminate = jest.fn();
 
-  addEventListener(type, callback) {
+  addEventListener(type: WorkerEventType, callback: TypedEventListener) {
     this.listenersPool[type].push(callback);
   }
 
-  removeEventListener(type, callback) {
-    remove(this.listenersPool[type], callback);
+  removeEventListener(type: WorkerEventType, callback: TypedEventListener) {
+    remove<TypedEventListener>(this.listenersPool[type], callback);
   }
 
-  trigger(event: AsyncWorkerControllerEvent, data?: unknown) {
+  trigger(event: AsyncWorkerControllerEvent, data?: any) {
     this.listenersPool[event].forEach((callback) => {
       callback(data);
     });
@@ -177,7 +177,7 @@ describe("batch-process-util", () => {
         })
       );
 
-      const triggerResult = (index) =>
+      const triggerResult = (index: number) =>
         setTimeout(() => {
           const worker = workers[index % 4];
           workers$.next({

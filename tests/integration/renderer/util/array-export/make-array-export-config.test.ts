@@ -1,9 +1,10 @@
 /* eslint-disable jest/expect-expect */
+import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { makeRowConfig } from "@renderer/util/array-export/make-array-export-config";
+import { formatPathForUserSystem } from "@renderer/util/file-system/file-sys-util";
+import { createTag } from "tests/integration/renderer/reducers/tags/tags-test-utils";
+
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { createTag } from "../../reducers/tags/tags-test-util";
-import { formatPathForUserSystem } from "../file-system/file-sys-util";
-import { makeRowConfig } from "./make-array-export-config";
 
 const rowId = "/filesAndFolders/file-1";
 const fileName = "file-name.csv";
@@ -64,8 +65,20 @@ describe("make-array-export-config", () => {
     const rowConfig = makeRowConfig(translator, tags);
 
     const makeTestRow =
-      ({ rowData, config }) =>
-      ({ columnLabel, expectedValue }) => {
+      ({
+        rowData,
+        config,
+      }: {
+        rowData: typeof rowDataSample;
+        config: typeof rowConfig;
+      }) =>
+      ({
+        columnLabel,
+        expectedValue,
+      }: {
+        columnLabel: string;
+        expectedValue: any;
+      }) => {
         const title = translator(columnLabel);
         const columnConfig = config.find((c) => c.title === title);
         expect(columnConfig?.accessor(rowData)).toEqual(expectedValue);

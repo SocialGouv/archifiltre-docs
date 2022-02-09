@@ -1,4 +1,4 @@
-import type { Tag } from "./tags-types";
+import type { Tag } from "@renderer/reducers/tags/tags-types";
 
 interface TagOptions {
   id: string;

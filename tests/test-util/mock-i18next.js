@@ -1,4 +1,3 @@
-
 const en = require("../../src/translations/en.json");
 const { at } = require("lodash");
 

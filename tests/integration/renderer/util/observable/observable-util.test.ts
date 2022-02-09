@@ -1,11 +1,10 @@
+import { MessageTypes } from "@renderer/util/batch-process/batch-process-util-types";
+import type { AnyFunction } from "@renderer/util/function/function-util";
+import type { DataProcessingStream } from "@renderer/util/observable/observable-util";
+import { operateOnDataProcessingStream } from "@renderer/util/observable/observable-util";
 import type { OperatorFunction } from "rxjs";
 import { identity, of } from "rxjs";
 import { map, toArray } from "rxjs/operators";
-
-import { MessageTypes } from "../batch-process/batch-process-util-types";
-import type { VoidFunction } from "../function/function-util";
-import type { DataProcessingStream } from "./observable-util";
-import { operateOnDataProcessingStream } from "./observable-util";
 
 const resultElement = {
   result: "result",
@@ -26,7 +25,7 @@ const streamData = [resultElement, errorElement, resultElement2];
 
 const testStream = (
   stream: DataProcessingStream<unknown>,
-  test: VoidFunction
+  test: AnyFunction
 ) => {
   return stream.pipe(toArray()).subscribe(test);
 };

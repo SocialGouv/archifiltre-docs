@@ -1,11 +1,11 @@
-import { range } from "lodash";
-import { pick } from "lodash/fp";
-
-import { createFilesAndFolders } from "../../files-and-folders-loader/files-and-folders-loader";
 import {
   extractKeysFromFilesAndFolders,
   makeDataExtractor,
-} from "./common-serializer";
+} from "@renderer/util/child-process-stream/common-serializer";
+import { range } from "lodash";
+import { pick } from "lodash/fp";
+
+import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 
 describe("common-serializer", () => {
   describe("extractKeysFromFilesAndFolders", () => {

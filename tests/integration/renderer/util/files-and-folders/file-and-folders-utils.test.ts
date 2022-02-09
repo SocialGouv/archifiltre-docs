@@ -1,7 +1,8 @@
-import MD5 from "js-md5";
-
-import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
+import {
+  getFiles,
+  getFolders,
+} from "@renderer/reducers/files-and-folders/files-and-folders-selectors";
+import type { FilesAndFolders } from "@renderer/reducers/files-and-folders/files-and-folders-types";
 import {
   computeFolderHashes,
   countDeeperFolders,
@@ -11,15 +12,16 @@ import {
   filesAndFoldersMapToArray,
   findAllFoldersWithNoSubfolder,
   getAllChildren,
-  getFiles,
   getFirstLevelName,
-  getFolders,
   getType,
   isExactFileOrAncestor,
   removeChildrenPath,
   sortFoldersByChildrenCount,
   sortFoldersByDepth,
-} from "./file-and-folders-utils";
+} from "@renderer/util/files-and-folders/file-and-folders-utils";
+import MD5 from "js-md5";
+
+import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 
 describe.skip("file-and-folders-common", () => {
   describe("countFoldersWithMoreThanNChildren", () => {
@@ -402,14 +404,14 @@ describe.skip("file-and-folders-common", () => {
   });
 
   describe("computeFolderHashes", () => {
-    const setup = async (fileAndFolders, hashes) => {
+    const setup = async (fileAndFolders: any, hashes: any) => {
       const hook = jest.fn();
       const result = await computeFolderHashes(fileAndFolders, hashes, hook);
 
       return { hook, result };
     };
 
-    const childrenHash = (...children) => MD5(children.sort().join(""));
+    const childrenHash = (...children: any) => MD5(children.sort().join(""));
 
     describe("with a valid fileAndFolders structure", () => {
       const baseFolderId = "baseFolder";
@@ -451,7 +453,7 @@ describe.skip("file-and-folders-common", () => {
         "baseFolder/folder2/file1": "24e10ee6f2f885106f7f6473701ebfd0",
       };
 
-      const expectedResults = {
+      const expectedResults: any = {
         ...hashes,
       };
       expectedResults["baseFolder/folder2"] = childrenHash(
@@ -468,10 +470,10 @@ describe.skip("file-and-folders-common", () => {
       );
       expectedResults[""] = childrenHash(expectedResults[baseFolderId]);
 
-      const getHashObject = (id) => ({ [id]: expectedResults[id] });
+      const getHashObject = (id: any) => ({ [id]: expectedResults[id] });
 
-      let hook = null;
-      let result = null;
+      let hook: any = null;
+      let result: any = null;
 
       beforeAll(async () => {
         ({ hook, result } = await setup(filesAndFolders, hashes));

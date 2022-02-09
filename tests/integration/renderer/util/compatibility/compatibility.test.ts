@@ -1,9 +1,13 @@
-import { v2ToV21Js, v13JsToV14Js, v21ToV22Js } from "./compatibility";
-import v21 from "./v2.1file.json";
-import v2 from "./v2file.json";
-import v13 from "./v13file.json";
-import v14 from "./v14file.json";
-import v22 from "./v22file.json";
+import {
+  v2ToV21Js,
+  v13JsToV14Js,
+  v21ToV22Js,
+} from "@renderer/util/compatibility/compatibility";
+import v21 from "@renderer/util/compatibility/v2.1file.json";
+import v2 from "@renderer/util/compatibility/v2file.json";
+import v13 from "@renderer/util/compatibility/v13file.json";
+import v14 from "@renderer/util/compatibility/v14file.json";
+import v22 from "@renderer/util/compatibility/v22file.json";
 
 describe("compatibility", () => {
   describe("v13JstoV14Js", () => {

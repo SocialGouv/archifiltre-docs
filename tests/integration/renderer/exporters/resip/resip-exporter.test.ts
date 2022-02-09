@@ -1,11 +1,11 @@
 import { resipExporter } from "@renderer/exporters/resip/resip-exporter";
 import { ROOT_FF_ID } from "@renderer/reducers/files-and-folders/files-and-folders-selectors";
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { createTag } from "@renderer/reducers/tags/tags-test-util";
 import { formatPathForUserSystem } from "@renderer/util/file-system/file-sys-util";
 import { advanceTo } from "jest-date-mock";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
+import { createTag } from "../../reducers/tags/tags-test-utils";
 
 // We advance to a specific date for TransactedDate to be setup correctly
 advanceTo("2019-08-05");

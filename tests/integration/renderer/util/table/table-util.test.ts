@@ -1,4 +1,7 @@
-import type { Column } from "../../components/common/table/table-types";
+import type {
+  Column,
+  TableAccessor,
+} from "@renderer/components/common/table/table-types";
 import {
   accessorToFunction,
   applyAccessorToTableValue,
@@ -7,7 +10,7 @@ import {
   maxPage,
   stableSort,
   tableContentToArray,
-} from "./table-util";
+} from "@renderer/util/table/table-util";
 
 describe("table-util", () => {
   describe("stableSort", () => {
@@ -54,7 +57,8 @@ describe("table-util", () => {
       const data: TestData = {
         name: "test-name",
       };
-      const accessor = (value, index) => `${value.name}-${index}`;
+      const accessor: TableAccessor<TestData> = (value, index) =>
+        `${value.name}-${index}`;
 
       expect(applyAccessorToTableValue(data, accessor, 1)).toBe("test-name-1");
     });

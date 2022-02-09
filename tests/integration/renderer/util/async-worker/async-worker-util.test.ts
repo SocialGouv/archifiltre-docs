@@ -1,9 +1,13 @@
+import { makeChildWorkerMessageCallback } from "@renderer/util/async-worker/async-worker-util";
+import { MessageTypes } from "@renderer/util/batch-process/batch-process-util-types";
 import { mapValues } from "lodash";
 
-import { translations } from "../../translations/translations";
-import { MessageTypes } from "../batch-process/batch-process-util-types";
 import { createAsyncWorkerMock } from "./async-worker-test-utils";
-import { makeChildWorkerMessageCallback } from "./async-worker-util";
+
+// import { translations } from "../../translations/translations";
+// import { MessageTypes } from "../batch-process/batch-process-util-types";
+// import { createAsyncWorkerMock } from "./async-worker-test-utils";
+// import { makeChildWorkerMessageCallback } from "./async-worker-util";
 
 // jest.mock("translations/translations", () => ({
 //   changeLanguage: jest.fn(),
@@ -28,7 +32,7 @@ describe("async-worker-util", () => {
   describe("setupChildWorkerListeners", () => {
     describe("on initialize message", () => {
       describe("when the message processing succeeds", () => {
-        let callback = null;
+        let callback: any = null;
         const onInitialize = jest.fn();
         const message = {
           data: {
@@ -43,13 +47,12 @@ describe("async-worker-util", () => {
             onInitialize,
           });
 
-          // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression, @typescript-eslint/await-thenable
           await callback(message);
         });
-        it.skip("should change the language", () => {
-          // eslint-disable-next-line @typescript-eslint/unbound-method
-          expect(translations.changeLanguage).toHaveBeenCalledWith("fr");
-        });
+        // it.skip("should change the language", () => {
+        //   // eslint-disable-next-line @typescript-eslint/unbound-method
+        //   expect(translations.changeLanguage).toHaveBeenCalledWith("fr");
+        // });
 
         it("should call the onInitializeCallback", () => {
           expect(onInitialize).toHaveBeenCalledWith(asyncWorker, message.data);
@@ -63,7 +66,7 @@ describe("async-worker-util", () => {
       });
 
       describe("when the message processing fails", () => {
-        let callback = null;
+        let callback: any = null;
         const testError = new Error("test error");
         const onInitialize = () => {
           throw testError;
@@ -90,14 +93,13 @@ describe("async-worker-util", () => {
     });
     describe("on data message", () => {
       describe("with a successful processing", () => {
-        let callback = null;
+        let callback: any = null;
         const onData = jest.fn();
         beforeAll(async () => {
           resetMocks();
           callback = makeChildWorkerMessageCallback(asyncWorker, {
             onData,
           });
-          // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression, @typescript-eslint/await-thenable
           await callback({ data: "data", type: MessageTypes.DATA });
         });
 
@@ -107,7 +109,7 @@ describe("async-worker-util", () => {
       });
 
       describe("with a failed processing", () => {
-        let callback = null;
+        let callback: any = null;
         const testError = new Error("test error");
         const onData = () => {
           throw testError;
@@ -117,7 +119,6 @@ describe("async-worker-util", () => {
           callback = makeChildWorkerMessageCallback(asyncWorker, {
             onData,
           });
-          // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression, @typescript-eslint/await-thenable
           await callback({ data: "data", type: MessageTypes.DATA });
         });
 

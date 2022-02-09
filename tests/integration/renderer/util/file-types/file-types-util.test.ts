@@ -1,6 +1,10 @@
+import type { FilesAndFolders } from "@renderer/reducers/files-and-folders/files-and-folders-types";
+import {
+  FileType,
+  getFileType,
+} from "@renderer/util/file-types/file-types-util";
+
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
-import { FileType, getFileType } from "./file-types-util";
 
 const createFileWithExt = (extension: string): FilesAndFolders =>
   createFilesAndFolders({

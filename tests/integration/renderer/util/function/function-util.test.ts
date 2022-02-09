@@ -1,5 +1,5 @@
-import type { AnyFunction } from "./function-util";
-import { compose } from "./function-util";
+import type { AnyFunction } from "@renderer/util/function/function-util";
+import { compose } from "redux";
 
 describe("function-util", () => {
   describe("compose", () => {
@@ -7,7 +7,7 @@ describe("function-util", () => {
       const firstFunction: AnyFunction = (value) => `${value}:first`;
       const secondFunction: AnyFunction = (value) => `${value}:second`;
 
-      const composed = compose(secondFunction, firstFunction);
+      const composed: AnyFunction = compose(secondFunction, firstFunction);
 
       expect(composed("base")).toBe("base:first:second");
     });

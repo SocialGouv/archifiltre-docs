@@ -1,19 +1,18 @@
-import { advanceTo } from "jest-date-mock";
-
 import {
   makeDmdSec,
   makeFileElement,
   makeHeader,
   makeObjectDiv,
   makePremisEvent,
-} from "./mets";
+} from "@renderer/exporters/mets/mets";
 import {
   outputDivTag,
   outputDmdSec,
   outputFileTag,
   outputHeader,
   outputProvMd,
-} from "./mets.test.data.json";
+} from "@renderer/exporters/mets/mets.test.data.json";
+import { advanceTo } from "jest-date-mock";
 
 // We advance to a specific date for TransactedDate to be setup correctly
 advanceTo(new Date(2019, 7, 5, 1, 0, 0, 0));
@@ -25,8 +24,10 @@ jest.mock("uuid", () => ({
 
 // BAD HACK to be able to compare 'undefined' values...
 // The undefined values are needed in order to generate self-closed tags
-outputFileTag["mets:file"][1]["mets:FLocat"][1] = undefined;
-outputDivTag["mets:div"][1]["mets:fptr"][1] = undefined;
+if (outputFileTag["mets:file"][1]["mets:FLocat"])
+  outputFileTag["mets:file"][1]["mets:FLocat"][1] = undefined as any;
+if (outputDivTag["mets:div"][1]["mets:fptr"])
+  outputDivTag["mets:div"][1]["mets:fptr"][1] = undefined as any;
 
 // Test suite
 describe("mets module", () => {
@@ -83,7 +84,13 @@ describe("mets module", () => {
     const testFileId = "master.10";
     it("should generate a proper file section", () => {
       expect(
-        makeObjectDiv(undefined, undefined, testId, testOrder, testFileId)
+        makeObjectDiv(
+          undefined as any,
+          undefined as any,
+          testId,
+          testOrder,
+          testFileId
+        )
       ).toEqual(outputDivTag);
     });
   });

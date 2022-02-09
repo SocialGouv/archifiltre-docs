@@ -1,19 +1,10 @@
-import { sanitizeUserSettings } from "./persistent-settings";
+import { sanitizeUserSettings } from "@renderer/persistence/persistent-settings";
 
 describe("persistent-settings", () => {
   describe("sanitizeUserSettings", () => {
     describe("with an empty object", () => {
       it("should return default user settings", () => {
         expect(sanitizeUserSettings({})).toEqual({
-          isMonitoringEnabled: true,
-          isTrackingEnabled: true,
-          language: "en",
-        });
-      });
-    });
-    describe("with an empty string", () => {
-      it("should return default user settings", () => {
-        expect(sanitizeUserSettings("")).toEqual({
           isMonitoringEnabled: true,
           isTrackingEnabled: true,
           language: "en",

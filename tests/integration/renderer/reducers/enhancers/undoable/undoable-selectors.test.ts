@@ -1,5 +1,5 @@
-import { getCurrentState } from "./undoable-selectors";
-import type { UndoableState } from "./undoable-types";
+import { getCurrentState } from "@renderer/reducers/enhancers/undoable/undoable-selectors";
+import type { UndoableState } from "@renderer/reducers/enhancers/undoable/undoable-types";
 
 describe("undoable-selectors", () => {
   describe("getCurrentState", () => {

@@ -1,29 +1,29 @@
-import { promises as fs } from "fs";
-import configureMockStore from "redux-mock-store";
-import thunk from "redux-thunk";
-import { of } from "rxjs";
-
-import type { DispatchExts } from "../../reducers/archifiltre-types";
-import { initialState as filesAndFoldersInitialState } from "../../reducers/files-and-folders/files-and-folders-reducer";
-import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { initialState } from "../../reducers/hashes/hashes-reducer";
+import { csvExporterThunk } from "@renderer/exporters/csv/csv-exporter";
+import { generateCsvExport$ } from "@renderer/exporters/csv/csv-exporter.controller";
+import type { DispatchExts } from "@renderer/reducers/archifiltre-types";
+import { initialState as filesAndFoldersInitialState } from "@renderer/reducers/files-and-folders/files-and-folders-reducer";
+import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { initialState as hashInitialState } from "@renderer/reducers/hashes/hashes-reducer";
 import {
   COMPLETE_LOADING,
   LoadingInfoTypes,
   PROGRESS_LOADING,
   START_LOADING,
-} from "../../reducers/loading-info/loading-info-types";
-import type { StoreState } from "../../reducers/store";
+} from "@renderer/reducers/loading-info/loading-info-types";
+import type { StoreState } from "@renderer/reducers/store";
+import { MessageTypes } from "@renderer/util/batch-process/batch-process-util-types";
+import { promises as fs } from "fs";
+import configureMockStore from "redux-mock-store";
+import thunk from "redux-thunk";
+import { of } from "rxjs";
+
+import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 import {
   createEmptyStore,
   wrapStoreWithUndoable,
 } from "../../reducers/store-test-utils";
-import { MessageTypes } from "../../util/batch-process/batch-process-util-types";
-import { csvExporterThunk } from "./csv-exporter";
-import { generateCsvExport$ } from "./csv-exporter.controller";
 
-jest.mock("./csv-exporter.controller", () => ({
+jest.mock("@renderer/exporters/csv/csv-exporter.controller", () => ({
   generateCsvExport$: jest.fn(),
 }));
 
@@ -124,7 +124,7 @@ const testState = {
     filesAndFolders,
   }),
   filesAndFoldersMetadata: wrapStoreWithUndoable({ filesAndFoldersMetadata }),
-  hashes: { ...initialState, hashes },
+  hashes: { ...hashInitialState, hashes },
   tags: wrapStoreWithUndoable({ tags }),
 };
 

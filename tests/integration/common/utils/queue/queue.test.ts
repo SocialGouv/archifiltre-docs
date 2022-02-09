@@ -1,6 +1,6 @@
+import type { Queue } from "@common/utils/queue/queue";
+import { computeQueue } from "@common/utils/queue/queue";
 import { tap } from "rxjs/operators";
-
-import { computeQueue } from "./queue";
 
 describe.skip("queue", () => {
   describe("computeQueue", () => {
@@ -34,7 +34,7 @@ describe.skip("queue", () => {
 
       const queueComputer = computeQueue(valueComputer, isResult);
 
-      const emitted = [];
+      const emitted: Queue<string, Result, Error | Result>[] = [];
 
       await queueComputer(queue)
         .pipe(tap((val) => emitted.push(val)))

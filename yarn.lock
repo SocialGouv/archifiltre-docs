@@ -6381,6 +6381,11 @@ eslint-plugin-lodash-fp@^2.2.0-a1:
     lodash "^4.11.1"
     req-all "^1.0.0"
 
+eslint-plugin-playwright@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-playwright/-/eslint-plugin-playwright-0.6.0.tgz#9b676c72ed543ae2a265cf4e4d981d6eb168257d"
+  integrity sha512-hccbDZcGcRAkfVa2omeTd/PCPjhjo8roZWVANYB8qBv2EGGjFNIGKkN3jzHjYQytgp5K4FKyBn/dgujPpFynjA==
+
 eslint-plugin-prettier@~4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-4.0.0.tgz#8b99d1e4b8b24a762472b4567992023619cb98e0"

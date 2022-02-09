@@ -2,4 +2,4 @@ dist
 node_modules
 electron
 # **/*.test.ts
-tests/**/*
+# tests/**/*

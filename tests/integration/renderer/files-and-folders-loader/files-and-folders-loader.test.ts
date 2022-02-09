@@ -1,22 +1,22 @@
+import {
+  createFilesAndFoldersMetadataDataStructure,
+  loadFileSystemFromFilesAndFoldersLoader,
+} from "@renderer/files-and-folders-loader/file-system-loading-process-utils";
+import type { FilesElementInfo } from "@renderer/files-and-folders-loader/files-and-folders-loader";
+import {
+  asyncLoadFilesAndFoldersFromFileSystem,
+  createFilesAndFoldersDataStructure,
+  loadFilesAndFoldersFromExportFileContent,
+} from "@renderer/files-and-folders-loader/files-and-folders-loader";
+import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+// @ts-expect-error Mock
+import { setMockFs as hiddenFileSetMockFs } from "@renderer/util/hidden-file/hidden-file-util";
+import { version } from "@renderer/version";
 import fs from "fs";
 import { sortBy } from "lodash";
 import { Readable } from "stream";
 
-import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-// @ts-expect-error wut?
-import { setMockFs as hiddenFileSetMockFs } from "../util/hidden-file/hidden-file-util";
-import { version } from "../version";
-import {
-  createFilesAndFoldersMetadataDataStructure,
-  loadFileSystemFromFilesAndFoldersLoader,
-} from "./file-system-loading-process-utils";
-import type { FilesElementInfo } from "./files-and-folders-loader";
-import {
-  asyncLoadFilesAndFoldersFromFileSystem,
-  createFilesAndFolders,
-  createFilesAndFoldersDataStructure,
-  loadFilesAndFoldersFromExportFileContent,
-} from "./files-and-folders-loader";
+import { createFilesAndFolders } from "../reducers/files-and-folders/files-and-folders-test-utils";
 
 interface FsMockElement {
   isDirectory: boolean;
@@ -71,7 +71,7 @@ jest.mock("fs", () => {
   };
 });
 
-jest.mock("util/hidden-file/hidden-file-util", () => {
+jest.mock("@renderer/util/hidden-file/hidden-file-util", () => {
   let underlyingFs: FsMockElementMap = {};
   const setMockFs = (mockedFs: FsMockElementMap): void => {
     underlyingFs = mockedFs;

@@ -1,14 +1,7 @@
 const path = require("path");
 
-const tsconfigPath = path.resolve(__dirname, "./tsconfig.json");
-const tsconfigTestPath = path.resolve(__dirname, "./tsconfig.test.json");
-
 /** @type {import("eslint").Linter.Config} */
 const typescriptConfig = {
-  env: {
-    browser: true,
-    node: true,
-  },
   extends: "@socialgouv/eslint-config-typescript",
   globals: {
     ARCHIFILTRE_SITE_URL: true,
@@ -24,7 +17,7 @@ const typescriptConfig = {
   },
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: tsconfigPath,
+    project: path.resolve(__dirname, "./tsconfig.json"),
     sourceType: "module",
   },
   rules: {
@@ -57,7 +50,7 @@ const typescriptConfig = {
 
 /** @type {import("eslint").Linter.Config} */
 const defaultConfig = {
-  ignorePatterns: "node_modules",
+  ignorePatterns: ["!**/.*.js*", "node_modules"],
   overrides: [
     {
       files: ["**/*.ts"],
@@ -77,31 +70,58 @@ const defaultConfig = {
     },
     {
       env: {
-        browser: false,
+        browser: true,
         node: true,
       },
-      files: ["src/main/**/*.ts", "src/electron-main.ts"],
+      files: ["src/renderer/**/*.ts*", "src/common/**/*.ts*"],
+    },
+    {
+      files: ["src/renderer/**/*.ts"],
+      parserOptions: {
+        project: "./src/renderer/tsconfig.json",
+      },
+      settings: {
+        "import/resolver": {
+          typescript: {
+            project: "./src/renderer/tsconfig.json",
+          },
+        },
+      },
+    },
+    {
+      files: ["src/common/**/*.ts"],
+      parserOptions: {
+        project: "./src/common/tsconfig.json",
+      },
+      settings: {
+        "import/resolver": {
+          typescript: {
+            project: "./src/common/tsconfig.json",
+          },
+        },
+      },
     },
     {
       env: {
-        jest: true,
+        browser: false,
+        node: true,
       },
-      files: [
-        "src/**/*.test.js",
-        "src/**/*.test.ts",
-        "src/test/**/*.js",
-        "tests/**/*.ts",
-      ],
+      files: ["src/main/**/*.ts"],
       parserOptions: {
-        project: tsconfigTestPath,
-        sourceType: "module",
+        project: "./src/main/tsconfig.json",
       },
-      rules: {
-        "@typescript-eslint/naming-convention": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-unsafe-argument": "off",
-        "@typescript-eslint/no-unsafe-return": "off",
-        "@typescript-eslint/require-array-sort-compare": "off",
+      settings: {
+        "import/resolver": {
+          typescript: {
+            project: "./src/main/tsconfig.json",
+          },
+        },
+      },
+    },
+    {
+      files: "src/**/*.ts*",
+      globals: {
+        __static: true,
       },
     },
   ],

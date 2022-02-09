@@ -4,8 +4,7 @@ import { createArchifiltreDocsError } from "@renderer/reducers/loading-info/load
 import { notifyError } from "@renderer/util/notification/notifications-util";
 import { noop } from "lodash";
 
-
-jest.mock("util/notification/notifications-util", () => ({
+jest.mock("@renderer/util/notification/notifications-util", () => ({
   notifyError: jest.fn(),
 }));
 

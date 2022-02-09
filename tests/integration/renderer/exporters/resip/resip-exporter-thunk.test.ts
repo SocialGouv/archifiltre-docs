@@ -1,25 +1,25 @@
+import { generateResipExport$ } from "@renderer/exporters/resip/resip-export.controller";
+import { resipExporterThunk } from "@renderer/exporters/resip/resip-exporter-thunk";
+import type { DispatchExts } from "@renderer/reducers/archifiltre-types";
+import { initialState as filesAndFoldersInitialState } from "@renderer/reducers/files-and-folders/files-and-folders-reducer";
+import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import type { StoreState } from "@renderer/reducers/store";
+import {
+  notifyInfo,
+  notifySuccess,
+} from "@renderer/util/notification/notifications-util";
 import { promises as fs } from "fs";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { from } from "rxjs";
 
-import type { DispatchExts } from "../../reducers/archifiltre-types";
-import { initialState as filesAndFoldersInitialState } from "../../reducers/files-and-folders/files-and-folders-reducer";
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import type { StoreState } from "../../reducers/store";
 import {
   createEmptyStore,
   wrapStoreWithUndoable,
 } from "../../reducers/store-test-utils";
-import {
-  notifyInfo,
-  notifySuccess,
-} from "../../util/notification/notifications-util";
-import { generateResipExport$ } from "./resip-export.controller";
-import { resipExporterThunk } from "./resip-exporter-thunk";
 
-jest.mock("./resip-export.controller", () => ({
+jest.mock("@renderer/exporters/resip/resip-export.controller", () => ({
   generateResipExport$: jest.fn(),
 }));
 
@@ -28,7 +28,7 @@ jest.mock("fs", () => ({
     writeFile: jest.fn(),
   },
 }));
-jest.mock("util/notification/notifications-util", () => ({
+jest.mock("@renderer/util/notification/notifications-util", () => ({
   notifyInfo: jest.fn(),
   notifySuccess: jest.fn(),
 }));

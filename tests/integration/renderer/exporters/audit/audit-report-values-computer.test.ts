@@ -1,10 +1,3 @@
-import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import { createFilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import {
-  formatPathForUserSystem,
-  octet2HumanReadableFormat,
-} from "../../util/file-system/file-sys-util";
-import { FileType } from "../../util/file-types/file-types-util";
 import {
   countFileSizes,
   countFileTypes,
@@ -16,7 +9,15 @@ import {
   percentFileTypes,
   sortFilesByLastModifiedDate,
   sortFilesBySize,
-} from "./audit-report-values-computer";
+} from "@renderer/exporters/audit/audit-report-values-computer";
+import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import {
+  formatPathForUserSystem,
+  octet2HumanReadableFormat,
+} from "@renderer/util/file-system/file-sys-util";
+import { FileType } from "@renderer/util/file-types/file-types-util";
+
+import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 
 const folderId1 = "folder-id-1";
 const folderId2 = `${folderId1}/folder-id-2`;

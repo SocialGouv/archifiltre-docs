@@ -1,7 +1,12 @@
-import { undoable } from "./undoable";
-import { commitAction, redoAction, undoAction } from "./undoable-actions";
+import { undoable } from "@renderer/reducers/enhancers/undoable/undoable";
+import {
+  commitAction,
+  redoAction,
+  undoAction,
+} from "@renderer/reducers/enhancers/undoable/undoable-actions";
+import type redux from "redux";
 
-const state0 = {
+const state0: redux.Action = {
   count: 0,
 };
 const state1 = {

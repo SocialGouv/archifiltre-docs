@@ -1,0 +1,63 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tests/tsconfig.json"
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "project": "./tests/tsconfig.json"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "files": [
+        "@(components|integration)/**/*.ts*"
+      ],
+      "env": {
+        "jest": true
+      },
+      "rules": {
+        "@typescript-eslint/naming-convention": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unsafe-argument": "off",
+        "@typescript-eslint/no-unsafe-return": "off",
+        "@typescript-eslint/require-array-sort-compare": "off"
+      }
+    },
+    {
+      "files": [
+        "e2e/**/*.ts*"
+      ],
+      "extends": [
+        "plugin:playwright/playwright-test"
+      ],
+      "env": {
+        "jest/globals": false
+      },
+      "rules": {
+        "jest/no-try-expect": "off",
+        "jest/expect-expect": "off",
+        "jest/no-commented-out-tests": "off",
+        "jest/no-conditional-expect": "off",
+        "jest/no-deprecated-functions": "off",
+        "jest/no-disabled-tests": "off",
+        "jest/no-done-callback": "off",
+        "jest/no-export": "off",
+        "jest/no-focused-tests": "off",
+        "jest/no-identical-title": "off",
+        "jest/no-interpolation-in-snapshots": "off",
+        "jest/no-jasmine-globals": "off",
+        "jest/no-jest-import": "off",
+        "jest/no-mocks-import": "off",
+        "jest/no-standalone-expect": "off",
+        "jest/no-test-prefixes": "off",
+        "jest/valid-describe": "off",
+        "jest/valid-expect-in-promise": "off",
+        "jest/valid-expect": "off",
+        "jest/valid-title": "off"
+      }
+    }
+  ]
+}

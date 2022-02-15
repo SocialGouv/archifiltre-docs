@@ -64,10 +64,7 @@
       "icon": "./electron/build/icon.png"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/SocialGouv/archifiltre-docs/"
-  },
+  "repository": "git@github.com:SocialGouv/archifiltre-docs.git",
   "bugs": {
     "url": "https://github.com/SocialGouv/archifiltre-docs/issues"
   },
@@ -78,6 +75,9 @@
   "devDependencies": {
     "@commitlint/cli": "13.1.0",
     "@commitlint/config-conventional": "13.1.0",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@socialgouv/eslint-config-react": "^1.90.4",
     "@socialgouv/eslint-config-typescript": "^1.90.4",
     "@tsconfig/node14": "^1.0.1",
@@ -85,9 +85,6 @@
     "@types/deep-equal": "^1.0.1",
     "@types/file-saver": "^2.0.4",
     "@types/hidefile": "^3.0.0",
-    "@semantic-release/changelog": "^6.0.1",
-    "@semantic-release/exec": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
     "@types/jest": "27.0.1",
     "@types/js-md5": "^0.4.3",
     "@types/lodash": "4.14.172",

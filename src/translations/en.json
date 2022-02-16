@@ -128,6 +128,7 @@
       "errorBack": "Return to home screen",
       "contactUs": "Click here to contact us",
       "somethingWentWrong": "Something went wrong.",
+      "fileWord": "file",
       "file_one": "{{count}} file",
       "file_other": "{{count}} files",
       "level_one": "{{count}} level",

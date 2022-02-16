@@ -106,6 +106,7 @@
       "errorBack": "Zurück zum Startbildschirm.",
       "contactUs": "Hier klicken, um uns zu kontaktieren",
       "somethingWentWrong": "Da ist etwas schiefgegangen.",
+      "fileWord": "datei",
       "file_one": "{{count}} datei",
       "file_other": "{{count}} dateien",
       "level_one": "{{count}} ebene",

@@ -18,8 +18,13 @@ updates:
       timezone: Europe/Paris
     versioning-strategy: increase-if-necessary
     allow:
-      - dependency-type: direct
+      - dependency-name: "*"
+        dependency-type: direct
     ignore:
+      - dependency-name: "@types/*"
+        update-types:
+          - "version-update:semver-patch"
+          - "version-update:semver-minor"
       - dependency-name: "node-sass"
         versions:
           - ">=6"

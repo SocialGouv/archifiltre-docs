@@ -24,6 +24,7 @@ export const UndoRedoButton: React.FC<UndoRedoButtonProps> = ({
   const { t } = useTranslation();
   const classes = useStyles();
 
+  // TODO: use electron built-in menu undo/redo instead
   const onKeyDownHandler = useCallback(
     ({ ctrlKey, key }) => {
       if (ctrlKey) {

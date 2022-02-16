@@ -125,6 +125,7 @@ export const TagCellContainer: React.FC = () => {
     if (isCurrentFileMarkedToDelete)
       dispatch(unmarkAsToDelete(filesAndFoldersId));
     else dispatch(markAsToDelete(filesAndFoldersId));
+    dispatch(commitAction());
   }, [
     dispatch,
     isCurrentFileMarkedToDelete,

@@ -10,8 +10,10 @@ export interface FileCountInfoProps {
 export const FileCountInfo: React.FC<FileCountInfoProps> = ({ fileCount }) => {
   const { t } = useTranslation();
   return (
-    <LargeIndicatorText>{`${fileCount} ${t(
-      "common.file_plural"
-    )}`}</LargeIndicatorText>
+    <LargeIndicatorText>
+      {t("common.file", {
+        count: fileCount,
+      })}
+    </LargeIndicatorText>
   );
 };

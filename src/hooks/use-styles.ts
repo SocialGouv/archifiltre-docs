@@ -30,7 +30,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     largeIndicatorText: {
       fontFamily: "QuicksandBold",
-      fontSize: "3rem",
+      fontSize: "2rem",
     },
     searchInput: {
       border: `1px solid ${theme.palette.secondary.main}`,

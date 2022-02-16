@@ -12,8 +12,8 @@ export const FileTreeDepth: React.FC<FileTreeDepthProps> = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <LargeIndicatorText>{`${fileTreeDepth} ${t(
-      "common.level_plural"
-    )}`}</LargeIndicatorText>
+    <LargeIndicatorText>
+      {t("common.level", { count: fileTreeDepth })}
+    </LargeIndicatorText>
   );
 };

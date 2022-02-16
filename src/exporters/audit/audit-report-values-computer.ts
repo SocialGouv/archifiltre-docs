@@ -328,7 +328,7 @@ export const getElementsToDelete = (
   elementsToDelete: string[]
 ): AuditReportElementWithType[] => {
   const folderText = translations.t("common.folder");
-  const fileText = translations.t("common.file");
+  const fileText = translations.t("common.fileWord");
   return elementsToDelete
     .map((filesAndFoldersId) => filesAndFolders[filesAndFoldersId])
     .map(

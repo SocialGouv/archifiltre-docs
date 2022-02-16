@@ -150,7 +150,7 @@ describe("make-array-export-config", () => {
       it("for a file", () => {
         testRow({
           columnLabel: "csvHeader.fileOrFolder",
-          expectedValue: translator("common.file"),
+          expectedValue: translator("common.fileWord"),
         });
       });
 

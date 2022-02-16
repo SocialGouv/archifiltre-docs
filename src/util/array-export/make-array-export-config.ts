@@ -198,7 +198,7 @@ export const makeRowConfig = (
     createCellConfig(
       "fileOrFolder",
       getFileOrFolderText({
-        file: translate("common.file"),
+        file: translate("common.fileWord"),
         folder: translate("common.folder"),
       })
     ),

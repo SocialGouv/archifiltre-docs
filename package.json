@@ -3,7 +3,7 @@
   "version": "3.2.2",
   "private": true,
   "description": "Visualisez et améliorez vos arborescences de fichiers !",
-  "author": "Fabrique des ministère sociaux",
+  "author": "Fabrique des ministères sociaux",
   "license": "Apache-2.0",
   "main": "dist/main.js",
   "scripts": {
@@ -50,7 +50,9 @@
       "entitlementsInherit": "./electron/build/entitlements.mac.plist"
     },
     "win": {
-      "icon": "./electron/build/icon.png",
+      "icon": "./electron/build/icon.png"
+    },
+    "portable": {
       "artifactName": "${name}-${os}-${arch}-portable.${ext}"
     },
     "msi": {

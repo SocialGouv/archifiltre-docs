@@ -12,7 +12,7 @@ asyncWorker.addEventListener(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async ({ type, data }: any) => {
     if (type === "initialize") {
-      const messageHook = (count: number | undefined) => {
+      const messageHook = (count?: number) => {
         asyncWorker.postMessage({
           result: { count, resipCsv: [] },
           type: MessageTypes.RESULT,

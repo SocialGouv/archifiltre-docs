@@ -2,19 +2,19 @@
   "translation": {
     "folderDropzone": {
       "placeholder": "Legen Sie hier ein Verzeichnis ab!",
-      "placeholderSubtitle": "Sie können auch eine zuvor aus $t(common:productName) exportierte JSON-Datei ablegen.",
+      "placeholderSubtitle": "Sie können auch eine zuvor aus $t(common.productName) exportierte JSON-Datei ablegen.",
       "zipNotificationTitle": "ZIP-Datei(en) entdeckt",
-      "zipNotificationMessage": "$t(common:productNameShort) kann ZIP-Dateien nicht verarbeiten, bitte entpacken Sie diese, um sie einzulesen",
+      "zipNotificationMessage": "$t(common.productNameShort) kann ZIP-Dateien nicht verarbeiten, bitte entpacken Sie diese, um sie einzulesen",
       "disclaimerSubtitle": "Ihre Daten werden Ihren Rechner nicht verlassen. Nur Sie können sehen, was in dieser Anwendung geschieht.",
       "loadingErrorTitle": "Fehler beim Laden",
       "loadingErrorMessage": "Wahrscheinlich haben Sie weder einen Ordner noch eine Datei abgelegt.",
       "indexedFiles": "Dateien geladen",
       "jsonLoading": "Laden von JSON",
       "warning": "Warnung!",
-      "wrongJsonVersion": "Die Datei, die Sie abgelegt haben, ist nicht mit der gleichen Version von $t(common:productName) erstellt worden.",
+      "wrongJsonVersion": "Die Datei, die Sie abgelegt haben, ist nicht mit der gleichen Version von $t(common.productName) erstellt worden.",
       "error": "Fehler!",
       "errorsWhileLoading": "Ein Fehler ist beim Laden aufgetreten. Klicken Sie zum Überprüfen den Fehler-Log.",
-      "rootElementError": "$t(common:productNameShort) kann derzeitig kein Laufwerk oder Root-Verzeichnis lesen. Bitte legen Sie einen Unterordner an."
+      "rootElementError": "$t(common.productNameShort) kann derzeitig kein Laufwerk oder Root-Verzeichnis lesen. Bitte legen Sie einen Unterordner an."
     },
     "report": {
       "comments": "Kommentare",
@@ -49,7 +49,7 @@
       "boundaryDatesExplanation": "Datum der ältesten und jüngsten Elemente im Dateibaum",
       "medianExplanation": "Das ist das Datum, an dem die Hälfte der Dateien dieses Ordners geschlossen wurden. Es gibt genauso viele bearbeitete Elemente vor wie nach diesem Datum.",
       "noElementSelected": "Wählen Sie ein Element aus, um seine Eigenschaften zu sehen",
-      "openElementErrorMessage": "$t(common:productNameShort) konnte das ausgewählte Element nicht öffnen",
+      "openElementErrorMessage": "$t(common.productNameShort) konnte das ausgewählte Element nicht öffnen",
       "openElementErrorTitle": "Element wird geöffnet"
     },
     "workspace": {
@@ -89,7 +89,7 @@
       "close": "Schließen",
       "save": "Speichern",
       "newVersion": "Neue Version",
-      "aNewVersionIsOut": "Version {{version}} von $t(common:productName) steht bereit!",
+      "aNewVersionIsOut": "Version {{version}} von $t(common.productName) steht bereit!",
       "download": "Herunterladen",
       "cancel": "Abbrechen",
       "csvWithHash": "CSV mit Hash-Werten",
@@ -106,10 +106,11 @@
       "errorBack": "Zurück zum Startbildschirm.",
       "contactUs": "Hier klicken, um uns zu kontaktieren",
       "somethingWentWrong": "Da ist etwas schiefgegangen.",
-      "file": "Datei",
-      "file_plural": "Dateien",
-      "level": "Ebene",
-      "level_plural": "Ebenen",
+      "fileWord": "datei",
+      "file_one": "{{count}} datei",
+      "file_other": "{{count}} dateien",
+      "level_one": "{{count}} ebene",
+      "level_other": "{{count}} ebenen",
       "folder": "Ordner",
       "originalName": "Der ursprüngliche Name des Elements war '{{oldName}}'",
       "byteChar": "B",

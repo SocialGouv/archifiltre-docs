@@ -198,7 +198,8 @@ const wrapWithHook =
   <T>(mapper = noop, sideEffect = noop): Parameters<T[]["map"]>[0] =>
   (mappedElement, mappedIndex, mappedArray) => {
     sideEffect(mappedElement, mappedIndex, mappedArray);
-    mapper(mappedElement, mappedIndex, mappedArray);
+    // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
+    return mapper(mappedElement, mappedIndex, mappedArray);
   };
 
 interface ResipExporterOptions {

@@ -37,7 +37,7 @@ const BreadcrumbPolyWrapper = styled.div`
 `;
 
 const BreadcrumbTextWrapper = styled.div`
-  max-width: 90%;
+  width: 100%;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

@@ -32,6 +32,7 @@ const typescriptConfig = {
     "prettier/prettier": [
       "error",
       {
+        endOfLine: "auto",
         tabWidth: 2,
       },
     ],

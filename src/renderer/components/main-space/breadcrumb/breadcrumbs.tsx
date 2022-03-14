@@ -28,7 +28,7 @@ interface BreadcrumbWrapperProps {
 }
 
 const BreadcrumbWrapper = styled.div<BreadcrumbWrapperProps>`
-  height: ${({ depth }) => `${100 / depth}%`};
+  height: ${({ depth }) => `calc(100% / ${depth})`};
 `;
 
 export interface BreadcrumbsProps {
@@ -205,7 +205,7 @@ const _Breadcrumbs: React.FC<BreadcrumbsProps> = ({
 
   const fillerElements = makeEmptyArray(depth - filesAndFolders.length, null);
   return (
-    <div className="breadcrumbs">
+    <div className="breadcrumbs" style={{ height: "100%" }}>
       <BreadcrumbsWrapper>
         {filesAndFolders.map(
           ({

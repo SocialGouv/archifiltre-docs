@@ -68,7 +68,7 @@ const computeFileHashesImplThunk =
     const hashes$ = computeHashes(fileIds, basePath);
 
     const getRelativePath = (filePath: string): string =>
-      `/${path.relative(basePath, filePath)}`;
+      `/${path.relative(basePath, filePath).replaceAll("\\", "/")}`;
 
     const formatResult = pipe(
       lodashMap(

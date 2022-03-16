@@ -2,7 +2,7 @@ import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-fold
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { translations } from "../../translations/translations";
-import { isExactFileOrAncestor } from "../../utils/file-and-folders-utils";
+import { isExactFileOrAncestor } from "../../utils/file-and-folders";
 import { notifyInfo } from "../../utils/notifications";
 import type { ArchifiltreDocsThunkAction } from "../archifiltre-types";
 import { commitAction } from "../enhancers/undoable/undoable-actions";

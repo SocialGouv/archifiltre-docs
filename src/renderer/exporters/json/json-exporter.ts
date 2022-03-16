@@ -1,8 +1,3 @@
-import {
-  getNameWithExtension,
-  save,
-} from "@common/utils/file-system/file-sys-util";
-
 import { addTracker } from "../../logging/tracker";
 import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
@@ -15,6 +10,10 @@ import {
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { getHashesFromStore } from "../../reducers/hashes/hashes-selectors";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
+import {
+  getNameWithExtension,
+  save,
+} from "../../utils/file-system/file-sys-util";
 
 export type ExportToJson = typeof jsonExporterThunk;
 

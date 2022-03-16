@@ -1,8 +1,4 @@
-import { arrayToCsv } from "@common/utils/csv/csv-util";
-import {
-  notifyInfo,
-  notifySuccess,
-} from "@common/utils/notification/notifications-util";
+import { arrayToCsv } from "@common/utils/csv";
 import { promises as fs } from "fs";
 import { takeLast, tap } from "rxjs/operators";
 import { v4 as uuid } from "uuid";
@@ -23,6 +19,7 @@ import {
 import { LoadingInfoTypes } from "../../reducers/loading-info/loading-info-types";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import { translations } from "../../translations/translations";
+import { notifyInfo, notifySuccess } from "../../utils/notifications";
 import { generateResipExport$ } from "./resip-export.controller";
 import { RESIP_HOOK_CALL_PER_ELEMENT } from "./resip-exporter";
 

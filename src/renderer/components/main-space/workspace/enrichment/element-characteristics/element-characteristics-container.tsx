@@ -15,7 +15,7 @@ import {
 import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getHashesFromStore } from "../../../../../reducers/hashes/hashes-selectors";
 import { useWorkspaceMetadata } from "../../../../../reducers/workspace-metadata/workspace-metadata-selectors";
-import { getType } from "../../../../../utils/file-and-folders-utils";
+import { getType } from "../../../../../utils/file-and-folders";
 import { getAbsolutePath } from "../../../../../utils/file-system/file-sys-util";
 import { ElementCharacteristics } from "./element-characteristics";
 import type { ElementCharacteristicsContentProps } from "./element-characteristics-content";

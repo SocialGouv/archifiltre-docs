@@ -1,4 +1,4 @@
-import type { VoidFunction } from "@common/utils/function/function-util";
+import type { VoidFunction } from "@common/utils/function";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";

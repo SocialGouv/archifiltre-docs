@@ -1,9 +1,8 @@
-import { WorkerEventType } from "@common/utils/async-worker/async-worker-util";
-import { createAsyncWorkerForChildProcess } from "@common/utils/async-worker/child-process";
-import { MessageTypes } from "@common/utils/batch-process/batch-process-util-types";
-import { hookCounter } from "@common/utils/hook/hook-utils";
-
 import { translations } from "../../translations/translations";
+import { WorkerEventType } from "../../utils/async-worker";
+import { createAsyncWorkerForChildProcess } from "../../utils/async-worker/child-process";
+import { MessageTypes } from "../../utils/batch-process/types";
+import { hookCounter } from "../../utils/hook";
 import { resipExporter } from "./resip-exporter";
 
 const asyncWorker = createAsyncWorkerForChildProcess();

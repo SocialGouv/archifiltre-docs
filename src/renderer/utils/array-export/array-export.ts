@@ -1,3 +1,4 @@
+import type { HashesMap } from "@common/utils/hashes-types";
 import type { TFunction } from "i18next";
 import _ from "lodash";
 import { compose } from "lodash/fp";
@@ -12,9 +13,8 @@ import type {
   FilesAndFoldersMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import type { TagMap } from "../../reducers/tags/tags-types";
-import { getAllChildren } from "../file-and-folders-utils";
+import { getAllChildren } from "../file-and-folders";
 import type { CellConfig } from "./make-array-export-config";
 import { makeRowConfig } from "./make-array-export-config";
 

@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { FaEye, FaLock } from "react-icons/fa";
 import styled from "styled-components";
 
-import logo from "../../../static/imgs/logo.png";
+import logo from "../../../../static/imgs/logo.png";
 import { useModal } from "../../hooks/use-modal";
 import { savePreviousSession } from "../../persistence/previous-sessions";
 import type { FileSystemLoadingStep } from "../../reducers/loading-state/loading-state-types";

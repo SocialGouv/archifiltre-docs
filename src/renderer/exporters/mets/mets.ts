@@ -1,3 +1,4 @@
+import type { HashesMap } from "@common/utils/hashes-types";
 import type { SimpleObject } from "@common/utils/object";
 import { generateRandomString } from "@common/utils/random-gen";
 import dateFormat from "dateformat";
@@ -16,11 +17,10 @@ import type {
   FilesAndFoldersMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import { getAllTagsForFile } from "../../reducers/tags/tags-selectors";
 import type { TagMap } from "../../reducers/tags/tags-types";
 import { translations } from "../../translations/translations";
-import { getDisplayName } from "../../utils/file-and-folders-utils";
+import { getDisplayName } from "../../utils/file-and-folders";
 import { notifyError, notifySuccess } from "../../utils/notifications";
 import { version } from "../../version";
 import {

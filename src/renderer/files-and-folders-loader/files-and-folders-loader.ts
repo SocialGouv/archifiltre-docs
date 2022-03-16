@@ -3,6 +3,7 @@ import {
   ArchifiltreDocsErrorType,
   convertFsErrorToArchifiltreDocsError,
 } from "@common/utils/error";
+import type { HashesMap } from "@common/utils/hashes-types";
 import parse from "csv-parse/lib/sync";
 import fs from "fs";
 import { noop } from "lodash";
@@ -21,7 +22,6 @@ import type {
   FilesAndFoldersMap,
   VirtualPathToIdMap,
 } from "../reducers/files-and-folders/files-and-folders-types";
-import type { HashesMap } from "../reducers/hashes/hashes-types";
 import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
 import { convertJsonToCurrentVersion } from "../utils/compatibility";
 import { identifyFileFormat } from "../utils/file-format";

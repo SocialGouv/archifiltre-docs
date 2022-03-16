@@ -1,4 +1,5 @@
 import { countItems } from "@common/utils/array";
+import type { HashesMap } from "@common/utils/hashes-types";
 import MD5 from "js-md5";
 import { lookup } from "mime-types";
 
@@ -11,7 +12,6 @@ import type {
   FilesAndFoldersMap,
   VirtualPathToIdMap,
 } from "../reducers/files-and-folders/files-and-folders-types";
-import type { HashesMap } from "../reducers/hashes/hashes-types";
 import { translations } from "../translations/translations";
 
 /**

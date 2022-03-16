@@ -1,3 +1,4 @@
+import type { HashesState } from "@common/utils/hashes-types";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import thunk from "redux-thunk";
 
@@ -7,7 +8,6 @@ import type { FilesAndFoldersState } from "./files-and-folders/files-and-folders
 import { undoableFilesAndFoldersMetadataReducer as filesAndFoldersMetadataReducer } from "./files-and-folders-metadata/files-and-folders-metadata-reducer";
 import type { FilesAndFoldersMetadataState } from "./files-and-folders-metadata/files-and-folders-metadata-types";
 import { hashesReducer } from "./hashes/hashes-reducer";
-import type { HashesState } from "./hashes/hashes-types";
 import { icicleSortMethodReducer } from "./icicle-sort-method/icicle-sort-method-reducer";
 import type { IcicleSortMethodState } from "./icicle-sort-method/icicle-sort-method-types";
 import { loadingInfoReducer } from "./loading-info/loading-info-reducer";

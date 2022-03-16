@@ -12,7 +12,7 @@ import type {
   ElementWithToDelete,
   FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
-import { getType } from "../../../utils/file-and-folders-utils";
+import { getType } from "../../../utils/file-and-folders";
 import { octet2HumanReadableFormat } from "../../../utils/file-system/file-sys-util";
 import { CategoryTitle } from "../../common/category-title";
 import { Table } from "../../common/table/table";

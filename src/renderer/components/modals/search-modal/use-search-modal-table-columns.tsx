@@ -8,7 +8,7 @@ import type {
   FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { getType } from "../../../utils/file-and-folders-utils";
+import { getType } from "../../../utils/file-and-folders";
 import { octet2HumanReadableFormat } from "../../../utils/file-system/file-sys-util";
 import type { Column } from "../../common/table/table-types";
 import { WordBreak } from "../../common/table/table-types";

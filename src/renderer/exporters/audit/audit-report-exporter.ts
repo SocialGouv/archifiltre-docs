@@ -1,19 +1,5 @@
-import {
-  countDuplicateFiles,
-  countDuplicateFolders,
-} from "@common/utils/duplicates/duplicates-util";
-import {
-  formatPathForUserSystem,
-  octet2HumanReadableFormat,
-} from "@common/utils/file-system/file-sys-util";
-import { openExternalElement } from "@common/utils/file-system/file-system-util";
-import { FileType } from "@common/utils/file-types/file-types-util";
-import type { AnyFunction } from "@common/utils/function/function-util";
-import {
-  NotificationDuration,
-  notifyInfo,
-  notifySuccess,
-} from "@common/utils/notification/notifications-util";
+import type { AnyFunction } from "@common/utils/function";
+import type { HashesMap } from "@common/utils/hashes-types";
 import fs from "fs";
 
 import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
@@ -28,8 +14,22 @@ import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-
 import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { getHashesFromStore } from "../../reducers/hashes/hashes-selectors";
-import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import { translations } from "../../translations/translations";
+import {
+  countDuplicateFiles,
+  countDuplicateFolders,
+} from "../../utils/duplicates";
+import {
+  formatPathForUserSystem,
+  octet2HumanReadableFormat,
+} from "../../utils/file-system/file-sys-util";
+import { openExternalElement } from "../../utils/file-system/file-system-util";
+import { FileType } from "../../utils/file-types";
+import {
+  NotificationDuration,
+  notifyInfo,
+  notifySuccess,
+} from "../../utils/notifications";
 import type { AuditReportData } from "./audit-report-generator";
 import { generateAuditReportDocx } from "./audit-report-generator";
 import {

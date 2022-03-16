@@ -16,7 +16,7 @@ import { translations } from "../../translations/translations";
 import {
   getDisplayName,
   isExactFileOrAncestor,
-} from "../../utils/file-and-folders-utils";
+} from "../../utils/file-and-folders";
 
 interface TagWithID extends Tag {
   ID: number;

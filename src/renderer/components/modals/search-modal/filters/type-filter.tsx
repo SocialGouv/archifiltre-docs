@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { useDeferredMemo } from "../../../../hooks/use-deferred-memo";
 import type { FilesAndFolders } from "../../../../reducers/files-and-folders/files-and-folders-types";
-import { getType } from "../../../../utils/file-and-folders-utils";
+import { getType } from "../../../../utils/file-and-folders";
 import { Filter } from "./filter";
 
 export interface TypeFilterProps {

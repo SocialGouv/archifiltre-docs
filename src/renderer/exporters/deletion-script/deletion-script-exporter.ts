@@ -12,7 +12,7 @@ import type { StoreState } from "../../reducers/store";
 import { getWorkspaceMetadataFromStore } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { translations } from "../../translations/translations";
 import { generateDeletionScript } from "../../utils/deletion-script";
-import { removeChildrenPath } from "../../utils/file-and-folders-utils";
+import { removeChildrenPath } from "../../utils/file-and-folders";
 import { startPathFromOneLevelAbove } from "../../utils/file-system/file-sys-util";
 import { showInFolder } from "../../utils/file-system/file-system-util";
 import { NotificationDuration, notifySuccess } from "../../utils/notifications";

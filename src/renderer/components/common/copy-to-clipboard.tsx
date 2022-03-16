@@ -1,11 +1,9 @@
-import {
-  NotificationDuration,
-  notifyInfo,
-} from "@common/utils/notification/notifications-util";
 import { clipboard } from "electron";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaClipboardCheck, FaRegClipboard } from "react-icons/fa";
+
+import { NotificationDuration, notifyInfo } from "../../utils/notifications";
 
 const COPIED_ICON_DISPLAY_DURATION = 3000;
 

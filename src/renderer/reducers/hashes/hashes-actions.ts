@@ -1,11 +1,10 @@
 import type { ArchifiltreDocsError } from "@common/utils/error";
-
-import type { HashesActionTypes, HashesMap } from "./hashes-types";
+import type { HashesActionTypes, HashesMap } from "@common/utils/hashes-types";
 import {
   ADD_ERRORED_HASHES,
   RESET_ERRORED_HASHES,
   SET_FILES_AND_FOLDERS_HASHES,
-} from "./hashes-types";
+} from "@common/utils/hashes-types";
 
 /**
  * Action to set hashes to FileAndFolders

@@ -1,10 +1,8 @@
 import { STATIC_PATH } from "@common/config";
-import {
-  createChartReplacer,
-  exportToDocX,
-} from "@common/utils/docx/docx-util";
-import type { SimpleObject } from "@common/utils/object/object-util";
+import type { SimpleObject } from "@common/utils/object";
 import path from "path";
+
+import { createChartReplacer, exportToDocX } from "../../utils/docx/docx-util";
 
 interface AuditReportFile {
   name: string;

@@ -8,7 +8,7 @@ import {
 import type { FilesAndFoldersMap } from "../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { IcicleColorMode } from "../reducers/icicle-sort-method/icicle-sort-method-types";
-import { FileType, getFileTypeFromFileName } from "./file-types-util";
+import { FileType, getFileTypeFromFileName } from "./file-types";
 
 type RgbaTuple = [
   red: number,

@@ -1,28 +1,10 @@
-import {
-  countDuplicateFilesTotalSize,
-  countDuplicatesPercentForFiles,
-  countDuplicatesPercentForFolders,
-  getBiggestDuplicatedFolders,
-  getMostDuplicatedFiles,
-} from "@common/utils/duplicates/duplicates-util";
-import {
-  formatPathForUserSystem,
-  octet2HumanReadableFormat,
-} from "@common/utils/file-system/file-sys-util";
-import {
-  FileType,
-  getExtensionsForEachFileType,
-  getFileType,
-} from "@common/utils/file-types/file-types-util";
 import type {
   Accessor,
   Mapper,
   Merger,
-} from "@common/utils/functionnal-programming-utils";
-import {
-  curriedFormatPercent,
-  percent,
-} from "@common/utils/numbers/numbers-util";
+} from "@common/utils/functionnal-programming";
+import type { HashesMap } from "@common/utils/hashes-types";
+import { curriedFormatPercent, percent } from "@common/utils/numbers";
 import dateFormat from "dateformat";
 import _ from "lodash";
 import {
@@ -56,8 +38,23 @@ import type {
   FilesAndFoldersMetadata,
   FilesAndFoldersMetadataMap,
 } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import { translations } from "../../translations/translations";
+import {
+  countDuplicateFilesTotalSize,
+  countDuplicatesPercentForFiles,
+  countDuplicatesPercentForFolders,
+  getBiggestDuplicatedFolders,
+  getMostDuplicatedFiles,
+} from "../../utils/duplicates";
+import {
+  formatPathForUserSystem,
+  octet2HumanReadableFormat,
+} from "../../utils/file-system/file-sys-util";
+import {
+  FileType,
+  getExtensionsForEachFileType,
+  getFileType,
+} from "../../utils/file-types";
 import type {
   AuditReportElementWithType,
   AuditReportFileWithCount,

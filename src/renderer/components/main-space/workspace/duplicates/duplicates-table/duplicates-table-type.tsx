@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { FaCircle } from "react-icons/fa";
 
 import { colors } from "../../../../../utils/color";
-import type { FileType } from "../../../../../utils/file-types-util";
+import type { FileType } from "../../../../../utils/file-types";
 
 export interface DuplicatesTableTypeProps {
   fileType: FileType;

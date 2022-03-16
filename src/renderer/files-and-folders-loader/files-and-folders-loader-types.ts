@@ -1,5 +1,6 @@
 import type { WorkerError } from "@common/types";
 import type { ArchifiltreDocsError } from "@common/utils/error";
+import type { HashesMap } from "@common/utils/hashes-types";
 import type { SimpleObject } from "@common/utils/object";
 
 import type {
@@ -10,7 +11,6 @@ import type {
   VirtualPathToIdMap,
 } from "../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { HashesMap } from "../reducers/hashes/hashes-types";
 import type { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
 import type { TagMap } from "../reducers/tags/tags-types";
 

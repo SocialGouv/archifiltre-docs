@@ -1,8 +1,8 @@
 import type { ArchifiltreDocsError } from "@common/utils/error";
+import type { HashesMap } from "@common/utils/hashes-types";
 import { useSelector } from "react-redux";
 
 import type { StoreState } from "../store";
-import type { HashesMap } from "./hashes-types";
 
 /**
  * Gets the hashes map from the redux state

@@ -1,4 +1,5 @@
 import type { Mapper, Merger } from "@common/utils/functionnal-programming";
+import type { HashesMap } from "@common/utils/hashes-types";
 import _ from "lodash";
 import {
   compose,
@@ -41,8 +42,7 @@ import type {
   FilesAndFoldersMetadata,
   FilesAndFoldersMetadataMap,
 } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { HashesMap } from "../reducers/hashes/hashes-types";
-import { FileType, getFileType } from "./file-types-util";
+import { FileType, getFileType } from "./file-types";
 
 export type DuplicatesMap = Record<string, FilesAndFolders[]>;
 

@@ -29,6 +29,7 @@ export const DuplicatesDistributionChartContainer: React.FC = () => {
     [duplicatesMap]
   );
 
+  // TODO
   return (
     <DuplicatesDistributionChart
       fileTypesCount={fileTypesCount}

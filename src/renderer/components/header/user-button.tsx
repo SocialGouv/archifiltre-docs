@@ -1,4 +1,4 @@
-import type { VoidFunction } from "@common/utils/function/function-util";
+import type { VoidFunction } from "@common/utils/function";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";

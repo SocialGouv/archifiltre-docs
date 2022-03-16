@@ -1,9 +1,12 @@
-import type { HashesActionTypes, HashesState } from "./hashes-types";
+import type {
+  HashesActionTypes,
+  HashesState,
+} from "@common/utils/hashes-types";
 import {
   ADD_ERRORED_HASHES,
   RESET_ERRORED_HASHES,
   SET_FILES_AND_FOLDERS_HASHES,
-} from "./hashes-types";
+} from "@common/utils/hashes-types";
 
 export const initialState: HashesState = {
   erroredHashes: [],

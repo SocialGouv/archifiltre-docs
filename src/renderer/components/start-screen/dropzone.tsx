@@ -1,11 +1,12 @@
-import { expectToBeDefined } from "@common/utils/expect-behaviour/expect-behaviour";
-import { notifyError } from "@common/utils/notification/notifications-util";
 import type { GridProps } from "@material-ui/core/Grid";
 import Grid from "@material-ui/core/Grid";
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaPlus } from "react-icons/fa";
 import styled from "styled-components";
+
+import { expectToBeDefined } from "../../utils/expect-behaviour";
+import { notifyError } from "../../utils/notifications";
 
 const Icon = styled(FaPlus)`
   width: 30px;

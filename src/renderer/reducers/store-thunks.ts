@@ -24,7 +24,7 @@ import {
   filesAndFoldersMapToArray,
   getFiles,
   getFirstLevelName,
-} from "../utils/file-and-folders-utils";
+} from "../utils/file-and-folders";
 import {
   countZipFiles,
   isJsonFile,

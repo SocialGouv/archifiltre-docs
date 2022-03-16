@@ -28,7 +28,7 @@ import { useFillColor } from "../../../utils/color";
 import {
   createFilePathSequence,
   getAllChildren,
-} from "../../../utils/file-and-folders-utils";
+} from "../../../utils/file-and-folders";
 import type { IcicleMainProps } from "./icicle-main";
 import { IcicleMain } from "./icicle-main";
 

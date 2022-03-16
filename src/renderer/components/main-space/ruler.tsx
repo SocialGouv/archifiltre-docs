@@ -1,5 +1,4 @@
-import { octet2HumanReadableFormat } from "@common/utils/file-system/file-sys-util";
-import { percent } from "@common/utils/numbers/numbers-util";
+import { percent } from "@common/utils/numbers";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
@@ -10,6 +9,7 @@ import {
 import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { translations } from "../../translations/translations";
+import { octet2HumanReadableFormat } from "../../utils/file-system/file-sys-util";
 import type { Dims } from "./icicle/icicle-rect";
 import type { FillColor } from "./icicle/icicle-types";
 

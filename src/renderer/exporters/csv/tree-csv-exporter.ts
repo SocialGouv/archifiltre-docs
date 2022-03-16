@@ -1,9 +1,8 @@
-import { handleFileExportThunk } from "@common/utils/export/export-util";
-import { notifyInfo } from "@common/utils/notification/notifications-util";
-
 import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { translations } from "../../translations/translations";
+import { handleFileExportThunk } from "../../utils/export";
+import { notifyInfo } from "../../utils/notifications";
 import { generateTreeCsvExport$ } from "./tree-csv-exporter.controller";
 
 /**

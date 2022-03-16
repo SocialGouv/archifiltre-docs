@@ -5,6 +5,7 @@ import {
   hashErrorToArchifiltreDocsError,
   hashResultsToMap,
 } from "@common/utils/hash";
+import type { HashesMap } from "@common/utils/hashes-types";
 import { map as lodashMap } from "lodash/fp";
 import path from "path";
 import { pipe } from "rxjs";
@@ -26,7 +27,6 @@ import {
   getErroredHashesFromStore,
   getHashesFromStore,
 } from "../reducers/hashes/hashes-selectors";
-import type { HashesMap } from "../reducers/hashes/hashes-types";
 import {
   completeLoadingAction,
   progressLoadingAction,

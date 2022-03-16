@@ -1,3 +1,4 @@
+import type { HashesMap } from "@common/utils/hashes-types";
 import type { TFunction } from "i18next";
 import { compose, constant, property, sortBy, toString } from "lodash/fp";
 import { extname } from "path";
@@ -12,10 +13,9 @@ import type {
   FilesAndFolders,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import type { Tag, TagMap } from "../../reducers/tags/tags-types";
 import { hasDuplicate } from "../duplicates";
-import { getType, isExactFileOrAncestor } from "../file-and-folders-utils";
+import { getType, isExactFileOrAncestor } from "../file-and-folders";
 import { formatPathForUserSystem } from "../file-system/file-sys-util";
 
 /**

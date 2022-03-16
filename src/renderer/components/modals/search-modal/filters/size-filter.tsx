@@ -1,8 +1,8 @@
+import type { FilterMethod } from "@common/utils/types";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { FilesAndFolders } from "../../../../reducers/files-and-folders/files-and-folders-types";
-import type { FilterMethod } from "../../../../typings/filter-types";
 import { Filter } from "./filter";
 
 export interface SizeFilterProps {

@@ -1,3 +1,4 @@
+import { openLink } from "@common/utils/electron";
 import { createStyles, Link } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import type { Theme } from "@material-ui/core/styles/createMuiTheme";
@@ -12,7 +13,6 @@ import {
   FaInfo,
 } from "react-icons/fa";
 
-import { openLink } from "../../../../common/utils/electron/electron-util";
 import {
   ARCHIFILTRE_CONTACT_EMAIL,
   CONTACT_LINK,

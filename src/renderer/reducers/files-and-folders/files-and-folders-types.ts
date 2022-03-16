@@ -1,4 +1,4 @@
-import type { ArchifiltreDocsError } from "@common/utils/error/error-util";
+import type { ArchifiltreDocsError } from "@common/utils/error";
 import type { Action } from "redux";
 
 export const INITIALIZE_FILES_AND_FOLDERS = "FILES_AND_FOLDERS/INITIALIZE";

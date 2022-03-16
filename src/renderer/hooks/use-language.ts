@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { translations } from "../translations/translations";
-import type { Language } from "../utils/language/language-types";
+import type { Language } from "../utils/language/types";
 import { useUserSettings } from "./use-user-settings";
 
 /**

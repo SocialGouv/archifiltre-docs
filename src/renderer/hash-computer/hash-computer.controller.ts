@@ -3,7 +3,7 @@ import { bufferCount, map } from "rxjs/operators";
 
 import type { FilesAndFoldersMap } from "../reducers/files-and-folders/files-and-folders-types";
 import type { HashesMap } from "../reducers/hashes/hashes-types";
-import { computeFolderHashes } from "../utils/files-and-folders/file-and-folders-utils";
+import { computeFolderHashes } from "../utils/file-and-folders-utils";
 
 interface ComputeFolderHashesOptions {
   filesAndFolders: FilesAndFoldersMap;

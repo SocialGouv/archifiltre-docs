@@ -1,3 +1,4 @@
+import { isWindows } from "@common/utils/os";
 import _ from "lodash";
 import path from "path";
 
@@ -11,7 +12,6 @@ import { resipExporterThunk } from "../../../exporters/resip/resip-exporter-thun
 import { ActionTitle } from "../../../logging/tracker-types";
 import type { ArchifiltreDocsThunkAction } from "../../../reducers/archifiltre-types";
 import { getNameWithExtension } from "../../../utils/file-system/file-sys-util";
-import { isWindows } from "../../../utils/os/os-util";
 import type { ExportTypesMap } from "../export-modal/export-options";
 
 /* eslint-disable @typescript-eslint/naming-convention */

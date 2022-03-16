@@ -1,5 +1,18 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "stylelint.validate": [
+    "css",
+    "scss"
+  ],
+  "[css]": {
+    "editor.defaultFormatter": "stylelint.vscode-stylelint"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "stylelint.vscode-stylelint"
+  },
   "[javascript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
@@ -21,8 +34,14 @@
       "url": "https://docs.renovatebot.com/renovate-schema.json"
     }
   ],
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-issue-config.json": ".github/ISSUE_TEMPLATE/config.yml"
+  },
   "jest.jestCommandLine": "yarn jest",
   "jest.autoRun": "off",
   "typescript.preferences.importModuleSpecifier": "project-relative",
-  "javascript.preferences.importModuleSpecifier": "project-relative"
+  "javascript.preferences.importModuleSpecifier": "project-relative",
+  "files.associations": {
+    ".env.dist": "dotenv"
+  }
 }

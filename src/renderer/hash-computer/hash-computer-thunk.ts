@@ -1,15 +1,15 @@
-import { ArchifiltreDocsErrorType } from "@common/utils/error/error-util";
+import { ArchifiltreDocsErrorType } from "@common/utils/error";
+import type { HashComputingResult } from "@common/utils/hash";
+import {
+  computeHashes,
+  hashErrorToArchifiltreDocsError,
+  hashResultsToMap,
+} from "@common/utils/hash";
 import { map as lodashMap } from "lodash/fp";
 import path from "path";
 import { pipe } from "rxjs";
 import { map, tap } from "rxjs/operators";
 
-import type { HashComputingResult } from "../../common/utils/hash/hash-util";
-import {
-  computeHashes,
-  hashErrorToArchifiltreDocsError,
-  hashResultsToMap,
-} from "../../common/utils/hash/hash-util";
 import { reportError } from "../logging/reporter";
 import type { ArchifiltreDocsThunkAction } from "../reducers/archifiltre-types";
 import {
@@ -43,7 +43,7 @@ import {
   NotificationDuration,
   notifyError,
   notifySuccess,
-} from "../utils/notification/notifications-util";
+} from "../utils/notifications";
 import { computeFolderHashes$ } from "./hash-computer.controller";
 
 const computeFileHashesIgnoredThunk =

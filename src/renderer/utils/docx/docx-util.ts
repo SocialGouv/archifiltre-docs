@@ -1,9 +1,9 @@
+import type { SimpleObject } from "@common/utils/object";
 import Docxtemplater from "docxtemplater";
 import fs from "fs";
 import path from "path";
 import PizZip from "pizzip";
 
-import type { SimpleObject } from "../object/object-util";
 import { angularParser } from "./angular-parser";
 
 export type FileReplacer = (zip: PizZip, values: DocXValuesMap) => PizZip;

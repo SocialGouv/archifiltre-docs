@@ -4,7 +4,7 @@ import {
   MESSAGE_SIZE_CHUNK_LENGTH,
   readBufferMessageWithLength,
   uint8ArrayToString,
-} from "@renderer/utils/buffer-util/buffer-util";
+} from "@common/utils/buffer";
 
 describe("buffer-util", () => {
   describe("readBufferMessageWithLength", () => {

@@ -1,4 +1,4 @@
-import { openLink } from "@common/utils/electron/electron-util";
+import { openLink } from "@common/utils/electron";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 import { useStyles } from "../../hooks/use-styles";
 import { reportError } from "../../logging/reporter";
-import { request } from "../../utils/http-util";
+import { request } from "../../utils/http";
 import { version, versionComparator } from "../../version";
 import { ModalHeader } from "../modals/modal-header";
 

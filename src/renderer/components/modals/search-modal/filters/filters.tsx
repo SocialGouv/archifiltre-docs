@@ -1,9 +1,9 @@
+import type { FilterMethod } from "@common/utils/types";
 import { Box } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 
 import type { FilesAndFolders } from "../../../../reducers/files-and-folders/files-and-folders-types";
 import type { TagMap } from "../../../../reducers/tags/tags-types";
-import type { FilterMethod } from "../../../../typings/filter-types";
 import { SizeFilter } from "./size-filter";
 import { TagFilter } from "./tag-filter";
 import { TypeFilter } from "./type-filter";

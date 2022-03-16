@@ -1,4 +1,7 @@
 /* eslint-disable import/no-named-as-default-member */
+import { loadApp } from "@common/modules/app";
+import { loadHash } from "@common/modules/hash";
+import { loadWindow } from "@common/modules/window";
 import type { Extension } from "electron";
 import {
   app,
@@ -11,10 +14,6 @@ import {
 } from "electron";
 import path from "path";
 import Raven from "raven"; // TODO: switch to @sentry/node (https://docs.sentry.io/platforms/node/)
-
-import { loadApp } from "./app";
-import { loadHash } from "./hash";
-import { loadWindow } from "./window";
 
 // Initializes sentry logging for production build
 if (app.isPackaged) {

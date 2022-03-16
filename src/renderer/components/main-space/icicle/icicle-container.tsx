@@ -24,11 +24,11 @@ import {
   getWorkspaceMetadataFromStore,
   useWorkspaceMetadata,
 } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
-import { useFillColor } from "../../../utils/color/color-util";
+import { useFillColor } from "../../../utils/color";
 import {
   createFilePathSequence,
   getAllChildren,
-} from "../../../utils/files-and-folders/file-and-folders-utils";
+} from "../../../utils/file-and-folders-utils";
 import type { IcicleMainProps } from "./icicle-main";
 import { IcicleMain } from "./icicle-main";
 

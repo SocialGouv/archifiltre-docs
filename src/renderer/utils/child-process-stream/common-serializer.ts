@@ -6,7 +6,7 @@ import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-m
 import type {
   WithFilesAndFolders,
   WithFilesAndFoldersMetadata,
-} from "../virtual-file-system-util/virtual-file-system-util";
+} from "../virtual-file-system";
 
 export const extractKeysFromFilesAndFolders = ({
   filesAndFolders,

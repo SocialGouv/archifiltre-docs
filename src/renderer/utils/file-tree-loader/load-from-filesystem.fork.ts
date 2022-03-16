@@ -1,5 +1,5 @@
-import type { WorkerMessageHandler } from "../async-worker/async-worker-util";
-import { setupChildWorkerListeners } from "../async-worker/async-worker-util";
+import type { WorkerMessageHandler } from "../async-worker";
+import { setupChildWorkerListeners } from "../async-worker";
 import { createAsyncWorkerForChildProcess } from "../async-worker/child-process";
 import { loadVirtualFileSystem } from "./load-from-filesystem.impl";
 

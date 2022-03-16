@@ -1,3 +1,10 @@
+import type { ArchifiltreDocsError } from "@common/utils/error";
+import {
+  ArchifiltreDocsErrorType,
+  makeErrorHandler,
+} from "@common/utils/error";
+import { ArchifiltreDocsStoreThunkErrorCode } from "@common/utils/error/error-codes";
+import { clipboard } from "electron";
 import _, { noop } from "lodash";
 import { compose } from "lodash/fp";
 import path from "path";
@@ -11,18 +18,13 @@ import { reportError } from "../logging/reporter";
 import { addTracker } from "../logging/tracker";
 import { ActionTitle, ActionType } from "../logging/tracker-types";
 import { translations } from "../translations/translations";
-import { filterResults } from "../utils/batch-process/batch-process-util";
-import type {
-  ErrorMessage,
-  ResultMessage,
-} from "../utils/batch-process/batch-process-util-types";
-import { copyToClipboard } from "../utils/clipboard/clipboard";
-import { ArchifiltreDocsStoreThunkErrorCode } from "../utils/error/error-codes";
-import type { ArchifiltreDocsError } from "../utils/error/error-util";
+import { filterResults } from "../utils/batch-process";
+import type { ErrorMessage, ResultMessage } from "../utils/batch-process/types";
 import {
-  ArchifiltreDocsErrorType,
-  makeErrorHandler,
-} from "../utils/error/error-util";
+  filesAndFoldersMapToArray,
+  getFiles,
+  getFirstLevelName,
+} from "../utils/file-and-folders-utils";
 import {
   countZipFiles,
   isJsonFile,
@@ -33,17 +35,12 @@ import {
 import type { HookParam } from "../utils/file-tree-loader/file-tree-loader";
 import { loadFileTree } from "../utils/file-tree-loader/file-tree-loader";
 import {
-  filesAndFoldersMapToArray,
-  getFiles,
-  getFirstLevelName,
-} from "../utils/files-and-folders/file-and-folders-utils";
-import {
   NotificationDuration,
   notifyError,
   notifyInfo,
-} from "../utils/notification/notifications-util";
-import { operateOnDataProcessingStream } from "../utils/observable/observable-util";
-import { workerManager } from "../utils/worker-manager/worker-manager";
+} from "../utils/notifications";
+import { operateOnDataProcessingStream } from "../utils/observable";
+import { workerManager } from "../utils/worker";
 import { version, versionComparator } from "../version";
 import type {
   ArchifiltreDocsDispatch,
@@ -154,7 +151,7 @@ const displayUnexpectedError = (errorReason: string) => {
   const errorMessage = translations.t("folderDropzone.unexpectedErrorMessage");
   reportError(errorReason);
   notifyError(errorMessage, errorTitle, NotificationDuration.PERMANENT, () => {
-    copyToClipboard(errorReason);
+    clipboard.writeText(errorReason);
   });
 };
 

@@ -1,3 +1,4 @@
+import type { AnyFunction } from "@common/utils/function";
 import { MenuItem } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import type { ButtonProps } from "@material-ui/core/Button";
@@ -8,7 +9,6 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSearch, FaSearchMinus, FaSearchPlus } from "react-icons/fa";
 
-import type { AnyFunction } from "../../../utils/function/function-util";
 import { ZOOM_SPEED } from "../icicle/icicle-main";
 import { useZoomContext } from "../workspace/zoom-provider";
 import { ZoomPickerOptionItem } from "./zoom-picker-option-item";

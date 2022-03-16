@@ -14,12 +14,9 @@ import type {
 import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import type { Tag, TagMap } from "../../reducers/tags/tags-types";
-import { hasDuplicate } from "../duplicates/duplicates-util";
+import { hasDuplicate } from "../duplicates";
+import { getType, isExactFileOrAncestor } from "../file-and-folders-utils";
 import { formatPathForUserSystem } from "../file-system/file-sys-util";
-import {
-  getType,
-  isExactFileOrAncestor,
-} from "../files-and-folders/file-and-folders-utils";
 
 /**
  * Simple date formatting function for performance matters.

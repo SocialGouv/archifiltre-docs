@@ -1,3 +1,5 @@
+import { Object } from "@common/utils";
+import { identity } from "@common/utils/function";
 import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -5,10 +7,8 @@ import { find, negate } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Object } from "../../../../common/utils";
 import { useStyles } from "../../../hooks/use-styles";
 import { isValidFilePath } from "../../../utils/file-system/file-sys-util";
-import { identity } from "../../../utils/function/function-util";
 import type { IsActiveOptions } from "./export-config";
 import {
   exportConfig,

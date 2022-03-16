@@ -1,8 +1,3 @@
-import {
-  parseSerializedDataFromStream,
-  sendStringToStream,
-  stringifyObjectToStream,
-} from "@common/utils/child-process-stream/child-process-stream";
 import { FilesAndFoldersMessage } from "@common/utils/child-process-stream/child-process-stream-messages";
 import type { OmitProtobuf } from "@common/utils/child-process-stream/common-serializer";
 import {
@@ -22,6 +17,11 @@ import type {
   FilesAndFolders,
   FilesAndFoldersMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
+import {
+  parseSerializedDataFromStream,
+  sendStringToStream,
+  stringifyObjectToStream,
+} from "../../utils/child-process-stream/child-process-stream";
 
 export type TreeCsvExporterParams = WithLanguage<WithFilesAndFolders>;
 

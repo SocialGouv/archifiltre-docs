@@ -1,7 +1,7 @@
 import type {
   ArchifiltreDocsError,
   ArchifiltreDocsErrorType,
-} from "@common/utils/error/error-util";
+} from "@common/utils/error";
 
 import type { LoadingInfoAction, LoadingInfoTypes } from "./loading-info-types";
 import {

@@ -1,3 +1,4 @@
+import { STATIC_PATH } from "@common/config";
 import {
   createChartReplacer,
   exportToDocX,
@@ -78,7 +79,7 @@ export interface AuditReportData {
 }
 
 const TEMPLATE_PATH = path.resolve(
-  STATIC_ASSETS_PATH,
+  STATIC_PATH,
   "template/auditReportTemplate.docx"
 );
 
@@ -88,7 +89,7 @@ const TEMPLATE_PATH = path.resolve(
  * Then, you replace the numeric values by templated strings like "<c:v>{presentationCount}</c:v>"
  */
 const CHART_TEMPLATE_PATH = path.resolve(
-  STATIC_ASSETS_PATH,
+  STATIC_PATH,
   "template/chartTemplate.xml"
 );
 

@@ -1,4 +1,4 @@
-import { epochToFormattedUtcDateString } from "@renderer/utils/date/date-util";
+import { epochToFormattedUtcDateString } from "@common/utils/date";
 import fc from "fast-check";
 
 describe("csv", () => {

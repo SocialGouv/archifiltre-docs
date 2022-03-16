@@ -1,6 +1,6 @@
+import { ipcRenderer } from "@common/ipc";
 import { PureComponent } from "react";
 
-import { ipcRenderer } from "../../../common/ipc";
 import * as UserData from "../../user-data";
 
 export type WindowResizeState = UserData.UserData;

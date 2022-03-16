@@ -1,7 +1,7 @@
-import { medianOnSortedArray } from "@common/utils/array/array-util";
-import type { ArchifiltreDocsError } from "@common/utils/error/error-util";
-import type { Mapper } from "@common/utils/functionnal-programming-utils";
-import { not, size } from "@common/utils/functionnal-programming-utils";
+import { medianOnSortedArray } from "@common/utils/array";
+import type { ArchifiltreDocsError } from "@common/utils/error";
+import type { Mapper } from "@common/utils/functionnal-programming";
+import { not, size } from "@common/utils/functionnal-programming";
 import _ from "lodash";
 import fp from "lodash/fp";
 import { useSelector } from "react-redux";

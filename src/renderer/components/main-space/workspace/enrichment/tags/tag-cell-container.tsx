@@ -27,7 +27,7 @@ import {
   getHoveredElementIdFromStore,
   getLockedElementIdFromStore,
 } from "../../../../../reducers/workspace-metadata/workspace-metadata-selectors";
-import { getAllChildren } from "../../../../../utils/files-and-folders/file-and-folders-utils";
+import { getAllChildren } from "../../../../../utils/file-and-folders-utils";
 import type { TagCellProps } from "./tag-cell";
 import { TagCell } from "./tag-cell";
 

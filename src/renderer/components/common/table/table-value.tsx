@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import React from "react";
 
-import { applyAccessorToTableValue } from "../../../utils/table/table-util";
+import { applyAccessorToTableValue } from "../../../utils/table";
 import type { CellStyle, TableAccessor } from "./table-types";
 import { WordBreak } from "./table-types";
 

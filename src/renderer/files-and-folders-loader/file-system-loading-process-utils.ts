@@ -1,3 +1,8 @@
+import type { WorkerError } from "@common/types";
+import { medianOnSortedArray } from "@common/utils/array";
+import type { ArchifiltreDocsError } from "@common/utils/error";
+import { tap } from "@common/utils/functionnal-programming";
+import { indexSort, indexSortReverse } from "@common/utils/list";
 import fs from "fs";
 import _, { noop } from "lodash";
 import { compose, defaults } from "lodash/fp";
@@ -10,12 +15,8 @@ import type {
 import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
-import { medianOnSortedArray } from "../utils/array/array-util";
-import type { ArchifiltreDocsError } from "../utils/error/error-util";
 import { isJsonFile } from "../utils/file-system/file-sys-util";
-import { tap } from "../utils/functionnal-programming-utils";
-import { hookCounter } from "../utils/hook/hook-utils";
-import { indexSort, indexSortReverse } from "../utils/list-util";
+import { hookCounter } from "../utils/hook";
 import { version } from "../version";
 import {
   asyncLoadFilesAndFoldersFromFileSystem,
@@ -34,7 +35,6 @@ import type {
   VirtualFileSystem,
   WithMetadata,
   WithResultHook,
-  WorkerError,
 } from "./files-and-folders-loader-types";
 
 interface Overrides {

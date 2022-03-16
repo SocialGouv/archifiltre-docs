@@ -9,7 +9,7 @@ import {
   parseSerializedDataFromStream,
   sendStringToStream,
   stringifyObjectToStream,
-} from "../child-process-stream/child-process-stream";
+} from "../child-process-stream";
 import {
   FilesAndFoldersMessage,
   FilesAndFoldersMetadataMessage,

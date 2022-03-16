@@ -26,7 +26,7 @@ import {
   getTagsFromStore,
 } from "../../../../reducers/tags/tags-selectors";
 import { useWorkspaceMetadata } from "../../../../reducers/workspace-metadata/workspace-metadata-selectors";
-import { getAllChildren } from "../../../../utils/files-and-folders/file-and-folders-utils";
+import { getAllChildren } from "../../../../utils/file-and-folders-utils";
 import { Enrichment } from "./enrichment";
 
 const computeTreeSize = (

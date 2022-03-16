@@ -1,3 +1,4 @@
+import { getPath } from "@common/utils/electron";
 import type { Event as SentryEvent } from "@sentry/browser";
 import * as Sentry from "@sentry/browser";
 import dateFormat from "dateformat";
@@ -8,7 +9,6 @@ import DailyRotateFile from "winston-daily-rotate-file";
 import type { SentryTransportOptions } from "winston-transport-sentry-node";
 import WinstonSentry from "winston-transport-sentry-node";
 
-import { getPath } from "../../common/utils/electron/electron-util";
 import { WinstonConsoleLogger } from "./winston-console-logger";
 
 const isProd = () => MODE === "production";

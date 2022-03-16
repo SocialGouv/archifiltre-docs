@@ -1,3 +1,4 @@
+import type { VoidFunction } from "@common/utils/function";
 import { IconButton } from "@material-ui/core";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
@@ -13,7 +14,6 @@ import {
   setHoveredElementId,
   setLockedElementId,
 } from "../../../reducers/workspace-metadata/workspace-metadata-actions";
-import type { VoidFunction } from "../../../utils/function/function-util";
 import { TabsContext } from "../../header/tabs-context";
 import type { Column } from "./table-types";
 import { TableValue } from "./table-value";

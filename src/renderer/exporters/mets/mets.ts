@@ -1,8 +1,5 @@
-import { handleError } from "@common/utils/error/error-util";
-import { getDisplayName } from "@common/utils/files-and-folders/file-and-folders-utils";
-import { notifySuccess } from "@common/utils/notification/notifications-util";
-import type { SimpleObject } from "@common/utils/object/object-util";
-import { generateRandomString } from "@common/utils/random-gen-util";
+import type { SimpleObject } from "@common/utils/object";
+import { generateRandomString } from "@common/utils/random-gen";
 import dateFormat from "dateformat";
 import fs from "fs";
 import MD5 from "js-md5";
@@ -23,6 +20,8 @@ import type { HashesMap } from "../../reducers/hashes/hashes-types";
 import { getAllTagsForFile } from "../../reducers/tags/tags-selectors";
 import type { TagMap } from "../../reducers/tags/tags-types";
 import { translations } from "../../translations/translations";
+import { getDisplayName } from "../../utils/file-and-folders-utils";
+import { notifyError, notifySuccess } from "../../utils/notifications";
 import { version } from "../../version";
 import {
   METS_EXPORT_ERROR_TITLE,
@@ -30,6 +29,27 @@ import {
   metsExportErrorCannotAccessFile,
   metsExportErrorFileDoesNotExist,
 } from "./mets-errors";
+
+interface ErrorMessageMap {
+  [errorCode: string]: string;
+  default: string;
+}
+/**
+ * Reports an error based on the error code
+ * @param errorCode - The error code
+ * @param errorMessages - The error message map mapping all of the error codes
+ * @param errorMessageTitle - The title of the error message
+ */
+export const handleError = (
+  errorCode: string,
+  errorMessages: ErrorMessageMap,
+  errorMessageTitle: string
+): void => {
+  const message = errorMessages[errorCode] || errorMessages.default;
+
+  notifyError(message, errorMessageTitle);
+};
+
 // =================================
 // AUXILIARY FUNCTIONS AND VARIABLES
 // =================================

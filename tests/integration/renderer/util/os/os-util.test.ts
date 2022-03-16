@@ -1,4 +1,4 @@
-import { isWindows } from "@renderer/utils/os/os-util";
+import { isWindows } from "@common/utils/os";
 import os from "os";
 
 jest.mock("os", () => ({

@@ -10,9 +10,8 @@ import {
   getElementsToDeleteFromStore,
   getFilesAndFoldersFromStore,
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
-import type { FilesAndFolders } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { getHashesFromStore } from "../../../reducers/hashes/hashes-selectors";
-import { getFilesDuplicatesMap } from "../../../utils/duplicates/duplicates-util";
+import { getFilesDuplicatesMap } from "../../../utils/duplicates";
 import { DuplicatesSearch } from "./duplicates-search";
 
 export const DuplicatesSearchContainer: React.FC = () => {
@@ -44,7 +43,7 @@ export const DuplicatesSearchContainer: React.FC = () => {
     return _(filesDuplicatesMap)
       .pickBy((filesAndFoldersArray) => filesAndFoldersArray.length > 1)
       .values()
-      .value() as FilesAndFolders[][];
+      .value();
   }, [filesAndFoldersMap, hashesMap]);
 
   return (

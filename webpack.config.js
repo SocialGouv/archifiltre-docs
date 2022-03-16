@@ -1,3 +1,3 @@
-const renderer = require("./webpack.renderer");
+const renderer = require("./webpack.renderer.old");
 
 module.exports = renderer;

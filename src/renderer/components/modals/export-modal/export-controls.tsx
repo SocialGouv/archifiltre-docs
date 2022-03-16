@@ -1,3 +1,4 @@
+import { ipcRenderer } from "@common/ipc";
 import { Button } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -7,7 +8,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaFolderOpen } from "react-icons/fa";
 
-import { ipcRenderer } from "../../../../common/ipc";
 import { exportConfig, ExportType } from "./export-config";
 import type { ExportTypesMap } from "./export-options";
 

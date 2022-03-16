@@ -1,3 +1,4 @@
+import type { Awaitable, VoidFunction } from "@common/utils/function";
 import path from "path";
 import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -15,11 +16,7 @@ import type { ElementWithToDelete } from "../../../reducers/files-and-folders/fi
 import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getTagsFromStore } from "../../../reducers/tags/tags-selectors";
 import { useWorkspaceMetadata } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
-import type {
-  Awaitable,
-  VoidFunction,
-} from "../../../utils/function/function-util";
-import { exportTableToCsvFile } from "../../../utils/table/table-util";
+import { exportTableToCsvFile } from "../../../utils/table";
 import type { SearchModalProps } from "./search-modal";
 import { SearchModal } from "./search-modal";
 import { useSearchModalTableColumns } from "./use-search-modal-table-columns";

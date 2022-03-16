@@ -1,15 +1,12 @@
+import { BooleanOperator, joinFilters } from "@common/utils/array";
+import type { FilterMethod } from "@common/utils/types";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useDeferredMemo } from "../../../../hooks/use-deferred-memo";
 import type { FilesAndFolders } from "../../../../reducers/files-and-folders/files-and-folders-types";
-import type { FilterMethod } from "../../../../typings/filter-types";
-import {
-  BooleanOperator,
-  joinFilters,
-} from "../../../../utils/array/array-util";
-import { getType } from "../../../../utils/files-and-folders/file-and-folders-utils";
+import { getType } from "../../../../utils/file-and-folders-utils";
 import { Filter } from "./filter";
 
 export interface TypeFilterProps {

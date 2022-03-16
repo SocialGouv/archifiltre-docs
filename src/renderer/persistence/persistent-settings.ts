@@ -1,11 +1,11 @@
+import { getPath } from "@common/utils/electron";
+import type { SimpleObject } from "@common/utils/object";
 import fs from "fs";
 import _ from "lodash";
 import path from "path";
 
-import { getPath } from "../../common/utils/electron/electron-util";
 import { getLanguage } from "../languages";
 import { reportError } from "../logging/reporter";
-import type { SimpleObject } from "../utils/object/object-util";
 
 export interface UserSettings {
   isTrackingEnabled: boolean;

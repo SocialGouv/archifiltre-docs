@@ -1,4 +1,4 @@
-import { openLink } from "@common/utils/electron/electron-util";
+import { openLink } from "@common/utils/electron";
 import useTheme from "@material-ui/core/styles/useTheme";
 import React from "react";
 import { useTranslation } from "react-i18next";

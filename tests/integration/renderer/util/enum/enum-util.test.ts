@@ -2,7 +2,7 @@ import {
   getEnumKeyFromValue,
   isValueInEnum,
   mapValueBetweenEnums,
-} from "@renderer/utils/enum/enum-util";
+} from "@common/utils/enum";
 
 enum SourceEnum {
   FIRST_VALUE = "firstValue",

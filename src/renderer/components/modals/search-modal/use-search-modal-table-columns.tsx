@@ -8,8 +8,8 @@ import type {
   FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { getType } from "../../../utils/file-and-folders-utils";
 import { octet2HumanReadableFormat } from "../../../utils/file-system/file-sys-util";
-import { getType } from "../../../utils/files-and-folders/file-and-folders-utils";
 import type { Column } from "../../common/table/table-types";
 import { WordBreak } from "../../common/table/table-types";
 import { ToDeleteChip } from "../../common/to-delete-chip";

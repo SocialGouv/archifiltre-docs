@@ -4,13 +4,13 @@ import { EventEmitter } from "events";
 import path from "path";
 import type { Readable } from "stream";
 
-import type { WorkerMessage } from "../batch-process/batch-process-util-types";
-import { MessageTypes } from "../batch-process/batch-process-util-types";
-import type { MessageSerializer } from "../child-process-stream/child-process-stream";
+import type { WorkerMessage } from "../batch-process/types";
+import { MessageTypes } from "../batch-process/types";
+import type { MessageSerializer } from "../child-process-stream";
 import type {
   ChildProcessAsyncWorker,
   ChildProcessControllerAsyncWorker,
-} from "./async-worker-util";
+} from ".";
 
 type StreamMessageParser = (stream: Readable) => Promise<WorkerMessage>;
 

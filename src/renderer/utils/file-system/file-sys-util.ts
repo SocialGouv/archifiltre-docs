@@ -1,10 +1,10 @@
+import { countItems } from "@common/utils/array";
 import dateFormat from "dateformat";
 import { saveAs } from "file-saver";
 import fs from "fs";
 import path, { dirname } from "path";
 
 import { translations } from "../../translations/translations";
-import { countItems } from "../array/array-util";
 
 const utf8ByteOrderMark = "\ufeff";
 

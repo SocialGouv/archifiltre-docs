@@ -1,8 +1,7 @@
+import type { AnyFunction } from "@common/utils/function";
+import { identity } from "@common/utils/function";
+import type { SimpleObject } from "@common/utils/object";
 import expressions from "angular-expressions";
-
-import type { AnyFunction } from "../function/function-util";
-import { identity } from "../function/function-util";
-import type { SimpleObject } from "../object/object-util";
 
 // All the code comes from the docx-templater doc.
 // To add custom filters, check the documentation page : https://docxtemplater.readthedocs.io/en/latest/angular_parse.html#angular-parser

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 
-import type { RgbFunc } from "../../../utils/color/color-util";
+import type { RgbFunc } from "../../../utils/color";
 import type { IcicleMouseHandler } from "./icicle-main";
 import type { Dims } from "./icicle-rect";
 

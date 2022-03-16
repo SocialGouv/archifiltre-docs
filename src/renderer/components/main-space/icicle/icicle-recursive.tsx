@@ -1,6 +1,6 @@
+import { computeCumulative } from "@common/utils/array";
 import React, { memo } from "react";
 
-import { computeCumulative } from "../../../utils/array/array-util";
 import { IcicleRect } from "./icicle-rect";
 import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 

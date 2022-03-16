@@ -1,3 +1,4 @@
+import { reloadApp } from "@common/utils/electron";
 import type { Theme } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -8,7 +9,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
-import { reloadApp } from "../../../../common/utils/electron/electron-util";
 import { useUserSettings } from "../../../hooks/use-user-settings";
 import { getInitialUserSettings } from "../../../persistence/persistent-settings";
 

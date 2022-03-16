@@ -1,3 +1,8 @@
+import type { WorkerError } from "@common/types";
+import {
+  ArchifiltreDocsErrorType,
+  convertFsErrorToArchifiltreDocsError,
+} from "@common/utils/error";
 import parse from "csv-parse/lib/sync";
 import fs from "fs";
 import { noop } from "lodash";
@@ -18,15 +23,11 @@ import type {
 } from "../reducers/files-and-folders/files-and-folders-types";
 import type { HashesMap } from "../reducers/hashes/hashes-types";
 import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
-import { convertJsonToCurrentVersion } from "../utils/compatibility/compatibility";
-import {
-  ArchifiltreDocsErrorType,
-  convertFsErrorToArchifiltreDocsError,
-} from "../utils/error/error-util";
-import { identifyFileFormat } from "../utils/file-format/file-format-util";
+import { convertJsonToCurrentVersion } from "../utils/compatibility";
+import { identifyFileFormat } from "../utils/file-format";
 import { convertToPosixAbsolutePath } from "../utils/file-system/file-sys-util";
-import { asyncShouldIgnoreElement } from "../utils/hidden-file/hidden-file-util";
-import { removeIgnoredElementsFromVirtualFileSystem } from "../utils/virtual-file-system-util/virtual-file-system-util";
+import { asyncShouldIgnoreElement } from "../utils/hidden-file";
+import { removeIgnoredElementsFromVirtualFileSystem } from "../utils/virtual-file-system";
 import { sanitizeHooks } from "./file-system-loading-process-utils";
 import type {
   FilesAndFoldersLoader,
@@ -38,7 +39,6 @@ import type {
   WithHashes,
   WithResultHook,
   WithVirtualPathToIdMap,
-  WorkerError,
 } from "./files-and-folders-loader-types";
 
 interface FilesAndFoldersInfo {

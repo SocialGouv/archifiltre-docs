@@ -22,7 +22,7 @@ import {
 } from "./persistence/persistent-settings";
 import { initPreviousSessions } from "./persistence/previous-sessions";
 import { SecretDevtools } from "./secret-devtools";
-import { setupLanguage } from "./utils/language/language-util";
+import { setupLanguage } from "./utils/language";
 import { version } from "./version";
 
 reportInfo("Docs started");

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { mapValueBetweenEnums } from "@common/utils/enum";
 import _ from "lodash";
 import { compose } from "lodash/fp";
 
-import { mapValueBetweenEnums } from "../utils/enum/enum-util";
 import type { TrackerAction } from "./tracker-types";
 import { ActionTitle, ActionType } from "./tracker-types";
 

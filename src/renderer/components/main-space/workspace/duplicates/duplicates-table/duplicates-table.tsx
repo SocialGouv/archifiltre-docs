@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { octet2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
-import type { FileType } from "../../../../../utils/file-types/file-types-util";
+import type { FileType } from "../../../../../utils/file-types-util";
 import { Table } from "../../../../common/table/table";
 import type { Column } from "../../../../common/table/table-types";
 import { DuplicatesTableType } from "./duplicates-table-type";

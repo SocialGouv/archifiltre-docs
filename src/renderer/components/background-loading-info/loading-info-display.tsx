@@ -1,3 +1,4 @@
+import { percent } from "@common/utils/numbers";
 import { LinearProgress } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
@@ -5,7 +6,6 @@ import React from "react";
 import styled from "styled-components";
 
 import type { LoadingInfo } from "../../reducers/loading-info/loading-info-types";
-import { percent } from "../../utils/numbers/numbers-util";
 
 const getColor = ({ color }: { color: string }) => color;
 

@@ -5,9 +5,9 @@ import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { FileTypeMap } from "../../../../../exporters/audit/audit-report-values-computer";
-import { colors } from "../../../../../utils/color/color-util";
+import { colors } from "../../../../../utils/color";
 import { octet2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
-import { FileType } from "../../../../../utils/file-types/file-types-util";
+import { FileType } from "../../../../../utils/file-types-util";
 import type {
   HorizontalStackedBarOption,
   RenderTooltipContent,

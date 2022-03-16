@@ -1,3 +1,4 @@
+import { makeEmptyArray } from "@common/utils/array";
 import type { TFunction } from "i18next";
 import React, { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -8,8 +9,7 @@ import type {
   FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { makeEmptyArray } from "../../../utils/array/array-util";
-import { placeholder } from "../../../utils/color/color-util";
+import { placeholder } from "../../../utils/color";
 import { formatPathForUserSystem } from "../../../utils/file-system/file-sys-util";
 import type {
   FillColor,

@@ -1,3 +1,4 @@
+import type { SimpleObject } from "@common/utils/object";
 import type { Theme } from "@material-ui/core/styles/createMuiTheme";
 import createStyles from "@material-ui/core/styles/createStyles";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -10,7 +11,6 @@ import { useSelector } from "react-redux";
 import { addTracker } from "../../../../logging/tracker";
 import { ActionTitle, ActionType } from "../../../../logging/tracker-types";
 import { getAreHashesReady } from "../../../../reducers/files-and-folders/files-and-folders-selectors";
-import type { SimpleObject } from "../../../../utils/object/object-util";
 
 const useLocalStyles = makeStyles((theme: Theme) =>
   createStyles({

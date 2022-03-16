@@ -1,4 +1,5 @@
-import { openLink } from "@common/utils/electron/electron-util";
+import { ipcRenderer } from "@common/ipc";
+import { openLink } from "@common/utils/electron";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
@@ -23,7 +24,6 @@ import {
   FaTrash,
 } from "react-icons/fa";
 
-import { ipcRenderer } from "../../../common/ipc";
 import {
   CONTACT_LINK,
   DOCUMENTATION_LINK,

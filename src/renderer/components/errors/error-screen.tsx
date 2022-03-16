@@ -1,11 +1,11 @@
-import { reloadApp } from "@common/utils/electron/electron-util";
+import { reloadApp } from "@common/utils/electron";
 import { Box } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import logo from "../../../static/imgs/logo.png";
+import logo from "../../../../static/imgs/logo.png";
 import { ContactUs } from "./contact-us";
 
 export const ErrorScreen: React.FC = () => {

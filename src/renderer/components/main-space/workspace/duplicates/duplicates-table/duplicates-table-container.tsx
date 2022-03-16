@@ -1,3 +1,4 @@
+import { percent } from "@common/utils/numbers";
 import _ from "lodash";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -9,8 +10,7 @@ import {
   countDuplicateFileSizes,
   countDuplicateFileTypes,
   getFilesDuplicatesMap,
-} from "../../../../../utils/duplicates/duplicates-util";
-import { percent } from "../../../../../utils/numbers/numbers-util";
+} from "../../../../../utils/duplicates";
 import type { DuplicatesTableProps } from "./duplicates-table";
 import { DuplicatesTable } from "./duplicates-table";
 

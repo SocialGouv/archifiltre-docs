@@ -1,12 +1,12 @@
+import { getPath } from "@common/utils/electron";
+import { compose, extractKeys } from "@common/utils/object";
 import { createHash } from "crypto";
 import fs from "fs";
 import { join } from "path";
 
-import { getPath } from "../common/utils/electron/electron-util";
 import { mkdir } from "./utils/file-system/file-sys-util";
-import { compose, extractKeys } from "./utils/object/object-util";
 
-const randomString = "WbXDHMMHojJEQHzY6TLFBq2LSOQjVktGRSp9HT07";
+const randomString = "WbXDHMMHojJEQHzY6TLFBq2LSOQjVktGRSp9HT07"; // TODO: change
 const basePath = join(getPath("userData"), randomString);
 
 interface InitialData {

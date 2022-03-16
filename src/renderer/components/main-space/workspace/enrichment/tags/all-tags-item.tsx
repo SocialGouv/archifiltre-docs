@@ -1,3 +1,4 @@
+import { percent } from "@common/utils/numbers";
 import Box from "@material-ui/core/Box";
 import Chip from "@material-ui/core/Chip";
 import IconButton from "@material-ui/core/IconButton";
@@ -6,7 +7,6 @@ import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaPen, FaTrash } from "react-icons/fa";
 
-import { percent } from "../../../../../utils/numbers/numbers-util";
 import type { EditableFieldProps } from "../../../../common/editable-field";
 import { EditableField } from "../../../../common/editable-field";
 import { EllipsisText } from "./ellipsis-text";

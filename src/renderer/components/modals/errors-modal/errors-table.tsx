@@ -1,7 +1,7 @@
+import type { ArchifiltreDocsError } from "@common/utils/error";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { ArchifiltreDocsError } from "../../../utils/error/error-util";
 import { Table } from "../../common/table/table";
 import type { Column } from "../../common/table/table-types";
 

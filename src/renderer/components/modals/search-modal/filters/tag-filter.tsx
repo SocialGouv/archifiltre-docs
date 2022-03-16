@@ -1,3 +1,4 @@
+import type { FilterMethod } from "@common/utils/types";
 import type { TFunction } from "i18next";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -7,7 +8,6 @@ import type {
   FilesAndFolders,
 } from "../../../../reducers/files-and-folders/files-and-folders-types";
 import type { TagMap } from "../../../../reducers/tags/tags-types";
-import type { FilterMethod } from "../../../../typings/filter-types";
 import { Filter } from "./filter";
 
 export interface TagFilterProps {

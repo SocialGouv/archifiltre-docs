@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { isWindows } from "./os/os-util";
+import { isWindows } from "@common/utils/os";
+
+// TODO: replace
 
 /**
  * Loads the fswin.node module that is copied from the node_modules. A dirty workaround to the fact that

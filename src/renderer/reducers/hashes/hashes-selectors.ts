@@ -1,4 +1,4 @@
-import type { ArchifiltreDocsError } from "@common/utils/error/error-util";
+import type { ArchifiltreDocsError } from "@common/utils/error";
 import { useSelector } from "react-redux";
 
 import type { StoreState } from "../store";

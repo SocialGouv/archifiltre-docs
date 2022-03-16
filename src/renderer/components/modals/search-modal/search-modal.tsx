@@ -1,3 +1,4 @@
+import type { FilterMethod } from "@common/utils/types";
 import { Box } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -17,7 +18,6 @@ import type {
   FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import type { TagMap } from "../../../reducers/tags/tags-types";
-import type { FilterMethod } from "../../../typings/filter-types";
 import type { Column } from "../../common/table/table-types";
 import { ModalHeader } from "../modal-header";
 import { FilesAndFoldersTable } from "./files-and-folders-table";

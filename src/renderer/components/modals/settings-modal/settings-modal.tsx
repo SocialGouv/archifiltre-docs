@@ -1,3 +1,4 @@
+import type { VoidFunction } from "@common/utils/function";
 import { Box } from "@material-ui/core";
 import type { DialogProps } from "@material-ui/core/Dialog";
 import Dialog from "@material-ui/core/Dialog";
@@ -5,7 +6,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { VoidFunction } from "../../../utils/function/function-util";
 import { LanguagePicker } from "../../header/language";
 import { ModalHeader } from "../../modals/modal-header";
 import { About } from "./about";

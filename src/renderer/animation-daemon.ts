@@ -1,6 +1,5 @@
+import { generateRandomString } from "@common/utils/random-gen";
 import noop from "lodash/noop";
-
-import { generateRandomString } from "./utils/random-gen-util";
 
 type Visible = (animationId: string) => boolean;
 type Measure = (animationId: string) => void;

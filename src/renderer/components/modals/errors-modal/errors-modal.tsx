@@ -1,3 +1,4 @@
+import type { ArchifiltreDocsError } from "@common/utils/error";
 import { DialogActions } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -6,7 +7,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { useStyles } from "../../../hooks/use-styles";
-import type { ArchifiltreDocsError } from "../../../utils/error/error-util";
 import { ModalHeader } from "../modal-header";
 import { ErrorsTable } from "./errors-table";
 

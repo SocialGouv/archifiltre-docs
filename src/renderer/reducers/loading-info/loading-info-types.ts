@@ -1,7 +1,7 @@
 import type {
   ArchifiltreDocsError,
   ArchifiltreDocsErrorType,
-} from "@common/utils/error/error-util";
+} from "@common/utils/error";
 
 export const START_LOADING = "LOADING_INFO/START_LOADING";
 export const UPDATE_LOADING = "LOADING_INFO/UPDATE_LOADING";

@@ -9,7 +9,7 @@ import { closeModalAction } from "../../../reducers/modal/modal-actions";
 import { useOpenModal } from "../../../reducers/modal/modal-selectors";
 import { Modal } from "../../../reducers/modal/modal-types";
 import { useWorkspaceMetadata } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
-import { exportTableToCsvFile } from "../../../utils/table/table-util";
+import { exportTableToCsvFile } from "../../../utils/table";
 import type { ErrorsModalProps } from "../errors-modal/errors-modal";
 import { ErrorsModal } from "../errors-modal/errors-modal";
 import { useErrorsModalConfig } from "../errors-modal/use-errors-modal-config";

@@ -1,5 +1,6 @@
 import type { WorkerError } from "@common/types";
-import type { ArchifiltreDocsError } from "@common/utils/error/error-util";
+import type { ArchifiltreDocsError } from "@common/utils/error";
+import type { SimpleObject } from "@common/utils/object";
 
 import type {
   AliasMap,
@@ -12,7 +13,6 @@ import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-m
 import type { HashesMap } from "../reducers/hashes/hashes-types";
 import type { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
 import type { TagMap } from "../reducers/tags/tags-types";
-import type { SimpleObject } from "../utils/object/object-util";
 
 export type VirtualFileSystem = WithAliases &
   WithComments &

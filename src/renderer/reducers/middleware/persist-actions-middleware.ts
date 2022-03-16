@@ -1,7 +1,6 @@
-import { getPath } from "@common/utils/electron/electron-util";
-import type { VoidFunction } from "@common/utils/function/function-util";
-import { notifyError } from "@common/utils/notification/notifications-util";
-import type { SimpleObject } from "@common/utils/object/object-util";
+import { getPath } from "@common/utils/electron";
+import type { VoidFunction } from "@common/utils/function";
+import type { SimpleObject } from "@common/utils/object";
 import { promises as fs } from "fs";
 import path from "path";
 import { useEffect, useState } from "react";
@@ -9,6 +8,7 @@ import type { Action, Middleware } from "redux";
 
 import { reportError, reportInfo } from "../../logging/reporter";
 import { translations } from "../../translations/translations";
+import { notifyError } from "../../utils/notifications";
 import { setLoadingStep } from "../loading-state/loading-state-actions";
 import {
   loadingStateActionTypes,

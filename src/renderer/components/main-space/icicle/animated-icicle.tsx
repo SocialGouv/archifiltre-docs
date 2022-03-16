@@ -1,10 +1,10 @@
+import { generateRandomString } from "@common/utils/random-gen";
 import type { MouseEventHandler } from "react";
 import React, { memo, useCallback, useRef, useState } from "react";
 
 import { animateSvgDomElement } from "../../../animation-daemon";
 import { addTracker } from "../../../logging/tracker";
 import { ActionTitle, ActionType } from "../../../logging/tracker-types";
-import { generateRandomString } from "../../../utils/random-gen-util";
 import type { IcicleProps } from "./icicle";
 import { Icicle } from "./icicle";
 import type { IcicleMouseActionHandler } from "./icicle-types";

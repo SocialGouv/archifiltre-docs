@@ -1,6 +1,6 @@
+import { ipcRenderer } from "@common/ipc";
 import React, { Component } from "react";
 
-import { ipcRenderer } from "../../../common/ipc";
 import { WindowResize } from "./window-resize";
 
 export interface WindowResizeErrorHandlerState {

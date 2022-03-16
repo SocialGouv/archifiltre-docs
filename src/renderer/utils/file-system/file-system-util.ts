@@ -1,6 +1,7 @@
-import { ipcRenderer } from "../../../common/ipc";
+import { ipcRenderer } from "@common/ipc";
+
 import { translations } from "../../translations/translations";
-import { notifyError } from "../notification/notifications-util";
+import { notifyError } from "../notifications";
 
 /**
  * Prompts the user to save a file. Returns the file path if the user confirmed

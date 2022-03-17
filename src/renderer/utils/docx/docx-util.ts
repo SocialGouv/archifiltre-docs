@@ -1,3 +1,4 @@
+import { STATIC_PATH } from "@common/config";
 import type { SimpleObject } from "@common/utils/object";
 import Docxtemplater from "docxtemplater";
 import fs from "fs";
@@ -23,7 +24,7 @@ export const exportToDocX = (
   ...replacers: FileReplacer[]
 ): Buffer => {
   const templateContent = fs.readFileSync(
-    path.resolve("./static", templatePath),
+    path.resolve(STATIC_PATH, templatePath),
     "binary"
   );
 

@@ -27,8 +27,8 @@ const windowsFileWriter = (path: string): Awaitable<AnyFunction> =>
   compose(
     async (binaryString: string) =>
       fs.promises.writeFile(path, binaryString, "binary"),
-    encode as Awaitable<AnyFunction>
-  );
+    encode as AnyFunction
+  ); // TODO: types
 
 const unixFileWriter = (path: string) => async (data: string) =>
   fs.promises.writeFile(path, data);

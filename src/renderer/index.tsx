@@ -60,7 +60,7 @@ render(
     <NotificationContainer />
     <Modals />
   </Providers>,
-  document.querySelector("#root")
+  document.querySelector("#app")
 );
 
 document.ondragover = document.ondrop = (event) => {

@@ -4,8 +4,8 @@ import { generateRandomString } from "@common/utils/random-gen";
 import dateFormat from "dateformat";
 import fs from "fs";
 import MD5 from "js-md5";
-import JSZip from "jszip";
 import path from "path";
+import PizZip from "pizzip";
 import { v4 as uuidv4 } from "uuid";
 import XML from "xml";
 
@@ -682,10 +682,11 @@ export const makeSIP = async ({
   sessionName,
   exportPath,
 }: GlobalState): Promise<void> => {
-  const sip = new JSZip();
+  // const sip = new JSZip();
+  const sip = new PizZip();
   const content = sip.folder("master");
   const addToContent = (filename: string, data: Buffer) => {
-    content?.file(filename.replace(/[^a-zA-Z0-9.\\/+=@_]+/g, "_"), data);
+    content.file(filename.replace(/[^a-zA-Z0-9.\\/+=@_]+/g, "_"), data);
   };
 
   const metsContent: SimpleObject[] = [];
@@ -719,7 +720,9 @@ export const makeSIP = async ({
   sip.file("manifest.xml", manifestStr);
 
   // final ZIP output
-  const exportedData = await sip.generateAsync({ type: "nodebuffer" });
+  const exportedData = await new Promise<Buffer>((resolve) => {
+    resolve(sip.generate({ type: "nodebuffer" }));
+  });
 
   const exportSuccessTitle = translations.t("export.exportSuccessTitle");
   const exportSuccessMessage = translations.t("export.exportSuccessMessage");

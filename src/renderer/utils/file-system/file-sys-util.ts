@@ -38,9 +38,10 @@ export const save = (
  * @param blob - The blob to save into a file
  */
 export const saveBlob = (name: string, blob: Blob): void => {
-  saveAs(blob, name);
+  saveAs(blob, name); // TODO: use electron save
 };
 
+// TODO: rename
 export const getNameWithExtension = (name: string, extension: string): string =>
   `${name}_${dateFormat(new Date(), "yyyy_mm_dd_HH_MM")}.${extension}`;
 

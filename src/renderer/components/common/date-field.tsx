@@ -40,6 +40,7 @@ export const DateField: React.FC<DateFieldProps> = ({ date, onDateChange }) => {
 
   const inputProps: { onFocus: AnyFunction; onBlur: AnyFunction } =
     useDateInput({
+      // TODO: don't use react-nice-dates
       date: fromUnixTime(date / 1000),
       locale: getLanguageLocale(language),
       onDateChange: dateChangeHandler,

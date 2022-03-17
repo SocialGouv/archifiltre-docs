@@ -16,6 +16,7 @@ export const HashInfo: React.FC<HashInfoProps> = ({ hash }) => {
       <span>{hash}</span>&nbsp;
       <Tooltip title={hashIconExplanation}>
         <span>
+          {/* TODO: use simple icon */}
           <HashIcon value={hash} size={12} />
         </span>
       </Tooltip>

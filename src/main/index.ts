@@ -1,4 +1,5 @@
 /* eslint-disable import/no-named-as-default-member */
+import { IS_DEV, IS_DIST_MODE, IS_E2E, IS_PACKAGED } from "@common/config";
 import { loadApp } from "@common/modules/app";
 import { loadHash } from "@common/modules/hash";
 import { loadWindow } from "@common/modules/window";
@@ -13,7 +14,7 @@ import {
   session,
 } from "electron";
 import path from "path";
-import Raven from "raven"; // TODO: switch to @sentry/node (https://docs.sentry.io/platforms/node/)
+import Raven from "raven"; // TODO: switch to @sentry/electron (https://docs.sentry.io/platforms/electron/)
 
 // Initializes sentry logging for production build
 if (app.isPackaged) {
@@ -102,7 +103,13 @@ const askBeforeLeaving = () => {
   });
 };
 
-function createWindow() {
+const INDEX_URL = IS_PACKAGED()
+  ? `file://${path.join(__dirname, "index.html")}`
+  : IS_E2E || IS_DIST_MODE
+  ? `file://${path.join(__dirname, "/../renderer/index.html")}`
+  : `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`;
+
+async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     height: 800,
@@ -117,11 +124,14 @@ function createWindow() {
   });
 
   // and load the index.html of the app.
-  if (process.env.DEV_SERVER !== "true" && process.env.NODE_ENV !== "test") {
-    void win.loadFile(path.join(__dirname, "./index.html"));
-  } else {
-    void win.loadURL("http://localhost:8000");
-  }
+  // if (process.env.DEV_SERVER !== "true" && process.env.NODE_ENV !== "test") {
+  //   void win.loadFile(path.join(__dirname, "./index.html"));
+  // } else {
+  //   void win.loadURL("http://localhost:8000");
+  // }
+  loadWindow(win);
+
+  await win.loadURL(INDEX_URL);
 
   preventNavigation();
 
@@ -138,11 +148,13 @@ function createWindow() {
 }
 
 void app.whenReady().then(() => {
-  let devToolsLoaded = Promise.resolve<Extension | null>(null);
-  if (REACT_DEV_TOOLS_PATH !== "") {
+  if (IS_DEV && !IS_PACKAGED()) {
+    let devToolsLoaded = Promise.resolve<Extension | null>(null);
     try {
       devToolsLoaded = session.defaultSession
-        .loadExtension(REACT_DEV_TOOLS_PATH)
+        .loadExtension(
+          path.join(process.cwd(), "scripts", "out", "react-devtools-extension")
+        )
         .catch((err) => {
           console.error("Cannot load react dev tools.", err);
           return null;
@@ -150,9 +162,7 @@ void app.whenReady().then(() => {
     } catch (err: unknown) {
       console.error("Error loading React dev tools", err);
     }
-  }
 
-  if (!app.isPackaged && process.env.NODE_ENV !== "test") {
     void devToolsLoaded.then(() => win?.webContents.openDevTools());
   }
 });
@@ -160,13 +170,10 @@ void app.whenReady().then(() => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", () => {
-  createWindow();
+app.on("ready", async () => {
   loadHash();
   loadApp();
-  if (win) {
-    loadWindow(win);
-  }
+  await createWindow();
 });
 
 // Quit when all windows are closed.
@@ -174,11 +181,11 @@ app.on("window-all-closed", () => {
   app.quit();
 });
 
-app.on("activate", () => {
+app.on("activate", async () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
-    createWindow();
+    await createWindow();
   }
 });
 

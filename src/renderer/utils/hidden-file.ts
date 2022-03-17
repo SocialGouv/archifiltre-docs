@@ -1,9 +1,9 @@
 import { isWindows } from "@common/utils/os";
-import { isHidden as origIsHidden, isHiddenSync } from "hidefile";
 import path from "path";
-import { promisify } from "util";
 
 import { fswin } from "./fs-win-loader";
+
+const UNIX_HIDDEN_PREFIX = ".";
 
 /**
  * Check is a file is hidden on a windows fileSystem. It uses the attrib command.
@@ -30,6 +30,9 @@ export const asyncIsFileHiddenOnWindows = async (
     });
   });
 
+const isFileHiddenOnUnix = (filePath: string) =>
+  path.basename(filePath).startsWith(UNIX_HIDDEN_PREFIX);
+
 /**
  * Check if a file is hidden (starts with a dot on unix or has the hidden attribute on windows)
  * The main problem with hidefile, is that it considers a file hidden on windows if it both has the
@@ -37,9 +40,14 @@ export const asyncIsFileHiddenOnWindows = async (
  * @param elementPath
  */
 const isHidden = (elementPath: string): boolean =>
-  isWindows() ? isFileHiddenOnWindows(elementPath) : isHiddenSync(elementPath);
+  isWindows()
+    ? isFileHiddenOnWindows(elementPath)
+    : isFileHiddenOnUnix(elementPath);
 
-const promiseIsHidden = promisify(origIsHidden);
+const promiseIsHidden = async (filePath: string) =>
+  new Promise<boolean>((resolve) => {
+    resolve(isFileHiddenOnUnix(filePath));
+  });
 
 const asyncIsHidden = async (elementPath: string): Promise<boolean> =>
   isWindows()

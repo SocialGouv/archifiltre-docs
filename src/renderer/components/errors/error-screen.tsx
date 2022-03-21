@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import logo from "../../../../static/imgs/logo.png";
+import { StaticImage } from "../common/StaticImage";
 import { ContactUs } from "./contact-us";
 
 export const ErrorScreen: React.FC = () => {
@@ -20,7 +20,7 @@ export const ErrorScreen: React.FC = () => {
       flexDirection="column"
     >
       <Box p={2}>
-        <img alt="logo-archifiltre" src={logo} height={33} />
+        <StaticImage src="imgs/logo.png" alt="logo-archifiltre" height={33} />
       </Box>
       <Box p={2}>
         <Typography variant="h4">{t("common.error")}</Typography>

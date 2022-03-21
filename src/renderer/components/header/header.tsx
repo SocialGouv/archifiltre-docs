@@ -3,8 +3,8 @@ import Box from "@material-ui/core/Box";
 import React from "react";
 import styled from "styled-components";
 
-import logo from "../../../../static/imgs/logo.png";
 import type { ExportToJson } from "../../exporters/json/json-exporter";
+import { StaticImage } from "../common/StaticImage";
 import { TabsHeader } from "../main-space/workspace/tabs/tabs-header";
 import { ExportButton } from "./export-button";
 import { SaveButton } from "./save-button";
@@ -44,7 +44,7 @@ export const Header: React.FC<HeaderActionsProps> = ({
     <HeaderLine>
       <Box display="flex">
         <Box display="flex" alignItems="center">
-          <img src={logo} alt="Logo archifiltre" height={30} />
+          <StaticImage src="imgs/logo.png" alt="Logo archifiltre" height={30} />
         </Box>
         <Box flexGrow={1} />
         <>

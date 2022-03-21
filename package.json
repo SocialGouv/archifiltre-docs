@@ -71,7 +71,8 @@
       "winston-transport",
       "winston-transport-sentry-node",
       "xlsx",
-      "xml"
+      "xml",
+      "iconv-lite"
     ]
   },
   "build": {

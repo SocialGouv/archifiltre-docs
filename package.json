@@ -17,13 +17,17 @@
     "dist:linux": "electron-builder --linux AppImage",
     "lint": "eslint src/",
     "lint:fix": "eslint --fix src/",
+    "devtools": "ts-node scripts/getReactDevtools.ts",
     "generate-translation-csv": "node ./scripts/diff-translations.js",
     "import-translation-csv": "node ./scripts/translation-csv-to-json"
   },
   "electronWebpack": {
     "title": true,
     "main": {
-      "webpackConfig": "webpack.main.config.js"
+      "webpackConfig": "webpack.main.config.js",
+      "extraEntries": [
+        "@/preload.ts"
+      ]
     },
     "renderer": {
       "webpackConfig": "webpack.renderer.config.js"
@@ -35,7 +39,7 @@
       "@emeraldpay/hashicon-react",
       "@material-ui/core",
       "@material-ui/lab",
-      "@sentry/browser",
+      "@sentry/electron",
       "angular-expressions",
       "csv-parse",
       "date-fns",
@@ -50,7 +54,6 @@
       "mime-types",
       "pizzip",
       "protobufjs",
-      "raven",
       "react",
       "react-dom",
       "react-i18next",
@@ -86,6 +89,15 @@
       "dist",
       "electron/build/icon.*",
       "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "dist/main/",
+        "to": "./",
+        "filter": [
+          "preload.js"
+        ]
+      }
     ],
     "directories": {
       "output": "electron/dist/${os}"
@@ -143,7 +155,6 @@
     "@types/mime-types": "^2.1.1",
     "@types/node": "^16",
     "@types/pizzip": "^3.0.2",
-    "@types/raven": "^2.5.4",
     "@types/react": "17.0.40",
     "@types/react-dom": "17.0.13",
     "@types/react-redux": "7.1.23",
@@ -179,18 +190,18 @@
     "postcss": "^8.4.8",
     "postcss-scss": "^4.0.3",
     "prettier": "^2.5.1",
+    "redux-mock-store": "^1.5.4",
     "rimraf": "^3.0.2",
     "rmfr": "2.0.0",
     "sass": "^1.49.9",
     "sass-loader": "10",
     "semantic-release": "^19.0.2",
+    "stdio-mock": "^1.1.0",
     "ts-jest": "27.1.3",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
     "typescript": "^4.6.2",
     "unzip-crx-3": "^0.2.0",
     "webpack": "4",
-    "stdio-mock": "^1.1.0",
-    "redux-mock-store": "^1.5.4",
     "yargs": "^17.1.1"
   },
   "dependencies": {
@@ -200,7 +211,7 @@
     "@emeraldpay/hashicon-react": "^0.5.1",
     "@material-ui/core": "^4.11.4",
     "@material-ui/lab": "^4.0.0-alpha.60",
-    "@sentry/browser": "^5.30.0",
+    "@sentry/electron": "^3.0.4",
     "angular-expressions": "^1.1.4",
     "axios": "^0.26.1",
     "csv-parse": "^4.15.4",
@@ -216,7 +227,6 @@
     "mime-types": "^2.1.32",
     "pizzip": "^3.0.6",
     "protobufjs": "^6.10.2",
-    "raven": "^2.6.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-i18next": "^11.11.4",
@@ -236,7 +246,6 @@
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5",
     "winston-transport": "^4.4.0",
-    "winston-transport-sentry-node": "^0.7.0",
     "xlsx": "^0.17.0",
     "xml": "^1.0.1"
   }

@@ -2,6 +2,7 @@
 import "./css/index.scss";
 import "./translations/translations";
 
+import { setupSentry } from "@common/monitoring/sentry";
 import Box from "@material-ui/core/Box";
 import React from "react";
 import { render } from "react-dom";
@@ -24,6 +25,10 @@ import { initPreviousSessions } from "./persistence/previous-sessions";
 import { SecretDevtools } from "./secret-devtools";
 import { setupLanguage } from "./utils/language";
 import { version } from "./version";
+
+module.hot?.accept();
+
+setupSentry();
 
 reportInfo("Docs started");
 

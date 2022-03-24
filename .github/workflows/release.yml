@@ -18,6 +18,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   WIN_CSC_LINK: ${{ github.workspace }}/certwin.p12
   CSC_LINK: ${{ github.workspace }}/certmac.p12
+  GITHUB_REF_OVERRIDE: ${{ github.event.workflow_run.conclusion == 'success' && format('refs/heads/{0}', github.event.workflow_run.head_branch) || github.ref }}
 
 jobs:
   compile:
@@ -34,6 +35,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          ref: ${{ env.GITHUB_REF_OVERRIDE }}
       - name: Decode certificates
         env:
           WIN_CSC_LINK_RAW: ${{ secrets.WIN_CSC_LINK }}
@@ -70,6 +72,9 @@ jobs:
         name: Compile
         run: |
           export PATH="$(pwd)/.github/bin/:$PATH"
+          # override because of "env-ci" used by semantic-release
+          # GITHUB_REF should not be default branch when "workflow_run" event is triggered
+          export GITHUB_REF=$GITHUB_REF_OVERRIDE
           echo ::set-output name=current-version::$(node -e "console.log(require('./package.json').version)")
           yarn semantic-release
           echo ::set-output name=next-version::$(node -e "console.log(require('./package.json').version)")
@@ -113,6 +118,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          ref: ${{ env.GITHUB_REF_OVERRIDE }}
       - name: Setup Node
         uses: ./.github/actions/setup-node
       - name: Yarn install
@@ -156,6 +162,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          ref: ${{ env.GITHUB_REF_OVERRIDE }}
       - name: Download all dist form build jobs
         uses: actions/download-artifact@v2
         with:
@@ -182,4 +189,5 @@ jobs:
       - name: Semantic Release
         run: |
           export PATH="$(pwd)/.github/bin/:$PATH"
+          export GITHUB_REF=$GITHUB_REF_OVERRIDE
           yarn semantic-release

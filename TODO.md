@@ -1,0 +1,6 @@
+- [ ] Migrate user config to `electron-store`
+- [ ] Move heavy load workers to backend
+- [ ] Migrate icicles
+- [ ] Handles TODOs
+- [ ] Change from Matomo to Posthog
+- [ ] Migrate from Redux to Zustand

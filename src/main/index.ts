@@ -1,34 +1,16 @@
-/* eslint-disable import/no-named-as-default-member */
 import { IS_DEV, IS_DIST_MODE, IS_E2E, IS_PACKAGED } from "@common/config";
 import { loadApp } from "@common/modules/app";
 import { loadHash } from "@common/modules/hash";
 import { loadWindow } from "@common/modules/window";
+import { setupSentry } from "@common/monitoring/sentry";
 import type { Extension } from "electron";
-import {
-  app,
-  BrowserWindow,
-  crashReporter,
-  dialog,
-  ipcMain,
-  Menu,
-  session,
-} from "electron";
+import { app, BrowserWindow, dialog, ipcMain, Menu, session } from "electron";
 import path from "path";
-import Raven from "raven"; // TODO: switch to @sentry/electron (https://docs.sentry.io/platforms/electron/)
+
+module.hot?.accept();
 
 // Initializes sentry logging for production build
-if (app.isPackaged) {
-  // Initialize sentry error reporter
-  Raven.config(SENTRY_DSN).install();
-
-  // Enable electron crash reporter to get logs in case of low level crash
-  crashReporter.start({
-    companyName: "SocialGouv",
-    ignoreSystemCrashHandler: true,
-    productName: "Docs par Archifiltre",
-    submitURL: SENTRY_MINIDUMP_URL,
-  });
-}
+const sentryCallback = setupSentry();
 
 // We need to check if we are on 64 bits.
 // Setting --max-old-space-size with this value
@@ -109,18 +91,23 @@ const INDEX_URL = IS_PACKAGED()
   ? `file://${path.join(__dirname, "/../renderer/index.html")}`
   : `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`;
 
+const PRELOAD_PATH = IS_PACKAGED()
+  ? path.resolve(process.resourcesPath, "preload.js") // prod
+  : IS_DIST_MODE
+  ? path.resolve(__dirname, "preload.js") // dist / e2e
+  : path.resolve(__dirname, "preload.js").replace("/src/", "/dist/"); // dev
+
 async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    height: 800,
-    show: !app.isPackaged,
     webPreferences: {
       contextIsolation: false,
+      defaultEncoding: "UTF-8",
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
-      webSecurity: app.isPackaged,
+      preload: PRELOAD_PATH,
+      webSecurity: false,
     },
-    width: 1500,
   });
 
   // and load the index.html of the app.
@@ -192,13 +179,6 @@ app.on("activate", async () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-app.on("renderer-process-crashed", () => {
-  Raven.captureException(new Error("Renderer process crashed"));
-});
-
-process.on("uncaughtException", () => {
-  Raven.captureException(new Error("Uncaught exception"));
-});
 // Needed for secret devtools
 ipcMain.on("open-devtools", () => {
   win?.webContents.openDevTools();

@@ -10,7 +10,7 @@
     "experimentalDecorators": true,
     "strictNullChecks": true,
     "jsx": "react",
-    "target": "ES2015", // TODO: >=ES2016 (Raven only working in es2015 for whatever reasons)
+    "target": "ES2017",
     "baseUrl": ".",
     "paths": {
       "@common/*": [

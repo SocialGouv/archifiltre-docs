@@ -25,4 +25,4 @@ export const versionComparator = (
 
 export const versionName = "Romantic Raccoon";
 
-export const version = ARCHIFILTRE_VERSION;
+export { version } from "@common/utils/package";

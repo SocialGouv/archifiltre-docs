@@ -1,9 +1,9 @@
 import type { AnyFunction } from "@common/utils/function";
-import { MenuItem } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import type { ButtonProps } from "@material-ui/core/Button";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import { round } from "lodash";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";

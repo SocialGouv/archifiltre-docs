@@ -40,7 +40,7 @@ export const generateTreeCsvExport$ = (
   return backgroundWorkerProcess$(
     { filesAndFolders, language },
     createAsyncWorkerForChildProcessControllerFactory(
-      "tree-csv-exporter.fork",
+      "exporters/csv/tree-csv-exporter.fork.ts",
       {
         messageSerializers,
       }

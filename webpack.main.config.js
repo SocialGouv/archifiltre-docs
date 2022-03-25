@@ -25,12 +25,10 @@ module.exports =
       }
     }
 
-    if (config.entry) {
-      config.entry = {
-        ...config.entry,
-        ...workers,
-      };
-    }
+    config.entry = {
+      ...config.entry,
+      ...workers,
+    };
 
     return webpackCommonConfig(config);
   };

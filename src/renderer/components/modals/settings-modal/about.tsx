@@ -1,7 +1,8 @@
 import { openLink } from "@common/utils/electron";
-import { createStyles, Link } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
+import Link from "@material-ui/core/Link";
 import type { Theme } from "@material-ui/core/styles/createMuiTheme";
+import createStyles from "@material-ui/core/styles/createStyles";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import React from "react";
 import { useTranslation } from "react-i18next";

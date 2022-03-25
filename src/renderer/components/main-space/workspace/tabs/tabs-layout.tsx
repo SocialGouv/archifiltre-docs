@@ -1,5 +1,5 @@
-import { Divider } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
+import Divider from "@material-ui/core/Divider";
 import type { ReactNode } from "react";
 import React from "react";
 

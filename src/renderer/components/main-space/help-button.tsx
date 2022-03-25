@@ -1,7 +1,10 @@
 import { openLink } from "@common/utils/electron";
-import { ListItemIcon, ListItemText, Menu, MenuItem } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {

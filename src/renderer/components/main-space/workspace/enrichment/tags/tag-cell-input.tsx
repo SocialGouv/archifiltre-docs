@@ -1,5 +1,5 @@
 import TextField from "@material-ui/core/TextField";
-import { Autocomplete } from "@material-ui/lab";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 

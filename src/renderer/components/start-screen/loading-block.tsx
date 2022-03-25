@@ -1,6 +1,7 @@
-import { CircularProgress, Grid } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Grid from "@material-ui/core/Grid";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";

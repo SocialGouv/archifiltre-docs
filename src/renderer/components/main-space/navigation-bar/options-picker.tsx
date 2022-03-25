@@ -1,7 +1,8 @@
-import { Menu, MenuItem } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import type { ButtonProps } from "@material-ui/core/Button";
 import Button from "@material-ui/core/Button";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import type { ReactNode } from "react";
 import React, { useState } from "react";
 import { FaCheck } from "react-icons/fa";

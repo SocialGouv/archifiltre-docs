@@ -1,8 +1,9 @@
-import { createStyles, TableSortLabel } from "@material-ui/core";
+import createStyles from "@material-ui/core/styles/createStyles";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
 import React from "react";
 
 import type { Order } from "../../../utils/table";

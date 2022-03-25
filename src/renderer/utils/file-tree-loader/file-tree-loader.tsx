@@ -48,7 +48,7 @@ export const loadFileTree = (
       ...params,
     },
     createAsyncWorkerForChildProcessControllerFactory<StreamParserResult>(
-      "load-from-filesystem.fork",
+      "utils/file-tree-loader/load-from-filesystem.fork.ts",
       {
         dataStreamProcessor: streamParser,
       }

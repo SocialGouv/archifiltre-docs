@@ -1,5 +1,5 @@
 import type { VoidFunction } from "@common/utils/function";
-import { IconButton } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";

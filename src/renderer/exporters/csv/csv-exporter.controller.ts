@@ -53,10 +53,13 @@ export const generateCsvExport$ = (
   const { language } = translations;
   return backgroundWorkerProcess$(
     { ...data, language },
-    createAsyncWorkerForChildProcessControllerFactory("csv-exporter.fork", {
-      messageSerializers: {
-        [MessageTypes.INITIALIZE]: initMessageSerializer,
-      },
-    })
+    createAsyncWorkerForChildProcessControllerFactory(
+      "exporters/csv/csv-exporter.fork.ts",
+      {
+        messageSerializers: {
+          [MessageTypes.INITIALIZE]: initMessageSerializer,
+        },
+      }
+    )
   );
 };

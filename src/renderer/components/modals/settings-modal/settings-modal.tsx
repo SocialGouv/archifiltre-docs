@@ -1,5 +1,5 @@
 import type { VoidFunction } from "@common/utils/function";
-import { Box } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 import type { DialogProps } from "@material-ui/core/Dialog";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";

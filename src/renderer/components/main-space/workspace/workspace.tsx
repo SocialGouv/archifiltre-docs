@@ -1,6 +1,5 @@
 import Box from "@material-ui/core/Box";
 import React from "react";
-import { createContext } from "vm";
 
 import { useTabsState } from "../..//header/tabs-context";
 import { HeaderContainer as Header } from "../../header/header-container";
@@ -11,14 +10,14 @@ import { NavigationBarContainer as NavigationBar } from "../navigation-bar/navig
 import { TabsContent } from "./tabs/tabs-content";
 import { WorkspaceProviders } from "./workspace-providers";
 
-const workspaceState = {
-  areTabsHidden: false,
-  isFileMoveActive: false,
-  setAreTabsHidden: (_areTabsHidden: boolean) => void 0,
-  setIsFileMoveActive: (_isMoveActive: boolean) => void 0,
-};
+// const workspaceState = {
+//   areTabsHidden: false,
+//   isFileMoveActive: false,
+//   setAreTabsHidden: (_areTabsHidden: boolean) => void 0,
+//   setIsFileMoveActive: (_isMoveActive: boolean) => void 0,
+// };
 
-export const WorkspaceContext = createContext(workspaceState);
+// export const WorkspaceContext = createContext(workspaceState);
 
 const areIciclesDisplayed = (tabIndex: number) => tabIndex !== 3;
 

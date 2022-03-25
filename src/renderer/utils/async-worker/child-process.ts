@@ -1,3 +1,9 @@
+import {
+  IS_DIST_MODE,
+  IS_PACKAGED,
+  IS_WORKER,
+  workerSerializedConfig,
+} from "@common/config";
 import type { ChildProcess, ForkOptions } from "child_process";
 import { fork } from "child_process";
 import { EventEmitter } from "events";
@@ -13,6 +19,27 @@ import type {
 } from ".";
 
 type StreamMessageParser = (stream: Readable) => Promise<WorkerMessage>;
+
+const WORKER_BRIDGE_PATH = path.resolve(__dirname, "_child-process.js");
+const PACKAGED_WORKERS_FOLDER_RESOURCE_PATH = "workers";
+const getWorkerPath = (rendererRelativeWorkerPath: string) => {
+  // TODO: path validator
+  if (IS_PACKAGED()) {
+    const absoluteProdWorkerPath = path.resolve(
+      process.resourcesPath,
+      PACKAGED_WORKERS_FOLDER_RESOURCE_PATH,
+      rendererRelativeWorkerPath.replace(/\.ts$/gi, ".js")
+    );
+
+    return absoluteProdWorkerPath;
+  }
+
+  if (IS_DIST_MODE) {
+    const distWorkerPath = path.resolve(__dirname, rendererRelativeWorkerPath);
+    return distWorkerPath.replace(/\.ts$/gi, ".js");
+  }
+  return path.resolve(__dirname, "../../", rendererRelativeWorkerPath);
+};
 
 /**
  * Creates an AsyncWorker bound to the current ChildProcess context
@@ -41,10 +68,10 @@ export const createAsyncWorkerForChildProcess = (
       );
     },
     postMessage: (message) => {
-      if (!localProcess?.send) {
+      if (!IS_WORKER) {
         throw new Error("This must be called in a forked process");
       }
-      localProcess.send(message);
+      localProcess?.send?.(message);
     },
     removeEventListener: (eventType, listener) => {
       eventEmitter.removeListener(eventType, listener);
@@ -106,14 +133,16 @@ export const RESULT_STREAM_FILE_DESCRIPTOR = 3;
 
 export const createAsyncWorkerForChildProcessControllerFactory =
   <TStreamParserResponse = unknown>(
-    filename: string,
+    filepathFromRenderer: string,
     {
       dataStreamProcessor,
       messageSerializers = {},
     }: CreateAsyncWorkerForChildProcessControllerFactoryOptions<TStreamParserResponse> = {}
   ) =>
   (): ChildProcessControllerAsyncWorker => {
-    const workerPath = path.join(WORKER_ROOT_FOLDER, `${filename}.js`);
+    const _workerPath = getWorkerPath(filepathFromRenderer);
+
+    console.log(`[child-process-util] Load worker from path ${_workerPath}`);
 
     // 1st pipe : We make stdin pipeable to allow to stream binary data to the worker
     // 2nd pipe : We create a pipeable stream to receive data from the worker. we don't use stdout
@@ -127,7 +156,11 @@ export const createAsyncWorkerForChildProcessControllerFactory =
           }
         : {};
 
-    const worker = fork(workerPath, options);
+    const worker = fork(
+      _workerPath.endsWith(".js") ? _workerPath : WORKER_BRIDGE_PATH,
+      [_workerPath, JSON.stringify(workerSerializedConfig)],
+      options
+    );
 
     const sentMessageInterceptor = (message: WorkerMessage) => {
       const serializer = messageSerializers[message.type] as

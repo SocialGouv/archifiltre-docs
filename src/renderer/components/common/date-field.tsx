@@ -1,6 +1,6 @@
 import type { AnyFunction } from "@common/utils/function";
 import { tap } from "@common/utils/functionnal-programming";
-import { Input } from "@material-ui/core";
+import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import type { Locale } from "date-fns";
 // eslint-disable-next-line import/no-duplicates

@@ -59,7 +59,9 @@ export const generateResipExport$ = ({
       language,
       tags,
     },
-    createAsyncWorkerForChildProcessControllerFactory("resip-export.fork")
+    createAsyncWorkerForChildProcessControllerFactory(
+      "exporters/resip/resip-export.fork.ts"
+    )
   )
     .pipe(filterResults<ResipExportProgress>())
     .pipe(map(({ result }) => result));

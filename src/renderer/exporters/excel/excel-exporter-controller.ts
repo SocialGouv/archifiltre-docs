@@ -36,8 +36,11 @@ export const generateExcelExport$ = (
 
   return backgroundWorkerProcess$(
     { ...data, language },
-    createAsyncWorkerForChildProcessControllerFactory("excel-exporter.fork", {
-      messageSerializers,
-    })
+    createAsyncWorkerForChildProcessControllerFactory(
+      "exporters/excel/excel-exporter.fork.ts",
+      {
+        messageSerializers,
+      }
+    )
   );
 };

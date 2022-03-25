@@ -4,3 +4,4 @@
 - [ ] Handles TODOs
 - [ ] Change from Matomo to Posthog
 - [ ] Migrate from Redux to Zustand
+- [ ] Upgrade i18next usage

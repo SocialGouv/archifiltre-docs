@@ -1,5 +1,5 @@
 import type { FilterMethod } from "@common/utils/types";
-import { Box } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 import React, { useEffect, useState } from "react";
 
 import type { FilesAndFolders } from "../../../../reducers/files-and-folders/files-and-folders-types";

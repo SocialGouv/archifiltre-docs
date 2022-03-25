@@ -9,6 +9,7 @@
     "resolveJsonModule": true,
     "experimentalDecorators": true,
     "strictNullChecks": true,
+    "sourceMap": true,
     "jsx": "react",
     "target": "ES2017",
     "baseUrl": ".",
@@ -17,6 +18,13 @@
         "src/common/*"
       ]
     }
+  },
+  "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
+    ],
+    "transpileOnly": true,
+    "files": true
   },
   "include": [
     "globals.d.ts",

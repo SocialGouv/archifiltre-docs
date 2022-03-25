@@ -4,10 +4,7 @@ import type { DispatchExts } from "@renderer/reducers/archifiltre-types";
 import { initialState as filesAndFoldersInitialState } from "@renderer/reducers/files-and-folders/files-and-folders-reducer";
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import type { StoreState } from "@renderer/reducers/store";
-import {
-  notifyInfo,
-  notifySuccess,
-} from "@renderer/utils/notification/notifications-util";
+import { notifyInfo, notifySuccess } from "@renderer/utils/notifications";
 import { promises as fs } from "fs";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
@@ -28,7 +25,7 @@ jest.mock("fs", () => ({
     writeFile: jest.fn(),
   },
 }));
-jest.mock("@renderer/util/notification/notifications-util", () => ({
+jest.mock("@renderer/utils/notifications", () => ({
   notifyInfo: jest.fn(),
   notifySuccess: jest.fn(),
 }));

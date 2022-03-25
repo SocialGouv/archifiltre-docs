@@ -2,7 +2,7 @@ import {
   computeZoomRatio,
   ZoomDirection,
   zoomReducer,
-} from "@renderer/utils/zoom/zoom-util";
+} from "@renderer/utils/zoom";
 import fc from "fast-check";
 import _ from "lodash";
 

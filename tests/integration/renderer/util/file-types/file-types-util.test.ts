@@ -1,8 +1,5 @@
 import type { FilesAndFolders } from "@renderer/reducers/files-and-folders/files-and-folders-types";
-import {
-  FileType,
-  getFileType,
-} from "@renderer/utils/file-types/file-types-util";
+import { FileType, getFileType } from "@renderer/utils/file-types";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 

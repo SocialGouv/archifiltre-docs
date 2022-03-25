@@ -14,7 +14,7 @@ import {
 } from "../../reducers/store-test-utils";
 import { createTag } from "../../reducers/tags/tags-test-utils";
 
-jest.mock("@renderer/util/file-system/file-sys-util", () => ({
+jest.mock("@renderer/utils/file-system/file-sys-util", () => ({
   getNameWithExtension: (name: string, ext: string) => `${name}.${ext}`,
   save: jest.fn(),
 }));

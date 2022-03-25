@@ -1,4 +1,4 @@
-import { isIgnored } from "@renderer/utils/hidden-file/hidden-file-util";
+import { isIgnored } from "@renderer/utils/hidden-file";
 
 describe("hidden-file-util", () => {
   describe("isIgnored", () => {

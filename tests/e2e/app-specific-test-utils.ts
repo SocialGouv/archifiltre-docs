@@ -5,8 +5,8 @@ import { clickOnPosition, clickOverElement, typeText } from "./e2e-test-utils";
  * @param app - The spectron app object
  */
 export const waitForAppReady = async (app): Promise<void> => {
-    await app.browserWindow.isVisible();
-    await app.client.waitForExist(makeTestIdSelector("export-menu"));
+  await app.browserWindow.isVisible();
+  await app.client.waitForExist(makeTestIdSelector("export-menu"));
 };
 
 /**
@@ -14,7 +14,7 @@ export const waitForAppReady = async (app): Promise<void> => {
  * @param app - The spectron app object
  */
 export const openExportMenu = async (app): Promise<void> => {
-    await clickOverElement(app, getElementByTestId(app, "export-menu"));
+  await clickOverElement(app, getElementByTestId(app, "export-menu"));
 };
 
 /**
@@ -23,13 +23,13 @@ export const openExportMenu = async (app): Promise<void> => {
  * @param notificationText - The text of the notification to await
  */
 export const waitForSuccessNotification = async (
-    app,
-    notificationText
+  app,
+  notificationText
 ): Promise<void> => {
-    await app.client.waitUntilTextExists(
-        ".notification-success .message",
-        notificationText
-    );
+  await app.client.waitUntilTextExists(
+    ".notification-success .message",
+    notificationText
+  );
 };
 
 /**
@@ -38,10 +38,10 @@ export const waitForSuccessNotification = async (
  * @param filePath - The path of the file corresponding to the icicle element
  */
 export const clickIcicleElement = async (
-    app,
-    filePath: string
+  app,
+  filePath: string
 ): Promise<void> => {
-    await clickOverElement(app, getElementByTestId(app, filePath));
+  await clickOverElement(app, getElementByTestId(app, filePath));
 };
 
 /**
@@ -56,14 +56,14 @@ const makeTestIdSelector = (testId: string) => `[data-test-id="${testId}"]`;
  * @param testId - The data-test-id
  */
 export const getElementByTestId = (app, testId: string) =>
-    app.client.$(makeTestIdSelector(testId));
+  app.client.$(makeTestIdSelector(testId));
 
 /**
  * Start editing tag box
  * @param app - The spectron app object
  */
 const enableTagEdition = async (app) => {
-    await getElementByTestId(app, "tag-edit-box").click();
+  await getElementByTestId(app, "tag-edit-box").click();
 };
 
 /**
@@ -71,7 +71,7 @@ const enableTagEdition = async (app) => {
  * @param app - The spectron app object
  */
 const enableDescriptionEdition = async (app) => {
-    await getElementByTestId(app, "description-edit-box").click();
+  await getElementByTestId(app, "description-edit-box").click();
 };
 
 /**
@@ -80,10 +80,10 @@ const enableDescriptionEdition = async (app) => {
  * @param tags - The list of the tag names to add
  */
 export const addTags = async (app, tags: string[]): Promise<void> => {
-    await enableTagEdition(app);
+  await enableTagEdition(app);
 
-    const keyboardInputs = `${tags.join("\n")}\n`;
-    await typeText(app, keyboardInputs);
+  const keyboardInputs = `${tags.join("\n")}\n`;
+  await typeText(app, keyboardInputs);
 };
 
 /**
@@ -92,14 +92,14 @@ export const addTags = async (app, tags: string[]): Promise<void> => {
  * @param description - The description to add
  */
 export const addDescription = async (
-    app,
-    description: string
+  app,
+  description: string
 ): Promise<void> => {
-    await enableDescriptionEdition(app);
+  await enableDescriptionEdition(app);
 
-    await typeText(app, description);
-    // We click outside the box to save our description
-    await clickOnPosition(app, 10, 10);
+  await typeText(app, description);
+  // We click outside the box to save our description
+  await clickOnPosition(app, 10, 10);
 };
 
 /**
@@ -107,6 +107,6 @@ export const addDescription = async (
  * @param app - The spectron app object
  */
 export const exportToResip = async (app): Promise<void> => {
-    await openExportMenu(app);
-    await getElementByTestId(app, "resip-button").click();
+  await openExportMenu(app);
+  await getElementByTestId(app, "resip-button").click();
 };

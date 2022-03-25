@@ -1,8 +1,8 @@
+import type { HashesMap } from "@common/utils/hashes-types";
 import type { VirtualFileSystem } from "@renderer/files-and-folders-loader/files-and-folders-loader-types";
 import type { FilesAndFoldersMap } from "@renderer/reducers/files-and-folders/files-and-folders-types";
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import type { FilesAndFoldersMetadataMap } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { HashesMap } from "@renderer/reducers/hashes/hashes-types";
 import { parseVFSFromStream } from "@renderer/utils/file-tree-loader/load-from-filesystem-serializer";
 import { times } from "lodash";
 import { MockWritable } from "stdio-mock";

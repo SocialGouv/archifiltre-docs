@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import {
   notifyError,
   notifyInfo,
   notifySuccess,
-} from "@renderer/utils/notification/notifications-util";
+} from "@renderer/utils/notifications";
 import noop from "lodash/noop";
 import { NotificationManager } from "react-notifications";
 

@@ -1,7 +1,8 @@
-import { arbitraryRgba } from "@renderer/test/custom-arbitraries";
-import { fromRgba, toRgba } from "@renderer/utils/color/color-util";
+import { fromRgba, toRgba } from "@renderer/utils/color";
 import equal from "deep-equal";
 import fc from "fast-check";
+
+import { arbitraryRgba } from "./custom-arbitraries";
 
 describe("color", () => {
   // eslint-disable-next-line jest/expect-expect -- fc assert

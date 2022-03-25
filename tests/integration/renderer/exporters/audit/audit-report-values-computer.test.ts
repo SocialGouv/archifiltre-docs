@@ -15,7 +15,7 @@ import {
   formatPathForUserSystem,
   octet2HumanReadableFormat,
 } from "@renderer/utils/file-system/file-sys-util";
-import { FileType } from "@renderer/utils/file-types/file-types-util";
+import { FileType } from "@renderer/utils/file-types";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 

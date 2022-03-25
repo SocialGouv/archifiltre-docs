@@ -11,8 +11,8 @@ import {
   getFilesDuplicatesMap,
   getMostDuplicatedFiles,
   hasDuplicate,
-} from "@renderer/utils/duplicates/duplicates-util";
-import { FileType } from "@renderer/utils/file-types/file-types-util";
+} from "@renderer/utils/duplicates";
+import { FileType } from "@renderer/utils/file-types";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 

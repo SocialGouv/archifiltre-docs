@@ -2,7 +2,7 @@ import { isUnixLike, isWindows } from "@common/utils/os";
 import {
   generateUnixDeletionScript,
   generateWindowDeletionScript,
-} from "@renderer/utils/deletion-script/deletion-script-util";
+} from "@renderer/utils/deletion-script";
 import cp from "child_process";
 import fs from "fs";
 import path from "path";

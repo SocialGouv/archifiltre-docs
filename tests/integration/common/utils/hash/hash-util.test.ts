@@ -1,14 +1,14 @@
+import type { HashComputingResult } from "@common/utils/hash";
+import {
+  hashErrorToArchifiltreDocsError,
+  hashResult,
+  hashResultsToMap,
+} from "@common/utils/hash";
 import {
   accessDenied,
   fileNotFound,
   unhandledFileError,
 } from "@common/utils/hash/hash-errors";
-import type { HashComputingResult } from "@common/utils/hash/hash-util";
-import {
-  hashErrorToArchifiltreDocsError,
-  hashResult,
-  hashResultsToMap,
-} from "@common/utils/hash/hash-util";
 
 describe("hash-util", () => {
   describe("hashErrorToArchifiltreDocsError", () => {

@@ -26,14 +26,14 @@ import { setFilesAndFoldersHashes } from "@renderer/reducers/hashes/hashes-actio
 import { updateFilesAndFoldersHashes } from "@renderer/reducers/hashes/hashes-thunks";
 import type { StoreState } from "@renderer/reducers/store";
 import { translations } from "@renderer/translations/translations";
-import { notifyInfo } from "@renderer/utils/notification/notifications-util";
+import { notifyInfo } from "@renderer/utils/notifications";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
 import { createFilesAndFolders } from "./files-and-folders-test-utils";
 
-jest.mock("@renderer/util/notification/notifications-util", () => ({
+jest.mock("@renderer/utils/notifications", () => ({
   notifyInfo: jest.fn(),
 }));
 

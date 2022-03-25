@@ -4,7 +4,7 @@ import {
   removeUnusedAliasesFromVirtualFileSystem,
   removeUnusedCommentsFromVirtualFileSystem,
   removeUnusedTagsFromVirtualFileSystem,
-} from "@renderer/utils/virtual-file-system-util/virtual-file-system-util";
+} from "@renderer/utils/virtual-file-system";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
 import { createTag } from "../../reducers/tags/tags-test-utils";

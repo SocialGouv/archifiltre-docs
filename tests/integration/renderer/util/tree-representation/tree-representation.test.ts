@@ -1,5 +1,5 @@
 import type { FilesAndFoldersMap } from "@renderer/reducers/files-and-folders/files-and-folders-types";
-import { computeTreeStructureArray } from "@renderer/utils/tree-representation/tree-representation";
+import { computeTreeStructureArray } from "@renderer/utils/tree-representation";
 import { flatten } from "lodash";
 import { toArray } from "rxjs/operators";
 

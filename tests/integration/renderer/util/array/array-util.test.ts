@@ -7,7 +7,7 @@ import {
   makeEmptyArray,
   medianOnSortedArray,
   replaceValue,
-} from "@renderer/utils/array/array-util";
+} from "@common/utils/array";
 
 describe("array-util", () => {
   describe("computeCumulative", () => {

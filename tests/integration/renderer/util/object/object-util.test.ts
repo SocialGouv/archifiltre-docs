@@ -1,4 +1,4 @@
-import { compose, copy, extractKeys } from "@renderer/utils/object/object-util";
+import { compose, copy, extractKeys } from "@common/utils/object";
 import fc from "fast-check";
 
 describe("object-util", () => {

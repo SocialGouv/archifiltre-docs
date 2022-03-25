@@ -1,9 +1,9 @@
-import v21 from "@renderer/util/compatibility/v2.1file.json";
 import {
   v2ToV21Js,
   v13JsToV14Js,
   v21ToV22Js,
-} from "@renderer/utils/compatibility/compatibility";
+} from "@renderer/utils/compatibility";
+import v21 from "@renderer/utils/compatibility/v2.1file.json";
 import v2 from "@renderer/utils/compatibility/v2file.json";
 import v13 from "@renderer/utils/compatibility/v13file.json";
 import v14 from "@renderer/utils/compatibility/v14file.json";

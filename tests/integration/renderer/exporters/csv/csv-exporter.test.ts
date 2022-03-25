@@ -11,7 +11,7 @@ import {
   START_LOADING,
 } from "@renderer/reducers/loading-info/loading-info-types";
 import type { StoreState } from "@renderer/reducers/store";
-import { MessageTypes } from "@renderer/utils/batch-process/batch-process-util-types";
+import { MessageTypes } from "@renderer/utils/batch-process/types";
 import { promises as fs } from "fs";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";

@@ -1,11 +1,11 @@
+import { makeErrorHandler } from "@common/utils/error";
 import { ArchifiltreDocsFileSystemErrorCode } from "@common/utils/error/error-codes";
+import { handleError } from "@renderer/exporters/mets/mets";
 import { createArchifiltreDocsError } from "@renderer/reducers/loading-info/loading-info-selectors";
-import { notifyError } from "@renderer/utils/notification/notifications-util";
+import { notifyError } from "@renderer/utils/notifications";
 import { noop } from "lodash";
 
-import { handleError, makeErrorHandler } from "../../utils/error/error-util";
-
-jest.mock("@renderer/util/notification/notifications-util", () => ({
+jest.mock("@renderer/utils/notifications", () => ({
   notifyError: jest.fn(),
 }));
 

@@ -1,5 +1,5 @@
-import type { HookCounterOptions } from "@renderer/utils/hook/hook-utils";
-import { hookCounter } from "@renderer/utils/hook/hook-utils";
+import type { HookCounterOptions } from "@renderer/utils/hook";
+import { hookCounter } from "@renderer/utils/hook";
 import { advanceBy, advanceTo } from "jest-date-mock";
 
 const setup = (options: HookCounterOptions<unknown[]>) => {

@@ -156,6 +156,7 @@ export const createAsyncWorkerForChildProcessControllerFactory =
           }
         : {};
 
+    console.log({ _workerPath, workerSerializedConfig });
     const worker = fork(
       _workerPath.endsWith(".js") ? _workerPath : WORKER_BRIDGE_PATH,
       [_workerPath, JSON.stringify(workerSerializedConfig)],

@@ -3,7 +3,10 @@ import type { VirtualFileSystem } from "@renderer/files-and-folders-loader/files
 import type { FilesAndFoldersMap } from "@renderer/reducers/files-and-folders/files-and-folders-types";
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import type { FilesAndFoldersMetadataMap } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { parseVFSFromStream } from "@renderer/utils/file-tree-loader/load-from-filesystem-serializer";
+import {
+  parseVFSFromStream,
+  stringifyVFSToStream,
+} from "@renderer/utils/file-tree-loader/load-from-filesystem-serializer";
 import { times } from "lodash";
 import { MockWritable } from "stdio-mock";
 import Stream from "stream";
@@ -64,8 +67,7 @@ describe("load-from-filesystem-serializer", () => {
 
     const writeable = new MockWritable();
 
-    // @ts-expect-error Mock
-    stringifyVFSToStream(writeable, vfs);
+    stringifyVFSToStream(writeable as any, vfs);
 
     const data: Buffer[] = await extractDataFromMock(writeable);
 

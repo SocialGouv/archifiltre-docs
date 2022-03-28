@@ -1,5 +1,8 @@
 import type { TreeCsvExporterParams } from "@renderer/exporters/csv/tree-csv-exporter-serializer";
-import { parseTreeCsvExporterOptionsFromStream } from "@renderer/exporters/csv/tree-csv-exporter-serializer";
+import {
+  parseTreeCsvExporterOptionsFromStream,
+  stringifyTreeCsvExporterOptionsToStream,
+} from "@renderer/exporters/csv/tree-csv-exporter-serializer";
 import { createFilesAndFolders } from "@renderer/files-and-folders-loader/files-and-folders-loader";
 import { Language } from "@renderer/utils/language/types";
 import { MockWritable } from "stdio-mock";
@@ -25,8 +28,7 @@ describe("tree-csv-exporter-serializer", () => {
 
     const writeable = new MockWritable();
 
-    // @ts-expect-error Mock
-    stringifyTreeCsvExporterOptionsToStream(writeable, exporterOptions);
+    stringifyTreeCsvExporterOptionsToStream(writeable as any, exporterOptions);
 
     const sentData: Buffer[] = await extractDataFromMock(writeable);
 

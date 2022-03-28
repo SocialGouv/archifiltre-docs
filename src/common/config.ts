@@ -16,13 +16,15 @@ export interface WorkerSerializedConfig {
 export const IS_WORKER = !!(process as NodeJS.Process | undefined)?.send;
 
 const workerConfig: WorkerSerializedConfig = IS_WORKER
-  ? JSON.parse(process.argv[3])
+  ? JSON.parse(process.argv[3] ?? "{}")
   : ({} as WorkerSerializedConfig);
 export const IS_MAIN = IS_WORKER
   ? workerConfig.isMain
   : // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     ((ipcMain && !ipcRenderer) as boolean);
-export const IS_TEST = !!process.env.NODE_ENV?.startsWith("test");
+export const IS_TEST = IS_WORKER
+  ? workerConfig.isTest
+  : !!process.env.NODE_ENV?.startsWith("test");
 export const IS_DEV = IS_WORKER
   ? workerConfig.isDev
   : process.env.NODE_ENV !== "production" && !IS_TEST;

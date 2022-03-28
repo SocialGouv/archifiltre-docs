@@ -7,6 +7,8 @@
       "DOM"
     ],
     "jsx": "react",
+    "allowJs": true,
+    "noEmit": true,
     "strictNullChecks": true,
     "baseUrl": "../",
     "paths": {

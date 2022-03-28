@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const { pathsToModuleNameMapper } = require("ts-jest/utils");
+const { pathsToModuleNameMapper } = require("ts-jest");
 
 const testsTsConfigPath = path.resolve(__dirname, "tests", "tsconfig.json");
 const tsconfig = JSON.parse(
@@ -19,8 +19,7 @@ const moduleNameMapper = {
 const collectCoverageFrom = ["<rootDir>/src/**/!(*.d).ts*"];
 
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
-module.exports = {
-  collectCoverageFrom,
+const defaultConfig = {
   coverageDirectory: "coverage",
   globals: {
     ARCHIFILTRE_VERSION: JSON.stringify(require("./package.json").version),
@@ -39,8 +38,20 @@ module.exports = {
   preset: "ts-jest/presets/js-with-ts",
   setupFiles: [
     "jest-date-mock",
-    "<rootDir>/tests/test-util/mock-electron.js",
-    "<rootDir>/tests/test-util/mock-i18next.js",
+    "<rootDir>/tests/mocks/electron.ts",
+    "<rootDir>/tests/mocks/i18next.ts",
+    "<rootDir>/tests/setup/env.ts",
   ],
-  testMatch: ["<rootDir>/tests/**/?(*.)(spec|test).(ts|tsx)"],
+};
+
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
+module.exports = {
+  collectCoverageFrom,
+  projects: [
+    {
+      displayName: "integration",
+      testMatch: ["<rootDir>/tests/integration/**/?(*.)(spec|test).(ts|tsx)"],
+      ...defaultConfig,
+    },
+  ],
 };

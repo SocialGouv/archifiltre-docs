@@ -5,6 +5,7 @@ import {
 import type { FilesElementInfo } from "@renderer/files-and-folders-loader/files-and-folders-loader";
 import {
   asyncLoadFilesAndFoldersFromFileSystem,
+  createFilesAndFolders,
   createFilesAndFoldersDataStructure,
   loadFilesAndFoldersFromExportFileContent,
 } from "@renderer/files-and-folders-loader/files-and-folders-loader";
@@ -15,8 +16,6 @@ import { version } from "@renderer/version";
 import fs from "fs";
 import { sortBy } from "lodash";
 import { Readable } from "stream";
-
-import { createFilesAndFolders } from "../reducers/files-and-folders/files-and-folders-test-utils";
 
 interface FsMockElement {
   isDirectory: boolean;

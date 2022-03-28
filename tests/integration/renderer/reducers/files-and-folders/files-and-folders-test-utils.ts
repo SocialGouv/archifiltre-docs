@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import type { FilesAndFolders } from "@renderer/reducers/files-and-folders/files-and-folders-types";
 
 interface CreateFilesAndFoldersOptions {

@@ -1,5 +1,8 @@
 import type { GenerateCsvExportOptions } from "@renderer/exporters/csv/csv-exporter.controller";
-import { parseCsvExporterOptionsFromStream } from "@renderer/exporters/csv/csv-exporter-serializer";
+import {
+  parseCsvExporterOptionsFromStream,
+  stringifyCsvExporterOptionsToStream,
+} from "@renderer/exporters/csv/csv-exporter-serializer";
 import { createFilesAndFolders } from "@renderer/files-and-folders-loader/files-and-folders-loader";
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import type { WithLanguage } from "@renderer/utils/language/types";
@@ -41,8 +44,7 @@ describe("csv-exporter-serializer", () => {
 
     const writeable = new MockWritable();
 
-    // @ts-expect-error Mock
-    stringifyCsvExporterOptionsToStream(writeable, exporterOptions);
+    stringifyCsvExporterOptionsToStream(writeable as any, exporterOptions);
 
     const sentData: Buffer[] = await extractDataFromMock(writeable);
 

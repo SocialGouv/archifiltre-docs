@@ -1,3 +1,4 @@
+import { IS_PACKAGED } from "@common/config";
 import { getPath } from "@common/utils/electron";
 import dateFormat from "dateformat";
 import path from "path";
@@ -5,8 +6,6 @@ import { createLogger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 
 import { WinstonConsoleLogger } from "./winston-console-logger";
-
-const isProd = () => MODE === "production";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 enum Level {
@@ -32,7 +31,7 @@ const logger = createLogger({
  * Inits the reporter here Sentry
  */
 export const initReporter = (isActive: boolean): void => {
-  if (!isProd() || !isActive) {
+  if (!IS_PACKAGED() || !isActive) {
     return;
   }
 

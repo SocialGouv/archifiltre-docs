@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "electron-webpack dev",
     "test": "jest",
-    "e2e": "jest \"tests/e2e/.*\\\\.test\\\\.[jt]s\"",
+    "test:e2e": "playwright test",
     "compile": "electron-webpack",
     "dist:win": "electron-builder --x64 --ia32 --win portable msi nsis",
     "dist:mac": "electron-builder --mac dmg zip",
@@ -17,6 +17,9 @@
     "dist:linux": "electron-builder --linux AppImage",
     "lint": "eslint src/",
     "lint:fix": "eslint --fix src/",
+    "lint:test": "eslint -c tests/.eslintrc.json 'tests/**/*.ts*'",
+    "lint:fix-test": "eslint --fix -c tests/.eslintrc.json 'tests/**/*.ts*'",
+    "lint:fix-all": "yarn lint:fix && yarn lint:fix-test",
     "devtools": "ts-node scripts/getReactDevtools.ts",
     "generate-translation-csv": "node ./scripts/diff-translations.js",
     "import-translation-csv": "node ./scripts/translation-csv-to-json"

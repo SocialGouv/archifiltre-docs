@@ -3,18 +3,6 @@ const path = require("path");
 /** @type {import("eslint").Linter.Config} */
 const typescriptConfig = {
   extends: "@socialgouv/eslint-config-typescript",
-  globals: {
-    ARCHIFILTRE_SITE_URL: true,
-    ARCHIFILTRE_VERSION: true,
-    AUTOLOAD: true,
-    FORCE_TRACKING: true,
-    MODE: true,
-    REACT_DEV_TOOLS_PATH: true,
-    SENTRY_DSN: true,
-    SENTRY_MINIDUMP_URL: true,
-    STATIC_ASSETS_PATH: true,
-    WRITE_DEBUG: true,
-  },
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: path.resolve(__dirname, "./tsconfig.json"),

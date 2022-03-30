@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { FORCE_TRACKING, IS_PACKAGED } from "@common/config";
 import { mapValueBetweenEnums } from "@common/utils/enum";
 import _ from "lodash";
 import { compose } from "lodash/fp";
@@ -10,31 +11,27 @@ declare global {
   interface Window {
     _paq?: unknown[];
   }
-  const FORCE_TRACKING: boolean;
-  const MODE: string;
-  const MATOMO_APPLICATION_ID: number;
-  const MATOMO_URL: string;
 }
 /**
  * Inits the trackers needed for monitoring, here Matomo
  */
 export const initTracker = (isActive: boolean): void => {
-  if ((!FORCE_TRACKING && MODE !== "production") || !isActive) {
+  if ((!FORCE_TRACKING && !IS_PACKAGED()) || !isActive) {
     return;
   }
   window._paq = window._paq ?? [];
   addMatomoTracker({
     type: MatomoActionType.SET_SITE_ID,
-    value: MATOMO_APPLICATION_ID,
+    value: process.env.TRACKER_MATOMO_ID_SITE,
   });
   addMatomoTracker({
     type: MatomoActionType.SET_TRACKER_URL,
-    value: `${MATOMO_URL}/piwik.php`,
+    value: `${process.env.TRACKER_MATOMO_URL}/piwik.php`,
   });
   addMatomoTracker({ type: MatomoActionType.ENABLE_LINK_TRACKING });
   addMatomoTracker({
     type: MatomoActionType.SET_CUSTOM_URL,
-    value: `https://archifiltre/`,
+    value: process.env.TRACKER_FAKE_HREF,
   });
   addMatomoTracker({ type: MatomoActionType.TRACK_PAGE_VIEW });
   const scriptElement = document.createElement("script");
@@ -42,7 +39,7 @@ export const initTracker = (isActive: boolean): void => {
   scriptElement.type = "text/javascript";
   scriptElement.async = true;
   scriptElement.defer = true;
-  scriptElement.src = `${MATOMO_URL}/piwik.js`;
+  scriptElement.src = `${process.env.TRACKER_MATOMO_URL}/piwik.js`;
   refElement.parentNode?.insertBefore(scriptElement, refElement);
 };
 
@@ -96,7 +93,7 @@ const handleMatomoValue = (matomoAction: MatomoTrackerAction) => {
 const addMatomoTracker = (
   trackerAction: MatomoTrackerAction | TrackerAction
 ) => {
-  if (!FORCE_TRACKING && MODE !== "production") {
+  if (!FORCE_TRACKING && !IS_PACKAGED()) {
     return;
   }
 

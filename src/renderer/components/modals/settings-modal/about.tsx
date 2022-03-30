@@ -36,7 +36,10 @@ const aboutItems = [
     Icon: FaGlobeAmericas,
     id: "website",
     label: "settingsModal.website",
-    link: `${ARCHIFILTRE_SITE_URL}/produit#${version.replace(/\./g, "")}`,
+    link: `${process.env.ARCHIFILTRE_SITE_URL}/produit#${version.replace(
+      /\./g,
+      ""
+    )}`,
   },
   {
     // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -1,3 +1,4 @@
+import { IS_TEST } from "@common/config";
 import { getPath } from "@common/utils/electron";
 import type { SimpleObject } from "@common/utils/object";
 import fs from "fs";
@@ -25,7 +26,7 @@ let initialUserSettings: UserSettings | undefined = void 0;
  * Initialize user settings to values in user-settings.json
  */
 export const initUserSettings = (): void => {
-  if (!initialUserSettings && MODE !== "test") {
+  if (!initialUserSettings && IS_TEST) {
     const userSettingsFilePath = getUserSettingsFilePath();
     initialUserSettings = readUserSettings(userSettingsFilePath);
   }

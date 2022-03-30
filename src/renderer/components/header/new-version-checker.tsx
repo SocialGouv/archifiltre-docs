@@ -7,9 +7,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useStyles } from "../../hooks/use-styles";
-import { reportError } from "../../logging/reporter";
-import { request } from "../../utils/http";
-import { version, versionComparator } from "../../version";
 import { ModalHeader } from "../modals/modal-header";
 
 /**
@@ -34,27 +31,28 @@ export const NewVersionChecker: React.FC = () => {
   const classes = useStyles();
 
   useEffect(() => {
-    request<string>({
-      method: "GET",
-      url: `${ARCHIFILTRE_SITE_URL}/api-version.json`,
-    })
-      .then((result) => {
-        const previousVersion = mapToNewVersionNumbers(
-          JSON.parse(result).lastVersion as string
-        );
-        const currentVersion = version;
-        if (versionComparator(currentVersion, previousVersion) === -1) {
-          setIsDisplayed(true);
-          setLastVersion(previousVersion);
-        }
-      })
-      .catch((error) => {
-        reportError(error);
-      });
+    // TODO: use auto update
+    // request<string>({
+    //   method: "GET",
+    //   url: `${process.env.ARCHIFILTRE_SITE_URL}/api-version.json`,
+    // })
+    //   .then((result) => {
+    //     const previousVersion = mapToNewVersionNumbers(
+    //       JSON.parse(result).lastVersion as string
+    //     );
+    //     const currentVersion = version;
+    //     if (versionComparator(currentVersion, previousVersion) === -1) {
+    //       setIsDisplayed(true);
+    //       setLastVersion(previousVersion);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     reportError(error);
+    //   });
   }, []);
 
   const download = useCallback(() => {
-    openLink(ARCHIFILTRE_SITE_URL);
+    openLink(process.env.ARCHIFILTRE_SITE_URL);
   }, []);
 
   const onClose = useCallback(() => {

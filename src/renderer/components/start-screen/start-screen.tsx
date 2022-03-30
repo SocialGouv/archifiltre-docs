@@ -1,3 +1,4 @@
+import { isFalsy, isTruthy } from "@common/utils/string";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
@@ -16,11 +17,6 @@ import { SettingsModal } from "../modals/settings-modal/settings-modal";
 import { Dropzone } from "./dropzone";
 import { LoadingBlock } from "./loading-block";
 import { StartScreenSidebar } from "./start-screen-sidebar";
-
-declare global {
-  const AUTOLOAD: string;
-  const AUTORELOAD: string;
-}
 
 export interface StartScreenProps {
   loadFromPath: (path: string) => void;
@@ -70,14 +66,14 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   );
 
   useEffect(() => {
-    if (AUTOLOAD !== "") {
-      const pathToLoad = path.resolve(AUTOLOAD);
+    // cannot test as truthy because var can also be full string
+    if (!isFalsy(process.env.AUTOLOAD)) {
+      const pathToLoad = path.resolve(process.env.AUTOLOAD);
       loadPath(pathToLoad);
       return;
     }
 
-    // eslint-disable-next-line no-undef -- it's def...
-    if (AUTORELOAD !== "") {
+    if (isTruthy(process.env.AUTORELOAD)) {
       reloadPreviousSession();
     }
   }, [loadPath, reloadPreviousSession]);

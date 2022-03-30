@@ -1,0 +1,11 @@
+name: Start XVFB server
+description: Exclusively for ubuntu, start Xvfb
+
+runs:
+  using: composite
+  steps:
+    - name: Start Xvfb
+      shell: bash
+      run: |
+        sudo apt install -y xvfb
+        /usr/bin/Xvfb :0 -ac -screen 0 1280x1024x24 &

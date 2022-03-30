@@ -22,11 +22,6 @@ const collectCoverageFrom = ["<rootDir>/src/**/!(*.d).ts*"];
 const defaultConfig = {
   coverageDirectory: "coverage",
   globals: {
-    ARCHIFILTRE_VERSION: JSON.stringify(require("./package.json").version),
-    FORCE_TRACKING: false,
-    MODE: "test",
-    SENTRY_DSN: "https://sentry-mock-url.io",
-    STATIC_ASSETS_PATH: ".",
     "ts-jest": {
       diagnostics: false,
       isolatedModules: true,

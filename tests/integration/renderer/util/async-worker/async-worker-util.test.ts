@@ -76,7 +76,6 @@ describe("async-worker-util", () => {
           callback = makeChildWorkerMessageCallback(asyncWorker, {
             onInitialize,
           });
-          // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression, @typescript-eslint/await-thenable
           await callback({
             data: "data",
             type: MessageTypes.INITIALIZE,

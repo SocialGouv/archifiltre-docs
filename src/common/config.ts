@@ -1,12 +1,15 @@
 import { app, ipcMain, ipcRenderer } from "electron";
 import path from "path";
 
+import { isTruthy } from "./utils/string";
+
 export interface WorkerSerializedConfig {
   isMain: boolean;
   isWorker: true;
   isTest: boolean;
   isDev: boolean;
   isE2E: boolean;
+  forceTracking: boolean;
   isMac: boolean;
   isPackaged: boolean;
   isDistMode: boolean;
@@ -29,6 +32,7 @@ export const IS_DEV = IS_WORKER
   ? workerConfig.isDev
   : process.env.NODE_ENV !== "production" && !IS_TEST;
 export const IS_E2E = IS_WORKER ? workerConfig.isE2E : !!process.env.E2E;
+export const FORCE_TRACKING = isTruthy(process.env.FORCE_TRACKING);
 export const IS_MAC = IS_WORKER
   ? workerConfig.isMac
   : process.platform === "darwin";
@@ -58,6 +62,7 @@ export const STATIC_PATH = IS_WORKER
   : __static; // dev
 
 export const workerSerializedConfig: WorkerSerializedConfig = {
+  forceTracking: FORCE_TRACKING,
   isDev: IS_DEV,
   isDistMode: IS_DIST_MODE,
   isE2E: IS_E2E,

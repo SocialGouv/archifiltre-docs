@@ -21,7 +21,7 @@ const branches = [
 ];
 const isPreRealse = process.env.GITHUB_REF
   ? branches.some(
-      (branche) =>
+      (branch) =>
         branche.prerelease &&
         `refs/heads/${branche.name}` === process.env.GITHUB_REF
     )

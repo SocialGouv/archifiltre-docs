@@ -8,8 +8,8 @@ import { FaTimes } from "react-icons/fa";
 import { useStyles } from "../../hooks/use-styles";
 
 export interface ModalHeaderProps {
-  title: string;
   onClose?: VoidFunction;
+  title: string;
 }
 
 export const ModalHeader: React.FC<ModalHeaderProps> = ({ title, onClose }) => {

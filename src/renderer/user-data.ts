@@ -10,8 +10,8 @@ const randomString = "WbXDHMMHojJEQHzY6TLFBq2LSOQjVktGRSp9HT07"; // TODO: change
 const basePath = join(getPath("userData"), randomString);
 
 interface InitialData {
-  width: number;
   height: number;
+  width: number;
 }
 
 export interface UserData<T = InitialData> {

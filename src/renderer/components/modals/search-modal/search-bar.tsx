@@ -19,8 +19,8 @@ const handleTracking = (searchTerm: string) => {
 };
 
 export interface SearchBarProps {
-  value: string;
   setSearchTerm: (searchTerm: string) => void;
+  value: string;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({

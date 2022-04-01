@@ -6,18 +6,18 @@ import {
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export enum ArchifiltreDocsErrorType {
-  STORE_THUNK = "storeThunk",
-  LOADING_FILE_SYSTEM = "loadingFromFileSystem",
-  COMPUTING_HASHES = "computingHashes",
   BATCH_PROCESS_ERROR = "batchProcessError",
+  COMPUTING_HASHES = "computingHashes",
+  LOADING_FILE_SYSTEM = "loadingFromFileSystem",
+  STORE_THUNK = "storeThunk",
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 
 export interface ArchifiltreDocsError {
-  type: ArchifiltreDocsErrorType;
+  code: ArchifiltreDocsErrorCode;
   filePath: string;
   reason: string;
-  code: ArchifiltreDocsErrorCode;
+  type: ArchifiltreDocsErrorType;
 }
 
 export const isArchifiltreDocsError = (

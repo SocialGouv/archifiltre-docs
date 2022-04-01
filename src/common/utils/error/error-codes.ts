@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 export enum ArchifiltreDocsFileSystemErrorCode {
-  ENOENT = "ENOENT",
-  EBUSY = "EBUSY",
   EACCES = "EACCES",
+  EBUSY = "EBUSY",
+  ENOENT = "ENOENT",
 }
 
 export enum ArchifiltreDocsStoreThunkErrorCode {
-  ROOT_PATH = "ROOT_PATH",
   INVALID_PATH = "INVALID_PATH",
+  ROOT_PATH = "ROOT_PATH",
 }
 
 export enum UnknownError {

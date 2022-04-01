@@ -62,11 +62,11 @@ const deserializer = (data: Uint8Array) =>
   TreeCsvExporterSerializerMessage.toObject(
     TreeCsvExporterSerializerMessage.decode(data),
     { arrays: true }
-  ) as { key: string; filesAndFolders: FilesAndFolders };
+  ) as { filesAndFolders: FilesAndFolders; key: string };
 
 const merger = (
   base: TreeCsvExporterParams,
-  deserializedData: { key: string; filesAndFolders: FilesAndFolders }
+  deserializedData: { filesAndFolders: FilesAndFolders; key: string }
 ) => {
   const { key, filesAndFolders } = deserializedData;
   base.filesAndFolders[key] = filesAndFolders;

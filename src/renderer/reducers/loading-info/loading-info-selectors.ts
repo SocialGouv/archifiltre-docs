@@ -44,10 +44,10 @@ export const useArchifiltreDocsErrors = (): ArchifiltreDocsError[] =>
   useSelector(getArchifiltreDocsErrors);
 
 interface CreateArchifiltreDocsErrorParams {
-  type?: ArchifiltreDocsErrorType;
+  code?: ArchifiltreDocsErrorCode;
   filePath?: string;
   reason?: string;
-  code?: ArchifiltreDocsErrorCode;
+  type?: ArchifiltreDocsErrorType;
 }
 
 /**

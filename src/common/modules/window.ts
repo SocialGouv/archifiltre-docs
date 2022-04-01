@@ -5,9 +5,9 @@ import { ipcMain } from "../ipc";
 declare module "../ipc/event" {
   interface SyncIpcMapping {
     "window.getSize": IpcConfig<[], number[]>;
+    "window.reload": IpcConfig<[], void>;
     "window.setSize": IpcConfig<[width: number, heigth: number], void>;
     "window.show": IpcConfig<[], void>;
-    "window.reload": IpcConfig<[], void>;
   }
 }
 

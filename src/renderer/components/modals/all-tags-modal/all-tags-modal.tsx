@@ -14,8 +14,8 @@ const StyledPaper = styled(Paper)`
 `;
 
 export interface SettingsModalProps {
-  isModalOpen: boolean;
   closeModal: () => void;
+  isModalOpen: boolean;
 }
 
 export const AllTagsModal: React.FC<SettingsModalProps> = ({

@@ -98,26 +98,26 @@ const viewBoxHeight = 300;
 export interface IcicleMainProps {
   aliases: AliasMap;
   comments: CommentsMap;
-  tags: TagMap;
-  originalPath: string;
-  rootId: string;
-  fillColor: FillColor;
-  hoveredElementId: string;
-  lockedElementId: string;
-  hoverSequence: string[];
-  lockedSequence: string[];
+  elementWeightMethod: ElementWeightMethod;
   elementsToDelete: string[];
+  fillColor: FillColor;
   getAllChildrenFolderCount: (id: string) => number;
   getChildrenIdFromId: (id: string) => string[];
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
-  elementWeightMethod: ElementWeightMethod;
-  maxDepth: number;
+  hoverSequence: string[];
+  hoveredElementId: string;
   lock: (id: string) => void;
-  unlock: () => void;
+  lockedElementId: string;
+  lockedSequence: string[];
+  maxDepth: number;
   moveElement: (movedElementId: string, targetFolderId: string) => void;
+  originalPath: string;
+  rootId: string;
   setFocus: (id: string) => void;
   setNoFocus: () => void;
   setNoHover: () => void;
+  tags: TagMap;
+  unlock: () => void;
 }
 
 const _IcicleMain: React.FC<IcicleMainProps> = ({

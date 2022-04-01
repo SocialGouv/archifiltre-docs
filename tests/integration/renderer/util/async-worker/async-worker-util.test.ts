@@ -23,10 +23,12 @@ const resetMocks = () => {
 describe("async-worker-util", () => {
   const { error } = console;
   beforeAll(() => {
+    // eslint-disable-next-line no-console
     console.error = jest.fn();
   });
 
   afterAll(() => {
+    // eslint-disable-next-line no-console
     console.error = error;
   });
   describe("setupChildWorkerListeners", () => {

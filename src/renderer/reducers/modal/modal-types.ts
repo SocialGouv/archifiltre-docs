@@ -4,8 +4,8 @@ export const CLOSE_MODAL = "MODAL/CLOSE_MODAL";
 /* eslint-disable @typescript-eslint/naming-convention */
 export enum Modal {
   ERROR_MODAL = "errorModal",
-  HASHES_ERROR_MODAL = "hashesErrorModal",
   FIlES_AND_FOLDERS_ERRORS_MODAL = "filesAndFoldersErrorModal",
+  HASHES_ERROR_MODAL = "hashesErrorModal",
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 
@@ -14,8 +14,8 @@ export interface ModalState {
 }
 
 export interface OpenErrorModalAction {
-  type: typeof OPEN_MODAL;
   modal: Modal;
+  type: typeof OPEN_MODAL;
 }
 
 export interface CloseModalAction {

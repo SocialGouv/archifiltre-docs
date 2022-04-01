@@ -7,11 +7,11 @@ import { ToDeleteChip } from "../../../../common/to-delete-chip";
 import { EllipsisText } from "./ellipsis-text";
 
 export interface TagCellChipsProps {
-  tagsForCurrentFile: Tag[];
-  untag: (tagId: string, nodeId: string) => void;
-  nodeId: string;
   isCurrentFileMarkedToDelete: boolean;
+  nodeId: string;
+  tagsForCurrentFile: Tag[];
   toggleCurrentFileDeleteState: () => void;
+  untag: (tagId: string, nodeId: string) => void;
 }
 
 export const TagCellChips: React.FC<TagCellChipsProps> = ({

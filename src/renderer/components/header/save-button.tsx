@@ -9,9 +9,9 @@ import { useStyles } from "../../hooks/use-styles";
 import { version } from "../../version";
 
 export interface SaveButtonProps {
+  exportToJson: ExportToJson;
   originalPath: string;
   sessionName: string;
-  exportToJson: ExportToJson;
 }
 
 export const SaveButton: React.FC<SaveButtonProps> = ({

@@ -7,16 +7,16 @@ import { FaPen } from "react-icons/fa";
 import { useStyles } from "../../hooks/use-styles";
 
 export interface EditableFieldProps {
+  endAdornment?: ReactNode;
   multiline?: boolean;
-  trimValue: boolean;
-  selectTextOnFocus: boolean;
-  submitOnBlur?: boolean;
-  value: string;
   onChange: (value: string) => void;
   placeholder?: string;
   rowsMax?: number;
+  selectTextOnFocus: boolean;
   startAdornment?: ReactNode;
-  endAdornment?: ReactNode;
+  submitOnBlur?: boolean;
+  trimValue: boolean;
+  value: string;
 }
 
 export const EditableField: React.FC<EditableFieldProps> = ({

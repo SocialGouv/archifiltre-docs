@@ -52,10 +52,10 @@ export const updateCommentThunk =
   };
 
 export enum IsMoveValidError {
-  nameConflict = "nameConflict",
   cannotMoveToChild = "cannotMoveToChild",
   cannotMoveToFile = "cannotMoveToFile",
   impossibleMove = "impossibleMove",
+  nameConflict = "nameConflict",
 }
 
 /**

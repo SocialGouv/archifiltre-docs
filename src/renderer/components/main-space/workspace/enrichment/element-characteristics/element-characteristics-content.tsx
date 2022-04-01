@@ -15,16 +15,16 @@ import { ElementCharacteristic } from "./element-characteristic";
 import { HashInfo } from "./hash-info";
 
 export interface ElementCharacteristicsContentProps {
-  elementName: string;
   elementAlias: string;
-  elementSize: number;
+  elementName: string;
   elementPath: string;
-  minLastModifiedTimestamp: number;
-  maxLastModifiedTimestamp: number;
-  medianLastModifiedTimestamp: number;
-  lastModified: number;
+  elementSize: number;
   hash: string;
   isFolder: boolean;
+  lastModified: number;
+  maxLastModifiedTimestamp: number;
+  medianLastModifiedTimestamp: number;
+  minLastModifiedTimestamp: number;
   onElementNameChange: (name: string) => void;
   onLastModifiedChange: (timestamp: number) => void;
   type: string;

@@ -8,11 +8,11 @@ import type { ExportTypesMap } from "./export-options";
 import { ExportTypeOption } from "./export-type-option";
 
 export interface ExportCategoryOptionsProps {
-  exportCategory: string;
+  activeExports: ExportTypesMap<boolean>;
   enabledExports: ExportTypesMap<boolean>;
+  exportCategory: string;
   exportPaths: ExportTypesMap<string>;
   isValidPaths: ExportTypesMap<boolean>;
-  activeExports: ExportTypesMap<boolean>;
   setActiveExportValue: (exportType: ExportType, value: boolean) => void;
   setExportsPathsValue: (exportType: ExportType, value: string) => void;
 }

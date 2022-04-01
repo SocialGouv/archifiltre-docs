@@ -2,8 +2,8 @@ import { noop } from "lodash";
 import { createContext, useContext } from "react";
 
 export interface TabsContextValues {
-  tabIndex: number;
   setTabIndex: (tabIndex: number) => void;
+  tabIndex: number;
 }
 
 const tabsState: TabsContextValues = {

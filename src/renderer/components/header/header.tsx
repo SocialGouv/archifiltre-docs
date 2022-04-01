@@ -18,14 +18,14 @@ const HeaderLine = styled.div`
 `;
 
 export interface HeaderActionsProps {
-  originalPath: string;
-  sessionName: string;
-  exportToJson: ExportToJson;
-  resetWorkspace: VoidFunction;
-  undo: () => void;
-  redo: () => void;
-  canUndo: boolean;
   canRedo: boolean;
+  canUndo: boolean;
+  exportToJson: ExportToJson;
+  originalPath: string;
+  redo: () => void;
+  resetWorkspace: VoidFunction;
+  sessionName: string;
+  undo: () => void;
 }
 
 export const Header: React.FC<HeaderActionsProps> = ({

@@ -14,15 +14,20 @@ import { TagCellContainer } from "./tags/tag-cell-container";
 import { TagHeader } from "./tags/tag-header";
 
 export interface EnrichmentProps {
-  createTag?: unknown; // -- unused?
-  untag?: unknown; // -- unused?
-  updateComment?: unknown; // -- unused?
+  createTag?: unknown;
+  // -- unused?
   currentFileComment: string;
-  tagsForCurrentFile?: unknown; // -- unused?
-  isCurrentFileMarkedToDelete: boolean;
-  toggleCurrentFileDeleteState?: unknown; // -- unused?
-  nodeId: string;
   isActive: boolean;
+  // -- unused?
+  isCurrentFileMarkedToDelete: boolean;
+  // -- unused?
+  nodeId: string;
+  tagsForCurrentFile?: unknown;
+  toggleCurrentFileDeleteState?: unknown;
+  // -- unused?
+  untag?: unknown;
+  // -- unused?
+  updateComment?: unknown;
 }
 
 interface EnrichmentTitleProps {

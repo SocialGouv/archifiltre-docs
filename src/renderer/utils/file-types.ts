@@ -5,15 +5,15 @@ import type { FilesAndFolders } from "../reducers/files-and-folders/files-and-fo
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export enum FileType {
-  PUBLICATION = "publication",
-  PRESENTATION = "presentation",
-  SPREADSHEET = "spreadsheet",
-  EMAIL = "email",
-  DOCUMENT = "document",
-  IMAGE = "image",
-  VIDEO = "video",
   AUDIO = "audio",
+  DOCUMENT = "document",
+  EMAIL = "email",
+  IMAGE = "image",
   OTHER = "other",
+  PRESENTATION = "presentation",
+  PUBLICATION = "publication",
+  SPREADSHEET = "spreadsheet",
+  VIDEO = "video",
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 

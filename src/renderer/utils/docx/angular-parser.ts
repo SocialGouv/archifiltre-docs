@@ -7,8 +7,8 @@ import expressions from "angular-expressions";
 // To add custom filters, check the documentation page : https://docxtemplater.readthedocs.io/en/latest/angular_parse.html#angular-parser
 
 interface ParserContext {
-  scopeList: SimpleObject[];
   num: number;
+  scopeList: SimpleObject[];
 }
 interface Parser {
   get: (scope: string, context: ParserContext) => unknown;

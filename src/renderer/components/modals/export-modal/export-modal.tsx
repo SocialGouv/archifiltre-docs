@@ -8,8 +8,8 @@ import { ModalHeader } from "../../modals/modal-header";
 import { ExportModalContentContainer as ExportModalContent } from "./export-modal-content-container";
 
 export interface ExportModalProps {
-  isModalOpen: boolean;
   closeModal: () => void;
+  isModalOpen: boolean;
 }
 
 export const ExportModal: React.FC<ExportModalProps> = ({

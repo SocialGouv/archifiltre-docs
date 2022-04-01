@@ -13,14 +13,14 @@ type NumberMap<T extends string = string> = Record<T, number>;
 interface TableData {
   fileType: FileType;
   nbFiles: number;
-  size: number;
   percentage: number;
+  size: number;
 }
 
 export interface DuplicatesTableProps {
-  fileTypesCount: NumberMap<FileType>;
-  fileSizesCount: NumberMap;
   filePercentagesCount: NumberMap;
+  fileSizesCount: NumberMap;
+  fileTypesCount: NumberMap<FileType>;
 }
 
 export const DuplicatesTable: React.FC<DuplicatesTableProps> = ({

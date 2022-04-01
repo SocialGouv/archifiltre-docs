@@ -69,8 +69,8 @@ describe("make-array-export-config", () => {
         rowData,
         config,
       }: {
-        rowData: typeof rowDataSample;
         config: typeof rowConfig;
+        rowData: typeof rowDataSample;
       }) =>
       ({
         columnLabel,

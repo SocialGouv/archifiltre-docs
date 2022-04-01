@@ -50,10 +50,10 @@ const onDocumentationClick = () => {
 
 export interface StartScreenSidebarProps {
   hasPreviousSession: boolean;
-  reloadPreviousSession: () => void;
-  openModal: () => void;
-  loadPath: (path: string) => void;
   isLoading: boolean;
+  loadPath: (path: string) => void;
+  openModal: () => void;
+  reloadPreviousSession: () => void;
 }
 
 const useStyles = makeStyles({

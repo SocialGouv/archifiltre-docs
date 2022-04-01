@@ -1,10 +1,10 @@
 import type { FilesAndFolders } from "@renderer/reducers/files-and-folders/files-and-folders-types";
 
 interface CreateFilesAndFoldersOptions {
-  id: string;
-  file_last_modified?: number;
   children?: string[];
+  file_last_modified?: number;
   file_size?: number;
+  id: string;
   name?: string;
   virtualPath?: string;
 }

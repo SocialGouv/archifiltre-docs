@@ -30,11 +30,11 @@ const StyledPaper = styled(Paper)`
 `;
 
 export interface SearchModalProps {
-  exportToCsv: (data: FilesAndFolders[]) => void;
-  isModalOpen: boolean;
   closeModal: () => void;
   columns: Column<ElementWithToDelete>[];
+  exportToCsv: (data: FilesAndFolders[]) => void;
   filesAndFolders: ElementWithToDelete[];
+  isModalOpen: boolean;
   tags: TagMap;
   toDelete: string[];
 }

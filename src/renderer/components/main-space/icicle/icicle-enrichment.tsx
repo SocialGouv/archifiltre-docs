@@ -26,16 +26,16 @@ export const ENRICHMENT_COLORS: Record<EnrichmentTypes, RgbFunc> = {
 };
 
 export interface IcicleEnrichmentProps {
-  ffId: string;
   dims: Dims;
-  hasTag: boolean;
-  isToDelete: boolean;
+  ffId: string;
   hasAlias: boolean;
   hasComment: boolean;
-  opacity: OPACITY;
+  hasTag: boolean;
+  isToDelete: boolean;
   onClick: IcicleMouseHandler;
   onDoubleClick: IcicleMouseHandler;
   onMouseOver: IcicleMouseHandler;
+  opacity: OPACITY;
 }
 
 export const IcicleEnrichment: React.FC<IcicleEnrichmentProps> = ({

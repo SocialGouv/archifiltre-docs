@@ -22,8 +22,8 @@ import { MessageTypes } from "./types";
 const NB_CPUS = cpus().length - 1 > 0 ? cpus().length - 1 : 1;
 
 interface InitWorkersData {
-  onMessage?: (worker: unknown, data: unknown) => void;
   initialValues?: unknown;
+  onMessage?: (worker: unknown, data: unknown) => void;
   workerCount?: number;
 }
 
@@ -223,8 +223,8 @@ export interface BatchProcessResult<T> {
 }
 
 export interface BatchProcessError {
-  param: string;
   error: unknown;
+  param: string;
 }
 
 type AggregatedResult<T> = Record<string, T>;

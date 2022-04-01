@@ -16,20 +16,20 @@ import type { ExportTypesMap } from "../export-modal/export-options";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export enum ExportType {
-  EXCEL = "EXCEL",
+  AUDIT = "AUDIT",
   CSV = "CSV",
   CSV_WITH_HASHES = "CSV_WITH_HASHES",
-  TREE_CSV = "TREE_CSV",
-  AUDIT = "AUDIT",
-  RESIP = "RESIP",
-  METS = "METS",
   DELETION_SCRIPT = "DELETION",
+  EXCEL = "EXCEL",
+  METS = "METS",
+  RESIP = "RESIP",
+  TREE_CSV = "TREE_CSV",
 }
 
 export enum ExportCategory {
-  RECORDS_INVENTORY = "RECORDS_INVENTORY",
   AUDIT = "AUDIT",
   EXCHANGE_WITH_ERMS = "EXCHANGE_WITH_ERMS",
+  RECORDS_INVENTORY = "RECORDS_INVENTORY",
   UTILITIES = "UTILITIES",
 }
 /* eslint-enable @typescript-eslint/naming-convention */
@@ -39,13 +39,13 @@ export interface IsActiveOptions {
 }
 
 interface ExportConfig {
-  isActive: boolean | ((options: IsActiveOptions) => boolean);
-  label: string;
-  exportFunction: (exportPath: string) => ArchifiltreDocsThunkAction;
-  disabledExplanation?: string;
-  exportPath: (originalPath: string, sessionName: string) => string;
-  isFilePickerDisabled?: boolean;
   category: ExportCategory;
+  disabledExplanation?: string;
+  exportFunction: (exportPath: string) => ArchifiltreDocsThunkAction;
+  exportPath: (originalPath: string, sessionName: string) => string;
+  isActive: boolean | ((options: IsActiveOptions) => boolean);
+  isFilePickerDisabled?: boolean;
+  label: string;
   trackingTitle: ActionTitle;
 }
 

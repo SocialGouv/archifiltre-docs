@@ -106,8 +106,8 @@ export const tableContentToArray = <
 
 interface ExportTableToCsvOptions {
   defaultFilePath: string;
-  notificationTitle: string;
   notificationMessage: string;
+  notificationTitle: string;
 }
 
 export const exportTableToCsvFile = async <

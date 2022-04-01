@@ -1,10 +1,10 @@
 import React, { memo } from "react";
 
 export interface MinimapBracketProps {
+  viewportHeight: number;
+  viewportWidth: number;
   zoomOffset: number;
   zoomRatio: number;
-  viewportWidth: number;
-  viewportHeight: number;
 }
 
 const _MinimapBracket: React.FC<MinimapBracketProps> = ({

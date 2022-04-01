@@ -41,10 +41,10 @@ const iconSizes: { [size in IconSize]: string } = {
 };
 
 export interface IconProps {
-  icon: IconComponent;
   color: string;
-  size?: IconSize;
+  icon: IconComponent;
   onClick?: () => void;
+  size?: IconSize;
 }
 
 /** Displays an icon */

@@ -10,10 +10,10 @@ import { reportError } from "../../logging/reporter";
 import { ContactUs } from "./contact-us";
 
 export interface ErrorBoundaryProps {
-  t: TFunction;
+  exportToJson: ExportToJson;
   originalPath: string;
   sessionName: string;
-  exportToJson: ExportToJson;
+  t: TFunction;
 }
 
 export interface ErrorBoundaryState {

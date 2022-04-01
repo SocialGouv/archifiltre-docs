@@ -7,8 +7,8 @@ import { EditableField } from "../../../common/editable-field";
 import { NoElementSelectedPlaceholder } from "../enrichment/element-characteristics/no-element-selected-placeholder";
 
 export interface CommentCellProps {
-  isActive: boolean;
   comment: string;
+  isActive: boolean;
   updateComment: (newComment: string) => void;
 }
 

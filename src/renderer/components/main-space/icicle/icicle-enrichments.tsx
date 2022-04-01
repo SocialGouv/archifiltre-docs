@@ -15,13 +15,13 @@ import type { IcicleMouseHandler } from "./icicle-main";
 export interface IcicleEnrichmentsProps {
   aliases: AliasMap;
   comments: CommentsMap;
-  tags: TagMap;
+  dims: DimsMap;
   elementsToDelete: string[];
   highlightedTagId: string;
-  dims: DimsMap;
   onClick: IcicleMouseHandler;
   onDoubleClick: IcicleMouseHandler;
   onMouseOver: IcicleMouseHandler;
+  tags: TagMap;
 }
 
 /**

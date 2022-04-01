@@ -27,16 +27,16 @@ export const RESET_OVERRIDE_LAST_MODIFIED =
   "FILES_AND_FOLDERS/RESET_OVERRIDE_LAST_MODIFIED";
 
 export interface FilesAndFolders {
-  id: string;
-  name: string;
   children: string[];
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  file_size: number;
+  depth?: number;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   file_last_modified: number;
-  virtualPath: string;
-  depth?: number;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  file_size: number;
+  id: string;
   maxLastModified?: number;
+  name: string;
+  virtualPath: string;
 }
 
 export interface ElementWithToDelete extends FilesAndFolders {
@@ -54,60 +54,60 @@ export type VirtualPathToIdMap = Record<string, string>;
 export type LastModifiedMap = Record<string, number>;
 
 export interface FilesAndFoldersState {
-  filesAndFolders: FilesAndFoldersMap;
   aliases: AliasMap;
   comments: CommentsMap;
   elementsToDelete: string[];
   erroredFilesAndFolders: ArchifiltreDocsError[];
-  virtualPathToId: VirtualPathToIdMap;
+  filesAndFolders: FilesAndFoldersMap;
   overrideLastModified: LastModifiedMap;
+  virtualPathToId: VirtualPathToIdMap;
 }
 
 interface InitializeFilesAndFoldersAction extends Action {
-  type: typeof INITIALIZE_FILES_AND_FOLDERS;
   filesAndFolders: FilesAndFoldersMap;
+  type: typeof INITIALIZE_FILES_AND_FOLDERS;
 }
 
 interface RemoveChildAction extends Action {
-  type: typeof REMOVE_CHILD;
   childId: string;
   parentId: string;
+  type: typeof REMOVE_CHILD;
 }
 
 interface AddChildAction extends Action {
-  type: typeof ADD_CHILD;
   childId: string;
   parentId: string;
+  type: typeof ADD_CHILD;
 }
 
 interface SetFilesAndFoldersAliasAction extends Action {
-  type: typeof SET_FILES_AND_FOLDERS_ALIAS;
   aliases: AliasMap;
+  type: typeof SET_FILES_AND_FOLDERS_ALIAS;
 }
 
 interface AddCommentsOnFilesAndFoldersAction extends Action {
-  type: typeof ADD_COMMENTS_ON_FILES_AND_FOLDERS;
   comments: CommentsMap;
+  type: typeof ADD_COMMENTS_ON_FILES_AND_FOLDERS;
 }
 
 interface MarkAsToDelete extends Action {
-  type: typeof MARK_AS_TO_DELETE;
   filesAndFoldersId: string;
+  type: typeof MARK_AS_TO_DELETE;
 }
 
 interface UnmarkAsToDelete extends Action {
-  type: typeof UNMARK_AS_TO_DELETE;
   filesAndFoldersId: string;
+  type: typeof UNMARK_AS_TO_DELETE;
 }
 
 interface MarkElementsToDelete extends Action {
-  type: typeof MARK_ELEMENTS_TO_DELETE;
   elementIds: string[];
+  type: typeof MARK_ELEMENTS_TO_DELETE;
 }
 
 interface UnmarkElementsToDelete extends Action {
-  type: typeof UNMARK_ELEMENTS_TO_DELETE;
   elementIds: string[];
+  type: typeof UNMARK_ELEMENTS_TO_DELETE;
 }
 
 interface InitVirtualPathToIdMap extends Action {
@@ -116,8 +116,8 @@ interface InitVirtualPathToIdMap extends Action {
 }
 
 interface RegisterErroredElements extends Action {
-  type: typeof REGISTER_ERRORED_ELEMENTS;
   elements: ArchifiltreDocsError[];
+  type: typeof REGISTER_ERRORED_ELEMENTS;
 }
 
 interface ResetErroredElements extends Action {
@@ -125,14 +125,14 @@ interface ResetErroredElements extends Action {
 }
 
 interface OverrideLastModified extends Action {
-  type: typeof OVERRIDE_LAST_MODIFIED;
-  lastModified: number;
   elementId: string;
+  lastModified: number;
+  type: typeof OVERRIDE_LAST_MODIFIED;
 }
 
 interface InitOverrideLastModified extends Action {
-  type: typeof INIT_OVERRIDE_LAST_MODIFIED;
   overrideLastModified: LastModifiedMap;
+  type: typeof INIT_OVERRIDE_LAST_MODIFIED;
 }
 
 interface ResetOverrideLastModified extends Action {

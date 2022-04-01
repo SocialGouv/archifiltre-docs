@@ -12,11 +12,11 @@ import { exportConfig, ExportType } from "./export-config";
 import type { ExportTypesMap } from "./export-options";
 
 export interface ExportControlsProps {
+  activeExports: ExportTypesMap<boolean>;
+  enabledExports: ExportTypesMap<boolean>;
+  exportPaths: ExportTypesMap<string>;
   setActiveExportValue: (exportType: ExportType, value: boolean) => void;
   setExportsPathsValue: (exportType: ExportType, value: string) => void;
-  activeExports: ExportTypesMap<boolean>;
-  exportPaths: ExportTypesMap<string>;
-  enabledExports: ExportTypesMap<boolean>;
 }
 
 export const ExportControls: React.FC<ExportControlsProps> = ({

@@ -15,74 +15,74 @@ export const DISMISS_ALL_COMPLETE = "LOADING_INFO/DISMISS_ALL_COMPLETE";
 
 export enum LoadingInfoTypes {
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  HASH_COMPUTING = "hash-computing",
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   EXPORT = "export",
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  HASH_COMPUTING = "hash-computing",
 }
 
 export interface LoadingInfo {
-  id: string;
-  type: LoadingInfoTypes;
-  progress: number;
+  exportedPath?: string;
   goal: number;
+  id: string;
   label: string;
   loadedLabel: string;
-  exportedPath?: string;
+  progress: number;
+  type: LoadingInfoTypes;
 }
 
 export type LoadingInfoMap = Record<string, LoadingInfo>;
 
 export interface LoadingInfoState {
-  loadingInfo: LoadingInfoMap;
-  loading: string[];
   complete: string[];
   dismissed: string[];
   errors: ArchifiltreDocsError[];
+  loading: string[];
+  loadingInfo: LoadingInfoMap;
 }
 
 interface StartLoadingAction {
-  type: typeof START_LOADING;
-  id: string;
-  loadingType: LoadingInfoTypes;
+  exportedPath?: string;
   goal: number;
+  id: string;
   label: string;
   loadedLabel: string;
-  exportedPath?: string;
+  loadingType: LoadingInfoTypes;
+  type: typeof START_LOADING;
 }
 
 interface UpdateLoadingAction {
-  type: typeof UPDATE_LOADING;
+  goal?: number;
   id: string;
   progress?: number;
-  goal?: number;
+  type: typeof UPDATE_LOADING;
 }
 
 interface ProgressLoadingAction {
-  type: typeof PROGRESS_LOADING;
   id: string;
   progress: number;
+  type: typeof PROGRESS_LOADING;
 }
 
 interface CompleteLoadingAction {
-  type: typeof COMPLETE_LOADING;
   id: string;
+  type: typeof COMPLETE_LOADING;
 }
 
 interface AddExportedPathAction {
-  type: typeof ADD_EXPORTED_PATH;
-  id: string;
   exportedPath: string;
+  id: string;
+  type: typeof ADD_EXPORTED_PATH;
 }
 
 interface RegisterErrorAction {
-  type: typeof REGISTER_ERROR;
   error: ArchifiltreDocsError;
+  type: typeof REGISTER_ERROR;
 }
 
 interface ReplaceErrorsAction {
-  type: typeof REPLACE_ERRORS;
-  errors: ArchifiltreDocsError[];
   errorType: ArchifiltreDocsErrorType;
+  errors: ArchifiltreDocsError[];
+  type: typeof REPLACE_ERRORS;
 }
 
 interface ResetLoadingAction {

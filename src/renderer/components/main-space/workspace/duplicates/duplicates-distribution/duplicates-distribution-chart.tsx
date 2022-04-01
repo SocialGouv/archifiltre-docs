@@ -19,8 +19,8 @@ const ColoredText = styled.span<{ color: string }>`
 `;
 
 export interface DuplicatesDistributionChartProps {
-  fileTypesCount: FileTypeMap<number>;
   fileSizesCount: Record<FileType, number>;
+  fileTypesCount: FileTypeMap<number>;
 }
 
 export const DuplicatesDistributionChart: React.FC<

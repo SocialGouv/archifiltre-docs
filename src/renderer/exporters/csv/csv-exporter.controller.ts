@@ -25,10 +25,10 @@ import { stringifyCsvExporterOptionsToStream } from "./csv-exporter-serializer";
 export interface GenerateCsvExportOptions {
   aliases: AliasMap;
   comments: CommentsMap;
+  elementsToDelete?: string[];
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
   hashes?: HashesMap;
-  elementsToDelete?: string[];
   tags: TagMap;
 }
 

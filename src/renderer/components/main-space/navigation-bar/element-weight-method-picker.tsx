@@ -6,8 +6,8 @@ import { ElementWeightMethod } from "../../../reducers/icicle-sort-method/icicle
 import { OptionsPicker } from "./options-picker";
 
 export interface ElementWeightMethodPickerProps {
-  setElementWeightMethod: (method: ElementWeightMethod) => void;
   elementWeightMethod: ElementWeightMethod;
+  setElementWeightMethod: (method: ElementWeightMethod) => void;
 }
 
 export const ElementWeightMethodPicker: React.FC<

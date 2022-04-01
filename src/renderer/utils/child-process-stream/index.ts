@@ -24,9 +24,9 @@ export const sendStringToStream = (stream: Writable, data: string): void => {
 };
 
 interface StringifyObjectToStreamOptions<TData, TSerializedData> {
-  keyExtractor: (data: TData) => string[];
   dataExtractor: (data: TData, key: string) => TSerializedData;
   dataSerializer: (data: TSerializedData) => Uint8Array;
+  keyExtractor: (data: TData) => string[];
 }
 
 /**
@@ -105,12 +105,12 @@ class MessageDeserializer extends Transform {
 }
 
 interface ParseSerializedDataFromStreamOptions<TOutputData, TDeserializedData> {
-  withJsonInitializing?: boolean;
   deserializer: (data: Uint8Array) => TDeserializedData;
   merger: (
     outputData: TOutputData,
     deserializedData: TDeserializedData
   ) => void;
+  withJsonInitializing?: boolean;
 }
 
 /**

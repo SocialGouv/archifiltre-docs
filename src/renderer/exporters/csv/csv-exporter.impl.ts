@@ -18,9 +18,9 @@ import { MessageTypes } from "../../utils/batch-process/types";
 export interface CsvExporterData {
   aliases: AliasMap;
   comments: CommentsMap;
+  elementsToDelete: string[];
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
-  elementsToDelete: string[];
   hashes?: HashesMap;
   tags: TagMap;
 }

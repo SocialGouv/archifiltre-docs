@@ -21,9 +21,9 @@ export interface NavigationBarProps {
   elementWeightMethod: ElementWeightMethod;
   icicleColorMode: IcicleColorMode;
   icicleSortMethod: IcicleSortMethod;
-  setIcicleSortMethod: (sortMethod: IcicleSortMethod) => void;
   setElementWeightMethod: (method: ElementWeightMethod) => void;
   setIcicleColorMode: (method: IcicleColorMode) => void;
+  setIcicleSortMethod: (sortMethod: IcicleSortMethod) => void;
 }
 
 export const NavigationBar: React.FC<NavigationBarProps> = ({

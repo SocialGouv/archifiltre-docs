@@ -4,8 +4,8 @@ import type { ReactNode } from "react";
 import React from "react";
 
 export interface BoundaryDateProps {
-  title: ReactNode;
   content: string;
+  title: ReactNode;
 }
 
 export const BoundaryDate: React.FC<BoundaryDateProps> = ({

@@ -28,16 +28,16 @@ import { TableDefaultRow } from "./table-default-row";
 import type { Column, RowIdAccessor, RowRenderer } from "./table-types";
 
 export interface TableProps<T> {
-  data: T[];
-  columns: Column<T>[];
-  rowId?: RowIdAccessor<T>;
-  isPaginatorDisplayed?: boolean;
-  isDense?: boolean;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   RowRendererComp?: RowRenderer<T>;
-  stickyHeader?: boolean;
-  page?: number;
+  columns: Column<T>[];
+  data: T[];
+  isDense?: boolean;
+  isPaginatorDisplayed?: boolean;
   onPageChange?: (page: number) => void;
+  page?: number;
+  rowId?: RowIdAccessor<T>;
+  stickyHeader?: boolean;
 }
 
 const _Table = <T,>({

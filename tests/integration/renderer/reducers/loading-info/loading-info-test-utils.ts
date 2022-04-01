@@ -2,12 +2,12 @@ import type { LoadingInfo } from "@renderer/reducers/loading-info/loading-info-t
 import { LoadingInfoTypes } from "@renderer/reducers/loading-info/loading-info-types";
 
 interface CreateLoadingInfoParams {
-  id: string;
-  type?: LoadingInfoTypes;
-  progress?: number;
   goal?: number;
+  id: string;
   label?: string;
   loadedLabel?: string;
+  progress?: number;
+  type?: LoadingInfoTypes;
 }
 
 const DEFAULT_PROGRESS = 10;

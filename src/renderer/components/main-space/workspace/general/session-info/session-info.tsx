@@ -7,14 +7,14 @@ import { SessionElementsDetails } from "./session-elements-details";
 import { WorkspaceBoundaryDates } from "./workspace-boundary-dates";
 
 export interface SessionInfoProps {
-  sessionName: string;
-  onChangeSessionName: (name: string) => void;
-  nbFolders: number;
+  firstLevelName: string;
   nbFiles: number;
-  volume: number;
+  nbFolders: number;
   newestFileTimestamp: number;
   oldestFileTimestamp: number;
-  firstLevelName: string;
+  onChangeSessionName: (name: string) => void;
+  sessionName: string;
+  volume: number;
 }
 
 export const SessionInfo: React.FC<SessionInfoProps> = ({

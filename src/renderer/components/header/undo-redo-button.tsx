@@ -7,11 +7,11 @@ import { FaRedo, FaUndo } from "react-icons/fa";
 import { useStyles } from "../../hooks/use-styles";
 
 export interface UndoRedoButtonProps {
-  isVisible: boolean;
-  isUndo?: boolean;
-  undo: () => void;
-  redo: () => void;
   isActive: boolean;
+  isUndo?: boolean;
+  isVisible: boolean;
+  redo: () => void;
+  undo: () => void;
 }
 
 export const UndoRedoButton: React.FC<UndoRedoButtonProps> = ({

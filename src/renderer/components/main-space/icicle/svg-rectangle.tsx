@@ -1,10 +1,12 @@
 import React, { memo } from "react";
 
 export interface SvgRectangleProps {
-  x: NonNullable<React.SVGAttributes<SVGRectElement>["x"]>;
-  y: NonNullable<React.SVGAttributes<SVGRectElement>["y"]>;
+  cursor: NonNullable<React.CSSProperties["cursor"]>;
   dx: NonNullable<React.SVGAttributes<SVGRectElement>["width"]>;
   dy: NonNullable<React.SVGAttributes<SVGRectElement>["height"]>;
+  elementId: string;
+  fill: NonNullable<React.CSSProperties["fill"]>;
+  ignorePointerEvents?: boolean;
   onClickHandler: NonNullable<React.SVGAttributes<SVGRectElement>["onClick"]>;
   onDoubleClickHandler: NonNullable<
     React.SVGAttributes<SVGRectElement>["onDoubleClick"]
@@ -13,13 +15,11 @@ export interface SvgRectangleProps {
     React.SVGAttributes<SVGRectElement>["onFocus"] &
       React.SVGAttributes<SVGRectElement>["onMouseOver"]
   >;
-  fill: NonNullable<React.CSSProperties["fill"]>;
   opacity: NonNullable<React.CSSProperties["opacity"]>;
   stroke: NonNullable<React.CSSProperties["stroke"]>;
-  cursor: NonNullable<React.CSSProperties["cursor"]>;
-  elementId: string;
-  ignorePointerEvents?: boolean;
   strokeWidth?: React.CSSProperties["strokeWidth"];
+  x: NonNullable<React.SVGAttributes<SVGRectElement>["x"]>;
+  y: NonNullable<React.SVGAttributes<SVGRectElement>["y"]>;
 }
 const _SvgRectangle: React.FC<SvgRectangleProps> = ({
   x,

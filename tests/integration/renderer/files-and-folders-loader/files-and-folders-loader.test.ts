@@ -18,11 +18,11 @@ import { sortBy } from "lodash";
 import { Readable } from "stream";
 
 interface FsMockElement {
-  isDirectory: boolean;
   children: string[];
+  isDirectory: boolean;
+  isHidden: boolean;
   mtimeMs: number;
   size: number;
-  isHidden: boolean;
 }
 
 type FsMockElementMap = Record<string, FsMockElement>;

@@ -1,10 +1,10 @@
 type Headers = Record<string, string>;
 
 interface RequestInput {
+  body?: BodyInit | Document;
+  headers?: Headers;
   method?: string;
   url: string;
-  headers?: Headers;
-  body?: BodyInit | Document;
 }
 
 export const request = async <T>({

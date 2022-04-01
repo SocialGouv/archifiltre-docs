@@ -21,14 +21,14 @@ import type { TagMap } from "../../../../../reducers/tags/tags-types";
 import { AllTagsItem as TagListItem } from "./all-tags-item";
 
 export interface AllTagsProps {
-  tags: TagMap;
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
-  totalVolume: number;
-  filesToDeleteSize: number;
   filesToDeleteCount: number;
+  filesToDeleteSize: number;
   onDeleteTag: (tagId: string) => () => void;
   onRenameTag: (tagId: string) => (newName: string) => void;
+  tags: TagMap;
+  totalVolume: number;
 }
 
 const AllTags: React.FC<AllTagsProps> = ({
@@ -91,9 +91,9 @@ const AllTags: React.FC<AllTagsProps> = ({
 };
 
 export interface AllTagsApiToPropsProps {
-  tags: TagMap;
-  renameTag: (tagId: string, name: string) => void;
   deleteTag: (tagId: string) => void;
+  renameTag: (tagId: string, name: string) => void;
+  tags: TagMap;
 }
 
 export const AllTagsApiToProps: React.FC<AllTagsApiToPropsProps> = ({

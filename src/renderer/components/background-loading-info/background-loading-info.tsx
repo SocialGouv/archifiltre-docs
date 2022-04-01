@@ -34,9 +34,9 @@ const ToggleArrow = styled(IconButton)<ToggleArrowProps>(({ collapsed }) => ({
 }));
 
 export interface BackgroundLoadingInfoProps {
-  loadingItems: LoadingInfo[];
-  isLoading: boolean;
   dismissAll: () => void;
+  isLoading: boolean;
+  loadingItems: LoadingInfo[];
 }
 
 const _BackgroundLoadingInfo: React.FC<BackgroundLoadingInfoProps> = ({

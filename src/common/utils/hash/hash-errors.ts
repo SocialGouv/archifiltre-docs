@@ -22,19 +22,19 @@ export const unhandledFileError = (
 });
 
 export interface FileNotFoundError {
-  type: typeof FILE_NOT_FOUND;
   path: string;
+  type: typeof FILE_NOT_FOUND;
 }
 
 export interface AccessDeniedError {
-  type: typeof ACCESS_DENIED;
   path: string;
+  type: typeof ACCESS_DENIED;
 }
 
 export interface UnhandledError {
-  type: typeof UNHANDLED_FILE_ERROR;
   path: string;
   reason: string;
+  type: typeof UNHANDLED_FILE_ERROR;
 }
 
 export type HashComputingError =

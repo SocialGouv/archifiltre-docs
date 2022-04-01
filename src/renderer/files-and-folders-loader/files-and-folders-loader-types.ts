@@ -94,20 +94,20 @@ export type JsonFileInfo = PartialFileSystem &
   WithVirtualPathToIdMap;
 
 interface ResultData {
-  status: FileSystemLoadingStep;
   count: number;
+  status: FileSystemLoadingStep;
   totalCount?: number;
 }
 
 export interface ErrorData {
-  status: FileSystemLoadingStep;
   error: WorkerError;
+  status: FileSystemLoadingStep;
 }
 
 export interface FileSystemReporters {
-  reportResult: (result: ResultData) => void;
   reportError: (message: ErrorData) => void;
   reportFatal: (message: unknown) => void;
+  reportResult: (result: ResultData) => void;
 }
 
 export type FilesAndFoldersLoader = (
@@ -124,8 +124,8 @@ export type WithErrorHook<T = SimpleObject> = T & {
 
 export type FileSystemLoadingHooks = WithErrorHook &
   WithResultHook & {
-    onStart: () => void;
     onComplete: () => void;
+    onStart: () => void;
   };
 
 export type FileSystemLoadingHooksCreator = (

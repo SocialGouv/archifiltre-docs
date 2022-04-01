@@ -77,7 +77,7 @@ const getNewFirstModifiedDateForFolder = ({
     ? ""
     : formatOutputDate(minLastModified);
 
-const getNewPath = ({ virtualPath, id }: { virtualPath: string; id: string }) =>
+const getNewPath = ({ virtualPath, id }: { id: string; virtualPath: string }) =>
   virtualPath !== id ? formatPathForUserSystem(virtualPath) : "";
 
 const getAlias = ({ aliases, id }: { aliases: AliasMap; id: keyof AliasMap }) =>
@@ -106,11 +106,11 @@ const getFileCount = compose(
   property<{ nbChildrenFiles: number }, "nbChildrenFiles">("nbChildrenFiles")
 );
 
-const getFileHash = ({ id, hashes }: { id: string; hashes: HashesMap }) =>
+const getFileHash = ({ id, hashes }: { hashes: HashesMap; id: string }) =>
   hashes[id] ?? "";
 
 const getHasDuplicateText =
-  ({ yes, no }: { yes: string; no: string }) =>
+  ({ yes, no }: { no: string; yes: string }) =>
   ({ hashes, ...currentFf }: FilesAndFolders & { hashes: HashesMap }) =>
     hasDuplicate(hashes, currentFf) ? yes : no;
 
@@ -132,7 +132,7 @@ const getToDeleteText = (toDeleteText: string) =>
       idsToDelete.includes(id)
   );
 
-const getTagText = ({ name, ffIds }: { name: string; ffIds: string[] }) =>
+const getTagText = ({ name, ffIds }: { ffIds: string[]; name: string }) =>
   compose(
     (isTaggged) => (isTaggged ? name : ""),
     ({ id }: { id: string }) =>
@@ -148,9 +148,9 @@ type AccessorParams = FilesAndFolders &
 
 type Accessor = (params: AccessorParams) => string;
 export interface CellConfig {
+  accessor: Accessor;
   id: string;
   title: string;
-  accessor: Accessor;
 }
 
 const makeCellConfigCreator =

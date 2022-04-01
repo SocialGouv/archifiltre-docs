@@ -11,16 +11,16 @@ import { ModalHeader } from "../modal-header";
 import { ErrorsTable } from "./errors-table";
 
 interface ModalAction {
+  action: (errors: ArchifiltreDocsError[]) => void;
   id: string;
   title: string;
-  action: (errors: ArchifiltreDocsError[]) => void;
 }
 
 export interface ErrorsModalProps {
-  isModalOpen: boolean;
+  actions?: ModalAction[];
   closeModal: () => void;
   errors: ArchifiltreDocsError[];
-  actions?: ModalAction[];
+  isModalOpen: boolean;
 }
 
 export const ErrorsModal: React.FC<ErrorsModalProps> = ({

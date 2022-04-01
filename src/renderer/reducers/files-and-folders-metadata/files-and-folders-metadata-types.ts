@@ -2,18 +2,18 @@ export const INIT_FILES_AND_FOLDERS_METADATA =
   "FILES_AND_FOLDERS_METADATA/INIT";
 
 export interface FilesAndFoldersMetadata {
-  maxLastModified: number;
-  minLastModified: number;
-  medianLastModified: number;
   averageLastModified: number;
-  initialMinLastModified: number;
-  initialMedianLastModified: number;
-  initialMaxLastModified: number;
   childrenTotalSize: number;
+  initialMaxLastModified: number;
+  initialMedianLastModified: number;
+  initialMinLastModified: number;
+  maxLastModified: number;
+  medianLastModified: number;
+  minLastModified: number;
   nbChildrenFiles: number;
-  sortBySizeIndex: number[];
-  sortByDateIndex: number[];
   sortAlphaNumericallyIndex: number[];
+  sortByDateIndex: number[];
+  sortBySizeIndex: number[];
 }
 
 export type FilesAndFoldersMetadataMap = Record<
@@ -26,8 +26,8 @@ export interface FilesAndFoldersMetadataState {
 }
 
 interface InitFilesAndFoldersMetadataAction {
-  type: typeof INIT_FILES_AND_FOLDERS_METADATA;
   metadata: FilesAndFoldersMetadataMap;
+  type: typeof INIT_FILES_AND_FOLDERS_METADATA;
 }
 
 export type FilesAndFoldersMetadataAction = InitFilesAndFoldersMetadataAction;

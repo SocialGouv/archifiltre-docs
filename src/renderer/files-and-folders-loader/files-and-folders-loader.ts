@@ -157,8 +157,8 @@ export const asyncLoadFilesAndFoldersFromFileSystem = async (
   );
 
 interface LoadFilesAndFoldersFromExportFileContentResult {
-  hashes: HashesMap;
   files: FilesElementInfo[];
+  hashes: HashesMap;
   rootPath: string;
 }
 
@@ -180,10 +180,10 @@ export const loadFilesAndFoldersFromExportFile = async (
 const latestVersion = "windows-1.0.1";
 
 interface LoadedLine {
+  fileHash: string;
+  fileLastModified: string;
   filePath: string;
   fileSize: string;
-  fileLastModified: string;
-  fileHash: string;
 }
 type LineLoader = (parsedLine: string[]) => LoadedLine;
 

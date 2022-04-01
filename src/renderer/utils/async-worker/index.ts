@@ -7,9 +7,9 @@ import type { WithLanguage } from "../language/types";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export enum WorkerEventType {
-  MESSAGE = "message",
-  EXIT = "exit",
   ERROR = "error",
+  EXIT = "exit",
+  MESSAGE = "message",
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 
@@ -28,11 +28,11 @@ export interface AsyncWorker<TEventType = AsyncWorkerEventType> {
     eventType: TEventType,
     listener: TypedEventListener
   ) => void;
+  postMessage: (message: WorkerMessage) => void;
   removeEventListener: (
     eventType: TEventType,
     listener: TypedEventListener
   ) => void;
-  postMessage: (message: WorkerMessage) => void;
 }
 
 export type ProcessControllerAsyncWorker =
@@ -52,8 +52,8 @@ export type WorkerMessageHandler = (
 ) => Promise<void> | void;
 
 interface SetupChildWorkerListenersOptions {
-  onInitialize?: WorkerMessageHandler;
   onData?: WorkerMessageHandler;
+  onInitialize?: WorkerMessageHandler;
 }
 
 export const makeChildWorkerMessageCallback =

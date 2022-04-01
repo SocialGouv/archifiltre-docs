@@ -10,16 +10,16 @@ import { FaCheck } from "react-icons/fa";
 type OptionValue = number | string;
 
 interface Option<TValueType extends OptionValue> {
-  value: TValueType;
   label: string;
+  value: TValueType;
 }
 
 interface OptionsPickerProps<TValueType extends OptionValue> {
+  icon?: ReactNode;
+  options: Option<TValueType>[];
+  setValue: (value: TValueType) => void;
   title?: string;
   value: TValueType;
-  setValue: (value: TValueType) => void;
-  options: Option<TValueType>[];
-  icon?: ReactNode;
 }
 
 export const OptionsPicker = <TValueType extends OptionValue>({

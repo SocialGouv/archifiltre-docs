@@ -5,13 +5,13 @@ import { useZoomTracker } from "../../../hooks/use-zoom-tracker";
 import { ZoomDirection, zoomReducer } from "../../../utils/zoom";
 
 interface ZoomState {
+  offset: number;
+  ratio: number;
+  resetZoom: () => void;
+  setDefaultMousePosition: (mousePosition: number | null) => void;
+  setZoom: (offset: number, ratio: number) => void;
   zoomIn: (mousePosition: number | null, zoomSpeed: number) => void;
   zoomOut: (mousePosition: number | null, zoomSpeed: number) => void;
-  setZoom: (offset: number, ratio: number) => void;
-  setDefaultMousePosition: (mousePosition: number | null) => void;
-  resetZoom: () => void;
-  ratio: number;
-  offset: number;
 }
 
 const zoomState: ZoomState = {

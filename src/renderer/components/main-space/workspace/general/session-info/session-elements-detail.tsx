@@ -3,8 +3,8 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 
 export interface SessionElementsDetailProps {
-  title: string;
   content: number | string;
+  title: string;
 }
 
 export const SessionElementsDetail: React.FC<SessionElementsDetailProps> = ({

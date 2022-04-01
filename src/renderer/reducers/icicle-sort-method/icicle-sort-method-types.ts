@@ -6,15 +6,15 @@ export const SET_ELEMENT_WEIGHT_METHOD =
 export const SET_ICICLE_COLOR_MODE = "WORKSPACE_METADATA/SET_ICICLE_COLOR_MODE";
 
 export interface IcicleSortMethodState {
-  icicleSortMethod: IcicleSortMethod;
   elementWeightMethod: ElementWeightMethod;
   icicleColorMode: IcicleColorMode;
+  icicleSortMethod: IcicleSortMethod;
 }
 
 export enum IcicleSortMethod {
-  SORT_BY_SIZE = "bySize",
-  SORT_BY_DATE = "byDate",
   SORT_ALPHA_NUMERICALLY = "alphaNumeric",
+  SORT_BY_DATE = "byDate",
+  SORT_BY_SIZE = "bySize",
 }
 
 export enum ElementWeightMethod {
@@ -28,8 +28,8 @@ export enum IcicleColorMode {
 }
 
 interface SetIciclesSortMethod {
-  type: typeof SET_ICICLE_SORT_METHOD;
   sortMethod: IcicleSortMethod;
+  type: typeof SET_ICICLE_SORT_METHOD;
 }
 
 interface SetElementWeightMethod {

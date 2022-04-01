@@ -5,17 +5,12 @@ import { IcicleRect } from "./icicle-rect";
 import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 
 export interface IcicleRecursiveProps {
-  id: string;
-  x: number;
-  width: number;
-  y: number;
-  height: number;
+  fillColor: FillColor;
   getChildrenIdFromId: (id: string) => string[];
   getWidthFromId: (id: string) => number;
+  height: number;
+  id: string;
   normalizeWidth: (width: number[]) => number[];
-  trueFHeight: () => number;
-  shouldRenderChild: (xPosition: number, elementWidth: number) => boolean;
-  fillColor: FillColor;
   onClickHandler: IcicleMouseActionHandler;
   onDoubleClickHandler: IcicleMouseActionHandler;
   onMouseOverHandler: IcicleMouseActionHandler;
@@ -26,6 +21,11 @@ export interface IcicleRecursiveProps {
     dy: number,
     id: string
   ) => void;
+  shouldRenderChild: (xPosition: number, elementWidth: number) => boolean;
+  trueFHeight: () => number;
+  width: number;
+  x: number;
+  y: number;
 }
 
 const _IcicleRecursive: React.FC<IcicleRecursiveProps> = ({

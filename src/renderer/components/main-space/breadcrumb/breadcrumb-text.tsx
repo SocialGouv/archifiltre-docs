@@ -5,8 +5,8 @@ import React from "react";
 import { BreadcrumbTextTooltipContent } from "./breadcrumb-text-tooltip-content";
 
 export interface BreadcrumbTextProps {
-  name: string;
   alias: string | null;
+  name: string;
 }
 
 export const BreadcrumbText: React.FC<BreadcrumbTextProps> = ({

@@ -32,34 +32,34 @@ const BreadcrumbWrapper = styled.div<BreadcrumbWrapperProps>`
 `;
 
 export interface BreadcrumbsProps {
+  aliases: AliasMap;
   depth: number;
-  lockedSequence: string[];
-  hoveredSequence: string[];
   fillColor: FillColor;
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
-  aliases: AliasMap;
-  originalPath: string;
+  hoveredSequence: string[];
+  lockedSequence: string[];
   onBreadcrumbClick: IcicleMouseActionHandler;
+  originalPath: string;
 }
 
 interface MakeFillerArgs {
-  id: string;
-  name: string;
   alias: string | null;
+  id: string;
   isFirst: boolean;
   isLast: boolean;
+  name: string;
 }
 
 export interface BreadcrumbProps {
-  id: string;
-  name: string;
   alias?: string | null;
-  opacity: BreadcrumbOpacity;
   color: string;
+  id: string;
+  isActive: boolean;
   isFirst: boolean;
   isLast: boolean;
+  name: string;
+  opacity: BreadcrumbOpacity;
   path: string;
-  isActive: boolean;
 }
 
 /**

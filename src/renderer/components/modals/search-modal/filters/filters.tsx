@@ -10,8 +10,8 @@ import { TypeFilter } from "./type-filter";
 
 export interface FiltersProps {
   filesAndFolders: FilesAndFolders[];
-  tags: TagMap;
   setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
+  tags: TagMap;
   toDelete: string[];
 }
 

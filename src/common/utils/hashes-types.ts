@@ -7,13 +7,13 @@ export const ADD_ERRORED_HASHES = "HASHES/ADD_ERRORED_HASHES";
 export type HashesMap = Record<string, string | null>;
 
 export interface HashesState {
-  hashes: HashesMap;
   erroredHashes: ArchifiltreDocsError[];
+  hashes: HashesMap;
 }
 
 interface SetFilesAndFoldersHashesAction {
-  type: typeof SET_FILES_AND_FOLDERS_HASHES;
   hashes: HashesMap;
+  type: typeof SET_FILES_AND_FOLDERS_HASHES;
 }
 
 interface ResetErroredHashesAction {

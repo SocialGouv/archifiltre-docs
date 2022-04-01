@@ -8,9 +8,9 @@ const CHUNK_SIZE = 1500;
 type IsResult<T> = (value: any) => value is T;
 
 export interface Queue<TInput, TResult, TError = never> {
-  results: TResult[];
   errors: TError[];
   remaining: TInput[][];
+  results: TResult[];
 }
 
 export const computeQueue =

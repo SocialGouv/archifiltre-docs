@@ -9,8 +9,8 @@ import { getLanguage } from "../languages";
 import { reportError } from "../logging/reporter";
 
 export interface UserSettings {
-  isTrackingEnabled: boolean;
   isMonitoringEnabled: boolean;
+  isTrackingEnabled: boolean;
   language: string;
 }
 

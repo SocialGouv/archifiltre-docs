@@ -8,8 +8,8 @@ export enum ZoomDirection {
 }
 
 interface ZoomState {
-  ratio: number;
   offset: number;
+  ratio: number;
 }
 
 interface ZoomAction {

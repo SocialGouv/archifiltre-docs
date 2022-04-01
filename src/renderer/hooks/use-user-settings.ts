@@ -7,8 +7,8 @@ import {
 } from "../persistence/persistent-settings";
 
 interface UseUserSettingsResult {
-  userSettings: UserSettings;
   setUserSettings: (userSettings: Partial<UserSettings>) => void;
+  userSettings: UserSettings;
 }
 
 export const useUserSettings = (): UseUserSettingsResult => {

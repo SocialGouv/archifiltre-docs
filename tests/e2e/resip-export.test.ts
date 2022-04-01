@@ -64,7 +64,6 @@ describe("Export to RESIP", () => {
     const exportFolderPath = path.join(__dirname, "../test-folder");
     const exportFolder = fs.readdirSync(exportFolderPath);
 
-    console.log({ exportFolder });
     const resipExportFilePath = exportFolder.find((folderName) =>
       /test-folder-resip/i.test(folderName)
     );

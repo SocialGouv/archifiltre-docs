@@ -41,6 +41,7 @@ export const startApp = async (): Promise<ElectronApplication> => {
   });
 
   const win = await electronApp.firstWindow();
+  // eslint-disable-next-line no-console
   win.on("console", console.log);
   await win.waitForLoadState();
   return electronApp;
@@ -67,11 +68,9 @@ export const clickOverElement = async (
   locator: Locator
 ): Promise<void> => {
   const box = await locator.boundingBox();
-  console.log(locator, box);
   if (!box) {
     return;
   }
   const { x, y } = box;
-  console.log("click", { x, y });
   await win.mouse.click(x, y);
 };

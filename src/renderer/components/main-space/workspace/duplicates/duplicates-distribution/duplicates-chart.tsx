@@ -23,8 +23,8 @@ const scheme = [orange["500"], grey["500"]];
 
 export interface DuplicatesChartProps {
   duplicatesNumber: number;
-  nonDuplicatesNumber: number;
   duplicatesSize: number;
+  nonDuplicatesNumber: number;
   nonDuplicatesSize: number;
 }
 

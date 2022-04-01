@@ -5,12 +5,12 @@ import React, { forwardRef } from "react";
 import { PaginatorActions } from "./paginator-actions";
 
 export interface PaginatorProps {
-  pageCount: TablePaginationProps["count"];
-  rowsPerPage: TablePaginationProps["rowsPerPage"];
-  page: TablePaginationProps["page"];
   handleChangePage: TablePaginationProps["onChangePage"];
   handleChangeRowsPerPage: TablePaginationProps["onChangeRowsPerPage"];
   labelRowsPerPage: TablePaginationProps["labelRowsPerPage"];
+  page: TablePaginationProps["page"];
+  pageCount: TablePaginationProps["count"];
+  rowsPerPage: TablePaginationProps["rowsPerPage"];
 }
 const _Paginator: React.ForwardRefRenderFunction<
   HTMLDivElement,

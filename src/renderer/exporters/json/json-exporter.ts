@@ -18,8 +18,8 @@ import {
 export type ExportToJson = typeof jsonExporterThunk;
 
 export interface JsonExporterThunkArgs {
-  sessionName: string;
   originalPath: string;
+  sessionName: string;
   version: string;
 }
 

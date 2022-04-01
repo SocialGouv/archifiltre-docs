@@ -3,8 +3,8 @@ import { LEVEL, MESSAGE } from "triple-beam";
 import TransportStream from "winston-transport";
 
 interface InfoObject {
-  [MESSAGE]: string;
   [LEVEL]: UnknownMapping | ("error" | "warning");
+  [MESSAGE]: string;
 }
 
 /**

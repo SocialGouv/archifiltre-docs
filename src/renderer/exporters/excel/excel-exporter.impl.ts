@@ -20,8 +20,8 @@ export const getExcelExportProgressGoal = (
   filesAndFoldersCount;
 
 export interface CreateExcelWorkbookParams {
-  treeCsv: string[][];
   csvArray: string[][];
+  treeCsv: string[][];
 }
 const createExcelWorkbook = (
   { treeCsv, csvArray }: CreateExcelWorkbookParams,

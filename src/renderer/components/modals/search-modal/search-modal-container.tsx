@@ -22,8 +22,8 @@ import { SearchModal } from "./search-modal";
 import { useSearchModalTableColumns } from "./use-search-modal-table-columns";
 
 export interface SearchModalContainerProps {
-  isModalOpen: SearchModalProps["isModalOpen"];
   closeModal: SearchModalProps["closeModal"];
+  isModalOpen: SearchModalProps["isModalOpen"];
 }
 export const SearchModalContainer: React.FC<SearchModalContainerProps> = ({
   isModalOpen,

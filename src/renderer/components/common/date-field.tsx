@@ -38,7 +38,7 @@ export const DateField: React.FC<DateFieldProps> = ({ date, onDateChange }) => {
 
   const dateChangeHandler = compose(onDateChange, getTime);
 
-  const inputProps: { onFocus: AnyFunction; onBlur: AnyFunction } =
+  const inputProps: { onBlur: AnyFunction; onFocus: AnyFunction } =
     useDateInput({
       // TODO: don't use react-nice-dates
       date: fromUnixTime(date / 1000),

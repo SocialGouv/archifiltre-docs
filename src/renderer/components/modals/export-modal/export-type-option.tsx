@@ -15,13 +15,13 @@ const ExportContainer = styled.div`
 `;
 
 export interface ExportTypeOptionProps {
-  exportType: ExportType;
+  activeExports: ExportTypesMap<boolean>;
   enabledExports: ExportTypesMap<boolean>;
-  isPathValid: boolean;
   exportPaths: ExportTypesMap<string>;
+  exportType: ExportType;
+  isPathValid: boolean;
   setActiveExportValue: (exportType: ExportType, value: boolean) => void;
   setExportsPathsValue: (exportType: ExportType, value: string) => void;
-  activeExports: ExportTypesMap<boolean>;
 }
 
 export const ExportTypeOption: React.FC<ExportTypeOptionProps> = ({

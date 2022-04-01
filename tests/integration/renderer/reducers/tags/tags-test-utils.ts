@@ -1,9 +1,9 @@
 import type { Tag } from "@renderer/reducers/tags/tags-types";
 
 interface TagOptions {
+  ffIds?: string[];
   id: string;
   name?: string;
-  ffIds?: string[];
 }
 
 const DEFAULT_NAME = "base-tag-name";

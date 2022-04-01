@@ -4,9 +4,9 @@ export const COMMIT = "UNDOABLE/COMMIT";
 
 export interface UndoableState<TWrappedState> {
   current: TWrappedState;
+  future: TWrappedState[];
   past: TWrappedState[];
   present: TWrappedState;
-  future: TWrappedState[];
 }
 
 interface UndoAction {

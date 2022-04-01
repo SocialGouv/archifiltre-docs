@@ -15,22 +15,22 @@ import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-fold
 import type { JsonFileInfo } from "../../files-and-folders-loader/files-and-folders-loader-types";
 
 interface V8 {
-  version: number;
   content_queue: any;
-  tree: any;
+  parent_path: any;
   tags: any;
   tags_sizes: any;
-  parent_path: any;
+  tree: any;
+  version: number;
 }
 
 interface V9To12 {
-  tags: any;
   files_and_folders: any;
+  tags: any;
 }
 
 interface V13 {
-  session_name: string;
   original_path: string;
+  session_name: string;
   tags: any;
 }
 

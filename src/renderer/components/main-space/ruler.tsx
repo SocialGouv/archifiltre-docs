@@ -97,15 +97,15 @@ const makeRulerText = (
 };
 
 export interface RulerProps {
-  widthUnit: number;
-  totalSize: number;
-  hoveredDims: Dims | null;
-  lockedDims: Dims | null;
-  lockedElementId: string;
-  hoveredElementId: string;
+  fillColor: FillColor;
   getAllChildrenFolderCount: (id: string) => number;
   getFfByFfId: (id: string) => FilesAndFolders & FilesAndFoldersMetadata;
-  fillColor: FillColor;
+  hoveredDims: Dims | null;
+  hoveredElementId: string;
+  lockedDims: Dims | null;
+  lockedElementId: string;
+  totalSize: number;
+  widthUnit: number;
 }
 
 export const Ruler: React.FC<RulerProps> = ({

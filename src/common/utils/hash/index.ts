@@ -24,9 +24,9 @@ import {
 } from "./hash-errors";
 
 export interface HashComputingResult {
-  type: "result";
-  path: string;
   hash: string;
+  path: string;
+  type: "result";
 }
 
 export const isResult = (

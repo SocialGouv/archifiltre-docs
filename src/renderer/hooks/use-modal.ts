@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 
 interface UseModalResponse {
+  closeModal: () => void;
   isModalOpen: boolean;
   openModal: () => void;
-  closeModal: () => void;
 }
 
 /**

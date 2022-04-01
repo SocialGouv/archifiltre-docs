@@ -18,11 +18,11 @@ import { stringifyVFSToStream } from "./load-from-filesystem-serializer";
 type Reporter = (message: unknown) => void;
 
 interface Reporters {
+  reportComplete: Reporter;
   reportError: Reporter;
-  reportWarning: Reporter;
   reportFatal: Reporter;
   reportResult: Reporter;
-  reportComplete: Reporter;
+  reportWarning: Reporter;
 }
 
 const createReporters = (asyncWorker: AsyncWorker): Reporters => ({
@@ -52,9 +52,9 @@ const reportResultStream = (result: VirtualFileSystem) => {
 };
 
 interface LoadVirtualFileSystemParams {
-  path: string;
-  filesAndFolders?: FilesAndFoldersMap;
   erroredPaths?: ArchifiltreDocsError[];
+  filesAndFolders?: FilesAndFoldersMap;
+  path: string;
 }
 
 /**

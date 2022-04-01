@@ -320,8 +320,8 @@ const loadFilesAndFoldersAfterInitThunk =
       filesAndFolders,
       erroredPaths,
     }: {
-      filesAndFolders?: FilesAndFoldersMap;
       erroredPaths?: ArchifiltreDocsError[];
+      filesAndFolders?: FilesAndFoldersMap;
     } = {}
   ): ArchifiltreDocsThunkAction<VirtualFileSystemLoader> =>
   (dispatch) => {
@@ -370,8 +370,8 @@ export const reloadFilesAndFoldersThunk =
   };
 
 interface VirtualFileSystemLoader {
-  virtualFileSystem: Promise<VirtualFileSystem>;
   terminate: () => void;
+  virtualFileSystem: Promise<VirtualFileSystem>;
 }
 
 const tryLoadFilesAndFoldersAfterInitThunk =

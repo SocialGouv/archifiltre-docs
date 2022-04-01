@@ -56,10 +56,10 @@ class VFSElementMessage extends Message<VFSElementMessage> {
  * @param element
  */
 export const serializeField = (element: {
-  hash: string | null;
-  key: string;
   filesAndFolders: FilesAndFolders;
   filesAndFoldersMetadata: FilesAndFoldersMetadata;
+  hash: string | null;
+  key: string;
 }): Uint8Array => {
   const message = VFSElementMessage.create(element);
   return VFSElementMessage.encode(message).finish();

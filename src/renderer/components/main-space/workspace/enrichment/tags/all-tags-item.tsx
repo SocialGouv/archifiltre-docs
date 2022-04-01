@@ -12,12 +12,12 @@ import { EditableField } from "../../../../common/editable-field";
 import { EllipsisText } from "./ellipsis-text";
 
 export interface AllTagsItemProps {
-  tag: string;
-  size: number;
-  totalVolume: number;
   deleteTag?: () => void;
-  tagNumber: number;
   renameTag?: (newName: string) => void;
+  size: number;
+  tag: string;
+  tagNumber: number;
+  totalVolume: number;
 }
 
 export const AllTagsItem: React.FC<AllTagsItemProps> = ({

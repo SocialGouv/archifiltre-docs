@@ -56,10 +56,10 @@ const computeExportPathsValidityMap = async (
 
 export interface ExportModalContentProps {
   areHashesReady: boolean;
+  closeModal: () => void;
   originalPath: string;
   sessionName: string;
   startExport: (exportId: ExportType, exportPath: string) => void;
-  closeModal: () => void;
 }
 
 export const ExportModalContent: React.FC<ExportModalContentProps> = ({

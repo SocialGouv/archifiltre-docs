@@ -17,20 +17,20 @@ interface LoadFileTreeResponse {
 }
 
 export interface HookParam {
-  status?: FileSystemLoadingStep | string;
   count?: number;
+  status?: FileSystemLoadingStep | string;
   totalCount?: number;
   vfs?: VirtualFileSystem;
 }
 
 interface LoadFileTreeParams {
-  filesAndFolders?: FilesAndFoldersMap;
   erroredPaths?: ArchifiltreDocsError[];
+  filesAndFolders?: FilesAndFoldersMap;
 }
 
 interface StreamParserResult {
-  status: MessageTypes;
   result: VirtualFileSystem;
+  status: MessageTypes;
 }
 
 const streamParser = async (stream: Readable): Promise<StreamParserResult> => {

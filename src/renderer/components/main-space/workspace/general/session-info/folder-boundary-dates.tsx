@@ -7,9 +7,9 @@ import { HelpTooltip } from "../../../../common/help-tooltip";
 import { BoundaryDate } from "./boundary-date";
 
 export interface FolderBoundaryDatesProps {
-  minLastModifiedTimestamp: number;
-  medianLastModifiedTimestamp: number;
   maxLastModifiedTimestamp: number;
+  medianLastModifiedTimestamp: number;
+  minLastModifiedTimestamp: number;
 }
 
 export const FolderBoundaryDates: React.FC<FolderBoundaryDatesProps> = ({

@@ -8,14 +8,14 @@ import { TagCellChips } from "./tag-cell-chips";
 import { TagCellInput } from "./tag-cell-input";
 
 export interface TagCellProps {
+  availableTags: Tag[];
+  createTag: (value: string, filesAndFoldersId: string) => void;
   isActive: boolean;
   isCurrentFileMarkedToDelete: boolean;
   nodeId: string;
   tagsForCurrentFile: Tag[];
-  createTag: (value: string, filesAndFoldersId: string) => void;
-  untag: (tagId: string, nodeId: string) => void;
   toggleCurrentFileDeleteState: () => void;
-  availableTags: Tag[];
+  untag: (tagId: string, nodeId: string) => void;
 }
 
 export const TagCell: React.FC<TagCellProps> = ({

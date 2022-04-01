@@ -8,13 +8,13 @@ type Hook<THookArgs extends unknown[]> = (
 type ResultHook<THookArgs extends unknown[]> = (...args: THookArgs) => void;
 
 export interface HookCounterOptions<THookArgs extends unknown[]> {
-  interval?: number;
   internalHook: InternalHook<[]> | InternalHook<THookArgs>;
+  interval?: number;
 }
 
 interface HookCounterResult<THookArgs extends unknown[]> {
-  hook: ResultHook<THookArgs>;
   getCount: () => number;
+  hook: ResultHook<THookArgs>;
 }
 
 /**

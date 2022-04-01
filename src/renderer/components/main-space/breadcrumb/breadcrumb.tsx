@@ -75,15 +75,15 @@ const dimsGetter = (): Dims => emptyDims;
 
 export interface BreadcrumbProps {
   active: boolean;
-  opacity: BreadcrumbOpacity;
+  alias: string | null;
   color: string;
+  id: string;
   isFirst: boolean;
   isLast: boolean;
   name: string;
-  alias: string | null;
-  path: string;
-  id: string;
   onBreadcrumbClick: (dimsAndId: DimsAndId, event: React.MouseEvent) => void;
+  opacity: BreadcrumbOpacity;
+  path: string;
 }
 
 export const Breadcrumb: React.FC<BreadcrumbProps> = ({

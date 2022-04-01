@@ -6,9 +6,9 @@ type Measure = (animationId: string) => void;
 type Mutate = (animationId: string) => void;
 
 interface Animation {
-  visible: Visible;
   measure: Measure;
   mutate: Mutate;
+  visible: Visible;
 }
 
 type AnimationQueue = Record<string, Animation>;

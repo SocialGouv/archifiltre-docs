@@ -26,13 +26,13 @@ const useStyles = makeStyles(
 );
 
 export interface EnhancedTableHeadProps<T> {
+  columns: Column<T>[];
   onRequestSort: (
     event: React.MouseEvent<unknown>,
     columnIndex: number
   ) => void;
   order: Order;
   orderBy: number;
-  columns: Column<T>[];
 }
 
 export const EnhancedTableHead = <T,>({

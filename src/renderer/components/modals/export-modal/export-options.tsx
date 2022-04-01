@@ -11,10 +11,10 @@ export type ExportTypesMap<TValue> = {
 };
 
 export interface ExportOptionsProps {
+  activeExports: ExportTypesMap<boolean>;
   enabledExports: ExportTypesMap<boolean>;
   exportPaths: ExportTypesMap<string>;
   isValidPaths: ExportTypesMap<boolean>;
-  activeExports: ExportTypesMap<boolean>;
   setActiveExportValue: (exportType: ExportType, value: boolean) => void;
   setExportsPathsValue: (exportType: ExportType, value: string) => void;
 }

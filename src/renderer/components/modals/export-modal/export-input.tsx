@@ -27,9 +27,9 @@ const HideableTooltip = styled(Tooltip)<{ isvisible: string }>`
 
 export interface ExportInputProps {
   exportFilePath: string;
+  isFilePickerDisabled?: boolean;
   isValid: boolean;
   setExportsPathsValue: (value: string) => void;
-  isFilePickerDisabled?: boolean;
 }
 
 export const ExportInput: React.FC<ExportInputProps> = ({

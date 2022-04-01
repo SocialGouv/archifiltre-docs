@@ -40,8 +40,8 @@ export const curriedFormatPercent =
     formatPercent(value, options);
 
 interface RatioOptions {
-  min?: number;
   max: number;
+  min?: number;
 }
 
 export const ratio = (value: number, { min = 0, max }: RatioOptions): number =>

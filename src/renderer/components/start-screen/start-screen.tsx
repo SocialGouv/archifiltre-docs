@@ -19,13 +19,13 @@ import { LoadingBlock } from "./loading-block";
 import { StartScreenSidebar } from "./start-screen-sidebar";
 
 export interface StartScreenProps {
-  loadFromPath: (path: string) => void;
-  hasPreviousSession: boolean;
-  reloadPreviousSession: () => void;
-  isLoading: boolean;
-  fileSystemLoadingStep: FileSystemLoadingStep;
-  indexedFilesCount: number;
   cancelLoading: () => void;
+  fileSystemLoadingStep: FileSystemLoadingStep;
+  hasPreviousSession: boolean;
+  indexedFilesCount: number;
+  isLoading: boolean;
+  loadFromPath: (path: string) => void;
+  reloadPreviousSession: () => void;
 }
 
 const DropzoneWrapper = styled(Grid)`

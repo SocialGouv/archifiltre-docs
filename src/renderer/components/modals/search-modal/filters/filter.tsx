@@ -10,8 +10,8 @@ import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
 export interface FilterProps {
-  name: string;
   availableOptions: string[];
+  name: string;
   selectedOptions: string[];
   setSelectedOptions: (options: string[]) => void;
 }

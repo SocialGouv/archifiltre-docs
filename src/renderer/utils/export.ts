@@ -15,12 +15,12 @@ import { openExternalElement } from "./file-system/file-system-util";
 import { NotificationDuration, notifySuccess } from "./notifications";
 
 interface ExportOptions {
-  totalProgress: number;
-  loaderMessage: string;
-  loadedMessage: string;
   exportFileName: string;
   exportNotificationTitle: string;
   exportSuccessMessage: string;
+  loadedMessage: string;
+  loaderMessage: string;
+  totalProgress: number;
 }
 
 export const isProgressResult = ({ result }: ResultMessage): boolean =>

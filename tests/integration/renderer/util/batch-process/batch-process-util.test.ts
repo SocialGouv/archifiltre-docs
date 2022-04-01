@@ -161,8 +161,8 @@ describe("batch-process-util", () => {
 
       const workers = makeEmptyArray(4, null).map(() => new TestWorker());
       const workers$ = new Subject<{
-        worker: ProcessControllerAsyncWorker;
         message: WorkerMessage;
+        worker: ProcessControllerAsyncWorker;
       }>();
       const data = range(0, 21);
 

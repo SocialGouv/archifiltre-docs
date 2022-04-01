@@ -7,15 +7,15 @@ import type { SvgRectangleProps } from "./svg-rectangle";
 import { SvgRectangle } from "./svg-rectangle";
 
 export interface Dims {
-  x: number;
-  y: number;
   dx: number;
   dy: number;
+  x: number;
+  y: number;
 }
 
 export interface DimsAndId {
-  id: string;
   dims: () => Dims;
+  id: string;
 }
 
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -27,13 +27,14 @@ enum CursorState {
 /* eslint-enable @typescript-eslint/naming-convention */
 
 export interface IcicleRectProps {
-  opacity: number;
-  x: number;
   dx: number;
-  y: number;
   dy: number;
-  id: string;
   fillColor: FillColor;
+  id: string;
+  onClickHandler: IcicleMouseActionHandler;
+  onDoubleClickHandler: IcicleMouseActionHandler;
+  onMouseOverHandler: IcicleMouseActionHandler;
+  opacity: number;
   registerDims: (
     x: number,
     dx: number,
@@ -41,9 +42,8 @@ export interface IcicleRectProps {
     dy: number,
     id: string
   ) => void;
-  onClickHandler: IcicleMouseActionHandler;
-  onDoubleClickHandler: IcicleMouseActionHandler;
-  onMouseOverHandler: IcicleMouseActionHandler;
+  x: number;
+  y: number;
 }
 
 export const IcicleRect: React.FC<IcicleRectProps> = ({

@@ -23,7 +23,6 @@ import { undoableWorkspaceMetadataReducer as workspaceMetadataReducer } from "./
 import type { WorkspaceMetadataState } from "./workspace-metadata/workspace-metadata-types";
 
 export interface StoreState {
-  tags: UndoableState<TagsState>;
   filesAndFolders: UndoableState<FilesAndFoldersState>;
   filesAndFoldersMetadata: UndoableState<FilesAndFoldersMetadataState>;
   hashes: HashesState;
@@ -31,6 +30,7 @@ export interface StoreState {
   loadingInfo: LoadingInfoState;
   loadingState: UndoableState<LoadingState>;
   modal: ModalState;
+  tags: UndoableState<TagsState>;
   workspaceMetadata: UndoableState<WorkspaceMetadataState>;
 }
 

@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 export enum MessageTypes {
-  READY = "ready",
   COMPLETE = "complete",
   DATA = "data",
   ERROR = "error",
-  WARNING = "warning",
   FATAL = "fatal",
   INITIALIZE = "initialize",
   LOG = "log",
+  READY = "ready",
   RESULT = "result",
   STREAM_READ = "streamRead",
+  WARNING = "warning",
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 
@@ -18,13 +18,13 @@ export interface ReadyMessage {
 }
 
 export interface ErrorMessage {
-  type: typeof MessageTypes.ERROR;
   error: unknown;
+  type: typeof MessageTypes.ERROR;
 }
 
 export interface ResultMessage<T = unknown> {
-  type: typeof MessageTypes.RESULT;
   result: T;
+  type: typeof MessageTypes.RESULT;
 }
 
 export interface StreamReadMessage {
@@ -32,18 +32,18 @@ export interface StreamReadMessage {
 }
 
 export interface InitializeMessage<T = unknown> {
-  type: typeof MessageTypes.INITIALIZE;
   data: T;
+  type: typeof MessageTypes.INITIALIZE;
 }
 
 export interface DataMessage {
-  type: typeof MessageTypes.DATA;
   data: unknown;
+  type: typeof MessageTypes.DATA;
 }
 
 interface CompleteMessage {
-  type: typeof MessageTypes.COMPLETE;
   result?: unknown;
+  type: typeof MessageTypes.COMPLETE;
 }
 
 interface WarningMessage {
@@ -52,13 +52,13 @@ interface WarningMessage {
 }
 
 interface FatalMessage {
-  type: typeof MessageTypes.FATAL;
   error: unknown;
+  type: typeof MessageTypes.FATAL;
 }
 
 interface LogMessage {
-  type: typeof MessageTypes.LOG;
   data: unknown;
+  type: typeof MessageTypes.LOG;
 }
 
 export type WorkerMessage =

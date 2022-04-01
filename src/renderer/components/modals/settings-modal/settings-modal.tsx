@@ -19,8 +19,8 @@ const availableSettings = [
 ];
 
 export interface SettingModalProps {
-  isModalOpen: DialogProps["open"];
   closeModal: VoidFunction;
+  isModalOpen: DialogProps["open"];
 }
 
 export const SettingsModal: React.FC<SettingModalProps> = ({

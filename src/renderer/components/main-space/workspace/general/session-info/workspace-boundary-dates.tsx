@@ -9,8 +9,8 @@ import { HelpTooltip } from "../../../../common/help-tooltip";
 import { BoundaryDate } from "./boundary-date";
 
 export interface WorkspaceBoundaryDatesProps {
-  oldestFileTimestamp: number;
   newestFileTimestamp: number;
+  oldestFileTimestamp: number;
 }
 
 export const WorkspaceBoundaryDates: React.FC<WorkspaceBoundaryDatesProps> = ({

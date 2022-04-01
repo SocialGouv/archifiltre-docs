@@ -6,10 +6,10 @@ import type { CellStyle, TableAccessor } from "./table-types";
 import { WordBreak } from "./table-types";
 
 export interface TableValueProps<T> {
-  row: T;
   accessor: TableAccessor<T>;
-  index?: number;
   cellStyle?: CellStyle;
+  index?: number;
+  row: T;
 }
 
 export const TableValue = <T,>({

@@ -21,9 +21,9 @@ import { makeRowConfig } from "./make-array-export-config";
 interface CsvExporterData {
   aliases: AliasMap;
   comments: CommentsMap;
+  elementsToDelete: string[];
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
-  elementsToDelete: string[];
   hashes?: HashesMap;
   tags: TagMap;
   translator: TFunction;
@@ -88,8 +88,8 @@ const getChildrenToDelete = (
 
 const prepareIdsToDelete = <
   T extends {
-    filesAndFolders: FilesAndFoldersMap;
     elementsToDelete: string[];
+    filesAndFolders: FilesAndFoldersMap;
   }
 >(
   params: T

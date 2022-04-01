@@ -4,11 +4,11 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import React, { useCallback } from "react";
 
 export interface ExportCheckboxProps {
-  setActiveExportValue: (value: boolean) => void;
-  label: string;
-  isActive: boolean;
-  disabledExplanation: string;
   checked: boolean;
+  disabledExplanation: string;
+  isActive: boolean;
+  label: string;
+  setActiveExportValue: (value: boolean) => void;
 }
 
 export const ExportCheckbox: React.FC<ExportCheckboxProps> = ({

@@ -32,9 +32,9 @@ namespace FsWin {
   }
 }
 interface FsWin {
-  getAttributesSync: (path: string) => FsWin.Attributes;
   getAttributes: (
     path: string,
     cb: (attributes?: FsWin.Attributes) => void
   ) => void;
+  getAttributesSync: (path: string) => FsWin.Attributes;
 }

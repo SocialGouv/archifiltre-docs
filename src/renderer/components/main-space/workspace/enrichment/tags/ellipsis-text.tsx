@@ -14,8 +14,8 @@ const Container = styled.div<ContainerProps>`
 `;
 
 export interface EllipsisTextProps {
-  maxWidth?: number;
   displayTooltip?: boolean;
+  maxWidth?: number;
 }
 
 export const EllipsisText: React.FC<EllipsisTextProps> = ({

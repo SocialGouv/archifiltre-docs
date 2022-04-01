@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 export enum Language {
-  FR = "fr",
-  EN = "en",
   DE = "de",
+  EN = "en",
+  FR = "fr",
 }
 
 export type WithLanguage<T> = T & { language: Language };

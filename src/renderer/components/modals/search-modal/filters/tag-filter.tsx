@@ -11,8 +11,8 @@ import type { TagMap } from "../../../../reducers/tags/tags-types";
 import { Filter } from "./filter";
 
 export interface TagFilterProps {
-  tags: TagMap;
   setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
+  tags: TagMap;
   toDelete: string[];
 }
 

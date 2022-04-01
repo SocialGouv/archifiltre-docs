@@ -7,15 +7,15 @@ import styled from "styled-components";
 type HorizontalStackedBarData = Record<string, number>;
 
 export interface HorizontalStackedBarOption {
-  key: string;
   color: string;
+  key: string;
 }
 
 export type RenderTooltipContent = (key: string) => React.ReactElement;
 
 export interface HorizontalStackedBarProps {
-  data: HorizontalStackedBarData;
   bars: HorizontalStackedBarOption[];
+  data: HorizontalStackedBarData;
   renderTooltipContent?: RenderTooltipContent;
 }
 

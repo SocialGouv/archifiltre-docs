@@ -5,11 +5,11 @@ import { ipcMain } from "../ipc";
 
 declare module "../ipc/event" {
   interface SyncIpcMapping {
+    "app.getAppPath": IpcConfig<[], string>;
     "app.getPath": IpcConfig<
       [pathId: Parameters<typeof app["getPath"]>[0]],
       string
     >;
-    "app.getAppPath": IpcConfig<[], string>;
   }
 
   interface AsyncIpcMapping {
@@ -21,6 +21,10 @@ declare module "../ipc/event" {
       Parameters<Dialog["showSaveDialog"]>,
       ReturnType<Dialog["showSaveDialog"]>
     >;
+    "shell.openExternal": IpcConfig<
+      Parameters<Shell["openExternal"]>,
+      ReturnType<Shell["openExternal"]>
+    >;
     "shell.openPath": IpcConfig<
       Parameters<Shell["openPath"]>,
       ReturnType<Shell["openPath"]>
@@ -28,10 +32,6 @@ declare module "../ipc/event" {
     "shell.showItemInFolder": IpcConfig<
       Parameters<Shell["showItemInFolder"]>,
       ReturnType<Shell["showItemInFolder"]>
-    >;
-    "shell.openExternal": IpcConfig<
-      Parameters<Shell["openExternal"]>,
-      ReturnType<Shell["openExternal"]>
     >;
   }
 }

@@ -6,13 +6,13 @@ import type { ErrorMessage, ResultMessage } from "./batch-process/types";
 import { MessageTypes } from "./batch-process/types";
 
 interface DataProcessingError {
-  type: MessageTypes;
   error: unknown;
+  type: MessageTypes;
 }
 
 export interface DataProcessingResult<T> {
-  type: MessageTypes;
   result: T;
+  type: MessageTypes;
 }
 
 export type DataProcessingElement<T> = ErrorMessage | ResultMessage<T>;

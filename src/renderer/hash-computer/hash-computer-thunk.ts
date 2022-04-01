@@ -124,8 +124,8 @@ const computeFileHashesImplThunk =
   };
 
 interface ComputeFileHashesThunkOptions {
-  loadingActionId: string;
   ignoreFileHashes: boolean;
+  loadingActionId: string;
   originalPath: string;
 }
 
@@ -172,9 +172,9 @@ const computeFolderHashesThunk =
   };
 
 interface ComputeHashesThunkOptions {
-  ignoreFileHashes?: boolean;
-  hashesLoadingLabel: string;
   hashesLoadedLabel: string;
+  hashesLoadingLabel: string;
+  ignoreFileHashes?: boolean;
   originalPath: string;
 }
 

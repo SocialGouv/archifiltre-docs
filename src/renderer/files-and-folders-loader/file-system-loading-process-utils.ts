@@ -232,8 +232,8 @@ export const isFileSystemLoad = (loadPath: string): boolean =>
 const isJsonLoad = (loadPath: string) => isJsonFile(loadPath);
 
 interface GetLoadTypeOptions {
-  filesAndFolders?: FilesAndFoldersMap;
   erroredPaths?: ArchifiltreDocsError[];
+  filesAndFolders?: FilesAndFoldersMap;
 }
 
 /**

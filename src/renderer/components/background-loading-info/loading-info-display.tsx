@@ -25,10 +25,10 @@ const RoundedLinearProgress = styled(LinearProgress)`
 `;
 
 export interface LoadingInfoProps {
-  loadingInfo: LoadingInfo;
   color: string;
-  label: string;
   isLoaded: boolean;
+  label: string;
+  loadingInfo: LoadingInfo;
 }
 
 export const LoadingInfoDisplay: React.FC<LoadingInfoProps> = ({

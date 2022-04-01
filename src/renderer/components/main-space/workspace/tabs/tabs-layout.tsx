@@ -4,10 +4,10 @@ import type { ReactNode } from "react";
 import React from "react";
 
 interface ComponentElement {
-  title: ReactNode;
   content: ReactNode;
-  widthRatio?: number;
   isLast?: boolean;
+  title: ReactNode;
+  widthRatio?: number;
 }
 
 export const makeTabComponent = ({

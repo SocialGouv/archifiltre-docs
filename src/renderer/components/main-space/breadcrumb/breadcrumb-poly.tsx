@@ -44,9 +44,9 @@ const lastPolygonPath = [
 ].join(" ");
 
 export interface BreadcrumbPolyProps {
+  color: NonNullable<React.SVGProps<SVGPolygonElement>["fill"]>;
   isFirst: boolean;
   isLast: boolean;
-  color: NonNullable<React.SVGProps<SVGPolygonElement>["fill"]>;
   opacity: NonNullable<React.CSSProperties["opacity"]>;
 }
 

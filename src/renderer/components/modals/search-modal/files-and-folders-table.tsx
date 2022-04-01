@@ -8,11 +8,11 @@ import { Table } from "../../common/table/table";
 import type { Column } from "../../common/table/table-types";
 
 export interface FilesAndFoldersTableProps {
+  closeModal: () => void;
   columns: Column<ElementWithToDelete>[];
   filesAndFolders: ElementWithToDelete[];
-  closeModal: () => void;
-  page?: number;
   onPageChange?: (page: number) => void;
+  page?: number;
 }
 
 export const FilesAndFoldersTable: React.FC<FilesAndFoldersTableProps> = ({

@@ -33,36 +33,36 @@ export enum FileSystemLoadingStep {
 /* eslint-enable @typescript-eslint/naming-convention */
 
 export interface LoadingState {
-  step: LoadingStep;
-  fileSystemLoadingStep: FileSystemLoadingStep;
-  indexedFilesCount: number;
   constructedDataModelElementsCount: number;
   derivedElementsCount: number;
+  fileSystemLoadingStep: FileSystemLoadingStep;
+  indexedFilesCount: number;
+  step: LoadingStep;
 }
 
 interface SetLoadingStep {
-  type: typeof SET_LOADING_STEP;
   step: LoadingStep;
+  type: typeof SET_LOADING_STEP;
 }
 
 interface SetFileSystemLoadingStep {
-  type: typeof SET_FILE_SYSTEM_LOADING_STEP;
   step: FileSystemLoadingStep;
+  type: typeof SET_FILE_SYSTEM_LOADING_STEP;
 }
 
 interface SetIndexedFilesCount {
-  type: typeof SET_INDEXED_FILES_COUNT;
   count: number;
+  type: typeof SET_INDEXED_FILES_COUNT;
 }
 
 interface SetConstructedDataModelElementsCount {
-  type: typeof SET_DATA_MODEL_ELEMENTS_COUNT;
   count: number;
+  type: typeof SET_DATA_MODEL_ELEMENTS_COUNT;
 }
 
 interface SetDerivedElementsCount {
-  type: typeof SET_DERIVED_ELEMENTS_COUNT;
   count: number;
+  type: typeof SET_DERIVED_ELEMENTS_COUNT;
 }
 
 interface ResetLoadingState {

@@ -4,15 +4,15 @@ import path from "path";
 import { isTruthy } from "./utils/string";
 
 export interface WorkerSerializedConfig {
-  isMain: boolean;
-  isWorker: true;
-  isTest: boolean;
-  isDev: boolean;
-  isE2E: boolean;
   forceTracking: boolean;
-  isMac: boolean;
-  isPackaged: boolean;
+  isDev: boolean;
   isDistMode: boolean;
+  isE2E: boolean;
+  isMac: boolean;
+  isMain: boolean;
+  isPackaged: boolean;
+  isTest: boolean;
+  isWorker: true;
   staticPath: string;
 }
 

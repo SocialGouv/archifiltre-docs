@@ -2,10 +2,10 @@ import type { ComponentType, ReactElement } from "react";
 
 /* eslint-disable @typescript-eslint/naming-convention -- enum */
 export enum WordBreak {
-  NORMAL = "normal",
   BREAK_ALL = "break-all",
   BREAK_WORD = "break-word",
   KEEP_ALL = "keep-all",
+  NORMAL = "normal",
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 
@@ -21,22 +21,22 @@ export interface CellStyle {
 }
 
 export interface Column<T> {
-  id: string;
-  name: string;
   accessor: TableAccessor<T>;
   cellStyle?: CellStyle;
+  id: string;
+  name: string;
   sortAccessor?: TableAccessor<T>;
-  textValueAccessor?: FunctionAccessor<unknown>;
   sortable?: boolean;
+  textValueAccessor?: FunctionAccessor<unknown>;
 }
 
 export type HeaderColumn<T> =
   | {
-      accessor: keyof T;
+      accessor: FunctionAccessor<T>;
+      id: string;
     }
   | {
-      id: string;
-      accessor: FunctionAccessor<T>;
+      accessor: keyof T;
     };
 
 export interface RowRendererProps<T> {

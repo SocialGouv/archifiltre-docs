@@ -22,58 +22,58 @@ export interface AuditReportFileWithCount extends AuditReportFile {
 }
 
 export interface AuditReportElementWithType extends AuditReportFile {
-  type: string;
-  size: string;
   date: string;
+  size: string;
+  type: string;
 }
 
 export interface AuditReportData {
-  totalFoldersCount: number;
-  totalFilesCount: number;
-  totalSize: string;
-  oldestDate: string;
-  newestDate: string;
-  longestPathLength: number;
-  longestPathFileName: string;
-  longestPathPath: string;
-  depth: number;
-  publicationPercent: number;
-  publicationCount: number;
-  publicationFileTypes: string;
-  presentationPercent: number;
-  presentationCount: number;
-  presentationFileTypes: string;
-  spreadsheetPercent: number;
-  spreadsheetCount: number;
-  spreadsheetFileTypes: string;
-  emailPercent: number;
-  emailCount: number;
-  emailFileTypes: string;
-  documentPercent: number;
-  documentCount: number;
-  documentFileTypes: string;
-  imagePercent: number;
-  imageCount: number;
-  imageFileTypes: string;
-  videoPercent: number;
-  videoCount: number;
-  videoFileTypes: string;
-  audioPercent: number;
   audioCount: number;
   audioFileTypes: string;
-  otherPercent: number;
-  otherCount: number;
-  otherFileTypes: string;
-  oldestFiles: AuditReportFileWithDate[];
+  audioPercent: number;
+  biggestDuplicateFolders: AuditReportFileWithSize[];
   biggestFiles: AuditReportFileWithSize[];
-  duplicateFolderCount: number;
-  duplicateFolderPercent: number;
+  depth: number;
+  documentCount: number;
+  documentFileTypes: string;
+  documentPercent: number;
   duplicateFileCount: number;
   duplicateFilePercent: number;
+  duplicateFolderCount: number;
+  duplicateFolderPercent: number;
   duplicateTotalSize: string;
   duplicates: AuditReportFileWithCount[];
-  biggestDuplicateFolders: AuditReportFileWithSize[];
   elementsToDelete: AuditReportElementWithType[];
+  emailCount: number;
+  emailFileTypes: string;
+  emailPercent: number;
+  imageCount: number;
+  imageFileTypes: string;
+  imagePercent: number;
+  longestPathFileName: string;
+  longestPathLength: number;
+  longestPathPath: string;
+  newestDate: string;
+  oldestDate: string;
+  oldestFiles: AuditReportFileWithDate[];
+  otherCount: number;
+  otherFileTypes: string;
+  otherPercent: number;
+  presentationCount: number;
+  presentationFileTypes: string;
+  presentationPercent: number;
+  publicationCount: number;
+  publicationFileTypes: string;
+  publicationPercent: number;
+  spreadsheetCount: number;
+  spreadsheetFileTypes: string;
+  spreadsheetPercent: number;
+  totalFilesCount: number;
+  totalFoldersCount: number;
+  totalSize: string;
+  videoCount: number;
+  videoFileTypes: string;
+  videoPercent: number;
 }
 
 const TEMPLATE_PATH = path.resolve(

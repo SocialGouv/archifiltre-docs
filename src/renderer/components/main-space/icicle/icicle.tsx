@@ -17,36 +17,36 @@ import { IciclesOverlay } from "./icicles-overlay";
 export type DimsMap = Record<string, Dims>;
 
 export interface IcicleProps {
-  trueFHeight: () => number;
-  x: number;
-  y: number;
+  aliases: AliasMap;
+  comments: CommentsMap;
   dx: number;
   dy: number;
+  elementsToDelete: string[];
+  fillColor: FillColor;
+  getChildrenIdFromId: (id: string) => string[];
+  getWidthFromId: (id: string) => number;
   hoverSequence: string[];
   lockedSequence: string[];
-  rootId: string;
-  getWidthFromId: (id: string) => number;
-  getChildrenIdFromId: (id: string) => string[];
+  movedElementId?: string;
+  movedElementTime?: number;
   normalizeWidth: (width: number[]) => number[];
-  shouldRenderChild: (xPosition: number, elementWidth: number) => boolean;
-  fillColor: FillColor;
+  onIcicleMouseWheel?: (event: {
+    mousePosition: number;
+    wheelDirection: number;
+  }) => void;
   onIcicleRectClickHandler: IcicleMouseActionHandler;
   onIcicleRectDoubleClickHandler: IcicleMouseActionHandler;
   onIcicleRectMouseOverHandler: IcicleMouseActionHandler;
-  aliases: AliasMap;
-  comments: CommentsMap;
+  rootId: string;
+  shouldRenderChild: (xPosition: number, elementWidth: number) => boolean;
   tags: TagMap;
-  elementsToDelete: string[];
-  movedElementId?: string;
-  movedElementTime?: number;
-  zoomOffset: number;
-  zoomRatio: number;
-  onIcicleMouseWheel?: (event: {
-    wheelDirection: number;
-    mousePosition: number;
-  }) => void;
   /** Used for e2e */
   testId: string;
+  trueFHeight: () => number;
+  x: number;
+  y: number;
+  zoomOffset: number;
+  zoomRatio: number;
 }
 
 const _Icicle: React.FC<IcicleProps> = ({

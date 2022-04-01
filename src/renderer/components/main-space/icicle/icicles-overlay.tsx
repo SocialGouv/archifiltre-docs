@@ -7,12 +7,12 @@ import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 
 export interface IciclesOverlayProps {
   dimsMap: DimsMap;
-  opacity: number;
-  ids: string[];
   fillColor: FillColor;
+  ids: string[];
   onIcicleRectClickHandler: IcicleMouseActionHandler;
   onIcicleRectDoubleClickHandler: IcicleMouseActionHandler;
   onIcicleRectMouseOverHandler: IcicleMouseActionHandler;
+  opacity: number;
 }
 
 const _IciclesOverlay: React.FC<IciclesOverlayProps> = ({

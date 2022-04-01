@@ -5,8 +5,8 @@ import React from "react";
 import { FaCheckCircle } from "react-icons/fa";
 
 export interface LoadingSpinnerProps {
-  loaderText: string;
   isLoading?: boolean;
+  loaderText: string;
 }
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({

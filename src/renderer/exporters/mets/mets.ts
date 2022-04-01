@@ -314,8 +314,8 @@ export const makeObjectDiv = (
   ]);
 
 interface Counters {
-  fileCount: number;
   dmdCount: number;
+  fileCount: number;
   objCount: number;
 }
 
@@ -477,12 +477,12 @@ interface GlobalState {
   aliases: AliasMap;
   comments: CommentsMap;
   elementsToDelete: string[];
+  exportPath: string;
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
-  tags: TagMap;
-  exportPath: string;
   originalPath: string;
   sessionName: string;
+  tags: TagMap;
 }
 
 /**

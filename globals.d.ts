@@ -13,6 +13,11 @@ declare const __static: string;
 
 declare namespace NodeJS {
   interface ProcessEnv {
+    ARCHIFILTRE_SITE_URL: string;
+    AUTOLOAD: string;
+    AUTORELOAD?: "false" | "true";
+    CI?: "true";
+    FORCE_TRACKING: string;
     SENTRY_DSN: string;
     SENTRY_ORG: string;
     SENTRY_URL: string;
@@ -22,9 +27,5 @@ declare namespace NodeJS {
     TRACKER_POSTHOG_API_KEY: string;
     TRACKER_POSTHOG_URL: string;
     TRACKER_PROVIDER: string;
-    AUTOLOAD: string;
-    AUTORELOAD?: "false" | "true";
-    ARCHIFILTRE_SITE_URL: string;
-    FORCE_TRACKING: string;
   }
 }

@@ -5,6 +5,7 @@ import { isTruthy } from "./utils/string";
 
 export interface WorkerSerializedConfig {
   forceTracking: boolean;
+  isCi: boolean;
   isDev: boolean;
   isDistMode: boolean;
   isE2E: boolean;
@@ -18,9 +19,21 @@ export interface WorkerSerializedConfig {
 
 export const IS_WORKER = !!(process as NodeJS.Process | undefined)?.send;
 
-const workerConfig: WorkerSerializedConfig = IS_WORKER
-  ? JSON.parse(process.argv[3] ?? "{}")
-  : ({} as WorkerSerializedConfig);
+const workerConfig: WorkerSerializedConfig = (() => {
+  if (IS_WORKER) {
+    try {
+      return JSON.parse(process.argv[3] ?? "{}") as WorkerSerializedConfig;
+    } catch {
+      // eslint-disable-next-line no-console
+      console.error(
+        `Unparsable process argv (${JSON.stringify(process.argv[3])})`
+      );
+    }
+  }
+
+  return {} as WorkerSerializedConfig;
+})();
+export const IS_CI = IS_WORKER ? workerConfig.isCi : process.env.CI === "true";
 export const IS_MAIN = IS_WORKER
   ? workerConfig.isMain
   : // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -63,6 +76,7 @@ export const STATIC_PATH = IS_WORKER
 
 export const workerSerializedConfig: WorkerSerializedConfig = {
   forceTracking: FORCE_TRACKING,
+  isCi: IS_CI,
   isDev: IS_DEV,
   isDistMode: IS_DIST_MODE,
   isE2E: IS_E2E,

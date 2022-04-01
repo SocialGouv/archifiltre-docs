@@ -10,6 +10,7 @@ import { EventEmitter } from "events";
 import path from "path";
 import type { Readable } from "stream";
 
+import { reportInfo } from "../../logging/reporter";
 import type { WorkerMessage } from "../batch-process/types";
 import { MessageTypes } from "../batch-process/types";
 import type { MessageSerializer } from "../child-process-stream";
@@ -142,7 +143,7 @@ export const createAsyncWorkerForChildProcessControllerFactory =
   (): ChildProcessControllerAsyncWorker => {
     const _workerPath = getWorkerPath(filepathFromRenderer);
 
-    console.log(`[child-process-util] Load worker from path ${_workerPath}`);
+    reportInfo(`[child-process-util] Load worker from path ${_workerPath}`);
 
     // 1st pipe : We make stdin pipeable to allow to stream binary data to the worker
     // 2nd pipe : We create a pipeable stream to receive data from the worker. we don't use stdout
@@ -156,7 +157,6 @@ export const createAsyncWorkerForChildProcessControllerFactory =
           }
         : {};
 
-    console.log({ _workerPath, workerSerializedConfig });
     const worker = fork(
       _workerPath.endsWith(".js") ? _workerPath : WORKER_BRIDGE_PATH,
       [_workerPath, JSON.stringify(workerSerializedConfig)],

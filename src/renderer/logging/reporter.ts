@@ -9,13 +9,13 @@ import { WinstonConsoleLogger } from "./winston-console-logger";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 enum Level {
-  ERROR = "error",
-  WARN = "warn",
-  INFO = "info",
-  HTTP = "http",
-  VERBOSE = "verbose",
   DEBUG = "debug",
+  ERROR = "error",
+  HTTP = "http",
+  INFO = "info",
   SILLY = "silly",
+  VERBOSE = "verbose",
+  WARN = "warn",
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 

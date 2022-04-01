@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-/* eslint-disable @typescript-eslint/no-var-requires */
 const { app, BrowserView } = require("electron");
 
 app
@@ -8,6 +6,7 @@ app
     const window = new BrowserView({
       webPreferences: { nativeWindowOpen: true },
     });
+    // used by as parse token in getReactDevtools.ts
     console.log(`>>>>>${window.webContents.userAgent}<<<<<`);
     app.exit();
     process.exit();

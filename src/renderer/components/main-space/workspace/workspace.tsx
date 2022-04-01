@@ -10,15 +10,6 @@ import { NavigationBarContainer as NavigationBar } from "../navigation-bar/navig
 import { TabsContent } from "./tabs/tabs-content";
 import { WorkspaceProviders } from "./workspace-providers";
 
-// const workspaceState = {
-//   areTabsHidden: false,
-//   isFileMoveActive: false,
-//   setAreTabsHidden: (_areTabsHidden: boolean) => void 0,
-//   setIsFileMoveActive: (_isMoveActive: boolean) => void 0,
-// };
-
-// export const WorkspaceContext = createContext(workspaceState);
-
 const areIciclesDisplayed = (tabIndex: number) => tabIndex !== 3;
 
 export const Workspace: React.FC = () => {

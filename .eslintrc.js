@@ -1,20 +1,34 @@
 const path = require("path");
 
+const tsconfigPath = path.resolve(__dirname, "./tsconfig.json");
+const tsconfigRendererPath = path.resolve(
+  __dirname,
+  "./src/renderer/tsconfig.json"
+);
+const tsconfigMainPath = path.resolve(__dirname, "./src/main/tsconfig.json");
+const tsconfigCommonPath = path.resolve(
+  __dirname,
+  "./src/common/tsconfig.json"
+);
+const tsconfigScriptsPath = path.resolve(__dirname, "./scripts/tsconfig.json");
+
 /** @type {import("eslint").Linter.Config} */
 const typescriptConfig = {
   extends: "@socialgouv/eslint-config-typescript",
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: path.resolve(__dirname, "./tsconfig.json"),
+    project: tsconfigPath,
     sourceType: "module",
   },
+  plugins: ["typescript-sort-keys"],
   rules: {
     "@typescript-eslint/consistent-type-imports": "error",
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "import/default": "off",
-    "import/named": "off",
+    "import/named": "warn",
+    "no-console": "warn",
     "no-unused-vars": "off",
     "prefer-template": "warn",
     "prettier/prettier": [
@@ -24,6 +38,8 @@ const typescriptConfig = {
         tabWidth: 2,
       },
     ],
+    "typescript-sort-keys/interface": "error",
+    "typescript-sort-keys/string-enum": "error",
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
       "warn",
@@ -55,7 +71,7 @@ const defaultConfig = {
     },
     {
       extends: "@socialgouv/eslint-config-react",
-      files: ["**/*.js"],
+      files: ["**/*.js*"],
     },
     {
       env: {
@@ -65,14 +81,14 @@ const defaultConfig = {
       files: ["src/renderer/**/*.ts*", "src/common/**/*.ts*"],
     },
     {
-      files: ["src/renderer/**/*.ts"],
+      files: ["src/renderer/**/*.ts*"],
       parserOptions: {
-        project: "./src/renderer/tsconfig.json",
+        project: tsconfigRendererPath,
       },
       settings: {
         "import/resolver": {
           typescript: {
-            project: "./src/renderer/tsconfig.json",
+            project: tsconfigRendererPath,
           },
         },
       },
@@ -80,12 +96,12 @@ const defaultConfig = {
     {
       files: ["src/common/**/*.ts"],
       parserOptions: {
-        project: "./src/common/tsconfig.json",
+        project: tsconfigCommonPath,
       },
       settings: {
         "import/resolver": {
           typescript: {
-            project: "./src/common/tsconfig.json",
+            project: tsconfigCommonPath,
           },
         },
       },
@@ -97,12 +113,12 @@ const defaultConfig = {
       },
       files: ["src/main/**/*.ts"],
       parserOptions: {
-        project: "./src/main/tsconfig.json",
+        project: tsconfigMainPath,
       },
       settings: {
         "import/resolver": {
           typescript: {
-            project: "./src/main/tsconfig.json",
+            project: tsconfigMainPath,
           },
         },
       },
@@ -111,6 +127,19 @@ const defaultConfig = {
       files: "src/**/*.ts*",
       globals: {
         __static: true,
+      },
+    },
+    {
+      files: "scripts/**/*.ts",
+      parserOptions: {
+        project: tsconfigScriptsPath,
+      },
+      settings: {
+        "import/resolver": {
+          typescript: {
+            project: tsconfigScriptsPath,
+          },
+        },
       },
     },
   ],

@@ -106,7 +106,6 @@ async function createWindow() {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
       preload: PRELOAD_PATH,
-      webSecurity: false,
     },
   });
 

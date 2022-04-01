@@ -37,6 +37,7 @@ export const CommentCell: React.FC<CommentCellProps> = ({
       trimValue={true}
       selectTextOnFocus={true}
       value={comment}
+      data-test-id="comment-edit-box"
       onChange={handleChange}
       placeholder={t("report.clickHereToAddComments")}
       rowsMax={8}

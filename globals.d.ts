@@ -5,7 +5,6 @@ declare module "*.svg" {
 
 declare module "*.png";
 
-declare module "react-notifications"; // TODO: use another lib
 declare module "windows-1252";
 declare module "angular-expressions";
 

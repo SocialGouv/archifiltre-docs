@@ -1,5 +1,8 @@
-@import "~react-notifications/lib/notifications.css";
 @import "../../../static/fonts/fonts.css";
+@import "~react-toastify/dist/ReactToastify.css";
+
+// :global {
+// }
 
 #app {
   padding: unset;

@@ -29,8 +29,7 @@ export const startApp = async (): Promise<ElectronApplication> => {
     ],
     env: {
       AUTOLOAD: path.resolve(__dirname, "../../test-folder/"),
-      DISPLAY: ":0",
-      //TODO: input as env var
+      DISPLAY: ":0", //TODO: input as env var
       E2E: "true",
       FORCE_TRACKING: "false",
       NODE_ENV: "test-e2e",
@@ -68,9 +67,11 @@ export const clickOverElement = async (
   locator: Locator
 ): Promise<void> => {
   const box = await locator.boundingBox();
+  console.log(locator, box);
   if (!box) {
     return;
   }
   const { x, y } = box;
+  console.log("click", { x, y });
   await win.mouse.click(x, y);
 };

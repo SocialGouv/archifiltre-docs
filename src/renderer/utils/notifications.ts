@@ -1,5 +1,5 @@
 import { noop } from "lodash";
-import { NotificationManager } from "react-notifications";
+import { toast } from "react-toastify";
 
 export enum NotificationDuration {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -22,7 +22,12 @@ export const notifySuccess = (
   notificationDuration = NotificationDuration.NORMAL,
   callback = noop
 ): void => {
-  NotificationManager.success(message, title, notificationDuration, callback);
+  toast(`${title}\n${message}`, {
+    autoClose: notificationDuration,
+    bodyClassName: "notification-success",
+    onClick: callback,
+    type: toast.TYPE.SUCCESS,
+  });
 };
 
 /**
@@ -38,7 +43,12 @@ export const notifyError = (
   notificationDuration = NotificationDuration.NORMAL,
   callback = noop
 ): void => {
-  NotificationManager.error(message, title, notificationDuration, callback);
+  toast(`${title}\n${message}`, {
+    autoClose: notificationDuration,
+    bodyClassName: "notification-error",
+    onClick: callback,
+    type: toast.TYPE.ERROR,
+  });
 };
 
 /**
@@ -54,5 +64,10 @@ export const notifyInfo = (
   notificationDuration = NotificationDuration.NORMAL,
   callback = noop
 ): void => {
-  NotificationManager.info(message, title, notificationDuration, callback);
+  toast(`${title}\n${message}`, {
+    autoClose: notificationDuration,
+    bodyClassName: "notification-info",
+    onClick: callback,
+    type: toast.TYPE.INFO,
+  });
 };

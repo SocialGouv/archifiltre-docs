@@ -136,6 +136,7 @@ export const ExportModalContent: React.FC<ExportModalContentProps> = ({
           disableElevation
           disabled={Object.values(activeExports).every(negate(identity))}
           onClick={onExport}
+          data-test-id="export-submit"
         >
           {t("exportModal.buttonTitle")}
         </Button>

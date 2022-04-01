@@ -45,6 +45,8 @@ export interface IcicleProps {
     wheelDirection: number;
     mousePosition: number;
   }) => void;
+  /** Used for e2e */
+  testId: string;
 }
 
 const _Icicle: React.FC<IcicleProps> = ({
@@ -73,6 +75,7 @@ const _Icicle: React.FC<IcicleProps> = ({
   zoomOffset,
   zoomRatio,
   onIcicleMouseWheel = noop,
+  testId,
 }) => {
   const [dims, setDims] = useState<DimsMap>({});
   const dimsRef = useRef<DimsMap>({});
@@ -156,7 +159,7 @@ const _Icicle: React.FC<IcicleProps> = ({
 
   return (
     <g onWheel={onMouseWheel} ref={icicleRef}>
-      <g style={style}>
+      <g style={style} data-test-id={testId}>
         <IcicleRecursive
           x={sanitizedXPrime}
           y={y}

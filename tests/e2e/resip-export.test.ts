@@ -8,10 +8,9 @@ import rimraf from "rimraf";
 
 import {
   addDescription,
-  addTags,
+  addTag,
   clickIcicleElement,
   exportToResip,
-  waitForSuccessNotification,
 } from "./utils/app";
 import { startApp } from "./utils/test";
 
@@ -30,8 +29,9 @@ describe("Export to RESIP", () => {
   });
 
   afterEach(async () => {
+    const cwd = path.resolve(__dirname, "../test-folder/");
     await new Promise<void>((resolve, reject) => {
-      rimraf("tests/test-folder/*-RESIP_*.csv", (err) => {
+      rimraf(path.join(cwd, "test-folder-resip*.csv"), (err) => {
         if (err) reject(err);
         else resolve();
       });
@@ -44,27 +44,29 @@ describe("Export to RESIP", () => {
     const tag1Name = "tag1";
     const description = "element description";
 
-    const RESIP_EXPORT_SUCCESS_MESSAGE =
-      "Fichier de métadonnées exporté dans le dossier racine du projet";
-
     const win = await app.firstWindow();
 
-    await clickIcicleElement(win, "/tests/test-folder/child/index.csv");
+    await win.waitForSelector(`[data-test-id="main-icicle"]`);
+    await (await win.waitForSelector(".notification-success")).click();
 
-    await addTags(win, [tag0Name, tag1Name]);
+    await clickIcicleElement(win, "/test-folder/child/index.csv");
+
+    await addTag(win, tag0Name);
+    await addTag(win, tag1Name);
     await addDescription(win, description);
 
     await exportToResip(win);
 
     // Waiting for the RESIP file to be created
-    await waitForSuccessNotification(win, RESIP_EXPORT_SUCCESS_MESSAGE);
+    await win.waitForSelector(".notification-success");
 
     // Finding the RESIP export file
-    const exportFolderPath = path.join(__dirname, "../tests/test-folder");
+    const exportFolderPath = path.join(__dirname, "../test-folder");
     const exportFolder = fs.readdirSync(exportFolderPath);
 
+    console.log({ exportFolder });
     const resipExportFilePath = exportFolder.find((folderName) =>
-      /(Nom du projet|Project name)-RESIP_/.test(folderName)
+      /test-folder-resip/i.test(folderName)
     );
 
     if (resipExportFilePath === undefined) {
@@ -96,61 +98,64 @@ describe("Export to RESIP", () => {
     ]);
 
     const todayDate = dateFormat(Date.now(), "yyyy-mm-dd");
-    expect(lines).toContainEqual([
-      "1",
-      "",
-      ".",
-      "RecordGrp",
-      "test-folder",
-      "2019-11-20",
-      "2019-11-20",
-      todayDate,
-      "",
-      "",
-      "",
-      "",
-    ]);
-    expect(lines).toContainEqual([
-      "2",
-      "1",
-      "child",
-      "RecordGrp",
-      "child",
-      "2019-11-20",
-      "2019-11-20",
-      todayDate,
-      "",
-      "",
-      "",
-      "",
-    ]);
-    expect(lines).toContainEqual([
-      "3",
-      "2",
-      "child/index.csv",
-      "Item",
-      "index.csv",
-      "2019-11-20",
-      "2019-11-20",
-      todayDate,
-      "",
-      description,
-      tag0Name,
-      tag1Name,
-    ]);
-    expect(lines).toContainEqual([
-      "4",
-      "2",
-      "child/text.txt",
-      "Item",
-      "text.txt",
-      "2019-11-20",
-      "2019-11-20",
-      todayDate,
-      "",
-      "",
-      "",
-      "",
-    ]);
+    const expected = [
+      [
+        "1",
+        "2",
+        "child/index.csv",
+        "Item",
+        "index.csv",
+        "2021-09-01",
+        "2021-09-01",
+        todayDate,
+        "",
+        "element description",
+        "tag0",
+        "tag1",
+      ],
+      [
+        "2",
+        "3",
+        "child",
+        "RecordGrp",
+        "child",
+        "2021-09-01",
+        "2021-09-01",
+        todayDate,
+        "",
+        "",
+        "",
+        "",
+      ],
+      [
+        "3",
+        "",
+        ".",
+        "RecordGrp",
+        "test-folder",
+        "2021-09-01",
+        "2021-09-01",
+        todayDate,
+        "",
+        "",
+        "",
+        "",
+      ],
+      [
+        "4",
+        "2",
+        "child/text.txt",
+        "Item",
+        "text.txt",
+        "2021-09-01",
+        "2021-09-01",
+        todayDate,
+        "",
+        "",
+        "",
+        "",
+      ],
+    ];
+    expect(lines).toEqual(expected);
   });
 });

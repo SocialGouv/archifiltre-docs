@@ -34,6 +34,7 @@ export const EditableField: React.FC<EditableFieldProps> = ({
     </InputAdornment>
   ),
   endAdornment,
+  ...props
 }) => {
   const [isFocused, setFocus] = useState(false);
   const [localValue, setLocalValue] = useState(value);
@@ -107,6 +108,7 @@ export const EditableField: React.FC<EditableFieldProps> = ({
   return (
     <form ref={formRef} onSubmit={handleSubmit}>
       <Input
+        {...props}
         multiline={multiline}
         type="text"
         inputRef={inputRef}

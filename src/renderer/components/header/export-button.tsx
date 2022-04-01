@@ -36,6 +36,7 @@ export const ExportButton: React.FC = () => {
         <Badge color="error" variant="dot" invisible={!isBadgeShown}>
           <Button
             id="export-button"
+            data-test-id="export-menu"
             color="primary"
             variant="contained"
             className={classes.headerButton}

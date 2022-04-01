@@ -47,10 +47,18 @@ export const TabsHeader: React.FC<TabsHeaderProps> = ({
 
   const tabData = useMemo(
     () => [
-      { disabled: false, label: t("workspace.general") },
-      { disabled: false, label: t("workspace.enrichment") },
-      { disabled: false, label: t("workspace.audit") },
-      { disabled: !areHashesReady, label: t("workspace.duplicates") },
+      { disabled: false, label: t("workspace.general"), testId: "tab-general" },
+      {
+        disabled: false,
+        label: t("workspace.enrichment"),
+        testId: "tab-enrichment",
+      },
+      { disabled: false, label: t("workspace.audit"), testId: "tab-audit" },
+      {
+        disabled: !areHashesReady,
+        label: t("workspace.duplicates"),
+        testId: "tab-duplicates",
+      },
     ],
     [t, areHashesReady]
   );
@@ -77,9 +85,10 @@ export const TabsHeader: React.FC<TabsHeaderProps> = ({
       indicatorColor="primary"
       textColor="primary"
     >
-      {tabData.map(({ label, disabled }, index) => (
+      {tabData.map(({ label, disabled, testId }, index) => (
         <Tab
-          key={`${label}- ${index}`}
+          key={`${label}-${index}`}
+          data-test-id={testId}
           label={label}
           className={classes.tab}
           {...a11yProps(index)}

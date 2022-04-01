@@ -36,7 +36,10 @@ export const ExportTypeOption: React.FC<ExportTypeOptionProps> = ({
   const { t } = useTranslation();
 
   return (
-    <ExportContainer key={exportType}>
+    <ExportContainer
+      key={exportType}
+      data-test-id={`export-type-container-${exportType}`}
+    >
       <ExportCheckbox
         isActive={enabledExports[exportType] && isPathValid}
         setActiveExportValue={(value) => {

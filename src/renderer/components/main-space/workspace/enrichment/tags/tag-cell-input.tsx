@@ -79,6 +79,7 @@ export const TagCellInput: React.FC<TagCellInputProps> = ({
       renderInput={(params) => (
         <TextField
           {...params}
+          data-test-id="tag-edit-box"
           label={t("workspace.newTag")}
           margin="normal"
           onKeyDown={onKeyDown}

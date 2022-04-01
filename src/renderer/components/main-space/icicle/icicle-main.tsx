@@ -343,6 +343,7 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
             onMouseDown={isFileMoveActive ? onIcicleMouseDown : noop}
           >
             <AnimatedIcicle
+              testId="main-icicle"
               aliases={aliases}
               comments={comments}
               x={0}
@@ -408,6 +409,7 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
             preserveAspectRatio="none"
           >
             <Icicle
+              testId="minimap-icicle"
               aliases={aliases}
               comments={comments}
               x={0}

@@ -6,12 +6,12 @@ import { setupSentry } from "@common/monitoring/sentry";
 import Box from "@material-ui/core/Box";
 import React from "react";
 import { render } from "react-dom";
-import { NotificationContainer } from "react-notifications";
+import { ToastContainer } from "react-toastify";
 import styled from "styled-components";
 
 import { BackgroundLoadingInfoContainer } from "./components/background-loading-info/background-loading-info-container";
 import { Providers } from "./components/common/providers";
-import { WindowResizeErrorHandler as WindowResize } from "./components/common/window-resize-handler";
+import { WindowResize } from "./components/common/window-resize";
 import { NewVersionChecker } from "./components/header/new-version-checker";
 import { MainSpace } from "./components/main-space/main-space";
 import { Modals } from "./components/modals/modals";
@@ -62,7 +62,7 @@ render(
       </Box>
       <NewVersionChecker />
     </App>
-    <NotificationContainer />
+    <ToastContainer draggable={false} theme={"colored"} />
     <Modals />
   </Providers>,
   document.querySelector("#app")

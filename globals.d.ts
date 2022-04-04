@@ -7,6 +7,28 @@ declare module "*.png";
 
 declare module "windows-1252";
 declare module "angular-expressions";
+declare module "fswin" {
+  namespace FsWin {
+    export interface Attributes {
+      readonly IS_HIDDEN: boolean;
+    }
+  }
+  interface FsWin {
+    getAttributes: (
+      path: string,
+      cb: (attributes?: FsWin.Attributes) => void
+    ) => void;
+    getAttributesSync: (path: string) => FsWin.Attributes;
+  }
+
+  const fswin: FsWin;
+
+  export { FsWin };
+  export default fswin;
+}
+
+declare module "fswin/electron/x64/fswin.node";
+declare module "fswin/electron/ia32/fswin.node";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 declare const __static: string;

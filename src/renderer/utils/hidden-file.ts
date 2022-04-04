@@ -1,7 +1,7 @@
 import { isWindows } from "@common/utils/os";
 import path from "path";
 
-import { fswin } from "./fs-win-loader";
+import { getFsWin } from "./fs-win-loader";
 
 const UNIX_HIDDEN_PREFIX = ".";
 
@@ -9,18 +9,12 @@ const UNIX_HIDDEN_PREFIX = ".";
  * Check is a file is hidden on a windows fileSystem. It uses the attrib command.
  * @param elementPath
  */
-export const isFileHiddenOnWindows = (elementPath: string): boolean => {
-  if (!isWindows()) {
-    throw new Error("This method can only be used on a dos system");
-  }
-
-  return fswin.getAttributesSync(elementPath).IS_HIDDEN;
-};
-
-export const asyncIsFileHiddenOnWindows = async (
+export const isFileHiddenOnWindows = async (
   elementPath: string
-): Promise<boolean> =>
-  new Promise((resolve, reject) => {
+): Promise<boolean> => {
+  const fswin = await getFsWin();
+
+  return new Promise((resolve, reject) => {
     if (!isWindows()) {
       reject(new Error("This method can only be used on a dos system"));
       return;
@@ -29,6 +23,7 @@ export const asyncIsFileHiddenOnWindows = async (
       resolve(attr?.IS_HIDDEN ?? false);
     });
   });
+};
 
 const isFileHiddenOnUnix = (filePath: string) =>
   path.basename(filePath).startsWith(UNIX_HIDDEN_PREFIX);
@@ -37,22 +32,9 @@ const isFileHiddenOnUnix = (filePath: string) =>
  * Check if a file is hidden (starts with a dot on unix or has the hidden attribute on windows)
  * The main problem with hidefile, is that it considers a file hidden on windows if it both has the
  * hidden attribute and starts with a dot. So we have to directly read the attributes.
- * @param elementPath
  */
-const isHidden = (elementPath: string): boolean =>
-  isWindows()
-    ? isFileHiddenOnWindows(elementPath)
-    : isFileHiddenOnUnix(elementPath);
-
-const promiseIsHidden = async (filePath: string) =>
-  new Promise<boolean>((resolve) => {
-    resolve(isFileHiddenOnUnix(filePath));
-  });
-
-const asyncIsHidden = async (elementPath: string): Promise<boolean> =>
-  isWindows()
-    ? asyncIsFileHiddenOnWindows(elementPath)
-    : promiseIsHidden(elementPath);
+const isHidden = async (filePath: string) =>
+  isWindows() ? isFileHiddenOnWindows(filePath) : isFileHiddenOnUnix(filePath);
 
 const IGNORED_NAMES = ["thumbs.db", ".ds_store", ".gitkeep"];
 const IGNORED_EXTS = [".lnk", ".tmp", ".ini"];
@@ -76,17 +58,12 @@ export const isIgnored = (elementPath: string): boolean => {
 
 /**
  * Checks if a file should be ignored by file system loading
- * @param elementPath
  */
-export const shouldIgnoreElement = (elementPath: string): boolean =>
-  isHidden(elementPath) || isIgnored(elementPath);
-
-export const asyncShouldIgnoreElement = async (
+export const shouldIgnoreElement = async (
   elementPath: string
 ): Promise<boolean> => {
-  // eslint-disable-next-line @typescript-eslint/await-thenable
-  if (await isIgnored(elementPath)) {
+  if (isIgnored(elementPath)) {
     return true;
   }
-  return asyncIsHidden(elementPath);
+  return isHidden(elementPath);
 };

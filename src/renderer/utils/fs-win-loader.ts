@@ -1,40 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { isWindows } from "@common/utils/os";
+import type { FsWin } from "fswin";
 
-// TODO: replace
+export const getFsWin = async (): Promise<FsWin> => {
+  if (!isWindows() || !process.versions.electron) {
+    return {} as FsWin;
+  }
 
-/**
- * Loads the fswin.node module that is copied from the node_modules. A dirty workaround to the fact that
- * we use webpack to build our app so importing native modules is not that simple.
- * We could probably replace this with a proper webpack loader.
- */
-export const fswin: FsWin = (() => {
-  if (!isWindows()) {
-    return {};
+  if (process.arch === "ia32") {
+    return import("fswin/electron/ia32/fswin.node");
   }
-  try {
-    //TODO // @ts-expect-error
-    return __non_webpack_require__(
-      `./dist/electron/${process.arch}/fswin.node`
-    );
-  } catch (err: unknown) {
-    //TODO // @ts-expect-error
-    return __non_webpack_require__(`./electron/${process.arch}/fswin.node`);
-  }
-})();
-
-// eslint-disable-next-line @typescript-eslint/no-namespace
-namespace FsWin {
-  export interface Attributes {
-    readonly IS_HIDDEN: boolean;
-  }
-}
-interface FsWin {
-  getAttributes: (
-    path: string,
-    cb: (attributes?: FsWin.Attributes) => void
-  ) => void;
-  getAttributesSync: (path: string) => FsWin.Attributes;
-}
+  return import("fswin/electron/x64/fswin.node");
+};

@@ -26,7 +26,7 @@ import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-t
 import { convertJsonToCurrentVersion } from "../utils/compatibility";
 import { identifyFileFormat } from "../utils/file-format";
 import { convertToPosixAbsolutePath } from "../utils/file-system/file-sys-util";
-import { asyncShouldIgnoreElement } from "../utils/hidden-file";
+import { shouldIgnoreElement } from "../utils/hidden-file";
 import { removeIgnoredElementsFromVirtualFileSystem } from "../utils/virtual-file-system";
 import { sanitizeHooks } from "./file-system-loading-process-utils";
 import type {
@@ -78,7 +78,7 @@ const loadFilesAndFoldersFromFileSystemImpl = async (
 
   const loadFilesAndFoldersFromFileSystemRec = async (currentPath: string) => {
     try {
-      if (await asyncShouldIgnoreElement(currentPath)) {
+      if (await shouldIgnoreElement(currentPath)) {
         return;
       }
       const stats = await fs.promises.stat(currentPath);

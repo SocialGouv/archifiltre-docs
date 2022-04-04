@@ -95,7 +95,9 @@ const PRELOAD_PATH = IS_PACKAGED()
   ? path.resolve(process.resourcesPath, "preload.js") // prod
   : IS_DIST_MODE
   ? path.resolve(__dirname, "preload.js") // dist / e2e
-  : path.resolve(__dirname, "preload.js").replace("/src/", "/dist/"); // dev
+  : path
+      .resolve(__dirname, "preload.js")
+      .replace(`${path.sep}src${path.sep}`, `${path.sep}dist${path.sep}`); // dev
 
 async function createWindow() {
   // Create the browser window.

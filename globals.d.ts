@@ -27,8 +27,7 @@ declare module "fswin" {
   export default fswin;
 }
 
-declare module "fswin/electron/x64/fswin.node";
-declare module "fswin/electron/ia32/fswin.node";
+declare module "fswin/*.node";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 declare const __static: string;

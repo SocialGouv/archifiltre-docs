@@ -48,7 +48,7 @@ module.exports =
         config.devServer.writeToDisk = true;
       }
       config.plugins.push(
-        new webpack.EnvironmentPlugin(["AUTORELOAD", "AUTOLOAD"])
+        new webpack.EnvironmentPlugin({ AUTOLOAD: false, AUTORELOAD: false })
       );
     }
 

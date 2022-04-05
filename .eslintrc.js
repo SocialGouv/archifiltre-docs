@@ -1,32 +1,26 @@
 const path = require("path");
 
 const tsconfigPath = path.resolve(__dirname, "./tsconfig.json");
-const tsconfigTestPath = path.resolve(__dirname, "./tsconfig.test.json");
+const tsconfigRendererPath = path.resolve(
+  __dirname,
+  "./src/renderer/tsconfig.json"
+);
+const tsconfigMainPath = path.resolve(__dirname, "./src/main/tsconfig.json");
+const tsconfigCommonPath = path.resolve(
+  __dirname,
+  "./src/common/tsconfig.json"
+);
+const tsconfigScriptsPath = path.resolve(__dirname, "./scripts/tsconfig.json");
 
 /** @type {import("eslint").Linter.Config} */
 const typescriptConfig = {
-  env: {
-    browser: true,
-    node: true,
-  },
   extends: "@socialgouv/eslint-config-typescript",
-  globals: {
-    ARCHIFILTRE_SITE_URL: true,
-    ARCHIFILTRE_VERSION: true,
-    AUTOLOAD: true,
-    FORCE_TRACKING: true,
-    MODE: true,
-    REACT_DEV_TOOLS_PATH: true,
-    SENTRY_DSN: true,
-    SENTRY_MINIDUMP_URL: true,
-    STATIC_ASSETS_PATH: true,
-    WRITE_DEBUG: true,
-  },
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: tsconfigPath,
     sourceType: "module",
   },
+  plugins: ["typescript-sort-keys"],
   rules: {
     "@typescript-eslint/consistent-type-imports": "error",
     "@typescript-eslint/no-misused-promises": "off",
@@ -34,6 +28,7 @@ const typescriptConfig = {
     "@typescript-eslint/no-unused-vars": "off",
     "import/default": "off",
     "import/named": "off",
+    "no-console": "warn",
     "no-unused-vars": "off",
     "prefer-template": "warn",
     "prettier/prettier": [
@@ -43,6 +38,9 @@ const typescriptConfig = {
         tabWidth: 2,
       },
     ],
+    "react/prop-types": "off",
+    "typescript-sort-keys/interface": "error",
+    "typescript-sort-keys/string-enum": "error",
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
       "warn",
@@ -58,7 +56,7 @@ const typescriptConfig = {
 
 /** @type {import("eslint").Linter.Config} */
 const defaultConfig = {
-  ignorePatterns: "node_modules",
+  ignorePatterns: ["!**/.*.js*", "node_modules"],
   overrides: [
     {
       files: ["**/*.ts"],
@@ -74,35 +72,75 @@ const defaultConfig = {
     },
     {
       extends: "@socialgouv/eslint-config-react",
-      files: ["**/*.js"],
+      files: ["**/*.js*"],
+    },
+    {
+      env: {
+        browser: true,
+        node: true,
+      },
+      files: ["src/renderer/**/*.ts*", "src/common/**/*.ts*"],
+    },
+    {
+      files: ["src/renderer/**/*.ts*"],
+      parserOptions: {
+        project: tsconfigRendererPath,
+      },
+      settings: {
+        "import/resolver": {
+          typescript: {
+            project: tsconfigRendererPath,
+          },
+        },
+      },
+    },
+    {
+      files: ["src/common/**/*.ts"],
+      parserOptions: {
+        project: tsconfigCommonPath,
+      },
+      settings: {
+        "import/resolver": {
+          typescript: {
+            project: tsconfigCommonPath,
+          },
+        },
+      },
     },
     {
       env: {
         browser: false,
         node: true,
       },
-      files: ["src/main/**/*.ts", "src/electron-main.ts"],
+      files: ["src/main/**/*.ts"],
+      parserOptions: {
+        project: tsconfigMainPath,
+      },
+      settings: {
+        "import/resolver": {
+          typescript: {
+            project: tsconfigMainPath,
+          },
+        },
+      },
     },
     {
-      env: {
-        jest: true,
+      files: "src/**/*.ts*",
+      globals: {
+        __static: true,
       },
-      files: [
-        "src/**/*.test.js",
-        "src/**/*.test.ts",
-        "src/test/**/*.js",
-        "tests/**/*.ts",
-      ],
+    },
+    {
+      files: "scripts/**/*.ts",
       parserOptions: {
-        project: tsconfigTestPath,
-        sourceType: "module",
+        project: tsconfigScriptsPath,
       },
-      rules: {
-        "@typescript-eslint/naming-convention": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-unsafe-argument": "off",
-        "@typescript-eslint/no-unsafe-return": "off",
-        "@typescript-eslint/require-array-sort-compare": "off",
+      settings: {
+        "import/resolver": {
+          typescript: {
+            project: tsconfigScriptsPath,
+          },
+        },
       },
     },
   ],

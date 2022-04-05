@@ -14,3 +14,4 @@ yarn-error.log
 # act workflow folder
 workflow/
 pr_event.json
+scripts/out/*

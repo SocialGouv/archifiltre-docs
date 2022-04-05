@@ -1,6 +1,6 @@
 import type { IpcMainEvent } from "electron";
 
-import type { UnknownMapping } from "../types";
+import type { UnknownMapping } from "../utils/types";
 
 /**
  * Define an IPC config with arguments types and a return value type.

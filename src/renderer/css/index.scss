@@ -1,0 +1,19 @@
+@import "../../../static/fonts/fonts.css";
+@import "~react-toastify/dist/ReactToastify.css";
+
+// :global {
+// }
+
+#app {
+  padding: unset;
+}
+
+body {
+  margin: unset;
+  background-color: #fafafa;
+}
+
+*,
+h4 {
+  font-family: "Quicksand", sans-serif;
+}

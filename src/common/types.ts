@@ -1,4 +1,7 @@
-/**
- * Hack for union string litteral with string to keep autocomplete.
- */
-export type UnknownMapping = string & { _?: never };
+import type { ArchifiltreDocsErrorCode } from "./utils/error/error-codes";
+
+export interface WorkerError {
+  code: ArchifiltreDocsErrorCode;
+  message: string;
+  path: string;
+}

@@ -1,0 +1,16 @@
+name: Kill XVFB server
+description: Exclusively for ubuntu, kill any xvfb processes when found
+
+runs:
+  using: composite
+  steps:
+    - name: Search & Kill all Xvfb
+      shell: bash
+      run: |
+        xvfb_pids=`ps aux | grep -i xvfb | grep -v grep | awk '{print $2}'`
+        if [ "$xvfb_pids" != "" ]; then
+            echo "Killing the following xvfb processes: $xvfb_pids"
+            sudo kill $xvfb_pids
+        else
+            echo "No xvfb processes to kill"
+        fi

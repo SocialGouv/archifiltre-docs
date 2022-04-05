@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": ["@playwright/test"],
+    "typeRoots": []
+  },
+  "exclude": [
+    "../../node_modules/@types/**/*jest*/*.d.ts",
+    "../../node_modules/@types/jest/index.d.ts"
+  ]
+}

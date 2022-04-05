@@ -1,27 +1,39 @@
 {
-  "extends": "@tsconfig/node14/tsconfig.json",
+  "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
-    "incremental": true,
-    "experimentalDecorators": true,
-    "strictNullChecks": true,
-    "outDir": "./dist/", // path to output directory
-    "sourceMap": true, // allow sourcemap support
-    "module": "CommonJS", // specify module code generation
-    "jsx": "react", // use typescript to transpile jsx to js
-    "target": "ES2015", // TODO: >=ES2016 (Raven only working in es2015 for whatever reasons)
-    "allowJs": true, // allow a partial TypeScript and JavaScript codebase
-    "resolveJsonModule": true,
     "lib": [
       "ES2021",
       "DOM"
     ],
+    "incremental": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "jsx": "react",
+    "target": "ES2017",
+    "baseUrl": ".",
+    "paths": {
+      "@common/*": [
+        "src/common/*"
+      ]
+    }
+  },
+  "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
+    ],
+    "transpileOnly": true,
+    "files": true
   },
   "include": [
-    "src/**/*",
-    "globals.d.ts"
+    "globals.d.ts",
+    "typings/*.d.ts",
+    "src/**/*"
   ],
   "exclude": [
     "tests/**/*",
-    "**/*.test.*"
+    "**/*.test.*",
+    "./node_modules/"
   ]
 }

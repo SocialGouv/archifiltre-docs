@@ -29,6 +29,7 @@ const typescriptConfig = {
     "import/default": "off",
     "import/named": "off",
     "no-console": "warn",
+    "no-undef": "off",
     "no-unused-vars": "off",
     "prefer-template": "warn",
     "prettier/prettier": [

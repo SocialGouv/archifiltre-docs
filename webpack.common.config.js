@@ -17,8 +17,6 @@ module.exports =
       "event"
     );
 
-    config.module.rules.push({ loader: "node-loader", test: /\.node$/ });
-
     if (!config.plugins) {
       config.plugins = [];
     }

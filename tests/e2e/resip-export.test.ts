@@ -1,50 +1,63 @@
-import type { ElectronApplication } from "@playwright/test";
+import type { ElectronApplication, Page } from "@playwright/test";
 import { expect, test } from "@playwright/test";
 import parseCsv from "csv-parse/lib/sync";
 import dateFormat from "dateformat";
 import fs from "fs";
 import path from "path";
-import rimraf from "rimraf";
+import { sync as rimrafSync } from "rimraf";
 
+import { createStructure } from "../utils/fs";
 import {
   addDescription,
   addTag,
   clickIcicleElement,
   exportToResip,
 } from "./utils/app";
-import { startApp } from "./utils/test";
+import { closeApp, startApp } from "./utils/test";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
-const { describe, beforeEach, afterEach } = test;
+const { describe, beforeEach, afterEach, beforeAll, afterAll } = test;
 const it = test;
 
 const TEST_TIMEOUT = 20000;
 
+const testFolderPath = path.resolve(__dirname, "../test-folder/");
+
 describe("Export to RESIP", () => {
   test.use({ navigationTimeout: TEST_TIMEOUT });
 
-  let app: ElectronApplication;
+  beforeAll(async () => {
+    await createStructure({
+      [testFolderPath]: {
+        "child/": {
+          "index.csv": `"dez";
+`,
+          "text.txt": `dedez
+`,
+        },
+      },
+    });
+  });
+
+  afterAll(() => {
+    rimrafSync(testFolderPath);
+  });
+
+  let app: ElectronApplication, win: Page;
   beforeEach(async () => {
-    app = await startApp();
+    [app, win] = await startApp(testFolderPath);
   });
 
   afterEach(async () => {
-    const cwd = path.resolve(__dirname, "../test-folder/");
-    await new Promise<void>((resolve, reject) => {
-      rimraf(path.join(cwd, "test-folder-resip*.csv"), (err) => {
-        if (err) reject(err);
-        else resolve();
-      });
-    });
-    await app.close();
+    rimrafSync(path.join(testFolderPath, "test-folder-resip*.csv"));
+    await closeApp(app);
   });
 
   it("should generate a valid resip export", async () => {
+    test.slow();
     const tag0Name = "tag0";
     const tag1Name = "tag1";
     const description = "element description";
-
-    const win = await app.firstWindow();
 
     await win.waitForSelector(`[data-test-id="main-icicle"]`);
     await (await win.waitForSelector(".notification-success")).click();
@@ -101,11 +114,11 @@ describe("Export to RESIP", () => {
       [
         "1",
         "2",
-        "child/index.csv",
+        path.normalize("child/index.csv"),
         "Item",
         "index.csv",
-        "2021-09-01",
-        "2021-09-01",
+        todayDate,
+        todayDate,
         todayDate,
         "",
         "element description",
@@ -118,8 +131,8 @@ describe("Export to RESIP", () => {
         "child",
         "RecordGrp",
         "child",
-        "2021-09-01",
-        "2021-09-01",
+        todayDate,
+        todayDate,
         todayDate,
         "",
         "",
@@ -132,8 +145,8 @@ describe("Export to RESIP", () => {
         ".",
         "RecordGrp",
         "test-folder",
-        "2021-09-01",
-        "2021-09-01",
+        todayDate,
+        todayDate,
         todayDate,
         "",
         "",
@@ -143,11 +156,11 @@ describe("Export to RESIP", () => {
       [
         "4",
         "2",
-        "child/text.txt",
+        path.normalize("child/text.txt"),
         "Item",
         "text.txt",
-        "2021-09-01",
-        "2021-09-01",
+        todayDate,
+        todayDate,
         todayDate,
         "",
         "",

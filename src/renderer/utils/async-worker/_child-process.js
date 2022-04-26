@@ -9,5 +9,4 @@ require("ts-node").register({
   project: path.resolve(__dirname, "../../tsconfig.json"),
 });
 
-console.log("BRIDGE CALLED, REDIRECT =>", process.argv[2]);
 require(process.argv[2]);

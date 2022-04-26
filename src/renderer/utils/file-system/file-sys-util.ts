@@ -154,16 +154,11 @@ export const getAbsolutePath = (
 export const isRootPath = (testPath: string): boolean =>
   path.dirname(testPath) === testPath;
 
-export const isValidFilePath = async (filePath: string): Promise<boolean> => {
+export const isValidFilePath = (filePath: string): boolean => {
   const folderPath = dirname(filePath);
 
-  return folderExists(folderPath);
-};
-
-const folderExists = async (folderPath: string): Promise<boolean> => {
   try {
-    const stats = await fs.promises.stat(folderPath);
-    return stats.isDirectory();
+    return fs.statSync(folderPath).isDirectory();
   } catch (error: unknown) {
     return false;
   }

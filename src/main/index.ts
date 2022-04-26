@@ -1,4 +1,9 @@
-import { IS_DEV, IS_DIST_MODE, IS_E2E, IS_PACKAGED } from "@common/config";
+import {
+  IS_DIST_MODE,
+  IS_E2E,
+  IS_PACKAGED,
+  RESOURCES_PATH,
+} from "@common/config";
 import { loadApp } from "@common/modules/app";
 import { loadHash } from "@common/modules/hash";
 import { loadWindow } from "@common/modules/window";
@@ -19,14 +24,9 @@ if (process.arch === "x64") {
   app.commandLine.appendSwitch("js-flags", "--max-old-space-size=40960");
 }
 
-// Passing null will suppress the default menu.
-// On Windows and Linux, this has the additional
-// effect of removing the menu bar from the window.
 if (app.isPackaged) {
   Menu.setApplicationMenu(null);
-}
-
-if (!app.isPackaged) {
+} else {
   app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
 }
 
@@ -91,13 +91,7 @@ const INDEX_URL = IS_PACKAGED()
   ? `file://${path.join(__dirname, "/../renderer/index.html")}`
   : `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`;
 
-const PRELOAD_PATH = IS_PACKAGED()
-  ? path.resolve(process.resourcesPath, "preload.js") // prod
-  : IS_DIST_MODE
-  ? path.resolve(__dirname, "preload.js") // dist / e2e
-  : path
-      .resolve(__dirname, "preload.js")
-      .replace(`${path.sep}src${path.sep}`, `${path.sep}dist${path.sep}`); // dev
+const PRELOAD_PATH = path.resolve(RESOURCES_PATH, "preload.js");
 
 async function createWindow() {
   // Create the browser window.
@@ -136,7 +130,7 @@ async function createWindow() {
 }
 
 void app.whenReady().then(() => {
-  if (IS_DEV && !IS_PACKAGED()) {
+  if (!IS_E2E && !IS_PACKAGED()) {
     let devToolsLoaded = Promise.resolve<Extension | null>(null);
     try {
       devToolsLoaded = session.defaultSession

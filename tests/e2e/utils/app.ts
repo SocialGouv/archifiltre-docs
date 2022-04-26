@@ -28,7 +28,7 @@ export const clickOverIcicleElement = async (
   win: Page,
   filePath: string
 ): Promise<void> => {
-  await clickOverElement(win, getIcicleLocatorByTestId(win, filePath));
+  await clickOverElement(getIcicleLocatorByTestId(win, filePath), win);
 };
 
 export const clickIcicleElement = async (
@@ -71,7 +71,7 @@ const enableDescriptionEdition = async (win: Page) => {
  */
 export const addTag = async (win: Page, tag: string): Promise<void> => {
   await enableTagEdition(win);
-  await typeText(win, tag);
+  await typeText(tag, win);
   // We click outside the box to save our description
   await win.keyboard.press("Enter", { delay: 100 });
 };
@@ -85,7 +85,7 @@ export const addDescription = async (
 ): Promise<void> => {
   await enableDescriptionEdition(win);
 
-  await typeText(win, description);
+  await typeText(description, win);
   // We click outside the box to save our description
   await win.mouse.click(10, 10);
 };

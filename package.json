@@ -69,7 +69,6 @@
       "redux",
       "rxjs",
       "source-map-support",
-      "source-map-support",
       "styled-components",
       "triple-beam",
       "uuid",
@@ -111,6 +110,13 @@
       {
         "from": "static",
         "to": "static",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "dist/renderer/lib/",
+        "to": "lib/",
         "filter": [
           "**/*"
         ]
@@ -185,7 +191,7 @@
     "@types/xml": "^1.0.6",
     "clean-webpack-plugin": "^4.0.0",
     "concurrently": "6.0.2",
-    "copy-webpack-plugin": "9.0.1",
+    "copy-webpack-plugin": "6",
     "cross-env": "^7.0.3",
     "csv-stringify": "^5.6.4",
     "deep-equal": "2.0.5",

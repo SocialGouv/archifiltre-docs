@@ -37,20 +37,16 @@ const defaultEnabledExports: ExportTypesMap<boolean> = mapValuesFromExportType(
   () => false
 );
 
-const computeExportPathsValidityMap = async (
+const computeExportPathsValidityMap = (
   exportPathsMap: ExportTypesMap<string>
-): Promise<ExportTypesMap<boolean>> => {
-  const resultsArray = await Promise.all(
-    Object.keys(exportPathsMap).map(async (key: ExportType) =>
-      isValidFilePath(exportPathsMap[key]).then((isValid) => ({
-        isValid,
-        key,
-      }))
-    )
-  );
+): ExportTypesMap<boolean> => {
+  const resultsArray = Object.keys(exportPathsMap).map((key: ExportType) => ({
+    isValid: isValidFilePath(exportPathsMap[key]),
+    key,
+  }));
 
   return mapValuesFromExportType(
-    (key) => find(resultsArray, { key })?.isValid ?? false
+    (key) => !!find(resultsArray, { key })?.isValid
   );
 };
 
@@ -94,7 +90,7 @@ export const ExportModalContent: React.FC<ExportModalContentProps> = ({
   }, [startExport, activeExports, exportPaths, closeModal]);
 
   useEffect(() => {
-    void computeExportPathsValidityMap(exportPaths).then(setValidPaths);
+    setValidPaths(computeExportPathsValidityMap(exportPaths));
   }, [exportPaths, setValidPaths]);
 
   const setActiveExportValue: ExportOptionsProps["setActiveExportValue"] = (

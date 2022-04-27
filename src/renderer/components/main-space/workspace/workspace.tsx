@@ -5,7 +5,10 @@ import { useTabsState } from "../..//header/tabs-context";
 import { HeaderContainer as Header } from "../../header/header-container";
 import { DuplicatesSearchContainer as DuplicatesSearch } from "../duplicates-search/duplicates-search-container";
 import { HelpButton } from "../help-button";
+// eslint-disable-next-line unused-imports/no-unused-imports
 import { IcicleApiToProps as Icicle } from "../icicle/icicle-container";
+// eslint-disable-next-line unused-imports/no-unused-imports
+import { IciclesContainer } from "../icicle/nivo-icicles";
 import { NavigationBarContainer as NavigationBar } from "../navigation-bar/navigation-bar-container";
 import { TabsContent } from "./tabs/tabs-content";
 import { WorkspaceProviders } from "./workspace-providers";
@@ -36,7 +39,8 @@ export const Workspace: React.FC = () => {
                 <NavigationBar />
               </Box>
               <Box flexGrow={1} overflow="hidden">
-                <Icicle />
+                {/* <Icicle /> */}
+                <IciclesContainer />
               </Box>
               <Box position="absolute" bottom={15} right={15}>
                 <HelpButton />

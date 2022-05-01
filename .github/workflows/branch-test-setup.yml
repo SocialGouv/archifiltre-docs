@@ -90,7 +90,7 @@ jobs:
           yarn global add replace
           $(yarn global bin)/replace '"version": "${{ needs.compile.outputs.current-version }}"' '"version": "${{ needs.compile.outputs.next-version }}"' package.json
       - name: Download dist
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: compile-dist
           path: dist/
@@ -133,7 +133,7 @@ jobs:
         env:
           TAG_VERSION: v${{ needs.compile.outputs.next-version }}
       - name: Downloads bin
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
 
       - name: Release tip tag for branch
         uses: pyTooling/Actions/releaser@r0

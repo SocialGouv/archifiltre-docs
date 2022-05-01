@@ -61,7 +61,7 @@ jobs:
           yarn config set network-timeout 300000
           yarn --frozen-lockfile --perfer-offline
       - name: Download dist
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: compile-dist
           path: dist/

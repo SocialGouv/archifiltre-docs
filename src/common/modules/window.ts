@@ -5,6 +5,7 @@ import { ipcMain } from "../ipc";
 declare module "../ipc/event" {
   interface SyncIpcMapping {
     "window.getSize": IpcConfig<[], number[]>;
+    "window.maximize": IpcConfig<[], void>;
     "window.reload": IpcConfig<[], void>;
     "window.setSize": IpcConfig<[width: number, heigth: number], void>;
     "window.show": IpcConfig<[], void>;
@@ -17,6 +18,9 @@ export const loadWindow = (window: BrowserWindow): void => {
   });
   ipcMain.on("window.reload", () => {
     window.reload();
+  });
+  ipcMain.on("window.maximize", () => {
+    window.maximize();
   });
   ipcMain.on("window.getSize", (event) => {
     event.returnValue = window.getSize();

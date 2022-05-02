@@ -13,8 +13,15 @@ import type {
   AsyncIpcChannel,
   AsyncIpcKeys,
   CustomIpcMainEvent,
+  CustomIpcRendererEvent,
+  DualAsyncIpcChannel,
+  DualAsyncIpcKeys,
   GetAsyncIpcConfig,
+  GetDualAsyncIpcConfig,
+  GetRepliedDualAsyncIpcConfig,
   GetSyncIpcConfig,
+  ReplyDualAsyncIpcChannel,
+  ReplyDualAsyncIpcKeys,
   SyncIpcChannel,
   SyncIpcKeys,
 } from "./event";
@@ -30,11 +37,14 @@ interface IpcMain extends BaseIpcMain {
       | Promise<GetAsyncIpcConfig<T>["returnValue"]>
   ) => void;
 
-  on: <T extends SyncIpcKeys | UnknownMapping>(
-    channel: SyncIpcChannel<T>,
+  on: <T extends DualAsyncIpcKeys | SyncIpcKeys | UnknownMapping>(
+    channel: DualAsyncIpcChannel<T> | SyncIpcChannel<T>,
     listener: (
       event: CustomIpcMainEvent<T>,
-      ...args: GetSyncIpcConfig<T>["args"]
+      ...args: T extends SyncIpcKeys
+        ? // @ts-expect-error -- conflict because of pre filled ipc mapping
+          GetSyncIpcConfig<T>["args"]
+        : GetDualAsyncIpcConfig<T>["args"]
     ) => void
   ) => this;
 }
@@ -43,6 +53,27 @@ interface IpcRenderer extends BaseIpcRenderer {
     channel: AsyncIpcChannel<T>,
     ...args: GetAsyncIpcConfig<T>["args"]
   ) => Promise<GetAsyncIpcConfig<T>["returnValue"]>;
+
+  off: <T extends ReplyDualAsyncIpcKeys | UnknownMapping>(
+    channel: ReplyDualAsyncIpcChannel<T>,
+    listener: (
+      event: CustomIpcRendererEvent<T>,
+      ...args: GetRepliedDualAsyncIpcConfig<T>["args"]
+    ) => void
+  ) => this;
+
+  on: <T extends ReplyDualAsyncIpcKeys | UnknownMapping>(
+    channel: ReplyDualAsyncIpcChannel<T>,
+    listener: (
+      event: CustomIpcRendererEvent<T>,
+      ...args: GetRepliedDualAsyncIpcConfig<T>["args"]
+    ) => void
+  ) => this;
+
+  send: <T extends DualAsyncIpcKeys | UnknownMapping>(
+    channel: DualAsyncIpcChannel<T>,
+    ...args: GetDualAsyncIpcConfig<T>["args"]
+  ) => void;
 
   sendSync: <T extends SyncIpcKeys | UnknownMapping>(
     channel: SyncIpcChannel<T>,

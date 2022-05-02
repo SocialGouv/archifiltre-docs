@@ -26,7 +26,7 @@ import { SecretDevtools } from "./secret-devtools";
 import { setupLanguage } from "./utils/language";
 import { version } from "./version";
 
-module.hot?.accept();
+module.hot?.decline();
 
 setupSentry();
 

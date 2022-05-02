@@ -5,6 +5,7 @@ import {
   RESOURCES_PATH,
 } from "@common/config";
 import { loadApp } from "@common/modules/app";
+import { setupAutoUpdate } from "@common/modules/auto-update";
 import { loadHash } from "@common/modules/hash";
 import { loadWindow } from "@common/modules/window";
 import { setupSentry } from "@common/monitoring/sentry";
@@ -105,12 +106,6 @@ async function createWindow() {
     },
   });
 
-  // and load the index.html of the app.
-  // if (process.env.DEV_SERVER !== "true" && process.env.NODE_ENV !== "test") {
-  //   void win.loadFile(path.join(__dirname, "./index.html"));
-  // } else {
-  //   void win.loadURL("http://localhost:8000");
-  // }
   loadWindow(win);
 
   await win.loadURL(INDEX_URL);
@@ -155,6 +150,7 @@ void app.whenReady().then(() => {
 app.on("ready", async () => {
   loadHash();
   loadApp();
+  await setupAutoUpdate();
   await createWindow();
 });
 

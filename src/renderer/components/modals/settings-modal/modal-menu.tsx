@@ -1,3 +1,4 @@
+import { Badge } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -5,6 +6,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaFlag, FaInfoCircle, FaLock } from "react-icons/fa";
+
+import { useAutoUpdate } from "../../../hooks/use-auto-update";
 
 export interface ModalMenuProps {
   selectedItem: number;
@@ -16,6 +19,7 @@ export const ModalMenu: React.FC<ModalMenuProps> = ({
   setSelectedItem,
 }) => {
   const { t } = useTranslation();
+  const { updateAvailable } = useAutoUpdate();
   const menuOptions = [
     {
       icon: <FaFlag />,
@@ -26,7 +30,11 @@ export const ModalMenu: React.FC<ModalMenuProps> = ({
       label: t("settingsModal.privacy"),
     },
     {
-      icon: <FaInfoCircle />,
+      icon: (
+        <Badge color="error" variant="dot" invisible={!updateAvailable}>
+          <FaInfoCircle />
+        </Badge>
+      ),
       label: t("settingsModal.about"),
     },
   ];

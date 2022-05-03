@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import type { IpcMainEvent, IpcRendererEvent } from "electron";
 
-import type { UnknownMapping } from "../utils/types";
+import type { UnknownMapping } from "../utils/type";
 
 /**
  * Define an IPC config with arguments type and a return values type.

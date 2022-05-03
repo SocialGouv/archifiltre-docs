@@ -7,10 +7,18 @@ import {
 import { loadApp } from "@common/modules/app";
 import { setupAutoUpdate } from "@common/modules/auto-update";
 import { loadHash } from "@common/modules/hash";
+import {
+  get as getConfig,
+  initNewUserConfig,
+} from "@common/modules/new-user-config";
+import { getTrackerProvider, initTracking } from "@common/modules/tracker";
 import { loadWindow } from "@common/modules/window";
 import { setupSentry } from "@common/monitoring/sentry";
+import { sleep } from "@common/utils/os";
+import { version } from "@common/utils/package";
 import type { Extension } from "electron";
 import { app, BrowserWindow, dialog, ipcMain, Menu, session } from "electron";
+import { totalmem } from "os";
 import path from "path";
 
 module.hot?.accept();
@@ -148,9 +156,34 @@ void app.whenReady().then(() => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
+  // -- init all "modules"
+  // TODO: do real modules
+  await initNewUserConfig();
+  initTracking();
   loadHash();
   loadApp();
   await setupAutoUpdate();
+
+  // post init
+  const tracker = getTrackerProvider();
+  sentryCallback(getConfig("appId"), ...tracker.getSentryIntegations());
+  const firstOpened = getConfig("_firstOpened");
+  if (firstOpened) {
+    tracker.track("App First Opened", {
+      arch: process.arch,
+      date: new Date(),
+      os: process.platform,
+      ram: totalmem() / 1024 / 1024 / 1024,
+      version,
+    });
+  }
+
+  tracker.track("App Opened", {
+    date: new Date(),
+    version,
+  });
+
+  // finally create window
   await createWindow();
 });
 
@@ -165,6 +198,13 @@ app.on("activate", async () => {
   if (win === null) {
     await createWindow();
   }
+});
+
+app.on("will-quit", async (event) => {
+  event.preventDefault();
+  getTrackerProvider().track("App Closed", { date: new Date() });
+  await sleep(1000);
+  process.exit();
 });
 
 // In this file you can include the rest of your app's specific main process

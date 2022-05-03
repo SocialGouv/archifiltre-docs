@@ -1,4 +1,4 @@
-import { percent } from "@common/utils/numbers";
+import { getPercentage } from "@common/utils/numbers";
 import _ from "lodash";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -47,12 +47,10 @@ export const DuplicatesTableContainer: React.FC = () => {
     () =>
       removeZeroValues(
         _.mapValues(fileSizesCount, (fileSize) =>
-          percent(
+          getPercentage(
             fileSize || 0,
             filesAndFoldersMetadataMap[""].childrenTotalSize,
-            {
-              numbersOfDecimals: 2,
-            }
+            2
           )
         )
       ),

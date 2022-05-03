@@ -1,4 +1,4 @@
-import type { FilterMethod } from "@common/utils/types";
+import type { FilterMethod } from "@common/utils/type";
 import Box from "@material-ui/core/Box";
 import React, { useEffect, useState } from "react";
 

@@ -1,3 +1,4 @@
+import { ExportCategory, ExportType } from "@common/export/type";
 import { isWindows } from "@common/utils/os";
 import _ from "lodash";
 import path from "path";
@@ -13,26 +14,6 @@ import { ActionTitle } from "../../../logging/tracker-types";
 import type { ArchifiltreDocsThunkAction } from "../../../reducers/archifiltre-types";
 import { getNameWithExtension } from "../../../utils/file-system/file-sys-util";
 import type { ExportTypesMap } from "../export-modal/export-options";
-
-/* eslint-disable @typescript-eslint/naming-convention */
-export enum ExportType {
-  AUDIT = "AUDIT",
-  CSV = "CSV",
-  CSV_WITH_HASHES = "CSV_WITH_HASHES",
-  DELETION_SCRIPT = "DELETION",
-  EXCEL = "EXCEL",
-  METS = "METS",
-  RESIP = "RESIP",
-  TREE_CSV = "TREE_CSV",
-}
-
-export enum ExportCategory {
-  AUDIT = "AUDIT",
-  EXCHANGE_WITH_ERMS = "EXCHANGE_WITH_ERMS",
-  RECORDS_INVENTORY = "RECORDS_INVENTORY",
-  UTILITIES = "UTILITIES",
-}
-/* eslint-enable @typescript-eslint/naming-convention */
 
 export interface IsActiveOptions {
   areHashesReady: boolean;

@@ -4,7 +4,7 @@ import type {
   Merger,
 } from "@common/utils/functionnal-programming";
 import type { HashesMap } from "@common/utils/hashes-types";
-import { curriedFormatPercent, percent } from "@common/utils/numbers";
+import { curriedToDecimalFloat, getPercentage } from "@common/utils/numbers";
 import dateFormat from "dateformat";
 import _ from "lodash";
 import {
@@ -153,7 +153,7 @@ export const percentFileTypes: Mapper<
 > = compose((counts: FileTypeMap<number>) => {
   const nbFiles = sumFileType(counts);
   return _.mapValues(counts, (filesForType: number) =>
-    percent(filesForType, nbFiles, { numbersOfDecimals: 2 })
+    getPercentage(filesForType, nbFiles)
   );
 }, countFileTypes);
 
@@ -243,7 +243,7 @@ export const getDuplicateFoldersPercent: Merger<
   HashesMap,
   number
 > = compose(
-  curriedFormatPercent({ numbersOfDecimals: 2 }),
+  curriedToDecimalFloat(2),
   countDuplicatesPercentForFolders as Merger<
     FilesAndFoldersCollection,
     HashesMap,
@@ -259,7 +259,7 @@ export const getDuplicateFilesPercent: Merger<
   HashesMap,
   number
 > = compose(
-  curriedFormatPercent({ numbersOfDecimals: 2 }),
+  curriedToDecimalFloat(2),
   countDuplicatesPercentForFiles as Merger<
     FilesAndFoldersCollection,
     HashesMap,

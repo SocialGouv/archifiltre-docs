@@ -3,6 +3,8 @@ import { autoUpdater } from "electron-updater";
 
 import { ipcMain } from "../ipc";
 import type { DualIpcConfig } from "../ipc/event";
+import { version } from "../utils/package";
+import { getTrackerProvider } from "./tracker";
 
 type AutoUpdateCheckIpcConfig =
   | DualIpcConfig<
@@ -74,13 +76,13 @@ export const setupAutoUpdate = async (): Promise<void> => {
   autoUpdater.on("update-downloaded", (info: UpdateInfo) => {
     console.log("[UPDATE] Update downloaded", info);
     updateAvailable = true;
+    getTrackerProvider().track("App Updated", {
+      currentVersion: info.version,
+      oldVersion: version,
+    });
     repliers.forEach((reply) => {
       reply("autoUpdate.onUpdateAvailable", info);
     });
-    // this.trackerService.getProvider().track("App Updated", {
-    //   currentVersion: info.version,
-    //   oldVersion: version,
-    // });
   });
 
   await autoUpdater.checkForUpdates();

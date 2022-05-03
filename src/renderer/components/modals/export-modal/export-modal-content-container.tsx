@@ -1,3 +1,4 @@
+import type { ExportType } from "@common/export/type";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -5,7 +6,6 @@ import { addTracker } from "../../../logging/tracker";
 import { ActionType } from "../../../logging/tracker-types";
 import { getAreHashesReady } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import { getWorkspaceMetadataFromStore } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
-import type { ExportType } from "./export-config";
 import { exportConfig } from "./export-config";
 import { ExportModalContent } from "./export-modal-content";
 

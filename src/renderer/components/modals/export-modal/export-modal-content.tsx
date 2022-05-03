@@ -1,3 +1,4 @@
+import { ExportType } from "@common/export/type";
 import { Object } from "@common/utils";
 import { identity } from "@common/utils/function";
 import Button from "@material-ui/core/Button";
@@ -10,11 +11,7 @@ import { useTranslation } from "react-i18next";
 import { useStyles } from "../../../hooks/use-styles";
 import { isValidFilePath } from "../../../utils/file-system/file-sys-util";
 import type { IsActiveOptions } from "./export-config";
-import {
-  exportConfig,
-  ExportType,
-  mapValuesFromExportType,
-} from "./export-config";
+import { exportConfig, mapValuesFromExportType } from "./export-config";
 import type { ExportOptionsProps, ExportTypesMap } from "./export-options";
 import { ExportOptions } from "./export-options";
 

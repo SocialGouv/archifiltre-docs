@@ -1,4 +1,4 @@
-import { percent } from "@common/utils/numbers";
+import { getPercentage } from "@common/utils/numbers";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
@@ -59,12 +59,9 @@ const getFoldersCount = (
 
 /**
  * Returns a formatted text with the size percentage of the file or folder
- * @param nodeSize
- * @param totalSize
- * @returns {string}
  */
-const makePercentageText = (nodeSize: number, totalSize: number) => {
-  const percentage = percent(nodeSize, totalSize, { numbersOfDecimals: 1 });
+const makePercentageText = (nodeSize: number, totalSize: number): string => {
+  const percentage = getPercentage(nodeSize, totalSize, 1);
   return percentage < 0.1 ? "< 0.1%" : `${percentage}%`;
 };
 

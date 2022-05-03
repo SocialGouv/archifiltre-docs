@@ -1,6 +1,6 @@
 import _, { fill } from "lodash";
 
-import type { FilterMethod } from "./types";
+import type { FilterMethod } from "./type";
 
 /**
  * Adds cumulatively the values of an array (starting with a 0) without the last element

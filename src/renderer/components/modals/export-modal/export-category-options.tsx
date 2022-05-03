@@ -1,9 +1,10 @@
+import { ExportType } from "@common/export/type";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import { exportConfig, ExportType } from "./export-config";
+import { exportConfig } from "./export-config";
 import type { ExportTypesMap } from "./export-options";
 import { ExportTypeOption } from "./export-type-option";
 

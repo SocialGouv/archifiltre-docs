@@ -1,43 +1,7 @@
-export interface NumberUtilOptions {
-  numbersOfDecimals?: number;
-}
-
-/**
- * Get a percent value rounded to the right number of decimals
- * @param value - The numerator count
- * @param total - The denominator count
- * @param numbersOfDecimals - The number of displayed decimals
- * @returns {string}
- */
-export const percent = (
-  value: number,
-  total: number,
-  { numbersOfDecimals = 0 }: NumberUtilOptions = {}
-): number => formatPercent(value / total, { numbersOfDecimals });
-
-/**
- * Format a number to percent
- * @param value - The value
- * @param numbersOfDecimals - The number of decimals required
- * @example
- * formatPercent(1/3, { numberOfDecimals: 2 })
- * // 33.33
- */
-export const formatPercent = (
-  value: number,
-  { numbersOfDecimals = 0 }: NumberUtilOptions = {}
-): number => {
-  const exponent = 10 ** numbersOfDecimals;
-  return Math.round(value * 100 * exponent) / exponent;
-};
-
-/**
- * Curried version of format percent, where first arg is the options.
- */
-export const curriedFormatPercent =
-  (options: NumberUtilOptions) =>
+export const curriedToDecimalFloat =
+  (decimals: number) =>
   (value: number): number =>
-    formatPercent(value, options);
+    toDecimalsFloat(value, decimals);
 
 interface RatioOptions {
   max: number;
@@ -49,3 +13,23 @@ export const ratio = (value: number, { min = 0, max }: RatioOptions): number =>
 
 export const boundNumber = (low: number, high: number, value: number): number =>
   Math.max(Math.min(value, high), low);
+
+export const toDecimalsFloat = (n: number, decimals: number): number => {
+  const mult = Math.pow(10, decimals);
+  return Math.round(n * mult) / mult;
+};
+
+export const getPercentage = (
+  current: number,
+  total: number,
+  decimals = 2
+): number => toDecimalsFloat((current / total) * 100, decimals);
+
+export const bytesToGigabytes = (bytes: number, decimals = 1): number =>
+  toDecimalsFloat(bytes / 1.0e9, decimals);
+
+export const bytesToMegabytes = (bytes: number, decimals = 1): number =>
+  toDecimalsFloat(bytes / 1.0e6, decimals);
+
+export const bytesToKilobytes = (bytes: number, decimals = 1): number =>
+  toDecimalsFloat(bytes / 1000, decimals);

@@ -118,15 +118,15 @@ export const formatPathForUserSystem = (formattedPath: string): string =>
 
 export const octet2HumanReadableFormat = (size: number): string => {
   const unit = translations.t("common.byteChar");
-  const To = size / Math.pow(1000, 4);
+  const To = size / 1000 ** 4;
   if (To > 1) {
     return `${Math.round(To * 10) / 10} T${unit}`;
   }
-  const Go = size / Math.pow(1000, 3);
+  const Go = size / 1000 ** 3;
   if (Go > 1) {
     return `${Math.round(Go * 10) / 10} G${unit}`;
   }
-  const Mo = size / Math.pow(1000, 2);
+  const Mo = size / 1000 ** 2;
   if (Mo > 1) {
     return `${Math.round(Mo * 10) / 10} M${unit}`;
   }

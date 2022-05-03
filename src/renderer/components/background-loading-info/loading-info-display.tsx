@@ -1,4 +1,4 @@
-import { percent } from "@common/utils/numbers";
+import { getPercentage } from "@common/utils/numbers";
 import Box from "@material-ui/core/Box";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
@@ -48,7 +48,7 @@ export const LoadingInfoDisplay: React.FC<LoadingInfoProps> = ({
       </Box>
       <Box minWidth={35}>
         <Typography variant="body2">
-          {percent(loadingInfo.progress, loadingInfo.goal)} %
+          {getPercentage(loadingInfo.progress, loadingInfo.goal)} %
         </Typography>
       </Box>
     </Box>

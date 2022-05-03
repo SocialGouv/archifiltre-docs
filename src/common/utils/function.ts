@@ -1,6 +1,9 @@
+import type { Any } from "./type";
+
 export const identity = <T>(param: T): T => param;
 
 export type AnyFunction = (...args: unknown[]) => unknown;
+export type EveryFunction = (...args: Any[]) => Any;
 export type Awaitable<T> = T extends (...args: infer A) => infer R
   ? (...args: A) => Promise<R>
   : Promise<T>;
@@ -30,4 +33,52 @@ export function compose(...funcs: AnyFunction[]): AnyFunction {
       (...args) =>
         a(b(...args))
   );
+}
+
+type Curry<TFunc extends EveryFunction> = TFunc extends (
+  ...args: [infer FirstArg, ...infer RestArgs]
+) => infer Ret
+  ? RestArgs["length"] extends 0
+    ? TFunc
+    : (
+        param: FirstArg
+      ) => RestArgs["length"] extends 1
+        ? (...restArgs: RestArgs) => Ret
+        : Curry<(...args: RestArgs) => Ret>
+  : never;
+
+type PartialTuple<
+  TTuple extends Any[],
+  TExtracted extends Any[] = []
+> = TTuple extends [infer FirstParam, ...infer RestParam]
+  ? PartialTuple<RestParam, [...TExtracted, FirstParam?]>
+  : [...TExtracted, ...TTuple];
+
+type PartialParameters<TFunc extends (...args: Any[]) => Any> = PartialTuple<
+  Parameters<TFunc>
+>;
+
+/**
+ * Currify a given function with multiple parameters.
+ *
+ * Because of TypeScript limitations on keeping labels of named tuples manipulations,
+ * only the last param name is kept for autocomplete.
+ *
+ * @example ```ts
+ * declare const fn: (a: number, b: string, c: boolean) => Date;
+ * const curryFn = curry(fn); // (param: number) => (param: string) => (c: boolean) => Date
+ * ```
+ */
+export function curry<TFunc extends EveryFunction>(
+  fn: TFunc,
+  ...inputArgs: PartialParameters<TFunc>
+): Curry<TFunc> {
+  return ((...args: PartialParameters<TFunc>) => {
+    const totalArgs = [...inputArgs, ...args] as PartialParameters<TFunc>;
+    if (totalArgs.length >= fn.length) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return fn(...totalArgs);
+    }
+    return curry(fn, ...totalArgs);
+  }) as unknown as Curry<TFunc>;
 }

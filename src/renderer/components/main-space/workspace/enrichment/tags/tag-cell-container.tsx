@@ -1,8 +1,8 @@
+import { getTrackerProvider } from "@common/modules/tracker";
+import { bytesToMegabytes } from "@common/utils/numbers";
 import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { addTracker } from "../../../../../logging/tracker";
-import { ActionTitle, ActionType } from "../../../../../logging/tracker-types";
 import { commitAction } from "../../../../../reducers/enhancers/undoable/undoable-actions";
 import {
   markAsToDelete,
@@ -49,20 +49,21 @@ const handleTracking = (
   filesAndFoldersId: string
 ): void => {
   if (!isCurrentFileMarkedToDelete) {
-    const volumeToDelete = computeTreeSize(
+    const sizeRaw = computeTreeSize(
       filesAndFoldersMetadataMap,
       filesAndFoldersMap,
       filesAndFoldersId
     );
-    const elementsToDelete = getAllChildren(
+    const fileCount = getAllChildren(
       filesAndFoldersMap,
       filesAndFoldersId
-    );
+    ).length;
 
-    addTracker({
-      title: ActionTitle.ELEMENT_MARKED_TO_DELETE,
-      type: ActionType.TRACK_EVENT,
-      value: `Volume to delete: ${volumeToDelete}o; Elements to delete: ${elementsToDelete.length}`,
+    getTrackerProvider().track("Feat(4.0) Element Marked To Delete", {
+      fileCount,
+      mode: "enrichment",
+      size: bytesToMegabytes(sizeRaw),
+      sizeRaw,
     });
   }
 };

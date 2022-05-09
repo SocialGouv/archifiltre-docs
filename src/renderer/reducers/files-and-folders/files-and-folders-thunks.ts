@@ -1,6 +1,7 @@
+import { getTrackerProvider } from "@common/modules/tracker";
+import { bytesToMegabytes } from "@common/utils/numbers";
+
 import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/file-system-loading-process-utils";
-import { addTracker } from "../../logging/tracker";
-import { ActionTitle, ActionType } from "../../logging/tracker-types";
 import { translations } from "../../translations/translations";
 import { isExactFileOrAncestor } from "../../utils/file-and-folders";
 import { notifyInfo } from "../../utils/notifications";
@@ -19,6 +20,7 @@ import {
   getFilesAndFoldersFromStore,
   getLastModifiedDateOverrides,
   isFile,
+  isFolder,
 } from "./files-and-folders-selectors";
 import type { FilesAndFoldersMap } from "./files-and-folders-types";
 
@@ -30,12 +32,6 @@ import type { FilesAndFoldersMap } from "./files-and-folders-types";
 export const updateAliasThunk =
   (filesAndFoldersId: string, newAlias: string): ArchifiltreDocsThunkAction =>
   (dispatch) => {
-    addTracker({
-      title: ActionTitle.ALIAS_ADDED,
-      type: ActionType.TRACK_EVENT,
-      value: "Alias created",
-    });
-
     dispatch(setFilesAndFoldersAliases({ [filesAndFoldersId]: newAlias }));
     dispatch(commitAction());
   };
@@ -117,6 +113,17 @@ export const moveElement =
 
     dispatch(initFilesAndFoldersMetatada(newMetadata));
     dispatch(commitAction());
+
+    const ff = updatedFilesAndFolders[elementId];
+    const ffIsFolder = isFolder(ff);
+    const sizeRaw = ffIsFolder
+      ? newMetadata[elementId].childrenTotalSize
+      : ff.file_size;
+    getTrackerProvider().track("Feat(3.0) Element Moved", {
+      size: bytesToMegabytes(sizeRaw),
+      sizeRaw,
+      type: ffIsFolder ? "folder" : "file",
+    });
   };
 
 export const overrideLastModifiedDateThunk =

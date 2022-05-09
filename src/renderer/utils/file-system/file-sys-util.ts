@@ -116,7 +116,7 @@ export const countZipFiles = (filePaths: string[]): number =>
 export const formatPathForUserSystem = (formattedPath: string): string =>
   path.normalize(formattedPath);
 
-export const octet2HumanReadableFormat = (size: number): string => {
+export const bytes2HumanReadableFormat = (size: number): string => {
   const unit = translations.t("common.byteChar");
   const To = size / 1000 ** 4;
   if (To > 1) {

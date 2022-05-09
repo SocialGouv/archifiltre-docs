@@ -2,7 +2,7 @@ import Box from "@material-ui/core/Box";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { octet2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
+import { bytes2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
 import type { FileType } from "../../../../../utils/file-types";
 import { Table } from "../../../../common/table/table";
 import type { Column } from "../../../../common/table/table-types";
@@ -45,7 +45,7 @@ export const DuplicatesTable: React.FC<DuplicatesTableProps> = ({
         sortable: true,
       },
       {
-        accessor: ({ size }) => octet2HumanReadableFormat(size),
+        accessor: ({ size }) => bytes2HumanReadableFormat(size),
         id: "size",
         name: t("duplicates.spaceUsed"),
         sortAccessor: "size",

@@ -6,7 +6,9 @@ import {
 } from "@common/utils/error";
 import { ArchifiltreDocsStoreThunkErrorCode } from "@common/utils/error/error-codes";
 import { bytesToGigabytes } from "@common/utils/numbers";
+import { createHash } from "crypto";
 import { clipboard } from "electron";
+import fs from "fs";
 import { noop } from "lodash";
 import { compose } from "lodash/fp";
 import type { Observable, OperatorFunction } from "rxjs";
@@ -349,6 +351,24 @@ const loadFilesAndFoldersFromValidPathThunk =
       tryLoadFilesAndFoldersAfterInitThunk(fileOrFolderPath)
     );
     void virtualFileSystem.then((vfs) => {
+      if (isJsonFile(fileOrFolderPath)) {
+        void fs.promises
+          .readFile(fileOrFolderPath, "utf8")
+          .then((jsonContent) => {
+            // remove BOM from legacy save files
+            const content = !jsonContent.startsWith("{")
+              ? jsonContent.slice(1)
+              : jsonContent;
+
+            const hasher = createHash("sha256");
+            hasher.update(content);
+
+            getTrackerProvider().track("Work Reloaded", {
+              workHash: hasher.digest("hex"),
+            });
+          });
+        return { terminate, virtualFileSystem };
+      }
       const filesAndFoldersMap = vfs.filesAndFolders;
       const treeVolume =
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

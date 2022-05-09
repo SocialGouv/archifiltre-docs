@@ -1,7 +1,43 @@
 /**
  * Hack for union string litteral with string to keep autocomplete.
+ *
+ * Can be used in mapped type that output unwanted discriminated unions.
+ *
+ * @example
+ * ```ts
+ * type Discr = "A" | "B";
+ * type DiscrMap = {
+ *  "A": "alpha" | "beta",
+ *  "B": "beta" | "gamma"
+ * }
+ * type T1 = {
+ *  [P in Discr]: {
+ *    discr: P,
+ *    prop: DiscrMap[P];
+ *  }
+ * }[Discr];
+ * type T2 = {
+ *  [P in Discr]: {
+ *    discr: P,
+ *    prop: UniqueString<DiscrMap[P]> | DiscrMap[P]; // first part makes unique the litterals, second ensure autocomplete
+ *  }
+ * }[Discr];
+ *
+ * const bad: T1 = {
+ *  discr: "A",
+ *  prop: "gamma" // typed and autocomplete with `"alpha" | "beta" | "gama"`. Bad DX but still type safe.
+ * }
+ * const good: T2 = {
+ *   discr: "A",
+ *   prop: "alpha", // typed, autocompleted, and type safed with `"alpha" | "beta"`
+ * };
+ * ```
  */
-export type UnknownMapping = string & { _?: never };
+export type UniqueString<TStr extends string> = TStr & {
+  _?: never & symbol;
+};
+
+export type UnknownMapping = UniqueString<string>;
 
 export type FilterMethod<T> = (element: T) => boolean;
 export type Nothing = never | 0 | null | undefined;

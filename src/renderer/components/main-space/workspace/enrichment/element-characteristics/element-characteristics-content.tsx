@@ -4,7 +4,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { useStyles } from "../../../../../hooks/use-styles";
-import { octet2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
+import { bytes2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
 import { openExternalElement } from "../../../../../utils/file-system/file-system-util";
 import { ClickableIcon } from "../../../../common/clickable-icon";
 import { EditableField } from "../../../../common/editable-field";
@@ -96,7 +96,7 @@ export const ElementCharacteristicsContent: React.FC<
         <Box marginY={0.5} flex={1}>
           <ElementCharacteristic
             name={t("report.size")}
-            value={octet2HumanReadableFormat(elementSize)}
+            value={bytes2HumanReadableFormat(elementSize)}
           />
           <ElementCharacteristic
             name={

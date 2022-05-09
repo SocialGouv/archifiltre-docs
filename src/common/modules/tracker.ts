@@ -15,7 +15,7 @@ declare module "../ipc/event" {
   }
 }
 
-export function initTracking(): void {
+export function initTrackingInMain(): void {
   ipcMain.on("tracking.toggle", (_, enable) => {
     enableTracking = enable;
     getTrackerProvider()[enableTracking ? "enable" : "disable"]();

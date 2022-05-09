@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 import type { ExportType } from "../export/type";
+import type { UniqueString } from "../utils/type";
 
 export type TrackAppId = string & { readonly _trackAppId?: never };
 // TODO: move when "save work" feature is done
@@ -27,19 +28,15 @@ export interface TrackCoreEventProps {
     oldVersion: string;
   };
   "Export Generated": {
-    /** in Mo */
-    size: number;
-    /** in Octet */
-    sizeRaw: number;
     type: ExportType;
   };
   "Folder Dropped": {
     fileCount: number;
     folderCount: number;
     loadTime: number;
-    /** in Go */
+    /** in gigabytes */
     size: number;
-    /** in Octet */
+    /** in bytes */
     sizeRaw: number;
   };
   "NPS Answered": {
@@ -60,25 +57,26 @@ export interface TrackAppEventProps {
   "Feat(1.0) Nav Mode Changed": {
     [M in TrackNavMode]: {
       navMode: M;
-      type: TrackNavModeTypeMap[M];
+      type: TrackNavModeTypeMap[M] | UniqueString<TrackNavModeTypeMap[M]>;
     };
   }[TrackNavMode];
   "Feat(2.0) Move Mode Toggled": {
     enabled: boolean;
   };
   "Feat(3.0) Element Moved": {
-    /** in Mo */
+    /** in megabytes */
     size: number;
-    /** in Octet */
+    /** in bytes */
     sizeRaw: number;
+    type: "file" | "folder";
   };
   "Feat(4.0) Element Marked To Delete": {
     fileCount: number;
     /** depending on the tab we're currently on */
     mode: "duplicate" | "enrichment";
-    /** in Mo */
+    /** in megabytes */
     size: number;
-    /** in Octet */
+    /** in bytes */
     sizeRaw: number;
   };
   "Feat(5.0) Action History Moved": {

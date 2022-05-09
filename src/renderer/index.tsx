@@ -2,6 +2,7 @@
 import "./css/index.scss";
 import "./translations/translations";
 
+import { toggleTracking } from "@common/modules/tracker";
 import { setupSentry } from "@common/monitoring/sentry";
 import Box from "@material-ui/core/Box";
 import React from "react";
@@ -16,7 +17,6 @@ import { NewVersionChecker } from "./components/header/new-version-checker";
 import { MainSpace } from "./components/main-space/main-space";
 import { Modals } from "./components/modals/modals";
 import { initReporter, reportInfo } from "./logging/reporter";
-import { initTracker } from "./logging/tracker";
 import {
   getInitialUserSettings,
   initUserSettings,
@@ -39,7 +39,7 @@ initUserSettings();
 setupLanguage();
 initPreviousSessions();
 const { isTrackingEnabled, isMonitoringEnabled } = getInitialUserSettings();
-initTracker(isTrackingEnabled);
+toggleTracking(isTrackingEnabled);
 initReporter(isMonitoringEnabled);
 
 const App = styled.div`

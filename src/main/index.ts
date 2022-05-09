@@ -11,7 +11,10 @@ import {
   get as getConfig,
   initNewUserConfig,
 } from "@common/modules/new-user-config";
-import { getTrackerProvider, initTracking } from "@common/modules/tracker";
+import {
+  getTrackerProvider,
+  initTrackingInMain,
+} from "@common/modules/tracker";
 import { loadWindow } from "@common/modules/window";
 import { setupSentry } from "@common/monitoring/sentry";
 import { sleep } from "@common/utils/os";
@@ -159,7 +162,7 @@ app.on("ready", async () => {
   // -- init all "modules"
   // TODO: do real modules
   await initNewUserConfig();
-  initTracking();
+  initTrackingInMain();
   loadHash();
   loadApp();
   await setupAutoUpdate();

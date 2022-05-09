@@ -20,8 +20,8 @@ import {
   countDuplicateFolders,
 } from "../../utils/duplicates";
 import {
+  bytes2HumanReadableFormat,
   formatPathForUserSystem,
-  octet2HumanReadableFormat,
 } from "../../utils/file-system/file-sys-util";
 import { openExternalElement } from "../../utils/file-system/file-system-util";
 import { FileType } from "../../utils/file-types";
@@ -137,7 +137,7 @@ export const computeAuditReportData = (
     spreadsheetPercent: fileTypesPercents[FileType.SPREADSHEET],
     totalFilesCount: getFileCount(filesAndFolders),
     totalFoldersCount: getFoldersCount(filesAndFolders),
-    totalSize: octet2HumanReadableFormat(
+    totalSize: bytes2HumanReadableFormat(
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       filesAndFoldersMetadata[ROOT_ID].childrenTotalSize ?? 0
     ),

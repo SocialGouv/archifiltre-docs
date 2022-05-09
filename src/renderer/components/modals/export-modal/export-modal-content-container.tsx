@@ -1,9 +1,8 @@
 import type { ExportType } from "@common/export/type";
+import { getTrackerProvider } from "@common/modules/tracker";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { addTracker } from "../../../logging/tracker";
-import { ActionType } from "../../../logging/tracker-types";
 import { getAreHashesReady } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import { getWorkspaceMetadataFromStore } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { exportConfig } from "./export-config";
@@ -24,10 +23,9 @@ export const ExportModalContentContainer: React.FC<
   const dispatch = useDispatch();
 
   const startExport = (exportId: ExportType, exportPath: string) => {
-    const { exportFunction, trackingTitle } = exportConfig[exportId];
-    addTracker({
-      title: trackingTitle,
-      type: ActionType.TRACK_EVENT,
+    const { exportFunction } = exportConfig[exportId];
+    getTrackerProvider().track("Export Generated", {
+      type: exportId,
     });
     dispatch(exportFunction(exportPath));
   };

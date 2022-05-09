@@ -13,7 +13,7 @@ import type {
   FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { getType } from "../../../utils/file-and-folders";
-import { octet2HumanReadableFormat } from "../../../utils/file-system/file-sys-util";
+import { bytes2HumanReadableFormat } from "../../../utils/file-system/file-sys-util";
 import { CategoryTitle } from "../../common/category-title";
 import { Table } from "../../common/table/table";
 import { makeTableExpandableRow } from "../../common/table/table-expandable-row";
@@ -101,7 +101,7 @@ export const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
       },
       {
         accessor: (row, index = 0) =>
-          octet2HumanReadableFormat(row[index].file_size),
+          bytes2HumanReadableFormat(row[index].file_size),
         id: "fileSize",
       },
       {
@@ -172,7 +172,7 @@ export const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
       },
       {
         accessor: (row: FilesAndFolders[], index = 0) =>
-          octet2HumanReadableFormat(row[index].file_size),
+          bytes2HumanReadableFormat(row[index].file_size),
         id: "size",
         name: t("search.size"),
         sortAccessor: (row: FilesAndFolders[], index = 0) =>

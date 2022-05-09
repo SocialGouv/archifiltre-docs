@@ -9,7 +9,7 @@ import {
 import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { translations } from "../../translations/translations";
-import { octet2HumanReadableFormat } from "../../utils/file-system/file-sys-util";
+import { bytes2HumanReadableFormat } from "../../utils/file-system/file-sys-util";
 import type { Dims } from "./icicle/icicle-rect";
 import type { FillColor } from "./icicle/icicle-types";
 
@@ -82,7 +82,7 @@ const makeRulerText = (
     childrenTotalSize,
     rootChildrenTotalSize
   );
-  const filesAndFolderSize = octet2HumanReadableFormat(childrenTotalSize);
+  const filesAndFolderSize = bytes2HumanReadableFormat(childrenTotalSize);
   const rulerInfo = [percentageText, filesAndFolderSize];
 
   if (isFolder(node)) {

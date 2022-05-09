@@ -47,8 +47,8 @@ import {
   getMostDuplicatedFiles,
 } from "../../utils/duplicates";
 import {
+  bytes2HumanReadableFormat,
   formatPathForUserSystem,
-  octet2HumanReadableFormat,
 } from "../../utils/file-system/file-sys-util";
 import {
   FileType,
@@ -226,7 +226,7 @@ export const getBiggestFiles: Mapper<
     ({ name, id, file_size }) => ({
       name,
       path: formatPathForUserSystem(id),
-      size: octet2HumanReadableFormat(file_size),
+      size: bytes2HumanReadableFormat(file_size),
     })
   ),
   reverse,
@@ -275,7 +275,7 @@ export const getHumanReadableDuplicateTotalSize: Merger<
   HashesMap,
   string
 > = compose(
-  octet2HumanReadableFormat,
+  bytes2HumanReadableFormat,
   countDuplicateFilesTotalSize as Merger<
     FilesAndFoldersCollection,
     HashesMap,
@@ -314,7 +314,7 @@ export const getDuplicatesWithTheBiggestSize = compose(
     ) => ({
       name: filesAndFolders.name,
       path: formatPathForUserSystem(filesAndFolders.id),
-      size: octet2HumanReadableFormat(
+      size: bytes2HumanReadableFormat(
         (filesAndFolders.count - 1) * filesAndFolders.childrenTotalSize
       ),
     })
@@ -338,7 +338,7 @@ export const getElementsToDelete = (
         ),
         name: fileAndFolder.name,
         path: formatPathForUserSystem(fileAndFolder.id),
-        size: octet2HumanReadableFormat(
+        size: bytes2HumanReadableFormat(
           filesAndFoldersMetadata[fileAndFolder.id].childrenTotalSize
         ),
         type: isFile(fileAndFolder) ? fileText : folderText,

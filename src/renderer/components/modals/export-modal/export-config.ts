@@ -10,7 +10,6 @@ import { deletionScriptExporterThunk } from "../../../exporters/deletion-script/
 import { excelExporterThunk } from "../../../exporters/excel/excel-exporter";
 import { metsExporterThunk } from "../../../exporters/mets/mets-export-thunk";
 import { resipExporterThunk } from "../../../exporters/resip/resip-exporter-thunk";
-import { ActionTitle } from "../../../logging/tracker-types";
 import type { ArchifiltreDocsThunkAction } from "../../../reducers/archifiltre-types";
 import { getNameWithExtension } from "../../../utils/file-system/file-sys-util";
 import type { ExportTypesMap } from "../export-modal/export-options";
@@ -27,7 +26,6 @@ interface ExportConfig {
   isActive: boolean | ((options: IsActiveOptions) => boolean);
   isFilePickerDisabled?: boolean;
   label: string;
-  trackingTitle: ActionTitle;
 }
 
 type ExportConfigMap = {
@@ -85,7 +83,6 @@ export const exportConfig: ExportConfigMap = {
       computeExportFilePath(originalPath, sessionName, ExportType.AUDIT),
     isActive: ({ areHashesReady }) => areHashesReady,
     label: "header.auditReport",
-    trackingTitle: ActionTitle.AUDIT_REPORT_EXPORT,
   },
   [ExportType.CSV]: {
     category: ExportCategory.RECORDS_INVENTORY,
@@ -96,7 +93,6 @@ export const exportConfig: ExportConfigMap = {
       computeExportFilePath(originalPath, sessionName, ExportType.CSV),
     isActive: true,
     label: "CSV",
-    trackingTitle: ActionTitle.CSV_EXPORT,
   },
   [ExportType.CSV_WITH_HASHES]: {
     category: ExportCategory.RECORDS_INVENTORY,
@@ -111,7 +107,6 @@ export const exportConfig: ExportConfigMap = {
       ),
     isActive: ({ areHashesReady }) => areHashesReady,
     label: "header.csvWithHash",
-    trackingTitle: ActionTitle.CSV_WITH_HASHES_EXPORT,
   },
   [ExportType.TREE_CSV]: {
     category: ExportCategory.RECORDS_INVENTORY,
@@ -120,7 +115,6 @@ export const exportConfig: ExportConfigMap = {
       computeExportFilePath(originalPath, sessionName, ExportType.TREE_CSV),
     isActive: true,
     label: "export.treeCsv",
-    trackingTitle: ActionTitle.TREE_CSV_EXPORT,
   },
   [ExportType.EXCEL]: {
     category: ExportCategory.RECORDS_INVENTORY,
@@ -130,7 +124,6 @@ export const exportConfig: ExportConfigMap = {
       computeExportFilePath(originalPath, sessionName, ExportType.EXCEL),
     isActive: ({ areHashesReady }) => areHashesReady,
     label: "Excel",
-    trackingTitle: ActionTitle.EXCEL_EXPORT,
   },
   [ExportType.RESIP]: {
     category: ExportCategory.EXCHANGE_WITH_ERMS,
@@ -145,7 +138,6 @@ export const exportConfig: ExportConfigMap = {
     isActive: true,
     isFilePickerDisabled: true,
     label: "RESIP",
-    trackingTitle: ActionTitle.RESIP_EXPORT,
   },
   [ExportType.METS]: {
     category: ExportCategory.EXCHANGE_WITH_ERMS,
@@ -154,7 +146,6 @@ export const exportConfig: ExportConfigMap = {
       computeExportFilePath(originalPath, sessionName, ExportType.METS),
     isActive: true,
     label: "METS (beta)",
-    trackingTitle: ActionTitle.METS_EXPORT,
   },
   [ExportType.DELETION_SCRIPT]: {
     category: ExportCategory.UTILITIES,
@@ -167,6 +158,5 @@ export const exportConfig: ExportConfigMap = {
       ),
     isActive: true,
     label: "export.deletionScript",
-    trackingTitle: ActionTitle.DELETION_SCRIPT,
   },
 };

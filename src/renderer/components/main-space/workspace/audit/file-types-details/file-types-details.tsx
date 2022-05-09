@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import type { FileTypeMap } from "../../../../../exporters/audit/audit-report-values-computer";
 import { colors } from "../../../../../utils/color";
-import { octet2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
+import { bytes2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
 import { FileType } from "../../../../../utils/file-types";
 import type {
   HorizontalStackedBarOption,
@@ -50,7 +50,7 @@ const makeRenderTooltipContent =
         </Box>
         <Box>
           <Typography variant="body1">
-            {octet2HumanReadableFormat(elementSizesByType[typedKey])}
+            {bytes2HumanReadableFormat(elementSizesByType[typedKey])}
           </Typography>
         </Box>
       </Box>

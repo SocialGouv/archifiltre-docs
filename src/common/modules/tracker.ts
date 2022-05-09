@@ -15,11 +15,13 @@ declare module "../ipc/event" {
   }
 }
 
-export function initTrackingInMain(): void {
-  ipcMain.on("tracking.toggle", (_, enable) => {
-    enableTracking = enable;
-    getTrackerProvider()[enableTracking ? "enable" : "disable"]();
-  });
+export async function initTracking(): Promise<void> {
+  await getTrackerProvider().init();
+  if (IS_MAIN) {
+    ipcMain.on("tracking.toggle", (_, enable) => {
+      toggleTracking((enableTracking = enable));
+    });
+  }
 }
 
 export function toggleTracking(enable = !enableTracking): void {

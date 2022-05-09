@@ -5,6 +5,7 @@ import { NodeClient } from "@sentry/node";
 import type { Integration } from "@sentry/types";
 
 import { IS_MAIN, IS_PACKAGED } from "../config";
+import type { TrackAppId } from "../tracker/type";
 import { name, version } from "../utils/package";
 
 export type SentrySetupCallback = (
@@ -29,7 +30,7 @@ export const setupSentry = (): SentrySetupCallback => {
   };
   init(commonOptions);
 
-  return (userId: string, ...additionalIntegrations: Integration[]) => {
+  return (userId: TrackAppId, ...additionalIntegrations: Integration[]) => {
     const Client = IS_MAIN ? NodeClient : BrowserClient;
     getCurrentHub().bindClient(
       new Client({

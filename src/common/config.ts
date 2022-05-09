@@ -1,5 +1,6 @@
 import path from "path";
 
+import { version } from "./utils/package";
 import { isTruthy } from "./utils/string";
 
 export const IS_WORKER = !!(process as NodeJS.Process | undefined)?.send;
@@ -20,6 +21,7 @@ export interface WorkerSerializedConfig {
   isPackaged: boolean;
   isTest: boolean;
   isWorker: true;
+  productChannel: "beta" | "next" | "stable";
   resourcesPath: string;
   staticPath: string;
 }
@@ -38,6 +40,14 @@ const workerConfig: WorkerSerializedConfig = (() => {
 
   return {} as WorkerSerializedConfig;
 })();
+// TODO: logo, config, bug repport enable in beta/next
+export const PRODUCT_CHANNEL = IS_WORKER
+  ? workerConfig.productChannel
+  : version.includes("beta")
+  ? "beta"
+  : version.includes("next")
+  ? "next"
+  : "stable";
 export const IS_CI = IS_WORKER ? workerConfig.isCi : process.env.CI === "true";
 export const IS_MAIN = IS_WORKER
   ? workerConfig.isMain
@@ -100,6 +110,7 @@ export const workerSerializedConfig: WorkerSerializedConfig = {
   isPackaged: IS_PACKAGED(),
   isTest: IS_TEST,
   isWorker: true,
+  productChannel: PRODUCT_CHANNEL,
   resourcesPath: RESOURCES_PATH,
   staticPath: STATIC_PATH,
 };

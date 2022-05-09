@@ -10,11 +10,9 @@ import { loadHash } from "@common/modules/hash";
 import {
   get as getConfig,
   initNewUserConfig,
+  set as setConfig,
 } from "@common/modules/new-user-config";
-import {
-  getTrackerProvider,
-  initTrackingInMain,
-} from "@common/modules/tracker";
+import { getTrackerProvider, initTracking } from "@common/modules/tracker";
 import { loadWindow } from "@common/modules/window";
 import { setupSentry } from "@common/monitoring/sentry";
 import { sleep } from "@common/utils/os";
@@ -162,7 +160,7 @@ app.on("ready", async () => {
   // -- init all "modules"
   // TODO: do real modules
   await initNewUserConfig();
-  initTrackingInMain();
+  await initTracking();
   loadHash();
   loadApp();
   await setupAutoUpdate();
@@ -179,6 +177,7 @@ app.on("ready", async () => {
       ram: totalmem() / 1024 / 1024 / 1024,
       version,
     });
+    setConfig("_firstOpened", false);
   }
 
   tracker.track("App Opened", {

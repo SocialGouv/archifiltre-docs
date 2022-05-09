@@ -34,6 +34,7 @@ const defaultConfig = {
   setupFiles: [
     "jest-date-mock",
     "<rootDir>/tests/mocks/electron.ts",
+    "<rootDir>/tests/mocks/new-user-config.ts",
     "<rootDir>/tests/mocks/i18next.ts",
     "<rootDir>/tests/setup/env.ts",
   ],

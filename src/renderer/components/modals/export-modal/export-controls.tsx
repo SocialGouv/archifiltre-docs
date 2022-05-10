@@ -1,3 +1,4 @@
+import { ExportType } from "@common/export/type";
 import { ipcRenderer } from "@common/ipc";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -8,7 +9,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaFolderOpen } from "react-icons/fa";
 
-import { exportConfig, ExportType } from "./export-config";
+import { exportConfig } from "./export-config";
 import type { ExportTypesMap } from "./export-options";
 
 export interface ExportControlsProps {

@@ -1,4 +1,4 @@
-import type { FilterMethod } from "@common/utils/types";
+import type { FilterMethod } from "@common/utils/type";
 
 import { useFilters } from "./use-filters";
 

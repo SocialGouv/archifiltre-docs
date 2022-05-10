@@ -20,6 +20,7 @@ import {
   DOCUMENTATION_LINK,
   FEEDBACK_LINK,
 } from "../../../constants";
+import { useAutoUpdate } from "../../../hooks/use-auto-update";
 import { version, versionName } from "../../../version";
 
 const useLocalStyles = makeStyles((theme: Theme) =>
@@ -36,10 +37,7 @@ const aboutItems = [
     Icon: FaGlobeAmericas,
     id: "website",
     label: "settingsModal.website",
-    link: `${process.env.ARCHIFILTRE_SITE_URL}/produit#${version.replace(
-      /\./g,
-      ""
-    )}`,
+    link: `${process.env.ARCHIFILTRE_SITE_URL}/docs`,
   },
   {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -67,6 +65,7 @@ const aboutItems = [
 export const About: React.FC = () => {
   const { t } = useTranslation();
   const classes = useLocalStyles();
+  const { updateAvailable, doUpdate } = useAutoUpdate();
 
   const onClick = (event: React.MouseEvent, link: string) => {
     event.preventDefault();
@@ -79,6 +78,22 @@ export const About: React.FC = () => {
       <Box display="flex" pb={1}>
         <FaInfo className={classes.icon} />
         {`v${version} ${versionName}`}
+        {updateAvailable && (
+          <>
+            {"  "}
+            <Link
+              onClick={() => {
+                doUpdate();
+              }}
+              variant="caption"
+              component="caption"
+              color="error"
+              style={{ cursor: "pointer" }}
+            >
+              (Download new version)
+            </Link>
+          </>
+        )}
       </Box>
 
       {aboutItems.map(({ id, link, Icon, label }) => (

@@ -1,4 +1,4 @@
-import type { FilterMethod } from "@common/utils/types";
+import type { FilterMethod } from "@common/utils/type";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";

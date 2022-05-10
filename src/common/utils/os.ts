@@ -14,3 +14,8 @@ export const isWindows = (): boolean => os.type() === WINDOWS_OS_TYPE;
  */
 export const isUnixLike = (): boolean =>
   [LINUX_OS_TYPE, MAC_OS_TYPE].includes(os.type());
+
+export const sleep = async (ms: number): Promise<void> =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });

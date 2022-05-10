@@ -1,4 +1,4 @@
-import { percent } from "@common/utils/numbers";
+import { getPercentage } from "@common/utils/numbers";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
@@ -9,7 +9,7 @@ import {
 import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { translations } from "../../translations/translations";
-import { octet2HumanReadableFormat } from "../../utils/file-system/file-sys-util";
+import { bytes2HumanReadableFormat } from "../../utils/file-system/file-sys-util";
 import type { Dims } from "./icicle/icicle-rect";
 import type { FillColor } from "./icicle/icicle-types";
 
@@ -59,12 +59,9 @@ const getFoldersCount = (
 
 /**
  * Returns a formatted text with the size percentage of the file or folder
- * @param nodeSize
- * @param totalSize
- * @returns {string}
  */
-const makePercentageText = (nodeSize: number, totalSize: number) => {
-  const percentage = percent(nodeSize, totalSize, { numbersOfDecimals: 1 });
+const makePercentageText = (nodeSize: number, totalSize: number): string => {
+  const percentage = getPercentage(nodeSize, totalSize, 1);
   return percentage < 0.1 ? "< 0.1%" : `${percentage}%`;
 };
 
@@ -85,7 +82,7 @@ const makeRulerText = (
     childrenTotalSize,
     rootChildrenTotalSize
   );
-  const filesAndFolderSize = octet2HumanReadableFormat(childrenTotalSize);
+  const filesAndFolderSize = bytes2HumanReadableFormat(childrenTotalSize);
   const rulerInfo = [percentageText, filesAndFolderSize];
 
   if (isFolder(node)) {

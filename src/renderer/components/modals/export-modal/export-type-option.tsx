@@ -1,9 +1,9 @@
+import type { ExportType } from "@common/export/type";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
 import { ExportCheckbox } from "./export-checkbox";
-import type { ExportType } from "./export-config";
 import { exportConfig } from "./export-config";
 import { ExportInput } from "./export-input";
 import type { ExportTypesMap } from "./export-options";

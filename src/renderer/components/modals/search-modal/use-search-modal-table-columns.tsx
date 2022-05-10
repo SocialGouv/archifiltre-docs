@@ -9,7 +9,7 @@ import type {
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { getType } from "../../../utils/file-and-folders";
-import { octet2HumanReadableFormat } from "../../../utils/file-system/file-sys-util";
+import { bytes2HumanReadableFormat } from "../../../utils/file-system/file-sys-util";
 import type { Column } from "../../common/table/table-types";
 import { WordBreak } from "../../common/table/table-types";
 import { ToDeleteChip } from "../../common/to-delete-chip";
@@ -40,7 +40,7 @@ export const useSearchModalTableColumns = (
       } as Column<ElementWithToDelete>,
       {
         accessor: (element: FilesAndFolders) =>
-          octet2HumanReadableFormat(
+          bytes2HumanReadableFormat(
             isFile(element)
               ? element.file_size
               : metadata[element.id].childrenTotalSize

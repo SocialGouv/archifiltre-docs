@@ -3,6 +3,7 @@ export const INIT_FILES_AND_FOLDERS_METADATA =
 
 export interface FilesAndFoldersMetadata {
   averageLastModified: number;
+  /** in bytes */
   childrenTotalSize: number;
   initialMaxLastModified: number;
   initialMedianLastModified: number;

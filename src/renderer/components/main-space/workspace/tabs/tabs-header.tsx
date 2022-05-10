@@ -8,8 +8,6 @@ import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
-import { addTracker } from "../../../../logging/tracker";
-import { ActionTitle, ActionType } from "../../../../logging/tracker-types";
 import { getAreHashesReady } from "../../../../reducers/files-and-folders/files-and-folders-selectors";
 
 const useLocalStyles = makeStyles((theme: Theme) =>
@@ -64,18 +62,10 @@ export const TabsHeader: React.FC<TabsHeaderProps> = ({
   );
 
   const handleChange = useCallback(
-    (event: React.ChangeEvent<SimpleObject>, newValue: number) => {
-      const handleTracking = (trackingTabIndex: number) => {
-        addTracker({
-          title: ActionTitle.CLICK_ON_TAB,
-          type: ActionType.TRACK_EVENT,
-          value: `Click on ${t(tabData[trackingTabIndex].label)}`,
-        });
-      };
-      handleTracking(newValue);
+    (_: React.ChangeEvent<SimpleObject>, newValue: number) => {
       setTabIndex(newValue);
     },
-    [setTabIndex, t, tabData]
+    [setTabIndex]
   );
 
   return (

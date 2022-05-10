@@ -4,7 +4,7 @@ import type {
   Merger,
 } from "@common/utils/functionnal-programming";
 import type { HashesMap } from "@common/utils/hashes-types";
-import { curriedFormatPercent, percent } from "@common/utils/numbers";
+import { curriedToDecimalFloat, getPercentage } from "@common/utils/numbers";
 import dateFormat from "dateformat";
 import _ from "lodash";
 import {
@@ -47,8 +47,8 @@ import {
   getMostDuplicatedFiles,
 } from "../../utils/duplicates";
 import {
+  bytes2HumanReadableFormat,
   formatPathForUserSystem,
-  octet2HumanReadableFormat,
 } from "../../utils/file-system/file-sys-util";
 import {
   FileType,
@@ -153,7 +153,7 @@ export const percentFileTypes: Mapper<
 > = compose((counts: FileTypeMap<number>) => {
   const nbFiles = sumFileType(counts);
   return _.mapValues(counts, (filesForType: number) =>
-    percent(filesForType, nbFiles, { numbersOfDecimals: 2 })
+    getPercentage(filesForType, nbFiles)
   );
 }, countFileTypes);
 
@@ -226,7 +226,7 @@ export const getBiggestFiles: Mapper<
     ({ name, id, file_size }) => ({
       name,
       path: formatPathForUserSystem(id),
-      size: octet2HumanReadableFormat(file_size),
+      size: bytes2HumanReadableFormat(file_size),
     })
   ),
   reverse,
@@ -243,7 +243,7 @@ export const getDuplicateFoldersPercent: Merger<
   HashesMap,
   number
 > = compose(
-  curriedFormatPercent({ numbersOfDecimals: 2 }),
+  curriedToDecimalFloat(2),
   countDuplicatesPercentForFolders as Merger<
     FilesAndFoldersCollection,
     HashesMap,
@@ -259,7 +259,7 @@ export const getDuplicateFilesPercent: Merger<
   HashesMap,
   number
 > = compose(
-  curriedFormatPercent({ numbersOfDecimals: 2 }),
+  curriedToDecimalFloat(2),
   countDuplicatesPercentForFiles as Merger<
     FilesAndFoldersCollection,
     HashesMap,
@@ -275,7 +275,7 @@ export const getHumanReadableDuplicateTotalSize: Merger<
   HashesMap,
   string
 > = compose(
-  octet2HumanReadableFormat,
+  bytes2HumanReadableFormat,
   countDuplicateFilesTotalSize as Merger<
     FilesAndFoldersCollection,
     HashesMap,
@@ -314,7 +314,7 @@ export const getDuplicatesWithTheBiggestSize = compose(
     ) => ({
       name: filesAndFolders.name,
       path: formatPathForUserSystem(filesAndFolders.id),
-      size: octet2HumanReadableFormat(
+      size: bytes2HumanReadableFormat(
         (filesAndFolders.count - 1) * filesAndFolders.childrenTotalSize
       ),
     })
@@ -338,7 +338,7 @@ export const getElementsToDelete = (
         ),
         name: fileAndFolder.name,
         path: formatPathForUserSystem(fileAndFolder.id),
-        size: octet2HumanReadableFormat(
+        size: bytes2HumanReadableFormat(
           filesAndFoldersMetadata[fileAndFolder.id].childrenTotalSize
         ),
         type: isFile(fileAndFolder) ? fileText : folderText,

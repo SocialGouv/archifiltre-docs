@@ -17,33 +17,27 @@ module.exports =
       "event"
     );
 
-    config.module.rules.push({ loader: "node-loader", test: /\.node$/ });
-
     if (!config.plugins) {
       config.plugins = [];
     }
     const project = `${packageJson.name}${isProd ? "" : "-dev"}`;
 
     config.plugins.push(
-      new webpack.EnvironmentPlugin(["ARCHIFILTRE_SITE_URL", "FORCE_TRACKING"])
+      new webpack.EnvironmentPlugin(["ARCHIFILTRE_SITE_URL", "FORCE_TRACKING"]),
+      new webpack.EnvironmentPlugin({
+        SENTRY_DSN: "",
+        SENTRY_ORG: "",
+        SENTRY_URL: "",
+        TRACKER_FAKE_HREF: JSON.stringify(`https://${project}`),
+        TRACKER_MATOMO_ID_SITE: "",
+        TRACKER_MATOMO_URL: "",
+        TRACKER_POSTHOG_API_KEY: "",
+        TRACKER_POSTHOG_URL: "",
+        /** @type {import("./src/common/tracker/provider/utils").ProviderType} */
+        TRACKER_PROVIDER: "debug",
+      })
     );
-    if (isProd) {
-      config.plugins.push(
-        new webpack.EnvironmentPlugin([
-          "TRACKER_MATOMO_ID_SITE",
-          "TRACKER_MATOMO_URL",
-          "TRACKER_PROVIDER",
-          "TRACKER_POSTHOG_API_KEY",
-          "TRACKER_POSTHOG_URL",
-          "SENTRY_ORG",
-          "SENTRY_DSN",
-          "SENTRY_URL",
-        ]),
-        new webpack.EnvironmentPlugin({
-          TRACKER_FAKE_HREF: JSON.stringify(`https://${project}`),
-        })
-      );
-    } else {
+    if (!isProd) {
       if (config.devServer) {
         config.devServer.writeToDisk = true;
       }

@@ -7,6 +7,7 @@ declare module "*.png";
 
 declare module "windows-1252";
 declare module "angular-expressions";
+declare module "source-map-support";
 declare module "fswin" {
   namespace FsWin {
     export interface Attributes {
@@ -27,7 +28,12 @@ declare module "fswin" {
   export default fswin;
 }
 
-declare module "fswin/*.node";
+declare module "fswin/*.node" {
+  import fswin, { FsWin } from "fswin";
+
+  export { FsWin };
+  export default fswin;
+}
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 declare const __static: string;

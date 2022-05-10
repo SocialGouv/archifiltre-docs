@@ -1,3 +1,4 @@
+import { getTrackerProvider } from "@common/modules/tracker";
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -23,10 +24,16 @@ export const HeaderContainer: React.FC = () => {
 
   const undo = useCallback(() => {
     dispatch(undoAction());
+    getTrackerProvider().track("Feat(5.0) Action History Moved", {
+      type: "undo",
+    });
   }, [dispatch]);
 
   const redo = useCallback(() => {
     dispatch(redoAction());
+    getTrackerProvider().track("Feat(5.0) Action History Moved", {
+      type: "redo",
+    });
   }, [dispatch]);
 
   const canRedo = useSelector((store: StoreState) =>

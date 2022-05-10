@@ -10,7 +10,6 @@ import { EventEmitter } from "events";
 import path from "path";
 import type { Readable } from "stream";
 
-import { reportInfo } from "../../logging/reporter";
 import type { WorkerMessage } from "../batch-process/types";
 import { MessageTypes } from "../batch-process/types";
 import type { MessageSerializer } from "../child-process-stream";
@@ -21,9 +20,19 @@ import type {
 
 type StreamMessageParser = (stream: Readable) => Promise<WorkerMessage>;
 
+interface WorkerProcess {
+  send: NonNullable<NodeJS.Process["send"]>;
+}
+
+export function assertWorkerProcess<T extends NodeJS.Process | undefined>(
+  p: T
+): asserts p is NonNullable<T> & WorkerProcess {
+  if (!IS_WORKER) throw new Error("This must be called in a forked process");
+}
+
 const WORKER_BRIDGE_PATH = path.resolve(__dirname, "_child-process.js");
 const PACKAGED_WORKERS_FOLDER_RESOURCE_PATH = "workers";
-const getWorkerPath = (rendererRelativeWorkerPath: string) => {
+const getWorkerPath = (rendererRelativeWorkerPath: string): string => {
   // TODO: path validator
   if (IS_PACKAGED()) {
     const absoluteProdWorkerPath = path.resolve(
@@ -49,10 +58,11 @@ export const createAsyncWorkerForChildProcess = (
   streamMessageParser?: StreamMessageParser
 ): ChildProcessAsyncWorker => {
   const localProcess = process as NodeJS.Process | undefined;
+  assertWorkerProcess(localProcess);
 
   const eventEmitter = new EventEmitter();
 
-  localProcess?.addListener("message", (event) => {
+  localProcess.addListener("message", (event) => {
     eventEmitter.emit("message", event);
   });
 
@@ -69,10 +79,8 @@ export const createAsyncWorkerForChildProcess = (
       );
     },
     postMessage: (message) => {
-      if (!IS_WORKER) {
-        throw new Error("This must be called in a forked process");
-      }
-      localProcess?.send?.(message);
+      assertWorkerProcess(localProcess);
+      localProcess.send(message);
     },
     removeEventListener: (eventType, listener) => {
       eventEmitter.removeListener(eventType, listener);
@@ -143,6 +151,8 @@ export const createAsyncWorkerForChildProcessControllerFactory =
   (): ChildProcessControllerAsyncWorker => {
     const _workerPath = getWorkerPath(filepathFromRenderer);
 
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- sorry not sorry
+    const { reportInfo } = require("../../logging/reporter");
     reportInfo(`[child-process-util] Load worker from path ${_workerPath}`);
 
     // 1st pipe : We make stdin pipeable to allow to stream binary data to the worker

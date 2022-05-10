@@ -1,13 +1,16 @@
+import { getTrackerProvider } from "@common/modules/tracker";
 import type { ArchifiltreDocsError } from "@common/utils/error";
 import {
   ArchifiltreDocsErrorType,
   makeErrorHandler,
 } from "@common/utils/error";
 import { ArchifiltreDocsStoreThunkErrorCode } from "@common/utils/error/error-codes";
+import { bytesToGigabytes } from "@common/utils/numbers";
+import { createHash } from "crypto";
 import { clipboard } from "electron";
-import _, { noop } from "lodash";
+import fs from "fs";
+import { noop } from "lodash";
 import { compose } from "lodash/fp";
-import path from "path";
 import type { Observable, OperatorFunction } from "rxjs";
 import { tap } from "rxjs/operators";
 
@@ -15,8 +18,6 @@ import { mapToNewVersionNumbers } from "../components/header/new-version-checker
 import type { VirtualFileSystem } from "../files-and-folders-loader/files-and-folders-loader-types";
 import { firstHashesComputingThunk } from "../hash-computer/hash-computer-thunk";
 import { reportError } from "../logging/reporter";
-import { addTracker } from "../logging/tracker";
-import { ActionTitle, ActionType } from "../logging/tracker-types";
 import { translations } from "../translations/translations";
 import { filterResults } from "../utils/batch-process";
 import type { ErrorMessage, ResultMessage } from "../utils/batch-process/types";
@@ -30,7 +31,6 @@ import {
   isJsonFile,
   isRootPath,
   isValidFolderPath,
-  octet2HumanReadableFormat,
 } from "../utils/file-system/file-sys-util";
 import type { HookParam } from "../utils/file-tree-loader/file-tree-loader";
 import { loadFileTree } from "../utils/file-tree-loader/file-tree-loader";
@@ -65,7 +65,6 @@ import {
 } from "./files-and-folders/files-and-folders-selectors";
 import type { FilesAndFoldersMap } from "./files-and-folders/files-and-folders-types";
 import { initFilesAndFoldersMetatada } from "./files-and-folders-metadata/files-and-folders-metadata-actions";
-import { getFilesAndFoldersMetadataFromStore } from "./files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { setFilesAndFoldersHashes } from "./hashes/hashes-actions";
 import {
   registerErrorAction,
@@ -160,56 +159,7 @@ const displayError = (errorMessage: string, errorTitle: string) => {
   return makeErrorResponse();
 };
 
-/**
- * Handles tracking events sent to Matomo
- */
-const handleTracking =
-  (
-    paths: string[],
-    filesAndFoldersMap: FilesAndFoldersMap
-  ): ArchifiltreDocsThunkAction =>
-  (dispatch, getState) => {
-    const filesAndFoldersMetadataMap = getFilesAndFoldersMetadataFromStore(
-      getState()
-    );
-
-    const treeVolume =
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      filesAndFoldersMetadataMap[ROOT_FF_ID].childrenTotalSize ?? 0;
-
-    const fileCount = paths.length;
-    const foldersCount = Object.keys(filesAndFoldersMap).length - fileCount;
-
-    const elementsByExtension = _(paths)
-      .map((p) => path.extname(p))
-      // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
-      .countBy(_.identity())
-      .map((count, extension) => `${extension || "[No extension]"}: ${count}`)
-      .unshift(`Folders dropped: ${foldersCount}`)
-      .unshift(`Files dropped: ${fileCount}`)
-      .unshift(`Total volume: ${octet2HumanReadableFormat(treeVolume)}`)
-      .join("; \r\n");
-
-    addTracker({
-      eventValue: paths.length,
-      title: ActionTitle.FILE_TREE_DROP,
-      type: ActionType.TRACK_EVENT,
-      value: elementsByExtension,
-    });
-  };
-
 const defaultHookParam: HookParam = {};
-
-const handleLoadingTimeTracking = (loadingStart: number) => {
-  const loadingEnd = new Date().getTime();
-  const loadingTime = `${(loadingEnd - loadingStart) / 1000}s`; // Loading time in seconds
-  addTracker({
-    eventValue: loadingTime,
-    title: ActionTitle.LOADING_TIME,
-    type: ActionType.TRACK_EVENT,
-    value: `Loading time: ${loadingTime}`,
-  });
-};
 
 const handleZipNotificationDisplay = (paths: string[]) => {
   const zipFileCount = countZipFiles(paths);
@@ -247,7 +197,6 @@ const handleNonJsonFileThunk =
       const paths = getFiles(
         filesAndFoldersMapToArray(virtualFileSystem.filesAndFolders)
       ).map((file) => file.id);
-      void dispatch(handleTracking(paths, virtualFileSystem.filesAndFolders));
       handleZipNotificationDisplay(paths);
       void dispatch(handleErrorNotificationDisplay());
       void dispatch(handleHashComputing(virtualFileSystem));
@@ -397,12 +346,47 @@ const loadFilesAndFoldersFromValidPathThunk =
   ): ArchifiltreDocsThunkAction<Promise<VirtualFileSystemLoader>> =>
   async (dispatch) => {
     await clearActionReplayFile();
-    const loadingStart = new Date().getTime();
+    const loadingStart = Date.now();
     const { virtualFileSystem, terminate } = dispatch(
       tryLoadFilesAndFoldersAfterInitThunk(fileOrFolderPath)
     );
-    void virtualFileSystem.then(() => {
-      handleLoadingTimeTracking(loadingStart);
+    void virtualFileSystem.then((vfs) => {
+      if (isJsonFile(fileOrFolderPath)) {
+        void fs.promises
+          .readFile(fileOrFolderPath, "utf8")
+          .then((jsonContent) => {
+            // remove BOM from legacy save files
+            const content = !jsonContent.startsWith("{")
+              ? jsonContent.slice(1)
+              : jsonContent;
+
+            const hasher = createHash("sha256");
+            hasher.update(content);
+
+            getTrackerProvider().track("Work Reloaded", {
+              workHash: hasher.digest("hex"),
+            });
+          });
+        return { terminate, virtualFileSystem };
+      }
+      const filesAndFoldersMap = vfs.filesAndFolders;
+      const treeVolume =
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        vfs.filesAndFoldersMetadata[ROOT_FF_ID].childrenTotalSize ?? 0;
+
+      const paths = getFiles(filesAndFoldersMapToArray(filesAndFoldersMap)).map(
+        (file) => file.id
+      );
+      const fileCount = paths.length;
+      const folderCount = Object.keys(filesAndFoldersMap).length - fileCount;
+
+      getTrackerProvider().track("Folder Dropped", {
+        fileCount,
+        folderCount,
+        loadTime: Date.now() - loadingStart,
+        size: bytesToGigabytes(treeVolume, 2),
+        sizeRaw: treeVolume,
+      });
     });
     return { terminate, virtualFileSystem };
   };

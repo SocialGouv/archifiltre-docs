@@ -1,4 +1,4 @@
-import type { UnknownMapping } from "@common/utils/types";
+import type { UnknownMapping } from "@common/utils/type";
 import { LEVEL, MESSAGE } from "triple-beam";
 import TransportStream from "winston-transport";
 

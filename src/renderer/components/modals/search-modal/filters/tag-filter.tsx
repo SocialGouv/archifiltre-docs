@@ -1,4 +1,4 @@
-import type { FilterMethod } from "@common/utils/types";
+import type { FilterMethod } from "@common/utils/type";
 import type { TFunction } from "i18next";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

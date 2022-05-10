@@ -20,7 +20,7 @@ module.exports =
     if (config.mode === "production") {
       for (const plugin of config.plugins) {
         if (plugin instanceof webpack.BannerPlugin) {
-          plugin.options.exclude = /\.worker\.js$/i;
+          plugin.options.exclude = /(preload|\.worker)\.js$/i;
         }
       }
     }

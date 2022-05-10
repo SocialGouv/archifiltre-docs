@@ -37,10 +37,6 @@ jest.mock("@renderer/utils/notifications", () => ({
   notifyInfo: jest.fn(),
 }));
 
-jest.mock("@renderer/logging/tracker", () => ({
-  addTracker: jest.fn(),
-}));
-
 jest.mock(
   "@renderer/files-and-folders-loader/file-system-loading-process-utils",
   () => ({

@@ -1,6 +1,7 @@
 const webpackCommonConfig = require("./webpack.common.config");
 const path = require("path");
 const glob = require("glob");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 require("dotenv").config();
 
@@ -44,6 +45,27 @@ module.exports =
     //     };
     //   }
     // });
+
+    if (config.mode === "production") {
+      if (!config.plugins?.length) {
+        config.plugins = [];
+      }
+
+      config.plugins.push(
+        new CopyWebpackPlugin({
+          patterns: [
+            {
+              from: "node_modules/fswin/electron",
+              to: "lib/fswin/electron",
+            },
+            {
+              from: "node_modules/fswin/node",
+              to: "lib/fswin/node",
+            },
+          ],
+        })
+      );
+    }
 
     config.entry = {
       ...config.entry,

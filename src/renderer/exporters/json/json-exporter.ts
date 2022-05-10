@@ -1,5 +1,6 @@
-import { addTracker } from "../../logging/tracker";
-import { ActionTitle, ActionType } from "../../logging/tracker-types";
+import { getTrackerProvider } from "@common/modules/tracker";
+import { createHash } from "crypto";
+
 import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import {
   getAliasesFromStore,
@@ -36,10 +37,6 @@ export const jsonExporterThunk =
     version,
   }: JsonExporterThunkArgs): ArchifiltreDocsThunkAction =>
   (dispatch, getState) => {
-    addTracker({
-      title: ActionTitle.JSON_EXPORT,
-      type: ActionType.TRACK_EVENT,
-    });
     const state = getState();
     const fileName = getNameWithExtension(sessionName, "json");
 
@@ -56,5 +53,13 @@ export const jsonExporterThunk =
       version,
     };
 
-    save(fileName, JSON.stringify(exportedData));
+    const content = JSON.stringify(exportedData);
+    const hasher = createHash("sha256");
+    hasher.update(content);
+
+    getTrackerProvider().track("Work Saved", {
+      workHash: hasher.digest("hex"),
+    });
+
+    save(fileName, content);
   };

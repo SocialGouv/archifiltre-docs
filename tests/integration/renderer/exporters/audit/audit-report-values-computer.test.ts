@@ -12,8 +12,8 @@ import {
 } from "@renderer/exporters/audit/audit-report-values-computer";
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import {
+  bytes2HumanReadableFormat,
   formatPathForUserSystem,
-  octet2HumanReadableFormat,
 } from "@renderer/utils/file-system/file-sys-util";
 import { FileType } from "@renderer/utils/file-types";
 
@@ -205,13 +205,13 @@ describe("audit-report-values-computer", () => {
       const file2Description = {
         name: file2.name,
         path: formatPathForUserSystem(file2.id),
-        size: octet2HumanReadableFormat(file2.file_size),
+        size: bytes2HumanReadableFormat(file2.file_size),
       };
 
       const file3Description = {
         name: file3.name,
         path: formatPathForUserSystem(file3.id),
-        size: octet2HumanReadableFormat(file3.file_size),
+        size: bytes2HumanReadableFormat(file3.file_size),
       };
       expect(getBiggestFiles(sortingTestArray)).toEqual([
         file2Description,

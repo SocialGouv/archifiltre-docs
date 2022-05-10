@@ -116,17 +116,17 @@ export const countZipFiles = (filePaths: string[]): number =>
 export const formatPathForUserSystem = (formattedPath: string): string =>
   path.normalize(formattedPath);
 
-export const octet2HumanReadableFormat = (size: number): string => {
+export const bytes2HumanReadableFormat = (size: number): string => {
   const unit = translations.t("common.byteChar");
-  const To = size / Math.pow(1000, 4);
+  const To = size / 1000 ** 4;
   if (To > 1) {
     return `${Math.round(To * 10) / 10} T${unit}`;
   }
-  const Go = size / Math.pow(1000, 3);
+  const Go = size / 1000 ** 3;
   if (Go > 1) {
     return `${Math.round(Go * 10) / 10} G${unit}`;
   }
-  const Mo = size / Math.pow(1000, 2);
+  const Mo = size / 1000 ** 2;
   if (Mo > 1) {
     return `${Math.round(Mo * 10) / 10} M${unit}`;
   }
@@ -154,16 +154,11 @@ export const getAbsolutePath = (
 export const isRootPath = (testPath: string): boolean =>
   path.dirname(testPath) === testPath;
 
-export const isValidFilePath = async (filePath: string): Promise<boolean> => {
+export const isValidFilePath = (filePath: string): boolean => {
   const folderPath = dirname(filePath);
 
-  return folderExists(folderPath);
-};
-
-const folderExists = async (folderPath: string): Promise<boolean> => {
   try {
-    const stats = await fs.promises.stat(folderPath);
-    return stats.isDirectory();
+    return fs.statSync(folderPath).isDirectory();
   } catch (error: unknown) {
     return false;
   }

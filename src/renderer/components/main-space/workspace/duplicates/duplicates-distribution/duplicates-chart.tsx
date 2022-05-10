@@ -12,7 +12,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
-import { octet2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
+import { bytes2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
 
 const ColoredText = styled.span<{ color: string }>`
   display: block;
@@ -79,7 +79,7 @@ export const DuplicatesChart: React.FC<DuplicatesChartProps> = ({
             "duplicates.elements"
           )}`}</ColoredText>
           <ColoredText color={scheme[point]}>
-            {octet2HumanReadableFormat(size)}
+            {bytes2HumanReadableFormat(size)}
           </ColoredText>
         </div>
       );

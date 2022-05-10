@@ -6,17 +6,6 @@ import { useTranslation } from "react-i18next";
 import { FaSearch } from "react-icons/fa";
 
 import { useStyles } from "../../../hooks/use-styles";
-import { addTracker } from "../../../logging/tracker";
-import { ActionTitle, ActionType } from "../../../logging/tracker-types";
-
-const handleTracking = (searchTerm: string) => {
-  if (searchTerm.length) {
-    addTracker({
-      title: ActionTitle.SEARCH_PERFORMED,
-      type: ActionType.TRACK_EVENT,
-    });
-  }
-};
 
 export interface SearchBarProps {
   setSearchTerm: (searchTerm: string) => void;
@@ -32,7 +21,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const onChange: NonNullable<InputBaseProps["onChange"]> = useCallback(
     (event) => {
       setSearchTerm(event.target.value);
-      handleTracking(event.target.value);
     },
     [setSearchTerm]
   );

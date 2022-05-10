@@ -1,3 +1,4 @@
+import { ExportType } from "@common/export/type";
 import { Object } from "@common/utils";
 import { identity } from "@common/utils/function";
 import Button from "@material-ui/core/Button";
@@ -10,11 +11,7 @@ import { useTranslation } from "react-i18next";
 import { useStyles } from "../../../hooks/use-styles";
 import { isValidFilePath } from "../../../utils/file-system/file-sys-util";
 import type { IsActiveOptions } from "./export-config";
-import {
-  exportConfig,
-  ExportType,
-  mapValuesFromExportType,
-} from "./export-config";
+import { exportConfig, mapValuesFromExportType } from "./export-config";
 import type { ExportOptionsProps, ExportTypesMap } from "./export-options";
 import { ExportOptions } from "./export-options";
 
@@ -37,20 +34,16 @@ const defaultEnabledExports: ExportTypesMap<boolean> = mapValuesFromExportType(
   () => false
 );
 
-const computeExportPathsValidityMap = async (
+const computeExportPathsValidityMap = (
   exportPathsMap: ExportTypesMap<string>
-): Promise<ExportTypesMap<boolean>> => {
-  const resultsArray = await Promise.all(
-    Object.keys(exportPathsMap).map(async (key: ExportType) =>
-      isValidFilePath(exportPathsMap[key]).then((isValid) => ({
-        isValid,
-        key,
-      }))
-    )
-  );
+): ExportTypesMap<boolean> => {
+  const resultsArray = Object.keys(exportPathsMap).map((key: ExportType) => ({
+    isValid: isValidFilePath(exportPathsMap[key]),
+    key,
+  }));
 
   return mapValuesFromExportType(
-    (key) => find(resultsArray, { key })?.isValid ?? false
+    (key) => !!find(resultsArray, { key })?.isValid
   );
 };
 
@@ -94,7 +87,7 @@ export const ExportModalContent: React.FC<ExportModalContentProps> = ({
   }, [startExport, activeExports, exportPaths, closeModal]);
 
   useEffect(() => {
-    void computeExportPathsValidityMap(exportPaths).then(setValidPaths);
+    setValidPaths(computeExportPathsValidityMap(exportPaths));
   }, [exportPaths, setValidPaths]);
 
   const setActiveExportValue: ExportOptionsProps["setActiveExportValue"] = (

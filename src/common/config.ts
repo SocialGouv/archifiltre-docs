@@ -1,7 +1,14 @@
-import { app, ipcMain, ipcRenderer } from "electron";
 import path from "path";
 
+import { version } from "./utils/package";
 import { isTruthy } from "./utils/string";
+
+export const IS_WORKER = !!(process as NodeJS.Process | undefined)?.send;
+const { app, ipcMain, ipcRenderer } = IS_WORKER
+  ? // eslint-disable-next-line @typescript-eslint/consistent-type-imports -- deal with it
+    ({} as typeof import("electron"))
+  : // eslint-disable-next-line @typescript-eslint/no-require-imports -- yep, sad uh?
+    require("electron");
 
 export interface WorkerSerializedConfig {
   forceTracking: boolean;
@@ -14,10 +21,10 @@ export interface WorkerSerializedConfig {
   isPackaged: boolean;
   isTest: boolean;
   isWorker: true;
+  productChannel: "beta" | "next" | "stable";
+  resourcesPath: string;
   staticPath: string;
 }
-
-export const IS_WORKER = !!(process as NodeJS.Process | undefined)?.send;
 
 const workerConfig: WorkerSerializedConfig = (() => {
   if (IS_WORKER) {
@@ -33,6 +40,14 @@ const workerConfig: WorkerSerializedConfig = (() => {
 
   return {} as WorkerSerializedConfig;
 })();
+// TODO: logo, config, bug repport enable in beta/next
+export const PRODUCT_CHANNEL = IS_WORKER
+  ? workerConfig.productChannel
+  : version.includes("beta")
+  ? "beta"
+  : version.includes("next")
+  ? "next"
+  : "stable";
 export const IS_CI = IS_WORKER ? workerConfig.isCi : process.env.CI === "true";
 export const IS_MAIN = IS_WORKER
   ? workerConfig.isMain
@@ -74,6 +89,16 @@ export const STATIC_PATH = IS_WORKER
   ? path.resolve(__dirname, "../../static") // dist / e2e
   : __static; // dev
 
+export const RESOURCES_PATH = IS_WORKER
+  ? workerConfig.resourcesPath
+  : IS_PACKAGED()
+  ? path.resolve(process.resourcesPath) // prod
+  : IS_DIST_MODE
+  ? path.resolve(__dirname) // dist / e2e
+  : path
+      .resolve(__dirname, "..", IS_MAIN ? "main" : "renderer")
+      .replace(`${path.sep}src${path.sep}`, `${path.sep}dist${path.sep}`); // dev
+
 export const workerSerializedConfig: WorkerSerializedConfig = {
   forceTracking: FORCE_TRACKING,
   isCi: IS_CI,
@@ -85,5 +110,7 @@ export const workerSerializedConfig: WorkerSerializedConfig = {
   isPackaged: IS_PACKAGED(),
   isTest: IS_TEST,
   isWorker: true,
+  productChannel: PRODUCT_CHANNEL,
+  resourcesPath: RESOURCES_PATH,
   staticPath: STATIC_PATH,
 };

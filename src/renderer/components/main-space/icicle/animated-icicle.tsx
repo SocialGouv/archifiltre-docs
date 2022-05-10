@@ -3,8 +3,6 @@ import type { MouseEventHandler } from "react";
 import React, { memo, useCallback, useRef, useState } from "react";
 
 import { animateSvgDomElement } from "../../../animation-daemon";
-import { addTracker } from "../../../logging/tracker";
-import { ActionTitle, ActionType } from "../../../logging/tracker-types";
 import type { IcicleProps } from "./icicle";
 import { Icicle } from "./icicle";
 import type { IcicleMouseActionHandler } from "./icicle-types";
@@ -25,11 +23,6 @@ const _AnimatedIcicle: React.FC<AnimatedIcicleProps> = (props) => {
 
   const onIcicleRectDoubleClick: IcicleMouseActionHandler = useCallback(
     ({ dims, id }, event) => {
-      addTracker({
-        title: ActionTitle.ICICLE_DOUBLE_CLICK,
-        type: ActionType.TRACK_EVENT,
-      });
-
       setPreviousProps(props);
       setPreviousDisplayMode("inherit");
 

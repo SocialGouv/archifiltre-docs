@@ -1,5 +1,6 @@
 import { ipcRenderer } from "@common/ipc";
 import { openLink } from "@common/utils/electron";
+import { Badge } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
@@ -29,6 +30,7 @@ import {
   DOCUMENTATION_LINK,
   FEEDBACK_LINK,
 } from "../../constants";
+import { useAutoUpdate } from "../../hooks/use-auto-update";
 import {
   clearSession,
   getPreviousSessions,
@@ -77,6 +79,8 @@ export const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
   const { t } = useTranslation();
   const [previousSessions, setPreviousSessions] = useState<string[]>([]);
   const [hoveredPreviousSession, setHoveredSessions] = useState<number>(-1);
+
+  const { updateAvailable } = useAutoUpdate();
 
   const toggleDisplayClearElement = (index: number) => {
     setHoveredSessions(index);
@@ -201,7 +205,9 @@ export const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
         <List component="nav">
           <ListItem button onClick={openModal}>
             <ListItemIcon>
-              <FaCog />
+              <Badge color="error" variant="dot" invisible={!updateAvailable}>
+                <FaCog />
+              </Badge>
             </ListItemIcon>
             <ListItemText primary={t("settingsModal.title")} />
           </ListItem>

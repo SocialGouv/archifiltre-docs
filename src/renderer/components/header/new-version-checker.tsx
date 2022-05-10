@@ -1,12 +1,14 @@
-import { openLink } from "@common/utils/electron";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import type { UseAutoUpdateParam } from "../../hooks/use-auto-update";
+import { useAutoUpdate } from "../../hooks/use-auto-update";
 import { useStyles } from "../../hooks/use-styles";
+import { reportError } from "../../logging/reporter";
 import { ModalHeader } from "../modals/modal-header";
 
 /**
@@ -26,34 +28,37 @@ export const mapToNewVersionNumbers = (lastVersion: string): string => {
 
 export const NewVersionChecker: React.FC = () => {
   const [isDisplayed, setIsDisplayed] = useState(false);
-  const [lastVersion, setLastVersion] = useState("");
+  const [lastVersion, setLastVersion] = useState<string>();
+  const [errorMessage, setErrorMessage] = useState<string>();
   const { t } = useTranslation();
   const classes = useStyles();
 
-  useEffect(() => {
-    // TODO: use auto update
-    // request<string>({
-    //   method: "GET",
-    //   url: `${process.env.ARCHIFILTRE_SITE_URL}/api-version.json`,
-    // })
-    //   .then((result) => {
-    //     const previousVersion = mapToNewVersionNumbers(
-    //       JSON.parse(result).lastVersion as string
-    //     );
-    //     const currentVersion = version;
-    //     if (versionComparator(currentVersion, previousVersion) === -1) {
-    //       setIsDisplayed(true);
-    //       setLastVersion(previousVersion);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     reportError(error);
-    //   });
+  const onUpdateAvailable = useCallback<
+    UseAutoUpdateParam["onUpdateAvailable"]
+  >((info) => {
+    if (info) {
+      setIsDisplayed(true);
+      setLastVersion(info.version);
+    }
   }, []);
+  const onUpdateError = useCallback<UseAutoUpdateParam["onUpdateError"]>(
+    (error) => {
+      reportError(error);
+    },
+    []
+  );
+
+  const { doUpdate } = useAutoUpdate({
+    onUpdateAvailable,
+    onUpdateError,
+  });
 
   const download = useCallback(() => {
-    openLink(process.env.ARCHIFILTRE_SITE_URL);
-  }, []);
+    const updated = doUpdate();
+    if (!updated) {
+      setErrorMessage("No update available."); //TODO: i18n
+    }
+  }, [doUpdate]);
 
   const onClose = useCallback(() => {
     setIsDisplayed(false);
@@ -64,12 +69,17 @@ export const NewVersionChecker: React.FC = () => {
     <Dialog open={isDisplayed} onClose={onClose}>
       <ModalHeader title={t("header.newVersion")} onClose={onClose} />
       <DialogContent className={classes.dialogContent}>
-        {t("header.aNewVersionIsOut", {
-          version: lastVersion,
-        })}
+        {errorMessage ??
+          t("header.aNewVersionIsOut", {
+            version: lastVersion,
+          })}
       </DialogContent>
       <DialogActions>
-        <Button onClick={download} color="primary">
+        <Button
+          onClick={download}
+          color="primary"
+          disabled={!!lastVersion || !!errorMessage}
+        >
           {t("header.download")}
         </Button>
         <Button onClick={onClose} color="primary">

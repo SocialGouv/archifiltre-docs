@@ -173,7 +173,7 @@
       "pathLength": "path length",
       "name": "name",
       "extension": "extension",
-      "size": "size (octet)",
+      "size": "size (bytes)",
       "firstModified": "first modified",
       "newFirstModified": "new first modified",
       "lastModified": "last modified",

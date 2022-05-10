@@ -1,4 +1,5 @@
 import { IS_WORKER } from "@common/config";
+import sourceMapSupport from "source-map-support";
 
 import type { WorkerMessageHandler } from "../../utils/async-worker";
 import { setupChildWorkerListeners } from "../../utils/async-worker";
@@ -8,6 +9,7 @@ import { onInitialize } from "./tree-csv-exporter.impl";
 import { parseTreeCsvExporterOptionsFromStream } from "./tree-csv-exporter-serializer";
 
 if (IS_WORKER) {
+  sourceMapSupport.install();
   const asyncWorker = createAsyncWorkerForChildProcess(async (stream) => ({
     data: await parseTreeCsvExporterOptionsFromStream(stream),
     type: MessageTypes.INITIALIZE,

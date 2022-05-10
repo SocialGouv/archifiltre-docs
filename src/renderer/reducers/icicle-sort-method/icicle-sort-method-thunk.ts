@@ -1,12 +1,12 @@
-import { addTracker } from "../../logging/tracker";
-import { ActionTitle, ActionType } from "../../logging/tracker-types";
+import { getTrackerProvider } from "@common/modules/tracker";
+
 import type { ArchifiltreDocsThunkAction } from "../archifiltre-types";
 import {
   setElementWeightMethod,
   setIcicleColorMode,
   setIcicleSortMethod,
 } from "./icicle-sort-method-actions";
-import type {
+import {
   ElementWeightMethod,
   IcicleColorMode,
   IcicleSortMethod,
@@ -19,10 +19,14 @@ import type {
 export const setIcicleSortMethodThunk =
   (iciclesSortMethod: IcicleSortMethod): ArchifiltreDocsThunkAction =>
   (dispatch) => {
-    addTracker({
-      title: ActionTitle.TOGGLE_ICICLES_SORT,
-      type: ActionType.TRACK_EVENT,
-      value: iciclesSortMethod,
+    getTrackerProvider().track("Feat(1.0) Nav Mode Changed", {
+      navMode: "sort",
+      type:
+        iciclesSortMethod === IcicleSortMethod.SORT_ALPHA_NUMERICALLY
+          ? "alpha"
+          : iciclesSortMethod === IcicleSortMethod.SORT_BY_DATE
+          ? "date"
+          : "size",
     });
 
     dispatch(setIcicleSortMethod(iciclesSortMethod));
@@ -35,10 +39,12 @@ export const setIcicleSortMethodThunk =
 export const setElementWeightMethodThunk =
   (elementWeightMethod: ElementWeightMethod): ArchifiltreDocsThunkAction =>
   (dispatch) => {
-    addTracker({
-      title: ActionTitle.TOGGLE_ICICLES_WEIGHT,
-      type: ActionType.TRACK_EVENT,
-      value: elementWeightMethod,
+    getTrackerProvider().track("Feat(1.0) Nav Mode Changed", {
+      navMode: "weight",
+      type:
+        elementWeightMethod === ElementWeightMethod.BY_FILE_COUNT
+          ? "count"
+          : "size",
     });
 
     dispatch(setElementWeightMethod(elementWeightMethod));
@@ -51,10 +57,9 @@ export const setElementWeightMethodThunk =
 export const setIcicleColorModeThunk =
   (icicleColorMode: IcicleColorMode): ArchifiltreDocsThunkAction =>
   (dispatch) => {
-    addTracker({
-      title: ActionTitle.TOGGLE_ICICLES_COLOR,
-      type: ActionType.TRACK_EVENT,
-      value: icicleColorMode,
+    getTrackerProvider().track("Feat(1.0) Nav Mode Changed", {
+      navMode: "color",
+      type: icicleColorMode === IcicleColorMode.BY_DATE ? "date" : "type",
     });
 
     dispatch(setIcicleColorMode(icicleColorMode));

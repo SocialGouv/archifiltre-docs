@@ -1,10 +1,25 @@
-import { IS_DEV, IS_DIST_MODE, IS_E2E, IS_PACKAGED } from "@common/config";
+import {
+  IS_DIST_MODE,
+  IS_E2E,
+  IS_PACKAGED,
+  RESOURCES_PATH,
+} from "@common/config";
 import { loadApp } from "@common/modules/app";
+import { setupAutoUpdate } from "@common/modules/auto-update";
 import { loadHash } from "@common/modules/hash";
+import {
+  get as getConfig,
+  initNewUserConfig,
+  set as setConfig,
+} from "@common/modules/new-user-config";
+import { getTrackerProvider, initTracking } from "@common/modules/tracker";
 import { loadWindow } from "@common/modules/window";
 import { setupSentry } from "@common/monitoring/sentry";
+import { sleep } from "@common/utils/os";
+import { version } from "@common/utils/package";
 import type { Extension } from "electron";
 import { app, BrowserWindow, dialog, ipcMain, Menu, session } from "electron";
+import { totalmem } from "os";
 import path from "path";
 
 module.hot?.accept();
@@ -19,14 +34,9 @@ if (process.arch === "x64") {
   app.commandLine.appendSwitch("js-flags", "--max-old-space-size=40960");
 }
 
-// Passing null will suppress the default menu.
-// On Windows and Linux, this has the additional
-// effect of removing the menu bar from the window.
 if (app.isPackaged) {
   Menu.setApplicationMenu(null);
-}
-
-if (!app.isPackaged) {
+} else {
   app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
 }
 
@@ -91,13 +101,7 @@ const INDEX_URL = IS_PACKAGED()
   ? `file://${path.join(__dirname, "/../renderer/index.html")}`
   : `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`;
 
-const PRELOAD_PATH = IS_PACKAGED()
-  ? path.resolve(process.resourcesPath, "preload.js") // prod
-  : IS_DIST_MODE
-  ? path.resolve(__dirname, "preload.js") // dist / e2e
-  : path
-      .resolve(__dirname, "preload.js")
-      .replace(`${path.sep}src${path.sep}`, `${path.sep}dist${path.sep}`); // dev
+const PRELOAD_PATH = path.resolve(RESOURCES_PATH, "preload.js");
 
 async function createWindow() {
   // Create the browser window.
@@ -111,12 +115,6 @@ async function createWindow() {
     },
   });
 
-  // and load the index.html of the app.
-  // if (process.env.DEV_SERVER !== "true" && process.env.NODE_ENV !== "test") {
-  //   void win.loadFile(path.join(__dirname, "./index.html"));
-  // } else {
-  //   void win.loadURL("http://localhost:8000");
-  // }
   loadWindow(win);
 
   await win.loadURL(INDEX_URL);
@@ -136,7 +134,7 @@ async function createWindow() {
 }
 
 void app.whenReady().then(() => {
-  if (IS_DEV && !IS_PACKAGED()) {
+  if (!IS_E2E && !IS_PACKAGED()) {
     let devToolsLoaded = Promise.resolve<Extension | null>(null);
     try {
       devToolsLoaded = session.defaultSession
@@ -159,8 +157,35 @@ void app.whenReady().then(() => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
+  // -- init all "modules"
+  // TODO: do real modules
+  await initNewUserConfig();
+  await initTracking();
   loadHash();
   loadApp();
+  await setupAutoUpdate();
+
+  // post init
+  const tracker = getTrackerProvider();
+  sentryCallback(getConfig("appId"), ...tracker.getSentryIntegations());
+  const firstOpened = getConfig("_firstOpened");
+  if (firstOpened) {
+    tracker.track("App First Opened", {
+      arch: process.arch,
+      date: new Date(),
+      os: process.platform,
+      ram: totalmem() / 1024 / 1024 / 1024,
+      version,
+    });
+    setConfig("_firstOpened", false);
+  }
+
+  tracker.track("App Opened", {
+    date: new Date(),
+    version,
+  });
+
+  // finally create window
   await createWindow();
 });
 
@@ -175,6 +200,13 @@ app.on("activate", async () => {
   if (win === null) {
     await createWindow();
   }
+});
+
+app.on("will-quit", async (event) => {
+  event.preventDefault();
+  getTrackerProvider().track("App Closed", { date: new Date() });
+  await sleep(1000);
+  process.exit();
 });
 
 // In this file you can include the rest of your app's specific main process

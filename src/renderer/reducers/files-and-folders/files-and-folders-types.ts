@@ -31,6 +31,7 @@ export interface FilesAndFolders {
   depth?: number;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   file_last_modified: number;
+  /** in bytes */
   // eslint-disable-next-line @typescript-eslint/naming-convention
   file_size: number;
   id: string;

@@ -1,9 +1,9 @@
+import type { ExportType } from "@common/export/type";
+import { ExportCategory } from "@common/export/type";
 import Box from "@material-ui/core/Box";
 import React from "react";
 
 import { ExportCategoryOptions } from "./export-category-options";
-import type { ExportType } from "./export-config";
-import { ExportCategory } from "./export-config";
 import { ExportControls } from "./export-controls";
 
 export type ExportTypesMap<TValue> = {

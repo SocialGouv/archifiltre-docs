@@ -1,8 +1,6 @@
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
-import { addTracker } from "../../../../logging/tracker";
-import { ActionTitle, ActionType } from "../../../../logging/tracker-types";
 import { EditableField } from "../../../common/editable-field";
 import { NoElementSelectedPlaceholder } from "../enrichment/element-characteristics/no-element-selected-placeholder";
 
@@ -22,11 +20,6 @@ export const CommentCell: React.FC<CommentCellProps> = ({
   const handleChange = useCallback(
     (newComment: string) => {
       updateComment(newComment);
-      addTracker({
-        title: ActionTitle.DESCRIPTION_ADDED,
-        type: ActionType.TRACK_EVENT,
-        value: "Description created",
-      });
     },
     [updateComment]
   );

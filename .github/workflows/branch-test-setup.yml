@@ -36,8 +36,6 @@ jobs:
         env:
           ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
           ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
-      - name: Set .env to production
-        run: cp .env.prod .env
       - id: compile
         name: Compile
         run: |
@@ -48,8 +46,20 @@ jobs:
           yarn global add replace
           $(yarn global bin)/replace "\"version": \"$TMP_CURRENT_VERSION\"" "\"version": \"$TMP_NEXT_VERSION\"" package.json
           echo ::set-output name=next-version::$TMP_NEXT_VERSION
-          yarn webpack --mode production
-          yarn webpack --mode production --config webpack.electron-main.js
+          yarn compile --no-progress
+        env:
+          ARCHIFILTRE_RELEASE_MODE: version
+          TRACKER_MATOMO_ID_SITE: ${{ secrets.TRACKER_MATOMO_ID_SITE }}
+          TRACKER_MATOMO_URL: ${{ secrets.TRACKER_MATOMO_URL }}
+          TRACKER_PROVIDER: ${{ secrets.TRACKER_PROVIDER }}
+          TRACKER_POSTHOG_API_KEY: ${{ secrets.TRACKER_POSTHOG_API_KEY }}
+          TRACKER_POSTHOG_URL: ${{ secrets.TRACKER_POSTHOG_URL }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_URL: ${{ secrets.SENTRY_URL }}
+          ARCHIFILTRE_SITE_URL: ${{ secrets.ARCHIFILTRE_SITE_URL }}
+          FORCE_TRACKING: false
       - name: Archive dist
         uses: actions/upload-artifact@v2
         with:

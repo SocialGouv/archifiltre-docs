@@ -2,7 +2,7 @@ import Grid from "@material-ui/core/Grid";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import { octet2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
+import { bytes2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
 import { SessionElementsDetail } from "./session-elements-detail";
 
 export interface SessionElementsDetailsProps {
@@ -32,7 +32,7 @@ export const SessionElementsDetails: React.FC<SessionElementsDetailsProps> = ({
       <Grid item>
         <SessionElementsDetail
           title={t("report.size")}
-          content={octet2HumanReadableFormat(volume)}
+          content={bytes2HumanReadableFormat(volume)}
         />
       </Grid>
     </Grid>

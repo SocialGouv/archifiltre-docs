@@ -1,20 +1,10 @@
 import type { MouseEvent } from "react";
 import { useCallback, useRef } from "react";
 
-import { addTracker } from "../logging/tracker";
-import { ActionTitle, ActionType } from "../logging/tracker-types";
-
 export type MoveElement = (
   movedElementId: string,
   targetFolderId: string
 ) => void;
-
-const handleTracking = () => {
-  addTracker({
-    title: ActionTitle.ELEMENT_MOVED,
-    type: ActionType.TRACK_EVENT,
-  });
-};
 
 interface MovableElement {
   onIcicleMouseDown: (event: MouseEvent) => void;
@@ -33,7 +23,6 @@ export const useMovableElements = (
 
   const onIcicleMouseDown = useCallback(
     (event: MouseEvent) => {
-      handleTracking();
       const target = event.target as HTMLElement;
       draggedElementRef.current =
         target.attributes.getNamedItem("data-draggable-id")?.value ?? "";

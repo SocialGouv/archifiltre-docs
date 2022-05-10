@@ -48,6 +48,7 @@
       "date-fns",
       "dateformat",
       "docxtemplater",
+      "electron-store",
       "file-saver",
       "fswin",
       "i18next",
@@ -57,6 +58,7 @@
       "md5-file",
       "mime-types",
       "pizzip",
+      "posthog-js",
       "protobufjs",
       "react-dom",
       "react-i18next",
@@ -68,7 +70,6 @@
       "redux-thunk",
       "redux",
       "rxjs",
-      "source-map-support",
       "source-map-support",
       "styled-components",
       "triple-beam",
@@ -111,6 +112,13 @@
       {
         "from": "static",
         "to": "static",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "dist/renderer/lib/",
+        "to": "lib/",
         "filter": [
           "**/*"
         ]
@@ -185,7 +193,7 @@
     "@types/xml": "^1.0.6",
     "clean-webpack-plugin": "^4.0.0",
     "concurrently": "6.0.2",
-    "copy-webpack-plugin": "9.0.1",
+    "copy-webpack-plugin": "6",
     "cross-env": "^7.0.3",
     "csv-stringify": "^5.6.4",
     "deep-equal": "2.0.5",
@@ -237,6 +245,8 @@
     "date-fns": "^2.19.0",
     "dateformat": "3.0.3",
     "docxtemplater": "3.21.2",
+    "electron-store": "^8.0.1",
+    "electron-updater": "^5.0.1",
     "file-saver": "2.0.5",
     "fswin": "3.21.107",
     "i18next": "^21.6.14",
@@ -245,6 +255,8 @@
     "md5-file": "^5.0.0",
     "mime-types": "^2.1.32",
     "pizzip": "^3.0.6",
+    "posthog-js": "^1.20.4",
+    "posthog-node": "^1.3.0",
     "protobufjs": "^6.10.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

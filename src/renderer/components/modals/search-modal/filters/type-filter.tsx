@@ -1,5 +1,5 @@
 import { BooleanOperator, joinFilters } from "@common/utils/array";
-import type { FilterMethod } from "@common/utils/types";
+import type { FilterMethod } from "@common/utils/type";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

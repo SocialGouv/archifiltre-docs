@@ -46,7 +46,7 @@ jobs:
           echo "$CSC_LINK_RAW" > certmac.txt
           base64 --decode certmac.txt > $CSC_LINK
       - name: Archive certificates
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           if-no-files-found: error
           name: certificates
@@ -91,7 +91,7 @@ jobs:
           ARCHIFILTRE_SITE_URL: ${{ secrets.ARCHIFILTRE_SITE_URL }}
           FORCE_TRACKING: false
       - name: Archive dist
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: compile-dist
           path: dist/
@@ -156,7 +156,7 @@ jobs:
       - name: Build bin
         run: yarn dist:${{ matrix.target }}
       - name: Archive bin
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.target }}-bin
           path: |

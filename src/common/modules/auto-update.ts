@@ -29,7 +29,7 @@ type Replier = <T extends AutoUpdateCheckIpcConfig["replyKey"]>(
   ...args: Extract<AutoUpdateCheckIpcConfig, { replyKey: T }>["returnValue"]
 ) => void;
 
-export const setupAutoUpdate = async (): Promise<void> => {
+export const setupAutoUpdate = (): void => {
   autoUpdater.logger = console;
 
   const repliers: Replier[] = [];
@@ -84,6 +84,4 @@ export const setupAutoUpdate = async (): Promise<void> => {
       reply("autoUpdate.onUpdateAvailable", info);
     });
   });
-
-  await autoUpdater.checkForUpdates();
 };

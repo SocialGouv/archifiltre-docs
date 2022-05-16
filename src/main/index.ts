@@ -163,7 +163,7 @@ app.on("ready", async () => {
   await initTracking();
   loadHash();
   loadApp();
-  await setupAutoUpdate();
+  setupAutoUpdate();
 
   // post init
   const tracker = getTrackerProvider();

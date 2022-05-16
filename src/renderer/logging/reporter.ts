@@ -7,6 +7,8 @@ import DailyRotateFile from "winston-daily-rotate-file";
 
 import { WinstonConsoleLogger } from "./winston-console-logger";
 
+//TODO: replace with electron-log
+
 /* eslint-disable @typescript-eslint/naming-convention */
 enum Level {
   DEBUG = "debug",

@@ -90,7 +90,6 @@
     "artifactName": "${name}-${os}-${arch}.${ext}",
     "productName": "Docs par Archifiltre",
     "afterSign": "scripts/notarize.js",
-    "publish": null,
     "files": [
       "electron/build/icon.*"
     ],
@@ -145,7 +144,9 @@
       "artifactName": "${name}-${os}-${arch}.${ext}"
     },
     "nsis": {
-      "artifactName": "${name}-${os}-${arch}-setup.${ext}"
+      "artifactName": "${name}-${os}-${arch}-setup.${ext}",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     },
     "linux": {
       "category": "Office",

@@ -37,7 +37,7 @@ jobs:
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
 
       - name: Archive dist
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: compile-dist
           path: dist/

@@ -18,7 +18,6 @@ import styled from "styled-components";
 
 import { BackgroundLoadingInfoContainer } from "./components/background-loading-info/background-loading-info-container";
 import { Providers } from "./components/common/providers";
-import { WindowResize } from "./components/common/window-resize";
 import { NewVersionChecker } from "./components/header/new-version-checker";
 import { MainSpace } from "./components/main-space/main-space";
 import { Modals } from "./components/modals/modals";
@@ -65,7 +64,6 @@ void (async () => {
   /** This is the entrypoint for the app. */
   render(
     <Providers>
-      <WindowResize />
       <App>
         <Box display="flex" flexDirection="column" height="100%" width="100%">
           <Box height="100%">

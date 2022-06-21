@@ -42,10 +42,10 @@ const animationLoop = () => {
     }
   });
 
-  requestAnimationFrame(animationLoop);
+  if (Object.keys(queue).length > 0) {
+    requestAnimationFrame(animationLoop);
+  }
 };
-
-animationLoop();
 
 export const animate = (
   visible: Visible,
@@ -58,6 +58,9 @@ export const animate = (
     mutate,
     visible,
   };
+
+  requestAnimationFrame(animationLoop);
+
   return animationId;
 };
 

@@ -1,7 +1,7 @@
 import type { HashesMap } from "@common/utils/hashes-types";
 import type { TFunction } from "i18next";
 import _ from "lodash";
-import { compose } from "lodash/fp";
+import { compose, cond, defaults, isObject, prop, stubTrue } from "lodash/fp";
 import type { Observable } from "rxjs";
 import { concat, from, interval } from "rxjs";
 import { map, take } from "rxjs/operators";
@@ -109,7 +109,7 @@ const normalizeHashes = <T extends { hashes?: HashesMap }>(
 });
 
 const shouldDisplayDuplicates = (hashes?: HashesMap) =>
-  hashes && Object.keys(hashes).length > 0;
+  isObject(hashes) && Object.keys(hashes).length > 0;
 
 const removeDuplicateCells = (
   params: CsvExporterData & WithRowConfig
@@ -127,31 +127,41 @@ const removeToDeleteCells = (
   rowConfig: params.rowConfig.filter(({ id }) => id !== "toDelete"),
 });
 
-export const exportToCsv = compose(
-  (
-    params: CsvExporterData &
-      WithHashes &
-      WithIdsToDelete &
-      WithRowConfig & {
-        output: string[][];
-      }
-  ): Observable<string[][]> =>
-    concat(from([params.output]), makeExportBody(params)),
-  (params) => ({
-    ...params,
-    output: [params.rowConfig.map(({ title }) => title)],
-  }),
-  (params: CsvExporterData & WithHashes & WithRowConfig) =>
-    prepareIdsToDelete(params),
-  (params: CsvExporterData & WithRowConfig) => normalizeHashes(params),
-  (params: CsvExporterData & WithRowConfig) =>
-    params.elementsToDelete.length > 0 ? params : removeToDeleteCells(params),
-  (params: CsvExporterData & WithRowConfig) =>
-    shouldDisplayDuplicates(params.hashes)
-      ? params
-      : removeDuplicateCells(params),
-  (csvExporterData: CsvExporterData) => ({
-    rowConfig: makeRowConfig(csvExporterData.translator, csvExporterData.tags),
-    ...csvExporterData,
-  })
-);
+const setDefaultHashesValue = <T>(params: T) =>
+  defaults({ hashes: {} }, params);
+
+const maybeRemoveDuplicates = cond([
+  [compose(shouldDisplayDuplicates, prop("hashes")), removeDuplicateCells],
+  [stubTrue, (input: CsvExporterData & WithRowConfig) => input],
+]);
+
+const addRowConfig = (csvExporterData: CsvExporterData) => ({
+  rowConfig: makeRowConfig(csvExporterData.translator, csvExporterData.tags),
+  ...csvExporterData,
+});
+
+const generateHeaderRow = <T extends WithRowConfig>(params: T) => ({
+  ...params,
+  output: [params.rowConfig.map(({ title }) => title)],
+});
+
+const computeExportRows = (
+  params: CsvExporterData &
+    WithHashes &
+    WithIdsToDelete &
+    WithRowConfig & {
+      output: string[][];
+    }
+): Observable<string[][]> =>
+  concat(from([params.output]), makeExportBody(params));
+
+export const exportToCsv: (input: CsvExporterData) => Observable<string[][]> =
+  compose(
+    computeExportRows,
+    generateHeaderRow,
+    prepareIdsToDelete,
+    setDefaultHashesValue,
+    removeToDeleteCells,
+    maybeRemoveDuplicates,
+    addRowConfig
+  );

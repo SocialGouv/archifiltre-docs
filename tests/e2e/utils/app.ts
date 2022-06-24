@@ -90,15 +90,18 @@ export const addDescription = async (
   await win.mouse.click(10, 10);
 };
 
+type ExportType = "RESIP" | "CSV" | "CSV_WITH_HASHES" | "AUDIT" | "EXCEL" | "TREE_CSV" | "DELETION";
+
 /**
- * Triggers the RESIP export
+ * Triggers an export
  */
-export const exportToResip = async (win: Page): Promise<void> => {
+export const makeExport = async (win: Page, type: ExportType): Promise<void> => {
   await openExportMenu(win);
+  const exportTypeSelector = `export-type-container-${type}`
   await win
     .locator(
       `${makeTestIdSelector(
-        "export-type-container-RESIP"
+        exportTypeSelector
       )} input[type="checkbox"]`
     )
     .click();

@@ -41,7 +41,7 @@ export const csvExporterThunk =
     const exportSuccessMessage = translations.t(
       "export.csvExportSuccessMessage"
     );
-
+    console.log(data);
     const csvExportData$ = generateCsvExport$(data);
 
     return dispatch(

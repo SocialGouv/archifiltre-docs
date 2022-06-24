@@ -101,13 +101,6 @@ const prepareIdsToDelete = <
   ),
 });
 
-const normalizeHashes = <T extends { hashes?: HashesMap }>(
-  data: T
-): T & WithHashes => ({
-  ...data,
-  hashes: data.hashes ?? {},
-});
-
 const shouldDisplayDuplicates = (hashes?: HashesMap) =>
   isObject(hashes) && Object.keys(hashes).length > 0;
 
@@ -131,8 +124,11 @@ const setDefaultHashesValue = <T>(params: T) =>
   defaults({ hashes: {} }, params);
 
 const maybeRemoveDuplicates = cond([
-  [compose(shouldDisplayDuplicates, prop("hashes")), removeDuplicateCells],
-  [stubTrue, (input: CsvExporterData & WithRowConfig) => input],
+  [
+    compose(shouldDisplayDuplicates, prop("hashes")),
+    (input: CsvExporterData & WithRowConfig) => input,
+  ],
+  [stubTrue, removeDuplicateCells],
 ]);
 
 const addRowConfig = (csvExporterData: CsvExporterData) => ({

@@ -1,0 +1,59 @@
+name: User Story
+description: Création d'une histoire utilisateur pour Docs
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ceci est le formation de création d'une **User Story**.
+        Merci de bien remplir l'ensemble des champs.
+        N'oubliez pas non plus d'ajouter le ou les labels associés à la thématique de la fonctionnalité attendue (ex: `feat:metadata`, `feat:visualisation`, etc.)
+  - type: input
+    id: epic
+    attributes:
+      label: EPIC
+      description: Copier l'url de l'EPIC associée
+      placeholder: SocialGouv/archifiltre-private#<number>
+      value: SocialGouv/archifiltre-private#
+    validations:
+      required: true
+  - type: input
+    id: after
+    attributes:
+      label: AFTER
+      description: Si besoin, copier l'url du ticket dont celui ci est dépendant
+      placeholder: "#<number>"
+      value: "#"
+  - type: textarea
+    id: context
+    validations:
+      required: true
+    attributes:
+      label: Contexte
+      description: Quel est le contexte de cette fonctionnalité ? Qu'est-ce qui fait que cette fonctionnalité doit être ajoutée ?
+  - type: textarea
+    id: pain
+    validations:
+      required: true
+    attributes:
+      label: Définition du(des) problème(s)
+      description: Quels sont les problèmes ou manques actuels dans l'application que empêchent d'atteindre cet objectif ?
+  - type: textarea
+    id: solution
+    validations:
+      required: true
+    attributes:
+      label: Solution
+      description: Quelle est le moyen de résoudre ce problème ? (Il n'est pas nécessaire de se perdre dans les détails techniques d'implémentation)
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Critères d'acceptance
+      description: Si connus, quels sont les critères à remplir pour considérer la problématique comme résolue ?
+  - type: checkboxes
+    attributes:
+      label: Les tests e2e doivent-ils passer ?
+      options:
+        - label: e2e
+          required: false

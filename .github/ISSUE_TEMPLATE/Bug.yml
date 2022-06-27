@@ -1,0 +1,84 @@
+name: Bug
+description: Remonté d'un bug trouvé dans Docs
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de remplir l'ensemble des informations essentielles à la bonne qualification et résolution du bug.
+  - type: input
+    id: us
+    attributes:
+      label: User Story
+      description: Copier l'url de la user story associée (si applicable)
+      placeholder: SocialGouv/archifiltre-docs#<number>
+      value: SocialGouv/archifiltre-docs#
+    validations:
+      required: false
+  - type: textarea
+    id: describe
+    validations:
+      required: true
+    attributes:
+      label: Description du bug
+      description: Comment décrire le bug de manière claire et concise ? Quel est son contexte ?
+  - type: textarea
+    id: steps
+    validations:
+      required: true
+    attributes:
+      label: Étapes pour reproduire
+      description: Quelles sont les étapes pour reproduire le comportement ?
+      placeholder: |
+        1. Sur cet écran '...'
+        2. Cliquer sur le bouton '...'
+        3. Dans l'encart '...'
+        4. Constater l'erreur
+  - type: textarea
+    id: expected
+    validations:
+      required: true
+    attributes:
+      label: Comportement attendu
+      description: Quel est le comportement attendu ?
+  - type: textarea
+    id: solution
+    validations:
+      required: false
+    attributes:
+      label: Solution
+      description: Si différent du comportement attendu, quel serait le ou les moyen(s) fonctionnels de résoudre ce problème ? (Il n'est pas nécessaire de se perdre dans les détails techniques d'implémentation)
+  - type: textarea
+    attributes:
+      label: Captures d'écran (si possible)
+      placeholder: |
+        # Copiez-collez directement vos images après capture d'écran
+        # ou utilisez une image markdown "![nom-de-mon-image](https://url-de-mon-image)" si vous l'avez uploadée vous même.
+  - type: textarea
+    id: specs
+    validations:
+      required: true
+    attributes:
+      label: Liste des caractéristiques de votre machine
+      placeholder: |
+        - OS (Windows 10, Windows 11, OSX 11, OSX 12.1 Montery, Ubuntu 20.04, etc)
+        - RAM (4Go, 6Go, etc) (si possible)
+        - Type de version de l'application (setup, portable, msi, dmg, zip, etc)
+  - type: dropdown
+    id: version
+    validations:
+      required: true
+    attributes:
+      label: Version de l'application
+      options:
+        - "3.x"
+        - "4.x"
+        - beta (à préciser dans les caratéristiques)
+        - next (à préciser dans les caratéristiques)
+        - autre (à préciser dans les caratéristiques)
+  - type: textarea
+    id: misc
+    attributes:
+      label: Informations complémentaires
+      placeholder: Ajoutez toutes autres données qui pourraient potentiellement aider à la résolution du bug.

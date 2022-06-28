@@ -114,6 +114,7 @@
       "cancel": "Annuler",
       "csvWithHash": "CSV avec empreintes",
       "csvWithHashDisabledMessage": "Vous devez attendre que les hashs aient été calculés",
+      "metsDisabledMessage": "L'export METS provoque des bugs et est temporairement désactivé",
       "loadPreviousSessionButtonLabel": "Recharger la session précédente",
       "help": "Aide",
       "undo": "Annuler",

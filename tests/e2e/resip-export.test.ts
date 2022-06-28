@@ -11,7 +11,7 @@ import {
   addDescription,
   addTag,
   clickIcicleElement,
-  exportToResip,
+  makeExport,
 } from "./utils/app";
 import { closeApp, startApp } from "./utils/test";
 
@@ -68,10 +68,10 @@ describe("Export to RESIP", () => {
     await addTag(win, tag1Name);
     await addDescription(win, description);
 
-    await exportToResip(win);
+    await makeExport(win, "RESIP");
 
     // Waiting for the RESIP file to be created
-    await win.waitForSelector(".notification-success");
+    await win.waitForSelector(`text=/Fichier de métadonnées exporté dans le dossier racine du projet/`);
 
     // Finding the RESIP export file
     const exportFolderPath = path.join(__dirname, "../test-folder");

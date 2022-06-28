@@ -1,6 +1,5 @@
 import type { HashesMap } from "@common/utils/hashes-types";
 import type { Observable } from "rxjs";
-import type { Writable } from "stream";
 
 import type {
   AliasMap,
@@ -14,13 +13,8 @@ import { createAsyncWorkerForChildProcessControllerFactory } from "../../utils/a
 import { backgroundWorkerProcess$ } from "../../utils/batch-process";
 import type {
   ErrorMessage,
-  InitializeMessage,
   ResultMessage,
 } from "../../utils/batch-process/types";
-import { MessageTypes } from "../../utils/batch-process/types";
-import type { MessageSerializer } from "../../utils/child-process-stream";
-import type { WithLanguage } from "../../utils/language/types";
-import { stringifyCsvExporterOptionsToStream } from "./csv-exporter-serializer";
 
 export interface GenerateCsvExportOptions {
   aliases: AliasMap;
@@ -31,16 +25,6 @@ export interface GenerateCsvExportOptions {
   hashes?: HashesMap;
   tags: TagMap;
 }
-
-const initMessageSerializer: MessageSerializer<InitializeMessage> = (
-  stream: Writable,
-  { data }: InitializeMessage
-) => {
-  stringifyCsvExporterOptionsToStream(
-    stream,
-    data as WithLanguage<GenerateCsvExportOptions>
-  );
-};
 
 /**
  * Asynchronously generates a csv export
@@ -54,12 +38,7 @@ export const generateCsvExport$ = (
   return backgroundWorkerProcess$(
     { ...data, language },
     createAsyncWorkerForChildProcessControllerFactory(
-      "exporters/csv/csv-exporter.fork.ts",
-      {
-        messageSerializers: {
-          [MessageTypes.INITIALIZE]: initMessageSerializer,
-        },
-      }
+      "exporters/csv/csv-exporter.fork.ts"
     )
   );
 };

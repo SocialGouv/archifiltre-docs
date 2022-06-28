@@ -114,6 +114,7 @@
       "cancel": "Cancel",
       "csvWithHash": "CSV with hashes",
       "csvWithHashDisabledMessage": "You must wait for hashes to have been computed",
+      "metsDisabledMessage": "METS export has some bugs and is temporarily disabled",
       "loadPreviousSessionButtonLabel": "Load previous session",
       "help": "Help",
       "undo": "Undo",

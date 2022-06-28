@@ -1,5 +1,4 @@
 import type { Observable } from "rxjs";
-import type { Writable } from "stream";
 
 import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 import { translations } from "../../translations/translations";
@@ -7,26 +6,8 @@ import { createAsyncWorkerForChildProcessControllerFactory } from "../../utils/a
 import { backgroundWorkerProcess$ } from "../../utils/batch-process";
 import type {
   ErrorMessage,
-  InitializeMessage,
   ResultMessage,
 } from "../../utils/batch-process/types";
-import { MessageTypes } from "../../utils/batch-process/types";
-import type { TreeCsvExporterParams } from "./tree-csv-exporter-serializer";
-import { stringifyTreeCsvExporterOptionsToStream } from "./tree-csv-exporter-serializer";
-
-const initMessageSerializer = (
-  stream: Writable,
-  { data }: InitializeMessage
-) => {
-  stringifyTreeCsvExporterOptionsToStream(
-    stream,
-    data as TreeCsvExporterParams
-  );
-};
-
-const messageSerializers = {
-  [MessageTypes.INITIALIZE]: initMessageSerializer,
-};
 
 /**
  * Asynchronously generates a tree csv export
@@ -40,10 +21,7 @@ export const generateTreeCsvExport$ = (
   return backgroundWorkerProcess$(
     { filesAndFolders, language },
     createAsyncWorkerForChildProcessControllerFactory(
-      "exporters/csv/tree-csv-exporter.fork.ts",
-      {
-        messageSerializers,
-      }
+      "exporters/csv/tree-csv-exporter.fork.ts"
     )
   );
 };

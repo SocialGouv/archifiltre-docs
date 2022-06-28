@@ -72,5 +72,14 @@ module.exports =
       ...workers,
     };
 
-    return webpackCommonConfig(config);
+    const finalConfig = webpackCommonConfig(config);
+
+    const findHtmlWebpackPlugin = (plugins) =>
+      plugins.find((plugin) => plugin?.options?.excludeChunks);
+
+    findHtmlWebpackPlugin(finalConfig.plugins)?.options?.excludeChunks?.push?.(
+      ...Object.keys(workers)
+    );
+
+    return finalConfig;
   };

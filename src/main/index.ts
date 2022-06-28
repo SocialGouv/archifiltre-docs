@@ -116,6 +116,7 @@ async function createWindow() {
   });
 
   loadWindow(win);
+  win.maximize();
 
   await win.loadURL(INDEX_URL);
 

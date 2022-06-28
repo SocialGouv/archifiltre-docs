@@ -12,7 +12,7 @@ import { WorkspaceProviders } from "./workspace-providers";
 
 const areIciclesDisplayed = (tabIndex: number) => tabIndex !== 3;
 
-export const Workspace: React.FC = () => {
+const Workspace: React.FC = () => {
   const { tabIndex } = useTabsState();
 
   return (
@@ -50,3 +50,5 @@ export const Workspace: React.FC = () => {
     </WorkspaceProviders>
   );
 };
+
+export default Workspace;

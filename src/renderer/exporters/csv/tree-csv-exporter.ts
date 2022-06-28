@@ -14,7 +14,7 @@ export const treeCsvExporterThunk =
   (name: string): ArchifiltreDocsThunkAction =>
   async (dispatch, getState) => {
     const csvExportStartedMessage = translations.t(
-      "export.csvExportStartedMessage"
+      "export.creatingTreeCsvExport"
     );
     const exportNotificationTitle = translations.t("export.csvExportTitle");
     notifyInfo(csvExportStartedMessage, exportNotificationTitle);
@@ -25,9 +25,7 @@ export const treeCsvExporterThunk =
     const totalProgress = Object.keys(filesAndFolders).length;
     const loaderMessage = translations.t("export.creatingTreeCsvExport");
     const loadedMessage = translations.t("export.createdTreeCsvExport");
-    const exportSuccessMessage = translations.t(
-      "export.csvExportSuccessMessage"
-    );
+    const exportSuccessMessage = translations.t("export.createdTreeCsvExport");
 
     const treeCsvExportData$ = generateTreeCsvExport$(filesAndFolders);
 

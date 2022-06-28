@@ -141,10 +141,11 @@ export const exportConfig: ExportConfigMap = {
   },
   [ExportType.METS]: {
     category: ExportCategory.EXCHANGE_WITH_ERMS,
+    disabledExplanation: "header.metsDisabledMessage",
     exportFunction: (exportPath) => metsExporterThunk(exportPath),
     exportPath: (originalPath, sessionName) =>
       computeExportFilePath(originalPath, sessionName, ExportType.METS),
-    isActive: true,
+    isActive: false,
     label: "METS (beta)",
   },
   [ExportType.DELETION_SCRIPT]: {

@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "electron-webpack dev",
     "test": "jest",
-    "test:e2e": "playwright test --workers=1",
+    "test:e2e": "playwright test",
     "compile": "cross-env 'NODE_OPTIONS=\"--max-old-space-size=4096\"' electron-webpack",
     "dist:win": "electron-builder --x64 --ia32 --win portable msi nsis",
     "dist:mac": "electron-builder --mac dmg zip",

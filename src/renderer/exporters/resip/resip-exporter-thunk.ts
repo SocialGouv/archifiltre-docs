@@ -80,6 +80,8 @@ export const resipExporterThunk =
 
     await fs.writeFile(filePath, arrayToCsv(resipCsv));
 
-    notifySuccess(resipExportSuccessMessage, resipExportTitle);
+    notifySuccess(resipExportSuccessMessage, resipExportTitle, void 0, void 0, [
+      "resip-export-success",
+    ]);
     dispatch(completeLoadingAction(loadingActionId));
   };

@@ -15,16 +15,19 @@ export enum NotificationDuration {
  * @param title - The notification title
  * @param notificationDuration - The notification duration (in ms)
  * @param callback - The function called on notification click
+ * @param bodyClassNames - additional classes for the notification
  */
 export const notifySuccess = (
   message: string,
   title: string,
   notificationDuration = NotificationDuration.NORMAL,
-  callback = noop
+  callback = noop,
+  // TODO: transform params into options
+  bodyClassNames: string[] = []
 ): void => {
   toast(`${title}\n${message}`, {
     autoClose: notificationDuration,
-    bodyClassName: "notification-success",
+    bodyClassName: ["notification-success", ...bodyClassNames].join(" "),
     onClick: callback,
     type: toast.TYPE.SUCCESS,
   });

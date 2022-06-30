@@ -65,6 +65,7 @@ export const excelExporterThunk =
       translations.t("export.excelExportSuccessMessage"),
       translations.t("export.excelExportTitle"),
       NotificationDuration.NORMAL,
-      async () => openExternalElement(name)
+      async () => openExternalElement(name),
+      ["excel-export-success"]
     );
   };

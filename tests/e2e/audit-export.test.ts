@@ -1,6 +1,5 @@
 import type { ElectronApplication, Page } from "@playwright/test";
-import { expect, test } from "@playwright/test";
-import parseCsv from "csv-parse/lib/sync";
+import { test } from "@playwright/test";
 import fs from "fs";
 import path from "path";
 import { sync as rimrafSync } from "rimraf";
@@ -11,6 +10,7 @@ import {
   addTag,
   clickIcicleElement,
   makeExport,
+  waitForSuccessNotification,
 } from "./utils/app";
 import { closeApp, startApp } from "./utils/test";
 
@@ -20,12 +20,16 @@ const it = test;
 
 const TEST_TIMEOUT = 20000;
 
-const testFolderPath = path.resolve(__dirname, "../test-folder/");
-
 describe("Export audit report", () => {
   test.use({ navigationTimeout: TEST_TIMEOUT });
 
+  let testFolderName = "";
+  let testFolderPath = "";
+
   beforeAll(async () => {
+    testFolderName = `audit-export-${Date.now()}`;
+    testFolderPath = path.resolve(__dirname, "..", testFolderName);
+
     await createStructure({
       [testFolderPath]: {
         "child/": {
@@ -48,13 +52,15 @@ describe("Export audit report", () => {
   });
 
   afterEach(async () => {
-    rimrafSync(path.join(testFolderPath, "..","test-folder-audit_*.docx"));
+    rimrafSync(
+      path.join(testFolderPath, "..", `${testFolderName}-audit_*.docx`)
+    );
     await closeApp(app);
   });
 
   it("should generate an audit report", async () => {
     test.slow();
-    
+
     const tag0Name = "tag0";
     const tag1Name = "tag1";
     const description = "element description";
@@ -62,7 +68,7 @@ describe("Export audit report", () => {
     await win.waitForSelector(`[data-test-id="main-icicle"]`);
     await (await win.waitForSelector(".notification-success")).click();
 
-    await clickIcicleElement(win, "/test-folder/child/index.csv");
+    await clickIcicleElement(win, `/${testFolderName}/child/index.csv`);
 
     await addTag(win, tag0Name);
     await addTag(win, tag1Name);
@@ -71,14 +77,14 @@ describe("Export audit report", () => {
     await makeExport(win, "AUDIT");
 
     // Waiting for the CSV file to be created
-    await win.waitForSelector(`text=/L'export du rapport d'audit est terminé/`);
+    await waitForSuccessNotification(win, ".audit-report-export-success");
 
     // Finding the CSV export file
     const exportFolderPath = path.join(__dirname, "..");
     const exportFolder = fs.readdirSync(exportFolderPath);
 
     const auditExportFilePath = exportFolder.find((folderName) =>
-      /test-folder-audit_/i.test(folderName)
+      new RegExp(`${testFolderName}-audit_`, "i").test(folderName)
     );
 
     if (auditExportFilePath === undefined) {

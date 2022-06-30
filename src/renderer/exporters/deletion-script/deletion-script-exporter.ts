@@ -47,7 +47,8 @@ const success = (t: TFunction, filePath: string) => () => {
     t("export.deletionScriptSuccessMessage"),
     t("export.deletionScript"),
     NotificationDuration.NORMAL,
-    async () => showInFolder(filePath)
+    async () => showInFolder(filePath),
+    ["deletion-script-export-success"]
   );
 };
 

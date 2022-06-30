@@ -12,6 +12,7 @@ import {
   addTag,
   clickIcicleElement,
   makeExport,
+  waitForSuccessNotification,
 } from "./utils/app";
 import { closeApp, startApp } from "./utils/test";
 
@@ -21,12 +22,15 @@ const it = test;
 
 const TEST_TIMEOUT = 20000;
 
-const testFolderPath = path.resolve(__dirname, "../test-folder/");
-
 describe("Export to RESIP", () => {
   test.use({ navigationTimeout: TEST_TIMEOUT });
 
+  let testFolderName = "";
+  let testFolderPath = "";
+
   beforeAll(async () => {
+    testFolderName = `resip-${Date.now()}`;
+    testFolderPath = path.resolve(__dirname, "..", testFolderName);
     await createStructure({
       [testFolderPath]: {
         "child/": {
@@ -49,7 +53,7 @@ describe("Export to RESIP", () => {
   });
 
   afterEach(async () => {
-    rimrafSync(path.join(testFolderPath, "test-folder-resip*.csv"));
+    rimrafSync(path.join(testFolderPath, `${testFolderName}-resip*.csv`));
     await closeApp(app);
   });
 
@@ -62,7 +66,7 @@ describe("Export to RESIP", () => {
     await win.waitForSelector(`[data-test-id="main-icicle"]`);
     await (await win.waitForSelector(".notification-success")).click();
 
-    await clickIcicleElement(win, "/test-folder/child/index.csv");
+    await clickIcicleElement(win, `/${testFolderName}/child/index.csv`);
 
     await addTag(win, tag0Name);
     await addTag(win, tag1Name);
@@ -71,14 +75,14 @@ describe("Export to RESIP", () => {
     await makeExport(win, "RESIP");
 
     // Waiting for the RESIP file to be created
-    await win.waitForSelector(`text=/Fichier de métadonnées exporté dans le dossier racine du projet/`);
+    await waitForSuccessNotification(win, ".resip-export-success");
 
     // Finding the RESIP export file
-    const exportFolderPath = path.join(__dirname, "../test-folder");
+    const exportFolderPath = testFolderPath;
     const exportFolder = fs.readdirSync(exportFolderPath);
 
     const resipExportFilePath = exportFolder.find((folderName) =>
-      /test-folder-resip/i.test(folderName)
+      new RegExp(`${testFolderName}-resip`, "i").test(folderName)
     );
 
     if (resipExportFilePath === undefined) {
@@ -110,10 +114,8 @@ describe("Export to RESIP", () => {
     ]);
 
     const todayDate = dateFormat(Date.now(), "yyyy-mm-dd");
-    const expected = [
+    const expectedRows = [
       [
-        "1",
-        "2",
         path.normalize("child/index.csv"),
         "Item",
         "index.csv",
@@ -126,8 +128,6 @@ describe("Export to RESIP", () => {
         "tag1",
       ],
       [
-        "2",
-        "3",
         "child",
         "RecordGrp",
         "child",
@@ -140,11 +140,9 @@ describe("Export to RESIP", () => {
         "",
       ],
       [
-        "3",
-        "",
         ".",
         "RecordGrp",
-        "test-folder",
+        testFolderName,
         todayDate,
         todayDate,
         todayDate,
@@ -154,8 +152,6 @@ describe("Export to RESIP", () => {
         "",
       ],
       [
-        "4",
-        "2",
         path.normalize("child/text.txt"),
         "Item",
         "text.txt",
@@ -168,6 +164,14 @@ describe("Export to RESIP", () => {
         "",
       ],
     ];
-    expect(lines).toEqual(expected);
+
+    expect(lines.length).toBe(expectedRows.length);
+
+    expectedRows.forEach((row) => {
+      const testedRow = lines.find(
+        ([, , elementPath]: string[]) => row[0] === elementPath
+      );
+      expect(testedRow).toEqual(expect.arrayContaining(row));
+    });
   });
 });

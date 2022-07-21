@@ -281,6 +281,12 @@
       "unselectAll": "Unselect all",
       "browseAll": "Browse for all"
     },
+    "importModal": {
+      "title": "Import metadata",
+      "pickAFile": "Pick a metadata file",
+      "import": "Import",
+      "metadataFile": "Metadata file"
+    },
     "audit": {
       "fileCountInfoTitle": "File count",
       "fileTreeDepthTitle": "Depth",

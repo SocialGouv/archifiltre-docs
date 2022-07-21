@@ -1,3 +1,6 @@
+import parse from "csv-parse";
+import { createReadStream } from "fs";
+
 /**
  * Escape doubleQuotes with the specified character (usually " or \)
  * @param doubleQuoteEscapeCharacter
@@ -46,4 +49,32 @@ export const arrayToCsv = (matrix: string[][]): string => {
   return matrix
     .map(flattenLine({ cellSeparator, doubleQuoteEscapeCharacter }))
     .join(lineSeparator);
+};
+
+interface LoadCsvFileToArrayOptions {
+  delimiter: string;
+}
+
+export const loadCsvFileToArray = async (
+  filePath: string,
+  options: LoadCsvFileToArrayOptions
+): Promise<Record<string, string>[]> => {
+  const input = createReadStream(filePath);
+  const parser = parse({
+    columns: true,
+    ...options,
+  });
+  const loadedData: Record<string, string>[] = [];
+
+  await new Promise<Record<string, string>[]>((resolve, reject) => {
+    input
+      .pipe(parser)
+      .on("data", (data: Record<string, string>) => loadedData.push(data))
+      .on("end", () => {
+        resolve(loadedData);
+      })
+      .on("error", reject);
+  });
+
+  return loadedData;
 };

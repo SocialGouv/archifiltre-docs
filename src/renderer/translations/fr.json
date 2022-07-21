@@ -281,6 +281,12 @@
       "unselectAll": "Tout désélectionner",
       "browseAll": "Parcourir pour tous"
     },
+    "importModal": {
+      "title": "Importer des métadonnées",
+      "pickAFile": "Choisir un fichier de métadonnées",
+      "import": "Importer",
+      "metadataFile": "Fichier de métadonnées"
+    },
     "audit": {
       "fileCountInfoTitle": "Nombre de fichiers",
       "fileTreeDepthTitle": "Niveau de profondeur",

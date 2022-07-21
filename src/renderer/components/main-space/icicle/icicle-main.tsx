@@ -1,6 +1,5 @@
-import Paper from "@material-ui/core/Paper";
-import { noop, sum } from "lodash";
-import type { MouseEvent } from "react";
+import { noop } from "lodash";
+import type { ComponentType, MouseEvent } from "react";
 import React, { memo, useCallback, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
@@ -14,14 +13,15 @@ import type {
 import type { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { ElementWeightMethod } from "../../../reducers/icicle-sort-method/icicle-sort-method-types";
 import type { TagMap } from "../../../reducers/tags/tags-types";
-import { Breadcrumbs as BreadcrumbsNew } from "../breadcrumb/breadcrumbs";
-import { MinimapBracket } from "../minimap-bracket";
 import { Ruler } from "../ruler";
 import { useFileMoveActiveState } from "../workspace/file-move-provider";
 import { useZoomContext } from "../workspace/zoom-provider";
 import { AnimatedIcicle } from "./animated-icicle";
 import type { IcicleProps } from "./icicle";
-import { Icicle } from "./icicle";
+import { normalizeWidth } from "./icicle-common";
+import type { DefaultSidebarProps } from "./icicle-default-sidebar";
+import { DefaultSidebar } from "./icicle-default-sidebar";
+import { LargeBlock, Layout } from "./icicle-layout";
 import type { Dims, DimsAndId } from "./icicle-rect";
 import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 
@@ -30,21 +30,6 @@ export type IcicleMouseHandler = (
   event: MouseEvent
 ) => void;
 
-const Viewport = styled(Paper)`
-  display: flex;
-  height: 97.5%;
-  justify-content: space-between;
-  padding: 5px;
-`;
-
-const IcicleViewport = styled.div`
-  height: 100%;
-  width: 74%;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-`;
-
 const IcicleWrapper = styled.div`
   height: 74%;
 `;
@@ -52,44 +37,6 @@ const IcicleWrapper = styled.div`
 const RulerWrapper = styled.div`
   height: 24%;
 `;
-
-const BreadcrumbsViewport = styled.div`
-  height: 100%;
-  width: 24%;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-`;
-
-const BreadcrumbsWrapper = styled.div`
-  height: 74%;
-`;
-
-const MinimapWrapper = styled.div`
-  height: 24%;
-  padding: 5px;
-  background-color: rgba(255, 255, 255, 0.4);
-`;
-
-/**
- * Returns the array of widths divided by the sum of the widths.
- * @param widths - the widths to normalize
- */
-const normalizeWidth = (widths: number[]) => {
-  const totalWidth = sum(widths);
-  return widths.map((a) => a / totalWidth);
-};
-
-/**
- * Determines if a minimap child element should render based on its width. Width < 2.5 are not rendered.
- * @param x - Mock parameter to keep the same API as shouldRenderChild
- * @param elementWidth - The width of the element
- */
-const shouldRenderChildMinimap = (x: number, elementWidth: number): boolean => {
-  const minimumMinimapElementWidth = 2.5;
-
-  return elementWidth > minimumMinimapElementWidth;
-};
 
 export const ZOOM_SPEED = 1.1;
 const viewBoxWidth = 1000;
@@ -112,6 +59,7 @@ export interface IcicleMainProps {
   maxDepth: number;
   moveElement: (movedElementId: string, targetFolderId: string) => void;
   originalPath: string;
+  rightSidebar?: ComponentType<DefaultSidebarProps>;
   rootId: string;
   setFocus: (id: string) => void;
   setNoFocus: () => void;
@@ -143,7 +91,9 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
   setFocus,
   setNoFocus,
   setNoHover,
+  rightSidebar = DefaultSidebar,
 }) => {
+  const Sidebar = rightSidebar;
   const [hoveredDims, setHoveredDims] = useState<Dims | null>(null);
   const [lockedDims, setLockedDims] = useState<Dims | null>(null);
   const [movedElementId, setMovedElementId] = useState("");
@@ -189,34 +139,6 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
         : getElementChildrenFilesCount,
     [elementWeightMethod, getElementTotalSize, getElementChildrenFilesCount]
   );
-
-  /**
-   * Pretty obscure behaviour for now.
-   */
-  // -- never called...?
-  // const computeWidthRec = useCallback(
-  //     (ids: string[], x: number, dx: number): number[][] => {
-  //         const ans = [[x, dx]];
-  //         if (ids.length < 2) {
-  //             return ans;
-  //         } else {
-  //             const [parentId, childId] = ids;
-  //             const childrenIds = getChildrenIdFromId(parentId);
-  //             const widths = normalizeWidth(
-  //                 childrenIds.map(computeWidth)
-  //             ).map((a) => a * dx);
-  //             const cumulatedWidths = ArrayUtil.computeCumulative(widths);
-  //             const childIndex = childrenIds.indexOf(childId);
-  //             const childX = cumulatedWidths[childIndex] + x;
-  //             const childDx = widths[childIndex];
-
-  //             return ans.concat(
-  //                 computeWidthRec(ids.slice(1), childX, childDx)
-  //             );
-  //         }
-  //     },
-  //     [getChildrenIdFromId, computeWidth]
-  // );
 
   /**
    * Normalizes the height based on the maxDepth of the file tree
@@ -327,8 +249,8 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
     );
 
   return (
-    <Viewport>
-      <IcicleViewport>
+    <Layout>
+      <LargeBlock>
         <IcicleWrapper>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -386,63 +308,29 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
             fillColor={fillColor}
           />
         </RulerWrapper>
-      </IcicleViewport>
-      <BreadcrumbsViewport>
-        <BreadcrumbsWrapper>
-          <BreadcrumbsNew
-            aliases={aliases}
-            originalPath={originalPath}
-            fillColor={fillColor}
-            depth={maxDepth}
-            lockedSequence={lockedSequence}
-            hoveredSequence={hoverSequence}
-            getFfByFfId={getFfByFfId}
-            onBreadcrumbClick={onIcicleRectClickHandler}
-          />
-        </BreadcrumbsWrapper>
-        <MinimapWrapper>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
-            width="100%"
-            height="100%"
-            preserveAspectRatio="none"
-          >
-            <Icicle
-              testId="minimap-icicle"
-              aliases={aliases}
-              comments={comments}
-              x={0}
-              y={0}
-              dx={icicleWidth}
-              dy={icicleHeight}
-              rootId={rootId}
-              getWidthFromId={computeWidth}
-              elementsToDelete={elementsToDelete}
-              normalizeWidth={normalizeWidth}
-              trueFHeight={normalizeHeight}
-              getChildrenIdFromId={getChildrenIdFromId}
-              fillColor={fillColor}
-              hoverSequence={hoverSequence}
-              lockedSequence={lockedSequence}
-              shouldRenderChild={shouldRenderChildMinimap}
-              onIcicleRectClickHandler={noop}
-              onIcicleRectDoubleClickHandler={noop}
-              onIcicleRectMouseOverHandler={noop}
-              tags={tags}
-              zoomOffset={0}
-              zoomRatio={1}
-            />
-            <MinimapBracket
-              zoomOffset={zoomOffset}
-              zoomRatio={zoomRatio}
-              viewportWidth={viewBoxWidth}
-              viewportHeight={viewBoxHeight}
-            />
-          </svg>
-        </MinimapWrapper>
-      </BreadcrumbsViewport>
-    </Viewport>
+      </LargeBlock>
+      <Sidebar
+        aliases={aliases}
+        comments={comments}
+        tags={tags}
+        zoomOffset={zoomOffset}
+        zoomRatio={zoomRatio}
+        computeWidth={computeWidth}
+        elementsToDelete={elementsToDelete}
+        rootId={rootId}
+        getChildrenIdFromId={getChildrenIdFromId}
+        fillColor={fillColor}
+        hoverSequence={hoverSequence}
+        lockedSequence={lockedSequence}
+        icicleWidth={icicleWidth}
+        icicleHeight={icicleHeight}
+        getFfByFfId={getFfByFfId}
+        onBreadcrumbClick={onIcicleRectClickHandler}
+        normalizeHeight={normalizeHeight}
+        maxDepth={maxDepth}
+        originalPath={originalPath}
+      />
+    </Layout>
   );
 };
 

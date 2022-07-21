@@ -14,6 +14,8 @@ import { loadingInfoReducer } from "./loading-info/loading-info-reducer";
 import type { LoadingInfoState } from "./loading-info/loading-info-types";
 import { undoableLoadingStateReducer as loadingStateReducer } from "./loading-state/loading-state-reducer";
 import type { LoadingState } from "./loading-state/loading-state-types";
+import { metadataReducer } from "./metadata/metadata-reducer";
+import type { MetadataState } from "./metadata/metadata-types";
 import { persistActions } from "./middleware/persist-actions-middleware";
 import { modalReducer } from "./modal/modal-reducer";
 import type { ModalState } from "./modal/modal-types";
@@ -29,6 +31,7 @@ export interface StoreState {
   icicleSortMethod: IcicleSortMethodState;
   loadingInfo: LoadingInfoState;
   loadingState: UndoableState<LoadingState>;
+  metadata: UndoableState<MetadataState>;
   modal: ModalState;
   tags: UndoableState<TagsState>;
   workspaceMetadata: UndoableState<WorkspaceMetadataState>;
@@ -42,6 +45,7 @@ export const store = createStore(
     icicleSortMethod: icicleSortMethodReducer,
     loadingInfo: loadingInfoReducer,
     loadingState: loadingStateReducer,
+    metadata: metadataReducer,
     modal: modalReducer,
     tags: tagsReducer,
     workspaceMetadata: workspaceMetadataReducer,

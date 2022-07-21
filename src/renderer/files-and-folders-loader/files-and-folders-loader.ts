@@ -24,6 +24,7 @@ import type {
 } from "../reducers/files-and-folders/files-and-folders-types";
 import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
 import { convertJsonToCurrentVersion } from "../utils/compatibility";
+import { getIdFromPath } from "../utils/file-and-folders";
 import { identifyFileFormat } from "../utils/file-format";
 import { convertToPosixAbsolutePath } from "../utils/file-system/file-sys-util";
 import { shouldIgnoreElement } from "../utils/hidden-file";
@@ -101,7 +102,7 @@ const loadFilesAndFoldersFromFileSystemImpl = async (
           lastModified: stats.mtimeMs,
           size: stats.size,
         },
-        convertToPosixAbsolutePath(path.relative(rootPath, currentPath)),
+        getIdFromPath(rootPath, currentPath),
       ]);
     } catch (error: unknown) {
       onError({

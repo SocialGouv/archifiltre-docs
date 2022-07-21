@@ -19,6 +19,10 @@ export const LargeBlock = styled.div`
 export const ColumnBlock = styled.div`
   height: 100%;
   width: 24%;
+`;
+
+export const VerticalContainer = styled.div`
+  height: 100%;
   display: flex;
   justify-content: space-between;
   flex-direction: column;

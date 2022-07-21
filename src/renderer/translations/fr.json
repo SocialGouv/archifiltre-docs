@@ -224,6 +224,10 @@
       "auditReportStarted": "L'export du rapport d'audit a commencé",
       "auditReportSuccess": "L'export du rapport d'audit est terminé"
     },
+    "metadata": {
+      "name": "Nom",
+      "content": "Contenu"
+    },
     "replay": {
       "title": "Chargement de la session précédente",
       "error": "Une erreur s'est produite lors du chargement de la session précédente."

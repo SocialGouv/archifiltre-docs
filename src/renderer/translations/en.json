@@ -224,6 +224,10 @@
       "auditReportStarted": "The audit report export has started",
       "auditReportSuccess": "The audit report export has succeeded"
     },
+    "metadata": {
+      "name": "Name",
+      "content": "Content"
+    },
     "replay": {
       "title": "Restore previous session",
       "error": "An error occurred while restoring the previous session."

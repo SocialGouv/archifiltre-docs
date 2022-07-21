@@ -13,7 +13,7 @@ import { Breadcrumbs as BreadcrumbsNew } from "../breadcrumb/breadcrumbs";
 import { MinimapBracket } from "../minimap-bracket";
 import { Icicle } from "./icicle";
 import { normalizeWidth, VIEWBOX_HEIGHT, VIEWBOX_WIDTH } from "./icicle-common";
-import { ColumnBlock } from "./icicle-layout";
+import { ColumnBlock, VerticalContainer } from "./icicle-layout";
 import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
 
 /**
@@ -81,58 +81,60 @@ export const DefaultSidebar: React.FC<DefaultSidebarProps> = ({
   tags,
 }) => (
   <ColumnBlock>
-    <BreadcrumbsWrapper>
-      <BreadcrumbsNew
-        aliases={aliases}
-        originalPath={originalPath}
-        fillColor={fillColor}
-        depth={maxDepth}
-        lockedSequence={lockedSequence}
-        hoveredSequence={hoverSequence}
-        getFfByFfId={getFfByFfId}
-        onBreadcrumbClick={onBreadcrumbClick}
-      />
-    </BreadcrumbsWrapper>
-    <MinimapWrapper>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
-        width="100%"
-        height="100%"
-        preserveAspectRatio="none"
-      >
-        <Icicle
-          testId="minimap-icicle"
+    <VerticalContainer>
+      <BreadcrumbsWrapper>
+        <BreadcrumbsNew
           aliases={aliases}
-          comments={comments}
-          x={0}
-          y={0}
-          dx={icicleWidth}
-          dy={icicleHeight}
-          rootId={rootId}
-          getWidthFromId={computeWidth}
-          elementsToDelete={elementsToDelete}
-          normalizeWidth={normalizeWidth}
-          trueFHeight={normalizeHeight}
-          getChildrenIdFromId={getChildrenIdFromId}
+          originalPath={originalPath}
           fillColor={fillColor}
-          hoverSequence={hoverSequence}
+          depth={maxDepth}
           lockedSequence={lockedSequence}
-          shouldRenderChild={shouldRenderChildMinimap}
-          onIcicleRectClickHandler={noop}
-          onIcicleRectDoubleClickHandler={noop}
-          onIcicleRectMouseOverHandler={noop}
-          tags={tags}
-          zoomOffset={0}
-          zoomRatio={1}
+          hoveredSequence={hoverSequence}
+          getFfByFfId={getFfByFfId}
+          onBreadcrumbClick={onBreadcrumbClick}
         />
-        <MinimapBracket
-          zoomOffset={zoomOffset}
-          zoomRatio={zoomRatio}
-          viewportWidth={VIEWBOX_WIDTH}
-          viewportHeight={VIEWBOX_HEIGHT}
-        />
-      </svg>
-    </MinimapWrapper>
+      </BreadcrumbsWrapper>
+      <MinimapWrapper>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
+          width="100%"
+          height="100%"
+          preserveAspectRatio="none"
+        >
+          <Icicle
+            testId="minimap-icicle"
+            aliases={aliases}
+            comments={comments}
+            x={0}
+            y={0}
+            dx={icicleWidth}
+            dy={icicleHeight}
+            rootId={rootId}
+            getWidthFromId={computeWidth}
+            elementsToDelete={elementsToDelete}
+            normalizeWidth={normalizeWidth}
+            trueFHeight={normalizeHeight}
+            getChildrenIdFromId={getChildrenIdFromId}
+            fillColor={fillColor}
+            hoverSequence={hoverSequence}
+            lockedSequence={lockedSequence}
+            shouldRenderChild={shouldRenderChildMinimap}
+            onIcicleRectClickHandler={noop}
+            onIcicleRectDoubleClickHandler={noop}
+            onIcicleRectMouseOverHandler={noop}
+            tags={tags}
+            zoomOffset={0}
+            zoomRatio={1}
+          />
+          <MinimapBracket
+            zoomOffset={zoomOffset}
+            zoomRatio={zoomRatio}
+            viewportWidth={VIEWBOX_WIDTH}
+            viewportHeight={VIEWBOX_HEIGHT}
+          />
+        </svg>
+      </MinimapWrapper>
+    </VerticalContainer>
   </ColumnBlock>
 );

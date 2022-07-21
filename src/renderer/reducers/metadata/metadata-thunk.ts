@@ -30,7 +30,7 @@ export const importMetadataThunk =
     const metadata = recordsToMetadata(csvData, {
       entityIdKey,
       entityIdTransformer: getElementIdFromAbsolutePath(originalPath),
-    });
+    }).filter(({ entity, name }) => entity !== "" && name !== "");
 
     dispatch(addBatchMetadataAction(metadata));
   };

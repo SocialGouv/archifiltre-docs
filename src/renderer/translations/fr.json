@@ -289,7 +289,10 @@
       "title": "Importer des métadonnées",
       "pickAFile": "Choisir un fichier de métadonnées",
       "import": "Importer",
-      "metadataFile": "Fichier de métadonnées"
+      "metadataFile": "Fichier de métadonnées",
+      "dropAMetadataFile": "Cliquez ici ou déposez un fichier de métadonnées",
+      "advancedOptions": "Options avancées",
+      "delimiter": "Séparateur"
     },
     "audit": {
       "fileCountInfoTitle": "Nombre de fichiers",

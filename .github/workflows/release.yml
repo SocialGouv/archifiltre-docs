@@ -58,7 +58,7 @@ jobs:
       - name: Yarn install
         run: yarn --frozen-lockfile --perfer-offline
       - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v4
+        uses: crazy-max/ghaction-import-gpg@v5
         with:
           gpg_private_key: ${{ secrets.SOCIALGROOVYBOT_GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.SOCIALGROOVYBOT_GPG_PASSPHRASE }}
@@ -187,7 +187,7 @@ jobs:
       - name: Yarn install
         run: yarn --frozen-lockfile --perfer-offline
       - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v4
+        uses: crazy-max/ghaction-import-gpg@v5
         with:
           gpg_private_key: ${{ secrets.SOCIALGROOVYBOT_GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.SOCIALGROOVYBOT_GPG_PASSPHRASE }}

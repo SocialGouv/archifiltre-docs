@@ -6,15 +6,23 @@ import React from "react";
 import { ImportModalFields } from "./ImportModalFields";
 import type { ImportModalOptionsProps } from "./ImportModalOptions";
 import { ImportModalOptions } from "./ImportModalOptions";
+import type {
+  FieldsConfig,
+  FieldsConfigChangeHandler,
+} from "./ImportModalTypes";
 
 export interface ImportModalPreviewProps {
+  fieldsConfig: FieldsConfig;
   metadataConfig: LoadCsvFileToArrayOptions;
   metadataRow?: Record<string, string>;
+  onFieldsConfigChange: FieldsConfigChangeHandler;
   onOptionChange: ImportModalOptionsProps["onChange"];
 }
 
 export const ImportModalPreview: FC<ImportModalPreviewProps> = ({
+  fieldsConfig,
   metadataConfig,
+  onFieldsConfigChange,
   onOptionChange,
   metadataRow,
 }) => (
@@ -23,7 +31,11 @@ export const ImportModalPreview: FC<ImportModalPreviewProps> = ({
       <ImportModalOptions options={metadataConfig} onChange={onOptionChange} />
     </Box>
     <Box>
-      <ImportModalFields previewData={metadataRow} />
+      <ImportModalFields
+        fieldsConfig={fieldsConfig}
+        onFieldsConfigChange={onFieldsConfigChange}
+        previewData={metadataRow}
+      />
     </Box>
   </Box>
 );

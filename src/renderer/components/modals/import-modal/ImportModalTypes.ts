@@ -8,3 +8,9 @@ export type OptionChangeHandler = <T extends keyof LoadCsvFileToArrayOptions>(
 ) => void;
 
 export type PathChangeHandler = (path: string) => void;
+
+export type FieldsConfig = FieldConfig[];
+
+export type FieldConfig = string;
+
+export type FieldsConfigChangeHandler = (newConfig: FieldsConfig) => void;

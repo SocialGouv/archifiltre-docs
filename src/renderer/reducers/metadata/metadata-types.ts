@@ -21,6 +21,10 @@ export interface MetadataContext {
 
 export type MetadataDto = Omit<Metadata, "id">;
 
+/*
+ * Redux types
+ */
+
 export interface MetadataState {
   context: MetadataContext;
 }

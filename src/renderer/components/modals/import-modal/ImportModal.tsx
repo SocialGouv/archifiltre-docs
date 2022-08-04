@@ -6,24 +6,33 @@ import styled from "styled-components";
 import { ImportModalFilePicker } from "./ImportModalFilePicker";
 import type { ImportModalPreviewProps } from "./ImportModalPreview";
 import { ImportModalPreview } from "./ImportModalPreview";
-import type { ImportModalState, PathChangeHandler } from "./ImportModalTypes";
+import type {
+  FieldsConfig,
+  FieldsConfigChangeHandler,
+  ImportModalState,
+  PathChangeHandler,
+} from "./ImportModalTypes";
 
 const StyledPaper = styled(Paper)`
   height: 90%;
 `;
 
 export interface ImportModalProps {
+  fieldsConfig: FieldsConfig;
   metadataConfig: LoadCsvFileToArrayOptions;
   metadataRow?: Record<string, string>;
+  onFieldsConfigChange: FieldsConfigChangeHandler;
   onOptionChange: ImportModalPreviewProps["onOptionChange"];
   onPathChange: PathChangeHandler;
   state: ImportModalState;
 }
 
 export const ImportModal: React.FC<ImportModalProps> = ({
+  fieldsConfig,
   onPathChange,
   metadataRow,
   metadataConfig,
+  onFieldsConfigChange,
   onOptionChange,
   state,
 }) => {
@@ -34,8 +43,10 @@ export const ImportModal: React.FC<ImportModalProps> = ({
       )}
       {state === "preview" && (
         <ImportModalPreview
+          fieldsConfig={fieldsConfig}
           metadataConfig={metadataConfig}
           metadataRow={metadataRow}
+          onFieldsConfigChange={onFieldsConfigChange}
           onOptionChange={onOptionChange}
         />
       )}

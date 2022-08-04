@@ -30,13 +30,14 @@ export const ImportModalContainer: React.FC<ImportModalContainerProps> = ({
   const { t } = useTranslation();
   const classes = useStyles();
 
-  const { path, ...props } = useMetadataImport();
+  const { path, metadataConfig, fieldsConfig, ...props } = useMetadataImport();
 
   const importMetadata = () => {
     dispatch(
       importMetadataThunk(path, {
-        delimiter: ";",
+        delimiter: metadataConfig.delimiter ?? ";",
         entityIdKey: "path",
+        fieldsConfig,
       })
     );
     closeModal();
@@ -53,7 +54,11 @@ export const ImportModalContainer: React.FC<ImportModalContainerProps> = ({
     >
       <ModalHeader title={t("importModal.title")} onClose={closeModal} />
       <DialogContent className={classes.dialogContent} dividers>
-        <ImportModal {...props} />
+        <ImportModal
+          metadataConfig={metadataConfig}
+          fieldsConfig={fieldsConfig}
+          {...props}
+        />
       </DialogContent>
       <DialogActions>
         <Button

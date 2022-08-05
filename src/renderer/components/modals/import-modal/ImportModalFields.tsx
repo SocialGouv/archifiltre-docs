@@ -1,50 +1,57 @@
 import {
   Checkbox,
+  Radio,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
 } from "@material-ui/core";
-import type { FC } from "react";
+import type { ChangeEvent, FC } from "react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import type {
-  FieldsConfig,
-  FieldsConfigChangeHandler,
-} from "./ImportModalTypes";
+import type { MetadataImportConfig } from "./ImportModalTypes";
 
 interface ImportModalPreviewProps {
-  fieldsConfig: FieldsConfig;
-  onFieldsConfigChange: FieldsConfigChangeHandler;
+  formValues: MetadataImportConfig;
+  onFormChange: (formValue: MetadataImportConfig) => void;
   previewData?: Record<string, string>;
 }
 
 export const ImportModalFields: FC<ImportModalPreviewProps> = ({
-  fieldsConfig,
-  onFieldsConfigChange,
   previewData,
+  formValues,
+  onFormChange,
 }) => {
   const { t } = useTranslation();
 
-  const hasOption = (key: string) => fieldsConfig.some((name) => key === name);
+  const isRowSelected = (rowName: string) =>
+    formValues.fields.includes(rowName);
 
-  const addOption = (key: string) => {
-    if (!hasOption(key)) {
-      onFieldsConfigChange([...fieldsConfig, key]);
-    }
-  };
+  const onRowSelectionChange =
+    (rowName: string) => (event: ChangeEvent<HTMLInputElement>) => {
+      onFormChange({
+        ...formValues,
+        fields: event.target.checked
+          ? [...formValues.fields, rowName]
+          : formValues.fields.filter((name) => name !== rowName),
+      });
+    };
 
-  const removeOption = (key: string) => {
-    onFieldsConfigChange(fieldsConfig.filter((name) => name !== key));
+  const onPathSelectionChange = (entityIdKey: string) => () => {
+    onFormChange({
+      ...formValues,
+      entityIdKey,
+    });
   };
 
   return (
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell />
+          <TableCell>{t("importModal.pathField")}</TableCell>
+          <TableCell>{t("importModal.import")}</TableCell>
           <TableCell>{t("metadata.name")}</TableCell>
           <TableCell>{t("metadata.content")}</TableCell>
         </TableRow>
@@ -53,15 +60,15 @@ export const ImportModalFields: FC<ImportModalPreviewProps> = ({
         {Object.entries(previewData ?? {}).map(([name, content]) => (
           <TableRow key={name}>
             <TableCell>
+              <Radio
+                checked={formValues.entityIdKey === name}
+                onChange={onPathSelectionChange(name)}
+              />
+            </TableCell>
+            <TableCell>
               <Checkbox
-                checked={hasOption(name)}
-                onChange={(event) => {
-                  if (event.target.checked) {
-                    addOption(name);
-                  } else {
-                    removeOption(name);
-                  }
-                }}
+                checked={isRowSelected(name)}
+                onChange={onRowSelectionChange(name)}
               />
             </TableCell>
             <TableCell>{name}</TableCell>

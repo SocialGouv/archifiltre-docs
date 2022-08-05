@@ -7,12 +7,12 @@ import { ImportModalFields } from "./ImportModalFields";
 import type { ImportModalOptionsProps } from "./ImportModalOptions";
 import { ImportModalOptions } from "./ImportModalOptions";
 import type {
-  FieldsConfig,
   FieldsConfigChangeHandler,
+  MetadataImportConfig,
 } from "./ImportModalTypes";
 
 export interface ImportModalPreviewProps {
-  fieldsConfig: FieldsConfig;
+  fieldsConfig: MetadataImportConfig;
   metadataConfig: LoadCsvFileToArrayOptions;
   metadataRow?: Record<string, string>;
   onFieldsConfigChange: FieldsConfigChangeHandler;
@@ -32,8 +32,8 @@ export const ImportModalPreview: FC<ImportModalPreviewProps> = ({
     </Box>
     <Box>
       <ImportModalFields
-        fieldsConfig={fieldsConfig}
-        onFieldsConfigChange={onFieldsConfigChange}
+        formValues={fieldsConfig}
+        onFormChange={onFieldsConfigChange}
         previewData={metadataRow}
       />
     </Box>

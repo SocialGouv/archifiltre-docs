@@ -36,8 +36,7 @@ export const ImportModalContainer: React.FC<ImportModalContainerProps> = ({
     dispatch(
       importMetadataThunk(path, {
         delimiter: metadataConfig.delimiter ?? ";",
-        entityIdKey: "path",
-        fieldsConfig,
+        ...fieldsConfig,
       })
     );
     closeModal();

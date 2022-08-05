@@ -7,9 +7,9 @@ import { ImportModalFilePicker } from "./ImportModalFilePicker";
 import type { ImportModalPreviewProps } from "./ImportModalPreview";
 import { ImportModalPreview } from "./ImportModalPreview";
 import type {
-  FieldsConfig,
   FieldsConfigChangeHandler,
   ImportModalState,
+  MetadataImportConfig,
   PathChangeHandler,
 } from "./ImportModalTypes";
 
@@ -18,7 +18,7 @@ const StyledPaper = styled(Paper)`
 `;
 
 export interface ImportModalProps {
-  fieldsConfig: FieldsConfig;
+  fieldsConfig: MetadataImportConfig;
   metadataConfig: LoadCsvFileToArrayOptions;
   metadataRow?: Record<string, string>;
   onFieldsConfigChange: FieldsConfigChangeHandler;

@@ -4,9 +4,9 @@ import { defaults } from "lodash";
 import { useState } from "react";
 
 import type {
-  FieldsConfig,
   FieldsConfigChangeHandler,
   ImportModalState,
+  MetadataImportConfig,
   OptionChangeHandler,
   PathChangeHandler,
 } from "./ImportModalTypes";
@@ -16,7 +16,7 @@ const defaultConfig = {
 };
 
 interface UseMetadataImportReturn {
-  fieldsConfig: FieldsConfig;
+  fieldsConfig: MetadataImportConfig;
   metadataConfig: LoadCsvFileToArrayOptions;
   metadataRow?: Record<string, string>;
   onFieldsConfigChange: FieldsConfigChangeHandler;
@@ -37,7 +37,10 @@ export const useMetadataImport = (): UseMetadataImportReturn => {
   const [metadataConfig, setMetadataConfig] =
     useState<LoadCsvFileToArrayOptions>(defaultConfig);
 
-  const [fieldsConfig, setFieldsConfig] = useState<FieldsConfig>([]);
+  const [fieldsConfig, setFieldsConfig] = useState<MetadataImportConfig>({
+    entityIdKey: "",
+    fields: [],
+  });
 
   const loadPreview = async (
     loadedPath?: string,
@@ -55,7 +58,12 @@ export const useMetadataImport = (): UseMetadataImportReturn => {
     );
 
     setMetadataRow(row);
-    setFieldsConfig(Object.keys(row ?? {}));
+
+    const fields = Object.keys(row ?? {});
+    setFieldsConfig({
+      entityIdKey: fields[0] || "",
+      fields,
+    });
     setState("preview");
   };
 
@@ -77,7 +85,7 @@ export const useMetadataImport = (): UseMetadataImportReturn => {
     await loadPreview(void 0, newConfig);
   };
 
-  const onFieldsConfigChange = (newFieldsConfig: FieldsConfig) => {
+  const onFieldsConfigChange = (newFieldsConfig: MetadataImportConfig) => {
     setFieldsConfig(newFieldsConfig);
   };
 

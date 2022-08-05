@@ -9,8 +9,13 @@ export type OptionChangeHandler = <T extends keyof LoadCsvFileToArrayOptions>(
 
 export type PathChangeHandler = (path: string) => void;
 
-export type FieldsConfig = FieldConfig[];
+export interface MetadataImportConfig {
+  entityIdKey: string;
+  fields: string[];
+}
 
 export type FieldConfig = string;
 
-export type FieldsConfigChangeHandler = (newConfig: FieldsConfig) => void;
+export type FieldsConfigChangeHandler = (
+  newConfig: MetadataImportConfig
+) => void;

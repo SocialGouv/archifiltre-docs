@@ -1,17 +1,15 @@
 import { loadCsvFileToArray } from "@common/utils/csv";
 import path from "path";
 
-import type { FieldsConfig } from "../../components/modals/import-modal/ImportModalTypes";
+import type { MetadataImportConfig } from "../../components/modals/import-modal/ImportModalTypes";
 import { getIdFromPath } from "../../utils/file-and-folders";
 import type { ArchifiltreDocsThunkAction } from "../archifiltre-types";
 import { getOriginalPathFromStore } from "../workspace-metadata/workspace-metadata-selectors";
 import { addBatchMetadataAction } from "./metadata-actions";
 import { recordsToMetadata } from "./metadata-operations";
 
-interface ImportMetadataThunkOptions {
+interface ImportMetadataThunkOptions extends MetadataImportConfig {
   delimiter: string;
-  entityIdKey: string;
-  fieldsConfig: FieldsConfig;
 }
 
 const getElementIdFromAbsolutePath = (basePath: string) => {
@@ -22,7 +20,7 @@ const getElementIdFromAbsolutePath = (basePath: string) => {
 export const importMetadataThunk =
   (
     filePath: string,
-    { entityIdKey, delimiter, fieldsConfig }: ImportMetadataThunkOptions
+    { entityIdKey, delimiter, fields }: ImportMetadataThunkOptions
   ): ArchifiltreDocsThunkAction =>
   async (dispatch, getState) => {
     const originalPath = getOriginalPathFromStore(getState());
@@ -34,7 +32,7 @@ export const importMetadataThunk =
       entityIdTransformer: getElementIdFromAbsolutePath(originalPath),
     }).filter(
       ({ entity, name }) =>
-        entity !== "" && name !== "" && fieldsConfig.includes(name)
+        entity !== "" && name !== "" && fields.includes(name)
     );
 
     dispatch(addBatchMetadataAction(metadata));

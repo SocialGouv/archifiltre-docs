@@ -1,7 +1,5 @@
 import type { LoadCsvFileToArrayOptions } from "@common/utils/csv";
-import Paper from "@material-ui/core/Paper";
 import React from "react";
-import styled from "styled-components";
 
 import { ImportModalFilePicker } from "./ImportModalFilePicker";
 import type { ImportModalPreviewProps } from "./ImportModalPreview";
@@ -12,10 +10,6 @@ import type {
   MetadataImportConfig,
   PathChangeHandler,
 } from "./ImportModalTypes";
-
-const StyledPaper = styled(Paper)`
-  height: 90%;
-`;
 
 export interface ImportModalProps {
   fieldsConfig: MetadataImportConfig;

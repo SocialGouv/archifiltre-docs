@@ -2,7 +2,6 @@ import { loadCsvFileToArray } from "@common/utils/csv";
 import path from "path";
 
 import type { MetadataImportConfig } from "../../components/modals/import-modal/ImportModalTypes";
-import { getIdFromPath } from "../../utils/file-and-folders";
 import type { ArchifiltreDocsThunkAction } from "../archifiltre-types";
 import { getOriginalPathFromStore } from "../workspace-metadata/workspace-metadata-selectors";
 import { addBatchMetadataAction } from "./metadata-actions";
@@ -12,9 +11,10 @@ interface ImportMetadataThunkOptions extends MetadataImportConfig {
   delimiter: string;
 }
 
-const getElementIdFromAbsolutePath = (basePath: string) => {
-  const rootIdPath = path.join(basePath, "..");
-  return (elementPath: string) => getIdFromPath(rootIdPath, elementPath);
+const getIdFromRelativePath = (basePath: string) => {
+  const rootDirectoryName = path.basename(basePath);
+  return (elementPath: string) =>
+    path.join(`/${rootDirectoryName}`, elementPath);
 };
 
 export const importMetadataThunk =
@@ -29,7 +29,7 @@ export const importMetadataThunk =
 
     const metadata = recordsToMetadata(csvData, {
       entityIdKey,
-      entityIdTransformer: getElementIdFromAbsolutePath(originalPath),
+      entityIdTransformer: getIdFromRelativePath(originalPath),
     }).filter(
       ({ entity, name }) =>
         entity !== "" && name !== "" && fields.includes(name)

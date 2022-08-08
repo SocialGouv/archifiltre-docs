@@ -6,7 +6,7 @@ const ImportModalPreviewHeader = () => {
   const { t } = useTranslation();
 
   return (
-    <Typography>
+    <Typography variant="body2">
       {t("importModal.importedFieldsSelectionDescription")}
     </Typography>
   );

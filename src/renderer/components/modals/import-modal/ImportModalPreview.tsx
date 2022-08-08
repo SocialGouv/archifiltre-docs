@@ -29,10 +29,10 @@ export const ImportModalPreview: FC<ImportModalPreviewProps> = ({
 }) => (
   <Box display="flex" flexDirection="column" height="100%">
     <Box>
-      <ImportModalPreviewHeader />
-    </Box>
-    <Box>
       <ImportModalOptions options={metadataConfig} onChange={onOptionChange} />
+    </Box>
+    <Box padding={2}>
+      <ImportModalPreviewHeader />
     </Box>
     <Box>
       <ImportModalFields

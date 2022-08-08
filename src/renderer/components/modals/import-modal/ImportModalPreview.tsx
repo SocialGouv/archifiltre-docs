@@ -6,6 +6,7 @@ import React from "react";
 import { ImportModalFields } from "./ImportModalFields";
 import type { ImportModalOptionsProps } from "./ImportModalOptions";
 import { ImportModalOptions } from "./ImportModalOptions";
+import ImportModalPreviewHeader from "./ImportModalPreviewHeader";
 import type {
   FieldsConfigChangeHandler,
   MetadataImportConfig,
@@ -27,6 +28,9 @@ export const ImportModalPreview: FC<ImportModalPreviewProps> = ({
   metadataRow,
 }) => (
   <Box display="flex" flexDirection="column" height="100%">
+    <Box>
+      <ImportModalPreviewHeader />
+    </Box>
     <Box>
       <ImportModalOptions options={metadataConfig} onChange={onOptionChange} />
     </Box>

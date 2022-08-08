@@ -292,7 +292,9 @@
       "metadataFile": "Fichier de métadonnées",
       "dropAMetadataFile": "Cliquez ici ou déposez un fichier de métadonnées",
       "advancedOptions": "Options avancées",
-      "delimiter": "Séparateur"
+      "delimiter": "Séparateur",
+      "pathField": "Chemin",
+      "importedFieldsSelectionDescription": "Sélectionnez le champ contenant le chemin de l'élément associé ainsi que les champs de métadonnées à importer."
     },
     "audit": {
       "fileCountInfoTitle": "Nombre de fichiers",

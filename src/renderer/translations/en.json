@@ -292,7 +292,9 @@
       "metadataFile": "Metadata file",
       "dropAMetadataFile": "Click here or drop a metadata file",
       "advancedOptions": "Advanced options",
-      "delimiter": "Delimiter"
+      "delimiter": "Delimiter",
+      "pathField": "Path",
+      "importedFieldsSelectionDescription": "Select the field containing the path of the element and the metadata fields you want to import"
     },
     "audit": {
       "fileCountInfoTitle": "File count",

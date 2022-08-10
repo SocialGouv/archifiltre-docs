@@ -139,7 +139,7 @@ const getTagText = ({ name, ffIds }: { ffIds: string[]; name: string }) =>
       ffIds.some((taggedId) => isExactFileOrAncestor(id, taggedId))
   );
 
-type AccessorParams = FilesAndFolders &
+export type AccessorParams = FilesAndFolders &
   FilesAndFoldersMetadata & {
     comments: CommentsMap;
   } & {
@@ -153,12 +153,20 @@ export interface CellConfig {
   title: string;
 }
 
+const tryTranslate = (translate: TFunction, text: string) => {
+  try {
+    return translate(text);
+  } catch (err: unknown) {
+    return text;
+  }
+};
+
 const makeCellConfigCreator =
   (translate: TFunction) =>
   (id: string, accessor: Accessor): CellConfig => ({
     accessor,
     id,
-    title: id ? translate(`csvHeader.${id}`) : "",
+    title: id ? tryTranslate(translate, `csvHeader.${id}`) : "",
   });
 
 const makeTagsConfig = compose(

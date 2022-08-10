@@ -15,7 +15,7 @@ import type {
 import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import type { TagMap } from "../../reducers/tags/tags-types";
 import { getAllChildren } from "../file-and-folders";
-import type { CellConfig } from "./make-array-export-config";
+import type { AccessorParams, CellConfig } from "./make-array-export-config";
 import { makeRowConfig } from "./make-array-export-config";
 
 interface CsvExporterData {
@@ -41,6 +41,17 @@ interface WithIdsToDelete {
 
 const CHUNK_SIZE = 1000;
 
+const computeExportCell = (cellConfig: CellConfig, data: AccessorParams) => {
+  try {
+    return cellConfig.accessor(data);
+  } catch (err: unknown) {
+    return `#ERROR ${err}`;
+  }
+};
+
+const computeExportRow = (rowConfig: CellConfig[], data: AccessorParams) =>
+  rowConfig.map((cellConfig) => computeExportCell(cellConfig, data));
+
 const makeExportBody = ({
   rowConfig,
   filesAndFolders,
@@ -57,13 +68,11 @@ const makeExportBody = ({
     map((index) => filesAndFoldersChunks[index]!),
     map((chunk) =>
       chunk.map((element) =>
-        rowConfig.map((cellConfig) =>
-          cellConfig.accessor({
-            ...element,
-            ...filesAndFoldersMetadata[element.id],
-            ...rest,
-          })
-        )
+        computeExportRow(rowConfig, {
+          ...element,
+          ...filesAndFoldersMetadata[element.id],
+          ...rest,
+        })
       )
     )
   );

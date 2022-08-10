@@ -5,6 +5,7 @@ import { compose, cond, defaults, isObject, prop, stubTrue } from "lodash/fp";
 import type { Observable } from "rxjs";
 import { concat, from, interval } from "rxjs";
 import { map, take } from "rxjs/operators";
+import { Readable } from "stream";
 
 import { ROOT_FF_ID } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import type {
@@ -47,6 +48,61 @@ const makeExportBody = ({
   filesAndFoldersMetadata,
   ...rest
 }: CsvExporterData & WithHashes & WithIdsToDelete & WithRowConfig) => {
+  const filesAndFoldersChunks = _.chunk(
+    Object.values(filesAndFolders).filter(({ id }) => id !== ROOT_FF_ID),
+    CHUNK_SIZE
+  );
+
+  return interval().pipe(
+    take(filesAndFoldersChunks.length),
+    map((index) => filesAndFoldersChunks[index]!),
+    map((chunk) =>
+      chunk.map((element) =>
+        rowConfig.map((cellConfig) =>
+          cellConfig.accessor({
+            ...element,
+            ...filesAndFoldersMetadata[element.id],
+            ...rest,
+          })
+        )
+      )
+    )
+  );
+};
+
+class ArrayReadable<T extends []> extends Readable {
+  index = 0;
+}
+
+const makeExportBodyStream = ({
+  rowConfig,
+  filesAndFolders,
+  filesAndFoldersMetadata,
+  ...rest
+}: CsvExporterData & WithHashes & WithIdsToDelete & WithRowConfig) => {
+  const data = Object.values(filesAndFolders).filter(
+    ({ id }) => id !== ROOT_FF_ID
+  );
+  const stream = new ArrayReadable({
+    objectMode: true,
+    read() {
+      if (stream.index === 0) {
+      }
+      if (stream.index > data.length) {
+        this.push(null);
+        return;
+      }
+
+      const ffElement = data[stream.index];
+      const element = {
+        ...ffElement,
+        ...filesAndFoldersMetadata[ffElement.id],
+        ...rest,
+      };
+      this.push(rowConfig.map((cellConfig) => cellConfig.accessor(element)));
+      stream.index++;
+    },
+  });
   const filesAndFoldersChunks = _.chunk(
     Object.values(filesAndFolders).filter(({ id }) => id !== ROOT_FF_ID),
     CHUNK_SIZE

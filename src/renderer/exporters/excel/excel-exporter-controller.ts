@@ -1,23 +1,95 @@
-import type { Observable } from "rxjs";
+import type { TFunction } from "i18next";
+import { flatten } from "lodash";
+import { Observable } from "rxjs";
+import { tap, toArray } from "rxjs/operators";
+import { utils, write } from "xlsx";
 
 import { translations } from "../../translations/translations";
-import { createAsyncWorkerForChildProcessControllerFactory } from "../../utils/async-worker/child-process";
-import { backgroundWorkerProcess$ } from "../../utils/batch-process";
+import { exportToCsv } from "../../utils/array-export/array-export";
 import type {
   ErrorMessage,
   ResultMessage,
 } from "../../utils/batch-process/types";
-import type { CsvExporterData } from "../csv/csv-exporter.impl";
+import { MessageTypes } from "../../utils/batch-process/types";
+import { computeTreeStructureArray } from "../../utils/tree-representation";
+import type { CsvExporterData } from "../csv/csv-exporter-types";
+import type { CreateExcelWorkbookParams } from "./excel-exporter-common";
+import {
+  CSV_EXPORT_PROGRESS_WEIGHT,
+  TREE_CSV_PROGRESS_WEIGHT,
+} from "./excel-exporter-common";
+
+const createExcelWorkbook = (
+  { treeCsv, csvArray }: CreateExcelWorkbookParams,
+  translator: TFunction
+) => {
+  const workbook = utils.book_new();
+  const csvWorkSheet = utils.aoa_to_sheet(csvArray);
+  const treeCsvWorkSheet = utils.aoa_to_sheet(treeCsv);
+  utils.book_append_sheet(
+    workbook,
+    csvWorkSheet,
+    translator("export.treeStats")
+  );
+  utils.book_append_sheet(
+    workbook,
+    treeCsvWorkSheet,
+    translator("export.treeVisualizing")
+  );
+  return workbook;
+};
 
 export const generateExcelExport$ = (
   data: CsvExporterData
 ): Observable<ErrorMessage | ResultMessage> => {
-  const { language } = translations;
+  return new Observable<ErrorMessage | ResultMessage>((subscriber) => {
+    const translator = translations.t.bind(translations);
+    const treeCsvPromise = computeTreeStructureArray(data.filesAndFolders)
+      .pipe(
+        tap((lines) => {
+          subscriber.next({
+            result: TREE_CSV_PROGRESS_WEIGHT * lines.length,
+            type: MessageTypes.RESULT,
+          });
+        }),
+        toArray()
+      )
+      .toPromise()
+      .then(flatten);
 
-  return backgroundWorkerProcess$(
-    { ...data, language },
-    createAsyncWorkerForChildProcessControllerFactory(
-      "exporters/excel/excel-exporter.fork.ts"
-    )
-  );
+    const csvArrayPromise = exportToCsv({
+      ...data,
+      translator,
+    })
+      .pipe(
+        tap((lines) => {
+          subscriber.next({
+            result: CSV_EXPORT_PROGRESS_WEIGHT * lines.length,
+            type: MessageTypes.RESULT,
+          });
+        }),
+        toArray()
+      )
+      .toPromise()
+      .then(flatten);
+
+    void Promise.all([treeCsvPromise, csvArrayPromise]).then(
+      ([treeCsv, csvArray]) => {
+        const xlsxWorkbook = createExcelWorkbook(
+          { csvArray, treeCsv },
+          translator
+        );
+
+        const binaryXlsx = write(xlsxWorkbook, {
+          type: "binary",
+        });
+
+        subscriber.next({
+          result: binaryXlsx,
+          type: MessageTypes.RESULT,
+        });
+        subscriber.complete();
+      }
+    );
+  });
 };

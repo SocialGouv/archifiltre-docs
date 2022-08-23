@@ -41,7 +41,7 @@ export interface DataMessage {
   type: typeof MessageTypes.DATA;
 }
 
-interface CompleteMessage {
+export interface CompleteMessage {
   result?: unknown;
   type: typeof MessageTypes.COMPLETE;
 }

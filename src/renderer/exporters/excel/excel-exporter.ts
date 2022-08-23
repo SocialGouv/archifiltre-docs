@@ -19,7 +19,7 @@ import {
   notifyInfo,
   notifySuccess,
 } from "../../utils/notifications";
-import { getExcelExportProgressGoal } from "./excel-exporter.impl";
+import { getExcelExportProgressGoal } from "./excel-exporter-common";
 import { generateExcelExport$ } from "./excel-exporter-controller";
 
 export const excelExporterThunk =

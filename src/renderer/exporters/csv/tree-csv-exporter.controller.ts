@@ -1,13 +1,15 @@
-import type { Observable } from "rxjs";
+import { arrayToCsv } from "@common/utils/csv";
+import { flatten } from "lodash";
+import { Observable } from "rxjs";
+import { tap, toArray } from "rxjs/operators";
 
 import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
-import { translations } from "../../translations/translations";
-import { createAsyncWorkerForChildProcessControllerFactory } from "../../utils/async-worker/child-process";
-import { backgroundWorkerProcess$ } from "../../utils/batch-process";
 import type {
   ErrorMessage,
   ResultMessage,
 } from "../../utils/batch-process/types";
+import { MessageTypes } from "../../utils/batch-process/types";
+import { computeTreeStructureArray } from "../../utils/tree-representation";
 
 /**
  * Asynchronously generates a tree csv export
@@ -17,11 +19,27 @@ import type {
 export const generateTreeCsvExport$ = (
   filesAndFolders: FilesAndFoldersMap
 ): Observable<ErrorMessage | ResultMessage> => {
-  const { language } = translations;
-  return backgroundWorkerProcess$(
-    { filesAndFolders, language },
-    createAsyncWorkerForChildProcessControllerFactory(
-      "exporters/csv/tree-csv-exporter.fork.ts"
-    )
-  );
+  return new Observable<ResultMessage>((subscriber) => {
+    const header = [""];
+    void computeTreeStructureArray(filesAndFolders)
+      .pipe(
+        tap((lineComputed) => {
+          subscriber.next({
+            result: lineComputed.length,
+            type: MessageTypes.RESULT,
+          });
+        }),
+        toArray()
+      )
+      .toPromise()
+      .then(flatten)
+      .then((rows) => {
+        subscriber.next({
+          result: arrayToCsv([header, ...rows]),
+          type: MessageTypes.RESULT,
+        });
+
+        subscriber.complete();
+      });
+  });
 };

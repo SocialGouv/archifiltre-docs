@@ -90,20 +90,26 @@ export const addDescription = async (
   await win.mouse.click(10, 10);
 };
 
-type ExportType = "RESIP" | "CSV" | "CSV_WITH_HASHES" | "AUDIT" | "EXCEL" | "TREE_CSV" | "DELETION";
+type ExportType =
+  | "AUDIT"
+  | "CSV_WITH_HASHES"
+  | "CSV"
+  | "DELETION"
+  | "EXCEL"
+  | "RESIP"
+  | "TREE_CSV";
 
 /**
  * Triggers an export
  */
-export const makeExport = async (win: Page, type: ExportType): Promise<void> => {
+export const makeExport = async (
+  win: Page,
+  type: ExportType
+): Promise<void> => {
   await openExportMenu(win);
-  const exportTypeSelector = `export-type-container-${type}`
+  const exportTypeSelector = `export-type-container-${type}`;
   await win
-    .locator(
-      `${makeTestIdSelector(
-        exportTypeSelector
-      )} input[type="checkbox"]`
-    )
+    .locator(`${makeTestIdSelector(exportTypeSelector)} input[type="checkbox"]`)
     .click();
   await getLocatorByTestId(win, "export-submit").click();
 };

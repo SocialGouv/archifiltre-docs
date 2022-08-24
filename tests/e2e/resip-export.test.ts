@@ -13,6 +13,7 @@ import {
   clickIcicleElement,
   makeExport,
 } from "./utils/app";
+import { getTextSelector } from "./utils/lang";
 import { closeApp, startApp } from "./utils/test";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -71,7 +72,9 @@ describe("Export to RESIP", () => {
     await makeExport(win, "RESIP");
 
     // Waiting for the RESIP file to be created
-    await win.waitForSelector(`text=/Fichier de métadonnées exporté dans le dossier racine du projet/`);
+    await win.waitForSelector(
+      getTextSelector("export.resipExportSuccessMessage")
+    );
 
     // Finding the RESIP export file
     const exportFolderPath = path.join(__dirname, "../test-folder");

@@ -1,6 +1,5 @@
 import type { ElectronApplication, Page } from "@playwright/test";
-import { expect, test } from "@playwright/test";
-import parseCsv from "csv-parse/lib/sync";
+import { test } from "@playwright/test";
 import fs from "fs";
 import path from "path";
 import { sync as rimrafSync } from "rimraf";
@@ -12,6 +11,7 @@ import {
   clickIcicleElement,
   makeExport,
 } from "./utils/app";
+import { getTextSelector } from "./utils/lang";
 import { closeApp, startApp } from "./utils/test";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -48,13 +48,13 @@ describe("Export excel", () => {
   });
 
   afterEach(async () => {
-    rimrafSync(path.join(testFolderPath, "..","test-folder-excel_*.xlsx"));
+    rimrafSync(path.join(testFolderPath, "..", "test-folder-excel_*.xlsx"));
     await closeApp(app);
   });
 
   it("should generate an excel export", async () => {
     test.slow();
-    
+
     const tag0Name = "tag0";
     const tag1Name = "tag1";
     const description = "element description";
@@ -71,7 +71,9 @@ describe("Export excel", () => {
     await makeExport(win, "EXCEL");
 
     // Waiting for the CSV file to be created
-    await win.waitForSelector(`text=/L'export Excel est terminé/`);
+    await win.waitForSelector(
+      getTextSelector("export.excelExportSuccessMessage")
+    );
 
     // Finding the CSV export file
     const exportFolderPath = path.join(__dirname, "..");

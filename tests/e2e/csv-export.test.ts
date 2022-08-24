@@ -12,6 +12,11 @@ import {
   clickIcicleElement,
   makeExport,
 } from "./utils/app";
+import {
+  findTranslatedKey,
+  getRegexSelector,
+  getTextSelector,
+} from "./utils/lang";
 import { closeApp, startApp } from "./utils/test";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -48,13 +53,13 @@ describe("Export to CSV", () => {
   });
 
   afterEach(async () => {
-    rimrafSync(path.join(testFolderPath, "..","test-folder-csv_*.csv"));
+    rimrafSync(path.join(testFolderPath, "..", "test-folder-csv_*.csv"));
     await closeApp(app);
   });
 
   it("should generate a valid csv export", async () => {
     test.slow();
-    
+
     const tag0Name = "tag0";
     const tag1Name = "tag1";
     const description = "element description";
@@ -71,7 +76,9 @@ describe("Export to CSV", () => {
     await makeExport(win, "CSV");
 
     // Waiting for the CSV file to be created
-    await win.waitForSelector(`text=/L'export CSV est terminé/`);
+    await win.waitForSelector(
+      getTextSelector("export.csvExportSuccessMessage")
+    );
 
     // Finding the CSV export file
     const exportFolderPath = path.join(__dirname, "..");
@@ -90,20 +97,32 @@ describe("Export to CSV", () => {
       path.join(exportFolderPath, csvExportFilePath),
       { encoding: "utf-8" }
     );
-    
+
     const data = parseCsv(csv, {
+      columns: true,
       delimiter: ";",
-      columns: true
     });
 
     expect(data.length).toBe(4);
-    
+
+    const pathField = findTranslatedKey(data[0], "csvHeader.path");
+    const typeField = findTranslatedKey(data[0], "csvHeader.type");
+
     // folders are marked as folders
-    const testedFolder = data.find((row: Record<string, string>) => row.chemin === "/test-folder/child");
-    expect(testedFolder?.type).toBe("répertoire");
-    
+    const testedFolder = data.find(
+      (row: Record<string, string>) =>
+        row[pathField] === path.join("/", "test-folder", "child")
+    );
+
+    expect(testedFolder?.[typeField]).toMatch(
+      getRegexSelector("common.folder")
+    );
+
     // csv files are marked as csv files
-    const testedFile = data.find((row: Record<string, string>) => row.chemin === "/test-folder/child/index.csv");
-    expect(testedFile?.type).toBe("csv");
+    const testedFile = data.find(
+      (row: Record<string, string>) =>
+        row[pathField] === path.join("/", "test-folder", "child", "index.csv")
+    );
+    expect(testedFile?.[typeField]).toBe("csv");
   });
 });

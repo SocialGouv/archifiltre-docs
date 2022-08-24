@@ -73,18 +73,14 @@ const AllTags: React.FC<AllTagsProps> = ({
     );
 
   return (
-    <Box display="flex" flexDirection="column" flexWrap="nowrap" height="100%">
+    <Box height="100%" width="100%">
       <Box
-        flex="1"
-        flexBasis="0px"
-        height="auto"
-        minHeight="0px"
-        minWidth="0px"
-        width="100%"
+        overflow="hidden auto"
+        display="flex"
+        flexDirection="column"
+        height="100%"
       >
-        <Box overflow="hidden auto" height="100%">
-          {tagsList}
-        </Box>
+        {tagsList}
       </Box>
     </Box>
   );

@@ -1,3 +1,4 @@
+import { PRODUCT_CHANNEL } from "@common/config";
 import type { Theme } from "@material-ui/core/styles/createMuiTheme";
 import createStyles from "@material-ui/core/styles/createStyles";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -31,6 +32,11 @@ export const useStyles = makeStyles((theme: Theme) =>
     largeIndicatorText: {
       fontFamily: "QuicksandBold",
       fontSize: "2rem",
+    },
+    logoChannel: {
+      color: theme.palette.error.dark,
+      display: PRODUCT_CHANNEL !== "stable" ? "block" : "none",
+      float: "right",
     },
     searchInput: {
       border: `1px solid ${theme.palette.secondary.main}`,

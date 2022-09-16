@@ -5,7 +5,10 @@ import {
   RESOURCES_PATH,
 } from "@common/config";
 import { loadApp } from "@common/modules/app";
-import { setupAutoUpdate } from "@common/modules/auto-update";
+import {
+  isQuitingForUpdate,
+  setupAutoUpdate,
+} from "@common/modules/auto-update";
 import { loadHash } from "@common/modules/hash";
 import {
   get as getConfig,
@@ -56,6 +59,9 @@ const preventNavigation = () => {
 const askBeforeLeaving = () => {
   if (!win) return;
   win.on("close", (event) => {
+    if (isQuitingForUpdate()) {
+      return;
+    }
     event.preventDefault();
     const language = getLanguage();
     let title = "";
@@ -71,7 +77,7 @@ const askBeforeLeaving = () => {
       no = "Non";
       yes = "Oui";
     } else {
-      title = "Bye bye !";
+      title = "Bye bye!";
       message = "Are you sure you want to leave?";
       detail = "All data that has not been saved will be permanently lost!";
       no = "No";

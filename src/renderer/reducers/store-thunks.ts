@@ -14,7 +14,6 @@ import { compose } from "lodash/fp";
 import type { Observable, OperatorFunction } from "rxjs";
 import { tap } from "rxjs/operators";
 
-import { mapToNewVersionNumbers } from "../components/header/new-version-checker";
 import type { VirtualFileSystem } from "../files-and-folders-loader/files-and-folders-loader-types";
 import { firstHashesComputingThunk } from "../hash-computer/hash-computer-thunk";
 import { reportError } from "../logging/reporter";
@@ -202,6 +201,21 @@ const handleNonJsonFileThunk =
       void dispatch(handleHashComputing(virtualFileSystem));
     }
   };
+
+/**
+ * Maps a version number to this format: MAJOR.MINOR.PATCH
+ *
+ * @param lastVersion number to map
+ */
+const mapToNewVersionNumbers = (lastVersion: string): string => {
+  if (lastVersion.split(".").length === 1) {
+    return `1.${lastVersion}.0`;
+  }
+  if (lastVersion.split(".").length === 2) {
+    return `1.${lastVersion}`;
+  }
+  return lastVersion;
+};
 
 const handleJsonNotificationDisplay = (
   fileOrFolderPath: string,

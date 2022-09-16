@@ -111,7 +111,7 @@
       "noUpdate": "No update available.",
       "newVersion": "New version",
       "aNewVersionIsOut": "Version {{version}} of $t(common.productName) is out!",
-      "download": "Update",
+      "update": "Update",
       "cancel": "Cancel",
       "csvWithHash": "CSV with hashes",
       "csvWithHashDisabledMessage": "You must wait for hashes to have been computed",

@@ -31,14 +31,15 @@ type Replier = <T extends AutoUpdateCheckIpcConfig["replyKey"]>(
 ) => void;
 
 let quitForUpdate = false;
-
-export const isQuitingForUpdate = () => quitForUpdate;
+export const isQuitingForUpdate = (): boolean => quitForUpdate;
 
 let setup = false;
 export const setupAutoUpdate = (): void => {
   if (!IS_MAIN || setup) return;
   setup = true;
   autoUpdater.logger = console;
+  autoUpdater.autoDownload = false;
+  autoUpdater.allowDowngrade = false;
   autoUpdater.autoInstallOnAppQuit = PRODUCT_CHANNEL !== "stable";
 
   const repliers: Replier[] = [];
@@ -57,12 +58,13 @@ export const setupAutoUpdate = (): void => {
   });
 
   // setup auto updater events
-  autoUpdater.on("checking-for-update", (evt) => {
-    console.log("[UPDATE] Check for update", evt);
+  autoUpdater.on("checking-for-update", () => {
+    console.log("[UPDATE] Check for update");
   });
 
-  autoUpdater.on("update-available", (info: UpdateInfo) => {
+  autoUpdater.on("update-available", async (info: UpdateInfo) => {
     console.log("[UPDATE] Update available", info);
+    await autoUpdater.downloadUpdate();
   });
 
   autoUpdater.on("update-not-available", (info: UpdateInfo) => {

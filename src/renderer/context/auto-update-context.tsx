@@ -25,7 +25,7 @@ const AutoUpdateContext = createContext<AutoUpdateContextProps>({
   updateInfo: false,
 });
 
-export const useAutoUpdate = (): AutoUpdateContextProps => {
+export const useAutoUpdateContext = (): AutoUpdateContextProps => {
   return useContext(AutoUpdateContext);
 };
 

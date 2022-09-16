@@ -7,7 +7,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaFlag, FaInfoCircle, FaLock } from "react-icons/fa";
 
-import { useAutoUpdate } from "../../../context/auto-update-context";
+import { useAutoUpdateContext } from "../../../context/auto-update-context";
 
 export interface ModalMenuProps {
   selectedItem: number;
@@ -19,7 +19,7 @@ export const ModalMenu: React.FC<ModalMenuProps> = ({
   setSelectedItem,
 }) => {
   const { t } = useTranslation();
-  const { updateInfo } = useAutoUpdate();
+  const { updateInfo } = useAutoUpdateContext();
   const menuOptions = [
     {
       icon: <FaFlag />,

@@ -4,7 +4,7 @@ import { getCurrentHub, init } from "@sentry/electron";
 import { NodeClient } from "@sentry/node";
 import type { Integration } from "@sentry/types";
 
-import { IS_MAIN, IS_PACKAGED } from "../config";
+import { IS_MAIN, IS_PACKAGED, PRODUCT_CHANNEL } from "../config";
 import type { TrackAppId } from "../tracker/type";
 import { name, version } from "../utils/package";
 
@@ -25,7 +25,9 @@ export const setupSentry = (): SentrySetupCallback => {
   if (!IS_PACKAGED()) return () => void 0;
   const commonOptions: Partial<ElectronOptions> = {
     dsn: process.env.SENTRY_DSN,
-    getSessions: () => [], // because we do a manual preload
+    environment: PRODUCT_CHANNEL === "stable" ? "production" : PRODUCT_CHANNEL,
+    // because we do a manual preload
+    getSessions: () => [],
     release: `${name}@${version}`,
   };
   init(commonOptions);

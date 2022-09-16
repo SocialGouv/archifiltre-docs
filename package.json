@@ -6,6 +6,11 @@
   "author": "Fabrique des ministères sociaux",
   "license": "Apache-2.0",
   "main": "dist/main/main.js",
+  "homepage": "https://archifiltre.fr/docs",
+  "repository": "git@github.com:SocialGouv/archifiltre-docs.git",
+  "bugs": {
+    "url": "https://github.com/SocialGouv/archifiltre-docs/issues"
+  },
   "scripts": {
     "dev": "electron-webpack dev",
     "test": "jest",
@@ -21,6 +26,7 @@
     "lint:fix-test": "eslint --fix -c tests/.eslintrc.json 'tests/**/*.ts*'",
     "lint:fix-all": "yarn lint:fix && yarn lint:fix-test",
     "devtools": "ts-node scripts/getReactDevtools.ts",
+    "replaceForChannel": "node scripts/replaceForChannel.js",
     "generate-translation-csv": "node ./scripts/diff-translations.js",
     "import-translation-csv": "node ./scripts/translation-csv-to-json"
   },
@@ -91,7 +97,7 @@
     "productName": "Docs par Archifiltre",
     "afterSign": "scripts/notarize.js",
     "files": [
-      "electron/build/icon.*"
+      "electron/build/icon*.*"
     ],
     "extraResources": [
       {
@@ -134,6 +140,9 @@
       "entitlements": "./electron/build/entitlements.mac.plist",
       "entitlementsInherit": "./electron/build/entitlements.mac.plist"
     },
+    "dmg": {
+      "title": "${name} ${version}"
+    },
     "win": {
       "icon": "./electron/build/icon.png"
     },
@@ -146,18 +155,17 @@
     "nsis": {
       "artifactName": "${name}-${os}-${arch}-setup.${ext}",
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "language": 1036,
+      "menuCategory": "Archifiltre",
+      "installerIcon": "./electron/build/installerIcon.png",
+      "uninstallerIcon": "./electron/build/uninstallerIcon.png"
     },
     "linux": {
       "category": "Office",
       "icon": "./electron/build/icon.png"
     }
   },
-  "repository": "git@github.com:SocialGouv/archifiltre-docs.git",
-  "bugs": {
-    "url": "https://github.com/SocialGouv/archifiltre-docs/issues"
-  },
-  "homepage": "https://github.com/SocialGouv/archifiltre-docs/#readme",
   "engines": {
     "node": "^16"
   },
@@ -218,6 +226,7 @@
     "postcss-scss": "^4.0.3",
     "prettier": "^2.5.1",
     "redux-mock-store": "^1.5.4",
+    "replace": "^1.2.1",
     "rimraf": "^3.0.2",
     "rmfr": "2.0.0",
     "sass": "^1.49.9",

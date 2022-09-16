@@ -30,7 +30,7 @@ import {
   DOCUMENTATION_LINK,
   FEEDBACK_LINK,
 } from "../../constants";
-import { useAutoUpdate } from "../../hooks/use-auto-update";
+import { useAutoUpdate } from "../../context/auto-update-context";
 import {
   clearSession,
   getPreviousSessions,
@@ -80,7 +80,7 @@ export const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
   const [previousSessions, setPreviousSessions] = useState<string[]>([]);
   const [hoveredPreviousSession, setHoveredSessions] = useState<number>(-1);
 
-  const { updateAvailable } = useAutoUpdate();
+  const { updateInfo } = useAutoUpdate();
 
   const toggleDisplayClearElement = (index: number) => {
     setHoveredSessions(index);
@@ -205,7 +205,7 @@ export const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
         <List component="nav">
           <ListItem button onClick={openModal}>
             <ListItemIcon>
-              <Badge color="error" variant="dot" invisible={!updateAvailable}>
+              <Badge color="error" variant="dot" invisible={!updateInfo}>
                 <FaCog />
               </Badge>
             </ListItemIcon>

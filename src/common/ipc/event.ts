@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import type { IpcMainEvent, IpcRendererEvent } from "electron";
 
-import type { Nothing, UnknownMapping } from "../utils/type";
+import type { UnknownMapping } from "../utils/type";
 
 /**
  * Define an IPC config with arguments type and a return values type.
@@ -67,20 +67,16 @@ export interface DualAsyncIpcMapping {}
  * @internal
  */
 export type ReplyDualAsyncIpcMapping = {
-  [K in DualAsyncIpcKeys]: DualAsyncIpcMapping[K]["replyKey"] extends
-    | Nothing
-    | ""
-    ? never
-    : {
-        [ReplyKey in DualAsyncIpcMapping[K]["replyKey"]]: IpcConfig<
-          Extract<
-            DualAsyncIpcMapping[K],
-            { replyKey: ReplyKey }
-          >["returnValue"],
-          void
-        >;
-      };
-}[DualAsyncIpcKeys];
+  [K in DualAsyncIpcMapping[DualAsyncIpcKeys]["replyKey"]]: IpcConfig<
+    Extract<
+      {
+        [P in DualAsyncIpcKeys as DualAsyncIpcMapping[P]["replyKey"]]: DualAsyncIpcMapping[P];
+      }[K],
+      { replyKey: K; returnValue: unknown[] }
+    >["returnValue"],
+    void
+  >;
+};
 
 export type SyncIpcKeys = keyof SyncIpcMapping;
 export type AsyncIpcKeys = keyof AsyncIpcMapping;

@@ -30,7 +30,7 @@ import {
   DOCUMENTATION_LINK,
   FEEDBACK_LINK,
 } from "../../constants";
-import { useAutoUpdate } from "../../context/auto-update-context";
+import { useAutoUpdateContext } from "../../context/auto-update-context";
 import {
   clearSession,
   getPreviousSessions,
@@ -80,7 +80,7 @@ export const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
   const [previousSessions, setPreviousSessions] = useState<string[]>([]);
   const [hoveredPreviousSession, setHoveredSessions] = useState<number>(-1);
 
-  const { updateInfo } = useAutoUpdate();
+  const { updateInfo } = useAutoUpdateContext();
 
   const toggleDisplayClearElement = (index: number) => {
     setHoveredSessions(index);

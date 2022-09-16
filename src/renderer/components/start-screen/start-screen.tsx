@@ -12,7 +12,7 @@ import styled from "styled-components";
 import { useModal } from "../../hooks/use-modal";
 import { savePreviousSession } from "../../persistence/previous-sessions";
 import type { FileSystemLoadingStep } from "../../reducers/loading-state/loading-state-types";
-import { StaticImage } from "../common/StaticImage";
+import { Logo } from "../common/Logo";
 import { SettingsModal } from "../modals/settings-modal/settings-modal";
 import { Dropzone } from "./dropzone";
 import { LoadingBlock } from "./loading-block";
@@ -96,11 +96,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
         <Grid item>
           <Box display="flex" flexDirection="column" alignItems="center">
             <Box pb={2}>
-              <StaticImage
-                alt="Logo Archifiltre"
-                src={"imgs/logo.png"}
-                height={40}
-              />
+              <Logo height={40} />
             </Box>
             <Typography variant="h3">{t("folderDropzone.slug")}</Typography>
           </Box>

@@ -18,7 +18,6 @@ import styled from "styled-components";
 
 import { BackgroundLoadingInfoContainer } from "./components/background-loading-info/background-loading-info-container";
 import { Providers } from "./components/common/providers";
-import { NewVersionChecker } from "./components/header/new-version-checker";
 import { MainSpace } from "./components/main-space/main-space";
 import { Modals } from "./components/modals/modals";
 import { initReporter, reportInfo } from "./logging/reporter";
@@ -71,7 +70,6 @@ void (async () => {
           </Box>
           <BackgroundLoadingInfoContainer />
         </Box>
-        <NewVersionChecker />
       </App>
       <ToastContainer draggable={false} theme={"colored"} />
       <Modals />

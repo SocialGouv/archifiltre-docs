@@ -1,6 +1,7 @@
 import type { ProgressInfo, UpdateInfo } from "electron-updater";
 import { autoUpdater } from "electron-updater";
 
+import { IS_MAIN, PRODUCT_CHANNEL } from "../config";
 import { ipcMain } from "../ipc";
 import type { DualIpcConfig } from "../ipc/event";
 import { version } from "../utils/package";
@@ -29,8 +30,16 @@ type Replier = <T extends AutoUpdateCheckIpcConfig["replyKey"]>(
   ...args: Extract<AutoUpdateCheckIpcConfig, { replyKey: T }>["returnValue"]
 ) => void;
 
+let quitForUpdate = false;
+
+export const isQuitingForUpdate = () => quitForUpdate;
+
+let setup = false;
 export const setupAutoUpdate = (): void => {
+  if (!IS_MAIN || setup) return;
+  setup = true;
   autoUpdater.logger = console;
+  autoUpdater.autoInstallOnAppQuit = PRODUCT_CHANNEL !== "stable";
 
   const repliers: Replier[] = [];
   let updateAvailable = false;
@@ -41,6 +50,7 @@ export const setupAutoUpdate = (): void => {
   ipcMain.on("autoUpdate.doUpdate", (evt) => {
     evt.returnValue = updateAvailable;
     if (updateAvailable) {
+      quitForUpdate = true;
       autoUpdater.quitAndInstall();
       return;
     }

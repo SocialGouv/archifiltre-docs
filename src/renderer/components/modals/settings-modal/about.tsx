@@ -20,7 +20,7 @@ import {
   DOCUMENTATION_LINK,
   FEEDBACK_LINK,
 } from "../../../constants";
-import { useAutoUpdate } from "../../../context/auto-update-context";
+import { useAutoUpdateContext } from "../../../context/auto-update-context";
 import { version, versionName } from "../../../version";
 
 const useLocalStyles = makeStyles((theme: Theme) =>
@@ -65,7 +65,7 @@ const aboutItems = [
 export const About: React.FC = () => {
   const { t } = useTranslation();
   const classes = useLocalStyles();
-  const { updateInfo, doUpdate } = useAutoUpdate();
+  const { updateInfo, doUpdate } = useAutoUpdateContext();
 
   const onClick = (event: React.MouseEvent, link: string) => {
     event.preventDefault();

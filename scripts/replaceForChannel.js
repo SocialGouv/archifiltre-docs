@@ -10,11 +10,18 @@ const channel = packageJson.version.includes("beta")
   ? "next"
   : "stable";
 
-console.log("Channel detected:", channel);
+if (channel === "stable") {
+  console.log("[ReplaceForChannel] Replace not need in stable.");
+  process.exit();
+}
+console.log("[ReplaceForChannel] Channel detected:", channel);
 const productNameReplacement = `"productName": "${productName}${
   channel === "stable" ? "" : ` (${channel})`
 }"`;
-console.log("Replacing product name with", productNameReplacement);
+console.log(
+  "[ReplaceForChannel] Replacing product name with",
+  productNameReplacement
+);
 replace({
   paths: [packageJsonPath],
   recursive: false,
@@ -26,7 +33,7 @@ replace({
 const iconPngReplacement = `"icon": "./electron/build/icon_${
   channel === "stable" ? "" : `${channel}`
 }.png"`;
-console.log("Replacing PNG icon with", iconPngReplacement);
+console.log("[ReplaceForChannel] Replacing PNG icon with", iconPngReplacement);
 replace({
   paths: [packageJsonPath],
   recursive: false,
@@ -38,7 +45,10 @@ replace({
 const iconIcnsReplacement = `"icon": "./electron/build/icon_${
   channel === "stable" ? "" : `${channel}`
 }.icns"`;
-console.log("Replacing ICNS icon with", iconIcnsReplacement);
+console.log(
+  "[ReplaceForChannel] Replacing ICNS icon with",
+  iconIcnsReplacement
+);
 replace({
   paths: [packageJsonPath],
   recursive: false,

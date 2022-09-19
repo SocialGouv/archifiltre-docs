@@ -1,5 +1,6 @@
 {
   "name": "archifiltre-docs",
+  "productName": "Docs par Archifiltre",
   "version": "3.2.2",
   "private": true,
   "description": "Visualisez et améliorez vos arborescences de fichiers !",
@@ -94,7 +95,6 @@
     "generateUpdatesFilesForAllChannels": true,
     "appId": "fr.gouv.social.fabrique.archifiltre.docs",
     "artifactName": "${name}-${os}-${arch}.${ext}",
-    "productName": "Docs par Archifiltre",
     "afterSign": "scripts/notarize.js",
     "files": [
       "electron/build/icon*.*"
@@ -155,11 +155,14 @@
     "nsis": {
       "artifactName": "${name}-${os}-${arch}-setup.${ext}",
       "oneClick": false,
+      "perMachine": true,
       "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": true,
       "language": 1036,
       "menuCategory": "Archifiltre",
       "installerIcon": "./electron/build/installerIcon.ico",
-      "uninstallerIcon": "./electron/build/uninstallerIcon.ico"
+      "uninstallerIcon": "./electron/build/uninstallerIcon.ico",
+      "include": "./electron/build/installer.nsh"
     },
     "linux": {
       "category": "Office",

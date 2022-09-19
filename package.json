@@ -158,8 +158,8 @@
       "allowToChangeInstallationDirectory": true,
       "language": 1036,
       "menuCategory": "Archifiltre",
-      "installerIcon": "./electron/build/installerIcon.png",
-      "uninstallerIcon": "./electron/build/uninstallerIcon.png"
+      "installerIcon": "./electron/build/installerIcon.ico",
+      "uninstallerIcon": "./electron/build/uninstallerIcon.ico"
     },
     "linux": {
       "category": "Office",

@@ -3,7 +3,11 @@ const replace = require("replace");
 const packageJson = require("../package.json");
 
 const packageJsonPath = path.resolve(__dirname, "../package.json");
-const productName = packageJson.build.productName;
+const nsisInstaller = path.resolve(
+  __dirname,
+  "../electron/build/installer.nsh"
+);
+const productName = packageJson.productName;
 const channel = packageJson.version.includes("beta")
   ? "beta"
   : packageJson.version.includes("next")
@@ -37,7 +41,7 @@ console.log("[ReplaceForChannel] Replacing PNG icon with", iconPngReplacement);
 replace({
   paths: [packageJsonPath],
   recursive: false,
-  regex: `"icon": "./electron/build/icon.png"`,
+  regex: /"icon": "\.\/electron\/build\/icon\.png"/g,
   replacement: iconPngReplacement,
   silent: true,
 });
@@ -52,7 +56,39 @@ console.log(
 replace({
   paths: [packageJsonPath],
   recursive: false,
-  regex: `"icon": "./electron/build/icon.icns"`,
+  regex: /"icon": "\.\/electron\/build\/icon\.icns"/g,
   replacement: iconIcnsReplacement,
   silent: true,
+});
+
+const install64bitPathReplacement = `PROGRAMFILES64\\Archifilitre\\${productName}${
+  channel === "stable" ? "" : ` (${channel})`
+}"`;
+console.log(
+  "[ReplaceForChannel] Replacing custom NSIS install path (x64)",
+  install64bitPathReplacement
+);
+console.log({ nsisInstaller });
+replace({
+  paths: [nsisInstaller],
+  recursive: false,
+  regex: `PROGRAMFILES64\\\\Archifilitre\\\\${productName}"`,
+  replacement: install64bitPathReplacement,
+  silent: false,
+});
+
+const install32PathReplacement = `PROGRAMFILES\\Archifilitre\\${productName}${
+  channel === "stable" ? "" : ` (${channel})`
+}"`;
+console.log(
+  "[ReplaceForChannel] Replacing custom NSIS install path (ia32)",
+  install32PathReplacement
+);
+console.log({ nsisInstaller });
+replace({
+  paths: [nsisInstaller],
+  recursive: false,
+  regex: `PROGRAMFILES\\\\Archifilitre\\\\${productName}"`,
+  replacement: install32PathReplacement,
+  silent: false,
 });

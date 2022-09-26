@@ -154,9 +154,6 @@
     },
     "nsis": {
       "artifactName": "${name}-${os}-${arch}-setup.${ext}",
-      "oneClick": false,
-      "perMachine": true,
-      "allowToChangeInstallationDirectory": true,
       "deleteAppDataOnUninstall": true,
       "language": 1036,
       "menuCategory": "Archifiltre",

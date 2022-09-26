@@ -2,45 +2,38 @@ import { Dialog, DialogContent } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import Paper from "@material-ui/core/Paper";
+import type { FC } from "react";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import { useStyles } from "../../../hooks/use-styles";
-import { importMetadataThunk } from "../../../reducers/metadata/metadata-thunk";
 import { ModalHeader } from "../modal-header";
-import { ImportModal } from "./ImportModal";
-import { useMetadataImport } from "./ImportModalHook";
+import type { ModalAction } from "./MetadataModalTypes";
 
-interface ImportModalContainerProps {
+interface ModalProps {
   closeModal: () => void;
   isModalOpen: boolean;
+}
+
+interface MetadataModalContentProps extends ModalProps {
+  actions: ModalAction[];
+  onAction: (actionId: string) => void;
 }
 
 const StyledPaper = styled(Paper)`
   height: 90%;
 `;
 
-export const ImportModalContainer: React.FC<ImportModalContainerProps> = ({
+const MetadataModalContent: FC<MetadataModalContentProps> = ({
   isModalOpen,
   closeModal,
+  children,
+  actions,
+  onAction,
 }) => {
-  const dispatch = useDispatch();
   const { t } = useTranslation();
   const classes = useStyles();
-
-  const { path, metadataConfig, fieldsConfig, ...props } = useMetadataImport();
-
-  const importMetadata = () => {
-    dispatch(
-      importMetadataThunk(path, {
-        delimiter: metadataConfig.delimiter ?? ";",
-        ...fieldsConfig,
-      })
-    );
-    closeModal();
-  };
 
   return (
     <Dialog
@@ -53,24 +46,33 @@ export const ImportModalContainer: React.FC<ImportModalContainerProps> = ({
     >
       <ModalHeader title={t("importModal.title")} onClose={closeModal} />
       <DialogContent className={classes.dialogContent} dividers>
-        <ImportModal
-          metadataConfig={metadataConfig}
-          fieldsConfig={fieldsConfig}
-          {...props}
-        />
+        {children}
       </DialogContent>
       <DialogActions>
+        {actions.map(({ id, label }) => (
+          <Button
+            key={`action-${id}`}
+            color="primary"
+            variant="contained"
+            disableElevation
+            onClick={() => {
+              onAction(id);
+            }}
+          >
+            {t(label)}
+          </Button>
+        ))}
         <Button
-          color="primary"
+          color="secondary"
           variant="contained"
           disableElevation
-          onClick={() => {
-            importMetadata();
-          }}
+          onClick={closeModal}
         >
-          {t("importModal.import")}
+          {t("importModal.close")}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
+
+export default MetadataModalContent;

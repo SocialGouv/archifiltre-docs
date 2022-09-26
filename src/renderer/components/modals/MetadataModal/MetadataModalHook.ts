@@ -2,14 +2,16 @@ import type { LoadCsvFileToArrayOptions } from "@common/utils/csv";
 import { detectConfig, loadCsvFirstRowToArray } from "@common/utils/csv";
 import { defaults } from "lodash";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
+import { importMetadataThunk } from "../../../reducers/metadata/metadata-thunk";
 import type {
   FieldsConfigChangeHandler,
+  FilePathPickedHandler,
   ImportModalState,
   MetadataImportConfig,
   OptionChangeHandler,
-  PathChangeHandler,
-} from "./ImportModalTypes";
+} from "./MetadataModalTypes";
 
 const defaultConfig = {
   delimiter: ",",
@@ -17,18 +19,20 @@ const defaultConfig = {
 
 interface UseMetadataImportReturn {
   fieldsConfig: MetadataImportConfig;
+  importMetadata: () => void;
   metadataConfig: LoadCsvFileToArrayOptions;
   metadataRow?: Record<string, string>;
   onFieldsConfigChange: FieldsConfigChangeHandler;
   onOptionChange: OptionChangeHandler;
-  onPathChange: PathChangeHandler;
+  onPathChange: FilePathPickedHandler;
   path: string;
   state: ImportModalState;
 }
 
 export const useMetadataImport = (): UseMetadataImportReturn => {
   const [path, setPath] = useState("");
-  const [state, setState] = useState<ImportModalState>("initial");
+  const [state, setState] = useState<ImportModalState>("view");
+  const dispatch = useDispatch();
 
   const [metadataRow, setMetadataRow] = useState<
     Record<string, string> | undefined
@@ -64,7 +68,7 @@ export const useMetadataImport = (): UseMetadataImportReturn => {
       entityIdKey: fields[0] || "",
       fields,
     });
-    setState("preview");
+    setState("importPreview");
   };
 
   const onPathChange = async (pickedFilePath: string) => {
@@ -89,8 +93,21 @@ export const useMetadataImport = (): UseMetadataImportReturn => {
     setFieldsConfig(newFieldsConfig);
   };
 
+  const importMetadata = async () => {
+    // eslint-disable-next-line @typescript-eslint/await-thenable
+    await dispatch(
+      importMetadataThunk(path, {
+        delimiter: metadataConfig.delimiter ?? ";",
+        ...fieldsConfig,
+      })
+    );
+
+    setState("view");
+  };
+
   return {
     fieldsConfig,
+    importMetadata,
     metadataConfig,
     metadataRow,
     onFieldsConfigChange,

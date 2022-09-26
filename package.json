@@ -249,6 +249,7 @@
     "@material-ui/core": "^4.11.4",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@sentry/electron": "^3.0.4",
+    "@xstate/react": "2.0.1",
     "angular-expressions": "^1.1.4",
     "axios": "^0.26.1",
     "csv-parse": "^4.15.4",
@@ -288,6 +289,7 @@
     "winston-daily-rotate-file": "^4.5.5",
     "winston-transport": "^4.4.0",
     "xlsx": "^0.17.0",
-    "xml": "^1.0.1"
+    "xml": "^1.0.1",
+    "xstate": "4.31.0"
   }
 }

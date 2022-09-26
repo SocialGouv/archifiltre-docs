@@ -2,7 +2,7 @@ import { Typography } from "@material-ui/core";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-const ImportModalPreviewHeader = () => {
+const MetadataModalPreviewHeader = () => {
   const { t } = useTranslation();
 
   return (
@@ -12,4 +12,4 @@ const ImportModalPreviewHeader = () => {
   );
 };
 
-export default ImportModalPreviewHeader;
+export default MetadataModalPreviewHeader;

@@ -6,9 +6,9 @@ import { FaUpload } from "react-icons/fa";
 
 import { useModal } from "../../../hooks/use-modal";
 import { useStyles } from "../../../hooks/use-styles";
-import { ImportModalContainer } from "./ImportModalContainer";
+import { MetadataModalContainer } from "./MetadataModalContainer";
 
-export const ImportModalButton: React.FC = () => {
+export const MetadataModalButton: React.FC = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const classes = useStyles();
   const { t } = useTranslation();
@@ -28,7 +28,10 @@ export const ImportModalButton: React.FC = () => {
           <FaUpload />
         </Button>
       </Tooltip>
-      <ImportModalContainer isModalOpen={isModalOpen} closeModal={closeModal} />
+      <MetadataModalContainer
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+      />
     </>
   );
 };

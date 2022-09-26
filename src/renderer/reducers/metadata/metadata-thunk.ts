@@ -1,7 +1,7 @@
 import { loadCsvFileToArray } from "@common/utils/csv";
 import path from "path";
 
-import type { MetadataImportConfig } from "../../components/modals/import-modal/ImportModalTypes";
+import type { MetadataImportConfig } from "../../components/modals/MetadataModal/MetadataModalTypes";
 import type { ArchifiltreDocsThunkAction } from "../archifiltre-types";
 import { getOriginalPathFromStore } from "../workspace-metadata/workspace-metadata-selectors";
 import { addBatchMetadataAction } from "./metadata-actions";
@@ -21,7 +21,7 @@ export const importMetadataThunk =
   (
     filePath: string,
     { entityIdKey, delimiter, fields }: ImportMetadataThunkOptions
-  ): ArchifiltreDocsThunkAction =>
+  ): ArchifiltreDocsThunkAction<Promise<void>> =>
   async (dispatch, getState) => {
     const originalPath = getOriginalPathFromStore(getState());
 

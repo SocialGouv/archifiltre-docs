@@ -13,14 +13,14 @@ import type { ChangeEventHandler, FC } from "react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import type { OptionChangeHandler } from "./ImportModalTypes";
+import type { OptionChangeHandler } from "./MetadataModalTypes";
 
 export interface ImportModalOptionsProps {
   onChange?: OptionChangeHandler;
   options?: LoadCsvFileToArrayOptions;
 }
 
-export const ImportModalOptions: FC<ImportModalOptionsProps> = ({
+export const MetadataModalOptions: FC<ImportModalOptionsProps> = ({
   options,
   onChange = noop,
 }) => {
@@ -36,7 +36,10 @@ export const ImportModalOptions: FC<ImportModalOptionsProps> = ({
     key: T
   ): ChangeEventHandler<HTMLInputElement> {
     return (event) => {
-      onChange(key, event.target.value);
+      onChange({
+        ...options,
+        [key]: event.target.value,
+      });
     };
   }
 

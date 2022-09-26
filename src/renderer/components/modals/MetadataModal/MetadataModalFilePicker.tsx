@@ -12,7 +12,7 @@ interface ImportModalFilePickerProps {
   onFilePicked: (filePath: string) => void;
 }
 
-export const ImportModalFilePicker: FC<ImportModalFilePickerProps> = ({
+export const MetadataModalFilePicker: FC<ImportModalFilePickerProps> = ({
   onFilePicked,
 }) => {
   const { t } = useTranslation();

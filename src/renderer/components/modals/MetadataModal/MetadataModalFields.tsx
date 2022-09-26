@@ -11,7 +11,7 @@ import type { ChangeEvent, FC } from "react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import type { MetadataImportConfig } from "./ImportModalTypes";
+import type { MetadataImportConfig } from "./MetadataModalTypes";
 
 interface ImportModalPreviewProps {
   formValues: MetadataImportConfig;
@@ -19,7 +19,7 @@ interface ImportModalPreviewProps {
   previewData?: Record<string, string>;
 }
 
-export const ImportModalFields: FC<ImportModalPreviewProps> = ({
+export const MetadataModalFields: FC<ImportModalPreviewProps> = ({
   previewData,
   formValues,
   onFormChange,

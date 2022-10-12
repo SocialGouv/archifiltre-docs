@@ -1,4 +1,4 @@
-import { identity, isUndefined } from "lodash";
+import { groupBy, identity, isUndefined, uniqBy } from "lodash";
 
 import type {
   EntityId,
@@ -187,6 +187,10 @@ export const getMetadataByEntityId = (
     .filter(isMetadata);
 };
 
+export const getMetadataList = (context: MetadataContext) => {
+  return uniqBy([...context.metadata.values()], "name");
+};
+
 export const deleteMetadata = (
   context: MetadataContext,
   metadata: Metadata
@@ -246,3 +250,11 @@ export const recordsToMetadata = (
   options: RecordsToMedatataOptions
 ): MetadataDto[] =>
   records.flatMap((record) => recordToMetadata(record, options));
+
+export const getMetadataByEntity = (
+  context: MetadataContext
+): Record<string, Metadata[]> => {
+  const metadataValues = [...context.metadata.values()];
+
+  return groupBy(metadataValues, "entity");
+};

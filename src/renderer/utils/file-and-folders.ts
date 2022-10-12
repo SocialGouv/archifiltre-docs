@@ -13,6 +13,8 @@ import type {
   FilesAndFoldersMap,
   VirtualPathToIdMap,
 } from "../reducers/files-and-folders/files-and-folders-types";
+import { getTitleFromMetadata } from "../reducers/metadata/metadata-selector";
+import type { Metadata } from "../reducers/metadata/metadata-types";
 import { translations } from "../translations/translations";
 import { convertToPosixAbsolutePath } from "./file-system/file-sys-util";
 
@@ -229,11 +231,13 @@ export const isExactFileOrAncestor = (
  * Displays an element name depending on its original name and optional alias
  * @param elementName - element original name
  * @param elementAlias - element optional alias
+ * @param metadata
  */
 export const getDisplayName = (
   elementName: string,
-  elementAlias?: string
-): string => elementAlias || elementName; // eslint-disable-line @typescript-eslint/prefer-nullish-coalescing -- Handle empty string
+  elementAlias: string | undefined,
+  metadata?: Metadata[]
+): string => getTitleFromMetadata(metadata) || elementAlias || elementName; // eslint-disable-line @typescript-eslint/prefer-nullish-coalescing -- Handle empty string
 
 /**
  * Create a element id sequence from the virtual path of a file

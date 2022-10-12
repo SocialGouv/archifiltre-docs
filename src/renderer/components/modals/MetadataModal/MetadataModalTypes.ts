@@ -2,8 +2,6 @@ import type { LoadCsvFileToArrayOptions } from "@common/utils/csv";
 
 export type ImportModalState = "importDropzone" | "importPreview" | "view";
 
-export type OptionChangeHandler = (config: FileConfig) => void;
-
 export interface MetadataImportConfig {
   entityIdKey: string;
   fields: string[];

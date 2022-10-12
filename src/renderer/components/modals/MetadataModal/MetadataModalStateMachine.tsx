@@ -1,12 +1,12 @@
 import type { LoadCsvFileToArrayOptions } from "@common/utils/csv";
-import { loadCsvFirstRowToArray } from "@common/utils/csv";
+import { detectConfig, loadCsvFirstRowToArray } from "@common/utils/csv";
 import type { DoneInvokeEvent, StateFrom } from "xstate";
 import { assign, createMachine } from "xstate";
 
 import { notifyError } from "../../../utils/notifications";
 import type { MetadataImportConfig } from "./MetadataModalTypes";
 
-interface MetadataModalContext {
+export interface MetadataModalContext {
   config: LoadCsvFileToArrayOptions;
   fieldsConfig: MetadataImportConfig;
   filePath: string;
@@ -33,19 +33,20 @@ interface ConfigChanged {
   type: "CONFIG_CHANGED";
 }
 
-interface LoadMetadata {
+interface FieldsConfigChanged {
   fieldsConfig: MetadataImportConfig;
-  type: "LOAD_METADATA";
+  type: "FIELDS_CONFIG_CHANGED";
 }
 
 type Events =
   | ConfigChanged
+  | FieldsConfigChanged
   | FilePathPicked
-  | LoadMetadata
   | { type: "ABORT" }
   | { type: "CONTINUE" }
   | { type: "FULFIL" }
   | { type: "IMPORT" }
+  | { type: "LOAD_METADATA" }
   | { type: "REJECT" }
   | { type: "RETRY" };
 
@@ -87,7 +88,7 @@ export const metadataModalMachine = createMachine(
         },
       },
       importPreview: {
-        initial: "loading",
+        initial: "detectingConfig",
         on: {
           ABORT: "metadataView",
           CONFIG_CHANGED: {
@@ -100,6 +101,30 @@ export const metadataModalMachine = createMachine(
           },
         },
         states: {
+          detectingConfig: {
+            invoke: {
+              id: "detectConfig",
+              onDone: {
+                actions: assign<
+                  MetadataModalContext,
+                  DoneInvokeEvent<
+                    Partial<LoadCsvFileToArrayOptions> | undefined
+                  >
+                >({
+                  config: (context, event) => ({
+                    ...context.config,
+                    ...event.data,
+                  }),
+                }),
+                target: "loading",
+              },
+              onError: {
+                actions: ["notifyError"],
+                target: "view",
+              },
+              src: "detectConfig",
+            },
+          },
           loading: {
             invoke: {
               id: "loadPreview",
@@ -121,10 +146,12 @@ export const metadataModalMachine = createMachine(
           },
           view: {
             on: {
-              LOAD_METADATA: {
-                actions: assign<MetadataModalContext, LoadMetadata>({
+              FIELDS_CONFIG_CHANGED: {
+                actions: assign<MetadataModalContext, FieldsConfigChanged>({
                   fieldsConfig: (context, event) => event.fieldsConfig,
                 }),
+              },
+              LOAD_METADATA: {
                 target: "#loadingMetadata",
               },
               RETRY: "#importDropzone",
@@ -159,7 +186,11 @@ export const metadataModalMachine = createMachine(
       },
     },
     services: {
-      loadMetadata: async (context) => {
+      detectConfig:
+        (context) => async (): Promise<Partial<LoadCsvFileToArrayOptions>> => {
+          return detectConfig(context.filePath);
+        },
+      loadMetadata: (context) => async () => {
         assertDelimiterIsValid(context.config);
         return loadCsvFirstRowToArray(context.filePath, context.config);
       },

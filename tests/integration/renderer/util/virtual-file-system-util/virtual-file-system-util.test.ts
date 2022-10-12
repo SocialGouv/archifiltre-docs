@@ -1,4 +1,5 @@
 import type { FilesAndFoldersMap } from "@renderer/reducers/files-and-folders/files-and-folders-types";
+import { createTag } from "@renderer/reducers/tags/tags-selectors";
 import {
   removeIgnoredFilesAndFoldersFromVirtualFileSystem,
   removeUnusedAliasesFromVirtualFileSystem,
@@ -7,7 +8,6 @@ import {
 } from "@renderer/utils/virtual-file-system";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import { createTag } from "../../reducers/tags/tags-test-utils";
 
 const folderId = "/root/folder";
 const hiddenFileId = "/root/folder/hidden.tmp";

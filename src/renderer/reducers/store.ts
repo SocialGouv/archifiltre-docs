@@ -19,6 +19,8 @@ import type { MetadataState } from "./metadata/metadata-types";
 import { persistActions } from "./middleware/persist-actions-middleware";
 import { modalReducer } from "./modal/modal-reducer";
 import type { ModalState } from "./modal/modal-types";
+import { sedaConfigurationReducer } from "./seda-configuration/seda-configuration-reducer";
+import type { SedaConfigurationState } from "./seda-configuration/seda-configuration-type";
 import { undoableTagsReducer as tagsReducer } from "./tags/tags-reducer";
 import type { TagsState } from "./tags/tags-types";
 import { undoableWorkspaceMetadataReducer as workspaceMetadataReducer } from "./workspace-metadata/workspace-metadata-reducer";
@@ -33,6 +35,7 @@ export interface StoreState {
   loadingState: UndoableState<LoadingState>;
   metadata: UndoableState<MetadataState>;
   modal: ModalState;
+  sedaConfiguration: SedaConfigurationState;
   tags: UndoableState<TagsState>;
   workspaceMetadata: UndoableState<WorkspaceMetadataState>;
 }
@@ -47,6 +50,7 @@ export const store = createStore(
     loadingState: loadingStateReducer,
     metadata: metadataReducer,
     modal: modalReducer,
+    sedaConfiguration: sedaConfigurationReducer,
     tags: tagsReducer,
     workspaceMetadata: workspaceMetadataReducer,
   }),

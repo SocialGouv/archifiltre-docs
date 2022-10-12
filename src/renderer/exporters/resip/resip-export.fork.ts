@@ -25,25 +25,12 @@ if (IS_WORKER) {
         };
         const { hook, getCount } = hookCounter(messageHook);
 
-        const {
-          aliases,
-          comments,
-          elementsToDelete,
-          filesAndFolders,
-          filesAndFoldersMetadata,
-          tags,
-          language,
-        } = data;
+        const { language, ...props } = data;
         await translations.changeLanguage(language as string);
-
+        console.log(props.sedaMetadata);
         const resipExportData = resipExporter(
           {
-            aliases,
-            comments,
-            elementsToDelete,
-            filesAndFolders,
-            filesAndFoldersMetadata,
-            tags,
+            ...props,
           },
           hook
         );

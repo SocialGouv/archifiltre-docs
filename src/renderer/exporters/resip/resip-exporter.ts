@@ -10,7 +10,13 @@ import type {
   FilesAndFoldersMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { tagHasFfId } from "../../reducers/tags/tags-selectors";
+import {
+  getArchivalAgencyArchiveUnitIdentifierFromMetadata,
+  getDescriptionLevelFromMetadata,
+} from "../../reducers/metadata/metadata-selector";
+import type { Metadata } from "../../reducers/metadata/metadata-types";
+import { isTagMetadata } from "../../reducers/seda-configuration/seda-configuration-selector";
+import { createTag, tagHasFfId } from "../../reducers/tags/tags-selectors";
 import type { Tag, TagMap } from "../../reducers/tags/tags-types";
 import { translations } from "../../translations/translations";
 import {
@@ -45,7 +51,18 @@ const formatFile = (ff: FilesAndFolders) => {
 /**
  * Returns the SEDA description level corresponding to the FF item
  */
-const formatDescriptionLevel = (ff: FilesAndFolders) => {
+const formatDescriptionLevel = (
+  ff: FilesAndFolders,
+  metadataMap: SedaMetadataMap
+) => {
+  const metadata = metadataMap[ff.id];
+
+  const metadataDescriptionLevel = getDescriptionLevelFromMetadata(metadata);
+
+  if (metadataDescriptionLevel) {
+    return metadataDescriptionLevel;
+  }
+
   if (ff.children.length === 0) {
     return "Item";
   }
@@ -56,8 +73,11 @@ const formatDescriptionLevel = (ff: FilesAndFolders) => {
 /**
  * Gets the title of a file or folder
  */
-const formatTitle = (ff: FilesAndFolders, aliases: AliasMap) =>
-  getDisplayName(path.basename(ff.id), aliases[ff.id]);
+const formatTitle = (
+  ff: FilesAndFolders,
+  aliases: AliasMap,
+  sedaMetadata: SedaMetadataMap
+) => getDisplayName(path.basename(ff.id), aliases[ff.id], sedaMetadata[ff.id]);
 
 /**
  * Formats the date to "yyyy-mm-dd"
@@ -89,14 +109,31 @@ const addParentId = (
 
 const formatCustodialHistory = (
   fileAndFolder: FilesAndFolders,
-  aliases: AliasMap
-) => (aliases[fileAndFolder.id] ? nameChangedText(fileAndFolder.name) : "");
+  aliases: AliasMap,
+  sedaMetadataMap: SedaMetadataMap
+) => {
+  const base = aliases[fileAndFolder.id]
+    ? nameChangedText(fileAndFolder.name)
+    : "";
+
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  const sedaMetadata = sedaMetadataMap[fileAndFolder.id] ?? [];
+
+  const custodialHistoryMetadata = sedaMetadata
+    .filter(({ name }) => name === "CustodialHistory")
+    .map(({ content }) => content);
+
+  return [base, ...custodialHistoryMetadata]
+    .filter((val) => val !== "")
+    .join(" | ");
+};
 
 interface ResipFormat {
   /* eslint-disable @typescript-eslint/naming-convention */
+  ArchivalAgencyArchiveUnitIdentifier?: string;
   "CustodialHistory.CustodialHistoryItem": string;
   Description: string;
-  DescriptionLevel: "Item" | "RecordGrp";
+  DescriptionLevel: string;
   EndDate: string;
   File: string;
   ID: number;
@@ -108,6 +145,8 @@ interface ResipFormat {
   /* eslint-enable @typescript-eslint/naming-convention */
 }
 
+type SedaMetadataMap = Record<string, Metadata[]>;
+
 /**
  * Mapper that transform enriched archifiltre data to Resip compatible data
  */
@@ -115,16 +154,25 @@ const transformDefaultFormatToResip =
   (
     aliases: AliasMap,
     comments: CommentsMap,
-    filesAndFoldersMetadata: FilesAndFoldersMetadataMap
+    filesAndFoldersMetadata: FilesAndFoldersMetadataMap,
+    sedaMetadata: SedaMetadataMap
   ) =>
   (enrichedFilesAndFolders: FilesAndFoldersWithID): ResipFormat => ({
     /* eslint-disable @typescript-eslint/naming-convention */
+    ArchivalAgencyArchiveUnitIdentifier:
+      getArchivalAgencyArchiveUnitIdentifierFromMetadata(
+        sedaMetadata[enrichedFilesAndFolders.id]
+      ),
     "CustodialHistory.CustodialHistoryItem": formatCustodialHistory(
       enrichedFilesAndFolders,
-      aliases
+      aliases,
+      sedaMetadata
     ),
     Description: comments[enrichedFilesAndFolders.id] || "",
-    DescriptionLevel: formatDescriptionLevel(enrichedFilesAndFolders),
+    DescriptionLevel: formatDescriptionLevel(
+      enrichedFilesAndFolders,
+      sedaMetadata
+    ),
     EndDate: formatDate(
       filesAndFoldersMetadata[enrichedFilesAndFolders.id].maxLastModified
     ),
@@ -135,7 +183,7 @@ const transformDefaultFormatToResip =
       filesAndFoldersMetadata[enrichedFilesAndFolders.id].minLastModified
     ),
     Tags: enrichedFilesAndFolders.tags,
-    Title: formatTitle(enrichedFilesAndFolders, aliases),
+    Title: formatTitle(enrichedFilesAndFolders, aliases, sedaMetadata),
     TransactedDate: formatDate(Date.now()),
     /* eslint-enable @typescript-eslint/naming-convention */
   });
@@ -155,27 +203,26 @@ const addTagsToFf = (tags: Tag[]) => (ff: FilesAndFoldersWithID) => ({
 });
 
 const formatToCsv = (sipFilesAndFolders: ResipFormat[], tags: Tag[]) => {
-  const fieldsOrder = [
+  const fieldsOrder: (keyof ResipFormat)[] = [
     "ID",
     "ParentID",
     "File",
     "DescriptionLevel",
     "Title",
+    "ArchivalAgencyArchiveUnitIdentifier",
     "StartDate",
     "EndDate",
     "TransactedDate",
     "CustodialHistory.CustodialHistoryItem",
     "Description",
-  ] as (keyof ResipFormat)[];
-  const tagsFields = tags.map(
-    (_tag, index) => `Content.Tag.${index}`
-  ) as (keyof ResipFormat)[];
+  ];
+  const tagsFields = tags.map((_tag, index) => `Content.Tag.${index}`);
 
-  const firstRow: unknown[] = fieldsOrder.concat(tagsFields);
+  const firstRow: string[] = (fieldsOrder as string[]).concat(tagsFields);
 
   const dataRows = sipFilesAndFolders.map((sipFileAndFolder) => {
     const baseFileAndFolder = fieldsOrder.map(
-      (field) => sipFileAndFolder[field] ?? ""
+      (field) => `${sipFileAndFolder[field] ?? ""}`
     );
     const tagsCells = sipFileAndFolder.Tags.reduce(
       (acc, { ID, name }) => replaceValue(acc, ID, name),
@@ -208,6 +255,7 @@ interface ResipExporterOptions {
   elementsToDelete: string[];
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
+  sedaMetadata: Record<string, Metadata[]>;
   tags: TagMap;
 }
 
@@ -223,6 +271,26 @@ const isAncestorDeleted = (ffId: string, elementsToDelete: string[]): boolean =>
 
 export const RESIP_HOOK_CALL_PER_ELEMENT = 4;
 
+const extractTagsFromSedaMetadata = (sedaMetadata: SedaMetadataMap): Tag[] => {
+  const tags: Record<string, Tag> = {};
+
+  Object.entries(sedaMetadata).forEach(([ffId, metadatas]) => {
+    metadatas.filter(isTagMetadata).forEach((metadata) => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (!tags[metadata.content]) {
+        tags[metadata.content] = createTag({
+          id: metadata.content,
+          name: metadata.content,
+        });
+      }
+
+      tags[metadata.content].ffIds.push(ffId);
+    });
+  });
+
+  return Object.values(tags);
+};
+
 /**
  * Formats the fileStructure and tag into a csv that can be imported in RESIP
  */
@@ -233,6 +301,7 @@ export const resipExporter = (
     elementsToDelete,
     filesAndFolders,
     filesAndFoldersMetadata,
+    sedaMetadata,
     tags,
   }: ResipExporterOptions,
   hook = noop
@@ -244,8 +313,11 @@ export const resipExporter = (
     return { ...ff, ID: `${sipId}` };
   };
 
-  const tagsWithIndex = Object.keys(tags)
-    .map((tagId) => tags[tagId])
+  const allTags = Object.values(tags).concat(
+    extractTagsFromSedaMetadata(sedaMetadata)
+  );
+
+  const tagsWithIndex = Object.values(allTags)
     .filter(({ ffIds }) => ffIds.length !== 0)
     .map((tag, tagIndex) => ({
       ...tag,
@@ -271,7 +343,12 @@ export const resipExporter = (
     ) as FilesAndFoldersWithID[];
 
   const formattedData = dataWithSipId.map(
-    transformDefaultFormatToResip(aliases, comments, filesAndFoldersMetadata)
+    transformDefaultFormatToResip(
+      aliases,
+      comments,
+      filesAndFoldersMetadata,
+      sedaMetadata
+    )
   );
 
   return formatToCsv(formattedData, tagsWithIndex);

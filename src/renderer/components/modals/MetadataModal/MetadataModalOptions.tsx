@@ -13,10 +13,10 @@ import type { ChangeEventHandler, FC } from "react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import type { OptionChangeHandler } from "./MetadataModalTypes";
+import type { FileConfigChangeHandler } from "./MetadataModalTypes";
 
 export interface ImportModalOptionsProps {
-  onChange?: OptionChangeHandler;
+  onChange?: FileConfigChangeHandler;
   options?: LoadCsvFileToArrayOptions;
 }
 
@@ -27,8 +27,8 @@ export const MetadataModalOptions: FC<ImportModalOptionsProps> = ({
   const { t } = useTranslation();
 
   function getValue<T extends keyof LoadCsvFileToArrayOptions>(
-    key: T
-  ): LoadCsvFileToArrayOptions[T] {
+    key: keyof LoadCsvFileToArrayOptions
+  ): LoadCsvFileToArrayOptions[T] | undefined {
     return options?.[key];
   }
 

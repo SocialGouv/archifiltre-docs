@@ -13,13 +13,13 @@ import { useTranslation } from "react-i18next";
 
 import type { MetadataImportConfig } from "./MetadataModalTypes";
 
-interface ImportModalPreviewProps {
+export interface ImportModalFieldsProps {
   formValues: MetadataImportConfig;
   onFormChange: (formValue: MetadataImportConfig) => void;
   previewData?: Record<string, string>;
 }
 
-export const MetadataModalFields: FC<ImportModalPreviewProps> = ({
+export const MetadataModalFields: FC<ImportModalFieldsProps> = ({
   previewData,
   formValues,
   onFormChange,

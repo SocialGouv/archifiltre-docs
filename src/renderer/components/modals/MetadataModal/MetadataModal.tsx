@@ -31,7 +31,7 @@ export const MetadataModal: React.FC<ImportModalProps> = ({
           fieldsConfig={state.context.fieldsConfig}
           metadataConfig={state.context.config}
           metadataRow={state.context.firstRow}
-          onOptionChange={onFileConfigChange}
+          onFileConfigChange={onFileConfigChange}
         />
       )}
     </>

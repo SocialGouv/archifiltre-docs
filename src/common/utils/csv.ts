@@ -96,7 +96,7 @@ const readCsvPromise = async <TOptions extends parse.Options>(
 };
 
 export interface LoadCsvFileToArrayOptions {
-  delimiter?: string;
+  delimiter: string;
 }
 
 export const loadCsvFileToArray = async (

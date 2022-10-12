@@ -3,6 +3,7 @@ import type { DispatchExts } from "@renderer/reducers/archifiltre-types";
 import { initialState as filesAndFoldersInitialState } from "@renderer/reducers/files-and-folders/files-and-folders-reducer";
 import { initialState as hashesReducerInitialState } from "@renderer/reducers/hashes/hashes-reducer";
 import type { StoreState } from "@renderer/reducers/store";
+import { createTag } from "@renderer/reducers/tags/tags-selectors";
 import { save } from "@renderer/utils/file-system/file-sys-util";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
@@ -12,7 +13,6 @@ import {
   createEmptyStore,
   wrapStoreWithUndoable,
 } from "../../reducers/store-test-utils";
-import { createTag } from "../../reducers/tags/tags-test-utils";
 
 jest.mock("@renderer/utils/file-system/file-sys-util", () => ({
   getNameWithExtension: (name: string, ext: string) => `${name}.${ext}`,

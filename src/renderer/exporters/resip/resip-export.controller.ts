@@ -7,6 +7,8 @@ import type {
   FilesAndFoldersMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import type { Metadata } from "../../reducers/metadata/metadata-types";
+import type { ActiveSedaFields } from "../../reducers/seda-configuration/seda-configuration-type";
 import type { TagMap } from "../../reducers/tags/tags-types";
 import { translations } from "../../translations/translations";
 import { createAsyncWorkerForChildProcessControllerFactory } from "../../utils/async-worker/child-process";
@@ -21,43 +23,30 @@ interface ResipExportProgress {
 }
 
 interface GenerateResipExportOptions {
+  activeSedaFields: ActiveSedaFields;
   aliases: AliasMap;
   comments: CommentsMap;
   elementsToDelete: string[];
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
+  sedaMetadata: Record<string, Metadata[]>;
   tags: TagMap;
 }
 
 /**
  * Returns an observable that emits the final result and the progress state of the export
- * @param aliases
- * @param comments
- * @param filesAndFolders
- * @param filesAndFoldersMetadata
- * @param tags
- * @param elementsToDelete
  * @returns {Observable<ResipExportProgress>} An observable to follow the export progress
+ * @param options
  */
-export const generateResipExport$ = ({
-  aliases,
-  comments,
-  elementsToDelete,
-  filesAndFolders,
-  filesAndFoldersMetadata,
-  tags,
-}: GenerateResipExportOptions): Observable<ResipExportProgress> => {
+export const generateResipExport$ = (
+  options: GenerateResipExportOptions
+): Observable<ResipExportProgress> => {
   const { language } = translations;
 
   return backgroundWorkerProcess$(
     {
-      aliases,
-      comments,
-      elementsToDelete,
-      filesAndFolders,
-      filesAndFoldersMetadata,
       language,
-      tags,
+      ...options,
     },
     createAsyncWorkerForChildProcessControllerFactory(
       "exporters/resip/resip-export.fork.ts"

@@ -1,25 +1,29 @@
-import Paper from "@material-ui/core/Paper";
-import { useMachine } from "@xstate/react";
 import React from "react";
-import styled from "styled-components";
+import { useDispatch } from "react-redux";
 
+import { useMachine } from "../../../lib/@xstate/react/useMachine";
+import type { DispatchExts } from "../../../reducers/archifiltre-types";
+import { useMetadataList } from "../../../reducers/metadata/metadata-selector";
+import { importMetadataThunk } from "../../../reducers/metadata/metadata-thunk";
 import MetadataModalContent from "./MetadataModalContent";
-import type { MetadataModalState } from "./MetadataModalStateMachine";
+import { MetadataModalFilePicker } from "./MetadataModalFilePicker";
+import { MetadataModalPreview } from "./MetadataModalPreview";
+import type {
+  MetadataModalContext,
+  MetadataModalState,
+} from "./MetadataModalStateMachine";
 import { metadataModalMachine } from "./MetadataModalStateMachine";
 import type {
+  FieldsConfigChangeHandler,
   FileConfig,
-  MetadataImportConfig,
   ModalAction,
 } from "./MetadataModalTypes";
+import { MetadataModalView } from "./MetadataModalView";
 
 interface ImportModalContainerProps {
   closeModal: () => void;
   isModalOpen: boolean;
 }
-
-const StyledPaper = styled(Paper)`
-  height: 90%;
-`;
 
 const getActionsByState = (state: MetadataModalState): ModalAction[] => {
   if (state.matches("importDropzone")) {
@@ -31,10 +35,19 @@ const getActionsByState = (state: MetadataModalState): ModalAction[] => {
     ];
   }
 
-  if (state.matches("view")) {
+  if (state.matches("importPreview.view")) {
     return [
       {
-        id: "loadMetadata",
+        id: "LOAD_METADATA",
+        label: "loadMetadata",
+      },
+    ];
+  }
+
+  if (state.matches("metadataView")) {
+    return [
+      {
+        id: "IMPORT",
         label: "loadMetadata",
       },
     ];
@@ -47,13 +60,31 @@ export const MetadataModalContainer: React.FC<ImportModalContainerProps> = ({
   isModalOpen,
   closeModal,
 }) => {
-  const [state, send] = useMachine(metadataModalMachine);
+  const dispatch = useDispatch<DispatchExts>();
 
-  const onFileConfigChange = (config: FileConfig) =>
+  const metadataList = useMetadataList();
+
+  const loadMetadataService = (context: MetadataModalContext) => async () => {
+    await dispatch(
+      importMetadataThunk(context.filePath, {
+        ...context.fieldsConfig,
+        ...context.config,
+      })
+    );
+  };
+
+  const [state, send] = useMachine(metadataModalMachine, {
+    services: {
+      loadMetadata: loadMetadataService,
+    },
+  });
+
+  const onFileConfigChange = (config: FileConfig) => {
     send({
       config,
       type: "CONFIG_CHANGED",
     });
+  };
 
   const onFilePathPicked = (filePath: string) =>
     send({
@@ -61,14 +92,25 @@ export const MetadataModalContainer: React.FC<ImportModalContainerProps> = ({
       type: "FILE_PATH_PICKED",
     });
 
-  const onMetadataLoad = (fieldsConfig: MetadataImportConfig) =>
+  const onFieldsConfigChange: FieldsConfigChangeHandler = (fieldsConfig) => {
     send({
       fieldsConfig,
-      type: "LOAD_METADATA",
+      type: "FIELDS_CONFIG_CHANGED",
     });
+  };
 
   const onAction = (actionId: string) => {
-    console.log(`action-${actionId}`);
+    if (actionId === "IMPORT") {
+      send("IMPORT");
+    }
+
+    if (actionId === "LOAD_METADATA") {
+      send("LOAD_METADATA");
+    }
+
+    if (actionId === "LOAD_METADATA") {
+      send("LOAD_METADATA");
+    }
   };
 
   const actions = getActionsByState(state);
@@ -80,7 +122,23 @@ export const MetadataModalContainer: React.FC<ImportModalContainerProps> = ({
       isModalOpen={isModalOpen}
       onAction={onAction}
     >
-      {state.value}
+      {state.matches("importDropzone") && (
+        <MetadataModalFilePicker onFilePicked={onFilePathPicked} />
+      )}
+
+      {state.matches("importPreview") && (
+        <MetadataModalPreview
+          onFieldsConfigChange={onFieldsConfigChange}
+          fieldsConfig={state.context.fieldsConfig}
+          metadataConfig={state.context.config}
+          metadataRow={state.context.firstRow}
+          onFileConfigChange={onFileConfigChange}
+        />
+      )}
+
+      {state.matches("metadataView") && (
+        <MetadataModalView metadataList={metadataList} />
+      )}
     </MetadataModalContent>
   );
 };

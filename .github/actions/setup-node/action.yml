@@ -6,7 +6,7 @@ runs:
   steps:
     - name: Read Node version from .nvmrc
       shell: bash
-      run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+      run: echo "name=NVMRC::$(cat .nvmrc)" >> $GITHUB_OUTPUT
       id: nvm
 
     - name: Set up Node.js

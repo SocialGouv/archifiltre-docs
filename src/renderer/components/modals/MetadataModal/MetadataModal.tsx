@@ -1,3 +1,4 @@
+import { noop } from "lodash";
 import React from "react";
 
 import { MetadataModalFilePicker } from "./MetadataModalFilePicker";
@@ -32,6 +33,7 @@ export const MetadataModal: React.FC<ImportModalProps> = ({
           metadataConfig={state.context.config}
           metadataRow={state.context.firstRow}
           onFileConfigChange={onFileConfigChange}
+          onFieldsConfigChange={noop}
         />
       )}
     </>

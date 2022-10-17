@@ -1,6 +1,6 @@
 import type { LoadCsvFileToArrayOptions } from "@common/utils/csv";
 import { detectConfig, loadCsvFirstRowToArray } from "@common/utils/csv";
-import type { DoneInvokeEvent, StateFrom } from "xstate";
+import type { DoneInvokeEvent, State } from "xstate";
 import { assign, createMachine } from "xstate";
 
 import { notifyError } from "../../../utils/notifications";
@@ -50,9 +50,9 @@ type Events =
   | { type: "REJECT" }
   | { type: "RETRY" };
 
-export type MetadataModalState = StateFrom<typeof metadataModalMachine>;
+export type MetadataModalState = State<MetadataModalContext, Events>;
 
-export const metadataModalMachine = createMachine(
+export const metadataModalMachine = createMachine<MetadataModalContext, Events>(
   {
     context: {
       config: defaultConfig,

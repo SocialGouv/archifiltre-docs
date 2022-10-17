@@ -46,7 +46,7 @@ jobs:
           echo "$CSC_LINK_RAW" > certmac.txt
           base64 --decode certmac.txt > $CSC_LINK
       - name: Archive certificates
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           if-no-files-found: error
           name: certificates
@@ -73,9 +73,9 @@ jobs:
           # override because of "env-ci" used by semantic-release
           # GITHUB_REF should not be default branch when "workflow_run" event is triggered
           export GITHUB_REF=$GITHUB_REF_OVERRIDE
-          echo ::set-output name=current-version::$(node -e "console.log(require('./package.json').version)")
+          echo "current-version=$(node -e "console.log(require('./package.json').version)")" >> $GITHUB_OUTPUT
           yarn semantic-release
-          echo ::set-output name=next-version::$(node -e "console.log(require('./package.json').version)")
+          echo "next-version=$(node -e "console.log(require('./package.json').version)")" >> $GITHUB_OUTPUT
           yarn compile --no-progress
         env:
           ARCHIFILTRE_RELEASE_MODE: version
@@ -91,7 +91,7 @@ jobs:
           ARCHIFILTRE_SITE_URL: ${{ secrets.ARCHIFILTRE_SITE_URL }}
           FORCE_TRACKING: false
       - name: Archive dist
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: compile-dist
           path: dist/
@@ -146,18 +146,18 @@ jobs:
       #   shell: bash
       #   run: $(yarn global bin)/replace 'lightArgs\.push\(\.\.\.objectFiles\);' 'lightArgs.push("-sval", ...objectFiles);' node_modules/app-builder-lib/out/targets/MsiTarget.js
       - name: Download dist
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: compile-dist
           path: dist/
       - name: Download cetificates
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: certificates
       - name: Build bin
         run: yarn dist:${{ matrix.target }}
       - name: Archive bin
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.target }}-bin
           path: |
@@ -174,7 +174,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ env.GITHUB_REF_OVERRIDE }}
       - name: Download all dist form build jobs
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           path: bin
       - name: Generate hashes

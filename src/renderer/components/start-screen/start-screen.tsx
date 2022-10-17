@@ -14,9 +14,9 @@ import { savePreviousSession } from "../../persistence/previous-sessions";
 import type { FileSystemLoadingStep } from "../../reducers/loading-state/loading-state-types";
 import { Logo } from "../common/Logo";
 import { SettingsModal } from "../modals/settings-modal/settings-modal";
-import { StartscreenDropzone } from "./startscreen-dropzone";
 import { LoadingBlock } from "./loading-block";
 import { StartScreenSidebar } from "./start-screen-sidebar";
+import { StartscreenDropzone } from "./startscreen-dropzone";
 
 export interface StartScreenProps {
   cancelLoading: () => void;
@@ -110,7 +110,10 @@ export const StartScreen: React.FC<StartScreenProps> = ({
               cancelLoading={cancelLoading}
             />
           ) : (
-            <StartscreenDropzone loadPath={loadPath} setLoadedPath={setLoadedPath} />
+            <StartscreenDropzone
+              loadPath={loadPath}
+              setLoadedPath={setLoadedPath}
+            />
           )}
         </DropzoneWrapper>
         <Grid item>

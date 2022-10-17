@@ -232,7 +232,7 @@ const wrapWithHook =
     return mapper(mappedElement, mappedIndex, mappedArray);
   };
 
-interface ResipExporterOptions {
+export interface ResipExporterOptions {
   aliases: AliasMap;
   comments: CommentsMap;
   elementsToDelete: string[];

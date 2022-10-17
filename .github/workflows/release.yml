@@ -46,7 +46,7 @@ jobs:
           echo "$CSC_LINK_RAW" > certmac.txt
           base64 --decode certmac.txt > $CSC_LINK
       - name: Archive certificates
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           if-no-files-found: error
           name: certificates
@@ -55,6 +55,21 @@ jobs:
             ${{ env.CSC_LINK }}
       - name: Setup Node
         uses: ./.github/actions/setup-node
+        # >> NO Secrets
+      - name: Temp NO_SECRETS as .env file
+        run: |
+          touch ${{ github.run_id }}_${{ github.sha }}.env
+          echo "${{ secrets.NO_SECRETS }}" >> ${{ github.run_id }}_${{ github.sha }}.env
+      - name: Convert dotenv as output
+        id: nosecrets
+        uses: falti/dotenv-action@v1
+        with:
+          path: ${{ github.run_id }}_${{ github.sha }}.env
+          log-variables: true
+          mask-variables: false
+      - name: Remove temp .env file
+        run: rm -rf ${{ github.run_id }}_${{ github.sha }}.env
+        # << NO Secrets
       - name: Yarn install
         run: yarn --frozen-lockfile --perfer-offline
       - name: Import GPG key
@@ -73,25 +88,25 @@ jobs:
           # override because of "env-ci" used by semantic-release
           # GITHUB_REF should not be default branch when "workflow_run" event is triggered
           export GITHUB_REF=$GITHUB_REF_OVERRIDE
-          echo ::set-output name=current-version::$(node -e "console.log(require('./package.json').version)")
+          echo "current-version=$(node -e "console.log(require('./package.json').version)")" >> $GITHUB_OUTPUT
           yarn semantic-release
-          echo ::set-output name=next-version::$(node -e "console.log(require('./package.json').version)")
+          echo "next-version=$(node -e "console.log(require('./package.json').version)")" >> $GITHUB_OUTPUT
           yarn compile --no-progress
         env:
           ARCHIFILTRE_RELEASE_MODE: version
-          TRACKER_MATOMO_ID_SITE: ${{ secrets.TRACKER_MATOMO_ID_SITE }}
+          TRACKER_MATOMO_ID_SITE: ${{ steps.nosecrets.outputs.tracker_matomo_id_site }}
+          TRACKER_PROVIDER: ${{ steps.nosecrets.outputs.tracker_provider }}
+          SENTRY_ORG: ${{ steps.nosecrets.outputs.sentry_org }}
           TRACKER_MATOMO_URL: ${{ secrets.TRACKER_MATOMO_URL }}
-          TRACKER_PROVIDER: ${{ secrets.TRACKER_PROVIDER }}
           TRACKER_POSTHOG_API_KEY: ${{ secrets.TRACKER_POSTHOG_API_KEY }}
           TRACKER_POSTHOG_URL: ${{ secrets.TRACKER_POSTHOG_URL }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
           ARCHIFILTRE_SITE_URL: ${{ secrets.ARCHIFILTRE_SITE_URL }}
           FORCE_TRACKING: false
       - name: Archive dist
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: compile-dist
           path: dist/
@@ -146,18 +161,18 @@ jobs:
       #   shell: bash
       #   run: $(yarn global bin)/replace 'lightArgs\.push\(\.\.\.objectFiles\);' 'lightArgs.push("-sval", ...objectFiles);' node_modules/app-builder-lib/out/targets/MsiTarget.js
       - name: Download dist
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: compile-dist
           path: dist/
       - name: Download cetificates
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: certificates
       - name: Build bin
         run: yarn dist:${{ matrix.target }}
       - name: Archive bin
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.target }}-bin
           path: |
@@ -174,7 +189,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ env.GITHUB_REF_OVERRIDE }}
       - name: Download all dist form build jobs
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           path: bin
       - name: Generate hashes

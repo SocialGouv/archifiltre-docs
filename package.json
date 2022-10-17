@@ -288,7 +288,7 @@
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5",
     "winston-transport": "^4.4.0",
-    "xlsx": "^0.17.0",
+    "xlsx": "^0.18.5",
     "xml": "^1.0.1",
     "xstate": "^4.11.0"
   }

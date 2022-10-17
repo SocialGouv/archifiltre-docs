@@ -10,6 +10,9 @@ import {
   getLastModifiedDateOverrides,
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { getHashesFromStore } from "../../reducers/hashes/hashes-selectors";
+import { serializeMetadataContext } from "../../reducers/metadata/metadata-operations";
+import { getMetadataContextFromState } from "../../reducers/metadata/metadata-selector";
+import { getSedaState } from "../../reducers/seda-configuration/seda-configuration-selector";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import {
   getNameWithExtension,
@@ -46,8 +49,10 @@ export const jsonExporterThunk =
       elementsToDelete: getElementsToDeleteFromStore(state),
       filesAndFolders: getFilesAndFoldersFromStore(state),
       hashes: getHashesFromStore(state),
+      metadata: serializeMetadataContext(getMetadataContextFromState(state)),
       originalPath,
       overrideLastModified: getLastModifiedDateOverrides(state),
+      sedaConfiguration: getSedaState(state),
       sessionName,
       tags: getTagsFromStore(state),
       version,

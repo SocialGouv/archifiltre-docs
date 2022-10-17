@@ -224,6 +224,10 @@
       "auditReportStarted": "The audit report export has started",
       "auditReportSuccess": "The audit report export has succeeded"
     },
+    "metadata": {
+      "name": "Name",
+      "content": "Content"
+    },
     "replay": {
       "title": "Restore previous session",
       "error": "An error occurred while restoring the previous session."
@@ -280,6 +284,17 @@
       "selectAll": "Select all",
       "unselectAll": "Unselect all",
       "browseAll": "Browse for all"
+    },
+    "importModal": {
+      "title": "Import metadata",
+      "pickAFile": "Pick a metadata file",
+      "import": "Import",
+      "metadataFile": "Metadata file",
+      "dropAMetadataFile": "Click here or drop a metadata file",
+      "advancedOptions": "Advanced options",
+      "delimiter": "Delimiter",
+      "pathField": "Path",
+      "importedFieldsSelectionDescription": "Select the field containing the path of the element and the metadata fields you want to import"
     },
     "audit": {
       "fileCountInfoTitle": "File count",

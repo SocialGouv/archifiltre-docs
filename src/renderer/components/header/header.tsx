@@ -6,6 +6,7 @@ import styled from "styled-components";
 import type { ExportToJson } from "../../exporters/json/json-exporter";
 import { Logo } from "../common/Logo";
 import { TabsHeader } from "../main-space/workspace/tabs/tabs-header";
+import { MetadataModalButton } from "../modals/MetadataModal/MetadataModalButton";
 import { ExportButton } from "./export-button";
 import { SaveButton } from "./save-button";
 import { SearchButton } from "./search-button";
@@ -53,6 +54,9 @@ export const Header: React.FC<HeaderActionsProps> = ({
           </Box>
           <Box flexGrow={1} />
         </>
+        <Box>
+          <MetadataModalButton />
+        </Box>
         <Box>
           <SearchButton />
         </Box>

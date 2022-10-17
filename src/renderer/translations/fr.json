@@ -224,6 +224,10 @@
       "auditReportStarted": "L'export du rapport d'audit a commencé",
       "auditReportSuccess": "L'export du rapport d'audit est terminé"
     },
+    "metadata": {
+      "name": "Nom",
+      "content": "Contenu"
+    },
     "replay": {
       "title": "Chargement de la session précédente",
       "error": "Une erreur s'est produite lors du chargement de la session précédente."
@@ -280,6 +284,17 @@
       "selectAll": "Tout sélectionner",
       "unselectAll": "Tout désélectionner",
       "browseAll": "Parcourir pour tous"
+    },
+    "importModal": {
+      "title": "Importer des métadonnées",
+      "pickAFile": "Choisir un fichier de métadonnées",
+      "import": "Importer",
+      "metadataFile": "Fichier de métadonnées",
+      "dropAMetadataFile": "Cliquez ici ou déposez un fichier de métadonnées",
+      "advancedOptions": "Options avancées",
+      "delimiter": "Séparateur",
+      "pathField": "Chemin",
+      "importedFieldsSelectionDescription": "Sélectionnez le champ contenant le chemin de l'élément associé ainsi que les champs de métadonnées à importer."
     },
     "audit": {
       "fileCountInfoTitle": "Nombre de fichiers",

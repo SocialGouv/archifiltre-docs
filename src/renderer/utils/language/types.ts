@@ -5,4 +5,6 @@ export enum Language {
   FR = "fr",
 }
 
-export type WithLanguage<T> = T & { language: Language };
+export type WithLanguage<T = Record<string, unknown>> = T & {
+  language: Language;
+};

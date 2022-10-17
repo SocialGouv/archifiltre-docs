@@ -5,12 +5,26 @@ import { useTabsState } from "../..//header/tabs-context";
 import { HeaderContainer as Header } from "../../header/header-container";
 import { DuplicatesSearchContainer as DuplicatesSearch } from "../duplicates-search/duplicates-search-container";
 import { HelpButton } from "../help-button";
-import { IcicleApiToProps as Icicle } from "../icicle/icicle-container";
+import type { IcicleContainerProps } from "../icicle/icicle-container";
+import { IcicleContainer as Icicle } from "../icicle/icicle-container";
+import { IcicleMetadataSidebarContainer } from "../icicle/icicle-metadata/icicle-metadata-sidebar-container";
 import { NavigationBarContainer as NavigationBar } from "../navigation-bar/navigation-bar-container";
+import {
+  DUPLICATES_TAB_INDEX,
+  ENRICHMENT_TAB_INDEX,
+} from "./tabs/tabs-constants";
 import { TabsContent } from "./tabs/tabs-content";
 import { WorkspaceProviders } from "./workspace-providers";
 
-const areIciclesDisplayed = (tabIndex: number) => tabIndex !== 3;
+const areIciclesDisplayed = (tabIndex: number) =>
+  tabIndex !== DUPLICATES_TAB_INDEX;
+
+const minimapReplaceComponent = (
+  tabIndex: number
+): IcicleContainerProps["rightSidebar"] | undefined =>
+  ({
+    [ENRICHMENT_TAB_INDEX]: IcicleMetadataSidebarContainer,
+  }[tabIndex]);
 
 const Workspace: React.FC = () => {
   const { tabIndex } = useTabsState();
@@ -36,7 +50,7 @@ const Workspace: React.FC = () => {
                 <NavigationBar />
               </Box>
               <Box flexGrow={1} overflow="hidden">
-                <Icicle />
+                <Icicle rightSidebar={minimapReplaceComponent(tabIndex)} />
               </Box>
               <Box position="absolute" bottom={15} right={15}>
                 <HelpButton />

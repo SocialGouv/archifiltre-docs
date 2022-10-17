@@ -17,6 +17,10 @@ import {
   startLoadingAction,
 } from "../../reducers/loading-info/loading-info-actions";
 import { LoadingInfoTypes } from "../../reducers/loading-info/loading-info-types";
+import {
+  getActiveSedaFields,
+  getSedaMetadata,
+} from "../../reducers/seda-configuration/seda-configuration-selector";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import { translations } from "../../translations/translations";
 import { notifyInfo, notifySuccess } from "../../utils/notifications";
@@ -37,6 +41,8 @@ export const resipExporterThunk =
     const aliases = getAliasesFromStore(state);
     const comments = getCommentsFromStore(state);
     const elementsToDelete = getElementsToDeleteFromStore(state);
+    const sedaMetadata = getSedaMetadata(state);
+    const activeSedaFields = getActiveSedaFields(sedaMetadata);
 
     const resipExportTitle = translations.t("export.resipExportTitle");
     const resipExportSuccessMessage = translations.t(
@@ -62,11 +68,13 @@ export const resipExporterThunk =
     let lastCount = 0;
 
     const { resipCsv } = await generateResipExport$({
+      activeSedaFields,
       aliases,
       comments,
       elementsToDelete,
       filesAndFolders,
       filesAndFoldersMetadata,
+      sedaMetadata,
       tags,
     })
       .pipe(

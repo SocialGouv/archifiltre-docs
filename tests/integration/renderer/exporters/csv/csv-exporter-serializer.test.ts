@@ -5,12 +5,11 @@ import {
 } from "@renderer/exporters/csv/csv-exporter-serializer";
 import { createFilesAndFolders } from "@renderer/files-and-folders-loader/files-and-folders-loader";
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { createTag } from "@renderer/reducers/tags/tags-selectors";
 import type { WithLanguage } from "@renderer/utils/language/types";
 import { Language } from "@renderer/utils/language/types";
 import { MockWritable } from "stdio-mock";
 import Stream from "stream";
-
-import { createTag } from "../../reducers/tags/tags-test-utils";
 
 const extractDataFromMock = async (
   writeable: MockWritable

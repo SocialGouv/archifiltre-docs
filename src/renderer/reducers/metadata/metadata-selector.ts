@@ -25,8 +25,5 @@ const getPropFromMetadata =
 
 export const getTitleFromMetadata = getPropFromMetadata("Title");
 
-export const getDescriptionLevelFromMetadata =
-  getPropFromMetadata("DescriptionLevel");
-
 export const getArchivalAgencyArchiveUnitIdentifierFromMetadata =
   getPropFromMetadata("ArchivalAgencyArchiveUnitIdentifier");

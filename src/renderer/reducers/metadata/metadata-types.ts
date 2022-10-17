@@ -19,6 +19,12 @@ export interface MetadataContext {
   metadata: MetadataMap;
 }
 
+export interface SerializedMetadataContext {
+  entityMetadataIndex: Record<EntityId, MetadataId[]>;
+  id: MetadataId;
+  metadata: Record<MetadataId, Metadata>;
+}
+
 export type MetadataDto = Omit<Metadata, "id">;
 
 /*

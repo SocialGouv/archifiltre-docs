@@ -8,6 +8,7 @@ import type {
   MetadataDto,
   MetadataId,
   MetadataMap,
+  SerializedMetadataContext,
 } from "./metadata-types";
 
 const createMetadataEntity = (
@@ -258,3 +259,23 @@ export const getMetadataByEntity = (
 
   return groupBy(metadataValues, "entity");
 };
+
+export const serializeMetadataContext = (
+  context: MetadataContext
+): SerializedMetadataContext => ({
+  entityMetadataIndex: Object.fromEntries(context.entityMetadataIndex),
+  id: context.id,
+  metadata: Object.fromEntries(context.metadata),
+});
+
+export const deserializeMetadataContext = (
+  context: SerializedMetadataContext
+): MetadataContext => ({
+  entityMetadataIndex: new Map<EntityId, MetadataId[]>(
+    Object.entries(context.entityMetadataIndex)
+  ),
+  id: context.id,
+  metadata: new Map<MetadataId, Metadata>(
+    Object.entries(context.metadata).map(([id, metadata]) => [+id, metadata])
+  ),
+});

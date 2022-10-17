@@ -1,9 +1,15 @@
 export const SET_METADATA_MAPPING = "SEDA/SET_METADATA_MAPPING";
 
+export const sedaFields: SedaField[] = [
+  "CustodialHistory",
+  "Title",
+  "ArchivalAgencyArchiveUnitIdentifier",
+  "Tags",
+];
+
 export type SedaField =
   | "ArchivalAgencyArchiveUnitIdentifier"
   | "CustodialHistory"
-  | "DescriptionLevel"
   | "Tags"
   | "Title";
 

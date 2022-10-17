@@ -10,10 +10,7 @@ import type {
   FilesAndFoldersMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import {
-  getArchivalAgencyArchiveUnitIdentifierFromMetadata,
-  getDescriptionLevelFromMetadata,
-} from "../../reducers/metadata/metadata-selector";
+import { getArchivalAgencyArchiveUnitIdentifierFromMetadata } from "../../reducers/metadata/metadata-selector";
 import type { Metadata } from "../../reducers/metadata/metadata-types";
 import { isTagMetadata } from "../../reducers/seda-configuration/seda-configuration-selector";
 import { createTag, tagHasFfId } from "../../reducers/tags/tags-selectors";
@@ -51,18 +48,7 @@ const formatFile = (ff: FilesAndFolders) => {
 /**
  * Returns the SEDA description level corresponding to the FF item
  */
-const formatDescriptionLevel = (
-  ff: FilesAndFolders,
-  metadataMap: SedaMetadataMap
-) => {
-  const metadata = metadataMap[ff.id];
-
-  const metadataDescriptionLevel = getDescriptionLevelFromMetadata(metadata);
-
-  if (metadataDescriptionLevel) {
-    return metadataDescriptionLevel;
-  }
-
+const formatDescriptionLevel = (ff: FilesAndFolders) => {
   if (ff.children.length === 0) {
     return "Item";
   }
@@ -169,10 +155,7 @@ const transformDefaultFormatToResip =
       sedaMetadata
     ),
     Description: comments[enrichedFilesAndFolders.id] || "",
-    DescriptionLevel: formatDescriptionLevel(
-      enrichedFilesAndFolders,
-      sedaMetadata
-    ),
+    DescriptionLevel: formatDescriptionLevel(enrichedFilesAndFolders),
     EndDate: formatDate(
       filesAndFoldersMetadata[enrichedFilesAndFolders.id].maxLastModified
     ),

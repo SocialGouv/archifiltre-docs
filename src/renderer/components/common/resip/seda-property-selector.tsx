@@ -5,21 +5,15 @@ import type { FC } from "react";
 import React from "react";
 
 import type { SedaField } from "../../../reducers/seda-configuration/seda-configuration-type";
+import { sedaFields } from "../../../reducers/seda-configuration/seda-configuration-type";
 
 export interface SedaPropertySelectorProps {
   onChange?: (value: SedaField) => void;
   value?: SedaField;
 }
 
-const SEDA_PROPERTIES: SedaField[] = [
-  "CustodialHistory",
-  "Title",
-  "ArchivalAgencyArchiveUnitIdentifier",
-  "Tags",
-];
-
 const isSedaField = (value: unknown): value is SedaField =>
-  typeof value === "string" && (SEDA_PROPERTIES as string[]).includes(value);
+  typeof value === "string" && (sedaFields as string[]).includes(value);
 
 export const SedaPropertySelector: FC<SedaPropertySelectorProps> = ({
   onChange,
@@ -33,7 +27,7 @@ export const SedaPropertySelector: FC<SedaPropertySelectorProps> = ({
   };
   return (
     <Select value={value ?? ""} onChange={selectChangeHandler}>
-      {SEDA_PROPERTIES.map((label) => (
+      {sedaFields.map((label) => (
         <MenuItem key={label} value={label}>
           {label}
         </MenuItem>

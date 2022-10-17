@@ -12,7 +12,7 @@ import type {
   SedaMetadataMapping,
 } from "./seda-configuration-type";
 
-const getSedaState = (state: StoreState) => state.sedaConfiguration;
+export const getSedaState = (state: StoreState) => state.sedaConfiguration;
 
 interface SedaMetadata {
   content: string;

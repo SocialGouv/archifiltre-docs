@@ -93,8 +93,16 @@ describe("json-exporter", () => {
         elementsToDelete,
         filesAndFolders,
         hashes,
+        metadata: {
+          entityMetadataIndex: {},
+          id: 0,
+          metadata: {},
+        },
         originalPath,
         overrideLastModified,
+        sedaConfiguration: {
+          metadataMapping: {},
+        },
         sessionName,
         tags,
         version,

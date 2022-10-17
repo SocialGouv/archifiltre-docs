@@ -2,7 +2,7 @@ import { metadataModalMachine } from "@renderer/components/modals/MetadataModal/
 import { noop } from "lodash";
 import { interpret } from "xstate";
 
-describe("metadataModalStateMachine", () => {
+describe.skip("metadataModalStateMachine", () => {
   const service = interpret(metadataModalMachine);
 
   afterEach(() => {

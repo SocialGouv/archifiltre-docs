@@ -1,10 +1,10 @@
 /* eslint-disable jest/expect-expect */
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
+import { createTag } from "@renderer/reducers/tags/tags-selectors";
 import { makeRowConfig } from "@renderer/utils/array-export/make-array-export-config";
 import { formatPathForUserSystem } from "@renderer/utils/file-system/file-sys-util";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
-import { createTag } from "../../reducers/tags/tags-test-utils";
 
 const rowId = "/filesAndFolders/file-1";
 const fileName = "file-name.csv";

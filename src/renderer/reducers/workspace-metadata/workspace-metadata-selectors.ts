@@ -1,3 +1,4 @@
+import path from "path";
 import { useSelector } from "react-redux";
 
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
@@ -29,3 +30,20 @@ export const getOriginalPathFromStore = (store: StoreState): string =>
  */
 export const useWorkspaceMetadata = (): WorkspaceMetadataState =>
   useSelector(getWorkspaceMetadataFromStore);
+
+/**
+ * Hook to get the currently active element
+ */
+export const useActiveElement = (): string => {
+  const { hoveredElementId, lockedElementId } = useWorkspaceMetadata();
+
+  return lockedElementId || hoveredElementId;
+};
+
+export const useElementAbsolutePath = (elementPath: string): string => {
+  const originalPath = useOriginalPath();
+
+  return path.join(originalPath, "..", elementPath);
+};
+
+const useOriginalPath = () => useSelector(getOriginalPathFromStore);

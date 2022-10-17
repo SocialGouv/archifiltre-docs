@@ -6,6 +6,8 @@ import { WorkerEventType } from "../../utils/async-worker";
 import { createAsyncWorkerForChildProcess } from "../../utils/async-worker/child-process";
 import { MessageTypes } from "../../utils/batch-process/types";
 import { hookCounter } from "../../utils/hook";
+import type { WithLanguage } from "../../utils/language/types";
+import type { ResipExporterOptions } from "./resip-exporter";
 import { resipExporter } from "./resip-exporter";
 
 if (IS_WORKER) {
@@ -25,25 +27,13 @@ if (IS_WORKER) {
         };
         const { hook, getCount } = hookCounter(messageHook);
 
-        const {
-          aliases,
-          comments,
-          elementsToDelete,
-          filesAndFolders,
-          filesAndFoldersMetadata,
-          tags,
-          language,
-        } = data;
+        const { language, ...props }: ResipExporterOptions & WithLanguage =
+          data;
         await translations.changeLanguage(language as string);
-
+        console.log(props.sedaMetadata);
         const resipExportData = resipExporter(
           {
-            aliases,
-            comments,
-            elementsToDelete,
-            filesAndFolders,
-            filesAndFoldersMetadata,
-            tags,
+            ...props,
           },
           hook
         );

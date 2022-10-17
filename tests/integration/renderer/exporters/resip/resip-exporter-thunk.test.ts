@@ -119,11 +119,16 @@ describe("resip-exporter-thunk", () => {
       await store.dispatch(resipExporterThunk(savePath));
 
       expect(mockedGenerateResipExport$).toHaveBeenCalledWith({
+        activeSedaFields: {
+          fields: new Set(),
+          tags: new Set(),
+        },
         aliases,
         comments,
         elementsToDelete,
         filesAndFolders,
         filesAndFoldersMetadata,
+        sedaMetadata: {},
         tags,
       });
       expect(writeFileMock).toHaveBeenCalledWith(

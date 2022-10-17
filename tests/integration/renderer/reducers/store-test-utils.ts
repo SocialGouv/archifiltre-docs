@@ -6,7 +6,9 @@ import { initialState as icicleSortMethodInitialState } from "@renderer/reducers
 import { IcicleSortMethod } from "@renderer/reducers/icicle-sort-method/icicle-sort-method-types";
 import { initialState as loadingInfoInitialState } from "@renderer/reducers/loading-info/loading-info-reducer";
 import { initialState as loadingStateInitialState } from "@renderer/reducers/loading-state/loading-state-reducer";
+import { initialState as metadataInitialState } from "@renderer/reducers/metadata/metadata-reducer";
 import { initialState as modalInitialState } from "@renderer/reducers/modal/modal-reducer";
+import { initialState as sedaInitialState } from "@renderer/reducers/seda-configuration/seda-configuration-reducer";
 import type { StoreState } from "@renderer/reducers/store";
 
 /**
@@ -21,7 +23,9 @@ export const createEmptyStore = (): StoreState => ({
   icicleSortMethod: icicleSortMethodInitialState,
   loadingInfo: loadingInfoInitialState,
   loadingState: wrapStoreWithUndoable(loadingStateInitialState),
+  metadata: wrapStoreWithUndoable(metadataInitialState),
   modal: modalInitialState,
+  sedaConfiguration: sedaInitialState,
   tags: wrapStoreWithUndoable({
     tags: {},
   }),

@@ -32,7 +32,13 @@ import {
 import type { IcicleMainProps } from "./icicle-main";
 import { IcicleMain } from "./icicle-main";
 
-export const IcicleApiToProps: React.FC = () => {
+export interface IcicleContainerProps {
+  rightSidebar?: IcicleMainProps["rightSidebar"];
+}
+
+export const IcicleContainer: React.FC<IcicleContainerProps> = ({
+  rightSidebar,
+}) => {
   const dispatch = useDispatch();
 
   const tags = useSelector(getTagsFromStore);
@@ -170,6 +176,7 @@ export const IcicleApiToProps: React.FC = () => {
       moveElement={moveElementCallback}
       tags={tags}
       unlock={unlock}
+      rightSidebar={rightSidebar}
     />
   );
 };

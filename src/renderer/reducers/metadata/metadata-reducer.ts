@@ -8,6 +8,7 @@ import type { MetadataAction, MetadataState } from "./metadata-types";
 import {
   ADD_BATCH_METADATA_ACTION,
   INIT_METADATA_ACTION,
+  RESET_METADATA_ACTION,
 } from "./metadata-types";
 
 export const initialState: MetadataState = {
@@ -27,6 +28,10 @@ export const metadataReducer = undoable(
         return {
           ...state,
           context: deserializeMetadataContext(action.context),
+        };
+      case RESET_METADATA_ACTION:
+        return {
+          ...initialState,
         };
       default:
         return state;

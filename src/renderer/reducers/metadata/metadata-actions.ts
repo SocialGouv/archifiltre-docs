@@ -6,6 +6,7 @@ import type {
 import {
   ADD_BATCH_METADATA_ACTION,
   INIT_METADATA_ACTION,
+  RESET_METADATA_ACTION,
 } from "./metadata-types";
 
 export const addBatchMetadataAction = (
@@ -20,4 +21,8 @@ export const initMetadataAction = (
 ): MetadataAction => ({
   context,
   type: INIT_METADATA_ACTION,
+});
+
+export const resetMetadataAction = (): MetadataAction => ({
+  type: RESET_METADATA_ACTION,
 });

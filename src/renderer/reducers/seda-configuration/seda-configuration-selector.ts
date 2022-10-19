@@ -8,11 +8,13 @@ import type { StoreState } from "../store";
 import { setSedaMappingAction } from "./seda-configuration-action";
 import type {
   ActiveSedaFields,
+  SedaConfigurationState,
   SedaField,
   SedaMetadataMapping,
 } from "./seda-configuration-type";
 
-export const getSedaState = (state: StoreState) => state.sedaConfiguration;
+export const getSedaState = (state: StoreState): SedaConfigurationState =>
+  state.sedaConfiguration;
 
 interface SedaMetadata {
   content: string;

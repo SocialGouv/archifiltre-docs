@@ -137,8 +137,7 @@ jobs:
       - name: Replace version in package.json
         shell: bash
         run: |
-          yarn global add replace
-          $(yarn global bin)/replace '"version": "${{ needs.compile.outputs.current-version }}"' '"version": "${{ needs.compile.outputs.next-version }}"' package.json
+          yarn version "${{ needs.compile.outputs.next-version }}"
           yarn replaceForChannel
       ####### Activate only if windows msi build fail with "ICE error"
       # - name: Hack msi compilation

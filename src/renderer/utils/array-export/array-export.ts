@@ -1,6 +1,6 @@
 import type { HashesMap } from "@common/utils/hashes-types";
 import type { TFunction } from "i18next";
-import _, { flatten } from "lodash";
+import _, { flatten, identity } from "lodash";
 import { compose, cond, defaults, isObject, prop, stubTrue } from "lodash/fp";
 import { concat, from, interval, Observable } from "rxjs";
 import { map, take, tap, toArray } from "rxjs/operators";
@@ -116,12 +116,20 @@ const removeDuplicateCells = (
   ),
 });
 
+const shouldRemoveToDelete = (params: CsvExporterData & WithRowConfig) =>
+  params.elementsToDelete.length === 0;
+
 const removeToDeleteCells = (
   params: CsvExporterData & WithRowConfig
 ): CsvExporterData & WithRowConfig => ({
   ...params,
   rowConfig: params.rowConfig.filter(({ id }) => id !== "toDelete"),
 });
+
+const maybeRemoveToDeleteCells = cond([
+  [shouldRemoveToDelete, removeToDeleteCells],
+  [stubTrue, identity],
+]);
 
 const setDefaultHashesValue = <T>(params: T) =>
   defaults({ hashes: {} }, params);
@@ -160,7 +168,7 @@ export const exportToCsv: (input: CsvExporterData) => Observable<string[][]> =
     generateHeaderRow,
     prepareIdsToDelete,
     setDefaultHashesValue,
-    removeToDeleteCells,
+    maybeRemoveToDeleteCells,
     maybeRemoveDuplicates,
     addRowConfig
   );

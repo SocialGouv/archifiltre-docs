@@ -81,9 +81,11 @@ import {
   FileSystemLoadingStep,
   LoadingStep,
 } from "./loading-state/loading-state-types";
+import { initMetadataAction } from "./metadata/metadata-actions";
 import { clearActionReplayFile } from "./middleware/persist-actions-middleware";
 import { openModalAction } from "./modal/modal-actions";
 import { Modal } from "./modal/modal-types";
+import { initSedaMappingAction } from "./seda-configuration/seda-configuration-action";
 import { initializeTags, resetTags } from "./tags/tags-actions";
 import {
   setLockedElementId,
@@ -479,9 +481,11 @@ const initStore =
     filesAndFolders,
     filesAndFoldersMetadata,
     hashes,
+    metadata,
     originalPath,
     overrideLastModified,
     sessionName,
+    sedaConfiguration,
     tags,
     virtualPathToIdMap,
   }: VirtualFileSystem): ArchifiltreDocsThunkAction =>
@@ -493,6 +497,15 @@ const initStore =
 
     dispatch(initVirtualPathToIdMap(virtualPathToIdMap));
     dispatch(initOverrideLastModified(overrideLastModified));
+
+    if (metadata) {
+      dispatch(initMetadataAction(metadata));
+    }
+
+    if (sedaConfiguration) {
+      dispatch(initSedaMappingAction(sedaConfiguration.metadataMapping));
+    }
+
     /* eslint-disable @typescript-eslint/no-unnecessary-condition */
     if (hashes) {
       dispatch(setFilesAndFoldersHashes(hashes));

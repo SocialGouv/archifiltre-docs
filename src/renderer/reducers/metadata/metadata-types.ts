@@ -36,10 +36,16 @@ export interface MetadataState {
 }
 
 export const ADD_BATCH_METADATA_ACTION = "ADD_BATCH_METADATA_ACTION";
+export const INIT_METADATA_ACTION = "INIT_BATCH_METADATA_ACTION";
 
 export interface AddBatchMetadataAction extends Action {
   metadata: MetadataDto[];
   type: typeof ADD_BATCH_METADATA_ACTION;
 }
 
-export type MetadataAction = AddBatchMetadataAction;
+export interface InitMetadataAction extends Action {
+  context: SerializedMetadataContext;
+  type: typeof INIT_METADATA_ACTION;
+}
+
+export type MetadataAction = AddBatchMetadataAction | InitMetadataAction;

@@ -33,8 +33,8 @@ import type {
   FileSystemReporters,
   PartialFileSystem,
   VirtualFileSystem,
-  WithMetadata,
   WithResultHook,
+  WithWorkspaceMetadata,
 } from "./files-and-folders-loader-types";
 
 interface Overrides {
@@ -186,8 +186,8 @@ export const loadFileSystemFromFilesAndFoldersLoader = async (
   return compose<
     [PartialFileSystem],
     PartialFileSystem,
-    WithMetadata<PartialFileSystem>,
-    WithMetadata<PartialFileSystem>,
+    WithWorkspaceMetadata<PartialFileSystem>,
+    WithWorkspaceMetadata<PartialFileSystem>,
     VirtualFileSystem
   >(
     defaults({
@@ -207,7 +207,7 @@ export const loadFileSystemFromFilesAndFoldersLoader = async (
     }),
     (
       partialFileSystem: PartialFileSystem
-    ): WithMetadata<PartialFileSystem> => ({
+    ): WithWorkspaceMetadata<PartialFileSystem> => ({
       ...partialFileSystem,
       filesAndFoldersMetadata: createFilesAndFoldersMetadataDataStructure(
         partialFileSystem.filesAndFolders,

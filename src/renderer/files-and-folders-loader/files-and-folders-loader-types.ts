@@ -12,21 +12,25 @@ import type {
 } from "../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import type { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
+import type { SerializedMetadataContext } from "../reducers/metadata/metadata-types";
+import type { SedaConfigurationState } from "../reducers/seda-configuration/seda-configuration-type";
 import type { TagMap } from "../reducers/tags/tags-types";
 
-export type VirtualFileSystem = WithAliases &
+export type VirtualFileSystem = Partial<WithMetadata> &
+  Partial<WithSedaConfiguration> &
+  WithAliases &
   WithComments &
   WithElementsToDelete &
   WithFilesAndFolders &
   WithHashes &
   WithIsOnFileSystem &
-  WithMetadata &
   WithOriginalPath &
   WithOverrideLastModified &
   WithSessionName &
   WithTags &
   WithVersion &
-  WithVirtualPathToIdMap;
+  WithVirtualPathToIdMap &
+  WithWorkspaceMetadata;
 
 export type WithIsOnFileSystem<T = SimpleObject> = T & {
   isOnFileSystem: boolean;
@@ -44,12 +48,20 @@ export type WithElementsToDelete<T = SimpleObject> = T & {
   elementsToDelete: string[];
 };
 
-export type WithMetadata<T = SimpleObject> = T & {
+export type WithWorkspaceMetadata<T = SimpleObject> = T & {
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
 };
 
 export type WithAliases<T = SimpleObject> = T & {
   aliases: AliasMap;
+};
+
+export type WithMetadata<T = SimpleObject> = T & {
+  metadata: SerializedMetadataContext;
+};
+
+export type WithSedaConfiguration<T = SimpleObject> = T & {
+  sedaConfiguration: SedaConfigurationState;
 };
 
 export type WithComments<T = SimpleObject> = T & {
@@ -88,7 +100,9 @@ export type JsonFileInfo = PartialFileSystem &
   WithAliases &
   WithComments &
   WithHashes &
+  WithMetadata &
   WithOverrideLastModified &
+  WithSedaConfiguration &
   WithSessionName &
   WithVersion &
   WithVirtualPathToIdMap;

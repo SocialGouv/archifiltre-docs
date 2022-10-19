@@ -1,4 +1,5 @@
 export const SET_METADATA_MAPPING = "SEDA/SET_METADATA_MAPPING";
+export const INIT_METADATA_MAPPING = "SEDA/INIT_METADATA_MAPPING";
 
 export const sedaFields: SedaField[] = [
   "CustodialHistory",
@@ -29,4 +30,11 @@ interface SetMetadataMappingAction {
   type: typeof SET_METADATA_MAPPING;
 }
 
-export type SedaConfigurationAction = SetMetadataMappingAction;
+interface InitMetadataMappingAction {
+  mapping: SedaMetadataMapping;
+  type: typeof INIT_METADATA_MAPPING;
+}
+
+export type SedaConfigurationAction =
+  | InitMetadataMappingAction
+  | SetMetadataMappingAction;

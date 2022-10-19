@@ -4,6 +4,7 @@ import type {
 } from "./seda-configuration-type";
 import {
   INIT_METADATA_MAPPING,
+  RESET_METADATA_MAPPING,
   SET_METADATA_MAPPING,
 } from "./seda-configuration-type";
 
@@ -23,6 +24,10 @@ export const sedaConfigurationReducer = (
     case INIT_METADATA_MAPPING:
       return {
         metadataMapping: action.mapping,
+      };
+    case RESET_METADATA_MAPPING:
+      return {
+        ...initialState,
       };
     default:
       return state;

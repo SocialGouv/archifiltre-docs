@@ -4,6 +4,7 @@ import type {
 } from "./seda-configuration-type";
 import {
   INIT_METADATA_MAPPING,
+  RESET_METADATA_MAPPING,
   SET_METADATA_MAPPING,
 } from "./seda-configuration-type";
 
@@ -19,4 +20,8 @@ export const initSedaMappingAction = (
 ): SedaConfigurationAction => ({
   mapping,
   type: INIT_METADATA_MAPPING,
+});
+
+export const resetSedaMappingAction = (): SedaConfigurationAction => ({
+  type: RESET_METADATA_MAPPING,
 });

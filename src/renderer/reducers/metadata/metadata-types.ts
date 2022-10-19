@@ -37,6 +37,7 @@ export interface MetadataState {
 
 export const ADD_BATCH_METADATA_ACTION = "ADD_BATCH_METADATA_ACTION";
 export const INIT_METADATA_ACTION = "INIT_BATCH_METADATA_ACTION";
+export const RESET_METADATA_ACTION = "RESET_METADATA_ACTION";
 
 export interface AddBatchMetadataAction extends Action {
   metadata: MetadataDto[];
@@ -48,4 +49,11 @@ export interface InitMetadataAction extends Action {
   type: typeof INIT_METADATA_ACTION;
 }
 
-export type MetadataAction = AddBatchMetadataAction | InitMetadataAction;
+export interface ResetMetadataAction extends Action {
+  type: typeof RESET_METADATA_ACTION;
+}
+
+export type MetadataAction =
+  | AddBatchMetadataAction
+  | InitMetadataAction
+  | ResetMetadataAction;

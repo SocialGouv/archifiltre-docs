@@ -11,6 +11,7 @@ import { MetadataModalPreview } from "./MetadataModalPreview";
 import type {
   MetadataModalContext,
   MetadataModalState,
+  SimpleMetadataEvents,
 } from "./MetadataModalStateMachine";
 import { metadataModalMachine } from "./MetadataModalStateMachine";
 import type {
@@ -29,7 +30,7 @@ const getActionsByState = (state: MetadataModalState): ModalAction[] => {
   if (state.matches("importDropzone")) {
     return [
       {
-        id: "cancel",
+        id: "ABORT",
         label: "cancel",
       },
     ];
@@ -100,18 +101,8 @@ export const MetadataModalContainer: React.FC<ImportModalContainerProps> = ({
     });
   };
 
-  const onAction = (actionId: string) => {
-    if (actionId === "IMPORT") {
-      send("IMPORT");
-    }
-
-    if (actionId === "LOAD_METADATA") {
-      send("LOAD_METADATA");
-    }
-
-    if (actionId === "LOAD_METADATA") {
-      send("LOAD_METADATA");
-    }
+  const onAction = (actionId: SimpleMetadataEvents["type"]) => {
+    send(actionId);
   };
 
   const actions = getActionsByState(state);

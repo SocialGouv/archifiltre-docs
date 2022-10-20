@@ -21,11 +21,10 @@ export const MetadataModalView: FC<MetadataModalViewProps> = ({
   metadataList,
 }) => {
   const [mapping, setMapping] = useSedaMapping();
-  console.log(mapping);
+
   const onMappingChange =
     (metadataId: string): SedaPropertySelectorProps["onChange"] =>
     (field) => {
-      console.log(metadataId, field);
       setMapping({
         ...mapping,
         [metadataId]: field,

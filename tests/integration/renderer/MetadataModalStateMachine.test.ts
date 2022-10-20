@@ -1,4 +1,4 @@
-import { metadataModalMachine } from "@renderer/components/modals/MetadataModal/MetadataModalStateMachine";
+import { metadataModalMachine } from "@renderer/components/modals/MetadataModal/MetadataModalStateMachine/MetadataModalStateMachine";
 import { noop } from "lodash";
 import { interpret } from "xstate";
 

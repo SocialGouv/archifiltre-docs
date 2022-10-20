@@ -108,6 +108,12 @@ export const loadCsvFileToArray = async (
     ...options,
   });
 
+export const assertDelimiterIsValid = (config: LoadCsvFileToArrayOptions) => {
+  if (config.delimiter === "") {
+    throw new Error("Invalid Delimiter");
+  }
+};
+
 export const loadCsvFirstRowToArray = async (
   filePath: string,
   options?: LoadCsvFileToArrayOptions

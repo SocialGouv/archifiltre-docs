@@ -1,20 +1,21 @@
 import type { LoadCsvFileToArrayOptions } from "@common/utils/csv";
 
-import type { SimpleMetadataEvents } from "./MetadataModalStateMachine";
-
-export type ImportModalState = "importDropzone" | "importPreview" | "view";
-
 export interface MetadataImportConfig {
   entityIdKey: string;
   fields: string[];
 }
 
-export interface ModalAction {
-  id: SimpleMetadataEvents["type"];
-  label: string;
+export interface MetadataModalContext {
+  config: LoadCsvFileToArrayOptions;
+  fieldsConfig: MetadataImportConfig;
+  filePath: string;
+  firstRow: Record<string, string> | undefined;
 }
 
-export type FieldConfig = string;
+export interface ModalAction<T> {
+  id: T;
+  label: string;
+}
 
 export type FieldsConfigChangeHandler = (
   newConfig: MetadataImportConfig

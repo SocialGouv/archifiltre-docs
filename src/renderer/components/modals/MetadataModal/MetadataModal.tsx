@@ -3,10 +3,10 @@ import React from "react";
 
 import { MetadataModalFilePicker } from "./MetadataModalFilePicker";
 import { MetadataModalPreview } from "./MetadataModalPreview";
-import type { MetadataModalState } from "./MetadataModalStateMachine";
-import type {
-  FileConfigChangeHandler,
-  FilePathPickedHandler,
+import type { MetadataModalState } from "./MetadataModalStateMachine/Me
+tadataModalStateMachine";
+import type {,  FileConfigChangeHandle,,
+  FilePathPickedHand,er,
   MetadataLoadHandler,
 } from "./MetadataModalTypes";
 

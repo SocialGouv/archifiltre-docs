@@ -1,5 +1,7 @@
 import type { LoadCsvFileToArrayOptions } from "@common/utils/csv";
 
+import type { SimpleMetadataEvents } from "./MetadataModalStateMachine";
+
 export type ImportModalState = "importDropzone" | "importPreview" | "view";
 
 export interface MetadataImportConfig {
@@ -8,7 +10,7 @@ export interface MetadataImportConfig {
 }
 
 export interface ModalAction {
-  id: string;
+  id: SimpleMetadataEvents["type"];
   label: string;
 }
 

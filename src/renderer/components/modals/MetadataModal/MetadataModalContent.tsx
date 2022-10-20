@@ -9,6 +9,7 @@ import styled from "styled-components";
 
 import { useStyles } from "../../../hooks/use-styles";
 import { ModalHeader } from "../modal-header";
+import type { SimpleMetadataEvents } from "./MetadataModalStateMachine";
 import type { ModalAction } from "./MetadataModalTypes";
 
 interface ModalProps {
@@ -18,7 +19,7 @@ interface ModalProps {
 
 interface MetadataModalContentProps extends ModalProps {
   actions: ModalAction[];
-  onAction: (actionId: string) => void;
+  onAction: (actionId: SimpleMetadataEvents["type"]) => void;
 }
 
 const StyledPaper = styled(Paper)`

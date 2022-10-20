@@ -38,10 +38,7 @@ interface FieldsConfigChanged {
   type: "FIELDS_CONFIG_CHANGED";
 }
 
-type Events =
-  | ConfigChanged
-  | FieldsConfigChanged
-  | FilePathPicked
+export type SimpleMetadataEvents =
   | { type: "ABORT" }
   | { type: "CONTINUE" }
   | { type: "FULFIL" }
@@ -50,9 +47,18 @@ type Events =
   | { type: "REJECT" }
   | { type: "RETRY" };
 
-export type MetadataModalState = State<MetadataModalContext, Events>;
+export type MetadataEvents =
+  | ConfigChanged
+  | FieldsConfigChanged
+  | FilePathPicked
+  | SimpleMetadataEvents;
 
-export const metadataModalMachine = createMachine<MetadataModalContext, Events>(
+export type MetadataModalState = State<MetadataModalContext, MetadataEvents>;
+
+export const metadataModalMachine = createMachine<
+  MetadataModalContext,
+  MetadataEvents
+>(
   {
     context: {
       config: defaultConfig,
@@ -67,12 +73,13 @@ export const metadataModalMachine = createMachine<MetadataModalContext, Events>(
     predictableActionArguments: true,
     schema: {
       context: {} as MetadataModalContext,
-      events: {} as Events,
+      events: {} as MetadataEvents,
     },
     states: {
       importDropzone: {
         id: "importDropzone",
         on: {
+          ABORT: "metadataView",
           FILE_PATH_PICKED: {
             actions: assign<MetadataModalContext, FilePathPicked>({
               filePath: (context, event) => event.filePath,

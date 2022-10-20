@@ -11,10 +11,15 @@ interface ImportMetadataThunkOptions extends MetadataImportConfig {
   delimiter: string;
 }
 
+const ARCHIFILTRE_PATH_SEPARATOR = "/";
+
 const getIdFromRelativePath = (basePath: string) => {
   const rootDirectoryName = path.basename(basePath);
   return (elementPath: string) =>
-    path.join(`/${rootDirectoryName}`, elementPath);
+    path.posix.join(
+      `/${rootDirectoryName}`,
+      elementPath.split(path.sep).join(ARCHIFILTRE_PATH_SEPARATOR)
+    );
 };
 
 export const importMetadataThunk =

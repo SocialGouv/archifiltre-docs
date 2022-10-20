@@ -5,20 +5,14 @@ import { useMachine } from "../../../lib/@xstate/react/useMachine";
 import type { DispatchExts } from "../../../reducers/archifiltre-types";
 import { useMetadataList } from "../../../reducers/metadata/metadata-selector";
 import { importMetadataThunk } from "../../../reducers/metadata/metadata-thunk";
+import { MetadataDialogContent } from "./MetadataDialogContent";
+import { MetadataDialogFooter } from "./MetadataDialogFooter";
 import MetadataModalContent from "./MetadataModalContent";
 import { MetadataModalFilePicker } from "./MetadataModalFilePicker";
 import { MetadataModalPreview } from "./MetadataModalPreview";
-import type {
-  MetadataModalContext,
-  MetadataModalState,
-  SimpleMetadataEvents,
-} from "./MetadataModalStateMachine";
-import { metadataModalMachine } from "./MetadataModalStateMachine";
-import type {
-  FieldsConfigChangeHandler,
-  FileConfig,
-  ModalAction,
-} from "./MetadataModalTypes";
+import type { SimpleMetadataEvents } from "./MetadataModalStateMachine/MetadataModalStateMachine";
+import { metadataModalMachine } from "./MetadataModalStateMachine/MetadataModalStateMachine";
+import type { MetadataModalContext, ModalAction } from "./MetadataModalTypes";
 import { MetadataModalView } from "./MetadataModalView";
 
 interface ImportModalContainerProps {
@@ -26,36 +20,19 @@ interface ImportModalContainerProps {
   isModalOpen: boolean;
 }
 
-const getActionsByState = (state: MetadataModalState): ModalAction[] => {
-  if (state.matches("importDropzone")) {
-    return [
-      {
-        id: "ABORT",
-        label: "cancel",
-      },
-    ];
-  }
+const importDropzoneActions: ModalAction<SimpleMetadataEvents["type"]>[] = [
+  {
+    id: "ABORT",
+    label: "cancel",
+  },
+];
 
-  if (state.matches("importPreview.view")) {
-    return [
-      {
-        id: "LOAD_METADATA",
-        label: "loadMetadata",
-      },
-    ];
-  }
-
-  if (state.matches("metadataView")) {
-    return [
-      {
-        id: "IMPORT",
-        label: "loadMetadata",
-      },
-    ];
-  }
-
-  return [];
-};
+const metadataViewActions: ModalAction<SimpleMetadataEvents["type"]>[] = [
+  {
+    id: "IMPORT",
+    label: "loadMetadata",
+  },
+];
 
 export const MetadataModalContainer: React.FC<ImportModalContainerProps> = ({
   isModalOpen,
@@ -80,13 +57,6 @@ export const MetadataModalContainer: React.FC<ImportModalContainerProps> = ({
     },
   });
 
-  const onFileConfigChange = (config: FileConfig) => {
-    send({
-      config,
-      type: "CONFIG_CHANGED",
-    });
-  };
-
   const onFilePathPicked = (filePath: string) => {
     send({
       filePath,
@@ -94,42 +64,52 @@ export const MetadataModalContainer: React.FC<ImportModalContainerProps> = ({
     });
   };
 
-  const onFieldsConfigChange: FieldsConfigChangeHandler = (fieldsConfig) => {
+  const onRetry = () => send("RETRY");
+  const onLoadMetadata = (context: MetadataModalContext) =>
     send({
-      fieldsConfig,
-      type: "FIELDS_CONFIG_CHANGED",
+      context,
+      type: "LOAD_METADATA",
     });
-  };
 
   const onAction = (actionId: SimpleMetadataEvents["type"]) => {
     send(actionId);
   };
 
-  const actions = getActionsByState(state);
-
   return (
-    <MetadataModalContent
-      actions={actions}
-      closeModal={closeModal}
-      isModalOpen={isModalOpen}
-      onAction={onAction}
-    >
+    <MetadataModalContent isModalOpen={isModalOpen} closeModal={closeModal}>
       {state.matches("importDropzone") && (
-        <MetadataModalFilePicker onFilePicked={onFilePathPicked} />
+        <>
+          <MetadataDialogContent>
+            <MetadataModalFilePicker onFilePicked={onFilePathPicked} />
+          </MetadataDialogContent>
+          <MetadataDialogFooter
+            actions={importDropzoneActions}
+            closeModal={closeModal}
+            onAction={onAction}
+          />
+        </>
       )}
 
       {state.matches("importPreview") && (
         <MetadataModalPreview
-          onFieldsConfigChange={onFieldsConfigChange}
-          fieldsConfig={state.context.fieldsConfig}
-          metadataConfig={state.context.config}
-          metadataRow={state.context.firstRow}
-          onFileConfigChange={onFileConfigChange}
+          context={state.context}
+          onRetry={onRetry}
+          onLoadMetadata={onLoadMetadata}
+          closeModal={closeModal}
         />
       )}
 
       {state.matches("metadataView") && (
-        <MetadataModalView metadataList={metadataList} />
+        <>
+          <MetadataDialogContent>
+            <MetadataModalView metadataList={metadataList} />{" "}
+          </MetadataDialogContent>
+          <MetadataDialogFooter
+            actions={metadataViewActions}
+            closeModal={closeModal}
+            onAction={onAction}
+          />
+        </>
       )}
     </MetadataModalContent>
   );

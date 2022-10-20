@@ -1,46 +1,96 @@
-import type { LoadCsvFileToArrayOptions } from "@common/utils/csv";
 import Box from "@material-ui/core/Box";
 import type { FC } from "react";
 import React from "react";
 
-import type { ImportModalFieldsProps } from "./MetadataModalFields";
+import { useMachine } from "../../../lib/@xstate/react/useMachine";
+import { MetadataDialogContent } from "./MetadataDialogContent";
+import { MetadataDialogFooter } from "./MetadataDialogFooter";
 import { MetadataModalFields } from "./MetadataModalFields";
-import type { ImportModalOptionsProps } from "./MetadataModalOptions";
 import { MetadataModalOptions } from "./MetadataModalOptions";
 import MetadataModalPreviewHeader from "./MetadataModalPreviewHeader";
-import type { MetadataImportConfig } from "./MetadataModalTypes";
+import type { ImportPreviewSimpleEvents } from "./MetadataModalStateMachine/ImportPreviewStateMachine";
+import { importPreviewStateMachine } from "./MetadataModalStateMachine/ImportPreviewStateMachine";
+import type { MetadataModalContext } from "./MetadataModalStateMachine/MetadataModalStateMachine";
+import type {
+  FieldsConfigChangeHandler,
+  FileConfig,
+  ModalAction,
+} from "./MetadataModalTypes";
+
+const actions: ModalAction<ImportPreviewSimpleEvents["type"]>[] = [
+  {
+    id: "LOAD_METADATA",
+    label: "loadMetadata",
+  },
+];
 
 export interface ImportModalPreviewProps {
-  fieldsConfig: MetadataImportConfig;
-  metadataConfig: LoadCsvFileToArrayOptions;
-  metadataRow?: Record<string, string>;
-  onFieldsConfigChange: ImportModalFieldsProps["onFormChange"];
-  onFileConfigChange: ImportModalOptionsProps["onChange"];
+  closeModal: () => void;
+  context: MetadataModalContext;
+  onLoadMetadata: (context: MetadataModalContext) => void;
+  onRetry: () => void;
 }
 
 export const MetadataModalPreview: FC<ImportModalPreviewProps> = ({
-  fieldsConfig,
-  metadataConfig,
-  onFieldsConfigChange,
-  onFileConfigChange,
-  metadataRow,
-}) => (
-  <Box display="flex" flexDirection="column" height="100%">
-    <Box>
-      <MetadataModalOptions
-        options={metadataConfig}
-        onChange={onFileConfigChange}
+  context,
+  closeModal,
+  onRetry,
+  onLoadMetadata,
+}) => {
+  const [state, send] = useMachine(importPreviewStateMachine, { context });
+
+  const onFieldsConfigChange: FieldsConfigChangeHandler = (fieldsConfig) => {
+    send({
+      fieldsConfig,
+      type: "FIELDS_CONFIG_CHANGED",
+    });
+  };
+
+  const onFileConfigChange = (config: FileConfig) => {
+    send({
+      config,
+      type: "CONFIG_CHANGED",
+    });
+  };
+
+  const onAction = (type: ImportPreviewSimpleEvents["type"]) => {
+    send(type);
+
+    if (type === "RETRY") {
+      onRetry();
+    }
+    if (type === "LOAD_METADATA") {
+      onLoadMetadata(state.context);
+    }
+  };
+
+  return (
+    <>
+      <MetadataDialogContent>
+        <Box display="flex" flexDirection="column" height="100%">
+          <Box>
+            <MetadataModalOptions
+              options={state.context.config}
+              onChange={onFileConfigChange}
+            />
+          </Box>
+          <Box padding={2}>
+            <MetadataModalPreviewHeader />
+          </Box>
+          <Box>
+            <MetadataModalFields
+              formValues={state.context.fieldsConfig}
+              previewData={state.context.firstRow}
+              onFormChange={onFieldsConfigChange}
+            />
+          </Box>
+        </Box>
+      </MetadataDialogContent>
+      <MetadataDialogFooter
+        actions={actions}
+        closeModal={closeModal}
+        onAction={onAction}
       />
-    </Box>
-    <Box padding={2}>
-      <MetadataModalPreviewHeader />
-    </Box>
-    <Box>
-      <MetadataModalFields
-        formValues={fieldsConfig}
-        previewData={metadataRow}
-        onFormChange={onFieldsConfigChange}
-      />
-    </Box>
-  </Box>
-);
+    </>
+  );
+};

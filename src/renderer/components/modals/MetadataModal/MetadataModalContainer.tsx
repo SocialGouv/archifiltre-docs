@@ -86,11 +86,12 @@ export const MetadataModalContainer: React.FC<ImportModalContainerProps> = ({
     });
   };
 
-  const onFilePathPicked = (filePath: string) =>
+  const onFilePathPicked = (filePath: string) => {
     send({
       filePath,
       type: "FILE_PATH_PICKED",
     });
+  };
 
   const onFieldsConfigChange: FieldsConfigChangeHandler = (fieldsConfig) => {
     send({

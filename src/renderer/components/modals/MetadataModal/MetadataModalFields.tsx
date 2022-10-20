@@ -25,7 +25,6 @@ export const MetadataModalFields: FC<ImportModalFieldsProps> = ({
   onFormChange,
 }) => {
   const { t } = useTranslation();
-
   const isRowSelected = (rowName: string) =>
     formValues.fields.includes(rowName);
 

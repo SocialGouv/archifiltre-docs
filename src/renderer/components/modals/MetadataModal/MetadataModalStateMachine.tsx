@@ -133,6 +133,10 @@ export const metadataModalMachine = createMachine<MetadataModalContext, Events>(
                   MetadataModalContext,
                   DoneInvokeEvent<Record<string, string> | undefined>
                 >({
+                  fieldsConfig: (context, event) => ({
+                    entityIdKey: Object.keys(event.data ?? {})[0],
+                    fields: Object.keys(event.data ?? {}),
+                  }),
                   firstRow: (context, event) => event.data,
                 }),
                 target: "view",

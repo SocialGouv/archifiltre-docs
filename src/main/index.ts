@@ -112,6 +112,7 @@ const PRELOAD_PATH = path.resolve(RESOURCES_PATH, "preload.js");
 async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
+    show: false,
     webPreferences: {
       contextIsolation: false,
       defaultEncoding: "UTF-8",
@@ -119,6 +120,10 @@ async function createWindow() {
       nodeIntegrationInWorker: true,
       preload: PRELOAD_PATH,
     },
+  });
+
+  win.once("ready-to-show", () => {
+    win?.show();
   });
 
   loadWindow(win);

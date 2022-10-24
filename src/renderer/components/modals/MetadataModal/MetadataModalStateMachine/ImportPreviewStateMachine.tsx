@@ -21,7 +21,7 @@ import type {
 } from "../MetadataModalTypes";
 
 interface ConfigChanged {
-  config: CsvFileLoadingOptions;
+  config: MetadataFileConfig;
   type: "CONFIG_CHANGED";
 }
 
@@ -78,6 +78,10 @@ const saveFieldConfig = assign<MetadataModalContext, FieldsConfigChanged>({
   fieldsConfig: (context, event) => event.fieldsConfig,
 });
 
+const saveFileConfig = assign<MetadataModalContext, ConfigChanged>({
+  config: (context, event) => event.config,
+});
+
 export const importPreviewStateMachine = createMachine<
   MetadataModalContext,
   Events
@@ -129,8 +133,13 @@ export const importPreviewStateMachine = createMachine<
       },
       view: {
         on: {
+          CONFIG_CHANGED: {
+            actions: saveFileConfig,
+            target: "loading",
+          },
           FIELDS_CONFIG_CHANGED: {
             actions: saveFieldConfig,
+            target: "loading",
           },
           LOAD_METADATA: "import",
           RETRY: "retry",

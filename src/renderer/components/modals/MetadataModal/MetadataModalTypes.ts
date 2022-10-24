@@ -34,10 +34,4 @@ export type FieldsConfigChangeHandler = (
   newConfig: MetadataImportConfig
 ) => void;
 
-export type FilePathPickedHandler = (path: string) => void;
-
-export type FileConfig = CsvFileLoadingOptions;
-
-export type FileConfigChangeHandler = (fileConfig: FileConfig) => void;
-
-export type MetadataLoadHandler = (config: MetadataImportConfig) => void;
+export type FileConfigChangeHandler = (fileConfig: MetadataFileConfig) => void;

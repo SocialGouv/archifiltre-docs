@@ -12,7 +12,7 @@ import type { ImportPreviewSimpleEvents } from "./MetadataModalStateMachine/Impo
 import { importPreviewStateMachine } from "./MetadataModalStateMachine/ImportPreviewStateMachine";
 import type {
   FieldsConfigChangeHandler,
-  FileConfig,
+  MetadataFileConfig,
   MetadataModalContext,
   ModalAction,
 } from "./MetadataModalTypes";
@@ -46,7 +46,7 @@ export const MetadataModalPreview: FC<ImportModalPreviewProps> = ({
     });
   };
 
-  const onFileConfigChange = (config: FileConfig) => {
+  const onFileConfigChange = (config: MetadataFileConfig) => {
     send({
       config,
       type: "CONFIG_CHANGED",

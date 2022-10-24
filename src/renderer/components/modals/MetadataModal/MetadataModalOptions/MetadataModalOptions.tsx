@@ -7,6 +7,7 @@ import type {
   MetadataFileConfig,
 } from "../MetadataModalTypes";
 import { CsvMetadataModalOptions } from "./CsvMetadataModalOptions";
+import { XlsxMetadataModalOptions } from "./XlsxMetadataModalOptions";
 
 export interface ImportModalOptionsProps {
   onChange?: FileConfigChangeHandler;
@@ -21,5 +22,5 @@ export const MetadataModalOptions: FC<ImportModalOptionsProps> = ({
     return <CsvMetadataModalOptions options={options} onChange={onChange} />;
   }
 
-  return <div>Hello</div>;
+  return <XlsxMetadataModalOptions options={options} onChange={onChange} />;
 };

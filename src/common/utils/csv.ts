@@ -95,20 +95,20 @@ const readCsvPromise = async <TOptions extends parse.Options>(
   return loadedData;
 };
 
-export interface LoadCsvFileToArrayOptions {
+export interface CsvFileLoadingOptions {
   delimiter: string;
 }
 
 export const loadCsvFileToArray = async (
   filePath: string,
-  options: LoadCsvFileToArrayOptions
+  options: CsvFileLoadingOptions
 ): Promise<Record<string, string>[]> =>
   readCsvPromise(filePath, {
     ...csvBaseOptions,
     ...options,
   });
 
-export const assertDelimiterIsValid = (config: LoadCsvFileToArrayOptions) => {
+export const assertDelimiterIsValid = (config: CsvFileLoadingOptions) => {
   if (config.delimiter === "") {
     throw new Error("Invalid Delimiter");
   }
@@ -116,7 +116,7 @@ export const assertDelimiterIsValid = (config: LoadCsvFileToArrayOptions) => {
 
 export const loadCsvFirstRowToArray = async (
   filePath: string,
-  options?: LoadCsvFileToArrayOptions
+  options?: CsvFileLoadingOptions
 ): Promise<Record<string, string> | undefined> => {
   const metadata = await readCsvPromise(filePath, {
     ...csvBaseOptions,
@@ -135,9 +135,7 @@ type Delimiter = "," | ";" | "\t" | "|";
 const isValidParse = (rows: unknown[][]): boolean =>
   rows.every((row) => row.length === rows[0]?.length);
 
-const detectSeparator = async (
-  filePath: string
-): Promise<Delimiter | undefined> => {
+const detectSeparator = async (filePath: string): Promise<Delimiter> => {
   const rowsByDelimiter = await Promise.all(
     detectedDelimiter.map(async (delimiter) => {
       return {
@@ -157,11 +155,11 @@ const detectSeparator = async (
     return rows[0]?.length;
   });
 
-  return longestParse?.delimiter;
+  return longestParse?.delimiter ?? ";";
 };
 
 interface DetectedConfig {
-  delimiter?: Delimiter;
+  delimiter: Delimiter;
 }
 
 export const detectConfig = async (

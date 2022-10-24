@@ -6,14 +6,14 @@ import { useMachine } from "../../../lib/@xstate/react/useMachine";
 import { MetadataDialogContent } from "./MetadataDialogContent";
 import { MetadataDialogFooter } from "./MetadataDialogFooter";
 import { MetadataModalFields } from "./MetadataModalFields";
-import { MetadataModalOptions } from "./MetadataModalOptions";
+import { MetadataModalOptions } from "./MetadataModalOptions/MetadataModalOptions";
 import MetadataModalPreviewHeader from "./MetadataModalPreviewHeader";
 import type { ImportPreviewSimpleEvents } from "./MetadataModalStateMachine/ImportPreviewStateMachine";
 import { importPreviewStateMachine } from "./MetadataModalStateMachine/ImportPreviewStateMachine";
-import type { MetadataModalContext } from "./MetadataModalStateMachine/MetadataModalStateMachine";
 import type {
   FieldsConfigChangeHandler,
   FileConfig,
+  MetadataModalContext,
   ModalAction,
 } from "./MetadataModalTypes";
 

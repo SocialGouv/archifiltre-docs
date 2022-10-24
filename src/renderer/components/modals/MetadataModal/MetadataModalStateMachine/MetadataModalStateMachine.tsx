@@ -1,23 +1,23 @@
-import type { LoadCsvFileToArrayOptions } from "@common/utils/csv";
+import type { CsvFileLoadingOptions } from "@common/utils/csv";
 import {
   assertDelimiterIsValid,
   loadCsvFirstRowToArray,
 } from "@common/utils/csv";
+import { loadXlsxFirstRow } from "@common/utils/xlsx";
 import type { State } from "xstate";
 import { assign, createMachine } from "xstate";
 
 import { notifyError } from "../../../../utils/notifications";
-import type { MetadataImportConfig } from "../MetadataModalTypes";
+import { isCsvMetadataFileConfig } from "../MetadataModalCommon";
+import type {
+  CsvMetadataFileConfig,
+  MetadataImportConfig,
+  MetadataModalContext,
+} from "../MetadataModalTypes";
 
-export interface MetadataModalContext {
-  config: LoadCsvFileToArrayOptions;
-  fieldsConfig: MetadataImportConfig;
-  filePath: string;
-  firstRow: Record<string, string> | undefined;
-}
-
-const defaultConfig = {
+const defaultConfig: CsvMetadataFileConfig = {
   delimiter: ",",
+  type: "CSV",
 };
 
 interface FilePathPicked {
@@ -26,7 +26,7 @@ interface FilePathPicked {
 }
 
 interface ConfigChanged {
-  config: LoadCsvFileToArrayOptions;
+  config: CsvFileLoadingOptions;
   type: "CONFIG_CHANGED";
 }
 
@@ -142,8 +142,11 @@ export const metadataModalMachine = createMachine<
     },
     services: {
       loadMetadata: (context) => async () => {
-        assertDelimiterIsValid(context.config);
-        return loadCsvFirstRowToArray(context.filePath, context.config);
+        if (isCsvMetadataFileConfig(context.config)) {
+          assertDelimiterIsValid(context.config);
+          return loadCsvFirstRowToArray(context.filePath, context.config);
+        }
+        return loadXlsxFirstRow(context.filePath, context.config.selectedSheet);
       },
     },
   }

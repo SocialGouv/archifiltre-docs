@@ -8,7 +8,5 @@ export const IcicleMetadataSidebarContainer = () => {
   const entityId = useActiveElement();
   const metadata = useMetadataByEntityId(entityId);
 
-  console.log(metadata);
-
   return <IcicleMetadataSidebar metadata={metadata} />;
 };

@@ -45,8 +45,8 @@ export const MetadataModalContainer: React.FC<ImportModalContainerProps> = ({
   const loadMetadataService = (context: MetadataModalContext) => async () => {
     await dispatch(
       importMetadataThunk(context.filePath, {
-        ...context.fieldsConfig,
-        ...context.config,
+        fieldsConfig: context.fieldsConfig,
+        fileConfig: context.config,
       })
     );
   };

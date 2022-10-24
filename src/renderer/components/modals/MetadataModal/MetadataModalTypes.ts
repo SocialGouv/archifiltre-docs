@@ -1,4 +1,17 @@
-import type { LoadCsvFileToArrayOptions } from "@common/utils/csv";
+import type { CsvFileLoadingOptions } from "@common/utils/csv";
+import type { XlsxSheetName } from "@common/utils/xlsx";
+
+export type CsvMetadataFileConfig = CsvFileLoadingOptions & {
+  type: "CSV";
+};
+
+export interface XlsMetadataFileConfig {
+  selectedSheet: XlsxSheetName;
+  sheets: XlsxSheetName[];
+  type: "XLS";
+}
+
+export type MetadataFileConfig = CsvMetadataFileConfig | XlsMetadataFileConfig;
 
 export interface MetadataImportConfig {
   entityIdKey: string;
@@ -6,7 +19,7 @@ export interface MetadataImportConfig {
 }
 
 export interface MetadataModalContext {
-  config: LoadCsvFileToArrayOptions;
+  config: MetadataFileConfig;
   fieldsConfig: MetadataImportConfig;
   filePath: string;
   firstRow: Record<string, string> | undefined;
@@ -23,7 +36,7 @@ export type FieldsConfigChangeHandler = (
 
 export type FilePathPickedHandler = (path: string) => void;
 
-export type FileConfig = LoadCsvFileToArrayOptions;
+export type FileConfig = CsvFileLoadingOptions;
 
 export type FileConfigChangeHandler = (fileConfig: FileConfig) => void;
 

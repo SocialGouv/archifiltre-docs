@@ -1,4 +1,4 @@
-import type { LoadCsvFileToArrayOptions } from "@common/utils/csv";
+import type { CsvFileLoadingOptions } from "@common/utils/csv";
 import {
   Accordion,
   AccordionDetails,
@@ -13,35 +13,25 @@ import type { ChangeEventHandler, FC } from "react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import type { FileConfigChangeHandler } from "./MetadataModalTypes";
+import type { FileConfigChangeHandler } from "../MetadataModalTypes";
 
 export interface ImportModalOptionsProps {
   onChange?: FileConfigChangeHandler;
-  options?: LoadCsvFileToArrayOptions;
+  options?: CsvFileLoadingOptions;
 }
 
-export const MetadataModalOptions: FC<ImportModalOptionsProps> = ({
+export const CsvMetadataModalOptions: FC<ImportModalOptionsProps> = ({
   options,
   onChange = noop,
 }) => {
   const { t } = useTranslation();
 
-  function getValue<T extends keyof LoadCsvFileToArrayOptions>(
-    key: keyof LoadCsvFileToArrayOptions
-  ): LoadCsvFileToArrayOptions[T] | undefined {
-    return options?.[key];
-  }
-
-  function onValueChange<T extends keyof LoadCsvFileToArrayOptions>(
-    key: T
-  ): ChangeEventHandler<HTMLInputElement> {
-    return (event) => {
-      onChange({
-        ...options,
-        [key]: event.target.value,
-      });
-    };
-  }
+  const onDelimiterChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    onChange({
+      ...options,
+      delimiter: event.target.value,
+    });
+  };
 
   return (
     <Accordion>
@@ -53,9 +43,9 @@ export const MetadataModalOptions: FC<ImportModalOptionsProps> = ({
           <ListItem>
             <TextField
               label={t("importModal.delimiter")}
-              value={getValue("delimiter")}
+              value={options?.delimiter}
               name="delimiter"
-              onChange={onValueChange("delimiter")}
+              onChange={onDelimiterChange}
             />
           </ListItem>
         </List>

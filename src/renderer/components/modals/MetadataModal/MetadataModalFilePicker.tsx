@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { notifyError } from "../../../utils/notifications";
 import { Dropzone } from "../../common/dropzone";
 
-const importModalValidExtensions = ["csv"];
+const importModalValidExtensions = ["csv", "xlsx"];
 
 interface ImportModalFilePickerProps {
   onFilePicked: (filePath: string) => void;

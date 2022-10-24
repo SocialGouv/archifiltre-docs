@@ -1,17 +1,27 @@
-import type { LoadCsvFileToArrayOptions } from "@common/utils/csv";
+import type { CsvFileLoadingOptions } from "@common/utils/csv";
 import {
   assertDelimiterIsValid,
-  detectConfig,
   loadCsvFirstRowToArray,
 } from "@common/utils/csv";
+import { loadXlsxFirstRow } from "@common/utils/xlsx";
 import type { DoneInvokeEvent } from "xstate";
 import { assign, createMachine } from "xstate";
 
-import type { MetadataImportConfig } from "../MetadataModalTypes";
-import type { MetadataModalContext } from "./MetadataModalStateMachine";
+import {
+  detectCsvConfig,
+  detectXlsxConfig,
+  isCsvFile,
+  isCsvMetadataFileConfig,
+  isXlsxFile,
+} from "../MetadataModalCommon";
+import type {
+  MetadataFileConfig,
+  MetadataImportConfig,
+  MetadataModalContext,
+} from "../MetadataModalTypes";
 
 interface ConfigChanged {
-  config: LoadCsvFileToArrayOptions;
+  config: CsvFileLoadingOptions;
   type: "CONFIG_CHANGED";
 }
 
@@ -45,7 +55,7 @@ export type ImportPreviewFinalEvent = ImportFinalEvent | RetryFinalEvent;
 
 const saveDetectedConfig = assign<
   MetadataModalContext,
-  DoneInvokeEvent<Partial<LoadCsvFileToArrayOptions> | undefined>
+  DoneInvokeEvent<Partial<CsvFileLoadingOptions> | undefined>
 >({
   config: (context, event) => ({
     ...context.config,
@@ -131,13 +141,25 @@ export const importPreviewStateMachine = createMachine<
   {
     services: {
       detectConfig:
-        (context) => async (): Promise<Partial<LoadCsvFileToArrayOptions>> => {
-          return detectConfig(context.filePath);
+        ({ filePath }) =>
+        async (): Promise<MetadataFileConfig> => {
+          if (isCsvFile(filePath)) {
+            return detectCsvConfig(filePath);
+          }
+          if (isXlsxFile(filePath)) {
+            return detectXlsxConfig(filePath);
+          }
+          throw new Error("Unsupported file extension");
         },
-      loadPreview: (context) => async () => {
-        assertDelimiterIsValid(context.config);
-        return loadCsvFirstRowToArray(context.filePath, context.config);
-      },
+      loadPreview:
+        ({ filePath, config }) =>
+        async () => {
+          if (isCsvMetadataFileConfig(config)) {
+            assertDelimiterIsValid(config);
+            return loadCsvFirstRowToArray(filePath, config);
+          }
+          return loadXlsxFirstRow(filePath, config.selectedSheet);
+        },
     },
   }
 );

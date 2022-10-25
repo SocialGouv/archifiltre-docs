@@ -5,15 +5,9 @@ import { compose, cond, defaults, isObject, prop, stubTrue } from "lodash/fp";
 import { concat, from, interval, Observable } from "rxjs";
 import { map, take, tap, toArray } from "rxjs/operators";
 
-import type { GenerateCsvExportOptions } from "../../exporters/csv/csv-exporter.controller";
+import type { CsvExportData } from "../../exporters/csv/csv-exporter-types";
 import { ROOT_FF_ID } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import type {
-  AliasMap,
-  CommentsMap,
-  FilesAndFoldersMap,
-} from "../../reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { TagMap } from "../../reducers/tags/tags-types";
+import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 import { translations } from "../../translations/translations";
 import type { ResultMessage } from "../batch-process/types";
 import { MessageTypes } from "../batch-process/types";
@@ -21,16 +15,9 @@ import { getAllChildren } from "../file-and-folders";
 import type { CellConfig } from "./make-array-export-config";
 import { makeRowConfig } from "./make-array-export-config";
 
-interface CsvExporterData {
-  aliases: AliasMap;
-  comments: CommentsMap;
-  elementsToDelete: string[];
-  filesAndFolders: FilesAndFoldersMap;
-  filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
-  hashes?: HashesMap;
-  tags: TagMap;
+type CsvExporterData = CsvExportData & {
   translator: TFunction;
-}
+};
 
 interface WithRowConfig {
   rowConfig: CellConfig[];
@@ -143,7 +130,7 @@ const maybeRemoveDuplicates = cond([
 ]);
 
 const addRowConfig = (csvExporterData: CsvExporterData) => ({
-  rowConfig: makeRowConfig(csvExporterData.translator, csvExporterData.tags),
+  rowConfig: makeRowConfig(csvExporterData.translator, csvExporterData),
   ...csvExporterData,
 });
 
@@ -174,13 +161,13 @@ export const exportToCsv: (input: CsvExporterData) => Observable<string[][]> =
   );
 
 export const generateArrayExport$ = (
-  data: GenerateCsvExportOptions,
+  data: CsvExportData,
   outputFormatter: (matrix: string[][]) => string
 ): Observable<ResultMessage> => {
   return new Observable<ResultMessage>((subscriber) => {
     void exportToCsv({
       ...data,
-      elementsToDelete: data.elementsToDelete ?? [],
+      elementsToDelete: data.elementsToDelete,
       translator: translations.t.bind(translations),
     })
       .pipe(

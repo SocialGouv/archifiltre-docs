@@ -1,29 +1,30 @@
+import type { ObjectIterator } from "lodash";
 import { mapValues } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getMetadataByEntity } from "../metadata/metadata-operations";
 import { getMetadataContextFromState } from "../metadata/metadata-selector";
-import type { Metadata } from "../metadata/metadata-types";
+import type { Metadata, MetadataByEntity } from "../metadata/metadata-types";
 import type { StoreState } from "../store";
 import { setSedaMappingAction } from "./seda-configuration-action";
 import type {
   ActiveSedaFields,
   SedaConfigurationState,
   SedaField,
+  SedaMetadata,
+  SedaMetadataMap,
   SedaMetadataMapping,
 } from "./seda-configuration-type";
+import { sedaFields } from "./seda-configuration-type";
 
 export const getSedaState = (state: StoreState): SedaConfigurationState =>
   state.sedaConfiguration;
 
-interface SedaMetadata {
-  content: string;
-  entity: string;
-  id: number;
-  name: SedaField;
-}
+const isSedaField = (value: string): value is SedaField =>
+  sedaFields.includes(value as SedaField);
 
-type SedaMetadataMap = Record<string, SedaMetadata[]>;
+const isSedaMetadata = (value: Metadata): value is SedaMetadata =>
+  isSedaField(value.name);
 
 export const getMetadataMapping = (state: StoreState) =>
   getSedaState(state).metadataMapping;
@@ -34,14 +35,20 @@ export const getSedaMetadata = (state: StoreState): SedaMetadataMap => {
     getMetadataContextFromState(state)
   );
 
-  return mapValues(metadataByEntity, (metadatas: Metadata[]) =>
+  const updateMetadata: ObjectIterator<MetadataByEntity, SedaMetadata[]> = (
+    metadatas: Metadata[] | undefined
+  ) =>
     metadatas
-      .map((metadata) => ({
+      ?.map((metadata) => ({
         ...metadata,
-        name: mapping[metadata.name],
+        name: mapping[metadata.name] ?? "",
       }))
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      .filter(({ name }) => name !== undefined)
+      .filter(isSedaMetadata)
+      .filter(({ name }) => name) ?? [];
+
+  return mapValues<MetadataByEntity, SedaMetadata[]>(
+    metadataByEntity,
+    updateMetadata
   );
 };
 
@@ -52,6 +59,7 @@ export const getActiveSedaFields = (
   const tags = new Set<string>();
   Object.values(sedaMetadata)
     .flat()
+    .filter((metadata): metadata is SedaMetadata => metadata !== undefined)
     .forEach((metadata) => {
       if (metadata.name === "Tags") {
         tags.add(metadata.content);

@@ -3,8 +3,8 @@ import { translations } from "../../translations/translations";
 import { getCsvExportParamsFromStore } from "../../utils/array-export";
 import { handleFileExportThunk } from "../../utils/export";
 import { notifyInfo } from "../../utils/notifications";
-import type { GenerateCsvExportOptions } from "./csv-exporter.controller";
 import { generateCsvExport$ } from "./csv-exporter.controller";
+import type { CsvExportData } from "./csv-exporter-types";
 
 /**
  * Thunk that generates the csv array for the CSV export with the first line being
@@ -22,7 +22,7 @@ export const csvExporterThunk =
 
     const exportData = getCsvExportParamsFromStore(getState());
 
-    const data: GenerateCsvExportOptions = {
+    const data: CsvExportData = {
       ...exportData,
     };
 

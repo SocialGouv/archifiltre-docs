@@ -43,4 +43,4 @@ export const copy = <T extends SimpleObject>(a: T): T => ({ ...a });
 /**
  * To use instead of `object` or `{}`.
  */
-export type SimpleObject = Record<string, unknown>;
+export type SimpleObject<T = unknown> = Record<string, T | undefined>;

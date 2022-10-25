@@ -4,6 +4,7 @@ import type {
   EntityId,
   EntityMetadataIndex,
   Metadata,
+  MetadataByEntity,
   MetadataContext,
   MetadataDto,
   MetadataId,
@@ -188,8 +189,12 @@ export const getMetadataByEntityId = (
     .filter(isMetadata);
 };
 
-export const getMetadataList = (context: MetadataContext) => {
+export const getMetadataList = (context: MetadataContext): Metadata[] => {
   return uniqBy([...context.metadata.values()], "name");
+};
+
+export const getMetadataKeys = (context: MetadataContext): string[] => {
+  return getMetadataList(context).map(({ name }) => name);
 };
 
 export const deleteMetadata = (
@@ -254,7 +259,7 @@ export const recordsToMetadata = (
 
 export const getMetadataByEntity = (
   context: MetadataContext
-): Record<string, Metadata[]> => {
+): MetadataByEntity => {
   const metadataValues = [...context.metadata.values()];
 
   return groupBy(metadataValues, "entity");

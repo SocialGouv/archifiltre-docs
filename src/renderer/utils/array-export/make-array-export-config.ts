@@ -3,6 +3,7 @@ import type { TFunction } from "i18next";
 import { compose, constant, property, sortBy, toString } from "lodash/fp";
 import { extname } from "path";
 
+import type { CsvExportData } from "../../exporters/csv/csv-exporter-types";
 import {
   getDepthFromPath,
   isFile,
@@ -13,7 +14,9 @@ import type {
   FilesAndFolders,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { Tag, TagMap } from "../../reducers/tags/tags-types";
+import type { MetadataByEntity } from "../../reducers/metadata/metadata-types";
+import type { SedaMetadataMapping } from "../../reducers/seda-configuration/seda-configuration-type";
+import type { Tag } from "../../reducers/tags/tags-types";
 import { hasDuplicate } from "../duplicates";
 import { getType, isExactFileOrAncestor } from "../file-and-folders";
 import { formatPathForUserSystem } from "../file-system/file-sys-util";
@@ -144,6 +147,8 @@ type AccessorParams = FilesAndFolders &
     comments: CommentsMap;
   } & {
     idsToDelete: string[];
+  } & {
+    metadata: MetadataByEntity;
   } & { aliases: AliasMap } & { hashes: HashesMap };
 
 type Accessor = (params: AccessorParams) => string;
@@ -173,9 +178,32 @@ const makeTagsConfig = compose(
   sortBy<Tag>("name")
 );
 
+const getMetadataName = (
+  metadataName: string,
+  sedaMapping: SedaMetadataMapping
+) =>
+  sedaMapping[metadataName]
+    ? `${metadataName} (${sedaMapping[metadataName]})`
+    : metadataName;
+
+const makeMetdataConfig = ({
+  metadataKeys,
+  sedaMapping,
+}: CsvExportData): CellConfig[] => {
+  return metadataKeys.map(
+    (metadataName): CellConfig => ({
+      accessor: (params) =>
+        params.metadata[params.id]?.find(({ name }) => name === metadataName)
+          ?.content ?? "",
+      id: metadataName,
+      title: getMetadataName(metadataName, sedaMapping),
+    })
+  );
+};
+
 export const makeRowConfig = (
   translate: TFunction,
-  tags: TagMap
+  config: CsvExportData
 ): CellConfig[] => {
   const createCellConfig = makeCellConfigCreator(translate);
   return [
@@ -217,6 +245,7 @@ export const makeRowConfig = (
       })
     ),
     createCellConfig("toDelete", getToDeleteText(translate("common.toDelete"))),
-    ...makeTagsConfig(tags),
+    ...makeTagsConfig(config.tags),
+    ...makeMetdataConfig(config),
   ];
 };

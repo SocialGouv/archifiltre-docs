@@ -13,7 +13,8 @@ export interface SedaPropertySelectorProps {
 }
 
 const isSedaField = (value: unknown): value is SedaField =>
-  typeof value === "string" && (sedaFields as string[]).includes(value);
+  // @ts-expect-error type assertion
+  typeof value === "string" && sedaFields.includes(value);
 
 export const SedaPropertySelector: FC<SedaPropertySelectorProps> = ({
   onChange,

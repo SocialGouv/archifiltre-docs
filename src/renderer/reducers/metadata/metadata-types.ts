@@ -1,3 +1,4 @@
+import type { SimpleObject } from "@common/utils/object";
 import type { Action } from "redux";
 
 export type MetadataId = number;
@@ -26,6 +27,8 @@ export interface SerializedMetadataContext {
 }
 
 export type MetadataDto = Omit<Metadata, "id">;
+
+export type MetadataByEntity = SimpleObject<Metadata[]>;
 
 /*
  * Redux types

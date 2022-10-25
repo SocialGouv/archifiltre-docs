@@ -12,7 +12,7 @@ import type {
 } from "../../utils/batch-process/types";
 import { MessageTypes } from "../../utils/batch-process/types";
 import { computeTreeStructureArray } from "../../utils/tree-representation";
-import type { CsvExporterData } from "../csv/csv-exporter-types";
+import type { CsvExportData } from "../csv/csv-exporter-types";
 import type { CreateExcelWorkbookParams } from "./excel-exporter-common";
 import {
   CSV_EXPORT_PROGRESS_WEIGHT,
@@ -40,7 +40,7 @@ const createExcelWorkbook = (
 };
 
 export const generateExcelExport$ = (
-  data: CsvExporterData
+  data: CsvExportData
 ): Observable<ErrorMessage | ResultMessage> => {
   return new Observable<ErrorMessage | ResultMessage>((subscriber) => {
     const translator = translations.t.bind(translations);

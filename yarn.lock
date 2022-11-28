@@ -15361,10 +15361,10 @@ widest-line@^3.1.0:
   dependencies:
     string-width "^4.0.0"
 
-windows-1252@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/windows-1252/-/windows-1252-1.1.0.tgz#c9d7cb301f779322050f8c12454f277baeb9a98f"
-  integrity sha512-DuZvfW7bAFmIe7+eXkpGWV4SeJ0+HBlrCmFWc57vRcDZBwRomtjj7cnmbrb8UxwnWlxtRLi8W5q7kdku3hoJjw==
+windows-1252@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/windows-1252/-/windows-1252-3.0.4.tgz#b52b33296b2cd986dd0fac9bd2b24175c6f13eb3"
+  integrity sha512-PxP05UYnSeqhkkcHeT3xhpY/BsMOX6URw4ZW9ljOlhkQ6UZRRj/xvS3o5kG+fwefCztUtW36+DHBBNnWfXPIsw==
 
 winston-daily-rotate-file@^4.5.5:
   version "4.5.5"

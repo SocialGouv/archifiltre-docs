@@ -109,6 +109,7 @@ describe.skip("resip-exporter", () => {
           "EndDate",
           "TransactedDate",
           "CustodialHistory.CustodialHistoryItem",
+          "ArchivalAgencyArchiveUnitIdentifier",
           "Description",
           "Content.Tag.0",
         ],

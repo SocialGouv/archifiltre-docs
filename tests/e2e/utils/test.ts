@@ -39,6 +39,7 @@ export const startApp = async (
     },
     timeout: 120000,
   });
+
   await electronApp.evaluate(({ app }) => {
     return app.getAppPath();
   });

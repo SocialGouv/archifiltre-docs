@@ -87,7 +87,8 @@
       "winston-transport",
       "winston",
       "xlsx",
-      "xml"
+      "xml",
+      "xstate"
     ]
   },
   "//build.extraResources": "Static should be set again because it is overwritten",

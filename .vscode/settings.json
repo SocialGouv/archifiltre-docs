@@ -43,5 +43,8 @@
   "javascript.preferences.importModuleSpecifier": "project-relative",
   "files.associations": {
     ".env.dist": "dotenv"
-  }
+  },
+  "i18n-ally.localesPaths": [
+    "src/renderer/utils/language"
+  ]
 }

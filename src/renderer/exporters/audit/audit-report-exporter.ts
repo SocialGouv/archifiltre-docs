@@ -25,11 +25,7 @@ import {
 } from "../../utils/file-system/file-sys-util";
 import { openExternalElement } from "../../utils/file-system/file-system-util";
 import { FileType } from "../../utils/file-types";
-import {
-  NotificationDuration,
-  notifyInfo,
-  notifySuccess,
-} from "../../utils/notifications";
+import { notifyInfo, notifySuccess } from "../../utils/notifications";
 import type { AuditReportData } from "./audit-report-generator";
 import { generateAuditReportDocx } from "./audit-report-generator";
 import {
@@ -182,7 +178,8 @@ export const auditReportExporterThunk =
     notifySuccess(
       translations.t("export.auditReportSuccess"),
       translations.t("export.auditReportTitle"),
-      NotificationDuration.NORMAL,
-      async () => openExternalElement(name)
+      void 0,
+      async () => openExternalElement(name),
+      ["audit-report-export-success"]
     );
   };

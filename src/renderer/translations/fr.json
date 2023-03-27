@@ -260,6 +260,7 @@
     },
     "settingsModal": {
       "title": "Paramètres",
+      "close": "Fermer les paramètres",
       "language": "Langue",
       "privacy": "Confidentialité",
       "trackingData": "Données et statistiques d'utilisation",

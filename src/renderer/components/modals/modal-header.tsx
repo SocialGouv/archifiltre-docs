@@ -8,11 +8,16 @@ import { FaTimes } from "react-icons/fa";
 import { useStyles } from "../../hooks/use-styles";
 
 export interface ModalHeaderProps {
+  closeButtonAriaLabel?: string;
   onClose?: VoidFunction;
   title: string;
 }
 
-export const ModalHeader: React.FC<ModalHeaderProps> = ({ title, onClose }) => {
+export const ModalHeader: React.FC<ModalHeaderProps> = ({
+  title,
+  onClose,
+  closeButtonAriaLabel,
+}) => {
   const classes = useStyles();
   return (
     <MuiDialogTitle disableTypography>
@@ -22,6 +27,7 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({ title, onClose }) => {
           size="small"
           className={classes.closeButton}
           onClick={onClose}
+          aria-label={closeButtonAriaLabel}
         >
           <FaTimes />
         </IconButton>

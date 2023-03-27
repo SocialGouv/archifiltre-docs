@@ -1,6 +1,5 @@
 import type { ElectronApplication, Page } from "@playwright/test";
-import { expect, test } from "@playwright/test";
-import parseCsv from "csv-parse/lib/sync";
+import { test } from "@playwright/test";
 import fs from "fs";
 import path from "path";
 import { sync as rimrafSync } from "rimraf";
@@ -11,6 +10,7 @@ import {
   addTag,
   clickIcicleElement,
   makeExport,
+  waitForSuccessNotification,
 } from "./utils/app";
 import { closeApp, startApp } from "./utils/test";
 
@@ -20,12 +20,16 @@ const it = test;
 
 const TEST_TIMEOUT = 20000;
 
-const testFolderPath = path.resolve(__dirname, "../test-folder/");
-
 describe("Export deletion script", () => {
   test.use({ navigationTimeout: TEST_TIMEOUT });
 
+  let testFolderName = "";
+  let testFolderPath = "";
+
   beforeAll(async () => {
+    testFolderName = `deletion-script-export-${Date.now()}`;
+    testFolderPath = path.resolve(__dirname, "..", testFolderName);
+
     await createStructure({
       [testFolderPath]: {
         "child/": {
@@ -48,13 +52,13 @@ describe("Export deletion script", () => {
   });
 
   afterEach(async () => {
-    rimrafSync(path.join(testFolderPath, "..","test-folder-delete*.sh"));
+    rimrafSync(path.join(testFolderPath, "..", `${testFolderName}-delete*.sh`));
     await closeApp(app);
   });
 
   it("should generate a deletion script", async () => {
     test.slow();
-    
+
     const tag0Name = "tag0";
     const tag1Name = "tag1";
     const description = "element description";
@@ -62,7 +66,7 @@ describe("Export deletion script", () => {
     await win.waitForSelector(`[data-test-id="main-icicle"]`);
     await (await win.waitForSelector(".notification-success")).click();
 
-    await clickIcicleElement(win, "/test-folder/child/index.csv");
+    await clickIcicleElement(win, `/${testFolderName}/child/index.csv`);
 
     await addTag(win, tag0Name);
     await addTag(win, tag1Name);
@@ -71,14 +75,14 @@ describe("Export deletion script", () => {
     await makeExport(win, "DELETION");
 
     // Waiting for the CSV file to be created
-    await win.waitForSelector(`text=/Le script de suppression a été généré/`);
+    await waitForSuccessNotification(win, ".deletion-script-export-success");
 
     // Finding the CSV export file
     const exportFolderPath = path.join(__dirname, "..");
     const exportFolder = fs.readdirSync(exportFolderPath);
 
     const csvExportFilePath = exportFolder.find((folderName) =>
-      /test-folder-delete_/i.test(folderName)
+      new RegExp(`${testFolderName}-delete_`, "i").test(folderName)
     );
 
     if (csvExportFilePath === undefined) {

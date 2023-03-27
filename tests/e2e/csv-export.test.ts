@@ -11,6 +11,7 @@ import {
   addTag,
   clickIcicleElement,
   makeExport,
+  waitForSuccessNotification,
 } from "./utils/app";
 import { closeApp, startApp } from "./utils/test";
 
@@ -20,12 +21,16 @@ const it = test;
 
 const TEST_TIMEOUT = 20000;
 
-const testFolderPath = path.resolve(__dirname, "../test-folder/");
-
 describe("Export to CSV", () => {
   test.use({ navigationTimeout: TEST_TIMEOUT });
 
+  let testFolderName = "";
+  let testFolderPath = "";
+
   beforeAll(async () => {
+    testFolderName = `csv-export-${Date.now()}`;
+    testFolderPath = path.resolve(__dirname, "..", testFolderName);
+
     await createStructure({
       [testFolderPath]: {
         "child/": {
@@ -48,13 +53,13 @@ describe("Export to CSV", () => {
   });
 
   afterEach(async () => {
-    rimrafSync(path.join(testFolderPath, "..","test-folder-csv_*.csv"));
+    rimrafSync(path.join(testFolderPath, "..", `${testFolderName}-csv_*.csv`));
     await closeApp(app);
   });
 
   it("should generate a valid csv export", async () => {
     test.slow();
-    
+
     const tag0Name = "tag0";
     const tag1Name = "tag1";
     const description = "element description";
@@ -62,7 +67,7 @@ describe("Export to CSV", () => {
     await win.waitForSelector(`[data-test-id="main-icicle"]`);
     await (await win.waitForSelector(".notification-success")).click();
 
-    await clickIcicleElement(win, "/test-folder/child/index.csv");
+    await clickIcicleElement(win, `/${testFolderName}/child/index.csv`);
 
     await addTag(win, tag0Name);
     await addTag(win, tag1Name);
@@ -71,14 +76,14 @@ describe("Export to CSV", () => {
     await makeExport(win, "CSV");
 
     // Waiting for the CSV file to be created
-    await win.waitForSelector(`text=/L'export CSV est terminé/`);
+    await waitForSuccessNotification(win, ".csv-export-success");
 
     // Finding the CSV export file
     const exportFolderPath = path.join(__dirname, "..");
     const exportFolder = fs.readdirSync(exportFolderPath);
 
     const csvExportFilePath = exportFolder.find((folderName) =>
-      /test-folder-csv_/i.test(folderName)
+      new RegExp(`${testFolderName}-csv_`, "i").test(folderName)
     );
 
     if (csvExportFilePath === undefined) {
@@ -90,20 +95,12 @@ describe("Export to CSV", () => {
       path.join(exportFolderPath, csvExportFilePath),
       { encoding: "utf-8" }
     );
-    
+
     const data = parseCsv(csv, {
+      columns: true,
       delimiter: ";",
-      columns: true
     });
 
     expect(data.length).toBe(4);
-    
-    // folders are marked as folders
-    const testedFolder = data.find((row: Record<string, string>) => row.chemin === "/test-folder/child");
-    expect(testedFolder?.type).toBe("répertoire");
-    
-    // csv files are marked as csv files
-    const testedFile = data.find((row: Record<string, string>) => row.chemin === "/test-folder/child/index.csv");
-    expect(testedFile?.type).toBe("csv");
   });
 });

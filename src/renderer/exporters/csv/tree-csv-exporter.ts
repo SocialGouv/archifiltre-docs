@@ -34,6 +34,7 @@ export const treeCsvExporterThunk =
         exportFileName: name,
         exportNotificationTitle,
         exportSuccessMessage,
+        exportType: "tree-csv",
         loadedMessage,
         loaderMessage,
         totalProgress,

@@ -1,6 +1,5 @@
 import type { ElectronApplication, Page } from "@playwright/test";
-import { expect, test } from "@playwright/test";
-import parseCsv from "csv-parse/lib/sync";
+import { test } from "@playwright/test";
 import fs from "fs";
 import path from "path";
 import { sync as rimrafSync } from "rimraf";
@@ -11,6 +10,7 @@ import {
   addTag,
   clickIcicleElement,
   makeExport,
+  waitForSuccessNotification,
 } from "./utils/app";
 import { closeApp, startApp } from "./utils/test";
 
@@ -20,12 +20,15 @@ const it = test;
 
 const TEST_TIMEOUT = 20000;
 
-const testFolderPath = path.resolve(__dirname, "../test-folder/");
-
 describe("Export to tree CSV", () => {
   test.use({ navigationTimeout: TEST_TIMEOUT });
 
+  let testFolderName = "";
+  let testFolderPath = "";
+
   beforeAll(async () => {
+    testFolderName = `tree-csv-${Date.now()}`;
+    testFolderPath = path.resolve(__dirname, "..", testFolderName);
     await createStructure({
       [testFolderPath]: {
         "child/": {
@@ -48,13 +51,15 @@ describe("Export to tree CSV", () => {
   });
 
   afterEach(async () => {
-    rimrafSync(path.join(testFolderPath, "..","test-folder-treeCsv*.csv"));
+    rimrafSync(
+      path.join(testFolderPath, "..", `${testFolderName}-treeCsv*.csv`)
+    );
     await closeApp(app);
   });
 
   it("should generate a valid tree csv export", async () => {
     test.slow();
-    
+
     const tag0Name = "tag0";
     const tag1Name = "tag1";
     const description = "element description";
@@ -62,7 +67,7 @@ describe("Export to tree CSV", () => {
     await win.waitForSelector(`[data-test-id="main-icicle"]`);
     await (await win.waitForSelector(".notification-success")).click();
 
-    await clickIcicleElement(win, "/test-folder/child/index.csv");
+    await clickIcicleElement(win, `/${testFolderName}/child/index.csv`);
 
     await addTag(win, tag0Name);
     await addTag(win, tag1Name);
@@ -71,14 +76,13 @@ describe("Export to tree CSV", () => {
     await makeExport(win, "TREE_CSV");
 
     // Waiting for the CSV file to be created
-    await win.waitForSelector(`text=/L'export csv hiérarchisé est terminé/`);
+    await waitForSuccessNotification(win, ".tree-csv-export-success");
 
     // Finding the CSV export file
     const exportFolderPath = path.join(__dirname, "..");
     const exportFolder = fs.readdirSync(exportFolderPath);
-
     const treeCsvExportFilePath = exportFolder.find((folderName) =>
-      /test-folder-treeCsv_/i.test(folderName)
+      new RegExp(`${testFolderName}-treeCsv_`, "i").test(folderName)
     );
 
     if (treeCsvExportFilePath === undefined) {

@@ -41,7 +41,7 @@ export const csvExporterThunk =
     const exportSuccessMessage = translations.t(
       "export.csvExportSuccessMessage"
     );
-    console.log(data);
+
     const csvExportData$ = generateCsvExport$(data);
 
     return dispatch(
@@ -49,6 +49,7 @@ export const csvExporterThunk =
         exportFileName: name,
         exportNotificationTitle,
         exportSuccessMessage,
+        exportType: "csv",
         loadedMessage,
         loaderMessage,
         totalProgress,

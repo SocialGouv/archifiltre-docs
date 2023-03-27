@@ -18,6 +18,7 @@ interface ExportOptions {
   exportFileName: string;
   exportNotificationTitle: string;
   exportSuccessMessage: string;
+  exportType?: string;
   loadedMessage: string;
   loaderMessage: string;
   totalProgress: number;
@@ -36,6 +37,7 @@ export const handleFileExportThunk =
       exportNotificationTitle,
       exportFileName,
       exportSuccessMessage,
+      exportType = "export",
     }: ExportOptions
   ): ArchifiltreDocsThunkAction =>
   async (dispatch) => {
@@ -69,6 +71,7 @@ export const handleFileExportThunk =
       exportSuccessMessage,
       exportNotificationTitle,
       NotificationDuration.NORMAL,
-      async () => openExternalElement(exportFileName)
+      async () => openExternalElement(exportFileName),
+      [`${exportType}-export-success`]
     );
   };

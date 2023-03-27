@@ -14,11 +14,9 @@ export const openExportMenu = async (win: Page): Promise<void> => {
  */
 export const waitForSuccessNotification = async (
   win: Page,
-  notificationText: string
+  selector: string
 ): Promise<void> => {
-  await win.waitForSelector(
-    `.notification-success >> text=${notificationText}`
-  );
+  await win.waitForSelector(`.notification-success${selector}`);
 };
 
 /**
@@ -90,20 +88,55 @@ export const addDescription = async (
   await win.mouse.click(10, 10);
 };
 
-type ExportType = "RESIP" | "CSV" | "CSV_WITH_HASHES" | "AUDIT" | "EXCEL" | "TREE_CSV" | "DELETION";
+type ExportType =
+  | "AUDIT"
+  | "CSV_WITH_HASHES"
+  | "CSV"
+  | "DELETION"
+  | "EXCEL"
+  | "RESIP"
+  | "TREE_CSV";
 
 /**
  * Triggers an export
  */
-export const makeExport = async (win: Page, type: ExportType): Promise<void> => {
+export const makeExport = async (
+  win: Page,
+  type: ExportType
+): Promise<void> => {
   await openExportMenu(win);
-  const exportTypeSelector = `export-type-container-${type}`
+  const exportTypeSelector = `export-type-container-${type}`;
   await win
-    .locator(
-      `${makeTestIdSelector(
-        exportTypeSelector
-      )} input[type="checkbox"]`
-    )
+    .locator(`${makeTestIdSelector(exportTypeSelector)} input[type="checkbox"]`)
     .click();
   await getLocatorByTestId(win, "export-submit").click();
+};
+
+export const closeNotification = async (win: Page): Promise<void> => {
+  await win.locator(`button[aria-label="close"]`).click();
+};
+
+const openParams = async (win: Page): Promise<void> => {
+  await win.waitForSelector(`button[id="settings-button"]`);
+  await win.locator(`button[id="settings-button"]`).click();
+  await win.locator(`text=/Settings|Paramètres|Einstellungen/`).click();
+};
+
+type Language = "de" | "en" | "fr";
+
+const languageCloseAria = {
+  de: "Close settings",
+  en: "Close settings",
+  fr: "Fermer les paramètres",
+};
+
+export const setLanguage = async (
+  win: Page,
+  language: Language
+): Promise<void> => {
+  await openParams(win);
+  await win.selectOption("select", language);
+  await win
+    .locator(`button[aria-label="${languageCloseAria[language]}"]`)
+    .click();
 };

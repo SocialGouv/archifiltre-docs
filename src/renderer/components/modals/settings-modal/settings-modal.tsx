@@ -32,7 +32,11 @@ export const SettingsModal: React.FC<SettingModalProps> = ({
 
   return (
     <Dialog open={isModalOpen} onClose={closeModal} maxWidth="sm" fullWidth>
-      <ModalHeader title={t("settingsModal.title")} onClose={closeModal} />
+      <ModalHeader
+        title={t("settingsModal.title")}
+        onClose={closeModal}
+        closeButtonAriaLabel={t("settingsModal.close")}
+      />
       <DialogContent dividers>
         <Box display="flex">
           <Box>

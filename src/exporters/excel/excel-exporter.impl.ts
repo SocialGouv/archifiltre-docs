@@ -40,7 +40,10 @@ export type ExportToExcelParams = CsvExporterData;
 
 export const exportToExcel = async (
   worker: AsyncWorker,
-  params: ExportToExcelParams
+  {
+    elementsToDelete = [],
+    ...params
+  }: ExportToExcelParams
 ) => {
   const translator = translations.t.bind(translations);
   const treeCsv = await computeTreeStructureArray(params.filesAndFolders)
@@ -58,6 +61,7 @@ export const exportToExcel = async (
 
   const csvArray = await exportToCsv({
     ...params,
+    elementsToDelete,
     translator,
   })
     .pipe(

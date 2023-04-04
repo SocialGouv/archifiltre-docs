@@ -226,6 +226,8 @@ export const getBiggestDuplicatedFolders = (nbDuplicatedItems: number) => (
     .value();
 };
 
+let t = 0;
+
 /**
  * Returns true if a file and folder element has at least one duplicate, false otherwise
  * @param hashes - map of hashes of the file tree
@@ -234,12 +236,22 @@ export const getBiggestDuplicatedFolders = (nbDuplicatedItems: number) => (
 export const hasDuplicate = (
   hashes: HashesMap = {},
   fileOrFolder: FilesAndFolders
-) =>
-  _(hashes)
-    .omit(fileOrFolder.id)
-    .values()
-    .filter((hash) => hash !== null)
-    .some((hash) => hash === hashes[fileOrFolder.id]);
+) => {
+
+    const startTime = Date.now();
+    const val = _(hashes)
+        .omit(fileOrFolder.id)
+        .values()
+        .filter((hash) => hash !== null)
+        .some((hash) => hash === hashes[fileOrFolder.id]);
+
+    t += Date.now() - startTime;
+
+    console.log(t);
+
+    return val;
+}
+
 
 type Size = {
   size: number;

@@ -1,12 +1,12 @@
-import { ArchifiltreThunkAction } from "reducers/archifiltre-types";
+import {ArchifiltreThunkAction} from "reducers/archifiltre-types";
 import translations from "translations/translations";
-import { handleFileExportThunk } from "util/export/export-util";
-import { notifyInfo } from "util/notification/notifications-util";
-import {
-  generateCsvExport$,
-  GenerateCsvExportOptions,
-} from "./csv-exporter.controller";
-import { getCsvExportParamsFromStore } from "util/array-export/array-export-utils";
+import {handleFileExportThunk} from "util/export/export-util";
+import {notifyInfo} from "util/notification/notifications-util";
+import {GenerateCsvExportOptions,} from "./csv-exporter.controller";
+import {getCsvExportParamsFromStore} from "util/array-export/array-export-utils";
+import {Observable} from "rxjs";
+import {exportToCsvWithProgress} from "./csv-exporter.impl";
+import {MessageTypes, WorkerMessage} from "../../util/batch-process/batch-process-util-types";
 
 /**
  * Thunk that generates the csv array for the CSV export with the first line being
@@ -40,7 +40,25 @@ export const csvExporterThunk = (
 
   const exportSuccessMessage = translations.t("export.csvExportSuccessMessage");
 
-  const csvExportData$ = generateCsvExport$(data);
+
+  const csvExportData$ = new Observable(
+      subscriber => {
+          const notify = (message: WorkerMessage) => {
+              if (message.type === MessageTypes.COMPLETE) {
+                  subscriber.complete()
+                  return;
+              }
+              if (message.type === MessageTypes.RESULT) {
+                  subscriber.next(message)
+              }
+          }
+
+          exportToCsvWithProgress(
+              notify,
+              data
+          )
+      }
+  )
 
   return dispatch(
     handleFileExportThunk(csvExportData$, {

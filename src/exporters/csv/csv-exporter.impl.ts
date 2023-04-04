@@ -7,7 +7,7 @@ import {
 import { TagMap } from "reducers/tags/tags-types";
 import translations from "translations/translations";
 import { WorkerMessageHandler } from "util/async-worker/async-worker-util";
-import { MessageTypes } from "util/batch-process/batch-process-util-types";
+import {MessageTypes, WorkerMessage} from "util/batch-process/batch-process-util-types";
 import { arrayToCsv } from "util/csv/csv-util";
 import { HashesMap } from "reducers/hashes/hashes-types";
 import { exportToCsv } from "util/array-export/array-export";
@@ -19,7 +19,7 @@ export type CsvExporterData = {
   comments: CommentsMap;
   filesAndFolders: FilesAndFoldersMap;
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;
-  elementsToDelete: string[];
+  elementsToDelete?: string[];
   hashes?: HashesMap;
   tags: TagMap;
 };
@@ -79,3 +79,47 @@ export const onInitialize: WorkerMessageHandler = async (
     type: MessageTypes.COMPLETE,
   });
 };
+
+export const exportToCsvWithProgress = async (
+    notify: (message: WorkerMessage) => void,
+    {
+        aliases,
+        comments,
+        elementsToDelete = [],
+        filesAndFolders,
+        filesAndFoldersMetadata,
+        hashes,
+        tags,
+    }: CsvExporterData
+) => {
+    const array = await exportToCsv({
+        aliases,
+        comments,
+        elementsToDelete,
+        filesAndFolders,
+        filesAndFoldersMetadata,
+        hashes,
+        tags,
+        translator: translations.t.bind(translations),
+    })
+        .pipe(
+            tap((row) =>
+                notify({
+                    result: row.length,
+                    type: MessageTypes.RESULT,
+                })
+            ),
+            toArray()
+        )
+        .toPromise()
+        .then(flatten);
+
+    notify({
+        result: arrayToCsv(array),
+        type: MessageTypes.RESULT,
+    });
+
+    notify({
+        type: MessageTypes.COMPLETE,
+    });
+}

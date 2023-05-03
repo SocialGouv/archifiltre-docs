@@ -14,7 +14,21 @@
       "wrongJsonVersion": "Die Datei, die Sie abgelegt haben, ist nicht mit der gleichen Version von $t(common.productName) erstellt worden.",
       "error": "Fehler!",
       "errorsWhileLoading": "Ein Fehler ist beim Laden aufgetreten. Klicken Sie zum Überprüfen den Fehler-Log.",
-      "rootElementError": "$t(common.productNameShort) kann derzeitig kein Laufwerk oder Root-Verzeichnis lesen. Bitte legen Sie einen Unterordner an."
+      "rootElementError": "$t(common.productNameShort) kann derzeitig kein Laufwerk oder Root-Verzeichnis lesen. Bitte legen Sie einen Unterordner an.",
+      "almostDone": "Fast fertig!",
+      "updatePrivacySettings": "Datenschutzeinstellungen aktualisieren",
+      "contactUs": "Kontaktieren Sie uns",
+      "feedback": "Geben Sie uns Feedback",
+      "documentation": "Dokumentation",
+      "suggestFeature": "Eine Funktion vorschlagen",
+      "newDirectory": "Neues Verzeichnis",
+      "slug": "Visualisieren und verbessern Sie Ihre Dateibäume!",
+      "cancelLoading": "Laden abbrechen",
+      "cannotFindPath": "Ordnerpfad kann nicht gefunden werden",
+      "multipleFoldersDroppedErrorMessage": "$t(common.productNameShort) kann nicht mehrere Verzeichnisse gleichzeitig lesen",
+      "multipleFoldersDroppedErrorTitle": "Mehrere Ordner fallen gelassen",
+      "unexpectedError": "Unerwarteter Fehler",
+      "unexpectedErrorMessage": "Ein unerwarteter Fehler ist aufgetreten. Klicken Sie hier, um die Fehlerdetails zu kopieren."
     },
     "report": {
       "comments": "Kommentare",
@@ -50,7 +64,8 @@
       "medianExplanation": "Das ist das Datum, an dem die Hälfte der Dateien dieses Ordners geschlossen wurden. Es gibt genauso viele bearbeitete Elemente vor wie nach diesem Datum.",
       "noElementSelected": "Wählen Sie ein Element aus, um seine Eigenschaften zu sehen",
       "openElementErrorMessage": "$t(common.productNameShort) konnte das ausgewählte Element nicht öffnen",
-      "openElementErrorTitle": "Element wird geöffnet"
+      "openElementErrorTitle": "Element wird geöffnet",
+      "hashIconExplanation": "Dieses Symbol ist eine grafische Darstellung des Hashes dieses Elements"
     },
     "workspace": {
       "ordering": "Anordnung",
@@ -70,7 +85,8 @@
       "file": "Datei",
       "level": "Ebene",
       "impossibleMove": "Nicht möglich zu bewegen",
-      "cannotMoveElement": "Die Datei oder der Ordner kann hierher nicht verschoben werden.",
+      "cannotMoveToChild": "Ein Element kann nicht in eines seiner Kinder verschoben werden",
+      "cannotMoveToFile": "Ein Element kann nicht in eine Datei verschoben werden",
       "nameConflict": "Namenskonflikt mit einem anderen Ordnerelement",
       "moveElementsMode": "Bewegungsmodus",
       "general": "Allgemein",
@@ -81,7 +97,11 @@
       "show": "Anzeigen",
       "noOptions": "Keine Ergebnisse - Drücken Sie “Enter”, um einen neuen Tag hinzuzufügen",
       "tagItemTooltip": "Tag Nummer (Volumenprozent)",
-      "metadata": "Metadaten"
+      "metadata": "Metadaten",
+      "currentZoom": "Aktueller Zoom",
+      "zoomIn": "Vergrößern",
+      "zoomOut": "Verkleinern",
+      "resetZoom": "Zoom zurücksetzen"
     },
     "header": {
       "export": "Exportieren",
@@ -95,14 +115,17 @@
       "cancel": "Abbrechen",
       "csvWithHash": "CSV mit Hash-Werten",
       "csvWithHashDisabledMessage": "Bitte warten, bis die Hash-Werte berechnet wurden",
+      "metsDisabledMessage": "METS-Export hat einige Fehler und ist vorübergehend deaktiviert",
       "loadPreviousSessionButtonLabel": "Vorherige Sitzung laden",
       "help": "Hilfe",
       "undo": "Zurück",
-      "redo": "Wiederherstellen"
+      "redo": "Wiederherstellen",
+      "clearHistory": " Verlauf der letzten Sitzungen löschen"
     },
     "common": {
       "productName": "Docs von Archifiltre",
       "productNameShort": "Docs",
+      "exportActionTitle": "Exportieren",
       "error": "Ups! Ein Fehler ist aufgetreten.",
       "errorBack": "Zurück zum Startbildschirm.",
       "contactUs": "Hier klicken, um uns zu kontaktieren",
@@ -119,7 +142,13 @@
       "toDelete": "Zu löschen",
       "yes": "Ja",
       "no": "Nein",
+      "rowsPerPage": "Zeilen pro Seite",
+      "lastPage": "Letzte Seite",
+      "firstPage": "Erste Seite",
+      "nextPage": "Nächste Seite",
+      "previousPage": "Vorherige Seite",
       "files": "Datei(en)",
+      "folders": "Verzeichnis(e)",
       "fileTypes": {
         "presentation": "Präsentation",
         "publication": "Veröffentlichung",
@@ -131,10 +160,13 @@
         "audio": "Audio",
         "other": "Andere"
       },
-      "browse": "Stöbern"
+      "browse": "Stöbern",
+      "reload": "Speichern und neu laden",
+      "retry": "Wiederholen"
     },
     "hash": {
       "loadingInfoLabel": "Laden der Hash-Werte von Dateien und Ordnern",
+      "loadedInfoLabel": "Hashes von Dateien und Ordnern werden geladen",
       "loadingErrorMessage": "Beim Laden der Hash-Werte ist ein Fehler aufgetreten. Für Mehr Details können Sie die Protokolldatei prüfen.",
       "title": "Hash-Werte"
     },
@@ -145,7 +177,9 @@
       "extension": "Dateiendung",
       "size": "Größe (Byte)",
       "firstModified": "Erste Änderung",
+      "newFirstModified": "neue erste Änderung",
       "lastModified": "Letzte Änderung",
+      "newLastModified": "neu zuletzt geändert",
       "newPath": "Neuer Pfad",
       "newName": "Neuer Name",
       "description": "Beschreibung",
@@ -171,8 +205,24 @@
       "csvExportStartedMessage": "CSV-Export begonnen",
       "csvExportSuccessMessage": "CSV-Export beendet",
       "creatingCsvExport": "CSV-Exportdatei wird erstellt",
+      "createdCsvExport": "CSV-Exportdatei wurde erstellt",
       "creatingCsvExportWithHashes": "CSV-Exportdatei mit Hash-Wert wird erstellt",
-      "creatingResipExport": "RESIP-Exportdatei wird erstellt"
+      "createdCsvExportWithHashes": "CSV-Exportdatei mit Hashes wurde erstellt",
+      "creatingResipExport": "RESIP-Exportdatei wird erstellt",
+      "treeCsv": "Baum-CSV",
+      "excelExportProgressLabel": "Excel-Export erstellen",
+      "excelExportStartedMessage": "Excel-Export gestartet",
+      "excelExportSuccessMessage": "Excel-Export erfolgreich",
+      "excelExportTitle": "Excel-Export",
+      "treeStats": "Dateibaum-Statistik",
+      "treeVisualizing": "Dateibaum visualisieren",
+      "creatingTreeCsvExport": "Baum csv-Export erstellen",
+      "createdTreeCsvExport": "Baum csv exportiert", 
+      "deletionScript": "Löschungsskript",
+      "deletionScriptSuccessMessage": "Das Löschskript wurde erstellt. Klicken Sie hier, um es aufzurufen.",
+      "auditReportTitle": "Prüfbericht",
+      "auditReportStarted": "Der Export des Prüfberichts wurde gestartet",
+      "auditReportSuccess": "Der Export des Prüfberichts war erfolgreich."
     },
     "replay": {
       "title": "Vorherige Sitzung laden",
@@ -189,7 +239,10 @@
       "noResult": "Keine Ergebnisse",
       "page": "Seite",
       "tag": "Tag",
-      "noAvailableOption": "Option nicht verfügbar"
+      "noAvailableOption": "Option nicht verfügbar",
+      "visualizeElement": "Element visualisieren",
+      "exportNotificationTitle": "Export der Suchergebnisse",
+      "exportNotificationMessage": "CSV-Export erfolgreich."
     },
     "errorsModal": {
       "title": "Fehlerliste",
@@ -201,15 +254,32 @@
         "EBUSY": "Die Quelle ist besetzt und wird vielleicht von einem anderen Prozess benutzt. ",
         "EACCES": "Keine Zugriffsrechte auf diese Datei.",
         "UNKNOWN": "Unbekannter oder unbehandelter Fehler"
-      }
+    },
+      "exportNotificationTitle": "Fehler exportieren",
+      "exportNotificationMessage": "CSV-Export erfolgreich."
     },
     "settingsModal": {
       "title": "Einstellungen",
-      "language": "Sprache"
+      "language": "Sprache",
+      "privacy": "Datenschutz",
+      "trackingData": "Nutzungsdaten und Statistiken",
+      "monitoringData": "Technische Nutzungsdaten (helfen uns bei der Fehlersuche)",
+      "reloadExplanation": "Sie müssen die App neu laden, um neue Einstellungen zu übernehmen",
+      "about": "Über",
+      "website": "Website",
+      "wiki": "Wiki",
+      "contactUs": "Kontaktieren Sie uns: {{email}}"
     },
     "exportModal": {
       "title": "Export",
-      "buttonTitle": "Exportieren"
+      "buttonTitle": "Exportieren",
+      "EXCHANGE_WITH_ERMS": "Austausch mit einem ERMS",
+      "RECORDS_INVENTORY": "Aktenbestand",
+      "UTILITIES": "Dienstprogramme",
+      "AUDIT": "Prüfung",
+      "selectAll": "Alles auswählen",
+      "unselectAll": "Alle abwählen",
+      "browseAll": "Alles durchsuchen"
     },
     "audit": {
       "fileCountInfoTitle": "Dateianzahl im Dateibaum",

@@ -17,6 +17,8 @@ import type { TagMap } from "../../reducers/tags/tags-types";
 import { translations } from "../../translations/translations";
 import type { ResultMessage } from "../batch-process/types";
 import { MessageTypes } from "../batch-process/types";
+import type { DuplicatesMap } from "../duplicates";
+import { getDuplicatesMap } from "../duplicates";
 import { getAllChildren } from "../file-and-folders";
 import type { CellConfig } from "./make-array-export-config";
 import { makeRowConfig } from "./make-array-export-config";
@@ -104,6 +106,18 @@ const prepareIdsToDelete = <
   ),
 });
 
+const prepareDuplicateMap = <
+  T extends {
+    hashes: HashesMap;
+  }
+>(
+  params: T
+  // @ts-expect-error for testing purpose
+): T & { duplicatesMap: DuplicatesMap } => ({
+  ...params,
+  duplicatesMap: getDuplicatesMap(params.hashes),
+});
+
 const shouldDisplayDuplicates = (hashes?: HashesMap) =>
   isObject(hashes) && Object.keys(hashes).length > 0;
 
@@ -159,6 +173,7 @@ export const exportToCsv: (input: CsvExporterData) => Observable<string[][]> =
     computeExportRows,
     generateHeaderRow,
     prepareIdsToDelete,
+    prepareDuplicateMap,
     setDefaultHashesValue,
     removeToDeleteCells,
     maybeRemoveDuplicates,

@@ -14,7 +14,8 @@ import type {
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import type { Tag, TagMap } from "../../reducers/tags/tags-types";
-import { hasDuplicate } from "../duplicates";
+import type { DuplicatesMap } from "../duplicates";
+import { hasDuplicateInDuplicatesMap } from "../duplicates";
 import { getType, isExactFileOrAncestor } from "../file-and-folders";
 import { formatPathForUserSystem } from "../file-system/file-sys-util";
 
@@ -111,8 +112,16 @@ const getFileHash = ({ id, hashes }: { hashes: HashesMap; id: string }) =>
 
 const getHasDuplicateText =
   ({ yes, no }: { no: string; yes: string }) =>
-  ({ hashes, ...currentFf }: FilesAndFolders & { hashes: HashesMap }) =>
-    hasDuplicate(hashes, currentFf) ? yes : no;
+  ({
+    hashes,
+    duplicatesMap,
+    ...currentFf
+  }: FilesAndFolders & {
+    duplicatesMap: DuplicatesMap;
+  } & { hashes: HashesMap }) =>
+    hasDuplicateInDuplicatesMap(duplicatesMap, hashes[currentFf.id] ?? "")
+      ? yes
+      : no;
 
 const getTypeText =
   ({
@@ -211,6 +220,7 @@ export const makeRowConfig = (
     createCellConfig("hash", getFileHash),
     createCellConfig(
       "duplicate",
+      // @ts-expect-error for testing purpose
       getHasDuplicateText({
         no: translate("common.no"),
         yes: translate("common.yes"),

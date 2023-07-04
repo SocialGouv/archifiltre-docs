@@ -53,8 +53,10 @@ jobs:
           path: |
             ${{ env.WIN_CSC_LINK }}
             ${{ env.CSC_LINK }}
-      - name: Setup Node
-        uses: ./.github/actions/setup-node
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
         # >> NO Secrets
       - name: Temp NO_SECRETS as .env file
         run: |
@@ -143,8 +145,10 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ env.GITHUB_REF_OVERRIDE }}
-      - name: Setup Node
-        uses: ./.github/actions/setup-node
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
       - name: Yarn install
         run: |
           yarn config set network-timeout 300000
@@ -198,8 +202,10 @@ jobs:
           -regex ".*/bin/.*/archifiltre.*\.(exe|AppImage|dmg|msi|zip)$"
           -type f
           -exec bash -c "openssl dgst -sha512 {} > {}.sha512" \;
-      - name: Setup Node
-        uses: ./.github/actions/setup-node
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
       - name: Yarn install
         run: yarn --frozen-lockfile --perfer-offline
       - name: Import GPG key

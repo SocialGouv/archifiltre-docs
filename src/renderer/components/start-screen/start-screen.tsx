@@ -13,6 +13,7 @@ import { useModal } from "../../hooks/use-modal";
 import { savePreviousSession } from "../../persistence/previous-sessions";
 import type { FileSystemLoadingStep } from "../../reducers/loading-state/loading-state-types";
 import { Logo } from "../common/Logo";
+import { Version } from "../common/version";
 import { SettingsModal } from "../modals/settings-modal/settings-modal";
 import { LoadingBlock } from "./loading-block";
 import { StartScreenSidebar } from "./start-screen-sidebar";
@@ -97,6 +98,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
           <Box display="flex" flexDirection="column" alignItems="center">
             <Box pb={2}>
               <Logo height={40} />
+              <Version />
             </Box>
             <Typography variant="h3">{t("folderDropzone.slug")}</Typography>
           </Box>

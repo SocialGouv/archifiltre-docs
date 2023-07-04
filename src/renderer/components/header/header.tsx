@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 import type { ExportToJson } from "../../exporters/json/json-exporter";
 import { Logo } from "../common/Logo";
+import { Version } from "../common/version";
 import { TabsHeader } from "../main-space/workspace/tabs/tabs-header";
 import { MetadataModalButton } from "../modals/MetadataModal/MetadataModalButton";
 import { ExportButton } from "./export-button";
@@ -44,8 +45,14 @@ export const Header: React.FC<HeaderActionsProps> = ({
   return (
     <HeaderLine>
       <Box display="flex">
-        <Box display="flex" alignItems="center">
+        <Box
+          display="flex"
+          alignItems="flex-start"
+          justifyContent="flex-start"
+          flexDirection="column"
+        >
           <Logo height={30} />
+          <Version />
         </Box>
         <Box flexGrow={1} />
         <>

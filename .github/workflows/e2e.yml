@@ -56,8 +56,10 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v3
-      - name: Setup Node
-        uses: ./.github/actions/setup-node
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
       - name: Yarn install
         run: |
           yarn config set network-timeout 300000

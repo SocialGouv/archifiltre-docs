@@ -1,7 +1,7 @@
 {
   "name": "archifiltre-docs",
   "productName": "Docs par Archifiltre",
-  "version": "3.2.2",
+  "version": "4.0.0",
   "private": true,
   "description": "Visualisez et améliorez vos arborescences de fichiers !",
   "author": "Fabrique des ministères sociaux",

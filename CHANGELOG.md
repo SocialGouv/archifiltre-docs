@@ -1,3 +1,75 @@
+# [4.0.0](https://github.com/SocialGouv/archifiltre-docs/compare/v3.2.1...v4.0.0) (2023-07-07)
+
+
+### Bug Fixes
+
+* **artifacts:** add arch in win setup artifact ([3d62f35](https://github.com/SocialGouv/archifiltre-docs/commit/3d62f3533df3d7308fbfe55d6e6571433458c7b5))
+* **artifacts:** update win portable artifact name ([2c9d5dd](https://github.com/SocialGouv/archifiltre-docs/commit/2c9d5dd2a1e4329d7733792cec0fc99a22f9ec1d))
+* **auto-update:** remove auto update check in main during boot ([#1430](https://github.com/SocialGouv/archifiltre-docs/issues/1430)) ([22824db](https://github.com/SocialGouv/archifiltre-docs/commit/22824db88050431bacbbd988ed92689949456e9e))
+* **auto-update:** remove publish options in builder ([bd6e491](https://github.com/SocialGouv/archifiltre-docs/commit/bd6e491ea0e2b47d33cc359e45914c015e00339d))
+* **breadcrumb-tooltip:** remove interpolation string ([#1320](https://github.com/SocialGouv/archifiltre-docs/issues/1320)) ([3498b87](https://github.com/SocialGouv/archifiltre-docs/commit/3498b87eb007257a6235a1153550b4d178d9f719))
+* **breadcrumbs:** sliced breadcrumbs fixed ([#1351](https://github.com/SocialGouv/archifiltre-docs/issues/1351)) ([94a3100](https://github.com/SocialGouv/archifiltre-docs/commit/94a310097ba93b549ce0add15835172311ef3c5a))
+* **build:** fix workers build ([91cfa2e](https://github.com/SocialGouv/archifiltre-docs/commit/91cfa2e35fa2d80f2972025785554e70d9dde89a))
+* **ci:** lock node version to 14 in build ([b063370](https://github.com/SocialGouv/archifiltre-docs/commit/b0633709a02436de01892fb21b23e5d27347d19e))
+* **ci:** update ci and (no)secrets usage ([2d6b702](https://github.com/SocialGouv/archifiltre-docs/commit/2d6b7020b407978118cb0659b90dfc135b4e6a20))
+* **ci:** update ci node version ([030558a](https://github.com/SocialGouv/archifiltre-docs/commit/030558a8d8ddf4fca48d293e3cdfc0bf67849958))
+* compute folder hashes in main thread ([#1285](https://github.com/SocialGouv/archifiltre-docs/issues/1285)) ([c508199](https://github.com/SocialGouv/archifiltre-docs/commit/c508199fef781433a71b847da41d3fc50e97b3d4))
+* **csv-exporter:** add a map as cache ([b157f3b](https://github.com/SocialGouv/archifiltre-docs/commit/b157f3b4fd638668d659caefa8fb095dae003eb0))
+* **deps:** lock node version to 14 ([4a27497](https://github.com/SocialGouv/archifiltre-docs/commit/4a274979f5cbbdf45ec32d5372e4b0d97f72fab9))
+* **deps:** lock version for sass and css loaders ([#1346](https://github.com/SocialGouv/archifiltre-docs/issues/1346)) ([72ce220](https://github.com/SocialGouv/archifiltre-docs/commit/72ce220fa0f0b8a48c6a1d41920a9b1427a9688f))
+* **deps:** update all dependencies ([#1280](https://github.com/SocialGouv/archifiltre-docs/issues/1280)) ([1cee0a6](https://github.com/SocialGouv/archifiltre-docs/commit/1cee0a6aafdc07b3ba96faa230d0ad3fa7cf1b1f))
+* **deps:** update all dependencies ([#1283](https://github.com/SocialGouv/archifiltre-docs/issues/1283)) ([8e898a7](https://github.com/SocialGouv/archifiltre-docs/commit/8e898a7346fa120f5da6c3a3ed8192542be11729))
+* **deps:** update all dependencies ([#1295](https://github.com/SocialGouv/archifiltre-docs/issues/1295)) ([6b094dd](https://github.com/SocialGouv/archifiltre-docs/commit/6b094ddfd4d5615c1661ea764d514533772cdcb1))
+* **deps:** update dependency clean-webpack-plugin to v4 ([#1354](https://github.com/SocialGouv/archifiltre-docs/issues/1354)) ([75e9c74](https://github.com/SocialGouv/archifiltre-docs/commit/75e9c74a29edefb7fbd0c0f8603cd0347aeddd30))
+* **deps:** update dependency i18next to v20 ([#1311](https://github.com/SocialGouv/archifiltre-docs/issues/1311)) ([d4ac77d](https://github.com/SocialGouv/archifiltre-docs/commit/d4ac77dac0fe528eae934989cc3032a466144348))
+* **deps:** update dependency i18next to v21 ([#1355](https://github.com/SocialGouv/archifiltre-docs/issues/1355)) ([44c0c48](https://github.com/SocialGouv/archifiltre-docs/commit/44c0c481964f8e603a26bd1c2accc662d6491adb))
+* **deps:** update dependency jszip to v3.7.0 [security] ([#1324](https://github.com/SocialGouv/archifiltre-docs/issues/1324)) ([4b51b1d](https://github.com/SocialGouv/archifiltre-docs/commit/4b51b1d9f3b4ed5a8b3cf67df977d8e9fb25f2a4))
+* **deps:** update dependency react-i18next to ^11.11.0 ([#1281](https://github.com/SocialGouv/archifiltre-docs/issues/1281)) ([e7fd58e](https://github.com/SocialGouv/archifiltre-docs/commit/e7fd58ebff5b75303433673464ee6047c763eb03))
+* **deps:** update dependency react-icons to v4 ([#1312](https://github.com/SocialGouv/archifiltre-docs/issues/1312)) ([a8a1a74](https://github.com/SocialGouv/archifiltre-docs/commit/a8a1a74c8601a11b295a8d2831de4ae88e5018fe))
+* **deps:** update dependency windows-1252 to ^1.1.0 ([#1316](https://github.com/SocialGouv/archifiltre-docs/issues/1316)) ([e4f25e3](https://github.com/SocialGouv/archifiltre-docs/commit/e4f25e3664eb077402fb7222414552bf6480aafb))
+* **deps:** update dependency xlsx to ^0.17.0 [security] ([#1299](https://github.com/SocialGouv/archifiltre-docs/issues/1299)) ([d674607](https://github.com/SocialGouv/archifiltre-docs/commit/d6746071cdb9f34555371c09bc3805de2497459f))
+* **deps:** update dependency yargs to v17 ([#1338](https://github.com/SocialGouv/archifiltre-docs/issues/1338)) ([e53b096](https://github.com/SocialGouv/archifiltre-docs/commit/e53b09685fc9b661b8feaeb25b03459b155ecdc6))
+* **display:** change file count / level font size in audit tab. Fix [#1397](https://github.com/SocialGouv/archifiltre-docs/issues/1397) ([d45c1dd](https://github.com/SocialGouv/archifiltre-docs/commit/d45c1dd3b17e2d7d76ab56f915c38b37e1edb9fe))
+* **display:** fix breadcrumb height. Fix [#1395](https://github.com/SocialGouv/archifiltre-docs/issues/1395) ([7d87344](https://github.com/SocialGouv/archifiltre-docs/commit/7d873443f2d2749b00c71384f53e89bf11e3c1fe))
+* **e2e:** shush ubuntu as playwright deps not working for now ([04821b8](https://github.com/SocialGouv/archifiltre-docs/commit/04821b8958255ef6ab7256ff6205a5ba0813cade))
+* **export:** fix resip export ([1a5c973](https://github.com/SocialGouv/archifiltre-docs/commit/1a5c973b9a8383ccd967b682be546e1d50731d9c))
+* **exports:** fix csv/excel exports by removing workers ([#1464](https://github.com/SocialGouv/archifiltre-docs/issues/1464)) ([1dafcca](https://github.com/SocialGouv/archifiltre-docs/commit/1dafcca1c15ab413a8690b61f62593676b1a89ab))
+* fix husky not launching ([#1273](https://github.com/SocialGouv/archifiltre-docs/issues/1273)) ([a9c982c](https://github.com/SocialGouv/archifiltre-docs/commit/a9c982cad0eb03df09c77040483a4289bcd34c8e))
+* hash compute again ([#1372](https://github.com/SocialGouv/archifiltre-docs/issues/1372)) ([e553362](https://github.com/SocialGouv/archifiltre-docs/commit/e553362fcbd5174e43d53a711a31e7e6748e298f))
+* **hash:** fix windows specific file hash with correct path ([#1394](https://github.com/SocialGouv/archifiltre-docs/issues/1394)) ([de8cf00](https://github.com/SocialGouv/archifiltre-docs/commit/de8cf00d82ff8ce0141b6bba5ebd7f0044de6354))
+* **hash:** move hash computing to main thread ([#1363](https://github.com/SocialGouv/archifiltre-docs/issues/1363)) ([b2e1fa9](https://github.com/SocialGouv/archifiltre-docs/commit/b2e1fa989323582ce67a8447b48358e558939db1))
+* **i18n:** use good interpolate. Fix [#1396](https://github.com/SocialGouv/archifiltre-docs/issues/1396) ([8e9f45d](https://github.com/SocialGouv/archifiltre-docs/commit/8e9f45dee84f2ddfa8c7150c61ad1355b7025562))
+* improve startup speed and exports crashing on windows ([#1450](https://github.com/SocialGouv/archifiltre-docs/issues/1450)) ([69dddec](https://github.com/SocialGouv/archifiltre-docs/commit/69dddec4c5b8264cf4d77c1816b39a625eb980b6))
+* installer id ([9edd3f6](https://github.com/SocialGouv/archifiltre-docs/commit/9edd3f621123a0a93dc2bd3d0b84ad45997c1de8))
+* **lint:** reenable eslint ([#1368](https://github.com/SocialGouv/archifiltre-docs/issues/1368)) ([6579533](https://github.com/SocialGouv/archifiltre-docs/commit/6579533a9e2617655da8d360f8475725fd7e6b95))
+* **load-filesystem.sh:** support paths with spaces ([#1358](https://github.com/SocialGouv/archifiltre-docs/issues/1358)) ([c4a61d8](https://github.com/SocialGouv/archifiltre-docs/commit/c4a61d8977372f3a6f5787d870cffaebe80dca21))
+* **modal:** increment display time ([#1301](https://github.com/SocialGouv/archifiltre-docs/issues/1301)) ([a0855ec](https://github.com/SocialGouv/archifiltre-docs/commit/a0855ec47a3da1dc1f423515f0d99f95c6bb4f74))
+* **release:** adapt windows installer for release channels ([57e4e20](https://github.com/SocialGouv/archifiltre-docs/commit/57e4e20ade0328e0f185e1ce1ef7735bdf17a674))
+* **release:** change default windows install path ([#1474](https://github.com/SocialGouv/archifiltre-docs/issues/1474)) ([bf3172f](https://github.com/SocialGouv/archifiltre-docs/commit/bf3172f521e29c214b2d6b41a437647418fcad31))
+* **release:** change installer and uninstaller ico files ([44f322f](https://github.com/SocialGouv/archifiltre-docs/commit/44f322f72cea045b94cb6fa39b36dbeb16c472cb))
+* **release:** fix asset replacer script ([ee47fd1](https://github.com/SocialGouv/archifiltre-docs/commit/ee47fd12f9da23457bbb327876ae5cc5cc56ad6d))
+* **release:** fix repository url ([2985c19](https://github.com/SocialGouv/archifiltre-docs/commit/2985c19cb25d9a3d6f343dd1f6142623f56929fc))
+* **resip-test:** skip test during investigation ([#1496](https://github.com/SocialGouv/archifiltre-docs/issues/1496)) ([b00a075](https://github.com/SocialGouv/archifiltre-docs/commit/b00a075cf40ba4f9e10d36408f6118f0f5428efb))
+* **tags:** fix tags library not being displayed ([#1468](https://github.com/SocialGouv/archifiltre-docs/issues/1468)) ([70d7e0d](https://github.com/SocialGouv/archifiltre-docs/commit/70d7e0d70ef14096edaaeccaa56595610298f54b))
+* **tests:** fix tests poorly using i18n ([5eb808f](https://github.com/SocialGouv/archifiltre-docs/commit/5eb808fec31de2f237d996ea9b882f415ac01eb0))
+* **to-delete:** fix undo after to delete. Fix [#1398](https://github.com/SocialGouv/archifiltre-docs/issues/1398) ([c79c539](https://github.com/SocialGouv/archifiltre-docs/commit/c79c5394f952cd6033877c93176ab093d8b5101e))
+
+
+### Features
+
+* **exporters:** add is loaded label ([#1302](https://github.com/SocialGouv/archifiltre-docs/issues/1302)) ([260f7dc](https://github.com/SocialGouv/archifiltre-docs/commit/260f7dcdcfb0ca76fcb40d18a4d1713ca9184efe))
+* **icicle:** add folder's count on ruler ([#1265](https://github.com/SocialGouv/archifiltre-docs/issues/1265)) ([083b041](https://github.com/SocialGouv/archifiltre-docs/commit/083b04125288af1d6bfe57137a37c45d441f3200))
+* **import:** add additionnal metadata import feature ([#1462](https://github.com/SocialGouv/archifiltre-docs/issues/1462)) ([c4291aa](https://github.com/SocialGouv/archifiltre-docs/commit/c4291aa981c3bdaa0f6ee458954c2c616fd9902b))
+* Prepare beta ([#1422](https://github.com/SocialGouv/archifiltre-docs/issues/1422)) ([89a296f](https://github.com/SocialGouv/archifiltre-docs/commit/89a296f8550605e95870981ff477093d413e6fdf))
+* **ruler:** add total folder count ([#1339](https://github.com/SocialGouv/archifiltre-docs/issues/1339)) ([e55d6a4](https://github.com/SocialGouv/archifiltre-docs/commit/e55d6a418533c0c725e10c629c1a440fa8c0e9fe))
+* **search-filter:** add to delete tag to search filter ([#1272](https://github.com/SocialGouv/archifiltre-docs/issues/1272)) ([a163221](https://github.com/SocialGouv/archifiltre-docs/commit/a163221f96f1de44f98c37ffa4ea24e55363c506))
+* **version:** add app version in main views ([#1540](https://github.com/SocialGouv/archifiltre-docs/issues/1540)) ([c97fec9](https://github.com/SocialGouv/archifiltre-docs/commit/c97fec989dc7ac4f2d5fd3bf11e29ae88e7a5fd5))
+
+
+### BREAKING CHANGES
+
+* go for v4
+
 ## [3.2.2](https://github.com/SocialGouv/archifiltre-docs/compare/v3.2.1...v3.2.2) (2021-09-22)
 
 

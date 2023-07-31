@@ -198,6 +198,17 @@ export const countDuplicateFilesTotalSize: Merger<
   getFilesDuplicatesMap
 );
 
+export const getDuplicatesMap = (hashes: HashesMap) => {
+  return _.invertBy(hashes);
+};
+
+export const hasDuplicateInDuplicatesMap = (
+  duplicatesMap: DuplicatesMap,
+  hash: string
+) => {
+  return duplicatesMap[hash].length > 1;
+};
+
 /**
  * Get the duplicated files where the duplicates take the most space
  * @param nbDuplicatedItems

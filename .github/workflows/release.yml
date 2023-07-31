@@ -11,10 +11,10 @@ on:
   workflow_dispatch:
 
 env:
-  GIT_AUTHOR_EMAIL: socialgroovybot@fabrique.social.gouv.fr
-  GIT_AUTHOR_NAME: SocialGroovyBot
-  GIT_COMMITTER_EMAIL: socialgroovybot@fabrique.social.gouv.fr
-  GIT_COMMITTER_NAME: SocialGroovyBot
+  GIT_AUTHOR_EMAIL: ${{ secrets.SOCIALGROOVYBOT_EMAIL }}
+  GIT_AUTHOR_NAME: ${{ secrets.SOCIALGROOVYBOT_NAME }}
+  GIT_COMMITTER_EMAIL: ${{ secrets.SOCIALGROOVYBOT_EMAIL }}
+  GIT_COMMITTER_NAME: ${{ secrets.SOCIALGROOVYBOT_NAME }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   WIN_CSC_LINK: ${{ github.workspace }}/certwin.p12
   CSC_LINK: ${{ github.workspace }}/certmac.p12
@@ -53,8 +53,25 @@ jobs:
           path: |
             ${{ env.WIN_CSC_LINK }}
             ${{ env.CSC_LINK }}
-      - name: Setup Node
-        uses: ./.github/actions/setup-node
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+        # >> NO Secrets
+      - name: Temp NO_SECRETS as .env file
+        run: |
+          touch ${{ github.run_id }}_${{ github.sha }}.env
+          echo "${{ secrets.NO_SECRETS }}" >> ${{ github.run_id }}_${{ github.sha }}.env
+      - name: Convert dotenv as output
+        id: nosecrets
+        uses: falti/dotenv-action@v1
+        with:
+          path: ${{ github.run_id }}_${{ github.sha }}.env
+          log-variables: true
+          mask-variables: false
+      - name: Remove temp .env file
+        run: rm -rf ${{ github.run_id }}_${{ github.sha }}.env
+        # << NO Secrets
       - name: Yarn install
         run: yarn --frozen-lockfile --perfer-offline
       - name: Import GPG key
@@ -79,14 +96,14 @@ jobs:
           yarn compile --no-progress
         env:
           ARCHIFILTRE_RELEASE_MODE: version
-          TRACKER_MATOMO_ID_SITE: ${{ secrets.TRACKER_MATOMO_ID_SITE }}
+          TRACKER_MATOMO_ID_SITE: ${{ steps.nosecrets.outputs.tracker_matomo_id_site }}
+          TRACKER_PROVIDER: ${{ steps.nosecrets.outputs.tracker_provider }}
+          SENTRY_ORG: ${{ steps.nosecrets.outputs.sentry_org }}
           TRACKER_MATOMO_URL: ${{ secrets.TRACKER_MATOMO_URL }}
-          TRACKER_PROVIDER: ${{ secrets.TRACKER_PROVIDER }}
           TRACKER_POSTHOG_API_KEY: ${{ secrets.TRACKER_POSTHOG_API_KEY }}
           TRACKER_POSTHOG_URL: ${{ secrets.TRACKER_POSTHOG_URL }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
           ARCHIFILTRE_SITE_URL: ${{ secrets.ARCHIFILTRE_SITE_URL }}
           FORCE_TRACKING: false
@@ -128,8 +145,10 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ env.GITHUB_REF_OVERRIDE }}
-      - name: Setup Node
-        uses: ./.github/actions/setup-node
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
       - name: Yarn install
         run: |
           yarn config set network-timeout 300000
@@ -183,8 +202,10 @@ jobs:
           -regex ".*/bin/.*/archifiltre.*\.(exe|AppImage|dmg|msi|zip)$"
           -type f
           -exec bash -c "openssl dgst -sha512 {} > {}.sha512" \;
-      - name: Setup Node
-        uses: ./.github/actions/setup-node
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
       - name: Yarn install
         run: yarn --frozen-lockfile --perfer-offline
       - name: Import GPG key

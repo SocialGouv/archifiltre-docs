@@ -43,6 +43,16 @@ replace({
   silent: true,
 });
 
+const appIdReplacement = `"appId": "fr.gouv.social.fabrique.archifiltre.$1-${channel}"`;
+console.log("[ReplaceForChannel] Replacing app id with", appIdReplacement);
+replace({
+  paths: [packageJsonPath],
+  recursive: false,
+  regex: /"appId": "fr\.gouv\.social\.fabrique\.archifiltre\.(.+)"/g,
+  replacement: appIdReplacement,
+  silent: true,
+});
+
 const iconIcnsReplacement = `"icon": "./electron/build/icon_${channel}.icns"`;
 console.log(
   "[ReplaceForChannel] Replacing ICNS icon with",

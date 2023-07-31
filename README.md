@@ -43,7 +43,7 @@ You should use auto reloading when developing, using
 yarn dev
 ```
 
-and then, reload your electron app with the refresh command (`CMD + R` on OS X)
+and then, reload your electron app with the refresh command (`CMD + R` on MacOS)
 
 You can make the app automatically load a specific folder by doing:
 

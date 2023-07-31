@@ -23,6 +23,6 @@ export const versionComparator = (
   return 0;
 };
 
-export const versionName = "Romantic Raccoon";
+export const versionName = "Triggered Tardigrade";
 
 export { version } from "@common/utils/package";

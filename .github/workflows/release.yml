@@ -165,12 +165,12 @@ jobs:
       #   shell: bash
       #   run: $(yarn global bin)/replace 'lightArgs\.push\(\.\.\.objectFiles\);' 'lightArgs.push("-sval", ...objectFiles);' node_modules/app-builder-lib/out/targets/MsiTarget.js
       - name: Download dist
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: compile-dist
           path: dist/
       - name: Download cetificates
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: certificates
       - name: Build bin
@@ -193,7 +193,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ env.GITHUB_REF_OVERRIDE }}
       - name: Download all dist form build jobs
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           path: bin
       - name: Generate hashes

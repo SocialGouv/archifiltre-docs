@@ -252,7 +252,7 @@
     "@sentry/electron": "^3.0.4",
     "angular-expressions": "^1.1.4",
     "axios": "^0.26.1",
-    "csv-parse": "^4.15.4",
+    "csv-parse": "^5.5.1",
     "date-fns": "^2.19.0",
     "dateformat": "3.0.3",
     "docxtemplater": "3.21.2",

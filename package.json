@@ -223,7 +223,7 @@
     "jest": "27.5.1",
     "jest-date-mock": "1.0.8",
     "node-loader": "^1",
-    "postcss": "^8.4.8",
+    "postcss": "^8.4.31",
     "postcss-scss": "^4.0.3",
     "prettier": "^2.5.1",
     "redux-mock-store": "^1.5.4",

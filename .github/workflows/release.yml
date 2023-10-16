@@ -32,7 +32,7 @@ jobs:
       next-version: ${{ steps.compile.outputs.next-version }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ env.GITHUB_REF_OVERRIDE }}
@@ -141,7 +141,7 @@ jobs:
       ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ env.GITHUB_REF_OVERRIDE }}
@@ -188,7 +188,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ env.GITHUB_REF_OVERRIDE }}

@@ -54,7 +54,7 @@ jobs:
             ${{ env.WIN_CSC_LINK }}
             ${{ env.CSC_LINK }}
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
         # >> NO Secrets
@@ -146,7 +146,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ env.GITHUB_REF_OVERRIDE }}
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
       - name: Yarn install
@@ -203,7 +203,7 @@ jobs:
           -type f
           -exec bash -c "openssl dgst -sha512 {} > {}.sha512" \;
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
       - name: Yarn install

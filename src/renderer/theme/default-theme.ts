@@ -2,8 +2,8 @@ import grey from "@material-ui/core/colors/grey";
 import type {
   Theme,
   ThemeOptions,
-} from "@material-ui/core/styles/createMuiTheme";
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+} from "@material-ui/core/styles/createTheme";
+import createTheme from "@material-ui/core/styles/createTheme";
 
 export interface ThemedProps {
   theme: Theme;
@@ -109,4 +109,4 @@ export const themeOptions: ThemeOptions = {
   },
 };
 
-export const defaultTheme = createMuiTheme(themeOptions);
+export const defaultTheme = createTheme(themeOptions);

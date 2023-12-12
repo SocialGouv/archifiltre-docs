@@ -1,5 +1,5 @@
 import { PRODUCT_CHANNEL } from "@common/config";
-import type { Theme } from "@material-ui/core/styles/createMuiTheme";
+import type { Theme } from "@material-ui/core/styles/createTheme";
 import createStyles from "@material-ui/core/styles/createStyles";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 

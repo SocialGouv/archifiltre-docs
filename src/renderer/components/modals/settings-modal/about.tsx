@@ -1,7 +1,7 @@
 import { openLink } from "@common/utils/electron";
 import Box from "@material-ui/core/Box";
 import Link from "@material-ui/core/Link";
-import type { Theme } from "@material-ui/core/styles/createMuiTheme";
+import type { Theme } from "@material-ui/core/styles/createTheme";
 import createStyles from "@material-ui/core/styles/createStyles";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import React from "react";

@@ -71,7 +71,11 @@ void (async () => {
           <BackgroundLoadingInfoContainer />
         </Box>
       </App>
-      <ToastContainer draggable={false} theme={"colored"} />
+      <ToastContainer
+        draggable={false}
+        theme={"colored"}
+        position="bottom-right"
+      />
       <Modals />
     </Providers>,
     document.querySelector("#app")

@@ -11,7 +11,6 @@ interface MetadataDialogFooterProps<T> {
   onAction: (actionId: T) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export function MetadataDialogFooter<T>({
   actions,
   closeModal,
@@ -30,7 +29,7 @@ export function MetadataDialogFooter<T>({
             onAction(id);
           }}
         >
-          {t(label)}
+          {t(`importModal.${label}`)}
         </Button>
       ))}
       <Button

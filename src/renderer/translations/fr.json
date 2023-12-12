@@ -289,6 +289,8 @@
       "title": "Importer des métadonnées",
       "pickAFile": "Choisir un fichier de métadonnées",
       "import": "Importer",
+      "close": "Fermer",
+      "loadMetadata": "Importer les métadonnées",
       "metadataFile": "Fichier de métadonnées",
       "dropAMetadataFile": "Cliquez ici ou déposez un fichier de métadonnées",
       "advancedOptions": "Options avancées",

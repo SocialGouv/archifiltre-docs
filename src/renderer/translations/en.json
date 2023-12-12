@@ -286,15 +286,17 @@
       "browseAll": "Browse for all"
     },
     "importModal": {
-      "title": "Import metadata",
-      "pickAFile": "Pick a metadata file",
+      "title": "Import Metadata",
+      "pickAFile": "Choose a metadata file",
       "import": "Import",
-      "metadataFile": "Metadata file",
+      "close": "Close",
+      "loadMetadata": "Load Metadata",
+      "metadataFile": "Metadata File",
       "dropAMetadataFile": "Click here or drop a metadata file",
-      "advancedOptions": "Advanced options",
+      "advancedOptions": "Advanced Options",
       "delimiter": "Delimiter",
       "pathField": "Path",
-      "importedFieldsSelectionDescription": "Select the field containing the path of the element and the metadata fields you want to import"
+      "importedFieldsSelectionDescription": "Select the field containing the path of the associated item as well as the metadata fields to import."
     },
     "audit": {
       "fileCountInfoTitle": "File count",

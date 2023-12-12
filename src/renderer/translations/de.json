@@ -281,6 +281,20 @@
       "unselectAll": "Alle abwählen",
       "browseAll": "Alles durchsuchen"
     },
+    "importModal": {
+      "title": "Metadaten importieren",
+      "pickAFile": "Wählen Sie eine Metadatendatei aus",
+      "import": "Importieren",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "loadMetadata": "Metadaten laden",
+      "metadataFile": "Metadatendatei",
+      "dropAMetadataFile": "Klicken Sie hier oder ziehen Sie eine Metadatendatei hierhin",
+      "advancedOptions": "Erweiterte Optionen",
+      "delimiter": "Trennzeichen",
+      "pathField": "Pfad",
+      "importedFieldsSelectionDescription": "Wählen Sie das Feld aus, das den Pfad des zugehörigen Elements sowie die zu importierenden Metadatenfelder enthält."
+    },
     "audit": {
       "fileCountInfoTitle": "Dateianzahl im Dateibaum",
       "fileTreeDepthTitle": "Tiefe des Dateibaum",

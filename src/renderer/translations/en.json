@@ -290,6 +290,7 @@
       "pickAFile": "Choose a metadata file",
       "import": "Import",
       "close": "Close",
+      "cancel": "Annuler",
       "loadMetadata": "Load Metadata",
       "metadataFile": "Metadata File",
       "dropAMetadataFile": "Click here or drop a metadata file",

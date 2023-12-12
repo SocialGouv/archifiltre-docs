@@ -1,8 +1,8 @@
 import Box from "@material-ui/core/Box";
 import React from "react";
 
-import { useTabsState } from "../../header/tabs-context";
 import { HeaderContainer as Header } from "../../header/header-container";
+import { useTabsState } from "../../header/tabs-context";
 import { DuplicatesSearchContainer as DuplicatesSearch } from "../duplicates-search/duplicates-search-container";
 import { HelpButton } from "../help-button";
 import type { IcicleContainerProps } from "../icicle/icicle-container";

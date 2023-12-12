@@ -25,4 +25,4 @@ const themeOptions: ThemeOptions = {
   },
 };
 
-export const theme = createMuiTheme(themeOptions);
+export const theme = createTheme(themeOptions);

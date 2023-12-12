@@ -31,7 +31,6 @@ const workerConfig: WorkerSerializedConfig = (() => {
     try {
       return JSON.parse(process.argv[3] ?? "{}") as WorkerSerializedConfig;
     } catch {
-      // eslint-disable-next-line no-console
       console.error(
         `Unparsable process argv (${JSON.stringify(process.argv[3])})`
       );

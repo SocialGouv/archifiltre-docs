@@ -30,7 +30,6 @@ if (IS_WORKER) {
         const { language, ...props }: ResipExporterOptions & WithLanguage =
           data;
         await translations.changeLanguage(language as string);
-        console.log(props.sedaMetadata);
         const resipExportData = resipExporter(
           {
             ...props,

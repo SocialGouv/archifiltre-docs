@@ -336,5 +336,5 @@ export const removeChildrenPath = (filesAndFolders: string[]): string[] =>
     []
   );
 
-export const getIdFromPath = (rootPath: string, currentPath: string) =>
+export const getIdFromPath = (rootPath: string, currentPath: string): string =>
   convertToPosixAbsolutePath(path.relative(rootPath, currentPath));

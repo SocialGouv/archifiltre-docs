@@ -1,10 +1,10 @@
 import type { UnionConcat } from "../../utils/type";
 import { DebugProvider } from "./DebugProvider";
 import { NoopProvider } from "./NoopProvider";
-import { PosthogProvider } from "./PosthogProvider";
+import { PostHogProvider } from "./PostHogProvider";
 
 export const providers = [
-  PosthogProvider,
+  PostHogProvider,
   NoopProvider,
   DebugProvider,
 ] as const;

@@ -1,6 +1,6 @@
 import Chip from "@material-ui/core/Chip";
-import type { Theme } from "@material-ui/core/styles/createTheme";
 import createStyles from "@material-ui/core/styles/createStyles";
+import type { Theme } from "@material-ui/core/styles/createTheme";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import React from "react";
 import { useTranslation } from "react-i18next";

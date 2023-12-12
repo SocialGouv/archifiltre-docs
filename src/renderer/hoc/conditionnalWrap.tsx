@@ -1,5 +1,5 @@
 import type { FC, ReactElement } from "react";
-import React from "react";
+import { cloneElement } from "react";
 
 interface ConditionalWrapProps {
   children: ReactElement;
@@ -11,4 +11,4 @@ export const ConditionnalWrap: FC<ConditionalWrapProps> = ({
   condition,
   children,
   wrap,
-}) => (condition ? React.cloneElement(wrap(children)) : children);
+}) => (condition ? cloneElement(wrap(children)) : children);

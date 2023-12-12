@@ -59,34 +59,34 @@ export const setupAutoUpdate = (): void => {
 
   // setup auto updater events
   autoUpdater.on("checking-for-update", () => {
-    console.log("[UPDATE] Check for update");
+    console.info("[setupAutoUpdate] Check for update");
   });
 
   autoUpdater.on("update-available", async (info: UpdateInfo) => {
-    console.log("[UPDATE] Update available", info);
+    console.info("[setupAutoUpdate] Update available", info);
     await autoUpdater.downloadUpdate();
   });
 
   autoUpdater.on("update-not-available", (info: UpdateInfo) => {
-    console.log("[UPDATE] Update NOT available", info);
+    console.info("[setupAutoUpdate] Update NOT available", info);
     repliers.forEach((reply) => {
       reply("autoUpdate.onUpdateAvailable", false);
     });
   });
 
   autoUpdater.on("error", (err, reason) => {
-    console.error("[UPDATE] Error", reason, err);
+    console.error("[setupAutoUpdate] Error", reason, err);
     repliers.forEach((reply) => {
       reply("autoUpdate.onError", reason as string);
     });
   });
 
   autoUpdater.on("download-progress", (progress: ProgressInfo) => {
-    console.log("[UPDATE] Progress...", progress);
+    console.info("[setupAutoUpdate] Progress...", progress);
   });
 
   autoUpdater.on("update-downloaded", (info: UpdateInfo) => {
-    console.log("[UPDATE] Update downloaded", info);
+    console.info("[setupAutoUpdate] Update downloaded", info);
     updateAvailable = true;
     getTrackerProvider().track("App Updated", {
       currentVersion: info.version,

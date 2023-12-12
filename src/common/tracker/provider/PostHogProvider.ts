@@ -22,7 +22,7 @@ const DEFAULT_$SET_ONCE = {
   $initial_pathname: "",
   $pathname: "",
 };
-export class PosthogProvider extends TrackerProvider<
+export class PostHogProvider extends TrackerProvider<
   typeof FrontPostHog,
   NodeJsPostHog
 > {
@@ -32,7 +32,10 @@ export class PosthogProvider extends TrackerProvider<
 
   public async init(): Promise<void> {
     if (this.inited) {
-      console.warn("[PosthogProvider] Already inited.", this.disabled);
+      console.warn(
+        "[TrackerProvider][PostHogProvider] Already inited.",
+        this.disabled
+      );
     }
     if (IS_MAIN) {
       this.tracker = new (await import("posthog-node")).default(
@@ -75,7 +78,7 @@ export class PosthogProvider extends TrackerProvider<
   }
 
   public async uninit(): Promise<void> {
-    console.info("[Tracker][PosthogProvider] Shutdown posthog");
+    console.info("[Tracker][PostHogProvider] Shutdown posthog");
     if (this.isMain(this.tracker)) {
       this.tracker.shutdown();
     }

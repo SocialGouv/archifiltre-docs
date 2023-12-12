@@ -11,6 +11,7 @@ import type {
   SedaField,
   SedaMetadata,
   SedaMetadataMap,
+  SedaMetadataMapping,
 } from "./seda-configuration-type";
 import { sedaFields } from "./seda-configuration-type";
 
@@ -23,7 +24,7 @@ const isSedaField = (value: string): value is SedaField =>
 const isSedaMetadata = (value: Metadata): value is SedaMetadata =>
   isSedaField(value.name);
 
-export const getMetadataMapping = (state: StoreState) =>
+export const getMetadataMapping = (state: StoreState): SedaMetadataMapping =>
   getSedaState(state).metadataMapping;
 
 export const getSedaMetadata = (state: StoreState): SedaMetadataMap => {
@@ -71,4 +72,5 @@ export const getActiveSedaFields = (
   };
 };
 
-export const isTagMetadata = (metadata: Metadata) => metadata.name === "Tags";
+export const isTagMetadata = (metadata: Metadata): boolean =>
+  metadata.name === "Tags";

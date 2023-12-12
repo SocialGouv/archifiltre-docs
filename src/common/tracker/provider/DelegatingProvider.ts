@@ -19,7 +19,7 @@ export class DelegatingProvider extends TrackerProvider {
     disabled: boolean,
     private readonly providers: TrackerProvider[]
   ) {
-    console.log("[Tracker][DelegatingProvider]", { providers });
+    console.info("[TrackerProvider][DelegatingProvider]", { providers });
     super(appId, disabled);
   }
 

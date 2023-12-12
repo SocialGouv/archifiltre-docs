@@ -213,7 +213,7 @@ export const updateMetadata = (
   context: MetadataContext,
   metadataId: MetadataId,
   metadata: Partial<MetadataDto>
-) => ({
+): MetadataContext & { metadata: Map<number, Metadata> } => ({
   ...context,
   metadata: updateMetadataInMap(context.metadata, metadataId, metadata),
 });

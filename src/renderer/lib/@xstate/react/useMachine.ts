@@ -28,7 +28,6 @@ function createReactActionFunction<TContext, TEvent extends EventObject>(
   };
 
   Object.defineProperties(effectExec, {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     __effect: { value: tag },
     name: { value: `effect:${exec.name}` },
   });

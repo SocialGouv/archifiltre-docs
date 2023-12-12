@@ -1,6 +1,6 @@
 import { PRODUCT_CHANNEL } from "@common/config";
-import type { Theme } from "@material-ui/core/styles/createTheme";
 import createStyles from "@material-ui/core/styles/createStyles";
+import type { Theme } from "@material-ui/core/styles/createTheme";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
 export const useStyles = makeStyles((theme: Theme) =>

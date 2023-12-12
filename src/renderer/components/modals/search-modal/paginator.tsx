@@ -5,7 +5,10 @@ import React, { forwardRef } from "react";
 import { PaginatorActions } from "./paginator-actions";
 
 export interface PaginatorProps {
-  handleChangePage: TablePaginationProps["onChangePage"];
+  handleChangePage: (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    page: number
+  ) => void;
   handleChangeRowsPerPage: TablePaginationProps["onChangeRowsPerPage"];
   labelRowsPerPage: TablePaginationProps["labelRowsPerPage"];
   page: TablePaginationProps["page"];
@@ -33,8 +36,8 @@ const _Paginator: React.ForwardRefRenderFunction<
     count={pageCount}
     rowsPerPage={rowsPerPage}
     page={page}
-    onChangePage={handleChangePage}
-    onChangeRowsPerPage={handleChangeRowsPerPage}
+    onPageChange={handleChangePage}
+    onRowsPerPageChange={handleChangeRowsPerPage}
     labelRowsPerPage={labelRowsPerPage}
     labelDisplayedRows={({ from, to, count }) =>
       `${from}-${to === -1 ? count : to}/${count !== -1 ? count : `>${to}`}`

@@ -4,7 +4,7 @@ import { useMetadataByEntityId } from "../../../../reducers/metadata/metadata-se
 import { useActiveElement } from "../../../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { IcicleMetadataSidebar } from "./icicle-metadata-sidebar";
 
-export const IcicleMetadataSidebarContainer = (): React.ReactNode => {
+export const IcicleMetadataSidebarContainer = (): React.ReactElement => {
   const entityId = useActiveElement();
   const metadata = useMetadataByEntityId(entityId);
 

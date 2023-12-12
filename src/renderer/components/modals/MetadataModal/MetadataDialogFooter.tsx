@@ -16,7 +16,7 @@ export function MetadataDialogFooter<T>({
   actions,
   closeModal,
   onAction,
-}: MetadataDialogFooterProps<T>): React.ReactNode {
+}: MetadataDialogFooterProps<T>): React.ReactElement {
   const { t } = useTranslation();
   return (
     <DialogActions>

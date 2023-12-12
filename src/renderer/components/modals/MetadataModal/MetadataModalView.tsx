@@ -9,9 +9,6 @@ import type { FC } from "react";
 import React from "react";
 
 import type { Metadata } from "../../../reducers/metadata/metadata-types";
-import { useSedaMapping } from "../../../reducers/seda-configuration/seda-configuration-selector";
-import type { SedaPropertySelectorProps } from "../../common/resip/seda-property-selector";
-import { SedaPropertySelector } from "../../common/resip/seda-property-selector";
 
 interface MetadataModalViewProps {
   metadataList: Metadata[];
@@ -20,24 +17,12 @@ interface MetadataModalViewProps {
 export const MetadataModalView: FC<MetadataModalViewProps> = ({
   metadataList,
 }) => {
-  const [mapping, setMapping] = useSedaMapping();
-
-  const onMappingChange =
-    (metadataId: string): SedaPropertySelectorProps["onChange"] =>
-    (field) => {
-      setMapping({
-        ...mapping,
-        [metadataId]: field,
-      });
-    };
-
   return (
     <Table>
       <TableHead>
         <TableRow>
           <TableCell>Métadonnée</TableCell>
           <TableCell>{"Valeur d'exemple"}</TableCell>
-          <TableCell>Metadonnée Resip</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -45,12 +30,6 @@ export const MetadataModalView: FC<MetadataModalViewProps> = ({
           <TableRow key={metadata.id}>
             <TableCell>{metadata.name}</TableCell>
             <TableCell>{metadata.content}</TableCell>
-            <TableCell>
-              <SedaPropertySelector
-                value={mapping[metadata.name]}
-                onChange={onMappingChange(metadata.name)}
-              />
-            </TableCell>
           </TableRow>
         ))}
       </TableBody>

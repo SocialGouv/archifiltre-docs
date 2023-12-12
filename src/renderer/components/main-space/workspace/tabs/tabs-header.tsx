@@ -1,5 +1,5 @@
 import type { SimpleObject } from "@common/utils/object";
-import type { Theme } from "@material-ui/core/styles/createMuiTheme";
+import type { Theme } from "@material-ui/core/styles/createTheme";
 import createStyles from "@material-ui/core/styles/createStyles";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Tab from "@material-ui/core/Tab";

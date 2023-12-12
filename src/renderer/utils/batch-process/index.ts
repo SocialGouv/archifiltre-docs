@@ -152,16 +152,6 @@ export const processQueueWithWorkers = (
   );
 };
 
-export const computeBatch$ = (
-  data: unknown[],
-  asyncWorkerFactory: ProcessControllerAsyncWorkerFactory,
-  { batchSize, initialValues }: { batchSize: number; initialValues: unknown }
-): Observable<unknown> => {
-  const { result$ } = initWorkers$(asyncWorkerFactory, { initialValues });
-
-  return processQueueWithWorkers(result$, data, batchSize);
-};
-
 // eslint-disable-next-line @typescript-eslint/naming-convention
 type LookUp<U, T> = U extends { type: T } ? U : never;
 
@@ -206,7 +196,10 @@ export const cancelableBackgroundWorkerProcess$ = <T = unknown>(
       reportError(message.error);
     }),
     onMessageType(MessageTypes.LOG, (message) => {
-      console.log("Logging :", message.data);
+      console.info(
+        "cancelableBackgroundWorkerProcess$ Logging :",
+        message.data
+      );
     }),
     filter<WorkerMessage, ErrorMessage | ResultMessage>(
       (message: WorkerMessage): message is ErrorMessage | ResultMessage =>

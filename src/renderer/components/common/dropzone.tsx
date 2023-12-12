@@ -1,7 +1,6 @@
 import { IconButton } from "@material-ui/core";
 import type { GridProps } from "@material-ui/core/Grid";
 import Grid from "@material-ui/core/Grid";
-import type { ReactNode } from "react";
 import React from "react";
 import { FaPlus } from "react-icons/fa";
 import styled from "styled-components";
@@ -42,11 +41,6 @@ export type DropzoneErrorType =
   | "invalidElementDropped"
   | "multipleFolderLoaded";
 
-interface MaybeButtonProps {
-  children: ReactNode;
-  onClick?: () => void;
-}
-
 export interface DropzoneProps {
   onClick?: () => void;
   onError: (type: DropzoneErrorType) => void;
@@ -85,6 +79,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
       container
       direction="row"
       justify="center"
+      justifyContent="center"
       alignItems="center"
       onDragOver={handleDragover}
       onDrop={handleDrop}

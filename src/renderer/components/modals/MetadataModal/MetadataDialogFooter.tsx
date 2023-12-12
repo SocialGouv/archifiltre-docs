@@ -11,11 +11,12 @@ interface MetadataDialogFooterProps<T> {
   onAction: (actionId: T) => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export function MetadataDialogFooter<T>({
   actions,
   closeModal,
   onAction,
-}: MetadataDialogFooterProps<T>) {
+}: MetadataDialogFooterProps<T>): React.ReactNode {
   const { t } = useTranslation();
   return (
     <DialogActions>

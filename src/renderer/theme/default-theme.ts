@@ -1,8 +1,5 @@
 import grey from "@material-ui/core/colors/grey";
-import type {
-  Theme,
-  ThemeOptions,
-} from "@material-ui/core/styles/createTheme";
+import type { Theme, ThemeOptions } from "@material-ui/core/styles/createTheme";
 import createTheme from "@material-ui/core/styles/createTheme";
 
 export interface ThemedProps {

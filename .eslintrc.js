@@ -28,7 +28,7 @@ const typescriptConfig = {
     "@typescript-eslint/no-unused-vars": "off",
     "import/default": "off",
     "import/named": "off",
-    "no-console": "warn",
+    "no-console": ["error", { "allow": ["warn", "error", "info", "debug"] }],
     "no-unused-vars": "off",
     "prefer-template": "warn",
     "prettier/prettier": [

@@ -7,7 +7,7 @@ export const VIEWBOX_HEIGHT = 300;
  * Returns the array of widths divided by the sum of the widths.
  * @param widths - the widths to normalize
  */
-export const normalizeWidth = (widths: number[]) => {
+export const normalizeWidth = (widths: number[]): number[] => {
   const totalWidth = sum(widths);
   return widths.map((a) => a / totalWidth);
 };

@@ -4,10 +4,11 @@ import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
 import type { SedaField } from "../seda-configuration/seda-configuration-type";
 import type { StoreState } from "../store";
 import { getMetadataByEntityId, getMetadataList } from "./metadata-operations";
-import type { EntityId, Metadata } from "./metadata-types";
+import type { EntityId, Metadata, MetadataContext } from "./metadata-types";
 
-export const getMetadataContextFromState = (state: StoreState) =>
-  getCurrentState(state.metadata).context;
+export const getMetadataContextFromState = (
+  state: StoreState
+): MetadataContext => getCurrentState(state.metadata).context;
 
 export const useMetadataByEntityId = (entityId: EntityId): Metadata[] =>
   useSelector((state: StoreState) =>

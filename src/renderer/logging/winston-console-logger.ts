@@ -18,7 +18,7 @@ export class WinstonConsoleLogger extends TransportStream {
     } else if (info[LEVEL] === "warning") {
       console.warn(message);
     } else {
-      console.log(message);
+      console.info(message);
     }
 
     if (callback) {

@@ -23,7 +23,6 @@ export class NoopProvider extends TrackerProvider {
 
   private warn() {
     if (!this.flagConsole) {
-      // eslint-disable-next-line no-console
       console.warn(
         `[Tracker] No tracker set or found (${process.env.TRACKER_PROVIDER})`
       );

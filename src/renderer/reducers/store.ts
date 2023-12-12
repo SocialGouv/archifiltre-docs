@@ -54,6 +54,5 @@ export const store = createStore(
     tags: tagsReducer,
     workspaceMetadata: workspaceMetadataReducer,
   }),
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   applyMiddleware(thunk, persistActions)
 );

@@ -32,7 +32,7 @@ export const detectCsvConfig = async (
   };
 };
 
-export const isCsvFile = (filePath: string) =>
+export const isCsvFile = (filePath: string): boolean =>
   path.extname(filePath) === ".csv";
-export const isXlsxFile = (filePath: string) =>
+export const isXlsxFile = (filePath: string): boolean =>
   path.extname(filePath) === ".xlsx";

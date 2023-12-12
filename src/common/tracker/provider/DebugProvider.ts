@@ -16,6 +16,6 @@ export class DebugProvider extends TrackerProvider {
 
   public track<TEvent extends TrackEvent>(...args: TrackArgs<TEvent>): void {
     const [event, props] = args;
-    console.info("[DebugTracker] Track", { event, props });
+    console.info("[DebugProvider] Track", { event, props });
   }
 }

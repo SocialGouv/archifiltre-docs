@@ -1,19 +1,16 @@
 import type { ObjectIterator } from "lodash";
 import { mapValues } from "lodash";
-import { useDispatch, useSelector } from "react-redux";
 
 import { getMetadataByEntity } from "../metadata/metadata-operations";
 import { getMetadataContextFromState } from "../metadata/metadata-selector";
 import type { Metadata, MetadataByEntity } from "../metadata/metadata-types";
 import type { StoreState } from "../store";
-import { setSedaMappingAction } from "./seda-configuration-action";
 import type {
   ActiveSedaFields,
   SedaConfigurationState,
   SedaField,
   SedaMetadata,
   SedaMetadataMap,
-  SedaMetadataMapping,
 } from "./seda-configuration-type";
 import { sedaFields } from "./seda-configuration-type";
 
@@ -72,19 +69,6 @@ export const getActiveSedaFields = (
     fields,
     tags,
   };
-};
-
-export const useSedaMapping = (): [
-  SedaMetadataMapping,
-  (mapping: SedaMetadataMapping) => void
-] => {
-  const mapping = useSelector(getMetadataMapping);
-  const dispatch = useDispatch();
-
-  const setMapping = (newMapping: SedaMetadataMapping) =>
-    dispatch(setSedaMappingAction(newMapping));
-
-  return [mapping, setMapping];
 };
 
 export const isTagMetadata = (metadata: Metadata) => metadata.name === "Tags";

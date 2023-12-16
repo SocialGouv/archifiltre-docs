@@ -40,7 +40,7 @@ export const LoadingBlock: React.FC<LoadingBlockProps> = ({
     : `${indexedFilesCount} ${t("folderDropzone.indexedFiles")}`;
 
   return (
-    <Grid container direction="row" justify="center" alignItems="center">
+    <Grid container direction="row" justifyContent="center" alignItems="center">
       <StyledGrid item>
         <Box>
           <LoadingSpinner loaderText={loaderText} isLoading={!isIndexingDone} />

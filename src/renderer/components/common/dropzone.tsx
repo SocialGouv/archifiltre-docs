@@ -78,7 +78,6 @@ export const Dropzone: React.FC<DropzoneProps> = ({
     <DropzoneContainer
       container
       direction="row"
-      justify="center"
       justifyContent="center"
       alignItems="center"
       onDragOver={handleDragover}

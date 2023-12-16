@@ -33,7 +33,12 @@ export const ExportButton: React.FC = () => {
   return (
     <>
       <Tooltip title={title}>
-        <Badge color="error" variant="dot" invisible={!isBadgeShown}>
+        <Badge
+          color="error"
+          overlap="rectangular"
+          variant="dot"
+          invisible={!isBadgeShown}
+        >
           <Button
             id="export-button"
             data-test-id="export-menu"

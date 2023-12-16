@@ -205,7 +205,12 @@ export const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
         <List component="nav">
           <ListItem button onClick={openModal}>
             <ListItemIcon>
-              <Badge color="error" variant="dot" invisible={!updateInfo}>
+              <Badge
+                color="error"
+                overlap="rectangular"
+                variant="dot"
+                invisible={!updateInfo}
+              >
                 <FaCog />
               </Badge>
             </ListItemIcon>

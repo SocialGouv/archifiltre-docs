@@ -31,7 +31,12 @@ export const ModalMenu: React.FC<ModalMenuProps> = ({
     },
     {
       icon: (
-        <Badge color="error" variant="dot" invisible={!updateInfo}>
+        <Badge
+          color="error"
+          overlap="rectangular"
+          variant="dot"
+          invisible={!updateInfo}
+        >
           <FaInfoCircle />
         </Badge>
       ),

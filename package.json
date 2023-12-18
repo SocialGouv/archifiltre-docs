@@ -29,7 +29,8 @@
     "devtools": "ts-node scripts/getReactDevtools.ts",
     "replaceForChannel": "node scripts/replaceForChannel.js",
     "generate-translation-csv": "node ./scripts/diff-translations.js",
-    "import-translation-csv": "node ./scripts/translation-csv-to-json"
+    "import-translation-csv": "node ./scripts/translation-csv-to-json",
+    "verify-translation-json": "node ./src/renderer/translations/verify-translation-json.js"
   },
   "electronWebpack": {
     "title": true,

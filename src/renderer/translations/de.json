@@ -224,6 +224,10 @@
       "auditReportStarted": "Der Export des Prüfberichts wurde gestartet",
       "auditReportSuccess": "Der Export des Prüfberichts war erfolgreich."
     },
+    "metadata": {
+      "name": "Name",
+      "content": "Inhalt"
+    },
     "replay": {
       "title": "Vorherige Sitzung laden",
       "error": "Beim Laden der vorherigen Sitzung ist ein Fehler aufgetreten."

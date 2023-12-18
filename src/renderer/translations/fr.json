@@ -1,7 +1,7 @@
 {
   "translation": {
     "folderDropzone": {
-      "placeholder": "Glissez-déposez un répertoire ou un JSON $t(common.productName) ici",
+      "placeholder": "Glissez ou déposez un répertoire ou un JSON ici",
       "placeholderSubtitle": "Pas de modification du répertoire original",
       "zipNotificationTitle": "fichier(s) zip détecté(s)",
       "zipNotificationMessage": "$t(common.productNameShort) ne lit pas les zips, veuillez les décompresser pour les lire",

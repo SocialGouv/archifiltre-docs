@@ -1,7 +1,8 @@
+import { ipcRenderer } from "@common/ipc";
 import { IconButton } from "@material-ui/core";
 import type { GridProps } from "@material-ui/core/Grid";
 import Grid from "@material-ui/core/Grid";
-import React from "react";
+import React, { useCallback } from "react";
 import { FaPlus } from "react-icons/fa";
 import styled from "styled-components";
 
@@ -42,6 +43,7 @@ export type DropzoneErrorType =
   | "multipleFolderLoaded";
 
 export interface DropzoneProps {
+  loadPath: (path: string) => void;
   onClick?: () => void;
   onError: (type: DropzoneErrorType) => void;
   onPathLoaded: (path: string) => void;
@@ -53,7 +55,17 @@ export const Dropzone: React.FC<DropzoneProps> = ({
   onError,
   placeholder,
   onClick,
+  loadPath,
 }) => {
+  const onNewDirectoryClick = useCallback(async () => {
+    const chosenPath = await ipcRenderer.invoke("dialog.showOpenDialog", {
+      properties: ["openDirectory"],
+    });
+    if (chosenPath.filePaths.length > 0) {
+      loadPath(chosenPath.filePaths[0]);
+    }
+  }, [loadPath]);
+
   const handleDrop: NonNullable<GridProps["onDrop"]> = (event) => {
     event.preventDefault();
 
@@ -82,6 +94,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
       alignItems="center"
       onDragOver={handleDragover}
       onDrop={handleDrop}
+      onClick={onNewDirectoryClick}
     >
       <ConditionnalWrap
         condition={onClick !== undefined}

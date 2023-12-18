@@ -44,6 +44,7 @@ export const StartscreenDropzone: React.FC<DropzoneProps> = ({
       placeholder={t("folderDropzone.placeholder")}
       onPathLoaded={onPathLoaded}
       onError={onError}
+      loadPath={loadPath}
     />
   );
 };

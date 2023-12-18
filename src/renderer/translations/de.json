@@ -1,8 +1,8 @@
 {
   "translation": {
     "folderDropzone": {
-      "placeholder": "Legen Sie hier ein Verzeichnis ab!",
-      "placeholderSubtitle": "Sie können auch eine zuvor aus $t(common.productName) exportierte JSON-Datei ablegen.",
+      "placeholder": "Ziehen Sie ein Verzeichnis oder eine JSON-Datei hierher",
+      "placeholderSubtitle": "Sie können auch eine zuvor aus exportierte JSON-Datei ablegen.",
       "zipNotificationTitle": "ZIP-Datei(en) entdeckt",
       "zipNotificationMessage": "$t(common.productNameShort) kann ZIP-Dateien nicht verarbeiten, bitte entpacken Sie diese, um sie einzulesen",
       "disclaimerSubtitle": "Ihre Daten werden Ihren Rechner nicht verlassen. Nur Sie können sehen, was in dieser Anwendung geschieht.",

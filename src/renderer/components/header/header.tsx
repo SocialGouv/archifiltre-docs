@@ -1,23 +1,20 @@
 import type { VoidFunction } from "@common/utils/function";
 import Box from "@material-ui/core/Box";
 import React from "react";
-import styled from "styled-components";
 
 import type { ExportToJson } from "../../exporters/json/json-exporter";
+import { SaveButton } from "../Buttons/SaveButton";
 import { Logo } from "../common/Logo";
 import { Version } from "../common/version";
 import { TabsHeader } from "../main-space/workspace/tabs/tabs-header";
 import { MetadataModalButton } from "../modals/MetadataModal/MetadataModalButton";
-import { ExportButton } from "./export-button";
-import { SaveButton } from "./save-button";
-import { SearchButton } from "./search-button";
+import { CloseButton } from "./Buttons/close-button";
+import { ExportButton } from "./Buttons/export-button";
+import { SearchButton } from "./Buttons/search-button";
+import { UndoRedoButton } from "./Buttons/undo-redo-button";
+import { UserButton } from "./Buttons/user-button";
+import { HeaderLine } from "./styledComponents";
 import { useTabsState } from "./tabs-context";
-import { UndoRedoButton } from "./undo-redo-button";
-import { UserButton } from "./user-button";
-
-const HeaderLine = styled.div`
-  width: 100%;
-`;
 
 export interface HeaderActionsProps {
   canRedo: boolean;
@@ -55,16 +52,14 @@ export const Header: React.FC<HeaderActionsProps> = ({
           <Version />
         </Box>
         <Box flexGrow={1} />
-        <>
-          <Box>
-            <TabsHeader tabIndex={tabIndex} setTabIndex={setTabIndex} />
-          </Box>
-          <Box flexGrow={1} />
-        </>
         <Box>
+          <TabsHeader tabIndex={tabIndex} setTabIndex={setTabIndex} />
+        </Box>
+        <Box flexGrow={1} />
+        <Box pl={1}>
           <MetadataModalButton />
         </Box>
-        <Box>
+        <Box pl={1}>
           <SearchButton />
         </Box>
         <Box pl={1}>
@@ -96,7 +91,10 @@ export const Header: React.FC<HeaderActionsProps> = ({
           <ExportButton />
         </Box>
         <Box pl={1}>
-          <UserButton resetWorkspace={resetWorkspace} />
+          <UserButton />
+        </Box>
+        <Box pl={1}>
+          <CloseButton resetWorkspace={resetWorkspace} />
         </Box>
       </Box>
     </HeaderLine>

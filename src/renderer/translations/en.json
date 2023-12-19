@@ -105,6 +105,7 @@
     },
     "header": {
       "export": "Export",
+      "settings": "Settings",
       "auditReport": "Audit report",
       "close": "Close",
       "save": "Save",

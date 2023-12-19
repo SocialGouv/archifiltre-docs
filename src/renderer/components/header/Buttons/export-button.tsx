@@ -6,10 +6,10 @@ import { useTranslation } from "react-i18next";
 import { FaDownload } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
-import { useModal } from "../../hooks/use-modal";
-import { useStyles } from "../../hooks/use-styles";
-import { getAreHashesReady } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import { ExportModal } from "../modals/export-modal/export-modal";
+import { useModal } from "../../../hooks/use-modal";
+import { useStyles } from "../../../hooks/use-styles";
+import { getAreHashesReady } from "../../../reducers/files-and-folders/files-and-folders-selectors";
+import { ExportModal } from "../../modals/export-modal/export-modal";
 
 export const ExportButton: React.FC = () => {
   const { t } = useTranslation();

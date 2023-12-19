@@ -4,9 +4,9 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaSearch } from "react-icons/fa";
 
-import { useModal } from "../../hooks/use-modal";
-import { useStyles } from "../../hooks/use-styles";
-import { SearchModalContainer } from "../modals/search-modal/search-modal-container";
+import { useModal } from "../../../hooks/use-modal";
+import { useStyles } from "../../../hooks/use-styles";
+import { SearchModalContainer } from "../../modals/search-modal/search-modal-container";
 
 export const SearchButton: React.FC = () => {
   const { isModalOpen, openModal, closeModal } = useModal();

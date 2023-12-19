@@ -6,9 +6,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { LanguagePicker } from "../../header/language";
-import { ModalHeader } from "../../modals/modal-header";
+import { ModalHeader } from "../modal-header";
 import { About } from "./about";
+import { LanguagePicker } from "./language";
 import { ModalMenu } from "./modal-menu";
 import { PrivacySettings } from "./privacy-settings";
 

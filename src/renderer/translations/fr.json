@@ -105,6 +105,7 @@
     },
     "header": {
       "export": "Exporter",
+      "settings": "Paramètres",
       "auditReport": "Rapport d'audit",
       "close": "Fermer",
       "save": "Enregistrer",

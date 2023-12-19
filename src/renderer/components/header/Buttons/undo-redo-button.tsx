@@ -4,7 +4,7 @@ import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { FaRedo, FaUndo } from "react-icons/fa";
 
-import { useStyles } from "../../hooks/use-styles";
+import { useStyles } from "../../../hooks/use-styles";
 
 export interface UndoRedoButtonProps {
   isActive: boolean;

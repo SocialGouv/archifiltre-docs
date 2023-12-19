@@ -4,9 +4,9 @@ import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCog } from "react-icons/fa";
 
-import { useModal } from "../../hooks/use-modal";
-import { useStyles } from "../../hooks/use-styles";
-import { SettingsModal } from "../modals/settings-modal/settings-modal";
+import { useModal } from "../../../hooks/use-modal";
+import { useStyles } from "../../../hooks/use-styles";
+import { SettingsModal } from "../../modals/settings-modal/settings-modal";
 
 export const UserButton: React.FC = () => {
   const { t } = useTranslation();

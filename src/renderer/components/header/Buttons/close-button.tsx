@@ -5,7 +5,7 @@ import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSignOutAlt } from "react-icons/fa";
 
-import { useStyles } from "../../hooks/use-styles";
+import { useStyles } from "../../../hooks/use-styles";
 
 export interface CloseButtonProps {
   resetWorkspace: VoidFunction;

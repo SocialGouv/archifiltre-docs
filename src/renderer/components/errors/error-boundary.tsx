@@ -4,9 +4,9 @@ import React, { Component } from "react";
 import { withTranslation } from "react-i18next";
 import styled from "styled-components";
 
-import { SaveButton } from "../../components/header/save-button";
 import type { ExportToJson } from "../../exporters/json/json-exporter";
 import { reportError } from "../../logging/reporter";
+import { SaveButton } from "../Buttons/SaveButton";
 import { ContactUs } from "./contact-us";
 
 export interface ErrorBoundaryProps {

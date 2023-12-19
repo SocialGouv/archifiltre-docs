@@ -105,6 +105,7 @@
     },
     "header": {
       "export": "Exportieren",
+      "settings": "Einstellungen",
       "auditReport": "Prüfbericht",
       "close": "Schließen",
       "save": "Speichern",

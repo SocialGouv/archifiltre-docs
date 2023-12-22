@@ -17,7 +17,7 @@ body:
       placeholder: SocialGouv/archifiltre-private#<number>
       value: SocialGouv/archifiltre-private#
     validations:
-      required: true
+      required: false
   - type: input
     id: after
     attributes:
@@ -28,21 +28,21 @@ body:
   - type: textarea
     id: context
     validations:
-      required: true
+      required: false
     attributes:
       label: Contexte
       description: Quel est le contexte de cette fonctionnalité ? Qu'est-ce qui fait que cette fonctionnalité doit être ajoutée ?
   - type: textarea
     id: pain
     validations:
-      required: true
+      required: false
     attributes:
       label: Définition du(des) problème(s)
       description: Quels sont les problèmes ou manques actuels dans l'application que empêchent d'atteindre cet objectif ?
   - type: textarea
     id: solution
     validations:
-      required: true
+      required: false
     attributes:
       label: Solution
       description: Quelle est le moyen de résoudre ce problème ? (Il n'est pas nécessaire de se perdre dans les détails techniques d'implémentation)

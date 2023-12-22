@@ -19,14 +19,14 @@ body:
   - type: textarea
     id: describe
     validations:
-      required: true
+      required: false
     attributes:
       label: Description du bug
       description: Comment décrire le bug de manière claire et concise ? Quel est son contexte ?
   - type: textarea
     id: steps
     validations:
-      required: true
+      required: false
     attributes:
       label: Étapes pour reproduire
       description: Quelles sont les étapes pour reproduire le comportement ?
@@ -38,7 +38,7 @@ body:
   - type: textarea
     id: expected
     validations:
-      required: true
+      required: false
     attributes:
       label: Comportement attendu
       description: Quel est le comportement attendu ?
@@ -58,7 +58,7 @@ body:
   - type: textarea
     id: specs
     validations:
-      required: true
+      required: false
     attributes:
       label: Liste des caractéristiques de votre machine
       placeholder: |
@@ -68,7 +68,7 @@ body:
   - type: dropdown
     id: version
     validations:
-      required: true
+      required: false
     attributes:
       label: Version de l'application
       options:

@@ -229,7 +229,7 @@
     "prettier": "^2.5.1",
     "redux-mock-store": "^1.5.4",
     "replace": "^1.2.1",
-    "rimraf": "^3.0.2",
+    "rimraf": "^5.0.5",
     "rmfr": "2.0.0",
     "sass": "^1.49.9",
     "sass-loader": "10",

@@ -136,7 +136,7 @@ export const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
           <ListItem
             button
             onClick={() => {
-              void clearSession();
+              clearSession();
               setPreviousSessions([]);
             }}
             disabled={isLoading}

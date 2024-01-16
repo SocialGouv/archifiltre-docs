@@ -153,14 +153,17 @@
       "fileTypes": {
         "presentation": "Präsentation",
         "publication": "Veröffentlichung",
-        "spreadsheet": "Tabelle",
+        "spreadsheet": "Tabellenkalkulation",
         "email": "E-Mail",
         "document": "Dokument",
         "image": "Bild",
         "video": "Video",
         "audio": "Audio",
-        "other": "Andere"
-      },
+        "other": "Andere",
+        "data": "Daten",
+        "web": "Web"
+      }
+    ,
       "browse": "Stöbern",
       "reload": "Speichern und neu laden",
       "retry": "Wiederholen"

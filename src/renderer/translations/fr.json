@@ -159,7 +159,9 @@
         "image": "Image",
         "video": "Vidéo",
         "audio": "Audio",
-        "other": "Autre"
+        "other": "Autre",
+        "data": "Data",
+        "web": "Web"
       },
       "browse": "Parcourir",
       "reload": "Sauvegarder et recharger",

@@ -6,6 +6,7 @@ import type { FilesAndFolders } from "../reducers/files-and-folders/files-and-fo
 /* eslint-disable @typescript-eslint/naming-convention */
 export enum FileType {
   AUDIO = "audio",
+  DATA = "data",
   DOCUMENT = "document",
   EMAIL = "email",
   IMAGE = "image",
@@ -14,6 +15,7 @@ export enum FileType {
   PUBLICATION = "publication",
   SPREADSHEET = "spreadsheet",
   VIDEO = "video",
+  WEB = "web",
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 
@@ -21,6 +23,7 @@ export const fileTypesByExtensions: Record<string, FileType | undefined> = {
   ".arc": FileType.OTHER,
   ".avi": FileType.VIDEO,
   ".bmp": FileType.IMAGE,
+  ".css": FileType.WEB,
   ".csv": FileType.SPREADSHEET,
   ".doc": FileType.DOCUMENT,
   ".docm": FileType.DOCUMENT,
@@ -32,9 +35,13 @@ export const fileTypesByExtensions: Record<string, FileType | undefined> = {
   ".epub": FileType.PUBLICATION,
   ".flac": FileType.AUDIO,
   ".gif": FileType.IMAGE,
+  ".htm": FileType.WEB,
+  ".html": FileType.WEB,
   ".jp2": FileType.IMAGE,
   ".jpeg": FileType.IMAGE,
   ".jpg": FileType.IMAGE,
+  ".js": FileType.WEB,
+  ".json": FileType.DATA,
   ".mkv": FileType.VIDEO,
   ".mobi": FileType.PUBLICATION,
   ".mov": FileType.VIDEO,
@@ -57,6 +64,7 @@ export const fileTypesByExtensions: Record<string, FileType | undefined> = {
   ".ppt": FileType.PRESENTATION,
   ".pptm": FileType.PRESENTATION,
   ".pptx": FileType.PRESENTATION,
+  ".psd": FileType.IMAGE,
   ".pst": FileType.EMAIL,
   ".rf64": FileType.AUDIO,
   ".rtf": FileType.DOCUMENT,
@@ -77,13 +85,14 @@ export const fileTypesByExtensions: Record<string, FileType | undefined> = {
   ".xltm": FileType.SPREADSHEET,
   ".xltx": FileType.SPREADSHEET,
   ".xlw": FileType.SPREADSHEET,
+  ".xml": FileType.DATA,
   ".zip": FileType.OTHER,
 };
 
 type ExtensionsByFileTypes = Record<FileType, string[]>;
 
 /**
- * Returns the file type of a file
+ * Returns the file type of file
  * @param fileAndFolders
  */
 export const getFileType = (fileAndFolders: FilesAndFolders): FileType =>

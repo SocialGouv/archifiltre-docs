@@ -6,11 +6,10 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Switch from "@material-ui/core/Switch";
 import Tooltip from "@material-ui/core/Tooltip";
-import React, { useCallback } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useUserSettings } from "../../../hooks/use-user-settings";
-import { getInitialUserSettings } from "../../../persistence/persistent-settings";
+import { useGetUserSettings } from "../../../hooks/use-user-settings";
 
 const useStyles = makeStyles((theme: Theme) => ({
   disabled: {
@@ -23,33 +22,20 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export const PrivacySettings: React.FC = () => {
   const { t } = useTranslation();
+  const { userSettings, updateUserSettings } = useGetUserSettings();
   const classes = useStyles();
 
-  const {
-    isTrackingEnabled: defaultIsTrackingEnabled,
-    isMonitoringEnabled: defaultIsMonitoringEnabled,
-  } = getInitialUserSettings();
-  const {
-    userSettings: { isTrackingEnabled, isMonitoringEnabled },
-    setUserSettings,
-  } = useUserSettings();
+  const [isTrackingEnabled, setIsTrackingEnabled] = useState<boolean>(
+    userSettings.isTrackingEnabled
+  );
+  const [isMonitoringEnabled, setIsMonitoringEnabled] = useState<boolean>(
+    userSettings.isMonitoringEnabled
+  );
+  const [isButtonDisable, setIsButtonDisable] = useState<boolean>(false);
+
   const hasSettingChanged =
-    defaultIsTrackingEnabled !== isTrackingEnabled ||
-    defaultIsMonitoringEnabled !== isMonitoringEnabled;
-
-  const toggleTracking = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setUserSettings({ isTrackingEnabled: event.target.checked });
-    },
-    [setUserSettings]
-  );
-
-  const toggleMonitoring = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setUserSettings({ isMonitoringEnabled: event.target.checked });
-    },
-    [setUserSettings]
-  );
+    isTrackingEnabled !== userSettings.isTrackingEnabled ||
+    isMonitoringEnabled !== userSettings.isMonitoringEnabled;
 
   const reloadExplanation = t("settingsModal.reloadExplanation");
 
@@ -58,7 +44,12 @@ export const PrivacySettings: React.FC = () => {
       <Box>
         <FormControlLabel
           control={
-            <Switch checked={isTrackingEnabled} onChange={toggleTracking} />
+            <Switch
+              checked={isTrackingEnabled}
+              onChange={(event) => {
+                setIsTrackingEnabled(event.target.checked);
+              }}
+            />
           }
           label={t("settingsModal.trackingData")}
           classes={{
@@ -69,7 +60,12 @@ export const PrivacySettings: React.FC = () => {
       <Box>
         <FormControlLabel
           control={
-            <Switch checked={isMonitoringEnabled} onChange={toggleMonitoring} />
+            <Switch
+              checked={isMonitoringEnabled}
+              onChange={(event) => {
+                setIsMonitoringEnabled(event.target.checked);
+              }}
+            />
           }
           label={t("settingsModal.monitoringData")}
           classes={{
@@ -84,8 +80,15 @@ export const PrivacySettings: React.FC = () => {
               color="primary"
               variant="contained"
               disableElevation
-              disabled={!hasSettingChanged}
-              onClick={reloadApp}
+              disabled={!hasSettingChanged || isButtonDisable}
+              onClick={async () => {
+                setIsButtonDisable(true);
+                await updateUserSettings({
+                  isMonitoringEnabled,
+                  isTrackingEnabled,
+                });
+                await reloadApp(); // TODO remove after UserSettings don't need to reload
+              }}
             >
               {t("common.reload")}
             </Button>

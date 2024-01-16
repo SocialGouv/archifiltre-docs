@@ -1,7 +1,10 @@
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
 import Select from "@material-ui/core/Select";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import { useLanguage } from "../../../hooks/use-language";
+import { useGetUserSettings } from "../../../hooks/use-user-settings";
 import { Language } from "../../../utils/language/types";
 
 const availableLanguages = [
@@ -20,9 +23,15 @@ const availableLanguages = [
 ];
 
 export const LanguagePicker: React.FC = () => {
-  const [language, setLanguage] = useLanguage();
+  const { t } = useTranslation();
+  const { userSettings, updateUserSettings } = useGetUserSettings();
 
-  const onChange = useCallback(
+  const [language, setLanguage] = useState<string>(userSettings.language);
+  const [isButtonDisable, setIsButtonDisable] = useState<boolean>(false);
+
+  const hasSettingChanged = language !== userSettings.language;
+
+  const onChangeLanguage = useCallback(
     (event) => {
       setLanguage(event.target.value as Language);
     },
@@ -30,12 +39,39 @@ export const LanguagePicker: React.FC = () => {
   );
 
   return (
-    <Select onChange={onChange} value={language} variant="outlined" native>
-      {availableLanguages.map((availableLanguage) => (
-        <option value={availableLanguage.value} key={availableLanguage.value}>
-          {availableLanguage.label}
-        </option>
-      ))}
-    </Select>
+    <>
+      <Box>
+        <Select
+          onChange={onChangeLanguage}
+          value={language}
+          variant="outlined"
+          native
+        >
+          {availableLanguages.map((availableLanguage) => (
+            <option
+              value={availableLanguage.value}
+              key={availableLanguage.value}
+            >
+              {availableLanguage.label}
+            </option>
+          ))}
+        </Select>
+      </Box>
+      <Box pt={1}>
+        <Button
+          color="primary"
+          variant="contained"
+          disableElevation
+          disabled={!hasSettingChanged || isButtonDisable}
+          onClick={async () => {
+            setIsButtonDisable(true);
+            await updateUserSettings({ language });
+            setIsButtonDisable(false);
+          }}
+        >
+          {t("common.reload")}
+        </Button>
+      </Box>
+    </>
   );
 };

@@ -299,7 +299,7 @@ const createCountDuplicateFiles = (
   );
 
 /**
- * Gets the size of of every duplicate file
+ * Gets the size of every duplicate file
  * @param filesAndFolders
  */
 export const countDuplicateFileSizes: Mapper<

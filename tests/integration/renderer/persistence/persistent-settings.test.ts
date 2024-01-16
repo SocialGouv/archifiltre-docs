@@ -1,10 +1,10 @@
-import { sanitizeUserSettings } from "@renderer/persistence/persistent-settings";
+import { sanitizeUserLocalSettings } from "@renderer/persistence/persistent-settings";
 
 describe("persistent-settings", () => {
   describe("sanitizeUserSettings", () => {
     describe("with an empty object", () => {
       it("should return default user settings", () => {
-        expect(sanitizeUserSettings({})).toEqual({
+        expect(sanitizeUserLocalSettings({})).toEqual({
           isMonitoringEnabled: true,
           isTrackingEnabled: true,
           language: "en",
@@ -13,7 +13,7 @@ describe("persistent-settings", () => {
     });
     describe("with undefined", () => {
       it("should return default user settings", () => {
-        expect(sanitizeUserSettings(undefined)).toEqual({
+        expect(sanitizeUserLocalSettings(undefined)).toEqual({
           isMonitoringEnabled: true,
           isTrackingEnabled: true,
           language: "en",
@@ -23,7 +23,7 @@ describe("persistent-settings", () => {
     describe("with valid user settings JSON", () => {
       it("should return default user settings", () => {
         expect(
-          sanitizeUserSettings({
+          sanitizeUserLocalSettings({
             isMonitoringEnabled: true,
             isTrackingEnabled: false,
             language: "fr",
@@ -38,7 +38,7 @@ describe("persistent-settings", () => {
     describe("with partial user settings JSON", () => {
       it("should return default user settings", () => {
         expect(
-          sanitizeUserSettings({
+          sanitizeUserLocalSettings({
             isMonitoringEnabled: false,
           })
         ).toEqual({

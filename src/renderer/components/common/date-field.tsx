@@ -12,7 +12,7 @@ import React, { useState } from "react";
 import { FaPen } from "react-icons/fa";
 import { useDateInput } from "react-nice-dates";
 
-import { useLanguage } from "../../hooks/use-language";
+import { useGetUserSettings } from "../../hooks/use-user-settings";
 import { Language } from "../../utils/language/types";
 
 const languagesMap = {
@@ -34,7 +34,7 @@ const MIN_DATE_YEAR = 1970;
 
 export const DateField: React.FC<DateFieldProps> = ({ date, onDateChange }) => {
   const [isFocused, setFocus] = useState(false);
-  const [language] = useLanguage();
+  const { userSettings } = useGetUserSettings();
 
   const dateChangeHandler = compose(onDateChange, getTime);
 
@@ -42,7 +42,7 @@ export const DateField: React.FC<DateFieldProps> = ({ date, onDateChange }) => {
     useDateInput({
       // TODO: don't use react-nice-dates
       date: fromUnixTime(date / 1000),
-      locale: getLanguageLocale(language),
+      locale: getLanguageLocale(userSettings.language as Language),
       onDateChange: dateChangeHandler,
       validate: (dateToValidate) =>
         getYear(dateToValidate) > MIN_DATE_YEAR &&

@@ -7,8 +7,8 @@ import { ipcRenderer } from "../ipc";
 /**
  * Reloads the app. Acts like F5 or CTRL+R
  */
-export const reloadApp = (): void => {
-  ipcRenderer.sendSync("window.reload");
+export const reloadApp = async (): Promise<void> => {
+  await ipcRenderer.invoke("window.reload");
 };
 
 /**
@@ -21,9 +21,18 @@ export const openLink = (...args: Parameters<Shell["openExternal"]>): void => {
   void ipcRenderer.invoke("shell.openExternal", ...args);
 };
 
-export const getPath = (...args: Parameters<App["getPath"]>): string => {
+export function getPath(...args: Parameters<App["getPath"]>): string {
   if (IS_MAIN) {
     return app.getPath(...args);
   }
-  return ipcRenderer.sendSync("app.getPath", ...args);
-};
+
+  try {
+    return ipcRenderer.sendSync("app.getPath", ...args);
+  } catch (error: unknown) {
+    console.error(
+      "Erreur lors de la communication avec le processus principal:",
+      error
+    );
+    throw error;
+  }
+}

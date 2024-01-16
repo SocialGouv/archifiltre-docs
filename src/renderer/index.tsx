@@ -22,8 +22,8 @@ import { MainSpace } from "./components/main-space/main-space";
 import { Modals } from "./components/modals/modals";
 import { initReporter, reportInfo } from "./logging/reporter";
 import {
-  getInitialUserSettings,
-  initUserSettings,
+  getInitialUserLocalSettings,
+  initUserLocalSettings,
 } from "./persistence/persistent-settings";
 import { initPreviousSessions } from "./persistence/previous-sessions";
 import { SecretDevtools } from "./secret-devtools";
@@ -39,14 +39,20 @@ reportInfo("Docs started");
 document.title = `Docs v${version} (${PRODUCT_CHANNEL})`;
 
 SecretDevtools.enable();
-initUserSettings();
-setupLanguage();
-initPreviousSessions();
-const { isTrackingEnabled, isMonitoringEnabled } = getInitialUserSettings();
-initReporter(isMonitoringEnabled);
 
 void (async () => {
+  initUserLocalSettings();
+  const { isTrackingEnabled, isMonitoringEnabled, language } =
+    getInitialUserLocalSettings();
+
+  await setupLanguage(language);
+
+  initPreviousSessions();
+
+  initReporter(isMonitoringEnabled);
+
   await initTracking();
+
   toggleTracking(isTrackingEnabled);
   setupSentryIntegrations(
     getConfig("appId"),

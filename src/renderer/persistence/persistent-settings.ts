@@ -1,4 +1,3 @@
-import { IS_TEST } from "@common/config";
 import { getPath } from "@common/utils/electron";
 import type { SimpleObject } from "@common/utils/object";
 import fs from "fs";
@@ -7,81 +6,99 @@ import path from "path";
 
 import { getLanguage } from "../languages";
 import { reportError } from "../logging/reporter";
+import { Language } from "../utils/language/types";
 
-export interface UserSettings {
+export interface UserLocalSettings {
   isMonitoringEnabled: boolean;
   isTrackingEnabled: boolean;
   language: string;
 }
 
-const defaultUserSettings: UserSettings = {
+const defaultUserLocalSettings: UserLocalSettings = {
   isMonitoringEnabled: true,
   isTrackingEnabled: true,
-  language: getLanguage()[0] || "en",
+  language: getLanguage()[0] || Language.EN,
 };
 
-let initialUserSettings: UserSettings | undefined = void 0;
+let _initialUserLocalSettings: UserLocalSettings | undefined = undefined;
+let _userSettingsFilePath: string | undefined = undefined;
+
+function getUserLocalSettingsFilePath(): string {
+  if (_userSettingsFilePath) {
+    return _userSettingsFilePath;
+  }
+
+  const userFolderPath = getPath("userData");
+  _userSettingsFilePath = path.join(userFolderPath, "user-settings.json");
+
+  return _userSettingsFilePath;
+}
 
 /**
  * Initialize user settings to values in user-settings.json
  */
-export const initUserSettings = (): void => {
-  if (!initialUserSettings && IS_TEST) {
-    const userSettingsFilePath = getUserSettingsFilePath();
-    initialUserSettings = readUserSettings(userSettingsFilePath);
+export function initUserLocalSettings(): void {
+  if (!_initialUserLocalSettings) {
+    const userSettingsFilePath = getUserLocalSettingsFilePath();
+    _initialUserLocalSettings = readUserLocalSettings(userSettingsFilePath);
   }
-};
+}
 
 /**
  * Getter for initial user settings
  */
-export const getInitialUserSettings = (): UserSettings =>
-  initialUserSettings ?? defaultUserSettings;
-
-const getUserSettingsFilePath = () => {
-  const userFolderPath = getPath("userData");
-  return path.join(userFolderPath, "user-settings.json");
+export const getInitialUserLocalSettings = (): UserLocalSettings => {
+  return _initialUserLocalSettings ?? defaultUserLocalSettings;
 };
 
 /**
  * Returns a normalized value of user settings
- * @param storedUserSettings - User settings stored in user-settings.json
+ * @param storedUserLocalSettings - User settings stored in user-settings.json
  */
-export const sanitizeUserSettings = (
-  storedUserSettings?: SimpleObject
-): UserSettings => {
-  if (!storedUserSettings) {
-    return defaultUserSettings;
+export const sanitizeUserLocalSettings = (
+  storedUserLocalSettings?: SimpleObject
+): UserLocalSettings => {
+  if (!storedUserLocalSettings) {
+    return defaultUserLocalSettings;
   }
   return _.pick(
     {
-      ...defaultUserSettings,
-      ...storedUserSettings,
+      ...defaultUserLocalSettings,
+      ...storedUserLocalSettings,
     },
-    Object.keys(defaultUserSettings)
-  ) as UserSettings;
+    Object.keys(defaultUserLocalSettings)
+  ) as UserLocalSettings;
 };
 
-const readUserSettings = (userSettingsFilePath: string): UserSettings => {
+const readUserLocalSettings = (
+  userSettingsFilePath: string
+): UserLocalSettings => {
   try {
-    const storedUserSettings = fs.readFileSync(userSettingsFilePath, "utf8");
-    return sanitizeUserSettings(JSON.parse(storedUserSettings) as SimpleObject);
+    const storedUserLocalSettings = fs.readFileSync(
+      userSettingsFilePath,
+      "utf8"
+    );
+    return sanitizeUserLocalSettings(
+      JSON.parse(storedUserLocalSettings) as SimpleObject
+    );
   } catch {
-    return defaultUserSettings;
+    return defaultUserLocalSettings;
   }
 };
 
 /**
  * Save new user settings in user-settings.json
- * @param newUserSettings - new value for user settings
+ * @param newUserLocalSettings - new value for user settings
  */
-export const saveUserSettings = async (
-  newUserSettings: UserSettings
-): Promise<void> => {
-  const settingsAsString = JSON.stringify(newUserSettings);
+export async function saveUserLocalSettings(
+  newUserLocalSettings: UserLocalSettings
+): Promise<void> {
+  const settingsAsString = JSON.stringify(newUserLocalSettings);
   try {
-    await fs.promises.writeFile(getUserSettingsFilePath(), settingsAsString);
+    const userSettingsFilePath = getUserLocalSettingsFilePath();
+    await fs.promises.writeFile(userSettingsFilePath, settingsAsString);
+    _initialUserLocalSettings = newUserLocalSettings;
   } catch (err: unknown) {
     reportError(err);
   }
-};
+}

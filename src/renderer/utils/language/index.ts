@@ -1,10 +1,9 @@
-import {
-  getInitialUserSettings,
-  initUserSettings,
-} from "../../persistence/persistent-settings";
 import { translations } from "../../translations/translations";
 
-export const setupLanguage = (): void => {
-  initUserSettings();
-  void translations.changeLanguage(getInitialUserSettings().language);
-};
+export async function setupLanguage(language: string): Promise<void> {
+  if (!language) {
+    throw new Error("MISSING LANGUAGE");
+  }
+
+  await translations.changeLanguage(language);
+}

@@ -43,7 +43,7 @@ export type DropzoneErrorType =
   | "multipleFolderLoaded";
 
 export interface DropzoneProps {
-  loadPath: (path: string) => void;
+  loadPath?: (path: string) => void;
   onClick?: () => void;
   onError: (type: DropzoneErrorType) => void;
   onPathLoaded: (path: string) => void;
@@ -58,6 +58,10 @@ export const Dropzone: React.FC<DropzoneProps> = ({
   loadPath,
 }) => {
   const onNewDirectoryClick = useCallback(async () => {
+    if (!loadPath) {
+      return;
+    }
+
     const chosenPath = await ipcRenderer.invoke("dialog.showOpenDialog", {
       properties: ["openDirectory"],
     });

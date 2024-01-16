@@ -45,20 +45,20 @@ if (app.isPackaged) {
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win: BrowserWindow | null = null;
+let mainWindow: BrowserWindow | null = null;
 
 const getLanguage = () => app.getLocale().slice(0, 2);
 
 const preventNavigation = () => {
-  if (!win) return;
-  win.webContents.on("will-navigate", (event) => {
+  if (!mainWindow) return;
+  mainWindow.webContents.on("will-navigate", (event) => {
     event.preventDefault();
   });
 };
 
 const askBeforeLeaving = () => {
-  if (!win) return;
-  win.on("close", (event) => {
+  if (!mainWindow) return;
+  mainWindow.on("close", (event) => {
     if (isQuitingForUpdate()) {
       return;
     }
@@ -87,15 +87,15 @@ const askBeforeLeaving = () => {
       buttons: [no, yes],
       cancelId: 0,
       defaultId: 0,
-      detail: detail,
-      message: message,
-      title: title,
+      detail,
+      message,
+      title,
       type: "warning",
     };
-    const promiseResponse = dialog.showMessageBox(win!, options);
+    const promiseResponse = dialog.showMessageBox(mainWindow!, options);
     void promiseResponse.then((obj) => {
       if (obj.response === 1) {
-        win?.destroy();
+        mainWindow?.destroy();
       }
     });
   });
@@ -111,7 +111,7 @@ const PRELOAD_PATH = path.resolve(RESOURCES_PATH, "preload.js");
 
 async function createWindow() {
   // Create the browser window.
-  win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     show: false,
     webPreferences: {
       contextIsolation: false,
@@ -122,14 +122,14 @@ async function createWindow() {
     },
   });
 
-  win.once("ready-to-show", () => {
-    win?.show();
+  mainWindow.once("ready-to-show", () => {
+    mainWindow?.show();
   });
 
-  loadWindow(win);
-  win.maximize();
+  loadWindow(mainWindow);
+  mainWindow.maximize();
 
-  await win.loadURL(INDEX_URL);
+  await mainWindow.loadURL(INDEX_URL);
 
   preventNavigation();
 
@@ -137,11 +137,16 @@ async function createWindow() {
     askBeforeLeaving();
   }
   // Emitted when the window is closed.
-  win.on("closed", () => {
+  mainWindow.on("closed", () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    win = null;
+    mainWindow = null;
+  });
+
+  ipcMain.handle("window.reload", () => {
+    mainWindow?.reload();
+    return "reloaded";
   });
 }
 
@@ -161,7 +166,7 @@ void app.whenReady().then(() => {
       console.error("Error loading React dev tools", err);
     }
 
-    void devToolsLoaded.then(() => win?.webContents.openDevTools());
+    void devToolsLoaded.then(() => mainWindow?.webContents.openDevTools());
   }
 });
 
@@ -209,7 +214,7 @@ app.on("window-all-closed", () => {
 app.on("activate", async () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (win === null) {
+  if (mainWindow === null) {
     await createWindow();
   }
 });
@@ -226,5 +231,5 @@ app.on("will-quit", async (event) => {
 
 // Needed for secret devtools
 ipcMain.on("open-devtools", () => {
-  win?.webContents.openDevTools();
+  mainWindow?.webContents.openDevTools();
 });

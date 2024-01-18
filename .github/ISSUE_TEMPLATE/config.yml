@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Remontée de satisfaction
-    url: https://form.typeform.com/to/lTwzr0dP
-    about: Pour donner votre avis sur l'application
+  - name: Idée d'amélioration (non bug)
+    url: https://archifiltre.featurebase.app/
+    about: Pour partager des idées d'améliorations et fonctionnalités

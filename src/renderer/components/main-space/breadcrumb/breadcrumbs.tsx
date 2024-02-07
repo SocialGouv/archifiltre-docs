@@ -9,7 +9,7 @@ import type {
   FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { placeholder } from "../../../utils/color";
+import { PLACEHOLDER_COLOR } from "../../../utils/color";
 import { formatPathForUserSystem } from "../../../utils/file-system/file-sys-util";
 import type {
   FillColor,
@@ -78,7 +78,7 @@ const makeFiller = ({
   isLast,
 }: MakeFillerArgs): BreadcrumbProps => ({
   alias,
-  color: placeholder(),
+  color: PLACEHOLDER_COLOR,
   id,
   isActive: false,
   isFirst,

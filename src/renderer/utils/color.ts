@@ -2,10 +2,14 @@ import { ratio } from "@common/utils/numbers";
 import { useCallback, useMemo } from "react";
 
 import {
+  isArchiveFolder,
   isFile,
   ROOT_FF_ID,
 } from "../reducers/files-and-folders/files-and-folders-selectors";
-import type { FilesAndFoldersMap } from "../reducers/files-and-folders/files-and-folders-types";
+import type {
+  FilesAndFolders,
+  FilesAndFoldersMap,
+} from "../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { IcicleColorMode } from "../reducers/icicle-sort-method/icicle-sort-method-types";
 import { FileType, getFileTypeFromFileName } from "./file-types";
@@ -38,10 +42,6 @@ export const gradient =
         }
       }) as RgbaTuple;
 
-export const setAlpha = (alpha: number, color: RgbaTuple): RgbaTuple => {
-  return color.slice(0, -1).concat([alpha]) as RgbaTuple;
-};
-
 export const toRgba = (color: RgbaTuple): RgbaFunc =>
   `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${color[3]})`;
 
@@ -54,8 +54,7 @@ export const fromRgba = (color: RgbaFunc): RgbaTuple =>
 export const mostRecentDate = (): RgbaTuple => [255, 216, 155, 1];
 export const leastRecentDate = (): RgbaTuple => [20, 86, 130, 1];
 
-const PLACEHOLDER_COLOR: RgbaHex = "#8a8c93";
-const FOLDER_COLOR: RgbaHex = "#fabf0b";
+export const PLACEHOLDER_COLOR: RgbaHex = "#8a8c93";
 
 export const colors: Record<FileType, RgbaHex> = {
   [FileType.PUBLICATION]: "#b4250c",
@@ -67,27 +66,27 @@ export const colors: Record<FileType, RgbaHex> = {
   [FileType.VIDEO]: "#6700c7",
   [FileType.AUDIO]: "#ff35dd",
   [FileType.OTHER]: "#8a8c93",
+  [FileType.DATA]: "#ff9900",
+  [FileType.WEB]: "#ff6600",
+  [FileType.ARCHIVE]: "#7a7a7a",
+  [FileType.FOLDER]: "#fabf0b",
 };
 
-export const folder = (): RgbaHex => FOLDER_COLOR;
-
-export const placeholder = (): RgbaHex => PLACEHOLDER_COLOR;
-
-export const fromFileName = (name: string): RgbaHex => {
-  const fileType = getFileTypeFromFileName(name);
-  return colors[fileType];
-};
-
+export const getFileOrFolderColor = (file: FilesAndFolders): RgbaHex =>
+  colors[
+    isFile(file)
+      ? getFileTypeFromFileName(file.name)
+      : isArchiveFolder(file)
+      ? FileType.ARCHIVE
+      : FileType.FOLDER
+  ];
 /**
  * Hook that returns the fillColorByType method. It allows to get the color of a node using its id.
  */
 const useFillColorByType = (filesAndFolders: FilesAndFoldersMap) =>
   useCallback(
-    (id: string) => {
-      const element = filesAndFolders[id];
+    (id: string) => getFileOrFolderColor(filesAndFolders[id]),
 
-      return isFile(element) ? fromFileName(element.name) : folder();
-    },
     [filesAndFolders]
   );
 

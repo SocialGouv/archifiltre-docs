@@ -42,6 +42,7 @@
       "fileOrFolderRealNamePlaceholder": "Tatsächlicher Name",
       "size": "Größe",
       "folders": "Ordner",
+      "archive": "komprimierte Ordner",
       "files": "Daten",
       "boundaryDates": "Anfangs- und Enddatum",
       "oldestFile": "Ältester Ordner",
@@ -137,6 +138,7 @@
       "level_one": "{{count}} ebene",
       "level_other": "{{count}} ebenen",
       "folder": "Ordner",
+      "archive": "komprimierte Ordner",
       "originalName": "Der ursprüngliche Name des Elements war '{{oldName}}'",
       "byteChar": "B",
       "unknown": "Unbekannt",
@@ -151,6 +153,7 @@
       "files": "Datei(en)",
       "folders": "Verzeichnis(e)",
       "fileTypes": {
+        "archive": "Archive",
         "presentation": "Präsentation",
         "publication": "Veröffentlichung",
         "spreadsheet": "Tabellenkalkulation",

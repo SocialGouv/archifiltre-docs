@@ -7,9 +7,10 @@ import { SessionElementsDetails } from "./session-elements-details";
 import { WorkspaceBoundaryDates } from "./workspace-boundary-dates";
 
 export interface SessionInfoProps {
+  archivesCount: number;
+  filesCount: number;
   firstLevelName: string;
-  nbFiles: number;
-  nbFolders: number;
+  foldersCount: number;
   newestFileTimestamp: number;
   oldestFileTimestamp: number;
   onChangeSessionName: (name: string) => void;
@@ -20,8 +21,9 @@ export interface SessionInfoProps {
 export const SessionInfo: React.FC<SessionInfoProps> = ({
   sessionName,
   onChangeSessionName,
-  nbFolders,
-  nbFiles,
+  foldersCount,
+  archivesCount,
+  filesCount,
   volume,
   newestFileTimestamp,
   oldestFileTimestamp,
@@ -45,8 +47,9 @@ export const SessionInfo: React.FC<SessionInfoProps> = ({
     </Box>
     <Box marginY={0.5}>
       <SessionElementsDetails
-        nbFiles={nbFiles}
-        nbFolders={nbFolders}
+        filesCount={filesCount}
+        foldersCount={foldersCount}
+        archivesCount={archivesCount}
         volume={volume}
       />
     </Box>

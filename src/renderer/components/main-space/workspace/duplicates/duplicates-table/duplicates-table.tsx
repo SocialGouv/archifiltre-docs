@@ -12,7 +12,7 @@ type NumberMap<T extends string = string> = Record<T, number>;
 
 interface TableData {
   fileType: FileType;
-  nbFiles: number;
+  filesCount: number;
   percentage: number;
   size: number;
 }
@@ -39,8 +39,8 @@ export const DuplicatesTable: React.FC<DuplicatesTableProps> = ({
         sortable: true,
       },
       {
-        accessor: "nbFiles",
-        id: "nbFiles",
+        accessor: "filesCount",
+        id: "filesCount",
         name: t("duplicates.filesNumber"),
         sortable: true,
       },
@@ -69,7 +69,7 @@ export const DuplicatesTable: React.FC<DuplicatesTableProps> = ({
         .map(([fileType, fileTypeValue]) => {
           return {
             fileType: fileType,
-            nbFiles: fileTypeValue,
+            filesCount: fileTypeValue,
             percentage: filePercentagesCount[fileType],
             size: fileSizesCount[fileType],
           };

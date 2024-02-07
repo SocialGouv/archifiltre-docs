@@ -2,8 +2,9 @@ import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
-  getFileCount,
+  getArchiveFoldersCount,
   getFilesAndFoldersFromStore,
+  getFilesCount,
   getFoldersCount,
 } from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
 import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
@@ -25,14 +26,19 @@ export const SessionInfoContainer: React.FC = () => {
     [dispatch]
   );
 
-  const nbFiles = useMemo(
-    () => getFileCount(filesAndFolders),
+  const filesCount = useMemo(
+    () => getFilesCount(filesAndFolders),
     [filesAndFolders]
   );
-  const nbFolders = useMemo(
+  const foldersCount = useMemo(
     () => getFoldersCount(filesAndFolders),
     [filesAndFolders]
   );
+  const archiveFoldersCount = useMemo(
+    () => getArchiveFoldersCount(filesAndFolders),
+    [filesAndFolders]
+  );
+
   const metadata = useSelector(getFilesAndFoldersMetadataFromStore);
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   const rootFilesAndFoldersMetadata = metadata[""] ?? {};
@@ -48,8 +54,9 @@ export const SessionInfoContainer: React.FC = () => {
       firstLevelName={firstLevelName}
       sessionName={sessionName}
       onChangeSessionName={setSessionName}
-      nbFiles={nbFiles}
-      nbFolders={nbFolders}
+      filesCount={filesCount}
+      foldersCount={foldersCount - archiveFoldersCount}
+      archivesCount={archiveFoldersCount}
       volume={volume}
       oldestFileTimestamp={oldestFileTimestamp}
       newestFileTimestamp={newestFileTimestamp}

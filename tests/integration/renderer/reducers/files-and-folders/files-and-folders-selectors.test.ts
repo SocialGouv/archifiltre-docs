@@ -5,7 +5,7 @@ import {
   findElementParent,
   getDepthFromPath,
   getElementByVirtualPath,
-  getFileCount,
+  getFilesCount,
   getFiles,
   getFilesAndFoldersAverageLastModified,
   getFilesAndFoldersFromStore,
@@ -267,7 +267,7 @@ describe("files-and-folders-selectors", () => {
         }),
       };
 
-      expect(getFileCount(filesAndFoldersMap)).toBe(1);
+      expect(getFilesCount(filesAndFoldersMap)).toBe(1);
     });
   });
 

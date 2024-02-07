@@ -43,6 +43,7 @@
       "size": "Taille",
       "files": "Fichiers",
       "folders": "dossiers",
+      "archive": "dossiers compressé",
       "boundaryDates": "Dates extrêmes",
       "hash": "Hash",
       "type": "Type",
@@ -137,6 +138,7 @@
       "level_one": "{{count}} niveau",
       "level_other": "{{count}} niveaux",
       "folder": "répertoire",
+      "archive": "dossier compressé",
       "originalName": "Cet élément était originellement intitulé '{{oldName}}'",
       "byteChar": "o",
       "unknown": "inconnu",
@@ -151,6 +153,7 @@
       "files": "fichier(s)",
       "folders": "dossier(s)",
       "fileTypes": {
+        "archive": "Archive",
         "presentation": "Présentation",
         "publication": "Publication",
         "spreadsheet": "Tableur",

@@ -5,7 +5,7 @@ import fs from "fs";
 import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import {
   getElementsToDeleteFromStore,
-  getFileCount,
+  getFilesCount,
   getFilesAndFoldersFromStore,
   getFoldersCount,
   getMaxDepth,
@@ -135,7 +135,7 @@ export const computeAuditReportData = (
     spreadsheetCount: fileTypesCounts[FileType.SPREADSHEET],
     spreadsheetFileTypes: extensionsList[FileType.SPREADSHEET],
     spreadsheetPercent: fileTypesPercents[FileType.SPREADSHEET],
-    totalFilesCount: getFileCount(filesAndFolders),
+    totalFilesCount: getFilesCount(filesAndFolders),
     totalFoldersCount: getFoldersCount(filesAndFolders),
     totalSize: bytes2HumanReadableFormat(
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

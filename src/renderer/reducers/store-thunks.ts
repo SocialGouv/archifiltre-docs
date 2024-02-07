@@ -26,7 +26,6 @@ import {
   getFirstLevelName,
 } from "../utils/file-and-folders";
 import {
-  countZipFiles,
   isJsonFile,
   isRootPath,
   isValidFolderPath,
@@ -101,17 +100,6 @@ import {
 import { getWorkspaceMetadataFromStore } from "./workspace-metadata/workspace-metadata-selectors";
 
 /**
- * Notifies the user that there is a Zip in the loaded files
- */
-const displayZipNotification = (zipCount: number) => {
-  notifyInfo(
-    translations.t("folderDropzone.zipNotificationMessage"),
-    `${zipCount} ${translations.t("folderDropzone.zipNotificationTitle")}`,
-    NotificationDuration.PERMANENT
-  );
-};
-
-/**
  * Notifies the user that the imported JSON version is different from current version
  */
 const displayJsonNotification = () => {
@@ -168,13 +156,6 @@ const displayError = (errorMessage: string, errorTitle: string) => {
 
 const defaultHookParam: HookParam = {};
 
-const handleZipNotificationDisplay = (paths: string[]) => {
-  const zipFileCount = countZipFiles(paths);
-  if (zipFileCount > 0) {
-    displayZipNotification(zipFileCount);
-  }
-};
-
 const handleErrorNotificationDisplay =
   (): ArchifiltreDocsThunkAction => (dispatch, getState) => {
     const errors = getErroredFilesAndFolders(getState());
@@ -201,10 +182,6 @@ const handleNonJsonFileThunk =
   ): ArchifiltreDocsThunkAction =>
   (dispatch) => {
     if (!isJsonFile(fileOrFolderPath)) {
-      const paths = getFiles(
-        filesAndFoldersMapToArray(virtualFileSystem.filesAndFolders)
-      ).map((file) => file.id);
-      handleZipNotificationDisplay(paths);
       void dispatch(handleErrorNotificationDisplay());
       void dispatch(handleHashComputing(virtualFileSystem));
     }
@@ -296,12 +273,15 @@ const loadFilesAndFoldersAfterInitThunk =
     } = {}
   ): ArchifiltreDocsThunkAction<VirtualFileSystemLoader> =>
   (dispatch) => {
-    const { result$, terminate } = loadFileTree(fileOrFolderPath, {
+    const loadedFileTree = loadFileTree(fileOrFolderPath, {
       erroredPaths,
       filesAndFolders,
     });
+
     const virtualFileSystem = operateOnDataProcessingStream(
-      result$ as Observable<ErrorMessage | ResultMessage<HookParam>>,
+      loadedFileTree.result$ as Observable<
+        ErrorMessage | ResultMessage<HookParam>
+      >,
       {
         error: makeLoadFilesAndFoldersErrorHandler(
           dispatch
@@ -317,7 +297,7 @@ const loadFilesAndFoldersAfterInitThunk =
       });
 
     return {
-      terminate,
+      terminate: loadedFileTree.terminate,
       virtualFileSystem,
     };
   };

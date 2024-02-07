@@ -6,14 +6,16 @@ import { bytes2HumanReadableFormat } from "../../../../../utils/file-system/file
 import { SessionElementsDetail } from "./session-elements-detail";
 
 export interface SessionElementsDetailsProps {
-  nbFiles: number;
-  nbFolders: number;
+  archivesCount: number;
+  filesCount: number;
+  foldersCount: number;
   volume: number;
 }
 
 export const SessionElementsDetails: React.FC<SessionElementsDetailsProps> = ({
-  nbFolders,
-  nbFiles,
+  foldersCount,
+  archivesCount,
+  filesCount,
   volume,
 }) => {
   const { t } = useTranslation();
@@ -23,11 +25,17 @@ export const SessionElementsDetails: React.FC<SessionElementsDetailsProps> = ({
       <Grid item>
         <SessionElementsDetail
           title={t("report.folders")}
-          content={nbFolders}
+          content={foldersCount}
         />
       </Grid>
       <Grid item>
-        <SessionElementsDetail title={t("report.files")} content={nbFiles} />
+        <SessionElementsDetail
+          title={t("report.archive")}
+          content={archivesCount}
+        />
+      </Grid>
+      <Grid item>
+        <SessionElementsDetail title={t("report.files")} content={filesCount} />
       </Grid>
       <Grid item>
         <SessionElementsDetail

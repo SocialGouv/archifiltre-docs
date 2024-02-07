@@ -1,8 +1,10 @@
+import crypto from "crypto";
 import md5File from "md5-file";
 import { join } from "path";
 import type { Observable } from "rxjs";
 import { throttleTime } from "rxjs/operators";
 
+import { isInArchiveFolder } from "../../../renderer/reducers/files-and-folders/files-and-folders-selectors";
 import { ipcRenderer } from "../../ipc";
 import type { WorkerError } from "../../types";
 import type { ArchifiltreDocsError } from "../error";
@@ -45,6 +47,14 @@ export const hashResult = (
 export const computeHash = async (
   filePath: string
 ): Promise<HashComputingError | HashComputingResult> => {
+  if (isInArchiveFolder(filePath)) {
+    return {
+      hash: crypto.createHash("md5").update(filePath).digest("hex"),
+      path: filePath,
+      type: "result",
+    };
+  }
+
   try {
     const hash = await md5File(filePath);
     return hashResult(filePath, hash);

@@ -6,7 +6,8 @@ import path from "path";
 
 import {
   decomposePathToElement,
-  isFile,
+  isArchiveFolder,
+  isFolder,
 } from "../reducers/files-and-folders/files-and-folders-selectors";
 import type {
   FilesAndFolders,
@@ -259,6 +260,7 @@ export const createFilePathSequence = (
 };
 
 interface GetTypeOptions {
+  archiveLabel?: string;
   folderLabel?: string;
   unknownLabel?: string;
 }
@@ -274,11 +276,14 @@ export const getType = (
   filesAndFolders: FilesAndFolders,
   {
     folderLabel = translations.t("common.folder"),
+    archiveLabel = translations.t("common.archive"),
     unknownLabel = translations.t("common.unknown"),
   }: GetTypeOptions = {}
 ): string => {
-  if (!isFile(filesAndFolders)) {
-    return folderLabel ?? "";
+  if (isFolder(filesAndFolders)) {
+    return (
+      (isArchiveFolder(filesAndFolders) ? archiveLabel : folderLabel) ?? ""
+    );
   }
   const mimeType = lookup(filesAndFolders.id);
   return (mimeType ? mimeType.split("/").pop()! : unknownLabel) ?? "";

@@ -6,6 +6,7 @@ import _ from "lodash";
 import fp from "lodash/fp";
 import { useSelector } from "react-redux";
 
+import { FileType, getFileTypeFromFileName } from "../../utils/file-types";
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
 import type { FilesAndFoldersMetadataMap } from "../files-and-folders-metadata/files-and-folders-metadata-types";
 import { getHashesFromStore } from "../hashes/hashes-selectors";
@@ -283,30 +284,80 @@ export const getAliasesFromStore = (store: StoreState): AliasMap =>
   getCurrentState(store.filesAndFolders).aliases;
 
 /**
- * Returns true if the filesAndFolders is a file
+ * Vérifie si un objet FilesAndFolders donné est un dossier d'archive.
+ * Un dossier d'archive est défini par le type de fichier correspondant à 'ARCHIVE' obtenu depuis son nom.
+ *
+ * @param {FilesAndFolders} filesAndFolders - L'objet FilesAndFolders à évaluer.
+ *
+ * @returns {boolean} Retourne 'true' si l'objet est un dossier d'archive, sinon 'false'.
  */
-export const isFile = (filesAndFolders: FilesAndFolders): boolean =>
-  filesAndFolders.children.length === 0;
+export const isArchiveFolder = (filesAndFolders: FilesAndFolders): boolean =>
+  getFileTypeFromFileName(filesAndFolders.name) === FileType.ARCHIVE;
 
 /**
- * Returns true if the filesAndFolders is a folder
+ * Vérifie si un chemin de fichier donné est un chemin de fichier dans un dossier d'archive.
+ *
+ * @param filePath
+ *
+ * @returns {boolean} Retourne 'true' si le chemin de fichier est dans un dossier d'archive, sinon 'false'.
  */
-export const isFolder = (filesAndFolders: FilesAndFolders): boolean =>
-  !isFile(filesAndFolders);
+export const isInArchiveFolder = (filePath: string): boolean =>
+  filePath.includes(".zip/") || filePath.endsWith(".zip");
 
 /**
- * Removes the root folder from a filesAndFolders collection
+ * Vérifie si un objet FilesAndFolders donné est un dossier.
+ * Un dossier est défini soit par un tableau 'children' non vide, soit par un type de fichier correspondant à 'ARCHIVE'.
+ *
+ * @param {FilesAndFolders} filesAndFolders - L'objet FilesAndFolders à évaluer.
+ *
+ * @returns {boolean} Retourne 'true' si l'objet est un dossier, sinon 'false'.
  */
-const removeRootFolder: Mapper<
-  FilesAndFoldersCollection,
-  FilesAndFoldersCollection
-> = fp.filter(({ id }) => id !== "");
+export function isFolder(filesAndFolders: FilesAndFolders): boolean {
+  return (
+    filesAndFolders.children.length !== 0 ||
+    getFileTypeFromFileName(filesAndFolders.name) === FileType.ARCHIVE
+  );
+}
 
 /**
- * Get the files only from files and folders
+ * Vérifie si un objet FilesAndFolders donné est un fichier.
+ * Un fichier est défini comme ayant un nom et n'étant pas un dossier.
+ *
+ * @param {FilesAndFolders} filesAndFolders - L'objet FilesAndFolders à évaluer.
+ *
+ * @returns {boolean} Retourne 'true' si l'objet est un fichier, sinon 'false'.
  */
-export const getFiles: Mapper<FilesAndFoldersCollection, FilesAndFolders[]> =
-  fp.filter(isFile);
+export function isFile(filesAndFolders: FilesAndFolders): boolean {
+  return !!filesAndFolders.name && !isFolder(filesAndFolders);
+}
+
+/**
+ * Récupère tous les fichiers d'une map FilesAndFoldersMap.
+ * Les fichiers sont définis comme ayant un nom et n'étant pas un dossier.
+ *
+ * @param {FilesAndFoldersMap} filesAndFoldersMap - La map à parcourir.
+ *
+ * @returns {FilesAndFolders[]} Un tableau d'objets FilesAndFolders qui sont des fichiers.
+ */
+export function getFiles(
+  filesAndFoldersMap: FilesAndFoldersMap
+): FilesAndFolders[] {
+  return Object.values(filesAndFoldersMap).filter(isFile);
+}
+
+/**
+ * Récupère tous les dossiers d'une map FilesAndFoldersMap.
+ * Les dossiers sont définis soit par un tableau 'children' non vide, soit par un type de fichier correspondant à 'ARCHIVE'.
+ *
+ * @param {FilesAndFoldersMap} filesAndFoldersMap - La map à parcourir.
+ *
+ * @returns {FilesAndFolders[]} Un tableau d'objets FilesAndFolders qui sont des dossiers.
+ */
+export function getFolders(
+  filesAndFoldersMap: FilesAndFoldersMap
+): FilesAndFolders[] {
+  return Object.values(filesAndFoldersMap).filter(isFolder);
+}
 
 /**
  * Get only files from files and folders
@@ -321,28 +372,47 @@ export const getFoldersMap: Mapper<FilesAndFoldersMap, FilesAndFoldersMap> =
   fp.pickBy(fp.compose([not, isFile]));
 
 /**
- * Get folders only from files and folders
+ * Calcule et retourne le nombre de fichiers présents dans un objet map de type FilesAndFoldersMap.
+ * Un fichier est défini comme ayant un tableau 'children' vide.
+ *
+ * @param {FilesAndFoldersMap} filesAndFoldersMap - Un objet map où la clé est une chaîne de caractères
+ * et la valeur est un objet FilesAndFolders. Cet objet map représente une structure de fichiers et dossiers.
+ *
+ * @returns {number} Le nombre de fichiers (éléments avec un tableau 'children' vide) présents dans filesAndFoldersMap.
  */
-export const getFolders: Mapper<FilesAndFoldersCollection, FilesAndFolders[]> =
-  fp.filter(fp.compose([not, isFile]));
+export function getFilesCount(filesAndFoldersMap: FilesAndFoldersMap): number {
+  return size(getFiles(filesAndFoldersMap));
+}
 
 /**
- * Returns the number of files in a FilesAndFoldersMap
+ * Calcule et retourne le nombre de dossiers présents dans un objet map de type FilesAndFoldersMap.
+ * Un dossier est défini comme ayant un tableau 'children' non vide.
+ *
+ * @param {FilesAndFoldersMap} filesAndFoldersMap - Un objet map où la clé est une chaîne de caractères
+ * et la valeur est un objet FilesAndFolders. Cet objet map représente une structure de fichiers et dossiers.
+ *
+ * @returns {number} Le nombre de dossiers (éléments avec un tableau 'children' non vide) présents dans filesAndFoldersMap.
  */
-export const getFileCount: Mapper<FilesAndFoldersMap, number> = fp.compose(
-  size,
-  getFiles,
-  removeRootFolder
-);
+export function getFoldersCount(
+  filesAndFoldersMap: FilesAndFoldersMap
+): number {
+  return size(getFolders(filesAndFoldersMap));
+}
 
 /**
- * Returns the number of folders in a FilesAndFoldersMap
+ * Calcule et retourne le nombre de dossiers d'archive présents dans un objet map de type FilesAndFoldersMap.
+ * Un dossier d'archive est défini par un objet FilesAndFolders dont le type de fichier, déterminé par son nom, correspond à 'ARCHIVE'.
+ *
+ * @param {FilesAndFoldersMap} filesAndFoldersMap - Un objet map où la clé est une chaîne de caractères
+ * et la valeur est un objet FilesAndFolders. Cet objet map représente une structure de fichiers et dossiers.
+ *
+ * @returns {number} Le nombre de dossiers d'archive (éléments dont le type de fichier correspond à 'ARCHIVE') présents dans filesAndFoldersMap.
  */
-export const getFoldersCount: Mapper<FilesAndFoldersMap, number> = fp.compose(
-  size,
-  getFolders,
-  removeRootFolder
-);
+export function getArchiveFoldersCount(
+  filesAndFoldersMap: FilesAndFoldersMap
+): number {
+  return size(Object.values(filesAndFoldersMap).filter(isArchiveFolder));
+}
 
 /**
  * Returns the depth of the deepest element of a filesAndFoldersMap

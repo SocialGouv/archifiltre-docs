@@ -6,6 +6,7 @@ import {
 import type { HashesMap } from "@common/utils/hashes-types";
 import parse from "csv-parse/lib/sync";
 import fs from "fs";
+import jszip from "jszip";
 import { noop } from "lodash";
 import { compose, defaults } from "lodash/fp";
 import path from "path";
@@ -77,6 +78,42 @@ const loadFilesAndFoldersFromFileSystemImpl = async (
   const files = [...fileInfos];
   const rootPath = path.dirname(folderPath);
 
+  async function loadFoldersFromFileSystemRec(currentPath: string) {
+    const children = await fs.promises.readdir(currentPath);
+
+    return Promise.all(
+      children.map(async (childPath) =>
+        loadFilesAndFoldersFromFileSystemRec(path.join(currentPath, childPath))
+      )
+    );
+  }
+
+  async function loadZipFromFileSystemRec(currentPath: string) {
+    const zipContent = await fs.promises.readFile(currentPath);
+    const zip = await jszip.loadAsync(zipContent);
+    for (const fileName in zip.files) {
+      const filePath = `${currentPath}/${fileName}`;
+      if (await shouldIgnoreElement(filePath)) {
+        continue;
+      }
+      if (fileName.endsWith("/")) {
+        continue;
+      }
+      const fileInformation = zip.files[fileName] as jszip.JSZipObject & {
+        _data: { compressedSize: number; uncompressedSize: number };
+      };
+
+      onResult();
+      files.push([
+        {
+          lastModified: new Date(fileInformation.date).getTime(),
+          size: fileInformation._data.compressedSize,
+        },
+        getIdFromPath(rootPath, `${currentPath}/${fileName}`),
+      ]);
+    }
+  }
+
   const loadFilesAndFoldersFromFileSystemRec = async (currentPath: string) => {
     try {
       if (await shouldIgnoreElement(currentPath)) {
@@ -85,14 +122,10 @@ const loadFilesAndFoldersFromFileSystemImpl = async (
       const stats = await fs.promises.stat(currentPath);
 
       if (stats.isDirectory()) {
-        const children = await fs.promises.readdir(currentPath);
-        await Promise.all(
-          children.map(async (childPath) =>
-            loadFilesAndFoldersFromFileSystemRec(
-              path.join(currentPath, childPath)
-            )
-          )
-        );
+        await loadFoldersFromFileSystemRec(currentPath);
+        return;
+      } else if (currentPath.endsWith(".zip")) {
+        await loadZipFromFileSystemRec(currentPath);
         return;
       }
 
@@ -222,10 +255,10 @@ const getLineLoader = (version: string): LineLoader =>
  * @param exportFileContent - The content of an export file generating by archifiltre command line exporter
  * @param hook - A hook called after each file is processed.
  */
-export const loadFilesAndFoldersFromExportFileContent = async (
+export async function loadFilesAndFoldersFromExportFileContent(
   exportFileContent: Readable,
   { onResult }: WithResultHook = { onResult: noop }
-): Promise<LoadFilesAndFoldersFromExportFileContentResult> => {
+): Promise<LoadFilesAndFoldersFromExportFileContentResult> {
   const lineReader = readline.createInterface({
     crlfDelay: Infinity,
     input: exportFileContent,
@@ -284,7 +317,7 @@ export const loadFilesAndFoldersFromExportFileContent = async (
     hashes,
     rootPath: basePath,
   };
-};
+}
 
 interface CreateFilesAndFoldersOptions {
   alias?: string;

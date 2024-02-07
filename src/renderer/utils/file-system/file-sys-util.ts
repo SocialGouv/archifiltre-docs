@@ -1,4 +1,3 @@
-import { countItems } from "@common/utils/array";
 import dateFormat from "dateformat";
 import { saveAs } from "file-saver";
 import fs from "fs";
@@ -94,15 +93,6 @@ export const isJsonFile = (filePath: string): boolean => {
 };
 
 export const readFileSync = fs.readFileSync;
-
-/**
- * Get the number of files with .zip extension
- * @param filePaths - list of strings representing file paths
- */
-export const countZipFiles = (filePaths: string[]): number =>
-  countItems<string>((filePath) => path.extname(filePath) === ".zip")(
-    filePaths
-  );
 
 /**
  * Formats a path for the user file system

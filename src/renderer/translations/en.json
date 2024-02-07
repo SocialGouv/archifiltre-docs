@@ -42,6 +42,7 @@
       "fileOrFolderRealNamePlaceholder": "Real name",
       "size": "Size",
       "folders": "Folders",
+      "archive": "compressed folders",
       "files": "files",
       "boundaryDates": "Boundary dates",
       "oldestFile": "Oldest file",
@@ -137,6 +138,7 @@
       "level_one": "{{count}} level",
       "level_other": "{{count}} levels",
       "folder": "folder",
+      "archive": "compressed folders",
       "originalName": "This element original title was '{{oldName}}'",
       "byteChar": "B",
       "unknown": "unknown",
@@ -151,6 +153,7 @@
       "files": "file(s)",
       "folders": "folder(s)",
       "fileTypes": {
+        "archive": "Archive",
         "presentation": "Presentation",
         "publication": "Publication",
         "spreadsheet": "Spreadsheet",

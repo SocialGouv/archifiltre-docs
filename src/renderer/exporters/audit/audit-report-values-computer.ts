@@ -151,9 +151,9 @@ export const percentFileTypes: Mapper<
   FilesAndFoldersCollection,
   FileTypeMap<number>
 > = compose((counts: FileTypeMap<number>) => {
-  const nbFiles = sumFileType(counts);
+  const filesCount = sumFileType(counts);
   return _.mapValues(counts, (filesForType: number) =>
-    getPercentage(filesForType, nbFiles)
+    getPercentage(filesForType, filesCount)
   );
 }, countFileTypes);
 

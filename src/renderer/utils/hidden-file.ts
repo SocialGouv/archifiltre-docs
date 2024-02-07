@@ -36,7 +36,7 @@ const isFileHiddenOnUnix = (filePath: string) =>
 const isHidden = async (filePath: string) =>
   isWindows() ? isFileHiddenOnWindows(filePath) : isFileHiddenOnUnix(filePath);
 
-const IGNORED_NAMES = ["thumbs.db", ".ds_store", ".gitkeep"];
+const IGNORED_NAMES = ["thumbs.db", ".ds_store", ".gitkeep", "__MACOSX"];
 const IGNORED_EXTS = [".lnk", ".tmp", ".ini"];
 const IGNORED_PATTERNS = [
   /^\$/, // matches files starting with $

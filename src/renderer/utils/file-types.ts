@@ -10,7 +10,6 @@ export enum FileType {
   DATA = "data",
   DOCUMENT = "document",
   EMAIL = "email",
-  FOLDER = "folder",
   IMAGE = "image",
   OTHER = "other",
   PRESENTATION = "presentation",
@@ -19,8 +18,11 @@ export enum FileType {
   VIDEO = "video",
   WEB = "web",
 }
-/* eslint-enable @typescript-eslint/naming-convention */
+export enum FolderType {
+  FOLDER = "folder",
+}
 
+/* eslint-enable @typescript-eslint/naming-convention */
 export const fileTypesByExtensions: Record<string, FileType | undefined> = {
   ".arc": FileType.OTHER,
   ".avi": FileType.VIDEO,

@@ -12,7 +12,7 @@ import type {
 } from "../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { IcicleColorMode } from "../reducers/icicle-sort-method/icicle-sort-method-types";
-import { FileType, getFileTypeFromFileName } from "./file-types";
+import { FileType, FolderType, getFileTypeFromFileName } from "./file-types";
 
 type RgbaTuple = [
   red: number,
@@ -56,7 +56,7 @@ export const leastRecentDate = (): RgbaTuple => [20, 86, 130, 1];
 
 export const PLACEHOLDER_COLOR: RgbaHex = "#8a8c93";
 
-export const colors: Record<FileType, RgbaHex> = {
+export const colors: Record<FileType | FolderType, RgbaHex> = {
   [FileType.PUBLICATION]: "#b4250c",
   [FileType.PRESENTATION]: "#f75b40",
   [FileType.SPREADSHEET]: "#52d11a",
@@ -69,7 +69,7 @@ export const colors: Record<FileType, RgbaHex> = {
   [FileType.DATA]: "#ff9900",
   [FileType.WEB]: "#ff6600",
   [FileType.ARCHIVE]: "#7a7a7a",
-  [FileType.FOLDER]: "#fabf0b",
+  [FolderType.FOLDER]: "#fabf0b",
 };
 
 export const getFileOrFolderColor = (file: FilesAndFolders): RgbaHex =>
@@ -78,7 +78,7 @@ export const getFileOrFolderColor = (file: FilesAndFolders): RgbaHex =>
       ? getFileTypeFromFileName(file.name)
       : isArchiveFolder(file)
       ? FileType.ARCHIVE
-      : FileType.FOLDER
+      : FolderType.FOLDER
   ];
 /**
  * Hook that returns the fillColorByType method. It allows to get the color of a node using its id.

@@ -276,21 +276,42 @@ export const getDuplicateFilesPercent: Merger<
   >
 );
 
+type CountDuplicateFilesTotalSize = (
+  filesAndFoldersCollection: FilesAndFoldersCollection,
+  hashesMap: HashesMap
+) => number;
+type BytesToHumanReadableFormat = (size: number) => string;
+
 /**
- * Returns the total size of duplicated files
+ * Calculates the total size of duplicate files in the collection of files and folders.
+ *
+ * @param {FilesAndFoldersCollection} filesAndFoldersCollection The collection of files and folders.
+ * @param {HashesMap} hashesMap The map of file hashes.
+ * @returns {number} The total size of duplicate files in bytes.
  */
-export const getHumanReadableDuplicateTotalSize: Merger<
-  FilesAndFoldersCollection,
-  HashesMap,
-  string
-> = compose(
-  bytes2HumanReadableFormat,
-  countDuplicateFilesTotalSize as Merger<
-    FilesAndFoldersCollection,
-    HashesMap,
-    number
-  >
-);
+export function getDuplicateTotalSize(
+  filesAndFoldersCollection: FilesAndFoldersCollection,
+  hashesMap: HashesMap
+): number {
+  const countDuplicateFilesTotalSizeFunction: CountDuplicateFilesTotalSize =
+    countDuplicateFilesTotalSize as CountDuplicateFilesTotalSize;
+  return countDuplicateFilesTotalSizeFunction(
+    filesAndFoldersCollection,
+    hashesMap
+  );
+}
+
+/**
+ * Converts the total size of duplicate files into a human-readable string.
+ *
+ * @param {number} totalSize The total size of duplicate files in bytes.
+ * @returns {string} The total size of duplicate files in a human-readable format.
+ */
+export function getHumanReadableDuplicateTotalSize(totalSize: number): string {
+  const bytesToHumanReadableFormatFunction: BytesToHumanReadableFormat =
+    bytes2HumanReadableFormat as BytesToHumanReadableFormat;
+  return bytesToHumanReadableFormatFunction(totalSize);
+}
 
 /**
  * Returns the most duplicated files formatted for the audit report
@@ -331,26 +352,53 @@ export const getDuplicatesWithTheBiggestSize = compose(
   getBiggestDuplicatedFolders(5)
 );
 
-export const getElementsToDelete = (
+/**
+ * Formats an element to be deleted into an audit report element.
+ *
+ * @param {FilesAndFolders} element The element to delete.
+ * @param {FilesAndFoldersMetadata} metadata The metadata of the element.
+ * @param {string} folderText The text representation for folders.
+ * @param {string} fileText The text representation for files.
+ * @returns {AuditReportElementWithType} The audit report element.
+ */
+function formatElementToDelete(
+  element: FilesAndFolders,
+  metadata: FilesAndFoldersMetadata,
+  folderText: string,
+  fileText: string
+): AuditReportElementWithType {
+  const type = isFile(element) ? fileText : folderText;
+  return {
+    date: formatAuditReportDate(metadata.maxLastModified),
+    name: element.name,
+    path: formatPathForUserSystem(element.id),
+    size: bytes2HumanReadableFormat(metadata.childrenTotalSize),
+    type,
+  };
+}
+
+/**
+ * Retrieves the elements to delete from the provided files and folders data.
+ *
+ * @param {FilesAndFoldersMap} filesAndFolders The map of files and folders.
+ * @param {FilesAndFoldersMetadataMap} filesAndFoldersMetadata The map of files and folders metadata.
+ * @param {string[]} elementsToDelete The IDs of elements to delete.
+ * @returns {AuditReportElementWithType[]} The elements to delete with their metadata.
+ */
+export function getElementsToDelete(
   filesAndFolders: FilesAndFoldersMap,
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap,
   elementsToDelete: string[]
-): AuditReportElementWithType[] => {
+): AuditReportElementWithType[] {
   const folderText = translations.t("common.folder");
   const fileText = translations.t("common.fileWord");
-  return elementsToDelete
-    .map((filesAndFoldersId) => filesAndFolders[filesAndFoldersId])
-    .map(
-      (fileAndFolder): AuditReportElementWithType => ({
-        date: formatAuditReportDate(
-          filesAndFoldersMetadata[fileAndFolder.id].maxLastModified
-        ),
-        name: fileAndFolder.name,
-        path: formatPathForUserSystem(fileAndFolder.id),
-        size: bytes2HumanReadableFormat(
-          filesAndFoldersMetadata[fileAndFolder.id].childrenTotalSize
-        ),
-        type: isFile(fileAndFolder) ? fileText : folderText,
-      })
-    );
-};
+
+  return elementsToDelete.map((id) =>
+    formatElementToDelete(
+      filesAndFolders[id],
+      filesAndFoldersMetadata[id],
+      folderText,
+      fileText
+    )
+  );
+}

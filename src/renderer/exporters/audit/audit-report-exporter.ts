@@ -1,12 +1,13 @@
 import type { AnyFunction } from "@common/utils/function";
 import type { HashesMap } from "@common/utils/hashes-types";
+import { version } from "@common/utils/package";
 import fs from "fs";
 
 import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import {
   getElementsToDeleteFromStore,
-  getFilesCount,
   getFilesAndFoldersFromStore,
+  getFilesCount,
   getFoldersCount,
   getMaxDepth,
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
@@ -15,6 +16,7 @@ import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-fo
 import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { getHashesFromStore } from "../../reducers/hashes/hashes-selectors";
 import { translations } from "../../translations/translations";
+import { getCO2ByFileSize } from "../../utils";
 import {
   countDuplicateFiles,
   countDuplicateFolders,
@@ -40,6 +42,7 @@ import {
   getDuplicateFoldersPercent,
   getDuplicatesWithTheBiggestSize,
   getDuplicatesWithTheMostCopy,
+  getDuplicateTotalSize,
   getElementsToDelete,
   getExtensionsList,
   getHumanReadableDuplicateTotalSize,
@@ -60,7 +63,16 @@ export const computeAuditReportData = (
   const fileTypesPercents = percentFileTypes(filesAndFolders);
   const fileTypesCounts = countFileTypes(filesAndFolders);
   const extensionsList = getExtensionsList();
+  const totalSizeInBytes =
+    filesAndFoldersMetadata[ROOT_ID].childrenTotalSize || 0;
+  const totalCO2 = getCO2ByFileSize(totalSizeInBytes);
+  const duplicateTotalSize = getDuplicateTotalSize(
+    filesAndFolders,
+    filesAndFoldersHashes
+  );
+
   return {
+    archifiltreVersion: version,
     audioCount: fileTypesCounts[FileType.AUDIO],
     audioFileTypes: extensionsList[FileType.AUDIO],
     audioPercent: fileTypesPercents[FileType.AUDIO],
@@ -78,22 +90,18 @@ export const computeAuditReportData = (
       filesAndFolders,
       filesAndFoldersHashes
     ),
-    duplicateFilePercent: getDuplicateFilesPercent(
-      filesAndFolders,
-      filesAndFoldersHashes
+    duplicateFilePercent: Math.round(
+      getDuplicateFilesPercent(filesAndFolders, filesAndFoldersHashes) * 100
     ),
     duplicateFolderCount: countDuplicateFolders(
       filesAndFolders,
       filesAndFoldersHashes
     ),
-    duplicateFolderPercent: getDuplicateFoldersPercent(
-      filesAndFolders,
-      filesAndFoldersHashes
+    duplicateFolderPercent: Math.round(
+      getDuplicateFoldersPercent(filesAndFolders, filesAndFoldersHashes) * 100
     ),
-    duplicateTotalSize: getHumanReadableDuplicateTotalSize(
-      filesAndFolders,
-      filesAndFoldersHashes
-    ),
+    duplicateTotalCO2: getCO2ByFileSize(duplicateTotalSize),
+    duplicateTotalSize: getHumanReadableDuplicateTotalSize(duplicateTotalSize),
     duplicates: getDuplicatesWithTheMostCopy(
       filesAndFolders,
       filesAndFoldersHashes
@@ -135,12 +143,10 @@ export const computeAuditReportData = (
     spreadsheetCount: fileTypesCounts[FileType.SPREADSHEET],
     spreadsheetFileTypes: extensionsList[FileType.SPREADSHEET],
     spreadsheetPercent: fileTypesPercents[FileType.SPREADSHEET],
+    totalCO2,
     totalFilesCount: getFilesCount(filesAndFolders),
     totalFoldersCount: getFoldersCount(filesAndFolders),
-    totalSize: bytes2HumanReadableFormat(
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      filesAndFoldersMetadata[ROOT_ID].childrenTotalSize ?? 0
-    ),
+    totalSize: bytes2HumanReadableFormat(totalSizeInBytes),
     videoCount: fileTypesCounts[FileType.VIDEO],
     videoFileTypes: extensionsList[FileType.VIDEO],
     videoPercent: fileTypesPercents[FileType.VIDEO],

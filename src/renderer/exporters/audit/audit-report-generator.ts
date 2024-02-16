@@ -28,6 +28,7 @@ export interface AuditReportElementWithType extends AuditReportFile {
 }
 
 export interface AuditReportData {
+  archifiltreVersion: string;
   audioCount: number;
   audioFileTypes: string;
   audioPercent: number;
@@ -41,6 +42,7 @@ export interface AuditReportData {
   duplicateFilePercent: number;
   duplicateFolderCount: number;
   duplicateFolderPercent: number;
+  duplicateTotalCO2: string;
   duplicateTotalSize: string;
   duplicates: AuditReportFileWithCount[];
   elementsToDelete: AuditReportElementWithType[];
@@ -68,6 +70,7 @@ export interface AuditReportData {
   spreadsheetCount: number;
   spreadsheetFileTypes: string;
   spreadsheetPercent: number;
+  totalCO2: string;
   totalFilesCount: number;
   totalFoldersCount: number;
   totalSize: string;

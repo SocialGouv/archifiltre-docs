@@ -1,8 +1,11 @@
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
+import { IoIosCloudOutline } from "react-icons/all";
 
+import { getCO2ByFileSize } from "../../../../../utils";
 import { EditableField } from "../../../../common/editable-field";
+import { HelpTooltip } from "../../../../common/help-tooltip";
 import { SessionElementsDetails } from "./session-elements-details";
 import { WorkspaceBoundaryDates } from "./workspace-boundary-dates";
 
@@ -29,35 +32,61 @@ export const SessionInfo: React.FC<SessionInfoProps> = ({
   oldestFileTimestamp,
   firstLevelName,
 }) => (
-  <Box display="flex" flexDirection="column" justifyContent="space-between">
-    <Box marginY={0.5}>
-      <Box>
-        <EditableField
-          trimValue={true}
-          value={firstLevelName === sessionName ? firstLevelName : sessionName}
-          onChange={onChangeSessionName}
-          selectTextOnFocus={true}
+  <Box display="flex">
+    <Box display="flex" flexDirection="column" justifyContent="space-between">
+      <Box marginY={0.5}>
+        <Box>
+          <EditableField
+            trimValue={true}
+            value={
+              firstLevelName === sessionName ? firstLevelName : sessionName
+            }
+            onChange={onChangeSessionName}
+            selectTextOnFocus={true}
+          />
+        </Box>
+        {firstLevelName !== sessionName && (
+          <Box>
+            <Typography variant="subtitle2">({firstLevelName})</Typography>
+          </Box>
+        )}
+      </Box>
+      <Box marginY={0.5}>
+        <SessionElementsDetails
+          filesCount={filesCount}
+          foldersCount={foldersCount}
+          archivesCount={archivesCount}
+          volume={volume}
         />
       </Box>
-      {firstLevelName !== sessionName && (
+      <Box marginY={0.5}>
+        <WorkspaceBoundaryDates
+          oldestFileTimestamp={oldestFileTimestamp}
+          newestFileTimestamp={newestFileTimestamp}
+        />
+      </Box>
+    </Box>
+    <Box marginLeft={"auto"}>
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
+        textAlign="center"
+      >
         <Box>
-          <Typography variant="subtitle2">({firstLevelName})</Typography>
+          <IoIosCloudOutline size={50} />
         </Box>
-      )}
-    </Box>
-    <Box marginY={0.5}>
-      <SessionElementsDetails
-        filesCount={filesCount}
-        foldersCount={foldersCount}
-        archivesCount={archivesCount}
-        volume={volume}
-      />
-    </Box>
-    <Box marginY={0.5}>
-      <WorkspaceBoundaryDates
-        oldestFileTimestamp={oldestFileTimestamp}
-        newestFileTimestamp={newestFileTimestamp}
-      />
+        <Box>
+          <Typography variant="h5">
+            {getCO2ByFileSize(volume)}{" "}
+            <HelpTooltip
+              tooltipText={
+                "Ce poids est calculé à partir de l’indicateur de la Base IMPACTS® Numérique de l’ADEME : 0,0116 kg CO2eq/an pour 1Go stocké"
+              }
+            />
+          </Typography>
+        </Box>
+      </Box>
     </Box>
   </Box>
 );

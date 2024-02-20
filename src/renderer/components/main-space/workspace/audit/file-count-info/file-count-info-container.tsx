@@ -2,8 +2,8 @@ import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 
 import {
-  getFilesCount,
   getFilesAndFoldersFromStore,
+  getFilesCount,
 } from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
 import { FileCountInfo } from "./file-count-info";
 

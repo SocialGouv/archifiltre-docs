@@ -10,11 +10,13 @@ import {
   PROGRESS_LOADING,
   START_LOADING,
 } from "@renderer/reducers/loading-info/loading-info-types";
+import type { SedaMetadataMapping } from "@renderer/reducers/seda-configuration/seda-configuration-type";
 import type { StoreState } from "@renderer/reducers/store";
 import { MessageTypes } from "@renderer/utils/batch-process/types";
 import { promises as fs } from "fs";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
+import type { Observable } from "rxjs";
 import { of } from "rxjs";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";
@@ -128,7 +130,10 @@ const testState = {
   tags: wrapStoreWithUndoable({ tags }),
 };
 
-const generateCsvExportMock = generateCsvExport$ as jest.Mock;
+const generateCsvExportMock: jest.Mock<
+  Observable<any>,
+  [SedaMetadataMapping]
+> = generateCsvExport$ as jest.Mock;
 const writeFileMock = fs.writeFile as jest.Mock;
 const csvValue = "csv-value";
 
@@ -163,6 +168,9 @@ describe("csv-exporter", () => {
           elementsToDelete: [taggedFfId],
           filesAndFolders,
           filesAndFoldersMetadata,
+          metadata: {},
+          metadataKeys: [],
+          sedaMapping: {},
           tags,
         });
         expect(writeFileMock).toHaveBeenCalledWith(exportPath, csvValue, {
@@ -205,6 +213,9 @@ describe("csv-exporter", () => {
           filesAndFolders,
           filesAndFoldersMetadata,
           hashes,
+          metadata: {},
+          metadataKeys: [],
+          sedaMapping: {},
           tags,
         });
 

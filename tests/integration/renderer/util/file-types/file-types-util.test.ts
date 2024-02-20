@@ -53,12 +53,12 @@ describe("file-types-util", () => {
 
     it("should return the right type for archive", () => {
       const zipFile = createFileWithExt("zip");
-      expect(getFileType(zipFile)).toBe(FileType.OTHER);
+      expect(getFileType(zipFile)).toBe(FileType.ARCHIVE);
     });
 
     it("should return the right type for unknown type", () => {
       const xmlFile = createFileWithExt("xml");
-      expect(getFileType(xmlFile)).toBe(FileType.OTHER);
+      expect(getFileType(xmlFile)).toBe(FileType.DATA);
     });
   });
 });

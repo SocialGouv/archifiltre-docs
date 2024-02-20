@@ -120,7 +120,10 @@ describe("audit-report-values-computer", () => {
         [FileType.IMAGE]: 0,
         [FileType.VIDEO]: 0,
         [FileType.AUDIO]: 0,
-        [FileType.OTHER]: 1,
+        [FileType.OTHER]: 0,
+        [FileType.ARCHIVE]: 0,
+        [FileType.DATA]: 1,
+        [FileType.WEB]: 0,
       });
     });
   });
@@ -136,7 +139,10 @@ describe("audit-report-values-computer", () => {
         [FileType.IMAGE]: 0,
         [FileType.VIDEO]: 0,
         [FileType.AUDIO]: 0,
-        [FileType.OTHER]: 1000,
+        [FileType.OTHER]: 0,
+        [FileType.ARCHIVE]: 0,
+        [FileType.DATA]: 1000,
+        [FileType.WEB]: 0,
       });
     });
   });
@@ -152,7 +158,10 @@ describe("audit-report-values-computer", () => {
         [FileType.IMAGE]: 0,
         [FileType.VIDEO]: 0,
         [FileType.AUDIO]: 0,
-        [FileType.OTHER]: 33.33,
+        [FileType.OTHER]: 0,
+        [FileType.ARCHIVE]: 0,
+        [FileType.DATA]: 33.33,
+        [FileType.WEB]: 0,
       });
     });
   });

@@ -4,31 +4,19 @@ import { mapValues } from "lodash";
 
 import { createAsyncWorkerMock } from "./async-worker-test-utils";
 
-// import { translations } from "../../translations/translations";
-// import { MessageTypes } from "../batch-process/batch-process-util-types";
-// import { createAsyncWorkerMock } from "./async-worker-test-utils";
-// import { makeChildWorkerMessageCallback } from "./async-worker-util";
-
-// jest.mock("translations/translations", () => ({
-//   changeLanguage: jest.fn(),
-// }));
-
 const asyncWorker = createAsyncWorkerMock();
 
 const resetMocks = () => {
-  // (translations.changeLanguage as jest.Mock).mockReset();
   mapValues(asyncWorker, (mock) => mock.mockReset());
 };
 
 describe("async-worker-util", () => {
   const { error } = console;
   beforeAll(() => {
-    // eslint-disable-next-line no-console
     console.error = jest.fn();
   });
 
   afterAll(() => {
-    // eslint-disable-next-line no-console
     console.error = error;
   });
   describe("setupChildWorkerListeners", () => {
@@ -51,10 +39,6 @@ describe("async-worker-util", () => {
 
           await callback(message);
         });
-        // it.skip("should change the language", () => {
-        //   // eslint-disable-next-line @typescript-eslint/unbound-method
-        //   expect(translations.changeLanguage).toHaveBeenCalledWith("fr");
-        // });
 
         it("should call the onInitializeCallback", () => {
           expect(onInitialize).toHaveBeenCalledWith(asyncWorker, message.data);

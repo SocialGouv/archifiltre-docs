@@ -1,6 +1,6 @@
 /* eslint-disable jest/expect-expect */
+import type { CsvExportData } from "@renderer/exporters/csv/csv-exporter-types";
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import { createTag } from "@renderer/reducers/tags/tags-selectors";
 import { makeRowConfig } from "@renderer/utils/array-export/make-array-export-config";
 import { formatPathForUserSystem } from "@renderer/utils/file-system/file-sys-util";
 
@@ -14,11 +14,33 @@ const newModification = 962568000000;
 const lastModification = 1531670400000;
 
 const tags = {
-  taggy: createTag({
+  tag1: {
     ffIds: [rowId],
-    id: "taggy ",
-    name: "Taggy",
-  }),
+    id: "tag1",
+    name: "Tag Number One",
+  },
+  tag2: {
+    ffIds: [rowId],
+    id: "tag2",
+    name: "Tag Number Two",
+  },
+  tag3: {
+    ffIds: [rowId],
+    id: "tag3",
+    name: "Tag Number Three",
+  },
+};
+
+const csvConfig: CsvExportData = {
+  aliases: {},
+  comments: {},
+  elementsToDelete: [],
+  filesAndFolders: {},
+  filesAndFoldersMetadata: {},
+  metadata: {},
+  metadataKeys: [],
+  sedaMapping: {},
+  tags,
 };
 
 const hashes = {
@@ -37,6 +59,31 @@ const comments = {
 
 const idsToDelete = [rowId];
 
+const metadata = {
+  group1: [
+    {
+      content: "Contenu de la première métadonnée du groupe 1.",
+      entity: "entity1",
+      id: 1,
+      name: "Métadonnée 1",
+    },
+    {
+      content: "Contenu de la seconde métadonnée du groupe 1.",
+      entity: "entity2",
+      id: 2,
+      name: "Métadonnée 2",
+    },
+  ],
+  group2: [
+    {
+      content: "Contenu de la première métadonnée du groupe 2.",
+      entity: "entity3",
+      id: 3,
+      name: "Métadonnée 3",
+    },
+  ],
+};
+
 const rowDataSample = {
   ...createFilesAndFolders({
     id: rowId,
@@ -53,6 +100,7 @@ const rowDataSample = {
   comments,
   hashes,
   idsToDelete,
+  metadata,
   overrideLastModified: {},
   tags,
 };
@@ -62,7 +110,7 @@ describe("make-array-export-config", () => {
     const translator = (translationKey: string) =>
       `translate(${translationKey})`;
 
-    const rowConfig = makeRowConfig(translator, tags);
+    const rowConfig = makeRowConfig(translator, csvConfig);
 
     const makeTestRow =
       ({
@@ -303,9 +351,10 @@ describe("make-array-export-config", () => {
 
     it("should fill tags", () => {
       const columnConfig = rowConfig.find(
-        (config) => config.title === "tag0 : Taggy"
+        (config) => config.title === "tag0 : Tag Number One"
       );
-      expect(columnConfig?.accessor(rowDataSample)).toEqual("Taggy");
+
+      expect(columnConfig?.accessor(rowDataSample)).toEqual("Tag Number One");
     });
   });
 });

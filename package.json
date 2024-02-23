@@ -89,7 +89,8 @@
       "winston",
       "xlsx",
       "xml",
-      "xstate"
+      "xstate",
+      "jszip"
     ]
   },
   "//build.extraResources": "Static should be set again because it is overwritten",

@@ -173,7 +173,7 @@
     "node": "^16"
   },
   "devDependencies": {
-    "@commitlint/cli": "13.1.0",
+    "@commitlint/cli": "19.0.3",
     "@commitlint/config-conventional": "17.1.0",
     "@playwright/test": "^1.20.1",
     "@semantic-release/changelog": "^6.0.1",
@@ -234,7 +234,7 @@
     "rmfr": "2.0.0",
     "sass": "^1.49.9",
     "sass-loader": "10",
-    "semantic-release": "^19.0.3",
+    "semantic-release": "^23.0.2",
     "stdio-mock": "^1.1.0",
     "ts-jest": "27.1.4",
     "tsconfig-paths": "^4.1.0",

@@ -1,4 +1,4 @@
-import { bytesToGB } from "./bytesToGB";
+import { bytesToGB } from "./bytes";
 import { calculateCO2Emissions } from "./calculateCO2Emissions";
 import { formatCO2Emissions } from "./formatCO2Emissions";
 

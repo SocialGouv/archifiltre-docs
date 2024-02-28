@@ -23,12 +23,13 @@ const typescriptConfig = {
   plugins: ["typescript-sort-keys"],
   rules: {
     "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/init-declarations": "off",
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "import/default": "off",
     "import/named": "off",
-    "no-console": ["error", { "allow": ["warn", "error", "info", "debug"] }],
+    "no-console": ["error", { allow: ["warn", "error", "info", "debug"] }],
     "no-unused-vars": "off",
     "prefer-template": "warn",
     "prettier/prettier": [

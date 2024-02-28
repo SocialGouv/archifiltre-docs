@@ -11,19 +11,21 @@ import {
   getFilesAndFoldersMedianLastModified,
   getFilesAndFoldersMinLastModified,
   getFilesAndFoldersTotalSize,
-  getFilesCount,
   getFilesMap,
   getFilesTotalSize,
-  getFoldersArchive,
-  getFoldersCount,
   getLastModifiedDateOverrides,
   getMaxDepth,
   getRealLastModified,
-  isFileArchive,
 } from "@renderer/reducers/files-and-folders/files-and-folders-selectors";
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import type { StoreState } from "@renderer/reducers/store";
-import { getFiles } from "@renderer/utils";
+import {
+  getFiles,
+  getFilesCount,
+  getFoldersArchive,
+  getFoldersCount,
+  isFile,
+} from "@renderer/utils";
 import _ from "lodash";
 
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
@@ -241,7 +243,7 @@ describe("files-and-folders-selectors", () => {
         id: "test",
       });
 
-      expect(isFileArchive(filesAndFolders)).toBe(true);
+      expect(isFile(filesAndFolders)).toBe(true);
     });
 
     it("should return false if the element is a folder", () => {
@@ -250,7 +252,7 @@ describe("files-and-folders-selectors", () => {
         id: "test",
       });
 
-      expect(isFileArchive(filesAndFolders)).toBe(false);
+      expect(isFile(filesAndFolders)).toBe(false);
     });
   });
 

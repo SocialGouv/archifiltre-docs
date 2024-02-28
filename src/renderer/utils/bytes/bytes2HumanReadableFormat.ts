@@ -1,4 +1,4 @@
-import { translations } from "../translations/translations";
+import { translations } from "../../translations/translations";
 import { bytesToGB } from "./bytesToGB";
 import { bytesToKB } from "./bytesToKB";
 import { bytesToMB } from "./bytesToMB";

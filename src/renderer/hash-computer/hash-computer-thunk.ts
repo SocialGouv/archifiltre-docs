@@ -15,7 +15,6 @@ import type { ArchifiltreDocsThunkAction } from "../reducers/archifiltre-types";
 import {
   getFilesAndFoldersFromStore,
   getFilesMap,
-  getFoldersCount,
 } from "../reducers/files-and-folders/files-and-folders-selectors";
 import {
   addErroredHashes,
@@ -38,7 +37,7 @@ import { openModalAction } from "../reducers/modal/modal-actions";
 import { Modal } from "../reducers/modal/modal-types";
 import { getWorkspaceMetadataFromStore } from "../reducers/workspace-metadata/workspace-metadata-selectors";
 import { translations } from "../translations/translations";
-import { getRelativePath } from "../utils";
+import { getFoldersCount, getRelativePath } from "../utils";
 import {
   NotificationDuration,
   notifyError,

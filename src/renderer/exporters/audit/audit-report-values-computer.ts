@@ -274,7 +274,6 @@ type CountDuplicateFilesTotalSize = (
   filesAndFoldersCollection: FilesAndFoldersCollection,
   hashesMap: HashesMap
 ) => number;
-type BytesToHumanReadableFormat = (size: number) => string;
 
 /**
  * Calculates the total size of duplicate files in the collection of files and folders.

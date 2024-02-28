@@ -7,8 +7,6 @@ import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-type
 import {
   getElementsToDeleteFromStore,
   getFilesAndFoldersFromStore,
-  getFilesCount,
-  getFoldersCount,
   getMaxDepth,
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
@@ -16,7 +14,12 @@ import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-fo
 import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { getHashesFromStore } from "../../reducers/hashes/hashes-selectors";
 import { translations } from "../../translations/translations";
-import { bytes2HumanReadableFormat, getCO2ByFileSize } from "../../utils";
+import {
+  bytes2HumanReadableFormat,
+  getCO2ByFileSize,
+  getFilesCount,
+  getFoldersCount,
+} from "../../utils";
 import {
   countDuplicateFiles,
   countDuplicateFolders,

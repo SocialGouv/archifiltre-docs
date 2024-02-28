@@ -242,14 +242,14 @@ describe("audit-report-values-computer", () => {
           date: "01/01/1970",
           name: "base-name",
           path: formatPathForUserSystem(folderId2),
-          size: "3 kB",
+          size: "2.9 kB",
           type: "folder",
         },
         {
           date: "01/01/1970",
           name: fileName1,
           path: formatPathForUserSystem(fileId1),
-          size: "3 kB",
+          size: "2.9 kB",
           type: "file",
         },
       ]);

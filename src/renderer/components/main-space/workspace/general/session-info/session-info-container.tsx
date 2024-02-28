@@ -4,12 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getArchiveFoldersCount,
   getFilesAndFoldersFromStore,
-  getFilesCount,
-  getFoldersCount,
 } from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
 import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getSessionNameFromStore } from "../../../../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { setSessionNameThunk } from "../../../../../reducers/workspace-metadata/workspace-metadata-thunk";
+import { getFilesCount, getFoldersCount } from "../../../../../utils";
 import { getFirstLevelName } from "../../../../../utils/file-and-folders";
 import type { SessionInfoProps } from "./session-info";
 import { SessionInfo } from "./session-info";

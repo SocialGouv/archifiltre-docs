@@ -6,7 +6,7 @@ import _ from "lodash";
 import fp from "lodash/fp";
 import { useSelector } from "react-redux";
 
-import { getFiles, isArchiveFolder, isFile, isFolder } from "../../utils";
+import { isArchiveFolder, isFile } from "../../utils";
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
 import type { FilesAndFoldersMetadataMap } from "../files-and-folders-metadata/files-and-folders-metadata-types";
 import { getHashesFromStore } from "../hashes/hashes-selectors";
@@ -284,20 +284,6 @@ export const getAliasesFromStore = (store: StoreState): AliasMap =>
   getCurrentState(store.filesAndFolders).aliases;
 
 /**
- * Récupère tous les dossiers d'une map FilesAndFoldersMap.
- * Les dossiers sont définis soit par un tableau 'children' non vide, soit par un type de fichier correspondant à 'ARCHIVE'.
- *
- * @param {FilesAndFoldersMap} filesAndFoldersMap - La map à parcourir.
- *
- * @returns {FilesAndFolders[]} Un tableau d'objets FilesAndFolders qui sont des dossiers.
- */
-export function getFoldersArchive(
-  filesAndFoldersMap: FilesAndFoldersMap
-): FilesAndFolders[] {
-  return Object.values(filesAndFoldersMap).filter(isFolder);
-}
-
-/**
  * Get only files from files and folders
  */
 export const getFilesMap: Mapper<FilesAndFoldersMap, FilesAndFoldersMap> =
@@ -308,34 +294,6 @@ export const getFilesMap: Mapper<FilesAndFoldersMap, FilesAndFoldersMap> =
  */
 export const getFoldersMap: Mapper<FilesAndFoldersMap, FilesAndFoldersMap> =
   fp.pickBy(fp.compose([not, isFile]));
-
-/**
- * Calcule et retourne le nombre de fichiers présents dans un objet map de type FilesAndFoldersMap.
- * Un fichier est défini comme ayant un tableau 'children' vide.
- *
- * @param {FilesAndFoldersMap} filesAndFoldersMap - Un objet map où la clé est une chaîne de caractères
- * et la valeur est un objet FilesAndFolders. Cet objet map représente une structure de fichiers et dossiers.
- *
- * @returns {number} Le nombre de fichiers (éléments avec un tableau 'children' vide) présents dans filesAndFoldersMap.
- */
-export function getFilesCount(filesAndFoldersMap: FilesAndFoldersMap): number {
-  return size(getFiles(filesAndFoldersMap));
-}
-
-/**
- * Calcule et retourne le nombre de dossiers présents dans un objet map de type FilesAndFoldersMap.
- * Un dossier est défini comme ayant un tableau 'children' non vide.
- *
- * @param {FilesAndFoldersMap} filesAndFoldersMap - Un objet map où la clé est une chaîne de caractères
- * et la valeur est un objet FilesAndFolders. Cet objet map représente une structure de fichiers et dossiers.
- *
- * @returns {number} Le nombre de dossiers (éléments avec un tableau 'children' non vide) présents dans filesAndFoldersMap.
- */
-export function getFoldersCount(
-  filesAndFoldersMap: FilesAndFoldersMap
-): number {
-  return size(getFoldersArchive(filesAndFoldersMap));
-}
 
 /**
  * Calcule et retourne le nombre de dossiers d'archive présents dans un objet map de type FilesAndFoldersMap.

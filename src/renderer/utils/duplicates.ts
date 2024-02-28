@@ -30,7 +30,6 @@ import type { FileTypeMap } from "../exporters/audit/audit-report-values-compute
 import type { FilesAndFoldersCollection } from "../reducers/files-and-folders/files-and-folders-selectors";
 import {
   getFilesMap,
-  getFoldersArchive,
   getFoldersMap,
 } from "../reducers/files-and-folders/files-and-folders-selectors";
 import type {
@@ -42,7 +41,7 @@ import type {
   FilesAndFoldersMetadataMap,
 } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { FileType, getFileType } from "./file-types";
-import { getFiles } from "./fileAndFolder";
+import { getFiles, getFoldersArchive } from "./fileAndFolder";
 
 export type DuplicatesMap = Record<string, FilesAndFolders[]>;
 

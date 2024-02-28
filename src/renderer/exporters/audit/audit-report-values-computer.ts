@@ -26,10 +26,6 @@ import {
 } from "lodash/fp";
 
 import type { FilesAndFoldersCollection } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import {
-  getFiles,
-  isFile,
-} from "../../reducers/files-and-folders/files-and-folders-selectors";
 import type {
   FilesAndFolders,
   FilesAndFoldersMap,
@@ -39,7 +35,7 @@ import type {
   FilesAndFoldersMetadataMap,
 } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { translations } from "../../translations/translations";
-import { bytes2HumanReadableFormat } from "../../utils";
+import { bytes2HumanReadableFormat, getFiles, isFile } from "../../utils";
 import {
   countDuplicateFilesTotalSize,
   countDuplicatesPercentForFiles,

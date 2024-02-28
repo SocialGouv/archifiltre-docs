@@ -4,10 +4,7 @@ import { compose, constant, property, sortBy, toString } from "lodash/fp";
 import { extname } from "path";
 
 import type { CsvExportData } from "../../exporters/csv/csv-exporter-types";
-import {
-  getDepthFromPath,
-  isFile,
-} from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { getDepthFromPath } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import type {
   AliasMap,
   CommentsMap,
@@ -21,6 +18,7 @@ import type { DuplicatesMap } from "../duplicates";
 import { hasDuplicateInDuplicatesMap } from "../duplicates";
 import { getType, isExactFileOrAncestor } from "../file-and-folders";
 import { formatPathForUserSystem } from "../file-system/file-sys-util";
+import { isFile } from "../fileAndFolder";
 
 /**
  * Simple date formatting function for performance matters.

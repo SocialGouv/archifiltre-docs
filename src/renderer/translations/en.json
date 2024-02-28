@@ -329,7 +329,7 @@
       "filesNumber": "Number of files",
       "spaceUsed": "Size in file tree",
       "percentage": "Percentage (size)",
-      "duplicatesList": "Elements list"
+      "duplicatesList": "List of items (does not apply to .zip)"
     }
   }
 }

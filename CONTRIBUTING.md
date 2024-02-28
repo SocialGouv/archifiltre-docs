@@ -85,9 +85,9 @@ A basic new ChildProcess would look like :
 ```typescript
 // child-process.controller.ts
 import MyChildProcess from "./child-process.fork.ts";
-import { createAsyncWorkerForChildProcessControllerFactory } from "util/async-worker/child-process";
-import { MessageTypes } from "util/batch-process/batch-process-util-types";
-import { cancelableBackgroundWorkerProcess$ } from "util/batch-process/batch-process-util";
+import { createAsyncWorkerForChildProcessControllerFactory } from "utils/async-worker/child-process";
+import { MessageTypes } from "utils/batch-process/batch-process-utils-types";
+import { cancelableBackgroundWorkerProcess$ } from "utils/batch-process/batch-process-utils";
 
 export const runMyChildProcess = () => {
     // We build a factory that return the AsyncWorker object. The parameter is the child process file name
@@ -101,9 +101,9 @@ export const runMyChildProcess = () => {
 
 ```typescript
 // my-child-process.fork.ts
-import { MessageTypes } from "../util/batch-process/batch-process-util-types";
-import { createAsyncWorkerForChildProcess } from "util/async-worker/child-process";
-import { setupChildWorkerListeners } from "util/async-worker/async-worker-util";
+import { MessageTypes } from "../utils/batch-process/batch-process-utils-types";
+import { createAsyncWorkerForChildProcess } from "utils/async-worker/child-process";
+import { setupChildWorkerListeners } from "utils/async-worker/async-worker-utils";
 
 const asyncWorker = createAsyncWorkerForChildProcess();
 

@@ -4,7 +4,7 @@ import { join } from "path";
 import type { Observable } from "rxjs";
 import { throttleTime } from "rxjs/operators";
 
-import { isInArchiveFolder } from "../../../renderer/reducers/files-and-folders/files-and-folders-selectors";
+import { isInArchiveFolder } from "../../../renderer/utils";
 import { ipcRenderer } from "../../ipc";
 import type { WorkerError } from "../../types";
 import type { ArchifiltreDocsError } from "../error";
@@ -44,6 +44,11 @@ export const hashResult = (
   type: "result",
 });
 
+/**
+ * Computes the MD5 hash of a file at the specified path.
+ * @param filePath The path of the file to hash.
+ * @returns A promise resolved with either a HashComputingResult or a HashComputingError.
+ */
 export const computeHash = async (
   filePath: string
 ): Promise<HashComputingError | HashComputingResult> => {
@@ -59,14 +64,15 @@ export const computeHash = async (
     const hash = await md5File(filePath);
     return hashResult(filePath, hash);
   } catch (err: unknown) {
-    if ((err as WorkerError).code === "ENOENT") {
+    const workerError = err as WorkerError;
+    if (workerError.code === "ENOENT") {
       return fileNotFound(filePath);
     }
-    if ((err as WorkerError).code === "EACCES") {
+    if (workerError.code === "EACCES") {
       return accessDenied(filePath);
     }
 
-    return unhandledFileError(filePath, (err as WorkerError).message);
+    return unhandledFileError(filePath, workerError.message);
   }
 };
 
@@ -78,9 +84,11 @@ export const computeHashes = (
     string,
     HashComputingResult,
     HashComputingError
-  >(async (filePaths: string[]) => {
-    return ipcRenderer.invoke("hash.computeHash", filePaths);
-  }, isResult);
+  >(
+    async (filePaths: string[]) =>
+      ipcRenderer.invoke("hash.computeHash", filePaths),
+    isResult
+  );
 
   const paths = files.map((file) => join(basePath, file));
 

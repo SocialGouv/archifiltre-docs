@@ -11,12 +11,12 @@ import {
 import {
   getElementsToDeleteFromStore,
   getFilesAndFoldersFromStore,
-  isFolder,
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import type { FilesAndFoldersMap } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import type { FilesAndFoldersMetadataMap } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { getHashesFromStore } from "../../../reducers/hashes/hashes-selectors";
+import { isFolder } from "../../../utils";
 import { getFilesDuplicatesMap } from "../../../utils/duplicates";
 import { getAllChildren } from "../../../utils/file-and-folders";
 import { DuplicatesSearch } from "./duplicates-search";

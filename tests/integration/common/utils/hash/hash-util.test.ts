@@ -10,7 +10,7 @@ import {
   unhandledFileError,
 } from "@common/utils/hash/hash-errors";
 
-describe("hash-util", () => {
+describe("hash-utils", () => {
   describe("hashErrorToArchifiltreDocsError", () => {
     it("should handle fileNotFound error", () => {
       const filePath = "path1";

@@ -20,7 +20,7 @@ const ERROR_TITLE = "error-title";
 
 const notifyErrorMock = notifyError as jest.Mock;
 
-describe("error-util", () => {
+describe("error-utils", () => {
   describe("handleError", () => {
     it("should notify default error when error is unhandled", () => {
       notifyErrorMock.mockReset();

@@ -1,11 +1,7 @@
 import { ratio } from "@common/utils/numbers";
 import { useCallback, useMemo } from "react";
 
-import {
-  isArchiveFolder,
-  isFile,
-  ROOT_FF_ID,
-} from "../reducers/files-and-folders/files-and-folders-selectors";
+import { ROOT_FF_ID } from "../reducers/files-and-folders/files-and-folders-selectors";
 import type {
   FilesAndFolders,
   FilesAndFoldersMap,
@@ -13,6 +9,7 @@ import type {
 import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { IcicleColorMode } from "../reducers/icicle-sort-method/icicle-sort-method-types";
 import { FileType, FolderType, getFileTypeFromFileName } from "./file-types";
+import { isArchiveFolder, isFile } from "./fileAndFolder";
 
 type RgbaTuple = [
   red: number,

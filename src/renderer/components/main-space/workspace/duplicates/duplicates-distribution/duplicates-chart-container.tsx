@@ -1,12 +1,10 @@
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 
-import {
-  getFiles,
-  getFilesAndFoldersFromStore,
-} from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
+import { getFilesAndFoldersFromStore } from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
 import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getHashesFromStore } from "../../../../../reducers/hashes/hashes-selectors";
+import { getFiles } from "../../../../../utils";
 import {
   countDuplicateFiles,
   countDuplicateFilesTotalSize,

@@ -4,11 +4,7 @@ import MD5 from "js-md5";
 import { lookup } from "mime-types";
 import path from "path";
 
-import {
-  decomposePathToElement,
-  isArchiveFolder,
-  isFolder,
-} from "../reducers/files-and-folders/files-and-folders-selectors";
+import { decomposePathToElement } from "../reducers/files-and-folders/files-and-folders-selectors";
 import type {
   FilesAndFolders,
   FilesAndFoldersMap,
@@ -18,6 +14,7 @@ import { getTitleFromMetadata } from "../reducers/metadata/metadata-selector";
 import type { Metadata } from "../reducers/metadata/metadata-types";
 import { translations } from "../translations/translations";
 import { convertToPosixAbsolutePath } from "./file-system/file-sys-util";
+import { isArchiveFolder, isFolder } from "./fileAndFolder";
 
 /**
  * Returns the number of folders in an array which have strictly more that nbChildren children
@@ -125,26 +122,6 @@ export const filesAndFoldersMapToArray = (
       ...filesAndFolders[id],
       id,
     })) as FilesAndFolders[];
-
-/**
- * Returns all the files from a filesAndFolders list
- * @param filesAndFoldersArray
- * @returns {*}
- */
-export const getFiles = (
-  filesAndFoldersArray: FilesAndFolders[]
-): FilesAndFolders[] =>
-  filesAndFoldersArray.filter(({ children }) => !children.length);
-
-/**
- * Filters files and folders to only get folders
- * @param filesAndFolders
- * @returns {*}
- */
-export const getFolders = (
-  filesAndFolders: FilesAndFolders[]
-): FilesAndFolders[] =>
-  filesAndFolders.filter(({ children }) => children.length);
 
 type HookCompute = (hashes: HashesMap) => void;
 

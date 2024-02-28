@@ -9,7 +9,6 @@ import PizZip from "pizzip";
 import { v4 as uuidv4 } from "uuid";
 import XML from "xml";
 
-import { isFile } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import type {
   AliasMap,
   CommentsMap,
@@ -20,6 +19,7 @@ import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folder
 import { getAllTagsForFile } from "../../reducers/tags/tags-selectors";
 import type { TagMap } from "../../reducers/tags/tags-types";
 import { translations } from "../../translations/translations";
+import { isFile } from "../../utils";
 import { getDisplayName } from "../../utils/file-and-folders";
 import { notifyError, notifySuccess } from "../../utils/notifications";
 import { version } from "../../version";

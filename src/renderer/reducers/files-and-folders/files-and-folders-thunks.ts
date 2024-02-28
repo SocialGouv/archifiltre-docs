@@ -3,6 +3,7 @@ import { bytesToMegabytes } from "@common/utils/numbers";
 
 import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/file-system-loading-process-utils";
 import { translations } from "../../translations/translations";
+import { isFile, isFolder } from "../../utils";
 import { isExactFileOrAncestor } from "../../utils/file-and-folders";
 import { notifyInfo } from "../../utils/notifications";
 import type { ArchifiltreDocsThunkAction } from "../archifiltre-types";
@@ -19,8 +20,6 @@ import {
   findElementParent,
   getFilesAndFoldersFromStore,
   getLastModifiedDateOverrides,
-  isFile,
-  isFolder,
 } from "./files-and-folders-selectors";
 import type { FilesAndFoldersMap } from "./files-and-folders-types";
 

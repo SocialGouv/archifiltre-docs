@@ -330,7 +330,7 @@
       "filesNumber": "Anzahl der Dateien",
       "spaceUsed": "Größe im Dateibaum",
       "percentage": "Prozentsatz (Größe)",
-      "duplicatesList": "Liste der Duplikate"
+      "duplicatesList": "Liste der Elemente (gilt nicht für .zip)"
     }
   }
 }

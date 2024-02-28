@@ -7,7 +7,6 @@ import fs from "fs";
 import _, { noop } from "lodash";
 import { compose, defaults } from "lodash/fp";
 
-import { isFile } from "../reducers/files-and-folders/files-and-folders-selectors";
 import type {
   FilesAndFoldersMap,
   LastModifiedMap,
@@ -15,6 +14,7 @@ import type {
 import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
+import { isFile } from "../utils";
 import { isJsonFile } from "../utils/file-system/file-sys-util";
 import { hookCounter } from "../utils/hook";
 import { version } from "../version";

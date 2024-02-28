@@ -14,7 +14,6 @@ import readline from "readline";
 import type { Readable } from "stream";
 
 import {
-  isFile,
   reduceFilesAndFolders,
   ROOT_FF_ID,
 } from "../reducers/files-and-folders/files-and-folders-selectors";
@@ -24,6 +23,7 @@ import type {
   VirtualPathToIdMap,
 } from "../reducers/files-and-folders/files-and-folders-types";
 import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
+import { isFile } from "../utils";
 import { convertJsonToCurrentVersion } from "../utils/compatibility";
 import { getIdFromPath } from "../utils/file-and-folders";
 import { identifyFileFormat } from "../utils/file-format";

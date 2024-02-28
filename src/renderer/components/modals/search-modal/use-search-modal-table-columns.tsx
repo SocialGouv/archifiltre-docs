@@ -2,13 +2,12 @@ import dateFormat from "dateformat";
 import type { TFunction } from "i18next";
 import React, { useMemo } from "react";
 
-import { isFile } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import type {
   ElementWithToDelete,
   FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadataMap } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import { bytes2HumanReadableFormat } from "../../../utils";
+import { bytes2HumanReadableFormat, isFile } from "../../../utils";
 import { getType } from "../../../utils/file-and-folders";
 import type { Column } from "../../common/table/table-types";
 import { WordBreak } from "../../common/table/table-types";

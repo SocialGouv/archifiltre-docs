@@ -69,9 +69,6 @@ export const computeAuditReportData = (
 
   return {
     archifiltreVersion: version,
-    archiveCount: fileTypesCounts[FileType.ARCHIVE],
-    archiveFileTypes: extensionsList[FileType.ARCHIVE],
-    archivePercent: fileTypesPercents[FileType.ARCHIVE],
     audioCount: fileTypesCounts[FileType.AUDIO],
     audioFileTypes: extensionsList[FileType.AUDIO],
     audioPercent: fileTypesPercents[FileType.AUDIO],
@@ -130,9 +127,11 @@ export const computeAuditReportData = (
       filesAndFoldersMetadata[ROOT_ID].minLastModified ?? 0
     ),
     oldestFiles: getOldestFiles(filesAndFolders),
-    otherCount: fileTypesCounts[FileType.OTHER],
+    otherCount:
+      fileTypesCounts[FileType.OTHER] + fileTypesCounts[FileType.ARCHIVE],
     otherFileTypes: "les types restants",
-    otherPercent: fileTypesPercents[FileType.OTHER],
+    otherPercent:
+      fileTypesPercents[FileType.OTHER] + fileTypesPercents[FileType.ARCHIVE],
     presentationCount: fileTypesCounts[FileType.PRESENTATION],
     presentationFileTypes: extensionsList[FileType.PRESENTATION],
     presentationPercent: fileTypesPercents[FileType.PRESENTATION],

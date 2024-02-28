@@ -2,14 +2,11 @@ import { getPercentage } from "@common/utils/numbers";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import {
-  isFolder,
-  ROOT_FF_ID,
-} from "../../reducers/files-and-folders/files-and-folders-selectors";
+import { ROOT_FF_ID } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { translations } from "../../translations/translations";
-import { bytes2HumanReadableFormat } from "../../utils";
+import { bytes2HumanReadableFormat, isFolder } from "../../utils";
 import type { Dims } from "./icicle/icicle-rect";
 import type { FillColor } from "./icicle/icicle-types";
 

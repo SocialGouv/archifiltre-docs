@@ -5,25 +5,25 @@ import {
   findElementParent,
   getDepthFromPath,
   getElementByVirtualPath,
-  getFilesCount,
-  getFiles,
   getFilesAndFoldersAverageLastModified,
   getFilesAndFoldersFromStore,
   getFilesAndFoldersMaxLastModified,
   getFilesAndFoldersMedianLastModified,
   getFilesAndFoldersMinLastModified,
   getFilesAndFoldersTotalSize,
+  getFilesCount,
   getFilesMap,
   getFilesTotalSize,
-  getFolders,
+  getFoldersArchive,
   getFoldersCount,
   getLastModifiedDateOverrides,
   getMaxDepth,
   getRealLastModified,
-  isFile,
+  isFileArchive,
 } from "@renderer/reducers/files-and-folders/files-and-folders-selectors";
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import type { StoreState } from "@renderer/reducers/store";
+import { getFiles } from "@renderer/utils";
 import _ from "lodash";
 
 import { createEmptyStore, wrapStoreWithUndoable } from "../store-test-utils";
@@ -179,7 +179,7 @@ describe("files-and-folders-selectors", () => {
 
   describe("getFolders", () => {
     it("should filter out files", () => {
-      const folders = getFolders(filesAndFoldersTestMap);
+      const folders = getFoldersArchive(filesAndFoldersTestMap);
       expect(folders.length).toBe(2);
       expect(folders).toEqual(expect.arrayContaining([rootFolder, child1]));
     });
@@ -241,7 +241,7 @@ describe("files-and-folders-selectors", () => {
         id: "test",
       });
 
-      expect(isFile(filesAndFolders)).toBe(true);
+      expect(isFileArchive(filesAndFolders)).toBe(true);
     });
 
     it("should return false if the element is a folder", () => {
@@ -250,7 +250,7 @@ describe("files-and-folders-selectors", () => {
         id: "test",
       });
 
-      expect(isFile(filesAndFolders)).toBe(false);
+      expect(isFileArchive(filesAndFolders)).toBe(false);
     });
   });
 

@@ -5,7 +5,6 @@ import {
   getAliasesFromStore,
   getFilesAndFoldersFromStore,
   getRealLastModified,
-  isFile,
   useLastModifiedDateOverrides,
 } from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
 import {
@@ -15,6 +14,7 @@ import {
 import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getHashesFromStore } from "../../../../../reducers/hashes/hashes-selectors";
 import { useWorkspaceMetadata } from "../../../../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { isFile } from "../../../../../utils";
 import { getType } from "../../../../../utils/file-and-folders";
 import { getAbsolutePath } from "../../../../../utils/file-system/file-sys-util";
 import { ElementCharacteristics } from "./element-characteristics";

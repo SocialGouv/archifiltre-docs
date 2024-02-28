@@ -18,11 +18,11 @@ import type { VirtualFileSystem } from "../files-and-folders-loader/files-and-fo
 import { firstHashesComputingThunk } from "../hash-computer/hash-computer-thunk";
 import { reportError } from "../logging/reporter";
 import { translations } from "../translations/translations";
+import { getFilesFromArray } from "../utils";
 import { filterResults } from "../utils/batch-process";
 import type { ErrorMessage, ResultMessage } from "../utils/batch-process/types";
 import {
   filesAndFoldersMapToArray,
-  getFiles,
   getFirstLevelName,
 } from "../utils/file-and-folders";
 import {
@@ -376,9 +376,9 @@ const loadFilesAndFoldersFromValidPathThunk =
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         vfs.filesAndFoldersMetadata[ROOT_FF_ID].childrenTotalSize ?? 0;
 
-      const paths = getFiles(filesAndFoldersMapToArray(filesAndFoldersMap)).map(
-        (file) => file.id
-      );
+      const paths = getFilesFromArray(
+        filesAndFoldersMapToArray(filesAndFoldersMap)
+      ).map((file) => file.id);
       const fileCount = paths.length;
       const folderCount = Object.keys(filesAndFoldersMap).length - fileCount;
 

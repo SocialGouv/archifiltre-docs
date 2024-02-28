@@ -12,7 +12,6 @@ import {
   getCommentsFromStore,
   getElementsToDeleteFromStore,
   getFilesAndFoldersFromStore,
-  isFolder,
 } from "../../../../reducers/files-and-folders/files-and-folders-selectors";
 import { updateCommentThunk } from "../../../../reducers/files-and-folders/files-and-folders-thunks";
 import type { FilesAndFoldersMap } from "../../../../reducers/files-and-folders/files-and-folders-types";
@@ -26,6 +25,7 @@ import {
   getTagsFromStore,
 } from "../../../../reducers/tags/tags-selectors";
 import { useWorkspaceMetadata } from "../../../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { isFolder } from "../../../../utils";
 import { getAllChildren } from "../../../../utils/file-and-folders";
 import { Enrichment } from "./enrichment";
 

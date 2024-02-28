@@ -8,7 +8,6 @@ import {
   getFilesAndFoldersFromStore,
   getMaxDepth,
   getVirtualPathToIdFromStore,
-  isFolder,
   ROOT_FF_ID,
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
 import { moveElement } from "../../../reducers/files-and-folders/files-and-folders-thunks";
@@ -24,6 +23,7 @@ import {
   getWorkspaceMetadataFromStore,
   useWorkspaceMetadata,
 } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { isFolder } from "../../../utils";
 import { useFillColor } from "../../../utils/color";
 import {
   createFilePathSequence,

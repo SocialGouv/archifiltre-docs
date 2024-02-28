@@ -3,12 +3,11 @@ import type { HashComputingResult } from "@common/utils/hash";
 import {
   computeHashes,
   hashErrorToArchifiltreDocsError,
-  hashResultsToMap,
 } from "@common/utils/hash";
 import type { HashesMap } from "@common/utils/hashes-types";
-import { map as lodashMap } from "lodash/fp";
 import path from "path";
-import { pipe } from "rxjs";
+import type { Dispatch } from "react";
+import type { AnyAction } from "redux";
 import { map, tap } from "rxjs/operators";
 
 import { reportError } from "../logging/reporter";
@@ -39,6 +38,7 @@ import { openModalAction } from "../reducers/modal/modal-actions";
 import { Modal } from "../reducers/modal/modal-types";
 import { getWorkspaceMetadataFromStore } from "../reducers/workspace-metadata/workspace-metadata-selectors";
 import { translations } from "../translations/translations";
+import { getRelativePath } from "../utils";
 import {
   NotificationDuration,
   notifyError,
@@ -56,38 +56,43 @@ const computeFileHashesIgnoredThunk =
     return 0;
   };
 
+/**
+ * Creates a thunk action to compute hashes for specified files.
+ * @param originalPath The original path of the folder containing the files.
+ * @param fileIds The IDs of the files for which to compute hashes.
+ * @param loadingActionId The ID of the loading action to update.
+ * @returns A thunk function that, when executed, initiates the computation of hashes and updates the Redux store accordingly.
+ */
 const computeFileHashesImplThunk =
   (
     originalPath: string,
     fileIds: string[],
     loadingActionId: string
   ): ArchifiltreDocsThunkAction<Promise<number>> =>
-  async (dispatch): Promise<number> => {
+  async (dispatch: Dispatch<AnyAction>): Promise<number> => {
     dispatch(resetErroredHashes());
     const basePath = path.dirname(originalPath);
     const hashes$ = computeHashes(fileIds, basePath);
 
-    const getRelativePath = (filePath: string): string =>
-      `/${path.relative(basePath, filePath).replaceAll("\\", "/")}`;
-
-    const formatResult = pipe(
-      lodashMap(
-        ({
-          path: pathToFormat,
-          ...rest
-        }: HashComputingResult): HashComputingResult => ({
-          ...rest,
-          path: getRelativePath(pathToFormat),
-        })
-      ),
-      hashResultsToMap
-    );
+    /**
+     * Formats the hash computation results into a HashesMap, mapping file paths to their hashes or null.
+     * @param hashResults The results from the hash computation.
+     * @returns A HashesMap mapping relative paths to hash strings or null.
+     */
+    const formatResult = (hashResults: HashComputingResult[]): HashesMap => {
+      const formattedResults: HashesMap = {};
+      hashResults.forEach(({ path: resultPath, hash }) => {
+        const relativePath = getRelativePath(basePath, resultPath);
+        formattedResults[relativePath] = hash || null;
+      });
+      return formattedResults;
+    };
 
     const result = await hashes$
       .pipe(
         map(({ errors, results, ...rest }) => ({
           ...rest,
-          errors: errors.map(hashErrorToArchifiltreDocsError),
+          errors: errors.map(hashErrorToArchifiltreDocsError), // Assuming this function exists
           results: formatResult(results),
         })),
         tap(({ results, errors }) => {
@@ -114,7 +119,7 @@ const computeFileHashesImplThunk =
         addErroredHashes(
           result.errors.map(({ filePath, ...rest }) => ({
             ...rest,
-            filePath: getRelativePath(filePath),
+            filePath: getRelativePath(basePath, filePath),
           }))
         )
       );
@@ -129,6 +134,17 @@ interface ComputeFileHashesThunkOptions {
   originalPath: string;
 }
 
+/**
+ * Thunk action to compute hashes for given file paths. It can optionally ignore the computation
+ * if the file hashes have already been loaded, to optimize performance.
+ *
+ * @param filePaths - An array of file paths for which hashes need to be computed.
+ * @param options - Options controlling how file hashes are computed.
+ * @param options.ignoreFileHashes - If true, skips the hash computation for files.
+ * @param options.loadingActionId - An identifier for the loading action, used to track the progress.
+ * @param options.originalPath - The original path used as a reference for hash computation.
+ * @returns A promise that resolves to the number of files for which hashes were computed or ignored.
+ */
 const computeFileHashesThunk =
   (
     filePaths: string[],
@@ -141,11 +157,15 @@ const computeFileHashesThunk =
   async (dispatch): Promise<number> => {
     const filesCount = filePaths.length;
 
-    return ignoreFileHashes
-      ? dispatch(computeFileHashesIgnoredThunk(loadingActionId, filesCount))
-      : dispatch(
-          computeFileHashesImplThunk(originalPath, filePaths, loadingActionId)
-        );
+    if (ignoreFileHashes) {
+      return dispatch(
+        computeFileHashesIgnoredThunk(loadingActionId, filesCount)
+      );
+    }
+
+    return dispatch(
+      computeFileHashesImplThunk(originalPath, filePaths, loadingActionId)
+    );
   };
 
 const computeFolderHashesThunk =
@@ -171,6 +191,23 @@ const computeFolderHashesThunk =
     });
   };
 
+/**
+ * Handles errors related to hash computation, triggering a notification and opening a modal.
+ * @param dispatch The Redux dispatch function.
+ */
+const handleHashesError = (dispatch: Dispatch<AnyAction>) => {
+  const loadingErrorMessage = translations.t("hash.loadingErrorMessage");
+  const hashTitle = translations.t("hash.title");
+  notifyError(
+    loadingErrorMessage,
+    hashTitle,
+    NotificationDuration.PERMANENT,
+    () => {
+      dispatch(openModalAction(Modal.HASHES_ERROR_MODAL));
+    }
+  );
+};
+
 interface ComputeHashesThunkOptions {
   hashesLoadedLabel: string;
   hashesLoadingLabel: string;
@@ -179,11 +216,18 @@ interface ComputeHashesThunkOptions {
 }
 
 /**
- * Thunk that computes files and folders hashes
- * @param filePaths
- * @param originalPath
- * @param options
- * @param options.ignoreFileHashes - allows to ignore file hashes computation if they have already been loaded.
+ * Thunk function that computes hashes for a list of files and folders.
+ * It optionally skips file hash computation if they are already loaded.
+ * This function initiates loading, computes file and folder hashes, and then completes the loading process.
+ * On success, it notifies the user that the report is ready. On failure, it shows an error notification.
+ *
+ * @param {string[]} filePaths - The paths of the files for which to compute hashes.
+ * @param {ComputeHashesThunkOptions} options - The options for hash computation.
+ * @param {boolean} options.ignoreFileHashes - If true, skips computation of file hashes if they are already loaded.
+ * @param {string} options.originalPath - The original path of the files and folders.
+ * @param {string} options.hashesLoadingLabel - The label to show while hashes are being computed.
+ * @param {string} options.hashesLoadedLabel - The label to show once hashes computation is completed.
+ * @returns {ArchifiltreDocsThunkAction} A thunk action that performs the hash computation process.
  */
 export const computeHashesThunk =
   (
@@ -198,8 +242,6 @@ export const computeHashesThunk =
   async (dispatch, getState) => {
     const state = getState();
     const filesAndFolders = getFilesAndFoldersFromStore(state);
-
-    // We also compute the root folder hash
     const foldersCount = getFoldersCount(filesAndFolders) + 1;
 
     const loadingActionId = dispatch(
@@ -229,14 +271,7 @@ export const computeHashesThunk =
     );
 
     if (fileHashesErrorsCount > 0) {
-      const loadingErrorMessage = translations.t("hash.loadingErrorMessage");
-      const hashTitle = translations.t("hash.title");
-      notifyError(
-        loadingErrorMessage,
-        hashTitle,
-        NotificationDuration.PERMANENT,
-        () => dispatch(openModalAction(Modal.HASHES_ERROR_MODAL))
-      );
+      handleHashesError(dispatch);
     }
   };
 

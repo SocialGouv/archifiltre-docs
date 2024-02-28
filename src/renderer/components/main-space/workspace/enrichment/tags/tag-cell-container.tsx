@@ -11,7 +11,6 @@ import {
 import {
   getElementsToDeleteFromStore,
   getFilesAndFoldersFromStore,
-  isFolder,
 } from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
 import type { FilesAndFoldersMap } from "../../../../../reducers/files-and-folders/files-and-folders-types";
 import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
@@ -27,6 +26,7 @@ import {
   getHoveredElementIdFromStore,
   getLockedElementIdFromStore,
 } from "../../../../../reducers/workspace-metadata/workspace-metadata-selectors";
+import { isFolder } from "../../../../../utils";
 import { getAllChildren } from "../../../../../utils/file-and-folders";
 import type { TagCellProps } from "./tag-cell";
 import { TagCell } from "./tag-cell";

@@ -1,4 +1,4 @@
-import { generateRandomString } from "@common/utils/random-gen";
+import { generateSecureRandomString } from "@common/utils/generateSecureRandomString";
 import noop from "lodash/noop";
 
 type Visible = (animationId: string) => boolean;
@@ -13,7 +13,7 @@ interface Animation {
 
 type AnimationQueue = Record<string, Animation>;
 
-const genId = () => generateRandomString(40);
+const genId = () => generateSecureRandomString(40);
 
 const queue: AnimationQueue = {};
 

@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import { createHash } from "crypto";
 import md5File from "md5-file";
 import { join } from "path";
 import type { Observable } from "rxjs";
@@ -54,7 +54,7 @@ export const computeHash = async (
 ): Promise<HashComputingError | HashComputingResult> => {
   if (isInArchiveFolder(filePath)) {
     return {
-      hash: crypto.createHash("md5").update(filePath).digest("hex"),
+      hash: createHash("sha256").update(filePath).digest("hex"),
       path: filePath,
       type: "result",
     };

@@ -1,6 +1,6 @@
+import { generateSecureRandomString } from "@common/utils/generateSecureRandomString";
 import type { HashesMap } from "@common/utils/hashes-types";
 import type { SimpleObject } from "@common/utils/object";
-import { generateRandomString } from "@common/utils/random-gen";
 import dateFormat from "dateformat";
 import fs from "fs";
 import MD5 from "js-md5";
@@ -58,7 +58,7 @@ const makeObj = (key: string, value: unknown) => ({
 });
 
 const makeId = () => {
-  return `_${generateRandomString(40)}`;
+  return `_${generateSecureRandomString(40)}`;
 };
 
 const DATE_FORMAT = "yyyy-mm-dd'T'HH:MM:ss";
@@ -78,18 +78,18 @@ const DUMMY_ARK = "ark:/12148/cbDUMMY";
 // SPECIFIC ROOT ELEMENTS
 // =================================
 const METS_SOURCE =
-  "http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd";
+  "https://www.loc.gov/METS/ https://www.loc.gov/standards/mets/mets.xsd";
 
 const makeManifestRootAttributes = () => {
   /* eslint-disable @typescript-eslint/naming-convention */
   return {
-    xmlns: "http://www.loc.gov/METS/",
+    xmlns: "https://www.loc.gov/METS/",
     "xmlns:dc": "http://purl.org/dc/elements/1.1/",
     "xmlns:dcterms": "http://purl.org/dc/terms/",
     "xmlns:link": "http://www.w3.org/1999/xlink",
-    "xmlns:mets": "http://www.loc.gov/METS/",
+    "xmlns:mets": "https://www.loc.gov/METS/",
     "xmlns:premis": "info:lc/xmlns/premis-v2",
-    "xmlns:spar_dc": "http://bibnum.bnf.fr/ns/spar_dc",
+    "xmlns:spar_dc": "http://bibnum.bnf.fr/ns/spar_dc.xsd",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
     "xsi:schemaLocation": METS_SOURCE,
   };

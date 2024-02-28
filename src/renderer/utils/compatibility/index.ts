@@ -6,8 +6,8 @@
     @typescript-eslint/no-unsafe-argument,
     @typescript-eslint/no-unsafe-return
 */
+import { generateSecureRandomString } from "@common/utils/generateSecureRandomString";
 import type { SimpleObject } from "@common/utils/object";
-import { generateRandomString } from "@common/utils/random-gen";
 import _, { mapValues, pick } from "lodash";
 import fp from "lodash/fp";
 
@@ -154,7 +154,7 @@ const v8JsToV9Js = (v8: V8 & V9To12): SimpleObject => {
     const ans = {} as any;
     for (const key in tags) {
       if (Object.prototype.hasOwnProperty.call(tags, key)) {
-        ans[generateRandomString(40)] = {
+        ans[generateSecureRandomString(40)] = {
           ff_ids: tags[key].map((a: any) => mapOldToNewId[a]),
           name: key,
         };

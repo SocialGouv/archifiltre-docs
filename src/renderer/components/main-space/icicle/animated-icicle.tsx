@@ -1,4 +1,4 @@
-import { generateRandomString } from "@common/utils/random-gen";
+import { generateSecureRandomString } from "@common/utils/generateSecureRandomString";
 import type { MouseEventHandler } from "react";
 import React, { memo, useCallback, useRef, useState } from "react";
 
@@ -19,7 +19,7 @@ const _AnimatedIcicle: React.FC<AnimatedIcicleProps> = (props) => {
   const [previousProps, setPreviousProps] = useState(props);
   const animatedPreviousElementRef = useRef<SVGGElement>(null);
   const animatedCurrentElementRef = useRef<SVGGElement>(null);
-  const svgId = generateRandomString(40);
+  const svgId = generateSecureRandomString(40);
 
   const onIcicleRectDoubleClick: IcicleMouseActionHandler = useCallback(
     ({ dims, id }, event) => {

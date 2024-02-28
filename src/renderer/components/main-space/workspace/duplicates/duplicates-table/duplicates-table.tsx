@@ -2,7 +2,7 @@ import Box from "@material-ui/core/Box";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { bytes2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
+import { bytes2HumanReadableFormat } from "../../../../../utils";
 import type { FileType } from "../../../../../utils/file-types";
 import { Table } from "../../../../common/table/table";
 import type { Column } from "../../../../common/table/table-types";

@@ -5,8 +5,10 @@ import { useTranslation } from "react-i18next";
 import { IoIosCloudOutline } from "react-icons/all";
 
 import { useStyles } from "../../../../../hooks/use-styles";
-import { getCO2ByFileSize } from "../../../../../utils";
-import { bytes2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
+import {
+  bytes2HumanReadableFormat,
+  getCO2ByFileSize,
+} from "../../../../../utils";
 import { openExternalElement } from "../../../../../utils/file-system/file-system-util";
 import { ClickableIcon } from "../../../../common/clickable-icon";
 import { EditableField } from "../../../../common/editable-field";
@@ -147,7 +149,12 @@ export const ElementCharacteristicsContent: React.FC<
           <Box>
             <IoIosCloudOutline size={50} />
           </Box>
-          <Box>{getCO2ByFileSize(elementSize)}</Box>
+          <Box>
+            <Typography variant="h5">
+              {getCO2ByFileSize(elementSize)}{" "}
+              <HelpTooltip tooltipText={t("co2.weightCalculation")} />
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>

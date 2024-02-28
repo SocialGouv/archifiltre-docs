@@ -12,7 +12,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
-import { bytes2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
+import { bytes2HumanReadableFormat } from "../../../../../utils";
 
 const ColoredText = styled.span<{ color: string }>`
   display: block;

@@ -9,7 +9,7 @@ import {
 import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
 import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { translations } from "../../translations/translations";
-import { bytes2HumanReadableFormat } from "../../utils/file-system/file-sys-util";
+import { bytes2HumanReadableFormat } from "../../utils";
 import type { Dims } from "./icicle/icicle-rect";
 import type { FillColor } from "./icicle/icicle-types";
 

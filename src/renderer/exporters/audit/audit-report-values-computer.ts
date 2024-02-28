@@ -39,6 +39,7 @@ import type {
   FilesAndFoldersMetadataMap,
 } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { translations } from "../../translations/translations";
+import { bytes2HumanReadableFormat } from "../../utils";
 import {
   countDuplicateFilesTotalSize,
   countDuplicatesPercentForFiles,
@@ -46,10 +47,7 @@ import {
   getBiggestDuplicatedFolders,
   getMostDuplicatedFiles,
 } from "../../utils/duplicates";
-import {
-  bytes2HumanReadableFormat,
-  formatPathForUserSystem,
-} from "../../utils/file-system/file-sys-util";
+import { formatPathForUserSystem } from "../../utils/file-system/file-sys-util";
 import {
   FileType,
   getExtensionsForEachFileType,
@@ -299,18 +297,6 @@ export function getDuplicateTotalSize(
     filesAndFoldersCollection,
     hashesMap
   );
-}
-
-/**
- * Converts the total size of duplicate files into a human-readable string.
- *
- * @param {number} totalSize The total size of duplicate files in bytes.
- * @returns {string} The total size of duplicate files in a human-readable format.
- */
-export function getHumanReadableDuplicateTotalSize(totalSize: number): string {
-  const bytesToHumanReadableFormatFunction: BytesToHumanReadableFormat =
-    bytes2HumanReadableFormat as BytesToHumanReadableFormat;
-  return bytesToHumanReadableFormatFunction(totalSize);
 }
 
 /**

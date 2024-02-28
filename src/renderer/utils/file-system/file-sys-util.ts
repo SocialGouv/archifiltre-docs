@@ -3,8 +3,6 @@ import { saveAs } from "file-saver";
 import fs from "fs";
 import path, { dirname } from "path";
 
-import { translations } from "../../translations/translations";
-
 const utf8ByteOrderMark = "\ufeff";
 
 export const UTF8 = "utf-8";
@@ -105,27 +103,6 @@ export const readFileSync = fs.readFileSync;
  */
 export const formatPathForUserSystem = (formattedPath: string): string =>
   path.normalize(formattedPath);
-
-export const bytes2HumanReadableFormat = (size: number): string => {
-  const unit = translations.t("common.byteChar");
-  const To = size / 1000 ** 4;
-  if (To > 1) {
-    return `${Math.round(To * 10) / 10} T${unit}`;
-  }
-  const Go = size / 1000 ** 3;
-  if (Go > 1) {
-    return `${Math.round(Go * 10) / 10} G${unit}`;
-  }
-  const Mo = size / 1000 ** 2;
-  if (Mo > 1) {
-    return `${Math.round(Mo * 10) / 10} M${unit}`;
-  }
-  const ko = size / 1000;
-  if (ko > 1) {
-    return `${Math.round(ko * 10) / 10} k${unit}`;
-  }
-  return `${size} ${unit}`;
-};
 
 /**
  * Returns the element absolute path based on the partition base path and the element id

@@ -11,10 +11,8 @@ import {
   sortFilesBySize,
 } from "@renderer/exporters/audit/audit-report-values-computer";
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import {
-  bytes2HumanReadableFormat,
-  formatPathForUserSystem,
-} from "@renderer/utils/file-system/file-sys-util";
+import { bytes2HumanReadableFormat } from "@renderer/utils";
+import { formatPathForUserSystem } from "@renderer/utils/file-system/file-sys-util";
 import { FileType } from "@renderer/utils/file-types";
 
 import { createFilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-test-utils";

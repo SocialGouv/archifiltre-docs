@@ -197,6 +197,12 @@
       "duplicate": "redondance",
       "toDelete": "À éliminer"
     },
+    "co2": {
+      "kgPerYear": "kg de CO2 équivalent par an",
+      "mgPerYear": "mg de CO2 équivalent par an",
+      "gPerYear": "g de CO2 équivalent par an",
+      "weightCalculation": "Ce poids est calculé à partir de l’indicateur de la Base IMPACTS® Numérique de l’ADEME : 0,0116 kg CO2eq/an pour 1Go stocké"
+    },
     "export": {
       "metsExportErrorTitle": "Erreur dans l'export METS",
       "metsExportErrorFileDoesNotExist": "Le fichier \"{{filePath}}\" est introuvable. Il a peut-être été supprimé ou déplacé.",

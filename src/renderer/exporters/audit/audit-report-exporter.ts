@@ -16,15 +16,12 @@ import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-fo
 import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { getHashesFromStore } from "../../reducers/hashes/hashes-selectors";
 import { translations } from "../../translations/translations";
-import { getCO2ByFileSize } from "../../utils";
+import { bytes2HumanReadableFormat, getCO2ByFileSize } from "../../utils";
 import {
   countDuplicateFiles,
   countDuplicateFolders,
 } from "../../utils/duplicates";
-import {
-  bytes2HumanReadableFormat,
-  formatPathForUserSystem,
-} from "../../utils/file-system/file-sys-util";
+import { formatPathForUserSystem } from "../../utils/file-system/file-sys-util";
 import { openExternalElement } from "../../utils/file-system/file-system-util";
 import { FileType } from "../../utils/file-types";
 import {
@@ -45,7 +42,6 @@ import {
   getDuplicateTotalSize,
   getElementsToDelete,
   getExtensionsList,
-  getHumanReadableDuplicateTotalSize,
   getLongestPathFile,
   getOldestFiles,
   percentFileTypes,
@@ -73,6 +69,9 @@ export const computeAuditReportData = (
 
   return {
     archifiltreVersion: version,
+    archiveCount: fileTypesCounts[FileType.ARCHIVE],
+    archiveFileTypes: extensionsList[FileType.ARCHIVE],
+    archivePercent: fileTypesPercents[FileType.ARCHIVE],
     audioCount: fileTypesCounts[FileType.AUDIO],
     audioFileTypes: extensionsList[FileType.AUDIO],
     audioPercent: fileTypesPercents[FileType.AUDIO],
@@ -101,7 +100,7 @@ export const computeAuditReportData = (
       getDuplicateFoldersPercent(filesAndFolders, filesAndFoldersHashes) * 100
     ),
     duplicateTotalCO2: getCO2ByFileSize(duplicateTotalSize),
-    duplicateTotalSize: getHumanReadableDuplicateTotalSize(duplicateTotalSize),
+    duplicateTotalSize: bytes2HumanReadableFormat(duplicateTotalSize),
     duplicates: getDuplicatesWithTheMostCopy(
       filesAndFolders,
       filesAndFoldersHashes

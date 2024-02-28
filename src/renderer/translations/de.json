@@ -198,6 +198,12 @@
       "duplicate": "Duplikat",
       "toDelete": "Zu löschen"
     },
+    "co2": {
+      "kgPerYear": "kg CO2-Äquivalent pro Jahr",
+      "mgPerYear": "mg CO2-Äquivalent pro Jahr",
+      "gPerYear": "g CO2-Äquivalent pro Jahr",
+      "weightCalculation": "Dieses Gewicht wird basierend auf dem Indikator der IMPACTS® Digital-Datenbank der ADEME berechnet: 0,0116 kg CO2eq/Jahr für 1GB gespeichert"
+    },
     "export": {
       "metsExportErrorTitle": "Fehler im METS-Export",
       "metsExportErrorFileDoesNotExist": "Die Datei \"{{filePath}}\" kann nicht gefunden werden. Möglicherweise wurde sie verschoben oder gelöscht.",

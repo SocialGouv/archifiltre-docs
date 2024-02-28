@@ -2,7 +2,7 @@ import Grid from "@material-ui/core/Grid";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import { bytes2HumanReadableFormat } from "../../../../../utils/file-system/file-sys-util";
+import { bytes2HumanReadableFormat } from "../../../../../utils";
 import { SessionElementsDetail } from "./session-elements-detail";
 
 export interface SessionElementsDetailsProps {

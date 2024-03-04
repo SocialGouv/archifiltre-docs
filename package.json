@@ -211,7 +211,7 @@
     "deep-equal": "2.0.5",
     "dotenv": "^16.0.0",
     "electron": "^18.3.7",
-    "electron-builder": "^23.0.3",
+    "electron-builder": "^24.13.3",
     "electron-notarize": "^1.1.1",
     "electron-webpack": "^2.8.2",
     "electron-webpack-ts": "^4.0.1",

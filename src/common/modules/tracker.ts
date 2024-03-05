@@ -9,12 +9,6 @@ import { get as getConfig } from "./new-user-config";
 
 let enableTracking = FORCE_TRACKING || IS_PACKAGED();
 
-declare module "../ipc/event" {
-  interface DualAsyncIpcMapping {
-    "tracking.toggle": DualIpcConfig<never, [enable: boolean], []>;
-  }
-}
-
 export async function initTracking(): Promise<void> {
   await getTrackerProvider().init();
   if (IS_MAIN) {
@@ -32,7 +26,7 @@ export function toggleTracking(enable = !enableTracking): void {
   }
 }
 
-let provider: TrackerProvider | null = null;
+const provider: TrackerProvider | null = null;
 function findProvider(name?: ProviderType): TrackerProvider {
   const appId = getConfig("appId");
   const disabled = !enableTracking;

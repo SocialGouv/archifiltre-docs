@@ -1,6 +1,5 @@
-import { getFoldersArchive } from "@renderer/reducers/files-and-folders/files-and-folders-selectors";
 import type { FilesAndFolders } from "@renderer/reducers/files-and-folders/files-and-folders-types";
-import { getFiles } from "@renderer/utils";
+import { getFiles, getFolders } from "@renderer/utils";
 import {
   computeFolderHashes,
   countDeeperFolders,
@@ -280,8 +279,12 @@ describe.skip("file-and-folders-common", () => {
 
       it("should return all the folders with no child folders", () => {
         // Order does not matter, so we sort both arrays
-        expect(findAllFoldersWithNoSubfolder(fileAndFolders).sort()).toEqual(
-          ["folder1/folder1", "folder2"].sort()
+        expect(
+          findAllFoldersWithNoSubfolder(fileAndFolders).sort((a, b) =>
+            a.localeCompare(b)
+          )
+        ).toEqual(
+          ["folder1/folder1", "folder2"].sort((a, b) => a.localeCompare(b))
         );
       });
     });
@@ -384,7 +387,7 @@ describe.skip("file-and-folders-common", () => {
         ];
 
         expect(
-          getFoldersArchive(data).sort((folder1, folder2) =>
+          getFolders(data).sort((folder1, folder2) =>
             folder1.id > folder2.id ? 1 : -1
           )
         ).toEqual([

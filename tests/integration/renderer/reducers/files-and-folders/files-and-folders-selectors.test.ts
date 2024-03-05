@@ -373,9 +373,11 @@ describe("files-and-folders-selectors", () => {
 
       const elementIds = [parentId, ignoredChildId, nonIgnoredChildId];
 
-      expect(excludeChildNodes(elementIds, filesAndFoldersMap).sort()).toEqual(
-        [parentId, nonIgnoredChildId].sort()
-      );
+      expect(
+        excludeChildNodes(elementIds, filesAndFoldersMap).sort((a, b) =>
+          a.localeCompare(b)
+        )
+      ).toEqual([parentId, nonIgnoredChildId].sort());
     });
   });
 

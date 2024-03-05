@@ -160,10 +160,13 @@ const recComputeFolderHash = async (
   const childrenResults: HashesMap = Object.assign({}, ...childResults);
 
   const currentFolderHash = MD5(
-    // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
     children
       .map((childId) => childrenResults[childId])
-      .sort()
+      .sort((a, b) => {
+        if (a === null) return b === null ? 0 : 1;
+        if (b === null) return -1;
+        return a.localeCompare(b);
+      })
       .join("")
   );
 

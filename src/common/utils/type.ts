@@ -34,7 +34,7 @@
  * ```
  */
 export type UniqueString<TStr extends string> = TStr & {
-  _?: never & symbol;
+  _?: never;
 };
 
 export type UnknownMapping = UniqueString<string>;

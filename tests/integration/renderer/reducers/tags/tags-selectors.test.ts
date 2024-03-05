@@ -40,8 +40,10 @@ describe("tags-selectors", () => {
         },
       };
 
-      expect(getAllTagIdsForFile(tags, ffId).sort()).toEqual(
-        [foundTagID, secondFoundTagID].sort()
+      expect(
+        getAllTagIdsForFile(tags, ffId).sort((a, b) => a.localeCompare(b))
+      ).toEqual(
+        [foundTagID, secondFoundTagID].sort((a, b) => a.localeCompare(b))
       );
     });
   });

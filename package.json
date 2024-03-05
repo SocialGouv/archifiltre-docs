@@ -170,7 +170,7 @@
     }
   },
   "engines": {
-    "node": "^16"
+    "node": "^20"
   },
   "devDependencies": {
     "@commitlint/cli": "13.1.0",
@@ -180,8 +180,8 @@
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@sentry/webpack-plugin": "^1.18.8",
-    "@socialgouv/eslint-config-react": "^1.107.0",
-    "@socialgouv/eslint-config-typescript": "^1.107.0",
+    "@socialgouv/eslint-config-react": "^1.131.0",
+    "@socialgouv/eslint-config-typescript": "^1.131.0",
     "@tsconfig/node16": "^1.0.2",
     "@types/dateformat": "^5.0.0",
     "@types/deep-equal": "^1.0.1",
@@ -215,12 +215,12 @@
     "electron-notarize": "^1.1.1",
     "electron-webpack": "^2.8.2",
     "electron-webpack-ts": "^4.0.1",
-    "eslint": "^7",
-    "eslint-import-resolver-webpack": "0.13.1",
+    "eslint": "^8.57.0",
+    "eslint-import-resolver-webpack": "^0.13.8",
     "eslint-plugin-lodash-fp": "^2.2.0-a1",
-    "eslint-plugin-playwright": "^0.8.0",
-    "eslint-plugin-typescript-sort-keys": "^2.1.0",
-    "eslint-plugin-unused-imports": "^1.1.5",
+    "eslint-plugin-playwright": "^1.5.2",
+    "eslint-plugin-typescript-sort-keys": "^3.2.0",
+    "eslint-plugin-unused-imports": "^3.1.0",
     "fast-check": "2.23.0",
     "jest": "27.5.1",
     "jest-date-mock": "1.0.8",

@@ -18,7 +18,7 @@ import type { VirtualFileSystem } from "../files-and-folders-loader/files-and-fo
 import { firstHashesComputingThunk } from "../hash-computer/hash-computer-thunk";
 import { reportError } from "../logging/reporter";
 import { translations } from "../translations/translations";
-import { getFilesFromArray } from "../utils";
+import { getFilesFromArray, versionComparator } from "../utils";
 import { filterResults } from "../utils/batch-process";
 import type { ErrorMessage, ResultMessage } from "../utils/batch-process/types";
 import {
@@ -39,7 +39,7 @@ import {
 } from "../utils/notifications";
 import { operateOnDataProcessingStream } from "../utils/observable";
 import { workerManager } from "../utils/worker";
-import { version, versionComparator } from "../version";
+import { version } from "../version";
 import type {
   ArchifiltreDocsDispatch,
   ArchifiltreDocsThunkAction,
@@ -131,12 +131,14 @@ const makeErrorResponse = () => ({
 const displayRootPathError = () => {
   const errorMessage = translations.t("folderDropzone.errorsWhileLoading");
   const errorTitle = translations.t("folderDropzone.rootElementError");
+
   return displayError(errorMessage, errorTitle);
 };
 
 const displayInvalidPathError = () => {
   const errorMessage = translations.t("folderDropzone.cannotFindPath");
   const errorTitle = translations.t("folderDropzone.error");
+
   return displayError(errorMessage, errorTitle);
 };
 
@@ -196,9 +198,11 @@ const mapToNewVersionNumbers = (lastVersion: string): string => {
   if (lastVersion.split(".").length === 1) {
     return `1.${lastVersion}.0`;
   }
+
   if (lastVersion.split(".").length === 2) {
     return `1.${lastVersion}`;
   }
+
   return lastVersion;
 };
 
@@ -410,6 +414,7 @@ const failIfRootPath = (rootPath: string) => {
       ArchifiltreDocsStoreThunkErrorCode.ROOT_PATH
     );
   }
+
   return rootPath;
 };
 
@@ -420,6 +425,7 @@ const failIfInvalidPath = (invalidPath: string) => {
       ArchifiltreDocsStoreThunkErrorCode.INVALID_PATH
     );
   }
+
   return invalidPath;
 };
 

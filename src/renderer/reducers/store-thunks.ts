@@ -163,14 +163,14 @@ const handleErrorNotificationDisplay =
     const errors = getErroredFilesAndFolders(getState());
 
     if (errors.length > 0) {
-      void dispatch(displayErrorNotification());
+      dispatch(displayErrorNotification());
     }
   };
 
 const handleHashComputing =
   (virtualFileSystem: VirtualFileSystem): ArchifiltreDocsThunkAction =>
   (dispatch) => {
-    void dispatch(
+    dispatch(
       firstHashesComputingThunk(virtualFileSystem.originalPath, {
         ignoreFileHashes: !virtualFileSystem.isOnFileSystem,
       })
@@ -184,8 +184,8 @@ const handleNonJsonFileThunk =
   ): ArchifiltreDocsThunkAction =>
   (dispatch) => {
     if (!isJsonFile(fileOrFolderPath)) {
-      void dispatch(handleErrorNotificationDisplay());
-      void dispatch(handleHashComputing(virtualFileSystem));
+      dispatch(handleErrorNotificationDisplay());
+      dispatch(handleHashComputing(virtualFileSystem));
     }
   };
 

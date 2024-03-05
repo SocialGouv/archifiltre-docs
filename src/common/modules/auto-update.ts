@@ -50,11 +50,13 @@ export const setupAutoUpdate = (): void => {
   });
   ipcMain.on("autoUpdate.doUpdate", (evt) => {
     evt.returnValue = updateAvailable;
-    if (updateAvailable) {
-      quitForUpdate = true;
-      autoUpdater.quitAndInstall();
+
+    if (!updateAvailable) {
       return;
     }
+
+    quitForUpdate = true;
+    autoUpdater.quitAndInstall();
   });
 
   // setup auto updater events

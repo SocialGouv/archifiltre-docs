@@ -3,15 +3,14 @@ import { promises as fs } from "fs";
 import { maxBy, omit } from "lodash";
 
 /**
- * Escape doubleQuotes with the specified character (usually " or \)
- * @param doubleQuoteEscapeCharacter
+ * Escapes double quotes in a string using a specified character.
+ * @param doubleQuoteEscapeCharacter - The character used to escape double quotes (e.g., another " or a \).
+ * @returns A function that takes a string and returns it with double quotes escaped.
  */
 const escapeDoubleQuotes =
-  (doubleQuoteEscapeCharacter: string) => (stringToEscape: string) =>
-    stringToEscape.replace(
-      new RegExp(`"`, "gm"),
-      `${doubleQuoteEscapeCharacter}"`
-    );
+  (doubleQuoteEscapeCharacter: string): ((stringToEscape: string) => string) =>
+  (stringToEscape: string): string =>
+    stringToEscape.replace(/"/g, `${doubleQuoteEscapeCharacter}"`);
 
 /**
  * Wraps a string with double quotes
@@ -19,18 +18,25 @@ const escapeDoubleQuotes =
  */
 const wrapWithQuotes = (wrappedString: string): string => `"${wrappedString}"`;
 
+/**
+ * Options for flattening a CSV line.
+ */
 interface FlattenLineOptions {
   cellSeparator: string;
   doubleQuoteEscapeCharacter: string;
 }
 
 /**
- * Transform a csv array line into a csv strong
- * @param separator - The cell separator
- * @param doubleQuoteEscapeCharacter - The character used to escape double quote. Is usually another " or a \
+ * Transforms an array of strings (representing a CSV line) into a flattened CSV string,
+ * with options for the cell separator and the double quote escape character.
+ * @param options - Object containing `cellSeparator` and `doubleQuoteEscapeCharacter`.
+ * @returns A function that takes an array of strings and returns a flattened CSV string.
  */
 const flattenLine =
-  ({ cellSeparator, doubleQuoteEscapeCharacter }: FlattenLineOptions) =>
+  ({
+    cellSeparator,
+    doubleQuoteEscapeCharacter,
+  }: FlattenLineOptions): ((lineArray: string[]) => string) =>
   (lineArray: string[]): string =>
     lineArray
       .map(escapeDoubleQuotes(doubleQuoteEscapeCharacter))

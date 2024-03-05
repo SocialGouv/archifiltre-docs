@@ -16,7 +16,8 @@ export const reloadApp = async (): Promise<void> => {
  */
 export const openLink = (...args: Parameters<Shell["openExternal"]>): void => {
   if (IS_MAIN) {
-    return void shell.openExternal(...args);
+    void shell.openExternal(...args);
+    return;
   }
   void ipcRenderer.invoke("shell.openExternal", ...args);
 };

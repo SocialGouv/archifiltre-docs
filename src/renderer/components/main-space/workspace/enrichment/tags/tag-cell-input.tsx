@@ -23,7 +23,7 @@ export const TagCellInput: React.FC<TagCellInputProps> = ({
 
   const onInputChange: NonNullable<AutocompleteSimpleProps["onInputChange"]> =
     useCallback(
-      (event, value, reason) => {
+      (_, value, reason) => {
         // We do not update the state when the input value changes programmatically as
         // the inputChange event occurs after the autocomplete change event, preventing us from
         // resetting the input value
@@ -47,7 +47,7 @@ export const TagCellInput: React.FC<TagCellInputProps> = ({
 
   const handleChange: NonNullable<AutocompleteSimpleProps["onChange"]> =
     useCallback(
-      (event, newValue: { name: string }) => {
+      (_, newValue: { name: string }) => {
         addTag(newValue.name);
       },
       [addTag]

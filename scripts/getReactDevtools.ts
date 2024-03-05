@@ -30,18 +30,18 @@ const getChromiumUserAgent = async () =>
   });
 
 const getChromeVersion = (userAgent: string) => {
-  const pieces = /Chrom(?:e|ium)\/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/.exec(
-    userAgent
-  );
+  const pieces = /Chrom(?:e|ium)\/(\d+)\.(\d+)\.(\d+)\.(\d+)/.exec(userAgent);
   if (!pieces || pieces.length != 5) {
-    throw new Error(`Unparsable user agent : ${userAgent}`);
+    throw new Error(`Unparsable user agent: ${userAgent}`);
   }
-  const ret = pieces.map((piece) => parseInt(piece, 10));
+
+  const ret = pieces.slice(1).map((piece) => parseInt(piece, 10));
+
   return {
-    build: ret[3],
-    major: ret[1],
-    minor: ret[2],
-    patch: ret[4],
+    build: ret[2],
+    major: ret[0],
+    minor: ret[1],
+    patch: ret[3],
   };
 };
 

@@ -1,6 +1,5 @@
 /*
     eslint-disable
-    no-fallthrough,
     @typescript-eslint/no-explicit-any,
     @typescript-eslint/naming-convention,
     @typescript-eslint/no-unsafe-argument,
@@ -39,29 +38,28 @@ interface V21 {
 }
 
 export const convertJsonToCurrentVersion = (json: string): JsonFileInfo => {
-  let js = JSON.parse(json);
+  const jsonFileInfo = JSON.parse(json);
 
-  const version = js.version;
-
-  switch (version) {
+  switch (jsonFileInfo.version) {
     case 8:
-      js = v8JsToV9Js(js);
+      return v8JsToV9Js(jsonFileInfo) as JsonFileInfo;
     case 9:
-      js = v9JsToV10Js(js);
+      return v9JsToV10Js(jsonFileInfo) as JsonFileInfo;
     case 10:
-      js = v10JsToV11Js(js);
+      return v10JsToV11Js(jsonFileInfo) as JsonFileInfo;
     case 11:
     case 12:
-      js = v12JsToV13Js(js);
+      return v12JsToV13Js(jsonFileInfo) as JsonFileInfo;
     case 13:
     case 13.1:
-      js = v13JsToV14Js(js);
+      return v13JsToV14Js(jsonFileInfo) as JsonFileInfo;
     case "2.0.0":
-      js = v2ToV21Js(js);
+      return v2ToV21Js(jsonFileInfo) as JsonFileInfo;
     case "2.1.0":
-      js = v21ToV22Js(js);
+      return v21ToV22Js(jsonFileInfo) as JsonFileInfo;
+    default:
+      return jsonFileInfo;
   }
-  return js as JsonFileInfo;
 };
 
 const v8JsToV9Js = (v8: V8 & V9To12): SimpleObject => {

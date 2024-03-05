@@ -19,7 +19,7 @@ export async function initTracking(): Promise<void> {
   await getTrackerProvider().init();
   if (IS_MAIN) {
     ipcMain.on("tracking.toggle", (_, enable) => {
-      toggleTracking((enableTracking = enable));
+      toggleTracking(enableTracking === enable);
     });
   }
 }
@@ -53,9 +53,7 @@ function findProvider(name?: ProviderType): TrackerProvider {
 
 export function getTrackerProvider(): TrackerProvider {
   if (!provider) {
-    return (provider = findProvider(
-      process.env.TRACKER_PROVIDER as ProviderType
-    ));
+    return findProvider(process.env.TRACKER_PROVIDER as ProviderType);
   }
 
   return provider;

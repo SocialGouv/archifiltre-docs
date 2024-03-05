@@ -53,12 +53,11 @@ const success = (t: TFunction, filePath: string) => () => {
 
 export const deletionScriptExporterThunk =
   (filePath: string): ArchifiltreDocsThunkAction =>
-  async (dispatch, getState) => {
-    return compose(
+  async (_, getState) =>
+    compose(
       liftPromise(success(translations.t.bind(translations), filePath)),
       curriedWriteFile(filePath),
       ({ originalPath, elementsToDelete }) =>
         generateDeletionScript(originalPath, elementsToDelete),
       extractParamsFromState
     )(getState());
-  };

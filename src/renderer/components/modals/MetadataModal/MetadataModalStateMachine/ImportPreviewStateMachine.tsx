@@ -67,19 +67,19 @@ const saveLoadedPreview = assign<
   MetadataModalContext,
   DoneInvokeEvent<Record<string, string> | undefined>
 >({
-  fieldsConfig: (context, event) => ({
+  fieldsConfig: (_, event) => ({
     entityIdKey: Object.keys(event.data ?? {})[0],
     fields: Object.keys(event.data ?? {}),
   }),
-  firstRow: (context, event) => event.data,
+  firstRow: (_, event) => event.data,
 });
 
 const saveFieldConfig = assign<MetadataModalContext, FieldsConfigChanged>({
-  fieldsConfig: (context, event) => event.fieldsConfig,
+  fieldsConfig: (_, event) => event.fieldsConfig,
 });
 
 const saveFileConfig = assign<MetadataModalContext, ConfigChanged>({
-  config: (context, event) => event.config,
+  config: (_, event) => event.config,
 });
 
 export const importPreviewStateMachine = createMachine<

@@ -39,7 +39,7 @@ export const jsonExporterThunk =
     originalPath,
     version,
   }: JsonExporterThunkArgs): ArchifiltreDocsThunkAction =>
-  (dispatch, getState) => {
+  (_, getState) => {
     const state = getState();
     const fileName = getNameWithExtension(sessionName, "json");
 

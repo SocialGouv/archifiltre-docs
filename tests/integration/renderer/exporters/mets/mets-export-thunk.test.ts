@@ -1,6 +1,5 @@
 import { metsExporterThunk } from "@renderer/exporters/mets/mets-export-thunk";
 import type { DispatchExts } from "@renderer/reducers/archifiltre-types";
-// import type { DispatchExts } from "../../reducers/archifiltre-types";
 import { initialState as filesAndFoldersInitialState } from "@renderer/reducers/files-and-folders/files-and-folders-reducer";
 import { createFilesAndFoldersMetadata } from "@renderer/reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import type { StoreState } from "@renderer/reducers/store";

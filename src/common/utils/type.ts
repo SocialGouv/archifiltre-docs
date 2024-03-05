@@ -43,18 +43,6 @@ export type FilterMethod<T> = (element: T) => boolean;
 export type Nothing = never | 0 | null | undefined;
 
 /**
- * When using abstract class, return a simulated extended class type without having to target a "real" sub class.
- */
-export type ExtendedClass<
-  T extends abstract new (...args: unknown[]) => unknown
-> = T extends abstract new (...args: infer TArgs) => infer TInstance
-  ? new (...args: TArgs) => TInstance
-  : never;
-export type ImplementedClass<T> =
-  | (abstract new (...args: unknown[]) => T)
-  | (new (...args: unknown[]) => T);
-
-/**
  * Stub to trick eslint.
  * @deprecated
  */

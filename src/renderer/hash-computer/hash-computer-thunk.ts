@@ -169,8 +169,8 @@ const computeFileHashesThunk =
 
 const computeFolderHashesThunk =
   (loadingActionId: string): ArchifiltreDocsThunkAction<Promise<void>> =>
-  async (dispatch, getState) => {
-    return new Promise((resolve) => {
+  async (dispatch, getState) =>
+    new Promise((resolve) => {
       const state = getState();
       const hashes = getHashesFromStore(state);
       const filesAndFolders = getFilesAndFoldersFromStore(state);
@@ -188,7 +188,6 @@ const computeFolderHashesThunk =
         next: onNewHashesComputed,
       });
     });
-  };
 
 /**
  * Handles errors related to hash computation, triggering a notification and opening a modal.

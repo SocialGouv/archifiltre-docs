@@ -65,7 +65,7 @@ const saveLoadedMetadata = assign<MetadataModalContext, LoadMetadata>(
 );
 
 const saveFilePathPicked = assign<MetadataModalContext, FilePathPicked>({
-  filePath: (context, event) => event.filePath,
+  filePath: (_, event) => event.filePath,
 });
 
 export const metadataModalMachine = createMachine<

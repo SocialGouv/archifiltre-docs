@@ -1,9 +1,8 @@
 import type { Integration } from "@sentry/types";
 
-import type { ExtendedClass, Nothing } from "../../utils/type";
+import type { Nothing } from "../../utils/type";
 import type { TrackAppId, TrackEvent, TrackEventProps } from "../type";
 
-export type ExtendedTrackerProvider = ExtendedClass<typeof TrackerProvider>;
 export type TrackArgs<TEvent extends TrackEvent> =
   TrackEventProps[TEvent] extends Nothing
     ? [event: TEvent]

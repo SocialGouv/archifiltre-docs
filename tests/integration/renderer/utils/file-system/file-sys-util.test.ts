@@ -38,6 +38,11 @@ jest.mock("path", () => {
             ...actualPath,
             setOs,
           };
+        default:
+          return {
+            ...actualPath,
+            setOs,
+          };
       }
     },
   });

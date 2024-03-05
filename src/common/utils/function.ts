@@ -1,9 +1,7 @@
-import type { Any } from "./type";
-
 export const identity = <T>(param: T): T => param;
 
 export type AnyFunction = (...args: unknown[]) => unknown;
-export type EveryFunction = (...args: Any[]) => Any;
+export type EveryFunction = (...args: unknown[]) => unknown;
 export type Awaitable<T> = T extends (...args: infer A) => infer R
   ? (...args: A) => Promise<R>
   : Promise<T>;
@@ -48,15 +46,14 @@ type Curry<TFunc extends EveryFunction> = TFunc extends (
   : never;
 
 type PartialTuple<
-  TTuple extends Any[],
-  TExtracted extends Any[] = []
+  TTuple extends unknown[],
+  TExtracted extends unknown[] = []
 > = TTuple extends [infer FirstParam, ...infer RestParam]
   ? PartialTuple<RestParam, [...TExtracted, FirstParam?]>
   : [...TExtracted, ...TTuple];
 
-type PartialParameters<TFunc extends (...args: Any[]) => Any> = PartialTuple<
-  Parameters<TFunc>
->;
+type PartialParameters<TFunc extends (...args: unknown[]) => unknown> =
+  PartialTuple<Parameters<TFunc>>;
 
 /**
  * Currify a given function with multiple parameters.

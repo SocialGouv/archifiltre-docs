@@ -637,8 +637,10 @@ describe.skip("file-and-folders-common", () => {
         "/other/element",
       ];
 
-      expect(removeChildrenPath(elements).sort()).toEqual(
-        ["/parent", "/other/element"].sort()
+      expect(
+        removeChildrenPath(elements).sort((a, b) => a.localeCompare(b))
+      ).toEqual(
+        ["/parent", "/other/element"].sort((a, b) => a.localeCompare(b))
       );
     });
   });

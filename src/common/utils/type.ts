@@ -45,28 +45,26 @@ export type Nothing = never | 0 | null | undefined;
 /**
  * When using abstract class, return a simulated extended class type without having to target a "real" sub class.
  */
-export type ExtendedClass<T extends abstract new (...args: Any) => Any> =
-  T extends abstract new (...args: infer TArgs) => infer TInstance
-    ? new (...args: TArgs) => TInstance
-    : never;
+export type ExtendedClass<
+  T extends abstract new (...args: unknown[]) => unknown
+> = T extends abstract new (...args: infer TArgs) => infer TInstance
+  ? new (...args: TArgs) => TInstance
+  : never;
 export type ImplementedClass<T> =
-  | (abstract new (...args: Any[]) => T)
-  | (new (...args: Any[]) => T);
+  | (abstract new (...args: unknown[]) => T)
+  | (new (...args: unknown[]) => T);
 
 /**
  * Stub to trick eslint.
  * @deprecated
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Any = any;
-
 export type UnionToIntersection<TUnion> = (
-  TUnion extends Any ? (k: TUnion) => void : never
+  TUnion extends unknown ? (k: TUnion) => void : never
 ) extends (k: infer I) => void
   ? I
   : never;
 type UnionToOverloads<TUnion> = UnionToIntersection<
-  TUnion extends Any ? (f: TUnion) => void : never
+  TUnion extends unknown ? (f: TUnion) => void : never
 >;
 export type PopUnion<TUnion> = UnionToOverloads<TUnion> extends (
   a: infer A

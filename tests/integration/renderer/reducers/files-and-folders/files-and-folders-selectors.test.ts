@@ -377,7 +377,9 @@ describe("files-and-folders-selectors", () => {
         excludeChildNodes(elementIds, filesAndFoldersMap).sort((a, b) =>
           a.localeCompare(b)
         )
-      ).toEqual([parentId, nonIgnoredChildId].sort());
+      ).toEqual(
+        [parentId, nonIgnoredChildId].sort((a, b) => a.localeCompare(b))
+      );
     });
   });
 

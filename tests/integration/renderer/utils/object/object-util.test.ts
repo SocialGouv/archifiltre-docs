@@ -1,54 +1,7 @@
-import { compose, copy, extractKeys } from "@common/utils/object";
+import { copy, extractKeys } from "@common/utils/object";
 import fc from "fast-check";
 
 describe("object-utils", () => {
-  describe("compose", () => {
-    it("should properly create an object with first object merged into second object", () => {
-      const first = {
-        firstKey: "firstValue",
-        overlappedKey: "firstOverlappedValue",
-      };
-      const second = {
-        overlappedKey: "secondOverlappedValue",
-        secondKey: "secondValue",
-      };
-
-      expect(compose(first, second)).toEqual({
-        firstKey: "firstValue",
-        overlappedKey: "firstOverlappedValue",
-        secondKey: "secondValue",
-      });
-    });
-
-    it("should always contain first object values", () => {
-      fc.assert(
-        fc.property(fc.object(), fc.object(), (a, b) => {
-          expect(compose(a, b)).toMatchObject(a);
-        })
-      );
-    });
-
-    it("should always contain all the keys of the first object", () => {
-      fc.assert(
-        fc.property(fc.object(), fc.object(), (a, b) => {
-          expect(Object.keys(compose(a, b))).toEqual(
-            expect.arrayContaining(Object.keys(a))
-          );
-        })
-      );
-    });
-
-    it("should always contain all the keys of the second object", () => {
-      fc.assert(
-        fc.property(fc.object(), fc.object(), (a, b) => {
-          expect(Object.keys(compose(a, b))).toEqual(
-            expect.arrayContaining(Object.keys(b))
-          );
-        })
-      );
-    });
-  });
-
   describe("extractKeys", () => {
     it("should extract keys that are inside the object", () => {
       const baseObject = {

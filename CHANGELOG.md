@@ -1,3 +1,54 @@
+# [4.1.0](https://github.com/SocialGouv/archifiltre-docs/compare/v4.0.1...v4.1.0) (2024-03-08)
+
+
+### Bug Fixes
+
+* add missing translation ([488f324](https://github.com/SocialGouv/archifiltre-docs/commit/488f324f835e8be72d24979bc58c87bcc1fc4613))
+* bad version in package.json ([f9b2773](https://github.com/SocialGouv/archifiltre-docs/commit/f9b2773c092c97f1e8e377c7677ba942e7b82e2b))
+* dropzone loadPath optional ([11ba3d8](https://github.com/SocialGouv/archifiltre-docs/commit/11ba3d8e5f3d5334865262f09bc540889e014992))
+* ignore __MACOSX file ([79d4bf6](https://github.com/SocialGouv/archifiltre-docs/commit/79d4bf67e9240f9ecb25f4e4df12beda983d568d))
+* improve header button ([d3900de](https://github.com/SocialGouv/archifiltre-docs/commit/d3900dec4f11b9913b1cc62e20f2d4cae8d8ab44))
+* lint ([1f6882b](https://github.com/SocialGouv/archifiltre-docs/commit/1f6882bdc8344b500debda6f703d1694150a78be))
+* lint ([abcf5d9](https://github.com/SocialGouv/archifiltre-docs/commit/abcf5d979aa65d80c3d5eb9f41de60be178def41))
+* lint ([435e340](https://github.com/SocialGouv/archifiltre-docs/commit/435e340b9d5537b437bd876929f31d7ca42d50b5))
+* **lint:** simple-import-sort/imports ([f41e0c8](https://github.com/SocialGouv/archifiltre-docs/commit/f41e0c806e23b0fb6ee148dc783ecb30ebc354b9))
+* many error ([b12aaec](https://github.com/SocialGouv/archifiltre-docs/commit/b12aaec2ae28c04ba6756322e3208ea61df138cc))
+* material-ui createMuiTheme rename to createTheme ([0aaac73](https://github.com/SocialGouv/archifiltre-docs/commit/0aaac731e39159d85245dd2fbfa2fe5bb47d8889))
+* material-ui createMuiTheme rename to createTheme ([7510c1f](https://github.com/SocialGouv/archifiltre-docs/commit/7510c1fb09a392f69bfd5dd88a7b94b21491cf6b))
+* metadata translation ([bb9cacb](https://github.com/SocialGouv/archifiltre-docs/commit/bb9cacbf05bab851435a316b3d5e76232014bbb8))
+* missing de translation & add verify-translation-json ([e895df6](https://github.com/SocialGouv/archifiltre-docs/commit/e895df6b81571e8c0c8aac5866a5fbdaf727e643))
+* missing jszip accepted by electron ([b0f497b](https://github.com/SocialGouv/archifiltre-docs/commit/b0f497bb18e89345086ea52290e2036bb7ddb2c7))
+* onChangePage & onChangeRowsPerPage is rename to onPageChange & onRowsPerPageChange ([1eaff35](https://github.com/SocialGouv/archifiltre-docs/commit/1eaff35c731ff99ddfdcca3bac91739d567f78f7))
+* remove "Metadonnée Resip" column ([51bb48a](https://github.com/SocialGouv/archifiltre-docs/commit/51bb48a028938246b3051af476e6d5fa597fae72))
+* **test:** broken unit test ([8d4ff89](https://github.com/SocialGouv/archifiltre-docs/commit/8d4ff89bcf9a6081a7ecc4266931d217a7b232de))
+* use justifyContent instead of deprecated justify ([a5bd456](https://github.com/SocialGouv/archifiltre-docs/commit/a5bd45636d4fbcfcadc36d1f8e649c7f919a11de))
+* use overlap=rectangular to avoid mui error ([a4c0346](https://github.com/SocialGouv/archifiltre-docs/commit/a4c03464dafab7a743f307eaefa3ebe4905495e1))
+
+
+### Features
+
+* add co2 to audit & improve code ([778913e](https://github.com/SocialGouv/archifiltre-docs/commit/778913e2aadd2d038a41b5bb278c1c5f16dc0c13))
+* add getCO2ByFileSize to calculates the estimated CO2 emissions ([934f293](https://github.com/SocialGouv/archifiltre-docs/commit/934f2936035025be8b279bdebf1c4848f10a84ca))
+* add more FileType & fileTypesByExtensions ([1ebb2dd](https://github.com/SocialGouv/archifiltre-docs/commit/1ebb2dda2f50c1acbe849616020d47958175fb9d))
+* add window.reload in electron event ([522fad7](https://github.com/SocialGouv/archifiltre-docs/commit/522fad718cf864da4e14e5c8d382fd345c5842c4))
+* code improvement ([d18852c](https://github.com/SocialGouv/archifiltre-docs/commit/d18852cabcbc9c328a036dc68de4fc44d7b44992))
+* code improvement ([dd711bd](https://github.com/SocialGouv/archifiltre-docs/commit/dd711bde8a40ec33a85e43ed432345243094bcd8))
+* code improvement ([7a8ad74](https://github.com/SocialGouv/archifiltre-docs/commit/7a8ad74412d82ee2f2f4aa4fe9362a1716c47398))
+* code improvement ([7214ad9](https://github.com/SocialGouv/archifiltre-docs/commit/7214ad99d5bf62adc9c09cfebf8ae9b267672396))
+* code improvement ([5603d0f](https://github.com/SocialGouv/archifiltre-docs/commit/5603d0fb2332cf047eb6f125f317524c0e76a1f0))
+* code improvement ([dc1aa87](https://github.com/SocialGouv/archifiltre-docs/commit/dc1aa87be2328570a88e725d7321302771cbf2d6))
+* display co2 for current element ([dcc5725](https://github.com/SocialGouv/archifiltre-docs/commit/dcc57256a4d764851acb6b394fc644560a2bc04a))
+* display co2 for volume ([76f992f](https://github.com/SocialGouv/archifiltre-docs/commit/76f992f8fcbd9e7deb550cb84aa60ce2725899da))
+* improve generateRandomString ([53e8403](https://github.com/SocialGouv/archifiltre-docs/commit/53e84037d5f1a29e96106a30551aa143744f47fa))
+* make zip readble ([313763a](https://github.com/SocialGouv/archifiltre-docs/commit/313763a78e6cc9789b3dd613b0089345d630fa14))
+* massive code improvement ([2f86a9d](https://github.com/SocialGouv/archifiltre-docs/commit/2f86a9d922907580c81f2180cbc77a83d261d4e8))
+* move toast to bottom right ([8288be4](https://github.com/SocialGouv/archifiltre-docs/commit/8288be42b2962624809caa5d296d1a358c106806))
+* remove useless code ([696af8f](https://github.com/SocialGouv/archifiltre-docs/commit/696af8f5c7e9d9f9dc69acfdc0bbe644fa29d35f))
+* rewrite isInArchiveFolder to normalize path ([63a404b](https://github.com/SocialGouv/archifiltre-docs/commit/63a404b25bf7ff3a05985bdd836c8f6ba3a1f1c4))
+* rewrite version calculator ([73b6414](https://github.com/SocialGouv/archifiltre-docs/commit/73b64143c7d01ca60527894ad5be6c979e99075e))
+* update bytes usage ([6ad063b](https://github.com/SocialGouv/archifiltre-docs/commit/6ad063bd6c9a59626ef4d490972b1ca9928c1d13))
+* use drag or drop in dropZone ([d8b9071](https://github.com/SocialGouv/archifiltre-docs/commit/d8b90712b7757381cbb5b9e7740f4fadbfef124f))
+
 ## [3.2.2](https://github.com/SocialGouv/archifiltre-docs/compare/v3.2.1...v3.2.2) (2021-09-22)
 
 

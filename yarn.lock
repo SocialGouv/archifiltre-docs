@@ -6111,11 +6111,11 @@ file-saver@2.0.5:
   version "2.0.5"
   resolved "https://registry.npmjs.org/file-saver/-/file-saver-2.0.5.tgz"
 
-file-stream-rotator@^0.5.7:
-  version "0.5.7"
-  resolved "https://registry.npmjs.org/file-stream-rotator/-/file-stream-rotator-0.5.7.tgz"
+file-stream-rotator@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/file-stream-rotator/-/file-stream-rotator-0.6.1.tgz#007019e735b262bb6c6f0197e58e5c87cb96cec3"
   dependencies:
-    moment "^2.11.2"
+    moment "^2.29.1"
 
 file-uri-to-path@1.0.0:
   version "1.0.0"
@@ -9122,9 +9122,9 @@ modify-values@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/modify-values/-/modify-values-1.0.1.tgz"
 
-moment@^2.11.2:
-  version "2.29.4"
-  resolved "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz"
+moment@^2.29.1:
+  version "2.30.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.30.1.tgz#f8c91c07b7a786e30c59926df530b4eac96974ae"
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -9598,9 +9598,9 @@ object-copy@^0.1.0:
     define-property "^0.2.5"
     kind-of "^3.0.3"
 
-object-hash@^2.0.1:
-  version "2.0.3"
-  resolved "https://registry.npmjs.org/object-hash/-/object-hash-2.0.3.tgz"
+object-hash@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-3.0.0.tgz#73f97f753e7baffc0e2cc9d6e079079744ac82e9"
 
 object-inspect@^1.13.1, object-inspect@^1.9.0:
   version "1.13.1"
@@ -12200,9 +12200,9 @@ trim-newlines@^3.0.0:
   version "3.0.1"
   resolved "https://registry.npmjs.org/trim-newlines/-/trim-newlines-3.0.1.tgz"
 
-triple-beam@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.npmjs.org/triple-beam/-/triple-beam-1.3.0.tgz"
+triple-beam@^1.3.0, triple-beam@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/triple-beam/-/triple-beam-1.4.1.tgz#6fde70271dc6e5d73ca0c3b24e2d92afb7441984"
 
 truncate-utf8-bytes@^1.0.0:
   version "1.0.2"
@@ -12984,16 +12984,16 @@ windows-1252@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/windows-1252/-/windows-1252-1.1.0.tgz"
 
-winston-daily-rotate-file@^4.5.5:
-  version "4.5.5"
-  resolved "https://registry.npmjs.org/winston-daily-rotate-file/-/winston-daily-rotate-file-4.5.5.tgz"
+winston-daily-rotate-file@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/winston-daily-rotate-file/-/winston-daily-rotate-file-5.0.0.tgz#8cd94800025490e47c00ec892b655a5821f4266d"
   dependencies:
-    file-stream-rotator "^0.5.7"
-    object-hash "^2.0.1"
-    triple-beam "^1.3.0"
-    winston-transport "^4.4.0"
+    file-stream-rotator "^0.6.1"
+    object-hash "^3.0.0"
+    triple-beam "^1.4.1"
+    winston-transport "^4.7.0"
 
-winston-transport@^4.4.0, winston-transport@^4.5.0:
+winston-transport@^4.4.0, winston-transport@^4.5.0, winston-transport@^4.7.0:
   version "4.7.0"
   resolved "https://registry.npmjs.org/winston-transport/-/winston-transport-4.7.0.tgz"
   dependencies:

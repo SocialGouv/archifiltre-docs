@@ -16,6 +16,7 @@ import {
 
 import {
   ARCHIFILTRE_CONTACT_EMAIL,
+  ARCHIFILTRE_SITE_URL,
   CONTACT_LINK,
   DOCUMENTATION_LINK,
   FEEDBACK_LINK,
@@ -37,7 +38,7 @@ const aboutItems = [
     Icon: FaGlobeAmericas,
     id: "website",
     label: "settingsModal.website",
-    link: `${process.env.ARCHIFILTRE_SITE_URL}/docs`,
+    link: `${ARCHIFILTRE_SITE_URL}/docs`,
   },
   {
     // eslint-disable-next-line @typescript-eslint/naming-convention

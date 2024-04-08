@@ -23,7 +23,7 @@ module.exports =
     const project = `${packageJson.name}${isProd ? "" : "-dev"}`;
 
     config.plugins.push(
-      new webpack.EnvironmentPlugin(["ARCHIFILTRE_SITE_URL", "FORCE_TRACKING"]),
+      new webpack.EnvironmentPlugin(["FORCE_TRACKING"]),
       new webpack.EnvironmentPlugin({
         SENTRY_DSN: "",
         SENTRY_ORG: "",

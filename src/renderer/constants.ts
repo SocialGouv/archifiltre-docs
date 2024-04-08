@@ -1,4 +1,4 @@
-export const ARCHIFILTRE_CONTACT_EMAIL = "contact@archifiltre.fr";
+export const ARCHIFILTRE_CONTACT_EMAIL = "archifiltre@fabrique.socia.gouv.fr";
 export const FEEDBACK_LINK =
   "https://archifiltre.fabrique.social.gouv.fr/questionnaire/";
 export const CONTACT_LINK = `mailto:${ARCHIFILTRE_CONTACT_EMAIL}`;

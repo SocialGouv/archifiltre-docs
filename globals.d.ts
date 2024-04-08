@@ -40,7 +40,6 @@ declare const __static: string;
 
 declare namespace NodeJS {
   interface ProcessEnv {
-    ARCHIFILTRE_SITE_URL: string;
     AUTOLOAD: string;
     AUTORELOAD?: "false" | "true";
     CI?: "true";

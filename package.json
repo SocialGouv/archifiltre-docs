@@ -4,7 +4,10 @@
   "version": "4.1.0",
   "private": true,
   "description": "Visualisez et améliorez vos arborescences de fichiers !",
-  "author": "Fabrique des ministères sociaux",
+  "author": {
+    "name": "Fabrique des ministères sociaux",
+    "email": "archifiltre@fabrique.social.gouv.fr"
+  },
   "license": "Apache-2.0",
   "main": "dist/main/main.js",
   "homepage": "https://archifiltre.fr/docs",
@@ -20,7 +23,7 @@
     "dist:win": "electron-builder --x64 --ia32 --win portable msi nsis",
     "dist:mac": "electron-builder --mac --x64 --arm64",
     "dist:mac-local": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dmg",
-    "dist:linux": "electron-builder --linux AppImage",
+    "dist:linux": "electron-builder --linux",
     "lint": "eslint src/",
     "lint:fix": "eslint --fix src/",
     "lint:test": "eslint -c tests/.eslintrc.json 'tests/**/*.ts*'",
@@ -166,7 +169,16 @@
     },
     "linux": {
       "category": "Office",
-      "icon": "./electron/build/icon.png"
+      "icon": "./electron/build/icon.png",
+      "target": [
+        {
+          "target": "AppImage"
+        },
+        {
+          "target": "deb",
+          "arch": "x64"
+        }
+      ]
     }
   },
   "engines": {

@@ -104,6 +104,7 @@ export const About: React.FC = () => {
             onClick={(event) => {
               onClick(event, link);
             }}
+            className={"text-left"}
           >
             <Icon className={classes.icon} />
             {t(label, { email: ARCHIFILTRE_CONTACT_EMAIL })}

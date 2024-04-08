@@ -46,9 +46,9 @@ function findProvider(name?: ProviderType): TrackerProvider {
 }
 
 export function getTrackerProvider(): TrackerProvider {
-  if (!provider) {
-    return findProvider(process.env.TRACKER_PROVIDER as ProviderType);
+  if (provider) {
+    return provider;
   }
 
-  return provider;
+  return findProvider(process.env.TRACKER_PROVIDER as ProviderType);
 }

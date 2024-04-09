@@ -6,9 +6,8 @@ import { WorkerEventType } from "../../utils/async-worker";
 import { createAsyncWorkerForChildProcess } from "../../utils/async-worker/child-process";
 import { MessageTypes } from "../../utils/batch-process/types";
 import { hookCounter } from "../../utils/hook";
-import type { WithLanguage } from "../../utils/language/types";
-import type { ResipExporterOptions } from "./resip-exporter";
-import { resipExporter } from "./resip-exporter";
+import { type WithLanguage } from "../../utils/language/types";
+import { resipExporter, type ResipExporterOptions } from "./resip-exporter";
 
 if (IS_WORKER) {
   sourceMapSupport.install();
@@ -27,14 +26,13 @@ if (IS_WORKER) {
         };
         const { hook, getCount } = hookCounter(messageHook);
 
-        const { language, ...props }: ResipExporterOptions & WithLanguage =
-          data;
+        const { language, ...props }: ResipExporterOptions & WithLanguage = data;
         await translations.changeLanguage(language as string);
         const resipExportData = resipExporter(
           {
             ...props,
           },
-          hook
+          hook,
         );
 
         asyncWorker.postMessage({
@@ -46,6 +44,6 @@ if (IS_WORKER) {
           type: MessageTypes.COMPLETE,
         });
       }
-    }
+    },
   );
 }

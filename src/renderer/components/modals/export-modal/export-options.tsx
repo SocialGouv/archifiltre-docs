@@ -1,6 +1,5 @@
-import type { ExportType } from "@common/export/type";
-import { ExportCategory } from "@common/export/type";
-import Box from "@material-ui/core/Box";
+import { ExportCategory, type ExportType } from "@common/export/type";
+import Box from "@mui/material/Box";
 import React from "react";
 
 import { ExportCategoryOptions } from "./export-category-options";
@@ -36,7 +35,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
         exportPaths={exportPaths}
         enabledExports={enabledExports}
       />
-      {Object.values(ExportCategory).map((exportCategory) => (
+      {Object.values(ExportCategory).map(exportCategory => (
         <ExportCategoryOptions
           exportCategory={exportCategory}
           key={exportCategory}

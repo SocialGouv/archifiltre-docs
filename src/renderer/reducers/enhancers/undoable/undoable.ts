@@ -1,12 +1,11 @@
-import type { Reducer } from "redux";
 import type redux from "redux";
+import { type Reducer } from "redux";
 
-import type { UndoableActionTypes, UndoableState } from "./undoable-types";
-import { COMMIT, REDO, UNDO } from "./undoable-types";
+import { COMMIT, REDO, UNDO, type UndoableActionTypes, type UndoableState } from "./undoable-types";
 
 export const undoable = <TWrappedState, TAction extends redux.Action>(
   reducer: Reducer<TWrappedState, TAction>,
-  initialState: TWrappedState
+  initialState: TWrappedState,
 ): Reducer<UndoableState<TWrappedState>, TAction | UndoableActionTypes> => {
   const wrappedInitialState: UndoableState<TWrappedState> = {
     current: initialState,
@@ -47,9 +46,9 @@ export const undoable = <TWrappedState, TAction extends redux.Action>(
       default:
         return {
           current: reducer(state.current, action as TAction),
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
           future: state?.future ?? [],
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
           past: state?.past ?? [],
           present: state.present,
         };

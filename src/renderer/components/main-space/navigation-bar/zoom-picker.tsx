@@ -1,9 +1,8 @@
-import type { AnyFunction } from "@common/utils/function";
-import Box from "@material-ui/core/Box";
-import type { ButtonProps } from "@material-ui/core/Button";
-import Button from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+import { type AnyFunction } from "@common/utils/function";
+import Box from "@mui/material/Box";
+import Button, { type ButtonProps } from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { round } from "lodash";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -18,7 +17,7 @@ export const ZoomPicker: React.FC = () => {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-  const handleClick: ButtonProps["onClick"] = (event) => {
+  const handleClick: ButtonProps["onClick"] = event => {
     setAnchorEl(event.currentTarget);
   };
 

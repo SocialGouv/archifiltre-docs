@@ -1,4 +1,4 @@
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import React from "react";
 import styled from "styled-components";
 
@@ -11,9 +11,7 @@ export interface BreadcrumbTextTooltipContentProps {
   name: string;
 }
 
-export const BreadcrumbTextTooltipContent: React.FC<
-  BreadcrumbTextTooltipContentProps
-> = ({ alias, name }) =>
+export const BreadcrumbTextTooltipContent: React.FC<BreadcrumbTextTooltipContentProps> = ({ alias, name }) =>
   alias ? (
     <Box>
       <span>{alias}</span>

@@ -1,4 +1,4 @@
-import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
+import { type ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import {
   getAliasesFromStore,
   getCommentsFromStore,

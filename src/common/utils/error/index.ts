@@ -1,17 +1,15 @@
-import type { ArchifiltreDocsErrorCode } from "@common/utils/error/error-codes";
 import {
+  type ArchifiltreDocsErrorCode,
   ArchifiltreDocsFileSystemErrorCode,
   UnknownError,
 } from "@common/utils/error/error-codes";
 
-/* eslint-disable @typescript-eslint/naming-convention */
 export enum ArchifiltreDocsErrorType {
   BATCH_PROCESS_ERROR = "batchProcessError",
   COMPUTING_HASHES = "computingHashes",
   LOADING_FILE_SYSTEM = "loadingFromFileSystem",
   STORE_THUNK = "storeThunk",
 }
-/* eslint-enable @typescript-eslint/naming-convention */
 
 export interface ArchifiltreDocsError {
   code: ArchifiltreDocsErrorCode;
@@ -22,14 +20,10 @@ export interface ArchifiltreDocsError {
 
 export const isArchifiltreDocsError = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Guard hack
-  err: any | unknown
-): err is ArchifiltreDocsError =>
-  "type" in err && "filePath" in err && "reason" in err && "code" in err;
+  err: any | unknown,
+): err is ArchifiltreDocsError => "type" in err && "filePath" in err && "reason" in err && "code" in err;
 
-type FsErrorToArchifiltreDocsError = Record<
-  string,
-  ArchifiltreDocsFileSystemErrorCode
->;
+type FsErrorToArchifiltreDocsError = Record<string, ArchifiltreDocsFileSystemErrorCode>;
 
 const fsErrorToArchifiltreDocsError: FsErrorToArchifiltreDocsError = {
   EACCES: ArchifiltreDocsFileSystemErrorCode.EACCES,
@@ -38,9 +32,8 @@ const fsErrorToArchifiltreDocsError: FsErrorToArchifiltreDocsError = {
 };
 
 export const convertFsErrorToArchifiltreDocsError = (
-  errorCode: string
+  errorCode: string,
 ): ArchifiltreDocsFileSystemErrorCode | UnknownError =>
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   fsErrorToArchifiltreDocsError[errorCode] ?? UnknownError.UNKNOWN;
 
 type ErrorHandler<T> = (error: ArchifiltreDocsError) => Promise<T> | T;

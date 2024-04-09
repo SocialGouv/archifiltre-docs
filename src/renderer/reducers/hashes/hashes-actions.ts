@@ -1,7 +1,8 @@
-import type { ArchifiltreDocsError } from "@common/utils/error";
-import type { HashesActionTypes, HashesMap } from "@common/utils/hashes-types";
+import { type ArchifiltreDocsError } from "@common/utils/error";
 import {
   ADD_ERRORED_HASHES,
+  type HashesActionTypes,
+  type HashesMap,
   RESET_ERRORED_HASHES,
   SET_FILES_AND_FOLDERS_HASHES,
 } from "@common/utils/hashes-types";
@@ -10,9 +11,7 @@ import {
  * Action to set hashes to FileAndFolders
  * @param hashes
  */
-export const setFilesAndFoldersHashes = (
-  hashes: HashesMap
-): HashesActionTypes => ({
+export const setFilesAndFoldersHashes = (hashes: HashesMap): HashesActionTypes => ({
   hashes,
   type: SET_FILES_AND_FOLDERS_HASHES,
 });
@@ -29,9 +28,7 @@ export const resetErroredHashes = (): HashesActionTypes => ({
  * Action to set hashes to FileAndFolders
  * @param hashPaths
  */
-export const addErroredHashes = (
-  hashErrors: ArchifiltreDocsError[]
-): HashesActionTypes => ({
+export const addErroredHashes = (hashErrors: ArchifiltreDocsError[]): HashesActionTypes => ({
   hashErrors,
   type: ADD_ERRORED_HASHES,
 });

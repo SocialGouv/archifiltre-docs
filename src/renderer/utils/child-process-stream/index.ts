@@ -5,8 +5,7 @@ import {
   readBufferMessageWithLength,
   uint8ArrayToString,
 } from "@common/utils/buffer";
-import type { Readable, TransformCallback, Writable } from "stream";
-import { Transform } from "stream";
+import { type Readable, Transform, type TransformCallback, type Writable } from "stream";
 
 const sendBufferToStream = (stream: Writable, buffer: Uint8Array) => {
   stream.write(bufferMessageWithLength(buffer));
@@ -40,13 +39,9 @@ interface StringifyObjectToStreamOptions<TData, TSerializedData> {
 export const stringifyObjectToStream = <TData, TSerializedData>(
   stream: Writable,
   data: TData,
-  {
-    keyExtractor,
-    dataExtractor,
-    dataSerializer,
-  }: StringifyObjectToStreamOptions<TData, TSerializedData>
+  { keyExtractor, dataExtractor, dataSerializer }: StringifyObjectToStreamOptions<TData, TSerializedData>,
 ): void => {
-  keyExtractor(data).forEach((elementKey) => {
+  keyExtractor(data).forEach(elementKey => {
     const serializedData = dataSerializer(dataExtractor(data, elementKey));
     sendBufferToStream(stream, serializedData);
   });
@@ -67,11 +62,7 @@ class MessageDeserializer extends Transform {
     });
   }
 
-  _write(
-    chunk: Buffer,
-    _encoding: string,
-    callback: (error?: Error | null) => void
-  ) {
+  _write(chunk: Buffer, _encoding: string, callback: (error?: Error | null) => void) {
     this.queue = joinBuffers(this.queue, new Uint8Array(chunk));
     this._read();
 
@@ -106,10 +97,7 @@ class MessageDeserializer extends Transform {
 
 interface ParseSerializedDataFromStreamOptions<TOutputData, TDeserializedData> {
   deserializer: (data: Uint8Array) => TDeserializedData;
-  merger: (
-    outputData: TOutputData,
-    deserializedData: TDeserializedData
-  ) => void;
+  merger: (outputData: TOutputData, deserializedData: TDeserializedData) => void;
   withJsonInitializing?: boolean;
 }
 
@@ -121,17 +109,14 @@ interface ParseSerializedDataFromStreamOptions<TOutputData, TDeserializedData> {
  * @param deserializer - Transform the binary data into an object
  * @param merger - Merge the deserialized object into the result object. It uses side effects for performance concerns
  */
-export const parseSerializedDataFromStream = async <
-  TOutputData,
-  TDeserializedData
->(
+export const parseSerializedDataFromStream = async <TOutputData, TDeserializedData>(
   stream: Readable,
   initialData: TOutputData,
   {
     withJsonInitializing = false,
     deserializer,
     merger,
-  }: ParseSerializedDataFromStreamOptions<TOutputData, TDeserializedData>
+  }: ParseSerializedDataFromStreamOptions<TOutputData, TDeserializedData>,
 ): Promise<TOutputData> => {
   const outputData = { ...initialData };
   let isFirstMessage = true;
@@ -149,7 +134,7 @@ export const parseSerializedDataFromStream = async <
     }
   };
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const messageDeserializer = new MessageDeserializer();
     stream.pipe(messageDeserializer);
     messageDeserializer.on("readable", () => {

@@ -1,10 +1,10 @@
-import Grid from "@material-ui/core/Grid";
-import type { TFunction } from "i18next";
+import Grid from "@mui/material/Grid";
+import { type TFunction } from "i18next";
 import React, { Component } from "react";
 import { withTranslation } from "react-i18next";
 import styled from "styled-components";
 
-import type { ExportToJson } from "../../exporters/json/json-exporter";
+import { type ExportToJson } from "../../exporters/json/json-exporter";
 import { reportError } from "../../logging/reporter";
 import { SaveButton } from "../Buttons/SaveButton";
 import { ContactUs } from "./contact-us";
@@ -24,10 +24,7 @@ const Wrapper = styled(Grid)`
   height: 100vh;
 `;
 
-class ErrorBoundaryComponent extends Component<
-  ErrorBoundaryProps,
-  ErrorBoundaryState
-> {
+class ErrorBoundaryComponent extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = {
@@ -47,12 +44,7 @@ class ErrorBoundaryComponent extends Component<
 
     if (this.state.hasError) {
       return (
-        <Wrapper
-          container
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-        >
+        <Wrapper container direction="column" justifyContent="center" alignItems="center">
           <Grid item>
             <h1>{t("common.somethingWentWrong")}</h1>
           </Grid>
@@ -62,11 +54,7 @@ class ErrorBoundaryComponent extends Component<
             </h4>
           </Grid>
           <Grid item>
-            <SaveButton
-              originalPath={originalPath}
-              sessionName={sessionName}
-              exportToJson={exportToJson}
-            />
+            <SaveButton originalPath={originalPath} sessionName={sessionName} exportToJson={exportToJson} />
           </Grid>
         </Wrapper>
       );

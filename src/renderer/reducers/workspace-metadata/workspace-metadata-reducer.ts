@@ -1,13 +1,11 @@
 import { undoable } from "../enhancers/undoable/undoable";
-import type {
-  WorkspaceMetadataAction,
-  WorkspaceMetadataState,
-} from "./workspace-metadata-types";
 import {
   SET_HOVERED_ELEMENT_ID,
   SET_LOCKED_ELEMENT_ID,
   SET_ORIGINAL_PATH,
   SET_SESSION_NAME,
+  type WorkspaceMetadataAction,
+  type WorkspaceMetadataState,
 } from "./workspace-metadata-types";
 
 export const initialState: WorkspaceMetadataState = {
@@ -17,10 +15,7 @@ export const initialState: WorkspaceMetadataState = {
   sessionName: "",
 };
 
-const workspaceMetadataReducer = (
-  state = initialState,
-  action?: WorkspaceMetadataAction
-): WorkspaceMetadataState => {
+const workspaceMetadataReducer = (state = initialState, action?: WorkspaceMetadataAction): WorkspaceMetadataState => {
   switch (action?.type) {
     case SET_SESSION_NAME:
       return { ...state, sessionName: action.sessionName };
@@ -37,7 +32,7 @@ const workspaceMetadataReducer = (
 
 export { workspaceMetadataReducer };
 
-export const undoableWorkspaceMetadataReducer = undoable<
-  WorkspaceMetadataState,
-  WorkspaceMetadataAction
->(workspaceMetadataReducer, initialState);
+export const undoableWorkspaceMetadataReducer = undoable<WorkspaceMetadataState, WorkspaceMetadataAction>(
+  workspaceMetadataReducer,
+  initialState,
+);

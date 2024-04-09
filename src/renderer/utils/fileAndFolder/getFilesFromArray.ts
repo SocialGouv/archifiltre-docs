@@ -1,4 +1,4 @@
-import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
+import { type FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
 import { isFile } from "./isFile";
 
 /**
@@ -6,6 +6,5 @@ import { isFile } from "./isFile";
  * @param filesAndFoldersArray Le tableau de FilesAndFolders à filtrer.
  * @returns {FilesAndFolders[]} Un tableau contenant uniquement les fichiers.
  */
-export const getFilesFromArray = (
-  filesAndFoldersArray: FilesAndFolders[]
-): FilesAndFolders[] => filesAndFoldersArray.filter(isFile);
+export const getFilesFromArray = (filesAndFoldersArray: FilesAndFolders[]): FilesAndFolders[] =>
+  filesAndFoldersArray.filter(isFile);

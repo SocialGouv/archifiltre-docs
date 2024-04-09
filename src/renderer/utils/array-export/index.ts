@@ -1,4 +1,4 @@
-import type { CsvExportData } from "../../exporters/csv/csv-exporter-types";
+import { type CsvExportData } from "../../exporters/csv/csv-exporter-types";
 import {
   getAliasesFromStore,
   getCommentsFromStore,
@@ -7,18 +7,13 @@ import {
 } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { getFilesAndFoldersMetadataFromStore } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getHashesFromStore } from "../../reducers/hashes/hashes-selectors";
-import {
-  getMetadataByEntity,
-  getMetadataKeys,
-} from "../../reducers/metadata/metadata-operations";
+import { getMetadataByEntity, getMetadataKeys } from "../../reducers/metadata/metadata-operations";
 import { getMetadataContextFromState } from "../../reducers/metadata/metadata-selector";
 import { getMetadataMapping } from "../../reducers/seda-configuration/seda-configuration-selector";
-import type { StoreState } from "../../reducers/store";
+import { type StoreState } from "../../reducers/store";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 
-export const getCsvExportParamsFromStore = (
-  state: StoreState
-): CsvExportData => {
+export const getCsvExportParamsFromStore = (state: StoreState): CsvExportData => {
   const metadataContext = getMetadataContextFromState(state);
 
   return {

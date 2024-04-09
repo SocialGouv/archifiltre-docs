@@ -1,8 +1,5 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-export const SET_ICICLE_SORT_METHOD =
-  "WORKSPACE_METADATA/SET_ICICLE_SORT_METHOD";
-export const SET_ELEMENT_WEIGHT_METHOD =
-  "WORKSPACE_METADATA/SET_ELEMENT_WEIGHT_METHOD";
+export const SET_ICICLE_SORT_METHOD = "WORKSPACE_METADATA/SET_ICICLE_SORT_METHOD";
+export const SET_ELEMENT_WEIGHT_METHOD = "WORKSPACE_METADATA/SET_ELEMENT_WEIGHT_METHOD";
 export const SET_ICICLE_COLOR_MODE = "WORKSPACE_METADATA/SET_ICICLE_COLOR_MODE";
 
 export interface IcicleSortMethodState {
@@ -42,7 +39,4 @@ interface SetIcicleColorMode {
   type: typeof SET_ICICLE_COLOR_MODE;
 }
 
-export type IcicleSortMethodAction =
-  | SetElementWeightMethod
-  | SetIcicleColorMode
-  | SetIciclesSortMethod;
+export type IcicleSortMethodAction = SetElementWeightMethod | SetIcicleColorMode | SetIciclesSortMethod;

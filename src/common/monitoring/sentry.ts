@@ -1,17 +1,13 @@
 import { BrowserClient } from "@sentry/browser";
-import type { ElectronOptions } from "@sentry/electron";
-import { getCurrentHub, init } from "@sentry/electron";
+import { type ElectronOptions, getCurrentHub, init } from "@sentry/electron";
 import { NodeClient } from "@sentry/node";
-import type { Integration } from "@sentry/types";
+import { type Integration } from "@sentry/types";
 
 import { IS_MAIN, IS_PACKAGED, PRODUCT_CHANNEL } from "../config";
-import type { TrackAppId } from "../tracker/type";
+import { type TrackAppId } from "../tracker/type";
 import { name, version } from "../utils/package";
 
-export type SentrySetupCallback = (
-  userId: string,
-  ...additionalIntegrations: Integration[]
-) => void;
+export type SentrySetupCallback = (userId: string, ...additionalIntegrations: Integration[]) => void;
 
 /**
  * Setup sentry in main or renderer and return a "post setup"
@@ -37,17 +33,14 @@ export const setupSentry = (): SentrySetupCallback => {
     getCurrentHub().bindClient(
       new Client({
         ...commonOptions,
-        initialScope: (scope) => {
+        initialScope: scope => {
           scope.setUser({
             id: userId,
           });
           return scope;
         },
-        integrations: (integrations) => [
-          ...integrations,
-          ...additionalIntegrations,
-        ],
-      })
+        integrations: integrations => [...integrations, ...additionalIntegrations],
+      }),
     );
   };
 };

@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { IS_DIST_MODE, IS_PACKAGED, RESOURCES_PATH } from "@common/config";
 import { isWindows } from "@common/utils/os";
-import type { FsWin } from "fswin";
+import { type FsWin } from "fswin";
 import path from "path";
 
 export const getFsWin = async (): Promise<FsWin> => {
@@ -13,12 +12,8 @@ export const getFsWin = async (): Promise<FsWin> => {
     return import(`fswin/electron/${process.arch}/fswin.node`);
   }
 
-  const fsWinElectron = path.resolve(
-    `${RESOURCES_PATH}/lib/fswin/electron/${process.arch}/fswin.node`
-  );
-  const fsWinNode = path.resolve(
-    `${RESOURCES_PATH}/lib/fswin/node/${process.arch}/fswin.node`
-  );
+  const fsWinElectron = path.resolve(`${RESOURCES_PATH}/lib/fswin/electron/${process.arch}/fswin.node`);
+  const fsWinNode = path.resolve(`${RESOURCES_PATH}/lib/fswin/node/${process.arch}/fswin.node`);
 
   // TODO: add custom node-loader working with different entry paths
   // https://github.com/webpack-contrib/node-loader/blob/v1.0.3/src/index.js

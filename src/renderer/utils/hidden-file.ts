@@ -9,9 +9,7 @@ const UNIX_HIDDEN_PREFIX = ".";
  * Check is a file is hidden on a windows fileSystem. It uses the attrib command.
  * @param elementPath
  */
-export const isFileHiddenOnWindows = async (
-  elementPath: string
-): Promise<boolean> => {
+export const isFileHiddenOnWindows = async (elementPath: string): Promise<boolean> => {
   const fswin = await getFsWin();
 
   return new Promise((resolve, reject) => {
@@ -19,14 +17,13 @@ export const isFileHiddenOnWindows = async (
       reject(new Error("This method can only be used on a dos system"));
       return;
     }
-    fswin.getAttributes(elementPath, (attr) => {
+    fswin.getAttributes(elementPath, attr => {
       resolve(attr?.IS_HIDDEN ?? false);
     });
   });
 };
 
-const isFileHiddenOnUnix = (filePath: string) =>
-  path.basename(filePath).startsWith(UNIX_HIDDEN_PREFIX);
+const isFileHiddenOnUnix = (filePath: string) => path.basename(filePath).startsWith(UNIX_HIDDEN_PREFIX);
 
 /**
  * Check if a file is hidden (starts with a dot on unix or has the hidden attribute on windows)
@@ -52,16 +49,14 @@ export const isIgnored = (elementPath: string): boolean => {
   return (
     IGNORED_NAMES.includes(elementName) ||
     IGNORED_EXTS.includes(path.extname(elementPath)) ||
-    IGNORED_PATTERNS.some((regex) => regex.test(elementName))
+    IGNORED_PATTERNS.some(regex => regex.test(elementName))
   );
 };
 
 /**
  * Checks if a file should be ignored by file system loading
  */
-export const shouldIgnoreElement = async (
-  elementPath: string
-): Promise<boolean> => {
+export const shouldIgnoreElement = async (elementPath: string): Promise<boolean> => {
   if (isIgnored(elementPath)) {
     return true;
   }

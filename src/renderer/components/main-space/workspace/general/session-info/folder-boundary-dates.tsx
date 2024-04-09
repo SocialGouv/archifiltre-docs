@@ -1,4 +1,4 @@
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import dateFormat from "dateformat";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -22,10 +22,7 @@ export const FolderBoundaryDates: React.FC<FolderBoundaryDatesProps> = ({
   return (
     <Grid container spacing={2}>
       <Grid item>
-        <BoundaryDate
-          title={t("report.minimum")}
-          content={dateFormat(minLastModifiedTimestamp, "dd/mm/yyyy")}
-        />
+        <BoundaryDate title={t("report.minimum")} content={dateFormat(minLastModifiedTimestamp, "dd/mm/yyyy")} />
       </Grid>
       <Grid item>
         <BoundaryDate
@@ -39,10 +36,7 @@ export const FolderBoundaryDates: React.FC<FolderBoundaryDatesProps> = ({
         />
       </Grid>
       <Grid item>
-        <BoundaryDate
-          title={t("report.maximum")}
-          content={dateFormat(maxLastModifiedTimestamp, "dd/mm/yyyy")}
-        />
+        <BoundaryDate title={t("report.maximum")} content={dateFormat(maxLastModifiedTimestamp, "dd/mm/yyyy")} />
       </Grid>
     </Grid>
   );

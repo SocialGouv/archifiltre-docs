@@ -1,10 +1,8 @@
-import type {
-  SedaConfigurationAction,
-  SedaConfigurationState,
-} from "./seda-configuration-type";
 import {
   INIT_METADATA_MAPPING,
   RESET_METADATA_MAPPING,
+  type SedaConfigurationAction,
+  type SedaConfigurationState,
   SET_METADATA_MAPPING,
 } from "./seda-configuration-type";
 
@@ -14,7 +12,7 @@ export const initialState: SedaConfigurationState = {
 
 export const sedaConfigurationReducer = (
   state = initialState,
-  action?: SedaConfigurationAction
+  action?: SedaConfigurationAction,
 ): SedaConfigurationState => {
   switch (action?.type) {
     case SET_METADATA_MAPPING:

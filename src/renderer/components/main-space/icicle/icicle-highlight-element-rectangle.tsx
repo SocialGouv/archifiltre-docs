@@ -2,10 +2,9 @@ import React from "react";
 
 import { useAnimatedValue } from "../../../hooks/use-animation";
 import { useFileMoveActiveState } from "../workspace/file-move-provider";
-import type { Dims } from "./icicle-rect";
-import type { IcicleMouseActionHandler } from "./icicle-types";
-import type { SvgRectangleProps } from "./svg-rectangle";
-import { SvgRectangle } from "./svg-rectangle";
+import { type Dims } from "./icicle-rect";
+import { type IcicleMouseActionHandler } from "./icicle-types";
+import { SvgRectangle, type SvgRectangleProps } from "./svg-rectangle";
 
 export interface IcicleHightlightElementRectangleProps {
   dims: Dims;
@@ -18,9 +17,7 @@ export interface IcicleHightlightElementRectangleProps {
 
 const ICICLE_HIGHLIGHT_DURATION = 3000;
 
-export const IcicleHightlightElementRectangle: React.FC<
-  IcicleHightlightElementRectangleProps
-> = ({
+export const IcicleHightlightElementRectangle: React.FC<IcicleHightlightElementRectangleProps> = ({
   dims,
   highlightedElementId,
   highlightedElementTime,
@@ -30,26 +27,21 @@ export const IcicleHightlightElementRectangle: React.FC<
 }) => {
   const highlightedElementControl = `${highlightedElementId}:${highlightedElementTime}`;
 
-  const animatedOpacity = useAnimatedValue(
-    1,
-    0,
-    ICICLE_HIGHLIGHT_DURATION,
-    highlightedElementControl
-  );
+  const animatedOpacity = useAnimatedValue(1, 0, ICICLE_HIGHLIGHT_DURATION, highlightedElementControl);
 
   const { isFileMoveActive } = useFileMoveActiveState();
 
   const dimsAndId = { dims: () => dims, id: highlightedElementId };
 
-  const onClick: SvgRectangleProps["onClickHandler"] = (event) => {
+  const onClick: SvgRectangleProps["onClickHandler"] = event => {
     onClickHandler(dimsAndId, event);
   };
 
-  const ouDoubleClick: SvgRectangleProps["onDoubleClickHandler"] = (event) => {
+  const ouDoubleClick: SvgRectangleProps["onDoubleClickHandler"] = event => {
     onDoubleClickHandler(dimsAndId, event);
   };
 
-  const onMouseOver: SvgRectangleProps["onMouseOverHandler"] = (event) => {
+  const onMouseOver: SvgRectangleProps["onMouseOverHandler"] = event => {
     onMouseOverHandler(dimsAndId, event as React.MouseEvent);
   };
 

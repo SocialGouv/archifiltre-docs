@@ -8,10 +8,7 @@ import { compareSegments } from "./compareSegments";
  * @returns Returns 0 if versions are equal, 1 if firstVersion is greater,
  * and -1 if secondVersion is greater.
  */
-export const versionComparator = (
-  firstVersion: string,
-  secondVersion: string
-): number => {
+export const versionComparator = (firstVersion: string, secondVersion: string): number => {
   const firstVersionSegments = firstVersion.split(".").map(Number);
   const secondVersionSegments = secondVersion.split(".").map(Number);
 

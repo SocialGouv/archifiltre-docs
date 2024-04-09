@@ -25,27 +25,19 @@ import {
 } from "../../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { isFolder } from "../../../utils";
 import { useFillColor } from "../../../utils/color";
-import {
-  createFilePathSequence,
-  getAllChildren,
-} from "../../../utils/file-and-folders";
-import type { IcicleMainProps } from "./icicle-main";
-import { IcicleMain } from "./icicle-main";
+import { createFilePathSequence, getAllChildren } from "../../../utils/file-and-folders";
+import { IcicleMain, type IcicleMainProps } from "./icicle-main";
 
 export interface IcicleContainerProps {
   rightSidebar?: IcicleMainProps["rightSidebar"];
 }
 
-export const IcicleContainer: React.FC<IcicleContainerProps> = ({
-  rightSidebar,
-}) => {
+export const IcicleContainer: React.FC<IcicleContainerProps> = ({ rightSidebar }) => {
   const dispatch = useDispatch();
 
   const tags = useSelector(getTagsFromStore);
 
-  const filesAndFoldersMetadata = useSelector(
-    getFilesAndFoldersMetadataFromStore
-  );
+  const filesAndFoldersMetadata = useSelector(getFilesAndFoldersMetadataFromStore);
 
   const virtualPathToIdMap = useSelector(getVirtualPathToIdFromStore);
 
@@ -56,15 +48,14 @@ export const IcicleContainer: React.FC<IcicleContainerProps> = ({
 
   const { hoveredElementId, lockedElementId } = useWorkspaceMetadata();
 
-  const { icicleSortMethod, icicleColorMode, elementWeightMethod } =
-    useIcicleSortMethod();
+  const { icicleSortMethod, icicleColorMode, elementWeightMethod } = useIcicleSortMethod();
 
   const getFfByFfId = useCallback(
     (ffId: string) => ({
       ...filesAndFoldersMetadata[ffId],
       ...filesAndFolders[ffId],
     }),
-    [filesAndFoldersMetadata, filesAndFolders]
+    [filesAndFoldersMetadata, filesAndFolders],
   );
 
   const getAllChildrenFolderCount = useCallback(
@@ -72,84 +63,55 @@ export const IcicleContainer: React.FC<IcicleContainerProps> = ({
       const children = getAllChildren(filesAndFolders, id);
       return children.map(getFfByFfId).filter(isFolder).length - 1;
     },
-    [filesAndFolders, getFfByFfId]
+    [filesAndFolders, getFfByFfId],
   );
 
-  const maxDepth = useMemo(
-    () => getMaxDepth(filesAndFolders),
-    [filesAndFolders]
-  );
+  const maxDepth = useMemo(() => getMaxDepth(filesAndFolders), [filesAndFolders]);
 
   const lock: IcicleMainProps["lock"] = useCallback(
-    (id) => {
+    id => {
       dispatch(setLockedElementId(id));
     },
-    [dispatch]
+    [dispatch],
   );
 
-  const setFocus: IcicleMainProps["setFocus"] = useCallback(
-    (id) => dispatch(setHoveredElementId(id)),
-    [dispatch]
-  );
+  const setFocus: IcicleMainProps["setFocus"] = useCallback(id => dispatch(setHoveredElementId(id)), [dispatch]);
 
-  const setNoFocus: IcicleMainProps["setNoFocus"] = useCallback(
-    () => dispatch(setHoveredElementId("")),
-    [dispatch]
-  );
+  const setNoFocus: IcicleMainProps["setNoFocus"] = useCallback(() => dispatch(setHoveredElementId("")), [dispatch]);
 
-  const unlock: IcicleMainProps["unlock"] = useCallback(
-    () => dispatch(setLockedElementId("")),
-    [dispatch]
-  );
+  const unlock: IcicleMainProps["unlock"] = useCallback(() => dispatch(setLockedElementId("")), [dispatch]);
 
   const hoverSequence: IcicleMainProps["hoverSequence"] = useMemo(
-    () =>
-      createFilePathSequence(
-        hoveredElementId,
-        filesAndFolders,
-        virtualPathToIdMap
-      ),
-    [hoveredElementId, filesAndFolders, virtualPathToIdMap]
+    () => createFilePathSequence(hoveredElementId, filesAndFolders, virtualPathToIdMap),
+    [hoveredElementId, filesAndFolders, virtualPathToIdMap],
   );
 
   const lockedSequence: IcicleMainProps["lockedSequence"] = useMemo(
-    () =>
-      createFilePathSequence(
-        lockedElementId,
-        filesAndFolders,
-        virtualPathToIdMap
-      ),
-    [lockedElementId, filesAndFolders, virtualPathToIdMap]
+    () => createFilePathSequence(lockedElementId, filesAndFolders, virtualPathToIdMap),
+    [lockedElementId, filesAndFolders, virtualPathToIdMap],
   );
 
   const { originalPath } = useSelector(getWorkspaceMetadataFromStore);
 
-  const getChildrenIdFromId: IcicleMainProps["getChildrenIdFromId"] =
-    useCallback(
-      (id: string): string[] => {
-        const children = filesAndFolders[id].children;
-        const metadata = filesAndFoldersMetadata[id];
-        const orderArray = {
-          [IcicleSortMethod.SORT_BY_DATE]: metadata.sortByDateIndex,
-          [IcicleSortMethod.SORT_BY_SIZE]: metadata.sortBySizeIndex,
-          [IcicleSortMethod.SORT_ALPHA_NUMERICALLY]:
-            metadata.sortAlphaNumericallyIndex,
-        }[icicleSortMethod];
-        return orderArray.map((childIndex) => children[childIndex]);
-      },
-      [filesAndFolders, filesAndFoldersMetadata, icicleSortMethod]
-    );
-
-  const fillColor = useFillColor(
-    filesAndFolders,
-    filesAndFoldersMetadata,
-    icicleColorMode
+  const getChildrenIdFromId: IcicleMainProps["getChildrenIdFromId"] = useCallback(
+    (id: string): string[] => {
+      const children = filesAndFolders[id].children;
+      const metadata = filesAndFoldersMetadata[id];
+      const orderArray = {
+        [IcicleSortMethod.SORT_BY_DATE]: metadata.sortByDateIndex,
+        [IcicleSortMethod.SORT_BY_SIZE]: metadata.sortBySizeIndex,
+        [IcicleSortMethod.SORT_ALPHA_NUMERICALLY]: metadata.sortAlphaNumericallyIndex,
+      }[icicleSortMethod];
+      return orderArray.map(childIndex => children[childIndex]);
+    },
+    [filesAndFolders, filesAndFoldersMetadata, icicleSortMethod],
   );
 
+  const fillColor = useFillColor(filesAndFolders, filesAndFoldersMetadata, icicleColorMode);
+
   const moveElementCallback: IcicleMainProps["moveElement"] = useCallback(
-    (movedElement, targetFolder) =>
-      dispatch(moveElement(movedElement, targetFolder)),
-    [dispatch]
+    (movedElement, targetFolder) => dispatch(moveElement(movedElement, targetFolder)),
+    [dispatch],
   );
 
   return (

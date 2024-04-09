@@ -1,8 +1,5 @@
 export type Mapper<TInput, TOutput> = (input: TInput) => TOutput;
-export type Merger<TInput1, TInput2, TOutput> = (
-  input1: TInput1,
-  input2: TInput2
-) => TOutput;
+export type Merger<TInput1, TInput2, TOutput> = (input1: TInput1, input2: TInput2) => TOutput;
 
 export type Accessor<T> = () => T;
 
@@ -14,8 +11,7 @@ export const not = (value: boolean): boolean => !value;
 /**
  * Returns the size of an array. Basically, array.length wrapped in a function.
  */
-export const size = (arrayOrString: unknown[] | string): number =>
-  arrayOrString.length;
+export const size = (arrayOrString: unknown[] | string): number => arrayOrString.length;
 
 /**
  * Function that applies a side effect and returns the value. It can be pretty useful to add logs.

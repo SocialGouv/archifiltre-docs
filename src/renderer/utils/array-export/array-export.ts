@@ -1,21 +1,18 @@
-import type { HashesMap } from "@common/utils/hashes-types";
-import type { TFunction } from "i18next";
+import { type HashesMap } from "@common/utils/hashes-types";
+import { type TFunction } from "i18next";
 import _, { flatten, identity } from "lodash";
 import { compose, cond, defaults, isObject, prop, stubTrue } from "lodash/fp";
 import { concat, from, interval, Observable } from "rxjs";
 import { map, take, tap, toArray } from "rxjs/operators";
 
-import type { CsvExportData } from "../../exporters/csv/csv-exporter-types";
+import { type CsvExportData } from "../../exporters/csv/csv-exporter-types";
 import { ROOT_FF_ID } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import { type FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 import { translations } from "../../translations/translations";
-import type { ResultMessage } from "../batch-process/types";
-import { MessageTypes } from "../batch-process/types";
-import type { DuplicatesMap } from "../duplicates";
-import { getDuplicatesMap } from "../duplicates";
+import { MessageTypes, type ResultMessage } from "../batch-process/types";
+import { type DuplicatesMap, getDuplicatesMap } from "../duplicates";
 import { getAllChildren } from "../file-and-folders";
-import type { CellConfig } from "./make-array-export-config";
-import { makeRowConfig } from "./make-array-export-config";
+import { type CellConfig, makeRowConfig } from "./make-array-export-config";
 
 type CsvExporterData = CsvExportData & {
   translator: TFunction;
@@ -41,23 +38,23 @@ const makeExportBody = ({
 }: CsvExporterData & WithHashes & WithIdsToDelete & WithRowConfig) => {
   const filesAndFoldersChunks = _.chunk(
     Object.values(filesAndFolders).filter(({ id }) => id !== ROOT_FF_ID),
-    CHUNK_SIZE
+    CHUNK_SIZE,
   );
 
   return interval().pipe(
     take(filesAndFoldersChunks.length),
-    map((index) => filesAndFoldersChunks[index]!),
-    map((chunk) =>
-      chunk.map((element) =>
-        rowConfig.map((cellConfig) =>
+    map(index => filesAndFoldersChunks[index]!),
+    map(chunk =>
+      chunk.map(element =>
+        rowConfig.map(cellConfig =>
           cellConfig.accessor({
             ...element,
             ...filesAndFoldersMetadata[element.id],
             ...rest,
-          })
-        )
-      )
-    )
+          }),
+        ),
+      ),
+    ),
   );
 };
 
@@ -66,14 +63,9 @@ const makeExportBody = ({
  * @param filesAndFolders
  * @param elementsToDelete
  */
-const getChildrenToDelete = (
-  filesAndFolders: FilesAndFoldersMap,
-  elementsToDelete: string[]
-) => {
+const getChildrenToDelete = (filesAndFolders: FilesAndFoldersMap, elementsToDelete: string[]) => {
   return _(elementsToDelete)
-    .flatMap((elementToDelete) =>
-      getAllChildren(filesAndFolders, elementToDelete)
-    )
+    .flatMap(elementToDelete => getAllChildren(filesAndFolders, elementToDelete))
     .uniq()
     .value();
 };
@@ -82,47 +74,36 @@ const prepareIdsToDelete = <
   T extends {
     elementsToDelete: string[];
     filesAndFolders: FilesAndFoldersMap;
-  }
+  },
 >(
-  params: T
+  params: T,
 ): T & WithIdsToDelete => ({
   ...params,
-  idsToDelete: getChildrenToDelete(
-    params.filesAndFolders,
-    params.elementsToDelete
-  ),
+  idsToDelete: getChildrenToDelete(params.filesAndFolders, params.elementsToDelete),
 });
 
 const prepareDuplicateMap = <
   T extends {
     hashes: HashesMap;
-  }
+  },
 >(
-  params: T
+  params: T,
   // @ts-expect-error for testing purpose
 ): T & { duplicatesMap: DuplicatesMap } => ({
   ...params,
   duplicatesMap: getDuplicatesMap(params.hashes),
 });
 
-const shouldDisplayDuplicates = (hashes?: HashesMap) =>
-  isObject(hashes) && Object.keys(hashes).length > 0;
+const shouldDisplayDuplicates = (hashes?: HashesMap) => isObject(hashes) && Object.keys(hashes).length > 0;
 
-const removeDuplicateCells = (
-  params: CsvExporterData & WithRowConfig
-): CsvExporterData & WithRowConfig => ({
+const removeDuplicateCells = (params: CsvExporterData & WithRowConfig): CsvExporterData & WithRowConfig => ({
   ...params,
-  rowConfig: params.rowConfig.filter(
-    ({ id }) => !["hash", "duplicate"].includes(id)
-  ),
+  rowConfig: params.rowConfig.filter(({ id }) => !["hash", "duplicate"].includes(id)),
 });
 
-const shouldRemoveToDelete = (params: CsvExporterData & WithRowConfig) =>
-  params.elementsToDelete.length === 0;
+const shouldRemoveToDelete = (params: CsvExporterData & WithRowConfig) => params.elementsToDelete.length === 0;
 
-const removeToDeleteCells = (
-  params: CsvExporterData & WithRowConfig
-): CsvExporterData & WithRowConfig => ({
+const removeToDeleteCells = (params: CsvExporterData & WithRowConfig): CsvExporterData & WithRowConfig => ({
   ...params,
   rowConfig: params.rowConfig.filter(({ id }) => id !== "toDelete"),
 });
@@ -132,14 +113,10 @@ const maybeRemoveToDeleteCells = cond([
   [stubTrue, identity],
 ]);
 
-const setDefaultHashesValue = <T>(params: T) =>
-  defaults({ hashes: {} }, params);
+const setDefaultHashesValue = <T>(params: T) => defaults({ hashes: {} }, params);
 
 const maybeRemoveDuplicates = cond([
-  [
-    compose(shouldDisplayDuplicates, prop("hashes")),
-    (input: CsvExporterData & WithRowConfig) => input,
-  ],
+  [compose(shouldDisplayDuplicates, prop("hashes")), (input: CsvExporterData & WithRowConfig) => input],
   [stubTrue, removeDuplicateCells],
 ]);
 
@@ -159,27 +136,25 @@ const computeExportRows = (
     WithIdsToDelete &
     WithRowConfig & {
       output: string[][];
-    }
-): Observable<string[][]> =>
-  concat(from([params.output]), makeExportBody(params));
+    },
+): Observable<string[][]> => concat(from([params.output]), makeExportBody(params));
 
-export const exportToCsv: (input: CsvExporterData) => Observable<string[][]> =
-  compose(
-    computeExportRows,
-    generateHeaderRow,
-    prepareIdsToDelete,
-    prepareDuplicateMap,
-    setDefaultHashesValue,
-    maybeRemoveToDeleteCells,
-    maybeRemoveDuplicates,
-    addRowConfig
-  );
+export const exportToCsv: (input: CsvExporterData) => Observable<string[][]> = compose(
+  computeExportRows,
+  generateHeaderRow,
+  prepareIdsToDelete,
+  prepareDuplicateMap,
+  setDefaultHashesValue,
+  maybeRemoveToDeleteCells,
+  maybeRemoveDuplicates,
+  addRowConfig,
+);
 
 export const generateArrayExport$ = (
   data: CsvExportData,
-  outputFormatter: (matrix: string[][]) => string
+  outputFormatter: (matrix: string[][]) => string,
 ): Observable<ResultMessage> => {
-  return new Observable<ResultMessage>((subscriber) => {
+  return new Observable<ResultMessage>(subscriber => {
     void exportToCsv({
       ...data,
       elementsToDelete: data.elementsToDelete,
@@ -192,11 +167,11 @@ export const generateArrayExport$ = (
             type: MessageTypes.RESULT,
           });
         }),
-        toArray()
+        toArray(),
       )
       .toPromise()
       .then(flatten)
-      .then((array) => {
+      .then(array => {
         subscriber.next({
           result: outputFormatter(array),
           type: MessageTypes.RESULT,

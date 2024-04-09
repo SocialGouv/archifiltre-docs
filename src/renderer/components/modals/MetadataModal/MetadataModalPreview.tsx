@@ -1,6 +1,5 @@
-import Box from "@material-ui/core/Box";
-import type { FC } from "react";
-import React from "react";
+import Box from "@mui/material/Box";
+import React, { type FC } from "react";
 
 import { useMachine } from "../../../lib/@xstate/react/useMachine";
 import { MetadataDialogContent } from "./MetadataDialogContent";
@@ -8,16 +7,18 @@ import { MetadataDialogFooter } from "./MetadataDialogFooter";
 import { MetadataModalFields } from "./MetadataModalFields";
 import { MetadataModalOptions } from "./MetadataModalOptions/MetadataModalOptions";
 import MetadataModalPreviewHeader from "./MetadataModalPreviewHeader";
-import type { ImportPreviewSimpleEvents } from "./MetadataModalStateMachine/ImportPreviewStateMachine";
-import { importPreviewStateMachine } from "./MetadataModalStateMachine/ImportPreviewStateMachine";
-import type {
-  FieldsConfigChangeHandler,
-  MetadataFileConfig,
-  MetadataModalContext,
-  ModalAction,
+import {
+  type ImportPreviewSimpleEvents,
+  importPreviewStateMachine,
+} from "./MetadataModalStateMachine/ImportPreviewStateMachine";
+import {
+  type FieldsConfigChangeHandler,
+  type MetadataFileConfig,
+  type MetadataModalContext,
+  type ModalAction,
 } from "./MetadataModalTypes";
 
-const actions: ModalAction<ImportPreviewSimpleEvents["type"]>[] = [
+const actions: Array<ModalAction<ImportPreviewSimpleEvents["type"]>> = [
   {
     id: "LOAD_METADATA",
     label: "loadMetadata",
@@ -31,15 +32,10 @@ export interface ImportModalPreviewProps {
   onRetry: () => void;
 }
 
-export const MetadataModalPreview: FC<ImportModalPreviewProps> = ({
-  context,
-  closeModal,
-  onRetry,
-  onLoadMetadata,
-}) => {
+export const MetadataModalPreview: FC<ImportModalPreviewProps> = ({ context, closeModal, onRetry, onLoadMetadata }) => {
   const [state, send] = useMachine(importPreviewStateMachine, { context });
 
-  const onFieldsConfigChange: FieldsConfigChangeHandler = (fieldsConfig) => {
+  const onFieldsConfigChange: FieldsConfigChangeHandler = fieldsConfig => {
     send({
       fieldsConfig,
       type: "FIELDS_CONFIG_CHANGED",
@@ -69,10 +65,7 @@ export const MetadataModalPreview: FC<ImportModalPreviewProps> = ({
       <MetadataDialogContent>
         <Box display="flex" flexDirection="column" height="100%">
           <Box>
-            <MetadataModalOptions
-              options={state.context.config}
-              onChange={onFileConfigChange}
-            />
+            <MetadataModalOptions options={state.context.config} onChange={onFileConfigChange} />
           </Box>
           <Box padding={2}>
             <MetadataModalPreviewHeader />
@@ -86,11 +79,7 @@ export const MetadataModalPreview: FC<ImportModalPreviewProps> = ({
           </Box>
         </Box>
       </MetadataDialogContent>
-      <MetadataDialogFooter
-        actions={actions}
-        closeModal={closeModal}
-        onAction={onAction}
-      />
+      <MetadataDialogFooter actions={actions} closeModal={closeModal} onAction={onAction} />
     </>
   );
 };

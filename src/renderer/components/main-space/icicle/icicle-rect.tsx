@@ -2,9 +2,8 @@ import { noop } from "lodash";
 import React, { useCallback, useEffect } from "react";
 
 import { useFileMoveActiveState } from "../workspace/file-move-provider";
-import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
-import type { SvgRectangleProps } from "./svg-rectangle";
-import { SvgRectangle } from "./svg-rectangle";
+import { type FillColor, type IcicleMouseActionHandler } from "./icicle-types";
+import { SvgRectangle, type SvgRectangleProps } from "./svg-rectangle";
 
 export interface Dims {
   dx: number;
@@ -18,13 +17,11 @@ export interface DimsAndId {
   id: string;
 }
 
-/* eslint-disable @typescript-eslint/naming-convention */
 enum CursorState {
   ACTIVE_ELEMENT_CURSOR = "pointer",
   INACTIVE_ELEMENT_CURSOR = "initial",
   MOVE_CURSOR = "move",
 }
-/* eslint-enable @typescript-eslint/naming-convention */
 
 export interface IcicleRectProps {
   dx: number;
@@ -35,13 +32,7 @@ export interface IcicleRectProps {
   onDoubleClickHandler: IcicleMouseActionHandler;
   onMouseOverHandler: IcicleMouseActionHandler;
   opacity: number;
-  registerDims: (
-    x: number,
-    dx: number,
-    y: number,
-    dy: number,
-    id: string
-  ) => void;
+  registerDims: (x: number, dx: number, y: number, dy: number, id: string) => void;
   x: number;
   y: number;
 }
@@ -67,24 +58,24 @@ export const IcicleRect: React.FC<IcicleRectProps> = ({
   }, [x, dx, y, dy]);
 
   const onClick: SvgRectangleProps["onClickHandler"] = useCallback(
-    (event) => {
+    event => {
       onClickHandler({ dims: getDims, id }, event);
     },
-    [onClickHandler, getDims, id]
+    [onClickHandler, getDims, id],
   );
 
   const onDoubleClick: SvgRectangleProps["onDoubleClickHandler"] = useCallback(
-    (event) => {
+    event => {
       onDoubleClickHandler({ dims: getDims, id }, event);
     },
-    [onDoubleClickHandler, getDims, id]
+    [onDoubleClickHandler, getDims, id],
   );
 
   const onMouseOver: SvgRectangleProps["onMouseOverHandler"] = useCallback(
-    (event) => {
+    event => {
       onMouseOverHandler({ dims: getDims, id }, event as React.MouseEvent);
     },
-    [onMouseOverHandler, getDims, id]
+    [onMouseOverHandler, getDims, id],
   );
 
   const { isFileMoveActive } = useFileMoveActiveState();

@@ -10,9 +10,9 @@ import { deletionScriptExporterThunk } from "../../../exporters/deletion-script/
 import { excelExporterThunk } from "../../../exporters/excel/excel-exporter";
 import { metsExporterThunk } from "../../../exporters/mets/mets-export-thunk";
 import { resipExporterThunk } from "../../../exporters/resip/resip-exporter-thunk";
-import type { ArchifiltreDocsThunkAction } from "../../../reducers/archifiltre-types";
+import { type ArchifiltreDocsThunkAction } from "../../../reducers/archifiltre-types";
 import { getNameWithExtension } from "../../../utils/file-system/file-sys-util";
-import type { ExportTypesMap } from "../export-modal/export-options";
+import { type ExportTypesMap } from "./export-options";
 
 export interface IsActiveOptions {
   areHashesReady: boolean;
@@ -32,14 +32,8 @@ type ExportConfigMap = {
   [exportType in ExportType]: ExportConfig;
 };
 
-export const mapValuesFromExportType = <T>(
-  iteratee: (value: ExportType) => T
-): ExportTypesMap<T> => {
-  return _(ExportType)
-    .values()
-    .keyBy()
-    .mapValues(iteratee)
-    .value() as ExportTypesMap<T>;
+export const mapValuesFromExportType = <T>(iteratee: (value: ExportType) => T): ExportTypesMap<T> => {
+  return _(ExportType).values().keyBy().mapValues(iteratee).value() as ExportTypesMap<T>;
 };
 
 const exportFilesConfigs = {
@@ -59,17 +53,9 @@ const exportFilesConfigs = {
   },
 };
 
-const computeExportFilePath = (
-  originalPath: string,
-  sessionName: string,
-  exportId: ExportType
-) => {
+const computeExportFilePath = (originalPath: string, sessionName: string, exportId: ExportType) => {
   const { fileSuffix, extension } = exportFilesConfigs[exportId];
-  return path.join(
-    originalPath,
-    "..",
-    getNameWithExtension(`${sessionName}-${fileSuffix}`, extension)
-  );
+  return path.join(originalPath, "..", getNameWithExtension(`${sessionName}-${fileSuffix}`, extension));
 };
 
 export const exportConfig: ExportConfigMap = {
@@ -79,8 +65,7 @@ export const exportConfig: ExportConfigMap = {
     exportFunction(exportPath) {
       return auditReportExporterThunk(exportPath);
     },
-    exportPath: (originalPath, sessionName) =>
-      computeExportFilePath(originalPath, sessionName, ExportType.AUDIT),
+    exportPath: (originalPath, sessionName) => computeExportFilePath(originalPath, sessionName, ExportType.AUDIT),
     isActive: ({ areHashesReady }) => areHashesReady,
     label: "header.auditReport",
   },
@@ -89,51 +74,40 @@ export const exportConfig: ExportConfigMap = {
     exportFunction(exportPath) {
       return csvExporterThunk(exportPath);
     },
-    exportPath: (originalPath, sessionName) =>
-      computeExportFilePath(originalPath, sessionName, ExportType.CSV),
+    exportPath: (originalPath, sessionName) => computeExportFilePath(originalPath, sessionName, ExportType.CSV),
     isActive: true,
     label: "CSV",
   },
   [ExportType.CSV_WITH_HASHES]: {
     category: ExportCategory.RECORDS_INVENTORY,
     disabledExplanation: "header.csvWithHashDisabledMessage",
-    exportFunction: (exportPath) =>
-      csvExporterThunk(exportPath, { withHashes: true }),
+    exportFunction: exportPath => csvExporterThunk(exportPath, { withHashes: true }),
     exportPath: (originalPath, sessionName) =>
-      computeExportFilePath(
-        originalPath,
-        sessionName,
-        ExportType.CSV_WITH_HASHES
-      ),
+      computeExportFilePath(originalPath, sessionName, ExportType.CSV_WITH_HASHES),
     isActive: ({ areHashesReady }) => areHashesReady,
     label: "header.csvWithHash",
   },
   [ExportType.TREE_CSV]: {
     category: ExportCategory.RECORDS_INVENTORY,
-    exportFunction: (exportPath) => treeCsvExporterThunk(exportPath),
-    exportPath: (originalPath, sessionName) =>
-      computeExportFilePath(originalPath, sessionName, ExportType.TREE_CSV),
+    exportFunction: exportPath => treeCsvExporterThunk(exportPath),
+    exportPath: (originalPath, sessionName) => computeExportFilePath(originalPath, sessionName, ExportType.TREE_CSV),
     isActive: true,
     label: "export.treeCsv",
   },
   [ExportType.EXCEL]: {
     category: ExportCategory.RECORDS_INVENTORY,
     disabledExplanation: "header.csvWithHashDisabledMessage",
-    exportFunction: (exportPath) => excelExporterThunk(exportPath),
-    exportPath: (originalPath, sessionName) =>
-      computeExportFilePath(originalPath, sessionName, ExportType.EXCEL),
+    exportFunction: exportPath => excelExporterThunk(exportPath),
+    exportPath: (originalPath, sessionName) => computeExportFilePath(originalPath, sessionName, ExportType.EXCEL),
     isActive: ({ areHashesReady }) => areHashesReady,
     label: "Excel",
   },
   [ExportType.RESIP]: {
     category: ExportCategory.EXCHANGE_WITH_ERMS,
-    exportFunction: (exportPath) => resipExporterThunk(exportPath),
+    exportFunction: exportPath => resipExporterThunk(exportPath),
     exportPath: (originalPath, sessionName) => {
       const { fileSuffix, extension } = exportFilesConfigs[ExportType.RESIP];
-      return path.join(
-        originalPath,
-        getNameWithExtension(`${sessionName}-${fileSuffix}`, extension)
-      );
+      return path.join(originalPath, getNameWithExtension(`${sessionName}-${fileSuffix}`, extension));
     },
     isActive: true,
     isFilePickerDisabled: true,
@@ -142,21 +116,16 @@ export const exportConfig: ExportConfigMap = {
   [ExportType.METS]: {
     category: ExportCategory.EXCHANGE_WITH_ERMS,
     disabledExplanation: "header.metsDisabledMessage",
-    exportFunction: (exportPath) => metsExporterThunk(exportPath),
-    exportPath: (originalPath, sessionName) =>
-      computeExportFilePath(originalPath, sessionName, ExportType.METS),
+    exportFunction: exportPath => metsExporterThunk(exportPath),
+    exportPath: (originalPath, sessionName) => computeExportFilePath(originalPath, sessionName, ExportType.METS),
     isActive: false,
     label: "METS (beta)",
   },
   [ExportType.DELETION_SCRIPT]: {
     category: ExportCategory.UTILITIES,
-    exportFunction: (exportPath) => deletionScriptExporterThunk(exportPath),
+    exportFunction: exportPath => deletionScriptExporterThunk(exportPath),
     exportPath: (originalPath, sessionName) =>
-      computeExportFilePath(
-        originalPath,
-        sessionName,
-        ExportType.DELETION_SCRIPT
-      ),
+      computeExportFilePath(originalPath, sessionName, ExportType.DELETION_SCRIPT),
     isActive: true,
     label: "export.deletionScript",
   },

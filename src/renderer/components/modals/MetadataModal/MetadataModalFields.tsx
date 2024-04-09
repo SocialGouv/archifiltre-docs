@@ -1,17 +1,8 @@
-import {
-  Checkbox,
-  Radio,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@material-ui/core";
-import type { ChangeEvent, FC } from "react";
-import React from "react";
+import { Checkbox, Radio, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import React, { type ChangeEvent, type FC } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { MetadataImportConfig } from "./MetadataModalTypes";
+import { type MetadataImportConfig } from "./MetadataModalTypes";
 
 export interface ImportModalFieldsProps {
   formValues: MetadataImportConfig;
@@ -19,24 +10,18 @@ export interface ImportModalFieldsProps {
   previewData?: Record<string, string>;
 }
 
-export const MetadataModalFields: FC<ImportModalFieldsProps> = ({
-  previewData,
-  formValues,
-  onFormChange,
-}) => {
+export const MetadataModalFields: FC<ImportModalFieldsProps> = ({ previewData, formValues, onFormChange }) => {
   const { t } = useTranslation();
-  const isRowSelected = (rowName: string) =>
-    formValues.fields.includes(rowName);
+  const isRowSelected = (rowName: string) => formValues.fields.includes(rowName);
 
-  const onRowSelectionChange =
-    (rowName: string) => (event: ChangeEvent<HTMLInputElement>) => {
-      onFormChange({
-        ...formValues,
-        fields: event.target.checked
-          ? [...formValues.fields, rowName]
-          : formValues.fields.filter((name) => name !== rowName),
-      });
-    };
+  const onRowSelectionChange = (rowName: string) => (event: ChangeEvent<HTMLInputElement>) => {
+    onFormChange({
+      ...formValues,
+      fields: event.target.checked
+        ? [...formValues.fields, rowName]
+        : formValues.fields.filter(name => name !== rowName),
+    });
+  };
 
   const onPathSelectionChange = (entityIdKey: string) => () => {
     onFormChange({
@@ -59,16 +44,10 @@ export const MetadataModalFields: FC<ImportModalFieldsProps> = ({
         {Object.entries(previewData ?? {}).map(([name, content]) => (
           <TableRow key={name}>
             <TableCell>
-              <Radio
-                checked={formValues.entityIdKey === name}
-                onChange={onPathSelectionChange(name)}
-              />
+              <Radio checked={formValues.entityIdKey === name} onChange={onPathSelectionChange(name)} />
             </TableCell>
             <TableCell>
-              <Checkbox
-                checked={isRowSelected(name)}
-                onChange={onRowSelectionChange(name)}
-              />
+              <Checkbox checked={isRowSelected(name)} onChange={onRowSelectionChange(name)} />
             </TableCell>
             <TableCell>{name}</TableCell>
             <TableCell>{content}</TableCell>

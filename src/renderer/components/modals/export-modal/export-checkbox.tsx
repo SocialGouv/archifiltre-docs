@@ -1,6 +1,5 @@
-import type { CheckboxProps } from "@material-ui/core/Checkbox";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox, { type CheckboxProps } from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import React, { useCallback } from "react";
 
 export interface ExportCheckboxProps {
@@ -19,19 +18,17 @@ export const ExportCheckbox: React.FC<ExportCheckboxProps> = ({
   checked,
 }) => {
   const onChange: NonNullable<CheckboxProps["onChange"]> = useCallback(
-    (event) => {
+    event => {
       setActiveExportValue(event.target.checked);
     },
-    [setActiveExportValue]
+    [setActiveExportValue],
   );
 
   return (
     <FormControlLabel
       disabled={!isActive}
       control={<Checkbox onChange={onChange} checked={checked} />}
-      label={`${label}${
-        !isActive && disabledExplanation ? ` (${disabledExplanation})` : ""
-      }`}
+      label={`${label}${!isActive && disabledExplanation ? ` (${disabledExplanation})` : ""}`}
     />
   );
 };

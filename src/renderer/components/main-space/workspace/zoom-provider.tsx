@@ -31,9 +31,7 @@ export const useZoomContext = (): ZoomState => useContext(ZoomContext);
 export const ZoomProvider: React.FC = ({ children }) => {
   const [ratio, setRatio] = useState(1);
   const [offset, setOffset] = useState(0);
-  const [defaultMousePosition, setDefaultMousePosition] = useState<
-    number | null
-  >(null);
+  const [defaultMousePosition, setDefaultMousePosition] = useState<number | null>(null);
   const trackZoom = useZoomTracker();
   const viewPortCenter = offset + 1 / (2 * ratio);
 
@@ -49,14 +47,11 @@ export const ZoomProvider: React.FC = ({ children }) => {
         zoomDirection,
         zoomSpeed,
       };
-      const { offset: nextOffset, ratio: nextRatio } = zoomReducer(
-        zoomStateToApply,
-        zoomAction
-      );
+      const { offset: nextOffset, ratio: nextRatio } = zoomReducer(zoomStateToApply, zoomAction);
       setOffset(nextOffset);
       setRatio(nextRatio);
     },
-    [ratio, offset, setRatio, setOffset, trackZoom]
+    [ratio, offset, setRatio, setOffset, trackZoom],
   );
 
   const setZoom: ZoomState["setZoom"] = useCallback(
@@ -64,29 +59,21 @@ export const ZoomProvider: React.FC = ({ children }) => {
       setOffset(toSetOffset);
       setRatio(toSetRatio);
     },
-    [setOffset, setRatio]
+    [setOffset, setRatio],
   );
 
   const zoomIn = useCallback(
     (mousePosition, zoomSpeed) => {
-      applyZoom(
-        ZoomDirection.IN,
-        mousePosition || defaultMousePosition || viewPortCenter,
-        zoomSpeed
-      );
+      applyZoom(ZoomDirection.IN, mousePosition || defaultMousePosition || viewPortCenter, zoomSpeed);
     },
-    [applyZoom, defaultMousePosition, viewPortCenter]
+    [applyZoom, defaultMousePosition, viewPortCenter],
   );
 
   const zoomOut = useCallback(
     (mousePosition, zoomSpeed) => {
-      applyZoom(
-        ZoomDirection.OUT,
-        mousePosition || defaultMousePosition || viewPortCenter,
-        zoomSpeed
-      );
+      applyZoom(ZoomDirection.OUT, mousePosition || defaultMousePosition || viewPortCenter, zoomSpeed);
     },
-    [applyZoom, defaultMousePosition, viewPortCenter]
+    [applyZoom, defaultMousePosition, viewPortCenter],
   );
 
   const resetZoom = useCallback(() => {

@@ -1,5 +1,5 @@
-import type { VoidFunction } from "@common/utils/function";
-import type { UnknownMapping } from "@common/utils/type";
+import { type VoidFunction } from "@common/utils/function";
+import { type UnknownMapping } from "@common/utils/type";
 import { LEVEL, MESSAGE } from "triple-beam";
 import TransportStream from "winston-transport";
 

@@ -1,9 +1,9 @@
 import { noop } from "lodash";
 import React, { memo } from "react";
 
-import type { DimsMap } from "./icicle";
+import { type DimsMap } from "./icicle";
 import { IcicleRect } from "./icicle-rect";
-import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
+import { type FillColor, type IcicleMouseActionHandler } from "./icicle-types";
 
 export interface IciclesOverlayProps {
   dimsMap: DimsMap;
@@ -26,9 +26,9 @@ const _IciclesOverlay: React.FC<IciclesOverlayProps> = ({
 }) => {
   return (
     <>
-      {ids.map((id) => {
+      {ids.map(id => {
         const dims = dimsMap[id];
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
         if (!dims) {
           return <g key={id} />;
         }

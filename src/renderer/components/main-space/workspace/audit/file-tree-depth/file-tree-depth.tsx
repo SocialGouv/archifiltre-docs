@@ -7,13 +7,7 @@ export interface FileTreeDepthProps {
   fileTreeDepth: number;
 }
 
-export const FileTreeDepth: React.FC<FileTreeDepthProps> = ({
-  fileTreeDepth,
-}) => {
+export const FileTreeDepth: React.FC<FileTreeDepthProps> = ({ fileTreeDepth }) => {
   const { t } = useTranslation();
-  return (
-    <LargeIndicatorText>
-      {t("common.level", { count: fileTreeDepth })}
-    </LargeIndicatorText>
-  );
+  return <LargeIndicatorText>{t("common.level", { count: fileTreeDepth })}</LargeIndicatorText>;
 };

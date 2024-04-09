@@ -1,6 +1,6 @@
 import { generateSecureRandomString } from "@common/utils/generateSecureRandomString";
-import type { HashesMap } from "@common/utils/hashes-types";
-import type { SimpleObject } from "@common/utils/object";
+import { type HashesMap } from "@common/utils/hashes-types";
+import { type SimpleObject } from "@common/utils/object";
 import dateFormat from "dateformat";
 import fs from "fs";
 import MD5 from "js-md5";
@@ -9,15 +9,15 @@ import PizZip from "pizzip";
 import { v4 as uuidv4 } from "uuid";
 import XML from "xml";
 
-import type {
-  AliasMap,
-  CommentsMap,
-  FilesAndFolders,
-  FilesAndFoldersMap,
+import {
+  type AliasMap,
+  type CommentsMap,
+  type FilesAndFolders,
+  type FilesAndFoldersMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { type FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { getAllTagsForFile } from "../../reducers/tags/tags-selectors";
-import type { TagMap } from "../../reducers/tags/tags-types";
+import { type TagMap } from "../../reducers/tags/tags-types";
 import { translations } from "../../translations/translations";
 import { isFile } from "../../utils";
 import { getDisplayName } from "../../utils/file-and-folders";
@@ -40,11 +40,7 @@ interface ErrorMessageMap {
  * @param errorMessages - The error message map mapping all of the error codes
  * @param errorMessageTitle - The title of the error message
  */
-export const handleError = (
-  errorCode: string,
-  errorMessages: ErrorMessageMap,
-  errorMessageTitle: string
-): void => {
+export const handleError = (errorCode: string, errorMessages: ErrorMessageMap, errorMessageTitle: string): void => {
   const message = errorMessages[errorCode] || errorMessages.default;
 
   notifyError(message, errorMessageTitle);
@@ -77,11 +73,9 @@ const DUMMY_ARK = "ark:/12148/cbDUMMY";
 // =================================
 // SPECIFIC ROOT ELEMENTS
 // =================================
-const METS_SOURCE =
-  "https://www.loc.gov/METS/ https://www.loc.gov/standards/mets/mets.xsd";
+const METS_SOURCE = "https://www.loc.gov/METS/ https://www.loc.gov/standards/mets/mets.xsd";
 
 const makeManifestRootAttributes = () => {
-  /* eslint-disable @typescript-eslint/naming-convention */
   return {
     xmlns: "https://www.loc.gov/METS/",
     "xmlns:dc": "http://purl.org/dc/elements/1.1/",
@@ -93,7 +87,6 @@ const makeManifestRootAttributes = () => {
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
     "xsi:schemaLocation": METS_SOURCE,
   };
-  /* eslint-enable @typescript-eslint/naming-convention */
 };
 
 /**
@@ -109,14 +102,8 @@ export const makeHeader = (pid: string): SimpleObject => ({
         LASTMODDATE: makeCreationDate(),
       },
     },
-    makeObj("mets:altRecordID", [
-      { _attr: makeObj("TYPE", "producerIdentifier") },
-      DUMMY_PRODUCERIDENTIFIER,
-    ]),
-    makeObj("mets:altRecordID", [
-      { _attr: makeObj("TYPE", "productionIdentifier") },
-      pid,
-    ]),
+    makeObj("mets:altRecordID", [{ _attr: makeObj("TYPE", "producerIdentifier") }, DUMMY_PRODUCERIDENTIFIER]),
+    makeObj("mets:altRecordID", [{ _attr: makeObj("TYPE", "productionIdentifier") }, pid]),
   ],
 });
 
@@ -125,10 +112,7 @@ export const makeHeader = (pid: string): SimpleObject => ({
  * @param {string} id identifier of the section
  * @param {Array} content a block of descriptive information in Dublin Core
  */
-export const makeDmdSec = (
-  id: string,
-  content: SimpleObject[]
-): SimpleObject => {
+export const makeDmdSec = (id: string, content: SimpleObject[]): SimpleObject => {
   return {
     "mets:dmdSec": [
       { _attr: makeObj("ID", id) },
@@ -146,11 +130,7 @@ export const makeDmdSec = (
  * @param {string} agentValue the value of the identifier
  * @param {string} agentRole the role of the linking agent
  */
-const makePremisAgent = (
-  agentType: string,
-  agentValue: string,
-  agentRole: string
-) => {
+const makePremisAgent = (agentType: string, agentValue: string, agentRole: string) => {
   return {
     "premis:linkingAgentIdentifier": [
       makeObj("premis:linkingAgentIdentifierType", agentType),
@@ -166,11 +146,7 @@ const makePremisAgent = (
  * @param {string} objectValue the value of the identifier
  * @param {string} objectRole an optional role of the linking object
  */
-const makePremisObject = (
-  objectType: string,
-  objectValue: string,
-  objectRole: string | undefined
-) => {
+const makePremisObject = (objectType: string, objectValue: string, objectRole: string | undefined) => {
   const loiContent = [] as SimpleObject[];
   loiContent.push(makeObj("premis:linkingObjectIdentifierType", objectType));
   loiContent.push(makeObj("premis:linkingObjectIdentifierValue", objectValue));
@@ -196,14 +172,14 @@ export const makePremisEvent = (
   date: unknown,
   detail: string | undefined,
   agents: SimpleObject[] | undefined,
-  object: SimpleObject | undefined
+  object: SimpleObject | undefined,
 ): SimpleObject => {
   const premisEvent = [] as SimpleObject[];
   premisEvent.push(
     makeObj("premis:eventIdentifier", [
       makeObj("premis:eventIdentifierType", "UUID"),
       makeObj("premis:eventIdentifierValue", uuidv4()),
-    ])
+    ]),
   );
   premisEvent.push(makeObj("premis:eventType", type));
   if (date !== undefined && date !== "") {
@@ -222,7 +198,7 @@ export const makePremisEvent = (
   }
 
   if (agents !== undefined) {
-    agents.forEach((agent) => {
+    agents.forEach(agent => {
       premisEvent.push(agent);
     });
   }
@@ -255,7 +231,7 @@ export const makeFileElement = (
   ID: string,
   DMDID: string,
   hash: string,
-  alias: string
+  alias: string,
 ): SimpleObject => {
   const originalName = item.name;
   const aliasName = getDisplayName(originalName, alias);
@@ -284,7 +260,7 @@ export const makeFileElement = (
         },
       },
       undefined, // self-closed tag
-    ])
+    ]),
   );
 
   return makeObj("mets:file", fileContent);
@@ -303,7 +279,7 @@ export const makeObjectDiv = (
   _itemTags: string[],
   ID: string,
   order: number,
-  FILEID: string
+  FILEID: string,
 ): SimpleObject =>
   makeObj("mets:div", [
     { _attr: { ID, ORDER: order, TYPE: "object" } },
@@ -351,11 +327,8 @@ const recTraverseDB = (
   addToMASTER: (object: SimpleObject) => void,
   addToDIV: (object: SimpleObject) => void,
   hashMapReader: () => HashesMap,
-  hashMapUpdater: (
-    hash: string,
-    updater: (h1: string, h2: string) => string
-  ) => void,
-  contentWriter: (hash: string, data: Buffer) => void
+  hashMapUpdater: (hash: string, updater: (h1: string, h2: string) => string) => void,
+  contentWriter: (hash: string, data: Buffer) => void,
 ) => {
   const item = readFromFF(filesAndFoldersId);
   const tags = readTags(filesAndFoldersId);
@@ -372,9 +345,7 @@ const recTraverseDB = (
 
   if (isFile(item)) {
     // it's a file
-    const cleanRootpath = rootPath.startsWith("/")
-      ? rootPath.substring(1)
-      : rootPath;
+    const cleanRootpath = rootPath.startsWith("/") ? rootPath.substring(1) : rootPath;
     const URI = path.join(absolutePath, cleanRootpath, item.name);
     let data = Buffer.from([]);
     try {
@@ -389,7 +360,7 @@ const recTraverseDB = (
             ENOENT: metsExportErrorFileDoesNotExist(URI),
             default: METS_EXPORT_UNHANDLED_ERROR,
           },
-          METS_EXPORT_ERROR_TITLE
+          METS_EXPORT_ERROR_TITLE,
         );
       }
       return;
@@ -410,12 +381,7 @@ const recTraverseDB = (
     // make sure we use / in uri even on Windows
     const relativeURI = path.join(cleanRootpath, item.name).replace(/\\/g, "/");
 
-    dmdContent.push(
-      makeObj("dc:source", [
-        { _attr: { "xsi:type": "spar_dc:originalName" } },
-        relativeURI,
-      ])
-    );
+    dmdContent.push(makeObj("dc:source", [{ _attr: { "xsi:type": "spar_dc:originalName" } }, relativeURI]));
 
     const lastModified = dateFormat(item.maxLastModified, DATE_FORMAT);
     const comment = comments[filesAndFoldersId];
@@ -425,25 +391,13 @@ const recTraverseDB = (
     dmdContent.push(makeObj("dcterms:modified", lastModified));
     addToDmd(makeDmdSec(`DMD.${idDmd}`, dmdContent));
 
-    const itemFile = makeFileElement(
-      item,
-      `master.${idFile}`,
-      `DMD.${idDmd}`,
-      hash,
-      aliases[filesAndFoldersId]
-    );
+    const itemFile = makeFileElement(item, `master.${idFile}`, `DMD.${idDmd}`, hash, aliases[filesAndFoldersId]);
     addToMASTER(itemFile);
 
     const idObj = counters.objCount;
     counters.objCount = idObj + 1;
 
-    const itemDIV = makeObjectDiv(
-      item,
-      tags,
-      `DIV.${idObj + 2}`,
-      idObj,
-      `master.${idFile}`
-    );
+    const itemDIV = makeObjectDiv(item, tags, `DIV.${idObj + 2}`, idObj, `master.${idFile}`);
     addToDIV(itemDIV);
 
     hashMapUpdater(hash, () => ID);
@@ -451,7 +405,7 @@ const recTraverseDB = (
     contentWriter(hash, data);
   } else {
     // it's a folder continue the traversal
-    item.children.forEach((childId) => {
+    item.children.forEach(childId => {
       recTraverseDB(
         childId,
         path.join(rootPath, item.name),
@@ -467,7 +421,7 @@ const recTraverseDB = (
         addToDIV,
         hashMapReader,
         hashMapUpdater,
-        contentWriter
+        contentWriter,
       );
     });
   }
@@ -503,7 +457,7 @@ const makeMetsContent = (
     sessionName,
   }: GlobalState,
   contentWriter: (hash: string, data: Buffer) => void,
-  metsContent: SimpleObject[]
+  metsContent: SimpleObject[],
 ) => {
   const folderpath = path.join(originalPath, "/../");
 
@@ -528,10 +482,7 @@ const makeMetsContent = (
   dmdContent.push(
     makeObj("dc:title", "DUMMMY_TITLE"),
     makeObj("dc:type", "electronic document"),
-    makeObj("dc:relation", [
-      { _attr: { "xsi:type": "spar_dc:ark" } },
-      DUMMY_ARK,
-    ])
+    makeObj("dc:relation", [{ _attr: { "xsi:type": "spar_dc:ark" } }, DUMMY_ARK]),
   );
   DMDChildren.push(makeDmdSec("DMD.1", dmdContent));
 
@@ -548,15 +499,9 @@ const makeMetsContent = (
       "preconditioning",
       dateFormat(new Date(), DATE_FORMAT),
       undefined,
-      [
-        makePremisAgent(
-          "application",
-          `Docs par Archifiltre v${version}`,
-          "performer"
-        ),
-      ],
-      undefined
-    )
+      [makePremisAgent("application", `Docs par Archifiltre v${version}`, "performer")],
+      undefined,
+    ),
   );
   // Skip the documentReception event ?
   // Then a 'packageCreation' event
@@ -568,29 +513,18 @@ const makeMetsContent = (
       dateFormat(new Date(), DATE_FORMAT),
       "Création d'un paquet compatible avec SPAR",
       [
-        makePremisAgent(
-          "application",
-          `Docs par Archifiltre v${version}`,
-          "performer"
-        ),
+        makePremisAgent("application", `Docs par Archifiltre v${version}`, "performer"),
         makePremisAgent("producerIdentifier", "ADNUM", "issuer"),
-        makePremisAgent(
-          "channelIdentifier",
-          "info:bnf/spar/context/DUMMMY_CHANNEL",
-          "authorizer"
-        ),
+        makePremisAgent("channelIdentifier", "info:bnf/spar/context/DUMMMY_CHANNEL", "authorizer"),
       ],
-      makePremisObject("productionIdentifier", sessionName, undefined)
-    )
+      makePremisObject("productionIdentifier", sessionName, undefined),
+    ),
   );
 
   // Traversing database
   const hashmap: HashesMap = {};
   const HMread = () => hashmap;
-  const HMupdate = (
-    hash: string,
-    updater: (h1: string, h2: string) => string
-  ) => {
+  const HMupdate = (hash: string, updater: (h1: string, h2: string) => string) => {
     hashmap[hash] = updater(hashmap[hash] ?? "", hash);
   };
 
@@ -598,9 +532,8 @@ const makeMetsContent = (
     ({
       ...filesAndFolders[ffId],
       ...filesAndFoldersMetadata[ffId],
-    } as FilesAndFolders);
-  const tagReader = (ffId: string) =>
-    getAllTagsForFile(tags, ffId).map((tag) => tag.name);
+    }) as FilesAndFolders;
+  const tagReader = (ffId: string) => getAllTagsForFile(tags, ffId).map(tag => tag.name);
 
   const DMDwriter = (item: SimpleObject) => DMDChildren.push(item);
   const MASTERwriter = (item: SimpleObject) => MASTERChildren.push(item);
@@ -608,7 +541,7 @@ const makeMetsContent = (
 
   const ROOT_ID = "";
 
-  filesAndFolders[ROOT_ID].children.forEach((ffId) => {
+  filesAndFolders[ROOT_ID].children.forEach(ffId => {
     recTraverseDB(
       ffId,
       "",
@@ -624,7 +557,7 @@ const makeMetsContent = (
       DIVwriter,
       HMread,
       HMupdate,
-      contentWriter
+      contentWriter,
     );
   });
 
@@ -639,27 +572,22 @@ const makeMetsContent = (
     },
   });
   // Add all the divs at the object level
-  DIVChildren.forEach((div) => {
+  DIVChildren.forEach(div => {
     groupContent.push(div);
   });
 
   // Build the physical structMap
   const divRoot = makeObj("mets:structMap", [
     { _attr: makeObj("TYPE", "physical") },
-    makeObj("mets:div", [
-      { _attr: { ID: "DIV.1", TYPE: "set" } },
-      makeObj("mets:div", groupContent),
-    ]),
+    makeObj("mets:div", [{ _attr: { ID: "DIV.1", TYPE: "set" } }, makeObj("mets:div", groupContent)]),
   ]);
 
   // Populate the METS
-  DMDChildren.forEach((dmd) => {
+  DMDChildren.forEach(dmd => {
     metsContent.push(dmd);
   });
   metsContent.push(makeObj("mets:amdSec", digiprovsContent));
-  metsContent.push(
-    makeObj("mets:fileSec", [makeObj("mets:fileGrp", MASTERChildren)])
-  );
+  metsContent.push(makeObj("mets:fileSec", [makeObj("mets:fileGrp", MASTERChildren)]));
   metsContent.push(divRoot);
 };
 
@@ -706,7 +634,7 @@ export const makeSIP = async ({
       tags,
     },
     addToContent,
-    metsContent
+    metsContent,
   ); // will also compute ZIP
 
   const manifestObj = [
@@ -720,7 +648,7 @@ export const makeSIP = async ({
   sip.file("manifest.xml", manifestStr);
 
   // final ZIP output
-  const exportedData = await new Promise<Buffer>((resolve) => {
+  const exportedData = await new Promise<Buffer>(resolve => {
     resolve(sip.generate({ type: "nodebuffer" }));
   });
 

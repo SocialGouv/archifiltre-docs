@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 
-const linearProgress = (
-  startTime: number,
-  duration: number,
-  currentTime: number
-) => Math.min(1, (currentTime - startTime) / duration);
+const linearProgress = (startTime: number, duration: number, currentTime: number) =>
+  Math.min(1, (currentTime - startTime) / duration);
 
 /**
  * Allow to animate a value between initialValue and targetValue.
@@ -18,7 +15,7 @@ export const useAnimatedValue = (
   initialValue: number,
   targetValue: number,
   duration: number,
-  animationDependency: unknown
+  animationDependency: unknown,
 ): number => {
   const [value, setValue] = useState(initialValue);
 

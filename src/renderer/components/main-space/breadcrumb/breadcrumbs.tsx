@@ -1,20 +1,14 @@
 import { makeEmptyArray } from "@common/utils/array";
-import type { TFunction } from "i18next";
+import { type TFunction } from "i18next";
 import React, { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
-import type {
-  AliasMap,
-  FilesAndFolders,
-} from "../../../reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { type AliasMap, type FilesAndFolders } from "../../../reducers/files-and-folders/files-and-folders-types";
+import { type FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { PLACEHOLDER_COLOR } from "../../../utils/color";
 import { formatPathForUserSystem } from "../../../utils/file-system/file-sys-util";
-import type {
-  FillColor,
-  IcicleMouseActionHandler,
-} from "../icicle/icicle-types";
+import { type FillColor, type IcicleMouseActionHandler } from "../icicle/icicle-types";
 import { Breadcrumb, BreadcrumbOpacity } from "./breadcrumb";
 
 const BreadcrumbsWrapper = styled.div`
@@ -70,13 +64,7 @@ export interface BreadcrumbProps {
  * @param isFirst
  * @param isLast
  */
-const makeFiller = ({
-  id,
-  name,
-  alias,
-  isFirst,
-  isLast,
-}: MakeFillerArgs): BreadcrumbProps => ({
+const makeFiller = ({ id, name, alias, isFirst, isLast }: MakeFillerArgs): BreadcrumbProps => ({
   alias,
   color: PLACEHOLDER_COLOR,
   id,
@@ -93,10 +81,7 @@ const makeFiller = ({
  * @param depth - breadcrumbs depth
  * @param t - translation function
  */
-const makeBreadcrumbsFillers = (
-  depth: number,
-  t: TFunction
-): BreadcrumbProps[] => [
+const makeBreadcrumbsFillers = (depth: number, t: TFunction): BreadcrumbProps[] => [
   makeFiller({
     alias: null,
     id: "filler1",
@@ -176,8 +161,7 @@ const _Breadcrumbs: React.FC<BreadcrumbsProps> = ({
     if (hoveredSequence.length === 0 && lockedSequence.length === 0) {
       return fillers;
     }
-    const sequence =
-      hoveredSequence.length > 0 ? hoveredSequence : lockedSequence;
+    const sequence = hoveredSequence.length > 0 ? hoveredSequence : lockedSequence;
     return sequence.map(getFfByFfId).map((node, index) => ({
       alias: aliases[node.id],
       color: fillColor(node.id),
@@ -186,56 +170,32 @@ const _Breadcrumbs: React.FC<BreadcrumbsProps> = ({
       isFirst: index === 0,
       isLast: index === depth - 1,
       name: node.name,
-      opacity:
-        lockedSequence[index] === node.id
-          ? BreadcrumbOpacity.LOCKED
-          : BreadcrumbOpacity.HOVERED,
+      opacity: lockedSequence[index] === node.id ? BreadcrumbOpacity.LOCKED : BreadcrumbOpacity.HOVERED,
       path: getPathToCopy(originalPath, node.id),
     }));
-  }, [
-    getFfByFfId,
-    fillColor,
-    depth,
-    aliases,
-    originalPath,
-    hoveredSequence,
-    lockedSequence,
-    fillers,
-  ]);
+  }, [getFfByFfId, fillColor, depth, aliases, originalPath, hoveredSequence, lockedSequence, fillers]);
 
   const fillerElements = makeEmptyArray(depth - filesAndFolders.length, null);
   return (
     <div className="breadcrumbs" style={{ height: "100%" }}>
       <BreadcrumbsWrapper>
-        {filesAndFolders.map(
-          ({
-            id,
-            name,
-            alias,
-            opacity,
-            color,
-            isActive,
-            isFirst,
-            isLast,
-            path,
-          }) => (
-            <BreadcrumbWrapper key={`breadcrumb-wrapper-${id}`} depth={depth}>
-              <Breadcrumb
-                id={id}
-                key={`breadcrumb-${id}`}
-                name={name}
-                alias={alias ?? null}
-                path={path}
-                active={isActive}
-                opacity={opacity}
-                color={color}
-                isFirst={isFirst}
-                isLast={isLast}
-                onBreadcrumbClick={onBreadcrumbClick}
-              />
-            </BreadcrumbWrapper>
-          )
-        )}
+        {filesAndFolders.map(({ id, name, alias, opacity, color, isActive, isFirst, isLast, path }) => (
+          <BreadcrumbWrapper key={`breadcrumb-wrapper-${id}`} depth={depth}>
+            <Breadcrumb
+              id={id}
+              key={`breadcrumb-${id}`}
+              name={name}
+              alias={alias ?? null}
+              path={path}
+              active={isActive}
+              opacity={opacity}
+              color={color}
+              isFirst={isFirst}
+              isLast={isLast}
+              onBreadcrumbClick={onBreadcrumbClick}
+            />
+          </BreadcrumbWrapper>
+        ))}
         {fillerElements.map((_, index) => (
           <BreadcrumbWrapper key={`breadcrumb-filler-${index}`} depth={depth} />
         ))}

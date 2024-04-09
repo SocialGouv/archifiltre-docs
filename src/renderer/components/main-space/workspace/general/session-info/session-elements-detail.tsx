@@ -1,5 +1,5 @@
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import React from "react";
 
 export interface SessionElementsDetailProps {
@@ -7,10 +7,7 @@ export interface SessionElementsDetailProps {
   title: string;
 }
 
-export const SessionElementsDetail: React.FC<SessionElementsDetailProps> = ({
-  title,
-  content,
-}) => (
+export const SessionElementsDetail: React.FC<SessionElementsDetailProps> = ({ title, content }) => (
   <Box>
     <Box>
       <Typography variant="h5">{title}</Typography>

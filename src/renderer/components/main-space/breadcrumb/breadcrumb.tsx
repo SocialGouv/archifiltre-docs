@@ -1,9 +1,8 @@
-import type { MouseEventHandler } from "react";
-import React, { useCallback } from "react";
+import React, { type MouseEventHandler, useCallback } from "react";
 import styled from "styled-components";
 
 import { CopyToClipboard } from "../../common/copy-to-clipboard";
-import type { Dims, DimsAndId } from "../icicle/icicle-rect";
+import { type Dims, type DimsAndId } from "../icicle/icicle-rect";
 import { BreadcrumbPoly } from "./breadcrumb-poly";
 import { BreadcrumbText } from "./breadcrumb-text";
 
@@ -55,9 +54,8 @@ const SmallSpacer = styled.div`
 `;
 
 export enum BreadcrumbOpacity {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   LOCKED = 1,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+
   HOVERED = 0.4,
 }
 
@@ -99,23 +97,18 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   onBreadcrumbClick,
 }) => {
   const onClick: MouseEventHandler = useCallback(
-    (event) => {
+    event => {
       if (!active) {
         return;
       }
       onBreadcrumbClick({ dims: dimsGetter, id }, event);
     },
-    [onBreadcrumbClick, id, active]
+    [onBreadcrumbClick, id, active],
   );
   return (
     <BreadcrumbWrapper onClick={onClick} active={active}>
       <BreadcrumbPolyWrapper>
-        <BreadcrumbPoly
-          isFirst={isFirst}
-          isLast={isLast}
-          opacity={opacity}
-          color={color}
-        />
+        <BreadcrumbPoly isFirst={isFirst} isLast={isLast} opacity={opacity} color={color} />
       </BreadcrumbPolyWrapper>
       <Spacer />
       <BreadcrumbTextWrapper>

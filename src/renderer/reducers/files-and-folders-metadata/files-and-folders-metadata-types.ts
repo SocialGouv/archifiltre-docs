@@ -1,5 +1,4 @@
-export const INIT_FILES_AND_FOLDERS_METADATA =
-  "FILES_AND_FOLDERS_METADATA/INIT";
+export const INIT_FILES_AND_FOLDERS_METADATA = "FILES_AND_FOLDERS_METADATA/INIT";
 
 export interface FilesAndFoldersMetadata {
   averageLastModified: number;
@@ -17,10 +16,7 @@ export interface FilesAndFoldersMetadata {
   sortBySizeIndex: number[];
 }
 
-export type FilesAndFoldersMetadataMap = Record<
-  string,
-  FilesAndFoldersMetadata
->;
+export type FilesAndFoldersMetadataMap = Record<string, FilesAndFoldersMetadata>;
 
 export interface FilesAndFoldersMetadataState {
   filesAndFoldersMetadata: FilesAndFoldersMetadataMap;

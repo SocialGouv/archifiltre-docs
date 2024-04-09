@@ -1,18 +1,15 @@
-import type { WorkerError } from "@common/types";
+import { type WorkerError } from "@common/types";
 import { medianOnSortedArray } from "@common/utils/array";
-import type { ArchifiltreDocsError } from "@common/utils/error";
+import { type ArchifiltreDocsError } from "@common/utils/error";
 import { tap } from "@common/utils/functionnal-programming";
 import { indexSort, indexSortReverse } from "@common/utils/list";
 import fs from "fs";
 import _, { noop } from "lodash";
 import { compose, defaults } from "lodash/fp";
 
-import type {
-  FilesAndFoldersMap,
-  LastModifiedMap,
-} from "../reducers/files-and-folders/files-and-folders-types";
+import { type FilesAndFoldersMap, type LastModifiedMap } from "../reducers/files-and-folders/files-and-folders-types";
 import { createFilesAndFoldersMetadata } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { type FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
 import { isFile } from "../utils";
 import { isJsonFile } from "../utils/file-system/file-sys-util";
@@ -25,16 +22,16 @@ import {
   makeJsonFileLoader,
   retryLoadFromFileSystem,
 } from "./files-and-folders-loader";
-import type {
-  FileLoaderCreator,
-  FilesAndFoldersLoader,
-  FileSystemLoadingHooks,
-  FileSystemLoadingHooksCreator,
-  FileSystemReporters,
-  PartialFileSystem,
-  VirtualFileSystem,
-  WithResultHook,
-  WithWorkspaceMetadata,
+import {
+  type FileLoaderCreator,
+  type FilesAndFoldersLoader,
+  type FileSystemLoadingHooks,
+  type FileSystemLoadingHooksCreator,
+  type FileSystemReporters,
+  type PartialFileSystem,
+  type VirtualFileSystem,
+  type WithResultHook,
+  type WithWorkspaceMetadata,
 } from "./files-and-folders-loader-types";
 
 interface Overrides {
@@ -47,7 +44,7 @@ interface Overrides {
 export const createFilesAndFoldersMetadataDataStructure = (
   filesAndFoldersMap: FilesAndFoldersMap,
   { onResult = noop }: Partial<WithResultHook> = {},
-  { lastModified = {} }: Overrides = {}
+  { lastModified = {} }: Overrides = {},
 ): FilesAndFoldersMetadataMap => {
   const metadata: FilesAndFoldersMetadataMap = {};
   const lastModifiedLists: Record<string, number[]> = {};
@@ -57,11 +54,7 @@ export const createFilesAndFoldersMetadataDataStructure = (
     const element = filesAndFoldersMap[id];
     onResult();
     if (isFile(element)) {
-      const fileLastModified =
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        lastModified[id] !== undefined
-          ? lastModified[id]
-          : element.file_last_modified;
+      const fileLastModified = lastModified[id] !== undefined ? lastModified[id] : element.file_last_modified;
       metadata[id] = createFilesAndFoldersMetadata({
         averageLastModified: fileLastModified,
         childrenTotalSize: element.file_size,
@@ -81,54 +74,43 @@ export const createFilesAndFoldersMetadataDataStructure = (
       return;
     }
 
-    element.children.forEach((childId) => {
+    element.children.forEach(childId => {
       computeMetadataRec(childId);
     });
 
     lastModifiedLists[id] = _(element.children)
-      .map((childId) => lastModifiedLists[childId])
+      .map(childId => lastModifiedLists[childId])
       .flatten()
       .sortBy()
       .value();
 
     initialLastModifiedLists[id] = _(element.children)
-      .map((childId) => initialLastModifiedLists[childId])
+      .map(childId => initialLastModifiedLists[childId])
       .flatten()
       .sortBy()
       .value();
 
-    const childrenTotalSize = _.sum(
-      element.children.map((childId) => metadata[childId].childrenTotalSize)
-    );
+    const childrenTotalSize = _.sum(element.children.map(childId => metadata[childId].childrenTotalSize));
     const averageLastModified = _.mean(lastModifiedLists[id]);
     const medianLastModified = medianOnSortedArray(lastModifiedLists[id]);
-    const maxLastModified =
-      lastModifiedLists[id][lastModifiedLists[id].length - 1];
+    const maxLastModified = lastModifiedLists[id][lastModifiedLists[id].length - 1];
     const minLastModified = lastModifiedLists[id][0];
 
-    const initialMedianLastModified = medianOnSortedArray(
-      initialLastModifiedLists[id]
-    );
-    const initialMaxLastModified =
-      initialLastModifiedLists[id][initialLastModifiedLists[id].length - 1];
+    const initialMedianLastModified = medianOnSortedArray(initialLastModifiedLists[id]);
+    const initialMaxLastModified = initialLastModifiedLists[id][initialLastModifiedLists[id].length - 1];
     const initialMinLastModified = initialLastModifiedLists[id][0];
 
-    const nbChildrenFiles = _.sum(
-      element.children.map((childId) => metadata[childId].nbChildrenFiles)
-    );
-    const sortByDateIndex = indexSort(
-      (childId: string) => metadata[childId].averageLastModified,
-      element.children
-    );
+    const nbChildrenFiles = _.sum(element.children.map(childId => metadata[childId].nbChildrenFiles));
+    const sortByDateIndex = indexSort((childId: string) => metadata[childId].averageLastModified, element.children);
 
     const sortBySizeIndex = indexSortReverse(
       (childId: string) => metadata[childId].childrenTotalSize,
-      element.children
+      element.children,
     );
 
     const sortAlphaNumericallyIndex = indexSort(
       (childId: string) => filesAndFoldersMap[childId].name,
-      element.children
+      element.children,
     );
 
     metadata[id] = createFilesAndFoldersMetadata({
@@ -175,13 +157,11 @@ export const loadFileSystemFromFilesAndFoldersLoader = async (
   hooksCreator?: FileSystemLoadingHooksCreator,
   overrides?: {
     isOnFileSystem: boolean;
-  }
+  },
 ): Promise<VirtualFileSystem> => {
   const baseFileSystem = await loadFromSource(hooksCreator);
 
-  const metadataHooks = sanitizeHooks(hooksCreator)(
-    FileSystemLoadingStep.METADATA
-  );
+  const metadataHooks = sanitizeHooks(hooksCreator)(FileSystemLoadingStep.METADATA);
 
   return compose<
     [PartialFileSystem],
@@ -205,26 +185,23 @@ export const loadFileSystemFromFilesAndFoldersLoader = async (
     tap(() => {
       metadataHooks.onComplete();
     }),
-    (
-      partialFileSystem: PartialFileSystem
-    ): WithWorkspaceMetadata<PartialFileSystem> => ({
+    (partialFileSystem: PartialFileSystem): WithWorkspaceMetadata<PartialFileSystem> => ({
       ...partialFileSystem,
       filesAndFoldersMetadata: createFilesAndFoldersMetadataDataStructure(
         partialFileSystem.filesAndFolders,
-        metadataHooks
+        metadataHooks,
       ),
     }),
     tap(() => {
       metadataHooks.onStart();
-    })
+    }),
   )(baseFileSystem);
 };
 
 /**
  * Check if the element needs to be loaded with the file system loader
  */
-export const isFileSystemLoad = (loadPath: string): boolean =>
-  fs.statSync(loadPath).isDirectory();
+export const isFileSystemLoad = (loadPath: string): boolean => fs.statSync(loadPath).isDirectory();
 
 /**
  * Check if the element needs to be loaded with the JsonLoader
@@ -241,7 +218,7 @@ interface GetLoadTypeOptions {
  */
 export const getLoader = (
   loadPath: string,
-  { filesAndFolders, erroredPaths }: GetLoadTypeOptions = {}
+  { filesAndFolders, erroredPaths }: GetLoadTypeOptions = {},
 ): FileLoaderCreator => {
   if (isFileSystemLoad(loadPath)) {
     if (filesAndFolders && erroredPaths) {
@@ -250,7 +227,7 @@ export const getLoader = (
         retryLoadFromFileSystem({
           erroredPaths: paths,
           filesAndFolders,
-        })
+        }),
       );
     }
     return makeFileSystemLoader(asyncLoadFilesAndFoldersFromFileSystem);
@@ -278,8 +255,7 @@ export const makeFileLoadingHooksCreator =
       }
     };
 
-    const { hook: onResult, getCount: getResultCount } =
-      hookCounter(resultReporter);
+    const { hook: onResult, getCount: getResultCount } = hookCounter(resultReporter);
 
     const onStart = () => {
       resultReporter(0);

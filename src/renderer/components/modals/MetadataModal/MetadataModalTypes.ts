@@ -1,5 +1,5 @@
-import type { CsvFileLoadingOptions } from "@common/utils/csv";
-import type { XlsxSheetName } from "@common/utils/xlsx";
+import { type CsvFileLoadingOptions } from "@common/utils/csv";
+import { type XlsxSheetName } from "@common/utils/xlsx";
 
 export type CsvMetadataFileConfig = CsvFileLoadingOptions & {
   type: "CSV";
@@ -30,8 +30,6 @@ export interface ModalAction<T> {
   label: string;
 }
 
-export type FieldsConfigChangeHandler = (
-  newConfig: MetadataImportConfig
-) => void;
+export type FieldsConfigChangeHandler = (newConfig: MetadataImportConfig) => void;
 
 export type FileConfigChangeHandler = (fileConfig: MetadataFileConfig) => void;

@@ -16,24 +16,13 @@ export const DuplicatesDistributionChartContainer: React.FC = () => {
 
   const duplicatesMap = useMemo(
     () => getFilesDuplicatesMap(filesAndFoldersMap, hashesMap),
-    [filesAndFoldersMap, hashesMap]
+    [filesAndFoldersMap, hashesMap],
   );
 
-  const fileTypesCount = useMemo(
-    () => countDuplicateFileTypes(duplicatesMap),
-    [duplicatesMap]
-  );
+  const fileTypesCount = useMemo(() => countDuplicateFileTypes(duplicatesMap), [duplicatesMap]);
 
-  const fileSizesCount = useMemo(
-    () => countDuplicateFileSizes(duplicatesMap),
-    [duplicatesMap]
-  );
+  const fileSizesCount = useMemo(() => countDuplicateFileSizes(duplicatesMap), [duplicatesMap]);
 
   // TODO
-  return (
-    <DuplicatesDistributionChart
-      fileTypesCount={fileTypesCount}
-      fileSizesCount={fileSizesCount}
-    />
-  );
+  return <DuplicatesDistributionChart fileTypesCount={fileTypesCount} fileSizesCount={fileSizesCount} />;
 };

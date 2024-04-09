@@ -1,6 +1,6 @@
 import _, { fill } from "lodash";
 
-import type { FilterMethod } from "./type";
+import { type FilterMethod } from "./type";
 
 /**
  * Adds cumulatively the values of an array (starting with a 0) without the last element
@@ -21,8 +21,7 @@ export const computeCumulative = (array: number[]): number[] => {
  * @param nbElements
  * @param [defaultValue=undefined] - Default
  */
-export const makeEmptyArray = <T>(nbElements: number, defaultValue: T): T[] =>
-  fill(Array(nbElements), defaultValue);
+export const makeEmptyArray = <T>(nbElements: number, defaultValue: T): T[] => fill(Array(nbElements), defaultValue);
 
 /**
  * Replaces the value from array at index by the newValue.
@@ -31,11 +30,11 @@ export const makeEmptyArray = <T>(nbElements: number, defaultValue: T): T[] =>
  * @param newValue - The value to replace the old one with
  * @returns {*[]} - A new array with the replaced value
  */
-export const replaceValue = <T>(
-  array: T[],
-  index: number,
-  newValue: T
-): T[] => [...array.slice(0, index), newValue, ...array.slice(index + 1)];
+export const replaceValue = <T>(array: T[], index: number, newValue: T): T[] => [
+  ...array.slice(0, index),
+  newValue,
+  ...array.slice(index + 1),
+];
 
 /**
  * Curried function that counts the number of items in array for which predicate is true
@@ -59,17 +58,12 @@ export const medianOnSortedArray = (sortedArray: number[]): number => {
     return sortedArray[(arrayLength - 1) / 2] ?? 0;
   }
 
-  return (
-    ((sortedArray[arrayLength / 2] ?? 0) +
-      (sortedArray[arrayLength / 2 - 1] ?? 0)) /
-    2
-  );
+  return ((sortedArray[arrayLength / 2] ?? 0) + (sortedArray[arrayLength / 2 - 1] ?? 0)) / 2;
 };
 
 export enum BooleanOperator {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   AND = 0,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+
   OR = 1,
 }
 
@@ -86,8 +80,8 @@ const methodByOperator = {
  */
 export const applyFiltersList = <T>(
   array: T[],
-  filters: FilterMethod<T>[],
-  booleanOperator: BooleanOperator = BooleanOperator.AND
+  filters: Array<FilterMethod<T>>,
+  booleanOperator: BooleanOperator = BooleanOperator.AND,
 ): T[] => array.filter(joinFilters(filters, booleanOperator));
 
 /**
@@ -96,16 +90,14 @@ export const applyFiltersList = <T>(
  * @param booleanOperator to join the filters
  */
 export const joinFilters = <T>(
-  filters: FilterMethod<T>[],
-  booleanOperator: BooleanOperator = BooleanOperator.AND
+  filters: Array<FilterMethod<T>>,
+  booleanOperator: BooleanOperator = BooleanOperator.AND,
 ): FilterMethod<T> => {
   if (filters.length === 0) {
     return () => true;
   }
   return (element: T): boolean =>
-    methodByOperator[booleanOperator](filters, (filter: FilterMethod<T>) =>
-      filter(element)
-    );
+    methodByOperator[booleanOperator](filters, (filter: FilterMethod<T>) => filter(element));
 };
 
 export const empty = [];

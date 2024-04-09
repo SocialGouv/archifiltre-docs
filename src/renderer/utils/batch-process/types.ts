@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 export enum MessageTypes {
   COMPLETE = "complete",
   DATA = "data",
@@ -11,7 +10,6 @@ export enum MessageTypes {
   STREAM_READ = "streamRead",
   WARNING = "warning",
 }
-/* eslint-enable @typescript-eslint/naming-convention */
 
 export interface ReadyMessage {
   type: typeof MessageTypes.READY;

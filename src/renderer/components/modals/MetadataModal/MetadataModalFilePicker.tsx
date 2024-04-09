@@ -1,6 +1,5 @@
 import { ipcRenderer } from "@common/ipc";
-import type { FC } from "react";
-import React from "react";
+import React, { type FC } from "react";
 import { useTranslation } from "react-i18next";
 
 import { notifyError } from "../../../utils/notifications";
@@ -12,15 +11,10 @@ interface ImportModalFilePickerProps {
   onFilePicked: (filePath: string) => void;
 }
 
-export const MetadataModalFilePicker: FC<ImportModalFilePickerProps> = ({
-  onFilePicked,
-}) => {
+export const MetadataModalFilePicker: FC<ImportModalFilePickerProps> = ({ onFilePicked }) => {
   const { t } = useTranslation();
   const onError = () => {
-    notifyError(
-      t("importModal.loadingErrorMessage"),
-      t("importModal.loadingErrorTitle")
-    );
+    notifyError(t("importModal.loadingErrorMessage"), t("importModal.loadingErrorTitle"));
   };
 
   const onClick = async () => {

@@ -7,7 +7,6 @@ export interface FileLastModifiedDateProps {
   onDateChange: (date: number) => void;
 }
 
-export const FileLastModifiedDate: React.FC<FileLastModifiedDateProps> = ({
-  lastModified,
-  onDateChange,
-}) => <DateField date={lastModified} onDateChange={onDateChange} />;
+export const FileLastModifiedDate: React.FC<FileLastModifiedDateProps> = ({ lastModified, onDateChange }) => (
+  <DateField date={lastModified} onDateChange={onDateChange} />
+);

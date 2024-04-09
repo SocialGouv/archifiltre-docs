@@ -1,7 +1,4 @@
-import type {
-  ArchifiltreDocsError,
-  ArchifiltreDocsErrorType,
-} from "@common/utils/error";
+import { type ArchifiltreDocsError, type ArchifiltreDocsErrorType } from "@common/utils/error";
 
 export const START_LOADING = "LOADING_INFO/START_LOADING";
 export const UPDATE_LOADING = "LOADING_INFO/UPDATE_LOADING";
@@ -14,9 +11,8 @@ export const RESET_LOADING = "LOADING_INFO/RESET_LOADING";
 export const DISMISS_ALL_COMPLETE = "LOADING_INFO/DISMISS_ALL_COMPLETE";
 
 export enum LoadingInfoTypes {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   EXPORT = "export",
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+
   HASH_COMPUTING = "hash-computing",
 }
 

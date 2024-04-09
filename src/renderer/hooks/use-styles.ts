@@ -1,7 +1,7 @@
 import { PRODUCT_CHANNEL } from "@common/config";
-import createStyles from "@material-ui/core/styles/createStyles";
-import type { Theme } from "@material-ui/core/styles/createTheme";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import { type Theme } from "@mui/material/styles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,5 +44,5 @@ export const useStyles = makeStyles((theme: Theme) =>
       paddingLeft: theme.spacing(1),
       paddingRight: theme.spacing(1),
     },
-  })
+  }),
 );

@@ -15,16 +15,12 @@ function getPreviousSessionsPath(): string {
  * Remove duplicates and incorrect data from previous sessions array
  */
 const sanitizePreviousSessions = (previousSessions: string[]) => {
-  const sanitizedPreviousSessions = previousSessions.map((session) =>
-    session.replace(/\r/g, "")
-  );
+  const sanitizedPreviousSessions = previousSessions.map(session => session.replace(/\r/g, ""));
 
   return sanitizedPreviousSessions
-    .map((session) => session.replace(/\r/g, ""))
-    .filter(
-      (session, index) => sanitizedPreviousSessions.indexOf(session) === index
-    )
-    .filter((session) => !session.includes("\0"));
+    .map(session => session.replace(/\r/g, ""))
+    .filter((session, index) => sanitizedPreviousSessions.indexOf(session) === index)
+    .filter(session => !session.includes("\0"));
 };
 
 /**
@@ -59,24 +55,17 @@ export function getPreviousSessions(): string[] {
   }
 }
 
-const removeDuplicateLines = (lines: string): string[] => [
-  ...new Set(lines.trim().split("\n")),
-];
+const removeDuplicateLines = (lines: string): string[] => [...new Set(lines.trim().split("\n"))];
 
 /**
  * Save a new user session in previous-sessions
  * @param newSessionPath - new value for user settings
  */
-export async function savePreviousSession(
-  newSessionPath: string
-): Promise<void> {
+export async function savePreviousSession(newSessionPath: string): Promise<void> {
   try {
     const previousSessionsPath = getPreviousSessionsPath();
     const previousSessions = fs.readFileSync(previousSessionsPath, "utf8");
-    const previousSessionsList = [
-      ...removeDuplicateLines(previousSessions),
-      `\r\n${newSessionPath}`,
-    ]
+    const previousSessionsList = [...removeDuplicateLines(previousSessions), `\r\n${newSessionPath}`]
       .reverse()
       .slice(0, MAX_SHORTCUTS_LENGTH)
       .join("\n")
@@ -88,26 +77,16 @@ export async function savePreviousSession(
   }
 }
 
-const removeClickedElement = (
-  previousSession: string,
-  elementToDelete: string
-) => previousSession.replace(`${elementToDelete}\n`, "");
+const removeClickedElement = (previousSession: string, elementToDelete: string) =>
+  previousSession.replace(`${elementToDelete}\n`, "");
 
-export async function removeOneSessionElement(
-  elementToDelete: string
-): Promise<void> {
+export async function removeOneSessionElement(elementToDelete: string): Promise<void> {
   try {
     const previousSessionsPath = getPreviousSessionsPath();
     const previousSessions = fs.readFileSync(previousSessionsPath, "utf8");
-    const previousSessionsSanitized = removeClickedElement(
-      previousSessions,
-      elementToDelete
-    );
+    const previousSessionsSanitized = removeClickedElement(previousSessions, elementToDelete);
 
-    await fs.promises.writeFile(
-      previousSessionsPath,
-      previousSessionsSanitized
-    );
+    await fs.promises.writeFile(previousSessionsPath, previousSessionsSanitized);
   } catch (error: unknown) {
     reportError(error);
   }

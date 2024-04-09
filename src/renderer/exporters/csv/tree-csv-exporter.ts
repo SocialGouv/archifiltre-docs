@@ -1,4 +1,4 @@
-import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
+import { type ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import { getFilesAndFoldersFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
 import { translations } from "../../translations/translations";
 import { handleFileExportThunk } from "../../utils/export";
@@ -13,9 +13,7 @@ import { generateTreeCsvExport$ } from "./tree-csv-exporter.controller";
 export const treeCsvExporterThunk =
   (name: string): ArchifiltreDocsThunkAction =>
   async (dispatch, getState) => {
-    const csvExportStartedMessage = translations.t(
-      "export.creatingTreeCsvExport"
-    );
+    const csvExportStartedMessage = translations.t("export.creatingTreeCsvExport");
     const exportNotificationTitle = translations.t("export.csvExportTitle");
     notifyInfo(csvExportStartedMessage, exportNotificationTitle);
 
@@ -37,6 +35,6 @@ export const treeCsvExporterThunk =
         loadedMessage,
         loaderMessage,
         totalProgress,
-      })
+      }),
     );
   };

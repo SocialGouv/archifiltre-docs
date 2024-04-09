@@ -1,5 +1,4 @@
-import type { PaperProps } from "@material-ui/core/Paper";
-import Paper from "@material-ui/core/Paper";
+import Paper, { type PaperProps } from "@mui/material/Paper";
 import styled from "styled-components";
 
 export type InfoBoxPaperProps = PaperProps & {

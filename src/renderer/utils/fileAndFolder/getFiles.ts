@@ -1,6 +1,6 @@
-import type {
-  FilesAndFolders,
-  FilesAndFoldersMap,
+import {
+  type FilesAndFolders,
+  type FilesAndFoldersMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
 import { isFile } from "./isFile";
 
@@ -12,6 +12,5 @@ import { isFile } from "./isFile";
  *
  * @returns {FilesAndFolders[]} An array of FilesAndFolders objects that are files.
  */
-export const getFiles = (
-  filesAndFoldersMap: FilesAndFoldersMap
-): FilesAndFolders[] => Object.values(filesAndFoldersMap).filter(isFile);
+export const getFiles = (filesAndFoldersMap: FilesAndFoldersMap): FilesAndFolders[] =>
+  Object.values(filesAndFoldersMap).filter(isFile);

@@ -1,4 +1,4 @@
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import React from "react";
 import { FaHandPointer } from "react-icons/fa";
 
@@ -6,9 +6,7 @@ export interface NoElementSelectedPlaceholderProps {
   title: string;
 }
 
-export const NoElementSelectedPlaceholder: React.FC<
-  NoElementSelectedPlaceholderProps
-> = ({ title }) => (
+export const NoElementSelectedPlaceholder: React.FC<NoElementSelectedPlaceholderProps> = ({ title }) => (
   <Box
     display="flex"
     flexDirection="column"

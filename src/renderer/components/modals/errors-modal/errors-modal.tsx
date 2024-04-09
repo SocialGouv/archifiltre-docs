@@ -1,8 +1,8 @@
-import type { ArchifiltreDocsError } from "@common/utils/error";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
+import { type ArchifiltreDocsError } from "@common/utils/error";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -23,12 +23,7 @@ export interface ErrorsModalProps {
   isModalOpen: boolean;
 }
 
-export const ErrorsModal: React.FC<ErrorsModalProps> = ({
-  isModalOpen,
-  closeModal,
-  errors,
-  actions = [],
-}) => {
+export const ErrorsModal: React.FC<ErrorsModalProps> = ({ isModalOpen, closeModal, errors, actions = [] }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 

@@ -1,13 +1,13 @@
-import Box from "@material-ui/core/Box";
-import Card from "@material-ui/core/Card";
-import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
-import useTheme from "@material-ui/core/styles/useTheme";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import { useTheme } from "@mui/material/styles";
 import React, { memo, useCallback, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import styled from "styled-components";
 
-import type { LoadingInfo } from "../../reducers/loading-info/loading-info-types";
+import { type LoadingInfo } from "../../reducers/loading-info/loading-info-types";
 import { LoadingInfoDisplay } from "./loading-info-display";
 import { LoadingSpinnerOrCloseCross } from "./loading-spinner-or-close-cross";
 
@@ -39,11 +39,7 @@ export interface BackgroundLoadingInfoProps {
   loadingItems: LoadingInfo[];
 }
 
-const _BackgroundLoadingInfo: React.FC<BackgroundLoadingInfoProps> = ({
-  loadingItems,
-  isLoading,
-  dismissAll,
-}) => {
+const _BackgroundLoadingInfo: React.FC<BackgroundLoadingInfoProps> = ({ loadingItems, isLoading, dismissAll }) => {
   const [collapsed, setCollapsed] = useState(true);
   const theme = useTheme();
   const toggleCollapsed = useCallback(() => {
@@ -53,15 +49,13 @@ const _BackgroundLoadingInfo: React.FC<BackgroundLoadingInfoProps> = ({
 
   const isLoaded = useCallback(
     (loadingInfo: LoadingInfo) =>
-      loadingInfo.goal === loadingInfo.progress ||
-      loadingInfo.goal - 1 === loadingInfo.progress,
-    []
+      loadingInfo.goal === loadingInfo.progress || loadingInfo.goal - 1 === loadingInfo.progress,
+    [],
   );
 
   const selectLabel = useCallback(
-    (loadingInfo: LoadingInfo) =>
-      isLoaded(loadingInfo) ? loadingInfo.loadedLabel : loadingInfo.label,
-    [isLoaded]
+    (loadingInfo: LoadingInfo) => (isLoaded(loadingInfo) ? loadingInfo.loadedLabel : loadingInfo.label),
+    [isLoaded],
   );
   if (!isActive) {
     return null;
@@ -74,11 +68,7 @@ const _BackgroundLoadingInfo: React.FC<BackgroundLoadingInfoProps> = ({
           <Grid container direction="column">
             <Grid item>
               <Box p={1}>
-                <ToggleArrow
-                  size="small"
-                  collapsed={collapsed.toString()}
-                  onClick={toggleCollapsed}
-                >
+                <ToggleArrow size="small" collapsed={collapsed.toString()} onClick={toggleCollapsed}>
                   <FaChevronLeft
                     style={{
                       color: theme.palette.secondary.main,
@@ -90,10 +80,7 @@ const _BackgroundLoadingInfo: React.FC<BackgroundLoadingInfoProps> = ({
             <Grid item>
               {collapsed && (
                 <Box p={1}>
-                  <LoadingSpinnerOrCloseCross
-                    isLoading={isLoading}
-                    onClose={dismissAll}
-                  />
+                  <LoadingSpinnerOrCloseCross isLoading={isLoading} onClose={dismissAll} />
                 </Box>
               )}
             </Grid>
@@ -102,7 +89,7 @@ const _BackgroundLoadingInfo: React.FC<BackgroundLoadingInfoProps> = ({
         {!collapsed && (
           <Grid item>
             <LoadingBarArea>
-              {loadingItems.map((loadingInfo) => (
+              {loadingItems.map(loadingInfo => (
                 <LoadingInfoDisplay
                   key={loadingInfo.id}
                   loadingInfo={loadingInfo}

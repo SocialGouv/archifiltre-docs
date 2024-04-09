@@ -1,5 +1,4 @@
-import type { CSSProperties } from "react";
-import React from "react";
+import React, { type CSSProperties } from "react";
 
 import { version, versionName } from "../../version";
 

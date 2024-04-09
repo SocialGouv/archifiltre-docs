@@ -1,4 +1,4 @@
-import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
+import { type FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
 import { FileType, getFileTypeFromFileName } from "../file-types";
 
 /**

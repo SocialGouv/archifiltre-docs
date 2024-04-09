@@ -10,18 +10,14 @@ export interface CommentCellProps {
   updateComment: (newComment: string) => void;
 }
 
-export const CommentCell: React.FC<CommentCellProps> = ({
-  isActive,
-  comment,
-  updateComment,
-}) => {
+export const CommentCell: React.FC<CommentCellProps> = ({ isActive, comment, updateComment }) => {
   const { t } = useTranslation();
 
   const handleChange = useCallback(
     (newComment: string) => {
       updateComment(newComment);
     },
-    [updateComment]
+    [updateComment],
   );
 
   return isActive ? (

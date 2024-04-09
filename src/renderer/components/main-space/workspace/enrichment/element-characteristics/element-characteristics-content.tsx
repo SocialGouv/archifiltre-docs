@@ -1,14 +1,11 @@
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { IoIosCloudOutline } from "react-icons/all";
 
 import { useStyles } from "../../../../../hooks/use-styles";
-import {
-  bytes2HumanReadableFormat,
-  getCO2ByFileSize,
-} from "../../../../../utils";
+import { bytes2HumanReadableFormat, getCO2ByFileSize } from "../../../../../utils";
 import { openExternalElement } from "../../../../../utils/file-system/file-system-util";
 import { ClickableIcon } from "../../../../common/clickable-icon";
 import { EditableField } from "../../../../common/editable-field";
@@ -34,9 +31,7 @@ export interface ElementCharacteristicsContentProps {
   type: string;
 }
 
-export const ElementCharacteristicsContent: React.FC<
-  ElementCharacteristicsContentProps
-> = ({
+export const ElementCharacteristicsContent: React.FC<ElementCharacteristicsContentProps> = ({
   elementName,
   elementAlias,
   elementSize,
@@ -64,17 +59,9 @@ export const ElementCharacteristicsContent: React.FC<
             <Box marginRight={2}>
               <Box className={body2Box}>
                 {isFolder ? (
-                  <ClickableIcon
-                    onClick={openElement}
-                    icon={FOLDER_ICON}
-                    color="black"
-                  />
+                  <ClickableIcon onClick={openElement} icon={FOLDER_ICON} color="black" />
                 ) : (
-                  <ClickableIcon
-                    onClick={openElement}
-                    icon={PAGE_ICON}
-                    color="black"
-                  />
+                  <ClickableIcon onClick={openElement} icon={PAGE_ICON} color="black" />
                 )}
               </Box>
             </Box>
@@ -89,9 +76,7 @@ export const ElementCharacteristicsContent: React.FC<
                   />
                 </Box>
                 <Box>
-                  <Typography variant="subtitle2">
-                    ({elementAlias ? elementName : t("report.initialName")})
-                  </Typography>
+                  <Typography variant="subtitle2">({elementAlias ? elementName : t("report.initialName")})</Typography>
                 </Box>
               </Box>
             )}
@@ -99,20 +84,13 @@ export const ElementCharacteristicsContent: React.FC<
         </Box>
         <Box display="flex">
           <Box marginY={0.5} flex={1}>
-            <ElementCharacteristic
-              name={t("report.size")}
-              value={bytes2HumanReadableFormat(elementSize)}
-            />
+            <ElementCharacteristic name={t("report.size")} value={bytes2HumanReadableFormat(elementSize)} />
             <ElementCharacteristic
               name={
                 <>
                   {t("report.hash")}&nbsp;
                   <HelpTooltip
-                    tooltipText={
-                      isFolder
-                        ? t("report.folderHashExplanation")
-                        : t("report.fileHashExplanation")
-                    }
+                    tooltipText={isFolder ? t("report.folderHashExplanation") : t("report.fileHashExplanation")}
                   />
                 </>
               }
@@ -125,9 +103,7 @@ export const ElementCharacteristicsContent: React.FC<
         </Box>
         <Box marginY={0.5}>
           <Box>
-            <Typography variant="h5">
-              {t("report.lastModifications")}
-            </Typography>
+            <Typography variant="h5">{t("report.lastModifications")}</Typography>
           </Box>
           <LastModifiedDate
             isFile={!isFolder}
@@ -140,19 +116,13 @@ export const ElementCharacteristicsContent: React.FC<
         </Box>
       </Box>
       <Box marginLeft={"auto"}>
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="space-between"
-          textAlign="center"
-        >
+        <Box display="flex" flexDirection="column" justifyContent="space-between" textAlign="center">
           <Box>
             <IoIosCloudOutline size={50} />
           </Box>
           <Box>
             <Typography variant="h5">
-              {getCO2ByFileSize(elementSize)}{" "}
-              <HelpTooltip tooltipText={t("co2.weightCalculation")} />
+              {getCO2ByFileSize(elementSize)} <HelpTooltip tooltipText={t("co2.weightCalculation")} />
             </Typography>
           </Box>
         </Box>

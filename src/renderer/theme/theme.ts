@@ -1,13 +1,12 @@
-import type { ThemeOptions } from "@material-ui/core/styles/createTheme";
-import createTheme from "@material-ui/core/styles/createTheme";
+import { adaptV4Theme, createTheme, type DeprecatedThemeOptions } from "@mui/material/styles";
 
 import { themeOptions as defaultThemeOptions } from "./default-theme";
 
-const themeOptions: ThemeOptions = {
+const themeOptions: DeprecatedThemeOptions = {
   ...defaultThemeOptions,
   overrides: {
     ...defaultThemeOptions.overrides,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
+
     MuiTypography: {
       ...defaultThemeOptions.overrides?.MuiTypography,
       body1: {
@@ -25,4 +24,4 @@ const themeOptions: ThemeOptions = {
   },
 };
 
-export const theme = createTheme(themeOptions);
+export const theme = createTheme(adaptV4Theme(themeOptions));

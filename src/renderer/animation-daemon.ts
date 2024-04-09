@@ -47,11 +47,7 @@ const animationLoop = () => {
   }
 };
 
-export const animate = (
-  visible: Visible,
-  measure: Measure,
-  mutate: Mutate
-): string => {
+export const animate = (visible: Visible, measure: Measure, mutate: Mutate): string => {
   const animationId = genId();
   queue[animationId] = {
     measure,
@@ -65,7 +61,6 @@ export const animate = (
 };
 
 export const clear = (animationId: string): void => {
-  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   delete queue[animationId];
 };
 
@@ -79,30 +74,24 @@ export const animateSvgDomElement = async (
   targetDx: number,
   x: number,
   dx: number,
-  animationDuration: number
+  animationDuration: number,
 ): Promise<void> =>
-  new Promise((resolve) => {
+  new Promise(resolve => {
     const getTime = () => Date.now();
     const initTime = getTime();
 
-    const getAnimationProgress = () =>
-      Math.min(1, (getTime() - initTime) / animationDuration);
+    const getAnimationProgress = () => Math.min(1, (getTime() - initTime) / animationDuration);
 
     const init = [0, 1, 1];
     const horizontalMove = targetX - x;
     const widthGrowth = targetDx / dx;
-    const normalizedHorizontalMove =
-      targetX === 0 ? horizontalMove * widthGrowth : horizontalMove;
+    const normalizedHorizontalMove = targetX === 0 ? horizontalMove * widthGrowth : horizontalMove;
 
     const target = [normalizedHorizontalMove, widthGrowth, 0];
 
     const vector = inv
-      ? target.map(
-          (val, i) => (progress: number) => val + (init[i] - val) * progress
-        )
-      : init.map(
-          (val, i) => (progress: number) => val + (target[i] - val) * progress
-        );
+      ? target.map((val, i) => (progress: number) => val + (init[i] - val) * progress)
+      : init.map((val, i) => (progress: number) => val + (target[i] - val) * progress);
 
     const visible = () => true;
     const measure = noop;

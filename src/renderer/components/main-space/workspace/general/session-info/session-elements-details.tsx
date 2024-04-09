@@ -1,4 +1,4 @@
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -23,25 +23,16 @@ export const SessionElementsDetails: React.FC<SessionElementsDetailsProps> = ({
   return (
     <Grid container spacing={2}>
       <Grid item>
-        <SessionElementsDetail
-          title={t("report.folders")}
-          content={foldersCount}
-        />
+        <SessionElementsDetail title={t("report.folders")} content={foldersCount} />
       </Grid>
       <Grid item>
-        <SessionElementsDetail
-          title={t("report.archive")}
-          content={archivesCount}
-        />
+        <SessionElementsDetail title={t("report.archive")} content={archivesCount} />
       </Grid>
       <Grid item>
         <SessionElementsDetail title={t("report.files")} content={filesCount} />
       </Grid>
       <Grid item>
-        <SessionElementsDetail
-          title={t("report.size")}
-          content={bytes2HumanReadableFormat(volume)}
-        />
+        <SessionElementsDetail title={t("report.size")} content={bytes2HumanReadableFormat(volume)} />
       </Grid>
     </Grid>
   );

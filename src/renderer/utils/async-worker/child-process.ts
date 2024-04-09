@@ -1,22 +1,12 @@
-import {
-  IS_DIST_MODE,
-  IS_PACKAGED,
-  IS_WORKER,
-  workerSerializedConfig,
-} from "@common/config";
-import type { ChildProcess, ForkOptions } from "child_process";
-import { fork } from "child_process";
+import { IS_DIST_MODE, IS_PACKAGED, IS_WORKER, workerSerializedConfig } from "@common/config";
+import { type ChildProcess, fork, type ForkOptions } from "child_process";
 import { EventEmitter } from "events";
 import path from "path";
-import type { Readable } from "stream";
+import { type Readable } from "stream";
 
-import type { WorkerMessage } from "../batch-process/types";
-import { MessageTypes } from "../batch-process/types";
-import type { MessageSerializer } from "../child-process-stream";
-import type {
-  ChildProcessAsyncWorker,
-  ChildProcessControllerAsyncWorker,
-} from ".";
+import { MessageTypes, type WorkerMessage } from "../batch-process/types";
+import { type MessageSerializer } from "../child-process-stream";
+import { type ChildProcessAsyncWorker, type ChildProcessControllerAsyncWorker } from ".";
 
 type StreamMessageParser = (stream: Readable) => Promise<WorkerMessage>;
 
@@ -25,7 +15,7 @@ interface WorkerProcess {
 }
 
 export function assertWorkerProcess<T extends NodeJS.Process | undefined>(
-  p: T
+  p: T,
 ): asserts p is NonNullable<T> & WorkerProcess {
   if (!IS_WORKER) throw new Error("This must be called in a forked process");
 }
@@ -38,7 +28,7 @@ const getWorkerPath = (rendererRelativeWorkerPath: string): string => {
     const absoluteProdWorkerPath = path.resolve(
       process.resourcesPath,
       PACKAGED_WORKERS_FOLDER_RESOURCE_PATH,
-      rendererRelativeWorkerPath.replace(/\.ts$/gi, ".js")
+      rendererRelativeWorkerPath.replace(/\.ts$/gi, ".js"),
     );
 
     return absoluteProdWorkerPath;
@@ -55,30 +45,27 @@ const getWorkerPath = (rendererRelativeWorkerPath: string): string => {
  * Creates an AsyncWorker bound to the current ChildProcess context
  */
 export const createAsyncWorkerForChildProcess = (
-  streamMessageParser?: StreamMessageParser
+  streamMessageParser?: StreamMessageParser,
 ): ChildProcessAsyncWorker => {
   const localProcess = process as NodeJS.Process | undefined;
   assertWorkerProcess(localProcess);
 
   const eventEmitter = new EventEmitter();
 
-  localProcess.addListener("message", (event) => {
+  localProcess.addListener("message", event => {
     eventEmitter.emit("message", event);
   });
 
-  void streamMessageParser?.(process.stdin).then((message) => {
+  void streamMessageParser?.(process.stdin).then(message => {
     eventEmitter.emit("message", message);
   });
   return {
     addEventListener: (eventType, listener) => {
-      eventEmitter.addListener(
-        eventType,
-        (event: Parameters<typeof listener>[0]) => {
-          listener(event);
-        }
-      );
+      eventEmitter.addListener(eventType, (event: Parameters<typeof listener>[0]) => {
+        listener(event);
+      });
     },
-    postMessage: (message) => {
+    postMessage: message => {
       assertWorkerProcess(localProcess);
       localProcess.send(message);
     },
@@ -94,18 +81,15 @@ export const createAsyncWorkerForChildProcess = (
  */
 export const createAsyncWorkerForChildProcessController = (
   childProcess: ChildProcess,
-  sentMessageInterceptor?: (message: WorkerMessage) => boolean
+  sentMessageInterceptor?: (message: WorkerMessage) => boolean,
 ): ChildProcessControllerAsyncWorker => ({
   addEventListener: (eventType, listener) => {
-    childProcess.addListener(
-      eventType,
-      (data: Parameters<typeof listener>[0]) => {
-        listener(data);
-      }
-    );
+    childProcess.addListener(eventType, (data: Parameters<typeof listener>[0]) => {
+      listener(data);
+    });
   },
   childProcess,
-  postMessage: (message) => {
+  postMessage: message => {
     if (sentMessageInterceptor && !sentMessageInterceptor(message)) {
       return;
     }
@@ -117,19 +101,13 @@ export const createAsyncWorkerForChildProcessController = (
   terminate: () => childProcess.kill(),
 });
 
-type DataStreamParser<TStreamParserResponse> = (
-  stream: Readable
-) => Promise<TStreamParserResponse>;
+type DataStreamParser<TStreamParserResponse> = (stream: Readable) => Promise<TStreamParserResponse>;
 
 type MessageSerializers = {
-  [key in MessageTypes]?: MessageSerializer<
-    Extract<WorkerMessage, { type: key }>
-  >;
+  [key in MessageTypes]?: MessageSerializer<Extract<WorkerMessage, { type: key }>>;
 };
 
-interface CreateAsyncWorkerForChildProcessControllerFactoryOptions<
-  TStreamParserResponse
-> {
+interface CreateAsyncWorkerForChildProcessControllerFactoryOptions<TStreamParserResponse> {
   dataStreamProcessor?: DataStreamParser<TStreamParserResponse>;
   messageSerializers?: MessageSerializers;
 }
@@ -146,12 +124,12 @@ export const createAsyncWorkerForChildProcessControllerFactory =
     {
       dataStreamProcessor,
       messageSerializers = {},
-    }: CreateAsyncWorkerForChildProcessControllerFactoryOptions<TStreamParserResponse> = {}
+    }: CreateAsyncWorkerForChildProcessControllerFactoryOptions<TStreamParserResponse> = {},
   ) =>
   (): ChildProcessControllerAsyncWorker => {
     const _workerPath = getWorkerPath(filepathFromRenderer);
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- sorry not sorry
+    // eslint-disable-next-line @typescript-eslint/no-var-requires -- sorry not sorry
     const { reportInfo } = require("../../logging/reporter");
     reportInfo(`[child-process-util] Load worker from path ${_workerPath}`);
 
@@ -170,29 +148,22 @@ export const createAsyncWorkerForChildProcessControllerFactory =
     const worker = fork(
       _workerPath.endsWith(".js") ? _workerPath : WORKER_BRIDGE_PATH,
       [_workerPath, JSON.stringify(workerSerializedConfig)],
-      options
+      options,
     );
 
     const sentMessageInterceptor = (message: WorkerMessage) => {
-      const serializer = messageSerializers[message.type] as
-        | MessageSerializer<WorkerMessage>
-        | undefined;
+      const serializer = messageSerializers[message.type] as MessageSerializer<WorkerMessage> | undefined;
       if (serializer && worker.stdin) {
         serializer(worker.stdin, message);
         return false;
       }
       return true;
     };
-    const asyncWorker = createAsyncWorkerForChildProcessController(
-      worker,
-      sentMessageInterceptor
-    );
+    const asyncWorker = createAsyncWorkerForChildProcessController(worker, sentMessageInterceptor);
 
     if (dataStreamProcessor) {
-      void dataStreamProcessor(
-        worker.stdio[RESULT_STREAM_FILE_DESCRIPTOR] as Readable
-      )
-        .then((result) => {
+      void dataStreamProcessor(worker.stdio[RESULT_STREAM_FILE_DESCRIPTOR] as Readable)
+        .then(result => {
           worker.emit("message", {
             result,
             type: MessageTypes.RESULT,

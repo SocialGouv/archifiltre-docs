@@ -1,4 +1,4 @@
-import type { ExportType } from "@common/export/type";
+import { type ExportType } from "@common/export/type";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { ExportCheckbox } from "./export-checkbox";
 import { exportConfig } from "./export-config";
 import { ExportInput } from "./export-input";
-import type { ExportTypesMap } from "./export-options";
+import { type ExportTypesMap } from "./export-options";
 
 const ExportContainer = styled.div`
   display: flex;
@@ -36,25 +36,20 @@ export const ExportTypeOption: React.FC<ExportTypeOptionProps> = ({
   const { t } = useTranslation();
 
   return (
-    <ExportContainer
-      key={exportType}
-      data-test-id={`export-type-container-${exportType}`}
-    >
+    <ExportContainer key={exportType} data-test-id={`export-type-container-${exportType}`}>
       <ExportCheckbox
         isActive={enabledExports[exportType] && isPathValid}
-        setActiveExportValue={(value) => {
+        setActiveExportValue={value => {
           setActiveExportValue(exportType, value);
         }}
         label={t(exportConfig[exportType].label)}
-        disabledExplanation={t(
-          exportConfig[exportType].disabledExplanation ?? ""
-        )}
+        disabledExplanation={t(exportConfig[exportType].disabledExplanation ?? "")}
         checked={activeExports[exportType]}
       />
       <ExportInput
         exportFilePath={exportPaths[exportType]}
         isValid={isPathValid}
-        setExportsPathsValue={(value) => {
+        setExportsPathsValue={value => {
           setExportsPathsValue(exportType, value);
         }}
         isFilePickerDisabled={exportConfig[exportType].isFilePickerDisabled}

@@ -1,9 +1,6 @@
-import type { MutableRefObject } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { type MutableRefObject, useCallback, useEffect, useState } from "react";
 
-export const useElementHeight = (
-  ref: MutableRefObject<HTMLElement | null>
-): number => {
+export const useElementHeight = (ref: MutableRefObject<HTMLElement | null>): number => {
   const [height, setHeight] = useState(0);
 
   const setElementHeightFromRef = useCallback(
@@ -11,7 +8,7 @@ export const useElementHeight = (
       const { height: refHeight } = element.getBoundingClientRect();
       setHeight(refHeight);
     },
-    [setHeight]
+    [setHeight],
   );
 
   useEffect(() => {

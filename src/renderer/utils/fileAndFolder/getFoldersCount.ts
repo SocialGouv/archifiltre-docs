@@ -1,4 +1,4 @@
-import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import { type FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 
 /**
  * Calculates and returns the number of folders present in a FilesAndFoldersMap object.
@@ -9,9 +9,5 @@ import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-
  *
  * @returns {number} The number of folders (items with a non-empty 'children' array) present in the filesAndFoldersMap.
  */
-export const getFoldersCount = (
-  filesAndFoldersMap: FilesAndFoldersMap
-): number =>
-  Object.values(filesAndFoldersMap).filter(
-    ({ children }) => children.length > 0
-  ).length;
+export const getFoldersCount = (filesAndFoldersMap: FilesAndFoldersMap): number =>
+  Object.values(filesAndFoldersMap).filter(({ children }) => children.length > 0).length;

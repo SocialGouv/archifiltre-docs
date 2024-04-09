@@ -1,10 +1,10 @@
-import type { FilterMethod } from "@common/utils/type";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import Paper from "@material-ui/core/Paper";
+import { type FilterMethod } from "@common/utils/type";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import Paper from "@mui/material/Paper";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
@@ -13,17 +13,16 @@ import { useDebouncedSearchFilter } from "../../../hooks/use-debounced-search-fi
 import { useSearchAndFilters } from "../../../hooks/use-search-and-filters";
 import { useStyles } from "../../../hooks/use-styles";
 import { ROOT_FF_ID } from "../../../reducers/files-and-folders/files-and-folders-selectors";
-import type {
-  ElementWithToDelete,
-  FilesAndFolders,
+import {
+  type ElementWithToDelete,
+  type FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
-import type { TagMap } from "../../../reducers/tags/tags-types";
-import type { Column } from "../../common/table/table-types";
+import { type TagMap } from "../../../reducers/tags/tags-types";
+import { type Column } from "../../common/table/table-types";
 import { ModalHeader } from "../modal-header";
 import { FilesAndFoldersTable } from "./files-and-folders-table";
 import { Filters } from "./filters/filters";
-import type { SearchBarProps } from "./search-bar";
-import { SearchBar } from "./search-bar";
+import { SearchBar, type SearchBarProps } from "./search-bar";
 
 const StyledPaper = styled(Paper)`
   height: 90%;
@@ -31,7 +30,7 @@ const StyledPaper = styled(Paper)`
 
 export interface SearchModalProps {
   closeModal: () => void;
-  columns: Column<ElementWithToDelete>[];
+  columns: Array<Column<ElementWithToDelete>>;
   exportToCsv: (data: FilesAndFolders[]) => void;
   filesAndFolders: ElementWithToDelete[];
   isModalOpen: boolean;
@@ -50,25 +49,14 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
-  const filesAndFoldersArray = useMemo(
-    () => filesAndFolders.filter(({ id }) => id !== ROOT_FF_ID),
-    [filesAndFolders]
-  );
+  const filesAndFoldersArray = useMemo(() => filesAndFolders.filter(({ id }) => id !== ROOT_FF_ID), [filesAndFolders]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState<FilterMethod<ElementWithToDelete>[]>(
-    []
-  );
+  const [filters, setFilters] = useState<Array<FilterMethod<ElementWithToDelete>>>([]);
   const [page, setPage] = useState(0);
 
-  const nameFilter = useDebouncedSearchFilter<ElementWithToDelete>(
-    "name",
-    searchTerm
-  );
+  const nameFilter = useDebouncedSearchFilter<ElementWithToDelete>("name", searchTerm);
 
-  const searchFilters = useMemo(
-    () => [nameFilter].concat(filters),
-    [nameFilter, filters]
-  );
+  const searchFilters = useMemo(() => [nameFilter].concat(filters), [nameFilter, filters]);
 
   /**
    * Resets the filters when the modal closes
@@ -80,39 +68,24 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     }
   }, [isModalOpen, setSearchTerm, setFilters]);
 
-  const filteredFilesAndFolders = useSearchAndFilters(
-    filesAndFoldersArray,
-    searchFilters
-  );
+  const filteredFilesAndFolders = useSearchAndFilters(filesAndFoldersArray, searchFilters);
 
   const performSearch: SearchBarProps["setSearchTerm"] = useCallback(
-    (searchValue) => {
+    searchValue => {
       setSearchTerm(searchValue);
       setPage(0);
     },
-    [setSearchTerm, setPage]
+    [setSearchTerm, setPage],
   );
 
   return (
-    <Dialog
-      open={isModalOpen}
-      onClose={closeModal}
-      fullWidth
-      maxWidth="lg"
-      scroll="paper"
-      PaperComponent={StyledPaper}
-    >
+    <Dialog open={isModalOpen} onClose={closeModal} fullWidth maxWidth="lg" scroll="paper" PaperComponent={StyledPaper}>
       <ModalHeader title={t("search.title")} onClose={closeModal} />
       <DialogContent className={classes.dialogContent} dividers>
         <Box display="flex" flexDirection="column" height="100%">
           <Box>
             <Box display="flex">
-              <Box
-                flex={1}
-                display="flex"
-                alignItems="flex-end"
-                paddingBottom={1}
-              >
+              <Box flex={1} display="flex" alignItems="flex-end" paddingBottom={1}>
                 <SearchBar value={searchTerm} setSearchTerm={performSearch} />
               </Box>
               <Box flex={1}>

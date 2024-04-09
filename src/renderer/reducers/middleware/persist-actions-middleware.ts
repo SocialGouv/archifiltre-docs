@@ -1,29 +1,23 @@
 import { getPath } from "@common/utils/electron";
-import type { VoidFunction } from "@common/utils/function";
-import type { SimpleObject } from "@common/utils/object";
+import { type VoidFunction } from "@common/utils/function";
+import { type SimpleObject } from "@common/utils/object";
 import { promises as fs } from "fs";
 import path from "path";
 import { useEffect, useState } from "react";
-import type { Action, Middleware } from "redux";
+import { type Action, type Middleware } from "redux";
 
 import { reportError, reportInfo } from "../../logging/reporter";
 import { translations } from "../../translations/translations";
 import { notifyError } from "../../utils/notifications";
 import { setLoadingStep } from "../loading-state/loading-state-actions";
-import {
-  loadingStateActionTypes,
-  LoadingStep,
-} from "../loading-state/loading-state-types";
+import { loadingStateActionTypes, LoadingStep } from "../loading-state/loading-state-types";
 
 const IGNORED_ACTIONS = [...loadingStateActionTypes];
 
 const userFolderPath = getPath("userData");
-export const previousSessionFilePath = path.join(
-  userFolderPath,
-  "last-session-actions"
-);
+export const previousSessionFilePath = path.join(userFolderPath, "last-session-actions");
 
-const actionStack: Action<string>[] = [];
+const actionStack: Array<Action<string>> = [];
 let saving = false;
 
 /**
@@ -36,7 +30,7 @@ const saveActionsFromStack = async () => {
   const actionsToSave = actionStack.splice(0, actionStack.length);
   saving = true;
   const actionsToSaveText = actionsToSave
-    .map((action) => JSON.stringify(action))
+    .map(action => JSON.stringify(action))
     .join("\n")
     .concat("\n");
   try {
@@ -56,25 +50,19 @@ export const replayActionsThunk =
   () =>
   async (dispatch: VoidFunction): Promise<void> => {
     try {
-      const previousActions = await fs.readFile(
-        previousSessionFilePath,
-        "utf8"
-      );
+      const previousActions = await fs.readFile(previousSessionFilePath, "utf8");
       const previousActionsArray = previousActions
         .trim()
         .split("\n")
-        .map((actionString) => JSON.parse(actionString) as SimpleObject);
+        .map(actionString => JSON.parse(actionString) as SimpleObject);
       await clearActionReplayFile();
-      previousActionsArray.forEach((action) => {
+      previousActionsArray.forEach(action => {
         dispatch(action);
       });
       dispatch(setLoadingStep(LoadingStep.FINISHED));
     } catch (err: unknown) {
       reportError((err as Error).message);
-      notifyError(
-        translations.t("replay.error"),
-        translations.t("replay.title")
-      );
+      notifyError(translations.t("replay.error"), translations.t("replay.title"));
     }
   };
 
@@ -119,8 +107,7 @@ export const usePreviousSession = (): boolean => {
 /**
  * Middleware to persist into a file all the dispatched actions
  */
-export const persistActions: Middleware =
-  () => (next) => (action: Action<string>) => {
-    saveAction(action);
-    return next(action);
-  };
+export const persistActions: Middleware = () => next => (action: Action<string>) => {
+  saveAction(action);
+  return next(action);
+};

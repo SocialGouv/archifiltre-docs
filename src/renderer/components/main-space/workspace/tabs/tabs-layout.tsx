@@ -1,7 +1,6 @@
-import Box from "@material-ui/core/Box";
-import Divider from "@material-ui/core/Divider";
-import type { ReactNode } from "react";
-import React from "react";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import React, { type ReactNode } from "react";
 
 interface ComponentElement {
   content: ReactNode;
@@ -10,12 +9,7 @@ interface ComponentElement {
   widthRatio?: number;
 }
 
-export const makeTabComponent = ({
-  title,
-  content,
-  widthRatio = 1,
-  isLast,
-}: ComponentElement): React.FC => {
+export const makeTabComponent = ({ title, content, widthRatio = 1, isLast }: ComponentElement): React.FC => {
   const Component: React.FC = () => (
     <>
       <Box flex={widthRatio}>

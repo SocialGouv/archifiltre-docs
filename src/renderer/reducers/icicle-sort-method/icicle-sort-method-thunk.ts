@@ -1,16 +1,8 @@
 import { getTrackerProvider } from "@common/modules/tracker";
 
-import type { ArchifiltreDocsThunkAction } from "../archifiltre-types";
-import {
-  setElementWeightMethod,
-  setIcicleColorMode,
-  setIcicleSortMethod,
-} from "./icicle-sort-method-actions";
-import {
-  ElementWeightMethod,
-  IcicleColorMode,
-  IcicleSortMethod,
-} from "./icicle-sort-method-types";
+import { type ArchifiltreDocsThunkAction } from "../archifiltre-types";
+import { setElementWeightMethod, setIcicleColorMode, setIcicleSortMethod } from "./icicle-sort-method-actions";
+import { ElementWeightMethod, IcicleColorMode, IcicleSortMethod } from "./icicle-sort-method-types";
 
 /**
  * Defines the sort method of the icicles
@@ -18,15 +10,15 @@ import {
  */
 export const setIcicleSortMethodThunk =
   (iciclesSortMethod: IcicleSortMethod): ArchifiltreDocsThunkAction =>
-  (dispatch) => {
+  dispatch => {
     getTrackerProvider().track("Feat(1.0) Nav Mode Changed", {
       navMode: "sort",
       type:
         iciclesSortMethod === IcicleSortMethod.SORT_ALPHA_NUMERICALLY
           ? "alpha"
           : iciclesSortMethod === IcicleSortMethod.SORT_BY_DATE
-          ? "date"
-          : "size",
+            ? "date"
+            : "size",
     });
 
     dispatch(setIcicleSortMethod(iciclesSortMethod));
@@ -38,13 +30,10 @@ export const setIcicleSortMethodThunk =
  */
 export const setElementWeightMethodThunk =
   (elementWeightMethod: ElementWeightMethod): ArchifiltreDocsThunkAction =>
-  (dispatch) => {
+  dispatch => {
     getTrackerProvider().track("Feat(1.0) Nav Mode Changed", {
       navMode: "weight",
-      type:
-        elementWeightMethod === ElementWeightMethod.BY_FILE_COUNT
-          ? "count"
-          : "size",
+      type: elementWeightMethod === ElementWeightMethod.BY_FILE_COUNT ? "count" : "size",
     });
 
     dispatch(setElementWeightMethod(elementWeightMethod));
@@ -56,7 +45,7 @@ export const setElementWeightMethodThunk =
  */
 export const setIcicleColorModeThunk =
   (icicleColorMode: IcicleColorMode): ArchifiltreDocsThunkAction =>
-  (dispatch) => {
+  dispatch => {
     getTrackerProvider().track("Feat(1.0) Nav Mode Changed", {
       navMode: "color",
       type: icicleColorMode === IcicleColorMode.BY_DATE ? "date" : "type",

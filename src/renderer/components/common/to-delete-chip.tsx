@@ -1,7 +1,7 @@
-import Chip from "@material-ui/core/Chip";
-import createStyles from "@material-ui/core/styles/createStyles";
-import type { Theme } from "@material-ui/core/styles/createTheme";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import Chip from "@mui/material/Chip";
+import { type Theme } from "@mui/material/styles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaTrash } from "react-icons/fa";
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.error.main,
       color: "white",
     },
-  })
+  }),
 );
 
 export interface ToDeleteChipProps {
@@ -26,10 +26,7 @@ export interface ToDeleteChipProps {
   onClick: () => void;
 }
 
-export const ToDeleteChip: React.FC<ToDeleteChipProps> = ({
-  checked,
-  onClick,
-}) => {
+export const ToDeleteChip: React.FC<ToDeleteChipProps> = ({ checked, onClick }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 

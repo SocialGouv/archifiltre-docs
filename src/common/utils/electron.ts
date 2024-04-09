@@ -1,5 +1,4 @@
-import type { App, Shell } from "electron";
-import { app, shell } from "electron";
+import { type App, app, type Shell, shell } from "electron";
 
 import { IS_MAIN } from "../config";
 import { ipcRenderer } from "../ipc";
@@ -30,10 +29,7 @@ export function getPath(...args: Parameters<App["getPath"]>): string {
   try {
     return ipcRenderer.sendSync("app.getPath", ...args);
   } catch (error: unknown) {
-    console.error(
-      "Erreur lors de la communication avec le processus principal:",
-      error
-    );
+    console.error("Erreur lors de la communication avec le processus principal:", error);
     throw error;
   }
 }

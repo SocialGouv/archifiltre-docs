@@ -2,10 +2,9 @@ import { noop } from "lodash";
 import { toast } from "react-toastify";
 
 export enum NotificationDuration {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   NORMAL = 10000,
   // aproximatively equals 3 years as Number.MAX_SAFE_INTEGER is not working
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+
   PERMANENT = 100000000000,
 }
 
@@ -20,7 +19,7 @@ export const notifySuccess = (
   message: string,
   title: string,
   notificationDuration = NotificationDuration.NORMAL,
-  callback = noop
+  callback = noop,
 ): void => {
   toast(`${title}\n${message}`, {
     autoClose: notificationDuration,
@@ -41,7 +40,7 @@ export const notifyError = (
   message: string,
   title: string,
   notificationDuration = NotificationDuration.NORMAL,
-  callback = noop
+  callback = noop,
 ): void => {
   toast(`${title}\n${message}`, {
     autoClose: notificationDuration,
@@ -62,7 +61,7 @@ export const notifyInfo = (
   message: string,
   title: string,
   notificationDuration = NotificationDuration.NORMAL,
-  callback = noop
+  callback = noop,
 ): void => {
   toast(`${title}\n${message}`, {
     autoClose: notificationDuration,

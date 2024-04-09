@@ -2,15 +2,10 @@ import { detectConfig } from "@common/utils/csv";
 import { detectXlsxSheets } from "@common/utils/xlsx";
 import * as path from "path";
 
-import type {
-  CsvMetadataFileConfig,
-  MetadataFileConfig,
-  XlsMetadataFileConfig,
-} from "./MetadataModalTypes";
+import { type CsvMetadataFileConfig, type MetadataFileConfig, type XlsMetadataFileConfig } from "./MetadataModalTypes";
 
-export const isCsvMetadataFileConfig = (
-  config: MetadataFileConfig
-): config is CsvMetadataFileConfig => config.type === "CSV";
+export const isCsvMetadataFileConfig = (config: MetadataFileConfig): config is CsvMetadataFileConfig =>
+  config.type === "CSV";
 
 export const detectXlsxConfig = (filePath: string): XlsMetadataFileConfig => {
   const sheets = detectXlsxSheets(filePath);
@@ -22,9 +17,7 @@ export const detectXlsxConfig = (filePath: string): XlsMetadataFileConfig => {
   };
 };
 
-export const detectCsvConfig = async (
-  filePath: string
-): Promise<CsvMetadataFileConfig> => {
+export const detectCsvConfig = async (filePath: string): Promise<CsvMetadataFileConfig> => {
   const config = await detectConfig(filePath);
   return {
     type: "CSV",
@@ -32,7 +25,5 @@ export const detectCsvConfig = async (
   };
 };
 
-export const isCsvFile = (filePath: string): boolean =>
-  path.extname(filePath) === ".csv";
-export const isXlsxFile = (filePath: string): boolean =>
-  path.extname(filePath) === ".xlsx";
+export const isCsvFile = (filePath: string): boolean => path.extname(filePath) === ".csv";
+export const isXlsxFile = (filePath: string): boolean => path.extname(filePath) === ".xlsx";

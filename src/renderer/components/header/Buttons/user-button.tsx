@@ -1,5 +1,5 @@
-import Button from "@material-ui/core/Button";
-import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCog } from "react-icons/fa";

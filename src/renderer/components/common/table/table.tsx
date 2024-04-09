@@ -1,36 +1,22 @@
-import Paper from "@material-ui/core/Paper";
-import MuiTable from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableContainer from "@material-ui/core/TableContainer";
-import React, {
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import Paper from "@mui/material/Paper";
+import MuiTable from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useDuplicatePageState } from "../../../context/duplicates-page-context";
 import { useControllableValue } from "../../../hooks/use-controllable-value";
 import { useElementHeight } from "../../../hooks/use-element-height";
-import type { Order } from "../../../utils/table";
-import {
-  accessorToFunction,
-  getComparator,
-  limitPageIndex,
-  stableSort,
-} from "../../../utils/table";
+import { accessorToFunction, getComparator, limitPageIndex, type Order, stableSort } from "../../../utils/table";
 import { Paginator } from "../../modals/search-modal/paginator";
 import { EnhancedTableHead } from "./enhanced-table-head";
 import { TableDefaultRow } from "./table-default-row";
-import type { Column, RowIdAccessor, RowRenderer } from "./table-types";
+import { type Column, type RowIdAccessor, type RowRenderer } from "./table-types";
 
 export interface TableProps<T> {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   RowRendererComp?: RowRenderer<T>;
-  columns: Column<T>[];
+  columns: Array<Column<T>>;
   data: T[];
   isDense?: boolean;
   isPaginatorDisplayed?: boolean;
@@ -46,7 +32,7 @@ const _Table = <T,>({
   rowId,
   isPaginatorDisplayed = true,
   isDense = false,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+
   RowRendererComp = TableDefaultRow,
   stickyHeader = false,
   page,
@@ -60,30 +46,25 @@ const _Table = <T,>({
     (_event: unknown, newPage: number) => {
       setInnerPage(newPage);
     },
-    [setInnerPage]
+    [setInnerPage],
   );
   const handleChangeRowsPerPage = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setRowsPerPage(parseInt(event.target.value, 10));
       setInnerPage(0);
     },
-    [setRowsPerPage, setInnerPage]
+    [setRowsPerPage, setInnerPage],
   );
   const rowIdAccessor = useMemo(
-    () =>
-      typeof rowId === "function"
-        ? rowId
-        : (row: T) => (rowId ? row[rowId] : undefined),
-    [rowId]
+    () => (typeof rowId === "function" ? rowId : (row: T) => (rowId ? row[rowId] : undefined)),
+    [rowId],
   );
 
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<number>(-1);
 
   const sortedColumnAccessor = useMemo(() => {
-    const sortAccessor =
-      columns[orderBy]?.sortAccessor ??
-      (columns[orderBy]?.accessor || (() => ""));
+    const sortAccessor = columns[orderBy]?.sortAccessor ?? (columns[orderBy]?.accessor || (() => ""));
     return accessorToFunction(sortAccessor);
   }, [columns, orderBy]);
 
@@ -122,34 +103,13 @@ const _Table = <T,>({
 
   return (
     <div ref={tableRef} style={containerStyle}>
-      <TableContainer
-        component={Paper}
-        style={tableContainerStyle}
-        ref={tableContainerRef}
-      >
-        <MuiTable
-          size={isDense ? "small" : "medium"}
-          stickyHeader={stickyHeader}
-        >
-          <EnhancedTableHead
-            order={order}
-            orderBy={orderBy}
-            onRequestSort={handleRequestSort}
-            columns={columns}
-          />
+      <TableContainer component={Paper} style={tableContainerStyle} ref={tableContainerRef}>
+        <MuiTable size={isDense ? "small" : "medium"} stickyHeader={stickyHeader}>
+          <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} columns={columns} />
           <TableBody>
-            {sortedData
-              .slice(
-                innerPage * rowsPerPage,
-                innerPage * rowsPerPage + rowsPerPage
-              )
-              .map((row, rowIndex) => (
-                <RowRendererComp
-                  key={`${rowIdAccessor(row) ?? rowIndex}`}
-                  row={row}
-                  columns={columns}
-                />
-              ))}
+            {sortedData.slice(innerPage * rowsPerPage, innerPage * rowsPerPage + rowsPerPage).map((row, rowIndex) => (
+              <RowRendererComp key={`${rowIdAccessor(row) ?? rowIndex}`} row={row} columns={columns} />
+            ))}
           </TableBody>
         </MuiTable>
       </TableContainer>

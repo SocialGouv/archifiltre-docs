@@ -2,9 +2,8 @@ import { FORCE_TRACKING, IS_MAIN, IS_PACKAGED } from "../config";
 import { ipcMain, ipcRenderer } from "../ipc";
 import { DelegatingProvider } from "../tracker/provider/DelegatingProvider";
 import { NoopProvider } from "../tracker/provider/NoopProvider";
-import type { TrackerProvider } from "../tracker/provider/TrackerProvider";
-import type { DelegatingName, ProviderType } from "../tracker/provider/utils";
-import { providers } from "../tracker/provider/utils";
+import { type TrackerProvider } from "../tracker/provider/TrackerProvider";
+import { type DelegatingName, providers, type ProviderType } from "../tracker/provider/utils";
 import { get as getConfig } from "./new-user-config";
 
 let enableTracking = FORCE_TRACKING || IS_PACKAGED();
@@ -36,13 +35,10 @@ function findProvider(name?: ProviderType): TrackerProvider {
     return new DelegatingProvider(
       appId,
       disabled,
-      names.map((n) => findProvider(n))
+      names.map(n => findProvider(n)),
     );
   }
-  return new (providers.find((p) => p.trackerName === name) ?? NoopProvider)(
-    appId,
-    disabled
-  ) as TrackerProvider;
+  return new (providers.find(p => p.trackerName === name) ?? NoopProvider)(appId, disabled) as TrackerProvider;
 }
 
 export function getTrackerProvider(): TrackerProvider {

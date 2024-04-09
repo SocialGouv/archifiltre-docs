@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 export enum ArchifiltreDocsFileSystemErrorCode {
   EACCES = "EACCES",
   EBUSY = "EBUSY",

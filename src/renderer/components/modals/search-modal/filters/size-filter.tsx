@@ -1,12 +1,12 @@
-import type { FilterMethod } from "@common/utils/type";
+import { type FilterMethod } from "@common/utils/type";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { FilesAndFolders } from "../../../../reducers/files-and-folders/files-and-folders-types";
+import { type FilesAndFolders } from "../../../../reducers/files-and-folders/files-and-folders-types";
 import { Filter } from "./filter";
 
 export interface SizeFilterProps {
-  setFilters: (filters: FilterMethod<FilesAndFolders>[]) => void;
+  setFilters: (filters: Array<FilterMethod<FilesAndFolders>>) => void;
 }
 
 const kBToB = 1000;
@@ -33,12 +33,8 @@ const availableOptions: SizeFilterOption[] = [
   },
 ];
 
-const makeSizeFilter = (
-  selectedOption: string
-): FilterMethod<FilesAndFolders> => {
-  const option =
-    availableOptions.find(({ label }) => label === selectedOption) ??
-    availableOptions[0];
+const makeSizeFilter = (selectedOption: string): FilterMethod<FilesAndFolders> => {
+  const option = availableOptions.find(({ label }) => label === selectedOption) ?? availableOptions[0];
   return option.method;
 };
 

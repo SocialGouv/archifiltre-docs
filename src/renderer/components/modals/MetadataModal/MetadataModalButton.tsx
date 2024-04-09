@@ -1,5 +1,5 @@
-import Button from "@material-ui/core/Button";
-import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaUpload } from "react-icons/fa";
@@ -28,10 +28,7 @@ export const MetadataModalButton: React.FC = () => {
           <FaUpload />
         </Button>
       </Tooltip>
-      <MetadataModalContainer
-        isModalOpen={isModalOpen}
-        closeModal={closeModal}
-      />
+      <MetadataModalContainer isModalOpen={isModalOpen} closeModal={closeModal} />
     </>
   );
 };

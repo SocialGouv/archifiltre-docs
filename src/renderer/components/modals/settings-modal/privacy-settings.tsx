@@ -1,11 +1,11 @@
 import { reloadApp } from "@common/utils/electron";
-import type { Theme } from "@material-ui/core";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Switch from "@material-ui/core/Switch";
-import Tooltip from "@material-ui/core/Tooltip";
+import { type Theme } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import Tooltip from "@mui/material/Tooltip";
+import makeStyles from "@mui/styles/makeStyles";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -25,17 +25,12 @@ export const PrivacySettings: React.FC = () => {
   const { userSettings, updateUserSettings } = useGetUserSettings();
   const classes = useStyles();
 
-  const [isTrackingEnabled, setIsTrackingEnabled] = useState<boolean>(
-    userSettings.isTrackingEnabled
-  );
-  const [isMonitoringEnabled, setIsMonitoringEnabled] = useState<boolean>(
-    userSettings.isMonitoringEnabled
-  );
+  const [isTrackingEnabled, setIsTrackingEnabled] = useState<boolean>(userSettings.isTrackingEnabled);
+  const [isMonitoringEnabled, setIsMonitoringEnabled] = useState<boolean>(userSettings.isMonitoringEnabled);
   const [isButtonDisable, setIsButtonDisable] = useState<boolean>(false);
 
   const hasSettingChanged =
-    isTrackingEnabled !== userSettings.isTrackingEnabled ||
-    isMonitoringEnabled !== userSettings.isMonitoringEnabled;
+    isTrackingEnabled !== userSettings.isTrackingEnabled || isMonitoringEnabled !== userSettings.isMonitoringEnabled;
 
   const reloadExplanation = t("settingsModal.reloadExplanation");
 
@@ -46,7 +41,7 @@ export const PrivacySettings: React.FC = () => {
           control={
             <Switch
               checked={isTrackingEnabled}
-              onChange={(event) => {
+              onChange={event => {
                 setIsTrackingEnabled(event.target.checked);
               }}
             />
@@ -62,7 +57,7 @@ export const PrivacySettings: React.FC = () => {
           control={
             <Switch
               checked={isMonitoringEnabled}
-              onChange={(event) => {
+              onChange={event => {
                 setIsMonitoringEnabled(event.target.checked);
               }}
             />

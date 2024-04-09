@@ -1,13 +1,13 @@
-import createStyles from "@material-ui/core/styles/createStyles";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import React from "react";
 
-import type { Order } from "../../../utils/table";
-import type { Column } from "./table-types";
+import { type Order } from "../../../utils/table";
+import { type Column } from "./table-types";
 
 const useStyles = makeStyles(
   createStyles({
@@ -22,15 +22,12 @@ const useStyles = makeStyles(
       top: 20,
       width: 1,
     },
-  })
+  }),
 );
 
 export interface EnhancedTableHeadProps<T> {
-  columns: Column<T>[];
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    columnIndex: number
-  ) => void;
+  columns: Array<Column<T>>;
+  onRequestSort: (event: React.MouseEvent<unknown>, columnIndex: number) => void;
   order: Order;
   orderBy: number;
 }
@@ -40,23 +37,17 @@ export const EnhancedTableHead = <T,>({
   order,
   orderBy,
   onRequestSort,
-}: EnhancedTableHeadProps<T>): React.ReactElement<
-  EnhancedTableHeadProps<T>
-> => {
+}: EnhancedTableHeadProps<T>): React.ReactElement<EnhancedTableHeadProps<T>> => {
   const classes = useStyles();
-  const createSortHandler =
-    (columnIndex: number) => (event: React.MouseEvent) => {
-      onRequestSort(event, columnIndex);
-    };
+  const createSortHandler = (columnIndex: number) => (event: React.MouseEvent) => {
+    onRequestSort(event, columnIndex);
+  };
 
   return (
     <TableHead>
       <TableRow>
         {columns.map((column, index) => (
-          <TableCell
-            key={column.id}
-            sortDirection={orderBy === index ? order : false}
-          >
+          <TableCell key={column.id} sortDirection={orderBy === index ? order : false}>
             <TableSortLabel
               active={orderBy === index}
               direction={orderBy === index ? order : "asc"}

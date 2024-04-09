@@ -1,20 +1,20 @@
-import type { WorkerError } from "@common/types";
-import type { ArchifiltreDocsError } from "@common/utils/error";
-import type { HashesMap } from "@common/utils/hashes-types";
-import type { SimpleObject } from "@common/utils/object";
+import { type WorkerError } from "@common/types";
+import { type ArchifiltreDocsError } from "@common/utils/error";
+import { type HashesMap } from "@common/utils/hashes-types";
+import { type SimpleObject } from "@common/utils/object";
 
-import type {
-  AliasMap,
-  CommentsMap,
-  FilesAndFoldersMap,
-  LastModifiedMap,
-  VirtualPathToIdMap,
+import {
+  type AliasMap,
+  type CommentsMap,
+  type FilesAndFoldersMap,
+  type LastModifiedMap,
+  type VirtualPathToIdMap,
 } from "../reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
-import type { SerializedMetadataContext } from "../reducers/metadata/metadata-types";
-import type { SedaConfigurationState } from "../reducers/seda-configuration/seda-configuration-type";
-import type { TagMap } from "../reducers/tags/tags-types";
+import { type FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { type FileSystemLoadingStep } from "../reducers/loading-state/loading-state-types";
+import { type SerializedMetadataContext } from "../reducers/metadata/metadata-types";
+import { type SedaConfigurationState } from "../reducers/seda-configuration/seda-configuration-type";
+import { type TagMap } from "../reducers/tags/tags-types";
 
 export type VirtualFileSystem = Partial<WithMetadata> &
   Partial<WithSedaConfiguration> &
@@ -92,9 +92,7 @@ export type WithOverrideLastModified<T = SimpleObject> = T & {
   overrideLastModified: LastModifiedMap;
 };
 
-export type PartialFileSystem = Partial<VirtualFileSystem> &
-  WithFilesAndFolders &
-  WithOriginalPath;
+export type PartialFileSystem = Partial<VirtualFileSystem> & WithFilesAndFolders & WithOriginalPath;
 
 export type JsonFileInfo = PartialFileSystem &
   WithAliases &
@@ -125,7 +123,7 @@ export interface FileSystemReporters {
 }
 
 export type FilesAndFoldersLoader = (
-  hooksCreator?: FileSystemLoadingHooksCreator
+  hooksCreator?: FileSystemLoadingHooksCreator,
 ) => PartialFileSystem | Promise<PartialFileSystem>;
 
 export type WithResultHook<T = SimpleObject> = T & {
@@ -142,8 +140,6 @@ export type FileSystemLoadingHooks = WithErrorHook &
     onStart: () => void;
   };
 
-export type FileSystemLoadingHooksCreator = (
-  step: FileSystemLoadingStep
-) => FileSystemLoadingHooks;
+export type FileSystemLoadingHooksCreator = (step: FileSystemLoadingStep) => FileSystemLoadingHooks;
 
 export type FileLoaderCreator = (path: string) => FilesAndFoldersLoader;

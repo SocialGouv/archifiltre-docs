@@ -8,9 +8,7 @@ import { notifyError } from "../notifications";
  * or undefined if he canceled.
  * @param filename - Either the default name of the file or the full path to the default file
  */
-export const promptUserForSave = async (
-  filename: string
-): Promise<string | undefined> => {
+export const promptUserForSave = async (filename: string): Promise<string | undefined> => {
   const { filePath } = await ipcRenderer.invoke("dialog.showSaveDialog", {
     defaultPath: filename,
   });
@@ -21,16 +19,11 @@ export const promptUserForSave = async (
  * Open a fileSystem element with the default app (folder are opened with the file browsing app)
  * @param elementPath
  */
-export const openExternalElement = async (
-  elementPath: string
-): Promise<void> => {
+export const openExternalElement = async (elementPath: string): Promise<void> => {
   const error = await ipcRenderer.invoke("shell.openPath", elementPath);
 
   if (error) {
-    notifyError(
-      translations.t("report.openElementErrorMessage"),
-      translations.t("report.openElementErrorTitle")
-    );
+    notifyError(translations.t("report.openElementErrorMessage"), translations.t("report.openElementErrorTitle"));
   }
 };
 

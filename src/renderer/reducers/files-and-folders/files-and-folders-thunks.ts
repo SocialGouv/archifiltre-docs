@@ -6,7 +6,7 @@ import { translations } from "../../translations/translations";
 import { isFile, isFolder } from "../../utils";
 import { isExactFileOrAncestor } from "../../utils/file-and-folders";
 import { notifyInfo } from "../../utils/notifications";
-import type { ArchifiltreDocsThunkAction } from "../archifiltre-types";
+import { type ArchifiltreDocsThunkAction } from "../archifiltre-types";
 import { commitAction } from "../enhancers/undoable/undoable-actions";
 import { initFilesAndFoldersMetatada } from "../files-and-folders-metadata/files-and-folders-metadata-actions";
 import {
@@ -21,7 +21,7 @@ import {
   getFilesAndFoldersFromStore,
   getLastModifiedDateOverrides,
 } from "./files-and-folders-selectors";
-import type { FilesAndFoldersMap } from "./files-and-folders-types";
+import { type FilesAndFoldersMap } from "./files-and-folders-types";
 
 /**
  * Updates the files and folders alias
@@ -30,7 +30,7 @@ import type { FilesAndFoldersMap } from "./files-and-folders-types";
  */
 export const updateAliasThunk =
   (filesAndFoldersId: string, newAlias: string): ArchifiltreDocsThunkAction =>
-  (dispatch) => {
+  dispatch => {
     dispatch(setFilesAndFoldersAliases({ [filesAndFoldersId]: newAlias }));
     dispatch(commitAction());
   };
@@ -42,7 +42,7 @@ export const updateAliasThunk =
  */
 export const updateCommentThunk =
   (filesAndFoldersId: string, comments: string): ArchifiltreDocsThunkAction =>
-  (dispatch) => {
+  dispatch => {
     dispatch(addCommentsOnFilesAndFolders({ [filesAndFoldersId]: comments }));
   };
 
@@ -62,15 +62,13 @@ export enum IsMoveValidError {
 const isMoveValid = (
   filesAndFolders: FilesAndFoldersMap,
   newParentId: string,
-  elementId: string
+  elementId: string,
 ): IsMoveValidError | null => {
   const newParent = filesAndFolders[newParentId];
   const element = filesAndFolders[elementId];
   const newParentVirtualPath = newParent.virtualPath;
   const elementVirtualPath = element.virtualPath;
-  const newSiblingsNames = newParent.children.map(
-    (id) => filesAndFolders[id].name
-  );
+  const newSiblingsNames = newParent.children.map(id => filesAndFolders[id].name);
   const isNameConflict = newSiblingsNames.includes(element.name);
   if (isExactFileOrAncestor(newParentVirtualPath, elementVirtualPath)) {
     return IsMoveValidError.cannotMoveToChild;
@@ -106,18 +104,14 @@ export const moveElement =
     dispatch(addChild(newParentId, elementId));
 
     const updatedFilesAndFolders = getFilesAndFoldersFromStore(getState());
-    const newMetadata = createFilesAndFoldersMetadataDataStructure(
-      updatedFilesAndFolders
-    );
+    const newMetadata = createFilesAndFoldersMetadataDataStructure(updatedFilesAndFolders);
 
     dispatch(initFilesAndFoldersMetatada(newMetadata));
     dispatch(commitAction());
 
     const ff = updatedFilesAndFolders[elementId];
     const ffIsFolder = isFolder(ff);
-    const sizeRaw = ffIsFolder
-      ? newMetadata[elementId].childrenTotalSize
-      : ff.file_size;
+    const sizeRaw = ffIsFolder ? newMetadata[elementId].childrenTotalSize : ff.file_size;
     getTrackerProvider().track("Feat(3.0) Element Moved", {
       size: bytesToMegabytes(sizeRaw),
       sizeRaw,
@@ -136,7 +130,7 @@ export const overrideLastModifiedDateThunk =
     const metadata = createFilesAndFoldersMetadataDataStructure(
       filesAndFolders,
       {},
-      { lastModified: lastModifiedOverrides }
+      { lastModified: lastModifiedOverrides },
     );
     dispatch(initFilesAndFoldersMetatada(metadata));
   };

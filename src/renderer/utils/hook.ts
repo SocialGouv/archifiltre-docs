@@ -1,10 +1,5 @@
-type InternalHook<THookArgs extends unknown[]> = (
-  ...args: THookArgs
-) => boolean;
-type Hook<THookArgs extends unknown[]> = (
-  count?: number,
-  ...args: THookArgs
-) => void;
+type InternalHook<THookArgs extends unknown[]> = (...args: THookArgs) => boolean;
+type Hook<THookArgs extends unknown[]> = (count?: number, ...args: THookArgs) => void;
 type ResultHook<THookArgs extends unknown[]> = (...args: THookArgs) => void;
 
 export interface HookCounterOptions<THookArgs extends unknown[]> {
@@ -27,13 +22,10 @@ interface HookCounterResult<THookArgs extends unknown[]> {
  */
 export const hookCounter = <THookArgs extends unknown[]>(
   throttledHook: Hook<THookArgs>,
-  {
-    interval = 500,
-    internalHook = () => true,
-  }: HookCounterOptions<unknown[]> = {
+  { interval = 500, internalHook = () => true }: HookCounterOptions<unknown[]> = {
     internalHook: () => true,
     interval: 500,
-  }
+  },
 ): HookCounterResult<THookArgs> => {
   let count = 0;
   let lastCall = Date.now();

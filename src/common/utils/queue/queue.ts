@@ -15,11 +15,11 @@ export interface Queue<TInput, TResult, TError = never> {
 
 export const computeQueue =
   <TInput, TResult, TError = never>(
-    computingFn: (param: TInput[]) => Promise<(TError | TResult)[]>,
-    isResult: IsResult<TResult>
+    computingFn: (param: TInput[]) => Promise<Array<TError | TResult>>,
+    isResult: IsResult<TResult>,
   ) =>
   (input: TInput[]): Observable<Queue<TInput, TResult, TError>> =>
-    new Observable<Queue<TInput, TResult, TError>>((observer) => {
+    new Observable<Queue<TInput, TResult, TError>>(observer => {
       let results: TResult[] = [];
       let errors: TError[] = [];
       let remaining: TInput[][] = chunk(input, CHUNK_SIZE);
@@ -29,12 +29,8 @@ export const computeQueue =
           const computed = remaining[0];
           remaining = remaining.slice(1);
           const values = await computingFn(computed);
-          const newResults = values.filter((value): value is TResult =>
-            isResult(value)
-          );
-          const newErrors = values.filter(
-            (value): value is TError => !isResult(value)
-          );
+          const newResults = values.filter((value): value is TResult => isResult(value));
+          const newErrors = values.filter((value): value is TError => !isResult(value));
 
           results = [...results, ...newResults];
           errors = [...errors, ...newErrors];

@@ -1,14 +1,11 @@
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
 import React from "react";
 
-import type { RowRendererProps } from "./table-types";
+import { type RowRendererProps } from "./table-types";
 import { TableValue } from "./table-value";
 
-export const TableDefaultRow = <T,>({
-  row,
-  columns,
-}: RowRendererProps<T>): React.ReactElement<RowRendererProps<T>> => {
+export const TableDefaultRow = <T,>({ row, columns }: RowRendererProps<T>): React.ReactElement<RowRendererProps<T>> => {
   return (
     <TableRow>
       {columns.map(({ accessor, cellStyle, id }, columnIndex) => (

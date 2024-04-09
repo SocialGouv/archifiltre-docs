@@ -1,19 +1,16 @@
-import type { ArchifiltreDocsError } from "@common/utils/error";
+import { type ArchifiltreDocsError } from "@common/utils/error";
 
-import type {
-  AliasMap,
-  CommentsMap,
-  FilesAndFoldersActionTypes,
-  FilesAndFoldersMap,
-  LastModifiedMap,
-  VirtualPathToIdMap,
-} from "./files-and-folders-types";
 import {
   ADD_CHILD,
   ADD_COMMENTS_ON_FILES_AND_FOLDERS,
+  type AliasMap,
+  type CommentsMap,
+  type FilesAndFoldersActionTypes,
+  type FilesAndFoldersMap,
   INIT_OVERRIDE_LAST_MODIFIED,
   INIT_VIRTUAL_PATH_TO_ID_MAP,
   INITIALIZE_FILES_AND_FOLDERS,
+  type LastModifiedMap,
   MARK_AS_TO_DELETE,
   MARK_ELEMENTS_TO_DELETE,
   OVERRIDE_LAST_MODIFIED,
@@ -24,15 +21,14 @@ import {
   SET_FILES_AND_FOLDERS_ALIAS,
   UNMARK_AS_TO_DELETE,
   UNMARK_ELEMENTS_TO_DELETE,
+  type VirtualPathToIdMap,
 } from "./files-and-folders-types";
 
 /**
  * Action to set the initial state of the files and folders store
  * @param filesAndFolders - The files and folders to set
  */
-export const initializeFilesAndFolders = (
-  filesAndFolders: FilesAndFoldersMap
-): FilesAndFoldersActionTypes => ({
+export const initializeFilesAndFolders = (filesAndFolders: FilesAndFoldersMap): FilesAndFoldersActionTypes => ({
   filesAndFolders,
   type: INITIALIZE_FILES_AND_FOLDERS,
 });
@@ -41,9 +37,7 @@ export const initializeFilesAndFolders = (
  * Action to set an alias to a FileAndFolder
  * @param aliases
  */
-export const setFilesAndFoldersAliases = (
-  aliases: AliasMap
-): FilesAndFoldersActionTypes => ({
+export const setFilesAndFoldersAliases = (aliases: AliasMap): FilesAndFoldersActionTypes => ({
   aliases,
   type: SET_FILES_AND_FOLDERS_ALIAS,
 });
@@ -52,9 +46,7 @@ export const setFilesAndFoldersAliases = (
  * Add comments on a FileAndFolder
  * @param comments
  */
-export const addCommentsOnFilesAndFolders = (
-  comments: CommentsMap
-): FilesAndFoldersActionTypes => ({
+export const addCommentsOnFilesAndFolders = (comments: CommentsMap): FilesAndFoldersActionTypes => ({
   comments,
   type: ADD_COMMENTS_ON_FILES_AND_FOLDERS,
 });
@@ -63,9 +55,7 @@ export const addCommentsOnFilesAndFolders = (
  * Marks an element as to delete
  * @param filesAndFoldersId
  */
-export const markAsToDelete = (
-  filesAndFoldersId: string
-): FilesAndFoldersActionTypes => ({
+export const markAsToDelete = (filesAndFoldersId: string): FilesAndFoldersActionTypes => ({
   filesAndFoldersId,
   type: MARK_AS_TO_DELETE,
 });
@@ -74,9 +64,7 @@ export const markAsToDelete = (
  * Mark multiple elements to delete
  * @param elementIds
  */
-export const markElementsToDelete = (
-  elementIds: string[]
-): FilesAndFoldersActionTypes => ({
+export const markElementsToDelete = (elementIds: string[]): FilesAndFoldersActionTypes => ({
   elementIds,
   type: MARK_ELEMENTS_TO_DELETE,
 });
@@ -85,9 +73,7 @@ export const markElementsToDelete = (
  * Unmark an element as to delete
  * @param filesAndFoldersId
  */
-export const unmarkAsToDelete = (
-  filesAndFoldersId: string
-): FilesAndFoldersActionTypes => ({
+export const unmarkAsToDelete = (filesAndFoldersId: string): FilesAndFoldersActionTypes => ({
   filesAndFoldersId,
   type: UNMARK_AS_TO_DELETE,
 });
@@ -96,9 +82,7 @@ export const unmarkAsToDelete = (
  * Mark multiple elements to delete
  * @param elementIds
  */
-export const unmarkElementsToDelete = (
-  elementIds: string[]
-): FilesAndFoldersActionTypes => ({
+export const unmarkElementsToDelete = (elementIds: string[]): FilesAndFoldersActionTypes => ({
   elementIds,
   type: UNMARK_ELEMENTS_TO_DELETE,
 });
@@ -108,10 +92,7 @@ export const unmarkElementsToDelete = (
  * @param parentId
  * @param childId
  */
-export const removeChild = (
-  parentId: string,
-  childId: string
-): FilesAndFoldersActionTypes => ({
+export const removeChild = (parentId: string, childId: string): FilesAndFoldersActionTypes => ({
   childId,
   parentId,
   type: REMOVE_CHILD,
@@ -122,25 +103,18 @@ export const removeChild = (
  * @param parentId
  * @param childId
  */
-export const addChild = (
-  parentId: string,
-  childId: string
-): FilesAndFoldersActionTypes => ({
+export const addChild = (parentId: string, childId: string): FilesAndFoldersActionTypes => ({
   childId,
   parentId,
   type: ADD_CHILD,
 });
 
-export const initVirtualPathToIdMap = (
-  virtualPathToIdMap: VirtualPathToIdMap
-): FilesAndFoldersActionTypes => ({
+export const initVirtualPathToIdMap = (virtualPathToIdMap: VirtualPathToIdMap): FilesAndFoldersActionTypes => ({
   type: INIT_VIRTUAL_PATH_TO_ID_MAP,
   virtualPathToIdMap,
 });
 
-export const registerErroredElements = (
-  elements: ArchifiltreDocsError[]
-): FilesAndFoldersActionTypes => ({
+export const registerErroredElements = (elements: ArchifiltreDocsError[]): FilesAndFoldersActionTypes => ({
   elements,
   type: REGISTER_ERRORED_ELEMENTS,
 });
@@ -149,18 +123,13 @@ export const resetErroredElements = (): FilesAndFoldersActionTypes => ({
   type: RESET_ERRORED_ELEMENTS,
 });
 
-export const overrideLastModified = (
-  elementId: string,
-  lastModified: number
-): FilesAndFoldersActionTypes => ({
+export const overrideLastModified = (elementId: string, lastModified: number): FilesAndFoldersActionTypes => ({
   elementId,
   lastModified,
   type: OVERRIDE_LAST_MODIFIED,
 });
 
-export const initOverrideLastModified = (
-  overrideLastModifiedToInit: LastModifiedMap
-): FilesAndFoldersActionTypes => ({
+export const initOverrideLastModified = (overrideLastModifiedToInit: LastModifiedMap): FilesAndFoldersActionTypes => ({
   overrideLastModified: overrideLastModifiedToInit,
   type: INIT_OVERRIDE_LAST_MODIFIED,
 });

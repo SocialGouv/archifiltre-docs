@@ -1,4 +1,3 @@
-import type { TagMap, TagsActionTypes } from "./tags-types";
 import {
   ADD_TAG,
   DELETE_TAG,
@@ -6,6 +5,8 @@ import {
   RENAME_TAG,
   RESET_TAGS,
   TAG_FILE,
+  type TagMap,
+  type TagsActionTypes,
   UNTAG_FILE,
 } from "./tags-types";
 
@@ -31,11 +32,7 @@ export const initializeTags = (tags: TagMap): TagsActionTypes => ({
  * @param ffId - The id of the file to tag
  * @param [tagId] - Used to force the tag id. Will be obsolete when real-estate tags will be removed.
  */
-export const addTag = (
-  tagName: string,
-  ffId: string,
-  tagId = ""
-): TagsActionTypes => ({
+export const addTag = (tagName: string, ffId: string, tagId = ""): TagsActionTypes => ({
   ffId,
   tagId,
   tagName,

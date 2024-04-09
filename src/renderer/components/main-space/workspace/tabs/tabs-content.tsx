@@ -1,4 +1,4 @@
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import React from "react";
 import styled from "styled-components";
 
@@ -18,12 +18,7 @@ interface TabPanelProps {
 }
 
 const TabPanel: React.FC<TabPanelProps> = ({ children, value, index }) => (
-  <StyledPanel
-    role="tabpanel"
-    hidden={value !== index}
-    id={`tabpanel-${index}`}
-    aria-labelledby={`tab-${index}`}
-  >
+  <StyledPanel role="tabpanel" hidden={value !== index} id={`tabpanel-${index}`} aria-labelledby={`tab-${index}`}>
     {value === index && (
       <Box height="100%" boxSizing="border-box">
         {children}

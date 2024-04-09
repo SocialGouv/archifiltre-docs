@@ -1,6 +1,5 @@
-import { DialogContent } from "@material-ui/core";
-import type { FC } from "react";
-import React from "react";
+import { DialogContent } from "@mui/material";
+import React, { type FC } from "react";
 
 import { useStyles } from "../../../hooks/use-styles";
 

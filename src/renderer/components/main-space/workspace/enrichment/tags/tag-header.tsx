@@ -1,13 +1,10 @@
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { CategoryTitle } from "../../../../common/category-title";
 import { ColorCircle } from "../../../../common/color-circle";
-import {
-  ENRICHMENT_COLORS,
-  EnrichmentTypes,
-} from "../../../icicle/icicle-enrichment";
+import { ENRICHMENT_COLORS, EnrichmentTypes } from "../../../icicle/icicle-enrichment";
 import { AllTagsButton } from "./all-tags-button";
 
 export const TagHeader: React.FC = () => {

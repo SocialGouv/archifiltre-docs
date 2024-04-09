@@ -1,27 +1,22 @@
 import { createHash } from "crypto";
 import md5File from "md5-file";
 import { join } from "path";
-import type { Observable } from "rxjs";
+import { type Observable } from "rxjs";
 import { throttleTime } from "rxjs/operators";
 
 import { isInArchiveFolder } from "../../../renderer/utils";
 import { ipcRenderer } from "../../ipc";
-import type { WorkerError } from "../../types";
-import type { ArchifiltreDocsError } from "../error";
-import { ArchifiltreDocsErrorType } from "../error";
-import {
-  ArchifiltreDocsFileSystemErrorCode,
-  UnknownError,
-} from "../error/error-codes";
-import type { HashesMap } from "../hashes-types";
-import type { Queue } from "../queue/queue";
-import { computeQueue } from "../queue/queue";
-import type { HashComputingError } from "./hash-errors";
+import { type WorkerError } from "../../types";
+import { type ArchifiltreDocsError, ArchifiltreDocsErrorType } from "../error";
+import { ArchifiltreDocsFileSystemErrorCode, UnknownError } from "../error/error-codes";
+import { type HashesMap } from "../hashes-types";
+import { computeQueue, type Queue } from "../queue/queue";
 import {
   ACCESS_DENIED,
   accessDenied,
   FILE_NOT_FOUND,
   fileNotFound,
+  type HashComputingError,
   unhandledFileError,
 } from "./hash-errors";
 
@@ -31,14 +26,10 @@ export interface HashComputingResult {
   type: "result";
 }
 
-export const isResult = (
-  values: HashComputingError | HashComputingResult
-): values is HashComputingResult => values.type === "result";
+export const isResult = (values: HashComputingError | HashComputingResult): values is HashComputingResult =>
+  values.type === "result";
 
-export const hashResult = (
-  path: string,
-  hash: string
-): HashComputingResult => ({
+export const hashResult = (path: string, hash: string): HashComputingResult => ({
   hash,
   path,
   type: "result",
@@ -49,9 +40,7 @@ export const hashResult = (
  * @param filePath The path of the file to hash.
  * @returns A promise resolved with either a HashComputingResult or a HashComputingError.
  */
-export const computeHash = async (
-  filePath: string
-): Promise<HashComputingError | HashComputingResult> => {
+export const computeHash = async (filePath: string): Promise<HashComputingError | HashComputingResult> => {
   if (isInArchiveFolder(filePath)) {
     return {
       hash: createHash("sha256").update(filePath).digest("hex"),
@@ -78,25 +67,20 @@ export const computeHash = async (
 
 export const computeHashes = (
   files: string[],
-  basePath: string
+  basePath: string,
 ): Observable<Queue<string, HashComputingResult, HashComputingError>> => {
-  const computeFn = computeQueue<
-    string,
-    HashComputingResult,
-    HashComputingError
-  >(
-    async (filePaths: string[]) =>
-      ipcRenderer.invoke("hash.computeHash", filePaths),
-    isResult
+  const computeFn = computeQueue<string, HashComputingResult, HashComputingError>(
+    async (filePaths: string[]) => ipcRenderer.invoke("hash.computeHash", filePaths),
+    isResult,
   );
 
-  const paths = files.map((file) => join(basePath, file));
+  const paths = files.map(file => join(basePath, file));
 
   return computeFn(paths).pipe(
     throttleTime(1000, void 0, {
       leading: true,
       trailing: true,
-    })
+    }),
   );
 };
 
@@ -111,9 +95,7 @@ const hashErrorCodeToArchifiltreDocsErrorCode = (hashErrorCode: string) => {
   }
 };
 
-export const hashErrorToArchifiltreDocsError = (
-  hashError: HashComputingError
-): ArchifiltreDocsError => ({
+export const hashErrorToArchifiltreDocsError = (hashError: HashComputingError): ArchifiltreDocsError => ({
   code: hashErrorCodeToArchifiltreDocsErrorCode(hashError.type),
   filePath: hashError.path,
   reason: hashError.type,

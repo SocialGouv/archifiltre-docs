@@ -10,9 +10,10 @@ export interface ElementWeightMethodPickerProps {
   setElementWeightMethod: (method: ElementWeightMethod) => void;
 }
 
-export const ElementWeightMethodPicker: React.FC<
-  ElementWeightMethodPickerProps
-> = ({ setElementWeightMethod, elementWeightMethod }) => {
+export const ElementWeightMethodPicker: React.FC<ElementWeightMethodPickerProps> = ({
+  setElementWeightMethod,
+  elementWeightMethod,
+}) => {
   const { t } = useTranslation();
 
   const options = [

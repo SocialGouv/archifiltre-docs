@@ -2,19 +2,19 @@ import { noop } from "lodash";
 import React from "react";
 import styled from "styled-components";
 
-import type {
-  AliasMap,
-  CommentsMap,
-  FilesAndFolders,
+import {
+  type AliasMap,
+  type CommentsMap,
+  type FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { TagMap } from "../../../reducers/tags/tags-types";
+import { type FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { type TagMap } from "../../../reducers/tags/tags-types";
 import { Breadcrumbs as BreadcrumbsNew } from "../breadcrumb/breadcrumbs";
 import { MinimapBracket } from "../minimap-bracket";
 import { Icicle } from "./icicle";
 import { normalizeWidth, VIEWBOX_HEIGHT, VIEWBOX_WIDTH } from "./icicle-common";
 import { ColumnBlock, VerticalContainer } from "./icicle-layout";
-import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
+import { type FillColor, type IcicleMouseActionHandler } from "./icicle-types";
 
 /**
  * Determines if a minimap child element should render based on its width. Width < 2.5 are not rendered.

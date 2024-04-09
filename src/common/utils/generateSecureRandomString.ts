@@ -1,7 +1,6 @@
 import { randomBytes } from "crypto";
 
-const CHARACTERS =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
 /**
  * Generates a secure, random string of the specified length using Node.js's `randomBytes`.
@@ -15,6 +14,6 @@ export function generateSecureRandomString(length: number): string {
   const bytes = randomBytes(length);
 
   return Array.from(bytes)
-    .map((byte) => CHARACTERS.charAt(byte % CHARACTERS.length))
+    .map(byte => CHARACTERS.charAt(byte % CHARACTERS.length))
     .join("");
 }

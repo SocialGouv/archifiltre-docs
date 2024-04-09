@@ -1,17 +1,12 @@
-import type { SimpleObject } from "@common/utils/object";
+import { type SimpleObject } from "@common/utils/object";
 
 export const SET_METADATA_MAPPING = "SEDA/SET_METADATA_MAPPING";
 export const INIT_METADATA_MAPPING = "SEDA/INIT_METADATA_MAPPING";
 export const RESET_METADATA_MAPPING = "SEDA/RESET_METADATA_MAPPING";
 
-export const sedaFields = [
-  "CustodialHistory",
-  "Title",
-  "ArchivalAgencyArchiveUnitIdentifier",
-  "Tags",
-] as const;
+export const sedaFields = ["CustodialHistory", "Title", "ArchivalAgencyArchiveUnitIdentifier", "Tags"] as const;
 
-export type SedaField = typeof sedaFields[number];
+export type SedaField = (typeof sedaFields)[number];
 
 export interface ActiveSedaFields {
   fields: Set<string>;
@@ -46,7 +41,4 @@ export interface SedaMetadata {
 
 export type SedaMetadataMap = SimpleObject<SedaMetadata[]>;
 
-export type SedaConfigurationAction =
-  | InitMetadataMappingAction
-  | ResetMetadataMappingAction
-  | SetMetadataMappingAction;
+export type SedaConfigurationAction = InitMetadataMappingAction | ResetMetadataMappingAction | SetMetadataMappingAction;

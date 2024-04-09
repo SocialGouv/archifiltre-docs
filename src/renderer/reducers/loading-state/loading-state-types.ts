@@ -1,11 +1,8 @@
 export const SET_LOADING_STEP = "loadingState/SET_LOADING_STEP";
-export const SET_FILE_SYSTEM_LOADING_STEP =
-  "loadingState/SET_FILE_SYSTEM_LOADING_STEP";
+export const SET_FILE_SYSTEM_LOADING_STEP = "loadingState/SET_FILE_SYSTEM_LOADING_STEP";
 export const SET_INDEXED_FILES_COUNT = "loadingState/SET_INDEXED_FILES_COUNT";
-export const SET_DATA_MODEL_ELEMENTS_COUNT =
-  "loadingState/SET_DATA_MODEL_ELEMENTS_COUNT";
-export const SET_DERIVED_ELEMENTS_COUNT =
-  "loadingState/SET_DERIVED_ELEMENTS_COUNT";
+export const SET_DATA_MODEL_ELEMENTS_COUNT = "loadingState/SET_DATA_MODEL_ELEMENTS_COUNT";
+export const SET_DERIVED_ELEMENTS_COUNT = "loadingState/SET_DERIVED_ELEMENTS_COUNT";
 export const RESET_LOADING_STATE = "loadingState/RESET_LOADING_STATE";
 
 export const loadingStateActionTypes = [
@@ -17,7 +14,6 @@ export const loadingStateActionTypes = [
   RESET_LOADING_STATE,
 ];
 
-/* eslint-disable @typescript-eslint/naming-convention */
 export enum LoadingStep {
   WAITING = 0,
   FINISHED = 1,
@@ -30,7 +26,6 @@ export enum FileSystemLoadingStep {
   METADATA = 2,
   COMPLETE = 3,
 }
-/* eslint-enable @typescript-eslint/naming-convention */
 
 export interface LoadingState {
   constructedDataModelElementsCount: number;

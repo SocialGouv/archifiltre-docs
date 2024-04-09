@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 export enum ExportType {
   AUDIT = "AUDIT",
   CSV = "CSV",

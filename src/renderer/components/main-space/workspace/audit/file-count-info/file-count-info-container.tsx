@@ -8,10 +8,7 @@ import { FileCountInfo } from "./file-count-info";
 export const FileCountInfoContainer: React.FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
 
-  const fileCount = useMemo(
-    () => getFilesCount(filesAndFoldersMap),
-    [filesAndFoldersMap]
-  );
+  const fileCount = useMemo(() => getFilesCount(filesAndFoldersMap), [filesAndFoldersMap]);
 
   return <FileCountInfo fileCount={fileCount} />;
 };

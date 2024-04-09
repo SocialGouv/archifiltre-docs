@@ -1,17 +1,17 @@
 import { countItems } from "@common/utils/array";
-import type { HashesMap } from "@common/utils/hashes-types";
+import { type HashesMap } from "@common/utils/hashes-types";
 import MD5 from "js-md5";
 import { lookup } from "mime-types";
 import path from "path";
 
 import { decomposePathToElement } from "../reducers/files-and-folders/files-and-folders-selectors";
-import type {
-  FilesAndFolders,
-  FilesAndFoldersMap,
-  VirtualPathToIdMap,
+import {
+  type FilesAndFolders,
+  type FilesAndFoldersMap,
+  type VirtualPathToIdMap,
 } from "../reducers/files-and-folders/files-and-folders-types";
 import { getTitleFromMetadata } from "../reducers/metadata/metadata-selector";
-import type { Metadata } from "../reducers/metadata/metadata-types";
+import { type Metadata } from "../reducers/metadata/metadata-types";
 import { translations } from "../translations/translations";
 import { convertToPosixAbsolutePath } from "./file-system/file-sys-util";
 import { isArchiveFolder, isFolder } from "./fileAndFolder";
@@ -25,9 +25,7 @@ import { isArchiveFolder, isFolder } from "./fileAndFolder";
 export const countFoldersWithMoreThanNChildren =
   (nbChildren: number) =>
   (folders: FilesAndFolders[]): number =>
-    countItems<FilesAndFolders>(
-      (folder) => folder.children.length > nbChildren
-    )(folders);
+    countItems<FilesAndFolders>(folder => folder.children.length > nbChildren)(folders);
 
 /**
  * Counts folder that are deeper than maxDepth
@@ -38,9 +36,7 @@ export const countFoldersWithMoreThanNChildren =
 export const countDeeperFolders =
   (maxDepth: number) =>
   (folders: FilesAndFolders[]): number =>
-    countItems<FilesAndFolders>(
-      (folder) => folder.depth ?? -Infinity > maxDepth
-    )(folders);
+    countItems<FilesAndFolders>(folder => folder.depth ?? -Infinity > maxDepth)(folders);
 
 /**
  * Counts the number of path longer than maxLength
@@ -51,40 +47,29 @@ export const countDeeperFolders =
 export const countLongerPath =
   (maxLength: number) =>
   (paths: string[]): number =>
-    countItems<string>((itemPath) => itemPath.length > maxLength)(paths);
+    countItems<string>(itemPath => itemPath.length > maxLength)(paths);
 
 /**
  * Sorts folders by number of childrens in a decreasing order
  */
-export const sortFoldersByChildrenCount = (
-  folders: FilesAndFolders[]
-): FilesAndFolders[] =>
-  folders.sort(
-    (folder1, folder2) => folder2.children.length - folder1.children.length
-  );
+export const sortFoldersByChildrenCount = (folders: FilesAndFolders[]): FilesAndFolders[] =>
+  folders.sort((folder1, folder2) => folder2.children.length - folder1.children.length);
 
 /**
  * Sort folders by depth in a decreasing order
  */
-export const sortFoldersByDepth = (
-  folders: FilesAndFolders[]
-): FilesAndFolders[] =>
-  folders.sort(
-    (folder1, folder2) =>
-      (folder2.depth ?? -Infinity) - (folder1.depth ?? -Infinity)
-  );
+export const sortFoldersByDepth = (folders: FilesAndFolders[]): FilesAndFolders[] =>
+  folders.sort((folder1, folder2) => (folder2.depth ?? -Infinity) - (folder1.depth ?? -Infinity));
 
 /**
  * Returns all the folders with no child folders
  */
-export const findAllFoldersWithNoSubfolder = (
-  fileAndFoldersMap: FilesAndFoldersMap
-): string[] => {
+export const findAllFoldersWithNoSubfolder = (fileAndFoldersMap: FilesAndFoldersMap): string[] => {
   const baseNodeId = "";
 
   const findFoldersWithNoSubfolderRec = (nodeId: string): string[] => {
     const currentNode = fileAndFoldersMap[nodeId];
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
     if (!currentNode) {
       throw new Error(`${nodeId} is undefined`);
     }
@@ -93,9 +78,8 @@ export const findAllFoldersWithNoSubfolder = (
     }
 
     const subFoldersWithNoSubfolders = currentNode.children.reduce<string[]>(
-      (acc, childNodeId) =>
-        acc.concat(findFoldersWithNoSubfolderRec(childNodeId)),
-      []
+      (acc, childNodeId) => acc.concat(findFoldersWithNoSubfolderRec(childNodeId)),
+      [],
     );
 
     if (!subFoldersWithNoSubfolders.length) {
@@ -113,12 +97,10 @@ export const findAllFoldersWithNoSubfolder = (
  * @param filesAndFolders - An object with id (the path) as a key and the fileAndFolders data as a value
  * @returns {{Object}[]}
  */
-export const filesAndFoldersMapToArray = (
-  filesAndFolders: FilesAndFoldersMap
-): FilesAndFolders[] =>
+export const filesAndFoldersMapToArray = (filesAndFolders: FilesAndFoldersMap): FilesAndFolders[] =>
   Object.keys(filesAndFolders)
-    .filter((id) => id)
-    .map((id) => ({
+    .filter(id => id)
+    .map(id => ({
       ...filesAndFolders[id],
       id,
     })) as FilesAndFolders[];
@@ -138,7 +120,7 @@ const recComputeFolderHash = async (
   filesAndFolders: FilesAndFoldersMap,
   hashes: HashesMap,
   id: string,
-  hook: HookCompute
+  hook: HookCompute,
 ): Promise<HashesMap> => {
   const { children } = filesAndFolders[id];
   const hash = hashes[id];
@@ -146,28 +128,25 @@ const recComputeFolderHash = async (
     return { [id]: hash };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!children?.length) {
     return { [id]: null };
   }
 
   const childResults = await Promise.all(
-    children.map(async (childId) =>
-      recComputeFolderHash(filesAndFolders, hashes, childId, hook)
-    )
+    children.map(async childId => recComputeFolderHash(filesAndFolders, hashes, childId, hook)),
   );
 
   const childrenResults: HashesMap = Object.assign({}, ...childResults);
 
   const currentFolderHash = MD5(
     children
-      .map((childId) => childrenResults[childId])
+      .map(childId => childrenResults[childId])
       .sort((a, b) => {
         if (a === null) return b === null ? 0 : 1;
         if (b === null) return -1;
         return a.localeCompare(b);
       })
-      .join("")
+      .join(""),
   );
 
   const currentHashObject: HashesMap = { [id]: currentFolderHash };
@@ -187,7 +166,7 @@ const recComputeFolderHash = async (
 export const computeFolderHashes = async (
   filesAndFolders: FilesAndFoldersMap,
   hashes: HashesMap,
-  hook: HookCompute
+  hook: HookCompute,
 ): Promise<HashesMap> => {
   const baseFolder = "";
   return recComputeFolderHash(filesAndFolders, hashes, baseFolder, hook);
@@ -198,13 +177,10 @@ export const computeFolderHashes = async (
  * @param baseElementId
  * @param suspectedAncestorId
  */
-export const isExactFileOrAncestor = (
-  baseElementId: string,
-  suspectedAncestorId: string
-): boolean => {
+export const isExactFileOrAncestor = (baseElementId: string, suspectedAncestorId: string): boolean => {
   const index = baseElementId.indexOf(suspectedAncestorId);
   const trailingChar = baseElementId[suspectedAncestorId.length];
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
   return !index && (trailingChar === void 0 || trailingChar === "/");
 };
 
@@ -214,11 +190,8 @@ export const isExactFileOrAncestor = (
  * @param elementAlias - element optional alias
  * @param metadata
  */
-export const getDisplayName = (
-  elementName: string,
-  elementAlias: string | undefined,
-  metadata?: Metadata[]
-): string => getTitleFromMetadata(metadata) || elementAlias || elementName; // eslint-disable-line @typescript-eslint/prefer-nullish-coalescing -- Handle empty string
+export const getDisplayName = (elementName: string, elementAlias: string | undefined, metadata?: Metadata[]): string =>
+  getTitleFromMetadata(metadata) || elementAlias || elementName;
 
 /**
  * Create a element id sequence from the virtual path of a file
@@ -229,14 +202,13 @@ export const getDisplayName = (
 export const createFilePathSequence = (
   targetElementId: string,
   filesAndFolders: FilesAndFoldersMap,
-  virtualPathToIdMap: VirtualPathToIdMap
+  virtualPathToIdMap: VirtualPathToIdMap,
 ): string[] => {
-  const { virtualPath: targetElementVirtualPath } =
-    filesAndFolders[targetElementId];
+  const { virtualPath: targetElementVirtualPath } = filesAndFolders[targetElementId];
 
   return decomposePathToElement(targetElementVirtualPath || targetElementId)
     .slice(1)
-    .map((virtualPath) => virtualPathToIdMap[virtualPath] || virtualPath);
+    .map(virtualPath => virtualPathToIdMap[virtualPath] || virtualPath);
 };
 
 interface GetTypeOptions {
@@ -258,12 +230,10 @@ export const getType = (
     folderLabel = translations.t("common.folder"),
     archiveLabel = translations.t("common.archive"),
     unknownLabel = translations.t("common.unknown"),
-  }: GetTypeOptions = {}
+  }: GetTypeOptions = {},
 ): string => {
   if (isFolder(filesAndFolders)) {
-    return (
-      (isArchiveFolder(filesAndFolders) ? archiveLabel : folderLabel) ?? ""
-    );
+    return (isArchiveFolder(filesAndFolders) ? archiveLabel : folderLabel) ?? "";
   }
   const mimeType = lookup(filesAndFolders.id);
   return (mimeType ? mimeType.split("/").pop()! : unknownLabel) ?? "";
@@ -274,16 +244,13 @@ export const getType = (
  * @param filesAndFoldersMap - list of all files and folders
  * @param filesAndFoldersId - filesAndFoldersId of the node to get children from
  */
-export const getAllChildren = (
-  filesAndFoldersMap: FilesAndFoldersMap,
-  filesAndFoldersId: string
-): string[] => {
+export const getAllChildren = (filesAndFoldersMap: FilesAndFoldersMap, filesAndFoldersId: string): string[] => {
   const allChildren: string[] = [];
 
   const getAllChildrenRec = (currentId: string) => {
     const { children } = filesAndFoldersMap[currentId];
     allChildren.push(currentId);
-    children.forEach((childId) => {
+    children.forEach(childId => {
       getAllChildrenRec(childId);
     });
   };
@@ -296,9 +263,8 @@ export const getAllChildren = (
  * Returns the name of the first level, without the initial /
  * @param filesAndFoldersMap - list of all files and folders
  */
-export const getFirstLevelName = (
-  filesAndFoldersMap: FilesAndFoldersMap
-): string => filesAndFoldersMap[""].children[0].slice(1);
+export const getFirstLevelName = (filesAndFoldersMap: FilesAndFoldersMap): string =>
+  filesAndFoldersMap[""].children[0].slice(1);
 
 /**
  * Remove elements for which the parent is already in the array
@@ -308,17 +274,9 @@ export const removeChildrenPath = (filesAndFolders: string[]): string[] =>
   filesAndFolders.reduce<string[]>(
     (acc, element) =>
       acc
-        .filter(
-          (includedElement) => !isExactFileOrAncestor(includedElement, element)
-        )
-        .concat(
-          acc.some((includedElement) =>
-            isExactFileOrAncestor(element, includedElement)
-          )
-            ? []
-            : [element]
-        ),
-    []
+        .filter(includedElement => !isExactFileOrAncestor(includedElement, element))
+        .concat(acc.some(includedElement => isExactFileOrAncestor(element, includedElement)) ? [] : [element]),
+    [],
   );
 
 export const getIdFromPath = (rootPath: string, currentPath: string): string =>

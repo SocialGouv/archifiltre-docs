@@ -10,21 +10,19 @@ const COPIED_ICON_DISPLAY_DURATION = 3000;
 export interface CopyToClipboardProps {
   stringToCopy: string;
 }
-export const CopyToClipboard: React.FC<CopyToClipboardProps> = ({
-  stringToCopy,
-}) => {
+export const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ stringToCopy }) => {
   const { t } = useTranslation();
 
   const [isCopied, setIsCopied] = useState(false);
 
   const onClick = useCallback(
-    (event) => {
+    event => {
       event.stopPropagation();
       clipboard.writeText(stringToCopy);
       setIsCopied(true);
       notifyInfo(t("report.copied"), "", NotificationDuration.NORMAL);
     },
-    [stringToCopy, t]
+    [stringToCopy, t],
   );
 
   useEffect(() => {

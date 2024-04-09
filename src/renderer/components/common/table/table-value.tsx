@@ -1,9 +1,7 @@
-import type { ReactElement } from "react";
-import React from "react";
+import React, { type ReactElement } from "react";
 
 import { applyAccessorToTableValue } from "../../../utils/table";
-import type { CellStyle, TableAccessor } from "./table-types";
-import { WordBreak } from "./table-types";
+import { type CellStyle, type TableAccessor, WordBreak } from "./table-types";
 
 export interface TableValueProps<T> {
   accessor: TableAccessor<T>;

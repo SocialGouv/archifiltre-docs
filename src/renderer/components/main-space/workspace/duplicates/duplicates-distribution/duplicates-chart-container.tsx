@@ -5,12 +5,8 @@ import { getFilesAndFoldersFromStore } from "../../../../../reducers/files-and-f
 import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import { getHashesFromStore } from "../../../../../reducers/hashes/hashes-selectors";
 import { getFiles } from "../../../../../utils";
-import {
-  countDuplicateFiles,
-  countDuplicateFilesTotalSize,
-} from "../../../../../utils/duplicates";
-import type { DuplicatesChartProps } from "./duplicates-chart";
-import { DuplicatesChart } from "./duplicates-chart";
+import { countDuplicateFiles, countDuplicateFilesTotalSize } from "../../../../../utils/duplicates";
+import { DuplicatesChart, type DuplicatesChartProps } from "./duplicates-chart";
 
 export const DuplicatesChartContainer: React.FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
@@ -19,23 +15,20 @@ export const DuplicatesChartContainer: React.FC = () => {
 
   const duplicatesNumber: DuplicatesChartProps["duplicatesNumber"] = useMemo(
     () => countDuplicateFiles(filesAndFoldersMap, hashes),
-    [filesAndFoldersMap, hashes]
+    [filesAndFoldersMap, hashes],
   );
-  const nonDuplicatesNumber: DuplicatesChartProps["nonDuplicatesNumber"] =
-    useMemo(
-      () => getFiles(filesAndFoldersMap).length - duplicatesNumber,
-      [filesAndFoldersMap, duplicatesNumber]
-    );
+  const nonDuplicatesNumber: DuplicatesChartProps["nonDuplicatesNumber"] = useMemo(
+    () => getFiles(filesAndFoldersMap).length - duplicatesNumber,
+    [filesAndFoldersMap, duplicatesNumber],
+  );
   const duplicatesSize: DuplicatesChartProps["duplicatesSize"] = useMemo(
     () => countDuplicateFilesTotalSize(filesAndFoldersMap, hashes),
-    [filesAndFoldersMap, hashes]
+    [filesAndFoldersMap, hashes],
   );
-  const nonDuplicatesSize: DuplicatesChartProps["nonDuplicatesSize"] =
-    useMemo(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      const rootFilesAndFoldersMetadata = metadata[""] ?? {};
-      return rootFilesAndFoldersMetadata.childrenTotalSize - duplicatesSize;
-    }, [metadata, duplicatesSize]);
+  const nonDuplicatesSize: DuplicatesChartProps["nonDuplicatesSize"] = useMemo(() => {
+    const rootFilesAndFoldersMetadata = metadata[""] ?? {};
+    return rootFilesAndFoldersMetadata.childrenTotalSize - duplicatesSize;
+  }, [metadata, duplicatesSize]);
 
   return (
     <DuplicatesChart

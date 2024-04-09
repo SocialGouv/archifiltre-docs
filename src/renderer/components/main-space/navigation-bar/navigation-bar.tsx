@@ -1,11 +1,11 @@
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import React from "react";
 import styled from "styled-components";
 
-import type {
-  ElementWeightMethod,
-  IcicleColorMode,
-  IcicleSortMethod,
+import {
+  type ElementWeightMethod,
+  type IcicleColorMode,
+  type IcicleSortMethod,
 } from "../../../reducers/icicle-sort-method/icicle-sort-method-types";
 import { ElementWeightMethodPicker } from "./element-weight-method-picker";
 import { IcicleColorModePicker } from "./icicle-color-mode-picker";
@@ -44,10 +44,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
       </Box>
       <Box flexGrow={1} />
       <Box pt={1} pl={1}>
-        <IciclesSortOrderPicker
-          icicleSortMethod={icicleSortMethod}
-          setIcicleSortMethod={setIcicleSortMethod}
-        />
+        <IciclesSortOrderPicker icicleSortMethod={icicleSortMethod} setIcicleSortMethod={setIcicleSortMethod} />
       </Box>
       <Box pt={1} pl={1}>
         <ElementWeightMethodPicker
@@ -56,10 +53,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
         />
       </Box>
       <Box pt={1} pl={1}>
-        <IcicleColorModePicker
-          icicleColorMode={icicleColorMode}
-          setIcicleColorMode={setIcicleColorMode}
-        />
+        <IcicleColorModePicker icicleColorMode={icicleColorMode} setIcicleColorMode={setIcicleColorMode} />
       </Box>
     </Box>
   </Wrapper>

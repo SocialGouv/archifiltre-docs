@@ -1,17 +1,13 @@
 import { noop } from "lodash";
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
-import type {
-  AliasMap,
-  CommentsMap,
-} from "../../../reducers/files-and-folders/files-and-folders-types";
-import type { TagMap } from "../../../reducers/tags/tags-types";
+import { type AliasMap, type CommentsMap } from "../../../reducers/files-and-folders/files-and-folders-types";
+import { type TagMap } from "../../../reducers/tags/tags-types";
 import { IcicleEnrichments } from "./icicle-enrichments";
 import { IcicleHightlightElement } from "./icicle-highlight-element";
-import type { Dims } from "./icicle-rect";
-import type { IcicleRecursiveProps } from "./icicle-recursive";
-import { IcicleRecursive } from "./icicle-recursive";
-import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
+import { type Dims } from "./icicle-rect";
+import { IcicleRecursive, type IcicleRecursiveProps } from "./icicle-recursive";
+import { type FillColor, type IcicleMouseActionHandler } from "./icicle-types";
 import { IciclesOverlay } from "./icicles-overlay";
 
 export type DimsMap = Record<string, Dims>;
@@ -30,10 +26,7 @@ export interface IcicleProps {
   movedElementId?: string;
   movedElementTime?: number;
   normalizeWidth: (width: number[]) => number[];
-  onIcicleMouseWheel?: (event: {
-    mousePosition: number;
-    wheelDirection: number;
-  }) => void;
+  onIcicleMouseWheel?: (event: { mousePosition: number; wheelDirection: number }) => void;
   onIcicleRectClickHandler: IcicleMouseActionHandler;
   onIcicleRectDoubleClickHandler: IcicleMouseActionHandler;
   onIcicleRectMouseOverHandler: IcicleMouseActionHandler;
@@ -102,7 +95,7 @@ const _Icicle: React.FC<IcicleProps> = ({
         y: dimY,
       };
     },
-    [dimsRef, dimsUpdated]
+    [dimsRef, dimsUpdated],
   );
 
   // TODO: missing deps?
@@ -115,13 +108,8 @@ const _Icicle: React.FC<IcicleProps> = ({
     }
   });
 
-  const onMouseWheel: React.SVGProps<SVGGElement>["onWheel"] = ({
-    clientX,
-    deltaY,
-  }) => {
-    const { x: rectX, width } =
-      icicleRef.current?.getBoundingClientRect() ??
-      (clientX as unknown as DOMRect); // TODO: why is Rect instead of number given by onWheelEvent?
+  const onMouseWheel: React.SVGProps<SVGGElement>["onWheel"] = ({ clientX, deltaY }) => {
+    const { x: rectX, width } = icicleRef.current?.getBoundingClientRect() ?? (clientX as unknown as DOMRect); // TODO: why is Rect instead of number given by onWheelEvent?
     const mousePosition = (clientX - rectX) / width;
     const wheelDirection = deltaY > 1 ? 1 : -1;
     onIcicleMouseWheel({ mousePosition, wheelDirection });
@@ -143,17 +131,11 @@ const _Icicle: React.FC<IcicleProps> = ({
       : {};
 
   const lockedHovered =
-    hoverSequence.length > 0
-      ? lockedSequence.filter((id) => hoverSequence.includes(id))
-      : lockedSequence;
+    hoverSequence.length > 0 ? lockedSequence.filter(id => hoverSequence.includes(id)) : lockedSequence;
 
-  const lockedNotHovered = lockedSequence.filter(
-    (id) => !hoverSequence.includes(id)
-  );
+  const lockedNotHovered = lockedSequence.filter(id => !hoverSequence.includes(id));
 
-  const unlockedHovered = hoverSequence.filter(
-    (id) => !lockedSequence.includes(id)
-  );
+  const unlockedHovered = hoverSequence.filter(id => !lockedSequence.includes(id));
 
   const tagIdToHighlight = "";
 

@@ -1,10 +1,8 @@
-import Box from "@material-ui/core/Box";
-import type { ButtonProps } from "@material-ui/core/Button";
-import Button from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import type { ReactNode } from "react";
-import React, { useState } from "react";
+import Box from "@mui/material/Box";
+import Button, { type ButtonProps } from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import React, { type ReactNode, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 
 type OptionValue = number | string;
@@ -16,7 +14,7 @@ interface Option<TValueType extends OptionValue> {
 
 interface OptionsPickerProps<TValueType extends OptionValue> {
   icon?: ReactNode;
-  options: Option<TValueType>[];
+  options: Array<Option<TValueType>>;
   setValue: (value: TValueType) => void;
   title?: string;
   value: TValueType;
@@ -28,12 +26,10 @@ export const OptionsPicker = <TValueType extends OptionValue>({
   setValue,
   options,
   icon = null,
-}: OptionsPickerProps<TValueType>): React.ReactElement<
-  OptionsPickerProps<TValueType>
-> => {
+}: OptionsPickerProps<TValueType>): React.ReactElement<OptionsPickerProps<TValueType>> => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-  const handleClick: ButtonProps["onClick"] = (event) => {
+  const handleClick: ButtonProps["onClick"] = event => {
     setAnchorEl(event.currentTarget);
   };
 

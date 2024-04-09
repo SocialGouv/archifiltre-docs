@@ -1,5 +1,5 @@
 import { Hashicon as HashIcon } from "@emeraldpay/hashicon-react/lib/component";
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 import React from "react";
 import { useTranslation } from "react-i18next";
 

@@ -1,6 +1,6 @@
-import CircularProgress from "@material-ui/core/CircularProgress";
-import IconButton from "@material-ui/core/IconButton";
-import useTheme from "@material-ui/core/styles/useTheme";
+import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import { useTheme } from "@mui/material/styles";
 import noop from "lodash/noop";
 import React from "react";
 import { FaTimes } from "react-icons/fa";
@@ -10,9 +10,10 @@ export interface LoadingSpinnerOrCloseCrossProps {
   onClose: () => void;
 }
 
-export const LoadingSpinnerOrCloseCross: React.FC<
-  LoadingSpinnerOrCloseCrossProps
-> = ({ isLoading, onClose = noop }) => {
+export const LoadingSpinnerOrCloseCross: React.FC<LoadingSpinnerOrCloseCrossProps> = ({
+  isLoading,
+  onClose = noop,
+}) => {
   const theme = useTheme();
   if (isLoading) {
     return (

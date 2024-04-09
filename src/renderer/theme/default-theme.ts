@@ -1,6 +1,5 @@
-import grey from "@material-ui/core/colors/grey";
-import type { Theme, ThemeOptions } from "@material-ui/core/styles/createTheme";
-import createTheme from "@material-ui/core/styles/createTheme";
+import { grey } from "@mui/material/colors";
+import { adaptV4Theme, createTheme, type DeprecatedThemeOptions, type Theme } from "@mui/material/styles";
 
 export interface ThemedProps {
   theme: Theme;
@@ -16,9 +15,8 @@ const darkBlue = {
 const primaryColor = darkBlue;
 const secondaryColor = grey;
 
-export const themeOptions: ThemeOptions = {
+export const themeOptions: DeprecatedThemeOptions = {
   overrides: {
-    /* eslint-disable @typescript-eslint/naming-convention */
     MuiButton: {
       outlinedSecondary: {
         borderColor: secondaryColor.A400,
@@ -98,7 +96,6 @@ export const themeOptions: ThemeOptions = {
         fontSize: "0.625rem",
       },
     },
-    /* eslint-enable @typescript-eslint/naming-convention */
   },
   palette: {
     primary: primaryColor,
@@ -106,4 +103,4 @@ export const themeOptions: ThemeOptions = {
   },
 };
 
-export const defaultTheme = createTheme(themeOptions);
+export const defaultTheme = createTheme(adaptV4Theme(themeOptions));

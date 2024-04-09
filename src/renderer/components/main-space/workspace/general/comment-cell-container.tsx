@@ -8,8 +8,7 @@ import {
   getHoveredElementIdFromStore,
   getLockedElementIdFromStore,
 } from "../../../../reducers/workspace-metadata/workspace-metadata-selectors";
-import type { CommentCellProps } from "./comment-cell";
-import { CommentCell } from "./comment-cell";
+import { CommentCell, type CommentCellProps } from "./comment-cell";
 
 export const CommentCellContainer: React.FC = () => {
   const dispatch = useDispatch();
@@ -23,22 +22,15 @@ export const CommentCellContainer: React.FC = () => {
   const isLocked = lockedElementId !== "";
   const isActive = isFocused || isLocked;
 
-  const currentFileComment =
-    useSelector(getCommentsFromStore)[filesAndFoldersId] || "";
+  const currentFileComment = useSelector(getCommentsFromStore)[filesAndFoldersId] || "";
 
   const updateComment: CommentCellProps["updateComment"] = useCallback(
-    (comments) => {
+    comments => {
       dispatch(updateCommentThunk(filesAndFoldersId, comments));
       dispatch(commitAction());
     },
-    [dispatch, filesAndFoldersId]
+    [dispatch, filesAndFoldersId],
   );
 
-  return (
-    <CommentCell
-      isActive={isActive}
-      comment={currentFileComment}
-      updateComment={updateComment}
-    />
-  );
+  return <CommentCell isActive={isActive} comment={currentFileComment} updateComment={updateComment} />;
 };

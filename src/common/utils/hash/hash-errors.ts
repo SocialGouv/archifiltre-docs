@@ -12,10 +12,7 @@ export const accessDenied = (path: string): AccessDeniedError => ({
   type: ACCESS_DENIED,
 });
 
-export const unhandledFileError = (
-  path: string,
-  reason: string
-): UnhandledError => ({
+export const unhandledFileError = (path: string, reason: string): UnhandledError => ({
   path,
   reason,
   type: UNHANDLED_FILE_ERROR,
@@ -37,7 +34,4 @@ export interface UnhandledError {
   type: typeof UNHANDLED_FILE_ERROR;
 }
 
-export type HashComputingError =
-  | AccessDeniedError
-  | FileNotFoundError
-  | UnhandledError;
+export type HashComputingError = AccessDeniedError | FileNotFoundError | UnhandledError;

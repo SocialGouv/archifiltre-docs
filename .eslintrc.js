@@ -1,153 +1,110 @@
-const path = require("path");
+const tsconfigPath = "./tsconfig.json";
+const tsconfigRendererPath = "./src/renderer/tsconfig.json";
+const tsconfigMainPath = "./src/main/tsconfig.json";
+const tsconfigCommonPath = "./src/common/tsconfig.json";
+const tsconfigScriptsPath = "./scripts/tsconfig.json";
 
-const tsconfigPath = path.resolve(__dirname, "./tsconfig.json");
-const tsconfigRendererPath = path.resolve(
-  __dirname,
-  "./src/renderer/tsconfig.json"
-);
-const tsconfigMainPath = path.resolve(__dirname, "./src/main/tsconfig.json");
-const tsconfigCommonPath = path.resolve(
-  __dirname,
-  "./src/common/tsconfig.json"
-);
-const tsconfigScriptsPath = path.resolve(__dirname, "./scripts/tsconfig.json");
-
-/** @type {import("eslint").Linter.Config} */
 const typescriptConfig = {
-  extends: "@socialgouv/eslint-config-typescript",
+  extends: "plugin:@typescript-eslint/recommended",
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: tsconfigPath,
     sourceType: "module",
   },
-  plugins: ["typescript-sort-keys"],
+  plugins: [
+    "@typescript-eslint",
+    "typescript-sort-keys",
+    "unused-imports",
+    "react",
+    "react-hooks",
+    "prettier",
+    "simple-import-sort",
+  ],
   rules: {
-    "@typescript-eslint/consistent-type-imports": "error",
-    "@typescript-eslint/init-declarations": "off",
-    "@typescript-eslint/no-misused-promises": "off",
-    "@typescript-eslint/no-non-null-assertion": "off",
-    "@typescript-eslint/no-unused-vars": "off",
-    "import/default": "off",
-    "import/named": "off",
-    "no-console": ["error", { allow: ["warn", "error", "info", "debug"] }],
-    "no-unused-vars": "off",
-    "prefer-template": "warn",
-    "prettier/prettier": [
+    "@typescript-eslint/consistent-type-imports": [
       "error",
-      {
-        endOfLine: "auto",
-        tabWidth: 2,
-      },
+      { prefer: "type-imports", fixStyle: "inline-type-imports" },
     ],
-    "react/prop-types": "off",
+    "@typescript-eslint/sort-type-constituents": "warn",
+    "@typescript-eslint/explicit-member-accessibility": [
+      "error",
+      { accessibility: "explicit", overrides: { accessors: "no-public", constructors: "no-public" } },
+    ],
+    "@typescript-eslint/ban-ts-comment": "error",
+    "@typescript-eslint/array-type": ["error", { default: "array-simple" }],
+    "@typescript-eslint/adjacent-overload-signatures": "error",
+    "no-console": ["error", { allow: ["warn", "error", "info", "debug"] }],
+    "prefer-template": "warn",
     "typescript-sort-keys/interface": "error",
     "typescript-sort-keys/string-enum": "error",
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
       "warn",
-      {
-        args: "after-used",
-        argsIgnorePattern: "^_",
-        vars: "all",
-        varsIgnorePattern: "^_",
-      },
+      { args: "after-used", argsIgnorePattern: "^_", vars: "all", varsIgnorePattern: "^_" },
     ],
   },
 };
 
-/** @type {import("eslint").Linter.Config} */
 const defaultConfig = {
-  ignorePatterns: ["!**/.*.js*", "node_modules"],
+  ignorePatterns: ["node_modules"],
   overrides: [
     {
-      files: ["**/*.ts"],
+      files: ["**/*.ts", "**/*.tsx"],
       ...typescriptConfig,
-    },
-    {
-      files: ["**/*.tsx"],
-      ...typescriptConfig,
-      extends: [
-        `${typescriptConfig.extends}`,
-        "@socialgouv/eslint-config-react",
-      ],
-    },
-    {
-      extends: "@socialgouv/eslint-config-react",
-      files: ["**/*.js*"],
-    },
-    {
-      env: {
-        browser: true,
-        node: true,
+      parserOptions: {
+        project: [tsconfigPath, tsconfigRendererPath, tsconfigMainPath, tsconfigCommonPath, tsconfigScriptsPath],
       },
+    },
+    {
       files: ["src/renderer/**/*.ts*", "src/common/**/*.ts*"],
+      env: { browser: true, node: true },
     },
     {
-      files: ["src/renderer/**/*.ts*"],
-      parserOptions: {
-        project: tsconfigRendererPath,
-      },
-      settings: {
-        "import/resolver": {
-          typescript: {
-            project: tsconfigRendererPath,
-          },
-        },
-      },
-    },
-    {
-      files: ["src/common/**/*.ts"],
-      parserOptions: {
-        project: tsconfigCommonPath,
-      },
-      settings: {
-        "import/resolver": {
-          typescript: {
-            project: tsconfigCommonPath,
-          },
-        },
-      },
-    },
-    {
-      env: {
-        browser: false,
-        node: true,
-      },
       files: ["src/main/**/*.ts"],
-      parserOptions: {
-        project: tsconfigMainPath,
-      },
-      settings: {
-        "import/resolver": {
-          typescript: {
-            project: tsconfigMainPath,
-          },
-        },
-      },
+      env: { browser: false, node: true },
     },
     {
       files: "src/**/*.ts*",
-      globals: {
-        __static: true,
-      },
+      globals: { __static: true },
     },
     {
-      files: "scripts/**/*.ts",
-      parserOptions: {
-        project: tsconfigScriptsPath,
-      },
-      settings: {
-        "import/resolver": {
-          typescript: {
-            project: tsconfigScriptsPath,
-          },
-        },
-      },
+      files: "**/*.js",
+      env: { node: true, es6: true},
     },
   ],
-  plugins: ["lodash-fp", "unused-imports"],
-  reportUnusedDisableDirectives: true,
+  rules: {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "import/newline-after-import": "error",
+    "import/no-useless-path-segments": "warn",
+    "import/no-absolute-path": "warn",
+    "prettier/prettier": [
+      "error",
+      {
+        tabWidth: 2,
+        trailingComma: "all",
+        printWidth: 120,
+        singleQuote: false,
+        parser: "typescript",
+        arrowParens: "avoid",
+      },
+    ],
+  },
+  plugins: ["react", "react-hooks", "prettier", "simple-import-sort", "import"],
+  extends: ["eslint:recommended", "plugin:prettier/recommended"],
   root: true,
+  settings: {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"],
+    },
+    "import/resolver": {
+      typescript: {
+        project: [tsconfigPath, tsconfigRendererPath, tsconfigMainPath, tsconfigCommonPath, tsconfigScriptsPath],
+      },
+    },
+  },
 };
 
 module.exports = defaultConfig;

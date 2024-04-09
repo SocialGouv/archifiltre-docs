@@ -9,13 +9,9 @@ import { translations } from "../translations/translations";
  */
 export function formatCO2Emissions(emissionsInGrams: number): string {
   if (emissionsInGrams >= 1000) {
-    return `${(emissionsInGrams / 1000).toFixed(2)}${translations.t(
-      "co2.kgPerYear"
-    )}`;
+    return `${(emissionsInGrams / 1000).toFixed(2)}${translations.t("co2.kgPerYear")}`;
   } else if (emissionsInGrams < 0.01) {
-    return `${(emissionsInGrams * 1000).toFixed(2)}${translations.t(
-      "co2.mgPerYear"
-    )}`;
+    return `${(emissionsInGrams * 1000).toFixed(2)}${translations.t("co2.mgPerYear")}`;
   }
 
   return `${emissionsInGrams.toFixed(2)}${translations.t("co2.gPerYear")}`;

@@ -33,15 +33,9 @@ interface FlattenLineOptions {
  * @returns A function that takes an array of strings and returns a flattened CSV string.
  */
 const flattenLine =
-  ({
-    cellSeparator,
-    doubleQuoteEscapeCharacter,
-  }: FlattenLineOptions): ((lineArray: string[]) => string) =>
+  ({ cellSeparator, doubleQuoteEscapeCharacter }: FlattenLineOptions): ((lineArray: string[]) => string) =>
   (lineArray: string[]): string =>
-    lineArray
-      .map(escapeDoubleQuotes(doubleQuoteEscapeCharacter))
-      .map(wrapWithQuotes)
-      .join(cellSeparator);
+    lineArray.map(escapeDoubleQuotes(doubleQuoteEscapeCharacter)).map(wrapWithQuotes).join(cellSeparator);
 
 /**
  * Converts an matrix of strings to CSV.
@@ -53,9 +47,7 @@ export const arrayToCsv = (matrix: string[][]): string => {
   const cellSeparator = ";";
   const doubleQuoteEscapeCharacter = '"';
 
-  return matrix
-    .map(flattenLine({ cellSeparator, doubleQuoteEscapeCharacter }))
-    .join(lineSeparator);
+  return matrix.map(flattenLine({ cellSeparator, doubleQuoteEscapeCharacter })).join(lineSeparator);
 };
 
 const csvBaseOptions: {
@@ -71,32 +63,30 @@ const csvBaseOptions: {
 type ReadCsvPromiseReturnType<TOptions> = TOptions extends {
   columns: Exclude<parse.Options["columns"], false>;
 }
-  ? Record<string, string>[]
+  ? Array<Record<string, string>>
   : string[][];
 
 const readCsvPromise = async <TOptions extends parse.Options>(
   filePath: string,
-  options?: TOptions
+  options?: TOptions,
 ): Promise<ReadCsvPromiseReturnType<TOptions>> => {
   const input = await fs.readFile(filePath);
 
-  const loadedData: ReadCsvPromiseReturnType<TOptions> = await new Promise(
-    (resolve, reject) => {
-      parse(
-        input,
-        {
-          ...options,
-        },
-        (err, records: ReadCsvPromiseReturnType<TOptions>) => {
-          if (err) {
-            reject(err);
-            return [];
-          }
-          resolve(records);
+  const loadedData: ReadCsvPromiseReturnType<TOptions> = await new Promise((resolve, reject) => {
+    parse(
+      input,
+      {
+        ...options,
+      },
+      (err, records: ReadCsvPromiseReturnType<TOptions>) => {
+        if (err) {
+          reject(err);
+          return [];
         }
-      );
-    }
-  );
+        resolve(records);
+      },
+    );
+  });
 
   return loadedData;
 };
@@ -107,8 +97,8 @@ export interface CsvFileLoadingOptions {
 
 export const loadCsvFileToArray = async (
   filePath: string,
-  options: CsvFileLoadingOptions
-): Promise<Record<string, string>[]> =>
+  options: CsvFileLoadingOptions,
+): Promise<Array<Record<string, string>>> =>
   readCsvPromise(filePath, {
     ...csvBaseOptions,
     ...options,
@@ -122,7 +112,7 @@ export const assertDelimiterIsValid = (config: CsvFileLoadingOptions): void => {
 
 export const loadCsvFirstRowToArray = async (
   filePath: string,
-  options?: CsvFileLoadingOptions
+  options?: CsvFileLoadingOptions,
 ): Promise<Record<string, string> | undefined> => {
   const metadata = await readCsvPromise(filePath, {
     ...csvBaseOptions,
@@ -138,12 +128,11 @@ const detectedDelimiter = [",", ";", "\t", "|"] as const;
 
 type Delimiter = "," | ";" | "\t" | "|";
 
-const isValidParse = (rows: unknown[][]): boolean =>
-  rows.every((row) => row.length === rows[0]?.length);
+const isValidParse = (rows: unknown[][]): boolean => rows.every(row => row.length === rows[0]?.length);
 
 const detectSeparator = async (filePath: string): Promise<Delimiter> => {
   const rowsByDelimiter = await Promise.all(
-    detectedDelimiter.map(async (delimiter) => {
+    detectedDelimiter.map(async delimiter => {
       return {
         delimiter,
         rows: await readCsvPromise(filePath, {
@@ -153,7 +142,7 @@ const detectSeparator = async (filePath: string): Promise<Delimiter> => {
           toLine: 4,
         }),
       };
-    })
+    }),
   );
 
   const validParses = rowsByDelimiter.filter(({ rows }) => isValidParse(rows));
@@ -168,8 +157,6 @@ interface DetectedConfig {
   delimiter: Delimiter;
 }
 
-export const detectConfig = async (
-  filePath: string
-): Promise<DetectedConfig> => ({
+export const detectConfig = async (filePath: string): Promise<DetectedConfig> => ({
   delimiter: await detectSeparator(filePath),
 });

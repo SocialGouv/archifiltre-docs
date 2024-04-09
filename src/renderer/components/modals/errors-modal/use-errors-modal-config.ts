@@ -1,12 +1,10 @@
-import type { ArchifiltreDocsError } from "@common/utils/error";
-import type { TFunction } from "i18next";
+import { type ArchifiltreDocsError } from "@common/utils/error";
+import { type TFunction } from "i18next";
 import { useMemo } from "react";
 
-import type { Column } from "../../common/table/table-types";
+import { type Column } from "../../common/table/table-types";
 
-export const useErrorsModalConfig = (
-  t: TFunction
-): Column<ArchifiltreDocsError>[] =>
+export const useErrorsModalConfig = (t: TFunction): Array<Column<ArchifiltreDocsError>> =>
   useMemo(
     () => [
       {
@@ -22,12 +20,11 @@ export const useErrorsModalConfig = (
         sortable: true,
       },
       {
-        accessor: ({ code }): string =>
-          t(`errorsModal.errorDescriptions.${code}`),
+        accessor: ({ code }): string => t(`errorsModal.errorDescriptions.${code}`),
         id: "description",
         name: t("errorsModal.errorDescription"),
         sortable: true,
       },
     ],
-    [t]
+    [t],
   );

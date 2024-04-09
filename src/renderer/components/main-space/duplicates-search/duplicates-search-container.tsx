@@ -12,9 +12,9 @@ import {
   getElementsToDeleteFromStore,
   getFilesAndFoldersFromStore,
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
-import type { FilesAndFoldersMap } from "../../../reducers/files-and-folders/files-and-folders-types";
+import { type FilesAndFoldersMap } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import type { FilesAndFoldersMetadataMap } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { type FilesAndFoldersMetadataMap } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { getHashesFromStore } from "../../../reducers/hashes/hashes-selectors";
 import { isFolder } from "../../../utils";
 import { getFilesDuplicatesMap } from "../../../utils/duplicates";
@@ -24,7 +24,7 @@ import { DuplicatesSearch } from "./duplicates-search";
 const computeTreeSize = (
   filesAndFoldersMetadataMap: FilesAndFoldersMetadataMap,
   filesAndFoldersMap: FilesAndFoldersMap,
-  filesAndFoldersId: string
+  filesAndFoldersId: string,
 ) => {
   const filesAndFolders = filesAndFoldersMap[filesAndFoldersId];
   return isFolder(filesAndFolders)
@@ -35,22 +35,16 @@ const computeTreeSize = (
 const handleTracking = (
   filesAndFoldersMetadataMap: FilesAndFoldersMetadataMap,
   filesAndFoldersMap: FilesAndFoldersMap,
-  filesAndFoldersIds: string[]
+  filesAndFoldersIds: string[],
 ): void => {
   const sizeRaw = filesAndFoldersIds.reduce(
     (acc, filesAndFoldersId) =>
-      acc +
-      computeTreeSize(
-        filesAndFoldersMetadataMap,
-        filesAndFoldersMap,
-        filesAndFoldersId
-      ),
-    0
+      acc + computeTreeSize(filesAndFoldersMetadataMap, filesAndFoldersMap, filesAndFoldersId),
+    0,
   );
   const fileCount = filesAndFoldersIds.reduce(
-    (acc, filesAndFoldersId) =>
-      acc + getAllChildren(filesAndFoldersMap, filesAndFoldersId).length,
-    0
+    (acc, filesAndFoldersId) => acc + getAllChildren(filesAndFoldersMap, filesAndFoldersId).length,
+    0,
   );
 
   getTrackerProvider().track("Feat(4.0) Element Marked To Delete", {
@@ -63,9 +57,7 @@ const handleTracking = (
 
 export const DuplicatesSearchContainer: React.FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
-  const filesAndFoldersMetadataMap = useSelector(
-    getFilesAndFoldersMetadataFromStore
-  );
+  const filesAndFoldersMetadataMap = useSelector(getFilesAndFoldersMetadataFromStore);
   const hashesMap = useSelector(getHashesFromStore);
   const dispatch = useDispatch();
 
@@ -76,23 +68,20 @@ export const DuplicatesSearchContainer: React.FC = () => {
       dispatch(markElementsToDelete(ids));
       handleTracking(filesAndFoldersMetadataMap, filesAndFoldersMap, ids);
     },
-    [dispatch, filesAndFoldersMetadataMap, filesAndFoldersMap]
+    [dispatch, filesAndFoldersMetadataMap, filesAndFoldersMap],
   );
 
   const untagAsToDelete = useCallback(
     (ids: string[]) => {
       dispatch(unmarkElementsToDelete(ids));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const duplicatesList = useMemo(() => {
-    const filesDuplicatesMap = getFilesDuplicatesMap(
-      filesAndFoldersMap,
-      hashesMap
-    );
+    const filesDuplicatesMap = getFilesDuplicatesMap(filesAndFoldersMap, hashesMap);
     return _(filesDuplicatesMap)
-      .pickBy((filesAndFoldersArray) => filesAndFoldersArray.length > 1)
+      .pickBy(filesAndFoldersArray => filesAndFoldersArray.length > 1)
       .values()
       .value();
   }, [filesAndFoldersMap, hashesMap]);

@@ -1,4 +1,4 @@
-import type { ArchifiltreDocsError } from "./error";
+import { type ArchifiltreDocsError } from "./error";
 
 export const SET_FILES_AND_FOLDERS_HASHES = "FILES_AND_FOLDERS/SET_HASHES";
 export const RESET_ERRORED_HASHES = "HASHES/RESET_ERRORED_HASHES";
@@ -25,7 +25,4 @@ interface AddErroredHashesAction {
   type: typeof ADD_ERRORED_HASHES;
 }
 
-export type HashesActionTypes =
-  | AddErroredHashesAction
-  | ResetErroredHashesAction
-  | SetFilesAndFoldersHashesAction;
+export type HashesActionTypes = AddErroredHashesAction | ResetErroredHashesAction | SetFilesAndFoldersHashesAction;

@@ -1,44 +1,31 @@
-import type { ChildProcess } from "child_process";
+import { type ChildProcess } from "child_process";
 
 import { translations } from "../../translations/translations";
-import type { WorkerMessage } from "../batch-process/types";
-import { MessageTypes } from "../batch-process/types";
-import type { WithLanguage } from "../language/types";
+import { MessageTypes, type WorkerMessage } from "../batch-process/types";
+import { type WithLanguage } from "../language/types";
 
-/* eslint-disable @typescript-eslint/naming-convention */
 export enum WorkerEventType {
   ERROR = "error",
   EXIT = "exit",
   MESSAGE = "message",
 }
-/* eslint-enable @typescript-eslint/naming-convention */
 
 type AsyncWorkerEventType = WorkerEventType.MESSAGE;
 
-export type AsyncWorkerControllerEvent =
-  | AsyncWorkerEventType
-  | WorkerEventType.ERROR
-  | WorkerEventType.EXIT;
+export type AsyncWorkerControllerEvent = AsyncWorkerEventType | WorkerEventType.ERROR | WorkerEventType.EXIT;
 
 type AsyncWorkerEvent = Omit<Event, "type"> & WorkerMessage;
 export type TypedEventListener = (evt: AsyncWorkerEvent) => void;
 
 export interface AsyncWorker<TEventType = AsyncWorkerEventType> {
-  addEventListener: (
-    eventType: TEventType,
-    listener: TypedEventListener
-  ) => void;
+  addEventListener: (eventType: TEventType, listener: TypedEventListener) => void;
   postMessage: (message: WorkerMessage) => void;
-  removeEventListener: (
-    eventType: TEventType,
-    listener: TypedEventListener
-  ) => void;
+  removeEventListener: (eventType: TEventType, listener: TypedEventListener) => void;
 }
 
-export type ProcessControllerAsyncWorker =
-  AsyncWorker<AsyncWorkerControllerEvent> & {
-    terminate: () => void;
-  };
+export type ProcessControllerAsyncWorker = AsyncWorker<AsyncWorkerControllerEvent> & {
+  terminate: () => void;
+};
 
 export type ChildProcessControllerAsyncWorker = ProcessControllerAsyncWorker & {
   childProcess: ChildProcess;
@@ -46,10 +33,7 @@ export type ChildProcessControllerAsyncWorker = ProcessControllerAsyncWorker & {
 
 export type ChildProcessAsyncWorker = AsyncWorker;
 
-export type WorkerMessageHandler = (
-  asyncWorker: AsyncWorker,
-  data: unknown
-) => Promise<void> | void;
+export type WorkerMessageHandler = (asyncWorker: AsyncWorker, data: unknown) => Promise<void> | void;
 
 interface SetupChildWorkerListenersOptions {
   onData?: WorkerMessageHandler;
@@ -57,11 +41,8 @@ interface SetupChildWorkerListenersOptions {
 }
 
 export const makeChildWorkerMessageCallback =
-  (
-    asyncWorker: AsyncWorker,
-    { onInitialize, onData }: SetupChildWorkerListenersOptions
-  ): TypedEventListener =>
-  async (event) => {
+  (asyncWorker: AsyncWorker, { onInitialize, onData }: SetupChildWorkerListenersOptions): TypedEventListener =>
+  async event => {
     switch (event.type) {
       case MessageTypes.INITIALIZE:
         // eslint-disable-next-line no-case-declarations
@@ -112,10 +93,7 @@ export const makeChildWorkerMessageCallback =
  */
 export const setupChildWorkerListeners = (
   asyncWorker: AsyncWorker,
-  listeners: SetupChildWorkerListenersOptions
+  listeners: SetupChildWorkerListenersOptions,
 ): void => {
-  asyncWorker.addEventListener(
-    WorkerEventType.MESSAGE,
-    makeChildWorkerMessageCallback(asyncWorker, listeners)
-  );
+  asyncWorker.addEventListener(WorkerEventType.MESSAGE, makeChildWorkerMessageCallback(asyncWorker, listeners));
 };

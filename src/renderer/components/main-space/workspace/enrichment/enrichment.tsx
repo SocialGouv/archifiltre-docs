@@ -2,10 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { ColorCircle } from "../../../common/color-circle";
-import {
-  ENRICHMENT_COLORS,
-  EnrichmentTypes,
-} from "../../icicle/icicle-enrichment";
+import { ENRICHMENT_COLORS, EnrichmentTypes } from "../../icicle/icicle-enrichment";
 import { CommentCellContainer } from "../general/comment-cell-container";
 import { TabContentHeader } from "../tabs/tab-content-header";
 import { makeTabComponent, TabsLayout } from "../tabs/tabs-layout";
@@ -46,16 +43,12 @@ const EnrichmentTitle: React.FC<EnrichmentTitleProps> = ({ title, type }) => {
 
 const ElementCharacteristicsContainerTab = makeTabComponent({
   content: <ElementCharacteristicsContainer />,
-  title: (
-    <EnrichmentTitle title="report.element" type={EnrichmentTypes.ALIAS} />
-  ),
+  title: <EnrichmentTitle title="report.element" type={EnrichmentTypes.ALIAS} />,
 });
 
 const CommentCellContainerTab = makeTabComponent({
   content: <CommentCellContainer />,
-  title: (
-    <EnrichmentTitle title="report.comments" type={EnrichmentTypes.COMMENT} />
-  ),
+  title: <EnrichmentTitle title="report.comments" type={EnrichmentTypes.COMMENT} />,
 });
 
 const TagCellContainerTab = makeTabComponent({

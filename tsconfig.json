@@ -1,8 +1,7 @@
 {
-  "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
     "lib": [
-      "ES2021",
+      "ES2023",
       "DOM"
     ],
     "incremental": true,
@@ -10,8 +9,13 @@
     "experimentalDecorators": true,
     "strictNullChecks": true,
     "sourceMap": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "strict": true,
+    "module": "node16",
     "jsx": "react",
-    "target": "ES2017",
+    "target": "ES2022",
     "baseUrl": ".",
     "paths": {
       "@common/*": [

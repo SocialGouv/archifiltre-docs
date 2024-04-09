@@ -1,6 +1,6 @@
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Select from "@material-ui/core/Select";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Select from "@mui/material/Select";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -32,26 +32,18 @@ export const LanguagePicker: React.FC = () => {
   const hasSettingChanged = language !== userSettings.language;
 
   const onChangeLanguage = useCallback(
-    (event) => {
+    event => {
       setLanguage(event.target.value as Language);
     },
-    [setLanguage]
+    [setLanguage],
   );
 
   return (
     <>
       <Box>
-        <Select
-          onChange={onChangeLanguage}
-          value={language}
-          variant="outlined"
-          native
-        >
-          {availableLanguages.map((availableLanguage) => (
-            <option
-              value={availableLanguage.value}
-              key={availableLanguage.value}
-            >
+        <Select onChange={onChangeLanguage} value={language} variant="outlined" native>
+          {availableLanguages.map(availableLanguage => (
+            <option value={availableLanguage.value} key={availableLanguage.value}>
               {availableLanguage.label}
             </option>
           ))}

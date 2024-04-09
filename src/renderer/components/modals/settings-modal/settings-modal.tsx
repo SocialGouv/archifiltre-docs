@@ -1,8 +1,7 @@
-import type { VoidFunction } from "@common/utils/function";
-import Box from "@material-ui/core/Box";
-import type { DialogProps } from "@material-ui/core/Dialog";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
+import { type VoidFunction } from "@common/utils/function";
+import Box from "@mui/material/Box";
+import Dialog, { type DialogProps } from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -23,10 +22,7 @@ export interface SettingModalProps {
   isModalOpen: DialogProps["open"];
 }
 
-export const SettingsModal: React.FC<SettingModalProps> = ({
-  isModalOpen,
-  closeModal,
-}) => {
+export const SettingsModal: React.FC<SettingModalProps> = ({ isModalOpen, closeModal }) => {
   const { t } = useTranslation();
   const [selectedItem, setSelectedItem] = useState(0);
 
@@ -36,10 +32,7 @@ export const SettingsModal: React.FC<SettingModalProps> = ({
       <DialogContent dividers>
         <Box display="flex">
           <Box>
-            <ModalMenu
-              selectedItem={selectedItem}
-              setSelectedItem={setSelectedItem}
-            />
+            <ModalMenu selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
           </Box>
           <Box paddingLeft={2}>{availableSettings[selectedItem]}</Box>
         </Box>

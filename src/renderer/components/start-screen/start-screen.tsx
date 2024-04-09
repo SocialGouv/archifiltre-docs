@@ -1,8 +1,8 @@
 import { isFalsy, isTruthy } from "@common/utils/string";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import path from "path";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -11,7 +11,7 @@ import styled from "styled-components";
 
 import { useModal } from "../../hooks/use-modal";
 import { savePreviousSession } from "../../persistence/previous-sessions";
-import type { FileSystemLoadingStep } from "../../reducers/loading-state/loading-state-types";
+import { type FileSystemLoadingStep } from "../../reducers/loading-state/loading-state-types";
 import { Logo } from "../common/Logo";
 import { Version } from "../common/version";
 import { SettingsModal } from "../modals/settings-modal/settings-modal";
@@ -63,7 +63,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
       loadFromPath(pathToLoad);
       void savePreviousSession(pathToLoad);
     },
-    [loadFromPath]
+    [loadFromPath],
   );
 
   useEffect(() => {
@@ -88,12 +88,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
         loadPath={loadPath}
         isLoading={isLoading}
       />
-      <FullHeightGrid
-        container
-        direction="column"
-        alignItems="center"
-        spacing={6}
-      >
+      <FullHeightGrid container direction="column" alignItems="center" spacing={6}>
         <Grid item>
           <Box display="flex" flexDirection="column" alignItems="center">
             <Box pb={2}>
@@ -112,10 +107,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
               cancelLoading={cancelLoading}
             />
           ) : (
-            <StartscreenDropzone
-              loadPath={loadPath}
-              setLoadedPath={setLoadedPath}
-            />
+            <StartscreenDropzone loadPath={loadPath} setLoadedPath={setLoadedPath} />
           )}
         </DropzoneWrapper>
         <Grid item>
@@ -133,9 +125,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
           <Box display="flex">
             <FaEye />
             &nbsp;
-            <Typography variant="body1">
-              {t("folderDropzone.placeholderSubtitle")}
-            </Typography>
+            <Typography variant="body1">{t("folderDropzone.placeholderSubtitle")}</Typography>
           </Box>
         </Grid>
       </FullHeightGrid>

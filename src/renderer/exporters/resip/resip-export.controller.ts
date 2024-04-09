@@ -1,23 +1,17 @@
-import type { Observable } from "rxjs";
+import { type Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
-import type {
-  AliasMap,
-  CommentsMap,
-  FilesAndFoldersMap,
+import {
+  type AliasMap,
+  type CommentsMap,
+  type FilesAndFoldersMap,
 } from "../../reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type {
-  ActiveSedaFields,
-  SedaMetadataMap,
-} from "../../reducers/seda-configuration/seda-configuration-type";
-import type { TagMap } from "../../reducers/tags/tags-types";
+import { type FilesAndFoldersMetadataMap } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { type ActiveSedaFields, type SedaMetadataMap } from "../../reducers/seda-configuration/seda-configuration-type";
+import { type TagMap } from "../../reducers/tags/tags-types";
 import { translations } from "../../translations/translations";
 import { createAsyncWorkerForChildProcessControllerFactory } from "../../utils/async-worker/child-process";
-import {
-  backgroundWorkerProcess$,
-  filterResults,
-} from "../../utils/batch-process";
+import { backgroundWorkerProcess$, filterResults } from "../../utils/batch-process";
 
 interface ResipExportProgress {
   count: number;
@@ -40,9 +34,7 @@ interface GenerateResipExportOptions {
  * @returns {Observable<ResipExportProgress>} An observable to follow the export progress
  * @param options
  */
-export const generateResipExport$ = (
-  options: GenerateResipExportOptions
-): Observable<ResipExportProgress> => {
+export const generateResipExport$ = (options: GenerateResipExportOptions): Observable<ResipExportProgress> => {
   const { language } = translations;
 
   return backgroundWorkerProcess$(
@@ -50,9 +42,7 @@ export const generateResipExport$ = (
       language,
       ...options,
     },
-    createAsyncWorkerForChildProcessControllerFactory(
-      "exporters/resip/resip-export.fork.ts"
-    )
+    createAsyncWorkerForChildProcessControllerFactory("exporters/resip/resip-export.fork.ts"),
   )
     .pipe(filterResults<ResipExportProgress>())
     .pipe(map(({ result }) => result));

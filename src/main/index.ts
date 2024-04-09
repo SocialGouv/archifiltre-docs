@@ -1,27 +1,14 @@
-import {
-  IS_DIST_MODE,
-  IS_E2E,
-  IS_PACKAGED,
-  RESOURCES_PATH,
-} from "@common/config";
+import { IS_DIST_MODE, IS_E2E, IS_PACKAGED, RESOURCES_PATH } from "@common/config";
 import { loadApp } from "@common/modules/app";
-import {
-  isQuitingForUpdate,
-  setupAutoUpdate,
-} from "@common/modules/auto-update";
+import { isQuitingForUpdate, setupAutoUpdate } from "@common/modules/auto-update";
 import { loadHash } from "@common/modules/hash";
-import {
-  get as getConfig,
-  initNewUserConfig,
-  set as setConfig,
-} from "@common/modules/new-user-config";
+import { get as getConfig, initNewUserConfig, set as setConfig } from "@common/modules/new-user-config";
 import { getTrackerProvider, initTracking } from "@common/modules/tracker";
 import { loadWindow } from "@common/modules/window";
 import { setupSentry } from "@common/monitoring/sentry";
 import { sleep } from "@common/utils/os";
 import { version } from "@common/utils/package";
-import type { Extension } from "electron";
-import { app, BrowserWindow, dialog, ipcMain, Menu, session } from "electron";
+import { app, BrowserWindow, dialog, type Extension, ipcMain, Menu, session } from "electron";
 import { totalmem } from "os";
 import path from "path";
 
@@ -51,14 +38,14 @@ const getLanguage = () => app.getLocale().slice(0, 2);
 
 const preventNavigation = () => {
   if (!mainWindow) return;
-  mainWindow.webContents.on("will-navigate", (event) => {
+  mainWindow.webContents.on("will-navigate", event => {
     event.preventDefault();
   });
 };
 
 const askBeforeLeaving = () => {
   if (!mainWindow) return;
-  mainWindow.on("close", (event) => {
+  mainWindow.on("close", event => {
     if (isQuitingForUpdate()) {
       return;
     }
@@ -72,8 +59,7 @@ const askBeforeLeaving = () => {
     if (language === "fr") {
       title = "Bye bye !";
       message = "Êtes-vous sûr•e de vouloir quitter ?";
-      detail =
-        "Toutes les données qui n'ont pas été sauvegardées seront perdues définitivement !";
+      detail = "Toutes les données qui n'ont pas été sauvegardées seront perdues définitivement !";
       no = "Non";
       yes = "Oui";
     } else {
@@ -93,7 +79,7 @@ const askBeforeLeaving = () => {
       type: "warning",
     };
     const promiseResponse = dialog.showMessageBox(mainWindow!, options);
-    void promiseResponse.then((obj) => {
+    void promiseResponse.then(obj => {
       if (obj.response === 1) {
         mainWindow?.destroy();
       }
@@ -104,8 +90,8 @@ const askBeforeLeaving = () => {
 const INDEX_URL = IS_PACKAGED()
   ? `file://${path.join(__dirname, "index.html")}`
   : IS_E2E || IS_DIST_MODE
-  ? `file://${path.join(__dirname, "/../renderer/index.html")}`
-  : `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`;
+    ? `file://${path.join(__dirname, "/../renderer/index.html")}`
+    : `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`;
 
 const PRELOAD_PATH = path.resolve(RESOURCES_PATH, "preload.js");
 
@@ -155,10 +141,8 @@ void app.whenReady().then(() => {
     let devToolsLoaded = Promise.resolve<Extension | null>(null);
     try {
       devToolsLoaded = session.defaultSession
-        .loadExtension(
-          path.join(process.cwd(), "scripts", "out", "react-devtools-extension")
-        )
-        .catch((err) => {
+        .loadExtension(path.join(process.cwd(), "scripts", "out", "react-devtools-extension"))
+        .catch(err => {
           console.error("Cannot load react dev tools.", err);
           return null;
         });
@@ -219,7 +203,7 @@ app.on("activate", async () => {
   }
 });
 
-app.on("will-quit", async (event) => {
+app.on("will-quit", async event => {
   event.preventDefault();
   getTrackerProvider().track("App Closed", { date: new Date() });
   await sleep(1000);

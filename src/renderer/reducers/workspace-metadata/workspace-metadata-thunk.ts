@@ -1,4 +1,4 @@
-import type { ArchifiltreDocsThunkAction } from "../archifiltre-types";
+import { type ArchifiltreDocsThunkAction } from "../archifiltre-types";
 import { commitAction } from "../enhancers/undoable/undoable-actions";
 import { setSessionName } from "./workspace-metadata-actions";
 
@@ -8,7 +8,7 @@ import { setSessionName } from "./workspace-metadata-actions";
  */
 export const setSessionNameThunk =
   (sessionName: string): ArchifiltreDocsThunkAction =>
-  (dispatch) => {
+  dispatch => {
     if (sessionName.length > 0) {
       dispatch(setSessionName(sessionName));
       dispatch(commitAction());

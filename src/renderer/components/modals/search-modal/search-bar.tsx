@@ -1,6 +1,5 @@
-import InputAdornment from "@material-ui/core/InputAdornment";
-import type { InputBaseProps } from "@material-ui/core/InputBase";
-import InputBase from "@material-ui/core/InputBase";
+import InputAdornment from "@mui/material/InputAdornment";
+import InputBase, { type InputBaseProps } from "@mui/material/InputBase";
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSearch } from "react-icons/fa";
@@ -12,17 +11,14 @@ export interface SearchBarProps {
   value: string;
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({
-  setSearchTerm,
-  value,
-}) => {
+export const SearchBar: React.FC<SearchBarProps> = ({ setSearchTerm, value }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const onChange: NonNullable<InputBaseProps["onChange"]> = useCallback(
-    (event) => {
+    event => {
       setSearchTerm(event.target.value);
     },
-    [setSearchTerm]
+    [setSearchTerm],
   );
 
   return (

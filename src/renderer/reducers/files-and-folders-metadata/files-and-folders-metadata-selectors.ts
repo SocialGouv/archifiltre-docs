@@ -1,17 +1,12 @@
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
-import type { StoreState } from "../store";
-import type {
-  FilesAndFoldersMetadata,
-  FilesAndFoldersMetadataMap,
-} from "./files-and-folders-metadata-types";
+import { type StoreState } from "../store";
+import { type FilesAndFoldersMetadata, type FilesAndFoldersMetadataMap } from "./files-and-folders-metadata-types";
 
 /**
  * Gets the files and folder metadata map from the redux state
  * @param store - The current redux state
  */
-export const getFilesAndFoldersMetadataFromStore = (
-  store: StoreState
-): FilesAndFoldersMetadataMap =>
+export const getFilesAndFoldersMetadataFromStore = (store: StoreState): FilesAndFoldersMetadataMap =>
   getCurrentState(store.filesAndFoldersMetadata).filesAndFoldersMetadata;
 type OptionalMetadata = Partial<FilesAndFoldersMetadata>;
 const DEFAULT_MAX_LAST_MODIFIED = 0;
@@ -54,20 +49,14 @@ export const createFilesAndFoldersMetadata = ({
 }: OptionalMetadata): FilesAndFoldersMetadata => ({
   averageLastModified: averageLastModified ?? DEFAULT_AVERAGE_LAST_MODIFIED,
   childrenTotalSize: childrenTotalSize ?? DEFAULT_CHILDREN_TOTAL_SIZE,
-  initialMaxLastModified:
-    initialMaxLastModified ?? maxLastModified ?? DEFAULT_MAX_LAST_MODIFIED,
-  initialMedianLastModified:
-    initialMedianLastModified ??
-    medianLastModified ??
-    DEFAULT_MEDIAN_LAST_MODIFIED,
-  initialMinLastModified:
-    initialMinLastModified ?? minLastModified ?? DEFAULT_MIN_LAST_MODIFIED,
+  initialMaxLastModified: initialMaxLastModified ?? maxLastModified ?? DEFAULT_MAX_LAST_MODIFIED,
+  initialMedianLastModified: initialMedianLastModified ?? medianLastModified ?? DEFAULT_MEDIAN_LAST_MODIFIED,
+  initialMinLastModified: initialMinLastModified ?? minLastModified ?? DEFAULT_MIN_LAST_MODIFIED,
   maxLastModified: maxLastModified ?? DEFAULT_MAX_LAST_MODIFIED,
   medianLastModified: medianLastModified ?? DEFAULT_MEDIAN_LAST_MODIFIED,
   minLastModified: minLastModified ?? DEFAULT_MIN_LAST_MODIFIED,
   nbChildrenFiles: nbChildrenFiles ?? DEFAULT_NB_CHILDREN_FILE,
-  sortAlphaNumericallyIndex:
-    sortAlphaNumericallyIndex ?? DEFAULT_SORT_ALPHA_NUMERICALLY_INDEX,
+  sortAlphaNumericallyIndex: sortAlphaNumericallyIndex ?? DEFAULT_SORT_ALPHA_NUMERICALLY_INDEX,
   sortByDateIndex: sortByDateIndex ?? DEFAULT_SORT_BY_DATE_INDEX,
   sortBySizeIndex: sortBySizeIndex ?? DEFAULT_SORT_BY_SIZE_INDEX,
 });

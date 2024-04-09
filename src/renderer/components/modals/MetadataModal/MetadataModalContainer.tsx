@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import { useMachine } from "../../../lib/@xstate/react/useMachine";
-import type { DispatchExts } from "../../../reducers/archifiltre-types";
+import { type DispatchExts } from "../../../reducers/archifiltre-types";
 import { useMetadataList } from "../../../reducers/metadata/metadata-selector";
 import { importMetadataThunk } from "../../../reducers/metadata/metadata-thunk";
 import { MetadataDialogContent } from "./MetadataDialogContent";
@@ -10,9 +10,8 @@ import { MetadataDialogFooter } from "./MetadataDialogFooter";
 import MetadataModalContent from "./MetadataModalContent";
 import { MetadataModalFilePicker } from "./MetadataModalFilePicker";
 import { MetadataModalPreview } from "./MetadataModalPreview";
-import type { SimpleMetadataEvents } from "./MetadataModalStateMachine/MetadataModalStateMachine";
-import { metadataModalMachine } from "./MetadataModalStateMachine/MetadataModalStateMachine";
-import type { MetadataModalContext, ModalAction } from "./MetadataModalTypes";
+import { metadataModalMachine, type SimpleMetadataEvents } from "./MetadataModalStateMachine/MetadataModalStateMachine";
+import { type MetadataModalContext, type ModalAction } from "./MetadataModalTypes";
 import { MetadataModalView } from "./MetadataModalView";
 
 interface ImportModalContainerProps {
@@ -20,24 +19,21 @@ interface ImportModalContainerProps {
   isModalOpen: boolean;
 }
 
-const importDropzoneActions: ModalAction<SimpleMetadataEvents["type"]>[] = [
+const importDropzoneActions: Array<ModalAction<SimpleMetadataEvents["type"]>> = [
   {
     id: "ABORT",
     label: "cancel",
   },
 ];
 
-const metadataViewActions: ModalAction<SimpleMetadataEvents["type"]>[] = [
+const metadataViewActions: Array<ModalAction<SimpleMetadataEvents["type"]>> = [
   {
     id: "IMPORT",
     label: "loadMetadata",
   },
 ];
 
-export const MetadataModalContainer: React.FC<ImportModalContainerProps> = ({
-  isModalOpen,
-  closeModal,
-}) => {
+export const MetadataModalContainer: React.FC<ImportModalContainerProps> = ({ isModalOpen, closeModal }) => {
   const dispatch = useDispatch<DispatchExts>();
 
   const metadataList = useMetadataList();
@@ -47,7 +43,7 @@ export const MetadataModalContainer: React.FC<ImportModalContainerProps> = ({
       importMetadataThunk(context.filePath, {
         fieldsConfig: context.fieldsConfig,
         fileConfig: context.config,
-      })
+      }),
     );
   };
 
@@ -82,11 +78,7 @@ export const MetadataModalContainer: React.FC<ImportModalContainerProps> = ({
           <MetadataDialogContent>
             <MetadataModalFilePicker onFilePicked={onFilePathPicked} />
           </MetadataDialogContent>
-          <MetadataDialogFooter
-            actions={importDropzoneActions}
-            closeModal={closeModal}
-            onAction={onAction}
-          />
+          <MetadataDialogFooter actions={importDropzoneActions} closeModal={closeModal} onAction={onAction} />
         </>
       )}
 
@@ -104,11 +96,7 @@ export const MetadataModalContainer: React.FC<ImportModalContainerProps> = ({
           <MetadataDialogContent>
             <MetadataModalView metadataList={metadataList} />{" "}
           </MetadataDialogContent>
-          <MetadataDialogFooter
-            actions={metadataViewActions}
-            closeModal={closeModal}
-            onAction={onAction}
-          />
+          <MetadataDialogFooter actions={metadataViewActions} closeModal={closeModal} onAction={onAction} />
         </>
       )}
     </MetadataModalContent>

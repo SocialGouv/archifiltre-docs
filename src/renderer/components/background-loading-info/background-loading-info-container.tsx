@@ -13,33 +13,15 @@ export const BackgroundLoadingInfoContainer: React.FC = () => {
   const loadingInfoState = useSelector(getLoadingInfoFromStore);
   const dispatch = useDispatch();
 
-  const loadingItems = useMemo(
-    () => getRunningLoadingInfo(loadingInfoState),
-    [loadingInfoState]
-  );
+  const loadingItems = useMemo(() => getRunningLoadingInfo(loadingInfoState), [loadingInfoState]);
 
-  const completedItems = useMemo(
-    () => getCompleteLoadingInfo(loadingInfoState),
-    [loadingInfoState]
-  );
+  const completedItems = useMemo(() => getCompleteLoadingInfo(loadingInfoState), [loadingInfoState]);
 
-  const displayedItems = useMemo(
-    () => [...loadingItems, ...completedItems],
-    [loadingItems, completedItems]
-  );
+  const displayedItems = useMemo(() => [...loadingItems, ...completedItems], [loadingItems, completedItems]);
 
-  const dismissAll = useCallback(
-    () => dispatch(dismissAllComplete()),
-    [dispatch]
-  );
+  const dismissAll = useCallback(() => dispatch(dismissAllComplete()), [dispatch]);
 
   const isLoading = loadingInfoState.loading.length > 0;
 
-  return (
-    <BackgroundLoadingInfo
-      loadingItems={displayedItems}
-      isLoading={isLoading}
-      dismissAll={dismissAll}
-    />
-  );
+  return <BackgroundLoadingInfo loadingItems={displayedItems} isLoading={isLoading} dismissAll={dismissAll} />;
 };

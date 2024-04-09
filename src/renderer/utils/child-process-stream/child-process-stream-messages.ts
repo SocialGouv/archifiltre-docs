@@ -17,12 +17,10 @@ export class FilesAndFoldersMessage extends Message<FilesAndFoldersMessage> {
 
   @Field.d(4, "float")
   // @ts-expect-error
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   public file_size: number;
 
   @Field.d(5, "float")
   // @ts-expect-error
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   public file_last_modified: number;
 
   @Field.d(6, "string")

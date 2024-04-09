@@ -1,29 +1,27 @@
-import type {
-  IpcMain as BaseIpcMain,
-  IpcMainInvokeEvent,
-  IpcRenderer as BaseIpcRenderer,
-} from "electron";
 import {
+  type IpcMain as BaseIpcMain,
   ipcMain as baseIpcMain,
+  type IpcMainInvokeEvent,
+  type IpcRenderer as BaseIpcRenderer,
   ipcRenderer as baseIpcRenderer,
 } from "electron";
 
-import type { UnknownMapping } from "../utils/type";
-import type {
-  AsyncIpcChannel,
-  AsyncIpcKeys,
-  CustomIpcMainEvent,
-  CustomIpcRendererEvent,
-  DualAsyncIpcChannel,
-  DualAsyncIpcKeys,
-  GetAsyncIpcConfig,
-  GetDualAsyncIpcConfig,
-  GetRepliedDualAsyncIpcConfig,
-  GetSyncIpcConfig,
-  ReplyDualAsyncIpcChannel,
-  ReplyDualAsyncIpcKeys,
-  SyncIpcChannel,
-  SyncIpcKeys,
+import { type UnknownMapping } from "../utils/type";
+import {
+  type AsyncIpcChannel,
+  type AsyncIpcKeys,
+  type CustomIpcMainEvent,
+  type CustomIpcRendererEvent,
+  type DualAsyncIpcChannel,
+  type DualAsyncIpcKeys,
+  type GetAsyncIpcConfig,
+  type GetDualAsyncIpcConfig,
+  type GetRepliedDualAsyncIpcConfig,
+  type GetSyncIpcConfig,
+  type ReplyDualAsyncIpcChannel,
+  type ReplyDualAsyncIpcKeys,
+  type SyncIpcChannel,
+  type SyncIpcKeys,
 } from "./event";
 
 interface IpcMain extends BaseIpcMain {
@@ -32,9 +30,7 @@ interface IpcMain extends BaseIpcMain {
     listener: (
       event: IpcMainInvokeEvent,
       ...args: GetAsyncIpcConfig<T>["args"]
-    ) =>
-      | GetAsyncIpcConfig<T>["returnValue"]
-      | Promise<GetAsyncIpcConfig<T>["returnValue"]>
+    ) => GetAsyncIpcConfig<T>["returnValue"] | Promise<GetAsyncIpcConfig<T>["returnValue"]>,
   ) => void;
 
   on: <T extends DualAsyncIpcKeys | SyncIpcKeys | UnknownMapping>(
@@ -45,7 +41,7 @@ interface IpcMain extends BaseIpcMain {
         ? // @ts-expect-error -- conflict because of pre filled ipc mapping
           GetSyncIpcConfig<T>["args"]
         : GetDualAsyncIpcConfig<T>["args"]
-    ) => void
+    ) => void,
   ) => this;
 }
 interface IpcRenderer extends BaseIpcRenderer {
@@ -56,18 +52,12 @@ interface IpcRenderer extends BaseIpcRenderer {
 
   off: <T extends ReplyDualAsyncIpcKeys | UnknownMapping>(
     channel: ReplyDualAsyncIpcChannel<T>,
-    listener: (
-      event: CustomIpcRendererEvent<T>,
-      ...args: GetRepliedDualAsyncIpcConfig<T>["args"]
-    ) => void
+    listener: (event: CustomIpcRendererEvent<T>, ...args: GetRepliedDualAsyncIpcConfig<T>["args"]) => void,
   ) => this;
 
   on: <T extends ReplyDualAsyncIpcKeys | UnknownMapping>(
     channel: ReplyDualAsyncIpcChannel<T>,
-    listener: (
-      event: CustomIpcRendererEvent<T>,
-      ...args: GetRepliedDualAsyncIpcConfig<T>["args"]
-    ) => void
+    listener: (event: CustomIpcRendererEvent<T>, ...args: GetRepliedDualAsyncIpcConfig<T>["args"]) => void,
   ) => this;
 
   send: <T extends DualAsyncIpcKeys | UnknownMapping>(

@@ -1,4 +1,4 @@
-import type { ArchifiltreDocsErrorCode } from "./utils/error/error-codes";
+import { type ArchifiltreDocsErrorCode } from "./utils/error/error-codes";
 
 export interface WorkerError {
   code: ArchifiltreDocsErrorCode;

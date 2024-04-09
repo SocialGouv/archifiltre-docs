@@ -1,6 +1,6 @@
-import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import dateFormat from "dateformat";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -29,16 +29,10 @@ export const WorkspaceBoundaryDates: React.FC<WorkspaceBoundaryDatesProps> = ({
       <Box>
         <Grid container spacing={2}>
           <Grid item>
-            <BoundaryDate
-              title={t("report.oldestFile")}
-              content={dateFormat(oldestFileTimestamp, "dd/mm/yyyy")}
-            />
+            <BoundaryDate title={t("report.oldestFile")} content={dateFormat(oldestFileTimestamp, "dd/mm/yyyy")} />
           </Grid>
           <Grid item>
-            <BoundaryDate
-              title={t("report.newestFile")}
-              content={dateFormat(newestFileTimestamp, "dd/mm/yyyy")}
-            />
+            <BoundaryDate title={t("report.newestFile")} content={dateFormat(newestFileTimestamp, "dd/mm/yyyy")} />
           </Grid>
         </Grid>
       </Box>

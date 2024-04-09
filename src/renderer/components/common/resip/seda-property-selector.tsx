@@ -1,11 +1,8 @@
-import { MenuItem } from "@material-ui/core";
-import type { SelectProps } from "@material-ui/core/Select";
-import Select from "@material-ui/core/Select";
-import type { FC } from "react";
-import React from "react";
+import { MenuItem } from "@mui/material";
+import Select, { type SelectProps } from "@mui/material/Select";
+import React, { type FC } from "react";
 
-import type { SedaField } from "../../../reducers/seda-configuration/seda-configuration-type";
-import { sedaFields } from "../../../reducers/seda-configuration/seda-configuration-type";
+import { type SedaField, sedaFields } from "../../../reducers/seda-configuration/seda-configuration-type";
 
 export interface SedaPropertySelectorProps {
   onChange?: (value: SedaField) => void;
@@ -16,11 +13,8 @@ const isSedaField = (value: unknown): value is SedaField =>
   // @ts-expect-error type assertion
   typeof value === "string" && sedaFields.includes(value);
 
-export const SedaPropertySelector: FC<SedaPropertySelectorProps> = ({
-  onChange,
-  value,
-}) => {
-  const selectChangeHandler: SelectProps["onChange"] = (event) => {
+export const SedaPropertySelector: FC<SedaPropertySelectorProps> = ({ onChange, value }) => {
+  const selectChangeHandler: SelectProps["onChange"] = event => {
     const newValue = event.target.value;
     if (isSedaField(newValue)) {
       onChange?.(newValue);
@@ -28,7 +22,7 @@ export const SedaPropertySelector: FC<SedaPropertySelectorProps> = ({
   };
   return (
     <Select value={value ?? ""} onChange={selectChangeHandler}>
-      {sedaFields.map((label) => (
+      {sedaFields.map(label => (
         <MenuItem key={label} value={label}>
           {label}
         </MenuItem>

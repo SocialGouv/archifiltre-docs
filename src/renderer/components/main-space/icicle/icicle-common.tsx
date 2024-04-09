@@ -9,5 +9,5 @@ export const VIEWBOX_HEIGHT = 300;
  */
 export const normalizeWidth = (widths: number[]): number[] => {
   const totalWidth = sum(widths);
-  return widths.map((a) => a / totalWidth);
+  return widths.map(a => a / totalWidth);
 };

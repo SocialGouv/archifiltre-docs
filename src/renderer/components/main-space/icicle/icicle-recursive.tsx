@@ -2,7 +2,7 @@ import { computeCumulative } from "@common/utils/array";
 import React, { memo } from "react";
 
 import { IcicleRect } from "./icicle-rect";
-import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
+import { type FillColor, type IcicleMouseActionHandler } from "./icicle-types";
 
 export interface IcicleRecursiveProps {
   fillColor: FillColor;
@@ -14,13 +14,7 @@ export interface IcicleRecursiveProps {
   onClickHandler: IcicleMouseActionHandler;
   onDoubleClickHandler: IcicleMouseActionHandler;
   onMouseOverHandler: IcicleMouseActionHandler;
-  registerDims: (
-    x: number,
-    dx: number,
-    y: number,
-    dy: number,
-    id: string
-  ) => void;
+  registerDims: (x: number, dx: number, y: number, dy: number, id: string) => void;
   shouldRenderChild: (xPosition: number, elementWidth: number) => boolean;
   trueFHeight: () => number;
   width: number;
@@ -46,9 +40,7 @@ const _IcicleRecursive: React.FC<IcicleRecursiveProps> = ({
   registerDims,
 }) => {
   const children = getChildrenIdFromId(id);
-  const childrenWidth = normalizeWidth(children.map(getWidthFromId)).map(
-    (a) => a * width
-  );
+  const childrenWidth = normalizeWidth(children.map(getWidthFromId)).map(a => a * width);
   const cumulatedChildrenWidth = computeCumulative(childrenWidth);
 
   const childrenHeight = children.map(trueFHeight);

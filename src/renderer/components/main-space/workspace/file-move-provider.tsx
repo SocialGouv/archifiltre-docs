@@ -14,13 +14,12 @@ const FileMoveContext = createContext(fileMoveState);
 
 export const useFileMoveActiveState = (): FileMoveState => {
   const { isFileMoveActive, setIsFileMoveActive } = useContext(FileMoveContext);
-  const setIsFileMoveActiveCallback: FileMoveState["setIsFileMoveActive"] =
-    useCallback(
-      (isMoveActive) => {
-        setIsFileMoveActive(isMoveActive);
-      },
-      [setIsFileMoveActive]
-    );
+  const setIsFileMoveActiveCallback: FileMoveState["setIsFileMoveActive"] = useCallback(
+    isMoveActive => {
+      setIsFileMoveActive(isMoveActive);
+    },
+    [setIsFileMoveActive],
+  );
   return {
     isFileMoveActive,
     setIsFileMoveActive: setIsFileMoveActiveCallback,

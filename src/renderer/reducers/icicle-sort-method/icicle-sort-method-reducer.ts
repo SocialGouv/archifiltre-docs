@@ -1,11 +1,9 @@
-import type {
-  IcicleSortMethodAction,
-  IcicleSortMethodState,
-} from "./icicle-sort-method-types";
 import {
   ElementWeightMethod,
   IcicleColorMode,
   IcicleSortMethod,
+  type IcicleSortMethodAction,
+  type IcicleSortMethodState,
   SET_ELEMENT_WEIGHT_METHOD,
   SET_ICICLE_COLOR_MODE,
   SET_ICICLE_SORT_METHOD,
@@ -19,7 +17,7 @@ export const initialState: IcicleSortMethodState = {
 
 export const icicleSortMethodReducer = (
   state = initialState,
-  action?: IcicleSortMethodAction
+  action?: IcicleSortMethodAction,
 ): IcicleSortMethodState => {
   switch (action?.type) {
     case SET_ICICLE_SORT_METHOD:

@@ -1,8 +1,8 @@
-import { Badge } from "@material-ui/core";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
+import { Badge } from "@mui/material";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaFlag, FaInfoCircle, FaLock } from "react-icons/fa";
@@ -14,10 +14,7 @@ export interface ModalMenuProps {
   setSelectedItem: (selectedItem: number) => void;
 }
 
-export const ModalMenu: React.FC<ModalMenuProps> = ({
-  selectedItem,
-  setSelectedItem,
-}) => {
+export const ModalMenu: React.FC<ModalMenuProps> = ({ selectedItem, setSelectedItem }) => {
   const { t } = useTranslation();
   const { updateInfo } = useAutoUpdateContext();
   const menuOptions = [
@@ -31,12 +28,7 @@ export const ModalMenu: React.FC<ModalMenuProps> = ({
     },
     {
       icon: (
-        <Badge
-          color="error"
-          overlap="rectangular"
-          variant="dot"
-          invisible={!updateInfo}
-        >
+        <Badge color="error" overlap="rectangular" variant="dot" invisible={!updateInfo}>
           <FaInfoCircle />
         </Badge>
       ),

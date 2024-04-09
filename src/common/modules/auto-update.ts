@@ -1,19 +1,14 @@
-import type { ProgressInfo, UpdateInfo } from "electron-updater";
-import { autoUpdater } from "electron-updater";
+import { autoUpdater, type ProgressInfo, type UpdateInfo } from "electron-updater";
 
 import { IS_MAIN, PRODUCT_CHANNEL } from "../config";
 import { ipcMain } from "../ipc";
-import type { DualIpcConfig } from "../ipc/event";
+import { type DualIpcConfig } from "../ipc/event";
 import { version } from "../utils/package";
 import { getTrackerProvider } from "./tracker";
 
 type AutoUpdateCheckIpcConfig =
-  | DualIpcConfig<
-      "autoUpdate.onUpdateAvailable",
-      [],
-      [info: UpdateInfo | false]
-    >
-  | DualIpcConfig<"autoUpdate.onError", [], [error: string]>;
+  | DualIpcConfig<"autoUpdate.onError", [], [error: string]>
+  | DualIpcConfig<"autoUpdate.onUpdateAvailable", [], [info: UpdateInfo | false]>;
 
 declare module "../ipc/event" {
   interface SyncIpcMapping {
@@ -44,11 +39,11 @@ export const setupAutoUpdate = (): void => {
 
   const repliers: Replier[] = [];
   let updateAvailable = false;
-  ipcMain.on("autoUpdate.check", async (evt) => {
+  ipcMain.on("autoUpdate.check", async evt => {
     repliers.push(evt.reply);
     await autoUpdater.checkForUpdates();
   });
-  ipcMain.on("autoUpdate.doUpdate", (evt) => {
+  ipcMain.on("autoUpdate.doUpdate", evt => {
     evt.returnValue = updateAvailable;
 
     if (!updateAvailable) {
@@ -71,14 +66,14 @@ export const setupAutoUpdate = (): void => {
 
   autoUpdater.on("update-not-available", (info: UpdateInfo) => {
     console.info("[setupAutoUpdate] Update NOT available", info);
-    repliers.forEach((reply) => {
+    repliers.forEach(reply => {
       reply("autoUpdate.onUpdateAvailable", false);
     });
   });
 
   autoUpdater.on("error", (err, reason) => {
     console.error("[setupAutoUpdate] Error", reason, err);
-    repliers.forEach((reply) => {
+    repliers.forEach(reply => {
       reply("autoUpdate.onError", reason as string);
     });
   });
@@ -94,7 +89,7 @@ export const setupAutoUpdate = (): void => {
       currentVersion: info.version,
       oldVersion: version,
     });
-    repliers.forEach((reply) => {
+    repliers.forEach(reply => {
       reply("autoUpdate.onUpdateAvailable", info);
     });
   });

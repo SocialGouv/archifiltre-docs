@@ -1,7 +1,7 @@
 import { reloadApp } from "@common/utils/electron";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -12,13 +12,7 @@ export const ErrorScreen: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      height="100%"
-      flexDirection="column"
-    >
+    <Box display="flex" alignItems="center" justifyContent="center" height="100%" flexDirection="column">
       <Box p={2}>
         <Logo height={33} />
       </Box>

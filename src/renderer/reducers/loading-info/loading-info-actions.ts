@@ -1,12 +1,10 @@
-import type {
-  ArchifiltreDocsError,
-  ArchifiltreDocsErrorType,
-} from "@common/utils/error";
+import { type ArchifiltreDocsError, type ArchifiltreDocsErrorType } from "@common/utils/error";
 
-import type { LoadingInfoAction, LoadingInfoTypes } from "./loading-info-types";
 import {
   COMPLETE_LOADING,
   DISMISS_ALL_COMPLETE,
+  type LoadingInfoAction,
+  type LoadingInfoTypes,
   PROGRESS_LOADING,
   REGISTER_ERROR,
   REPLACE_ERRORS,
@@ -27,7 +25,7 @@ export const startLoadingAction = (
   type: LoadingInfoTypes,
   goal: number,
   label: string,
-  loadedLabel: string
+  loadedLabel: string,
 ): LoadingInfoAction => ({
   goal,
   id,
@@ -43,11 +41,7 @@ export const startLoadingAction = (
  * @param progress - the progress
  * @param goal - the goal to reach for completion
  */
-export const updateLoadingAction = (
-  id: string,
-  progress?: number,
-  goal?: number
-): LoadingInfoAction => ({
+export const updateLoadingAction = (id: string, progress?: number, goal?: number): LoadingInfoAction => ({
   goal,
   id,
   progress,
@@ -59,10 +53,7 @@ export const updateLoadingAction = (
  * @param id - the loading id
  * @param progress
  */
-export const progressLoadingAction = (
-  id: string,
-  progress: number
-): LoadingInfoAction => ({
+export const progressLoadingAction = (id: string, progress: number): LoadingInfoAction => ({
   id,
   progress,
   type: PROGRESS_LOADING,
@@ -81,16 +72,14 @@ export const completeLoadingAction = (id: string): LoadingInfoAction => ({
  * Register an error to the error stack
  * @param error
  */
-export const registerErrorAction = (
-  error: ArchifiltreDocsError
-): LoadingInfoAction => ({
+export const registerErrorAction = (error: ArchifiltreDocsError): LoadingInfoAction => ({
   error,
   type: REGISTER_ERROR,
 });
 
 export const replaceErrorsAction = (
   errors: ArchifiltreDocsError[],
-  errorType: ArchifiltreDocsErrorType
+  errorType: ArchifiltreDocsErrorType,
 ): LoadingInfoAction => ({
   errorType,
   errors,

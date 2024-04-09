@@ -9,7 +9,6 @@ import { WinstonConsoleLogger } from "./winston-console-logger";
 
 //TODO: replace with electron-log
 
-/* eslint-disable @typescript-eslint/naming-convention */
 enum Level {
   DEBUG = "debug",
   ERROR = "error",
@@ -19,7 +18,6 @@ enum Level {
   VERBOSE = "verbose",
   WARN = "warn",
 }
-/* eslint-enable @typescript-eslint/naming-convention */
 
 const logger = createLogger({
   transports: [
@@ -46,7 +44,7 @@ export const initReporter = (isActive: boolean): void => {
       filename: "archifiltre-logs-%DATE%",
       level: Level.INFO,
       maxFiles: "7d",
-    })
+    }),
   );
 };
 

@@ -1,7 +1,6 @@
 import { ipcRenderer } from "@common/ipc";
-import { IconButton } from "@material-ui/core";
-import type { GridProps } from "@material-ui/core/Grid";
-import Grid from "@material-ui/core/Grid";
+import { IconButton } from "@mui/material";
+import Grid, { type GridProps } from "@mui/material/Grid";
 import React, { useCallback } from "react";
 import { FaPlus } from "react-icons/fa";
 import styled from "styled-components";
@@ -34,13 +33,11 @@ const Placeholder = styled.div`
   text-align: center;
 `;
 
-const handleDragover: GridProps["onDragOver"] = (event) => {
+const handleDragover: GridProps["onDragOver"] = event => {
   event.preventDefault();
 };
 
-export type DropzoneErrorType =
-  | "invalidElementDropped"
-  | "multipleFolderLoaded";
+export type DropzoneErrorType = "invalidElementDropped" | "multipleFolderLoaded";
 
 export interface DropzoneProps {
   loadPath?: (path: string) => void;
@@ -50,13 +47,7 @@ export interface DropzoneProps {
   placeholder: string;
 }
 
-export const Dropzone: React.FC<DropzoneProps> = ({
-  onPathLoaded,
-  onError,
-  placeholder,
-  onClick,
-  loadPath,
-}) => {
+export const Dropzone: React.FC<DropzoneProps> = ({ onPathLoaded, onError, placeholder, onClick, loadPath }) => {
   const onNewDirectoryClick = useCallback(async () => {
     if (!loadPath) {
       return;
@@ -70,7 +61,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
     }
   }, [loadPath]);
 
-  const handleDrop: NonNullable<GridProps["onDrop"]> = (event) => {
+  const handleDrop: NonNullable<GridProps["onDrop"]> = event => {
     event.preventDefault();
 
     const areMultipleFoldersDropped = event.dataTransfer.files.length > 1;
@@ -102,8 +93,10 @@ export const Dropzone: React.FC<DropzoneProps> = ({
     >
       <ConditionnalWrap
         condition={onClick !== undefined}
-        wrap={(children) => (
-          <IconButton onClick={onClick}>{children}</IconButton>
+        wrap={children => (
+          <IconButton onClick={onClick} size="large">
+            {children}
+          </IconButton>
         )}
       >
         <PlaceholderContainer item>

@@ -1,5 +1,5 @@
 import { getTrackerProvider } from "@common/modules/tracker";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaArrowsAlt } from "react-icons/fa";

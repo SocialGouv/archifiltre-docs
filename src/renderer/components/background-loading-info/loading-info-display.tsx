@@ -1,11 +1,11 @@
 import { getPercentage } from "@common/utils/numbers";
-import Box from "@material-ui/core/Box";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Typography from "@material-ui/core/Typography";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
+import Typography from "@mui/material/Typography";
 import React from "react";
 import styled from "styled-components";
 
-import type { LoadingInfo } from "../../reducers/loading-info/loading-info-types";
+import { type LoadingInfo } from "../../reducers/loading-info/loading-info-types";
 
 const getColor = ({ color }: { color: string }) => color;
 
@@ -31,11 +31,7 @@ export interface LoadingInfoProps {
   loadingInfo: LoadingInfo;
 }
 
-export const LoadingInfoDisplay: React.FC<LoadingInfoProps> = ({
-  loadingInfo,
-  color = "black",
-  label,
-}) => (
+export const LoadingInfoDisplay: React.FC<LoadingInfoProps> = ({ loadingInfo, color = "black", label }) => (
   <LoadingBarContainer color={color}>
     <LoadingBarName>{label || loadingInfo.label}</LoadingBarName>
     <Box display="flex" alignItems="center">
@@ -47,9 +43,7 @@ export const LoadingInfoDisplay: React.FC<LoadingInfoProps> = ({
         />
       </Box>
       <Box minWidth={35}>
-        <Typography variant="body2">
-          {getPercentage(loadingInfo.progress, loadingInfo.goal)} %
-        </Typography>
+        <Typography variant="body2">{getPercentage(loadingInfo.progress, loadingInfo.goal)} %</Typography>
       </Box>
     </Box>
   </LoadingBarContainer>

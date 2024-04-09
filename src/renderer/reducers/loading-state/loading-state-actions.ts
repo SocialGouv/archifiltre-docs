@@ -1,9 +1,7 @@
-import type {
-  FileSystemLoadingStep,
-  LoadingStateAction,
-  LoadingStep,
-} from "./loading-state-types";
 import {
+  type FileSystemLoadingStep,
+  type LoadingStateAction,
+  type LoadingStep,
   RESET_LOADING_STATE,
   SET_DATA_MODEL_ELEMENTS_COUNT,
   SET_DERIVED_ELEMENTS_COUNT,
@@ -17,9 +15,7 @@ export const setLoadingStep = (step: LoadingStep): LoadingStateAction => ({
   type: SET_LOADING_STEP,
 });
 
-export const setFileSystemLoadingStep = (
-  step: FileSystemLoadingStep
-): LoadingStateAction => ({
+export const setFileSystemLoadingStep = (step: FileSystemLoadingStep): LoadingStateAction => ({
   step,
   type: SET_FILE_SYSTEM_LOADING_STEP,
 });
@@ -37,9 +33,7 @@ export const setIndexedFilesCount = (count: number): LoadingStateAction => ({
  * Set the count of filesAndFolders generated
  * @param count
  */
-export const setConstructedDataModelElementsCount = (
-  count: number
-): LoadingStateAction => ({
+export const setConstructedDataModelElementsCount = (count: number): LoadingStateAction => ({
   count,
   type: SET_DATA_MODEL_ELEMENTS_COUNT,
 });

@@ -1,4 +1,4 @@
-import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
+import { type FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
 import { FileType, getFileTypeFromFileName } from "../file-types";
 
 /**
@@ -10,5 +10,4 @@ import { FileType, getFileTypeFromFileName } from "../file-types";
  * @returns {boolean} Returns 'true' if the object is a folder, otherwise 'false'.
  */
 export const isFolder = (filesAndFolders: FilesAndFolders): boolean =>
-  filesAndFolders.children.length !== 0 ||
-  getFileTypeFromFileName(filesAndFolders.name) === FileType.ARCHIVE;
+  filesAndFolders.children.length !== 0 || getFileTypeFromFileName(filesAndFolders.name) === FileType.ARCHIVE;

@@ -1,9 +1,9 @@
-import type { SimpleObject } from "@common/utils/object";
-import createStyles from "@material-ui/core/styles/createStyles";
-import type { Theme } from "@material-ui/core/styles/createTheme";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Tab from "@material-ui/core/Tab";
-import Tabs from "@material-ui/core/Tabs";
+import { type SimpleObject } from "@common/utils/object";
+import { type Theme } from "@mui/material/styles";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
@@ -22,7 +22,7 @@ const useLocalStyles = makeStyles((theme: Theme) =>
       paddingRight: theme.spacing(1),
       paddingTop: theme.spacing(1),
     },
-  })
+  }),
 );
 
 const a11yProps = (index: number) => ({
@@ -35,10 +35,7 @@ export interface TabsHeaderProps {
   tabIndex: number;
 }
 
-export const TabsHeader: React.FC<TabsHeaderProps> = ({
-  setTabIndex,
-  tabIndex,
-}) => {
+export const TabsHeader: React.FC<TabsHeaderProps> = ({ setTabIndex, tabIndex }) => {
   const { t } = useTranslation();
   const classes = useLocalStyles();
   const areHashesReady = useSelector(getAreHashesReady);
@@ -58,23 +55,18 @@ export const TabsHeader: React.FC<TabsHeaderProps> = ({
         testId: "tab-duplicates",
       },
     ],
-    [t, areHashesReady]
+    [t, areHashesReady],
   );
 
   const handleChange = useCallback(
     (_: React.ChangeEvent<SimpleObject>, newValue: number) => {
       setTabIndex(newValue);
     },
-    [setTabIndex]
+    [setTabIndex],
   );
 
   return (
-    <Tabs
-      value={tabIndex}
-      onChange={handleChange}
-      indicatorColor="primary"
-      textColor="primary"
-    >
+    <Tabs value={tabIndex} onChange={handleChange} indicatorColor="primary" textColor="primary">
       {tabData.map(({ label, disabled, testId }, index) => (
         <Tab
           key={`${label}-${index}`}

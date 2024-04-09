@@ -1,14 +1,13 @@
-import type { ArchifiltreDocsError } from "@common/utils/error";
-import type { Observable } from "rxjs";
-import type { Readable } from "stream";
+import { type ArchifiltreDocsError } from "@common/utils/error";
+import { type Observable } from "rxjs";
+import { type Readable } from "stream";
 
-import type { VirtualFileSystem } from "../../files-and-folders-loader/files-and-folders-loader-types";
-import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
-import type { FileSystemLoadingStep } from "../../reducers/loading-state/loading-state-types";
+import { type VirtualFileSystem } from "../../files-and-folders-loader/files-and-folders-loader-types";
+import { type FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import { type FileSystemLoadingStep } from "../../reducers/loading-state/loading-state-types";
 import { createAsyncWorkerForChildProcessControllerFactory } from "../async-worker/child-process";
 import { cancelableBackgroundWorkerProcess$ } from "../batch-process";
-import type { ErrorMessage, ResultMessage } from "../batch-process/types";
-import { MessageTypes } from "../batch-process/types";
+import { type ErrorMessage, MessageTypes, type ResultMessage } from "../batch-process/types";
 import { parseVFSFromStream } from "./load-from-filesystem-serializer";
 
 interface LoadFileTreeResponse {
@@ -38,10 +37,7 @@ const streamParser = async (stream: Readable): Promise<StreamParserResult> => {
   return { result: vfs, status: MessageTypes.RESULT };
 };
 
-export const loadFileTree = (
-  droppedElementPath: string,
-  params: LoadFileTreeParams
-): LoadFileTreeResponse =>
+export const loadFileTree = (droppedElementPath: string, params: LoadFileTreeParams): LoadFileTreeResponse =>
   cancelableBackgroundWorkerProcess$(
     {
       path: droppedElementPath,
@@ -51,6 +47,6 @@ export const loadFileTree = (
       "utils/file-tree-loader/load-from-filesystem.fork.ts",
       {
         dataStreamProcessor: streamParser,
-      }
-    )
+      },
+    ),
   );

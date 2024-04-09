@@ -3,12 +3,8 @@ import { flatten } from "lodash";
 import { Observable } from "rxjs";
 import { tap, toArray } from "rxjs/operators";
 
-import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
-import type {
-  ErrorMessage,
-  ResultMessage,
-} from "../../utils/batch-process/types";
-import { MessageTypes } from "../../utils/batch-process/types";
+import { type FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import { type ErrorMessage, MessageTypes, type ResultMessage } from "../../utils/batch-process/types";
 import { computeTreeStructureArray } from "../../utils/tree-representation";
 
 /**
@@ -17,23 +13,23 @@ import { computeTreeStructureArray } from "../../utils/tree-representation";
  * @param filesAndFolders
  */
 export const generateTreeCsvExport$ = (
-  filesAndFolders: FilesAndFoldersMap
+  filesAndFolders: FilesAndFoldersMap,
 ): Observable<ErrorMessage | ResultMessage> => {
-  return new Observable<ResultMessage>((subscriber) => {
+  return new Observable<ResultMessage>(subscriber => {
     const header = [""];
     void computeTreeStructureArray(filesAndFolders)
       .pipe(
-        tap((lineComputed) => {
+        tap(lineComputed => {
           subscriber.next({
             result: lineComputed.length,
             type: MessageTypes.RESULT,
           });
         }),
-        toArray()
+        toArray(),
       )
       .toPromise()
       .then(flatten)
-      .then((rows) => {
+      .then(rows => {
         subscriber.next({
           result: arrayToCsv([header, ...rows]),
           type: MessageTypes.RESULT,

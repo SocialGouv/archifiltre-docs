@@ -1,17 +1,13 @@
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import type { ReactNode } from "react";
-import React from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import React, { type ReactNode } from "react";
 
 export interface BoundaryDateProps {
   content: string;
   title: ReactNode;
 }
 
-export const BoundaryDate: React.FC<BoundaryDateProps> = ({
-  title,
-  content,
-}) => (
+export const BoundaryDate: React.FC<BoundaryDateProps> = ({ title, content }) => (
   <Box display="flex" flexDirection="column">
     <Box>
       <Typography variant="h6">{title}</Typography>

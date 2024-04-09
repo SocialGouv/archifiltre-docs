@@ -1,6 +1,6 @@
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -11,10 +11,7 @@ export interface TabContentHeaderProps {
   title: string;
 }
 
-export const TabContentHeader: React.FC<TabContentHeaderProps> = ({
-  children,
-  title,
-}) => {
+export const TabContentHeader: React.FC<TabContentHeaderProps> = ({ children, title }) => {
   const { t } = useTranslation();
   const [isContentHidden, setIsContentHidden] = useState(false);
   const toggleIsContentHidden = useCallback(() => {
@@ -25,11 +22,7 @@ export const TabContentHeader: React.FC<TabContentHeaderProps> = ({
     <InfoBoxPaper>
       <Box display="flex" flexDirection="column">
         <Box>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
+          <Box display="flex" justifyContent="space-between" alignItems="center">
             <Typography variant="h3">{title}</Typography>
             <Box>
               <Button

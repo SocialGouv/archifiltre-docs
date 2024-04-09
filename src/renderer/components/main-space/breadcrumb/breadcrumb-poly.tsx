@@ -50,12 +50,7 @@ export interface BreadcrumbPolyProps {
   opacity: NonNullable<React.CSSProperties["opacity"]>;
 }
 
-export const BreadcrumbPoly: React.FC<BreadcrumbPolyProps> = ({
-  isFirst,
-  isLast,
-  color,
-  opacity,
-}) => (
+export const BreadcrumbPoly: React.FC<BreadcrumbPolyProps> = ({ isFirst, isLast, color, opacity }) => (
   <svg
     viewBox={`0 0 ${viewportWidth} ${viewportHeight}`}
     preserveAspectRatio="none"
@@ -66,13 +61,7 @@ export const BreadcrumbPoly: React.FC<BreadcrumbPolyProps> = ({
     }}
   >
     <polygon
-      points={
-        isFirst
-          ? firstPolygonPath
-          : isLast
-          ? lastPolygonPath
-          : middlePolygonPath
-      }
+      points={isFirst ? firstPolygonPath : isLast ? lastPolygonPath : middlePolygonPath}
       fill={color}
       style={{ opacity }}
       stroke="white"

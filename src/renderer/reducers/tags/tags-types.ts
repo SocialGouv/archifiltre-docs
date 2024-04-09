@@ -1,4 +1,4 @@
-import type { Action } from "redux";
+import { type Action } from "redux";
 
 export const RESET_TAGS = "TAGS/RESET";
 export const INITIALIZE_TAGS = "TAGS/INITIALIZE";

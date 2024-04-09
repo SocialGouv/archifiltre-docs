@@ -2,15 +2,12 @@ import _, { without } from "lodash";
 import path from "path";
 
 import { undoable } from "../enhancers/undoable/undoable";
-import type {
-  FilesAndFoldersActionTypes,
-  FilesAndFoldersMap,
-  FilesAndFoldersState,
-  VirtualPathToIdMap,
-} from "./files-and-folders-types";
 import {
   ADD_CHILD,
   ADD_COMMENTS_ON_FILES_AND_FOLDERS,
+  type FilesAndFoldersActionTypes,
+  type FilesAndFoldersMap,
+  type FilesAndFoldersState,
   INIT_OVERRIDE_LAST_MODIFIED,
   INIT_VIRTUAL_PATH_TO_ID_MAP,
   INITIALIZE_FILES_AND_FOLDERS,
@@ -24,6 +21,7 @@ import {
   SET_FILES_AND_FOLDERS_ALIAS,
   UNMARK_AS_TO_DELETE,
   UNMARK_ELEMENTS_TO_DELETE,
+  type VirtualPathToIdMap,
 } from "./files-and-folders-types";
 
 export const initialState: FilesAndFoldersState = {
@@ -43,7 +41,7 @@ const updateChildVirtualPath = (
   filesAndFolders: FilesAndFoldersMap,
   virtualPathToId: VirtualPathToIdMap,
   movedElementId: string,
-  newParentVirtualPath: string
+  newParentVirtualPath: string,
 ) => {
   const updatedFilesAndFolders = {
     ...filesAndFolders,
@@ -53,16 +51,10 @@ const updateChildVirtualPath = (
     ...virtualPathToId,
   };
 
-  const updateChildVirtualPathRec = (
-    currentId: string,
-    currentParentVirtualPath: string
-  ) => {
+  const updateChildVirtualPathRec = (currentId: string, currentParentVirtualPath: string) => {
     const filesAndFolder = updatedFilesAndFolders[currentId];
 
-    const virtualPath = path.posix.join(
-      currentParentVirtualPath,
-      filesAndFolder.name
-    );
+    const virtualPath = path.posix.join(currentParentVirtualPath, filesAndFolder.name);
 
     updatedVirtualPathToId[virtualPath] = currentId;
     updatedFilesAndFolders[currentId] = {
@@ -70,7 +62,7 @@ const updateChildVirtualPath = (
       virtualPath,
     };
 
-    filesAndFolder.children.map((childId) => {
+    filesAndFolder.children.map(childId => {
       updateChildVirtualPathRec(childId, virtualPath);
     });
   };
@@ -88,10 +80,7 @@ const updateChildVirtualPath = (
  * @param state
  * @param action
  */
-const filesAndFoldersReducer = (
-  state = initialState,
-  action?: FilesAndFoldersActionTypes
-): FilesAndFoldersState => {
+const filesAndFoldersReducer = (state = initialState, action?: FilesAndFoldersActionTypes): FilesAndFoldersState => {
   switch (action?.type) {
     case INITIALIZE_FILES_AND_FOLDERS:
       return { ...state, filesAndFolders: action.filesAndFolders };
@@ -103,7 +92,7 @@ const filesAndFoldersReducer = (
         state.filesAndFolders,
         state.virtualPathToId,
         action.childId,
-        parent.virtualPath
+        parent.virtualPath,
       );
       return {
         ...state,
@@ -123,10 +112,7 @@ const filesAndFoldersReducer = (
           ...state.filesAndFolders,
           [action.parentId]: {
             ...state.filesAndFolders[action.parentId],
-            children: _.without(
-              state.filesAndFolders[action.parentId].children,
-              action.childId
-            ),
+            children: _.without(state.filesAndFolders[action.parentId].children, action.childId),
           },
         },
       };
@@ -149,24 +135,17 @@ const filesAndFoldersReducer = (
     case MARK_AS_TO_DELETE:
       return {
         ...state,
-        elementsToDelete: [
-          ...new Set([...state.elementsToDelete, action.filesAndFoldersId]),
-        ],
+        elementsToDelete: [...new Set([...state.elementsToDelete, action.filesAndFoldersId])],
       };
     case UNMARK_AS_TO_DELETE:
       return {
         ...state,
-        elementsToDelete: _.without(
-          state.elementsToDelete,
-          action.filesAndFoldersId
-        ),
+        elementsToDelete: _.without(state.elementsToDelete, action.filesAndFoldersId),
       };
     case MARK_ELEMENTS_TO_DELETE:
       return {
         ...state,
-        elementsToDelete: [
-          ...new Set([...state.elementsToDelete, ...action.elementIds]),
-        ],
+        elementsToDelete: [...new Set([...state.elementsToDelete, ...action.elementIds])],
       };
     case UNMARK_ELEMENTS_TO_DELETE:
       return {
@@ -181,10 +160,7 @@ const filesAndFoldersReducer = (
     case REGISTER_ERRORED_ELEMENTS:
       return {
         ...state,
-        erroredFilesAndFolders: [
-          ...state.erroredFilesAndFolders,
-          ...action.elements,
-        ],
+        erroredFilesAndFolders: [...state.erroredFilesAndFolders, ...action.elements],
       };
     case RESET_ERRORED_ELEMENTS:
       return {
@@ -214,9 +190,6 @@ const filesAndFoldersReducer = (
   }
 };
 
-const undoableFilesAndFoldersReducer = undoable(
-  filesAndFoldersReducer,
-  initialState
-);
+const undoableFilesAndFoldersReducer = undoable(filesAndFoldersReducer, initialState);
 
 export { filesAndFoldersReducer, undoableFilesAndFoldersReducer };

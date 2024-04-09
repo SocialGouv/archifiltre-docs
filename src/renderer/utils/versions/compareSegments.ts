@@ -7,11 +7,7 @@
  * @returns Returns 0 if current segments are equal, 1 if the first segment is greater,
  * and -1 if the second segment is greater.
  */
-export const compareSegments = (
-  v1Segments: number[],
-  v2Segments: number[],
-  index = 0
-): number => {
+export const compareSegments = (v1Segments: number[], v2Segments: number[], index = 0): number => {
   if (index >= v1Segments.length && index >= v2Segments.length) {
     return 0;
   }

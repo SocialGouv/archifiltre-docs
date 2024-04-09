@@ -1,7 +1,8 @@
 import { undoable } from "../enhancers/undoable/undoable";
-import type { LoadingState, LoadingStateAction } from "./loading-state-types";
 import {
   FileSystemLoadingStep,
+  type LoadingState,
+  type LoadingStateAction,
   LoadingStep,
   RESET_LOADING_STATE,
   SET_DATA_MODEL_ELEMENTS_COUNT,
@@ -19,10 +20,7 @@ export const initialState: LoadingState = {
   step: LoadingStep.WAITING,
 };
 
-export const loadingStateReducer = (
-  state = initialState,
-  action?: LoadingStateAction
-): LoadingState => {
+export const loadingStateReducer = (state = initialState, action?: LoadingStateAction): LoadingState => {
   switch (action?.type) {
     case RESET_LOADING_STATE:
       return initialState;
@@ -56,7 +54,4 @@ export const loadingStateReducer = (
   }
 };
 
-export const undoableLoadingStateReducer = undoable(
-  loadingStateReducer,
-  initialState
-);
+export const undoableLoadingStateReducer = undoable(loadingStateReducer, initialState);

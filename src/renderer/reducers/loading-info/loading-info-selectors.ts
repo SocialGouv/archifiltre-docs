@@ -1,47 +1,38 @@
-import type { ArchifiltreDocsError } from "@common/utils/error";
-import { ArchifiltreDocsErrorType } from "@common/utils/error";
-import type { ArchifiltreDocsErrorCode } from "@common/utils/error/error-codes";
-import { UnknownError } from "@common/utils/error/error-codes";
+import { type ArchifiltreDocsError, ArchifiltreDocsErrorType } from "@common/utils/error";
+import { type ArchifiltreDocsErrorCode, UnknownError } from "@common/utils/error/error-codes";
 import { useSelector } from "react-redux";
 
-import type { StoreState } from "../store";
-import type { LoadingInfo, LoadingInfoState } from "./loading-info-types";
+import { type StoreState } from "../store";
+import { type LoadingInfo, type LoadingInfoState } from "./loading-info-types";
 
 /**
  * Returns the loadingInfo from the store
  */
-export const getLoadingInfoFromStore = (store: StoreState): LoadingInfoState =>
-  store.loadingInfo;
+export const getLoadingInfoFromStore = (store: StoreState): LoadingInfoState => store.loadingInfo;
 
 /**
  * Returns the currently loading LoadingInfo
  * @param loading - The list of loading ids
  * @param loadingInfo - The map of loadingInfo
  */
-export const getRunningLoadingInfo = ({
-  loading,
-  loadingInfo,
-}: LoadingInfoState): LoadingInfo[] => loading.map((id) => loadingInfo[id]);
+export const getRunningLoadingInfo = ({ loading, loadingInfo }: LoadingInfoState): LoadingInfo[] =>
+  loading.map(id => loadingInfo[id]);
 
 /**
  * Returns  the currently completed LoadingInfo
  * @param complete - The list of completed ids
  * @param loadingInfo - The map of loadingInfo
  */
-export const getCompleteLoadingInfo = ({
-  complete,
-  loadingInfo,
-}: LoadingInfoState): LoadingInfo[] => complete.map((id) => loadingInfo[id]);
+export const getCompleteLoadingInfo = ({ complete, loadingInfo }: LoadingInfoState): LoadingInfo[] =>
+  complete.map(id => loadingInfo[id]);
 
 /**
  * Selector for the errors list
  */
-export const getArchifiltreDocsErrors = (
-  store: StoreState
-): ArchifiltreDocsError[] => getLoadingInfoFromStore(store).errors;
+export const getArchifiltreDocsErrors = (store: StoreState): ArchifiltreDocsError[] =>
+  getLoadingInfoFromStore(store).errors;
 
-export const useArchifiltreDocsErrors = (): ArchifiltreDocsError[] =>
-  useSelector(getArchifiltreDocsErrors);
+export const useArchifiltreDocsErrors = (): ArchifiltreDocsError[] => useSelector(getArchifiltreDocsErrors);
 
 interface CreateArchifiltreDocsErrorParams {
   code?: ArchifiltreDocsErrorCode;

@@ -1,6 +1,5 @@
-import type { BoxProps } from "@material-ui/core/Box";
-import Box from "@material-ui/core/Box";
-import Tooltip from "@material-ui/core/Tooltip";
+import Box, { type BoxProps } from "@mui/material/Box";
+import Tooltip from "@mui/material/Tooltip";
 import React, { useMemo } from "react";
 import styled from "styled-components";
 
@@ -41,10 +40,7 @@ export const HorizontalStackedBar: React.FC<HorizontalStackedBarProps> = ({
   bars,
   renderTooltipContent = () => "",
 }) => {
-  const total = useMemo(
-    () => Object.values(data).reduce((sum, value) => sum + value, 0),
-    [data]
-  );
+  const total = useMemo(() => Object.values(data).reduce((sum, value) => sum + value, 0), [data]);
   return (
     <Box display="flex" flexWrap="nowrap" width="100%">
       {bars.map(({ key, color }) => (

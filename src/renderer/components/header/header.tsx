@@ -1,8 +1,8 @@
-import type { VoidFunction } from "@common/utils/function";
-import Box from "@material-ui/core/Box";
+import { type VoidFunction } from "@common/utils/function";
+import Box from "@mui/material/Box";
 import React from "react";
 
-import type { ExportToJson } from "../../exporters/json/json-exporter";
+import { type ExportToJson } from "../../exporters/json/json-exporter";
 import { SaveButton } from "../Buttons/SaveButton";
 import { Logo } from "../common/Logo";
 import { Version } from "../common/version";
@@ -42,12 +42,7 @@ export const Header: React.FC<HeaderActionsProps> = ({
   return (
     <HeaderLine>
       <Box display="flex">
-        <Box
-          display="flex"
-          alignItems="flex-start"
-          justifyContent="flex-start"
-          flexDirection="column"
-        >
+        <Box display="flex" alignItems="flex-start" justifyContent="flex-start" flexDirection="column">
           <Logo height={30} />
           <Version />
         </Box>
@@ -63,29 +58,13 @@ export const Header: React.FC<HeaderActionsProps> = ({
           <SearchButton />
         </Box>
         <Box pl={1}>
-          <UndoRedoButton
-            isVisible={true}
-            undo={undo}
-            redo={redo}
-            isUndo={true}
-            isActive={canUndo}
-          />
+          <UndoRedoButton isVisible={true} undo={undo} redo={redo} isUndo={true} isActive={canUndo} />
         </Box>
         <Box pl={1}>
-          <UndoRedoButton
-            isVisible={true}
-            undo={undo}
-            redo={redo}
-            isUndo={false}
-            isActive={canRedo}
-          />
+          <UndoRedoButton isVisible={true} undo={undo} redo={redo} isUndo={false} isActive={canRedo} />
         </Box>
         <Box pl={1}>
-          <SaveButton
-            originalPath={originalPath}
-            sessionName={sessionName}
-            exportToJson={exportToJson}
-          />
+          <SaveButton originalPath={originalPath} sessionName={sessionName} exportToJson={exportToJson} />
         </Box>
         <Box pl={1}>
           <ExportButton />

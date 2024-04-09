@@ -1,5 +1,5 @@
 import { STATIC_PATH } from "@common/config";
-import type { SimpleObject } from "@common/utils/object";
+import { type SimpleObject } from "@common/utils/object";
 import path from "path";
 
 import { createChartReplacer, exportToDocX } from "../../utils/docx/docx-util";
@@ -79,29 +79,21 @@ export interface AuditReportData {
   videoPercent: number;
 }
 
-const TEMPLATE_PATH = path.resolve(
-  STATIC_PATH,
-  "template/auditReportTemplate.docx"
-);
+const TEMPLATE_PATH = path.resolve(STATIC_PATH, "template/auditReportTemplate.docx");
 
 /*
  * To update the chart template, you will need to create a docx, unzip it, and get the xml chart file.
  * The xml chart files are in the folder word/charts.
  * Then, you replace the numeric values by templated strings like "<c:v>{presentationCount}</c:v>"
  */
-const CHART_TEMPLATE_PATH = path.resolve(
-  STATIC_PATH,
-  "template/chartTemplate.xml"
-);
+const CHART_TEMPLATE_PATH = path.resolve(STATIC_PATH, "template/chartTemplate.xml");
 
 /**
  * Generates the docx Blob
  */
-export const generateAuditReportDocx = (
-  auditReportData: AuditReportData
-): Buffer =>
+export const generateAuditReportDocx = (auditReportData: AuditReportData): Buffer =>
   exportToDocX(
     TEMPLATE_PATH,
     auditReportData as unknown as SimpleObject,
-    createChartReplacer("chart1", CHART_TEMPLATE_PATH)
+    createChartReplacer("chart1", CHART_TEMPLATE_PATH),
   );

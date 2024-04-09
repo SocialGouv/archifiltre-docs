@@ -1,20 +1,15 @@
 import { omit } from "lodash";
 import { Field, Message, Type } from "protobufjs";
-import type { Readable, Writable } from "stream";
+import { type Readable, type Writable } from "stream";
 
-import type { VirtualFileSystem } from "../../files-and-folders-loader/files-and-folders-loader-types";
-import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import {
-  parseSerializedDataFromStream,
-  sendStringToStream,
-  stringifyObjectToStream,
-} from "../child-process-stream";
+import { type VirtualFileSystem } from "../../files-and-folders-loader/files-and-folders-loader-types";
+import { type FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
+import { type FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { parseSerializedDataFromStream, sendStringToStream, stringifyObjectToStream } from "../child-process-stream";
 import {
   FilesAndFoldersMessage,
   FilesAndFoldersMetadataMessage,
 } from "../child-process-stream/child-process-stream-messages";
-import type { OmitProtobuf } from "../child-process-stream/common-serializer";
 import {
   extractFilesAndFolders,
   extractFilesAndFoldersMetadata,
@@ -22,13 +17,10 @@ import {
   extractKey,
   extractKeysFromFilesAndFolders,
   makeDataExtractor,
+  type OmitProtobuf,
 } from "../child-process-stream/common-serializer";
 
-const sections: (keyof VirtualFileSystem)[] = [
-  "filesAndFolders",
-  "filesAndFoldersMetadata",
-  "hashes",
-];
+const sections: Array<keyof VirtualFileSystem> = ["filesAndFolders", "filesAndFoldersMetadata", "hashes"];
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 @Type.d("VFSElement")
@@ -65,32 +57,18 @@ export const serializeField = (element: {
   return VFSElementMessage.encode(message).finish();
 };
 
-export const stringifyVFSToStream = (
-  stream: Writable,
-  vfs: VirtualFileSystem
-): void => {
+export const stringifyVFSToStream = (stream: Writable, vfs: VirtualFileSystem): void => {
   const base = omit(vfs, sections);
   sendStringToStream(stream, JSON.stringify(base));
-  stringifyObjectToStream<VirtualFileSystem, OmitProtobuf<VFSElementMessage>>(
-    stream,
-    vfs,
-    {
-      dataExtractor: makeDataExtractor(
-        extractKey,
-        extractFilesAndFolders,
-        extractFilesAndFoldersMetadata,
-        extractHashes
-      ),
-      dataSerializer: serializeField,
-      keyExtractor: extractKeysFromFilesAndFolders,
-    }
-  );
+  stringifyObjectToStream<VirtualFileSystem, OmitProtobuf<VFSElementMessage>>(stream, vfs, {
+    dataExtractor: makeDataExtractor(extractKey, extractFilesAndFolders, extractFilesAndFoldersMetadata, extractHashes),
+    dataSerializer: serializeField,
+    keyExtractor: extractKeysFromFilesAndFolders,
+  });
   stream.end();
 };
 
-export const parseVFSFromStream = async (
-  stream: Readable
-): Promise<VirtualFileSystem> => {
+export const parseVFSFromStream = async (stream: Readable): Promise<VirtualFileSystem> => {
   const vfs: VirtualFileSystem = {
     aliases: {},
     comments: {},
@@ -113,8 +91,7 @@ export const parseVFSFromStream = async (
         arrays: true,
       }),
     merger: (vfsToMerge, deserializedData) => {
-      const { filesAndFolders, filesAndFoldersMetadata, hash, key } =
-        deserializedData;
+      const { filesAndFolders, filesAndFoldersMetadata, hash, key } = deserializedData;
       vfsToMerge.filesAndFolders[key] = filesAndFolders;
       vfsToMerge.filesAndFoldersMetadata[key] = filesAndFoldersMetadata;
       if (hash !== "") {

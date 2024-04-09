@@ -7,16 +7,11 @@ interface RequestInput {
   url: string;
 }
 
-export const request = async <T>({
-  method = "GET",
-  url,
-  headers = {},
-  body = "",
-}: RequestInput): Promise<T> => {
+export const request = async <T>({ method = "GET", url, headers = {}, body = "" }: RequestInput): Promise<T> => {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open(method, url);
-    Object.keys(headers).forEach((key) => {
+    Object.keys(headers).forEach(key => {
       xhr.setRequestHeader(key, headers[key]);
     });
     xhr.onload = () => {

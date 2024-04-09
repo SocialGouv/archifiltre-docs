@@ -1,4 +1,4 @@
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 import React, { memo } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import styled from "styled-components";

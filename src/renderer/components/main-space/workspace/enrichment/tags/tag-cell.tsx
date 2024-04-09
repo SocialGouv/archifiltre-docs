@@ -1,8 +1,8 @@
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import type { Tag } from "../../../../../reducers/tags/tags-types";
+import { type Tag } from "../../../../../reducers/tags/tags-types";
 import { NoElementSelectedPlaceholder } from "../element-characteristics/no-element-selected-placeholder";
 import { TagCellChips } from "./tag-cell-chips";
 import { TagCellInput } from "./tag-cell-input";
@@ -39,11 +39,7 @@ export const TagCell: React.FC<TagCellProps> = ({
         isCurrentFileMarkedToDelete={isCurrentFileMarkedToDelete}
         toggleCurrentFileDeleteState={toggleCurrentFileDeleteState}
       />
-      <TagCellInput
-        availableTags={availableTags}
-        createTag={createTag}
-        nodeId={nodeId}
-      />
+      <TagCellInput availableTags={availableTags} createTag={createTag} nodeId={nodeId} />
     </Box>
   ) : (
     <NoElementSelectedPlaceholder title={t("workspace.yourTagsHere")} />

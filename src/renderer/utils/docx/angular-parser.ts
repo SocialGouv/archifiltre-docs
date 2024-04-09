@@ -1,6 +1,5 @@
-import type { AnyFunction } from "@common/utils/function";
-import { identity } from "@common/utils/function";
-import type { SimpleObject } from "@common/utils/object";
+import { type AnyFunction, identity } from "@common/utils/function";
+import { type SimpleObject } from "@common/utils/object";
 import expressions from "angular-expressions";
 
 // All the code comes from the docx-templater doc.

@@ -1,12 +1,11 @@
-import type { Integration } from "@sentry/types";
+import { type Integration } from "@sentry/types";
 
-import type { Nothing } from "../../utils/type";
-import type { TrackAppId, TrackEvent, TrackEventProps } from "../type";
+import { type Nothing } from "../../utils/type";
+import { type TrackAppId, type TrackEvent, type TrackEventProps } from "../type";
 
-export type TrackArgs<TEvent extends TrackEvent> =
-  TrackEventProps[TEvent] extends Nothing
-    ? [event: TEvent]
-    : [event: TEvent, props: TrackEventProps[TEvent]];
+export type TrackArgs<TEvent extends TrackEvent> = TrackEventProps[TEvent] extends Nothing
+  ? [event: TEvent]
+  : [event: TEvent, props: TrackEventProps[TEvent]];
 
 /**
  * A tracker provider is an isomorphic wrapper around
@@ -15,10 +14,7 @@ export type TrackArgs<TEvent extends TrackEvent> =
  * The provider should handle `main` AND `renderer` tracking
  * as it will be instanciated in both processes.
  */
-export abstract class TrackerProvider<
-  TFrontTracker = undefined,
-  TBackTracker = undefined
-> {
+export abstract class TrackerProvider<TFrontTracker = undefined, TBackTracker = undefined> {
   /**
    * Expose the provider name to match the config.
    *
@@ -40,7 +36,10 @@ export abstract class TrackerProvider<
    */
   public abstract inited: boolean;
 
-  constructor(protected appId: TrackAppId, protected disabled: boolean) {}
+  constructor(
+    protected appId: TrackAppId,
+    protected disabled: boolean,
+  ) {}
 
   /**
    * If revelent, return custom Sentry integrations to
@@ -77,7 +76,5 @@ export abstract class TrackerProvider<
   /**
    * Track an event described by the tracking plan.
    */
-  public abstract track<TEvent extends TrackEvent>(
-    ...args: TrackArgs<TEvent>
-  ): void;
+  public abstract track<TEvent extends TrackEvent>(...args: TrackArgs<TEvent>): void;
 }

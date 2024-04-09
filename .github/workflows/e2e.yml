@@ -21,11 +21,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-      - name: Yarn install
-        run: yarn --frozen-lockfile --perfer-offline
+      - name: npm install
+        run: npm ci --prefer-offline
 
       - name: Compiling
-        run: yarn compile
+        run: npm run compile
         env:
           SKIP_SENTRY_UPLOAD: 1
           TRACKER_MATOMO_ID_SITE: ${{ secrets.TRACKER_MATOMO_ID_SITE }}
@@ -61,10 +61,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-      - name: Yarn install
+      - name: npm install
         run: |
-          yarn config set network-timeout 300000
-          yarn --frozen-lockfile --perfer-offline
+          npm config set network-timeout 300000
+          npm ci --prefer-offline
       - name: Download dist
         uses: actions/download-artifact@v4
         with:
@@ -72,10 +72,10 @@ jobs:
           path: dist/
 
       - name: Test electron
-        run: yarn electron -v
+        run: npx electron -v
 
       - name: Install Playwright deps
-        run: yarn playwright install-deps chromium
+        run: npx playwright install-deps chromium
 
       - name: Start Xvfb server
         if: ${{ matrix.os == 'ubuntu-latest' }}
@@ -83,7 +83,7 @@ jobs:
 
       - name: Run Playwright
         timeout-minutes: 15
-        run: yarn test:e2e
+        run: npm run test:e2e
 
       - name: Clean Xvfb
         if: ${{ matrix.os == 'ubuntu-latest' }}

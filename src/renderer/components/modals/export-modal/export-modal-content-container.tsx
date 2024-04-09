@@ -1,4 +1,4 @@
-import type { ExportType } from "@common/export/type";
+import { type ExportType } from "@common/export/type";
 import { getTrackerProvider } from "@common/modules/tracker";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,12 +12,8 @@ export interface ExportModalContentContainerProps {
   closeModal: () => void;
 }
 
-export const ExportModalContentContainer: React.FC<
-  ExportModalContentContainerProps
-> = ({ closeModal }) => {
-  const { originalPath, sessionName } = useSelector(
-    getWorkspaceMetadataFromStore
-  );
+export const ExportModalContentContainer: React.FC<ExportModalContentContainerProps> = ({ closeModal }) => {
+  const { originalPath, sessionName } = useSelector(getWorkspaceMetadataFromStore);
   const areHashesReady = useSelector(getAreHashesReady);
 
   const dispatch = useDispatch();

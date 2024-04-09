@@ -11,8 +11,7 @@ import {
   countDuplicateFileTypes,
   getFilesDuplicatesMap,
 } from "../../../../../utils/duplicates";
-import type { DuplicatesTableProps } from "./duplicates-table";
-import { DuplicatesTable } from "./duplicates-table";
+import { DuplicatesTable, type DuplicatesTableProps } from "./duplicates-table";
 
 const removeZeroValues = <TKey extends number | string, TValue>(obj: {
   [key in TKey]: TValue;
@@ -20,41 +19,29 @@ const removeZeroValues = <TKey extends number | string, TValue>(obj: {
 
 export const DuplicatesTableContainer: React.FC = () => {
   const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
-  const filesAndFoldersMetadataMap = useSelector(
-    getFilesAndFoldersMetadataFromStore
-  );
+  const filesAndFoldersMetadataMap = useSelector(getFilesAndFoldersMetadataFromStore);
   const hashesMap = useSelector(getHashesFromStore);
 
   const duplicatesMap = useMemo(
     () => getFilesDuplicatesMap(filesAndFoldersMap, hashesMap),
-    [filesAndFoldersMap, hashesMap]
+    [filesAndFoldersMap, hashesMap],
   );
 
   const fileTypesCount = useMemo(
-    () =>
-      removeZeroValues(
-        countDuplicateFileTypes(duplicatesMap)
-      ) as DuplicatesTableProps["fileTypesCount"],
-    [duplicatesMap]
+    () => removeZeroValues(countDuplicateFileTypes(duplicatesMap)) as DuplicatesTableProps["fileTypesCount"],
+    [duplicatesMap],
   );
 
-  const fileSizesCount = useMemo(
-    () => removeZeroValues(countDuplicateFileSizes(duplicatesMap)),
-    [duplicatesMap]
-  );
+  const fileSizesCount = useMemo(() => removeZeroValues(countDuplicateFileSizes(duplicatesMap)), [duplicatesMap]);
 
   const filePercentagesCount = useMemo(
     () =>
       removeZeroValues(
-        _.mapValues(fileSizesCount, (fileSize) =>
-          getPercentage(
-            fileSize || 0,
-            filesAndFoldersMetadataMap[""].childrenTotalSize,
-            2
-          )
-        )
+        _.mapValues(fileSizesCount, fileSize =>
+          getPercentage(fileSize || 0, filesAndFoldersMetadataMap[""].childrenTotalSize, 2),
+        ),
       ),
-    [fileSizesCount, filesAndFoldersMetadataMap]
+    [fileSizesCount, filesAndFoldersMetadataMap],
   );
 
   return (

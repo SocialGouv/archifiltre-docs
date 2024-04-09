@@ -1,6 +1,6 @@
-import type { HashesMap } from "@common/utils/hashes-types";
+import { type HashesMap } from "@common/utils/hashes-types";
 
-import type { ArchifiltreDocsThunkAction } from "../archifiltre-types";
+import { type ArchifiltreDocsThunkAction } from "../archifiltre-types";
 import { setFilesAndFoldersHashes } from "./hashes-actions";
 
 /**
@@ -9,6 +9,6 @@ import { setFilesAndFoldersHashes } from "./hashes-actions";
  */
 export const updateFilesAndFoldersHashes =
   (hashes: HashesMap): ArchifiltreDocsThunkAction =>
-  (dispatch) => {
+  dispatch => {
     dispatch(setFilesAndFoldersHashes(hashes));
   };

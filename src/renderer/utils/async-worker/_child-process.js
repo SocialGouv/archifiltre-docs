@@ -1,6 +1,6 @@
 "use strict";
 
-module.hot?.reject();
+module.hot.decline();
 
 // bridge worker to call "real" workers in Typescript
 const path = require("path");

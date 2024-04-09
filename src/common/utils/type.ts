@@ -46,33 +46,22 @@ export type Nothing = never | 0 | null | undefined;
  * Stub to trick eslint.
  * @deprecated
  */
-export type UnionToIntersection<TUnion> = (
-  TUnion extends unknown ? (k: TUnion) => void : never
-) extends (k: infer I) => void
+export type UnionToIntersection<TUnion> = (TUnion extends unknown ? (k: TUnion) => void : never) extends (
+  k: infer I,
+) => void
   ? I
   : never;
-type UnionToOverloads<TUnion> = UnionToIntersection<
-  TUnion extends unknown ? (f: TUnion) => void : never
->;
-export type PopUnion<TUnion> = UnionToOverloads<TUnion> extends (
-  a: infer A
-) => void
-  ? A
-  : never;
+type UnionToOverloads<TUnion> = UnionToIntersection<TUnion extends unknown ? (f: TUnion) => void : never>;
+export type PopUnion<TUnion> = UnionToOverloads<TUnion> extends (a: infer A) => void ? A : never;
 
-export type UnionConcat<
-  TUnion extends string,
-  TSep extends string = ","
-> = PopUnion<TUnion> extends infer Self
-  ? Self extends string
-    ? Exclude<TUnion, Self> extends never
-      ? Self
-      :
-          | Self
-          | UnionConcat<Exclude<TUnion, Self>, TSep>
-          | `${UnionConcat<Exclude<TUnion, Self>, TSep>}${TSep}${Self}`
-    : never
-  : never;
+export type UnionConcat<TUnion extends string, TSep extends string = ","> =
+  PopUnion<TUnion> extends infer Self
+    ? Self extends string
+      ? Exclude<TUnion, Self> extends never
+        ? Self
+        : Self | UnionConcat<Exclude<TUnion, Self>, TSep> | `${UnionConcat<Exclude<TUnion, Self>, TSep>}${TSep}${Self}`
+      : never
+    : never;
 
 /**
  * Split literal strings with optional split char and return a tuple of literals.
@@ -86,11 +75,8 @@ export type UnionConcat<
  * type LitTuple3 = Split<"a.b.c.d"> // ["a.b.c.d"]
  * ```
  */
-export type Split<
-  T extends string,
-  TSep extends string = ","
-> = T extends `${infer Part}${TSep}${infer Rest}`
+export type Split<T extends string, TSep extends string = ","> = T extends `${infer Part}${TSep}${infer Rest}`
   ? [Part, ...Split<Rest, TSep>]
   : T extends string
-  ? [T]
-  : never;
+    ? [T]
+    : never;

@@ -1,11 +1,9 @@
 import { generateSecureRandomString } from "@common/utils/generateSecureRandomString";
-import type { MouseEventHandler } from "react";
-import React, { memo, useCallback, useRef, useState } from "react";
+import React, { type FC, memo, type MouseEventHandler, useCallback, useRef, useState } from "react";
 
 import { animateSvgDomElement } from "../../../animation-daemon";
-import type { IcicleProps } from "./icicle";
-import { Icicle } from "./icicle";
-import type { IcicleMouseActionHandler } from "./icicle-types";
+import { Icicle, type IcicleProps } from "./icicle";
+import { type IcicleMouseActionHandler } from "./icicle-types";
 
 export type AnimatedIcicleProps = IcicleProps & {
   onIcicleMouseLeave: MouseEventHandler<SVGGElement>;
@@ -13,7 +11,7 @@ export type AnimatedIcicleProps = IcicleProps & {
 
 const ANIMATION_DURATION = 1000;
 
-const _AnimatedIcicle: React.FC<AnimatedIcicleProps> = (props) => {
+const _AnimatedIcicle: FC<AnimatedIcicleProps> = props => {
   const { onIcicleRectDoubleClickHandler, x, y, dx, dy } = props;
   const [previousDisplayMode, setPreviousDisplayMode] = useState("none");
   const [previousProps, setPreviousProps] = useState(props);
@@ -31,10 +29,7 @@ const _AnimatedIcicle: React.FC<AnimatedIcicleProps> = (props) => {
       const { x: targetX, dx: targetDx } = props;
       const { x: dimX, dx: dimDx } = dims();
 
-      if (
-        !animatedPreviousElementRef.current ||
-        !animatedCurrentElementRef.current
-      ) {
+      if (!animatedPreviousElementRef.current || !animatedCurrentElementRef.current) {
         return;
       }
 
@@ -46,7 +41,7 @@ const _AnimatedIcicle: React.FC<AnimatedIcicleProps> = (props) => {
           targetDx,
           dimX,
           dimDx,
-          ANIMATION_DURATION
+          ANIMATION_DURATION,
         ),
         animateSvgDomElement(
           animatedCurrentElementRef.current,
@@ -55,7 +50,7 @@ const _AnimatedIcicle: React.FC<AnimatedIcicleProps> = (props) => {
           dimDx,
           targetX,
           targetDx,
-          ANIMATION_DURATION
+          ANIMATION_DURATION,
         ),
       ]).then(() => {
         setPreviousDisplayMode("none");
@@ -68,31 +63,20 @@ const _AnimatedIcicle: React.FC<AnimatedIcicleProps> = (props) => {
       setPreviousProps,
       animatedPreviousElementRef,
       animatedCurrentElementRef,
-    ]
+    ],
   );
   return (
     <>
       <clipPath id={svgId}>
         <rect x={x} y={y} width={dx} height={dy} />
       </clipPath>
-      <g
-        x={0}
-        y={0}
-        clipPath={`url(#${svgId})`}
-        onMouseLeave={props.onIcicleMouseLeave}
-      >
+      <g x={0} y={0} clipPath={`url(#${svgId})`} onMouseLeave={props.onIcicleMouseLeave}>
         <g>
-          <g
-            style={{ display: previousDisplayMode }}
-            ref={animatedPreviousElementRef}
-          >
+          <g style={{ display: previousDisplayMode }} ref={animatedPreviousElementRef}>
             {previousDisplayMode !== "none" && <Icicle {...previousProps} />}
           </g>
           <g ref={animatedCurrentElementRef}>
-            <Icicle
-              {...props}
-              onIcicleRectDoubleClickHandler={onIcicleRectDoubleClick}
-            />
+            <Icicle {...props} onIcicleRectDoubleClickHandler={onIcicleRectDoubleClick} />
           </g>
         </g>
       </g>

@@ -1,14 +1,6 @@
 import noop from "lodash/noop";
-import type { MouseEventHandler } from "react";
-import React from "react";
-import {
-  FaChevronDown,
-  FaChevronRight,
-  FaCopy,
-  FaFile,
-  FaFolder,
-  FaSearch,
-} from "react-icons/fa";
+import React, { type MouseEventHandler } from "react";
+import { FaChevronDown, FaChevronRight, FaCopy, FaFile, FaFolder, FaSearch } from "react-icons/fa";
 import styled from "styled-components";
 
 export const FOLDER_ICON = FaFolder;
@@ -48,12 +40,7 @@ export interface IconProps {
 }
 
 /** Displays an icon */
-export const Icon: React.FC<IconProps> = ({
-  icon,
-  size = "big",
-  color,
-  onClick = noop,
-}) => {
+export const Icon: React.FC<IconProps> = ({ icon, size = "big", color, onClick = noop }) => {
   const InnerIcon = icon;
   return (
     <IconWrapper onClick={onClick}>

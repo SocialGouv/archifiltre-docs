@@ -1,21 +1,20 @@
-import type { HashesMap } from "@common/utils/hashes-types";
-import type { TFunction } from "i18next";
+import { type HashesMap } from "@common/utils/hashes-types";
+import { type TFunction } from "i18next";
 import { compose, constant, property, sortBy, toString } from "lodash/fp";
 import { extname } from "path";
 
-import type { CsvExportData } from "../../exporters/csv/csv-exporter-types";
+import { type CsvExportData } from "../../exporters/csv/csv-exporter-types";
 import { getDepthFromPath } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import type {
-  AliasMap,
-  CommentsMap,
-  FilesAndFolders,
+import {
+  type AliasMap,
+  type CommentsMap,
+  type FilesAndFolders,
 } from "../../reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { MetadataByEntity } from "../../reducers/metadata/metadata-types";
-import type { SedaMetadataMapping } from "../../reducers/seda-configuration/seda-configuration-type";
-import type { Tag } from "../../reducers/tags/tags-types";
-import type { DuplicatesMap } from "../duplicates";
-import { hasDuplicateInDuplicatesMap } from "../duplicates";
+import { type FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { type MetadataByEntity } from "../../reducers/metadata/metadata-types";
+import { type SedaMetadataMapping } from "../../reducers/seda-configuration/seda-configuration-type";
+import { type Tag } from "../../reducers/tags/tags-types";
+import { type DuplicatesMap, hasDuplicateInDuplicatesMap } from "../duplicates";
 import { getType, isExactFileOrAncestor } from "../file-and-folders";
 import { formatPathForUserSystem } from "../file-system/file-sys-util";
 import { isFile } from "../fileAndFolder";
@@ -44,72 +43,40 @@ const getExtension = compose(extname, getName);
 
 const getChildrenTotalSize = compose(
   toString,
-  property<{ childrenTotalSize: number }, "childrenTotalSize">(
-    "childrenTotalSize"
-  )
+  property<{ childrenTotalSize: number }, "childrenTotalSize">("childrenTotalSize"),
 );
 
 const getFirstModifiedDate = compose(
   formatOutputDate,
-  property<{ initialMinLastModified: number }, "initialMinLastModified">(
-    "initialMinLastModified"
-  )
+  property<{ initialMinLastModified: number }, "initialMinLastModified">("initialMinLastModified"),
 );
 
 const getLastModifiedDate = compose(
   formatOutputDate,
-  property<{ initialMaxLastModified: number }, "initialMaxLastModified">(
-    "initialMaxLastModified"
-  )
+  property<{ initialMaxLastModified: number }, "initialMaxLastModified">("initialMaxLastModified"),
 );
 
-const getNewLastModifiedDateForFolder = ({
-  initialMaxLastModified,
-  maxLastModified,
-}: AccessorParams) =>
-  initialMaxLastModified === maxLastModified
-    ? ""
-    : formatOutputDate(maxLastModified);
+const getNewLastModifiedDateForFolder = ({ initialMaxLastModified, maxLastModified }: AccessorParams) =>
+  initialMaxLastModified === maxLastModified ? "" : formatOutputDate(maxLastModified);
 
-const getNewFirstModifiedDateForFolder = ({
-  initialMinLastModified,
-  minLastModified,
-}: AccessorParams) =>
-  initialMinLastModified === minLastModified
-    ? ""
-    : formatOutputDate(minLastModified);
+const getNewFirstModifiedDateForFolder = ({ initialMinLastModified, minLastModified }: AccessorParams) =>
+  initialMinLastModified === minLastModified ? "" : formatOutputDate(minLastModified);
 
 const getNewPath = ({ virtualPath, id }: { id: string; virtualPath: string }) =>
   virtualPath !== id ? formatPathForUserSystem(virtualPath) : "";
 
-const getAlias = ({ aliases, id }: { aliases: AliasMap; id: keyof AliasMap }) =>
-  aliases[id] || "";
+const getAlias = ({ aliases, id }: { aliases: AliasMap; id: keyof AliasMap }) => aliases[id] || "";
 
-const getComments = ({
-  comments,
-  id,
-}: {
-  comments: CommentsMap;
-  id: keyof CommentsMap;
-}) => comments[id] || "";
+const getComments = ({ comments, id }: { comments: CommentsMap; id: keyof CommentsMap }) => comments[id] || "";
 
-const getFileOrFolderText = ({
-  file,
-  folder,
-}: {
-  file: string;
-  folder: string;
-}) => compose((isAFile) => (isAFile ? file : folder), isFile);
+const getFileOrFolderText = ({ file, folder }: { file: string; folder: string }) =>
+  compose(isAFile => (isAFile ? file : folder), isFile);
 
 const getDepth = compose(toString, getDepthFromPath, getId);
 
-const getFileCount = compose(
-  toString,
-  property<{ nbChildrenFiles: number }, "nbChildrenFiles">("nbChildrenFiles")
-);
+const getFileCount = compose(toString, property<{ nbChildrenFiles: number }, "nbChildrenFiles">("nbChildrenFiles"));
 
-const getFileHash = ({ id, hashes }: { hashes: HashesMap; id: string }) =>
-  hashes[id] ?? "";
+const getFileHash = ({ id, hashes }: { hashes: HashesMap; id: string }) => hashes[id] ?? "";
 
 const getHasDuplicateText =
   ({ yes, no }: { no: string; yes: string }) =>
@@ -120,33 +87,23 @@ const getHasDuplicateText =
   }: FilesAndFolders & {
     duplicatesMap: DuplicatesMap;
   } & { hashes: HashesMap }) =>
-    hasDuplicateInDuplicatesMap(duplicatesMap, hashes[currentFf.id] ?? "")
-      ? yes
-      : no;
+    hasDuplicateInDuplicatesMap(duplicatesMap, hashes[currentFf.id] ?? "") ? yes : no;
 
 const getTypeText =
-  ({
-    folder: folderLabel,
-    unknown: unknownLabel,
-  }: {
-    folder: string;
-    unknown: string;
-  }) =>
+  ({ folder: folderLabel, unknown: unknownLabel }: { folder: string; unknown: string }) =>
   (filesAndFolders: FilesAndFolders) =>
     getType(filesAndFolders, { folderLabel, unknownLabel });
 
 const getToDeleteText = (toDeleteText: string) =>
   compose(
     (isToDelete: boolean) => (isToDelete ? toDeleteText : ""),
-    ({ id, idsToDelete }: { id: string; idsToDelete: string[] }) =>
-      idsToDelete.includes(id)
+    ({ id, idsToDelete }: { id: string; idsToDelete: string[] }) => idsToDelete.includes(id),
   );
 
 const getTagText = ({ name, ffIds }: { ffIds: string[]; name: string }) =>
   compose(
-    (isTaggged) => (isTaggged ? name : ""),
-    ({ id }: { id: string }) =>
-      ffIds.some((taggedId) => isExactFileOrAncestor(id, taggedId))
+    isTaggged => (isTaggged ? name : ""),
+    ({ id }: { id: string }) => ffIds.some(taggedId => isExactFileOrAncestor(id, taggedId)),
   );
 
 type AccessorParams = FilesAndFolders &
@@ -174,44 +131,31 @@ const makeCellConfigCreator =
   });
 
 const makeTagsConfig = compose(
-  (tags) =>
+  tags =>
     tags.map(
       ({ id, name, ffIds }: Tag, index): CellConfig => ({
         accessor: getTagText({ ffIds, name }),
         id,
         title: `tag${index} : ${name}`,
-      })
+      }),
     ),
-  sortBy<Tag>("name")
+  sortBy<Tag>("name"),
 );
 
-const getMetadataName = (
-  metadataName: string,
-  sedaMapping: SedaMetadataMapping
-) =>
-  sedaMapping[metadataName]
-    ? `${metadataName} (${sedaMapping[metadataName]})`
-    : metadataName;
+const getMetadataName = (metadataName: string, sedaMapping: SedaMetadataMapping) =>
+  sedaMapping[metadataName] ? `${metadataName} (${sedaMapping[metadataName]})` : metadataName;
 
-const makeMetdataConfig = ({
-  metadataKeys,
-  sedaMapping,
-}: CsvExportData): CellConfig[] => {
+const makeMetdataConfig = ({ metadataKeys, sedaMapping }: CsvExportData): CellConfig[] => {
   return metadataKeys.map(
     (metadataName): CellConfig => ({
-      accessor: (params) =>
-        params.metadata[params.id]?.find(({ name }) => name === metadataName)
-          ?.content ?? "",
+      accessor: params => params.metadata[params.id]?.find(({ name }) => name === metadataName)?.content ?? "",
       id: metadataName,
       title: getMetadataName(metadataName, sedaMapping),
-    })
+    }),
   );
 };
 
-export const makeRowConfig = (
-  translate: TFunction,
-  config: CsvExportData
-): CellConfig[] => {
+export const makeRowConfig = (translate: TFunction, config: CsvExportData): CellConfig[] => {
   const createCellConfig = makeCellConfigCreator(translate);
   return [
     createCellConfig("", constant("")),
@@ -232,7 +176,7 @@ export const makeRowConfig = (
       getFileOrFolderText({
         file: translate("common.fileWord"),
         folder: translate("common.folder"),
-      })
+      }),
     ),
     createCellConfig("depth", getDepth),
     createCellConfig("fileCount", getFileCount),
@@ -241,7 +185,7 @@ export const makeRowConfig = (
       getTypeText({
         folder: translate("common.folder"),
         unknown: translate("common.unknown"),
-      })
+      }),
     ),
     createCellConfig("hash", getFileHash),
     createCellConfig(
@@ -250,7 +194,7 @@ export const makeRowConfig = (
       getHasDuplicateText({
         no: translate("common.no"),
         yes: translate("common.yes"),
-      })
+      }),
     ),
     createCellConfig("toDelete", getToDeleteText(translate("common.toDelete"))),
     ...makeTagsConfig(config.tags),

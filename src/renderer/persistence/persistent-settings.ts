@@ -1,5 +1,5 @@
 import { getPath } from "@common/utils/electron";
-import type { SimpleObject } from "@common/utils/object";
+import { type SimpleObject } from "@common/utils/object";
 import fs from "fs";
 import _ from "lodash";
 import path from "path";
@@ -55,9 +55,7 @@ export const getInitialUserLocalSettings = (): UserLocalSettings => {
  * Returns a normalized value of user settings
  * @param storedUserLocalSettings - User settings stored in user-settings.json
  */
-export const sanitizeUserLocalSettings = (
-  storedUserLocalSettings?: SimpleObject
-): UserLocalSettings => {
+export const sanitizeUserLocalSettings = (storedUserLocalSettings?: SimpleObject): UserLocalSettings => {
   if (!storedUserLocalSettings) {
     return defaultUserLocalSettings;
   }
@@ -66,21 +64,14 @@ export const sanitizeUserLocalSettings = (
       ...defaultUserLocalSettings,
       ...storedUserLocalSettings,
     },
-    Object.keys(defaultUserLocalSettings)
+    Object.keys(defaultUserLocalSettings),
   ) as UserLocalSettings;
 };
 
-const readUserLocalSettings = (
-  userSettingsFilePath: string
-): UserLocalSettings => {
+const readUserLocalSettings = (userSettingsFilePath: string): UserLocalSettings => {
   try {
-    const storedUserLocalSettings = fs.readFileSync(
-      userSettingsFilePath,
-      "utf8"
-    );
-    return sanitizeUserLocalSettings(
-      JSON.parse(storedUserLocalSettings) as SimpleObject
-    );
+    const storedUserLocalSettings = fs.readFileSync(userSettingsFilePath, "utf8");
+    return sanitizeUserLocalSettings(JSON.parse(storedUserLocalSettings) as SimpleObject);
   } catch {
     return defaultUserLocalSettings;
   }
@@ -90,9 +81,7 @@ const readUserLocalSettings = (
  * Save new user settings in user-settings.json
  * @param newUserLocalSettings - new value for user settings
  */
-export async function saveUserLocalSettings(
-  newUserLocalSettings: UserLocalSettings
-): Promise<void> {
+export async function saveUserLocalSettings(newUserLocalSettings: UserLocalSettings): Promise<void> {
   const settingsAsString = JSON.stringify(newUserLocalSettings);
   try {
     const userSettingsFilePath = getUserLocalSettingsFilePath();

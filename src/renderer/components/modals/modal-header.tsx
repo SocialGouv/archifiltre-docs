@@ -1,7 +1,7 @@
-import type { VoidFunction } from "@common/utils/function";
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
+import { type VoidFunction } from "@common/utils/function";
+import MuiDialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import React from "react";
 import { FaTimes } from "react-icons/fa";
 
@@ -18,11 +18,7 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({ title, onClose }) => {
     <MuiDialogTitle disableTypography>
       <Typography variant="h5">{title}</Typography>
       {onClose ? (
-        <IconButton
-          size="small"
-          className={classes.closeButton}
-          onClick={onClose}
-        >
+        <IconButton size="small" className={classes.closeButton} onClick={onClose}>
           <FaTimes />
         </IconButton>
       ) : null}

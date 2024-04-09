@@ -8,9 +8,7 @@ type FileFormats = "ucs2" | "utf8";
  * @param filePath - The path of the file to inspect
  * @returns {string}
  */
-export const identifyFileFormat = async (
-  filePath: string
-): Promise<FileFormats> => {
+export const identifyFileFormat = async (filePath: string): Promise<FileFormats> => {
   const fileStream = fs.createReadStream(filePath);
   await once(fileStream, "readable");
   const fileFirstTwoBytes: Uint8Array = fileStream.read(2);

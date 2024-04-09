@@ -62,6 +62,7 @@ const aboutItems = [
     link: CONTACT_LINK,
   },
 ];
+console.log(process.env, aboutItems);
 
 export const About: React.FC = () => {
   const { t } = useTranslation();

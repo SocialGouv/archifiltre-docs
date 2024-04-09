@@ -1,15 +1,15 @@
 import { ipcRenderer } from "@common/ipc";
 import { openLink } from "@common/utils/electron";
-import { Badge } from "@material-ui/core";
-import Box from "@material-ui/core/Box";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Tooltip from "@material-ui/core/Tooltip";
+import { Badge } from "@mui/material";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Tooltip from "@mui/material/Tooltip";
+import makeStyles from "@mui/styles/makeStyles";
 import path from "path";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -25,17 +25,9 @@ import {
   FaTrash,
 } from "react-icons/fa";
 
-import {
-  CONTACT_LINK,
-  DOCUMENTATION_LINK,
-  FEEDBACK_LINK,
-} from "../../constants";
+import { CONTACT_LINK, DOCUMENTATION_LINK, FEEDBACK_LINK } from "../../constants";
 import { useAutoUpdateContext } from "../../context/auto-update-context";
-import {
-  clearSession,
-  getPreviousSessions,
-  removeOneSessionElement,
-} from "../../persistence/previous-sessions";
+import { clearSession, getPreviousSessions, removeOneSessionElement } from "../../persistence/previous-sessions";
 import { EllipsisText } from "../main-space/workspace/enrichment/tags/ellipsis-text";
 
 const onFeedbackClick = () => {
@@ -96,9 +88,7 @@ export const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
   }, [loadPath]);
 
   const deleteClickedElement = (clickedElement: string): void => {
-    const filteredPreviousSession = previousSessions.filter(
-      (prevElement) => prevElement !== clickedElement
-    );
+    const filteredPreviousSession = previousSessions.filter(prevElement => prevElement !== clickedElement);
     setPreviousSessions(filteredPreviousSession);
   };
 
@@ -120,17 +110,11 @@ export const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
             <ListItemText primary={t("folderDropzone.newDirectory")} />
           </ListItem>
           {hasPreviousSession && (
-            <ListItem
-              button
-              onClick={reloadPreviousSession}
-              disabled={isLoading}
-            >
+            <ListItem button onClick={reloadPreviousSession} disabled={isLoading}>
               <ListItemIcon>
                 <FaSyncAlt />
               </ListItemIcon>
-              <ListItemText
-                primary={t("header.loadPreviousSessionButtonLabel")}
-              />
+              <ListItemText primary={t("header.loadPreviousSessionButtonLabel")} />
             </ListItem>
           )}
           <ListItem
@@ -152,7 +136,7 @@ export const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
       <Box overflow="auto">
         <List component="nav">
           {previousSessions
-            .filter((prevSession) => prevSession !== "")
+            .filter(prevSession => prevSession !== "")
             .map((previousDirectory, index) => (
               <Tooltip title={previousDirectory} key={previousDirectory}>
                 <ListItem
@@ -185,7 +169,7 @@ export const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
                       size="small"
                       disableRipple
                       disableFocusRipple
-                      onClick={(event) => {
+                      onClick={event => {
                         event.stopPropagation();
                         void removeOneSessionElement(previousDirectory);
                         deleteClickedElement(previousDirectory);
@@ -205,12 +189,7 @@ export const StartScreenSidebar: React.FC<StartScreenSidebarProps> = ({
         <List component="nav">
           <ListItem button onClick={openModal}>
             <ListItemIcon>
-              <Badge
-                color="error"
-                overlap="rectangular"
-                variant="dot"
-                invisible={!updateInfo}
-              >
+              <Badge color="error" overlap="rectangular" variant="dot" invisible={!updateInfo}>
                 <FaCog />
               </Badge>
             </ListItemIcon>

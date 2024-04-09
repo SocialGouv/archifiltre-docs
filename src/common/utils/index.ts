@@ -1,5 +1,5 @@
-type Keys<T> = (keyof T)[];
-type Values<T> = T[keyof T][];
+type Keys<T> = Array<keyof T>;
+type Values<T> = Array<T[keyof T]>;
 
 const _Object = {
   ...Object,

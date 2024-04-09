@@ -1,16 +1,13 @@
-import type { SimpleObject } from "@common/utils/object";
+import { type SimpleObject } from "@common/utils/object";
 import _ from "lodash";
 import React from "react";
 
-import type {
-  AliasMap,
-  CommentsMap,
-} from "../../../reducers/files-and-folders/files-and-folders-types";
+import { type AliasMap, type CommentsMap } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { tagMapToArray } from "../../../reducers/tags/tags-selectors";
-import type { TagMap } from "../../../reducers/tags/tags-types";
-import type { DimsMap } from "./icicle";
+import { type TagMap } from "../../../reducers/tags/tags-types";
+import { type DimsMap } from "./icicle";
 import { IcicleEnrichment, OPACITY } from "./icicle-enrichment";
-import type { IcicleMouseHandler } from "./icicle-main";
+import { type IcicleMouseHandler } from "./icicle-main";
 
 export interface IcicleEnrichmentsProps {
   aliases: AliasMap;
@@ -35,7 +32,6 @@ const isHighlighted = (ffId: string, tags: TagMap, higlightedTagId: string) => {
     return true;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   return tags[higlightedTagId]?.ffIds.includes(ffId);
 };
 
@@ -52,7 +48,6 @@ export const IcicleEnrichments: React.FC<IcicleEnrichmentsProps> = ({
   onDoubleClick,
   onMouseOver,
 }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   const isElementDisplayed = (ffId: string) => dims[ffId] !== undefined;
   const tagArray = tagMapToArray(tags);
   const taggedFiles = _(tagArray)
@@ -68,12 +63,12 @@ export const IcicleEnrichments: React.FC<IcicleEnrichmentsProps> = ({
     taggedFiles,
     displayedElementsToDelete,
     Object.keys(filteredAliases),
-    Object.keys(filteredComments)
+    Object.keys(filteredComments),
   );
 
   return (
     <g>
-      {enrichedElements.map((ffId) => (
+      {enrichedElements.map(ffId => (
         <IcicleEnrichment
           key={`${ffId}-enrichment}`}
           ffId={ffId}
@@ -82,11 +77,7 @@ export const IcicleEnrichments: React.FC<IcicleEnrichmentsProps> = ({
           isToDelete={displayedElementsToDelete.includes(ffId)}
           hasAlias={ffId in filteredAliases}
           hasComment={ffId in filteredComments}
-          opacity={
-            isHighlighted(ffId, tags, highlightedTagId)
-              ? OPACITY.HIGHLIGHTED
-              : OPACITY.NOT_HIGHLIGHTED
-          }
+          opacity={isHighlighted(ffId, tags, highlightedTagId) ? OPACITY.HIGHLIGHTED : OPACITY.NOT_HIGHLIGHTED}
           onClick={onClick}
           onDoubleClick={onDoubleClick}
           onMouseOver={onMouseOver}

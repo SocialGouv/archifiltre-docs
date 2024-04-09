@@ -1,17 +1,16 @@
-import Button from "@material-ui/core/Button";
-import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@mui/material/Button";
+import DialogActions from "@mui/material/DialogActions";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import type { ModalAction } from "./MetadataModalTypes";
+import { type ModalAction } from "./MetadataModalTypes";
 
 interface MetadataDialogFooterProps<T> {
-  actions: ModalAction<T>[];
+  actions: Array<ModalAction<T>>;
   closeModal: () => void;
   onAction: (actionId: T) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export function MetadataDialogFooter<T>({
   actions,
   closeModal,
@@ -33,12 +32,7 @@ export function MetadataDialogFooter<T>({
           {t(`importModal.${label}`)}
         </Button>
       ))}
-      <Button
-        color="secondary"
-        variant="contained"
-        disableElevation
-        onClick={closeModal}
-      >
+      <Button color="secondary" variant="contained" disableElevation onClick={closeModal}>
         {t("importModal.close")}
       </Button>
     </DialogActions>

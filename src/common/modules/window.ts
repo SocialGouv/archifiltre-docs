@@ -1,4 +1,4 @@
-import type { BrowserWindow } from "electron";
+import { type BrowserWindow } from "electron";
 
 import { ipcMain } from "../ipc";
 
@@ -22,11 +22,10 @@ export const loadWindow = (window: BrowserWindow): void => {
   ipcMain.on("window.maximize", () => {
     window.maximize();
   });
-  ipcMain.on("window.getSize", (event) => {
+  ipcMain.on("window.getSize", event => {
     event.returnValue = window.getSize();
   });
   ipcMain.on("window.setSize", (event, width, heigth) => {
-    // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
     event.returnValue = window.setSize(width, heigth);
   });
 };

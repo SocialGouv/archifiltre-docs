@@ -3,7 +3,6 @@ import { v4 as uuid } from "uuid";
 
 import { undoable } from "../enhancers/undoable/undoable";
 import { getTagByName } from "./tags-selectors";
-import type { TagsActionTypes, TagsState } from "./tags-types";
 import {
   ADD_TAG,
   DELETE_TAG,
@@ -11,6 +10,8 @@ import {
   RENAME_TAG,
   RESET_TAGS,
   TAG_FILE,
+  type TagsActionTypes,
+  type TagsState,
   UNTAG_FILE,
 } from "./tags-types";
 
@@ -49,12 +50,7 @@ const tagFile = (state: TagsState, tagId: string, ffId: string): TagsState => ({
  * @param tagId - The new tag id. Set to "" to generate it with uuid/v4.
  * @returns - The new state
  */
-const createTag = (
-  state: TagsState,
-  tagName: string,
-  ffId: string,
-  tagId: string
-): TagsState => {
+const createTag = (state: TagsState, tagName: string, ffId: string, tagId: string): TagsState => {
   const completeTagId = tagId === "" ? uuid() : tagId;
   return {
     tags: {
@@ -73,17 +69,13 @@ const createTag = (
  * @param state
  * @param action
  */
-const tagsReducer = (
-  state = initialState,
-  action?: TagsActionTypes
-): TagsState => {
+const tagsReducer = (state = initialState, action?: TagsActionTypes): TagsState => {
   switch (action?.type) {
     case RESET_TAGS:
       return initialState;
     case INITIALIZE_TAGS:
       return { tags: action.tags };
     case ADD_TAG:
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (action.ffId === undefined) {
         return state;
       }

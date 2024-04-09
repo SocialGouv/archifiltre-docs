@@ -13,11 +13,7 @@ export const UTF8 = "utf-8";
  * @param content - The string content to save
  * @param format - The specific format (ex: UTF8)
  */
-export const save = (
-  name: string,
-  content: string,
-  { format = "" } = {}
-): void => {
+export const save = (name: string, content: string, { format = "" } = {}): void => {
   let fileHead = "";
 
   if (format === UTF8) {
@@ -67,7 +63,7 @@ interface ConvertToPosixAbsolutePathOptions {
  */
 export const convertToPosixAbsolutePath = (
   filePath: string,
-  { separator = path.sep }: ConvertToPosixAbsolutePathOptions = {}
+  { separator = path.sep }: ConvertToPosixAbsolutePathOptions = {},
 ): string => {
   const array = filePath.split(separator);
   if (array[0] !== "") {
@@ -101,25 +97,21 @@ export const readFileSync = fs.readFileSync;
  * console.log(formatPathForUserSystem("/folder/file"))
  * // => \folder\file
  */
-export const formatPathForUserSystem = (formattedPath: string): string =>
-  path.normalize(formattedPath);
+export const formatPathForUserSystem = (formattedPath: string): string => path.normalize(formattedPath);
 
 /**
  * Returns the element absolute path based on the partition base path and the element id
  * @param basePath
  * @param relativePath
  */
-export const getAbsolutePath = (
-  basePath: string,
-  relativePath: string
-): string => path.join(basePath, "..", relativePath);
+export const getAbsolutePath = (basePath: string, relativePath: string): string =>
+  path.join(basePath, "..", relativePath);
 
 /**
  * Checks if the path is a filesystem root (ex: "C:\" pour windows ou "/" pour posix)
  * @param testPath
  */
-export const isRootPath = (testPath: string): boolean =>
-  path.dirname(testPath) === testPath;
+export const isRootPath = (testPath: string): boolean => path.dirname(testPath) === testPath;
 
 export const isValidFilePath = (filePath: string): boolean => {
   const folderPath = dirname(filePath);
@@ -131,11 +123,7 @@ export const isValidFilePath = (filePath: string): boolean => {
   }
 };
 
-export const isValidFolderPath = (folderPath: string): boolean =>
-  fs.existsSync(folderPath);
+export const isValidFolderPath = (folderPath: string): boolean => fs.existsSync(folderPath);
 
 export const startPathFromOneLevelAbove = (elementPath: string): string =>
-  (elementPath.startsWith("/") ? elementPath.slice(1) : elementPath)
-    .split("/")
-    .slice(1)
-    .join("/");
+  (elementPath.startsWith("/") ? elementPath.slice(1) : elementPath).split("/").slice(1).join("/");

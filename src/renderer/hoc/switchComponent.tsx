@@ -1,5 +1,4 @@
-import type { ComponentType } from "react";
-import React from "react";
+import React, { type ComponentType } from "react";
 
 type MapKey = number | string | symbol;
 
@@ -12,12 +11,11 @@ export type ComponentMap<TProps, TKey extends MapKey> = {
  */
 export const switchComponent = <TComponentProps, TKey extends MapKey>(
   componentMap: ComponentMap<TComponentProps, TKey>,
-  keySelector: (props: TComponentProps) => TKey
+  keySelector: (props: TComponentProps) => TKey,
 ): React.ComponentType<TComponentProps> => {
-  const SwitchedComponent: React.FC<TComponentProps> = (props) => {
+  const SwitchedComponent: React.FC<TComponentProps> = props => {
     const key = keySelector(props);
-    const SelectedComponent: React.ComponentType<TComponentProps> | undefined =
-      componentMap[key];
+    const SelectedComponent: React.ComponentType<TComponentProps> | undefined = componentMap[key];
 
     return SelectedComponent ? <SelectedComponent {...props} /> : null;
   };

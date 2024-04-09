@@ -1,15 +1,14 @@
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
 import React, { useState } from "react";
 
 import { COLLAPSE_ICON, EXPAND_ICON, Icon } from "../icon";
-import type { RowRendererProps, TableAccessor } from "./table-types";
+import { type RowRendererProps, type TableAccessor } from "./table-types";
 import { TableValue } from "./table-value";
 
-type HeaderProps<T> = { accessor: TableAccessor<T> }[];
+type HeaderProps<T> = Array<{ accessor: TableAccessor<T> }>;
 
 export function makeTableExpandableRow<T>(_headerProps: HeaderProps<T>) {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   return function TableExpandableRow({
     columns,
     row: rows,
@@ -23,22 +22,12 @@ export function makeTableExpandableRow<T>(_headerProps: HeaderProps<T>) {
       <>
         <TableRow>
           <TableCell>
-            <Icon
-              icon={expanded ? COLLAPSE_ICON : EXPAND_ICON}
-              color="black"
-              onClick={toggleExpanded}
-              size="normal"
-            />
+            <Icon icon={expanded ? COLLAPSE_ICON : EXPAND_ICON} color="black" onClick={toggleExpanded} size="normal" />
           </TableCell>
           {slicedColumns.map(({ accessor, id, cellStyle }, columnIndex) => {
             return (
               <TableCell key={`${id || String(accessor)}-${columnIndex}`}>
-                <TableValue
-                  row={rows}
-                  accessor={accessor}
-                  index={0}
-                  cellStyle={cellStyle}
-                />
+                <TableValue row={rows} accessor={accessor} index={0} cellStyle={cellStyle} />
               </TableCell>
             );
           })}
@@ -48,15 +37,8 @@ export function makeTableExpandableRow<T>(_headerProps: HeaderProps<T>) {
           rows.map((_row, rowIndex) => (
             <TableRow key={`row-${rowIndex}`}>
               {columns.map(({ accessor, id, cellStyle }, columnIndex) => (
-                <TableCell
-                  key={`${id || String(accessor)}-${rowIndex}-${columnIndex}`}
-                >
-                  <TableValue
-                    index={rowIndex}
-                    row={rows}
-                    accessor={accessor}
-                    cellStyle={cellStyle}
-                  />
+                <TableCell key={`${id || String(accessor)}-${rowIndex}-${columnIndex}`}>
+                  <TableValue index={rowIndex} row={rows} accessor={accessor} cellStyle={cellStyle} />
                 </TableCell>
               ))}
             </TableRow>

@@ -1,14 +1,14 @@
-import type { AnyFunction, Awaitable } from "@common/utils/function";
+import { type AnyFunction, type Awaitable } from "@common/utils/function";
 import { isWindows } from "@common/utils/os";
 import { liftPromise } from "@common/utils/promise";
 import * as fs from "fs";
 import { compose, map } from "lodash/fp";
-import type { TFunction } from "react-i18next";
+import { type TFunction } from "react-i18next";
 import { encode } from "windows-1252";
 
-import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
+import { type ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import { getElementsToDeleteFromStore } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import type { StoreState } from "../../reducers/store";
+import { type StoreState } from "../../reducers/store";
 import { getWorkspaceMetadataFromStore } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { translations } from "../../translations/translations";
 import { generateDeletionScript } from "../../utils/deletion-script";
@@ -20,18 +20,13 @@ import { NotificationDuration, notifySuccess } from "../../utils/notifications";
 const prepareElementsToDelete = compose(
   map(startPathFromOneLevelAbove),
   removeChildrenPath,
-  getElementsToDeleteFromStore
+  getElementsToDeleteFromStore,
 );
 
 const windowsFileWriter = (path: string): Awaitable<AnyFunction> =>
-  compose(
-    async (binaryString: string) =>
-      fs.promises.writeFile(path, binaryString, "binary"),
-    encode as AnyFunction
-  ); // TODO: types
+  compose(async (binaryString: string) => fs.promises.writeFile(path, binaryString, "binary"), encode as AnyFunction); // TODO: types
 
-const unixFileWriter = (path: string) => async (data: string) =>
-  fs.promises.writeFile(path, data);
+const unixFileWriter = (path: string) => async (data: string) => fs.promises.writeFile(path, data);
 
 const getFileWriter = () => (isWindows() ? windowsFileWriter : unixFileWriter);
 
@@ -47,7 +42,7 @@ const success = (t: TFunction, filePath: string) => () => {
     t("export.deletionScriptSuccessMessage"),
     t("export.deletionScript"),
     NotificationDuration.NORMAL,
-    async () => showInFolder(filePath)
+    async () => showInFolder(filePath),
   );
 };
 
@@ -57,7 +52,6 @@ export const deletionScriptExporterThunk =
     compose(
       liftPromise(success(translations.t.bind(translations), filePath)),
       curriedWriteFile(filePath),
-      ({ originalPath, elementsToDelete }) =>
-        generateDeletionScript(originalPath, elementsToDelete),
-      extractParamsFromState
+      ({ originalPath, elementsToDelete }) => generateDeletionScript(originalPath, elementsToDelete),
+      extractParamsFromState,
     )(getState());

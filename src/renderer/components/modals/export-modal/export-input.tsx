@@ -1,13 +1,13 @@
-import Box from "@material-ui/core/Box";
-import IconButton from "@material-ui/core/IconButton";
-import withTheme from "@material-ui/core/styles/withTheme";
-import Tooltip from "@material-ui/core/Tooltip";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import withTheme from "@mui/styles/withTheme";
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaFolderOpen } from "react-icons/fa";
 import styled from "styled-components";
 
-import type { ThemedProps } from "../../../theme/default-theme";
+import { type ThemedProps } from "../../../theme/default-theme";
 import { promptUserForSave } from "../../../utils/file-system/file-system-util";
 
 const FilePath = withTheme(styled.span`
@@ -21,8 +21,7 @@ const FilePath = withTheme(styled.span`
 `);
 
 const HideableTooltip = styled(Tooltip)<{ isvisible: string }>`
-  visibility: ${({ isvisible }) =>
-    isvisible === "true" ? "visible" : "hidden"};
+  visibility: ${({ isvisible }) => (isvisible === "true" ? "visible" : "hidden")};
 `;
 
 export interface ExportInputProps {
@@ -53,17 +52,9 @@ export const ExportInput: React.FC<ExportInputProps> = ({
       <Tooltip title={exportFilePath}>
         <FilePath hasError={!isValid}>{exportFilePath}</FilePath>
       </Tooltip>
-      <HideableTooltip
-        title={browseTitle}
-        isvisible={(!isFilePickerDisabled).toString()}
-      >
+      <HideableTooltip title={browseTitle} isvisible={(!isFilePickerDisabled).toString()}>
         <Box paddingLeft={1}>
-          <IconButton
-            size="small"
-            color="secondary"
-            onClick={onClick}
-            disabled={isFilePickerDisabled}
-          >
+          <IconButton size="small" color="secondary" onClick={onClick} disabled={isFilePickerDisabled}>
             <FaFolderOpen />
           </IconButton>
         </Box>

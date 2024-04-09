@@ -1,26 +1,25 @@
 import dateFormat from "dateformat";
-import type { TFunction } from "i18next";
+import { type TFunction } from "i18next";
 import React, { useMemo } from "react";
 
-import type {
-  ElementWithToDelete,
-  FilesAndFolders,
+import {
+  type ElementWithToDelete,
+  type FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadataMap } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { type FilesAndFoldersMetadataMap } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { bytes2HumanReadableFormat, isFile } from "../../../utils";
 import { getType } from "../../../utils/file-and-folders";
-import type { Column } from "../../common/table/table-types";
-import { WordBreak } from "../../common/table/table-types";
+import { type Column, WordBreak } from "../../common/table/table-types";
 import { ToDeleteChip } from "../../common/to-delete-chip";
 
 export const useSearchModalTableColumns = (
   t: TFunction,
   metadata: FilesAndFoldersMetadataMap,
   tagAsToDelete: (id: string) => void,
-  untagAsToDelete: (id: string) => void
-): Column<ElementWithToDelete>[] =>
+  untagAsToDelete: (id: string) => void,
+): Array<Column<ElementWithToDelete>> =>
   useMemo(
-    (): Column<ElementWithToDelete>[] => [
+    (): Array<Column<ElementWithToDelete>> => [
       {
         accessor: "name",
         id: "name",
@@ -39,23 +38,15 @@ export const useSearchModalTableColumns = (
       } as Column<ElementWithToDelete>,
       {
         accessor: (element: FilesAndFolders) =>
-          bytes2HumanReadableFormat(
-            isFile(element)
-              ? element.file_size
-              : metadata[element.id].childrenTotalSize
-          ),
+          bytes2HumanReadableFormat(isFile(element) ? element.file_size : metadata[element.id].childrenTotalSize),
         id: "size",
         name: t("search.size"),
         sortAccessor: (element: FilesAndFolders) =>
-          isFile(element)
-            ? element.file_size
-            : metadata[element.id].childrenTotalSize,
+          isFile(element) ? element.file_size : metadata[element.id].childrenTotalSize,
         sortable: true,
       } as Column<ElementWithToDelete>,
       {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        accessor: ({ file_last_modified }: FilesAndFolders) =>
-          dateFormat(file_last_modified, "dd/mm/yyyy"),
+        accessor: ({ file_last_modified }: FilesAndFolders) => dateFormat(file_last_modified, "dd/mm/yyyy"),
         id: "lastModified",
         name: t("search.fileLastModified"),
         sortAccessor: "file_last_modified",
@@ -82,8 +73,7 @@ export const useSearchModalTableColumns = (
         ),
         id: "toDelete",
         name: t("common.toDelete"),
-        textValueAccessor: ({ toDelete }: ElementWithToDelete) =>
-          toDelete ? t("common.yes") : t("common.no"),
+        textValueAccessor: ({ toDelete }: ElementWithToDelete) => (toDelete ? t("common.yes") : t("common.no")),
       } as Column<ElementWithToDelete>,
       {
         accessor: () => "",
@@ -92,5 +82,5 @@ export const useSearchModalTableColumns = (
         sortable: false,
       },
     ],
-    [t, metadata, tagAsToDelete, untagAsToDelete]
+    [t, metadata, tagAsToDelete, untagAsToDelete],
   );

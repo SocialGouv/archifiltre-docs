@@ -1,11 +1,11 @@
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { bytes2HumanReadableFormat } from "../../../../../utils";
-import type { FileType } from "../../../../../utils/file-types";
+import { type FileType } from "../../../../../utils/file-types";
 import { Table } from "../../../../common/table/table";
-import type { Column } from "../../../../common/table/table-types";
+import { type Column } from "../../../../common/table/table-types";
 import { DuplicatesTableType } from "./duplicates-table-type";
 
 type NumberMap<T extends string = string> = Record<T, number>;
@@ -30,7 +30,7 @@ export const DuplicatesTable: React.FC<DuplicatesTableProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const columns: Column<TableData>[] = useMemo(
+  const columns: Array<Column<TableData>> = useMemo(
     () => [
       {
         accessor: ({ fileType }) => <DuplicatesTableType fileType={fileType} />,
@@ -59,12 +59,12 @@ export const DuplicatesTable: React.FC<DuplicatesTableProps> = ({
         sortable: true,
       },
     ],
-    [t]
+    [t],
   );
 
   const data = useMemo<TableData[]>(
     () =>
-      (Object.entries(fileTypesCount) as [FileType, number][])
+      (Object.entries(fileTypesCount) as Array<[FileType, number]>)
         .sort(([, firstValue], [, secondValue]) => secondValue - firstValue)
         .map(([fileType, fileTypeValue]) => {
           return {
@@ -74,18 +74,12 @@ export const DuplicatesTable: React.FC<DuplicatesTableProps> = ({
             size: fileSizesCount[fileType],
           };
         }),
-    [fileTypesCount, fileSizesCount, filePercentagesCount]
+    [fileTypesCount, fileSizesCount, filePercentagesCount],
   );
 
   return (
     <Box overflow="hidden">
-      <Table
-        rowId="fileType"
-        columns={columns}
-        data={data}
-        isPaginatorDisplayed={false}
-        isDense={true}
-      />
+      <Table rowId="fileType" columns={columns} data={data} isPaginatorDisplayed={false} isDense={true} />
     </Box>
   );
 };

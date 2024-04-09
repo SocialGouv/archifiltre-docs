@@ -1,6 +1,6 @@
-import type { VoidFunction } from "@common/utils/function";
-import Button from "@material-ui/core/Button";
-import Tooltip from "@material-ui/core/Tooltip";
+import { type VoidFunction } from "@common/utils/function";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSignOutAlt } from "react-icons/fa";

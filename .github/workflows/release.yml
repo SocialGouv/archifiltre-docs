@@ -72,8 +72,8 @@ jobs:
       - name: Remove temp .env file
         run: rm -rf ${{ github.run_id }}_${{ github.sha }}.env
         # << NO Secrets
-      - name: Yarn install
-        run: yarn --frozen-lockfile --perfer-offline
+      - name: npm install
+        run: npm ci --prefer-offline
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v6
         with:
@@ -91,9 +91,9 @@ jobs:
           # GITHUB_REF should not be default branch when "workflow_run" event is triggered
           export GITHUB_REF=$GITHUB_REF_OVERRIDE
           echo "current-version=$(node -e "console.log(require('./package.json').version)")" >> $GITHUB_OUTPUT
-          yarn semantic-release
+          npx semantic-release
           echo "next-version=$(node -e "console.log(require('./package.json').version)")" >> $GITHUB_OUTPUT
-          yarn compile --no-progress
+          npm run compile --no-progress
         env:
           ARCHIFILTRE_RELEASE_MODE: version
           TRACKER_MATOMO_ID_SITE: ${{ steps.nosecrets.outputs.tracker_matomo_id_site }}
@@ -148,21 +148,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-      - name: Yarn install
+      - name: npm install
         run: |
-          yarn config set network-timeout 300000
-          yarn --frozen-lockfile --perfer-offline
+          npm config set network-timeout 300000
+          npm ci --prefer-offline
       - name: Replace version in package.json
         shell: bash
         run: |
-          yarn global add replace
-          $(yarn global bin)/replace '"version": "${{ needs.compile.outputs.current-version }}"' '"version": "${{ needs.compile.outputs.next-version }}"' package.json
-          yarn replaceForChannel
+          npx replace '"version": "${{ needs.compile.outputs.current-version }}"' '"version": "${{ needs.compile.outputs.next-version }}"' package.json
+          npm run replaceForChannel
       ####### Activate only if windows msi build fail with "ICE error"
       # - name: Hack msi compilation
       #   if: contains(matrix.os, 'windows')
       #   shell: bash
-      #   run: $(yarn global bin)/replace 'lightArgs\.push\(\.\.\.objectFiles\);' 'lightArgs.push("-sval", ...objectFiles);' node_modules/app-builder-lib/out/targets/MsiTarget.js
+      #   run: npx replace 'lightArgs\.push\(\.\.\.objectFiles\);' 'lightArgs.push("-sval", ...objectFiles);' node_modules/app-builder-lib/out/targets/MsiTarget.js
       - name: Download dist
         uses: actions/download-artifact@v4
         with:
@@ -173,7 +172,7 @@ jobs:
         with:
           name: certificates
       - name: Build bin
-        run: yarn dist:${{ matrix.target }}
+        run: npm run dist:${{ matrix.target }}
       - name: Archive bin
         uses: actions/upload-artifact@v4
         with:
@@ -205,8 +204,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-      - name: Yarn install
-        run: yarn --frozen-lockfile --perfer-offline
+      - name: npm install
+        run: npm ci --prefer-offline
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v6
         with:
@@ -220,4 +219,4 @@ jobs:
         run: |
           export PATH="$(pwd)/.github/bin/:$PATH"
           export GITHUB_REF=$GITHUB_REF_OVERRIDE
-          yarn semantic-release
+          npm run semantic-release

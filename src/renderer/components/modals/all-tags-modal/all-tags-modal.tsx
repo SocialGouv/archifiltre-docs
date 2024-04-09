@@ -1,6 +1,6 @@
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import Paper from "@material-ui/core/Paper";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import Paper from "@mui/material/Paper";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
@@ -18,21 +18,12 @@ export interface SettingsModalProps {
   isModalOpen: boolean;
 }
 
-export const AllTagsModal: React.FC<SettingsModalProps> = ({
-  isModalOpen,
-  closeModal,
-}) => {
+export const AllTagsModal: React.FC<SettingsModalProps> = ({ isModalOpen, closeModal }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
   return (
-    <Dialog
-      open={isModalOpen}
-      onClose={closeModal}
-      maxWidth="xs"
-      fullWidth
-      PaperComponent={StyledPaper}
-    >
+    <Dialog open={isModalOpen} onClose={closeModal} maxWidth="xs" fullWidth PaperComponent={StyledPaper}>
       <ModalHeader title={t("workspace.allTags")} onClose={closeModal} />
       <DialogContent className={classes.allTagsDialogContent} dividers>
         <AllTagsContainer />

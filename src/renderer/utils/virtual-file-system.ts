@@ -2,11 +2,11 @@ import _ from "lodash";
 import { compose } from "lodash/fp";
 
 import { createFilesAndFoldersMetadataDataStructure } from "../files-and-folders-loader/file-system-loading-process-utils";
-import type { VirtualFileSystem } from "../files-and-folders-loader/files-and-folders-loader-types";
+import { type VirtualFileSystem } from "../files-and-folders-loader/files-and-folders-loader-types";
 import { ROOT_FF_ID } from "../reducers/files-and-folders/files-and-folders-selectors";
-import type { FilesAndFoldersMap } from "../reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import type { Tag, TagMap } from "../reducers/tags/tags-types";
+import { type FilesAndFoldersMap } from "../reducers/files-and-folders/files-and-folders-types";
+import { type FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { type Tag, type TagMap } from "../reducers/tags/tags-types";
 import { isIgnored } from "./hidden-file";
 
 export interface WithFilesAndFolders {
@@ -24,10 +24,7 @@ export interface WithTags {
  * @param filesAndFolders
  * @param elementId
  */
-const removeHiddenFilesRec = (
-  filesAndFolders: FilesAndFoldersMap,
-  elementId: string
-): FilesAndFoldersMap => {
+const removeHiddenFilesRec = (filesAndFolders: FilesAndFoldersMap, elementId: string): FilesAndFoldersMap => {
   const element = filesAndFolders[elementId];
 
   if (element.children.length === 0) {
@@ -36,15 +33,10 @@ const removeHiddenFilesRec = (
 
   const nextFilesAndFolders: FilesAndFoldersMap = Object.assign(
     {},
-    ...element.children.map((childId) =>
-      removeHiddenFilesRec(filesAndFolders, childId)
-    )
+    ...element.children.map(childId => removeHiddenFilesRec(filesAndFolders, childId)),
   );
 
-  const nextChildren = _.intersection(
-    element.children,
-    Object.keys(nextFilesAndFolders)
-  );
+  const nextChildren = _.intersection(element.children, Object.keys(nextFilesAndFolders));
 
   if (nextChildren.length === 0) {
     return nextFilesAndFolders;
@@ -57,7 +49,7 @@ const removeHiddenFilesRec = (
         children: nextChildren,
       },
     },
-    nextFilesAndFolders
+    nextFilesAndFolders,
   );
 };
 
@@ -65,11 +57,7 @@ const removeHiddenFilesRec = (
  * Remove ignored filesAndFolders from a VirtualFileSystem
  * @param vfs
  */
-export const removeIgnoredFilesAndFoldersFromVirtualFileSystem = <
-  T extends WithFilesAndFolders
->(
-  vfs: T
-): T => {
+export const removeIgnoredFilesAndFoldersFromVirtualFileSystem = <T extends WithFilesAndFolders>(vfs: T): T => {
   return {
     ...vfs,
     filesAndFolders: removeHiddenFilesRec(vfs.filesAndFolders, ROOT_FF_ID),
@@ -80,15 +68,11 @@ export const removeIgnoredFilesAndFoldersFromVirtualFileSystem = <
  * Recompute the filesAndFoldersMetadata of a VirtualFileSystem based on the filesAndFolders
  * @param vfs
  */
-export const recomputeVirtualFileSystemMetadata = <
-  T extends WithFilesAndFolders & WithFilesAndFoldersMetadata
->(
-  vfs: T
+export const recomputeVirtualFileSystemMetadata = <T extends WithFilesAndFolders & WithFilesAndFoldersMetadata>(
+  vfs: T,
 ): T => ({
   ...vfs,
-  filesAndFoldersMetadata: createFilesAndFoldersMetadataDataStructure(
-    vfs.filesAndFolders
-  ),
+  filesAndFoldersMetadata: createFilesAndFoldersMetadataDataStructure(vfs.filesAndFolders),
 });
 
 /**
@@ -105,24 +89,18 @@ const removeMissingFilesAndFoldersFromFileSystemMap =
 /**
  * Remove comments that correspond to no filesAndFolders
  */
-export const removeUnusedCommentsFromVirtualFileSystem =
-  removeMissingFilesAndFoldersFromFileSystemMap("comments");
+export const removeUnusedCommentsFromVirtualFileSystem = removeMissingFilesAndFoldersFromFileSystemMap("comments");
 
 /**
  * Remove aliases that correspond to no filesAndFolders
  */
-export const removeUnusedAliasesFromVirtualFileSystem =
-  removeMissingFilesAndFoldersFromFileSystemMap("aliases");
+export const removeUnusedAliasesFromVirtualFileSystem = removeMissingFilesAndFoldersFromFileSystemMap("aliases");
 
 /**
  * Remove non referenced filesAndFolders from tags in a VirtualFileSystem
  * @param vfs
  */
-export const removeUnusedTagsFromVirtualFileSystem = <
-  T extends WithFilesAndFolders & WithTags
->(
-  vfs: T
-): T => {
+export const removeUnusedTagsFromVirtualFileSystem = <T extends WithFilesAndFolders & WithTags>(vfs: T): T => {
   const filesAndFoldersKeys = Object.keys(vfs.filesAndFolders);
   return {
     ...vfs,
@@ -131,7 +109,7 @@ export const removeUnusedTagsFromVirtualFileSystem = <
         (tag: Tag): Tag => ({
           ...tag,
           ffIds: _.intersection(tag.ffIds, filesAndFoldersKeys),
-        })
+        }),
       )
       .pickBy((tag: Tag) => tag.ffIds.length !== 0)
       .value() as TagMap,
@@ -141,13 +119,11 @@ export const removeUnusedTagsFromVirtualFileSystem = <
 /**
  * Clean up ignored files name from a VirtualFileSystem
  */
-export const removeIgnoredElementsFromVirtualFileSystem = (
-  virtualFileSystem: VirtualFileSystem
-): VirtualFileSystem =>
+export const removeIgnoredElementsFromVirtualFileSystem = (virtualFileSystem: VirtualFileSystem): VirtualFileSystem =>
   compose(
     removeUnusedTagsFromVirtualFileSystem,
     removeUnusedAliasesFromVirtualFileSystem,
     removeUnusedCommentsFromVirtualFileSystem,
     recomputeVirtualFileSystemMetadata,
-    removeIgnoredFilesAndFoldersFromVirtualFileSystem
+    removeIgnoredFilesAndFoldersFromVirtualFileSystem,
   )(virtualFileSystem) as VirtualFileSystem;

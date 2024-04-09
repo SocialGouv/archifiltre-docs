@@ -1,30 +1,23 @@
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import React from "react";
 
 import { HeaderContainer as Header } from "../../header";
 import { useTabsState } from "../../header/tabs-context";
 import { DuplicatesSearchContainer as DuplicatesSearch } from "../duplicates-search/duplicates-search-container";
 import { HelpButton } from "../help-button";
-import type { IcicleContainerProps } from "../icicle/icicle-container";
-import { IcicleContainer as Icicle } from "../icicle/icicle-container";
+import { IcicleContainer as Icicle, type IcicleContainerProps } from "../icicle/icicle-container";
 import { IcicleMetadataSidebarContainer } from "../icicle/icicle-metadata/icicle-metadata-sidebar-container";
 import { NavigationBarContainer as NavigationBar } from "../navigation-bar/navigation-bar-container";
-import {
-  DUPLICATES_TAB_INDEX,
-  ENRICHMENT_TAB_INDEX,
-} from "./tabs/tabs-constants";
+import { DUPLICATES_TAB_INDEX, ENRICHMENT_TAB_INDEX } from "./tabs/tabs-constants";
 import { TabsContent } from "./tabs/tabs-content";
 import { WorkspaceProviders } from "./workspace-providers";
 
-const areIciclesDisplayed = (tabIndex: number) =>
-  tabIndex !== DUPLICATES_TAB_INDEX;
+const areIciclesDisplayed = (tabIndex: number) => tabIndex !== DUPLICATES_TAB_INDEX;
 
-const minimapReplaceComponent = (
-  tabIndex: number
-): IcicleContainerProps["rightSidebar"] | undefined =>
+const minimapReplaceComponent = (tabIndex: number): IcicleContainerProps["rightSidebar"] | undefined =>
   ({
     [ENRICHMENT_TAB_INDEX]: IcicleMetadataSidebarContainer,
-  }[tabIndex]);
+  })[tabIndex];
 
 const Workspace: React.FC = () => {
   const { tabIndex } = useTabsState();
@@ -33,12 +26,7 @@ const Workspace: React.FC = () => {
     <WorkspaceProviders>
       <Box display="flex" flexDirection="column" height="100%">
         <Header />
-        <Box
-          flexGrow={0}
-          flexShrink={0}
-          flexBasis="auto"
-          style={{ minHeight: "0px", width: "100%" }}
-        >
+        <Box flexGrow={0} flexShrink={0} flexBasis="auto" style={{ minHeight: "0px", width: "100%" }}>
           <Box display="flex" flexDirection="row" flexWrap="wrap" height="100%">
             <TabsContent tabIndex={tabIndex} />
           </Box>

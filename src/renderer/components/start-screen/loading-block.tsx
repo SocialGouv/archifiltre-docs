@@ -1,7 +1,7 @@
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Grid from "@material-ui/core/Grid";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import Grid from "@mui/material/Grid";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
@@ -32,8 +32,7 @@ export const LoadingBlock: React.FC<LoadingBlockProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const isIndexingDone =
-    fileSystemLoadingStep !== FileSystemLoadingStep.INDEXING;
+  const isIndexingDone = fileSystemLoadingStep !== FileSystemLoadingStep.INDEXING;
 
   const loaderText = isJsonFile(loadedPath)
     ? t("folderDropzone.jsonLoading")
@@ -52,12 +51,7 @@ export const LoadingBlock: React.FC<LoadingBlockProps> = ({
           )}
         </Box>
         <Box p={2}>
-          <Button
-            color="primary"
-            variant="contained"
-            size="small"
-            onClick={cancelLoading}
-          >
+          <Button color="primary" variant="contained" size="small" onClick={cancelLoading}>
             {t("folderDropzone.cancelLoading")}
           </Button>
         </Box>

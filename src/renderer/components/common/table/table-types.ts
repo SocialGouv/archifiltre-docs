@@ -1,18 +1,13 @@
-import type { ComponentType, ReactElement } from "react";
+import { type ComponentType, type ReactElement } from "react";
 
-/* eslint-disable @typescript-eslint/naming-convention -- enum */
 export enum WordBreak {
   BREAK_ALL = "break-all",
   BREAK_WORD = "break-word",
   KEEP_ALL = "keep-all",
   NORMAL = "normal",
 }
-/* eslint-enable @typescript-eslint/naming-convention */
 
-export type FunctionAccessor<T> = (
-  value: T,
-  index?: number
-) => ReactElement | number | string;
+export type FunctionAccessor<T> = (value: T, index?: number) => ReactElement | number | string;
 
 export type TableAccessor<T> = FunctionAccessor<T> | keyof T;
 
@@ -40,7 +35,7 @@ export type HeaderColumn<T> =
     };
 
 export interface RowRendererProps<T> {
-  columns: Column<T>[];
+  columns: Array<Column<T>>;
   row: T;
 }
 

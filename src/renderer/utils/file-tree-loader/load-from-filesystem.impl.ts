@@ -1,4 +1,4 @@
-import type { ArchifiltreDocsError } from "@common/utils/error";
+import { type ArchifiltreDocsError } from "@common/utils/error";
 import * as fs from "fs";
 
 import {
@@ -7,10 +7,9 @@ import {
   loadFileSystemFromFilesAndFoldersLoader,
   makeFileLoadingHooksCreator,
 } from "../../files-and-folders-loader/file-system-loading-process-utils";
-import type { VirtualFileSystem } from "../../files-and-folders-loader/files-and-folders-loader-types";
-import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
-import type { AsyncWorker } from "../async-worker";
-import { WorkerEventType } from "../async-worker";
+import { type VirtualFileSystem } from "../../files-and-folders-loader/files-and-folders-loader-types";
+import { type FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
+import { type AsyncWorker, WorkerEventType } from "../async-worker";
 import { RESULT_STREAM_FILE_DESCRIPTOR } from "../async-worker/child-process";
 import { MessageTypes } from "../batch-process/types";
 import { stringifyVFSToStream } from "./load-from-filesystem-serializer";
@@ -64,10 +63,9 @@ interface LoadVirtualFileSystemParams {
  */
 export const loadVirtualFileSystem = async (
   asyncWorker: AsyncWorker,
-  { path, filesAndFolders, erroredPaths }: LoadVirtualFileSystemParams
+  { path, filesAndFolders, erroredPaths }: LoadVirtualFileSystemParams,
 ): Promise<void> => {
-  const { reportResult, reportError, reportFatal, reportComplete } =
-    createReporters(asyncWorker);
+  const { reportResult, reportError, reportFatal, reportComplete } = createReporters(asyncWorker);
 
   const isOnFileSystem = isFileSystemLoad(path);
 
@@ -84,17 +82,13 @@ export const loadVirtualFileSystem = async (
     reportResult,
   });
 
-  const fileSystem = await loadFileSystemFromFilesAndFoldersLoader(
-    filesAndFoldersLoader,
-    hooksCreator,
-    {
-      isOnFileSystem,
-    }
-  );
+  const fileSystem = await loadFileSystemFromFilesAndFoldersLoader(filesAndFoldersLoader, hooksCreator, {
+    isOnFileSystem,
+  });
 
   reportResultStream(fileSystem);
 
-  await new Promise<void>((resolve) => {
+  await new Promise<void>(resolve => {
     asyncWorker.addEventListener(WorkerEventType.MESSAGE, ({ type }) => {
       if (type === MessageTypes.STREAM_READ) {
         resolve();

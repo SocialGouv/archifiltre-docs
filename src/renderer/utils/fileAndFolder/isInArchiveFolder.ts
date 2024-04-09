@@ -8,5 +8,5 @@ export const isInArchiveFolder = (filePath: string): boolean => {
   const normalizedFilePath = filePath.replace(/\\/g, "/");
   const segments = normalizedFilePath.split("/");
 
-  return segments.some((segment) => segment.endsWith(".zip"));
+  return segments.some(segment => segment.endsWith(".zip"));
 };

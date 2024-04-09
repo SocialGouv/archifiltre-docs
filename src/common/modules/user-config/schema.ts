@@ -1,6 +1,6 @@
-import type { Schema } from "electron-store";
+import { type Schema } from "electron-store";
 
-import type { UserConfigObject } from "./type";
+import { type UserConfigObject } from "./type";
 
 export const schema: Schema<UserConfigObject> = {
   _firstOpened: {

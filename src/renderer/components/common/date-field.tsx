@@ -1,16 +1,11 @@
-import type { AnyFunction } from "@common/utils/function";
-import { tap } from "@common/utils/functionnal-programming";
-import Input from "@material-ui/core/Input";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import type { Locale } from "date-fns";
-// eslint-disable-next-line import/no-duplicates
-import { fromUnixTime, getTime, getYear, isBefore } from "date-fns";
-// eslint-disable-next-line import/no-duplicates
-import { de, enUS, fr } from "date-fns/locale";
-import compose from "lodash/fp/compose";
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { de, enUS, fr, fromUnixTime, getYear, isBefore } from "date-fns";
 import React, { useState } from "react";
 import { FaPen } from "react-icons/fa";
-import { useDateInput } from "react-nice-dates";
 
 import { useGetUserSettings } from "../../hooks/use-user-settings";
 import { Language } from "../../utils/language/types";
@@ -21,9 +16,6 @@ const languagesMap = {
   [Language.EN]: enUS,
 };
 
-const getLanguageLocale = (language: Language): Locale =>
-  languagesMap[language];
-
 export interface DateFieldProps {
   date: number;
   onDateChange: (timestamp: number) => void;
@@ -33,47 +25,40 @@ export interface DateFieldProps {
 const MIN_DATE_YEAR = 1970;
 
 export const DateField: React.FC<DateFieldProps> = ({ date, onDateChange }) => {
-  const [isFocused, setFocus] = useState(false);
   const { userSettings } = useGetUserSettings();
+  const [selectedDate, setSelectedDate] = useState<Date | null>(fromUnixTime(date / 1000));
 
-  const dateChangeHandler = compose(onDateChange, getTime);
+  const handleDateChange = (date: Date | null) => {
+    if (date) {
+      setSelectedDate(date);
+      onDateChange(date.getTime()); // Assuming onDateChange expects a timestamp in milliseconds
+    }
+  };
 
-  const inputProps: { onBlur: AnyFunction; onFocus: AnyFunction } =
-    useDateInput({
-      // TODO: don't use react-nice-dates
-      date: fromUnixTime(date / 1000),
-      locale: getLanguageLocale(userSettings.language as Language),
-      onDateChange: dateChangeHandler,
-      validate: (dateToValidate) =>
-        getYear(dateToValidate) > MIN_DATE_YEAR &&
-        isBefore(dateToValidate, new Date()),
-    });
-
-  const onFocus = compose(
-    tap(() => {
-      setFocus(true);
-    }),
-    inputProps.onFocus
-  );
-
-  const onBlur = compose(
-    tap(() => {
-      setFocus(false);
-    }),
-    inputProps.onBlur
-  );
+  const validateDate = (date: Date) => {
+    return getYear(date) > MIN_DATE_YEAR && isBefore(date, new Date());
+  };
 
   return (
-    <Input
-      {...inputProps}
-      startAdornment={
-        <InputAdornment position="start">
-          <FaPen />
-        </InputAdornment>
-      }
-      disableUnderline={!isFocused}
-      onFocus={onFocus}
-      onBlur={onBlur}
-    />
+    <LocalizationProvider dateAdapter={AdapterDateFns} locale={languagesMap[userSettings.language as Language]}>
+      <DatePicker
+        value={selectedDate}
+        onChange={handleDateChange}
+        renderInput={params => (
+          <TextField
+            {...params}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FaPen />
+                </InputAdornment>
+              ),
+            }}
+            fullWidth
+          />
+        )}
+        shouldDisableDate={validateDate}
+      />
+    </LocalizationProvider>
   );
 };

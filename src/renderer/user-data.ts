@@ -22,7 +22,7 @@ export interface UserData<T = InitialData> {
 export const create = <T>(initialObj: T): UserData<T> => {
   mkdir(basePath);
 
-  const keys = Object.keys(initialObj) as (keyof T)[];
+  const keys = Object.keys(initialObj) as Array<keyof T>;
   const hash = createHash("sha256");
   hash.update(JSON.stringify(initialObj));
   const path = join(basePath, hash.digest("hex"));

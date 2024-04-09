@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
-import type { ExportType } from "../export/type";
-import type { UniqueString } from "../utils/type";
+import { type ExportType } from "../export/type";
+import { type UniqueString } from "../utils/type";
 
 export type TrackAppId = string & { readonly _trackAppId?: never };
 // TODO: move when "save work" feature is done

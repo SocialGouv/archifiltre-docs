@@ -8,12 +8,9 @@ export interface SvgRectangleProps {
   fill: NonNullable<React.CSSProperties["fill"]>;
   ignorePointerEvents?: boolean;
   onClickHandler: NonNullable<React.SVGAttributes<SVGRectElement>["onClick"]>;
-  onDoubleClickHandler: NonNullable<
-    React.SVGAttributes<SVGRectElement>["onDoubleClick"]
-  >;
+  onDoubleClickHandler: NonNullable<React.SVGAttributes<SVGRectElement>["onDoubleClick"]>;
   onMouseOverHandler: NonNullable<
-    React.SVGAttributes<SVGRectElement>["onFocus"] &
-      React.SVGAttributes<SVGRectElement>["onMouseOver"]
+    React.SVGAttributes<SVGRectElement>["onFocus"] & React.SVGAttributes<SVGRectElement>["onMouseOver"]
   >;
   opacity: NonNullable<React.CSSProperties["opacity"]>;
   stroke: NonNullable<React.CSSProperties["stroke"]>;

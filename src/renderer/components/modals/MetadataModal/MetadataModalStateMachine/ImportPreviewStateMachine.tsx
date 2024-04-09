@@ -1,11 +1,6 @@
-import type { CsvFileLoadingOptions } from "@common/utils/csv";
-import {
-  assertDelimiterIsValid,
-  loadCsvFirstRowToArray,
-} from "@common/utils/csv";
+import { assertDelimiterIsValid, type CsvFileLoadingOptions, loadCsvFirstRowToArray } from "@common/utils/csv";
 import { loadXlsxFirstRow } from "@common/utils/xlsx";
-import type { DoneInvokeEvent } from "xstate";
-import { assign, createMachine } from "xstate";
+import { assign, createMachine, type DoneInvokeEvent } from "xstate";
 
 import {
   detectCsvConfig,
@@ -14,11 +9,7 @@ import {
   isCsvMetadataFileConfig,
   isXlsxFile,
 } from "../MetadataModalCommon";
-import type {
-  MetadataFileConfig,
-  MetadataImportConfig,
-  MetadataModalContext,
-} from "../MetadataModalTypes";
+import { type MetadataFileConfig, type MetadataImportConfig, type MetadataModalContext } from "../MetadataModalTypes";
 
 interface ConfigChanged {
   config: MetadataFileConfig;
@@ -53,20 +44,14 @@ interface RetryFinalEvent {
 
 export type ImportPreviewFinalEvent = ImportFinalEvent | RetryFinalEvent;
 
-const saveDetectedConfig = assign<
-  MetadataModalContext,
-  DoneInvokeEvent<Partial<CsvFileLoadingOptions> | undefined>
->({
+const saveDetectedConfig = assign<MetadataModalContext, DoneInvokeEvent<Partial<CsvFileLoadingOptions> | undefined>>({
   config: (context, event) => ({
     ...context.config,
     ...event.data,
   }),
 });
 
-const saveLoadedPreview = assign<
-  MetadataModalContext,
-  DoneInvokeEvent<Record<string, string> | undefined>
->({
+const saveLoadedPreview = assign<MetadataModalContext, DoneInvokeEvent<Record<string, string> | undefined>>({
   fieldsConfig: (_, event) => ({
     entityIdKey: Object.keys(event.data ?? {})[0],
     fields: Object.keys(event.data ?? {}),
@@ -82,10 +67,7 @@ const saveFileConfig = assign<MetadataModalContext, ConfigChanged>({
   config: (_, event) => event.config,
 });
 
-export const importPreviewStateMachine = createMachine<
-  MetadataModalContext,
-  Events
->(
+export const importPreviewStateMachine = createMachine<MetadataModalContext, Events>(
   {
     initial: "detectingConfig",
     predictableActionArguments: true,
@@ -170,5 +152,5 @@ export const importPreviewStateMachine = createMachine<
           return loadXlsxFirstRow(filePath, config.selectedSheet);
         },
     },
-  }
+  },
 );

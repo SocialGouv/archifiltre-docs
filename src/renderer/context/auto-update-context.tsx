@@ -1,13 +1,7 @@
 import { ipcRenderer } from "@common/ipc";
-import type { UpdateInfo } from "electron-updater";
+import { type UpdateInfo } from "electron-updater";
 import { noop } from "lodash";
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { reportError } from "../logging/reporter";
@@ -30,17 +24,13 @@ export const useAutoUpdateContext = (): AutoUpdateContextProps => {
 };
 
 export const AutoUpdateProvider: React.FC = ({ children }) => {
-  const [updateInfo, setUpdateInfo] =
-    useState<AutoUpdateContextProps["updateInfo"]>(false);
+  const [updateInfo, setUpdateInfo] = useState<AutoUpdateContextProps["updateInfo"]>(false);
   const [error, setError] = useState<string>();
   const { t } = useTranslation();
   const checkForUpdate = useCallback(() => {
     ipcRenderer.send("autoUpdate.check");
   }, []);
-  const doUpdate = useCallback(
-    () => ipcRenderer.sendSync("autoUpdate.doUpdate"),
-    []
-  );
+  const doUpdate = useCallback(() => ipcRenderer.sendSync("autoUpdate.doUpdate"), []);
 
   useEffect(() => {
     ipcRenderer.on("autoUpdate.onUpdateAvailable", async (_, info) => {
@@ -77,9 +67,7 @@ export const AutoUpdateProvider: React.FC = ({ children }) => {
   }, [checkForUpdate, doUpdate, t]);
 
   return (
-    <AutoUpdateContext.Provider
-      value={{ checkForUpdate, doUpdate, error, updateInfo }}
-    >
+    <AutoUpdateContext.Provider value={{ checkForUpdate, doUpdate, error, updateInfo }}>
       {children}
     </AutoUpdateContext.Provider>
   );

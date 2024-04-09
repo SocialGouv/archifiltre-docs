@@ -16,11 +16,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-      - name: Yarn install
-        run: yarn --frozen-lockfile --perfer-offline
+      - name: npm install
+        run: npm ci --prefer-offline
 
       - name: Test if code compile
-        run: yarn compile --no-progress --display-error-details
+        run: npm run compile --no-progress --display-error-details
         env:
           SKIP_SENTRY_UPLOAD: 1
           TRACKER_MATOMO_ID_SITE: ${{ secrets.TRACKER_MATOMO_ID_SITE }}
@@ -35,10 +35,10 @@ jobs:
           FORCE_TRACKING: false
 
       - name: Lint
-        run: yarn lint
+        run: npm run lint
 
       - name: Unit tests
-        run: yarn test --ci --coverage
+        run: npm run test --ci --coverage
 
       - name: Send test coverage to codecov
         continue-on-error: true

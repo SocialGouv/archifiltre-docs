@@ -1,4 +1,4 @@
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,15 +9,11 @@ import {
   getFilesAndFoldersFromStore,
   getFilesTotalSize,
 } from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
-import type { FilesAndFoldersMap } from "../../../../../reducers/files-and-folders/files-and-folders-types";
+import { type FilesAndFoldersMap } from "../../../../../reducers/files-and-folders/files-and-folders-types";
 import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
-import type { FilesAndFoldersMetadataMap } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
-import {
-  getTagSize,
-  sortTags,
-  tagMapToArray,
-} from "../../../../../reducers/tags/tags-selectors";
-import type { TagMap } from "../../../../../reducers/tags/tags-types";
+import { type FilesAndFoldersMetadataMap } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { getTagSize, sortTags, tagMapToArray } from "../../../../../reducers/tags/tags-selectors";
+import { type TagMap } from "../../../../../reducers/tags/tags-types";
 import { AllTagsItem as TagListItem } from "./all-tags-item";
 
 export interface AllTagsProps {
@@ -44,7 +40,7 @@ const AllTags: React.FC<AllTagsProps> = ({
   const { t } = useTranslation();
 
   const tagsList = sortTags(tagMapToArray(tags))
-    .map((tag) => {
+    .map(tag => {
       const size = getTagSize(tag, filesAndFolders, filesAndFoldersMetadata);
 
       return (
@@ -69,17 +65,12 @@ const AllTags: React.FC<AllTagsProps> = ({
           totalVolume={totalVolume}
           tagNumber={filesToDeleteCount}
         />,
-      ]
+      ],
     );
 
   return (
     <Box height="100%" width="100%">
-      <Box
-        overflow="hidden auto"
-        display="flex"
-        flexDirection="column"
-        height="100%"
-      >
+      <Box overflow="hidden auto" display="flex" flexDirection="column" height="100%">
         {tagsList}
       </Box>
     </Box>
@@ -92,15 +83,9 @@ export interface AllTagsApiToPropsProps {
   tags: TagMap;
 }
 
-export const AllTagsApiToProps: React.FC<AllTagsApiToPropsProps> = ({
-  tags,
-  renameTag,
-  deleteTag,
-}) => {
+export const AllTagsApiToProps: React.FC<AllTagsApiToPropsProps> = ({ tags, renameTag, deleteTag }) => {
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
-  const filesAndFoldersMetadata = useSelector(
-    getFilesAndFoldersMetadataFromStore
-  );
+  const filesAndFoldersMetadata = useSelector(getFilesAndFoldersMetadataFromStore);
   const elementsToDelete = useSelector(getElementsToDeleteFromStore);
 
   const dispatch = useDispatch();
@@ -110,21 +95,16 @@ export const AllTagsApiToProps: React.FC<AllTagsApiToPropsProps> = ({
 
   const filesToDeleteCount = elementsToDelete.length;
   const filesToDeleteSize = useMemo(
-    () =>
-      getFilesTotalSize(
-        elementsToDelete,
-        filesAndFolders,
-        filesAndFoldersMetadata
-      ),
-    [elementsToDelete, filesAndFolders, filesAndFoldersMetadata]
+    () => getFilesTotalSize(elementsToDelete, filesAndFolders, filesAndFoldersMetadata),
+    [elementsToDelete, filesAndFolders, filesAndFoldersMetadata],
   );
 
-  const onRenameTag: AllTagsProps["onRenameTag"] = (tagId) => (name) => {
+  const onRenameTag: AllTagsProps["onRenameTag"] = tagId => name => {
     renameTag(tagId, name);
     dispatch(commitAction());
   };
 
-  const onDeleteTag: AllTagsProps["onDeleteTag"] = (tagId) => () => {
+  const onDeleteTag: AllTagsProps["onDeleteTag"] = tagId => () => {
     deleteTag(tagId);
     dispatch(commitAction());
   };

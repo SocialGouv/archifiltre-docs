@@ -1,6 +1,5 @@
-import type { TrackEvent } from "../type";
-import type { TrackArgs } from "./TrackerProvider";
-import { TrackerProvider } from "./TrackerProvider";
+import { type TrackEvent } from "../type";
+import { type TrackArgs, TrackerProvider } from "./TrackerProvider";
 
 /**
  * Enable a Debug tracker which will "dry run" log every track requests made.

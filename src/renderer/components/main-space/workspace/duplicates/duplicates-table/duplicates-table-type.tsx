@@ -3,15 +3,13 @@ import { useTranslation } from "react-i18next";
 import { FaCircle } from "react-icons/fa";
 
 import { colors } from "../../../../../utils/color";
-import type { FileType } from "../../../../../utils/file-types";
+import { type FileType } from "../../../../../utils/file-types";
 
 export interface DuplicatesTableTypeProps {
   fileType: FileType;
 }
 
-export const DuplicatesTableType: React.FC<DuplicatesTableTypeProps> = ({
-  fileType,
-}) => {
+export const DuplicatesTableType: React.FC<DuplicatesTableTypeProps> = ({ fileType }) => {
   const { t } = useTranslation();
   return (
     <div>

@@ -1,4 +1,4 @@
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import dateFormat from "dateformat";
 import { isEmpty, maxBy } from "lodash";
 import React, { useCallback, useMemo, useState } from "react";
@@ -8,20 +8,18 @@ import styled from "styled-components";
 import { useDuplicatePageState } from "../../../context/duplicates-page-context";
 import { useDebouncedValue } from "../../../hooks/use-debounced-value";
 import { useSearchAndFilters } from "../../../hooks/use-search-and-filters";
-import type {
-  ElementWithToDelete,
-  FilesAndFolders,
+import {
+  type ElementWithToDelete,
+  type FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
 import { bytes2HumanReadableFormat } from "../../../utils";
 import { getType } from "../../../utils/file-and-folders";
 import { CategoryTitle } from "../../common/category-title";
 import { Table } from "../../common/table/table";
 import { makeTableExpandableRow } from "../../common/table/table-expandable-row";
-import type { Column, HeaderColumn } from "../../common/table/table-types";
-import { WordBreak } from "../../common/table/table-types";
+import { type Column, type HeaderColumn, WordBreak } from "../../common/table/table-types";
 import { ToDeleteChip } from "../../common/to-delete-chip";
-import type { SearchBarProps } from "../../modals/search-modal/search-bar";
-import { SearchBar } from "../../modals/search-modal/search-bar";
+import { SearchBar, type SearchBarProps } from "../../modals/search-modal/search-bar";
 
 const SEARCH_INPUT_DEBOUNCE = 300;
 
@@ -49,43 +47,34 @@ export const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
   const { pageIndex, setPageIndex } = useDuplicatePageState();
 
   const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchTerm = useDebouncedValue(
-    searchTerm,
-    SEARCH_INPUT_DEBOUNCE
-  );
+  const debouncedSearchTerm = useDebouncedValue(searchTerm, SEARCH_INPUT_DEBOUNCE);
   const filterName = useCallback(
     (row: FilesAndFolders[]) =>
-      row.some((element) =>
-        element.name
-          .toLowerCase()
-          .includes(debouncedSearchTerm.trim().toLowerCase())
-      ),
-    [debouncedSearchTerm]
+      row.some(element => element.name.toLowerCase().includes(debouncedSearchTerm.trim().toLowerCase())),
+    [debouncedSearchTerm],
   );
-  const filteredFilesAndFolders = useSearchAndFilters(duplicatesList, [
-    filterName,
-  ]);
+  const filteredFilesAndFolders = useSearchAndFilters(duplicatesList, [filterName]);
 
   const performSearch: SearchBarProps["setSearchTerm"] = useCallback(
-    (searchValue) => {
+    searchValue => {
       setSearchTerm(searchValue);
       setPageIndex(0);
     },
-    [setSearchTerm, setPageIndex]
+    [setSearchTerm, setPageIndex],
   );
 
   const data = useMemo(
     (): ElementWithToDelete[][] =>
-      filteredFilesAndFolders.map((filesAndFoldersList) =>
-        filesAndFoldersList.map((filesAndFolders) => ({
+      filteredFilesAndFolders.map(filesAndFoldersList =>
+        filesAndFoldersList.map(filesAndFolders => ({
           ...filesAndFolders,
           toDelete: elementsToDelete.includes(filesAndFolders.id),
-        }))
+        })),
       ),
-    [filteredFilesAndFolders, elementsToDelete]
+    [filteredFilesAndFolders, elementsToDelete],
   );
 
-  const headerProps: HeaderColumn<ElementWithToDelete[]>[] = useMemo(
+  const headerProps: Array<HeaderColumn<ElementWithToDelete[]>> = useMemo(
     () => [
       {
         accessor: (row, index = 0) => row[index].name,
@@ -100,29 +89,23 @@ export const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
         id: "fileOrFolder",
       },
       {
-        accessor: (row, index = 0) =>
-          bytes2HumanReadableFormat(row[index].file_size),
+        accessor: (row, index = 0) => bytes2HumanReadableFormat(row[index].file_size),
         id: "fileSize",
       },
       {
-        accessor: (row) => row.length,
+        accessor: row => row.length,
         id: "elementsCount",
       },
       {
-        accessor: (row, index = 0) =>
-          dateFormat(row[index].file_last_modified, "dd/mm/yyyy"),
+        accessor: (row, index = 0) => dateFormat(row[index].file_last_modified, "dd/mm/yyyy"),
         id: "lastModified",
       },
       {
-        accessor: (row) => (
-          <HiddenSpan>
-            {maxBy(row, (element) => element.id.length)?.id}
-          </HiddenSpan>
-        ),
+        accessor: row => <HiddenSpan>{maxBy(row, element => element.id.length)?.id}</HiddenSpan>,
         id: "path",
       },
       {
-        accessor: (row) => {
+        accessor: row => {
           const ids = row.map(({ id }) => id);
           const checked = row.every(({ toDelete }) => toDelete);
           return (
@@ -138,15 +121,12 @@ export const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
         id: "toDelete",
       },
     ],
-    [t, untagAsToDelete, tagAsToDelete]
+    [t, untagAsToDelete, tagAsToDelete],
   );
 
-  const TableExpandableRow = useMemo(
-    () => makeTableExpandableRow(headerProps),
-    [headerProps]
-  );
+  const TableExpandableRow = useMemo(() => makeTableExpandableRow(headerProps), [headerProps]);
 
-  const columns: Column<ElementWithToDelete[]>[] = useMemo(
+  const columns: Array<Column<ElementWithToDelete[]>> = useMemo(
     () => [
       {
         accessor: () => "",
@@ -171,12 +151,10 @@ export const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
         sortable: true,
       },
       {
-        accessor: (row: FilesAndFolders[], index = 0) =>
-          bytes2HumanReadableFormat(row[index].file_size),
+        accessor: (row: FilesAndFolders[], index = 0) => bytes2HumanReadableFormat(row[index].file_size),
         id: "size",
         name: t("search.size"),
-        sortAccessor: (row: FilesAndFolders[], index = 0) =>
-          row[index].file_size,
+        sortAccessor: (row: FilesAndFolders[], index = 0) => row[index].file_size,
         sortable: true,
       },
       {
@@ -187,12 +165,10 @@ export const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
         sortable: true,
       },
       {
-        accessor: (row: FilesAndFolders[], index = 0) =>
-          dateFormat(row[index].file_last_modified, "dd/mm/yyyy"),
+        accessor: (row: FilesAndFolders[], index = 0) => dateFormat(row[index].file_last_modified, "dd/mm/yyyy"),
         id: "fileLastModified",
         name: t("search.fileLastModified"),
-        sortAccessor: (row: FilesAndFolders[], index = 0) =>
-          row[index].file_last_modified,
+        sortAccessor: (row: FilesAndFolders[], index = 0) => row[index].file_last_modified,
         sortable: true,
       },
       {
@@ -222,7 +198,7 @@ export const DuplicatesSearch: React.FC<DuplicatesSearchProps> = ({
         sortable: false,
       },
     ],
-    [t, tagAsToDelete, untagAsToDelete]
+    [t, tagAsToDelete, untagAsToDelete],
   );
 
   return (

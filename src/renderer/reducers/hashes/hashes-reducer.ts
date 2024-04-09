@@ -1,9 +1,7 @@
-import type {
-  HashesActionTypes,
-  HashesState,
-} from "@common/utils/hashes-types";
 import {
   ADD_ERRORED_HASHES,
+  type HashesActionTypes,
+  type HashesState,
   RESET_ERRORED_HASHES,
   SET_FILES_AND_FOLDERS_HASHES,
 } from "@common/utils/hashes-types";
@@ -13,10 +11,7 @@ export const initialState: HashesState = {
   hashes: {},
 };
 
-export const hashesReducer = (
-  state = initialState,
-  action?: HashesActionTypes
-): HashesState => {
+export const hashesReducer = (state = initialState, action?: HashesActionTypes): HashesState => {
   switch (action?.type) {
     case SET_FILES_AND_FOLDERS_HASHES:
       return {

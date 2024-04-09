@@ -1,20 +1,20 @@
 import { groupBy, identity, isUndefined, uniqBy } from "lodash";
 
-import type {
-  EntityId,
-  EntityMetadataIndex,
-  Metadata,
-  MetadataByEntity,
-  MetadataContext,
-  MetadataDto,
-  MetadataId,
-  MetadataMap,
-  SerializedMetadataContext,
+import {
+  type EntityId,
+  type EntityMetadataIndex,
+  type Metadata,
+  type MetadataByEntity,
+  type MetadataContext,
+  type MetadataDto,
+  type MetadataId,
+  type MetadataMap,
+  type SerializedMetadataContext,
 } from "./metadata-types";
 
 const createMetadataEntity = (
   context: MetadataContext,
-  metadata: MetadataDto
+  metadata: MetadataDto,
 ): { context: MetadataContext; metadataEntity: Metadata } => {
   return {
     context: {
@@ -28,13 +28,10 @@ const createMetadataEntity = (
   };
 };
 
-const addMetadataToEntityIndex = (
-  index: EntityMetadataIndex,
-  metadatas: Metadata[]
-) => {
+const addMetadataToEntityIndex = (index: EntityMetadataIndex, metadatas: Metadata[]) => {
   const newMap = new Map(index);
 
-  metadatas.forEach((metadata) => {
+  metadatas.forEach(metadata => {
     const existingData = newMap.get(metadata.entity);
 
     if (existingData) {
@@ -47,10 +44,7 @@ const addMetadataToEntityIndex = (
   return newMap;
 };
 
-const deleteMetadataFromEntityIndex = (
-  index: EntityMetadataIndex,
-  metadata: Metadata
-) => {
+const deleteMetadataFromEntityIndex = (index: EntityMetadataIndex, metadata: Metadata) => {
   const newIndex = new Map(index);
 
   const existingIndex = newIndex.get(metadata.entity);
@@ -61,7 +55,7 @@ const deleteMetadataFromEntityIndex = (
 
   newIndex.set(
     metadata.entity,
-    existingIndex.filter((metadataId) => metadataId !== metadata.id)
+    existingIndex.filter(metadataId => metadataId !== metadata.id),
   );
 
   return newIndex;
@@ -70,7 +64,7 @@ const deleteMetadataFromEntityIndex = (
 const addMetadataToMap = (map: MetadataMap, metadatas: Metadata[]) => {
   const newMap = new Map(map);
 
-  metadatas.forEach((metadata) => {
+  metadatas.forEach(metadata => {
     newMap.set(metadata.id, metadata);
   });
 
@@ -85,11 +79,7 @@ const deleteMetadataFromMap = (map: MetadataMap, metadata: Metadata) => {
   return newMap;
 };
 
-const updateMetadataInMap = (
-  map: MetadataMap,
-  metadataId: MetadataId,
-  metadata: Partial<MetadataDto>
-) => {
+const updateMetadataInMap = (map: MetadataMap, metadataId: MetadataId, metadata: Partial<MetadataDto>) => {
   const newMap = new Map(map);
 
   const existingMetadata = newMap.get(metadataId);
@@ -114,79 +104,52 @@ export const createMetadataContext = (): MetadataContext => ({
 
 export const addMetadata = (
   context: MetadataContext,
-  metadata: MetadataDto
+  metadata: MetadataDto,
 ): { context: MetadataContext; metadataId: MetadataId } => {
-  const { metadataEntity, context: newContext } = createMetadataEntity(
-    context,
-    metadata
-  );
+  const { metadataEntity, context: newContext } = createMetadataEntity(context, metadata);
 
   return {
     context: {
       ...newContext,
-      entityMetadataIndex: addMetadataToEntityIndex(
-        newContext.entityMetadataIndex,
-        [metadataEntity]
-      ),
+      entityMetadataIndex: addMetadataToEntityIndex(newContext.entityMetadataIndex, [metadataEntity]),
       metadata: addMetadataToMap(newContext.metadata, [metadataEntity]),
     },
     metadataId: metadataEntity.id,
   };
 };
 
-const createBatchMetadata = (
-  inputContext: MetadataContext,
-  metadatas: MetadataDto[]
-) =>
+const createBatchMetadata = (inputContext: MetadataContext, metadatas: MetadataDto[]) =>
   metadatas.reduce<{ context: MetadataContext; metadataEntities: Metadata[] }>(
     ({ context, metadataEntities }, metadata) => {
-      const { context: newContext, metadataEntity } = createMetadataEntity(
-        context,
-        metadata
-      );
+      const { context: newContext, metadataEntity } = createMetadataEntity(context, metadata);
       return {
         context: newContext,
         metadataEntities: [...metadataEntities, metadataEntity],
       };
     },
-    { context: inputContext, metadataEntities: [] }
+    { context: inputContext, metadataEntities: [] },
   );
 
-export const addBatchMetadata = (
-  context: MetadataContext,
-  metadata: MetadataDto[]
-): MetadataContext => {
-  const { context: contextAfterCreate, metadataEntities } = createBatchMetadata(
-    context,
-    metadata
-  );
+export const addBatchMetadata = (context: MetadataContext, metadata: MetadataDto[]): MetadataContext => {
+  const { context: contextAfterCreate, metadataEntities } = createBatchMetadata(context, metadata);
 
   return {
     ...contextAfterCreate,
-    entityMetadataIndex: addMetadataToEntityIndex(
-      contextAfterCreate.entityMetadataIndex,
-      metadataEntities
-    ),
+    entityMetadataIndex: addMetadataToEntityIndex(contextAfterCreate.entityMetadataIndex, metadataEntities),
     metadata: addMetadataToMap(contextAfterCreate.metadata, metadataEntities),
   };
 };
 
-const isMetadata = (metadata: Metadata | undefined): metadata is Metadata =>
-  metadata !== undefined;
+const isMetadata = (metadata: Metadata | undefined): metadata is Metadata => metadata !== undefined;
 
-export const getMetadataByEntityId = (
-  context: MetadataContext,
-  entityId: EntityId
-): Metadata[] => {
+export const getMetadataByEntityId = (context: MetadataContext, entityId: EntityId): Metadata[] => {
   const metadataIds = context.entityMetadataIndex.get(entityId);
 
   if (!metadataIds) {
     return [];
   }
 
-  return metadataIds
-    .map((metadataId) => context.metadata.get(metadataId))
-    .filter(isMetadata);
+  return metadataIds.map(metadataId => context.metadata.get(metadataId)).filter(isMetadata);
 };
 
 export const getMetadataList = (context: MetadataContext): Metadata[] => {
@@ -197,22 +160,16 @@ export const getMetadataKeys = (context: MetadataContext): string[] => {
   return getMetadataList(context).map(({ name }) => name);
 };
 
-export const deleteMetadata = (
-  context: MetadataContext,
-  metadata: Metadata
-): MetadataContext => ({
+export const deleteMetadata = (context: MetadataContext, metadata: Metadata): MetadataContext => ({
   ...context,
-  entityMetadataIndex: deleteMetadataFromEntityIndex(
-    context.entityMetadataIndex,
-    metadata
-  ),
+  entityMetadataIndex: deleteMetadataFromEntityIndex(context.entityMetadataIndex, metadata),
   metadata: deleteMetadataFromMap(context.metadata, metadata),
 });
 
 export const updateMetadata = (
   context: MetadataContext,
   metadataId: MetadataId,
-  metadata: Partial<MetadataDto>
+  metadata: Partial<MetadataDto>,
 ): MetadataContext & { metadata: Map<number, Metadata> } => ({
   ...context,
   metadata: updateMetadataInMap(context.metadata, metadataId, metadata),
@@ -229,10 +186,7 @@ const baseIdTransformer: IdTransformer = identity;
 
 const recordToMetadata = (
   record: Record<string, string>,
-  {
-    entityIdKey,
-    entityIdTransformer = baseIdTransformer,
-  }: RecordsToMedatataOptions
+  { entityIdKey, entityIdTransformer = baseIdTransformer }: RecordsToMedatataOptions,
 ): MetadataDto[] => {
   const entity = record[entityIdKey];
 
@@ -241,46 +195,35 @@ const recordToMetadata = (
   }
 
   return Object.keys(record)
-    .filter((key) => key !== entityIdKey)
+    .filter(key => key !== entityIdKey)
     .map(
       (key): MetadataDto => ({
         content: record[key],
         entity: entityIdTransformer(record[entityIdKey]),
         name: key,
-      })
+      }),
     );
 };
 
 export const recordsToMetadata = (
-  records: Record<string, string>[],
-  options: RecordsToMedatataOptions
-): MetadataDto[] =>
-  records.flatMap((record) => recordToMetadata(record, options));
+  records: Array<Record<string, string>>,
+  options: RecordsToMedatataOptions,
+): MetadataDto[] => records.flatMap(record => recordToMetadata(record, options));
 
-export const getMetadataByEntity = (
-  context: MetadataContext
-): MetadataByEntity => {
+export const getMetadataByEntity = (context: MetadataContext): MetadataByEntity => {
   const metadataValues = [...context.metadata.values()];
 
   return groupBy(metadataValues, "entity");
 };
 
-export const serializeMetadataContext = (
-  context: MetadataContext
-): SerializedMetadataContext => ({
+export const serializeMetadataContext = (context: MetadataContext): SerializedMetadataContext => ({
   entityMetadataIndex: Object.fromEntries(context.entityMetadataIndex),
   id: context.id,
   metadata: Object.fromEntries(context.metadata),
 });
 
-export const deserializeMetadataContext = (
-  context: SerializedMetadataContext
-): MetadataContext => ({
-  entityMetadataIndex: new Map<EntityId, MetadataId[]>(
-    Object.entries(context.entityMetadataIndex)
-  ),
+export const deserializeMetadataContext = (context: SerializedMetadataContext): MetadataContext => ({
+  entityMetadataIndex: new Map<EntityId, MetadataId[]>(Object.entries(context.entityMetadataIndex)),
   id: context.id,
-  metadata: new Map<MetadataId, Metadata>(
-    Object.entries(context.metadata).map(([id, metadata]) => [+id, metadata])
-  ),
+  metadata: new Map<MetadataId, Metadata>(Object.entries(context.metadata).map(([id, metadata]) => [+id, metadata])),
 });

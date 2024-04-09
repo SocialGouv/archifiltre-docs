@@ -13,7 +13,7 @@ export const expectToBeDefined = <T>(actual: T, message: string): boolean => {
         actual,
         message,
         type: "expectToBeDefined",
-      })
+      }),
     );
   }
 

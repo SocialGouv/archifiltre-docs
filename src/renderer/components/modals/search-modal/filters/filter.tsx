@@ -1,11 +1,10 @@
-import Box from "@material-ui/core/Box";
-import Checkbox from "@material-ui/core/Checkbox";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import ListItemText from "@material-ui/core/ListItemText";
-import MenuItem from "@material-ui/core/MenuItem";
-import type { SelectProps } from "@material-ui/core/Select";
-import Select from "@material-ui/core/Select";
+import Box from "@mui/material/Box";
+import Checkbox from "@mui/material/Checkbox";
+import Input from "@mui/material/Input";
+import InputLabel from "@mui/material/InputLabel";
+import ListItemText from "@mui/material/ListItemText";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { type SelectProps } from "@mui/material/Select";
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -16,19 +15,14 @@ export interface FilterProps {
   setSelectedOptions: (options: string[]) => void;
 }
 
-export const Filter: React.FC<FilterProps> = ({
-  name,
-  availableOptions,
-  selectedOptions,
-  setSelectedOptions,
-}) => {
+export const Filter: React.FC<FilterProps> = ({ name, availableOptions, selectedOptions, setSelectedOptions }) => {
   const { t } = useTranslation();
 
   const handleChange: NonNullable<SelectProps["onChange"]> = useCallback(
-    (event) => {
+    event => {
       setSelectedOptions(event.target.value as string[]);
     },
-    [setSelectedOptions]
+    [setSelectedOptions],
   );
 
   return (
@@ -40,7 +34,7 @@ export const Filter: React.FC<FilterProps> = ({
         multiple
         fullWidth
         value={selectedOptions}
-        renderValue={(selected) => (selected as string[]).join(", ")}
+        renderValue={selected => (selected as string[]).join(", ")}
         onChange={handleChange}
         input={<Input />}
         disableUnderline={true}

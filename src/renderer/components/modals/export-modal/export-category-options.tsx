@@ -1,11 +1,11 @@
 import { ExportType } from "@common/export/type";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { exportConfig } from "./export-config";
-import type { ExportTypesMap } from "./export-options";
+import { type ExportTypesMap } from "./export-options";
 import { ExportTypeOption } from "./export-type-option";
 
 export interface ExportCategoryOptionsProps {
@@ -35,9 +35,7 @@ export const ExportCategoryOptions: React.FC<ExportCategoryOptionsProps> = ({
         {t(`exportModal.${exportCategory}`)}
       </Typography>
       {Object.values(ExportType)
-        .filter(
-          (exportType) => exportConfig[exportType].category === exportCategory
-        )
+        .filter(exportType => exportConfig[exportType].category === exportCategory)
         .map((exportType: ExportType) => (
           <ExportTypeOption
             key={exportType}

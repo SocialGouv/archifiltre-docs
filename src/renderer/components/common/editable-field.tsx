@@ -1,7 +1,15 @@
-import Input from "@material-ui/core/Input";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import type { ChangeEvent, FormEvent, KeyboardEvent, ReactNode } from "react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import Input from "@mui/material/Input";
+import InputAdornment from "@mui/material/InputAdornment";
+import React, {
+  type ChangeEvent,
+  type FormEvent,
+  type KeyboardEvent,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { FaPen } from "react-icons/fa";
 
 import { useStyles } from "../../hooks/use-styles";
@@ -59,7 +67,7 @@ export const EditableField: React.FC<EditableFieldProps> = ({
     (event: ChangeEvent<HTMLInputElement>) => {
       setLocalValue(event.target.value);
     },
-    [setLocalValue]
+    [setLocalValue],
   );
 
   const submitValueChange = useCallback(() => {
@@ -78,7 +86,7 @@ export const EditableField: React.FC<EditableFieldProps> = ({
         submitValueChange();
       }
     },
-    [submitValueChange, blurInput, submitOnBlur]
+    [submitValueChange, blurInput, submitOnBlur],
   );
 
   const handleFocus = useCallback(() => {
@@ -100,7 +108,7 @@ export const EditableField: React.FC<EditableFieldProps> = ({
         blurInput();
       }
     },
-    [value, setLocalValue, setFocus, blurInput]
+    [value, setLocalValue, setFocus, blurInput],
   );
 
   const classes = useStyles();

@@ -1,5 +1,5 @@
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import React from "react";
 import { IoIosCloudOutline } from "react-icons/all";
 
@@ -38,9 +38,7 @@ export const SessionInfo: React.FC<SessionInfoProps> = ({
         <Box>
           <EditableField
             trimValue={true}
-            value={
-              firstLevelName === sessionName ? firstLevelName : sessionName
-            }
+            value={firstLevelName === sessionName ? firstLevelName : sessionName}
             onChange={onChangeSessionName}
             selectTextOnFocus={true}
           />
@@ -60,19 +58,11 @@ export const SessionInfo: React.FC<SessionInfoProps> = ({
         />
       </Box>
       <Box marginY={0.5}>
-        <WorkspaceBoundaryDates
-          oldestFileTimestamp={oldestFileTimestamp}
-          newestFileTimestamp={newestFileTimestamp}
-        />
+        <WorkspaceBoundaryDates oldestFileTimestamp={oldestFileTimestamp} newestFileTimestamp={newestFileTimestamp} />
       </Box>
     </Box>
     <Box marginLeft={"auto"}>
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="space-between"
-        textAlign="center"
-      >
+      <Box display="flex" flexDirection="column" justifyContent="space-between" textAlign="center">
         <Box>
           <IoIosCloudOutline size={50} />
         </Box>

@@ -1,5 +1,5 @@
-import type { SimpleObject } from "@common/utils/object";
-import type { Action } from "redux";
+import { type SimpleObject } from "@common/utils/object";
+import { type Action } from "redux";
 
 export type MetadataId = number;
 export type EntityId = string;
@@ -56,7 +56,4 @@ export interface ResetMetadataAction extends Action {
   type: typeof RESET_METADATA_ACTION;
 }
 
-export type MetadataAction =
-  | AddBatchMetadataAction
-  | InitMetadataAction
-  | ResetMetadataAction;
+export type MetadataAction = AddBatchMetadataAction | InitMetadataAction | ResetMetadataAction;

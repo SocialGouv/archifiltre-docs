@@ -1,17 +1,13 @@
 import { EventTracker, Palette } from "@devexpress/dx-react-chart";
-import {
-  Chart,
-  PieSeries,
-  Tooltip,
-} from "@devexpress/dx-react-chart-material-ui";
+import { Chart, PieSeries, Tooltip } from "@devexpress/dx-react-chart-material-ui";
 import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
-import type { FileTypeMap } from "../../../../../exporters/audit/audit-report-values-computer";
+import { type FileTypeMap } from "../../../../../exporters/audit/audit-report-values-computer";
 import { bytes2HumanReadableFormat } from "../../../../../utils";
 import { colors } from "../../../../../utils/color";
-import type { FileType } from "../../../../../utils/file-types";
+import { type FileType } from "../../../../../utils/file-types";
 
 const ColoredText = styled.span<{ color: string }>`
   display: block;
@@ -23,9 +19,10 @@ export interface DuplicatesDistributionChartProps {
   fileTypesCount: FileTypeMap<number>;
 }
 
-export const DuplicatesDistributionChart: React.FC<
-  DuplicatesDistributionChartProps
-> = ({ fileTypesCount, fileSizesCount }) => {
+export const DuplicatesDistributionChart: React.FC<DuplicatesDistributionChartProps> = ({
+  fileTypesCount,
+  fileSizesCount,
+}) => {
   const { t } = useTranslation();
 
   const chartData = useMemo(
@@ -36,13 +33,10 @@ export const DuplicatesDistributionChart: React.FC<
         size: fileSizesCount[fileType as FileType],
         value: fileTypeValue,
       })),
-    [fileTypesCount, fileSizesCount, t]
+    [fileTypesCount, fileSizesCount, t],
   );
 
-  const scheme = useMemo(
-    () => chartData.map(({ key }) => colors[key]),
-    [chartData]
-  );
+  const scheme = useMemo(() => chartData.map(({ key }) => colors[key]), [chartData]);
 
   const getTooltipContent = useCallback(
     ({ targetItem: { point } }) => {
@@ -50,16 +44,12 @@ export const DuplicatesDistributionChart: React.FC<
       return (
         <div>
           <div>{label}</div>
-          <ColoredText color={colors[key]}>{`${value} ${t(
-            "duplicates.duplicates"
-          )}`}</ColoredText>
-          <ColoredText color={colors[key]}>
-            {bytes2HumanReadableFormat(size)}
-          </ColoredText>
+          <ColoredText color={colors[key]}>{`${value} ${t("duplicates.duplicates")}`}</ColoredText>
+          <ColoredText color={colors[key]}>{bytes2HumanReadableFormat(size)}</ColoredText>
         </div>
       );
     },
-    [chartData, t]
+    [chartData, t],
   );
 
   return (

@@ -1,5 +1,4 @@
-import type { FC } from "react";
-import React, { lazy, Suspense } from "react";
+import React, { type FC, lazy, Suspense } from "react";
 
 import { LoadingStep } from "../../reducers/loading-state/loading-state-types";
 import { ErrorScreen } from "../errors/error-screen";

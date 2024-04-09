@@ -1,17 +1,14 @@
 /*
     eslint-disable
-    @typescript-eslint/no-explicit-any,
-    @typescript-eslint/naming-convention,
-    @typescript-eslint/no-unsafe-argument,
-    @typescript-eslint/no-unsafe-return
+    @typescript-eslint/no-explicit-any
 */
 import { generateSecureRandomString } from "@common/utils/generateSecureRandomString";
-import type { SimpleObject } from "@common/utils/object";
+import { type SimpleObject } from "@common/utils/object";
 import _, { mapValues, pick } from "lodash";
 import fp from "lodash/fp";
 
 import { createFilesAndFoldersMetadataDataStructure } from "../../files-and-folders-loader/file-system-loading-process-utils";
-import type { JsonFileInfo } from "../../files-and-folders-loader/files-and-folders-loader-types";
+import { type JsonFileInfo } from "../../files-and-folders-loader/files-and-folders-loader-types";
 
 interface V8 {
   content_queue: any;
@@ -134,9 +131,7 @@ const v8JsToV9Js = (v8: V8 & V9To12): SimpleObject => {
       const node = treeTable[key];
       const children = node.children;
       if (children.length) {
-        ans[mapOldToNewId[key]].children = children.map(
-          (a: any) => mapOldToNewId[a]
-        );
+        ans[mapOldToNewId[key]].children = children.map((a: any) => mapOldToNewId[a]);
         children.map(computeChildren);
       }
     };
@@ -193,32 +188,29 @@ export const v12JsToV13Js = (v12: V8 & V9To12): SimpleObject => {
         ...tagMap,
         [tagId]: reformatTag(tagId, v12.tags[tagId]),
       }),
-      {}
+      {},
     ),
     version: 13,
   };
 };
 
 export const v13JsToV14Js = (v13: V9To12 & V13): SimpleObject => {
-  const filesAndFolders = mapValues(
-    v13.files_and_folders,
-    (fileAndFolders, id) => ({
-      ...pick(fileAndFolders, [
-        "name",
-        "alias",
-        "comments",
-        "children",
-        "file_size",
-        "file_last_modified",
-        "virtualPath",
-      ]),
-      id,
-    })
-  );
+  const filesAndFolders = mapValues(v13.files_and_folders, (fileAndFolders, id) => ({
+    ...pick(fileAndFolders, [
+      "name",
+      "alias",
+      "comments",
+      "children",
+      "file_size",
+      "file_last_modified",
+      "virtualPath",
+    ]),
+    id,
+  }));
 
   const filesAndFoldersMetadata = _.mapValues(
     createFilesAndFoldersMetadataDataStructure(filesAndFolders as any),
-    fp.omit("sortAlphaNumericallyIndex")
+    fp.omit("sortAlphaNumericallyIndex"),
   );
 
   return {
@@ -234,17 +226,17 @@ export const v13JsToV14Js = (v13: V9To12 & V13): SimpleObject => {
 export const v2ToV21Js = (v2: V21): SimpleObject => {
   const filesAndFolders = _.mapValues(
     v2.filesAndFolders,
-    fp.pick(["name", "children", "file_size", "file_last_modified"])
+    fp.pick(["name", "children", "file_size", "file_last_modified"]),
   );
 
   const filteredComments = _(v2.filesAndFolders)
     .mapValues(({ comments }) => comments)
-    .pickBy((comment) => comment !== "")
+    .pickBy(comment => comment !== "")
     .value();
 
   const filteredAliases = _(v2.filesAndFolders)
     .mapValues(({ alias }) => alias)
-    .pickBy((alias) => alias !== "")
+    .pickBy(alias => alias !== "")
     .value();
 
   return {
@@ -257,13 +249,10 @@ export const v2ToV21Js = (v2: V21): SimpleObject => {
 };
 
 export const v21ToV22Js = (v21: V21): SimpleObject => {
-  const filesAndFolders = _.mapValues(
-    v21.filesAndFolders,
-    (fileAndFolder, id) => ({
-      ...fileAndFolder,
-      id,
-    })
-  );
+  const filesAndFolders = _.mapValues(v21.filesAndFolders, (fileAndFolder, id) => ({
+    ...fileAndFolder,
+    id,
+  }));
 
   return {
     ...v21,

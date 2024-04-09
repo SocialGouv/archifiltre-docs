@@ -1,10 +1,10 @@
-import Button from "@material-ui/core/Button";
-import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSave } from "react-icons/fa";
 
-import type { ExportToJson } from "../../exporters/json/json-exporter";
+import { type ExportToJson } from "../../exporters/json/json-exporter";
 import { useStyles } from "../../hooks/use-styles";
 import { version } from "../../version";
 
@@ -14,11 +14,7 @@ export interface SaveButtonProps {
   sessionName: string;
 }
 
-export const SaveButton: React.FC<SaveButtonProps> = ({
-  originalPath,
-  sessionName,
-  exportToJson,
-}) => {
+export const SaveButton: React.FC<SaveButtonProps> = ({ originalPath, sessionName, exportToJson }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 

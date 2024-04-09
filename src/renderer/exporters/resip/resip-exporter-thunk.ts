@@ -3,7 +3,7 @@ import { promises as fs } from "fs";
 import { takeLast, tap } from "rxjs/operators";
 import { v4 as uuid } from "uuid";
 
-import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
+import { type ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import {
   getAliasesFromStore,
   getCommentsFromStore,
@@ -17,10 +17,7 @@ import {
   startLoadingAction,
 } from "../../reducers/loading-info/loading-info-actions";
 import { LoadingInfoTypes } from "../../reducers/loading-info/loading-info-types";
-import {
-  getActiveSedaFields,
-  getSedaMetadata,
-} from "../../reducers/seda-configuration/seda-configuration-selector";
+import { getActiveSedaFields, getSedaMetadata } from "../../reducers/seda-configuration/seda-configuration-selector";
 import { getTagsFromStore } from "../../reducers/tags/tags-selectors";
 import { translations } from "../../translations/translations";
 import { notifyInfo, notifySuccess } from "../../utils/notifications";
@@ -45,12 +42,8 @@ export const resipExporterThunk =
     const activeSedaFields = getActiveSedaFields(sedaMetadata);
 
     const resipExportTitle = translations.t("export.resipExportTitle");
-    const resipExportSuccessMessage = translations.t(
-      "export.resipExportSuccessMessage"
-    );
-    const resipExportStartedMessage = translations.t(
-      "export.resipExportStartedMessage"
-    );
+    const resipExportSuccessMessage = translations.t("export.resipExportSuccessMessage");
+    const resipExportStartedMessage = translations.t("export.resipExportStartedMessage");
 
     notifyInfo(resipExportStartedMessage, resipExportTitle);
     const loadingActionId = uuid();
@@ -61,8 +54,8 @@ export const resipExporterThunk =
         // We remove the root folder
         RESIP_HOOK_CALL_PER_ELEMENT * (Object.keys(filesAndFolders).length - 1),
         "RESIP",
-        resipExportSuccessMessage
-      )
+        resipExportSuccessMessage,
+      ),
     );
 
     let lastCount = 0;
@@ -81,7 +74,7 @@ export const resipExporterThunk =
         tap(({ count }) => {
           dispatch(progressLoadingAction(loadingActionId, count - lastCount));
           lastCount = count;
-        })
+        }),
       )
       .pipe(takeLast(1))
       .toPromise();

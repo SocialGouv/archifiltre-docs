@@ -1,9 +1,8 @@
 import { invertBy } from "lodash";
 import path from "path";
 
-import type { FilesAndFolders } from "../reducers/files-and-folders/files-and-folders-types";
+import { type FilesAndFolders } from "../reducers/files-and-folders/files-and-folders-types";
 
-/* eslint-disable @typescript-eslint/naming-convention */
 export enum FileType {
   ARCHIVE = "archive",
   AUDIO = "audio",
@@ -22,7 +21,6 @@ export enum FolderType {
   FOLDER = "folder",
 }
 
-/* eslint-enable @typescript-eslint/naming-convention */
 export const fileTypesByExtensions: Record<string, FileType | undefined> = {
   ".arc": FileType.OTHER,
   ".avi": FileType.VIDEO,
@@ -99,8 +97,7 @@ type ExtensionsByFileTypes = Record<FileType, string[]>;
  * Returns the file type of file
  * @param fileAndFolders
  */
-export const getFileType = (fileAndFolders: FilesAndFolders): FileType =>
-  getFileTypeFromFileName(fileAndFolders.name);
+export const getFileType = (fileAndFolders: FilesAndFolders): FileType => getFileTypeFromFileName(fileAndFolders.name);
 
 /**
  * Returns the file type associated to the file name

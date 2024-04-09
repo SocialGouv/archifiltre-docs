@@ -3,12 +3,12 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { ROOT_FF_ID } from "../../reducers/files-and-folders/files-and-folders-selectors";
-import type { FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { type FilesAndFolders } from "../../reducers/files-and-folders/files-and-folders-types";
+import { type FilesAndFoldersMetadata } from "../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { translations } from "../../translations/translations";
 import { bytes2HumanReadableFormat, isFolder } from "../../utils";
-import type { Dims } from "./icicle/icicle-rect";
-import type { FillColor } from "./icicle/icicle-types";
+import { type Dims } from "./icicle/icicle-rect";
+import { type FillColor } from "./icicle/icicle-types";
 
 const RulerWrapper = styled.div`
   width: 100%;
@@ -46,10 +46,7 @@ const getFilesCount = (node: FilesAndFoldersMetadata): string =>
  * Get the number of child folders from a node
  * @param node
  */
-const getFoldersCount = (
-  node: FilesAndFolders,
-  getAllChildrenFolderCount: (id: string) => number
-): string => {
+const getFoldersCount = (node: FilesAndFolders, getAllChildrenFolderCount: (id: string) => number): string => {
   const foldersCount = getAllChildrenFolderCount(node.id);
   return `${foldersCount} ${translations.t("common.folders")}`;
 };
@@ -71,14 +68,11 @@ const makePercentageText = (nodeSize: number, totalSize: number): string => {
 const makeRulerText = (
   node: FilesAndFolders & FilesAndFoldersMetadata,
   rootNode: FilesAndFolders & FilesAndFoldersMetadata,
-  getAllChildrenFolderCount: (id: string) => number
+  getAllChildrenFolderCount: (id: string) => number,
 ) => {
   const { childrenTotalSize } = node;
   const { childrenTotalSize: rootChildrenTotalSize } = rootNode;
-  const percentageText = makePercentageText(
-    childrenTotalSize,
-    rootChildrenTotalSize
-  );
+  const percentageText = makePercentageText(childrenTotalSize, rootChildrenTotalSize);
   const filesAndFolderSize = bytes2HumanReadableFormat(childrenTotalSize);
   const rulerInfo = [percentageText, filesAndFolderSize];
 
@@ -113,16 +107,11 @@ export const Ruler: React.FC<RulerProps> = ({
   getFfByFfId,
   fillColor,
 }) => {
-  const elementDims =
-    (hoveredElementId ? hoveredDims : lockedDims) ?? EmptyDims;
+  const elementDims = (hoveredElementId ? hoveredDims : lockedDims) ?? EmptyDims;
   const elementId = hoveredElementId || lockedElementId;
 
   const rulerText = elementId
-    ? makeRulerText(
-        getFfByFfId(elementId),
-        getFfByFfId(ROOT_FF_ID),
-        getAllChildrenFolderCount
-      )
+    ? makeRulerText(getFfByFfId(elementId), getFfByFfId(ROOT_FF_ID), getAllChildrenFolderCount)
     : "";
 
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -138,15 +127,9 @@ export const Ruler: React.FC<RulerProps> = ({
 
       const rulerWidth = (elementDims.dx / totalSize) * wrapperWidth;
 
-      const rawTextMargin =
-        (wrapperWidth * elementDims.x) / widthUnit +
-        rulerWidth / 2 -
-        textWidth / 2;
+      const rawTextMargin = (wrapperWidth * elementDims.x) / widthUnit + rulerWidth / 2 - textWidth / 2;
 
-      const normalizedTextMargin = Math.min(
-        Math.max(0, rawTextMargin),
-        wrapperWidth - textWidth
-      );
+      const normalizedTextMargin = Math.min(Math.max(0, rawTextMargin), wrapperWidth - textWidth);
 
       setTextMargin(normalizedTextMargin);
     }

@@ -1,34 +1,28 @@
 import { noop } from "lodash";
-import type { ComponentType, MouseEvent } from "react";
-import React, { memo, useCallback, useMemo, useRef, useState } from "react";
+import React, { type ComponentType, memo, type MouseEvent, useCallback, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
-import type { MoveElement } from "../../../hooks/use-movable-elements";
-import { useMovableElements } from "../../../hooks/use-movable-elements";
-import type {
-  AliasMap,
-  CommentsMap,
-  FilesAndFolders,
+import { type MoveElement, useMovableElements } from "../../../hooks/use-movable-elements";
+import {
+  type AliasMap,
+  type CommentsMap,
+  type FilesAndFolders,
 } from "../../../reducers/files-and-folders/files-and-folders-types";
-import type { FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
+import { type FilesAndFoldersMetadata } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { ElementWeightMethod } from "../../../reducers/icicle-sort-method/icicle-sort-method-types";
-import type { TagMap } from "../../../reducers/tags/tags-types";
+import { type TagMap } from "../../../reducers/tags/tags-types";
 import { Ruler } from "../ruler";
 import { useFileMoveActiveState } from "../workspace/file-move-provider";
 import { useZoomContext } from "../workspace/zoom-provider";
 import { AnimatedIcicle } from "./animated-icicle";
-import type { IcicleProps } from "./icicle";
+import { type IcicleProps } from "./icicle";
 import { normalizeWidth } from "./icicle-common";
-import type { DefaultSidebarProps } from "./icicle-default-sidebar";
-import { DefaultSidebar } from "./icicle-default-sidebar";
+import { DefaultSidebar, type DefaultSidebarProps } from "./icicle-default-sidebar";
 import { LargeBlock, Layout } from "./icicle-layout";
-import type { Dims, DimsAndId } from "./icicle-rect";
-import type { FillColor, IcicleMouseActionHandler } from "./icicle-types";
+import { type Dims, type DimsAndId } from "./icicle-rect";
+import { type FillColor, type IcicleMouseActionHandler } from "./icicle-types";
 
-export type IcicleMouseHandler = (
-  dimsAndId: DimsAndId,
-  event: MouseEvent
-) => void;
+export type IcicleMouseHandler = (dimsAndId: DimsAndId, event: MouseEvent) => void;
 
 const IcicleWrapper = styled.div`
   height: 74%;
@@ -98,14 +92,7 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
   const [lockedDims, setLockedDims] = useState<Dims | null>(null);
   const [movedElementId, setMovedElementId] = useState("");
   const [movedElementTime, setMovedElementTime] = useState(0);
-  const {
-    zoomIn,
-    zoomOut,
-    setZoom,
-    setDefaultMousePosition,
-    offset: zoomOffset,
-    ratio: zoomRatio,
-  } = useZoomContext();
+  const { zoomIn, zoomOut, setZoom, setDefaultMousePosition, offset: zoomOffset, ratio: zoomRatio } = useZoomContext();
 
   const icicleHeight = viewBoxHeight;
   const icicleWidth = viewBoxWidth;
@@ -115,29 +102,20 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
   /**
    * Returns the total size of the child elements based on its id
    */
-  const getElementTotalSize = useCallback(
-    (id: string) => getFfByFfId(id).childrenTotalSize,
-    [getFfByFfId]
-  );
+  const getElementTotalSize = useCallback((id: string) => getFfByFfId(id).childrenTotalSize, [getFfByFfId]);
 
   /**
    * Returns the total number of children files of an element based on its id
    */
-  const getElementChildrenFilesCount = useCallback(
-    (id: string) => getFfByFfId(id).nbChildrenFiles,
-    [getFfByFfId]
-  );
+  const getElementChildrenFilesCount = useCallback((id: string) => getFfByFfId(id).nbChildrenFiles, [getFfByFfId]);
 
   /**
    * The function used to compute the width of an element. It will use the suitable computing method based on the
    * widthBySize boolean
    */
   const computeWidth = useMemo(
-    () =>
-      elementWeightMethod === ElementWeightMethod.BY_VOLUME
-        ? getElementTotalSize
-        : getElementChildrenFilesCount,
-    [elementWeightMethod, getElementTotalSize, getElementChildrenFilesCount]
+    () => (elementWeightMethod === ElementWeightMethod.BY_VOLUME ? getElementTotalSize : getElementChildrenFilesCount),
+    [elementWeightMethod, getElementTotalSize, getElementChildrenFilesCount],
   );
 
   /**
@@ -145,25 +123,22 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
    */
   const normalizeHeight: IcicleProps["trueFHeight"] = useCallback(
     () => icicleHeight / maxDepth,
-    [icicleHeight, maxDepth]
+    [icicleHeight, maxDepth],
   );
 
   /**
    * Determines if an icicle is in the viewport. It allows icicles not to be rendered if they are too far left
    * or too far right.
    */
-  const isIcicleInViewport: IcicleProps["shouldRenderChild"] = useCallback(
-    (x, elementWidth) => {
-      const minimumDisplayedWidth = 1;
-      const elementIsTooFarLeft = x + elementWidth < 0;
-      const elementIsTooFarRight = x > viewBoxWidth;
-      if (elementIsTooFarRight || elementIsTooFarLeft) {
-        return false;
-      }
-      return elementWidth > minimumDisplayedWidth;
-    },
-    []
-  );
+  const isIcicleInViewport: IcicleProps["shouldRenderChild"] = useCallback((x, elementWidth) => {
+    const minimumDisplayedWidth = 1;
+    const elementIsTooFarLeft = x + elementWidth < 0;
+    const elementIsTooFarRight = x > viewBoxWidth;
+    if (elementIsTooFarRight || elementIsTooFarLeft) {
+      return false;
+    }
+    return elementWidth > minimumDisplayedWidth;
+  }, []);
 
   /**
    * Handles viewport click action
@@ -191,7 +166,7 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
       setLockedDims(newDims);
       setDefaultMousePosition((newDims.x + newDims.dx / 2) / viewBoxWidth);
     },
-    [lock, setLockedDims, setDefaultMousePosition]
+    [lock, setLockedDims, setDefaultMousePosition],
   );
 
   /**
@@ -204,7 +179,7 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
       const newZoomRatio = (zoomRatio * viewBoxWidth) / dx;
       setZoom(newZoomOffset, newZoomRatio);
     },
-    [setZoom, zoomRatio, zoomOffset]
+    [setZoom, zoomRatio, zoomOffset],
   );
 
   /**
@@ -215,7 +190,7 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
       setHoveredDims(dims());
       setFocus(id);
     },
-    [setFocus, setHoveredDims]
+    [setFocus, setHoveredDims],
   );
 
   /**
@@ -233,20 +208,18 @@ const _IcicleMain: React.FC<IcicleMainProps> = ({
       setMovedElementTime(Date.now());
       moveElement(newMovedElementId, targetFolderId);
     },
-    [moveElement, setMovedElementId]
+    [moveElement, setMovedElementId],
   );
 
-  const { onIcicleMouseUp, onIcicleMouseDown } =
-    useMovableElements(moveElementHandler);
+  const { onIcicleMouseUp, onIcicleMouseDown } = useMovableElements(moveElementHandler);
 
-  const onIcicleMouseWheel: NonNullable<IcicleProps["onIcicleMouseWheel"]> =
-    useCallback(
-      ({ wheelDirection, mousePosition }) => {
-        const zoomMethod = wheelDirection < 0 ? zoomIn : zoomOut;
-        zoomMethod(mousePosition, ZOOM_SPEED);
-      },
-      [zoomIn, zoomOut]
-    );
+  const onIcicleMouseWheel: NonNullable<IcicleProps["onIcicleMouseWheel"]> = useCallback(
+    ({ wheelDirection, mousePosition }) => {
+      const zoomMethod = wheelDirection < 0 ? zoomIn : zoomOut;
+      zoomMethod(mousePosition, ZOOM_SPEED);
+    },
+    [zoomIn, zoomOut],
+  );
 
   return (
     <Layout>

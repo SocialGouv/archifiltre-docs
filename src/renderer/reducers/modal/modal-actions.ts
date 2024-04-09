@@ -1,5 +1,4 @@
-import type { Modal, ModalAction } from "./modal-types";
-import { CLOSE_MODAL, OPEN_MODAL } from "./modal-types";
+import { CLOSE_MODAL, type Modal, type ModalAction, OPEN_MODAL } from "./modal-types";
 
 export const openModalAction = (modal: Modal): ModalAction => ({
   modal,

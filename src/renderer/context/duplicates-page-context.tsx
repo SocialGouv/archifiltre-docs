@@ -15,12 +15,10 @@ const duplicatePageState: DuplicatePageContextValues = {
   setRowsPerPage: noop,
 };
 
-export const DuplicateContext =
-  createContext<DuplicatePageContextValues>(duplicatePageState);
+export const DuplicateContext = createContext<DuplicatePageContextValues>(duplicatePageState);
 
 export const useDuplicatePageState = (): DuplicatePageContextValues => {
-  const { pageIndex, rowsPerPage, setPageIndex, setRowsPerPage } =
-    useContext(DuplicateContext);
+  const { pageIndex, rowsPerPage, setPageIndex, setRowsPerPage } = useContext(DuplicateContext);
 
   return { pageIndex, rowsPerPage, setPageIndex, setRowsPerPage };
 };

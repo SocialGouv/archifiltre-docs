@@ -10,8 +10,7 @@ import { getSessionNameFromStore } from "../../../../../reducers/workspace-metad
 import { setSessionNameThunk } from "../../../../../reducers/workspace-metadata/workspace-metadata-thunk";
 import { getFilesCount, getFoldersCount } from "../../../../../utils";
 import { getFirstLevelName } from "../../../../../utils/file-and-folders";
-import type { SessionInfoProps } from "./session-info";
-import { SessionInfo } from "./session-info";
+import { SessionInfo, type SessionInfoProps } from "./session-info";
 
 export const SessionInfoContainer: React.FC = () => {
   const filesAndFolders = useSelector(getFilesAndFoldersFromStore);
@@ -21,25 +20,16 @@ export const SessionInfoContainer: React.FC = () => {
   const sessionName = useSelector(getSessionNameFromStore);
 
   const setSessionName: SessionInfoProps["onChangeSessionName"] = useCallback(
-    (newSessionName) => dispatch(setSessionNameThunk(newSessionName)),
-    [dispatch]
+    newSessionName => dispatch(setSessionNameThunk(newSessionName)),
+    [dispatch],
   );
 
-  const filesCount = useMemo(
-    () => getFilesCount(filesAndFolders),
-    [filesAndFolders]
-  );
-  const foldersCount = useMemo(
-    () => getFoldersCount(filesAndFolders),
-    [filesAndFolders]
-  );
-  const archiveFoldersCount = useMemo(
-    () => getArchiveFoldersCount(filesAndFolders),
-    [filesAndFolders]
-  );
+  const filesCount = useMemo(() => getFilesCount(filesAndFolders), [filesAndFolders]);
+  const foldersCount = useMemo(() => getFoldersCount(filesAndFolders), [filesAndFolders]);
+  const archiveFoldersCount = useMemo(() => getArchiveFoldersCount(filesAndFolders), [filesAndFolders]);
 
   const metadata = useSelector(getFilesAndFoldersMetadataFromStore);
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
   const rootFilesAndFoldersMetadata = metadata[""] ?? {};
 
   const volume = rootFilesAndFoldersMetadata.childrenTotalSize;

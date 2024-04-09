@@ -1,4 +1,4 @@
-import type { SimpleObject } from "@common/utils/object";
+import { type SimpleObject } from "@common/utils/object";
 import fs from "fs";
 
 interface BufferedFileWriter {
@@ -9,9 +9,7 @@ interface BufferedFileWriter {
  * Returns a buffered writer that will append objects to a file in the write order
  * @param filename
  */
-export const createBufferedFileWriter = (
-  filename: string
-): BufferedFileWriter => {
+export const createBufferedFileWriter = (filename: string): BufferedFileWriter => {
   const buffer: SimpleObject[] = [];
   let writing = false;
   fs.writeFileSync(filename, "");

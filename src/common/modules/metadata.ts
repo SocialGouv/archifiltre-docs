@@ -5,10 +5,7 @@ import { ipcMain } from "../ipc";
 
 declare module "../ipc/event" {
   interface AsyncIpcMapping {
-    "metadata.importMetadata": IpcConfig<
-      [filePath: string],
-      Record<string, string>[]
-    >;
+    "metadata.importMetadata": IpcConfig<[filePath: string], Array<Record<string, string>>>;
   }
 }
 
@@ -18,9 +15,9 @@ export const loadMetadata = (): void => {
     const parser = parse({
       columns: true,
     });
-    const metadata: Record<string, string>[] = [];
+    const metadata: Array<Record<string, string>> = [];
 
-    await new Promise<Record<string, string>[]>((resolve, reject) => {
+    await new Promise<Array<Record<string, string>>>((resolve, reject) => {
       input
         .pipe(parser)
         .on("data", (data: Record<string, string>) => metadata.push(data))

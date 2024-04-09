@@ -1,8 +1,7 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import type { JsonExporterThunkArgs } from "../../exporters/json/json-exporter";
-import { jsonExporterThunk } from "../../exporters/json/json-exporter";
+import { jsonExporterThunk, type JsonExporterThunkArgs } from "../../exporters/json/json-exporter";
 import { getWorkspaceMetadataFromStore } from "../../reducers/workspace-metadata/workspace-metadata-selectors";
 import { ErrorBoundary } from "./error-boundary";
 
@@ -15,15 +14,11 @@ export const ErrorBoundaryContainer: React.FC = ({ children }) => {
   const exportToJson = useCallback(
     ({ sessionName, originalPath, version }: JsonExporterThunkArgs) =>
       dispatch(jsonExporterThunk({ originalPath, sessionName, version })),
-    [dispatch]
+    [dispatch],
   );
 
   return (
-    <ErrorBoundary
-      originalPath={currentOriginalPath}
-      sessionName={currentSessionName}
-      exportToJson={exportToJson}
-    >
+    <ErrorBoundary originalPath={currentOriginalPath} sessionName={currentSessionName} exportToJson={exportToJson}>
       {children}
     </ErrorBoundary>
   );

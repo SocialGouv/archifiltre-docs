@@ -30,11 +30,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-      - name: Yarn install
+      - name: npm install
         run: |
-          yarn config set network-timeout 300000
-          yarn --frozen-lockfile --perfer-offline
-          yarn electron-builder install-app-deps
+          npm ci --prefer-offline
+          npm run electron-builder install-app-deps
         env:
           ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
           ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
@@ -45,10 +44,10 @@ jobs:
           TMP_CURRENT_VERSION="$(node -e "console.log(require('./package.json').version)")"
           echo ::set-output name=current-version::$TMP_CURRENT_VERSION
           TMP_NEXT_VERSION="$TMP_CURRENT_VERSION-$(node -e "console.log('${{ github.ref }}'.replace('refs/heads/', ''))" | iconv -t ascii//TRANSLIT | sed -r "s/[^a-zA-Z0-9]+/-/g" | sed -r "s/^-+\|-+$//g" | tr A-Z a-z).0"
-          yarn global add replace
-          $(yarn global bin)/replace "\"version": \"$TMP_CURRENT_VERSION\"" "\"version": \"$TMP_NEXT_VERSION\"" package.json
+          npm install -g replace
+          npx replace "\"version\": \"$TMP_CURRENT_VERSION\"" "\"version\": \"$TMP_NEXT_VERSION\"" package.json
           echo ::set-output name=next-version::$TMP_NEXT_VERSION
-          yarn compile --no-progress
+          npm run compile --no-progress
         env:
           ARCHIFILTRE_RELEASE_MODE: version
           TRACKER_MATOMO_ID_SITE: ${{ secrets.TRACKER_MATOMO_ID_SITE }}
@@ -93,22 +92,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-      - name: Yarn install
+      - name: npm install
         run: |
-          yarn config set network-timeout 300000
-          yarn --frozen-lockfile --perfer-offline
+          npm ci --prefer-offline
       - name: Replace version in package.json
         shell: bash
         run: |
-          yarn global add replace
-          $(yarn global bin)/replace '"version": "${{ needs.compile.outputs.current-version }}"' '"version": "${{ needs.compile.outputs.next-version }}"' package.json
+          npm install -g replace
+          npx replace '"version": "${{ needs.compile.outputs.current-version }}"' '"version": "${{ needs.compile.outputs.next-version }}"' package.json
       - name: Download dist
         uses: actions/download-artifact@v4
         with:
           name: compile-dist
           path: dist/
       - name: Build bin
-        run: yarn electron-builder --x64 --${{ matrix.target}} ${{ matrix.bin-output }}
+        run: npx electron-builder --x64 --${{ matrix.target }} ${{ matrix.bin-output }}
       - name: Archive bin
         uses: actions/upload-artifact@v4
         with:

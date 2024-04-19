@@ -266,10 +266,11 @@
       "errorDescription": "Description",
       "element": "Élément (fichier ou répertoire)",
       "errorDescriptions": {
-        "ENOENT": "Le fichier est introuvable",
-        "EBUSY": "La resource est occupée. Elle est peut-être utilisée par un autre processus.",
-        "EACCES": "Vous n'avez pas les droits pour accéder à cette resource.",
-        "UNKNOWN": "Erreur inconnue ou non supportée."
+        "ENOENT": "Le fichier ne peut pas être trouvé.",
+        "EBUSY": "La ressource est occupée. Peut-être qu'elle est utilisée actuellement par un autre processus.",
+        "EACCES": "Vous n'avez pas les droits d'accès à ce fichier.",
+        "UNKNOWN": "Erreur inconnue ou non gérée.",
+        "Z_CORRUPTED": "Le fichier ZIP est corrompu et ne peut pas être ouvert. Le problème provient probablement de Archifiltre."
       },
       "exportNotificationTitle": "Export des erreurs",
       "exportNotificationMessage": "L'export CSV est terminé."

@@ -268,10 +268,11 @@
       "element": "Element (Datei oder Ordner)",
       "errorDescriptions": {
         "ENOENT": "Die Datei kann nicht gefunden werden.",
-        "EBUSY": "Die Quelle ist besetzt und wird vielleicht von einem anderen Prozess benutzt. ",
-        "EACCES": "Keine Zugriffsrechte auf diese Datei.",
-        "UNKNOWN": "Unbekannter oder unbehandelter Fehler"
-    },
+        "EBUSY": "Die Ressource ist beschäftigt. Vielleicht wird sie gerade von einem anderen Prozess verwendet.",
+        "EACCES": "Sie haben keine Zugriffsrechte auf diese Datei.",
+        "UNKNOWN": "Unbekannter oder nicht behandelter Fehler.",
+        "Z_CORRUPTED": "Die ZIP-Datei ist beschädigt und kann nicht geöffnet werden. Das Problem stammt wahrscheinlich von Archifiltre."
+      },
       "exportNotificationTitle": "Fehler exportieren",
       "exportNotificationMessage": "CSV-Export erfolgreich."
     },

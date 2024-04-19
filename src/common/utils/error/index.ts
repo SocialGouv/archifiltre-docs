@@ -35,6 +35,7 @@ const fsErrorToArchifiltreDocsError: FsErrorToArchifiltreDocsError = {
   EACCES: ArchifiltreDocsFileSystemErrorCode.EACCES,
   EBUSY: ArchifiltreDocsFileSystemErrorCode.EBUSY,
   ENOENT: ArchifiltreDocsFileSystemErrorCode.ENOENT,
+  Z_CORRUPTED: ArchifiltreDocsFileSystemErrorCode.Z_CORRUPTED,
 };
 
 export const convertFsErrorToArchifiltreDocsError = (

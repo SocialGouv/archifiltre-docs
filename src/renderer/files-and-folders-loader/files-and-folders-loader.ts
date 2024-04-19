@@ -3,6 +3,7 @@ import {
   ArchifiltreDocsErrorType,
   convertFsErrorToArchifiltreDocsError,
 } from "@common/utils/error";
+import { ArchifiltreDocsFileSystemErrorCode } from "@common/utils/error/error-codes";
 import type { HashesMap } from "@common/utils/hashes-types";
 import parse from "csv-parse/lib/sync";
 import fs from "fs";
@@ -138,10 +139,18 @@ const loadFilesAndFoldersFromFileSystemImpl = async (
         getIdFromPath(rootPath, currentPath),
       ]);
     } catch (error: unknown) {
+      let code = convertFsErrorToArchifiltreDocsError(
+        (error as WorkerError).code
+      );
+      const message = (error as WorkerError).message;
+      if (message.startsWith("Corrupted zip")) {
+        code = ArchifiltreDocsFileSystemErrorCode.Z_CORRUPTED;
+      }
+
       onError({
-        code: convertFsErrorToArchifiltreDocsError((error as WorkerError).code),
+        code: code,
         filePath: currentPath,
-        reason: (error as WorkerError).message,
+        reason: message,
         type: ArchifiltreDocsErrorType.LOADING_FILE_SYSTEM,
       });
     }

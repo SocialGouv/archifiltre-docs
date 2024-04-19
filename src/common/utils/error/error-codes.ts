@@ -3,6 +3,7 @@ export enum ArchifiltreDocsFileSystemErrorCode {
   EACCES = "EACCES",
   EBUSY = "EBUSY",
   ENOENT = "ENOENT",
+  Z_CORRUPTED = "Z_CORRUPTED",
 }
 
 export enum ArchifiltreDocsStoreThunkErrorCode {

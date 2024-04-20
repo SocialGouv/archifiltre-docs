@@ -9,5 +9,5 @@ import { isFolder } from "./isFolder";
  *
  * @returns {boolean} Returns 'true' if the object is a file, otherwise 'false'.
  */
-export const isFile = (filesAndFolders: FilesAndFolders): boolean =>
-  !!filesAndFolders.name && !isFolder(filesAndFolders);
+export const isFile = (filesAndFolders?: FilesAndFolders): boolean =>
+  !!filesAndFolders?.name && !isFolder(filesAndFolders);

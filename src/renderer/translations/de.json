@@ -1,5 +1,10 @@
 {
   "translation": {
+    "fileSystemLoadingStep": {
+      "INDEXING": "Indizierung von Dateien",
+      "FILES_AND_FOLDERS": "Erstellen von Datei- und Ordnerstrukturen",
+      "METADATA": "Metadaten analysieren"
+    },
     "folderDropzone": {
       "placeholder": "Ziehen Sie ein Verzeichnis oder eine JSON-Datei hierher",
       "placeholderSubtitle": "Sie können auch eine zuvor aus exportierte JSON-Datei ablegen.",

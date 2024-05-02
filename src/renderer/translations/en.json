@@ -1,5 +1,10 @@
 {
   "translation": {
+    "fileSystemLoadingStep": {
+      "INDEXING": "Indexing files",
+      "FILES_AND_FOLDERS": "Creating file and folder structure",
+      "METADATA": "Parsing metadata"
+    },
     "folderDropzone": {
       "placeholder": "Drag or Drop a directory or an JSON here",
       "placeholderSubtitle": "No modification on the original directory",

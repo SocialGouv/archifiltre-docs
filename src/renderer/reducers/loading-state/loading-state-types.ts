@@ -25,10 +25,9 @@ export enum LoadingStep {
 }
 
 export enum FileSystemLoadingStep {
-  INDEXING = 0,
-  FILES_AND_FOLDERS = 1,
-  METADATA = 2,
-  COMPLETE = 3,
+  FILES_AND_FOLDERS = "FILES_AND_FOLDERS",
+  INDEXING = "INDEXING",
+  METADATA = "METADATA",
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 

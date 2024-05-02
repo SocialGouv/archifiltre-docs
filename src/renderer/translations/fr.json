@@ -1,5 +1,10 @@
 {
   "translation": {
+    "fileSystemLoadingStep": {
+      "INDEXING": "Indexation des fichiers",
+      "FILES_AND_FOLDERS": "Création de la structure de fichier et de dossiers",
+      "METADATA": "Parsing des meta données"
+    },
     "folderDropzone": {
       "placeholder": "Glissez ou déposez un répertoire ou un JSON ici",
       "placeholderSubtitle": "Pas de modification du répertoire original",

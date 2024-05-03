@@ -59,6 +59,7 @@
       "minimum": "minimum",
       "maximum": "maximum",
       "median": "median",
+      "hashCalculateInProgress": "hash en cours de calcule",
       "fileHashExplanation": "This hash is a file digital fingerprint computed with the MD5 algorithm",
       "folderHashExplanation": "This hash is a digital fingerprint (computed with the MD5 algorithm) of this folder's children hashes concatenation",
       "clickHereToAddComments": "Click here to add comments!",

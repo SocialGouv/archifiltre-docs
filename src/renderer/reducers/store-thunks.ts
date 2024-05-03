@@ -257,9 +257,6 @@ const makeLoadFilesAndFoldersResultHandler = (
         dispatch(setDerivedElementsCount(count));
         dispatch(setFileSystemLoadingStep(status));
         break;
-      case FileSystemLoadingStep.COMPLETE:
-        dispatch(setFileSystemLoadingStep(FileSystemLoadingStep.COMPLETE));
-        break;
       default:
         break;
     }

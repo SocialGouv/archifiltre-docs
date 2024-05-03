@@ -253,6 +253,7 @@ export const getLoader = (
         })
       );
     }
+
     return makeFileSystemLoader(asyncLoadFilesAndFoldersFromFileSystem);
   }
 

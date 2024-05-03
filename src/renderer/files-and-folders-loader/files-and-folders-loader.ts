@@ -125,7 +125,8 @@ const loadFilesAndFoldersFromFileSystemImpl = async (
       if (stats.isDirectory()) {
         await loadFoldersFromFileSystemRec(currentPath);
         return;
-      } else if (currentPath.endsWith(".zip")) {
+      }
+      if (currentPath.endsWith(".zip")) {
         await loadZipFromFileSystemRec(currentPath);
         return;
       }

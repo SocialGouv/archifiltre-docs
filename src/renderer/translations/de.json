@@ -59,6 +59,7 @@
       "minimum": "Minimum",
       "maximum": "Maximum",
       "median": "Median",
+      "hashCalculateInProgress": "hash en cours de calcule",
       "fileHashExplanation": "Dieser Hash-Wert ist ein durch einen MD5 Algorithmus berechneter digitaler Fingerabdruck der Datei",
       "folderHashExplanation": "Dieser Hash-Wert ist ein (durch einen MD5 Algorithmus berechneter) digitaler Fingerabdruck der Verknüpfung der Hash-Werte der Unterordner dieses Ordners",
       "clickHereToAddComments": "Klicken Sie hier um Kommentare hinzuzufügen!",

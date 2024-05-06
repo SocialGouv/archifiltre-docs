@@ -1,32 +1,24 @@
 name: Bug
 description: Remonté d'un bug trouvé dans Docs
 labels:
+  - A évaluer
   - bug
 body:
   - type: markdown
     attributes:
       value: |
         Merci de remplir l'ensemble des informations essentielles à la bonne qualification et résolution du bug.
-  - type: input
-    id: us
-    attributes:
-      label: User Story
-      description: Copier l'url de la user story associée (si applicable)
-      placeholder: SocialGouv/archifiltre-docs#<number>
-      value: SocialGouv/archifiltre-docs#
-    validations:
-      required: false
   - type: textarea
     id: describe
     validations:
-      required: false
+      required: true
     attributes:
       label: Description du bug
       description: Comment décrire le bug de manière claire et concise ? Quel est son contexte ?
   - type: textarea
     id: steps
     validations:
-      required: false
+      required: true
     attributes:
       label: Étapes pour reproduire
       description: Quelles sont les étapes pour reproduire le comportement ?
@@ -58,27 +50,23 @@ body:
   - type: textarea
     id: specs
     validations:
-      required: false
+      required: true
     attributes:
       label: Liste des caractéristiques de votre machine
       placeholder: |
         - OS (Windows 10, Windows 11, OSX 11, OSX 12.1 Montery, Ubuntu 20.04, etc)
         - RAM (4Go, 6Go, etc) (si possible)
         - Type de version de l'application (setup, portable, msi, dmg, zip, etc)
-  - type: dropdown
+  - type: input
     id: version
     validations:
-      required: false
+      required: true
     attributes:
       label: Version de l'application
-      options:
-        - "3.x"
-        - "4.x"
-        - beta (à préciser dans les caratéristiques)
-        - next (à préciser dans les caratéristiques)
-        - autre (à préciser dans les caratéristiques)
+      placeholder: "4.1, 4.0, 4.0-next15, 3.2, etc."
   - type: textarea
     id: misc
     attributes:
       label: Informations complémentaires
       placeholder: Ajoutez toutes autres données qui pourraient potentiellement aider à la résolution du bug.
+

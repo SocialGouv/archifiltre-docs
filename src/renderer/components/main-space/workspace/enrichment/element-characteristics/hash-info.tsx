@@ -14,7 +14,7 @@ export const HashInfo: React.FC<HashInfoProps> = ({ hash }) => {
 
   return (
     <span>
-      <span>{hash || t("report.hashCalculateInProgress")}</span>&nbsp;
+      <span>{hash ?? t("report.hashCalculateInProgress")}</span>&nbsp;
       <Tooltip title={hashIconExplanation}>
         <span>
           {hash ? <HashIcon value={hash} size={12} /> : <FaAtom size={12} />}

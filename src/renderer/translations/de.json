@@ -277,7 +277,7 @@
         "EBUSY": "Die Ressource ist beschäftigt. Vielleicht wird sie gerade von einem anderen Prozess verwendet.",
         "EACCES": "Sie haben keine Zugriffsrechte auf diese Datei.",
         "UNKNOWN": "Unbekannter oder nicht behandelter Fehler.",
-        "Z_CORRUPTED": "Die ZIP-Datei ist beschädigt und kann nicht geöffnet werden. Das Problem stammt wahrscheinlich von Archifiltre."
+        "Z_CORRUPTED": "Die ZIP-Datei kann nicht analysiert werden, da sie beschädigt erscheint und nicht geöffnet werden kann."
       },
       "exportNotificationTitle": "Fehler exportieren",
       "exportNotificationMessage": "CSV-Export erfolgreich."

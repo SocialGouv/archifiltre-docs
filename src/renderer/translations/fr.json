@@ -276,7 +276,7 @@
         "EBUSY": "La ressource est occupée. Peut-être qu'elle est utilisée actuellement par un autre processus.",
         "EACCES": "Vous n'avez pas les droits d'accès à ce fichier.",
         "UNKNOWN": "Erreur inconnue ou non gérée.",
-        "Z_CORRUPTED": "Le fichier ZIP est corrompu et ne peut pas être ouvert. Le problème provient probablement de Archifiltre."
+        "Z_CORRUPTED": "Le fichier ZIP ne peut pas être analysé car il apparait comme corrompu et ne peut être ouvert."
       },
       "exportNotificationTitle": "Export des erreurs",
       "exportNotificationMessage": "L'export CSV est terminé."

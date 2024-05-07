@@ -276,7 +276,7 @@
         "EBUSY": "The resource is busy. Maybe it's currently used by another process.",
         "EACCES": "You do not have the rights to access this file.",
         "UNKNOWN": "Unknown or unhandled error.",
-        "Z_CORRUPTED": "The ZIP file is corrupted and cannot be opened. The issue likely originates from Archifiltre."
+        "Z_CORRUPTED": "The ZIP file cannot be analyzed as it appears to be corrupted and cannot be opened."
       },
       "exportNotificationTitle": "Errors export",
       "exportNotificationMessage": "CSV export success."

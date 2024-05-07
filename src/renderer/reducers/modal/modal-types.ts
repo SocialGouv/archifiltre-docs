@@ -6,7 +6,6 @@ export enum Modal {
   ERROR_MODAL = "errorModal",
   FIlES_AND_FOLDERS_ERRORS_MODAL = "filesAndFoldersErrorModal",
   HASHES_ERROR_MODAL = "hashesErrorModal",
-  IMPORT_MODAL = "importModal",
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 

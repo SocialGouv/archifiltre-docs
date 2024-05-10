@@ -91,7 +91,6 @@ export const countFileTypes: Mapper<
   defaults({
     [FileType.ARCHIVE]: 0,
     [FileType.AUDIO]: 0,
-    [FileType.DATA]: 0,
     [FileType.DOCUMENT]: 0,
     [FileType.EMAIL]: 0,
     [FileType.IMAGE]: 0,
@@ -100,7 +99,6 @@ export const countFileTypes: Mapper<
     [FileType.PUBLICATION]: 0,
     [FileType.SPREADSHEET]: 0,
     [FileType.VIDEO]: 0,
-    [FileType.WEB]: 0,
   }),
   countBy(identity),
   map(getFileType),
@@ -118,7 +116,6 @@ export const countFileSizes: Mapper<
   defaults({
     [FileType.ARCHIVE]: 0,
     [FileType.AUDIO]: 0,
-    [FileType.DATA]: 0,
     [FileType.DOCUMENT]: 0,
     [FileType.EMAIL]: 0,
     [FileType.IMAGE]: 0,
@@ -127,7 +124,6 @@ export const countFileSizes: Mapper<
     [FileType.PUBLICATION]: 0,
     [FileType.SPREADSHEET]: 0,
     [FileType.VIDEO]: 0,
-    [FileType.WEB]: 0,
   }),
   mapValues(sumBy("size")),
   groupBy("type"),
@@ -164,7 +160,6 @@ export const getExtensionsList: Accessor<FileTypeMap<string>> = compose(
   defaults({
     [FileType.ARCHIVE]: "",
     [FileType.AUDIO]: "",
-    [FileType.DATA]: "",
     [FileType.DOCUMENT]: "",
     [FileType.EMAIL]: "",
     [FileType.IMAGE]: "",
@@ -173,7 +168,6 @@ export const getExtensionsList: Accessor<FileTypeMap<string>> = compose(
     [FileType.PUBLICATION]: "",
     [FileType.SPREADSHEET]: "",
     [FileType.VIDEO]: "",
-    [FileType.WEB]: "",
   }),
   mapValues(join(", ")),
   getExtensionsForEachFileType

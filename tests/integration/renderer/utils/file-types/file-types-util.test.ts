@@ -58,7 +58,7 @@ describe("file-types-utils", () => {
 
     it("should return the right type for unknown type", () => {
       const xmlFile = createFileWithExt("xml");
-      expect(getFileType(xmlFile)).toBe(FileType.DATA);
+      expect(getFileType(xmlFile)).toBe(FileType.OTHER);
     });
   });
 });

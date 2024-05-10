@@ -63,8 +63,6 @@ export const colors: Record<FileType | FolderType, RgbaHex> = {
   [FileType.VIDEO]: "#6700c7",
   [FileType.AUDIO]: "#ff35dd",
   [FileType.OTHER]: "#8a8c93",
-  [FileType.DATA]: "#ff9900",
-  [FileType.WEB]: "#ff6600",
   [FileType.ARCHIVE]: "#7a7a7a",
   [FolderType.FOLDER]: "#fabf0b",
 };

@@ -7,7 +7,6 @@ import type { FilesAndFolders } from "../reducers/files-and-folders/files-and-fo
 export enum FileType {
   ARCHIVE = "archive",
   AUDIO = "audio",
-  DATA = "data",
   DOCUMENT = "document",
   EMAIL = "email",
   IMAGE = "image",
@@ -16,7 +15,6 @@ export enum FileType {
   PUBLICATION = "publication",
   SPREADSHEET = "spreadsheet",
   VIDEO = "video",
-  WEB = "web",
 }
 export enum FolderType {
   FOLDER = "folder",
@@ -27,7 +25,7 @@ export const fileTypesByExtensions: Record<string, FileType | undefined> = {
   ".arc": FileType.OTHER,
   ".avi": FileType.VIDEO,
   ".bmp": FileType.IMAGE,
-  ".css": FileType.WEB,
+  ".css": FileType.OTHER,
   ".csv": FileType.SPREADSHEET,
   ".doc": FileType.DOCUMENT,
   ".docm": FileType.DOCUMENT,
@@ -39,13 +37,13 @@ export const fileTypesByExtensions: Record<string, FileType | undefined> = {
   ".epub": FileType.PUBLICATION,
   ".flac": FileType.AUDIO,
   ".gif": FileType.IMAGE,
-  ".htm": FileType.WEB,
-  ".html": FileType.WEB,
+  ".htm": FileType.OTHER,
+  ".html": FileType.OTHER,
   ".jp2": FileType.IMAGE,
   ".jpeg": FileType.IMAGE,
   ".jpg": FileType.IMAGE,
-  ".js": FileType.WEB,
-  ".json": FileType.DATA,
+  ".js": FileType.OTHER,
+  ".json": FileType.OTHER,
   ".mkv": FileType.VIDEO,
   ".mobi": FileType.PUBLICATION,
   ".mov": FileType.VIDEO,
@@ -89,7 +87,7 @@ export const fileTypesByExtensions: Record<string, FileType | undefined> = {
   ".xltm": FileType.SPREADSHEET,
   ".xltx": FileType.SPREADSHEET,
   ".xlw": FileType.SPREADSHEET,
-  ".xml": FileType.DATA,
+  ".xml": FileType.OTHER,
   ".zip": FileType.ARCHIVE,
 };
 

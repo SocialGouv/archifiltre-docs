@@ -159,7 +159,7 @@
       "files": "fichier(s)",
       "folders": "dossier(s)",
       "fileTypes": {
-        "archive": "Archive",
+        "compressed": "Compressé",
         "presentation": "Présentation",
         "publication": "Publication",
         "spreadsheet": "Tableur",
@@ -168,9 +168,7 @@
         "image": "Image",
         "video": "Vidéo",
         "audio": "Audio",
-        "other": "Autre",
-        "data": "Data",
-        "web": "Web"
+        "other": "Autre"
       },
       "browse": "Parcourir",
       "reload": "Sauvegarder et recharger",

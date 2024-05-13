@@ -89,7 +89,7 @@ export const countFileTypes: Mapper<
   FileTypeMap<number>
 > = compose(
   defaults({
-    [FileType.ARCHIVE]: 0,
+    [FileType.COMPRESSED]: 0,
     [FileType.AUDIO]: 0,
     [FileType.DOCUMENT]: 0,
     [FileType.EMAIL]: 0,
@@ -114,7 +114,7 @@ export const countFileSizes: Mapper<
   FileTypeMap<number>
 > = compose(
   defaults({
-    [FileType.ARCHIVE]: 0,
+    [FileType.COMPRESSED]: 0,
     [FileType.AUDIO]: 0,
     [FileType.DOCUMENT]: 0,
     [FileType.EMAIL]: 0,
@@ -158,7 +158,7 @@ export const percentFileTypes: Mapper<
  */
 export const getExtensionsList: Accessor<FileTypeMap<string>> = compose(
   defaults({
-    [FileType.ARCHIVE]: "",
+    [FileType.COMPRESSED]: "",
     [FileType.AUDIO]: "",
     [FileType.DOCUMENT]: "",
     [FileType.EMAIL]: "",

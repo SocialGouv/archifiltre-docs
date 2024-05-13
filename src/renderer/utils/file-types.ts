@@ -5,8 +5,8 @@ import type { FilesAndFolders } from "../reducers/files-and-folders/files-and-fo
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export enum FileType {
-  ARCHIVE = "archive",
   AUDIO = "audio",
+  COMPRESSED = "compressed",
   DOCUMENT = "document",
   EMAIL = "email",
   IMAGE = "image",
@@ -88,7 +88,7 @@ export const fileTypesByExtensions: Record<string, FileType | undefined> = {
   ".xltx": FileType.SPREADSHEET,
   ".xlw": FileType.SPREADSHEET,
   ".xml": FileType.OTHER,
-  ".zip": FileType.ARCHIVE,
+  ".zip": FileType.COMPRESSED,
 };
 
 type ExtensionsByFileTypes = Record<FileType, string[]>;

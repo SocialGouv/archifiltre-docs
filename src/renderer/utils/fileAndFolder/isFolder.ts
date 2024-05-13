@@ -3,7 +3,7 @@ import { FileType, getFileTypeFromFileName } from "../file-types";
 
 /**
  * Checks if a given FilesAndFolders object is a folder.
- * A folder is defined either by a non-empty 'children' array or by a file type matching 'ARCHIVE'.
+ * A folder is defined either by a non-empty 'children' array or by a file type matching 'COMPRESSED'.
  *
  * @param {FilesAndFolders} filesAndFolders - The FilesAndFolders object to evaluate.
  *
@@ -11,4 +11,4 @@ import { FileType, getFileTypeFromFileName } from "../file-types";
  */
 export const isFolder = (filesAndFolders: FilesAndFolders): boolean =>
   filesAndFolders.children.length !== 0 ||
-  getFileTypeFromFileName(filesAndFolders.name) === FileType.ARCHIVE;
+  getFileTypeFromFileName(filesAndFolders.name) === FileType.COMPRESSED;

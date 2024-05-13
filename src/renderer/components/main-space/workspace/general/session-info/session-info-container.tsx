@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
-  getArchiveFoldersCount,
+  getCompressedFoldersCount,
   getFilesAndFoldersFromStore,
 } from "../../../../../reducers/files-and-folders/files-and-folders-selectors";
 import { getFilesAndFoldersMetadataFromStore } from "../../../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
@@ -34,7 +34,7 @@ export const SessionInfoContainer: React.FC = () => {
     [filesAndFolders]
   );
   const archiveFoldersCount = useMemo(
-    () => getArchiveFoldersCount(filesAndFolders),
+    () => getCompressedFoldersCount(filesAndFolders),
     [filesAndFolders]
   );
 

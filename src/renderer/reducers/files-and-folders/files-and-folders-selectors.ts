@@ -6,7 +6,7 @@ import _ from "lodash";
 import fp from "lodash/fp";
 import { useSelector } from "react-redux";
 
-import { isArchiveFolder, isFile } from "../../utils";
+import { isCompressedFolder, isFile } from "../../utils";
 import { getCurrentState } from "../enhancers/undoable/undoable-selectors";
 import type { FilesAndFoldersMetadataMap } from "../files-and-folders-metadata/files-and-folders-metadata-types";
 import { getHashesFromStore } from "../hashes/hashes-selectors";
@@ -297,17 +297,17 @@ export const getFoldersMap: Mapper<FilesAndFoldersMap, FilesAndFoldersMap> =
 
 /**
  * Calcule et retourne le nombre de dossiers d'archive présents dans un objet map de type FilesAndFoldersMap.
- * Un dossier d'archive est défini par un objet FilesAndFolders dont le type de fichier, déterminé par son nom, correspond à 'ARCHIVE'.
+ * Un dossier d'archive est défini par un objet FilesAndFolders dont le type de fichier, déterminé par son nom, correspond à 'COMPRESSED'.
  *
  * @param {FilesAndFoldersMap} filesAndFoldersMap - Un objet map où la clé est une chaîne de caractères
  * et la valeur est un objet FilesAndFolders. Cet objet map représente une structure de fichiers et dossiers.
  *
- * @returns {number} Le nombre de dossiers d'archive (éléments dont le type de fichier correspond à 'ARCHIVE') présents dans filesAndFoldersMap.
+ * @returns {number} Le nombre de dossiers d'archive (éléments dont le type de fichier correspond à 'COMPRESSED') présents dans filesAndFoldersMap.
  */
-export function getArchiveFoldersCount(
+export function getCompressedFoldersCount(
   filesAndFoldersMap: FilesAndFoldersMap
 ): number {
-  return size(Object.values(filesAndFoldersMap).filter(isArchiveFolder));
+  return size(Object.values(filesAndFoldersMap).filter(isCompressedFolder));
 }
 
 /**

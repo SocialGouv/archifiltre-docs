@@ -1,10 +1,10 @@
 /**
- * Checks if a given file path is within an archive folder.
+ * Checks if a given file path is within an compressed folder.
  *
  * @param {string} filePath - The file path to check.
- * @returns {boolean} Returns 'true' if the file path is within an archive folder, otherwise 'false'.
+ * @returns {boolean} Returns 'true' if the file path is within an compressed folder, otherwise 'false'.
  */
-export const isInArchiveFolder = (filePath: string): boolean => {
+export const isInCompressedFolder = (filePath: string): boolean => {
   const normalizedFilePath = filePath.replace(/\\/g, "/");
   const segments = normalizedFilePath.split("/");
 

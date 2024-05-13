@@ -53,7 +53,7 @@ describe("file-types-utils", () => {
 
     it("should return the right type for archive", () => {
       const zipFile = createFileWithExt("zip");
-      expect(getFileType(zipFile)).toBe(FileType.ARCHIVE);
+      expect(getFileType(zipFile)).toBe(FileType.COMPRESSED);
     });
 
     it("should return the right type for unknown type", () => {

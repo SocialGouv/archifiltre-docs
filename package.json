@@ -246,7 +246,7 @@
     "rmfr": "2.0.0",
     "sass": "^1.49.9",
     "sass-loader": "10",
-    "semantic-release": "^19.0.3",
+    "semantic-release": "^23.0.8",
     "stdio-mock": "^1.1.0",
     "ts-jest": "27.1.4",
     "tsconfig-paths": "^4.1.0",

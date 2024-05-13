@@ -131,10 +131,11 @@ export const computeAuditReportData = (
     ),
     oldestFiles: getOldestFiles(filesAndFolders),
     otherCount:
-      fileTypesCounts[FileType.OTHER] + fileTypesCounts[FileType.ARCHIVE],
+      fileTypesCounts[FileType.OTHER] + fileTypesCounts[FileType.COMPRESSED],
     otherFileTypes: "les types restants",
     otherPercent:
-      fileTypesPercents[FileType.OTHER] + fileTypesPercents[FileType.ARCHIVE],
+      fileTypesPercents[FileType.OTHER] +
+      fileTypesPercents[FileType.COMPRESSED],
     presentationCount: fileTypesCounts[FileType.PRESENTATION],
     presentationFileTypes: extensionsList[FileType.PRESENTATION],
     presentationPercent: fileTypesPercents[FileType.PRESENTATION],

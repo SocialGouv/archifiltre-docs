@@ -6,7 +6,7 @@ import { isFolder } from "./isFolder";
 
 /**
  * Retrieves all folders from a FilesAndFoldersMap.
- * Folders are defined either by a non-empty 'children' array or by a file type matching 'ARCHIVE'.
+ * Folders are defined either by a non-empty 'children' array or by a file type matching 'COMPRESSED'.
  *
  * @param {FilesAndFoldersMap} filesAndFoldersMap - The map to iterate through.
  *

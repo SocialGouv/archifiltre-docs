@@ -14,7 +14,7 @@ import { getTitleFromMetadata } from "../reducers/metadata/metadata-selector";
 import type { Metadata } from "../reducers/metadata/metadata-types";
 import { translations } from "../translations/translations";
 import { convertToPosixAbsolutePath } from "./file-system/file-sys-util";
-import { isArchiveFolder, isFolder } from "./fileAndFolder";
+import { isCompressedFolder, isFolder } from "./fileAndFolder";
 
 /**
  * Returns the number of folders in an array which have strictly more that nbChildren children
@@ -262,7 +262,7 @@ export const getType = (
 ): string => {
   if (isFolder(filesAndFolders)) {
     return (
-      (isArchiveFolder(filesAndFolders) ? archiveLabel : folderLabel) ?? ""
+      (isCompressedFolder(filesAndFolders) ? archiveLabel : folderLabel) ?? ""
     );
   }
   const mimeType = lookup(filesAndFolders.id);

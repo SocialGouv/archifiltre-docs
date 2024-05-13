@@ -9,7 +9,7 @@ import type {
 import type { FilesAndFoldersMetadataMap } from "../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { IcicleColorMode } from "../reducers/icicle-sort-method/icicle-sort-method-types";
 import { FileType, FolderType, getFileTypeFromFileName } from "./file-types";
-import { isArchiveFolder, isFile } from "./fileAndFolder";
+import { isCompressedFolder, isFile } from "./fileAndFolder";
 
 type RgbaTuple = [
   red: number,
@@ -63,7 +63,7 @@ export const colors: Record<FileType | FolderType, RgbaHex> = {
   [FileType.VIDEO]: "#6700c7",
   [FileType.AUDIO]: "#ff35dd",
   [FileType.OTHER]: "#8a8c93",
-  [FileType.ARCHIVE]: "#7a7a7a",
+  [FileType.COMPRESSED]: "#545454",
   [FolderType.FOLDER]: "#fabf0b",
 };
 
@@ -71,8 +71,8 @@ export const getFileOrFolderColor = (file: FilesAndFolders): RgbaHex =>
   colors[
     isFile(file)
       ? getFileTypeFromFileName(file.name)
-      : isArchiveFolder(file)
-      ? FileType.ARCHIVE
+      : isCompressedFolder(file)
+      ? FileType.COMPRESSED
       : FolderType.FOLDER
   ];
 /**

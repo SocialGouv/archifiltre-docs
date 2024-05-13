@@ -159,20 +159,17 @@
       "files": "Datei(en)",
       "folders": "Verzeichnis(e)",
       "fileTypes": {
-        "archive": "Archive",
+        "compressed": "Komprimiert",
         "presentation": "Präsentation",
-        "publication": "Veröffentlichung",
+        "publication": "Publikation",
         "spreadsheet": "Tabellenkalkulation",
         "email": "E-Mail",
         "document": "Dokument",
         "image": "Bild",
         "video": "Video",
         "audio": "Audio",
-        "other": "Andere",
-        "data": "Daten",
-        "web": "Web"
-      }
-    ,
+        "other": "Andere"
+      },
       "browse": "Stöbern",
       "reload": "Speichern und neu laden",
       "retry": "Wiederholen"

@@ -5,7 +5,7 @@ import type {
 import { isFolder } from "./isFolder";
 
 /**
- * Retrieves all folders from a FilesAndFoldersMap. A folder is defined either by having a non-empty 'children' array or by being of a type that corresponds to 'ARCHIVE'.
+ * Retrieves all folders from a FilesAndFoldersMap. A folder is defined either by having a non-empty 'children' array or by being of a type that corresponds to 'COMPRESSED'.
  *
  * This function assumes that an 'isFolder' utility function exists, which should check if a given FilesAndFolders object represents a folder according to the aforementioned criteria.
  *

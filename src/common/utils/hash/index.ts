@@ -4,7 +4,7 @@ import { join } from "path";
 import type { Observable } from "rxjs";
 import { throttleTime } from "rxjs/operators";
 
-import { isInArchiveFolder } from "../../../renderer/utils";
+import { isInCompressedFolder } from "../../../renderer/utils";
 import { ipcRenderer } from "../../ipc";
 import type { WorkerError } from "../../types";
 import type { ArchifiltreDocsError } from "../error";
@@ -52,7 +52,7 @@ export const hashResult = (
 export const computeHash = async (
   filePath: string
 ): Promise<HashComputingError | HashComputingResult> => {
-  if (isInArchiveFolder(filePath)) {
+  if (isInCompressedFolder(filePath)) {
     return {
       hash: createHash("sha256").update(filePath).digest("hex"),
       path: filePath,

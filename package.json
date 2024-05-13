@@ -301,7 +301,7 @@
     "uuid": "9.0.1",
     "windows-1252": "^1.1.0",
     "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.5",
+    "winston-daily-rotate-file": "^5.0.0",
     "winston-transport": "^4.4.0",
     "xlsx": "^0.17.0",
     "xml": "^1.0.1",

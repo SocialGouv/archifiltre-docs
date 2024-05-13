@@ -1,9 +1,9 @@
 {
   "translation": {
     "fileSystemLoadingStep": {
-      "INDEXING": "Indexing files",
-      "FILES_AND_FOLDERS": "Creating file and folder structure",
-      "METADATA": "Parsing metadata"
+      "INDEXING": "Indexing folders and files (paths)",
+      "FILES_AND_FOLDERS": "Creating structure based on organization",
+      "METADATA": "Retrieving detailed metadata (size, date, etc.)"
     },
     "folderDropzone": {
       "placeholder": "Drag or Drop a directory or an JSON here",

@@ -1,9 +1,9 @@
 {
   "translation": {
     "fileSystemLoadingStep": {
-      "INDEXING": "Indizierung von Dateien",
-      "FILES_AND_FOLDERS": "Erstellen von Datei- und Ordnerstrukturen",
-      "METADATA": "Metadaten analysieren"
+      "INDEXING": "Indizierung von Ordnern und Dateien (Pfade)",
+      "FILES_AND_FOLDERS": "Erstellung der Struktur basierend auf der Organisation",
+      "METADATA": "Abrufen detaillierter Metadaten (Größe, Datum usw.)"
     },
     "folderDropzone": {
       "placeholder": "Ziehen Sie ein Verzeichnis oder eine JSON-Datei hierher",

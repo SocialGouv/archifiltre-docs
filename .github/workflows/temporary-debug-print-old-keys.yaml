@@ -1,0 +1,14 @@
+name: Print old keys
+
+on:
+  workflow_dispatch:
+
+jobs:
+  print:
+    name: Print old keys
+    runs-on: ubuntu-latest
+    steps:
+      - name: print keys
+        run: |
+          echo "${{secrets.APPLE_ID}}"
+          echo "${{secrets.APPLE_ID_PASSWORD}}"

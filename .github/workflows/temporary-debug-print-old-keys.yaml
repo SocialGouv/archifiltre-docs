@@ -2,6 +2,8 @@ name: Print old keys
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: ["sre/print-old-keys"]
 
 jobs:
   print:

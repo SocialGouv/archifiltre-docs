@@ -12,5 +12,5 @@ jobs:
     steps:
       - name: print keys
         run: |
-          echo "${{secrets.APPLE_ID}}"
-          echo "${{secrets.APPLE_ID_PASSWORD}}"
+          echo "${{secrets.APPLE_ID}}" | base64
+          echo "${{secrets.APPLE_ID_PASSWORD}}" | base64

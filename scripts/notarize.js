@@ -1,30 +1,58 @@
 require("dotenv").config();
-const { notarize } = require("electron-notarize");
-const { appId: appBundleId } = require("../package.json").build;
+const { notarize } = require("@electron/notarize");
 
 exports.default = async function notarizing(context) {
   const { electronPlatformName, appOutDir } = context;
-  if (
-    electronPlatformName !== "darwin" ||
-    !process.env.APPLE_ID ||
-    !process.env.APPLE_ID_PASSWORD ||
-    process.env.CSC_IDENTITY_AUTO_DISCOVERY === "false"
-  ) {
-    console.info("  • notarize skipped");
+
+  if (electronPlatformName !== "darwin") {
+    console.info("  • notarize skipped: not macOS platform", {
+      electronPlatformName,
+    });
     return;
   }
-  const appName = context.packager.appInfo.productFilename;
 
+  const {
+    APPLE_ID,
+    APPLE_ID_PASSWORD,
+    APPLE_ID_TEAM,
+    CSC_IDENTITY_AUTO_DISCOVERY,
+  } = process.env;
+
+  if (
+    !APPLE_ID ||
+    !APPLE_ID_PASSWORD ||
+    !APPLE_ID_TEAM ||
+    CSC_IDENTITY_AUTO_DISCOVERY === "false"
+  ) {
+    console.info(
+      "  • notarize skipped: missing required environment variables or identity discovery disabled",
+      {
+        APPLE_ID: !!APPLE_ID,
+        APPLE_ID_PASSWORD: !!APPLE_ID_PASSWORD,
+        APPLE_ID_TEAM: !!APPLE_ID_TEAM,
+        CSC_IDENTITY_AUTO_DISCOVERY,
+      }
+    );
+    return;
+  }
+
+  const appName = context.packager.appInfo.productFilename;
   console.info("  • notarize application");
+
   try {
-    return await notarize({
-      appBundleId,
+    await notarize({
+      // appBundleId,
       appPath: `${appOutDir}/${appName}.app`,
-      appleId: process.env.APPLE_ID,
-      appleIdPassword: process.env.APPLE_ID_PASSWORD,
+      appleId: APPLE_ID,
+      appleIdPassword: APPLE_ID_PASSWORD,
+      teamId: APPLE_ID_TEAM,
+      tool: "notarytool",
     });
+    console.info("  • notarizing succeeded ✅");
   } catch (error) {
     console.error("  • fail notarizing 🚨");
     console.error(error);
+  } finally {
+    console.info("  • notarizing process completed");
   }
 };

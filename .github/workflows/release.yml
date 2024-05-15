@@ -111,7 +111,6 @@ jobs:
         with:
           name: compile-dist
           path: dist/
-
   build:
     if: ${{ success() }}
     needs: compile
@@ -136,6 +135,7 @@ jobs:
       CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
       APPLE_ID: ${{ secrets.APPLE_ID }}
       APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+      APPLE_ID_TEAM: ${{ secrets.APPLE_ID_TEAM }}
       ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
       ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
 
@@ -151,29 +151,26 @@ jobs:
       - name: Yarn install
         run: |
           yarn config set network-timeout 300000
-          yarn --frozen-lockfile --perfer-offline
+          yarn --frozen-lockfile --prefer-offline
       - name: Replace version in package.json
         shell: bash
         run: |
           yarn global add replace
           $(yarn global bin)/replace '"version": "${{ needs.compile.outputs.current-version }}"' '"version": "${{ needs.compile.outputs.next-version }}"' package.json
           yarn replaceForChannel
-      ####### Activate only if windows msi build fail with "ICE error"
-      # - name: Hack msi compilation
-      #   if: contains(matrix.os, 'windows')
-      #   shell: bash
-      #   run: $(yarn global bin)/replace 'lightArgs\.push\(\.\.\.objectFiles\);' 'lightArgs.push("-sval", ...objectFiles);' node_modules/app-builder-lib/out/targets/MsiTarget.js
       - name: Download dist
         uses: actions/download-artifact@v4
         with:
           name: compile-dist
           path: dist/
-      - name: Download cetificates
+      - name: Download certificates
         uses: actions/download-artifact@v4
         with:
           name: certificates
       - name: Build bin
         run: yarn dist:${{ matrix.target }}
+        env:
+          USE_HARD_LINKS: false
       - name: Archive bin
         uses: actions/upload-artifact@v4
         with:
@@ -181,7 +178,6 @@ jobs:
           path: |
             electron/dist/*/archifiltre*.*
             electron/dist/*/latest*.yml
-
   release:
     needs: build
     runs-on: ubuntu-latest

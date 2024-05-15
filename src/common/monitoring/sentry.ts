@@ -14,7 +14,7 @@ export type SentrySetupCallback = (
 ) => void;
 
 /**
- * Setup sentry in main or renderer and return a "post setup"
+ * Setup Sentry in main or renderer and return a "post setup"
  * callback to be used after tracking is loaded for example.
  *
  * The first setup should be set at the top most of the process.
@@ -43,7 +43,7 @@ export const setupSentry = (): SentrySetupCallback => {
           });
           return scope;
         },
-        integrations: (integrations) => [
+        integrations: (integrations: Integration[]) => [
           ...integrations,
           ...additionalIntegrations,
         ],

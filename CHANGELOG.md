@@ -1,3 +1,29 @@
+## [4.1.1](https://github.com/SocialGouv/archifiltre-docs/compare/v4.1.0...v4.1.1) (2024-05-15)
+
+
+### Bug Fixes
+
+* add deb extension to electron build ([a510810](https://github.com/SocialGouv/archifiltre-docs/commit/a510810a4fa028150d0818e51c5aa7baf2d8d104))
+* ARCHIFILTRE_CONTACT_EMAIL ([0fe8d92](https://github.com/SocialGouv/archifiltre-docs/commit/0fe8d92a9d23712b1f2ee88780b966461a867105))
+* ARCHIFILTRE_SITE_URL ([b5e7881](https://github.com/SocialGouv/archifiltre-docs/commit/b5e7881f1be2c13f856d1c36517e67894088c6f7))
+* avoid crash when filesAndFolders is undefined ([4fb635a](https://github.com/SocialGouv/archifiltre-docs/commit/4fb635a34be24fecd9eeca75a4fc645a31003f62))
+* change ARCHIFILTRE_CONTACT_EMAIL ([b3c44f4](https://github.com/SocialGouv/archifiltre-docs/commit/b3c44f4edf9ff26a6f5bd158d7025ca5850d26e6))
+* change archive to compressed ([6d7e781](https://github.com/SocialGouv/archifiltre-docs/commit/6d7e7819f4b5514e55f514a66575023ae26f903f))
+* improve laoding message ([c66fb5e](https://github.com/SocialGouv/archifiltre-docs/commit/c66fb5edfa1e45b9d8ef6c83338998edd95739bf))
+* improve waiting hash message ([0eeb478](https://github.com/SocialGouv/archifiltre-docs/commit/0eeb478f28e46708a463e4dabe53e7adff0f510f))
+* lint ([32bde1f](https://github.com/SocialGouv/archifiltre-docs/commit/32bde1fd46ab5a1b0137c08ae919b84f22185349))
+* lint ([29a4fa4](https://github.com/SocialGouv/archifiltre-docs/commit/29a4fa4179e753c5e6c486dd63dd2890a4afb0d3))
+* minor improvment ([1d86a20](https://github.com/SocialGouv/archifiltre-docs/commit/1d86a20fc51b4c781188c6140c73254644f17843))
+* notarize ([1e46220](https://github.com/SocialGouv/archifiltre-docs/commit/1e462203b8f9a20a0acf94b7dda93fe5d1b58fd0))
+* pagination ([905a919](https://github.com/SocialGouv/archifiltre-docs/commit/905a91995e95990f030c428573882458b8b5dcab))
+* remove compressed stats in audit from auditReportTemplate.docx ([c31ea85](https://github.com/SocialGouv/archifiltre-docs/commit/c31ea85b52b1edb148082e69d89ca5017febd005))
+* remove web & data from FileType ([21753e9](https://github.com/SocialGouv/archifiltre-docs/commit/21753e9ffa0b7b1fb241c6f4545b5545917615e7))
+* update fileSystemLoadingStep wording ([936a5e0](https://github.com/SocialGouv/archifiltre-docs/commit/936a5e0996580d0eaeb19e061bd77f46f587a4e3))
+* update github issue template ([d92ace0](https://github.com/SocialGouv/archifiltre-docs/commit/d92ace01f2e18f6ff5226200dfc9f0ee8e86628a))
+* update sentry lint ([6d4c33b](https://github.com/SocialGouv/archifiltre-docs/commit/6d4c33b335c90206a978634925f7b166d98c0935))
+* Z_CORRUPTED typo ([f4291b7](https://github.com/SocialGouv/archifiltre-docs/commit/f4291b73217993118a6ffa7b9ad964f35918b7ff))
+* zip corrupted error ([e2f342e](https://github.com/SocialGouv/archifiltre-docs/commit/e2f342e52086386114b564367163a496c384a736))
+
 # [4.1.0](https://github.com/SocialGouv/archifiltre-docs/compare/v4.0.1...v4.1.0) (2024-03-08)
 
 

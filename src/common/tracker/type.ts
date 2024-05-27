@@ -13,7 +13,7 @@ export type TrackErrorId = string & { readonly _trackErrorId?: never };
  * Tracking Plan props representation.
  */
 export interface TrackCoreEventProps {
-  "App Closed": { date: Date };
+  "App Closed": { date: Date; version: string };
   "App First Opened": {
     arch: string;
     date: Date;

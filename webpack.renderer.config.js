@@ -7,6 +7,8 @@ require("dotenv").config();
 
 module.exports =
   /** @param {import("webpack").Configuration} config */ function (config) {
+    const isProd = config.mode === "production";
+
     const workers = glob
       .sync("./src/renderer/**/*.fork.ts")
       .map((filePath) => {
@@ -46,7 +48,7 @@ module.exports =
     //   }
     // });
 
-    if (config.mode === "production") {
+    if (isProd) {
       if (!config.plugins?.length) {
         config.plugins = [];
       }

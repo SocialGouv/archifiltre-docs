@@ -64,11 +64,11 @@ const askBeforeLeaving = () => {
     }
     event.preventDefault();
     const language = getLanguage();
-    let title = "";
-    let message = "";
-    let detail = "";
-    let no = "";
-    let yes = "";
+    let title = "Bye bye!";
+    let message = "Are you sure you want to leave?";
+    let detail = "All data that has not been saved will be permanently lost!";
+    let no = "No";
+    let yes = "Yes";
     if (language === "fr") {
       title = "Bye bye !";
       message = "Êtes-vous sûr•e de vouloir quitter ?";
@@ -76,12 +76,6 @@ const askBeforeLeaving = () => {
         "Toutes les données qui n'ont pas été sauvegardées seront perdues définitivement !";
       no = "Non";
       yes = "Oui";
-    } else {
-      title = "Bye bye!";
-      message = "Are you sure you want to leave?";
-      detail = "All data that has not been saved will be permanently lost!";
-      no = "No";
-      yes = "Yes";
     }
     const options = {
       buttons: [no, yes],
@@ -174,8 +168,6 @@ void app.whenReady().then(() => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
-  // -- init all "modules"
-  // TODO: do real modules
   await initNewUserConfig();
   await initTracking();
   loadHash();
@@ -221,7 +213,7 @@ app.on("activate", async () => {
 
 app.on("will-quit", async (event) => {
   event.preventDefault();
-  getTrackerProvider().track("App Closed", { date: new Date() });
+  getTrackerProvider().track("App Closed", { date: new Date(), version });
   await sleep(1000);
   process.exit();
 });

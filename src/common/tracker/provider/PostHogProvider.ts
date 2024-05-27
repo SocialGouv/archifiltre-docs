@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+import { version } from "@common/utils/package";
 import type { Integration } from "@sentry/types";
+import { totalmem } from "os";
 import type FrontPostHog from "posthog-js";
 import type NodeJsPostHog from "posthog-node";
 
@@ -10,18 +13,26 @@ import { TrackerProvider } from "./TrackerProvider";
 const TRACKER_FAKE_HOST = (process.env.TRACKER_FAKE_HREF ?? "").split("//")[1]!;
 
 const DEFAULT_$SET = {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   $current_url: process.env.TRACKER_FAKE_HREF,
   $host: TRACKER_FAKE_HOST,
   $pathname: "",
 };
 const DEFAULT_$SET_ONCE = {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   $initial_current_url: process.env.TRACKER_FAKE_HREF,
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   $initial_pathname: "",
   $pathname: "",
 };
+
+function getCommonProperties() {
+  return {
+    arch: process.arch,
+    date: new Date(),
+    os: process.platform,
+    ram: totalmem() / 1024 / 1024 / 1024,
+    version,
+  };
+}
+
 export class PostHogProvider extends TrackerProvider<
   typeof FrontPostHog,
   NodeJsPostHog
@@ -51,34 +62,33 @@ export class PostHogProvider extends TrackerProvider<
       this.tracker.capture({
         distinctId: this.appId,
         event: "$identify",
+        properties: getCommonProperties(),
       });
       this.inited = true;
-    } else {
-      return new Promise<void>(
-        (resolve) =>
-          void import("posthog-js").then(({ default: frontPostHog }) => {
-            this.hijackPostHog(frontPostHog);
-            frontPostHog.init(process.env.TRACKER_POSTHOG_API_KEY, {
-              /* eslint-disable @typescript-eslint/naming-convention */
-              api_host: process.env.TRACKER_POSTHOG_URL,
-              autocapture: false,
-              capture_pageview: false,
-              disable_session_recording: true,
-              loaded: (posthog) => {
-                this.tracker = posthog;
-                this.tracker.identify(this.appId);
-                this.inited = true;
-                resolve();
-              },
-              /* eslint-enable @typescript-eslint/naming-convention */
-            });
-          })
-      );
+      return;
     }
+
+    return new Promise<void>(
+      (resolve) =>
+        void import("posthog-js").then(({ default: frontPostHog }) => {
+          this.hijackPostHog(frontPostHog);
+          frontPostHog.init(process.env.TRACKER_POSTHOG_API_KEY, {
+            api_host: process.env.TRACKER_POSTHOG_URL,
+            autocapture: false,
+            capture_pageview: false,
+            disable_session_recording: true,
+            loaded: (posthog) => {
+              this.tracker = posthog;
+              this.tracker.identify(this.appId, getCommonProperties());
+              this.inited = true;
+              resolve();
+            },
+          });
+        })
+    );
   }
 
   public async uninit(): Promise<void> {
-    console.info("[Tracker][PostHogProvider] Shutdown posthog");
     if (this.isMain(this.tracker)) {
       this.tracker.shutdown();
     }
@@ -101,7 +111,10 @@ export class PostHogProvider extends TrackerProvider<
 
   public track<TEvent extends TrackEvent>(...args: TrackArgs<TEvent>): void {
     const [event, properties] = args;
-    if (!this.tracker || this.disabled) return;
+    if (!this.tracker || this.disabled) {
+      return;
+    }
+
     if (this.isMain(this.tracker)) {
       this.tracker.capture({
         distinctId: this.appId,
@@ -117,12 +130,16 @@ export class PostHogProvider extends TrackerProvider<
     if (!this.tracker) return;
     if (!this.isMain(this.tracker)) {
       this.tracker.opt_in_capturing();
+      const optInProperties = getCommonProperties();
+      this.tracker.capture("$opt_in", optInProperties);
     }
     super.enable();
   }
 
   public disable(): void {
-    if (!this.tracker) return;
+    if (!this.tracker) {
+      return;
+    }
     if (!this.isMain(this.tracker)) {
       this.tracker.opt_out_capturing();
     } else {
@@ -139,7 +156,6 @@ export class PostHogProvider extends TrackerProvider<
     const originalCaptureFn = posthog.capture.bind(posthog);
     const hijack = {
       $set: DEFAULT_$SET,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       $set_once: DEFAULT_$SET_ONCE,
       ...DEFAULT_$SET,
     };

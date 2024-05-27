@@ -6,6 +6,8 @@ require("dotenv").config();
 
 module.exports =
   /** @param {import("webpack").Configuration} config */ function (config) {
+    const isProd = config.mode === "production";
+
     const workers = glob
       .sync("./src/main/**/*.worker.ts")
       .map((filePath) => {
@@ -17,7 +19,7 @@ module.exports =
         return acc;
       }, {});
 
-    if (config.mode === "production") {
+    if (isProd) {
       for (const plugin of config.plugins) {
         if (plugin instanceof webpack.BannerPlugin) {
           plugin.options.exclude = /(preload|\.worker)\.js$/i;

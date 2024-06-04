@@ -1,7 +1,7 @@
 {
   "name": "archifiltre-docs",
   "productName": "Docs par Archifiltre",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "private": true,
   "description": "Visualisez et améliorez vos arborescences de fichiers !",
   "author": {
@@ -20,10 +20,10 @@
     "test": "jest",
     "test:e2e": "playwright test --workers=1",
     "compile": "cross-env 'NODE_OPTIONS=\"--max-old-space-size=4096\"' electron-webpack",
-    "dist:win": "electron-builder --x64 --ia32 --win portable msi nsis",
-    "dist:mac": "electron-builder --mac --x64 --arm64",
-    "dist:mac-local": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dmg",
-    "dist:linux": "electron-builder --linux",
+    "dist:win": "cross-env ELECTRON_FORCE_IS_PACKAGED=true electron-builder --x64 --ia32 --win portable msi nsis",
+    "dist:mac": "cross-env ELECTRON_FORCE_IS_PACKAGED=true electron-builder --mac --x64 --arm64",
+    "dist:mac-local": "cross-env ELECTRON_FORCE_IS_PACKAGED=true CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dmg",
+    "dist:linux": "cross-env ELECTRON_FORCE_IS_PACKAGED=true electron-builder --linux",
     "lint": "eslint src/",
     "lint:fix": "eslint --fix src/",
     "lint:test": "eslint -c tests/.eslintrc.json 'tests/**/*.ts*'",

@@ -1,3 +1,10 @@
+## [4.1.2](https://github.com/SocialGouv/archifiltre-docs/compare/v4.1.1...v4.1.2) (2024-06-04)
+
+
+### Bug Fixes
+
+* posthog ([4e67168](https://github.com/SocialGouv/archifiltre-docs/commit/4e67168485699ebcf171ac6cc15c692ac6b70969))
+
 ## [4.1.1](https://github.com/SocialGouv/archifiltre-docs/compare/v4.1.0...v4.1.1) (2024-05-15)
 
 

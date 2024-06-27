@@ -201,7 +201,17 @@ const formatToCsv = (sipFilesAndFolders: ResipFormat[], tags: Tag[]) => {
   ];
   const tagsFields = tags.map((_tag, index) => `Content.Tag.${index}`);
 
-  const firstRow: string[] = (fieldsOrder as string[]).concat(tagsFields);
+  // Add the “Content.” prefix where needed
+  const formatFieldName = (field: keyof ResipFormat): string => {
+    if (field === "ID" || field === "ParentID" || field === "File") {
+      return field as string;
+    }
+    return `Content.${field}`;
+  };
+
+  const firstRow: string[] = fieldsOrder
+    .map(formatFieldName)
+    .concat(tagsFields);
 
   const dataRows = sipFilesAndFolders.map((sipFileAndFolder) => {
     const baseFileAndFolder = fieldsOrder.map(

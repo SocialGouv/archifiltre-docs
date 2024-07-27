@@ -6,6 +6,7 @@
       "METADATA": "Abrufen detaillierter Metadaten (Größe, Datum usw.)"
     },
     "folderDropzone": {
+      "loadingFolder": "Ordner wird geladen",
       "placeholder": "Ziehen Sie ein Verzeichnis oder eine JSON-Datei hierher",
       "placeholderSubtitle": "Sie können auch eine zuvor aus exportierte JSON-Datei ablegen.",
       "zipNotificationTitle": "ZIP-Datei(en) entdeckt",

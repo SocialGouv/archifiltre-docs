@@ -57,10 +57,12 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   const { t } = useTranslation();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [loadedPath, setLoadedPath] = useState("");
+  const [folderName, setFolderName] = useState("");
 
   const loadPath = useCallback(
     (pathToLoad: string) => {
       loadFromPath(pathToLoad);
+      setFolderName(path.basename(pathToLoad));
       void savePreviousSession(pathToLoad);
     },
     [loadFromPath]
@@ -109,6 +111,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
               fileSystemLoadingStep={fileSystemLoadingStep}
               indexedFilesCount={indexedFilesCount}
               loadedPath={loadedPath}
+              folderName={folderName}
               cancelLoading={cancelLoading}
             />
           ) : (

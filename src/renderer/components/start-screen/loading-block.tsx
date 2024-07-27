@@ -1,6 +1,7 @@
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
@@ -22,12 +23,14 @@ export interface LoadingBlockProps {
   fileSystemLoadingStep: FileSystemLoadingStep;
   indexedFilesCount: number;
   loadedPath: string;
+  folderName: string;
 }
 
 export const LoadingBlock: React.FC<LoadingBlockProps> = ({
   fileSystemLoadingStep,
   indexedFilesCount,
   loadedPath,
+  folderName,
   cancelLoading,
 }) => {
   const { t } = useTranslation();
@@ -39,7 +42,15 @@ export const LoadingBlock: React.FC<LoadingBlockProps> = ({
   return (
     <Grid container direction="row" justifyContent="center" alignItems="center">
       <StyledGrid item>
-        <Box>
+        <Box textAlign="center">
+          <Typography variant="h6">
+            {t("folderDropzone.loadingFolder")}:
+          </Typography>
+          <Typography variant="h4" color="textPrimary">
+            {folderName}
+          </Typography>
+        </Box>
+        <Box mt={3}>
           <LoadingSpinner loaderText={loaderText} isLoading={true} />
           <Box display="flex" justifyContent="center">
             <Box pr={1}>

@@ -103,7 +103,7 @@
       "hide": "Cacher",
       "show": "Afficher",
       "noOptions": "Pas de résultats - Appuyez sur Entrer pour ajouter un nouveau tag",
-      "tagItemTooltip": "Nombre d'utilisation du tag (pourcentage du volume)",
+      "tagItemTooltip": "Nombre d’utilisation du tag (pourcentage du volume et poids des éléments taggés)",
       "metadata": "Métadonnées",
       "currentZoom": "Zoom actuel",
       "zoomIn": "Zoomer",
@@ -172,7 +172,12 @@
       },
       "browse": "Parcourir",
       "reload": "Sauvegarder et recharger",
-      "retry": "Réessayer"
+      "retry": "Réessayer",
+      "Bytes": "Octets",
+      "KB": "Ko",
+      "MB": "Mo",
+      "GB": "Go",
+      "TB": "To"
     },
     "hash": {
       "loadingInfoLabel": "Chargement des empreintes de fichiers et dossiers",

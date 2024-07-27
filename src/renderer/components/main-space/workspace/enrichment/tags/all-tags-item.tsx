@@ -1,4 +1,4 @@
-import { getPercentage } from "@common/utils/numbers";
+import { formatSize, getPercentage } from "@common/utils/numbers";
 import Box from "@material-ui/core/Box";
 import Chip from "@material-ui/core/Chip";
 import IconButton from "@material-ui/core/IconButton";
@@ -66,7 +66,10 @@ export const AllTagsItem: React.FC<AllTagsItemProps> = ({
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="center" pr={1}>
         <Tooltip title={tooltipText}>
-          <span>{`${tagNumber} (${getPercentage(size, totalVolume)}%)`}</span>
+          <span>{`${tagNumber} (${getPercentage(
+            size,
+            totalVolume
+          )}% - ${formatSize(size, t)})`}</span>
         </Tooltip>
       </Box>
       {renameTag && (

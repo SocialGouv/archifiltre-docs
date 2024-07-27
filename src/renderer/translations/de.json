@@ -6,6 +6,7 @@
       "METADATA": "Abrufen detaillierter Metadaten (Größe, Datum usw.)"
     },
     "folderDropzone": {
+      "loadingFolder": "Ordner wird geladen",
       "placeholder": "Ziehen Sie ein Verzeichnis oder eine JSON-Datei hierher",
       "placeholderSubtitle": "Sie können auch eine zuvor aus exportierte JSON-Datei ablegen.",
       "zipNotificationTitle": "ZIP-Datei(en) entdeckt",
@@ -233,7 +234,7 @@
       "treeStats": "Dateibaum-Statistik",
       "treeVisualizing": "Dateibaum visualisieren",
       "creatingTreeCsvExport": "Baum csv-Export erstellen",
-      "createdTreeCsvExport": "Baum csv exportiert", 
+      "createdTreeCsvExport": "Baum csv exportiert",
       "deletionScript": "Löschungsskript",
       "deletionScriptSuccessMessage": "Das Löschskript wurde erstellt. Klicken Sie hier, um es aufzurufen.",
       "auditReportTitle": "Prüfbericht",

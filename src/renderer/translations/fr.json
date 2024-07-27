@@ -6,6 +6,7 @@
       "METADATA": "Remontée des métadonnées détaillées (poids, date, etc.)"
     },
     "folderDropzone": {
+      "loadingFolder": "Chargement du dossier",
       "placeholder": "Glissez ou déposez un répertoire ou un JSON ici",
       "placeholderSubtitle": "Pas de modification du répertoire original",
       "zipNotificationTitle": "fichier(s) zip détecté(s)",

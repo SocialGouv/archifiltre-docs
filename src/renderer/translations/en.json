@@ -6,6 +6,7 @@
       "METADATA": "Retrieving detailed metadata (size, date, etc.)"
     },
     "folderDropzone": {
+      "loadingFolder": "Loading Folder",
       "placeholder": "Drag or Drop a directory or an JSON here",
       "placeholderSubtitle": "No modification on the original directory",
       "zipNotificationTitle": "zip(s) file(s) detected",

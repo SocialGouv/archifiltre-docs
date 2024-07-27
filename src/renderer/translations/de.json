@@ -103,7 +103,7 @@
       "hide": "Verbergen",
       "show": "Anzeigen",
       "noOptions": "Keine Ergebnisse - Drücken Sie “Enter”, um einen neuen Tag hinzuzufügen",
-      "tagItemTooltip": "Tag Nummer (Volumenprozent)",
+      "tagItemTooltip": "Tag Nummer (Volumenprozent und Gewicht der getaggten Elemente)",
       "metadata": "Metadaten",
       "currentZoom": "Aktueller Zoom",
       "zoomIn": "Vergrößern",
@@ -172,7 +172,12 @@
       },
       "browse": "Stöbern",
       "reload": "Speichern und neu laden",
-      "retry": "Wiederholen"
+      "retry": "Wiederholen",
+      "Bytes": "Bytes",
+      "KB": "KB",
+      "MB": "MB",
+      "GB": "GB",
+      "TB": "TB"
     },
     "hash": {
       "loadingInfoLabel": "Laden der Hash-Werte von Dateien und Ordnern",

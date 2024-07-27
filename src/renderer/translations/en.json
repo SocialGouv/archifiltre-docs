@@ -103,7 +103,7 @@
       "hide": "Hide",
       "show": "Show",
       "noOptions": "No results - Press enter to add a new tag",
-      "tagItemTooltip": "Tag number (volume percentage)",
+      "tagItemTooltip": "Tag number (volume percentage and weight of tagged elements)",
       "metadata": "Metadata",
       "currentZoom": "Current zoom",
       "zoomIn": "Zoom in",
@@ -172,7 +172,12 @@
       },
       "browse": "Browse",
       "reload": "Save and reload",
-      "retry": "Retry"
+      "retry": "Retry",
+      "Bytes": "Bytes",
+      "KB": "KB",
+      "MB": "MB",
+      "GB": "GB",
+      "TB": "TB"
     },
     "hash": {
       "loadingInfoLabel": "Loading files and folders hashes",

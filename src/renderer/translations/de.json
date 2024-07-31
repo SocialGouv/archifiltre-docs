@@ -233,7 +233,7 @@
       "treeStats": "Dateibaum-Statistik",
       "treeVisualizing": "Dateibaum visualisieren",
       "creatingTreeCsvExport": "Baum csv-Export erstellen",
-      "createdTreeCsvExport": "Baum csv exportiert", 
+      "createdTreeCsvExport": "Baum csv exportiert",
       "deletionScript": "Löschungsskript",
       "deletionScriptSuccessMessage": "Das Löschskript wurde erstellt. Klicken Sie hier, um es aufzurufen.",
       "auditReportTitle": "Prüfbericht",
@@ -262,7 +262,8 @@
       "noAvailableOption": "Option nicht verfügbar",
       "visualizeElement": "Element visualisieren",
       "exportNotificationTitle": "Export der Suchergebnisse",
-      "exportNotificationMessage": "CSV-Export erfolgreich."
+      "exportNotificationMessage": "CSV-Export erfolgreich.",
+      "exportSizeColumn": "Größe (Bytes)"
     },
     "errorsModal": {
       "title": "Fehlerliste",

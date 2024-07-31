@@ -252,7 +252,7 @@
       "title": "Rechercher et filtrer",
       "name": "Nom",
       "type": "Type",
-      "size": "Taille",
+      "size": "Poids",
       "fileLastModified": "Dernière modification",
       "path": "Chemin",
       "searchPlaceholder": "Rechercher",
@@ -262,7 +262,8 @@
       "noAvailableOption": "Pas d'option disponible",
       "visualizeElement": "Visualiser l'élément",
       "exportNotificationTitle": "Export des résultats de recherche",
-      "exportNotificationMessage": "L'export CSV est terminé."
+      "exportNotificationMessage": "L'export CSV est terminé.",
+      "exportSizeColumn": "Poids (octets)"
     },
     "errorsModal": {
       "title": "Liste des erreurs",

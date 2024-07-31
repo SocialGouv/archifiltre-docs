@@ -262,7 +262,8 @@
       "noAvailableOption": "No available option",
       "visualizeElement": "Visualize element",
       "exportNotificationTitle": "Search results export",
-      "exportNotificationMessage": "CSV export success."
+      "exportNotificationMessage": "CSV export success.",
+      "exportSizeColumn": "Size (bytes)"
     },
     "errorsModal": {
       "title": "Errors list",

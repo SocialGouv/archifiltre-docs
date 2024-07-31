@@ -19,7 +19,10 @@ import { useWorkspaceMetadata } from "../../../reducers/workspace-metadata/works
 import { exportTableToCsvFile } from "../../../utils/table";
 import type { SearchModalProps } from "./search-modal";
 import { SearchModal } from "./search-modal";
-import { useSearchModalTableColumns } from "./use-search-modal-table-columns";
+import {
+  useExportTableColumns,
+  useSearchModalTableColumns,
+} from "./use-search-modal-table-columns";
 
 export interface SearchModalContainerProps {
   closeModal: SearchModalProps["closeModal"];
@@ -60,21 +63,42 @@ export const SearchModalContainer: React.FC<SearchModalContainerProps> = ({
     untagAsToDelete
   );
 
+  const exportColumns = useExportTableColumns(
+    t,
+    filesAndFoldersMetadata,
+    tagAsToDelete,
+    untagAsToDelete
+  );
+
   const exportToCsv: Awaitable<VoidFunction> = useCallback(
     async (data) => {
-      const exportedColumns = columns.filter(({ id }) => id !== "emptyColumn");
+      const exportedColumns = exportColumns.filter(
+        ({ id }) => id !== "emptyColumn"
+      );
+
+      // Get the current date and time in local timezone
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const formattedDate = `${year}-${month}-${day}-${hours}-${minutes}`; // Format as yyyy-mm-dd-hh-mm
 
       await exportTableToCsvFile(
         data as ElementWithToDelete[],
         exportedColumns,
         {
-          defaultFilePath: path.join(originalPath, `${sessionName}-search.csv`),
+          defaultFilePath: path.join(
+            originalPath,
+            `${sessionName}-search_${formattedDate}.csv`
+          ),
           notificationMessage: t("search.exportNotificationMessage"),
           notificationTitle: t("search.exportNotificationTitle"),
         }
       );
     },
-    [columns, t, originalPath, sessionName]
+    [exportColumns, t, originalPath, sessionName]
   );
 
   const filesAndFoldersWithToDelete = useMemo(

@@ -4,11 +4,14 @@ import type { Theme } from "@material-ui/core/styles/createTheme";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
-import { getAreHashesReady } from "../../../../reducers/files-and-folders/files-and-folders-selectors";
+import { getAreHashesReady, getFilesAndFoldersFromStore } from "../../../../reducers/files-and-folders/files-and-folders-selectors";
+import { getTrackerProvider } from "@common/modules/tracker";
+import { countDuplicateFiles, countDuplicateFilesTotalSize } from "../../../../utils/duplicates";
+import { getHashesFromStore } from "../../../../reducers/hashes/hashes-selectors";
 
 const useLocalStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,6 +70,31 @@ export const TabsHeader: React.FC<TabsHeaderProps> = ({
     },
     [setTabIndex]
   );
+
+  const filesAndFoldersMap = useSelector(getFilesAndFoldersFromStore);
+  const hashesMap = useSelector(getHashesFromStore);
+
+  // Use the utility functions to calculate duplicates data
+  const duplicateSizeRaw = useMemo(
+    () => countDuplicateFilesTotalSize(filesAndFoldersMap, hashesMap),
+    [filesAndFoldersMap, hashesMap]
+  );
+
+  const duplicateCount = useMemo(
+    () => countDuplicateFiles(filesAndFoldersMap, hashesMap),
+    [filesAndFoldersMap, hashesMap]
+  );
+
+  // Use useEffect to trigger the function when areHashesReady becomes true
+  useEffect(() => {
+    if (areHashesReady) {
+      getTrackerProvider().track("Hash Completed", {
+        duplicateSizeRaw,
+        duplicateCount,
+      });
+    }
+  }, [areHashesReady, duplicateSizeRaw, duplicateCount]);
+
 
   return (
     <Tabs

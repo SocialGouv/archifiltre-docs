@@ -244,7 +244,13 @@
       "deletionScriptSuccessMessage": "Das Löschskript wurde erstellt. Klicken Sie hier, um es aufzurufen.",
       "auditReportTitle": "Prüfbericht",
       "auditReportStarted": "Der Export des Prüfberichts wurde gestartet",
-      "auditReportSuccess": "Der Export des Prüfberichts war erfolgreich."
+      "auditReportSuccess": "Der Export des Prüfberichts war erfolgreich.",
+      "elementsToDelete": "Liste der zu entfernenden Elemente",
+      "elementsToDeleteExportStartedMessage": "Der Export der zu löschenden Elemente hat begonnen.",
+      "elementsToDeleteExportTitle": "Elemente zum Löschen exportieren",
+      "creatingElementsToDeleteCsv": "CSV für zu löschende Elemente wird erstellt…",
+      "createdElementsToDeleteCsv": "CSV für zu löschende Elemente wurde erstellt.",
+      "elementsToDeleteExportSuccessMessage": "Der Export der zu löschenden Elemente wurde erfolgreich abgeschlossen."
     },
     "metadata": {
       "name": "Name",

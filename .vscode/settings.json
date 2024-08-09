@@ -3,10 +3,7 @@
   "css.validate": false,
   "less.validate": false,
   "scss.validate": false,
-  "stylelint.validate": [
-    "css",
-    "scss"
-  ],
+  "stylelint.validate": ["css", "scss"],
   "[css]": {
     "editor.defaultFormatter": "stylelint.vscode-stylelint"
   },
@@ -17,7 +14,7 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
@@ -28,9 +25,7 @@
   "eslint.format.enable": true,
   "json.schemas": [
     {
-      "fileMatch": [
-        "renovate.json"
-      ],
+      "fileMatch": ["renovate.json"],
       "url": "https://docs.renovatebot.com/renovate-schema.json"
     }
   ],

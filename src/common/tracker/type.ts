@@ -43,6 +43,7 @@ export interface TrackCoreEventProps {
     responseId?: string;
     userEmail: string;
   };
+  "searchModalOpened": {};
   "Work Reloaded": { workHash: TrackWorkHash };
   "Work Saved": { workHash: TrackWorkHash };
 }

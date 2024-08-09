@@ -20,14 +20,10 @@ export const csvExporterThunk =
     const exportNotificationTitle = translations.t("export.csvExportTitle");
     notifyInfo(csvExportStartedMessage, exportNotificationTitle);
 
-    const exportData = getCsvExportParamsFromStore(getState());
-
-    const data: CsvExportData = {
-      ...exportData,
-    };
+    const exportData: CsvExportData = getCsvExportParamsFromStore(getState());
 
     if (!withHashes) {
-      delete data.hashes;
+      delete exportData.hashes;
     }
 
     const totalProgress = Object.keys(exportData.filesAndFolders).length + 1;
@@ -41,7 +37,7 @@ export const csvExporterThunk =
     const exportSuccessMessage = translations.t(
       "export.csvExportSuccessMessage"
     );
-    const csvExportData$ = generateCsvExport$(data);
+    const csvExportData$ = generateCsvExport$(exportData);
 
     return dispatch(
       handleFileExportThunk(csvExportData$, {

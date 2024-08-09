@@ -244,7 +244,13 @@
       "deletionScriptSuccessMessage": "Le script de suppression a été généré. Cliquez pour y accéder.",
       "auditReportTitle": "Rapport d'audit",
       "auditReportStarted": "L'export du rapport d'audit a commencé",
-      "auditReportSuccess": "L'export du rapport d'audit est terminé"
+      "auditReportSuccess": "L'export du rapport d'audit est terminé",
+      "elementsToDelete": "Liste des éléments à éliminer",
+      "elementsToDeleteExportStartedMessage": "L’export des éléments à supprimer a commencé.",
+      "elementsToDeleteExportTitle": "Exporter les éléments à supprimer",
+      "creatingElementsToDeleteCsv": "Création du CSV pour les éléments à supprimer…",
+      "createdElementsToDeleteCsv": "Le CSV pour les éléments à supprimer a été créé.",
+      "elementsToDeleteExportSuccessMessage": "L’exportation des éléments à supprimer s'est terminée avec succès."
     },
     "metadata": {
       "name": "Nom",

@@ -3,21 +3,21 @@ import { translations } from "../../translations/translations";
 import { getCsvExportParamsFromStore } from "../../utils/array-export";
 import { handleFileExportThunk } from "../../utils/export";
 import { notifyInfo } from "../../utils/notifications";
-import { generateCsvExport$ } from "./csv-exporter.controller";
+import { generateElementsToDeleteArrayExport$ } from "../../utils/array-export/array-export";
 import type { CsvExportData } from "./csv-exporter-types";
 
 /**
- * Thunk that generates the csv array for the CSV export with the first line being
- * the csv header.
- * Each line represents one file or folder.
+ * Thunk that generates the CSV export with only the elements tagged for deletion.
  */
-export const csvExporterThunk =
+export const csvElementsToDeleteExporterThunk =
   (name: string, { withHashes = false } = {}): ArchifiltreDocsThunkAction =>
   (dispatch, getState) => {
     const csvExportStartedMessage = translations.t(
-      "export.csvExportStartedMessage"
+      "export.elementsToDeleteExportStartedMessage"
     );
-    const exportNotificationTitle = translations.t("export.csvExportTitle");
+    const exportNotificationTitle = translations.t(
+      "export.elementsToDeleteExportTitle"
+    );
     notifyInfo(csvExportStartedMessage, exportNotificationTitle);
 
     const exportData: CsvExportData = getCsvExportParamsFromStore(getState());
@@ -27,18 +27,17 @@ export const csvExporterThunk =
     }
 
     const totalProgress = Object.keys(exportData.filesAndFolders).length + 1;
-    const loaderMessage = withHashes
-      ? translations.t("export.creatingCsvExportWithHashes")
-      : translations.t("export.creatingCsvExport");
-    const loadedMessage = withHashes
-      ? translations.t("export.createdCsvExportWithHashes")
-      : translations.t("export.createdCsvExport");
+    const loaderMessage = translations.t("export.creatingElementsToDeleteCsv");
+    const loadedMessage = translations.t("export.createdElementsToDeleteCsv");
 
     const exportSuccessMessage = translations.t(
-      "export.csvExportSuccessMessage"
+      "export.elementsToDeleteExportSuccessMessage"
     );
-    const csvExportData$ = generateCsvExport$(exportData);
 
+    // Generate the filtered CSV export observable (elements to delete only)
+    const csvExportData$ = generateElementsToDeleteArrayExport$(exportData);
+
+    // Dispatch the file export process
     return dispatch(
       handleFileExportThunk(csvExportData$, {
         exportFileName: name,

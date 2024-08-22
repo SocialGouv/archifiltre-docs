@@ -5,12 +5,13 @@ import { handleFileExportThunk } from "../../utils/export";
 import { notifyInfo, notifySuccess } from "../../utils/notifications";
 import { generateCsvExport$ } from "./csv-exporter.controller";
 import type { CsvExportData } from "./csv-exporter-types";
+import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 
 // Function to filter elements by deletion tags
-const filterByDeletion = <T extends { children?: string[] }>(
-  list: Record<string, T>,
+const filterByDeletion = (
+  list: FilesAndFoldersMap,
   toDelete: string[]
-): Record<string, T> => {
+): FilesAndFoldersMap => {
   const filteredList = Object.fromEntries(
     Object.entries(list).filter(([id, item]) => {
       if (!item) {

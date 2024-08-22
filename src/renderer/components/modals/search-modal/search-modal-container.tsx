@@ -20,7 +20,6 @@ import { exportTableToCsvFile } from "../../../utils/table";
 import type { SearchModalProps } from "./search-modal";
 import { SearchModal } from "./search-modal";
 import { useSearchModalTableColumns } from "./use-search-modal-table-columns";
-import { getTrackerProvider } from "@common/modules/tracker";
 
 export interface SearchModalContainerProps {
   closeModal: SearchModalProps["closeModal"];
@@ -86,8 +85,6 @@ export const SearchModalContainer: React.FC<SearchModalContainerProps> = ({
       })),
     [filesAndFolders, toDelete]
   );
-
-  getTrackerProvider().track("searchModalOpened", {});
 
   return (
     <SearchModal

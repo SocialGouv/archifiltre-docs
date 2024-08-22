@@ -39,6 +39,10 @@ export interface TrackCoreEventProps {
     /** in bytes */
     sizeRaw: number;
   };
+  "Hash Completed": {
+    duplicateSizeRaw: number;
+    duplicateCount: number;
+  };
   "NPS Answered": {
     responseId?: string;
     userEmail: string;

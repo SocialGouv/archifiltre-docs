@@ -24,6 +24,7 @@ import { FilesAndFoldersTable } from "./files-and-folders-table";
 import { Filters } from "./filters/filters";
 import type { SearchBarProps } from "./search-bar";
 import { SearchBar } from "./search-bar";
+import { getTrackerProvider } from "@common/modules/tracker";
 
 const StyledPaper = styled(Paper)`
   height: 90%;
@@ -70,13 +71,17 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     [nameFilter, filters]
   );
 
-  /**
-   * Resets the filters when the modal closes
-   */
+  
   useEffect(() => {
+    // Resets the filters when the modal closes
     if (!isModalOpen) {
       setSearchTerm("");
       setFilters([]);
+    }
+
+    // Tracks when the search modal is opened
+    if (isModalOpen === true) {
+      getTrackerProvider().track("searchModalOpened", {});
     }
   }, [isModalOpen, setSearchTerm, setFilters]);
 

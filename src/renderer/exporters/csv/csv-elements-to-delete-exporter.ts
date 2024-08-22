@@ -14,7 +14,7 @@ const filterByDeletion = <T extends { children?: string[] }>(
   const filteredList = Object.fromEntries(
     Object.entries(list).filter(([id, item]) => {
       if (!item) {
-        // console.warn(`Item with ID ${id} is undefined.`);
+        console.warn(`Item with ID ${id} is undefined.`);
         return false;
       }
       // Always include the "" entry and items tagged for deletion
@@ -22,15 +22,19 @@ const filterByDeletion = <T extends { children?: string[] }>(
     })
   );
 
-  // Ensure all parents of toDelete items are also included
-  toDelete.forEach((id) => {
-    const item = list[id];
-    if (item && item.children) {
-      item.children.forEach((childId) => {
-        if (!filteredList[childId]) {
-          filteredList[childId] = list[childId];
-        }
-      });
+  // Ensure that all parents of items in the filtered list are also included
+  Object.keys(filteredList).forEach((id) => {
+    let currentId = id;
+    while (currentId) {
+      const parent = list[currentId];
+      if (parent && !filteredList[currentId]) {
+        filteredList[currentId] = parent;
+      }
+      // Break if we reach the root
+      if (parent && parent.id === "") break;
+
+      // Move to the next parent by traversing upwards in the hierarchy
+      currentId = parent?.children?.[0]; // Assuming the first child path contains the parent ID
     }
   });
 

@@ -2,85 +2,42 @@ import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-type
 import { translations } from "../../translations/translations";
 import { getCsvExportParamsFromStore } from "../../utils/array-export";
 import { handleFileExportThunk } from "../../utils/export";
-import { notifyInfo, notifySuccess } from "../../utils/notifications";
-import { generateCsvExport$ } from "./csv-exporter.controller";
+import { notifyInfo } from "../../utils/notifications";
+import { generateElementsToDeleteArrayExport$ } from "../../utils/array-export/array-export";
 import type { CsvExportData } from "./csv-exporter-types";
-import type { FilesAndFoldersMap } from "../../reducers/files-and-folders/files-and-folders-types";
 
-// Function to filter elements by deletion tags
-const filterByDeletion = (
-  list: FilesAndFoldersMap,
-  toDelete: string[]
-): FilesAndFoldersMap => {
-  const filteredList = Object.fromEntries(
-    Object.entries(list).filter(([id, item]) => {
-      if (!item) {
-        console.warn(`Item with ID ${id} is undefined.`);
-        return false;
-      }
-      // Always include the "" entry and items tagged for deletion
-      return id === "" || toDelete.includes(id);
-    })
-  );
-
-  // Ensure that all parents of items in the filtered list are also included
-  Object.keys(filteredList).forEach((id) => {
-    let currentId = id;
-    while (currentId) {
-      const parent = list[currentId];
-      if (parent && !filteredList[currentId]) {
-        filteredList[currentId] = parent;
-      }
-      // Break if we reach the root
-      if (parent && parent.id === "") break;
-
-      // Move to the next parent by traversing upwards in the hierarchy
-      currentId = parent?.children?.[0]; // Assuming the first child path contains the parent ID
-    }
-  });
-
-  return filteredList;
-};
-
+/**
+ * Thunk that generates the CSV export with only the elements tagged for deletion.
+ */
 export const csvElementsToDeleteExporterThunk =
-  (name: string): ArchifiltreDocsThunkAction =>
+  (name: string, { withHashes = false } = {}): ArchifiltreDocsThunkAction =>
   (dispatch, getState) => {
-    const exportStartedMessage = translations.t(
+    const csvExportStartedMessage = translations.t(
       "export.elementsToDeleteExportStartedMessage"
     );
     const exportNotificationTitle = translations.t(
       "export.elementsToDeleteExportTitle"
     );
-    notifyInfo(exportStartedMessage, exportNotificationTitle);
+    notifyInfo(csvExportStartedMessage, exportNotificationTitle);
 
-    const state = getState();
-    const exportData = getCsvExportParamsFromStore(state);
+    const exportData: CsvExportData = getCsvExportParamsFromStore(getState());
 
-    // Use selectors to get elements tagged for deletion
-    const {
-      filesAndFolders,
-      filesAndFoldersMetadata,
-      elementsToDelete: toDelete,
-    } = exportData;
+    if (!withHashes) {
+      delete exportData.hashes;
+    }
 
-    // Filter the data to include only elements tagged for deletion
-    const filteredFilesAndFolders = filterByDeletion(filesAndFolders, toDelete);
-
-    const filteredData: CsvExportData = {
-      ...exportData,
-      filesAndFolders: filteredFilesAndFolders,
-      filesAndFoldersMetadata: filesAndFoldersMetadata,
-    };
-
-    const totalProgress = Object.keys(filteredData.filesAndFolders).length + 1;
+    const totalProgress = Object.keys(exportData.filesAndFolders).length + 1;
     const loaderMessage = translations.t("export.creatingElementsToDeleteCsv");
     const loadedMessage = translations.t("export.createdElementsToDeleteCsv");
 
     const exportSuccessMessage = translations.t(
       "export.elementsToDeleteExportSuccessMessage"
     );
-    const csvExportData$ = generateCsvExport$(filteredData);
 
+    // Generate the filtered CSV export observable (elements to delete only)
+    const csvExportData$ = generateElementsToDeleteArrayExport$(exportData);
+
+    // Dispatch the file export process
     return dispatch(
       handleFileExportThunk(csvExportData$, {
         exportFileName: name,

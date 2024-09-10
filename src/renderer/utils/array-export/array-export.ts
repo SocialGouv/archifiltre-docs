@@ -206,3 +206,61 @@ export const generateArrayExport$ = (
       });
   });
 };
+
+/**
+ * Generates a CSV array export with only the elements marked for deletion.
+ */
+export const generateElementsToDeleteArrayExport$ = (
+  data: CsvExportData
+): Observable<ResultMessage> => {
+  return new Observable<ResultMessage>((subscriber) => {
+    const toDeleteTranslation = translations.t("csvHeader.toDelete"); // Dynamic translation for "To Delete"
+
+    // Call exportToCsv with the full data to ensure the parent-children processing is done
+    void exportToCsv({
+      ...data,
+      elementsToDelete: data.elementsToDelete,
+      translator: translations.t.bind(translations),
+    })
+      .pipe(
+        tap((row: string[][]) => {
+          subscriber.next({
+            result: row.length, // Progress: report how many rows are exported
+            type: MessageTypes.RESULT,
+          });
+        }),
+        toArray(), // Collect all rows into one array
+        map((array) => {
+          const flattenedArray = flatten(array);
+
+          // Apply the filter after the parent-children structure is handled
+          const filteredArray = flattenedArray.filter((row) => {
+            // Assuming the last column holds the translated "to delete" status
+            const lastColumnIndex = row.length - 1;
+            const lastColumnValue = row[lastColumnIndex]?.trim(); // Get the value and trim spaces
+
+            // Use the translation to match the correct "to delete" label
+            return lastColumnValue === toDeleteTranslation;
+          });
+
+          return filteredArray;
+        })
+      )
+      .toPromise()
+      .then((filteredArray) => {
+        // Format the filtered result into a CSV string
+        const formattedResult = filteredArray
+          .map((row) => row.join(";"))
+          .join("\n");
+
+        // Emit the final CSV string
+        subscriber.next({
+          result: formattedResult,
+          type: MessageTypes.RESULT,
+        });
+
+        // Complete the observable
+        subscriber.complete();
+      });
+  });
+};

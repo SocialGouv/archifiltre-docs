@@ -40,16 +40,16 @@ export interface TrackCoreEventProps {
     sizeRaw: number;
   };
   "Hash Completed": {
-    duplicateSizeRaw: number;
     duplicateCount: number;
+    duplicateSizeRaw: number;
   };
   "NPS Answered": {
     responseId?: string;
     userEmail: string;
   };
-  "searchModalOpened": {};
   "Work Reloaded": { workHash: TrackWorkHash };
   "Work Saved": { workHash: TrackWorkHash };
+  searchModalOpened: Record<string, never> | undefined;
 }
 
 export type TrackNavMode = "color" | "sort" | "weight";

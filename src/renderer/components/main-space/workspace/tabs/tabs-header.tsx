@@ -1,3 +1,4 @@
+import { getTrackerProvider } from "@common/modules/tracker";
 import type { SimpleObject } from "@common/utils/object";
 import createStyles from "@material-ui/core/styles/createStyles";
 import type { Theme } from "@material-ui/core/styles/createTheme";
@@ -8,10 +9,15 @@ import React, { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
-import { getAreHashesReady, getFilesAndFoldersFromStore } from "../../../../reducers/files-and-folders/files-and-folders-selectors";
-import { getTrackerProvider } from "@common/modules/tracker";
-import { countDuplicateFiles, countDuplicateFilesTotalSize } from "../../../../utils/duplicates";
+import {
+  getAreHashesReady,
+  getFilesAndFoldersFromStore,
+} from "../../../../reducers/files-and-folders/files-and-folders-selectors";
 import { getHashesFromStore } from "../../../../reducers/hashes/hashes-selectors";
+import {
+  countDuplicateFiles,
+  countDuplicateFilesTotalSize,
+} from "../../../../utils/duplicates";
 
 const useLocalStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -89,12 +95,11 @@ export const TabsHeader: React.FC<TabsHeaderProps> = ({
   useEffect(() => {
     if (areHashesReady) {
       getTrackerProvider().track("Hash Completed", {
-        duplicateSizeRaw,
         duplicateCount,
+        duplicateSizeRaw,
       });
     }
   }, [areHashesReady, duplicateSizeRaw, duplicateCount]);
-
 
   return (
     <Tabs

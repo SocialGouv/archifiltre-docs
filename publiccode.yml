@@ -1,0 +1,28 @@
+publiccodeYmlVersion: "0.2"
+name: Archifiltre
+url: https://github.com/SocialGouv/archifiltre-docs
+landingURL: https://archifiltre.fabrique.social.gouv.fr
+creationDate: 2019-06-18
+latestRelease:
+  date: ""
+  version: ""
+logo: https://github.com/SocialGouv.png
+usedBy: []
+fundedBy: []
+roadmap: ""
+softwareType: ""
+description:
+  fr:
+    shortDescription: Visualisez et auditez vos arborescences de fichiers !
+    documentation: ""
+  en:
+    shortDescription: Audit and visualize your filetrees on your servers and local storages
+    documentation: ""
+legal:
+  license: apache-2.0
+  authorsFile: ""
+maintenance:
+  type: community
+  contacts:
+    - name: "Chloé Moser"
+      email: "chloe.MOSER@sg.social.gouv.fr"

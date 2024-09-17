@@ -8,6 +8,7 @@
   <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache--2.0-yellow.svg" alt="License: Apache-2.0"></a>
   <a href="https://img.shields.io/github/v/release/SocialGouv/archifiltre-docs"><img src="https://img.shields.io/github/v/release/SocialGouv/archifiltre-docs" alt="Npm version"></a>
   <a href="https://codecov.io/gh/SocialGouv/archifiltre-docs"><img src="https://codecov.io/gh/SocialGouv/archifiltre-docs/branch/main/graph/badge.svg" alt="codecov"></a>
+  <a href="https://code.gouv.fr/fr/awesome/"><img src="https://img.shields.io/badge/awesome-codegouvfr_7/10-blue" alt="codegouv"></a>
 </p>
 
 <br>

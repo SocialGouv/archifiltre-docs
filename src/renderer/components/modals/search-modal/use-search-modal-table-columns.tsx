@@ -1,6 +1,7 @@
 import dateFormat from "dateformat";
 import type { TFunction } from "i18next";
 import React, { useMemo } from "react";
+
 import type {
   ElementWithToDelete,
   FilesAndFolders,
@@ -9,7 +10,6 @@ import type { FilesAndFoldersMetadataMap } from "../../../reducers/files-and-fol
 import { bytes2HumanReadableFormat, isFile } from "../../../utils";
 import { getType } from "../../../utils/file-and-folders";
 import type { Column } from "../../common/table/table-types";
-import { WordBreak } from "../../common/table/table-types";
 import { ToDeleteChip } from "../../common/to-delete-chip";
 
 function notNull<T>(value: T | null): value is T {

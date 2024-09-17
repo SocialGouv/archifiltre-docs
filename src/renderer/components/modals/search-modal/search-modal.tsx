@@ -1,3 +1,4 @@
+import { getTrackerProvider } from "@common/modules/tracker";
 import type { FilterMethod } from "@common/utils/type";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -24,7 +25,6 @@ import { FilesAndFoldersTable } from "./files-and-folders-table";
 import { Filters } from "./filters/filters";
 import type { SearchBarProps } from "./search-bar";
 import { SearchBar } from "./search-bar";
-import { getTrackerProvider } from "@common/modules/tracker";
 
 const StyledPaper = styled(Paper)`
   height: 90%;
@@ -71,7 +71,6 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     [nameFilter, filters]
   );
 
-  
   useEffect(() => {
     // Resets the filters when the modal closes
     if (!isModalOpen) {
@@ -80,7 +79,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     }
 
     // Tracks when the search modal is opened
-    if (isModalOpen === true) {
+    if (isModalOpen) {
       getTrackerProvider().track("searchModalOpened", {});
     }
   }, [isModalOpen, setSearchTerm, setFilters]);

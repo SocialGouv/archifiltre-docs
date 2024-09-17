@@ -4,6 +4,7 @@ import _ from "lodash";
 import path from "path";
 
 import { auditReportExporterThunk } from "../../../exporters/audit/audit-report-exporter";
+import { csvElementsToDeleteExporterThunk } from "../../../exporters/csv/csv-elements-to-delete-exporter";
 import { csvExporterThunk } from "../../../exporters/csv/csv-exporter";
 import { treeCsvExporterThunk } from "../../../exporters/csv/tree-csv-exporter";
 import { deletionScriptExporterThunk } from "../../../exporters/deletion-script/deletion-script-exporter";
@@ -13,7 +14,6 @@ import { resipExporterThunk } from "../../../exporters/resip/resip-exporter-thun
 import type { ArchifiltreDocsThunkAction } from "../../../reducers/archifiltre-types";
 import { getNameWithExtension } from "../../../utils/file-system/file-sys-util";
 import type { ExportTypesMap } from "../export-modal/export-options";
-import { csvElementsToDeleteExporterThunk } from "../../../exporters/csv/csv-elements-to-delete-exporter";
 
 export interface IsActiveOptions {
   areHashesReady: boolean;
@@ -51,7 +51,10 @@ const exportFilesConfigs = {
     fileSuffix: "csvWithHashes",
   },
   [ExportType.TREE_CSV]: { extension: "csv", fileSuffix: "treeCsv" },
-  [ExportType.ELEMENTS_TO_DELETE]: { extension: "csv", fileSuffix: "csvToDelete" },
+  [ExportType.ELEMENTS_TO_DELETE]: {
+    extension: "csv",
+    fileSuffix: "csvToDelete",
+  },
   [ExportType.RESIP]: { extension: "csv", fileSuffix: "resip" },
   [ExportType.METS]: { extension: "zip", fileSuffix: "mets" },
   [ExportType.EXCEL]: { extension: "xlsx", fileSuffix: "excel" },
@@ -124,7 +127,11 @@ export const exportConfig: ExportConfigMap = {
     exportFunction: (exportPath) =>
       csvElementsToDeleteExporterThunk(exportPath),
     exportPath: (originalPath, sessionName) =>
-      computeExportFilePath(originalPath, sessionName, ExportType.ELEMENTS_TO_DELETE),
+      computeExportFilePath(
+        originalPath,
+        sessionName,
+        ExportType.ELEMENTS_TO_DELETE
+      ),
     isActive: true,
     label: "export.elementsToDelete",
   },
@@ -169,7 +176,7 @@ export const exportConfig: ExportConfigMap = {
         sessionName,
         ExportType.DELETION_SCRIPT
       ),
-      isActive: ({ areHashesReady }) => areHashesReady,
+    isActive: ({ areHashesReady }) => areHashesReady,
     label: "export.deletionScript",
   },
 };

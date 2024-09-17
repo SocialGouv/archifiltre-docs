@@ -21,9 +21,9 @@ const StyledGrid = styled(Grid)`
 export interface LoadingBlockProps {
   cancelLoading: () => void;
   fileSystemLoadingStep: FileSystemLoadingStep;
+  folderName: string;
   indexedFilesCount: number;
   loadedPath: string;
-  folderName: string;
 }
 
 export const LoadingBlock: React.FC<LoadingBlockProps> = ({

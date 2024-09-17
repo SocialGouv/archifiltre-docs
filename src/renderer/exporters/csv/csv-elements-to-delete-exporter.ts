@@ -1,9 +1,9 @@
 import type { ArchifiltreDocsThunkAction } from "../../reducers/archifiltre-types";
 import { translations } from "../../translations/translations";
 import { getCsvExportParamsFromStore } from "../../utils/array-export";
+import { generateElementsToDeleteArrayExport$ } from "../../utils/array-export/array-export";
 import { handleFileExportThunk } from "../../utils/export";
 import { notifyInfo } from "../../utils/notifications";
-import { generateElementsToDeleteArrayExport$ } from "../../utils/array-export/array-export";
 import type { CsvExportData } from "./csv-exporter-types";
 
 /**

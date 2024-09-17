@@ -34,10 +34,15 @@ export const bytesToMegabytes = (bytes: number, decimals = 1): number =>
 export const bytesToKilobytes = (bytes: number, decimals = 1): number =>
   toDecimalsFloat(bytes / 1000, decimals);
 
-export const formatSize = (bytes: number, t: (key: string) => string): string => {
+export const formatSize = (
+  bytes: number,
+  t: (key: string) => string
+): string => {
   if (bytes === 0) return `0 ${t("Bytes")}`;
   const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + t(`common.${sizes[i]}`);
-}
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${t(
+    `common.${sizes[i]}`
+  )}`;
+};

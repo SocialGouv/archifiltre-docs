@@ -8,7 +8,9 @@ latestRelease:
   version: ""
 logo: https://github.com/SocialGouv.png
 usedBy: []
-fundedBy: []
+fundedBy:
+  - name: Mission Fabrique numérique (FabNum)
+    url: https://lannuaire.service-public.fr/gouvernement/361651ec-d4af-4c9f-b76f-e5f9ca19df4b
 roadmap: ""
 softwareType: ""
 description:

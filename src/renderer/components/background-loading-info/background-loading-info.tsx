@@ -52,9 +52,7 @@ const _BackgroundLoadingInfo: React.FC<BackgroundLoadingInfoProps> = ({
   const isActive = loadingItems.length > 0;
 
   const isLoaded = useCallback(
-    (loadingInfo: LoadingInfo) =>
-      loadingInfo.goal === loadingInfo.progress ||
-      loadingInfo.goal - 1 === loadingInfo.progress,
+    (loadingInfo: LoadingInfo) => loadingInfo.goal === loadingInfo.progress, // Remove off-by-one check
     []
   );
 

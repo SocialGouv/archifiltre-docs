@@ -82,7 +82,7 @@ const computeFileHashesImplThunk =
       const formattedResults: HashesMap = {};
       hashResults.forEach(({ path: resultPath, hash }) => {
         const relativePath = getRelativePath(basePath, resultPath);
-        formattedResults[relativePath] = hash || null;
+        formattedResults[relativePath] = hash || null; // If no hash, assign null
       });
       return formattedResults;
     };
@@ -91,17 +91,22 @@ const computeFileHashesImplThunk =
       .pipe(
         map(({ errors, results, ...rest }) => ({
           ...rest,
-          errors: errors.map(hashErrorToArchifiltreDocsError), // Assuming this function exists
-          results: formatResult(results),
+          errors: errors.map(hashErrorToArchifiltreDocsError), // Convert errors to ArchifiltreDocsError
+          results: formatResult(results), // Convert raw results to HashesMap
         })),
         tap(({ results, errors }) => {
+          console.log(
+            `Hash progress: ${Object.keys(results).length} results, ${
+              errors.length
+            } errors.`
+          );
           dispatch(
             updateLoadingAction(
               loadingActionId,
               Object.keys(results).length + errors.length
             )
           );
-          dispatch(setFilesAndFoldersHashes(results));
+          dispatch(setFilesAndFoldersHashes(results)); // Update Redux with hashes
           dispatch(
             replaceErrorsAction(
               errors,
@@ -113,15 +118,20 @@ const computeFileHashesImplThunk =
       .toPromise();
 
     if (result.errors.length) {
+      console.log(
+        `Errors occurred during hashing: ${result.errors.length} errors.`
+      );
       reportError(result.errors);
       dispatch(
         addErroredHashes(
           result.errors.map(({ filePath, ...rest }) => ({
             ...rest,
-            filePath: getRelativePath(basePath, filePath),
+            filePath: getRelativePath(basePath, filePath), // Normalize error paths
           }))
         )
       );
+    } else {
+      console.log("No errors during hash computation.");
     }
 
     return result.errors.length;
@@ -240,15 +250,24 @@ export const computeHashesThunk =
   async (dispatch, getState) => {
     const state = getState();
     const filesAndFolders = getFilesAndFoldersFromStore(state);
-    const foldersCount = getFoldersCount(filesAndFolders) + 1;
+    const foldersCount = getFoldersCount(filesAndFolders); // Removed +1
+    const totalCount = foldersCount + filePaths.length; // Total expected files and folders
+
+    console.log(`Total files and folders to be processed: ${totalCount}`);
 
     const loadingActionId = dispatch(
       startLoading(
         LoadingInfoTypes.HASH_COMPUTING,
-        foldersCount + filePaths.length,
+        totalCount, // Goal set to the exact number of items
         hashesLoadingLabel,
         hashesLoadedLabel
       )
+    );
+
+    console.log(
+      `Starting hash computation: total files and folders = ${
+        foldersCount + filePaths.length
+      }`
     );
 
     const fileHashesErrorsCount = await dispatch(
@@ -261,6 +280,8 @@ export const computeHashesThunk =
 
     await dispatch(computeFolderHashesThunk(loadingActionId));
 
+    console.log(`File hashes error count: ${fileHashesErrorsCount}`);
+
     dispatch(completeLoadingAction(loadingActionId));
 
     notifySuccess(
@@ -269,7 +290,12 @@ export const computeHashesThunk =
     );
 
     if (fileHashesErrorsCount > 0) {
+      console.log(
+        "Errors encountered during hash computation. Handling errors..."
+      );
       handleHashesError(dispatch);
+    } else {
+      console.log("Hash computation completed successfully.");
     }
   };
 

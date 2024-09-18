@@ -62,20 +62,24 @@ export const updateLoadingAction = (
 export const progressLoadingAction = (
   id: string,
   progress: number
-): LoadingInfoAction => ({
-  id,
-  progress,
-  type: PROGRESS_LOADING,
-});
+): LoadingInfoAction => {
+  return {
+    id,
+    progress,
+    type: PROGRESS_LOADING,
+  };
+};
 
 /**
  * Completes a loading.
  * @param id
  */
-export const completeLoadingAction = (id: string): LoadingInfoAction => ({
-  id,
-  type: COMPLETE_LOADING,
-});
+export const completeLoadingAction = (id: string): LoadingInfoAction => {
+  return {
+    id,
+    type: COMPLETE_LOADING,
+  };
+};
 
 /**
  * Register an error to the error stack

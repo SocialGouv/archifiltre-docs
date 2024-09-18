@@ -82,7 +82,7 @@ const computeFileHashesImplThunk =
       const formattedResults: HashesMap = {};
       hashResults.forEach(({ path: resultPath, hash }) => {
         const relativePath = getRelativePath(basePath, resultPath);
-        formattedResults[relativePath] = hash || null;
+        formattedResults[relativePath] = hash || null; // If no hash, assign null
       });
       return formattedResults;
     };
@@ -91,8 +91,8 @@ const computeFileHashesImplThunk =
       .pipe(
         map(({ errors, results, ...rest }) => ({
           ...rest,
-          errors: errors.map(hashErrorToArchifiltreDocsError), // Assuming this function exists
-          results: formatResult(results),
+          errors: errors.map(hashErrorToArchifiltreDocsError), // Convert errors to ArchifiltreDocsError
+          results: formatResult(results), // Convert raw results to HashesMap
         })),
         tap(({ results, errors }) => {
           dispatch(
@@ -101,7 +101,7 @@ const computeFileHashesImplThunk =
               Object.keys(results).length + errors.length
             )
           );
-          dispatch(setFilesAndFoldersHashes(results));
+          dispatch(setFilesAndFoldersHashes(results)); // Update Redux with hashes
           dispatch(
             replaceErrorsAction(
               errors,
@@ -118,7 +118,7 @@ const computeFileHashesImplThunk =
         addErroredHashes(
           result.errors.map(({ filePath, ...rest }) => ({
             ...rest,
-            filePath: getRelativePath(basePath, filePath),
+            filePath: getRelativePath(basePath, filePath), // Normalize error paths
           }))
         )
       );
@@ -240,12 +240,12 @@ export const computeHashesThunk =
   async (dispatch, getState) => {
     const state = getState();
     const filesAndFolders = getFilesAndFoldersFromStore(state);
-    const foldersCount = getFoldersCount(filesAndFolders) + 1;
+    const totalCount = getFoldersCount(filesAndFolders) + filePaths.length;
 
     const loadingActionId = dispatch(
       startLoading(
         LoadingInfoTypes.HASH_COMPUTING,
-        foldersCount + filePaths.length,
+        totalCount,
         hashesLoadingLabel,
         hashesLoadedLabel
       )

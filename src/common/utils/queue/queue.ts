@@ -16,12 +16,12 @@ export interface Queue<TInput, TResult, TError = never> {
 export const computeQueue =
   <TInput, TResult, TError = never>(
     computingFn: (param: TInput[]) => Promise<(TError | TResult)[]>,
-    isResult: IsResult<TResult>
+    _isResult: IsResult<TResult>
   ) =>
   (input: TInput[]): Observable<Queue<TInput, TResult, TError>> =>
     new Observable<Queue<TInput, TResult, TError>>((observer) => {
-      let results: TResult[] = [];
-      let errors: TError[] = [];
+      const results: TResult[] = [];
+      const errors: TError[] = [];
       let remaining: TInput[][] = chunk(input, CHUNK_SIZE);
 
       const run = async () => {
@@ -29,15 +29,16 @@ export const computeQueue =
           const computed = remaining[0];
           remaining = remaining.slice(1);
           const values = await computingFn(computed);
+
           const newResults = values.filter((value): value is TResult =>
-            isResult(value)
+            _isResult(value)
           );
           const newErrors = values.filter(
-            (value): value is TError => !isResult(value)
+            (value): value is TError => !_isResult(value)
           );
 
-          results = [...results, ...newResults];
-          errors = [...errors, ...newErrors];
+          results.push(...newResults);
+          errors.push(...newErrors);
 
           observer.next({
             errors,
@@ -45,6 +46,16 @@ export const computeQueue =
             results,
           });
         }
+
+        // Emit final update to ensure completion
+        observer.next({
+          errors,
+          remaining: [],
+          results,
+        });
+
+        // Complete the observable to signal the end
+        observer.complete();
       };
 
       void run();

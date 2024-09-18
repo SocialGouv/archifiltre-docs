@@ -95,11 +95,6 @@ const computeFileHashesImplThunk =
           results: formatResult(results), // Convert raw results to HashesMap
         })),
         tap(({ results, errors }) => {
-          console.log(
-            `Hash progress: ${Object.keys(results).length} results, ${
-              errors.length
-            } errors.`
-          );
           dispatch(
             updateLoadingAction(
               loadingActionId,
@@ -118,9 +113,6 @@ const computeFileHashesImplThunk =
       .toPromise();
 
     if (result.errors.length) {
-      console.log(
-        `Errors occurred during hashing: ${result.errors.length} errors.`
-      );
       reportError(result.errors);
       dispatch(
         addErroredHashes(
@@ -130,8 +122,6 @@ const computeFileHashesImplThunk =
           }))
         )
       );
-    } else {
-      console.log("No errors during hash computation.");
     }
 
     return result.errors.length;
@@ -250,24 +240,15 @@ export const computeHashesThunk =
   async (dispatch, getState) => {
     const state = getState();
     const filesAndFolders = getFilesAndFoldersFromStore(state);
-    const foldersCount = getFoldersCount(filesAndFolders); // Removed +1
-    const totalCount = foldersCount + filePaths.length; // Total expected files and folders
-
-    console.log(`Total files and folders to be processed: ${totalCount}`);
+    const totalCount = getFoldersCount(filesAndFolders) + filePaths.length;
 
     const loadingActionId = dispatch(
       startLoading(
         LoadingInfoTypes.HASH_COMPUTING,
-        totalCount, // Goal set to the exact number of items
+        totalCount,
         hashesLoadingLabel,
         hashesLoadedLabel
       )
-    );
-
-    console.log(
-      `Starting hash computation: total files and folders = ${
-        foldersCount + filePaths.length
-      }`
     );
 
     const fileHashesErrorsCount = await dispatch(
@@ -280,8 +261,6 @@ export const computeHashesThunk =
 
     await dispatch(computeFolderHashesThunk(loadingActionId));
 
-    console.log(`File hashes error count: ${fileHashesErrorsCount}`);
-
     dispatch(completeLoadingAction(loadingActionId));
 
     notifySuccess(
@@ -290,12 +269,7 @@ export const computeHashesThunk =
     );
 
     if (fileHashesErrorsCount > 0) {
-      console.log(
-        "Errors encountered during hash computation. Handling errors..."
-      );
       handleHashesError(dispatch);
-    } else {
-      console.log("Hash computation completed successfully.");
     }
   };
 

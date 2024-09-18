@@ -63,7 +63,6 @@ export const progressLoadingAction = (
   id: string,
   progress: number
 ): LoadingInfoAction => {
-  console.log(`Progress update: id=${id}, progress=${progress}`);
   return {
     id,
     progress,
@@ -76,7 +75,6 @@ export const progressLoadingAction = (
  * @param id
  */
 export const completeLoadingAction = (id: string): LoadingInfoAction => {
-  console.log(`Loading complete: id=${id}`);
   return {
     id,
     type: COMPLETE_LOADING,

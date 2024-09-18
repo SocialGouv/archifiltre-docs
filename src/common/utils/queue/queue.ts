@@ -25,8 +25,6 @@ export const computeQueue =
       let remaining: TInput[][] = chunk(input, CHUNK_SIZE);
 
       const run = async () => {
-        console.log(`Starting to process ${remaining.length} chunks.`);
-
         while (remaining.length > 0) {
           const computed = remaining[0];
           remaining = remaining.slice(1);
@@ -42,10 +40,6 @@ export const computeQueue =
           results.push(...newResults);
           errors.push(...newErrors);
 
-          console.log(
-            `Processed chunk: results=${results.length}, errors=${errors.length}, remaining=${remaining.length}`
-          );
-
           observer.next({
             errors,
             remaining,
@@ -54,7 +48,6 @@ export const computeQueue =
         }
 
         // Emit final update to ensure completion
-        console.log("Emitting final update.");
         observer.next({
           errors,
           remaining: [],
@@ -62,7 +55,6 @@ export const computeQueue =
         });
 
         // Complete the observable to signal the end
-        console.log("Completing observable.");
         observer.complete();
       };
 

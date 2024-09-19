@@ -10,7 +10,7 @@
   },
   "license": "Apache-2.0",
   "main": "dist/main/main.js",
-  "homepage": "https://archifiltre.fr/docs",
+  "homepage": "https://archifiltre.fabrique.social.gouv.fr",
   "repository": "git@github.com:SocialGouv/archifiltre-docs.git",
   "bugs": {
     "url": "https://github.com/SocialGouv/archifiltre-docs/issues"

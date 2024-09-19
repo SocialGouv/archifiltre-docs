@@ -5,4 +5,4 @@ export const DOCUMENTATION_LINK =
   "https://github.com/SocialGouv/archifiltre-docs/wiki/Wiki-Archifiltre";
 export const SUGGEST_FEATURE_LINK =
   "https://github.com/SocialGouv/archifiltre-docs/issues";
-export const ARCHIFILTRE_SITE_URL = "https://archifiltre.fr";
+export const ARCHIFILTRE_SITE_URL = "https://archifiltre.fabrique.social.gouv.fr";

@@ -65,6 +65,8 @@ export const handleFileExportThunk =
     await fs.writeFile(exportFileName, result as string, {
       encoding: "utf-8",
     });
+    console.log(`CSV file ${exportFileName} written successfully.`);
+
     notifySuccess(
       exportSuccessMessage,
       exportNotificationTitle,

@@ -197,13 +197,48 @@ export const countDuplicateFilesTotalSize: Merger<
   getFilesDuplicatesMap
 );
 
-export const getDuplicatesMap = (hashes: HashesMap): _.Dictionary<string[]> =>
-  _.invertBy(hashes);
+/**
+ * Generates a DuplicatesMap mapping hashes to FilesAndFolders objects
+ * @param filesAndFoldersMap - Map of file IDs to FilesAndFolders objects
+ * @param hashes - Map of file IDs to hash strings
+ * @returns DuplicatesMap mapping hash strings to arrays of FilesAndFolders
+ */
+export const getDuplicatesMap = (
+  filesAndFoldersMap: FilesAndFoldersMap,
+  hashes: HashesMap
+): DuplicatesMap => {
+  console.log("Generating DuplicatesMap...");
+  const inverted = _.invertBy(hashes); // { hash: [fileId1, fileId2, ...], ... }
+
+  const duplicatesMap: DuplicatesMap = {};
+
+  for (const [hash, fileIds] of Object.entries(inverted)) {
+    duplicatesMap[hash] = fileIds
+      .map((fileId) => filesAndFoldersMap[fileId])
+      .filter((file) => {
+        if (file === undefined) {
+          console.warn(`File ID ${fileId} not found in filesAndFoldersMap`);
+          return false;
+        }
+        return true;
+      });
+  }
+
+  console.log("DuplicatesMap generated:", duplicatesMap);
+  return duplicatesMap;
+};
 
 export const hasDuplicateInDuplicatesMap = (
   duplicatesMap: DuplicatesMap,
   hash: string
-): boolean => duplicatesMap[hash].length > 1;
+): boolean => {
+  const duplicates = duplicatesMap[hash];
+  if (!duplicates) {
+    console.warn(`No duplicates found for hash: ${hash}`);
+    return false;
+  }
+  return duplicates.length > 1;
+};
 
 /**
  * Get the duplicated files where the duplicates take the most space

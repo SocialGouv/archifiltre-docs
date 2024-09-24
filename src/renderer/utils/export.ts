@@ -65,6 +65,7 @@ export const handleFileExportThunk =
     await fs.writeFile(exportFileName, result as string, {
       encoding: "utf-8",
     });
+
     notifySuccess(
       exportSuccessMessage,
       exportNotificationTitle,

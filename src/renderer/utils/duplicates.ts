@@ -197,13 +197,41 @@ export const countDuplicateFilesTotalSize: Merger<
   getFilesDuplicatesMap
 );
 
-export const getDuplicatesMap = (hashes: HashesMap): _.Dictionary<string[]> =>
-  _.invertBy(hashes);
+/**
+ * Generates a DuplicatesMap mapping hashes to FilesAndFolders objects
+ * @param filesAndFoldersMap - Map of file IDs to FilesAndFolders objects
+ * @param hashes - Map of file IDs to hash strings
+ * @returns DuplicatesMap mapping hash strings to arrays of FilesAndFolders
+ */
+export const getDuplicatesMap = (
+  filesAndFoldersMap: FilesAndFoldersMap,
+  hashes: HashesMap
+): DuplicatesMap => {
+  const inverted = _.invertBy(hashes); // { hash: [fileId1, fileId2, ...], ... }
+
+  const duplicatesMap: DuplicatesMap = {};
+
+  for (const [hash, fileIds] of Object.entries(inverted)) {
+    duplicatesMap[hash] = fileIds.map((fileId) => filesAndFoldersMap[fileId]);
+  }
+
+  return duplicatesMap;
+};
 
 export const hasDuplicateInDuplicatesMap = (
   duplicatesMap: DuplicatesMap,
   hash: string
-): boolean => duplicatesMap[hash].length > 1;
+): boolean => {
+  const duplicates = duplicatesMap[hash];
+
+  // Check if duplicates is undefined or not an array before accessing its length
+  if (!Array.isArray(duplicates)) {
+    return false;
+  }
+
+  // Check if there are more than one duplicate
+  return duplicates.length > 1;
+};
 
 /**
  * Get the duplicated files where the duplicates take the most space

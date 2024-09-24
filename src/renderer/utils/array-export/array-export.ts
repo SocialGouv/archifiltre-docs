@@ -95,14 +95,14 @@ const prepareIdsToDelete = <
 
 const prepareDuplicateMap = <
   T extends {
+    filesAndFolders: FilesAndFoldersMap;
     hashes: HashesMap;
   }
 >(
   params: T
-  // @ts-expect-error for testing purpose
 ): T & { duplicatesMap: DuplicatesMap } => ({
   ...params,
-  duplicatesMap: getDuplicatesMap(params.hashes),
+  duplicatesMap: getDuplicatesMap(params.filesAndFolders, params.hashes),
 });
 
 const shouldDisplayDuplicates = (hashes?: HashesMap) =>
@@ -183,7 +183,8 @@ export const generateArrayExport$ = (
     void exportToCsv({
       ...data,
       elementsToDelete: data.elementsToDelete,
-      translator: translations.t.bind(translations),
+      filesAndFolders: data.filesAndFolders,
+      translator: translations.t.bind(translations), // Ensure this is passed
     })
       .pipe(
         tap((row: string[][]) => {
@@ -203,6 +204,9 @@ export const generateArrayExport$ = (
         });
 
         subscriber.complete();
+      })
+      .catch((error) => {
+        subscriber.error(error);
       });
   });
 };

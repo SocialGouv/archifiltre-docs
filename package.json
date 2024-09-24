@@ -183,6 +183,9 @@
   "engines": {
     "node": "^16"
   },
+  "resolutions": {
+    "tar": "6.1.11"
+  },
   "devDependencies": {
     "@commitlint/cli": "13.1.0",
     "@commitlint/config-conventional": "17.1.0",

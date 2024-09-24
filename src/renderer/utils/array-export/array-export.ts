@@ -46,7 +46,12 @@ const makeExportBody = ({
 
   return interval().pipe(
     take(filesAndFoldersChunks.length),
-    map((index) => filesAndFoldersChunks[index]!),
+    map((index) => {
+      console.log(
+        `Processing chunk ${index + 1} of ${filesAndFoldersChunks.length}`
+      );
+      return filesAndFoldersChunks[index]!;
+    }),
     map((chunk) =>
       chunk.map((element) =>
         rowConfig.map((cellConfig) =>
@@ -95,14 +100,14 @@ const prepareIdsToDelete = <
 
 const prepareDuplicateMap = <
   T extends {
+    filesAndFolders: FilesAndFoldersMap;
     hashes: HashesMap;
   }
 >(
   params: T
-  // @ts-expect-error for testing purpose
 ): T & { duplicatesMap: DuplicatesMap } => ({
   ...params,
-  duplicatesMap: getDuplicatesMap(params.hashes),
+  duplicatesMap: getDuplicatesMap(params.filesAndFolders, params.hashes),
 });
 
 const shouldDisplayDuplicates = (hashes?: HashesMap) =>
@@ -183,10 +188,12 @@ export const generateArrayExport$ = (
     void exportToCsv({
       ...data,
       elementsToDelete: data.elementsToDelete,
-      translator: translations.t.bind(translations),
+      filesAndFolders: data.filesAndFolders,
+      translator: translations.t.bind(translations), // Ensure this is passed
     })
       .pipe(
         tap((row: string[][]) => {
+          console.log(`Exporting ${row.length} rows`);
           subscriber.next({
             result: row.length,
             type: MessageTypes.RESULT,
@@ -203,6 +210,11 @@ export const generateArrayExport$ = (
         });
 
         subscriber.complete();
+        console.log("CSV export process completed");
+      })
+      .catch((error) => {
+        console.error("Error during CSV export:", error);
+        subscriber.error(error);
       });
   });
 };

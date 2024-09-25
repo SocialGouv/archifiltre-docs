@@ -1,3 +1,25 @@
+# [4.2.0](https://github.com/SocialGouv/archifiltre-docs/compare/v4.1.2...v4.2.0) (2024-09-25)
+
+
+### Bug Fixes
+
+* add “Content.” prefix to specific CSV fields for ReSIP import ([#1642](https://github.com/SocialGouv/archifiltre-docs/issues/1642)) ([e71e8b4](https://github.com/SocialGouv/archifiltre-docs/commit/e71e8b4225c2523f6e0a8db5b039eb6a33e586c8))
+* added codegouv badge to the readme ([#1650](https://github.com/SocialGouv/archifiltre-docs/issues/1650)) ([b62caf8](https://github.com/SocialGouv/archifiltre-docs/commit/b62caf89331fd0e8443ee34644dd7d3f0417d0a1))
+* event posthog ([cbdcf2a](https://github.com/SocialGouv/archifiltre-docs/commit/cbdcf2a7c4d2c7a1508520183797cf88923d3cb3))
+* posthog ([9f2d373](https://github.com/SocialGouv/archifiltre-docs/commit/9f2d373f8f267a5cad5ae6ebc2888ef719a0bb18))
+* resolve off-by-one error for 100% hash computation progress ([#1652](https://github.com/SocialGouv/archifiltre-docs/issues/1652)) ([41d5605](https://github.com/SocialGouv/archifiltre-docs/commit/41d56052d758664b1dd68b9f0cd5e746730c05e1))
+
+
+### Features
+
+* Add a new CSV export option for elements marked for deletion ([be5b0b0](https://github.com/SocialGouv/archifiltre-docs/commit/be5b0b0e051207051d675385dd058aca618de892))
+* Add code of conduct ([#1648](https://github.com/SocialGouv/archifiltre-docs/issues/1648)) ([6274eb2](https://github.com/SocialGouv/archifiltre-docs/commit/6274eb281e46bb50f817d7cd973a962aac8ae1a5))
+* add PostHog tracking for hash completion and search modal events ([53df4c2](https://github.com/SocialGouv/archifiltre-docs/commit/53df4c2a2180a0ef77300822bf601080ff0ea90c))
+* Create publiccode.yml file ([#1649](https://github.com/SocialGouv/archifiltre-docs/issues/1649)) ([737474e](https://github.com/SocialGouv/archifiltre-docs/commit/737474e52ad93cadb19f9f0f4d65e896963cb267))
+* Display folder name in LoadingBlock component ([8606ea8](https://github.com/SocialGouv/archifiltre-docs/commit/8606ea8e824869e3b060db948d1489655f9d84e8))
+* Display folder size in a human-readable format ([96d0367](https://github.com/SocialGouv/archifiltre-docs/commit/96d036786cebe557778479495e2a8bb1873bb13e))
+* on search modal, export sizes in bytes in CSV and file name based on date ([66436e9](https://github.com/SocialGouv/archifiltre-docs/commit/66436e970de05e55fa2db0e34498a107b7262fe8))
+
 ## [4.1.2](https://github.com/SocialGouv/archifiltre-docs/compare/v4.1.1...v4.1.2) (2024-06-04)
 
 

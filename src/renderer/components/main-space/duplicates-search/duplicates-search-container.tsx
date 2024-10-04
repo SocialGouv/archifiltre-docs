@@ -12,7 +12,10 @@ import {
   getElementsToDeleteFromStore,
   getFilesAndFoldersFromStore,
 } from "../../../reducers/files-and-folders/files-and-folders-selectors";
-import type { FilesAndFoldersMap } from "../../../reducers/files-and-folders/files-and-folders-types";
+import type {
+  FilesAndFolders,
+  FilesAndFoldersMap,
+} from "../../../reducers/files-and-folders/files-and-folders-types";
 import { getFilesAndFoldersMetadataFromStore } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-selectors";
 import type { FilesAndFoldersMetadataMap } from "../../../reducers/files-and-folders-metadata/files-and-folders-metadata-types";
 import { getHashesFromStore } from "../../../reducers/hashes/hashes-selectors";
@@ -28,7 +31,7 @@ const computeTreeSize = (
 ) => {
   const filesAndFolders = filesAndFoldersMap[filesAndFoldersId];
   return isFolder(filesAndFolders)
-    ? filesAndFoldersMetadataMap[filesAndFoldersId].childrenTotalSize
+    ? filesAndFoldersMetadataMap[filesAndFoldersId].childrenTotalSize || 0
     : filesAndFolders.file_size;
 };
 
@@ -92,7 +95,10 @@ export const DuplicatesSearchContainer: React.FC = () => {
       hashesMap
     );
     return _(filesDuplicatesMap)
-      .pickBy((filesAndFoldersArray) => filesAndFoldersArray.length > 1)
+      .pickBy(
+        (filesAndFoldersArray): filesAndFoldersArray is FilesAndFolders[] =>
+          filesAndFoldersArray !== undefined && filesAndFoldersArray.length > 1
+      )
       .values()
       .value();
   }, [filesAndFoldersMap, hashesMap]);

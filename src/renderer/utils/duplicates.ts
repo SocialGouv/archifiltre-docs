@@ -43,7 +43,7 @@ import type {
 import { FileType, getFileType } from "./file-types";
 import { getFiles, getFoldersArchive } from "./fileAndFolder";
 
-export type DuplicatesMap = Record<string, FilesAndFolders[]>;
+export type DuplicatesMap = Record<string, FilesAndFolders[] | undefined>;
 
 /**
  * Utility function to transform function args into an array of args
@@ -54,7 +54,7 @@ const argsToArray = (
 ) => [filesAndFoldersMap, hashesMap];
 
 /**
- * Filters out imcomplete files and folders from merge
+ * Filters out incomplete files and folders from merge
  */
 const removeIncompleteFilesAndFolders: Mapper<
   FilesAndFoldersMap,
@@ -173,14 +173,16 @@ const countDuplicatesInDuplicatesMap = (
   compose(
     sum,
     values,
-    mapValues((filesAndFoldersList: FilesAndFolders[]) =>
+    mapValues((filesAndFoldersList: FilesAndFolders[] | undefined) =>
       filesAndFoldersList
-        .slice(1)
-        .reduce(
-          (count, fileAndfolder: FilesAndFolders) =>
-            count + countMethod(fileAndfolder),
-          0
-        )
+        ? filesAndFoldersList
+            .slice(1)
+            .reduce(
+              (count, fileAndFolder: FilesAndFolders) =>
+                count + countMethod(fileAndFolder),
+              0
+            )
+        : 0
     )
   );
 
@@ -203,7 +205,10 @@ export const getDuplicatesMap = (hashes: HashesMap): _.Dictionary<string[]> =>
 export const hasDuplicateInDuplicatesMap = (
   duplicatesMap: DuplicatesMap,
   hash: string
-): boolean => duplicatesMap[hash].length > 1;
+): boolean => {
+  const filesAndFoldersList = duplicatesMap[hash];
+  return filesAndFoldersList ? filesAndFoldersList.length > 1 : false;
+};
 
 /**
  * Get the duplicated files where the duplicates take the most space
@@ -222,11 +227,15 @@ export const getBiggestDuplicatedFolders =
     );
 
     return _(duplicatesMap)
+      .filter(
+        (filesAndFoldersList): filesAndFoldersList is FilesAndFolders[] =>
+          filesAndFoldersList !== undefined
+      )
       .sortBy(
         (filesAndFoldersList) =>
           (filesAndFoldersList.length - 1) *
-          filesAndFoldersMetadataMap[filesAndFoldersList[0].id]
-            .childrenTotalSize
+          (filesAndFoldersMetadataMap[filesAndFoldersList[0].id]
+            .childrenTotalSize || 0)
       )
       .takeRight(nbDuplicatedItems)
       .filter((filesAndFoldersList) => filesAndFoldersList.length > 1)
@@ -282,18 +291,20 @@ const createCountDuplicateFiles = (
     }),
     mapValues(sumSizes),
     groupBy("type"),
-    mapValues((filesAndFoldersArray: FilesAndFolders[]) =>
-      filesAndFoldersArray.slice(1).reduce(
-        (accumulator, element) => ({
-          size: accumulator.size + mapFilesAndFoldersToNumber(element),
-          type: getFileType(element),
-        }),
-        { size: 0, type: FileType.OTHER }
-      )
+    mapValues((filesAndFoldersArray: FilesAndFolders[] | undefined) =>
+      filesAndFoldersArray
+        ? filesAndFoldersArray.slice(1).reduce(
+            (accumulator, element) => ({
+              size: accumulator.size + mapFilesAndFoldersToNumber(element),
+              type: getFileType(element),
+            }),
+            { size: 0, type: FileType.OTHER }
+          )
+        : { size: 0, type: FileType.OTHER }
     ),
     pickBy(
-      (filesAndFoldersArray: FilesAndFolders[]) =>
-        filesAndFoldersArray.length > 1
+      (filesAndFoldersArray: FilesAndFolders[] | undefined) =>
+        filesAndFoldersArray && filesAndFoldersArray.length > 1
     )
   );
 

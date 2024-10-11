@@ -1,3 +1,10 @@
+## [4.2.1](https://github.com/SocialGouv/archifiltre-docs/compare/v4.2.0...v4.2.1) (2024-10-11)
+
+
+### Bug Fixes
+
+* resolve export failures due to undefined duplicates ([#1659](https://github.com/SocialGouv/archifiltre-docs/issues/1659)) ([dbe9ff7](https://github.com/SocialGouv/archifiltre-docs/commit/dbe9ff730316b6e607c7020878cbe182fff23844))
+
 # [4.2.0](https://github.com/SocialGouv/archifiltre-docs/compare/v4.1.2...v4.2.0) (2024-09-25)
 
 

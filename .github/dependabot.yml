@@ -1,54 +1,54 @@
 version: 2
-updates:
-  # Maintain dependencies for GitHub Actions
-  - package-ecosystem: github-actions
-    directory: "/"
-    schedule:
-      interval: monthly
-  - package-ecosystem: npm
-    target-branch: dev
-    labels:
-      - bot
-      - dependencies
-    directory: /
-    schedule:
-      interval: weekly
-      day: monday
-      time: "01:00"
-      timezone: Europe/Paris
-    versioning-strategy: increase-if-necessary
-    allow:
-      - dependency-name: "*"
-        dependency-type: direct
-    ignore:
-      - dependency-name: "@types/*"
-        update-types:
-          - "version-update:semver-patch"
-          - "version-update:semver-minor"
-      - dependency-name: "node-sass"
-        versions:
-          - ">=6"
-      - dependency-name: "sass-loader"
-        versions:
-          - ">=10"
-      - dependency-name: "css-loader"
-        versions:
-          - ">=6"
-      - dependency-name: "@types/node"
-        versions:
-          - ">=17"
-      - dependency-name: "eslint"
-        versions:
-          - ">=8"
-      - dependency-name: "@types/eslint"
-        versions:
-          - ">=8"
-      - dependency-name: "eslint-plugin-unused-imports"
-        versions:
-          - ">=2"
-      - dependency-name: "eslint-plugin-playwright"
-        versions:
-          - ">=0.7.0"
-      - dependency-name: "typescript"
-        versions:
-          - ">=4.7"
+# updates:
+#   # Maintain dependencies for GitHub Actions
+#   - package-ecosystem: github-actions
+#     directory: "/"
+#     schedule:
+#       interval: monthly
+#   - package-ecosystem: npm
+#     target-branch: dev
+#     labels:
+#       - bot
+#       - dependencies
+#     directory: /
+#     schedule:
+#       interval: weekly
+#       day: monday
+#       time: "01:00"
+#       timezone: Europe/Paris
+#     versioning-strategy: increase-if-necessary
+#     allow:
+#       - dependency-name: "*"
+#         dependency-type: direct
+#     ignore:
+#       - dependency-name: "@types/*"
+#         update-types:
+#           - "version-update:semver-patch"
+#           - "version-update:semver-minor"
+#       - dependency-name: "node-sass"
+#         versions:
+#           - ">=6"
+#       - dependency-name: "sass-loader"
+#         versions:
+#           - ">=10"
+#       - dependency-name: "css-loader"
+#         versions:
+#           - ">=6"
+#       - dependency-name: "@types/node"
+#         versions:
+#           - ">=17"
+#       - dependency-name: "eslint"
+#         versions:
+#           - ">=8"
+#       - dependency-name: "@types/eslint"
+#         versions:
+#           - ">=8"
+#       - dependency-name: "eslint-plugin-unused-imports"
+#         versions:
+#           - ">=2"
+#       - dependency-name: "eslint-plugin-playwright"
+#         versions:
+#           - ">=0.7.0"
+#       - dependency-name: "typescript"
+#         versions:
+#           - ">=4.7"

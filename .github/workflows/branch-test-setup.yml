@@ -62,7 +62,7 @@ jobs:
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
           FORCE_TRACKING: false
       - name: Archive dist
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: compile-dist
           path: dist/
@@ -110,7 +110,7 @@ jobs:
       - name: Build bin
         run: yarn electron-builder --x64 --${{ matrix.target}} ${{ matrix.bin-output }}
       - name: Archive bin
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: bin
           path: electron/dist/*/archifiltre-*

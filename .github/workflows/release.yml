@@ -159,12 +159,12 @@ jobs:
           $(yarn global bin)/replace '"version": "${{ needs.compile.outputs.current-version }}"' '"version": "${{ needs.compile.outputs.next-version }}"' package.json
           yarn replaceForChannel
       - name: Download dist
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: compile-dist
           path: dist/
       - name: Download certificates
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: certificates
       - name: Build bin
@@ -188,7 +188,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ env.GITHUB_REF_OVERRIDE }}
       - name: Download all dist form build jobs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           path: bin
       - name: Generate hashes

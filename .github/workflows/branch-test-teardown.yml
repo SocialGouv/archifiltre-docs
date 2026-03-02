@@ -19,10 +19,13 @@ jobs:
           ref: ${{ github.event.repository.default_branch }}
       - name: Seek
         id: seek
+        env:
+          HEAD_REF: ${{ github.head_ref }}
         run: |
-          TAG_VERSION="$(echo '${{ github.head_ref }}' | iconv -t ascii//TRANSLIT | sed -r "s/[^a-zA-Z0-9]+/-/g" | sed -r "s/^-+\|-+$//g" | tr A-Z a-z)"
+          set -euo pipefail
+          TAG_VERSION="$(printf '%s' "$HEAD_REF" | iconv -t ascii//TRANSLIT | sed -r "s/[^a-zA-Z0-9]+/-/g" | sed -r "s/^-+|-+$//g" | tr A-Z a-z)"
           TAG_VERSION="v$(awk '/version/{gsub(/("|",)/,"",$2);print $2}' package.json)-$TAG_VERSION.0"
-          echo ::set-output name=tag-version::$TAG_VERSION
+          echo "tag-version=$TAG_VERSION" >> "$GITHUB_OUTPUT"
       - name: Destroy local
         id: destroy-local
         run: |

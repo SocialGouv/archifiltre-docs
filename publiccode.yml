@@ -1,30 +1,72 @@
-publiccodeYmlVersion: "0.2"
-name: Archifiltre
-url: https://github.com/SocialGouv/archifiltre-docs
-landingURL: https://archifiltre.fabrique.social.gouv.fr
-creationDate: 2019-06-18
-latestRelease:
-  date: ""
-  version: ""
-logo: https://github.com/SocialGouv.png
-usedBy: []
+publiccodeYmlVersion: "0"
+name: "Archifiltre Docs"
+url: "https://github.com/SocialGouv/archifiltre-docs"
+landingURL: "https://archifiltre.fabrique.social.gouv.fr"
+softwareVersion: "4.2.1"
+releaseDate: "2024-10-11"
+logo: "https://github.com/SocialGouv.png"
+platforms:
+  - "windows"
+  - "mac"
+  - "linux"
+softwareType: "standalone/desktop"
+developmentStatus: "stable"
 fundedBy:
-  - name: Mission Fabrique numérique (FabNum)
-    url: https://lannuaire.service-public.fr/gouvernement/361651ec-d4af-4c9f-b76f-e5f9ca19df4b
-roadmap: ""
-softwareType: ""
+  - name: "Mission Fabrique numérique (FabNum)"
+    uri: "https://lannuaire.service-public.fr/gouvernement/361651ec-d4af-4c9f-b76f-e5f9ca19df4b"
 description:
   fr:
-    shortDescription: Visualisez et auditez vos arborescences de fichiers !
-    documentation: ""
+    shortDescription: "Visualisez et auditez vos arborescences de fichiers !"
+    longDescription: >
+      Archifiltre Docs est une application de bureau qui permet de visualiser,
+      auditer et gérer des arborescences de fichiers volumineuses. Elle offre
+      une vue graphique interactive de l'ensemble d'un répertoire, facilite
+      l'identification des doublons, des fichiers obsolètes et des problèmes
+      de nommage, et permet d'exporter des rapports détaillés pour accompagner
+      les démarches d'archivage ou de nettoyage.
+    features:
+      - "Visualisation interactive d'arborescences de fichiers"
+      - "Détection des doublons et des fichiers obsolètes"
+      - "Export de rapports CSV et Excel"
+      - "Analyse en local, sans envoi de données"
   en:
-    shortDescription: Audit and visualize your filetrees on your servers and local storages
-    documentation: ""
+    shortDescription: "Audit and visualize your filetrees on your servers and local storages"
+    longDescription: >
+      Archifiltre Docs is a desktop application for visualizing, auditing, and
+      managing large file trees. It provides an interactive graphical view of
+      any directory, helps identify duplicates, outdated files, and naming
+      issues, and lets you export detailed reports to support archiving or
+      cleanup workflows. All processing happens locally with no data sent
+      externally.
+    features:
+      - "Interactive file tree visualization"
+      - "Duplicate and outdated file detection"
+      - "CSV and Excel report export"
+      - "Local processing, no data sent externally"
+  de:
+    shortDescription: "Visualisieren und auditieren Sie Ihre Dateistrukturen"
+    longDescription: >
+      Archifiltre Docs ist eine Desktop-Anwendung zur Visualisierung, Prüfung
+      und Verwaltung großer Dateistrukturen. Sie bietet eine interaktive
+      grafische Ansicht beliebiger Verzeichnisse, hilft beim Erkennen von
+      Duplikaten, veralteten Dateien und Benennungsproblemen und ermöglicht
+      den Export detaillierter Berichte für Archivierungs- oder
+      Bereinigungsworkflows. Die Verarbeitung erfolgt vollständig lokal.
+    features:
+      - "Interaktive Dateistrukturvisualisierung"
+      - "Erkennung von Duplikaten und veralteten Dateien"
+      - "CSV- und Excel-Berichtexport"
+      - "Lokale Verarbeitung, keine Datenübertragung"
 legal:
-  license: apache-2.0
-  authorsFile: ""
+  license: "Apache-2.0"
 maintenance:
-  type: community
+  type: "community"
   contacts:
     - name: "Chloé Moser"
       email: "chloe.MOSER@sg.social.gouv.fr"
+localisation:
+  localisationReady: true
+  availableLanguages:
+    - "fr"
+    - "en"
+    - "de"
